@@ -116,3 +116,12 @@ $('#div_pageContainer').on( 'click','.eqLogic-widget .history', function () {
     $('#md_modal2').dialog({title: "Historique"});
     $("#md_modal2").load('index.php?v=d&modal=cmd.history&id=' + $(this).data('cmd_id')).dialog('open');
 });
+
+function initObjectMenuFilter() {
+    $('.nav-tabs-custom a').off('click').click(function() {
+        window.location.href = 'index.php?v=d&p=dashboard&object_id=' + $(this).data('object-id');
+        return false;
+    });
+}
+
+initObjectMenuFilter();

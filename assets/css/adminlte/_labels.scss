@@ -216,6 +216,9 @@ legend {
 .input-group, select {
     border-radius: 4px !important;
 }
+.input-group{
+    border: 1px solid;
+}
 .colorpick {
     border-radius: 0px 4px 4px 0px !important;
 }
@@ -268,4 +271,11 @@ legend {
     border: none;
     padding: 0px;
     background: none;
+}
+
+.no-border {
+    border: none !important;
+}
+.no-radius {
+    border-radius: 0px !important;
 }

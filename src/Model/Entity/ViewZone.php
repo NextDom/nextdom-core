@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ViewDataManager;
 use NextDom\Managers\ViewManager;
@@ -27,7 +28,7 @@ use NextDom\Managers\ViewManager;
  * @ORM\Table(name="viewZone", indexes={@ORM\Index(name="fk_zone_view1", columns={"view_id"})})
  * @ORM\Entity
  */
-class ViewZone
+class ViewZone implements EntityInterface
 {
 
     /**
@@ -84,17 +85,20 @@ class ViewZone
 
     public function save()
     {
-        return \DB::save($this);
+        return DBHelper::save($this);
     }
 
     public function remove()
     {
-        return \DB::remove($this);
+        return DBHelper::remove($this);
     }
 
-    public function getviewData()
+    /**
+     * @return  [ViewZone]|null
+     */
+    public function getViewData()
     {
-        return ViewDataManager::byviewZoneId($this->getId());
+        return ViewDataManager::byViewZoneId($this->getId());
     }
 
     public function getView()

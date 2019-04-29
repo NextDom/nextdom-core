@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ScenarioElementManager;
 use NextDom\Managers\ScenarioExpressionManager;
@@ -27,7 +28,7 @@ use NextDom\Managers\ScenarioExpressionManager;
  * ORM\Table(name="scenarioSubElement", indexes={@ORM\Index(name="fk_scenarioSubElement_scenarioElement1_idx", columns={"scenarioElement_id"}), @ORM\Index(name="type", columns={"scenarioElement_id", "type"})})
  * ORM\Entity
  */
-class ScenarioSubElement
+class ScenarioSubElement implements EntityInterface
 {
 
     /**
@@ -220,7 +221,7 @@ class ScenarioSubElement
 
     public function save()
     {
-        \DB::save($this);
+        DBHelper::save($this);
     }
 
     public function remove()
@@ -228,7 +229,7 @@ class ScenarioSubElement
         foreach ($this->getExpression() as $expression) {
             $expression->remove();
         }
-        \DB::remove($this);
+        DBHelper::remove($this);
     }
 
     public function getExpression()

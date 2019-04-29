@@ -34,13 +34,14 @@
 namespace NextDom\Managers;
 
 use NextDom\Enums\ScenarioState;
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Model\Entity\Scenario;
 
-// TODO: \DB::buildField(ScenarioEntity::className) à factoriser
+// TODO: DBHelper::buildField(ScenarioEntity::className) à factoriser
 class ScenarioManager
 {
     const DB_CLASS_NAME = 'scenario';
@@ -48,7 +49,7 @@ class ScenarioManager
     const INITIAL_TRANSLATION_FILE = '';
 
     /**
-     * Obtenir un objet scenario
+     * Get scenario by his id
      *
      * @param int $id Identifiant du scénario
      *
@@ -56,11 +57,27 @@ class ScenarioManager
      *
      * @throws \Exception
      */
-    public static function byId(int $id)
+    public static function byId($id)
     {
         $values = array('id' => $id);
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . ' FROM ' . self::DB_CLASS_NAME . ' WHERE id = :id';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . ' FROM ' . self::DB_CLASS_NAME . ' WHERE id = :id';
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+    }
+
+    /**
+     * Get scenario by his name
+     *
+     * @param string $name Name of the scenario
+     *
+     * @return Scenario|null Requested scenario or null
+     *
+     * @throws \Exception
+     */
+    public static function byName(string $name)
+    {
+        $values = array('name' => $name);
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . ' FROM ' . self::DB_CLASS_NAME . ' WHERE name = :name';
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -97,7 +114,7 @@ class ScenarioManager
         $result1 = null;
         $result2 = null;
 
-        $baseSql = 'SELECT ' . \DB::buildField(self::CLASS_NAME, 's') . 'FROM ' . self::DB_CLASS_NAME . ' s ';
+        $baseSql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME, 's') . 'FROM ' . self::DB_CLASS_NAME . ' s ';
         $sqlWhereTypeFilter = ' ';
         $sqlAndTypeFilter = ' ';
         if ($type !== null) {
@@ -118,8 +135,8 @@ class ScenarioManager
             $sql1 .= 'WHERE `group` = :group ' . $sqlAndTypeFilter . 'ORDER BY ob.name, s.group, s.name';
             $sql2 = $baseSql . 'WHERE `group` = :group AND s.object_id IS NULL' . $sqlAndTypeFilter . 'ORDER BY s.group, s.name';
         }
-        $result1 = \DB::Prepare($sql1, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
-        $result2 = \DB::Prepare($sql2, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        $result1 = DBHelper::Prepare($sql1, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        $result2 = DBHelper::Prepare($sql2, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
         if (!is_array($result1)) {
             $result1 = array();
         }
@@ -137,11 +154,11 @@ class ScenarioManager
      */
     public static function schedule()
     {
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE `mode` != "provoke"
                 AND isActive = 1';
-        return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -162,7 +179,7 @@ class ScenarioManager
             $sql .= ' WHERE `group` LIKE :group';
         }
         $sql .= ' ORDER BY `group`';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL);
     }
 
     /**
@@ -177,13 +194,13 @@ class ScenarioManager
     public static function byTrigger(string $cmdId, $onlyEnabled = true)
     {
         $values = array('cmd_id' => '%#' . $cmdId . '#%');
-        $sql = 'SELECT ' . \DB::buildField(self::DB_CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE mode != "schedule" AND `trigger` LIKE :cmd_id';
         if ($onlyEnabled) {
             $sql .= ' AND isActive = 1';
         }
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -199,10 +216,10 @@ class ScenarioManager
         $values = array(
             'element_id' => '%"' . $elementId . '"%',
         );
-        $sql = 'SELECT ' . \DB::buildField(self::DB_CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE `scenarioElement` LIKE :element_id';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -219,7 +236,7 @@ class ScenarioManager
     public static function byObjectId($objectId, $onlyEnabled = true, $onlyVisible = false)
     {
         $values = array();
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME;
         if ($objectId === null) {
             $sql .= ' WHERE object_id IS NULL';
@@ -234,7 +251,7 @@ class ScenarioManager
             $sql .= ' AND isVisible = 1';
         }
         $sql .= ' ORDER BY `order`';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -379,7 +396,7 @@ class ScenarioManager
                 $sql .= ',' . $expressionId;
             }
             $sql .= ')';
-            \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL);
+            DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL);
         }
     }
 
@@ -453,7 +470,7 @@ class ScenarioManager
             'scenario_name' => html_entity_decode($scenarioName),
         );
 
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME, 's') . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME, 's') . '
                 FROM ' . self::DB_CLASS_NAME . ' s ';
 
         if ($objectName == __('Aucun')) {
@@ -478,7 +495,7 @@ class ScenarioManager
                 $sql .= 'AND `group` = :group_name';
             }
         }
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**

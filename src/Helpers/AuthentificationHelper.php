@@ -34,7 +34,6 @@
 namespace NextDom\Helpers;
 
 use NextDom\Exceptions\CoreException;
-use NextDom\Managers\AjaxManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UserManager;
 
@@ -127,6 +126,13 @@ class AuthentificationHelper
         }
     }
 
+    /**
+     * @param      $_login
+     * @param      $_password
+     * @param null $_twoFactor
+     * @return bool
+     * @throws \Exception
+     */
     public static function login($_login, $_password, $_twoFactor = null)
     {
         $user = UserManager::connect($_login, $_password);
@@ -154,6 +160,11 @@ class AuthentificationHelper
         return true;
     }
 
+    /**
+     * @param $_key
+     * @return bool
+     * @throws \Exception
+     */
     public static function loginByHash($_key)
     {
         $key = explode('-', $_key);
@@ -195,12 +206,15 @@ class AuthentificationHelper
         UserManager::getStoredUser()->save();
         @session_write_close();
         if (!isset($_COOKIE['nextdom_token'])) {
-            setcookie('nextdom_token', AjaxManager::getToken(), time() + 365 * 24 * 3600, "/", '', false, true);
+            setcookie('nextdom_token', AjaxHelper::getToken(), time() + 365 * 24 * 3600, "/", '', false, true);
         }
         LogHelper::add('connection', 'info', __('Connexion de l\'utilisateur par clef : ') . $user->getLogin());
         return true;
     }
 
+    /**
+     *
+     */
     public static function logout()
     {
         @session_start();

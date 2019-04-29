@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\ReportHelper;
@@ -29,7 +30,7 @@ use NextDom\Managers\PlanManager;
  * @ORM\Table(name="planHeader")
  * @ORM\Entity
  */
-class PlanHeader
+class PlanHeader implements EntityInterface
 {
 
     /**
@@ -87,6 +88,11 @@ class PlanHeader
             $planCopy->setPlanHeader_id($planHeaderCopy->getId());
             $planCopy->save();
         }
+        $filename1 = 'planHeader' . $this->getId() . '-' . $this->getImage('sha512') . '.' . $this->getImage('type');
+        if (file_exists(NEXTDOM_DATA . '/data/plan/' . $filename1)) {
+            $filename2 = 'planHeader' . $planHeaderCopy->getId() . '-' . $planHeaderCopy->getImage('sha512') . '.' . $planHeaderCopy->getImage('type');
+            copy(NEXTDOM_DATA . '/data/plan/' . $filename1, NEXTDOM_DATA . '/data/plan/' . $filename2);
+        }
         return $planHeaderCopy;
     }
 
@@ -111,13 +117,13 @@ class PlanHeader
 
     public function save()
     {
-        \DB::save($this);
+        DBHelper::save($this);
     }
 
     public function remove()
     {
         NextDomHelper::addRemoveHistory(array('id' => $this->getId(), 'name' => $this->getName(), 'date' => date('Y-m-d H:i:s'), 'type' => 'plan'));
-        \DB::remove($this);
+        DBHelper::remove($this);
     }
 
     public function displayImage()

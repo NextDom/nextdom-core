@@ -16,6 +16,7 @@ function initLog(_log) {
 
     if (isset(_log)) {
         setTimeout(function(){
+            $('#pre_globallog').height($('body').height() - $('div[data-role=header]').height() - $('.log_menu').height() - 40);
             nextdom.log.autoupdate({
                 log : _log,
                 display : $('#pre_globallog'),
@@ -48,7 +49,7 @@ function initLog(_log) {
                     initLog();
                 }
             });
-        });
+        });    
     }
 
     $("#bt_removeAllLog").off('click').on('click', function(event) {
@@ -64,4 +65,11 @@ function initLog(_log) {
             });
         }
     });
+
+    $(window).on("orientationchange", function (event) {
+        setTimeout(function(){
+            $('#pre_globallog').height($('body').height() - $('div[data-role=header]').height() - $('.log_menu').height() - 35);
+        }, 100);
+    });
 }
+

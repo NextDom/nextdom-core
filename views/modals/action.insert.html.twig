@@ -71,6 +71,10 @@
     {{ 'Action qui permet à NextDom de faire une demande puis de stocker la réponse dans une variable. Cette action est bloquante et ne finit que si NextDom reçoit une réponse ou si le timeout est atteint. Pour le moment cette action n\'est compatible qu\'avec les plugins SMS, Slack, SARAH et Telegram.' }}
 </div>
 
+<div class="alert alert-info mod_actionValue_selDescription nextdom_reboot" style="display:none;">
+    {{ 'Envoi l\'ordre à NextDom de redémarrer' }}
+</div>
+
 <div class="alert alert-info mod_actionValue_selDescription nextdom_poweroff" style="display:none;">
     {{ 'Envoi l\'ordre à NextDom de s\'éteindre' }}
 </div>
@@ -98,10 +102,10 @@
 <div class="alert alert-info mod_actionValue_selDescription remove_inat" style="display:none;">
     {{ 'Permet de supprimer la programmation de tous les blocs DANS et A du scénario' }}
 </div>
-<div class="alert alert-info mod_actionValue_selDescription event">
+<div class="alert alert-info mod_actionValue_selDescription event" style="display: none">
     {{ 'Permet de pousser une valeur dans une commande de type information de maniere arbitraire' }}
 </div>
-<div class="alert alert-info mod_actionValue_selDescription tag">
+<div class="alert alert-info mod_actionValue_selDescription tag" style="display: none">
     {{ 'Permet d\'ajouter/modifier un tag (le tag n\'existe que pendant l\'execution en cours du scénario à la difference des variables qui survive à la fin du scénario)' }}
 </div>
 <script>

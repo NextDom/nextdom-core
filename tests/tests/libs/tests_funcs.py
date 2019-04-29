@@ -112,7 +112,7 @@ def init_docker():
             create_docker()
         else:
             reset_answer = ask_y_n('Reset base test container', 'n')
-            if reset_answer == '-y':
+            if reset_answer == 'y':
                 create_docker()
         clear_docker()
 
@@ -157,17 +157,36 @@ def copy_file_in_container(container_name, src, dest):
     """
     os.system('docker cp ' + src + ' nextdom-test-' + container_name + ':' + dest)
 
-def start_all_tests(title, tests_list):
+def copy_file_from_container(container_name, src, dest):
+    """Copy a file in a test container
+    :param container_name: Name of the container
+    :param src:            Source file
+    :param dest:           Destination directory
+    :type container_name:  str
+    :type src:             str
+    :type dest:            str
+    """
+    os.system('docker cp nextdom-test-' + container_name + ':' + src + ' ' + dest)
+
+def start_all_tests(title, tests_list, use_docker=True):
     """Start all tests
     :param title:      Title of the type of tests
     :param tests_list: List of all tests
+    :param use_docker: True if docker is used during tests
     :type title:       str
     :type tests_list:  dict
+    :type use_docker:  bool
+    :return:           True if all tests pass
+    :rtype:            bool
     """
-    clear_docker()
+    if use_docker:
+        clear_docker()
     print_title(title)
+    all_tests_pass = True
     for test in tests_list:
-        tests_list[test]()
+        if tests_list[test]():
+            all_tests_pass = False
+    return all_tests_pass
 
 def start_specific_test(test_name, tests_list):
     """Start specific test choosed by the user

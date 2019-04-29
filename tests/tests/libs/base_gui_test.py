@@ -43,8 +43,8 @@ class BaseGuiTest(unittest.TestCase):
         driver_path = os.path.dirname(os.path.abspath(__file__ + os.sep + '..')) + os.sep + 'chromedriver' #pylint: disable=line-too-long
         try:
             options = webdriver.ChromeOptions()
-            # For travis environment, disable render
-            if os.uname().nodename.startswith('travis'):
+            # For travis environment and headless servers, disable render
+            if (not "XAUTHORITY" in os.environ) or os.uname().nodename.startswith('travis'):
                 options.add_argument('headless')
                 options.add_argument('disable-gpu')
             options.add_argument('window-size=1920x1080')

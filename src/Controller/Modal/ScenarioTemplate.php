@@ -27,6 +27,7 @@ use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\UpdateManager;
+use NextDom\Managers\AjaxManager;
 
 class ScenarioTemplate extends BaseAbstractModal
 {
@@ -45,6 +46,7 @@ class ScenarioTemplate extends BaseAbstractModal
         }
         Utils::sendVarToJS('scenario_template_id', $scenarioId);
         $pageData = [];
+        $pageData['uploadAjaxToken'] = AjaxManager::getToken();
         $pageData['repoList'] = UpdateManager::listRepo();
 
         return Render::getInstance()->get('/modals/scenario.template.html.twig', $pageData);

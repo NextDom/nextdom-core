@@ -20,6 +20,7 @@ namespace NextDom\Model\Entity;
 use NextDom\Enums\ScenarioExpressionAction;
 use NextDom\Enums\ScenarioExpressionType;
 use NextDom\Exceptions\CoreException;
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\ReportHelper;
@@ -47,7 +48,7 @@ use NextDom\Managers\ViewManager;
  * @ORM\Table(name="scenarioExpression", indexes={@ORM\Index(name="fk_scenarioExpression_scenarioSubElement1_idx", columns={"scenarioSubElement_id"})})
  * @ORM\Entity
  */
-class ScenarioExpression
+class ScenarioExpression implements EntityInterface
 {
 
     /**
@@ -674,7 +675,7 @@ class ScenarioExpression
             case 'eqAnalyse':
                 $url = NetworkHelper::getNetworkAccess('internal') . '/index.php?v=d&p=eqAnalyse&report=1';
                 $this->setLog($scenario, __('Génération du rapport ') . $url);
-                $cmd_parameters['files'] = array(ReportHelper::generate($url, 'other', $options['export_type'], $options));
+                $cmd_parameters['files'] = array(ReportHelper::generate($url, 'other', 'eqAnalyse', $options['export_type'], $options));
                 $cmd_parameters['title'] = __('[' . ConfigManager::byKey('name') . '] Rapport équipement du ') . date('Y-m-d H:i:s');
                 $cmd_parameters['message'] = __('Veuillez trouver ci-joint le rapport équipement généré le ') . date('Y-m-d H:i:s');
                 break;
@@ -732,13 +733,13 @@ class ScenarioExpression
     public function save()
     {
         $this->checkBackground();
-        \DB::save($this);
+        DBHelper::save($this);
         return true;
     }
 
     public function remove()
     {
-        \DB::remove($this);
+        DBHelper::remove($this);
     }
 
     public function getAllId()

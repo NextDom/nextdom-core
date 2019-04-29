@@ -140,7 +140,7 @@ $("#bt_saveInteract").on('click', function () {
 
 
 $("#bt_regenerateInteract,#bt_regenerateInteract2").on('click', function () {
-  bootbox.confirm('{{Etes-vous sûr de vouloir regénérer toutes les intérations (cela peut être très long) ?}}', function (result) {
+  bootbox.confirm('{{Etes-vous sûr de vouloir régénérer toutes les intérations (cela peut être très long) ?}}', function (result) {
    if (result) {
     nextdom.interact.regenerateInteract({
       interact: {query: result},

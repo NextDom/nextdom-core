@@ -39,6 +39,7 @@
                     <option value="text">{{ 'Texte' }}</option>
                     <option value="door">{{ 'Porte/Fenêtre' }}</option>
                     <option value="conditionalColor">{{ 'Couleur conditionnel' }}</option>
+                    <option value="conditionalShow">{{ 'Affichage conditionnel' }}</option>
                 </select>
             </div>
         </div>
@@ -319,77 +320,77 @@
 </form>
 
 <script>
-
-    $('.plan3dAttr[data-l1key=configuration][data-l2key="3d::widget"]').on('change', function () {
+    $('.plan3dAttr[data-l1key=configuration][data-l2key="3d::widget"]').on('change',function(){
         $('.specificity').hide();
-        $('.specificity.specificity_' + $(this).value()).show();
+        $('.specificity.specificity_'+$(this).value()).show();
     });
 
     $('.plan3dAttr[data-l1key=configuration][data-l2key="3d::widget"]').trigger('change');
 
-    $('#fd_plan3dConfigure').off('click', '#bt_selEqLogic').on('click', '#bt_selEqLogic', function (event) {
+    $('#fd_plan3dConfigure').off('click','#bt_selEqLogic').on('click','#bt_selEqLogic',  function (event) {
         nextdom.eqLogic.getSelectModal({}, function (result) {
             $('.plan3dAttr[data-l1key=link_id]').value(result.human);
         });
     });
 
-    $('#fd_plan3dConfigure').off('click', '#bt_selCmd').on('click', '#bt_selCmd', function (event) {
-        nextdom.cmd.getSelectModal({cmd: {type: 'info'}}, function (result) {
+    $('#fd_plan3dConfigure').off('click','#bt_selCmd').on('click','#bt_selCmd',  function (event) {
+        nextdom.cmd.getSelectModal({cmd:{type:'info'}}, function (result) {
             $('.plan3dAttr[data-l1key=configuration][data-l2key="cmd::state"]').value(result.human);
         });
     });
 
-    $('#fd_plan3dConfigure').off('click', '#bt_selWindow').on('click', '#bt_selWindow', function (event) {
-        nextdom.cmd.getSelectModal({cmd: {type: 'info'}}, function (result) {
+    $('#fd_plan3dConfigure').off('click','#bt_selWindow').on('click','#bt_selWindow',  function (event) {
+        nextdom.cmd.getSelectModal({cmd:{type:'info'}}, function (result) {
             $('.plan3dAttr[data-l1key=configuration][data-l2key="3d::widget::door::window"]').value(result.human);
         });
     });
 
-    $('#fd_plan3dConfigure').off('click', '#bt_selShutter').on('click', '#bt_selShutter', function (event) {
-        nextdom.cmd.getSelectModal({cmd: {type: 'info'}}, function (result) {
+    $('#fd_plan3dConfigure').off('click','#bt_selShutter').on('click','#bt_selShutter',  function (event) {
+        nextdom.cmd.getSelectModal({cmd:{type:'info'}}, function (result) {
             $('.plan3dAttr[data-l1key=configuration][data-l2key="3d::widget::door::shutter"]').value(result.human);
         });
     });
 
-    $('#fd_plan3dConfigure').off('click', '#bt_addTextCommand').on('click', '#bt_addTextCommand', function (event) {
-        nextdom.cmd.getSelectModal({cmd: {type: 'info'}}, function (result) {
-            $('.plan3dAttr[data-l1key=configuration][data-l2key="3d::widget::text::text"]').atCaret('insert', result.human);
+    $('#fd_plan3dConfigure').off('click','#bt_addTextCommand').on('click','#bt_addTextCommand',  function (event) {
+        nextdom.cmd.getSelectModal({cmd:{type:'info'}}, function (result) {
+            $('.plan3dAttr[data-l1key=configuration][data-l2key="3d::widget::text::text"]').atCaret('insert',result.human);
         });
     });
 
     $('#bt_saveConfigurePlan3d').on('click', function () {
         var plan3ds = $('#fd_plan3dConfigure').getValues('.plan3dAttr');
-        if (!isset(plan3ds[0].configuration)) {
+        if(!isset(plan3ds[0].configuration)){
             plan3ds[0].configuration = {};
         }
         plan3ds[0].configuration['3d::widget::conditionalColor::condition'] = $('#div_conditionColor .conditionalColor').getValues('.conditionalColorAttr');
+        plan3ds[0].configuration['3d::widget::conditionalShow::condition'] = $('#div_conditionShow .conditionalShow').getValues('.conditionalShowAttr');
         nextdom.plan3d.save({
             plan3ds: plan3ds,
             error: function (error) {
-                notify('Core', error.message, 'error');
+                $('#div_alertPlan3dConfigure').showAlert({message: error.message, level: 'danger'});
             },
             success: function () {
                 $('#fd_plan3dConfigure').closest("div.ui-dialog-content").dialog("close");
-                if (typeof refresh3dObject == 'function') {
+                if(typeof refresh3dObject == 'function'){
                     refresh3dObject();
                 }
             },
         });
     });
 
-    $('#bt_removeConfigurePlan3d').on('click', function () {
+    $('#bt_removeConfigurePlan3d').on('click',function(){
         var plan3ds = $('#fd_plan3dConfigure').getValues('.plan3dAttr');
-        if (!isset(plan3ds[0].configuration)) {
+        if(!isset(plan3ds[0].configuration)){
             plan3ds[0].configuration = {};
         }
         nextdom.plan3d.remove({
             id: plan3ds[0].id,
             error: function (error) {
-                notify('Core', error.message, 'error');
+                $('#div_alertPlan3dConfigure').showAlert({message: error.message, level: 'danger'});
             },
             success: function () {
                 $('#fd_plan3dConfigure').closest("div.ui-dialog-content").dialog("close");
-                if (typeof refresh3dObject == 'function') {
+                if(typeof refresh3dObject == 'function'){
                     refresh3dObject();
                 }
             },
@@ -410,13 +411,18 @@
             },
             success: function (data) {
                 if (data.state != 'ok') {
-                    notify("Core", data.result, "error");
+                    $('#div_alertPlan3dConfigure').showAlert({message: data.result, level: 'danger'});
                     return;
                 }
                 $('#fd_plan3dConfigure').setValues(data.result, '.plan3dAttr');
                 if (isset(data.result.configuration) && isset(data.result.configuration['3d::widget::conditionalColor::condition'])) {
                     for (var i in data.result.configuration['3d::widget::conditionalColor::condition']) {
                         addConditionalColor(data.result.configuration['3d::widget::conditionalColor::condition'][i]);
+                    }
+                }
+                if (isset(data.result.configuration) && isset(data.result.configuration['3d::widget::conditionalShow::condition'])) {
+                    for (var i in data.result.configuration['3d::widget::conditionalShow::condition']) {
+                        addConditionalShow(data.result.configuration['3d::widget::conditionalShow::condition'][i]);
                     }
                 }
             }

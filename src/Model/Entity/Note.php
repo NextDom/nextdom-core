@@ -17,6 +17,8 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Exceptions\CoreException;
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
 
 /**
@@ -25,7 +27,7 @@ use NextDom\Helpers\Utils;
  * @ORM\Table(name="note")
  * @ORM\Entity
  */
-class Note
+class Note implements EntityInterface
 {
 
     /**
@@ -53,22 +55,29 @@ class Note
 
     private $_changed = false;
 
+    /**
+     * Throw exception if note doesn't have name
+     * @throws CoreException
+     */
     public function preSave()
     {
         if (trim($this->getName()) == '') {
-            throw new \Exception(__('Le nom de la note ne peut être vide'));
+            throw new CoreException(__('entity.note.name-cannot-be-empty'));
         }
     }
 
     public function save()
     {
-        \DB::save($this);
+        if ($this->_changed) {
+            DBHelper::save($this);
+            $this->_changed = false;
+        }
         return true;
     }
 
     public function remove()
     {
-        \DB::remove($this);
+        DBHelper::remove($this);
     }
 
     public function getId()
@@ -86,10 +95,10 @@ class Note
         return $this->text;
     }
 
-    public function setId($_id)
+    public function setId($id)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $id);
+        $this->id = $id;
         return $this;
     }
 

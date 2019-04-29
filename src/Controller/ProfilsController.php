@@ -84,10 +84,15 @@ class ProfilsController extends BaseController
             }
         }
         $pageData['profilsAvatars'] = [];
-        $lsAvatars = FileSystemHelper::ls(NEXTDOM_ROOT . '/public/img/profils/');
+
+        $profilRootURL = "/public/img/profils/";
+        $profilRootDir = sprintf("%s/public/img/profils/", NEXTDOM_ROOT);
+        $lsAvatars = FileSystemHelper::ls($profilRootDir);
         foreach ($lsAvatars as $avatarFile) {
-            if (is_file(NEXTDOM_ROOT . '/public/img/profils/' . $avatarFile)) {
-                $pageData['profilsAvatars'][] = '/public/img/profils/' . $avatarFile;
+            $path = sprintf("%s/%s", $profilRootDir, $avatarFile);
+            $url  = sprintf("%s/%s", $profilRootURL, $avatarFile);
+            if (true == is_file($path)) {
+                $pageData['profilsAvatars'][] = $url;
             }
         }
         $pageData['profilsDisplayTypes'] = NextDomHelper::getConfiguration('eqLogic:displayType');

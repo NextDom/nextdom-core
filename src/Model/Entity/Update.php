@@ -18,6 +18,8 @@
 namespace NextDom\Model\Entity;
 
 use NextDom\Exceptions\CoreException;
+use NextDom\Helpers\DBHelper;
+use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
@@ -34,7 +36,7 @@ use ZipArchive;
  * @ORM\Table(name="update", indexes={@ORM\Index(name="status", columns={"status"})})
  * @ORM\Entity
  */
-class Update
+class Update implements EntityInterface
 {
     /**
      * @var string
@@ -184,12 +186,12 @@ class Update
 
                         }
                         if (!file_exists($cibDir . '/plugin_info')) {
-                            $files = ls($cibDir, '*');
+                            $files = FileSystemHelper::ls($cibDir, '*');
                             if (count($files) == 1 && file_exists($cibDir . '/' . $files[0] . 'plugin_info')) {
                                 $cibDir = $cibDir . '/' . $files[0];
                             }
                         }
-                        rmove($cibDir . '/', NEXTDOM_ROOT . '/plugins/' . $this->getLogicalId(), false, array(), true);
+                        rmove($cibDir, NEXTDOM_ROOT . '/plugins/' . $this->getLogicalId(), false, array(), true);
                         rrmdir($cibDir);
                         $cibDir = NextDomHelper::getTmpFolder('market') . '/' . $this->getLogicalId();
                         if (file_exists($cibDir)) {
@@ -411,7 +413,7 @@ class Update
      */
     public function save()
     {
-        return \DB::save($this);
+        return DBHelper::save($this);
     }
 
     /**
@@ -431,7 +433,12 @@ class Update
      */
     public function remove()
     {
-        return \DB::remove($this);
+        return DBHelper::remove($this);
+    }
+
+    public function postRemove()
+    {
+        EventManager::add('update::refreshUpdateNumber');
     }
 
     /**
@@ -441,7 +448,7 @@ class Update
      */
     public function refresh()
     {
-        \DB::refresh($this);
+        DBHelper::refresh($this);
     }
 
     public function getId()

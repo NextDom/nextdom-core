@@ -33,6 +33,11 @@ class plugin extends \NextDom\Model\Entity\Plugin
         return PluginManager::getPathById($id);
     }
 
+    public static function forceDisablePlugin($id)
+    {
+        PluginManager::forceDisablePlugin($id);
+    }
+
     public static function listPlugin($activateOnly = false, $orderByCaterogy = false, $translate = true, $nameOnly = false)
     {
         return PluginManager::listPlugin($activateOnly, $orderByCaterogy, $nameOnly);
