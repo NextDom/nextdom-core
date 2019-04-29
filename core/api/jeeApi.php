@@ -933,7 +933,7 @@ try {
         if (!is_object($plugin)) {
             $jsonrpc->makeSuccess(array('state' => 'nok', 'log' => 'nok'));
         }
-        $jsonrpc->makeSuccess($plugin->dependancy_info());
+        $jsonrpc->makeSuccess($plugin->getDependencyInfo());
     }
     
     if ($jsonrpc->getMethod() == 'plugin::dependancyInstall') {

@@ -53,13 +53,13 @@ NextDomUIDGenerator._checkDuplicates = function(generator, count) {
 		// if it already exists, then it has been duplicated
 		if (typeof hash[gen] !== 'undefined') {
 			dupe.push({
-				duplicate : gen,
-				indexCreated : hash[gen],
-				indexDuplicated : idx,
-				duplicateCount : dupe.filter(function(cur) {
+				duplicate: gen,
+				indexCreated: hash[gen],
+				indexDuplicated: idx,
+				duplicateCount: dupe.filter(function (cur) {
 					return cur.duplicate === gen
 				}).length
-}
+			});
 		}
 		hash[gen] = idx;
 	}

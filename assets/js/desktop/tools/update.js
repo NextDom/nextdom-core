@@ -295,15 +295,20 @@ function addUpdate(_update) {
         bgClass = 'bg-yellow';
     }
 
+    var boxUpdateClass = '';
+    if (_update.type !== 'core') {
+        boxUpdateClass = 'update-box';
+    }
     var tr = '<div class="objet col-lg-4 col-md-6 col-sm-6 col-xs-12">';
-    tr += '<div class="box ' + boxClass +'" data-id="' + init(_update.id) + '" data-logicalId="' + init(_update.logicalId) + ' col-lg-4 col-md-6 col-sm-6 col-xs-12" data-type="' + init(_update.type) + '">';
+
+    tr += '<div class="' + boxUpdateClass + ' box ' + boxClass +'" data-id="' + init(_update.id) + '" data-logicalId="' + init(_update.logicalId) + ' col-lg-4 col-md-6 col-sm-6 col-xs-12" data-type="' + init(_update.type) + '">';
     tr += '<div class="box-header with-border">';
     if (_update.type == 'core') {
-        tr += ' <h4 class="box-title" style="text-transform: capitalize;"><img style="height:50px;padding-right:5px;" src="/public/img/NextDom/NextDom_Square_AlphaBlackBlue.png"/>' + init(_update.name)+'</h4>';
+        tr += ' <h4 class="box-title"><img src="/public/img/NextDom/NextDom_Square_AlphaBlackBlue.png"/>' + init(_update.name)+'</h4>';
     }else{
-        tr += ' <h4 class="box-title" style="text-transform: capitalize;"><img style="height:50px;padding-right:5px;" src="' + init(_update.icon) + '"/>' + init(_update.name)+'</h4>';
+        tr += ' <h4 class="box-title"><img src="' + init(_update.icon) + '"/>' + init(_update.name)+'</h4>';
     }
-    tr += '<span data-toggle="tooltip" title="" class="updateAttr badge ' + bgClass +' pull-right" data-original-title="" data-l1key="status" style="text-transform: uppercase;"></span>';
+    tr += '<span data-toggle="tooltip" title="" class="updateAttr badge ' + bgClass +' pull-right" data-original-title="" data-l1key="status"></span>';
     tr += '</div>';
     tr += '<div class="box-body">';
     tr += '<span class="updateAttr" data-l1key="id" style="display:none;"></span><p><b>{{Source : }}</b><span class="updateAttr" data-l1key="source"></span></p>';
@@ -315,7 +320,8 @@ function addUpdate(_update) {
     tr += '</p>';
     tr += '<p><b>{{Version : }}</b>'+_update.remoteVersion+'</p>';
     if (_update.type != 'core') {
-        tr += '<input type="checkbox" class="updateAttr" data-l1key="configuration" data-l2key="doNotUpdate"><span style="font-size:1em;">{{Ne pas mettre à jour}}</span></br>';
+        tr += '<input type="checkbox" id="do-not-update' + _update.id + '" class="updateAttr" data-l1key="configuration" data-l2key="doNotUpdate">';
+        tr += '<label for="do-not-update' + _update.id + '">{{Ne pas mettre à jour}}</label></br>';
     }
     tr += '</div>';
     tr += '<div class="box-footer clearfix text-center">';
@@ -362,7 +368,7 @@ function addUpdate(_update) {
 
 $('#bt_saveUpdate').on('click',function(){
     nextdom.update.saves({
-        updates : $('#table_update tbody tr').getValues('.updateAttr'),
+        updates : $('.update-box').getValues('.updateAttr'),
         error: function (error) {
             notify("Erreur", error.message, 'error');
         },

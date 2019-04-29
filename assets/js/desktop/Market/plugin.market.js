@@ -112,7 +112,7 @@ function initInstallationButtons() {
  */
 function initBranchesUpdate(defaultBranchChoice) {
     $.post({
-        url: 'core/ajax/Market/Ajax/NextDomMarketAjax.php',
+        url: 'core/ajax/nextdom_market.ajax.php',
         data: {
             action: 'get',
             params: 'branches',

@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\InteractDefManager;
@@ -29,7 +30,7 @@ use NextDom\Managers\JeeObjectManager;
  * @ORM\Table(name="interactDef")
  * @ORM\Entity
  */
-class InteractDef
+class InteractDef implements EntityInterface
 {
 
     /**
@@ -278,7 +279,7 @@ class InteractDef
         if ($this->getQuery() == '') {
             throw new \Exception(__('La commande (demande) ne peut pas être vide'));
         }
-        \DB::save($this);
+        DBHelper::save($this);
         return true;
     }
 
@@ -287,7 +288,7 @@ class InteractDef
         $queries = $this->generateQueryVariant();
         InteractQueryManager::removeByInteractDefId($this->getId());
         if ($this->getEnable()) {
-            \DB::beginTransaction();
+            DBHelper::beginTransaction();
             foreach ($queries as $query) {
                 $query['query'] = InteractDefManager::sanitizeQuery($query['query']);
                 if (trim($query['query']) == '') {
@@ -302,14 +303,14 @@ class InteractDef
                 $interactQuery->setActions('cmd', $query['cmd']);
                 $interactQuery->save();
             }
-            \DB::commit();
+            DBHelper::commit();
         }
         InteractDefManager::cleanInteract();
     }
 
     public function remove()
     {
-        \DB::remove($this);
+        DBHelper::remove($this);
     }
 
     public function preRemove()

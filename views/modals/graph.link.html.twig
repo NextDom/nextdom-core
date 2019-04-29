@@ -19,8 +19,8 @@
 <script>
     var graph = Viva.Graph.graph();
     nextdom.getGraphData({
-        filter_type : '<?php echo init('filter_type', '') ?>',
-        filter_id : '<?php echo init('filter_id', '') ?>',
+        filter_type : filterTypeGraph,
+        filter_id :  filterIdGraph ,
         error: function(error) {
             $('#div_alertGraphLink').showAlert({message: error.message, level: 'danger'});
         },

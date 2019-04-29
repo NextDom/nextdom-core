@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\ConfigManager;
@@ -31,7 +32,7 @@ use NextDom\Managers\ScenarioManager;
  * @ORM\Table(name="dataStore", uniqueConstraints={@ORM\UniqueConstraint(name="UNIQUE", columns={"type", "link_id", "key"})})
  * @ORM\Entity
  */
-class DataStore
+class DataStore implements EntityInterface
 {
 
     /**
@@ -96,7 +97,7 @@ class DataStore
 
     public function save()
     {
-        \DB::save($this);
+        DBHelper::save($this);
         return true;
     }
 
@@ -116,7 +117,7 @@ class DataStore
 
     public function remove()
     {
-        \DB::remove($this);
+        DBHelper::remove($this);
     }
 
     public function getLinkData(&$_data = array('node' => array(), 'link' => array()), $_level = 0, $_drill = null)

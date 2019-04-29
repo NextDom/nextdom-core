@@ -35,6 +35,7 @@ namespace NextDom\Managers;
 
 use NextDom\Enums\DaemonState;
 use NextDom\Enums\PluginManagerCron;
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Model\Entity\Plugin;
@@ -63,10 +64,12 @@ class PluginManager
             $id = self::getPathById($id);
         }
         if (!file_exists($id)) {
+            self::forceDisablePlugin($id);
             throw new \Exception('Plugin introuvable : ' . $id);
         }
         $data = json_decode(file_get_contents($id), true);
         if (!is_array($data)) {
+            self::forceDisablePlugin($id);
             throw new \Exception('Plugin introuvable (json invalide) : ' . $id . ' => ' . print_r($data, true));
         }
         $plugin = new Plugin();
@@ -95,6 +98,18 @@ class PluginManager
     public static function getPathById(string $id): string
     {
         return NEXTDOM_ROOT . '/plugins/' . $id . '/plugin_info/info.json';
+    }
+
+    public static function forceDisablePlugin($_id)
+    {
+        ConfigManager::save('active', 0, $_id);
+        $values = array(
+            'eqType_name' => $_id,
+        );
+        $sql = 'UPDATE eqLogic
+                SET isEnable=0
+                WHERE eqType_name=:eqType_name';
+        DBHelper::Prepare($sql, $values);
     }
 
     /**
@@ -126,7 +141,7 @@ class PluginManager
                     FROM `config`
                     WHERE `key` = 'active'
                     AND `value` = '1'";
-            $queryResults = \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL);
+            $queryResults = DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL);
             if ($nameOnly) {
                 foreach ($queryResults as $row) {
                     $listPlugin[] = $row['plugin'];
@@ -373,7 +388,7 @@ class PluginManager
             if (ConfigManager::byKey('deamonAutoMode', $plugin->getId(), 1) != 1) {
                 continue;
             }
-            $dependancy_info = $plugin->dependancy_info();
+            $dependancy_info = $plugin->getDependencyInfo();
             if ($dependancy_info['state'] == DaemonState::NOT_OK) {
                 try {
                     $plugin->dependancy_install();

@@ -1,0 +1,88 @@
+{#
+
+/* This file is part of Jeedom.
+*
+* Jeedom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* Jeedom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/* This file is part of NextDom.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#}
+<style>
+    #sel_plugin {
+        width: 300px;
+    }
+
+    #table_message {
+        margin-top: 5px;
+    }
+
+    #table_message .datetime {
+        width: 90px;
+    }
+</style>
+<section class="content">
+    <a class="btn btn-danger pull-right" id="bt_clearMessage"><i class="far fa-trash-alt text-white spacing-right"></i>{{ 'Vider' }}</a>
+    <a class="btn btn-warning pull-right" id="bt_refreshMessage"><i class="fas fa-sync text-white spacing-right"></i>{{ 'Rafraichir' }}</a>
+    <select id="sel_plugin" class="form-control">
+        <option value="" selected="selected">{{ 'Tout' }}</option>
+        {% for plugin in messagePluginsList %}
+            {% if messageSelectedPlugin == plugin['plugin'] %}
+                <option value="{{ plugin['plugin'] }}" selected="selected">{{ plugin['plugin'] }}</option>
+            {% else %}
+                <option value="{{ plugin['plugin'] }}">{{ plugin['plugin'] }}</option>
+            {% endif %}
+        {% endfor %}
+    </select>
+    <table class="table table-condensed table-bordered tablesorter" id="table_message">
+        <thead>
+        <tr>
+            <th data-sorter="false" data-filter="false"></th>
+            <th>{{ 'Date et heure' }}</th>
+            <th>{{ 'Plugin' }}</th>
+            <th>{{ 'Description' }}</th>
+            <th data-sorter="false" data-filter="false">{{ 'Action' }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for message in messagesList %}
+            <tr data-message_id="{{ message.getId() }}">
+                <td>
+                    <div class="btn btn-sm btn-danger text-center removeMessage"><i class="far fa-trash-alt cursor"></i></div>
+                </td>
+                <td class="datetime">{{ message.getDate() }}</td>
+                <td class="plugin">{{ message.getPlugin() }}</td>
+                <td class="message">{{ message.getMessage()|raw }}</td>
+                <td class="message_action">{{ message.getAction() }}</td>
+            </tr>
+        {% endfor %}
+        <?php
+    </tbody>
+    </table>
+</section>
+<script src="/public/js/modals/message.js"></script>

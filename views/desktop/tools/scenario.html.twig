@@ -37,23 +37,81 @@
     .CodeMirror {
         height: auto;
     }
+
+    .element {
+        color: white;
+        border-width: 0px;
+        border-style: solid;
+    }
+
+    .subElement {
+        width: 100%;
+    }
+
+    .scenario-delete i {
+        position: relative;
+        z-index: 2;
+    }
+
+    div.sortable.empty {
+        height: 30px;
+    }
+
+    .scenario-alors .dropdown {
+        display: inline-block;
+    }
+
+    .scenario-si-bloc {
+        display: table-cell;
+    }
+
+    .expressionAttr.scenario-text {
+        resize: vertical;
+    }
+
+    .scenarioDisplayCard span.scenario-icon {
+        font-size: 3.8em;
+    }
+
+    #md_addElement .modal-body .alert:not(:first-child) {
+        display: none;
+    }
+
+    #in_addElementType {
+        margin-bottom: 1.5rem;
+    }
+
+    #div_scenarioElement {
+        padding-bottom: 7rem;
+    }
+    .tab-content {
+        height: calc(100% - 50px);
+        overflow:auto;
+        overflow-x: hidden;
+    }
+
+    .expression-error {
+        text-decoration: underline;
+        text-decoration-color: 'red';
+        text-decoration-style: 'dashed';
+    }
 </style>
 <div id="scenarioThumbnailDisplay" class="blurPanel">
     <section class="content-header">
         <div class="action-bar">
             <div class="action-group">
-                <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour' }}</a>
-                {% if scenarioEnabled == 0 %}
-                    <a class="btn btn-success btn-action-bar" id="bt_changeAllScenarioState2" data-state="1"><i class="fas fa-check spacing-right"></i>{{ 'Activer scénarios' }}</a>
+                <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'scenario.back'|trans }}</a>
+                {% if scenariosEnabled == 0 %}
+                    <a class="btn btn-success btn-action-bar" id="bt_changeAllScenarioState" data-state="1"><i class="fas fa-check spacing-right"></i>{{ 'scenario.enable-scenarios'|trans }}</a>
                 {% else %}
-                    <a class="btn btn-danger btn-action-bar" id="bt_changeAllScenarioState2" data-state="0"><i class="fas fa-times spacing-right"></i>{{ 'Désactiver scénarios' }}</a>
+                    <a class="btn btn-danger btn-action-bar" id="bt_changeAllScenarioState" data-state="0"><i class="fas fa-times spacing-right"></i>{{ 'scenario.disable-scenarios'|trans }}</a>
                 {% endif %}
             </div>
             <div class="action-group">
-                <a class="btn btn-success btn-action-bar pull-right" id="bt_addScenario2"><i class="fas fa-plus-circle spacing-right"></i>{{ 'Ajouter' }}</a>
-                <a class="btn btn-warning btn-action-bar pull-right bt_showExpressionTest"><i class="fas fa-check spacing-right"></i>{{ 'Testeur d\'expression' }}</a>
-                <a class="btn btn-primary btn-action-bar pull-right" id="bt_displayScenarioVariable2"><i class="fas fa-eye spacing-right"></i>{{ 'Variables' }}</a>
-                <a class="btn btn-default btn-action-bar pull-right bt_showScenarioSummary"><i class="fas fa-list spacing-right"></i>{{ 'Vue d\'ensemble' }}</a>
+                <a class="btn btn-success btn-action-bar pull-right" id="bt_addScenario"><i class="fas fa-plus-circle spacing-right"></i>{{ 'scenario.add'|trans }}</a>
+                <a class="btn btn-warning btn-action-bar pull-right bt_showExpressionTest"><i class="fas fa-check spacing-right"></i>{{ 'scenario.test-expression'|trans }}</a>
+                <a class="btn btn-primary btn-action-bar pull-right bt_displayScenarioVariable"><i class="fas fa-eye spacing-right"></i>{{ 'scenario.variables'|trans }}</a>
+                <a class="btn btn-default btn-action-bar pull-right bt_showScenarioSummary"><i class="fas fa-list spacing-right"></i>{{ 'scenario.summary'|trans }}</a>
             </div>
         </div>
     </section>
@@ -61,36 +119,36 @@
     <section class="content">
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title"><i class="fas fa-film spacing-right"></i>{{ 'Mes scénarios' }}</h3>
+                <h3 class="box-title"><i class="fas fa-film spacing-right"></i>{{ 'scenario.my-scenarios'|trans }}</h3>
             </div>
             <div class="box-body">
                 {% if scenarioCount == 0 %}
-                    <div><span>{{ 'Vous n\'avez encore aucun scénario ! Cliquez sur ajouter dans le menu pour commencer...' }}</span></div>
+                    <div><span>{{ 'scenario.no-scenario'|trans }}</span></div>
                 {% else %}
-                    <div><span>{{ 'Vous avez '}} {{ scenarioCount }} {{ 'scénarios...' }}</span></div>
+                    <div><span>{{ 'scenario.you-have-scenarios'|trans|format(scenarioCount) }}</span></div>
                 {% endif %}
             </div>
         </div>
 
         <div class="box-group" id="accordionScenario">
-            {% if scenarios[-1]|length > 0 %}
+            {% if scenariosWithoutGroup|length > 0 %}
                 <div class="panel box">
                     <a class="box-header with-border accordion-toggle" data-toggle="collapse" data-parent="" href="#config_none">
                         <h3 class="box-title">
-                            <span class="accordion-toggle" data-toggle="collapse" data-parent="#accordionScenario" href="#config_none">{{ 'Aucun'}} - {{ scenarios[-1]|length }} {{ 'scénario(s)'}}.</span>
+                            <span>{{ 'scenario.no-group'|trans }}</span>
                         </h3>
                     </a>
                     <div id="config_none" class="panel-collapse collapse in">
                         <div class="box-body">
                             <div class="scenarioListContainer DisplayCard text-center">
-                                {% for scenario in scenarios[-1] %}
+                                {% for scenario in scenariosWithoutGroup %}
                                     <div class="scenarioDisplayCard cursor icon_gestion" data-scenario_id="{{ scenario.getId() }}" style="{% if not scenario.getIsActive() %}{{ scenarioInactiveStyle }}{% endif %}">
                                         {% if scenario.getDisplay('icon') != '' %}
-                                            <span style="font-size:3.8em;">{{ scenario.getDisplay('icon')|raw }}</span>
+                                            <span class="scenario-icon">{{ scenario.getDisplay('icon')|raw }}</span>
                                         {% else %}
                                             <img class="backgroundColor" src="/public/img/NextDom_Scenario.png" height="70"/>
                                         {% endif %}
-                                        <p class="name">{{ scenario.getHumanName(true, true, true, true)|raw }}</p>
+                                        <p>{{ scenario.getHumanName(true, true, true, true)|raw }}
                                     </div>
                                 {% endfor %}
                             </div>
@@ -106,20 +164,20 @@
                     <div class="panel box">
                         <a class="box-header with-border accordion-toggle" data-toggle="collapse" data-parent="" href="#config_{{ index }}">
                             <h3 class="box-title">
-                                <span>{{ scenarioGroup.group }} - {{ scenarios[scenarioGroup.group]|length }} {{ 'scénario(s)' }}</span>
+                                <span>{{ scenarioGroup.group }} - {{ scenarios[scenarioGroup.group]|length }} {{ 'scenario.scenarios'|trans }}</span>
                             </h3>
                         </a>
                         <div id="config_{{ index }}" class="panel-collapse collapse in">
                             <div class="box-body">
                                 <div class="scenarioListContainer DisplayCard text-center ">
                                     {% for scenario in scenarios[scenarioGroup.group] %}
-                                        <div class="scenarioDisplayCard  icon_gestion cursor" data-scenario_id="{{ scenario.getId() }}" style="{% if not scenario.getIsActive() %}{{ scenarioInactiveStyle }}{% endif %}">
+                                        <div class="scenarioDisplayCard icon_gestion cursor" data-scenario_id="{{ scenario.getId() }}" style="{% if not scenario.getIsActive() %}{{ scenarioInactiveStyle }}{% endif %}">
                                             {% if scenario.getDisplay('icon') != '' %}
-                                                <span style="font-size:3.8em;">{{ scenario.getDisplay('icon')|raw }}</span>
+                                                <span class="scenario-icon">{{ scenario.getDisplay('icon')|raw }}</span>
                                             {% else %}
-                                                <img class="backgroundColor" src="/public/img/NextDom_Scenario.png" height="70"/>
+                                                <img class="backgroundColor" alt="scenario" src="/public/img/NextDom_Scenario.png" height="70"/>
                                             {% endif %}
-                                            <p>{{ scenario.getHumanName(true, true, true, true)|raw }}</p>
+                                            <p>{{ scenario.getHumanName(true, true, true, true)|raw }}
                                         </div>
                                     {% endfor %}
                                 </div>
@@ -137,21 +195,21 @@
     <section class="content-header">
         <div class="action-bar">
             <div class="action-group">
-                <a class="btn btn-danger btn-action-bar" id="bt_scenarioThumbnailDisplay"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour' }}</a>
-                <a class="btn btn-success btn-action-bar" id="bt_saveScenario"><i class="fas fa-save spacing-right"></i>{{ 'Sauvegarder' }}</a>
-                <a class="btn btn-default btn-action-bar" id="bt_graphScenario"><i class="fas fa-object-group spacing-right"></i>{{ 'Liens' }}</a>
-                <a class="btn btn-default btn-action-bar" id="bt_copyScenario"><i class="fas fa-copy spacing-right"></i>{{ 'Dupliquer' }}</a>
-                <a class="btn btn-primary btn-action-bar" id="bt_exportScenario"><i class="fas fa fa-share spacing-right"></i>{{ 'Exporter' }}</a>
-                <a class="btn btn-default btn-action-bar" id="bt_templateScenario"><i class="fas fa-cubes spacing-right"></i>{{ 'Template' }}</a>
-                <a class="btn btn-default btn-action-bar" id="bt_logScenario"><i class="far fa-file-alt spacing-right"></i>{{ 'Log' }}</a>
+                <a class="btn btn-danger btn-action-bar" id="bt_scenarioThumbnailDisplay"><i class="fas fa-chevron-left spacing-right"></i>{{ 'scenario.back'|trans }}</a>
+                <a class="btn btn-default btn-action-bar" id="bt_graphScenario"><i class="fas fa-object-group spacing-right"></i>{{ 'scenario.links'|trans }}</a>
+                <a class="btn btn-default btn-action-bar" id="bt_logScenario"><i class="far fa-file-alt spacing-right"></i>{{ 'scenario.log'|trans }}</a>
+                <a class="btn btn-default btn-action-bar" id="bt_templateScenario"><i class="fas fa-cubes spacing-right"></i>{{ 'scenario.template'|trans }}</a>
+                <a class="btn btn-primary btn-action-bar" id="bt_exportScenario"><i class="fas fa fa-share spacing-right"></i>{{ 'scenario.export'|trans }}</a>
+                <a class="btn btn-default btn-action-bar" id="bt_copyScenario"><i class="fas fa-copy spacing-right"></i>{{ 'scenario.duplicate'|trans }}</a>
+                <a class="btn btn-success btn-action-bar bt_addScenarioElement"><i class="fas fa-plus-circle spacing-right"></i>{{ 'scenario.add-block'|trans }}</a>
             </div>
             <div class="action-group">
-                <a class="btn btn-danger btn-action-bar pull-right" id="bt_delScenario2"><i class="fas fa-minus-circle spacing-right"></i>{{ 'Supprimer' }}</a>
-                <a class="btn btn-success btn-action-bar pull-right bt_addScenarioElement"><i class="fas fa-plus-circle spacing-right"></i>{{ 'Ajouter bloc' }}</a>
-                <a class="btn btn-danger btn-action-bar pull-right" id="bt_stopScenario" style="display:none;"><i class="fas fa-stop spacing-right"></i>{{ 'Arrêter' }}</a>
-                <a class="btn btn-warning btn-action-bar pull-right" id="bt_testScenario2" title='{{ 'Veuillez sauvegarder avant de tester. Ceci peut ne pas aboutir.' }}'><i class="fas fa-gamepad spacing-right"></i>{{ 'Exécuter' }}</a>
-                <a class="btn btn-warning btn-action-bar pull-right bt_showExpressionTest"><i class="fas fa-check spacing-right"></i>{{ 'Testeur d\'Expression' }}</a>
-                <a class="btn btn-primary btn-action-bar pull-right" id="bt_displayScenarioVariable"><i class="fas fa-eye spacing-right"></i> {{ 'Variables' }}</a>
+                <a class="btn btn-success btn-action-bar pull-right" id="bt_saveScenario"><i class="fas fa-save spacing-right"></i>{{ 'scenario.save'|trans }}</a>
+                <a class="btn btn-danger btn-action-bar pull-right" id="bt_stopScenario" style="display:none;"><i class="fas fa-stop spacing-right"></i>{{ 'scenario.stop'|trans }}</a>
+                <a class="btn btn-warning btn-action-bar pull-right" id="bt_testScenario" title='{{ 'scenario.execute-title'|trans }}'><i class="fas fa-gamepad spacing-right"></i>{{ 'scenario.execute'|trans }}</a>
+                <a class="btn btn-warning btn-action-bar pull-right bt_showExpressionTest"><i class="fas fa-check spacing-right"></i>{{ 'scenario.expression-test'|trans }}</a>
+                <a class="btn btn-primary btn-action-bar pull-right bt_displayScenarioVariable"><i class="fas fa-eye spacing-right"></i> {{ 'scenario.variables'|trans }}</a>
+                <a class="btn btn-danger btn-action-bar pull-right" id="bt_delScenario"><i class="fas fa-minus-circle spacing-right"></i>{{ 'scenario.delete'|trans }}</a>
             </div>
         </div>
     </section>
@@ -160,92 +218,94 @@
         <div class="nav-tabs-custom">
             <ul class="nav nav-tabs pull-right" role="tablist">
                 <li role="presentation">
-                    <a id="bt_scenarioTab" href="#scenariotab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-microchip spacing-right"></i>{{ 'Programmation' }}</a>
+                    <a id="bt_scenarioTab" href="#scenariotab" aria-controls="profile" role="tab" data-toggle="tab">
+                        <i class="fas fa-microchip spacing-right"></i>{{ 'scenario.programmation'|trans }}
+                    </a>
                 </li>
                 <li role="presentation" class="active">
-                    <a href="#generaltab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-cog spacing-right"></i>{{ 'Paramètres' }}</a>
+                    <a href="#generaltab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-cog spacing-right"></i>{{ 'scenario.parameters'|trans }}</a>
                 </li>
-                <h4 id="span_ongoing" class="label pull-right label-sticker"></h4>
-                <h4 class="label label-primary pull-right label-sticker">{{ 'ID : ' }}<span class="scenarioAttr" data-l1key="id"></span></h4>
-                <li class="header pull-left"><i class="fas fa-film spacing-right"></i>{{ 'Edition Scénario' }}</li>
+                <li><h4 id="span_ongoing" class="label pull-right label-sticker"></h4></li>
+                <li><h4 class="label label-primary pull-right label-sticker">{{ 'scenario.id'|trans }} : <span class="scenarioAttr" data-l1key="id"></span></h4></li>
+                <li class="header pull-left"><i class="fas fa-film spacing-right"></i>{{ 'scenario.scenario-edit'|trans }}</li>
             </ul>
-            <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
+            <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="generaltab">
                     <form class="form-horizontal">
                         <div class="row">
                             <div class="col-lg-6 col-md-12">
                                 <fieldset>
-                                    <legend>{{ 'Identité' }}</legend>
+                                    <legend>{{ 'scenario.identity'|trans }}</legend>
                                     <div class="form-group">
-                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Nom du scénario' }}</label>
+                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'scenario.name'|trans }}</label>
                                         <div class="col-lg-8 col-md-8 col-sm-7 col-xs-12">
                                             <input class="form-control scenarioAttr" data-l1key="name" type="text"
-                                                   placeholder="{{ 'Nom du scénario' }}"/>
+                                                   placeholder="{{ 'scenario.name'|trans }}"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Nom à afficher' }}</label>
+                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'scenario.name-to-show'|trans }}</label>
                                         <div class="col-lg-8 col-md-8 col-sm-7 col-xs-12">
                                             <input class="form-control scenarioAttr"
-                                                   title="{{ 'Ne rien mettre pour laisser le nom par défaut' }}"
+                                                   title="{{ 'scenario.name-to-show-placeholder'|trans }}"
                                                    data-l1key="display" data-l2key="name" type="text"
-                                                   placeholder="{{ 'Nom à afficher' }}"/>
+                                                   placeholder="{{ 'scenario.name-to-show'|trans }}"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Description' }}</label>
+                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'scenario.description'|trans }}</label>
                                         <div class="col-lg-8 col-md-8 col-sm-7 col-xs-12">
-                                            <textarea class="form-control scenarioAttr ta_autosize" data-l1key="description" placeholder="Description"></textarea>
+                                            <textarea class="form-control scenarioAttr ta_autosize" data-l1key="description" placeholder="{{ 'scenario.description'|trans }}"></textarea>
                                         </div>
                                     </div>
                                 </fieldset>
                                 <fieldset class="legend-section">
-                                    <legend>{{ 'Options' }}</legend>
+                                    <legend>{{ 'scenario.options'|trans }}</legend>
                                     <div class="form-group">
-                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-3 control-label">{{ 'Actif' }}</label>
+                                        <label for="scenarioActiveAttr" class="col-lg-3 col-md-3 col-sm-4 col-xs-3 control-label">{{ 'scenario.enabled'|trans }}</label>
                                         <div class="col-sm-1 col-xs-3">
-                                            <input type="checkbox" class="scenarioAttr" data-l1key="isActive">
+                                            <input id="scenarioActiveAttr" type="checkbox" class="scenarioAttr" data-l1key="isActive">
                                         </div>
-                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-3 control-label">{{ 'Visible' }}</label>
+                                        <label for="scenarioVisibleAttr" class="col-lg-3 col-md-3 col-sm-4 col-xs-3 control-label">{{ 'scenario.visible'|trans }}</label>
                                         <div class="col-sm-1 col-xs-3">
-                                            <input type="checkbox" class="scenarioAttr" data-l1key="isVisible">
+                                            <input id="scenarioVisibleAttr" type="checkbox" class="scenarioAttr" data-l1key="isVisible">
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-3 control-label">{{ 'Multi lancement' }}</label>
+                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-3 control-label">{{ 'scenario.multi-launch'|trans }}</label>
                                         <div class="col-sm-1 col-xs-3">
                                             <input type="checkbox" class="scenarioAttr" data-l1key="configuration" data-l2key="allowMultiInstance"
-                                                   title="{{ 'Le scénario pourra tourner plusieurs fois en même temps' }}">
+                                                   title="{{ 'scenario.multi-launch-title'|trans }}">
                                         </div>
-                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-3 control-label">{{ 'Mode synchrone' }}</label>
+                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-3 control-label">{{ 'scenario.sync-mode'|trans }}</label>
                                         <div class="col-sm-1 col-xs-3">
                                             <input type="checkbox" class="scenarioAttr" data-l1key="configuration" data-l2key="syncmode"
-                                                   title="{{ 'Le scénario est en mode synchrone. Attention, cela peut rendre le système instable' }}">
+                                                   title="{{ 'scenario.sync-mode-title'|trans }}">
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Timeout' }}</label>
+                                        <label for="scenarioAttrTimeout" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'scenario.timeout'|trans }}</label>
                                         <div class="col-lg-8 col-md-8 col-sm-7 col-xs-12">
                                             <div class="input-group">
-                                                <input type="text" class="form-control scenarioAttr" data-l1key="timeout"/>
-                                                <span class="input-group-addon">{{ 'secondes (0 = illimité)' }}</span>
+                                                <input id="scenarioAttrTimeout" type="text" class="form-control scenarioAttr" data-l1key="timeout"/>
+                                                <span class="input-group-addon">{{ 'scenario.timeout-unity'|trans }}</span>
                                             </div>
                                         </div>
                                     </div>
                                 </fieldset>
                                 <fieldset class="legend-section">
-                                    <legend>{{ 'Paternité' }}</legend>
+                                    <legend>{{ 'scenario.paternity'|trans }}</legend>
                                     <div class="form-group">
-                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Groupe' }}</label>
+                                        <label for="scenarioGroupAttr" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'scenario.group'|trans }}</label>
                                         <div class="col-lg-8 col-md-8 col-sm-7 col-xs-12">
-                                            <input class="form-control scenarioAttr" data-l1key="group" type="text" placeholder="{{ 'Groupe du scénario' }}"/>
+                                            <input id="scenarioGroupAttr" class="form-control scenarioAttr" data-l1key="group" type="text" placeholder="{{ 'scenario.scenario-group'|trans }}"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Objet parent' }}</label>
+                                        <label for="scenarioObjectIdAttr" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'scenario.parent-object'|trans }}</label>
                                         <div class="col-lg-8 col-md-8 col-sm-7 col-xs-12">
-                                            <select class="scenarioAttr form-control" data-l1key="object_id">
-                                                <option value="">{{ 'Aucun' }}</option>
+                                            <select id="scenarioObjectIdAttr" class="scenarioAttr form-control" data-l1key="object_id">
+                                                <option value="">{{ 'scenario.no-choice'|trans }}</option>
                                                 {% for object in scenarioAllObjects %}
                                                     <option value="{{ object.getId() }}">{{ object.getName() }}</option>
                                                 {% endfor %}
@@ -254,22 +314,21 @@
                                     </div>
                                 </fieldset>
                                 <fieldset class="legend-section">
-                                    <legend>{{ 'Surveillance' }}</legend>
+                                    <legend>{{ 'scenario.supervising'|trans }}</legend>
                                     <div class="form-group">
-                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-3 control-label">{{ 'Log' }}</label>
+                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-3 control-label">{{ 'scenario.log'|trans }}</label>
                                         <div class="col-lg-8 col-md-8 col-sm-7 col-xs-9">
                                             <select class="scenarioAttr form-control" data-l1key="configuration" data-l2key="logmode">
-                                                <option value="default">{{ 'Défaut' }}</option>
-                                                <option value="none">{{ 'Aucun' }}</option>
-                                                <option value="realtime">{{ 'Temps réel' }}</option>
+                                                <option value="default">{{ 'scenario.default'|trans }}</option>
+                                                <option value="none">{{ 'scenario.no-choice'|trans }}</option>
+                                                <option value="realtime">{{ 'scenario.realtime'|trans }}</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-3 control-label">{{ 'Suivre dans la timeline' }}</label>
+                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-3 control-label">{{ 'scenario.follow-timeline'|trans }}</label>
                                         <div class="col-sm-1 col-xs-3">
-                                            <input type="checkbox" class="scenarioAttr" data-l1key="configuration" data-l2key="timeline::enable"
-                                                   title="{{ 'Les exécutions du scénario pourront être vues dans la timeline.' }}">
+                                            <input type="checkbox" class="scenarioAttr" data-l1key="configuration" data-l2key="timeline::enable" title="{{ 'scenario.follow-timeline-title'|trans }}"/>
                                         </div>
                                     </div>
                                     <div class="form-group"></div>
@@ -277,46 +336,45 @@
                             </div>
                             <div class="col-lg-6 col-md-12">
                                 <fieldset>
-                                    <legend>{{ 'Icône' }}</legend>
+                                    <legend>{{ 'scenario.icon'|trans }}</legend>
                                     <div class="form-group">
-                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-3 control-label">{{ 'Icône' }}</label>
+                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-3 control-label">{{ 'scenario.icon'|trans }}</label>
                                         <div class="col-lg-8 col-md-8 col-sm-3 col-xs-12">
                                             <div class="input-group">
-                                                <a class="btn btn-action" id="bt_chooseIcon"><i class="fas fa-flag spacing-right"></i>{{ 'Choisir' }}</a>
+                                                <a class="btn btn-action" id="bt_chooseIcon"><i class="fas fa-flag spacing-right"></i>{{ 'scenario.choose'|trans }}</a>
                                                 <div class="scenarioAttr label label-icon" data-l1key="display" data-l2key="icon"></div>
                                             </div>
                                         </div>
                                     </div>
                                 </fieldset>
                                 <fieldset class="legend-section">
-                                    <legend>{{ 'Déclenchement' }}</legend>
+                                    <legend>{{ 'scenario.launching'|trans }}</legend>
                                     <div class="form-group">
-                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Mode du scénario' }}</label>
+                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'scenario.scenario-mode'|trans }}</label>
                                         <div class="col-lg-8 col-md-8 col-sm-7 col-xs-12">
                                             <div class="input-group">
                                                 <select class="form-control scenarioAttr" data-l1key="mode">
-                                                    <option value="provoke">{{ 'Provoqué' }}</option>
-                                                    <option value="schedule">{{ 'Programmé' }}</option>
-                                                    <option value="all">{{ 'Les deux' }}</option>
+                                                    <option value="provoke">{{ 'scenario.provoked'|trans }}</option>
+                                                    <option value="schedule">{{ 'scenario.scheduled'|trans }}</option>
+                                                    <option value="all">{{ 'scenario.twice'|trans }}</option>
                                                 </select>
                                                 <span class="input-group-btn">
-                                                    <a class="btn btn-default" id="bt_addTrigger"><i class="fas fa-plus-square spacing-right"></i>{{ 'Déclencheur' }}</a>
-                                                    <a class="btn btn-default" id="bt_addSchedule"><i class="fas fa-plus-square spacing-right"></i>{{ 'Programmation' }}</a>
+                                                    <a class="btn btn-default" id="bt_addTrigger"><i class="fas fa-plus-square spacing-right"></i>{{ 'scenario.trigger'|trans }}</a>
+                                                    <a class="btn btn-default" id="bt_addSchedule"><i class="fas fa-plus-square spacing-right"></i>{{ 'scenario.scheduler'|trans }}</a>
                                                 </span>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="scheduleDisplay" style="display: none;">
                                         <div class="form-group">
-                                            <i class="col-lg-2 col-md-3 col-sm-4 col-xs-6  control-label">{{ 'Précédent' }}</i>
+                                            <i class="col-lg-2 col-md-3 col-sm-4 col-xs-6  control-label">{{ 'scenario.previous'|trans }}</i>
                                             <div class="col-lg-4 col-md-3 col-sm-5 col-xs-6"><span class="scenarioAttr label label-primary label-sticker-sm" data-l1key="forecast" data-l2key="prevDate" data-l3key="date"></span></div>
-                                            <i class="col-lg-2 col-md-3 col-sm-4 col-xs-6  control-label">{{ 'Prochain' }}</i>
+                                            <i class="col-lg-2 col-md-3 col-sm-4 col-xs-6  control-label">{{ 'scenario.next'|trans }}</i>
                                             <div class="col-lg-4 col-md-3 col-sm-5 col-xs-6"><span class="scenarioAttr label label-success label-sticker-sm" data-l1key="forecast" data-l2key="nextDate" data-l3key="date"></span></div>
                                         </div>
                                         <div class="scheduleMode"></div>
                                     </div>
                                     <div class="provokeMode provokeDisplay" style="display: none;">
-
                                     </div>
                                 </fieldset>
                             </div>
@@ -324,86 +382,73 @@
                     </form>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="scenariotab">
-                    <div id="div_scenarioElement" class="element" style="padding-bottom: 70px;"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="md_copyScenario">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button class="bootbox-close-button close" data-dismiss="modal">×</button>
-                    <h4>{{ 'Dupliquer le scénario' }}</h4>
-                </div>
-                <div class="modal-body">
-                    <div style="display: none;" id="div_copyScenarioAlert"></div>
-                    <center>
-                        <input class="form-control" type="text" id="in_copyScenarioName" size="16"
-                               placeholder="{{ 'Nom du scénario' }}"/><br/><br/>
-                    </center>
-                </div>
-                <div class="modal-footer">
-                    <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-minus-circle spacing-right"></i>{{ 'Annuler' }}</a>
-                    <a class="btn btn-success" id="bt_copyScenarioSave"><i class="fas fa-save spacing-right"></i>{{ 'Enregistrer' }}</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="md_addElement">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button class="bootbox-close-button close" data-dismiss="modal">×</button>
-                    <h4>{{ 'Ajouter élément' }}</h4>
-                </div>
-                <div class="modal-body">
-                    <center>
-                        <select id="in_addElementType" class="form-control">
-                            <option value="if">{{ 'Si/Alors/Sinon' }}</option>
-                            <option value="action">{{ 'Action' }}</option>
-                            <option value="for">{{ 'Boucle' }}</option>
-                            <option value="in">{{ 'Dans' }}</option>
-                            <option value="at">{{ 'A' }}</option>
-                            <option value="code">{{ 'Code' }}</option>
-                            <option value="comment">{{ 'Commentaire' }}</option>
-                        </select>
-                    </center>
-                    <br/>
-                    <div class="alert alert-info addElementTypeDescription if">
-                        Permet de faire des conditions dans votre scénario. Par exemple : Si mon détecteur
-                        d’ouverture de porte se déclenche Alors allumer la lumière.
-                    </div>
-                    <div class="alert alert-info addElementTypeDescription action" style="display:none;">
-                        Permet de lancer une action, sur un de vos modules, scénarios ou autre. Par exemple : Passer
-                        votre sirène sur ON.
-                    </div>
-                    <div class="alert alert-info addElementTypeDescription for" style="display:none;">
-                        Une boucle permet de réaliser une action de façon répétée un certain nombre de fois. Par
-                        exemple : Permet de répéter une action de 1 à X, c’est-à-dire X fois.
-                    </div>
-                    <div class="alert alert-info addElementTypeDescription in" style="display:none;">
-                        Permet de faire une action dans X min. Par exemple : Dans 5 min, éteindre la lumière.
-                    </div>
-                    <div class="alert alert-info addElementTypeDescription at" style="display:none;">
-                        A un temps précis, cet élément permet de lancer une action. Par exemple : A 9h30, ouvrir les
-                        volets.
-                    </div>
-                    <div class="alert alert-info addElementTypeDescription code" style="display:none;">
-                        Cet élément permet de rajouter dans votre scénario de la programmation à l’aide d’un code,
-                        PHP/Shell, etc.
-                    </div>
-                    <div class="alert alert-info addElementTypeDescription comment" style="display:none;">
-                        Permet de commenter votre scénario.
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-minus-circle spacing-right"></i>{{ 'Annuler' }}</a>
-                    <a class="btn btn-success" id="bt_addElementSave"><i class="fas fa-save spacing-right"></i>{{ 'Valider' }}</a>
+                    <div id="div_scenarioElement" class="element"></div>
                 </div>
             </div>
         </div>
     </section>
+</div>
+<div class="modal fade" id="md_copyScenario">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">×</button>
+                <h3>{{ 'scenario.duplicate-title'|trans }}</h3>
+            </div>
+            <div class="modal-body">
+                <input class="form-control" type="text" id="in_copyScenarioName" size="16"
+                       placeholder="{{ 'scenario.name'|trans }}"/><br/><br/>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-minus-circle spacing-right"></i>{{ 'scenario.cancel'|trans }}</a>
+                <a class="btn btn-success" id="bt_copyScenarioSave"><i class="fas fa-save spacing-right"></i>{{ 'scenario.save'|trans }}</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="md_addElement">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">×</button>
+                <h3>{{ 'scenario.add-item'|trans }}</h3>
+            </div>
+            <div class="modal-body">
+                <select id="in_addElementType" class="form-control">
+                    <option value="if">{{ 'scenario.item-if'|trans }}</option>
+                    <option value="action">{{ 'scenario.item-action'|trans }}</option>
+                    <option value="for">{{ 'scenario.item-for'|trans }}</option>
+                    <option value="in">{{ 'scenario.item-in'|trans }}</option>
+                    <option value="at">{{ 'scenario.item-at'|trans }}</option>
+                    <option value="code">{{ 'scenario.item-code'|trans }}</option>
+                    <option value="comment">{{ 'scenario.item-comment'|trans }}</option>
+                </select>
+                <div class="alert alert-info addElementTypeDescription if">
+                    {{ 'scenario.description-if'|trans }}
+                </div>
+                <div class="alert alert-info addElementTypeDescription action">
+                    {{ 'scenario.description-action'|trans }}
+                </div>
+                <div class="alert alert-info addElementTypeDescription for">
+                    {{ 'scenario.description-for'|trans }}
+                </div>
+                <div class="alert alert-info addElementTypeDescription in">
+                    {{ 'scenario.description-in'|trans }}
+                </div>
+                <div class="alert alert-info addElementTypeDescription at">
+                    {{ 'scenario.description-at'|trans }}
+                </div>
+                <div class="alert alert-info addElementTypeDescription code">
+                    {{ 'scenario.description-code'|trans }}
+                </div>
+                <div class="alert alert-info addElementTypeDescription comment">
+                    {{ 'scenario.description-comment'|trans }}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-minus-circle spacing-right"></i>{{ 'scenario.cancel'|trans }}</a>
+                <a class="btn btn-success" id="bt_addElementSave"><i class="fas fa-save spacing-right"></i>{{ 'scenario.save'|trans }}</a>
+            </div>
+        </div>
+    </div>
 </div>

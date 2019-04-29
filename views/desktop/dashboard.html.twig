@@ -33,14 +33,14 @@
 */
 
 #}
-<section class="content-header">
-    <div class="nav-tabs-custom">
-        {% for i in 0..2 %}
+<section id="dashboard-header" class="content-header">
+    <div class="nav-tabs-custom hidden-xs" >
+        {% for menuLayer in dashboardObjectListMenu %}
             <ul class="nav nav-tabs nav-tabs-dashboard">
-                {% for child in objectList %}
-                    {% if child.parentNumber() == i and (child.getFather_id() == dashboardObject.getFather().getFather_id() or child.getFather_id() == dashboardObject.getFather_id() or child.getFather_id() == dashboardObjectId or child.getFather_id() == '') %}
-                        <li class="cursor {% if child.getId() == dashboardObjectId %}active{% endif %} {% if child.getId() == dashboardObject.getFather_id() or child.getId() == dashboardObject.getFather().getFather_id() %}father{% endif %}"><a href="index.php?v=d&p=dashboard&object_id={{ child.getId() }}">{{ child.getDisplay("icon")|raw }}<i class="spacing-right"></i>{{ child.getName() }}</a><li>
-                    {% endif %}
+                {% for menuItem in menuLayer %}
+                <li class="cursor{% if menuItem.active %} active{% endif %}">
+                    <a href="" data-object-id="{{ menuItem.jeeObject.getId() }}">{{ menuItem.jeeObject.getDisplay("icon")|raw }}<i class="spacing-right"></i>{{ menuItem.jeeObject.getName() }}</a>
+                <li>
                 {% endfor %}
             </ul>
         {% endfor %}

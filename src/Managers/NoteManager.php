@@ -34,31 +34,53 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Model\Entity\Note;
 
 require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
 
 class NoteManager
 {
+    /**
+     * Name of the class
+     */
     const CLASS_NAME = Note::class;
+    /**
+     * Table name in database
+     */
     const DB_CLASS_NAME = '`note`';
 
-    public static function byId($_id)
+    /**
+     * Get a note by his Id
+     * @param int $id Id of the note
+     *
+     * @return Note|null
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
+    public static function byId($id)
     {
-        $values = array(
-            'id' => $_id,
-        );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $values = ['id' => $id];
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE id = :id';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * Get all notes
+     *
+     * @return Note[]|null
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function all()
     {
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 ORDER BY name';
-        return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, [], DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 }

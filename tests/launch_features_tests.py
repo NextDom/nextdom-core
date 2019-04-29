@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """Launch NextDom features tests
 """
 import sys
