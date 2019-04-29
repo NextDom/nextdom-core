@@ -42,6 +42,7 @@
 });
 
  $(".li_log").on('click', function() {
+   $('#div_logDisplay').show();
   $('#pre_globallog').empty();
   $(".li_log").removeClass('active');
   $(this).addClass('active');

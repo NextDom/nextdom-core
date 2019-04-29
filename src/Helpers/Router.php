@@ -101,6 +101,7 @@ class Router
                 'language',
                 'nextdom::firstUse',
                 'nextdom::Welcome',
+                'nextdom::waitSpinner',
                 'notify::status',
                 'notify::position',
                 'notify::timeout',

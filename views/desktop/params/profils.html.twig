@@ -76,7 +76,7 @@
                             <input class="userAttr form-control" data-l1key="options" data-l2key="avatar" disabled/>
                         </div>
                         <div class="form-group col-sm-6">
-                            <input class="userAttr form-control" id="user_avatar" type="file" name="images" data-url="core/ajax/profils.ajax.php?action=imageUpload"/>
+                            <input class="userAttr form-control btn btn-action" id="user_avatar" type="file" name="images" data-url="core/ajax/profils.ajax.php?action=imageUpload"/>
                         </div>
                     </div>
                 </fieldset>
@@ -293,22 +293,10 @@
                 <form class="form-horizontal">
                     <fieldset>
                         <legend>{{ 'Authentifications' }}</legend>
+                        <div class="alert alert-info">
+                            {{ 'Attention : La double authentification est désactivée en connexion locale... ' }}
+                        </div>
                         {% if profilsAllowRemoteUsers != 1 %}
-                            <div class="form-group">
-                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Double authentification' }}</label>
-                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-                                    <a class="btn btn-action" id="bt_configureTwoFactorAuthentification"><i class="fas fa-magic spacing-right"></i>{{ 'Configurer' }}</a>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                {% if profilsUser.getOptions('twoFactorAuthentification', 0) == 1 %}
-                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Double authentification' }}</label>
-                                    <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
-                                        <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="twoFactorAuthentification"/>
-                                        <label class="control-label label-check">{{ 'Activer' }}</label>
-                                    </div>
-                                {% endif %}
-                            </div>
                             <div class="form-group">
                                 <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Nouveau mot de passe' }}</label>
                                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
@@ -321,6 +309,21 @@
                                     <input type="password" class="form-control" id="in_passwordCheck"/>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                {% if profilsUser.getOptions('twoFactorAuthentification', 0) == 1 %}
+                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Double authentification' }}</label>
+                                    <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+                                        <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="twoFactorAuthentification"/>
+                                        <label class="control-label label-check">{{ 'Activer' }}</label>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Double authentification' }}</label>
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                                    <a class="btn btn-warning" id="bt_configureTwoFactorAuthentification"><i class="fas fa-magic spacing-right"></i>{{ 'Configurer' }}</a>
+                                </div>
+                            </div>
                         {% endif %}
                         <div class="form-group">
                             <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Hash de l\'utilisateur' }}</label>
@@ -330,7 +333,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-lg-10 col-lg-offset-2 col-md-9 col-md-offset-3 col-sm-8 col-sm-offset-4 col-xs-12">
-                                <span class="userAttr label label-value label-hash" data-l1key="hash"></span>
+                                <span class="userAttr label label-config label-hash" data-l1key="hash"></span>
                             </div>
                         </div>
                     </fieldset>

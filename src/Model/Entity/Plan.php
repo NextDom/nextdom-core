@@ -23,7 +23,7 @@ use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\EqLogicManager;
-use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\ObjectManager;
 use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PlanManager;
 use NextDom\Managers\ScenarioExpressionManager;
@@ -154,7 +154,7 @@ class Plan implements EntityInterface
             $cmd = CmdManager::byId($this->getLink_id());
             return $cmd;
         } elseif ($this->getLink_type() == 'summary') {
-            $object = JeeObjectManager::byId($this->getLink_id());
+            $object = ObjectManager::byId($this->getLink_id());
             return $object;
         }
         return null;
@@ -263,7 +263,7 @@ class Plan implements EntityInterface
             case 'image':
                 $html = '<div class="image-widget" data-image_id="' . $this->getLink_id() . '" style="min-width:10px;min-height:10px;">';
                 if ($this->getConfiguration('display_mode', 'image') == 'image') {
-                    $html .= '<img style="width:100%;height:100%" src="' . $this->getDisplay('path', 'public/img/NextDom_NoPicture.png') . '"/>';
+                    $html .= '<img style="width:100%;height:100%" src="' . $this->getDisplay('path', 'public/img/NextDom_NoPicture_Gray.png') . '"/>';
                 } else {
                     $camera = EqLogicManager::byId(str_replace(array('#', 'eqLogic'), array('', ''), $this->getConfiguration('camera')));
                     if (is_object($camera)) {
@@ -309,7 +309,7 @@ class Plan implements EntityInterface
                 $html = '<div class="summary-widget" data-summary_id="' . $this->getLink_id() . '" style="' . $background_color . $color . ';min-width:10px;min-height:10px;">';
                 $summary = '';
                 if ($this->getLink_id() == 0) {
-                    $summary = JeeObjectManager::getGlobalHtmlSummary($_version);
+                    $summary = ObjectManager::getGlobalHtmlSummary($_version);
                 } else {
                     $object = $this->getLink();
                     if (is_object($object)) {

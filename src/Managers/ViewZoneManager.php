@@ -33,6 +33,8 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Model\Entity\ViewZone;
+
 use NextDom\Helpers\DBHelper;
 use NextDom\Model\Entity\ViewZone;
 

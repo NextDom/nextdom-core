@@ -33,30 +33,6 @@
 */
 
 #}
-<style>
-    #div_Update-view .box-body label {
-        cursor: pointer;
-        font-size: 1.5rem;
-        font-weight: normal;
-    }
-
-    #pre_updateInfo {
-        overflow: scroll;
-    }
-
-    #div_Update-view h4.box-title {
-        text-transform: capitalize;
-    }
-
-    #div_Update-view h4.box-title img{
-        height:50px;
-        padding-right:5px;
-    }
-
-    #div_Update-view .box-header .badge {
-        text-transform: uppercase;
-    }
-</style>
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
@@ -64,6 +40,8 @@
             <a class="btn btn-default btn-action-bar" id="bt_updateOpenLog"><i class="fas fa-file-alt spacing-right"></i>{{ 'Log' }}</a>
         </div>
         <div class="action-group">
+            <a class="btn btn-action btn-action-bar pull-right" id="bt_updateCollapse"><i class="fas fa-plus-square spacing-right"></i>{{ 'Déplier' }}</a>
+            <a class="btn btn-action btn-action-bar pull-right" style="display:none;" id="bt_updateUncollapse"><i class="fas fa-minus-square spacing-right"></i>{{ 'Replier' }}</a>
             <a class="btn btn-success btn-action-bar pull-right" id="bt_saveUpdate"><i class="fas fa-save spacing-right"></i>{{ 'Sauvegarder' }}</a>
             <a class="btn btn-primary btn-action-bar pull-right" id="bt_checkAllUpdate"><i class="fas fa-refresh spacing-right"></i>{{ 'Vérifier les mises à jour' }}</a>
             <a class="btn btn-warning btn-action-bar pull-right" id="bt_updateNextDom"><i class="fas fa-check spacing-right"></i>{{ 'Mise à jour selective' }}</a>
@@ -72,7 +50,7 @@
 </section>
 
 <section class="content">
-    <div class="nav-tabs-custom config" id="div_Update-view">
+    <div class="nav-tabs-custom config">
         <!-- Tabs title -->
         <ul class="nav nav-tabs pull-right" role="tablist">
             <li role="presentation"><a href="#others" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-align-justify spacing-right"></i>{{ 'Autres' }}{% if numberOfUpdatesOthers>0 %}<span class="badge bg-yellow spacing-left">{{ numberOfUpdatesOthers }}</span>{% endif %}</a></li>
@@ -84,7 +62,7 @@
         </ul>
 
         <!-- Tabs content -->
-        <div class="global-tab-content tab-content">
+        <div class="global-tab-content tab-content" id="accordionUpdate">
             <legend><i class="fas fa-clock-o spacing-right"></i><span>{{ 'Dernière vérification :' }}</span><span class="label label-info badge spacing-left" id="span_lastUpdateCheck"></span></legend>
             <div role="tabpanel" class="tab-pane active" id="core">
                 <div class="row">
@@ -119,7 +97,9 @@
     </div>
 
     <div id="md_updateInfo">
-        <pre id="pre_updateInfo"></pre>
+        <section class="content">
+            <pre id="pre_updateInfo" style="overflow: scroll;"></pre>
+        </section>
     </div>
 
     <div class="modal fade" id="md_specifyUpdate">
@@ -134,13 +114,13 @@
                     <fieldset>
                         <legend>{{ 'Options' }}</legend>
                         <div class="form-group">
-                            <label class="col-xs-6 control-label label-sticker-big">{{ 'Pré-update (mettre à jour le script d\'update avant)' }}</label>
+                            <label class="col-xs-8 control-label label-sticker-big">{{ 'Pré-update (mettre à jour le script d\'update avant)' }}</label>
                             <div class="col-xs-4">
                                 <input type="checkbox" class="updateOption" data-l1key="preUpdate"/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-xs-6 control-label label-sticker-big">{{ 'Sauvegarder avant' }}</label>
+                            <label class="col-xs-8 control-label label-sticker-big">{{ 'Sauvegarder avant' }}</label>
                             <div class="col-xs-4">
                                 <input type="checkbox" class="updateOption" data-l1key="backup::before" checked/>
                             </div>
@@ -149,13 +129,13 @@
                     <fieldset>
                         <legend>{{ 'Selection des mises à jour' }}</legend>
                         <div class="form-group">
-                            <label class="col-xs-6 control-label label-sticker-big">{{ 'Mettre à jour les plugins' }}</label>
+                            <label class="col-xs-8 control-label label-sticker-big">{{ 'Mettre à jour les plugins' }}</label>
                             <div class="col-xs-4">
                                 <input type="checkbox" class="updateOption" data-l1key="plugins" checked/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-xs-6 control-label label-sticker-big">{{ 'Mettre à jour le core' }}</label>
+                            <label class="col-xs-8 control-label label-sticker-big">{{ 'Mettre à jour le core' }}</label>
                             <div class="col-xs-4">
                                 <input type="checkbox" class="updateOption" data-l1key="core" checked/>
                             </div>
@@ -164,7 +144,7 @@
                     <fieldset>
                         <legend>{{ 'Expert' }}</legend>
                         <div class="form-group has-error">
-                            <label class="col-xs-6 control-label label-sticker-big">{{ 'Mode forcé' }}</label>
+                            <label class="col-xs-8 control-label label-sticker-big">{{ 'Mode forcé' }}</label>
                             <div class="col-xs-4">
                                 <input type="checkbox" class="updateOption" data-l1key="force"/>
                             </div>
@@ -188,7 +168,7 @@
                 </div>
                 <div class="modal-footer">
                     <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-minus-circle spacing-right"></i>{{ 'Annuler' }}</a>
-                    <a class="btn btn-success" id="bt_doUpdate"><i class="fas fa-check spacing-right"></i>{{ 'Mettre à jour' }}</a>
+                    <a class="btn btn-success" id="bt_doUpdate"><i class="fas fa-download spacing-right"></i>{{ 'Mettre à jour' }}</a>
                 </div>
             </div>
         </div>

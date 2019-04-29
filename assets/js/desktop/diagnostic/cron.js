@@ -129,10 +129,10 @@ $('#div_pageContainer').delegate('.cronAttr', 'change', function () {
 });
 
 function printCron() {
-    $.showLoading();
+    showLoadingCustom();
     nextdom.cron.all({
         success: function (data) {
-            $.showLoading();
+            showLoadingCustom();
             $('#table_cron tbody').empty();
             var tr = [];
             for (var i in data) {
@@ -140,7 +140,7 @@ function printCron() {
             }
             $('#table_cron tbody').append(tr);
             modifyWithoutSave = false;
-            $.hideLoading();
+            hideLoadingCustom();
         }
     });
 }
@@ -222,10 +222,10 @@ function addCron(_cron) {
 
 
 function printListener() {
-    $.showLoading();
+    showLoadingCustom();
     nextdom.listener.all({
         success: function (data) {
-            $.showLoading();
+            showLoadingCustom();
             $('#table_listener tbody').empty();
             var tr = [];
             for (var i in data) {
@@ -233,7 +233,7 @@ function printListener() {
             }
             $('#table_listener tbody').append(tr);
             modifyWithoutSave = false;
-            $.hideLoading();
+            hideLoadingCustom();
         }
     });
 }

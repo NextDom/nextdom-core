@@ -48,7 +48,7 @@ class ViewManager
     public static function all()
     {
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . ' 
+        FROM ' . self::DB_CLASS_NAME . '
         ORDER BY `order`';
         return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
@@ -64,7 +64,7 @@ class ViewManager
             'id' => $_id,
         );
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . ' 
+        FROM ' . self::DB_CLASS_NAME . '
         WHERE id = :id';
         return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }

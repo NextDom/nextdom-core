@@ -27,7 +27,7 @@
         <testsuite name="Managers">
             <file>CmdManagerTest.php</file>
             <file>EqLogicManagerTest.php</file>
-            <file>JeeObjectManagerTest.php</file>
+            <file>ObjectManagerTest.php</file>
             <file>UserManagerTest.php</file>
         </testsuite>
         <testsuite name="Helpers">

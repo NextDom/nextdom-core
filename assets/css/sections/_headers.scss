@@ -1,0 +1,104 @@
+@charset "utf-8";
+/* This file is part of NextDom Software.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom Software is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
+*
+* @Support <https://www.nextdom.org>
+* @Email   <admin@nextdom.org>
+* @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
+*/
+
+/* Core-Ajout : Header clock */
+.clock {
+    height: 50px;
+    >a:hover {
+        background: transparent !important;
+    }
+}
+.clocktime {
+    font-size: 15px;
+    text-align: right;
+    top: -8px;
+}
+.clockdate {
+    font-size: 11px;
+    text-align: right;
+    top: -40px;
+}
+
+/* Core-Ajout : Barre recherche générale */
+.navbar-search {
+    padding: 0px 10px 0px 0px;
+    margin-bottom: 0px;
+    display: none;
+    @media (max-width: 768px) {
+        position: absolute;
+        top: -11px;
+        left: 57px;
+        border: none;
+        box-shadow: none;
+        -webkit-box-shadow: none;
+        margin-top: 18px;
+        margin-right: 0px;
+    }
+}
+
+/* AdminLTE-Surcharge : Menu de droite du header */
+.navbar-custom-menu > .navbar-nav > li {
+    position: unset;
+}
+
+/* AdminLTE-Surcharge */
+.main-header .navbar {
+    box-shadow: 2px 0 1px rgba(0, 0, 0, 0.5);
+}
+.main-header .navbar .nav > li > a > .label {
+    position: absolute;
+    top: 0;
+    right: 0;
+    text-align: center;
+    font-size: 14px;
+    padding: 3px 3px;
+    line-height: .9;
+    z-index: -1;
+}
+.main-header {
+    position: fixed;
+    width: 100%;
+    z-index: 1030;
+}
+
+/* COe-Surcharge */
+#dashboard-header {
+    position: fixed;
+    width: 100%;
+    padding-right: 65px;
+    z-index: 999;
+    display: none;
+    -webkit-animation: slidein 0.5s;
+    -moz-animation:    slidein 0.5s;
+    -o-animation:      slidein 0.5s;
+    animation:     slidein 0.5s;
+}
+.content-header {
+    background: transparent;
+    position: fixed;
+    width: 100%;
+    padding-right: 65px;
+    z-index: 999;
+    -webkit-animation: slidein 0.5s;
+    -moz-animation:    slidein 0.5s;
+    -o-animation:      slidein 0.5s;
+    animation:     slidein 0.5s;
+}

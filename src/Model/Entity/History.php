@@ -204,4 +204,3 @@ class History
         return $this;
     }
 }
-

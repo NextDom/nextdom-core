@@ -28,13 +28,13 @@
     }
     var template = '';
     $.ajax({
-        type: "POST", 
+        type: "POST",
         url: path,
         async: false,
         error: function (request, status, error) {
             handleAjaxError(request, status, error);
         },
-        success: function (data) { 
+        success: function (data) {
             if (isset(_replace) && _replace != null) {
                 for (i in _replace) {
                     var reg = new RegExp(i, "g");
@@ -48,7 +48,7 @@
 }
 
 function handleAjaxError(_request, _status, _error, _div_alert) {
-    $.hideLoading();
+    hideLoadingCustom();
     var div_alert = init(_div_alert, $('#div_alert'));
     if (_request.status != '0') {
         if (init(_request.responseText, '') != '') {
@@ -130,5 +130,3 @@ function getDeviceType() {
     }
     return result;
 }
-
-

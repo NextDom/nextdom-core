@@ -87,7 +87,7 @@ class FileSystemHelper
                     'bootstrap.slider/js/bootstrap-slider' => 'vendor/node_modules/bootstrap-slider/dist/bootstrap-slider.min',
                     'jquery.ui/jquery-ui.min' => 'vendor/node_modules/jquery-ui-dist/jquery-ui.min',
                     //TODO : A remettre en 3rdparty
-                    'jquery.ui/jquery-ui-bootstrap/jquery-ui' => 'assets/css/jquery-ui-bootstrap/jquery-ui.css'
+                    'jquery.ui/jquery-ui-bootstrap/jquery-ui' => 'assets/css/vendors/jquery-ui-bootstrap/jquery-ui.css'
                 ];
 
                 if (array_key_exists($_filename, $router3rdParty)) {

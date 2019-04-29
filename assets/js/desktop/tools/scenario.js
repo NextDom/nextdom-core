@@ -366,7 +366,7 @@ function setAutocomplete() {
  * @param scenarioId
  */
 function printScenario(scenarioId) {
-    $.showLoading();
+    showLoadingCustom();
     nextdom.scenario.update[scenarioId] = function (_options) {
         if (_options.scenario_id = !pageContainer.getValues('.scenarioAttr')[0]['id']) {
             return;
@@ -465,11 +465,11 @@ function printScenario(scenarioId) {
                     notify("Erreur", error.message, 'error');
                 },
                 success: function (data) {
-                    $.showLoading();
+                    showLoadingCustom();
                     for (var i in data) {
                         $('#' + data[i].id).append(data[i].html.html);
                     }
-                    $.hideLoading();
+                    hideLoadingCustom();
                     taAutosize();
                 }
             });
@@ -951,7 +951,6 @@ function getCodeSubElementHTML(subElementData, elementColorIndex) {
     htmlData += '<span class="scenario-title">{{CODE}}</span>';
     htmlData += '</div>';
     htmlData += '<div class="expressions scenario-condition" style="background-color: ' + listColor[elementColorIndex] + ';">';
-    htmlData += '<div class="sortable empty"></div>';
     htmlData += addFirstExpressionHTML(subElementData);
     htmlData += '</div>';
     htmlData += '<div class="scenario-delete"><i class="fas fa-minus-circle pull-right cursor bt_removeElement"></i></div>';
@@ -972,7 +971,6 @@ function getCommentSubElementHTML(subElementData, elementColorIndex) {
     htmlData += '<i class="fas fa-sort bt_sortable"></i>';
     htmlData += '</div>';
     htmlData += '<div class="expressions scenario-condition" style="background-color: ' + listColor[elementColorIndex] + ';">';
-    htmlData += '<div class="sortable empty"></div>';
     htmlData += addFirstExpressionHTML(subElementData);
     htmlData += '</div>';
     htmlData += '<div class="scenario-delete"><i class="fas fa-minus-circle pull-right cursor bt_removeElement"></i></div>';
@@ -1866,6 +1864,27 @@ function initScenarioEditorEvents() {
         modifyWithoutSave = true;
     });
 }
+
+$('#bt_scenarioCollapse').on('click',function(){
+   $('#accordionScenario .panel-collapse').each(function () {
+      if (!$(this).hasClass("in")) {
+          $(this).css({'height' : '' });
+          $(this).addClass("in");
+      }
+   });
+   $('#bt_scenarioCollapse').hide();
+   $('#bt_scenarioUncollapse').show()
+});
+
+$('#bt_scenarioUncollapse').on('click',function(){
+   $('#accordionScenario .panel-collapse').each(function () {
+      if ($(this).hasClass("in")) {
+          $(this).removeClass("in");
+      }
+   });
+   $('#bt_scenarioUncollapse').hide();
+   $('#bt_scenarioCollapse').show()
+});
 
 initListEvents();
 initGeneralFormEvents();

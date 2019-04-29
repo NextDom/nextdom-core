@@ -15,11 +15,11 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\ObjectManager;
 
 require_once(__DIR__ . '/../../src/core.php');
 
-class JeeObjectManagerTest extends PHPUnit_Framework_TestCase
+class ObjectManagerTest extends PHPUnit_Framework_TestCase
 {
     public static function setUpBeforeClass()
     {
@@ -35,27 +35,27 @@ class JeeObjectManagerTest extends PHPUnit_Framework_TestCase
     }
 
     public function testById() {
-        $jeeObject = JeeObjectManager::byId(1);
+        $jeeObject = ObjectManager::byId(1);
         $this->assertEquals(1, $jeeObject->getId());
         $this->assertEquals('My Room', $jeeObject->getName());
     }
 
     public function testByIdBadId() {
-        $jeeObject = JeeObjectManager::byId(69);
+        $jeeObject = ObjectManager::byId(69);
         $this->assertFalse($jeeObject);
     }
 
     public function testByName() {
-        $jeeObject = JeeObjectManager::byName('My Room');
+        $jeeObject = ObjectManager::byName('My Room');
         $this->assertEquals(1, $jeeObject->getId());
     }
 
     public function testByNameBadName() {
-        $jeeObject = JeeObjectManager::byName('An impossible name');
+        $jeeObject = ObjectManager::byName('An impossible name');
         $this->assertFalse($jeeObject);
     }
 
     public function testAll() {
-        $jeeObjects = JeeObjectManager::all();
+        $jeeObjects = ObjectManager::all();
     }
 }

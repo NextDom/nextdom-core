@@ -63,6 +63,27 @@
   "plugins": ["search"]
 });
 
+$('#bt_interactCollapse').on('click',function(){
+   $('#accordionInteract .panel-collapse').each(function () {
+      if (!$(this).hasClass("in")) {
+          $(this).css({'height' : '' });
+          $(this).addClass("in");
+      }
+   });
+   $('#bt_interactCollapse').hide();
+   $('#bt_interactUncollapse').show()
+});
+
+$('#bt_interactUncollapse').on('click',function(){
+   $('#accordionInteract .panel-collapse').each(function () {
+      if ($(this).hasClass("in")) {
+          $(this).removeClass("in");
+      }
+   });
+   $('#bt_interactUncollapse').hide();
+   $('#bt_interactCollapse').show()
+});
+
  $('.interactDisplayCard').on('click',function(){
   displayInteract($(this).attr('data-interact_id'));
   if(document.location.toString().split('#')[1] == '' || document.location.toString().split('#')[1] == undefined){

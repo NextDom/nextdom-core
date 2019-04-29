@@ -33,69 +33,6 @@
 */
 
 #}
-<style>
-    .CodeMirror {
-        height: auto;
-    }
-
-    .element {
-        color: white;
-        border-width: 0px;
-        border-style: solid;
-    }
-
-    .subElement {
-        width: 100%;
-    }
-
-    .scenario-delete i {
-        position: relative;
-        z-index: 2;
-    }
-
-    div.sortable.empty {
-        height: 30px;
-    }
-
-    .scenario-alors .dropdown {
-        display: inline-block;
-    }
-
-    .scenario-si-bloc {
-        display: table-cell;
-    }
-
-    .expressionAttr.scenario-text {
-        resize: vertical;
-    }
-
-    .scenarioDisplayCard span.scenario-icon {
-        font-size: 3.8em;
-    }
-
-    #md_addElement .modal-body .alert:not(:first-child) {
-        display: none;
-    }
-
-    #in_addElementType {
-        margin-bottom: 1.5rem;
-    }
-
-    #div_scenarioElement {
-        padding-bottom: 7rem;
-    }
-    .tab-content {
-        height: calc(100% - 50px);
-        overflow:auto;
-        overflow-x: hidden;
-    }
-
-    .expression-error {
-        text-decoration: underline;
-        text-decoration-color: 'red';
-        text-decoration-style: 'dashed';
-    }
-</style>
 <div id="scenarioThumbnailDisplay" class="blurPanel">
     <section class="content-header">
         <div class="action-bar">
@@ -106,9 +43,11 @@
                 {% else %}
                     <a class="btn btn-danger btn-action-bar" id="bt_changeAllScenarioState" data-state="0"><i class="fas fa-times spacing-right"></i>{{ 'scenario.disable-scenarios'|trans }}</a>
                 {% endif %}
+                <a class="btn btn-success btn-action-bar" id="bt_addScenario"><i class="fas fa-plus-circle spacing-right"></i>{{ 'scenario.add'|trans }}</a>
             </div>
             <div class="action-group">
-                <a class="btn btn-success btn-action-bar pull-right" id="bt_addScenario"><i class="fas fa-plus-circle spacing-right"></i>{{ 'scenario.add'|trans }}</a>
+                <a class="btn btn-action btn-action-bar pull-right" style="display:none;" id="bt_scenarioCollapse"><i class="fas fa-plus-square spacing-right"></i>{{ 'Déplier' }}</a>
+                <a class="btn btn-action btn-action-bar pull-right" id="bt_scenarioUncollapse"><i class="fas fa-minus-square spacing-right"></i>{{ 'Replier' }}</a>
                 <a class="btn btn-warning btn-action-bar pull-right bt_showExpressionTest"><i class="fas fa-check spacing-right"></i>{{ 'scenario.test-expression'|trans }}</a>
                 <a class="btn btn-primary btn-action-bar pull-right bt_displayScenarioVariable"><i class="fas fa-eye spacing-right"></i>{{ 'scenario.variables'|trans }}</a>
                 <a class="btn btn-default btn-action-bar pull-right bt_showScenarioSummary"><i class="fas fa-list spacing-right"></i>{{ 'scenario.summary'|trans }}</a>
@@ -133,7 +72,7 @@
         <div class="box-group" id="accordionScenario">
             {% if scenariosWithoutGroup|length > 0 %}
                 <div class="panel box">
-                    <a class="box-header with-border accordion-toggle" data-toggle="collapse" data-parent="" href="#config_none">
+                    <a class="box-header with-border accordion-toggle cursor" data-toggle="collapse" data-parent="" href="#config_none">
                         <h3 class="box-title">
                             <span>{{ 'scenario.no-group'|trans }}</span>
                         </h3>
@@ -142,7 +81,7 @@
                         <div class="box-body">
                             <div class="scenarioListContainer DisplayCard text-center">
                                 {% for scenario in scenariosWithoutGroup %}
-                                    <div class="scenarioDisplayCard cursor icon_gestion" data-scenario_id="{{ scenario.getId() }}" style="{% if not scenario.getIsActive() %}{{ scenarioInactiveStyle }}{% endif %}">
+                                    <div class="scenarioDisplayCard cursor icon_card" data-scenario_id="{{ scenario.getId() }}" style="{% if not scenario.getIsActive() %}{{ scenarioInactiveStyle }}{% endif %}">
                                         {% if scenario.getDisplay('icon') != '' %}
                                             <span class="scenario-icon">{{ scenario.getDisplay('icon')|raw }}</span>
                                         {% else %}
@@ -162,7 +101,7 @@
             {% for scenarioGroup in scenarioListGroup %}
                 {% if scenarioGroup.group != '' %}
                     <div class="panel box">
-                        <a class="box-header with-border accordion-toggle" data-toggle="collapse" data-parent="" href="#config_{{ index }}">
+                        <a class="box-header with-border accordion-toggle cursor" data-toggle="collapse" data-parent="" href="#config_{{ index }}">
                             <h3 class="box-title">
                                 <span>{{ scenarioGroup.group }} - {{ scenarios[scenarioGroup.group]|length }} {{ 'scenario.scenarios'|trans }}</span>
                             </h3>
@@ -171,7 +110,7 @@
                             <div class="box-body">
                                 <div class="scenarioListContainer DisplayCard text-center ">
                                     {% for scenario in scenarios[scenarioGroup.group] %}
-                                        <div class="scenarioDisplayCard icon_gestion cursor" data-scenario_id="{{ scenario.getId() }}" style="{% if not scenario.getIsActive() %}{{ scenarioInactiveStyle }}{% endif %}">
+                                        <div class="scenarioDisplayCard icon_card cursor" data-scenario_id="{{ scenario.getId() }}" style="{% if not scenario.getIsActive() %}{{ scenarioInactiveStyle }}{% endif %}">
                                             {% if scenario.getDisplay('icon') != '' %}
                                                 <span class="scenario-icon">{{ scenario.getDisplay('icon')|raw }}</span>
                                             {% else %}
@@ -225,8 +164,8 @@
                 <li role="presentation" class="active">
                     <a href="#generaltab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-cog spacing-right"></i>{{ 'scenario.parameters'|trans }}</a>
                 </li>
-                <li><h4 id="span_ongoing" class="label pull-right label-sticker"></h4></li>
-                <li><h4 class="label label-primary pull-right label-sticker">{{ 'scenario.id'|trans }} : <span class="scenarioAttr" data-l1key="id"></span></h4></li>
+                <h4 id="span_ongoing" class="label pull-right badge spacing-right"></h4>
+                <h4 class="label label-primary pull-right badge spacing-right">{{ 'scenario.id'|trans }} : <span class="scenarioAttr" data-l1key="id"></span></h4>
                 <li class="header pull-left"><i class="fas fa-film spacing-right"></i>{{ 'scenario.scenario-edit'|trans }}</li>
             </ul>
             <div class="tab-content">
@@ -393,7 +332,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button class="close" data-dismiss="modal">×</button>
-                <h3>{{ 'scenario.duplicate-title'|trans }}</h3>
+                <h4>{{ 'scenario.duplicate-title'|trans }}</h4>
             </div>
             <div class="modal-body">
                 <input class="form-control" type="text" id="in_copyScenarioName" size="16"
@@ -411,7 +350,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button class="close" data-dismiss="modal">×</button>
-                <h3>{{ 'scenario.add-item'|trans }}</h3>
+                <h4>{{ 'scenario.add-item'|trans }}</h4>
             </div>
             <div class="modal-body">
                 <select id="in_addElementType" class="form-control">

@@ -50,7 +50,6 @@ $('#bt_updateNextDom').off('click').on('click', function () {
     $('#md_specifyUpdate').modal('show');
 });
 
-
 $('.updateOption[data-l1key=force]').off('click').on('click',function(){
     if($(this).value() == 1){
         $('.updateOption[data-l1key="backup::before"]').value(0);
@@ -60,7 +59,6 @@ $('.updateOption[data-l1key=force]').off('click').on('click',function(){
         $('.updateOption[data-l1key="backup::before"]').attr('disabled',false);
     }
 });
-
 
 $('#bt_doUpdate').off('click').on('click', function () {
     $("#md_specifyUpdate").modal('hide');
@@ -97,6 +95,26 @@ $('#bt_checkAllUpdate').off('click').on('click', function () {
     });
 });
 
+$('#bt_updateCollapse').on('click',function(){
+   $('#accordionUpdate .panel-collapse').each(function () {
+      if (!$(this).hasClass("in")) {
+          $(this).css({'height' : '' });
+          $(this).addClass("in");
+      }
+   });
+   $('#bt_updateCollapse').hide();
+   $('#bt_updateUncollapse').show()
+});
+
+$('#bt_updateUncollapse').on('click',function(){
+   $('#accordionUpdate .panel-collapse').each(function () {
+      if ($(this).hasClass("in")) {
+          $(this).removeClass("in");
+      }
+   });
+   $('#bt_updateUncollapse').hide();
+   $('#bt_updateCollapse').show()
+});
 
 $('#listPlugin,#listOther,#listCore,#listWidget,#listScript').delegate('.update', 'click', function () {
     var id = $(this).closest('.box').attr('data-id');
@@ -218,7 +236,6 @@ function getNextDomLog(_autoUpdate, _log) {
 }
 
 function printUpdate() {
-
     nextdom.update.get({
         error: function (error) {
             notify("Erreur", error.message, 'error');
@@ -269,17 +286,31 @@ function addUpdate(_update) {
         boxUpdateClass = 'update-box';
     }
     var tr = '<div class="objet col-lg-4 col-md-6 col-sm-6 col-xs-12">';
-
-    tr += '<div class="' + boxUpdateClass + ' box ' + boxClass +'" data-id="' + init(_update.id) + '" data-logicalId="' + init(_update.logicalId) + ' col-lg-4 col-md-6 col-sm-6 col-xs-12" data-type="' + init(_update.type) + '">';
-    tr += '<div class="box-header with-border">';
-    if (_update.type == 'core') {
-        tr += ' <h4 class="box-title"><img src="/public/img/NextDom/NextDom_Square_AlphaBlackBlue.png"/>' + init(_update.name)+'</h4>';
-    }else{
-        tr += ' <h4 class="box-title"><img src="' + init(_update.icon) + '"/>' + init(_update.name)+'</h4>';
+    tr += '<div class="box ' + boxClass +'" data-id="' + init(_update.id) + '" data-logicalId="' + init(_update.logicalId) + '" data-type="' + init(_update.type) + '">';
+    tr += '<div class="box-header with-border accordion-toggle cursor" data-toggle="collapse" data-parent="#accordionUpdate" href="#update_' + init(_update.id) + '">';
+    var updateIcon = '';
+    if (init(_update.type) == 'core') {
+        updateIcon = '/public/img/NextDom/NextDom_Square_WhiteBlackBlue.png';
+    } else {
+        if (init(_update.icon) != '') {
+            updateIcon = init(_update.icon);
+        } else {
+            updateIcon = '/public/img/NextDom_' + init(_update.type).charAt(0).toUpperCase() + init(_update.type).slice(1) + '_Gray.png';
+        }
     }
-    tr += '<span data-toggle="tooltip" title="" class="updateAttr badge ' + bgClass +' pull-right" data-original-title="" data-l1key="status"></span>';
+    var updateName = init(_update.name);
+    if (init(_update.type) == 'widget') {
+        updateName = updateName.split(".").pop();
+    }
+    tr += ' <h4 class="box-title" style="text-transform: capitalize;"><img class="box-header-icon spacing-right" src="' + updateIcon + '"/>' + updateName +'</h4>';
+    tr += '<span data-toggle="tooltip" title="" class="updateAttr badge ' + bgClass +' pull-right" data-original-title="" data-l1key="status" style="text-transform: uppercase;"></span>';
     tr += '</div>';
-    tr += '<div class="box-body">';
+    if (init(_update.type) == 'core') {
+        tr += '<div id="update_' + init(_update.id) + '" class="panel-collapse collapse in">';
+    } else {
+        tr += '<div id="update_' + init(_update.id) + '" class="panel-collapse collapse">';
+    }
+    tr += '<div class="box-body" style="min-height: 268px;">';
     tr += '<span class="updateAttr" data-l1key="id" style="display:none;"></span><p><b>{{Source : }}</b><span class="updateAttr" data-l1key="source"></span></p>';
     tr += '<p><b>{{Type : }}</b><span class="updateAttr" data-l1key="type"></span></p>';
     tr += '<p><b>{{Branche : }}</b>';
@@ -287,10 +318,14 @@ function addUpdate(_update) {
         tr += _update.configuration.version ;
     }
     tr += '</p>';
+    if (_update.type == 'widget') {
+      tr += '<p><b>{{Id : }}</b>'+ init(_update.name);
+      tr += '</p>';
+    }
     tr += '<p><b>{{Version : }}</b>'+_update.remoteVersion+'</p>';
     if (_update.type != 'core') {
-        tr += '<input type="checkbox" id="do-not-update' + _update.id + '" class="updateAttr" data-l1key="configuration" data-l2key="doNotUpdate">';
-        tr += '<label for="do-not-update' + _update.id + '">{{Ne pas mettre à jour}}</label></br>';
+        tr += '<input type="checkbox" class="updateAttr" data-l1key="configuration" data-l2key="doNotUpdate" id="doNotUpdate_'+init(_update.id)+'">';
+        tr += '<label for="doNotUpdate_'+init(_update.id)+'" class="control-label label-check">{{Ne pas mettre à jour}}</label></br>';
     }
     tr += '</div>';
     tr += '<div class="box-footer clearfix text-center">';
@@ -309,6 +344,7 @@ function addUpdate(_update) {
         tr += '<a class="btn btn-default btn-sm pull-right" href="https://nextdom.github.io/core/fr_FR/changelog" target="_blank"><i class="fas fa-book spacing-right"></i>{{Changelog}}</a>';
     }
     tr += '<a class="btn btn-info btn-sm pull-left checkUpdate" ><i class="fas fa-check spacing-right"></i>{{Vérifier}}</a>';
+    tr += '</div>';
     tr += '</div>';
     tr += '</div>';
 

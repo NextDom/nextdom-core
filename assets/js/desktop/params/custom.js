@@ -39,6 +39,9 @@ editorDesktopCSS = null;
 editorMobileJS = null;
 editorMobileCSS = null;
 
+showLoadingCustom();
+printConvertColor();
+
 var url = document.location.toString();
 if (url.match('#')) {
     $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
@@ -52,8 +55,6 @@ jwerty.key('ctrl+s/⌘+s', function (e) {
     $("#bt_savecustom").click();
 });
 
-printConvertColor();
-$.showLoading();
 nextdom.config.load({
     configuration: $('#custom').getValues('.configKey:not(.noSet)')[0],
     error: function (error) {
@@ -64,7 +65,6 @@ nextdom.config.load({
         modifyWithoutSave = false;
     }
 });
-
 
 $('a[data-toggle="tab"][href="#advanced"]').on('shown.bs.tab', function () {
     editorDesktopJS = CodeMirror.fromTextArea(document.getElementById("ta_jsDesktopContent"), {
@@ -80,8 +80,6 @@ $('a[data-toggle="tab"][href="#advanced"]').on('shown.bs.tab', function () {
         viewportMargin: Infinity
     });
 });
-
-
 
 $('a[data-toggle="tab"][href="#mobile"]').on('shown.bs.tab', function (e) {
     if (editorMobileCSS == null) {
@@ -151,6 +149,7 @@ $("#bt_savecustom").on('click', function (event) {
             widget_margin = config['widget::margin'];
             widget_padding = config['widget::padding'];
             widget_radius = config['widget::radius'];
+            nextdom_waitSpinner = config['nextdom::waitSpinner'];
             nextdom.config.load({
                 configuration: $('#custom').getValues('.configKey:not(.noSet)')[0],
                 error: function (error) {
@@ -168,8 +167,11 @@ $("#bt_savecustom").on('click', function (event) {
     saveCustom();
 });
 
+$("#waitSpinnerSelect").change(function () {
+    document.getElementById("waitSpinner").innerHTML="<i class='fas fa-info'></i>";
+    $("#waitSpinner i").removeClass('fa-info').addClass($("#waitSpinnerSelect").value());
+});
 
-/********************Convertion************************/
 function printConvertColor() {
     $.ajax({
         type: "POST",
@@ -238,8 +240,6 @@ function saveConvertColor() {
     });
 }
 
-/*CMD color*/
-
 $('.bt_resetColor').on('click', function () {
     var el = $(this);
     nextdom.getConfiguration({
@@ -260,7 +260,7 @@ $("input[name=theme]").click(function () {
     if (radio == "dark"){
         config = {
             'theme:color1' : '#33b8cc',
-            'theme:color2' : '#e6e7e8',
+            'theme:color2' : '#ffffff',
             'theme:color3' : '#ffffff',
             'theme:color4' : '#33b8cc',
             'theme:color5' : '#ffffff',
@@ -280,6 +280,7 @@ $("input[name=theme]").click(function () {
             'theme:color19' : '#8aa4af',
             'theme:color20' : '#222d32',
             'theme:color21' : '50',
+            'theme:color22' : '#263238',
         }
     }
     if (radio == "white"){
@@ -305,6 +306,7 @@ $("input[name=theme]").click(function () {
             'theme:color19' : '#555555',
             'theme:color20' : '#dddddd',
             'theme:color21' : '100',
+            'theme:color22' : '#fafafa',
         }
     }
     if (radio == "mix"){
@@ -330,6 +332,7 @@ $("input[name=theme]").click(function () {
             'theme:color19' : '#8aa4af',
             'theme:color20' : '#dddddd',
             'theme:color21' : '100',
+            'theme:color22' : '#fafafa',
         }
     }
     nextdom.config.save({

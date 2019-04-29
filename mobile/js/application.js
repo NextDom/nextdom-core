@@ -4,13 +4,13 @@ var NEXTDOM_DATA;
 
 $(document).ajaxStart(function () {
   nbActiveAjaxRequest++;
-  $.showLoading();
+  showLoadingCustom();
 });
 $(document).ajaxStop(function () {
   nbActiveAjaxRequest--;
   if (nbActiveAjaxRequest <= 0) {
     nbActiveAjaxRequest = 0;
-    $.hideLoading();
+    hideLoadingCustom();
   }
 });
 
@@ -18,42 +18,42 @@ $(function () {
   MESSAGE_NUMBER = null;
   nbActiveAjaxRequest = 0;
   utid = Date.now();
-  
+
   $.mobile.orientationChangeEnabled = false;
-  
+
   $(window).on("orientationchange", function (event) {
     deviceInfo = getDeviceType();
   });
-  
+
   initApplication();
-  
+
   $('body').delegate('.link', 'click', function () {
     modal(false);
     panel(false);
     page($(this).attr('data-page'), $(this).attr('data-title'), $(this).attr('data-option'), $(this).attr('data-plugin'));
   });
-  
-  
+
+
   $('body').on('click','.objectSummaryParent',function(){
     modal(false);
     panel(false);
     page('equipment', '{{Résumé}}', $(this).data('object_id')+':'+$(this).data('summary'));
   });
-  
+
   $('body').on('taphold','.cmd[data-type=info]',function(){
     $('#bottompanel_mainoption').empty();
     $('#bottompanel_mainoption').append('<a class="link ui-bottom-sheet-link ui-btn ui-btn-inline waves-effect waves-button" data-page="history" data-title="{{Historique}}" data-option="'+$(this).data('cmd_id')+'"><i class="fas fa-bar-chart"></i> {{Historique}}</a>');
     $('#bottompanel_mainoption').append('<a class="ui-bottom-sheet-link ui-btn ui-btn-inline waves-effect waves-button" id="bt_warnmeCmd" data-cmd_id="'+$(this).data('cmd_id')+'"><i class="fas fa-bell"></i> {{Préviens moi}}</a>');
     $('#bottompanel_mainoption').panel('open');
   });
-  
+
   $('body').on('click','#bt_warnmeCmd',function(){
     page('warnme','{{Me prévenir si}}',{cmd_id : $(this).data('cmd_id')},null,true);
   });
-  
+
   var webappCache = window.applicationCache;
-  
-  
+
+
   function updateCacheEvent(e) {
     if (webappCache.status == 3) {
       $('#div_updateInProgress').html('<p>Mise à jour de l\'application en cours<br/><span id="span_updateAdvancement">0</span>%</p>');
@@ -71,7 +71,7 @@ $(function () {
       setTimeout(function(){ webappCache.update(); }, 5000);
     }
   }
-  
+
   webappCache.addEventListener('cached', updateCacheEvent, false);
   webappCache.addEventListener('checking', updateCacheEvent, false);
   webappCache.addEventListener('downloading', updateCacheEvent, false);
@@ -83,7 +83,7 @@ $(function () {
   try{
     webappCache.update();
   }catch (e) {
-    
+
   }
 });
 
@@ -179,7 +179,7 @@ function initApplication(_reinit) {
         widget_margin =  data.result.widget_margin;
         nextdom.init();
         var include = ['core/js/core.js'];
-        
+
         if (isset(userProfils) && userProfils != null) {
           if (isset(userProfils.mobile_theme_color) && userProfils.mobile_theme_color != '') {
             $('#jQMnDColor').attr('href', 'core/themes/'+userProfils.mobile_theme_color+'/mobile/' + userProfils.mobile_theme_color + '.css');
@@ -202,7 +202,7 @@ function initApplication(_reinit) {
             include.push('plugins/'+plugins[i].id+'/mobile/js/event.js');
           }
         }
-        
+
         $.get("core/php/icon.inc.php", function (data) {
           $("head").append(data);
           $.include(include, function () {
@@ -240,13 +240,13 @@ function initApplication(_reinit) {
 
 function page(_page, _title, _option, _plugin,_dialog) {
   setBackgroundImage('');
-  $.showLoading();
+  showLoadingCustom();
   try {
     $('#bottompanel').panel('close');
     $('#bottompanel_mainoption').panel('close');
     $('.ui-popup').popup('close');
   } catch (e) {
-    
+
   }
   if (isset(_title)) {
     if(!isset(_dialog) || !_dialog){
@@ -340,7 +340,7 @@ function modal(_name) {
       });
     }
   } catch (e) {
-    
+
   }
 }
 
@@ -355,7 +355,7 @@ function panel(_content) {
       $('#bt_bottompanel').show();
     }
   } catch (e) {
-    
+
   }
 }
 
@@ -369,7 +369,7 @@ function refreshMessageNumber() {
 }
 
 function refreshUpdateNumber() {
-  
+
 }
 
 function notify(_title, _text) {

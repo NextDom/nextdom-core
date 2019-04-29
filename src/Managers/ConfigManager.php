@@ -130,7 +130,7 @@ class ConfigManager
             'key' => $configKey,
             'value' => $configValue,
         );
-        $sql = 'REPLACE ' . self::DB_CLASS_NAME . ' 
+        $sql = 'REPLACE ' . self::DB_CLASS_NAME . '
                 SET `key` = :key,
                     `value` = :value,
                      `plugin` = :plugin';
@@ -167,7 +167,7 @@ class ConfigManager
                 'plugin' => $pluginId,
                 'key' => $configKey,
             );
-            $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . ' 
+            $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . '
                     WHERE `key` = :key
                         AND `plugin` = :plugin';
             DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW);

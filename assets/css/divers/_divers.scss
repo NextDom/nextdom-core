@@ -1,0 +1,82 @@
+/* This file is part of Jeedom.
+*
+* Jeedom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* Jeedom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/* This file is part of NextDom.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+*
+* @Support <https://www.nextdom.org>
+* @Email   <admin@nextdom.org>
+* @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
+*/
+
+/* Core-Surcharge */
+html {
+    height: 100%;
+    scroll-behavior: smooth;
+}
+#md_pageHelp {
+    display: none;
+}
+
+/* Data type binaire */
+.binary {
+    margin-left: 5px;
+    position: relative;
+    top: 2px;
+    width : 15px;
+    height : 15px;
+    border-radius: 5px 5px 5px 5px;
+    display: inline-block;
+}
+
+/* Attente chargement */
+#jqueryLoadingDiv .overlay {
+    background-image: url(/assets/3rdparty/jquery.utils/gritter.png);
+}
+
+/* Fond flouté */
+.blur {
+    filter:blur(2px) grayscale(1);
+}
+
+/* Selecteur de date */
+#ui-datepicker-div {
+    z-index: 9999 !important;
+}
+
+/* Shadows */
+.fixed-shadow {
+    box-shadow: 0 6px 6px 0px rgba(0,0,0,0.4);
+    border-top-right-radius: 0px;
+    border-top-left-radius: 0px;
+}
+.scroll-shadow {
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+}

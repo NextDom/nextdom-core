@@ -70,6 +70,7 @@ page-title:
   database: OS/DB
   scenarios: Scénarios
   objects: Objets
+  plugins: Plugins
 
 administration:
   cpu: CPU
@@ -109,8 +110,13 @@ health:
   authentication-error: "Attention : vous avez toujours l'utilisateur admin/admin configuré, cela représente une grave faille de sécurité, allez <a href=\"index.php?v=d&p=user\">ici</a> pour modifier le mot de passe de l'utilisateur admin"
   available-memory: Mémoire disponible
   available-swap: Swap disponible
+  updates: mises à jour disponibles
+  need-more-than: Doit être supérieur(e) à
+  need-less-than: Doit être inférieur(e) à
   cache-not-saved: Votre cache n'est pas sauvegardé. En cas de redémarrage, certaines informations peuvent être perdues. Essayez de lancer (à partir du moteur de tâches) la tâche cache::persist.
   cache-persistence: Persistance du cache
+  collapse: Déplier
+  config: Configuration du plugin
   cron-disabled: "Erreur cron : les crons sont désactivés. Allez dans Administration -> Moteur de tâches pour les réactiver"
   cron-enabled: Service cron actif
   daemon-auto: Démon en mode automatique
@@ -129,15 +135,18 @@ health:
   launch-benchmark: Lancer un Benchmark
   load: Charge
   network-config: Allez sur Administration -> Configuration -> Réseaux, puis configurez correctement la partie réseau
-  no-info: Aucune santé spécifique
+  no-info: Pas d'informations de santé
+  no-info-detail: Aucune dépendances, ni daemon, ni informations
   os-version: Version OS
+  os-not-supported: Vous n'êtes pas sur un OS officiellement supporté par l'équipe %productName% (toute demande de support pourra donc être refusée). Les OS officiellement supportés sont Debian Jessie et Debian Strech.
   php-error: Une version de PHP supérieure ou égale à 7 est nécessaire.
   php-version: Version PHP
   plugins-legend: Détails de la santé de vos plugins, cliquez sur le titre pour avoir le détail puis survolez les icônes pour plus d'informations.
-  plugins-title: Santé des Plugins
-  processes-killed: Nombre de processus tués par le noyau pour manque de mémoire. Votre système manque de mémoire. Essayez de réduire le nombre de plugins ou les scénarios
-  product-legend: Détails de la santé de votre solution, survolez les icônes pour plus d'informations.
-  product-title: Santé de NextDom
+  plugins-title: Plugins
+  port: Port configuré
+  processes-killed: Nombre de processus tués par le noyau pour manque de mémoire. Votre système manque de mémoire. Essayez de réduire le nombre de plugins ou de scénarios.
+  product-legend: Détails de la santé de votre solution NextDom.
+  product-title: NextDom
   product-started: Démarré
   product-version: Version NextDom
   scenario-disabled: "Erreur scénario : tous les scénarios sont désactivés. Allez dans Outils -> Scénarios pour les réactiver"
@@ -146,6 +155,8 @@ health:
   sudo-rights: Droits sudo
   system-date-error: Si la dernière heure enregistrée est fausse, il faut la remettre à zéro <a href="index.php?v=d&p=administration">ici</a>
   system-date: Date système (dernière heure enregistrée)
+  title: Page Santé
+  uncollapse: Replier
   unknown: Inconnue
   update-to-date: Système à jour
 
@@ -215,6 +226,8 @@ sidebar:
   expert-restart: Redémarrer
   expert-shutdown: Eteindre
   expert-issue: Un Dysfonctionnement ?
+  online: Online
+  offline: Offline
 
 firstuse:
   step: Étape
@@ -560,7 +573,6 @@ scenario:
 "Autre": "Autre"
 "Autre Sources": "Autre Sources"
 "Autres": "Autres"
-"Avancement de la migration": "Avancement de la migration"
 "Avancement de la mises à jour": "Avancement de la mise à jour"
 "Avancement de la restauration": "Avancement de la restauration"
 "Avancement de la sauvegarde": "Avancement de la sauvegarde"
@@ -1798,7 +1810,6 @@ scenario:
 "Renouveler la clef API": "Renouveler la clef API"
 "repo": "repo"
 "repoCode": "repoCode"
-"Report bug": "Report bug"
 "Reprise": "Reprise"
 "Requête invalide. Version JSON-RPC invalide :": "Requête invalide. Version JSON-RPC invalide :"
 "Restauration": "Restauration"
