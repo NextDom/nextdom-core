@@ -140,6 +140,13 @@ class MarketJeeController extends BaseController
                 case 'Obsolète':
                     $marketObjects2['certificationClass'] = 'obsolete';
                     break;
+                case 'Premium':
+                    $marketObjects2['certificationClass'] = 'premium';
+                    $marketObjects2['cost'] = -1;
+                    break;
+                case 'Partenaire':
+                    $marketObjects2['certificationClass'] = 'partner';
+                    break;
             }
             $marketObjects2['type'] = $marketObject->getType();
             if (strpos($marketObject->getName(), 'mobile.') !== false) {

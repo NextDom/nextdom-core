@@ -55,13 +55,17 @@ echo '<img src="' . $default_image . '" data-original="' . $urlPath . '"  class=
    echo '<div class="form-group text-medium"><span class="spacing-right">';
    echo $market->getCertification();
    echo '</span>';
-if ($market->getCost() > 0) {
+if ($market->getCost() > 0 && $market->getCost() != 999 ) {
     if ($market->getCost() != $market->getRealCost()) {
         echo '<span data-l1key="rating" style="text-decoration:line-through;">(' . number_format($market->getRealCost(), 2) . ' €)</span> ';
     }
     echo '<span data-l1key="rating">(' . number_format($market->getCost(), 2) . ' € TTC)</span>';
 } else {
-    echo '<span data-l1key="rating">({{Gratuit}})</span>';
+    if ($market->getCost() == 999 ) {
+        echo '<span data-l1key="rating">({{Nous contacter}})</span>';
+    } else {
+        echo '<span data-l1key="rating">({{Gratuit}})</span>';
+    }
 }
 echo '</div>';
 global $NEXTDOM_INTERNAL_CONFIG;

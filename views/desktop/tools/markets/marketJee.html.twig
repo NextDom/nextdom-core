@@ -37,6 +37,11 @@
     <div class="action-bar">
         <div class="action-group">
             <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=plugin"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour' }}</a>
+            <div class="btn-group">
+                <a class="btn btn-default" id="authorSearch"><i class="fas fa-user spacing-right"></i>{{ 'Un Auteur ?' }}</a>
+                <a class="btn btn-default" id="pluginNameSearch"><i class="fas fa-tag spacing-right"></i>{{ 'Un Nom ?' }}</a>
+                <a class="btn btn-primary" id="resetSearch"><i class="fas fa-times"></i></a>
+            </div>
             {% if marketType == 'plugin' %}
                 <div class="btn-group">
                     <a class="btn btn-default bt_pluginFilterCost" data-filter="free"><i class="fas fa-gift spacing-right"></i>{{ 'Gratuit' }}</a>
@@ -44,22 +49,21 @@
                     <a class="btn btn-primary bt_pluginFilterCost" data-filter=""><i class="fa fa-times"></i></a>
                 </div>
                 <div class="btn-group">
-                    <a class="btn btn-default bt_pluginFilterCertification" data-filter="Officiel">{{ 'Officiel' }}</a>
-                    <a class="btn btn-default bt_pluginFilterCertification" data-filter="Conseillé">{{ 'Conseillé' }}</a>
-                    <a class="btn btn-default bt_pluginFilterCertification" data-filter="Legacy">{{ 'Legacy' }}</a>
-                    <a class="btn btn-primary bt_pluginFilterCertification" data-filter=""><i class="fa fa-times"></i></a>
-                </div>
-                <div class="btn-group">
                     <a class="btn btn-default bt_pluginFilterInstall" data-filter="notInstall">{{ 'Installé' }}</a>
                     <a class="btn btn-default bt_pluginFilterInstall" data-filter="install">{{ 'Non installé' }}</a>
                     <a class="btn btn-primary bt_pluginFilterInstall" data-filter=""><i class="fa fa-times"></i></a>
                 </div>
+                <div class="btn-group">
+                    <select class="form-control" id="sel_certif">
+                        <option value="" selected>{{ 'Tous' }}</option>
+                        <option value="Officiel">{{ 'Officiel' }}</option>
+                        <option value="Conseillé">{{ 'Conseillé' }}</option>
+                        <option value="Premium">{{ 'Premium' }}</option>
+                        <option value="Partenaire">{{ 'Partenaire' }}</option>
+                        <option value="Legacy">{{ 'Legacy' }}</option>
+                    </select>
+                </div>
             {% endif %}
-            <div class="btn-group">
-                <a class="btn btn-default" id="authorSearch"><i class="fas fa-user spacing-right"></i>{{ 'Un Auteur ?' }}</a>
-                <a class="btn btn-default" id="pluginNameSearch"><i class="fas fa-tag spacing-right"></i>{{ 'Un Nom ?' }}</a>
-                <a class="btn btn-primary" id="resetSearch"><i class="fas fa-times"></i></a>
-            </div>
         </div>
         <div class="action-group">
             <div class="btn-group">
@@ -157,7 +161,11 @@
                                             {% endif %}
                                         </span>
                                     {% else %}
-                                        <span class="market-cost">Gratuit</span>
+                                        {% if object.cost < 0 %}
+                                            <span class="market-cost">{{ 'Nous contacter'}}</span>
+                                        {% else %}
+                                            <span class="market-cost">{{ 'Gratuit' }}</span>
+                                        {% endif %}
                                     {% endif %}
                                 </div>
                             {% endfor %}

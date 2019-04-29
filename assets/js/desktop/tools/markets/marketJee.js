@@ -49,11 +49,7 @@ $('.bt_pluginFilterCost').on('click', function () {
     marketFilter();
 });
 
-$('.bt_pluginFilterCertification').on('click', function () {
-    $('.bt_pluginFilterCertification').removeClass('btn-primary');
-    $('.bt_pluginFilterCertification').addClass('btn-default');
-    $(this).addClass('btn-primary');
-    $(this).removeClass('btn-default');
+$('#sel_certif').on('change', function () {
     marketFilter();
 });
 
@@ -232,7 +228,6 @@ function displayWidgetSubtype(name) {
 
 function marketFilter() {
     var filterCost = '';
-    var filterCertification = '';
     var filterInstall = '';
     var pluginValue = '';
     $('.market').hide();
@@ -241,16 +236,12 @@ function marketFilter() {
             filterCost = $(this).attr('data-filter');
         }
     });
-    $('.bt_pluginFilterCertification').each(function () {
-        if ($(this).hasClass("btn-primary")) {
-            filterCertification = $(this).attr('data-filter');
-        }
-    });
-    $('.bt_pluginFilterInstall').each(function () {
+        $('.bt_pluginFilterInstall').each(function () {
         if ($(this).hasClass("btn-primary")) {
             filterInstall = $(this).attr('data-filter');
         }
     });
+    var filterCertification = $('#sel_certif').value();
     var filterCategory = $('#sel_categorie').value();
     var currentSearchValue = $('#generalSearch').val().toLowerCase();
     $('.market').show();
