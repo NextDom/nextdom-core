@@ -336,6 +336,7 @@ step_nextdom_directory_layout() {
 step_nextdom_configuration() {
   # recreate configuration from sample
   cp ${WEBSERVER_HOME}/core/config/common.config.sample.php ${WEBSERVER_HOME}/core/config/common.config.php
+  SECRET_KEY=$(</dev/urandom tr -dc '12345!@#$%qwertQWERTasdfgASDFGzxcvbZXCVB' | head -c32; echo "")
   sed -i "s/#PASSWORD#/${MYSQL_NEXTDOM_PASSWD}/g" ${WEBSERVER_HOME}/core/config/common.config.php
   sed -i "s/#DBNAME#/${MYSQL_NEXTDOM_DB}/g"       ${WEBSERVER_HOME}/core/config/common.config.php
   sed -i "s/#USERNAME#/${MYSQL_NEXTDOM_USER}/g"   ${WEBSERVER_HOME}/core/config/common.config.php
@@ -344,6 +345,7 @@ step_nextdom_configuration() {
   sed -i "s%#LOG_DIR#%${LOG_DIRECTORY}%g"         ${WEBSERVER_HOME}/core/config/common.config.php
   sed -i "s%#LIB_DIR#%${LIB_DIRECTORY}%g"         ${WEBSERVER_HOME}/core/config/common.config.php
   sed -i "s%#TMP_DIR#%${TMP_DIRECTORY}%g"         ${WEBSERVER_HOME}/core/config/common.config.php
+  sed -i "s%#SECRET_KEY#%${SECRET_KEY}%g"         ${WEBSERVER_HOME}/core/config/common.config.php
   print_verbose "wrote configuration file: ${WEBSERVER_HOME}/core/config/common.config.php"
 
   # some other compatibilty ugly stuff

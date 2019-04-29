@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+    <body>
+        <input type="text" id="login"/>
+        <input type="password" id="password"/>
+        <button id="connect">Connect</button>
+        <script>
+            document.getElementById('connect').addEventListener('click', function() {
+                const login = document.getElementById('login').value;
+                const password = document.getElementById('password').value;
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', '/api/connect?login=' + login + '&password=' + password, true);
+                xhr.onreadystatechange = function() {
+                    if (this.readystatechange !== 4) {
+                        return;
+                    }
+                    if (this.status === 200) {
+                        console.log(this.responseText);
+                    }
+                };
+                xhr.send();
+            });
+        </script>
+    </body>
+</html>

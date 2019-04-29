@@ -1,0 +1,33 @@
+eqlogic_get_all:
+  path: '/eqlogic/all'
+  controller: NextDom\Rest\EqLogicRest::getAll
+  methods: GET
+room_get_room:
+  path: '/room/get/{roomId}'
+  controller: NextDom\Rest\RoomRest::get
+  methods: GET
+  requirements:
+    roomId: \d+
+room_get_default_tree:
+  path: '/room/get_tree'
+  controller: NextDom\Rest\RoomRest::getDefaultTree
+  methods: GET
+room_get_tree:
+  path: '/room/get_tree/{roomId}'
+  controller: NextDom\Rest\RoomRest::getTree
+  methods: GET
+  requirements:
+    roomId: \d+
+room_get_root:
+  path: '/room/get_roots'
+  controller: NextDom\Rest\RoomRest::getRoots
+summary_get_room_tree:
+  path: '/summary/get_room_tree/{roomId}'
+  controller: NextDom\Rest\SummaryRest::getRoomTree
+  methods: GET
+  requirements:
+    roomId: \d+
+summary_get_default_room_tree:
+  path: '/summary/get_default_room_tree'
+  controller: NextDom\Rest\SummaryRest::getDefaultRoomTree
+  methods: GET
