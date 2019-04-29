@@ -34,6 +34,7 @@ __pycache__/
 tests/tests/chromedriver*
 
 core/config
+core/css
 
 /var.*
 /var
