@@ -319,6 +319,9 @@ scenario:
   description-at: "A un temps précis, cet élément permet de lancer une action. Par exemple : A 9h30, ouvrir les volets."
   description-code: "Cet élément permet de rajouter dans votre scénario de la programmation à l’aide d’un code, PHP/Shell, etc."
   description-comment: "Permet de commenter votre scénario."
+entity:
+  note:
+    name-cannot-be-empty: Le nom de la note ne peut être vide
 # Ancien format
 "401 - Accès non autorisé": "401 - Accès non autorisé"
 "403 Access Forbidden": "403 Access Forbidden"

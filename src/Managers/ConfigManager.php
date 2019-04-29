@@ -285,7 +285,7 @@ class ConfigManager
         $sql = 'SELECT *
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE `key` LIKE :key
-                    AND `plugin`= :plugin';
+                AND `plugin`= :plugin';
         $results = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL);
         foreach ($results as &$result) {
             $result['value'] = Utils::isJson($result['value'], $result['value']);

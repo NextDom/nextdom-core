@@ -7,25 +7,23 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   <meta name="mobile-web-app-capable" content="yes">
-  <link rel="manifest" href="manifest.json.php">
-  <link rel="stylesheet" href="3rdparty/font-noto/font-noto.css" />
-  <link rel="stylesheet" href="3rdparty/jquery.mobile/jquery.mobile.min.css" />
-  <link rel="stylesheet" href="3rdparty/waves/waves.min.css"/>
-  <link rel="stylesheet" href="3rdparty/jquery.mobile/css/flexboxgrid.min.css">
-  <link rel="stylesheet" href="3rdparty/jquery.mobile/css/nativedroid2.css" />
-  <link rel="stylesheet" href="core/themes/blue_grey/mobile/blue_grey.css" id="jQMnDColor" />
-  <link rel="stylesheet" href="3rdparty/jquery.mobile/css/fonts.css">
-  <link rel="stylesheet" href="3rdparty/roboto/roboto.css">
-  <link rel="stylesheet" href="core/css/core.css">
-  <link rel="stylesheet" href="3rdparty/jquery.utils/jquery.utils.css">
-  <link rel="stylesheet" href="mobile/css/commun.css">
-  <script src="core/php/getJS.php?file=3rdparty/jquery/jquery.min.js"></script>
-  <script src="core/php/getJS.php?file=3rdparty/jquery.mobile/jquery.mobile.min.js"></script>
-  <script src="core/php/getJS.php?file=3rdparty/highstock/highstock.js"></script>
-  <script src="core/php/getJS.php?file=3rdparty/highstock/highcharts-more.js"></script>
-  <script src="core/php/getJS.php?file=3rdparty/highstock/modules/solid-gauge.js"></script>
-  <script src="core/php/getJS.php?file=3rdparty/jquery.utils/jquery.utils.js"></script>
-  <script src="core/php/getJS.php?file=3rdparty/jquery.packery/jquery.packery.js"></script>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="/assets/3rdparty/jquery.mobile/jquery.mobile.min.css" />
+  <link rel="stylesheet" href="/vendor/node_modules/node-waves/dist/waves.min.css"/>
+  <link rel="stylesheet" href="/assets/3rdparty/jquery.mobile/css/flexboxgrid.min.css">
+  <link rel="stylesheet" href="/assets/3rdparty/jquery.mobile/css/nativedroid2.css" />
+  <link rel="stylesheet" href="/public/themes/blue_grey/mobile/blue_grey.css" id="jQMnDColor" />
+  <link rel="stylesheet" href="/assets/3rdparty/jquery.mobile/css/fonts.css">
+  <link rel="stylesheet" href="/vendor/node_modules/roboto-fontface/css/roboto/roboto-fontface.css">
+  <link rel="stylesheet" href="/assets/3rdparty/jquery.utils/jquery.utils.css">
+  <link rel="stylesheet" href="/mobile/css/commun.css">
+  <script src="/vendor/node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="core/php/getJS.php?file=assets/3rdparty/jquery.mobile/jquery.mobile.min.js"></script>
+  <script src="/vendor/node_modules/highcharts/highstock.js"></script>
+  <script src="/vendor/node_modules/highcharts/highcharts-more.js"></script>
+  <script src="/vendor/node_modules/highcharts/modules/solid-gauge.js"></script>
+  <script src="core/php/getJS.php?file=assets/3rdparty/jquery.utils/jquery.utils.js"></script>
+  <script src="/vendor/node_modules/packery/dist/packery.pkgd.js"></script>
   <script src="core/php/getJS.php?file=core/js/nextdom.class.js"></script>
   <script src="core/php/getJS.php?file=core/js/private.class.js"></script>
   <script src="core/php/getJS.php?file=core/js/cmd.class.js"></script>
@@ -42,9 +40,9 @@
   <script src="core/php/getJS.php?file=core/js/cron.class.js"></script>
   <script src="core/php/getJS.php?file=core/js/plan3d.class.js"></script>
   <script src="core/php/getJS.php?file=core/js/log.class.js"></script>
-  <script src="core/php/getJS.php?file=3rdparty/waves/waves.min.js" ></script>
-  <script src="core/php/getJS.php?file=3rdparty/wow/wow.min.js" ></script>
-  <script src="core/php/getJS.php?file=3rdparty/jquery.mobile/nativedroid2.js" ></script>
+  <script src="/vendor/node_modules/node-waves/dist/waves.min.js" ></script>
+  <script src="/vendor/node_modules/wowjs/dist/wow.min.js" ></script>
+  <script src="core/php/getJS.php?file=assets/3rdparty/jquery.mobile/nativedroid2.js" ></script>
   <script src="core/php/getJS.php?file=mobile/js/application.js"></script>
 </head>
 <body>
@@ -66,7 +64,7 @@
         <div class="break dot3" style="position : relative;top : -6px;"></div>
       </div>
     </div>
-    
+
     <div role="main" class="ui-content" id="page" data-inset="false" style="padding : 2px;padding-top : 4px;"></div>
     <div data-role="popup" id="popupDialog" style="width : 100%">
       <div data-role="header">

@@ -312,28 +312,29 @@ class MarketItem
      */
     public function readCache(): bool
     {
-        $result = false;
-        $jsonContent = $this->dataStorage->getJsonData('repo_data_' . str_replace('/', '_', $this->fullName));
-        if ($jsonContent !== null) {
-            if (array_key_exists('name', $jsonContent)) $this->name = $jsonContent['name'];
-            if (array_key_exists('gitName', $jsonContent)) $this->gitName = $jsonContent['gitName'];
-            if (array_key_exists('gitId', $jsonContent)) $this->gitId = $jsonContent['gitId'];
-            if (array_key_exists('fullName', $jsonContent)) $this->fullName = $jsonContent['fullName'];
-            if (array_key_exists('description', $jsonContent)) $this->description = $jsonContent['description'];
-            if (array_key_exists('url', $jsonContent)) $this->url = $jsonContent['url'];
-            if (array_key_exists('id', $jsonContent)) $this->id = $jsonContent['id'];
-            if (array_key_exists('author', $jsonContent)) $this->author = $jsonContent['author'];
-            if (array_key_exists('category', $jsonContent)) $this->category = $jsonContent['category'];
-            if (array_key_exists('iconPath', $jsonContent)) $this->iconPath = $jsonContent['iconPath'];
-            if (array_key_exists('defaultBranch', $jsonContent)) $this->defaultBranch = $jsonContent['defaultBranch'];
-            if (array_key_exists('branchesList', $jsonContent)) $this->branchesList = $jsonContent['branchesList'];
-            if (array_key_exists('licence', $jsonContent)) $this->licence = $jsonContent['licence'];
-            if (array_key_exists('changelogLink', $jsonContent)) $this->changelogLink = $jsonContent['changelogLink'];
-            if (array_key_exists('documentationLink', $jsonContent)) $this->documentationLink = $jsonContent['documentationLink'];
-            if (array_key_exists('screenshots', $jsonContent)) $this->screenshots = $jsonContent['screenshots'];
-            $result = true;
+        $name   = sprintf("repo_data_%s", str_replace("/", "_", $this->fullName));
+        $json   = $this->dataStorage->getJsonData($name);
+        $attrs  = array("name",        "gitName",       "gitId",             "fullName",
+                        "description", "url",           "id",                "author",
+                        "category",    "iconPath",      "defaultBranch",     "branchesList",
+                        "licence",     "changelogLink", "documentationLink", "screenshots");
+        if ($json === null) {
+            return false;
         }
-        return $result;
+
+        foreach ($attrs as $c_attr) {
+            if (true === array_key_exists($c_attr, $json)) {
+                $this->$c_attr = $json[$c_attr];
+            }
+        }
+
+        if (false !== $this->iconPath) {
+            $path = sprintf("%s/%s", NEXTDOM_ROOT, $this->iconPath);
+            if (false === file_exists($path)) {
+                $this->iconPath = false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -365,14 +366,15 @@ class MarketItem
     public function downloadIcon()
     {
         $iconFilename = str_replace('/', '_', $this->fullName) . '.png';
-        $iconUrl = 'https://raw.githubusercontent.com/' . $this->fullName . '/' . $this->defaultBranch . '/plugin_info/' . $this->id . '_icon.png';
-        $targetPath = NEXTDOM_DATA . '/market_cache/' . $iconFilename;
+        $iconUrl      = 'https://raw.githubusercontent.com/' . $this->fullName . '/' . $this->defaultBranch . '/plugin_info/' . $this->id . '_icon.png';
+        $targetPath   = NEXTDOM_DATA . '/public/img/market_cache/' . $iconFilename;
+
         DownloadManager::downloadBinary($iconUrl, $targetPath);
         if (filesize($targetPath) < 100) {
             unlink($targetPath);
             $this->iconPath = '/public/img/unknown_icon.png';
         } else {
-            $this->iconPath = '/var/market_cache/' . $iconFilename;
+            $this->iconPath = '/var/public/img/market_cache/' . $iconFilename;
         }
         $this->writeCache();
     }

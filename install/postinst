@@ -95,6 +95,7 @@ prereq_create_dirs() {
   mkdir -p ${LIB_DIRECTORY}/public/css
   mkdir -p ${LIB_DIRECTORY}/public/img/plan
   mkdir -p ${LIB_DIRECTORY}/public/img/profils
+  mkdir -p ${LIB_DIRECTORY}/public/img/market_cache
 
   mkdir -p ${root}/plugins
 
@@ -284,6 +285,18 @@ step_nextdom_directory_layout() {
       rm -rf ${WEBSERVER_HOME}/var
   fi
   ln -s ${LIB_DIRECTORY} ${WEBSERVER_HOME}/var
+
+  # jeedom backup compatibility:  ./core/css is a symlink
+  # -> some important plugins like widget are writing direclty to core/css/...
+  #    and there fore need www-data write permission
+  if [ -L ${WEBSERVER_HOME}/core/css ]; then
+      rm -f ${WEBSERVER_HOME}/core/css
+  fi
+  if [ -d ${WEBSERVER_HOME}/core/css ]; then
+      mv ${WEBSERVER_HOME}/core/css/* ${LIB_DIRECTORY}/public/css/
+      rm -rf ${WEBSERVER_HOME}/core/css
+  fi
+  ln -s ${LIB_DIRECTORY}/public/css/ ${WEBSERVER_HOME}/core/css
 
   # jeedom backup compatibility:  ./data is a symlink
   if [ -L ${WEBSERVER_HOME}/data ]; then

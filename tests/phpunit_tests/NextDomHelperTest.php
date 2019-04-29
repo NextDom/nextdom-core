@@ -16,6 +16,7 @@
  */
 
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Managers\ConfigManager;
 
 require_once(__DIR__ . '/../../src/core.php');
 
@@ -94,5 +95,21 @@ class NextDomHelperTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($testPath, $tmpFolder);
         $this->assertDirectoryIsWritable($testPath);
         rmdir($testPath);
+    }
+
+    public function testIsCapableSudo() {
+        $result = NextDomHelper::isCapable('sudo');
+        $this->assertTrue($result);
+    }
+
+    public function testGetHardwareName() {
+        $result = NextDomHelper::getHardwareName();
+        $this->assertEquals('docker', $result);
+    }
+
+    public function testGetHardwareNameWithRemovedConfig() {
+        ConfigManager::remove('hardware_name');
+        $result = NextDomHelper::getHardwareName();
+        $this->assertEquals('docker', $result);
     }
 }
