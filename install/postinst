@@ -67,10 +67,11 @@ print_error(){
   ROUGE="\\033[1;31m"
 
   if [ 1 -eq "0${isdev}"  ] ; then
-      echo -e "${ROUGE}error${NORMAL}: $@"
-  else
-    echo -e "${ROUGE}error${NORMAL}: $@" >> ${LOG_DIRECTORY}/postinst.log
+      echo -e "${ROUGE} Ko${NORMAL}"
+      echo -e "  -> error: $@"
   fi
+  echo -e "${ROUGE} Ko${NORMAL}" >> ${LOG_DIRECTORY}/postinst.log
+  echo -e "  -> error: $@"       >> ${LOG_DIRECTORY}/postinst.log
   exit 1
 }
 
@@ -430,7 +431,9 @@ step_nextdom_assets() {
   if [ 1 -eq "0${isdev}" ]; then
       # A faire dans une version developpeur (apres git clone)
       cd ${WEBSERVER_HOME}
-      ./scripts/gen_global.sh >> ${DEBUG} 2>&1
+      ./scripts/gen_global.sh >> ${DEBUG} 2>&1 || {
+        print_error "error during asset generation"
+      }
   fi
 }
 
