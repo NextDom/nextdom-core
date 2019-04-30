@@ -31,7 +31,7 @@ function gen_css {
   	echo " >>> Generate CSS"
     mkdir -p public/css/pages
     mkdir -p public/css/modals
-    sass --update -f --stop-on-error assets/css/compiled:public/css $COMPRESS
+    sass --update --stop-on-error assets/css/compiled:public/css $COMPRESS
 
   	# Remplacement des chemins
   	sed -i s#\"images/ui-#\"/assets/css/vendors/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.css
