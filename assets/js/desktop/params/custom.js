@@ -33,7 +33,6 @@
 * @Email   <admin@nextdom.org>
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
-
 editorDesktopJS = null;
 editorDesktopCSS = null;
 editorMobileJS = null;
@@ -41,19 +40,6 @@ editorMobileCSS = null;
 
 showLoadingCustom();
 printConvertColor();
-
-var url = document.location.toString();
-if (url.match('#')) {
-    $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
-}
-$('.nav-tabs a').on('shown.bs.tab', function (e) {
-    window.location.hash = e.target.hash;
-})
-
-jwerty.key('ctrl+s/⌘+s', function (e) {
-    e.preventDefault();
-    $("#bt_savecustom").click();
-});
 
 nextdom.config.load({
     configuration: $('#custom').getValues('.configKey:not(.noSet)')[0],
@@ -66,30 +52,60 @@ nextdom.config.load({
     }
 });
 
+var url = document.location.toString();
+if (url.match('#')) {
+    $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
+    if (url.split('#')[1] == "desktop" || url.split('#')[1] == "mobile") {
+        $('.nav-tabs a[href="#advanced"]').tab('show');
+    }
+    if (url.split('#')[1] == "desktop" || url.split('#')[1] == "advanced") {
+        printAdvancedDesktop();
+    } 
+    if (url.split('#')[1] == "mobile") {
+        printAdvancedMobile();
+    }
+}
+$('.nav-tabs a').on('shown.bs.tab', function (e) {
+    window.location.hash = e.target.hash;
+})
+
+jwerty.key('ctrl+s/⌘+s', function (e) {
+    e.preventDefault();
+    $("#bt_savecustom").click();
+});
+
 $('a[data-toggle="tab"][href="#advanced"]').on('shown.bs.tab', function () {
-    editorDesktopJS = CodeMirror.fromTextArea(document.getElementById("ta_jsDesktopContent"), {
-        lineNumbers: true,
-        mode: "text/javascript",
-        matchBrackets: true,
-        viewportMargin: Infinity
-    });
-    editorDesktopCSS = CodeMirror.fromTextArea(document.getElementById("ta_cssDesktopContent"), {
-        lineNumbers: true,
-        mode: "text/css",
-        matchBrackets: true,
-        viewportMargin: Infinity
-    });
+    printAdvancedDesktop();
 });
 
 $('a[data-toggle="tab"][href="#mobile"]').on('shown.bs.tab', function (e) {
-    if (editorMobileCSS == null) {
-        editorMobileCSS = CodeMirror.fromTextArea(document.getElementById("ta_cssMobileContent"), {
+    printAdvancedMobile();
+});
+
+$('a[data-toggle="tab"][href="#desktop"]').on('shown.bs.tab', function (e) {
+    printAdvancedDesktop();
+});
+
+function printAdvancedDesktop() {
+    if (editorDesktopJS == null) {
+        editorDesktopJS = CodeMirror.fromTextArea(document.getElementById("ta_jsDesktopContent"), {
+            lineNumbers: true,
+            mode: "text/javascript",
+            matchBrackets: true,
+            viewportMargin: Infinity
+        });
+    }
+    if (editorDesktopCSS == null) {
+        editorDesktopCSS = CodeMirror.fromTextArea(document.getElementById("ta_cssDesktopContent"), {
             lineNumbers: true,
             mode: "text/css",
             matchBrackets: true,
             viewportMargin: Infinity
         });
     }
+}
+
+function printAdvancedMobile() {
     if (editorMobileJS == null) {
         editorMobileJS = CodeMirror.fromTextArea(document.getElementById("ta_jsMobileContent"), {
             lineNumbers: true,
@@ -98,16 +114,28 @@ $('a[data-toggle="tab"][href="#mobile"]').on('shown.bs.tab', function (e) {
             viewportMargin: Infinity
         });
     }
-});
+    if (editorMobileCSS == null) {
+        editorMobileCSS = CodeMirror.fromTextArea(document.getElementById("ta_cssMobileContent"), {
+            lineNumbers: true,
+            mode: "text/css",
+            matchBrackets: true,
+            viewportMargin: Infinity
+        });
+    }
+}
 
 function saveCustom() {
     if (editorDesktopJS !== null) {
         sendCustomData('desktop', 'js', editorDesktopJS.getValue());
+    }
+    if (editorDesktopCSS !== null) {
         sendCustomData('desktop', 'css', editorDesktopCSS.getValue());
-        if (editorMobileCSS !== null) {
-            sendCustomData('mobile', 'js', editorMobileJS.getValue());
-            sendCustomData('mobile', 'css', editorMobileCSS.getValue());
-        }
+    }
+    if (editorMobileJS !== null) {
+        sendCustomData('mobile', 'js', editorMobileJS.getValue());
+    }
+    if (editorMobileCSS !== null) {
+        sendCustomData('mobile', 'css', editorMobileCSS.getValue());
     }
 }
 
@@ -126,7 +154,6 @@ function sendCustomData(version, type, content) {
                     notify("Erreur", error.message, 'error');
                 },
                 success: function (data) {
-//               notify("Info", 'Sauvegarde réussie', 'success');
                 }
             });
         }
@@ -157,7 +184,6 @@ $("#bt_savecustom").on('click', function (event) {
                 },
                 success: function (data) {
                     $('#custom').setValues(data, '.configKey');
-
                     modifyWithoutSave = false;
                     notify("Info", '{{Sauvegarde réussie}}', 'success');
                 }
