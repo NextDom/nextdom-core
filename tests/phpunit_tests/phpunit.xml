@@ -24,14 +24,32 @@
         timeoutForLargeTests="60"
         verbose="false">
     <testsuites>
+        <testsuite name="Temp">
+            <file>NoteTest.php</file>
+        </testsuite>
         <testsuite name="Managers">
+            <file>BackupManagerTest.php</file>
             <file>CmdManagerTest.php</file>
+            <file>ConfigManagerTest.php</file>
             <file>EqLogicManagerTest.php</file>
+            <file>EventManagerTest.php</file>
             <file>ObjectManagerTest.php</file>
+            <file>NoteManagerTest.php</file>
             <file>UserManagerTest.php</file>
         </testsuite>
         <testsuite name="Helpers">
+            <file>AjaxHelperTest.php</file>
+            <file>ClientTest.php</file>
             <file>NextDomHelperTest.php</file>
+            <file>FileSystemHelperTest.php</file>
+            <file>UtilsTest.php</file>
+        </testsuite>
+        <testsuite name="Entities">
+            <file>NoteTest.php</file>
+            <file>qLogicTest.php</file>
+        </testsuite>
+        <testsuite name="Others">
+            <file>I18nTest.php</file>
         </testsuite>
         <testsuite name="AllTests">
             <directory>../phpunit_tests</directory>

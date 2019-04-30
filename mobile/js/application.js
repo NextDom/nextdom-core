@@ -4,13 +4,13 @@ var NEXTDOM_DATA;
 
 $(document).ajaxStart(function () {
   nbActiveAjaxRequest++;
-  showLoadingCustom();
+  $.showLoading();
 });
 $(document).ajaxStop(function () {
   nbActiveAjaxRequest--;
   if (nbActiveAjaxRequest <= 0) {
     nbActiveAjaxRequest = 0;
-    hideLoadingCustom();
+    $.hideLoading();
   }
 });
 
@@ -51,7 +51,7 @@ $(function () {
     page('warnme','{{Me prévenir si}}',{cmd_id : $(this).data('cmd_id')},null,true);
   });
 
-  var webappCache = window.applicationCache;
+
 
 
   function updateCacheEvent(e) {
@@ -72,18 +72,31 @@ $(function () {
     }
   }
 
-  webappCache.addEventListener('cached', updateCacheEvent, false);
-  webappCache.addEventListener('checking', updateCacheEvent, false);
-  webappCache.addEventListener('downloading', updateCacheEvent, false);
-  webappCache.addEventListener('error', updateCacheEvent, false);
-  webappCache.addEventListener('noupdate', updateCacheEvent, false);
-  webappCache.addEventListener('obsolete', updateCacheEvent, false);
-  webappCache.addEventListener('progress', updateCacheEvent, false);
-  webappCache.addEventListener('updateready', updateCacheEvent, false);
-  try{
-    webappCache.update();
-  }catch (e) {
+  var webappCache = window.applicationCache;
 
+
+
+
+
+
+
+
+
+
+
+  if (webappCache != undefined) {
+    webappCache.addEventListener('cached', updateCacheEvent, false);
+    webappCache.addEventListener('checking', updateCacheEvent, false);
+    webappCache.addEventListener('downloading', updateCacheEvent, false);
+    webappCache.addEventListener('error', updateCacheEvent, false);
+    webappCache.addEventListener('noupdate', updateCacheEvent, false);
+    webappCache.addEventListener('obsolete', updateCacheEvent, false);
+    webappCache.addEventListener('progress', updateCacheEvent, false);
+    webappCache.addEventListener('updateready', updateCacheEvent, false);
+    try{
+      webappCache.update();
+    } catch (e) {
+    }
   }
 });
 
@@ -186,7 +199,7 @@ function initApplication(_reinit) {
             include.push( 'core/themes/'+userProfils.mobile_theme_color+'/mobile/' + userProfils.mobile_theme_color + '.js');
           }
           if (isset(userProfils.mobile_highcharts_theme) && userProfils.mobile_highcharts_theme != '') {
-            include.push('3rdparty/highstock/themes/' + userProfils.mobile_highcharts_theme + '.js');
+            include.push('vendor/node_modules/highcharts/themes/' + userProfils.mobile_highcharts_theme + '.js');
           }
         }
         if (isset(data.result.custom) && data.result.custom != null) {
@@ -240,7 +253,7 @@ function initApplication(_reinit) {
 
 function page(_page, _title, _option, _plugin,_dialog) {
   setBackgroundImage('');
-  showLoadingCustom();
+  $.showLoading();
   try {
     $('#bottompanel').panel('close');
     $('#bottompanel_mainoption').panel('close');

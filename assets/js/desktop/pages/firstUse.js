@@ -205,7 +205,7 @@ $("#toStep5").click(function () {
 });
 
 $("#finishConf").click(function () {
-    location.reload();
+    window.location = "/";
 });
 
 function NextStep(_step) {
