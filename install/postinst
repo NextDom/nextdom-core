@@ -434,7 +434,9 @@ step_nextdom_assets() {
   if [ 1 -eq "0${isdev}" ]; then
       # A faire dans une version developpeur (apres git clone)
       cd ${WEBSERVER_HOME}
-      ./scripts/gen_global.sh >> ${DEBUG} 2>&1
+      ./scripts/gen_global.sh >> ${DEBUG} 2>&1 || {
+        print_error "error during asset generation"
+      }
   fi
 }
 
