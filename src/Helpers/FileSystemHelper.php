@@ -54,9 +54,7 @@ class FileSystemHelper
             '3rdparty/bootstrap.slider/js/bootstrap-slider'              => 'vendor/node_modules/bootstrap-slider/dist/bootstrap-slider.min',
             '3rdparty/bootstrap/css/bootstrap.min'                       => 'vendor/node_modules/bootstrap/dist/css/bootstrap.min',
             '3rdparty/bootstrap/js/bootstrap.min'                        => 'vendor/node_modules/bootstrap/dist/js/bootstrap.min',
-            '3rdparty/codemirror/addon/edit/matchbrackets'               => 'vendor/node_modules/codemirror/addon/edit/matchbrackets',
             '3rdparty/codemirror/lib/codemirror'                         => 'vendor/node_modules/codemirror/lib/codemirror',
-            '3rdparty/codemirror/addon/mode/loadmode'                    => 'vendor/node_modules/codemirror/addon/mode/loadmode',
             '3rdparty/datetimepicker/jquery.datetimepicker'              => 'vendor/node_modules/jquery-datetimepicker/jquery.datetimepicker',
             '3rdparty/highstock/highcharts-more'                         => 'vendor/node_modules/highcharts/highcharts-more',
             '3rdparty/highstock/highstock'                               => 'vendor/node_modules/highcharts/highstock',
@@ -76,7 +74,7 @@ class FileSystemHelper
             '3rdparty/jquery.ui/jquery-ui-bootstrap/jquery-ui'           => 'assets/css/jquery-ui-bootstrap/jquery-ui.css'
         ];
         $reMapping  = [
-            '%3rdparty/codemirror/mode/(\w+/\w+)%' => 'vendor/node_modules/codemirror/mode/${1}',
+            '%3rdparty/codemirror/(mode|addon)/(.*)%' => 'vendor/node_modules/codemirror/${1}/${2}',
         ];
 
         $pathinfo    = pathinfo($path);
@@ -85,12 +83,12 @@ class FileSystemHelper
         $filename    = Utils::array_key_default($pathinfo, "filename",  "");
         $needle      = sprintf("%s/%s", trim($dirname, "/"), $filename);
         $mappedValue = Utils::array_key_default($staticMapping, $needle, false);
-        $staticValue = sprintf("%s/assets/%s.%s", NEXTDOM_ROOT, $needle, $extension);
+        $staticValue = sprintf("assets/%s.%s", $needle, $extension);
 
         if (false !== $mappedValue) {
             // try conversion from static mapping
-            $path = sprintf("%s/%s.%s", NEXTDOM_ROOT, $mappedValue, $extension);
-        } elseif (true === file_exists($staticValue)) {
+            $path = sprintf("%s.%s", $mappedValue, $extension);
+        } elseif (true === file_exists(NEXTDOM_ROOT . '/' . $staticValue)) {
             // try conversion existing asset file
             $path = $staticValue;
         } else {
@@ -98,17 +96,16 @@ class FileSystemHelper
             foreach ($reMapping as $c_match => $c_replace) {
                 $path = preg_replace($c_match, $c_replace, $needle);
                 if (($path !== null) && ($path !== $needle)) {
-                    $path = sprintf("%s/%s.%s", NEXTDOM_ROOT, $path, $extension);
+                    $path = sprintf("%s.%s", $path, $extension);
                     break;
                 }
             }
         }
 
         // ensure that returned file belongs to NEXTDOM_ROOT
-
-        $path = realpath($path);
-        if ((false === $path) ||
-            (    0 !== strpos($path, NEXTDOM_ROOT))) {
+        $abspath = realpath(NEXTDOM_ROOT . '/' . $path);
+        if ((false === $abspath) ||
+            (    0 !== strpos($abspath, NEXTDOM_ROOT))) {
             return null;
         }
         return $path;
