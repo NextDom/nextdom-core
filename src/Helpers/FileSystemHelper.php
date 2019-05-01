@@ -56,6 +56,7 @@ class FileSystemHelper
             '3rdparty/bootstrap/js/bootstrap.min'                        => 'vendor/node_modules/bootstrap/dist/js/bootstrap.min',
             '3rdparty/codemirror/addon/edit/matchbrackets'               => 'vendor/node_modules/codemirror/addon/edit/matchbrackets',
             '3rdparty/codemirror/lib/codemirror'                         => 'vendor/node_modules/codemirror/lib/codemirror',
+            '3rdparty/codemirror/addon/mode/loadmode'                    => 'vendor/node_modules/codemirror/addon/mode/loadmode',
             '3rdparty/datetimepicker/jquery.datetimepicker'              => 'vendor/node_modules/jquery-datetimepicker/jquery.datetimepicker',
             '3rdparty/highstock/highcharts-more'                         => 'vendor/node_modules/highcharts/highcharts-more',
             '3rdparty/highstock/highstock'                               => 'vendor/node_modules/highcharts/highstock',
@@ -104,6 +105,7 @@ class FileSystemHelper
         }
 
         // ensure that returned file belongs to NEXTDOM_ROOT
+
         $path = realpath($path);
         if ((false === $path) ||
             (    0 !== strpos($path, NEXTDOM_ROOT))) {
