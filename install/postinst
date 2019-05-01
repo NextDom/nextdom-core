@@ -45,15 +45,18 @@ print_log_in() {
 
 
 print_log_ok() {
+  NORMAL="\\033[0;39m"
+  GREEN="\\033[1;92m"
+
   if [ 1 -eq "0${isdev}"  ] ; then
-      echo " oK"
+      echo -e " ${GREEN}Success${NORMAL}"
       if [ "${#DETAILS[@]}" -ne 0 ]; then
           for c_line in "${DETAILS[@]}"; do
             echo "  -> ${c_line}"
           done
       fi
   fi
-  echo " oK" >> ${LOG_DIRECTORY}/postinst.log
+  echo " Success" >> ${LOG_DIRECTORY}/postinst.log
   if [ "${#DETAILS[@]}" -ne 0 ]; then
       for c_line in "${DETAILS[@]}"; do
         echo "  -> ${c_line}" >> ${LOG_DIRECTORY}/postinst.log
@@ -67,10 +70,11 @@ print_error(){
   ROUGE="\\033[1;31m"
 
   if [ 1 -eq "0${isdev}"  ] ; then
-      echo -e "${ROUGE}error${NORMAL}: $@"
-  else
-    echo -e "${ROUGE}error${NORMAL}: $@" >> ${LOG_DIRECTORY}/postinst.log
+      echo -e " ${ROUGE}Failure${NORMAL}"
+      echo -e "  -> error: $@"
   fi
+  echo -e " Failure" >> ${LOG_DIRECTORY}/postinst.log
+  echo -e "  -> error: $@" >> ${LOG_DIRECTORY}/postinst.log
   exit 1
 }
 
