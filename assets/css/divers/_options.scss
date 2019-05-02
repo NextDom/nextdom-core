@@ -51,3 +51,11 @@
 .no-radius {
     border-radius: 0px !important;
 }
+
+/* Core-Ajout */
+.status-offline:hover {
+    border: solid 1px $critical;
+}
+.status-online:hover {
+    border: solid 1px $good;
+}

@@ -458,9 +458,7 @@ class PrepareView
         }
         $pageData['MENU_HTML_GLOBAL_SUMMARY'] = ObjectManager::getGlobalHtmlSummary();
         $pageData['PRODUCT_IMAGE'] = ConfigManager::byKey('product_image');
-        $pageData['USER_ISCONNECTED'] = UserManager::getStoredUser()->is_Connected();
-        $pageData['USER_AVATAR'] = UserManager::getStoredUser()->getOptions('avatar');
-        $pageData['USER_LOGIN'] = UserManager::getStoredUser()->getLogin();
+        $pageData['profilsUser'] = UserManager::getStoredUser();
         $pageData['NEXTDOM_VERSION'] = NextDomHelper::getNextdomVersion();
         $pageData['JEEDOM_VERSION'] = NextDomHelper::getJeedomVersion();
         $pageData['MENU_PLUGIN_HELP'] = Utils::init('m');

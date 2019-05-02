@@ -67,7 +67,6 @@ class CustomController extends BaseController
         }
 
         $pageData['JS_END_POOL'][] = '/public/js/desktop/params/custom.js';
-        $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return Render::getInstance()->get('/desktop/params/custom.html.twig', $pageData);
     }
