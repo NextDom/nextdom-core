@@ -92,10 +92,10 @@ log_admin:
   condition: 'admin'
 market:
   path: 'market'
-  controller: NextDom\Controller\Tools\markets\MarketController::get
+  controller: NextDom\Controller\Tools\Markets\MarketController::get
 marketJee:
   path: 'marketJee'
-  controller: NextDom\Controller\Tools\markets\MarketJeeController::get
+  controller: NextDom\Controller\Tools\Markets\MarketJeeController::get
   condition: 'admin'
 network:
   path: 'network'

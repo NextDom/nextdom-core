@@ -60,7 +60,7 @@ if (url.match('#')) {
     }
     if (url.split('#')[1] == "desktop" || url.split('#')[1] == "advanced") {
         printAdvancedDesktop();
-    } 
+    }
     if (url.split('#')[1] == "mobile") {
         printAdvancedMobile();
     }

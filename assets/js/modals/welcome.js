@@ -37,7 +37,7 @@ $('#btn_doNotDisplayWelcomeModalAnymore').on('click', function () {
         },
         success: function () {
             $('#md_modal').dialog('close');
-            notify('Core', '{{ welcome.notify|trans }}', 'success');
+            notify('Core', '{{ Sauvegarde réussie }}', 'success');
         }
     });
 });
