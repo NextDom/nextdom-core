@@ -64,7 +64,9 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <p class="alert alert-no-child" style="background-color:{{ dashboardObject.getDisplay("tagColor") }}30">{{ 'Aucun objet n\'est associé à cette pièce...'}}</p>
+                        {% if dashboardObject.getChilds()|length == 0 %}
+                            <p class="alert alert-no-child" style="background-color:{{ dashboardObject.getDisplay("tagColor") }}30">{{ 'Aucun objet n\'est associé à cette pièce...'}}</p>
+                        {% endif %}
                         <div class="div_displayEquipement" id="div_ob{{ dashboardObject.getId() }}">
                             <script>getObjectHtml({{ dashboardObject.getId() }})</script>
                         </div>
@@ -73,9 +75,9 @@
             </div>
         {% endif %}
         {% for child in dashboardChildrenObjects %}
-            <div class="div_object col-xs-{{ child.getDisplay('dashboard::size', 12) }}">
-                {% if child.getFather_id() == '' %}
-                    {% if child.getConfiguration('hideOnDashboard') == 0 %}
+            <div class="div_object col-xs-{{ child.getDisplay('dashboard::size', 12) }}" style="padding-left:{{ 15+(child.parentNumber()-dashboardObjectParentNumber)*15 }}px">
+                {% if child.getConfiguration('hideOnDashboard') == 0 %}
+                    {% if child.getFather_id() == '' %}
                         <div class="card" style="background-color:{{ child.getDisplay("tagColor") }}10;box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08); border: 1px solid {{ child.getDisplay("tagColor") }}50" ; data-father_id="{{ child.getId() }}">
                             <div class="card-header card-header-icon">
                                 <div class="card-icon text-center cursor openObject" style="background:{{ child.getDisplay("tagColor") }}" data-id="index.php?v=d&p=object&id={{ child.getId() }}">
@@ -89,15 +91,15 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <p class="alert alert-no-child" style="background-color:{{ child.getDisplay("tagColor") }}30">{{ 'Aucun objet n\'est associé à cette pièce...'}}</p>
+                                {% if child.getChilds()|length == 0 %}
+                                    <p class="alert alert-no-child" style="background-color:{{ child.getDisplay("tagColor") }}30">{{ 'Aucun objet n\'est associé à cette pièce...'}}</p>
+                                {% endif %}
                                 <div class="div_displayEquipement" id="div_ob{{ child.getId() }}" style="width: 100%;">
                                     <script>getObjectHtml({{ child.getId() }})</script>
                                 </div>
                             </div>
                         </div>
-                    {% endif %}
-                {% else %}
-                    {% if child.getConfiguration('hideOnDashboard') == 0 %}
+                    {% else %}
                         <div class="card" style="background-color:{{ child.getDisplay("tagColor") }}10;box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08); border: 1px solid {{ child.getDisplay("tagColor") }}50" ; data-father_id="{{ child.getFather_id() }}">
                             <div class="card-header card-header-icon">
                                 <div class="card-icon text-center" style="background:{{ child.getDisplay("tagColor") }}">
@@ -111,7 +113,9 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <p class="alert alert-no-child" style="background-color:{{ child.getDisplay("tagColor") }}30">{{ 'Aucun objet n\'est associé à cette pièce...'}}</p>
+                                {% if child.getChilds()|length == 0 %}
+                                    <p class="alert alert-no-child" style="background-color:{{ child.getDisplay("tagColor") }}30">{{ 'Aucun objet n\'est associé à cette pièce...'}}</p>
+                                {% endif %}
                                 <div class="div_displayEquipement" id="div_ob{{ child.getId() }}" style="width: 100%;">
                                     <script>getObjectHtml({{ child.getId() }})</script>
                                 </div>

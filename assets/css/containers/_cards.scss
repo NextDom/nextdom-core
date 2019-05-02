@@ -77,9 +77,8 @@
     text-align: center;
 }
 .card [class*=card-header-] .card-icon .icon {
-    position: absolute;
     top: -18px;
-    left: 20px;
+    text-align: center;
 }
 .card [class*=card-header-] .card-icon, .card [class*=card-header-] .card-text > i {
     font-size: 2em;

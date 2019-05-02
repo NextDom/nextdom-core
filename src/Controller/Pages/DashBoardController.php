@@ -84,6 +84,7 @@ class DashBoardController extends BaseController
         $pageData['dashboardTags'] = EqLogicManager::getAllTags();
         $pageData['dashboardObjectId'] = $pageData['JS_VARS']['SEL_OBJECT_ID'];
         $pageData['dashboardObject'] = $currentJeeObject;
+        $pageData['dashboardObjectParentNumber'] = $currentJeeObject->parentNumber();
         $pageData['dashboardObjectListMenu'] = self::getObjectsListMenu($pageData['dashboardObjectId']);
         $pageData['dashboardChildrenObjects'] = ObjectManager::buildTree($currentJeeObject);
         $pageData['profilsUser'] = UserManager::getStoredUser();
