@@ -52,8 +52,6 @@ $(function () {
   });
 
 
-
-
   function updateCacheEvent(e) {
     if (webappCache.status == 3) {
       $('#div_updateInProgress').html('<p>Mise à jour de l\'application en cours<br/><span id="span_updateAdvancement">0</span>%</p>');
@@ -73,16 +71,6 @@ $(function () {
   }
 
   var webappCache = window.applicationCache;
-
-
-
-
-
-
-
-
-
-
 
   if (webappCache != undefined) {
     webappCache.addEventListener('cached', updateCacheEvent, false);

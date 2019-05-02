@@ -380,7 +380,7 @@ function getSystemMemInfo()
 
 function strContain($_string, $_words)
 {
-    return Utils::strContain($_string, $_words);
+    return Utils::strContainsOneOf($_string, $_words);
 }
 
 function makeZipSupport()

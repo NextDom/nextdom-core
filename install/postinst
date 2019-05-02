@@ -22,6 +22,7 @@ options:
   -L <dir>      : set log directory, defaults to /var/log/nextdom
   -l <dir>      : set lib directory, defaults to /var/lib/nextdom
   -t <dir>      : set tmp directory, defaults to /tmp/nextdom
+  -v            : enable verbose output
 EOS
   exit 1;
 }
@@ -38,22 +39,29 @@ set_root() {
 print_log_in() {
   txt=$1
   if [ 1 -eq "0${isdev}"  ] ; then
-      printf "${txt}"
+      format="%- 50s"
+      if [ ${VERBOSE} -eq 1 ]; then
+          format="%s"
+      fi
+      printf "${format}" "${txt}"
   fi
   printf ${txt} >> ${LOG_DIRECTORY}/postinst.log
 }
 
 
 print_log_ok() {
+  NORMAL="\\033[0;39m"
+  GREEN="\\033[1;92m"
+
   if [ 1 -eq "0${isdev}"  ] ; then
-      echo " oK"
+      echo -e " ${GREEN}Success${NORMAL}"
       if [ "${#DETAILS[@]}" -ne 0 ]; then
           for c_line in "${DETAILS[@]}"; do
             echo "  -> ${c_line}"
           done
       fi
   fi
-  echo " oK" >> ${LOG_DIRECTORY}/postinst.log
+  echo " Success" >> ${LOG_DIRECTORY}/postinst.log
   if [ "${#DETAILS[@]}" -ne 0 ]; then
       for c_line in "${DETAILS[@]}"; do
         echo "  -> ${c_line}" >> ${LOG_DIRECTORY}/postinst.log
@@ -62,19 +70,26 @@ print_log_ok() {
   fi
 }
 
-print_error(){
+print_verbose() {
+  if [ ${VERBOSE} -eq 1 ]; then
+      DETAILS+=("$@")
+  fi
+}
+
+print_error() {
   NORMAL="\\033[0;39m"
   ROUGE="\\033[1;31m"
 
   if [ 1 -eq "0${isdev}"  ] ; then
-      echo -e "${ROUGE}error${NORMAL}: $@"
-  else
-    echo -e "${ROUGE}error${NORMAL}: $@" >> ${LOG_DIRECTORY}/postinst.log
+      echo -e " ${ROUGE}Failure${NORMAL}"
+      echo -e "  -> error: $@"
   fi
+  echo -e " Failure" >> ${LOG_DIRECTORY}/postinst.log
+  echo -e "  -> error: $@" >> ${LOG_DIRECTORY}/postinst.log
   exit 1
 }
 
-detect_dev_version(){
+detect_dev_version() {
   isdev=0
   WEBSERVER_HOME=/usr/share/nextdom
 
@@ -95,6 +110,7 @@ prereq_create_dirs() {
   mkdir -p ${LIB_DIRECTORY}/public/css
   mkdir -p ${LIB_DIRECTORY}/public/img/plan
   mkdir -p ${LIB_DIRECTORY}/public/img/profils
+  mkdir -p ${LIB_DIRECTORY}/public/img/market_cache
 
   mkdir -p ${root}/plugins
 
@@ -120,13 +136,13 @@ step_nextdom_file_permissions() {
   for c_dir in ${directories[*]}; do
     chown -R www-data:www-data ${c_dir}
     find ${c_dir} -type d -exec chmod 0755 {} \;
-    find ${c_dir} -type f -exec chmod 0664 {} \;
+    find ${c_dir} -type f -exec chmod 0644 {} \;
+    print_verbose "set file owner: www-data, perms: 0755/0644 on directory ${c_dir}"
   done
 }
 
 
 step_nextdom_mysql_parameters() {
-
   if [ 1 -eq "0${isdev}"  ] ; then
       # Development version
       [[ -z "${MYSQL_NEXTDOM_DB}" ]]   && MYSQL_NEXTDOM_DB="nextdomdev"
@@ -158,14 +174,13 @@ step_nextdom_mysql_parameters() {
   MYSQL_PORT=${MYSQL_PORT:-3306}
   MYSQL_NEXTDOM_DB=${MYSQL_NEXTDOM_DB:nextdom}
 
-  if [ 1 -eq "0${isdev}"  ] ; then
-      DETAILS+=("install directory: ${WEBSERVER_HOME}")
-      DETAILS+=("database host: ${MYSQL_HOSTNAME}")
-      DETAILS+=("database port: ${MYSQL_PORT}")
-      DETAILS+=("database name: ${MYSQL_NEXTDOM_DB}")
-      DETAILS+=("database user: ${MYSQL_NEXTDOM_USER}")
-      DETAILS+=("database passwd: ${MYSQL_NEXTDOM_PASSWD}")
-  fi
+
+  print_verbose "install directory: ${WEBSERVER_HOME}"
+  print_verbose "database host: ${MYSQL_HOSTNAME}"
+  print_verbose "database port: ${MYSQL_PORT}"
+  print_verbose "database name: ${MYSQL_NEXTDOM_DB}"
+  print_verbose "database user: ${MYSQL_NEXTDOM_USER}"
+  print_verbose "database passwd: ${MYSQL_NEXTDOM_PASSWD}"
 
   # slow start of docker mysql
   try=0
@@ -197,9 +212,9 @@ step_nextdom_prerequisites_verification() {
 
   # check that WEBSERVER_HOME is readable by www-data
   sudo -u www-data test -r "${wwwdir}" || {
-    DETAILS+=("${wwwdir} not readable by www-data")
-    DETAILS+=("enabling compatibility mode, DocumentRoot targets /var/www/html")
     wwwdir="/var/www/html/"
+    print_verbose "${wwwdir} not readable by www-data"
+    print_verbose "enabled compatibility mode, DocumentRoot targets /var/www/html"
   }
 
   for c_file in nextdom.conf nextdom-ssl.conf nextdom-common; do
@@ -207,7 +222,7 @@ step_nextdom_prerequisites_verification() {
       cp ${srcdir}/${c_file} ${dstdir}/${c_file} >> ${DEBUG} 2>&1
       sed -i -r "s%\s+Define\s+wwwdir\s.*%Define wwwdir \"${wwwdir}\"%gI"         ${dstdir}/${c_file} >> ${DEBUG} 2>&1
       sed -i -r "s%\s+Define\s+logdir\s.*%Define logdir \"${LOG_DIRECTORY}\"%gI"  ${dstdir}/${c_file} >> ${DEBUG} 2>&1
-      DETAILS+=("created file: ${dstdir}/${c_file}")
+      print_verbose "created file: ${dstdir}/${c_file}"
     fi
   done
 
@@ -215,7 +230,7 @@ step_nextdom_prerequisites_verification() {
   if [[ ! -f "/etc/systemd/system/apache2.service.d/privatetmp.conf" ]] ; then
       mkdir -p /etc/systemd/system/apache2.service.d
       cp ${srcdir}/privatetmp.conf /etc/systemd/system/apache2.service.d/privatetmp.conf >> ${DEBUG} 2>&1
-      DETAILS+=("created file: /etc/systemd/system/apache2.service.d/privatetmp.conf")
+      print_verbose "created file: /etc/systemd/system/apache2.service.d/privatetmp.conf"
   fi
 
   # Windows hack (bash for windows)
@@ -225,12 +240,12 @@ step_nextdom_prerequisites_verification() {
 
   # Certificat SSL auto signe
   if [[ ! -f /etc/nextdom/ssl/nextdom.crt ]] || [[ ! -f /etc/nextdom/ssl/nextdom.csr ]] || [[ ! -f /etc/nextdom/ssl/nextdom.key ]] ; then
-      DETAILS+=("created SSL self-signed certificates in /etc/nextdom/ssl/")
       mkdir -p /etc/nextdom/ssl/ >> ${DEBUG} 2>&1
       cd /etc/nextdom/ssl/ >> ${DEBUG} 2>&1
       openssl genrsa -out nextdom.key 2048 >> ${DEBUG} 2>&1
       openssl req -new -key nextdom.key -out nextdom.csr -subj "/C=FR/ST=Paris/L=Paris/O=Global Security/OU=IT Department/CN=example.com" >> ${DEBUG} 2>&1
       openssl x509 -req -days 3650 -in nextdom.csr -signkey nextdom.key -out nextdom.crt >> ${DEBUG} 2>&1
+      print_verbose "created SSL self-signed certificates in /etc/nextdom/ssl/"
   fi
 }
 
@@ -243,10 +258,10 @@ step_nextdom_apache_php() {
   a2dissite default-ssl     >> ${DEBUG} 2>&1
   a2ensite nextdom-ssl      >> ${DEBUG} 2>&1
   a2ensite nextdom          >> ${DEBUG} 2>&1
-  DETAILS+=("apache: disabled site default")
-  DETAILS+=("apache: disabled site default-ssl")
-  DETAILS+=("apache: enabled site nextdom")
-  DETAILS+=("apache: enabled site nextdom-ssl")
+  print_verbose "apache: disabled site default"
+  print_verbose "apache: disabled site default-ssl"
+  print_verbose "apache: enabled site nextdom"
+  print_verbose "apache: enabled site nextdom-ssl"
 
   service apache2 restart >> ${DEBUG} 2>&1 || {
     service apache2 restart >> ${DEBUG} 2>&1 || {
@@ -260,16 +275,19 @@ step_nextdom_directory_layout() {
   # we delete existing config since it is regenerated from asset sample (step_nextdom_configuration)
   rm -rf ${LIB_DIRECTORY}/config
   cp -r  ${WEBSERVER_HOME}/assets/config ${LIB_DIRECTORY}
+  print_verbose "created configuration directory ${LIB_DIRECTORY}/config"
 
   # we delete existing data, since its re-imported from assets
   rm -rf ${LIB_DIRECTORY}/data
   cp -r  ${WEBSERVER_HOME}/assets/data   ${LIB_DIRECTORY}
+  print_verbose "created data directory ${LIB_DIRECTORY}/data"
 
   # jeedom backup compatibility: ./core/config is a symlink
   if [ -L ${WEBSERVER_HOME}/core/config ]; then
       rm -f ${WEBSERVER_HOME}/core/config
   fi
   ln -s ${LIB_DIRECTORY}/config ${WEBSERVER_HOME}/core/config
+  print_verbose "created core configuration symlink: ${WEBSERVER_HOME}/core/config"
 
   # jeedom backup compatibility:  ./var is a symlink
   if [ -L ${WEBSERVER_HOME}/var ]; then
@@ -284,6 +302,20 @@ step_nextdom_directory_layout() {
       rm -rf ${WEBSERVER_HOME}/var
   fi
   ln -s ${LIB_DIRECTORY} ${WEBSERVER_HOME}/var
+  print_verbose "created var symlink: ${WEBSERVER_HOME}/var"
+
+  # jeedom backup compatibility:  ./core/css is a symlink
+  # -> some important plugins like widget are writing direclty to core/css/...
+  #    and there fore need www-data write permission
+  if [ -L ${WEBSERVER_HOME}/core/css ]; then
+      rm -f ${WEBSERVER_HOME}/core/css
+  fi
+  if [ -d ${WEBSERVER_HOME}/core/css ]; then
+      mv ${WEBSERVER_HOME}/core/css/* ${LIB_DIRECTORY}/public/css/
+      rm -rf ${WEBSERVER_HOME}/core/css
+  fi
+  ln -s ${LIB_DIRECTORY}/public/css/ ${WEBSERVER_HOME}/core/css
+  print_verbose "created core/css symlink: ${WEBSERVER_HOME}/core/css"
 
   # jeedom backup compatibility:  ./data is a symlink
   if [ -L ${WEBSERVER_HOME}/data ]; then
@@ -298,6 +330,7 @@ step_nextdom_directory_layout() {
       rm -rf ${WEBSERVER_HOME}/data
   fi
   ln -s ${LIB_DIRECTORY}/data ${WEBSERVER_HOME}/data
+  print_verbose "created data symlink: ${WEBSERVER_HOME}/data"
 }
 
 step_nextdom_configuration() {
@@ -311,6 +344,7 @@ step_nextdom_configuration() {
   sed -i "s%#LOG_DIR#%${LOG_DIRECTORY}%g"         ${WEBSERVER_HOME}/core/config/common.config.php
   sed -i "s%#LIB_DIR#%${LIB_DIRECTORY}%g"         ${WEBSERVER_HOME}/core/config/common.config.php
   sed -i "s%#TMP_DIR#%${TMP_DIRECTORY}%g"         ${WEBSERVER_HOME}/core/config/common.config.php
+  print_verbose "wrote configuration file: ${WEBSERVER_HOME}/core/config/common.config.php"
 
   # some other compatibilty ugly stuff
   if [[ -d "/tmp/jeedom" ]]; then
@@ -334,6 +368,7 @@ step_nextdom_configuration() {
     fi
     ln -s ${TMP_DIRECTORY} /tmp/jeedom
   fi
+  print_verbose "created temporary directory: ${TMP_DIRECTORY}"
 
   # allow www-data to use usb/serial ports
   usermod -a -G dialout,tty www-data
@@ -358,6 +393,7 @@ EOS
           print_error "unable to add www-data to sudoers"
       fi
   fi
+  print_verbose "added user as sudoer: www-data"
 }
 
 
@@ -392,6 +428,7 @@ innodb_flush_log_at_trx_commit = 2
 innodb_log_file_size = 32M
 EOS
   fi
+  print_verbose "created nextdom mysql configuration: /etc/mysql/conf.d/nextdom_my.cnf"
 
   service mysql start >> ${DEBUG} 2>&1 || {
     service mysql start >> ${DEBUG} 2>&1 || {
@@ -404,10 +441,12 @@ step_nextdom_crontab() {
   cat - > /etc/cron.d/nextdom << EOS
 * * * * * www-data /usr/bin/php ${WEBSERVER_HOME}/src/Api/start_cron.php >> /dev/null
 EOS
+  print_verbose "created nextdom cron configuration: /etc/cron.d/nextdom"
 
   cat - > /etc/cron.d/nextdom_watchdog << EOS
 */5 * * * * root /usr/bin/php ${WEBSERVER_HOME}/scripts/watchdog.php >> /dev/null
 EOS
+  print_verbose "created nextdom cron configuration: /etc/cron.d/nextdom_watchdog"
 
   service cron reload >> ${DEBUG} 2>&1
 }
@@ -417,7 +456,15 @@ step_nextdom_assets() {
   if [ 1 -eq "0${isdev}" ]; then
       # A faire dans une version developpeur (apres git clone)
       cd ${WEBSERVER_HOME}
-      ./scripts/gen_global.sh >> ${DEBUG} 2>&1
+      ./scripts/gen_global.sh >> ${DEBUG} 2>&1 || {
+        print_error "error during asset generation"
+      }
+      print_verbose "installed nodejs"
+      print_verbose "installed composer manager"
+      print_verbose "installed project dependencies"
+      print_verbose "copied icons, themes and images from assets"
+      print_verbose "generated css files"
+      print_verbose "generated javascript files"
   fi
 }
 
@@ -452,7 +499,7 @@ step_nextdom_var_www_html() {
       if [ $count -gt 0 ] ; then
           tmpd="$(mktemp -d -u /var/www/html.XXXXXXXX)"
           mv ${dirn} ${tmpd}
-          DETAILS+=("warning : directory ${dirn} isn't empty, renamed to ${tmpd}")
+          print_verbose "warning : directory ${dirn} isn't empty, renamed to ${tmpd}"
       fi
   fi
 
@@ -465,7 +512,7 @@ step_nextdom_var_www_html() {
           tfile="$(mktemp -u /var/www/html.XXXXXXXX)"
           cd /var/www/
           mv ${dirn} ${tfile}
-          DETAILS+=("warning : directory ${dirn} is a link, renamed it ${tfile}")
+          print_verbose "warning : directory ${dirn} is a link, renamed it ${tfile}"
       fi
   fi
 
@@ -473,7 +520,7 @@ step_nextdom_var_www_html() {
   if [[ -f "${dirn}" ]] ; then
       tfile=$(mktemp -u /var/www/html.XXXXXXXX)
       mv ${dirn} ${tfile}
-      DETAILS+=("warning : ${dirn} is a file, renamed it ${tfile}")
+      print_verbose "warning : ${dirn} is a file, renamed it ${tfile}"
   fi
 
   # link /var/www/html to nextdom root
@@ -488,25 +535,30 @@ step_nextdom_mysql_populate() {
 
   QUERY="DROP USER IF EXISTS '${MYSQL_NEXTDOM_USER}'@'${CONSTRAINT}';"
   mysql -uroot -h${MYSQL_HOSTNAME} ${HOSTPASS} -e "${QUERY}" >> ${DEBUG} 2>&1
+  print_verbose "deleted mysql user: ${MYSQL_NEXTDOM_USER}"
 
   QUERY="CREATE USER '${MYSQL_NEXTDOM_USER}'@'${CONSTRAINT}' IDENTIFIED BY '${MYSQL_NEXTDOM_PASSWD}';"
   mysql -uroot -h${MYSQL_HOSTNAME} ${HOSTPASS} -e "${QUERY}" >> ${DEBUG} 2>&1
+  print_verbose "created mysql user: ${MYSQL_NEXTDOM_USER}"
 
   QUERY="DROP DATABASE IF EXISTS ${MYSQL_NEXTDOM_DB};"
   mysql -uroot -h${MYSQL_HOSTNAME} ${HOSTPASS} -e "${QUERY}" >> ${DEBUG} 2>&1
+  print_verbose "deleted mysql table: ${MYSQL_NEXTDOM_DB}"
 
   QUERY="CREATE DATABASE ${MYSQL_NEXTDOM_DB};"
   mysql -uroot -h${MYSQL_HOSTNAME} ${HOSTPASS} -e "${QUERY}" >> ${DEBUG} 2>&1
+  print_verbose "created mysql table: ${MYSQL_NEXTDOM_DB}"
 
   QUERY="GRANT ALL PRIVILEGES ON ${MYSQL_NEXTDOM_DB}.* TO '${MYSQL_NEXTDOM_USER}'@'${CONSTRAINT}';"
   mysql -uroot -h${MYSQL_HOSTNAME} ${HOSTPASS} -e "${QUERY}" >> ${DEBUG} 2>&1
-
   QUERY="FLUSH PRIVILEGES;"
   mysql -uroot -h${MYSQL_HOSTNAME} ${HOSTPASS} -e "${QUERY}" >> ${DEBUG} 2>&1
+  print_verbose "configured table privileges: ${MYSQL_NEXTDOM_DB}"
 
   php ${WEBSERVER_HOME}/install/install.php mode=force >> ${DEBUG} 2>&1 || {
     print_error "nexdom installation script failed"
   }
+  print_verbose "ran installation procedure: ${WEBSERVER_HOME}/install/install.php"
 }
 
 
@@ -517,11 +569,15 @@ main() {
   LIB_DIRECTORY=/var/lib/nextdom
   LOG_DIRECTORY=/var/log/nextdom
   TMP_DIRECTORY=/tmp/nextdom
+  VERBOSE=0
 
-  while getopts "hi:p:d:r:u:z:L:l:t:" option; do
+  while getopts "vhi:p:d:r:u:z:L:l:t:" option; do
     case "${option}" in
       h)
         usage
+        ;;
+      v)
+        VERBOSE=1
         ;;
       i)
         MYSQL_HOSTNAME=${OPTARG}

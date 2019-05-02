@@ -1225,7 +1225,7 @@ class NextDomHelper
         }
         $result = 'diy';
         $uname = shell_exec('uname -a');
-        if (file_exists('/.dockerinit')) {
+        if (strpos(shell_exec('sudo cat /proc/1/cgroup'), 'docker') !== false) {
             $result = 'docker';
         } else if (file_exists('/usr/bin/raspi-config')) {
             $result = 'rpi';
