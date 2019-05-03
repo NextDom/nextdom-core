@@ -65,7 +65,7 @@ nextdom.changes = function(){
       if(object_summary_update.length > 0){
         $('body').trigger('jeeObject::summary::update',[object_summary_update]);
       }
-      
+
       setTimeout(nextdom.changes, 1);
     },
     error: function(_error){
@@ -112,7 +112,7 @@ nextdom.init = function () {
   $('body').on('cmd::update', function (_event,_options) {
     nextdom.cmd.refreshValue(_options);
   });
-  
+
   $('body').on('scenario::update', function (_event,_options) {
     nextdom.scenario.refreshValue(_options);
   });
@@ -122,7 +122,7 @@ nextdom.init = function () {
   $('body').on('jeeObject::summary::update', function (_event,_options) {
     nextdom.object.summaryUpdate(_options);
   });
-  
+
   $('body').on('ui::update', function (_event,_options) {
     if(isset(_options.page) && _options.page != ''){
       if(!$.mobile && getUrlVars('p') != _options.page){
@@ -147,7 +147,7 @@ nextdom.init = function () {
       }
     }
   });
-  
+
   $('body').on('nextdom::alert', function (_event,_options) {
     if (!isset(_options.message) || $.trim(_options.message) == '') {
       if(isset(_options.page) && _options.page != ''){
@@ -166,7 +166,7 @@ nextdom.init = function () {
           notify("Core",_options.message,_options.level);
       }
     }
-    
+
   });
   $('body').on('nextdom::alertPopup', function (_event,_message) {
     alert(_message);
@@ -418,7 +418,7 @@ nextdom.getSelectActionModal = function(_options, _callback){
       closeText: '',
       autoOpen: false,
       modal: true,
-      height: 250,
+      height: 280,
       width: 800
     });
     jQuery.ajaxSetup({

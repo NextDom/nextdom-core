@@ -196,7 +196,7 @@ function addObjectSummary(_summary) {
     }
     tr += '</td>';
     tr += '<td>';
-    tr += '<a class="objectSummaryAction cursor" data-l1key="remove"><i class="fas fa-minus-circle"></i></a>';
+    tr += '<a class="objectSummaryAction btn btn-sm btn-danger" data-l1key="remove"><i class="fas fa-minus-circle"></i></a>';
     tr += '</td>';
     tr += '</tr>';
     $('#table_objectSummary tbody').append(tr);

@@ -34,6 +34,7 @@
 
 namespace NextDom\Helpers;
 
+use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
 
 class AjaxHelper

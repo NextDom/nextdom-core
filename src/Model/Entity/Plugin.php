@@ -671,7 +671,7 @@ class Plugin implements EntityInterface
         if (file_exists(NEXTDOM_ROOT . '/plugins/' . $this->getId() . '/doc/images/' . strtolower($this->getId()) . '_icon.png')) {
             return 'plugins/' . $this->getId() . '/doc/images/' . strtolower($this->getId()) . '_icon.png';
         }
-        return '/public/img/NextDom_Plugin.png';
+        return '/public/img/NextDom_Plugin_Gray.png';
     }
 
     /**

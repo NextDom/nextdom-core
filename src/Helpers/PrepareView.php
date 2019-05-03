@@ -20,7 +20,7 @@ namespace NextDom\Helpers;
 use NextDom\Enums\GetParams;
 use NextDom\Enums\ViewType;
 use NextDom\Managers\ConfigManager;
-use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\ObjectManager;
 use NextDom\Managers\MessageManager;
 use NextDom\Managers\Plan3dHeaderManager;
 use NextDom\Managers\PlanHeaderManager;
@@ -37,7 +37,7 @@ use Symfony\Component\Routing\Loader\YamlFileLoader;
  */
 class PrepareView
 {
-    private static $NB_THEME_COLORS = 21;
+    private static $NB_THEME_COLORS = 22;
 
     /**
      * Get the controller data of the specified route
@@ -252,6 +252,7 @@ class PrepareView
             'user_isAdmin' => AuthentificationHelper::isConnectedAsAdmin(),
             'user_login' => UserManager::getStoredUser()->getLogin(),
             'nextdom_Welcome' => $configs['nextdom::Welcome'],
+            'nextdom_waitSpinner' => $configs['nextdom::waitSpinner'],
             'notify_status' => $configs['notify::status'],
             'notify_position' => $configs['notify::position'],
             'notify_timeout' => $configs['notify::timeout'],
@@ -448,18 +449,16 @@ class PrepareView
         if ($pageData['IS_ADMIN']) {
             $pageData['MENU_NB_UPDATES'] = UpdateManager::nbNeedUpdate();
         }
-        $pageData['MENU_JEEOBJECT_TREE'] = JeeObjectManager::buildTree(null, false);
+        $pageData['MENU_JEEOBJECT_TREE'] = ObjectManager::buildTree(null, false);
         $pageData['MENU_VIEWS_LIST'] = ViewManager::all();
         $pageData['MENU_PLANS_LIST'] = PlanHeaderManager::all();
         $pageData['MENU_PLANS3D_LIST'] = Plan3dHeaderManager::all();
         if (is_object($currentPlugin) && $currentPlugin->getIssue()) {
             $pageData['MENU_CURRENT_PLUGIN_ISSUE'] = $currentPlugin->getIssue();
         }
-        $pageData['MENU_HTML_GLOBAL_SUMMARY'] = JeeObjectManager::getGlobalHtmlSummary();
+        $pageData['MENU_HTML_GLOBAL_SUMMARY'] = ObjectManager::getGlobalHtmlSummary();
         $pageData['PRODUCT_IMAGE'] = ConfigManager::byKey('product_image');
-        $pageData['USER_ISCONNECTED'] = UserManager::getStoredUser()->is_Connected();
-        $pageData['USER_AVATAR'] = UserManager::getStoredUser()->getOptions('avatar');
-        $pageData['USER_LOGIN'] = UserManager::getStoredUser()->getLogin();
+        $pageData['profilsUser'] = UserManager::getStoredUser();
         $pageData['NEXTDOM_VERSION'] = NextDomHelper::getNextdomVersion();
         $pageData['JEEDOM_VERSION'] = NextDomHelper::getJeedomVersion();
         $pageData['MENU_PLUGIN_HELP'] = Utils::init('m');

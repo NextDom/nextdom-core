@@ -30,7 +30,7 @@ use NextDom\Managers\BackupManager;
 use NextDom\Managers\CacheManager;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\ConfigManager;
-use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\ObjectManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\UserManager;
@@ -73,7 +73,7 @@ class NextDomAjax extends BaseAjax
         }
         $return['userProfils']['defaultMobileObjectName'] = __('Objet');
         if ($currentUser->getOptions('defaultDashboardObject') != '') {
-            $object = JeeObjectManager::byId($currentUser->getOptions('defaultDashboardObject'));
+            $object = ObjectManager::byId($currentUser->getOptions('defaultDashboardObject'));
             if (is_object($object)) {
                 $return['userProfils']['defaultMobileObjectName'] = $object->getName();
             }

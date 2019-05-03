@@ -172,7 +172,7 @@ class ConsistencyManager {
     private static function saveObjects()
     {
         try {
-            foreach (JeeObjectManager::all() as $c_item) {
+            foreach (ObjectManager::all() as $c_item) {
                 $c_item->save();
             }
         } catch (\Exception $e) {

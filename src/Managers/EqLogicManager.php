@@ -693,5 +693,4 @@ class EqLogicManager
         }
         return $eqLogic;
     }
-
 }

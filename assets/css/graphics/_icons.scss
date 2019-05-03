@@ -1,0 +1,86 @@
+@charset "utf-8";
+/* This file is part of NextDom Software.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom Software is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
+*
+* @Support <https://www.nextdom.org>
+* @Email   <admin@nextdom.org>
+* @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
+*/
+
+/* Core-Surcharge */
+.icon_card {
+    height : auto;
+    width : 170px;
+    word-break: break-word;
+    padding: 5px 10px 0px;
+    & > i {
+        font-size : 4em;
+        margin-top:5px;
+    }
+    & > i > div >span{
+        font-size : 1em;
+        position:relative;
+        top : 15px;
+        word-break: break-all;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+    & img{
+      border:{
+          top:{
+              left-radius: 10px;
+              right-radius: 4px;
+          }
+          bottom:{
+              left-radius: 4px;
+              right-radius: 10px;
+          }
+      }
+      margin-bottom: 8px;
+      padding: 4px;
+      box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+    }
+}
+
+/* AdminLTE-Surcharge */
+.info-box-icon {
+  height: 65px;
+  width: 55px;
+  font-size: 30px;
+  line-height: 65px;
+}
+
+/* AdminLTE-AJout */
+.info-box-small-icon {
+  height: 50px;
+  line-height: 50px;
+  font-size: 28px;
+  width: 50px;
+}
+
+/* Core-Surcharge : icone selectionnée */
+.iconSelected {
+    border: 1px dashed $critical;
+}
+
+/* Core-Ajout : Icone recherche globale */
+.main-header .search-toggle {
+    float: left;
+    background-color: transparent;
+    background-image: none;
+    padding: 15px 15px 0px 4px;
+    font-family: fontAwesome;
+    color: white;
+}

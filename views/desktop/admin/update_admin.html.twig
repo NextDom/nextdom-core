@@ -65,6 +65,13 @@
                             <fieldset>
                                 <legend>{{ 'Paramètres de mises à jour' }}</legend>
                                 <div class="form-group">
+                                    <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Vérification automatique' }}</label>
+                                    <div class="col-lg-5 col-md-6 col-sm-7 col-xs-12">
+                                        <input type="checkbox" class="configKey" data-l1key="update::autocheck" id="autocheck"/>
+                                        <label for="autocheck" class="control-label label-check">{{'Activer'}}</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
                                     <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Source de mise à jour' }}</label>
                                     <div class="col-lg-5 col-md-6 col-sm-7 col-xs-12">
                                         <select class="configKey form-control" data-l1key="core::repo::provider">
@@ -86,20 +93,13 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Vérification automatique' }}</label>
-                                    <div class="col-lg-5 col-md-6 col-sm-7 col-xs-12">
-                                        <input type="checkbox" class="configKey" data-l1key="update::autocheck" id="autocheck"/>
-                                        <label for="autocheck" class="control-label label-check">{{'Activer'}}</label>
-                                    </div>
-                                </div>
                             </fieldset>
                         </form>
                     </div>
                     {% for repo, data in adminReposList %}
                         <div role="tabpanel" class="tab-pane" id="tab{{ repo }}">
                             <fieldset>
-                                <legend>{{ 'Paramètres du service' }}<i class="spacing-right"></i>{{ data['name'] }}</legend>
+                                <legend>{{ 'Paramètres du service' }} {{ data['name'] }}</legend>
                                 <div class="form-group">
                                     <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Activation' }}</label>
                                     <div class="col-lg-5 col-md-6 col-sm-7 col-xs-12">
@@ -139,7 +139,7 @@
                                             <div class="form-group">
                                                 <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Tester' }}</label>
                                                 <div class="col-sm-4">
-                                                    <a class="btn btn-action testRepoConnection" data-repo="{{ repo }}"><i class="fas fa-check spacing-right"></i>{{ 'Tester' }}</a>
+                                                    <a class="btn btn-warning testRepoConnection" data-repo="{{ repo }}"><i class="fas fa-check spacing-right"></i>{{ 'Tester' }}</a>
                                                 </div>
                                             </div>
                                         {% endif %}

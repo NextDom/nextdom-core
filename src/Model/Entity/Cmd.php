@@ -35,7 +35,7 @@ use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
 use NextDom\Managers\HistoryManager;
 use NextDom\Managers\InteractDefManager;
-use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\ObjectManager;
 use NextDom\Managers\ListenerManager;
 use NextDom\Managers\MessageManager;
 use NextDom\Managers\PlanHeaderManager;
@@ -1180,7 +1180,7 @@ class Cmd implements EntityInterface
         }
         if (!$repeat) {
             ListenerManager::check($this->getId(), $value, $this->getCollectDate());
-            JeeObjectManager::checkSummaryUpdate($this->getId());
+            ObjectManager::checkSummaryUpdate($this->getId());
         }
         $this->addHistoryValue($value, $this->getCollectDate());
         $this->checkReturnState($value);

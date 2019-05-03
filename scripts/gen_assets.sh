@@ -28,18 +28,14 @@ function gen_css {
     if [ $# -eq 0 ]; then
         COMPRESS="--style compressed"
     fi
-	echo " >>> Generate CSS"
+  	echo " >>> Generate CSS"
+    mkdir -p public/css/pages
+    mkdir -p public/css/modals
+    sass --update --stop-on-error assets/css/compiled:public/css $COMPRESS
 
-	mkdir -p public/css/adminlte
-	sass assets/css/nextdom.scss       public/css/nextdom.css     $COMPRESS
-	sass assets/css/nextdom.mob.scss   public/css/nextdom.mob.css $COMPRESS
-	sass assets/css/firstUse.scss      public/css/firstUse.css    $COMPRESS
-	sass assets/css/rescue.scss        public/css/rescue.css      $COMPRESS
-	sass assets/css/Market/market.scss public/css/market.css      $COMPRESS
-
-	# Remplacement des chemins
-	sed -i s#\"images/ui-#\"/assets/css/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.css
-	sed -i s#\"images/ui-#\"/assets/css/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.mob.css
+  	# Remplacement des chemins
+  	sed -i s#\"images/ui-#\"/assets/css/vendors/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.css
+  	sed -i s#\"images/ui-#\"/assets/css/vendors/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.mob.css
 }
 
 function gen_js {
@@ -121,15 +117,15 @@ function gen_js {
       rm ${tmpfile}
       php scripts/translate.php public/js/base.js
 
-      directories=(js/adminlte \
-                   js/desktop \
+      directories=(js/desktop \
                    js/desktop/admin \
                    js/desktop/diagnostic \
+                   js/desktop/pages \
                    js/desktop/params \
                    js/desktop/tools \
+                   js/desktop/tools/markets \
                    js/desktop/tools/osdb \
-                   js/modals \
-                   js/desktop/Market)
+                   js/modals)
       for c_dir in ${directories[*]}; do
         mkdir -p public/${c_dir}
         for c_file in assets/${c_dir}/*.js; do
@@ -152,7 +148,7 @@ function copy_assets {
 }
 
 function clean_cache {
-	echo " >>> Cleaning Twig Cache"
+	echo " >>> Cleaning Caches"
 	rm -rf var/cache/twig/*
 	rm -rf var/i18n/*
 	rm -fr var/cache/i18n/*

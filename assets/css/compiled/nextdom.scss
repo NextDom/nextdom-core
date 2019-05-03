@@ -1,0 +1,87 @@
+@charset "utf-8";
+/* This file is part of NextDom Software.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom Software is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
+*
+* @Support <https://www.nextdom.org>
+* @Email   <admin@nextdom.org>
+* @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
+*/
+
+/* Vendors */
+@import "../../../vendor/node_modules/bootstrap/dist/css/bootstrap.css";
+@import "../../../vendor/node_modules/roboto-fontface/css/roboto/roboto-fontface.css";
+@import "../vendors/jquery-ui-bootstrap/jquery-ui.scss";
+@import "../../3rdparty/jquery.utils/_jquery.utils.scss";
+@import "../../../vendor/node_modules/notosans-fontface/css/notosans-fontface.min.css";
+@import "../../../vendor/node_modules/jstree/dist/themes/default/style.css";
+@import "../../../vendor/node_modules/jquery-cron/dist/jquery-cron.css";
+@import "../../../vendor/node_modules/jquery-contextmenu/dist/jquery.contextMenu.css";
+@import "../../../vendor/node_modules/tablesorter/dist/css/theme.bootstrap.min.css";
+@import "../../../vendor/node_modules/codemirror/lib/codemirror.css";
+@import "../../../vendor/node_modules/izitoast/dist/css/iziToast.css";
+@import "../../../vendor/node_modules/font-awesome/css/font-awesome.css";
+@import "../../../vendor/node_modules/font-awesome5/css/fontawesome-all.css";
+@import "../../../vendor/node_modules/admin-lte/dist/css/AdminLTE.css";
+@import "../../../vendor/node_modules/jquery-datetimepicker/jquery.datetimepicker.css";
+@import "../../../vendor/node_modules/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css";
+
+/* NextDom and AdminLTE surcharges */
+/* Need to be first */
+@import "../graphics/_colors.scss";
+/* Fields */
+@import "../components/_autocompletions.scss";
+@import "../components/_buttons.scss";
+@import "../components/_charts.scss";
+@import "../components/_checkboxs.scss";
+@import "../components/_eqlogics.scss";
+@import "../components/_fabs.scss";
+@import "../components/_inputs.scss";
+@import "../components/_labels.scss";
+@import "../components/_legends.scss";
+@import "../components/_lists.scss";
+@import "../components/_scrollbars.scss";
+@import "../components/_summary.scss";
+@import "../components/_texts.scss";
+@import "../components/_tooltips.scss";
+/* Containers */
+@import "../containers/_actionbars.scss";
+@import "../containers/_boxs.scss";
+@import "../containers/_cards.scss";
+@import "../containers/_containers.scss";
+@import "../containers/_navs.scss";
+@import "../containers/_panel.scss";
+@import "../containers/_sidebars.scss";
+@import "../containers/_tables.scss";
+@import "../containers/_treeviews.scss";
+/* Divers */
+@import "../divers/_cursors.scss";
+@import "../divers/_divers.scss";
+@import "../divers/_fonts.scss";
+@import "../divers/_options.scss";
+@import "../divers/_positions.scss";
+/* Graphics */
+@import "../graphics/_animations.scss";
+@import "../graphics/_carrousels.scss";
+@import "../graphics/_colorpicks.scss";
+@import "../graphics/_icons.scss";
+@import "../graphics/_logos.scss";
+/* Infos */
+@import "../infos/_alerts.scss";
+@import "../infos/_badges.scss";
+/* Pages */
+@import "../pages/_modals.scss";
+/* Sections */
+@import "../sections/_footers.scss";
+@import "../sections/_headers.scss";
