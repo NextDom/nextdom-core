@@ -141,9 +141,6 @@ class BackupManager
             printf("importing jeedom configuration...");
             self::restoreJeedomConfig($tmpDir);
             printf("Success\n");
-            printf("restoring cache...");
-            self::restoreCache($tmpDir);
-            printf("Success\n");
             printf("restoring plugins...");
             self::restorePlugins($tmpDir);
             printf("Success\n");
@@ -370,12 +367,9 @@ class BackupManager
                 (ConfigManager::byKey($c_key . '::cloudUpload') == 0)) {
                 continue;
             }
-            try {
-                $class = sprintf("repo_%s", $c_key);
-                $class::backup_send($path);
-            } catch (\Exception $e) {
-                return false;
-            }
+            $class = sprintf("repo_%s", $c_key);
+            LogHelper::addError("system", $class);
+            $class::backup_send($path);
         }
         return true;
     }
@@ -622,28 +616,6 @@ class BackupManager
         }
     }
 
-    /**
-     * Restore cache from backup archive
-     *
-     * @param string $tmpDir extracted backup root directory
-     */
-    private static function restoreCache($tmpDir) {
-        $cachePath1 = sprintf("%s/cache.tar.gz",     $tmpDir);
-        $cachePath2 = sprintf("%s/var/cache.tar.gz", $tmpDir);
-        $cacheDest  = sprintf("%s/cache.tar.gz",     NEXTDOM_DATA);
-
-        if (true === file_exists($cachePath1)) {
-            FileSystemHelper::mv($cachePath1, $cacheDest);
-        } elseif (true === file_exists($cachePath2)) {
-            FileSystemHelper::mv($cachePath2, $cacheDest);
-        }
-
-        try {
-            CacheManager::restore();
-        } catch (\Exception $e) {
-            // not a big deal if cache cannot be restored
-        }
-    }
 
     /**
      * Restore www-data owner and 775 permissions on plugin directory

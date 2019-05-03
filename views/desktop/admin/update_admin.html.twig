@@ -115,6 +115,10 @@
                                                     {{ param['name'] }}
                                                 </label>
                                                 <div class="col-lg-5 col-md-6 col-sm-7 col-xs-12">
+                                                    {% set placeholder = '' %}
+                                                    {% if param['placeholder'] is defined %}
+                                                    {%   set placeholder = param['placeholder']   %}
+                                                    {% endif %}
                                                     {% if param['default'] is defined %}
                                                         {% set defaultValue = param['default'] %}
                                                     {% else %}
@@ -124,13 +128,13 @@
                                                         <input type="checkbox" class="configKey" data-l1key="{{ repo }}::{{ config }}" value="{{ defaultValue }}" id="{{ repo }}::{{ config }}"/>
                                                         <label for="{{ repo }}::{{ config }}" class="control-label label-check">{{ 'Activer' }}</label>
                                                     {% elseif param['type'] == 'input' %}
-                                                        <input class="configKey form-control" data-l1key="{{ repo }}::{{ config }}" value="{{ defaultValue }}"/>
+                                                        <input class="configKey form-control" data-l1key="{{ repo }}::{{ config }}" value="{{ defaultValue }}" placeholder="{{placeholder}}"/>
                                                     {% elseif param['type'] == 'number' %}
-                                                        <input type="number" class="configKey form-control" data-l1key="{{ repo }}::{{ config }}" value="{{ defaultValue }}"/>
+                                                        <input type="number" class="configKey form-control" data-l1key="{{ repo }}::{{ config }}" value="{{ defaultValue }}" placeholder="{{placeholder}}"/>
                                                     {% elseif param['type'] == 'password' %}
-                                                        <input type="password" class="configKey form-control" data-l1key="{{ repo }}::{{ config }}" value="{{ defaultValue }}"/>
+                                                        <input type="password" class="configKey form-control" data-l1key="{{ repo }}::{{ config }}" value="{{ defaultValue }}" placeholder="{{placeholder}}"/>
                                                     {% else %}
-                                                        <input class="configKey form-control" data-l1key="{{ repo }}::{{ config }}" value="{{ defaultValue }}"/>
+                                                        <input class="configKey form-control" data-l1key="{{ repo }}::{{ config }}" value="{{ defaultValue }}" placeholder="{{placeholder}}"/>
                                                     {% endif %}
                                                 </div>
                                             </div>
