@@ -26,11 +26,18 @@ class Samba
     private $client = null;
     private $share  = null;
 
+
     public static function createFromConfig(string $target = "backup") {
         $host     = ConfigManager::byKey('samba::' . $target . '::ip');
         $share    = ConfigManager::byKey('samba::' . $target . '::share');
         $username = ConfigManager::byKey('samba::' . $target . '::username');
         $password = ConfigManager::byKey('samba::' . $target . '::password');
+
+        // 1. compatibility with old parameter semantic
+        $matches = [];
+        if (preg_match("%(//[^/]+/)(.*)%", $share, $matches)) {
+            $share = $matches[2];
+        }
         return new Samba($host, $username, $password, $share);
     }
 
