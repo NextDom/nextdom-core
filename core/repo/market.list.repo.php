@@ -149,6 +149,7 @@ function displayWidgetSubtype($_name) {
 }
 ?>
 
+<style type="text/css"> <!-- @import url("/public/css/pages/markets.css"); --> </style>
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
@@ -337,7 +338,13 @@ foreach ($markets as $market) {
     echo '<img class="lazy market-icon" src="' . $default_image . '" data-original="' . $urlPath . '"/>';
     echo "</div>";
 
-    echo '<span class="market-name">' . $market->getName().split('.').pop() . '</span>';
+    $displayName  = $market->getName();
+    $parts = array_reverse(explode(".", $displayName));
+    if (0 !== count($parts)) {
+        $displayName = $parts[0];
+    }
+
+    echo '<span class="market-name">' . $displayName . '</span>';
     echo '<span class="market-author"><i>{{par }}</i>' . $market->getAuthor() . '</span>';
 
     $note = $market->getRating();

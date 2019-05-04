@@ -119,7 +119,7 @@ if (init('type') == 'plugin') {
             global $NEXTDOM_INTERNAL_CONFIG;
             foreach ($NEXTDOM_INTERNAL_CONFIG['plugin']['category'] as $key => $value) {
               echo '<option value="' . $key . '"';
-              echo (is_object($plugin) && $plugin->getCategory() == $key) ? 'selected >' : '>';
+              echo (isset($plugin) && is_object($plugin) && $plugin->getCategory() == $key) ? 'selected >' : '>';
               echo $value['name'];
               echo '</option>';
             }
