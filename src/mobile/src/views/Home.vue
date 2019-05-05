@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import communication from "../libs/communication.js";
 import Summary from "@/components/Summary.vue";
 
 export default {
@@ -20,9 +20,13 @@ export default {
     Summary
   },
   mounted() {
-    axios.get("/api/summary/get_default_room_tree").then(response => {
-      this.roomsSummary = response.data;
-    });
+    // Get dashboard data
+    communication.get("/api/summary/get_default_room_tree", this.initData);
+  },
+  methods: {
+    initData(data) {
+      this.roomsSummary = data;
+    }
   }
 };
 </script>

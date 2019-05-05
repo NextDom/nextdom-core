@@ -1,10 +1,26 @@
 <?php
 
+/*
+* This file is part of the NextDom software (https://github.com/NextDom or http://nextdom.github.io).
+* Copyright (c) 2018 NextDom.
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, version 2.
+*
+* This program is distributed in the hope that it will be useful, but
+* WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+* General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 use NextDom\Rest\Authenticator;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestMatcher;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Loader\YamlFileLoader;
 use Symfony\Component\Routing\RequestContext;
@@ -52,6 +68,7 @@ if ($authenticator->isAuthenticated()) {
         // Find all necessary parameters
         $parameters = $method->getParameters();
         $callParameters = [];
+        // Link all parameters from URL for method calls
         if (!empty($parameters)) {
             foreach ($parameters as $parameter) {
                 $parameterName = $parameter->getName();
@@ -60,18 +77,22 @@ if ($authenticator->isAuthenticated()) {
                 }
             }
         }
+        // Call the method with params
         $result = call_user_func_array($route['_controller'], $callParameters);
         $response->setData($result);
     }
     catch (ResourceNotFoundException $resourceNotFoundException) {
+        // Bad route
         $response->setStatusCode(404);
         $response->setData(['error' => $resourceNotFoundException->getMessage()]);
     }
     catch (\TypeError $e) {
+        // Bad arguments
         $response->setStatusCode(400);
         $response->setData(['error' => $e->getMessage()]);
     }
     catch (\Throwable $t) {
+        // Others errors
         $response->setStatusCode(400);
         $response->setData(['error' => $t->getMessage()]);
     }
@@ -102,13 +123,7 @@ else {
         $response->setStatusCode(403);
         $response->setData('Forbidden access');
     }
-    /*
-     * Réalisé par Vuejs
-    else {
-        // Show login page
-        $response = new Response(file_get_contents(NEXTDOM_ROOT . '/views/mobile/login.html'));
-    }
-    */
 }
 
+// Send answer with correct header
 $response->send();

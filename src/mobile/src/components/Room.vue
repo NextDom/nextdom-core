@@ -3,7 +3,14 @@
     <template v-if="room.children">
       <router-link v-if="room" v-bind:to="{ name: 'rooms', params: { roomId: room.id }}">
         <div class="title">
-          <span v-html="room.icon"></span>
+          <template v-if="room.icon !== ''">
+            <span v-html="room.icon"></span>
+          </template>
+          <template v-else>
+            <span>
+              <i class="fas fa-ban"></i>
+            </span>
+          </template>
           <h2>{{ room.name }}</h2>
         </div>
       </router-link>

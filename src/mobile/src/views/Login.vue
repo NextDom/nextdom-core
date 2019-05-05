@@ -10,6 +10,7 @@
 
 <script>
 import axios from "axios";
+import communication from "@/libs/communication.js";
 
 export default {
   name: "login",
@@ -23,21 +24,16 @@ export default {
   methods: {
     login() {
       if (this.username !== "" && this.password !== "") {
-        axios.defaults.headers.common["X-AUTH-TOKEN"] = null;
-        axios
-          .get(
-            "/api/connect?login=" + this.username + "&password=" + this.password
-          )
-          .then(response => {
-            localStorage.setItem("token", response.data.token);
-          })
-          .catch(error => {
-            if (error.response.status === 401) {
-              this.error = error.response.data;
+        communication.connect(this.username, this.password, response => {
+          if (response === false) {
+            let error = communication.getLastError();
+            if (error.status === 401) {
+              this.error = error.data;
             } else {
-              this.error = error.response.data;
+              this.error = error.data;
             }
-          });
+          }
+        });
       }
     }
   }

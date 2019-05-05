@@ -2,7 +2,6 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import axios from "axios";
-
 require("./assets/icons/animal/style.css");
 require("./assets/icons/divers/style.css");
 require("./assets/icons/fashion/style.css");
@@ -19,6 +18,10 @@ require("./assets/icons/securite/style.css");
 require("./assets/icons/transport/style.css");
 require("../node_modules/font-awesome/css/font-awesome.css");
 require("../node_modules/font-awesome5/css/fontawesome-all.css");
+
+import communication from "./libs/communication.js";
+import { store } from "./libs/store.js";
+import eventsManager from "./libs/eventsManager.js";
 
 Vue.config.productionTip = false;
 
@@ -38,7 +41,13 @@ router.beforeEach((to, from, next) => {
   }
 });
 
+// Init communication helper for ajax calls
+communication.init(router);
+// Init events manager (ask for new events)
+eventsManager.init(communication, store);
+
 new Vue({
   router,
+  store,
   render: h => h(App)
 }).$mount("#app");

@@ -1,6 +1,11 @@
 <template>
   <div class="eqlogics">
-    <Widget v-for="eqLogic in eqLogicsList" v-bind:key="eqLogic.id" v-bind:eqlogic="eqLogic"></Widget>
+    <Widget
+      v-for="eqLogic in eqLogicsList"
+      v-bind:key="eqLogic.id"
+      v-bind:cmds="eqLogic.cmds"
+      v-bind:eqlogic="eqLogic"
+    ></Widget>
   </div>
 </template>
 

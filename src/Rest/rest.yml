@@ -31,3 +31,21 @@ summary_get_default_room_tree:
   path: '/summary/get_default_room_tree'
   controller: NextDom\Rest\SummaryRest::getDefaultRoomTree
   methods: GET
+get_changes:
+  path: '/changes/get/{lastUpdate}'
+  controller: NextDom\Rest\ChangesRest::get
+  methods: GET
+  requirements:
+    lastUpdate: \d+
+get_cmd_by_eqlogic:
+  path: '/cmd/eqlogic/{eqLogicId}'
+  controller: NextDom\Rest\CmdRest::byEqLogic
+  methods: GET
+  requirements:
+    eqLogicId: \d+
+exec_cmd:
+  path: '/cmd/exec/{cmdId}'
+  controller: NextDom\Rest\CmdRest::exec
+  methods: PUT
+  requirements:
+    cmdId: \d+

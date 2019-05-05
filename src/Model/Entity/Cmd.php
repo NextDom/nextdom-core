@@ -246,6 +246,71 @@ class Cmd implements EntityInterface
         return $this->order;
     }
 
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function getConfiguration($_key = '', $_default = '')
+    {
+        return Utils::getJsonAttr($this->configuration, $_key, $_default);
+    }
+
+    public function getTemplate($_key = '', $_default = '')
+    {
+        return Utils::getJsonAttr($this->template, $_key, $_default);
+    }
+
+    public function getIsHistorized()
+    {
+        return $this->isHistorized;
+    }
+
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    public function getSubType()
+    {
+        return $this->subType;
+    }
+
+    public function getUnite()
+    {
+        return $this->unite;
+    }
+
+    public function getDisplay($_key = '', $_default = '')
+    {
+        return Utils::getJsonAttr($this->display, $_key, $_default);
+    }
+
+    public function getIsVisible()
+    {
+        return $this->isVisible;
+    }
+
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    public function getHtml($_key = '', $_default = '')
+    {
+        return Utils::getJsonAttr($this->html, $_key, $_default);
+    }
+
+    public function getAlert($_key = '', $_default = '')
+    {
+        return Utils::getJsonAttr($this->alert, $_key, $_default);
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
     /**
      * @param $order
      * @return $this

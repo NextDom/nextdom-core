@@ -14,7 +14,8 @@
     "font-awesome5": "^1.0.5",
     "sass": "^1.19.0",
     "vue": "^2.6.10",
-    "vue-router": "^3.0.3"
+    "vue-router": "^3.0.3",
+    "vuex": "^3.1.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.7.0",

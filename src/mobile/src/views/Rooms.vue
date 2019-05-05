@@ -22,8 +22,8 @@
 </template>
 
 <script>
-import axios from "axios";
 import Room from "@/components/Room.vue";
+import communication from "../libs/communication.js";
 
 export default {
   name: "rooms",
@@ -40,12 +40,12 @@ export default {
   },
   mounted() {
     if (this.roomId === undefined) {
-      axios.get("/api/room/get_roots").then(response => {
-        this.rootRoomsList = response.data;
+      communication.get("/api/room/get_roots", data => {
+        this.rootRoomsList = data;
       });
     } else {
-      axios.get("/api/room/get_tree/" + this.roomId).then(response => {
-        this.rootRoomsList = [response.data];
+      communication.get("/api/room/get_tree/" + this.roomId, data => {
+        this.rootRoomsList = [data];
       });
     }
   }
