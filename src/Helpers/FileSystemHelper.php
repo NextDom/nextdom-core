@@ -70,11 +70,10 @@ class FileSystemHelper
             '3rdparty/jquery/jquery.min'                                 => 'vendor/node_modules/jquery/dist/jquery.min',
             '3rdparty/roboto/roboto'                                     => 'vendor/node_modules/roboto-fontface/css/roboto-fontface',
             '3rdparty/waves/waves.min'                                   => 'vendor/node_modules/node-waves/waves.min',
-            //TODO : A remettre en 3rdparty
-            '3rdparty/jquery.ui/jquery-ui-bootstrap/jquery-ui'           => 'assets/css/jquery-ui-bootstrap/jquery-ui.css'
+            '3rdparty/jquery.ui/jquery-ui-bootstrap/jquery-ui'           => 'vendor/node_modules/jquery-ui-bootstrap/jquery.ui.theme'
         ];
         $reMapping  = [
-            '%3rdparty/codemirror/(mode|addon)/(.*)%' => 'vendor/node_modules/codemirror/${1}/${2}',
+            '%3rdparty/codemirror/(mode|addon)/(.*)%'              => 'vendor/node_modules/codemirror/${1}/${2}'
         ];
 
         $pathinfo    = pathinfo($path);
