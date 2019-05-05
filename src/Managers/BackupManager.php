@@ -124,7 +124,7 @@ class BackupManager
             printf("*********** starting restore procedure at %s ***********\n", date('Y-m-d H:i:s'));
             NextDomHelper::event('begin_restore', true);
 
-            if ($file === null) {
+            if (($file === null) || ("" === $file)) {
                 $file = self::getLastBackupFilePath($backupDir, "newest");
             }
             printf("file used for restoration: %s\n", $file);
