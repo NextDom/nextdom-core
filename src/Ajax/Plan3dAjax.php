@@ -192,9 +192,9 @@ class Plan3dAjax extends BaseAjax
                 throw new CoreException(__('Impossible de décompresser les fichiers : '));
             }
             $zip->close();
-            unlink($file);
+            unlink($filename);
         } else {
-            throw new CoreException(__('Impossible de décompresser l\'archive zip : ') . $file . ' => ' . ZipErrorMessage($res));
+            throw new CoreException(__('Impossible de décompresser l\'archive zip : ') . $filename . ' => ' . ZipErrorMessage($res));
         }
         $objfile = FileSystemHelper::ls($cibDir, '*.obj', false, array('files'));
         if (count($objfile) != 1) {

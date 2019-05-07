@@ -437,7 +437,9 @@ class CmdManager
             'value' => $value,
             'search' => '%#' . $value . '#%',
         );
-
+        if(strpos($value,'variable(') !== false){
+            $values['search'] = '%#' . $value . '%';
+        }
         if ($onlyEnable) {
             $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME, 'c') . '
             FROM ' . self::DB_CLASS_NAME . ' c

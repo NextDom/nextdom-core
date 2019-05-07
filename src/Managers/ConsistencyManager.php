@@ -182,11 +182,14 @@ class ConsistencyManager {
     private static function resetCommandsActionID()
     {
         foreach (CmdManager::all() as $c_cmd) {
-            $value = $c_cmd->getConfiguration("nextdomCheckCmdCmdActionId");
-            if ("" != $value) {
-                $c_cmd->setConfiguration("nextdomCheckCmdCmdActionId", "");
+            try {
+                $value = $c_cmd->getConfiguration("nextdomCheckCmdCmdActionId");
+                if ("" != $value) {
+                    $c_cmd->setConfiguration("nextdomCheckCmdCmdActionId", "");
+                }
+                $c_cmd->save();
+            } catch (\Exception $e) {
             }
-            $c_cmd->save();
         }
     }
 
@@ -226,19 +229,22 @@ class ConsistencyManager {
     {
         foreach (self::getDefaultCrons() as $c_class => $c_data) {
             foreach ($c_data as $c_name => $c_config) {
-                $cron = CronManager::byClassAndFunction($c_class, $c_name);
-                if (false == is_object($cron)) {
-                    $cron = new Cron();
+                try {
+                    $cron = CronManager::byClassAndFunction($c_class, $c_name);
+                    if (false == is_object($cron)) {
+                        $cron = new Cron();
+                    }
+                    $cron->setClass($c_class);
+                    $cron->setFunction($c_name);
+                    $cron->setSchedule($c_config["schedule"]);
+                    $cron->setTimeout($c_config["timeout"]);
+                    $cron->setDeamon(0);
+                    if (true == array_key_exists("enabled", $c_config)) {
+                        $cron->setEnable($c_config["enabled"]);
+                    }
+                    $cron->save();
+                } catch (\Exception $e) {
                 }
-                $cron->setClass($c_class);
-                $cron->setFunction($c_name);
-                $cron->setSchedule($c_config["schedule"]);
-                $cron->setTimeout($c_config["timeout"]);
-                $cron->setDeamon(0);
-                if (true == array_key_exists("enabled", $c_config)) {
-                    $cron->setEnable($c_config["enabled"]);
-                }
-                $cron->save();
             }
         }
     }

@@ -35,7 +35,6 @@ if ($author == null && $name === null && $categorie === null && init('certificat
             'cost' => init('cost', null),
             'timeState' => init('timeState'),
             'certification' => init('certification', null),
-            'limit' => 100,
         )
     );
 }
@@ -193,36 +192,17 @@ function displayWidgetSubtype($_name) {
                 </div>
             </div>
         </div>
-        <div class="action-group">
-          <div class="btn-group">
-              <select class="form-control" id="sel_categorie">
-                  <?php
-                      if (init('categorie') == '') {
-                          echo '<option value="" selected>{{Top & Nouveautés}}</option>';
-                      } else {
-                          echo '<option value="">{{Top & Nouveautés}}</option>';
-                      }
-                      if ($type !== null && $type != 'plugin') {
-                          foreach (repo_market::distinctCategorie($type) as $id => $category) {
-                              if (trim($category) != '' && is_numeric($id)) {
-                                  echo '<option value="' . $category . '"';
-                                  echo (init('categorie') == $category) ? 'selected >' : '>';
-                                  echo $category;
-                                  echo '</option>';
-                              }
-                          }
-                      } else {
-                          global $NEXTDOM_INTERNAL_CONFIG;
-                          foreach ($NEXTDOM_INTERNAL_CONFIG['plugin']['category'] as $key => $value) {
-                              echo '<option value="' . $key . '"';
-                              echo (init('categorie') == $key) ? 'selected >' : '>';
-                              echo $value['name'];
-                              echo '</option>';
-                          }
-                      }
-                  ?>
-              </select>
-          </div>
+        <?php }
+?>
+        <div class="form-group">
+            <div class="btn-group" >
+                <a class="btn btn-default bt_pluginFilter <?php echo (init('certification') == 'Officiel') ? 'btn-primary' : '' ?>" data-href="<?php echo buildUrl('certification', 'Officiel'); ?>">{{Officiel}}</a>
+                <a class="btn btn-default bt_pluginFilter <?php echo (init('certification') == 'Conseillé') ? 'btn-primary' : '' ?>" data-href="<?php echo buildUrl('certification', 'Conseillé'); ?>">{{Conseillé}}</a>
+                <a class="btn btn-default bt_pluginFilter <?php echo (init('certification') == 'Premium') ? 'btn-primary' : '' ?>" data-href="<?php echo buildUrl('certification', 'Premium'); ?>">{{Premium}}</a>
+                <a class="btn btn-default bt_pluginFilter <?php echo (init('certification') == 'Partenaire') ? 'btn-primary' : '' ?>" data-href="<?php echo buildUrl('certification', 'Partenaire'); ?>">{{Partenaire}}</a>
+                <a class="btn btn-default bt_pluginFilter <?php echo (init('certification') == 'Legacy') ? 'btn-primary' : '' ?>" data-href="<?php echo buildUrl('certification', 'Legacy'); ?>">{{Legacy}}</a>
+                <a class="btn btn-default bt_pluginFilter" data-href="<?php echo buildUrl('certification', ''); ?>"><i class="fa fa-times"></i></a>
+            </div>
         </div>
     </div>
 </section>
@@ -303,6 +283,12 @@ foreach ($markets as $market) {
         if ($market->getCertification() == 'Conseillé') {
             $certificationClass = 'advised';
         }
+        if ($market->getCertification() == 'Premium') {
+            echo '<div style="position : absolute; right : 0;top:0;width:58px;height:58px;"><img src="core/img/band_Premium.png" /></div>';
+        }
+        if ($market->getCertification() == 'Partenaire') {
+            echo '<div style="position : absolute; right : 0;top:0;width:58px;height:58px;"><img src="core/img/band_Partenaire.png" /></div>';
+        }
         if ($market->getCertification() == 'Legacy') {
             $certificationClass = 'legacy';
         }
@@ -357,19 +343,23 @@ foreach ($markets as $market) {
         }
     }
     echo '</span>';
-    if ($market->getCost() > 0) {
-        echo '<span class="market-cost">';
-        if ($market->getPurchase() == 1) {
-            echo ' <i class="fa fa-check-circle"></i>';
-        } else {
-            if ($market->getCost() != $market->getRealCost()) {
-                echo '<span style="text-decoration:line-through;">' . number_format($market->getRealCost(), 2) . ' €</span> ';
+    if ($market->getCertification() !== 'Premium') {
+        if ($market->getCost() > 0) {
+            echo '<span style="position : absolute;bottom : 5px;right : 12px;color:#97bd44;">';
+            if ($market->getPurchase() == 1) {
+                echo ' <i class="fa fa-check-circle"></i>';
+            } else if ($market->getCertification() == 'Premium') {
+                echo '';
+            } else {
+                if ($market->getCost() != $market->getRealCost()) {
+                    echo '<span style="text-decoration:line-through;">' . number_format($market->getRealCost(), 2) . ' €</span> ';
+                }
+                echo number_format($market->getCost(), 2) . ' €';
             }
-            echo number_format($market->getCost(), 2) . ' €';
+            echo '</span>';
+        } else {
+            echo '<span style="position : absolute;bottom : 5px;right : 12px;color:#97bd44;">Gratuit</span>';
         }
-        echo '</span>';
-    } else {
-        echo '<span class="market-cost">Gratuit</span>';
     }
     echo '</div>';
 }

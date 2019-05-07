@@ -24,6 +24,7 @@ use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Helpers\SystemHelper;
 use NextDom\Helpers\TimeLineHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\BackupManager;
@@ -278,7 +279,7 @@ class NextDomAjax extends BaseAjax
         Utils::unautorizedInDemo();
         AjaxHelper::init(true);
         $uploadDir = BackupManager::getBackupDirectory();
-        Utils::readUploadedFile($_FILES, "file", $uploadDir, 300, array(".gz"));
+        Utils::readUploadedFile($_FILES, "file", $uploadDir, 1000, array(".gz"));
         AjaxHelper::success();
     }
 
@@ -367,6 +368,24 @@ class NextDomAjax extends BaseAjax
             }
         }
         AjaxHelper::success($return);
+    }
+
+    public function consistency()
+    {
+        AuthentificationHelper::isConnectedAsAdminOrFail();
+        Utils::unautorizedInDemo();
+        AjaxHelper::init(true);
+        SystemHelper::consistency();
+        AjaxHelper::success();
+    }
+
+    public function cleanFileSystemRight()
+    {
+        AuthentificationHelper::isConnectedAsAdminOrFail();
+        Utils::unautorizedInDemo();
+        AjaxHelper::init(true);
+        SystemHelper::cleanFileSystemRight();
+        AjaxHelper::success();
     }
 
     public function removeTimelineEvents()

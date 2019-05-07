@@ -406,8 +406,16 @@ function deleteSession($_id)
     SessionHelper::deleteSession($_id);
 }
 
-
 function checkAndFixCron($_cron)
 {
     return CronManager::convertCronSchedule($_cron);
+}
+
+function getTZoffsetMin($_cron)
+{
+    return Utils::getTZoffsetMin($_cron);
+}
+
+function cleanComponanteName($_name){
+    return Utils::cleanComponentName($_name);
 }

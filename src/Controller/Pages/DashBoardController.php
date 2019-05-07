@@ -89,6 +89,8 @@ class DashBoardController extends BaseController
         $pageData['dashboardChildrenObjects'] = ObjectManager::buildTree($currentJeeObject);
         $pageData['profilsUser'] = UserManager::getStoredUser();
 
+        $pageData['tZoffetMin'] = Utils::getTZoffsetMin();
+
         $pageData['JS_POOL'][] = '/public/js/desktop/pages/dashboard.js';
         $pageData['JS_END_POOL'][] = '/public/js/desktop/pages/dashboard_events.js';
         // A remettre une fois mise sous forme de thème
