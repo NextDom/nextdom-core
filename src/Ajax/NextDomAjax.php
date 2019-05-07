@@ -278,7 +278,7 @@ class NextDomAjax extends BaseAjax
         Utils::unautorizedInDemo();
         AjaxHelper::init(true);
         $uploadDir = BackupManager::getBackupDirectory();
-        Utils::readUploadedFile($_FILES, "file", $uploadDir, 300, array(".gz"));
+        Utils::readUploadedFile($_FILES, "file", $uploadDir, 1000, array(".gz"));
         AjaxHelper::success();
     }
 
@@ -367,6 +367,24 @@ class NextDomAjax extends BaseAjax
             }
         }
         AjaxHelper::success($return);
+    }
+
+    public function consistency()
+    {
+        AuthentificationHelper::isConnectedAsAdminOrFail();
+        Utils::unautorizedInDemo();
+        AjaxHelper::init(true);
+        TimeLineHelper::consistency();
+        AjaxHelper::success();
+    }
+
+    public function cleanFileSystemRight()
+    {
+        AuthentificationHelper::isConnectedAsAdminOrFail();
+        Utils::unautorizedInDemo();
+        AjaxHelper::init(true);
+        TimeLineHelper::cleanFileSytemRight();
+        AjaxHelper::success();
     }
 
     public function removeTimelineEvents()

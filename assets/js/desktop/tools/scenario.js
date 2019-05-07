@@ -619,12 +619,16 @@ function getActionExpressionHTML(expressionData) {
     } else {
         htmlData += '<input type="checkbox" class="expressionAttr" data-l1key="options" data-l2key="background" checked title="{{Cocher pour que la commande s\'exécute en parallèle des autres actions}}"/>';
     }
+    var expression_txt = init(_expression.expression);
+    if(typeof expression_txt !== 'string'){
+        expression_txt = json_encode(expression_txt);
+    }
     htmlData += '</div>';
     htmlData += '<div class="col-xs-11 scenario-sub-group"><div class="input-group input-group-sm no-border">';
     htmlData += '<span class="input-group-btn">';
     htmlData += '<button class="btn btn-default bt_removeExpression" type="button" title="{{Supprimer l\'action}}"><i class="fas fa-minus-circle"></i></button>';
     htmlData += '</span>';
-    htmlData += '<input class="expressionAttr form-control" data-l1key="expression" value="' + init(expressionData.expression).replace(/"/g, '&quot;') + '" style="font-weight:bold;"/>';
+    htmlData += '<input class="expressionAttr form-control" data-l1key="expression" value="' + expression_txt.replace(/"/g, '&quot;') + '" style="font-weight:bold;"/>';
     htmlData += '<span class="input-group-btn">';
     htmlData += '<button class="btn btn-default bt_selectOtherActionExpression" type="button" title="{{Sélectionner un mot-clé}}"><i class="fas fa-tasks"></i></button>';
     htmlData += '<button class="btn btn-default bt_selectCmdExpression" type="button" title="{{Sélectionner la commande}}"><i class="fas fa-list-alt"></i></button>';
@@ -671,7 +675,7 @@ function getCommentExpressionHTML(expressionData) {
  * @returns {string}
  */
 function addExpression(expressionToAdd) {
-    if (!isset(expressionToAdd.type) || expressionToAdd.type === '') {
+    if (!isset(expressionToAdd) || !isset(expressionToAdd.type) || expressionToAdd.type === '') {
         return '';
     }
     var sortable = 'sortable';
