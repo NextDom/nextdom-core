@@ -1,26 +1,49 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link>|
-      <router-link to="/rooms">Rooms</router-link>|
-      <router-link to="/login">Login</router-link>|
-    </div>
-    <router-view v-bind:key="$route.fullPath"/>
+    <router-view
+      v-bind:key="$route.fullPath"
+      v-on:setCurrentView="setCurrentView"
+      v-on:changeView="changeView"
+    />
+    <mu-bottom-nav class="bottom-nav" v-bind:value.sync="currentView" shift @change="changeView">
+      <mu-bottom-nav-item value="/" title="Accueil" icon="home"/>
+      <mu-bottom-nav-item value="/rooms" title="Pièces" icon="meeting_room"/>
+      <mu-bottom-nav-item value="/scenario" title="Scénario" icon="movie_creation"/>
+      <mu-bottom-nav-item value="/login" title="Connexion" icon="lock" v-if="isConnected"/>
+      <mu-bottom-nav-item value="/settings" title="Paramètres" icon="build" v-if="!isConnected"/>
+    </mu-bottom-nav>
   </div>
 </template>
 
-<style lang="scss">
-@import "@/assets/styles/color.scss";
+<script>
+import communication from "./libs/communication.js";
 
-* {
-  font-family: sans-serif;
-}
+export default {
+  data() {
+    return {
+      currentView: "login"
+    };
+  },
+  conputed: {},
+  methods: {
+    changeView(newView) {
+      this.setCurrentView;
+      this.$router.push(newView);
+    },
+    setCurrentView(newView) {
+      this.currentView = newView;
+    },
+    isConnected: function() {
+      return communication.isConnected();
+    }
+  }
+};
+</script>
 
-html {
-  background-color: $backgroundColor;
-}
-
-body {
-  margin: 0;
+<style scoped>
+.bottom-nav {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
 }
 </style>

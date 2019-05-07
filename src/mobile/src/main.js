@@ -1,7 +1,10 @@
 import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
-import axios from "axios";
+import MuseUI from "muse-ui";
+import "material-icons";
+import "muse-ui/dist/muse-ui.css";
+
 require("./assets/icons/animal/style.css");
 require("./assets/icons/divers/style.css");
 require("./assets/icons/fashion/style.css");
@@ -29,10 +32,7 @@ Vue.config.productionTip = false;
  * Route to login if not connected
  */
 router.beforeEach((to, from, next) => {
-  if (localStorage.getItem("token") !== null) {
-    axios.defaults.headers.common["X-AUTH-TOKEN"] = localStorage.getItem(
-      "token"
-    );
+  if (communication.isConnected()) {
     next();
   } else if (to.name === "login") {
     next();
@@ -45,9 +45,12 @@ router.beforeEach((to, from, next) => {
 communication.init(router);
 // Init events manager (ask for new events)
 eventsManager.init(communication, store);
+// Init MuseUI framekwork
+Vue.use(MuseUI);
 
 new Vue({
   router,
   store,
+  MuseUI,
   render: h => h(App)
 }).$mount("#app");

@@ -336,7 +336,7 @@ step_nextdom_directory_layout() {
 step_nextdom_configuration() {
   # recreate configuration from sample
   cp ${WEBSERVER_HOME}/core/config/common.config.sample.php ${WEBSERVER_HOME}/core/config/common.config.php
-  SECRET_KEY=$(</dev/urandom tr -dc '12345!@#$%qwertQWERTasdfgASDFGzxcvbZXCVB' | head -c32; echo "")
+  SECRET_KEY=$(</dev/urandom tr -dc '1234567890azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN_@;=' | head -c32; echo "")
   sed -i "s/#PASSWORD#/${MYSQL_NEXTDOM_PASSWD}/g" ${WEBSERVER_HOME}/core/config/common.config.php
   sed -i "s/#DBNAME#/${MYSQL_NEXTDOM_DB}/g"       ${WEBSERVER_HOME}/core/config/common.config.php
   sed -i "s/#USERNAME#/${MYSQL_NEXTDOM_USER}/g"   ${WEBSERVER_HOME}/core/config/common.config.php

@@ -120,10 +120,10 @@ class ObjectManager
     {
         $rootRoomId = $user->getOptions('defaultDashboardObject');
         if (empty($rootRoomId)) {
-            $defaultRoom = JeeObjectManager::getRootObjects();
+            $defaultRoom = self::getRootObjects();
         }
         else {
-            $defaultRoom = JeeObjectManager::byId($rootRoomId);
+            $defaultRoom = self::byId($rootRoomId);
         }
         return $defaultRoom;
     }

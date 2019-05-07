@@ -19,7 +19,7 @@
 
 namespace NextDom\Rest;
 
-use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\ObjectManager;
 use NextDom\Model\Entity\JeeObject;
 
 /**
@@ -30,8 +30,42 @@ use NextDom\Model\Entity\JeeObject;
 class SummaryRest
 {
     /**
-     * @param JeeObject $room
-     * @return array
+     * Get tree of rooms from room defined by the user or root room
+     *
+     * @throws \Exception
+     */
+    public static function getDefaultRoomTree()
+    {
+        $authenticator = Authenticator::getInstance();
+        $user = $authenticator->getConnectedUser();
+        $defaultRoom = ObjectManager::getDefaultUserRoom($user);
+        return self::getRoomTree($defaultRoom->getId());
+    }
+
+    /**
+     * Get tree of rooms from specific room
+     *
+     * @param int $roomId
+     *
+     * @return ObjectManager[] Tree of rooms
+     *
+     * @throws \Exception
+     */
+    public static function getRoomTree(int $roomId)
+    {
+        $rootRoom = ObjectManager::byId($roomId);
+        $rootRoom->getChilds();
+        $result = self::prepareResult($rootRoom);
+        return $result;
+    }
+
+    /**
+     * Prepare result for response
+     *
+     * @param JeeObject $room Room object to prepare
+     *
+     * @return array Data for response
+     *
      * @throws \Exception
      */
     private static function prepareResult(JeeObject $room)
@@ -56,6 +90,15 @@ class SummaryRest
         return $result;
     }
 
+    /**
+     * Add eqLogics data in rooms
+     *
+     * @param int $roomId Room ID
+     *
+     * @return array List of rooms with eqLogics data
+     *
+     * @throws \Exception
+     */
     private static function addEqLogicsInformations(int $roomId)
     {
         $result = [];
@@ -70,35 +113,6 @@ class SummaryRest
                 }
             }
         }
-        return $result;
-    }
-
-    /**
-     * Get tree of rooms from room defined by the user or root room
-     *
-     * @throws \Exception
-     */
-    public static function getDefaultRoomTree()
-    {
-        $authenticator = Authenticator::getInstance();
-        $user = $authenticator->getConnectedUser();
-        $defaultRoom = JeeObjectManager::getDefaultUserRoom($user);
-        return self::getRoomTree($defaultRoom->getId());
-    }
-
-    /**
-     * Get tree of rooms from specific room
-     *
-     * @param int $rootRoomId Root rooms
-     *
-     * @return JeeObjectManager[] Tree of rooms
-     * @throws \Exception
-     */
-    public static function getRoomTree(int $roomId)
-    {
-        $rootRoom = JeeObjectManager::byId($roomId);
-        $rootRoom->getChilds();
-        $result = self::prepareResult($rootRoom);
         return $result;
     }
 }

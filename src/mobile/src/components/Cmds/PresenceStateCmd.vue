@@ -1,19 +1,19 @@
 <template>
-  <div class="sabotage-info-cmd cmd">
-    <span class="pull-left">Sabotage</span>
+  <div class="presence-state-cmd cmd">
+    <span class="pull-left">{{ cmd.name }}</span>
     <i class="fas pull-right" v-bind:class="icon"></i>
   </div>
 </template>
 
 <script>
 export default {
-  name: "SabotageInfoCmd",
+  name: "PresenceStateCmd",
   props: {
     cmd: null
   },
   data: function() {
     return {
-      icon: "fa-check"
+      icon: "fa-walking"
     };
   },
   mounted() {
@@ -25,9 +25,9 @@ export default {
      */
     update() {
       if (this.cmd.state) {
-        this.icon = "fa-check";
+        this.icon = "fa-walking";
       } else {
-        this.icon = "fa-notifications_active";
+        this.icon = "fa-expand";
       }
     }
   }

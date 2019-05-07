@@ -1,12 +1,10 @@
 <template>
-  <div class="default-action-cmd">
-    <mu-button v-on:click="action">{{ cmd.name }}</mu-button>
-  </div>
+  <div class="action-on-icon-cmd"></div>
 </template>
 
 <script>
 export default {
-  name: "DefaultActionCmd",
+  name: "ActionOnIconCmd",
   props: {
     cmd: null
   },
@@ -16,11 +14,6 @@ export default {
       cmdId: this.cmd.id,
       cmdValue: this.cmd.value
     });
-  },
-  methods: {
-    action: function() {
-      this.$emit("executeCmd", this.cmd.id);
-    }
   }
 };
 </script>

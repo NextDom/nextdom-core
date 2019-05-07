@@ -30,7 +30,22 @@ use NextDom\Model\Entity\EqLogic;
 class EqLogicRest
 {
     /**
+     * Get all eqLogic
+     *
+     * @throws \Exception
+     */
+    public static function getAll()
+    {
+        $eqLogics = EqLogicManager::all();
+        return self::prepareResults($eqLogics);
+    }
+
+    /**
+     * Prepare result for response
+     *
      * @param EqLogic[] $eqLogics Array of eqLogic to convert
+     *
+     * @return array
      */
     private static function prepareResults($eqLogics)
     {
@@ -46,17 +61,6 @@ class EqLogicRest
             $result[] = $eqLogicRow;
         }
         return $result;
-    }
-
-    /**
-     * Get all eqLogic
-     *
-     * @throws \Exception
-     */
-    public static function getAll()
-    {
-        $eqLogics = EqLogicManager::all();
-        return self::prepareResults($eqLogics);
     }
 
     /**

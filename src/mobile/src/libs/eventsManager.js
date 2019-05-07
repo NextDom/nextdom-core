@@ -1,4 +1,5 @@
 export default {
+  loopStarted: false,
   /**
    * Initialize event manger
    * @param {communication} communication Communication helper
@@ -7,16 +8,17 @@ export default {
   init(communication, store) {
     this.store = store;
     this.communication = communication;
-    this.loop();
   },
   /**
    * Call getNewEvents in background
    */
   loop() {
-    let self = this;
-    setTimeout(function() {
-      self.getNewEvents();
-    }, 1);
+    if (!this.loopStarted) {
+      let self = this;
+      setTimeout(function() {
+        self.getNewEvents();
+      }, 1);
+    }
   },
   /**
    * Get new events since last call

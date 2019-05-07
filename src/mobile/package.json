@@ -12,8 +12,11 @@
     "core-js": "^2.6.5",
     "font-awesome": "^4.7.0",
     "font-awesome5": "^1.0.5",
+    "material-icons": "^0.3.1",
+    "muse-ui": "^3.0.2",
     "sass": "^1.19.0",
     "vue": "^2.6.10",
+    "vue-color-picker-wheel": "^0.4.3",
     "vue-router": "^3.0.3",
     "vuex": "^3.1.0"
   },

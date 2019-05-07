@@ -1,7 +1,6 @@
 <template>
-  <div class="plug-state-cmd cmd">
+  <div class="plug-state-cmd cmd icon">
     <i class="fas" v-bind:class="icon" v-on:click="action"></i>
-    {{ cmd.state }}
   </div>
 </template>
 

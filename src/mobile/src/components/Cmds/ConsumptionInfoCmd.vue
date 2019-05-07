@@ -1,5 +1,8 @@
 <template>
-  <div class="consumption-info-cmd cmd">Consommation : {{ cmd.value }} {{ cmd.unite }}</div>
+  <div class="consumption-info-cmd cmd">
+    <span class="pull-left">Consommation :</span>
+    <span class="pull-right">{{ cmd.state }} {{ cmd.unite }}</span>
+  </div>
 </template>
 
 <script>

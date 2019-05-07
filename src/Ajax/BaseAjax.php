@@ -115,4 +115,27 @@ abstract class BaseAjax
         }
         return false;
     }
+
+    /**
+     * Start the process
+     * @throws \Exception
+     */
+    public function process()
+    {
+        try {
+            $this->checkAccessOrFail($this->MUST_BE_CONNECTED, $this->NEEDED_RIGHTS);
+            AjaxHelper::init($this->CHECK_AJAX_TOKEN);
+
+            // Check and call the method for the action in query
+            $actionCode = Utils::init('action', '');
+            if ($this->checkIfActionExists($actionCode)) {
+                $this->$actionCode();
+            } else {
+                throw new CoreException(__('core.error-ajax'), 401);
+            }
+        } catch (\Throwable $throwable) {
+            AjaxHelper::error(Utils::displayException($throwable), $throwable->getCode());
+        }
+
+    }
 }

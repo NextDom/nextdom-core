@@ -27,7 +27,8 @@ use Symfony\Component\HttpFoundation\Request;
 // user access 10 hours
 define('TOKEN_EXPIRATION_TIME', 3600 * 10);
 
-class Authenticator {
+class Authenticator
+{
     /**
      * @var Authenticator Instance
      */
@@ -58,7 +59,8 @@ class Authenticator {
      *
      * @param Request $request
      */
-    private function __construct(Request $request) {
+    private function __construct(Request $request)
+    {
         global $CONFIG;
         $this->request = $request;
         $this->secret = $CONFIG['secretKey'];
@@ -68,7 +70,8 @@ class Authenticator {
      * @param Request $request
      * @return Authenticator
      */
-    public static function init(Request $request): Authenticator {
+    public static function init(Request $request): Authenticator
+    {
         self::$instance = new self($request);
         return self::$instance;
     }
@@ -78,7 +81,8 @@ class Authenticator {
      *
      * @return Authenticator Instance of the singleton
      */
-    public static function getInstance() {
+    public static function getInstance()
+    {
         return self::$instance;
     }
 
@@ -87,7 +91,8 @@ class Authenticator {
      *
      * @return bool True if query use authentication
      */
-    public function supportAuthentication(): bool {
+    public function supportAuthentication(): bool
+    {
         if ($this->request->headers->has('X-AUTH-TOKEN')) {
             return true;
         }
@@ -99,7 +104,8 @@ class Authenticator {
      *
      * @return bool True if user send token
      */
-    public function isAuthenticated(): bool {
+    public function isAuthenticated(): bool
+    {
         return $this->authenticated;
     }
 
@@ -111,7 +117,8 @@ class Authenticator {
      * @return User|false User object or false
      * @throws \Exception
      */
-    public function checkCredentials(string $login, string $password) {
+    public function checkCredentials(string $login, string $password)
+    {
         $user = UserManager::connect($login, $password);
         return $user;
     }
@@ -123,7 +130,8 @@ class Authenticator {
      *
      * @return string User token
      */
-    public function createTokenForUser(User $user): string {
+    public function createTokenForUser(User $user): string
+    {
         $token = Token::getToken($user->getId(), $this->secret, time() + TOKEN_EXPIRATION_TIME, 'localhost');
         // Save token in database
         $user->setOptions('token', $token);
@@ -141,12 +149,15 @@ class Authenticator {
      */
     public function checkSendedToken(): bool
     {
-        if (Token::validate($this->request->headers->get('X-AUTH-TOKEN'), $this->secret)) {
+        if ($this->secret === null) {
+            $this->authenticated = false;
+        } elseif (Token::validate($this->request->headers->get('X-AUTH-TOKEN'), $this->secret)) {
             $this->connectedUser = $this->getUserFromToken();
             if (is_object($this->connectedUser)) {
                 $this->authenticated = true;
             }
         }
+
         return $this->authenticated;
     }
 
@@ -156,7 +167,9 @@ class Authenticator {
      * @return User|null User
      * @throws \Exception
      */
-    private function getUserFromToken() {
+    private
+    function getUserFromToken()
+    {
         $user = null;
         $payload = Token::getPayload($this->request->headers->get('X-AUTH-TOKEN'));
         if (!empty($payload)) {
@@ -173,7 +186,9 @@ class Authenticator {
      *
      * @return User Connected user
      */
-    public function getConnectedUser() {
+    public
+    function getConnectedUser()
+    {
         return $this->connectedUser;
     }
 }

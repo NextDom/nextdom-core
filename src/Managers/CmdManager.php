@@ -110,6 +110,90 @@ class CmdManager
     }
 
     /**
+     * Get command by specifics IDs
+     * @param array $idsList List of ID
+     * @return Cmd[]|null List of commands
+     * @throws \Exception
+     */
+    public static function byIds($idsList)
+    {
+        if (!is_array($idsList) || count($idsList) == 0) {
+            return [];
+        }
+        $in = trim(preg_replace('/[, ]{2,}/m', ',', implode(',', $idsList)), ',');
+        if ($in === '') {
+            return [];
+        }
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE id IN (' . $in . ')';
+        return self::cast(DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+    }
+
+    /**
+     * Get command by his id
+     *
+     * @param mixed $id Command id
+     * @return Cmd|bool
+     * @throws \Exception
+     */
+    public static function byId($id)
+    {
+        if ($id == '') {
+            return null;
+        }
+        $values = array(
+            'id' => $id,
+        );
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE id = :id';
+        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME));
+    }
+
+    /**
+     * Get all commands
+     *
+     * @return Cmd[]
+     *
+     * @throws \Exception
+     */
+    public static function all()
+    {
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                ORDER BY id';
+        return self::cast(DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+    }
+
+    /**
+     * Get historized commands
+     *
+     * @return array
+     * @throws \Exception
+     */
+    public static function allHistoryCmd()
+    {
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME, 'c') . '
+                FROM ' . self::DB_CLASS_NAME . ' c
+                INNER JOIN eqLogic el ON c.eqLogic_id=el.id
+                INNER JOIN object ob ON el.object_id=ob.id
+                WHERE isHistorized=1
+                AND type=\'info\'';
+        $sql .= ' ORDER BY ob.position, ob.name, el.name, c.name';
+        $result1 = self::cast(DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME, 'c') . '
+                FROM ' . self::DB_CLASS_NAME . ' c
+                INNER JOIN eqLogic el ON c.eqLogic_id=el.id
+                WHERE el.object_id IS NULL
+                AND isHistorized=1
+                AND type=\'info\'';
+        $sql .= ' ORDER BY el.name, c.name';
+        $result2 = self::cast(DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        return array_merge($result1, $result2);
+    }
+
+    /**
      * Get commands attached to eqLogic objects
      *
      * @param int|array $eqLogicId EqLogic object id or array of EqLogic id

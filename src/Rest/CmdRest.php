@@ -21,6 +21,7 @@ namespace NextDom\Rest;
 
 use NextDom\Managers\CmdManager;
 use NextDom\Model\Entity\Cmd;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class CmdRest
@@ -30,6 +31,23 @@ use NextDom\Model\Entity\Cmd;
 class CmdRest
 {
     /**
+     * Get all commands by eqLogic
+     *
+     * @param int $eqLogicId EqLogic id linked to commands
+     *
+     * @return array Array of linked commands
+     *
+     * @throws \Exception
+     */
+    public static function byEqLogic(int $eqLogicId)
+    {
+        $cmds = CmdManager::byEqLogicId($eqLogicId);
+        return self::prepareResults($cmds);
+    }
+
+    /**
+     * Prepare result for response
+     *
      * @param Cmd[] $cmds Liste of commands
      *
      * @return array API necessary data
@@ -52,11 +70,14 @@ class CmdRest
             $cmdRow['value'] = $cmd->getValue();
             $cmdRow['visible'] = $cmd->getIsVisible();
             $cmdRow['unite'] = $cmd->getUnite();
+            $cmdRow['state'] = '';
             if ($cmdRow['type'] === 'info') {
                 try {
                     $cmdRow['state'] = $cmd->execCmd();
-                }
-                catch (\Exception $e) {
+                    if ($cmdRow['subType'] === 'numeric' && empty($cmdRow['state'])) {
+                        $cmdRow['state'] = 0;
+                    }
+                } catch (\Exception $e) {
 
                 }
             }
@@ -66,35 +87,31 @@ class CmdRest
     }
 
     /**
-     * Get all commands by eqLogic
-     *
-     * @param int $eqLogicId EqLogic id linked to commands
-     *
-     * @return array Array of linked commands
-     *
-     * @throws \Exception
-     */
-    public static function byEqLogic(int $eqLogicId)
-    {
-        $cmds = CmdManager::byEqLogicId($eqLogicId);
-        return self::prepareResults($cmds);
-    }
-
-    /**
      * Execute command
      *
+     * @param Request $request Query data
      * @param int $cmdId Command id to execute
      *
      * @return bool True if success
      *
      * @throws \NextDom\Exceptions\CoreException
      */
-    public static function exec(int $cmdId) {
+    public static function exec(Request $request, int $cmdId)
+    {
+        $options = null;
+        // Read post data for options
+        $postDataKeys = $request->request->keys();
+        if (count($postDataKeys) > 0) {
+            $options = [];
+            foreach ($postDataKeys as $postDataKey) {
+                $options[$postDataKey] = $request->request->get($postDataKey);
+            }
+        }
         $cmd = CmdManager::byId($cmdId);
         if (!is_object($cmd)) {
             return false;
         }
-        $cmd->execCmd();
+        $cmd->execCmd($options);
         return true;
     }
 

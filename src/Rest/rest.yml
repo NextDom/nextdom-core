@@ -2,6 +2,12 @@ eqlogic_get_all:
   path: '/eqlogic/all'
   controller: NextDom\Rest\EqLogicRest::getAll
   methods: GET
+eqlogic_get_by_room:
+  path: 'eqlogic/room/{roomId}'
+  controller: NextDom\Rest\EqLogicRest::getByRoom
+  methods: GET
+  requirements:
+    roomId: \d+
 room_get_room:
   path: '/room/get/{roomId}'
   controller: NextDom\Rest\RoomRest::get
@@ -46,6 +52,6 @@ get_cmd_by_eqlogic:
 exec_cmd:
   path: '/cmd/exec/{cmdId}'
   controller: NextDom\Rest\CmdRest::exec
-  methods: PUT
+  methods: POST
   requirements:
     cmdId: \d+

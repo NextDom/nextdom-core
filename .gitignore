@@ -41,3 +41,4 @@ core/css
 /data.*
 /data
 /src/mobile/node_modules
+/src/mobile/src/assets/icons

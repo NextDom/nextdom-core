@@ -1,5 +1,5 @@
 <template>
-  <div class="door-state-cmd cmd">
+  <div class="door-state-cmd cmd icon">
     <i class="icon" v-bind:class="icon"></i>
   </div>
 </template>

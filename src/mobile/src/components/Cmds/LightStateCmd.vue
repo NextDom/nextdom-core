@@ -1,7 +1,6 @@
 <template>
-  <div class="light-state-cmd cmd">
+  <div class="light-state-cmd cmd icon">
     <i class="icon" v-bind:class="icon" v-on:click="action"></i>
-    {{ cmd.state }} {{ cmd.id }}
   </div>
 </template>
 

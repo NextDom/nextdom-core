@@ -21,6 +21,7 @@ use NextDom\Rest\Authenticator;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestMatcher;
+use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Loader\YamlFileLoader;
 use Symfony\Component\Routing\RequestContext;
@@ -29,7 +30,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 // Load core
 require_once(__DIR__ . '/../src/core.php');
-
 // Read context and request
 $context = new RequestContext();
 $request = Request::createFromGlobals();
@@ -55,6 +55,7 @@ try {
     }
 }
 catch (Exception $e) {
+    var_dump($e->getMessage());
 }
 
 // API answers
@@ -68,6 +69,10 @@ if ($authenticator->isAuthenticated()) {
         // Find all necessary parameters
         $parameters = $method->getParameters();
         $callParameters = [];
+        // Inject $request if necessary
+        if (count($parameters) > 0 && $parameters[0]->getName() === "request") {
+            $callParameters[] = $request;
+        }
         // Link all parameters from URL for method calls
         if (!empty($parameters)) {
             foreach ($parameters as $parameter) {
@@ -85,6 +90,11 @@ if ($authenticator->isAuthenticated()) {
         // Bad route
         $response->setStatusCode(404);
         $response->setData(['error' => $resourceNotFoundException->getMessage()]);
+    }
+    catch (MethodNotAllowedException $methodNotAllowedException) {
+        // Bad method
+        $response->setStatusCode(404);
+        $response->setData(['error' => $methodNotAllowedException->getMessage()]);
     }
     catch (\TypeError $e) {
         // Bad arguments

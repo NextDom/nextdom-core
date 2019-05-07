@@ -19,7 +19,7 @@
 
 namespace NextDom\Rest;
 
-use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\ObjectManager;
 use NextDom\Model\Entity\JeeObject;
 
 /**
@@ -30,28 +30,6 @@ use NextDom\Model\Entity\JeeObject;
 class RoomRest
 {
     /**
-     * @param JeeObject $room
-     * @return array
-     * @throws \Exception
-     */
-    private static function prepareResult(JeeObject $room)
-    {
-        $result = [];
-        $result['id'] = $room->getId();
-        $result['name'] = $room->getName();
-        $result['icon'] = $room->getDisplay('icon');
-        // Get all children
-        $directChildren = $room->getChild();
-        if (!empty($directChildren)) {
-            $result['children'] = [];
-            foreach ($directChildren as $child) {
-                $result['children'][] = self::prepareResult($child);
-            }
-        }
-        return $result;
-    }
-
-    /**
      * Get tree of rooms from room defined by the user or root room
      *
      * @throws \Exception
@@ -60,7 +38,7 @@ class RoomRest
     {
         $authenticator = Authenticator::getInstance();
         $user = $authenticator->getConnectedUser();
-        $defaultRoom = JeeObjectManager::getDefaultUserRoom($user);
+        $defaultRoom = ObjectManager::getDefaultUserRoom($user);
         return self::getTree($defaultRoom->getId());
     }
 
@@ -69,14 +47,46 @@ class RoomRest
      *
      * @param int $rootRoomId Root rooms
      *
-     * @return JeeObjectManager[] Tree of rooms
+     * @return ObjectManager[] Tree of rooms
      * @throws \Exception
      */
     public static function getTree(int $roomId)
     {
-        $rootRoom = JeeObjectManager::byId($roomId);
+        $rootRoom = ObjectManager::byId($roomId);
         $rootRoom->getChilds();
         $result = self::prepareResult($rootRoom);
+        return $result;
+    }
+
+    /**
+     * @param JeeObject $room
+     * @return array
+     * @throws \Exception
+     */
+    private static function prepareResult(JeeObject $room, JeeObject $father = null)
+    {
+        $result = [];
+        $result['id'] = $room->getId();
+        $result['name'] = $room->getName();
+        $result['icon'] = $room->getDisplay('icon');
+        // Avoid sql query
+        if ($father === null) {
+            $father = $room->getFather();
+        }
+        if (is_object($father)) {
+            $result['father'] = [];
+            $result['father']['id'] = $father->getId();
+            $result['father']['name'] = $father->getName();
+            $result['father']['icon'] = $father->getDisplay('icon');
+        }
+        // Get all children
+        $directChildren = $room->getChild();
+        if (!empty($directChildren)) {
+            $result['children'] = [];
+            foreach ($directChildren as $child) {
+                $result['children'][] = self::prepareResult($child, $room);
+            }
+        }
         return $result;
     }
 
@@ -89,8 +99,9 @@ class RoomRest
      *
      * @throws \Exception
      */
-    public static function get(int $roomId) {
-        $room = JeeObjectManager::byId($roomId);
+    public static function get(int $roomId)
+    {
+        $room = ObjectManager::byId($roomId);
         return self::prepareResult($room);
     }
 
@@ -101,11 +112,16 @@ class RoomRest
      *
      * @throws \Exception
      */
-    public static function getRoots() {
-        $rootRooms = JeeObjectManager::getRootObjects(true, false);
+    public static function getRoots()
+    {
+        $rootRooms = ObjectManager::getRootObjects(true, false);
         $result = [];
+        $result['id'] = null;
+        $result['name'] = null;
+        $result['icon'] = null;
+        $result['children'] = [];
         foreach ($rootRooms as $room) {
-            $result[] = self::prepareResult($room);
+            $result['children'][] = self::prepareResult($room);
         }
         return $result;
     }
