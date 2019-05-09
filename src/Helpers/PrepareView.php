@@ -321,6 +321,9 @@ class PrepareView
         ));
         $pageData['JS'] = '';
 
+        $pageData['tZoffsetMin'] = Utils::getTZoffsetMin();
+
+
         $pageData['MENU'] = $render->get('commons/menu_rescue.html.twig');
 
         if (!NextDomHelper::isStarted()) {

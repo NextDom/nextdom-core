@@ -41,6 +41,9 @@ class ConnectionController extends BaseController
         $pageData['JS_END_POOL'][] = '/vendor/node_modules/admin-lte/dist/js/adminlte.min.js';
         $pageData['JS_END_POOL'][] = '/public/js/desktop/connection.js';
 
+        $pageData['tZoffsetMin'] = Utils::getTZoffsetMin();
+
+
         return Render::getInstance()->get('desktop/connection.html.twig', $pageData);
     }
 
