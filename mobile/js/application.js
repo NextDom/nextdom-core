@@ -183,8 +183,8 @@ function initApplication(_reinit) {
 
         if (isset(userProfils) && userProfils != null) {
           if (isset(userProfils.mobile_theme_color) && userProfils.mobile_theme_color != '') {
-            $('#jQMnDColor').attr('href', 'core/themes/'+userProfils.mobile_theme_color+'/mobile/' + userProfils.mobile_theme_color + '.css');
-            include.push( 'core/themes/'+userProfils.mobile_theme_color+'/mobile/' + userProfils.mobile_theme_color + '.js');
+            $('#jQMnDColor').attr('href', '/public/themes/'+userProfils.mobile_theme_color+'/mobile/' + userProfils.mobile_theme_color + '.css');
+            include.push( '/public/themes/'+userProfils.mobile_theme_color+'/mobile/' + userProfils.mobile_theme_color + '.js');
           }
           if (isset(userProfils.mobile_highcharts_theme) && userProfils.mobile_highcharts_theme != '') {
             include.push('vendor/node_modules/highcharts/themes/' + userProfils.mobile_highcharts_theme + '.js');
