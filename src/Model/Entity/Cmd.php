@@ -368,7 +368,7 @@ class Cmd implements EntityInterface
 
     public function setName($_name)
     {
-        $_name = cleanComponanteName($_name);
+        $_name = Utils::cleanComponentName($_name);
         $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
         $this->name = $_name;
         return $this;
