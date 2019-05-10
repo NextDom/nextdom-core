@@ -148,7 +148,7 @@ function displayWidgetSubtype($_name) {
 }
 ?>
 
-<style type="text/css"> <!-- @import url("/public/css/pages/markets.css"); --> </style>
+<style type="text/css"> <!-- @import url("/public/css/market.css"); --> </style>
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
@@ -192,8 +192,6 @@ function displayWidgetSubtype($_name) {
                 </div>
             </div>
         </div>
-        <?php }
-?>
         <div class="form-group">
             <div class="btn-group" >
                 <a class="btn btn-default bt_pluginFilter <?php echo (init('certification') == 'Officiel') ? 'btn-primary' : '' ?>" data-href="<?php echo buildUrl('certification', 'Officiel'); ?>">{{Officiel}}</a>
