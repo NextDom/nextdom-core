@@ -917,14 +917,14 @@ function displayObject(_plan,_html, _noRender) {
     }else if (_plan.link_type == 'cmd') {
         $('.div_displayObject > .cmd-widget[data-cmd_id=' + _plan.link_id + ']').remove();
     }else if (_plan.link_type == 'graph') {
-        for (var i in jeedom.history.chart) {
-            delete jeedom.history.chart[i];
+        for (var i in nextdom.history.chart) {
+            delete nextdom.history.chart[i];
         }
         $('.div_displayObject .graph-widget[data-graph_id=' + _plan.link_id + ']').remove();
     }
     var html = $(_html);
     html.attr('data-plan_id',_plan.id);
-    html.addClass('jeedomAlreadyPosition');
+    html.addClass('nextdomAlreadyPosition');
     html.css('z-index', 1000);
     html.css('position', 'absolute');
     html.css('top',  init(_plan.position.top, '10') * $('.div_displayObject').height() / 100);
@@ -990,7 +990,7 @@ function displayObject(_plan,_html, _noRender) {
         if(isset(_plan.display) && isset(_plan.display.graph)){
             for (var i in _plan.display.graph) {
                 if (init(_plan.display.graph[i].link_id) != '') {
-                    jeedom.history.drawChart({
+                    nextdom.history.drawChart({
                         cmd_id: _plan.display.graph[i].link_id,
                         el: 'graph' + _plan.link_id,
                         showLegend: init(_plan.display.showLegend, true),
