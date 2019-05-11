@@ -114,7 +114,8 @@ class BackupManager
      * @param bool $file path to backup archive, when empty, use last available backup
      * @return bool false when error occurs
      */
-    public static function restoreBackup($file = '') {
+    public static function restoreBackup($file = '') 
+    {
         $backupDir  = self::getBackupDirectory();
         $startTime  = strtotime('now');
         $status     = "success";
@@ -189,7 +190,7 @@ class BackupManager
      */
     public static function backup(bool $background = false)
     {
-        if ($background) {
+        if (true === $background) {
             LogHelper::clear('backup');
             $script = sprintf("%s/install/backup.php interactive=false  > %s 2>&1 &",
                               NEXTDOM_ROOT,
@@ -238,7 +239,7 @@ class BackupManager
      * @retrun bool true archive generated successfully
      * @throws \Exception when error occured while writing the tar archive
      */
-    public static function createBackupArchive($outputPath, $sqlPath, $cachePath)
+    public static function createBackupArchive(string $outputPath, $sqlPath, $cachePath)
     {
         $pattern = sprintf("|^%s/+|", NEXTDOM_ROOT);
         $tar  = new Tar();
@@ -248,15 +249,16 @@ class BackupManager
         $tar->addFile($sqlPath,   "DB_backup.sql");
 
         // iterate on dirs we want to include in archive
-        $roots = array("plugins");
+        $roots = ["plugins"];
         foreach ($roots as $c_root) {
             $path     = sprintf("%s/%s", NEXTDOM_ROOT, $c_root);
             $dirIter = new RecursiveDirectoryIterator($path);
             $riIter  = new RecursiveIteratorIterator($dirIter);
             // iterate on files recursively found
             foreach ($riIter as $c_entry) {
-                if (false === $c_entry->isFile())
+                if (false === $c_entry->isFile()){
                     continue;
+                }
                 $dest = preg_replace($pattern, "", $c_entry->getPathname());
                 $tar->addFile($c_entry->getPathname(), $dest);
             }
@@ -280,12 +282,13 @@ class BackupManager
      * @throws CoreException if cannot stat one of the backup files
      * @retrun array of file object
      */
-    public static function getBackupFileInfo($backupDir, $order = "newest") {
+    public static function getBackupFileInfo($backupDir, $order = "newest") 
+    {
         $pattern = sprintf("%s/*.gz", $backupDir);
         // 1.
         $entries = glob($pattern);
         if (false ===  $entries) {
-            return array();
+            return [];
         }
 
         // 2.
@@ -317,7 +320,8 @@ class BackupManager
      * @throws CoreException when no archive is found
      * @return string archive file path
      */
-    public static function getLastBackupFilePath($backupDir, $order = "newest") {
+    public static function getLastBackupFilePath($backupDir, $order = "newest") 
+    {
         $files = self::getBackupFileInfo($backupDir, $order);
 
         if (true === empty($files)) {
@@ -335,7 +339,8 @@ class BackupManager
      * @param string $backupDir backup root directory
      * @throws \Exception
      */
-    public static function rotateBackups($backupDir) {
+    public static function rotateBackups(string $backupDir) 
+    {
         $maxDays         = ConfigManager::byKey('backup::keepDays');
         $maxSizeInBytes  = ConfigManager::byKey('backup::maxSize') * 1024 * 1024;
         $minMtime        = time() - ($maxDays * 60 * 60 * 24);
@@ -359,7 +364,8 @@ class BackupManager
      * @param string $path path to backup archive
      * @retrun bool true is everything went fine
      */
-    public static function sendRemoteBackup($path) {
+    public static function sendRemoteBackup(string $path) 
+    {
         $repos = UpdateManager::listRepo();
         foreach ($repos as $c_key => $c_val) {
             if (($c_val['scope']['backup'] === false)            ||
@@ -382,7 +388,8 @@ class BackupManager
      * @throws CoreException if backup directory cannot be created
      * @retrun string backup root directory
      */
-    public static function getBackupDirectory() {
+    public static function getBackupDirectory() 
+    {
         $dir = ConfigManager::byKey('backup::path');
         if ("/" != substr($dir, 0, 1)) {
             $dir = sprintf("%s/%s", NEXTDOM_DATA, $dir);
@@ -546,7 +553,8 @@ class BackupManager
      * @throw CoreException when error on reading archive or creating temporary dir
      * @return string path to generated temporary directory
      */
-    private static function extractArchive($file) {
+    private static function extractArchive($file)
+    {
         $excludeDirs = array("AlternativeMarketForJeedom", "musicast");
         $exclude = sprintf("/^(%s)$/", join("|", $excludeDirs));
         $tmpDir  = sprintf("%s-restore-%s", NEXTDOM_TMP, date('Y-m-d-H:i:s'));
@@ -564,7 +572,8 @@ class BackupManager
      *
      * @throws CoreException from RestoreManager::loadSQLFromFile
      */
-    private static function loadSQLMigrateScript() {
+    private static function loadSQLMigrateScript()
+    {
         $migrateFile = sprintf("%s/install/migrate/migrate.sql", NEXTDOM_ROOT);
 
         self::loadSQLFromFile($migrateFile);
@@ -576,7 +585,8 @@ class BackupManager
      * @param string $tmpDir extracted backup root directory
      * @throws CoreException when error occurs
      */
-    private static function restoreDatabase($tmpDir) {
+    private static function restoreDatabase($tmpDir) 
+    {
         $backupFile  = sprintf("%s/DB_backup.sql", $tmpDir);
 
         if (0 != SystemHelper::vsystem("sed -i -e 's/jeedom/nextdom/g' '%s'", $backupFile)) {
@@ -600,7 +610,8 @@ class BackupManager
      *
      * @param string $tmpDir extracted backup root directory
      */
-    private static function restoreJeedomConfig($tmpDir) {
+    private static function restoreJeedomConfig(string $tmpDir) 
+    {
         $commonBackup  = sprintf("%s/common.config.php",              $tmpDir);
         $commonConfig  = sprintf("%s/core/config/common.config.php",  NEXTDOM_ROOT);
         $jeedomConfig  = sprintf("%s/core/config/jeedom.config.php",  NEXTDOM_ROOT);
@@ -622,7 +633,8 @@ class BackupManager
      *
      * @throws CoreException on permission error
      */
-    private static function restorePluginPerms() {
+    private static function restorePluginPerms()
+    {
         $pluginRoot  = sprintf("%s/plugins", NEXTDOM_ROOT);
         $status = SystemHelper::vsystem("%s chown %s:%s -R %s",
                                         SystemHelper::getCmdSudo(),
@@ -647,7 +659,8 @@ class BackupManager
      * @param string $tmpDir extracted backup root directory
      * @throws CoreException
      */
-    private static function restorePlugins($tmpDir) {
+    private static function restorePlugins($tmpDir) 
+    {
         $plugingDirs = glob(sprintf("%s/plugins/*", $tmpDir), GLOB_ONLYDIR);
         $pluginRoot  = sprintf("%s/plugins", NEXTDOM_ROOT);
 
@@ -675,7 +688,8 @@ class BackupManager
         }
     }
 
-    private static function updateConfig() {
+    private static function updateConfig() 
+    {
         ConfigManager::save('hardware_name', '');
         $cache = CacheManager::byKey('nextdom::isCapable::sudo');
         $cache->remove();
