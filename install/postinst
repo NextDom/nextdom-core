@@ -399,9 +399,18 @@ EOS
 
 step_nextdom_mysql_configuration() {
   # check that mysql is locally installed before any further configuration
-  mysqladmin -uroot ${HOSTPASS} status >/dev/null 2>/dev/null || {
+  # default value for mysql_host is localhost
+  [[ "localhost" != "$HOSTNAME" ]] && {
+    print_log_ok "Remote mysql server detected"
     return 0
   }
+
+  service mysql status 2>&1 >>${DEBUG}
+  isService=$?
+  if [ ! -f /etc/init.d/mysql -o ${isService} -gt 0 ]; then
+    print_log_ok "no mysql service locally"
+    return 0
+  fi
 
   service mysql stop >> ${DEBUG} 2>&1 || {
     service mysql stop >> ${DEBUG} 2>&1 || {
