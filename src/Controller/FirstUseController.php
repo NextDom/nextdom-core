@@ -51,12 +51,11 @@ class FirstUseController extends BaseController
             'notify_status' => $configs['notify::status'],
             'notify_position' => $configs['notify::position'],
             'notify_timeout' => $configs['notify::timeout'],
+            'serverTZoffsetMin' => Utils::getTZoffsetMin()
         ];
         $pageData['CSS_POOL'][] = '/public/css/nextdom.css';
         $pageData['CSS_POOL'][] = '/public/css/pages/firstUse.css';
         $pageData['JS_END_POOL'][] = '/public/js/desktop/pages/firstUse.js';
-
-        $pageData['tZoffsetMin'] = Utils::getTZoffsetMin();
 
 
         return Render::getInstance()->get('desktop/pages/firstUse.html.twig', $pageData);

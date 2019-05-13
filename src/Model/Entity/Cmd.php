@@ -642,16 +642,16 @@ class Cmd implements EntityInterface
 
     public function save()
     {
-        if ($this->getName() === '') {
+        if (empty($this->getName())) {
             throw new CoreException(__('Le nom de la commande ne peut pas être vide :') . print_r($this, true));
         }
-        if ($this->getType() === '') {
+        if (empty($this->getType())) {
             throw new CoreException($this->getHumanName() . ' ' . __('Le type de la commande ne peut pas être vide :') . print_r($this, true));
         }
-        if ($this->getSubType() === '') {
+        if (empty($this->getSubType())) {
             throw new CoreException($this->getHumanName() . ' ' . __('Le sous-type de la commande ne peut pas être vide :') . print_r($this, true));
         }
-        if ($this->getEqLogic_id() === '') {
+        if (empty($this->getEqLogic_id())) {
             throw new CoreException($this->getHumanName() . ' ' . __('Vous ne pouvez pas créer une commande sans la rattacher à un équipement'));
         }
         if ($this->getConfiguration('maxValue') != '' && $this->getConfiguration('minValue') != '' && $this->getConfiguration('minValue') > $this->getConfiguration('maxValue')) {

@@ -24,7 +24,6 @@ namespace NextDom\Controller\Tools;
 
 use NextDom\Helpers\Render;
 use NextDom\Helpers\AjaxHelper;
-use NextDom\Managers\AjaxManager;
 use NextDom\Managers\UpdateManager;
 use NextDom\Controller\BaseController;
 

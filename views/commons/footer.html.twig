@@ -38,7 +38,6 @@
     var clientDatetime = new Date();
     var clientServerDiff = {{ date().timestamp }} * 1000;
     var clientServerDiffDatetime = clientServerDiff - clientDatetime.getTime();
-    var serverTZoffsetMin = {{ tZoffsetMin }};
     var serverDatetime = {{ date().timestamp }};
     var io = null;
     NEXTDOM_PRODUCT_NAME='{{ PRODUCT_NAME }}';

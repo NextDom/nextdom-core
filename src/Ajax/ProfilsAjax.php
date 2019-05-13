@@ -18,7 +18,6 @@
 namespace NextDom\Ajax;
 
 use NextDom\Enums\UserRight;
-use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\Utils;
 

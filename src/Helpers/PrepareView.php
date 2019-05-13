@@ -259,7 +259,7 @@ class PrepareView
             'widget_size' => $configs['widget::size'],
             'widget_margin' => $configs['widget::margin'],
             'widget_padding' => $configs['widget::padding'],
-            'widget_radius' => $configs['widget::radius'],
+            'widget_radius' => $configs['widget::radius']
         ];
         $pageData['JS_VARS_RAW'] = [
             'userProfils' => Utils::getArrayToJQueryJson(UserManager::getStoredUser()->getOptions()),
@@ -317,12 +317,10 @@ class PrepareView
             'user_id' => UserManager::getStoredUser()->getId(),
             'user_isAdmin' => AuthentificationHelper::isConnectedAsAdmin(),
             'user_login' => UserManager::getStoredUser()->getLogin(),
-            'nextdom_firstUse' => $configs['nextdom::firstUse'] // TODO sans doute inutile
+            'nextdom_firstUse' => $configs['nextdom::firstUse'], // TODO sans doute inutile
+            'serverTZoffsetMin' => Utils::getTZoffsetMin()
         ));
         $pageData['JS'] = '';
-
-        $pageData['tZoffsetMin'] = Utils::getTZoffsetMin();
-
 
         $pageData['MENU'] = $render->get('commons/menu_rescue.html.twig');
 

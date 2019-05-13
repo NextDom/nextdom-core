@@ -57,17 +57,17 @@ class NextDomAjax extends BaseAjax
             AjaxHelper::success($return);
         }
 
-        $return['user_id'] = $_SESSION['user']->getId();
+        $return['user_id'] = UserManager::getStoredUser()->getId();
         $return['nextdom_token'] = AjaxHelper::getToken();
         @session_start();
         $currentUser = UserManager::getStoredUser();
         $currentUser->refresh();
         @session_write_close();
 
-        $return['userProfils'] = $_SESSION['user']->getOptions();
+        $return['userProfils'] = $currentUser->getOptions();
         $return['userProfils']['defaultMobileViewName'] = __('Vue');
         if ($currentUser->getOptions('defaultDesktopView') != '') {
-            $view = ViewManager::byId($_SESSION['user']->getOptions('defaultDesktopView'));
+            $view = ViewManager::byId($currentUser->getOptions('defaultDesktopView'));
             if (is_object($view)) {
                 $return['userProfils']['defaultMobileViewName'] = $view->getName();
             }

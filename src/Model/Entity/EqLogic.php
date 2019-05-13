@@ -69,7 +69,8 @@ class EqLogic implements EntityInterface
     protected $_timeoutUpdated = false;
     protected $_batteryUpdated = false;
     protected $_changed = false;
-    private static $_templateArray = array();
+    private static $_templateArray = [];
+    private $_cmds = [];
 
     /**
      * @var string

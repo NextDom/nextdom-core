@@ -75,6 +75,7 @@ class DashBoardController extends BaseController
         }
 
         $pageData['JS_VARS']['rootObjectId'] = $currentJeeObject->getId();
+        $pageData['JS_VARS']['serverTZoffsetMin'] = Utils::getTZoffsetMin();
 
         $pageData['dashboardDisplayObjectByDefault'] = UserManager::getStoredUser()->getOptions('displayObjetByDefault');
         $pageData['dashboardDisplayScenarioByDefault'] = UserManager::getStoredUser()->getOptions('displayScenarioByDefault');
@@ -88,8 +89,6 @@ class DashBoardController extends BaseController
         $pageData['dashboardObjectListMenu'] = self::getObjectsListMenu($pageData['dashboardObjectId']);
         $pageData['dashboardChildrenObjects'] = ObjectManager::buildTree($currentJeeObject);
         $pageData['profilsUser'] = UserManager::getStoredUser();
-
-        $pageData['tZoffsetMin'] = Utils::getTZoffsetMin();
 
         $pageData['JS_POOL'][] = '/public/js/desktop/pages/dashboard.js';
         $pageData['JS_END_POOL'][] = '/public/js/desktop/pages/dashboard_events.js';

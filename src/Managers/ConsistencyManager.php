@@ -34,6 +34,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Exceptions\CoreException;
 use NextDom\Model\Entity\Cron;
 
 class ConsistencyManager {
@@ -63,7 +64,7 @@ class ConsistencyManager {
             self::resetCommandsActionID();
             self::ensureUserFunctionExists();
         } catch (\Exception $e) {
-            throw CoreException("error while checking system consistency: " . $e->getMessage());
+            throw new CoreException("error while checking system consistency: " . $e->getMessage());
         }
     }
 
@@ -209,16 +210,16 @@ class ConsistencyManager {
 
     private static function deleteDeprecatedCrons()
     {
-        $targets = array(
-            "nextdom" => "persist",
-            "history" => "historize",
-            "cmd"     => "collect",
-            "nextdom" => "updateSystem",
-            "nextdom" => "checkAndCollect",
-            "DB"      => "optimize",
-        );
-        foreach ($targets as $c_class => $c_function) {
-            $cron = CronManager::byClassAndFunction($c_class, $c_function);
+        $cronTasksToRemove = [
+            ['target_class' => 'nextdom', 'action' => 'persist'],
+            ['target_class' => 'history', 'action' => 'historize'],
+            ['target_class' => 'cmd',     'action' => 'collect'],
+            ['target_class' => 'nextdom', 'action' => 'updateSystem'],
+            ['target_class' => 'nextdom', 'action' => 'checkAndCollect'],
+            ['target_class' => 'DB',      'action' => 'optimize'],
+        ];
+        foreach ($cronTasksToRemove as $cronTask) {
+            $cron = CronManager::byClassAndFunction($cronTask['target_class'], $cronTask['action']);
             if (true == is_object($cron)) {
                 $cron->remove();
             }

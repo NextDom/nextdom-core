@@ -178,7 +178,7 @@ class Plan3dAjax extends BaseAjax
         $filename = Utils::readUploadedFile($_FILES, "file", $uploadDir, 150, array(".zip"));
 
         if ($plan3dHeader->getConfiguration('path') == '') {
-            $path = sprintf("%s/data/3d/%s/", NEXTDOM_DATA, config::genKey());
+            $path = sprintf("%s/data/3d/%s/", NEXTDOM_DATA, ConfigManager::genKey());
             $plan3dHeader->setConfiguration('path', $path);
         }
 

@@ -25,8 +25,6 @@ namespace NextDom\Controller\Tools\Markets;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
-use NextDom\Managers\ConfigManager;
-use NextDom\Managers\MessageManager;
 use NextDom\Managers\UpdateManager;
 use NextDom\Controller\BaseController;
 

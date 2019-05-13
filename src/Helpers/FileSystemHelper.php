@@ -636,7 +636,7 @@ class FileSystemHelper
      * @throws CoreException when cannot create directory
      */
     public static function mkdirIfNotExists($path, $mode = 0775, $recursive = false) {
-        if (false === id_dir($path)) {
+        if (false === is_dir($path)) {
             if (false === mkdir($path, $mode, $recursive)) {
                 throw new CoreException("unable to create directory : " . $path);
             }
