@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\SystemHelper;
 use NextDom\Helpers\Utils;
@@ -28,7 +29,7 @@ use NextDom\Managers\ListenerManager;
  * @ORM\Table(name="listener", indexes={@ORM\Index(name="event", columns={"event"})})
  * @ORM\Entity
  */
-class Listener
+class Listener implements EntityInterface
 {
 
     /**
@@ -79,7 +80,7 @@ class Listener
         if (isset($option['background']) && $option['background'] == false) {
             $this->execute($_event, $_value);
         } else {
-            $cmd = NEXTDOM_ROOT . '/core/php/jeeListener.php';
+            $cmd = NEXTDOM_ROOT . '/src/Api/start_listener.php';
             $cmd .= ' listener_id=' . $this->getId() . ' event_id=' . $_event . ' "value=' . escapeshellarg($_value) . '"';
             if ($_datetime !== null) {
                 $cmd .= ' "datetime=' . escapeshellarg($_datetime) . '"';
@@ -114,7 +115,7 @@ class Listener
                 if (function_exists($function)) {
                     $function($option);
                 } else {
-                    LogHelper::add('listener', 'error', __('[Erreur] Non trouvée ') . $this->getName());
+                    LogHelper::addError('listener', __('[Erreur] Non trouvée ') . $this->getName());
                     return;
                 }
             }
@@ -135,13 +136,13 @@ class Listener
         if ($_once) {
             ListenerManager::removeByClassFunctionAndEvent($this->getClass(), $this->getFunction(), $this->event, $this->getOption());
         }
-        \DB::save($this);
+        DBHelper::save($this);
         return true;
     }
 
     public function remove()
     {
-        return \DB::remove($this);
+        return DBHelper::remove($this);
     }
 
     public function emptyEvent()

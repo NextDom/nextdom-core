@@ -34,14 +34,9 @@ class RebootController extends BaseController
      *
      * @return string Content of reboot page
      *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
     public static function get(&$pageData): string
     {
-
-        $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return Render::getInstance()->get('/desktop/reboot.html.twig', $pageData);
     }

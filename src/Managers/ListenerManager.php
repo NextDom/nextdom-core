@@ -34,6 +34,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\SystemHelper;
 use NextDom\Model\Entity\Listener;
 
@@ -47,9 +48,9 @@ class ListenerManager
 
     public static function all()
     {
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME;
-        return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     public static function byId($_id)
@@ -57,10 +58,10 @@ class ListenerManager
         $value = array(
             'id' => $_id,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE id=:id';
-        return \DB::Prepare($sql, $value, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     public static function byClass($_class)
@@ -68,10 +69,10 @@ class ListenerManager
         $value = array(
             'class' => $_class,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE class=:class';
-        return \DB::Prepare($sql, $value, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     public static function byClassAndFunction($_class, $_function, $_option = '')
@@ -80,7 +81,7 @@ class ListenerManager
             'class' => $_class,
             'function' => $_function,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE class=:class
         AND function=:function';
@@ -89,7 +90,7 @@ class ListenerManager
             $value['option'] = $_option;
             $sql .= ' AND `option`=:option';
         }
-        return \DB::Prepare($sql, $value, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     public static function searchClassFunctionOption($_class, $_function, $_option = '')
@@ -99,12 +100,12 @@ class ListenerManager
             'function' => $_function,
             'option' => '%' . $_option . '%',
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE class=:class
         AND function=:function
         AND `option` LIKE :option';
-        return \DB::Prepare($sql, $value, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     public static function byClassFunctionAndEvent($_class, $_function, $_event)
@@ -114,12 +115,12 @@ class ListenerManager
             'function' => $_function,
             'event' => $_event,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE class=:class
         AND function=:function
         AND event=:event';
-        return \DB::Prepare($sql, $value, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     public static function removeByClassFunctionAndEvent($_class, $_function, $_event, $_option = '')
@@ -138,7 +139,7 @@ class ListenerManager
             $value['option'] = $_option;
             $sql .= ' AND `option`=:option';
         }
-        \DB::Prepare($sql, $value, \DB::FETCH_TYPE_ROW);
+        DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ROW);
     }
 
     /**
@@ -157,10 +158,10 @@ class ListenerManager
                 'event' => '%#' . $_event . '#%',
             );
         }
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE `event` LIKE :event';
-        return \DB::Prepare($sql, $value, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     public static function check($_event, $_value, $_datetime)
@@ -178,7 +179,7 @@ class ListenerManager
         if (count(CmdManager::byValue($_event, 'info')) == 0) {
             return;
         }
-        $cmd = __DIR__ . '/../php/jeeListener.php';
+        $cmd = NEXTDOM_ROOT . '/src/Api/start_listener.php';
         $cmd .= ' event_id=' . $_event;
         SystemHelper::php($cmd . ' >> /dev/null 2>&1 &');
     }

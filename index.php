@@ -15,9 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
-//use NextDom;
-require_once(__DIR__ . '/vendor/autoload.php');
-require_once(__DIR__ . '/core/php/utils.inc.php');
+
+require_once __DIR__ . "/src/core.php";
 
 use NextDom\Enums\GetParams;
 use NextDom\Enums\ViewType;
@@ -26,42 +25,29 @@ use NextDom\Helpers\Client;
 use NextDom\Helpers\Router;
 use NextDom\Helpers\Utils;
 
-try {
-    // Test if NextDom is installed. Redirection to setup if necessary
-    if (!file_exists('/var/lib/nextdom/config/common.config.php')) {
-        header("location: install/setup.php");
-    }
-
-    // Test if the type of view is initialized ($_GET['v'])
-    // v == 'd' => desktop
-    // v == 'm' => mobile
-    $viewType = Utils::init(GetParams::VIEW_TYPE, '');
-    if ($viewType === '') {
-        $getParams = ViewType::DESKTOP_VIEW;
-        if (Client::isMobile()) {
-            $getParams = ViewType::MOBILE_VIEW;
-        }
-        // Add all others GET parameters
-        foreach ($_GET AS $var => $value) {
-            $getParams .= '&' . $var . '=' . $value;
-        }
-        // Rewrite URL and reload with the good URL
-        $url = 'index.php?' . GetParams::VIEW_TYPE . '=' . trim($getParams, '&');
-        Utils::redirect($url);
-        die();
-    }
-
-    // Show the content
-    require_once __DIR__ . "/core/php/core.inc.php";
-    // Start routing
-    $router = new Router($viewType);
-    if (!$router->show()) {
-        throw new CoreException(__('Erreur : veuillez contacter l\'administrateur'));
-    }
-
-} catch (\Exception $e) {
-    echo $e->getMessage();
-    echo $e->getFile() . ' - Line ' . $e->getLine();
+// Test if NextDom is installed. Redirection to setup if necessary
+if (!file_exists( NEXTDOM_DATA .'/config/common.config.php')) {
+    header("location: install/setup.php");
 }
 
- 
+$viewType = Utils::init(GetParams::VIEW_TYPE, '');
+if ($viewType === '') {
+    $getParams = ViewType::DESKTOP_VIEW;
+    if (Client::isMobile()) {
+        $getParams = ViewType::MOBILE_VIEW;
+    }
+    // Add all others GET parameters
+    foreach ($_GET AS $var => $value) {
+        $getParams .= '&' . $var . '=' . $value;
+    }
+    // Rewrite URL and reload with the good URL
+    $url = 'index.php?' . GetParams::VIEW_TYPE . '=' . trim($getParams, '&');
+    Utils::redirect($url);
+}
+
+// Show the content
+// Start routing
+$router = new Router($viewType);
+if (!$router->show()) {
+    throw new CoreException(__('Erreur : veuillez contacter l\'administrateur'));
+}

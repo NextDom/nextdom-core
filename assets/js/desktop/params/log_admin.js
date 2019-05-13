@@ -65,7 +65,7 @@ jwerty.key('ctrl+s/⌘+s', function (e) {
     });
 });
 
-$.showLoading();
+showLoadingCustom();
 nextdom.config.load({
     configuration: $('#log_admin').getValues('.configKey:not(.noSet)')[0],
     error: function (error) {

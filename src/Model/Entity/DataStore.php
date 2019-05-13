@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\ConfigManager;
@@ -31,7 +32,7 @@ use NextDom\Managers\ScenarioManager;
  * @ORM\Table(name="dataStore", uniqueConstraints={@ORM\UniqueConstraint(name="UNIQUE", columns={"type", "link_id", "key"})})
  * @ORM\Entity
  */
-class DataStore
+class DataStore implements EntityInterface
 {
 
     /**
@@ -77,13 +78,13 @@ class DataStore
     {
         $allowType = array('cmd', 'object', 'eqLogic', 'scenario', 'eqReal');
         if (!in_array($this->getType(), $allowType)) {
-            throw new \Exception(\__('Le type doit être un des suivants : ') . print_r($allowType, true));
+            throw new \Exception(__('Le type doit être un des suivants : ') . print_r($allowType, true));
         }
         if (!is_numeric($this->getLink_id())) {
-            throw new \Exception(\__('Link_id doit être un chiffre'));
+            throw new \Exception(__('Link_id doit être un chiffre'));
         }
         if ($this->getKey() == '') {
-            throw new \Exception(\__('La clef ne peut pas être vide'));
+            throw new \Exception(__('La clef ne peut pas être vide'));
         }
         if ($this->getId() == '') {
             $dataStore = DataStoreManager::byTypeLinkIdKey($this->getType(), $this->getLink_id(), $this->getKey());
@@ -96,7 +97,7 @@ class DataStore
 
     public function save()
     {
-        \DB::save($this);
+        DBHelper::save($this);
         return true;
     }
 
@@ -116,7 +117,7 @@ class DataStore
 
     public function remove()
     {
-        \DB::remove($this);
+        DBHelper::remove($this);
     }
 
     public function getLinkData(&$_data = array('node' => array(), 'link' => array()), $_level = 0, $_drill = null)
@@ -141,7 +142,7 @@ class DataStore
             'fontweight' => ($_level == 1) ? 'bold' : 'normal',
             'texty' => -14,
             'textx' => 0,
-            'title' => \__('Variable :') . ' ' . $this->getKey(),
+            'title' => __('Variable :') . ' ' . $this->getKey(),
         );
         $usedBy = $this->getUsedBy();
         Utils::addGraphLink($this, 'dataStore', $usedBy['scenario'], 'scenario', $_data, $_level, $_drill);

@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\Plan3dManager;
@@ -27,7 +28,7 @@ use NextDom\Managers\Plan3dManager;
  * @ORM\Table(name="plan3dHeader")
  * @ORM\Entity
  */
-class Plan3dHeader
+class Plan3dHeader implements EntityInterface
 {
 
     /**
@@ -64,7 +65,7 @@ class Plan3dHeader
 
     public function save()
     {
-        \DB::save($this);
+        DBHelper::save($this);
     }
 
     public function remove()
@@ -74,7 +75,7 @@ class Plan3dHeader
             rrmdir($cibDir);
         }
         NextDomHelper::addRemoveHistory(array('id' => $this->getId(), 'name' => $this->getName(), 'date' => date('Y-m-d H:i:s'), 'type' => 'plan3d'));
-        \DB::remove($this);
+        DBHelper::remove($this);
     }
 
     public function getPlan3d()

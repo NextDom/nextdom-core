@@ -26,6 +26,7 @@
     "jquery-datetimepicker": "^2.5.20",
     "jquery-lazyload": "^1.9.7",
     "jquery-mobile": "^1.5.0-alpha.1",
+    "jquery-ui-bootstrap": "^1.0.0",
     "jquery-ui-dist": "^1.12.1",
     "jquery-ui-touch-punch": "^0.2.3",
     "jstree": "^3.3.6",

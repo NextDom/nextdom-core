@@ -37,7 +37,7 @@ use NextDom\Managers\UpdateManager;
  * @ORM\Table(name="plugin")
  * @ORM\Entity
  */
-class Plugin
+class Plugin implements EntityInterface
 {
     protected $id;
     protected $name = '';
@@ -313,7 +313,7 @@ class Plugin
             $cache->remove();
             throw new \Exception(__('Vous devez attendre au moins 60 secondes entre deux lancements d\'installation de dépendances'));
         }
-        $dependancy_info = $this->dependancy_info(true);
+        $dependancy_info = $this->getDependencyInfo(true);
         if ($dependancy_info['state'] == 'in_progress') {
             throw new \Exception(__('Les dépendances sont déjà en cours d\'installation'));
         }
@@ -321,7 +321,7 @@ class Plugin
             if ($plugin->getId() == $this->getId()) {
                 continue;
             }
-            $dependancy_info = $plugin->dependancy_info();
+            $dependancy_info = $plugin->getDependencyInfo();
             if ($dependancy_info['state'] == 'in_progress') {
                 throw new \Exception(__('Les dépendances d\'un autre plugin sont déjà en cours, veuillez attendre qu\'elles soient finies : ') . $plugin->getId());
             }
@@ -379,7 +379,7 @@ class Plugin
         }
         $result = $plugin_id::deamon_info();
         if ($this->getHasDependency() == 1 && method_exists($plugin_id, 'dependancy_info') && $result['launchable'] == 'ok') {
-            $dependancy_info = $this->dependancy_info();
+            $dependancy_info = $this->getDependencyInfo();
             if ($dependancy_info['state'] != 'ok') {
                 $result['launchable'] = 'nok';
                 if ($dependancy_info['state'] == 'in_progress') {
@@ -416,6 +416,7 @@ class Plugin
      *
      * @param bool $forceRestart
      * @param bool $auto
+     * @throws \Exception
      */
     public function deamon_start($forceRestart = false, $auto = false)
     {
@@ -541,20 +542,20 @@ class Plugin
                 } else {
                     $out = $this->callInstallFunction('install');
                 }
-                $this->dependancy_info(true);
+                $this->getDependencyInfo(true);
             } else {
                 $this->deamon_stop();
                 if ($alreadyActive == 1) {
                     $out = $this->callInstallFunction('remove');
                 }
-                rrmdir(NextDomHelper::getTmpFolder('openvpn'));
+                rrmdir(NextDomHelper::getTmpFolder($this->getId()));
             }
             if (isset($out) && trim($out) != '') {
                 LogHelper::add($this->getId(), 'info', "Installation/remove/update result : " . $out);
             }
         } catch (\Throwable $e) {
             ConfigManager::save('active', $alreadyActive, $this->getId());
-            LogHelper::add('plugin', 'error', $e->getMessage());
+            LogHelper::addError('plugin', $e->getMessage());
             throw $e;
         }
 
@@ -588,7 +589,7 @@ class Plugin
         if (!$callInstallFunction && (!class_exists($this->getId()) || !method_exists($this->getId(), $functionToCall))) {
             throw new \Exception('Il n\'existe aucune méthode : ' . $this->getId() . '::' . $functionToCall . '()');
         }
-        $cmd = NEXTDOM_ROOT . '/core/php/jeePlugin.php ';
+        $cmd = NEXTDOM_ROOT . '/src/Api/start_plugin_func.php ';
         $cmd .= ' plugin_id=' . $this->getId();
         $cmd .= ' function=' . $functionToCall;
         $cmd .= ' callInstallFunction=' . $callInstallFunction;
@@ -670,7 +671,7 @@ class Plugin
         if (file_exists(NEXTDOM_ROOT . '/plugins/' . $this->getId() . '/doc/images/' . strtolower($this->getId()) . '_icon.png')) {
             return 'plugins/' . $this->getId() . '/doc/images/' . strtolower($this->getId()) . '_icon.png';
         }
-        return '/public/img/NextDom_Plugin.png';
+        return '/public/img/NextDom_Plugin_Gray.png';
     }
 
     /**

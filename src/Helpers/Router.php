@@ -37,6 +37,8 @@ namespace NextDom\Helpers;
 use NextDom\Enums\GetParams;
 use NextDom\Enums\ViewType;
 use NextDom\Managers\ConfigManager;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Turnout of the display
@@ -75,8 +77,40 @@ class Router
         } elseif ($this->viewType == ViewType::MOBILE_VIEW) {
             $this->mobileView();
             $result = true;
+        } elseif ($this->viewType == ViewType::STATIC_VIEW) {
+            $this->staticView();
+            $result = true;
         }
         return $result;
+    }
+
+
+    /**
+     * Echos content of requested asset
+     */
+    private function staticView()
+    {
+        $response = new Response();
+        $request  = Request::createFromGlobals();
+        $file     = $request->get("file");
+        $mapped   = FileSystemHelper::getAssetPath($file);
+        $data     = @file_get_contents($mapped);
+        $mtime    = @filemtime($mapped);
+
+        $response->prepare($request);
+        $response->setStatusCode(Response::HTTP_NOT_FOUND);
+
+        if (false !== $data) {
+            $response
+                ->setStatusCode(Response::HTTP_OK)
+                ->setPublic()
+                ->setMaxAge(0)
+                ->setContent($data)
+                ->setMaxAge(600)
+                ->setLastModified(new \DateTime("@" . $mtime));
+            $response->isNotModified($request);
+        }
+        $response->send();
     }
 
     /**
@@ -86,8 +120,7 @@ class Router
      */
     public function desktopView()
     {
-        Status::initConnectState();
-        Status::initRescueModeState();
+        AuthentificationHelper::init();
 
         if (isset($_GET[GetParams::MODAL])) {
             PrepareView::showModal();
@@ -102,6 +135,7 @@ class Router
                 'language',
                 'nextdom::firstUse',
                 'nextdom::Welcome',
+                'nextdom::waitSpinner',
                 'notify::status',
                 'notify::position',
                 'notify::timeout',
@@ -116,11 +150,11 @@ class Router
                 'default_bootstrap_theme'));
             if ($configs['nextdom::firstUse'] == 1) {
                 PrepareView::showSpecialPage('firstUse', $configs);
-            } elseif (!Status::isConnected()) {
+            } elseif (!AuthentificationHelper::isConnected()) {
                 PrepareView::showSpecialPage('connection', $configs);
             } else {
-                if (Status::isRescueMode()) {
-                    Status::isConnectedAdminOrFail();
+                if (AuthentificationHelper::isRescueMode()) {
+                    AuthentificationHelper::isConnectedAsAdminOrFail();
                     PrepareView::showRescueMode($configs);
                 } else {
                     PrepareView::showContent($configs);
@@ -152,13 +186,21 @@ class Router
     }
 
     /**
-     *
-     * Generate 404 page
+     * Show 404 error page (Not found)
      */
     public static function showError404AndDie()
     {
         header("HTTP/1.0 404 Not Found");
         require(NEXTDOM_ROOT . '/public/404.html');
-        exit();
+        die();
+    }
+
+    /**
+     * Show 401 error page (Unauthorized)
+     */
+    public static function showError401AndDie()
+    {
+        header("HTTP/1.1 401 Unauthorized");
+        die();
     }
 }

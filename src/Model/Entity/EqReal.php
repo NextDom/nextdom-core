@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\DataStoreManager;
 use NextDom\Managers\EqLogicManager;
@@ -27,7 +28,7 @@ use NextDom\Managers\EqLogicManager;
  * @ORM\Table(name="eqReal", uniqueConstraints={@ORM\UniqueConstraint(name="name_UNIQUE", columns={"name"})}, indexes={@ORM\Index(name="logicalId", columns={"logicalId"}), @ORM\Index(name="type", columns={"type"}), @ORM\Index(name="logicalId_Type", columns={"logicalId", "type"}), @ORM\Index(name="name", columns={"name"})})
  * @ORM\Entity
  */
-class EqReal
+class EqReal implements EntityInterface
 {
 
     /**
@@ -80,15 +81,15 @@ class EqReal
             $eqLogic->remove();
         }
         DataStoreManager::removeByTypeLinkId('eqReal', $this->getId());
-        return \DB::remove($this);
+        return DBHelper::remove($this);
     }
 
     public function save()
     {
         if ($this->getName() == '') {
-            throw new \Exception(\__('Le nom de l\'équipement réel ne peut pas être vide'));
+            throw new \Exception(__('Le nom de l\'équipement réel ne peut pas être vide'));
         }
-        return \DB::save($this);
+        return DBHelper::save($this);
     }
 
     /**

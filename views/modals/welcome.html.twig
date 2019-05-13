@@ -1,30 +1,55 @@
-<style>
-    .carousel-inner img {
-        height: 20rem !important;
-    }
+{#
+/* This file is part of Jeedom.
+*
+* Jeedom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* Jeedom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+*/
 
-    #migration-box a {
-        font-size: 14rem;
-    }
+/* This file is part of NextDom.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+*/
 
-    div#md_modal {
-        overflow-x: hidden;
-    }
-</style>
-<div class="alert alert-success">
-    <div class="row">
-        <div class="col-sm-6">
-            <h4><i class="fas fa-thumbs-up spacing-right"></i>{{ 'welcome.congrats'|trans }}</h4>
-            <p>{{ 'welcome.congrats-content'|trans|replace({'%productName%':productName}) }}</p>
-        </div>
-        <div class="col-sm-6">
-            <button id="btn_doNotDisplayWelcomeModalAnymore" class="btn btn-default pull-right">
-                <i class="fas fa-eye-slash spacing-right"></i>{{ 'welcome.never-show'|trans }}
-            </button>
+#}
+
+<section class="content-header">
+    <div class="alert alert-success">
+        <div class="row">
+            <div class="col-sm-6">
+                <h4><i class="fas fa-thumbs-up spacing-right"></i>{{ 'welcome.congrats'|trans }}</h4>
+                <span>{{ 'welcome.congrats-content'|trans|replace({'%productName%':productName}) }}</span>
+            </div>
+            <div class="col-sm-6">
+                <button id="btn_doNotDisplayWelcomeModalAnymore" class="btn btn-default pull-right">
+                    <i class="fas fa-eye-slash spacing-right"></i>{{ 'welcome.never-show'|trans }}
+                </button>
+            </div>
         </div>
     </div>
-</div>
-<div class="container-fluid">
+</section>
+
+<section class="content">
     <div class="row">
         <div class="col-md-6">
             <div class="box box-default">
@@ -118,18 +143,7 @@
             </div>
         </div>
     </div>
-</div>
-<script>
-    $('#btn_doNotDisplayWelcomeModalAnymore').on('click', function () {
-        nextdom.config.save({
-            configuration: {'nextdom::Welcome': 0},
-            error: function (error) {
-                notify('Core', error.message, 'error');
-            },
-            success: function () {
-                $('#md_modal').dialog('close');
-                notify('Core', '{{ 'welcome.notify'|trans }}', 'success');
-            }
-        });
-    });
-</script>
+</section>
+
+<style type="text/css"> <!-- @import url("/public/css/modals/welcome.css"); --> </style>
+<script src="/public/js/modals/welcome.js"></script>

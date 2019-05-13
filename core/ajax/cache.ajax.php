@@ -16,34 +16,9 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-try {
-    require_once __DIR__ . '/../../core/php/core.inc.php';
-    include_file('core', 'authentification', 'php');
+use NextDom\Ajax\CacheAjax;
 
-    if (!isConnect('admin')) {
-        throw new Exception(__('401 - Accès non autorisé', __FILE__), -1234);
-    }
+require_once (__DIR__ . '/../../src/core.php');
 
-    ajax::init(true);
-
-    if (init('action') == 'flush') {
-        unautorizedInDemo();
-        cache::flush();
-        ajax::success();
-    }
-
-    if (init('action') == 'clean') {
-        unautorizedInDemo();
-        cache::clean();
-        ajax::success();
-    }
-
-    if (init('action') == 'stats') {
-        ajax::success(cache::stats());
-    }
-
-    throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
-    /*     * *********Catch exeption*************** */
-} catch (Exception $e) {
-    ajax::error(displayException($e), $e->getCode());
-}
+$cacheAjax = new CacheAjax();
+$cacheAjax->process();

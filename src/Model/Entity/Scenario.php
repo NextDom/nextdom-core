@@ -17,13 +17,15 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\ScenarioState;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
-use NextDom\Helpers\TimeLine;
+use NextDom\Helpers\TimeLineHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CacheManager;
 use NextDom\Managers\CmdManager;
@@ -33,10 +35,11 @@ use NextDom\Managers\DataStoreManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
 use NextDom\Managers\InteractDefManager;
-use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\ObjectManager;
 use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\ScenarioElementManager;
 use NextDom\Managers\ScenarioManager;
+use NextDom\Managers\UserManager;
 use NextDom\Managers\ViewDataManager;
 use NextDom\Managers\ViewManager;
 
@@ -46,7 +49,7 @@ use NextDom\Managers\ViewManager;
  * ORM\Table(name="scenario", uniqueConstraints={@ORM\UniqueConstraint(name="name", columns={"group", "object_id", "name"})}, indexes={@ORM\Index(name="group", columns={"group"}), @ORM\Index(name="fk_scenario_object1_idx", columns={"object_id"}), @ORM\Index(name="trigger", columns={"trigger"}), @ORM\Index(name="mode", columns={"mode"}), @ORM\Index(name="modeTriger", columns={"mode", "trigger"})})
  * ORM\Entity
  */
-class Scenario
+class Scenario implements EntityInterface
 {
 
     /**
@@ -504,7 +507,7 @@ class Scenario
             if (count($this->getTags()) != '') {
                 $this->setCache('tags', $this->getTags());
             }
-            $cmd = NEXTDOM_ROOT . '/core/php/jeeScenario.php ';
+            $cmd = NEXTDOM_ROOT . '/src/Api/start_scenario.php ';
             $cmd .= ' scenario_id=' . $this->getId();
             $cmd .= ' trigger=' . escapeshellarg($trigger);
             $cmd .= ' "message=' . escapeshellarg(Utils::sanitizeAccent($message)) . '"';
@@ -544,12 +547,12 @@ class Scenario
         if (is_object($cmd)) {
             LogHelper::add('event', 'info', __('Exécution du scénario ') . $this->getHumanName() . __(' déclenché par : ') . $cmd->getHumanName());
             if ($this->getConfiguration('timeline::enable')) {
-                TimeLine::addTimelineEvent(array('type' => 'scenario', 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => date('Y-m-d H:i:s'), 'trigger' => $cmd->getHumanName(true)));
+                TimeLineHelper::addTimelineEvent(array('type' => 'scenario', 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => date('Y-m-d H:i:s'), 'trigger' => $cmd->getHumanName(true)));
             }
         } else {
             LogHelper::add('event', 'info', __('Exécution du scénario ') . $this->getHumanName() . __(' déclenché par : ') . $trigger);
             if ($this->getConfiguration('timeline::enable')) {
-                TimeLine::addTimelineEvent(array('type' => 'scenario', 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => date('Y-m-d H:i:s'), 'trigger' => $trigger == 'schedule' ? 'programmation' : $trigger));
+                TimeLineHelper::addTimelineEvent(array('type' => 'scenario', 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => date('Y-m-d H:i:s'), 'trigger' => $trigger == 'schedule' ? 'programmation' : $trigger));
             }
         }
         if (count($this->getTags()) == 0) {
@@ -558,7 +561,7 @@ class Scenario
             $this->setLog('Start : ' . trim($message, "'") . '. Tags : ' . json_encode($this->getTags()));
         }
         $this->setLastLaunch(date('Y-m-d H:i:s'));
-        $this->setState('in progress');
+        $this->setState(ScenarioState::IN_PROGRESS);
         $this->setPID(getmypid());
         $this->setRealTrigger($trigger);
         foreach ($this->getElement() as $element) {
@@ -592,8 +595,8 @@ class Scenario
         $scenarioCopy->setScenarioElement($scenario_element_list);
         $scenarioCopy->setLog('');
         $scenarioCopy->save();
-        if (file_exists('/var/log/nextdom/scenarioLog/scenario' . $scenarioCopy->getId() . '.log')) {
-            unlink('/var/log/nextdom/scenarioLog/scenario' . $scenarioCopy->getId() . '.log');
+        if (file_exists(NEXTDOM_LOG . '/scenarioLog/scenario' . $scenarioCopy->getId() . '.log')) {
+            unlink(NEXTDOM_LOG . '/scenarioLog/scenario' . $scenarioCopy->getId() . '.log');
         }
         return $scenarioCopy;
     }
@@ -666,9 +669,9 @@ class Scenario
         if ($_only_class) {
             if ($this->getIsActive() == 1) {
                 switch ($this->getState()) {
-                    case 'in progress':
+                    case ScenarioState::IN_PROGRESS:
                         return 'fas fa-spinner fa-spin';
-                    case 'error':
+                    case ScenarioState::ERROR:
                         return 'fas fa-exclamation-triangle';
                     default:
                         if (strpos($this->getDisplay('icon'), '<i') === 0) {
@@ -682,9 +685,9 @@ class Scenario
         } else {
             if ($this->getIsActive() == 1) {
                 switch ($this->getState()) {
-                    case 'in progress':
+                    case ScenarioState::IN_PROGRESS:
                         return '<i class="fas fa-spinner fa-spin"></i>';
-                    case 'error':
+                    case ScenarioState::ERROR:
                         return '<i class="fas fa-exclamation-triangle"></i>';
                     default:
                         if (strpos($this->getDisplay('icon'), '<i') === 0) {
@@ -748,7 +751,7 @@ class Scenario
             $calculateScheduleDate = $this->calculateScheduleDate();
             $this->setLastLaunch($calculateScheduleDate['prevDate']);
         }
-        \DB::save($this);
+        DBHelper::save($this);
         $this->emptyCacheWidget();
         if ($this->_changeState) {
             $this->_changeState = false;
@@ -761,7 +764,7 @@ class Scenario
      */
     public function refresh()
     {
-        \DB::refresh($this);
+        DBHelper::refresh($this);
     }
 
     /**
@@ -777,11 +780,11 @@ class Scenario
             $element->remove();
         }
         $this->emptyCacheWidget();
-        if (file_exists('/var/log/nextdom/scenarioLog/scenario' . $this->getId() . '.log')) {
-            unlink('/var/log/nextdom/scenarioLog/scenario' . $this->getId() . '.log');
+        if (file_exists(NEXTDOM_LOG . '/scenarioLog/scenario' . $this->getId() . '.log')) {
+            unlink(NEXTDOM_LOG . '/scenarioLog/scenario' . $this->getId() . '.log');
         }
         CacheManager::delete('scenarioCacheAttr' . $this->getId());
-        return \DB::remove($this);
+        return DBHelper::remove($this);
     }
 
     /**
@@ -1138,7 +1141,7 @@ class Scenario
      */
     public function getObject()
     {
-        return JeeObjectManager::byId($this->object_id);
+        return ObjectManager::byId($this->object_id);
     }
 
     /**
@@ -1159,9 +1162,9 @@ class Scenario
             $object = $this->getObject();
             if ($_tag) {
                 if ($object->getDisplay('tagColor') != '') {
-                    $name .= '<span class="label" style="text-shadow : none;background-color:' . $object->getDisplay('tagColor') . ' !important;color:' . $object->getDisplay('tagTextColor', 'white') . ' !important">' . $object->getName() . '</span>';
+                    $name .= '<span class="label label-sticker" style="text-shadow : none;background-color:' . $object->getDisplay('tagColor') . ' !important;color:' . $object->getDisplay('tagTextColor', 'white') . ' !important">' . $object->getName() . '</span>';
                 } else {
-                    $name .= '<span class="label label-primary" style="text-shadow : none;">' . $object->getName() . '</span>';
+                    $name .= '<span class="label label-primary label-sticker" style="text-shadow : none;">' . $object->getName() . '</span>';
                 }
             } else {
                 $name .= '[' . $object->getName() . ']';
@@ -1169,7 +1172,7 @@ class Scenario
         } else {
             if ($_complete) {
                 if ($_tag) {
-                    $name .= '<span class="label label-default" style="text-shadow : none;">' . __('Aucun') . '</span>';
+                    $name .= '<span class="label label-default label-sticker" style="text-shadow : none;">' . __('Aucun') . '</span>';
                 } else {
                     $name .= '[' . __('Aucun') . ']';
                 }
@@ -1185,7 +1188,7 @@ class Scenario
             }
         }
         if ($_prettify) {
-            $name .= '</p><p class="title">';
+            $name .= '<p class="title">';
         }
         if (!$_withoutScenarioName) {
             if ($_tag) {
@@ -1221,10 +1224,10 @@ class Scenario
         if (!AuthentificationHelper::isConnected()) {
             return false;
         }
-        if (AuthentificationHelper::isConnected('admin') || AuthentificationHelper::isConnected('user')) {
+        if (AuthentificationHelper::isConnectedAsAdmin() || AuthentificationHelper::isConnectedWithRights('user')) {
             return true;
         }
-        if (strpos($_SESSION['user']->getRights('scenario' . $this->getId()), $_right) !== false) {
+        if (strpos(UserManager::getStoredUser()->getRights('scenario' . $this->getId()), $_right) !== false) {
             return true;
         }
         return false;
@@ -1240,7 +1243,7 @@ class Scenario
         if ($this->getConfiguration('logmode', 'default') == 'none') {
             return null;
         }
-        $path = '/var/log/nextdom/scenarioLog';
+        $path = NEXTDOM_LOG . '/scenarioLog';
         if (!file_exists($path)) {
             mkdir($path);
         }

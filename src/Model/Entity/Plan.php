@@ -17,12 +17,13 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\EqLogicManager;
-use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\ObjectManager;
 use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PlanManager;
 use NextDom\Managers\ScenarioExpressionManager;
@@ -34,7 +35,7 @@ use NextDom\Managers\ScenarioManager;
  * @ORM\Table(name="plan", indexes={@ORM\Index(name="unique", columns={"link_type", "link_id"}), @ORM\Index(name="fk_plan_planHeader1_idx", columns={"planHeader_id"})})
  * @ORM\Entity
  */
-class Plan
+class Plan implements EntityInterface
 {
 
     /**
@@ -122,21 +123,21 @@ class Plan
 
     public function save()
     {
-        \DB::save($this);
+        DBHelper::save($this);
     }
 
     public function remove()
     {
-        \DB::remove($this);
+        DBHelper::remove($this);
     }
 
-    public function copy()
+    public function copy(): Plan
     {
         $planCopy = clone $this;
-        $planCopy->setId('');
-        $planCopy->setLink_id('');
-        $planCopy->setPosition('top', '');
-        $planCopy->setPosition('left', '');
+        $planCopy->setId('')
+            ->setLink_id('')
+            ->setPosition('top', '')
+            ->setPosition('left', '');
         $planCopy->save();
         return $planCopy;
     }
@@ -153,7 +154,7 @@ class Plan
             $cmd = CmdManager::byId($this->getLink_id());
             return $cmd;
         } elseif ($this->getLink_type() == 'summary') {
-            $object = JeeObjectManager::byId($this->getLink_id());
+            $object = ObjectManager::byId($this->getLink_id());
             return $object;
         }
         return null;
@@ -190,7 +191,7 @@ class Plan
                 }
                 ScenarioExpressionManager::createAndExec('action', $action['cmd'], $options);
             } catch (\Exception $e) {
-                LogHelper::add('design', 'error', __('Erreur lors de l\'exécution de ') . $action['cmd'] . __('. Détails : ') . $e->getMessage());
+                LogHelper::addError('design', __('Erreur lors de l\'exécution de ') . $action['cmd'] . __('. Détails : ') . $e->getMessage());
             }
         }
     }
@@ -262,7 +263,7 @@ class Plan
             case 'image':
                 $html = '<div class="image-widget" data-image_id="' . $this->getLink_id() . '" style="min-width:10px;min-height:10px;">';
                 if ($this->getConfiguration('display_mode', 'image') == 'image') {
-                    $html .= '<img style="width:100%;height:100%" src="' . $this->getDisplay('path', 'public/img/NextDom_NoPicture.png') . '"/>';
+                    $html .= '<img style="width:100%;height:100%" src="' . $this->getDisplay('path', 'public/img/NextDom_NoPicture_Gray.png') . '"/>';
                 } else {
                     $camera = EqLogicManager::byId(str_replace(array('#', 'eqLogic'), array('', ''), $this->getConfiguration('camera')));
                     if (is_object($camera)) {
@@ -308,7 +309,7 @@ class Plan
                 $html = '<div class="summary-widget" data-summary_id="' . $this->getLink_id() . '" style="' . $background_color . $color . ';min-width:10px;min-height:10px;">';
                 $summary = '';
                 if ($this->getLink_id() == 0) {
-                    $summary = JeeObjectManager::getGlobalHtmlSummary($_version);
+                    $summary = ObjectManager::getGlobalHtmlSummary($_version);
                 } else {
                     $object = $this->getLink();
                     if (is_object($object)) {

@@ -49,6 +49,12 @@ class LogHelper
     private static $logger = array();
     private static $config = null;
 
+    /**
+     * @param        $_key
+     * @param string $_default
+     * @return string
+     * @throws \Exception
+     */
     public static function getConfig($_key, $_default = '')
     {
         if (self::$config === null) {
@@ -84,6 +90,11 @@ class LogHelper
         return self::$logger[$_log];
     }
 
+    /**
+     * @param $_log
+     * @return int|string
+     * @throws \Exception
+     */
     public static function getLogLevel($_log)
     {
         $specific_level = self::getConfig('log::level::' . $_log);
@@ -103,6 +114,10 @@ class LogHelper
         return self::getConfig('log::level');
     }
 
+    /**
+     * @param int $_level
+     * @return string|null
+     */
     public static function convertLogLevel($_level = 100)
     {
         if ($_level > logger::EMERGENCY) {
@@ -117,8 +132,28 @@ class LogHelper
     }
 
     /**
-     * Ajoute un message dans les log et fait en sorte qu'il n'y
-     * ai jamais plus de 1000 lignes
+     * @param        $logTarget
+     * @param        $message
+     * @param string $logicalId
+     */
+    public static function addError($logTarget, $message, $logicalId = '')
+    {
+        self::add($logTarget, 'error', $message, $logicalId);
+    }
+
+    /**
+     * @param        $logTarget
+     * @param        $message
+     * @param string $logicalId
+     */
+    public static function addInfo($logTarget, $message, $logicalId = '')
+    {
+        self::add($logTarget, 'info', $message, $logicalId);
+    }
+
+    /**
+     * Add a message to the log and ensure that there are never more than 1000 lines
+     *
      * @param $_log
      * @param string $_type type du message à mettre dans les log
      * @param string $_message message à mettre dans les logs
@@ -146,6 +181,9 @@ class LogHelper
         }
     }
 
+    /**
+     * @param string $_log
+     */
     public static function chunk($_log = '')
     {
         $paths = array();
@@ -168,6 +206,10 @@ class LogHelper
         }
     }
 
+    /**
+     * @param $_path
+     * @throws \Exception
+     */
     public static function chunkLog($_path)
     {
         if (strpos($_path, '.htaccess') !== false) {
@@ -197,7 +239,7 @@ class LogHelper
      */
     public static function getPathToLog($_log = 'core')
     {
-        return '/var/log/nextdom/' . $_log;
+        return NEXTDOM_LOG . '/' . $_log;
     }
 
     /**
@@ -249,6 +291,10 @@ class LogHelper
         return null;
     }
 
+    /**
+     * @return bool
+     * @throws \Exception
+     */
     public static function removeAll()
     {
         foreach (array('', 'scenarioLog/') as $logPath) {
@@ -260,12 +306,11 @@ class LogHelper
         return true;
     }
 
-    /*
-     *
+    /**
      * @param string $_log
-     * @param int $_begin
-     * @param int $_nbLines
-     * @return boolean|array
+     * @param        $_begin
+     * @param        $_nbLines
+     * @return array|bool
      */
     public static function get($_log = 'core', $_begin, $_nbLines)
     {
@@ -291,10 +336,14 @@ class LogHelper
         return $page;
     }
 
+    /**
+     * @param null $_filtre
+     * @return array
+     */
     public static function liste($_filtre = null)
     {
         $return = array();
-        foreach (ls(self::getPathToLog(''), '*') as $log) {
+        foreach (FileSystemHelper::ls(self::getPathToLog(''), '*') as $log) {
             if ($_filtre !== null && strpos($log, $_filtre) === false) {
                 continue;
             }
@@ -337,12 +386,14 @@ class LogHelper
                 break;
             default:
                 throw new \Exception('log::level invalide ("' . $log_level . '")');
+                break;
         }
     }
 
     /**
-     * @param \Exception $e
+     * @param $e
      * @return mixed
+     * @throws \Exception
      */
     public static function exception($e)
     {

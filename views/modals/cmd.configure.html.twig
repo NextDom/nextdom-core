@@ -32,730 +32,746 @@
 */
 
 #}
-<div style="display: none;" id="md_displayCmdConfigure"></div>
+<div id="md_displayCmdConfigure" style="display: none;"></div>
 
-<div class="form-group">
-    <a class="btn btn-default" id="bt_cmdConfigureRawObject"><i class="fas fa-info spacing-right"></i>{{ 'Informations' }}</a>
-    <a class="btn btn-default" id="bt_cmdConfigureLogRealTime"><i class="fas fa-file-alt spacing-right"></i>{{ 'Log' }}</a>
-    <a class="btn btn-default" id="bt_cmdConfigureGraph"><i class="fas fa-object-group spacing-right"></i>{{ 'Liens' }}</a>
-    <a class="btn btn-default" id="bt_cmdConfigureTest"><i class="fas fa-rss spacing-right"></i>{{ 'Tester' }}</a>
-    <a class="btn btn-success pull-right" id="bt_cmdConfigureSave"><i class="fas fa-check-circle spacing-right"></i>{{ 'Enregistrer' }}</a>
-    <a class="btn btn-default pull-right" id="bt_cmdConfigureSaveOn"><i class="fas fa-plus-circle spacing-right"></i>{{ 'Appliquer à' }}</a>
-</div>
-
-<div class="nav-tabs-custom" role="tabpanel">
-    <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active"><a href="#cmd_information" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-info-circle spacing-right"></i>{{ 'Informations' }}</a></li>
-        <li role="presentation"><a href="#cmd_configuration" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-wrench spacing-right"></i>{{ 'Configuration' }}</a></li>
-        {% if cmdType == 'info' %}
-            <li role="presentation"><a href="#cmd_alert" aria-controls="messages" role="tab" data-toggle="tab"><i class="fas fa-exclamation-triangle spacing-right"></i>{{ 'Alertes' }}</a></li>
-        {% endif %}
-        {% if cmdWidgetPossibilityCustom %}
-            <li role="presentation"><a href="#cmd_display" aria-controls="messages" role="tab" data-toggle="tab"><i class="fas fa-desktop spacing-right"></i>{{ 'Affichage' }}</a></li>
-        {% endif %}
-        {% if cmdWidgetPossibilityCustomHtmlCode %}
-            <li role="presentation"><a href="#cmd_html" aria-controls="messages" role="tab" data-toggle="tab"><i class="fas fa-code-fork spacing-right"></i>{{ 'Code' }}</a></li>
-        {% endif %}
-    </ul>
-
-    <div class="tab-content" id="div_displayCmdConfigure">
-        <div role="tabpanel" class="tab-pane active" id="cmd_information">
-            <legend><i class="fas fa-list-alt spacing-right"></i>{{ 'Général' }}</legend>
-            <div class="row">
-                <form class="form-horizontal">
-                    <fieldset class="col-sm-6">
-                        <div class="form-group">
-                            <label class="col-xs-4 control-label">{{ 'ID' }}</label>
-                            <div class="col-xs-4">
-                                <span class="cmdAttr label label-config label-sticker-sm" data-l1key="id"></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-xs-4 control-label">{{ 'Logical ID' }}</label>
-                            <div class="col-xs-4">
-                                <span class="cmdAttr label label-config label-sticker-sm" data-l1key="logicalId"></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-xs-4 control-label">{{ 'Nom' }}</label>
-                            <div class="col-xs-4">
-                                <span class="cmdAttr label label-config label-sticker-sm" data-l1key="name"></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-xs-4 control-label">{{ 'Type' }}</label>
-                            <div class="col-xs-4">
-                                <span class="cmdAttr label label-config label-sticker-sm" data-l1key="type"></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-xs-4 control-label">{{ 'Sous-type' }}</label>
-                            <div class="col-xs-4">
-                                <span class="cmdAttr label label-config label-sticker-sm" data-l1key="subType"></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-xs-4 control-label">{{ 'Commande déclenchant une mise à jour' }}</label>
-                            <div class="col-xs-4">
-                                <span class="cmdAttr label label-config label-sticker-sm" data-l1key="value"></span>
-                            </div>
-                        </div>
-                        {% if cmdType == 'action' and cmdSubType == 'select' %}
-                            <div class="form-group">
-                                <label class="col-xs-4 control-label">{{ 'Valeurs possibles' }}</label>
-                                <div class="col-xs-8">
-                                    {% if cmdListValues is defined %}
-                                        {% for value in cmdListValues %}
-                                            {{ value[1] }}
-                                            =>
-                                            {{ value[0] }}
-                                        {% endfor %}
-                                    {% endif %}
-                                </div>
-                            </div>
-                        {% endif %}
-                        {% if cmdType == 'info' %}
-                            <div class="form-group">
-                                <label class="col-xs-4 control-label">{{ 'Valeur' }}</label>
-                                <div class="col-xs-4">
-                                    <span class="label label-config label-sticker-sm">{{ cmdCacheValue }}</span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-xs-4 control-label">{{ 'Date collecte' }}</label>
-                                <div class="col-xs-4">
-                                    <span class="label label-config label-sticker-sm">{{ cmdCollectDate }}</span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-xs-4 control-label">{{ 'Date valeur' }}</label>
-                                <div class="col-xs-4">
-                                    <span class="label label-primary" style="font-size : 1em;">{{ cmdValueDate }}</span>
-                                </div>
-                            </div>
-                        {% endif %}
-                    </fieldset>
-                    <fieldset class="col-sm-6">
-                        <div class="form-group">
-                            <label class="col-xs-4 control-label">{{ 'URL directe' }}</label>
-                            <div class="col-xs-8">
-                                <a class="label label-config label-sticker-sm" href="{{ cmdDirectUrlAccess }}" target="_blank"><i class="fas fa-external-link-alt spacing-right"></i>URL</a>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-xs-4 control-label">{{ 'Unité' }}</label>
-                            <div class="col-xs-4">
-                                <span class="cmdAttr label label-primary txtSizeNormal" data-l1key="unite"></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-xs-4 control-label">{{ 'Visible' }}</label>
-                            <div class="col-xs-4">
-                                <input type="checkbox" class="cmdAttr" data-l1key="isVisible"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-xs-4 control-label">{{ 'Valeur minimum (défaut : 0)' }}</label>
-                            <div class="col-xs-4">
-                                <input type="checkbox" class="cmdAttr" data-l1key="configuration" data-l2key="minValue"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-xs-4 control-label">{{ 'Valeur maximum (défaut : 100)' }}</label>
-                            <div class="col-xs-4">
-                                <input type="checkbox" class="cmdAttr" data-l1key="configuration" data-l2key="maxValue"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-xs-4 control-label">{{ 'Suivre dans la timeline' }}</label>
-                            <div class="col-xs-4">
-                                <input type="checkbox" class="cmdAttr" data-l1key="configuration" data-l2key="timeline::enable" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-xs-4 control-label">{{ 'Interdire dans les interactions automatique' }}</label>
-                            <div class="col-xs-4">
-                                <input type="checkbox" class="cmdAttr" data-l1key="configuration" data-l2key="interact::auto::disable"/>
-                            </div>
-                        </div>
-                        <div class="form-group iconeGeneric">
-                            <label class="col-xs-4 control-label">{{ 'Icône' }}</label>
-                            <div class="col-xs-4">
-                                <div class="input-group">
-                                    <a class="btn btn-action" id="bt_cmdConfigureChooseIcon"><i class="fas fa-flag">&nbsp;&nbsp;</i>{{ 'Icône' }}</a>
-                                    <div class="cmdAttr label label-icon" data-l1key="display" data-l2key="icon"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </fieldset>
-                </form>
-            </div>
-
-            <legend><i class="fas fa-search spacing-right"></i>{{ 'Utilisé par' }}</legend>
-            <div class="form-group">
-                <a class="btn btn-sm btn-warning pull-right" id="bt_cmdConfigureReplaceMeBy"><i class="fas fa-download" aria-hidden="true spacing-right"></i>{{ 'Remplacer cette commande par la commande' }}</a>
-                <a class="btn btn-sm btn-warning pull-right" id="bt_cmdConfigureReplaceByMe"><i class="fas fa-upload" aria-hidden="true spacing-right"></i>{{ 'Cette commande remplace la commande' }}</a>
-                <a class="btn btn-sm btn-warning pull-right" id="bt_cmdConfigureReplaceIdByMe"><i class="fas fa-upload" aria-hidden="true spacing-right"></i>{{ 'Cette commande remplace l\'ID' }}</a>
-            </div>
-            <div class="row">
-                <form class="form-horizontal">
-                    <fieldset class="col-xs-12" id="fd_cmdUsedBy">
-                        <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Equipement' }}</label>
-                            <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6">
-                                {% for usedByEqLogic in cmdUsedBy['eqLogic'] %}
-                                    {% if usedByEqLogic.getIsEnable() != 1 %}
-                                        <span class="label label-default cursor"><a class="text-white" href="{{ usedByEqLogic.getLinkToConfiguration() }}">{{ usedByEqLogic.getHumanName() }}</a></span><br/>
-                                    {% else %}
-                                        <span class="label label-primary cursor"><a class="text-white" href="{{ usedByEqLogic.getLinkToConfiguration() }}">{{ usedByEqLogic.getHumanName() }}</a></span><br/>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Commandes' }}</label>
-                            <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6">
-                                {% for usedByCmd in cmdUsedBy['cmd'] %}
-                                    <span class="label label-primary cursor"><a class="text-white" href="{{ usedByCmd.getEqLogic().getLinkToConfiguration() }}">{{ usedByCmd.getHumanName() }}</a></span><br/>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Scénario' }}</label>
-                            <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6">
-                                {% for usedByScenario in cmdUsedBy['scenario'] %}
-                                    {% if usedByScenario.getIsActive() != 1 %}
-                                        <span class="label label-default cursor"><a class="text-white" href="{{ usedByScenario.getLinkToConfiguration() }}">{{ usedByScenario.getHumanName() }}</a></span><br/>
-                                    {% else %}
-                                        <span class="label label-primary cursor"><a class="text-white" href="{{ usedByScenario.getLinkToConfiguration() }}">{{ usedByScenario.getHumanName() }}</a></span><br/>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </fieldset>
-                </form>
-            </div>
+<section class="content-header">
+    <div class="action-bar">
+        <div class="action-group">
+            <a class="btn btn-action-bar btn-primary" id="bt_cmdConfigureRawObject"><i class="fas fa-info spacing-right"></i>{{ 'Informations' }}</a>
+            <a class="btn btn-action-bar btn-default" id="bt_cmdConfigureLogRealTime"><i class="fas fa-file-alt spacing-right"></i>{{ 'Log' }}</a>
+            <a class="btn btn-action-bar btn-default" id="bt_cmdConfigureGraph"><i class="fas fa-object-group spacing-right"></i>{{ 'Liens' }}</a>
+            <a class="btn btn-action-bar btn-warning" id="bt_cmdConfigureTest"><i class="fas fa-rss spacing-right"></i>{{ 'Tester' }}</a>
         </div>
+        <div class="action-group">
+            <a class="btn btn-action-bar btn-success pull-right" id="bt_cmdConfigureSave"><i class="fas fa-save spacing-right"></i>{{ 'Enregistrer' }}</a>
+            <a class="btn btn-action-bar btn-default pull-right" id="bt_cmdConfigureSaveOn"><i class="fas fa-plus-circle spacing-right"></i>{{ 'Appliquer à...' }}</a>
+        </div>
+    </div>
+</section>
 
-        <div role="tabpanel" class="tab-pane" id="cmd_configuration">
-            <form class="form-horizontal">
-                <fieldset>
-                    {% if cmdType == 'info' and cmdSubType == 'numeric' or cmdSubType == 'binary' %}
-                        <legend><i class="fas fa-table spacing-right"></i>{{ 'Calcul et arrondi' }}</legend>
-                        <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Formule de calcul' }}</label>
-                            <div class="col-lg-8 col-md-7 col-sm-6 col-xs-12">
-                                <div class="input-group">
-                                    <input class="cmdAttr form-control" data-l1key="configuration" data-l2key="calculValueOffset"/>
-                                    <span class="input-group-addon">{{ '#value# pour la valeur' }}</span>
-                                </div>
-                            </div>
-                        </div>
-                        {% if cmdSubType == 'numeric' %}
+<section class="content">
+    <div class="nav-tabs-custom" role="tabpanel">
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#cmd_information" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-info-circle spacing-right"></i>{{ 'Informations' }}</a></li>
+            <li role="presentation"><a href="#cmd_configuration" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-wrench spacing-right"></i>{{ 'Configuration' }}</a></li>
+            {% if cmdType == 'info' %}
+                <li role="presentation"><a href="#cmd_alert" aria-controls="messages" role="tab" data-toggle="tab"><i class="fas fa-exclamation-triangle spacing-right"></i>{{ 'Alertes' }}</a></li>
+            {% endif %}
+            {% if cmdWidgetPossibilityCustom %}
+                <li role="presentation"><a href="#cmd_display" aria-controls="messages" role="tab" data-toggle="tab"><i class="fas fa-desktop spacing-right"></i>{{ 'Affichage' }}</a></li>
+            {% endif %}
+            {% if cmdWidgetPossibilityCustomHtmlCode %}
+                <li role="presentation"><a href="#cmd_html" aria-controls="messages" role="tab" data-toggle="tab"><i class="fas fa-code-fork spacing-right"></i>{{ 'Code' }}</a></li>
+            {% endif %}
+        </ul>
+
+        <div class="tab-content" id="div_displayCmdConfigure">
+            <div role="tabpanel" class="tab-pane active" id="cmd_information">
+                <legend><i class="fas fa-list-alt spacing-right"></i>{{ 'Général' }}</legend>
+                <div class="row">
+                    <form class="form-horizontal">
+                        <fieldset class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Arrondi' }}</label>
-                                <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
-                                    <div class="input-group">
-                                        <input class="cmdAttr form-control" data-l1key="configuration" data-l2key="historizeRound"/>
-                                        <span class="input-group-addon">{{ 'chiffre après la virgule' }}</span>
-                                    </div>
+                                <label class="col-xs-4 control-label">{{ 'ID' }}</label>
+                                <div class="col-xs-4">
+                                    <span class="cmdAttr label label-config" data-l1key="id"></span>
                                 </div>
                             </div>
-                        {% endif %}
-                    {% endif %}
-                </fieldset>
-                <fieldset class="legend-section">
-                    <legend><i class="fas fa-building spacing-right"></i>{{ 'Type générique' }}</legend>
-                    <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Valeur' }}</label>
-                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
-                            <select class="cmdAttr form-control" data-l1key="generic_type">
-                                <option value="">{{ 'Aucun' }}</option>
-                                {% for informationGroup in cmdGenericTypeInformations %}
-                                    {% if informationGroup|length > 0 %}
-                                        <optgroup label="{{ informationGroup[0]['family'] }}">
-                                            {% for informationKey, informationValue in informationGroup %}
-                                                <option value="{{ informationValue['key'] }}">{{ informationValue['name'] }}</option>
+                            <div class="form-group">
+                                <label class="col-xs-4 control-label">{{ 'Logical ID' }}</label>
+                                <div class="col-xs-4">
+                                    <span class="cmdAttr label label-config" data-l1key="logicalId"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-4 control-label">{{ 'Nom' }}</label>
+                                <div class="col-xs-4">
+                                    <span class="cmdAttr label label-config" data-l1key="name"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-4 control-label">{{ 'Type' }}</label>
+                                <div class="col-xs-4">
+                                    <span class="cmdAttr label label-config" data-l1key="type"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-4 control-label">{{ 'Sous-type' }}</label>
+                                <div class="col-xs-4">
+                                    <span class="cmdAttr label label-config" data-l1key="subType"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-4 control-label">{{ 'Commande déclenchant une mise à jour' }}</label>
+                                <div class="col-xs-4">
+                                    <span class="cmdAttr label label-config" data-l1key="value"></span>
+                                </div>
+                            </div>
+                            {% if cmdType == 'action' and cmdSubType == 'select' %}
+                                <div class="form-group">
+                                    <label class="col-xs-4 control-label">{{ 'Valeurs possibles' }}</label>
+                                    <div class="col-xs-8">
+                                        {% if cmdListValues is defined %}
+                                            {% for value in cmdListValues %}
+                                                {{ value[1] }}
+                                                =>
+                                                {{ value[0] }}
                                             {% endfor %}
-                                        </optgroup>
-                                    {% endif %}
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                </fieldset>
-                {% if cmdType == 'action' %}
-                    <fieldset class="legend-section">
-                        <legend><i class="fas fa-exclamation-triangle spacing-right"></i>{{ 'Restriction de l\'action' }}</legend>
-                        <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Confirmer l\'action' }}</label>
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <input type="checkbox" class="cmdAttr" data-l1key="configuration" data-l2key="actionConfirm"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Code d\'accès' }}</label>
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <input type="password" class="cmdAttr form-control" data-l1key="configuration" data-l2key="actionCodeAccess" autocomplete="off"/>
-                            </div>
-                        </div>
-                    </fieldset>
-                {% endif %}
-                {% if cmdType == 'info' %}
-                    <fieldset class="legend-section">
-                        <legend><i class="fas fa-sign-out-alt spacing-right"></i>{{ 'Action sur la valeur' }}</legend>
-                        <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Action sur valeur, si' }}</label>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
-                                <select class="cmdAttr form-control" data-l1key="configuration" data-l2key="nextdomCheckCmdOperator">
-                                    <option value="==">{{ 'égal' }}</option>
-                                    <option value=">">{{ 'supérieur' }}</option>
-                                    <option value="<">{{ 'inférieur' }}</option>
-                                    <option value=" !=">{{ 'différent' }}</option>
-                                </select>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
-                                <input class="cmdAttr form-control" data-l1key="configuration" data-l2key="nextdomCheckCmdTest"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'plus de' }}</label>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <div class="input-group">
-                                    <input type="number" class="cmdAttr form-control" data-l1key="configuration" data-l2key="nextdomCheckCmdTime"/>
-                                    <span class="input-group-addon">{{ 'min' }}</span>
+                                        {% endif %}
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Action' }}</label>
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <a class="btn btn-success" id="bt_addActionCheckCmd"><i class="fas fa-plus-circle spacing-right"></i>{{ 'Ajouter' }}</a>
-                            </div>
-                        </div>
-                        <div id="div_actionCheckCmd"></div>
-                        <script type="text/javascript">
-                            $("#div_actionCheckCmd").sortable({
-                                axis: "y",
-                                cursor: "move",
-                                items: ".actionCheckCmd",
-                                placeholder: "ui-state-highlight",
-                                tolerance: "intersect",
-                                forcePlaceholderSize: true
-                            });
-                            $('#bt_addActionCheckCmd').off('click').on('click', function () {
-                                addActionCmd({}, 'actionCheckCmd', '{{ ' Action ' }}');
-                            });
-                        </script>
-                    </fieldset>
-                {% endif %}
-                {% if cmdType == 'action' %}
-                    <fieldset class="legend-section">
-                        <legend><i class="fas fa-sign-out-alt spacing-right"></i>{{ 'Action avant exécution de la commande' }}</legend>
-                        <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Action' }}</label>
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <a class="btn btn-success" id="bt_addActionPreExecCmd"><i class="fas fa-plus-circle spacing-right"></i>{{ 'Ajouter' }}</a>
-                            </div>
-                        </div>
-                        <div id="div_actionPreExecCmd"></div>
-                        <script type="text/javascript">
-                            $('#div_actionPreExecCmd').sortable({
-                                axis: "y",
-                                cursor: "move",
-                                items: ".actionPreExecCmd",
-                                placeholder: "ui-state-highlight",
-                                tolerance: "intersect",
-                                forcePlaceholderSize: true
-                            });
-                            $('#bt_addActionPreExecCmd').off('click').on('click', function () {
-                                addActionCmd({}, 'actionPreExecCmd', '{{ ' Action ' }}');
-                            });
-                        </script>
-                    </fieldset>
-                    <fieldset class="legend-section">
-                        <legend><i class="fas fa-sign-out-alt spacing-right"></i>{{ 'Action après exécution de la commande' }}</legend>
-                        <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Action' }}</label>
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <a class="btn btn-success" id="bt_addActionPostExecCmd"><i class="fas fa-plus-circle spacing-right"></i>{{ 'Ajouter' }}</a>
-                            </div>
-                        </div>
-                        <div id="div_actionPostExecCmd"></div>
-
-                        <script type="text/javascript">
-                            $("#div_actionPostExecCmd").sortable({
-                                axis: "y",
-                                cursor: "move",
-                                items: ".actionPostExecCmd",
-                                placeholder: "ui-state-highlight",
-                                tolerance: "intersect",
-                                forcePlaceholderSize: true
-                            });
-                            $('#bt_addActionPostExecCmd').off('click').on('click', function () {
-                                addActionCmd({}, 'actionPostExecCmd', '{{ ' Action ' }}');
-                            });
-                        </script>
-                    </fieldset>
-                {% endif %}
-                {% if cmdType == 'info' and cmdTypeIsHistorized %}
-                    <fieldset class="legend-section">
-                        <legend><i class="fas fa-bar-chart-o spacing-right"></i>{{ 'Historique' }}</legend>
-                        <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-4 control-label">{{ 'Historiser' }}</label>
-                            <div class="col-xs-1">
-                                <input type="checkbox" class="cmdAttr" data-l1key="isHistorized"/>
-                            </div>
-                        </div>
-                        {% if cmdIsHistorizedCanBeSmooth %}
-                            <div class="form-group">
-                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Mode de lissage' }}</label>
-                                <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
-                                    <select class="form-control cmdAttr" data-l1key="configuration" data-l2key="historizeMode">
-                                        <option value="avg">{{ 'Moyenne' }}</option>
-                                        <option value="min">{{ 'Minimum' }}</option>
-                                        <option value="max">{{ 'Maximum' }}</option>
-                                        <option value="none">{{ 'Aucun' }}</option>
-                                    </select>
-                                </div>
-                            </div>
-                        {% endif %}
-                        <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Purger l\'historique' }}</label>
-                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
-                                <div class="input-group">
-                                    <select class="form-control cmdAttr" data-l1key="configuration"
-                                            data-l2key="historyPurge">
-                                        <option value="">{{ 'Jamais' }}</option>
-                                        <option value="-1 day">{{ '1 jour' }}</option>
-                                        <option value="-7 days">{{ '7 jours' }}</option>
-                                        <option value="-1 month">{{ '1 mois' }}</option>
-                                        <option value="-3 month">{{ '3 mois' }}</option>
-                                        <option value="-6 month">{{ '6 mois' }}</option>
-                                        <option value="-1 year">{{ '1 an' }}</option>
-                                    </select>
-                                    <span class="input-group-addon">{{ 'si plus vieux que' }}</span>
-                                </div>
-                            </div>
-                        </div>
-                        {% if cmdIsHistorized == 1 %}
-                            <div class="form-group">
-                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Copie' }}</label>
-                                <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
-                                    <a class="btn btn-warning" id="bt_cmdConfigureCopyHistory"><i class="fas fa-clone spacing-right"></i>{{ 'Copier l\'historique de cette commande sur une autre commande' }}</a>
-                                </div>
-                            </div>
-                        {% endif %}
-                    </fieldset>
-                {% endif %}
-                {% if cmdType == 'info' %}
-                    <fieldset class="legend-section">
-                        <legend><i class="fas fa-thermometer-three-quarters spacing-right"></i>{{ 'Gestion des valeurs' }}</legend>
-                        <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Valeurs interdites' }}</label>
-                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
-                                <div class="input-group">
-                                    <input class="cmdAttr form-control" data-l1key="configuration" data-l2key="denyValues"/>
-                                    <span class="input-group-addon">{{ 'séparées par des ";"' }}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Valeur retour d\'état' }}</label>
-                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
-                                <input class="cmdAttr form-control" data-l1key="configuration" data-l2key="returnStateValue"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Durée avant retour d\'état' }}</label>
-                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
-                                <div class="input-group">
-                                    <input class="cmdAttr form-control" data-l1key="configuration" data-l2key="returnStateTime"/>
-                                    <span class="input-group-addon">{{ 'min' }}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </fieldset>
-                    <fieldset class="legend-section">
-                        <legend><i class="fas fa-plus spacing-right"></i>{{ 'Autres' }}</legend>
-                        <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Gestion de la répétition' }}</label>
-                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
-                                <div class="input-group">
-                                    <select class="cmdAttr form-control" data-l1key="configuration" data-l2key="repeatEventManagement">
-                                        <option value="auto">{{ 'Répéter automatiquement' }}</option>
-                                        <option value="always">{{ 'Toujours répéter' }}</option>
-                                        <option value="never">{{ 'Jamais répéter' }}</option>
-                                    </select>
-                                    <span class="input-group-addon">{{ 'les valeurs' }}</span>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Push URL' }}</label>
-                            <div class="col-lg-8 col-md-7 col-sm-6 col-xs-12">
-                                <input class="cmdAttr form-control tooltips" data-l1key="configuration" data-l2key="nextdomPushUrl" title="{{ 'Mettez ici l\'URL à appeler lors d\'une mise à jour de la valeur de la commande. Vous pouvez utiliser les tags suivants : #value# (valeur de la commande), #cmd_id# (id de la commande) et #cmd_name# (nom de la commande)' }}"/>
-                            </div>
-                        </div>
-                    </fieldset>
-                {% endif %}
-            </form>
-        </div>
-
-        {% if cmdType == 'info' %}
-            <div role="tabpanel" class="tab-pane" id="cmd_alert">
-                {% for alertValue in alertsConfig %}
-                    {% if alertValue['check'] %}
-                        <form class="form-horizontal">
-                            <fieldset>
-                                <legend><i class="{{ alertValue['icon'] }} spacing-right"></i>{{ 'Niveau' }}&nbsp;{{ alertValue['name'] }}</legend>
+                            {% endif %}
+                            {% if cmdType == 'info' %}
                                 <div class="form-group">
-                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'En' }}&nbsp;{{ alertValue['name'] }}&nbsp;{{ 'si' }}</label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                        <div class="input-group">
-                                            <input class="cmdAttr form-control" data-l1key="alert" data-l2key="{{ alertValue['name'] }}if"/>
-                                            <span class="input-group-addon">{{ '#value# pour la valeur' }}</span>
-                                        </div>
+                                    <label class="col-xs-4 control-label">{{ 'Valeur' }}</label>
+                                    <div class="col-xs-4">
+                                        <span class="label label-config">{{ cmdCacheValue }}</span>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Pendant plus de' }}</label>
-                                    <div class="col-lg-6 col-md-6 col-sm-2 col-xs-12">
-                                        <div class="input-group">
-                                            <input type="number" class="cmdAttr form-control" data-l1key="alert" data-l2key="{{ alertValue['name'] }}during"/>
-                                            <span class="input-group-addon">{{ 'min, laisser vide pour immédiat' }}</span>
-                                        </div>
+                                    <label class="col-xs-4 control-label">{{ 'Date collecte' }}</label>
+                                    <div class="col-xs-4">
+                                        <span class="label label-config">{{ cmdCollectDate }}</span>
                                     </div>
                                 </div>
-                            </fieldset>
-                        </form>
-                    {% endif %}
-                {% endfor %}
+                                <div class="form-group">
+                                    <label class="col-xs-4 control-label">{{ 'Date valeur' }}</label>
+                                    <div class="col-xs-4">
+                                        <span class="label label-config">{{ cmdValueDate }}</span>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </fieldset>
+                        <fieldset class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-xs-4 control-label">{{ 'URL directe' }}</label>
+                                <div class="col-xs-8">
+                                    <a class="label label-config" href="{{ cmdDirectUrlAccess }}" target="_blank"><i class="fas fa-external-link-alt spacing-right"></i>URL</a>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-4 control-label">{{ 'Unité' }}</label>
+                                <div class="col-xs-4">
+                                    <span class="cmdAttr label label-config" data-l1key="unite"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-4 control-label">{{ 'Visible' }}</label>
+                                <div class="col-xs-4">
+                                    <input type="checkbox" class="cmdAttr" data-l1key="isVisible"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-4 control-label">{{ 'Valeur minimum (défaut : 0)' }}</label>
+                                <div class="col-xs-4">
+                                    <input type="text" class="cmdAttr form-control" data-l1key="configuration" data-l2key="minValue"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-4 control-label">{{ 'Valeur maximum (défaut : 100)' }}</label>
+                                <div class="col-xs-4">
+                                    <input type="text" class="cmdAttr form-control" data-l1key="configuration" data-l2key="maxValue"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-4 control-label">{{ 'Suivre dans la timeline' }}</label>
+                                <div class="col-xs-4">
+                                    <input type="checkbox" class="cmdAttr" data-l1key="configuration" data-l2key="timeline::enable" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-4 control-label">{{ 'Interdire dans les interactions automatique' }}</label>
+                                <div class="col-xs-4">
+                                    <input type="checkbox" class="cmdAttr" data-l1key="configuration" data-l2key="interact::auto::disable"/>
+                                </div>
+                            </div>
+                            <div class="form-group iconeGeneric">
+                                <label class="col-xs-4 control-label">{{ 'Icône' }}</label>
+                                <div class="col-xs-4">
+                                    <div class="input-group">
+                                        <a class="btn btn-action" id="bt_cmdConfigureChooseIcon"><i class="fas fa-flag">&nbsp;&nbsp;</i>{{ 'Icône' }}</a>
+                                        <div class="cmdAttr label label-icon" data-l1key="display" data-l2key="icon"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+
+                <legend><i class="fas fa-search spacing-right"></i>{{ 'Utilisé par' }}</legend>
+                <div class="form-group">
+                    <a class="btn btn-sm btn-warning pull-right" id="bt_cmdConfigureReplaceMeBy"><i class="fas fa-download spacing-right" aria-hidden="true"></i>{{ 'Remplacer cette commande par la commande' }}</a>
+                    <a class="btn btn-sm btn-warning pull-right" id="bt_cmdConfigureReplaceByMe"><i class="fas fa-upload spacing-right" aria-hidden="true"></i>{{ 'Cette commande remplace la commande' }}</a>
+                    <a class="btn btn-sm btn-warning pull-right" id="bt_cmdConfigureReplaceIdByMe"><i class="fas fa-upload spacing-right" aria-hidden="true"></i>{{ 'Cette commande remplace l\'ID' }}</a>
+                </div>
+                <div class="row">
+                    <form class="form-horizontal">
+                        <fieldset class="col-xs-12" id="fd_cmdUsedBy">
+                            <div class="form-group">
+                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Equipement' }}</label>
+                                <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6">
+                                    {% for usedByEqLogic in cmdUsedBy['eqLogic'] %}
+                                        {% if usedByEqLogic.getIsEnable() != 1 %}
+                                            <span class="label label-config-inactive cursor"><a class="text-white" href="{{ usedByEqLogic.getLinkToConfiguration() }}">{{ usedByEqLogic.getHumanName() }}</a></span><br/>
+                                        {% else %}
+                                            <span class="label label-config cursor"><a class="text-white" href="{{ usedByEqLogic.getLinkToConfiguration() }}">{{ usedByEqLogic.getHumanName() }}</a></span><br/>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Commandes' }}</label>
+                                <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6">
+                                    {% for usedByCmd in cmdUsedBy['cmd'] %}
+                                        <span class="label label-config cursor"><a class="text-white" href="{{ usedByCmd.getEqLogic().getLinkToConfiguration() }}">{{ usedByCmd.getHumanName() }}</a></span><br/>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Scénario' }}</label>
+                                <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6">
+                                    {% for usedByScenario in cmdUsedBy['scenario'] %}
+                                        {% if usedByScenario.getIsActive() != 1 %}
+                                            <span class="label label-config-inactive cursor"><a class="text-white" href="{{ usedByScenario.getLinkToConfiguration() }}">{{ usedByScenario.getHumanName() }}</a></span><br/>
+                                        {% else %}
+                                            <span class="label label-config cursor"><a class="text-white" href="{{ usedByScenario.getLinkToConfiguration() }}">{{ usedByScenario.getHumanName() }}</a></span><br/>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
             </div>
-        {% endif %}
 
-        {% if cmdWidgetCanCustom %}
-            <div role="tabpanel" class="tab-pane" id="cmd_display">
+            <div role="tabpanel" class="tab-pane" id="cmd_configuration">
                 <form class="form-horizontal">
                     <fieldset>
-                        <legend><i class="fas fa-tint spacing-right"></i>{{ 'Widget' }}</legend>
-                        <table class="table table-bordered table-condensed">
-                            <thead>
-                            <tr>
-                                <th></th>
-                                {% for displayTypevalue in eqLogicDisplayType %}
-                                    <th>{{ displayTypevalue['name'] }}</th>
-                                {% endfor %}
-                            </tr>
-                            </thead>
-                            <tbody>
-                                {% if cmdWidgetCanCustomWidget %}
-                                    <tr>
-                                        <td>{{ 'Widget' }}</td>
-                                        <td colspan="3">
-                                            {% if cmdWidgetCanCustomWidgetDashboard %}
-                                                <select class="form-control cmdAttr" data-l1key="template" data-l2key="dashboard">
-                                                    <option value="default">defaut (core)</option>
-                                                    {% if cmdWidgetDashboard is defined %}
-                                                        {% for widget in cmdWidgetDashboard %}
-                                                            {% if widget['name'] != 'default' %}
-                                                                <option value="{{ widget['name'] }}">{{ widget['name'] }}
-                                                                    ({{ widget['location'] }})
-                                                                </option>
-                                                            {% endif %}
-                                                        {% endfor %}
-                                                    {% endif %}
-                                                </select>
-                                            {% endif %}
-                                        </td>
-                                        <td>
-                                            {% if cmdWidgetCanCustomWidgetMobile %}
-                                                <select class="form-control cmdAttr" data-l1key="template" data-l2key="mobile">
-                                                    <option value="default">defaut (core)</option>
-                                                    {% if cmdWidgetMobile is defined %}
-                                                        {% for widget in cmdWidgetMobile %}
-                                                            {% if widget['name'] != 'default' %}
-                                                                <option value="{{ widget['name'] }}">{{ widget['name'] }}
-                                                                    ({{ widget['location'] }})
-                                                                </option>
-                                                            {% endif %}
-                                                        {% endfor %}
-                                                    {% endif %}
-                                                </select>
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                {% endif %}
-                                {% if cmdWidgetCanCustomVisibility %}
-                                    <tr>
-                                        <td>{{ 'Visible' }}</td>
-                                        {% for displayTypeKey, displayTypeValue in eqLogicDisplayType %}
-                                            <td>
-                                                {% if cmd.widgetPossibility('custom::visibility::' ~ displayTypeKey) %}
-                                                    <input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="showOn{{ displayTypevalue['key'] }}" checked="checked"/>
-                                                {% endif %}
-                                            </td>
-                                        {% endfor %}
-                                    </tr>
-                                {% endif %}
-                                {% if cmdWidgetCanCustomDisplayName %}
-                                    <tr>
-                                        <td>{{ 'Afficher le nom' }}</td>
-                                        {% for displayTypeKey, displayTypeValue in eqLogicDisplayType %}
-                                            <td>
-                                                {% if cmd.widgetPossibility('custom::displayName::' ~ displayTypeKey) %}
-                                                    <input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="showNameOn{{ displayTypeKey }}" checked="checked"/>
-                                                {% endif %}
-                                            </td>
-                                        {% endfor %}
-                                    </tr>
-                                {% endif %}
-                                {% if cmdWidgetCanCustomDisplayIconAndName %}
-                                    <tr>
-                                        <td>{{ 'Afficher le nom et l\'icône' }}</td>
-                                        {% for displayTypeKey, displayTypeValue in eqLogicDisplayType %}
-                                            <td>
-                                                {% if cmd.widgetPossibility('custom::displayIconAndName::' ~ displayTypeKey) %}
-                                                    <input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="showIconAndName{{ displayTypeKey }}"/>
-                                                {% endif %}
-                                            </td>
-                                        {% endfor %}
-                                    </tr>
-                                {% endif %}
-                                {% if configDisplayStatsWidget == 1 and cmdSubType != 'string' and cmdWidgetCanCustomDisplayStats %}
-                                    <tr>
-                                        <td>{{ 'Afficher les statistiques' }}</td>
-                                        {% for displayTypeKey, displayTypeValue in eqLogicDisplayType %}
-                                            <td>
-                                                {% if cmd.widgetPossibility('custom::displayStats::' ~ displayTypeKey) %}
-                                                    <input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="showStatsOn{{ displayTypeKey }}" checked/>
-                                                {% endif %}
-                                            </td>
-                                        {% endfor %}
-                                    </tr>
-                                {% endif %}
-                            </tbody>
-                        </table>
+                        {% if cmdType == 'info' and cmdSubType == 'numeric' or cmdSubType == 'binary' %}
+                            <legend><i class="fas fa-table spacing-right"></i>{{ 'Calcul et arrondi' }}</legend>
+                            <div class="form-group">
+                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Formule de calcul' }}</label>
+                                <div class="col-lg-8 col-md-7 col-sm-6 col-xs-12">
+                                    <div class="input-group">
+                                        <input class="cmdAttr form-control" data-l1key="configuration" data-l2key="calculValueOffset"/>
+                                        <span class="input-group-addon">{{ '#value# pour la valeur' }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            {% if cmdSubType == 'numeric' %}
+                                <div class="form-group">
+                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Arrondi' }}</label>
+                                    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+                                        <div class="input-group">
+                                            <input class="cmdAttr form-control" data-l1key="configuration" data-l2key="historizeRound"/>
+                                            <span class="input-group-addon">{{ 'chiffre après la virgule' }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endif %}
                     </fieldset>
                     <fieldset class="legend-section">
-                        <legend><i class="fas fa-level-down-alt spacing-right"></i>{{ 'Retour à la ligne' }}</legend>
+                        <legend><i class="fas fa-building spacing-right"></i>{{ 'Type générique' }}</legend>
                         <div class="form-group">
-                            <label class="col-lg-4 col-md-4 col-sm-5 col-xs-6 control-label">{{ 'Forcé avant le widget' }}</label>
-                            <div class="col-xs-1">
-                                <input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="forceReturnLineBefore"/>
-                            </div>
-                            <label class="col-xs-2 control-label">{{ 'après le widget' }}</label>
-                            <div class="col-xs-1">
-                                <input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="forceReturnLineAfter"/>
+                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Valeur' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                                <select class="cmdAttr form-control" data-l1key="generic_type">
+                                    <option value="">{{ 'Aucun' }}</option>
+                                    {% for informationGroup in cmdGenericTypeInformations %}
+                                        {% if informationGroup|length > 0 %}
+                                            <optgroup label="{{ informationGroup[0]['family'] }}">
+                                                {% for informationKey, informationValue in informationGroup %}
+                                                    <option value="{{ informationValue['key'] }}">{{ informationValue['name'] }}</option>
+                                                {% endfor %}
+                                            </optgroup>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
                             </div>
                         </div>
                     </fieldset>
-                    {% if cmdWidgetCanCustomOptionalParameters %}
+                    {% if cmdType == 'action' %}
                         <fieldset class="legend-section">
-                            <legend><i class="fas fa-pencil-alt spacing-right"></i>{{ 'Paramètres optionnels widget' }}
-                            <a class="btn btn-success btn-sm pull-right" id="bt_addWidgetParametersCmd"><i class="fas fa-plus-circle spacing-right"></i>{{ 'Ajouter' }}</a></legend>
-                            <table class="table table-bordered table-condensed" id="table_widgetParametersCmd">
-                                <thead>
-                                <tr>
-                                    <th>Nom</th>
-                                    <th>Valeur</th>
-                                    <th>Action</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                    {% if cmdDisplayParameters != '' %}
-                                        {% for displayKey, displayValue in cmdDisplayParameters %}
-                                            <tr>
-                                                <td>
-                                                    <input class="form-control key" value="{{ displayKey }}"/>
-                                                </td>
-                                                <td>
-                                                    <input class="form-control value" value="{{ displayValue }}"/>
-                                                </td>
-                                                <td>
-                                                    <a class="btn btn-danger btn-sm removeWidgetParameter"><i class="fas fa-times spacing-right"></i>{{ 'Supprimer' }}</a>
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
-                                    {% endif %}
-                                </tbody>
-                            </table>
+                            <legend><i class="fas fa-exclamation-triangle spacing-right"></i>{{ 'Restriction de l\'action' }}</legend>
+                            <div class="form-group">
+                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Confirmer l\'action' }}</label>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <input type="checkbox" class="cmdAttr" data-l1key="configuration" data-l2key="actionConfirm"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Code d\'accès' }}</label>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <input type="password" class="cmdAttr form-control" data-l1key="configuration" data-l2key="actionCodeAccess" autocomplete="off"/>
+                                </div>
+                            </div>
+                        </fieldset>
+                    {% endif %}
+                    {% if cmdType == 'info' %}
+                        <fieldset class="legend-section">
+                            <legend><i class="fas fa-sign-out-alt spacing-right"></i>{{ 'Action sur la valeur' }}</legend>
+                            <div class="form-group">
+                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Action sur valeur, si' }}</label>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
+                                    <select class="cmdAttr form-control" data-l1key="configuration" data-l2key="nextdomCheckCmdOperator">
+                                        <option value="==">{{ 'égal' }}</option>
+                                        <option value=">">{{ 'supérieur' }}</option>
+                                        <option value="<">{{ 'inférieur' }}</option>
+                                        <option value=" !=">{{ 'différent' }}</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
+                                    <input class="cmdAttr form-control" data-l1key="configuration" data-l2key="nextdomCheckCmdTest"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'plus de' }}</label>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <div class="input-group">
+                                        <input type="number" class="cmdAttr form-control" data-l1key="configuration" data-l2key="nextdomCheckCmdTime"/>
+                                        <span class="input-group-addon">{{ 'min' }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Action' }}</label>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <a class="btn btn-success" id="bt_addActionCheckCmd"><i class="fas fa-plus-circle spacing-right"></i>{{ 'Ajouter' }}</a>
+                                </div>
+                            </div>
+                            <div id="div_actionCheckCmd"></div>
+                            <script type="text/javascript">
+                                $("#div_actionCheckCmd").sortable({
+                                    axis: "y",
+                                    cursor: "move",
+                                    items: ".actionCheckCmd",
+                                    placeholder: "ui-state-highlight",
+                                    tolerance: "intersect",
+                                    forcePlaceholderSize: true
+                                });
+                                $('#bt_addActionCheckCmd').off('click').on('click', function () {
+                                    addActionCmd({}, 'actionCheckCmd', '{{ ' Action ' }}');
+                                });
+                            </script>
+                        </fieldset>
+                    {% endif %}
+                    {% if cmdType == 'action' %}
+                        <fieldset class="legend-section">
+                            <legend><i class="fas fa-sign-out-alt spacing-right"></i>{{ 'Action avant exécution de la commande' }}</legend>
+                            <div class="form-group">
+                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Action' }}</label>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <a class="btn btn-success" id="bt_addActionPreExecCmd"><i class="fas fa-plus-circle spacing-right"></i>{{ 'Ajouter' }}</a>
+                                </div>
+                            </div>
+                            <div id="div_actionPreExecCmd"></div>
+                            <script type="text/javascript">
+                                $('#div_actionPreExecCmd').sortable({
+                                    axis: "y",
+                                    cursor: "move",
+                                    items: ".actionPreExecCmd",
+                                    placeholder: "ui-state-highlight",
+                                    tolerance: "intersect",
+                                    forcePlaceholderSize: true
+                                });
+                                $('#bt_addActionPreExecCmd').off('click').on('click', function () {
+                                    addActionCmd({}, 'actionPreExecCmd', '{{ ' Action ' }}');
+                                });
+                            </script>
+                        </fieldset>
+                        <fieldset class="legend-section">
+                            <legend><i class="fas fa-sign-out-alt spacing-right"></i>{{ 'Action après exécution de la commande' }}</legend>
+                            <div class="form-group">
+                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Action' }}</label>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <a class="btn btn-success" id="bt_addActionPostExecCmd"><i class="fas fa-plus-circle spacing-right"></i>{{ 'Ajouter' }}</a>
+                                </div>
+                            </div>
+                            <div id="div_actionPostExecCmd"></div>
+
+                            <script type="text/javascript">
+                                $("#div_actionPostExecCmd").sortable({
+                                    axis: "y",
+                                    cursor: "move",
+                                    items: ".actionPostExecCmd",
+                                    placeholder: "ui-state-highlight",
+                                    tolerance: "intersect",
+                                    forcePlaceholderSize: true
+                                });
+                                $('#bt_addActionPostExecCmd').off('click').on('click', function () {
+                                    addActionCmd({}, 'actionPostExecCmd', '{{ ' Action ' }}');
+                                });
+                            </script>
+                        </fieldset>
+                    {% endif %}
+                    {% if cmdType == 'info' and cmdTypeIsHistorized %}
+                        <fieldset class="legend-section">
+                            <legend><i class="fas fa-bar-chart-o spacing-right"></i>{{ 'Historique' }}</legend>
+                            <div class="form-group">
+                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-4 control-label">{{ 'Historiser' }}</label>
+                                <div class="col-xs-1">
+                                    <input type="checkbox" class="cmdAttr" data-l1key="isHistorized"/>
+                                </div>
+                            </div>
+                            {% if cmdIsHistorizedCanBeSmooth %}
+                                <div class="form-group">
+                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Mode de lissage' }}</label>
+                                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                                        <select class="form-control cmdAttr" data-l1key="configuration" data-l2key="historizeMode">
+                                            <option value="avg">{{ 'Moyenne' }}</option>
+                                            <option value="min">{{ 'Minimum' }}</option>
+                                            <option value="max">{{ 'Maximum' }}</option>
+                                            <option value="none">{{ 'Aucun' }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <div class="form-group">
+                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Purger l\'historique' }}</label>
+                                <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+                                    <div class="input-group">
+                                        <select class="form-control cmdAttr" data-l1key="configuration"
+                                                data-l2key="historyPurge">
+                                            <option value="">{{ 'Jamais' }}</option>
+                                            <option value="-1 day">{{ '1 jour' }}</option>
+                                            <option value="-7 days">{{ '7 jours' }}</option>
+                                            <option value="-1 month">{{ '1 mois' }}</option>
+                                            <option value="-3 month">{{ '3 mois' }}</option>
+                                            <option value="-6 month">{{ '6 mois' }}</option>
+                                            <option value="-1 year">{{ '1 an' }}</option>
+                                        </select>
+                                        <span class="input-group-addon">{{ 'si plus vieux que' }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            {% if cmdIsHistorized == 1 %}
+                                <div class="form-group">
+                                    <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Copie' }}</label>
+                                    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                                        <a class="btn btn-warning" id="bt_cmdConfigureCopyHistory"><i class="fas fa-clone spacing-right"></i>{{ 'Copier l\'historique de cette commande sur une autre commande' }}</a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </fieldset>
+                    {% endif %}
+                    {% if cmdType == 'info' %}
+                        <fieldset class="legend-section">
+                            <legend><i class="fas fa-thermometer-three-quarters spacing-right"></i>{{ 'Gestion des valeurs' }}</legend>
+                            <div class="form-group">
+                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Valeurs interdites' }}</label>
+                                <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+                                    <div class="input-group">
+                                        <input class="cmdAttr form-control" data-l1key="configuration" data-l2key="denyValues"/>
+                                        <span class="input-group-addon">{{ 'séparées par des ";"' }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Valeur retour d\'état' }}</label>
+                                <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+                                    <input class="cmdAttr form-control" data-l1key="configuration" data-l2key="returnStateValue"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Durée avant retour d\'état' }}</label>
+                                <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+                                    <div class="input-group">
+                                        <input class="cmdAttr form-control" data-l1key="configuration" data-l2key="returnStateTime"/>
+                                        <span class="input-group-addon">{{ 'min' }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="legend-section">
+                            <legend><i class="fas fa-plus spacing-right"></i>{{ 'Autres' }}</legend>
+                            <div class="form-group">
+                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Gestion de la répétition' }}</label>
+                                <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+                                    <div class="input-group">
+                                        <select class="cmdAttr form-control" data-l1key="configuration" data-l2key="repeatEventManagement">
+                                            <option value="auto">{{ 'Répéter automatiquement' }}</option>
+                                            <option value="always">{{ 'Toujours répéter' }}</option>
+                                            <option value="never">{{ 'Jamais répéter' }}</option>
+                                        </select>
+                                        <span class="input-group-addon">{{ 'les valeurs' }}</span>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Push URL' }}</label>
+                                <div class="col-lg-8 col-md-7 col-sm-6 col-xs-12">
+                                    <input class="cmdAttr form-control tooltips" data-l1key="configuration" data-l2key="nextdomPushUrl" title="{{ 'Mettez ici l\'URL à appeler lors d\'une mise à jour de la valeur de la commande. Vous pouvez utiliser les tags suivants : #value# (valeur de la commande), #cmd_id# (id de la commande) et #cmd_name# (nom de la commande)' }}"/>
+                                </div>
+                            </div>
                         </fieldset>
                     {% endif %}
                 </form>
             </div>
-        {% endif %}
 
-        {% if cmdWidgetCanCustomHtml %}
-            <div role="tabpanel" class="tab-pane" id="cmd_html">
-                <form class="form-horizontal">
-                    <fieldset>
-                        <legend>{{ 'Personnalisation du widget' }}</legend>
-                        <div class="form-group col-xs-12">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Activer' }}</label>
-                            <div class="col-xs-1">
-                                <input type="checkbox" class="cmdAttr" data-l1key="html" data-l2key="enable" id="enableCustom"/>
+            {% if cmdType == 'info' %}
+                <div role="tabpanel" class="tab-pane" id="cmd_alert">
+                    {% for alertValue in alertsConfig %}
+                        {% if alertValue['check'] %}
+                            <form class="form-horizontal">
+                                <fieldset>
+                                    <legend><i class="{{ alertValue['icon'] }} spacing-right"></i>{{ 'Niveau' }}&nbsp;{{ alertValue['name'] }}</legend>
+                                    <div class="form-group">
+                                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'En' }}&nbsp;{{ alertValue['name'] }}&nbsp;{{ 'si' }}</label>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <div class="input-group">
+                                                <input class="cmdAttr form-control" data-l1key="alert" data-l2key="{{ alertValue['name'] }}if"/>
+                                                <span class="input-group-addon">{{ '#value# pour la valeur' }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Pendant plus de' }}</label>
+                                        <div class="col-lg-6 col-md-6 col-sm-2 col-xs-12">
+                                            <div class="input-group">
+                                                <input type="number" class="cmdAttr form-control" data-l1key="alert" data-l2key="{{ alertValue['name'] }}during"/>
+                                                <span class="input-group-addon">{{ 'min, laisser vide pour immédiat' }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if cmdWidgetCanCustom %}
+                <div role="tabpanel" class="tab-pane" id="cmd_display">
+                    <form class="form-horizontal">
+                        <fieldset>
+                            <legend><i class="fas fa-tint spacing-right"></i>{{ 'Widget' }}</legend>
+                            <table class="table table-bordered table-condensed">
+                                <thead>
+                                <tr>
+                                    <th></th>
+                                    {% for displayTypevalue in eqLogicDisplayType %}
+                                        <th>{{ displayTypevalue['name'] }}</th>
+                                    {% endfor %}
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    {% if cmdWidgetCanCustomWidget %}
+                                        <tr>
+                                            <td>{{ 'Widget' }}</td>
+                                            <td colspan="3">
+                                                {% if cmdWidgetCanCustomWidgetDashboard %}
+                                                    <select class="form-control cmdAttr" data-l1key="template" data-l2key="dashboard">
+                                                        <option value="default">defaut (core)</option>
+                                                        {% if cmdWidgetDashboard is defined %}
+                                                            {% for widget in cmdWidgetDashboard %}
+                                                                {% if widget['name'] != 'default' %}
+                                                                    <option value="{{ widget['name'] }}">{{ widget['name'] }}
+                                                                        ({{ widget['location'] }})
+                                                                    </option>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    </select>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if cmdWidgetCanCustomWidgetMobile %}
+                                                    <select class="form-control cmdAttr" data-l1key="template" data-l2key="mobile">
+                                                        <option value="default">defaut (core)</option>
+                                                        {% if cmdWidgetMobile is defined %}
+                                                            {% for widget in cmdWidgetMobile %}
+                                                                {% if widget['name'] != 'default' %}
+                                                                    <option value="{{ widget['name'] }}">{{ widget['name'] }}
+                                                                        ({{ widget['location'] }})
+                                                                    </option>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    </select>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+                                    {% if cmdWidgetCanCustomVisibility %}
+                                        <tr>
+                                            <td>{{ 'Visible' }}</td>
+                                            {% for displayTypeKey, displayTypeValue in eqLogicDisplayType %}
+                                                <td>
+                                                    {% if cmd.widgetPossibility('custom::visibility::' ~ displayTypeKey) %}
+                                                        <input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="showOn{{ displayTypevalue['key'] }}" checked="checked"/>
+                                                    {% endif %}
+                                                </td>
+                                            {% endfor %}
+                                        </tr>
+                                    {% endif %}
+                                    {% if cmdWidgetCanCustomDisplayName %}
+                                        <tr>
+                                            <td>{{ 'Afficher le nom' }}</td>
+                                            {% for displayTypeKey, displayTypeValue in eqLogicDisplayType %}
+                                                <td>
+                                                    {% if cmd.widgetPossibility('custom::displayName::' ~ displayTypeKey) %}
+                                                        <input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="showNameOn{{ displayTypeKey }}" checked="checked"/>
+                                                    {% endif %}
+                                                </td>
+                                            {% endfor %}
+                                        </tr>
+                                    {% endif %}
+                                    {% if cmdWidgetCanCustomDisplayIconAndName %}
+                                        <tr>
+                                            <td>{{ 'Afficher le nom et l\'icône' }}</td>
+                                            {% for displayTypeKey, displayTypeValue in eqLogicDisplayType %}
+                                                <td>
+                                                    {% if cmd.widgetPossibility('custom::displayIconAndName::' ~ displayTypeKey) %}
+                                                        <input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="showIconAndName{{ displayTypeKey }}"/>
+                                                    {% endif %}
+                                                </td>
+                                            {% endfor %}
+                                        </tr>
+                                    {% endif %}
+                                    {% if configDisplayStatsWidget == 1 and cmdSubType != 'string' and cmdWidgetCanCustomDisplayStats %}
+                                        <tr>
+                                            <td>{{ 'Afficher les statistiques' }}</td>
+                                            {% for displayTypeKey, displayTypeValue in eqLogicDisplayType %}
+                                                <td>
+                                                    {% if cmd.widgetPossibility('custom::displayStats::' ~ displayTypeKey) %}
+                                                        <input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="showStatsOn{{ displayTypeKey }}" checked/>
+                                                    {% endif %}
+                                                </td>
+                                            {% endfor %}
+                                        </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </fieldset>
+                        <fieldset class="legend-section">
+                            <legend><i class="fas fa-level-down-alt spacing-right"></i>{{ 'Retour à la ligne' }}</legend>
+                            <div class="form-group">
+                                <label class="col-lg-4 col-md-4 col-sm-5 col-xs-6 control-label">{{ 'Forcé avant le widget' }}</label>
+                                <div class="col-xs-1">
+                                    <input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="forceReturnLineBefore"/>
+                                </div>
+                                <label class="col-xs-2 control-label">{{ 'après le widget' }}</label>
+                                <div class="col-xs-1">
+                                    <input type="checkbox" class="cmdAttr" data-l1key="display" data-l2key="forceReturnLineAfter"/>
+                                </div>
                             </div>
-                            <a class="btn btn-warning" id="bt_reinitHtmlCode"><i class="fas fa-times spacing-right"></i>{{ 'Réinitialiser la personnalisation' }}</a>
-                        </div>
-                    </fieldset>
-                    <div class="box-group" id="accordion" role="tablist" aria-multiselectable="true">
-                        <div class="panel box">
-                            <div class="box-header with-border accordion-toggle cursor" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" role="tab" id="bt_codeDashboard">
-                                <h4 class="box-title">{{ 'Dashboard' }}</h4>
+                        </fieldset>
+                        {% if cmdWidgetCanCustomOptionalParameters %}
+                            <fieldset class="legend-section">
+                                <div class="col-md-9 col-xs-12 container-fluid">
+                                    <legend><i class="fas fa-pencil-alt spacing-right"></i>{{ 'Paramètres optionnels widget' }}</legend>
+                                </div>
+                                <div class="col-md-3 col-xs-12 container-fluid">
+                                    <div class="box-tools pull-right padding-bottom">
+                                        <a class="btn btn-success btn-sm pull-right" id="bt_addWidgetParametersCmd"><i class="fas fa-plus-circle spacing-right"></i>{{ 'Ajouter' }}</a>
+                                    </div>
+                                </div>
+                                <table class="table table-bordered table-condensed" id="table_widgetParametersCmd">
+                                    <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Valeur</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% if cmdDisplayParameters != '' %}
+                                            {% for displayKey, displayValue in cmdDisplayParameters %}
+                                                <tr>
+                                                    <td>
+                                                        <input class="form-control key" value="{{ displayKey }}"/>
+                                                    </td>
+                                                    <td>
+                                                        <input class="form-control value" value="{{ displayValue }}"/>
+                                                    </td>
+                                                    <td>
+                                                        <a class="btn btn-danger btn-sm removeWidgetParameter"><i class="fas fa-times spacing-right"></i>{{ 'Supprimer' }}</a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </tbody>
+                                </table>
+                            </fieldset>
+                        {% endif %}
+                    </form>
+                </div>
+            {% endif %}
+
+            {% if cmdWidgetCanCustomHtml %}
+                <div role="tabpanel" class="tab-pane" id="cmd_html">
+                    <form class="form-horizontal">
+                        <fieldset>
+                            <legend>{{ 'Personnalisation du widget' }}</legend>
+                            <div class="form-group col-xs-12">
+                                <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Activer' }}</label>
+                                <div class="col-xs-1">
+                                    <input type="checkbox" class="cmdAttr" data-l1key="html" data-l2key="enable" id="enableCustom"/>
+                                </div>
+                                <a class="btn btn-warning" id="bt_reinitHtmlCode"><i class="fas fa-times spacing-right"></i>{{ 'Réinitialiser la personnalisation' }}</a>
                             </div>
-                            <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-                                <div class="box-body">
-                                    <textarea class="cmdAttr" id="ta_codeDashboard" data-l1key="html" data-l2key="dashboard" style="width: 100%;height: 350px"></textarea>
+                        </fieldset>
+                        <div class="box-group" id="accordion" role="tablist" aria-multiselectable="true">
+                            <div class="panel box">
+                                <div class="box-header with-border accordion-toggle cursor" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" role="tab" id="bt_codeDashboard">
+                                    <h4 class="box-title">{{ 'Dashboard' }}</h4>
+                                </div>
+                                <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                                    <div class="box-body">
+                                        <textarea class="cmdAttr" id="ta_codeDashboard" data-l1key="html" data-l2key="dashboard" style="width: 100%;height: 350px">{{ cmdWidgetCustomHtmlValues['dashboard'] }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel box">
+                                <div class="box-header with-border cursor" role="tab" id="bt_codeDview" data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
+                                    <h4 class="box-title">{{ 'Vue dashboard' }}</h4>
+                                </div>
+                                <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                    <div class="box-body">
+                                        <textarea class="cmdAttr" id="ta_codeDview" data-l1key="html" data-l2key="dview" style="width: 100%;height: 350px">{{ cmdWidgetCustomHtmlValues['dview'] }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel box">
+                                <div class="box-header with-border cursor" role="tab" id="bt_codeDplan" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+                                    <h4 class="box-title">{{ 'Design' }}</h4>
+                                </div>
+                                <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                    <div class="box-body">
+                                        <textarea class="cmdAttr" id="ta_codeDplan" data-l1key="html" data-l2key="dplan" style="width: 100%;height: 350px">{{ cmdWidgetCustomHtmlValues['dplan'] }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel box">
+                                <div class="box-header with-border cursor" role="tab" id="bt_codeMobile" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                                    <h4 class="box-title">{{ 'Mobile' }}</h4>
+                                </div>
+                                <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                    <div class="box-body">
+                                        <textarea class="cmdAttr" id="ta_codeMobile" data-l1key="html" data-l2key="mobile" style="width: 100%;height: 350px">{{ cmdWidgetCustomHtmlValues['mobile'] }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel box">
+                                <div class="box-header with-border cursor" role="tab" id="bt_codeMview" data-toggle="collapse" data-parent="#accordion" href="#collapseFive">
+                                    <h4 class="box-title">{{ 'Vue mobile' }}</h4>
+                                </div>
+                                <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                    <div class="box-body">
+                                        <textarea class="cmdAttr" id="ta_codeMview" data-l1key="html" data-l2key="mview" style="width: 100%;height: 350px">{{ cmdWidgetCustomHtmlValues['mview'] }}</textarea>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="panel box">
-                            <div class="box-header with-border cursor" role="tab" id="bt_codeDview" data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
-                                <h4 class="box-title">{{ 'Vue dashboard' }}</h4>
-                            </div>
-                            <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-                                <div class="box-body">
-                                    <textarea class="cmdAttr" id="ta_codeDview" data-l1key="html" data-l2key="dview" style="width: 100%;height: 350px"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel box">
-                            <div class="box-header with-border cursor" role="tab" id="bt_codeDplan" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
-                                <h4 class="box-title">{{ 'Design' }}</h4>
-                            </div>
-                            <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-                                <div class="box-body">
-                                    <textarea class="cmdAttr" id="ta_codeDplan" data-l1key="html" data-l2key="dplan" style="width: 100%;height: 350px"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel box">
-                            <div class="box-header with-border cursor" role="tab" id="bt_codeMobile" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
-                                <h4 class="box-title">{{ 'Mobile' }}</h4>
-                            </div>
-                            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                                <div class="box-body">
-                                    <textarea class="cmdAttr" id="ta_codeMobile" data-l1key="html" data-l2key="mobile" style="width: 100%;height: 350px"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel box">
-                            <div class="box-header with-border cursor" role="tab" id="bt_codeMview" data-toggle="collapse" data-parent="#accordion" href="#collapseFive">
-                                <h4 class="box-title">{{ 'Vue mobile' }}</h4>
-                            </div>
-                            <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-                                <div class="box-body">
-                                    <textarea class="cmdAttr" id="ta_codeMview" data-l1key="html" data-l2key="mview" style="width: 100%;height: 350px"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        {% endif %}
+                    </form>
+                </div>
+            {% endif %}
+        </div>
     </div>
-</div>
+</section>
+
 <div id="md_cmdConfigureSelectMultiple" title="{{ 'Sélection multiple de commandes' }}"></div>
+
 <script src="/public/js/modals/cmd.configure.js"></script>

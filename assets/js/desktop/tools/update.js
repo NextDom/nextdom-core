@@ -42,73 +42,13 @@ setTimeout(function(){
     $('#listScript').packery();
 },100);
 
-
-$('#in_searchPlugin').off('keyup').keyup(function () {
-    var search = $(this).value();
-    if(search == ''){
-        $('.box-warning').show();
-        $('.box-success').show();
-        $('.box-danger').show();
-        $('#listPlugin').packery();
-        $('#listOther').packery();
-        $('#listCore').packery();
-        $('#listWidget').packery();
-        $('#listScript').packery();
-        return;
-    }
-    $('.box-warning').hide();
-    $('.box-success').hide();
-    $('.box-danger').hide();
-    $('.box .box-title').each(function(){
-        var text = $(this).text().toLowerCase();
-        if(text.indexOf(search.toLowerCase()) >= 0){
-            $(this)
-            $(this).closest('.box').show();
-        }
-    });
-    $('#listPlugin').packery();
-    $('#listOther').packery();
-    $('#listCore').packery();
-    $('#listWidget').packery();
-    $('#listScript').packery();
-});
-
 printUpdate();
-
-$("#md_specifyUpdate").dialog({
-    closeText: '',
-    autoOpen: false,
-    modal: true,
-    height: 600,
-    width: 600,
-    open: function () {
-        $("body").css({overflow: 'hidden'});
-    },
-    beforeClose: function (event, ui) {
-        $("body").css({overflow: 'inherit'});
-    }
-});
-
-$("#md_updateInfo").dialog({
-    closeText: '',
-    autoOpen: false,
-    modal: true,
-    width: ((jQuery(window).width() - 50) < 1500) ? (jQuery(window).width() - 50) : 1500,
-    open: function () {
-        $("body").css({overflow: 'hidden'});
-    },
-    beforeClose: function (event, ui) {
-        $("body").css({overflow: 'inherit'});
-    }
-});
 
 $('#pre_updateInfo').height($(window).height() - $('header').height() - $('footer').height() - 150);
 
 $('#bt_updateNextDom').off('click').on('click', function () {
-    $('#md_specifyUpdate').dialog({title: "{{Options}}"});
-    $("#md_specifyUpdate").dialog('open');
+    $('#md_specifyUpdate').modal('show');
 });
-
 
 $('.updateOption[data-l1key=force]').off('click').on('click',function(){
     if($(this).value() == 1){
@@ -120,10 +60,9 @@ $('.updateOption[data-l1key=force]').off('click').on('click',function(){
     }
 });
 
-
 $('#bt_doUpdate').off('click').on('click', function () {
-    $("#md_specifyUpdate").dialog('close');
-    $('#md_updateInfo').dialog({title: "{{Avancement des mises à jour}}"});
+    $("#md_specifyUpdate").modal('hide');
+    $('#md_updateInfo').dialog({title: "{{Avancement de la mise à jour}}"});
     $("#md_updateInfo").dialog('open');
     var options = $('#md_specifyUpdate').getValues('.updateOption')[0];
     $.hideAlert();
@@ -140,8 +79,8 @@ $('#bt_doUpdate').off('click').on('click', function () {
 });
 
 $("#bt_updateOpenLog").on('click', function (event) {
-    $('#md_updateInfo').dialog({title: "{{Avancement de la mises à jour}}"});
-    $("#md_updateInfo").dialog('open');
+  $('#md_updateInfo').dialog({title: "{{Avancement de la mise à jour}}"});
+  $("#md_updateInfo").dialog('open');
 });
 
 $('#bt_checkAllUpdate').off('click').on('click', function () {
@@ -156,13 +95,33 @@ $('#bt_checkAllUpdate').off('click').on('click', function () {
     });
 });
 
+$('#bt_updateCollapse').on('click',function(){
+   $('#accordionUpdate .panel-collapse').each(function () {
+      if (!$(this).hasClass("in")) {
+          $(this).css({'height' : '' });
+          $(this).addClass("in");
+      }
+   });
+   $('#bt_updateCollapse').hide();
+   $('#bt_updateUncollapse').show()
+});
+
+$('#bt_updateUncollapse').on('click',function(){
+   $('#accordionUpdate .panel-collapse').each(function () {
+      if ($(this).hasClass("in")) {
+          $(this).removeClass("in");
+      }
+   });
+   $('#bt_updateUncollapse').hide();
+   $('#bt_updateCollapse').show()
+});
 
 $('#listPlugin,#listOther,#listCore,#listWidget,#listScript').delegate('.update', 'click', function () {
     var id = $(this).closest('.box').attr('data-id');
     bootbox.confirm('{{Etes vous sur de vouloir mettre à jour cet objet ?}}', function (result) {
         if (result) {
             $.hideAlert();
-            $('#md_updateInfo').dialog({title: "{{Avancement des mises à jour}}"});
+            $('#md_updateInfo').dialog({title: "{{Avancement de la mise à jour}}"});
             $("#md_updateInfo").dialog('open');
             nextdom.update.do({
                 id: id,
@@ -209,6 +168,19 @@ $('#listPlugin,#listOther,#listCore,#listWidget,#listScript').delegate('.checkUp
         }
     });
 
+});
+
+$("#md_updateInfo").dialog({
+    closeText: '',
+    autoOpen: false,
+    modal: true,
+    width: ((jQuery(window).width() - 50) < 1500) ? (jQuery(window).width() - 50) : 1500,
+    open: function () {
+        $("body").css({overflow: 'hidden'});
+    },
+    beforeClose: function (event, ui) {
+        $("body").css({overflow: 'inherit'});
+    }
 });
 
 function getNextDomLog(_autoUpdate, _log) {
@@ -264,7 +236,6 @@ function getNextDomLog(_autoUpdate, _log) {
 }
 
 function printUpdate() {
-
     nextdom.update.get({
         error: function (error) {
             notify("Erreur", error.message, 'error');
@@ -310,17 +281,36 @@ function addUpdate(_update) {
         bgClass = 'bg-yellow';
     }
 
-    var tr = '<div class="objet col-lg-4 col-md-6 col-sm-6 col-xs-12">';
-    tr += '<div class="box ' + boxClass +'" data-id="' + init(_update.id) + '" data-logicalId="' + init(_update.logicalId) + ' col-lg-4 col-md-6 col-sm-6 col-xs-12" data-type="' + init(_update.type) + '">';
-    tr += '<div class="box-header with-border">';
-    if (_update.type == 'core') {
-        tr += ' <h4 class="box-title" style="text-transform: capitalize;"><img style="height:50px;padding-right:5px;" src="/public/img/NextDom/NextDom_Square_AlphaBlackBlue.png"/>' + init(_update.name)+'</h4>';
-    }else{
-        tr += ' <h4 class="box-title" style="text-transform: capitalize;"><img style="height:50px;padding-right:5px;" src="' + init(_update.icon) + '"/>' + init(_update.name)+'</h4>';
+    var boxUpdateClass = '';
+    if (_update.type !== 'core') {
+        boxUpdateClass = 'update-box';
     }
+    var tr = '<div class="objet col-lg-4 col-md-6 col-sm-6 col-xs-12">';
+    tr += '<div class="box ' + boxClass +'" data-id="' + init(_update.id) + '" data-logicalId="' + init(_update.logicalId) + '" data-type="' + init(_update.type) + '">';
+    tr += '<div class="box-header with-border accordion-toggle cursor" data-toggle="collapse" data-parent="#accordionUpdate" href="#update_' + init(_update.id) + '">';
+    var updateIcon = '';
+    if (init(_update.type) == 'core') {
+        updateIcon = '/public/img/NextDom/NextDom_Square_WhiteBlackBlue.png';
+    } else {
+        if (init(_update.icon) != '') {
+            updateIcon = init(_update.icon);
+        } else {
+            updateIcon = '/public/img/NextDom_' + init(_update.type).charAt(0).toUpperCase() + init(_update.type).slice(1) + '_Gray.png';
+        }
+    }
+    var updateName = init(_update.name);
+    if (init(_update.type) == 'widget') {
+        updateName = updateName.split(".").pop();
+    }
+    tr += ' <h4 class="box-title" style="text-transform: capitalize;"><img class="box-header-icon spacing-right" src="' + updateIcon + '"/>' + updateName +'</h4>';
     tr += '<span data-toggle="tooltip" title="" class="updateAttr badge ' + bgClass +' pull-right" data-original-title="" data-l1key="status" style="text-transform: uppercase;"></span>';
     tr += '</div>';
-    tr += '<div class="box-body">';
+    if (init(_update.type) == 'core') {
+        tr += '<div id="update_' + init(_update.id) + '" class="panel-collapse collapse in">';
+    } else {
+        tr += '<div id="update_' + init(_update.id) + '" class="panel-collapse collapse">';
+    }
+    tr += '<div class="box-body" style="min-height: 268px;">';
     tr += '<span class="updateAttr" data-l1key="id" style="display:none;"></span><p><b>{{Source : }}</b><span class="updateAttr" data-l1key="source"></span></p>';
     tr += '<p><b>{{Type : }}</b><span class="updateAttr" data-l1key="type"></span></p>';
     tr += '<p><b>{{Branche : }}</b>';
@@ -328,9 +318,14 @@ function addUpdate(_update) {
         tr += _update.configuration.version ;
     }
     tr += '</p>';
+    if (_update.type == 'widget') {
+      tr += '<p><b>{{Id : }}</b>'+ init(_update.name);
+      tr += '</p>';
+    }
     tr += '<p><b>{{Version : }}</b>'+_update.remoteVersion+'</p>';
     if (_update.type != 'core') {
-        tr += '<input type="checkbox" class="updateAttr" data-l1key="configuration" data-l2key="doNotUpdate"><span style="font-size:1em;">{{Ne pas mettre à jour}}</span></br>';
+        tr += '<input type="checkbox" class="updateAttr" data-l1key="configuration" data-l2key="doNotUpdate" id="doNotUpdate_'+init(_update.id)+'">';
+        tr += '<label for="doNotUpdate_'+init(_update.id)+'" class="control-label label-check">{{Ne pas mettre à jour}}</label></br>';
     }
     tr += '</div>';
     tr += '<div class="box-footer clearfix text-center">';
@@ -340,7 +335,7 @@ function addUpdate(_update) {
         if (_update.status == 'update') {
             tr += '<a class="btn btn-warning btn-sm update pull-right" title="{{Mettre à jour}}"><i class="fas fa-refresh spacing-right"></i>{{Mettre à jour}}</a> ';
         }else if (_update.type != 'core') {
-            tr += '<a class="btn  btn-default btn-sm update pull-right" title="{{Re-installer}}"><i class="fas fa-refresh spacing-right"></i>{{Reinstaller}}</a> ';
+            tr += '<a class="btn btn-action btn-sm update pull-right" title="{{Re-installer}}"><i class="fas fa-refresh spacing-right"></i>{{Reinstaller}}</a> ';
         }
         if (isset(_update.plugin) && isset(_update.plugin.changelog) && _update.plugin.changelog != '') {
             tr += '<a class="btn btn-default btn-sm pull-left cursor hidden-sm" target="_blank" href="'+_update.plugin.changelog+'"><i class="fas fa-book spacing-right"></i>{{Changelog}}</a>';
@@ -349,6 +344,7 @@ function addUpdate(_update) {
         tr += '<a class="btn btn-default btn-sm pull-right" href="https://nextdom.github.io/core/fr_FR/changelog" target="_blank"><i class="fas fa-book spacing-right"></i>{{Changelog}}</a>';
     }
     tr += '<a class="btn btn-info btn-sm pull-left checkUpdate" ><i class="fas fa-check spacing-right"></i>{{Vérifier}}</a>';
+    tr += '</div>';
     tr += '</div>';
     tr += '</div>';
 
@@ -377,7 +373,7 @@ function addUpdate(_update) {
 
 $('#bt_saveUpdate').on('click',function(){
     nextdom.update.saves({
-        updates : $('#table_update tbody tr').getValues('.updateAttr'),
+        updates : $('.update-box').getValues('.updateAttr'),
         error: function (error) {
             notify("Erreur", error.message, 'error');
         },

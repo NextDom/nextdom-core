@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\ReportHelper;
@@ -30,7 +31,7 @@ use NextDom\Managers\ViewZoneManager;
  * @ORM\Table(name="view", uniqueConstraints={@ORM\UniqueConstraint(name="name_UNIQUE", columns={"name"})})
  * @ORM\Entity
  */
-class View
+class View implements EntityInterface
 {
 
     /**
@@ -103,13 +104,13 @@ class View
 
     public function save()
     {
-        return \DB::save($this);
+        return DBHelper::save($this);
     }
 
     public function remove()
     {
         NextDomHelper::addRemoveHistory(array('id' => $this->getId(), 'name' => $this->getName(), 'date' => date('Y-m-d H:i:s'), 'type' => 'view'));
-        return \DB::remove($this);
+        return DBHelper::remove($this);
     }
 
     /**
@@ -135,7 +136,7 @@ class View
             mkdir($dir);
         }
         if ($this->getImage('sha512') == '') {
-            $this->setImage('sha512', sha512($this->getImage('data')));
+            $this->setImage('sha512', Utils::sha512($this->getImage('data')));
             $this->save();
         }
         $filename = $this->getImage('sha512') . '.' . $this->getImage('type');
@@ -251,7 +252,7 @@ class View
         if ($_level > $_drill) {
             return $_data;
         }
-        $icon = findCodeIcon('fa-picture-o');
+        $icon = Utils::findCodeIcon('fa-picture-o');
         $_data['node']['view' . $this->getId()] = array(
             'id' => 'interactDef' . $this->getId(),
             'name' => substr($this->getName(), 0, 20),

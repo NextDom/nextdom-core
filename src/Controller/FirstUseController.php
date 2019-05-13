@@ -32,9 +32,7 @@ class FirstUseController extends BaseController
      *
      * @param array $pageData
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Exception
      */
     public static function get(&$pageData): string
     {
@@ -54,10 +52,10 @@ class FirstUseController extends BaseController
             'notify_timeout' => $configs['notify::timeout'],
         ];
         $pageData['CSS_POOL'][] = '/public/css/nextdom.css';
-        $pageData['CSS_POOL'][] = '/public/css/firstUse.css';
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/firstUse.js';
+        $pageData['CSS_POOL'][] = '/public/css/pages/firstUse.css';
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/pages/firstUse.js';
 
-        return Render::getInstance()->get('desktop/firstUse.html.twig', $pageData);
+        return Render::getInstance()->get('desktop/pages/firstUse.html.twig', $pageData);
     }
 
 }

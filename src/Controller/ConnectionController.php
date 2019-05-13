@@ -23,6 +23,7 @@
 namespace NextDom\Controller;
 
 use NextDom\Helpers\Render;
+use NextDom\Managers\ConfigManager;
 
 class ConnectionController extends BaseController
 {
@@ -30,14 +31,13 @@ class ConnectionController extends BaseController
      *
      * @param array $pageData
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      */
     public static function get(&$pageData): string
     {
+        $pageData['JS_VARS']['nextdom_waitSpinner'] = ConfigManager::byKey('nextdom::waitSpinner');
         $pageData['JS_END_POOL'] = [];
         $pageData['TITLE'] = 'Connexion';
+        $pageData['CSS_POOL'][] = '/public/css/pages/connection.css';
         $pageData['JS_END_POOL'][] = '/vendor/node_modules/admin-lte/dist/js/adminlte.min.js';
         $pageData['JS_END_POOL'][] = '/public/js/desktop/connection.js';
 

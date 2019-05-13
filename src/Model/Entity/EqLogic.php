@@ -20,6 +20,7 @@ namespace NextDom\Model\Entity;
 use NextDom\Enums\EqLogicViewType;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
@@ -31,7 +32,7 @@ use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EqRealManager;
 use NextDom\Managers\EventManager;
 use NextDom\Managers\InteractDefManager;
-use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\ObjectManager;
 use NextDom\Managers\MessageManager;
 use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PluginManager;
@@ -56,7 +57,7 @@ use NextDom\Managers\ViewManager;
  * })
  * ORM\Entity
  */
-class EqLogic
+class EqLogic implements EntityInterface
 {
     const CLASS_NAME = EqLogic::class;
     const DB_CLASS_NAME = '`eqLogic`';
@@ -230,7 +231,7 @@ class EqLogic
      * @param int $defaultValue
      * @return bool|int
      */
-    public function getIsvisible($defaultValue = 0)
+    public function getIsVisible($defaultValue = 0)
     {
         if ($this->isVisible == '' || !is_numeric($this->isVisible)) {
             return $defaultValue;
@@ -368,56 +369,56 @@ class EqLogic
     public function getObject()
     {
         if ($this->_object === null) {
-            $this->setObject(JeeObjectManager::byId($this->object_id));
+            $this->setObject(ObjectManager::byId($this->object_id));
         }
         return $this->_object;
     }
 
     /**
-     * @param $_name
+     * @param $name
      * @return $this
      */
-    public function setName($_name)
+    public function setName($name)
     {
-        $_name = str_replace(array('&', '#', ']', '[', '%', "'", "\\", "/"), '', $_name);
-        if ($_name != $this->name) {
+        $name = str_replace(array('&', '#', ']', '[', '%', "'", "\\", "/"), '', $name);
+        if ($name != $this->name) {
             $this->_needRefreshWidget = true;
             $this->_changed = true;
         }
-        $this->name = $_name;
+        $this->name = $name;
         return $this;
     }
 
     /**
-     * @param $generic_type
+     * @param $genericType
      * @return $this
      */
-    public function setGenericType($generic_type)
+    public function setGenericType($genericType)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->generic_type, $generic_type);
-        $this->generic_type = $generic_type;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->generic_type, $genericType);
+        $this->generic_type = $genericType;
         return $this;
     }
 
     /**
-     * @param $_logicalId
+     * @param $logicalId
      * @return $this
      */
-    public function setLogicalId($_logicalId)
+    public function setLogicalId($logicalId)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->logicalId, $_logicalId);
-        $this->logicalId = $_logicalId;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->logicalId, $logicalId);
+        $this->logicalId = $logicalId;
         return $this;
     }
 
     /**
-     * @param $eqType_name
+     * @param $eqTypeName
      * @return $this
      */
-    public function setEqType_name($eqType_name)
+    public function setEqType_name($eqTypeName)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->eqType_name, $eqType_name);
-        $this->eqType_name = $eqType_name;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->eqType_name, $eqTypeName);
+        $this->eqType_name = $eqTypeName;
         return $this;
     }
 
@@ -440,45 +441,64 @@ class EqLogic
     }
 
     /**
-     * @param $_isVisible
+     * @param $isVisible
      * @return $this
      */
-    public function setIsVisible($_isVisible)
+    public function setIsVisible($isVisible)
     {
-        if ($this->isVisible != $_isVisible) {
+        if ($this->isVisible != $isVisible) {
             $this->_needRefreshWidget = true;
             $this->_changed = true;
         }
-        $this->isVisible = $_isVisible;
+        $this->isVisible = $isVisible;
         return $this;
     }
 
     /**
-     * @param $_isEnable
+     * @param $isEnable
      * @return $this
      * @throws \Exception
      */
-    public function setIsEnable($_isEnable)
+    public function setIsEnable($isEnable)
     {
-        if ($this->isEnable != $_isEnable) {
+        if ($this->isEnable != $isEnable) {
             $this->_needRefreshWidget = true;
             $this->_changed = true;
         }
-        if ($_isEnable) {
+        if ($isEnable) {
             $this->setStatus(array('lastCommunication' => date('Y-m-d H:i:s'), 'timeout' => 0));
         }
-        $this->isEnable = $_isEnable;
+        $this->isEnable = $isEnable;
         return $this;
     }
 
     /**
-     * @param $_key
-     * @param null $_value
+     * @param $statusKey
+     * @param null $statusValue
      * @throws \Exception
      */
-    public function setStatus($_key, $_value = null)
+    public function setStatus($statusKey, $statusValue = null)
     {
-        CacheManager::set('eqLogicStatusAttr' . $this->getId(), Utils::setJsonAttr(CacheManager::byKey('eqLogicStatusAttr' . $this->getId())->getValue(), $_key, $_value));
+        global $NEXTDOM_INTERNAL_CONFIG;
+        $changed = false;
+        if (is_array($statusKey)) {
+            foreach ($statusKey as $key => $value) {
+                if (isset($NEXTDOM_INTERNAL_CONFIG['alerts'][$key])) {
+                    $changed = ($this->getStatus($key) != $value);
+                }
+                if ($changed) {
+                    break;
+                }
+            }
+        } else {
+            if (isset($JEEDOM_INTERNAL_CONFIG['alerts'][$statusKey])) {
+                $changed = ($this->getStatus($statusKey) !== $statusValue);
+            }
+        }
+        CacheManager::set('eqLogicStatusAttr' . $this->getId(), utils::setJsonAttr(CacheManager::byKey('eqLogicStatusAttr' . $this->getId())->getValue(), $statusKey, $statusValue));
+        if ($changed) {
+            $this->refreshWidget();
+        }
     }
 
     /**
@@ -704,9 +724,9 @@ class EqLogic
             $html .= '<i class="manual-threshold icon techno-fingerprint41 pull-right" title="Seuil manuel défini"></i>';
         }
         if ($batteryTime != 'NA') {
-            $html .= '<i class="icon divers-calendar2 pull-right" style="position:absolute;bottom: 3px;left: 3px;cursor:default;" title="Pile(s) changée(s) il y a ' . $batterySince . ' jour(s) (' . $batteryTime . ')"> (' . $batterySince . 'j)</i>';
+            $html .= '<i class="icon divers-calendar2 pull-right eqLogic-calendar" title="Pile(s) changée(s) il y a ' . $batterySince . ' jour(s) (' . $batteryTime . ')"> (' . $batterySince . 'j)</i>';
         } else {
-            $html .= '<i class="icon divers-calendar2 pull-right" style="position:absolute;bottom: 3px;left: 3px;cursor:default;" title="Pas de date de changement de pile(s) renseignée"></i>';
+            $html .= '<i class="icon divers-calendar2 pull-right eqLogic-calendar" title="Pas de date de changement de pile(s) renseignée"></i>';
         }
         $html .= '</div>';
         return $html;
@@ -832,12 +852,12 @@ class EqLogic
         if ($this->getDisplay('showOn' . $version, 1) == 0) {
             return '';
         }
-        $user_id = '';
-        if (isset($_SESSION) && isset($_SESSION['user']) && is_object($_SESSION['user'])) {
-            $user_id = $_SESSION['user']->getId();
+        $userId = '';
+        if (isset($_SESSION) && is_object(UserManager::getStoredUser())) {
+            $userId = UserManager::getStoredUser()->getId();
         }
         if (!$_noCache) {
-            $mc = CacheManager::byKey('widgetHtml' . $this->getId() . $viewType . $user_id);
+            $mc = CacheManager::byKey('widgetHtml' . $this->getId() . $viewType . $userId);
             if ($mc->getValue() != '') {
                 return preg_replace("/" . preg_quote(self::UIDDELIMITER) . "(.*?)" . preg_quote(self::UIDDELIMITER) . "/", self::UIDDELIMITER . mt_rand() . self::UIDDELIMITER, $mc->getValue());
             }
@@ -976,8 +996,8 @@ class EqLogic
             }
         }
         $default_opacity = ConfigManager::byKey('widget::background-opacity');
-        if (isset($_SESSION) && isset($_SESSION['user']) && is_object($_SESSION['user']) && $_SESSION['user']->getOptions('widget::background-opacity::' . $version, null) !== null) {
-            $default_opacity = $_SESSION['user']->getOptions('widget::background-opacity::' . $version);
+        if (isset($_SESSION) && is_object(UserManager::getStoredUser()) && UserManager::getStoredUser()->getOptions('widget::background-opacity::' . $version, null) !== null) {
+            $default_opacity = UserManager::getStoredUser()->getOptions('widget::background-opacity::' . $version);
         }
         $opacity = $this->getDisplay('background-opacity' . $version, $default_opacity);
         if ($replace['#background-color#'] != 'transparent' && $opacity != '' && $opacity < 1) {
@@ -1066,8 +1086,8 @@ class EqLogic
     public function postToHtml(string $viewType, string $htmlCode)
     {
         $user_id = '';
-        if (isset($_SESSION) && isset($_SESSION['user']) && is_object($_SESSION['user'])) {
-            $user_id = $_SESSION['user']->getId();
+        if (isset($_SESSION) && is_object(UserManager::getStoredUser())) {
+            $user_id = UserManager::getStoredUser()->getId();
         }
         CacheManager::set('widgetHtml' . $this->getId() . $viewType . $user_id, $htmlCode);
         return $htmlCode;
@@ -1151,7 +1171,7 @@ class EqLogic
         $this->emptyCacheWidget();
         CacheManager::delete('eqLogicCacheAttr' . $this->getId());
         CacheManager::delete('eqLogicStatusAttr' . $this->getId());
-        return \DB::remove($this);
+        return DBHelper::remove($this);
     }
 
     /**
@@ -1220,7 +1240,8 @@ class EqLogic
                 }
             }
         }
-        \DB::save($this, $_direct);
+        DBHelper::save($this, $_direct);
+        $this->setChanged(false);
         if ($this->_needRefreshWidget) {
             $this->_needRefreshWidget = false;
             $this->refreshWidget();
@@ -1247,7 +1268,7 @@ class EqLogic
      */
     public function refresh()
     {
-        \DB::refresh($this);
+        DBHelper::refresh($this);
     }
 
     /**
@@ -1359,13 +1380,14 @@ class EqLogic
             $categories = $categories . ' energy';
         }
         if ($this->getCategory('multimedia', 0) == 1) {
-            $categories = $categories .' multimedia';
+            $categories = $categories . ' multimedia';
         }
         if ($this->getCategory('default', 0) == 1) {
-            $categories = $categories .' default ';
+            $categories = $categories . ' default ';
         }
         return $categories;
     }
+
     /**
      * @param $_message
      */
@@ -1489,14 +1511,13 @@ class EqLogic
             }
             return false;
         }
-        if (!isConnect()) {
+        if (!AuthentificationHelper::isConnected()) {
             return false;
         }
-        if (
-            AuthentificationHelper::isConnected('admin') || AuthentificationHelper::isConnected('user')) {
+        if (AuthentificationHelper::isConnectedAsAdmin() || AuthentificationHelper::isConnectedWithRights('user')) {
             return true;
         }
-        if (strpos($_SESSION['user']->getRights('eqLogic' . $this->getId()), $_right) !== false) {
+        if (strpos(UserManager::getStoredUser()->getRights('eqLogic' . $this->getId()), $_right) !== false) {
             return true;
         }
         return false;
@@ -1553,6 +1574,7 @@ class EqLogic
                 }
                 try {
                     if ($cmd === null || !is_object($cmd)) {
+                        /** @var Cmd $cmd */
                         $cmd = new $cmdClass();
                         $cmd->setOrder($cmd_order);
                         $cmd->setEqLogic_id($this->getId());
@@ -1894,4 +1916,39 @@ class EqLogic
         return $this;
     }
 
+    public function getAllAttributes() {
+        return [
+            '_debug' => $this->_debug,
+            '_object' => $this->_object,
+            '_needRefreshWidget' => $this->_needRefreshWidget,
+            '_timeoutUpdated' => $this->_timeoutUpdated,
+            '_batteryUpdated' => $this->_batteryUpdated,
+            '_changed' => $this->_changed,
+            'name' => $this->name,
+            'generic_type' => $this->generic_type,
+            'logicalId' => $this->logicalId,
+            'eqType_name' => $this->eqType_name,
+            'configuration' => $this->configuration,
+            'isVisible' => $this->isVisible,
+            'isEnable' => $this->isEnable,
+            'timeout' => $this->timeout,
+            'category' => $this->category,
+            'display' => $this->display,
+            'order' => $this->order,
+            'comment' => $this->comment,
+            'tags' => $this->tags,
+            'id' => $this->id,
+            'eqReal_id' => $this->eqReal_id,
+            'object_id' => $this->object_id,
+        ];
+    }
+
+    public function castFromEqLogic(EqLogic $srcEqLogic)
+    {
+        $attributes = $srcEqLogic->getAllAttributes();
+        foreach ($attributes as $name => $value) {
+            $this->$name = $value;
+        }
+        return $this;
+    }
 }

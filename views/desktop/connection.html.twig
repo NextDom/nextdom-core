@@ -35,47 +35,44 @@
 #}
 {% include '/commons/header.html.twig' %}
 <body class="hold-transition login-page">
-<div class="login-box animationZoomIn">
-    <!-- Section logo -->
-    <div class="login-logo">
-        <img class="login-logo-img" src="/public/img/NextDom/NextDom_Wide_AlphaBlackWhite.png">
-    </div>
+    <div class="login-box animationZoomIn">
+        <!-- Section logo -->
+        <div class="login-logo">
+            <img class="login-logo-img" src="/public/img/NextDom/NextDom_Wide_AlphaBlackWhite.png">
+        </div>
 
-    <!-- Section connexion -->
-    <div class="login-box-body">
-        <div class="form-group">
-            <p class="login-box-msg">{{ 'connection.home-msg'|trans }}</p>
-        </div>
-        <div class="form-group has-feedback">
-            <input type="text" class="form-control" placeholder="{{ 'connection.login-placeholder'|trans }}" id="in_login_username">
-            <span class="label-badge"><i class="fas fa-user-circle"></i></span>
-        </div>
-        <div class="form-group has-feedback">
-            <input type="password" class="form-control" placeholder="{{ 'connection.password-placeholder'|trans }}" id="in_login_password">
-            <span class="label-badge"><i class="fas fa-key"></i></span>
-        </div>
-        <div class="passwd form-group has-feedback" id="div_twoFactorCode" style="display:none;">
-            <input type="text" id="in_twoFactorCode" placeholder="{{ 'connection.two-factors-placeholder'|trans }}" class="form-control">
-            <span class="label-badge"><i class="fas fa-user-secret"></i></span>
-        </div>
-        <div class="row form-group">
-            <div class="col-sm-7 col-xs-12">
-                <input type="checkbox" id="cb_storeConnection">
-                <span for="cb_storeConnection" data-toggle="tooltip" title="" data-original-title="{{ 'connection.remember-title'|trans }}">{{ 'connection.remember-label'|trans }}</span>
+        <!-- Section connexion -->
+        <div class="login-box-body">
+            <div class="form-group">
+                <p class="login-box-msg">{{ 'connection.home-msg'|trans }}</p>
             </div>
-            <div class="col-sm-5 col-xs-12">
-                <button class="btn btn-primary btn-block btn-flat" id="bt_login_validate"><i class="fas fa-unlock spacing-right"></i>{{ 'connection.connect'|trans }}</button>
+            <div class="form-group has-feedback">
+                <input type="text" class="form-control" placeholder="{{ 'connection.login-placeholder'|trans }}" id="login">
+                <span class="label-badge"><i class="fas fa-user-circle"></i></span>
             </div>
+            <div class="form-group has-feedback">
+                <input type="password" class="form-control" placeholder="{{ 'connection.password-placeholder'|trans }}" id="password">
+                <span class="label-badge"><i class="fas fa-key"></i></span>
+            </div>
+            <div class="passwd form-group has-feedback" style="display:none;">
+                <input type="text" id="twofactor" placeholder="{{ 'connection.two-factors-placeholder'|trans }}" class="form-control">
+                <span class="label-badge"><i class="fas fa-user-secret"></i></span>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-7 col-xs-12">
+                    <input type="checkbox" id="storeConnection">
+                    <label for="storeConnection" data-toggle="tooltip" title="" data-original-title="{{ 'connection.remember-title'|trans }}">{{ 'connection.remember-label'|trans }}</label>
+                </div>
+                <div class="col-sm-5 col-xs-12">
+                    <button class="btn btn-primary btn-block btn-flat" id="submit"><i class="fas fa-unlock spacing-right"></i>{{ 'connection.connect'|trans }}</button>
+                </div>
+            </div>
+            <a class="label-link" href="https://www.nextdom.org/knowledge-base/reinitialiser-sont-mot-de-passe/" target="_blank">{{ 'connection.forgot'|trans }}</a><br>
         </div>
-        <a class="label-link" href="https://www.nextdom.org/knowledge-base/reinitialiser-sont-mot-de-passe/" target="_blank">{{ 'connection.forgot'|trans }}</a><br>
     </div>
-</div>
-
-{% if JS_END_POOL is defined %}
-    {% for jsFile in JS_END_POOL %}
-        <script src="{{ jsFile }}"></script>
-    {% endfor %}
-{% endif %}
+    {% if JS_END_POOL is defined %}
+        {% for jsFile in JS_END_POOL %}
+            <script src="{{ jsFile }}"></script>
+        {% endfor %}
+    {% endif %}
 </body>
-
-</html>

@@ -33,19 +33,14 @@
 * @Email   <admin@nextdom.org>
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
-
 editorDesktopJS = null;
 editorDesktopCSS = null;
 editorMobileJS = null;
 editorMobileCSS = null;
 
-jwerty.key('ctrl+s/⌘+s', function (e) {
-    e.preventDefault();
-    $("#bt_savecustom").click();
-});
-
+showLoadingCustom();
 printConvertColor();
-$.showLoading();
+
 nextdom.config.load({
     configuration: $('#custom').getValues('.configKey:not(.noSet)')[0],
     error: function (error) {
@@ -57,33 +52,60 @@ nextdom.config.load({
     }
 });
 
+var url = document.location.toString();
+if (url.match('#')) {
+    $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
+    if (url.split('#')[1] == "desktop" || url.split('#')[1] == "mobile") {
+        $('.nav-tabs a[href="#advanced"]').tab('show');
+    }
+    if (url.split('#')[1] == "desktop" || url.split('#')[1] == "advanced") {
+        printAdvancedDesktop();
+    }
+    if (url.split('#')[1] == "mobile") {
+        printAdvancedMobile();
+    }
+}
+$('.nav-tabs a').on('shown.bs.tab', function (e) {
+    window.location.hash = e.target.hash;
+})
 
-$('a[data-toggle="tab"][href="#advanced"]').on('shown.bs.tab', function () {
-    editorDesktopJS = CodeMirror.fromTextArea(document.getElementById("ta_jsDesktopContent"), {
-        lineNumbers: true,
-        mode: "text/javascript",
-        matchBrackets: true,
-        viewportMargin: Infinity
-    });
-    editorDesktopCSS = CodeMirror.fromTextArea(document.getElementById("ta_cssDesktopContent"), {
-        lineNumbers: true,
-        mode: "text/css",
-        matchBrackets: true,
-        viewportMargin: Infinity
-    });
+jwerty.key('ctrl+s/⌘+s', function (e) {
+    e.preventDefault();
+    $("#bt_savecustom").click();
 });
 
-
+$('a[data-toggle="tab"][href="#advanced"]').on('shown.bs.tab', function () {
+    printAdvancedDesktop();
+});
 
 $('a[data-toggle="tab"][href="#mobile"]').on('shown.bs.tab', function (e) {
-    if (editorMobileCSS == null) {
-        editorMobileCSS = CodeMirror.fromTextArea(document.getElementById("ta_cssMobileContent"), {
+    printAdvancedMobile();
+});
+
+$('a[data-toggle="tab"][href="#desktop"]').on('shown.bs.tab', function (e) {
+    printAdvancedDesktop();
+});
+
+function printAdvancedDesktop() {
+    if (editorDesktopJS == null) {
+        editorDesktopJS = CodeMirror.fromTextArea(document.getElementById("ta_jsDesktopContent"), {
+            lineNumbers: true,
+            mode: "text/javascript",
+            matchBrackets: true,
+            viewportMargin: Infinity
+        });
+    }
+    if (editorDesktopCSS == null) {
+        editorDesktopCSS = CodeMirror.fromTextArea(document.getElementById("ta_cssDesktopContent"), {
             lineNumbers: true,
             mode: "text/css",
             matchBrackets: true,
             viewportMargin: Infinity
         });
     }
+}
+
+function printAdvancedMobile() {
     if (editorMobileJS == null) {
         editorMobileJS = CodeMirror.fromTextArea(document.getElementById("ta_jsMobileContent"), {
             lineNumbers: true,
@@ -92,16 +114,28 @@ $('a[data-toggle="tab"][href="#mobile"]').on('shown.bs.tab', function (e) {
             viewportMargin: Infinity
         });
     }
-});
+    if (editorMobileCSS == null) {
+        editorMobileCSS = CodeMirror.fromTextArea(document.getElementById("ta_cssMobileContent"), {
+            lineNumbers: true,
+            mode: "text/css",
+            matchBrackets: true,
+            viewportMargin: Infinity
+        });
+    }
+}
 
 function saveCustom() {
     if (editorDesktopJS !== null) {
         sendCustomData('desktop', 'js', editorDesktopJS.getValue());
+    }
+    if (editorDesktopCSS !== null) {
         sendCustomData('desktop', 'css', editorDesktopCSS.getValue());
-        if (editorMobileCSS !== null) {
-            sendCustomData('mobile', 'js', editorMobileJS.getValue());
-            sendCustomData('mobile', 'css', editorMobileCSS.getValue());
-        }
+    }
+    if (editorMobileJS !== null) {
+        sendCustomData('mobile', 'js', editorMobileJS.getValue());
+    }
+    if (editorMobileCSS !== null) {
+        sendCustomData('mobile', 'css', editorMobileCSS.getValue());
     }
 }
 
@@ -120,7 +154,6 @@ function sendCustomData(version, type, content) {
                     notify("Erreur", error.message, 'error');
                 },
                 success: function (data) {
-//               notify("Info", 'Sauvegarde réussie', 'success');
                 }
             });
         }
@@ -143,6 +176,7 @@ $("#bt_savecustom").on('click', function (event) {
             widget_margin = config['widget::margin'];
             widget_padding = config['widget::padding'];
             widget_radius = config['widget::radius'];
+            nextdom_waitSpinner = config['nextdom::waitSpinner'];
             nextdom.config.load({
                 configuration: $('#custom').getValues('.configKey:not(.noSet)')[0],
                 error: function (error) {
@@ -150,7 +184,6 @@ $("#bt_savecustom").on('click', function (event) {
                 },
                 success: function (data) {
                     $('#custom').setValues(data, '.configKey');
-
                     modifyWithoutSave = false;
                     notify("Info", '{{Sauvegarde réussie}}', 'success');
                 }
@@ -160,8 +193,11 @@ $("#bt_savecustom").on('click', function (event) {
     saveCustom();
 });
 
+$("#waitSpinnerSelect").change(function () {
+    document.getElementById("waitSpinner").innerHTML="<i class='fas fa-info'></i>";
+    $("#waitSpinner i").removeClass('fa-info').addClass($("#waitSpinnerSelect").value());
+});
 
-/********************Convertion************************/
 function printConvertColor() {
     $.ajax({
         type: "POST",
@@ -230,8 +266,6 @@ function saveConvertColor() {
     });
 }
 
-/*CMD color*/
-
 $('.bt_resetColor').on('click', function () {
     var el = $(this);
     nextdom.getConfiguration({
@@ -252,7 +286,7 @@ $("input[name=theme]").click(function () {
     if (radio == "dark"){
         config = {
             'theme:color1' : '#33b8cc',
-            'theme:color2' : '#e6e7e8',
+            'theme:color2' : '#ffffff',
             'theme:color3' : '#ffffff',
             'theme:color4' : '#33b8cc',
             'theme:color5' : '#ffffff',
@@ -272,6 +306,7 @@ $("input[name=theme]").click(function () {
             'theme:color19' : '#8aa4af',
             'theme:color20' : '#222d32',
             'theme:color21' : '50',
+            'theme:color22' : '#263238',
         }
     }
     if (radio == "white"){
@@ -297,6 +332,7 @@ $("input[name=theme]").click(function () {
             'theme:color19' : '#555555',
             'theme:color20' : '#dddddd',
             'theme:color21' : '100',
+            'theme:color22' : '#fafafa',
         }
     }
     if (radio == "mix"){
@@ -322,6 +358,7 @@ $("input[name=theme]").click(function () {
             'theme:color19' : '#8aa4af',
             'theme:color20' : '#dddddd',
             'theme:color21' : '100',
+            'theme:color22' : '#fafafa',
         }
     }
     nextdom.config.save({

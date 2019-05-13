@@ -17,11 +17,12 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\EqLogicManager;
-use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\ObjectManager;
 use NextDom\Managers\Plan3dHeaderManager;
 use NextDom\Managers\Plan3dManager;
 use NextDom\Managers\ScenarioExpressionManager;
@@ -33,7 +34,7 @@ use NextDom\Managers\ScenarioManager;
  * @ORM\Table(name="plan3d", indexes={@ORM\Index(name="name", columns={"name"}), @ORM\Index(name="link_type_link_id", columns={"link_type", "link_id"}), @ORM\Index(name="fk_plan3d_plan3dHeader1_idx", columns={"plan3dHeader_id"})})
  * @ORM\Entity
  */
-class Plan3d
+class Plan3d implements EntityInterface
 {
     /**
      * @var string
@@ -139,12 +140,12 @@ class Plan3d
 
     public function save()
     {
-        \DB::save($this);
+        DBHelper::save($this);
     }
 
     public function remove()
     {
-        \DB::remove($this);
+        DBHelper::remove($this);
     }
 
     public function getLink()
@@ -159,7 +160,7 @@ class Plan3d
             $cmd = CmdManager::byId($this->getLink_id());
             return $cmd;
         } else if ($this->getLink_type() == 'summary') {
-            $object = JeeObjectManager::byId($this->getLink_id());
+            $object = ObjectManager::byId($this->getLink_id());
             return $object;
         }
         return null;
@@ -191,11 +192,9 @@ class Plan3d
         }
         if ($this->getLink_type() == 'eqLogic') {
             if ($this->getConfiguration('3d::widget') == 'text') {
-                if (is_object($cmd) && $cmd->getType() == 'info') {
-                    $return['text'] = ScenarioExpressionManager::setTags($this->getConfiguration('3d::widget::text::text'));
-                    preg_match_all("/#([0-9]*)#/", $this->getConfiguration('3d::widget::text::text'), $matches);
-                    $return['cmds'] = $matches[1];
-                }
+                $return['text'] = ScenarioExpressionManager::setTags($this->getConfiguration('3d::widget::text::text'));
+                preg_match_all("/#([0-9]*)#/", $this->getConfiguration('3d::widget::text::text'), $matches);
+                $return['cmds'] = $matches[1];
             }
             if ($this->getConfiguration('3d::widget') == 'door') {
                 $return['cmds'] = array(str_replace('#', '', $this->getConfiguration('3d::widget::door::window')), str_replace('#', '', $this->getConfiguration('3d::widget::door::shutter')));
@@ -211,7 +210,11 @@ class Plan3d
                 if ($return['state'] > 0) {
                     $cmd = CmdManager::byId(str_replace('#', '', $this->getConfiguration('3d::widget::door::shutter')));
                     if (is_object($cmd) && $cmd->getType() == 'info') {
-                        if ($cmd->execCmd()) {
+                        $cmd_value = $cmd->execCmd();
+                        if ($cmd->getSubType() == 'binary' && $cmd->getDisplay('invertBinary') == 1) {
+                            $cmd_value = ($cmd_value == 1) ? 0 : 1;
+                        }
+                        if ($cmd_value) {
                             $return['state'] = 2;
                         }
                     }

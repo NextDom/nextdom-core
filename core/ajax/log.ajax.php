@@ -16,44 +16,9 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-try {
-    require_once __DIR__ . '/../../core/php/core.inc.php';
-    include_file('core', 'authentification', 'php');
+use NextDom\Ajax\LogAjax;
 
-    if (!isConnect('admin')) {
-        throw new Exception(__('401 - Accès non autorisé', __FILE__));
-    }
+require_once (__DIR__ . '/../../src/core.php');
 
-    ajax::init();
-
-    if (init('action') == 'clear') {
-        unautorizedInDemo();
-        log::clear(init('log'));
-        ajax::success();
-    }
-
-    if (init('action') == 'remove') {
-        unautorizedInDemo();
-        log::remove(init('log'));
-        ajax::success();
-    }
-
-    if (init('action') == 'list') {
-        ajax::success(log::liste());
-    }
-
-    if (init('action') == 'removeAll') {
-        unautorizedInDemo();
-        log::removeAll();
-        ajax::success();
-    }
-
-    if (init('action') == 'get') {
-        ajax::success(log::get(init('log'), init('start', 0), init('nbLine', 99999)));
-    }
-
-    throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
-    /*     * *********Catch exeption*************** */
-} catch (Exception $e) {
-    ajax::error(displayException($e), $e->getCode());
-}
+$logAjax = new LogAjax();
+$logAjax->process();

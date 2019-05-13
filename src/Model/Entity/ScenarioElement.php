@@ -18,6 +18,7 @@
 namespace NextDom\Model\Entity;
 
 use NextDom\Exceptions\CoreException;
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
@@ -34,7 +35,7 @@ use NextDom\Managers\ScenarioSubElementManager;
  * ORM\Table(name="scenarioElement")
  * ORM\Entity
  */
-class ScenarioElement
+class ScenarioElement implements EntityInterface
 {
 
     /**
@@ -79,7 +80,7 @@ class ScenarioElement
 
     public function save()
     {
-        \DB::save($this);
+        DBHelper::save($this);
         return $this;
     }
 
@@ -88,7 +89,7 @@ class ScenarioElement
         foreach ($this->getSubElement() as $subElement) {
             $subElement->remove();
         }
-        \DB::remove($this);
+        DBHelper::remove($this);
     }
 
     /**
@@ -175,7 +176,7 @@ class ScenarioElement
                 $time = 0;
             }
             if ($time == 0) {
-                $cmd = NEXTDOM_ROOT . '/core/php/jeeScenario.php ';
+                $cmd = NEXTDOM_ROOT . '/src/Api/start_scenario.php ';
                 $cmd .= ' scenario_id=' . $_scenario->getId();
                 $cmd .= ' scenarioElement_id=' . $this->getId();
                 $cmd .= ' tags=' . escapeshellarg(json_encode($_scenario->getTags()));

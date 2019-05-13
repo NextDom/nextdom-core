@@ -17,11 +17,12 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\InteractQueryManager;
-use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\ObjectManager;
 
 /**
  * Interactdef
@@ -29,7 +30,7 @@ use NextDom\Managers\JeeObjectManager;
  * @ORM\Table(name="interactDef")
  * @ORM\Entity
  */
-class InteractDef
+class InteractDef implements EntityInterface
 {
 
     /**
@@ -278,7 +279,7 @@ class InteractDef
         if ($this->getQuery() == '') {
             throw new \Exception(__('La commande (demande) ne peut pas être vide'));
         }
-        \DB::save($this);
+        DBHelper::save($this);
         return true;
     }
 
@@ -287,7 +288,7 @@ class InteractDef
         $queries = $this->generateQueryVariant();
         InteractQueryManager::removeByInteractDefId($this->getId());
         if ($this->getEnable()) {
-            \DB::beginTransaction();
+            DBHelper::beginTransaction();
             foreach ($queries as $query) {
                 $query['query'] = InteractDefManager::sanitizeQuery($query['query']);
                 if (trim($query['query']) == '') {
@@ -302,14 +303,14 @@ class InteractDef
                 $interactQuery->setActions('cmd', $query['cmd']);
                 $interactQuery->save();
             }
-            \DB::commit();
+            DBHelper::commit();
         }
         InteractDefManager::cleanInteract();
     }
 
     public function remove()
     {
-        \DB::remove($this);
+        DBHelper::remove($this);
     }
 
     public function preRemove()
@@ -337,7 +338,7 @@ class InteractDef
             preg_match_all("/#(.*?)#/", $input, $matches);
             $matches = $matches[1];
             if (in_array('commande', $matches) || (in_array('objet', $matches) || in_array('equipement', $matches))) {
-                foreach (JeeObjectManager::all() as $object) {
+                foreach (ObjectManager::all() as $object) {
                     if (isset($object_filter[$object->getId()]) && $object_filter[$object->getId()] == 0) {
                         continue;
                     }
@@ -478,7 +479,7 @@ class InteractDef
         if ($_level > $_drill) {
             return $_data;
         }
-        $icon = findCodeIcon('fa-comments-o');
+        $icon = Utils::findCodeIcon('fa-comments-o');
         $_data['node']['interactDef' . $this->getId()] = array(
             'id' => 'interactDef' . $this->getId(),
             'name' => substr($this->getHumanName(), 0, 20),

@@ -17,7 +17,7 @@ function initDeamon() {
     $('#table_deamon tbody').empty();
     nextdom.plugin.all({
       error: function (error) {
-        notify("Erreur", error.message, 'error');
+        $('#div_alert').showAlert({message: error.message, level: 'danger'});
       },
       success: function (plugins) {
         for (var i in plugins) {
@@ -28,7 +28,7 @@ function initDeamon() {
           id : plugins[i].id,
           async:false,
           error: function (error) {
-            notify("Erreur", error.message, 'error');
+            $('#div_alert').showAlert({message: error.message, level: 'danger'});
           },
           success: function (deamonInfo) {
             var html = '<tr>';
@@ -67,7 +67,7 @@ function initDeamon() {
         id : plugin,
         forceRestart : 1,
         error: function (error) {
-          notify("Erreur", error.message, 'error');
+          $('#div_alert').showAlert({message: error.message, level: 'danger'});
         },
         success: function () {
          getDeamonState();
@@ -77,7 +77,7 @@ function initDeamon() {
       nextdom.plugin.deamonStop({
         id : plugin,
         error: function (error) {
-          notify("Erreur", error.message, 'error');
+          $('#div_alert').showAlert({message: error.message, level: 'danger'});
         },
         success: function () {
          getDeamonState();
@@ -88,7 +88,7 @@ function initDeamon() {
         id : plugin,
         mode:1,
         error: function (error) {
-          notify("Erreur", error.message, 'error');
+          $('#div_alert').showAlert({message: error.message, level: 'danger'});
         },
         success: function () {
          getDeamonState();
@@ -99,7 +99,7 @@ function initDeamon() {
         id : plugin,
         mode:0,
         error: function (error) {
-          notify("Erreur", error.message, 'error');
+          $('#div_alert').showAlert({message: error.message, level: 'danger'});
         },
         success: function () {
          getDeamonState();

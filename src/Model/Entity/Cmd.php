@@ -19,11 +19,12 @@ namespace NextDom\Model\Entity;
 
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Api;
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
-use NextDom\Helpers\TimeLine;
+use NextDom\Helpers\TimeLineHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CacheManager;
 use NextDom\Managers\CmdManager;
@@ -34,7 +35,7 @@ use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
 use NextDom\Managers\HistoryManager;
 use NextDom\Managers\InteractDefManager;
-use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\ObjectManager;
 use NextDom\Managers\ListenerManager;
 use NextDom\Managers\MessageManager;
 use NextDom\Managers\PlanHeaderManager;
@@ -62,7 +63,7 @@ use NextDom\Managers\ViewManager;
  *      })
  * ORM\Entity
  */
-class Cmd
+class Cmd implements EntityInterface
 {
     /**
      * TODO: Mis en public pour y accéder depuis CmdManager
@@ -73,7 +74,7 @@ class Cmd
     public $_needRefreshWidget;
     public $_needRefreshAlert;
     protected $_changed = false;
-    protected static $_templateArray = array();
+    private static $_templateArray = array();
 
 
     /**
@@ -663,7 +664,7 @@ class Cmd
             $this->setGeneric_type($this->getDisplay('generic_type'));
             $this->setDisplay('generic_type', '');
         }
-        \DB::save($this);
+        DBHelper::save($this);
         if ($this->_needRefreshWidget) {
             $this->_needRefreshWidget = false;
             $this->getEqLogicId()->refreshWidget();
@@ -680,7 +681,7 @@ class Cmd
 
     public function refresh()
     {
-        \DB::refresh($this);
+        DBHelper::refresh($this);
     }
 
     public function remove()
@@ -692,9 +693,14 @@ class Cmd
         CacheManager::delete('cmdCacheAttr' . $this->getId());
         CacheManager::delete('cmd' . $this->getId());
         NextDomHelper::addRemoveHistory(array('id' => $this->getId(), 'name' => $this->getHumanName(), 'date' => date('Y-m-d H:i:s'), 'type' => 'cmd'));
-        return \DB::remove($this);
+        return DBHelper::remove($this);
     }
 
+    /**
+     * TODO ???
+     * @param $_options
+     * @return bool
+     */
     public function execute($_options)
     {
         return false;
@@ -722,7 +728,7 @@ class Cmd
                 }
                 ScenarioExpressionManager::createAndExec('action', $action['cmd'], $options);
             } catch (\Exception $e) {
-                LogHelper::add('cmd', 'error', __('Erreur lors de l\'exécution de ') . $action['cmd'] . __('. Sur preExec de la commande') . $this->getHumanName() . __('. Détails : ') . $e->getMessage());
+                LogHelper::addError('cmd', __('Erreur lors de l\'exécution de ') . $action['cmd'] . __('. Sur preExec de la commande') . $this->getHumanName() . __('. Détails : ') . $e->getMessage());
             }
         }
     }
@@ -749,7 +755,7 @@ class Cmd
                 }
                 ScenarioExpressionManager::createAndExec('action', $action['cmd'], $options);
             } catch (\Exception $e) {
-                LogHelper::add('cmd', 'error', __('Erreur lors de l\'exécution de ') . $action['cmd'] . __('. Sur preExec de la commande') . $this->getHumanName() . __('. Détails : ') . $e->getMessage());
+                LogHelper::addError('cmd', __('Erreur lors de l\'exécution de ') . $action['cmd'] . __('. Sur preExec de la commande') . $this->getHumanName() . __('. Détails : ') . $e->getMessage());
             }
         }
     }
@@ -806,7 +812,7 @@ class Cmd
             }
 
             if ($this->getConfiguration('timeline::enable')) {
-                TimeLine::addTimelineEvent(array('type' => 'cmd', 'subtype' => 'action', 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => date('Y-m-d H:i:s'), 'options' => $str_option));
+                TimeLineHelper::addTimelineEvent(array('type' => 'cmd', 'subtype' => 'action', 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => date('Y-m-d H:i:s'), 'options' => $str_option));
             }
             $this->preExecCmd($options);
             $value = $this->formatValue($this->execute($options), $_quote);
@@ -1174,7 +1180,7 @@ class Cmd
         }
         if (!$repeat) {
             ListenerManager::check($this->getId(), $value, $this->getCollectDate());
-            JeeObjectManager::checkSummaryUpdate($this->getId());
+            ObjectManager::checkSummaryUpdate($this->getId());
         }
         $this->addHistoryValue($value, $this->getCollectDate());
         $this->checkReturnState($value);
@@ -1184,7 +1190,7 @@ class Cmd
                 $this->actionAlertLevel($level, $value);
             }
             if ($this->getConfiguration('timeline::enable')) {
-                TimeLine::addTimelineEvent(array('type' => 'cmd', 'subtype' => 'info', 'cmdType' => $this->getSubType(), 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => $this->getValueDate(), 'value' => $value . $this->getUnite()));
+                TimeLineHelper::addTimelineEvent(array('type' => 'cmd', 'subtype' => 'info', 'cmdType' => $this->getSubType(), 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => $this->getValueDate(), 'value' => $value . $this->getUnite()));
             }
             $this->pushUrl($value);
         }
@@ -1257,7 +1263,7 @@ class Cmd
                 }
                 ScenarioExpressionManager::createAndExec('action', $action['cmd'], $options);
             } catch (\Exception $e) {
-                LogHelper::add('cmd', 'error', __('Erreur lors de l\'exécution de ') . $action['cmd'] . __('. Détails : ') . $e->getMessage());
+                LogHelper::addError('cmd', __('Erreur lors de l\'exécution de ') . $action['cmd'] . __('. Détails : ') . $e->getMessage());
             }
         }
     }
@@ -1404,7 +1410,7 @@ class Cmd
         try {
             $http->exec();
         } catch (\Exception $e) {
-            LogHelper::add('cmd', 'error', __('Erreur push sur : ') . $url . ' => ' . $e->getMessage());
+            LogHelper::addError('cmd', __('Erreur push sur : ') . $url . ' => ' . $e->getMessage());
         }
     }
 
@@ -1726,6 +1732,45 @@ class Cmd
     public function setChanged($_changed)
     {
         $this->_changed = $_changed;
+        return $this;
+    }
+
+    public function getAllAttributes()
+    {
+        return [
+            '_collectDate' => $this->_collectDate,
+            '_valueDate' => $this->_valueDate,
+            '_eqLogic' => $this->_eqLogic,
+            '_needRefreshWidget' => $this->_needRefreshWidget,
+            '_needRefreshAlert' => $this->_needRefreshAlert,
+            '_changed' => $this->_changed,
+            'eqType' => $this->eqType,
+            'logicalId' => $this->logicalId,
+            'generic_type' => $this->generic_type,
+            'order' => $this->order,
+            'name' => $this->name,
+            'configuration' => $this->configuration,
+            'template' => $this->template,
+            'isHistorized' => $this->isHistorized,
+            'type' => $this->type,
+            'subType' => $this->subType,
+            'unite' => $this->unite,
+            'display' => $this->display,
+            'isVisible' => $this->isVisible,
+            'value' => $this->value,
+            'html' => $this->html,
+            'alert' => $this->alert,
+            'id' => $this->id,
+            'eqLogic_id' => $this->eqLogic_id
+        ];
+    }
+
+    public function castFromCmd(Cmd $srcCmd)
+    {
+        $attributes = $srcCmd->getAllAttributes();
+        foreach ($attributes as $name => $value) {
+            $this->$name = $value;
+        }
         return $this;
     }
 }

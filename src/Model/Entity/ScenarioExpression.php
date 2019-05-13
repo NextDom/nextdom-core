@@ -20,6 +20,7 @@ namespace NextDom\Model\Entity;
 use NextDom\Enums\ScenarioExpressionAction;
 use NextDom\Enums\ScenarioExpressionType;
 use NextDom\Exceptions\CoreException;
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\ReportHelper;
@@ -47,7 +48,7 @@ use NextDom\Managers\ViewManager;
  * @ORM\Table(name="scenarioExpression", indexes={@ORM\Index(name="fk_scenarioExpression_scenarioSubElement1_idx", columns={"scenarioSubElement_id"})})
  * @ORM\Entity
  */
-class ScenarioExpression
+class ScenarioExpression implements EntityInterface
 {
 
     /**
@@ -139,7 +140,7 @@ class ScenarioExpression
                 $key = 'scenarioElement' . ConfigManager::genKey(10);
             }
             CacheManager::set($key, array('scenarioExpression' => $this, 'scenario' => $scenario), 60);
-            $cmd = NEXTDOM_ROOT . '/core/php/jeeScenarioExpression.php';
+            $cmd = NEXTDOM_ROOT . '/src/Api/start_scenario_expr.php';
             $cmd .= ' key=' . $key;
             $this->setLog($scenario, __('Execution du lancement en arriere plan : ') . $key);
             SystemHelper::php($cmd . ' >> /dev/null 2>&1 &');
@@ -268,6 +269,7 @@ class ScenarioExpression
 
     /**
      * @param Scenario $scenario
+     * @throws \Exception
      */
     protected function executeActionIcon(&$scenario)
     {
@@ -329,6 +331,7 @@ class ScenarioExpression
     /**
      * @param Scenario $scenario
      * @return null
+     * @throws \Exception
      */
     protected function executeActionStop(&$scenario)
     {
@@ -591,6 +594,7 @@ class ScenarioExpression
 
     /**
      * @param Scenario $scenario
+     * @throws \Exception
      */
     protected function executeActionNextDomPowerOff(&$scenario)
     {
@@ -602,6 +606,7 @@ class ScenarioExpression
     /**
      * @param Scenario $scenario
      * @param $options
+     * @throws \Exception
      */
     protected function executeActionScenarioReturn(&$scenario, $options)
     {
@@ -670,7 +675,7 @@ class ScenarioExpression
             case 'eqAnalyse':
                 $url = NetworkHelper::getNetworkAccess('internal') . '/index.php?v=d&p=eqAnalyse&report=1';
                 $this->setLog($scenario, __('Génération du rapport ') . $url);
-                $cmd_parameters['files'] = array(ReportHelper::generate($url, 'other', $options['export_type'], $options));
+                $cmd_parameters['files'] = array(ReportHelper::generate($url, 'other', 'eqAnalyse', $options['export_type'], $options));
                 $cmd_parameters['title'] = __('[' . ConfigManager::byKey('name') . '] Rapport équipement du ') . date('Y-m-d H:i:s');
                 $cmd_parameters['message'] = __('Veuillez trouver ci-joint le rapport équipement généré le ') . date('Y-m-d H:i:s');
                 break;
@@ -691,6 +696,7 @@ class ScenarioExpression
     /**
      * @param Scenario $scenario
      * @param $options
+     * @throws \Exception
      */
     protected function executeActionTag(&$scenario, $options)
     {
@@ -727,13 +733,13 @@ class ScenarioExpression
     public function save()
     {
         $this->checkBackground();
-        \DB::save($this);
+        DBHelper::save($this);
         return true;
     }
 
     public function remove()
     {
-        \DB::remove($this);
+        DBHelper::remove($this);
     }
 
     public function getAllId()

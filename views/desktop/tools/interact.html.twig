@@ -40,10 +40,12 @@
             <div class="action-group">
                 <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
                 <a class="btn btn-default btn-action-bar" href="index.php?v=d&p=interact_admin"><i class="fas fa-cog spacing-right"></i>{{ 'Paramètres' }}</a>
+                <a class="btn btn-success btn-action-bar" id="bt_addInteract2"><i class="fas fa-plus-circle spacing-right"></i>{{ 'Ajouter' }}</a>
             </div>
             <div class="action-group">
-                <a class="btn btn-success btn-action-bar pull-right" id="bt_addInteract2"><i class="fas fa-plus-circle spacing-right"></i>{{ 'Ajouter' }}</a>
-                <a class="btn btn-warning btn-action-bar pull-right" id="bt_regenerateInteract2"><i class="fas fa-refresh spacing-right"></i>{{ 'Regénerer' }}</a>
+                <a class="btn btn-action btn-action-bar pull-right" style="display:none;" id="bt_interactCollapse"><i class="fas fa-plus-square spacing-right"></i>{{ 'Déplier' }}</a>
+                <a class="btn btn-action btn-action-bar pull-right" id="bt_interactUncollapse"><i class="fas fa-minus-square spacing-right"></i>{{ 'Replier' }}</a>
+                <a class="btn btn-warning btn-action-bar pull-right" id="bt_regenerateInteract2"><i class="fas fa-refresh spacing-right"></i>{{ 'Régénérer' }}</a>
                 <a class="btn btn-default btn-action-bar pull-right" id="bt_testInteract2"><i class="fas fa-check spacing-right"></i>{{ 'Tester' }}</a>
             </div>
         </div>
@@ -56,49 +58,27 @@
             </div>
             <div class="box-body">
                 {% if interactTotal|length == 0 %}
-                    <div class="text-center">
-                        <span>{{ 'Vous n\'avez encore aucune interaction. Cliquez sur ajouter pour commencer.' }}</span>
-                    </div>
+                    <div><span>{{ 'Vous n\'avez encore aucune interaction. Cliquez sur ajouter pour commencer.' }}</span></div>
                 {% else %}
+                    <div><span>{{ 'Vous avez '}} {{ interactTotal|length }} {{ 'intéractions...' }}</span></div>
                 {% endif %}
             </div>
         </div>
-        {% if interactTotal|length > 0 %}
-            {% if interactsList[-1]|length > 0 %}
-                <div class="panel box">
-                    <a class="box-header with-border accordion-toggle" data-toggle="collapse" data-parent="" href="#config_aucun">
-                        <h3 class="box-title">
-                            <span>{{ 'Aucun - ' }} {{ interactsList[-1]|length }} {{ 'interaction(s)' }}</span>
-                        </h3>
-                    </a>
-                    <div id="config_aucun" class="panel-collapse collapse in">
-                        <div class="box-body">
-                            <div class="interactListContainer DisplayCard text-center">
-                                {% for interact in interactsList[-1] %}
-                                    <div class="interactDisplayCard cursor icon_gestion" data-interact_id="{{ interact.getId() }}" style="{% if not interact.getEnable() %}{{ interactDisabledOpacity }}{% endif %}">
-                                        <img class="backgroundColor" src="/public/img/NextDom_Interaction.png" height="70"/>
-                                        <p>{{ interact.getHumanName(true, true, true, true) }}</p>
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            {% endif %}
-            {% set index = 0 %}
-            {% for group in interactsListGroup %}
-                {% if group['group'] != '' %}
-                    <div class="panel box box-primary">
-                        <a class="box-header with-border accordion-toggle" data-toggle="collapse" data-parent="" href="#config_{{ index }}">
+
+        <div class="box-group" id="accordionInteract">
+            {% if interactTotal|length > 0 %}
+                {% if interactsList[-1]|length > 0 %}
+                    <div class="panel box">
+                        <a class="box-header with-border accordion-toggle cursor" data-toggle="collapse" data-parent="" href="#config_aucun">
                             <h3 class="box-title">
-                                <span style="text-decoration:none;">{{ group['group'] }} - {{ interactsList[group['group']]|length }} {{ 'interaction(s)' }}</span>
+                                <span>{{ 'Aucun - ' }} {{ interactsList[-1]|length }} {{ 'interaction(s)' }}</span>
                             </h3>
                         </a>
-                        <div id="config_{{ index }}" class="panel-collapse collapse in">
+                        <div id="config_aucun" class="panel-collapse collapse in">
                             <div class="box-body">
                                 <div class="interactListContainer DisplayCard text-center">
-                                    {% for interact in interactsList[group['group']] %}
-                                        <div class="interactDisplayCard cursor icon_gestion" data-interact_id="{{ interact.getId() }}" style="{% if not interact.getEnable() %}{{ interactDisabledOpacity }}{% endif %}">
+                                    {% for interact in interactsList[-1] %}
+                                        <div class="interactDisplayCard cursor icon_card" data-interact_id="{{ interact.getId() }}" style="{% if not interact.getEnable() %}{{ interactDisabledOpacity }}{% endif %}">
                                             <img class="backgroundColor" src="/public/img/NextDom_Interaction.png" height="70"/>
                                             <p>{{ interact.getHumanName(true, true, true, true) }}</p>
                                         </div>
@@ -108,9 +88,33 @@
                         </div>
                     </div>
                 {% endif %}
-                {% set index = index + 1 %}
-            {% endfor %}
-        {% endif %}
+                {% set index = 0 %}
+                {% for group in interactsListGroup %}
+                    {% if group['group'] != '' %}
+                        <div class="panel box box-primary">
+                            <a class="box-header with-border accordion-toggle cursor" data-toggle="collapse" data-parent="" href="#config_{{ index }}">
+                                <h3 class="box-title">
+                                    <span style="text-decoration:none;">{{ group['group'] }} - {{ interactsList[group['group']]|length }} {{ 'interaction(s)' }}</span>
+                                </h3>
+                            </a>
+                            <div id="config_{{ index }}" class="panel-collapse collapse in">
+                                <div class="box-body">
+                                    <div class="interactListContainer DisplayCard text-center">
+                                        {% for interact in interactsList[group['group']] %}
+                                            <div class="interactDisplayCard cursor icon_card" data-interact_id="{{ interact.getId() }}" style="{% if not interact.getEnable() %}{{ interactDisabledOpacity }}{% endif %}">
+                                                <img class="backgroundColor" src="/public/img/NextDom_Interaction.png" height="70"/>
+                                                <p>{{ interact.getHumanName(true, true, true, true) }}</p>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% set index = index + 1 %}
+                {% endfor %}
+            {% endif %}
+        </div>
     </section>
 </div>
 
@@ -118,23 +122,34 @@
     <section class="content-header">
         <div class="action-bar">
             <div class="action-group">
-                <a class="btn btn-danger" id="bt_interactThumbnailDisplay"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
-                <a class="btn btn-default displayInteracQuery"><i class="fas fa-eye spacing-right"></i>{{ 'Phrase(s)' }} <span class="label label-success interactAttr" data-l1key="nbInteractQuery"></span></a>
+                <a class="btn btn-action-bar btn-danger" id="bt_interactThumbnailDisplay"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
+                <div class="btn-group">
+                    <a class="btn btn-action-bar btn-default displayInteracQuery"><i class="fas fa-eye spacing-right"></i>{{ 'Phrase(s)' }}</a>
+                    <a class="btn btn-action-bar btn-success displayInteracQuery"><span class="interactAttr" data-l1key="nbInteractQuery"></span></a>
+                </div>
             </div>
             <div class="action-group">
-                <a class="btn btn-success pull-right" id="bt_saveInteract"><i class="fas fa-save spacing-right"></i>{{ 'Enregistrer' }}</a>
-                <a class="btn btn-default pull-right" id="bt_duplicate"><i class="far fa-files-o spacing-right"></i>{{ 'Dupliquer' }}</a>
-                <a class="btn btn-danger pull-right" id="bt_removeInteract"><i class="fas fa-minus-circle spacing-right"></i>{{ 'Supprimer' }}</a>
+                <a class="btn btn-action-bar btn-success pull-right" id="bt_saveInteract"><i class="fas fa-save spacing-right"></i>{{ 'Enregistrer' }}</a>
+                <a class="btn btn-action-bar btn-default pull-right" id="bt_duplicate"><i class="far fa-files-o spacing-right"></i>{{ 'Dupliquer' }}</a>
+                <a class="btn btn-action-bar btn-danger pull-right" id="bt_removeInteract"><i class="fas fa-minus-circle spacing-right"></i>{{ 'Supprimer' }}</a>
             </div>
         </div>
     </section>
 
     <section class="content">
         <div class="nav-tabs-custom">
-            <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active"><a href="#generaltab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tachometer-alt spacing-right"></i>{{ 'Général' }}</a></li>
-                <li role="presentation"><a href="#filtertab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-filter spacing-right"></i>{{ 'Filtres' }}</a></li>
-                <li role="presentation"><a href="#actiontab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-cogs spacing-right"></i>{{ 'Actions' }}</a></li>
+            <ul class="nav nav-tabs pull-right" role="tablist">
+                <li role="presentation">
+                    <a href="#actiontab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-cogs spacing-right"></i>{{ 'Actions' }}</a>
+                </li>
+                <li role="presentation">
+                    <a href="#filtertab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-filter spacing-right"></i>{{ 'Filtres' }}</a>
+                </li>
+                <li role="presentation" class="active">
+                    <a href="#generaltab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tachometer-alt spacing-right"></i>{{ 'Général' }}</a>
+                </li>
+                <h4 class="label label-primary pull-right badge spacing-right">{{ 'ID : ' }}<span id="interactId"></span></h4>
+                <li class="header pull-left"><i class="fas fa-comments spacing-right"></i>{{ 'Edition Intéraction' }}</li>
             </ul>
 
             <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
@@ -184,7 +199,7 @@
                                     <textarea class="form-control interactAttr ta_autosize" type="text" data-l1key="reply" placeholder=""></textarea>
                                 </div>
                                 <div class="col-sm-1">
-                                    <a class="btn btn-sm btn-default cursor listEquipementInfoReply input-sm"><i class="fas fa-list-alt "></i></a>
+                                    <a class="btn btn-sm btn-default cursor listEquipementInfoReply"><i class="fas fa-list-alt "></i></a>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -215,8 +230,8 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-lg-2 col-xs-12 control-label">{{ 'Autorisation' }}</label>
-                                <div class="col-lg-10 col-xs-12">
+                                <label class="col-sm-2 col-xs-12 control-label">{{ 'Autorisation' }}</label>
+                                <div class="col-sm-9 col-xs-12">
                                     <input type="checkbox" class="interactAttr" data-l1key="options" data-l2key="allowSyntaxCheck">
                                     <label for="ldap" class="control-label label-check">{{ 'Autoriser NextDom à supprimer les demandes syntaxiquement incorrectes' }}</label>
                                 </div>
@@ -232,9 +247,8 @@
                                 <label class="col-sm-3 control-label">{{ 'Limiter aux commandes de type' }}</label>
                                 <div class="col-sm-9">
                                     {% for id, type in interactCmdType %}
-                                        <label style="margin-right:25px;">
-                                            <input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="type" data-l3key="{{ id }}" checked="true"/>
-                                            {{ type['name'] }}
+                                        <label class="label-option">
+                                            <input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="type" data-l3key="{{ id }}" checked="true"/>{{ type['name']|trim }}
                                         </label>
                                     {% endfor %}
                                 </div>
@@ -244,9 +258,8 @@
                                 <div class="col-sm-9">
                                     {% for type in interactCmdType %}
                                         {% for id, subtype in type['subtype'] %}
-                                            <label style="margin-right:25px;">
-                                                <input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="subtype" data-l3key="{{ id }}" checked="true"/>
-                                                {{ subtype['name'] }}
+                                            <label class="label-option">
+                                                <input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="subtype" data-l3key="{{ id }}" checked="true"/>{{ subtype['name']|trim }}
                                             </label>
                                         {% endfor %}
                                     {% endfor %}
@@ -255,15 +268,14 @@
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">{{ 'Limiter aux commandes ayant pour unité' }}</label>
                                 <div class="col-sm-9">
-                                    <label style="margin-right:25px;">
+                                    <label class="label-option">
                                         <input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="unite" data-l3key="none" checked="true"/>
                                         {{ 'Sans unité' }}
                                     </label>
                                     {% for unite in interactAllUnite %}
                                         {% if unite['unite']|trim != '' %}
-                                            <label style="margin-right:25px;">
-                                                <input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="unite" data-l3key="{{ unite['unite'] }}" checked="true"/>
-                                                {{ unite['unite'] }}
+                                            <label class="label-option">
+                                                <input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="unite" data-l3key="{{ unite['unite'] }}" checked="true"/>{{ unite['unite']|trim }}
                                             </label>
                                         {% endif %}
                                     {% endfor %}
@@ -273,9 +285,8 @@
                                 <label class="col-sm-3 control-label">{{ 'Limiter aux commandes appartenant aux objets' }}</label>
                                 <div class="col-sm-9">
                                     {% for jeeObject in interactJeeObjects %}
-                                        <label style="margin-right:25px;">
-                                            <input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="object" data-l3key="{{ jeeObject.getId() }}" checked="true"/>
-                                            {{ jeeObject.getName() }}
+                                        <label class="label-option">
+                                            <input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="object" data-l3key="{{ jeeObject.getId() }}" checked="true"/>{{ jeeObject.getName()|trim }}
                                         </label>
                                     {% endfor %}
                                 </div>
@@ -284,9 +295,8 @@
                                 <label class="col-sm-3 control-label">{{ 'Limiter aux plugins' }}</label>
                                 <div class="col-sm-9">
                                     {% for eqLogicType in interactEqLogicTypes %}
-                                        <label style="margin-right:25px;">
-                                            <input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="plugin" data-l3key="{{ eqLogicType['type'] }}" checked="true"/>
-                                            {{ eqLogicType['type'] }}
+                                        <label class="label-option">
+                                            <input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="plugin" data-l3key="{{ eqLogicType['type'] }}" checked="true"/>{{ eqLogicType['type']|trim }}
                                         </label>
                                     {% endfor %}
                                 </div>
@@ -294,11 +304,10 @@
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">{{ 'Limiter aux catégories' }}</label>
                                 <div class="col-sm-9">
-                                    <label style="margin-right:25px;"><input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="category" data-l3key="noCategory" checked="true"/>{{ 'Sans catégorie' }}</label>
+                                    <label class="label-option"><input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="category" data-l3key="noCategory" checked="true"/>{{ 'Sans catégorie' }}</label>
                                     {% for id, category in interactEqLogicCategories %}
-                                        <label style="margin-right:25px;">
-                                            <input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="category" data-l3key="{{ id }}" checked="true"/>
-                                            {{ category['name'] }}
+                                        <label class="label-option">
+                                            <input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="category" data-l3key="{{ id }}" checked="true"/>{{ category['name']|trim }}
                                         </label>
                                     {% endfor %}
                                 </div>
@@ -306,9 +315,9 @@
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">{{ 'Limiter aux visibles' }}</label>
                                 <div class="col-sm-9">
-                                    <label style="margin-right:25px;"><input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="visible" data-l3key="object"/>{{ 'Objets' }}</label>
-                                    <label style="margin-right:25px;"><input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="visible" data-l3key="eqlogic"/>{{ 'Equipements' }}</label>
-                                    <label style="margin-right:25px;"><input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="visible" data-l3key="cmd"/>{{ 'Commandes' }}</label>
+                                    <label class="label-option"><input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="visible" data-l3key="object"/>{{ 'Objets' }}</label>
+                                    <label class="label-option"><input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="visible" data-l3key="eqlogic"/>{{ 'Equipements' }}</label>
+                                    <label class="label-option"><input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="visible" data-l3key="cmd"/>{{ 'Commandes' }}</label>
                                 </div>
                             </div>
                             <div class="form-group">

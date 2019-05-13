@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
@@ -32,7 +33,7 @@ use NextDom\Managers\ScenarioExpressionManager;
  * @ORM\Table(name="interactQuery", indexes={@ORM\Index(name="fk_sarahQuery_sarahDef1_idx", columns={"interactDef_id"}), @ORM\Index(name="query", columns={"query"})})
  * @ORM\Entity
  */
-class InteractQuery
+class InteractQuery implements EntityInterface
 {
 
     /**
@@ -75,13 +76,13 @@ class InteractQuery
         if ($this->getInteractDef_id() == '') {
             throw new \Exception(__('InteractDef_id ne peut pas être vide'));
         }
-        \DB::save($this);
+        DBHelper::save($this);
         return $this;
     }
 
     public function remove()
     {
-        return \DB::remove($this);
+        return DBHelper::remove($this);
     }
 
     public function executeAndReply($_parameters)
@@ -198,7 +199,7 @@ class InteractQuery
                     }
                     $tags = array();
                     if (isset($options['tags'])) {
-                        $options['tags'] = arg2array($options['tags']);
+                        $options['tags'] = Utils::arg2array($options['tags']);
                         foreach ($options['tags'] as $key => $value) {
                             $tags['#' . trim(trim($key), '#') . '#'] = ScenarioExpressionManager::setTags(trim($value));
                         }
@@ -209,7 +210,7 @@ class InteractQuery
                         $replace['#valeur#'] .= ' ' . $return;
                     }
                 } catch (\Exception $e) {
-                    LogHelper::add('interact', 'error', __('Erreur lors de l\'exécution de ') . $action['cmd'] . __('. Détails : ') . $e->getMessage());
+                    LogHelper::addError('interact', __('Erreur lors de l\'exécution de ') . $action['cmd'] . __('. Détails : ') . $e->getMessage());
                 }
             }
         }

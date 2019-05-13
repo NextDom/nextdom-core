@@ -2,7 +2,7 @@ function initEqanalyse() {
     nextdom.eqLogic.htmlAlert({
         version : 'mobile',
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            $('#div_alert').showAlert({message: error.message, level: 'danger'});
         },
         success: function (eqLogics) {
             div = '';
@@ -17,7 +17,7 @@ function initEqanalyse() {
             nextdom.eqLogic.htmlBattery({
                 version : 'mobile',
                 error: function (error) {
-                    notify("Erreur", error.message, 'error');
+                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
                 },
                 success: function (eqLogics) {
                     div = '';

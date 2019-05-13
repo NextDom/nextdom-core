@@ -34,6 +34,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
 use NextDom\Model\Entity\Cron;
@@ -53,12 +54,12 @@ class CronManager
      */
     public static function all($ordered = false)
     {
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME;
         if ($ordered) {
             $sql .= ' ORDER BY deamon DESC';
         }
-        return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -66,7 +67,8 @@ class CronManager
      *
      * @param int $cronId
      *
-     * @return object
+     * @return Cron
+     *
      * @throws \Exception
      */
     public static function byId($cronId)
@@ -74,10 +76,10 @@ class CronManager
         $value = array(
             'id' => $cronId,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE id = :id';
-        return \DB::Prepare($sql, $value, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -96,7 +98,7 @@ class CronManager
             'class' => $className,
             'function' => $functionName,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE class = :class
                 AND function = :function';
@@ -105,7 +107,7 @@ class CronManager
             $value['option'] = $options;
             $sql .= ' AND `option` = :option';
         }
-        return \DB::Prepare($sql, $value, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -124,7 +126,7 @@ class CronManager
             'class' => $className,
             'function' => $functionName,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE class = :class
                 AND function = :function';
@@ -132,7 +134,7 @@ class CronManager
             $value['option'] = '%' . $options . '%';
             $sql .= ' AND `option` LIKE :option';
         }
-        return \DB::Prepare($sql, $value, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -141,14 +143,14 @@ class CronManager
     public static function clean()
     {
         $crons = self::all();
-        foreach ($crons as $cronExpression) {
-            $cronExpression = new \Cron\CronExpression($cronExpression->getSchedule(), new \Cron\FieldFactory);
+        foreach ($crons as $cron) {
+            $cronExpression = new \Cron\CronExpression($cron->getSchedule(), new \Cron\FieldFactory);
             try {
                 if (!$cronExpression->isDue()) {
                     $cronExpression->getNextRunDate();
                 }
             } catch (\Exception $ex) {
-                $cronExpression->remove();
+                $cron->remove();
             }
         }
     }
@@ -160,7 +162,7 @@ class CronManager
      */
     public static function nbCronRun()
     {
-        return count(SystemHelper::ps('jeeCron.php', array('grep', 'sudo', 'shell=/bin/bash - ', '/bin/bash -c ', posix_getppid(), getmypid())));
+        return count(SystemHelper::ps('start_cron.php', array('grep', 'sudo', 'shell=/bin/bash - ', '/bin/bash -c ', posix_getppid(), getmypid())));
     }
 
     /**
@@ -238,5 +240,17 @@ class CronManager
     public static function convertDateToCron($dateToConvert)
     {
         return date('i', $dateToConvert) . ' ' . date('H', $dateToConvert) . ' ' . date('d', $dateToConvert) . ' ' . date('m', $dateToConvert) . ' * ' . date('Y', $dateToConvert);
+    }
+
+    /**
+     * convert cron schedule string
+     *
+     * @param string $cron F cron schedule format to re
+     * @return string
+     * @throws \Exception
+     */
+    public static function convertCronSchedule($cron)
+    {
+        return str_replace('*/ ', '* ', $cron);
     }
 }

@@ -33,7 +33,9 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Enums\ScenarioState;
 use NextDom\Helpers\DateHelper;
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
@@ -61,10 +63,10 @@ class ScenarioExpressionManager
     public static function byId($id)
     {
         $values = array('id' => $id);
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE id = :id';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -76,9 +78,9 @@ class ScenarioExpressionManager
      */
     public static function all()
     {
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME;
-        return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
 
@@ -96,11 +98,11 @@ class ScenarioExpressionManager
     public static function byScenarioSubElementId($scenarioSubElementId)
     {
         $values = array('scenarioSubElement_id' => $scenarioSubElementId);
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE scenarioSubElement_id = :scenarioSubElement_id
                 ORDER BY `order`';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -117,7 +119,7 @@ class ScenarioExpressionManager
     public static function searchExpression($expression, $options = null, $and = true)
     {
         $values = array('expression' => '%' . $expression . '%');
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE expression LIKE :expression ';
         if ($options !== null) {
@@ -128,7 +130,7 @@ class ScenarioExpressionManager
                 $sql .= 'OR options LIKE :options';
             }
         }
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -141,11 +143,11 @@ class ScenarioExpressionManager
     public static function byElement($elementId)
     {
         $values = array('expression' => $elementId);
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE expression = :expression
         AND `type` = "element"';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -210,11 +212,11 @@ class ScenarioExpressionManager
                 $name = $scenario->getName();
             }
             $action = $baseAction['options']['action'];
-            $result .= \__('Scénario : ') . $name . ' <i class="fa fa-arrow-right"></i> ' . $action;
+            $result .= __('Scénario : ') . $name . ' <i class="fa fa-arrow-right"></i> ' . $action;
         } elseif ($baseAction['cmd'] == 'variable') {
             $name = $baseAction['options']['name'];
             $value = $baseAction['options']['value'];
-            $result .= \__('Variable : ') . $name . ' <i class="fa fa-arrow-right"></i> ' . $value;
+            $result .= __('Variable : ') . $name . ' <i class="fa fa-arrow-right"></i> ' . $value;
         } elseif (is_object(CmdManager::byId(str_replace('#', '', $baseAction['cmd'])))) {
             $cmd = CmdManager::byId(str_replace('#', '', $baseAction['cmd']));
             $eqLogic = $cmd->getEqLogicId();
@@ -285,9 +287,9 @@ class ScenarioExpressionManager
             return -1;
         }
         switch ($state) {
-            case 'stop':
+            case ScenarioState::STOP:
                 return 0;
-            case 'in progress':
+            case ScenarioState::IN_PROGRESS:
                 return 1;
         }
         return -3;
@@ -1264,7 +1266,7 @@ class ScenarioExpressionManager
             $cmd = CmdManager::byId(trim(str_replace('#', '', CmdManager::humanReadableToCmd('#' . str_replace('#', '', $cmdId) . '#'))));
         }
         if (!is_object($cmd)) {
-            return \__('Commande non trouvée');
+            return __('Commande non trouvée');
         }
         switch ($type) {
             case 'cmd':
@@ -1274,11 +1276,11 @@ class ScenarioExpressionManager
             case 'object':
                 $object = $cmd->getEqLogicId()->getObject();
                 if (!is_object($object)) {
-                    return \__('Aucun');
+                    return __('Aucun');
                 }
                 return $object->getName();
         }
-        return \__('Type inconnu');
+        return __('Type inconnu');
     }
 
     /**
@@ -1394,8 +1396,8 @@ class ScenarioExpressionManager
      */
     public static function setTags($_expression, &$_scenario = null, $_quote = false, $_nbCall = 0)
     {
-        if (file_exists(NEXTDOM_ROOT . '/data/php/user.function.class.php')) {
-            require_once NEXTDOM_ROOT . '/data/php/user.function.class.php';
+        if (file_exists(NEXTDOM_DATA . '/data/php/user.function.class.php')) {
+            require_once NEXTDOM_DATA . '/data/php/user.function.class.php';
         }
         if ($_nbCall > 10) {
             return $_expression;

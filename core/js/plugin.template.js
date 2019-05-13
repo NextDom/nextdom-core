@@ -16,9 +16,8 @@
  */
  var changeLeftMenuObjectOrEqLogicName = false;
 
-
  if((!isset(userProfils.doNotAutoHideMenu) || userProfils.doNotAutoHideMenu != 1) && !jQuery.support.touch && $('.eqLogicThumbnailDisplay').html() != undefined && $('#ul_eqLogic').html() != undefined){
-    $('#div_mainContainer').append('<div style="position : fixed;height:100%;width:15px;top:50px;left:0px;z-index:998;background-color:#f6f6f6;" class="bt_pluginTemplateShowSidebar div_smallSideBar"><i class="fa fa-arrow-circle-o-right" style="color : #b6b6b6;"></i><div>');
+    $('#div_mainContainer').append('<div style="position : fixed;height:100%;width:15px;top:50px;right:0px;z-index:998;background-color:#f6f6f6;" class="bt_pluginTemplateShowSidebar div_smallSideBar"><i class="fa fa-arrow-circle-o-right" style="color : #b6b6b6;"></i><div>');
     $('#ul_eqLogic').closest('.bs-sidebar').parent().hide();
     $('#ul_eqLogic').closest('.bs-sidebar').parent().css('z-index','999');
     $('#ul_eqLogic').closest('.bs-sidebar').parent().removeClass().addClass('col-xs-2');
@@ -43,7 +42,9 @@
             $('.eqLogicThumbnailDisplay').removeClass().addClass('eqLogicThumbnailDisplay col-xs-10');
             $('.bt_pluginTemplateShowSidebar').find('i').hide();
             $('.eqLogic').removeClass('col-xs-12').addClass('eqLogic col-xs-10');
-            $('#ul_eqLogic').closest('.bs-sidebar').parent().show();
+            var sidebar = $('#ul_eqLogic').closest('.bs-sidebar').parent();
+            sidebar[0].style.cssFloat = 'right';
+            sidebar.show();
             $('.eqLogicThumbnailContainer').packery();
         }, 100);
         $(this).data('timerMouseleave', timer)
@@ -55,7 +56,7 @@
 var url = document.location.toString();
 if (url.match('#')) {
     $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
-} 
+}
 $('.nav-tabs a').on('shown.bs.tab', function (e) {
     window.location.hash = e.target.hash;
 })
@@ -97,13 +98,13 @@ $(".li_eqLogic,.eqLogicDisplayCard").on('click', function () {
     if (!url.match('#')) {
        $('.nav-tabs a[href="#eqlogictab"]').click();
    }
-   $.showLoading();
+   showLoadingCustom();
    nextdom.eqLogic.print({
     type: isset($(this).attr('data-eqLogic_type')) ? $(this).attr('data-eqLogic_type') : eqType,
     id: $(this).attr('data-eqLogic_id'),
     status : 1,
     error: function (error) {
-        $.hideLoading();
+        hideLoadingCustom();
         notify("Core",error.message,"error");
     },
     success: function (data) {
@@ -129,7 +130,7 @@ $(".li_eqLogic,.eqLogicDisplayCard").on('click', function () {
             nextdom.cmd.changeSubType($(this).closest('.cmd'));
         });
         changeLeftMenuObjectOrEqLogicName = false;
-        $.hideLoading();
+        hideLoadingCustom();
         modifyWithoutSave = false;
     }
 });
@@ -216,7 +217,7 @@ $('.eqLogicAction[data-action=save]').on('click', function () {
             url += 'id=' + data.id + '&saveSuccessFull=1';
             if (document.location.toString().match('#')) {
                 url += '#' + document.location.toString().split('#')[1];
-            } 
+            }
             loadPage(url);
             modifyWithoutSave = false;
         }

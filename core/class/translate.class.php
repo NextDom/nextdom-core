@@ -46,6 +46,11 @@ class translate
         return TranslateHelper::exec($_content, $_name, $_backslash);
     }
 
+    public static function getPluginFromName($_name)
+    {
+        return TranslateHelper::getPluginFromName($_name);
+    }
+
     public static function getPathTranslationFile($_language)
     {
         return NEXTDOM_ROOT . '/i18n/' . $_language . '.json';
@@ -72,7 +77,9 @@ class translate
     }
 }
 
-function __(string $_content, string $_name = '', bool $_backslash = false): string
-{
-    return TranslateHelper::sentence($_content, $_name, $_backslash);
+if (!function_exists('__')) {
+    function __(string $_content, string $_name = '', bool $_backslash = false): string
+    {
+        return TranslateHelper::sentence($_content, $_name, $_backslash);
+    }
 }

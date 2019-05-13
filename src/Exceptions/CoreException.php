@@ -19,5 +19,15 @@ namespace NextDom\Exceptions;
 
 class CoreException extends \Exception
 {
+    public static function do_throw($format = '') {
+        $format = preg_replace_callback("/\{([^}]+)\}/", function($match) {
+            return __($match[1]);
+        }, $format);
 
+        $args = func_get_args();
+        array_shift($args);
+
+        $msg = vsprintf($format, $args);
+        throw new CoreException($msg);
+    }
 }

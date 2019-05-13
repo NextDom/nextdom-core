@@ -17,6 +17,8 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\DBHelper;
+use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\HistoryManager;
 
@@ -29,7 +31,7 @@ use NextDom\Managers\HistoryManager;
 class History
 {
     /**
-     * @var \DateTime
+     * @var string
      *
      * @ORM\Column(name="datetime", type="datetime", nullable=false)
      */
@@ -52,6 +54,7 @@ class History
      */
     protected $cmd_id;
     protected $_tableName = 'history';
+    protected $_changed = false;
 
     public function save($_cmd = null, $_direct = false)
     {
@@ -86,7 +89,7 @@ class History
                     SET cmd_id=:cmd_id,
                     `datetime`=:datetime,
                     value=:value';
-                    \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW);
+                    DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW);
                     return;
                 }
                 $values = array(
@@ -97,7 +100,7 @@ class History
                 FROM history
                 WHERE cmd_id=:cmd_id
                 AND `datetime`=:datetime';
-                $result = \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW);
+                $result = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW);
                 if ($result !== false) {
                     switch ($cmd->getConfiguration('historizeMode', 'avg')) {
                         case 'avg':
@@ -130,12 +133,12 @@ class History
         SET cmd_id=:cmd_id,
         `datetime`=:datetime,
         value=:value';
-        \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW);
+        DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW);
     }
 
     public function remove()
     {
-        \DB::remove($this);
+        DBHelper::remove($this);
     }
 
     public function getCmd_id()
@@ -171,20 +174,33 @@ class History
 
     public function setCmd_id($cmd_id)
     {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->cmd_id, $cmd_id);
         $this->cmd_id = $cmd_id;
         return $this;
     }
 
     public function setValue($value)
     {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->value, $value);
         $this->value = $value;
         return $this;
     }
 
     public function setDatetime($datetime)
     {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->datetime, $datetime);
         $this->datetime = $datetime;
         return $this;
     }
-}
 
+    public function getChanged()
+    {
+        return $this->_changed;
+    }
+
+    public function setChanged($_changed)
+    {
+        $this->_changed = $_changed;
+        return $this;
+    }
+}

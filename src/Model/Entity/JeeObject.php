@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CacheManager;
@@ -24,7 +25,7 @@ use NextDom\Managers\CmdManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\DataStoreManager;
 use NextDom\Managers\EqLogicManager;
-use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\ObjectManager;
 use NextDom\Managers\ScenarioManager;
 
 /**
@@ -33,7 +34,7 @@ use NextDom\Managers\ScenarioManager;
  * @ORM\Table(name="object", uniqueConstraints={@ORM\UniqueConstraint(name="name_UNIQUE", columns={"name"})}, indexes={@ORM\Index(name="fk_object_object1_idx1", columns={"father_id"}), @ORM\Index(name="position", columns={"position"})})
  * @ORM\Entity
  */
-class JeeObject
+class JeeObject implements EntityInterface
 {
     const CLASS_NAME = JeeObject::class;
     const DB_CLASS_NAME = '`object`';
@@ -43,7 +44,7 @@ class JeeObject
      *
      * @ORM\Column(name="name", type="string", length=45, nullable=false)
      */
-    protected $name;
+    protected $name = '';
 
     /**
      * @var boolean
@@ -168,12 +169,12 @@ class JeeObject
      */
     public function save()
     {
-        \DB::save($this);
+        DBHelper::save($this);
         return true;
     }
 
     /**
-     * Get direct chidren
+     * Get direct children
      *
      * @param bool $_visible
      * @return array|mixed|null
@@ -186,14 +187,14 @@ class JeeObject
             $values = array(
                 'id' => $this->id,
             );
-            $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE father_id = :id';
             if ($_visible) {
                 $sql .= ' AND isVisible = 1 ';
             }
             $sql .= ' ORDER BY position';
-            $this->_child[$_visible] = \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+            $this->_child[$_visible] = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
         }
         return $this->_child[$_visible];
     }
@@ -216,7 +217,6 @@ class JeeObject
         return $tree;
     }
 
-
     /**
      * @param bool $onlyEnable
      * @param bool $onlyVisible
@@ -235,7 +235,7 @@ class JeeObject
             }
         }
         if ($searchOnchild) {
-            $child_object = JeeObjectManager::buildTree($this);
+            $child_object = ObjectManager::buildTree($this);
             if (count($child_object) > 0) {
                 foreach ($child_object as $object) {
                     $eqLogics = array_merge($eqLogics, $object->getEqLogic($onlyEnable, $onlyVisible, $eqTypeName, $logicalId));
@@ -288,12 +288,12 @@ class JeeObject
     public function remove()
     {
         NextDomHelper::addRemoveHistory(array('id' => $this->getId(), 'name' => $this->getName(), 'date' => date('Y-m-d H:i:s'), 'type' => 'object'));
-        return \DB::remove($this);
+        return DBHelper::remove($this);
     }
 
     public function getFather()
     {
-        return JeeObjectManager::byId($this->getFather_id());
+        return ObjectManager::byId($this->getFather_id());
     }
 
     public function parentNumber()
@@ -318,12 +318,12 @@ class JeeObject
         if ($tag) {
             if ($prettify) {
                 if ($this->getDisplay('tagColor') != '') {
-                    return '<span class="label" style="text-shadow : none;background-color:' . $this->getDisplay('tagColor') . ' !important;color:' . $this->getDisplay('tagTextColor', 'white') . ' !important">' . $this->getDisplay('icon') . '<i class="spacing-right"></i>' . $this->getName() . '</span>';
+                    return '<span class="label" style="text-shadow : none;background-color:' . $this->getDisplay('tagColor') . ' !important;color:' . $this->getDisplay('tagTextColor', 'white') . ' !important">' . $this->getDisplay('icon', '<i class="fas fa-tag"></i>') . '<i class="spacing-right"></i>' . $this->getName() . '</span>';
                 } else {
-                    return '<span class="label label-primary">' . $this->getDisplay('icon') . '<i class="spacing-right"></i>' . $this->getName() . '</span>';
+                    return '<span class="label label-primary">' . $this->getDisplay('icon', '<i class="fas fa-tag"></i>') . '<i class="spacing-right"></i>' . $this->getName() . '</span>';
                 }
             } else {
-                return $this->getDisplay('icon') . '<i class="spacing-right"></i>' . $this->getName();
+                return $this->getDisplay('icon', '<i class="fas fa-tag"></i>') . '<i class="spacing-right"></i>' . $this->getName();
             }
         } else {
             return $this->getName();
@@ -390,7 +390,7 @@ class JeeObject
                 if ($allowDisplayZero == 0 && $result == 0) {
                     $style = 'display:none;';
                 }
-                $return .= '<span style="margin-right:5px;' . $style . '" class="objectSummaryParent cursor" data-summary="' . $key . '" data-object_id="' . $this->getId() . '" data-displayZeroValue="' . $allowDisplayZero . '">' . $value['icon'] . ' <sup><span class="objectSummary' . $key . '">' . $result . '</span> ' . $value['unit'] . '</span></sup>';
+                $return .= '<span style="margin-right:8px;' . $style . '" class="objectSummaryParent cursor" data-summary="' . $key . '" data-object_id="' . $this->getId() . '" data-displayZeroValue="' . $allowDisplayZero . '">' . $value['icon'] . ' <sup><span class="objectSummary' . $key . '">' . $result . '</span> ' . $value['unit'] . '</span></sup>';
             }
         }
         $return = trim($return) . '</span>';
@@ -410,7 +410,7 @@ class JeeObject
         if ($level > $drill) {
             return $data;
         }
-        $icon = findCodeIcon($this->getDisplay('icon'));
+        $icon = Utils::findCodeIcon($this->getDisplay('icon'));
         $data['node']['object' . $this->getId()] = array(
             'id' => 'object' . $this->getId(),
             'name' => $this->getName(),
@@ -495,7 +495,7 @@ class JeeObject
      *
      * @return string Object name
      */
-    public function getName(): string
+    public function getName()
     {
         return $this->name;
     }

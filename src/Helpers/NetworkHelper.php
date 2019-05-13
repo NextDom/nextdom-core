@@ -474,7 +474,7 @@ class NetworkHelper
         }
         $gw = shell_exec("ip route show default | awk '/default/ {print $3}'");
         if ($gw == '') {
-            LogHelper::add('network', 'error', __('Souci réseau détecté, redémarrage du réseau. Aucune gateway de trouvée'));
+            LogHelper::addError('network', __('Souci réseau détecté, redémarrage du réseau. Aucune gateway de trouvée'));
             exec(SystemHelper::getCmdSudo() . 'service networking restart');
             return;
         }
@@ -486,7 +486,7 @@ class NetworkHelper
         if ($return_val == 0) {
             return;
         }
-        LogHelper::add('network', 'error', __('Souci réseau détecté, redémarrage du réseau. La gateway ne répond pas au ping : ') . $gw);
+        LogHelper::addError('network', __('Souci réseau détecté, redémarrage du réseau. La gateway ne répond pas au ping : ') . $gw);
         exec(SystemHelper::getCmdSudo() . 'service networking restart');
     }
 
@@ -499,7 +499,7 @@ class NetworkHelper
     public static function netMatch($network, $ip)
     {
         $ip = trim($ip);
-        if ($ip == trim($network)) {
+        if ($ip === trim($network)) {
             return true;
         }
         $network = str_replace(' ', '', $network);
@@ -543,7 +543,6 @@ class NetworkHelper
             $ip_long = ip2long($ip);
             return ($ip_long & $mask) == ($network_long & $mask);
         } else {
-
             $from = trim(ip2long(substr($network, 0, $d)));
             $to = trim(ip2long(substr($network, $d + 1)));
             $ip = ip2long($ip);
