@@ -52,22 +52,24 @@ echo '<img src="' . $default_image . '" data-original="' . $urlPath . '"  class=
    <div class="marketAttr form-group" data-l1key="name" placeholder="{{Nom}}" style="font-size: 2em;font-weight: bold;"></div>
    <div class="span_author cursor form-group text-medium text-bold text-gray" data-author="<?php echo $market->getAuthor(); ?>">{{Développé par}} <?php echo $market->getAuthor(); ?></div>
    <?php
-   echo '<div class="form-group text-medium"><span class="spacing-right">';
-   echo $market->getCertification();
-   echo '</span>';
-if ($market->getCost() > 0 && $market->getCost() != 999 ) {
-    if ($market->getCost() != $market->getRealCost()) {
-        echo '<span data-l1key="rating" style="text-decoration:line-through;">(' . number_format($market->getRealCost(), 2) . ' €)</span> ';
-    }
-    echo '<span data-l1key="rating">(' . number_format($market->getCost(), 2) . ' € TTC)</span>';
-} else {
-    if ($market->getCost() == 999 ) {
-        echo '<span data-l1key="rating">({{Nous contacter}})</span>';
-    } else {
-        echo '<span data-l1key="rating">({{Gratuit}})</span>';
-    }
+if ($market->getCertification() === 'Officiel') {
+    echo '<span class="txtSizeMedium icon-gray">Officiel</span><br/>';
 }
-echo '</div>';
+if ($market->getCertification() === 'Conseillé') {
+    echo '<span class="txtSizeMedium txtBold text-gray">{{Conseillé}}</span><br/>';
+}
+if ($market->getCertification() === 'Legacy') {
+    echo '<span class="txtSizeMedium txtBold" style="color:#6b6b6b;">{{Legacy}}</span><br/>';
+}
+if ($market->getCertification() === 'Obsolète') {
+    echo '<span class="txtSizeMedium txtBold text-critical">{{Obsolète}}</span><br/>';
+}
+if ($market->getCertification() === 'Premium') {
+       echo '<span style="font-size : 1.5em;color:#9b59b6">{{Premium}}</span><br/>';
+   }
+   if ($market->getCertification() === 'Partenaire') {
+       echo '<span style="font-size : 1.5em;color:#2ecc71">{{Partenaire}}</span><br/>';
+   }
 global $NEXTDOM_INTERNAL_CONFIG;
 if (isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$market->getCategorie()])) {
     echo '<div class="form-group text-normal text-bold text-gray"><i class="fa ' . $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$market->getCategorie()]['icon'] . '"></i> ' . $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$market->getCategorie()]['name'] . '</div>';
@@ -78,14 +80,14 @@ if (isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$market->getCategorie()
 }
 ?>
    <?php
-if ($market->getPurchase() == 1) {
+if ($market->getPurchase() === 1) {
     $allowVersion = $market->getAllowVersion();
     foreach ($allowVersion as $branch) {
-        if ($market->getStatus($branch) == 1) {
-            echo ' <a class="btn btn-warning bt_installFromMarket" data-version="' . $branch . '" data-market_logicalId="' . $market->getLogicalId() . '" data-market_id="' . $market->getId() . '" ><i class="fas fa-plus-circle spacing-right"></i>{{Installer}} ' . $branch . '</a>';
+        if ($market->getStatus($branch) === 1) {
+            echo ' <a class="btn btn-default bt_installFromMarket" data-version="' . $branch . '" data-market_logicalId="' . $market->getLogicalId() . '" data-market_id="' . $market->getId() . '" ><i class="fa fa-plus-circle"></i> {{Installer}} ' . $branch . '</a>';
         }
     }
-} else if ($market->getPrivate() == 1) {
+} else if ($market->getPrivate() === 1) {
     echo '<div class="alert alert-info">{{Ce plugin est pour le moment privé. Vous devez attendre qu\'il devienne public ou avoir un code pour y accéder}}</div>';
 } else {
     if (config::byKey('market::apikey') != '' || (config::byKey('market::username') != '' && config::byKey('market::password') != '')) {
@@ -95,7 +97,11 @@ if ($market->getPurchase() == 1) {
             ?>
      <a class="btn btn-action" href='https://market.jeedom.fr/index.php?v=d&p=profils' target="_blank"><i class="fas fa-eur spacing-right"></i>{{Code promo}}</a>
      <?php
-echo '<a class="btn btn-action" target="_blank" href="' . config::byKey('market::address') . '/index.php?v=d&p=purchaseItem&user_id=' . $purchase_info['user_id'] . '&type=plugin&id=' . $market->getId() . '"><i class="fas fa-shopping-cart spacing-right"></i>{{Acheter}}</a>';
+            if ($market->getCertification() === 'Premium') {
+                echo '<a class="btn btn-default" target="_blank" href="mailto:supportpro@jeedom.com"><i class="fa fa-envelope"></i> {{Nous Contacter}}</a>';
+            }else{
+                echo '<a class="btn btn-default" target="_blank" href="' . config::byKey('market::address') . '/index.php?v=d&p=purchaseItem&user_id=' . $purchase_info['user_id'] . '&type=plugin&id=' . $market->getId() . '"><i class="fa fa-shopping-cart"></i> {{Acheter}}</a>';
+            }
         } else {
             echo '<div class="alert alert-info">{{Cet article est payant. Vous devez avoir un compte sur le market et avoir renseigné les identifiants market dans NextDom pour pouvoir l\'acheter}}</div>';
         }
@@ -108,10 +114,25 @@ if (is_object($update)) {
   <a class="btn btn-danger" id="bt_removeFromMarket" data-market_id="<?php echo $market->getId(); ?>" ><i class="fas fa-minus-circle spacing-right"></i>{{Supprimer}}</a>
 <?php }
 ?>
+<br/><br/>
+<?php
+if ($market->getCertification() === 'Premium') {
+    echo '<span data-l1key="rating" style="font-size: 1.5em;">{{Nous Contacter}}</span>';
+}else{
+    if ($market->getCost() > 0) {
+        if ($market->getCost() != $market->getRealCost()) {
+            echo '<span data-l1key="rating" style="font-size: 1em;text-decoration:line-through;">' . number_format($market->getRealCost(), 2) . ' €</span> ';
+        }
+        echo '<span data-l1key="rating" style="font-size: 1.5em;">' . number_format($market->getCost(), 2) . ' € TTC</span>';
+    } else {
+        echo '<span data-l1key="rating" style="font-size: 1.5em;">{{Gratuit}}</span>';
+    }
+}
+?>
 </div>
 </div>
 <?php
-if ($market->getCertification() != 'Officiel') {
+if ($market->getCertification() !== 'Officiel' && $market->getCertification() !== 'Premium' && $market->getCertification() !== 'Legacy') {
     echo '<div class="alert alert-warning">{{Attention ce plugin n\'est pas un plugin officiel en cas de soucis avec celui-ci (direct ou indirect) toute demande de support peut être refusée}}</div>';
 }
 $compatibilityHardware = $market->getHardwareCompatibility();
@@ -149,16 +170,16 @@ foreach ($market->getImg('screenshot') as $screenshot) {
   <div class='col-sm-6'>
     <legend>{{Compatibilité plateforme}}</legend>
     <?php
-if ($market->getHardwareCompatibility('diy') == 1) {
+if ($market->getHardwareCompatibility('diy') === 1) {
     echo '<img src="public/img/logo_diy.png" style="width:60px;height:60px;" />';
 }
-if ($market->getHardwareCompatibility('rpi') == 1) {
+if ($market->getHardwareCompatibility('rpi') === 1) {
     echo '<img src="public/img/logo_rpi12.png" style="width:60px;height:60px;" />';
 }
-if ($market->getHardwareCompatibility('docker') == 1) {
+if ($market->getHardwareCompatibility('docker') === 1) {
     echo '<img src="public/img/logo_docker.png" style="width:60px;height:60px;" />';
 }
-if ($market->getHardwareCompatibility('miniplus') == 1) {
+if ($market->getHardwareCompatibility('miniplus') === 1) {
     echo '<img src="public/img/logo_nextdomboard.png" style="width:60px;height:60px;" />';
 }
 ?>
@@ -222,22 +243,22 @@ if ($market->getHardwareCompatibility('miniplus') == 1) {
     <label class="control-label">{{Langue disponible}}</label><br/>
     <?php
 echo '<img src="public/img/francais.png" width="30" />';
-if ($market->getLanguage('en_US') == 1) {
+if ($market->getLanguage('en_US') === 1) {
     echo '<img src="public/img/anglais.png" width="30" />';
 }
-if ($market->getLanguage('de_DE') == 1) {
+if ($market->getLanguage('de_DE') === 1) {
     echo '<img src="public/img/allemand.png" width="30" />';
 }
-if ($market->getLanguage('sp_SP') == 1) {
+if ($market->getLanguage('sp_SP') === 1) {
     echo '<img src="public/img/espagnol.png" width="30" />';
 }
-if ($market->getLanguage('ru_RU') == 1) {
+if ($market->getLanguage('ru_RU') === 1) {
     echo '<img src="public/img/russe.png" width="30" />';
 }
-if ($market->getLanguage('id_ID') == 1) {
+if ($market->getLanguage('id_ID') === 1) {
     echo '<img src="public/img/indonesien.png" width="30" />';
 }
-if ($market->getLanguage('it_IT') == 1) {
+if ($market->getLanguage('it_IT') === 1) {
     echo '<img src="public/img/italien.png" width="30" />';
 }
 ?>
@@ -300,14 +321,14 @@ if ($market->getLanguage('it_IT') == 1) {
         notify('Core',error.message,'error');
       },
       success: function (data) {
-       if(market_display_info.type == 'plugin'){
+       if(market_display_info.type === 'plugin'){
          bootbox.confirm('{{Voulez-vous aller sur la page de configuration de votre nouveau plugin ?}}', function (result) {
            if (result) {
             loadPage('index.php?v=d&p=plugin&id=' + logicalId);
           }
         });
        }
-       if ( typeof refreshListAfterMarketObjectInstall == 'function'){
+       if ( typeof refreshListAfterMarketObjectInstall === 'function'){
         refreshListAfterMarketObjectInstall()
       }
           notify("Core",'{{Objet installé avec succès}}',"success");

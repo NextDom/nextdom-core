@@ -46,6 +46,8 @@ printUpdate();
 
 $('#pre_updateInfo').height($(window).height() - $('header').height() - $('footer').height() - 150);
 
+$('#pre_updateInfo').parent().height($(window).outerHeight() - $('header').outerHeight() - 160);
+
 $('#bt_updateNextDom').off('click').on('click', function () {
     $('#md_specifyUpdate').modal('show');
 });

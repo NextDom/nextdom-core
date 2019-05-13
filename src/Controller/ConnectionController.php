@@ -23,6 +23,7 @@
 namespace NextDom\Controller;
 
 use NextDom\Helpers\Render;
+use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
 
 class ConnectionController extends BaseController
@@ -35,11 +36,14 @@ class ConnectionController extends BaseController
     public static function get(&$pageData): string
     {
         $pageData['JS_VARS']['nextdom_waitSpinner'] = ConfigManager::byKey('nextdom::waitSpinner');
+        $pageData['JS_VARS']['serverTZoffsetMin'] = Utils::getTZoffsetMin();
         $pageData['JS_END_POOL'] = [];
         $pageData['TITLE'] = 'Connexion';
         $pageData['CSS_POOL'][] = '/public/css/pages/connection.css';
         $pageData['JS_END_POOL'][] = '/vendor/node_modules/admin-lte/dist/js/adminlte.min.js';
         $pageData['JS_END_POOL'][] = '/public/js/desktop/connection.js';
+
+
 
         return Render::getInstance()->get('desktop/connection.html.twig', $pageData);
     }

@@ -178,7 +178,7 @@ class Plan3dAjax extends BaseAjax
         $filename = Utils::readUploadedFile($_FILES, "file", $uploadDir, 150, array(".zip"));
 
         if ($plan3dHeader->getConfiguration('path') == '') {
-            $path = sprintf("%s/data/3d/%s/", NEXTDOM_DATA, config::genKey());
+            $path = sprintf("%s/data/3d/%s/", NEXTDOM_DATA, ConfigManager::genKey());
             $plan3dHeader->setConfiguration('path', $path);
         }
 
@@ -192,9 +192,9 @@ class Plan3dAjax extends BaseAjax
                 throw new CoreException(__('Impossible de décompresser les fichiers : '));
             }
             $zip->close();
-            unlink($file);
+            unlink($filename);
         } else {
-            throw new CoreException(__('Impossible de décompresser l\'archive zip : ') . $file . ' => ' . ZipErrorMessage($res));
+            throw new CoreException(__('Impossible de décompresser l\'archive zip : ') . $filename . ' => ' . ZipErrorMessage($res));
         }
         $objfile = FileSystemHelper::ls($cibDir, '*.obj', false, array('files'));
         if (count($objfile) != 1) {

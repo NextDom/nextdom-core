@@ -231,7 +231,7 @@ class Cmd implements EntityInterface
 
     public function getOrder()
     {
-        if ($this->order == '') {
+        if ($this->order === '') {
             return 0;
         }
         return $this->order;
@@ -368,7 +368,7 @@ class Cmd implements EntityInterface
 
     public function setName($_name)
     {
-        $_name = str_replace(array('&', '#', ']', '[', '%', "'"), '', $_name);
+        $_name = Utils::cleanComponentName($_name);
         $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
         $this->name = $_name;
         return $this;
@@ -376,7 +376,7 @@ class Cmd implements EntityInterface
 
     public function setConfiguration($_key, $_value)
     {
-        if ($_key == 'actionCodeAccess' && $_value != '') {
+        if ($_key === 'actionCodeAccess' && $_value != '') {
             if (!Utils::isSha1($_value) && !Utils::isSha512($_value)) {
                 $_value = Utils::sha512($_value);
             }
@@ -454,7 +454,7 @@ class Cmd implements EntityInterface
 
     public function setHtml($_key, $_value)
     {
-        if (in_array($_key, array('dashboard', 'mobile', 'dview', 'mview', 'dplan')) && $this->getWidgetTemplateCode($_key, true) == $_value) {
+        if (in_array($_key, array('dashboard', 'mobile', 'dview', 'mview', 'dplan')) && $this->getWidgetTemplateCode($_key, true) === $_value) {
             $_value = '';
         }
         if ($this->getHtml($_key) != $_value) {
@@ -555,14 +555,14 @@ class Cmd implements EntityInterface
         if (is_array($_value)) {
             return '';
         }
-        if (trim($_value) == '' && $_value !== false && $_value !== 0) {
+        if (trim($_value) === '' && $_value !== false && $_value !== 0) {
             return '';
         }
         $_value = trim(trim($_value), '"');
         if (@strpos(strtolower($_value), 'error::') !== false) {
             return $_value;
         }
-        if ($this->getType() == 'info') {
+        if ($this->getType() === 'info') {
             switch ($this->getSubType()) {
                 case 'string':
                     if ($_quote) {
@@ -587,13 +587,13 @@ class Cmd implements EntityInterface
                         }
                     }
                     $value = strtolower($_value);
-                    if ($value == 'on' || $value == 'high' || $value == 'true' || $value === true) {
+                    if ($value === 'on' || $value === 'high' || $value === 'true' || $value === true) {
                         return 1;
                     }
-                    if ($value == 'off' || $value == 'low' || $value == 'false' || $value === false) {
+                    if ($value === 'off' || $value === 'low' || $value === 'false' || $value === false) {
                         return 0;
                     }
-                    if ((is_numeric(intval($_value)) && intval($_value) > 1) || $_value === true || $_value == 1) {
+                    if ((is_numeric(intval($_value)) && intval($_value) > 1) || $_value === true || $_value === 1) {
                         return 1;
                     }
                     return 0;
@@ -613,10 +613,10 @@ class Cmd implements EntityInterface
                     if ($this->getConfiguration('historizeRound') !== '' && is_numeric($this->getConfiguration('historizeRound')) && $this->getConfiguration('historizeRound') >= 0) {
                         $_value = round($_value, $this->getConfiguration('historizeRound'));
                     }
-                    if ($_value > $this->getConfiguration('maxValue', $_value) && $this->getConfiguration('maxValueReplace') == 1) {
+                    if ($_value > $this->getConfiguration('maxValue', $_value) && $this->getConfiguration('maxValueReplace') === 1) {
                         $_value = $this->getConfiguration('maxValue', $_value);
                     }
-                    if ($_value < $this->getConfiguration('minValue', $_value) && $this->getConfiguration('minValueReplace') == 1) {
+                    if ($_value < $this->getConfiguration('minValue', $_value) && $this->getConfiguration('minValueReplace') === 1) {
                         $_value = $this->getConfiguration('minValue', $_value);
                     }
                     return floatval($_value);
@@ -642,25 +642,25 @@ class Cmd implements EntityInterface
 
     public function save()
     {
-        if ($this->getName() == '') {
+        if (empty($this->getName())) {
             throw new CoreException(__('Le nom de la commande ne peut pas être vide :') . print_r($this, true));
         }
-        if ($this->getType() == '') {
+        if (empty($this->getType())) {
             throw new CoreException($this->getHumanName() . ' ' . __('Le type de la commande ne peut pas être vide :') . print_r($this, true));
         }
-        if ($this->getSubType() == '') {
+        if (empty($this->getSubType())) {
             throw new CoreException($this->getHumanName() . ' ' . __('Le sous-type de la commande ne peut pas être vide :') . print_r($this, true));
         }
-        if ($this->getEqLogic_id() == '') {
+        if (empty($this->getEqLogic_id())) {
             throw new CoreException($this->getHumanName() . ' ' . __('Vous ne pouvez pas créer une commande sans la rattacher à un équipement'));
         }
         if ($this->getConfiguration('maxValue') != '' && $this->getConfiguration('minValue') != '' && $this->getConfiguration('minValue') > $this->getConfiguration('maxValue')) {
             throw new CoreException($this->getHumanName() . ' ' . __('La valeur minimum de la commande ne peut etre supérieure à la valeur maximum'));
         }
-        if ($this->getEqType() == '') {
+        if ($this->getEqType() === '') {
             $this->setEqType($this->getEqLogicId()->getEqType_name());
         }
-        if ($this->getDisplay('generic_type') !== '' && $this->getGeneric_type() == '') {
+        if ($this->getDisplay('generic_type') !== '' && $this->getGeneric_type() === '') {
             $this->setGeneric_type($this->getDisplay('generic_type'));
             $this->setDisplay('generic_type', '');
         }
@@ -669,7 +669,7 @@ class Cmd implements EntityInterface
             $this->_needRefreshWidget = false;
             $this->getEqLogicId()->refreshWidget();
         }
-        if ($this->_needRefreshAlert && $this->getType() == 'info') {
+        if ($this->_needRefreshAlert && $this->getType() === 'info') {
             $value = $this->execCmd();
             $level = $this->checkAlertLevel($value);
             if ($level != $this->getCache('alertLevel')) {
@@ -708,7 +708,7 @@ class Cmd implements EntityInterface
 
     public function preExecCmd($_values = array())
     {
-        if (!is_array($this->getConfiguration('nextdomPreExecCmd')) || count($this->getConfiguration('nextdomPreExecCmd')) == 0) {
+        if (!is_array($this->getConfiguration('nextdomPreExecCmd')) || count($this->getConfiguration('nextdomPreExecCmd')) === 0) {
             return;
         }
         foreach ($this->getConfiguration('nextdomPreExecCmd') as $action) {
@@ -770,7 +770,7 @@ class Cmd implements EntityInterface
      */
     public function execCmd($_options = null, $_sendNodeJsEvent = false, $_quote = false)
     {
-        if ($this->getType() == 'info') {
+        if ($this->getType() === 'info') {
             $state = $this->getCache(array('collectDate', 'valueDate', 'value'));
             if (isset($state['collectDate'])) {
                 $this->setCollectDate($state['collectDate']);
@@ -801,7 +801,7 @@ class Cmd implements EntityInterface
             if (isset($options['color'])) {
                 $options['color'] = str_replace('"', '', $options['color']);
             }
-            if ($this->getSubType() == 'color' && isset($options['color']) && substr($options['color'], 0, 1) != '#') {
+            if ($this->getSubType() === 'color' && isset($options['color']) && substr($options['color'], 0, 1) != '#') {
                 $options['color'] = CmdManager::convertColor($options['color']);
             }
             $str_option = '';
@@ -833,7 +833,7 @@ class Cmd implements EntityInterface
             LogHelper::add($type, 'error', __('Erreur exécution de la commande ') . $this->getHumanName() . ' : ' . $e->getMessage());
             throw $e;
         }
-        if ($options !== null && $this->getValue() == '') {
+        if ($options !== null && $this->getValue() === '') {
             if (isset($options['slider'])) {
                 $this->setConfiguration('lastCmdValue', $options['slider']);
                 $this->save();
@@ -872,17 +872,15 @@ class Cmd implements EntityInterface
     public function getWidgetTemplateCode($_version = 'dashboard', $_noCustom = false)
     {
         $version = NextDomHelper::versionAlias($_version);
-        if (!$_noCustom && $this->getHtml('enable', 0) == 1 && $this->getHtml($_version) != '') {
-            return $this->getHtml($_version);
-        }
+
         $template_name = 'cmd.' . $this->getType() . '.' . $this->getSubType() . '.' . $this->getTemplate($version, 'default');
         if (!isset(self::$_templateArray[$version . '::' . $template_name])) {
             $template = FileSystemHelper::getTemplateFileContent('core', $version, $template_name);
-            if ($template == '') {
-                if (ConfigManager::byKey('active', 'widget') == 1) {
+            if ($template === '') {
+                if (ConfigManager::byKey('active', 'widget') === 1) {
                     $template = FileSystemHelper::getTemplateFileContent('core', $version, $template_name, 'widget');
                 }
-                if ($template == '') {
+                if ($template === '') {
                     foreach (PluginManager::listPlugin(true) as $plugin) {
                         $template = FileSystemHelper::getTemplateFileContent('core', $version, $template_name, $plugin->getId());
                         if ($template != '') {
@@ -890,7 +888,7 @@ class Cmd implements EntityInterface
                         }
                     }
                 }
-                if ($template == '') {
+                if ($template === '') {
                     $template_name = 'cmd.' . $this->getType() . '.' . $this->getSubType() . '.default';
                     $template = FileSystemHelper::getTemplateFileContent('core', $version, $template_name);
                 }
@@ -905,7 +903,7 @@ class Cmd implements EntityInterface
     public function toHtml($_version = 'dashboard', $_options = '', $_cmdColor = null)
     {
         $version2 = NextDomHelper::versionAlias($_version, false);
-        if ($this->getDisplay('showOn' . $version2, 1) == 0) {
+        if ($this->getDisplay('showOn' . $version2, 1) === 0) {
             return '';
         }
         $version = NextDomHelper::versionAlias($_version);
@@ -933,8 +931,8 @@ class Cmd implements EntityInterface
             foreach ($elements as $element) {
                 $coupleArray = explode('|', $element);
                 $cmdValue = $this->getCmdValue();
-                if (is_object($cmdValue) && $cmdValue->getType() == 'info') {
-                    if ($cmdValue->execCmd() == $coupleArray[0]) {
+                if (is_object($cmdValue) && $cmdValue->getType() === 'info') {
+                    if ($cmdValue->execCmd() === $coupleArray[0]) {
                         $listOption .= '<option value="' . $coupleArray[0] . '" selected>' . $coupleArray[1] . '</option>';
                         $foundSelect = true;
                     } else {
@@ -949,18 +947,18 @@ class Cmd implements EntityInterface
             }
             $replace['#listValue#'] = $listOption;
         }
-        if ($this->getDisplay('showNameOn' . $version2, 1) == 0) {
+        if ($this->getDisplay('showNameOn' . $version2, 1) === 0) {
             $replace['#hideCmdName#'] = 'display:none;';
         }
-        if ($this->getDisplay('showIconAndName' . $version2, 0) == 1) {
+        if ($this->getDisplay('showIconAndName' . $version2, 0) === 1) {
             $replace['#name_display#'] = $this->getDisplay('icon') . ' ' . $this->getName();
         }
         $template = $this->getWidgetTemplateCode($_version);
 
         if ($_cmdColor === null && $version != 'scenario') {
             $eqLogic = $this->getEqLogicId();
-            $vcolor = ($version == 'mobile') ? 'mcmdColor' : 'cmdColor';
-            if ($eqLogic->getPrimaryCategory() == '') {
+            $vcolor = ($version === 'mobile') ? 'mcmdColor' : 'cmdColor';
+            if ($eqLogic->getPrimaryCategory() === '') {
                 $replace['#cmdColor#'] = NextDomHelper::getConfiguration('eqLogic:category:default:' . $vcolor);
             } else {
                 $replace['#cmdColor#'] = NextDomHelper::getConfiguration('eqLogic:category:' . $eqLogic->getPrimaryCategory() . ':' . $vcolor);
@@ -969,10 +967,10 @@ class Cmd implements EntityInterface
             $replace['#cmdColor#'] = $_cmdColor;
         }
 
-        if ($this->getType() == 'info') {
+        if ($this->getType() === 'info') {
             $replace['#state#'] = '';
             $replace['#tendance#'] = '';
-            if ($this->getEqLogicId()->getIsEnable() == 0) {
+            if ($this->getEqLogicId()->getIsEnable() === 0) {
                 $template = FileSystemHelper::getTemplateFileContent('core', $version, 'cmd.error');
                 $replace['#state#'] = 'N/A';
             } else {
@@ -981,10 +979,10 @@ class Cmd implements EntityInterface
                     $template = FileSystemHelper::getTemplateFileContent('core', $version, 'cmd.error');
                     $replace['#state#'] = str_replace('error::', '', $replace['#state#']);
                 } else {
-                    if ($this->getSubType() == 'binary' && $this->getDisplay('invertBinary') == 1) {
-                        $replace['#state#'] = ($replace['#state#'] == 1) ? 0 : 1;
+                    if ($this->getSubType() === 'binary' && $this->getDisplay('invertBinary') === 1) {
+                        $replace['#state#'] = ($replace['#state#'] === 1) ? 0 : 1;
                     }
-                    if ($this->getSubType() == 'numeric' && trim($replace['#state#']) === '') {
+                    if ($this->getSubType() === 'numeric' && trim($replace['#state#']) === '') {
                         $replace['#state#'] = 0;
                     }
                 }
@@ -997,14 +995,14 @@ class Cmd implements EntityInterface
             $replace['#collectDate#'] = $this->getCollectDate();
             $replace['#valueDate#'] = $this->getValueDate();
             $replace['#alertLevel#'] = $this->getCache('alertLevel', 'none');
-            if ($this->getIsHistorized() == 1) {
+            if ($this->getIsHistorized() === 1) {
                 $replace['#history#'] = 'history cursor';
-                if (ConfigManager::byKey('displayStatsWidget') == 1 && strpos($template, '#displayHistory#') !== false) {
-                    if ($this->getDisplay('showStatsOn' . $version2, 1) == 1) {
+                if (ConfigManager::byKey('displayStatsWidget') === 1 && strpos($template, '#displayHistory#') !== false) {
+                    if ($this->getDisplay('showStatsOn' . $version2, 1) === 1) {
                         $startHist = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -' . ConfigManager::byKey('historyCalculPeriod') . ' hour'));
                         $replace['#displayHistory#'] = '';
                         $historyStatistique = $this->getStatistique($startHist, date('Y-m-d H:i:s'));
-                        if ($historyStatistique['avg'] == 0 && $historyStatistique['min'] == 0 && $historyStatistique['max'] == 0) {
+                        if ($historyStatistique['avg'] === 0 && $historyStatistique['min'] === 0 && $historyStatistique['max'] === 0) {
                             $replace['#averageHistoryValue#'] = round($replace['#state#'], 1);
                             $replace['#minHistoryValue#'] = round($replace['#state#'], 1);
                             $replace['#maxHistoryValue#'] = round($replace['#state#'], 1);
@@ -1034,15 +1032,15 @@ class Cmd implements EntityInterface
             return Utils::templateReplace($replace, $template);
         } else {
             $cmdValue = $this->getCmdValue();
-            if (is_object($cmdValue) && $cmdValue->getType() == 'info') {
+            if (is_object($cmdValue) && $cmdValue->getType() === 'info') {
                 $replace['#state#'] = $cmdValue->execCmd();
                 $replace['#valueName#'] = $cmdValue->getName();
                 $replace['#unite#'] = $cmdValue->getUnite();
-                if (trim($replace['#state#']) === '' && ($cmdValue->getSubType() == 'binary' || $cmdValue->getSubType() == 'numeric')) {
+                if (trim($replace['#state#']) === '' && ($cmdValue->getSubType() === 'binary' || $cmdValue->getSubType() === 'numeric')) {
                     $replace['#state#'] = 0;
                 }
-                if ($cmdValue->getSubType() == 'binary' && $cmdValue->getDisplay('invertBinary') == 1) {
-                    $replace['#state#'] = ($replace['#state#'] == 1) ? 0 : 1;
+                if ($cmdValue->getSubType() === 'binary' && $cmdValue->getDisplay('invertBinary') === 1) {
+                    $replace['#state#'] = ($replace['#state#'] === 1) ? 0 : 1;
                 }
             } else {
                 $replace['#state#'] = ($this->getLastValue() !== null) ? $this->getLastValue() : '';
@@ -1058,7 +1056,7 @@ class Cmd implements EntityInterface
             }
 
             $html .= Utils::templateReplace($replace, $template);
-            if (trim($html) == '') {
+            if (trim($html) === '') {
                 return $html;
             }
             if ($_options != '') {
@@ -1103,11 +1101,11 @@ class Cmd implements EntityInterface
             return;
         }
         $eqLogic = $this->getEqLogicId();
-        if (!is_object($eqLogic) || $eqLogic->getIsEnable() == 0) {
+        if (!is_object($eqLogic) || $eqLogic->getIsEnable() === 0) {
             return;
         }
         $value = $this->formatValue($_value);
-        if ($this->getSubType() == 'numeric' && ($value > $this->getConfiguration('maxValue', $value) || $value < $this->getConfiguration('minValue', $value)) && strpos($value, 'error') === false) {
+        if ($this->getSubType() === 'numeric' && ($value > $this->getConfiguration('maxValue', $value) || $value < $this->getConfiguration('minValue', $value)) && strpos($value, 'error') === false) {
             LogHelper::add('cmd', 'info', __('La commande n\'est pas dans la plage de valeur autorisée : ') . $this->getHumanName() . ' => ' . $value);
             return;
         }
@@ -1115,7 +1113,7 @@ class Cmd implements EntityInterface
             return;
         }
         $oldValue = $this->execCmd();
-        $repeat = ($oldValue == $value && $oldValue !== '' && $oldValue !== null);
+        $repeat = ($oldValue === $value && $oldValue !== '' && $oldValue !== null);
         $this->setCollectDate(($_datetime !== null) ? $_datetime : date('Y-m-d H:i:s'));
         $this->setCache('collectDate', $this->getCollectDate());
         $this->setValueDate(($repeat) ? $this->getValueDate() : $this->getCollectDate());
@@ -1123,21 +1121,21 @@ class Cmd implements EntityInterface
         $display_value = $value;
         if (method_exists($this, 'formatValueWidget')) {
             $display_value = $this->formatValueWidget($value);
-        } else if ($this->getSubType() == 'binary' && $this->getDisplay('invertBinary') == 1) {
-            $display_value = ($value == 1) ? 0 : 1;
-        } else if ($this->getSubType() == 'numeric' && trim($value) === '') {
+        } else if ($this->getSubType() === 'binary' && $this->getDisplay('invertBinary') === 1) {
+            $display_value = ($value === 1) ? 0 : 1;
+        } else if ($this->getSubType() === 'numeric' && trim($value) === '') {
             $display_value = 0;
-        } else if ($this->getSubType() == 'binary' && trim($value) === '') {
+        } else if ($this->getSubType() === 'binary' && trim($value) === '') {
             $display_value = 0;
         }
-        if ($repeat && $this->getConfiguration('repeatEventManagement', 'auto') == 'never') {
+        if ($repeat && $this->getConfiguration('repeatEventManagement', 'auto') === 'never') {
             $this->addHistoryValue($value, $this->getCollectDate());
             $eqLogic->emptyCacheWidget();
             EventManager::adds('cmd::update', array(array('cmd_id' => $this->getId(), 'value' => $value, 'display_value' => $display_value, 'valueDate' => $this->getValueDate(), 'collectDate' => $this->getCollectDate())));
             return;
         }
         $_loop++;
-        if ($repeat && ($this->getConfiguration('repeatEventManagement', 'auto') == 'always' || $this->getSubType() == 'binary')) {
+        if ($repeat && ($this->getConfiguration('repeatEventManagement', 'auto') === 'always' || $this->getSubType() === 'binary')) {
             $repeat = false;
         }
         $message = __('Evènement sur la commande ') . $this->getHumanName() . __(' valeur : ') . $value;
@@ -1156,7 +1154,7 @@ class Cmd implements EntityInterface
             $value_cmd = CmdManager::byValue($this->getId(), null, true);
             if (is_array($value_cmd) && count($value_cmd) > 0) {
                 foreach ($value_cmd as $cmd) {
-                    if ($cmd->getType() == 'action') {
+                    if ($cmd->getType() === 'action') {
                         if (!$repeat) {
                             $events[] = array('cmd_id' => $cmd->getId(), 'value' => $value, 'display_value' => $display_value, 'valueDate' => $this->getValueDate(), 'collectDate' => $this->getCollectDate());
                         }
@@ -1216,12 +1214,12 @@ class Cmd implements EntityInterface
 
     public function checkCmdAlert($_value)
     {
-        if ($this->getConfiguration('nextdomCheckCmdOperator') == '' || $this->getConfiguration('nextdomCheckCmdTest') == '' || is_nan($this->getConfiguration('nextdomCheckCmdTime', 0))) {
+        if ($this->getConfiguration('nextdomCheckCmdOperator') === '' || $this->getConfiguration('nextdomCheckCmdTest') === '' || is_nan($this->getConfiguration('nextdomCheckCmdTime', 0))) {
             return;
         }
         $check = NextDomHelper::evaluateExpression($_value . $this->getConfiguration('nextdomCheckCmdOperator') . $this->getConfiguration('nextdomCheckCmdTest'));
-        if ($check == 1 || $check || $check == '1') {
-            if ($this->getConfiguration('nextdomCheckCmdTime', 0) == 0) {
+        if ($check === 1 || $check || $check === '1') {
+            if ($this->getConfiguration('nextdomCheckCmdTime', 0) === 0) {
                 $this->executeAlertCmdAction();
                 return;
             }
@@ -1270,7 +1268,7 @@ class Cmd implements EntityInterface
 
     public function checkAlertLevel($_value, $_allowDuring = true)
     {
-        if ($this->getType() != 'info' || ($this->getAlert('warningif') == '' && $this->getAlert('dangerif') == '')) {
+        if ($this->getType() != 'info' || ($this->getAlert('warningif') === '' && $this->getAlert('dangerif') === '')) {
             return 'none';
         }
         global $NEXTDOM_INTERNAL_CONFIG;
@@ -1282,13 +1280,12 @@ class Cmd implements EntityInterface
             }
             if ($this->getAlert($level . 'if') != '') {
                 $check = NextDomHelper::evaluateExpression(str_replace('#value#', $_value, $this->getAlert($level . 'if')));
-                if ($check == 1 || $check || $check == '1') {
+                if ($check === 1 || $check || $check === '1') {
                     $currentLevel = $level;
                 }
             }
         }
-        $level = $this->getEqLogicId()->getAlert();
-        if (is_array($level) && isset($level['name']) && $currentLevel == strtolower($level['name'])) {
+        if ($this->getCache('alertLevel') === $currentLevel) {
             return $currentLevel;
         }
         if ($_allowDuring && $this->getAlert($currentLevel . 'during') != '' && $this->getAlert($currentLevel . 'during') > 0) {
@@ -1311,7 +1308,7 @@ class Cmd implements EntityInterface
             $cron->save();
             return 'none';
         }
-        if ($_allowDuring && $currentLevel == 'none') {
+        if ($_allowDuring && $currentLevel === 'none') {
             $cron = CronManager::byClassAndFunction('cmd', 'duringAlertLevel', array('cmd_id' => intval($this->getId())));
             if (is_object($cron)) {
                 $cron->remove(false);
@@ -1357,7 +1354,7 @@ class Cmd implements EntityInterface
             $message .= ' => ' . str_replace('#value#', $_value, $this->getAlert($_level . 'if'));
             LogHelper::add('event', 'info', $message);
             $eqLogic = $this->getEqLogicId();
-            if (ConfigManager::byKey('alert::addMessageOn' . ucfirst($_level)) == 1) {
+            if (ConfigManager::byKey('alert::addMessageOn' . ucfirst($_level)) === 1) {
                 MessageManager::add($eqLogic->getEqType_name(), $message);
             }
             $cmds = explode(('&&'), ConfigManager::byKey('alert::' . $_level . 'Cmd'));
@@ -1390,10 +1387,10 @@ class Cmd implements EntityInterface
     public function pushUrl($_value)
     {
         $url = $this->getConfiguration('nextdomPushUrl');
-        if ($url == '') {
+        if ($url === '') {
             $url = ConfigManager::byKey('cmdPushUrl');
         }
-        if ($url == '') {
+        if ($url === '') {
             return;
         }
         $replace = array(
@@ -1430,7 +1427,7 @@ class Cmd implements EntityInterface
 
     public function askResponse($_response)
     {
-        if ($this->getCache('ask::variable', 'none') == 'none') {
+        if ($this->getCache('ask::variable', 'none') === 'none') {
             return false;
         }
         $askEndTime = $this->getCache('ask::endtime', null);
@@ -1454,7 +1451,7 @@ class Cmd implements EntityInterface
 
     public function addHistoryValue($_value, $_datetime = '')
     {
-        if ($this->getIsHistorized() == 1 && ($_value === null || ($_value !== '' && $this->getType() == 'info' && $_value <= $this->getConfiguration('maxValue', $_value) && $_value >= $this->getConfiguration('minValue', $_value)))) {
+        if ($this->getIsHistorized() === 1 && ($_value === null || ($_value !== '' && $this->getType() === 'info' && $_value <= $this->getConfiguration('maxValue', $_value) && $_value >= $this->getConfiguration('minValue', $_value)))) {
             $history = new History();
             $history->setCmd_id($this->getId());
             $history->setValue($_value);
@@ -1466,11 +1463,19 @@ class Cmd implements EntityInterface
 
     public function getStatistique($_startTime, $_endTime)
     {
+        if ($this->getType() != 'info' || $this->getType() === 'string') {
+            return array();
+        }
+        return HistoryManager::getStatistics($this->getId(), $_startTime, $_endTime);
+    }
+
+    public function getTemporalAvg($_startTime, $_endTime) {
         if ($this->getType() != 'info' || $this->getType() == 'string') {
             return array();
         }
-        return HistoryManager::getStatistique($this->getId(), $_startTime, $_endTime);
+        return HistoryManager::getTemporalAvg($this->getId(), $_startTime, $_endTime);
     }
+
 
     public function getTendance($_startTime, $_endTime)
     {
@@ -1526,14 +1531,14 @@ class Cmd implements EntityInterface
         $class = new \ReflectionClass($this->getEqType());
         $method_toHtml = $class->getMethod('toHtml');
         $return = array();
-        if ($method_toHtml->class == EqLogic::class) {
+        if ($method_toHtml->class === EqLogic::class) {
             $return['custom'] = true;
         } else {
             $return['custom'] = false;
         }
         $class = new \ReflectionClass($this->getEqType() . 'Cmd');
         $method_toHtml = $class->getMethod('toHtml');
-        if ($method_toHtml->class == Cmd::class) {
+        if ($method_toHtml->class === Cmd::class) {
             $return['custom'] = true;
         } else {
             $return['custom'] = false;
@@ -1587,20 +1592,20 @@ class Cmd implements EntityInterface
         foreach ($return as $key => $value) {
             if (is_array($value)) {
                 foreach ($value as $key2 => $value2) {
-                    if ($value2 == '') {
+                    if ($value2 === '') {
                         unset($return[$key][$key2]);
                     }
                 }
             } else {
-                if ($value == '') {
+                if ($value === '') {
                     unset($return[$key]);
                 }
             }
         }
-        if (isset($return['configuration']) && count($return['configuration']) == 0) {
+        if (isset($return['configuration']) && count($return['configuration']) === 0) {
             unset($return['configuration']);
         }
-        if (isset($return['display']) && count($return['display']) == 0) {
+        if (isset($return['display']) && count($return['display']) === 0) {
             unset($return['display']);
         }
         return $return;
@@ -1609,7 +1614,7 @@ class Cmd implements EntityInterface
     public function getDirectUrlAccess()
     {
         $url = '/core/api/jeeApi.php?apikey=' . ConfigManager::byKey('api') . '&type=cmd&id=' . $this->getId();
-        if ($this->getType() == 'action') {
+        if ($this->getType() === 'action') {
             switch ($this->getSubType()) {
                 case 'slider':
                     $url .= '&slider=50';
@@ -1630,15 +1635,15 @@ class Cmd implements EntityInterface
 
     public function checkAccessCode($_code)
     {
-        if ($this->getType() != 'action' || trim($this->getConfiguration('actionCodeAccess')) == '') {
+        if ($this->getType() != 'action' || trim($this->getConfiguration('actionCodeAccess')) === '') {
             return true;
         }
-        if (sha1($_code) == $this->getConfiguration('actionCodeAccess')) {
+        if (sha1($_code) === $this->getConfiguration('actionCodeAccess')) {
             $this->setConfiguration('actionCodeAccess', Utils::sha512($_code));
             $this->save();
             return true;
         }
-        if (Utils::sha512($_code) == $this->getConfiguration('actionCodeAccess')) {
+        if (Utils::sha512($_code) === $this->getConfiguration('actionCodeAccess')) {
             return true;
         }
         return false;
@@ -1663,7 +1668,7 @@ class Cmd implements EntityInterface
         if ($_level > $_drill) {
             return $_data;
         }
-        $icon = ($this->getType() == 'info') ? Utils::findCodeIcon('fa-eye') : Utils::findCodeIcon('fa-hand-paper-o');
+        $icon = ($this->getType() === 'info') ? Utils::findCodeIcon('fa-eye') : Utils::findCodeIcon('fa-hand-paper-o');
         $_data['node']['cmd' . $this->getId()] = array(
             'id' => 'cmd' . $this->getId(),
             'name' => $this->getName(),
@@ -1672,7 +1677,7 @@ class Cmd implements EntityInterface
             'fontsize' => '1.5em',
             'texty' => -14,
             'textx' => 0,
-            'fontweight' => ($_level == 1) ? 'bold' : 'normal',
+            'fontweight' => ($_level === 1) ? 'bold' : 'normal',
             'title' => $this->getHumanName(),
             'url' => $this->getEqLogicId()->getLinkToConfiguration(),
         );
@@ -1717,7 +1722,7 @@ class Cmd implements EntityInterface
 
     public function hasRight($_user = null)
     {
-        if ($this->getType() == 'action') {
+        if ($this->getType() === 'action') {
             return $this->getEqLogicId()->hasRight('x', $_user);
         } else {
             return $this->getEqLogicId()->hasRight('r', $_user);

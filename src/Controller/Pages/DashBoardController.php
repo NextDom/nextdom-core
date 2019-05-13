@@ -75,6 +75,7 @@ class DashBoardController extends BaseController
         }
 
         $pageData['JS_VARS']['rootObjectId'] = $currentJeeObject->getId();
+        $pageData['JS_VARS']['serverTZoffsetMin'] = Utils::getTZoffsetMin();
 
         $pageData['dashboardDisplayObjectByDefault'] = UserManager::getStoredUser()->getOptions('displayObjetByDefault');
         $pageData['dashboardDisplayScenarioByDefault'] = UserManager::getStoredUser()->getOptions('displayScenarioByDefault');

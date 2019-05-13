@@ -919,6 +919,7 @@ class Utils
         if (!isset(self::$properties[$class])) {
             self::$properties[$class] = (new \ReflectionClass($class))->getProperties();
         }
+        /** @var \ReflectionProperty $property */
         foreach (self::$properties[$class] as $property) {
             $name = $property->getName();
             if ('_' !== $name[0]) {
@@ -976,7 +977,7 @@ class Utils
     }
 
     /**
-     * @param      $_class
+     * @param  $_class
      * @param      $_ajaxList
      * @param null $_dbList
      * @throws CoreException
@@ -1125,6 +1126,7 @@ class Utils
      * @param array $array input array
      * @param string $key array key
      * @param mixed $default fallback value
+     * @return mixed
      */
     public static function array_key_default($array, $key, $default) {
         if (true === array_key_exists($key, $array))
@@ -1182,5 +1184,26 @@ class Utils
         }
 
         return $name;
+    }
+
+    /**
+     * @return float|int
+     */
+    static public function getTZoffsetMin() {
+        $tz = date_default_timezone_get();
+        date_default_timezone_set( "UTC" );
+        $seconds = timezone_offset_get( timezone_open($tz), new \DateTime() );
+        date_default_timezone_set($tz);
+        return($seconds/60);
+    }
+
+    /**
+     * Clean some characters from name passed
+     *
+     * @param $name
+     * @return mixed
+     */
+    function cleanComponentName($name){
+        return str_replace(array('&', '#', ']', '[', '%', "\\", "/", "'", '"'), '', $name);
     }
 }

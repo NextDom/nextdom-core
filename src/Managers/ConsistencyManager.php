@@ -34,6 +34,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Exceptions\CoreException;
 use NextDom\Model\Entity\Cron;
 
 class ConsistencyManager {
@@ -63,7 +64,7 @@ class ConsistencyManager {
             self::resetCommandsActionID();
             self::ensureUserFunctionExists();
         } catch (\Exception $e) {
-            throw CoreException("error while checking system consistency: " . $e->getMessage());
+            throw new CoreException("error while checking system consistency: " . $e->getMessage());
         }
     }
 
@@ -182,11 +183,14 @@ class ConsistencyManager {
     private static function resetCommandsActionID()
     {
         foreach (CmdManager::all() as $c_cmd) {
-            $value = $c_cmd->getConfiguration("nextdomCheckCmdCmdActionId");
-            if ("" != $value) {
-                $c_cmd->setConfiguration("nextdomCheckCmdCmdActionId", "");
+            try {
+                $value = $c_cmd->getConfiguration("nextdomCheckCmdCmdActionId");
+                if ("" != $value) {
+                    $c_cmd->setConfiguration("nextdomCheckCmdCmdActionId", "");
+                }
+                $c_cmd->save();
+            } catch (\Exception $e) {
             }
-            $c_cmd->save();
         }
     }
 
@@ -206,16 +210,16 @@ class ConsistencyManager {
 
     private static function deleteDeprecatedCrons()
     {
-        $targets = array(
-            "nextdom" => "persist",
-            "history" => "historize",
-            "cmd"     => "collect",
-            "nextdom" => "updateSystem",
-            "nextdom" => "checkAndCollect",
-            "DB"      => "optimize",
-        );
-        foreach ($targets as $c_class => $c_function) {
-            $cron = CronManager::byClassAndFunction($c_class, $c_function);
+        $cronTasksToRemove = [
+            ['target_class' => 'nextdom', 'action' => 'persist'],
+            ['target_class' => 'history', 'action' => 'historize'],
+            ['target_class' => 'cmd',     'action' => 'collect'],
+            ['target_class' => 'nextdom', 'action' => 'updateSystem'],
+            ['target_class' => 'nextdom', 'action' => 'checkAndCollect'],
+            ['target_class' => 'DB',      'action' => 'optimize'],
+        ];
+        foreach ($cronTasksToRemove as $cronTask) {
+            $cron = CronManager::byClassAndFunction($cronTask['target_class'], $cronTask['action']);
             if (true == is_object($cron)) {
                 $cron->remove();
             }
@@ -226,19 +230,22 @@ class ConsistencyManager {
     {
         foreach (self::getDefaultCrons() as $c_class => $c_data) {
             foreach ($c_data as $c_name => $c_config) {
-                $cron = CronManager::byClassAndFunction($c_class, $c_name);
-                if (false == is_object($cron)) {
-                    $cron = new Cron();
+                try {
+                    $cron = CronManager::byClassAndFunction($c_class, $c_name);
+                    if (false == is_object($cron)) {
+                        $cron = new Cron();
+                    }
+                    $cron->setClass($c_class);
+                    $cron->setFunction($c_name);
+                    $cron->setSchedule($c_config["schedule"]);
+                    $cron->setTimeout($c_config["timeout"]);
+                    $cron->setDeamon(0);
+                    if (true == array_key_exists("enabled", $c_config)) {
+                        $cron->setEnable($c_config["enabled"]);
+                    }
+                    $cron->save();
+                } catch (\Exception $e) {
                 }
-                $cron->setClass($c_class);
-                $cron->setFunction($c_name);
-                $cron->setSchedule($c_config["schedule"]);
-                $cron->setTimeout($c_config["timeout"]);
-                $cron->setDeamon(0);
-                if (true == array_key_exists("enabled", $c_config)) {
-                    $cron->setEnable($c_config["enabled"]);
-                }
-                $cron->save();
             }
         }
     }

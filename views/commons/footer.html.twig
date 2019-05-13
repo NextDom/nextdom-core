@@ -36,7 +36,8 @@
 <script src="/vendor/node_modules/jquery/dist/jquery.min.js"></script>
 <script>
     var clientDatetime = new Date();
-    var clientServerDiffDatetime = ({{ date().timestamp }} * 1000) - clientDatetime.getTime();
+    var clientServerDiff = {{ date().timestamp }} * 1000;
+    var clientServerDiffDatetime = clientServerDiff - clientDatetime.getTime();
     var serverDatetime = {{ date().timestamp }};
     var io = null;
     NEXTDOM_PRODUCT_NAME='{{ PRODUCT_NAME }}';

@@ -102,4 +102,8 @@ class history extends \NextDom\Model\Entity\History {
         return HistoryManager::getHistoryFromCalcul($_strcalcul, $_dateStart, $_dateEnd, $_noCalcul);
     }
 
+    public static function getTemporalAvg($_cmd_id, $_startTime, $_endTime){
+        return HistoryManager::getTemporalAvg($_cmd_id, $_startTime, $_endTime);
+    }
+
 }

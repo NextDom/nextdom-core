@@ -256,10 +256,10 @@ class PlanAjax extends BaseAjax
             return sha512(base64_encode($content));
         });
         $filepath = sprintf("%s/%s", $uploadDir, $filename);
-        $img_size = getimagesize($filepath);
-        $plan->setDisplay('width', $img_size[0]);
-        $plan->setDisplay('height', $img_size[1]);
-        $plan->setDisplay('path', 'public/img/plan_' . $plan->getId() . '/' . $name);
+        $imgSize = getimagesize($filepath);
+        $plan->setDisplay('width', $imgSize[0]);
+        $plan->setDisplay('height', $imgSize[1]);
+        $plan->setDisplay('path', 'public/img/plan_' . $plan->getId() . '/' . $filename);
         $plan->save();
         AjaxHelper::success();
     }

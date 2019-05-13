@@ -425,4 +425,16 @@ class AjaxNextDomTest extends AjaxBase
         $this->assertContains('"result":""', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
+    public function testConsistency() {
+        $this->connectAsAdmin();
+        $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'consistency']);
+        $this->assertContains('"result":""', (string) $result->getBody());
+        $this->assertEquals(200, $result->getStatusCode());
+    }
+    public function testCleanFileSystemRight() {
+        $this->connectAsAdmin();
+        $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'cleanFileSystemRight']);
+        $this->assertContains('"result":""', (string) $result->getBody());
+        $this->assertEquals(200, $result->getStatusCode());
+    }
 }

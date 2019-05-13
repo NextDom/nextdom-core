@@ -23,7 +23,7 @@ docker run -d -p 8765:80 -v ${rootDir}:/data --name="nextdom-test" ${baseImage} 
 }
 END_OF_INSTALL_STR="OK NEXTDOM TEST READY"
 
-echo -n "step 2. watting for installation to complete..."
+echo -n "step 2. waiting for installation to complete..."
 while true; do
 	DOCKER_LOGS=$(docker logs --tail 10 nextdom-test 2>&1)
 	if [[ "$DOCKER_LOGS" =~ .*NEXTDOM.TEST.READY.* ]]; then
