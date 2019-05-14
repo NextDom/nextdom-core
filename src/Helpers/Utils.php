@@ -37,6 +37,7 @@ namespace NextDom\Helpers;
 use NextDom\Exceptions\CoreException;
 use NextDom\Managers\UserManager;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+use NextDom\Helpers\DBHelper;
 
 class Utils
 {
@@ -47,6 +48,7 @@ class Utils
      *
      * @param string $varName Name of javascript variable
      * @param mixed $varValue Value of the javascript variable
+     * @return string
      */
     public static function sendVarToJs(string $varName, $varValue)
     {
@@ -69,7 +71,7 @@ class Utils
      * @param array $listOfVarsWithValues
      * @return string
      */
-    public static function getVarsToJS(array $listOfVarsWithValues)
+    public static function getVarsToJS(array $listOfVarsWithValues): string
     {
         $result = "<script>\n";
         foreach ($listOfVarsWithValues as $varName => $value) {
@@ -89,7 +91,6 @@ class Utils
      */
     private static function getVarInJs(string $varName, $varValue): string
     {
-        $jsVarValue = '';
         if (is_array($varValue)) {
             $jsVarValue = self::getArrayToJQueryJson($varValue);
         } else {
@@ -154,7 +155,6 @@ class Utils
      */
     public static function transformExpressionForEvaluation($expression)
     {
-
         $result = $expression;
         $replaceMap = [
             '==' => '==',
@@ -265,9 +265,8 @@ class Utils
     /**
      * @return bool
      */
-    public static function connectedToDatabase()
+    public static function connectedToDatabase(): bool
     {
-        require_once NEXTDOM_ROOT . '/src/Helpers/DBHelper.php';
         return is_object(DBHelper::getConnection());
     }
 
@@ -585,7 +584,7 @@ class Utils
      */
     public static function sanitizeAccent($_message)
     {
-        $caracteres = array(
+        $chars = array(
             'À' => 'a', 'Á' => 'a', 'Â' => 'a', 'Ä' => 'a', 'à' => 'a', 'á' => 'a', 'â' => 'a', 'ä' => 'a', '@' => 'a',
             'Ç' => 'c', 'ç' => 'c',
             'È' => 'e', 'É' => 'e', 'Ê' => 'e', 'Ë' => 'e', 'è' => 'e', 'é' => 'e', 'ê' => 'e', 'ë' => 'e', '€' => 'e',
@@ -594,14 +593,14 @@ class Utils
             'Ù' => 'u', 'Ú' => 'u', 'Û' => 'u', 'Ü' => 'u', 'ù' => 'u', 'ú' => 'u', 'û' => 'u', 'ü' => 'u', 'µ' => 'u',
             'Œ' => 'oe', 'œ' => 'oe',
             '$' => 's');
-        return preg_replace('#[^A-Za-z0-9 \n\.\'=\*:]+\#\)\(#', '', strtr($_message, $caracteres));
+        return preg_replace('#[^A-Za-z0-9 \n\.\'=\*:]+\#\)\(#', '', strtr($_message, $chars));
     }
 
     /**
      * @param $code
      * @return string
      */
-    public static function getZipErrorMessage($code)
+    public static function getZipErrorMessage(int $code): string
     {
         switch ($code) {
             case 0:
@@ -743,7 +742,7 @@ class Utils
         $rTotal = 0;
         $gTotal = 0;
         $bTotal = 0;
-        $total = 0;
+        $total  = 0;
         $i = imagecreatefromjpeg($_pathimg);
         $imagesX = imagesx($i);
         for ($x = 0; $x < $imagesX; $x++) {
@@ -772,10 +771,10 @@ class Utils
     }
 
     /**
-     * @param $_icon
+     * @param string $_icon
      * @return array
      */
-    public static function findCodeIcon($_icon)
+    public static function findCodeIcon(string $_icon): array
     {
         $icon = trim(str_replace(array('fa ', 'icon ', '></i>', '<i', 'class="', '"'), '', trim($_icon)));
         $re = '/.' . $icon . ':.*\n.*content:.*"(.*?)";/m';
@@ -894,20 +893,19 @@ class Utils
     }
 
     /**
-     * @param      $_object
-     * @param bool $_noToArray
+     * @param array $_object
+     * @param bool  $_noToArray
      * @return array
      * @throws \ReflectionException
      */
-    public static function o2a($_object, $_noToArray = false)
+    public static function o2a(array $_object, $_noToArray = false)
     {
-        if (is_array($_object)) {
             $return = array();
             foreach ($_object as $object) {
                 $return[] = self::o2a($object);
             }
             return $return;
-        }
+
         $array = array();
         if (!is_object($_object)) {
             return $array;
@@ -942,34 +940,32 @@ class Utils
      * @param $_data
      * @throws \ReflectionException
      */
-    public static function a2o(&$_object, $_data)
+    public static function a2o(&$_object, array $_data)
     {
-        if (is_array($_data)) {
-            foreach ($_data as $key => $value) {
-                $method = 'set' . ucfirst($key);
-                if (method_exists($_object, $method)) {
-                    $function = new \ReflectionMethod($_object, $method);
-                    $value = Utils::isJson($value, $value);
-                    if (is_array($value)) {
-                        if ($function->getNumberOfRequiredParameters() == 2) {
-                            foreach ($value as $arrayKey => $arrayValue) {
-                                if (is_array($arrayValue)) {
-                                    if ($function->getNumberOfRequiredParameters() == 3) {
-                                        foreach ($arrayValue as $arrayArraykey => $arrayArrayvalue) {
-                                            $_object->$method($arrayKey, $arrayArraykey, $arrayArrayvalue);
-                                        }
-                                        continue;
+        foreach ($_data as $key => $value) {
+            $method = 'set' . ucfirst($key);
+            if (method_exists($_object, $method)) {
+                $function = new \ReflectionMethod($_object, $method);
+                $value = Utils::isJson($value, $value);
+                if (is_array($value)) {
+                    if ($function->getNumberOfRequiredParameters() == 2) {
+                        foreach ($value as $arrayKey => $arrayValue) {
+                            if (is_array($arrayValue)) {
+                                if ($function->getNumberOfRequiredParameters() == 3) {
+                                    foreach ($arrayValue as $arrayArraykey => $arrayArrayvalue) {
+                                        $_object->$method($arrayKey, $arrayArraykey, $arrayArrayvalue);
                                     }
+                                    continue;
                                 }
-                                $_object->$method($arrayKey, $arrayValue);
                             }
-                        } else {
-                            $_object->$method(json_encode($value, JSON_UNESCAPED_UNICODE));
+                            $_object->$method($arrayKey, $arrayValue);
                         }
                     } else {
-                        if ($function->getNumberOfRequiredParameters() < 2) {
-                            $_object->$method($value);
-                        }
+                        $_object->$method(json_encode($value, JSON_UNESCAPED_UNICODE));
+                    }
+                } else {
+                    if ($function->getNumberOfRequiredParameters() < 2) {
+                        $_object->$method($value);
                     }
                 }
             }
@@ -1105,7 +1101,8 @@ class Utils
      * @param array $argv input parameters of form "<name>=<value>"
      * @return array parsed parameters of form "<name>" => "<value>"
      */
-    public static function parseArgs($argv) {
+    public static function parseArgs($argv)
+    {
         $args = array();
         if (isset($argv)) {
             foreach ($argv as $c_arg) {
@@ -1173,23 +1170,24 @@ class Utils
         }
 
         $destPath = sprintf("%s/%s", $destDir, $name);
-        if (false == move_uploaded_file($files[$key]['tmp_name'], $destPath)) {
+        if (false === move_uploaded_file($files[$key]['tmp_name'], $destPath)) {
             $message = __('Impossible de déplacer le fichier temporaire');
             throw new CoreException($message);
         }
 
-        if (false == file_exists($destPath)) {
+        if (false === file_exists($destPath)) {
             $message = __('Impossible de téléverser le fichier');
             throw new CoreException($message);
         }
-
         return $name;
     }
 
     /**
      * @return float|int
+     * @throws \Exception
      */
-    static public function getTZoffsetMin() {
+    static public function getTZoffsetMin()
+    {
         $tz = date_default_timezone_get();
         date_default_timezone_set( "UTC" );
         $seconds = timezone_offset_get( timezone_open($tz), new \DateTime() );
@@ -1203,7 +1201,8 @@ class Utils
      * @param $name
      * @return mixed
      */
-    function cleanComponentName($name){
+    function cleanComponentName(string $name)
+    {
         return str_replace(array('&', '#', ']', '[', '%', "\\", "/", "'", '"'), '', $name);
     }
 }
