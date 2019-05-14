@@ -317,13 +317,16 @@ class Cmd implements EntityInterface
      */
     public function getEqLogicId()
     {
-        if ($this->_eqLogic == null) {
+        if ($this->_eqLogic === null) {
             $this->setEqLogicId(EqLogicManager::byId($this->eqLogic_id));
         }
         return $this->_eqLogic;
     }
 
-    public function getEventOnly()
+    /**
+     * @return int
+     */
+    public function getEventOnly(): int
     {
         return 1;
     }
@@ -356,6 +359,10 @@ class Cmd implements EntityInterface
         return $this;
     }
 
+    /**
+     * @param $order
+     * @return $this
+     */
     public function setOrder($order)
     {
         if ($this->order != $order) {
@@ -532,7 +539,7 @@ class Cmd implements EntityInterface
      */
     public function getEqLogic()
     {
-        if ($this->_eqLogic == null) {
+        if ($this->_eqLogic === null) {
             $this->setEqLogic(EqLogicManager::byId($this->eqLogic_id));
         }
         return $this->_eqLogic;
@@ -544,6 +551,9 @@ class Cmd implements EntityInterface
         return $this;
     }
 
+    /**
+     * return error
+     */
     public function setEventOnly()
     {
         trigger_error('This method is deprecated', E_USER_DEPRECATED);
@@ -587,13 +597,13 @@ class Cmd implements EntityInterface
                         }
                     }
                     $value = strtolower($_value);
-                    if ($value == 'on' || $value == 'high' || $value == 'true' || $value == true) {
+                    if ($value == 'on' || $value == 'high' || $value == 'true' || $value === true) {
                         return 1;
                     }
-                    if ($value == 'off' || $value == 'low' || $value == 'false' || $value == false) {
+                    if ($value == 'off' || $value == 'low' || $value == 'false' || $value === false) {
                         return 0;
                     }
-                    if ((is_numeric(intval($_value)) && intval($_value) > 1) || $_value == true || $_value == 1) {
+                    if ((is_numeric(intval($_value)) && intval($_value) > 1) || $_value === true || $_value == 1) {
                         return 1;
                     }
                     return 0;
@@ -640,6 +650,11 @@ class Cmd implements EntityInterface
         return 'cmd';
     }
 
+    /**
+     * @return bool
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function save()
     {
         if (empty($this->getName())) {
@@ -701,7 +716,7 @@ class Cmd implements EntityInterface
      * @param $_options
      * @return bool
      */
-    public function execute($_options)
+    public function execute($_options): bool
     {
         return false;
     }
@@ -761,12 +776,12 @@ class Cmd implements EntityInterface
     }
 
     /**
-     *
-     * @param mixed $_options
-     * @param mixed $_sendNodeJsEvent
-     * @param mixed $_quote
-     * @return mixed result
+     * @param null $_options
+     * @param bool $_sendNodeJsEvent
+     * @param bool $_quote
+     * @return array|bool|float|int|mixed|string|null
      * @throws CoreException
+     * @throws \ReflectionException
      */
     public function execCmd($_options = null, $_sendNodeJsEvent = false, $_quote = false)
     {
@@ -900,6 +915,14 @@ class Cmd implements EntityInterface
         return $template;
     }
 
+    /**
+     * @param string $_version
+     * @param string $_options
+     * @param null   $_cmdColor
+     * @return mixed|string
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function toHtml($_version = 'dashboard', $_options = '', $_cmdColor = null)
     {
         $version2 = NextDomHelper::versionAlias($_version, false);
@@ -908,22 +931,22 @@ class Cmd implements EntityInterface
         }
         $version = NextDomHelper::versionAlias($_version);
         $html = '';
-        $replace = array(
-            '#id#' => $this->getId(),
-            '#name#' => $this->getName(),
-            '#name_display#' => ($this->getDisplay('icon') != '') ? $this->getDisplay('icon') : $this->getName(),
-            '#history#' => '',
+        $replace = [
+            '#id#'             => $this->getId(),
+            '#name#'           => $this->getName(),
+            '#name_display#'   => ($this->getDisplay('icon') != '') ? $this->getDisplay('icon') : $this->getName(),
+            '#history#'        => '',
             '#displayHistory#' => 'display : none;',
-            '#unite#' => $this->getUnite(),
-            '#minValue#' => $this->getConfiguration('minValue', 0),
-            '#maxValue#' => $this->getConfiguration('maxValue', 100),
-            '#logicalId#' => $this->getLogicalId(),
-            '#uid#' => 'cmd' . $this->getId() . EqLogic::UIDDELIMITER . mt_rand() . EqLogic::UIDDELIMITER,
-            '#version#' => $_version,
-            '#eqLogic_id#' => $this->getEqLogic_id(),
-            '#generic_type#' => $this->getGeneric_type(),
-            '#hideCmdName#' => '',
-        );
+            '#unite#'          => $this->getUnite(),
+            '#minValue#'       => $this->getConfiguration('minValue', 0),
+            '#maxValue#'       => $this->getConfiguration('maxValue', 100),
+            '#logicalId#'      => $this->getLogicalId(),
+            '#uid#'            => 'cmd' . $this->getId() . EqLogic::UIDDELIMITER . mt_rand() . EqLogic::UIDDELIMITER,
+            '#version#'        => $_version,
+            '#eqLogic_id#'     => $this->getEqLogic_id(),
+            '#generic_type#'   => $this->getGeneric_type(),
+            '#hideCmdName#'    => '',
+        ];
         if ($this->getConfiguration('listValue', '') != '') {
             $listOption = '';
             $elements = explode(';', $this->getConfiguration('listValue', ''));
@@ -955,7 +978,7 @@ class Cmd implements EntityInterface
         }
         $template = $this->getWidgetTemplateCode($_version);
 
-        if ($_cmdColor == null && $version != 'scenario') {
+        if ($_cmdColor === null && $version != 'scenario') {
             $eqLogic = $this->getEqLogicId();
             $vcolor = ($version == 'mobile') ? 'mcmdColor' : 'cmdColor';
             if ($eqLogic->getPrimaryCategory() == '') {
@@ -1095,6 +1118,13 @@ class Cmd implements EntityInterface
         }
     }
 
+    /**
+     * @param      $_value
+     * @param null $_datetime
+     * @param int  $_loop
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function event($_value, $_datetime = null, $_loop = 1)
     {
         if ($_loop > 4 || $this->getType() != 'info') {
@@ -1105,7 +1135,7 @@ class Cmd implements EntityInterface
             return;
         }
         $value = $this->formatValue($_value);
-        if ($this->getSubType() == 'numeric' && ($value > $this->getConfiguration('maxValue', $value) || $value < $this->getConfiguration('minValue', $value)) && strpos($value, 'error') == false) {
+        if ($this->getSubType() == 'numeric' && ($value > $this->getConfiguration('maxValue', $value) || $value < $this->getConfiguration('minValue', $value)) && strpos($value, 'error') === false) {
             LogHelper::add('cmd', 'info', __('La commande n\'est pas dans la plage de valeur autorisée : ') . $this->getHumanName() . ' => ' . $value);
             return;
         }
@@ -1121,11 +1151,11 @@ class Cmd implements EntityInterface
         $display_value = $value;
         if (method_exists($this, 'formatValueWidget')) {
             $display_value = $this->formatValueWidget($value);
-        } else if ($this->getSubType() == 'binary' && $this->getDisplay('invertBinary') == 1) {
+        } elseif ($this->getSubType() == 'binary' && $this->getDisplay('invertBinary') == 1) {
             $display_value = ($value == 1) ? 0 : 1;
-        } else if ($this->getSubType() == 'numeric' && trim($value) == '') {
+        } elseif ($this->getSubType() == 'numeric' && trim($value) == '') {
             $display_value = 0;
-        } else if ($this->getSubType() == 'binary' && trim($value) == '') {
+        } elseif ($this->getSubType() == 'binary' && trim($value) == '') {
             $display_value = 0;
         }
         if ($repeat && $this->getConfiguration('repeatEventManagement', 'auto') == 'never') {
@@ -1194,6 +1224,10 @@ class Cmd implements EntityInterface
         }
     }
 
+    /**
+     * @param $_value
+     * @throws \Exception
+     */
     public function checkReturnState($_value)
     {
         if (is_numeric($this->getConfiguration('returnStateTime')) && $this->getConfiguration('returnStateTime') > 0 && $_value != $this->getConfiguration('returnStateValue') && trim($this->getConfiguration('returnStateValue')) != '') {
@@ -1212,6 +1246,10 @@ class Cmd implements EntityInterface
         }
     }
 
+    /**
+     * @param $_value
+     * @throws CoreException
+     */
     public function checkCmdAlert($_value)
     {
         if ($this->getConfiguration('nextdomCheckCmdOperator') == '' || $this->getConfiguration('nextdomCheckCmdTest') == '' || is_nan($this->getConfiguration('nextdomCheckCmdTime', 0))) {
@@ -1248,6 +1286,9 @@ class Cmd implements EntityInterface
         }
     }
 
+    /**
+     * @throws \Exception
+     */
     public function executeAlertCmdAction()
     {
         if (!is_array($this->getConfiguration('actionCheckCmd'))) {
@@ -1411,18 +1452,27 @@ class Cmd implements EntityInterface
         }
     }
 
+    /**
+     * @param        $_response
+     * @param string $_plugin
+     * @param string $_network
+     * @return string
+     * @throws \Exception
+     */
     public function generateAskResponseLink($_response, $_plugin = 'core', $_network = 'external')
     {
         $token = $this->getCache('ask::token', ConfigManager::genKey());
         $this->setCache(array('ask::count' => 0, 'ask::token' => $token));
         $return = NetworkHelper::getNetworkAccess($_network) . '/core/api/jeeApi.php?';
-        $return .= 'type=ask';
-        $return .= '&plugin=' . $_plugin;
-        $return .= '&apikey=' . Api::getApiKey($_plugin);
-        $return .= '&token=' . $token;
-        $return .= '&response=' . urlencode($_response);
-        $return .= '&cmd_id=' . $this->getId();
-        return $return;
+        $arguments = http_build_query([
+            'type'     => 'ask',
+            'plugin'   => $_plugin,
+            'api_key'  => Api::getApiKey($_plugin),
+            'token'    => $token,
+            'response' => $_response,
+            'cmd_id'   => $this->getId(),
+        ]);
+        return $return.$arguments;
     }
 
     public function askResponse($_response)
@@ -1431,7 +1481,7 @@ class Cmd implements EntityInterface
             return false;
         }
         $askEndTime = $this->getCache('ask::endtime', null);
-        if ($askEndTime == null || $askEndTime < strtotime('now')) {
+        if ($askEndTime === null || $askEndTime < strtotime('now')) {
             return false;
         }
         $dataStore = new DataStore();
@@ -1444,6 +1494,10 @@ class Cmd implements EntityInterface
         return true;
     }
 
+    /**
+     * @param string $_date
+     * @return array|mixed|null
+     */
     public function emptyHistory($_date = '')
     {
         return HistoryManager::emptyHistory($this->getId(), $_date);
@@ -1451,7 +1505,7 @@ class Cmd implements EntityInterface
 
     public function addHistoryValue($_value, $_datetime = '')
     {
-        if ($this->getIsHistorized() == 1 && ($_value == null || ($_value !== '' && $this->getType() == 'info' && $_value <= $this->getConfiguration('maxValue', $_value) && $_value >= $this->getConfiguration('minValue', $_value)))) {
+        if ($this->getIsHistorized() == 1 && ($_value === null || ($_value !== '' && $this->getType() == 'info' && $_value <= $this->getConfiguration('maxValue', $_value) && $_value >= $this->getConfiguration('minValue', $_value)))) {
             $history = new History();
             $history->setCmd_id($this->getId());
             $history->setValue($_value);
@@ -1658,7 +1712,7 @@ class Cmd implements EntityInterface
 
     public function getLinkData(&$_data = array('node' => array(), 'link' => array()), $_level = 0, $_drill = null)
     {
-        if ($_drill == null) {
+        if ($_drill === null) {
             $_drill = ConfigManager::byKey('graphlink::cmd::drill');
         }
         if (isset($_data['node']['cmd' . $this->getId()])) {
@@ -1669,18 +1723,18 @@ class Cmd implements EntityInterface
             return $_data;
         }
         $icon = ($this->getType() == 'info') ? Utils::findCodeIcon('fa-eye') : Utils::findCodeIcon('fa-hand-paper-o');
-        $_data['node']['cmd' . $this->getId()] = array(
-            'id' => 'cmd' . $this->getId(),
-            'name' => $this->getName(),
-            'icon' => $icon['icon'],
+        $_data['node']['cmd' . $this->getId()] = [
+            'id'         => 'cmd' . $this->getId(),
+            'name'       => $this->getName(),
+            'icon'       => $icon['icon'],
             'fontfamily' => $icon['fontfamily'],
-            'fontsize' => '1.5em',
-            'texty' => -14,
-            'textx' => 0,
+            'fontsize'   => '1.5em',
+            'texty'      => -14,
+            'textx'      => 0,
             'fontweight' => ($_level == 1) ? 'bold' : 'normal',
-            'title' => $this->getHumanName(),
-            'url' => $this->getEqLogicId()->getLinkToConfiguration(),
-        );
+            'title'      => $this->getHumanName(),
+            'url'        => $this->getEqLogicId()->getLinkToConfiguration(),
+        ];
         $usedBy = $this->getUsedBy();
         $use = $this->getUse();
         Utils::addGraphLink($this, 'cmd', $usedBy['scenario'], 'scenario', $_data, $_level, $_drill);
@@ -1743,30 +1797,30 @@ class Cmd implements EntityInterface
     public function getAllAttributes()
     {
         return [
-            '_collectDate' => $this->_collectDate,
-            '_valueDate' => $this->_valueDate,
-            '_eqLogic' => $this->_eqLogic,
+            '_collectDate'       => $this->_collectDate,
+            '_valueDate'         => $this->_valueDate,
+            '_eqLogic'           => $this->_eqLogic,
             '_needRefreshWidget' => $this->_needRefreshWidget,
-            '_needRefreshAlert' => $this->_needRefreshAlert,
-            '_changed' => $this->_changed,
-            'eqType' => $this->eqType,
-            'logicalId' => $this->logicalId,
-            'generic_type' => $this->generic_type,
-            'order' => $this->order,
-            'name' => $this->name,
-            'configuration' => $this->configuration,
-            'template' => $this->template,
-            'isHistorized' => $this->isHistorized,
-            'type' => $this->type,
-            'subType' => $this->subType,
-            'unite' => $this->unite,
-            'display' => $this->display,
-            'isVisible' => $this->isVisible,
-            'value' => $this->value,
-            'html' => $this->html,
-            'alert' => $this->alert,
-            'id' => $this->id,
-            'eqLogic_id' => $this->eqLogic_id
+            '_needRefreshAlert'  => $this->_needRefreshAlert,
+            '_changed'           => $this->_changed,
+            'eqType'             => $this->eqType,
+            'logicalId'          => $this->logicalId,
+            'generic_type'       => $this->generic_type,
+            'order'              => $this->order,
+            'name'               => $this->name,
+            'configuration'      => $this->configuration,
+            'template'           => $this->template,
+            'isHistorized'       => $this->isHistorized,
+            'type'               => $this->type,
+            'subType'            => $this->subType,
+            'unite'              => $this->unite,
+            'display'            => $this->display,
+            'isVisible'          => $this->isVisible,
+            'value'              => $this->value,
+            'html'               => $this->html,
+            'alert'              => $this->alert,
+            'id'                 => $this->id,
+            'eqLogic_id'         => $this->eqLogic_id,
         ];
     }
 
