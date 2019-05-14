@@ -106,7 +106,7 @@ function loadPage(_url,_noPushHistory){
     }
     $('.backgroundforJeedom').css('background-image','');
     nextdomBackgroundImg = null;
-    $('#div_pageContainer').empty().load(url,function(){
+    $('#div_pageContainer').empty().load(url, function(){
         $('#bt_getHelpPage').attr('data-page',getUrlVars('p')).attr('data-plugin',getUrlVars('m'));
         var title = getUrlVars('p');
         if(title !== false){
