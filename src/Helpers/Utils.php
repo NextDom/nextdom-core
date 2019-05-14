@@ -1203,7 +1203,7 @@ class Utils
      * @param $name
      * @return mixed
      */
-    function cleanComponentName($name){
+    public static function cleanComponentName($name){
         return str_replace(array('&', '#', ']', '[', '%', "\\", "/", "'", '"'), '', $name);
     }
 }
