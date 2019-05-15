@@ -101,14 +101,14 @@ $('.market').on('click', function () {
 
 $('#pluginNameSearch').on('click', function () {
     bootbox.prompt("{{Nom du plugin ?}}", function (result) {
-      loadPage('index.php?v=d&p=marketJee' + '&type=' + marketType + '&name=' + result);
+      loadPage('index.php?v=d&p=marketJee' + '&type=' + marketType + '&name=' + encodeURI(result));
     });
     $('#generalSearch').value('');
 });
 
 $('#authorSearch').on('click', function () {
     bootbox.prompt("{{Nom de l'auteur ?}}", function (result) {
-      loadPage('index.php?v=d&p=marketJee' + '&type=' + marketType + '&author=' + result);
+      loadPage('index.php?v=d&p=marketJee' + '&type=' + marketType + '&author=' + encodeURI(result));
     });
     $('#generalSearch').value('');
 });
