@@ -203,8 +203,8 @@ class ConfigManager
                 WHERE `key` = :key
                 AND `plugin` = :plugin';
         $value = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW);
-        if ($value['value'] === '' || $value['value'] === null) {
-            if ($defaultValue !== '') {
+        if (empty($value['value'])) {
+            if (!empty($defaultValue)) {
                 self::$cache[$pluginId . '::' . $configKey] = $defaultValue;
             } else {
                 $defaultConfiguration = self::getDefaultConfiguration($pluginId);

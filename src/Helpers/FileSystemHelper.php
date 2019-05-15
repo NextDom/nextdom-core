@@ -125,7 +125,7 @@ class FileSystemHelper
     {
         // Aucune particularité pour les 3rdparty
         if ($_folder == '3rdparty') {
-            if ($_plugin === '') {
+            if (empty($_plugin)) {
                 $file      = sprintf("%s/%s.%s", $_folder, $_filename, $_type);
                 $_folder   = null;
                 $_filename = self::getAssetPath($file);
@@ -167,7 +167,7 @@ class FileSystemHelper
         /**
          * Modification pour la gestion du dossier public
          */
-        if ($_folder === 'desktop/js') {
+        if ($_folder == 'desktop/js') {
             $_folder = 'public/js/desktop';
         }
         if ($_folder === null) {
@@ -217,7 +217,7 @@ class FileSystemHelper
     public static function getTemplateFileContent(string $folder, string $version, string $filename, string $pluginId = ''): string
     {
         $result = '';
-        if ($pluginId == '') {
+        if (empty($pluginId)) {
             $filePath = NEXTDOM_ROOT . '/' . $folder . '/template/' . $version . '/' . $filename . '.html';
         }
         else {

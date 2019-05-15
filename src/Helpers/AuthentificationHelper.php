@@ -147,7 +147,7 @@ class AuthentificationHelper
             return false;
         }
         if (NetworkHelper::getUserLocation() != 'internal' && $user->getOptions('twoFactorAuthentification', 0) == 1 && $user->getOptions('twoFactorAuthentificationSecret') != '') {
-            if (trim($_twoFactor) == '' || $_twoFactor === null || !$user->validateTwoFactorCode($_twoFactor)) {
+            if (empty(trim($_twoFactor)) || $_twoFactor === null || !$user->validateTwoFactorCode($_twoFactor)) {
                 UserManager::failedLogin();
                 sleep(5);
                 return false;
@@ -247,7 +247,7 @@ class AuthentificationHelper
                 $result = false;
             } elseif ($isSetSessionUser && is_object(UserManager::getStoredUser()) && UserManager::getStoredUser()->is_Connected()) {
 
-                if ($rights !== '') {
+                if (!empty($rights)) {
                     if (UserManager::getStoredUser()->getProfils() == $rights) {
                         $result = true;
                     }

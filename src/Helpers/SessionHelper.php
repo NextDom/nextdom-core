@@ -73,7 +73,7 @@ class SessionHelper
             $sessions = explode("\n", \com_shell::execute(SystemHelper::getCmdSudo() . ' ls ' . session_save_path()));
             foreach ($sessions as $session) {
                 $data = \com_shell::execute(SystemHelper::getCmdSudo() . ' cat ' . session_save_path() . '/' . $session);
-                if ($data == '') {
+                if (empty($data)) {
                     continue;
                 }
                 $data_session = self::decodeSessionData($data);

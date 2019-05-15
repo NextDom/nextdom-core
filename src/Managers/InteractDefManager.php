@@ -64,7 +64,7 @@ class InteractDefManager
     public static function all($_group = '')
     {
         $values = array();
-        if ($_group === '') {
+        if ($_group == '') {
             $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                     FROM ' . self::DB_CLASS_NAME . '
                     ORDER BY name, query';

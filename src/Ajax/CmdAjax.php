@@ -253,7 +253,7 @@ class CmdAjax extends BaseAjax
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
         Utils::unautorizedInDemo();
-        if (Utils::init('cmd_id') === '') {
+        if (Utils::init('cmd_id') == '') {
             throw new CoreException(__('Historique impossible'));
         }
         $history = HistoryManager::byCmdIdDatetime(Utils::init('cmd_id'), Utils::init('datetime'));
@@ -273,7 +273,7 @@ class CmdAjax extends BaseAjax
             throw new CoreException(__('Aucun point ne correspond pour l\'historique : ') . Utils::init('cmd_id') . ' - ' . Utils::init('datetime') . ' - ' . Utils::init('oldValue'));
         }
         $value = Utils::init('value', null);
-        if ($value === '') {
+        if ($value == '') {
             $history->remove();
         } else {
             $history->setValue($value);

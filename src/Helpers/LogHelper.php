@@ -161,7 +161,7 @@ class LogHelper
      */
     public static function add($_log, $_type, $_message, $_logicalId = '')
     {
-        if (trim($_message) == '') {
+        if (empty(trim($_message))) {
             return;
         }
         $logger = self::getLogger($_log);

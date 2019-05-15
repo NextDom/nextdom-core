@@ -50,7 +50,7 @@ class ViewController extends BaseController
         $pageData['viewNoControl'] = Utils::init('noControl');
 
         $currentView = null;
-        if (Utils::init('view_id') == '') {
+        if (empty(Utils::init('view_id'))) {
 
             if (UserManager::getStoredUser()->getOptions('defaultDesktopView') != '') {
                 $currentView = ViewManager::byId(UserManager::getStoredUser()->getOptions('defaultDesktopView'));

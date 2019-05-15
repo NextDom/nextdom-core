@@ -75,10 +75,10 @@ class SystemHelper
         }
         if (self::$distrib === null) {
             self::$distrib = trim(shell_exec('grep CPE_NAME /etc/os-release | cut -d \'"\' -f 2 | cut -d : -f 3 '));
-            if (self::$distrib == '') {
+            if (empty(self::$distrib)) {
                 self::$distrib = trim(shell_exec('grep -e "^ID" /etc/os-release | cut -d \'=\' -f 2'));
             }
-            if (self::$distrib == '' || !isset(self::$commands[self::$distrib])) {
+            if (empty(self::$distrib) || !isset(self::$commands[self::$distrib])) {
                 self::$distrib = 'debian';
             }
         }
@@ -98,7 +98,7 @@ class SystemHelper
         if (isset(self::$commands[self::getDistrib()]) && isset(self::$commands[self::getDistrib()][$commandKey])) {
             $result = self::$commands[self::getDistrib()][$commandKey];
         }
-        if ($result == '') {
+        if (empty($result)) {
             if ($commandKey == 'www-uid') {
                 $processUser = posix_getpwuid(posix_geteuid());
                 $result = $processUser['name'];
@@ -173,14 +173,14 @@ class SystemHelper
         }
         $order = array('pid', 'tty', 'stat', 'time', 'command');
         foreach ($results as $result) {
-            if (trim($result) == '') {
+            if (empty(trim($result))) {
                 continue;
             }
             $explodes = explode(" ", $result);
             $info = array();
             $i = 0;
             foreach ($explodes as $value) {
-                if (trim($value) == '') {
+                if (empty(trim($value))) {
                     continue;
                 }
                 if (isset($order[$i])) {
@@ -207,7 +207,7 @@ class SystemHelper
      */
     public static function kill($find = '', $forceKill = true)
     {
-        if (trim($find) == '') {
+        if (empty(trim($find))) {
             return null;
         }
         if (is_numeric($find)) {

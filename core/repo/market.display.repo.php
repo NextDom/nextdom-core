@@ -52,22 +52,22 @@ echo '<img src="' . $default_image . '" data-original="' . $urlPath . '"  class=
    <div class="marketAttr form-group" data-l1key="name" placeholder="{{Nom}}" style="font-size: 2em;font-weight: bold;"></div>
    <div class="span_author cursor form-group text-medium text-bold text-gray" data-author="<?php echo $market->getAuthor(); ?>">{{Développé par}} <?php echo $market->getAuthor(); ?></div>
    <?php
-if ($market->getCertification() === 'Officiel') {
+if ($market->getCertification() == 'Officiel') {
     echo '<span class="txtSizeMedium icon-gray">Officiel</span><br/>';
 }
-if ($market->getCertification() === 'Conseillé') {
+if ($market->getCertification() == 'Conseillé') {
     echo '<span class="txtSizeMedium txtBold text-gray">{{Conseillé}}</span><br/>';
 }
-if ($market->getCertification() === 'Legacy') {
+if ($market->getCertification() == 'Legacy') {
     echo '<span class="txtSizeMedium txtBold" style="color:#6b6b6b;">{{Legacy}}</span><br/>';
 }
-if ($market->getCertification() === 'Obsolète') {
+if ($market->getCertification() == 'Obsolète') {
     echo '<span class="txtSizeMedium txtBold text-critical">{{Obsolète}}</span><br/>';
 }
-if ($market->getCertification() === 'Premium') {
+if ($market->getCertification() == 'Premium') {
        echo '<span style="font-size : 1.5em;color:#9b59b6">{{Premium}}</span><br/>';
    }
-   if ($market->getCertification() === 'Partenaire') {
+   if ($market->getCertification() == 'Partenaire') {
        echo '<span style="font-size : 1.5em;color:#2ecc71">{{Partenaire}}</span><br/>';
    }
 global $NEXTDOM_INTERNAL_CONFIG;
@@ -97,7 +97,7 @@ if ($market->getPurchase() === 1) {
             ?>
      <a class="btn btn-action" href='https://market.jeedom.fr/index.php?v=d&p=profils' target="_blank"><i class="fas fa-eur spacing-right"></i>{{Code promo}}</a>
      <?php
-            if ($market->getCertification() === 'Premium') {
+            if ($market->getCertification() == 'Premium') {
                 echo '<a class="btn btn-default" target="_blank" href="mailto:supportpro@jeedom.com"><i class="fa fa-envelope"></i> {{Nous Contacter}}</a>';
             }else{
                 echo '<a class="btn btn-default" target="_blank" href="' . config::byKey('market::address') . '/index.php?v=d&p=purchaseItem&user_id=' . $purchase_info['user_id'] . '&type=plugin&id=' . $market->getId() . '"><i class="fa fa-shopping-cart"></i> {{Acheter}}</a>';
@@ -116,7 +116,7 @@ if (is_object($update)) {
 ?>
 <br/><br/>
 <?php
-if ($market->getCertification() === 'Premium') {
+if ($market->getCertification() == 'Premium') {
     echo '<span data-l1key="rating" style="font-size: 1.5em;">{{Nous Contacter}}</span>';
 }else{
     if ($market->getCost() > 0) {
@@ -132,7 +132,7 @@ if ($market->getCertification() === 'Premium') {
 </div>
 </div>
 <?php
-if ($market->getCertification() !== 'Officiel' && $market->getCertification() !== 'Premium' && $market->getCertification() !== 'Legacy') {
+if ($market->getCertification() != 'Officiel' && $market->getCertification() !== 'Premium' && $market->getCertification() !== 'Legacy') {
     echo '<div class="alert alert-warning">{{Attention ce plugin n\'est pas un plugin officiel en cas de soucis avec celui-ci (direct ou indirect) toute demande de support peut être refusée}}</div>';
 }
 $compatibilityHardware = $market->getHardwareCompatibility();
@@ -321,14 +321,14 @@ if ($market->getLanguage('it_IT') === 1) {
         notify('Core',error.message,'error');
       },
       success: function (data) {
-       if(market_display_info.type === 'plugin'){
+       if(market_display_info.type == 'plugin'){
          bootbox.confirm('{{Voulez-vous aller sur la page de configuration de votre nouveau plugin ?}}', function (result) {
            if (result) {
             loadPage('index.php?v=d&p=plugin&id=' + logicalId);
           }
         });
        }
-       if ( typeof refreshListAfterMarketObjectInstall === 'function'){
+       if ( typeof refreshListAfterMarketObjectInstall == 'function'){
         refreshListAfterMarketObjectInstall()
       }
           notify("Core",'{{Objet installé avec succès}}',"success");

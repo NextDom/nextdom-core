@@ -35,18 +35,18 @@ class Api
     public static function getApiKey(string $plugin = 'core'): string
     {
         if ($plugin == 'apipro') {
-            if (ConfigManager::byKey('apipro') == '') {
+            if (empty(ConfigManager::byKey('apipro'))) {
                 ConfigManager::save('apipro', ConfigManager::genKey());
             }
             return ConfigManager::byKey('apipro');
         }
         if ($plugin == 'apimarket') {
-            if (ConfigManager::byKey('apimarket') == '') {
+            if (empty(ConfigManager::byKey('apimarket'))) {
                 ConfigManager::save('apimarket', ConfigManager::genKey());
             }
             return ConfigManager::byKey('apimarket');
         }
-        if (ConfigManager::byKey('api', $plugin) == '') {
+        if (empty(ConfigManager::byKey('api', $plugin))) {
             ConfigManager::save('api', ConfigManager::genKey(), $plugin);
         }
         return ConfigManager::byKey('api', $plugin);
@@ -102,7 +102,7 @@ class Api
     public static function apiAccess(string $defaultApiKey = '', string $plugin = 'core')
     {
         $defaultApiKey = trim($defaultApiKey);
-        if ($defaultApiKey == '') {
+        if (empty($defaultApiKey)) {
             return false;
         }
         if ($plugin != 'core' && self::apiAccess($defaultApiKey)) {

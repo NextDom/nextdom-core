@@ -513,7 +513,7 @@ class HistoryManager
         }
         $return = array_merge($result, $result2);
         foreach ($return as $key => &$value) {
-            if ($value === '') {
+            if ($value == '') {
                 $value = 0;
             }
         }

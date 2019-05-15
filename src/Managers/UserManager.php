@@ -290,7 +290,7 @@ class UserManager
     public static function isBanned()
     {
         $ip = NetworkHelper::getClientIp();
-        if ($ip == '') {
+        if (empty($ip)) {
             return false;
         }
         $whiteIps = explode(';', ConfigManager::byKey('security::whiteips'));

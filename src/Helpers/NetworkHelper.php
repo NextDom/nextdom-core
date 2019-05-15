@@ -96,10 +96,10 @@ class NetworkHelper
         if ($_mode == 'auto') {
             $_mode = self::getUserLocation();
         }
-        if ($_mode == 'internal' && ConfigManager::byKey('internalAddr', 'core', '') == '') {
+        if ($_mode == 'internal' && empty(ConfigManager::byKey('internalAddr', 'core', ''))) {
             self::checkConf($_mode);
         }
-        if ($_mode == 'external' && ConfigManager::byKey('market::allowDNS') != 1 && ConfigManager::byKey('externalAddr', 'core', '') == '') {
+        if ($_mode == 'external' && ConfigManager::byKey('market::allowDNS') != 1 && empty(ConfigManager::byKey('externalAddr', 'core', ''))) {
             self::checkConf($_mode);
         }
         if ($_test && !self::test($_mode)) {
@@ -219,10 +219,10 @@ class NetworkHelper
 
     public static function checkConf($_mode = 'external')
     {
-        if (ConfigManager::byKey($_mode . 'Protocol') == '') {
+        if (empty(ConfigManager::byKey($_mode . 'Protocol'))) {
             ConfigManager::save($_mode . 'Protocol', 'http://');
         }
-        if (ConfigManager::byKey($_mode . 'Port') == '') {
+        if (empty(ConfigManager::byKey($_mode . 'Port'))) {
             ConfigManager::save($_mode . 'Port', 80);
         }
         if (ConfigManager::byKey($_mode . 'Protocol') == 'https://' && ConfigManager::byKey($_mode . 'Port') == 80) {
@@ -285,7 +285,7 @@ class NetworkHelper
 
     public static function dnsCreate()
     {
-        if (ConfigManager::byKey('dns::token') == '') {
+        if (empty(ConfigManager::byKey('dns::token'))) {
             return null;
         }
         try {
@@ -358,7 +358,7 @@ class NetworkHelper
 
     public static function dnsStart()
     {
-        if (ConfigManager::byKey('dns::token') == '') {
+        if (empty(ConfigManager::byKey('dns::token'))) {
             return;
         }
         if (ConfigManager::byKey('market::allowDNS') != 1) {
@@ -391,7 +391,7 @@ class NetworkHelper
 
     public static function dnsRun()
     {
-        if (ConfigManager::byKey('dns::token') == '') {
+        if (empty(ConfigManager::byKey('dns::token'))) {
             return false;
         }
         if (ConfigManager::byKey('market::allowDNS') != 1) {
@@ -411,7 +411,7 @@ class NetworkHelper
 
     public static function dnsStop()
     {
-        if (ConfigManager::byKey('dns::token') == '') {
+        if (empty(ConfigManager::byKey('dns::token'))) {
             return;
         }
         $openvpn = self::dnsCreate();
@@ -446,7 +446,7 @@ class NetworkHelper
         $interfaces = explode("\n", shell_exec(SystemHelper::getCmdSudo() . "ip -o link show | awk -F': ' '{print $2}'"));
         $result = [];
         foreach ($interfaces as $interface) {
-            if (trim($interface) == '') {
+            if (empty(trim($interface))) {
                 continue;
             }
             $result[] = $interface;
@@ -473,7 +473,7 @@ class NetworkHelper
             return;
         }
         $gw = shell_exec("ip route show default | awk '/default/ {print $3}'");
-        if ($gw == '') {
+        if (empty($gw)) {
             LogHelper::addError('network', __('Souci réseau détecté, redémarrage du réseau. Aucune gateway de trouvée'));
             exec(SystemHelper::getCmdSudo() . 'service networking restart');
             return;

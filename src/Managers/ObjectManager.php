@@ -54,7 +54,7 @@ class ObjectManager
      */
     public static function byId($id)
     {
-        if ($id == '') {
+        if (empty($id)) {
             return null;
         }
         $values = array(
@@ -283,7 +283,7 @@ class ObjectManager
                 try {
                     $value['object']->setCache('summaryHtmldesktop', '');
                     $value['object']->setCache('summaryHtmlmobile', '');
-                    if ($value['object']->getConfiguration('summary_virtual_id') == '') {
+                    if (empty($value['object']->getConfiguration('summary_virtual_id')) {
                         continue;
                     }
                     $virtual = EqLogicManager::byId($value['object']->getConfiguration('summary_virtual_id'));
@@ -341,7 +341,7 @@ class ObjectManager
      */
     public static function getGlobalSummary(string $key)
     {
-        if ($key == '') {
+        if (empty($key)) {
             return null;
         }
         $def = ConfigManager::byKey('object:summary');
@@ -435,7 +435,7 @@ class ObjectManager
      */
     public static function createSummaryToVirtual($key = '')
     {
-        if ($key == '') {
+        if (empty($key)) {
             return;
         }
         $def = ConfigManager::byKey('object:summary');

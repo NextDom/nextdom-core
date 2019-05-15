@@ -98,11 +98,11 @@ class TranslateHelper
      */
     public static function getLanguage(): string
     {
-        if (self::$language === null || self::$language === '') {
+        if (empty(self::$language)) {
             self::$language = self::getConfig('language', 'fr_FR');
         }
         // TODO: Pourquoi pas défault getConfig renvoie vide
-        if (self::$language === '') {
+        if (empty(self::$language)) {
             self::$language = 'fr_FR';
         }
         return self::$language;
@@ -171,7 +171,7 @@ class TranslateHelper
      */
     public static function exec(string $content, string $filename = '', bool $backslash = false): string
     {
-        if ($content == '') {// || $filename == '') {
+        if (empty($content)) {
             return '';
         }
 
@@ -188,7 +188,7 @@ class TranslateHelper
         preg_match_all("/{{(.*?)}}/s", $content, $matches);
         if ($oldTranslationMode) {
             foreach ($matches[1] as $text) {
-                if (trim($text) == '') {
+                if (empty(trim($text))) {
                     $replace["{{" . $text . "}}"] = $text;
                 }
                 if (isset($translate[$filename]) && isset($translate[$filename][$text])) {

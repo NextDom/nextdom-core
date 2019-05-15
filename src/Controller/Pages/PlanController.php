@@ -47,7 +47,7 @@ class PlanController extends BaseController
             $planHeadersSendToJS[] = array('id' => $planHeader_select->getId(), 'name' => $planHeader_select->getName());
         }
         $pageData['JS_VARS_RAW']['planHeader'] = Utils::getArrayToJQueryJson($planHeadersSendToJS);
-        if (Utils::init('plan_id') == '') {
+        if (empty(Utils::init('plan_id'))) {
             foreach ($planHeaders as $planHeader_select) {
                 if ($planHeader_select->getId() == UserManager::getStoredUser()->getOptions('defaultDashboardPlan')) {
                     $planHeader = $planHeader_select;

@@ -67,7 +67,7 @@ class UpdateAdminController extends BaseController
             foreach ($pluginsList as $plugin) {
                 $pluginApi = ConfigManager::byKey('api', $plugin->getId());
 
-                if ($pluginApi !== '') {
+                if (!empty($pluginApi)) {
                     $pluginData = [];
                     $pluginData['api'] = $pluginApi;
                     $pluginData['plugin'] = $plugin;
