@@ -24,12 +24,16 @@ use NextDom\Helpers\Utils;
 use NextDom\Managers\NoteManager;
 use NextDom\Model\Entity\Note;
 
+/**
+ * Class NoteAjax
+ * @package NextDom\Ajax
+ */
 class NoteAjax extends BaseAjax
 {
     /**
      * @var string
      */
-    protected $NEEDED_RIGHTS     = UserRight::ADMIN;
+    protected $NEEDED_RIGHTS = UserRight::ADMIN;
     /**
      * @var bool
      */
@@ -66,12 +70,10 @@ class NoteAjax extends BaseAjax
         $noteData = json_decode(Utils::init('note'), true);
         if (empty($noteData['name'])) {
             AjaxHelper::error(__('entity.note.name-cannot-be-empty'));
-        }
-        else {
+        } else {
             if (isset($noteData['id'])) {
                 $note = NoteManager::byId($noteData['id']);
-            }
-            else {
+            } else {
                 $note = new Note();
             }
             Utils::a2o($note, $noteData);

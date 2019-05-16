@@ -22,12 +22,16 @@
 
 namespace NextDom\Controller\Admin;
 
+use NextDom\Controller\BaseController;
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\Render;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UpdateManager;
-use NextDom\Controller\BaseController;
 
+/**
+ * Class NetworkController
+ * @package NextDom\Controller\Admin
+ */
 class NetworkController extends BaseController
 {
     /**

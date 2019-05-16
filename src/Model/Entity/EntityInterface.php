@@ -14,9 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
  */
+
 namespace NextDom\Model\Entity;
 
 
+/**
+ * Interface EntityInterface
+ * @package NextDom\Model\Entity
+ */
 interface EntityInterface
 {
     public function getId();

@@ -22,9 +22,13 @@
 
 namespace NextDom\Controller\Tools;
 
-use NextDom\Helpers\Render;
 use NextDom\Controller\BaseController;
+use NextDom\Helpers\Render;
 
+/**
+ * Class NoteController
+ * @package NextDom\Controller\Tools
+ */
 class NoteController extends BaseController
 {
     /**

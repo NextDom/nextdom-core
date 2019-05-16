@@ -17,12 +17,34 @@
 
 namespace NextDom\Enums;
 
+/**
+ * Class GetParams
+ * @package NextDom\Enums
+ */
 class GetParams extends Enum
 {
+    /**
+     *
+     */
     const VIEW_TYPE = 'v';
+    /**
+     *
+     */
     const MODAL = 'modal';
+    /**
+     *
+     */
     const PLUGIN_CONF = 'configure';
+    /**
+     *
+     */
     const AJAX_QUERY = 'ajax';
+    /**
+     *
+     */
     const PLUGIN_ID = 'plugin';
+    /**
+     *
+     */
     const PAGE = 'p';
 }

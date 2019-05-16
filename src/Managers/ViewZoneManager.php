@@ -36,9 +36,19 @@ namespace NextDom\Managers;
 use NextDom\Helpers\DBHelper;
 use NextDom\Model\Entity\ViewZone;
 
+/**
+ * Class ViewZoneManager
+ * @package NextDom\Managers
+ */
 class ViewZoneManager
 {
+    /**
+     *
+     */
     const DB_CLASS_NAME = '`viewZone`';
+    /**
+     *
+     */
     const CLASS_NAME = 'viewZone';
 
     /**

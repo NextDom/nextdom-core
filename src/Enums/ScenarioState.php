@@ -17,9 +17,22 @@
 
 namespace NextDom\Enums;
 
+/**
+ * Class ScenarioState
+ * @package NextDom\Enums
+ */
 class ScenarioState extends Enum
 {
+    /**
+     *
+     */
     const ERROR = 'error';
+    /**
+     *
+     */
     const IN_PROGRESS = 'in progress';
+    /**
+     *
+     */
     const STOP = 'stop';
 }

@@ -22,11 +22,15 @@
 
 namespace NextDom\Controller\Pages;
 
+use NextDom\Controller\BaseController;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\PluginManager;
-use NextDom\Controller\BaseController;
 
+/**
+ * Class PanelPageController
+ * @package NextDom\Controller\Pages
+ */
 class PanelPageController extends BaseController
 {
     /**

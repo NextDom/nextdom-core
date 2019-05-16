@@ -24,12 +24,16 @@ use NextDom\Market\DownloadManager;
 use NextDom\Market\MarketItem;
 use NextDom\Market\NextDomMarket;
 
+/**
+ * Class NextDomMarketAjax
+ * @package NextDom\Ajax
+ */
 class NextDomMarketAjax extends BaseAjax
 {
     /**
      * @var string
      */
-    protected $NEEDED_RIGHTS     = UserRight::ADMIN;
+    protected $NEEDED_RIGHTS = UserRight::ADMIN;
     /**
      * @var bool
      */

@@ -36,9 +36,19 @@ namespace NextDom\Managers;
 use NextDom\Helpers\DBHelper;
 use NextDom\Model\Entity\View;
 
+/**
+ * Class ViewManager
+ * @package NextDom\Managers
+ */
 class ViewManager
 {
+    /**
+     *
+     */
     const DB_CLASS_NAME = '`view`';
+    /**
+     *
+     */
     const CLASS_NAME = 'view';
 
     /**

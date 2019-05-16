@@ -22,10 +22,14 @@
 
 namespace NextDom\Controller\Diagnostic;
 
+use NextDom\Controller\BaseController;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
-use NextDom\Controller\BaseController;
 
+/**
+ * Class RealtimeController
+ * @package NextDom\Controller\Diagnostic
+ */
 class RealtimeController extends BaseController
 {
     /**

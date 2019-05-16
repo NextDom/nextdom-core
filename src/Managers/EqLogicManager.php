@@ -37,32 +37,38 @@ use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Model\Entity\EqLogic;
 
+/**
+ * Class EqLogicManager
+ * @package NextDom\Managers
+ */
 class EqLogicManager
 {
+    /**
+     *
+     */
     const CLASS_NAME = EqLogic::class;
+    /**
+     *
+     */
     const DB_CLASS_NAME = '`eqLogic`';
 
     /**
-     * Get eqLogic object with his id.
+     * TODO: ???
      *
-     * @param mixed $id EqLogic object id
+     * @param $eqRealId
      *
-     * @return EqLogic|null
-     *
+     * @return array|mixed
      * @throws \Exception
      */
-    public static function byId($id)
+    public static function byEqRealId($eqRealId)
     {
-        if ($id == '') {
-            return null;
-        }
         $values = array(
-            'id' => $id,
+            'eqReal_id' => $eqRealId,
         );
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
-                WHERE id = :id';
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME));
+                WHERE eqReal_id = :eqReal_id';
+        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
     }
 
     /**
@@ -92,45 +98,6 @@ class EqLogicManager
             return $return;
         }
         return $inputs;
-    }
-
-    /**
-     * Get all eqLogics
-     *
-     * @param bool $onlyEnable Filter only enabled eqLogics
-     *
-     * @return EqLogic[]|mixed
-     * @throws \Exception
-     */
-    public static function all($onlyEnable = false)
-    {
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME, 'el') . '
-                FROM ' . self::DB_CLASS_NAME . ' el
-                LEFT JOIN object ob ON el.object_id = ob.id ';
-        if ($onlyEnable) {
-            $sql .= 'WHERE isEnable = 1 ';
-        }
-        $sql .= 'ORDER BY ob.name, el.name';
-        return self::cast(DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
-    }
-
-    /**
-     * TODO: ???
-     *
-     * @param $eqRealId
-     *
-     * @return array|mixed
-     * @throws \Exception
-     */
-    public static function byEqRealId($eqRealId)
-    {
-        $values = array(
-            'eqReal_id' => $eqRealId,
-        );
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE eqReal_id = :eqReal_id';
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
     }
 
     /**
@@ -474,38 +441,6 @@ class EqLogicManager
     /**
      * TODO: ???
      *
-     * @param $objectName
-     * @param $eqLogicName
-     * @return array|mixed
-     * @throws \Exception
-     */
-    public static function byObjectNameEqLogicName($objectName, $eqLogicName)
-    {
-        if ($objectName == __('Aucun')) {
-            $values = [
-                'eqLogic_name' => $eqLogicName,
-            ];
-            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                    FROM ' . self::DB_CLASS_NAME . '
-                    WHERE name=:eqLogic_name
-                    AND object_id IS NULL';
-        } else {
-            $values = array(
-                'eqLogic_name' => $eqLogicName,
-                'object_name' => $objectName,
-            );
-            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME, 'el') . '
-                    FROM ' . self::DB_CLASS_NAME . '  el
-                    INNER JOIN object ob ON el.object_id=ob.id
-                    WHERE el.name=:eqLogic_name
-                    AND ob.name=:object_name';
-        }
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
-    }
-
-    /**
-     * TODO: ???
-     *
      * @param $input
      * @return array|mixed
      * @throws \ReflectionException
@@ -549,58 +484,26 @@ class EqLogicManager
     }
 
     /**
-     * TODO: ???
+     * Get eqLogic object with his id.
      *
-     * @param $input
-     * @return array|mixed
+     * @param mixed $id EqLogic object id
+     *
+     * @return EqLogic|null
+     *
      * @throws \Exception
      */
-    public static function fromHumanReadable($input)
+    public static function byId($id)
     {
-        $isJson = false;
-        if (Utils::isJson($input)) {
-            $isJson = true;
-            $input = json_decode($input, true);
+        if ($id == '') {
+            return null;
         }
-        if (is_object($input)) {
-            $reflections = [];
-            $uuid = spl_object_hash($input);
-            if (!isset($reflections[$uuid])) {
-                $reflections[$uuid] = new \ReflectionClass($input);
-            }
-            $reflection = $reflections[$uuid];
-            $properties = $reflection->getProperties();
-            foreach ($properties as $property) {
-                $property->setAccessible(true);
-                $value = $property->getValue($input);
-                $property->setValue($input, self::fromHumanReadable($value));
-                $property->setAccessible(false);
-            }
-            return $input;
-        }
-        if (is_array($input)) {
-            foreach ($input as $key => $value) {
-                $input[$key] = self::fromHumanReadable($value);
-            }
-            if ($isJson) {
-                return json_encode($input, JSON_UNESCAPED_UNICODE);
-            }
-            return $input;
-        }
-        $text = $input;
-        preg_match_all("/#\[(.*?)\]\[(.*?)\]#/", $text, $matches);
-        if (count($matches) == 3) {
-            $countMatches = count($matches[0]);
-            for ($i = 0; $i < $countMatches; $i++) {
-                if (isset($matches[1][$i]) && isset($matches[2][$i])) {
-                    $eqLogic = self::byObjectNameEqLogicName($matches[1][$i], $matches[2][$i]);
-                    if (isset($eqLogic[0]) && is_object($eqLogic[0])) {
-                        $text = str_replace($matches[0][$i], '#eqLogic' . $eqLogic[0]->getId() . '#', $text);
-                    }
-                }
-            }
-        }
-        return $text;
+        $values = array(
+            'id' => $id,
+        );
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE id = :id';
+        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME));
     }
 
     /**
@@ -611,6 +514,26 @@ class EqLogicManager
         foreach (self::all() as $eqLogic) {
             $eqLogic->emptyCacheWidget();
         }
+    }
+
+    /**
+     * Get all eqLogics
+     *
+     * @param bool $onlyEnable Filter only enabled eqLogics
+     *
+     * @return EqLogic[]|mixed
+     * @throws \Exception
+     */
+    public static function all($onlyEnable = false)
+    {
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME, 'el') . '
+                FROM ' . self::DB_CLASS_NAME . ' el
+                LEFT JOIN object ob ON el.object_id = ob.id ';
+        if ($onlyEnable) {
+            $sql .= 'WHERE isEnable = 1 ';
+        }
+        $sql .= 'ORDER BY ob.name, el.name';
+        return self::cast(DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
     }
 
     /**
@@ -697,5 +620,92 @@ class EqLogicManager
             throw new \Exception(__('L\'équipement n\'a pas pu être trouvé : ') . $_string . __(' => ') . self::fromHumanReadable($_string));
         }
         return $eqLogic;
+    }
+
+    /**
+     * TODO: ???
+     *
+     * @param $input
+     * @return array|mixed
+     * @throws \Exception
+     */
+    public static function fromHumanReadable($input)
+    {
+        $isJson = false;
+        if (Utils::isJson($input)) {
+            $isJson = true;
+            $input = json_decode($input, true);
+        }
+        if (is_object($input)) {
+            $reflections = [];
+            $uuid = spl_object_hash($input);
+            if (!isset($reflections[$uuid])) {
+                $reflections[$uuid] = new \ReflectionClass($input);
+            }
+            $reflection = $reflections[$uuid];
+            $properties = $reflection->getProperties();
+            foreach ($properties as $property) {
+                $property->setAccessible(true);
+                $value = $property->getValue($input);
+                $property->setValue($input, self::fromHumanReadable($value));
+                $property->setAccessible(false);
+            }
+            return $input;
+        }
+        if (is_array($input)) {
+            foreach ($input as $key => $value) {
+                $input[$key] = self::fromHumanReadable($value);
+            }
+            if ($isJson) {
+                return json_encode($input, JSON_UNESCAPED_UNICODE);
+            }
+            return $input;
+        }
+        $text = $input;
+        preg_match_all("/#\[(.*?)\]\[(.*?)\]#/", $text, $matches);
+        if (count($matches) == 3) {
+            $countMatches = count($matches[0]);
+            for ($i = 0; $i < $countMatches; $i++) {
+                if (isset($matches[1][$i]) && isset($matches[2][$i])) {
+                    $eqLogic = self::byObjectNameEqLogicName($matches[1][$i], $matches[2][$i]);
+                    if (isset($eqLogic[0]) && is_object($eqLogic[0])) {
+                        $text = str_replace($matches[0][$i], '#eqLogic' . $eqLogic[0]->getId() . '#', $text);
+                    }
+                }
+            }
+        }
+        return $text;
+    }
+
+    /**
+     * TODO: ???
+     *
+     * @param $objectName
+     * @param $eqLogicName
+     * @return array|mixed
+     * @throws \Exception
+     */
+    public static function byObjectNameEqLogicName($objectName, $eqLogicName)
+    {
+        if ($objectName == __('Aucun')) {
+            $values = [
+                'eqLogic_name' => $eqLogicName,
+            ];
+            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                    FROM ' . self::DB_CLASS_NAME . '
+                    WHERE name=:eqLogic_name
+                    AND object_id IS NULL';
+        } else {
+            $values = array(
+                'eqLogic_name' => $eqLogicName,
+                'object_name' => $objectName,
+            );
+            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME, 'el') . '
+                    FROM ' . self::DB_CLASS_NAME . '  el
+                    INNER JOIN object ob ON el.object_id=ob.id
+                    WHERE el.name=:eqLogic_name
+                    AND ob.name=:object_name';
+        }
+        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
     }
 }

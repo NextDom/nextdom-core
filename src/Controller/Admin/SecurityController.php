@@ -22,11 +22,15 @@
 
 namespace NextDom\Controller\Admin;
 
+use NextDom\Controller\BaseController;
 use NextDom\Helpers\Render;
 use NextDom\Managers\CacheManager;
 use NextDom\Managers\ConfigManager;
-use NextDom\Controller\BaseController;
 
+/**
+ * Class SecurityController
+ * @package NextDom\Controller\Admin
+ */
 class SecurityController extends BaseController
 {
     /**

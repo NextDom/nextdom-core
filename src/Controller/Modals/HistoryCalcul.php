@@ -25,6 +25,10 @@ namespace NextDom\Controller\Modals;
 use NextDom\Helpers\Render;
 
 
+/**
+ * Class HistoryCalcul
+ * @package NextDom\Controller\Modals
+ */
 class HistoryCalcul extends BaseAbstractModal
 {
     /**

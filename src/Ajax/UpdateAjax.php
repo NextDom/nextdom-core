@@ -29,12 +29,16 @@ use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
 use NextDom\Model\Entity\Update;
 
+/**
+ * Class UpdateAjax
+ * @package NextDom\Ajax
+ */
 class UpdateAjax extends BaseAjax
 {
     /**
      * @var string
      */
-    protected $NEEDED_RIGHTS     = UserRight::USER;
+    protected $NEEDED_RIGHTS = UserRight::USER;
     /**
      * @var bool
      */
@@ -232,11 +236,11 @@ class UpdateAjax extends BaseAjax
         AuthentificationHelper::isConnectedAsAdminOrFail();
         Utils::unautorizedInDemo();
         $uploadDir = '/tmp';
-        $filename = Utils::readUploadedFile($_FILES, "file", $uploadDir, 100, array(), function($file) {
+        $filename = Utils::readUploadedFile($_FILES, "file", $uploadDir, 100, array(), function ($file) {
             $remove = array(" ", "(", ")");
             return str_replace($remove, "", $file["name"]);
         });
         $filepath = sprintf("%s/%s", $uploadDir, $filename);
         AjaxHelper::success($filepath);
-   }
+    }
 }

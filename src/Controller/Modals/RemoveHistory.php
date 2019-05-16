@@ -24,6 +24,10 @@ namespace NextDom\Controller\Modals;
 
 use NextDom\Helpers\Render;
 
+/**
+ * Class RemoveHistory
+ * @package NextDom\Controller\Modals
+ */
 class RemoveHistory extends BaseAbstractModal
 {
     /**

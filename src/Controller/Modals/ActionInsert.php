@@ -25,6 +25,10 @@ namespace NextDom\Controller\Modals;
 use NextDom\Helpers\Render;
 use NextDom\Managers\ConfigManager;
 
+/**
+ * Class ActionInsert
+ * @package NextDom\Controller\Modals
+ */
 class ActionInsert extends BaseAbstractModal
 {
     /**

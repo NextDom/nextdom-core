@@ -40,9 +40,19 @@ use NextDom\Model\Entity\InteractDef;
 
 require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
 
+/**
+ * Class InteractDefManager
+ * @package NextDom\Managers
+ */
 class InteractDefManager
 {
+    /**
+     *
+     */
     const CLASS_NAME = InteractDef::class;
+    /**
+     *
+     */
     const DB_CLASS_NAME = '`interactDef`';
 
     /**
@@ -60,33 +70,6 @@ class InteractDefManager
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE id = :id';
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
-    }
-
-    /**
-     * @param string $_group
-     * @return InteractDef[]|null
-     * @throws \Exception
-     */
-    public static function all($_group = '')
-    {
-        $values = array();
-        if ($_group === '') {
-            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                    FROM ' . self::DB_CLASS_NAME . '
-                    ORDER BY name, query';
-        } else if ($_group === null) {
-            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                    FROM ' . self::DB_CLASS_NAME . '
-                    WHERE (`group` IS NULL OR `group` = "")
-                    ORDER BY name, query';
-        } else {
-            $values['group'] = $_group;
-            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                    FROM ' . self::DB_CLASS_NAME . '
-                    WHERE `group` = :group
-                    ORDER BY name, query';
-        }
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -157,6 +140,33 @@ class InteractDefManager
         foreach (self::all() as $interactDef) {
             $interactDef->save();
         }
+    }
+
+    /**
+     * @param string $_group
+     * @return InteractDef[]|null
+     * @throws \Exception
+     */
+    public static function all($_group = '')
+    {
+        $values = array();
+        if ($_group === '') {
+            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                    FROM ' . self::DB_CLASS_NAME . '
+                    ORDER BY name, query';
+        } else if ($_group === null) {
+            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                    FROM ' . self::DB_CLASS_NAME . '
+                    WHERE (`group` IS NULL OR `group` = "")
+                    ORDER BY name, query';
+        } else {
+            $values['group'] = $_group;
+            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                    FROM ' . self::DB_CLASS_NAME . '
+                    WHERE `group` = :group
+                    ORDER BY name, query';
+        }
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -256,6 +266,27 @@ class InteractDefManager
     }
 
     /**
+     * @param $searchPattern
+     * @return array
+     * @throws \Exception
+     */
+    public static function searchByUse($searchPattern)
+    {
+        $return = array();
+        $interactDefs = self::searchByActionsOrReply($searchPattern);
+        $interactQueries = InteractQueryManager::searchActions($searchPattern);
+        foreach ($interactQueries as $interactQuery) {
+            $interactDefs[] = $interactQuery->getInteractDef();
+        }
+        foreach ($interactDefs as $interactDef) {
+            if (!isset($return[$interactDef->getId()])) {
+                $return[$interactDef->getId()] = $interactDef;
+            }
+        }
+        return $return;
+    }
+
+    /**
      * @param string $searchPattern
      * @return InteractDef[]|null
      * @throws \Exception
@@ -285,27 +316,6 @@ class InteractDefManager
             }
         }
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
-    }
-
-    /**
-     * @param $searchPattern
-     * @return array
-     * @throws \Exception
-     */
-    public static function searchByUse($searchPattern)
-    {
-        $return = array();
-        $interactDefs = self::searchByActionsOrReply($searchPattern);
-        $interactQueries = InteractQueryManager::searchActions($searchPattern);
-        foreach ($interactQueries as $interactQuery) {
-            $interactDefs[] = $interactQuery->getInteractDef();
-        }
-        foreach ($interactDefs as $interactDef) {
-            if (!isset($return[$interactDef->getId()])) {
-                $return[$interactDef->getId()] = $interactDef;
-            }
-        }
-        return $return;
     }
 
     /**

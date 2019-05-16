@@ -40,10 +40,20 @@ use NextDom\Model\Entity\Listener;
 
 require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
 
+/**
+ * Class ListenerManager
+ * @package NextDom\Managers
+ */
 class ListenerManager
 {
 
+    /**
+     *
+     */
     const CLASS_NAME = Listener::class;
+    /**
+     *
+     */
     const DB_CLASS_NAME = '`listener`';
 
     /**
@@ -192,6 +202,22 @@ class ListenerManager
 
     /**
      * @param $_event
+     * @param $_value
+     * @param $_datetime
+     * @throws \Exception
+     */
+    public static function check($_event, $_value, $_datetime)
+    {
+        $listeners = self::searchEvent($_event);
+        if (count($listeners) > 0) {
+            foreach ($listeners as $listener) {
+                $listener->run(str_replace('#', '', $_event), $_value, $_datetime);
+            }
+        }
+    }
+
+    /**
+     * @param $_event
      * @return Listener[]|null
      * @throws \Exception
      */
@@ -210,22 +236,6 @@ class ListenerManager
         FROM ' . self::DB_CLASS_NAME . '
         WHERE `event` LIKE :event';
         return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
-    }
-
-    /**
-     * @param $_event
-     * @param $_value
-     * @param $_datetime
-     * @throws \Exception
-     */
-    public static function check($_event, $_value, $_datetime)
-    {
-        $listeners = self::searchEvent($_event);
-        if (count($listeners) > 0) {
-            foreach ($listeners as $listener) {
-                $listener->run(str_replace('#', '', $_event), $_value, $_datetime);
-            }
-        }
     }
 
     /**

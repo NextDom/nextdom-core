@@ -22,11 +22,15 @@
 
 namespace NextDom\Controller\Pages;
 
+use NextDom\Controller\BaseController;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\SystemHelper;
 use NextDom\Managers\UpdateManager;
-use NextDom\Controller\BaseController;
 
+/**
+ * Class AdministrationController
+ * @package NextDom\Controller\Pages
+ */
 class AdministrationController extends BaseController
 {
     /**

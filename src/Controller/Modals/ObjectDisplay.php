@@ -28,6 +28,10 @@ use NextDom\Helpers\Utils;
 use NextDom\Managers\ScenarioElementManager;
 use NextDom\Managers\ScenarioManager;
 
+/**
+ * Class ObjectDisplay
+ * @package NextDom\Controller\Modals
+ */
 class ObjectDisplay extends BaseAbstractModal
 {
     /**

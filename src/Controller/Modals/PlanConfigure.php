@@ -30,6 +30,10 @@ use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PlanManager;
 use NextDom\Managers\ViewManager;
 
+/**
+ * Class PlanConfigure
+ * @package NextDom\Controller\Modals
+ */
 class PlanConfigure extends BaseAbstractModal
 {
     /**

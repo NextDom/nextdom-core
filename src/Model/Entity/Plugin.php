@@ -62,6 +62,10 @@ class Plugin implements EntityInterface
     protected $include = array();
     protected $functionality = array();
 
+    /**
+     * @param $data
+     * @throws \Exception
+     */
     public function initPluginFromData($data)
     {
         $this->setId($data['id']);
@@ -144,6 +148,27 @@ class Plugin implements EntityInterface
     }
 
     /**
+     * Obtenir l'identifiant
+     *
+     * @return mixed Identifiant du plugin
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Définir l'identifiant
+     * @param string|int $id Identifiant du plugin
+     * @return $this
+     */
+    public function setId($id): Plugin
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
      * Obtenir le fichier de configuration du plugin
      *
      * @return string Chemin du fichier de configuration du plugin
@@ -180,6 +205,27 @@ class Plugin implements EntityInterface
     }
 
     /**
+     * TODO: ???
+     *
+     * @return string
+     */
+    public function getDisplay()
+    {
+        return $this->display;
+    }
+
+    /**
+     * TODO: ??
+     * @param $display
+     * @return $this
+     */
+    public function setDisplay($display): Plugin
+    {
+        $this->display = $display;
+        return $this;
+    }
+
+    /**
      * Test si le plugin est actif
      * TODO: Doit passer en static
      * @return int
@@ -188,55 +234,6 @@ class Plugin implements EntityInterface
     public function isActive()
     {
         return PluginManager::isActive($this->id);
-    }
-
-    /**
-     * Appelle les fonctions liées aux actions d'installation/préinstallation/mise à jour et suppression d'un plugin
-     * La fonction de préinstallation nommé TODO:TROUVER SON NOM doit se trouver dans un fichier nommé "pre_install.php" situé dans le répertoire plugin_info du plugin
-     * Les autres fonctions doivent se trouver dans le fichier install.php située dans le répertoire plugin_info du plugin
-     *
-     * @param $functionToCall
-     * @param bool $direct Lance la fonction passée en paramètre directement
-     *
-     * TODO: Amélioration possible, tester si le fichier existe, l'inclure, puis tester si la méthode existe plutot que de lire le contenu du fichier
-     *
-     * @return bool|string
-     *
-     * @throws \Exception
-     */
-    public function callInstallFunction($functionToCall, $direct = false)
-    {
-        if ($direct) {
-            // Lancement de la procédure de préinstallation
-            if (strpos($functionToCall, 'pre_') !== false) {
-                LogHelper::add('plugin', 'debug', 'Recherche de ' . NEXTDOM_ROOT . '/plugins/' . $this->getId() . '/plugin_info/pre_install.php');
-                if (file_exists(NEXTDOM_ROOT . '/plugins/' . $this->getId() . '/plugin_info/pre_install.php')) {
-                    LogHelper::add('plugin', 'debug', 'Fichier d\'installation trouvé pour  : ' . $this->getId());
-                    require_once NEXTDOM_ROOT . '/plugins/' . $this->getId() . '/plugin_info/pre_install.php';
-                    ob_start();
-                    $function = $this->getId() . '_' . $functionToCall;
-                    if (function_exists($this->getId() . '_' . $functionToCall)) {
-                        $function();
-                    }
-                    return ob_get_clean();
-                }
-            } else {
-                LogHelper::add('plugin', 'debug', 'Recherche de ' . NEXTDOM_ROOT . '/plugins/' . $this->getId() . '/plugin_info/install.php');
-                if (file_exists(NEXTDOM_ROOT . '/plugins/' . $this->getId() . '/plugin_info/install.php')) {
-                    LogHelper::add('plugin', 'debug', 'Fichier d\'installation trouvé pour  : ' . $this->getId());
-                    require_once NEXTDOM_ROOT . '/plugins/' . $this->getId() . '/plugin_info/install.php';
-                    ob_start();
-                    $function = $this->getId() . '_' . $functionToCall;
-                    if (function_exists($this->getId() . '_' . $functionToCall)) {
-                        $function();
-                    }
-                    return ob_get_clean();
-                }
-            }
-        } else {
-            return $this->launch($functionToCall, true);
-        }
-        return null;
     }
 
     /**
@@ -251,6 +248,11 @@ class Plugin implements EntityInterface
         return $this->getDependencyInfo($refresh);
     }
 
+    /**
+     * @param bool $refresh
+     * @return array
+     * @throws \Exception
+     */
     public function getDependencyInfo($refresh = false)
     {
         $pluginId = $this->getId();
@@ -293,6 +295,29 @@ class Plugin implements EntityInterface
             CacheManager::set('dependancy' . $this->getID(), $result);
         }
         return $result;
+    }
+
+    /**
+     * Savoir si le plugin a des dépendances
+     *
+     * @return int TODO mettre un bool
+     */
+    public function getHasDependency()
+    {
+        return $this->hasDependency;
+    }
+
+    /**
+     * Définir si le plugin a des dépendances
+     *
+     * @param $hasDependency
+     *
+     * @return $this
+     */
+    public function setHasDependency($hasDependency): Plugin
+    {
+        $this->hasDependency = $hasDependency;
+        return $this;
     }
 
     /**
@@ -350,18 +375,31 @@ class Plugin implements EntityInterface
     }
 
     /**
-     * TODO Surement le mode de chargement du daemon au démarrage. Sans doute
-     *
-     * @param $_mode
-     * @throws \Exception
+     * Arrête le daemon du plugin
      */
-    public function deamon_changeAutoMode($_mode)
+    public function deamon_stop()
     {
-        ConfigManager::save('deamonAutoMode', $_mode, $this->getId());
-        $pluginId = $this->getId();
-        if (method_exists($pluginId, 'deamon_changeAutoMode')) {
-            $pluginId::deamon_changeAutoMode($_mode);
+        $plugin_id = $this->getId();
+        try {
+            if ($this->getHasOwnDeamon() == 1 && method_exists($plugin_id, 'deamon_info')) {
+                $deamon_info = $this->deamon_info();
+                if ($deamon_info['state'] == 'ok' && method_exists($plugin_id, 'deamon_stop')) {
+                    $plugin_id::deamon_stop();
+                }
+            }
+        } catch (\Throwable $e) {
+            LogHelper::add($plugin_id, 'error', __('Erreur sur la fonction deamon_stop du plugin : ') . $e->getMessage());
         }
+    }
+
+    /**
+     * Savoir si le plugin a son propre daemon
+     *
+     * @return int
+     */
+    public function getHasOwnDeamon()
+    {
+        return $this->hasOwnDeamon;
     }
 
     /**
@@ -412,6 +450,21 @@ class Plugin implements EntityInterface
     }
 
     /**
+     * TODO Surement le mode de chargement du daemon au démarrage. Sans doute
+     *
+     * @param $_mode
+     * @throws \Exception
+     */
+    public function deamon_changeAutoMode($_mode)
+    {
+        ConfigManager::save('deamonAutoMode', $_mode, $this->getId());
+        $pluginId = $this->getId();
+        if (method_exists($pluginId, 'deamon_changeAutoMode')) {
+            $pluginId::deamon_changeAutoMode($_mode);
+        }
+    }
+
+    /**
      * Démarre le daemon du plugin
      *
      * @param bool $forceRestart
@@ -453,24 +506,6 @@ class Plugin implements EntityInterface
             }
         } catch (\Throwable $e) {
             LogHelper::add($pluginId, 'error', __('Erreur sur la fonction deamon_start du plugin : ') . $e->getMessage());
-        }
-    }
-
-    /**
-     * Arrête le daemon du plugin
-     */
-    public function deamon_stop()
-    {
-        $plugin_id = $this->getId();
-        try {
-            if ($this->getHasOwnDeamon() == 1 && method_exists($plugin_id, 'deamon_info')) {
-                $deamon_info = $this->deamon_info();
-                if ($deamon_info['state'] == 'ok' && method_exists($plugin_id, 'deamon_stop')) {
-                    $plugin_id::deamon_stop();
-                }
-            }
-        } catch (\Throwable $e) {
-            LogHelper::add($plugin_id, 'error', __('Erreur sur la fonction deamon_stop du plugin : ') . $e->getMessage());
         }
     }
 
@@ -572,6 +607,65 @@ class Plugin implements EntityInterface
     }
 
     /**
+     * Obtenir la version de NextDom requise
+     *
+     * @return string Version de NextDom requise
+     */
+    public function getRequire(): string
+    {
+        return $this->require;
+    }
+
+    /**
+     * Appelle les fonctions liées aux actions d'installation/préinstallation/mise à jour et suppression d'un plugin
+     * La fonction de préinstallation nommé TODO:TROUVER SON NOM doit se trouver dans un fichier nommé "pre_install.php" situé dans le répertoire plugin_info du plugin
+     * Les autres fonctions doivent se trouver dans le fichier install.php située dans le répertoire plugin_info du plugin
+     *
+     * @param $functionToCall
+     * @param bool $direct Lance la fonction passée en paramètre directement
+     *
+     * TODO: Amélioration possible, tester si le fichier existe, l'inclure, puis tester si la méthode existe plutot que de lire le contenu du fichier
+     *
+     * @return bool|string
+     *
+     * @throws \Exception
+     */
+    public function callInstallFunction($functionToCall, $direct = false)
+    {
+        if ($direct) {
+            // Lancement de la procédure de préinstallation
+            if (strpos($functionToCall, 'pre_') !== false) {
+                LogHelper::add('plugin', 'debug', 'Recherche de ' . NEXTDOM_ROOT . '/plugins/' . $this->getId() . '/plugin_info/pre_install.php');
+                if (file_exists(NEXTDOM_ROOT . '/plugins/' . $this->getId() . '/plugin_info/pre_install.php')) {
+                    LogHelper::add('plugin', 'debug', 'Fichier d\'installation trouvé pour  : ' . $this->getId());
+                    require_once NEXTDOM_ROOT . '/plugins/' . $this->getId() . '/plugin_info/pre_install.php';
+                    ob_start();
+                    $function = $this->getId() . '_' . $functionToCall;
+                    if (function_exists($this->getId() . '_' . $functionToCall)) {
+                        $function();
+                    }
+                    return ob_get_clean();
+                }
+            } else {
+                LogHelper::add('plugin', 'debug', 'Recherche de ' . NEXTDOM_ROOT . '/plugins/' . $this->getId() . '/plugin_info/install.php');
+                if (file_exists(NEXTDOM_ROOT . '/plugins/' . $this->getId() . '/plugin_info/install.php')) {
+                    LogHelper::add('plugin', 'debug', 'Fichier d\'installation trouvé pour  : ' . $this->getId());
+                    require_once NEXTDOM_ROOT . '/plugins/' . $this->getId() . '/plugin_info/install.php';
+                    ob_start();
+                    $function = $this->getId() . '_' . $functionToCall;
+                    if (function_exists($this->getId() . '_' . $functionToCall)) {
+                        $function();
+                    }
+                    return ob_get_clean();
+                }
+            }
+        } else {
+            return $this->launch($functionToCall, true);
+        }
+        return null;
+    }
+
+    /**
      * TODO: Lance un truc, peut être un Nokia 3310
      *
      * @param $functionToCall
@@ -657,6 +751,9 @@ class Plugin implements EntityInterface
         return UpdateManager::byTypeAndLogicalId('plugin', $this->getId());
     }
 
+    /**
+     * @return string
+     */
     public function getPathImgIcon()
     {
         if (file_exists(NEXTDOM_ROOT . '/plugins/' . $this->getId() . '/plugin_info/' . $this->getId() . '_icon.png')) {
@@ -693,24 +790,13 @@ class Plugin implements EntityInterface
     }
 
     /**
-     * Obtenir l'identifiant
+     * Obtenir le nom
      *
-     * @return mixed Identifiant du plugin
+     * @return string Nom
      */
-    public function getId()
+    public function getName(): string
     {
-        return $this->id;
-    }
-
-    /**
-     * Définir l'identifiant
-     * @param string|int $id Identifiant du plugin
-     * @return $this
-     */
-    public function setId($id): Plugin
-    {
-        $this->id = $id;
-        return $this;
+        return $this->name;
     }
 
     /**
@@ -726,16 +812,6 @@ class Plugin implements EntityInterface
     }
 
     /**
-     * Obtenir le nom
-     *
-     * @return string Nom
-     */
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    /**
      * Obtenir la description
      *
      * @return string Descsription
@@ -743,31 +819,6 @@ class Plugin implements EntityInterface
     public function getDescription()
     {
         return nl2br($this->description);
-    }
-
-    /**
-     * Obtenir les informations
-     *
-     * @param string $name
-     * @param string $default
-     * @return array|mixed|string
-     * @throws \Exception
-     */
-    public function getInfo($name = '', $default = '')
-    {
-        if (count($this->info) == 0) {
-            $update = UpdateManager::byLogicalId($this->id);
-            if (is_object($update)) {
-                $this->info = $update->getInfo();
-            }
-        }
-        if ($name !== '') {
-            if (isset($this->info[$name])) {
-                return $this->info[$name];
-            }
-            return $default;
-        }
-        return $this->info;
     }
 
     /**
@@ -781,16 +832,6 @@ class Plugin implements EntityInterface
     }
 
     /**
-     * Obtenir la version de NextDom requise
-     *
-     * @return string Version de NextDom requise
-     */
-    public function getRequire(): string
-    {
-        return $this->require;
-    }
-
-    /**
      * Obtenir la catégorie
      *
      * @return string Catégorie
@@ -798,6 +839,16 @@ class Plugin implements EntityInterface
     public function getCategory(): string
     {
         return $this->category;
+    }
+
+    /**
+     * @param $key
+     * @return $this
+     */
+    public function setCategory($key)
+    {
+        $this->category = $key;
+        return $this;
     }
 
     /**
@@ -848,27 +899,6 @@ class Plugin implements EntityInterface
     }
 
     /**
-     * TODO: ???
-     *
-     * @return string
-     */
-    public function getDisplay()
-    {
-        return $this->display;
-    }
-
-    /**
-     * TODO: ??
-     * @param $display
-     * @return $this
-     */
-    public function setDisplay($display): Plugin
-    {
-        $this->display = $display;
-        return $this;
-    }
-
-    /**
      * TODO: ??
      *
      * @return mixed
@@ -907,39 +937,6 @@ class Plugin implements EntityInterface
     {
         $this->eventjs = $eventjs;
         return $this;
-    }
-
-    /**
-     * Savoir si le plugin a des dépendances
-     *
-     * @return int TODO mettre un bool
-     */
-    public function getHasDependency()
-    {
-        return $this->hasDependency;
-    }
-
-    /**
-     * Définir si le plugin a des dépendances
-     *
-     * @param $hasDependency
-     *
-     * @return $this
-     */
-    public function setHasDependency($hasDependency): Plugin
-    {
-        $this->hasDependency = $hasDependency;
-        return $this;
-    }
-
-    /**
-     * Savoir si le plugin a son propre daemon
-     *
-     * @return int
-     */
-    public function getHasOwnDeamon()
-    {
-        return $this->hasOwnDeamon;
     }
 
     /**
@@ -1026,6 +1023,31 @@ class Plugin implements EntityInterface
     }
 
     /**
+     * Obtenir les informations
+     *
+     * @param string $name
+     * @param string $default
+     * @return array|mixed|string
+     * @throws \Exception
+     */
+    public function getInfo($name = '', $default = '')
+    {
+        if (count($this->info) == 0) {
+            $update = UpdateManager::byLogicalId($this->id);
+            if (is_object($update)) {
+                $this->info = $update->getInfo();
+            }
+        }
+        if ($name !== '') {
+            if (isset($this->info[$name])) {
+                return $this->info[$name];
+            }
+            return $default;
+        }
+        return $this->info;
+    }
+
+    /**
      * Obtenir l'adresse de la documentation
      *
      * @return string Adresse de la documentation
@@ -1052,12 +1074,9 @@ class Plugin implements EntityInterface
         return $this;
     }
 
-    public function setCategory($key)
-    {
-        $this->category = $key;
-        return $this;
-    }
-
+    /**
+     * @return string
+     */
     public function getTableName()
     {
         return 'plugin';

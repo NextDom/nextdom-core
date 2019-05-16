@@ -40,9 +40,19 @@ use NextDom\Model\Entity\Message;
 
 require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
 
+/**
+ * Class MessageManager
+ * @package NextDom\Managers
+ */
 class MessageManager
 {
+    /**
+     *
+     */
     const CLASS_NAME = Message::class;
+    /**
+     *
+     */
     const DB_CLASS_NAME = '`message`';
 
     /**
@@ -67,7 +77,7 @@ class MessageManager
     /**
      * @param string $_plugin
      * @param string $_logicalId
-     * @param bool   $_search
+     * @param bool $_search
      * @return bool
      * @throws \NextDom\Exceptions\CoreException
      */

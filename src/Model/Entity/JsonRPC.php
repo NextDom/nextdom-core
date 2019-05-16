@@ -19,6 +19,10 @@ namespace NextDom\Model\Entity;
 
 use NextDom\Helpers\Utils;
 
+/**
+ * Class JsonRPC
+ * @package NextDom\Model\Entity
+ */
 class JsonRPC
 {
     protected $jsonrpc;
@@ -52,6 +56,10 @@ class JsonRPC
         }
     }
 
+    /**
+     * @param $_code
+     * @param $_message
+     */
     public function makeError($_code, $_message)
     {
         $return = array(
@@ -71,6 +79,33 @@ class JsonRPC
         exit;
     }
 
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
+    public function getAdditionnalParams($_key = '', $_default = '')
+    {
+        return Utils::getJsonAttr($this->additionnalParams, $_key, $_default);
+    }
+
+    /*     * ********Getteur Setteur******************* */
+
+    /**
+     * @param $_key
+     * @param $_value
+     */
+    public function setAdditionnalParams($_key, $_value)
+    {
+        if (in_array($_key, array('result', 'jsonrpc', 'id'))) {
+            return;
+        }
+        $this->additionnalParams = Utils::setJsonAttr($this->additionnalParams, $_key, $_value);
+    }
+
+    /**
+     * @param string $_result
+     */
     public function makeSuccess($_result = 'ok')
     {
         $return = array(
@@ -87,55 +122,62 @@ class JsonRPC
         exit;
     }
 
-    /*     * ********Getteur Setteur******************* */
-
+    /**
+     * @return float
+     */
     public function getStartTime()
     {
         return $this->startTime;
     }
 
+    /**
+     * @return string
+     */
     public function getApplicationName()
     {
         return $this->applicationName;
     }
 
-    public function getJsonrpc()
-    {
-        return $this->jsonrpc;
-    }
-
-    public function getMethod()
-    {
-        return $this->method;
-    }
-
-    public function getParams()
-    {
-        return $this->params;
-    }
-
-    public function getId()
-    {
-        return $this->id;
-    }
-
+    /**
+     * @param $applicationName
+     * @return $this
+     */
     public function setApplicationName($applicationName)
     {
         $this->applicationName = $applicationName;
         return $this;
     }
 
-    public function getAdditionnalParams($_key = '', $_default = '')
+    /**
+     * @return mixed
+     */
+    public function getJsonrpc()
     {
-        return Utils::getJsonAttr($this->additionnalParams, $_key, $_default);
+        return $this->jsonrpc;
     }
 
-    public function setAdditionnalParams($_key, $_value)
+    /**
+     * @return string
+     */
+    public function getMethod()
     {
-        if (in_array($_key, array('result', 'jsonrpc', 'id'))) {
-            return;
-        }
-        $this->additionnalParams = Utils::setJsonAttr($this->additionnalParams, $_key, $_value);
+        return $this->method;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getParams()
+    {
+        return $this->params;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
 }

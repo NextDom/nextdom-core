@@ -25,6 +25,10 @@ namespace NextDom\Controller\Modals;
 use NextDom\Helpers\Render;
 use NextDom\Managers\ScenarioManager;
 
+/**
+ * Class ScenarioHumanInsert
+ * @package NextDom\Controller\Modals
+ */
 class ScenarioHumanInsert extends BaseAbstractModal
 {
     /**

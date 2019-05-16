@@ -42,77 +42,19 @@ use NextDom\Managers\ConfigManager;
 use NextDom\Managers\MessageManager;
 use SplFileObject;
 
+/**
+ * Class LogHelper
+ * @package NextDom\Helpers
+ */
 class LogHelper
 {
+    /**
+     *
+     */
     const DEFAULT_MAX_LINE = 200;
 
     private static $logger = array();
     private static $config = null;
-
-    /**
-     * @param        $_key
-     * @param string $_default
-     * @return string
-     * @throws \Exception
-     */
-    public static function getConfig($_key, $_default = '')
-    {
-        if (self::$config === null) {
-            self::$config = array_merge(ConfigManager::getLogLevelPlugin(), ConfigManager::byKeys(array('log::engine', 'log::formatter', 'log::level', 'addMessageForErrorLog', 'maxLineLog')));
-        }
-        if (isset(self::$config[$_key])) {
-            return self::$config[$_key];
-        }
-        return $_default;
-    }
-
-    public static function getLogger($_log)
-    {
-        if (isset(self::$logger[$_log])) {
-            return self::$logger[$_log];
-        }
-        $formatter = new LineFormatter(str_replace('\n', "\n", self::getConfig('log::formatter')));
-        self::$logger[$_log] = new Logger($_log);
-        switch (self::getConfig('log::engine')) {
-            case 'SyslogHandler':
-                $handler = new SyslogHandler(self::getLogLevel($_log));
-                break;
-            case 'SyslogUdp':
-                $handler = new SyslogUdpHandler(ConfigManager::byKey('log::syslogudphost'), ConfigManager::byKey('log::syslogudpport'), 'user', self::getLogLevel($_log));
-                break;
-            case 'StreamHandler':
-            default:
-                $handler = new StreamHandler(self::getPathToLog($_log), self::getLogLevel($_log));
-                break;
-        }
-        $handler->setFormatter($formatter);
-        self::$logger[$_log]->pushHandler($handler);
-        return self::$logger[$_log];
-    }
-
-    /**
-     * @param $_log
-     * @return int|string
-     * @throws \Exception
-     */
-    public static function getLogLevel($_log)
-    {
-        $specific_level = self::getConfig('log::level::' . $_log);
-        if (is_array($specific_level)) {
-            if (isset($specific_level['default']) && $specific_level['default'] == 1) {
-                return self::getConfig('log::level');
-            }
-            foreach ($specific_level as $key => $value) {
-                if (!is_numeric($key)) {
-                    continue;
-                }
-                if ($value == 1) {
-                    return $key;
-                }
-            }
-        }
-        return self::getConfig('log::level');
-    }
 
     /**
      * @param int $_level
@@ -139,16 +81,6 @@ class LogHelper
     public static function addError($logTarget, $message, $logicalId = '')
     {
         self::add($logTarget, 'error', $message, $logicalId);
-    }
-
-    /**
-     * @param        $logTarget
-     * @param        $message
-     * @param string $logicalId
-     */
-    public static function addInfo($logTarget, $message, $logicalId = '')
-    {
-        self::add($logTarget, 'info', $message, $logicalId);
     }
 
     /**
@@ -179,6 +111,189 @@ class LogHelper
 
             }
         }
+    }
+
+    /**
+     * @param $_log
+     * @return mixed
+     * @throws \Exception
+     */
+    public static function getLogger($_log)
+    {
+        if (isset(self::$logger[$_log])) {
+            return self::$logger[$_log];
+        }
+        $formatter = new LineFormatter(str_replace('\n', "\n", self::getConfig('log::formatter')));
+        self::$logger[$_log] = new Logger($_log);
+        switch (self::getConfig('log::engine')) {
+            case 'SyslogHandler':
+                $handler = new SyslogHandler(self::getLogLevel($_log));
+                break;
+            case 'SyslogUdp':
+                $handler = new SyslogUdpHandler(ConfigManager::byKey('log::syslogudphost'), ConfigManager::byKey('log::syslogudpport'), 'user', self::getLogLevel($_log));
+                break;
+            case 'StreamHandler':
+            default:
+                $handler = new StreamHandler(self::getPathToLog($_log), self::getLogLevel($_log));
+                break;
+        }
+        $handler->setFormatter($formatter);
+        self::$logger[$_log]->pushHandler($handler);
+        return self::$logger[$_log];
+    }
+
+    /**
+     * @param        $_key
+     * @param string $_default
+     * @return string
+     * @throws \Exception
+     */
+    public static function getConfig($_key, $_default = '')
+    {
+        if (self::$config === null) {
+            self::$config = array_merge(ConfigManager::getLogLevelPlugin(), ConfigManager::byKeys(array('log::engine', 'log::formatter', 'log::level', 'addMessageForErrorLog', 'maxLineLog')));
+        }
+        if (isset(self::$config[$_key])) {
+            return self::$config[$_key];
+        }
+        return $_default;
+    }
+
+    /**
+     * @param $_log
+     * @return int|string
+     * @throws \Exception
+     */
+    public static function getLogLevel($_log)
+    {
+        $specific_level = self::getConfig('log::level::' . $_log);
+        if (is_array($specific_level)) {
+            if (isset($specific_level['default']) && $specific_level['default'] == 1) {
+                return self::getConfig('log::level');
+            }
+            foreach ($specific_level as $key => $value) {
+                if (!is_numeric($key)) {
+                    continue;
+                }
+                if ($value == 1) {
+                    return $key;
+                }
+            }
+        }
+        return self::getConfig('log::level');
+    }
+
+    /**
+     * @param string $_log
+     * @return string
+     */
+    public static function getPathToLog($_log = 'core')
+    {
+        return NEXTDOM_LOG . '/' . $_log;
+    }
+
+    /**
+     * @param        $logTarget
+     * @param        $message
+     * @param string $logicalId
+     */
+    public static function addInfo($logTarget, $message, $logicalId = '')
+    {
+        self::add($logTarget, 'info', $message, $logicalId);
+    }
+
+    /**
+     * @return bool
+     * @throws \Exception
+     */
+    public static function removeAll()
+    {
+        foreach (array('', 'scenarioLog/') as $logPath) {
+            $logs = FileSystemHelper::ls(self::getPathToLog($logPath), '*');
+            foreach ($logs as $log) {
+                self::remove($log);
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Vide le fichier de log
+     * @param $_log
+     * @return bool|null
+     * @throws \Exception
+     */
+    public static function remove($_log)
+    {
+        if (strpos($_log, 'nginx.error') !== false || strpos($_log, 'http.error') !== false) {
+            self::clear($_log);
+            return null;
+        }
+        if (self::authorizeClearLog($_log)) {
+            $path = self::getPathToLog($_log);
+            \com_shell::execute(SystemHelper::getCmdSudo() . 'chmod 664 ' . $path . ' > /dev/null 2>&1; rm ' . $path . ' 2>&1 > /dev/null');
+            return true;
+        }
+        return null;
+    }
+
+    /**
+     * Vide le fichier de log
+     * @param $_log
+     * @return bool|null
+     * @throws \Exception
+     */
+    public static function clear($_log)
+    {
+        if (self::authorizeClearLog($_log)) {
+            $path = self::getPathToLog($_log);
+            \com_shell::execute(SystemHelper::getCmdSudo() . 'chmod 664 ' . $path . '> /dev/null 2>&1;cat /dev/null > ' . $path);
+            return true;
+        }
+        return null;
+    }
+
+    /**
+     * Autorisation de vide le fichier de log
+     * @param $_log
+     * @param string $_subPath
+     * @return bool
+     */
+    public static function authorizeClearLog($_log, $_subPath = '')
+    {
+        $path = self::getPathToLog($_subPath . $_log);
+        return !((strpos($_log, '.htaccess') !== false)
+            || (!file_exists($path) || !is_file($path)));
+    }
+
+    /**
+     * @param string $_log
+     * @param        $_begin
+     * @param        $_nbLines
+     * @return array|bool
+     */
+    public static function get($_log = 'core', $_begin, $_nbLines)
+    {
+        self::chunk($_log);
+        $path = (!file_exists($_log) || !is_file($_log)) ? self::getPathToLog($_log) : $_log;
+        if (!file_exists($path)) {
+            return false;
+        }
+        $page = array();
+        $log = new SplFileObject($path);
+        if ($log) {
+            $log->seek($_begin); //Seek to the begening of lines
+            $linesRead = 0;
+            while ($log->valid() && $linesRead != $_nbLines) {
+                $line = trim($log->current()); //get current line
+                if ($line != '') {
+                    array_unshift($page, $line);
+                }
+                $log->next(); //go to next line
+                $linesRead++;
+            }
+        }
+        return $page;
     }
 
     /**
@@ -231,109 +346,6 @@ class LogHelper
         if (filesize($_path) > (1024 * 1024 * 10)) {
             \com_shell::execute(SystemHelper::getCmdSudo() . ' rm -f ' . $_path);
         }
-    }
-
-    /**
-     * @param string $_log
-     * @return string
-     */
-    public static function getPathToLog($_log = 'core')
-    {
-        return NEXTDOM_LOG . '/' . $_log;
-    }
-
-    /**
-     * Autorisation de vide le fichier de log
-     * @param $_log
-     * @param string $_subPath
-     * @return bool
-     */
-    public static function authorizeClearLog($_log, $_subPath = '')
-    {
-        $path = self::getPathToLog($_subPath . $_log);
-        return !((strpos($_log, '.htaccess') !== false)
-            || (!file_exists($path) || !is_file($path)));
-    }
-
-    /**
-     * Vide le fichier de log
-     * @param $_log
-     * @return bool|null
-     * @throws \Exception
-     */
-    public static function clear($_log)
-    {
-        if (self::authorizeClearLog($_log)) {
-            $path = self::getPathToLog($_log);
-            \com_shell::execute(SystemHelper::getCmdSudo() . 'chmod 664 ' . $path . '> /dev/null 2>&1;cat /dev/null > ' . $path);
-            return true;
-        }
-        return null;
-    }
-
-    /**
-     * Vide le fichier de log
-     * @param $_log
-     * @return bool|null
-     * @throws \Exception
-     */
-    public static function remove($_log)
-    {
-        if (strpos($_log, 'nginx.error') !== false || strpos($_log, 'http.error') !== false) {
-            self::clear($_log);
-            return null;
-        }
-        if (self::authorizeClearLog($_log)) {
-            $path = self::getPathToLog($_log);
-            \com_shell::execute(SystemHelper::getCmdSudo() . 'chmod 664 ' . $path . ' > /dev/null 2>&1; rm ' . $path . ' 2>&1 > /dev/null');
-            return true;
-        }
-        return null;
-    }
-
-    /**
-     * @return bool
-     * @throws \Exception
-     */
-    public static function removeAll()
-    {
-        foreach (array('', 'scenarioLog/') as $logPath) {
-            $logs = FileSystemHelper::ls(self::getPathToLog($logPath), '*');
-            foreach ($logs as $log) {
-                self::remove($log);
-            }
-        }
-        return true;
-    }
-
-    /**
-     * @param string $_log
-     * @param        $_begin
-     * @param        $_nbLines
-     * @return array|bool
-     */
-    public static function get($_log = 'core', $_begin, $_nbLines)
-    {
-        self::chunk($_log);
-        $path = (!file_exists($_log) || !is_file($_log)) ? self::getPathToLog($_log) : $_log;
-        if (!file_exists($path)) {
-            return false;
-        }
-        $page = array();
-        $log = new SplFileObject($path);
-        if ($log) {
-            $log->seek($_begin); //Seek to the begening of lines
-            $linesRead = 0;
-            while ($log->valid() && $linesRead != $_nbLines) {
-                $line = trim($log->current()); //get current line
-                if ($line != '') {
-                    array_unshift($page, $line);
-                }
-                $log->next(); //go to next line
-                $linesRead++;
-            }
-        }
-        return $page;
     }
 
     /**

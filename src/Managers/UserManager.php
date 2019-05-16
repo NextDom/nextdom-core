@@ -41,9 +41,19 @@ use NextDom\Helpers\Utils;
 use NextDom\Model\Entity\User;
 use PragmaRX\Google2FA\Google2FA;
 
+/**
+ * Class UserManager
+ * @package NextDom\Managers
+ */
 class UserManager
 {
+    /**
+     *
+     */
     const DB_CLASS_NAME = '`user`';
+    /**
+     *
+     */
     const CLASS_NAME = 'user';
 
     /*     * ***********************Méthodes statiques*************************** */
@@ -129,22 +139,6 @@ class UserManager
     }
 
     /**
-     * @param $_id
-     * @return array|mixed|null
-     * @throws \Exception
-     */
-    public static function byId($_id)
-    {
-        $values = array(
-            'id' => $_id,
-        );
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE id = :id';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
-    }
-
-    /**
      * @return bool|resource
      * @throws \Exception
      */
@@ -173,6 +167,42 @@ class UserManager
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE login = :login';
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+    }
+
+    /**
+     * @param $_login
+     * @param $_password
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
+    public static function byLoginAndPassword($_login, $_password)
+    {
+        $values = array(
+            'login' => $_login,
+            'password' => $_password,
+        );
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE login = :login
+                AND password = :password';
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+    }
+
+    /**
+     * @param $_id
+     * @return array|mixed|null
+     * @throws \Exception
+     */
+    public static function byId($_id)
+    {
+        $values = array(
+            'id' => $_id,
+        );
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE id = :id';
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
@@ -209,26 +239,6 @@ class UserManager
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE login = :login
                 AND hash = :hash';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
-    }
-
-    /**
-     * @param $_login
-     * @param $_password
-     * @return array|mixed|null
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
-    public static function byLoginAndPassword($_login, $_password)
-    {
-        $values = array(
-            'login' => $_login,
-            'password' => $_password,
-        );
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE login = :login
-                AND password = :password';
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 

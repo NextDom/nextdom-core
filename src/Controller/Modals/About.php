@@ -24,6 +24,10 @@ namespace NextDom\Controller\Modals;
 
 use NextDom\Helpers\Render;
 
+/**
+ * Class About
+ * @package NextDom\Controller\Modals
+ */
 class About extends BaseAbstractModal
 {
     /**

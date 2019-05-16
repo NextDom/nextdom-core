@@ -22,6 +22,10 @@ use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CacheManager;
 
+/**
+ * Class CacheAjax
+ * @package NextDom\Ajax
+ */
 class CacheAjax extends BaseAjax
 {
     /**

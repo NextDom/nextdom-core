@@ -28,12 +28,12 @@ use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\Utils;
 
+/**
+ * Class BaseAjax
+ * @package NextDom\Ajax
+ */
 abstract class BaseAjax
 {
-    /**
-     * @var [string] Forbidden callable methods from ajax
-     */
-    private $FORBIDDEN_METHODS = ['checkIfActionExists', 'process', 'checkAccessOrFail'];
     /**
      * @var string Default rights for access. Must be override
      */
@@ -46,6 +46,33 @@ abstract class BaseAjax
      * @var string Default state of the connection needed. Must be override
      */
     protected $CHECK_AJAX_TOKEN = true;
+    /**
+     * @var [string] Forbidden callable methods from ajax
+     */
+    private $FORBIDDEN_METHODS = ['checkIfActionExists', 'process', 'checkAccessOrFail'];
+
+    /**
+     * Start the process
+     * @throws \Exception
+     */
+    public function process()
+    {
+        try {
+            $this->checkAccessOrFail($this->MUST_BE_CONNECTED, $this->NEEDED_RIGHTS);
+            AjaxHelper::init($this->CHECK_AJAX_TOKEN);
+
+            // Check and call the method for the action in query
+            $actionCode = Utils::init('action', '');
+            if ($this->checkIfActionExists($actionCode)) {
+                $this->$actionCode();
+            } else {
+                throw new CoreException(__('core.error-ajax'), 401);
+            }
+        } catch (\Throwable $throwable) {
+            AjaxHelper::error(Utils::displayException($throwable), $throwable->getCode());
+        }
+
+    }
 
     /**
      * Check access of the user. Fail on problem.
@@ -87,29 +114,5 @@ abstract class BaseAjax
             }
         }
         return false;
-    }
-
-    /**
-     * Start the process
-
-     * @throws \Exception
-     */
-    public function process()
-    {
-        try {
-            $this->checkAccessOrFail($this->MUST_BE_CONNECTED, $this->NEEDED_RIGHTS);
-            AjaxHelper::init($this->CHECK_AJAX_TOKEN);
-
-            // Check and call the method for the action in query
-            $actionCode = Utils::init('action', '');
-            if ($this->checkIfActionExists($actionCode)) {
-                $this->$actionCode();
-            } else {
-                throw new CoreException(__('core.error-ajax'), 401);
-            }
-        } catch (\Throwable $throwable) {
-            AjaxHelper::error(Utils::displayException($throwable), $throwable->getCode());
-        }
-
     }
 }

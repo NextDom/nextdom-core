@@ -33,9 +33,13 @@
  */
 
 namespace {
+
     use NextDom\Exceptions\CoreException;
     use NextDom\Managers\ConfigManager;
 
+    /**
+     *
+     */
     define('NEXTDOM_ROOT', realpath(__DIR__ . '/..'));
 
     if (file_exists(NEXTDOM_ROOT . '/core/config/common.config.php')) {
@@ -52,9 +56,18 @@ namespace {
     }
 
     global $CONFIG;
+    /**
+     *
+     */
     define('NEXTDOM_DATA', $CONFIG["paths"]["lib"]);
-    define('NEXTDOM_LOG',  $CONFIG["paths"]["log"]);
-    define('NEXTDOM_TMP',  $CONFIG["paths"]["tmp"]);
+    /**
+     *
+     */
+    define('NEXTDOM_LOG', $CONFIG["paths"]["log"]);
+    /**
+     *
+     */
+    define('NEXTDOM_TMP', $CONFIG["paths"]["tmp"]);
 
     require_once NEXTDOM_ROOT . '/vendor/autoload.php';
     require_once NEXTDOM_ROOT . '/src/Helpers/DBHelper.php';
@@ -64,10 +77,9 @@ namespace {
 
     // Developer mode : Register global error and exception handlers
     if (('cli' !== php_sapi_name()) &&
-        (  '1' == ConfigManager::getDefaultConfiguration()['core']['developer::mode']) &&
-        (  '1' == ConfigManager::getDefaultConfiguration()['core']['developer::errorhandler']) &&
-        (  '1' == ConfigManager::getDefaultConfiguration()['core']['developer::exceptionhandler']))
-    {
+        ('1' == ConfigManager::getDefaultConfiguration()['core']['developer::mode']) &&
+        ('1' == ConfigManager::getDefaultConfiguration()['core']['developer::errorhandler']) &&
+        ('1' == ConfigManager::getDefaultConfiguration()['core']['developer::exceptionhandler'])) {
         Symfony\Component\Debug\ErrorHandler::register();
         Symfony\Component\Debug\ExceptionHandler::register();
     }

@@ -26,6 +26,10 @@ use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
 use NextDom\Managers\ScenarioManager;
 
+/**
+ * Class ScenarioExport
+ * @package NextDom\Controller\Modals
+ */
 class ScenarioExport extends BaseAbstractModal
 {
     /**

@@ -36,9 +36,19 @@ namespace NextDom\Managers;
 use NextDom\Helpers\DBHelper;
 use NextDom\Model\Entity\ScenarioSubElement;
 
+/**
+ * Class ScenarioSubElementManager
+ * @package NextDom\Managers
+ */
 class ScenarioSubElementManager
 {
+    /**
+     *
+     */
     const DB_CLASS_NAME = 'scenarioSubElement';
+    /**
+     *
+     */
     const CLASS_NAME = ScenarioSubElement::class;
 
     /**

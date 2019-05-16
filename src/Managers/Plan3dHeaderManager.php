@@ -36,9 +36,19 @@ namespace NextDom\Managers;
 use NextDom\Helpers\DBHelper;
 use NextDom\Model\Entity\Plan3dHeader;
 
+/**
+ * Class Plan3dHeaderManager
+ * @package NextDom\Managers
+ */
 class Plan3dHeaderManager
 {
+    /**
+     *
+     */
     const CLASS_NAME = Plan3dHeader::class;
+    /**
+     *
+     */
     const DB_CLASS_NAME = '`plan3dHeader`';
 
     /**

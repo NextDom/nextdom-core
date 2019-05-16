@@ -20,6 +20,10 @@ namespace NextDom\Helpers;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UserManager;
 
+/**
+ * Class ReportHelper
+ * @package NextDom\Helpers
+ */
 class ReportHelper
 {
     public static function clean()
@@ -30,6 +34,16 @@ class ReportHelper
         shell_exec('find ' . NEXTDOM_DATA . '/data/report -type f -mtime +' . ConfigManager::byKey('report::maxdays') . ' -delete');
     }
 
+    /**
+     * @param $_url
+     * @param $_type
+     * @param $_name
+     * @param string $_format
+     * @param array $_parameter
+     * @return string
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function generate($_url, $_type, $_name, $_format = 'png', $_parameter = array())
     {
         if (!is_string($_format)) {

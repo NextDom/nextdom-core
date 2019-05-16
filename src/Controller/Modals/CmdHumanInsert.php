@@ -25,6 +25,10 @@ namespace NextDom\Controller\Modals;
 use NextDom\Helpers\Render;
 use NextDom\Managers\ObjectManager;
 
+/**
+ * Class CmdHumanInsert
+ * @package NextDom\Controller\Modals
+ */
 class CmdHumanInsert extends BaseAbstractModal
 {
     /**

@@ -29,6 +29,10 @@ use NextDom\Model\Entity\Cmd;
 use NextDom\Model\Entity\EqLogic;
 use NextDom\Model\Entity\Scenario;
 
+/**
+ * Class CmdAjax
+ * @package NextDom\Ajax
+ */
 class CmdAjax extends BaseAjax
 {
     protected $NEEDED_RIGHTS = UserRight::USER;

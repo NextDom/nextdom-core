@@ -24,6 +24,10 @@ namespace NextDom\Controller\Modals;
 
 use NextDom\Helpers\Render;
 
+/**
+ * Class InteractTest
+ * @package NextDom\Controller\Modals
+ */
 class InteractTest extends BaseAbstractModal
 {
     /**

@@ -17,9 +17,22 @@
 
 namespace NextDom\Enums;
 
+/**
+ * Class ViewType
+ * @package NextDom\Enums
+ */
 class ViewType extends Enum
 {
+    /**
+     *
+     */
     const DESKTOP_VIEW = 'd';
-    const MOBILE_VIEW  = 'm';
-    const STATIC_VIEW  = 's';
+    /**
+     *
+     */
+    const MOBILE_VIEW = 'm';
+    /**
+     *
+     */
+    const STATIC_VIEW = 's';
 }

@@ -22,12 +22,16 @@
 
 namespace NextDom\Controller\Tools\Markets;
 
+use NextDom\Controller\BaseController;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\MessageManager;
-use NextDom\Controller\BaseController;
 
+/**
+ * Class MarketController
+ * @package NextDom\Controller\Tools\Markets
+ */
 class MarketController extends BaseController
 {
     /**

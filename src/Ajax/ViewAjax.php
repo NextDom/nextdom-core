@@ -33,12 +33,16 @@ use NextDom\Model\Entity\View;
 use NextDom\Model\Entity\ViewData;
 use NextDom\Model\Entity\ViewZone;
 
+/**
+ * Class ViewAjax
+ * @package NextDom\Ajax
+ */
 class ViewAjax extends BaseAjax
 {
     /**
      * @var string
      */
-    protected $NEEDED_RIGHTS     = UserRight::USER;
+    protected $NEEDED_RIGHTS = UserRight::USER;
     /**
      * @var bool
      */

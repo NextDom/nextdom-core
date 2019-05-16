@@ -25,6 +25,10 @@ namespace NextDom\Controller\Modals;
 use NextDom\Helpers\Render;
 use NextDom\Managers\DataStoreManager;
 
+/**
+ * Class DataStoreHumanInsert
+ * @package NextDom\Controller\Modals
+ */
 class DataStoreHumanInsert extends BaseAbstractModal
 {
     /**

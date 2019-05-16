@@ -22,12 +22,16 @@
 
 namespace NextDom\Controller\Pages;
 
+use NextDom\Controller\BaseController;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\Plan3dHeaderManager;
 use NextDom\Managers\UserManager;
-use NextDom\Controller\BaseController;
 
+/**
+ * Class Plan3DController
+ * @package NextDom\Controller\Pages
+ */
 class Plan3DController extends BaseController
 {
     /**

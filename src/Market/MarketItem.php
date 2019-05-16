@@ -36,6 +36,10 @@ namespace NextDom\Market;
 use NextDom\Helpers\DataStorage;
 use NextDom\Managers\UpdateManager;
 
+/**
+ * Class MarketItem
+ * @package NextDom\Market
+ */
 class MarketItem
 {
     /**
@@ -153,6 +157,22 @@ class MarketItem
     }
 
     /**
+     * Lire les informations obtenus par GitHub
+     *
+     * @param string[] $repositoryInformations Informations de GitHub
+     */
+    public function initWithGlobalInformations($repositoryInformations)
+    {
+
+        if (array_key_exists('name', $repositoryInformations)) $this->gitName = $repositoryInformations['name'];
+        if (array_key_exists('full_name', $repositoryInformations)) $this->fullName = $repositoryInformations['full_name'];
+        if (array_key_exists('html_url', $repositoryInformations)) $this->url = $repositoryInformations['html_url'];
+        if (array_key_exists('git_id', $repositoryInformations)) $this->gitId = $repositoryInformations['git_id'];
+        if (array_key_exists('description', $repositoryInformations)) $this->description = $repositoryInformations['description'];
+        if (array_key_exists('default_branch', $repositoryInformations)) $this->defaultBranch = $repositoryInformations['default_branch'];
+    }
+
+    /**
      * Create an item from the cache
      *
      * @param string $sourceName Name of the source
@@ -166,6 +186,38 @@ class MarketItem
             ->setFullName($fullName);
         $result->readCache();
         return $result;
+    }
+
+    /**
+     * Read the cache file
+     *
+     * @return bool True if the reading was successful
+     */
+    public function readCache(): bool
+    {
+        $name = sprintf("repo_data_%s", str_replace("/", "_", $this->fullName));
+        $json = $this->dataStorage->getJsonData($name);
+        $attrs = array("name", "gitName", "gitId", "fullName",
+            "description", "url", "id", "author",
+            "category", "iconPath", "defaultBranch", "branchesList",
+            "licence", "changelogLink", "documentationLink", "screenshots");
+        if ($json === null) {
+            return false;
+        }
+
+        foreach ($attrs as $c_attr) {
+            if (true === array_key_exists($c_attr, $json)) {
+                $this->$c_attr = $json[$c_attr];
+            }
+        }
+
+        if (false !== $this->iconPath) {
+            $path = sprintf("%s/%s", NEXTDOM_ROOT, $this->iconPath);
+            if (false === file_exists($path)) {
+                $this->iconPath = false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -184,40 +236,8 @@ class MarketItem
     }
 
     /**
-     * Lire les informations obtenus par GitHub
-     *
-     * @param string[] $repositoryInformations Informations de GitHub
+     * @param $jsonInformations
      */
-    public function initWithGlobalInformations($repositoryInformations)
-    {
-
-        if (array_key_exists('name', $repositoryInformations)) $this->gitName = $repositoryInformations['name'];
-        if (array_key_exists('full_name', $repositoryInformations)) $this->fullName = $repositoryInformations['full_name'];
-        if (array_key_exists('html_url', $repositoryInformations)) $this->url = $repositoryInformations['html_url'];
-        if (array_key_exists('git_id', $repositoryInformations)) $this->gitId = $repositoryInformations['git_id'];
-        if (array_key_exists('description', $repositoryInformations)) $this->description = $repositoryInformations['description'];
-        if (array_key_exists('default_branch', $repositoryInformations)) $this->defaultBranch = $repositoryInformations['default_branch'];
-    }
-
-    /**
-     * Add the information contained in the plugin's info.json file
-     *
-     * @param string[] $pluginInfo Contenu du fichier info.json
-     */
-    public function addPluginInformations($pluginInfo)
-    {
-        if (array_key_exists('id', $pluginInfo)) $this->id = $pluginInfo['id'];
-        if (array_key_exists('name', $pluginInfo)) $this->name = $pluginInfo['name'];
-        if (array_key_exists('author', $pluginInfo)) $this->author = $pluginInfo['author'];
-        if (array_key_exists('category', $pluginInfo)) $this->category = $pluginInfo['category'];
-        if (array_key_exists('licence', $pluginInfo)) $this->licence = $pluginInfo['licence'];
-        if (array_key_exists('changelog', $pluginInfo)) $this->changelogLink = $pluginInfo['changelog'];
-        if (array_key_exists('documentation', $pluginInfo)) $this->documentationLink = $pluginInfo['documentation'];
-        if (array_key_exists('description', $pluginInfo) && $pluginInfo['description'] !== null && $pluginInfo['description'] !== '') {
-            $this->description = $pluginInfo['description'];
-        }
-    }
-
     public function initWithJsonInformations($jsonInformations)
     {
         if (array_key_exists('id', $jsonInformations)) $this->id = $jsonInformations['id'];
@@ -259,6 +279,79 @@ class MarketItem
     }
 
     /**
+     * Updates the data of the element
+     *
+     * @return bool True if the update was done.
+     */
+    public function refresh(): bool
+    {
+        $result = false;
+        $infoJsonUrl = 'https://raw.githubusercontent.com/' . $this->fullName . '/' . $this->defaultBranch . '/plugin_info/info.json';
+        $infoJson = DownloadManager::downloadContent($infoJsonUrl);
+        if (strpos($infoJson, '404: Not Found') === false) {
+            $pluginData = json_decode($infoJson, true);
+            if (is_array($pluginData) && array_key_exists('id', $pluginData)) {
+                $this->addPluginInformations($pluginData);
+                $this->downloadIcon();
+                $this->branchesList = [];
+                $this->writeCache();
+                $result = true;
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Add the information contained in the plugin's info.json file
+     *
+     * @param string[] $pluginInfo Contenu du fichier info.json
+     */
+    public function addPluginInformations($pluginInfo)
+    {
+        if (array_key_exists('id', $pluginInfo)) $this->id = $pluginInfo['id'];
+        if (array_key_exists('name', $pluginInfo)) $this->name = $pluginInfo['name'];
+        if (array_key_exists('author', $pluginInfo)) $this->author = $pluginInfo['author'];
+        if (array_key_exists('category', $pluginInfo)) $this->category = $pluginInfo['category'];
+        if (array_key_exists('licence', $pluginInfo)) $this->licence = $pluginInfo['licence'];
+        if (array_key_exists('changelog', $pluginInfo)) $this->changelogLink = $pluginInfo['changelog'];
+        if (array_key_exists('documentation', $pluginInfo)) $this->documentationLink = $pluginInfo['documentation'];
+        if (array_key_exists('description', $pluginInfo) && $pluginInfo['description'] !== null && $pluginInfo['description'] !== '') {
+            $this->description = $pluginInfo['description'];
+        }
+    }
+
+    /**
+     * Download the plugin icon
+     */
+    public function downloadIcon()
+    {
+        $iconFilename = str_replace('/', '_', $this->fullName) . '.png';
+        $iconUrl = 'https://raw.githubusercontent.com/' . $this->fullName . '/' . $this->defaultBranch . '/plugin_info/' . $this->id . '_icon.png';
+        $targetPath = NEXTDOM_DATA . '/public/img/market_cache/' . $iconFilename;
+
+        DownloadManager::downloadBinary($iconUrl, $targetPath);
+        if (filesize($targetPath) < 100) {
+            unlink($targetPath);
+            $this->iconPath = '/public/img/unknown_icon.png';
+        } else {
+            $this->iconPath = '/var/public/img/market_cache/' . $iconFilename;
+        }
+        $this->writeCache();
+    }
+
+    /**
+     * Write the cache file in JSON format
+     */
+    public function writeCache()
+    {
+        $dataArray = $this->getDataInArray();
+        unset($dataArray['installed']);
+        unset($dataArray['installedBranchData']);
+        $this->dataStorage->storeJsonData('repo_data_' . str_replace('/', '_', $this->fullName), $dataArray);
+        $this->dataStorage->storeRawData('repo_last_update_' . str_replace('/', '_', $this->fullName), time());
+    }
+
+    /**
      * Get all the information in an associative array
      *
      * @return array Data array
@@ -294,118 +387,6 @@ class MarketItem
     }
 
     /**
-     * Write the cache file in JSON format
-     */
-    public function writeCache()
-    {
-        $dataArray = $this->getDataInArray();
-        unset($dataArray['installed']);
-        unset($dataArray['installedBranchData']);
-        $this->dataStorage->storeJsonData('repo_data_' . str_replace('/', '_', $this->fullName), $dataArray);
-        $this->dataStorage->storeRawData('repo_last_update_' . str_replace('/', '_', $this->fullName), time());
-    }
-
-    /**
-     * Read the cache file
-     *
-     * @return bool True if the reading was successful
-     */
-    public function readCache(): bool
-    {
-        $name   = sprintf("repo_data_%s", str_replace("/", "_", $this->fullName));
-        $json   = $this->dataStorage->getJsonData($name);
-        $attrs  = array("name",        "gitName",       "gitId",             "fullName",
-                        "description", "url",           "id",                "author",
-                        "category",    "iconPath",      "defaultBranch",     "branchesList",
-                        "licence",     "changelogLink", "documentationLink", "screenshots");
-        if ($json === null) {
-            return false;
-        }
-
-        foreach ($attrs as $c_attr) {
-            if (true === array_key_exists($c_attr, $json)) {
-                $this->$c_attr = $json[$c_attr];
-            }
-        }
-
-        if (false !== $this->iconPath) {
-            $path = sprintf("%s/%s", NEXTDOM_ROOT, $this->iconPath);
-            if (false === file_exists($path)) {
-                $this->iconPath = false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Updates the data of the element
-     *
-     * @return bool True if the update was done.
-     */
-    public function refresh(): bool
-    {
-        $result = false;
-        $infoJsonUrl = 'https://raw.githubusercontent.com/' . $this->fullName . '/' . $this->defaultBranch . '/plugin_info/info.json';
-        $infoJson = DownloadManager::downloadContent($infoJsonUrl);
-        if (strpos($infoJson, '404: Not Found') === false) {
-            $pluginData = json_decode($infoJson, true);
-            if (is_array($pluginData) && array_key_exists('id', $pluginData)) {
-                $this->addPluginInformations($pluginData);
-                $this->downloadIcon();
-                $this->branchesList = [];
-                $this->writeCache();
-                $result = true;
-            }
-        }
-        return $result;
-    }
-
-    /**
-     * Download the plugin icon
-     */
-    public function downloadIcon()
-    {
-        $iconFilename = str_replace('/', '_', $this->fullName) . '.png';
-        $iconUrl      = 'https://raw.githubusercontent.com/' . $this->fullName . '/' . $this->defaultBranch . '/plugin_info/' . $this->id . '_icon.png';
-        $targetPath   = NEXTDOM_DATA . '/public/img/market_cache/' . $iconFilename;
-
-        DownloadManager::downloadBinary($iconUrl, $targetPath);
-        if (filesize($targetPath) < 100) {
-            unlink($targetPath);
-            $this->iconPath = '/public/img/unknown_icon.png';
-        } else {
-            $this->iconPath = '/var/public/img/market_cache/' . $iconFilename;
-        }
-        $this->writeCache();
-    }
-
-    /**
-     * Update branch data
-     *
-     * @return bool True if the data was found
-     */
-    public function downloadBranchesInformations(): bool
-    {
-        $result = false;
-        $baseGitRepoUrl = 'https://api.github.com/repos/' . $this->fullName . '/branches';
-        $branches = DownloadManager::downloadContent($baseGitRepoUrl);
-        if ($branches !== false) {
-            $branches = json_decode($branches, true);
-            $this->branchesList = [];
-            foreach ($branches as $branch) {
-                if (is_array($branch) && array_key_exists('name', $branch)) {
-                    $branchData = [];
-                    $branchData['name'] = $branch['name'];
-                    $branchData['hash'] = $branch['commit']['sha'];
-                    array_push($this->branchesList, $branchData);
-                }
-            }
-            $result = true;
-        }
-        return $result;
-    }
-
-    /**
      * Initialize the Jeedom data on the plugin
      */
     private function initUpdateData()
@@ -427,6 +408,9 @@ class MarketItem
         return $result;
     }
 
+    /**
+     * @return array|bool
+     */
     private function getInstalledBranchData()
     {
         $result = false;
@@ -451,6 +435,32 @@ class MarketItem
                     }
                 }
             }
+        }
+        return $result;
+    }
+
+    /**
+     * Update branch data
+     *
+     * @return bool True if the data was found
+     */
+    public function downloadBranchesInformations(): bool
+    {
+        $result = false;
+        $baseGitRepoUrl = 'https://api.github.com/repos/' . $this->fullName . '/branches';
+        $branches = DownloadManager::downloadContent($baseGitRepoUrl);
+        if ($branches !== false) {
+            $branches = json_decode($branches, true);
+            $this->branchesList = [];
+            foreach ($branches as $branch) {
+                if (is_array($branch) && array_key_exists('name', $branch)) {
+                    $branchData = [];
+                    $branchData['name'] = $branch['name'];
+                    $branchData['hash'] = $branch['commit']['sha'];
+                    array_push($this->branchesList, $branchData);
+                }
+            }
+            $result = true;
         }
         return $result;
     }
@@ -493,6 +503,19 @@ class MarketItem
     public function getFullName()
     {
         return $this->fullName;
+    }
+
+    /**
+     * Define the name of the deposit full
+     *
+     * @param string $fullName full name
+     *
+     * @return MarketItem Instance of the object
+     */
+    public function setFullName($fullName): MarketItem
+    {
+        $this->fullName = $fullName;
+        return $this;
     }
 
     /**
@@ -573,19 +596,6 @@ class MarketItem
     public function getBranchesList()
     {
         return $this->branchesList;
-    }
-
-    /**
-     * Define the name of the deposit full
-     *
-     * @param string $fullName full name
-     *
-     * @return MarketItem Instance of the object
-     */
-    public function setFullName($fullName): MarketItem
-    {
-        $this->fullName = $fullName;
-        return $this;
     }
 
     /**

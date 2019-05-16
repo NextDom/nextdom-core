@@ -37,6 +37,10 @@ use NextDom\Exceptions\CoreException;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UserManager;
 
+/**
+ * Class AuthentificationHelper
+ * @package NextDom\Helpers
+ */
 class AuthentificationHelper
 {
     /**
@@ -127,37 +131,12 @@ class AuthentificationHelper
     }
 
     /**
-     * @param      $_login
-     * @param      $_password
-     * @param null $_twoFactor
-     * @return bool
-     * @throws \Exception
+     * Get the status of the user login
+     * @return bool Status of the user connection
      */
-    public static function login($_login, $_password, $_twoFactor = null)
+    public static function isConnected(): bool
     {
-        $user = UserManager::connect($_login, $_password);
-        if (!is_object($user) || $user->getEnable() == 0) {
-            UserManager::failedLogin();
-            sleep(5);
-            return false;
-        }
-        if ($user->getOptions('localOnly', 0) == 1 && NetworkHelper::getUserLocation() != 'internal') {
-            UserManager::failedLogin();
-            sleep(5);
-            return false;
-        }
-        if (NetworkHelper::getUserLocation() != 'internal' && $user->getOptions('twoFactorAuthentification', 0) == 1 && $user->getOptions('twoFactorAuthentificationSecret') != '') {
-            if (trim($_twoFactor) == '' || $_twoFactor === null || !$user->validateTwoFactorCode($_twoFactor)) {
-                UserManager::failedLogin();
-                sleep(5);
-                return false;
-            }
-        }
-        @session_start();
-        UserManager::storeUserInSession($user);
-        @session_write_close();
-        LogHelper::add('connection', 'info', __('Connexion de l\'utilisateur : ') . $_login);
-        return true;
+        return self::$connectedState;
     }
 
     /**
@@ -261,12 +240,37 @@ class AuthentificationHelper
     }
 
     /**
-     * Get the status of the user login
-     * @return bool Status of the user connection
+     * @param      $_login
+     * @param      $_password
+     * @param null $_twoFactor
+     * @return bool
+     * @throws \Exception
      */
-    public static function isConnected(): bool
+    public static function login($_login, $_password, $_twoFactor = null)
     {
-        return self::$connectedState;
+        $user = UserManager::connect($_login, $_password);
+        if (!is_object($user) || $user->getEnable() == 0) {
+            UserManager::failedLogin();
+            sleep(5);
+            return false;
+        }
+        if ($user->getOptions('localOnly', 0) == 1 && NetworkHelper::getUserLocation() != 'internal') {
+            UserManager::failedLogin();
+            sleep(5);
+            return false;
+        }
+        if (NetworkHelper::getUserLocation() != 'internal' && $user->getOptions('twoFactorAuthentification', 0) == 1 && $user->getOptions('twoFactorAuthentificationSecret') != '') {
+            if (trim($_twoFactor) == '' || $_twoFactor === null || !$user->validateTwoFactorCode($_twoFactor)) {
+                UserManager::failedLogin();
+                sleep(5);
+                return false;
+            }
+        }
+        @session_start();
+        UserManager::storeUserInSession($user);
+        @session_write_close();
+        LogHelper::add('connection', 'info', __('Connexion de l\'utilisateur : ') . $_login);
+        return true;
     }
 
     /**

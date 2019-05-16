@@ -22,12 +22,16 @@ use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\Utils;
 
+/**
+ * Class LogAjax
+ * @package NextDom\Ajax
+ */
 class LogAjax extends BaseAjax
 {
     /**
      * @var string
      */
-    protected $NEEDED_RIGHTS     = UserRight::ADMIN;
+    protected $NEEDED_RIGHTS = UserRight::ADMIN;
     /**
      * @var bool
      */

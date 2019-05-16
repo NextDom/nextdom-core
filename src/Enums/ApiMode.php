@@ -17,10 +17,26 @@
 
 namespace NextDom\Enums;
 
+/**
+ * Class ApiMode
+ * @package NextDom\Enums
+ */
 class ApiMode extends Enum
 {
+    /**
+     *
+     */
     const API_ENABLE = 'enable';
+    /**
+     *
+     */
     const API_DISABLE = 'disable';
+    /**
+     *
+     */
     const API_WHITEIP = 'whiteip';
+    /**
+     *
+     */
     const API_LOCALHOST = 'cronDaily';
 }

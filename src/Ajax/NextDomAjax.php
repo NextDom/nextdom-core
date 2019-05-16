@@ -38,12 +38,16 @@ use NextDom\Managers\UserManager;
 use NextDom\Managers\ViewManager;
 use NextDom\Model\Entity\Listener;
 
+/**
+ * Class NextDomAjax
+ * @package NextDom\Ajax
+ */
 class NextDomAjax extends BaseAjax
 {
     /**
      * @var null
      */
-    protected $NEEDED_RIGHTS     = UserRight::NOTHING;
+    protected $NEEDED_RIGHTS = UserRight::NOTHING;
     /**
      * @var bool
      */
@@ -59,10 +63,10 @@ class NextDomAjax extends BaseAjax
     public function getInfoApplication()
     {
         $return = [
-            'product_name'   => ConfigManager::byKey('product_name'),
-            'product_icon'   => ConfigManager::byKey('product_icon'),
-            'product_image'  => ConfigManager::byKey('product_image'),
-            'widget_margin'  => ConfigManager::byKey('widget::margin'),
+            'product_name' => ConfigManager::byKey('product_name'),
+            'product_icon' => ConfigManager::byKey('product_icon'),
+            'product_image' => ConfigManager::byKey('product_image'),
+            'widget_margin' => ConfigManager::byKey('widget::margin'),
             'serverDatetime' => Utils::getmicrotime(),
         ];
 
@@ -162,10 +166,10 @@ class NextDomAjax extends BaseAjax
         $listener->setFunction('warnMeExecute');
         $listener->addEvent($cmd->getId());
         $options = [
-            'type'      => 'cmd',
-            'cmd_id'    => $cmd->getId(),
-            'name'      => $cmd->getHumanName(),
-            'test'      => Utils::init('test'),
+            'type' => 'cmd',
+            'cmd_id' => $cmd->getId(),
+            'name' => $cmd->getHumanName(),
+            'test' => Utils::init('test'),
             'reply_cmd' => Utils::init('reply_cmd', UserManager::getStoredUser()->getOptions('notification::cmd')),
         ];
         $listener->setOption($options);
@@ -397,7 +401,7 @@ class NextDomAjax extends BaseAjax
         if ($customType != 'js' && $customType != 'css') {
             throw new CoreException(__('La version ne peut être que js ou css'));
         }
-        $customDir  = sprintf("%s/custom/%s/", NEXTDOM_DATA, $customVersion);
+        $customDir = sprintf("%s/custom/%s/", NEXTDOM_DATA, $customVersion);
         $customPath = sprintf("%s/custom.%s", $customDir, $customType);
         file_put_contents($customPath, Utils::init('content'));
         AjaxHelper::success();
@@ -410,7 +414,7 @@ class NextDomAjax extends BaseAjax
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
         AjaxHelper::init(true);
-        $return = [ 'node' => [], 'link' => [] ];
+        $return = ['node' => [], 'link' => []];
         $object = null;
         $type = Utils::init('filter_type');
         if ($type !== '') {
@@ -505,9 +509,9 @@ class NextDomAjax extends BaseAjax
         AuthentificationHelper::isConnectedAsAdminOrFail();
         Utils::unautorizedInDemo();
         AjaxHelper::init(true);
-        $pathinfo  = pathinfo(init('path'));
+        $pathinfo = pathinfo(init('path'));
         $extension = Utils::array_key_default($pathinfo, "extension", "<no-ext>");
-        if (!in_array($extension, array('php', 'js', 'json', 'sql', 'ini','html','py','css'))) {
+        if (!in_array($extension, array('php', 'js', 'json', 'sql', 'ini', 'html', 'py', 'css'))) {
             throw new CoreException(__('Vous ne pouvez éditer ce type d\'extension : ' . $extension, __FILE__));
         }
         AjaxHelper::success(file_get_contents(Utils::init('path')));
@@ -523,7 +527,7 @@ class NextDomAjax extends BaseAjax
         AjaxHelper::init(true);
         $pathinfo = pathinfo(Utils::init('path'));
         $extension = Utils::array_key_default($pathinfo, "extension", "<no-ext>");
-        if (!in_array($extension, array('php', 'js', 'json', 'sql', 'ini','html','py','css'))) {
+        if (!in_array($extension, array('php', 'js', 'json', 'sql', 'ini', 'html', 'py', 'css'))) {
             throw new CoreException(__('Vous ne pouvez éditer ce type d\'extension : ' . $extension, __FILE__));
         }
         AjaxHelper::success(file_put_contents(Utils::init('path'), Utils::init('content')));
@@ -539,7 +543,7 @@ class NextDomAjax extends BaseAjax
         AjaxHelper::init(true);
         $pathinfo = pathinfo(Utils::init('path'));
         $extension = Utils::array_key_default($pathinfo, "extension", "<no-ext>");
-        if (!in_array($extension, array('php', 'js', 'json', 'sql', 'ini','css'))) {
+        if (!in_array($extension, array('php', 'js', 'json', 'sql', 'ini', 'css'))) {
             throw new CoreException(__('Vous ne pouvez éditer ce type d\'extension : ' . $extension, __FILE__));
         }
         AjaxHelper::success(unlink(Utils::init('path')));
@@ -555,7 +559,7 @@ class NextDomAjax extends BaseAjax
         AjaxHelper::init(true);
         $pathinfo = pathinfo(Utils::init('name'));
         $extension = Utils::array_key_default($pathinfo, "extension", "<no-ext>");
-        if (!in_array($extension, array('php', 'js', 'json', 'sql', 'ini','css'))) {
+        if (!in_array($extension, array('php', 'js', 'json', 'sql', 'ini', 'css'))) {
             throw new CoreException(__('Vous ne pouvez éditer ce type d\'extension : ' . $extension, __FILE__));
         }
         touch(Utils::init('path') . Utils::init('name'));

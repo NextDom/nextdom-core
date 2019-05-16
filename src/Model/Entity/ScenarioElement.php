@@ -78,18 +78,53 @@ class ScenarioElement implements EntityInterface
     protected $_subelement;
     protected $_changed = false;
 
-    public function save()
-    {
-        DBHelper::save($this);
-        return $this;
-    }
-
     public function remove()
     {
         foreach ($this->getSubElement() as $subElement) {
             $subElement->remove();
         }
         DBHelper::remove($this);
+    }
+
+    /**
+     * @param string $_type
+     * @return ScenarioSubElement[]|ScenarioSubElement
+     * @throws \Exception
+     */
+    public function getSubElement($_type = '')
+    {
+        if ($_type != '') {
+            if (isset($this->_subelement[$_type]) && is_object($this->_subelement[$_type])) {
+                return $this->_subelement[$_type];
+            }
+            $this->_subelement[$_type] = ScenarioSubElementManager::byScenarioElementId($this->getId(), $_type);
+            return $this->_subelement[$_type];
+        } else {
+            if (isset($this->_subelement[-1]) && is_array($this->_subelement[-1]) && count($this->_subelement[-1]) > 0) {
+                return $this->_subelement[-1];
+            }
+            $this->_subelement[-1] = ScenarioSubElementManager::byScenarioElementId($this->getId(), $_type);
+            return $this->_subelement[-1];
+        }
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param $_id
+     * @return $this
+     */
+    public function setId($_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
+        $this->id = $_id;
+        return $this;
     }
 
     /**
@@ -247,27 +282,29 @@ class ScenarioElement implements EntityInterface
     }
 
     /**
-     * @param string $_type
-     * @return ScenarioSubElement[]|ScenarioSubElement
-     * @throws \Exception
+     * @return string
      */
-    public function getSubElement($_type = '')
+    public function getType()
     {
-        if ($_type != '') {
-            if (isset($this->_subelement[$_type]) && is_object($this->_subelement[$_type])) {
-                return $this->_subelement[$_type];
-            }
-            $this->_subelement[$_type] = ScenarioSubElementManager::byScenarioElementId($this->getId(), $_type);
-            return $this->_subelement[$_type];
-        } else {
-            if (isset($this->_subelement[-1]) && is_array($this->_subelement[-1]) && count($this->_subelement[-1]) > 0) {
-                return $this->_subelement[-1];
-            }
-            $this->_subelement[-1] = ScenarioSubElementManager::byScenarioElementId($this->getId(), $_type);
-            return $this->_subelement[-1];
-        }
+        return $this->type;
     }
 
+    /**
+     * @param $_type
+     * @return $this
+     */
+    public function setType($_type)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->type, $_type);
+        $this->type = $_type;
+        return $this;
+    }
+
+    /**
+     * @param string $_mode
+     * @return array
+     * @throws \ReflectionException
+     */
     public function getAjaxElement($_mode = 'ajax')
     {
         $return = Utils::o2a($this);
@@ -347,6 +384,10 @@ class ScenarioElement implements EntityInterface
         return $return;
     }
 
+    /**
+     * @return array
+     * @throws \Exception
+     */
     public function getAllId()
     {
         $return = array(
@@ -376,6 +417,10 @@ class ScenarioElement implements EntityInterface
         }
     }
 
+    /**
+     * @return string
+     * @throws \Exception
+     */
     public function export()
     {
         $return = '';
@@ -427,6 +472,11 @@ class ScenarioElement implements EntityInterface
         return $return;
     }
 
+    /**
+     * @return int
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function copy()
     {
         $elementCopy = clone $this;
@@ -436,6 +486,17 @@ class ScenarioElement implements EntityInterface
             $subelement->copy($elementCopy->getId());
         }
         return $elementCopy->getId();
+    }
+
+    /**
+     * @return $this
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
+    public function save()
+    {
+        DBHelper::save($this);
+        return $this;
     }
 
     /**
@@ -455,23 +516,18 @@ class ScenarioElement implements EntityInterface
         return null;
     }
 
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
-    }
-
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
     }
 
+    /**
+     * @param $_name
+     * @return $this
+     */
     public function setName($_name)
     {
         $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
@@ -479,23 +535,21 @@ class ScenarioElement implements EntityInterface
         return $this;
     }
 
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    public function setType($_type)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->type, $_type);
-        $this->type = $_type;
-        return $this;
-    }
-
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
     public function getOptions($_key = '', $_default = '')
     {
         return Utils::getJsonAttr($this->options, $_key, $_default);
     }
 
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
     public function setOptions($_key, $_value)
     {
         $options = Utils::setJsonAttr($this->options, $_key, $_value);
@@ -504,11 +558,18 @@ class ScenarioElement implements EntityInterface
         return $this;
     }
 
+    /**
+     * @return int
+     */
     public function getOrder()
     {
         return $this->order;
     }
 
+    /**
+     * @param $_order
+     * @return $this
+     */
     public function setOrder($_order)
     {
         $this->_changed = Utils::attrChanged($this->_changed, $this->order, $_order);
@@ -516,17 +577,27 @@ class ScenarioElement implements EntityInterface
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getChanged()
     {
         return $this->_changed;
     }
 
+    /**
+     * @param $_changed
+     * @return $this
+     */
     public function setChanged($_changed)
     {
         $this->_changed = $_changed;
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getTableName()
     {
         return 'scenarioElement';

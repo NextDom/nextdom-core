@@ -22,7 +22,15 @@
 
 namespace NextDom\Controller;
 
+/**
+ * Class BaseController
+ * @package NextDom\Controller
+ */
 abstract class BaseController
 {
+    /**
+     * @param $pageData
+     * @return string
+     */
     public abstract static function get(&$pageData): string;
 }

@@ -29,6 +29,10 @@ use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\ConfigManager;
 
+/**
+ * Class CmdConfigure
+ * @package NextDom\Controller\Modals
+ */
 class CmdConfigure extends BaseAbstractModal
 {
     /**

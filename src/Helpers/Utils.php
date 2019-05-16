@@ -38,6 +38,10 @@ use NextDom\Exceptions\CoreException;
 use NextDom\Managers\UserManager;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
+/**
+ * Class Utils
+ * @package NextDom\Helpers
+ */
 class Utils
 {
     private static $properties = array();
@@ -51,32 +55,6 @@ class Utils
     public static function sendVarToJs(string $varName, $varValue)
     {
         echo "<script>" . self::getVarInJs($varName, $varValue) . "</script>\n";
-    }
-
-    /**
-     * Add list of javascript variables in HTML code
-     *
-     * @param array $listOfVarsWithValues Variables associative array 'name' => 'value'
-     */
-    public static function sendVarsToJS(array $listOfVarsWithValues)
-    {
-        echo self::getVarsToJS($listOfVarsWithValues);
-    }
-
-    /**
-     * Get HTML code of list a javascript variables.
-     *
-     * @param array $listOfVarsWithValues
-     * @return string
-     */
-    public static function getVarsToJS(array $listOfVarsWithValues)
-    {
-        $result = "<script>\n";
-        foreach ($listOfVarsWithValues as $varName => $value) {
-            $result .= self::getVarInJs($varName, $value) . "\n";
-        }
-        $result .= "</script>\n";
-        return $result;
     }
 
     /**
@@ -106,6 +84,32 @@ class Utils
     public static function getArrayToJQueryJson($varToTransform): string
     {
         return 'jQuery.parseJSON("' . addslashes(json_encode($varToTransform, JSON_UNESCAPED_UNICODE)) . '")';
+    }
+
+    /**
+     * Add list of javascript variables in HTML code
+     *
+     * @param array $listOfVarsWithValues Variables associative array 'name' => 'value'
+     */
+    public static function sendVarsToJS(array $listOfVarsWithValues)
+    {
+        echo self::getVarsToJS($listOfVarsWithValues);
+    }
+
+    /**
+     * Get HTML code of list a javascript variables.
+     *
+     * @param array $listOfVarsWithValues
+     * @return string
+     */
+    public static function getVarsToJS(array $listOfVarsWithValues)
+    {
+        $result = "<script>\n";
+        foreach ($listOfVarsWithValues as $varName => $value) {
+            $result .= self::getVarInJs($varName, $value) . "\n";
+        }
+        $result .= "</script>\n";
+        return $result;
     }
 
     /**
@@ -146,56 +150,6 @@ class Utils
     }
 
     /**
-     * Transforme une expression lisible en une expression analysable
-     *
-     * @param string $expression Expression lisible
-     *
-     * @return string Expression transformée
-     */
-    public static function transformExpressionForEvaluation($expression)
-    {
-
-        $result = $expression;
-        $replaceMap = [
-            '==' => '==',
-            '=' => '==',
-            '>=' => '>=',
-            '<=' => '<=',
-            '<==' => '<=',
-            '>==' => '>=',
-            '===' => '==',
-            '!==' => '!=',
-            '!=' => '!=',
-            'OR' => '||',
-            'OU' => '||',
-            'or' => '||',
-            'ou' => '||',
-            '||' => '||',
-            'AND' => '&&',
-            'ET' => '&&',
-            'and' => '&&',
-            'et' => '&&',
-            '&&' => '&&',
-            '<' => '<',
-            '>' => '>',
-            '/' => '/',
-            '*' => '*',
-            '+' => '+',
-            '-' => '-',
-            '' => ''
-        ];
-        preg_match_all('/(\w+|-?(?:\d+\\.\d+|\\.?\d+)|".*?"|\'.*?\'|\#.*?\#|\(|,|\)|!) *([!*+&|\\-\\/>=<]+|and|or|ou|et)* */i', $expression, $pregOutput);
-        if (count($pregOutput) > 2) {
-            $result = '';
-            $exprIndex = 0;
-            foreach ($pregOutput[1] as $expr) {
-                $result .= $expr . $replaceMap[$pregOutput[2][$exprIndex++]];
-            }
-        }
-        return $result;
-    }
-
-    /**
      * @param $_array
      * @param $_subject
      * @return mixed
@@ -205,6 +159,12 @@ class Utils
         return str_replace(array_keys($_array), array_values($_array), $_subject);
     }
 
+    /**
+     * @param $contents
+     * @param $width
+     * @param $height
+     * @return bool|false|string
+     */
     public static function resizeImage($contents, $width, $height)
     {
 // Calcul des nouvelles dimensions
@@ -337,6 +297,20 @@ class Utils
     }
 
     /**
+     * @param     $pattern
+     * @param int $flags
+     * @return array|false
+     */
+    public static function globBrace($pattern, $flags = 0)
+    {
+        if (defined("GLOB_BRACE")) {
+            return glob($pattern, $flags + GLOB_BRACE);
+        } else {
+            return self::polyfillGlobBrace($pattern, $flags);
+        }
+    }
+
+    /**
      * got from https://github.com/zendframework/zend-stdlib/issues/58
      *
      * @param $pattern
@@ -421,49 +395,12 @@ class Utils
     }
 
     /**
-     * @param     $pattern
-     * @param int $flags
-     * @return array|false
-     */
-    public static function globBrace($pattern, $flags = 0)
-    {
-        if (defined("GLOB_BRACE")) {
-            return glob($pattern, $flags + GLOB_BRACE);
-        } else {
-            return self::polyfillGlobBrace($pattern, $flags);
-        }
-    }
-
-    /**
      * @param $_string
      * @return string
      */
     public static function removeCR($_string)
     {
         return trim(str_replace(array("\n", "\r\n", "\r", "\n\r"), '', $_string));
-    }
-
-    /**
-     * @param      $_string
-     * @param null $_default
-     * @return bool|mixed|null
-     */
-    public static function isJson($_string, $_default = null)
-    {
-        if ($_string === null) {
-            return $_default;
-        }
-        if ($_default !== null) {
-            if (!is_string($_string)) {
-                return $_default;
-            }
-            $return = json_decode($_string, true, 512, JSON_BIGINT_AS_STRING);
-            if (!is_array($return)) {
-                return $_default;
-            }
-            return $return;
-        }
-        return ((is_string($_string) && is_array(json_decode($_string, true, 512, JSON_BIGINT_AS_STRING)))) ? true : false;
     }
 
     /**
@@ -544,6 +481,56 @@ class Utils
             //log::add('expression', 'debug', '[Parser 2] Expression : ' . $_string . ' tranformé en ' . $expr . ' => ' . $e->getMessage());
         }
         return $_string;
+    }
+
+    /**
+     * Transforme une expression lisible en une expression analysable
+     *
+     * @param string $expression Expression lisible
+     *
+     * @return string Expression transformée
+     */
+    public static function transformExpressionForEvaluation($expression)
+    {
+
+        $result = $expression;
+        $replaceMap = [
+            '==' => '==',
+            '=' => '==',
+            '>=' => '>=',
+            '<=' => '<=',
+            '<==' => '<=',
+            '>==' => '>=',
+            '===' => '==',
+            '!==' => '!=',
+            '!=' => '!=',
+            'OR' => '||',
+            'OU' => '||',
+            'or' => '||',
+            'ou' => '||',
+            '||' => '||',
+            'AND' => '&&',
+            'ET' => '&&',
+            'and' => '&&',
+            'et' => '&&',
+            '&&' => '&&',
+            '<' => '<',
+            '>' => '>',
+            '/' => '/',
+            '*' => '*',
+            '+' => '+',
+            '-' => '-',
+            '' => ''
+        ];
+        preg_match_all('/(\w+|-?(?:\d+\\.\d+|\\.?\d+)|".*?"|\'.*?\'|\#.*?\#|\(|,|\)|!) *([!*+&|\\-\\/>=<]+|and|or|ou|et)* */i', $expression, $pregOutput);
+        if (count($pregOutput) > 2) {
+            $result = '';
+            $exprIndex = 0;
+            foreach ($pregOutput[1] as $expr) {
+                $result .= $expr . $replaceMap[$pregOutput[2][$exprIndex++]];
+            }
+        }
+        return $result;
     }
 
     /**
@@ -938,42 +925,26 @@ class Utils
     }
 
     /**
-     * @param $_object
-     * @param $_data
-     * @throws \ReflectionException
+     * @param      $_string
+     * @param null $_default
+     * @return bool|mixed|null
      */
-    public static function a2o(&$_object, $_data)
+    public static function isJson($_string, $_default = null)
     {
-        if (is_array($_data)) {
-            foreach ($_data as $key => $value) {
-                $method = 'set' . ucfirst($key);
-                if (method_exists($_object, $method)) {
-                    $function = new \ReflectionMethod($_object, $method);
-                    $value = Utils::isJson($value, $value);
-                    if (is_array($value)) {
-                        if ($function->getNumberOfRequiredParameters() == 2) {
-                            foreach ($value as $arrayKey => $arrayValue) {
-                                if (is_array($arrayValue)) {
-                                    if ($function->getNumberOfRequiredParameters() == 3) {
-                                        foreach ($arrayValue as $arrayArraykey => $arrayArrayvalue) {
-                                            $_object->$method($arrayKey, $arrayArraykey, $arrayArrayvalue);
-                                        }
-                                        continue;
-                                    }
-                                }
-                                $_object->$method($arrayKey, $arrayValue);
-                            }
-                        } else {
-                            $_object->$method(json_encode($value, JSON_UNESCAPED_UNICODE));
-                        }
-                    } else {
-                        if ($function->getNumberOfRequiredParameters() < 2) {
-                            $_object->$method($value);
-                        }
-                    }
-                }
-            }
+        if ($_string === null) {
+            return $_default;
         }
+        if ($_default !== null) {
+            if (!is_string($_string)) {
+                return $_default;
+            }
+            $return = json_decode($_string, true, 512, JSON_BIGINT_AS_STRING);
+            if (!is_array($return)) {
+                return $_default;
+            }
+            return $return;
+        }
+        return ((is_string($_string) && is_array(json_decode($_string, true, 512, JSON_BIGINT_AS_STRING)))) ? true : false;
     }
 
     /**
@@ -1012,6 +983,45 @@ class Utils
         foreach ($_dbList as $dbObject) {
             if (!isset($enableList[$dbObject->getId()])) {
                 $dbObject->remove();
+            }
+        }
+    }
+
+    /**
+     * @param $_object
+     * @param $_data
+     * @throws \ReflectionException
+     */
+    public static function a2o(&$_object, $_data)
+    {
+        if (is_array($_data)) {
+            foreach ($_data as $key => $value) {
+                $method = 'set' . ucfirst($key);
+                if (method_exists($_object, $method)) {
+                    $function = new \ReflectionMethod($_object, $method);
+                    $value = Utils::isJson($value, $value);
+                    if (is_array($value)) {
+                        if ($function->getNumberOfRequiredParameters() == 2) {
+                            foreach ($value as $arrayKey => $arrayValue) {
+                                if (is_array($arrayValue)) {
+                                    if ($function->getNumberOfRequiredParameters() == 3) {
+                                        foreach ($arrayValue as $arrayArraykey => $arrayArrayvalue) {
+                                            $_object->$method($arrayKey, $arrayArraykey, $arrayArrayvalue);
+                                        }
+                                        continue;
+                                    }
+                                }
+                                $_object->$method($arrayKey, $arrayValue);
+                            }
+                        } else {
+                            $_object->$method(json_encode($value, JSON_UNESCAPED_UNICODE));
+                        }
+                    } else {
+                        if ($function->getNumberOfRequiredParameters() < 2) {
+                            $_object->$method($value);
+                        }
+                    }
+                }
             }
         }
     }
@@ -1105,7 +1115,8 @@ class Utils
      * @param array $argv input parameters of form "<name>=<value>"
      * @return array parsed parameters of form "<name>" => "<value>"
      */
-    public static function parseArgs($argv) {
+    public static function parseArgs($argv)
+    {
         $args = array();
         if (isset($argv)) {
             foreach ($argv as $c_arg) {
@@ -1128,7 +1139,8 @@ class Utils
      * @param mixed $default fallback value
      * @return mixed
      */
-    public static function array_key_default($array, $key, $default) {
+    public static function array_key_default($array, $key, $default)
+    {
         if (true === array_key_exists($key, $array))
             return $array[$key];
         return $default;
@@ -1162,7 +1174,7 @@ class Utils
         }
 
         $sizeBytes = filesize($files[$key]['tmp_name']);
-        if ($sizeBytes > ($maxSizeMB  * 1024 * 1024)) {
+        if ($sizeBytes > ($maxSizeMB * 1024 * 1024)) {
             $message = __('Le fichier est trop gros');
             throw new CoreException(sprintf("%s > %s MB", $message, $maxSizeMB));
         }
@@ -1189,12 +1201,13 @@ class Utils
     /**
      * @return float|int
      */
-    static public function getTZoffsetMin() {
+    static public function getTZoffsetMin()
+    {
         $tz = date_default_timezone_get();
-        date_default_timezone_set( "UTC" );
-        $seconds = timezone_offset_get( timezone_open($tz), new \DateTime() );
+        date_default_timezone_set("UTC");
+        $seconds = timezone_offset_get(timezone_open($tz), new \DateTime());
         date_default_timezone_set($tz);
-        return($seconds/60);
+        return ($seconds / 60);
     }
 
     /**
@@ -1203,7 +1216,8 @@ class Utils
      * @param $name
      * @return mixed
      */
-    function cleanComponentName($name){
+    function cleanComponentName($name)
+    {
         return str_replace(array('&', '#', ']', '[', '%', "\\", "/", "'", '"'), '', $name);
     }
 }

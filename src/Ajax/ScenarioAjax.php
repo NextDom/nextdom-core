@@ -30,12 +30,16 @@ use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Model\Entity\Scenario;
 
+/**
+ * Class ScenarioAjax
+ * @package NextDom\Ajax
+ */
 class ScenarioAjax extends BaseAjax
 {
     /**
      * @var string
      */
-    protected $NEEDED_RIGHTS     = UserRight::USER;
+    protected $NEEDED_RIGHTS = UserRight::USER;
     /**
      * @var bool
      */

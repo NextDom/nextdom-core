@@ -76,29 +76,18 @@ class EventManager
     }
 
     /**
-     * Add multiple events in cache
+     * Get event cache file object
      *
-     * @param string $eventName
-     * @param array $values
+     * @return bool|null|resource
      * @throws \Exception
      */
-    public static function adds($eventName, $values = [])
+    protected static function getEventLockFile()
     {
-        $waitIfLocked = true;
-        $fd = self::getEventLockFile();
-        if (flock($fd, LOCK_EX, $waitIfLocked)) {
-            $cache = CacheManager::byKey('event');
-            $value_src = json_decode($cache->getValue('[]'), true);
-            if (!is_array($value_src)) {
-                $value_src = [];
-            }
-            $value = [];
-            foreach ($values as $option) {
-                $value[] = array('datetime' => Utils::getMicrotime(), 'name' => $eventName, 'option' => $option);
-            }
-            CacheManager::set('event', json_encode(self::cleanEvent(array_merge($value_src, $value))));
-            flock($fd, LOCK_UN);
+        if (self::$eventLockFile === null) {
+            self::$eventLockFile = fopen(NextDomHelper::getTmpFolder() . '/event_cache_lock', 'w');
+            chmod(NextDomHelper::getTmpFolder() . '/event_cache_lock', 0666);
         }
+        return self::$eventLockFile;
     }
 
     /**
@@ -129,6 +118,32 @@ class EventManager
             $find[$id] = $event['datetime'];
         }
         return array_values($events);
+    }
+
+    /**
+     * Add multiple events in cache
+     *
+     * @param string $eventName
+     * @param array $values
+     * @throws \Exception
+     */
+    public static function adds($eventName, $values = [])
+    {
+        $waitIfLocked = true;
+        $fd = self::getEventLockFile();
+        if (flock($fd, LOCK_EX, $waitIfLocked)) {
+            $cache = CacheManager::byKey('event');
+            $value_src = json_decode($cache->getValue('[]'), true);
+            if (!is_array($value_src)) {
+                $value_src = [];
+            }
+            $value = [];
+            foreach ($values as $option) {
+                $value[] = array('datetime' => Utils::getMicrotime(), 'name' => $eventName, 'option' => $option);
+            }
+            CacheManager::set('event', json_encode(self::cleanEvent(array_merge($value_src, $value))));
+            flock($fd, LOCK_UN);
+        }
     }
 
     /**
@@ -231,20 +246,5 @@ class EventManager
         }
         $return['result'] = array_reverse($return['result']);
         return $return;
-    }
-
-    /**
-     * Get event cache file object
-     *
-     * @return bool|null|resource
-     * @throws \Exception
-     */
-    protected static function getEventLockFile()
-    {
-        if (self::$eventLockFile === null) {
-            self::$eventLockFile = fopen(NextDomHelper::getTmpFolder() . '/event_cache_lock', 'w');
-            chmod(NextDomHelper::getTmpFolder() . '/event_cache_lock', 0666);
-        }
-        return self::$eventLockFile;
     }
 }

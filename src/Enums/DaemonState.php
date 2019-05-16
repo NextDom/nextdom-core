@@ -18,10 +18,20 @@
 
 namespace NextDom\Enums;
 
+/**
+ * Class DaemonState
+ * @package NextDom\Enums
+ */
 class DaemonState extends Enum
 {
 
+    /**
+     *
+     */
     const NOT_OK = 'nok';
+    /**
+     *
+     */
     const IN_PROGRESS = 'in_progress';
 
 }

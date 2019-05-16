@@ -40,7 +40,13 @@ use NextDom\Managers\ConfigManager;
 use NextDom\Managers\CronManager;
 use NextDom\Model\Entity\Cron;
 
+/**
+ *
+ */
 const MAX_DURATION_TIME = 59;
+/**
+ *
+ */
 const GARBAGE_COLLECTOR_LIMIT = 30;
 
 require_once __DIR__ . "/../../src/core.php";

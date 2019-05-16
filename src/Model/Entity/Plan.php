@@ -111,6 +111,86 @@ class Plan implements EntityInterface
         }
     }
 
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
+    public function getCss($_key = '', $_default = '')
+    {
+        return Utils::getJsonAttr($this->css, $_key, $_default);
+    }
+
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
+    public function setCss($_key, $_value)
+    {
+        $css = Utils::setJsonAttr($this->css, $_key, $_value);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->css, $css);
+        $this->css = $css;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLink_type()
+    {
+        return $this->link_type;
+    }
+
+    /**
+     * @param $_link_type
+     * @return $this
+     */
+    public function setLink_type($_link_type)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->link_type, $_link_type);
+        $this->link_type = $_link_type;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLink_id()
+    {
+        return $this->link_id;
+    }
+
+    /**
+     * @param $_link_id
+     * @return $this
+     */
+    public function setLink_id($_link_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->link_id, $_link_id);
+        $this->link_id = $_link_id;
+        return $this;
+    }
+
+    /**
+     * @return PlanHeader
+     */
+    public function getPlanHeader_id()
+    {
+        return $this->planHeader_id;
+    }
+
+    /**
+     * @param $_planHeader_id
+     * @return $this
+     */
+    public function setPlanHeader_id($_planHeader_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->planHeader_id, $_planHeader_id);
+        $this->planHeader_id = $_planHeader_id;
+        return $this;
+    }
+
     public function preSave()
     {
         if ($this->getCss('zoom') != '' && (!is_numeric($this->getCss('zoom')) || $this->getCss('zoom')) < 0.1) {
@@ -121,16 +201,14 @@ class Plan implements EntityInterface
         }
     }
 
-    public function save()
-    {
-        DBHelper::save($this);
-    }
-
     public function remove()
     {
         DBHelper::remove($this);
     }
 
+    /**
+     * @return Plan
+     */
     public function copy(): Plan
     {
         $planCopy = clone $this;
@@ -142,22 +220,9 @@ class Plan implements EntityInterface
         return $planCopy;
     }
 
-    public function getLink()
+    public function save()
     {
-        if ($this->getLink_type() == 'eqLogic') {
-            $eqLogic = EqLogicManager::byId($this->getLink_id());
-            return $eqLogic;
-        } elseif ($this->getLink_type() == 'scenario') {
-            $scenario = ScenarioManager::byId($this->getLink_id());
-            return $scenario;
-        } elseif ($this->getLink_type() == 'cmd') {
-            $cmd = CmdManager::byId($this->getLink_id());
-            return $cmd;
-        } elseif ($this->getLink_type() == 'summary') {
-            $object = ObjectManager::byId($this->getLink_id());
-            return $object;
-        }
-        return null;
+        DBHelper::save($this);
     }
 
     public function execute()
@@ -177,6 +242,33 @@ class Plan implements EntityInterface
         }
     }
 
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
+    public function getConfiguration($_key = '', $_default = '')
+    {
+        return Utils::getJsonAttr($this->configuration, $_key, $_default);
+    }
+
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
+    public function setConfiguration($_key, $_value)
+    {
+        $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
+        $this->configuration = $configuration;
+        return $this;
+    }
+
+    /**
+     * @param $_action
+     * @throws \Exception
+     */
     public function doAction($_action)
     {
         foreach ($this->getConfiguration('action_' . $_action) as $action) {
@@ -196,6 +288,31 @@ class Plan implements EntityInterface
         }
     }
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param $_id
+     * @return $this
+     */
+    public function setId($_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
+        $this->id = $_id;
+        return $this;
+    }
+
+    /**
+     * @param string $_version
+     * @return array|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public function getHtml($_version = 'dplan')
     {
         switch ($this->getLink_type()) {
@@ -331,70 +448,43 @@ class Plan implements EntityInterface
         return null;
     }
 
-    public function getPlanHeader()
+    /**
+     * @return bool|Cmd|EqLogic|JeeObject|Scenario|null
+     * @throws \Exception
+     */
+    public function getLink()
     {
-        return PlanHeaderManager::byId($this->getPlanHeader_id());
+        if ($this->getLink_type() == 'eqLogic') {
+            $eqLogic = EqLogicManager::byId($this->getLink_id());
+            return $eqLogic;
+        } elseif ($this->getLink_type() == 'scenario') {
+            $scenario = ScenarioManager::byId($this->getLink_id());
+            return $scenario;
+        } elseif ($this->getLink_type() == 'cmd') {
+            $cmd = CmdManager::byId($this->getLink_id());
+            return $cmd;
+        } elseif ($this->getLink_type() == 'summary') {
+            $object = ObjectManager::byId($this->getLink_id());
+            return $object;
+        }
+        return null;
     }
 
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    public function getLink_type()
-    {
-        return $this->link_type;
-    }
-
-    public function getLink_id()
-    {
-        return $this->link_id;
-    }
-
-    public function getPosition($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->position, $_key, $_default);
-    }
-
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
     public function getDisplay($_key = '', $_default = '')
     {
         return Utils::getJsonAttr($this->display, $_key, $_default);
     }
 
-    public function getCss($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->css, $_key, $_default);
-    }
-
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
-    }
-
-    public function setLink_type($_link_type)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->link_type, $_link_type);
-        $this->link_type = $_link_type;
-        return $this;
-    }
-
-    public function setLink_id($_link_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->link_id, $_link_id);
-        $this->link_id = $_link_id;
-        return $this;
-    }
-
-    public function setPosition($_key, $_value)
-    {
-        $position = Utils::setJsonAttr($this->position, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->position, $position);
-        $this->position = $position;
-        return $this;
-    }
-
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
     public function setDisplay($_key, $_value)
     {
         $display = Utils::setJsonAttr($this->display, $_key, $_value);
@@ -403,50 +493,59 @@ class Plan implements EntityInterface
         return $this;
     }
 
-    public function setCss($_key, $_value)
+    /**
+     * @return PlanHeader|null
+     * @throws \Exception
+     */
+    public function getPlanHeader()
     {
-        $css = Utils::setJsonAttr($this->css, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->css, $css);
-        $this->css = $css;
+        return PlanHeaderManager::byId($this->getPlanHeader_id());
+    }
+
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
+    public function getPosition($_key = '', $_default = '')
+    {
+        return Utils::getJsonAttr($this->position, $_key, $_default);
+    }
+
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
+    public function setPosition($_key, $_value)
+    {
+        $position = Utils::setJsonAttr($this->position, $_key, $_value);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->position, $position);
+        $this->position = $position;
         return $this;
     }
 
-    public function getPlanHeader_id()
-    {
-        return $this->planHeader_id;
-    }
-
-    public function setPlanHeader_id($_planHeader_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->planHeader_id, $_planHeader_id);
-        $this->planHeader_id = $_planHeader_id;
-        return $this;
-    }
-
-    public function getConfiguration($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->configuration, $_key, $_default);
-    }
-
-    public function setConfiguration($_key, $_value)
-    {
-        $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
-        $this->configuration = $configuration;
-        return $this;
-    }
-
+    /**
+     * @return bool
+     */
     public function getChanged()
     {
         return $this->_changed;
     }
 
+    /**
+     * @param $_changed
+     * @return $this
+     */
     public function setChanged($_changed)
     {
         $this->_changed = $_changed;
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getTableName()
     {
         return 'plan';

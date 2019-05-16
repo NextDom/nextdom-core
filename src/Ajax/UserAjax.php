@@ -31,12 +31,16 @@ use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\UserManager;
 use NextDom\Model\Entity\User;
 
+/**
+ * Class UserAjax
+ * @package NextDom\Ajax
+ */
 class UserAjax extends BaseAjax
 {
     /**
      * @var null
      */
-    protected $NEEDED_RIGHTS     = UserRight::NOTHING;
+    protected $NEEDED_RIGHTS = UserRight::NOTHING;
     /**
      * @var bool
      */

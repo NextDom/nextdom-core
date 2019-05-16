@@ -25,6 +25,10 @@ namespace NextDom\Controller\Modals;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 
+/**
+ * Class DataStoreManagement
+ * @package NextDom\Controller\Modals
+ */
 class DataStoreManagement extends BaseAbstractModal
 {
     /**
@@ -37,7 +41,7 @@ class DataStoreManagement extends BaseAbstractModal
 
 
         Utils::sendVarsToJS([
-            'dataStore_type'    => Utils::init('type'),
+            'dataStore_type' => Utils::init('type'),
             'dataStore_link_id' => Utils::init('link_id', -1),
         ]);
 

@@ -29,12 +29,16 @@ use NextDom\Managers\PlanManager;
 use NextDom\Model\Entity\Plan;
 use NextDom\Model\Entity\PlanHeader;
 
+/**
+ * Class PlanAjax
+ * @package NextDom\Ajax
+ */
 class PlanAjax extends BaseAjax
 {
     /**
      * @var string
      */
-    protected $NEEDED_RIGHTS     = UserRight::USER;
+    protected $NEEDED_RIGHTS = UserRight::USER;
     /**
      * @var bool
      */

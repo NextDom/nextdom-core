@@ -22,12 +22,16 @@
 
 namespace NextDom\Controller\Admin;
 
+use NextDom\Controller\BaseController;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\SessionHelper;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UserManager;
-use NextDom\Controller\BaseController;
 
+/**
+ * Class UsersController
+ * @package NextDom\Controller\Admin
+ */
 class UsersController extends BaseController
 {
     /** Render summary page

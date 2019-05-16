@@ -22,6 +22,10 @@ use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\EventManager;
 
+/**
+ * Class EventAjax
+ * @package NextDom\Ajax
+ */
 class EventAjax extends BaseAjax
 {
     /**

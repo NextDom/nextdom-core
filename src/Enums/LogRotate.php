@@ -17,10 +17,26 @@
 
 namespace NextDom\Enums;
 
+/**
+ * Class LogRotate
+ * @package NextDom\Enums
+ */
 class LogRotate extends Enum
 {
+    /**
+     *
+     */
     const ROTATE_NONE = 'cron';
+    /**
+     *
+     */
     const ROTATE_DAY = 'cron5';
+    /**
+     *
+     */
     const ROTATE_MONTH = 'cron30';
+    /**
+     *
+     */
     const ROTATE_YEAR = 'cronDaily';
 }

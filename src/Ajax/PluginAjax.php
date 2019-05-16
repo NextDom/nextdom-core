@@ -27,12 +27,16 @@ use NextDom\Managers\ConfigManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
 
+/**
+ * Class PluginAjax
+ * @package NextDom\Ajax
+ */
 class PluginAjax extends BaseAjax
 {
     /**
      * @var string
      */
-    protected $NEEDED_RIGHTS     = UserRight::USER;
+    protected $NEEDED_RIGHTS = UserRight::USER;
     /**
      * @var bool
      */

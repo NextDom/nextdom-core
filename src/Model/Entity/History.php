@@ -56,6 +56,11 @@ class History
     protected $_tableName = 'history';
     protected $_changed = false;
 
+    /**
+     * @param null $_cmd
+     * @param bool $_direct
+     * @throws \NextDom\Exceptions\CoreException
+     */
     public function save($_cmd = null, $_direct = false)
     {
         global $NEXTDOM_INTERNAL_CONFIG;
@@ -136,42 +141,27 @@ class History
         DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW);
     }
 
-    public function remove()
-    {
-        DBHelper::remove($this);
-    }
-
-    public function getCmd_id()
-    {
-        return $this->cmd_id;
-    }
-
+    /**
+     * @return bool|Cmd
+     * @throws \Exception
+     */
     public function getCmd()
     {
         return CmdManager::byId($this->cmd_id);
     }
 
-    public function getValue()
+    /**
+     * @return Cmd
+     */
+    public function getCmd_id()
     {
-        return $this->value;
+        return $this->cmd_id;
     }
 
-    public function getDatetime()
-    {
-        return $this->datetime;
-    }
-
-    public function getTableName()
-    {
-        return $this->_tableName;
-    }
-
-    public function setTableName($_tableName)
-    {
-        $this->_tableName = $_tableName;
-        return $this;
-    }
-
+    /**
+     * @param $cmd_id
+     * @return $this
+     */
     public function setCmd_id($cmd_id)
     {
         $this->_changed = Utils::attrChanged($this->_changed, $this->cmd_id, $cmd_id);
@@ -179,13 +169,18 @@ class History
         return $this;
     }
 
-    public function setValue($value)
+    /**
+     * @return string
+     */
+    public function getDatetime()
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->value, $value);
-        $this->value = $value;
-        return $this;
+        return $this->datetime;
     }
 
+    /**
+     * @param $datetime
+     * @return $this
+     */
     public function setDatetime($datetime)
     {
         $this->_changed = Utils::attrChanged($this->_changed, $this->datetime, $datetime);
@@ -193,11 +188,60 @@ class History
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    /**
+     * @param $value
+     * @return $this
+     */
+    public function setValue($value)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->value, $value);
+        $this->value = $value;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTableName()
+    {
+        return $this->_tableName;
+    }
+
+    /**
+     * @param $_tableName
+     * @return $this
+     */
+    public function setTableName($_tableName)
+    {
+        $this->_tableName = $_tableName;
+        return $this;
+    }
+
+    public function remove()
+    {
+        DBHelper::remove($this);
+    }
+
+    /**
+     * @return bool
+     */
     public function getChanged()
     {
         return $this->_changed;
     }
 
+    /**
+     * @param $_changed
+     * @return $this
+     */
     public function setChanged($_changed)
     {
         $this->_changed = $_changed;

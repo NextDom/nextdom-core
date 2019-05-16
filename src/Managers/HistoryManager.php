@@ -40,9 +40,19 @@ use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Model\Entity\History;
 
+/**
+ * Class HistoryManager
+ * @package NextDom\Managers
+ */
 class HistoryManager
 {
+    /**
+     *
+     */
     const CLASS_NAME = 'history';
+    /**
+     *
+     */
     const DB_CLASS_NAME = '`history`';
 
     /**
@@ -286,52 +296,12 @@ class HistoryManager
     }
 
     /**
-     *
      * @param $_cmd_id
      * @param null $_startTime
      * @param null $_endTime
-     * @return History[] des valeurs de l'équipement
-     * @throws \Exception
+     * @return bool
+     * @throws CoreException
      */
-    public static function all($_cmd_id, $_startTime = null, $_endTime = null)
-    {
-        $values = array(
-            'cmd_id' => $_cmd_id,
-        );
-        if ($_startTime !== null) {
-            $values['startTime'] = $_startTime;
-        }
-        if ($_endTime !== null) {
-            $values['endTime'] = $_endTime;
-        }
-
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-            FROM history
-            WHERE cmd_id=:cmd_id ';
-        if ($_startTime !== null) {
-            $sql .= ' AND datetime>=:startTime';
-        }
-        if ($_endTime !== null) {
-            $sql .= ' AND datetime<=:endTime';
-        }
-        $sql .= ' ORDER BY `datetime` ASC';
-        $result1 = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
-
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-            FROM historyArch
-            WHERE cmd_id=:cmd_id ';
-        if ($_startTime !== null) {
-            $sql .= ' AND `datetime`>=:startTime';
-        }
-        if ($_endTime !== null) {
-            $sql .= ' AND `datetime`<=:endTime';
-        }
-        $sql .= ' ORDER BY `datetime` ASC';
-        $result2 = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, 'historyArch');
-
-        return array_merge($result2, $result1);
-    }
-
     public static function removes($_cmd_id, $_startTime = null, $_endTime = null)
     {
         $values = array(
@@ -370,10 +340,10 @@ class HistoryManager
 
     /**
      * @param        $_cmd_id
-     * @param null   $_startTime
-     * @param null   $_endTime
+     * @param null $_startTime
+     * @param null $_endTime
      * @param string $_period
-     * @param int    $_offset
+     * @param int $_offset
      * @return array|mixed|null
      * @throws CoreException
      * @throws \ReflectionException
@@ -465,7 +435,8 @@ class HistoryManager
      * @return float|int|null
      * @throws \Exception
      */
-    public static function getTemporalAvg($_cmd_id, $_startTime, $_endTime){
+    public static function getTemporalAvg($_cmd_id, $_startTime, $_endTime)
+    {
         $histories = self::all($_cmd_id, $_startTime, $_endTime);
         $result = null;
         $start = null;
@@ -473,7 +444,7 @@ class HistoryManager
         $cValue = null;
         $sum = 0;
         foreach ($histories as $history) {
-            if($start == null){
+            if ($start == null) {
                 $cValue = $history->getValue();
                 $cTime = strtotime($history->getDatetime());
                 $start = $cTime;
@@ -485,6 +456,53 @@ class HistoryManager
         }
         $result = $sum / ($cTime - $start);
         return $result;
+    }
+
+    /**
+     *
+     * @param $_cmd_id
+     * @param null $_startTime
+     * @param null $_endTime
+     * @return History[] des valeurs de l'équipement
+     * @throws \Exception
+     */
+    public static function all($_cmd_id, $_startTime = null, $_endTime = null)
+    {
+        $values = array(
+            'cmd_id' => $_cmd_id,
+        );
+        if ($_startTime !== null) {
+            $values['startTime'] = $_startTime;
+        }
+        if ($_endTime !== null) {
+            $values['endTime'] = $_endTime;
+        }
+
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+            FROM history
+            WHERE cmd_id=:cmd_id ';
+        if ($_startTime !== null) {
+            $sql .= ' AND datetime>=:startTime';
+        }
+        if ($_endTime !== null) {
+            $sql .= ' AND datetime<=:endTime';
+        }
+        $sql .= ' ORDER BY `datetime` ASC';
+        $result1 = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+            FROM historyArch
+            WHERE cmd_id=:cmd_id ';
+        if ($_startTime !== null) {
+            $sql .= ' AND `datetime`>=:startTime';
+        }
+        if ($_endTime !== null) {
+            $sql .= ' AND `datetime`<=:endTime';
+        }
+        $sql .= ' ORDER BY `datetime` ASC';
+        $result2 = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, 'historyArch');
+
+        return array_merge($result2, $result1);
     }
 
     /**

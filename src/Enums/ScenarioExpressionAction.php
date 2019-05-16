@@ -18,28 +18,98 @@
 
 namespace NextDom\Enums;
 
+/**
+ * Class ScenarioExpressionAction
+ * @package NextDom\Enums
+ */
 class ScenarioExpressionAction extends Enum
 {
+    /**
+     *
+     */
     const ICON = 'icon';
+    /**
+     *
+     */
     const WAIT = 'wait';
+    /**
+     *
+     */
     const SLEEP = 'sleep';
+    /**
+     *
+     */
     const STOP = 'stop';
+    /**
+     *
+     */
     const LOG = 'log';
+    /**
+     *
+     */
     const MESSAGE = 'message';
+    /**
+     *
+     */
     const ALERT = 'alert';
+    /**
+     *
+     */
     const POPUP = 'popup';
+    /**
+     *
+     */
     const EQUIPMENT = 'equipment';
+    /**
+     *
+     */
     CONST EQUIPEMENT = 'equipement';
+    /**
+     *
+     */
     const GOTODESIGN = 'gotodesign';
+    /**
+     *
+     */
     const SCENARIO = 'scenario';
+    /**
+     *
+     */
     const VARIABLE = 'variable';
+    /**
+     *
+     */
     const DELETE_VARIABLE = 'delete_variable';
+    /**
+     *
+     */
     const ASK = 'ask';
+    /**
+     *
+     */
     const NEXTDOM_POWEROFF = 'nextdom_poweroff';
+    /**
+     *
+     */
     const SCENARIO_RETURN = 'scenario_return';
+    /**
+     *
+     */
     const REMOVE_INAT = 'remove_inat';
+    /**
+     *
+     */
     const REPORT = 'report';
+    /**
+     *
+     */
     const TAG = 'tag';
+    /**
+     *
+     */
     const EVENT = 'event';
+    /**
+     *
+     */
     const CMD = 'cmd';
 }

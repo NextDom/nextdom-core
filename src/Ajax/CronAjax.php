@@ -23,6 +23,10 @@ use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CronManager;
 
+/**
+ * Class CronAjax
+ * @package NextDom\Ajax
+ */
 class CronAjax extends BaseAjax
 {
     /**

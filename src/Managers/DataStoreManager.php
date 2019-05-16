@@ -37,9 +37,19 @@ namespace NextDom\Managers;
 use NextDom\Helpers\DBHelper;
 use NextDom\Model\Entity\DataStore;
 
+/**
+ * Class DataStoreManager
+ * @package NextDom\Managers
+ */
 class DataStoreManager
 {
+    /**
+     *
+     */
     const CLASS_NAME = 'dataStore';
+    /**
+     *
+     */
     const DB_CLASS_NAME = '`dataStore`';
 
     /**
@@ -90,6 +100,24 @@ class DataStoreManager
     }
 
     /**
+     * Remove stored data by type and linkId
+     *
+     * @param $dataType
+     * @param $linkId
+     *
+     * @return bool
+     * @throws \Exception
+     */
+    public static function removeByTypeLinkId($dataType, $linkId)
+    {
+        $datastores = self::byTypeLinkId($dataType, $linkId);
+        foreach ($datastores as $datastore) {
+            $datastore->remove();
+        }
+        return true;
+    }
+
+    /**
      * Get stored data by type and linkId
      *
      * Ordered by $key
@@ -112,23 +140,5 @@ class DataStoreManager
             $sql .= ' AND link_id = :link_id';
         }
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
-    }
-
-    /**
-     * Remove stored data by type and linkId
-     *
-     * @param $dataType
-     * @param $linkId
-     *
-     * @return bool
-     * @throws \Exception
-     */
-    public static function removeByTypeLinkId($dataType, $linkId)
-    {
-        $datastores = self::byTypeLinkId($dataType, $linkId);
-        foreach ($datastores as $datastore) {
-            $datastore->remove();
-        }
-        return true;
     }
 }
