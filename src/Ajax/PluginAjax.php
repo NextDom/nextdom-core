@@ -29,10 +29,23 @@ use NextDom\Managers\UpdateManager;
 
 class PluginAjax extends BaseAjax
 {
-    protected $NEEDED_RIGHTS = UserRight::USER;
+    /**
+     * @var string
+     */
+    protected $NEEDED_RIGHTS     = UserRight::USER;
+    /**
+     * @var bool
+     */
     protected $MUST_BE_CONNECTED = true;
+    /**
+     * @var bool
+     */
     protected $CHECK_AJAX_TOKEN = true;
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function getConf()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -77,6 +90,10 @@ class PluginAjax extends BaseAjax
         AjaxHelper::success($return);
     }
 
+    /**
+     * @throws CoreException
+     * @throws \Throwable
+     */
     public function toggle()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -89,6 +106,10 @@ class PluginAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function all()
     {
         if (!isConnect()) {
@@ -97,6 +118,9 @@ class PluginAjax extends BaseAjax
         AjaxHelper::success(Utils::o2a(PluginManager::listPlugin()));
     }
 
+    /**
+     * @throws CoreException
+     */
     public function getDependancyInfo()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -108,6 +132,9 @@ class PluginAjax extends BaseAjax
         AjaxHelper::success($return);
     }
 
+    /**
+     * @throws CoreException
+     */
     public function dependancyInstall()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -119,6 +146,10 @@ class PluginAjax extends BaseAjax
         AjaxHelper::success($plugin->dependancy_install());
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function getDeamonInfo()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -132,6 +163,9 @@ class PluginAjax extends BaseAjax
         AjaxHelper::success($return);
     }
 
+    /**
+     * @throws CoreException
+     */
     public function deamonStart()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -145,6 +179,9 @@ class PluginAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function deamonStop()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -157,6 +194,9 @@ class PluginAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function deamonChangeAutoMode()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();

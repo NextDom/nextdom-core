@@ -46,6 +46,11 @@ class ListenerManager
     const CLASS_NAME = Listener::class;
     const DB_CLASS_NAME = '`listener`';
 
+    /**
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function all()
     {
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
@@ -53,6 +58,12 @@ class ListenerManager
         return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_id
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byId($_id)
     {
         $value = array(
@@ -64,6 +75,12 @@ class ListenerManager
         return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_class
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byClass($_class)
     {
         $value = array(
@@ -75,6 +92,14 @@ class ListenerManager
         return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param        $_class
+     * @param        $_function
+     * @param string $_option
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byClassAndFunction($_class, $_function, $_option = '')
     {
         $value = array(
@@ -93,6 +118,14 @@ class ListenerManager
         return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param        $_class
+     * @param        $_function
+     * @param string $_option
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function searchClassFunctionOption($_class, $_function, $_option = '')
     {
         $value = array(
@@ -108,6 +141,14 @@ class ListenerManager
         return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_class
+     * @param $_function
+     * @param $_event
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byClassFunctionAndEvent($_class, $_function, $_event)
     {
         $value = array(
@@ -123,6 +164,13 @@ class ListenerManager
         return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param        $_class
+     * @param        $_function
+     * @param        $_event
+     * @param string $_option
+     * @throws \NextDom\Exceptions\CoreException
+     */
     public static function removeByClassFunctionAndEvent($_class, $_function, $_event, $_option = '')
     {
         $value = array(
@@ -164,6 +212,12 @@ class ListenerManager
         return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_event
+     * @param $_value
+     * @param $_datetime
+     * @throws \Exception
+     */
     public static function check($_event, $_value, $_datetime)
     {
         $listeners = self::searchEvent($_event);
@@ -174,6 +228,10 @@ class ListenerManager
         }
     }
 
+    /**
+     * @param $_event
+     * @throws \Exception
+     */
     public static function backgroundCalculDependencyCmd($_event)
     {
         if (count(CmdManager::byValue($_event, 'info')) == 0) {

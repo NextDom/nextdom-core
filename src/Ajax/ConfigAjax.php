@@ -27,10 +27,24 @@ use NextDom\Managers\ConfigManager;
 
 class ConfigAjax extends BaseAjax
 {
+    /**
+     * @var string
+     */
     protected $NEEDED_RIGHTS = UserRight::USER;
+
+    /**
+     * @var bool
+     */
     protected $MUST_BE_CONNECTED = true;
+
+    /**
+     * @var bool
+     */
     protected $CHECK_AJAX_TOKEN = true;
 
+    /**
+     * @throws CoreException
+     */
     public function genApiKey()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -48,6 +62,9 @@ class ConfigAjax extends BaseAjax
         }
     }
 
+    /**
+     * @throws CoreException
+     */
     public function getKey()
     {
         $keys = Utils::init('key');
@@ -70,6 +87,9 @@ class ConfigAjax extends BaseAjax
         }
     }
 
+    /**
+     * @throws CoreException
+     */
     public function addKey()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -90,6 +110,9 @@ class ConfigAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function removeKey()
     {
         Utils::unautorizedInDemo();

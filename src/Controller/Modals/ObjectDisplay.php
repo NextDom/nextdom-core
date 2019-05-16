@@ -35,11 +35,10 @@ class ObjectDisplay extends BaseAbstractModal
      *
      * @return string
      * @throws CoreException
+     * @throws \ReflectionException
      */
     public static function get(): string
     {
-
-
         $cmdClass = Utils::init('class');
         if ($cmdClass == '' || !class_exists($cmdClass)) {
             throw new CoreException(__('La classe demandée n\'existe pas : ') . $cmdClass);

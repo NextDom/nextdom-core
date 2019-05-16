@@ -42,6 +42,11 @@ class EqRealManager
     const CLASS_NAME = EqReal::class;
     const DB_CLASS_NAME = '`eqReal`';
 
+    /**
+     * @param $_id
+     * @return string
+     * @throws \NextDom\Exceptions\CoreException
+     */
     protected static function getClass($_id)
     {
         if (get_called_class() != self::CLASS_NAME) {
@@ -79,6 +84,12 @@ class EqRealManager
         return self::CLASS_NAME;
     }
 
+    /**
+     * @param $_id
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byId($_id)
     {
         $values = array(
@@ -91,6 +102,13 @@ class EqRealManager
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, $class);
     }
 
+    /**
+     * @param $_logicalId
+     * @param $_cat
+     * @return array
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byLogicalId($_logicalId, $_cat)
     {
         $values = array(

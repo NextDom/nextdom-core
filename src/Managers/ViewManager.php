@@ -69,6 +69,12 @@ class ViewManager
         return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_type
+     * @param $_id
+     * @return array
+     * @throws \Exception
+     */
     public static function searchByUse($_type, $_id)
     {
         $return = array();

@@ -25,10 +25,25 @@ use NextDom\Managers\CronManager;
 
 class CronAjax extends BaseAjax
 {
+    /**
+     * @var string
+     */
     protected $NEEDED_RIGHTS = UserRight::ADMIN;
+
+    /**
+     * @var bool
+     */
     protected $MUST_BE_CONNECTED = true;
+
+    /**
+     * @var bool
+     */
     protected $CHECK_AJAX_TOKEN = true;
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function save()
     {
         Utils::unautorizedInDemo();
@@ -36,6 +51,9 @@ class CronAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function remove()
     {
         Utils::unautorizedInDemo();
@@ -47,6 +65,9 @@ class CronAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function all()
     {
         $crons = CronManager::all(true);
@@ -56,6 +77,9 @@ class CronAjax extends BaseAjax
         AjaxHelper::success(Utils::o2a($crons));
     }
 
+    /**
+     * @throws CoreException
+     */
     public function start()
     {
         $cron = CronManager::byId(Utils::init('id'));
@@ -67,6 +91,9 @@ class CronAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function stop()
     {
         $cron = CronManager::byId(Utils::init('id'));

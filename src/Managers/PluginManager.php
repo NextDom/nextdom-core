@@ -100,6 +100,10 @@ class PluginManager
         return NEXTDOM_ROOT . '/plugins/' . $id . '/plugin_info/info.json';
     }
 
+    /**
+     * @param $_id
+     * @throws \NextDom\Exceptions\CoreException
+     */
     public static function forceDisablePlugin($_id)
     {
         ConfigManager::save('active', 0, $_id);

@@ -35,7 +35,6 @@ class NoteManager extends BaseAbstractModal
      */
     public static function get(): string
     {
-
         $pageData = [];
         $pageData['benchmark'] = NextDomHelper::benchmark();
 

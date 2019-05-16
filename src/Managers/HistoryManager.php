@@ -88,13 +88,22 @@ class HistoryManager
         DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW);
     }
 
-    public static function byCmdIdDatetime($_cmd_id, $_startTime, $_endTime = null, $_oldValue = null)
+    /**
+     * @param      $cmdId
+     * @param      $_startTime
+     * @param null $_endTime
+     * @param null $_oldValue
+     * @return array|mixed|null
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
+    public static function byCmdIdDatetime($cmdId, $_startTime, $_endTime = null, $_oldValue = null)
     {
         if ($_endTime == null) {
             $_endTime = $_startTime;
         }
         $values = array(
-            'cmd_id' => $_cmd_id,
+            'cmd_id' => $cmdId,
             'startTime' => $_startTime,
             'endTime' => $_endTime,
         );
@@ -359,6 +368,16 @@ class HistoryManager
         return true;
     }
 
+    /**
+     * @param        $_cmd_id
+     * @param null   $_startTime
+     * @param null   $_endTime
+     * @param string $_period
+     * @param int    $_offset
+     * @return array|mixed|null
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public static function getPlurality($_cmd_id, $_startTime = null, $_endTime = null, $_period = 'day', $_offset = 0)
     {
         $values = array(
@@ -439,6 +458,13 @@ class HistoryManager
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_cmd_id
+     * @param $_startTime
+     * @param $_endTime
+     * @return float|int|null
+     * @throws \Exception
+     */
     public static function getTemporalAvg($_cmd_id, $_startTime, $_endTime){
         $histories = self::all($_cmd_id, $_startTime, $_endTime);
         $result = null;
@@ -461,6 +487,13 @@ class HistoryManager
         return $result;
     }
 
+    /**
+     * @param $_cmd_id
+     * @param $_startTime
+     * @param $_endTime
+     * @return array
+     * @throws CoreException
+     */
     public static function getStatistics($_cmd_id, $_startTime, $_endTime)
     {
         $values = array(
@@ -520,6 +553,13 @@ class HistoryManager
         return $return;
     }
 
+    /**
+     * @param $_cmd_id
+     * @param $_startTime
+     * @param $_endTime
+     * @return float|int
+     * @throws \Exception
+     */
     public static function getTendance($_cmd_id, $_startTime, $_endTime)
     {
         $values = array();
@@ -548,6 +588,12 @@ class HistoryManager
         return ($base / $divisor);
     }
 
+    /**
+     * @param      $_cmd_id
+     * @param null $_value
+     * @return false|int
+     * @throws CoreException
+     */
     public static function stateDuration($_cmd_id, $_value = null)
     {
         $cmd = CmdManager::byId($_cmd_id);
@@ -574,6 +620,12 @@ class HistoryManager
         return $duration;
     }
 
+    /**
+     * @param      $_cmd_id
+     * @param null $_value
+     * @return false|int
+     * @throws \Exception
+     */
     public static function lastStateDuration($_cmd_id, $_value = null)
     {
         $cmd = CmdManager::byId($_cmd_id);
@@ -765,6 +817,12 @@ class HistoryManager
         return $result['changes'];
     }
 
+    /**
+     * @param        $_cmd_id
+     * @param string $_date
+     * @return array|mixed|null
+     * @throws CoreException
+     */
     public static function emptyHistory($_cmd_id, $_date = '')
     {
         $values = array(

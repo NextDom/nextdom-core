@@ -53,5 +53,4 @@ class UsersController extends BaseController
         return Render::getInstance()->get('/desktop/admin/users.html.twig', $pageData);
     }
 
-
 }

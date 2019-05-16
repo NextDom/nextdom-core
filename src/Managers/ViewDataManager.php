@@ -42,6 +42,11 @@ class ViewDataManager
     const CLASS_NAME = 'viewData';
 
 
+    /**
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function all()
     {
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
@@ -49,6 +54,12 @@ class ViewDataManager
         return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_id
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byId($_id)
     {
         $value = array(
@@ -80,6 +91,12 @@ class ViewDataManager
         return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_viewZone_id
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byViewZoneId($_viewZone_id)
     {
         $value = array(
@@ -108,6 +125,12 @@ class ViewDataManager
         return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_type
+     * @param $_link_id
+     * @return bool
+     * @throws \Exception
+     */
     public static function removeByTypeLinkId($_type, $_link_id)
     {
         $viewDatas = self::byTypeLinkId($_type, $_link_id);

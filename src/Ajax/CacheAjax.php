@@ -24,8 +24,19 @@ use NextDom\Managers\CacheManager;
 
 class CacheAjax extends BaseAjax
 {
+    /**
+     * @var string
+     */
     protected $NEEDED_RIGHTS = UserRight::ADMIN;
+
+    /**
+     * @var bool
+     */
     protected $MUST_BE_CONNECTED = true;
+
+    /**
+     * @var bool
+     */
     protected $CHECK_AJAX_TOKEN = true;
 
     /**

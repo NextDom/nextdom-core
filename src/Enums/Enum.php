@@ -41,6 +41,12 @@ abstract class Enum
 
     }
 
+    /**
+     * @param $needle
+     * @return bool
+     * @throws OperatingSystemException
+     * @throws \ReflectionException
+     */
     public static function exists($needle): bool
     {
         return in_array($needle, self::getConstants());

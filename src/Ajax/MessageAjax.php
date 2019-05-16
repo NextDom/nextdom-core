@@ -25,21 +25,39 @@ use NextDom\Managers\MessageManager;
 
 class MessageAjax extends BaseAjax
 {
-    protected $NEEDED_RIGHTS = UserRight::USER;
+    /**
+     * @var string
+     */
+    protected $NEEDED_RIGHTS     = UserRight::USER;
+    /**
+     * @var bool
+     */
     protected $MUST_BE_CONNECTED = true;
+    /**
+     * @var bool
+     */
     protected $CHECK_AJAX_TOKEN = true;
 
+    /**
+     *
+     */
     public function clearMessage()
     {
         MessageManager::removeAll(Utils::init('plugin'));
         AjaxHelper::success();
     }
 
+    /**
+     *
+     */
     public function nbMessage()
     {
         AjaxHelper::success(MessageManager::nbMessage());
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function all()
     {
         if (Utils::init('plugin') == '') {
@@ -53,6 +71,9 @@ class MessageAjax extends BaseAjax
         AjaxHelper::success($messages);
     }
 
+    /**
+     * @throws CoreException
+     */
     public function removeMessage()
     {
         $message = MessageManager::byId(Utils::init('id'));

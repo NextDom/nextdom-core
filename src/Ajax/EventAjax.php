@@ -24,10 +24,24 @@ use NextDom\Managers\EventManager;
 
 class EventAjax extends BaseAjax
 {
+    /**
+     * @var string
+     */
     protected $NEEDED_RIGHTS = UserRight::USER;
+
+    /**
+     * @var bool
+     */
     protected $MUST_BE_CONNECTED = true;
+
+    /**
+     * @var bool
+     */
     protected $CHECK_AJAX_TOKEN = true;
 
+    /**
+     * @throws \Exception
+     */
     protected function changes()
     {
         AjaxHelper::success(EventManager::changes(Utils::init('datetime', 0), 59));

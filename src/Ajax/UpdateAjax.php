@@ -31,15 +31,31 @@ use NextDom\Model\Entity\Update;
 
 class UpdateAjax extends BaseAjax
 {
-    protected $NEEDED_RIGHTS = UserRight::USER;
+    /**
+     * @var string
+     */
+    protected $NEEDED_RIGHTS     = UserRight::USER;
+    /**
+     * @var bool
+     */
     protected $MUST_BE_CONNECTED = true;
+    /**
+     * @var bool
+     */
     protected $CHECK_AJAX_TOKEN = true;
 
+    /**
+     * @throws \Exception
+     */
     public function nbUpdate()
     {
         AjaxHelper::success(UpdateManager::nbNeedUpdate());
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function all()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -62,6 +78,9 @@ class UpdateAjax extends BaseAjax
         AjaxHelper::success($return);
     }
 
+    /**
+     * @throws CoreException
+     */
     public function checkAllUpdate()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -70,6 +89,9 @@ class UpdateAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function update()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -105,6 +127,9 @@ class UpdateAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function remove()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -121,6 +146,9 @@ class UpdateAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function checkUpdate()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -136,6 +164,9 @@ class UpdateAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function updateAll()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -144,6 +175,11 @@ class UpdateAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     * @throws \Throwable
+     */
     public function save()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -176,6 +212,10 @@ class UpdateAjax extends BaseAjax
         AjaxHelper::success(Utils::o2a($update));
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function saves()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -184,6 +224,9 @@ class UpdateAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function preUploadFile()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();

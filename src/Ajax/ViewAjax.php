@@ -35,10 +35,22 @@ use NextDom\Model\Entity\ViewZone;
 
 class ViewAjax extends BaseAjax
 {
-    protected $NEEDED_RIGHTS = UserRight::USER;
+    /**
+     * @var string
+     */
+    protected $NEEDED_RIGHTS     = UserRight::USER;
+    /**
+     * @var bool
+     */
     protected $MUST_BE_CONNECTED = true;
+    /**
+     * @var bool
+     */
     protected $CHECK_AJAX_TOKEN = true;
 
+    /**
+     * @throws CoreException
+     */
     public function remove()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -51,11 +63,17 @@ class ViewAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function all()
     {
         AjaxHelper::success(Utils::o2a(ViewManager::all()));
     }
 
+    /**
+     * @throws CoreException
+     */
     public function get()
     {
         if (Utils::init('id') == 'all' || is_json(Utils::init('id'))) {
@@ -82,6 +100,10 @@ class ViewAjax extends BaseAjax
         }
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function save()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -116,6 +138,10 @@ class ViewAjax extends BaseAjax
         AjaxHelper::success(Utils::o2a($view));
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function getEqLogicviewZone()
     {
         $viewZone = ViewZoneManager::byId(Utils::init('viewZone_id'));
@@ -135,6 +161,10 @@ class ViewAjax extends BaseAjax
         AjaxHelper::success($return);
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function setEqLogicOrder()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -159,6 +189,9 @@ class ViewAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function setOrder()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -175,6 +208,9 @@ class ViewAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function removeImage()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -189,6 +225,9 @@ class ViewAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function uploadImage()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();

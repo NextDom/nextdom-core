@@ -40,18 +40,32 @@ use NextDom\Model\Entity\Listener;
 
 class NextDomAjax extends BaseAjax
 {
-    protected $NEEDED_RIGHTS = UserRight::NOTHING;
+    /**
+     * @var null
+     */
+    protected $NEEDED_RIGHTS     = UserRight::NOTHING;
+    /**
+     * @var bool
+     */
     protected $MUST_BE_CONNECTED = true;
+    /**
+     * @var bool
+     */
     protected $CHECK_AJAX_TOKEN = false;
 
+    /**
+     * @throws \ReflectionException
+     */
     public function getInfoApplication()
     {
-        $return = array();
-        $return['product_name'] = ConfigManager::byKey('product_name');
-        $return['product_icon'] = ConfigManager::byKey('product_icon');
-        $return['product_image'] = ConfigManager::byKey('product_image');
-        $return['widget_margin'] = ConfigManager::byKey('widget::margin');
-        $return['serverDatetime'] = Utils::getmicrotime();
+        $return = [
+            'product_name'   => ConfigManager::byKey('product_name'),
+            'product_icon'   => ConfigManager::byKey('product_icon'),
+            'product_image'  => ConfigManager::byKey('product_image'),
+            'widget_margin'  => ConfigManager::byKey('widget::margin'),
+            'serverDatetime' => Utils::getmicrotime(),
+        ];
+
         if (!isConnect()) {
             $return['connected'] = false;
             AjaxHelper::success($return);
@@ -96,6 +110,9 @@ class NextDomAjax extends BaseAjax
         AjaxHelper::success($return);
     }
 
+    /**
+     * @throws CoreException
+     */
     public function getDocumentationUrl()
     {
         AuthentificationHelper::isConnectedOrFail();
@@ -129,6 +146,9 @@ class NextDomAjax extends BaseAjax
         throw new CoreException(__('Aucune documentation trouvée'), -1234);
     }
 
+    /**
+     * @throws CoreException
+     */
     public function addWarnme()
     {
         AuthentificationHelper::isConnectedOrFail();
@@ -141,19 +161,22 @@ class NextDomAjax extends BaseAjax
         $listener->setClass('interactQuery');
         $listener->setFunction('warnMeExecute');
         $listener->addEvent($cmd->getId());
-        $options = array(
-            'type' => 'cmd',
-            'cmd_id' => $cmd->getId(),
-            'name' => $cmd->getHumanName(),
-            'test' => Utils::init('test'),
+        $options = [
+            'type'      => 'cmd',
+            'cmd_id'    => $cmd->getId(),
+            'name'      => $cmd->getHumanName(),
+            'test'      => Utils::init('test'),
             'reply_cmd' => Utils::init('reply_cmd', UserManager::getStoredUser()->getOptions('notification::cmd')),
-        );
+        ];
         $listener->setOption($options);
         $listener->save(true);
         AjaxHelper::success();
     }
 
 
+    /**
+     * @throws CoreException
+     */
     public function ssh()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -168,6 +191,9 @@ class NextDomAjax extends BaseAjax
         AjaxHelper::success(implode("\n", $output));
     }
 
+    /**
+     * @throws CoreException
+     */
     public function db()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -180,6 +206,9 @@ class NextDomAjax extends BaseAjax
         }
     }
 
+    /**
+     * @throws CoreException
+     */
     public function dbcorrectTable()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -190,6 +219,9 @@ class NextDomAjax extends BaseAjax
 
     }
 
+    /**
+     * @throws CoreException
+     */
     public function health()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -197,6 +229,9 @@ class NextDomAjax extends BaseAjax
         AjaxHelper::success(NextDomHelper::health());
     }
 
+    /**
+     * @throws CoreException
+     */
     public function update()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -206,6 +241,9 @@ class NextDomAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function clearDate()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -215,6 +253,9 @@ class NextDomAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function backup()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -224,6 +265,9 @@ class NextDomAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function restore()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -233,6 +277,9 @@ class NextDomAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function removeBackup()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -242,6 +289,9 @@ class NextDomAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function listBackup()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -249,6 +299,9 @@ class NextDomAjax extends BaseAjax
         AjaxHelper::success(BackupManager::listBackup());
     }
 
+    /**
+     * @throws CoreException
+     */
     public function getConfiguration()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -256,6 +309,9 @@ class NextDomAjax extends BaseAjax
         AjaxHelper::success(NextDomHelper::getConfiguration(Utils::init('key'), Utils::init('default')));
     }
 
+    /**
+     * @throws CoreException
+     */
     public function resetHwKey()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -265,6 +321,9 @@ class NextDomAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function resetHour()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -273,6 +332,9 @@ class NextDomAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function backupupload()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -283,6 +345,9 @@ class NextDomAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function haltSystem()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -292,6 +357,9 @@ class NextDomAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function rebootSystem()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -301,6 +369,9 @@ class NextDomAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function forceSyncHour()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -310,6 +381,9 @@ class NextDomAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function saveCustom()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -329,11 +403,14 @@ class NextDomAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function getGraphData()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
         AjaxHelper::init(true);
-        $return = array('node' => array(), 'link' => array());
+        $return = [ 'node' => [], 'link' => [] ];
         $object = null;
         $type = Utils::init('filter_type');
         if ($type !== '') {
@@ -347,6 +424,9 @@ class NextDomAjax extends BaseAjax
         }
     }
 
+    /**
+     * @throws CoreException
+     */
     public function getTimelineEvents()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -370,6 +450,9 @@ class NextDomAjax extends BaseAjax
         AjaxHelper::success($return);
     }
 
+    /**
+     * @throws CoreException
+     */
     public function consistency()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -379,6 +462,9 @@ class NextDomAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function cleanFileSystemRight()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -388,6 +474,9 @@ class NextDomAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function removeTimelineEvents()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -397,6 +486,9 @@ class NextDomAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function getFileFolder()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -405,6 +497,9 @@ class NextDomAjax extends BaseAjax
         AjaxHelper::success(FileSystemHelper::ls(Utils::init('path'), '*', false, array(Utils::init('type'))));
     }
 
+    /**
+     * @throws CoreException
+     */
     public function getFileContent()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -418,6 +513,9 @@ class NextDomAjax extends BaseAjax
         AjaxHelper::success(file_get_contents(Utils::init('path')));
     }
 
+    /**
+     * @throws CoreException
+     */
     public function setFileContent()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -431,6 +529,9 @@ class NextDomAjax extends BaseAjax
         AjaxHelper::success(file_put_contents(Utils::init('path'), Utils::init('content')));
     }
 
+    /**
+     * @throws CoreException
+     */
     public function deleteFile()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -444,6 +545,9 @@ class NextDomAjax extends BaseAjax
         AjaxHelper::success(unlink(Utils::init('path')));
     }
 
+    /**
+     * @throws CoreException
+     */
     public function createFile()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -461,6 +565,9 @@ class NextDomAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function emptyRemoveHistory()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();

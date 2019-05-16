@@ -68,6 +68,9 @@ class AdministrationController extends BaseController
         return Render::getInstance()->get('/desktop/pages/administration.html.twig', $pageData);
     }
 
+    /**
+     * @param $pageData
+     */
     private static function initMemoryInformations(&$pageData)
     {
         $pageData['memoryLoad'] = 100;

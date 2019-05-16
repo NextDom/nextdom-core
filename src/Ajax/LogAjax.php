@@ -24,10 +24,22 @@ use NextDom\Helpers\Utils;
 
 class LogAjax extends BaseAjax
 {
-    protected $NEEDED_RIGHTS = UserRight::ADMIN;
+    /**
+     * @var string
+     */
+    protected $NEEDED_RIGHTS     = UserRight::ADMIN;
+    /**
+     * @var bool
+     */
     protected $MUST_BE_CONNECTED = true;
+    /**
+     * @var bool
+     */
     protected $CHECK_AJAX_TOKEN = true;
 
+    /**
+     * @throws \NextDom\Exceptions\CoreException
+     */
     public function clear()
     {
         Utils::unautorizedInDemo();
@@ -35,6 +47,9 @@ class LogAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws \NextDom\Exceptions\CoreException
+     */
     public function remove()
     {
         Utils::unautorizedInDemo();
@@ -42,11 +57,17 @@ class LogAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     *
+     */
     public function list()
     {
         AjaxHelper::success(LogHelper::liste());
     }
 
+    /**
+     * @throws \NextDom\Exceptions\CoreException
+     */
     public function removeAll()
     {
         Utils::unautorizedInDemo();
@@ -54,6 +75,9 @@ class LogAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     *
+     */
     public function get()
     {
         AjaxHelper::success(LogHelper::get(Utils::init('log'), Utils::init('start', 0), Utils::init('nbLine', 99999)));

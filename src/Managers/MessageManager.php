@@ -64,6 +64,13 @@ class MessageManager
         $message->save($_writeMessage);
     }
 
+    /**
+     * @param string $_plugin
+     * @param string $_logicalId
+     * @param bool   $_search
+     * @return bool
+     * @throws \NextDom\Exceptions\CoreException
+     */
     public static function removeAll($_plugin = '', $_logicalId = '', $_search = false)
     {
         $values = array();
@@ -86,6 +93,10 @@ class MessageManager
         return true;
     }
 
+    /**
+     * @return mixed
+     * @throws \NextDom\Exceptions\CoreException
+     */
     public static function nbMessage()
     {
         $sql = 'SELECT count(*)
@@ -94,6 +105,12 @@ class MessageManager
         return $count['count(*)'];
     }
 
+    /**
+     * @param $_id
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byId($_id)
     {
         $values = array(
@@ -124,6 +141,12 @@ class MessageManager
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_plugin
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byPlugin($_plugin)
     {
         $values = array(
@@ -136,6 +159,10 @@ class MessageManager
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     */
     public static function listPlugin()
     {
         $sql = 'SELECT DISTINCT(plugin)
@@ -143,6 +170,11 @@ class MessageManager
         return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL);
     }
 
+    /**
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function all()
     {
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '

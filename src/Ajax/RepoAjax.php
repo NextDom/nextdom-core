@@ -27,10 +27,22 @@ use repo_market;
 
 class RepoAjax extends BaseAjax
 {
-    protected $NEEDED_RIGHTS = UserRight::ADMIN;
+    /**
+     * @var string
+     */
+    protected $NEEDED_RIGHTS     = UserRight::ADMIN;
+    /**
+     * @var bool
+     */
     protected $MUST_BE_CONNECTED = true;
+    /**
+     * @var bool
+     */
     protected $CHECK_AJAX_TOKEN = true;
 
+    /**
+     * @throws CoreException
+     */
     public function uploadCloud()
     {
         Utils::unautorizedInDemo();
@@ -38,6 +50,9 @@ class RepoAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function restoreCloud()
     {
         Utils::unautorizedInDemo();
@@ -50,6 +65,9 @@ class RepoAjax extends BaseAjax
         AjaxHelper::error(__('Le repo n\'existe pas : ' . $repoName));
     }
 
+    /**
+     * @throws CoreException
+     */
     public function sendReportBug()
     {
         Utils::unautorizedInDemo();
@@ -61,6 +79,10 @@ class RepoAjax extends BaseAjax
         AjaxHelper::error(__('Le repo n\'existe pas : ' . $repoName));
     }
 
+    /**
+     * @throws CoreException
+     * @throws \Throwable
+     */
     public function install()
     {
         Utils::unautorizedInDemo();
@@ -87,6 +109,9 @@ class RepoAjax extends BaseAjax
         AjaxHelper::error(__('Le repo n\'existe pas : ' . $repoName));
     }
 
+    /**
+     * @throws \Exception
+     */
     public function test()
     {
         $repoName = Utils::init('repo');
@@ -98,6 +123,9 @@ class RepoAjax extends BaseAjax
         AjaxHelper::error(__('Le repo n\'existe pas : ' . $repoName));
     }
 
+    /**
+     * @throws CoreException
+     */
     public function remove()
     {
         unautorizedInDemo();
@@ -125,6 +153,9 @@ class RepoAjax extends BaseAjax
         AjaxHelper::error(__('Le repo n\'existe pas : ' . $repoName));
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function save()
     {
         unautorizedInDemo();
@@ -144,6 +175,9 @@ class RepoAjax extends BaseAjax
         AjaxHelper::error(__('Le repo n\'existe pas : ' . $repoName));
     }
 
+    /**
+     * @throws \Exception
+     */
     public function getInfo()
     {
         $repoName = Utils::init('repo');
@@ -154,6 +188,9 @@ class RepoAjax extends BaseAjax
         AjaxHelper::error(__('Le repo n\'existe pas : ' . $repoName));
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function byLogicalId()
     {
         $repoName = Utils::init('repo');
@@ -172,6 +209,9 @@ class RepoAjax extends BaseAjax
         AjaxHelper::error(__('Le repo n\'existe pas : ' . $repoName));
     }
 
+    /**
+     * @throws CoreException
+     */
     public function setRating()
     {
         unautorizedInDemo();
@@ -188,6 +228,9 @@ class RepoAjax extends BaseAjax
         AjaxHelper::error(__('Le repo n\'existe pas : ' . $repoName));
     }
 
+    /**
+     * @throws \Exception
+     */
     public function backupList()
     {
         $repoName = Utils::init('repo');

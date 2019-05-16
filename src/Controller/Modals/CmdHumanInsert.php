@@ -35,8 +35,6 @@ class CmdHumanInsert extends BaseAbstractModal
      */
     public static function get(): string
     {
-
-
         $pageData = [];
         $pageData['jeeObjects'] = ObjectManager::all();
 

@@ -685,6 +685,11 @@ class EqLogicManager
         return $return;
     }
 
+    /**
+     * @param $_string
+     * @return EqLogic|null
+     * @throws \Exception
+     */
     public static function byString($_string)
     {
         $eqLogic = self::byId(str_replace('#', '', self::fromHumanReadable($_string)));

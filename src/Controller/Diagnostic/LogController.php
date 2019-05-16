@@ -38,7 +38,6 @@ class LogController extends BaseController
      */
     public static function get(&$pageData): string
     {
-
         // TODO utiliser log::getpathLog
         $pageData['JS_END_POOL'][] = '/public/js/desktop/diagnostic/log.js';
         $currentLogfile = Utils::init('logfile');

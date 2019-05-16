@@ -25,10 +25,22 @@ use NextDom\Managers\ConfigManager;
 
 class NetworkAjax extends BaseAjax
 {
-    protected $NEEDED_RIGHTS = UserRight::ADMIN;
+    /**
+     * @var string
+     */
+    protected $NEEDED_RIGHTS     = UserRight::ADMIN;
+    /**
+     * @var bool
+     */
     protected $MUST_BE_CONNECTED = true;
+    /**
+     * @var bool
+     */
     protected $CHECK_AJAX_TOKEN = true;
 
+    /**
+     * @throws \NextDom\Exceptions\CoreException
+     */
     public function restartDns()
     {
         Utils::unautorizedInDemo();
@@ -37,6 +49,9 @@ class NetworkAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws \NextDom\Exceptions\CoreException
+     */
     public function stopDns()
     {
         Utils::unautorizedInDemo();

@@ -33,10 +33,22 @@ use NextDom\Model\Entity\User;
 
 class UserAjax extends BaseAjax
 {
-    protected $NEEDED_RIGHTS = UserRight::NOTHING;
+    /**
+     * @var null
+     */
+    protected $NEEDED_RIGHTS     = UserRight::NOTHING;
+    /**
+     * @var bool
+     */
     protected $MUST_BE_CONNECTED = false;
+    /**
+     * @var bool
+     */
     protected $CHECK_AJAX_TOKEN = false;
 
+    /**
+     * @throws \Exception
+     */
     public function useTwoFactorAuthentification()
     {
         $user = UserManager::byLogin(Utils::init('login'));
@@ -49,6 +61,9 @@ class UserAjax extends BaseAjax
         AjaxHelper::success($user->getOptions('twoFactorAuthentification', 0));
     }
 
+    /**
+     * @throws CoreException
+     */
     public function login()
     {
         if (!AuthentificationHelper::isConnected()) {
@@ -88,6 +103,9 @@ class UserAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function getApikey()
     {
         if (!AuthentificationHelper::login(Utils::init('username'), Utils::init('password'), Utils::init('twoFactorCode'))) {
@@ -96,6 +114,9 @@ class UserAjax extends BaseAjax
         AjaxHelper::success(UserManager::getStoredUser()->getHash());
     }
 
+    /**
+     * @throws CoreException
+     */
     public function validateTwoFactorCode()
     {
         AuthentificationHelper::init();
@@ -117,6 +138,9 @@ class UserAjax extends BaseAjax
         AjaxHelper::error('Problème d\'utilisateur');
     }
 
+    /**
+     * @throws CoreException
+     */
     public function removeTwoFactorCode()
     {
         AuthentificationHelper::init();
@@ -132,6 +156,9 @@ class UserAjax extends BaseAjax
         AjaxHelper::success(true);
     }
 
+    /**
+     * @throws CoreException
+     */
     public function isConnect()
     {
         AuthentificationHelper::init();
@@ -140,6 +167,9 @@ class UserAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function refresh()
     {
         AuthentificationHelper::init();
@@ -151,6 +181,9 @@ class UserAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function logout()
     {
         AuthentificationHelper::init();
@@ -160,6 +193,10 @@ class UserAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function all()
     {
         AuthentificationHelper::init();
@@ -174,6 +211,10 @@ class UserAjax extends BaseAjax
         AjaxHelper::success($users);
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function save()
     {
         AuthentificationHelper::init();
@@ -201,6 +242,9 @@ class UserAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function remove()
     {
         AuthentificationHelper::init();
@@ -221,6 +265,10 @@ class UserAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function saveProfils()
     {
         AuthentificationHelper::init();
@@ -247,12 +295,18 @@ class UserAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function get()
     {
         AjaxHelper::init();
         AjaxHelper::success(NextDomHelper::toHumanReadable(Utils::o2a($_SESSION['user'])));
     }
 
+    /**
+     * @throws CoreException
+     */
     public function removeRegisterDevice()
     {
         AuthentificationHelper::init();
@@ -300,6 +354,9 @@ class UserAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function deleteSession()
     {
         AuthentificationHelper::init();
@@ -324,6 +381,9 @@ class UserAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function testLdapConnection()
     {
         AuthentificationHelper::init();
@@ -337,6 +397,9 @@ class UserAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function removeBanIp()
     {
         AuthentificationHelper::init();
@@ -347,6 +410,9 @@ class UserAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function supportAccess()
     {
         AuthentificationHelper::init();

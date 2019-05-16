@@ -96,6 +96,9 @@ class CmdAjax extends BaseAjax
         AjaxHelper::success($cmd->execCmd($options));
     }
 
+    /**
+     * @throws CoreException
+     */
     public function getByObjectNameEqNameCmdName()
     {
         $cmd = CmdManager::byObjectNameEqLogicNameCmdName(Utils::init('object_name'), Utils::init('eqLogic_name'), Utils::init('cmd_name'));
@@ -105,6 +108,10 @@ class CmdAjax extends BaseAjax
         AjaxHelper::success($cmd->getId());
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function getByObjectNameCmdName()
     {
         $cmd = CmdManager::byObjectNameCmdName(Utils::init('object_name'), Utils::init('cmd_name'));
@@ -118,6 +125,7 @@ class CmdAjax extends BaseAjax
      * Get command object by his id
      *
      * @throws CoreException
+     * @throws \ReflectionException
      */
     public function byId()
     {
@@ -128,6 +136,9 @@ class CmdAjax extends BaseAjax
         AjaxHelper::success(NextDomHelper::toHumanReadable(Utils::o2a($cmd)));
     }
 
+    /**
+     * @throws CoreException
+     */
     public function copyHistoryToCmd()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -136,6 +147,9 @@ class CmdAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function replaceCmd()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -144,6 +158,10 @@ class CmdAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function byHumanName()
     {
         $cmd_id = CmdManager::humanReadableToCmd(Utils::init('humanName'));
@@ -154,6 +172,10 @@ class CmdAjax extends BaseAjax
         AjaxHelper::success(Utils::o2a($cmd));
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function usedBy()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -193,16 +215,26 @@ class CmdAjax extends BaseAjax
         AjaxHelper::success($return);
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function getHumanCmdName()
     {
         AjaxHelper::success(CmdManager::cmdToHumanReadable('#' . Utils::init('id') . '#'));
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function byEqLogic()
     {
         AjaxHelper::success(Utils::o2a(CmdManager::byEqLogicId(Utils::init('eqLogic_id'))));
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function getCmd()
     {
         $cmd = CmdManager::byId(Utils::init('id'));
@@ -219,6 +251,10 @@ class CmdAjax extends BaseAjax
         AjaxHelper::success($return);
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function save()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -233,6 +269,10 @@ class CmdAjax extends BaseAjax
         AjaxHelper::success(Utils::o2a($cmd));
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function multiSave()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -249,6 +289,9 @@ class CmdAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function changeHistoryPoint()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -282,6 +325,10 @@ class CmdAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function getHistory()
     {
         global $NEXTDOM_INTERNAL_CONFIG;
@@ -404,6 +451,9 @@ class CmdAjax extends BaseAjax
         AjaxHelper::success($return);
     }
 
+    /**
+     * @throws CoreException
+     */
     public function emptyHistory()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -416,6 +466,9 @@ class CmdAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function setOrder()
     {
         Utils::unautorizedInDemo();
@@ -456,4 +509,5 @@ class CmdAjax extends BaseAjax
         }
         AjaxHelper::success();
     }
+
 }

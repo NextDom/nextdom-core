@@ -144,6 +144,10 @@ class UserManager
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @return bool|resource
+     * @throws \Exception
+     */
     public static function connectToLDAP()
     {
         $ad = ldap_connect(ConfigManager::byKey('ldap:host'), ConfigManager::byKey('ldap:port'));
@@ -155,6 +159,12 @@ class UserManager
         return false;
     }
 
+    /**
+     * @param $_login
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byLogin($_login)
     {
         $values = array(
@@ -182,6 +192,13 @@ class UserManager
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_login
+     * @param $_hash
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byLoginAndHash($_login, $_hash)
     {
         $values = array(
@@ -195,6 +212,13 @@ class UserManager
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_login
+     * @param $_password
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byLoginAndPassword($_login, $_password)
     {
         $values = array(
@@ -220,6 +244,12 @@ class UserManager
         return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_rights
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function searchByRight($_rights)
     {
         $values = array(
@@ -253,6 +283,12 @@ class UserManager
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_enable
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byEnable($_enable)
     {
         $values = array(
@@ -264,6 +300,9 @@ class UserManager
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     *
+     */
     public static function failedLogin()
     {
         @session_start();
@@ -272,6 +311,9 @@ class UserManager
         @session_write_close();
     }
 
+    /**
+     * @throws \Exception
+     */
     public static function removeBanIp()
     {
         $cache = CacheManager::byKey('security::banip');
@@ -287,6 +329,10 @@ class UserManager
         return self::isBanned();
     }
 
+    /**
+     * @return bool
+     * @throws \Exception
+     */
     public static function isBanned()
     {
         $ip = NetworkHelper::getClientIp();
@@ -350,6 +396,11 @@ class UserManager
         return false;
     }
 
+    /**
+     * @return string
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function getAccessKeyForReport()
     {
         $user = self::byLogin('internal_report');
@@ -377,6 +428,11 @@ class UserManager
         return $user->getHash() . '-' . $key;
     }
 
+    /**
+     * @param bool $_enable
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function supportAccess($_enable = true)
     {
         if ($_enable) {
@@ -408,6 +464,9 @@ class UserManager
         }
     }
 
+    /**
+     * @param $user
+     */
     public static function storeUserInSession($user)
     {
         $_SESSION['user'] = $user;

@@ -32,10 +32,22 @@ use NextDom\Model\Entity\Scenario;
 
 class ObjectAjax extends BaseAjax
 {
-    protected $NEEDED_RIGHTS = UserRight::USER;
+    /**
+     * @var string
+     */
+    protected $NEEDED_RIGHTS     = UserRight::USER;
+    /**
+     * @var bool
+     */
     protected $MUST_BE_CONNECTED = true;
+    /**
+     * @var bool
+     */
     protected $CHECK_AJAX_TOKEN = true;
 
+    /**
+     * @throws CoreException
+     */
     public function remove()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -48,6 +60,10 @@ class ObjectAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function byId()
     {
         $object = ObjectManager::byId(Utils::init('id'));
@@ -57,12 +73,18 @@ class ObjectAjax extends BaseAjax
         AjaxHelper::success(NextDomHelper::toHumanReadable(Utils::o2a($object)));
     }
 
+    /**
+     * @throws \Throwable
+     */
     public function createSummaryVirtual()
     {
         ObjectManager::createSummaryToVirtual(Utils::init('key'));
         AjaxHelper::success();
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function all()
     {
         $objects = ObjectManager::buildTree();
@@ -79,6 +101,10 @@ class ObjectAjax extends BaseAjax
         AjaxHelper::success(Utils::o2a($objects));
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function save()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -98,6 +124,10 @@ class ObjectAjax extends BaseAjax
         AjaxHelper::error('Le nom de l\'objet ne peut être vide');
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function getChild()
     {
         $object = ObjectManager::byId(Utils::init('id'));
@@ -108,6 +138,10 @@ class ObjectAjax extends BaseAjax
         AjaxHelper::success($return);
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function toHtml()
     {
         if (Utils::init('id') == '' || Utils::init('id') == 'all' || is_json(Utils::init('id'))) {
@@ -210,6 +244,9 @@ class ObjectAjax extends BaseAjax
         }
     }
 
+    /**
+     * @throws CoreException
+     */
     public function setOrder()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -225,6 +262,9 @@ class ObjectAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function getSummaryHtml()
     {
         if (Utils::init('ids') != '') {
@@ -259,6 +299,9 @@ class ObjectAjax extends BaseAjax
         }
     }
 
+    /**
+     * @throws CoreException
+     */
     public function removeImage()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -274,6 +317,9 @@ class ObjectAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function uploadImage()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();

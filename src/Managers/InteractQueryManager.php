@@ -51,6 +51,12 @@ class InteractQueryManager
     const CLASS_NAME = InteractQuery::class;
     const DB_CLASS_NAME = '`interactQuery`';
 
+    /**
+     * @param $_id
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byId($_id)
     {
         $values = array(
@@ -63,6 +69,13 @@ class InteractQueryManager
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param      $_query
+     * @param null $_interactDef_id
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byQuery($_query, $_interactDef_id = null)
     {
         $values = array(
@@ -78,6 +91,12 @@ class InteractQueryManager
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_interactDef_id
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byInteractDefId($_interactDef_id)
     {
         $values = array(
@@ -131,6 +150,11 @@ class InteractQueryManager
         return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_interactDef_id
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     */
     public static function removeByInteractDefId($_interactDef_id)
     {
         $values = array(
@@ -141,6 +165,12 @@ class InteractQueryManager
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_query
+     * @return array|mixed|InteractQuery|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function recognize($_query)
     {
         $_query = InteractDefManager::sanitizeQuery($_query);
@@ -255,6 +285,12 @@ class InteractQueryManager
         return $closest;
     }
 
+    /**
+     * @param $_query
+     * @param $_for
+     * @return array
+     * @throws \Exception
+     */
     public static function getQuerySynonym($_query, $_for)
     {
         $return = array();
@@ -276,6 +312,13 @@ class InteractQueryManager
         return $return;
     }
 
+    /**
+     * @param      $_type
+     * @param      $_query
+     * @param null $_data
+     * @return array
+     * @throws \Exception
+     */
     public static function findInQuery($_type, $_query, $_data = null)
     {
         $return = array();
@@ -454,6 +497,11 @@ class InteractQueryManager
         }
     }
 
+    /**
+     * @param $_string
+     * @param $_word
+     * @return false|int
+     */
     public static function autoInteractWordFind($_string, $_word)
     {
         return preg_match(
@@ -462,6 +510,12 @@ class InteractQueryManager
         );
     }
 
+    /**
+     * @param       $_query
+     * @param array $_parameters
+     * @return array|null
+     * @throws \Exception
+     */
     public static function pluginReply($_query, $_parameters = array())
     {
         try {
@@ -486,6 +540,12 @@ class InteractQueryManager
         return null;
     }
 
+    /**
+     * @param       $_query
+     * @param array $_parameters
+     * @return array|null
+     * @throws \Exception
+     */
     public static function warnMe($_query, $_parameters = array())
     {
         global $NEXTDOM_INTERNAL_CONFIG;
@@ -531,6 +591,10 @@ class InteractQueryManager
         }
     }
 
+    /**
+     * @param $_options
+     * @throws \NextDom\Exceptions\CoreException
+     */
     public static function warnMeExecute($_options)
     {
         $warnMeCmd = (isset($_options['reply_cmd'])) ? $_options['reply_cmd'] : ConfigManager::byKey('interact::warnme::defaultreturncmd');
@@ -552,6 +616,13 @@ class InteractQueryManager
         }
     }
 
+    /**
+     * @param       $_query
+     * @param array $_parameters
+     * @return array|bool|string|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function tryToReply($_query, $_parameters = array())
     {
         if (trim($_query) == '') {
@@ -655,6 +726,11 @@ class InteractQueryManager
         return $reply;
     }
 
+    /**
+     * @param        $_lastCmd
+     * @param string $_identifier
+     * @throws \Exception
+     */
     public static function addLastInteract($_lastCmd, $_identifier = 'unknown')
     {
         $last = CacheManager::byKey('interact::lastCmd::' . $_identifier);
@@ -664,6 +740,13 @@ class InteractQueryManager
         CacheManager::set('interact::lastCmd::' . $_identifier, str_replace('#', '', $_lastCmd), 300);
     }
 
+    /**
+     * @param       $_query
+     * @param array $_parameters
+     * @param null  $_lastCmd
+     * @return array|string|null
+     * @throws \Exception
+     */
     public static function contextualReply($_query, $_parameters = array(), $_lastCmd = null)
     {
         $return = '';
@@ -720,11 +803,22 @@ class InteractQueryManager
         return $return;
     }
 
+    /**
+     * @param $_replace
+     * @param $_by
+     * @param $_in
+     * @return mixed
+     */
     public static function replaceForContextual($_replace, $_by, $_in)
     {
         return str_replace(strtolower(Utils::sanitizeAccent($_replace)), strtolower(Utils::sanitizeAccent($_by)), str_replace($_replace, $_by, $_in));
     }
 
+    /**
+     * @param $_query
+     * @param $_parameters
+     * @return string
+     */
     public static function brainReply($_query, $_parameters)
     {
         global $PROFILE;
@@ -754,6 +848,11 @@ class InteractQueryManager
         return '';
     }
 
+    /**
+     * @param $_parameters
+     * @return mixed
+     * @throws \Exception
+     */
     public static function dontUnderstand($_parameters)
     {
         $notUnderstood = array(
@@ -770,6 +869,10 @@ class InteractQueryManager
         return $notUnderstood[$random];
     }
 
+    /**
+     * @return mixed
+     * @throws \Exception
+     */
     public static function replyOk()
     {
         $reply = array(
@@ -782,6 +885,11 @@ class InteractQueryManager
         return $reply[$random];
     }
 
+    /**
+     * @param $_params
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function doIn($_params)
     {
         $interactQuery = self::byId($_params['interactQuery_id']);

@@ -37,8 +37,8 @@ class DataStoreManagement extends BaseAbstractModal
 
 
         Utils::sendVarsToJS([
-            'dataStore_type' => Utils::init('type'),
-            'dataStore_link_id' => Utils::init('link_id', -1)
+            'dataStore_type'    => Utils::init('type'),
+            'dataStore_link_id' => Utils::init('link_id', -1),
         ]);
 
         return Render::getInstance()->get('/modals/dataStore.management.html.twig');

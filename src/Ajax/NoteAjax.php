@@ -26,20 +26,41 @@ use NextDom\Model\Entity\Note;
 
 class NoteAjax extends BaseAjax
 {
-    protected $NEEDED_RIGHTS = UserRight::ADMIN;
+    /**
+     * @var string
+     */
+    protected $NEEDED_RIGHTS     = UserRight::ADMIN;
+    /**
+     * @var bool
+     */
     protected $MUST_BE_CONNECTED = true;
+    /**
+     * @var bool
+     */
     protected $CHECK_AJAX_TOKEN = true;
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function all()
     {
         AjaxHelper::success(Utils::o2a(NoteManager::all()));
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function byId()
     {
         AjaxHelper::success(Utils::o2a(NoteManager::byId(Utils::init('id'))));
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function save()
     {
         $noteData = json_decode(Utils::init('note'), true);
@@ -60,6 +81,10 @@ class NoteAjax extends BaseAjax
         }
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function remove()
     {
         $note = NoteManager::byId(Utils::init('id'));

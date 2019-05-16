@@ -43,7 +43,6 @@ class HistoryController extends BaseController
      */
     public static function get(&$pageData): string
     {
-
         $pageData['historyDate'] = array(
             'start' => date('Y-m-d', strtotime(ConfigManager::byKey('history::defautShowPeriod') . ' ' . date('Y-m-d'))),
             'end' => date('Y-m-d'),

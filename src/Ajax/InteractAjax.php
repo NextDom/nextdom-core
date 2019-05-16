@@ -27,12 +27,28 @@ use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\InteractQueryManager;
 use NextDom\Model\Entity\InteractDef;
 
+/**
+ * Class InteractAjax
+ * @package NextDom\Ajax
+ */
 class InteractAjax extends BaseAjax
 {
+    /**
+     * @var string
+     */
     protected $NEEDED_RIGHTS = UserRight::ADMIN;
+    /**
+     * @var bool
+     */
     protected $MUST_BE_CONNECTED = true;
+    /**
+     * @var bool
+     */
     protected $CHECK_AJAX_TOKEN = true;
 
+    /**
+     * @throws \ReflectionException
+     */
     public function all()
     {
         $results = Utils::o2a(InteractDefManager::all());
@@ -55,6 +71,9 @@ class InteractAjax extends BaseAjax
         AjaxHelper::success($results);
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function byId()
     {
         $result = Utils::o2a(InteractDefManager::byId(Utils::init('id')));
@@ -63,6 +82,10 @@ class InteractAjax extends BaseAjax
         AjaxHelper::success(NextDomHelper::toHumanReadable($result));
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function save()
     {
         Utils::unautorizedInDemo();
@@ -78,12 +101,18 @@ class InteractAjax extends BaseAjax
         AjaxHelper::success(Utils::o2a($interact));
     }
 
+    /**
+     *
+     */
     public function regenerateInteract()
     {
         InteractDefManager::regenerateInteract();
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function remove()
     {
         Utils::unautorizedInDemo();
@@ -95,6 +124,9 @@ class InteractAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function changeState()
     {
         Utils::unautorizedInDemo();
@@ -107,6 +139,9 @@ class InteractAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function changeAllState()
     {
         Utils::unautorizedInDemo();
@@ -120,6 +155,9 @@ class InteractAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     *
+     */
     public function execute()
     {
         AjaxHelper::success(InteractQueryManager::tryToReply(Utils::init('query')));

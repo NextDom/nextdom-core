@@ -78,5 +78,4 @@ class Plan3DController extends BaseController
         return Render::getInstance()->get('/desktop/pages/plan3d.html.twig', $pageData);
     }
 
-
 }

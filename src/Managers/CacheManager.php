@@ -43,6 +43,9 @@ require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
 
 class CacheManager
 {
+    /**
+     * @var null
+     */
     private static $cacheSystem = null;
 
     /**
@@ -122,7 +125,7 @@ class CacheManager
                     $result['count']++;
                 }
             }
-        } else if ($engine == 'RedisCache') {
+        } elseif ($engine == 'RedisCache') {
             $result['count'] = self::$cacheSystem->getRedis()->dbSize();
         }
         if ($details) {
@@ -247,7 +250,8 @@ class CacheManager
     }
 
     /**
-     * TODO: Ouahhh
+     * TODO: Ouahhh :)
+     *
      * @return array
      */
     public static function search(): array
@@ -255,6 +259,9 @@ class CacheManager
         return array();
     }
 
+    /**
+     * @return string
+     */
     public static function getArchivePath()
     {
         return NEXTDOM_DATA . '/cache.tar.gz';
@@ -313,6 +320,8 @@ class CacheManager
 
     /**
      * Restore persisted cache
+     *
+     * @throws \Exception
      */
     public static function restore()
     {

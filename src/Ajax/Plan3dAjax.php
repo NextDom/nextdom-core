@@ -33,10 +33,23 @@ use ZipArchive;
 
 class Plan3dAjax extends BaseAjax
 {
-    protected $NEEDED_RIGHTS = UserRight::USER;
+    /**
+     * @var string
+     */
+    protected $NEEDED_RIGHTS     = UserRight::USER;
+    /**
+     * @var bool
+     */
     protected $MUST_BE_CONNECTED = true;
+    /**
+     * @var bool
+     */
     protected $CHECK_AJAX_TOKEN = true;
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function save()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -53,6 +66,9 @@ class Plan3dAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function plan3dHeader()
     {
         $return = array();
@@ -67,6 +83,10 @@ class Plan3dAjax extends BaseAjax
         AjaxHelper::success($return);
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function create()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -80,6 +100,10 @@ class Plan3dAjax extends BaseAjax
         AjaxHelper::success($plan3d->getHtml(Utils::init('version')));
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function get()
     {
         $plan3d = Plan3dManager::byId(Utils::init('id'));
@@ -91,6 +115,9 @@ class Plan3dAjax extends BaseAjax
         AjaxHelper::success($return);
     }
 
+    /**
+     *
+     */
     public function byName()
     {
         $plan3d = Plan3dManager::byName3dHeaderId(Utils::init('name'), Utils::init('plan3dHeader_id'));
@@ -100,6 +127,9 @@ class Plan3dAjax extends BaseAjax
         AjaxHelper::success($plan3d->getHtml());
     }
 
+    /**
+     * @throws CoreException
+     */
     public function remove()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -111,6 +141,9 @@ class Plan3dAjax extends BaseAjax
         AjaxHelper::success($plan3d->remove());
     }
 
+    /**
+     * @throws CoreException
+     */
     public function removeplan3dHeader()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -123,6 +156,9 @@ class Plan3dAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function allHeader()
     {
         $plan3dHeaders = Plan3dHeaderManager::all();
@@ -135,6 +171,10 @@ class Plan3dAjax extends BaseAjax
         AjaxHelper::success($return);
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function getplan3dHeader()
     {
         $plan3dHeader = Plan3dHeaderManager::byId(Utils::init('id'));
@@ -148,6 +188,10 @@ class Plan3dAjax extends BaseAjax
         AjaxHelper::success($return);
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function saveplan3dHeader()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -165,6 +209,9 @@ class Plan3dAjax extends BaseAjax
         AjaxHelper::success(Utils::o2a($plan3dHeader));
     }
 
+    /**
+     * @throws CoreException
+     */
     public function uploadModel()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();

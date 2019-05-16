@@ -41,7 +41,6 @@ use NextDom\Model\Entity\Cron;
 
 class CronManager
 {
-
     const CLASS_NAME = Cron::class;
     const DB_CLASS_NAME = '`cron`';
 

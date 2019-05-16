@@ -45,6 +45,12 @@ class InteractDefManager
     const CLASS_NAME = InteractDef::class;
     const DB_CLASS_NAME = '`interactDef`';
 
+    /**
+     * @param $_id
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byId($_id)
     {
         $values = array(
@@ -83,6 +89,11 @@ class InteractDefManager
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param null $_group
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     */
     public static function listGroup($_group = null)
     {
         $values = array();
@@ -96,6 +107,10 @@ class InteractDefManager
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL);
     }
 
+    /**
+     * @param $_text
+     * @return array
+     */
     public static function generateTextVariant($_text)
     {
         $return = array();
@@ -117,6 +132,12 @@ class InteractDefManager
         return $return;
     }
 
+    /**
+     * @param $_query
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function searchByQuery($_query)
     {
         $values = array(
@@ -128,6 +149,9 @@ class InteractDefManager
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @throws \Exception
+     */
     public static function regenerateInteract()
     {
         foreach (self::all() as $interactDef) {
@@ -135,6 +159,11 @@ class InteractDefManager
         }
     }
 
+    /**
+     * @param $_def
+     * @param $_query
+     * @return array
+     */
     public static function getTagFromQuery($_def, $_query)
     {
         $_def = self::sanitizeQuery(trim($_def));
@@ -164,6 +193,10 @@ class InteractDefManager
         return $options;
     }
 
+    /**
+     * @param $_query
+     * @return mixed|string|string[]|null
+     */
     public static function sanitizeQuery($_query)
     {
         $_query = str_replace(array("\'"), array("'"), $_query);
@@ -173,6 +206,10 @@ class InteractDefManager
         return $_query;
     }
 
+    /**
+     * @return array
+     * @throws \Exception
+     */
     public static function deadCmd()
     {
         $return = array();
@@ -201,6 +238,10 @@ class InteractDefManager
         return $return;
     }
 
+    /**
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     */
     public static function cleanInteract()
     {
         $list_id = array();
@@ -246,6 +287,11 @@ class InteractDefManager
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $searchPattern
+     * @return array
+     * @throws \Exception
+     */
     public static function searchByUse($searchPattern)
     {
         $return = array();
@@ -262,6 +308,12 @@ class InteractDefManager
         return $return;
     }
 
+    /**
+     * @param     $_text
+     * @param     $_synonymes
+     * @param int $_deep
+     * @return array
+     */
     public static function generateSynonymeVariante($_text, $_synonymes, $_deep = 0)
     {
         $return = array();

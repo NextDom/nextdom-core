@@ -39,6 +39,10 @@ use NextDom\Model\Entity\Note;
 
 require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
 
+/**
+ * Class NoteManager
+ * @package NextDom\Managers
+ */
 class NoteManager
 {
     /**

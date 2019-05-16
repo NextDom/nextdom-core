@@ -41,6 +41,12 @@ class Plan3dManager
     const CLASS_NAME = Plan3d::class;
     const DB_CLASS_NAME = '`plan3d`';
 
+    /**
+     * @param $_id
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byId($_id)
     {
         $values = array(
@@ -68,6 +74,13 @@ class Plan3dManager
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_link_type
+     * @param $_link_id
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byLinkTypeLinkId($_link_type, $_link_id)
     {
         $values = array(
@@ -81,6 +94,13 @@ class Plan3dManager
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_name
+     * @param $_plan3dHeader_id
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byName3dHeaderId($_name, $_plan3dHeader_id)
     {
         $values = array(
@@ -94,6 +114,14 @@ class Plan3dManager
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_link_type
+     * @param $_link_id
+     * @param $_plan3dHeader_id
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byLinkTypeLinkId3dHeaderId($_link_type, $_link_id, $_plan3dHeader_id)
     {
         $values = array(
@@ -109,6 +137,13 @@ class Plan3dManager
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_link_type
+     * @param $_link_id
+     * @param $_plan3dHeader_id
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     */
     public static function removeByLinkTypeLinkId3dHeaderId($_link_type, $_link_id, $_plan3dHeader_id)
     {
         $values = array(
@@ -123,6 +158,11 @@ class Plan3dManager
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function all()
     {
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
@@ -130,6 +170,12 @@ class Plan3dManager
         return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_search
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function searchByDisplay($_search)
     {
         $value = array(
@@ -141,6 +187,13 @@ class Plan3dManager
         return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param        $_search
+     * @param string $_not
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function searchByConfiguration($_search, $_not = '')
     {
         $value = array(

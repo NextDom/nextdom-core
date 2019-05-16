@@ -26,10 +26,23 @@ use NextDom\Managers\ListenerManager;
 
 class ListenerAjax extends BaseAjax
 {
-    protected $NEEDED_RIGHTS = UserRight::ADMIN;
+    /**
+     * @var string
+     */
+    protected $NEEDED_RIGHTS     = UserRight::ADMIN;
+    /**
+     * @var bool
+     */
     protected $MUST_BE_CONNECTED = true;
+    /**
+     * @var bool
+     */
     protected $CHECK_AJAX_TOKEN = true;
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function save()
     {
         Utils::unautorizedInDemo();
@@ -37,6 +50,9 @@ class ListenerAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function remove()
     {
         Utils::unautorizedInDemo();
@@ -48,6 +64,9 @@ class ListenerAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function all()
     {
         $listeners = Utils::o2a(ListenerManager::all());

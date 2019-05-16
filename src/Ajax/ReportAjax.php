@@ -25,10 +25,22 @@ use NextDom\Helpers\Utils;
 
 class ReportAjax extends BaseAjax
 {
-    protected $NEEDED_RIGHTS = UserRight::ADMIN;
+    /**
+     * @var string
+     */
+    protected $NEEDED_RIGHTS     = UserRight::ADMIN;
+    /**
+     * @var bool
+     */
     protected $MUST_BE_CONNECTED = true;
+    /**
+     * @var bool
+     */
     protected $CHECK_AJAX_TOKEN = true;
 
+    /**
+     *
+     */
     public function list()
     {
         $return = array();
@@ -39,6 +51,9 @@ class ReportAjax extends BaseAjax
         AjaxHelper::success($return);
     }
 
+    /**
+     *
+     */
     public function get()
     {
         $path = NEXTDOM_DATA . '/data/report/' . Utils::init('type') . '/' . Utils::init('id') . '/' . Utils::init('report');
@@ -49,6 +64,9 @@ class ReportAjax extends BaseAjax
         AjaxHelper::success($return);
     }
 
+    /**
+     * @throws CoreException
+     */
     public function remove()
     {
         $path = NEXTDOM_DATA . '/data/report/' . Utils::init('type') . '/' . Utils::init('id') . '/' . Utils::init('report');
@@ -61,6 +79,9 @@ class ReportAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     *
+     */
     public function removeAll()
     {
         $path = NEXTDOM_DATA . '/data/report/' . Utils::init('type') . '/' . Utils::init('id') . '/';

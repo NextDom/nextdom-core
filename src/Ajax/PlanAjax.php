@@ -31,10 +31,23 @@ use NextDom\Model\Entity\PlanHeader;
 
 class PlanAjax extends BaseAjax
 {
-    protected $NEEDED_RIGHTS = UserRight::USER;
+    /**
+     * @var string
+     */
+    protected $NEEDED_RIGHTS     = UserRight::USER;
+    /**
+     * @var bool
+     */
     protected $MUST_BE_CONNECTED = true;
+    /**
+     * @var bool
+     */
     protected $CHECK_AJAX_TOKEN = true;
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function save()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -51,6 +64,9 @@ class PlanAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function execute()
     {
         $plan = PlanManager::byId(Utils::init('id'));
@@ -60,6 +76,9 @@ class PlanAjax extends BaseAjax
         AjaxHelper::success($plan->execute());
     }
 
+    /**
+     *
+     */
     public function planHeader()
     {
         $return = array();
@@ -75,6 +94,10 @@ class PlanAjax extends BaseAjax
         AjaxHelper::success($return);
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function create()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -88,6 +111,9 @@ class PlanAjax extends BaseAjax
         AjaxHelper::success($plan->getHtml(Utils::init('version')));
     }
 
+    /**
+     * @throws CoreException
+     */
     public function copy()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -99,6 +125,10 @@ class PlanAjax extends BaseAjax
         AjaxHelper::success($plan->copy()->getHtml(Utils::init('version', 'dplan')));
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function get()
     {
         $plan = PlanManager::byId(Utils::init('id'));
@@ -108,6 +138,9 @@ class PlanAjax extends BaseAjax
         AjaxHelper::success(NextDomHelper::toHumanReadable(Utils::o2a($plan)));
     }
 
+    /**
+     * @throws CoreException
+     */
     public function remove()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -119,6 +152,9 @@ class PlanAjax extends BaseAjax
         AjaxHelper::success($plan->remove());
     }
 
+    /**
+     * @throws CoreException
+     */
     public function removePlanHeader()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -131,6 +167,9 @@ class PlanAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function allHeader()
     {
         $planHeaders = PlanHeaderManager::all();
@@ -143,6 +182,10 @@ class PlanAjax extends BaseAjax
         AjaxHelper::success($return);
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function getPlanHeader()
     {
         $planHeader = PlanHeaderManager::byId(Utils::init('id'));
@@ -157,6 +200,10 @@ class PlanAjax extends BaseAjax
         AjaxHelper::success($return);
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function savePlanHeader()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -174,6 +221,10 @@ class PlanAjax extends BaseAjax
         AjaxHelper::success(Utils::o2a($planHeader));
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function copyPlanHeader()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -185,6 +236,9 @@ class PlanAjax extends BaseAjax
         AjaxHelper::success(Utils::o2a($planHeader->copy(Utils::init('name'))));
     }
 
+    /**
+     * @throws CoreException
+     */
     public function removeImageHeader()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -200,6 +254,9 @@ class PlanAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function uploadImage()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -240,6 +297,9 @@ class PlanAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function uploadImagePlan()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();

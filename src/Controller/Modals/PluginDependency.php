@@ -36,8 +36,6 @@ class PluginDependency extends BaseAbstractModal
      */
     public static function get(): string
     {
-
-
         $pageData = [];
         $pluginId = Utils::init('plugin_id');
         Utils::sendVarToJs('plugin_id', $pluginId);

@@ -38,20 +38,26 @@ use NextDom\Exceptions\CoreException;
 use NextDom\Model\Entity\Cron;
 
 class ConsistencyManager {
-    private static $defaultSummary = array(
-        'security'    => array('key' => 'security',    'name' => 'Alerte',      'calcul' => 'sum', 'icon' => '<i class="icon nextdom-alerte2"></i>',         'unit' => '', 'count' => 'binary', 'allowDisplayZero' => false),
-        'motion'      => array('key' => 'motion',      'name' => 'Mouvement',   'calcul' => 'sum', 'icon' => '<i class="icon nextdom-mouvement"></i>',       'unit' => '', 'count' => 'binary', 'allowDisplayZero' => false),
-        'door'        => array('key' => 'door',        'name' => 'Porte',       'calcul' => 'sum', 'icon' => '<i class="icon nextdom-porte-ouverte"></i>',   'unit' => '', 'count' => 'binary', 'allowDisplayZero' => false),
-        'windows'     => array('key' => 'windows',     'name' => 'Fenêtre',     'calcul' => 'sum', 'icon' => '<i class="icon nextdom-fenetre-ouverte"></i>', 'unit' => '', 'count' => 'binary', 'allowDisplayZero' => false),
-        'shutter'     => array('key' => 'shutter',     'name' => 'Volet',       'calcul' => 'sum', 'icon' => '<i class="icon nextdom-volet-ouvert"></i>',    'unit' => '', 'count' => 'binary', 'allowDisplayZero' => false),
-        'light'       => array('key' => 'light',       'name' => 'Lumière',     'calcul' => 'sum', 'icon' => '<i class="icon nextdom-lumiere-on"></i>',      'unit' => '', 'count' => 'binary', 'allowDisplayZero' => false),
-        'outlet'      => array('key' => 'outlet',      'name' => 'Prise',       'calcul' => 'sum', 'icon' => '<i class="icon nextdom-prise"></i>',           'unit' => '', 'count' => 'binary', 'allowDisplayZero' => false),
-        'temperature' => array('key' => 'temperature', 'name' => 'Température', 'calcul' => 'avg', 'icon' => '<i class="icon divers-thermometer31"></i>',    'unit' => '°C',                    'allowDisplayZero' => true),
-        'humidity'    => array('key' => 'humidity',    'name' => 'Humidité',    'calcul' => 'avg', 'icon' => '<i class="fa fa-tint"></i>',                   'unit' => '%',                     'allowDisplayZero' => true),
-        'luminosity'  => array('key' => 'luminosity',  'name' => 'Luminosité',  'calcul' => 'avg', 'icon' => '<i class="icon meteo-soleil"></i>',            'unit' => 'lx',                    'allowDisplayZero' => false),
-        'power'       => array('key' => 'power',       'name' => 'Puissance',   'calcul' => 'sum', 'icon' => '<i class="fa fa-bolt"></i>',                   'unit' => 'W',                     'allowDisplayZero' => false),
-    );
+    /**
+     * @var array
+     */
+    private static $defaultSummary = [
+        'security'    => [ 'key' => 'security', 'name' => 'Alerte', 'calcul' => 'sum', 'icon' => '<i class="icon nextdom-alerte2"></i>', 'unit' => '', 'count' => 'binary', 'allowDisplayZero' => false ],
+        'motion'      => [ 'key' => 'motion', 'name' => 'Mouvement', 'calcul' => 'sum', 'icon' => '<i class="icon nextdom-mouvement"></i>', 'unit' => '', 'count' => 'binary', 'allowDisplayZero' => false ],
+        'door'        => [ 'key' => 'door', 'name' => 'Porte', 'calcul' => 'sum', 'icon' => '<i class="icon nextdom-porte-ouverte"></i>', 'unit' => '', 'count' => 'binary', 'allowDisplayZero' => false ],
+        'windows'     => [ 'key' => 'windows', 'name' => 'Fenêtre', 'calcul' => 'sum', 'icon' => '<i class="icon nextdom-fenetre-ouverte"></i>', 'unit' => '', 'count' => 'binary', 'allowDisplayZero' => false ],
+        'shutter'     => [ 'key' => 'shutter', 'name' => 'Volet', 'calcul' => 'sum', 'icon' => '<i class="icon nextdom-volet-ouvert"></i>', 'unit' => '', 'count' => 'binary', 'allowDisplayZero' => false ],
+        'light'       => [ 'key' => 'light', 'name' => 'Lumière', 'calcul' => 'sum', 'icon' => '<i class="icon nextdom-lumiere-on"></i>', 'unit' => '', 'count' => 'binary', 'allowDisplayZero' => false ],
+        'outlet'      => [ 'key' => 'outlet', 'name' => 'Prise', 'calcul' => 'sum', 'icon' => '<i class="icon nextdom-prise"></i>', 'unit' => '', 'count' => 'binary', 'allowDisplayZero' => false ],
+        'temperature' => [ 'key' => 'temperature', 'name' => 'Température', 'calcul' => 'avg', 'icon' => '<i class="icon divers-thermometer31"></i>', 'unit' => '°C', 'allowDisplayZero' => true ],
+        'humidity'    => [ 'key' => 'humidity', 'name' => 'Humidité', 'calcul' => 'avg', 'icon' => '<i class="fa fa-tint"></i>', 'unit' => '%', 'allowDisplayZero' => true ],
+        'luminosity'  => [ 'key' => 'luminosity', 'name' => 'Luminosité', 'calcul' => 'avg', 'icon' => '<i class="icon meteo-soleil"></i>', 'unit' => 'lx', 'allowDisplayZero' => false ],
+        'power'       => [ 'key' => 'power', 'name' => 'Puissance', 'calcul' => 'sum', 'icon' => '<i class="fa fa-bolt"></i>', 'unit' => 'W', 'allowDisplayZero' => false ],
+    ];
 
+    /**
+     * @throws CoreException
+     */
     public static function checkConsistency()
     {
         try {
@@ -68,6 +74,9 @@ class ConsistencyManager {
         }
     }
 
+    /**
+     * @return array
+     */
     private static function getDefaultCrons() {
         return array(
             "nextdom" => array(
@@ -160,6 +169,9 @@ class ConsistencyManager {
         );
     }
 
+    /**
+     * @throws \Exception
+     */
     private static function cleanWidgetCache()
     {
         foreach (EqLogicManager::all() as $c_item) {
@@ -170,6 +182,9 @@ class ConsistencyManager {
         }
     }
 
+    /**
+     *
+     */
     private static function saveObjects()
     {
         try {
@@ -180,6 +195,9 @@ class ConsistencyManager {
         }
     }
 
+    /**
+     * @throws \Exception
+     */
     private static function resetCommandsActionID()
     {
         foreach (CmdManager::all() as $c_cmd) {
@@ -195,6 +213,9 @@ class ConsistencyManager {
     }
 
 
+    /**
+     * @throws \Exception
+     */
     private static function ensureConfiguration()
     {
         $summary = ConfigManager::byKey("object:summary");
@@ -208,6 +229,9 @@ class ConsistencyManager {
         }
     }
 
+    /**
+     * @throws CoreException
+     */
     private static function deleteDeprecatedCrons()
     {
         $cronTasksToRemove = [
@@ -226,6 +250,9 @@ class ConsistencyManager {
         }
     }
 
+    /**
+     *
+     */
     private static function ensureCrons()
     {
         foreach (self::getDefaultCrons() as $c_class => $c_data) {
@@ -250,13 +277,15 @@ class ConsistencyManager {
         }
     }
 
+    /**
+     *
+     */
     private static function ensureUserFunctionExists()
     {
         $source = sprintf("%s/data/php/user.function.class.sample.php", NEXTDOM_DATA);
         $dest   = sprintf("%s/data/php/user.function.class.php",        NEXTDOM_DATA);
 
-        if ((false == file_exists($dest)) &&
-            (true  == file_exists($source))) {
+        if ((false == file_exists($dest)) && (true  == file_exists($source))) {
             copy($source, $dest);
         }
     }

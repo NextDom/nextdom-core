@@ -30,10 +30,24 @@ use NextDom\Model\Entity\Scenario;
 
 class DataStoreAjax extends BaseAjax
 {
+    /**
+     * @var string
+     */
     protected $NEEDED_RIGHTS = UserRight::USER;
+
+    /**
+     * @var bool
+     */
     protected $MUST_BE_CONNECTED = true;
+
+    /**
+     * @var bool
+     */
     protected $CHECK_AJAX_TOKEN = true;
 
+    /**
+     * @throws CoreException
+     */
     public function remove()
     {
         $dataStore = DataStoreManager::byId(Utils::init('id'));
@@ -44,6 +58,9 @@ class DataStoreAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function save()
     {
         if (Utils::init('id') == '') {
@@ -62,6 +79,9 @@ class DataStoreAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function all()
     {
         $dataStores = DataStoreManager::byTypeLinkId(Utils::init('type'));
@@ -107,4 +127,5 @@ class DataStoreAjax extends BaseAjax
         }
         AjaxHelper::success($return);
     }
+
 }

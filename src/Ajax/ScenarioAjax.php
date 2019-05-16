@@ -32,10 +32,22 @@ use NextDom\Model\Entity\Scenario;
 
 class ScenarioAjax extends BaseAjax
 {
-    protected $NEEDED_RIGHTS = UserRight::USER;
+    /**
+     * @var string
+     */
+    protected $NEEDED_RIGHTS     = UserRight::USER;
+    /**
+     * @var bool
+     */
     protected $MUST_BE_CONNECTED = true;
+    /**
+     * @var bool
+     */
     protected $CHECK_AJAX_TOKEN = true;
 
+    /**
+     * @throws CoreException
+     */
     public function changeState()
     {
         $scenario = ScenarioManager::byId(Utils::init('id'));
@@ -67,6 +79,9 @@ class ScenarioAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws \Exception
+     */
     public function listScenarioHtml()
     {
         $return = array();
@@ -78,6 +93,10 @@ class ScenarioAjax extends BaseAjax
         AjaxHelper::success($return);
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function setOrder()
     {
         Utils::unautorizedInDemo();
@@ -96,6 +115,10 @@ class ScenarioAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function testExpression()
     {
         $return = array();
@@ -109,11 +132,17 @@ class ScenarioAjax extends BaseAjax
         AjaxHelper::success($return);
     }
 
+    /**
+     *
+     */
     public function getTemplate()
     {
         AjaxHelper::success(ScenarioManager::getTemplate());
     }
 
+    /**
+     * @throws CoreException
+     */
     public function convertToTemplate()
     {
         $scenario = ScenarioManager::byId(Utils::init('id'));
@@ -135,6 +164,9 @@ class ScenarioAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function removeTemplate()
     {
         Utils::unautorizedInDemo();
@@ -145,6 +177,9 @@ class ScenarioAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function loadTemplateDiff()
     {
         $path = NEXTDOM_DATA . '/config/scenario';
@@ -192,6 +227,10 @@ class ScenarioAjax extends BaseAjax
         AjaxHelper::success($return);
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function applyTemplate()
     {
         Utils::unautorizedInDemo();
@@ -235,6 +274,9 @@ class ScenarioAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function all()
     {
         $scenarios = ScenarioManager::all();
@@ -247,6 +289,10 @@ class ScenarioAjax extends BaseAjax
         AjaxHelper::success($return);
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function saveAll()
     {
         Utils::unautorizedInDemo();
@@ -264,6 +310,9 @@ class ScenarioAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function autoCompleteGroup()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -274,6 +323,9 @@ class ScenarioAjax extends BaseAjax
         AjaxHelper::success($return);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function toHtml()
     {
         if (Utils::init('id') == 'all' || is_json(Utils::init('id'))) {
@@ -300,6 +352,9 @@ class ScenarioAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function remove()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -315,6 +370,9 @@ class ScenarioAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function emptyLog()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -331,6 +389,10 @@ class ScenarioAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function copy()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -342,6 +404,10 @@ class ScenarioAjax extends BaseAjax
         AjaxHelper::success(Utils::o2a($scenario->copy(Utils::init('name'))));
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function get()
     {
         $scenario = ScenarioManager::byId(Utils::init('id'));
@@ -359,6 +425,10 @@ class ScenarioAjax extends BaseAjax
         AjaxHelper::success($return);
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function save()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -411,6 +481,9 @@ class ScenarioAjax extends BaseAjax
         AjaxHelper::success(Utils::o2a($scenario_db));
     }
 
+    /**
+     * @throws \Exception
+     */
     public function actionToHtml()
     {
         if (Utils::init('params') != '' && is_json(Utils::init('params'))) {
@@ -434,6 +507,9 @@ class ScenarioAjax extends BaseAjax
         AjaxHelper::success(ScenarioExpressionManager::getExpressionOptions(Utils::init('expression'), Utils::init('option')));
     }
 
+    /**
+     * @throws CoreException
+     */
     public function templateupload()
     {
         Utils::unautorizedInDemo();

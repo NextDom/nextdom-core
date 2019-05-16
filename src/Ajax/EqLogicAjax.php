@@ -28,10 +28,26 @@ use NextDom\Managers\ObjectManager;
 
 class EqLogicAjax extends BaseAjax
 {
+    /**
+     * @var string
+     */
     protected $NEEDED_RIGHTS = UserRight::USER;
+
+    /**
+     * @var bool
+     */
     protected $MUST_BE_CONNECTED = true;
+
+
+    /**
+     * @var bool
+     */
     protected $CHECK_AJAX_TOKEN = true;
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function getEqLogicObject()
     {
         $object = ObjectManager::byId(Utils::init('object_id'));
@@ -54,6 +70,10 @@ class EqLogicAjax extends BaseAjax
         AjaxHelper::success($return);
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function byId()
     {
         $eqLogic = EqLogicManager::byId(Utils::init('id'));
@@ -63,6 +83,10 @@ class EqLogicAjax extends BaseAjax
         AjaxHelper::success(Utils::o2a($eqLogic));
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function toHtml()
     {
         if (Utils::init('ids') != '') {
@@ -94,6 +118,10 @@ class EqLogicAjax extends BaseAjax
         }
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function htmlAlert()
     {
         $return = array();
@@ -111,6 +139,9 @@ class EqLogicAjax extends BaseAjax
         AjaxHelper::success($return);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function htmlBattery()
     {
         $return = array();
@@ -134,23 +165,35 @@ class EqLogicAjax extends BaseAjax
         AjaxHelper::success($return);
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function listByType()
     {
         AjaxHelper::success(Utils::a2o(EqLogicManager::byType(Utils::init('type'))));
     }
 
+    /**
+     * @throws \Exception
+     */
     public function listByObjectAndCmdType()
     {
         $object_id = (Utils::init('object_id') != -1) ? Utils::init('object_id') : null;
         AjaxHelper::success(EqLogicManager::listByObjectAndCmdType($object_id, Utils::init('typeCmd'), Utils::init('subTypeCmd')));
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function listByObject()
     {
         $object_id = (Utils::init('object_id') != -1) ? Utils::init('object_id') : null;
         AjaxHelper::success(Utils::o2a(EqLogicManager::byObjectId($object_id, Utils::init('onlyEnable', true), Utils::init('onlyVisible', false), Utils::init('eqType_name', null), Utils::init('logicalId', null), Utils::init('orderByName', false))));
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function listByTypeAndCmdType()
     {
         $results = EqLogicManager::listByTypeAndCmdType(Utils::init('type'), Utils::init('typeCmd'), Utils::init('subTypeCmd'));
@@ -170,6 +213,9 @@ class EqLogicAjax extends BaseAjax
         AjaxHelper::success($return);
     }
 
+    /**
+     * @throws CoreException
+     */
     public function setIsEnable()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -186,6 +232,10 @@ class EqLogicAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function setOrder()
     {
         Utils::unautorizedInDemo();
@@ -204,6 +254,9 @@ class EqLogicAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function removes()
     {
         Utils::unautorizedInDemo();
@@ -221,6 +274,9 @@ class EqLogicAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function setIsVisibles()
     {
         Utils::unautorizedInDemo();
@@ -239,6 +295,9 @@ class EqLogicAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     */
     public function setIsEnables()
     {
         Utils::unautorizedInDemo();
@@ -257,6 +316,10 @@ class EqLogicAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function simpleSave()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -275,6 +338,10 @@ class EqLogicAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function copy()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -289,6 +356,9 @@ class EqLogicAjax extends BaseAjax
         AjaxHelper::success(Utils::o2a($eqLogic->copy(Utils::init('name'))));
     }
 
+    /**
+     * @throws CoreException
+     */
     public function remove()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -304,6 +374,10 @@ class EqLogicAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function get()
     {
         $typeEqLogic = Utils::init('type');
@@ -319,6 +393,10 @@ class EqLogicAjax extends BaseAjax
         AjaxHelper::success(NextDomHelper::toHumanReadable($return));
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function save()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -399,6 +477,10 @@ class EqLogicAjax extends BaseAjax
         AjaxHelper::success(null);
     }
 
+    /**
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function getAlert()
     {
         $alerts = array();
@@ -410,4 +492,5 @@ class EqLogicAjax extends BaseAjax
         }
         AjaxHelper::success($alerts);
     }
+
 }

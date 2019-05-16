@@ -42,6 +42,7 @@ use NextDom\Model\Entity\EqLogic;
 
 class CmdManager
 {
+
     const CLASS_NAME = Cmd::class;
     const DB_CLASS_NAME = '`cmd`';
 

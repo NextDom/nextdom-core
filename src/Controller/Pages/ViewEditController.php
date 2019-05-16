@@ -45,5 +45,4 @@ class ViewEditController extends BaseController
         return Render::getInstance()->get('/desktop/pages/view_edit.html.twig', $pageData);
     }
 
-
 }

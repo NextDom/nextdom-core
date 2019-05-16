@@ -26,8 +26,17 @@ use NextDom\Market\NextDomMarket;
 
 class NextDomMarketAjax extends BaseAjax
 {
-    protected $NEEDED_RIGHTS = UserRight::ADMIN;
+    /**
+     * @var string
+     */
+    protected $NEEDED_RIGHTS     = UserRight::ADMIN;
+    /**
+     * @var bool
+     */
     protected $MUST_BE_CONNECTED = true;
+    /**
+     * @var bool
+     */
     protected $CHECK_AJAX_TOKEN = true;
 
     /**
@@ -69,7 +78,6 @@ class NextDomMarketAjax extends BaseAjax
      */
     private function refreshList($sources, $force)
     {
-        $result = false;
         if (is_array($sources)) {
             $result = true;
             foreach ($sources as $source) {
@@ -105,6 +113,7 @@ class NextDomMarketAjax extends BaseAjax
      * @param mixed $data Données en fonction du paramètre
      *
      * @return array|bool Information demandée
+     * @throws \Exception
      */
     public function get()
     {

@@ -38,8 +38,6 @@ class RealtimeController extends BaseController
      */
     public static function get(&$pageData): string
     {
-
-
         $pageData['JS_VARS']['realtime_name'] = Utils::init('log', 'event');
         $pageData['JS_VARS']['log_default_search'] = Utils::init('search', '');
 

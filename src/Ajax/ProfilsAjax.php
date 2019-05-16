@@ -23,10 +23,22 @@ use NextDom\Helpers\Utils;
 
 class ProfilsAjax extends BaseAjax
 {
-    protected $NEEDED_RIGHTS = UserRight::USER;
+    /**
+     * @var string
+     */
+    protected $NEEDED_RIGHTS     = UserRight::USER;
+    /**
+     * @var bool
+     */
     protected $MUST_BE_CONNECTED = true;
+    /**
+     * @var bool
+     */
     protected $CHECK_AJAX_TOKEN = true;
 
+    /**
+     *
+     */
     public function removeImage()
     {
         $uploaddir = sprintf("%s/public/img/profils", NEXTDOM_ROOT);
@@ -36,6 +48,9 @@ class ProfilsAjax extends BaseAjax
         AjaxHelper::success(unlink($path));
     }
 
+    /**
+     * @throws \NextDom\Exceptions\CoreException
+     */
     public function imageUpload()
     {
         $uploadDir = sprintf("%s/public/img/profils", NEXTDOM_ROOT);

@@ -38,7 +38,6 @@ namespace {
 
     define('NEXTDOM_ROOT', realpath(__DIR__ . '/..'));
 
-
     if (file_exists(NEXTDOM_ROOT . '/core/config/common.config.php')) {
         require_once NEXTDOM_ROOT . '/core/config/common.config.php';
     }

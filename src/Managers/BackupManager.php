@@ -111,10 +111,11 @@ class BackupManager
      *
      * Last output should not be removed since it act as a marker in ajax calls
      *
-     * @param bool $file path to backup archive, when empty, use last available backup
-     * @return bool false when error occurs
+     * @param string $file
+     * @return bool
+     * @throws CoreException
      */
-    public static function restoreBackup($file = '') 
+    public static function restoreBackup($file = '')
     {
         $backupDir  = self::getBackupDirectory();
         $startTime  = strtotime('now');
@@ -204,8 +205,9 @@ class BackupManager
     /**
      * Restore a backup from file
      *
-     * @param string $file Backup file path
-     * @param bool $background Start backup task in background
+     * @param string $file
+     * @param bool   $background
+     * @throws CoreException
      */
     public static function restore(string $file = '', bool $background = false)
     {
@@ -279,10 +281,9 @@ class BackupManager
      *
      * @param string $backupDir backup root directory
      * @param string $order sort result by 'newest' or 'oldest' first
-     * @throws CoreException if cannot stat one of the backup files
      * @retrun array of file object
      */
-    public static function getBackupFileInfo($backupDir, $order = "newest") 
+    public static function getBackupFileInfo($backupDir, $order = "newest")
     {
         $pattern = sprintf("%s/*.gz", $backupDir);
         // 1.
@@ -320,7 +321,7 @@ class BackupManager
      * @throws CoreException when no archive is found
      * @return string archive file path
      */
-    public static function getLastBackupFilePath($backupDir, $order = "newest") 
+    public static function getLastBackupFilePath($backupDir, $order = "newest")
     {
         $files = self::getBackupFileInfo($backupDir, $order);
 
@@ -339,7 +340,7 @@ class BackupManager
      * @param string $backupDir backup root directory
      * @throws \Exception
      */
-    public static function rotateBackups(string $backupDir) 
+    public static function rotateBackups(string $backupDir)
     {
         $maxDays         = ConfigManager::byKey('backup::keepDays');
         $maxSizeInBytes  = ConfigManager::byKey('backup::maxSize') * 1024 * 1024;
@@ -361,10 +362,11 @@ class BackupManager
     /**
      * Trigger remote upload for all available repos
      *
-     * @param string $path path to backup archive
-     * @retrun bool true is everything went fine
+     * @param string $path
+     * @return bool
+     * @throws \Exception
      */
-    public static function sendRemoteBackup(string $path) 
+    public static function sendRemoteBackup(string $path)
     {
         $repos = UpdateManager::listRepo();
         foreach ($repos as $c_key => $c_val) {
@@ -388,7 +390,7 @@ class BackupManager
      * @throws CoreException if backup directory cannot be created
      * @retrun string backup root directory
      */
-    public static function getBackupDirectory() 
+    public static function getBackupDirectory()
     {
         $dir = ConfigManager::byKey('backup::path');
         if ("/" != substr($dir, 0, 1)) {
@@ -469,8 +471,9 @@ class BackupManager
     /**
      * Computes backup filename from nextdom's name and current datetime
      *
-     * @param string $name current nextdom name, default given by ConfigManager
-     * @returns string backup filename
+     * @param null $name
+     * @return string
+     * @throws \Exception
      */
     public static function getBackupFilename($name = null): string
     {
@@ -527,7 +530,7 @@ class BackupManager
      * Load given file in mysql database
      *
      * @param string $file path to file to load
-     * @throw CoreException when a mysql error occurs
+     * @throws CoreException when a mysql error occurs
      */
     private static function loadSQLFromFile($file)
     {
@@ -550,7 +553,7 @@ class BackupManager
      * Extracts backup archive to a temporary folder
      *
      * @param string $file path to backup archive
-     * @throw CoreException when error on reading archive or creating temporary dir
+     * @throws CoreException when error on reading archive or creating temporary dir
      * @return string path to generated temporary directory
      */
     private static function extractArchive($file)
@@ -585,7 +588,7 @@ class BackupManager
      * @param string $tmpDir extracted backup root directory
      * @throws CoreException when error occurs
      */
-    private static function restoreDatabase($tmpDir) 
+    private static function restoreDatabase($tmpDir)
     {
         $backupFile  = sprintf("%s/DB_backup.sql", $tmpDir);
 
@@ -610,7 +613,7 @@ class BackupManager
      *
      * @param string $tmpDir extracted backup root directory
      */
-    private static function restoreJeedomConfig(string $tmpDir) 
+    private static function restoreJeedomConfig(string $tmpDir)
     {
         $commonBackup  = sprintf("%s/common.config.php",              $tmpDir);
         $commonConfig  = sprintf("%s/core/config/common.config.php",  NEXTDOM_ROOT);
@@ -626,7 +629,6 @@ class BackupManager
             }
         }
     }
-
 
     /**
      * Restore www-data owner and 775 permissions on plugin directory
@@ -659,7 +661,7 @@ class BackupManager
      * @param string $tmpDir extracted backup root directory
      * @throws CoreException
      */
-    private static function restorePlugins($tmpDir) 
+    private static function restorePlugins($tmpDir)
     {
         $plugingDirs = glob(sprintf("%s/plugins/*", $tmpDir), GLOB_ONLYDIR);
         $pluginRoot  = sprintf("%s/plugins", NEXTDOM_ROOT);
@@ -688,7 +690,10 @@ class BackupManager
         }
     }
 
-    private static function updateConfig() 
+    /**
+     * @throws \Exception
+     */
+    private static function updateConfig()
     {
         ConfigManager::save('hardware_name', '');
         $cache = CacheManager::byKey('nextdom::isCapable::sudo');
