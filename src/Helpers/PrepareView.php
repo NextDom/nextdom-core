@@ -180,10 +180,10 @@ class PrepareView
             } else {
                 if (self::userCanUseRoute($controllerRoute)) {
                     $pageData = [];
-                    $pageData['JS_POOL'] = [];
+                    $pageData['JS_POOL']     = [];
                     $pageData['JS_END_POOL'] = [];
-                    $pageData['CSS_POOL'] = [];
-                    $pageData['JS_VARS'] = [];
+                    $pageData['CSS_POOL']    = [];
+                    $pageData['JS_VARS']     = [];
                     $pageData['content'] = self::getContentFromControllerRouteData($controllerRoute, $pageData);
                     Render::getInstance()->show('/layouts/ajax_content.html.twig', $pageData);
                 }
@@ -230,7 +230,7 @@ class PrepareView
         global $language;
 
         $pageData = [];
-        $pageData['JS_POOL'] = [];
+        $pageData['JS_POOL']  = [];
         $pageData['CSS_POOL'] = [];
 
         $language = $configs['language'];
@@ -248,18 +248,18 @@ class PrepareView
         self::initHeaderData($pageData, $configs);
 
         $pageData['JS_VARS'] = [
-            'user_id' => UserManager::getStoredUser()->getId(),
-            'user_isAdmin' => AuthentificationHelper::isConnectedAsAdmin(),
-            'user_login' => UserManager::getStoredUser()->getLogin(),
-            'nextdom_Welcome' => $configs['nextdom::Welcome'],
+            'user_id'             => UserManager::getStoredUser()->getId(),
+            'user_isAdmin'        => AuthentificationHelper::isConnectedAsAdmin(),
+            'user_login'          => UserManager::getStoredUser()->getLogin(),
+            'nextdom_Welcome'     => $configs['nextdom::Welcome'],
             'nextdom_waitSpinner' => $configs['nextdom::waitSpinner'],
-            'notify_status' => $configs['notify::status'],
-            'notify_position' => $configs['notify::position'],
-            'notify_timeout' => $configs['notify::timeout'],
-            'widget_size' => $configs['widget::size'],
-            'widget_margin' => $configs['widget::margin'],
-            'widget_padding' => $configs['widget::padding'],
-            'widget_radius' => $configs['widget::radius']
+            'notify_status'       => $configs['notify::status'],
+            'notify_position'     => $configs['notify::position'],
+            'notify_timeout'      => $configs['notify::timeout'],
+            'widget_size'         => $configs['widget::size'],
+            'widget_margin'       => $configs['widget::margin'],
+            'widget_padding'      => $configs['widget::padding'],
+            'widget_radius'       => $configs['widget::radius'],
         ];
         $pageData['JS_VARS_RAW'] = [
             'userProfils' => Utils::getArrayToJQueryJson(UserManager::getStoredUser()->getOptions()),
@@ -294,7 +294,7 @@ class PrepareView
     {
         global $language;
 
-        if (!in_array(Utils::init(GetParams::PAGE), array('custom', 'backup', 'cron', 'connection', 'log', 'database', 'editor', 'system'))) {
+        if (!in_array(Utils::init(GetParams::PAGE), [ 'custom', 'backup', 'cron', 'connection', 'log', 'database', 'editor', 'system' ])) {
             $_GET[GetParams::PAGE] = 'system';
         }
         $homeLink = 'index.php?v=d&p=dashboard';
@@ -312,14 +312,14 @@ class PrepareView
         self::initHeaderData($pageData, $configs);
         $render = Render::getInstance();
         $pageData['CSS'] = $render->getCssHtmlTag('/public/css/nextdom.css');
-        $pageData['varToJs'] = Utils::getVarsToJS(array(
-            'userProfils' => UserManager::getStoredUser()->getOptions(),
-            'user_id' => UserManager::getStoredUser()->getId(),
-            'user_isAdmin' => AuthentificationHelper::isConnectedAsAdmin(),
-            'user_login' => UserManager::getStoredUser()->getLogin(),
-            'nextdom_firstUse' => $configs['nextdom::firstUse'], // TODO sans doute inutile
-            'serverTZoffsetMin' => Utils::getTZoffsetMin()
-        ));
+        $pageData['varToJs'] = Utils::getVarsToJS([
+            'userProfils'       => UserManager::getStoredUser()->getOptions(),
+            'user_id'           => UserManager::getStoredUser()->getId(),
+            'user_isAdmin'      => AuthentificationHelper::isConnectedAsAdmin(),
+            'user_login'        => UserManager::getStoredUser()->getLogin(),
+            'nextdom_firstUse'  => $configs['nextdom::firstUse'], // TODO sans doute inutile
+            'serverTZoffsetMin' => Utils::getTZoffsetMin(),
+        ]);
         $pageData['JS'] = '';
 
         $pageData['MENU'] = $render->get('commons/menu_rescue.html.twig');
@@ -344,10 +344,17 @@ class PrepareView
         $homePage = explode('::', UserManager::getStoredUser()->getOptions('homePage', 'core::dashboard'));
         if (count($homePage) == 2) {
             if ($homePage[0] == 'core') {
-                $homeLink = 'index.php?' . GetParams::VIEW_TYPE . '=' . ViewType::DESKTOP_VIEW . '&' . GetParams::PAGE . '=' . $homePage[1];
+                $homeLink = 'index.php?' . http_build_query([
+                        GetParams::VIEW_TYPE => ViewType::DESKTOP_VIEW,
+                        GetParams::PAGE      => $homePage[1],
+                    ]);
             } else {
                 // TODO : m ???
-                $homeLink = 'index.php?' . GetParams::VIEW_TYPE . '=' . ViewType::DESKTOP_VIEW . '&m=' . $homePage[0] . '&' . GetParams::PAGE . '=' . $homePage[1];
+                $homeLink = 'index.php?' . http_build_query([
+                        GetParams::VIEW_TYPE => ViewType::DESKTOP_VIEW,
+                        'm'                  => $homePage[0],
+                        GetParams::PAGE      => $homePage[1],
+                    ]);
             }
             if ($homePage[1] == 'plan' && UserManager::getStoredUser()->getOptions('defaultPlanFullScreen') == 1) {
                 $homeLink .= '&fullscreen=1';
@@ -443,27 +450,27 @@ class PrepareView
      */
     private static function initMenu(&$pageData, $currentPlugin)
     {
-        $pageData['IS_ADMIN'] = AuthentificationHelper::isConnectedAsAdmin();
-        $pageData['CAN_SUDO'] = NextDomHelper::isCapable('sudo');
+        $pageData['IS_ADMIN']         = AuthentificationHelper::isConnectedAsAdmin();
+        $pageData['CAN_SUDO']         = NextDomHelper::isCapable('sudo');
         $pageData['MENU_NB_MESSAGES'] = MessageManager::nbMessage();
-        $pageData['NOTIFY_STATUS'] = ConfigManager::byKey('notify::status');
+        $pageData['NOTIFY_STATUS']    = ConfigManager::byKey('notify::status');
         if ($pageData['IS_ADMIN']) {
             $pageData['MENU_NB_UPDATES'] = UpdateManager::nbNeedUpdate();
         }
         $pageData['MENU_JEEOBJECT_TREE'] = ObjectManager::buildTree(null, false);
-        $pageData['MENU_VIEWS_LIST'] = ViewManager::all();
-        $pageData['MENU_PLANS_LIST'] = PlanHeaderManager::all();
-        $pageData['MENU_PLANS3D_LIST'] = Plan3dHeaderManager::all();
+        $pageData['MENU_VIEWS_LIST']     = ViewManager::all();
+        $pageData['MENU_PLANS_LIST']     = PlanHeaderManager::all();
+        $pageData['MENU_PLANS3D_LIST']   = Plan3dHeaderManager::all();
         if (is_object($currentPlugin) && $currentPlugin->getIssue()) {
             $pageData['MENU_CURRENT_PLUGIN_ISSUE'] = $currentPlugin->getIssue();
         }
         $pageData['MENU_HTML_GLOBAL_SUMMARY'] = ObjectManager::getGlobalHtmlSummary();
-        $pageData['PRODUCT_IMAGE'] = ConfigManager::byKey('product_image');
-        $pageData['profilsUser'] = UserManager::getStoredUser();
-        $pageData['NEXTDOM_VERSION'] = NextDomHelper::getNextdomVersion();
-        $pageData['JEEDOM_VERSION'] = NextDomHelper::getJeedomVersion();
-        $pageData['MENU_PLUGIN_HELP'] = Utils::init('m');
-        $pageData['MENU_PLUGIN_PAGE'] = Utils::init('p');
+        $pageData['PRODUCT_IMAGE']            = ConfigManager::byKey('product_image');
+        $pageData['profilsUser']              = UserManager::getStoredUser();
+        $pageData['NEXTDOM_VERSION']          = NextDomHelper::getNextdomVersion();
+        $pageData['JEEDOM_VERSION']           = NextDomHelper::getJeedomVersion();
+        $pageData['MENU_PLUGIN_HELP']         = Utils::init('m');
+        $pageData['MENU_PLUGIN_PAGE']         = Utils::init('p');
     }
 
     /**
