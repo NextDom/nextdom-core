@@ -10,6 +10,8 @@
 </template>
 
 <script>
+import utils from "../libs/utils.js";
+
 export default {
   name: "RoomWidget",
   data: function() {
@@ -33,14 +35,7 @@ export default {
   },
   computed: {
     roomIcon: function() {
-      let iconToShow = "fas fa-times";
-      if (this.room.icon !== "") {
-        const iconRegexResult = this.room.icon.match(/.*class="(.*?)"/i);
-        if (iconRegexResult.length > 1) {
-          iconToShow = iconRegexResult[1];
-        }
-      }
-      return iconToShow;
+      return utils.extractIcon(this.room.icon, "fas fa-times");
     }
   }
 };

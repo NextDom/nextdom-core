@@ -37,21 +37,35 @@ summary_get_default_room_tree:
   path: '/summary/get_default_room_tree'
   controller: NextDom\Rest\SummaryRest::getDefaultRoomTree
   methods: GET
-get_changes:
+changes_get:
   path: '/changes/get/{lastUpdate}'
   controller: NextDom\Rest\ChangesRest::get
   methods: GET
   requirements:
     lastUpdate: \d+
-get_cmd_by_eqlogic:
+cmd_get_by_eqlogic:
   path: '/cmd/eqlogic/{eqLogicId}'
   controller: NextDom\Rest\CmdRest::byEqLogic
   methods: GET
   requirements:
     eqLogicId: \d+
-exec_cmd:
+cmd_exec:
   path: '/cmd/exec/{cmdId}'
   controller: NextDom\Rest\CmdRest::exec
   methods: POST
   requirements:
     cmdId: \d+
+scenario_get_all:
+  path: '/scenario/all'
+  controller: NextDom\Rest\ScenarioRest::getAll
+  methods: GET
+scenario_get_all_by_group:
+  path: '/scenario/all/by_group'
+  controller: NextDom\Rest\ScenarioRest::getAllByGroup
+  methods: GET
+scenario_launch:
+  path: '/scenario/launch/{scenarioId}'
+  controller: NextDom\Rest\ScenarioRest::launch
+  methods: POST
+  requirements:
+    scenarioId: \d+

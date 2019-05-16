@@ -30,7 +30,7 @@ use NextDom\Model\Entity\EqLogic;
 class EqLogicRest
 {
     /**
-     * Get all eqLogic
+     * Get all eqLogics
      *
      * @throws \Exception
      */
@@ -43,7 +43,7 @@ class EqLogicRest
     /**
      * Prepare result for response
      *
-     * @param EqLogic[] $eqLogics Array of eqLogic to convert
+     * @param EqLogic[] $eqLogics Array of eqLogics to convert
      *
      * @return array
      */
