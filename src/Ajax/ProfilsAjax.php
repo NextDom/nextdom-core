@@ -39,7 +39,7 @@ class ProfilsAjax extends BaseAjax
     public function imageUpload()
     {
         $uploadDir = sprintf("%s/public/img/profils", NEXTDOM_ROOT);
-        Utils::readUploadedFile($_FILES, "images", $uploadDir, 8, array('.png', '.jpg', '.jpeg'));
+        Utils::readUploadedFile($_FILES, "images", $uploadDir, 8, array(".png", ".jpg"));
         AjaxHelper::success();
     }
 }

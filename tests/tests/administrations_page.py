@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run all tests of administration pages
+"""Run all tests of administrations page
 """
 import unittest
 import sys

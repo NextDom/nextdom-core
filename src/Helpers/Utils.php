@@ -1146,7 +1146,7 @@ class Utils
      * @throws CoreException when checks fail
      * @return string path to modes file
      */
-    public static function readUploadedFile($files, $key, $destDir, $maxSizeMB, $extensions, $cleaner = null)
+    static public function readUploadedFile($files, $key, $destDir, $maxSizeMB, $extensions, $cleaner = null)
     {
         if (false == isset($files[$key])) {
             $message = __('Aucun fichier trouvé. Vérifiez le paramètre PHP (post size limit)');
