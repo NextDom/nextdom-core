@@ -1,6 +1,9 @@
 <template>
   <mu-grid-tile class="widget" v-bind:cols="tileWidth" v-bind:rows="tileHeight">
     <span slot="title">{{ eqlogic.name }}</span>
+    <mu-button slot="action" icon v-if="batteryIcon">
+      <mu-icon v-bind:value="batteryIcon"></mu-icon>
+    </mu-button>
     <mu-button slot="action" icon v-on:click="executeCmd(refreshCmdId)" v-if="refreshCmdId">
       <mu-icon value="refresh"></mu-icon>
     </mu-button>
@@ -32,6 +35,7 @@
         v-bind:is="getCmdComponent(cmd.id)"
         v-on:executeAction="executeAction"
         v-on:executeCmd="executeCmd"
+        v-on:setBatteryInfo="setBatteryInfo"
         v-on:setRefreshCommand="setRefreshCommand"
       ></component>
     </div>
@@ -41,6 +45,7 @@
 <script>
 import templates from "@/libs/nextdomTemplates.js";
 import communication from "@/libs/communication.js";
+import EventsBus from "@/libs/eventsBus";
 
 export default {
   name: "Widget",
@@ -48,7 +53,8 @@ export default {
     return {
       iconsCount: 0,
       refreshCmdId: null,
-      bigWidget: false
+      bigWidget: false,
+      batteryIcon: false
     };
   },
   props: {
@@ -146,10 +152,26 @@ export default {
      */
     executeCmd(cmdId, options) {
       if (options === undefined) {
-        communication.post("/api/cmd/exec/" + cmdId);
+        communication.post("/api/cmd/exec/" + cmdId, undefined, errorData => {
+          EventsBus.$emit("showError", errorData.error);
+        });
       } else {
-        communication.postWithOptions("/api/cmd/exec/" + cmdId, options);
+        communication.postWithOptions(
+          "/api/cmd/exec/" + cmdId,
+          options,
+          undefined,
+          errorData => {
+            EventsBus.$emit("showError", errorData.error);
+          }
+        );
       }
+    },
+    /**
+     * Set battery information on widget
+     * @param {batteryIcon} string Material icon
+     */
+    setBatteryInfo(batteryIcon) {
+      this.batteryIcon = batteryIcon;
     },
     /**
      * Get component of the command
@@ -200,7 +222,8 @@ export default {
   text-align: center;
   margin-bottom: 0.5rem;
 }
-.cmd::after {
+.cmd::after,
+.cmds-data::before {
   content: "";
   clear: both;
   display: block;

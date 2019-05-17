@@ -1,5 +1,5 @@
 <template>
-  <mu-container id="login">
+  <mu-container id="global login">
     <h1>Login</h1>
     <mu-form v-bind:model="form">
       <mu-form-item label="Identifiant">

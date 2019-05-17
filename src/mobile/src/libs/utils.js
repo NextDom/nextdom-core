@@ -1,4 +1,7 @@
 export default {
+  /**
+   * Extract icon class data from html content
+   */
   extractIcon(htmlIcon, defaultIcon) {
     if (htmlIcon !== "") {
       const iconRegexResult = htmlIcon.match(/.*class="(.*?)"/i);

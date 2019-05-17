@@ -24,3 +24,11 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+button {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+</style>

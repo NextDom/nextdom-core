@@ -1,12 +1,10 @@
 <template>
-  <div class="door-state-cmd cmd icon">
-    <i class="icon" v-bind:class="icon"></i>
-  </div>
+  <div class="battery-state-cmd cmd icon"></div>
 </template>
 
 <script>
 export default {
-  name: "DoorStateCmd",
+  name: "BatteryStateCmd",
   props: {
     cmd: null
   },
@@ -27,11 +25,12 @@ export default {
      * Called on update for change icon
      */
     update() {
-      if (this.cmd.cmdValue) {
-        this.icon = "nextdom-porte-ouverte";
-      } else {
-        this.icon = "nextdom-porte-ferme";
+      // TODO: Vérifier les valeurs
+      let batteryIcon = "battery_full";
+      if (this.cmd.value < 30) {
+        batteryIcon = "battery_alert";
       }
+      this.$emit("setBatteryInfo", batteryIcon);
     }
   }
 };

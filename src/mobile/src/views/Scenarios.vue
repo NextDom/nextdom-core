@@ -1,5 +1,5 @@
 <template>
-  <mu-container class="scenarios">
+  <mu-container class="global scenarios">
     <h1>Scénarios</h1>
     <mu-list toggle-nested v-if="scenarios !== null">
       <mu-list-item
@@ -48,6 +48,9 @@ export default {
     };
   },
   computed: {
+    /**
+     * Get groups list with no-group first
+     */
     sortedGroupsList: function() {
       if (this.scenarios !== null) {
         let groupsList = Object.keys(this.scenarios).sort((a, b) => {
@@ -67,8 +70,8 @@ export default {
     }
   },
   mounted() {
-    // Get dashboard data
     this.$emit("setCurrentView", "/scenarios");
+    // Get dashboard data
     communication.get("/api/scenario/all/by_group", result => {
       // Restore last list state
       for (let groupName in result) {
@@ -85,6 +88,9 @@ export default {
     });
   },
   methods: {
+    /**
+     * Called when group visibility changes
+     */
     toggleItem: function(groupName) {
       this.groupsListState[groupName] = !this.groupsListState[groupName];
       localStorage.setItem(
@@ -92,9 +98,17 @@ export default {
         this.groupsListState[groupName]
       );
     },
+    /**
+     * Launch scenario
+     * @param {scenarioId} Id of the scenario to launch
+     */
     launch: function(scenarioId) {
       communication.post("/api/scenario/launch/" + scenarioId);
     },
+    /**
+     * Get scenario icon
+     * @param {scenario} Scenario object
+     */
     scenarioIcon: function(scenario) {
       return utils.extractIcon(scenario.displayIcon, "fas fa-film");
     }

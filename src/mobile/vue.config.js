@@ -4,6 +4,7 @@ module.exports = {
     config.resolve.symlinks(false);
   },
   devServer: {
-    proxy: "http://localhost:80/"
+//    proxy: "http://10.0.0.100:80/"
+    proxy: "http://localhost:808/"
   }
 };

@@ -70,18 +70,33 @@ class CmdRest
             $cmdRow['value'] = $cmd->getValue();
             $cmdRow['visible'] = $cmd->getIsVisible();
             $cmdRow['unite'] = $cmd->getUnite();
-            $cmdRow['state'] = '';
-            if ($cmdRow['type'] === 'info') {
-                try {
-                    $cmdRow['state'] = $cmd->execCmd();
-                    if ($cmdRow['subType'] === 'numeric' && empty($cmdRow['state'])) {
-                        $cmdRow['state'] = 0;
-                    }
-                } catch (\Exception $e) {
-
-                }
+            $cmdRow = array_merge($cmdRow, self::getSpecialData($cmd));
+            if (empty($cmdRow['value'])) {
+                $cmdRow['value'] = 0;
             }
             $result[] = $cmdRow;
+        }
+        return $result;
+    }
+
+    /**
+     * Get specials data depends of type
+     * @param Cmd $cmd Command with data
+     *
+     * @return array Specials data
+     */
+    private static function getSpecialData($cmd)
+    {
+        $result = [];
+        if ($cmd->getType() === 'info') {
+            try {
+                $result['state'] = $cmd->execCmd();
+                if ($cmd->getSubType() === 'numeric' && empty($result['state'])) {
+                    $result['state'] = 0;
+                }
+            } catch (\Exception $e) {
+
+            }
         }
         return $result;
     }

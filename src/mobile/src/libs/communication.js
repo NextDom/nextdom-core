@@ -40,31 +40,47 @@ export default {
    * Ajax put query
    * @param {String} url API url
    * @param {Function} callbackFunc  Function called on response
+   * @param {Function} errorCallbackFunc  Function called on error
    */
-  post(url, callbackFunc) {
-    axios.post(url).then(response => {
-      if (callbackFunc !== undefined) {
-        callbackFunc(response);
-      }
-    });
+  post(url, callbackFunc, errorCallbackFunc) {
+    axios
+      .post(url)
+      .then(response => {
+        if (callbackFunc !== undefined) {
+          callbackFunc(response);
+        }
+      })
+      .catch(error => {
+        if (errorCallbackFunc !== undefined) {
+          errorCallbackFunc(error.response.data);
+        }
+      });
   },
   /**
    * Ajax put query with post options
    * @param {String} url API url
    * @param {Object} postOptions Options to send
    * @param {Function} callbackFunc  Function called on response
+   * @param {Function} errorCallbackFunc  Function called on error
    */
-  postWithOptions(url, postOptions, callbackFunc) {
+  postWithOptions(url, postOptions, callbackFunc, errorCallbackFunc) {
     // Transform options needed for $_POST filled
     let data = new FormData();
     for (let postOptionsKey in postOptions) {
       data.append(postOptionsKey, postOptions[postOptionsKey]);
     }
-    axios.post(url, data).then(response => {
-      if (callbackFunc !== undefined) {
-        callbackFunc(response);
-      }
-    });
+    axios
+      .post(url, data)
+      .then(response => {
+        if (callbackFunc !== undefined) {
+          callbackFunc(response);
+        }
+      })
+      .catch(error => {
+        if (errorCallbackFunc !== undefined) {
+          errorCallbackFunc(error.response.data);
+        }
+      });
   },
   /**
    * Connect to API and get JWT token

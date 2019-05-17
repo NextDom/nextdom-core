@@ -3,7 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 import MuseUI from "muse-ui";
 import "material-icons";
-import "muse-ui/dist/muse-ui.css";
+import "./assets/theme";
 
 require("./assets/icons/animal/style.css");
 require("./assets/icons/divers/style.css");

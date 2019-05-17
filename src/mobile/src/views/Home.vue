@@ -1,5 +1,5 @@
 <template>
-  <mu-container class="home">
+  <mu-container class="global home">
     <h1>Résumé</h1>
     <Summary v-bind:roomsSummary="roomsSummary"></Summary>
   </mu-container>

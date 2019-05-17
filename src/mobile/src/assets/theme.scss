@@ -1,0 +1,35 @@
+$primary: #253840;
+$secondary: #a6978a;
+$success: #586e73;
+$warning: #fdd835;
+$info: #f2ede4;
+$error: #f44336;
+$track: #757575;
+$textPrimary: #ffffff;
+$textSecondary: rgba(255, 255, 255, 0.7);
+$textAlternate: #303030;
+$textDisabled: rgba(255, 255, 255, 0.3);
+$textHint: rgba(255, 255, 255, 0.3);
+$divider: rgba(255, 255, 255, 0.3);
+$backgroundPaper: #424242;
+$backgroundChip: #616161;
+$backgroundDefault: #cccccc;
+
+:export {
+  primary: $primary;
+  secondary: $secondary;
+  success: $success;
+  warning: $warning;
+  info: $info;
+  error: $error;
+  track: $track;
+  textPrimary: $textPrimary;
+  textSecondary: $textSecondary;
+  textAlternate: $textAlternate;
+  textDisabled: $textDisabled;
+  textHint: $textHint;
+  divider: $divider;
+  backgroundPaper: $backgroundPaper;
+  backgroundChip: $backgroundChip;
+  backgroundDefault: $backgroundDefault;
+}

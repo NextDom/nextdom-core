@@ -55,7 +55,7 @@ try {
     }
 }
 catch (Exception $e) {
-    var_dump($e->getMessage());
+    echo $e->getMessage();
 }
 
 // API answers
@@ -94,7 +94,7 @@ if ($authenticator->isAuthenticated()) {
     catch (MethodNotAllowedException $methodNotAllowedException) {
         // Bad method
         $response->setStatusCode(404);
-        $response->setData(['error' => $methodNotAllowedException->getMessage()]);
+        $response->setData(['error' => 'Method not allowed.']);
     }
     catch (\TypeError $e) {
         // Bad arguments

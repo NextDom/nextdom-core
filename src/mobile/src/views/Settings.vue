@@ -1,9 +1,8 @@
 <template>
-  <mu-container class="settings">
+  <mu-container class="global settings">
     <h1>Paramètres</h1>
-    <mu-button flat color="primary">
-      <mu-icon left value="lock_open"></mu-icon>
-      {{ Déconnexion }}
+    <mu-button flat id="disconnect-button" color="primary">
+      <mu-icon left value="lock_open"></mu-icon>Déconnexion
     </mu-button>
   </mu-container>
 </template>
@@ -19,6 +18,9 @@ export default {
     this.$emit("setCurrentView", "/settings");
   },
   methods: {
+    /**
+     * Disconnect user
+     */
     disconnect: function() {
       communication.disconnect();
     }
@@ -27,5 +29,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "@/assets/theme.scss";
+
+#disconnect-button {
+  width: 100%;
+}
 </style>
 

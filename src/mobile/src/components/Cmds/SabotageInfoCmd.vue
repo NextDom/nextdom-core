@@ -1,8 +1,8 @@
 <template>
-  <div class="sabotage-info-cmd cmd">
+  <mu-container class="sabotage-info-cmd cmd">
     <span class="pull-left">Sabotage</span>
     <i class="fas pull-right" v-bind:class="icon"></i>
-  </div>
+  </mu-container>
 </template>
 
 <script>

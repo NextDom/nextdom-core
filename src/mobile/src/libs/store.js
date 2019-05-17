@@ -8,7 +8,8 @@ export const store = new Vuex.Store({
   state: {
     showedCmds: [],
     actionsList: {},
-    cmdsComponentsData: {}
+    cmdsComponentsData: {},
+    eqLogicsList: {}
   },
   mutations: {
     /**
@@ -41,7 +42,8 @@ export const store = new Vuex.Store({
         ) {
           componentData = {
             component: "RefreshCmd",
-            icon: false
+            icon: false,
+            button: false
           };
         }
       }
@@ -51,6 +53,7 @@ export const store = new Vuex.Store({
           componentData = templates["cmds"][cmd.type][cmd.subType]["no_data"];
         } catch {}
       }
+      //      if (componentData === undefined) {
       if (componentData === undefined) {
         let toShow =
           "No component for command Id : " +
@@ -122,6 +125,24 @@ export const store = new Vuex.Store({
           payload.cmdId;
       }
     }
+    /**
+     * Set visibility of an eqLogic
+     * @param {*} state Store access
+     * @param {*} payload EqLogicId and visibility {eqLogicId, visibility}
+     */
+    /*
+    setEqLogicVisibility(state, payload) {
+      if (!state.eqLogicsList.hasOwnProperty(payload.eqLogicId)) {
+        let eqLogicData = {
+          visibility: payload.visibility
+        }
+        state.eqLogicsList[payload.eqLogicId] = eqLogicData;
+      }
+      else {
+        state.eqLogicsList[payload.eqLogicId]['visibility'] = payload.visibility;
+      }
+    }
+    */
   },
   getters: {
     /**

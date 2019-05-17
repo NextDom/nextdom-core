@@ -1,8 +1,8 @@
 <template>
-  <div class="consumption-info-cmd cmd">
+  <mu-container class="consumption-info-cmd cmd">
     <span class="pull-left">Consommation :</span>
     <span class="pull-right">{{ cmd.state }} {{ cmd.unite }}</span>
-  </div>
+  </mu-container>
 </template>
 
 <script>

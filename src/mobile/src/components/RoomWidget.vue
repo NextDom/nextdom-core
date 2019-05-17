@@ -2,8 +2,8 @@
   <mu-grid-tile class="room-widget">
     <span slot="title">{{ room.name }}</span>
     <router-link v-bind:to="{ name: 'rooms', params: { roomId: room.id }}">
-      <div class="icon" v-bind:class="{inactive: !isVisible}">
-        <i v-bind:class="roomIcon"></i>
+      <div class="icon">
+        <i v-bind:class="[isVisible ? 'visible' : 'invisible', roomIcon]"></i>
       </div>
     </router-link>
   </mu-grid-tile>
@@ -11,6 +11,7 @@
 
 <script>
 import utils from "../libs/utils.js";
+import theme from "muse-ui/lib/theme";
 
 export default {
   name: "RoomWidget",
@@ -32,6 +33,7 @@ export default {
     if (isVisibleStoredValue !== null) {
       this.isVisible = isVisibleStoredValue === "true" ? true : false;
     }
+    console.log(theme);
   },
   computed: {
     roomIcon: function() {
@@ -40,8 +42,9 @@ export default {
   }
 };
 </script>
+<style scoped lang="scss">
+@import "../assets/theme.scss";
 
-<style scoped>
 .icon > i {
   width: 100%;
   display: block;
@@ -49,10 +52,19 @@ export default {
   font-size: 5rem;
   padding: 1rem 0.5rem 0 0.5rem;
 }
+.visible {
+  color: $primary;
+}
+
+.invisible {
+  color: $secondary;
+}
+/*
 a {
-  color: black;
+  color: $primary;
 }
 .icon.inactive i {
-  color: #888;
+  color: $secondary;
 }
+*/
 </style>

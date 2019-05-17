@@ -1,8 +1,8 @@
 <template>
-  <div class="power-info-cmd cmd">
+  <mu-container class="power-info-cmd cmd">
     <span class="pull-left">Puissance :</span>
     <span class="pull-right">{{ cmd.state }} {{ cmd.unite }}</span>
-  </div>
+  </mu-container>
 </template>
 
 <script>

@@ -1,18 +1,18 @@
 <template>
-  <div class="door-state-cmd cmd icon">
+  <div class="lock-state-cmd cmd icon">
     <i class="icon" v-bind:class="icon"></i>
   </div>
 </template>
 
 <script>
 export default {
-  name: "DoorStateCmd",
+  name: "LockStateCmd",
   props: {
     cmd: null
   },
   data: function() {
     return {
-      icon: "nextdom-porte-ferme"
+      icon: "nextdom-lock-ferme"
     };
   },
   mounted() {
@@ -27,10 +27,10 @@ export default {
      * Called on update for change icon
      */
     update() {
-      if (this.cmd.cmdValue) {
-        this.icon = "nextdom-porte-ouverte";
+      if (this.cmd.state) {
+        this.icon = "nextdom-lock-ferme";
       } else {
-        this.icon = "nextdom-porte-ferme";
+        this.icon = "nextdom-lock-ouvert";
       }
     }
   }

@@ -1,8 +1,8 @@
 <template>
-  <div class="presence-state-cmd cmd">
+  <mu-container class="presence-state-cmd cmd">
     <span class="pull-left">{{ cmd.name }}</span>
     <i class="fas pull-right" v-bind:class="icon"></i>
-  </div>
+  </mu-container>
 </template>
 
 <script>

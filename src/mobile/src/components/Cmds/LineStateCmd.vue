@@ -1,8 +1,8 @@
 <template>
-  <div class="line-state-cmd cmd">
+  <mu-container class="line-state-cmd cmd">
     <span class="pull-left">{{ cmd.name }}</span>
     <i class="fas pull-right" v-bind:class="icon"></i>
-  </div>
+  </mu-container>
 </template>
 
 <script>
@@ -33,3 +33,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+i {
+  margin-top: 4px;
+}
+</style>

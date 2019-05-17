@@ -1,9 +1,8 @@
 <template>
-  <div class="slider-cmd cmd">
-    <mu-container>
-      <mu-slider class="slider" v-model="preparedValue" @change="sliderChange"></mu-slider>
-    </mu-container>
-  </div>
+  <mu-container class="slider-cmd cmd">
+    <span>{{ cmd.name }}</span>
+    <mu-slider class="slider" v-model="cmd.state" @change="sliderChange"></mu-slider>
+  </mu-container>
 </template>
 
 <script>
@@ -17,14 +16,15 @@ export default {
       return parseInt(this.cmd.state);
     }
   },
-  mounted() {},
+  mounted() {
+    this.cmd.state = parseInt(this.cmd.state);
+  },
   methods: {
     /**
      * Read slider change
      * TODO: Surement des sliders avec un pas spécial à gérer
      */
     sliderChange(value) {
-      console.log(value);
       this.$emit("executeCmd", this.cmd.id, { slider: value });
     }
   }

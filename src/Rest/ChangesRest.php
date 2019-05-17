@@ -39,8 +39,6 @@ class ChangesRest
      */
     public static function get(int $lastUpdate)
     {
-        sleep(3);
-        return json_decode('{"datetime":1557440034.2021,"result":[{"datetime":1557440034.2021,"name":"cmd::update","option":{"cmd_id":"60","value":73.5,"display_value":73.5,"valueDate":"2019-05-10 00:13:54","collectDate":"2019-05-10 00:13:54","alertLevel":"none"}}]}', true);
         return EventManager::changes($lastUpdate, 59);
     }
 
