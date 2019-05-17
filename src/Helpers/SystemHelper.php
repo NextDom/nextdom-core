@@ -362,4 +362,22 @@ class SystemHelper
         system($cmd, $status);
         return ($status == 0);
     }
+
+    /**
+     *
+     */
+    public static function consistency() {
+        LogHelper::clear('consistency');
+        $cmd = __DIR__ . '/../../install/consistency.php';
+        $cmd .= ' >> ' . LogHelper::getPathToLog('consistency') . ' 2>&1 &';
+        self::php($cmd, true);
+    }
+
+    /**
+     *
+     */
+    public static function cleanFileSystemRight() {
+        //nothing to do for NextDom
+    }
+
 }

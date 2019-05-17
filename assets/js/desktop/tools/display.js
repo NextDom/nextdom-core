@@ -33,10 +33,32 @@
 * @Email   <admin@nextdom.org>
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
+setTimeout(function(){
+    setHeaderPosition(false);
+},100);
 
-$('.displayListContainer').packery();
+$('#bt_displayCollapse').on('click',function(){
+   $('#accordionDisplay .panel-collapse').each(function () {
+      if (!$(this).hasClass("in")) {
+          $(this).css({'height' : '' });
+          $(this).addClass("in");
+      }
+   });
+   $('#bt_displayCollapse').hide();
+   $('#bt_displayUncollapse').show()
+});
 
- $( ".eqLogicSortable" ).sortable({
+$('#bt_displayUncollapse').on('click',function(){
+   $('#accordionDisplay .panel-collapse').each(function () {
+      if ($(this).hasClass("in")) {
+          $(this).removeClass("in");
+      }
+   });
+   $('#bt_displayUncollapse').hide();
+   $('#bt_displayCollapse').show()
+});
+
+$( ".eqLogicSortable" ).sortable({
   connectWith: ".eqLogicSortable",
   stop: function (event, ui) {
     var eqLogics = [];
@@ -57,11 +79,11 @@ $('.displayListContainer').packery();
             $( ".eqLogicSortable" ).sortable( "cancel" );
         }
     });
-}
+  }
 }).disableSelection();
 
 
- $( ".cmdSortable" ).sortable({
+$( ".cmdSortable" ).sortable({
   stop: function (event, ui) {
     var cmds = [];
     var eqLogic = ui.item.closest('.eqLogic');
@@ -79,7 +101,7 @@ $('.displayListContainer').packery();
             notify("Erreur", error.message, 'error');
         }
     });
-}
+  }
 }).disableSelection();
 
  $( ".eqLogic" ).on('dblclick',function(e){
@@ -98,28 +120,32 @@ $('.displayListContainer').packery();
    $('#md_modal').load('index.php?v=d&modal=object.configure&object_id=' + $(this).closest('.object').attr('data-id')).dialog('open');
 });
 
- $('.showCmd').on('click',function(){
-    if($(this).hasClass('fa-chevron-right')){
-        $(this).removeClass('fa-chevron-right').addClass('fa-chevron-down');
-        $(this).closest('.eqLogic').find('.cmdSortable').show();
-    }else{
-        $(this).removeClass('fa-chevron-down').addClass('fa-chevron-right');
-        $(this).closest('.eqLogic').find('.cmdSortable').hide();
-    }
-     $('.displayListContainer').packery();
+$('.openObject').on('click',function(){
+    loadPage($(this).attr('data-id'));
 });
 
- $('.showEqLogic').on('click',function(){
-    if($(this).hasClass('fa-chevron-right')){
-        $(this).removeClass('fa-chevron-right').addClass('fa-chevron-down');
-        $(this).closest('.object').find('.eqLogic').show();
-    }else{
-        $(this).removeClass('fa-chevron-down').addClass('fa-chevron-right');
-        $(this).closest('.object').find('.eqLogic').hide();
-    }
+$('.showCmd').on('click',function(){
+  if($(this).hasClass('fa-chevron-right')){
+      $(this).removeClass('fa-chevron-right').addClass('fa-chevron-down');
+      $(this).closest('.eqLogic').find('.cmdSortable').show();
+  }else{
+      $(this).removeClass('fa-chevron-down').addClass('fa-chevron-right');
+      $(this).closest('.eqLogic').find('.cmdSortable').hide();
+  }
+   $('.displayListContainer').packery();
 });
 
- $('#cb_actifDisplay').on('change',function(){
+$('.showEqLogic').on('click',function(){
+  if($(this).hasClass('fa-chevron-right')){
+      $(this).removeClass('fa-chevron-right').addClass('fa-chevron-down');
+      $(this).closest('.object').find('.eqLogic').show();
+  }else{
+      $(this).removeClass('fa-chevron-down').addClass('fa-chevron-right');
+      $(this).closest('.object').find('.eqLogic').hide();
+  }
+});
+
+$('#cb_actifDisplay').on('change',function(){
     if($(this).value() == 1){
         $('.eqLogic[data-enable=0]').show();
     }else{
@@ -127,17 +153,25 @@ $('.displayListContainer').packery();
     }
 });
 
- $( ".cmd" ).on('dblclick',function(){
-     $('#md_modal').dialog({title: "{{Configuration de la commande}}"});
-     $('#md_modal').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).attr('data-id')).dialog('open');
- });
+$('#cb_visibleDisplay').on('change',function(){
+    if($(this).value() == 1){
+        $('.eqLogic[data-visible=0]').show();
+    }else{
+        $('.eqLogic[data-visible=0]').hide();
+    }
+});
 
- $('.configureCmd').on('click',function(){
+$( ".cmd" ).on('dblclick',function(){
+   $('#md_modal').dialog({title: "{{Configuration de la commande}}"});
+   $('#md_modal').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).attr('data-id')).dialog('open');
+});
+
+$('.configureCmd').on('click',function(){
    $('#md_modal').dialog({title: "{{Configuration de la commande}}"});
    $('#md_modal').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).closest('.cmd').attr('data-id')).dialog('open');
 });
 
- $('.cb_selEqLogic').on('change',function(){
+$('.cb_selEqLogic').on('change',function(){
     var found = false;
     $('.cb_selEqLogic').each(function(){
         if($(this).value() == 1){
@@ -153,9 +187,10 @@ $('.displayListContainer').packery();
         $('.bt_setIsVisible').hide();
         $('.bt_setIsEnable').hide();
     }
+    setHeaderPosition(false);
 });
 
- $('#bt_removeEqlogic').on('click',function(){
+$('#bt_removeEqlogic').on('click',function(){
     bootbox.confirm('{{Etes-vous sûr de vouloir supprimer tous ces équipements ?}}', function (result) {
         if (result) {
             var eqLogics = [];
@@ -177,7 +212,7 @@ $('.displayListContainer').packery();
     });
 });
 
- $('.bt_setIsVisible').on('click',function(){
+$('.bt_setIsVisible').on('click',function(){
     var eqLogics = [];
     $('.cb_selEqLogic').each(function(){
         if($(this).value() == 1){
@@ -193,10 +228,10 @@ $('.displayListContainer').packery();
         success : function(){
          loadPage('index.php?v=d&p=display');
      }
- });
+   });
 });
 
- $('.bt_setIsEnable').on('click',function(){
+$('.bt_setIsEnable').on('click',function(){
     var eqLogics = [];
     $('.cb_selEqLogic').each(function(){
         if($(this).value() == 1){
@@ -215,7 +250,7 @@ $('.displayListContainer').packery();
     });
 });
 
- $('#bt_removeHistory').on('click',function(){
+$('#bt_removeHistory').on('click',function(){
     $('#md_modal').dialog({title: "{{Historique des suppressions}}"});
     $('#md_modal').load('index.php?v=d&modal=remove.history').dialog('open');
 });

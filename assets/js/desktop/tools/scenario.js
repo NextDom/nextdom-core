@@ -366,7 +366,7 @@ function setAutocomplete() {
  * @param scenarioId
  */
 function printScenario(scenarioId) {
-    $.showLoading();
+    showLoadingCustom();
     nextdom.scenario.update[scenarioId] = function (_options) {
         if (_options.scenario_id = !pageContainer.getValues('.scenarioAttr')[0]['id']) {
             return;
@@ -465,11 +465,11 @@ function printScenario(scenarioId) {
                     notify("Erreur", error.message, 'error');
                 },
                 success: function (data) {
-                    $.showLoading();
+                    showLoadingCustom();
                     for (var i in data) {
                         $('#' + data[i].id).append(data[i].html.html);
                     }
-                    $.hideLoading();
+                    hideLoadingCustom();
                     taAutosize();
                 }
             });
@@ -619,12 +619,16 @@ function getActionExpressionHTML(expressionData) {
     } else {
         htmlData += '<input type="checkbox" class="expressionAttr" data-l1key="options" data-l2key="background" checked title="{{Cocher pour que la commande s\'exécute en parallèle des autres actions}}"/>';
     }
+    var expressionTxt = init(expressionData.expression);
+    if(typeof expressionTxt !== 'string'){
+        expressionTxt = json_encode(expressionTxt);
+    }
     htmlData += '</div>';
     htmlData += '<div class="col-xs-11 scenario-sub-group"><div class="input-group input-group-sm no-border">';
     htmlData += '<span class="input-group-btn">';
     htmlData += '<button class="btn btn-default bt_removeExpression" type="button" title="{{Supprimer l\'action}}"><i class="fas fa-minus-circle"></i></button>';
     htmlData += '</span>';
-    htmlData += '<input class="expressionAttr form-control" data-l1key="expression" value="' + init(expressionData.expression).replace(/"/g, '&quot;') + '" style="font-weight:bold;"/>';
+    htmlData += '<input class="expressionAttr form-control" data-l1key="expression" value="' + expressionTxt.replace(/"/g, '&quot;') + '" style="font-weight:bold;"/>';
     htmlData += '<span class="input-group-btn">';
     htmlData += '<button class="btn btn-default bt_selectOtherActionExpression" type="button" title="{{Sélectionner un mot-clé}}"><i class="fas fa-tasks"></i></button>';
     htmlData += '<button class="btn btn-default bt_selectCmdExpression" type="button" title="{{Sélectionner la commande}}"><i class="fas fa-list-alt"></i></button>';
@@ -671,7 +675,7 @@ function getCommentExpressionHTML(expressionData) {
  * @returns {string}
  */
 function addExpression(expressionToAdd) {
-    if (!isset(expressionToAdd.type) || expressionToAdd.type === '') {
+    if (!isset(expressionToAdd) || !isset(expressionToAdd.type) || expressionToAdd.type === '') {
         return '';
     }
     var sortable = 'sortable';
@@ -951,7 +955,6 @@ function getCodeSubElementHTML(subElementData, elementColorIndex) {
     htmlData += '<span class="scenario-title">{{CODE}}</span>';
     htmlData += '</div>';
     htmlData += '<div class="expressions scenario-condition" style="background-color: ' + listColor[elementColorIndex] + ';">';
-    htmlData += '<div class="sortable empty"></div>';
     htmlData += addFirstExpressionHTML(subElementData);
     htmlData += '</div>';
     htmlData += '<div class="scenario-delete"><i class="fas fa-minus-circle pull-right cursor bt_removeElement"></i></div>';
@@ -972,7 +975,6 @@ function getCommentSubElementHTML(subElementData, elementColorIndex) {
     htmlData += '<i class="fas fa-sort bt_sortable"></i>';
     htmlData += '</div>';
     htmlData += '<div class="expressions scenario-condition" style="background-color: ' + listColor[elementColorIndex] + ';">';
-    htmlData += '<div class="sortable empty"></div>';
     htmlData += addFirstExpressionHTML(subElementData);
     htmlData += '</div>';
     htmlData += '<div class="scenario-delete"><i class="fas fa-minus-circle pull-right cursor bt_removeElement"></i></div>';
@@ -1866,6 +1868,27 @@ function initScenarioEditorEvents() {
         modifyWithoutSave = true;
     });
 }
+
+$('#bt_scenarioCollapse').on('click',function(){
+   $('#accordionScenario .panel-collapse').each(function () {
+      if (!$(this).hasClass("in")) {
+          $(this).css({'height' : '' });
+          $(this).addClass("in");
+      }
+   });
+   $('#bt_scenarioCollapse').hide();
+   $('#bt_scenarioUncollapse').show()
+});
+
+$('#bt_scenarioUncollapse').on('click',function(){
+   $('#accordionScenario .panel-collapse').each(function () {
+      if ($(this).hasClass("in")) {
+          $(this).removeClass("in");
+      }
+   });
+   $('#bt_scenarioUncollapse').hide();
+   $('#bt_scenarioCollapse').show()
+});
 
 initListEvents();
 initGeneralFormEvents();

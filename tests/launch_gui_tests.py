@@ -3,6 +3,7 @@
 """Launch NextDom GUI tests
 """
 import sys
+from time import sleep
 from tests.libs.tests_funcs import *
 
 NEXTDOM_URL = 'http://127.0.0.1:8765'
@@ -28,6 +29,25 @@ def migration_tests():
     copy_file_in_container(container_name, 'data/backup-Jeedom-3.2.11-2018-11-17-23h26.tar.gz', '/var/lib/nextdom/backup/') #pylint: disable=line-too-long
     # Execute the migration
     exec_command_in_container(container_name, 'sudo -u www-data php /var/www/html/install/restore.php file=/var/lib/nextdom/backup/backup-Jeedom-3.2.11-2018-11-17-23h26.tar.gz > /dev/null 2>&1') #pylint: disable=line-too-long
+    # Reset admin password
+    exec_command_in_container(container_name, '/usr/bin/mysql -u root nextdomdev -e "UPDATE user SET password = SHA2(\'nextdom-test\', 512)"') #pylint: disable=line-too-long
+    run_test('tests/migration_page.py', [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])
+    remove_test_container(container_name)
+
+def migration_with_last_backup_file_tests():
+    """Starts gui tests related to the migration page
+    """
+    container_name = 'migration'
+    print_subtitle('Migration with last backup')
+    start_test_container(container_name, NEXTDOM_PASSWORD)
+    # Create fake backup file
+    exec_command_in_container(container_name, 'sudo touch /var/lib/nextdom/backup/backup-Jeedom-3.2.11-2018-11-17-22h26.tar.gz') #pylint: disable=line-too-long
+    sleep(2)
+    # Copy minimal Jeedom backup in the container
+    copy_file_in_container(container_name, 'data/backup-Jeedom-3.2.11-2018-11-17-23h26.tar.gz', '/var/lib/nextdom/backup/') #pylint: disable=line-too-long
+    exec_command_in_container(container_name, 'sudo touch /var/lib/nextdom/backup/backup-Jeedom-3.2.11-2018-11-17-23h26.tar.gz') #pylint: disable=line-too-long
+    # Execute the migration
+    exec_command_in_container(container_name, 'sudo -u www-data php /var/www/html/install/restore.php > /dev/null 2>&1') #pylint: disable=line-too-long
     # Reset admin password
     exec_command_in_container(container_name, '/usr/bin/mysql -u root nextdomdev -e "UPDATE user SET password = SHA2(\'nextdom-test\', 512)"') #pylint: disable=line-too-long
     run_test('tests/migration_page.py', [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])
@@ -66,18 +86,31 @@ def others_tests():
     container_name = 'others'
     print_subtitle('Others tests')
     start_test_container(container_name, NEXTDOM_PASSWORD)
+    # Load somes data
+    exec_command_in_container(
+        container_name,
+        '/bin/cp -fr /var/www/html/tests/data/plugin4tests /var/www/html/plugins')
+    exec_command_in_container(
+        container_name,
+        '/bin/chown www-data:www-data -R /var/www/html/plugins')
+    exec_command_in_container(
+        container_name,
+        '/usr/bin/mysql -u root nextdomdev < data/tests_fixtures.sql')
     print_subtitle('Connection page')
     run_test('tests/connection_page.py', [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])
     print_subtitle('Administrations pages')
     run_test('tests/administrations_page.py', [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])
     print_subtitle('Rescue pages')
     run_test('tests/rescue_page.py', [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])
+    print_subtitle('Others pages')
+    run_test('tests/others_pages.py', [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])
     remove_test_container(container_name)
 
 if __name__ == "__main__":
     TESTS_LIST = {
         'first_use': first_use_tests,
         'migration': migration_tests,
+        'migration_with_last_backup_file': migration_with_last_backup_file_tests,
         'custom_js_css': custom_js_css_tests,
         'plugins': plugins_tests,
         'others': others_tests

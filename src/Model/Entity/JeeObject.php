@@ -25,7 +25,7 @@ use NextDom\Managers\CmdManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\DataStoreManager;
 use NextDom\Managers\EqLogicManager;
-use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\ObjectManager;
 use NextDom\Managers\ScenarioManager;
 
 /**
@@ -235,7 +235,7 @@ class JeeObject implements EntityInterface
             }
         }
         if ($searchOnchild) {
-            $child_object = JeeObjectManager::buildTree($this);
+            $child_object = ObjectManager::buildTree($this);
             if (count($child_object) > 0) {
                 foreach ($child_object as $object) {
                     $eqLogics = array_merge($eqLogics, $object->getEqLogic($onlyEnable, $onlyVisible, $eqTypeName, $logicalId));
@@ -293,7 +293,7 @@ class JeeObject implements EntityInterface
 
     public function getFather()
     {
-        return JeeObjectManager::byId($this->getFather_id());
+        return ObjectManager::byId($this->getFather_id());
     }
 
     public function parentNumber()
@@ -318,12 +318,12 @@ class JeeObject implements EntityInterface
         if ($tag) {
             if ($prettify) {
                 if ($this->getDisplay('tagColor') != '') {
-                    return '<span class="label" style="text-shadow : none;background-color:' . $this->getDisplay('tagColor') . ' !important;color:' . $this->getDisplay('tagTextColor', 'white') . ' !important">' . $this->getDisplay('icon') . '<i class="spacing-right"></i>' . $this->getName() . '</span>';
+                    return '<span class="label" style="text-shadow : none;background-color:' . $this->getDisplay('tagColor') . ' !important;color:' . $this->getDisplay('tagTextColor', 'white') . ' !important">' . $this->getDisplay('icon', '<i class="fas fa-tag"></i>') . '<i class="spacing-right"></i>' . $this->getName() . '</span>';
                 } else {
-                    return '<span class="label label-primary">' . $this->getDisplay('icon') . '<i class="spacing-right"></i>' . $this->getName() . '</span>';
+                    return '<span class="label label-primary">' . $this->getDisplay('icon', '<i class="fas fa-tag"></i>') . '<i class="spacing-right"></i>' . $this->getName() . '</span>';
                 }
             } else {
-                return $this->getDisplay('icon') . '<i class="spacing-right"></i>' . $this->getName();
+                return $this->getDisplay('icon', '<i class="fas fa-tag"></i>') . '<i class="spacing-right"></i>' . $this->getName();
             }
         } else {
             return $this->getName();
@@ -390,7 +390,7 @@ class JeeObject implements EntityInterface
                 if ($allowDisplayZero == 0 && $result == 0) {
                     $style = 'display:none;';
                 }
-                $return .= '<span style="margin-right:5px;' . $style . '" class="objectSummaryParent cursor" data-summary="' . $key . '" data-object_id="' . $this->getId() . '" data-displayZeroValue="' . $allowDisplayZero . '">' . $value['icon'] . ' <sup><span class="objectSummary' . $key . '">' . $result . '</span> ' . $value['unit'] . '</span></sup>';
+                $return .= '<span style="margin-right:8px;' . $style . '" class="objectSummaryParent cursor" data-summary="' . $key . '" data-object_id="' . $this->getId() . '" data-displayZeroValue="' . $allowDisplayZero . '">' . $value['icon'] . ' <sup><span class="objectSummary' . $key . '">' . $result . '</span> ' . $value['unit'] . '</span></sup>';
             }
         }
         $return = trim($return) . '</span>';

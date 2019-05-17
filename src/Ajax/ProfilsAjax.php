@@ -18,7 +18,6 @@
 namespace NextDom\Ajax;
 
 use NextDom\Enums\UserRight;
-use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\Utils;
 
@@ -40,7 +39,7 @@ class ProfilsAjax extends BaseAjax
     public function imageUpload()
     {
         $uploadDir = sprintf("%s/public/img/profils", NEXTDOM_ROOT);
-        Utils::readUploadedFile($_FILES, "images", $uploadDir, 8, array(".png", ".jpg"));
+        Utils::readUploadedFile($_FILES, "images", $uploadDir, 8, array('.png', '.jpg', '.jpeg'));
         AjaxHelper::success();
     }
 }

@@ -37,6 +37,7 @@ require_once NEXTDOM_ROOT.'/core/php/core.inc.php';
 
 use NextDom\Helpers\Api;
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Helpers\SystemHelper;
 use NextDom\Helpers\TimeLineHelper;
 use NextDom\Managers\BackupManager;
 use NextDom\Managers\DevicesManager;
@@ -279,5 +280,9 @@ class nextdom
 
     public static function cleanFileSytemRight() {
         // no operation (jeedom compatibility)
+    }
+
+    public static function consistency() {
+        SystemHelper::consistency();
     }
 }

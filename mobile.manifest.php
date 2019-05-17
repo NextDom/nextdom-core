@@ -1,6 +1,9 @@
 <?php
+
+use NextDom\Helpers\FileSystemHelper;
+
 header('Content-type: text/cache-manifest');
-require_once __DIR__ . "/core/php/core.inc.php";
+require_once __DIR__ . "/src/core.php";
 
 $js_file = array(
     '/vendor/node_modules/highcharts/highcharts-more.js',
@@ -80,16 +83,16 @@ if (file_exists(__DIR__ . '/mobile/custom/custom.css')) {
 }
 
 $root_dir = __DIR__ . '/core/css/icon/';
-foreach (ls($root_dir, '*') as $dir) {
+foreach (FileSystemHelper::ls($root_dir, '*') as $dir) {
     if (is_dir($root_dir . $dir) && file_exists($root_dir . $dir . '/style.css')) {
         $other_file[] = 'core/css/icon/' . $dir . 'style.css';
-        foreach (ls($root_dir . $dir . '/fonts', '*') as $font) {
+        foreach (FileSystemHelper::ls($root_dir . $dir . '/fonts', '*') as $font) {
             $other_file[] = 'core/css/icon/' . $dir . 'fonts/' . $font;
         }
     }
 }
 
-foreach (ls(__DIR__ . '/core/themes') as $dir) {
+foreach (FileSystemHelper::ls(__DIR__ . '/core/themes') as $dir) {
     if (is_dir(__DIR__ . '/core/themes/' . $dir . '/mobile')) {
         if (file_exists(__DIR__ . 'core/themes/' . $dir . 'mobile/' . trim($dir, '/') . '.css')) {
             $other_file[] = 'core/themes/' . $dir . 'mobile/' . trim($dir, '/') . '.css';
@@ -106,11 +109,11 @@ CACHE:
 <?php
 echo '#LANG : ' . translate::getLanguage();
 foreach (plugin::listPlugin(true) as $plugin) {
-    foreach (ls(__DIR__ . '/plugins/' . $plugin->getId() . '/core/template/mobile', '*') as $file) {
+    foreach (FileSystemHelper::ls(__DIR__ . '/plugins/' . $plugin->getId() . '/core/template/mobile', '*') as $file) {
         if (is_dir(__DIR__ . '/plugins/' . $plugin->getId() . '/core/template/mobile/' . $file)) {
-            foreach (ls(__DIR__ . '/plugins/' . $plugin->getId() . '/core/template/mobile/' . $file, '*') as $file2) {
+            foreach (FileSystemHelper::ls(__DIR__ . '/plugins/' . $plugin->getId() . '/core/template/mobile/' . $file, '*') as $file2) {
                 if (is_dir(__DIR__ . '/plugins/' . $plugin->getId() . '/core/template/mobile/' . $file . $file2)) {
-                    foreach (ls(__DIR__ . '/plugins/' . $plugin->getId() . '/core/template/mobile/' . $file . $file2, '*') as $file3) {
+                    foreach (FileSystemHelper::ls(__DIR__ . '/plugins/' . $plugin->getId() . '/core/template/mobile/' . $file . $file2, '*') as $file3) {
                         if (strpos($file3, '.js') !== false) {
                             $js_file[] = 'plugins/' . $plugin->getId() . '/core/template/mobile/' . $file . $file2 . $file3;
                         } elseif (strpos($file3, '.css') !== false || strpos($file3, '.png') !== false || strpos($file3, '.jpg') !== false || strpos($file3, '.ttf') !== false || strpos($file3, '.woff') !== false) {
@@ -144,15 +147,15 @@ foreach (plugin::listPlugin(true) as $plugin) {
                 log::add($plugin_id, 'error', __('Erreur sur la fonction mobileManifest du plugin : ', __FILE__) . $e->getMessage());
             }
         }
-        foreach (ls(__DIR__ . '/plugins/' . $plugin->getId() . '/mobile/js', '*.js') as $file) {
+        foreach (FileSystemHelper::ls(__DIR__ . '/plugins/' . $plugin->getId() . '/mobile/js', '*.js') as $file) {
             echo "\n";
             if (file_exists(__DIR__ . '/plugins/' . $plugin->getId() . '/mobile/js/' . $file)) {
                 echo '#' . md5_file(__DIR__ . '/plugins/' . $plugin->getId() . '/mobile/js/' . $file);
                 echo "\n";
             }
-            echo 'core/php/getJS.php?file=plugins/' . $plugin->getId() . '/mobile/js/' . $file . "\n";
+            echo 'src/Api/getResource.php?file=plugins/' . $plugin->getId() . '/mobile/js/' . $file . "\n";
         }
-        foreach (ls(__DIR__ . '/plugins/' . $plugin->getId() . '/mobile/html', '*.html') as $file) {
+        foreach (FileSystemHelper::ls(__DIR__ . '/plugins/' . $plugin->getId() . '/mobile/html', '*.html') as $file) {
             echo "\n";
             if (file_exists(__DIR__ . '/plugins/' . $plugin->getId() . '/mobile/html/' . $file)) {
                 echo '#' . md5_file(__DIR__ . '/plugins/' . $plugin->getId() . '/mobile/html/' . $file);
@@ -160,7 +163,7 @@ foreach (plugin::listPlugin(true) as $plugin) {
             }
             echo 'index.php?v=m&ajax=1&p=' . substr($file, 0, -5) . '&m=' . $plugin->getId() . "\n";
         }
-        foreach (ls(__DIR__ . '/plugins/' . $plugin->getId() . '/mobile/modal', '*.html') as $file) {
+        foreach (FileSystemHelper::ls(__DIR__ . '/plugins/' . $plugin->getId() . '/mobile/modal', '*.html') as $file) {
             echo "\n";
             if (file_exists(__DIR__ . '/plugins/' . $plugin->getId() . '/mobile/modal/' . $file)) {
                 echo '#' . md5_file(__DIR__ . '/plugins/' . $plugin->getId() . '/mobile/modal/' . $file);
@@ -177,9 +180,9 @@ foreach ($js_file as $file) {
         echo '#' . md5_file(__DIR__ . '/' . $file);
         echo "\n";
     }
-    echo 'core/php/getJS.php?file=' . $file;
+    echo 'src/Api/getResource.php?file=' . $file;
     echo "\n";
-    echo 'core/php/getJS.php?file=' . $file . '&md5=' . md5_file(__DIR__ . '/' . $file);
+    echo 'src/Api/getResource.php?file=' . $file . '&md5=' . md5_file(__DIR__ . '/' . $file);
     echo "\n";
 }
 foreach ($other_file as $file) {
@@ -191,16 +194,16 @@ foreach ($other_file as $file) {
     echo $file;
     echo "\n";
 }
-foreach (ls('mobile/js', '*.js') as $file) {
+foreach (FileSystemHelper::ls('mobile/js', '*.js') as $file) {
     echo "\n";
     if (file_exists(__DIR__ . '/mobile/js/' . $file)) {
         echo '#' . md5_file(__DIR__ . '/mobile/js/' . $file);
         echo "\n";
     }
-    echo 'core/php/getResource.php?file=mobile/js/' . $file;
+    echo 'src/Api/getResource.php?file=mobile/js/' . $file;
     echo "\n";
 }
-foreach (ls('mobile/html', '*.html') as $file) {
+foreach (FileSystemHelper::ls('mobile/html', '*.html') as $file) {
     echo "\n";
     if (file_exists(__DIR__ . '/mobile/html/' . $file)) {
         echo '#' . md5_file(__DIR__ . '/mobile/html/' . $file);
@@ -210,7 +213,7 @@ foreach (ls('mobile/html', '*.html') as $file) {
     echo "\n";
 }
 
-foreach (ls('mobile/modal', '*.html') as $file) {
+foreach (FileSystemHelper::ls('mobile/modal', '*.html') as $file) {
     echo "\n";
     if (file_exists(__DIR__ . '/mobile/modal/' . $file)) {
         echo '#' . md5_file(__DIR__ . '/mobile/modal/' . $file);

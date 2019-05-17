@@ -10,6 +10,13 @@ core:
   disable-all-scenarios: "Desactivate all scenarios..."
   incorrect-sys-date: "The system date is incorrect (before %s or after %s) : "
 
+samba:
+  error:
+    connect: Unable to connect samba server
+    not-found: File not found on samba server
+    already-exists: File already exists on samba server
+    unknown: Error occured while connecting samba server
+
 # Ancien format
 "401 - Accès non autorisé": "401 - Access not allowed"
 "Aucune méthode correspondante à : ": "No method corresponding to: "
@@ -279,7 +286,6 @@ core:
 "Version": "Version"
 "Se déconnecter": "Log off"
 "Aide sur la page en cours": "Help on current page"
-"Envoyer un rapport de bug": "Send a bug report"
 "Générale": "Main"
 "Détaillée": "Detailed"
 "Ouverture d\\'un ticket": "Open ticket"
@@ -1565,36 +1571,6 @@ core:
 "Résultat : ": "Result :"
 "L\\'expression de test ne peut être vide": "The test expression can not be empty"
 "Attention : il doit y avoir un souci, car le résultat est le même que l\\'expression": "Warning: there must be a problem, because the result is the same as the expression"
-"Etape 1 : Information sur les tickets": "Step 1: Information on the tickets"
-"Merci de vérifier avant toute ouverture de ticket :": "Please check before submitting a ticket:"
-"- que la question n\\'a pas déjà été posée sur le <a href=\\'https://nextdom.com/forum\\'>forum</a>": "- That the matter has not been placed on the  <a href=\\'https://nextdom.com/forum\\'>forum</a>"
-"- que la catégorie est bien sélectionnée pour que votre ticket soit traité dans les plus courts délais": "- that the category is selected for your ticket is processed in the shortest time"
-"- que la réponse n\\'est pas déjà dans la <a href=\\'https://nextdom.github.io/documentation\\'>documentation</a>": "- that the answer is not already in the <a href=\\'https://nextdom.github.io/documentation\\'> documentation </a>"
-"IMPORTANT : si vous ouvrez un ticket pour un bug ou une demande d\\'amélioration celle-ci sont public (donc attention au informations que vous communiquez). Vous pouvez voir la liste des demandes en cours <a href=\"https://nextdom.atlassian.net/issues/?filter=-5&jql=status%20in%20(%22A%20valider%22%2C%20%22In%20Progress%22%2C%20Planifi%C3%A9%2C%20Reopened%2C%20%22To%20Do%22)%20AND%20resolution%20%3D%20Unresolved%20order%20by%20priority%20DESC%2Cupdated%20DESC\" target=\"_blank\">ici</a>. Les demandes public doivent etre parfaitement formuler avec toutes les informations necessaire car vous ne pouvez pas completer la demande par la suite. Toute demande d\\'un service pack pro est privée.": "IMPORTANT: if you open a ticket for a bug or a request for improvement it is public (so be careful with the information you provide). You can see the list of pending requests <a href = \"https://nextdom.atlassian.net/issues/?filter=-5&jql=status%20in%20(%22A%20valider%22%2C%20%22In%20Progress%22%2C%20Planifi%C3%A9%2C%20Reopened% 2C%20%22To% 20Do% 22) %20AND% 20resolution%20%3D% 20Unresolved%20order% 20by%20priority% 20DESC% 2Cupdated% 20DESC \"target =\" _ blank \"> here </a>. Public inquiries must be perfectly formulated with all the necessary information because you can not complete the application later. Any request for a service pack pro is private."
-"Etape 2 : Catégorie et type de la demande": "Step 2 : Request category and type"
-"Support": "Support"
-"Bug": "bug"
-"Demande d\\'amélioration": "Request for improvement"
-"Etape 3 : Chercher dans la documentation": "Step 3 : search in documentation"
-"Chercher": "Search"
-"Etape 4 : Demande de support": "Step 4 : Support request"
-"Ce plugin utilise un gestionnaire de demande de support": "This plugin uses a support request manager"
-"Accéder": "Access"
-"Votre ticket a bien été ouvert. Vous pouvez le suivre": "Your ticket has been opened. You can follow him"
-"Votre ticket a bien été ouvert. Un mail va vous être envoyé": "Your ticket has been submitted. You will receive a confirmation email shortly."
-"Etape 2 : Choix du type de demande": "Step 2: Choosing the type of request"
-"Etape 3 : Catégorie et type de la demande": "Step 3: Category and type of the request"
-"Etape 4 : Chercher dans la documentation": "Step 4: Search the documentation"
-"Etape 5 : Demande de support": "Step 5: Request Support"
-"Assistance technique": "Technical assistance"
-"Rédigez votre question à l\\'attention de notre service Technique qui y répondra dans les meilleurs délais.": "Write your question to the attention of our technical service who will respond as soon as possible."
-"Vous pouvez déclarer un bug qui sera publié sur notre Bug Tracker public (<strong>ATTENTION</strong> votre message sera public, il pourra être supprimé s\\'il ne s\\'agit pas d\\'un bug,  vous ne recevrez pas d\\'assistance technique suite à cette déclaration)": "You can declare a bug that will be published on our Bug Tracker public (<strong> WARNING </ strong> your message will be public, it can be deleted if it is not a bug, you will not receive technical assistance following this statement)"
-"Vous pouvez envoyer des proposition d\\'amélioration qui seront publiée sur notre page publique dédiée et qui pourront être intégrés dans notre roadmap.": "You can send suggestions for improvements that will be published on our dedicated public page and that can be integrated into our roadmap."
-"Voir les bugs": "See the bugs"
-"Voir les propositions d\\'amélioration": "See improvement proposals"
-"Vous pouvez envoyer des propositions d\\'amélioration qui seront publiées sur notre page publique dédiée et qui pourront être intégrées dans notre feuille de route.": "Vous pouvez envoyer des propositions d\\'amélioration qui seront publiées sur notre page publique dédiée et qui pourront être intégrées dans notre feuille de route."
-"Ouvrir un accès au support": "Ouvrir un accès au support"
-"Vous venez de déclarer un bug qui sera publié sur notre Bug Tracker public.<br/>Vous pouvez le suivre": "Vous venez de déclarer un bug qui sera publié sur notre Bug Tracker public.<br/>Vous pouvez le suivre"
 "Commande inconnu verifié l\\'id :": "Unknown order verified id:"
 "Cmd ID inconnu : ": "Unknown Cmd ID:"
 "Attention tout ce que vous écrivez ici est global et inclus sur toutes les pages, la moindre erreur peut rendre votre nextdom non fonctionel": "Warning everything you write here is global and is included on all pages, the slightest mistake can break your nextdom"

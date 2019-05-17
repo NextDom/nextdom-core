@@ -51,6 +51,3 @@ $router = new Router($viewType);
 if (!$router->show()) {
     throw new CoreException(__('Erreur : veuillez contacter l\'administrateur'));
 }
-
-
- 

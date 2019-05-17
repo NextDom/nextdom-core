@@ -33,7 +33,7 @@
             <file>ConfigManagerTest.php</file>
             <file>EqLogicManagerTest.php</file>
             <file>EventManagerTest.php</file>
-            <file>JeeObjectManagerTest.php</file>
+            <file>ObjectManagerTest.php</file>
             <file>NoteManagerTest.php</file>
             <file>UserManagerTest.php</file>
         </testsuite>

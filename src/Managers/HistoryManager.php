@@ -439,7 +439,29 @@ class HistoryManager
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
-    public static function getStatistique($_cmd_id, $_startTime, $_endTime)
+    public static function getTemporalAvg($_cmd_id, $_startTime, $_endTime){
+        $histories = self::all($_cmd_id, $_startTime, $_endTime);
+        $result = null;
+        $start = null;
+        $cTime = null;
+        $cValue = null;
+        $sum = 0;
+        foreach ($histories as $history) {
+            if($start == null){
+                $cValue = $history->getValue();
+                $cTime = strtotime($history->getDatetime());
+                $start = $cTime;
+                continue;
+            }
+            $sum += $cValue * (strtotime($history->getDatetime()) - $cTime);
+            $cValue = $history->getValue();
+            $cTime = strtotime($history->getDatetime());
+        }
+        $result = $sum / ($cTime - $start);
+        return $result;
+    }
+
+    public static function getStatistics($_cmd_id, $_startTime, $_endTime)
     {
         $values = array(
             'cmd_id' => $_cmd_id,

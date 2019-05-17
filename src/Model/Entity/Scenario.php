@@ -35,7 +35,7 @@ use NextDom\Managers\DataStoreManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
 use NextDom\Managers\InteractDefManager;
-use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\ObjectManager;
 use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\ScenarioElementManager;
 use NextDom\Managers\ScenarioManager;
@@ -1141,7 +1141,7 @@ class Scenario implements EntityInterface
      */
     public function getObject()
     {
-        return JeeObjectManager::byId($this->object_id);
+        return ObjectManager::byId($this->object_id);
     }
 
     /**

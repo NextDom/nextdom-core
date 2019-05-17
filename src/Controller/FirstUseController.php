@@ -24,6 +24,7 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Router;
+use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
 
 class FirstUseController extends BaseController
@@ -50,12 +51,14 @@ class FirstUseController extends BaseController
             'notify_status' => $configs['notify::status'],
             'notify_position' => $configs['notify::position'],
             'notify_timeout' => $configs['notify::timeout'],
+            'serverTZoffsetMin' => Utils::getTZoffsetMin()
         ];
         $pageData['CSS_POOL'][] = '/public/css/nextdom.css';
-        $pageData['CSS_POOL'][] = '/public/css/firstUse.css';
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/firstUse.js';
+        $pageData['CSS_POOL'][] = '/public/css/pages/firstUse.css';
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/pages/firstUse.js';
 
-        return Render::getInstance()->get('desktop/firstUse.html.twig', $pageData);
+
+        return Render::getInstance()->get('desktop/pages/firstUse.html.twig', $pageData);
     }
 
 }

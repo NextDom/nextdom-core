@@ -5,6 +5,11 @@ ErrorDocument 404 /public/404.html
 RewriteEngine On
 RewriteRule  ^/?core/img/(.*)$ /public/img/$1 [R=301,L]
 
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond expr "%{REQUEST_FILENAME} -strmatch '/3rdparty/*'"
+RewriteRule ^/(.*)$ /index.php?v=s&file=$1 [B,L]
+
+
 <Directory "${wwwdir}">
     Options -Indexes +FollowSymLinks
     AllowOverride All
