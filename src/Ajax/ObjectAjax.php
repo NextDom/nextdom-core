@@ -286,8 +286,8 @@ class ObjectAjax extends BaseAjax
             throw new CoreException(__('Aucun fichier trouvé. Vérifiez le paramètre PHP (post size limit)'));
         }
         $extension = strtolower(strrchr($_FILES['file']['name'], '.'));
-        if (!in_array($extension, array('.jpg', '.png'))) {
-            throw new CoreException('Extension du fichier non valide (autorisé .jpg .png) : ' . $extension);
+        if (!in_array($extension, array('.jpg', '.jpeg', '.png'))) {
+            throw new CoreException('Extension du fichier non valide (autorisé .jpg .jpeg .png) : ' . $extension);
         }
         if (filesize($_FILES['file']['tmp_name']) > 5000000) {
             throw new CoreException(__('Le fichier est trop gros (maximum 5Mo)'));

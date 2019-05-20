@@ -15,4 +15,7 @@ INSERT INTO `cmd` VALUES (2,1,'plugin4tests',NULL,NULL,0,'Cmd 2','[]','[]','0','
 INSERT INTO `cmd` VALUES (3,2,'plugin4tests',NULL,NULL,0,'Cmd 3','[]','[]','0','info','binary',NULL,'[]',1,NULL,'[]','[]');
 INSERT INTO `note` VALUES (1,'Note de test','Un peu de contenu');
 INSERT INTO `note` VALUES (2,'Une autre note','Peu d\'idée');
+INSERT INTO `scenario` VALUES (1,'Test scenario','',1,'schedule','* * * * *','[\"1\"]','[\"\"]',NULL,1,NULL,'{\"name\":\"\"}','','{\"timeDependency\":0,\"has_return\":0,\"logmode\":\"default\",\"allowMultiInstance\":\"0\",\"syncmode\":\"0\",\"timeline::enable\":\"0\"}','expert',99);
+INSERT INTO `scenarioElement` VALUES (1,0,'action',NULL,NULL,NULL);
+INSERT INTO `scenarioExpression` VALUES (1,0,1,'action',NULL,'log','{\"enable\":\"1\",\"background\":\"0\",\"message\":\"LAUNCHED\"}',NULL);
 SET FOREIGN_KEY_CHECKS=1;
