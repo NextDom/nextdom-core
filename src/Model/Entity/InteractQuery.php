@@ -70,10 +70,10 @@ class InteractQuery implements EntityInterface
 
     public function save()
     {
-        if ($this->getQuery() == '') {
+        if (empty($this->getQuery())) {
             throw new \Exception(__('La commande vocale ne peut pas être vide'));
         }
-        if ($this->getInteractDef_id() == '') {
+        if (empty($this->getInteractDef_id())) {
             throw new \Exception(__('InteractDef_id ne peut pas être vide'));
         }
         DBHelper::save($this);
@@ -206,7 +206,7 @@ class InteractQuery implements EntityInterface
                     }
                     $options['tags'] = array_merge($replace, $tags);
                     $return = ScenarioExpressionManager::createAndExec('action', $action['cmd'], $options);
-                    if (trim($return) !== '' && trim($return) !== null) {
+                    if (!empty(trim($return))) {
                         $replace['#valeur#'] .= ' ' . $return;
                     }
                 } catch (\Exception $e) {
@@ -232,7 +232,7 @@ class InteractQuery implements EntityInterface
                 unset($replace[$key]);
             }
         }
-        if ($replace['#valeur#'] == '') {
+        if (empty($replace['#valeur#'])) {
             $replace['#valeur#'] = __('aucune valeur');
         }
         $replace['"'] = '';

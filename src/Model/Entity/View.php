@@ -97,7 +97,7 @@ class View implements EntityInterface
      */
     public function presave()
     {
-        if (trim($this->getName()) == '') {
+        if (empty(trim($this->getName()))) {
             throw new \Exception(__('Le nom de la vue ne peut pas être vide'));
         }
     }
@@ -128,14 +128,14 @@ class View implements EntityInterface
 
     public function getImgLink()
     {
-        if ($this->getImage('data') == '') {
+        if (empty($this->getImage('data'))) {
             return '';
         }
         $dir = NEXTDOM_ROOT . '/public/img/view';
         if (!file_exists($dir)) {
             mkdir($dir);
         }
-        if ($this->getImage('sha512') == '') {
+        if (empty($this->getImage('sha512'))) {
             $this->setImage('sha512', Utils::sha512($this->getImage('data')));
             $this->save();
         }
@@ -296,7 +296,7 @@ class View implements EntityInterface
 
     public function getOrder($_default = null)
     {
-        if ($this->order == '' || !is_numeric($this->order)) {
+        if (empty($this->order) || !is_numeric($this->order)) {
             return $_default;
         }
         return $this->order;

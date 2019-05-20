@@ -170,7 +170,7 @@ class Plugin implements EntityInterface
      */
     public function report($outputFormat = 'pdf', $parameters = array())
     {
-        if ($this->getDisplay() == '') {
+        if (empty($this->getDisplay())) {
             throw new \Exception(__('core.cant-report'));
         }
         $url = NetworkHelper::getNetworkAccess('internal') . '/index.php?v=d&p=' . $this->getDisplay();
@@ -281,7 +281,7 @@ class Plugin implements EntityInterface
             }
         }
         if ($result['state'] == 'in_progress') {
-            if (ConfigManager::byKey('lastDependancyInstallTime', $pluginId) == '') {
+            if (empty(ConfigManager::byKey('lastDependancyInstallTime', $pluginId))) {
                 ConfigManager::save('lastDependancyInstallTime', date('Y-m-d H:i:s'), $pluginId);
             }
             $result['duration'] = round((strtotime('now') - strtotime(ConfigManager::byKey('lastDependancyInstallTime', $pluginId))) / 60);
@@ -583,7 +583,7 @@ class Plugin implements EntityInterface
      */
     public function launch($functionToCall, $callInstallFunction = false)
     {
-        if ($functionToCall == '') {
+        if (empty($functionToCall)) {
             throw new \Exception('La fonction à lancer ne peut être vide');
         }
         if (!$callInstallFunction && (!class_exists($this->getId()) || !method_exists($this->getId(), $functionToCall))) {
@@ -761,7 +761,7 @@ class Plugin implements EntityInterface
                 $this->info = $update->getInfo();
             }
         }
-        if ($name !== '') {
+        if (!empty($name)) {
             if (isset($this->info[$name])) {
                 return $this->info[$name];
             }
@@ -1006,7 +1006,7 @@ class Plugin implements EntityInterface
      */
     public function getChangelog(): string
     {
-        if ($this->changelog == '') {
+        if (empty($this->changelog)) {
             return $this->getInfo('changelog');
         }
         return $this->changelog;
@@ -1033,7 +1033,7 @@ class Plugin implements EntityInterface
      */
     public function getDocumentation(): string
     {
-        if ($this->documentation == '') {
+        if (empty($this->documentation)) {
             return $this->getInfo('doc');
         }
         return $this->documentation;

@@ -98,19 +98,19 @@ class PlanHeader implements EntityInterface
 
     public function preSave()
     {
-        if (trim($this->getName()) == '') {
+        if (empty(trim($this->getName()))) {
             throw new \Exception(__('Le nom du plan ne peut pas être vide'));
         }
-        if ($this->getConfiguration('desktopSizeX') == '') {
+        if (empty($this->getConfiguration('desktopSizeX'))) {
             $this->setConfiguration('desktopSizeX', 500);
         }
-        if ($this->getConfiguration('desktopSizeY') == '') {
+        if (empty($this->getConfiguration('desktopSizeY'))) {
             $this->setConfiguration('desktopSizeY', 500);
         }
-        if ($this->getConfiguration('backgroundTransparent') == '') {
+        if (empty($this->getConfiguration('backgroundTransparent'))) {
             $this->setConfiguration('backgroundTransparent', 1);
         }
-        if ($this->getConfiguration('backgroundColor') == '') {
+        if (empty($this->getConfiguration('backgroundColor'))) {
             $this->setConfiguration('backgroundColor', '#ffffff');
         }
     }
@@ -128,14 +128,14 @@ class PlanHeader implements EntityInterface
 
     public function displayImage()
     {
-        if ($this->getImage('data') == '') {
+        if (empty($this->getImage('data'))) {
             return '';
         }
         $dir = NEXTDOM_ROOT . '/public/img/plan';
         if (!file_exists($dir)) {
             mkdir($dir);
         }
-        if ($this->getImage('sha512') == '') {
+        if (empty($this->getImage('sha512'))) {
             $this->setImage('sha512', Utils::sha512($this->getImage('data')));
             $this->save();
         }

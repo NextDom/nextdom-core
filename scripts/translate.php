@@ -21,7 +21,7 @@ if (file_exists($target)) {
     $translationArray = [];
     foreach ($matches[1] as $toTranslate) {
         $translation = $translator->trans($toTranslate);
-        if ($translation == '') {
+        if (empty($translation)) {
             $translation = $toTranslate;
         }
         $translationArray['{{'.$toTranslate.'}}'] = $translation;

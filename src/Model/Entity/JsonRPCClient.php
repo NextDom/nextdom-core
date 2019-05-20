@@ -74,7 +74,7 @@ class JsonRPCClient
         }
 
         if (!((is_string($this->rawResult) && (is_object(json_decode($this->rawResult)) || is_array(json_decode($this->rawResult)))))) {
-            if ($this->error == 'No error' || $this->error == '') {
+            if ($this->error == 'No error' || empty($this->error)) {
                 $this->error = '9999<br/>Reponse is not json : ' . $this->rawResult;
             }
             $this->errorMessage = $this->rawResult;

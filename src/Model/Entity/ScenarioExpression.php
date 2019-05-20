@@ -582,7 +582,7 @@ class ScenarioExpression implements EntityInterface
             $occurence++;
             sleep(1);
         }
-        if ($value == '') {
+        if (empty($value)) {
             $value = __('Aucune réponse');
             $cmd->setCache('ask::variable', 'none');
             $dataStore = DataStoreManager::byTypeLinkIdKey('scenario', -1, $this->getOptions('variable'));

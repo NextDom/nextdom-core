@@ -70,12 +70,12 @@ function initEquipment(_object_id) {
         $('#div_alert').showAlert({message: error.message, level: 'danger'});
       },
       success: function (html) {
-        if((_object_id == 'all' || _object_id == '' || initObject != '')){
+        if((_object_id == 'all' || empty(_object_id) || !empty(initObject))){
           var div = '';
           var number = 0;
           summaries= [];
           for(var i in html){
-            if($.trim(html[i]) == ''){
+            if(empty($.trim(html[i]))){
               continue;
             }
             var id = i.split('::')[1]
@@ -129,7 +129,7 @@ function initEquipment(_object_id) {
   $('#in_searchWidget').off('keyup').on('keyup',function(){
     $('.div_displayEquipement').show();
     var search = $(this).value();
-    if(search == ''){
+    if(empty(search)){
       $('.eqLogic-widget').show();
       $('.scenario-widget').show();
       $('.objectHtml').packery();

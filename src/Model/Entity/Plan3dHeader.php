@@ -58,7 +58,7 @@ class Plan3dHeader implements EntityInterface
 
     public function preSave()
     {
-        if (trim($this->getName()) == '') {
+        if (empty(trim($this->getName()))) {
             throw new \Exception(__('Le nom du l\'objet ne peut pas être vide'));
         }
     }

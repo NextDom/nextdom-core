@@ -223,7 +223,7 @@ class Scenario implements EntityInterface
      */
     public function getTimeout($_default = 0)
     {
-        if ($this->timeout == '' || !is_numeric($this->timeout)) {
+        if (empty($this->timeout) || !is_numeric($this->timeout)) {
             return $_default;
         }
         return $this->timeout;
@@ -236,7 +236,7 @@ class Scenario implements EntityInterface
      */
     public function getIsVisible($defaultValue = 0)
     {
-        if ($this->isVisible == '' || !is_numeric($this->isVisible)) {
+        if (empty($this->isVisible) || !is_numeric($this->isVisible)) {
             return $defaultValue;
         }
         return $this->isVisible;
@@ -300,7 +300,7 @@ class Scenario implements EntityInterface
      */
     public function getObject_id($default = null)
     {
-        if ($this->object_id == '' || !is_numeric($this->object_id)) {
+        if (empty($this->object_id) || !is_numeric($this->object_id)) {
             return $default;
         }
         return $this->object_id;
@@ -402,7 +402,7 @@ class Scenario implements EntityInterface
      */
     public function setTimeout($_timeout)
     {
-        if ($_timeout === '' || is_nan(intval($_timeout)) || $_timeout < 1) {
+        if (empty($_timeout) || is_nan(intval($_timeout)) || $_timeout < 1) {
             $_timeout = 0;
         }
         $this->_changed = Utils::attrChanged($this->_changed, $this->timeout, $_timeout);
@@ -716,19 +716,19 @@ class Scenario implements EntityInterface
      */
     public function preSave()
     {
-        if ($this->getTimeout() == '' || !is_numeric($this->getTimeout())) {
+        if (empty($this->getTimeout()) || !is_numeric($this->getTimeout())) {
             $this->setTimeout(0);
         }
-        if ($this->getName() == '') {
+        if (empty($this->getName())) {
             throw new CoreException(__('Le nom du scénario ne peut pas être vide.'));
         }
-        if (($this->getMode() == 'schedule' || $this->getMode() == 'all') && $this->getSchedule() == '') {
+        if (($this->getMode() == 'schedule' || $this->getMode() == 'all') && empty($this->getSchedule())) {
             throw new CoreException(__('Le scénario est de type programmé mais la programmation est vide'));
         }
         if ($this->getConfiguration('has_return', 0) == 1) {
             $this->setConfiguration('syncmode', 1);
         }
-        if ($this->getConfiguration('logmode') == '') {
+        if (empty($this->getConfiguration('logmode'))) {
             $this->setConfiguration('logmode', 'default');
         }
     }
@@ -747,7 +747,7 @@ class Scenario implements EntityInterface
      */
     public function save()
     {
-        if ($this->getLastLaunch() == '' && ($this->getMode() == 'schedule' || $this->getMode() == 'all')) {
+        if (empty($this->getLastLaunch()) && ($this->getMode() == 'schedule' || $this->getMode() == 'all')) {
             $calculateScheduleDate = $this->calculateScheduleDate();
             $this->setLastLaunch($calculateScheduleDate['prevDate']);
         }
@@ -859,10 +859,10 @@ class Scenario implements EntityInterface
                 } catch (\Exception $exc) {
 
                 }
-                if ($calculatedDate['prevDate'] == '' || strtotime($calculatedDate['prevDate']) < strtotime($calculatedDate_tmp['prevDate'])) {
+                if (empty($calculatedDate['prevDate']) || strtotime($calculatedDate['prevDate']) < strtotime($calculatedDate_tmp['prevDate'])) {
                     $calculatedDate['prevDate'] = $calculatedDate_tmp['prevDate'];
                 }
-                if ($calculatedDate['nextDate'] == '' || strtotime($calculatedDate['nextDate']) > strtotime($calculatedDate_tmp['nextDate'])) {
+                if (empty($calculatedDate['nextDate']) || strtotime($calculatedDate['nextDate']) > strtotime($calculatedDate_tmp['nextDate'])) {
                     $calculatedDate['nextDate'] = $calculatedDate_tmp['nextDate'];
                 }
             }

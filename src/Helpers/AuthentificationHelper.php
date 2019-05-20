@@ -147,7 +147,7 @@ class AuthentificationHelper
             return false;
         }
         if (NetworkHelper::getUserLocation() != 'internal' && $user->getOptions('twoFactorAuthentification', 0) == 1 && $user->getOptions('twoFactorAuthentificationSecret') != '') {
-            if (empty(trim($_twoFactor)) || $_twoFactor === null || !$user->validateTwoFactorCode($_twoFactor)) {
+            if (empty(trim($_twoFactor)) || !$user->validateTwoFactorCode($_twoFactor)) {
                 UserManager::failedLogin();
                 sleep(5);
                 return false;

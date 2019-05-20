@@ -103,7 +103,7 @@ class Plan implements EntityInterface
 
     public function preInsert()
     {
-        if ($this->getCss('z-index') == '') {
+        if (empty($this->getCss('z-index'))) {
             $this->setCss('z-index', 1000);
         }
         if (in_array($this->getLink_type(), array('eqLogic', 'cmd', 'scenario'))) {
@@ -116,7 +116,7 @@ class Plan implements EntityInterface
         if ($this->getCss('zoom') != '' && (!is_numeric($this->getCss('zoom')) || $this->getCss('zoom')) < 0.1) {
             $this->setCss('zoom', 1);
         }
-        if ($this->getLink_id() == '') {
+        if (empty($this->getLink_id())) {
             $this->setLink_id(mt_rand(0, 99999999) + 9999);
         }
     }
@@ -316,7 +316,7 @@ class Plan implements EntityInterface
                         $summary = $object->getHtmlSummary($_version);
                     }
                 }
-                if ($summary == '') {
+                if (empty($summary)) {
                     $html .= __('Non configuré');
                 } else {
                     $html .= $summary;

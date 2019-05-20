@@ -61,7 +61,7 @@ class Note implements EntityInterface
      */
     public function preSave()
     {
-        if (trim($this->getName()) == '') {
+        if (empty(trim($this->getName()))) {
             throw new CoreException(__('entity.note.name-cannot-be-empty'));
         }
     }

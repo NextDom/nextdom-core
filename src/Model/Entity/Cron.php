@@ -111,7 +111,7 @@ class Cron implements EntityInterface
 
     public function getEnable($defaultValue = 0)
     {
-        if ($this->enable == '' || !is_numeric($this->enable)) {
+        if (empty($this->enable) || !is_numeric($this->enable)) {
             return $defaultValue;
         }
         return $this->enable;
@@ -162,7 +162,7 @@ class Cron implements EntityInterface
 
     public function getOnce($defaultValue = 0)
     {
-        if ($this->once == '' || !is_numeric($this->once)) {
+        if (empty($this->once) || !is_numeric($this->once)) {
             return $defaultValue;
         }
         return $this->once;
@@ -312,13 +312,13 @@ class Cron implements EntityInterface
      */
     public function preSave()
     {
-        if ($this->getFunction() == '') {
+        if (empty($this->getFunction() )) {
             throw new CoreException(__('La fonction ne peut pas être vide'));
         }
-        if ($this->getSchedule() == '') {
+        if (empty($this->getSchedule())) {
             throw new CoreException(__('La programmation ne peut pas être vide : ') . print_r($this, true));
         }
-        if ($this->getOption() == '' || count($this->getOption()) == 0) {
+        if (empty($this->getOption()) || count($this->getOption()) == 0) {
             $cron = CronManager::byClassAndFunction($this->getClass(), $this->getFunction());
             if (is_object($cron)) {
                 $this->setId($cron->getId());

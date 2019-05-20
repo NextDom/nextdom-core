@@ -86,7 +86,7 @@ class EqReal implements EntityInterface
 
     public function save()
     {
-        if ($this->getName() == '') {
+        if (empty($this->getName())) {
             throw new \Exception(__('Le nom de l\'équipement réel ne peut pas être vide'));
         }
         return DBHelper::save($this);

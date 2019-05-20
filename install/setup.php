@@ -147,7 +147,7 @@ if (initVar('hostname') != '' && initVar('username') != '' && initVar('password'
         $opt = array(
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         );
-        if (initVar('database') == '') {
+        if (empty(initVar('database'))) {
             $_POST['database'] = 'nextdom';
         }
         $dsn = "mysql:host=" . initVar('hostname') . ";port=" . initVar('port', '3306') . ";charset=utf8";

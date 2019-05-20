@@ -258,7 +258,7 @@ class InteractDef implements EntityInterface
 
     public function preInsert()
     {
-        if ($this->getReply() == '') {
+        if (empty($this->getReply())) {
             $this->setReply('#valeur#');
         }
         $this->setEnable(1);
@@ -266,17 +266,17 @@ class InteractDef implements EntityInterface
 
     public function preSave()
     {
-        if ($this->getOptions('allowSyntaxCheck') === '') {
+        if (empty($this->getOptions('allowSyntaxCheck'))) {
             $this->setOptions('allowSyntaxCheck', 1);
         }
-        if ($this->getFiltres('eqLogic_id') == '') {
+        if (empty($this->getFiltres('eqLogic_id'))) {
             $this->setFiltres('eqLogic_id', 'all');
         }
     }
 
     public function save()
     {
-        if ($this->getQuery() == '') {
+        if (empty($this->getQuery())) {
             throw new \Exception(__('La commande (demande) ne peut pas être vide'));
         }
         DBHelper::save($this);
@@ -291,7 +291,7 @@ class InteractDef implements EntityInterface
             DBHelper::beginTransaction();
             foreach ($queries as $query) {
                 $query['query'] = InteractDefManager::sanitizeQuery($query['query']);
-                if (trim($query['query']) == '') {
+                if (empty(trim($query['query']))) {
                     continue;
                 }
                 if (!$this->checkQuery($query['query'])) {
@@ -365,7 +365,7 @@ class InteractDef implements EntityInterface
                                         $category_ok = true;
                                         break;
                                     }
-                                    if ($category == 'noCategory' && $eqLogic->getPrimaryCategory() == '') {
+                                    if ($category == 'noCategory' && empty($eqLogic->getPrimaryCategory())) {
                                         $category_ok = true;
                                         break;
                                     }
@@ -385,7 +385,7 @@ class InteractDef implements EntityInterface
                             if (isset($type_filter[$cmd->getType()]) && $type_filter[$cmd->getType()] == 0) {
                                 continue;
                             }
-                            if ($cmd->getUnite() == '') {
+                            if (empty($cmd->getUnite())) {
                                 if (isset($unite_filter['none']) && $unite_filter['none'] == 0) {
                                     continue;
                                 }

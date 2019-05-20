@@ -65,7 +65,7 @@ class Cache
 
     public function getValue($_default = '')
     {
-        return ($this->value === null || (is_string($this->value) && trim($this->value) === '')) ? $_default : $this->value;
+        return (empty($this->value) || (is_string($this->value) && empty(trim($this->value)))) ? $_default : $this->value;
     }
 
     public function setValue($value)

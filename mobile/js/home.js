@@ -89,7 +89,7 @@ function initHome() {
   if (plugins.length > 0) {
     var li = '';
     for (var i in plugins) {
-      if(plugins[i].mobile == ''){
+      if(empty(plugins[i].mobile)){
         continue;
       }
       if(plugins[i].displayMobilePanel == 0){

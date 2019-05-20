@@ -148,16 +148,16 @@ class JeeObject implements EntityInterface
         $this->checkTreeConsistency();
 
         $this->setConfiguration('parentNumber', $this->parentNumber());
-        if ($this->getConfiguration('tagColor') == '') {
+        if (empty($this->getConfiguration('tagColor'))) {
             $this->setConfiguration('tagColor', '#000000');
         }
-        if ($this->getConfiguration('tagTextColor') == '') {
+        if (empty($this->getConfiguration('tagTextColor'))) {
             $this->setConfiguration('tagTextColor', '#FFFFFF');
         }
-        if ($this->getConfiguration('desktop::summaryTextColor') == '') {
+        if (empty($this->getConfiguration('desktop::summaryTextColor'))) {
             $this->setConfiguration('desktop::summaryTextColor', '');
         }
-        if ($this->getConfiguration('mobile::summaryTextColor') == '') {
+        if (empty($this->getConfiguration('mobile::summaryTextColor'))) {
             $this->setConfiguration('mobile::summaryTextColor', '');
         }
     }
@@ -248,7 +248,7 @@ class JeeObject implements EntityInterface
     public function getEqLogicBySummary($summary = '', $onlyEnable = true, $onlyVisible = false, $eqTypeName = null, $logicalId = null)
     {
         $def = ConfigManager::byKey('object:summary');
-        if ($summary == '' || !isset($def[$summary])) {
+        if (empty($summary) || !isset($def[$summary])) {
             return null;
         }
         $summaries = $this->getConfiguration('summary');
@@ -333,7 +333,7 @@ class JeeObject implements EntityInterface
     public function getSummary($key = '', $raw = false)
     {
         $def = ConfigManager::byKey('object:summary');
-        if ($key == '' || !isset($def[$key])) {
+        if (empty($key ) || !isset($def[$key])) {
             return null;
         }
         $summaries = $this->getConfiguration('summary');
@@ -442,14 +442,14 @@ class JeeObject implements EntityInterface
 
     public function getImgLink()
     {
-        if ($this->getImage('data') == '') {
+        if (empty($this->getImage('data'))) {
             return '';
         }
         $dir = NEXTDOM_ROOT . '/public/img/object';
         if (!file_exists($dir)) {
             mkdir($dir);
         }
-        if ($this->getImage('sha512') == '') {
+        if (empty($this->getImage('sha512'))) {
             $this->setImage('sha512', Utils::sha512($this->getImage('data')));
             $this->save();
         }
@@ -509,7 +509,7 @@ class JeeObject implements EntityInterface
      */
     public function getFather_id($default = null)
     {
-        if ($this->father_id == '' || !is_numeric($this->father_id)) {
+        if (empty($this->father_id) || !is_numeric($this->father_id)) {
             return $default;
         }
         return $this->father_id;
@@ -524,7 +524,7 @@ class JeeObject implements EntityInterface
      */
     public function getIsVisible($default = null)
     {
-        if ($this->isVisible == '' || !is_numeric($this->isVisible)) {
+        if (empty($this->isVisible) || !is_numeric($this->isVisible)) {
             return $default;
         }
         return $this->isVisible;
@@ -580,7 +580,7 @@ class JeeObject implements EntityInterface
      */
     public function setFather_id($_father_id = null)
     {
-        $_father_id = ($_father_id == '') ? null : $_father_id;
+        $_father_id = (empty($_father_id)) ? null : $_father_id;
         $this->_changed = Utils::attrChanged($this->_changed, $this->father_id, $_father_id);
         $this->father_id = $_father_id;
         return $this;
@@ -609,7 +609,7 @@ class JeeObject implements EntityInterface
      */
     public function getPosition($default = null)
     {
-        if ($this->position == '' || !is_numeric($this->position)) {
+        if (empty($this->position) || !is_numeric($this->position)) {
             return $default;
         }
         return $this->position;

@@ -398,10 +398,10 @@ class Update implements EntityInterface
      */
     public function preSave()
     {
-        if ($this->getLogicalId() == '') {
+        if (empty($this->getLogicalId())) {
             throw new CoreException(__('Le logical ID ne peut pas être vide'));
         }
-        if ($this->getName() == '') {
+        if (empty($this->getName())) {
             $this->setName($this->getLogicalId());
         }
     }

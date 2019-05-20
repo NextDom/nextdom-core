@@ -82,10 +82,10 @@ class Message implements EntityInterface
 
     public function save($_writeMessage = true)
     {
-        if ($this->getMessage() == '') {
+        if (empty($this->getMessage())) {
             return null;
         }
-        if ($this->getLogicalId() == '') {
+        if (empty($this->getLogicalId())) {
             $this->setLogicalId($this->getPlugin() . '::' . ConfigManager::genKey());
             $values = array(
                 'message' => $this->getMessage(),

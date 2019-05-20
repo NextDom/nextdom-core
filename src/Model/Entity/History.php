@@ -68,10 +68,10 @@ class History
         } else {
             $cmd = $_cmd;
         }
-        if ($this->getDatetime() == '') {
+        if (empty($this->getDatetime())) {
             $this->setDatetime(date('Y-m-d H:i:s'));
         }
-        if ($cmd->getConfiguration('historizeRound') !== '' && is_numeric($cmd->getConfiguration('historizeRound')) && $cmd->getConfiguration('historizeRound') >= 0 && $this->getValue() !== null) {
+        if (!empty($cmd->getConfiguration('historizeRound')) && is_numeric($cmd->getConfiguration('historizeRound')) && $cmd->getConfiguration('historizeRound') >= 0 && !empty($this->getValue())) {
             $this->setValue(round($this->getValue(), $cmd->getConfiguration('historizeRound')));
         }
         if ($NEXTDOM_INTERNAL_CONFIG['cmd']['type']['info']['subtype'][$cmd->getSubType()]['isHistorized']['canBeSmooth'] && $cmd->getConfiguration('historizeMode', 'avg') != 'none' && $this->getValue() !== null && $_direct === false) {
@@ -126,7 +126,7 @@ class History
             'datetime' => $this->getDatetime(),
             'value' => $this->getValue(),
         );
-        if ($values['value'] === '') {
+        if (empty($values['value'])) {
             $values['value'] = null;
         }
         $sql = 'REPLACE INTO ' . $this->getTableName() . '

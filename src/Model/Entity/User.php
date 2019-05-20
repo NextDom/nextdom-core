@@ -101,7 +101,7 @@ class User implements EntityInterface
 
     public function preSave()
     {
-        if ($this->getLogin() == '') {
+        if (empty($this->getLogin())) {
             throw new \Exception(__('Le nom d\'utilisateur ne peut pas être vide'));
         }
         $admins = UserManager::byProfils('admin', true);
@@ -231,7 +231,7 @@ class User implements EntityInterface
 
     public function getHash()
     {
-        if ($this->hash == '' && $this->id != '') {
+        if (empty($this->hash) && !empty($this->id)) {
             $hash = ConfigManager::genKey();
             while (is_object(UserManager::byHash($hash))) {
                 $hash = ConfigManager::genKey();

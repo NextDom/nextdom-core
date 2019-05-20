@@ -109,7 +109,7 @@ try {
             echo "/!\ Force update /!\ \n";
         }
         nextdom::stop();
-        if (init('update::reapply') == '' && config::byKey('update::allowCore', 'core', 1) != 0) {
+        if (empty(init('update::reapply')) && config::byKey('update::allowCore', 'core', 1) != 0) {
             $tmp_dir = nextdom::getTmpFolder('install');
             $tmp = $tmp_dir . '/nextdom_update.zip';
             try {

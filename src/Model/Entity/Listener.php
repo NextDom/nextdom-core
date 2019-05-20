@@ -126,7 +126,7 @@ class Listener implements EntityInterface
 
     public function preSave()
     {
-        if ($this->getFunction() == '') {
+        if (empty($this->getFunction())) {
             throw new \Exception(__('La fonction ne peut pas être vide'));
         }
     }

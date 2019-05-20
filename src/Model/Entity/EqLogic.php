@@ -234,7 +234,7 @@ class EqLogic implements EntityInterface
      */
     public function getIsVisible($defaultValue = 0)
     {
-        if ($this->isVisible == '' || !is_numeric($this->isVisible)) {
+        if (empty($this->isVisible) || !is_numeric($this->isVisible)) {
             return $defaultValue;
         }
         return $this->isVisible;
@@ -246,7 +246,7 @@ class EqLogic implements EntityInterface
      */
     public function getIsEnable($defaultValue = 0)
     {
-        if ($this->isEnable == '' || !is_numeric($this->isEnable)) {
+        if (empty($this->isEnable) || !is_numeric($this->isEnable)) {
             return $defaultValue;
         }
         return $this->isEnable;
@@ -271,7 +271,7 @@ class EqLogic implements EntityInterface
      */
     public function getTimeout($defaultValue = null)
     {
-        if ($this->timeout == '' || !is_numeric($this->timeout)) {
+        if (empty($this->timeout) || !is_numeric($this->timeout)) {
             return $defaultValue;
         }
         return $this->timeout;
@@ -305,7 +305,7 @@ class EqLogic implements EntityInterface
      */
     public function getOrder()
     {
-        if ($this->order == '' || !is_numeric($this->order)) {
+        if (empty($this->order) || !is_numeric($this->order)) {
             return 0;
         }
         return $this->order;
@@ -341,7 +341,7 @@ class EqLogic implements EntityInterface
      */
     public function getEqReal_id($defaultValue = null)
     {
-        if ($this->eqReal_id == '' || !is_numeric($this->eqReal_id)) {
+        if (empty($this->eqReal_id) || !is_numeric($this->eqReal_id)) {
             return $defaultValue;
         }
         return $this->eqReal_id;
@@ -508,7 +508,7 @@ class EqLogic implements EntityInterface
      */
     public function setTimeout($timeout)
     {
-        if ($timeout == '' || is_nan(intval($timeout)) || $timeout < 1) {
+        if (empty($timeout) || is_nan(intval($timeout)) || $timeout < 1) {
             $timeout = null;
         }
         if ($timeout != $this->getTimeout()) {
@@ -758,7 +758,7 @@ class EqLogic implements EntityInterface
             return false;
         }
         $oldValue = $cmd->execCmd();
-        if (($oldValue != $cmd->formatValue($_value)) || $oldValue === '') {
+        if (($oldValue != $cmd->formatValue($_value)) || empty($oldValue)) {
             $cmd->event($_value, $_updateTime);
             return true;
         }
@@ -949,7 +949,7 @@ class EqLogic implements EntityInterface
             $vcolor = 'mcmdColor';
         }
         $parameters = $this->getDisplay('parameters');
-        $replace['#cmd-background-color#'] = ($this->getPrimaryCategory() == '') ? NextDomHelper::getConfiguration('eqLogic:category:default:' . $vcolor) : NextDomHelper::getConfiguration('eqLogic:category:' . $this->getPrimaryCategory() . ':' . $vcolor);
+        $replace['#cmd-background-color#'] = (empty($this->getPrimaryCategory())) ? NextDomHelper::getConfiguration('eqLogic:category:default:' . $vcolor) : NextDomHelper::getConfiguration('eqLogic:category:' . $this->getPrimaryCategory() . ':' . $vcolor);
         if (is_array($parameters) && isset($parameters['cmd-background-color'])) {
             $replace['#cmd-background-color#'] = $parameters['cmd-background-color'];
         }
@@ -1181,7 +1181,7 @@ class EqLogic implements EntityInterface
      */
     public function save($_direct = false)
     {
-        if ($this->getName() == '') {
+        if (empty($this->getName())) {
             throw new CoreException(__('Le nom de l\'équipement ne peut pas être vide : ') . print_r($this, true));
         }
         if ($this->getChanged()) {
@@ -1208,22 +1208,22 @@ class EqLogic implements EntityInterface
                 $this->setDisplay('width', 'auto');
             }
             foreach (array('dashboard', 'mobile') as $key) {
-                if ($this->getDisplay('layout::' . $key . '::table::parameters') == '') {
+                if (empty($this->getDisplay('layout::' . $key . '::table::parameters'))) {
                     $this->setDisplay('layout::' . $key . '::table::parameters', array('center' => 1, 'styletd' => 'padding:3px;'));
                 }
                 if ($this->getDisplay('layout::' . $key) == 'table') {
-                    if ($this->getDisplay('layout::' . $key . '::table::nbLine') == '') {
+                    if (empty($this->getDisplay('layout::' . $key . '::table::nbLine'))) {
                         $this->setDisplay('layout::' . $key . '::table::nbLine', 1);
                     }
-                    if ($this->getDisplay('layout::' . $key . '::table::nbColumn') == '') {
+                    if (empty($this->getDisplay('layout::' . $key . '::table::nbColumn'))) {
                         $this->setDisplay('layout::' . $key . '::table::nbLine', 1);
                     }
                 }
                 foreach ($this->getCmd() as $cmd) {
-                    if ($this->getDisplay('layout::' . $key . '::table::cmd::' . $cmd->getId() . '::line') == '' && $cmd->getDisplay('layout::' . $key . '::table::cmd::line') != '') {
+                    if (empty($this->getDisplay('layout::' . $key . '::table::cmd::' . $cmd->getId() . '::line')) && !empty($cmd->getDisplay('layout::' . $key . '::table::cmd::line'))) {
                         $this->setDisplay('layout::' . $key . '::table::cmd::' . $cmd->getId() . '::line', $cmd->getDisplay('layout::' . $key . '::table::cmd::line'));
                     }
-                    if ($this->getDisplay('layout::' . $key . '::table::cmd::' . $cmd->getId() . '::column') == '' && $cmd->getDisplay('layout::' . $key . '::table::cmd::column') != '') {
+                    if (empty($this->getDisplay('layout::' . $key . '::table::cmd::' . $cmd->getId() . '::column')) && !empty($cmd->getDisplay('layout::' . $key . '::table::cmd::column'))) {
                         $this->setDisplay('layout::' . $key . '::table::cmd::' . $cmd->getId() . '::column', $cmd->getDisplay('layout::' . $key . '::table::cmd::column'));
                     }
                     if ($this->getDisplay('layout::' . $key . '::table::cmd::' . $cmd->getId() . '::line', 1) > $this->getDisplay('layout::' . $key . '::table::nbLine', 1)) {
@@ -1232,10 +1232,10 @@ class EqLogic implements EntityInterface
                     if ($this->getDisplay('layout::' . $key . '::table::cmd::' . $cmd->getId() . '::column', 1) > $this->getDisplay('layout::' . $key . '::table::nbColumn', 1)) {
                         $this->setDisplay('layout::' . $key . '::table::cmd::' . $cmd->getId() . '::column', $this->getDisplay('layout::' . $key . '::table::nbColumn', 1));
                     }
-                    if ($this->getDisplay('layout::' . $key . '::table::cmd::' . $cmd->getId() . '::line') == '') {
+                    if (empty($this->getDisplay('layout::' . $key . '::table::cmd::' . $cmd->getId() . '::line'))) {
                         $this->setDisplay('layout::' . $key . '::table::cmd::' . $cmd->getId() . '::line', 1);
                     }
-                    if ($this->getDisplay('layout::' . $key . '::table::cmd::' . $cmd->getId() . '::column') == '') {
+                    if (empty($this->getDisplay('layout::' . $key . '::table::cmd::' . $cmd->getId() . '::column'))) {
                         $this->setDisplay('layout::' . $key . '::table::cmd::' . $cmd->getId() . '::column', 1);
                     }
                 }
@@ -1409,7 +1409,7 @@ class EqLogic implements EntityInterface
         if ($this->getConfiguration('noBatterieCheck', 0) == 1) {
             return;
         }
-        if ($_pourcent == '') {
+        if (empty($_pourcent)) {
             $_pourcent = $this->getStatus('battery');
             $_datetime = $this->getStatus('batteryDatetime');
         }
@@ -1651,12 +1651,12 @@ class EqLogic implements EntityInterface
         foreach ($return as $key => $value) {
             if (is_array($value)) {
                 foreach ($value as $key2 => $value2) {
-                    if ($value2 == '') {
+                    if (empty($value2)) {
                         unset($return[$key][$key2]);
                     }
                 }
             } else {
-                if ($value == '') {
+                if (empty($value)) {
                     unset($return[$key]);
                 }
             }
