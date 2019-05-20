@@ -86,12 +86,24 @@ def others_tests():
     container_name = 'others'
     print_subtitle('Others tests')
     start_test_container(container_name, NEXTDOM_PASSWORD)
+    # Load somes data
+    exec_command_in_container(
+        container_name,
+        '/bin/cp -fr /var/www/html/tests/data/plugin4tests /var/www/html/plugins')
+    exec_command_in_container(
+        container_name,
+        '/bin/chown www-data:www-data -R /var/www/html/plugins')
+    exec_command_in_container(
+        container_name,
+        '/usr/bin/mysql -u root nextdomdev < data/tests_fixtures.sql')
     print_subtitle('Connection page')
     run_test('tests/connection_page.py', [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])
     print_subtitle('Administrations pages')
     run_test('tests/administrations_page.py', [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])
     print_subtitle('Rescue pages')
     run_test('tests/rescue_page.py', [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])
+    print_subtitle('Others pages')
+    run_test('tests/others_pages.py', [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])
     remove_test_container(container_name)
 
 if __name__ == "__main__":
