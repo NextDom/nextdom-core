@@ -283,7 +283,7 @@ class ObjectManager
                 try {
                     $value['object']->setCache('summaryHtmldesktop', '');
                     $value['object']->setCache('summaryHtmlmobile', '');
-                    if (empty($value['object']->getConfiguration('summary_virtual_id')) {
+                    if (empty($value['object']->getConfiguration('summary_virtual_id'))) {
                         continue;
                     }
                     $virtual = EqLogicManager::byId($value['object']->getConfiguration('summary_virtual_id'));
