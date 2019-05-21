@@ -44,13 +44,16 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
  */
 class Utils
 {
-    private static $properties = array();
+    /**
+     * @var array
+     */
+    private static $properties = [];
 
     /**
      * Add javascript variable in HTML code
      *
      * @param string $varName Name of javascript variable
-     * @param mixed $varValue Value of the javascript variable
+     * @param string $varValue Value of the javascript variable
      */
     public static function sendVarToJs(string $varName, $varValue)
     {
@@ -67,7 +70,6 @@ class Utils
      */
     private static function getVarInJs(string $varName, $varValue): string
     {
-        $jsVarValue = '';
         if (is_array($varValue)) {
             $jsVarValue = self::getArrayToJQueryJson($varValue);
         } else {
@@ -168,11 +170,11 @@ class Utils
     public static function resizeImage($contents, $width, $height)
     {
 // Calcul des nouvelles dimensions
-        $width_orig = imagesx($contents);
+        $width_orig  = imagesx($contents);
         $height_orig = imagesy($contents);
-        $ratio_orig = $width_orig / $height_orig;
-        $test = $width / $height > $ratio_orig;
-        $dest_width = $test ? ceil($height * $ratio_orig) : $width;
+        $ratio_orig  = $width_orig / $height_orig;
+        $test        = $width / $height > $ratio_orig;
+        $dest_width  = $test ? ceil($height * $ratio_orig) : $width;
         $dest_height = $test ? $height : ceil($width / $ratio_orig);
 
         $dest_image = imagecreatetruecolor($width, $height);
@@ -227,7 +229,6 @@ class Utils
      */
     public static function connectedToDatabase()
     {
-        require_once NEXTDOM_ROOT . '/src/Helpers/DBHelper.php';
         return is_object(DBHelper::getConnection());
     }
 
@@ -236,7 +237,7 @@ class Utils
      * @return string
      * @throws \Exception
      */
-    public static function displayException($e)
+    public static function displayException($e): string
     {
         $message = '<span id="span_errorMessage">' . $e->getMessage() . '</span>';
         if (DEBUG) {
@@ -251,7 +252,7 @@ class Utils
      * @return string
      * @throws \Exception
      */
-    public static function displaySimpleException($errorMessage)
+    public static function displaySimpleException($errorMessage): string
     {
         return '<span id="span_errorMessage">' . $errorMessage . '</span>';
     }
@@ -428,7 +429,7 @@ class Utils
      * @param $size
      * @return string
      */
-    public static function sizeFormat($size)
+    public static function sizeFormat($size): string
     {
         $mod = 1024;
         $units = explode(' ', 'B KB MB GB TB PB');
@@ -536,7 +537,7 @@ class Utils
     /**
      * @param string $_string
      *
-     * @return string
+     * @return strin
      */
     public static function secureXSS($_string)
     {
@@ -672,7 +673,7 @@ class Utils
      * @param $_string
      * @return array
      */
-    public static function arg2array($_string)
+    public static function arg2array($_string): array
     {
         $return = array();
         $re = '/[\/-]?(([a-zA-Z0-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœ_#]+)(?:[=:]("[^"]+"|[^\s"]+))?)(?:\s+|$)/';
@@ -690,7 +691,7 @@ class Utils
      * @param $string
      * @return string
      */
-    public static function strToHex($string)
+    public static function strToHex($string): string
     {
         $hex = '';
         $calculateStrLen = strlen($string);
@@ -725,7 +726,7 @@ class Utils
      * @param $_pathimg
      * @return string
      */
-    public static function getDominantColor($_pathimg)
+    public static function getDominantColor($_pathimg): string
     {
         $rTotal = 0;
         $gTotal = 0;
@@ -753,7 +754,7 @@ class Utils
      * @param $_string
      * @return string
      */
-    public static function sha512($_string)
+    public static function sha512($_string): string
     {
         return hash('sha512', $_string);
     }
@@ -762,7 +763,7 @@ class Utils
      * @param $_icon
      * @return array
      */
-    public static function findCodeIcon($_icon)
+    public static function findCodeIcon($_icon): array
     {
         $icon = trim(str_replace(array('fa ', 'icon ', '></i>', '<i', 'class="', '"'), '', trim($_icon)));
         $re = '/.' . $icon . ':.*\n.*content:.*"(.*?)";/m';
@@ -782,7 +783,7 @@ class Utils
                 }
             }
         }
-        return array('icon' => '', 'fontfamily' => '');
+        return [ 'icon' => '', 'fontfamily' => '' ];
     }
 
     /**
@@ -829,7 +830,7 @@ class Utils
      * @param $_words
      * @return bool
      */
-    public static function strContainsOneOf($_string, $_words)
+    public static function strContainsOneOf($_string, $_words): bool
     {
         foreach ($_words as $word) {
             if (strpos($_string, $word) !== false) {
@@ -1158,7 +1159,7 @@ class Utils
      * @throws CoreException when checks fail
      * @return string path to modes file
      */
-    static public function readUploadedFile($files, $key, $destDir, $maxSizeMB, $extensions, $cleaner = null)
+    public static function readUploadedFile($files, $key, $destDir, $maxSizeMB, $extensions, $cleaner = null)
     {
         if (false == isset($files[$key])) {
             $message = __('Aucun fichier trouvé. Vérifiez le paramètre PHP (post size limit)');
@@ -1200,8 +1201,9 @@ class Utils
 
     /**
      * @return float|int
+     * @throws \Exception
      */
-    static public function getTZoffsetMin()
+    public static function getTZoffsetMin()
     {
         $tz = date_default_timezone_get();
         date_default_timezone_set("UTC");
@@ -1216,7 +1218,7 @@ class Utils
      * @param $name
      * @return mixed
      */
-    function cleanComponentName($name)
+    public static function cleanComponentName($name)
     {
         return str_replace(array('&', '#', ']', '[', '%', "\\", "/", "'", '"'), '', $name);
     }
