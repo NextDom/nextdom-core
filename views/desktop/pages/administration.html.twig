@@ -162,7 +162,7 @@
                 <div class="box-body text-center">
                     <a class="btn btn-app" href="index.php?v=d&p=display"><i class="fas fa-table"></i>{{ 'page-title.summaries'|trans }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=backup" ><i class="fas fa-save"></i>{{ 'page-title.backups'|trans }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=update"><span class="badge bg-red">{{ numberOfUpdates }}</span><i class="fas fa-download"></i>{{ 'page-title.updates'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=update">{% if numberOfUpdates != 0 %}<span class="badge bg-red">{{ numberOfUpdates }}</span>{% endif %}<i class="fas fa-download"></i>{{ 'page-title.updates'|trans }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=note"><i class="fas fa-sticky-note"></i>{{ 'page-title.notes'|trans }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=osdb"><i class="fas fa-terminal"></i>{{ 'page-title.database'|trans }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=interact"><i class="fas fa-comments"></i>{{ 'page-title.interacts'|trans }}</a>
