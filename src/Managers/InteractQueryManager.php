@@ -283,7 +283,7 @@ class InteractQueryManager
         $return[$_type] = null;
         $synonyms = self::getQuerySynonym($return['query'], $_type);
         if ($_type == 'object') {
-            $objects = JeeObjectManager::all();
+            $objects = ObjectManager::all();
         } elseif ($_type == 'eqLogic') {
             if ($_data !== null && is_object($_data['object'])) {
                 $objects = $_data['object']->getEqLogic();
@@ -409,7 +409,7 @@ class InteractQueryManager
                 $value = $data['object']->getSummary($data['summary']['key']);
             }
             if (trim($value) === '') {
-                $value = JeeObjectManager::getGlobalSummary($data['summary']['key']);
+                $value = ObjectManager::getGlobalSummary($data['summary']['key']);
             }
             if (trim($value) === '') {
                 return '';

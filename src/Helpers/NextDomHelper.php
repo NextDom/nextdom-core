@@ -42,7 +42,7 @@ use NextDom\Managers\CronManager;
 use NextDom\Managers\DataStoreManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
-use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\ObjectManager;
 use NextDom\Managers\MessageManager;
 use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PluginManager;
@@ -140,7 +140,7 @@ class NextDomHelper
             'name' => __('health.os-version'),
             'state' => $state,
             'result' => ($state) ? $uname . ' [' . $version . ']' : $uname,
-            'comment' => ($state) ? '' : __('Vous n\'êtes pas sur un OS officiellement supporté par l\'équipe NextDom (toute demande de support pourra donc être refusée). Les OS officiellement supporté sont Debian Jessie et Debian Strech (voir <a href="https://jeedom.github.io/documentation/compatibility/fr_FR/index" target="_blank">ici</a>)'),
+            'comment' => ($state) ? '' : __('health.os-not-supported'),
         );
 
         $nbNeededUpdate = UpdateManager::nbNeedUpdate();
@@ -149,7 +149,7 @@ class NextDomHelper
             'icon' => 'fa-heartbeat',
             'name' => __('health.update-to-date'),
             'state' => $state,
-            'result' => ($state) ? $okStr : $nbNeededUpdate,
+            'result' => ($state) ? $okStr : $nbNeededUpdate . ' ' . __('health.updates'),
             'comment' => '',
         );
 
@@ -232,17 +232,17 @@ class NextDomHelper
             'name' => __('health.harddisk-freespace'),
             'state' => ($value > 10),
             'result' => $value . ' %',
-            'comment' => '',
+            'comment' => __('health.need-more-than') . ': 10%',
         );
 
         $values = SystemHelper::getMemInfo();
         $value = round(($values['MemAvailable'] / $values['MemTotal']) * 100);
         $systemHealth[] = array(
             'icon' => 'fa-th',
-            'name' => __('Mémoire disponible'),
+            'name' => __('health.available-memory'),
             'state' => ($value > 15),
             'result' => $value . ' %',
-            'comment' => '',
+            'comment' => __('health.need-more-than') . ': 15%',
         );
 
         $value = shell_exec('sudo dmesg | grep oom | wc -l');
@@ -250,7 +250,7 @@ class NextDomHelper
             'icon' => 'fa-th-large',
             'name' => __('health.enough-memory'),
             'state' => ($value == 0),
-            'result' => $value,
+            'result' => ($state == 0) ? $nokStr : $okStr,
             'comment' => ($value == 0) ? '' : __('health.processes-killed'),
         );
 
@@ -261,7 +261,7 @@ class NextDomHelper
                 'name' => __('health.available-swap'),
                 'state' => ($value > 15),
                 'result' => $value . ' %',
-                'comment' => '',
+                'comment' => __('health.need-more-than') . ': 15%',
             );
         } else {
             $systemHealth[] = array(
@@ -279,7 +279,7 @@ class NextDomHelper
             'name' => __('health.load'),
             'state' => ($values[2] < 20),
             'result' => $values[0] . ' - ' . $values[1] . ' - ' . $values[2],
-            'comment' => '',
+            'comment' => __('health.need-less-than') . ': 20',
         );
 
         $state = NetworkHelper::test('internal');
@@ -830,7 +830,7 @@ class NextDomHelper
         foreach ($_replaces as $key => $value) {
             $datas = array_merge($datas, CmdManager::searchConfiguration($key));
             $datas = array_merge($datas, EqLogicManager::searchConfiguration($key));
-            $datas = array_merge($datas, JeeObjectManager::searchConfiguration($key));
+            $datas = array_merge($datas, ObjectManager::searchConfiguration($key));
             $datas = array_merge($datas, ScenarioManager::searchByUse(array(array('action' => '#' . $key . '#'))));
             $datas = array_merge($datas, ScenarioExpressionManager::searchExpression($key, $key, false));
             $datas = array_merge($datas, ScenarioExpressionManager::searchExpression('variable(' . str_replace('#', '', $key) . ')'));

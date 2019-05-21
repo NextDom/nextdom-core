@@ -37,6 +37,8 @@ namespace NextDom\Helpers;
 use NextDom\Enums\GetParams;
 use NextDom\Enums\ViewType;
 use NextDom\Managers\ConfigManager;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Turnout of the display
@@ -75,8 +77,40 @@ class Router
         } elseif ($this->viewType == ViewType::MOBILE_VIEW) {
             $this->mobileView();
             $result = true;
+        } elseif ($this->viewType == ViewType::STATIC_VIEW) {
+            $this->staticView();
+            $result = true;
         }
         return $result;
+    }
+
+
+    /**
+     * Echos content of requested asset
+     */
+    private function staticView()
+    {
+        $response = new Response();
+        $request  = Request::createFromGlobals();
+        $file     = $request->get("file");
+        $mapped   = FileSystemHelper::getAssetPath($file);
+        $data     = @file_get_contents($mapped);
+        $mtime    = @filemtime($mapped);
+
+        $response->prepare($request);
+        $response->setStatusCode(Response::HTTP_NOT_FOUND);
+
+        if (false !== $data) {
+            $response
+                ->setStatusCode(Response::HTTP_OK)
+                ->setPublic()
+                ->setMaxAge(0)
+                ->setContent($data)
+                ->setMaxAge(600)
+                ->setLastModified(new \DateTime("@" . $mtime));
+            $response->isNotModified($request);
+        }
+        $response->send();
     }
 
     /**
@@ -101,6 +135,7 @@ class Router
                 'language',
                 'nextdom::firstUse',
                 'nextdom::Welcome',
+                'nextdom::waitSpinner',
                 'notify::status',
                 'notify::position',
                 'notify::timeout',

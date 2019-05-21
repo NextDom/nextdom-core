@@ -39,7 +39,7 @@ var modalContainer = $('#md_modal');
 function initEvents() {
     $('#sel_plugin').on('change', function () {
         var pluginId = $('#sel_plugin').value();
-        modalContainer.dialog({title: '{{Message NextDom}} ' + pluginId});
+        modalContainer.dialog({title: '{{Message NextDom}}' + pluginId});
         modalContainer.load('index.php?v=d&modal=message&plugin_id=' + pluginId).dialog('open');
     });
 

@@ -72,8 +72,8 @@ $("#bt_saveProfils").on('click', function (event) {
                     notify("Erreur", error.message, 'error');
                 },
                 success: function (data) {
-                    $('#div_pageContainer').setValues(data, '.userAttr');
                     modifyWithoutSave = false;
+                    window.location.reload();
                 }
             });
         }
@@ -189,7 +189,6 @@ $('#user_avatar').fileupload({
         }else{
             $('.userAttr[data-l2key=avatar]').value('/public/img/profils/' + data.files[0]['name']);
             $('#monAvatar').attr('src','/public/img/profils/' + data.files[0]['name']);
-
             notify("{{Ajout d'une Image}}", '{{Image ajoutée avec succès}}', 'success');
         }
     }

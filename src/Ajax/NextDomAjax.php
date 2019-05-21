@@ -24,13 +24,14 @@ use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Helpers\SystemHelper;
 use NextDom\Helpers\TimeLineHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\BackupManager;
 use NextDom\Managers\CacheManager;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\ConfigManager;
-use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\ObjectManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\UserManager;
@@ -56,24 +57,24 @@ class NextDomAjax extends BaseAjax
             AjaxHelper::success($return);
         }
 
-        $return['user_id'] = $_SESSION['user']->getId();
+        $return['user_id'] = UserManager::getStoredUser()->getId();
         $return['nextdom_token'] = AjaxHelper::getToken();
         @session_start();
         $currentUser = UserManager::getStoredUser();
         $currentUser->refresh();
         @session_write_close();
 
-        $return['userProfils'] = $_SESSION['user']->getOptions();
+        $return['userProfils'] = $currentUser->getOptions();
         $return['userProfils']['defaultMobileViewName'] = __('Vue');
         if ($currentUser->getOptions('defaultDesktopView') != '') {
-            $view = ViewManager::byId($_SESSION['user']->getOptions('defaultDesktopView'));
+            $view = ViewManager::byId($currentUser->getOptions('defaultDesktopView'));
             if (is_object($view)) {
                 $return['userProfils']['defaultMobileViewName'] = $view->getName();
             }
         }
         $return['userProfils']['defaultMobileObjectName'] = __('Objet');
         if ($currentUser->getOptions('defaultDashboardObject') != '') {
-            $object = JeeObjectManager::byId($currentUser->getOptions('defaultDashboardObject'));
+            $object = ObjectManager::byId($currentUser->getOptions('defaultDashboardObject'));
             if (is_object($object)) {
                 $return['userProfils']['defaultMobileObjectName'] = $object->getName();
             }
@@ -278,7 +279,7 @@ class NextDomAjax extends BaseAjax
         Utils::unautorizedInDemo();
         AjaxHelper::init(true);
         $uploadDir = BackupManager::getBackupDirectory();
-        Utils::readUploadedFile($_FILES, "file", $uploadDir, 300, array(".gz"));
+        Utils::readUploadedFile($_FILES, "file", $uploadDir, 1000, array(".gz"));
         AjaxHelper::success();
     }
 
@@ -367,6 +368,24 @@ class NextDomAjax extends BaseAjax
             }
         }
         AjaxHelper::success($return);
+    }
+
+    public function consistency()
+    {
+        AuthentificationHelper::isConnectedAsAdminOrFail();
+        Utils::unautorizedInDemo();
+        AjaxHelper::init(true);
+        SystemHelper::consistency();
+        AjaxHelper::success();
+    }
+
+    public function cleanFileSystemRight()
+    {
+        AuthentificationHelper::isConnectedAsAdminOrFail();
+        Utils::unautorizedInDemo();
+        AjaxHelper::init(true);
+        SystemHelper::cleanFileSystemRight();
+        AjaxHelper::success();
     }
 
     public function removeTimelineEvents()

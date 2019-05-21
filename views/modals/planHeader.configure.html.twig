@@ -69,7 +69,7 @@
             <div class="form-group">
                 <label class="col-lg-4 control-label">{{ 'Code d\'accès' }}</label>
                 <div class="col-lg-2">
-                    <input type="password" class="planHeaderAttr form-control" data-l1key="configuration" data-l2key="accessCode"/>
+                    <input type="password" autocomplete="new-password" class="planHeaderAttr form-control" data-l1key="configuration" data-l2key="accessCode"/>
                 </div>
             </div>
             <div class="form-group">
@@ -154,7 +154,7 @@
 
     $('#bt_uploadImage').fileupload({
         replaceFileInput: false,
-        url: 'core/ajax/plan.ajax.php?action=uploadImage&id=' + planHeader_id + '&nextdom_token=' + NEXTDOM_AJAX_TOKEN,
+        url: '/core/ajax/plan.ajax.php?action=uploadImage&id=' + planHeader_id + '&nextdom_token=' + NEXTDOM_AJAX_TOKEN,
         dataType: 'json',
         done: function (e, data) {
             if (data.result.state != 'ok') {

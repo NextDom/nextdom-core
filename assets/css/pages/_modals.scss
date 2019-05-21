@@ -1,0 +1,110 @@
+@charset "utf-8";
+/* This file is part of NextDom Software.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom Software is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
+*
+* @Support <https://www.nextdom.org>
+* @Email   <admin@nextdom.org>
+* @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
+*/
+
+/* Core-Surcharge */
+.ui-dialog {
+    z-index: 5000;
+    background-clip: unset;
+    box-shadow:0 3px 30px rgba(0,0,0,0.6);
+    padding: 0px 0 0px 0px;
+    & .ui-dialog-titlebar-close {
+        right: 0.5em;
+        top: 70%;
+    }
+    & .ui-dialog-title {
+        padding: 7px 5px 5px 0px;
+    }
+    & .ui-dialog-titlebar-close {
+        opacity: 1;
+    }
+    ::-webkit-scrollbar {
+        width: 12px;
+    }
+    .ui-dialog-titlebar {
+        border-bottom: none;
+    }
+    .content-header {
+        padding-right: 15px;
+        position: relative;
+    }
+    .content {
+        min-height: 0px;
+    }
+    .ui-dialog-content {
+        padding: 15px;
+    }
+    .ui-dialog-buttonpane {
+        border: none;
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        box-shadow: none;
+        padding: 5px 5px 5px;
+    }
+    .ui-dialog-content .content {
+        padding: 0px !important;
+    }
+    .ui-dialog-content .content-header {
+        padding: 0px;
+        padding-bottom: 15px;
+    }
+}
+.ui-dialog-buttonset .ui-button:not(:first-child) {
+    color: #ffffff;
+    background-color: #00a65a;
+    border-color: #008d4c;
+}
+
+
+/* Core-Surcharge */
+.modal {
+    z-index: 9999;
+}
+.modal-content {
+    border-radius: 6px;
+}
+.modal-header {
+    border-bottom: none;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    padding: 10px 15px;
+    .close {
+        margin-top: 8px;
+    }
+}
+.modal-footer {
+    border-top: none;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    padding: 10px;
+}
+
+/* Core-Surcharge */
+.ui-widget-overlay {
+    position: fixed;
+}
+.ui-widget-content {
+    background-image: none;
+}
+
+/* COre-Adjusting */
+.modal-padding {
+    padding: 15px !important;
+}

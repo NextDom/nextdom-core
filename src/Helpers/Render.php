@@ -129,11 +129,11 @@ class Render
         $data['debugbar'] = $this->showDebugBar($this->twigLoader);
         try {
             return $this->twig->render($view, $data);
-        } catch (Twig_Error_Loader $e) {
+        } catch (\Twig\Error\LoaderError $e) {
             echo $e->getMessage();
-        } catch (\Twig_Error_Runtime $e) {
+        } catch (\Twig\Error\RuntimeError $e) {
             echo $e->getMessage();
-        } catch (\Twig_Error_Syntax $e) {
+        } catch (\Twig\Error\SyntaxError $e) {
             echo $e->getMessage();
         }
         return null;

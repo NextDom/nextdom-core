@@ -166,7 +166,7 @@ $('body').on('click', '.li_eqLogic', function(event) {
     }
     $('.li_eqLogic').removeClass('active');
     $(this).addClass('active');
-    $.showLoading();
+    showLoadingCustom();
 
     nextdom.eqLogic.print({
         type: isset($(this).attr('data-eqLogic_type')) ? $(this).attr('data-eqLogic_type') : eqType,

@@ -39,6 +39,79 @@ use NextDom\Exceptions\CoreException;
 class FileSystemHelper
 {
     /**
+     * Returns paths to requested 3rdparty file with jeedom backward compatibility
+     *
+     * The function checks that returned file belongs to nextdom-core root directory
+     *
+     * @param string $folder base folder
+     * @param string $path requested path under folder
+     * @param string $extension file extension
+     * @returns string migrated file path or null when does not exists
+     */
+    public static function getAssetPath($path) {
+        $staticMapping  = [
+            '3rdparty/bootstrap.slider/css/slider'                       => 'vendor/node_modules/bootstrap-slider/dist/css/bootstrap-slider.min',
+            '3rdparty/bootstrap.slider/js/bootstrap-slider'              => 'vendor/node_modules/bootstrap-slider/dist/bootstrap-slider.min',
+            '3rdparty/bootstrap/css/bootstrap.min'                       => 'vendor/node_modules/bootstrap/dist/css/bootstrap.min',
+            '3rdparty/bootstrap/js/bootstrap.min'                        => 'vendor/node_modules/bootstrap/dist/js/bootstrap.min',
+            '3rdparty/codemirror/lib/codemirror'                         => 'vendor/node_modules/codemirror/lib/codemirror',
+            '3rdparty/datetimepicker/jquery.datetimepicker'              => 'vendor/node_modules/jquery-datetimepicker/jquery.datetimepicker',
+            '3rdparty/highstock/highcharts-more'                         => 'vendor/node_modules/highcharts/highcharts-more',
+            '3rdparty/highstock/highstock'                               => 'vendor/node_modules/highcharts/highstock',
+            '3rdparty/jquery.fileupload/jquery.fileupload'               => 'vendor/node_modules/blueimp-file-upload/js/jquery.fileupload',
+            '3rdparty/jquery.fileupload/jquery.iframe-transport'         => 'vendor/node_modules/blueimp-file-upload/js/jquery.iframe-transport',
+            '3rdparty/jquery.fileupload/jquery.ui.widget'                => 'vendor/node_modules/blueimp-file-upload/js/vendor/jquery.ui.widget',
+            '3rdparty/jquery.lazyload/jquery.lazyload'                   => 'vendor/node_modules/jquery-lazyload/jquery.lazyload',
+            '3rdparty/jquery.packery/jquery.packery'                     => 'vendor/node_modules/packery/dist/packery.pkgd',
+            '3rdparty/jquery.tablesorter/jquery.tablesorter.min'         => 'vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min',
+            '3rdparty/jquery.tablesorter/jquery.tablesorter.widgets.min' => 'vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min',
+            '3rdparty/jquery.tablesorter/theme.bootstrap'                => 'vendor/node_modules/tablesorter/dist/css/theme.bootstrap.min',
+            '3rdparty/jquery.ui/jquery-ui.min'                           => 'vendor/node_modules/jquery-ui-dist/jquery-ui.min',
+            '3rdparty/jquery/jquery.min'                                 => 'vendor/node_modules/jquery/dist/jquery.min',
+            '3rdparty/roboto/roboto'                                     => 'vendor/node_modules/roboto-fontface/css/roboto-fontface',
+            '3rdparty/waves/waves.min'                                   => 'vendor/node_modules/node-waves/waves.min',
+            '3rdparty/jquery.ui/jquery-ui-bootstrap/jquery-ui'           => 'vendor/node_modules/jquery-ui-bootstrap/jquery.ui.theme'
+        ];
+        $reMapping  = [
+            '%3rdparty/codemirror/(mode|addon)/(.*)%'              => 'vendor/node_modules/codemirror/${1}/${2}'
+        ];
+
+        $pathinfo    = pathinfo($path);
+        $extension   = Utils::array_key_default($pathinfo, "extension", "");
+        $dirname     = Utils::array_key_default($pathinfo, "dirname",   "");
+        $filename    = Utils::array_key_default($pathinfo, "filename",  "");
+        $needle      = sprintf("%s/%s", trim($dirname, "/"), $filename);
+        $mappedValue = Utils::array_key_default($staticMapping, $needle, false);
+        $staticValue = sprintf("assets/%s.%s", $needle, $extension);
+
+        if (false !== $mappedValue) {
+            // try conversion from static mapping
+            $path = sprintf("%s.%s", $mappedValue, $extension);
+        } elseif (true === file_exists(NEXTDOM_ROOT . '/' . $staticValue)) {
+            // try conversion existing asset file
+            $path = $staticValue;
+        } else {
+            // try conversion from regexp mapping (slowest mode)
+            foreach ($reMapping as $c_match => $c_replace) {
+                $path = preg_replace($c_match, $c_replace, $needle);
+                if (($path !== null) && ($path !== $needle)) {
+                    $path = sprintf("%s.%s", $path, $extension);
+                    break;
+                }
+            }
+        }
+
+        // ensure that returned file belongs to NEXTDOM_ROOT
+        $abspath = realpath(NEXTDOM_ROOT . '/' . $path);
+        if ((false === $abspath) ||
+            (    0 !== strpos($abspath, NEXTDOM_ROOT))) {
+            return null;
+        }
+        return $path;
+    }
+
+
+    /**
      * Inclut un fichier à partir de son type et son nom.
      * TODO: Doit être revue
      * @param string $_folder Répertoire du fichier
@@ -53,49 +126,12 @@ class FileSystemHelper
         // Aucune particularité pour les 3rdparty
         if ($_folder == '3rdparty') {
             if ($_plugin === '') {
-                //TODO : A améliorer avec une Regex en fonction des utilisations
-                $router3rdParty = [
-                    'bootstrap/css/bootstrap.min' => 'vendor/node_modules/bootstrap/dist/css/bootstrap.min',
-                    'bootstrap/js/bootstrap.min' => 'vendor/node_modules/bootstrap/dist/js/bootstrap.min',
-                    'codemirror/lib/codemirror' => 'vendor/node_modules/codemirror/lib/codemirror',
-                    'codemirror/addon/edit/matchbrackets' => 'vendor/node_modules/codemirror/addon/edit/matchbrackets',
-                    'codemirror/mode/htmlmixed/htmlmixed' => 'vendor/node_modules/codemirror/mode/htmlmixed/htmlmixed',
-                    'codemirror/mode/clike/clike' => 'vendor/node_modules/codemirror/mode/clike/clike',
-                    'codemirror/mode/css/css' => 'vendor/node_modules/codemirror/mode/css/css',
-                    'codemirror/mode/javascript/javascript' => 'vendor/node_modules/codemirror/mode/javascript/javascript',
-                    'codemirror/mode/php/php' => 'vendor/node_modules/codemirror/mode/php/php',
-                    'codemirror/mode/shell/shell' => 'vendor/node_modules/codemirror/mode/shell/shell',
-                    'codemirror/mode/python/python' => 'vendor/node_modules/codemirror/mode/python/python',
-                    'codemirror/mode/ruby/ruby' => 'vendor/node_modules/codemirror/mode/ruby/ruby',
-                    'codemirror/mode/perl/perl' => 'vendor/node_modules/codemirror/mode/perl/perl',
-                    'codemirror/mode/xml/xml' => 'vendor/node_modules/codemirror/mode/xml/xml',
-                    'jquery/jquery.min' => 'vendor/node_modules/jquery/dist/jquery.min',
-                    'datetimepicker/jquery.datetimepicker' => 'vendor/node_modules/jquery-datetimepicker/jquery.datetimepicker',
-                    'jquery.fileupload/jquery.fileupload' => 'vendor/node_modules/blueimp-file-upload/js/jquery.fileupload',
-                    'jquery.fileupload/jquery.ui.widget' => 'vendor/node_modules/blueimp-file-upload/js/vendor/jquery.ui.widget',
-                    'jquery.fileupload/jquery.iframe-transport' => 'vendor/node_modules/blueimp-file-upload/js/jquery.iframe-transport',
-                    'jquery.lazyload/jquery.lazyload' => 'vendor/node_modules/jquery-lazyload/jquery.lazyload',
-                    'jquery.packery/jquery.packery' => 'vendor/node_modules/packery/dist/packery.pkgd',
-                    'jquery.tablesorter/theme.bootstrap' => 'vendor/node_modules/tablesorter/dist/css/theme.bootstrap.min',
-                    'jquery.tablesorter/jquery.tablesorter.min' => 'vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min',
-                    'jquery.tablesorter/jquery.tablesorter.widgets.min' => 'vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min',
-                    'highstock/highstock' => 'vendor/node_modules/highcharts/highstock',
-                    'highstock/highcharts-more' => 'vendor/node_modules/highcharts/highcharts-more',
-                    'roboto/roboto' => 'vendor/node_modules/roboto-fontface/css/roboto-fontface',
-                    'waves/waves.min' => 'vendor/node_modules/node-waves/waves.min',
-                    'bootstrap.slider/css/slider' => 'vendor/node_modules/bootstrap-slider/dist/css/bootstrap-slider.min',
-                    'bootstrap.slider/js/bootstrap-slider' => 'vendor/node_modules/bootstrap-slider/dist/bootstrap-slider.min',
-                    'jquery.ui/jquery-ui.min' => 'vendor/node_modules/jquery-ui-dist/jquery-ui.min',
-                    //TODO : A remettre en 3rdparty
-                    'jquery.ui/jquery-ui-bootstrap/jquery-ui' => 'assets/css/jquery-ui-bootstrap/jquery-ui.css'
-                ];
-
-                if (array_key_exists($_filename, $router3rdParty)) {
-                    $_filename = $router3rdParty[$_filename] . '.' . $_type;
-                } else {
+                $file      = sprintf("%s/%s.%s", $_folder, $_filename, $_type);
+                $_folder   = null;
+                $_filename = self::getAssetPath($file);
+                if (null === $_filename) {
                     $_filename = 'assets/3rdparty/' . $_filename . '.' . $_type;
                 }
-                $_folder = null;
             } else {
                 $_filename .= '.' . $_type;
             }
@@ -103,23 +139,23 @@ class FileSystemHelper
         } else {
             // Tableau de mappage des fichiers
             $config = array(
-                'class' => array('/class', '.class.php', 'php'),
-                'com' => array('/com', '.com.php', 'php'),
-                'repo' => array('/repo', '.repo.php', 'php'),
-                'config' => array('/config', '.config.php', 'php'),
-                'modal' => array('/modal', '.php', 'php'),
-                'modalhtml' => array('/modal', '.html', 'php'),
-                'php' => array('/php', '.php', 'php'),
-                'css' => array('/css', '.css', 'css'),
-                'js' => array('/js', '.js', 'js'),
-                'class.js' => array('/js', '.class.js', 'js'),
-                'custom.js' => array('/custom', 'custom.js', 'js'),
-                'custom.css' => array('/custom', 'custom.css', 'css'),
-                'themes.js' => array('/themes', '.js', 'js'),
-                'themes.css' => array('/themes', '.css', 'css'),
-                'api' => array('/api', '.api.php', 'php'),
-                'html' => array('/html', '.html', 'php'),
-                'configuration' => array('', '.php', 'php'),
+                'class'         => array('/class',  '.class.php',  'php'),
+                'com'           => array('/com',    '.com.php',    'php'),
+                'repo'          => array('/repo',   '.repo.php',   'php'),
+                'config'        => array('/config', '.config.php', 'php'),
+                'modal'         => array('/modal',  '.php',        'php'),
+                'modalhtml'     => array('/modal',  '.html',       'php'),
+                'php'           => array('/php',    '.php',        'php'),
+                'css'           => array('/css',    '.css',        'css'),
+                'js'            => array('/js',     '.js',         'js'),
+                'class.js'      => array('/js',     '.class.js',   'js'),
+                'custom.js'     => array('/custom', 'custom.js',   'js'),
+                'custom.css'    => array('/custom', 'custom.css',  'css'),
+                'themes.js'     => array('/themes', '.js',         'js'),
+                'themes.css'    => array('/themes', '.css',        'css'),
+                'api'           => array('/api',    '.api.php',    'php'),
+                'html'          => array('/html',   '.html',       'php'),
+                'configuration' => array('',        '.php',        'php'),
             );
             $_folder .= $config[$_type][0];
             $_filename .= $config[$_type][1];
@@ -600,7 +636,7 @@ class FileSystemHelper
      * @throws CoreException when cannot create directory
      */
     public static function mkdirIfNotExists($path, $mode = 0775, $recursive = false) {
-        if (false === id_dir($path)) {
+        if (false === is_dir($path)) {
             if (false === mkdir($path, $mode, $recursive)) {
                 throw new CoreException("unable to create directory : " . $path);
             }

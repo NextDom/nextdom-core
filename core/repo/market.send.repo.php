@@ -119,7 +119,7 @@ if (init('type') == 'plugin') {
             global $NEXTDOM_INTERNAL_CONFIG;
             foreach ($NEXTDOM_INTERNAL_CONFIG['plugin']['category'] as $key => $value) {
               echo '<option value="' . $key . '"';
-              echo (is_object($plugin) && $plugin->getCategory() == $key) ? 'selected >' : '>';
+              echo (isset($plugin) && is_object($plugin) && $plugin->getCategory() == $key) ? 'selected >' : '>';
               echo $value['name'];
               echo '</option>';
             }
@@ -285,7 +285,7 @@ if (is_object($market)) {
             return;
           }
           if (market.id == undefined || market.id == '') {
-            $.showLoading();
+            showLoadingCustom();
             window.location.reload();
           } else {
               notify("Core",'{{Votre objet a été envoyé avec succès sur le market}}',"success");
@@ -312,7 +312,7 @@ if (is_object($market)) {
             return;
           }
           if (market.id == undefined || market.id == '') {
-            $.showLoading();
+            showLoadingCustom();
             window.location.reload();
           } else {
             $('#div_alertMarketSend').showAlert({message: '{{Votre objet a été envoyé avec succès sur le market}}', level: 'success'});

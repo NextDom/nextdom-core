@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run all tests of administrations page
+"""Run all tests of administration pages
 """
 import unittest
 import sys
@@ -98,6 +98,7 @@ class AdministrationPages(BaseGuiTest):
         back_button = self.get_link_by_title('Retour')
         self.assertIsNotNone(clean_cache_button)
         self.assertIsNotNone(back_button)
+        print(str(self.get_js_logs()))
         self.assertEqual(0, len(self.get_js_logs()))
         back_button.click()
 

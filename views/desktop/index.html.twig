@@ -37,8 +37,8 @@
     <div id="div_alert"></div>
     <div id="div_pageContainer">
         {% if ALERT_MSG is defined %}
-            <section class="content-header">
-                <div class="text-center alert alert-danger">{{ ALERT_MSG|raw }}</div>
+            <section class="alert-header">
+                <div class="alert alert-danger">{{ ALERT_MSG|raw }}</div>
             </section>
         {%  endif %}
         {{ content|raw }}

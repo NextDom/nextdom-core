@@ -24,7 +24,7 @@ use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\EqLogicManager;
-use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\ObjectManager;
 
 class EqLogicAjax extends BaseAjax
 {
@@ -34,7 +34,7 @@ class EqLogicAjax extends BaseAjax
 
     public function getEqLogicObject()
     {
-        $object = JeeObjectManager::byId(Utils::init('object_id'));
+        $object = ObjectManager::byId(Utils::init('object_id'));
 
         if (!is_object($object)) {
             throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));

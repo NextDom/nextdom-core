@@ -50,8 +50,8 @@ $currentUser  = posix_getpwuid(posix_geteuid());
 $expectedUser = SystemHelper::getWWWUid();
 
 if ($currentUser["name"] != $expectedUser) {
-    printf("error: script must be ran by '%s'");
-    printf(" -> sudo -u %s php %s file=%s", $expectedUser, $argv[0], $file);
+    printf("error: script must be ran by '%s'\n", $expectedUser);
+    printf(" -> sudo -u %s php %s file=%s\n", $expectedUser, $argv[0], $file);
     die(1);
 }
 

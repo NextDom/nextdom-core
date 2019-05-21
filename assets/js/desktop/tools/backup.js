@@ -212,7 +212,7 @@ $(".bt_uploadCloudBackup").on('click', function (event) {
     });
 });
 
-$.showLoading();
+showLoadingCustom();
 nextdom.config.load({
     configuration: $('#backup').getValues('.configKey')[0],
     error: function (error) {
