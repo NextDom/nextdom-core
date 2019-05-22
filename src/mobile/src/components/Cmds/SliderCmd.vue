@@ -1,13 +1,18 @@
 <template>
   <mu-container class="slider-cmd cmd">
     <span>{{ cmd.name }}</span>
-    <mu-slider class="slider" v-model="cmd.state" @change="sliderChange"></mu-slider>
+    <mu-slider class="slider" v-model="sliderValue" @change="sliderChange"></mu-slider>
   </mu-container>
 </template>
 
 <script>
 export default {
   name: "SliderCmd",
+  data: function() {
+    return {
+      sliderValue: 0
+    };
+  },
   props: {
     cmd: null
   },
@@ -17,7 +22,7 @@ export default {
     }
   },
   mounted() {
-    this.cmd.state = parseInt(this.cmd.state);
+    this.sliderValue = parseInt(this.cmd.state);
   },
   methods: {
     /**

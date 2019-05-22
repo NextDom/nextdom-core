@@ -1,13 +1,13 @@
 <template>
   <div class="summary">
     <template v-if="roomsSummary && isVisible">
-      <mu-grid-list v-bind:cols="nbColumns" v-bind:padding="5">
-        <!-- Room name -->
-        <mu-sub-header>
-          <span v-html="roomsSummary.icon"></span>
-          {{ roomsSummary.name }}
-        </mu-sub-header>
-        <!-- eqLogics of the room -->
+      <!-- Room name -->
+      <h2>
+        <span v-html="roomsSummary.icon"></span>
+        {{ roomsSummary.name }}
+      </h2>
+      <!-- eqLogics of the room -->
+      <div v-packery="{itemSelector: '.packery-item', percentPosition: true, initLayout: true}">
         <template v-for="eqLogic in roomsSummary.eqLogics">
           <Widget
             v-if="isShowedEqLogic(eqLogic.id)"
@@ -16,7 +16,7 @@
             v-bind:eqlogic="eqLogic"
           ></Widget>
         </template>
-      </mu-grid-list>
+      </div>
       <!-- Room children -->
       <div v-if="roomsSummary !== null && roomsSummary.children">
         <div v-for="room in roomsSummary.children" v-bind:key="room.id">
@@ -71,4 +71,3 @@ export default {
   }
 };
 </script>
-

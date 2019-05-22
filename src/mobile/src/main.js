@@ -2,6 +2,7 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import MuseUI from "muse-ui";
+import VuePackeryPlugin from "vue-packery-plugin";
 import "material-icons";
 import "./assets/theme";
 
@@ -47,6 +48,7 @@ communication.init(router);
 eventsManager.init(communication, store);
 // Init MuseUI framekwork
 Vue.use(MuseUI);
+Vue.use(VuePackeryPlugin);
 new Vue({
   router,
   store,

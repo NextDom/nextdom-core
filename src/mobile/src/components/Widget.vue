@@ -1,12 +1,25 @@
 <template>
+  <!--
   <mu-grid-tile class="widget" v-bind:cols="tileWidth" v-bind:rows="tileHeight">
-    <span slot="title">{{ eqlogic.name }}</span>
-    <mu-button slot="action" icon v-if="batteryIcon">
-      <mu-icon v-bind:value="batteryIcon"></mu-icon>
-    </mu-button>
-    <mu-button slot="action" icon v-on:click="executeCmd(refreshCmdId)" v-if="refreshCmdId">
-      <mu-icon value="refresh"></mu-icon>
-    </mu-button>
+  -->
+  <div v-packery-item class="packery-item" v-bind:class="[isLargeWidget ? 'large' : 'small']">
+    <div class="widget-title">
+      <span class="title">{{ eqlogic.name }}</span>
+      <span class="actions pull-right">
+        <mu-button class="pull-right" slot="action" icon v-if="batteryIcon">
+          <mu-icon v-bind:value="batteryIcon"></mu-icon>
+        </mu-button>
+        <mu-button
+          class="pull-right"
+          slot="action"
+          icon
+          v-on:click="executeCmd(refreshCmdId)"
+          v-if="refreshCmdId"
+        >
+          <mu-icon value="refresh"></mu-icon>
+        </mu-button>
+      </span>
+    </div>
     <div class="cmds-icon" v-bind:class="{ 'half-size': largeWidget}">
       <component
         v-bind:cmd="cmd"
@@ -39,7 +52,11 @@
         v-on:setRefreshCommand="setRefreshCommand"
       ></component>
     </div>
+  </div>
+  <!--
+
   </mu-grid-tile>
+  -->
 </template>
 
 <script>
@@ -69,69 +86,20 @@ export default {
     /**
      * Get tile width depends from number of icons
      */
-    tileWidth: function() {
-      let result = this.cmdsIconCount;
+    isLargeWidget: function() {
+      let result = false;
       // Width 2 if icons
       if (this.cmdsIconCount === 0) {
-        result = 1;
+        result = false;
       } else if (this.cmdsIconCount > 2) {
-        result = 2;
+        result = true;
       }
       // Show buttons at right if there is more than 5 commands
       if (this.buttonCmds.length > 8) {
-        result = 2;
-      }
-      if (result === 2) {
-        this.largeWidget = true;
+        result = true;
       }
       return result;
-    },
-    /**
-     * Get tile height depends number of items
-     */
-    tileHeight: function() {
-      if (this.cmds.length - this.cmdsIconCount > 14) {
-        return 2;
-      }
-      return 1;
     }
-    /**
-     * Get all commands with icon
-     */
-    /*
-    iconCmds: function() {
-      const cmdsWithIcon = this.cmds.filter(
-        cmd =>
-          this.$store.getters.getCmdComponentData({ cmdId: cmd.id }).icon ===
-          true
-      );
-      return cmdsWithIcon;
-    },
-    /**
-     * Get all commands for data
-     */
-    /*
-    dataCmds: function() {
-      return this.cmds.filter(
-        cmd =>
-          this.$store.getters.getCmdComponentData({ cmdId: cmd.id }).icon ===
-            false &&
-          this.$store.getters.getCmdComponentData({ cmdId: cmd.id }).button ===
-            false
-      );
-    },
-    /**
-     * Get all commands with button
-     */
-    /*
-    buttonCmds: function() {
-      return this.cmds.filter(
-        cmd =>
-          this.$store.getters.getCmdComponentData({ cmdId: cmd.id }).button ===
-          true
-      );
-    }
-    */
   },
   /**
    * Initialize cmd component data on create
@@ -217,10 +185,52 @@ export default {
 </script>
 
 <style>
-.widget > .mu-grid-tile {
-  padding-top: 0.5rem;
+.packery-item {
   background-color: white;
+  margin: 1%;
+  padding-bottom: 0.5rem;
 }
+
+.packery-item.small {
+  width: 48%;
+}
+
+.packery-item.large {
+  width: 98%;
+}
+
+.widget-title {
+  position: relative;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.1);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  height: 2.2rem;
+  line-height: 2.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.widget-title span.title {
+  margin-left: 0.2rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 80%;
+  display: block;
+}
+
+.widget-title span.title {
+  position: absolute;
+  left: 0;
+}
+
+.widget-title button {
+  margin: 0;
+  padding: 0;
+  height: 2.2rem;
+  width: 2.2rem;
+}
+
 .cmds-icon {
   display: flex;
   flex-direction: row;
@@ -247,6 +257,7 @@ export default {
 }
 .cmds-button {
   text-align: center;
+  overflow: hidden;
 }
 .cmds-button > .cmd {
   display: inline-block;

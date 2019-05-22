@@ -8,7 +8,7 @@
           <template v-if="room.father !== undefined">{{ room.father.name}}</template>
           <template v-else>Racine</template>
         </mu-button>
-        <mu-button class="pull-right" color="secondary" v-bind:to="viewLink" v-if="room.father">
+        <mu-button class="pull-right" color="secondary" v-bind:to="viewLink" v-if="room.id">
           <mu-icon left value="pageview"></mu-icon>Résumé
         </mu-button>
       </mu-container>

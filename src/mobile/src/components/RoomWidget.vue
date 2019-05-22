@@ -33,7 +33,6 @@ export default {
     if (isVisibleStoredValue !== null) {
       this.isVisible = isVisibleStoredValue === "true" ? true : false;
     }
-    console.log(theme);
   },
   computed: {
     roomIcon: function() {
