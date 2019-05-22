@@ -49,7 +49,6 @@ class EditorController extends BaseController
         }
         $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/osdb/editor.js';
 
-
         return Render::getInstance()->get('/desktop/tools/osdb/editor.html.twig', $pageData);
     }
 }
