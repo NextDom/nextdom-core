@@ -1,5 +1,5 @@
 <template>
-  <div class="default-action-cmd">
+  <div class="default-action-cmd cmd">
     <mu-button v-on:click="action">{{ cmd.name }}</mu-button>
   </div>
 </template>

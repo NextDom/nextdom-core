@@ -47,7 +47,6 @@ communication.init(router);
 eventsManager.init(communication, store);
 // Init MuseUI framekwork
 Vue.use(MuseUI);
-
 new Vue({
   router,
   store,

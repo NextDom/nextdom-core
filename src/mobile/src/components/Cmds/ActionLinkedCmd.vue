@@ -1,5 +1,5 @@
 <template>
-  <div class="action-linked-cmd">
+  <div class="action-linked-cmd cmd">
     <mu-button v-if="showButton" v-on:click="action">{{ cmd.name }}</mu-button>
   </div>
 </template>

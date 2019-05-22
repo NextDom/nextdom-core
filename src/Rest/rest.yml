@@ -8,6 +8,12 @@ eqlogic_get_by_room:
   methods: GET
   requirements:
     roomId: \d+
+eqlogic_get_visible_by_room:
+  path: 'eqlogic/room/visible/{roomId}'
+  controller: NextDom\Rest\EqLogicRest::getVisibleByRoom
+  methods: GET
+  requirements:
+    roomId: \d+
 room_get_room:
   path: '/room/get/{roomId}'
   controller: NextDom\Rest\RoomRest::get
@@ -45,7 +51,13 @@ changes_get:
     lastUpdate: \d+
 cmd_get_by_eqlogic:
   path: '/cmd/eqlogic/{eqLogicId}'
-  controller: NextDom\Rest\CmdRest::byEqLogic
+  controller: NextDom\Rest\CmdRest::getByEqLogic
+  methods: GET
+  requirements:
+    eqLogicId: \d+
+cmd_get_visible_by_eqlogic:
+  path: '/cmd/eqlogic/visible/{eqLogicId}'
+  controller: NextDom\Rest\CmdRest::getVisibleByEqLogic
   methods: GET
   requirements:
     eqLogicId: \d+

@@ -22,7 +22,7 @@
 
 <script>
 import communication from "./libs/communication.js";
-import EventsBus from "@/libs/eventsBus";
+import AppEventsBus from "@/libs/appEventsBus";
 import { setTimeout } from "timers";
 
 export default {
@@ -34,7 +34,7 @@ export default {
     };
   },
   created() {
-    EventsBus.$on("showError", msg => {
+    AppEventsBus.$on("showError", msg => {
       this.showErrorMsg(msg);
     });
   },

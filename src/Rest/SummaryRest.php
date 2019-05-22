@@ -39,7 +39,12 @@ class SummaryRest
         $authenticator = Authenticator::getInstance();
         $user = $authenticator->getConnectedUser();
         $defaultRoom = ObjectManager::getDefaultUserRoom($user);
-        return self::getRoomTree($defaultRoom->getId());
+        if ($defaultRoom === false) {
+            return false;
+        }
+        else {
+            return self::getRoomTree($defaultRoom->getId());
+        }
     }
 
     /**
@@ -102,11 +107,11 @@ class SummaryRest
     private static function addEqLogicsInformations(int $roomId)
     {
         $result = [];
-        $eqLogics = EqLogicRest::getByRoom($roomId);
+        $eqLogics = EqLogicRest::getVisibleByRoom($roomId);
         if (!empty($eqLogics)) {
             // Get commands attached to the room
             foreach ($eqLogics as $eqLogic) {
-                $cmds = CmdRest::byEqLogic($eqLogic['id']);
+                $cmds = CmdRest::getVisibleByEqLogic($eqLogic['id']);
                 if (!empty($cmds)) {
                     $eqLogic['cmds'] = $cmds;
                     $result[] = $eqLogic;

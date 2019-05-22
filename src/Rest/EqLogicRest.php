@@ -64,7 +64,7 @@ class EqLogicRest
     }
 
     /**
-     * Get all eqLogics in root
+     * Get all eqLogics in room
      *
      * @param int $roomId Id of the room
      *
@@ -73,6 +73,21 @@ class EqLogicRest
      * @throws \Exception
      */
     public static function getByRoom(int $roomId)
+    {
+        $eqLogics = EqLogicManager::byObjectId($roomId);
+        return self::prepareResults($eqLogics);
+    }
+
+    /**
+     * Get all visibles eqLogics in room
+     *
+     * @param int $roomId Id of the room
+     *
+     * @return array List of eqLogics data in the room
+     *
+     * @throws \Exception
+     */
+    public static function getVisibleByRoom(int $roomId)
     {
         $eqLogics = EqLogicManager::byObjectId($roomId, true, true);
         return self::prepareResults($eqLogics);

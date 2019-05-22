@@ -1,9 +1,8 @@
 <template>
-  <div
+  <mu-container
     class="default-cmd cmd"
     style="color: red"
-    v-if="parseInt(cmd.visible) === 1"
-  >{{ cmd.name }} {{ cmd.value }} {{ cmd.id }} {{ cmd.visible }}</div>
+  >{{ cmd.name }} {{ cmd.value }} {{ cmd.id }} {{ cmd.visible }}</mu-container>
 </template>
 
 <script>

@@ -7,7 +7,7 @@
     <mu-button slot="action" icon v-on:click="executeCmd(refreshCmdId)" v-if="refreshCmdId">
       <mu-icon value="refresh"></mu-icon>
     </mu-button>
-    <div class="cmds-icon" v-bind:class="{ 'half-size': bigWidget}">
+    <div class="cmds-icon" v-bind:class="{ 'half-size': largeWidget}">
       <component
         v-bind:cmd="cmd"
         v-bind:key="cmd.id"
@@ -45,16 +45,18 @@
 <script>
 import templates from "@/libs/nextdomTemplates.js";
 import communication from "@/libs/communication.js";
-import EventsBus from "@/libs/eventsBus";
+import AppEventsBus from "@/libs/appEventsBus";
 
 export default {
   name: "Widget",
   data: function() {
     return {
-      iconsCount: 0,
       refreshCmdId: null,
-      bigWidget: false,
-      batteryIcon: false
+      largeWidget: false,
+      batteryIcon: false,
+      iconCmds: [],
+      dataCmds: [],
+      buttonCmds: []
     };
   },
   props: {
@@ -68,39 +70,47 @@ export default {
      * Get tile width depends from number of icons
      */
     tileWidth: function() {
-      let result = this.iconsCount;
-      if (this.iconsCount === 0) {
+      let result = this.cmdsIconCount;
+      // Width 2 if icons
+      if (this.cmdsIconCount === 0) {
         result = 1;
-      } else if (this.iconsCount > 2) {
+      } else if (this.cmdsIconCount > 2) {
         result = 2;
       }
       // Show buttons at right if there is more than 5 commands
-      if (this.needBigWidget()) {
+      if (this.buttonCmds.length > 8) {
         result = 2;
+      }
+      if (result === 2) {
+        this.largeWidget = true;
       }
       return result;
     },
     /**
+     * Get tile height depends number of items
+     */
+    tileHeight: function() {
+      if (this.cmds.length - this.cmdsIconCount > 14) {
+        return 2;
+      }
+      return 1;
+    }
+    /**
      * Get all commands with icon
      */
+    /*
     iconCmds: function() {
       const cmdsWithIcon = this.cmds.filter(
         cmd =>
           this.$store.getters.getCmdComponentData({ cmdId: cmd.id }).icon ===
           true
       );
-      //      this.iconsCount = cmdsWithIcon.length;
       return cmdsWithIcon;
-    },
-    tileHeight: function() {
-      if (this.cmds.length > 14) {
-        return 2;
-      }
-      return 1;
     },
     /**
      * Get all commands for data
      */
+    /*
     dataCmds: function() {
       return this.cmds.filter(
         cmd =>
@@ -113,6 +123,7 @@ export default {
     /**
      * Get all commands with button
      */
+    /*
     buttonCmds: function() {
       return this.cmds.filter(
         cmd =>
@@ -120,6 +131,7 @@ export default {
           true
       );
     }
+    */
   },
   /**
    * Initialize cmd component data on create
@@ -128,8 +140,22 @@ export default {
     for (let cmdIndex = 0; cmdIndex < this.cmds.length; ++cmdIndex) {
       this.$store.commit("setCmdComponentData", this.cmds[cmdIndex]);
     }
-    this.iconsCount = this.iconCmds.length;
-    this.bigWidget = this.needBigWidget();
+    this.iconCmds = this.cmds.filter(
+      cmd =>
+        this.$store.getters.getCmdComponentData({ cmdId: cmd.id }).icon === true
+    );
+    this.dataCmds = this.cmds.filter(
+      cmd =>
+        this.$store.getters.getCmdComponentData({ cmdId: cmd.id }).icon ===
+          false &&
+        this.$store.getters.getCmdComponentData({ cmdId: cmd.id }).button ===
+          false
+    );
+    this.buttonCmds = this.cmds.filter(
+      cmd =>
+        this.$store.getters.getCmdComponentData({ cmdId: cmd.id }).button ===
+        true
+    );
   },
   methods: {
     /**
@@ -153,7 +179,7 @@ export default {
     executeCmd(cmdId, options) {
       if (options === undefined) {
         communication.post("/api/cmd/exec/" + cmdId, undefined, errorData => {
-          EventsBus.$emit("showError", errorData.error);
+          AppEventsBus.$emit("showError", errorData.error);
         });
       } else {
         communication.postWithOptions(
@@ -161,7 +187,7 @@ export default {
           options,
           undefined,
           errorData => {
-            EventsBus.$emit("showError", errorData.error);
+            AppEventsBus.$emit("showError", errorData.error);
           }
         );
       }
@@ -185,15 +211,6 @@ export default {
      */
     setRefreshCommand: function(cmdId) {
       this.refreshCmdId = cmdId;
-    },
-    needBigWidget: function() {
-      if (
-        this.cmds.length - this.iconsCount > 6 &&
-        this.buttonCmds.length > 0
-      ) {
-        return true;
-      }
-      return false;
     }
   }
 };
@@ -228,13 +245,18 @@ export default {
   clear: both;
   display: block;
 }
-.cmds-button > .cmd,
-.cmds-button button {
-  float: left;
+.cmds-button {
+  text-align: center;
+}
+.cmds-button > .cmd {
+  display: inline-block;
 }
 .cmds-button::after {
   content: "";
   clear: both;
+}
+.cmds-data {
+  margin-top: 0.5rem;
 }
 .half-size {
   width: 50%;

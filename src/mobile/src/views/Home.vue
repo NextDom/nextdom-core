@@ -9,6 +9,7 @@
 import communication from "@/libs/communication.js";
 import Summary from "@/components/Summary.vue";
 import eventsManager from "@/libs/eventsManager.js";
+import AppEventsBus from "@/libs/appEventsBus.js";
 
 export default {
   name: "home",
@@ -35,7 +36,10 @@ export default {
       // Room specific view
       communication.get(
         "/api/summary/get_room_tree/" + this.roomId,
-        this.initData
+        this.initData,
+        error => {
+          AppEventsBus.$emit("showError", error);
+        }
       );
     }
   },

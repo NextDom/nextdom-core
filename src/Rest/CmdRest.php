@@ -39,9 +39,24 @@ class CmdRest
      *
      * @throws \Exception
      */
-    public static function byEqLogic(int $eqLogicId)
+    public static function getByEqLogic(int $eqLogicId)
     {
         $cmds = CmdManager::byEqLogicId($eqLogicId);
+        return self::prepareResults($cmds);
+    }
+
+    /**
+     * Get all commands visible by eqLogic
+     *
+     * @param int $eqLogicId EqLogic id linked to commands
+     *
+     * @return array Array of linked commands
+     *
+     * @throws \Exception
+     */
+    public static function getVisibleByEqLogic(int $eqLogicId)
+    {
+        $cmds = CmdManager::byEqLogicId($eqLogicId, null, true);
         return self::prepareResults($cmds);
     }
 
