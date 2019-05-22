@@ -37,11 +37,11 @@
     <section class="content-header">
         <div class="action-bar">
             <div class="action-group">
-                <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
+                <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{'object.back'|trans}}</a>
             </div>
             <div class="action-group">
-                <a class="btn btn-success btn-action-bar pull-right" id="bt_addObject2"><i class="fas fa-plus-circle spacing-right"></i>{{ 'Ajouter' }}</a>
-                <a class="btn btn-primary btn-action-bar pull-right" id="bt_showObjectSummary"><i class="fas fa-list spacing-right"></i>{{ 'Vue d\'ensemble' }}</a>
+                <a class="btn btn-success btn-action-bar pull-right" id="bt_addObject2"><i class="fas fa-plus-circle spacing-right"></i>{{ 'object.add'|trans }}</a>
+                <a class="btn btn-primary btn-action-bar pull-right" id="bt_showObjectSummary"><i class="fas fa-list spacing-right"></i>{{ 'object.global-view'|trans }}</a>
             </div>
         </div>
     </section>
@@ -53,9 +53,9 @@
             </div>
             <div class="box-body">
                 {% if objectList|length == 0 %}
-                    <div><span>{{ 'Vous n\'avez encore aucun objet. Cliquez sur ajouter pour commencer.' }}</span></div>
+                    <div><span>{{ 'object.no-object-yet'|trans }}</span></div>
                 {% else %}
-                    <div><span>{{ 'Vous avez '}} {{ objectList|length }} {{ 'objets...' }}</span></div>
+                    <div><span>{{ 'object.you-have-n-objects'|trans|format(objectList|length) }}</span></div>
                 {% endif %}
             </div>
         </div>
@@ -70,8 +70,8 @@
                             <span class="object-summary spacing-left">{% if 'objectSummaryParent' in object.getHtmlSummary() %}{{ object.getHtmlSummary()|raw }}{% else %}{{'Aucun résumé...'}}{% endif%}</span>
                         </div>
                         <div class="box-footer clearfix text-center">
-                            <a class="btn btn-danger btn-sm pull-right remove bt_removeObject"><i class="far fa-trash-alt spacing-right"></i>{{ 'Supprimer' }}</a>
-                            <a class="btn btn-info btn-sm pull-left bt_detailsObject"><i class="far fa-edit spacing-right"></i>{{ 'Modifier' }}</a>
+                            <a class="btn btn-danger btn-sm pull-right remove bt_removeObject"><i class="far fa-trash-alt spacing-right"></i>{{ 'object.delete'|trans }}</a>
+                            <a class="btn btn-info btn-sm pull-left bt_detailsObject"><i class="far fa-edit spacing-right"></i>{{ 'object.modify'|trans }}</a>
                         </div>
                     </div>
                 </div>
@@ -85,10 +85,10 @@
     <section class="content-header">
         <div class="action-bar">
             <div class="action-group">
-                <a class="btn btn-action-bar btn-danger" id="bt_returnToThumbnailDisplay"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
+                <a class="btn btn-action-bar btn-danger" id="bt_returnToThumbnailDisplay"><i class="fas fa-chevron-left spacing-right"></i>{{ 'object.back'|trans}}</a>
             </div>
             <div class="action-group">
-                <a class="btn btn-action-bar btn-success pull-right" id="bt_saveObject"><i class="fas fa-save spacing-right"></i>{{ 'Sauvegarder' }}</a>
+                <a class="btn btn-action-bar btn-success pull-right" id="bt_saveObject"><i class="fas fa-save spacing-right"></i>{{ 'object.save'|trans }}</a>
             </div>
         </div>
     </section>

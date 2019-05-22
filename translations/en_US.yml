@@ -330,6 +330,26 @@ scenario:
     description-code: "This element allows you to add in your scenario programming using a code: PHP / Shell, etc."
     description-comment: Lets comment your scenario.
     
+object:
+  back: Back
+  add: Add
+  global-view: Global view
+  no-object-yet: You do not have any object yet. Press Add to start.
+  you-have-n-objects: "You have %s object(s)"
+  delete: Delete
+  modify: Modify
+  save: Save
+
+profile:
+  back: Back
+  save: Save
+  theme: Themes
+  interface: Interface
+  notifications: Notifications
+  security: Security
+  profile: Profile
+  profile-of: "%s's profile"
+
 entity:
   note:
     name-cannot-be-empty: The name of the note can not be empty

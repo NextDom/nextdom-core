@@ -333,6 +333,27 @@ scenario:
   description-code: "Cet élément permet de rajouter dans votre scénario de la programmation à l’aide d’un code, PHP/Shell, etc."
   description-comment: "Permet de commenter votre scénario."
 
+object:
+  back: Retour
+  add: Ajouter
+  global-view: Vue d'ensemble
+  no-object-yet: Vous n'avez encore aucun objet. Cliquez sur ajouter pour commencer.
+  you-have-n-objects: "Vous avez %s objet(s)"
+  delete: Supprimer
+  modify: Modifier
+  save: Sauvegarder
+
+profile:
+  back: Retour
+  save: Sauvegarder
+  theme: Thèmes
+  interface: Interface
+  notifications: Notifications
+  security: Sécurité
+  profile: Profil
+  profile-of: "Profil de %s"
+
+
 entity:
   note:
     name-cannot-be-empty: Le nom de la note ne peut être vide
