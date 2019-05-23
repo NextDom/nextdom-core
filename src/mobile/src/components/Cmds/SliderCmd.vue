@@ -1,7 +1,13 @@
 <template>
   <mu-container class="slider-cmd cmd">
     <span>{{ cmd.name }}</span>
-    <mu-slider class="slider" v-model="sliderValue" @change="sliderChange"></mu-slider>
+    <mu-slider
+      class="slider"
+      v-bind:min="minValue"
+      v-bind:max="maxValue"
+      v-model="sliderValue"
+      @change="sliderChange"
+    ></mu-slider>
   </mu-container>
 </template>
 
@@ -10,7 +16,9 @@ export default {
   name: "SliderCmd",
   data: function() {
     return {
-      sliderValue: 0
+      sliderValue: 0,
+      minValue: 0,
+      maxValue: 100
     };
   },
   props: {
@@ -23,11 +31,16 @@ export default {
   },
   mounted() {
     this.sliderValue = parseInt(this.cmd.state);
+    if (this.cmd.hasOwnProperty("minValue")) {
+      this.minValue = parseInt(this.cmd.minValue);
+    }
+    if (this.cmd.hasOwnProperty("maxValue")) {
+      this.maxValue = parseInt(this.cmd.maxValue);
+    }
   },
   methods: {
     /**
      * Read slider change
-     * TODO: Surement des sliders avec un pas spécial à gérer
      */
     sliderChange(value) {
       this.$emit("executeCmd", this.cmd.id, { slider: value });

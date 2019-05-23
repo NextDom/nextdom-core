@@ -32,7 +32,20 @@ room_get_tree:
     roomId: \d+
 room_get_root:
   path: '/room/get_roots'
+  methods: GET
   controller: NextDom\Rest\RoomRest::getRoots
+room_get_summaries:
+  path: '/room/get_summary/{roomsList}'
+  controller: NextDom\Rest\RoomRest::getRoomsSummary
+  methods: GET
+  requirements:
+    roomsList: \d+;(\d+;*)+
+room_get_summary:
+  path: '/room/get_summary/{roomId}'
+  controller: NextDom\Rest\RoomRest::getRoomSummary
+  methods: GET
+  requirements:
+    roomdId: \d+
 summary_get_room_tree:
   path: '/summary/get_room_tree/{roomId}'
   controller: NextDom\Rest\SummaryRest::getRoomTree

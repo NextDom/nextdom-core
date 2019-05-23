@@ -21,6 +21,7 @@ namespace NextDom\Rest;
 
 use NextDom\Managers\ObjectManager;
 use NextDom\Model\Entity\JeeObject;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class RoomRest
@@ -122,6 +123,37 @@ class RoomRest
         $result['children'] = [];
         foreach ($rootRooms as $room) {
             $result['children'][] = self::prepareResult($room);
+        }
+        return $result;
+    }
+
+    /**
+     * Get HTML room summary
+     * @param int $roomId Target room id
+     * @return bool|string HTML summary or false if no summary
+     * @throws \Exception
+     */
+    public static function getRoomSummary(int $roomId) {
+        $room = ObjectManager::byId($roomId);
+        if (is_object($room)) {
+            return $room->getHtmlSummary();
+        }
+        return false;
+    }
+
+    /**
+     * Get HTML summary from list of rooms passed in argument separated by ;
+     * @param string $roomsList List of rooms Id separated by ;
+     * @return string[]
+     * @throws \Exception
+     */
+    public static function getRoomsSummary(string $roomsList) {
+        $result = [];
+        $roomsList = explode(';', $roomsList);
+        if (is_array($roomsList) && count($roomsList) > 1) {
+            foreach ($roomsList as $roomId) {
+                $result[$roomId] = self::getRoomSummary(intval($roomId));
+            }
         }
         return $result;
     }

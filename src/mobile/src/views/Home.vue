@@ -1,13 +1,13 @@
 <template>
   <mu-container class="global home">
     <h1>Résumé</h1>
-    <Summary v-bind:roomsSummary="roomsSummary"></Summary>
+    <Dashboard v-bind:roomData="roomData"></Dashboard>
   </mu-container>
 </template>
 
 <script>
 import communication from "@/libs/communication.js";
-import Summary from "@/components/Summary.vue";
+import Dashboard from "@/components/Dashboard.vue";
 import eventsManager from "@/libs/eventsManager.js";
 import AppEventsBus from "@/libs/appEventsBus.js";
 
@@ -15,14 +15,14 @@ export default {
   name: "home",
   data: function() {
     return {
-      roomsSummary: null
+      roomData: null
     };
   },
   props: {
     roomId: null
   },
   components: {
-    Summary
+    Dashboard
   },
   mounted() {
     // Get dashboard data
@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     initData(data) {
-      this.roomsSummary = data;
+      this.roomData = data;
     }
   }
 };

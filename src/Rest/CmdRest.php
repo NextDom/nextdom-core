@@ -113,6 +113,15 @@ class CmdRest
 
             }
         }
+        elseif ($cmd->getType() === 'action') {
+            $configuration = $cmd->getConfiguration();
+            if (isset($configuration['minValue'])) {
+                $result['minValue'] = $configuration['minValue'];
+            }
+            if (isset($configuration['maxValue'])) {
+                $result['maxValue'] = $configuration['maxValue'];
+            }
+        }
         return $result;
     }
 
