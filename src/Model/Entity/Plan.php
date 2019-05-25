@@ -267,7 +267,7 @@ class Plan implements EntityInterface
                 } else {
                     $camera = EqLogicManager::byId(str_replace(array('#', 'eqLogic'), array('', ''), $this->getConfiguration('camera')));
                     if (is_object($camera)) {
-                        $html .= $camera->toHtml($_version);
+                        $html .= $camera->toHtml($_version, true);
                     }
                 }
                 $html .= '</div>';
