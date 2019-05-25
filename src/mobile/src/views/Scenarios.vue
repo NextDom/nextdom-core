@@ -1,3 +1,23 @@
+<!--
+This file is part of NextDom Software.
+
+NextDom is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+NextDom Software is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
+
+@Support <https://www.nextdom.org>
+@Email   <admin@nextdom.org>
+@Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
+-->
 <template>
   <mu-container class="global scenarios">
     <h1>Scénarios</h1>
@@ -36,11 +56,15 @@
 </template>
 
 <script>
-import communication from "../libs/communication.js";
-import utils from "../libs/utils.js";
+import Communication from "../libs/Communication.js";
+import Utils from "@/libs/Utils.js";
 
+/**
+ * Show all scenarios
+ * @group Pages
+ */
 export default {
-  name: "scenarios",
+  name: "Scenarios",
   data: function() {
     return {
       scenarios: null,
@@ -49,6 +73,7 @@ export default {
   },
   computed: {
     /**
+     * @vuese
      * Get groups list with no-group first
      */
     sortedGroupsList: function() {
@@ -70,9 +95,14 @@ export default {
     }
   },
   mounted() {
+    /**
+     * @vuese
+     * Update tabs and URL
+     * @arg New URL
+     */
     this.$emit("setCurrentView", "/scenarios");
     // Get dashboard data
-    communication.get("/api/scenario/all/by_group", result => {
+    Communication.get("/api/scenario/all/by_group", result => {
       // Restore last list state
       for (let groupName in result) {
         const showGroup = localStorage.getItem(
@@ -89,7 +119,9 @@ export default {
   },
   methods: {
     /**
+     * @vuese
      * Called when group visibility changes
+     * @arg Name of the group for change
      */
     toggleItem: function(groupName) {
       this.groupsListState[groupName] = !this.groupsListState[groupName];
@@ -99,18 +131,20 @@ export default {
       );
     },
     /**
+     * @vuese
      * Launch scenario
-     * @param {scenarioId} Id of the scenario to launch
+     * @arg Id of the scenario to launch
      */
     launch: function(scenarioId) {
-      communication.post("/api/scenario/launch/" + scenarioId);
+      Communication.post("/api/scenario/launch/" + scenarioId);
     },
     /**
+     * @vuese
      * Get scenario icon
-     * @param {scenario} Scenario object
+     * @arg Scenario object
      */
     scenarioIcon: function(scenario) {
-      return utils.extractIcon(scenario.displayIcon, "fas fa-film");
+      return Utils.extractIcon(scenario.displayIcon, "fas fa-film");
     }
   }
 };

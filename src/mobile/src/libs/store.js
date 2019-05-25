@@ -1,14 +1,37 @@
+/* This file is part of NextDom Software.
+ *
+ * NextDom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * NextDom Software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @Support <https://www.nextdom.org>
+ * @Email   <admin@nextdom.org>
+ * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
+ */
 import Vue from "vue";
 import Vuex from "vuex";
-import templates from "@/libs/nextdomTemplates.js";
+import Templates from "@/libs/NextdomTemplates.js";
 
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
   state: {
+    // List of showed commands
     showedCmds: [],
+    // List of actions
     actionsList: {},
+    // List component data by command id
     cmdsComponentsData: {},
+    // List of eqLogics
     eqLogicsList: {}
   },
   mutations: {
@@ -22,12 +45,12 @@ export const store = new Vuex.Store({
       let componentData = undefined;
       // Test for commands with template
       try {
-        componentData = templates["cmds"][cmd.type][cmd.subType][cmd.template];
+        componentData = Templates["cmds"][cmd.type][cmd.subType][cmd.template];
       } catch {}
       // Test generic type
       if (componentData === undefined) {
         try {
-          componentData = templates["cmdsWithoutTemplate"][cmd.genericType];
+          componentData = Templates["cmdsWithoutTemplate"][cmd.genericType];
         } catch {}
       }
       // Specials cases
@@ -50,10 +73,9 @@ export const store = new Vuex.Store({
       // Set default
       if (componentData === undefined) {
         try {
-          componentData = templates["cmds"][cmd.type][cmd.subType]["no_data"];
+          componentData = Templates["cmds"][cmd.type][cmd.subType]["no_data"];
         } catch {}
       }
-      //      if (componentData === undefined) {
       if (componentData === undefined) {
         let toShow =
           "No component for command Id : " +

@@ -1,3 +1,23 @@
+<!--
+This file is part of NextDom Software.
+
+NextDom is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+NextDom Software is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
+
+@Support <https://www.nextdom.org>
+@Email   <admin@nextdom.org>
+@Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
+-->
 <template>
   <mu-container class="global rooms">
     <h1>Rooms</h1>
@@ -53,10 +73,14 @@
 
 <script>
 import RoomWidget from "@/components/RoomWidget.vue";
-import communication from "../libs/communication.js";
+import Communication from "../libs/Communication.js";
 
+/**
+ * Navigate in rooms tree
+ * @group Pages
+ */
 export default {
-  name: "rooms",
+  name: "Rooms",
   data: function() {
     return {
       room: null,
@@ -68,18 +92,30 @@ export default {
     };
   },
   props: {
-    roomId: undefined
+    // Current room Id
+    roomId: {
+      type: String,
+      default: undefined
+    }
   },
   components: {
     RoomWidget
   },
   computed: {
+    /**
+     * @vuese
+     * Test if father link can be showed
+     */
     showFatherLink: function() {
       if (this.room.id !== null) {
         return true;
       }
       return false;
     },
+    /**
+     * @vuese
+     * Get father link
+     */
     fatherLink: function() {
       if (this.room.father === undefined) {
         return "/rooms";
@@ -87,20 +123,29 @@ export default {
         return "/rooms/" + this.room.father.id;
       }
     },
+    /**
+     * @vuese
+     * Get dashboard link
+     */
     viewLink: function() {
       return "/" + this.room.id;
     }
   },
   mounted() {
+    /**
+     * @vuese
+     * Update tabs and URL
+     * @arg New URL
+     */
     this.$emit("setCurrentView", "/rooms");
     // Get data from default room
     if (this.roomId === undefined) {
-      communication.get("/api/room/get_roots", data => {
+      Communication.get("/api/room/get_roots", data => {
         this.room = data;
       });
     } else {
       // Get data from specific room
-      communication.get("/api/room/get_tree/" + this.roomId, data => {
+      Communication.get("/api/room/get_tree/" + this.roomId, data => {
         this.room = data;
         this.initRoomConfig();
       });
@@ -108,6 +153,7 @@ export default {
   },
   methods: {
     /**
+     * @vuese
      * Init visibility and get data
      */
     initRoomConfig() {
@@ -118,7 +164,7 @@ export default {
       if (isVisibleStoredValue !== null) {
         this.form.isVisible = isVisibleStoredValue === "true" ? true : false;
       }
-      communication.get("/api/eqlogic/room/" + this.room.id, data => {
+      Communication.get("/api/eqlogic/room/" + this.room.id, data => {
         // Loop with push for reactivity
         data.forEach(eqLogic => {
           this.initEqLogicVisibility(eqLogic.id);
@@ -127,6 +173,7 @@ export default {
       });
     },
     /**
+     * @vuese
      * Change the visibility of the room in the summary
      */
     changeRoomVisibility() {
@@ -136,8 +183,9 @@ export default {
       );
     },
     /**
+     * @vuese
      * Init eqLogic visibility in local storage and data
-     * @param {eqLogicId} int Id of the eqLogic to init
+     * @arg eqLogicId Id of the eqLogic to init
      */
     initEqLogicVisibility(eqLogicId) {
       const localStorageKey = "is-visible-eqLogic-" + eqLogicId;
@@ -151,8 +199,9 @@ export default {
       }
     },
     /**
+     * @vuese
      * Method called on visibility update click
-     * @param {eqLogicId} int Id of the eqLogic with a visibility to change
+     * @arg eqLogicId Id of the eqLogic with a visibility to change
      */
     changeEqLogicVisibility(eqLogicId) {
       let temp = this.eqLogicsVisibility;
@@ -172,6 +221,10 @@ export default {
 </script>
 
 <style scoped>
+.room-config {
+  margin-top: 2rem;
+}
+
 .button-wrapper::after {
   content: "";
   clear: both;
