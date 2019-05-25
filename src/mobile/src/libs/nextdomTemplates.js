@@ -21,6 +21,7 @@ import DefaultCmd from "@/components/Cmds/DefaultCmd.vue";
 import DefaultInfoCmd from "@/components/Cmds/DefaultInfoCmd.vue";
 import DefaultStringCmd from "@/components/Cmds/DefaultStringCmd.vue";
 import DefaultActionCmd from "@/components/Cmds/DefaultActionCmd.vue";
+import DontCmd from "@/components/Cmds/DontCmd.vue";
 import ActionLinkedCmd from "@/components/Cmds/ActionLinkedCmd.vue";
 import BatteryStateCmd from "@/components/Cmds/BatteryStateCmd.vue";
 import PlugStateCmd from "@/components/Cmds/PlugStateCmd.vue";
@@ -43,6 +44,7 @@ export default {
     DefaultInfoCmd,
     DefaultStringCmd,
     DefaultActionCmd,
+    DontCmd,
     ActionLinkedCmd,
     BatteryStateCmd,
     ColorPickerCmd,
@@ -116,6 +118,13 @@ export default {
         },
         no_data: {
           component: "DefaultInfoCmd",
+          icon: false,
+          button: false
+        }
+      },
+      other: {
+        no_data: {
+          component: "DefaultStringCmd",
           icon: false,
           button: false
         }

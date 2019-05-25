@@ -77,35 +77,44 @@ export const store = new Vuex.Store({
         } catch {}
       }
       if (componentData === undefined) {
-        let toShow =
-          "No component for command Id : " +
-          cmd.id +
-          " - Name : " +
-          cmd.name +
-          " - Type : " +
-          cmd.type +
-          " - SubType : " +
-          cmd.subType;
-        if (cmd.genericType) {
-          toShow += " - GenericType : " + cmd.genericType;
+        // TODO: Peut être dans les types générique, mais il faut vérifier si il n'y a pas de cas particuliers
+        if (cmd.genericType === "DONT") {
+          componentData = componentData = {
+            component: "DontCmd",
+            icon: false,
+            button: false
+          };
+        } else {
+          let toShow =
+            "No component for command Id : " +
+            cmd.id +
+            " - Name : " +
+            cmd.name +
+            " - Type : " +
+            cmd.type +
+            " - SubType : " +
+            cmd.subType;
+          if (cmd.genericType) {
+            toShow += " - GenericType : " + cmd.genericType;
+          }
+          if (cmd.template) {
+            toShow += " - Template : " + cmd.template;
+          }
+          if (cmd.value) {
+            toShow += " - Value : " + cmd.value;
+          }
+          if (cmd.cmdValue) {
+            toShow += " - CmdValue : " + cmd.cmdValue;
+          }
+          toShow += " - State : " + cmd.state;
+          console.log(toShow);
+          // No data found
+          componentData = {
+            component: "DefaultCmd",
+            icon: false,
+            button: false
+          };
         }
-        if (cmd.template) {
-          toShow += " - Template : " + cmd.template;
-        }
-        if (cmd.value) {
-          toShow += " - Value : " + cmd.value;
-        }
-        if (cmd.cmdValue) {
-          toShow += " - CmdValue : " + cmd.cmdValue;
-        }
-        toShow += " - State : " + cmd.state;
-        console.log(toShow);
-        // No data found
-        componentData = {
-          component: "DefaultCmd",
-          icon: false,
-          button: false
-        };
       }
       state.cmdsComponentsData[cmd.id] = componentData;
     },

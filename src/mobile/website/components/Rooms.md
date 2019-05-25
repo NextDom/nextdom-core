@@ -7,7 +7,7 @@ Navigate in rooms tree
 <!-- @vuese:Rooms:props:start -->
 |Name|Description|Type|Required|Default|
 |---|---|---|---|---|
-|roomId|Current room Id|—|`false`|undefined|
+|roomId|Current room Id|`String`|`false`|undefined|
 
 <!-- @vuese:Rooms:props:end -->
 

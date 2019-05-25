@@ -7,7 +7,7 @@ Home page
 <!-- @vuese:Home:props:start -->
 |Name|Description|Type|Required|Default|
 |---|---|---|---|---|
-|roomId|Id of the root room|—|`false`|undefined|
+|roomId|Id of the root room|`String`|`false`|undefined|
 
 <!-- @vuese:Home:props:end -->
 

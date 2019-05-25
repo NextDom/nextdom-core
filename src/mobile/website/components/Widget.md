@@ -7,8 +7,8 @@ Show eqLogic widget
 <!-- @vuese:Widget:props:start -->
 |Name|Description|Type|Required|Default|
 |---|---|---|---|---|
-|eqlogic|eqLogic data|—|`false`|null|
-|cmds|List of commands|—|`false`|[]|
+|eqlogic|eqLogic data|—|`false`|-|
+|cmds|List of commands|`Array`|`false`|[]|
 
 <!-- @vuese:Widget:props:end -->
 
