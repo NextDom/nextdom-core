@@ -21,7 +21,7 @@ along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 <template>
   <mu-container class="global settings">
     <h1>Paramètres</h1>
-    <mu-button flat id="disconnect-button" color="primary">
+    <mu-button id="disconnect-button" color="primary">
       <mu-icon left value="lock_open"></mu-icon>Déconnexion
     </mu-button>
   </mu-container>
@@ -61,4 +61,3 @@ export default {
   width: 100%;
 }
 </style>
-
