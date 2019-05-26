@@ -19,13 +19,13 @@ along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 -->
 <template>
-  <mu-container id="global login">
+  <mu-container class="global login">
     <h1>Login</h1>
     <mu-form v-bind:model="form">
-      <mu-form-item label="Identifiant">
+      <mu-form-item label="Identifiant" icon="account_circle">
         <mu-text-field v-model="form.username"></mu-text-field>
       </mu-form-item>
-      <mu-form-item label="Mot de passe">
+      <mu-form-item label="Mot de passe" icon="locked">
         <mu-text-field type="password" v-model="form.password"></mu-text-field>
       </mu-form-item>
       <mu-alert color="error" v-if="error" transition="mu-scale-transition">

@@ -40,6 +40,60 @@ theme.addCreateTheme(theme => {
   .mu-bottom-nav-item {
     color: ${theme.textPrimary};
   }
+  .home>h1, .rooms>h1, .scenarios>h1, .settings>h1, .login>h1 {
+    margin: 0.5rem;
+    text-align: center;
+  }
+  .dashboard>h2, .rooms>h2 {
+    margin: 0.5rem;
+  }
+  .room-config {
+    margin: 0.5rem -1% -1%;
+  }
+  .button-wrapper {
+    margin: 0.5rem -1%;
+    width: 102%;
+  }
+  .cmds-button, .cmds-data, .cmds-icon {
+    padding: 0.5rem;
+  }
+  .cmd button {
+    margin: 0.2rem;
+  }
+  .mu-slider {
+    margin-left: 1%;
+    margin-right: 1%;
+    margin-bottom: 5px;
+    width: 98%;
+  }
+  .widget-title span.title {
+    margin-left: 0.5rem;
+  }
+  .widget-title {
+    margin-bottom: 0;
+  }
+  .cmds-data .container:nth-child(odd) {
+    background-color: #cccccc30;
+  }
+  .packery-item {
+    padding-bottom: 0;
+  }
+  .mu-grid-tile-wrapper {
+    padding: 0.2rem !important;
+  }
+  .mu-grid-tile-titlebar {
+    height: 42px;
+  }
+  .mu-grid-tile {
+    background-color: #fff;
+  }
+  .mu-grid-tile .icon > i {
+    padding-top: 25%;
+    font-size: 4rem;
+  }
+  .mu-text-field-input {
+    padding-left: 0.5rem;
+  }
   `;
 });
 theme.use("nextdom");

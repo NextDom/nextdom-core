@@ -221,10 +221,6 @@ export default {
 </script>
 
 <style scoped>
-.room-config {
-  margin-top: 2rem;
-}
-
 .button-wrapper::after {
   content: "";
   clear: both;

@@ -301,9 +301,6 @@ export default {
   content: "";
   clear: both;
 }
-.cmds-data {
-  margin-top: 0.5rem;
-}
 .half-size {
   width: 50%;
   float: left;
