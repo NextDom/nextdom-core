@@ -36,37 +36,32 @@ along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
       <mu-grid-list v-bind:cols="3" v-bind:padding="0">
         <RoomWidget v-for="child in room.children" v-bind:key="child.id" v-bind:room="child"></RoomWidget>
       </mu-grid-list>
-      <div class="room-config" v-if="room.id">
-        <mu-container>
-          <mu-expansion-panel>
-            <div slot="header">Configuration</div>
-            <mu-form v-bind:model="form">
-              <mu-form-item prop="switch" label="Visibilité" label-position="left">
-                <mu-switch v-model="form.isVisible" v-on:change="changeRoomVisibility"></mu-switch>
-              </mu-form-item>
-            </mu-form>
-          </mu-expansion-panel>
-          <mu-expansion-panel v-if="eqLogics.length > 0">
-            <div slot="header">Equipements</div>
-            <mu-list>
-              <mu-list-item
-                button
-                v-bind:ripple="false"
-                v-for="eqLogic in eqLogics"
-                v-bind:key="eqLogic.id"
-              >
-                <mu-list-item-title>{{ eqLogic.name }}</mu-list-item-title>
-                <mu-list-item-action v-on:click="changeEqLogicVisibility(eqLogic.id)">
-                  <mu-icon
-                    v-bind:data-id="eqLogic.id"
-                    v-bind:value="eqLogicsVisibility[eqLogic.id]"
-                  ></mu-icon>
-                </mu-list-item-action>
-              </mu-list-item>
-            </mu-list>
-          </mu-expansion-panel>
-        </mu-container>
-      </div>
+      <mu-container class="room-config" v-if="room.id">
+        <mu-expansion-panel>
+          <div slot="header">Configuration</div>
+          <mu-form v-bind:model="form">
+            <mu-form-item prop="switch" label="Visibilité" label-position="left">
+              <mu-switch v-model="form.isVisible" v-on:change="changeRoomVisibility"></mu-switch>
+            </mu-form-item>
+          </mu-form>
+        </mu-expansion-panel>
+        <mu-expansion-panel v-if="eqLogics.length > 0">
+          <div slot="header">Equipements</div>
+          <mu-list>
+            <mu-list-item
+              button
+              v-bind:ripple="false"
+              v-for="eqLogic in eqLogics"
+              v-bind:key="eqLogic.id"
+            >
+              <mu-list-item-title>{{ eqLogic.name }}</mu-list-item-title>
+              <mu-list-item-action v-on:click="changeEqLogicVisibility(eqLogic.id)">
+                <mu-icon v-bind:data-id="eqLogic.id" v-bind:value="eqLogicsVisibility[eqLogic.id]"></mu-icon>
+              </mu-list-item-action>
+            </mu-list-item>
+          </mu-list>
+        </mu-expansion-panel>
+      </mu-container>
     </template>
   </mu-container>
 </template>
@@ -220,10 +215,40 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "../assets/theme-color.scss";
+
 .button-wrapper::after {
   content: "";
   clear: both;
   display: block;
+}
+
+h2 {
+  margin: 0.5rem;
+}
+
+.room-config {
+  padding-right: 0.2rem;
+  padding-left: 0.2rem;
+  margin-top: 0.5rem;
+}
+
+.mu-grid-tile-wrapper {
+  padding: 0.2rem !important;
+}
+
+.mu-grid-tile-titlebar {
+  height: 2.6rem;
+}
+
+.mu-grid-tile .icon > i {
+  padding-top: 25%;
+  font-size: 4rem;
+  color: $textAlternate;
+}
+
+.mu-grid-tile {
+  background-color: $textPrimary;
 }
 </style>

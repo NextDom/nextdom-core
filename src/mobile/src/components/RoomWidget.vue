@@ -31,7 +31,6 @@ along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 
 <script>
 import Utils from "../libs/Utils.js";
-import theme from "muse-ui/lib/theme";
 
 /**
  * Show the room widget
@@ -71,7 +70,7 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-@import "../assets/theme.scss";
+@import "../assets/theme-color.scss";
 
 .icon > i {
   width: 100%;

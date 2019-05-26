@@ -219,9 +219,11 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+@import "../assets/theme-color.scss";
+
 .packery-item {
-  background-color: white;
+  background-color: $textPrimary;
   margin: 1%;
   padding-bottom: 0.5rem;
 }
@@ -237,33 +239,36 @@ export default {
 .widget-title {
   position: relative;
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: $primary;
+  color: $textPrimary;
   font-size: 0.8rem;
   text-transform: uppercase;
   height: 2.2rem;
   line-height: 2.2rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0;
 }
 
-.widget-title span.title {
-  margin-left: 0.2rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 80%;
-  display: block;
-}
+.widget-title {
+  .title {
+    margin-left: 0.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 80%;
+    display: block;
+  }
 
-.widget-title span.title {
-  position: absolute;
-  left: 0;
-}
+  span.title {
+    position: absolute;
+    left: 0;
+  }
 
-.widget-title button {
-  margin: 0;
-  padding: 0;
-  height: 2.2rem;
-  width: 2.2rem;
+  button {
+    margin: 0;
+    padding: 0;
+    height: 2.2rem;
+    width: 2.2rem;
+  }
 }
 
 .cmds-icon {
@@ -274,34 +279,62 @@ export default {
   align-items: stretch;
   align-content: stretch;
 }
-.cmd.icon {
-  font-size: 3rem;
-  display: flex;
-  flex: 1 1 auto;
+
+.cmds-icon {
+  .cmd.icon {
+    font-size: 3rem;
+    display: flex;
+    flex: 1 1 auto;
+  }
+  .cmd.icon i {
+    width: 100%;
+    text-align: center;
+    margin: 0.5rem 0;
+  }
 }
-.cmd.icon i {
-  width: 100%;
-  text-align: center;
-  margin-bottom: 0.5rem;
-}
-.cmd::after,
+
+.packery-item .cmd::after,
 .cmds-data::before {
   content: "";
   clear: both;
   display: block;
 }
+
+.cmds-data {
+  .cmd {
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+  }
+  .cmd:nth-child(odd) {
+    background-color: $info;
+  }
+  .mu-slider {
+    margin-left: 1%;
+    margin-right: 1%;
+    margin-bottom: 0.3rem;
+    width: 98%;
+  }
+}
+
 .cmds-button {
   text-align: center;
   overflow: hidden;
 }
-.cmds-button > .cmd {
-  display: inline-block;
+
+.cmds-button {
+  .cmd {
+    display: inline-block;
+  }
+  button {
+    margin: 0.2rem;
+  }
 }
 .cmds-button::after {
   content: "";
   clear: both;
 }
-.half-size {
+
+.packery-item .half-size {
   width: 50%;
   float: left;
 }

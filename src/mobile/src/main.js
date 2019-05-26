@@ -23,7 +23,8 @@ import router from "./router";
 import MuseUI from "muse-ui";
 import VuePackeryPlugin from "vue-packery-plugin";
 import "material-icons";
-import "./assets/theme";
+import "./assets/theme-color";
+import "./assets/theme.css";
 
 require("./assets/icons/animal/style.css");
 require("./assets/icons/divers/style.css");
@@ -42,9 +43,9 @@ require("./assets/icons/transport/style.css");
 require("../node_modules/font-awesome/css/font-awesome.css");
 require("../node_modules/font-awesome5/css/fontawesome-all.css");
 
-import Communication from "@/libs/Communication.js";
-import { store } from "@/libs/Store.js";
-import EventsManager from "@/libs/EventsManager.js";
+import Communication from "./libs/Communication.js";
+import { store } from "./libs/Store.js";
+import EventsManager from "./libs/EventsManager.js";
 
 Vue.config.productionTip = false;
 

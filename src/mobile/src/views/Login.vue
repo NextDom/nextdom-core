@@ -94,8 +94,13 @@ export default {
 button {
   width: 100%;
 }
+
 .mu-alert {
   margin-bottom: 1rem;
+}
+
+.mu-text-field-input {
+  padding-left: 0.5rem;
 }
 
 .mu-scale-transition-enter-active,
