@@ -294,8 +294,8 @@ function addUpdate(_update) {
     if (init(_update.type) == 'core') {
         updateIcon = '/public/img/NextDom/NextDom_Square_WhiteBlackBlue.png';
     } else {
-        if (init(_update.icon) != '') {
-            updateIcon = init(_update.icon);
+        if (init(_update.plugin.icon) != '') {
+            updateIcon = init(_update.plugin.icon);
         } else {
             updateIcon = '/public/img/NextDom_' + init(_update.type).charAt(0).toUpperCase() + init(_update.type).slice(1) + '_Gray.png';
         }
