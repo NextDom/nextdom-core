@@ -17,6 +17,10 @@
 
 namespace NextDom\Helpers;
 
+/**
+ * Class Client
+ * @package NextDom\Helpers
+ */
 class Client
 {
     /**

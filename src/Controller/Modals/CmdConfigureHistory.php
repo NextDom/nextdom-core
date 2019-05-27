@@ -26,6 +26,10 @@ use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
 
+/**
+ * Class CmdConfigureHistory
+ * @package NextDom\Controller\Modals
+ */
 class CmdConfigureHistory extends BaseAbstractModal
 {
     /**

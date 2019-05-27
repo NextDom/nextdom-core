@@ -17,6 +17,10 @@
 
 namespace NextDom\Enums;
 
+/**
+ * Class EqLogicViewType
+ * @package NextDom\Enums
+ */
 class EqLogicViewType extends Enum
 {
     const SCENARIO = 'scenario';

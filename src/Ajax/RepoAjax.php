@@ -25,6 +25,10 @@ use NextDom\Managers\UpdateManager;
 use NextDom\Model\Entity\Update;
 use repo_market;
 
+/**
+ * Class RepoAjax
+ * @package NextDom\Ajax
+ */
 class RepoAjax extends BaseAjax
 {
     protected $NEEDED_RIGHTS = UserRight::ADMIN;

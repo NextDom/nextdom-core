@@ -26,6 +26,10 @@ use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\MessageManager;
 
+/**
+ * Class MessageController
+ * @package NextDom\Controller\Modals
+ */
 class MessageController extends BaseAbstractModal
 {
     /**

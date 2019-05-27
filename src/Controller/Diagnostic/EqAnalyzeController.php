@@ -22,6 +22,7 @@
 
 namespace NextDom\Controller\Diagnostic;
 
+use NextDom\Controller\BaseController;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
 use NextDom\Managers\CmdManager;
@@ -31,8 +32,11 @@ use NextDom\Managers\ObjectManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
-use NextDom\Controller\BaseController;
 
+/**
+ * Class EqAnalyzeController
+ * @package NextDom\Controller\Diagnostic
+ */
 class EqAnalyzeController extends BaseController
 {
     /**

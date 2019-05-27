@@ -71,6 +71,12 @@ class Listener implements EntityInterface
 
     protected $_changed = false;
 
+    /**
+     * @param $_event
+     * @param $_value
+     * @param null $_datetime
+     * @throws \Exception
+     */
     public function run($_event, $_value, $_datetime = null)
     {
         $option = array();
@@ -89,6 +95,34 @@ class Listener implements EntityInterface
         }
     }
 
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
+    public function getOption($_key = '', $_default = '')
+    {
+        return Utils::getJsonAttr($this->option, $_key, $_default);
+    }
+
+    /**
+     * @param $_key
+     * @param string $_value
+     * @return $this
+     */
+    public function setOption($_key, $_value = '')
+    {
+        $option = Utils::setJsonAttr($this->option, $_key, $_value);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->option, $option);
+        $this->option = $option;
+        return $this;
+    }
+
+    /**
+     * @param $_event
+     * @param $_value
+     * @param string $_datetime
+     */
     public function execute($_event, $_value, $_datetime = '')
     {
         try {
@@ -124,6 +158,84 @@ class Listener implements EntityInterface
         }
     }
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param $_id
+     * @return $this
+     */
+    public function setId($_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
+        $this->id = $_id;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClass()
+    {
+        return $this->class;
+    }
+
+    /**
+     * @param $_class
+     * @return $this
+     */
+    public function setClass($_class)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->class, $_class);
+        $this->class = $_class;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFunction()
+    {
+        return $this->function;
+    }
+
+    /**
+     * @param $_function
+     * @return $this
+     */
+    public function setFunction($_function)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->function, $_function);
+        $this->function = $_function;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        if ($this->getClass() != '') {
+            return $this->getClass() . '::' . $this->getFunction() . '()';
+        }
+        return $this->getFunction() . '()';
+    }
+
+    /**
+     * @return bool
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
+    public function remove()
+    {
+        return DBHelper::remove($this);
+    }
+
     public function preSave()
     {
         if ($this->getFunction() == '') {
@@ -131,6 +243,12 @@ class Listener implements EntityInterface
         }
     }
 
+    /**
+     * @param bool $_once
+     * @return bool
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public function save($_once = false)
     {
         if ($_once) {
@@ -140,16 +258,15 @@ class Listener implements EntityInterface
         return true;
     }
 
-    public function remove()
-    {
-        return DBHelper::remove($this);
-    }
-
     public function emptyEvent()
     {
         $this->event = array();
     }
 
+    /**
+     * @param $_id
+     * @param string $_type
+     */
     public function addEvent($_id, $_type = 'cmd')
     {
         $event = $this->getEvent();
@@ -166,38 +283,18 @@ class Listener implements EntityInterface
         $this->setEvent($event);
     }
 
-    public function getId()
-    {
-        return $this->id;
-    }
-
+    /**
+     * @return bool|mixed|null
+     */
     public function getEvent()
     {
         return Utils::isJson($this->event, array());
     }
 
-    public function getClass()
-    {
-        return $this->class;
-    }
-
-    public function getFunction()
-    {
-        return $this->function;
-    }
-
-    public function getOption($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->option, $_key, $_default);
-    }
-
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
-    }
-
+    /**
+     * @param $_event
+     * @return $this
+     */
     public function setEvent($_event)
     {
         $event = json_encode($_event, JSON_UNESCAPED_UNICODE);
@@ -206,47 +303,27 @@ class Listener implements EntityInterface
         return $this;
     }
 
-    public function setClass($_class)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->class, $_class);
-        $this->class = $_class;
-        return $this;
-    }
-
-    public function setFunction($_function)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->function, $_function);
-        $this->function = $_function;
-        return $this;
-    }
-
-    public function setOption($_key, $_value = '')
-    {
-        $option = Utils::setJsonAttr($this->option, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->option, $option);
-        $this->option = $option;
-        return $this;
-    }
-
+    /**
+     * @return bool
+     */
     public function getChanged()
     {
         return $this->_changed;
     }
 
+    /**
+     * @param $_changed
+     * @return $this
+     */
     public function setChanged($_changed)
     {
         $this->_changed = $_changed;
         return $this;
     }
 
-    public function getName()
-    {
-        if ($this->getClass() != '') {
-            return $this->getClass() . '::' . $this->getFunction() . '()';
-        }
-        return $this->getFunction() . '()';
-    }
-
+    /**
+     * @return string
+     */
     public function getTableName()
     {
         return 'listener';

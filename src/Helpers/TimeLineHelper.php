@@ -36,6 +36,10 @@ namespace NextDom\Helpers;
 
 use NextDom\Managers\ConfigManager;
 
+/**
+ * Class TimeLineHelper
+ * @package NextDom\Helpers
+ */
 class TimeLineHelper
 {
     /**

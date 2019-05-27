@@ -18,6 +18,10 @@
 
 namespace NextDom\Enums;
 
+/**
+ * Class ScenarioExpressionAction
+ * @package NextDom\Enums
+ */
 class ScenarioExpressionAction extends Enum
 {
     const ICON = 'icon';

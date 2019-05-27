@@ -24,6 +24,10 @@ namespace NextDom\Controller\Modals;
 
 use NextDom\Helpers\Render;
 
+/**
+ * Class ExpressionTest
+ * @package NextDom\Controller\Modals
+ */
 class ExpressionTest extends BaseAbstractModal
 {
     /**

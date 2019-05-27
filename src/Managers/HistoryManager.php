@@ -40,6 +40,10 @@ use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Model\Entity\History;
 
+/**
+ * Class HistoryManager
+ * @package NextDom\Managers
+ */
 class HistoryManager
 {
     const CLASS_NAME = 'history';
@@ -88,6 +92,15 @@ class HistoryManager
         DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW);
     }
 
+    /**
+     * @param $_cmd_id
+     * @param $_startTime
+     * @param null $_endTime
+     * @param null $_oldValue
+     * @return array|mixed|null
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public static function byCmdIdDatetime($_cmd_id, $_startTime, $_endTime = null, $_oldValue = null)
     {
         if ($_endTime == null) {
@@ -277,52 +290,12 @@ class HistoryManager
     }
 
     /**
-     *
      * @param $_cmd_id
      * @param null $_startTime
      * @param null $_endTime
-     * @return History[] des valeurs de l'équipement
-     * @throws \Exception
+     * @return bool
+     * @throws CoreException
      */
-    public static function all($_cmd_id, $_startTime = null, $_endTime = null)
-    {
-        $values = array(
-            'cmd_id' => $_cmd_id,
-        );
-        if ($_startTime !== null) {
-            $values['startTime'] = $_startTime;
-        }
-        if ($_endTime !== null) {
-            $values['endTime'] = $_endTime;
-        }
-
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-            FROM history
-            WHERE cmd_id=:cmd_id ';
-        if ($_startTime !== null) {
-            $sql .= ' AND datetime>=:startTime';
-        }
-        if ($_endTime !== null) {
-            $sql .= ' AND datetime<=:endTime';
-        }
-        $sql .= ' ORDER BY `datetime` ASC';
-        $result1 = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
-
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-            FROM historyArch
-            WHERE cmd_id=:cmd_id ';
-        if ($_startTime !== null) {
-            $sql .= ' AND `datetime`>=:startTime';
-        }
-        if ($_endTime !== null) {
-            $sql .= ' AND `datetime`<=:endTime';
-        }
-        $sql .= ' ORDER BY `datetime` ASC';
-        $result2 = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, 'historyArch');
-
-        return array_merge($result2, $result1);
-    }
-
     public static function removes($_cmd_id, $_startTime = null, $_endTime = null)
     {
         $values = array(
@@ -359,6 +332,16 @@ class HistoryManager
         return true;
     }
 
+    /**
+     * @param $_cmd_id
+     * @param null $_startTime
+     * @param null $_endTime
+     * @param string $_period
+     * @param int $_offset
+     * @return array|mixed|null
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public static function getPlurality($_cmd_id, $_startTime = null, $_endTime = null, $_period = 'day', $_offset = 0)
     {
         $values = array(
@@ -439,7 +422,15 @@ class HistoryManager
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
-    public static function getTemporalAvg($_cmd_id, $_startTime, $_endTime){
+    /**
+     * @param $_cmd_id
+     * @param $_startTime
+     * @param $_endTime
+     * @return float|int|null
+     * @throws \Exception
+     */
+    public static function getTemporalAvg($_cmd_id, $_startTime, $_endTime)
+    {
         $histories = self::all($_cmd_id, $_startTime, $_endTime);
         $result = null;
         $start = null;
@@ -447,7 +438,7 @@ class HistoryManager
         $cValue = null;
         $sum = 0;
         foreach ($histories as $history) {
-            if($start == null){
+            if ($start == null) {
                 $cValue = $history->getValue();
                 $cTime = strtotime($history->getDatetime());
                 $start = $cTime;
@@ -461,6 +452,74 @@ class HistoryManager
         return $result;
     }
 
+    /**
+     *
+     * @param $_cmd_id
+     * @param null $_startTime
+     * @param null $_endTime
+     * @return History[] des valeurs de l'équipement
+     * @throws \Exception
+     */
+    public static function all($_cmd_id, $_startTime = null, $_endTime = null)
+    {
+        $values = array(
+            'cmd_id' => $_cmd_id,
+        );
+        if ($_startTime !== null) {
+            $values['startTime'] = $_startTime;
+        }
+        if ($_endTime !== null) {
+            $values['endTime'] = $_endTime;
+        }
+
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+            FROM history
+            WHERE cmd_id=:cmd_id ';
+        if ($_startTime !== null) {
+            $sql .= ' AND datetime>=:startTime';
+        }
+        if ($_endTime !== null) {
+            $sql .= ' AND datetime<=:endTime';
+        }
+        $sql .= ' ORDER BY `datetime` ASC';
+        $result1 = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+            FROM historyArch
+            WHERE cmd_id=:cmd_id ';
+        if ($_startTime !== null) {
+            $sql .= ' AND `datetime`>=:startTime';
+        }
+        if ($_endTime !== null) {
+            $sql .= ' AND `datetime`<=:endTime';
+        }
+        $sql .= ' ORDER BY `datetime` ASC';
+        $result2 = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, 'historyArch');
+
+        return array_merge($result2, $result1);
+    }
+
+    /**
+     * @param $_cmd_id
+     * @param $_startTime
+     * @param $_endTime
+     * @return array
+     * @throws CoreException
+     */
+    /**
+     * @param $_cmd_id
+     * @param $_startTime
+     * @param $_endTime
+     * @return array
+     * @throws CoreException
+     */
+    /**
+     * @param $_cmd_id
+     * @param $_startTime
+     * @param $_endTime
+     * @return array
+     * @throws CoreException
+     */
     public static function getStatistics($_cmd_id, $_startTime, $_endTime)
     {
         $values = array(
@@ -520,6 +579,27 @@ class HistoryManager
         return $return;
     }
 
+    /**
+     * @param $_cmd_id
+     * @param $_startTime
+     * @param $_endTime
+     * @return float|int
+     * @throws \Exception
+     */
+    /**
+     * @param $_cmd_id
+     * @param $_startTime
+     * @param $_endTime
+     * @return float|int
+     * @throws \Exception
+     */
+    /**
+     * @param $_cmd_id
+     * @param $_startTime
+     * @param $_endTime
+     * @return float|int
+     * @throws \Exception
+     */
     public static function getTendance($_cmd_id, $_startTime, $_endTime)
     {
         $values = array();
@@ -548,6 +628,24 @@ class HistoryManager
         return ($base / $divisor);
     }
 
+    /**
+     * @param $_cmd_id
+     * @param null $_value
+     * @return false|int
+     * @throws CoreException
+     */
+    /**
+     * @param $_cmd_id
+     * @param null $_value
+     * @return false|int
+     * @throws CoreException
+     */
+    /**
+     * @param $_cmd_id
+     * @param null $_value
+     * @return false|int
+     * @throws CoreException
+     */
     public static function stateDuration($_cmd_id, $_value = null)
     {
         $cmd = CmdManager::byId($_cmd_id);
@@ -574,6 +672,24 @@ class HistoryManager
         return $duration;
     }
 
+    /**
+     * @param $_cmd_id
+     * @param null $_value
+     * @return false|int
+     * @throws \Exception
+     */
+    /**
+     * @param $_cmd_id
+     * @param null $_value
+     * @return false|int
+     * @throws \Exception
+     */
+    /**
+     * @param $_cmd_id
+     * @param null $_value
+     * @return false|int
+     * @throws \Exception
+     */
     public static function lastStateDuration($_cmd_id, $_value = null)
     {
         $cmd = CmdManager::byId($_cmd_id);
@@ -765,6 +881,24 @@ class HistoryManager
         return $result['changes'];
     }
 
+    /**
+     * @param $_cmd_id
+     * @param string $_date
+     * @return array|mixed|null
+     * @throws CoreException
+     */
+    /**
+     * @param $_cmd_id
+     * @param string $_date
+     * @return array|mixed|null
+     * @throws CoreException
+     */
+    /**
+     * @param $_cmd_id
+     * @param string $_date
+     * @return array|mixed|null
+     * @throws CoreException
+     */
     public static function emptyHistory($_cmd_id, $_date = '')
     {
         $values = array(

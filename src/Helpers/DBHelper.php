@@ -36,17 +36,20 @@ namespace NextDom\Helpers;
 
 use NextDom\Exceptions\CoreException;
 
+/**
+ * Class DBHelper
+ * @package NextDom\Helpers
+ */
 class DBHelper
 {
     const FETCH_TYPE_ROW = 0;
     const FETCH_TYPE_ALL = 1;
     const CONNECTION_TIMEOUT = 120;
-
-    private $connection;
-    private $lastConnection;
     private static $sharedInstance;
     private static $fieldsCache = [];
     private static $fieldsQuery = [];
+    private $connection;
+    private $lastConnection;
 
     /**
      * Private constructor for singleton
@@ -59,35 +62,6 @@ class DBHelper
         } else {
             $this->connection = new \PDO('mysql:host=' . $CONFIG['db']['host'] . ';port=' . $CONFIG['db']['port'] . ';dbname=' . $CONFIG['db']['dbname'], $CONFIG['db']['username'], $CONFIG['db']['password'], array(\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8', \PDO::ATTR_PERSISTENT => true));
         }
-    }
-
-    /**
-     * Get the last insert id
-     * TODO: ???? Ca me parait dangereux si il y a une écriture en bdd entre temps
-     * @return mixed
-     * @throws CoreException
-     */
-    public static function getLastInsertId()
-    {
-        if (!isset(self::$sharedInstance)) {
-            throw new CoreException('DB : Aucune connection active - impossible d\'avoir le dernier ID inséré');
-        }
-        return self::$sharedInstance->connection->lastInsertId();
-    }
-
-    /**
-     * Get the connection. Connect to the database if not.
-     *
-     * @return \PDO Connection
-     */
-    public static function getConnection()
-    {
-        if (!isset(self::$sharedInstance) || self::$sharedInstance->lastConnection + self::CONNECTION_TIMEOUT < time()) {
-            self::$sharedInstance = new self();
-        }
-        // Store last connection
-        self::$sharedInstance->lastConnection = time();
-        return self::$sharedInstance->connection;
     }
 
     /**
@@ -163,11 +137,18 @@ class DBHelper
     }
 
     /**
-     * Block object cloning
+     * Get the connection. Connect to the database if not.
+     *
+     * @return \PDO Connection
      */
-    public function __clone()
+    public static function getConnection()
     {
-        trigger_error('DB : Cloner cet objet n\'est pas permis', E_USER_ERROR);
+        if (!isset(self::$sharedInstance) || self::$sharedInstance->lastConnection + self::CONNECTION_TIMEOUT < time()) {
+            self::$sharedInstance = new self();
+        }
+        // Store last connection
+        self::$sharedInstance->lastConnection = time();
+        return self::$sharedInstance->connection;
     }
 
     /**
@@ -288,6 +269,156 @@ class DBHelper
     }
 
     /**
+     * Returns the value of a field of a given object. It'll try to use a
+     * getter first if defined. If not defined, we'll use the reflection API.
+     *
+     * @param mixed $object
+     * @param string $field
+     * @return mixed
+     * @throws \ReflectionException
+     */
+    private static function getField($object, $field)
+    {
+        $result = null;
+        $method = 'get' . ucfirst($field);
+        if (method_exists($object, $method)) {
+            $result = $object->$method();
+        } else {
+            $reflection = self::getReflectionClass($object);
+            if ($reflection->hasProperty($field)) {
+                $property = $reflection->getProperty($field);
+                $property->setAccessible(true);
+                $result = $property->getValue($object);
+                $property->setAccessible(false);
+            }
+        }
+        if (is_array($result) || is_object($result)) {
+            $result = json_encode($result, JSON_UNESCAPED_UNICODE);
+        }
+        return $result;
+    }
+
+    /**
+     * Returns the reflection class for the given object.
+     *
+     * @param  object $object
+     * @return \ReflectionClass
+     * @throws \ReflectionException
+     */
+    private static function getReflectionClass($object)
+    {
+        $reflections = array();
+        $uuid = spl_object_hash($object);
+        if (!isset($reflections[$uuid])) {
+            $reflections[$uuid] = new \ReflectionClass($object);
+        }
+        return $reflections[$uuid];
+    }
+
+    /**
+     *
+     *
+     * @param mixed $object
+     * @return array List of fields
+     * @throws \RuntimeException
+     * @throws \ReflectionException
+     */
+    private static function getFields($object)
+    {
+        $table = is_string($object) ? $object : self::getTableName($object);
+        if (isset(self::$fieldsCache[$table])) {
+            return self::$fieldsCache[$table];
+        }
+        $reflection = is_object($object) ? self::getReflectionClass($object) : new \ReflectionClass($object);
+        $properties = $reflection->getProperties();
+        self::$fieldsCache[$table] = array();
+        foreach ($properties as $property) {
+            $name = $property->getName();
+            if ('_' !== $name[0]) {
+                self::$fieldsCache[$table][] = $name;
+            }
+        }
+        if (empty(self::$fieldsCache[$table])) {
+            throw new \RuntimeException('No fields found for class ' . get_class($object));
+        }
+        return self::$fieldsCache[$table];
+    }
+
+    /**
+     * Returns the name of the table where to save entities.
+     *
+     * @param $object
+     * @return string
+     */
+    private static function getTableName($object)
+    {
+        if (method_exists($object, 'getTableName')) {
+            return $object->getTableName();
+        }
+        return get_class($object);
+    }
+
+    /**
+     * Forces the value of a field of a given object, even if this field is
+     * not accessible.
+     *
+     * @param object $object The entity to alter
+     * @param string $field The name of the member to alter
+     * @param mixed $value The value to give to the member
+     * @throws \ReflectionException
+     */
+    private static function setField($object, $field, $value)
+    {
+        $method = 'set' . ucfirst($field);
+        if (method_exists($object, $method)) {
+            $object->$method($value);
+        } else {
+            $reflection = self::getReflectionClass($object);
+            if ($reflection->hasProperty($field)) {
+                throw new \InvalidArgumentException('Unknown field ' . get_class($object) . '::' . $field);
+            }
+            $property = $reflection->getProperty($field);
+            $property->setAccessible(true);
+            $property->setValue($object, $value);
+            $property->setAccessible(false);
+        }
+    }
+
+    /**
+     * Builds the elements for an SQL query. It will return two lists, the
+     * first being the list of parts "key= :key" to inject in the SQL, the
+     * second being the mapping of these parameters to the values.
+     *
+     * @param mixed $object
+     * @return array
+     * @throws \ReflectionException
+     */
+    private static function buildQuery($object)
+    {
+        $parameters = [];
+        $sql = [];
+        foreach (self::getFields($object) as $field) {
+            $sql[] = '`' . $field . '` = :' . $field;
+            $parameters[$field] = self::getField($object, $field);
+        }
+        return array($sql, $parameters);
+    }
+
+    /**
+     * Get the last insert id
+     * TODO: ???? Ca me parait dangereux si il y a une écriture en bdd entre temps
+     * @return mixed
+     * @throws CoreException
+     */
+    public static function getLastInsertId()
+    {
+        if (!isset(self::$sharedInstance)) {
+            throw new CoreException('DB : Aucune connection active - impossible d\'avoir le dernier ID inséré');
+        }
+        return self::$sharedInstance->connection->lastInsertId();
+    }
+
+    /**
      * Refresh value of an object
      *
      * @param mixed $objectToRefresh
@@ -330,6 +461,35 @@ class DBHelper
             $property->setAccessible(false);
         }
         return true;
+    }
+
+    /**
+     * Build fields for query
+     * @param $_class
+     * @param string $prefix
+     * @return string
+     * @throws \ReflectionException
+     */
+    public static function buildField($className, $prefix = '')
+    {
+        $className = is_string($className) ? $className : self::getTableName($className);
+        $code = $prefix . $className;
+        if (isset(self::$fieldsQuery[$code])) {
+            return self::$fieldsQuery[$code];
+        } else {
+            $fields = array();
+            foreach (self::getFields($className) as $field) {
+                if ('_' !== $field[0]) {
+                    if ($prefix != '') {
+                        $fields[] = '`' . $prefix . '`.' . '`' . $field . '`';
+                    } else {
+                        $fields[] = '`' . $field . '`';
+                    }
+                }
+            }
+            self::$fieldsQuery[$code] = implode(', ', $fields);
+            return self::$fieldsQuery[$code];
+        }
     }
 
     /**
@@ -434,6 +594,21 @@ class DBHelper
         return null !== $res && false !== $res;
     }
 
+    /**
+     * @param $_table
+     * @return mixed
+     * @throws CoreException
+     */
+    /**
+     * @param $_table
+     * @return mixed
+     * @throws CoreException
+     */
+    /**
+     * @param $_table
+     * @return mixed
+     * @throws CoreException
+     */
     public static function checksum($_table)
     {
         $sql = 'CHECKSUM TABLE ' . $_table;
@@ -471,172 +646,6 @@ class DBHelper
             $object->postLock();
         }
         return null !== $res && false !== $res;
-    }
-
-    /**
-     * Returns the name of the table where to save entities.
-     *
-     * @param $object
-     * @return string
-     */
-    private static function getTableName($object)
-    {
-        if (method_exists($object, 'getTableName')) {
-            return $object->getTableName();
-        }
-        return get_class($object);
-    }
-
-    /**
-     *
-     *
-     * @param mixed $object
-     * @return array List of fields
-     * @throws \RuntimeException
-     * @throws \ReflectionException
-     */
-    private static function getFields($object)
-    {
-        $table = is_string($object) ? $object : self::getTableName($object);
-        if (isset(self::$fieldsCache[$table])) {
-            return self::$fieldsCache[$table];
-        }
-        $reflection = is_object($object) ? self::getReflectionClass($object) : new \ReflectionClass($object);
-        $properties = $reflection->getProperties();
-        self::$fieldsCache[$table] = array();
-        foreach ($properties as $property) {
-            $name = $property->getName();
-            if ('_' !== $name[0]) {
-                self::$fieldsCache[$table][] = $name;
-            }
-        }
-        if (empty(self::$fieldsCache[$table])) {
-            throw new \RuntimeException('No fields found for class ' . get_class($object));
-        }
-        return self::$fieldsCache[$table];
-    }
-
-    /**
-     * Forces the value of a field of a given object, even if this field is
-     * not accessible.
-     *
-     * @param object $object The entity to alter
-     * @param string $field The name of the member to alter
-     * @param mixed $value The value to give to the member
-     * @throws \ReflectionException
-     */
-    private static function setField($object, $field, $value)
-    {
-        $method = 'set' . ucfirst($field);
-        if (method_exists($object, $method)) {
-            $object->$method($value);
-        } else {
-            $reflection = self::getReflectionClass($object);
-            if ($reflection->hasProperty($field)) {
-                throw new \InvalidArgumentException('Unknown field ' . get_class($object) . '::' . $field);
-            }
-            $property = $reflection->getProperty($field);
-            $property->setAccessible(true);
-            $property->setValue($object, $value);
-            $property->setAccessible(false);
-        }
-    }
-
-    /**
-     * Builds the elements for an SQL query. It will return two lists, the
-     * first being the list of parts "key= :key" to inject in the SQL, the
-     * second being the mapping of these parameters to the values.
-     *
-     * @param mixed $object
-     * @return array
-     * @throws \ReflectionException
-     */
-    private static function buildQuery($object)
-    {
-        $parameters = [];
-        $sql = [];
-        foreach (self::getFields($object) as $field) {
-            $sql[] = '`' . $field . '` = :' . $field;
-            $parameters[$field] = self::getField($object, $field);
-        }
-        return array($sql, $parameters);
-    }
-
-    /**
-     * Returns the value of a field of a given object. It'll try to use a
-     * getter first if defined. If not defined, we'll use the reflection API.
-     *
-     * @param mixed $object
-     * @param string $field
-     * @return mixed
-     * @throws \ReflectionException
-     */
-    private static function getField($object, $field)
-    {
-        $result = null;
-        $method = 'get' . ucfirst($field);
-        if (method_exists($object, $method)) {
-            $result = $object->$method();
-        } else {
-            $reflection = self::getReflectionClass($object);
-            if ($reflection->hasProperty($field)) {
-                $property = $reflection->getProperty($field);
-                $property->setAccessible(true);
-                $result = $property->getValue($object);
-                $property->setAccessible(false);
-            }
-        }
-        if (is_array($result) || is_object($result)) {
-            $result = json_encode($result, JSON_UNESCAPED_UNICODE);
-        }
-        return $result;
-    }
-
-    /**
-     * Returns the reflection class for the given object.
-     *
-     * @param  object $object
-     * @return \ReflectionClass
-     * @throws \ReflectionException
-     */
-    private static function getReflectionClass($object)
-    {
-        $reflections = array();
-        $uuid = spl_object_hash($object);
-        if (!isset($reflections[$uuid])) {
-            $reflections[$uuid] = new \ReflectionClass($object);
-        }
-        return $reflections[$uuid];
-    }
-
-    /**
-     * Build fields for query
-     * @param $_class
-     * @param string $prefix
-     * @return string
-     * @throws \ReflectionException
-     */
-    public static function buildField($className, $prefix = '')
-    {
-        $className = is_string($className) ? $className : self::getTableName($className);
-        $code = $prefix.$className;
-        if (isset(self::$fieldsQuery[$code])) {
-            return self::$fieldsQuery[$code];
-        }
-        else {
-            $fields = array();
-            foreach (self::getFields($className) as $field) {
-                if ('_' !== $field[0]) {
-                    if ($prefix != '') {
-                        $fields[] = '`' . $prefix . '`.' . '`' . $field . '`';
-                    } else {
-                        $fields[] = '`' . $field . '`';
-                    }
-                }
-            }
-            self::$fieldsQuery[$code] = implode(', ', $fields);
-            return self::$fieldsQuery[$code];
-        }
     }
 
     /**
@@ -722,6 +731,21 @@ class DBHelper
         return true;
     }
 
+    /**
+     * @param $database
+     * @return array
+     * @throws CoreException
+     */
+    /**
+     * @param $database
+     * @return array
+     * @throws CoreException
+     */
+    /**
+     * @param $database
+     * @return array
+     * @throws CoreException
+     */
     private static function compareDatabase($database)
     {
         $return = array();
@@ -731,7 +755,21 @@ class DBHelper
         return $return;
     }
 
-
+    /**
+     * @param $_table
+     * @return array
+     * @throws CoreException
+     */
+    /**
+     * @param $_table
+     * @return array
+     * @throws CoreException
+     */
+    /**
+     * @param $_table
+     * @return array
+     * @throws CoreException
+     */
     private static function compareTable($_table)
     {
         try {
@@ -843,26 +881,87 @@ class DBHelper
         return $return;
     }
 
-    private static function prepareIndexCompare($indexes)
+    /**
+     * @param $_field
+     * @return string
+     */
+    /**
+     * @param $_field
+     * @return string
+     */
+    /**
+     * @param $_field
+     * @return string
+     */
+    private static function buildDefinitionField($_field)
     {
-        $return = array();
-        foreach ($indexes as $index) {
-            if ($index['Key_name'] == 'PRIMARY') {
-                continue;
-            }
-            if (!isset($return[$index['Key_name']])) {
-                $return[$index['Key_name']] = array(
-                    'Key_name' => $index['Key_name'],
-                    'Non_unique' => 0,
-                    'columns' => array(),
-                );
-            }
-            $return[$index['Key_name']]['Non_unique'] = $index['Non_unique'];
-            $return[$index['Key_name']]['columns'][$index['Seq_in_index']] = array('column' => $index['Column_name'], 'Sub_part' => $index['Sub_part']);
+        $return = ' ' . $_field['type'];
+        if ($_field['null'] == 'NO') {
+            $return .= ' NOT NULL';
+        } else {
+            $return .= ' NULL';
+        }
+        if ($_field['default'] != '') {
+            $return .= ' DEFAULT "' . $_field['default'] . '"';
+        }
+        if ($_field['extra'] == 'auto_increment') {
+            $return .= ' AUTO_INCREMENT';
         }
         return $return;
     }
 
+    /**
+     * @param $_index
+     * @param $_table_name
+     * @return string
+     */
+    /**
+     * @param $_index
+     * @param $_table_name
+     * @return string
+     */
+    /**
+     * @param $_index
+     * @param $_table_name
+     * @return string
+     */
+    private static function buildDefinitionIndex($_index, $_table_name)
+    {
+        if ($_index['Non_unique'] == 0) {
+            $return = 'CREATE UNIQUE INDEX `' . $_index['Key_name'] . '` ON `' . $_table_name . '`' . ' (';
+        } else {
+            $return = 'CREATE INDEX `' . $_index['Key_name'] . '` ON `' . $_table_name . '`' . ' (';
+        }
+        foreach ($_index['columns'] as $value) {
+            $return .= '`' . $value['column'] . '`';
+            if ($value['Sub_part'] != null) {
+                $return .= '(' . $value['Sub_part'] . ')';
+            }
+            $return .= ' ASC,';
+        }
+        $return = trim($return, ',');
+        $return .= ')';
+        return $return;
+    }
+
+    /**
+     * @param $_ref_field
+     * @param $_real_field
+     * @param $_table_name
+     * @return array
+     */
+    /**
+     * @param $_ref_field
+     * @param $_real_field
+     * @param $_table_name
+     * @return array
+     */
+    /**
+     * @param $_ref_field
+     * @param $_real_field
+     * @param $_table_name
+     * @return array
+     */
     private static function compareField($_ref_field, $_real_field, $_table_name)
     {
         $return = array($_ref_field['name'] => array('status' => 'ok', 'sql' => ''));
@@ -889,6 +988,56 @@ class DBHelper
         return $return;
     }
 
+    /**
+     * @param $indexes
+     * @return array
+     */
+    /**
+     * @param $indexes
+     * @return array
+     */
+    /**
+     * @param $indexes
+     * @return array
+     */
+    private static function prepareIndexCompare($indexes)
+    {
+        $return = array();
+        foreach ($indexes as $index) {
+            if ($index['Key_name'] == 'PRIMARY') {
+                continue;
+            }
+            if (!isset($return[$index['Key_name']])) {
+                $return[$index['Key_name']] = array(
+                    'Key_name' => $index['Key_name'],
+                    'Non_unique' => 0,
+                    'columns' => array(),
+                );
+            }
+            $return[$index['Key_name']]['Non_unique'] = $index['Non_unique'];
+            $return[$index['Key_name']]['columns'][$index['Seq_in_index']] = array('column' => $index['Column_name'], 'Sub_part' => $index['Sub_part']);
+        }
+        return $return;
+    }
+
+    /**
+     * @param $_ref_index
+     * @param $_real_index
+     * @param $_table_name
+     * @return array
+     */
+    /**
+     * @param $_ref_index
+     * @param $_real_index
+     * @param $_table_name
+     * @return array
+     */
+    /**
+     * @param $_ref_index
+     * @param $_real_index
+     * @param $_table_name
+     * @return array
+     */
     private static function compareIndex($_ref_index, $_real_index, $_table_name)
     {
         $return = array($_ref_index['Key_name'] => array('status' => 'ok', 'presql' => '', 'sql' => ''));
@@ -907,40 +1056,12 @@ class DBHelper
         return $return;
     }
 
-    private static function buildDefinitionField($_field)
+    /**
+     * Block object cloning
+     */
+    public function __clone()
     {
-        $return = ' ' . $_field['type'];
-        if ($_field['null'] == 'NO') {
-            $return .= ' NOT NULL';
-        } else {
-            $return .= ' NULL';
-        }
-        if ($_field['default'] != '') {
-            $return .= ' DEFAULT "' . $_field['default'] . '"';
-        }
-        if ($_field['extra'] == 'auto_increment') {
-            $return .= ' AUTO_INCREMENT';
-        }
-        return $return;
-    }
-
-    private static function buildDefinitionIndex($_index, $_table_name)
-    {
-        if ($_index['Non_unique'] == 0) {
-            $return = 'CREATE UNIQUE INDEX `' . $_index['Key_name'] . '` ON `' . $_table_name . '`' . ' (';
-        } else {
-            $return = 'CREATE INDEX `' . $_index['Key_name'] . '` ON `' . $_table_name . '`' . ' (';
-        }
-        foreach ($_index['columns'] as $value) {
-            $return .= '`' . $value['column'] . '`';
-            if ($value['Sub_part'] != null) {
-                $return .= '(' . $value['Sub_part'] . ')';
-            }
-            $return .= ' ASC,';
-        }
-        $return = trim($return, ',');
-        $return .= ')';
-        return $return;
+        trigger_error('DB : Cloner cet objet n\'est pas permis', E_USER_ERROR);
     }
 
 }

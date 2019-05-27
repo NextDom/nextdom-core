@@ -27,27 +27,26 @@ use Twig\Extensions\DateExtension;
 use Twig\Extensions\I18nExtension;
 use Twig\Extensions\TextExtension;
 use Twig_Environment;
-use Twig_Error_Loader;
 use Twig_Extension_Debug;
 use Twig_Loader_Filesystem;
 
+/**
+ * Class Render
+ * @package NextDom\Helpers
+ */
 class Render
 {
     const DEFAULT_LANGUAGE = 'fr';
-
+    private static $instance;
     /**
      * @var Translator
      */
     private $translator;
-
     /**
      * @var Twig_Environment
      */
     private $twig;
-
     private $twigLoader;
-
-    private static $instance;
 
     private function __construct()
     {
@@ -120,6 +119,15 @@ class Render
     }
 
     /**
+     * @param string $view
+     * @param array $data
+     */
+    public function show($view, $data = array())
+    {
+        echo $this->get($view, $data);
+    }
+
+    /**
      * @param $view
      * @param array $data
      * @return mixed
@@ -140,25 +148,6 @@ class Render
     }
 
     /**
-     * @param string $view
-     * @param array $data
-     */
-    public function show($view, $data = array())
-    {
-        echo $this->get($view, $data);
-    }
-
-    /**
-     * @param string $url
-     * @return string
-     */
-    public function getCssHtmlTag(string $url): string
-    {
-        return '<link href="' . $url . '" rel="stylesheet"/>';
-    }
-
-
-    /**
      * @param Twig_Loader_Filesystem $twigLoader
      * @return bool|\DebugBar\JavascriptRenderer
      */
@@ -176,5 +165,14 @@ class Render
             }
         }
         return $debugBarData;
+    }
+
+    /**
+     * @param string $url
+     * @return string
+     */
+    public function getCssHtmlTag(string $url): string
+    {
+        return '<link href="' . $url . '" rel="stylesheet"/>';
     }
 }

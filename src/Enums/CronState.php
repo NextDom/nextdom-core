@@ -17,6 +17,10 @@
 
 namespace NextDom\Enums;
 
+/**
+ * Class CronState
+ * @package NextDom\Enums
+ */
 class CronState extends Enum
 {
     const RUN = 'run';

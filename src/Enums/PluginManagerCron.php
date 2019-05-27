@@ -18,6 +18,10 @@
 
 namespace NextDom\Enums;
 
+/**
+ * Class PluginManagerCron
+ * @package NextDom\Enums
+ */
 class PluginManagerCron extends Enum
 {
 

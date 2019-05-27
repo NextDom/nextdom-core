@@ -27,6 +27,10 @@ use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\PlanHeaderManager;
 
+/**
+ * Class PlanHeaderConfigure
+ * @package NextDom\Controller\Modals
+ */
 class PlanHeaderConfigure extends BaseAbstractModal
 {
     /**

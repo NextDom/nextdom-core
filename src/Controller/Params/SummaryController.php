@@ -22,9 +22,13 @@
 
 namespace NextDom\Controller\Params;
 
-use NextDom\Helpers\Render;
 use NextDom\Controller\BaseController;
+use NextDom\Helpers\Render;
 
+/**
+ * Class SummaryController
+ * @package NextDom\Controller\Params
+ */
 class SummaryController extends BaseController
 {
     /** Render summary page

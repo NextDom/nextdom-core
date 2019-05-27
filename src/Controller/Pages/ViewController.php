@@ -22,14 +22,18 @@
 
 namespace NextDom\Controller\Pages;
 
+use NextDom\Controller\BaseController;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\UserManager;
 use NextDom\Managers\ViewManager;
-use NextDom\Controller\BaseController;
 
+/**
+ * Class ViewController
+ * @package NextDom\Controller\Pages
+ */
 class ViewController extends BaseController
 {
     /**

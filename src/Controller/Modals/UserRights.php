@@ -29,6 +29,10 @@ use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\UserManager;
 
+/**
+ * Class UserRights
+ * @package NextDom\Controller\Modals
+ */
 class UserRights extends BaseAbstractModal
 {
     /**

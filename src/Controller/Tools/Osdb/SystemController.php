@@ -22,10 +22,14 @@
 
 namespace NextDom\Controller\Tools\Osdb;
 
+use NextDom\Controller\BaseController;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
-use NextDom\Controller\BaseController;
 
+/**
+ * Class SystemController
+ * @package NextDom\Controller\Tools\Osdb
+ */
 class SystemController extends BaseController
 {
     /**

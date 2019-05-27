@@ -27,8 +27,15 @@ use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\UpdateManager;
 
+/**
+ * Class BaseAbstractModal
+ * @package NextDom\Controller\Modals
+ */
 abstract class BaseAbstractModal
 {
+    /**
+     * @return string
+     */
     public abstract static function get(): string;
 
     /**

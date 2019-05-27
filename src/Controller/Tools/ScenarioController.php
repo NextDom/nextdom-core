@@ -22,13 +22,17 @@
 
 namespace NextDom\Controller\Tools;
 
+use NextDom\Controller\BaseController;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\ObjectManager;
 use NextDom\Managers\ScenarioManager;
-use NextDom\Controller\BaseController;
 
+/**
+ * Class ScenarioController
+ * @package NextDom\Controller\Tools
+ */
 class ScenarioController extends BaseController
 {
     /**

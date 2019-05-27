@@ -27,6 +27,10 @@ use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ObjectManager;
 
+/**
+ * Class ObjectConfigure
+ * @package NextDom\Controller\Modals
+ */
 class ObjectConfigure extends BaseAbstractModal
 {
     /**

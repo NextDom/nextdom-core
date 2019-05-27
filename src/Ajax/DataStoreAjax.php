@@ -28,6 +28,10 @@ use NextDom\Model\Entity\EqLogic;
 use NextDom\Model\Entity\InteractDef;
 use NextDom\Model\Entity\Scenario;
 
+/**
+ * Class DataStoreAjax
+ * @package NextDom\Ajax
+ */
 class DataStoreAjax extends BaseAjax
 {
     protected $NEEDED_RIGHTS = UserRight::USER;

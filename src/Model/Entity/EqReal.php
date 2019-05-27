@@ -75,6 +75,11 @@ class EqReal implements EntityInterface
      */
     protected $id;
 
+    /**
+     * @return bool
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public function remove()
     {
         foreach ($this->getEqLogic() as $eqLogic) {
@@ -82,14 +87,6 @@ class EqReal implements EntityInterface
         }
         DataStoreManager::removeByTypeLinkId('eqReal', $this->getId());
         return DBHelper::remove($this);
-    }
-
-    public function save()
-    {
-        if ($this->getName() == '') {
-            throw new \Exception(__('Le nom de l\'équipement réel ne peut pas être vide'));
-        }
-        return DBHelper::save($this);
     }
 
     /**
@@ -101,72 +98,133 @@ class EqReal implements EntityInterface
         return EqLogicManager::byEqRealId($this->id);
     }
 
+    /**
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
     }
 
-    public function getLogicalId()
-    {
-        return $this->logicalId;
-    }
-
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    public function getCat()
-    {
-        return $this->cat;
-    }
-
+    /**
+     * @param $id
+     * @return $this
+     */
     public function setId($id)
     {
         $this->id = $id;
         return $this;
     }
 
-    public function setLogicalId($logicalId)
+    /**
+     * @return bool
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
+    public function save()
     {
-        $this->logicalId = $logicalId;
-        return $this;
+        if ($this->getName() == '') {
+            throw new \Exception(__('Le nom de l\'équipement réel ne peut pas être vide'));
+        }
+        return DBHelper::save($this);
     }
 
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param $name
+     * @return $this
+     */
     public function setName($name)
     {
         $this->name = $name;
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getLogicalId()
+    {
+        return $this->logicalId;
+    }
+
+    /**
+     * @param $logicalId
+     * @return $this
+     */
+    public function setLogicalId($logicalId)
+    {
+        $this->logicalId = $logicalId;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param $type
+     * @return $this
+     */
     public function setType($type)
     {
         $this->type = $type;
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getCat()
+    {
+        return $this->cat;
+    }
+
+    /**
+     * @param $cat
+     * @return $this
+     */
     public function setCat($cat)
     {
         $this->cat = $cat;
         return $this;
     }
 
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
     public function getConfiguration($_key = '', $_default = '')
     {
         return Utils::getJsonAttr($this->configuration, $_key, $_default);
     }
 
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
     public function setConfiguration($_key, $_value)
     {
         $this->configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getTableName()
     {
         return 'eqReal';

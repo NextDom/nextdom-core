@@ -17,6 +17,10 @@
 
 namespace NextDom\Enums;
 
+/**
+ * Class GetParams
+ * @package NextDom\Enums
+ */
 class GetParams extends Enum
 {
     const VIEW_TYPE = 'v';
