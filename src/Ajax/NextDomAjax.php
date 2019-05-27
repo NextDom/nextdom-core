@@ -414,10 +414,14 @@ class NextDomAjax extends BaseAjax
         AuthentificationHelper::isConnectedAsAdminOrFail();
         Utils::unautorizedInDemo();
         AjaxHelper::init(true);
-        $pathinfo = pathinfo(init('path'));
+        $filePath = Utils::init('path');
+        $pathinfo  = pathinfo($filePath);
         $extension = Utils::array_key_default($pathinfo, "extension", "<no-ext>");
-        if (!in_array($extension, array('php', 'js', 'json', 'sql', 'ini', 'html', 'py', 'css'))) {
-            throw new CoreException(__('Vous ne pouvez éditer ce type d\'extension : ' . $extension, __FILE__));
+        if (!in_array($extension, array('php', 'js', 'json', 'sql', 'ini','html','py','css'))) {
+            throw new CoreException(__('Vous ne pouvez éditer ce type d\'extension : ' . $extension));
+        }
+        if (!is_writable($filePath)) {
+            throw new CoreException(__('Vous n\'avez pas les droits pour éditer ce fichier.'));
         }
         AjaxHelper::success(file_get_contents(Utils::init('path')));
     }
@@ -427,12 +431,16 @@ class NextDomAjax extends BaseAjax
         AuthentificationHelper::isConnectedAsAdminOrFail();
         Utils::unautorizedInDemo();
         AjaxHelper::init(true);
-        $pathinfo = pathinfo(Utils::init('path'));
-        $extension = Utils::array_key_default($pathinfo, "extension", "<no-ext>");
-        if (!in_array($extension, array('php', 'js', 'json', 'sql', 'ini', 'html', 'py', 'css'))) {
-            throw new CoreException(__('Vous ne pouvez éditer ce type d\'extension : ' . $extension, __FILE__));
+        $filePath = Utils::init('path');
+        $pathInfo = pathinfo($filePath);
+        $extension = Utils::array_key_default($pathInfo, "extension", "<no-ext>");
+        if (!in_array($extension, array('php', 'js', 'json', 'sql', 'ini','html','py','css'))) {
+            throw new CoreException(__('Vous ne pouvez éditer ce type d\'extension : ') . $extension);
         }
-        AjaxHelper::success(file_put_contents(Utils::init('path'), Utils::init('content')));
+        if (!is_writable($filePath)) {
+            throw new CoreException(__('Vous n\'avez pas les droits pour éditer ce fichier.'));
+        }
+        AjaxHelper::success(file_put_contents($filePath, Utils::init('content')));
     }
 
     public function deleteFile()
