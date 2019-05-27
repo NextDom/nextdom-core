@@ -7,6 +7,8 @@ common:
   error-b: "[Erreur] "
   in-progress: En cours
   version: Version
+  jeedom-version: Base Jeedom
+  branch: Branche
   next: Suivant
   previous: Précédent
   ignore: Ignorer
@@ -193,6 +195,7 @@ welcome:
 footer:
   licence: GPL Automation 2018
   about: A Propos de
+  rights: All rights reserved
 
 sidebar:
   menu-main: Menu Principal

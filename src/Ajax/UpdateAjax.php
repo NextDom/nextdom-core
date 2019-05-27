@@ -52,7 +52,13 @@ class UpdateAjax extends BaseAjax
             if ($update->getType() == 'plugin') {
                 try {
                     $plugin = PluginManager::byId($update->getLogicalId());
-                    $infos['plugin'] = is_object($plugin) ? Utils::o2a($plugin) : array();
+                    if (is_object($plugin)) {
+                        $infos['plugin'] = Utils::o2a($plugin);
+                        $infos['plugin']['icon'] = $plugin->getPathImgIcon();
+                    }
+                    else {
+                        $infos['plugin'] = [];
+                    }
                 } catch (\Exception $e) {
 
                 }

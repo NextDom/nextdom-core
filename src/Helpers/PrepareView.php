@@ -469,6 +469,7 @@ class PrepareView
         $pageData['profilsUser']              = UserManager::getStoredUser();
         $pageData['NEXTDOM_VERSION']          = NextDomHelper::getNextdomVersion();
         $pageData['JEEDOM_VERSION']           = NextDomHelper::getJeedomVersion();
+        $pageData['CORE_INFOS']               = reset(UpdateManager::byType('core'));
         $pageData['MENU_PLUGIN_HELP']         = Utils::init('m');
         $pageData['MENU_PLUGIN_PAGE']         = Utils::init('p');
     }
