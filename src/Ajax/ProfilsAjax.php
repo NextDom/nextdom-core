@@ -21,6 +21,10 @@ use NextDom\Enums\UserRight;
 use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\Utils;
 
+/**
+ * Class ProfilsAjax
+ * @package NextDom\Ajax
+ */
 class ProfilsAjax extends BaseAjax
 {
     protected $NEEDED_RIGHTS = UserRight::USER;
@@ -30,9 +34,9 @@ class ProfilsAjax extends BaseAjax
     public function removeImage()
     {
         $uploaddir = sprintf("%s/public/img/profils", NEXTDOM_ROOT);
-        $pathInfo  = pathinfo(init('image'));
+        $pathInfo = pathinfo(init('image'));
         $extension = Utils::array_key_default($pathInfo, "extension", "<no-ext>");
-        $path      = sprintf("%s/%s.%s", $uploaddir, $pathInfo['basename'], $extension);
+        $path = sprintf("%s/%s.%s", $uploaddir, $pathInfo['basename'], $extension);
         AjaxHelper::success(unlink($path));
     }
 
@@ -44,9 +48,3 @@ class ProfilsAjax extends BaseAjax
     }
 }
 
-function clean($string)
-{
-    $string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
-
-    return preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
-}

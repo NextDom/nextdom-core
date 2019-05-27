@@ -22,10 +22,14 @@
 
 namespace NextDom\Controller\Tools;
 
+use NextDom\Controller\BaseController;
 use NextDom\Helpers\Render;
 use NextDom\Managers\UpdateManager;
-use NextDom\Controller\BaseController;
 
+/**
+ * Class UpdateController
+ * @package NextDom\Controller\Tools
+ */
 class UpdateController extends BaseController
 {
     /**

@@ -26,6 +26,10 @@ use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 
 
+/**
+ * Class LogDisplay
+ * @package NextDom\Controller\Modals
+ */
 class LogDisplay extends BaseAbstractModal
 {
     /**

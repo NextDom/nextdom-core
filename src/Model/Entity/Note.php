@@ -66,6 +66,30 @@ class Note implements EntityInterface
         }
     }
 
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param $_name
+     * @return $this
+     */
+    public function setName($_name)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
+        $this->name = $_name;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function save()
     {
         if ($this->_changed) {
@@ -80,21 +104,18 @@ class Note implements EntityInterface
         DBHelper::remove($this);
     }
 
+    /**
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
     }
 
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    public function getText()
-    {
-        return $this->text;
-    }
-
+    /**
+     * @param $id
+     * @return $this
+     */
     public function setId($id)
     {
         $this->_changed = Utils::attrChanged($this->_changed, $this->id, $id);
@@ -102,13 +123,18 @@ class Note implements EntityInterface
         return $this;
     }
 
-    public function setName($_name)
+    /**
+     * @return string
+     */
+    public function getText()
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
-        $this->name = $_name;
-        return $this;
+        return $this->text;
     }
 
+    /**
+     * @param $_text
+     * @return $this
+     */
     public function setText($_text)
     {
         $this->_changed = Utils::attrChanged($this->_changed, $this->text, $_text);
@@ -116,17 +142,27 @@ class Note implements EntityInterface
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getChanged()
     {
         return $this->_changed;
     }
 
+    /**
+     * @param $_changed
+     * @return $this
+     */
     public function setChanged($_changed)
     {
         $this->_changed = $_changed;
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getTableName()
     {
         return 'note';

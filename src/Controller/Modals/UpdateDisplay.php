@@ -22,6 +22,10 @@
 
 namespace NextDom\Controller\Modals;
 
+/**
+ * Class UpdateDisplay
+ * @package NextDom\Controller\Modals
+ */
 class UpdateDisplay extends BaseAbstractModal
 {
     /**

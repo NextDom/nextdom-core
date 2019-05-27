@@ -27,6 +27,9 @@ class HistoryArch extends History
 {
     protected $_tableName = 'historyArch';
 
+    /**
+     * @return string
+     */
     public function getTableName()
     {
         return 'historyArch';

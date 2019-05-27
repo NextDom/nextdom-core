@@ -16,20 +16,50 @@
  */
 
 namespace NextDom\Helpers;
-use Icewind\SMB\ServerFactory;
+
 use Icewind\SMB\BasicAuth;
+use Icewind\SMB\ServerFactory;
 use NextDom\Exceptions\CoreException;
 use NextDom\Managers\ConfigManager;
 
+/**
+ * Class Samba
+ * @package NextDom\Helpers
+ */
 class Samba
 {
     private $client = null;
-    private $share  = null;
+    private $share = null;
 
+    /**
+     * Samba constructor.
+     * @param string $host
+     * @param string $user
+     * @param string $password
+     * @param string $share
+     * @throws CoreException
+     */
+    public function __construct(string $host, string $user, string $password, string $share)
+    {
+        try {
+            $serverFactory = new ServerFactory();
+            $auth = new BasicAuth($user, "WORKGROUP", $password);
+            $this->client = $serverFactory->createServer($host, $auth);
+            $this->share = $share;
+        } catch (\Exception $e) {
+            CoreException::do_throw("{samba.error.connect}: %s", $e->getMessage());
+        }
+    }
 
-    public static function createFromConfig(string $target = "backup") {
-        $host     = ConfigManager::byKey('samba::' . $target . '::ip');
-        $share    = ConfigManager::byKey('samba::' . $target . '::share');
+    /**
+     * @param string $target
+     * @return Samba
+     * @throws \Exception
+     */
+    public static function createFromConfig(string $target = "backup")
+    {
+        $host = ConfigManager::byKey('samba::' . $target . '::ip');
+        $share = ConfigManager::byKey('samba::' . $target . '::share');
         $username = ConfigManager::byKey('samba::' . $target . '::username');
         $password = ConfigManager::byKey('samba::' . $target . '::password');
 
@@ -41,33 +71,23 @@ class Samba
         return new Samba($host, $username, $password, $share);
     }
 
-    public static function cleanName(string $filename) {
-        return str_replace(array("<",">",":","\"","/","\\","|","?","*"), "-", $filename);
+    /**
+     * @param string $filename
+     * @return mixed
+     */
+    public static function cleanName(string $filename)
+    {
+        return str_replace(array("<", ">", ":", "\"", "/", "\\", "|", "?", "*"), "-", $filename);
     }
 
-    public function __construct(string $host, string $user, string $password, string $share) {
-        try {
-            $serverFactory = new ServerFactory();
-            $auth          = new BasicAuth($user, "WORKGROUP", $password);
-            $this->client  = $serverFactory->createServer($host, $auth);
-            $this->share   = $share;
-        } catch (\Exception $e) {
-            CoreException::do_throw("{samba.error.connect}: %s", $e->getMessage());
-        }
-    }
-
-    public function getShare(string $name = null) {
-        if ($name === null) {
-            $name = $this->share;
-        }
-        try {
-            return $this->client->getShare($name);
-        } catch (\Exception $e) {
-            CoreException::do_throw("{samba.error.connect}: %s", $e->getMessage());
-        }
-    }
-
-    public function __call($name, $args) {
+    /**
+     * @param $name
+     * @param $args
+     * @return mixed
+     * @throws CoreException
+     */
+    public function __call($name, $args)
+    {
         try {
             return call_user_func_array(array($this->getShare(), $name), $args);
         } catch (\Icewind\SMB\Exception\NotFoundException $e) {
@@ -79,38 +99,69 @@ class Samba
         }
     }
 
-    public function getEntries($dir = "/", $sort = 'mtime', $order = 'asc') {
+    /**
+     * @param string|null $name
+     * @return \Icewind\SMB\IShare
+     * @throws CoreException
+     */
+    public function getShare(string $name = null)
+    {
+        if ($name === null) {
+            $name = $this->share;
+        }
+        try {
+            return $this->client->getShare($name);
+        } catch (\Exception $e) {
+            CoreException::do_throw("{samba.error.connect}: %s", $e->getMessage());
+        }
+    }
+
+    /**
+     * @param string $dir
+     * @param string $sort
+     * @param string $order
+     * @return array
+     */
+    public function getFiles($dir = "/", $sort = 'mtime', $order = 'asc')
+    {
+        $entries = $this->getEntries($dir, $sort, $order);
+        $files = array_filter($entries, function ($c_item) {
+            return (false === $c_item->isDirectory());
+        });
+        return $files;
+    }
+
+    /**
+     * @param string $dir
+     * @param string $sort
+     * @param string $order
+     * @return array
+     */
+    public function getEntries($dir = "/", $sort = 'mtime', $order = 'asc')
+    {
         $entries = $this->dir($dir);
 
         switch ($sort) {
-        case "mtime":
-            $functor = function($x,$y) {
-                return $x->getMTime() < $x->getMTime();
-            };
-            break;
-        case "size":
-            $functor = function($x,$y) {
-                return $x->getSize() < $x->getSize();
-            };
-            break;
+            case "mtime":
+                $functor = function ($x, $y) {
+                    return $x->getMTime() < $x->getMTime();
+                };
+                break;
+            case "size":
+                $functor = function ($x, $y) {
+                    return $x->getSize() < $x->getSize();
+                };
+                break;
 
-        default:
-            $functor = function($x,$y) {
-                return $x->getName() < $x->getName();
-            };
+            default:
+                $functor = function ($x, $y) {
+                    return $x->getName() < $x->getName();
+                };
         }
         usort($entries, $functor);
         if ("asc" !== $order) {
             $entries = array_reverse($entries);
         }
         return $entries;
-    }
-
-    public function getFiles($dir = "/", $sort = 'mtime', $order = 'asc') {
-        $entries = $this->getEntries($dir, $sort, $order);
-        $files   = array_filter($entries, function($c_item) {
-            return (false === $c_item->isDirectory());
-        });
-        return $files;
     }
 }

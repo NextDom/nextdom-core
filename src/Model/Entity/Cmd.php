@@ -35,9 +35,9 @@ use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
 use NextDom\Managers\HistoryManager;
 use NextDom\Managers\InteractDefManager;
-use NextDom\Managers\ObjectManager;
 use NextDom\Managers\ListenerManager;
 use NextDom\Managers\MessageManager;
+use NextDom\Managers\ObjectManager;
 use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioExpressionManager;
@@ -65,6 +65,7 @@ use NextDom\Managers\ViewManager;
  */
 class Cmd implements EntityInterface
 {
+    private static $_templateArray = array();
     /**
      * TODO: Mis en public pour y accéder depuis CmdManager
      */
@@ -74,9 +75,6 @@ class Cmd implements EntityInterface
     public $_needRefreshWidget;
     public $_needRefreshAlert;
     protected $_changed = false;
-    private static $_templateArray = array();
-
-
     /**
      * @var string
      *
@@ -208,27 +206,38 @@ class Cmd implements EntityInterface
      */
     protected $eqLogic_id;
 
-    public function getEqType()
+    /**
+     * @param $_options
+     * @throws CoreException
+     */
+    public static function duringAlertLevel($_options)
     {
-        return $this->eqType;
+        $cmd = CmdManager::byId($_options['cmd_id']);
+        if (!is_object($cmd)) {
+            return;
+        }
+        if ($cmd->getType() != 'info') {
+            return;
+        }
+        $value = $cmd->execCmd();
+        $level = $cmd->checkAlertLevel($value, false);
+        if ($level != 'none') {
+            $cmd->actionAlertLevel($level, $value);
+        }
     }
 
+    /**
+     * @return string
+     */
     public function getEqType_name()
     {
         trigger_error('This method is deprecated. Use getEqType', E_USER_DEPRECATED);
         return $this->eqType;
     }
 
-    public function getLogicalId()
-    {
-        return $this->logicalId;
-    }
-
-    public function getGeneric_type()
-    {
-        return $this->generic_type;
-    }
-
+    /**
+     * @return int
+     */
     public function getOrder()
     {
         if ($this->order == '') {
@@ -237,125 +246,10 @@ class Cmd implements EntityInterface
         return $this->order;
     }
 
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    public function getConfiguration($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->configuration, $_key, $_default);
-    }
-
-    public function getTemplate($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->template, $_key, $_default);
-    }
-
-    public function getIsHistorized()
-    {
-        return $this->isHistorized;
-    }
-
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    public function getSubType()
-    {
-        return $this->subType;
-    }
-
-    public function getUnite()
-    {
-        return $this->unite;
-    }
-
-    public function getDisplay($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->display, $_key, $_default);
-    }
-
-    public function getIsvisible()
-    {
-        return $this->isVisible;
-    }
-
-    public function getValue()
-    {
-        return $this->value;
-    }
-
-    public function getHtml($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->html, $_key, $_default);
-    }
-
-    public function getAlert($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->alert, $_key, $_default);
-    }
-
-    public function getId()
-    {
-        return $this->id;
-    }
-
     /**
-     *
-     * @return mixed
+     * @param $order
+     * @return $this
      */
-    public function getEqLogic_Id()
-    {
-        return $this->eqLogic_id;
-    }
-
-    /**
-     * @return EqLogic|null
-     * @throws \Exception
-     */
-    public function getEqLogicId()
-    {
-        if ($this->_eqLogic == null) {
-            $this->setEqLogicId(EqLogicManager::byId($this->eqLogic_id));
-        }
-        return $this->_eqLogic;
-    }
-
-    public function getEventOnly()
-    {
-        return 1;
-    }
-
-    public function setEqLogicId($_eqLogic)
-    {
-        $this->_eqLogic = $_eqLogic;
-        return $this;
-    }
-
-
-    public function setEqType($_eqType)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->eqType, $_eqType);
-        $this->eqType = $_eqType;
-        return $this;
-    }
-
-    public function setLogicalId($_logicalId)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->logicalId, $_logicalId);
-        $this->logicalId = $_logicalId;
-        return $this;
-    }
-
-    public function setGeneric_type($generic_type)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->generic_type, $generic_type);
-        $this->generic_type = $generic_type;
-        return $this;
-    }
-
     public function setOrder($order)
     {
         if ($this->order != $order) {
@@ -366,75 +260,18 @@ class Cmd implements EntityInterface
         return $this;
     }
 
-    public function setName($_name)
+    /**
+     * @return int
+     */
+    public function getIsvisible()
     {
-        $_name = Utils::cleanComponentName($_name);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
-        $this->name = $_name;
-        return $this;
+        return $this->isVisible;
     }
 
-    public function setConfiguration($_key, $_value)
-    {
-        if ($_key == 'actionCodeAccess' && $_value != '') {
-            if (!Utils::isSha1($_value) && !Utils::isSha512($_value)) {
-                $_value = Utils::sha512($_value);
-            }
-        }
-        $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
-        $this->configuration = $configuration;
-        return $this;
-    }
-
-    public function setTemplate($_key, $_value)
-    {
-        if ($this->getTemplate($_key) != $_value) {
-            $this->_needRefreshWidget = true;
-            $this->_changed = true;
-        }
-        $this->template = Utils::setJsonAttr($this->template, $_key, $_value);
-        return $this;
-    }
-
-    public function setIsHistorized($_isHistorized)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->isHistorized, $_isHistorized);
-        $this->isHistorized = $_isHistorized;
-        return $this;
-    }
-
-    public function setType($_type)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->type, $_type);
-        $this->type = $_type;
-        return $this;
-    }
-
-    public function setSubType($_subType)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->subType, $_subType);
-        $this->subType = $_subType;
-        return $this;
-    }
-
-    public function setUnite($_unite)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->unite, $_unite);
-        $this->unite = $_unite;
-        return $this;
-    }
-
-    public function setDisplay($_key, $_value)
-    {
-        if ($this->getDisplay($_key) != $_value) {
-            $this->_needRefreshWidget = true;
-            $this->_changed = true;
-        }
-        $this->display = Utils::setJsonAttr($this->display, $_key, $_value);
-        return $this;
-    }
-
+    /**
+     * @param $isVisible
+     * @return $this
+     */
     public function setIsVisible($isVisible)
     {
         if ($this->isVisible != $isVisible) {
@@ -445,13 +282,22 @@ class Cmd implements EntityInterface
         return $this;
     }
 
-    public function setValue($_value)
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
+    public function getHtml($_key = '', $_default = '')
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->value, $_value);
-        $this->value = $_value;
-        return $this;
+        return Utils::getJsonAttr($this->html, $_key, $_default);
     }
 
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     * @throws \Exception
+     */
     public function setHtml($_key, $_value)
     {
         if (in_array($_key, array('dashboard', 'mobile', 'dview', 'mview', 'dplan')) && $this->getWidgetTemplateCode($_key, true) == $_value) {
@@ -462,403 +308,6 @@ class Cmd implements EntityInterface
         }
         $this->html = Utils::setJsonAttr($this->html, $_key, $_value);
         return $this;
-    }
-
-    public function setAlert($_key, $_value)
-    {
-        $alert = Utils::setJsonAttr($this->alert, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->alert, $alert);
-        $this->alert = $alert;
-        $this->_needRefreshAlert = true;
-        return $this;
-    }
-
-    public function setId($id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $id);
-        $this->id = $id;
-        return $this;
-    }
-
-    public function getCollectDate()
-    {
-        return $this->_collectDate;
-    }
-
-    public function setCollectDate($_collectDate)
-    {
-        $this->_collectDate = $_collectDate;
-        return $this;
-    }
-
-    public function getValueDate()
-    {
-        return $this->_valueDate;
-    }
-
-    public function setValueDate($_valueDate)
-    {
-        $this->_valueDate = $_valueDate;
-        return $this;
-    }
-
-    public function getCache($_key = '', $_default = '')
-    {
-        $cache = CacheManager::byKey('cmdCacheAttr' . $this->getId())->getValue();
-        return Utils::getJsonAttr($cache, $_key, $_default);
-    }
-
-    public function setCache($_key, $_value = null)
-    {
-        CacheManager::set('cmdCacheAttr' . $this->getId(), Utils::setJsonAttr(CacheManager::byKey('cmdCacheAttr' . $this->getId())->getValue(), $_key, $_value));
-        return $this;
-    }
-
-    /**
-     *
-     * @param $_eqLogic_id
-     * @return $this
-     */
-    public function setEqLogic_id($_eqLogic_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->eqLogic_id, $_eqLogic_id);
-        $this->eqLogic_id = $_eqLogic_id;
-        return $this;
-    }
-
-    /**
-     * @return EqLogic
-     * @throws \Exception
-     */
-    public function getEqLogic()
-    {
-        if ($this->_eqLogic == null) {
-            $this->setEqLogic(EqLogicManager::byId($this->eqLogic_id));
-        }
-        return $this->_eqLogic;
-    }
-
-    public function setEqLogic($_eqLogic)
-    {
-        $this->_eqLogic = $_eqLogic;
-        return $this;
-    }
-
-    public function setEventOnly()
-    {
-        trigger_error('This method is deprecated', E_USER_DEPRECATED);
-    }
-
-
-    public function formatValue($_value, $_quote = false)
-    {
-        if (is_array($_value)) {
-            return '';
-        }
-        if (trim($_value) == '' && $_value !== false && $_value !== 0) {
-            return '';
-        }
-        $_value = trim(trim($_value), '"');
-        if (@strpos(strtolower($_value), 'error::') !== false) {
-            return $_value;
-        }
-        if ($this->getType() == 'info') {
-            switch ($this->getSubType()) {
-                case 'string':
-                    if ($_quote) {
-                        return '"' . $_value . '"';
-                    }
-                    return $_value;
-                case 'other':
-                    if ($_quote) {
-                        return '"' . $_value . '"';
-                    }
-                    return $_value;
-                case 'binary':
-                    if ($this->getConfiguration('calculValueOffset') != '') {
-                        try {
-                            if (preg_match("/[a-zA-Z#]/", $_value)) {
-                                $_value = NextDomHelper::evaluateExpression(str_replace('#value#', '"' . $_value . '"', str_replace('\'#value#\'', '#value#', str_replace('"#value#"', '#value#', $this->getConfiguration('calculValueOffset')))));
-                            } else {
-                                $_value = NextDomHelper::evaluateExpression(str_replace('#value#', $_value, $this->getConfiguration('calculValueOffset')));
-                            }
-                        } catch (\Exception $ex) {
-
-                        }
-                    }
-                    $value = strtolower($_value);
-                    if ($value == 'on' || $value == 'high' || $value == 'true' || $value == true) {
-                        return 1;
-                    }
-                    if ($value == 'off' || $value == 'low' || $value == 'false' || $value == false) {
-                        return 0;
-                    }
-                    if ((is_numeric(intval($_value)) && intval($_value) > 1) || $_value == true || $_value == 1) {
-                        return 1;
-                    }
-                    return 0;
-                case 'numeric':
-                    $_value = floatval(str_replace(',', '.', $_value));
-                    if ($this->getConfiguration('calculValueOffset') != '') {
-                        try {
-                            if (preg_match("/[a-zA-Z#]/", $_value)) {
-                                $_value = NextDomHelper::evaluateExpression(str_replace('#value#', '"' . $_value . '"', str_replace('\'#value#\'', '#value#', str_replace('"#value#"', '#value#', $this->getConfiguration('calculValueOffset')))));
-                            } else {
-                                $_value = NextDomHelper::evaluateExpression(str_replace('#value#', $_value, $this->getConfiguration('calculValueOffset')));
-                            }
-                        } catch (\Exception $ex) {
-
-                        }
-                    }
-                    if ($this->getConfiguration('historizeRound') !== '' && is_numeric($this->getConfiguration('historizeRound')) && $this->getConfiguration('historizeRound') >= 0) {
-                        $_value = round($_value, $this->getConfiguration('historizeRound'));
-                    }
-                    if ($_value > $this->getConfiguration('maxValue', $_value) && $this->getConfiguration('maxValueReplace') == 1) {
-                        $_value = $this->getConfiguration('maxValue', $_value);
-                    }
-                    if ($_value < $this->getConfiguration('minValue', $_value) && $this->getConfiguration('minValueReplace') == 1) {
-                        $_value = $this->getConfiguration('minValue', $_value);
-                    }
-                    return floatval($_value);
-            }
-        }
-        return $_value;
-    }
-
-    public function getLastValue()
-    {
-        return $this->getConfiguration('lastCmdValue', null);
-    }
-
-    public function dontRemoveCmd()
-    {
-        return false;
-    }
-
-    public function getTableName()
-    {
-        return 'cmd';
-    }
-
-    public function save()
-    {
-        if (empty($this->getName())) {
-            throw new CoreException(__('Le nom de la commande ne peut pas être vide :') . print_r($this, true));
-        }
-        if (empty($this->getType())) {
-            throw new CoreException($this->getHumanName() . ' ' . __('Le type de la commande ne peut pas être vide :') . print_r($this, true));
-        }
-        if (empty($this->getSubType())) {
-            throw new CoreException($this->getHumanName() . ' ' . __('Le sous-type de la commande ne peut pas être vide :') . print_r($this, true));
-        }
-        if (empty($this->getEqLogic_id())) {
-            throw new CoreException($this->getHumanName() . ' ' . __('Vous ne pouvez pas créer une commande sans la rattacher à un équipement'));
-        }
-        if ($this->getConfiguration('maxValue') != '' && $this->getConfiguration('minValue') != '' && $this->getConfiguration('minValue') > $this->getConfiguration('maxValue')) {
-            throw new CoreException($this->getHumanName() . ' ' . __('La valeur minimum de la commande ne peut etre supérieure à la valeur maximum'));
-        }
-        if ($this->getEqType() == '') {
-            $this->setEqType($this->getEqLogicId()->getEqType_name());
-        }
-        if ($this->getDisplay('generic_type') !== '' && $this->getGeneric_type() == '') {
-            $this->setGeneric_type($this->getDisplay('generic_type'));
-            $this->setDisplay('generic_type', '');
-        }
-        DBHelper::save($this);
-        if ($this->_needRefreshWidget) {
-            $this->_needRefreshWidget = false;
-            $this->getEqLogicId()->refreshWidget();
-        }
-        if ($this->_needRefreshAlert && $this->getType() == 'info') {
-            $value = $this->execCmd();
-            $level = $this->checkAlertLevel($value);
-            if ($level != $this->getCache('alertLevel')) {
-                $this->actionAlertLevel($level, $value);
-            }
-        }
-        return true;
-    }
-
-    public function refresh()
-    {
-        DBHelper::refresh($this);
-    }
-
-    public function remove()
-    {
-        ViewDataManager::removeByTypeLinkId('cmd', $this->getId());
-        DataStoreManager::removeByTypeLinkId('cmd', $this->getId());
-        $this->getEqLogicId()->emptyCacheWidget();
-        $this->emptyHistory();
-        CacheManager::delete('cmdCacheAttr' . $this->getId());
-        CacheManager::delete('cmd' . $this->getId());
-        NextDomHelper::addRemoveHistory(array('id' => $this->getId(), 'name' => $this->getHumanName(), 'date' => date('Y-m-d H:i:s'), 'type' => 'cmd'));
-        return DBHelper::remove($this);
-    }
-
-    /**
-     * TODO ???
-     * @param $_options
-     * @return bool
-     */
-    public function execute($_options)
-    {
-        return false;
-    }
-
-    public function preExecCmd($_values = array())
-    {
-        if (!is_array($this->getConfiguration('nextdomPreExecCmd')) || count($this->getConfiguration('nextdomPreExecCmd')) == 0) {
-            return;
-        }
-        foreach ($this->getConfiguration('nextdomPreExecCmd') as $action) {
-            try {
-                $options = array();
-                if (isset($action['options'])) {
-                    $options = $action['options'];
-                }
-                if (is_array($_values) && count($_values) > 0) {
-                    foreach ($_values as $key => $value) {
-                        foreach ($options as &$option) {
-                            if (!is_array($option)) {
-                                $option = str_replace('#' . $key . '#', $value, $option);
-                            }
-                        }
-                    }
-                }
-                ScenarioExpressionManager::createAndExec('action', $action['cmd'], $options);
-            } catch (\Exception $e) {
-                LogHelper::addError('cmd', __('Erreur lors de l\'exécution de ') . $action['cmd'] . __('. Sur preExec de la commande') . $this->getHumanName() . __('. Détails : ') . $e->getMessage());
-            }
-        }
-    }
-
-    public function postExecCmd($_values = array())
-    {
-        if (!is_array($this->getConfiguration('nextdomPostExecCmd'))) {
-            return;
-        }
-        foreach ($this->getConfiguration('nextdomPostExecCmd') as $action) {
-            try {
-                $options = array();
-                if (isset($action['options'])) {
-                    $options = $action['options'];
-                }
-                if (count($_values) > 0) {
-                    foreach ($_values as $key => $value) {
-                        foreach ($options as &$option) {
-                            if (!is_array($option)) {
-                                $option = str_replace('#' . $key . '#', $value, $option);
-                            }
-                        }
-                    }
-                }
-                ScenarioExpressionManager::createAndExec('action', $action['cmd'], $options);
-            } catch (\Exception $e) {
-                LogHelper::addError('cmd', __('Erreur lors de l\'exécution de ') . $action['cmd'] . __('. Sur preExec de la commande') . $this->getHumanName() . __('. Détails : ') . $e->getMessage());
-            }
-        }
-    }
-
-    /**
-     *
-     * @param mixed $_options
-     * @param mixed $_sendNodeJsEvent
-     * @param mixed $_quote
-     * @return mixed result
-     * @throws CoreException
-     */
-    public function execCmd($_options = null, $_sendNodeJsEvent = false, $_quote = false)
-    {
-        if ($this->getType() == 'info') {
-            $state = $this->getCache(array('collectDate', 'valueDate', 'value'));
-            if (isset($state['collectDate'])) {
-                $this->setCollectDate($state['collectDate']);
-            } else {
-                $this->setCollectDate(date('Y-m-d H:i:s'));
-            }
-            if (isset($state['valueDate'])) {
-                $this->setValueDate($state['valueDate']);
-            } else {
-                $this->setValueDate($this->getCollectDate());
-            }
-            return $state['value'];
-
-        }
-        $eqLogic = $this->getEqLogicId();
-        if ($this->getType() != 'info' && (!is_object($eqLogic) || $eqLogic->getIsEnable() != 1)) {
-            throw new CoreException(__('Equipement désactivé - impossible d\'exécuter la commande : ') . $this->getHumanName());
-        }
-        try {
-            if ($_options !== null && $_options !== '') {
-                $options = CmdManager::cmdToValue($_options);
-                if (Utils::isJson($_options)) {
-                    $options = json_decode($_options, true);
-                }
-            } else {
-                $options = null;
-            }
-            if (isset($options['color'])) {
-                $options['color'] = str_replace('"', '', $options['color']);
-            }
-            if ($this->getSubType() == 'color' && isset($options['color']) && substr($options['color'], 0, 1) != '#') {
-                $options['color'] = CmdManager::convertColor($options['color']);
-            }
-            $str_option = '';
-            if (is_array($options) && ((count($options) > 1 && isset($options['uid'])) || count($options) > 0)) {
-                LogHelper::add('event', 'info', __('Exécution de la commande ') . $this->getHumanName() . __(' avec les paramètres ') . json_encode($options, true));
-            } else {
-                LogHelper::add('event', 'info', __('Exécution de la commande ') . $this->getHumanName());
-            }
-
-            if ($this->getConfiguration('timeline::enable')) {
-                TimeLineHelper::addTimelineEvent(array('type' => 'cmd', 'subtype' => 'action', 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => date('Y-m-d H:i:s'), 'options' => $str_option));
-            }
-            $this->preExecCmd($options);
-            $value = $this->formatValue($this->execute($options), $_quote);
-            $this->postExecCmd($options);
-        } catch (\Exception $e) {
-            $type = $eqLogic->getEqType_name();
-            if ($eqLogic->getConfiguration('nerverFail') != 1) {
-                $numberTryWithoutSuccess = $eqLogic->getStatus('numberTryWithoutSuccess', 0);
-                $eqLogic->setStatus('numberTryWithoutSuccess', $numberTryWithoutSuccess);
-                if ($numberTryWithoutSuccess >= ConfigManager::byKey('numberOfTryBeforeEqLogicDisable')) {
-                    $message = 'Désactivation de <a href="' . $eqLogic->getLinkToConfiguration() . '">' . $eqLogic->getName();
-                    $message .= '</a> ' . __('car il n\'a pas répondu ou mal répondu lors des 3 derniers essais');
-                    MessageManager::add($type, $message);
-                    $eqLogic->setIsEnable(0);
-                    $eqLogic->save();
-                }
-            }
-            LogHelper::add($type, 'error', __('Erreur exécution de la commande ') . $this->getHumanName() . ' : ' . $e->getMessage());
-            throw $e;
-        }
-        if ($options !== null && $this->getValue() == '') {
-            if (isset($options['slider'])) {
-                $this->setConfiguration('lastCmdValue', $options['slider']);
-                $this->save();
-            }
-            if (isset($options['color'])) {
-                $this->setConfiguration('lastCmdValue', $options['color']);
-                $this->save();
-            }
-        }
-        if ($this->getConfiguration('updateCmdId') != '') {
-            $cmd = CmdManager::byId($this->getConfiguration('updateCmdId'));
-            if (is_object($cmd)) {
-                $value = $this->getConfiguration('updateCmdToValue');
-                switch ($this->getSubType()) {
-                    case 'slider':
-                        $value = str_replace('#slider#', $options['slider'], $value);
-                        break;
-                    case 'color':
-                        $value = str_replace('#color#', $options['color'], $value);
-                        break;
-                }
-                $cmd->event($value);
-            }
-        }
-        return $value;
     }
 
     /**
@@ -900,6 +349,219 @@ class Cmd implements EntityInterface
         return $template;
     }
 
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param $_type
+     * @return $this
+     */
+    public function setType($_type)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->type, $_type);
+        $this->type = $_type;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSubType()
+    {
+        return $this->subType;
+    }
+
+    /**
+     * @param $_subType
+     * @return $this
+     */
+    public function setSubType($_subType)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->subType, $_subType);
+        $this->subType = $_subType;
+        return $this;
+    }
+
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
+    public function getTemplate($_key = '', $_default = '')
+    {
+        return Utils::getJsonAttr($this->template, $_key, $_default);
+    }
+
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
+    public function setTemplate($_key, $_value)
+    {
+        if ($this->getTemplate($_key) != $_value) {
+            $this->_needRefreshWidget = true;
+            $this->_changed = true;
+        }
+        $this->template = Utils::setJsonAttr($this->template, $_key, $_value);
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getEventOnly()
+    {
+        return 1;
+    }
+
+    /**
+     * @return EqLogic
+     * @throws \Exception
+     */
+    public function getEqLogic()
+    {
+        if ($this->_eqLogic == null) {
+            $this->setEqLogic(EqLogicManager::byId($this->eqLogic_id));
+        }
+        return $this->_eqLogic;
+    }
+
+    /**
+     * @param $_eqLogic
+     * @return $this
+     */
+    public function setEqLogic($_eqLogic)
+    {
+        $this->_eqLogic = $_eqLogic;
+        return $this;
+    }
+
+    public function setEventOnly()
+    {
+        trigger_error('This method is deprecated', E_USER_DEPRECATED);
+    }
+
+    /**
+     * @return bool
+     */
+    public function dontRemoveCmd()
+    {
+        return false;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTableName()
+    {
+        return 'cmd';
+    }
+
+    public function refresh()
+    {
+        DBHelper::refresh($this);
+    }
+
+    /**
+     * @return bool
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
+    public function remove()
+    {
+        ViewDataManager::removeByTypeLinkId('cmd', $this->getId());
+        DataStoreManager::removeByTypeLinkId('cmd', $this->getId());
+        $this->getEqLogicId()->emptyCacheWidget();
+        $this->emptyHistory();
+        CacheManager::delete('cmdCacheAttr' . $this->getId());
+        CacheManager::delete('cmd' . $this->getId());
+        NextDomHelper::addRemoveHistory(array('id' => $this->getId(), 'name' => $this->getHumanName(), 'date' => date('Y-m-d H:i:s'), 'type' => 'cmd'));
+        return DBHelper::remove($this);
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param $id
+     * @return $this
+     */
+    public function setId($id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $id);
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @param string $_date
+     * @return array|mixed|null
+     * @throws CoreException
+     */
+    public function emptyHistory($_date = '')
+    {
+        return HistoryManager::emptyHistory($this->getId(), $_date);
+    }
+
+    /**
+     * @param bool $_tag
+     * @param bool $_prettify
+     * @return string
+     * @throws \Exception
+     */
+    public function getHumanName($_tag = false, $_prettify = false)
+    {
+        $name = '';
+        $eqLogic = $this->getEqLogicId();
+        if (is_object($eqLogic)) {
+            $name .= $eqLogic->getHumanName($_tag, $_prettify);
+        }
+        if ($_tag) {
+            $name .= ' - ' . $this->getName();
+        } else {
+            $name .= '[' . $this->getName() . ']';
+        }
+        return $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param $_name
+     * @return $this
+     */
+    public function setName($_name)
+    {
+        $_name = Utils::cleanComponentName($_name);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
+        $this->name = $_name;
+        return $this;
+    }
+
+    /**
+     * @param string $_version
+     * @param string $_options
+     * @param null $_cmdColor
+     * @return mixed|string
+     * @throws CoreException
+     */
     public function toHtml($_version = 'dashboard', $_options = '', $_cmdColor = null)
     {
         $version2 = NextDomHelper::versionAlias($_version, false);
@@ -1095,6 +757,938 @@ class Cmd implements EntityInterface
         }
     }
 
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
+    public function getDisplay($_key = '', $_default = '')
+    {
+        return Utils::getJsonAttr($this->display, $_key, $_default);
+    }
+
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
+    public function setDisplay($_key, $_value)
+    {
+        if ($this->getDisplay($_key) != $_value) {
+            $this->_needRefreshWidget = true;
+            $this->_changed = true;
+        }
+        $this->display = Utils::setJsonAttr($this->display, $_key, $_value);
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    /**
+     * @return string
+     */
+    /**
+     * @return string
+     */
+    public function getUnite()
+    {
+        return $this->unite;
+    }
+
+    /**
+     * @param $_unite
+     * @return $this
+     */
+    /**
+     * @param $_unite
+     * @return $this
+     */
+    /**
+     * @param $_unite
+     * @return $this
+     */
+    public function setUnite($_unite)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->unite, $_unite);
+        $this->unite = $_unite;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    /**
+     * @return string
+     */
+    /**
+     * @return string
+     */
+    public function getLogicalId()
+    {
+        return $this->logicalId;
+    }
+
+    /**
+     * @param $_logicalId
+     * @return $this
+     */
+    /**
+     * @param $_logicalId
+     * @return $this
+     */
+    /**
+     * @param $_logicalId
+     * @return $this
+     */
+    public function setLogicalId($_logicalId)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->logicalId, $_logicalId);
+        $this->logicalId = $_logicalId;
+        return $this;
+    }
+
+    /**
+     *
+     * @return mixed
+     */
+    public function getEqLogic_Id()
+    {
+        return $this->eqLogic_id;
+    }
+
+    /**
+     * @return EqLogic|null
+     * @throws \Exception
+     */
+    public function getEqLogicId()
+    {
+        if ($this->_eqLogic == null) {
+            $this->setEqLogicId(EqLogicManager::byId($this->eqLogic_id));
+        }
+        return $this->_eqLogic;
+    }
+
+    /**
+     * @param $_eqLogic
+     * @return $this
+     */
+    /**
+     * @param $_eqLogic
+     * @return $this
+     */
+    /**
+     * @param $_eqLogic
+     * @return $this
+     */
+    public function setEqLogicId($_eqLogic)
+    {
+        $this->_eqLogic = $_eqLogic;
+        return $this;
+    }
+
+    /**
+     *
+     * @param $_eqLogic_id
+     * @return $this
+     */
+    public function setEqLogic_id($_eqLogic_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->eqLogic_id, $_eqLogic_id);
+        $this->eqLogic_id = $_eqLogic_id;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    /**
+     * @return string
+     */
+    /**
+     * @return string
+     */
+    public function getGeneric_type()
+    {
+        return $this->generic_type;
+    }
+
+    /**
+     * @param $generic_type
+     * @return $this
+     */
+    /**
+     * @param $generic_type
+     * @return $this
+     */
+    /**
+     * @param $generic_type
+     * @return $this
+     */
+    public function setGeneric_type($generic_type)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->generic_type, $generic_type);
+        $this->generic_type = $generic_type;
+        return $this;
+    }
+
+    /**
+     * @return Cmd|bool
+     * @throws \Exception
+     */
+    public function getCmdValue()
+    {
+        $cmd = CmdManager::byId(str_replace('#', '', $this->getValue()));
+        if (is_object($cmd)) {
+            return $cmd;
+        }
+        return false;
+    }
+
+    /**
+     * @return string
+     */
+    /**
+     * @return string
+     */
+    /**
+     * @return string
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    /**
+     * @param $_value
+     * @return $this
+     */
+    /**
+     * @param $_value
+     * @return $this
+     */
+    /**
+     * @param $_value
+     * @return $this
+     */
+    public function setValue($_value)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->value, $_value);
+        $this->value = $_value;
+        return $this;
+    }
+
+    /**
+     *
+     * @param mixed $_options
+     * @param mixed $_sendNodeJsEvent
+     * @param mixed $_quote
+     * @return mixed result
+     * @throws CoreException
+     */
+    public function execCmd($_options = null, $_sendNodeJsEvent = false, $_quote = false)
+    {
+        if ($this->getType() == 'info') {
+            $state = $this->getCache(array('collectDate', 'valueDate', 'value'));
+            if (isset($state['collectDate'])) {
+                $this->setCollectDate($state['collectDate']);
+            } else {
+                $this->setCollectDate(date('Y-m-d H:i:s'));
+            }
+            if (isset($state['valueDate'])) {
+                $this->setValueDate($state['valueDate']);
+            } else {
+                $this->setValueDate($this->getCollectDate());
+            }
+            return $state['value'];
+
+        }
+        $eqLogic = $this->getEqLogicId();
+        if ($this->getType() != 'info' && (!is_object($eqLogic) || $eqLogic->getIsEnable() != 1)) {
+            throw new CoreException(__('Equipement désactivé - impossible d\'exécuter la commande : ') . $this->getHumanName());
+        }
+        try {
+            if ($_options !== null && $_options !== '') {
+                $options = CmdManager::cmdToValue($_options);
+                if (Utils::isJson($_options)) {
+                    $options = json_decode($_options, true);
+                }
+            } else {
+                $options = null;
+            }
+            if (isset($options['color'])) {
+                $options['color'] = str_replace('"', '', $options['color']);
+            }
+            if ($this->getSubType() == 'color' && isset($options['color']) && substr($options['color'], 0, 1) != '#') {
+                $options['color'] = CmdManager::convertColor($options['color']);
+            }
+            $str_option = '';
+            if (is_array($options) && ((count($options) > 1 && isset($options['uid'])) || count($options) > 0)) {
+                LogHelper::add('event', 'info', __('Exécution de la commande ') . $this->getHumanName() . __(' avec les paramètres ') . json_encode($options, true));
+            } else {
+                LogHelper::add('event', 'info', __('Exécution de la commande ') . $this->getHumanName());
+            }
+
+            if ($this->getConfiguration('timeline::enable')) {
+                TimeLineHelper::addTimelineEvent(array('type' => 'cmd', 'subtype' => 'action', 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => date('Y-m-d H:i:s'), 'options' => $str_option));
+            }
+            $this->preExecCmd($options);
+            $value = $this->formatValue($this->execute($options), $_quote);
+            $this->postExecCmd($options);
+        } catch (\Exception $e) {
+            $type = $eqLogic->getEqType_name();
+            if ($eqLogic->getConfiguration('nerverFail') != 1) {
+                $numberTryWithoutSuccess = $eqLogic->getStatus('numberTryWithoutSuccess', 0);
+                $eqLogic->setStatus('numberTryWithoutSuccess', $numberTryWithoutSuccess);
+                if ($numberTryWithoutSuccess >= ConfigManager::byKey('numberOfTryBeforeEqLogicDisable')) {
+                    $message = 'Désactivation de <a href="' . $eqLogic->getLinkToConfiguration() . '">' . $eqLogic->getName();
+                    $message .= '</a> ' . __('car il n\'a pas répondu ou mal répondu lors des 3 derniers essais');
+                    MessageManager::add($type, $message);
+                    $eqLogic->setIsEnable(0);
+                    $eqLogic->save();
+                }
+            }
+            LogHelper::add($type, 'error', __('Erreur exécution de la commande ') . $this->getHumanName() . ' : ' . $e->getMessage());
+            throw $e;
+        }
+        if ($options !== null && $this->getValue() == '') {
+            if (isset($options['slider'])) {
+                $this->setConfiguration('lastCmdValue', $options['slider']);
+                $this->save();
+            }
+            if (isset($options['color'])) {
+                $this->setConfiguration('lastCmdValue', $options['color']);
+                $this->save();
+            }
+        }
+        if ($this->getConfiguration('updateCmdId') != '') {
+            $cmd = CmdManager::byId($this->getConfiguration('updateCmdId'));
+            if (is_object($cmd)) {
+                $value = $this->getConfiguration('updateCmdToValue');
+                switch ($this->getSubType()) {
+                    case 'slider':
+                        $value = str_replace('#slider#', $options['slider'], $value);
+                        break;
+                    case 'color':
+                        $value = str_replace('#color#', $options['color'], $value);
+                        break;
+                }
+                $cmd->event($value);
+            }
+        }
+        return $value;
+    }
+
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     * @throws \Exception
+     */
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     * @throws \Exception
+     */
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     * @throws \Exception
+     */
+    public function getCache($_key = '', $_default = '')
+    {
+        $cache = CacheManager::byKey('cmdCacheAttr' . $this->getId())->getValue();
+        return Utils::getJsonAttr($cache, $_key, $_default);
+    }
+
+    /**
+     * @return string
+     */
+    /**
+     * @return string
+     */
+    /**
+     * @return string
+     */
+    public function getCollectDate()
+    {
+        return $this->_collectDate;
+    }
+
+    /**
+     * @param $_collectDate
+     * @return $this
+     */
+    /**
+     * @param $_collectDate
+     * @return $this
+     */
+    /**
+     * @param $_collectDate
+     * @return $this
+     */
+    public function setCollectDate($_collectDate)
+    {
+        $this->_collectDate = $_collectDate;
+        return $this;
+    }
+
+    /**
+     * @param array $_values
+     * @throws \Exception
+     */
+    /**
+     * @param array $_values
+     * @throws \Exception
+     */
+    /**
+     * @param array $_values
+     * @throws \Exception
+     */
+    public function preExecCmd($_values = array())
+    {
+        if (!is_array($this->getConfiguration('nextdomPreExecCmd')) || count($this->getConfiguration('nextdomPreExecCmd')) == 0) {
+            return;
+        }
+        foreach ($this->getConfiguration('nextdomPreExecCmd') as $action) {
+            try {
+                $options = array();
+                if (isset($action['options'])) {
+                    $options = $action['options'];
+                }
+                if (is_array($_values) && count($_values) > 0) {
+                    foreach ($_values as $key => $value) {
+                        foreach ($options as &$option) {
+                            if (!is_array($option)) {
+                                $option = str_replace('#' . $key . '#', $value, $option);
+                            }
+                        }
+                    }
+                }
+                ScenarioExpressionManager::createAndExec('action', $action['cmd'], $options);
+            } catch (\Exception $e) {
+                LogHelper::addError('cmd', __('Erreur lors de l\'exécution de ') . $action['cmd'] . __('. Sur preExec de la commande') . $this->getHumanName() . __('. Détails : ') . $e->getMessage());
+            }
+        }
+    }
+
+    /**
+     * @param $_value
+     * @param bool $_quote
+     * @return float|mixed|string
+     */
+    /**
+     * @param $_value
+     * @param bool $_quote
+     * @return float|mixed|string
+     */
+    /**
+     * @param $_value
+     * @param bool $_quote
+     * @return float|mixed|string
+     */
+    public function formatValue($_value, $_quote = false)
+    {
+        if (is_array($_value)) {
+            return '';
+        }
+        if (trim($_value) == '' && $_value !== false && $_value !== 0) {
+            return '';
+        }
+        $_value = trim(trim($_value), '"');
+        if (@strpos(strtolower($_value), 'error::') !== false) {
+            return $_value;
+        }
+        if ($this->getType() == 'info') {
+            switch ($this->getSubType()) {
+                case 'string':
+                    if ($_quote) {
+                        return '"' . $_value . '"';
+                    }
+                    return $_value;
+                case 'other':
+                    if ($_quote) {
+                        return '"' . $_value . '"';
+                    }
+                    return $_value;
+                case 'binary':
+                    if ($this->getConfiguration('calculValueOffset') != '') {
+                        try {
+                            if (preg_match("/[a-zA-Z#]/", $_value)) {
+                                $_value = NextDomHelper::evaluateExpression(str_replace('#value#', '"' . $_value . '"', str_replace('\'#value#\'', '#value#', str_replace('"#value#"', '#value#', $this->getConfiguration('calculValueOffset')))));
+                            } else {
+                                $_value = NextDomHelper::evaluateExpression(str_replace('#value#', $_value, $this->getConfiguration('calculValueOffset')));
+                            }
+                        } catch (\Exception $ex) {
+
+                        }
+                    }
+                    $value = strtolower($_value);
+                    if ($value == 'on' || $value == 'high' || $value == 'true' || $value == true) {
+                        return 1;
+                    }
+                    if ($value == 'off' || $value == 'low' || $value == 'false' || $value == false) {
+                        return 0;
+                    }
+                    if ((is_numeric(intval($_value)) && intval($_value) > 1) || $_value == true || $_value == 1) {
+                        return 1;
+                    }
+                    return 0;
+                case 'numeric':
+                    $_value = floatval(str_replace(',', '.', $_value));
+                    if ($this->getConfiguration('calculValueOffset') != '') {
+                        try {
+                            if (preg_match("/[a-zA-Z#]/", $_value)) {
+                                $_value = NextDomHelper::evaluateExpression(str_replace('#value#', '"' . $_value . '"', str_replace('\'#value#\'', '#value#', str_replace('"#value#"', '#value#', $this->getConfiguration('calculValueOffset')))));
+                            } else {
+                                $_value = NextDomHelper::evaluateExpression(str_replace('#value#', $_value, $this->getConfiguration('calculValueOffset')));
+                            }
+                        } catch (\Exception $ex) {
+
+                        }
+                    }
+                    if ($this->getConfiguration('historizeRound') !== '' && is_numeric($this->getConfiguration('historizeRound')) && $this->getConfiguration('historizeRound') >= 0) {
+                        $_value = round($_value, $this->getConfiguration('historizeRound'));
+                    }
+                    if ($_value > $this->getConfiguration('maxValue', $_value) && $this->getConfiguration('maxValueReplace') == 1) {
+                        $_value = $this->getConfiguration('maxValue', $_value);
+                    }
+                    if ($_value < $this->getConfiguration('minValue', $_value) && $this->getConfiguration('minValueReplace') == 1) {
+                        $_value = $this->getConfiguration('minValue', $_value);
+                    }
+                    return floatval($_value);
+            }
+        }
+        return $_value;
+    }
+
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
+    public function getConfiguration($_key = '', $_default = '')
+    {
+        return Utils::getJsonAttr($this->configuration, $_key, $_default);
+    }
+
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
+    public function setConfiguration($_key, $_value)
+    {
+        if ($_key == 'actionCodeAccess' && $_value != '') {
+            if (!Utils::isSha1($_value) && !Utils::isSha512($_value)) {
+                $_value = Utils::sha512($_value);
+            }
+        }
+        $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
+        $this->configuration = $configuration;
+        return $this;
+    }
+
+    /**
+     * TODO ???
+     * @param $_options
+     * @return bool
+     */
+    public function execute($_options)
+    {
+        return false;
+    }
+
+    /**
+     * @param array $_values
+     * @throws \Exception
+     */
+    /**
+     * @param array $_values
+     * @throws \Exception
+     */
+    /**
+     * @param array $_values
+     * @throws \Exception
+     */
+    public function postExecCmd($_values = array())
+    {
+        if (!is_array($this->getConfiguration('nextdomPostExecCmd'))) {
+            return;
+        }
+        foreach ($this->getConfiguration('nextdomPostExecCmd') as $action) {
+            try {
+                $options = array();
+                if (isset($action['options'])) {
+                    $options = $action['options'];
+                }
+                if (count($_values) > 0) {
+                    foreach ($_values as $key => $value) {
+                        foreach ($options as &$option) {
+                            if (!is_array($option)) {
+                                $option = str_replace('#' . $key . '#', $value, $option);
+                            }
+                        }
+                    }
+                }
+                ScenarioExpressionManager::createAndExec('action', $action['cmd'], $options);
+            } catch (\Exception $e) {
+                LogHelper::addError('cmd', __('Erreur lors de l\'exécution de ') . $action['cmd'] . __('. Sur preExec de la commande') . $this->getHumanName() . __('. Détails : ') . $e->getMessage());
+            }
+        }
+    }
+
+    /**
+     * @return bool
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
+    /**
+     * @return bool
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
+    /**
+     * @return bool
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
+    public function save()
+    {
+        if (empty($this->getName())) {
+            throw new CoreException(__('Le nom de la commande ne peut pas être vide :') . print_r($this, true));
+        }
+        if (empty($this->getType())) {
+            throw new CoreException($this->getHumanName() . ' ' . __('Le type de la commande ne peut pas être vide :') . print_r($this, true));
+        }
+        if (empty($this->getSubType())) {
+            throw new CoreException($this->getHumanName() . ' ' . __('Le sous-type de la commande ne peut pas être vide :') . print_r($this, true));
+        }
+        if (empty($this->getEqLogic_id())) {
+            throw new CoreException($this->getHumanName() . ' ' . __('Vous ne pouvez pas créer une commande sans la rattacher à un équipement'));
+        }
+        if ($this->getConfiguration('maxValue') != '' && $this->getConfiguration('minValue') != '' && $this->getConfiguration('minValue') > $this->getConfiguration('maxValue')) {
+            throw new CoreException($this->getHumanName() . ' ' . __('La valeur minimum de la commande ne peut etre supérieure à la valeur maximum'));
+        }
+        if ($this->getEqType() == '') {
+            $this->setEqType($this->getEqLogicId()->getEqType_name());
+        }
+        if ($this->getDisplay('generic_type') !== '' && $this->getGeneric_type() == '') {
+            $this->setGeneric_type($this->getDisplay('generic_type'));
+            $this->setDisplay('generic_type', '');
+        }
+        DBHelper::save($this);
+        if ($this->_needRefreshWidget) {
+            $this->_needRefreshWidget = false;
+            $this->getEqLogicId()->refreshWidget();
+        }
+        if ($this->_needRefreshAlert && $this->getType() == 'info') {
+            $value = $this->execCmd();
+            $level = $this->checkAlertLevel($value);
+            if ($level != $this->getCache('alertLevel')) {
+                $this->actionAlertLevel($level, $value);
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @return string
+     */
+    /**
+     * @return string
+     */
+    /**
+     * @return string
+     */
+    public function getEqType()
+    {
+        return $this->eqType;
+    }
+
+    /**
+     * @param $_eqType
+     * @return $this
+     */
+    /**
+     * @param $_eqType
+     * @return $this
+     */
+    /**
+     * @param $_eqType
+     * @return $this
+     */
+    public function setEqType($_eqType)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->eqType, $_eqType);
+        $this->eqType = $_eqType;
+        return $this;
+    }
+
+    /**
+     * @param $_value
+     * @param bool $_allowDuring
+     * @return int|string
+     * @throws CoreException
+     */
+    /**
+     * @param $_value
+     * @param bool $_allowDuring
+     * @return int|string
+     * @throws CoreException
+     */
+    /**
+     * @param $_value
+     * @param bool $_allowDuring
+     * @return int|string
+     * @throws CoreException
+     */
+    public function checkAlertLevel($_value, $_allowDuring = true)
+    {
+        if ($this->getType() != 'info' || ($this->getAlert('warningif') == '' && $this->getAlert('dangerif') == '')) {
+            return 'none';
+        }
+        global $NEXTDOM_INTERNAL_CONFIG;
+
+        $currentLevel = 'none';
+        foreach ($NEXTDOM_INTERNAL_CONFIG['alerts'] as $level => $value) {
+            if (!$value['check']) {
+                continue;
+            }
+            if ($this->getAlert($level . 'if') != '') {
+                $check = NextDomHelper::evaluateExpression(str_replace('#value#', $_value, $this->getAlert($level . 'if')));
+                if ($check == 1 || $check || $check == '1') {
+                    $currentLevel = $level;
+                }
+            }
+        }
+        if ($this->getCache('alertLevel') == $currentLevel) {
+            return $currentLevel;
+        }
+        if ($_allowDuring && $this->getAlert($currentLevel . 'during') != '' && $this->getAlert($currentLevel . 'during') > 0) {
+            $cron = CronManager::byClassAndFunction('cmd', 'duringAlertLevel', array('cmd_id' => intval($this->getId())));
+            $next = strtotime('+ ' . $this->getAlert($currentLevel . 'during', 1) . ' minutes ' . date('Y-m-d H:i:s'));
+            if (!is_object($cron)) {
+                $cron = new cron();
+            } else {
+                $nextRun = $cron->getNextRunDate();
+                if ($nextRun !== false && $next > strtotime($nextRun) && strtotime($nextRun) > strtotime('now')) {
+                    return 'none';
+                }
+            }
+            $cron->setClass('cmd');
+            $cron->setFunction('duringAlertLevel');
+            $cron->setOnce(1);
+            $cron->setOption(array('cmd_id' => intval($this->getId())));
+            $cron->setSchedule(CronManager::convertDateToCron($next));
+            $cron->setLastRun(date('Y-m-d H:i:s'));
+            $cron->save();
+            return 'none';
+        }
+        if ($_allowDuring && $currentLevel == 'none') {
+            $cron = CronManager::byClassAndFunction('cmd', 'duringAlertLevel', array('cmd_id' => intval($this->getId())));
+            if (is_object($cron)) {
+                $cron->remove(false);
+            }
+        }
+        return $currentLevel;
+    }
+
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
+    public function getAlert($_key = '', $_default = '')
+    {
+        return Utils::getJsonAttr($this->alert, $_key, $_default);
+    }
+
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
+    public function setAlert($_key, $_value)
+    {
+        $alert = Utils::setJsonAttr($this->alert, $_key, $_value);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->alert, $alert);
+        $this->alert = $alert;
+        $this->_needRefreshAlert = true;
+        return $this;
+    }
+
+    /**
+     * @param $_level
+     * @param $_value
+     * @throws CoreException
+     */
+    /**
+     * @param $_level
+     * @param $_value
+     * @throws CoreException
+     */
+    /**
+     * @param $_level
+     * @param $_value
+     * @throws CoreException
+     */
+    public function actionAlertLevel($_level, $_value)
+    {
+        if ($this->getType() != 'info') {
+            return;
+        }
+        global $NEXTDOM_INTERNAL_CONFIG;
+        $this->setCache('alertLevel', $_level);
+        $eqLogic = $this->getEqLogicId();
+        $maxAlert = $eqLogic->getMaxCmdAlert();
+        $prevAlert = $eqLogic->getAlert();
+        if (!$_value) {
+            $_value = $this->execCmd();
+        }
+        if ($_level != 'none') {
+            $message = __('Alert sur la commande ') . $this->getHumanName() . __(' niveau ') . $_level . __(' valeur : ') . $_value . trim(' ' . $this->getUnite());
+            if ($this->getAlert($_level . 'during') != '' && $this->getAlert($_level . 'during') > 0) {
+                $message .= ' ' . __('pendant plus de ') . $this->getAlert($_level . 'during') . __(' minute(s)');
+            }
+            $message .= ' => ' . str_replace('#value#', $_value, $this->getAlert($_level . 'if'));
+            LogHelper::add('event', 'info', $message);
+            $eqLogic = $this->getEqLogicId();
+            if (ConfigManager::byKey('alert::addMessageOn' . ucfirst($_level)) == 1) {
+                MessageManager::add($eqLogic->getEqType_name(), $message);
+            }
+            $cmds = explode(('&&'), ConfigManager::byKey('alert::' . $_level . 'Cmd'));
+            if (count($cmds) > 0 && trim(ConfigManager::byKey('alert::' . $_level . 'Cmd')) != '') {
+                foreach ($cmds as $id) {
+                    $cmd = CmdManager::byId(str_replace('#', '', $id));
+                    if (is_object($cmd)) {
+                        $cmd->execCmd(array(
+                            'title' => __('[' . ConfigManager::byKey('name', 'core', 'NEXTDOM') . '] ') . $message,
+                            'message' => ConfigManager::byKey('name', 'core', 'NEXTDOM') . ' : ' . $message,
+                        ));
+                    }
+                }
+            }
+        }
+
+        if ($prevAlert != $maxAlert) {
+            $status = array(
+                'warning' => 0,
+                'danger' => 0,
+            );
+            if ($maxAlert != 'none' && isset($NEXTDOM_INTERNAL_CONFIG['alerts'][$maxAlert])) {
+                $status[$maxAlert] = 1;
+            }
+            $eqLogic->setStatus($status);
+            $eqLogic->refreshWidget();
+        }
+    }
+
+    /**
+     * @param $_key
+     * @param null $_value
+     * @return $this
+     * @throws \Exception
+     */
+    /**
+     * @param $_key
+     * @param null $_value
+     * @return $this
+     * @throws \Exception
+     */
+    /**
+     * @param $_key
+     * @param null $_value
+     * @return $this
+     * @throws \Exception
+     */
+    public function setCache($_key, $_value = null)
+    {
+        CacheManager::set('cmdCacheAttr' . $this->getId(), Utils::setJsonAttr(CacheManager::byKey('cmdCacheAttr' . $this->getId())->getValue(), $_key, $_value));
+        return $this;
+    }
+
+    /**
+     * @param $_value
+     * @param null $_datetime
+     * @param int $_loop
+     * @throws CoreException
+     */
+    /**
+     * @param $_value
+     * @param null $_datetime
+     * @param int $_loop
+     * @throws CoreException
+     */
+    /**
+     * @param $_value
+     * @param null $_datetime
+     * @param int $_loop
+     * @throws CoreException
+     */
     public function event($_value, $_datetime = null, $_loop = 1)
     {
         if ($_loop > 4 || $this->getType() != 'info') {
@@ -1194,6 +1788,113 @@ class Cmd implements EntityInterface
         }
     }
 
+    /**
+     * @return string
+     */
+    /**
+     * @return string
+     */
+    /**
+     * @return string
+     */
+    public function getValueDate()
+    {
+        return $this->_valueDate;
+    }
+
+    /**
+     * @param $_valueDate
+     * @return $this
+     */
+    /**
+     * @param $_valueDate
+     * @return $this
+     */
+    /**
+     * @param $_valueDate
+     * @return $this
+     */
+    public function setValueDate($_valueDate)
+    {
+        $this->_valueDate = $_valueDate;
+        return $this;
+    }
+
+    /**
+     * @param $_value
+     * @param string $_datetime
+     * @return null
+     * @throws CoreException
+     */
+    /**
+     * @param $_value
+     * @param string $_datetime
+     * @return null
+     * @throws CoreException
+     */
+    /**
+     * @param $_value
+     * @param string $_datetime
+     * @return null
+     * @throws CoreException
+     */
+    public function addHistoryValue($_value, $_datetime = '')
+    {
+        if ($this->getIsHistorized() == 1 && ($_value == null || ($_value !== '' && $this->getType() == 'info' && $_value <= $this->getConfiguration('maxValue', $_value) && $_value >= $this->getConfiguration('minValue', $_value)))) {
+            $history = new History();
+            $history->setCmd_id($this->getId());
+            $history->setValue($_value);
+            $history->setDatetime($_datetime);
+            $history->save($this);
+            return null;
+        }
+    }
+
+    /**
+     * @return string
+     */
+    /**
+     * @return string
+     */
+    /**
+     * @return string
+     */
+    public function getIsHistorized()
+    {
+        return $this->isHistorized;
+    }
+
+    /**
+     * @param $_isHistorized
+     * @return $this
+     */
+    /**
+     * @param $_isHistorized
+     * @return $this
+     */
+    /**
+     * @param $_isHistorized
+     * @return $this
+     */
+    public function setIsHistorized($_isHistorized)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->isHistorized, $_isHistorized);
+        $this->isHistorized = $_isHistorized;
+        return $this;
+    }
+
+    /**
+     * @param $_value
+     * @throws \Exception
+     */
+    /**
+     * @param $_value
+     * @throws \Exception
+     */
+    /**
+     * @param $_value
+     * @throws \Exception
+     */
     public function checkReturnState($_value)
     {
         if (is_numeric($this->getConfiguration('returnStateTime')) && $this->getConfiguration('returnStateTime') > 0 && $_value != $this->getConfiguration('returnStateValue') && trim($this->getConfiguration('returnStateValue')) != '') {
@@ -1212,6 +1913,18 @@ class Cmd implements EntityInterface
         }
     }
 
+    /**
+     * @param $_value
+     * @throws CoreException
+     */
+    /**
+     * @param $_value
+     * @throws CoreException
+     */
+    /**
+     * @param $_value
+     * @throws CoreException
+     */
     public function checkCmdAlert($_value)
     {
         if ($this->getConfiguration('nextdomCheckCmdOperator') == '' || $this->getConfiguration('nextdomCheckCmdTest') == '' || is_nan($this->getConfiguration('nextdomCheckCmdTime', 0))) {
@@ -1266,124 +1979,18 @@ class Cmd implements EntityInterface
         }
     }
 
-    public function checkAlertLevel($_value, $_allowDuring = true)
-    {
-        if ($this->getType() != 'info' || ($this->getAlert('warningif') == '' && $this->getAlert('dangerif') == '')) {
-            return 'none';
-        }
-        global $NEXTDOM_INTERNAL_CONFIG;
-
-        $currentLevel = 'none';
-        foreach ($NEXTDOM_INTERNAL_CONFIG['alerts'] as $level => $value) {
-            if (!$value['check']) {
-                continue;
-            }
-            if ($this->getAlert($level . 'if') != '') {
-                $check = NextDomHelper::evaluateExpression(str_replace('#value#', $_value, $this->getAlert($level . 'if')));
-                if ($check == 1 || $check || $check == '1') {
-                    $currentLevel = $level;
-                }
-            }
-        }
-        if ($this->getCache('alertLevel') == $currentLevel) {
-            return $currentLevel;
-        }
-        if ($_allowDuring && $this->getAlert($currentLevel . 'during') != '' && $this->getAlert($currentLevel . 'during') > 0) {
-            $cron = CronManager::byClassAndFunction('cmd', 'duringAlertLevel', array('cmd_id' => intval($this->getId())));
-            $next = strtotime('+ ' . $this->getAlert($currentLevel . 'during', 1) . ' minutes ' . date('Y-m-d H:i:s'));
-            if (!is_object($cron)) {
-                $cron = new cron();
-            } else {
-                $nextRun = $cron->getNextRunDate();
-                if ($nextRun !== false && $next > strtotime($nextRun) && strtotime($nextRun) > strtotime('now')) {
-                    return 'none';
-                }
-            }
-            $cron->setClass('cmd');
-            $cron->setFunction('duringAlertLevel');
-            $cron->setOnce(1);
-            $cron->setOption(array('cmd_id' => intval($this->getId())));
-            $cron->setSchedule(CronManager::convertDateToCron($next));
-            $cron->setLastRun(date('Y-m-d H:i:s'));
-            $cron->save();
-            return 'none';
-        }
-        if ($_allowDuring && $currentLevel == 'none') {
-            $cron = CronManager::byClassAndFunction('cmd', 'duringAlertLevel', array('cmd_id' => intval($this->getId())));
-            if (is_object($cron)) {
-                $cron->remove(false);
-            }
-        }
-        return $currentLevel;
-    }
-
-    public static function duringAlertLevel($_options)
-    {
-        $cmd = CmdManager::byId($_options['cmd_id']);
-        if (!is_object($cmd)) {
-            return;
-        }
-        if ($cmd->getType() != 'info') {
-            return;
-        }
-        $value = $cmd->execCmd();
-        $level = $cmd->checkAlertLevel($value, false);
-        if ($level != 'none') {
-            $cmd->actionAlertLevel($level, $value);
-        }
-    }
-
-    public function actionAlertLevel($_level, $_value)
-    {
-        if ($this->getType() != 'info') {
-            return;
-        }
-        global $NEXTDOM_INTERNAL_CONFIG;
-        $this->setCache('alertLevel', $_level);
-        $eqLogic = $this->getEqLogicId();
-        $maxAlert = $eqLogic->getMaxCmdAlert();
-        $prevAlert = $eqLogic->getAlert();
-        if (!$_value) {
-            $_value = $this->execCmd();
-        }
-        if ($_level != 'none') {
-            $message = __('Alert sur la commande ') . $this->getHumanName() . __(' niveau ') . $_level . __(' valeur : ') . $_value . trim(' ' . $this->getUnite());
-            if ($this->getAlert($_level . 'during') != '' && $this->getAlert($_level . 'during') > 0) {
-                $message .= ' ' . __('pendant plus de ') . $this->getAlert($_level . 'during') . __(' minute(s)');
-            }
-            $message .= ' => ' . str_replace('#value#', $_value, $this->getAlert($_level . 'if'));
-            LogHelper::add('event', 'info', $message);
-            $eqLogic = $this->getEqLogicId();
-            if (ConfigManager::byKey('alert::addMessageOn' . ucfirst($_level)) == 1) {
-                MessageManager::add($eqLogic->getEqType_name(), $message);
-            }
-            $cmds = explode(('&&'), ConfigManager::byKey('alert::' . $_level . 'Cmd'));
-            if (count($cmds) > 0 && trim(ConfigManager::byKey('alert::' . $_level . 'Cmd')) != '') {
-                foreach ($cmds as $id) {
-                    $cmd = CmdManager::byId(str_replace('#', '', $id));
-                    if (is_object($cmd)) {
-                        $cmd->execCmd(array(
-                            'title' => __('[' . ConfigManager::byKey('name', 'core', 'NEXTDOM') . '] ') . $message,
-                            'message' => ConfigManager::byKey('name', 'core', 'NEXTDOM') . ' : ' . $message,
-                        ));
-                    }
-                }
-            }
-        }
-
-        if ($prevAlert != $maxAlert) {
-            $status = array(
-                'warning' => 0,
-                'danger' => 0,
-            );
-            if ($maxAlert != 'none' && isset($NEXTDOM_INTERNAL_CONFIG['alerts'][$maxAlert])) {
-                $status[$maxAlert] = 1;
-            }
-            $eqLogic->setStatus($status);
-            $eqLogic->refreshWidget();
-        }
-    }
-
+    /**
+     * @param $_value
+     * @throws \Exception
+     */
+    /**
+     * @param $_value
+     * @throws \Exception
+     */
+    /**
+     * @param $_value
+     * @throws \Exception
+     */
     public function pushUrl($_value)
     {
         $url = $this->getConfiguration('nextdomPushUrl');
@@ -1411,6 +2018,90 @@ class Cmd implements EntityInterface
         }
     }
 
+    /**
+     * @param $_startTime
+     * @param $_endTime
+     * @return array
+     * @throws CoreException
+     */
+    /**
+     * @param $_startTime
+     * @param $_endTime
+     * @return array
+     * @throws CoreException
+     */
+    /**
+     * @param $_startTime
+     * @param $_endTime
+     * @return array
+     * @throws CoreException
+     */
+    public function getStatistique($_startTime, $_endTime)
+    {
+        if ($this->getType() != 'info' || $this->getType() == 'string') {
+            return array();
+        }
+        return HistoryManager::getStatistics($this->getId(), $_startTime, $_endTime);
+    }
+
+    /**
+     * @param $_startTime
+     * @param $_endTime
+     * @return float|int
+     * @throws \Exception
+     */
+    /**
+     * @param $_startTime
+     * @param $_endTime
+     * @return float|int
+     * @throws \Exception
+     */
+    /**
+     * @param $_startTime
+     * @param $_endTime
+     * @return float|int
+     * @throws \Exception
+     */
+    public function getTendance($_startTime, $_endTime)
+    {
+        return HistoryManager::getTendance($this->getId(), $_startTime, $_endTime);
+    }
+
+    /**
+     * @return array|bool|mixed|null|string
+     */
+    /**
+     * @return array|bool|mixed|null|string
+     */
+    /**
+     * @return array|bool|mixed|null|string
+     */
+    public function getLastValue()
+    {
+        return $this->getConfiguration('lastCmdValue', null);
+    }
+
+    /**
+     * @param $_response
+     * @param string $_plugin
+     * @param string $_network
+     * @return string
+     * @throws \Exception
+     */
+    /**
+     * @param $_response
+     * @param string $_plugin
+     * @param string $_network
+     * @return string
+     * @throws \Exception
+     */
+    /**
+     * @param $_response
+     * @param string $_plugin
+     * @param string $_network
+     * @return string
+     * @throws \Exception
+     */
     public function generateAskResponseLink($_response, $_plugin = 'core', $_network = 'external')
     {
         $token = $this->getCache('ask::token', ConfigManager::genKey());
@@ -1425,6 +2116,22 @@ class Cmd implements EntityInterface
         return $return;
     }
 
+    /**
+     * @param $_response
+     * @return bool
+     */
+    /**
+     * @param $_response
+     * @return bool
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
+    /**
+     * @param $_response
+     * @return bool
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function askResponse($_response)
     {
         if ($this->getCache('ask::variable', 'none') == 'none') {
@@ -1444,70 +2151,30 @@ class Cmd implements EntityInterface
         return true;
     }
 
-    public function emptyHistory($_date = '')
+    /**
+     * @param $_startTime
+     * @param $_endTime
+     * @return array|float|int|null
+     * @throws \Exception
+     */
+    /**
+     * @param $_startTime
+     * @param $_endTime
+     * @return array|float|int|null
+     * @throws \Exception
+     */
+    /**
+     * @param $_startTime
+     * @param $_endTime
+     * @return array|float|int|null
+     * @throws \Exception
+     */
+    public function getTemporalAvg($_startTime, $_endTime)
     {
-        return HistoryManager::emptyHistory($this->getId(), $_date);
-    }
-
-    public function addHistoryValue($_value, $_datetime = '')
-    {
-        if ($this->getIsHistorized() == 1 && ($_value == null || ($_value !== '' && $this->getType() == 'info' && $_value <= $this->getConfiguration('maxValue', $_value) && $_value >= $this->getConfiguration('minValue', $_value)))) {
-            $history = new History();
-            $history->setCmd_id($this->getId());
-            $history->setValue($_value);
-            $history->setDatetime($_datetime);
-            $history->save($this);
-            return null;
-        }
-    }
-
-    public function getStatistique($_startTime, $_endTime)
-    {
-        if ($this->getType() != 'info' || $this->getType() == 'string') {
-            return array();
-        }
-        return HistoryManager::getStatistics($this->getId(), $_startTime, $_endTime);
-    }
-
-    public function getTemporalAvg($_startTime, $_endTime) {
         if ($this->getType() != 'info' || $this->getType() == 'string') {
             return array();
         }
         return HistoryManager::getTemporalAvg($this->getId(), $_startTime, $_endTime);
-    }
-
-
-    public function getTendance($_startTime, $_endTime)
-    {
-        return HistoryManager::getTendance($this->getId(), $_startTime, $_endTime);
-    }
-
-    /**
-     * @return Cmd|bool
-     * @throws \Exception
-     */
-    public function getCmdValue()
-    {
-        $cmd = CmdManager::byId(str_replace('#', '', $this->getValue()));
-        if (is_object($cmd)) {
-            return $cmd;
-        }
-        return false;
-    }
-
-    public function getHumanName($_tag = false, $_prettify = false)
-    {
-        $name = '';
-        $eqLogic = $this->getEqLogicId();
-        if (is_object($eqLogic)) {
-            $name .= $eqLogic->getHumanName($_tag, $_prettify);
-        }
-        if ($_tag) {
-            $name .= ' - ' . $this->getName();
-        } else {
-            $name .= '[' . $this->getName() . ']';
-        }
-        return $name;
     }
 
     /**
@@ -1521,11 +2188,56 @@ class Cmd implements EntityInterface
         return HistoryManager::all($this->id, $_dateStart, $_dateEnd);
     }
 
+    /**
+     * @param null $_dateStart
+     * @param null $_dateEnd
+     * @param string $_period
+     * @param int $_offset
+     * @return array|mixed|null
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
+    /**
+     * @param null $_dateStart
+     * @param null $_dateEnd
+     * @param string $_period
+     * @param int $_offset
+     * @return array|mixed|null
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
+    /**
+     * @param null $_dateStart
+     * @param null $_dateEnd
+     * @param string $_period
+     * @param int $_offset
+     * @return array|mixed|null
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function getPluralityHistory($_dateStart = null, $_dateEnd = null, $_period = 'day', $_offset = 0)
     {
         return HistoryManager::getPlurality($this->id, $_dateStart, $_dateEnd, $_period, $_offset);
     }
 
+    /**
+     * @param string $_key
+     * @param bool $_default
+     * @return array|bool|mixed
+     * @throws \ReflectionException
+     */
+    /**
+     * @param string $_key
+     * @param bool $_default
+     * @return array|bool|mixed
+     * @throws \ReflectionException
+     */
+    /**
+     * @param string $_key
+     * @param bool $_default
+     * @return array|bool|mixed
+     * @throws \ReflectionException
+     */
     public function widgetPossibility($_key = '', $_default = true)
     {
         $class = new \ReflectionClass($this->getEqType());
@@ -1575,6 +2287,18 @@ class Cmd implements EntityInterface
         return $return;
     }
 
+    /**
+     * @return array
+     * @throws \ReflectionException
+     */
+    /**
+     * @return array
+     * @throws \ReflectionException
+     */
+    /**
+     * @return array
+     * @throws \ReflectionException
+     */
     public function export()
     {
         $cmd = clone $this;
@@ -1611,6 +2335,18 @@ class Cmd implements EntityInterface
         return $return;
     }
 
+    /**
+     * @return string
+     * @throws \Exception
+     */
+    /**
+     * @return string
+     * @throws \Exception
+     */
+    /**
+     * @return string
+     * @throws \Exception
+     */
     public function getDirectUrlAccess()
     {
         $url = '/core/api/jeeApi.php?apikey=' . ConfigManager::byKey('api') . '&type=cmd&id=' . $this->getId();
@@ -1633,6 +2369,23 @@ class Cmd implements EntityInterface
         return NetworkHelper::getNetworkAccess('external') . $url;
     }
 
+    /**
+     * @param $_code
+     * @return bool
+     * @throws CoreException
+     */
+    /**
+     * @param $_code
+     * @return bool
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
+    /**
+     * @param $_code
+     * @return bool
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function checkAccessCode($_code)
     {
         if ($this->getType() != 'action' || trim($this->getConfiguration('actionCodeAccess')) == '') {
@@ -1649,6 +2402,21 @@ class Cmd implements EntityInterface
         return false;
     }
 
+    /**
+     * @return array
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
+    /**
+     * @return array
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
+    /**
+     * @return array
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function exportApi()
     {
         $return = Utils::o2a($this);
@@ -1656,6 +2424,27 @@ class Cmd implements EntityInterface
         return $return;
     }
 
+    /**
+     * @param array $_data
+     * @param int $_level
+     * @param null $_drill
+     * @return array|null
+     * @throws \ReflectionException
+     */
+    /**
+     * @param array $_data
+     * @param int $_level
+     * @param null $_drill
+     * @return array|null
+     * @throws \ReflectionException
+     */
+    /**
+     * @param array $_data
+     * @param int $_level
+     * @param null $_drill
+     * @return array|null
+     * @throws \ReflectionException
+     */
     public function getLinkData(&$_data = array('node' => array(), 'link' => array()), $_level = 0, $_drill = null)
     {
         if ($_drill == null) {
@@ -1697,6 +2486,21 @@ class Cmd implements EntityInterface
         return $_data;
     }
 
+    /**
+     * @param bool $_array
+     * @return array
+     * @throws \ReflectionException
+     */
+    /**
+     * @param bool $_array
+     * @return array
+     * @throws \ReflectionException
+     */
+    /**
+     * @param bool $_array
+     * @return array
+     * @throws \ReflectionException
+     */
     public function getUsedBy($_array = false)
     {
         $return = array('cmd' => array(), 'eqLogic' => array(), 'scenario' => array(), 'plan' => array(), 'view' => array());
@@ -1714,12 +2518,39 @@ class Cmd implements EntityInterface
         return $return;
     }
 
+    /**
+     * @return array
+     * @throws \ReflectionException
+     */
+    /**
+     * @return array
+     * @throws \ReflectionException
+     */
+    /**
+     * @return array
+     * @throws \ReflectionException
+     */
     public function getUse()
     {
         $json = NextDomHelper::fromHumanReadable(json_encode(Utils::o2a($this)));
         return NextDomHelper::getTypeUse($json);
     }
 
+    /**
+     * @param null $_user
+     * @return bool
+     * @throws \Exception
+     */
+    /**
+     * @param null $_user
+     * @return bool
+     * @throws \Exception
+     */
+    /**
+     * @param null $_user
+     * @return bool
+     * @throws \Exception
+     */
     public function hasRight($_user = null)
     {
         if ($this->getType() == 'action') {
@@ -1729,17 +2560,68 @@ class Cmd implements EntityInterface
         }
     }
 
+    /**
+     * @return bool
+     */
+    /**
+     * @return bool
+     */
+    /**
+     * @return bool
+     */
     public function getChanged()
     {
         return $this->_changed;
     }
 
+    /**
+     * @param $_changed
+     * @return $this
+     */
+    /**
+     * @param $_changed
+     * @return $this
+     */
+    /**
+     * @param $_changed
+     * @return $this
+     */
     public function setChanged($_changed)
     {
         $this->_changed = $_changed;
         return $this;
     }
 
+    /**
+     * @param Cmd $srcCmd
+     * @return $this
+     */
+    /**
+     * @param Cmd $srcCmd
+     * @return $this
+     */
+    /**
+     * @param Cmd $srcCmd
+     * @return $this
+     */
+    public function castFromCmd(Cmd $srcCmd)
+    {
+        $attributes = $srcCmd->getAllAttributes();
+        foreach ($attributes as $name => $value) {
+            $this->$name = $value;
+        }
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    /**
+     * @return array
+     */
+    /**
+     * @return array
+     */
     public function getAllAttributes()
     {
         return [
@@ -1768,14 +2650,5 @@ class Cmd implements EntityInterface
             'id' => $this->id,
             'eqLogic_id' => $this->eqLogic_id
         ];
-    }
-
-    public function castFromCmd(Cmd $srcCmd)
-    {
-        $attributes = $srcCmd->getAllAttributes();
-        foreach ($attributes as $name => $value) {
-            $this->$name = $value;
-        }
-        return $this;
     }
 }

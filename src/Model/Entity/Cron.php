@@ -109,79 +109,16 @@ class Cron implements EntityInterface
     protected $id;
     protected $_changed = false;
 
+    /**
+     * @param int $defaultValue
+     * @return int
+     */
     public function getEnable($defaultValue = 0)
     {
         if ($this->enable == '' || !is_numeric($this->enable)) {
             return $defaultValue;
         }
         return $this->enable;
-    }
-
-    public function getClass()
-    {
-        return $this->class;
-    }
-
-    public function getFunction()
-    {
-        return $this->function;
-    }
-
-    public function getSchedule()
-    {
-        return $this->schedule;
-    }
-
-    public function getTimeout()
-    {
-        $timeout = $this->timeout;
-        if ($timeout == 0) {
-            $timeout = ConfigManager::byKey('maxExecTimeCrontask');
-        }
-        return $timeout;
-    }
-
-    public function getDeamon()
-    {
-        return $this->deamon;
-    }
-
-    public function getDeamonSleepTime()
-    {
-        $deamonSleepTime = $this->deamonSleepTime;
-        if ($deamonSleepTime == 0) {
-            $deamonSleepTime = ConfigManager::byKey('deamonsSleepTime');
-        }
-        return $deamonSleepTime;
-    }
-
-    public function getOption()
-    {
-        return json_decode($this->option, true);
-    }
-
-    public function getOnce($defaultValue = 0)
-    {
-        if ($this->once == '' || !is_numeric($this->once)) {
-            return $defaultValue;
-        }
-        return $this->once;
-    }
-
-    /**
-     * Get the name of the SQL table where data is stored.
-     *
-     * @return string
-     */
-    public function getTableName()
-    {
-        return 'cron';
-    }
-
-
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**
@@ -197,39 +134,16 @@ class Cron implements EntityInterface
     }
 
     /**
-     *
-     * @param $_class
-     * @return $this
+     * @return int|mixed
+     * @throws \Exception
      */
-    public function setClass($_class)
+    public function getTimeout()
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->class, $_class);
-        $this->class = $_class;
-        return $this;
-    }
-
-    /**
-     *
-     * @param $_function
-     * @return $this
-     */
-    public function setFunction($_function)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->function, $_function);
-        $this->function = $_function;
-        return $this;
-    }
-
-    /**
-     *
-     * @param $_schedule
-     * @return $this
-     */
-    public function setSchedule($_schedule)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->schedule, $_schedule);
-        $this->schedule = $_schedule;
-        return $this;
+        $timeout = $this->timeout;
+        if ($timeout == 0) {
+            $timeout = ConfigManager::byKey('maxExecTimeCrontask');
+        }
+        return $timeout;
     }
 
     /**
@@ -245,6 +159,14 @@ class Cron implements EntityInterface
     }
 
     /**
+     * @return int
+     */
+    public function getDeamon()
+    {
+        return $this->deamon;
+    }
+
+    /**
      *
      * @param $_deamons
      * @return $this
@@ -254,6 +176,19 @@ class Cron implements EntityInterface
         $this->_changed = Utils::attrChanged($this->_changed, $this->deamon, $_deamons);
         $this->deamon = $_deamons;
         return $this;
+    }
+
+    /**
+     * @return int|mixed
+     * @throws \Exception
+     */
+    public function getDeamonSleepTime()
+    {
+        $deamonSleepTime = $this->deamonSleepTime;
+        if ($deamonSleepTime == 0) {
+            $deamonSleepTime = ConfigManager::byKey('deamonsSleepTime');
+        }
+        return $deamonSleepTime;
     }
 
     /**
@@ -269,16 +204,15 @@ class Cron implements EntityInterface
     }
 
     /**
-     *
-     * @param $_option
-     * @return $this
+     * @param int $defaultValue
+     * @return int
      */
-    public function setOption($_option)
+    public function getOnce($defaultValue = 0)
     {
-        $_option = json_encode($_option, JSON_UNESCAPED_UNICODE);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->option, $_option);
-        $this->option = $_option;
-        return $this;
+        if ($this->once == '' || !is_numeric($this->once)) {
+            return $defaultValue;
+        }
+        return $this->once;
     }
 
     /**
@@ -294,16 +228,13 @@ class Cron implements EntityInterface
     }
 
     /**
-     * Set task id
+     * Get the name of the SQL table where data is stored.
      *
-     * @param $_id
-     * @return $this Task object
+     * @return string
      */
-    public function setId($_id)
+    public function getTableName()
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
+        return 'cron';
     }
 
     /**
@@ -327,12 +258,148 @@ class Cron implements EntityInterface
     }
 
     /**
+     * @return string
+     */
+    public function getFunction()
+    {
+        return $this->function;
+    }
+
+    /**
+     *
+     * @param $_function
+     * @return $this
+     */
+    public function setFunction($_function)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->function, $_function);
+        $this->function = $_function;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSchedule()
+    {
+        return $this->schedule;
+    }
+
+    /**
+     *
+     * @param $_schedule
+     * @return $this
+     */
+    public function setSchedule($_schedule)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->schedule, $_schedule);
+        $this->schedule = $_schedule;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOption()
+    {
+        return json_decode($this->option, true);
+    }
+
+    /**
+     *
+     * @param $_option
+     * @return $this
+     */
+    public function setOption($_option)
+    {
+        $_option = json_encode($_option, JSON_UNESCAPED_UNICODE);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->option, $_option);
+        $this->option = $_option;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClass()
+    {
+        return $this->class;
+    }
+
+    /**
+     *
+     * @param $_class
+     * @return $this
+     */
+    public function setClass($_class)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->class, $_class);
+        $this->class = $_class;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set task id
+     *
+     * @param $_id
+     * @return $this Task object
+     */
+    public function setId($_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
+        $this->id = $_id;
+        return $this;
+    }
+
+    /**
      * Stop task after insert in database
      */
     public function postInsert()
     {
         $this->setState('stop');
         $this->setPID();
+    }
+
+    /**
+     * Set task state
+     *
+     * @param mixed $state State of the task
+     * @throws \Exception
+     */
+    public function setState($state)
+    {
+        $this->setCache('state', $state);
+    }
+
+    /**
+     * Store task data in cache
+     *
+     * @param mixed $cacheKey
+     * @param mixed $cacheValue
+     * @throws \Exception
+     */
+    public function setCache($cacheKey, $cacheValue = null)
+    {
+        CacheManager::set('cronCacheAttr' . $this->getId(), Utils::setJsonAttr(CacheManager::byKey('cronCacheAttr' . $this->getId())->getValue(), $cacheKey, $cacheValue));
+    }
+
+    /**
+     * Store PID in cache
+     *
+     * @param mixed $pid
+     * @throws \Exception
+     */
+    public function setPID($pid = null)
+    {
+        $this->setCache('pid', $pid);
     }
 
     /**
@@ -362,42 +429,6 @@ class Cron implements EntityInterface
     }
 
     /**
-     * Start cron task
-     */
-    public function start()
-    {
-        if (!$this->running()) {
-            $this->setState('starting');
-        } else {
-            $this->setState('run');
-        }
-    }
-
-    /**
-     * Launch cron (this method must be only call by jeeCron master)
-     *
-     * @param bool $noErrorReport
-     * @throws CoreException
-     */
-    public function run($noErrorReport = false)
-    {
-        $cmd = NEXTDOM_ROOT . '/src/Api/start_cron.php';
-        $cmd .= ' "cron_id=' . $this->getId() . '"';
-        if (!$this->running()) {
-            SystemHelper::php($cmd . ' >> ' . LogHelper::getPathToLog('cron_execution') . ' 2>&1 &');
-        } else {
-            if (!$noErrorReport) {
-                $this->halt();
-                if (!$this->running()) {
-                    exec($cmd . ' >> ' . LogHelper::getPathToLog('cron_execution') . ' 2>&1 &');
-                } else {
-                    throw new CoreException(__('Impossible d\'exécuter la tâche car elle est déjà en cours d\'exécution (') . ' : ' . $cmd);
-                }
-            }
-        }
-    }
-
-    /**
      * Check if this cron is currently running
      *
      * @return boolean
@@ -417,28 +448,41 @@ class Cron implements EntityInterface
     }
 
     /**
-     * Refresh DB state of this cron
+     * Get current state
      *
-     * @return boolean
+     * @return mixed Current state
      * @throws \Exception
      */
-    public function refresh(): bool
+    public function getState()
     {
-        if (($this->getState() == 'run' || $this->getState() == 'stoping') && !$this->running()) {
-            $this->setState('stop');
-            $this->setPID();
-        }
-        return true;
+        return $this->getCache('state', 'stop');
     }
 
     /**
-     * Stop task
+     * Get task data in cache
+     *
+     * @param string $cacheKey
+     * @param string $cacheValue
+     * @return mixed
+     * @throws \Exception
      */
-    public function stop()
+    public function getCache($cacheKey = '', $cacheValue = '')
     {
-        if ($this->running()) {
-            $this->setState('stoping');
-        }
+        $cache = CacheManager::byKey('cronCacheAttr' . $this->getId())->getValue();
+        return Utils::getJsonAttr($cache, $cacheKey, $cacheValue);
+    }
+
+    /**
+     * Get task PID
+     *
+     * @param mixed $defaultValue
+     *
+     * @return mixed Task PID
+     * @throws \Exception
+     */
+    public function getPID($defaultValue = null)
+    {
+        return $this->getCache('pid', $defaultValue);
     }
 
     /**
@@ -487,6 +531,67 @@ class Cron implements EntityInterface
     }
 
     /**
+     * Start cron task
+     */
+    public function start()
+    {
+        if (!$this->running()) {
+            $this->setState('starting');
+        } else {
+            $this->setState('run');
+        }
+    }
+
+    /**
+     * Launch cron (this method must be only call by jeeCron master)
+     *
+     * @param bool $noErrorReport
+     * @throws CoreException
+     */
+    public function run($noErrorReport = false)
+    {
+        $cmd = NEXTDOM_ROOT . '/src/Api/start_cron.php';
+        $cmd .= ' "cron_id=' . $this->getId() . '"';
+        if (!$this->running()) {
+            SystemHelper::php($cmd . ' >> ' . LogHelper::getPathToLog('cron_execution') . ' 2>&1 &');
+        } else {
+            if (!$noErrorReport) {
+                $this->halt();
+                if (!$this->running()) {
+                    exec($cmd . ' >> ' . LogHelper::getPathToLog('cron_execution') . ' 2>&1 &');
+                } else {
+                    throw new CoreException(__('Impossible d\'exécuter la tâche car elle est déjà en cours d\'exécution (') . ' : ' . $cmd);
+                }
+            }
+        }
+    }
+
+    /**
+     * Refresh DB state of this cron
+     *
+     * @return boolean
+     * @throws \Exception
+     */
+    public function refresh(): bool
+    {
+        if (($this->getState() == 'run' || $this->getState() == 'stoping') && !$this->running()) {
+            $this->setState('stop');
+            $this->setPID();
+        }
+        return true;
+    }
+
+    /**
+     * Stop task
+     */
+    public function stop()
+    {
+        if ($this->running()) {
+            $this->setState('stoping');
+        }
+    }
+
+    /**
      * Check if it's time to launch cron
      *
      * @return boolean
@@ -524,6 +629,17 @@ class Cron implements EntityInterface
             LogHelper::add('cron', 'debug', 'Error on isDue : ' . $e->getMessage() . ', cron : ' . $this->getSchedule());
         }
         return false;
+    }
+
+    /**
+     * Get last task run
+     *
+     * @return mixed Last task run
+     * @throws \Exception
+     */
+    public function getLastRun()
+    {
+        return $this->getCache('lastRun');
     }
 
     /**
@@ -571,41 +687,6 @@ class Cron implements EntityInterface
     }
 
     /**
-     * Get last task run
-     *
-     * @return mixed Last task run
-     * @throws \Exception
-     */
-    public function getLastRun()
-    {
-        return $this->getCache('lastRun');
-    }
-
-    /**
-     * Get current state
-     *
-     * @return mixed Current state
-     * @throws \Exception
-     */
-    public function getState()
-    {
-        return $this->getCache('state', 'stop');
-    }
-
-    /**
-     * Get task PID
-     *
-     * @param mixed $defaultValue
-     *
-     * @return mixed Task PID
-     * @throws \Exception
-     */
-    public function getPID($defaultValue = null)
-    {
-        return $this->getCache('pid', $defaultValue);
-    }
-
-    /**
      * Set last task run
      *
      * @param mixed $lastRun Last task run
@@ -617,58 +698,17 @@ class Cron implements EntityInterface
     }
 
     /**
-     * Set task state
-     *
-     * @param mixed $state State of the task
-     * @throws \Exception
+     * @return bool
      */
-    public function setState($state)
-    {
-        $this->setCache('state', $state);
-    }
-
-    /**
-     * Store PID in cache
-     *
-     * @param mixed $pid
-     * @throws \Exception
-     */
-    public function setPID($pid = null)
-    {
-        $this->setCache('pid', $pid);
-    }
-
-    /**
-     * Get task data in cache
-     *
-     * @param string $cacheKey
-     * @param string $cacheValue
-     * @return mixed
-     * @throws \Exception
-     */
-    public function getCache($cacheKey = '', $cacheValue = '')
-    {
-        $cache = CacheManager::byKey('cronCacheAttr' . $this->getId())->getValue();
-        return Utils::getJsonAttr($cache, $cacheKey, $cacheValue);
-    }
-
-    /**
-     * Store task data in cache
-     *
-     * @param mixed $cacheKey
-     * @param mixed $cacheValue
-     * @throws \Exception
-     */
-    public function setCache($cacheKey, $cacheValue = null)
-    {
-        CacheManager::set('cronCacheAttr' . $this->getId(), Utils::setJsonAttr(CacheManager::byKey('cronCacheAttr' . $this->getId())->getValue(), $cacheKey, $cacheValue));
-    }
-
     public function getChanged()
     {
         return $this->_changed;
     }
 
+    /**
+     * @param $_changed
+     * @return $this
+     */
     public function setChanged($_changed)
     {
         $this->_changed = $_changed;

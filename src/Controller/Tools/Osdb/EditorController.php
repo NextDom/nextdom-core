@@ -22,10 +22,14 @@
 
 namespace NextDom\Controller\Tools\Osdb;
 
+use NextDom\Controller\BaseController;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\Render;
-use NextDom\Controller\BaseController;
 
+/**
+ * Class EditorController
+ * @package NextDom\Controller\Tools\Osdb
+ */
 class EditorController extends BaseController
 {
     /**
@@ -48,7 +52,6 @@ class EditorController extends BaseController
             $pageData['editorFolders'][] = $folder;
         }
         $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/osdb/editor.js';
-
 
         return Render::getInstance()->get('/desktop/tools/osdb/editor.html.twig', $pageData);
     }

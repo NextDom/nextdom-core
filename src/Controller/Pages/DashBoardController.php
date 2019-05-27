@@ -22,6 +22,7 @@
 
 namespace NextDom\Controller\Pages;
 
+use NextDom\Controller\BaseController;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
@@ -30,7 +31,6 @@ use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\ObjectManager;
 use NextDom\Managers\UserManager;
 use NextDom\Model\Entity\JeeObject;
-use NextDom\Controller\BaseController;
 
 /**
  * Description of toto
@@ -128,8 +128,7 @@ class DashBoardController extends BaseController
             $layerResult = [];
             if ($selectedLayerObject->getFather() === null) {
                 $layer = ObjectManager::getRootObjects(true);
-            }
-            else {
+            } else {
                 $layer = $selectedLayerObject->getFather()->getChild();
             }
             foreach ($layer as $item) {

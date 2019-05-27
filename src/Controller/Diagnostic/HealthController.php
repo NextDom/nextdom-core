@@ -22,12 +22,16 @@
 
 namespace NextDom\Controller\Diagnostic;
 
+use NextDom\Controller\BaseController;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\PluginManager;
-use NextDom\Controller\BaseController;
 
+/**
+ * Class HealthController
+ * @package NextDom\Controller\Diagnostic
+ */
 class HealthController extends BaseController
 {
     /**

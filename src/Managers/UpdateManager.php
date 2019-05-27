@@ -39,6 +39,10 @@ use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Model\Entity\Update;
 
+/**
+ * Class UpdateManager
+ * @package NextDom\Managers
+ */
 class UpdateManager
 {
     const DB_CLASS_NAME = 'update';
@@ -101,6 +105,111 @@ class UpdateManager
             }
         }
         ConfigManager::save('update::lastCheck', date('Y-m-d H:i:s'));
+    }
+
+    /**
+     * Search new updates
+     * @throws \Exception
+     */
+    public static function findNewUpdateObject()
+    {
+        foreach (PluginManager::listPlugin() as $plugin) {
+            $pluginId = $plugin->getId();
+            $update = self::byTypeAndLogicalId('plugin', $pluginId);
+            if (!is_object($update)) {
+                $update = (new Update())
+                    ->setLogicalId($pluginId)
+                    ->setType('plugin')
+                    ->setLocalVersion(date('Y-m-d H:i:s'));
+                $update->save();
+            }
+            $find = array();
+            if (method_exists($pluginId, 'listMarketObject')) {
+                $pluginIdListMarketObject = $pluginId::listMarketObject();
+                foreach ($pluginIdListMarketObject as $logical_id) {
+                    $find[$logical_id] = true;
+                    $update = self::byTypeAndLogicalId($pluginId, $logical_id);
+                    if (!is_object($update)) {
+                        $update = (new Update())
+                            ->setLogicalId($logical_id)
+                            ->setType($pluginId)
+                            ->setLocalVersion(date('Y-m-d H:i:s'));
+                        $update->save();
+                    }
+                }
+                $byTypePluginId = self::byType($pluginId);
+                foreach ($byTypePluginId as $update) {
+                    if (!isset($find[$update->getLogicalId()])) {
+                        $update->remove();
+                    }
+                }
+            } else {
+                $values = array(
+                    'type' => $pluginId,
+                );
+                $sql = 'DELETE FROM `' . self::DB_CLASS_NAME . '`
+                        WHERE type=:type';
+                DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW);
+            }
+        }
+    }
+
+    /**
+     * Get updates from their type and logicalId
+     *
+     * @param $type
+     * @param $logicalId
+     * @return array|mixed|null
+     * @throws \Exception
+     */
+    public static function byTypeAndLogicalId($type, $logicalId)
+    {
+        $values = array(
+            'logicalId' => $logicalId,
+            'type' => $type,
+        );
+        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
+                FROM `' . self::DB_CLASS_NAME . '`
+                WHERE logicalId=:logicalId
+                AND type=:type';
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+    }
+
+    /**
+     * Obtenir les mises à jour à partir de leur type
+     *
+     * @param $type
+     * @return array|mixed|null
+     * @throws \Exception
+     */
+    public static function byType($type)
+    {
+        $values = array(
+            'type' => $type,
+        );
+        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
+                FROM `' . self::DB_CLASS_NAME . '`
+                WHERE type=:type';
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+    }
+
+    /**
+     * Get all the updates.
+     * @param string $filter
+     * @return array|null List of all objects
+     * @throws \Exception
+     */
+    public static function all($filter = '')
+    {
+        $values = array();
+        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
+                FROM `' . self::DB_CLASS_NAME . '` ';
+        if ($filter != '') {
+            $values['type'] = $filter;
+            $sql .= 'WHERE `type`=:type ';
+        }
+        $sql .= 'ORDER BY FIELD( `status`, "update","ok","depreciated") ASC,FIELD( `type`,"plugin","core") DESC, `name` ASC';
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -236,64 +345,6 @@ class UpdateManager
     }
 
     /**
-     * Obtenir les mises à jour à partir de leur type
-     *
-     * @param $type
-     * @return array|mixed|null
-     * @throws \Exception
-     */
-    public static function byType($type)
-    {
-        $values = array(
-            'type' => $type,
-        );
-        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
-                FROM `' . self::DB_CLASS_NAME . '`
-                WHERE type=:type';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
-    }
-
-    /**
-     * Get updates from their type and logicalId
-     *
-     * @param $type
-     * @param $logicalId
-     * @return array|mixed|null
-     * @throws \Exception
-     */
-    public static function byTypeAndLogicalId($type, $logicalId)
-    {
-        $values = array(
-            'logicalId' => $logicalId,
-            'type' => $type,
-        );
-        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
-                FROM `' . self::DB_CLASS_NAME . '`
-                WHERE logicalId=:logicalId
-                AND type=:type';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
-    }
-
-    /**
-     * Get all the updates.
-     * @param string $filter
-     * @return array|null List of all objects
-     * @throws \Exception
-     */
-    public static function all($filter = '')
-    {
-        $values = array();
-        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
-                FROM `' . self::DB_CLASS_NAME . '` ';
-        if ($filter != '') {
-            $values['type'] = $filter;
-            $sql .= 'WHERE `type`=:type ';
-        }
-        $sql .= 'ORDER BY FIELD( `status`, "update","ok","depreciated") ASC,FIELD( `type`,"plugin","core") DESC, `name` ASC';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
-    }
-
-    /**
      * Get the number of pending updates
      * @return mixed
      * @throws \Exception
@@ -306,59 +357,12 @@ class UpdateManager
                FROM `' . self::DB_CLASS_NAME . '`
                WHERE status=:status';
         if ($filter != '') {
-           $values['type'] = $filter;
-           $sql .= ' AND type=:type';
+            $values['type'] = $filter;
+            $sql .= ' AND type=:type';
         }
 
         $result = \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW);
         return $result['count(*)'];
-    }
-
-    /**
-     * Search new updates
-     * @throws \Exception
-     */
-    public static function findNewUpdateObject()
-    {
-        foreach (PluginManager::listPlugin() as $plugin) {
-            $pluginId = $plugin->getId();
-            $update = self::byTypeAndLogicalId('plugin', $pluginId);
-            if (!is_object($update)) {
-                $update = (new Update())
-                    ->setLogicalId($pluginId)
-                    ->setType('plugin')
-                    ->setLocalVersion(date('Y-m-d H:i:s'));
-                $update->save();
-            }
-            $find = array();
-            if (method_exists($pluginId, 'listMarketObject')) {
-                $pluginIdListMarketObject = $pluginId::listMarketObject();
-                foreach ($pluginIdListMarketObject as $logical_id) {
-                    $find[$logical_id] = true;
-                    $update = self::byTypeAndLogicalId($pluginId, $logical_id);
-                    if (!is_object($update)) {
-                        $update = (new Update())
-                            ->setLogicalId($logical_id)
-                            ->setType($pluginId)
-                            ->setLocalVersion(date('Y-m-d H:i:s'));
-                        $update->save();
-                    }
-                }
-                $byTypePluginId = self::byType($pluginId);
-                foreach ($byTypePluginId as $update) {
-                    if (!isset($find[$update->getLogicalId()])) {
-                        $update->remove();
-                    }
-                }
-            } else {
-                $values = array(
-                    'type' => $pluginId,
-                );
-                $sql = 'DELETE FROM `' . self::DB_CLASS_NAME . '`
-                        WHERE type=:type';
-                DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW);
-            }
-        }
     }
 
     /**

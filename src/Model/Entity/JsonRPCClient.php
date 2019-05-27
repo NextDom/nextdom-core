@@ -19,6 +19,10 @@ namespace NextDom\Model\Entity;
 
 use CURLFile;
 
+/**
+ * Class JsonRPCClient
+ * @package NextDom\Model\Entity
+ */
 class JsonRPCClient
 {
     protected $errorCode = 9999;
@@ -109,6 +113,13 @@ class JsonRPCClient
         }
     }
 
+    /**
+     * @param $_request
+     * @param int $_timeout
+     * @param null $_file
+     * @param int $_maxRetry
+     * @return mixed|null
+     */
     protected function send($_request, $_timeout = 15, $_file = null, $_maxRetry = 2)
     {
         if ($_file !== null) {
@@ -173,6 +184,81 @@ class JsonRPCClient
 
     /*     * ********Getteur Setteur******************* */
 
+    /**
+     * @return string
+     */
+    public function getCertificate_path()
+    {
+        return $this->certificate_path;
+    }
+
+    /**
+     * @param $certificate_path
+     * @return $this
+     */
+    public function setCertificate_path($certificate_path)
+    {
+        $this->certificate_path = $certificate_path;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getNoSslCheck()
+    {
+        return $this->noSslCheck;
+    }
+
+    /**
+     * @param $noSslCHeck
+     * @return $this
+     */
+    public function setNoSslCheck($noSslCHeck)
+    {
+        $this->noSslCheck = $noSslCHeck;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCb_class()
+    {
+        return $this->cb_class;
+    }
+
+    /**
+     * @param $cb_class
+     * @return $this
+     */
+    public function setCb_class($cb_class)
+    {
+        $this->cb_class = $cb_class;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCb_function()
+    {
+        return $this->cb_function;
+    }
+
+    /**
+     * @param $cb_function
+     * @return $this
+     */
+    public function setCb_function($cb_function)
+    {
+        $this->cb_function = $cb_function;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
     public function getError()
     {
         return $this->error;
@@ -188,63 +274,29 @@ class JsonRPCClient
         return $this->rawResult;
     }
 
+    /**
+     * @return int
+     */
     public function getErrorCode()
     {
         return $this->errorCode;
     }
 
+    /**
+     * @return string
+     */
     public function getErrorMessage()
     {
         return $this->errorMessage;
     }
 
-    public function getCb_function()
-    {
-        return $this->cb_function;
-    }
-
-    public function getCb_class()
-    {
-        return $this->cb_class;
-    }
-
-    public function setCb_function($cb_function)
-    {
-        $this->cb_function = $cb_function;
-        return $this;
-    }
-
-    public function setCb_class($cb_class)
-    {
-        $this->cb_class = $cb_class;
-        return $this;
-    }
-
-    public function setCertificate_path($certificate_path)
-    {
-        $this->certificate_path = $certificate_path;
-        return $this;
-    }
-
-    public function getCertificate_path()
-    {
-        return $this->certificate_path;
-    }
-
+    /**
+     * @param $noSslCheck
+     * @return $this
+     */
     public function setDisable_ssl_verifiy($noSslCheck)
     {
         $this->noSslCheck = $noSslCheck;
-        return $this;
-    }
-
-    public function getNoSslCheck()
-    {
-        return $this->noSslCheck;
-    }
-
-    public function setNoSslCheck($noSslCHeck)
-    {
-        $this->noSslCheck = $noSslCHeck;
         return $this;
     }
 }

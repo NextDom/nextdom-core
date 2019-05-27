@@ -24,6 +24,10 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\Render;
 
+/**
+ * Class RebootController
+ * @package NextDom\Controller
+ */
 class RebootController extends BaseController
 {
 

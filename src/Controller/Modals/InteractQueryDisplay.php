@@ -27,6 +27,10 @@ use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\InteractQueryManager;
 
+/**
+ * Class InteractQueryDisplay
+ * @package NextDom\Controller\Modals
+ */
 class InteractQueryDisplay extends BaseAbstractModal
 {
     /**

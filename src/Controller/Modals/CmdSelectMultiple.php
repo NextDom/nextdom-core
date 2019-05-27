@@ -27,6 +27,10 @@ use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
 
+/**
+ * Class CmdSelectMultiple
+ * @package NextDom\Controller\Modals
+ */
 class CmdSelectMultiple extends BaseAbstractModal
 {
     /**

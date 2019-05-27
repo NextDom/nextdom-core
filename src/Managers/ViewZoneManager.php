@@ -36,12 +36,21 @@ namespace NextDom\Managers;
 use NextDom\Helpers\DBHelper;
 use NextDom\Model\Entity\ViewZone;
 
+/**
+ * Class ViewZoneManager
+ * @package NextDom\Managers
+ */
 class ViewZoneManager
 {
     const DB_CLASS_NAME = '`viewZone`';
     const CLASS_NAME = 'viewZone';
 
 
+    /**
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function all()
     {
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
@@ -65,6 +74,12 @@ class ViewZoneManager
         return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_view_id
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byView($_view_id)
     {
         $value = array(
@@ -76,6 +91,11 @@ class ViewZoneManager
         return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_view_id
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     */
     public static function removeByViewId($_view_id)
     {
         $value = array(

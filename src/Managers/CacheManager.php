@@ -41,24 +41,13 @@ use NextDom\Model\Entity\Cache;
 
 require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
 
+/**
+ * Class CacheManager
+ * @package NextDom\Managers
+ */
 class CacheManager
 {
     private static $cacheSystem = null;
-
-    /**
-     * Get the folder where the cache is stored
-     *
-     * @return string Cache folder
-     * @throws \Exception
-     */
-    public static function getFolder(): string
-    {
-        $return = NextDomHelper::getTmpFolder('cache');
-        if (!file_exists($return)) {
-            mkdir($return, 0775);
-        }
-        return $return;
-    }
 
     /**
      * Store object in cache
@@ -83,20 +72,6 @@ class CacheManager
             $cacheItem->setOptionsFromJson($options);
         }
         return $cacheItem->save();
-    }
-
-    /**
-     * Delete stored object in cache
-     *
-     * @param $key
-     * @throws \Exception
-     */
-    public static function delete($key)
-    {
-        $cacheItem = self::byKey($key);
-        if (is_object($cacheItem)) {
-            $cacheItem->remove();
-        }
     }
 
     /**
@@ -191,34 +166,18 @@ class CacheManager
     }
 
     /**
-     * Get stored object by key
+     * Get the folder where the cache is stored
      *
-     * @param string $key Key
-     * @return mixed Stored object or null if not exists
+     * @return string Cache folder
      * @throws \Exception
      */
-    public static function byKey($key)
+    public static function getFolder(): string
     {
-        $cache = self::getCache()->fetch($key);
-        if (!is_object($cache)) {
-            $cache = new Cache();
-            $cache->setKey($key)
-                ->setDatetime(date('Y-m-d H:i:s'));
+        $return = NextDomHelper::getTmpFolder('cache');
+        if (!file_exists($return)) {
+            mkdir($return, 0775);
         }
-        return $cache;
-    }
-
-    /**
-     * Test if object exists
-     *
-     * @param string $key Key
-     *
-     * @return bool True if object exists
-     * @throws \Exception
-     */
-    public static function exists($key)
-    {
-        return is_object(self::getCache()->fetch($key));
+        return $return;
     }
 
     /**
@@ -235,6 +194,19 @@ class CacheManager
     {
         trigger_error('This method is deprecated', E_USER_DEPRECATED);
         return self::exists($key);
+    }
+
+    /**
+     * Test if object exists
+     *
+     * @param string $key Key
+     *
+     * @return bool True if object exists
+     * @throws \Exception
+     */
+    public static function exists($key)
+    {
+        return is_object(self::getCache()->fetch($key));
     }
 
     /**
@@ -255,11 +227,6 @@ class CacheManager
         return array();
     }
 
-    public static function getArchivePath()
-    {
-        return NEXTDOM_DATA . '/cache.tar.gz';
-    }
-
     /**
      * Persist cache system
      */
@@ -277,10 +244,10 @@ class CacheManager
         }
         try {
             $cacheFile = self::getArchivePath();
-            $rmCmd     = sprintf("rm -rf %s", $cacheFile);
-            $tarCmd    = sprintf("cd %s; tar cfz %s *  2>&1 > /dev/null", $cacheDir, $cacheFile);
-            $chmodCmd  = sprintf("chmod 664 %s", $cacheFile);
-            $chownCmd  = sprintf("chown %s:%s %s", SystemHelper::getWWWUid(), SystemHelper::getWWWGid(), $cacheFile);
+            $rmCmd = sprintf("rm -rf %s", $cacheFile);
+            $tarCmd = sprintf("cd %s; tar cfz %s *  2>&1 > /dev/null", $cacheDir, $cacheFile);
+            $chmodCmd = sprintf("chmod 664 %s", $cacheFile);
+            $chownCmd = sprintf("chown %s:%s %s", SystemHelper::getWWWUid(), SystemHelper::getWWWGid(), $cacheFile);
 
             \com_shell::execute($rmCmd);
             \com_shell::execute($tarCmd);
@@ -288,6 +255,14 @@ class CacheManager
             \com_shell::execute($chownCmd);
         } catch (\Exception $e) {
         }
+    }
+
+    /**
+     * @return string
+     */
+    public static function getArchivePath()
+    {
+        return NEXTDOM_DATA . '/cache.tar.gz';
     }
 
     /**
@@ -476,5 +451,37 @@ class CacheManager
                 }
             }
         }
+    }
+
+    /**
+     * Delete stored object in cache
+     *
+     * @param $key
+     * @throws \Exception
+     */
+    public static function delete($key)
+    {
+        $cacheItem = self::byKey($key);
+        if (is_object($cacheItem)) {
+            $cacheItem->remove();
+        }
+    }
+
+    /**
+     * Get stored object by key
+     *
+     * @param string $key Key
+     * @return mixed Stored object or null if not exists
+     * @throws \Exception
+     */
+    public static function byKey($key)
+    {
+        $cache = self::getCache()->fetch($key);
+        if (!is_object($cache)) {
+            $cache = new Cache();
+            $cache->setKey($key)
+                ->setDatetime(date('Y-m-d H:i:s'));
+        }
+        return $cache;
     }
 }

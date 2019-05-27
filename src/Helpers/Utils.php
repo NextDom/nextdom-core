@@ -38,19 +38,54 @@ use NextDom\Exceptions\CoreException;
 use NextDom\Managers\UserManager;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
+/**
+ * Class Utils
+ * @package NextDom\Helpers
+ */
 class Utils
 {
-    private static $properties = array();
+    /**
+     * @var array
+     */
+    private static $properties = [];
 
     /**
      * Add javascript variable in HTML code
      *
      * @param string $varName Name of javascript variable
-     * @param mixed $varValue Value of the javascript variable
+     * @param string $varValue Value of the javascript variable
      */
     public static function sendVarToJs(string $varName, $varValue)
     {
         echo "<script>" . self::getVarInJs($varName, $varValue) . "</script>\n";
+    }
+
+    /**
+     * Convert variable in javascript format
+     *
+     * @param string $varName Nom de la variable
+     * @param mixed $varValue Valeur
+     *
+     * @return string Déclaration javascript
+     */
+    private static function getVarInJs(string $varName, $varValue): string
+    {
+        if (is_array($varValue)) {
+            $jsVarValue = self::getArrayToJQueryJson($varValue);
+        } else {
+            $jsVarValue = '"' . $varValue . '"';
+        }
+        return "var $varName = $jsVarValue;";
+    }
+
+    /**
+     * Encode at JSON format for javascript
+     * @param mixed $varToTransform Variable to transform
+     * @return string Encoded string for javascript
+     */
+    public static function getArrayToJQueryJson($varToTransform): string
+    {
+        return 'jQuery.parseJSON("' . addslashes(json_encode($varToTransform, JSON_UNESCAPED_UNICODE)) . '")';
     }
 
     /**
@@ -77,35 +112,6 @@ class Utils
         }
         $result .= "</script>\n";
         return $result;
-    }
-
-    /**
-     * Convert variable in javascript format
-     *
-     * @param string $varName Nom de la variable
-     * @param mixed $varValue Valeur
-     *
-     * @return string Déclaration javascript
-     */
-    private static function getVarInJs(string $varName, $varValue): string
-    {
-        $jsVarValue = '';
-        if (is_array($varValue)) {
-            $jsVarValue = self::getArrayToJQueryJson($varValue);
-        } else {
-            $jsVarValue = '"' . $varValue . '"';
-        }
-        return "var $varName = $jsVarValue;";
-    }
-
-    /**
-     * Encode at JSON format for javascript
-     * @param mixed $varToTransform Variable to transform
-     * @return string Encoded string for javascript
-     */
-    public static function getArrayToJQueryJson($varToTransform): string
-    {
-        return 'jQuery.parseJSON("' . addslashes(json_encode($varToTransform, JSON_UNESCAPED_UNICODE)) . '")';
     }
 
     /**
@@ -146,56 +152,6 @@ class Utils
     }
 
     /**
-     * Transforme une expression lisible en une expression analysable
-     *
-     * @param string $expression Expression lisible
-     *
-     * @return string Expression transformée
-     */
-    public static function transformExpressionForEvaluation($expression)
-    {
-
-        $result = $expression;
-        $replaceMap = [
-            '==' => '==',
-            '=' => '==',
-            '>=' => '>=',
-            '<=' => '<=',
-            '<==' => '<=',
-            '>==' => '>=',
-            '===' => '==',
-            '!==' => '!=',
-            '!=' => '!=',
-            'OR' => '||',
-            'OU' => '||',
-            'or' => '||',
-            'ou' => '||',
-            '||' => '||',
-            'AND' => '&&',
-            'ET' => '&&',
-            'and' => '&&',
-            'et' => '&&',
-            '&&' => '&&',
-            '<' => '<',
-            '>' => '>',
-            '/' => '/',
-            '*' => '*',
-            '+' => '+',
-            '-' => '-',
-            '' => ''
-        ];
-        preg_match_all('/(\w+|-?(?:\d+\\.\d+|\\.?\d+)|".*?"|\'.*?\'|\#.*?\#|\(|,|\)|!) *([!*+&|\\-\\/>=<]+|and|or|ou|et)* */i', $expression, $pregOutput);
-        if (count($pregOutput) > 2) {
-            $result = '';
-            $exprIndex = 0;
-            foreach ($pregOutput[1] as $expr) {
-                $result .= $expr . $replaceMap[$pregOutput[2][$exprIndex++]];
-            }
-        }
-        return $result;
-    }
-
-    /**
      * @param $_array
      * @param $_subject
      * @return mixed
@@ -205,6 +161,12 @@ class Utils
         return str_replace(array_keys($_array), array_values($_array), $_subject);
     }
 
+    /**
+     * @param $contents
+     * @param $width
+     * @param $height
+     * @return bool|false|string
+     */
     public static function resizeImage($contents, $width, $height)
     {
 // Calcul des nouvelles dimensions
@@ -267,7 +229,6 @@ class Utils
      */
     public static function connectedToDatabase()
     {
-        require_once NEXTDOM_ROOT . '/src/Helpers/DBHelper.php';
         return is_object(DBHelper::getConnection());
     }
 
@@ -276,7 +237,7 @@ class Utils
      * @return string
      * @throws \Exception
      */
-    public static function displayException($e)
+    public static function displayException($e): string
     {
         $message = '<span id="span_errorMessage">' . $e->getMessage() . '</span>';
         if (DEBUG) {
@@ -291,7 +252,7 @@ class Utils
      * @return string
      * @throws \Exception
      */
-    public static function displaySimpleException($errorMessage)
+    public static function displaySimpleException($errorMessage): string
     {
         return '<span id="span_errorMessage">' . $errorMessage . '</span>';
     }
@@ -334,6 +295,20 @@ class Utils
 
         }
         return ($path{0} == '/' ? '/' : '') . join('/', $out);
+    }
+
+    /**
+     * @param     $pattern
+     * @param int $flags
+     * @return array|false
+     */
+    public static function globBrace($pattern, $flags = 0)
+    {
+        if (defined("GLOB_BRACE")) {
+            return glob($pattern, $flags + GLOB_BRACE);
+        } else {
+            return self::polyfillGlobBrace($pattern, $flags);
+        }
     }
 
     /**
@@ -421,49 +396,12 @@ class Utils
     }
 
     /**
-     * @param     $pattern
-     * @param int $flags
-     * @return array|false
-     */
-    public static function globBrace($pattern, $flags = 0)
-    {
-        if (defined("GLOB_BRACE")) {
-            return glob($pattern, $flags + GLOB_BRACE);
-        } else {
-            return self::polyfillGlobBrace($pattern, $flags);
-        }
-    }
-
-    /**
      * @param $_string
      * @return string
      */
     public static function removeCR($_string)
     {
         return trim(str_replace(array("\n", "\r\n", "\r", "\n\r"), '', $_string));
-    }
-
-    /**
-     * @param      $_string
-     * @param null $_default
-     * @return bool|mixed|null
-     */
-    public static function isJson($_string, $_default = null)
-    {
-        if ($_string === null) {
-            return $_default;
-        }
-        if ($_default !== null) {
-            if (!is_string($_string)) {
-                return $_default;
-            }
-            $return = json_decode($_string, true, 512, JSON_BIGINT_AS_STRING);
-            if (!is_array($return)) {
-                return $_default;
-            }
-            return $return;
-        }
-        return ((is_string($_string) && is_array(json_decode($_string, true, 512, JSON_BIGINT_AS_STRING)))) ? true : false;
     }
 
     /**
@@ -491,7 +429,7 @@ class Utils
      * @param $size
      * @return string
      */
-    public static function sizeFormat($size)
+    public static function sizeFormat($size): string
     {
         $mod = 1024;
         $units = explode(' ', 'B KB MB GB TB PB');
@@ -547,9 +485,58 @@ class Utils
     }
 
     /**
-     * @param string $_string
+     * Transforme une expression lisible en une expression analysable
      *
-     * @return string
+     * @param string $expression Expression lisible
+     *
+     * @return string Expression transformée
+     */
+    public static function transformExpressionForEvaluation($expression)
+    {
+
+        $result = $expression;
+        $replaceMap = [
+            '==' => '==',
+            '=' => '==',
+            '>=' => '>=',
+            '<=' => '<=',
+            '<==' => '<=',
+            '>==' => '>=',
+            '===' => '==',
+            '!==' => '!=',
+            '!=' => '!=',
+            'OR' => '||',
+            'OU' => '||',
+            'or' => '||',
+            'ou' => '||',
+            '||' => '||',
+            'AND' => '&&',
+            'ET' => '&&',
+            'and' => '&&',
+            'et' => '&&',
+            '&&' => '&&',
+            '<' => '<',
+            '>' => '>',
+            '/' => '/',
+            '*' => '*',
+            '+' => '+',
+            '-' => '-',
+            '' => ''
+        ];
+        preg_match_all('/(\w+|-?(?:\d+\\.\d+|\\.?\d+)|".*?"|\'.*?\'|\#.*?\#|\(|,|\)|!) *([!*+&|\\-\\/>=<]+|and|or|ou|et)* */i', $expression, $pregOutput);
+        if (count($pregOutput) > 2) {
+            $result = '';
+            $exprIndex = 0;
+            foreach ($pregOutput[1] as $expr) {
+                $result .= $expr . $replaceMap[$pregOutput[2][$exprIndex++]];
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * @param $_string
+     * @return mixed|null
      */
     public static function secureXSS($_string)
     {
@@ -685,7 +672,7 @@ class Utils
      * @param $_string
      * @return array
      */
-    public static function arg2array($_string)
+    public static function arg2array($_string): array
     {
         $return = array();
         $re = '/[\/-]?(([a-zA-Z0-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœ_#]+)(?:[=:]("[^"]+"|[^\s"]+))?)(?:\s+|$)/';
@@ -703,7 +690,7 @@ class Utils
      * @param $string
      * @return string
      */
-    public static function strToHex($string)
+    public static function strToHex($string): string
     {
         $hex = '';
         $calculateStrLen = strlen($string);
@@ -738,7 +725,7 @@ class Utils
      * @param $_pathimg
      * @return string
      */
-    public static function getDominantColor($_pathimg)
+    public static function getDominantColor($_pathimg): string
     {
         $rTotal = 0;
         $gTotal = 0;
@@ -766,7 +753,7 @@ class Utils
      * @param $_string
      * @return string
      */
-    public static function sha512($_string)
+    public static function sha512($_string): string
     {
         return hash('sha512', $_string);
     }
@@ -775,7 +762,7 @@ class Utils
      * @param $_icon
      * @return array
      */
-    public static function findCodeIcon($_icon)
+    public static function findCodeIcon($_icon): array
     {
         $icon = trim(str_replace(array('fa ', 'icon ', '></i>', '<i', 'class="', '"'), '', trim($_icon)));
         $re = '/.' . $icon . ':.*\n.*content:.*"(.*?)";/m';
@@ -795,7 +782,7 @@ class Utils
                 }
             }
         }
-        return array('icon' => '', 'fontfamily' => '');
+        return ['icon' => '', 'fontfamily' => ''];
     }
 
     /**
@@ -842,7 +829,7 @@ class Utils
      * @param $_words
      * @return bool
      */
-    public static function strContainsOneOf($_string, $_words)
+    public static function strContainsOneOf($_string, $_words): bool
     {
         foreach ($_words as $word) {
             if (strpos($_string, $word) !== false) {
@@ -938,42 +925,26 @@ class Utils
     }
 
     /**
-     * @param $_object
-     * @param $_data
-     * @throws \ReflectionException
+     * @param      $_string
+     * @param null $_default
+     * @return bool|mixed|null
      */
-    public static function a2o(&$_object, $_data)
+    public static function isJson($_string, $_default = null)
     {
-        if (is_array($_data)) {
-            foreach ($_data as $key => $value) {
-                $method = 'set' . ucfirst($key);
-                if (method_exists($_object, $method)) {
-                    $function = new \ReflectionMethod($_object, $method);
-                    $value = Utils::isJson($value, $value);
-                    if (is_array($value)) {
-                        if ($function->getNumberOfRequiredParameters() == 2) {
-                            foreach ($value as $arrayKey => $arrayValue) {
-                                if (is_array($arrayValue)) {
-                                    if ($function->getNumberOfRequiredParameters() == 3) {
-                                        foreach ($arrayValue as $arrayArraykey => $arrayArrayvalue) {
-                                            $_object->$method($arrayKey, $arrayArraykey, $arrayArrayvalue);
-                                        }
-                                        continue;
-                                    }
-                                }
-                                $_object->$method($arrayKey, $arrayValue);
-                            }
-                        } else {
-                            $_object->$method(json_encode($value, JSON_UNESCAPED_UNICODE));
-                        }
-                    } else {
-                        if ($function->getNumberOfRequiredParameters() < 2) {
-                            $_object->$method($value);
-                        }
-                    }
-                }
-            }
+        if ($_string === null) {
+            return $_default;
         }
+        if ($_default !== null) {
+            if (!is_string($_string)) {
+                return $_default;
+            }
+            $return = json_decode($_string, true, 512, JSON_BIGINT_AS_STRING);
+            if (!is_array($return)) {
+                return $_default;
+            }
+            return $return;
+        }
+        return ((is_string($_string) && is_array(json_decode($_string, true, 512, JSON_BIGINT_AS_STRING)))) ? true : false;
     }
 
     /**
@@ -1012,6 +983,45 @@ class Utils
         foreach ($_dbList as $dbObject) {
             if (!isset($enableList[$dbObject->getId()])) {
                 $dbObject->remove();
+            }
+        }
+    }
+
+    /**
+     * @param $_object
+     * @param $_data
+     * @throws \ReflectionException
+     */
+    public static function a2o(&$_object, $_data)
+    {
+        if (is_array($_data)) {
+            foreach ($_data as $key => $value) {
+                $method = 'set' . ucfirst($key);
+                if (method_exists($_object, $method)) {
+                    $function = new \ReflectionMethod($_object, $method);
+                    $value = Utils::isJson($value, $value);
+                    if (is_array($value)) {
+                        if ($function->getNumberOfRequiredParameters() == 2) {
+                            foreach ($value as $arrayKey => $arrayValue) {
+                                if (is_array($arrayValue)) {
+                                    if ($function->getNumberOfRequiredParameters() == 3) {
+                                        foreach ($arrayValue as $arrayArraykey => $arrayArrayvalue) {
+                                            $_object->$method($arrayKey, $arrayArraykey, $arrayArrayvalue);
+                                        }
+                                        continue;
+                                    }
+                                }
+                                $_object->$method($arrayKey, $arrayValue);
+                            }
+                        } else {
+                            $_object->$method(json_encode($value, JSON_UNESCAPED_UNICODE));
+                        }
+                    } else {
+                        if ($function->getNumberOfRequiredParameters() < 2) {
+                            $_object->$method($value);
+                        }
+                    }
+                }
             }
         }
     }
@@ -1105,7 +1115,8 @@ class Utils
      * @param array $argv input parameters of form "<name>=<value>"
      * @return array parsed parameters of form "<name>" => "<value>"
      */
-    public static function parseArgs($argv) {
+    public static function parseArgs($argv)
+    {
         $args = array();
         if (isset($argv)) {
             foreach ($argv as $c_arg) {
@@ -1128,7 +1139,8 @@ class Utils
      * @param mixed $default fallback value
      * @return mixed
      */
-    public static function array_key_default($array, $key, $default) {
+    public static function array_key_default($array, $key, $default)
+    {
         if (true === array_key_exists($key, $array))
             return $array[$key];
         return $default;
@@ -1162,7 +1174,7 @@ class Utils
         }
 
         $sizeBytes = filesize($files[$key]['tmp_name']);
-        if ($sizeBytes > ($maxSizeMB  * 1024 * 1024)) {
+        if ($sizeBytes > ($maxSizeMB * 1024 * 1024)) {
             $message = __('Le fichier est trop gros');
             throw new CoreException(sprintf("%s > %s MB", $message, $maxSizeMB));
         }
@@ -1188,13 +1200,15 @@ class Utils
 
     /**
      * @return float|int
+     * @throws \Exception
      */
-    static public function getTZoffsetMin() {
+    public static function getTZoffsetMin()
+    {
         $tz = date_default_timezone_get();
-        date_default_timezone_set( "UTC" );
-        $seconds = timezone_offset_get( timezone_open($tz), new \DateTime() );
+        date_default_timezone_set("UTC");
+        $seconds = timezone_offset_get(timezone_open($tz), new \DateTime());
         date_default_timezone_set($tz);
-        return($seconds/60);
+        return ($seconds / 60);
     }
 
     /**
@@ -1203,7 +1217,8 @@ class Utils
      * @param $name
      * @return mixed
      */
-    function cleanComponentName($name){
+    public static function cleanComponentName($name)
+    {
         return str_replace(array('&', '#', ']', '[', '%', "\\", "/", "'", '"'), '', $name);
     }
 }

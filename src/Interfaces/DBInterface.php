@@ -19,16 +19,31 @@
 
 namespace NextDom\Interfaces;
 
+/**
+ * Interface DBInterface
+ * @package NextDom\Interfaces
+ */
 interface DBInterface
 {
+    /**
+     * @return bool
+     */
     function isDataTableExists(): bool;
 
     function createDataTable();
 
     function dropDataTable();
 
+    /**
+     * @param string $code
+     * @return mixed
+     */
     function deleteData(string $code);
 
+    /**
+     * @param string $code
+     * @return bool
+     */
     function isDataExists(string $code): bool;
 
 }

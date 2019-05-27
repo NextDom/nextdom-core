@@ -28,6 +28,10 @@ use NextDom\Helpers\Utils;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\UpdateManager;
 
+/**
+ * Class ScenarioTemplate
+ * @package NextDom\Controller\Modals
+ */
 class ScenarioTemplate extends BaseAbstractModal
 {
     /**
@@ -39,14 +43,14 @@ class ScenarioTemplate extends BaseAbstractModal
     public static function get(): string
     {
         $scenarioId = Utils::init('scenario_id');
-        $scenario   = ScenarioManager::byId($scenarioId);
+        $scenario = ScenarioManager::byId($scenarioId);
 
         if (is_object($scenario) !== true) {
             throw new CoreException(__('Scénario non trouvé : ') . $scenarioId);
         }
         Utils::sendVarToJS('scenario_template_id', $scenarioId);
         $pageData = [
-                     'repoList' => UpdateManager::listRepo(),
+            'repoList' => UpdateManager::listRepo(),
         ];
 
         return Render::getInstance()->get('/modals/scenario.template.html.twig', $pageData);

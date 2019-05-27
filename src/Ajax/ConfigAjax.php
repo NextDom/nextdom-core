@@ -25,6 +25,10 @@ use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
 
+/**
+ * Class ConfigAjax
+ * @package NextDom\Ajax
+ */
 class ConfigAjax extends BaseAjax
 {
     protected $NEEDED_RIGHTS = UserRight::USER;

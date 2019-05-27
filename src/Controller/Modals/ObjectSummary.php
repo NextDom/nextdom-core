@@ -27,6 +27,10 @@ use NextDom\Managers\CmdManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\ObjectManager;
 
+/**
+ * Class ObjectSummary
+ * @package NextDom\Controller\Modals
+ */
 class ObjectSummary extends BaseAbstractModal
 {
     /**

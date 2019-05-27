@@ -39,8 +39,7 @@ try {
     if (strpos($baseFilePath, 'log') === false) {
         if (strpos($baseFilePath, 'data') === 0) {
             $filePath = NEXTDOM_DATA . '/data';
-        }
-        else {
+        } else {
             $filePath = realpath(NEXTDOM_DATA . '/' . $baseFilePath);
             if (false === is_file($filePath)) {
                 $filePath = realpath(NEXTDOM_ROOT . '/' . $baseFilePath);

@@ -24,6 +24,10 @@ namespace NextDom\Controller\Modals;
 
 use NextDom\Helpers\Render;
 
+/**
+ * Class ScenarioSummary
+ * @package NextDom\Controller\Modals
+ */
 class ScenarioSummary extends BaseAbstractModal
 {
     /**

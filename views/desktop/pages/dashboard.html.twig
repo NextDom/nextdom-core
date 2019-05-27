@@ -56,7 +56,9 @@
                         <div class="card-icon text-center cursor openObject" style="background:{{ dashboardObject.getDisplay("tagColor") }}" data-id="index.php?v=d&p=object&id={{ dashboardObject.getId() }}">
                             {{ dashboardObject.getDisplay('icon', '<i class="fas fa-tag"></i>')|replace({'></i>': '></i>'})|raw }}
                         </div>
-                        <p class="card-category" style="color:{{ dashboardObject.getDisplay("tagColor") }}"><b>{{ dashboardObject.getName() }}</b></p>
+                        <p class="card-category" style="color:{{ dashboardObject.getDisplay("tagColor") }}"><b>{{ dashboardObject.getName() }}</b>
+                            <div class="card-summary" style="color:{{ dashboardObject.getDisplay("desktop::summaryTextColor") }}"><b>{{ dashboardObject.getHtmlSummary(desktop)|raw }}</b></div>
+                        </p>
                         <div class="editDashboardButtons" style="display:none;">
                             <a href="/index.php?v=d&p=custom#colortab"><i class="fas fa-cog pull-right cursor tooltips spacing-left" data-toggle="tooltip" data-placement="left" title="" data-original-title="{{ 'Configurer la taille de la grille' }}"></i></a>
                             <i class="fas fa-th-large pull-right cursor bt_editDashboardWidgetAutoResize tooltips spacing-left" id="edit_object_{{ dashboardObject.getId() }}" data-mode="0" data-toggle="tooltip" data-placement="left" title="" data-original-title="{{ 'Redimensionnement sur pas de grille supérieur' }}"></i>
@@ -75,7 +77,12 @@
             </div>
         {% endif %}
         {% for child in dashboardChildrenObjects %}
-            <div class="div_object col-xs-{{ child.getDisplay('dashboard::size', 12) }}" style="padding-left:{{ 15+(child.parentNumber()-dashboardObjectParentNumber)*15 }}px">
+            {% if dashboardObject.getConfiguration('hideOnDashboard') != 0 %}
+                {% set firstParentNumber = 1 %}
+            {% else %}
+                {% set firstParentNumber = 0 %}
+            {% endif %}
+            <div class="div_object col-xs-{{ child.getDisplay('dashboard::size', 12) }}" style="padding-left:{{ 15+(child.parentNumber() - dashboardObjectParentNumber - firstParentNumber)*15 }}px">
                 {% if child.getConfiguration('hideOnDashboard') == 0 %}
                     {% if child.getFather_id() == '' %}
                         <div class="card" style="background-color:{{ child.getDisplay("tagColor") }}10;box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08); border: 1px solid {{ child.getDisplay("tagColor") }}50" ; data-father_id="{{ child.getId() }}">
@@ -83,7 +90,9 @@
                                 <div class="card-icon text-center cursor openObject" style="background:{{ child.getDisplay("tagColor") }}" data-id="index.php?v=d&p=object&id={{ child.getId() }}">
                                     {{ child.getDisplay("icon")|raw }}
                                 </div>
-                                <p class="card-category" style="color:{{ child.getDisplay("tagColor") }}"><b>{{ child.getName() }}</b></p>
+                                <p class="card-category" style="color:{{ child.getDisplay("tagColor") }}"><b>{{ child.getName() }}</b>
+                                    <div class="card-summary" style="color:{{ child.getDisplay("desktop::summaryTextColor") }}"><b>{{ child.getHtmlSummary(desktop)|raw }}</b></div>
+                                </p>
                                 <div class="editDashboardButtons" style="display:none;">
                                     <a href="/index.php?v=d&p=custom#colortab"><i class="fas fa-cog pull-right cursor tooltips spacing-left" data-toggle="tooltip" data-placement="left" title="" data-original-title="{{ 'Configurer la taille de la grille' }}"></i></a>
                                     <i class="fas fa-th-large pull-right cursor bt_editDashboardWidgetAutoResize tooltips spacing-left" id="edit_object_{{ child.getId() }}" data-mode="0" data-toggle="tooltip" data-placement="left" title="" data-original-title="{{ 'Redimensionnement sur pas de grille supérieur' }}"></i>
@@ -105,7 +114,9 @@
                                 <div class="card-icon text-center" style="background:{{ child.getDisplay("tagColor") }}">
                                     {{ child.getDisplay("icon")|raw }}
                                 </div>
-                                <p class="card-category" style="color:{{ child.getDisplay("tagColor") }}"><b>{{ child.getName() }}</b></p>
+                                <p class="card-category" style="color:{{ child.getDisplay("tagColor") }}"><b>{{ child.getName() }}</b>
+                                    <div class="card-summary" style="color:{{ child.getDisplay("desktop::summaryTextColor") }}"><b>{{ child.getHtmlSummary(desktop)|raw }}</b></div>
+                                </p>
                                 <div class="editDashboardButtons" style="display:none;">
                                     <a href="/index.php?v=d&p=custom#colortab"><i class="fas fa-cog pull-right cursor tooltips spacing-left" data-toggle="tooltip" data-placement="left" title="" data-original-title="{{ 'Configurer la taille de la grille' }}"></i></a>
                                     <i class="fas fa-th-large pull-right cursor bt_editDashboardWidgetAutoResize tooltips spacing-left" id="edit_object_{{ child.getId() }}" data-mode="0" title="{{ 'Redimensionnement sur pas de grille supérieur' }}"></i>

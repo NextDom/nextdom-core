@@ -17,10 +17,19 @@
 
 namespace NextDom\Exceptions;
 
+/**
+ * Class CoreException
+ * @package NextDom\Exceptions
+ */
 class CoreException extends \Exception
 {
-    public static function do_throw($format = '') {
-        $format = preg_replace_callback("/\{([^}]+)\}/", function($match) {
+    /**
+     * @param string $format
+     * @throws CoreException
+     */
+    public static function do_throw($format = '')
+    {
+        $format = preg_replace_callback("/\{([^}]+)\}/", function ($match) {
             return __($match[1]);
         }, $format);
 

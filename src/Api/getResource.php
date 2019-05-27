@@ -29,25 +29,24 @@ if (false === file_exists($file)) {
     die();
 }
 
-$pathinfo  = pathinfo($file);
+$pathinfo = pathinfo($file);
 $extension = Utils::array_key_default($pathinfo, "extension", "unknown");
-switch ($extension)
-{
-case "js":
-    $contentType = "application/javascript";
-    $md5 = Utils::init("md5");
-    $etagFile = ($md5 == "") ? md5_file($file) : $md5;
-    break;
+switch ($extension) {
+    case "js":
+        $contentType = "application/javascript";
+        $md5 = Utils::init("md5");
+        $etagFile = ($md5 == "") ? md5_file($file) : $md5;
+        break;
 
-case "css":
-    $contentType = "text/css";
-    $etagFile = md5_file($file);
-    break;
+    case "css":
+        $contentType = "text/css";
+        $etagFile = md5_file($file);
+        break;
 
-default:
-    header("HTTP/1.1 401 Unauthorized");
-    die();
-    break;
+    default:
+        header("HTTP/1.1 401 Unauthorized");
+        die();
+        break;
 }
 
 header('Content-Type: ' . $contentType);

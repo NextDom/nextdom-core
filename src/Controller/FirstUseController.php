@@ -27,6 +27,10 @@ use NextDom\Helpers\Router;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
 
+/**
+ * Class FirstUseController
+ * @package NextDom\Controller
+ */
 class FirstUseController extends BaseController
 {
     /**
