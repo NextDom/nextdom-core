@@ -22,12 +22,16 @@
 
 namespace NextDom\Controller\Params;
 
+use NextDom\Controller\BaseController;
 use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\Render;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\PluginManager;
-use NextDom\Controller\BaseController;
 
+/**
+ * Class LogAdminController
+ * @package NextDom\Controller\Params
+ */
 class LogAdminController extends BaseController
 {
     /**

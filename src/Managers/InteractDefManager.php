@@ -40,11 +40,21 @@ use NextDom\Model\Entity\InteractDef;
 
 require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
 
+/**
+ * Class InteractDefManager
+ * @package NextDom\Managers
+ */
 class InteractDefManager
 {
     const CLASS_NAME = InteractDef::class;
     const DB_CLASS_NAME = '`interactDef`';
 
+    /**
+     * @param $_id
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byId($_id)
     {
         $values = array(
@@ -54,6 +64,73 @@ class InteractDefManager
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE id = :id';
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+    }
+
+    /**
+     * @param null $_group
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     */
+    public static function listGroup($_group = null)
+    {
+        $values = array();
+        $sql = 'SELECT DISTINCT(`group`)
+                FROM ' . self::DB_CLASS_NAME;
+        if ($_group !== null) {
+            $values['group'] = '%' . $_group . '%';
+            $sql .= ' WHERE `group` LIKE :group';
+        }
+        $sql .= ' ORDER BY `group`';
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL);
+    }
+
+    /**
+     * @param $_text
+     * @return array
+     */
+    public static function generateTextVariant($_text)
+    {
+        $return = array();
+        preg_match_all("/(\[.*?\])/", $_text, $words);
+        if (count($words[1]) == 0) {
+            $return[] = $_text;
+        } else {
+            $math = $words[1][0];
+            $words = str_replace('[', '', $math);
+            $words = str_replace(']', '', $words);
+            $words = explode('|', $words);
+            $textBefore = substr($_text, 0, strpos($_text, $math));
+            foreach (self::generateTextVariant(substr($_text, strpos($_text, $math) + strlen($math))) as $remainsText) {
+                foreach ($words as $word) {
+                    $return[] = $textBefore . $word . $remainsText;
+                }
+            }
+        }
+        return $return;
+    }
+
+    /**
+     * @param $_query
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
+    public static function searchByQuery($_query)
+    {
+        $values = array(
+            'query' => '%' . $_query . '%',
+        );
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE query LIKE :query';
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+    }
+
+    public static function regenerateInteract()
+    {
+        foreach (self::all() as $interactDef) {
+            $interactDef->save();
+        }
     }
 
     /**
@@ -83,58 +160,11 @@ class InteractDefManager
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
-    public static function listGroup($_group = null)
-    {
-        $values = array();
-        $sql = 'SELECT DISTINCT(`group`)
-                FROM ' . self::DB_CLASS_NAME;
-        if ($_group !== null) {
-            $values['group'] = '%' . $_group . '%';
-            $sql .= ' WHERE `group` LIKE :group';
-        }
-        $sql .= ' ORDER BY `group`';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL);
-    }
-
-    public static function generateTextVariant($_text)
-    {
-        $return = array();
-        preg_match_all("/(\[.*?\])/", $_text, $words);
-        if (count($words[1]) == 0) {
-            $return[] = $_text;
-        } else {
-            $math = $words[1][0];
-            $words = str_replace('[', '', $math);
-            $words = str_replace(']', '', $words);
-            $words = explode('|', $words);
-            $textBefore = substr($_text, 0, strpos($_text, $math));
-            foreach (self::generateTextVariant(substr($_text, strpos($_text, $math) + strlen($math))) as $remainsText) {
-                foreach ($words as $word) {
-                    $return[] = $textBefore . $word . $remainsText;
-                }
-            }
-        }
-        return $return;
-    }
-
-    public static function searchByQuery($_query)
-    {
-        $values = array(
-            'query' => '%' . $_query . '%',
-        );
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE query LIKE :query';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
-    }
-
-    public static function regenerateInteract()
-    {
-        foreach (self::all() as $interactDef) {
-            $interactDef->save();
-        }
-    }
-
+    /**
+     * @param $_def
+     * @param $_query
+     * @return array
+     */
     public static function getTagFromQuery($_def, $_query)
     {
         $_def = self::sanitizeQuery(trim($_def));
@@ -164,6 +194,10 @@ class InteractDefManager
         return $options;
     }
 
+    /**
+     * @param $_query
+     * @return mixed|null|string|string[]
+     */
     public static function sanitizeQuery($_query)
     {
         $_query = str_replace(array("\'"), array("'"), $_query);
@@ -173,6 +207,10 @@ class InteractDefManager
         return $_query;
     }
 
+    /**
+     * @return array
+     * @throws \Exception
+     */
     public static function deadCmd()
     {
         $return = array();
@@ -201,6 +239,10 @@ class InteractDefManager
         return $return;
     }
 
+    /**
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     */
     public static function cleanInteract()
     {
         $list_id = array();
@@ -212,6 +254,27 @@ class InteractDefManager
             return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ROW);
         }
         return null;
+    }
+
+    /**
+     * @param $searchPattern
+     * @return array
+     * @throws \Exception
+     */
+    public static function searchByUse($searchPattern)
+    {
+        $return = array();
+        $interactDefs = self::searchByActionsOrReply($searchPattern);
+        $interactQueries = InteractQueryManager::searchActions($searchPattern);
+        foreach ($interactQueries as $interactQuery) {
+            $interactDefs[] = $interactQuery->getInteractDef();
+        }
+        foreach ($interactDefs as $interactDef) {
+            if (!isset($return[$interactDef->getId()])) {
+                $return[$interactDef->getId()] = $interactDef;
+            }
+        }
+        return $return;
     }
 
     /**
@@ -246,22 +309,12 @@ class InteractDefManager
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
-    public static function searchByUse($searchPattern)
-    {
-        $return = array();
-        $interactDefs = self::searchByActionsOrReply($searchPattern);
-        $interactQueries = InteractQueryManager::searchActions($searchPattern);
-        foreach ($interactQueries as $interactQuery) {
-            $interactDefs[] = $interactQuery->getInteractDef();
-        }
-        foreach ($interactDefs as $interactDef) {
-            if (!isset($return[$interactDef->getId()])) {
-                $return[$interactDef->getId()] = $interactDef;
-            }
-        }
-        return $return;
-    }
-
+    /**
+     * @param $_text
+     * @param $_synonymes
+     * @param int $_deep
+     * @return array
+     */
     public static function generateSynonymeVariante($_text, $_synonymes, $_deep = 0)
     {
         $return = array();

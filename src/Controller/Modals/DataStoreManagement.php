@@ -25,6 +25,10 @@ namespace NextDom\Controller\Modals;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 
+/**
+ * Class DataStoreManagement
+ * @package NextDom\Controller\Modals
+ */
 class DataStoreManagement extends BaseAbstractModal
 {
     /**

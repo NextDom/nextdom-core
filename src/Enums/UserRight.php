@@ -17,6 +17,10 @@
 
 namespace NextDom\Enums;
 
+/**
+ * Class UserRight
+ * @package NextDom\Enums
+ */
 class UserRight extends Enum
 {
     const USER = '';

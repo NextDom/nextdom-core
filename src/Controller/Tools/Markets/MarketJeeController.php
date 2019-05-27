@@ -22,12 +22,16 @@
 
 namespace NextDom\Controller\Tools\Markets;
 
+use NextDom\Controller\BaseController;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\UpdateManager;
-use NextDom\Controller\BaseController;
 
+/**
+ * Class MarketJeeController
+ * @package NextDom\Controller\Tools\Markets
+ */
 class MarketJeeController extends BaseController
 {
     /**
@@ -110,7 +114,7 @@ class MarketJeeController extends BaseController
                 $categorieId++;
             }
             $marketObjects2 = [];
-            $marketObjects2['name'] = end(explode('.',$marketObject->getName()));
+            $marketObjects2['name'] = end(explode('.', $marketObject->getName()));
             $marketObjects2['author'] = $marketObject->getAuthor();
             $marketObjects2['category'] = $marketObject->getCategorie();
             $marketObjects2['id'] = $marketObject->getId();

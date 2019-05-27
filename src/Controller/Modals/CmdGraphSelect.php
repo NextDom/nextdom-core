@@ -25,6 +25,10 @@ namespace NextDom\Controller\Modals;
 use NextDom\Helpers\Render;
 use NextDom\Managers\CmdManager;
 
+/**
+ * Class CmdGraphSelect
+ * @package NextDom\Controller\Modals
+ */
 class CmdGraphSelect extends BaseAbstractModal
 {
     /**

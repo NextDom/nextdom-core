@@ -26,6 +26,10 @@ use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\PluginManager;
 
+/**
+ * Class PluginDependency
+ * @package NextDom\Controller\Modals
+ */
 class PluginDependency extends BaseAbstractModal
 {
     /**

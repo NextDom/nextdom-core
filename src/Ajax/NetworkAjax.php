@@ -23,6 +23,10 @@ use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
 
+/**
+ * Class NetworkAjax
+ * @package NextDom\Ajax
+ */
 class NetworkAjax extends BaseAjax
 {
     protected $NEEDED_RIGHTS = UserRight::ADMIN;

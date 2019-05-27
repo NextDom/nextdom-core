@@ -22,10 +22,14 @@
 
 namespace NextDom\Controller\Diagnostic;
 
+use NextDom\Controller\BaseController;
 use NextDom\Helpers\Render;
 use NextDom\Managers\ConfigManager;
-use NextDom\Controller\BaseController;
 
+/**
+ * Class CronController
+ * @package NextDom\Controller\Diagnostic
+ */
 class CronController extends BaseController
 {
     /**

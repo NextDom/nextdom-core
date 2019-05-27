@@ -63,6 +63,25 @@ class Router
     }
 
     /**
+     * Show 404 error page (Not found)
+     */
+    public static function showError404AndDie()
+    {
+        header("HTTP/1.0 404 Not Found");
+        require(NEXTDOM_ROOT . '/public/404.html');
+        die();
+    }
+
+    /**
+     * Show 401 error page (Unauthorized)
+     */
+    public static function showError401AndDie()
+    {
+        header("HTTP/1.1 401 Unauthorized");
+        die();
+    }
+
+    /**
      * Viewing the requested content
      *
      * @return bool True if an answer has been provided.
@@ -82,35 +101,6 @@ class Router
             $result = true;
         }
         return $result;
-    }
-
-
-    /**
-     * Echos content of requested asset
-     */
-    private function staticView()
-    {
-        $response = new Response();
-        $request  = Request::createFromGlobals();
-        $file     = $request->get("file");
-        $mapped   = FileSystemHelper::getAssetPath($file);
-        $data     = @file_get_contents($mapped);
-        $mtime    = @filemtime($mapped);
-
-        $response->prepare($request);
-        $response->setStatusCode(Response::HTTP_NOT_FOUND);
-
-        if (false !== $data) {
-            $response
-                ->setStatusCode(Response::HTTP_OK)
-                ->setPublic()
-                ->setMaxAge(0)
-                ->setContent($data)
-                ->setMaxAge(600)
-                ->setLastModified(new \DateTime("@" . $mtime));
-            $response->isNotModified($request);
-        }
-        $response->send();
     }
 
     /**
@@ -186,21 +176,30 @@ class Router
     }
 
     /**
-     * Show 404 error page (Not found)
+     * Echos content of requested asset
      */
-    public static function showError404AndDie()
+    private function staticView()
     {
-        header("HTTP/1.0 404 Not Found");
-        require(NEXTDOM_ROOT . '/public/404.html');
-        die();
-    }
+        $response = new Response();
+        $request = Request::createFromGlobals();
+        $file = $request->get("file");
+        $mapped = FileSystemHelper::getAssetPath($file);
+        $data = @file_get_contents($mapped);
+        $mtime = @filemtime($mapped);
 
-    /**
-     * Show 401 error page (Unauthorized)
-     */
-    public static function showError401AndDie()
-    {
-        header("HTTP/1.1 401 Unauthorized");
-        die();
+        $response->prepare($request);
+        $response->setStatusCode(Response::HTTP_NOT_FOUND);
+
+        if (false !== $data) {
+            $response
+                ->setStatusCode(Response::HTTP_OK)
+                ->setPublic()
+                ->setMaxAge(0)
+                ->setContent($data)
+                ->setMaxAge(600)
+                ->setLastModified(new \DateTime("@" . $mtime));
+            $response->isNotModified($request);
+        }
+        $response->send();
     }
 }

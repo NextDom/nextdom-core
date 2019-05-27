@@ -24,6 +24,10 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\Render;
 
+/**
+ * Class ShutdownController
+ * @package NextDom\Controller
+ */
 class ShutdownController extends BaseController
 {
     /**

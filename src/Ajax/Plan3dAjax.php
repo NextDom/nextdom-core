@@ -31,6 +31,10 @@ use NextDom\Model\Entity\Plan3d;
 use NextDom\Model\Entity\Plan3dHeader;
 use ZipArchive;
 
+/**
+ * Class Plan3dAjax
+ * @package NextDom\Ajax
+ */
 class Plan3dAjax extends BaseAjax
 {
     protected $NEEDED_RIGHTS = UserRight::USER;

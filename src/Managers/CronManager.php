@@ -39,28 +39,15 @@ use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
 use NextDom\Model\Entity\Cron;
 
+/**
+ * Class CronManager
+ * @package NextDom\Managers
+ */
 class CronManager
 {
 
     const CLASS_NAME = Cron::class;
     const DB_CLASS_NAME = '`cron`';
-
-    /**
-     * Return an array of all cron objects
-     *
-     * @param bool $ordered
-     * @return Cron[] List of all cron objets
-     * @throws \Exception
-     */
-    public static function all($ordered = false)
-    {
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME;
-        if ($ordered) {
-            $sql .= ' ORDER BY deamon DESC';
-        }
-        return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
-    }
 
     /**
      * Get cron object by his id
@@ -156,6 +143,23 @@ class CronManager
     }
 
     /**
+     * Return an array of all cron objects
+     *
+     * @param bool $ordered
+     * @return Cron[] List of all cron objets
+     * @throws \Exception
+     */
+    public static function all($ordered = false)
+    {
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME;
+        if ($ordered) {
+            $sql .= ' ORDER BY deamon DESC';
+        }
+        return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+    }
+
+    /**
      * Return number of running cron
      *
      * @return int Number of running cron
@@ -201,21 +205,6 @@ class CronManager
     }
 
     /**
-     * Return the current pid of jeecron or empty if not running
-     *
-     * @return int Current jeeCron PID
-     * @throws \Exception
-     */
-    public static function getPidFile()
-    {
-        $path = NextDomHelper::getTmpFolder() . '/jeeCron.pid';
-        if (file_exists($path)) {
-            return file_get_contents($path);
-        }
-        return '';
-    }
-
-    /**
      * Get status of jeeCron
      *
      * @return boolean True if jeeCron is running
@@ -228,6 +217,21 @@ class CronManager
             return false;
         }
         return posix_getsid($pid);
+    }
+
+    /**
+     * Return the current pid of jeecron or empty if not running
+     *
+     * @return int Current jeeCron PID
+     * @throws \Exception
+     */
+    public static function getPidFile()
+    {
+        $path = NextDomHelper::getTmpFolder() . '/jeeCron.pid';
+        if (file_exists($path)) {
+            return file_get_contents($path);
+        }
+        return '';
     }
 
     /**
@@ -251,13 +255,13 @@ class CronManager
      */
     public static function convertCronSchedule($cron)
     {
-        $return = str_replace('*/ ','* ',$cron);
+        $return = str_replace('*/ ', '* ', $cron);
         preg_match_all('/([0-9]*\/\*)/m', $return, $matches, PREG_SET_ORDER, 0);
-        if(count($matches) > 0){
+        if (count($matches) > 0) {
             return '';
         }
         preg_match_all('/(\*\/0)/m', $return, $matches, PREG_SET_ORDER, 0);
-        if(count($matches) > 0){
+        if (count($matches) > 0) {
             return '';
         }
         return $return;

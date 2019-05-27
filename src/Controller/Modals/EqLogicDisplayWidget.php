@@ -29,6 +29,10 @@ use NextDom\Managers\CacheManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\UserManager;
 
+/**
+ * Class EqLogicDisplayWidget
+ * @package NextDom\Controller\Modals
+ */
 class EqLogicDisplayWidget extends BaseAbstractModal
 {
     /**

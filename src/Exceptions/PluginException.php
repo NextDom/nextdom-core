@@ -17,6 +17,10 @@
 
 namespace NextDom\Exceptions;
 
+/**
+ * Class PluginException
+ * @package NextDom\Exceptions
+ */
 class PluginException extends \Exception
 {
 }

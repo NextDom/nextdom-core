@@ -22,10 +22,14 @@
 
 namespace NextDom\Controller\Tools\Osdb;
 
+use NextDom\Controller\BaseController;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\Render;
-use NextDom\Controller\BaseController;
 
+/**
+ * Class EditorController
+ * @package NextDom\Controller\Tools\Osdb
+ */
 class EditorController extends BaseController
 {
     /**

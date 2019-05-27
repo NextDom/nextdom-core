@@ -29,6 +29,10 @@ use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
 use NextDom\Model\Entity\Update;
 
+/**
+ * Class UpdateAjax
+ * @package NextDom\Ajax
+ */
 class UpdateAjax extends BaseAjax
 {
     protected $NEEDED_RIGHTS = UserRight::USER;
@@ -52,7 +56,12 @@ class UpdateAjax extends BaseAjax
             if ($update->getType() == 'plugin') {
                 try {
                     $plugin = PluginManager::byId($update->getLogicalId());
-                    $infos['plugin'] = is_object($plugin) ? Utils::o2a($plugin) : array();
+                    if (is_object($plugin)) {
+                        $infos['plugin'] = Utils::o2a($plugin);
+                        $infos['plugin']['icon'] = $plugin->getPathImgIcon();
+                    } else {
+                        $infos['plugin'] = [];
+                    }
                 } catch (\Exception $e) {
 
                 }
@@ -189,11 +198,11 @@ class UpdateAjax extends BaseAjax
         AuthentificationHelper::isConnectedAsAdminOrFail();
         Utils::unautorizedInDemo();
         $uploadDir = '/tmp';
-        $filename = Utils::readUploadedFile($_FILES, "file", $uploadDir, 100, array(), function($file) {
+        $filename = Utils::readUploadedFile($_FILES, "file", $uploadDir, 100, array(), function ($file) {
             $remove = array(" ", "(", ")");
             return str_replace($remove, "", $file["name"]);
         });
         $filepath = sprintf("%s/%s", $uploadDir, $filename);
         AjaxHelper::success($filepath);
-   }
+    }
 }

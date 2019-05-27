@@ -27,7 +27,6 @@
     padding: 0px 0 0px 0px;
     & .ui-dialog-titlebar-close {
         right: 0.5em;
-        top: 70%;
     }
     & .ui-dialog-title {
         padding: 7px 5px 5px 0px;
@@ -64,6 +63,16 @@
     .ui-dialog-content .content-header {
         padding: 0px;
         padding-bottom: 15px;
+    }
+    .ui-dialog-titlebar {
+        -webkit-border-top-left-radius: 6px;
+        -khtml-border-top-left-radius: 6px;
+        -moz-border-top-left-radius: 6px;
+        border-top-left-radius: 6px;
+        -webkit-border-top-right-radius: 6px;
+        -khtml-border-top-right-radius: 6px;
+        -moz-border-top-right-radius: 6px;
+        border-top-right-radius: 6px;
     }
 }
 .ui-dialog-buttonset .ui-button:not(:first-child) {
@@ -102,6 +111,14 @@
 }
 .ui-widget-content {
     background-image: none;
+    border: none !important;
+    border-radius: 6px !important;
+    .btn:not(.btn-default) {
+        color: $white !important;
+    }
+    a:not(.btn) {
+        color: $nextdom_blue !important;
+    }
 }
 
 /* COre-Adjusting */

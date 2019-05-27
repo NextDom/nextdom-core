@@ -30,6 +30,10 @@ use NextDom\Managers\ScenarioManager;
 use NextDom\Model\Entity\JeeObject;
 use NextDom\Model\Entity\Scenario;
 
+/**
+ * Class ObjectAjax
+ * @package NextDom\Ajax
+ */
 class ObjectAjax extends BaseAjax
 {
     protected $NEEDED_RIGHTS = UserRight::USER;

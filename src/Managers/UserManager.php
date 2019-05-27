@@ -41,6 +41,10 @@ use NextDom\Helpers\Utils;
 use NextDom\Model\Entity\User;
 use PragmaRX\Google2FA\Google2FA;
 
+/**
+ * Class UserManager
+ * @package NextDom\Managers
+ */
 class UserManager
 {
     const DB_CLASS_NAME = '`user`';
@@ -129,6 +133,58 @@ class UserManager
     }
 
     /**
+     * @return bool|resource
+     * @throws \Exception
+     */
+    public static function connectToLDAP()
+    {
+        $ad = ldap_connect(ConfigManager::byKey('ldap:host'), ConfigManager::byKey('ldap:port'));
+        ldap_set_option($ad, LDAP_OPT_PROTOCOL_VERSION, 3);
+        ldap_set_option($ad, LDAP_OPT_REFERRALS, 0);
+        if (ldap_bind($ad, ConfigManager::byKey('ldap:username'), ConfigManager::byKey('ldap:password'))) {
+            return $ad;
+        }
+        return false;
+    }
+
+    /**
+     * @param $_login
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
+    public static function byLogin($_login)
+    {
+        $values = array(
+            'login' => $_login,
+        );
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE login = :login';
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+    }
+
+    /**
+     * @param $_login
+     * @param $_password
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
+    public static function byLoginAndPassword($_login, $_password)
+    {
+        $values = array(
+            'login' => $_login,
+            'password' => $_password,
+        );
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE login = :login
+                AND password = :password';
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+    }
+
+    /**
      * @param $_id
      * @return array|mixed|null
      * @throws \Exception
@@ -141,28 +197,6 @@ class UserManager
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE id = :id';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
-    }
-
-    public static function connectToLDAP()
-    {
-        $ad = ldap_connect(ConfigManager::byKey('ldap:host'), ConfigManager::byKey('ldap:port'));
-        ldap_set_option($ad, LDAP_OPT_PROTOCOL_VERSION, 3);
-        ldap_set_option($ad, LDAP_OPT_REFERRALS, 0);
-        if (ldap_bind($ad, ConfigManager::byKey('ldap:username'), ConfigManager::byKey('ldap:password'))) {
-            return $ad;
-        }
-        return false;
-    }
-
-    public static function byLogin($_login)
-    {
-        $values = array(
-            'login' => $_login,
-        );
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE login = :login';
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
@@ -182,6 +216,13 @@ class UserManager
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_login
+     * @param $_hash
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byLoginAndHash($_login, $_hash)
     {
         $values = array(
@@ -192,19 +233,6 @@ class UserManager
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE login = :login
                 AND hash = :hash';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
-    }
-
-    public static function byLoginAndPassword($_login, $_password)
-    {
-        $values = array(
-            'login' => $_login,
-            'password' => $_password,
-        );
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE login = :login
-                AND password = :password';
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
@@ -220,6 +248,12 @@ class UserManager
         return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_rights
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function searchByRight($_rights)
     {
         $values = array(
@@ -253,6 +287,12 @@ class UserManager
         return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_enable
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byEnable($_enable)
     {
         $values = array(
@@ -287,6 +327,10 @@ class UserManager
         return self::isBanned();
     }
 
+    /**
+     * @return bool
+     * @throws \Exception
+     */
     public static function isBanned()
     {
         $ip = NetworkHelper::getClientIp();
@@ -350,6 +394,10 @@ class UserManager
         return false;
     }
 
+    /**
+     * @return string
+     * @throws \Exception
+     */
     public static function getAccessKeyForReport()
     {
         $user = self::byLogin('internal_report');
@@ -377,6 +425,10 @@ class UserManager
         return $user->getHash() . '-' . $key;
     }
 
+    /**
+     * @param bool $_enable
+     * @throws \Exception
+     */
     public static function supportAccess($_enable = true)
     {
         if ($_enable) {
@@ -408,6 +460,9 @@ class UserManager
         }
     }
 
+    /**
+     * @param $user
+     */
     public static function storeUserInSession($user)
     {
         $_SESSION['user'] = $user;

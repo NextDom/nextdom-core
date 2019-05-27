@@ -27,6 +27,10 @@ use NextDom\Helpers\Utils;
 use NextDom\Managers\Plan3dManager;
 use NextDom\Model\Entity\Plan3d;
 
+/**
+ * Class Plan3dConfigure
+ * @package NextDom\Controller\Modals
+ */
 class Plan3dConfigure extends BaseAbstractModal
 {
     /**

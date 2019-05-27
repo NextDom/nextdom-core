@@ -43,7 +43,6 @@
             <li class="treeview" id="side1">
                 <a href="#"><i class="fas fa-tachometer-alt spacing-right"></i><span>{{ 'sidebar.dashboard'|trans }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
                 <ul class="treeview-menu">
-                    <li><a href="index.php?v=d&p=object"><i class="fas fa-clone spacing-right"></i>{{ 'sidebar.objects-list'|trans }}</a></li>
                     <li class="divider"><a href="index.php?v=d&p=dashboard"><i class="fas fa-asterisk spacing-right"></i>{{ 'sidebar.default-object'|trans }}</a></li>
                     {% for jeeObject in MENU_JEEOBJECT_TREE %}
                         <li style="padding-left:{{ jeeObject.parentNumber()*7 }}px"><a href="index.php?v=d&p=dashboard&object_id={{ jeeObject.getId() }}">{{ jeeObject.getHumanName(true)|raw }}</a></li>
@@ -112,6 +111,7 @@
             <li class="treeview" id="side7">
                 <a href="#"><i class="fa fa-th-list spacing-right"></i><span>{{ 'sidebar.tools'|trans }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
                 <ul class="treeview-menu">
+                    <li><a href="index.php?v=d&p=object"><i class="fas fa-clone spacing-right"></i>{{ 'sidebar.objects-list'|trans }}</a></li>
                     <li><a href="index.php?v=d&p=display"><i class="fas fa-th spacing-right"></i>{{ 'sidebar.tools-summary'|trans }}</a></li>
                     <li><a href="index.php?v=d&p=interact"><i class="fas fa-comments spacing-right"></i>{{ 'sidebar.tools-interactions'|trans }}</a></li>
                     <li><a href="index.php?v=d&p=scenario"><i class="fas fa-film spacing-right"></i>{{ 'sidebar.tools-scenarios'|trans }}</a></li>
