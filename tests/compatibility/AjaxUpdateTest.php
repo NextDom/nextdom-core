@@ -44,7 +44,7 @@ class AjaxUpdateTest extends AjaxBase
     public function testNbUpdateAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'nbUpdate']);
-        $this->assertContains('"result":"0"', (string) $result->getBody());
+        $this->assertContains('"state":"ok","result":"', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 

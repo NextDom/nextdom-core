@@ -41,6 +41,12 @@ core:
     disable-all-scenarios: Disable all scenarios ...
     incorrect-sys-date: The system date is incorrect (before or after %s %s):
     
+install:
+    update-sourcecode: Update source code
+    already-updated: Already up to date.
+    update-core-error: Impossible to update core.
+    gen-assets: Generate assets
+
 page-title:
     administration: Administration
     users: User

@@ -41,6 +41,12 @@ core:
   disable-all-scenarios: "Désactiver tous les scénarios..."
   incorrect-sys-date: "La date du système est incorrecte (avant %s ou après %s) : "
 
+install:
+  update-sourcecode: Mise à jour du code
+  already-updated: Le code est déjà à jour.
+  update-core-error: Impossible de mettre à jour le code du core.
+  gen-assets: Génération des ressources
+
 page-title:
   administration: Administration
   users: Utilisateurs

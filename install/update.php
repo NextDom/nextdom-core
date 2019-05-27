@@ -16,6 +16,113 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+namespace NextDom;
+
+use NextDom\Helpers\NextDomHelper;
+use NextDom\Helpers\ScriptHelper;
+use NextDom\Helpers\SystemHelper;
+use NextDom\Helpers\Utils;
+use NextDom\Managers\BackupManager;
+use NextDom\Managers\UpdateManager;
+
+require_once(__DIR__ . '/../src/core.php');
+
+$versionBeforeUpdate = '';
+$versionAfterUpdate = '';
+
+/**
+ * Launch update with git
+ *
+ * @return True on success
+ *
+ * @throws \Exception
+ */
+function gitUpdate()
+{
+    // Ignore file mode change
+    system('git config core.fileMode false');
+
+    // Update git
+    echo __('install.update-sourcecode') . ' : ';
+    $gitPullReturn = 0;
+    $gitPullResult = system('cd ' . NEXTDOM_ROOT . ' && sudo git pull >> /dev/null', $gitPullReturn);
+    if ($gitPullReturn === 0) {
+        echo __('common.ok') . "\n";
+        if ($gitPullResult === 'Already up-to-date.') {
+            echo __('install.already-updated');
+            return false;
+        }
+    } else {
+        echo __('common.nok') . "\n";
+        echo __('install.update-core-error');
+        return false;
+    }
+
+    echo __('install.gen-assets') . ' : ';
+    $genAssetsReturn = 0;
+    system('cd ' . NEXTDOM_ROOT . ' && ./scripts/gen_assets.sh >> /dev/null', $genAssetsReturn);
+    if ($genAssetsReturn === 0) {
+        echo __('common.ok') . "\n";
+    } else {
+        echo __('common.nok') . "\n";
+        return false;
+    }
+    $coreUpdate = UpdateManager::byTypeAndLogicalId('core', 'nextdom');
+    if (is_object($coreUpdate)) {
+        $gitHash = system('git rev-parse HEAD');
+        $coreUpdate->setLocalVersion($gitHash);
+        $branch = system('git rev-parse --abbrev-ref HEAD');
+        $coreUpdate->setConfiguration('version', $branch);
+        $coreUpdate->save();
+    }
+    return true;
+}
+
+/**
+ * Launch update via apt
+ * @throws \Exception
+ */
+function debianUpdate()
+{
+    exec(SystemHelper::getCmdSudo() . 'apt update > /dev/null 2>&1');
+    exec(SystemHelper::getCmdSudo() . 'apt-get install -y nextdom');
+}
+
+ScriptHelper::cliOrCrash();
+ScriptHelper::parseArgumentsToGET();
+
+set_time_limit(1800);
+
+// Backup before depend of user choice
+if (Utils::init('backup::before')) {
+    BackupManager::createBackup();
+}
+
+$versionBeforeUpdate = file_get_contents(NEXTDOM_ROOT . '/assets/config/Nextdom_version');
+// Test type of installation
+$gitInstall = is_dir(NEXTDOM_ROOT . '/.git');
+
+// Begin process
+NextDomHelper::stopSystem();
+try {
+    if ($gitInstall) {
+        gitUpdate();
+    } else {
+        debianUpdate();
+    }
+} catch (\Throwable $e) {
+
+}
+$versionAfterUpdate = file_get_contents(NEXTDOM_ROOT . '/assets/config/Nextdom_version');
+
+// Todo: Add @slobberbone call update
+// UPDATE $versionBeforeUpdate $versionAfterUpdate
+
+NextDomHelper::startSystem();
+
+UpdateManager::checkAllUpdate('core', false);
+
+/*
 if (php_sapi_name() != 'cli' || isset($_SERVER['REQUEST_METHOD']) || !isset($_SERVER['argc'])) {
     header("Statut: 404 Page non trouvée");
     header('HTTP/1.0 404 Not Found');
@@ -54,8 +161,6 @@ try {
     echo "****Update from " . nextdom::version() . " (" . date('Y-m-d H:i:s') . ")****\n";
     echo "Parameters : " . json_encode($_GET) . "\n";
     $curentVersion = config::byKey('version');
-
-    /*         * ************************MISE A JOUR********************************** */
 
     try {
         echo "Send begin of update event...";
@@ -428,3 +533,4 @@ function incrementVersion($_version) {
     }
     return $version[0] . '.' . $version[1] . '.' . $version[2];
 }
+*/
