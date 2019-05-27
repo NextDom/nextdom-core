@@ -29,6 +29,10 @@ use NextDom\Helpers\Utils;
 use NextDom\Managers\EqLogicManager;
 
 
+/**
+ * Class EqLogicConfigure
+ * @package NextDom\Controller\Modals
+ */
 class EqLogicConfigure extends BaseAbstractModal
 {
     /**

@@ -22,10 +22,14 @@
 
 namespace NextDom\Controller\Pages;
 
+use NextDom\Controller\BaseController;
 use NextDom\Helpers\Render;
 use NextDom\Managers\ViewManager;
-use NextDom\Controller\BaseController;
 
+/**
+ * Class ViewEditController
+ * @package NextDom\Controller\Pages
+ */
 class ViewEditController extends BaseController
 {
     /**

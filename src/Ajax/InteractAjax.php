@@ -27,6 +27,10 @@ use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\InteractQueryManager;
 use NextDom\Model\Entity\InteractDef;
 
+/**
+ * Class InteractAjax
+ * @package NextDom\Ajax
+ */
 class InteractAjax extends BaseAjax
 {
     protected $NEEDED_RIGHTS = UserRight::ADMIN;

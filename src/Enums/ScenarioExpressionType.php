@@ -18,6 +18,10 @@
 
 namespace NextDom\Enums;
 
+/**
+ * Class ScenarioExpressionType
+ * @package NextDom\Enums
+ */
 class ScenarioExpressionType extends Enum
 {
     const ELEMENT = 'element';

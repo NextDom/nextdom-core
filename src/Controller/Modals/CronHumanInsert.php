@@ -24,6 +24,10 @@ namespace NextDom\Controller\Modals;
 
 use NextDom\Helpers\Render;
 
+/**
+ * Class CronHumanInsert
+ * @package NextDom\Controller\Modals
+ */
 class CronHumanInsert extends BaseAbstractModal
 {
     /**

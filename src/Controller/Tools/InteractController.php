@@ -22,14 +22,18 @@
 
 namespace NextDom\Controller\Tools;
 
+use NextDom\Controller\BaseController;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\ObjectManager;
-use NextDom\Controller\BaseController;
 
+/**
+ * Class InteractController
+ * @package NextDom\Controller\Tools
+ */
 class InteractController extends BaseController
 {
     /**

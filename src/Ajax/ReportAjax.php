@@ -23,6 +23,10 @@ use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\Utils;
 
+/**
+ * Class ReportAjax
+ * @package NextDom\Ajax
+ */
 class ReportAjax extends BaseAjax
 {
     protected $NEEDED_RIGHTS = UserRight::ADMIN;

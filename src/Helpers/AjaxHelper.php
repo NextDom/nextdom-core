@@ -36,6 +36,10 @@ namespace NextDom\Helpers;
 
 use NextDom\Managers\ConfigManager;
 
+/**
+ * Class AjaxHelper
+ * @package NextDom\Helpers
+ */
 class AjaxHelper
 {
     /**
@@ -75,17 +79,6 @@ class AjaxHelper
     }
 
     /**
-     * Send answer
-     *
-     * @param string $answer Answer to send
-     */
-    public static function success($answer = '')
-    {
-        echo self::getResponse($answer);
-        die();
-    }
-
-    /**
      * Send error
      *
      * @param string $errorData Error description
@@ -118,5 +111,16 @@ class AjaxHelper
             $response['code'] = $errorCode;
         }
         return json_encode($response, JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
+     * Send answer
+     *
+     * @param string $answer Answer to send
+     */
+    public static function success($answer = '')
+    {
+        echo self::getResponse($answer);
+        die();
     }
 }

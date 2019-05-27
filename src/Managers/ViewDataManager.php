@@ -36,12 +36,21 @@ namespace NextDom\Managers;
 use NextDom\Helpers\DBHelper;
 use NextDom\Model\Entity\ViewData;
 
+/**
+ * Class ViewDataManager
+ * @package NextDom\Managers
+ */
 class ViewDataManager
 {
     const DB_CLASS_NAME = '`viewData`';
     const CLASS_NAME = 'viewData';
 
 
+    /**
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function all()
     {
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
@@ -49,6 +58,12 @@ class ViewDataManager
         return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_id
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byId($_id)
     {
         $value = array(
@@ -61,25 +76,11 @@ class ViewDataManager
     }
 
     /**
-     * @param $_type
-     * @param $_link_id
-     * @return ViewData[]|null
-     * @throws \Exception
+     * @param $_viewZone_id
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
-    public static function byTypeLinkId($_type, $_link_id)
-    {
-        $value = array(
-            'type' => $_type,
-            'link_id' => $_link_id,
-        );
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE type=:type
-        AND link_id=:link_id
-        ORDER BY `order`';
-        return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
-    }
-
     public static function byViewZoneId($_viewZone_id)
     {
         $value = array(
@@ -108,6 +109,12 @@ class ViewDataManager
         return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_type
+     * @param $_link_id
+     * @return bool
+     * @throws \Exception
+     */
     public static function removeByTypeLinkId($_type, $_link_id)
     {
         $viewDatas = self::byTypeLinkId($_type, $_link_id);
@@ -115,5 +122,25 @@ class ViewDataManager
             $viewData->remove();
         }
         return true;
+    }
+
+    /**
+     * @param $_type
+     * @param $_link_id
+     * @return ViewData[]|null
+     * @throws \Exception
+     */
+    public static function byTypeLinkId($_type, $_link_id)
+    {
+        $value = array(
+            'type' => $_type,
+            'link_id' => $_link_id,
+        );
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+        FROM ' . self::DB_CLASS_NAME . '
+        WHERE type=:type
+        AND link_id=:link_id
+        ORDER BY `order`';
+        return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 }

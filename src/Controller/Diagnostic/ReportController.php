@@ -22,13 +22,17 @@
 
 namespace NextDom\Controller\Diagnostic;
 
+use NextDom\Controller\BaseController;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\Render;
 use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ViewManager;
-use NextDom\Controller\BaseController;
 
+/**
+ * Class ReportController
+ * @package NextDom\Controller\Diagnostic
+ */
 class ReportController extends BaseController
 {
     /**

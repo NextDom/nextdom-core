@@ -265,6 +265,7 @@ scenario:
   back: Retour
   enable-scenarios: Activer les scénarios
   disable-scenarios: Désactiver les scénarios
+  scenario-disabled: Le gestionnaire de scénario est désactivé, par conséquent tous les scénarios sont désactivés...
   add: Ajouter
   test-expression: Testeur d'expression
   variables: Variables

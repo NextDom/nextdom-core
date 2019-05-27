@@ -27,6 +27,10 @@ use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ScenarioManager;
 
+/**
+ * Class ScenarioLogExecution
+ * @package NextDom\Controller\Modals
+ */
 class ScenarioLogExecution extends BaseAbstractModal
 {
     /**

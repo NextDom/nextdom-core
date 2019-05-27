@@ -28,6 +28,10 @@ use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\Plan3dHeaderManager;
 
+/**
+ * Class Plan3dHeaderConfigure
+ * @package NextDom\Controller\Modals
+ */
 class Plan3dHeaderConfigure extends BaseAbstractModal
 {
     /**

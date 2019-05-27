@@ -22,6 +22,10 @@
 
 namespace NextDom\Controller\Modals;
 
+/**
+ * Class UpdateSend
+ * @package NextDom\Controller\Modals
+ */
 class UpdateSend extends BaseAbstractModal
 {
     /**

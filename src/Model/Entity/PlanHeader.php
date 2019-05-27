@@ -65,6 +65,12 @@ class PlanHeader implements EntityInterface
 
     protected $_changed;
 
+    /**
+     * @param string $_format
+     * @param array $_parameters
+     * @return string
+     * @throws \Exception
+     */
     public function report($_format = 'pdf', $_parameters = array())
     {
         $url = NetworkHelper::getNetworkAccess('internal') . '/index.php?v=d&p=plan';
@@ -76,6 +82,29 @@ class PlanHeader implements EntityInterface
         return ReportHelper::generate($url, 'plan', $this->getId(), $_format, $_parameters);
     }
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param $_id
+     * @return $this
+     */
+    public function setId($_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
+        $this->id = $_id;
+        return $this;
+    }
+
+    /**
+     * @param $_name
+     * @return PlanHeader
+     */
     public function copy($_name)
     {
         $planHeaderCopy = clone $this;
@@ -94,6 +123,42 @@ class PlanHeader implements EntityInterface
             copy(NEXTDOM_DATA . '/data/plan/' . $filename1, NEXTDOM_DATA . '/data/plan/' . $filename2);
         }
         return $planHeaderCopy;
+    }
+
+    public function save()
+    {
+        DBHelper::save($this);
+    }
+
+    /**
+     * @return Plan[]
+     */
+    public function getPlan()
+    {
+        return PlanManager::byPlanHeaderId($this->getId());
+    }
+
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
+    public function getImage($_key = '', $_default = '')
+    {
+        return Utils::getJsonAttr($this->image, $_key, $_default);
+    }
+
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
+    public function setImage($_key, $_value)
+    {
+        $image = Utils::setJsonAttr($this->image, $_key, $_value);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->image, $image);
+        $this->image = $image;
+        return $this;
     }
 
     public function preSave()
@@ -115,9 +180,49 @@ class PlanHeader implements EntityInterface
         }
     }
 
-    public function save()
+    /**
+     * @return string
+     */
+    public function getName()
     {
-        DBHelper::save($this);
+        return $this->name;
+    }
+
+    /**
+     * @param $_name
+     * @return $this
+     */
+    public function setName($_name)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
+        $this->name = $_name;
+        return $this;
+    }
+
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
+    public function getConfiguration($_key = '', $_default = '')
+    {
+        return Utils::getJsonAttr($this->configuration, $_key, $_default);
+    }
+
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
+    public function setConfiguration($_key, $_value)
+    {
+        if ($_key == 'accessCode' && $_value != '' && !Utils::isSha512($_value)) {
+            $_value = Utils::sha512($_value);
+        }
+        $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
+        $this->configuration = $configuration;
+        return $this;
     }
 
     public function remove()
@@ -126,6 +231,9 @@ class PlanHeader implements EntityInterface
         DBHelper::remove($this);
     }
 
+    /**
+     * @return string
+     */
     public function displayImage()
     {
         if ($this->getImage('data') == '') {
@@ -149,13 +257,12 @@ class PlanHeader implements EntityInterface
     }
 
     /**
-     * @return Plan[]
+     * @param array $_data
+     * @param int $_level
+     * @param int $_drill
+     * @return array|null
+     * @throws \Exception
      */
-    public function getPlan()
-    {
-        return PlanManager::byPlanHeaderId($this->getId());
-    }
-
     public function getLinkData(&$_data = array('node' => array(), 'link' => array()), $_level = 0, $_drill = 3)
     {
         if (isset($_data['node']['plan' . $this->getId()])) {
@@ -181,70 +288,27 @@ class PlanHeader implements EntityInterface
         return null;
     }
 
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
-    }
-
-    public function setName($_name)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
-        $this->name = $_name;
-        return $this;
-    }
-
-    public function getImage($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->image, $_key, $_default);
-    }
-
-    public function setImage($_key, $_value)
-    {
-        $image = Utils::setJsonAttr($this->image, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->image, $image);
-        $this->image = $image;
-        return $this;
-    }
-
-    public function getConfiguration($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->configuration, $_key, $_default);
-    }
-
-    public function setConfiguration($_key, $_value)
-    {
-        if ($_key == 'accessCode' && $_value != '' && !Utils::isSha512($_value)) {
-            $_value = Utils::sha512($_value);
-        }
-        $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
-        $this->configuration = $configuration;
-        return $this;
-    }
-
+    /**
+     * @return mixed
+     */
     public function getChanged()
     {
         return $this->_changed;
     }
 
+    /**
+     * @param $_changed
+     * @return $this
+     */
     public function setChanged($_changed)
     {
         $this->_changed = $_changed;
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getTableName()
     {
         return 'planHeader';

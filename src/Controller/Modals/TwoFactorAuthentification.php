@@ -27,6 +27,10 @@ use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UserManager;
 use PragmaRX\Google2FA\Google2FA;
 
+/**
+ * Class TwoFactorAuthentification
+ * @package NextDom\Controller\Modals
+ */
 class TwoFactorAuthentification extends BaseAbstractModal
 {
     /**

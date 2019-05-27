@@ -77,7 +77,12 @@
             </div>
         {% endif %}
         {% for child in dashboardChildrenObjects %}
-            <div class="div_object col-xs-{{ child.getDisplay('dashboard::size', 12) }}" style="padding-left:{{ 15+(child.parentNumber()-dashboardObjectParentNumber)*15 }}px">
+            {% if dashboardObject.getConfiguration('hideOnDashboard') != 0 %}
+                {% set firstParentNumber = 1 %}
+            {% else %}
+                {% set firstParentNumber = 0 %}
+            {% endif %}
+            <div class="div_object col-xs-{{ child.getDisplay('dashboard::size', 12) }}" style="padding-left:{{ 15+(child.parentNumber() - dashboardObjectParentNumber - firstParentNumber)*15 }}px">
                 {% if child.getConfiguration('hideOnDashboard') == 0 %}
                     {% if child.getFather_id() == '' %}
                         <div class="card" style="background-color:{{ child.getDisplay("tagColor") }}10;box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08); border: 1px solid {{ child.getDisplay("tagColor") }}50" ; data-father_id="{{ child.getId() }}">

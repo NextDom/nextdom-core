@@ -26,6 +26,10 @@ use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
 
+/**
+ * Class ConnectionController
+ * @package NextDom\Controller
+ */
 class ConnectionController extends BaseController
 {
     /**
@@ -42,7 +46,6 @@ class ConnectionController extends BaseController
         $pageData['CSS_POOL'][] = '/public/css/pages/connection.css';
         $pageData['JS_END_POOL'][] = '/vendor/node_modules/admin-lte/dist/js/adminlte.min.js';
         $pageData['JS_END_POOL'][] = '/public/js/desktop/connection.js';
-
 
 
         return Render::getInstance()->get('desktop/connection.html.twig', $pageData);

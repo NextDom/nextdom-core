@@ -36,6 +36,10 @@ namespace NextDom\Managers;
 use NextDom\Helpers\DBHelper;
 use NextDom\Model\Entity\View;
 
+/**
+ * Class ViewManager
+ * @package NextDom\Managers
+ */
 class ViewManager
 {
     const DB_CLASS_NAME = '`view`';
@@ -69,6 +73,12 @@ class ViewManager
         return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_type
+     * @param $_id
+     * @return array
+     * @throws \Exception
+     */
     public static function searchByUse($_type, $_id)
     {
         $return = array();

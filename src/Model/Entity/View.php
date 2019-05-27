@@ -80,6 +80,12 @@ class View implements EntityInterface
 
     protected $_changed = false;
 
+    /**
+     * @param string $_format
+     * @param array $_parameters
+     * @return string
+     * @throws \Exception
+     */
     public function report($_format = 'pdf', $_parameters = array())
     {
         $url = NetworkHelper::getNetworkAccess('internal') . '/index.php?v=d&p=view';
@@ -89,6 +95,25 @@ class View implements EntityInterface
             $url .= '&' . $_parameters['arg'];
         }
         return ReportHelper::generate($url, 'view', $this->getId(), $_format, $_parameters);
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param $_id
+     * @return $this
+     */
+    public function setId($_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
+        $this->id = $_id;
+        return $this;
     }
 
     /**
@@ -102,11 +127,30 @@ class View implements EntityInterface
         }
     }
 
-    public function save()
+    /**
+     * @return string
+     */
+    public function getName()
     {
-        return DBHelper::save($this);
+        return $this->name;
     }
 
+    /**
+     * @param $_name
+     * @return $this
+     */
+    public function setName($_name)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
+        $this->name = $_name;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public function remove()
     {
         NextDomHelper::addRemoveHistory(array('id' => $this->getId(), 'name' => $this->getName(), 'date' => date('Y-m-d H:i:s'), 'type' => 'view'));
@@ -114,18 +158,32 @@ class View implements EntityInterface
     }
 
     /**
-     * @return ViewZone[]
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
      */
-    public function getviewZone()
-    {
-        return ViewZoneManager::byView($this->getId());
-    }
-
     public function removeviewZone()
     {
         return ViewZoneManager::removeByViewId($this->getId());
     }
 
+    /**
+     * @return array
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
+    public function toArray()
+    {
+        $return = Utils::o2a($this, true);
+        unset($return['image']);
+        $return['img'] = $this->getImgLink();
+        return $return;
+    }
+
+    /**
+     * @return string
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public function getImgLink()
     {
         if ($this->getImage('data') == '') {
@@ -147,14 +205,48 @@ class View implements EntityInterface
         return 'core/img/view/' . $filename;
     }
 
-    public function toArray()
+    /*     * **********************Getteur Setteur*************************** */
+
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
+    public function getImage($_key = '', $_default = '')
     {
-        $return = Utils::o2a($this, true);
-        unset($return['image']);
-        $return['img'] = $this->getImgLink();
-        return $return;
+        return Utils::getJsonAttr($this->image, $_key, $_default);
     }
 
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
+    public function setImage($_key, $_value)
+    {
+        $image = Utils::setJsonAttr($this->image, $_key, $_value);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->image, $image);
+        $this->image = $image;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
+    public function save()
+    {
+        return DBHelper::save($this);
+    }
+
+    /**
+     * @param string $_version
+     * @param bool $_html
+     * @return array
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public function toAjax($_version = 'dview', $_html = false)
     {
         $return = Utils::o2a($this);
@@ -243,6 +335,21 @@ class View implements EntityInterface
         return NextDomHelper::toHumanReadable($return);
     }
 
+    /**
+     * @return ViewZone[]
+     */
+    public function getviewZone()
+    {
+        return ViewZoneManager::byView($this->getId());
+    }
+
+    /**
+     * @param array $_data
+     * @param int $_level
+     * @param int $_drill
+     * @return array|null
+     * @throws \Exception
+     */
     public function getLinkData(&$_data = array('node' => array(), 'link' => array()), $_level = 0, $_drill = 3)
     {
         if (isset($_data['node']['view' . $this->getId()])) {
@@ -268,32 +375,10 @@ class View implements EntityInterface
         return null;
     }
 
-    /*     * **********************Getteur Setteur*************************** */
-
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
-    }
-
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    public function setName($_name)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
-        $this->name = $_name;
-        return $this;
-    }
-
+    /**
+     * @param null $_default
+     * @return int|null
+     */
     public function getOrder($_default = null)
     {
         if ($this->order == '' || !is_numeric($this->order)) {
@@ -302,6 +387,10 @@ class View implements EntityInterface
         return $this->order;
     }
 
+    /**
+     * @param $_order
+     * @return $this
+     */
     public function setOrder($_order)
     {
         $this->_changed = Utils::attrChanged($this->_changed, $this->order, $_order);
@@ -309,11 +398,21 @@ class View implements EntityInterface
         return $this;
     }
 
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
     public function getDisplay($_key = '', $_default = '')
     {
         return Utils::getJsonAttr($this->display, $_key, $_default);
     }
 
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
     public function setDisplay($_key, $_value)
     {
         $display = Utils::setJsonAttr($this->display, $_key, $_value);
@@ -322,24 +421,21 @@ class View implements EntityInterface
         return $this;
     }
 
-    public function getImage($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->image, $_key, $_default);
-    }
-
-    public function setImage($_key, $_value)
-    {
-        $image = Utils::setJsonAttr($this->image, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->image, $image);
-        $this->image = $image;
-        return $this;
-    }
-
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
     public function getConfiguration($_key = '', $_default = '')
     {
         return Utils::getJsonAttr($this->configuration, $_key, $_default);
     }
 
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
     public function setConfiguration($_key, $_value)
     {
         if ($_key == 'accessCode' && $_value != '' && !Utils::isSha512($_value)) {
@@ -351,11 +447,18 @@ class View implements EntityInterface
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getChanged()
     {
         return $this->_changed;
     }
 
+    /**
+     * @param $_changed
+     * @return $this
+     */
     public function setChanged($_changed)
     {
         $this->_changed = $_changed;

@@ -27,6 +27,10 @@ use NextDom\Helpers\Render;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UpdateManager;
 
+/**
+ * Class UpdateAdd
+ * @package NextDom\Controller\Modals
+ */
 class UpdateAdd extends BaseAbstractModal
 {
     /**

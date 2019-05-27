@@ -83,11 +83,21 @@ class ViewZone implements EntityInterface
 
     /*     * *********************Methode d'instance************************* */
 
+    /**
+     * @return bool
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public function save()
     {
         return DBHelper::save($this);
     }
 
+    /**
+     * @return bool
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public function remove()
     {
         return DBHelper::remove($this);
@@ -101,18 +111,20 @@ class ViewZone implements EntityInterface
         return ViewDataManager::byViewZoneId($this->getId());
     }
 
-    public function getView()
-    {
-        return ViewManager::byId($this->getView_id());
-    }
-
-    /*     * **********************Getteur Setteur*************************** */
-
+    /**
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
     }
 
+    /*     * **********************Getteur Setteur*************************** */
+
+    /**
+     * @param $_id
+     * @return $this
+     */
     public function setId($_id)
     {
         $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
@@ -120,11 +132,27 @@ class ViewZone implements EntityInterface
         return $this;
     }
 
+    /**
+     * @return View|null
+     * @throws \Exception
+     */
+    public function getView()
+    {
+        return ViewManager::byId($this->getView_id());
+    }
+
+    /**
+     * @return View
+     */
     public function getView_id()
     {
         return $this->view_id;
     }
 
+    /**
+     * @param $_view_id
+     * @return $this
+     */
     public function setView_id($_view_id)
     {
         $this->_changed = Utils::attrChanged($this->_changed, $this->view_id, $_view_id);
@@ -132,11 +160,18 @@ class ViewZone implements EntityInterface
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getType()
     {
         return $this->type;
     }
 
+    /**
+     * @param $_type
+     * @return $this
+     */
     public function setType($_type)
     {
         $this->_changed = Utils::attrChanged($this->_changed, $this->type, $_type);
@@ -144,11 +179,18 @@ class ViewZone implements EntityInterface
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
     }
 
+    /**
+     * @param $_name
+     * @return $this
+     */
     public function setName($_name)
     {
         $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
@@ -156,11 +198,18 @@ class ViewZone implements EntityInterface
         return $this;
     }
 
+    /**
+     * @return int
+     */
     public function getPosition()
     {
         return $this->position;
     }
 
+    /**
+     * @param $_position
+     * @return $this
+     */
     public function setPosition($_position)
     {
         $this->_changed = Utils::attrChanged($this->_changed, $this->position, $_position);
@@ -168,11 +217,21 @@ class ViewZone implements EntityInterface
         return $this;
     }
 
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
     public function getConfiguration($_key = '', $_default = '')
     {
         return Utils::getJsonAttr($this->configuration, $_key, $_default);
     }
 
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
     public function setConfiguration($_key, $_value)
     {
         $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
@@ -181,11 +240,18 @@ class ViewZone implements EntityInterface
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getChanged()
     {
         return $this->_changed;
     }
 
+    /**
+     * @param $_changed
+     * @return $this
+     */
     public function setChanged($_changed)
     {
         $this->_changed = $_changed;

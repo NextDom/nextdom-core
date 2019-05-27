@@ -22,9 +22,13 @@
 
 namespace NextDom\Controller\Params;
 
-use NextDom\Helpers\Render;
 use NextDom\Controller\BaseController;
+use NextDom\Helpers\Render;
 
+/**
+ * Class InteractAdminController
+ * @package NextDom\Controller\Params
+ */
 class InteractAdminController extends BaseController
 {
     /**

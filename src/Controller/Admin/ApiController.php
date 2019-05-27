@@ -22,13 +22,17 @@
 
 namespace NextDom\Controller\Admin;
 
+use NextDom\Controller\BaseController;
 use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\Render;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
-use NextDom\Controller\BaseController;
 
+/**
+ * Class ApiController
+ * @package NextDom\Controller\Admin
+ */
 class ApiController extends BaseController
 {
     /**

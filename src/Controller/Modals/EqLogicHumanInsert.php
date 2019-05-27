@@ -25,6 +25,10 @@ namespace NextDom\Controller\Modals;
 use NextDom\Helpers\Render;
 use NextDom\Managers\ObjectManager;
 
+/**
+ * Class EqLogicHumanInsert
+ * @package NextDom\Controller\Modals
+ */
 class EqLogicHumanInsert extends BaseAbstractModal
 {
     /**

@@ -26,6 +26,10 @@ use NextDom\Helpers\Utils;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\ObjectManager;
 
+/**
+ * Class EqLogicAjax
+ * @package NextDom\Ajax
+ */
 class EqLogicAjax extends BaseAjax
 {
     protected $NEEDED_RIGHTS = UserRight::USER;
