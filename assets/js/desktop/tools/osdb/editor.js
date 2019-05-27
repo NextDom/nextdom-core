@@ -91,8 +91,12 @@ function printFileFolder(_path) {
     success: function (data) {
       $('#div_fileList').empty();
       var li = '';
+      var fileFolder = _path;
+      if (_path.charAt(_path.length - 1) !== '/') {
+        fileFolder = _path + '/';
+      }
       for (var i in data) {
-        li += '<li class="cursor"><a class="li_file" data-path="' + _path + data[i] + '">' + data[i] + '</a></li>';
+        li += '<li class="cursor"><a class="li_file" data-path="' + fileFolder + data[i] + '">' + data[i] + '</a></li>';
       }
       $('#div_fileList').append(li);
     }
