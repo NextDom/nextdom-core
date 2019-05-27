@@ -288,13 +288,13 @@ function addUpdate(_update) {
         boxUpdateClass = 'update-box';
     }
     var tr = '<div class="objet col-lg-4 col-md-6 col-sm-6 col-xs-12">';
-    tr += '<div class="box ' + boxClass +'" data-id="' + init(_update.id) + '" data-logicalId="' + init(_update.logicalId) + '" data-type="' + init(_update.type) + '">';
+    tr += '<div class="' + boxUpdateClass + ' box ' + boxClass +'" data-id="' + init(_update.id) + '" data-logicalId="' + init(_update.logicalId) + '" data-type="' + init(_update.type) + '">';
     tr += '<div class="box-header with-border accordion-toggle cursor" data-toggle="collapse" data-parent="#accordionUpdate" href="#update_' + init(_update.id) + '">';
     var updateIcon = '';
     if (init(_update.type) == 'core') {
         updateIcon = '/public/img/NextDom/NextDom_Square_WhiteBlackBlue.png';
     } else {
-        if (init(_update.plugin.icon) != '') {
+        if (isset(_update.plugin) && init(_update.plugin.icon) != '') {
             updateIcon = init(_update.plugin.icon);
         } else {
             updateIcon = '/public/img/NextDom_' + init(_update.type).charAt(0).toUpperCase() + init(_update.type).slice(1) + '_Gray.png';
