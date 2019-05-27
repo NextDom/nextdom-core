@@ -22,12 +22,16 @@
 
 namespace NextDom\Controller\Tools;
 
+use NextDom\Controller\BaseController;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\ObjectManager;
-use NextDom\Controller\BaseController;
 
+/**
+ * Class ObjectController
+ * @package NextDom\Controller\Tools
+ */
 class ObjectController extends BaseController
 {
     /**

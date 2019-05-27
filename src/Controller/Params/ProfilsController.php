@@ -22,6 +22,7 @@
 
 namespace NextDom\Controller\Params;
 
+use NextDom\Controller\BaseController;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
@@ -33,8 +34,11 @@ use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UserManager;
 use NextDom\Managers\ViewManager;
-use NextDom\Controller\BaseController;
 
+/**
+ * Class ProfilsController
+ * @package NextDom\Controller\Params
+ */
 class ProfilsController extends BaseController
 {
     /**
@@ -91,7 +95,7 @@ class ProfilsController extends BaseController
         $lsAvatars = FileSystemHelper::ls($profilRootDir);
         foreach ($lsAvatars as $avatarFile) {
             $path = sprintf("%s/%s", $profilRootDir, $avatarFile);
-            $url  = sprintf("%s/%s", $profilRootURL, $avatarFile);
+            $url = sprintf("%s/%s", $profilRootURL, $avatarFile);
             if (true == is_file($path)) {
                 $pageData['profilsAvatars'][] = $url;
             }

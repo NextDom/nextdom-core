@@ -27,6 +27,10 @@ use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ScenarioManager;
 
+/**
+ * Class ScenarioJsonEdit
+ * @package NextDom\Controller\Modals
+ */
 class ScenarioJsonEdit extends BaseAbstractModal
 {
     /**

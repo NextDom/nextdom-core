@@ -39,6 +39,10 @@ use NextDom\Helpers\Utils;
 use NextDom\Model\Entity\JeeObject;
 use NextDom\Model\Entity\Update;
 
+/**
+ * Class ObjectManager
+ * @package NextDom\Managers
+ */
 class ObjectManager
 {
     const DB_CLASS_NAME = '`object`';
@@ -85,23 +89,30 @@ class ObjectManager
     }
 
     /**
-     * Get all objects.
+     * Build tree of all objects
      *
-     * @param bool $onlyVisible Filter only visible objects
+     * @param mixed $nodeObject Current root object
+     * @param bool $visible Filter only visible objects
      *
-     * @return JeeObject[]|null
+     * @return JeeObject[]
      *
      * @throws \Exception
      */
-    public static function all($onlyVisible = false)
+    public static function buildTree($nodeObject = null, $visible = true)
     {
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . ' ';
-        if ($onlyVisible) {
-            $sql .= ' WHERE isVisible = 1';
+        $result = array();
+        if (!is_object($nodeObject)) {
+            $objectsList = self::getRootObjects(true, $visible);
+        } else {
+            $objectsList = $nodeObject->getChild($visible);
         }
-        $sql .= ' ORDER BY position,name,father_id';
-        return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        if (is_array($objectsList) && count($objectsList) > 0) {
+            foreach ($objectsList as $object) {
+                $result[] = $object;
+                $result = array_merge($result, self::buildTree($object, $visible));
+            }
+        }
+        return $result;
     }
 
     /**
@@ -129,33 +140,6 @@ class ObjectManager
             $fetchType = DBHelper::FETCH_TYPE_ROW;
         }
         return DBHelper::Prepare($sql, array(), $fetchType, \PDO::FETCH_CLASS, self::CLASS_NAME);
-    }
-
-    /**
-     * Build tree of all objects
-     *
-     * @param mixed $nodeObject Current root object
-     * @param bool $visible Filter only visible objects
-     *
-     * @return JeeObject[]
-     *
-     * @throws \Exception
-     */
-    public static function buildTree($nodeObject = null, $visible = true)
-    {
-        $result = array();
-        if (!is_object($nodeObject)) {
-            $objectsList = self::getRootObjects(true, $visible);
-        } else {
-            $objectsList = $nodeObject->getChild($visible);
-        }
-        if (is_array($objectsList) && count($objectsList) > 0) {
-            foreach ($objectsList as $object) {
-                $result[] = $object;
-                $result = array_merge($result, self::buildTree($object, $visible));
-            }
-        }
-        return $result;
     }
 
     /**
@@ -203,21 +187,23 @@ class ObjectManager
     }
 
     /**
-     * Search object configuration TODO: ??
+     * Get all objects.
      *
-     * @param string $search
-     * @return array|mixed|null
+     * @param bool $onlyVisible Filter only visible objects
+     *
+     * @return JeeObject[]|null
+     *
      * @throws \Exception
      */
-    public static function searchConfiguration(string $search)
+    public static function all($onlyVisible = false)
     {
-        $values = array(
-            'configuration' => '%' . $search . '%',
-        );
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE `configuration` LIKE :configuration';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+                FROM ' . self::DB_CLASS_NAME . ' ';
+        if ($onlyVisible) {
+            $sql .= ' WHERE isVisible = 1';
+        }
+        $sql .= ' ORDER BY position,name,father_id';
+        return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -330,6 +316,24 @@ class ObjectManager
         if (count($events) > 0) {
             EventManager::adds('jeeObject::summary::update', $events);
         }
+    }
+
+    /**
+     * Search object configuration TODO: ??
+     *
+     * @param string $search
+     * @return array|mixed|null
+     * @throws \Exception
+     */
+    public static function searchConfiguration(string $search)
+    {
+        $values = array(
+            'configuration' => '%' . $search . '%',
+        );
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE `configuration` LIKE :configuration';
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**

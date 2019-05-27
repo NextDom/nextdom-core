@@ -22,9 +22,13 @@
 
 namespace NextDom\Controller\Params;
 
-use NextDom\Helpers\Render;
 use NextDom\Controller\BaseController;
+use NextDom\Helpers\Render;
 
+/**
+ * Class CommandeController
+ * @package NextDom\Controller\Params
+ */
 class CommandeController extends BaseController
 {
     /**

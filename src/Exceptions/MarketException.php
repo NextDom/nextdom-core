@@ -19,6 +19,10 @@
 namespace NextDom\Exceptions;
 
 
+/**
+ * Class MarketException
+ * @package NextDom\Exceptions
+ */
 class MarketException extends \Exception
 {
 }

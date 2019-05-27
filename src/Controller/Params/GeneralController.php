@@ -22,11 +22,15 @@
 
 namespace NextDom\Controller\Params;
 
+use NextDom\Controller\BaseController;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
 use NextDom\Managers\CacheManager;
-use NextDom\Controller\BaseController;
 
+/**
+ * Class GeneralController
+ * @package NextDom\Controller\Params
+ */
 class GeneralController extends BaseController
 {
     /**

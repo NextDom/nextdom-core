@@ -22,11 +22,15 @@
 
 namespace NextDom\Controller\Tools;
 
-use NextDom\Helpers\Render;
-use NextDom\Helpers\AjaxHelper;
-use NextDom\Managers\UpdateManager;
 use NextDom\Controller\BaseController;
+use NextDom\Helpers\AjaxHelper;
+use NextDom\Helpers\Render;
+use NextDom\Managers\UpdateManager;
 
+/**
+ * Class BackupController
+ * @package NextDom\Controller\Tools
+ */
 class BackupController extends BaseController
 {
     /**

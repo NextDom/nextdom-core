@@ -17,6 +17,10 @@
 
 namespace NextDom\Exceptions;
 
+/**
+ * Class OperatingSystemException
+ * @package NextDom\Exceptions
+ */
 class OperatingSystemException extends \Exception
 {
 }

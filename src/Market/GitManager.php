@@ -127,6 +127,16 @@ class GitManager
     }
 
     /**
+     * Sauvegarder la liste des dépôts ignorés
+     *
+     * @param array $ignoreList Liste des dépôts ignorés
+     */
+    protected function saveIgnoreList($ignoreList)
+    {
+        $this->dataStorage->storeJsonData('repo_ignore_' . $this->gitId, $ignoreList);
+    }
+
+    /**
      * Mettre à jour les dépôts
      *
      * @param string $sourceName Nom de la source
@@ -164,31 +174,6 @@ class GitManager
     }
 
     /**
-     * Sauvegarder la liste des dépôts ignorés
-     *
-     * @param array $ignoreList Liste des dépôts ignorés
-     */
-    protected function saveIgnoreList($ignoreList)
-    {
-        $this->dataStorage->storeJsonData('repo_ignore_' . $this->gitId, $ignoreList);
-    }
-
-    /**
-     * Lire le contenu du fichier contenant la liste des dépôts
-     *
-     * @return bool|array Tableau associatifs contenant les données ou false en cas d'échec
-     */
-    public function getRepositoriesList()
-    {
-        $result = false;
-        $jsonStrList = $this->dataStorage->getJsonData('repo_data_' . $this->gitId);
-        if ($jsonStrList !== null) {
-            $result = $jsonStrList;
-        }
-        return $result;
-    }
-
-    /**
      * Obtenir la liste des plugins
      *
      * @param string $sourceName Nom de la source
@@ -205,6 +190,21 @@ class GitManager
                 $marketItem = MarketItem::createFromCache($sourceName, $repository['full_name']);
                 array_push($result, $marketItem);
             }
+        }
+        return $result;
+    }
+
+    /**
+     * Lire le contenu du fichier contenant la liste des dépôts
+     *
+     * @return bool|array Tableau associatifs contenant les données ou false en cas d'échec
+     */
+    public function getRepositoriesList()
+    {
+        $result = false;
+        $jsonStrList = $this->dataStorage->getJsonData('repo_data_' . $this->gitId);
+        if ($jsonStrList !== null) {
+            $result = $jsonStrList;
         }
         return $result;
     }

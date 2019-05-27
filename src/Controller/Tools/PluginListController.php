@@ -22,13 +22,17 @@
 
 namespace NextDom\Controller\Tools;
 
+use NextDom\Controller\BaseController;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
-use NextDom\Controller\BaseController;
 
+/**
+ * Class PluginListController
+ * @package NextDom\Controller\Tools
+ */
 class PluginListController extends BaseController
 {
     /**

@@ -379,6 +379,10 @@ $(function () {
         $('#md_modal').load('index.php?v=d&modal=message').dialog('open');
     });
 
+    $('#bt_goOnTop').click(function (){
+        window.scrollTo(0, 0);
+    });
+
     $('body').on('click','.objectSummaryParent',function(){
         loadPage('index.php?v=d&p=dashboard&summary='+$(this).data('summary')+'&object_id='+$(this).data('object_id'));
     });
@@ -1319,11 +1323,6 @@ window.onscroll = function () {
     setHeaderPosition(false);
     adjustNextDomTheme();
 };
-
-/* Click sur Fab goOnTop */
-$('#bt_goOnTop').click(function () {
-    window.scrollTo(0, 0);
-});
 
 /* Toggle du menu de gauche adminLTE */
 $('.sidebar-toggle').on("click", function () {

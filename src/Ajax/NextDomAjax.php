@@ -38,6 +38,10 @@ use NextDom\Managers\UserManager;
 use NextDom\Managers\ViewManager;
 use NextDom\Model\Entity\Listener;
 
+/**
+ * Class NextDomAjax
+ * @package NextDom\Ajax
+ */
 class NextDomAjax extends BaseAjax
 {
     protected $NEEDED_RIGHTS = UserRight::NOTHING;
@@ -323,7 +327,7 @@ class NextDomAjax extends BaseAjax
         if ($customType != 'js' && $customType != 'css') {
             throw new CoreException(__('La version ne peut être que js ou css'));
         }
-        $customDir  = sprintf("%s/custom/%s/", NEXTDOM_DATA, $customVersion);
+        $customDir = sprintf("%s/custom/%s/", NEXTDOM_DATA, $customVersion);
         $customPath = sprintf("%s/custom.%s", $customDir, $customType);
         file_put_contents($customPath, Utils::init('content'));
         AjaxHelper::success();
@@ -410,10 +414,14 @@ class NextDomAjax extends BaseAjax
         AuthentificationHelper::isConnectedAsAdminOrFail();
         Utils::unautorizedInDemo();
         AjaxHelper::init(true);
-        $pathinfo  = pathinfo(init('path'));
+        $filePath = Utils::init('path');
+        $pathinfo  = pathinfo($filePath);
         $extension = Utils::array_key_default($pathinfo, "extension", "<no-ext>");
         if (!in_array($extension, array('php', 'js', 'json', 'sql', 'ini','html','py','css'))) {
-            throw new CoreException(__('Vous ne pouvez éditer ce type d\'extension : ' . $extension, __FILE__));
+            throw new CoreException(__('Vous ne pouvez éditer ce type d\'extension : ' . $extension));
+        }
+        if (!is_writable($filePath)) {
+            throw new CoreException(__('Vous n\'avez pas les droits pour éditer ce fichier.'));
         }
         AjaxHelper::success(file_get_contents(Utils::init('path')));
     }
@@ -423,12 +431,16 @@ class NextDomAjax extends BaseAjax
         AuthentificationHelper::isConnectedAsAdminOrFail();
         Utils::unautorizedInDemo();
         AjaxHelper::init(true);
-        $pathinfo = pathinfo(Utils::init('path'));
-        $extension = Utils::array_key_default($pathinfo, "extension", "<no-ext>");
+        $filePath = Utils::init('path');
+        $pathInfo = pathinfo($filePath);
+        $extension = Utils::array_key_default($pathInfo, "extension", "<no-ext>");
         if (!in_array($extension, array('php', 'js', 'json', 'sql', 'ini','html','py','css'))) {
-            throw new CoreException(__('Vous ne pouvez éditer ce type d\'extension : ' . $extension, __FILE__));
+            throw new CoreException(__('Vous ne pouvez éditer ce type d\'extension : ') . $extension);
         }
-        AjaxHelper::success(file_put_contents(Utils::init('path'), Utils::init('content')));
+        if (!is_writable($filePath)) {
+            throw new CoreException(__('Vous n\'avez pas les droits pour éditer ce fichier.'));
+        }
+        AjaxHelper::success(file_put_contents($filePath, Utils::init('content')));
     }
 
     public function deleteFile()
@@ -438,7 +450,7 @@ class NextDomAjax extends BaseAjax
         AjaxHelper::init(true);
         $pathinfo = pathinfo(Utils::init('path'));
         $extension = Utils::array_key_default($pathinfo, "extension", "<no-ext>");
-        if (!in_array($extension, array('php', 'js', 'json', 'sql', 'ini','css'))) {
+        if (!in_array($extension, array('php', 'js', 'json', 'sql', 'ini', 'css'))) {
             throw new CoreException(__('Vous ne pouvez éditer ce type d\'extension : ' . $extension, __FILE__));
         }
         AjaxHelper::success(unlink(Utils::init('path')));
@@ -451,7 +463,7 @@ class NextDomAjax extends BaseAjax
         AjaxHelper::init(true);
         $pathinfo = pathinfo(Utils::init('name'));
         $extension = Utils::array_key_default($pathinfo, "extension", "<no-ext>");
-        if (!in_array($extension, array('php', 'js', 'json', 'sql', 'ini','css'))) {
+        if (!in_array($extension, array('php', 'js', 'json', 'sql', 'ini', 'css'))) {
             throw new CoreException(__('Vous ne pouvez éditer ce type d\'extension : ' . $extension, __FILE__));
         }
         touch(Utils::init('path') . Utils::init('name'));

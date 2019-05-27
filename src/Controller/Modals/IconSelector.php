@@ -25,6 +25,10 @@ namespace NextDom\Controller\Modals;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\Render;
 
+/**
+ * Class IconSelector
+ * @package NextDom\Controller\Modals
+ */
 class IconSelector extends BaseAbstractModal
 {
     /**

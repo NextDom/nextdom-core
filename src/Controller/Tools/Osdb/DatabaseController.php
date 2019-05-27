@@ -22,9 +22,13 @@
 
 namespace NextDom\Controller\Tools\Osdb;
 
-use NextDom\Helpers\Render;
 use NextDom\Controller\BaseController;
+use NextDom\Helpers\Render;
 
+/**
+ * Class DatabaseController
+ * @package NextDom\Controller\Tools\Osdb
+ */
 class DatabaseController extends BaseController
 {
     /**

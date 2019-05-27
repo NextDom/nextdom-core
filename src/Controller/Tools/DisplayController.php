@@ -22,11 +22,15 @@
 
 namespace NextDom\Controller\Tools;
 
+use NextDom\Controller\BaseController;
 use NextDom\Helpers\Render;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\ObjectManager;
-use NextDom\Controller\BaseController;
 
+/**
+ * Class DisplayController
+ * @package NextDom\Controller\Tools
+ */
 class DisplayController extends BaseController
 {
     /**

@@ -17,6 +17,10 @@
 
 namespace NextDom\Exceptions;
 
+/**
+ * Class DbException
+ * @package NextDom\Exceptions
+ */
 class DbException extends \Exception
 {
 }

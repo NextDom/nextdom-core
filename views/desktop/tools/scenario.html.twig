@@ -61,6 +61,9 @@
                 <h3 class="box-title"><i class="fas fa-film spacing-right"></i>{{ 'scenario.my-scenarios'|trans }}</h3>
             </div>
             <div class="box-body">
+                {% if scenariosEnabled == 0 %}
+                    <div class="alert alert-warning">{{ 'scenario.scenario-disabled'|trans }}</div>
+                {% endif %}
                 {% if scenarioCount == 0 %}
                     <div><span>{{ 'scenario.no-scenario'|trans }}</span></div>
                 {% else %}
@@ -81,7 +84,7 @@
                         <div class="box-body">
                             <div class="scenarioListContainer DisplayCard text-center">
                                 {% for scenario in scenariosWithoutGroup %}
-                                    <div class="scenarioDisplayCard cursor icon_card" data-scenario_id="{{ scenario.getId() }}" style="{% if not scenario.getIsActive() %}{{ scenarioInactiveStyle }}{% endif %}">
+                                    <div class="scenarioDisplayCard cursor icon_card" data-scenario_id="{{ scenario.getId() }}" style="{% if not scenario.getIsActive() or not scenariosEnabled %}{{ scenarioInactiveStyle }}{% endif %}">
                                         {% if scenario.getDisplay('icon') != '' %}
                                             <span class="scenario-icon">{{ scenario.getDisplay('icon')|raw }}</span>
                                         {% else %}
@@ -110,7 +113,7 @@
                             <div class="box-body">
                                 <div class="scenarioListContainer DisplayCard text-center ">
                                     {% for scenario in scenarios[scenarioGroup.group] %}
-                                        <div class="scenarioDisplayCard icon_card cursor" data-scenario_id="{{ scenario.getId() }}" style="{% if not scenario.getIsActive() %}{{ scenarioInactiveStyle }}{% endif %}">
+                                        <div class="scenarioDisplayCard icon_card cursor" data-scenario_id="{{ scenario.getId() }}" style="{% if not scenario.getIsActive() or not scenariosEnabled %}{{ scenarioInactiveStyle }}{% endif %}">
                                             {% if scenario.getDisplay('icon') != '' %}
                                                 <span class="scenario-icon">{{ scenario.getDisplay('icon')|raw }}</span>
                                             {% else %}

@@ -53,8 +53,9 @@ class PlanManager
 
     /**
      * @param $_id
-     * @return Plan[]|mixed|null
-     * @throws \Exception
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public static function byId($_id)
     {
@@ -69,8 +70,9 @@ class PlanManager
 
     /**
      * @param $_planHeader_id
-     * @return Plan[]|mixed|null
-     * @throws \Exception
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public static function byPlanHeaderId($_planHeader_id)
     {
@@ -86,8 +88,9 @@ class PlanManager
     /**
      * @param $_link_type
      * @param $_link_id
-     * @return Plan[]|mixed|null
-     * @throws \Exception
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public static function byLinkTypeLinkId($_link_type, $_link_id)
     {
@@ -106,8 +109,9 @@ class PlanManager
      * @param $_link_type
      * @param $_link_id
      * @param $_planHeader_id
-     * @return Plan[]|mixed|null
-     * @throws \Exception
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public static function byLinkTypeLinkIdPlanHedaerId($_link_type, $_link_id, $_planHeader_id)
     {
@@ -128,8 +132,8 @@ class PlanManager
      * @param $_link_type
      * @param $_link_id
      * @param $_planHeader_id
-     * @return Plan[]|mixed|null
-     * @throws \Exception
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
      */
     public static function removeByLinkTypeLinkIdPlanHedaerId($_link_type, $_link_id, $_planHeader_id)
     {
@@ -146,8 +150,9 @@ class PlanManager
     }
 
     /**
-     * @return Plan[]|mixed|null
-     * @throws \Exception
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public static function all()
     {
@@ -158,8 +163,9 @@ class PlanManager
 
     /**
      * @param $_search
-     * @return Plan[]|mixed|null
-     * @throws \Exception
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public static function searchByDisplay($_search)
     {
@@ -175,8 +181,9 @@ class PlanManager
     /**
      * @param $_search
      * @param string $_not
-     * @return Plan[]|mixed|null
-     * @throws \Exception
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public static function searchByConfiguration($_search, $_not = '')
     {

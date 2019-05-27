@@ -23,6 +23,10 @@ use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\MessageManager;
 
+/**
+ * Class MessageAjax
+ * @package NextDom\Ajax
+ */
 class MessageAjax extends BaseAjax
 {
     protected $NEEDED_RIGHTS = UserRight::USER;

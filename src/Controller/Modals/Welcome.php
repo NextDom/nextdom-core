@@ -25,6 +25,10 @@ namespace NextDom\Controller\Modals;
 use NextDom\Helpers\Render;
 use NextDom\Managers\ConfigManager;
 
+/**
+ * Class Welcome
+ * @package NextDom\Controller\Modals
+ */
 class Welcome extends BaseAbstractModal
 {
     /**

@@ -22,6 +22,7 @@
 
 namespace NextDom\Controller\Admin;
 
+use NextDom\Controller\BaseController;
 use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
@@ -30,8 +31,11 @@ use NextDom\Managers\ConfigManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
 use NextDom\Managers\UserManager;
-use NextDom\Controller\BaseController;
 
+/**
+ * Class UpdateAdminController
+ * @package NextDom\Controller\Admin
+ */
 class UpdateAdminController extends BaseController
 {
     /** Render updateAdmin page

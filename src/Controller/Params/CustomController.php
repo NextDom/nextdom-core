@@ -22,11 +22,15 @@
 
 namespace NextDom\Controller\Params;
 
+use NextDom\Controller\BaseController;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
 use NextDom\Managers\ConfigManager;
-use NextDom\Controller\BaseController;
 
+/**
+ * Class CustomController
+ * @package NextDom\Controller\Params
+ */
 class CustomController extends BaseController
 {
     /**
