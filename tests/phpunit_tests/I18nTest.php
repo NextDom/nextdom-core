@@ -81,7 +81,7 @@ class I18nTest extends PHPUnit_Framework_TestCase
         $sourceStr = 'core.error-401';
         $translator = $this->getTranslator('en_US');
         $translatedStr = $translator->trans($sourceStr);
-        $this->assertEquals('401 - Unauthorized access', $translatedStr);
+        $this->assertEquals('401 - Unauthorized Access', $translatedStr);
         $this->assertNotEquals(0, count(glob(CACHE_PATH . '/catalogue.en_US.*')));
     }
 
