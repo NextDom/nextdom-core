@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\EventManager;
@@ -28,7 +29,7 @@ use NextDom\Managers\ScenarioExpressionManager;
  * @ORM\Table(name="message", indexes={@ORM\Index(name="plugin_logicalID", columns={"plugin", "logicalId"})})
  * @ORM\Entity
  */
-class Message
+class Message implements EntityInterface
 {
     const CLASS_NAME = Message::class;
     const DB_CLASS_NAME = '`message`';
@@ -79,6 +80,12 @@ class Message
 
     protected $_changed = false;
 
+    /**
+     * @param bool $_writeMessage
+     * @return bool|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public function save($_writeMessage = true)
     {
         if ($this->getMessage() == '') {
@@ -94,7 +101,7 @@ class Message
                     FROM ' . self::DB_CLASS_NAME . '
                     WHERE plugin = :plugin
                     AND message = :message';
-            $result = \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW);
+            $result = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW);
         } else {
             $values = array(
                 'logicalId' => $this->getLogicalId(),
@@ -104,14 +111,14 @@ class Message
             FROM message
             WHERE plugin=:plugin
             AND logicalId=:logicalId';
-            $result = \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW);
+            $result = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW);
         }
         if ($result['count(*)'] != 0) {
             return null;
         }
         EventManager::add('notify', array('title' => __('Message de ') . $this->getPlugin(), 'message' => $this->getMessage(), 'category' => 'message'));
         if ($_writeMessage) {
-            \DB::save($this);
+            DBHelper::save($this);
             $params = array(
                 '#plugin#' => $this->getPlugin(),
                 '#message#' => $this->getMessage(),
@@ -134,60 +141,20 @@ class Message
         return true;
     }
 
-    public function remove()
-    {
-        \DB::remove($this);
-        EventManager::add('message::refreshMessageNumber');
-    }
-
-    /*     * **********************Getteur Setteur*************************** */
-
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    public function getDate()
-    {
-        return $this->date;
-    }
-
-    public function getPlugin()
-    {
-        return $this->plugin;
-    }
-
+    /**
+     * @return string
+     */
     public function getMessage()
     {
         return $this->message;
     }
 
-    public function getAction()
-    {
-        return $this->action;
-    }
+    /*     * **********************Getteur Setteur*************************** */
 
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
-    }
-
-    public function setDate($_date)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->date, $_date);
-        $this->date = $_date;
-        return $this;
-    }
-
-    public function setPlugin($_plugin)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->plugin, $_plugin);
-        $this->plugin = $_plugin;
-        return $this;
-    }
-
+    /**
+     * @param $_message
+     * @return $this
+     */
     public function setMessage($_message)
     {
         $this->_changed = Utils::attrChanged($this->_changed, $this->message, $_message);
@@ -195,18 +162,18 @@ class Message
         return $this;
     }
 
-    public function setAction($_action)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->action, $_action);
-        $this->action = $_action;
-        return $this;
-    }
-
+    /**
+     * @return string
+     */
     public function getLogicalId()
     {
         return $this->logicalId;
     }
 
+    /**
+     * @param $_logicalId
+     * @return $this
+     */
     public function setLogicalId($_logicalId)
     {
         $this->_changed = Utils::attrChanged($this->_changed, $this->logicalId, $_logicalId);
@@ -214,17 +181,109 @@ class Message
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getPlugin()
+    {
+        return $this->plugin;
+    }
+
+    /**
+     * @param $_plugin
+     * @return $this
+     */
+    public function setPlugin($_plugin)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->plugin, $_plugin);
+        $this->plugin = $_plugin;
+        return $this;
+    }
+
+    public function remove()
+    {
+        DBHelper::remove($this);
+        EventManager::add('message::refreshMessageNumber');
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param $_id
+     * @return $this
+     */
+    public function setId($_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
+        $this->id = $_id;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * @param $_date
+     * @return $this
+     */
+    public function setDate($_date)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->date, $_date);
+        $this->date = $_date;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAction()
+    {
+        return $this->action;
+    }
+
+    /**
+     * @param $_action
+     * @return $this
+     */
+    public function setAction($_action)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->action, $_action);
+        $this->action = $_action;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
     public function getChanged()
     {
         return $this->_changed;
     }
 
+    /**
+     * @param $_changed
+     * @return $this
+     */
     public function setChanged($_changed)
     {
         $this->_changed = $_changed;
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getTableName()
     {
         return 'message';

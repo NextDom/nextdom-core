@@ -7,6 +7,10 @@ from time import sleep
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.common.exceptions import WebDriverException
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
 
 class BaseGuiTest(unittest.TestCase):
     """Base class for gui tests
@@ -43,8 +47,8 @@ class BaseGuiTest(unittest.TestCase):
         driver_path = os.path.dirname(os.path.abspath(__file__ + os.sep + '..')) + os.sep + 'chromedriver' #pylint: disable=line-too-long
         try:
             options = webdriver.ChromeOptions()
-            # For travis environment, disable render
-            if os.uname().nodename.startswith('travis'):
+            # For travis environment and headless servers, disable render
+            if (not "XAUTHORITY" in os.environ) or os.uname().nodename.startswith('travis'):
                 options.add_argument('headless')
                 options.add_argument('disable-gpu')
             options.add_argument('window-size=1920x1080')
@@ -98,6 +102,19 @@ class BaseGuiTest(unittest.TestCase):
         """
         return self.driver.find_element_by_id(css_id)
 
+    def get_element_by_id_wait(self, css_id, timeout=5):
+        """Get Html element by CSS id (wait until visible)
+        :param css_id:  CSS id of the element
+        :param timeout: abort after number of seconds
+        :type css_id:   str
+        :type timeout:  int
+        :return:        Html element
+        :rtype:         WebElement
+        """
+        return WebDriverWait(self.driver, timeout).until(
+            EC.presence_of_element_located((By.ID, css_id))
+        )
+
     def get_element_by_css(self, css_selector):
         """Get Html element by CSS selector
         :param css_selector: CSS id of the element
@@ -106,6 +123,19 @@ class BaseGuiTest(unittest.TestCase):
         :rtype:              WebElement
         """
         return self.driver.find_element_by_css_selector(css_selector)
+
+    def get_element_by_css_wait(self, css_selector, timeout=5):
+        """Get Html element by CSS selector (wait until visible)
+        :param css_selector: CSS id of the element
+        :param timeout: abort after number of seconds
+        :type css_selector:  str
+        :type timeout:       int
+        :return:             Html element
+        :rtype:              WebElement
+        """
+        return WebDriverWait(self.driver, timeout).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, css_selector))
+        )
 
     def get_link_by_title(self, title):
         """Get link html element by text title

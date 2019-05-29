@@ -16,47 +16,9 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-try {
-    require_once __DIR__ . '/../php/core.inc.php';
-    include_file('core', 'authentification', 'php');
+use NextDom\Ajax\ListenerAjax;
 
-    if (!isConnect('admin')) {
-        throw new Exception(__('401 - Accès non autorisé', __FILE__));
-    }
+require_once (__DIR__ . '/../../src/core.php');
 
-    ajax::init();
-
-    if (init('action') == 'save') {
-        unautorizedInDemo();
-        utils::processJsonObject('listener', init('listeners'));
-        ajax::success();
-    }
-
-    if (init('action') == 'remove') {
-        unautorizedInDemo();
-        $listener = listener::byId(init('id'));
-        if (!is_object($listener)) {
-            throw new Exception(__('Listerner id inconnu', __FILE__));
-        }
-        $listener->remove();
-        ajax::success();
-    }
-
-    if (init('action') == 'all') {
-        $listeners = utils::o2a(listener::all(true));
-        foreach ($listeners as &$listener) {
-            $listener['event_str'] = '';
-            foreach ($listener['event'] as $event) {
-                $listener['event_str'] .= $event . ',';
-            }
-            $listener['event_str'] = nextdom::toHumanReadable(trim($listener['event_str'], ','));
-        }
-        ajax::success($listeners);
-    }
-
-    throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
-
-    /*     * *********Catch exeption*************** */
-} catch (Exception $e) {
-    ajax::error(displayException($e), $e->getCode());
-}
+$listenerAjax = new ListenerAjax();
+$listenerAjax->process();

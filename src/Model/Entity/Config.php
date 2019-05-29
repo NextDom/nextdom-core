@@ -51,33 +51,54 @@ class Config
      */
     protected $plugin;
 
+    /**
+     * @return string
+     */
     public function getValue()
     {
         return $this->value;
     }
 
-    public function getKey(): string
-    {
-        return $this->key;
-    }
-
-    public function getPlugin()
-    {
-        return $this->plugin;
-    }
-
+    /**
+     * @param $value
+     * @return $this
+     */
     public function setValue($value)
     {
         $this->value = $value;
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getKey(): string
+    {
+        return $this->key;
+    }
+
+    /**
+     * @param $key
+     * @return $this
+     */
     public function setKey($key)
     {
         $this->key = $key;
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getPlugin()
+    {
+        return $this->plugin;
+    }
+
+    /**
+     * @param $plugin
+     * @return $this
+     */
     public function setPlugin($plugin)
     {
         $this->plugin = $plugin;

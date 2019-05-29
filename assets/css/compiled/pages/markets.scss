@@ -1,0 +1,347 @@
+/* This file is part of Jeedom.
+*
+* Jeedom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* Jeedom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/* This file is part of NextDom.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+*
+* @Support <https://www.nextdom.org>
+* @Email   <admin@nextdom.org>
+* @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
+*/
+/* Need to be first */
+@import "../../graphics/_colors.scss";
+
+/* Core-Ajout */
+#logo-nextdom img {
+    width: 100%;
+    margin-top: 2rem;
+    max-width: 7em;
+    float: right;
+}
+#admin-buttons {
+    float: right;
+}
+.market-filters {
+    margin-top: 2rem;
+    .btn-primary {
+        background-color: $nextdom_blue !important;
+        border-color: $nextdom_blue !important;
+        background-image: none;
+    }
+    .btn-secondary {
+        color: $black;
+    }
+}
+.media-title {
+    padding: 0.4em;
+    margin: 0em -1em 0.5em -1em;
+}
+.ui-tooltip {
+    transform: translateY(-4.5em);
+}
+#market-div {
+    .media-container {
+        margin: 0;
+        padding: 5px 15px 10px 15px;
+    }
+    .media {
+        position: relative;
+        height: 200px;
+        transition: all 0.2s ease;
+        overflow: hidden;
+        box-shadow: 1px 1px 5px rgba(0,0,0,0.1), -1px -1px 4px rgba(0,0,0,0.1);
+        margin: 0;
+        border-radius: 5px;
+        padding: 0em 1em;
+        width: 100%;
+    }
+    .media-left {
+        margin-right: 1em;
+        padding-right: 1.2em;
+        padding-top: 0.3em;
+    }
+    .media .installed-marker {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 0;
+        border: 1.17em solid $nextdom_blue;
+        border-bottom-right-radius: 4px;
+    }
+    .media .installed-marker i {
+        position: absolute;
+        top: -0.5em;
+        left: -0.5em;
+        color: $white;
+    }
+    .media .update-marker {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 0;
+        height: 0;
+        border: 1.17em solid $nextdom_blue;
+        border-bottom-left-radius: 4px;
+    }
+    .media .update-marker i {
+        position: absolute;
+        top: -0.5em;
+        left: -0.5em;
+        color: $white;
+    }
+    .media img {
+        height: 100px;
+    }
+    .media h4 {
+        text:{
+            transform: capitalize;
+            align: center;
+        }
+    }
+    .media-body {
+        width: 100%;
+    }
+    .media-body p {
+        text-align: justify;
+        height: 6em;
+        overflow: hidden;
+        position: relative;
+        line-height: 1.5em;
+        font-size: 1em;
+    }
+    .media:hover {
+        cursor: pointer;
+    }
+    button {
+        color: $white;
+        border: none;
+        float: right;
+        border-top-left-radius: 0.3em;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        z-index: 1;
+        background: {
+            image: linear-gradient(to right, #40535e, #40535e 50%, $nextdom_blue 50%, $nextdom_blue);
+            size: 202% 100%;
+            position: 0 0;
+        }
+        -webkit-transition: all 0.2s ease;
+        -moz-transition: all 0.2s ease;
+        -ms-transition: all 0.2s ease;
+        -o-transition: all 0.2s ease;
+        transition: all 0.2s ease;
+        font-size: 1em;
+        line-height: 2em;
+        padding: 0 1em 0 1em;
+    }
+    .media:hover button {
+        background-position: 100% 0;
+        color: $white;
+    }
+    .gitid {
+        position: absolute;
+        bottom: 0;
+        background-color: $nextdom_blue;
+        line-height: 2em;
+        padding: {
+            left: 1em;
+            right: 1em;
+        }
+        color: $white;
+        left: 0;
+        border-top-right-radius: 5px;
+        font-size: 1em;
+    }
+}
+#mass-update {
+    display: none;
+}
+#plugin-modal {
+    .btn-primary {
+        background-color: $nextdom_blue !important;
+        border-color: $nextdom_blue !important;
+        background-image: none;
+    }
+    .btn-success {
+        background-color: $lightgreen !important;
+        border: $lightgreen !important;
+        background-image: none !important;
+    }
+    .btn-warning {
+        background-color: $orange !important;
+        border: $orange !important;
+        background-image: none !important;
+    }
+    .row {
+        margin: 0;
+    }
+    .right-pane .help-block {
+        color: $lightgrey;
+    }
+    .hidden-btn {
+        display: none;
+    }
+    .list-title {
+        font-weight: bold;
+    }
+}
+#div_pluginAlternativeMarketForJeedomAlert {
+    display: none;
+}
+#market-left-pane {
+  text-align: center;
+}
+#market-left-pane>img {
+  height: 14em;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+#plugin-modal-body {
+    background-color: $white;
+}
+#plugin-modal-body,
+#plugin-modal-footer {
+    padding-top: 10px;
+}
+#gitid-list li .btn {
+    border: none;
+}
+#add-git i {
+    font-size: 14px;
+    line-height: 20px;
+}
+#plugin-screenshots {
+    display: none;
+}
+#plugin-modal-screenshots .carousel-inner>.item>a>img, .carousel-inner>.item>img {
+    margin:{
+        left: auto;
+        left: auto;
+    }
+    max-width: 70%;
+}
+#plugin-modal-footer {
+    text-align: right;
+    margin-right: 0.5em;
+}
+.market-rating {
+    position: absolute;
+    bottom: 8px;
+    left: 10px;
+    font-size: 0.7em;
+}
+.market-cost {
+    position: absolute;
+    bottom: 5px;
+    right: 12px;
+    color: $jeedomgreen;
+}
+.market-author {
+    position: absolute;
+    bottom: 25px;
+    right: 12px;
+    font-size: 0.7em;
+    color: #999999;
+}
+.market-name {
+    position: relative;
+    top: 10px;
+    word-break: break-all;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+.market-certification {
+  top: 0px;
+  left: 25%;
+  width: 50%;
+  border-radius: 0px 0px 4px 4px;
+  padding: 1px 0px 1px 0px;
+  position: absolute;
+  font-size: 0.8em;
+}
+.market-official {
+  background-color: #33B8CC;
+  color: #fff;
+}
+.market-advised {
+  background-color: #755EED;
+  color: #fff;
+}
+.market-legacy {
+  background-color: #A0A0A0;
+  color: #333;
+}
+.market-premium {
+  background-color: #f3ae12;
+  color: #333;
+}
+.market-partner {
+  background-color: #95c12b;
+  color: #333;
+}
+.market-obsolete {
+  background-color: #BA0000;
+  color: #fff;
+}
+.market-widget {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    padding: 8px;
+}
+.market-install {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    padding: 8px;
+}
+.market {
+    border-radius: 4px;
+    height : 235px;
+    margin-bottom : 10px;
+    padding : 5px;
+    border-radius: 4px;
+    width : 190px;
+    margin-left : 10px;
+}
+.market-icon {
+    height: 117px;
+    min-width: 103px;
+    max-width: 135px;
+    margin-top: 22px;
+    text-align: center;
+    object-fit: fill;
+}
+
+/* Core-Surcharge */
+.market-slick {
+    padding: 0 25px 10px 25px;
+    overflow: hidden;
+}

@@ -74,6 +74,7 @@ $NEXTDOM_INTERNAL_CONFIG = array(
       'color19' => '#555555',
       'color20' => '#dddddd',
       'color21' => '100',
+      'color22' => '#fafafa',
     ),
     'plugin' => array(
         'category' => array(

@@ -83,13 +83,13 @@ try {
         }
     }
 
-    try {
-        echo "Check rights...";
-        nextdom::cleanFileSytemRight();
-        echo "OK\n";
-    } catch (Exception $e) {
-        echo '***ERROR***' . $e->getMessage();
-    }
+    // try {
+    //     echo "Check rights...";
+    //     nextdom::cleanFileSytemRight();
+    //     echo "OK\n";
+    // } catch (Exception $e) {
+    //     echo '***ERROR***' . $e->getMessage();
+    // }
     if (init('backup::before') == 1 && init('force') != 1) {
         try {
             global $NO_PLUGIN_BACKUP;

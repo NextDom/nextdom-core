@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\ConfigManager;
@@ -31,7 +32,7 @@ use NextDom\Managers\ScenarioManager;
  * @ORM\Table(name="dataStore", uniqueConstraints={@ORM\UniqueConstraint(name="UNIQUE", columns={"type", "link_id", "key"})})
  * @ORM\Entity
  */
-class DataStore
+class DataStore implements EntityInterface
 {
 
     /**
@@ -73,6 +74,10 @@ class DataStore
 
     protected $_changed;
 
+    /**
+     * @return bool
+     * @throws \Exception
+     */
     public function preSave()
     {
         $allowType = array('cmd', 'object', 'eqLogic', 'scenario', 'eqReal');
@@ -94,9 +99,92 @@ class DataStore
         return true;
     }
 
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param $_type
+     * @return $this
+     */
+    public function setType($_type)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->type, $_type);
+        $this->type = $_type;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLink_id()
+    {
+        return $this->link_id;
+    }
+
+    /**
+     * @param $_link_id
+     * @return $this
+     */
+    public function setLink_id($_link_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->link_id, $_link_id);
+        $this->link_id = $_link_id;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getKey()
+    {
+        return $this->key;
+    }
+
+    /*     * **********************Getteur Setteur*************************** */
+
+    /**
+     * @param $_key
+     * @return $this
+     */
+    public function setKey($_key)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->key, $_key);
+        $this->key = $_key;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param $_id
+     * @return $this
+     */
+    public function setId($_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
+        $this->id = $_id;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public function save()
     {
-        \DB::save($this);
+        DBHelper::save($this);
         return true;
     }
 
@@ -116,9 +204,16 @@ class DataStore
 
     public function remove()
     {
-        \DB::remove($this);
+        DBHelper::remove($this);
     }
 
+    /**
+     * @param array $_data
+     * @param int $_level
+     * @param null $_drill
+     * @return array|null
+     * @throws \ReflectionException
+     */
     public function getLinkData(&$_data = array('node' => array(), 'link' => array()), $_level = 0, $_drill = null)
     {
         if ($_drill == null) {
@@ -151,6 +246,11 @@ class DataStore
         return $_data;
     }
 
+    /**
+     * @param bool $_array
+     * @return array
+     * @throws \ReflectionException
+     */
     public function getUsedBy($_array = false)
     {
         $return = array('cmd' => array(), 'eqLogic' => array(), 'scenario' => array());
@@ -170,56 +270,10 @@ class DataStore
         return $return;
     }
 
-    /*     * **********************Getteur Setteur*************************** */
-
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
-    }
-
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    public function setType($_type)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->type, $_type);
-        $this->type = $_type;
-        return $this;
-    }
-
-    public function getLink_id()
-    {
-        return $this->link_id;
-    }
-
-    public function setLink_id($_link_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->link_id, $_link_id);
-        $this->link_id = $_link_id;
-        return $this;
-    }
-
-    public function getKey()
-    {
-        return $this->key;
-    }
-
-    public function setKey($_key)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->key, $_key);
-        $this->key = $_key;
-        return $this;
-    }
-
+    /**
+     * @param string $_default
+     * @return bool|mixed|null|string
+     */
     public function getValue($_default = '')
     {
         if ($this->value === '') {
@@ -228,6 +282,10 @@ class DataStore
         return is_json($this->value, $this->value);
     }
 
+    /**
+     * @param $_value
+     * @return $this
+     */
     public function setValue($_value)
     {
         if (is_object($_value) || is_array($_value)) {
@@ -238,17 +296,27 @@ class DataStore
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
     public function getChanged()
     {
         return $this->_changed;
     }
 
+    /**
+     * @param $_changed
+     * @return $this
+     */
     public function setChanged($_changed)
     {
         $this->_changed = $_changed;
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getTableName()
     {
         return 'dataStore';

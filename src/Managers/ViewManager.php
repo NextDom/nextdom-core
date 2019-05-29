@@ -33,8 +33,13 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Model\Entity\View;
 
+/**
+ * Class ViewManager
+ * @package NextDom\Managers
+ */
 class ViewManager
 {
     const DB_CLASS_NAME = '`view`';
@@ -46,10 +51,10 @@ class ViewManager
      */
     public static function all()
     {
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . ' 
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+        FROM ' . self::DB_CLASS_NAME . '
         ORDER BY `order`';
-        return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -62,12 +67,18 @@ class ViewManager
         $value = array(
             'id' => $_id,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . ' 
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+        FROM ' . self::DB_CLASS_NAME . '
         WHERE id = :id';
-        return \DB::Prepare($sql, $value, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_type
+     * @param $_id
+     * @return array
+     * @throws \Exception
+     */
     public static function searchByUse($_type, $_id)
     {
         $return = array();

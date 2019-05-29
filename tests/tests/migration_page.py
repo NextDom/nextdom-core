@@ -26,7 +26,8 @@ class MigrationPage(BaseGuiTest):
         """Test if backup is detected
         """
         self.goto('index.php?v=d&p=backup')
-        select_item = self.get_element_by_css('option[value="/var/www/html/backup/backup-Jeedom-3.2.11-2018-11-17-23h26.tar.gz"]') #pylint: disable=line-too-long
+        css = 'option[value="/var/lib/nextdom/backup/backup-Jeedom-3.2.11-2018-11-17-23h26.tar.gz"]'
+        select_item = self.get_element_by_css_wait(css)
         self.assertIsNotNone(select_item)
         self.assertEqual(0, len(self.get_js_logs()))
 

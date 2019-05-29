@@ -39,6 +39,10 @@ use NextDom\Helpers\Utils;
 
 require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
 
+/**
+ * Class DevicesManager
+ * @package NextDom\Managers
+ */
 class DevicesManager
 {
     /**

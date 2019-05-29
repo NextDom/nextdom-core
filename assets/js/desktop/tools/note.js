@@ -33,6 +33,9 @@
 * @Email   <admin@nextdom.org>
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
+setTimeout(function(){
+    setHeaderPosition(false);
+},100);
 
 function updateNoteList() {
     nextdom.note.all({

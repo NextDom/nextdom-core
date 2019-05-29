@@ -77,6 +77,9 @@ class NetworkHelper
         return self::netMatch($match, $client_ip) ? 'internal' : 'external';
     }
 
+    /**
+     * @return string
+     */
     public static function getClientIp()
     {
         if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
@@ -91,6 +94,14 @@ class NetworkHelper
         return '';
     }
 
+    /**
+     * @param string $_mode
+     * @param string $_protocol
+     * @param string $_default
+     * @param bool $_test
+     * @return mixed|string
+     * @throws \Exception
+     */
     public static function getNetworkAccess($_mode = 'auto', $_protocol = '', $_default = '', $_test = false)
     {
         if ($_mode == 'auto') {
@@ -217,6 +228,10 @@ class NetworkHelper
         return '';
     }
 
+    /**
+     * @param string $_mode
+     * @throws \Exception
+     */
     public static function checkConf($_mode = 'external')
     {
         if (ConfigManager::byKey($_mode . 'Protocol') == '') {
@@ -248,6 +263,105 @@ class NetworkHelper
         }
     }
 
+    /**
+     * @return array
+     * @throws \Exception
+     */
+    public static function getInterfacesList()
+    {
+        $interfaces = explode("\n", shell_exec(SystemHelper::getCmdSudo() . "ip -o link show | awk -F': ' '{print $2}'"));
+        $result = [];
+        foreach ($interfaces as $interface) {
+            if (trim($interface) == '') {
+                continue;
+            }
+            $result[] = $interface;
+        }
+        return $result;
+    }
+
+    /*     * *********************DNS************************* */
+
+    /**
+     * @param $_interface
+     * @return bool|string
+     * @throws \Exception
+     */
+    public static function getInterfaceIp($_interface)
+    {
+        $ip = trim(shell_exec(SystemHelper::getCmdSudo() . "ip addr show " . $_interface . " | grep \"inet .*" . $_interface . "\" | awk '{print $2}' | cut -d '/' -f 1"));
+        if (filter_var($ip, FILTER_VALIDATE_IP)) {
+            return $ip;
+        }
+        return false;
+    }
+
+    /**
+     * @param string $network
+     * @param string $ip
+     *
+     * @return bool
+     */
+    public static function netMatch($network, $ip)
+    {
+        $ip = trim($ip);
+        if ($ip === trim($network)) {
+            return true;
+        }
+        $network = str_replace(' ', '', $network);
+        if (strpos($network, '*') !== false) {
+            if (strpos($network, '/') !== false) {
+                $asParts = explode('/', $network);
+                if ($asParts[0]) {
+                    $network = $asParts[0];
+                } else {
+                    $network = null;
+                }
+            }
+            $nCount = substr_count($network, '*');
+            $network = str_replace('*', '0', $network);
+            if ($nCount == 1) {
+                $network .= '/24';
+            } elseif ($nCount == 2) {
+                $network .= '/16';
+            } elseif ($nCount == 3) {
+                $network .= '/8';
+            } elseif ($nCount > 3) {
+                return true; // if *.*.*.*, then all, so matched
+            }
+        }
+
+        $d = strpos($network, '-');
+        if ($d === false) {
+            if (strpos($network, '/') === false) {
+                if ($ip == $network) {
+                    return true;
+                }
+                return false;
+            }
+            $ip_arr = explode('/', $network);
+            if (!preg_match("@\d*\.\d*\.\d*\.\d*@", $ip_arr[0], $matches)) {
+                $ip_arr[0] .= ".0"; // Alternate form 194.1.4/24
+            }
+            $network_long = ip2long($ip_arr[0]);
+            $x = ip2long($ip_arr[1]);
+            $mask = long2ip($x) == $ip_arr[1] ? $x : (0xffffffff << (32 - $ip_arr[1]));
+            $ip_long = ip2long($ip);
+            return ($ip_long & $mask) == ($network_long & $mask);
+        } else {
+            $from = trim(ip2long(substr($network, 0, $d)));
+            $to = trim(ip2long(substr($network, $d + 1)));
+            $ip = ip2long($ip);
+            return ($ip >= $from && $ip <= $to);
+        }
+    }
+
+    /**
+     * @param string $_mode
+     * @param int $_timeout
+     * @return bool
+     * @throws \Exception
+     */
     public static function test($_mode = 'external', $_timeout = 5)
     {
         if (ConfigManager::byKey('network::disableMangement') == 1) {
@@ -281,8 +395,68 @@ class NetworkHelper
         return true;
     }
 
-    /*     * *********************DNS************************* */
+    /**
+     * @param $_string
+     * @return bool|mixed|string
+     */
+    public static function getIpFromString($_string)
+    {
+        $result = parse_url($_string);
+        if (isset($result['host'])) {
+            $_string = $result['host'];
+        } else {
+            $_string = str_replace(array('https://', 'http://'), '', $_string);
+            if (strpos($_string, '/') !== false) {
+                $_string = substr($_string, 0, strpos($_string, '/'));
+            }
+            if (strpos($_string, ':') !== false) {
+                $_string = substr($_string, 0, strpos($_string, ':'));
+            }
+        }
+        if (!filter_var($_string, FILTER_VALIDATE_IP)) {
+            $_string = gethostbyname($_string);
+        }
+        return $_string;
+    }
 
+    public static function dnsStart()
+    {
+        if (ConfigManager::byKey('dns::token') == '') {
+            return;
+        }
+        if (ConfigManager::byKey('market::allowDNS') != 1) {
+            return;
+        }
+        $openvpn = self::dnsCreate();
+        $cmd = $openvpn->getCmd('action', 'start');
+        if (!is_object($cmd)) {
+            throw new CoreException(__('La commande de démarrage du DNS est introuvable'));
+        }
+        $cmd->execCmd();
+        $interface = $openvpn->getInterfaceName();
+        if ($interface !== null && $interface != '' && $interface !== false) {
+            shell_exec(SystemHelper::getCmdSudo() . 'iptables -A INPUT -i ' . $interface . ' -p tcp  --destination-port 80 -j ACCEPT');
+            if (ConfigManager::byKey('dns::openport') != '') {
+                foreach (explode(',', ConfigManager::byKey('dns::openport')) as $port) {
+                    if (is_nan($port)) {
+                        continue;
+                    }
+                    try {
+                        shell_exec(SystemHelper::getCmdSudo() . 'iptables -A INPUT -i ' . $interface . ' -p tcp  --destination-port ' . $port . ' -j ACCEPT');
+                    } catch (\Exception $e) {
+
+                    }
+                }
+            }
+            shell_exec(SystemHelper::getCmdSudo() . 'iptables -A INPUT -i ' . $interface . ' -j DROP');
+        }
+    }
+
+    /**
+     * @return array|mixed|\openvpn
+     * @throws CoreException
+     * @throws \Throwable
+     */
     public static function dnsCreate()
     {
         if (ConfigManager::byKey('dns::token') == '') {
@@ -356,39 +530,20 @@ class NetworkHelper
         return $openvpn;
     }
 
-    public static function dnsStart()
-    {
-        if (ConfigManager::byKey('dns::token') == '') {
-            return;
-        }
-        if (ConfigManager::byKey('market::allowDNS') != 1) {
-            return;
-        }
-        $openvpn = self::dnsCreate();
-        $cmd = $openvpn->getCmd('action', 'start');
-        if (!is_object($cmd)) {
-            throw new CoreException(__('La commande de démarrage du DNS est introuvable'));
-        }
-        $cmd->execCmd();
-        $interface = $openvpn->getInterfaceName();
-        if ($interface !== null && $interface != '' && $interface !== false) {
-            shell_exec(SystemHelper::getCmdSudo() . 'iptables -A INPUT -i ' . $interface . ' -p tcp  --destination-port 80 -j ACCEPT');
-            if (ConfigManager::byKey('dns::openport') != '') {
-                foreach (explode(',', ConfigManager::byKey('dns::openport')) as $port) {
-                    if (is_nan($port)) {
-                        continue;
-                    }
-                    try {
-                        shell_exec(SystemHelper::getCmdSudo() . 'iptables -A INPUT -i ' . $interface . ' -p tcp  --destination-port ' . $port . ' -j ACCEPT');
-                    } catch (\Exception $e) {
-
-                    }
-                }
-            }
-            shell_exec(SystemHelper::getCmdSudo() . 'iptables -A INPUT -i ' . $interface . ' -j DROP');
-        }
-    }
-
+    /**
+     * @return bool
+     * @throws CoreException
+     */
+    /**
+     * @return bool
+     * @throws CoreException
+     * @throws \Throwable
+     */
+    /**
+     * @return bool
+     * @throws CoreException
+     * @throws \Throwable
+     */
     public static function dnsRun()
     {
         if (ConfigManager::byKey('dns::token') == '') {
@@ -422,15 +577,21 @@ class NetworkHelper
         $cmd->execCmd();
     }
 
-    public static function getInterfaceIp($_interface)
-    {
-        $ip = trim(shell_exec(SystemHelper::getCmdSudo() . "ip addr show " . $_interface . " | grep \"inet .*" . $_interface . "\" | awk '{print $2}' | cut -d '/' -f 1"));
-        if (filter_var($ip, FILTER_VALIDATE_IP)) {
-            return $ip;
-        }
-        return false;
-    }
-
+    /**
+     * @param $_interface
+     * @return bool|string
+     * @throws \Exception
+     */
+    /**
+     * @param $_interface
+     * @return bool|string
+     * @throws \Exception
+     */
+    /**
+     * @param $_interface
+     * @return bool|string
+     * @throws \Exception
+     */
     public static function getInterfaceMac($_interface)
     {
         $valid_mac = "([0-9A-F]{2}[:-]){5}([0-9A-F]{2})";
@@ -439,19 +600,6 @@ class NetworkHelper
             return $mac;
         }
         return false;
-    }
-
-    public static function getInterfacesList()
-    {
-        $interfaces = explode("\n", shell_exec(SystemHelper::getCmdSudo() . "ip -o link show | awk -F': ' '{print $2}'"));
-        $result = [];
-        foreach ($interfaces as $interface) {
-            if (trim($interface) == '') {
-                continue;
-            }
-            $result[] = $interface;
-        }
-        return $result;
     }
 
     public static function cron5()
@@ -488,86 +636,5 @@ class NetworkHelper
         }
         LogHelper::addError('network', __('Souci réseau détecté, redémarrage du réseau. La gateway ne répond pas au ping : ') . $gw);
         exec(SystemHelper::getCmdSudo() . 'service networking restart');
-    }
-
-    /**
-     * @param string $network
-     * @param string $ip
-     *
-     * @return bool
-     */
-    public static function netMatch($network, $ip)
-    {
-        $ip = trim($ip);
-        if ($ip == trim($network)) {
-            return true;
-        }
-        $network = str_replace(' ', '', $network);
-        if (strpos($network, '*') !== false) {
-            if (strpos($network, '/') !== false) {
-                $asParts = explode('/', $network);
-                if ($asParts[0]) {
-                    $network = $asParts[0];
-                } else {
-                    $network = null;
-                }
-            }
-            $nCount = substr_count($network, '*');
-            $network = str_replace('*', '0', $network);
-            if ($nCount == 1) {
-                $network .= '/24';
-            } elseif ($nCount == 2) {
-                $network .= '/16';
-            } elseif ($nCount == 3) {
-                $network .= '/8';
-            } elseif ($nCount > 3) {
-                return true; // if *.*.*.*, then all, so matched
-            }
-        }
-
-        $d = strpos($network, '-');
-        if ($d === false) {
-            if (strpos($network, '/') === false) {
-                if ($ip == $network) {
-                    return true;
-                }
-                return false;
-            }
-            $ip_arr = explode('/', $network);
-            if (!preg_match("@\d*\.\d*\.\d*\.\d*@", $ip_arr[0], $matches)) {
-                $ip_arr[0] .= ".0"; // Alternate form 194.1.4/24
-            }
-            $network_long = ip2long($ip_arr[0]);
-            $x = ip2long($ip_arr[1]);
-            $mask = long2ip($x) == $ip_arr[1] ? $x : (0xffffffff << (32 - $ip_arr[1]));
-            $ip_long = ip2long($ip);
-            return ($ip_long & $mask) == ($network_long & $mask);
-        } else {
-
-            $from = trim(ip2long(substr($network, 0, $d)));
-            $to = trim(ip2long(substr($network, $d + 1)));
-            $ip = ip2long($ip);
-            return ($ip >= $from && $ip <= $to);
-        }
-    }
-
-    public static function getIpFromString($_string)
-    {
-        $result = parse_url($_string);
-        if (isset($result['host'])) {
-            $_string = $result['host'];
-        } else {
-            $_string = str_replace(array('https://', 'http://'), '', $_string);
-            if (strpos($_string, '/') !== false) {
-                $_string = substr($_string, 0, strpos($_string, '/'));
-            }
-            if (strpos($_string, ':') !== false) {
-                $_string = substr($_string, 0, strpos($_string, ':'));
-            }
-        }
-        if (!filter_var($_string, FILTER_VALIDATE_IP)) {
-            $_string = gethostbyname($_string);
-        }
-        return $_string;
     }
 }

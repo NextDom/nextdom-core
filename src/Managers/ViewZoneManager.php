@@ -33,49 +33,77 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\DBHelper;
+use NextDom\Model\Entity\ViewZone;
+
+/**
+ * Class ViewZoneManager
+ * @package NextDom\Managers
+ */
 class ViewZoneManager
 {
     const DB_CLASS_NAME = '`viewZone`';
     const CLASS_NAME = 'viewZone';
 
 
+    /**
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function all()
     {
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME;
-        return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_id
+     * @return ViewZone|null
+     * @throws \Exception
+     */
     public static function byId($_id)
     {
         $value = array(
             'id' => $_id,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE id=:id';
-        return \DB::Prepare($sql, $value, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_view_id
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byView($_view_id)
     {
         $value = array(
             'view_id' => $_view_id,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE view_id=:view_id';
-        return \DB::Prepare($sql, $value, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_view_id
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     */
     public static function removeByViewId($_view_id)
     {
         $value = array(
             'view_id' => $_view_id,
         );
         $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . '
-                WHERE view_id=:view_id';
-        return \DB::Prepare($sql, $value, \DB::FETCH_TYPE_ROW);
+                WHERE view_id = :view_id';
+        return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ROW);
     }
 
 }

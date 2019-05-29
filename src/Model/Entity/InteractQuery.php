@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
@@ -32,7 +33,7 @@ use NextDom\Managers\ScenarioExpressionManager;
  * @ORM\Table(name="interactQuery", indexes={@ORM\Index(name="fk_sarahQuery_sarahDef1_idx", columns={"interactDef_id"}), @ORM\Index(name="query", columns={"query"})})
  * @ORM\Entity
  */
-class InteractQuery
+class InteractQuery implements EntityInterface
 {
 
     /**
@@ -67,6 +68,11 @@ class InteractQuery
 
     protected $_changed = false;
 
+    /**
+     * @return $this
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public function save()
     {
         if ($this->getQuery() == '') {
@@ -75,15 +81,64 @@ class InteractQuery
         if ($this->getInteractDef_id() == '') {
             throw new \Exception(__('InteractDef_id ne peut pas être vide'));
         }
-        \DB::save($this);
+        DBHelper::save($this);
         return $this;
     }
 
-    public function remove()
+    /**
+     * @return string
+     */
+    public function getQuery()
     {
-        return \DB::remove($this);
+        return $this->query;
     }
 
+    /**
+     * @param $_query
+     * @return $this
+     */
+    public function setQuery($_query)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->query, $_query);
+        $this->query = $_query;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getInteractDef_id()
+    {
+        return $this->interactDef_id;
+    }
+
+    /**
+     * @param $_interactDef_id
+     * @return $this
+     */
+    public function setInteractDef_id($_interactDef_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->interactDef_id, $_interactDef_id);
+        $this->interactDef_id = $_interactDef_id;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
+    public function remove()
+    {
+        return DBHelper::remove($this);
+    }
+
+    /**
+     * @param $_parameters
+     * @return mixed
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public function executeAndReply($_parameters)
     {
         if (isset($_parameters['reply_cmd'])) {
@@ -239,30 +294,17 @@ class InteractQuery
     }
 
     /**
-     * @return InteractDef
+     * @return int
      */
-    public function getInteractDef()
-    {
-        return InteractDefManager::byId($this->interactDef_id);
-    }
-
-    public function getInteractDef_id()
-    {
-        return $this->interactDef_id;
-    }
-
-    public function setInteractDef_id($_interactDef_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->interactDef_id, $_interactDef_id);
-        $this->interactDef_id = $_interactDef_id;
-        return $this;
-    }
-
     public function getId()
     {
         return $this->id;
     }
 
+    /**
+     * @param $_id
+     * @return $this
+     */
     public function setId($_id)
     {
         $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
@@ -270,23 +312,21 @@ class InteractQuery
         return $this;
     }
 
-    public function getQuery()
-    {
-        return $this->query;
-    }
-
-    public function setQuery($_query)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->query, $_query);
-        $this->query = $_query;
-        return $this;
-    }
-
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
     public function getActions($_key = '', $_default = '')
     {
         return Utils::getJsonAttr($this->actions, $_key, $_default);
     }
 
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
     public function setActions($_key, $_value)
     {
         $actions = Utils::setJsonAttr($this->actions, $_key, $_value);
@@ -295,22 +335,45 @@ class InteractQuery
         return $this;
     }
 
+    /**
+     * @return InteractDef
+     */
+    public function getInteractDef()
+    {
+        return InteractDefManager::byId($this->interactDef_id);
+    }
+
+    /**
+     * @param $_replace
+     * @param $_by
+     * @param $_in
+     */
     public function replaceForContextual($_replace, $_by, $_in)
     {
         Interactquery::replaceForContextual($_replace, $_by, $_in);
     }
 
+    /**
+     * @return bool
+     */
     public function getChanged()
     {
         return $this->_changed;
     }
 
+    /**
+     * @param $_changed
+     * @return $this
+     */
     public function setChanged($_changed)
     {
         $this->_changed = $_changed;
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getTableName()
     {
         return 'interactQuery';

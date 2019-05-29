@@ -17,11 +17,12 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\InteractQueryManager;
-use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\ObjectManager;
 
 /**
  * Interactdef
@@ -29,7 +30,7 @@ use NextDom\Managers\JeeObjectManager;
  * @ORM\Table(name="interactDef")
  * @ORM\Entity
  */
-class InteractDef
+class InteractDef implements EntityInterface
 {
 
     /**
@@ -106,7 +107,361 @@ class InteractDef
 
     protected $_changed = false;
 
+    /**
+     * @return mixed
+     */
+    public function selectReply()
+    {
+        $replies = InteractDefManager::generateTextVariant($this->getReply());
+        $random = rand(0, count($replies) - 1);
+        return $replies[$random];
+    }
 
+    /**
+     * @return string
+     */
+    public function getReply()
+    {
+        return $this->reply;
+    }
+
+    /**
+     * @param $_reply
+     * @return $this
+     */
+    public function setReply($_reply)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->reply, $_reply);
+        $this->reply = $_reply;
+        return $this;
+    }
+
+    public function preInsert()
+    {
+        if ($this->getReply() == '') {
+            $this->setReply('#valeur#');
+        }
+        $this->setEnable(1);
+    }
+
+    public function preSave()
+    {
+        if ($this->getOptions('allowSyntaxCheck') === '') {
+            $this->setOptions('allowSyntaxCheck', 1);
+        }
+        if ($this->getFiltres('eqLogic_id') == '') {
+            $this->setFiltres('eqLogic_id', 'all');
+        }
+    }
+
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
+    public function getOptions($_key = '', $_default = '')
+    {
+        return Utils::getJsonAttr($this->options, $_key, $_default);
+    }
+
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
+    public function setOptions($_key, $_value)
+    {
+        $options = Utils::setJsonAttr($this->options, $_key, $_value);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->options, $options);
+        $this->options = $options;
+        return $this;
+    }
+
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
+    public function getFiltres($_key = '', $_default = '')
+    {
+        return Utils::getJsonAttr($this->filtres, $_key, $_default);
+    }
+
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
+    public function setFiltres($_key, $_value)
+    {
+        $filtres = Utils::setJsonAttr($this->filtres, $_key, $_value);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->filtres, $filtres);
+        $this->filtres = $filtres;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
+    public function save()
+    {
+        if ($this->getQuery() == '') {
+            throw new \Exception(__('La commande (demande) ne peut pas être vide'));
+        }
+        DBHelper::save($this);
+        return true;
+    }
+
+    /**
+     * @return string
+     */
+    public function getQuery()
+    {
+        return $this->query;
+    }
+
+    /**
+     * @param $_query
+     * @return $this
+     */
+    public function setQuery($_query)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->query, $_query);
+        $this->query = $_query;
+        return $this;
+    }
+
+    public function postSave()
+    {
+        $queries = $this->generateQueryVariant();
+        InteractQueryManager::removeByInteractDefId($this->getId());
+        if ($this->getEnable()) {
+            DBHelper::beginTransaction();
+            foreach ($queries as $query) {
+                $query['query'] = InteractDefManager::sanitizeQuery($query['query']);
+                if (trim($query['query']) == '') {
+                    continue;
+                }
+                if (!$this->checkQuery($query['query'])) {
+                    continue;
+                }
+                $interactQuery = new InteractQuery();
+                $interactQuery->setInteractDef_id($this->getId());
+                $interactQuery->setQuery($query['query']);
+                $interactQuery->setActions('cmd', $query['cmd']);
+                $interactQuery->save();
+            }
+            DBHelper::commit();
+        }
+        InteractDefManager::cleanInteract();
+    }
+
+    /**
+     * @return array
+     * @throws \Exception
+     */
+    public function generateQueryVariant()
+    {
+        $inputs = InteractDefManager::generateTextVariant($this->getQuery());
+        $return = array();
+        $object_filter = $this->getFiltres('object');
+        $type_filter = $this->getFiltres('type');
+        $subtype_filter = $this->getFiltres('subtype');
+        $unite_filter = $this->getFiltres('unite');
+        $plugin_filter = $this->getFiltres('plugin');
+        $visible_filter = $this->getFiltres('visible');
+        $category_filter = $this->getFiltres('category');
+        foreach ($inputs as $input) {
+            preg_match_all("/#(.*?)#/", $input, $matches);
+            $matches = $matches[1];
+            if (in_array('commande', $matches) || (in_array('objet', $matches) || in_array('equipement', $matches))) {
+                foreach (ObjectManager::all() as $object) {
+                    if (isset($object_filter[$object->getId()]) && $object_filter[$object->getId()] == 0) {
+                        continue;
+                    }
+                    if (isset($visible_filter['object']) && $visible_filter['object'] == 1 && $object->getIsVisible() != 1) {
+                        continue;
+                    }
+                    foreach ($object->getEqLogic() as $eqLogic) {
+                        if ($this->getFiltres('eqLogic_id', 'all') != 'all' && $eqLogic->getId() != $this->getFiltres('eqLogic_id')) {
+                            continue;
+                        }
+                        if (isset($plugin_filter[$eqLogic->getEqType_name()]) && $plugin_filter[$eqLogic->getEqType_name()] == 0) {
+                            continue;
+                        }
+                        if (isset($visible_filter['eqLogic']) && $visible_filter['eqLogic'] == 1 && $eqLogic->getIsVisible() != 1) {
+                            continue;
+                        }
+
+                        $category_ok = true;
+                        if (is_array($category_filter)) {
+                            $category_ok = false;
+                            foreach ($category_filter as $category => $value) {
+                                if ($value == 1) {
+                                    if ($eqLogic->getCategory($category) == 1) {
+                                        $category_ok = true;
+                                        break;
+                                    }
+                                    if ($category == 'noCategory' && $eqLogic->getPrimaryCategory() == '') {
+                                        $category_ok = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        if (!$category_ok) {
+                            continue;
+                        }
+                        foreach ($eqLogic->getCmd() as $cmd) {
+                            if (isset($visible_filter['cmd']) && $visible_filter['cmd'] == 1 && $cmd->getIsVisible() != 1) {
+                                continue;
+                            }
+                            if (isset($subtype_filter[$cmd->getSubType()]) && $subtype_filter[$cmd->getSubType()] == 0) {
+                                continue;
+                            }
+                            if (isset($type_filter[$cmd->getType()]) && $type_filter[$cmd->getType()] == 0) {
+                                continue;
+                            }
+                            if ($cmd->getUnite() == '') {
+                                if (isset($unite_filter['none']) && $unite_filter['none'] == 0) {
+                                    continue;
+                                }
+                            } else {
+                                if (isset($unite_filter[$cmd->getUnite()]) && $unite_filter[$cmd->getUnite()] == 0) {
+                                    continue;
+                                }
+                            }
+
+                            $replace = array(
+                                '#objet#' => strtolower($object->getName()),
+                                '#commande#' => strtolower($cmd->getName()),
+                                '#equipement#' => strtolower($eqLogic->getName()),
+                            );
+                            $options = array();
+                            if ($cmd->getType() == 'action') {
+                                if ($cmd->getSubtype() == 'color') {
+                                    $options['color'] = '#color#';
+                                }
+                                if ($cmd->getSubtype() == 'slider') {
+                                    $options['slider'] = '#slider#';
+                                }
+                                if ($cmd->getSubtype() == 'message') {
+                                    $options['message'] = '#message#';
+                                    $options['title'] = '#title#';
+                                }
+                            }
+                            $query = str_replace(array_keys($replace), $replace, $input);
+                            $return[$query] = array(
+                                'query' => $query,
+                                'cmd' => array(array('cmd' => '#' . $cmd->getId() . '#', 'options' => $options)),
+
+                            );
+                        }
+                    }
+                }
+            }
+        }
+
+        if (count($return) == 0) {
+            foreach ($inputs as $input) {
+                $return[] = array(
+                    'query' => $input,
+                    'cmd' => $this->getActions('cmd'),
+                );
+            }
+        }
+        if ($this->getOptions('synonymes') != '') {
+            $synonymes = array();
+            foreach (explode('|', $this->getOptions('synonymes')) as $value) {
+                $values = explode('=', $value);
+                if (count($values) != 2) {
+                    continue;
+                }
+                $synonymes[InteractDefManager::sanitizeQuery($values[0])] = explode(',', InteractDefManager::sanitizeQuery($values[1]));
+            }
+            foreach ($return as $query) {
+                $results = InteractDefManager::generateSynonymeVariante(InteractDefManager::sanitizeQuery($query['query']), $synonymes);
+                if (count($results) == 0) {
+                    continue;
+                }
+                foreach ($results as $result) {
+                    $query_info = $query;
+                    $query_info['query'] = $result;
+                    $return[$result] = $query_info;
+                }
+            }
+        }
+        return $return;
+    }
+
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
+    public function getActions($_key = '', $_default = '')
+    {
+        return Utils::getJsonAttr($this->actions, $_key, $_default);
+    }
+
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
+    public function setActions($_key, $_value)
+    {
+        $actions = Utils::setJsonAttr($this->actions, $_key, $_value);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->actions, $actions);
+        $this->actions = $actions;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param $_id
+     * @return $this
+     */
+    public function setId($_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
+        $this->id = $_id;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getEnable()
+    {
+        return $this->enable;
+    }
+
+    /**
+     * @param $_enable
+     * @return $this
+     */
+    public function setEnable($_enable)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->enable, $_enable);
+        $this->enable = $_enable;
+        return $this;
+    }
+
+    /**
+     * @param $_query
+     * @return bool
+     * @throws \Exception
+     */
     public function checkQuery($_query)
     {
         if ($this->getOptions('allowSyntaxCheck', 1) == 1) {
@@ -248,68 +603,9 @@ class InteractDef
         return true;
     }
 
-    public function selectReply()
-    {
-        $replies = InteractDefManager::generateTextVariant($this->getReply());
-        $random = rand(0, count($replies) - 1);
-        return $replies[$random];
-    }
-
-    public function preInsert()
-    {
-        if ($this->getReply() == '') {
-            $this->setReply('#valeur#');
-        }
-        $this->setEnable(1);
-    }
-
-    public function preSave()
-    {
-        if ($this->getOptions('allowSyntaxCheck') === '') {
-            $this->setOptions('allowSyntaxCheck', 1);
-        }
-        if ($this->getFiltres('eqLogic_id') == '') {
-            $this->setFiltres('eqLogic_id', 'all');
-        }
-    }
-
-    public function save()
-    {
-        if ($this->getQuery() == '') {
-            throw new \Exception(__('La commande (demande) ne peut pas être vide'));
-        }
-        \DB::save($this);
-        return true;
-    }
-
-    public function postSave()
-    {
-        $queries = $this->generateQueryVariant();
-        InteractQueryManager::removeByInteractDefId($this->getId());
-        if ($this->getEnable()) {
-            \DB::beginTransaction();
-            foreach ($queries as $query) {
-                $query['query'] = InteractDefManager::sanitizeQuery($query['query']);
-                if (trim($query['query']) == '') {
-                    continue;
-                }
-                if (!$this->checkQuery($query['query'])) {
-                    continue;
-                }
-                $interactQuery = new InteractQuery();
-                $interactQuery->setInteractDef_id($this->getId());
-                $interactQuery->setQuery($query['query']);
-                $interactQuery->setActions('cmd', $query['cmd']);
-                $interactQuery->save();
-            }
-            \DB::commit();
-        }
-        InteractDefManager::cleanInteract();
-    }
-
     public function remove()
     {
-        \DB::remove($this);
+        DBHelper::remove($this);
     }
 
     public function preRemove()
@@ -322,153 +618,20 @@ class InteractDef
         InteractDefManager::cleanInteract();
     }
 
-    public function generateQueryVariant()
-    {
-        $inputs = InteractDefManager::generateTextVariant($this->getQuery());
-        $return = array();
-        $object_filter = $this->getFiltres('object');
-        $type_filter = $this->getFiltres('type');
-        $subtype_filter = $this->getFiltres('subtype');
-        $unite_filter = $this->getFiltres('unite');
-        $plugin_filter = $this->getFiltres('plugin');
-        $visible_filter = $this->getFiltres('visible');
-        $category_filter = $this->getFiltres('category');
-        foreach ($inputs as $input) {
-            preg_match_all("/#(.*?)#/", $input, $matches);
-            $matches = $matches[1];
-            if (in_array('commande', $matches) || (in_array('objet', $matches) || in_array('equipement', $matches))) {
-                foreach (JeeObjectManager::all() as $object) {
-                    if (isset($object_filter[$object->getId()]) && $object_filter[$object->getId()] == 0) {
-                        continue;
-                    }
-                    if (isset($visible_filter['object']) && $visible_filter['object'] == 1 && $object->getIsVisible() != 1) {
-                        continue;
-                    }
-                    foreach ($object->getEqLogic() as $eqLogic) {
-                        if ($this->getFiltres('eqLogic_id', 'all') != 'all' && $eqLogic->getId() != $this->getFiltres('eqLogic_id')) {
-                            continue;
-                        }
-                        if (isset($plugin_filter[$eqLogic->getEqType_name()]) && $plugin_filter[$eqLogic->getEqType_name()] == 0) {
-                            continue;
-                        }
-                        if (isset($visible_filter['eqLogic']) && $visible_filter['eqLogic'] == 1 && $eqLogic->getIsVisible() != 1) {
-                            continue;
-                        }
-
-                        $category_ok = true;
-                        if (is_array($category_filter)) {
-                            $category_ok = false;
-                            foreach ($category_filter as $category => $value) {
-                                if ($value == 1) {
-                                    if ($eqLogic->getCategory($category) == 1) {
-                                        $category_ok = true;
-                                        break;
-                                    }
-                                    if ($category == 'noCategory' && $eqLogic->getPrimaryCategory() == '') {
-                                        $category_ok = true;
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                        if (!$category_ok) {
-                            continue;
-                        }
-                        foreach ($eqLogic->getCmd() as $cmd) {
-                            if (isset($visible_filter['cmd']) && $visible_filter['cmd'] == 1 && $cmd->getIsVisible() != 1) {
-                                continue;
-                            }
-                            if (isset($subtype_filter[$cmd->getSubType()]) && $subtype_filter[$cmd->getSubType()] == 0) {
-                                continue;
-                            }
-                            if (isset($type_filter[$cmd->getType()]) && $type_filter[$cmd->getType()] == 0) {
-                                continue;
-                            }
-                            if ($cmd->getUnite() == '') {
-                                if (isset($unite_filter['none']) && $unite_filter['none'] == 0) {
-                                    continue;
-                                }
-                            } else {
-                                if (isset($unite_filter[$cmd->getUnite()]) && $unite_filter[$cmd->getUnite()] == 0) {
-                                    continue;
-                                }
-                            }
-
-                            $replace = array(
-                                '#objet#' => strtolower($object->getName()),
-                                '#commande#' => strtolower($cmd->getName()),
-                                '#equipement#' => strtolower($eqLogic->getName()),
-                            );
-                            $options = array();
-                            if ($cmd->getType() == 'action') {
-                                if ($cmd->getSubtype() == 'color') {
-                                    $options['color'] = '#color#';
-                                }
-                                if ($cmd->getSubtype() == 'slider') {
-                                    $options['slider'] = '#slider#';
-                                }
-                                if ($cmd->getSubtype() == 'message') {
-                                    $options['message'] = '#message#';
-                                    $options['title'] = '#title#';
-                                }
-                            }
-                            $query = str_replace(array_keys($replace), $replace, $input);
-                            $return[$query] = array(
-                                'query' => $query,
-                                'cmd' => array(array('cmd' => '#' . $cmd->getId() . '#', 'options' => $options)),
-
-                            );
-                        }
-                    }
-                }
-            }
-        }
-
-        if (count($return) == 0) {
-            foreach ($inputs as $input) {
-                $return[] = array(
-                    'query' => $input,
-                    'cmd' => $this->getActions('cmd'),
-                );
-            }
-        }
-        if ($this->getOptions('synonymes') != '') {
-            $synonymes = array();
-            foreach (explode('|', $this->getOptions('synonymes')) as $value) {
-                $values = explode('=', $value);
-                if (count($values) != 2) {
-                    continue;
-                }
-                $synonymes[InteractDefManager::sanitizeQuery($values[0])] = explode(',', InteractDefManager::sanitizeQuery($values[1]));
-            }
-            foreach ($return as $query) {
-                $results = InteractDefManager::generateSynonymeVariante(InteractDefManager::sanitizeQuery($query['query']), $synonymes);
-                if (count($results) == 0) {
-                    continue;
-                }
-                foreach ($results as $result) {
-                    $query_info = $query;
-                    $query_info['query'] = $result;
-                    $return[$result] = $query_info;
-                }
-            }
-        }
-        return $return;
-    }
-
+    /**
+     * @return string
+     */
     public function getLinkToConfiguration()
     {
         return 'index.php?v=d&p=interact&id=' . $this->getId();
     }
 
-    public function getHumanName()
-    {
-        if ($this->getName() != '') {
-            return $this->getName();
-        }
-        return $this->getQuery();
-    }
-
+    /**
+     * @param array $_data
+     * @param int $_level
+     * @param int $_drill
+     * @return array|null
+     */
     public function getLinkData(&$_data = array('node' => array(), 'link' => array()), $_level = 0, $_drill = 3)
     {
         if (isset($_data['node']['interactDef' . $this->getId()])) {
@@ -494,97 +657,49 @@ class InteractDef
         return null;
     }
 
-    public function getId()
+    /**
+     * @return string
+     */
+    /**
+     * @return string
+     */
+    /**
+     * @return string
+     */
+    public function getHumanName()
     {
-        return $this->id;
+        if ($this->getName() != '') {
+            return $this->getName();
+        }
+        return $this->getQuery();
     }
 
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
-    }
-
-    public function getQuery()
-    {
-        return $this->query;
-    }
-
-    public function setQuery($_query)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->query, $_query);
-        $this->query = $_query;
-        return $this;
-    }
-
-    public function getReply()
-    {
-        return $this->reply;
-    }
-
-    public function setReply($_reply)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->reply, $_reply);
-        $this->reply = $_reply;
-        return $this;
-    }
-
-    public function getPerson()
-    {
-        return $this->person;
-    }
-
-    public function setPerson($_person)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->person, $_person);
-        $this->person = $_person;
-        return $this;
-    }
-
-    public function getOptions($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->options, $_key, $_default);
-    }
-
-    public function setOptions($_key, $_value)
-    {
-        $options = Utils::setJsonAttr($this->options, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->options, $options);
-        $this->options = $options;
-        return $this;
-    }
-
-    public function getFiltres($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->filtres, $_key, $_default);
-    }
-
-    public function setFiltres($_key, $_value)
-    {
-        $filtres = Utils::setJsonAttr($this->filtres, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->filtres, $filtres);
-        $this->filtres = $filtres;
-        return $this;
-    }
-
-    public function getEnable()
-    {
-        return $this->enable;
-    }
-
-    public function setEnable($_enable)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->enable, $_enable);
-        $this->enable = $_enable;
-        return $this;
-    }
-
+    /**
+     * @return string
+     */
+    /**
+     * @return string
+     */
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
     }
 
+    /**
+     * @param $_name
+     * @return $this
+     */
+    /**
+     * @param $_name
+     * @return $this
+     */
+    /**
+     * @param $_name
+     * @return $this
+     */
     public function setName($_name)
     {
         $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
@@ -592,11 +707,65 @@ class InteractDef
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    /**
+     * @return string
+     */
+    /**
+     * @return string
+     */
+    public function getPerson()
+    {
+        return $this->person;
+    }
+
+    /**
+     * @param $_person
+     * @return $this
+     */
+    /**
+     * @param $_person
+     * @return $this
+     */
+    /**
+     * @param $_person
+     * @return $this
+     */
+    public function setPerson($_person)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->person, $_person);
+        $this->person = $_person;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    /**
+     * @return string
+     */
+    /**
+     * @return string
+     */
     public function getGroup()
     {
         return $this->group;
     }
 
+    /**
+     * @param $_group
+     * @return $this
+     */
+    /**
+     * @param $_group
+     * @return $this
+     */
+    /**
+     * @param $_group
+     * @return $this
+     */
     public function setGroup($_group)
     {
         $this->_changed = Utils::attrChanged($this->_changed, $this->group, $_group);
@@ -604,30 +773,47 @@ class InteractDef
         return $this;
     }
 
-    public function getActions($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->actions, $_key, $_default);
-    }
-
-    public function setActions($_key, $_value)
-    {
-        $actions = Utils::setJsonAttr($this->actions, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->actions, $actions);
-        $this->actions = $actions;
-        return $this;
-    }
-
+    /**
+     * @return bool
+     */
+    /**
+     * @return bool
+     */
+    /**
+     * @return bool
+     */
     public function getChanged()
     {
         return $this->_changed;
     }
 
+    /**
+     * @param $_changed
+     * @return $this
+     */
+    /**
+     * @param $_changed
+     * @return $this
+     */
+    /**
+     * @param $_changed
+     * @return $this
+     */
     public function setChanged($_changed)
     {
         $this->_changed = $_changed;
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    /**
+     * @return string
+     */
+    /**
+     * @return string
+     */
     public function getTableName()
     {
         return 'interactDef';

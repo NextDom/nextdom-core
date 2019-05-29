@@ -33,6 +33,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
@@ -40,6 +41,10 @@ use NextDom\Helpers\Utils;
 use NextDom\Model\Entity\User;
 use PragmaRX\Google2FA\Google2FA;
 
+/**
+ * Class UserManager
+ * @package NextDom\Managers
+ */
 class UserManager
 {
     const DB_CLASS_NAME = '`user`';
@@ -128,21 +133,9 @@ class UserManager
     }
 
     /**
-     * @param $_id
-     * @return array|mixed|null
+     * @return bool|resource
      * @throws \Exception
      */
-    public static function byId($_id)
-    {
-        $values = array(
-            'id' => $_id,
-        );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE id=:id';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
-    }
-
     public static function connectToLDAP()
     {
         $ad = ldap_connect(ConfigManager::byKey('ldap:host'), ConfigManager::byKey('ldap:port'));
@@ -154,15 +147,57 @@ class UserManager
         return false;
     }
 
+    /**
+     * @param $_login
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byLogin($_login)
     {
         $values = array(
             'login' => $_login,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE login=:login';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE login = :login';
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+    }
+
+    /**
+     * @param $_login
+     * @param $_password
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
+    public static function byLoginAndPassword($_login, $_password)
+    {
+        $values = array(
+            'login' => $_login,
+            'password' => $_password,
+        );
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE login = :login
+                AND password = :password';
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+    }
+
+    /**
+     * @param $_id
+     * @return array|mixed|null
+     * @throws \Exception
+     */
+    public static function byId($_id)
+    {
+        $values = array(
+            'id' => $_id,
+        );
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE id = :id';
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -175,36 +210,30 @@ class UserManager
         $values = array(
             'hash' => $_hash,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE hash=:hash';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE hash = :hash';
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_login
+     * @param $_hash
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byLoginAndHash($_login, $_hash)
     {
         $values = array(
             'login' => $_login,
             'hash' => $_hash,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
-                WHERE login=:login
-                AND hash=:hash';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
-    }
-
-    public static function byLoginAndPassword($_login, $_password)
-    {
-        $values = array(
-            'login' => $_login,
-            'password' => $_password,
-        );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE login=:login
-                AND password=:password';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+                WHERE login = :login
+                AND hash = :hash';
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -214,22 +243,28 @@ class UserManager
      */
     public static function all()
     {
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME;
-        return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME;
+        return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_rights
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function searchByRight($_rights)
     {
         $values = array(
             'rights' => '%"' . $_rights . '":1%',
             'rights2' => '%"' . $_rights . '":"1"%',
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE rights LIKE :rights
-        OR rights LIKE :rights2';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE rights LIKE :rights
+                OR rights LIKE :rights2';
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -243,24 +278,30 @@ class UserManager
         $values = array(
             'profils' => $_profils,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE profils=:profils';
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE profils = :profils';
         if ($_enable) {
             $sql .= ' AND enable=1';
         }
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_enable
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byEnable($_enable)
     {
         $values = array(
             'enable' => $_enable,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE enable=:enable';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     public static function failedLogin()
@@ -286,6 +327,10 @@ class UserManager
         return self::isBanned();
     }
 
+    /**
+     * @return bool
+     * @throws \Exception
+     */
     public static function isBanned()
     {
         $ip = NetworkHelper::getClientIp();
@@ -349,6 +394,10 @@ class UserManager
         return false;
     }
 
+    /**
+     * @return string
+     * @throws \Exception
+     */
     public static function getAccessKeyForReport()
     {
         $user = self::byLogin('internal_report');
@@ -376,6 +425,10 @@ class UserManager
         return $user->getHash() . '-' . $key;
     }
 
+    /**
+     * @param bool $_enable
+     * @throws \Exception
+     */
     public static function supportAccess($_enable = true)
     {
         if ($_enable) {
@@ -407,6 +460,9 @@ class UserManager
         }
     }
 
+    /**
+     * @param $user
+     */
     public static function storeUserInSession($user)
     {
         $_SESSION['user'] = $user;

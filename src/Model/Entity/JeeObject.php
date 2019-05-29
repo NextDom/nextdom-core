@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CacheManager;
@@ -24,7 +25,7 @@ use NextDom\Managers\CmdManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\DataStoreManager;
 use NextDom\Managers\EqLogicManager;
-use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\ObjectManager;
 use NextDom\Managers\ScenarioManager;
 
 /**
@@ -33,7 +34,7 @@ use NextDom\Managers\ScenarioManager;
  * @ORM\Table(name="object", uniqueConstraints={@ORM\UniqueConstraint(name="name_UNIQUE", columns={"name"})}, indexes={@ORM\Index(name="fk_object_object1_idx1", columns={"father_id"}), @ORM\Index(name="position", columns={"position"})})
  * @ORM\Entity
  */
-class JeeObject
+class JeeObject implements EntityInterface
 {
     const CLASS_NAME = JeeObject::class;
     const DB_CLASS_NAME = '`object`';
@@ -43,7 +44,7 @@ class JeeObject
      *
      * @ORM\Column(name="name", type="string", length=45, nullable=false)
      */
-    protected $name;
+    protected $name = '';
 
     /**
      * @var boolean
@@ -113,28 +114,6 @@ class JeeObject
     }
 
     /**
-     * Check that the object tree does not have a loop.
-     *
-     * @param array $ancestors List of all objects ancestors
-     *
-     * @throws \Exception
-     */
-    public function checkTreeConsistency($ancestors = array())
-    {
-        $father = $this->getFather();
-        // If object as a father
-        if (is_object($father)) {
-            // Check if the object is in ancestors (loop)
-            if (in_array($this->getFather_id(), $ancestors)) {
-                throw new \Exception(__('Problème dans l\'arbre des objets', __FILE__));
-            }
-            $ancestors[] = $this->getId();
-
-            $father->checkTreeConsistency($ancestors);
-        }
-    }
-
-    /**
      * Method called before save. Check error and set default values
      *
      * @throws \Exception
@@ -162,42 +141,138 @@ class JeeObject
     }
 
     /**
-     * Save object in database
+     * Get father object id
      *
-     * @return bool True if save works
+     * @param int|null $default Default value if object as no father
+     *
+     * @return int|null Father object id
      */
-    public function save()
+    public function getFather_id($default = null)
     {
-        \DB::save($this);
-        return true;
+        if ($this->father_id == '' || !is_numeric($this->father_id)) {
+            return $default;
+        }
+        return $this->father_id;
     }
 
     /**
-     * Get direct children
+     * Set father object
      *
-     * @param bool $_visible
-     * @return array|mixed|null
+     * @param int|null $_father_id Set father object id or null for root object
+     *
+     * @return $this
+     */
+    public function setFather_id($_father_id = null)
+    {
+        $_father_id = ($_father_id == '') ? null : $_father_id;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->father_id, $_father_id);
+        $this->father_id = $_father_id;
+        return $this;
+    }
+
+    /**
+     * Get object id
+     *
+     * @return int|null Object id
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set object id
+     *
+     * @param int|null $_id Object Id
+     *
+     * @return $this
+     */
+    public function setId($_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
+        $this->id = $_id;
+        return $this;
+    }
+
+    /**
+     * Check that the object tree does not have a loop.
+     *
+     * @param array $ancestors List of all objects ancestors
      *
      * @throws \Exception
      */
-    public function getChild($_visible = true)
+    public function checkTreeConsistency($ancestors = array())
     {
-        if (!isset($this->_child[$_visible])) {
-            $values = array(
-                'id' => $this->id,
-            );
-            $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE father_id = :id';
-            if ($_visible) {
-                $sql .= ' AND isVisible = 1 ';
+        $father = $this->getFather();
+        // If object as a father
+        if (is_object($father)) {
+            // Check if the object is in ancestors (loop)
+            if (in_array($this->getFather_id(), $ancestors)) {
+                throw new \Exception(__('Problème dans l\'arbre des objets', __FILE__));
             }
-            $sql .= ' ORDER BY position';
-            $this->_child[$_visible] = \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+            $ancestors[] = $this->getId();
+
+            $father->checkTreeConsistency($ancestors);
         }
-        return $this->_child[$_visible];
     }
 
+    /**
+     * @return JeeObject|null
+     * @throws \Exception
+     */
+    public function getFather()
+    {
+        return ObjectManager::byId($this->getFather_id());
+    }
+
+    /**
+     * @return int
+     */
+    public function parentNumber()
+    {
+        $father = $this->getFather();
+        if (!is_object($father)) {
+            return 0;
+        }
+        $fatherNumber = 0;
+        while ($fatherNumber < 50) {
+            $fatherNumber++;
+            $father = $father->getFather();
+            if (!is_object($father)) {
+                return $fatherNumber;
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * Get configuration information by key
+     * TODO: Position dans ?
+     * @param string $key Name of the information
+     * @param mixed $default Default value
+     *
+     * @return mixed Value of the asked information or $default.
+     */
+    public function getConfiguration(string $key = '', $default = '')
+    {
+        return Utils::getJsonAttr($this->configuration, $key, $default);
+    }
+
+    /**
+     * Set configuration information by key
+     *
+     * @param string $_key Name of the information
+     * @param mixed $_value Value of this information
+     *
+     * @return $this
+     */
+    public function setConfiguration(string $_key, $_value)
+    {
+        $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
+        $this->configuration = $configuration;
+        return $this;
+    }
 
     /**
      * Get tree under this object
@@ -216,35 +291,41 @@ class JeeObject
         return $tree;
     }
 
+    /**
+     * Get direct children
+     *
+     * @param bool $_visible
+     * @return array|mixed|null
+     *
+     * @throws \Exception
+     */
+    public function getChild($_visible = true)
+    {
+        if (!isset($this->_child[$_visible])) {
+            $values = array(
+                'id' => $this->id,
+            );
+            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE father_id = :id';
+            if ($_visible) {
+                $sql .= ' AND isVisible = 1 ';
+            }
+            $sql .= ' ORDER BY position';
+            $this->_child[$_visible] = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        }
+        return $this->_child[$_visible];
+    }
 
     /**
+     * @param string $summary
      * @param bool $onlyEnable
      * @param bool $onlyVisible
      * @param null $eqTypeName
      * @param null $logicalId
-     * @param bool $searchOnchild
-     * @return array|eqLogic[]
+     * @return array|null
      * @throws \Exception
      */
-    public function getEqLogic($onlyEnable = true, $onlyVisible = false, $eqTypeName = null, $logicalId = null, $searchOnchild = false)
-    {
-        $eqLogics = EqLogicManager::byObjectId($this->getId(), $onlyEnable, $onlyVisible, $eqTypeName, $logicalId);
-        if (is_array($eqLogics)) {
-            foreach ($eqLogics as &$eqLogic) {
-                $eqLogic->setObject($this);
-            }
-        }
-        if ($searchOnchild) {
-            $child_object = JeeObjectManager::buildTree($this);
-            if (count($child_object) > 0) {
-                foreach ($child_object as $object) {
-                    $eqLogics = array_merge($eqLogics, $object->getEqLogic($onlyEnable, $onlyVisible, $eqTypeName, $logicalId));
-                }
-            }
-        }
-        return $eqLogics;
-    }
-
     public function getEqLogicBySummary($summary = '', $onlyEnable = true, $onlyVisible = false, $eqTypeName = null, $logicalId = null)
     {
         $def = ConfigManager::byKey('object:summary');
@@ -275,61 +356,107 @@ class JeeObject
         return $return;
     }
 
-    public function getScenario($onlyEnable = true, $onlyVisible = false)
-    {
-        return ScenarioManager::byObjectId($this->getId(), $onlyEnable, $onlyVisible);
-    }
-
     public function preRemove()
     {
         DataStoreManager::removeByTypeLinkId('object', $this->getId());
     }
 
+    /**
+     * @return bool
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public function remove()
     {
         NextDomHelper::addRemoveHistory(array('id' => $this->getId(), 'name' => $this->getName(), 'date' => date('Y-m-d H:i:s'), 'type' => 'object'));
-        return \DB::remove($this);
+        return DBHelper::remove($this);
     }
 
-    public function getFather()
+    /**
+     * Get object name
+     *
+     * @return string Object name
+     */
+    public function getName()
     {
-        return JeeObjectManager::byId($this->getFather_id());
+        return $this->name;
     }
 
-    public function parentNumber()
+    /**
+     * Set object name
+     *
+     * @param string $_name Object name
+     *
+     * @return $this
+     */
+    public function setName($_name)
     {
-        $father = $this->getFather();
-        if (!is_object($father)) {
-            return 0;
+        $_name = str_replace(array('&', '#', ']', '[', '%'), '', $_name);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
+        $this->name = $_name;
+        return $this;
+    }
+
+    /**
+     * @param string $version
+     * @return mixed|string
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
+    public function getHtmlSummary($version = 'desktop')
+    {
+        if (trim($this->getCache('summaryHtml' . $version)) != '') {
+            return $this->getCache('summaryHtml' . $version);
         }
-        $fatherNumber = 0;
-        while ($fatherNumber < 50) {
-            $fatherNumber++;
-            $father = $father->getFather();
-            if (!is_object($father)) {
-                return $fatherNumber;
+        $return = '<span class="objectSummary' . $this->getId() . '" data-version="' . $version . '">';
+        $def = ConfigManager::byKey('object:summary');
+        foreach ($def as $key => $value) {
+            if ($this->getConfiguration('summary::hide::' . $version . '::' . $key, 0) == 1) {
+                continue;
             }
-        }
-        return 0;
-    }
-
-    public function getHumanName($tag = false, $prettify = false)
-    {
-        if ($tag) {
-            if ($prettify) {
-                if ($this->getDisplay('tagColor') != '') {
-                    return '<span class="label" style="text-shadow : none;background-color:' . $this->getDisplay('tagColor') . ' !important;color:' . $this->getDisplay('tagTextColor', 'white') . ' !important">' . $this->getDisplay('icon') . '<i class="spacing-right"></i>' . $this->getName() . '</span>';
-                } else {
-                    return '<span class="label label-primary">' . $this->getDisplay('icon') . '<i class="spacing-right"></i>' . $this->getName() . '</span>';
+            $result = $this->getSummary($key);
+            if ($result !== null) {
+                $style = '';
+                if ($version == 'desktop') {
+                    $style = 'color:' . $this->getDisplay($version . '::summaryTextColor', '#000000') . ';';
                 }
-            } else {
-                return $this->getDisplay('icon') . '<i class="spacing-right"></i>' . $this->getName();
+                $allowDisplayZero = $value['allowDisplayZero'];
+                if ($value['calcul'] == 'text') {
+                    $allowDisplayZero = 1;
+                }
+                if ($allowDisplayZero == 0 && $result == 0) {
+                    $style = 'display:none;';
+                }
+                $return .= '<span style="margin-right:8px;' . $style . '" class="objectSummaryParent cursor" data-summary="' . $key . '" data-object_id="' . $this->getId() . '" data-displayZeroValue="' . $allowDisplayZero . '">' . $value['icon'] . ' <sup><span class="objectSummary' . $key . '">' . $result . '</span> ' . $value['unit'] . '</span></sup>';
             }
-        } else {
-            return $this->getName();
         }
+        $return = trim($return) . '</span>';
+        $this->setCache('summaryHtml' . $version, $return);
+        return $return;
     }
 
+    /**
+     * Get cache information of this object
+     *
+     * @param string $key Name of the information
+     * @param mixed $default Default value
+     *
+     * @return mixed Value of the asked information or $default
+     * @throws \Exception
+     */
+    public function getCache(string $key = '', $default = '')
+    {
+        $cache = CacheManager::byKey('objectCacheAttr' . $this->getId())->getValue();
+        return Utils::getJsonAttr($cache, $key, $default);
+    }
+
+    /**
+     * @param string $key
+     * @param bool $raw
+     * @return array|float|null|string
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public function getSummary($key = '', $raw = false)
     {
         $def = ConfigManager::byKey('object:summary');
@@ -366,38 +493,54 @@ class JeeObject
         return round(NextDomHelper::calculStat($def[$key]['calcul'], $values), 1);
     }
 
-    public function getHtmlSummary($version = 'desktop')
+    /**
+     * Get display information by key
+     *
+     * @param string $key Name of the information
+     * @param mixed $default Value of this information
+     *
+     * @return mixed Value of the asked information or $default
+     */
+    public function getDisplay(string $key = '', $default = '')
     {
-        if (trim($this->getCache('summaryHtml' . $version)) != '') {
-            return $this->getCache('summaryHtml' . $version);
-        }
-        $return = '<span class="objectSummary' . $this->getId() . '" data-version="' . $version . '">';
-        $def = ConfigManager::byKey('object:summary');
-        foreach ($def as $key => $value) {
-            if ($this->getConfiguration('summary::hide::' . $version . '::' . $key, 0) == 1) {
-                continue;
-            }
-            $result = $this->getSummary($key);
-            if ($result !== null) {
-                $style = '';
-                if ($version == 'desktop') {
-                    $style = 'color:' . $this->getDisplay($version . '::summaryTextColor', '#000000') . ';';
-                }
-                $allowDisplayZero = $value['allowDisplayZero'];
-                if ($value['calcul'] == 'text') {
-                    $allowDisplayZero = 1;
-                }
-                if ($allowDisplayZero == 0 && $result == 0) {
-                    $style = 'display:none;';
-                }
-                $return .= '<span style="margin-right:5px;' . $style . '" class="objectSummaryParent cursor" data-summary="' . $key . '" data-object_id="' . $this->getId() . '" data-displayZeroValue="' . $allowDisplayZero . '">' . $value['icon'] . ' <sup><span class="objectSummary' . $key . '">' . $result . '</span> ' . $value['unit'] . '</span></sup>';
-            }
-        }
-        $return = trim($return) . '</span>';
-        $this->setCache('summaryHtml' . $version, $return);
-        return $return;
+        return Utils::getJsonAttr($this->display, $key, $default);
     }
 
+    /**
+     * Set display information by key
+     *
+     * @param string $key Name of the information
+     * @param mixed $value value of this information
+     *
+     * @return $this
+     */
+    public function setDisplay(string $key, $value)
+    {
+        $display = Utils::setJsonAttr($this->display, $key, $value);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->display, $display);
+        $this->display = $display;
+        return $this;
+    }
+
+    /**
+     * Store information of this object in cache
+     *
+     * @param string $key Name of the information to store
+     * @param mixed $value Default value
+     * @throws \Exception
+     */
+    public function setCache(string $key, $value = null)
+    {
+        CacheManager::set('objectCacheAttr' . $this->getId(), Utils::setJsonAttr(CacheManager::byKey('objectCacheAttr' . $this->getId())->getValue(), $key, $value));
+    }
+
+    /**
+     * @param array $data
+     * @param int $level
+     * @param null $drill
+     * @return array|null
+     * @throws \ReflectionException
+     */
     public function getLinkData(&$data = array('node' => array(), 'link' => array()), $level = 0, $drill = null)
     {
         if ($drill === null) {
@@ -434,12 +577,118 @@ class JeeObject
         return $data;
     }
 
+    /**
+     * @param bool $tag
+     * @param bool $prettify
+     * @return string
+     */
+    public function getHumanName($tag = false, $prettify = false)
+    {
+        if ($tag) {
+            if ($prettify) {
+                if ($this->getDisplay('tagColor') != '') {
+                    return '<span class="label" style="text-shadow : none;background-color:' . $this->getDisplay('tagColor') . ' !important;color:' . $this->getDisplay('tagTextColor', 'white') . ' !important">' . $this->getDisplay('icon', '<i class="fas fa-tag"></i>') . '<i class="spacing-right"></i>' . $this->getName() . '</span>';
+                } else {
+                    return '<span class="label label-primary">' . $this->getDisplay('icon', '<i class="fas fa-tag"></i>') . '<i class="spacing-right"></i>' . $this->getName() . '</span>';
+                }
+            } else {
+                return $this->getDisplay('icon', '<i class="fas fa-tag"></i>') . '<i class="spacing-right"></i>' . $this->getName();
+            }
+        } else {
+            return $this->getName();
+        }
+    }
+
+    /**
+     * @return array
+     * @throws \ReflectionException
+     */
     public function getUse()
     {
         $json = NextDomHelper::fromHumanReadable(json_encode(Utils::o2a($this)));
         return NextDomHelper::getTypeUse($json);
     }
 
+    /**
+     * @param bool $onlyEnable
+     * @param bool $onlyVisible
+     * @param null $eqTypeName
+     * @param null $logicalId
+     * @param bool $searchOnchild
+     * @return array|eqLogic[]
+     * @throws \Exception
+     */
+    public function getEqLogic($onlyEnable = true, $onlyVisible = false, $eqTypeName = null, $logicalId = null, $searchOnchild = false)
+    {
+        $eqLogics = EqLogicManager::byObjectId($this->getId(), $onlyEnable, $onlyVisible, $eqTypeName, $logicalId);
+        if (is_array($eqLogics)) {
+            foreach ($eqLogics as &$eqLogic) {
+                $eqLogic->setObject($this);
+            }
+        }
+        if ($searchOnchild) {
+            $child_object = ObjectManager::buildTree($this);
+            if (count($child_object) > 0) {
+                foreach ($child_object as $object) {
+                    $eqLogics = array_merge($eqLogics, $object->getEqLogic($onlyEnable, $onlyVisible, $eqTypeName, $logicalId));
+                }
+            }
+        }
+        return $eqLogics;
+    }
+
+    /**
+     * @param bool $onlyEnable
+     * @param bool $onlyVisible
+     * @return array|mixed|null[]
+     * @throws \Exception
+     */
+    /**
+     * @param bool $onlyEnable
+     * @param bool $onlyVisible
+     * @return array|mixed|null[]
+     * @throws \Exception
+     */
+    /**
+     * @param bool $onlyEnable
+     * @param bool $onlyVisible
+     * @return array|mixed|null[]
+     * @throws \Exception
+     */
+    public function getScenario($onlyEnable = true, $onlyVisible = false)
+    {
+        return ScenarioManager::byObjectId($this->getId(), $onlyEnable, $onlyVisible);
+    }
+
+    /**
+     * @return array
+     * @throws \ReflectionException
+     */
+    /**
+     * @return array
+     * @throws \ReflectionException
+     */
+    /**
+     * @return array
+     * @throws \ReflectionException
+     */
+    public function toArray()
+    {
+        $return = Utils::o2a($this, true);
+        unset($return['image']);
+        $return['img'] = $this->getImgLink();
+        return $return;
+    }
+
+    /**
+     * @return string
+     */
+    /**
+     * @return string
+     */
+    /**
+     * @return string
+     */
     public function getImgLink()
     {
         if ($this->getImage('data') == '') {
@@ -461,29 +710,41 @@ class JeeObject
         return 'public/img/object/' . $filename;
     }
 
-    public function toArray()
-    {
-        $return = Utils::o2a($this, true);
-        unset($return['image']);
-        $return['img'] = $this->getImgLink();
-        return $return;
-    }
-
     /**
-     * Get object id
-     *
-     * @return int|null Object id
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
      */
-    public function getId()
-    {
-        return $this->id;
-    }
-
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
     public function getImage($_key = '', $_default = '')
     {
         return Utils::getJsonAttr($this->image, $_key, $_default);
     }
 
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
     public function setImage($_key, $_value)
     {
         $this->image = Utils::setJsonAttr($this->image, $_key, $_value);
@@ -491,28 +752,14 @@ class JeeObject
     }
 
     /**
-     * Get object name
+     * Save object in database
      *
-     * @return string Object name
+     * @return bool True if save works
      */
-    public function getName(): string
+    public function save()
     {
-        return $this->name;
-    }
-
-    /**
-     * Get father object id
-     *
-     * @param int|null $default Default value if object as no father
-     *
-     * @return int|null Father object id
-     */
-    public function getFather_id($default = null)
-    {
-        if ($this->father_id == '' || !is_numeric($this->father_id)) {
-            return $default;
-        }
-        return $this->father_id;
+        DBHelper::save($this);
+        return true;
     }
 
     /**
@@ -540,50 +787,6 @@ class JeeObject
         if ($this->getIsVisible() === 1)
             return true;
         return false;
-    }
-
-    /**
-     * Set object id
-     *
-     * @param int|null $_id Object Id
-     *
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
-    }
-
-    /**
-     * Set object name
-     *
-     * @param string $_name Object name
-     *
-     * @return $this
-     */
-    public function setName($_name)
-    {
-        $_name = str_replace(array('&', '#', ']', '[', '%'), '', $_name);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
-        $this->name = $_name;
-        return $this;
-    }
-
-    /**
-     * Set father object
-     *
-     * @param int|null $_father_id Set father object id or null for root object
-     *
-     * @return $this
-     */
-    public function setFather_id($_father_id = null)
-    {
-        $_father_id = ($_father_id == '') ? null : $_father_id;
-        $this->_changed = Utils::attrChanged($this->_changed, $this->father_id, $_father_id);
-        $this->father_id = $_father_id;
-        return $this;
     }
 
     /**
@@ -631,95 +834,31 @@ class JeeObject
     }
 
     /**
-     * Get configuration information by key
-     * TODO: Position dans ?
-     * @param string $key Name of the information
-     * @param mixed $default Default value
-     *
-     * @return mixed Value of the asked information or $default.
+     * @return bool
      */
-    public function getConfiguration(string $key = '', $default = '')
-    {
-        return Utils::getJsonAttr($this->configuration, $key, $default);
-    }
-
     /**
-     * Set configuration information by key
-     *
-     * @param string $_key Name of the information
-     * @param mixed $_value Value of this information
-     *
-     * @return $this
+     * @return bool
      */
-    public function setConfiguration(string $_key, $_value)
-    {
-        $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
-        $this->configuration = $configuration;
-        return $this;
-    }
-
     /**
-     * Get display information by key
-     *
-     * @param string $key Name of the information
-     * @param mixed $default Value of this information
-     *
-     * @return mixed Value of the asked information or $default
+     * @return bool
      */
-    public function getDisplay(string $key = '', $default = '')
-    {
-        return Utils::getJsonAttr($this->display, $key, $default);
-    }
-
-    /**
-     * Set display information by key
-     *
-     * @param string $key Name of the information
-     * @param mixed $value value of this information
-     *
-     * @return $this
-     */
-    public function setDisplay(string $key, $value)
-    {
-        $display = Utils::setJsonAttr($this->display, $key, $value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->display, $display);
-        $this->display = $display;
-        return $this;
-    }
-
-    /**
-     * Get cache information of this object
-     *
-     * @param string $key Name of the information
-     * @param mixed $default Default value
-     *
-     * @return mixed Value of the asked information or $default
-     * @throws \Exception
-     */
-    public function getCache(string $key = '', $default = '')
-    {
-        $cache = CacheManager::byKey('objectCacheAttr' . $this->getId())->getValue();
-        return Utils::getJsonAttr($cache, $key, $default);
-    }
-
-    /**
-     * Store information of this object in cache
-     *
-     * @param string $key Name of the information to store
-     * @param mixed $value Default value
-     * @throws \Exception
-     */
-    public function setCache(string $key, $value = null)
-    {
-        CacheManager::set('objectCacheAttr' . $this->getId(), Utils::setJsonAttr(CacheManager::byKey('objectCacheAttr' . $this->getId())->getValue(), $key, $value));
-    }
-
     public function getChanged()
     {
         return $this->_changed;
     }
 
+    /**
+     * @param $_changed
+     * @return $this
+     */
+    /**
+     * @param $_changed
+     * @return $this
+     */
+    /**
+     * @param $_changed
+     * @return $this
+     */
     public function setChanged($_changed)
     {
         $this->_changed = $_changed;

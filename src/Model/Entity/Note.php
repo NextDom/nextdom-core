@@ -17,6 +17,8 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Exceptions\CoreException;
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
 
 /**
@@ -25,7 +27,7 @@ use NextDom\Helpers\Utils;
  * @ORM\Table(name="note")
  * @ORM\Entity
  */
-class Note
+class Note implements EntityInterface
 {
 
     /**
@@ -53,46 +55,29 @@ class Note
 
     private $_changed = false;
 
+    /**
+     * Throw exception if note doesn't have name
+     * @throws CoreException
+     */
     public function preSave()
     {
         if (trim($this->getName()) == '') {
-            throw new \Exception(__('Le nom de la note ne peut être vide'));
+            throw new CoreException(__('entity.note.name-cannot-be-empty'));
         }
     }
 
-    public function save()
-    {
-        \DB::save($this);
-        return true;
-    }
-
-    public function remove()
-    {
-        \DB::remove($this);
-    }
-
-    public function getId()
-    {
-        return $this->id;
-    }
-
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
     }
 
-    public function getText()
-    {
-        return $this->text;
-    }
-
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
-    }
-
+    /**
+     * @param $_name
+     * @return $this
+     */
     public function setName($_name)
     {
         $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
@@ -100,6 +85,56 @@ class Note
         return $this;
     }
 
+    /**
+     * @return bool
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
+    public function save()
+    {
+        if ($this->_changed) {
+            DBHelper::save($this);
+            $this->_changed = false;
+        }
+        return true;
+    }
+
+    public function remove()
+    {
+        DBHelper::remove($this);
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param $id
+     * @return $this
+     */
+    public function setId($id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $id);
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getText()
+    {
+        return $this->text;
+    }
+
+    /**
+     * @param $_text
+     * @return $this
+     */
     public function setText($_text)
     {
         $this->_changed = Utils::attrChanged($this->_changed, $this->text, $_text);
@@ -107,17 +142,27 @@ class Note
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getChanged()
     {
         return $this->_changed;
     }
 
+    /**
+     * @param $_changed
+     * @return $this
+     */
     public function setChanged($_changed)
     {
         $this->_changed = $_changed;
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getTableName()
     {
         return 'note';

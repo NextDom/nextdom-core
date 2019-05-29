@@ -52,7 +52,8 @@ class scenario extends \NextDom\Model\Entity\Scenario
     /**
      * Renvoie un objet scenario
      * @param int $_id id du scenario voulu
-     * @return scenario object scenario
+     * @return Scenario object scenario
+     * @throws Exception
      */
     public static function byId($_id)
     {
@@ -66,7 +67,10 @@ class scenario extends \NextDom\Model\Entity\Scenario
 
     /**
      * Renvoie tous les objets scenario
-     * @return [] scenario object scenario
+     * @param string $_group
+     * @param null $_type
+     * @return array|\NextDom\Model\Entity\Scenario[] [] scenario object scenario
+     * @throws Exception
      */
     public static function all($_group = '', $_type = null)
     {

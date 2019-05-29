@@ -34,8 +34,13 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Model\Entity\DataStore;
 
+/**
+ * Class DataStoreManager
+ * @package NextDom\Managers
+ */
 class DataStoreManager
 {
     const CLASS_NAME = 'dataStore';
@@ -54,10 +59,10 @@ class DataStoreManager
         $values = array(
             'id' => $id,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE id=:id';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -79,38 +84,13 @@ class DataStoreManager
             'link_id' => $linkId,
             'key' => $key,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE `type` = :type
                     AND `link_id` = :link_id
                     AND `key` = :key
                 ORDER BY `key`';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
-    }
-
-    /**
-     * Get stored data by type and linkId
-     *
-     * Ordered by $key
-     *
-     * @param mixed $dataType
-     * @param mixed $linkId
-     * @return DataStore[]|null
-     * @throws \Exception
-     */
-    public static function byTypeLinkId($dataType, $linkId = '')
-    {
-        $values = array(
-            'type' => $dataType,
-        );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE type=:type';
-        if ($linkId != '') {
-            $values['link_id'] = $linkId;
-            $sql .= ' AND link_id = :link_id';
-        }
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -129,5 +109,30 @@ class DataStoreManager
             $datastore->remove();
         }
         return true;
+    }
+
+    /**
+     * Get stored data by type and linkId
+     *
+     * Ordered by $key
+     *
+     * @param mixed $dataType
+     * @param mixed $linkId
+     * @return DataStore[]|null
+     * @throws \Exception
+     */
+    public static function byTypeLinkId($dataType, $linkId = '')
+    {
+        $values = array(
+            'type' => $dataType,
+        );
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE type=:type';
+        if ($linkId != '') {
+            $values['link_id'] = $linkId;
+            $sql .= ' AND link_id = :link_id';
+        }
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 }

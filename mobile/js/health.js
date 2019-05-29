@@ -17,7 +17,7 @@ function initHealth() {
     $('#table_health tbody').empty();
     nextdom.health({
       error: function (error) {
-        notify("Erreur", error.message, 'error');
+        $('#div_alert').showAlert({message: error.message, level: 'danger'});
       },
       success: function (data) {
         var html = '';

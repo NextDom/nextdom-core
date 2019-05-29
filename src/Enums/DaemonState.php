@@ -18,6 +18,10 @@
 
 namespace NextDom\Enums;
 
+/**
+ * Class DaemonState
+ * @package NextDom\Enums
+ */
 class DaemonState extends Enum
 {
 

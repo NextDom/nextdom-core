@@ -133,11 +133,11 @@ function clearErrors() {
 function setErrorOnInput(inputField, state) {
     var container = inputField.parent();
     if (state) {
-        container.addClass("has-error");
+        inputField.addClass("has-error");
         container.addClass('animationShake');
     }
     else {
-        container.removeClass("has-error");
+        inputField.removeClass("has-error");
         container.removeClass('animationShake');
     }
 }

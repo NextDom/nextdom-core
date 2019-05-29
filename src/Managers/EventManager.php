@@ -46,11 +46,11 @@ class EventManager
     /**
      * @var int Max events processed each time
      */
-    private static $MAX_EVENTS_BY_PROCESS = 250;
+    protected static $MAX_EVENTS_BY_PROCESS = 250;
     /**
      * @var mixed Event lock file
      */
-    private static $eventLockFile = null;
+    protected static $eventLockFile = null;
 
     /**
      * Add event in cache
@@ -73,6 +73,51 @@ class EventManager
             CacheManager::set('event', json_encode(self::cleanEvent($value)));
             flock($fd, LOCK_UN);
         }
+    }
+
+    /**
+     * Get event cache file object
+     *
+     * @return bool|null|resource
+     * @throws \Exception
+     */
+    protected static function getEventLockFile()
+    {
+        if (self::$eventLockFile === null) {
+            self::$eventLockFile = fopen(NextDomHelper::getTmpFolder() . '/event_cache_lock', 'w');
+            chmod(NextDomHelper::getTmpFolder() . '/event_cache_lock', 0666);
+        }
+        return self::$eventLockFile;
+    }
+
+    /**
+     * Get the last MAX_EVENTS_BY_PROCESS events
+     * @param $events
+     * @return array
+     */
+    protected static function cleanEvent($events)
+    {
+        $events = array_slice(array_values($events), -self::$MAX_EVENTS_BY_PROCESS, self::$MAX_EVENTS_BY_PROCESS);
+        $find = array();
+        foreach (array_values($events) as $key => $event) {
+            if ($event['name'] == 'eqLogic::update') {
+                $id = $event['name'] . '::' . $event['option']['eqLogic_id'];
+            } elseif ($event['name'] == 'cmd::update') {
+                $id = $event['name'] . '::' . $event['option']['cmd_id'];
+            } elseif ($event['name'] == 'scenario::update') {
+                $id = $event['name'] . '::' . $event['option']['scenario_id'];
+            } elseif ($event['name'] == 'jeeObject::summary::update') {
+                $id = $event['name'] . '::' . $event['option']['object_id'];
+            } else {
+                continue;
+            }
+            if ($id != '' && isset($find[$id]) && $find[$id] > $event['datetime']) {
+                unset($events[$key]);
+                continue;
+            }
+            $find[$id] = $event['datetime'];
+        }
+        return array_values($events);
     }
 
     /**
@@ -99,36 +144,6 @@ class EventManager
             CacheManager::set('event', json_encode(self::cleanEvent(array_merge($value_src, $value))));
             flock($fd, LOCK_UN);
         }
-    }
-
-    /**
-     * Get the last MAX_EVENTS_BY_PROCESS events
-     * @param $events
-     * @return array
-     */
-    private static function cleanEvent($events)
-    {
-        $events = array_slice(array_values($events), -self::$MAX_EVENTS_BY_PROCESS, self::$MAX_EVENTS_BY_PROCESS);
-        $find = array();
-        foreach (array_values($events) as $key => $event) {
-            if ($event['name'] == 'eqLogic::update') {
-                $id = $event['name'] . '::' . $event['option']['eqLogic_id'];
-            } elseif ($event['name'] == 'cmd::update') {
-                $id = $event['name'] . '::' . $event['option']['cmd_id'];
-            } elseif ($event['name'] == 'scenario::update') {
-                $id = $event['name'] . '::' . $event['option']['scenario_id'];
-            } elseif ($event['name'] == 'jeeObject::summary::update') {
-                $id = $event['name'] . '::' . $event['option']['object_id'];
-            } else {
-                continue;
-            }
-            if ($id != '' && isset($find[$id]) && $find[$id] > $event['datetime']) {
-                unset($events[$key]);
-                continue;
-            }
-            $find[$id] = $event['datetime'];
-        }
-        return array_values($events);
     }
 
     /**
@@ -183,7 +198,7 @@ class EventManager
      * @return array Filtered events
      * @throws \Exception
      */
-    private static function filterEvent($_data = [], $_filter = null)
+    protected static function filterEvent($_data = [], $_filter = null)
     {
         if ($_filter == null) {
             return $_data;
@@ -211,7 +226,7 @@ class EventManager
      * @return array Associative array with all events
      * @throws \Exception
      */
-    private static function changesSince($_datetime)
+    protected static function changesSince($_datetime)
     {
         $return = array('datetime' => $_datetime, 'result' => array());
         $cache = CacheManager::byKey('event');
@@ -231,20 +246,5 @@ class EventManager
         }
         $return['result'] = array_reverse($return['result']);
         return $return;
-    }
-
-    /**
-     * Get event cache file object
-     *
-     * @return bool|null|resource
-     * @throws \Exception
-     */
-    private static function getEventLockFile()
-    {
-        if (self::$eventLockFile === null) {
-            self::$eventLockFile = fopen(NextDomHelper::getTmpFolder() . '/event_cache_lock', 'w');
-            chmod(NextDomHelper::getTmpFolder() . '/event_cache_lock', 0666);
-        }
-        return self::$eventLockFile;
     }
 }

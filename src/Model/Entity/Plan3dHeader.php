@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\Plan3dManager;
@@ -27,7 +28,7 @@ use NextDom\Managers\Plan3dManager;
  * @ORM\Table(name="plan3dHeader")
  * @ORM\Entity
  */
-class Plan3dHeader
+class Plan3dHeader implements EntityInterface
 {
 
     /**
@@ -62,9 +63,28 @@ class Plan3dHeader
         }
     }
 
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param $_name
+     * @return $this
+     */
+    public function setName($_name)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
+        $this->name = $_name;
+        return $this;
+    }
+
     public function save()
     {
-        \DB::save($this);
+        DBHelper::save($this);
     }
 
     public function remove()
@@ -74,43 +94,24 @@ class Plan3dHeader
             rrmdir($cibDir);
         }
         NextDomHelper::addRemoveHistory(array('id' => $this->getId(), 'name' => $this->getName(), 'date' => date('Y-m-d H:i:s'), 'type' => 'plan3d'));
-        \DB::remove($this);
+        DBHelper::remove($this);
     }
 
-    public function getPlan3d()
-    {
-        return Plan3dManager::byPlan3dHeaderId($this->getId());
-    }
-
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
-    }
-
-    public function setName($_name)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
-        $this->name = $_name;
-        return $this;
-    }
-
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
     public function getConfiguration($_key = '', $_default = '')
     {
         return Utils::getJsonAttr($this->configuration, $_key, $_default);
     }
 
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
     public function setConfiguration($_key, $_value)
     {
         if ($_key == 'accessCode' && $_value != '' && !Utils::isSha512($_value)) {
@@ -122,17 +123,55 @@ class Plan3dHeader
         return $this;
     }
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param $_id
+     * @return $this
+     */
+    public function setId($_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
+        $this->id = $_id;
+        return $this;
+    }
+
+    /**
+     * @return Plan3d|null
+     * @throws \Exception
+     */
+    public function getPlan3d()
+    {
+        return Plan3dManager::byPlan3dHeaderId($this->getId());
+    }
+
+    /**
+     * @return bool
+     */
     public function getChanged()
     {
         return $this->_changed;
     }
 
+    /**
+     * @param $_changed
+     * @return $this
+     */
     public function setChanged($_changed)
     {
         $this->_changed = $_changed;
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getTableName()
     {
         return 'plan3dHeader';

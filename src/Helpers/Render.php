@@ -27,27 +27,26 @@ use Twig\Extensions\DateExtension;
 use Twig\Extensions\I18nExtension;
 use Twig\Extensions\TextExtension;
 use Twig_Environment;
-use Twig_Error_Loader;
 use Twig_Extension_Debug;
 use Twig_Loader_Filesystem;
 
+/**
+ * Class Render
+ * @package NextDom\Helpers
+ */
 class Render
 {
     const DEFAULT_LANGUAGE = 'fr';
-
+    private static $instance;
     /**
      * @var Translator
      */
     private $translator;
-
     /**
      * @var Twig_Environment
      */
     private $twig;
-
     private $twigLoader;
-
-    private static $instance;
 
     private function __construct()
     {
@@ -56,9 +55,12 @@ class Render
         $this->initRenderer();
     }
 
-    private function initTranslation($language)
+    /**
+     * @param $language
+     */
+    private function initTranslation(string $language)
     {
-        $this->translator = new Translator($language, null, NEXTDOM_ROOT . '/var/cache/i18n');
+        $this->translator = new Translator($language, null, NEXTDOM_DATA . '/cache/i18n');
         $this->translator->addLoader('yaml', new YamlFileLoader());
         $filename = NEXTDOM_ROOT . '/translations/' . $language . '.yml';
         if (file_exists($filename)) {
@@ -75,7 +77,7 @@ class Render
         $loader = new Twig_Loader_Filesystem(realpath('views'));
         $this->twigLoader = $loader;
         $twigConfig = [
-            'cache' => NEXTDOM_ROOT . '/var/cache/twig',
+            'cache' => NEXTDOM_DATA . '/cache/twig',
             'debug' => $developerMode,
         ];
 
@@ -117,26 +119,6 @@ class Render
     }
 
     /**
-     * @param $view
-     * @param array $data
-     * @return mixed
-     */
-    public function get($view, $data = array())
-    {
-        $data['debugbar'] = $this->showDebugBar($this->twigLoader);
-        try {
-            return $this->twig->render($view, $data);
-        } catch (Twig_Error_Loader $e) {
-            echo $e->getMessage();
-        } catch (\Twig_Error_Runtime $e) {
-            echo $e->getMessage();
-        } catch (\Twig_Error_Syntax $e) {
-            echo $e->getMessage();
-        }
-        return null;
-    }
-
-    /**
      * @param string $view
      * @param array $data
      */
@@ -146,14 +128,24 @@ class Render
     }
 
     /**
-     * @param string $url
-     * @return string
+     * @param $view
+     * @param array $data
+     * @return mixed
      */
-    public function getCssHtmlTag(string $url): string
+    public function get($view, $data = array())
     {
-        return '<link href="' . $url . '" rel="stylesheet"/>';
+        $data['debugbar'] = $this->showDebugBar($this->twigLoader);
+        try {
+            return $this->twig->render($view, $data);
+        } catch (\Twig\Error\LoaderError $e) {
+            echo $e->getMessage();
+        } catch (\Twig\Error\RuntimeError $e) {
+            echo $e->getMessage();
+        } catch (\Twig\Error\SyntaxError $e) {
+            echo $e->getMessage();
+        }
+        return null;
     }
-
 
     /**
      * @param Twig_Loader_Filesystem $twigLoader
@@ -173,5 +165,14 @@ class Render
             }
         }
         return $debugBarData;
+    }
+
+    /**
+     * @param string $url
+     * @return string
+     */
+    public function getCssHtmlTag(string $url): string
+    {
+        return '<link href="' . $url . '" rel="stylesheet"/>';
     }
 }

@@ -36,6 +36,10 @@ namespace NextDom\Helpers;
 
 use NextDom\Exceptions\CoreException;
 
+/**
+ * Class FileSystemHelper
+ * @package NextDom\Helpers
+ */
 class FileSystemHelper
 {
     /**
@@ -53,49 +57,12 @@ class FileSystemHelper
         // Aucune particularité pour les 3rdparty
         if ($_folder == '3rdparty') {
             if ($_plugin === '') {
-                //TODO : A améliorer avec une Regex en fonction des utilisations
-                $router3rdParty = [
-                    'bootstrap/css/bootstrap.min' => 'vendor/node_modules/bootstrap/dist/css/bootstrap.min',
-                    'bootstrap/js/bootstrap.min' => 'vendor/node_modules/bootstrap/dist/js/bootstrap.min',
-                    'codemirror/lib/codemirror' => 'vendor/node_modules/codemirror/lib/codemirror',
-                    'codemirror/addon/edit/matchbrackets' => 'vendor/node_modules/codemirror/addon/edit/matchbrackets',
-                    'codemirror/mode/htmlmixed/htmlmixed' => 'vendor/node_modules/codemirror/mode/htmlmixed/htmlmixed',
-                    'codemirror/mode/clike/clike' => 'vendor/node_modules/codemirror/mode/clike/clike',
-                    'codemirror/mode/css/css' => 'vendor/node_modules/codemirror/mode/css/css',
-                    'codemirror/mode/javascript/javascript' => 'vendor/node_modules/codemirror/mode/javascript/javascript',
-                    'codemirror/mode/php/php' => 'vendor/node_modules/codemirror/mode/php/php',
-                    'codemirror/mode/shell/shell' => 'vendor/node_modules/codemirror/mode/shell/shell',
-                    'codemirror/mode/python/python' => 'vendor/node_modules/codemirror/mode/python/python',
-                    'codemirror/mode/ruby/ruby' => 'vendor/node_modules/codemirror/mode/ruby/ruby',
-                    'codemirror/mode/perl/perl' => 'vendor/node_modules/codemirror/mode/perl/perl',
-                    'codemirror/mode/xml/xml' => 'vendor/node_modules/codemirror/mode/xml/xml',
-                    'jquery/jquery.min' => 'vendor/node_modules/jquery/dist/jquery.min',
-                    'datetimepicker/jquery.datetimepicker' => 'vendor/node_modules/jquery-datetimepicker/jquery.datetimepicker',
-                    'jquery.fileupload/jquery.fileupload' => 'vendor/node_modules/blueimp-file-upload/js/jquery.fileupload',
-                    'jquery.fileupload/jquery.ui.widget' => 'vendor/node_modules/blueimp-file-upload/js/vendor/jquery.ui.widget',
-                    'jquery.fileupload/jquery.iframe-transport' => 'vendor/node_modules/blueimp-file-upload/js/jquery.iframe-transport',
-                    'jquery.lazyload/jquery.lazyload' => 'vendor/node_modules/jquery-lazyload/jquery.lazyload',
-                    'jquery.packery/jquery.packery' => 'vendor/node_modules/packery/dist/packery.pkgd',
-                    'jquery.tablesorter/theme.bootstrap' => 'vendor/node_modules/tablesorter/dist/css/theme.bootstrap.min',
-                    'jquery.tablesorter/jquery.tablesorter.min' => 'vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min',
-                    'jquery.tablesorter/jquery.tablesorter.widgets.min' => 'vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min',
-                    'highstock/highstock' => 'vendor/node_modules/highcharts/highstock',
-                    'highstock/highcharts-more' => 'vendor/node_modules/highcharts/highcharts-more',
-                    'roboto/roboto' => 'vendor/node_modules/roboto-fontface/css/roboto-fontface',
-                    'waves/waves.min' => 'vendor/node_modules/node-waves/waves.min',
-                    'bootstrap.slider/css/slider' => 'vendor/node_modules/bootstrap-slider/dist/css/bootstrap-slider.min',
-                    'bootstrap.slider/js/bootstrap-slider' => 'vendor/node_modules/bootstrap-slider/dist/bootstrap-slider.min',
-                    'jquery.ui/jquery-ui.min' => 'vendor/node_modules/jquery-ui-dist/jquery-ui.min',
-                    //TODO : A remettre en 3rdparty
-                    'jquery.ui/jquery-ui-bootstrap/jquery-ui' => 'assets/css/jquery-ui-bootstrap/jquery-ui.css'
-                ];
-
-                if (array_key_exists($_filename, $router3rdParty)) {
-                    $_filename = $router3rdParty[$_filename] . '.' . $_type;
-                } else {
+                $file = sprintf("%s/%s.%s", $_folder, $_filename, $_type);
+                $_folder = null;
+                $_filename = self::getAssetPath($file);
+                if (null === $_filename) {
                     $_filename = 'assets/3rdparty/' . $_filename . '.' . $_type;
                 }
-                $_folder = null;
             } else {
                 $_filename .= '.' . $_type;
             }
@@ -169,6 +136,79 @@ class FileSystemHelper
     }
 
     /**
+     * Returns paths to requested 3rdparty file with jeedom backward compatibility
+     *
+     * The function checks that returned file belongs to nextdom-core root directory
+     *
+     * @param string $folder base folder
+     * @param string $path requested path under folder
+     * @param string $extension file extension
+     * @returns string migrated file path or null when does not exists
+     */
+    public static function getAssetPath($path)
+    {
+        $staticMapping = [
+            '3rdparty/bootstrap.slider/css/slider' => 'vendor/node_modules/bootstrap-slider/dist/css/bootstrap-slider.min',
+            '3rdparty/bootstrap.slider/js/bootstrap-slider' => 'vendor/node_modules/bootstrap-slider/dist/bootstrap-slider.min',
+            '3rdparty/bootstrap/css/bootstrap.min' => 'vendor/node_modules/bootstrap/dist/css/bootstrap.min',
+            '3rdparty/bootstrap/js/bootstrap.min' => 'vendor/node_modules/bootstrap/dist/js/bootstrap.min',
+            '3rdparty/codemirror/lib/codemirror' => 'vendor/node_modules/codemirror/lib/codemirror',
+            '3rdparty/datetimepicker/jquery.datetimepicker' => 'vendor/node_modules/jquery-datetimepicker/jquery.datetimepicker',
+            '3rdparty/highstock/highcharts-more' => 'vendor/node_modules/highcharts/highcharts-more',
+            '3rdparty/highstock/highstock' => 'vendor/node_modules/highcharts/highstock',
+            '3rdparty/jquery.fileupload/jquery.fileupload' => 'vendor/node_modules/blueimp-file-upload/js/jquery.fileupload',
+            '3rdparty/jquery.fileupload/jquery.iframe-transport' => 'vendor/node_modules/blueimp-file-upload/js/jquery.iframe-transport',
+            '3rdparty/jquery.fileupload/jquery.ui.widget' => 'vendor/node_modules/blueimp-file-upload/js/vendor/jquery.ui.widget',
+            '3rdparty/jquery.lazyload/jquery.lazyload' => 'vendor/node_modules/jquery-lazyload/jquery.lazyload',
+            '3rdparty/jquery.packery/jquery.packery' => 'vendor/node_modules/packery/dist/packery.pkgd',
+            '3rdparty/jquery.tablesorter/jquery.tablesorter.min' => 'vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min',
+            '3rdparty/jquery.tablesorter/jquery.tablesorter.widgets.min' => 'vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min',
+            '3rdparty/jquery.tablesorter/theme.bootstrap' => 'vendor/node_modules/tablesorter/dist/css/theme.bootstrap.min',
+            '3rdparty/jquery.ui/jquery-ui.min' => 'vendor/node_modules/jquery-ui-dist/jquery-ui.min',
+            '3rdparty/jquery/jquery.min' => 'vendor/node_modules/jquery/dist/jquery.min',
+            '3rdparty/roboto/roboto' => 'vendor/node_modules/roboto-fontface/css/roboto-fontface',
+            '3rdparty/waves/waves.min' => 'vendor/node_modules/node-waves/waves.min',
+            '3rdparty/jquery.ui/jquery-ui-bootstrap/jquery-ui' => 'vendor/node_modules/jquery-ui-bootstrap/jquery.ui.theme'
+        ];
+        $reMapping = [
+            '%3rdparty/codemirror/(mode|addon)/(.*)%' => 'vendor/node_modules/codemirror/${1}/${2}'
+        ];
+
+        $pathinfo = pathinfo($path);
+        $extension = Utils::array_key_default($pathinfo, "extension", "");
+        $dirname = Utils::array_key_default($pathinfo, "dirname", "");
+        $filename = Utils::array_key_default($pathinfo, "filename", "");
+        $needle = sprintf("%s/%s", trim($dirname, "/"), $filename);
+        $mappedValue = Utils::array_key_default($staticMapping, $needle, false);
+        $staticValue = sprintf("assets/%s.%s", $needle, $extension);
+
+        if (false !== $mappedValue) {
+            // try conversion from static mapping
+            $path = sprintf("%s.%s", $mappedValue, $extension);
+        } elseif (true === file_exists(NEXTDOM_ROOT . '/' . $staticValue)) {
+            // try conversion existing asset file
+            $path = $staticValue;
+        } else {
+            // try conversion from regexp mapping (slowest mode)
+            foreach ($reMapping as $c_match => $c_replace) {
+                $path = preg_replace($c_match, $c_replace, $needle);
+                if (($path !== null) && ($path !== $needle)) {
+                    $path = sprintf("%s.%s", $path, $extension);
+                    break;
+                }
+            }
+        }
+
+        // ensure that returned file belongs to NEXTDOM_ROOT
+        $abspath = realpath(NEXTDOM_ROOT . '/' . $path);
+        if ((false === $abspath) ||
+            (0 !== strpos($abspath, NEXTDOM_ROOT))) {
+            return null;
+        }
+        return $path;
+    }
+
+    /**
      * Obtenir le contenu d'un fichier template.
      *
      * @param string $folder Répertoire dans lequel se trouve le fichier de template
@@ -181,9 +221,10 @@ class FileSystemHelper
     public static function getTemplateFileContent(string $folder, string $version, string $filename, string $pluginId = ''): string
     {
         $result = '';
-        $filePath = NEXTDOM_ROOT . '/plugins/' . $pluginId . '/core/template/' . $version . '/' . $filename . '.html';
         if ($pluginId == '') {
             $filePath = NEXTDOM_ROOT . '/' . $folder . '/template/' . $version . '/' . $filename . '.html';
+        } else {
+            $filePath = NEXTDOM_ROOT . '/plugins/' . $pluginId . '/core/template/' . $version . '/' . $filename . '.html';
         }
         if (file_exists($filePath)) {
             $result = file_get_contents($filePath);
@@ -191,10 +232,15 @@ class FileSystemHelper
         return $result;
     }
 
-    public static function hadFileRight($_allowPath, $_path)
+    /**
+     * @param $allowPath
+     * @param $path
+     * @return bool
+     */
+    public static function hadFileRight($allowPath, $path): bool
     {
-        $path = Utils::cleanPath($_path);
-        foreach ($_allowPath as $right) {
+        $path = Utils::cleanPath($path);
+        foreach ($allowPath as $right) {
             if (strpos($right, '/') !== false || strpos($right, '\\') !== false) {
                 if (strpos($right, '/') !== 0 || strpos($right, '\\') !== 0) {
                     $right = NEXTDOM_ROOT . '/' . $right;
@@ -211,6 +257,16 @@ class FileSystemHelper
         return false;
     }
 
+    /**
+     * Get content list of a folder
+     *
+     * @param string $folder Folder to list
+     * @param string $pattern Pattern for filtering (*.php, *test*, etc.)
+     * @param bool $recursivly List all files/folders in subfolders
+     * @param array $options Limit files or folders
+     *
+     * @return array Content list
+     */
     public static function ls($folder = "", $pattern = "*", $recursivly = false, $options = array('files', 'folders'))
     {
         $currentFolder = '';
@@ -228,12 +284,12 @@ class FileSystemHelper
             }
 
         }
-        $get_files = in_array('files', $options);
-        $get_folders = in_array('folders', $options);
+        $getFiles = in_array('files', $options);
+        $getFolders = in_array('folders', $options);
         $both = array();
         $folders = array();
         // Get the all files and folders in the given directory.
-        if ($get_files) {
+        if ($getFiles) {
             $both = array();
             foreach (Utils::globBrace($pattern, GLOB_MARK) as $file) {
                 if (!is_dir($folder . '/' . $file)) {
@@ -241,7 +297,7 @@ class FileSystemHelper
                 }
             }
         }
-        if ($recursivly || $get_folders) {
+        if ($recursivly || $getFolders) {
             $folders = glob("*", GLOB_ONLYDIR + GLOB_MARK);
         }
 
@@ -253,9 +309,9 @@ class FileSystemHelper
 
         //Get just the files by removing the folders from the list of all files.
         $all = array_values(array_diff($both, $folders));
-        if ($recursivly || $get_folders) {
+        if ($recursivly || $getFolders) {
             foreach ($folders as $this_folder) {
-                if ($get_folders) {
+                if ($getFolders) {
                     //If a pattern is specified, make sure even the folders match that pattern.
                     if ($pattern !== '*') {
                         if (in_array($this_folder, $matching_folders)) {
@@ -270,8 +326,8 @@ class FileSystemHelper
 
                 if ($recursivly) {
                     // Continue calling this function for all the folders
-                    $deep_items = self::ls($pattern, $this_folder, $recursivly, $options); # :RECURSION:
-                    foreach ($deep_items as $item) {
+                    $folderItems = self::ls($this_folder, $pattern, $recursivly, $options); # :RECURSION:
+                    foreach ($folderItems as $item) {
                         array_push($all, $this_folder . $item);
                     }
                 }
@@ -300,6 +356,15 @@ class FileSystemHelper
         return $all;
     }
 
+    /**
+     * @param       $src
+     * @param       $dst
+     * @param bool $_emptyDest
+     * @param array $_exclude
+     * @param bool $_noError
+     * @param array $_params
+     * @return bool
+     */
     public static function rcopy($src, $dst, $_emptyDest = true, $_exclude = array(), $_noError = false, $_params = array())
     {
         if (!file_exists($src)) {
@@ -356,7 +421,7 @@ class FileSystemHelper
                 if ($srcSize != filesize($dst)) {
                     if (!$_noError) {
                         return false;
-                    } else if (isset($_params['log']) && $_params['log']) {
+                    } elseif (isset($_params['log']) && $_params['log']) {
                         echo 'Error on copy ' . $src . ' to ' . $dst . "\n";
                     }
                 }
@@ -366,6 +431,50 @@ class FileSystemHelper
         return true;
     }
 
+    /**
+     * @abstract removes files and non-empty directories
+     * @param $dir
+     * @return bool
+     */
+    public static function rrmdir($dir): bool
+    {
+        if (is_dir($dir)) {
+            $files = scandir($dir);
+            foreach ($files as $file) {
+                if ($file != "." && $file != "..") {
+                    self::rrmdir("$dir/$file");
+                }
+            }
+            if (!rmdir($dir)) {
+                $output = array();
+                $retval = 0;
+                exec('sudo rm -rf ' . $dir, $output, $retval);
+                if ($retval != 0) {
+                    return false;
+                }
+            }
+        } elseif (file_exists($dir)) {
+            if (!unlink($dir)) {
+                $output = array();
+                $retval = 0;
+                exec('sudo rm -rf ' . $dir, $output, $retval);
+                if ($retval != 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @param       $src
+     * @param       $dst
+     * @param bool $_emptyDest
+     * @param array $_exclude
+     * @param bool $_noError
+     * @param array $_params
+     * @return bool
+     */
     public static function rmove($src, $dst, $_emptyDest = true, $_exclude = array(), $_noError = false, $_params = array())
     {
         if (!file_exists($src)) {
@@ -432,37 +541,13 @@ class FileSystemHelper
         return true;
     }
 
-// removes files and non-empty directories
-    public static function rrmdir($dir)
-    {
-        if (is_dir($dir)) {
-            $files = scandir($dir);
-            foreach ($files as $file) {
-                if ($file != "." && $file != "..") {
-                    self::rrmdir("$dir/$file");
-                }
-            }
-            if (!rmdir($dir)) {
-                $output = array();
-                $retval = 0;
-                exec('sudo rm -rf ' . $dir, $output, $retval);
-                if ($retval != 0) {
-                    return false;
-                }
-            }
-        } else if (file_exists($dir)) {
-            if (!unlink($dir)) {
-                $output = array();
-                $retval = 0;
-                exec('sudo rm -rf ' . $dir, $output, $retval);
-                if ($retval != 0) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
+    /**
+     * @param       $source_arr
+     * @param       $destination
+     * @param array $_excludes
+     * @return bool
+     * @throws CoreException
+     */
     public static function createZip($source_arr, $destination, $_excludes = array())
     {
         if (is_string($source_arr)) {
@@ -508,6 +593,10 @@ class FileSystemHelper
         return $zip->close();
     }
 
+    /**
+     * @param $path
+     * @return false|int
+     */
     public static function getDirectorySize($path)
     {
         $totalsize = 0;
@@ -525,6 +614,37 @@ class FileSystemHelper
             closedir($handle);
         }
         return $totalsize;
+    }
+
+    /**
+     * Moves input file or directory to given destination (acts like mv)
+     *
+     * @param string $src source file or directory
+     * @param string $dst destination file or directory
+     * @return bool true if no error
+     */
+    public static function mv($src, $dst): bool
+    {
+        $status = -1;
+        $cmd = sprintf("mv %s %s", $src, $dst);
+        system($cmd, $status);
+        return ($status === 0);
+    }
+
+    /**
+     * Create directory if not already exists
+     *
+     * @param int $mode , see mkdir parameter
+     * @param int $recursive , see mkdir parameter
+     * @throws CoreException when cannot create directory
+     */
+    public static function mkdirIfNotExists($path, $mode = 0775, $recursive = false)
+    {
+        if (false === is_dir($path)) {
+            if (false === mkdir($path, $mode, $recursive)) {
+                throw new CoreException("unable to create directory : " . $path);
+            }
+        }
     }
 
 }

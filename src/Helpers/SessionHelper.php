@@ -36,32 +36,12 @@ namespace NextDom\Helpers;
 
 use NextDom\Exceptions\CoreException;
 
+/**
+ * Class SessionHelper
+ * @package NextDom\Helpers
+ */
 class SessionHelper
 {
-    /**
-     * @param $srcData
-     * @return array
-     * @throws CoreException
-     */
-    public static function decodeSessionData($srcData)
-    {
-        $resultData = array();
-        $offset = 0;
-        while ($offset < strlen($srcData)) {
-            if (!strstr(substr($srcData, $offset), "|")) {
-                throw new CoreException("invalid data, remaining: " . substr($srcData, $offset));
-            }
-            $pos = strpos($srcData, "|", $offset);
-            $num = $pos - $offset;
-            $varName = substr($srcData, $offset, $num);
-            $offset += $num + 1;
-            $data = unserialize(substr($srcData, $offset));
-            $resultData[$varName] = $data;
-            $offset += strlen(serialize($data));
-        }
-        return $resultData;
-    }
-
     /**
      * @return array
      * @throws \Exception
@@ -92,6 +72,30 @@ class SessionHelper
 
         }
         return $result;
+    }
+
+    /**
+     * @param $srcData
+     * @return array
+     * @throws CoreException
+     */
+    public static function decodeSessionData($srcData)
+    {
+        $resultData = array();
+        $offset = 0;
+        while ($offset < strlen($srcData)) {
+            if (!strstr(substr($srcData, $offset), "|")) {
+                throw new CoreException("invalid data, remaining: " . substr($srcData, $offset));
+            }
+            $pos = strpos($srcData, "|", $offset);
+            $num = $pos - $offset;
+            $varName = substr($srcData, $offset, $num);
+            $offset += $num + 1;
+            $data = unserialize(substr($srcData, $offset));
+            $resultData[$varName] = $data;
+            $offset += strlen(serialize($data));
+        }
+        return $resultData;
     }
 
     /**

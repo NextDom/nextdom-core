@@ -17,6 +17,10 @@
 
 namespace NextDom\Enums;
 
+/**
+ * Class ApiMode
+ * @package NextDom\Enums
+ */
 class ApiMode extends Enum
 {
     const API_ENABLE = 'enable';

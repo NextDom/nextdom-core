@@ -34,6 +34,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
@@ -44,49 +45,54 @@ use NextDom\Model\Entity\Listener;
 
 require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
 
+/**
+ * Class InteractQueryManager
+ * @package NextDom\Managers
+ */
 class InteractQueryManager
 {
 
     const CLASS_NAME = InteractQuery::class;
     const DB_CLASS_NAME = '`interactQuery`';
 
-    public static function byId($_id)
-    {
-        $values = array(
-            'id' => $_id,
-        );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE id=:id';
-
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
-    }
-
+    /**
+     * @param $_query
+     * @param null $_interactDef_id
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byQuery($_query, $_interactDef_id = null)
     {
         $values = array(
             'query' => $_query,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE query=:query';
         if ($_interactDef_id !== null) {
             $values['interactDef_id'] = $_interactDef_id;
             $sql .= ' AND interactDef_id=:interactDef_id';
         }
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_interactDef_id
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byInteractDefId($_interactDef_id)
     {
         $values = array(
             'interactDef_id' => $_interactDef_id,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE interactDef_id=:interactDef_id
                 ORDER BY `query`';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -100,14 +106,14 @@ class InteractQueryManager
             $values = array(
                 'actions' => '%' . $_action . '%',
             );
-            $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                     FROM ' . self::DB_CLASS_NAME . '
                     WHERE actions LIKE :actions';
         } else {
             $values = array(
                 'actions' => '%' . $_action[0] . '%',
             );
-            $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                     FROM ' . self::DB_CLASS_NAME . '
                     WHERE actions LIKE :actions';
             for ($i = 1; $i < count($_action); $i++) {
@@ -115,21 +121,14 @@ class InteractQueryManager
                 $sql .= ' OR actions LIKE :actions' . $i;
             }
         }
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
-     * @return InteractQuery|null
-     * @throws \Exception
+     * @param $_interactDef_id
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
      */
-    public static function all()
-    {
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                ORDER BY id';
-        return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
-    }
-
     public static function removeByInteractDefId($_interactDef_id)
     {
         $values = array(
@@ -137,212 +136,7 @@ class InteractQueryManager
         );
         $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . '
                 WHERE interactDef_id = :interactDef_id';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
-    }
-
-    public static function recognize($_query)
-    {
-        $_query = InteractDefManager::sanitizeQuery($_query);
-        if (trim($_query) == '') {
-            return null;
-        }
-        $values = array(
-            'query' => $_query,
-        );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE LOWER(query)=LOWER(:query)';
-        $query = \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
-        if (is_object($query)) {
-            $interactDef = $query->getInteractDef();
-            if ($interactDef->getOptions('mustcontain') != '' && !preg_match($interactDef->getOptions('mustcontain'), $_query)) {
-                LogHelper::add('interact', 'debug', __('Correspondance trouvée : ') . $query->getQuery() . __(' mais ne contient pas : ') . InteractDefManager::sanitizeQuery($interactDef->getOptions('mustcontain')));
-                return null;
-            }
-            LogHelper::add('interact', 'debug', 'Je prends : ' . $query->getQuery());
-            return $query;
-        }
-
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . ', MATCH query AGAINST (:query IN NATURAL LANGUAGE MODE) as score
-                FROM ' . self::DB_CLASS_NAME . '
-                GROUP BY id
-                HAVING score > 1';
-        $queries = \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
-        if (count($queries) == 0) {
-            $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                    FROM ' . self::DB_CLASS_NAME . '
-                    WHERE query=:query';
-            $query = \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
-            if (is_object($query)) {
-                $interactDef = $query->getInteractDef();
-                if ($interactDef->getOptions('mustcontain') != '' && !preg_match($interactDef->getOptions('mustcontain'), $_query)) {
-                    LogHelper::add('interact', 'debug', __('Correspondance trouvée : ') . $query->getQuery() . __(' mais ne contient pas : ') . InteractDefManager::sanitizeQuery($interactDef->getOptions('mustcontain')));
-                    return null;
-                }
-                return $queries;
-            }
-            $queries = self::all();
-        }
-        $shortest = 999;
-        foreach ($queries as $query) {
-            $input = InteractDefManager::sanitizeQuery($query->getQuery());
-            $tags = InteractDefManager::getTagFromQuery($query->getQuery(), $_query);
-            if (count($tags) > 0) {
-                foreach ($tags as $value) {
-                    if ($value == "") {
-                        continue (2);
-                    }
-                }
-                $input = str_replace(array_keys($tags), $tags, $input);
-            }
-            $lev = levenshtein($input, $_query);
-            LogHelper::add('interact', 'debug', 'Je compare : ' . $_query . ' avec ' . $input . ' => ' . $lev);
-            if (trim($_query) == trim($input)) {
-                $shortest = 0;
-                $closest = $query;
-                break;
-            }
-            if ($lev == 0) {
-                $shortest = 0;
-                $closest = $query;
-                break;
-            }
-            if ($lev <= $shortest || $shortest < 0) {
-                $closest = $query;
-                $shortest = $lev;
-            }
-        }
-        if ($shortest < 0) {
-            LogHelper::add('interact', 'debug', __('Aucune correspondance trouvée'));
-            return null;
-        }
-        $weigh = array(1 => ConfigManager::byKey('interact::weigh1'), 2 => ConfigManager::byKey('interact::weigh2'), 3 => ConfigManager::byKey('interact::weigh3'), 4 => ConfigManager::byKey('interact::weigh4'));
-        foreach (str_word_count($_query, 1) as $word) {
-            if (isset($weigh[strlen($word)])) {
-                $shortest += $weigh[strlen($word)];
-            }
-        }
-        if (str_word_count($_query) == 1 && ConfigManager::byKey('interact::confidence1') > 0 && $shortest > ConfigManager::byKey('interact::confidence1')) {
-            LogHelper::add('interact', 'debug', __('Correspondance trop éloigné : ') . $shortest);
-            return null;
-        } else if (str_word_count($_query) == 2 && ConfigManager::byKey('interact::confidence2') > 0 && $shortest > ConfigManager::byKey('interact::confidence2')) {
-            LogHelper::add('interact', 'debug', __('Correspondance trop éloigné : ') . $shortest);
-            return null;
-        } else if (str_word_count($_query) == 3 && ConfigManager::byKey('interact::confidence3') > 0 && $shortest > ConfigManager::byKey('interact::confidence3')) {
-            LogHelper::add('interact', 'debug', __('Correspondance trop éloigné : ') . $shortest);
-            return null;
-        } else if (str_word_count($_query) > 3 && ConfigManager::byKey('interact::confidence') > 0 && $shortest > ConfigManager::byKey('interact::confidence')) {
-            LogHelper::add('interact', 'debug', __('Correspondance trop éloigné : ') . $shortest);
-            return null;
-        }
-        if (!is_object($closest)) {
-            LogHelper::add('interact', 'debug', __('Aucune phrase trouvée'));
-            return null;
-        }
-        $interactDef = $closest->getInteractDef();
-        if ($interactDef->getOptions('mustcontain') != '' && !preg_match($interactDef->getOptions('mustcontain'), $_query)) {
-            LogHelper::add('interact', 'debug', __('Correspondance trouvée : ') . $closest->getQuery() . __(' mais ne contient pas : ') . InteractDefManager::sanitizeQuery($interactDef->getOptions('mustcontain')));
-            return null;
-        }
-        LogHelper::add('interact', 'debug', __('J\'ai une correspondance  : ') . $closest->getQuery() . __(' avec ') . $shortest);
-        return $closest;
-    }
-
-    public static function getQuerySynonym($_query, $_for)
-    {
-        $return = array();
-        $base_synonyms = explode(';', ConfigManager::byKey('interact::autoreply::' . $_for . '::synonym'));
-        if (count($base_synonyms) == 0) {
-            return $return;
-        }
-        foreach ($base_synonyms as $synonyms) {
-            if (trim($synonyms) == '') {
-                continue;
-            }
-            $synonyms = explode('|', $synonyms);
-            foreach ($synonyms as $synonym) {
-                if (self::autoInteractWordFind($_query, $synonym)) {
-                    $return = array_merge($return, $synonyms);
-                }
-            }
-        }
-        return $return;
-    }
-
-    public static function findInQuery($_type, $_query, $_data = null)
-    {
-        $return = array();
-        $return['query'] = strtolower(Utils::sanitizeAccent($_query));
-        $return[$_type] = null;
-        $synonyms = self::getQuerySynonym($return['query'], $_type);
-        if ($_type == 'object') {
-            $objects = JeeObjectManager::all();
-        } elseif ($_type == 'eqLogic') {
-            if ($_data !== null && is_object($_data['object'])) {
-                $objects = $_data['object']->getEqLogic();
-            } else {
-                $objects = EqLogicManager::all(true);
-            }
-        } elseif ($_type == 'cmd') {
-            if ($_data !== null && is_object($_data['eqLogic'])) {
-                $objects = $_data['eqLogic']->getCmd();
-            } elseif ($_data !== null && is_object($_data['object'])) {
-                $objects = array();
-                foreach ($_data['object']->getEqLogic() as $eqLogic) {
-                    if ($eqLogic->getIsEnable() == 0) {
-                        continue;
-                    }
-                    foreach ($eqLogic->getCmd() as $cmd) {
-                        $objects[] = $cmd;
-                    }
-                }
-            } else {
-                $objects = CmdManager::all();
-            }
-        } elseif ($_type == 'summary') {
-            foreach (ConfigManager::byKey('object:summary') as $key => $value) {
-                if (count($synonyms) > 0 && in_array(strtolower($value['name']), $synonyms)) {
-                    $return[$_type] = $value;
-                    break;
-                }
-                if (self::autoInteractWordFind($return['query'], $value['name'])) {
-                    $return[$_type] = $value;
-                    $return['query'] = str_replace(strtolower(Utils::sanitizeAccent($value['name'])), '', $return['query']);
-                    break;
-                }
-            }
-            if (count($synonyms) > 0) {
-                foreach ($synonyms as $value) {
-                    $return['query'] = str_replace(strtolower(Utils::sanitizeAccent($value)), '', $return['query']);
-                }
-            }
-            return $return;
-        }
-        usort($objects, array("interactQuery", "cmp_objectName"));
-        foreach ($objects as $object) {
-            if ($object->getConfiguration('interact::auto::disable', 0) == 1) {
-                continue;
-            }
-            if (count($synonyms) > 0 && in_array(strtolower($object->getName()), $synonyms)) {
-                $return[$_type] = $object;
-                break;
-            }
-            if (self::autoInteractWordFind($return['query'], $object->getName())) {
-                $return[$_type] = $object;
-                break;
-            }
-        }
-        if ($_type != 'eqLogic') {
-            if (is_object($return[$_type])) {
-                $return['query'] = str_replace(strtolower(Utils::sanitizeAccent($return[$_type]->getName())), '', $return['query']);
-                if (count($synonyms) > 0) {
-                    foreach ($synonyms as $value) {
-                        $return['query'] = str_replace(strtolower(Utils::sanitizeAccent($value)), '', $return['query']);
-                    }
-                }
-            }
-        }
-        return $return;
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -356,174 +150,10 @@ class InteractQueryManager
     }
 
     /**
-     * @param $_query
-     * @param array $_parameters
-     * @return string
-     * @throws \Exception
+     * @param $_options
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
-    public static function autoInteract($_query, $_parameters = array())
-    {
-        global $NEXTDOM_INTERNAL_CONFIG;
-        if (!isset($_parameters['identifier'])) {
-            $_parameters['identifier'] = '';
-        }
-        $data = self::findInQuery('object', $_query);
-        $data['cmd_parameters'] = array();
-        /** @var EqLogic[] $data */
-        $data = array_merge($data, self::findInQuery('eqLogic', $data['query'], $data));
-        $data = array_merge($data, self::findInQuery('cmd', $data['query'], $data));
-        if (isset($data['eqLogic']) && is_object($data['eqLogic']) && (!isset($data['cmd']) || !is_object($data['cmd']))) {
-            foreach ($data['eqLogic']->getCmd('action') as $cmd) {
-                if ($cmd->getSubtype() == 'slider') {
-                    break;
-                }
-            }
-            if (is_object($cmd)) {
-                if (preg_match_all('/' . ConfigManager::byKey('interact::autoreply::cmd::slider::max') . '/i', $data['query'])) {
-                    $data['cmd'] = $cmd;
-                    $data['cmd_parameters']['slider'] = $cmd->getConfiguration('maxValue', 100);
-                }
-                if (preg_match_all('/' . ConfigManager::byKey('interact::autoreply::cmd::slider::min') . '/i', $data['query'])) {
-                    $data['cmd'] = $cmd;
-                    $data['cmd_parameters']['slider'] = $cmd->getConfiguration('minValue', 0);
-                }
-            }
-        }
-        if (!isset($data['cmd']) || !is_object($data['cmd'])) {
-            $data = array_merge($data, self::findInQuery('summary', $data['query'], $data));
-            LogHelper::add('interact', 'debug', print_r($data, true));
-            if (!isset($data['summary'])) {
-                return '';
-            }
-            $return = $data['summary']['name'];
-            $value = '';
-            if (is_object($data['object'])) {
-                $return .= ' ' . $data['object']->getName();
-                $value = $data['object']->getSummary($data['summary']['key']);
-            }
-            if (trim($value) === '') {
-                $value = JeeObjectManager::getGlobalSummary($data['summary']['key']);
-            }
-            if (trim($value) === '') {
-                return '';
-            }
-            self::addLastInteract($_query, $_parameters['identifier']);
-            return $return . ' ' . $value . ' ' . $data['summary']['unit'];
-        }
-        self::addLastInteract($data['cmd']->getId(), $_parameters['identifier']);
-        if ($data['cmd']->getType() == 'info') {
-            return trim($data['cmd']->getHumanName() . ' ' . $data['cmd']->execCmd() . ' ' . $data['cmd']->getUnite());
-        } else {
-            if ($data['cmd']->getSubtype() == 'slider') {
-                preg_match_all('/(\d+)/', strtolower(Utils::sanitizeAccent($data['query'])), $matches);
-                if (isset($matches[0]) && isset($matches[0][0])) {
-                    $data['cmd_parameters']['slider'] = $matches[0][0];
-                }
-            }
-            if ($data['cmd']->getSubtype() == 'color') {
-                $colors = array_change_key_case(ConfigManager::byKey('convertColor'));
-                foreach ($colors as $name => $value) {
-                    if (strpos($data['query'], $name) !== false) {
-                        $data['cmd_parameters']['color'] = $value;
-                        break;
-                    }
-                }
-            }
-            $data['cmd']->execCmd($data['cmd_parameters']);
-            $return = __('C\'est fait') . ' (';
-            $eqLogic = $data['cmd']->getEqLogic();
-            if (is_object($eqLogic)) {
-                $object = $eqLogic->getObject();
-                if (is_object($object)) {
-                    $return .= $object->getName();
-                }
-                $return .= ' ' . $data['cmd']->getEqLogic()->getName();
-            }
-            $return .= ' ' . $data['cmd']->getName();
-            if (isset($data['cmd_parameters']['slider'])) {
-                $return .= ' => ' . $data['cmd_parameters']['slider'] . '%';
-            }
-            return $return . ')';
-        }
-    }
-
-    public static function autoInteractWordFind($_string, $_word)
-    {
-        return preg_match(
-            '/( |^)' . preg_quote(strtolower(Utils::sanitizeAccent($_word)), '/') . '( |$)/',
-            str_replace("'", ' ', strtolower(Utils::sanitizeAccent($_string)))
-        );
-    }
-
-    public static function pluginReply($_query, $_parameters = array())
-    {
-        try {
-            foreach (PluginManager::listPlugin(true) as $plugin) {
-                if (ConfigManager::byKey('functionality::interact::enable', $plugin->getId(), 1) == 0) {
-                    continue;
-                }
-                if (method_exists($plugin->getId(), 'interact')) {
-                    $plugin_id = $plugin->getId();
-                    $reply = $plugin_id::interact($_query, $_parameters);
-                    if ($reply !== null || is_array($reply)) {
-                        $reply['reply'] = '[' . $plugin_id . '] ' . $reply['reply'];
-                        self::addLastInteract($_query, $_parameters['identifier']);
-                        LogHelper::add('interact', 'debug', 'Le plugin ' . $plugin_id . ' a répondu');
-                        return $reply;
-                    }
-                }
-            }
-        } catch (\Exception $e) {
-            return array('reply' => __('Erreur : ') . $e->getMessage());
-        }
-        return null;
-    }
-
-    public static function warnMe($_query, $_parameters = array())
-    {
-        global $NEXTDOM_INTERNAL_CONFIG;
-        $operator = null;
-        $operand = null;
-        foreach ($NEXTDOM_INTERNAL_CONFIG['interact']['test'] as $key => $value) {
-            if (Utils::strContain(strtolower(Utils::sanitizeAccent($_query)), $value)) {
-                $operator .= $key;
-                break;
-            }
-        }
-        preg_match_all('!\d+!', strtolower(Utils::sanitizeAccent($_query)), $matches);
-        if (isset($matches[0]) && isset($matches[0][0])) {
-            $operand = $matches[0][0];
-        }
-        if ($operand === null || $operator === null) {
-            return null;
-        }
-        $test = '#value# ' . $operator . ' ' . $operand;
-        $options = array('test' => $test);
-        if (is_object($_parameters['reply_cmd'])) {
-            $options['reply_cmd'] = $_parameters['reply_cmd']->getId();
-        }
-        $listener = new Listener();
-        $listener->setClass('interactQuery');
-        $listener->setFunction('warnMeExecute');
-        $data = self::findInQuery('object', $_query);
-        $data = array_merge($data, self::findInQuery('eqLogic', $data['query'], $data));
-        $data = array_merge($data, self::findInQuery('cmd', $data['query'], $data));
-        if (!isset($data['cmd']) || !is_object($data['cmd'])) {
-            return null;
-        } else {
-            if ($data['cmd']->getType() == 'action') {
-                return null;
-            }
-            $options['type'] = 'cmd';
-            $options['cmd_id'] = $data['cmd']->getId();
-            $options['name'] = $data['cmd']->getHumanName();
-            $listener->addEvent($data['cmd']->getId());
-            $listener->setOption($options);
-            $listener->save(true);
-            return array('reply' => __('C\'est noté : ') . str_replace('#value#', $data['cmd']->getHumanName(), $test));
-        }
-    }
-
     public static function warnMeExecute($_options)
     {
         $warnMeCmd = (isset($_options['reply_cmd'])) ? $_options['reply_cmd'] : ConfigManager::byKey('interact::warnme::defaultreturncmd');
@@ -545,6 +175,13 @@ class InteractQueryManager
         }
     }
 
+    /**
+     * @param $_query
+     * @param array $_parameters
+     * @return array|bool|null|string
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function tryToReply($_query, $_parameters = array())
     {
         if (trim($_query) == '') {
@@ -571,7 +208,7 @@ class InteractQueryManager
             LogHelper::add('interact', 'debug', 'Je cherche interaction contextuel (prioritaire) : ' . print_r($reply, true));
         }
         $startWarnMe = explode(';', ConfigManager::byKey('interact::warnme::start'));
-        if (is_array($startWarnMe) && count($startWarnMe) > 0 && ConfigManager::byKey('interact::warnme::enable') == 1 && Utils::strContain(strtolower(Utils::sanitizeAccent($_query)), $startWarnMe)) {
+        if (is_array($startWarnMe) && count($startWarnMe) > 0 && ConfigManager::byKey('interact::warnme::enable') == 1 && Utils::strContainsOneOf(strtolower(Utils::sanitizeAccent($_query)), $startWarnMe)) {
             $reply = self::warnMe($_query, $_parameters);
             LogHelper::add('interact', 'debug', 'Je cherche interaction "previens-moi" : ' . print_r($reply, true));
         }
@@ -648,15 +285,13 @@ class InteractQueryManager
         return $reply;
     }
 
-    public static function addLastInteract($_lastCmd, $_identifier = 'unknown')
-    {
-        $last = CacheManager::byKey('interact::lastCmd::' . $_identifier);
-        if ($last->getValue() == '') {
-            CacheManager::set('interact::lastCmd2::' . $_identifier, $last->getValue(), 300);
-        }
-        CacheManager::set('interact::lastCmd::' . $_identifier, str_replace('#', '', $_lastCmd), 300);
-    }
-
+    /**
+     * @param $_query
+     * @param array $_parameters
+     * @param null $_lastCmd
+     * @return array|null|string
+     * @throws \Exception
+     */
     public static function contextualReply($_query, $_parameters = array(), $_lastCmd = null)
     {
         $return = '';
@@ -713,11 +348,541 @@ class InteractQueryManager
         return $return;
     }
 
+    /**
+     * @param $_type
+     * @param $_query
+     * @param null $_data
+     * @return array
+     * @throws \Exception
+     */
+    public static function findInQuery($_type, $_query, $_data = null)
+    {
+        $return = array();
+        $return['query'] = strtolower(Utils::sanitizeAccent($_query));
+        $return[$_type] = null;
+        $synonyms = self::getQuerySynonym($return['query'], $_type);
+        if ($_type == 'object') {
+            $objects = ObjectManager::all();
+        } elseif ($_type == 'eqLogic') {
+            if ($_data !== null && is_object($_data['object'])) {
+                $objects = $_data['object']->getEqLogic();
+            } else {
+                $objects = EqLogicManager::all(true);
+            }
+        } elseif ($_type == 'cmd') {
+            if ($_data !== null && is_object($_data['eqLogic'])) {
+                $objects = $_data['eqLogic']->getCmd();
+            } elseif ($_data !== null && is_object($_data['object'])) {
+                $objects = array();
+                foreach ($_data['object']->getEqLogic() as $eqLogic) {
+                    if ($eqLogic->getIsEnable() == 0) {
+                        continue;
+                    }
+                    foreach ($eqLogic->getCmd() as $cmd) {
+                        $objects[] = $cmd;
+                    }
+                }
+            } else {
+                $objects = CmdManager::all();
+            }
+        } elseif ($_type == 'summary') {
+            foreach (ConfigManager::byKey('object:summary') as $key => $value) {
+                if (count($synonyms) > 0 && in_array(strtolower($value['name']), $synonyms)) {
+                    $return[$_type] = $value;
+                    break;
+                }
+                if (self::autoInteractWordFind($return['query'], $value['name'])) {
+                    $return[$_type] = $value;
+                    $return['query'] = str_replace(strtolower(Utils::sanitizeAccent($value['name'])), '', $return['query']);
+                    break;
+                }
+            }
+            if (count($synonyms) > 0) {
+                foreach ($synonyms as $value) {
+                    $return['query'] = str_replace(strtolower(Utils::sanitizeAccent($value)), '', $return['query']);
+                }
+            }
+            return $return;
+        }
+        usort($objects, array("interactQuery", "cmp_objectName"));
+        foreach ($objects as $object) {
+            if ($object->getConfiguration('interact::auto::disable', 0) == 1) {
+                continue;
+            }
+            if (count($synonyms) > 0 && in_array(strtolower($object->getName()), $synonyms)) {
+                $return[$_type] = $object;
+                break;
+            }
+            if (self::autoInteractWordFind($return['query'], $object->getName())) {
+                $return[$_type] = $object;
+                break;
+            }
+        }
+        if ($_type != 'eqLogic') {
+            if (is_object($return[$_type])) {
+                $return['query'] = str_replace(strtolower(Utils::sanitizeAccent($return[$_type]->getName())), '', $return['query']);
+                if (count($synonyms) > 0) {
+                    foreach ($synonyms as $value) {
+                        $return['query'] = str_replace(strtolower(Utils::sanitizeAccent($value)), '', $return['query']);
+                    }
+                }
+            }
+        }
+        return $return;
+    }
+
+    /**
+     * @param $_query
+     * @param $_for
+     * @return array
+     * @throws \Exception
+     */
+    public static function getQuerySynonym($_query, $_for)
+    {
+        $return = array();
+        $base_synonyms = explode(';', ConfigManager::byKey('interact::autoreply::' . $_for . '::synonym'));
+        if (count($base_synonyms) == 0) {
+            return $return;
+        }
+        foreach ($base_synonyms as $synonyms) {
+            if (trim($synonyms) == '') {
+                continue;
+            }
+            $synonyms = explode('|', $synonyms);
+            foreach ($synonyms as $synonym) {
+                if (self::autoInteractWordFind($_query, $synonym)) {
+                    $return = array_merge($return, $synonyms);
+                }
+            }
+        }
+        return $return;
+    }
+
+    /**
+     * @param $_string
+     * @param $_word
+     * @return false|int
+     */
+    public static function autoInteractWordFind($_string, $_word)
+    {
+        return preg_match(
+            '/( |^)' . preg_quote(strtolower(Utils::sanitizeAccent($_word)), '/') . '( |$)/',
+            str_replace("'", ' ', strtolower(Utils::sanitizeAccent($_string)))
+        );
+    }
+
+    /**
+     * @param $_replace
+     * @param $_by
+     * @param $_in
+     * @return mixed
+     */
     public static function replaceForContextual($_replace, $_by, $_in)
     {
         return str_replace(strtolower(Utils::sanitizeAccent($_replace)), strtolower(Utils::sanitizeAccent($_by)), str_replace($_replace, $_by, $_in));
     }
 
+    /**
+     * @param $_query
+     * @param array $_parameters
+     * @return array|null
+     * @throws \Exception
+     */
+    public static function pluginReply($_query, $_parameters = array())
+    {
+        try {
+            foreach (PluginManager::listPlugin(true) as $plugin) {
+                if (ConfigManager::byKey('functionality::interact::enable', $plugin->getId(), 1) == 0) {
+                    continue;
+                }
+                if (method_exists($plugin->getId(), 'interact')) {
+                    $plugin_id = $plugin->getId();
+                    $reply = $plugin_id::interact($_query, $_parameters);
+                    if ($reply !== null || is_array($reply)) {
+                        $reply['reply'] = '[' . $plugin_id . '] ' . $reply['reply'];
+                        self::addLastInteract($_query, $_parameters['identifier']);
+                        LogHelper::add('interact', 'debug', 'Le plugin ' . $plugin_id . ' a répondu');
+                        return $reply;
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            return array('reply' => __('Erreur : ') . $e->getMessage());
+        }
+        return null;
+    }
+
+    /**
+     * @param $_lastCmd
+     * @param string $_identifier
+     * @throws \Exception
+     */
+    /**
+     * @param $_lastCmd
+     * @param string $_identifier
+     * @throws \Exception
+     */
+    /**
+     * @param $_lastCmd
+     * @param string $_identifier
+     * @throws \Exception
+     */
+    public static function addLastInteract($_lastCmd, $_identifier = 'unknown')
+    {
+        $last = CacheManager::byKey('interact::lastCmd::' . $_identifier);
+        if ($last->getValue() == '') {
+            CacheManager::set('interact::lastCmd2::' . $_identifier, $last->getValue(), 300);
+        }
+        CacheManager::set('interact::lastCmd::' . $_identifier, str_replace('#', '', $_lastCmd), 300);
+    }
+
+    /**
+     * @param $_query
+     * @param array $_parameters
+     * @return string
+     * @throws \Exception
+     */
+    public static function autoInteract($_query, $_parameters = array())
+    {
+        global $NEXTDOM_INTERNAL_CONFIG;
+        if (!isset($_parameters['identifier'])) {
+            $_parameters['identifier'] = '';
+        }
+        $data = self::findInQuery('object', $_query);
+        $data['cmd_parameters'] = array();
+        /** @var EqLogic[] $data */
+        $data = array_merge($data, self::findInQuery('eqLogic', $data['query'], $data));
+        $data = array_merge($data, self::findInQuery('cmd', $data['query'], $data));
+        if (isset($data['eqLogic']) && is_object($data['eqLogic']) && (!isset($data['cmd']) || !is_object($data['cmd']))) {
+            foreach ($data['eqLogic']->getCmd('action') as $cmd) {
+                if ($cmd->getSubtype() == 'slider') {
+                    break;
+                }
+            }
+            if (is_object($cmd)) {
+                if (preg_match_all('/' . ConfigManager::byKey('interact::autoreply::cmd::slider::max') . '/i', $data['query'])) {
+                    $data['cmd'] = $cmd;
+                    $data['cmd_parameters']['slider'] = $cmd->getConfiguration('maxValue', 100);
+                }
+                if (preg_match_all('/' . ConfigManager::byKey('interact::autoreply::cmd::slider::min') . '/i', $data['query'])) {
+                    $data['cmd'] = $cmd;
+                    $data['cmd_parameters']['slider'] = $cmd->getConfiguration('minValue', 0);
+                }
+            }
+        }
+        if (!isset($data['cmd']) || !is_object($data['cmd'])) {
+            $data = array_merge($data, self::findInQuery('summary', $data['query'], $data));
+            LogHelper::add('interact', 'debug', print_r($data, true));
+            if (!isset($data['summary'])) {
+                return '';
+            }
+            $return = $data['summary']['name'];
+            $value = '';
+            if (is_object($data['object'])) {
+                $return .= ' ' . $data['object']->getName();
+                $value = $data['object']->getSummary($data['summary']['key']);
+            }
+            if (trim($value) === '') {
+                $value = ObjectManager::getGlobalSummary($data['summary']['key']);
+            }
+            if (trim($value) === '') {
+                return '';
+            }
+            self::addLastInteract($_query, $_parameters['identifier']);
+            return $return . ' ' . $value . ' ' . $data['summary']['unit'];
+        }
+        self::addLastInteract($data['cmd']->getId(), $_parameters['identifier']);
+        if ($data['cmd']->getType() == 'info') {
+            return trim($data['cmd']->getHumanName() . ' ' . $data['cmd']->execCmd() . ' ' . $data['cmd']->getUnite());
+        } else {
+            if ($data['cmd']->getSubtype() == 'slider') {
+                preg_match_all('/(\d+)/', strtolower(Utils::sanitizeAccent($data['query'])), $matches);
+                if (isset($matches[0]) && isset($matches[0][0])) {
+                    $data['cmd_parameters']['slider'] = $matches[0][0];
+                }
+            }
+            if ($data['cmd']->getSubtype() == 'color') {
+                $colors = array_change_key_case(ConfigManager::byKey('convertColor'));
+                foreach ($colors as $name => $value) {
+                    if (strpos($data['query'], $name) !== false) {
+                        $data['cmd_parameters']['color'] = $value;
+                        break;
+                    }
+                }
+            }
+            $data['cmd']->execCmd($data['cmd_parameters']);
+            $return = __('C\'est fait') . ' (';
+            $eqLogic = $data['cmd']->getEqLogic();
+            if (is_object($eqLogic)) {
+                $object = $eqLogic->getObject();
+                if (is_object($object)) {
+                    $return .= $object->getName();
+                }
+                $return .= ' ' . $data['cmd']->getEqLogic()->getName();
+            }
+            $return .= ' ' . $data['cmd']->getName();
+            if (isset($data['cmd_parameters']['slider'])) {
+                $return .= ' => ' . $data['cmd_parameters']['slider'] . '%';
+            }
+            return $return . ')';
+        }
+    }
+
+    /**
+     * @param $_query
+     * @param array $_parameters
+     * @return array|null
+     * @throws \Exception
+     */
+    /**
+     * @param $_query
+     * @param array $_parameters
+     * @return array|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
+    /**
+     * @param $_query
+     * @param array $_parameters
+     * @return array|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
+    public static function warnMe($_query, $_parameters = array())
+    {
+        global $NEXTDOM_INTERNAL_CONFIG;
+        $operator = null;
+        $operand = null;
+        foreach ($NEXTDOM_INTERNAL_CONFIG['interact']['test'] as $key => $value) {
+            if (Utils::strContainsOneOf(strtolower(Utils::sanitizeAccent($_query)), $value)) {
+                $operator .= $key;
+                break;
+            }
+        }
+        preg_match_all('!\d+!', strtolower(Utils::sanitizeAccent($_query)), $matches);
+        if (isset($matches[0]) && isset($matches[0][0])) {
+            $operand = $matches[0][0];
+        }
+        if ($operand === null || $operator === null) {
+            return null;
+        }
+        $test = '#value# ' . $operator . ' ' . $operand;
+        $options = array('test' => $test);
+        if (is_object($_parameters['reply_cmd'])) {
+            $options['reply_cmd'] = $_parameters['reply_cmd']->getId();
+        }
+        $listener = new Listener();
+        $listener->setClass('interactQuery');
+        $listener->setFunction('warnMeExecute');
+        $data = self::findInQuery('object', $_query);
+        $data = array_merge($data, self::findInQuery('eqLogic', $data['query'], $data));
+        $data = array_merge($data, self::findInQuery('cmd', $data['query'], $data));
+        if (!isset($data['cmd']) || !is_object($data['cmd'])) {
+            return null;
+        } else {
+            if ($data['cmd']->getType() == 'action') {
+                return null;
+            }
+            $options['type'] = 'cmd';
+            $options['cmd_id'] = $data['cmd']->getId();
+            $options['name'] = $data['cmd']->getHumanName();
+            $listener->addEvent($data['cmd']->getId());
+            $listener->setOption($options);
+            $listener->save(true);
+            return array('reply' => __('C\'est noté : ') . str_replace('#value#', $data['cmd']->getHumanName(), $test));
+        }
+    }
+
+    /**
+     * @param $_query
+     * @return null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
+    /**
+     * @param $_query
+     * @return null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
+    /**
+     * @param $_query
+     * @return null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
+    public static function recognize($_query)
+    {
+        $_query = InteractDefManager::sanitizeQuery($_query);
+        if (trim($_query) == '') {
+            return null;
+        }
+        $values = array(
+            'query' => $_query,
+        );
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE LOWER(query)=LOWER(:query)';
+        $query = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        if (is_object($query)) {
+            $interactDef = $query->getInteractDef();
+            if ($interactDef->getOptions('mustcontain') != '' && !preg_match($interactDef->getOptions('mustcontain'), $_query)) {
+                LogHelper::add('interact', 'debug', __('Correspondance trouvée : ') . $query->getQuery() . __(' mais ne contient pas : ') . InteractDefManager::sanitizeQuery($interactDef->getOptions('mustcontain')));
+                return null;
+            }
+            LogHelper::add('interact', 'debug', 'Je prends : ' . $query->getQuery());
+            return $query;
+        }
+
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . ', MATCH query AGAINST (:query IN NATURAL LANGUAGE MODE) as score
+                FROM ' . self::DB_CLASS_NAME . '
+                GROUP BY id
+                HAVING score > 1';
+        $queries = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        if (count($queries) == 0) {
+            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                    FROM ' . self::DB_CLASS_NAME . '
+                    WHERE query=:query';
+            $query = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+            if (is_object($query)) {
+                $interactDef = $query->getInteractDef();
+                if ($interactDef->getOptions('mustcontain') != '' && !preg_match($interactDef->getOptions('mustcontain'), $_query)) {
+                    LogHelper::add('interact', 'debug', __('Correspondance trouvée : ') . $query->getQuery() . __(' mais ne contient pas : ') . InteractDefManager::sanitizeQuery($interactDef->getOptions('mustcontain')));
+                    return null;
+                }
+                return $queries;
+            }
+            $queries = self::all();
+        }
+        $shortest = 999;
+        foreach ($queries as $query) {
+            $input = InteractDefManager::sanitizeQuery($query->getQuery());
+            $tags = InteractDefManager::getTagFromQuery($query->getQuery(), $_query);
+            if (count($tags) > 0) {
+                foreach ($tags as $value) {
+                    if ($value == "") {
+                        continue (2);
+                    }
+                }
+                $input = str_replace(array_keys($tags), $tags, $input);
+            }
+            $lev = levenshtein($input, $_query);
+            LogHelper::add('interact', 'debug', 'Je compare : ' . $_query . ' avec ' . $input . ' => ' . $lev);
+            if (trim($_query) == trim($input)) {
+                $shortest = 0;
+                $closest = $query;
+                break;
+            }
+            if ($lev == 0) {
+                $shortest = 0;
+                $closest = $query;
+                break;
+            }
+            if ($lev <= $shortest || $shortest < 0) {
+                $closest = $query;
+                $shortest = $lev;
+            }
+        }
+        if ($shortest < 0) {
+            LogHelper::add('interact', 'debug', __('Aucune correspondance trouvée'));
+            return null;
+        }
+        $weigh = array(
+            1 => ConfigManager::byKey('interact::weigh1'),
+            2 => ConfigManager::byKey('interact::weigh2'),
+            3 => ConfigManager::byKey('interact::weigh3'),
+            4 => ConfigManager::byKey('interact::weigh4'));
+
+        foreach (str_word_count($_query, 1) as $word) {
+            if (isset($weigh[strlen($word)])) {
+                $value = intval($weigh[strlen($word)]);
+                $shortest += $value;
+            }
+        }
+        if (str_word_count($_query) == 1 && ConfigManager::byKey('interact::confidence1') > 0 && $shortest > ConfigManager::byKey('interact::confidence1')) {
+            LogHelper::add('interact', 'debug', __('Correspondance trop éloigné : ') . $shortest);
+            return null;
+        } else if (str_word_count($_query) == 2 && ConfigManager::byKey('interact::confidence2') > 0 && $shortest > ConfigManager::byKey('interact::confidence2')) {
+            LogHelper::add('interact', 'debug', __('Correspondance trop éloigné : ') . $shortest);
+            return null;
+        } else if (str_word_count($_query) == 3 && ConfigManager::byKey('interact::confidence3') > 0 && $shortest > ConfigManager::byKey('interact::confidence3')) {
+            LogHelper::add('interact', 'debug', __('Correspondance trop éloigné : ') . $shortest);
+            return null;
+        } else if (str_word_count($_query) > 3 && ConfigManager::byKey('interact::confidence') > 0 && $shortest > ConfigManager::byKey('interact::confidence')) {
+            LogHelper::add('interact', 'debug', __('Correspondance trop éloigné : ') . $shortest);
+            return null;
+        }
+        if (!is_object($closest)) {
+            LogHelper::add('interact', 'debug', __('Aucune phrase trouvée'));
+            return null;
+        }
+        $interactDef = $closest->getInteractDef();
+        if ($interactDef->getOptions('mustcontain') != '' && !preg_match($interactDef->getOptions('mustcontain'), $_query)) {
+            LogHelper::add('interact', 'debug', __('Correspondance trouvée : ') . $closest->getQuery() . __(' mais ne contient pas : ') . InteractDefManager::sanitizeQuery($interactDef->getOptions('mustcontain')));
+            return null;
+        }
+        LogHelper::add('interact', 'debug', __('J\'ai une correspondance  : ') . $closest->getQuery() . __(' avec ') . $shortest);
+        return $closest;
+    }
+
+    /**
+     * @return InteractQuery|null
+     * @throws \Exception
+     */
+    public static function all()
+    {
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                ORDER BY id';
+        return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+    }
+
+    /**
+     * @param $_parameters
+     * @return mixed
+     * @throws \Exception
+     */
+    /**
+     * @param $_parameters
+     * @return mixed
+     * @throws \Exception
+     */
+    /**
+     * @param $_parameters
+     * @return mixed
+     * @throws \Exception
+     */
+    public static function dontUnderstand($_parameters)
+    {
+        $notUnderstood = array(
+            __('Désolé je n\'ai pas compris'),
+            __('Désolé je n\'ai pas compris la demande'),
+            __('Désolé je ne comprends pas la demande'),
+            __('Je ne comprends pas'),
+        );
+        if (isset($_parameters['profile'])) {
+            $notUnderstood[] = __('Désolé ') . $_parameters['profile'] . __(' je n\'ai pas compris');
+            $notUnderstood[] = __('Désolé ') . $_parameters['profile'] . __(' je n\'ai pas compris ta demande');
+        }
+        $random = rand(0, count($notUnderstood) - 1);
+        return $notUnderstood[$random];
+    }
+
+    /**
+     * @param $_query
+     * @param $_parameters
+     * @return string
+     */
+    /**
+     * @param $_query
+     * @param $_parameters
+     * @return string
+     */
+    /**
+     * @param $_query
+     * @param $_parameters
+     * @return string
+     */
     public static function brainReply($_query, $_parameters)
     {
         global $PROFILE;
@@ -747,22 +912,18 @@ class InteractQueryManager
         return '';
     }
 
-    public static function dontUnderstand($_parameters)
-    {
-        $notUnderstood = array(
-            __('Désolé je n\'ai pas compris'),
-            __('Désolé je n\'ai pas compris la demande'),
-            __('Désolé je ne comprends pas la demande'),
-            __('Je ne comprends pas'),
-        );
-        if (isset($_parameters['profile'])) {
-            $notUnderstood[] = __('Désolé ') . $_parameters['profile'] . __(' je n\'ai pas compris');
-            $notUnderstood[] = __('Désolé ') . $_parameters['profile'] . __(' je n\'ai pas compris ta demande');
-        }
-        $random = rand(0, count($notUnderstood) - 1);
-        return $notUnderstood[$random];
-    }
-
+    /**
+     * @return mixed
+     * @throws \Exception
+     */
+    /**
+     * @return mixed
+     * @throws \Exception
+     */
+    /**
+     * @return mixed
+     * @throws \Exception
+     */
     public static function replyOk()
     {
         $reply = array(
@@ -775,6 +936,21 @@ class InteractQueryManager
         return $reply[$random];
     }
 
+    /**
+     * @param $_params
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
+    /**
+     * @param $_params
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
+    /**
+     * @param $_params
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function doIn($_params)
     {
         $interactQuery = self::byId($_params['interactQuery_id']);
@@ -783,5 +959,35 @@ class InteractQueryManager
         }
         $_params['execNow'] = 1;
         $interactQuery->executeAndReply($_params);
+    }
+
+    /**
+     * @param $_id
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
+    /**
+     * @param $_id
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
+    /**
+     * @param $_id
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
+    public static function byId($_id)
+    {
+        $values = array(
+            'id' => $_id,
+        );
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE id=:id';
+
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 }

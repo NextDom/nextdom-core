@@ -3,7 +3,7 @@ function initEquipment(_object_id) {
   var objectName = {};
   nextdom.object.all({
     error: function (error) {
-      notify("Erreur", error.message, 'error');
+      $('#div_alert').showAlert({message: error.message, level: 'danger'});
     },
     success: function (objects) {
       var summaries = [];
@@ -67,7 +67,7 @@ function initEquipment(_object_id) {
       version: 'mobile',
       summary :summary,
       error: function (error) {
-          notify("Erreur", error.message, 'error');
+        $('#div_alert').showAlert({message: error.message, level: 'danger'});
       },
       success: function (html) {
         if((_object_id == 'all' || _object_id == '' || initObject != '')){
@@ -98,6 +98,7 @@ function initEquipment(_object_id) {
             console.log(err);
           }
           setTileSize('.eqLogic');
+          setTileSize('.scenario');
           setTimeout(function () {
             $('.div_displayEquipement .objectHtml').packery({gutter :0});
           }, 10);
@@ -105,6 +106,7 @@ function initEquipment(_object_id) {
           $('#div_displayEquipement').empty().html('<div class="nd2-card objectSummaryHide" style="max-width:100% !important;"><div class="card-title has-supporting-text" style="padding:4px;font-size:0.6em;"><center><span class="objectSummary'+_object_id+'" data-version="mobile"></span></center></div></div><div class="objectHtml">'+html+'</div></div>').trigger('create');
           nextdom.object.summaryUpdate([{object_id:_object_id}]);
           setTileSize('.eqLogic');
+          setTileSize('.scenario');
           setTimeout(function () {
             $('#div_displayEquipement > .objectHtml').packery({gutter :0});
           }, 10);
@@ -119,11 +121,8 @@ function initEquipment(_object_id) {
   $(window).on("orientationchange", function (event) {
     deviceInfo = getDeviceType();
     setTileSize('.eqLogic');
-    if(_object_id == 'all'){
-      $('.div_displayEquipement > .objectHtml').packery({gutter :0});
-    }else{
-      $('#div_displayEquipement > .objectHtml').packery({gutter :0});
-    }
+    setTileSize('.scenario');
+    $('#div_displayEquipement > .objectHtml').packery({gutter :0});
   });
   
   
@@ -148,6 +147,9 @@ function initEquipment(_object_id) {
         match = true;
       }
       if(match ||($(this).attr('data-eqType') != undefined && $(this).attr('data-eqType').toLowerCase().indexOf(search.toLowerCase()) >= 0)){
+        match = true;
+      }
+      if(match ||($(this).attr('data-translate-category') != undefined && $(this).attr('data-translate-category').toLowerCase().indexOf(search.toLowerCase()) >= 0)){
         match = true;
       }
       if(match){
