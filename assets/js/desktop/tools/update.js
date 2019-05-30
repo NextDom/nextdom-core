@@ -94,9 +94,7 @@ function createUpdateBox(updateData) {
     bgClass = 'bg-yellow';
   }
 
-  if (updateData.type !== 'core') {
-    boxUpdateClass = 'update-box';
-  }
+  boxUpdateClass = 'update-box';
   var htmlData = '<div class="objet col-lg-4 col-md-6 col-sm-6 col-xs-12">';
   htmlData += '<div class="' + boxUpdateClass + ' box ' + boxClass + '" data-id="' + init(updateData.id) + '" data-logicalId="' + init(updateData.logicalId) + '" data-type="' + init(updateData.type) + '">';
   htmlData += '<div class="box-header with-border accordion-toggle cursor" data-toggle="collapse" data-parent="#accordionUpdate" href="#update_' + init(updateData.id) + '">';
@@ -367,7 +365,7 @@ function initEvents() {
       }
     });
   });
-  
+
   updateCollapseButton.on('click', function () {
     $('#accordionUpdate .panel-collapse').each(function () {
       if (!$(this).hasClass('in')) {
