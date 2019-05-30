@@ -56,7 +56,6 @@ function initUpdateTabsContent() {
         createUpdateBox(updatesList[updateIndex]);
       }
       tabsList.trigger('update');
-      tabsList.packery();
     }
   });
 
@@ -368,7 +367,7 @@ function initEvents() {
       }
     });
   });
-
+  
   updateCollapseButton.on('click', function () {
     $('#accordionUpdate .panel-collapse').each(function () {
       if (!$(this).hasClass('in')) {

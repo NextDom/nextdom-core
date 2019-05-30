@@ -88,6 +88,42 @@ function debianUpdate()
     exec(SystemHelper::getCmdSudo() . 'apt-get install -y nextdom');
 }
 
+/**
+ * Core update
+ */
+function coreUpdate()
+{
+    $versionBeforeUpdate = file_get_contents(NEXTDOM_ROOT . '/assets/config/Nextdom_version');
+    // Test type of installation
+    $gitInstall = is_dir(NEXTDOM_ROOT . '/.git');
+
+
+    // Begin process
+    NextDomHelper::stopSystem();
+    try {
+        if ($gitInstall) {
+            gitUpdate();
+        } else {
+            debianUpdate();
+        }
+    } catch (\Throwable $e) {
+
+    }
+    $versionAfterUpdate = file_get_contents(NEXTDOM_ROOT . '/assets/config/Nextdom_version');
+
+    // Todo: Add @slobberbone call update
+    // UPDATE $versionBeforeUpdate $versionAfterUpdate
+
+    NextDomHelper::startSystem();
+
+    UpdateManager::checkAllUpdate('core', false);
+}
+
+function pluginsUpdate()
+{
+    UpdateManager::updateAll();
+}
+
 ScriptHelper::cliOrCrash();
 ScriptHelper::parseArgumentsToGET();
 
@@ -98,30 +134,13 @@ if (Utils::init('backup::before')) {
     BackupManager::createBackup();
 }
 
-$versionBeforeUpdate = file_get_contents(NEXTDOM_ROOT . '/assets/config/Nextdom_version');
-// Test type of installation
-$gitInstall = is_dir(NEXTDOM_ROOT . '/.git');
-
-// Begin process
-NextDomHelper::stopSystem();
-try {
-    if ($gitInstall) {
-        gitUpdate();
-    } else {
-        debianUpdate();
-    }
-} catch (\Throwable $e) {
-
+if (init('plugins', 0) == '1') {
+    pluginsUpdate();
 }
-$versionAfterUpdate = file_get_contents(NEXTDOM_ROOT . '/assets/config/Nextdom_version');
 
-// Todo: Add @slobberbone call update
-// UPDATE $versionBeforeUpdate $versionAfterUpdate
-
-NextDomHelper::startSystem();
-
-UpdateManager::checkAllUpdate('core', false);
-
+if (init('core', 0) == '1') {
+    coreUpdate();
+}
 /*
 if (php_sapi_name() != 'cli' || isset($_SERVER['REQUEST_METHOD']) || !isset($_SERVER['argc'])) {
     header("Statut: 404 Page non trouvée");
