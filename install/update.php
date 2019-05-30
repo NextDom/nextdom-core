@@ -40,12 +40,12 @@ $versionAfterUpdate = '';
 function gitUpdate()
 {
     // Ignore file mode change
-    system('git config core.fileMode false');
+    exec(SystemHelper::getCmdSudo() . 'git config core.fileMode false');
 
     // Update git
     echo __('install.update-sourcecode') . ' : ';
     $gitPullReturn = 0;
-    $gitPullResult = system('cd ' . NEXTDOM_ROOT . ' && sudo git pull >> /dev/null', $gitPullReturn);
+    $gitPullResult = system('cd ' . NEXTDOM_ROOT . ' && ' . SystemHelper::getCmdSudo() . 'git pull >> /dev/null', $gitPullReturn);
     if ($gitPullReturn === 0) {
         echo __('common.ok') . "\n";
         if ($gitPullResult === 'Already up-to-date.') {
@@ -60,7 +60,7 @@ function gitUpdate()
 
     echo __('install.gen-assets') . ' : ';
     $genAssetsReturn = 0;
-    system('cd ' . NEXTDOM_ROOT . ' && ./scripts/gen_assets.sh >> /dev/null', $genAssetsReturn);
+    system('cd ' . NEXTDOM_ROOT . ' && ' . SystemHelper::getCmdSudo() . './scripts/gen_assets.sh >> /dev/null', $genAssetsReturn);
     if ($genAssetsReturn === 0) {
         echo __('common.ok') . "\n";
     } else {
