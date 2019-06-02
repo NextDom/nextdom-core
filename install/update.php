@@ -50,7 +50,7 @@ function gitUpdate()
     if ($gitPullReturn === 0) {
         echo __('common.ok') . "\n";
         if (count($gitPullResult) > 0 && $gitPullResult[0] === 'Already up-to-date.') {
-            echo __('install.already-updated');
+            echo __('install.already-updated') . "\n";
             return false;
         }
     } else {
