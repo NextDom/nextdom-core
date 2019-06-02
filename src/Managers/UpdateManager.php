@@ -151,7 +151,7 @@ class UpdateManager
      * Obtenir les mises à jour à partir de leur type
      *
      * @param $type
-     * @return array|mixed|null
+     * @return Update[]|null
      * @throws \Exception
      */
     public static function byType($type)
@@ -198,7 +198,6 @@ class UpdateManager
             }
 
             $class = 'repo_' . str_replace('.repo.php', '', $repoFile);
-            error_log($class);
             /** @noinspection PhpUndefinedFieldInspection */
             $result[str_replace('.repo.php', '', $repoFile)] = array(
                 'name' => $class::$_name,
