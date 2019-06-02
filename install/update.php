@@ -18,6 +18,7 @@
 
 namespace NextDom;
 
+use Icewind\SMB\System;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\ScriptHelper;
 use NextDom\Helpers\SystemHelper;
@@ -45,10 +46,10 @@ function gitUpdate()
     // Update git
     echo __('install.update-sourcecode') . ' : ';
     $gitPullReturn = 0;
-    $gitPullResult = system('cd ' . NEXTDOM_ROOT . ' && ' . SystemHelper::getCmdSudo() . 'git pull >> /dev/null', $gitPullReturn);
+    exec('cd ' . NEXTDOM_ROOT . ' && ' . SystemHelper::getCmdSudo() . 'git pull', $gitPullResult, $gitPullReturn);
     if ($gitPullReturn === 0) {
         echo __('common.ok') . "\n";
-        if ($gitPullResult === 'Already up-to-date.') {
+        if (count($gitPullResult) > 0 && $gitPullResult[0] === 'Already up-to-date.') {
             echo __('install.already-updated');
             return false;
         }
@@ -60,7 +61,7 @@ function gitUpdate()
 
     echo __('install.download-dependencies') . ' : ';
     $downloadDependencies = 0;
-    system('cd ' . NEXTDOM_ROOT . ' && ' . SystemHelper::getCmdSudo() . './scripts/gen_composer_npm.sh >> /dev/null', $downloadDependencies);
+    system('cd ' . NEXTDOM_ROOT . ' && ' . SystemHelper::getCmdSudo() . './scripts/gen_composer_npm.sh >> /dev/null 2>&1', $downloadDependencies);
     if ($downloadDependencies === 0) {
         echo __('common.ok') . "\n";
     } else {
@@ -70,7 +71,7 @@ function gitUpdate()
 
     echo __('install.gen-assets') . ' : ';
     $genAssetsReturn = 0;
-    system('cd ' . NEXTDOM_ROOT . ' && ' . SystemHelper::getCmdSudo() . './scripts/gen_assets.sh >> /dev/null', $genAssetsReturn);
+    system('cd ' . NEXTDOM_ROOT . ' && ' . SystemHelper::getCmdSudo() . './scripts/gen_assets.sh >> /dev/null 2>&1', $genAssetsReturn);
     if ($genAssetsReturn === 0) {
         echo __('common.ok') . "\n";
     } else {
@@ -139,6 +140,17 @@ ScriptHelper::parseArgumentsToGET();
 
 set_time_limit(1800);
 
+echo "[START UPDATE]\n";
+if (count(SystemHelper::ps('install/update.php', 'sudo')) > 1) {
+    echo "Update in progress. I will wait 10s\n";
+    sleep(10);
+    if (count(SystemHelper::ps('install/update.php', 'sudo')) > 1) {
+        echo "Update in progress. You need to wait before update\n";
+        echo "[END UPDATE]\n";
+        die();
+    }
+}
+
 // Backup before depend of user choice
 if (Utils::init('backup::before')) {
     BackupManager::createBackup();
@@ -151,6 +163,9 @@ if (Utils::init('plugins', 0) == '1') {
 if (Utils::init('core', 0) == '1') {
     coreUpdate();
 }
+
+echo "[END UPDATE SUCCESS]\n";
+
 /*
 if (php_sapi_name() != 'cli' || isset($_SERVER['REQUEST_METHOD']) || !isset($_SERVER['argc'])) {
     header("Statut: 404 Page non trouvée");
