@@ -45,6 +45,7 @@ install:
   update-sourcecode: Mise à jour du code
   already-updated: Le code est déjà à jour.
   update-core-error: Impossible de mettre à jour le code du core.
+  download-dependencies: Téléchargement des dépendances
   gen-assets: Génération des ressources
 
 page-title:

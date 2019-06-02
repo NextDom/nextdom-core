@@ -45,6 +45,7 @@ install:
     update-sourcecode: Update source code
     already-updated: Already up to date.
     update-core-error: Impossible to update core.
+    download-dependencies: Download dependencies
     gen-assets: Generate assets
 
 page-title:

@@ -58,6 +58,16 @@ function gitUpdate()
         return false;
     }
 
+    echo __('install.download-dependencies') . ' : ';
+    $downloadDependencies = 0;
+    system('cd ' . NEXTDOM_ROOT . ' && ' . SystemHelper::getCmdSudo() . './scripts/gen_composer_npm.sh >> /dev/null', $downloadDependencies);
+    if ($downloadDependencies === 0) {
+        echo __('common.ok') . "\n";
+    } else {
+        echo __('common.nok') . "\n";
+        return false;
+    }
+
     echo __('install.gen-assets') . ' : ';
     $genAssetsReturn = 0;
     system('cd ' . NEXTDOM_ROOT . ' && ' . SystemHelper::getCmdSudo() . './scripts/gen_assets.sh >> /dev/null', $genAssetsReturn);
