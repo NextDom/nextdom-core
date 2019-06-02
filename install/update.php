@@ -144,11 +144,11 @@ if (Utils::init('backup::before')) {
     BackupManager::createBackup();
 }
 
-if (init('plugins', 0) == '1') {
+if (Utils::init('plugins', 0) == '1') {
     pluginsUpdate();
 }
 
-if (init('core', 0) == '1') {
+if (Utils::init('core', 0) == '1') {
     coreUpdate();
 }
 /*
