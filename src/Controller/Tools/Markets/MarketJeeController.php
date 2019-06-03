@@ -27,6 +27,7 @@ use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\UpdateManager;
+use NextDom\Repo\RepoMarket;
 
 /**
  * Class MarketJeeController
@@ -64,12 +65,12 @@ class MarketJeeController extends BaseController
         /* Lecture market */
         if ($author == null && $name === null && $categorie === null && Utils::init('certification', null) === null && Utils::init('cost', null) === null && $type == 'plugin') {
             $news = true;
-            $markets = \repo_market::byFilter(array(
+            $markets = RepoMarket::byFilter(array(
                 'status' => 'stable',
                 'type' => 'plugin',
                 'timeState' => 'popular',
             ));
-            $markets2 = \repo_market::byFilter(array(
+            $markets2 = RepoMarket::byFilter(array(
                 'status' => 'stable',
                 'type' => 'plugin',
                 'timeState' => 'newest',
@@ -77,7 +78,7 @@ class MarketJeeController extends BaseController
             $markets = array_merge($markets, $markets2);
         } else {
             $news = false;
-            $markets = \repo_market::byFilter(array(
+            $markets = RepoMarket::byFilter(array(
                 'status' => null,
                 'type' => $type,
                 'categorie' => $categorie,
@@ -185,7 +186,7 @@ class MarketJeeController extends BaseController
 
         /* Test user */
         try {
-            \repo_market::test();
+            RepoMarket::test();
             $userTest = true;
         } catch (\Exception $e) {
             $userTest = false;
@@ -194,7 +195,7 @@ class MarketJeeController extends BaseController
         /* Categories */
         $pageData['marketCategories'] = [];
         if ($type !== null && $type != 'plugin') {
-            foreach (\repo_market::distinctCategorie($type) as $id => $category) {
+            foreach (RepoMarket::distinctCategorie($type) as $id => $category) {
                 if (trim($category) != '' && is_numeric($id)) {
                     $categories = [];
                     $categories['key'] = $category;

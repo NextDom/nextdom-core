@@ -23,7 +23,7 @@ use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\UpdateManager;
 use NextDom\Model\Entity\Update;
-use repo_market;
+use NextDom\Repo\RepoMarket;
 
 /**
  * Class RepoAjax
@@ -38,7 +38,7 @@ class RepoAjax extends BaseAjax
     public function uploadCloud()
     {
         Utils::unautorizedInDemo();
-        repo_market::backup_send(Utils::init('backup'));
+        RepoMarket::backup_send(Utils::init('backup'));
         AjaxHelper::success();
     }
 

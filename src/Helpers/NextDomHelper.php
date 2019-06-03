@@ -50,6 +50,7 @@ use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\UpdateManager;
 use NextDom\Managers\ViewManager;
+use NextDom\Repo\RepoMarket;
 
 /**
  * Class NextDomHelper
@@ -786,7 +787,7 @@ class NextDomHelper
             try {
                 if (ConfigManager::byKey('market::enable') == 1) {
                     LogHelper::add('starting', 'debug', __('Test de connexion au market'));
-                    \repo_market::test();
+                    RepoMarket::test();
                 }
             } catch (\Exception $e) {
                 LogHelper::addError('starting', __('Erreur sur la connexion au market : ') . LogHelper::exception($e));
