@@ -5,7 +5,7 @@ require_once __DIR__ . '/../../src/core.php';
 /**
  * Class repo_file
  */
-class repo_nextdom_market extends \NextDom\Repo\RepoNextDomMarket
+class repo_nextdom extends \NextDom\Repo\RepoNextDom
 {
 
 }

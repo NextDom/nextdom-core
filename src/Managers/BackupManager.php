@@ -370,7 +370,7 @@ class BackupManager
                 (ConfigManager::byKey($c_key . '::cloudUpload') == 0)) {
                 continue;
             }
-            $class = sprintf("repo_%s", $c_key);
+            $class = sprintf("Repo%s", $c_key);
             LogHelper::addError("system", $class);
             $class::backup_send($path);
         }

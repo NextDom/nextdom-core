@@ -27,8 +27,8 @@ use NextDom\Managers\UserManager;
 use NextDom\Model\Entity\Cron;
 
 header('Access-Control-Allow-Origin: *');
-require_once __DIR__ . "/../php/core.inc.php";
-if (UserManager::isBan() && false) {
+require_once __DIR__ . "/../../src/core.php";
+if (UserManager::isBanned() && false) {
     header("Status: 404 Not Found");
     header('HTTP/1.0 404 Not Found');
     $_SERVER['REDIRECT_STATUS'] = 404;
@@ -47,7 +47,7 @@ try {
             die(__('Tous les crons sont actuellement désactivés', __FILE__));
         }
         $cron = new Cron();
-        $cron->setClass('repo_market');
+        $cron->setClass('RepoMarket');
         $cron->setFunction(init('test'));
         $cron->setOnce(1);
         $cron->save();

@@ -47,7 +47,7 @@ class PluginAjax extends BaseAjax
         $return['configurationPath'] = $plugin->getPathToConfigurationById();
         $return['checkVersion'] = version_compare(NextDomHelper::getJeedomVersion(), $plugin->getRequire());
         if (is_object($update)) {
-            $class = 'repo_' . $update->getSource();
+            $class = 'Repo' . ucfirst($update->getSource());
             if (method_exists($class, 'getInfo')) {
                 $return['status'] = $class::getInfo(array('logicalId' => $plugin->getId(), 'type' => 'plugin'));
             }
@@ -63,7 +63,7 @@ class PluginAjax extends BaseAjax
                 }
                 if ($update->getSource() != $key) {
                     $return['status']['owner'][$key] = 0;
-                    $class = 'repo_' . $key;
+                    $class = 'Repo' . $key;
                     if (ConfigManager::byKey($key . '::enable')) {
                         $info = $class::getInfo(array('logicalId' => $plugin->getId(), 'type' => 'plugin'));
                         if (isset($info['owner']) && isset($info['owner'][$key])) {

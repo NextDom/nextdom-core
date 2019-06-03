@@ -20,7 +20,7 @@
 
 namespace NextDom\Repo;
 
-class RepoNextDomMarket
+class RepoNextDom
 {
     /*     * *************************Attributs****************************** */
 

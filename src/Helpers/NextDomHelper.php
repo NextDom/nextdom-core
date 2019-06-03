@@ -849,7 +849,7 @@ class NextDomHelper
         }
         try {
             foreach (UpdateManager::listRepo() as $name => $repo) {
-                $class = 'repo_' . $name;
+                $class = 'Repo' . $name;
                 if (class_exists($class) && method_exists($class, 'cron5') && ConfigManager::byKey($name . '::enable') == 1) {
                     $class::cron5();
                 }
@@ -894,7 +894,7 @@ class NextDomHelper
         }
         try {
             foreach (UpdateManager::listRepo() as $name => $repo) {
-                $class = 'repo_' . $name;
+                $class = 'Repo' . $name;
                 if (class_exists($class) && method_exists($class, 'cronHourly') && ConfigManager::byKey($name . '::enable') == 1) {
                     $class::cronHourly();
                 }

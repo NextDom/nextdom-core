@@ -333,7 +333,7 @@ class RepoMarket
             $jsonrpc = new \jsonrpcClient(ConfigManager::byKey('market::address') . '/core/api/api.php', '', $params);
         } else {
             $jsonrpc = new \jsonrpcClient(ConfigManager::byKey('market::address') . '/core/api/api.php', '', array(
-                'nextdomversion' => NextDomHelper::version(),
+                'nextdomversion' => NextDomHelper::getNextdomVersion(),
                 'hwkey' => NextDomHelper::getHardwareKey(),
                 'localIp' => $internalIp,
                 'nextdom_name' => ConfigManager::byKey('name'),
@@ -346,7 +346,7 @@ class RepoMarket
                 ),
             ));
         }
-        $jsonrpc->setCb_class('repo_market');
+        $jsonrpc->setCb_class('RepoMarket');
         $jsonrpc->setCb_function('postJsonRpc');
         $jsonrpc->setNoSslCheck(true);
         return $jsonrpc;
