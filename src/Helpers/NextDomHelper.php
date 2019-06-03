@@ -564,7 +564,7 @@ class NextDomHelper
         foreach ($options as $key => $value) {
             $params .= '"' . $key . '"="' . $value . '" ';
         }
-        SystemHelper::php(NEXTDOM_ROOT . '/install/update.php ' . $params . ' >> ' . LogHelper::getPathToLog('update') . ' 2>&1 &');
+        SystemHelper::php(NEXTDOM_ROOT . '/install/update.php ' . $params . ' >> ' . LogHelper::getPathToLog('update') . ' &');
     }
 
     /**

@@ -48,13 +48,12 @@ function gitUpdate()
 
     // Update git
     echo __('install.update-sourcecode') . ' : ';
-    $gitPullReturn = 0;
     exec('cd ' . NEXTDOM_ROOT . ' && ' . SystemHelper::getCmdSudo() . 'git pull', $gitPullResult, $gitPullReturn);
     if ($gitPullReturn === 0) {
         echo __('common.ok') . "\n";
         if (count($gitPullResult) > 0 && $gitPullResult[0] === 'Already up-to-date.') {
             echo __('install.already-updated') . "\n";
-            return false;
+            //return false;
         }
     } else {
         echo __('common.nok') . "\n";
@@ -64,7 +63,7 @@ function gitUpdate()
 
     echo __('install.download-dependencies') . ' : ';
     $downloadDependencies = 0;
-    system('cd ' . NEXTDOM_ROOT . ' && ' . SystemHelper::getCmdSudo() . './scripts/gen_composer_npm.sh >> /dev/null 2>&1', $downloadDependencies);
+    exec('cd ' . NEXTDOM_ROOT . ' && ' . SystemHelper::getCmdSudo() . './scripts/gen_composer_npm.sh >> /dev/null 2>&1', $output, $downloadDependencies);
     if ($downloadDependencies === 0) {
         echo __('common.ok') . "\n";
     } else {
@@ -74,7 +73,7 @@ function gitUpdate()
 
     echo __('install.gen-assets') . ' : ';
     $genAssetsReturn = 0;
-    system('cd ' . NEXTDOM_ROOT . ' && ' . SystemHelper::getCmdSudo() . './scripts/gen_assets.sh >> /dev/null 2>&1', $genAssetsReturn);
+    exec('cd ' . NEXTDOM_ROOT . ' && ' . SystemHelper::getCmdSudo() . './scripts/gen_assets.sh >> /dev/null 2>&1', $output, $genAssetsReturn);
     if ($genAssetsReturn === 0) {
         echo __('common.ok') . "\n";
     } else {
@@ -83,10 +82,10 @@ function gitUpdate()
     }
     $coreUpdate = UpdateManager::byTypeAndLogicalId('core', 'nextdom');
     if (is_object($coreUpdate)) {
-        $gitHash = system('git rev-parse HEAD');
-        $coreUpdate->setLocalVersion($gitHash);
-        $branch = system('git rev-parse --abbrev-ref HEAD');
-        $coreUpdate->setConfiguration('version', $branch);
+        exec('git rev-parse HEAD', $gitHash);
+        $coreUpdate->setLocalVersion($gitHash[0]);
+        exec('git rev-parse --abbrev-ref HEAD', $branch);
+        $coreUpdate->setConfiguration('version', $branch[0]);
         $coreUpdate->save();
     }
     return true;
@@ -103,7 +102,7 @@ function debianUpdate()
 }
 
 /**
- * Core update
+ * Start core update
  */
 function coreUpdate()
 {
@@ -134,17 +133,29 @@ function coreUpdate()
     UpdateManager::checkAllUpdate('core', false);
 }
 
+/**
+ * Start plugins update
+ *
+ * @throws \Exception
+ */
 function pluginsUpdate()
 {
     UpdateManager::updateAll();
 }
 
+/**
+ * Test if update is in progress
+ *
+ * @return bool True if update is in progress
+ *
+ * @throws \Exception
+ */
 function updateInProgress() {
     if (count(SystemHelper::ps('install/update.php', 'sudo')) > 1) {
-        echo "Update in progress. I will wait 10s\n";
+        echo __('install.update-in-progress-wait') . "\n";
         sleep(10);
         if (count(SystemHelper::ps('install/update.php', 'sudo')) > 1) {
-            echo "Update in progress. You need to wait before update\n";
+            echo __('install.update-in-progress-retry') . "\n";
             return true;
         }
     }
@@ -157,22 +168,28 @@ ScriptHelper::parseArgumentsToGET();
 set_time_limit(1800);
 
 if (!updateInProgress()) {
-    echo "[START UPDATE]\n";
-    NextDomHelper::event('begin_update', true);
-    // Backup before depend of user choice
-    if (Utils::init('backup::before')) {
-        BackupManager::createBackup();
+    $processPluginsUpdate = Utils::init('plugins', 0) == '1';
+    $processCoreUpdate = Utils::init('core', 0) == '1';
+
+    if ($processCoreUpdate || $processPluginsUpdate) {
+        echo "[" . __('install.begin-update') . "]\n";
+        NextDomHelper::event('begin_update', true);
+        // Backup before depend of user choice
+        if (Utils::init('backup::before')) {
+            BackupManager::createBackup();
+        }
+
+        if ($processPluginsUpdate) {
+            pluginsUpdate();
+        }
+
+        if ($processCoreUpdate) {
+            coreUpdate();
+        }
+        NextDomHelper::event('end_update');
+        echo "[" . __('install.end-update') . "]\n";
     }
 
-    if (Utils::init('plugins', 0) == '1') {
-        pluginsUpdate();
-    }
-
-    if (Utils::init('core', 0) == '1') {
-        coreUpdate();
-    }
-    NextDomHelper::event('end_update');
-    echo "[END UPDATE SUCCESS]\n";
 }
 
 /*
