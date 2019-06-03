@@ -181,7 +181,7 @@ function createUpdateBox(updateData) {
  */
 function saveUpdateChanges() {
   nextdom.update.saves({
-    updates: $('.update-box').getValues('.updateAttr'),
+    updates: $('.tab-pane .box').getValues('.updateAttr'),
     error: function (error) {
       notify('Erreur', error.message, 'error');
     },
