@@ -38,10 +38,15 @@ class RepoAjax extends BaseAjax
     /**
      * Get the class of the repo by the name
      * @param string $name Name of the repo in jeedom format
-     * @return string Name of the class
+     * @return array Associative array
      */
-    private function getRepoClassName($name): string {
-        return 'Repo' . ucwords($name);
+    private function getRepoDataFromName($name): array {
+        $name = str_replace('repo_', '', $name);
+        $className = 'Repo' . ucwords($name);
+        return [
+            'className' => $className,
+            'phpClass' => '\\NextDom\\Repo\\' . $className
+        ];
     }
 
     public function uploadCloud()
@@ -54,30 +59,30 @@ class RepoAjax extends BaseAjax
     public function restoreCloud()
     {
         Utils::unautorizedInDemo();
-        $repoClassName = $this->getRepoClassName(Utils::init('repo'));
-        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassName . '.php')) {
-            $repoClassName::backup_restore(Utils::init('backup'));
+        $repoClassData = $this->getRepoDataFromName(Utils::init('repo'));
+        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassData['className'] . '.php')) {
+            $repoClassData['phpClass']::backup_restore(Utils::init('backup'));
             AjaxHelper::success();
         }
-        AjaxHelper::error(__('Le repo n\'existe pas : ' . $repoClassName));
+        AjaxHelper::error(__('Le repo n\'existe pas : ' . $repoClassData['className']));
     }
 
     public function sendReportBug()
     {
         Utils::unautorizedInDemo();
-        $repoClassName = $this->getRepoClassName(Utils::init('repo'));
-        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassName . '.php')) {
-            AjaxHelper::success($repoClassName::saveTicket(json_decode(Utils::init('ticket'), true)));
+        $repoClassData = $this->getRepoDataFromName(Utils::init('repo'));
+        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassData['className'] . '.php')) {
+            AjaxHelper::success($repoClassData['phpClass']::saveTicket(json_decode(Utils::init('ticket'), true)));
         }
-        AjaxHelper::error(__('Le repo n\'existe pas : ' . $repoClassName));
+        AjaxHelper::error(__('Le repo n\'existe pas : ' . $repoClassData['className']));
     }
 
     public function install()
     {
         Utils::unautorizedInDemo();
-        $repoClassName = $this->getRepoClassName(Utils::init('repo'));
-        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassName . '.php')) {
-            $repo = $repoClassName::byId(Utils::init('id'));
+        $repoClassData = $this->getRepoDataFromName(Utils::init('repo'));
+        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassData['className'] . '.php')) {
+            $repo = $repoClassData['phpClass']::byId(Utils::init('id'));
             if (!is_object($repo)) {
                 throw new CoreException(__('Impossible de trouver l\'objet associé : ', __FILE__) . Utils::init('id'));
             }
@@ -94,25 +99,25 @@ class RepoAjax extends BaseAjax
             $update->doUpdate();
             AjaxHelper::success();
         }
-        AjaxHelper::error(__('Le repo n\'existe pas : ' . $repoClassName));
+        AjaxHelper::error(__('Le repo n\'existe pas : ' . $repoClassData['className']));
     }
 
     public function test()
     {
-        $repoClassName = $this->getRepoClassName(Utils::init('repo'));
-        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassName . '.php')) {
-            $repoClassName::test();
+        $repoClassData = $this->getRepoDataFromName(Utils::init('repo'));
+        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassData['className'] . '.php')) {
+            $repoClassData['phpClass']::test();
             AjaxHelper::success();
         }
-        AjaxHelper::error(__('Le repo n\'existe pas : ' . $repoClassName));
+        AjaxHelper::error(__('Le repo n\'existe pas : ' . $repoClassData['className']));
     }
 
     public function remove()
     {
         unautorizedInDemo();
-        $repoClassName = $this->getRepoClassName(Utils::init('repo'));
-        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassName . '.php')) {
-            $repo = $repoClassName::byId(Utils::init('id'));
+        $repoClassData = $this->getRepoDataFromName(Utils::init('repo'));
+        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassData['className'] . '.php')) {
+            $repo = $repoClassData['phpClass']::byId(Utils::init('id'));
             if (!is_object($repo)) {
                 throw new CoreException(__('Impossible de trouver l\'objet associé : ', __FILE__) . Utils::init('id'));
             }
@@ -130,74 +135,74 @@ class RepoAjax extends BaseAjax
             }
             AjaxHelper::success();
         }
-        AjaxHelper::error(__('Le repo n\'existe pas : ' . $repoClassName));
+        AjaxHelper::error(__('Le repo n\'existe pas : ' . $repoClassData['className']));
     }
 
     public function save()
     {
         unautorizedInDemo();
-        $repoClassName = $this->getRepoClassName(Utils::init('repo'));
-        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassName . '.php')) {
+        $repoClassData = $this->getRepoDataFromName(Utils::init('repo'));
+        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassData['className'] . '.php')) {
             $repo_ajax = json_decode(Utils::init('market'), true);
             try {
-                $repo = $repoClassName::byId($repo_ajax['id']);
+                $repo = $repoClassData['phpClass']::byId($repo_ajax['id']);
             } catch (\Exception $e) {
-                $repo = new $repoClassName();
+                $repo = new $repoClassData['phpClass']();
             }
             Utils::a2o($repo, $repo_ajax);
             $repo->save();
             AjaxHelper::success();
         }
-        AjaxHelper::error(__('Le repo n\'existe pas : ' . $repoClassName));
+        AjaxHelper::error(__('Le repo n\'existe pas : ' . $repoClassData['className']));
     }
 
     public function getInfo()
     {
-        $repoClassName = $this->getRepoClassName(Utils::init('repo'));
-        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassName . '.php')) {
-            AjaxHelper::success($repoClassName::getInfo(Utils::init('logicalId')));
+        $repoClassData = $this->getRepoDataFromName(Utils::init('repo'));
+        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassData['className'] . '.php')) {
+            AjaxHelper::success($repoClassData['phpClass']::getInfo(Utils::init('logicalId')));
         }
-        AjaxHelper::error(__('Le repo n\'existe pas : ' . $repoClassName));
+        AjaxHelper::error(__('Le repo n\'existe pas : ' . $repoClassData['className']));
     }
 
     public function byLogicalId()
     {
-        $repoClassName = $this->getRepoClassName(Utils::init('repo'));
-        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassName . '.php')) {
+        $repoClassData = $this->getRepoDataFromName(Utils::init('repo'));
+        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassData['className'] . '.php')) {
             if (Utils::init('noExecption', 0) == 1) {
                 try {
-                    AjaxHelper::success(Utils::o2a($repoClassName::byLogicalIdAndType(Utils::init('logicalId'), Utils::init('type'))));
+                    AjaxHelper::success(Utils::o2a($repoClassData['phpClass']::byLogicalIdAndType(Utils::init('logicalId'), Utils::init('type'))));
                 } catch (\Exception $e) {
                     AjaxHelper::success();
                 }
             } else {
-                AjaxHelper::success(Utils::o2a($repoClassName::byLogicalIdAndType(Utils::init('logicalId'), Utils::init('type'))));
+                AjaxHelper::success(Utils::o2a($repoClassData['phpClass']::byLogicalIdAndType(Utils::init('logicalId'), Utils::init('type'))));
             }
         }
-        AjaxHelper::error(__('Le repo n\'existe pas : ' . $repoClassName));
+        AjaxHelper::error(__('Le repo n\'existe pas : ' . $repoClassData['className']));
     }
 
     public function setRating()
     {
         unautorizedInDemo();
-        $repoClassName = $this->getRepoClassName(Utils::init('repo'));
-        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassName . '.php')) {
-            $repo = $repoClassName::byId(Utils::init('id'));
+        $repoClassData = $this->getRepoDataFromName(Utils::init('repo'));
+        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassData['className'] . '.php')) {
+            $repo = $repoClassData['phpClass']::byId(Utils::init('id'));
             if (!is_object($repo)) {
                 throw new CoreException(__('Impossible de trouver l\'objet associé : ') . Utils::init('id'));
             }
             $repo->setRating(Utils::init('rating'));
             AjaxHelper::success();
         }
-        AjaxHelper::error(__('Le repo n\'existe pas : ' . $repoClassName));
+        AjaxHelper::error(__('Le repo n\'existe pas : ' . $repoClassData['className']));
     }
 
     public function backupList()
     {
-        $repoClassName = $this->getRepoClassName(Utils::init('repo'));
-        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassName . '.php')) {
-            AjaxHelper::success($repoClassName::backup_list());
+        $repoClassData = $this->getRepoDataFromName(Utils::init('repo'));
+        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassData['className'] . '.php')) {
+            AjaxHelper::success($repoClassData['phpClass']::backup_list());
         }
-        AjaxHelper::error(__('Le repo n\'existe pas : ' . $repoClassName));
+        AjaxHelper::error(__('Le repo n\'existe pas : ' . $repoClassData['className']));
     }
 }

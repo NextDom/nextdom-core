@@ -660,7 +660,7 @@ class RepoMarket
         }
         $cmd .= ' --num-retries 2';
         $cmd .= ' --ssl-no-check-certificate';
-        $cmd .= ' --tempdir ' . $base_dir . '/tmp';
+        $cmd .= ' --tempdir ' . $base_dir;
         $cmd .= ' ' . $base_dir . '  "webdavs://' . ConfigManager::byKey('market::username') . ':' . ConfigManager::byKey('market::backupPassword');
         $cmd .= '@' . ConfigManager::byKey('market::backupServer') . '/remote.php/webdav/' . ConfigManager::byKey('market::cloud::backup::name') . '"';
         try {
@@ -1043,6 +1043,10 @@ class RepoMarket
             }
             if (isset($_result['register::dnsNumber']) && ConfigManager::byKey('dns::number') != $_result['register::dnsNumber']) {
                 ConfigManager::save('dns::number', $_result['register::dnsNumber']);
+                $restart_dns = true;
+            }
+            if (isset($_result['register::vpnurl']) && ConfigManager::byKey('dns::vpnurl') != $_result['register::vpnurl']) {
+                ConfigManager::save('dns::vpnurl', $_result['register::vpnurl']);
                 $restart_dns = true;
             }
             if (isset($_result['register::vpnPort']) && ConfigManager::byKey('vpn::port') != $_result['register::vpnPort']) {
