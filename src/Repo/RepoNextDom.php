@@ -18,9 +18,9 @@
 
 /* * ***************************Includes********************************* */
 
-require_once dirname(__FILE__) . '/../../core/php/core.inc.php';
+namespace NextDom\Repo;
 
-class repo_nextdom_market
+class RepoNextDom
 {
     /*     * *************************Attributs****************************** */
 
