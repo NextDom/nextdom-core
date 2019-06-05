@@ -45,25 +45,25 @@ if (init('type') != '') {
         if (!nextdom::apiAccess(init('apikey', init('api')), $plugin)) {
             user::failedLogin();
             sleep(5);
-            throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action 1, IP : ', __FILE__) . getClientIp());
+            throw new \Exception(__('Vous n\'êtes pas autorisé à effectuer cette action 1, IP : ', __FILE__) . getClientIp());
         }
         if ($plugin != 'core' && !nextdom::apiModeResult(config::byKey('api::' . $plugin . '::mode', 'core', 'enable'))) {
             user::failedLogin();
             sleep(5);
-            throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action (API ' . $plugin . '), IP : ', __FILE__) . getClientIp());
+            throw new \Exception(__('Vous n\'êtes pas autorisé à effectuer cette action (API ' . $plugin . '), IP : ', __FILE__) . getClientIp());
         }
         if (!nextdom::apiModeResult(config::byKey('api::core::http::mode', 'core', 'enable'))) {
             user::failedLogin();
             sleep(5);
-            throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action (HTTP API désactivé), IP : ', __FILE__) . getClientIp());
+            throw new \Exception(__('Vous n\'êtes pas autorisé à effectuer cette action (HTTP API désactivé), IP : ', __FILE__) . getClientIp());
         }
         if ($type == 'ask') {
             $cmd = cmd::byId(init('cmd_id'));
             if (!is_object($cmd)) {
-                throw new Exception(__('Commande inconnue : ', __FILE__) . init('cmd_id'));
+                throw new \Exception(__('Commande inconnue : ', __FILE__) . init('cmd_id'));
             }
             if ($cmd->getCache('ask::token', config::genKey()) != init('token')) {
-                throw new Exception(__('Token invalide', __FILE__) . $cmd->getCache('ask::token') . ' != ' . init('token'));
+                throw new \Exception(__('Token invalide', __FILE__) . $cmd->getCache('ask::token') . ' != ' . init('token'));
             }
             if (init('count', 0) != 0 && init('count', 0) > $cmd->getCache('ask::count', 0)) {
                 $cmd->setCache('ask::count', $cmd->getCache('ask::count', 0) + 1);
@@ -79,10 +79,10 @@ if (init('type') != '') {
                 foreach ($ids as $id) {
                     $cmd = cmd::byId($id);
                     if (!is_object($cmd)) {
-                        throw new Exception(__('Aucune commande correspondant à l\'ID : ', __FILE__) . secureXSS($id));
+                        throw new \Exception(__('Aucune commande correspondant à l\'ID : ', __FILE__) . secureXSS($id));
                     }
                     if (init('plugin', 'core') != 'core' && init('plugin', 'core') != $cmd->getEqType()) {
-                        throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action 2, IP : ', __FILE__) . getClientIp());
+                        throw new \Exception(__('Vous n\'êtes pas autorisé à effectuer cette action 2, IP : ', __FILE__) . getClientIp());
                     }
                     if ($_USER_GLOBAL != null && !$cmd->hasRight($_USER_GLOBAL)) {
                         continue;
@@ -94,13 +94,13 @@ if (init('type') != '') {
             } else {
                 $cmd = cmd::byId(init('id'));
                 if (!is_object($cmd)) {
-                    throw new Exception(__('Aucune commande correspondant à l\'ID : ', __FILE__) . secureXSS(init('id')));
+                    throw new \Exception(__('Aucune commande correspondant à l\'ID : ', __FILE__) . secureXSS(init('id')));
                 }
                 if (init('plugin', 'core') != 'core' && init('plugin', 'core') != $cmd->getEqType()) {
-                    throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action 3, IP : ', __FILE__) . getClientIp());
+                    throw new \Exception(__('Vous n\'êtes pas autorisé à effectuer cette action 3, IP : ', __FILE__) . getClientIp());
                 }
                 if ($_USER_GLOBAL != null && !$cmd->hasRight($_USER_GLOBAL)) {
-                    throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action 4, IP : ', __FILE__) . getClientIp());
+                    throw new \Exception(__('Vous n\'êtes pas autorisé à effectuer cette action 4, IP : ', __FILE__) . getClientIp());
                 }
                 log::add('api', 'debug', __('Exécution de : ', __FILE__) . $cmd->getHumanName());
                 echo $cmd->execCmd($_REQUEST);
@@ -108,7 +108,7 @@ if (init('type') != '') {
             }
         }
         if ($type != init('plugin', 'core') && init('plugin', 'core') != 'core') {
-            throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action 4, IP : ', __FILE__) . getClientIp());
+            throw new \Exception(__('Vous n\'êtes pas autorisé à effectuer cette action 4, IP : ', __FILE__) . getClientIp());
         }
         if (class_exists($type) && method_exists($type, 'event')) {
             log::add('api', 'info', __('Appels de ', __FILE__) . secureXSS($type) . '::event()');
@@ -142,10 +142,10 @@ if (init('type') != '') {
             log::add('api', 'debug', __('Demande API pour les scénarios', __FILE__));
             $scenario = scenario::byId(init('id'));
             if (!is_object($scenario)) {
-                throw new Exception(__('Aucun scénario correspondant à l\'ID : ', __FILE__) . secureXSS(init('id')));
+                throw new \Exception(__('Aucun scénario correspondant à l\'ID : ', __FILE__) . secureXSS(init('id')));
             }
             if ($_USER_GLOBAL != null && !$scenario->hasRight('x', $_USER_GLOBAL)) {
-                throw new Exception(__('Vous n\'avez pas le droit de faire une action sur ce scénario', __FILE__));
+                throw new \Exception(__('Vous n\'avez pas le droit de faire une action sur ce scénario', __FILE__));
             }
             switch (init('action')) {
                 case 'start':
@@ -181,7 +181,7 @@ if (init('type') != '') {
                     $scenario->save();
                     break;
                 default:
-                    throw new Exception(__('Action non trouvée ou invalide [start,stop,deactivate,activate]', __FILE__));
+                    throw new \Exception(__('Action non trouvée ou invalide [start,stop,deactivate,activate]', __FILE__));
             }
             echo 'ok';
             die();
@@ -249,12 +249,12 @@ try {
     $jsonrpc = new jsonrpc($request);
 
     if (!nextdom::apiModeResult(config::byKey('api::core::jsonrpc::mode', 'core', 'enable'))) {
-        throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action (JSON-RPC disable)', __FILE__), -32001);
+        throw new \Exception(__('Vous n\'êtes pas autorisé à effectuer cette action (JSON-RPC disable)', __FILE__), -32001);
     }
 
     if ($jsonrpc->getJsonrpc() != '2.0') {
         user::failedLogin();
-        throw new Exception(__('Requête invalide. Version JSON-RPC invalide : ', __FILE__) . $jsonrpc->getJsonrpc(), -32001);
+        throw new \Exception(__('Requête invalide. Version JSON-RPC invalide : ', __FILE__) . $jsonrpc->getJsonrpc(), -32001);
     }
 
     $params = $jsonrpc->getParams();
@@ -274,19 +274,19 @@ try {
         if (!isset($params['login']) || !isset($params['password']) || $params['login'] == '' || $params['password'] == '') {
             user::failedLogin();
             sleep(5);
-            throw new Exception(__('L\'identifiant ou le mot de passe ne peuvent pas être vide', __FILE__), -32001);
+            throw new \Exception(__('L\'identifiant ou le mot de passe ne peuvent pas être vide', __FILE__), -32001);
         }
         $user = user::connect($params['login'], $params['password']);
         if (!is_object($user) || $user->getEnable() != 1) {
             user::failedLogin();
             sleep(5);
-            throw new Exception(__('Echec lors de l\'authentification', __FILE__), -32001);
+            throw new \Exception(__('Echec lors de l\'authentification', __FILE__), -32001);
         }
         if (network::getUserLocation() != 'internal' && $user->getOptions('twoFactorAuthentification', 0) == 1 && $user->getOptions('twoFactorAuthentificationSecret') != '') {
             if (!isset($params['twoFactorCode']) || trim($params['twoFactorCode']) == '' || !$user->validateTwoFactorCode($params['twoFactorCode'])) {
                 user::failedLogin();
                 sleep(5);
-                throw new Exception(__('Echec lors de l\'authentification', __FILE__), -32001);
+                throw new \Exception(__('Echec lors de l\'authentification', __FILE__), -32001);
             }
         }
         $jsonrpc->makeSuccess($user->getHash());
@@ -313,15 +313,15 @@ try {
 
     if (!is_object($_USER_GLOBAL)) {
         if (!isset($params['apikey']) && !isset($params['api'])) {
-            throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action', __FILE__), -32001);
+            throw new \Exception(__('Vous n\'êtes pas autorisé à effectuer cette action', __FILE__), -32001);
         }
         $apikey = isset($params['apikey']) ? $params['apikey'] : $params['api'];
         if (isset($params['plugin']) && $params['plugin'] != '' && $params['plugin'] != 'core') {
             if (!nextdom::apiAccess($apikey, $params['plugin'])) {
-                throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action 1', __FILE__), -32001);
+                throw new \Exception(__('Vous n\'êtes pas autorisé à effectuer cette action 1', __FILE__), -32001);
             }
         } else if (!nextdom::apiAccess($apikey)) {
-            throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action 2', __FILE__), -32001);
+            throw new \Exception(__('Vous n\'êtes pas autorisé à effectuer cette action 2', __FILE__), -32001);
         }
         if (is_object($_USER_GLOBAL) && isset($params['session']) && $params['session']) {
             @session_start();
@@ -362,7 +362,7 @@ try {
     if ($jsonrpc->getMethod() == 'nextdom::halt') {
         unautorizedInDemo();
         if (is_object($_USER_GLOBAL) && $_USER_GLOBAL->getProfils() != 'admin') {
-            throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action ', __FILE__) . $jsonrpc->getMethod(), -32001);
+            throw new \Exception(__('Vous n\'êtes pas autorisé à effectuer cette action ', __FILE__) . $jsonrpc->getMethod(), -32001);
         }
         nextdom::haltSystem();
         $jsonrpc->makeSuccess('ok');
@@ -371,7 +371,7 @@ try {
     if ($jsonrpc->getMethod() == 'nextdom::reboot') {
         unautorizedInDemo();
         if (is_object($_USER_GLOBAL) && $_USER_GLOBAL->getProfils() != 'admin') {
-            throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action ', __FILE__) . $jsonrpc->getMethod(), -32001);
+            throw new \Exception(__('Vous n\'êtes pas autorisé à effectuer cette action ', __FILE__) . $jsonrpc->getMethod(), -32001);
         }
         nextdom::rebootSystem();
         $jsonrpc->makeSuccess('ok');
@@ -380,7 +380,7 @@ try {
     if ($jsonrpc->getMethod() == 'nextdom::update') {
         unautorizedInDemo();
         if (is_object($_USER_GLOBAL) && $_USER_GLOBAL->getProfils() != 'admin') {
-            throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action ', __FILE__) . $jsonrpc->getMethod(), -32001);
+            throw new \Exception(__('Vous n\'êtes pas autorisé à effectuer cette action ', __FILE__) . $jsonrpc->getMethod(), -32001);
         }
         nextdom::update('', 0);
         $jsonrpc->makeSuccess('ok');
@@ -389,7 +389,7 @@ try {
     if ($jsonrpc->getMethod() == 'nextdom::backup') {
         unautorizedInDemo();
         if (is_object($_USER_GLOBAL) && $_USER_GLOBAL->getProfils() != 'admin') {
-            throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action ', __FILE__) . $jsonrpc->getMethod(), -32001);
+            throw new \Exception(__('Vous n\'êtes pas autorisé à effectuer cette action ', __FILE__) . $jsonrpc->getMethod(), -32001);
         }
         nextdom::backup(true);
         $jsonrpc->makeSuccess('ok');
@@ -428,7 +428,7 @@ try {
     if ($jsonrpc->getMethod() == 'jeeObject::byId' || $jsonrpc->getMethod() == 'object::byId') {
         $object = jeeObject::byId($params['id']);
         if (!is_object($object)) {
-            throw new Exception(__('Objet introuvable : ', __FILE__) . secureXSS($params['id']), -32601);
+            throw new \Exception(__('Objet introuvable : ', __FILE__) . secureXSS($params['id']), -32601);
         }
         $jsonrpc->makeSuccess(utils::o2a($object));
     }
@@ -440,7 +440,7 @@ try {
     if ($jsonrpc->getMethod() == 'jeeObject::fullById' || $jsonrpc->getMethod() == 'object::fullById') {
         $object = jeeObject::byId($params['id']);
         if (!is_object($object)) {
-            throw new Exception(__('Objet introuvable : ', __FILE__) . secureXSS($params['id']), -32601);
+            throw new \Exception(__('Objet introuvable : ', __FILE__) . secureXSS($params['id']), -32601);
         }
         $return = utils::o2a($object);
         $return['eqLogics'] = array();
@@ -485,7 +485,7 @@ try {
     if ($jsonrpc->getMethod() == 'summary::byId') {
         $object = jeeObject::byId($params['id']);
         if (!is_object($object)) {
-            throw new Exception(__('Objet introuvable : ', __FILE__) . secureXSS($params['id']), -32601);
+            throw new \Exception(__('Objet introuvable : ', __FILE__) . secureXSS($params['id']), -32601);
         }
         if (!isset($params['key'])) {
             $params['key'] = '';
@@ -537,7 +537,7 @@ try {
     if ($jsonrpc->getMethod() == 'eqLogic::fullById') {
         $eqLogic = eqLogic::byId($params['id']);
         if (!is_object($eqLogic)) {
-            throw new Exception(__('EqLogic introuvable : ', __FILE__) . secureXSS($params['id']), -32602);
+            throw new \Exception(__('EqLogic introuvable : ', __FILE__) . secureXSS($params['id']), -32602);
         }
         $return = utils::o2a($eqLogic);
         $return['cmds'] = array();
@@ -552,7 +552,7 @@ try {
         $typeEqLogic = $params['eqType_name'];
         $typeCmd = $typeEqLogic . 'Cmd';
         if ($typeEqLogic == '' || !class_exists($typeEqLogic) || !class_exists($typeCmd)) {
-            throw new Exception(__('Type incorrect (classe commande inexistante)', __FILE__) . secureXSS($typeCmd));
+            throw new \Exception(__('Type incorrect (classe commande inexistante)', __FILE__) . secureXSS($typeCmd));
         }
         $eqLogic = null;
         if (isset($params['id'])) {
@@ -563,7 +563,7 @@ try {
             $eqLogic->setEqType_name($params['eqType_name']);
         }
         if (is_object($_USER_GLOBAL) && $_USER_GLOBAL->getProfils() != 'admin') {
-            throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action ', __FILE__) . $jsonrpc->getMethod(), -32001);
+            throw new \Exception(__('Vous n\'êtes pas autorisé à effectuer cette action ', __FILE__) . $jsonrpc->getMethod(), -32001);
         }
         utils::a2o($eqLogic, nextdom::fromHumanReadable($params));
         $eqLogic->save();
@@ -642,7 +642,7 @@ try {
     if ($jsonrpc->getMethod() == 'cmd::byId') {
         $cmd = cmd::byId($params['id']);
         if (!is_object($cmd)) {
-            throw new Exception(__('Cmd introuvable : ', __FILE__) . secureXSS($params['id']), -32701);
+            throw new \Exception(__('Cmd introuvable : ', __FILE__) . secureXSS($params['id']), -32701);
         }
         $jsonrpc->makeSuccess($cmd->exportApi());
     }
@@ -653,7 +653,7 @@ try {
             foreach ($params['id'] as $id) {
                 $cmd = cmd::byId($id);
                 if (!is_object($cmd)) {
-                    throw new Exception(__('Commande introuvable : ', __FILE__) . secureXSS($id), -32702);
+                    throw new \Exception(__('Commande introuvable : ', __FILE__) . secureXSS($id), -32702);
                 }
                 if (is_object($_USER_GLOBAL) && !$cmd->hasRight($_USER_GLOBAL)) {
                     continue;
@@ -663,10 +663,10 @@ try {
                     $params['codeAccess'] = '';
                 }
                 if (!$cmd->checkAccessCode($params['codeAccess'])) {
-                    throw new Exception(__('Cette action nécessite un code d\'accès', __FILE__), -32005);
+                    throw new \Exception(__('Cette action nécessite un code d\'accès', __FILE__), -32005);
                 }
                 if ($cmd->getType() == 'action' && $cmd->getConfiguration('actionConfirm') == 1 && $params['confirmAction'] != 1) {
-                    throw new Exception(__('Cette action nécessite une confirmation', __FILE__), -32006);
+                    throw new \Exception(__('Cette action nécessite une confirmation', __FILE__), -32006);
                 }
                 if ($cmd->getType() == 'info') {
                     $return[$id] = array('value' => $cmd->execCmd($params['options']), 'collectDate' => $cmd->getCollectDate());
@@ -677,19 +677,19 @@ try {
         } else {
             $cmd = cmd::byId($params['id']);
             if (!is_object($cmd)) {
-                throw new Exception(__('Commande introuvable : ', __FILE__) . secureXSS($params['id']), -32702);
+                throw new \Exception(__('Commande introuvable : ', __FILE__) . secureXSS($params['id']), -32702);
             }
             if (is_object($_USER_GLOBAL) && !$cmd->hasRight($_USER_GLOBAL)) {
-                throw new Exception(__('Vous n\'êtes pas autorisé à faire cette action', __FILE__));
+                throw new \Exception(__('Vous n\'êtes pas autorisé à faire cette action', __FILE__));
             }
             if (!isset($params['codeAccess'])) {
                 $params['codeAccess'] = '';
             }
             if (!$cmd->checkAccessCode($params['codeAccess'])) {
-                throw new Exception(__('Cette action nécessite un code d\'accès', __FILE__), -32005);
+                throw new \Exception(__('Cette action nécessite un code d\'accès', __FILE__), -32005);
             }
             if ($cmd->getType() == 'action' && $cmd->getConfiguration('actionConfirm') == 1 && $params['confirmAction'] != 1) {
-                throw new Exception(__('Cette action nécessite une confirmation', __FILE__), -32006);
+                throw new \Exception(__('Cette action nécessite une confirmation', __FILE__), -32006);
             }
             if ($cmd->getType() == 'info') {
                 $return = array('value' => $cmd->execCmd($params['options']), 'collectDate' => $cmd->getCollectDate());
@@ -703,7 +703,7 @@ try {
     if ($jsonrpc->getMethod() == 'cmd::getStatistique') {
         $cmd = cmd::byId($params['id']);
         if (!is_object($cmd)) {
-            throw new Exception('Commande introuvable : ' . secureXSS($params['id']), -32702);
+            throw new \Exception('Commande introuvable : ' . secureXSS($params['id']), -32702);
         }
         $jsonrpc->makeSuccess($cmd->getStatistique($params['startTime'], $params['endTime']));
     }
@@ -711,7 +711,7 @@ try {
     if ($jsonrpc->getMethod() == 'cmd::getTendance') {
         $cmd = cmd::byId($params['id']);
         if (!is_object($cmd)) {
-            throw new Exception('Commande introuvable : ' . secureXSS($params['id']), -32702);
+            throw new \Exception('Commande introuvable : ' . secureXSS($params['id']), -32702);
         }
         $jsonrpc->makeSuccess($cmd->getTendance($params['startTime'], $params['endTime']));
     }
@@ -719,7 +719,7 @@ try {
     if ($jsonrpc->getMethod() == 'cmd::getHistory') {
         $cmd = cmd::byId($params['id']);
         if (!is_object($cmd)) {
-            throw new Exception('Commande introuvable : ' . secureXSS($params['id']), -32702);
+            throw new \Exception('Commande introuvable : ' . secureXSS($params['id']), -32702);
         }
         $jsonrpc->makeSuccess(utils::o2a($cmd->getHistory($params['startTime'], $params['endTime'])));
     }
@@ -729,17 +729,17 @@ try {
         $typeEqLogic = $params['eqType_name'];
         $typeCmd = $typeEqLogic . 'Cmd';
         if ($typeEqLogic == '' || !class_exists($typeEqLogic) || !class_exists($typeCmd)) {
-            throw new Exception(__('Type incorrect (classe commande inexistante)', __FILE__) . secureXSS($typeCmd));
+            throw new \Exception(__('Type incorrect (classe commande inexistante)', __FILE__) . secureXSS($typeCmd));
         }
         if (isset($params['id'])) {
             $cmd = cmd::byId($params['id']);
             if (is_object($_USER_GLOBAL) && !$cmd->hasRight($_USER_GLOBAL)) {
-                throw new Exception(__('Vous n\'êtes pas autorisé à faire cette action', __FILE__));
+                throw new \Exception(__('Vous n\'êtes pas autorisé à faire cette action', __FILE__));
             }
         }
         if (!is_object($cmd)) {
             if (is_object($_USER_GLOBAL) && $_USER_GLOBAL->getProfils() != 'admin') {
-                throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action', __FILE__), -32001);
+                throw new \Exception(__('Vous n\'êtes pas autorisé à effectuer cette action', __FILE__), -32001);
             }
             $cmd = new cmd();
         }
@@ -751,7 +751,7 @@ try {
     if ($jsonrpc->getMethod() == 'cmd::event') {
         $cmd = cmd::byId($params['id']);
         if (!is_object($cmd)) {
-            throw new Exception('Commande introuvable : ' . secureXSS($params['id']), -32702);
+            throw new \Exception('Commande introuvable : ' . secureXSS($params['id']), -32702);
         }
         if (!isset($params['datetime'])) {
             $params['datetime'] = null;
@@ -768,7 +768,7 @@ try {
     if ($jsonrpc->getMethod() == 'scenario::byId') {
         $scenario = scenario::byId($params['id']);
         if (!is_object($scenario)) {
-            throw new Exception(__('Scénario introuvable : ', __FILE__) . secureXSS($params['id']), -32703);
+            throw new \Exception(__('Scénario introuvable : ', __FILE__) . secureXSS($params['id']), -32703);
         }
         $jsonrpc->makeSuccess(utils::o2a($scenario));
     }
@@ -776,7 +776,7 @@ try {
     if ($jsonrpc->getMethod() == 'scenario::changeState') {
         $scenario = scenario::byId($params['id']);
         if (!is_object($scenario)) {
-            throw new Exception(__('Scénario introuvable : ', __FILE__) . secureXSS($params['id']), -32702);
+            throw new \Exception(__('Scénario introuvable : ', __FILE__) . secureXSS($params['id']), -32702);
         }
         if ($params['state'] == 'stop') {
             $jsonrpc->makeSuccess($scenario->stop());
@@ -792,13 +792,13 @@ try {
             $scenario->setIsActive(0);
             $jsonrpc->makeSuccess($scenario->save());
         }
-        throw new Exception(__('Le paramètre "state" ne peut être vide et doit avoir pour valeur [run,stop,enable,disable]', __FILE__));
+        throw new \Exception(__('Le paramètre "state" ne peut être vide et doit avoir pour valeur [run,stop,enable,disable]', __FILE__));
     }
 
     if ($jsonrpc->getMethod() == 'scenario::export') {
         $scenario = scenario::byId($params['id']);
         if (!is_object($scenario)) {
-            throw new Exception(__('Scénario introuvable : ', __FILE__) . secureXSS($params['id']), -32702);
+            throw new \Exception(__('Scénario introuvable : ', __FILE__) . secureXSS($params['id']), -32702);
         }
         $jsonrpc->makeSuccess(array('humanName' => $scenario->getHumanName(), 'export' => $scenario->export('array')));
     }
@@ -808,12 +808,12 @@ try {
         if (isset($params['id'])) {
             $scenario = scenario::byId($params['id']);
             if (!is_object($scenario)) {
-                throw new Exception(__('Scénario introuvable : ', __FILE__) . secureXSS($params['id']), -32702);
+                throw new \Exception(__('Scénario introuvable : ', __FILE__) . secureXSS($params['id']), -32702);
             }
         } else if (isset($params['humanName'])) {
             $scenario = scenario::byString($params['humanName']);
             if (!is_object($scenario)) {
-                throw new Exception(__('Scénario introuvable : ', __FILE__) . secureXSS($params['id']), -32702);
+                throw new \Exception(__('Scénario introuvable : ', __FILE__) . secureXSS($params['id']), -32702);
             }
         } else {
             $scenario = new scenario();
@@ -922,7 +922,7 @@ try {
             $update = update::byLogicalId($params['logicalId']);
         }
         if (!is_object($update)) {
-            throw new Exception(__('Impossible de trouver l\'objet associé : ', __FILE__) . secureXSS($params['plugin_id']));
+            throw new \Exception(__('Impossible de trouver l\'objet associé : ', __FILE__) . secureXSS($params['plugin_id']));
         }
         $update->remove();
         $jsonrpc->makeSuccess('ok');
