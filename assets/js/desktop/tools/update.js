@@ -179,7 +179,7 @@ function createUpdateBox(updateData) {
  */
 function saveUpdateChanges() {
   nextdom.update.saves({
-    updates: $('.update-box').getValues('.updateAttr'),
+    updates: $('.tab-pane .box').getValues('.updateAttr'),
     error: function (error) {
       notify('Erreur', error.message, 'error');
     },
@@ -247,8 +247,7 @@ function launchUpdate(updateId) {
           notify('Erreur', error.message, 'error');
         },
         success: function () {
-          $('a[data-toggle=tab][href="#log"]').click();
-          getNextDomLog(1, 'update');
+          showLogDialog();
         }
       });
     }
@@ -313,6 +312,12 @@ function getNextDomLog(_autoUpdate, _log) {
   });
 }
 
+function showLogDialog() {
+  updateInfoModal.dialog({title: '{{Avancement de la mise à jour}}'});
+  updateInfoModal.dialog('open');
+  getNextDomLog(1, 'update');
+}
+
 /**
  * Init all events
  */
@@ -343,15 +348,13 @@ function initEvents() {
         notify('Erreur', error.message, 'error');
       },
       success: function () {
-        $('a[data-toggle=tab][href="#log"]').click();
-        getNextDomLog(1, 'update');
+        showLogDialog();
       }
     });
   });
 
-  $('#logDialogButton').on('click', function (event) {
-    updateInfoModal.dialog({title: '{{Avancement de la mise à jour}}'});
-    updateInfoModal.dialog('open');
+  $('#logDialogButton').on('click', function () {
+    showLogDialog();
   });
 
   $('#checkAllUpdatesButton').off('click').on('click', function () {
@@ -425,10 +428,6 @@ function initDialogs() {
     }
   });
 }
-
-setTimeout(function () {
-  tabsList.packery();
-}, 100);
 
 initUpdateTabsContent();
 initDialogs();

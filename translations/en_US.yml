@@ -40,12 +40,18 @@ core:
     enable-all-scenarios: Enable all scenarios ...
     disable-all-scenarios: Disable all scenarios ...
     incorrect-sys-date: The system date is incorrect (before or after %s %s):
-    
+
 install:
     update-sourcecode: Update source code
     already-updated: Already up to date.
     update-core-error: Impossible to update core.
+    download-dependencies: Download dependencies
     gen-assets: Generate assets
+    install.update-in-progress-wait: An update is in progress. Wait 10 s before new try.
+    install.update-in-progress-retry: An update is already in progress. Try again later.
+    install.begin-update: BEGIN UPDATE
+    install.end-update: END UPDATE
+    install.nothing-to-update: Nothing to update
 
 page-title:
     administration: Administration
