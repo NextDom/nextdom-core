@@ -991,7 +991,6 @@ class NextDomHelper
             }
         }
         $alias = array(
-            'mview' => 'mobile',
             'dview' => 'dashboard',
             'dplan' => 'dashboard',
         );

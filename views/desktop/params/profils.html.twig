@@ -85,42 +85,12 @@
             <!-- Themes tab -->
             <div role="tabpanel" class="tab-pane" id="themetab">
                 <form class="form-horizontal">
-                    <fieldset>
-                        <legend>{{ 'Couleurs' }}</legend>
-                        <div class="form-group">
-                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Couleur sur mobile' }}</label>
-                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
-                                <select class="userAttr form-control" data-l1key="options" data-l2key="mobile_theme_color">
-                                    {% for theme in profilsMobileThemes %}
-                                        <option value="{{ theme }}">{{ theme|capitalize|replace({'_': ' '}) }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                    </fieldset>
-
                     <fieldset class="legend-section">
                         <legend>{{ 'Graphiques' }}</legend>
                         <div class="form-group">
                             <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Graphique Desktop' }}</label>
                             <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
                                 <select class="userAttr form-control" data-l1key="options" data-l2key="desktop_highcharts_theme">
-                                    <option value="">Défaut</option>
-                                    <option value="dark-blue">Dark-blue</option>
-                                    <option value="dark-green">Dark-green</option>
-                                    <option value="dark-unica">Dark-unica</option>
-                                    <option value="gray">Gray</option>
-                                    <option value="grid-light">Grid-light</option>
-                                    <option value="grid">Grid</option>
-                                    <option value="sand-signika">Sand-signika</option>
-                                    <option value="skies">Skies</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Graphique mobile' }}</label>
-                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
-                                <select class="userAttr form-control" data-l1key="options" data-l2key="mobile_highcharts_theme">
                                     <option value="">Défaut</option>
                                     <option value="dark-blue">Dark-blue</option>
                                     <option value="dark-green">Dark-green</option>
@@ -163,15 +133,6 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                            <label class="col-sm-1 control-label">{{ 'Mobile' }}</label>
-                            <div class="col-sm-2">
-                                <select class="userAttr form-control" data-l1key="options" data-l2key="homePageMobile">
-                                    <option value="home">{{ 'Accueil' }}</option>
-                                    {% for homePageCode, homePageValue in profilsHomePageMobile %}
-                                        <option value="{{ homePageCode }}">{{ homePageValue }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
                         </div>
                     </fieldset>
 
@@ -181,15 +142,6 @@
                             <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
                             <div class="col-sm-2">
                                 <select class="userAttr form-control" data-l1key="options" data-l2key="defaultDashboardObject">
-                                    {% for jeeObject in profilsJeeObjects %}
-                                        <option value="{{ jeeObject.getId() }}">{{ jeeObject.getName() }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <label class="col-sm-1 control-label">{{ 'Mobile' }}</label>
-                            <div class="col-sm-2">
-                                <select class="userAttr form-control" data-l1key="options" data-l2key="defaultMobileObject">
-                                    <option value='all'>{{ 'Tout' }}</option>
                                     {% for jeeObject in profilsJeeObjects %}
                                         <option value="{{ jeeObject.getId() }}">{{ jeeObject.getName() }}</option>
                                     {% endfor %}
@@ -209,14 +161,6 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                            <label class="col-sm-1 control-label">{{ 'Mobile' }}</label>
-                            <div class="col-sm-2">
-                                <select class="userAttr form-control" data-l1key="options" data-l2key="defaultMobileView">
-                                    {% for view in profilsViews %}
-                                        <option value="{{ view.getId() }}">{{ view.getName() }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
                         </div>
                     </fieldset>
 
@@ -226,14 +170,6 @@
                             <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
                             <div class="col-sm-2">
                                 <select class="userAttr form-control" data-l1key="options" data-l2key="defaultDashboardPlan">
-                                    {% for plan in profilsPlans %}
-                                        <option value="{{ plan.getId() }}">{{ plan.getName() }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <label class="col-sm-1 control-label">{{ 'Mobile' }}</label>
-                            <div class="col-sm-2">
-                                <select class="userAttr form-control" data-l1key="options" data-l2key="defaultMobilePlan">
                                     {% for plan in profilsPlans %}
                                         <option value="{{ plan.getId() }}">{{ plan.getName() }}</option>
                                     {% endfor %}
@@ -255,14 +191,6 @@
                             <div class="col-sm-2">
                                 <select class="userAttr form-control" data-l1key="options" data-l2key="defaultDashboardPlan3d">
                                     {% for plan in profilsPlans3d %}
-                                        <option value="{{ plan3d.getId() }}">{{ plan3d.getName() }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <label class="col-sm-1 control-label">{{ 'Mobile' }}</label>
-                            <div class="col-sm-2">
-                                <select class="userAttr form-control" data-l1key="options" data-l2key="defaultMobilePlan3d">
-                                    {% for plan3d in profilsPlans3d %}
                                         <option value="{{ plan3d.getId() }}">{{ plan3d.getName() }}</option>
                                     {% endfor %}
                                 </select>

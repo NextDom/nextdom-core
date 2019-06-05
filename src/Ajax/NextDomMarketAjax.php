@@ -103,10 +103,7 @@ class NextDomMarketAjax extends BaseAjax
     /**
      * Obtenir une information
      *
-     * @param string $params Identifiant de l'information
-     * @param mixed $data Données en fonction du paramètre
-     *
-     * @return array|bool Information demandée
+     * @throws \Exception
      */
     public function get()
     {

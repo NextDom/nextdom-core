@@ -149,39 +149,6 @@ class ConfigManager
     }
 
     /**
-     * Get default configuration from default.config.ini
-     *
-     * Configuration file is in /var/lib/nextdom/config/default.config.ini or
-     * NEXTDOM_ROOT/plugins/PLUGIN_ID/core/config/PLUGIN_ID.config.ini
-     *
-     * @param string $pluginId Target configuration plugin or core
-     *
-     * @return mixed
-     */
-    public static function getDefaultConfiguration($pluginId = 'core')
-    {
-        if (!isset(self::$defaultConfiguration[$pluginId])) {
-            if ($pluginId === 'core') {
-                self::$defaultConfiguration[$pluginId] = parse_ini_file(NEXTDOM_DATA . '/config/default.config.ini', true);
-                $customPath = sprintf("%s/custom/custom.config.ini", NEXTDOM_DATA);
-                if (file_exists($customPath)) {
-                    $custom = parse_ini_file($customPath, true);
-                    self::$defaultConfiguration[$pluginId]['core'] = array_merge(self::$defaultConfiguration[$pluginId]['core'], $custom['core']);
-                }
-            } else {
-                $filename = NEXTDOM_ROOT . '/plugins/' . $pluginId . '/core/config/' . $pluginId . '.config.ini';
-                if (is_file($filename)) {
-                    self::$defaultConfiguration[$pluginId] = parse_ini_file($filename, true);
-                }
-            }
-        }
-        if (!isset(self::$defaultConfiguration[$pluginId])) {
-            self::$defaultConfiguration[$pluginId] = array();
-        }
-        return self::$defaultConfiguration[$pluginId];
-    }
-
-    /**
      * Remove key from the database
      *
      * @param string $configKey Config key to remove (* for all config from plugin)

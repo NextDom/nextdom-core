@@ -34,8 +34,7 @@ $NEXTDOM_INTERNAL_CONFIG = array(
         'displayType' => array(
             'dashboard' => array('name' => 'Dashboard'),
             'plan' => array('name' => 'Design'),
-            'view' => array('name' => 'Vue'),
-            'mobile' => array('name' => 'Mobile'),
+            'view' => array('name' => 'Vue')
         ),
     ),
     'interact' => array(

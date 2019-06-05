@@ -576,22 +576,6 @@
                                                     </select>
                                                 {% endif %}
                                             </td>
-                                            <td>
-                                                {% if cmdWidgetCanCustomWidgetMobile %}
-                                                    <select class="form-control cmdAttr" data-l1key="template" data-l2key="mobile">
-                                                        <option value="default">defaut (core)</option>
-                                                        {% if cmdWidgetMobile is defined %}
-                                                            {% for widget in cmdWidgetMobile %}
-                                                                {% if widget['name'] != 'default' %}
-                                                                    <option value="{{ widget['name'] }}">{{ widget['name'] }}
-                                                                        ({{ widget['location'] }})
-                                                                    </option>
-                                                                {% endif %}
-                                                            {% endfor %}
-                                                        {% endif %}
-                                                    </select>
-                                                {% endif %}
-                                            </td>
                                         </tr>
                                     {% endif %}
                                     {% if cmdWidgetCanCustomVisibility %}
@@ -741,26 +725,6 @@
                                 <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
                                     <div class="box-body">
                                         <textarea class="cmdAttr" id="ta_codeDplan" data-l1key="html" data-l2key="dplan" style="width: 100%;height: 350px">{{ cmdWidgetCustomHtmlValues['dplan'] }}</textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="panel box">
-                                <div class="box-header with-border cursor" role="tab" id="bt_codeMobile" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
-                                    <h4 class="box-title">{{ 'Mobile' }}</h4>
-                                </div>
-                                <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                                    <div class="box-body">
-                                        <textarea class="cmdAttr" id="ta_codeMobile" data-l1key="html" data-l2key="mobile" style="width: 100%;height: 350px">{{ cmdWidgetCustomHtmlValues['mobile'] }}</textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="panel box">
-                                <div class="box-header with-border cursor" role="tab" id="bt_codeMview" data-toggle="collapse" data-parent="#accordion" href="#collapseFive">
-                                    <h4 class="box-title">{{ 'Vue mobile' }}</h4>
-                                </div>
-                                <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-                                    <div class="box-body">
-                                        <textarea class="cmdAttr" id="ta_codeMview" data-l1key="html" data-l2key="mview" style="width: 100%;height: 350px">{{ cmdWidgetCustomHtmlValues['mview'] }}</textarea>
                                     </div>
                                 </div>
                             </div>

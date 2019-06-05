@@ -40,7 +40,7 @@ class RepoApt
     /**
      * @param Update $targetUpdate
      * @return bool
-     * @throws Exception
+     * @throws \Exception
      */
     public static function checkUpdate(&$targetUpdate)
     {

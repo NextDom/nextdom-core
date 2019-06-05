@@ -62,25 +62,13 @@ class AuthentificationHelper
      */
     public static function init()
     {
-        $configs = ConfigManager::byKeys(array('session_lifetime', 'sso:allowRemoteUser'));
-
-        $session_lifetime = $configs['session_lifetime'];
-        if (!is_numeric($session_lifetime)) {
-            $session_lifetime = 24;
-        }
-        ini_set('session.gc_maxlifetime', $session_lifetime * 3600);
-        ini_set('session.use_cookies', 1);
-        ini_set('session.cookie_httponly', 1);
-
-        if (isset($_COOKIE['sess_id'])) {
-            session_id($_COOKIE['sess_id']);
-        }
-        @session_start();
+        $allowRemoteUser = ConfigManager::byKey('session_lifetime');
+        SessionHelper::startSession();
         $_SESSION['ip'] = NetworkHelper::getClientIp();
         if (!headers_sent()) {
             setcookie('sess_id', session_id(), time() + 24 * 3600, "/", '', false, true);
         }
-        @session_write_close();
+        session_write_close();
         if (UserManager::isBanned()) {
             header("Statut: 403 Forbidden");
             header('HTTP/1.1 403 Forbidden');
@@ -103,7 +91,7 @@ class AuthentificationHelper
             }
         }
 
-        if (!self::isConnected() && $configs['sso:allowRemoteUser'] == 1) {
+        if (!self::isConnected() && $allowRemoteUser == 1) {
             $user = UserManager::byLogin($_SERVER['REMOTE_USER']);
             if (is_object($user) && $user->getEnable() == 1) {
                 @session_start();

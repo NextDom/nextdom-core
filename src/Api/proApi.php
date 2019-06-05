@@ -18,7 +18,9 @@
 
 require_once __DIR__ . "/../../src/core.php";
 
+use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\Utils;
+use NextDom\Managers\BackupManager;
 
 if (isset($argv)) {
     foreach ($argv as $arg) {
@@ -620,7 +622,7 @@ try {
             if (config::byKey('internalAddr') == '') {
                 config::save('internalAddr', $params['slave_ip']);
             }
-            jeeNetwork::testMaster();
+            \jeeNetwork::testMaster();
             $jsonrpc->makeSuccess($return);
         }
 
