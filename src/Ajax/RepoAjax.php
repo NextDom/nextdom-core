@@ -40,7 +40,8 @@ class RepoAjax extends BaseAjax
      * @param string $name Name of the repo in jeedom format
      * @return array Associative array
      */
-    private function getRepoDataFromName($name): array {
+    private function getRepoDataFromName($name): array 
+    {
         $name = str_replace('repo_', '', $name);
         $className = 'Repo' . ucwords($name);
         return [
