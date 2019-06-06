@@ -38,15 +38,15 @@
     <section class="content-header">
         <div class="action-bar">
             <div class="action-group">
-                <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
-                <a class="btn btn-default btn-action-bar" href="index.php?v=d&p=interact_admin"><i class="fas fa-cog spacing-right"></i>{{ 'Paramètres' }}</a>
-                <a class="btn btn-success btn-action-bar" id="bt_addInteract2"><i class="fas fa-plus-circle spacing-right"></i>{{ 'Ajouter' }}</a>
+                <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'Retour'}}</a>
+                <a class="btn btn-default btn-action-bar" href="index.php?v=d&p=interact_admin"><i class="fas fa-cog"></i>{{ 'Paramètres' }}</a>
+                <a class="btn btn-success btn-action-bar" id="bt_addInteract2"><i class="fas fa-plus-circle"></i>{{ 'Ajouter' }}</a>
             </div>
             <div class="action-group">
-                <a class="btn btn-action btn-action-bar pull-right" style="display:none;" id="bt_interactCollapse"><i class="fas fa-plus-square spacing-right"></i>{{ 'Déplier' }}</a>
-                <a class="btn btn-action btn-action-bar pull-right" id="bt_interactUncollapse"><i class="fas fa-minus-square spacing-right"></i>{{ 'Replier' }}</a>
-                <a class="btn btn-warning btn-action-bar pull-right" id="bt_regenerateInteract2"><i class="fas fa-refresh spacing-right"></i>{{ 'Régénérer' }}</a>
-                <a class="btn btn-default btn-action-bar pull-right" id="bt_testInteract2"><i class="fas fa-check spacing-right"></i>{{ 'Tester' }}</a>
+                <a class="btn btn-action btn-action-bar pull-right" style="display:none;" id="bt_interactCollapse"><i class="fas fa-plus-square"></i>{{ 'Déplier' }}</a>
+                <a class="btn btn-action btn-action-bar pull-right" id="bt_interactUncollapse"><i class="fas fa-minus-square"></i>{{ 'Replier' }}</a>
+                <a class="btn btn-warning btn-action-bar pull-right" id="bt_regenerateInteract2"><i class="fas fa-refresh"></i>{{ 'Régénérer' }}</a>
+                <a class="btn btn-default btn-action-bar pull-right" id="bt_testInteract2"><i class="fas fa-rss"></i>{{ 'Tester' }}</a>
             </div>
         </div>
     </section>
@@ -54,7 +54,7 @@
     <section class="content">
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title"><i class="fas fa-comments spacing-right"></i>{{ 'Interactions' }}</h3>
+                <h3 class="box-title"><i class="fas fa-comments"></i>{{ 'Interactions' }}</h3>
             </div>
             <div class="box-body">
                 {% if interactTotal|length == 0 %}
@@ -79,7 +79,7 @@
                                 <div class="interactListContainer DisplayCard text-center">
                                     {% for interact in interactsList[-1] %}
                                         <div class="interactDisplayCard cursor icon_card" data-interact_id="{{ interact.getId() }}" style="{% if not interact.getEnable() %}{{ interactDisabledOpacity }}{% endif %}">
-                                            <img class="backgroundColor" src="/public/img/NextDom_Interaction.png" height="70"/>
+                                            <img class="backgroundColor" src="/public/img/NextDom_Interaction.png"/>
                                             <p>{{ interact.getHumanName(true, true, true, true) }}</p>
                                         </div>
                                     {% endfor %}
@@ -102,7 +102,7 @@
                                     <div class="interactListContainer DisplayCard text-center">
                                         {% for interact in interactsList[group['group']] %}
                                             <div class="interactDisplayCard cursor icon_card" data-interact_id="{{ interact.getId() }}" style="{% if not interact.getEnable() %}{{ interactDisabledOpacity }}{% endif %}">
-                                                <img class="backgroundColor" src="/public/img/NextDom_Interaction.png" height="70"/>
+                                                <img class="backgroundColor" src="/public/img/NextDom_Interaction.png"/>
                                                 <p>{{ interact.getHumanName(true, true, true, true) }}</p>
                                             </div>
                                         {% endfor %}
@@ -122,16 +122,16 @@
     <section class="content-header">
         <div class="action-bar">
             <div class="action-group">
-                <a class="btn btn-action-bar btn-danger" id="bt_interactThumbnailDisplay"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
+                <a class="btn btn-action-bar btn-danger" id="bt_interactThumbnailDisplay"><i class="fas fa-chevron-left"></i>{{ 'Retour'}}</a>
                 <div class="btn-group">
-                    <a class="btn btn-action-bar btn-default displayInteracQuery"><i class="fas fa-eye spacing-right"></i>{{ 'Phrase(s)' }}</a>
+                    <a class="btn btn-action-bar btn-default displayInteracQuery"><i class="fas fa-eye"></i><span>{{ 'Phrase(s)' }}</span></a>
                     <a class="btn btn-action-bar btn-success displayInteracQuery"><span class="interactAttr" data-l1key="nbInteractQuery"></span></a>
                 </div>
             </div>
             <div class="action-group">
-                <a class="btn btn-action-bar btn-success pull-right" id="bt_saveInteract"><i class="fas fa-save spacing-right"></i>{{ 'Enregistrer' }}</a>
-                <a class="btn btn-action-bar btn-default pull-right" id="bt_duplicate"><i class="far fa-files-o spacing-right"></i>{{ 'Dupliquer' }}</a>
-                <a class="btn btn-action-bar btn-danger pull-right" id="bt_removeInteract"><i class="fas fa-minus-circle spacing-right"></i>{{ 'Supprimer' }}</a>
+                <a class="btn btn-action-bar btn-success pull-right" id="bt_saveInteract"><i class="fas fa-save"></i>{{ 'Enregistrer' }}</a>
+                <a class="btn btn-action-bar btn-default pull-right" id="bt_duplicate"><i class="fas fa-files-o"></i>{{ 'Dupliquer' }}</a>
+                <a class="btn btn-action-bar btn-danger pull-right" id="bt_removeInteract"><i class="fas fa-trash"></i>{{ 'Supprimer' }}</a>
             </div>
         </div>
     </section>
@@ -140,16 +140,16 @@
         <div class="nav-tabs-custom">
             <ul class="nav nav-tabs pull-right" role="tablist">
                 <li role="presentation">
-                    <a href="#actiontab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-cogs spacing-right"></i>{{ 'Actions' }}</a>
+                    <a href="#actiontab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-cogs"></i>{{ 'Actions' }}</a>
                 </li>
                 <li role="presentation">
-                    <a href="#filtertab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-filter spacing-right"></i>{{ 'Filtres' }}</a>
+                    <a href="#filtertab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-filter"></i>{{ 'Filtres' }}</a>
                 </li>
                 <li role="presentation" class="active">
-                    <a href="#generaltab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tachometer-alt spacing-right"></i>{{ 'Général' }}</a>
+                    <a href="#generaltab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tachometer-alt"></i>{{ 'Général' }}</a>
                 </li>
                 <h4 class="label label-primary pull-right badge spacing-right">{{ 'ID : ' }}<span id="interactId"></span></h4>
-                <li class="header pull-left"><i class="fas fa-comments spacing-right"></i>{{ 'Edition Intéraction' }}</li>
+                <li class="header pull-left"><i class="fas fa-comments"></i>{{ 'Edition Intéraction' }}</li>
             </ul>
 
             <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
@@ -199,7 +199,7 @@
                                     <textarea class="form-control interactAttr ta_autosize" type="text" data-l1key="reply" placeholder=""></textarea>
                                 </div>
                                 <div class="col-sm-1">
-                                    <a class="btn btn-sm btn-default cursor listEquipementInfoReply"><i class="fas fa-list-alt "></i></a>
+                                    <a class="btn btn-sm btn-default cursor listEquipementInfoReply"><i class="fas fa-list-alt no-spacing"></i></a>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -269,8 +269,7 @@
                                 <label class="col-sm-3 control-label">{{ 'Limiter aux commandes ayant pour unité' }}</label>
                                 <div class="col-sm-9">
                                     <label class="label-option">
-                                        <input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="unite" data-l3key="none" checked="true"/>
-                                        {{ 'Sans unité' }}
+                                        <input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="unite" data-l3key="none" checked="true"/>{{ 'Sans unité' }}
                                     </label>
                                     {% for unite in interactAllUnite %}
                                         {% if unite['unite']|trim != '' %}
@@ -339,7 +338,7 @@
                         <fieldset>
                             <legend class="col-xs-11">{{ 'Choisissez les actions associées à cette interaction...' }}</legend>
                             <div class="col-xs-1">
-                                <a class="btn btn-success btn-sm" id="bt_addAction"><i class="fas fa-plus-circle spacing-right"></i>{{ 'Ajouter' }}</a>
+                                <a class="btn btn-success btn-sm" id="bt_addAction"><i class="fas fa-plus-circle"></i>{{ 'Ajouter' }}</a>
                             </div>
                             <div id="div_action"></div>
                         </fieldset>

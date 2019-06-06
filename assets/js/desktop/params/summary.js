@@ -174,7 +174,7 @@ function addObjectSummary(_summary) {
     tr += '<option value="text">{{Texte}}</option>';
     tr += '</select>';
     tr += '</td>';
-    tr += '<td class="col-xs-1 input-group text-center">';
+    tr += '<td class="col-xs-1 input-group">';
     tr += '<a class="objectSummaryAction btn btn-action" data-l1key="chooseIcon"><i class="fas fa-plus"></i></a>';
     tr += '<span class="label label-icon objectSummaryAttr" style="min-width: 50px;" data-l1key="icon"></span>';
     tr += '</td>';
@@ -192,11 +192,11 @@ function addObjectSummary(_summary) {
     tr += '</td>';
     tr += '<td>';
     if(isset(_summary) && isset(_summary.key) && _summary.key != ''){
-        tr += '<a class="btn btn-success btn-sm objectSummaryAction" data-l1key="createVirtual"><i class="fas fa-puzzle-piece spacing-right"></i>{{Créer virtuel}}</a>';
+        tr += '<a class="btn btn-success btn-sm objectSummaryAction" data-l1key="createVirtual"><i class="fas fa-puzzle-piece"></i>{{Créer virtuel}}</a>';
     }
     tr += '</td>';
     tr += '<td>';
-    tr += '<a class="objectSummaryAction btn btn-sm btn-danger" data-l1key="remove"><i class="fas fa-minus-circle"></i></a>';
+    tr += '<a class="objectSummaryAction btn btn-sm btn-danger" data-l1key="remove"><i class="fas fa-minus-circle no-spacing"></i></a>';
     tr += '</td>';
     tr += '</tr>';
     $('#table_objectSummary tbody').append(tr);

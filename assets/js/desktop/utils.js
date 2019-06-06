@@ -1296,8 +1296,8 @@ function hideLoadingCustom() {
     }
 };
 
-/* Survol fab filtre categorie dashboard */
-if ($('[role="dialog"] .fab').length == 0) {
+/* Survol fabs filtre categorie dashboard */
+if ($('[role="dialog"] .fabs').length == 0) {
     $('.fab-filter').on('mouseleave',function() {
         $('.blurPanel').removeClass('blur');
     });
@@ -1306,7 +1306,7 @@ if ($('[role="dialog"] .fab').length == 0) {
         $('.blurPanel').addClass('blur');
     });
 } else {
-    $('.fab').css('display', 'none');
+    $('.fabs').css('display', 'none');
 }
 
 /* Scroll dans la page */

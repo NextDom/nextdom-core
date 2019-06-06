@@ -42,7 +42,6 @@ class OsDbController extends BaseController
     public static function get(&$pageData): string
     {
         global $CONFIG;
-
         $pageData['adminDbConfig'] = $CONFIG['db'];
         $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/osdb.js';
 

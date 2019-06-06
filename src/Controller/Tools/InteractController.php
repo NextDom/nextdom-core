@@ -57,6 +57,7 @@ class InteractController extends BaseController
                 $interacts[$group['group']] = InteractDefManager::all($group['group']);
             }
         }
+        $pageData['CSS_POOL'][] = '/public/css/pages/interact.css';
         $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/interact.js';
         $pageData['interactsList'] = $interacts;
         $pageData['interactsListGroup'] = $interactListGroup;

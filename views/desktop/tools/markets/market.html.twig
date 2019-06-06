@@ -36,10 +36,10 @@
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
-            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=plugin"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=plugin"><i class="fas fa-chevron-left"></i>{{ 'Retour'}}</a>
             <div class="btn-group">
-                <button id="market-filter-installed" class="btn btn-primary btn-action-bar">{{ 'Installés' }}</button>
-                <button id="market-filter-notinstalled" class="btn btn-primary btn-action-bar">{{ 'Non installés' }}</button>
+                <button id="market-filter-installed" class="btn btn-primary btn-action-bar"><i class="fas fa-thumbs-up"></i><span>{{ 'Installés' }}</span></button>
+                <button id="market-filter-notinstalled" class="btn btn-primary btn-action-bar"><i class="fas fa-thumbs-down"></i><span>{{ 'Non installés' }}</span></button>
             </div>
             {% if marketSourcesList|length > 1 and marketSourcesFilter %}
                 <div id="market-filter-src" class="btn-group">
@@ -69,8 +69,8 @@
             </div>
         </div>
         <div class="action-group" id="admin-buttons">
-            <a class="btn btn-warning btn-action-bar pull-right" id="mass-update"><i class="fas fa-download spacing-right"></i>{{ 'Mise(s) à jour' }}</a>
-            <a class="btn btn-primary btn-action-bar pull-right" id="refresh-markets"><i class="fas fa-refresh spacing-right"></i>{{ 'Rafraîchir' }}</a>
+            <a class="btn btn-warning btn-action-bar pull-right" id="mass-update"><i class="fas fa-download"></i>{{ 'Mise(s) à jour' }}</a>
+            <a class="btn btn-primary btn-action-bar pull-right" id="refresh-markets"><i class="fas fa-refresh"></i>{{ 'Rafraîchir' }}</a>
         </div>
     </div>
 </section>
@@ -78,7 +78,7 @@
 <section class="content">
     <div class="box">
         <div class="box-header with-border">
-            <h3 class="box-title"><i class="fas fa-shopping-cart spacing-right"></i>{{ 'Market Nextdom' }}</h3>
+            <h3 class="box-title"><i class="fas fa-shopping-cart"></i>{{ 'Market Nextdom' }}</h3>
         </div>
         <div class="box-body">
             <div class="row" id="market-div">
@@ -98,8 +98,8 @@
             <div class="modal-body" id="market-modal-content">
             </div>
             <div class="modal-footer">
-                <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-minus-circle spacing-right"></i>{{ 'Annuler' }}</a>
-                <a class="btn btn-warning" id="market-modal-valid"><i class="fas fa-check spacing-right"></i><span id="market-modal-valid-text"></span></a>
+                <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-minus-circle"></i>{{ 'Annuler' }}</a>
+                <a class="btn btn-warning" id="market-modal-valid"><i class="fas fa-check"></i><span id="market-modal-valid-text"></span></a>
             </div>
         </div>
     </div>

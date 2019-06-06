@@ -76,8 +76,18 @@ input[type="checkbox"], input[type="radio"] {
     background: #c9302c;
 }
 .radio-inline {
-    padding-top:0px !important;;
+    padding-top:0px !important;
     padding-bottom: 5px;
+}
+.checkbox-inline {
+    padding-top:0px !important;
+    padding-right: 5px;
+    input {
+        margin-right: 4px;
+    }
+    .checkbox-inline {
+        top: 0px;
+    }
 }
 
 /* state */
@@ -97,12 +107,4 @@ input[type="checkbox"], input[type="radio"] {
 [type="radio"]:focus {
     box-shadow: none;
     -webkit-box-shadow: none;
-}
-
-.radio-inline {
-    padding-top:0px !important;;
-    padding-bottom: 5px;
-}
-.checkbox-inline input {
-    top: 0px;
 }

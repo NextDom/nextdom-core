@@ -36,7 +36,7 @@
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
-            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=osdb"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=osdb"><i class="fas fa-chevron-left"></i>{{ 'Retour'}}</a>
         </div>
     </div>
 </section>
@@ -45,7 +45,7 @@
     <div class="box" id="div_rowSystemCommand">
         <!-- Header bar -->
         <div class="box-header with-border">
-            <h3 class="box-title"><i class="fas fa-terminal spacing-right"></i>{{ 'Console Système' }}</h3>
+            <h3 class="box-title"><i class="fas fa-terminal"></i>{{ 'Console Système' }}</h3>
         </div>
 
         <!-- Page content -->
@@ -85,7 +85,7 @@
                         <input class="form-control" id='in_specificCommand' placeholder="{{ 'Commande personnalisée...' }}"></input>
                         <span class="input-group-btn">
                             <a class="btn btn-action" id="bt_resetSpecifiCommand" data-toggle="tooltip" data-original-title="{{ 'Vider la commande' }}"><i class="fas fa-times"></i></a>
-                            <a class="btn btn-warning" id="bt_validateSpecifiCommand" data-toggle="tooltip" data-original-title="{{ 'Sélectionner la commande' }}"><i class="fas fa-check spacing-right"></i>{{ 'OK' }}</a>
+                            <a class="btn btn-warning" id="bt_validateSpecifiCommand" data-toggle="tooltip" data-original-title="{{ 'Sélectionner la commande' }}"><i class="fas fa-check spacing-right"></i><span>{{ 'OK' }}</span></a>
                         </span>
                     </div>
                     <pre id="pre_commandResult" class="form-control ta_autosize" style="height:auto;overflow: auto;" data-l1key="text" disabled></pre>
