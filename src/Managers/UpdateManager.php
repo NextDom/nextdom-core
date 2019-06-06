@@ -216,6 +216,21 @@ class UpdateManager
     }
 
     /**
+     * Get the class of the repo by the name
+     * @param string $name Name of the repo in jeedom format
+     * @return array Associative array
+     */
+    public static function getRepoDataFromName($name): array
+    {
+        $name = str_replace('repo_', '', $name);
+        $className = 'Repo' . ucwords($name);
+        return [
+            'className' => $className,
+            'phpClass' => '\\NextDom\\Repo\\' . $className
+        ];
+    }
+
+    /**
      * Get a repo by its identifier
      * @param string $id Repo identifier
      * @return array
@@ -223,12 +238,13 @@ class UpdateManager
      */
     public static function repoById($id)
     {
-        $class = 'Repo' . $id;
+        $repoClassData = self::getRepoDataFromName($id);
+        $phpClass = $repoClassData['phpClass'];
         $return = array(
-            'name' => $class::$_name,
-            'class' => $class,
-            'configuration' => $class::$_configuration,
-            'scope' => $class::$_scope,
+            'name' => $phpClass::$_name,
+            'class' => $repoClassData['className'],
+            'configuration' => $phpClass::$_configuration,
+            'scope' => $phpClass::$_scope,
         );
         $return['enable'] = ConfigManager::byKey($id . '::enable');
         return $return;
