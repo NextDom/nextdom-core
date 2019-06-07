@@ -561,14 +561,10 @@ class NextDomHelper
     {
         LogHelper::clear('update');
         $params = '';
-        if (count($options) > 0) {
-            foreach ($options as $key => $value) {
-                $params .= '"' . $key . '"="' . $value . '" ';
-            }
+        foreach ($options as $key => $value) {
+            $params .= '"' . $key . '"="' . $value . '" ';
         }
-        $cmd = NEXTDOM_ROOT . '/install/update.php ' . $params;
-        $cmd .= ' >> ' . LogHelper::getPathToLog('update') . ' 2>&1 &';
-        SystemHelper::php($cmd);
+        SystemHelper::php(NEXTDOM_ROOT . '/install/update.php ' . $params . ' >> ' . LogHelper::getPathToLog('update') . ' &');
     }
 
     /**

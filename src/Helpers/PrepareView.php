@@ -124,7 +124,7 @@ class PrepareView
             $pageData['JS_POOL'][] = '/core/js/note.class.js';
             $pageData['JS_POOL'][] = '/core/js/listener.class.js';
             $pageData['JS_POOL'][] = '/core/js/jeedom.class.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/bootbox/bootbox.min.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/bootbox/dist/bootbox.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/highcharts/highstock.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/highcharts/highcharts-more.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/highcharts/modules/solid-gauge.js';
@@ -566,7 +566,13 @@ class PrepareView
         $pageData['profilsUser'] = UserManager::getStoredUser();
         $pageData['NEXTDOM_VERSION'] = NextDomHelper::getNextdomVersion();
         $pageData['JEEDOM_VERSION'] = NextDomHelper::getJeedomVersion();
-        $pageData['CORE_INFOS'] = reset(UpdateManager::byType('core'));
+        $coreUpdates = UpdateManager::byType('core');
+        if (is_array($coreUpdates) && count($coreUpdates) > 0 && is_object($coreUpdates[0])) {
+            $version = $coreUpdates[0]->getConfiguration('version');
+            if ($version !== '') {
+                $pageData['CORE_BRANCH'] = $coreUpdates[0]->getConfiguration('version');
+            }
+        }
         $pageData['MENU_PLUGIN_HELP'] = Utils::init('m');
         $pageData['MENU_PLUGIN_PAGE'] = Utils::init('p');
     }

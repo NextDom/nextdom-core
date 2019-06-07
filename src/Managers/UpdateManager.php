@@ -36,7 +36,6 @@ namespace NextDom\Managers;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
-use NextDom\Helpers\NextDomHelper;
 use NextDom\Model\Entity\Update;
 
 /**
@@ -56,7 +55,6 @@ class UpdateManager
      */
     public static function checkAllUpdate($filter = '', $findNewObjects = true)
     {
-        $findCore = false;
         if ($findNewObjects) {
             self::findNewUpdateObject();
         }
@@ -64,39 +62,13 @@ class UpdateManager
         $updates_sources = array();
         if (is_array($updatesList)) {
             foreach ($updatesList as $update) {
-                if ($update->getType() == 'core') {
-                    if ($findCore) {
-                        $update->remove();
-                        continue;
+                if ($update->getStatus() != 'hold') {
+                    if (!isset($updates_sources[$update->getSource()])) {
+                        $updates_sources[$update->getSource()] = array();
                     }
-                    $findCore = true;
-                    $update->setType('core')
-                        ->setLogicalId('nextdom')
-                        ->setSource(ConfigManager::byKey('core::repo::provider'))
-                        ->setLocalVersion(NextDomHelper::getNextdomVersion());
-                    $update->save();
-                    $update->checkUpdate();
-                } else {
-                    if ($update->getStatus() != 'hold') {
-                        if (!isset($updates_sources[$update->getSource()])) {
-                            $updates_sources[$update->getSource()] = array();
-                        }
-                        $updates_sources[$update->getSource()][] = $update;
-                    }
+                    $updates_sources[$update->getSource()][] = $update;
                 }
             }
-        }
-        if (!$findCore && ($filter == '' || $filter == 'core')) {
-            $update = (new Update())
-                ->setType('core')
-                ->setLogicalId('nextdom')
-                ->setSource(ConfigManager::byKey('core::repo::provider'))
-                ->setConfiguration('user', 'NextDom')
-                ->setConfiguration('repository', 'nextdom-core')
-                ->setConfiguration('version', 'master')
-                ->setLocalVersion(NextDomHelper::getNextdomVersion());
-            $update->save();
-            $update->checkUpdate();
         }
         foreach ($updates_sources as $source => $updates) {
             $class = 'repo_' . $source;
@@ -159,7 +131,7 @@ class UpdateManager
      *
      * @param $type
      * @param $logicalId
-     * @return array|mixed|null
+     * @return Update|null
      * @throws \Exception
      */
     public static function byTypeAndLogicalId($type, $logicalId)
@@ -179,7 +151,7 @@ class UpdateManager
      * Obtenir les mises à jour à partir de leur type
      *
      * @param $type
-     * @return array|mixed|null
+     * @return Update[]|null
      * @throws \Exception
      */
     public static function byType($type)
@@ -296,7 +268,7 @@ class UpdateManager
     /**
      * Get information about an update from its username
      * @param string $id ID of the update
-     * @return array|mixed|null
+     * @return Update|null
      * @throws \Exception
      */
     public static function byId($id)
