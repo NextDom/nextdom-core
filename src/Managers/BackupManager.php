@@ -37,6 +37,7 @@ namespace NextDom\Managers;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
+use NextDom\Enums\FoldersReferential;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
 use NextDom\Helpers\Utils;
@@ -277,6 +278,42 @@ class BackupManager
                 $tar->addFile($c_entry->getPathname(), $dest);
             }
         }
+        $dir = new \RecursiveDirectoryIterator(NEXTDOM_ROOT, \FilesystemIterator::SKIP_DOTS);
+        // Flatten the recursive iterator, folders come before their files
+        $it  = new \RecursiveIteratorIterator($dir, \RecursiveIteratorIterator::SELF_FIRST);
+        // Maximum depth is 1 level deeper than the base folder
+        $it->setMaxDepth(0);
+        $message ='Start moving files and folders process to ' . NEXTDOM_DATA;
+        LogHelper::addInfo("restore", $message, '');
+
+        // Basic loop displaying different messages based on file or folder
+        foreach ($it as $fileinfo) {
+            if ($fileinfo->isDir() || $fileinfo->isFile()) {
+                if(!in_array($fileinfo->getFilename(), FoldersReferential::NEXTDOMFOLDERS)
+                    && !in_array($fileinfo->getFilename(), FoldersReferential::NEXTDOMFILES)) {
+                    $dest = preg_replace($pattern, "", $fileinfo->getPathname());
+                    $tar->addFile($fileinfo->getPathname(), $dest);
+//                    if ($fileinfo->isDir()) {
+//                        $roots = [$fileinfo->getFilename()];
+//                        foreach ($roots as $c_root) {
+//                            $path = sprintf("%s/%s", NEXTDOM_ROOT, $c_root);
+//                            $dirIter = new RecursiveDirectoryIterator($path);
+//                            $riIter = new RecursiveIteratorIterator($dirIter);
+//                            // iterate on files recursively found
+//                            foreach ($riIter as $c_entry) {
+//                                if (false === $c_entry->isFile()) {
+//                                    continue;
+//                                }
+//                                $dest = preg_replace($pattern, "", $c_entry->getPathname());
+//                                $tar->addFile($c_entry->getPathname(), $dest);
+//                            }
+//                        }
+//                    }
+                }
+            }
+        }
+
+
         $tar->close();
     }
 
@@ -550,7 +587,7 @@ class BackupManager
      * @param string $file path to file to load
      * @throw CoreException when a mysql error occurs
      */
-    private static function loadSQLFromFile($file)
+    public static function loadSQLFromFile($file)
     {
         global $CONFIG;
 
