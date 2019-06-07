@@ -38,7 +38,7 @@ use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\ConsoleHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
-use NextDom\Helpers\MigrationHelper;
+use NextDom\Enums\FoldersReferential;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
 use NextDom\Helpers\Utils;
@@ -292,7 +292,24 @@ class BackupManager
             if ($fileinfo->isDir() || $fileinfo->isFile()) {
                 if(!in_array($fileinfo->getFilename(), FoldersReferential::NEXTDOMFOLDERS)
                     && !in_array($fileinfo->getFilename(), FoldersReferential::NEXTDOMFILES)) {
-                    $tar->ad (fileinfo->getFilename(), $dest);
+                    $dest = preg_replace($pattern, "", $fileinfo->getPathname());
+                    $tar->addFile($fileinfo->getPathname(), $dest);
+//                    if ($fileinfo->isDir()) {
+//                        $roots = [$fileinfo->getFilename()];
+//                        foreach ($roots as $c_root) {
+//                            $path = sprintf("%s/%s", NEXTDOM_ROOT, $c_root);
+//                            $dirIter = new RecursiveDirectoryIterator($path);
+//                            $riIter = new RecursiveIteratorIterator($dirIter);
+//                            // iterate on files recursively found
+//                            foreach ($riIter as $c_entry) {
+//                                if (false === $c_entry->isFile()) {
+//                                    continue;
+//                                }
+//                                $dest = preg_replace($pattern, "", $c_entry->getPathname());
+//                                $tar->addFile($c_entry->getPathname(), $dest);
+//                            }
+//                        }
+//                    }
                 }
             }
         }
@@ -564,7 +581,7 @@ class BackupManager
      * @param string $file path to file to load
      * @throw CoreException when a mysql error occurs
      */
-    private static function loadSQLFromFile($file)
+    public static function loadSQLFromFile($file)
     {
         global $CONFIG;
 
