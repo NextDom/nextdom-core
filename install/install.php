@@ -16,64 +16,85 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-if (php_sapi_name() != 'cli' || isset($_SERVER['REQUEST_METHOD']) || !isset($_SERVER['argc'])) {
-    header("Statut: 404 Page non trouvée");
-    header('HTTP/1.0 404 Not Found');
-    $_SERVER['REDIRECT_STATUS'] = 404;
-    echo "<h1>404 Non trouvé</h1>";
-    echo "La page que vous demandez ne peut être trouvée.";
-    exit();
-}
+namespace NextDom;
+
+use NextDom\Exceptions\CoreException;
+use NextDom\Helpers\DBHelper;
+use NextDom\Helpers\NextDomHelper;
+use NextDom\Helpers\ScriptHelper;
+use NextDom\Helpers\SystemHelper;
+use NextDom\Managers\ConfigManager;
+use NextDom\Managers\UpdateManager;
+use NextDom\Model\Entity\Update;
+use NextDom\Model\Entity\User;
+
+require_once __DIR__ . "/../src/core.php";
+
+ScriptHelper::cliOrCrash();
 
 set_time_limit(1800);
+
 echo "[START INSTALL]\n";
 $starttime = strtotime('now');
-if (isset($argv)) {
-    foreach ($argv as $arg) {
-        $argList = explode('=', $arg);
-        if (isset($argList[0]) && isset($argList[1])) {
-            $_GET[$argList[0]] = $argList[1];
-        }
-    }
-}
+ScriptHelper::parseArgumentsToGET();
 
 try {
-    require_once __DIR__ . '/../core/php/core.inc.php';
-    if (count(system::ps('install/install.php', 'sudo')) > 1) {
+    if (count(SystemHelper::ps('install/install.php', 'sudo')) > 1) {
         echo "Une mise à jour/installation est déjà en cours. Vous devez attendre qu'elle soit finie avant d'en relancer une\n";
-        print_r(system::ps('install/install.php', 'sudo'));
+        print_r(SystemHelper::ps('install/install.php', 'sudo'));
         echo "[END INSTALL]\n";
         die();
     }
-    echo "****Install nextdom from " . nextdom::version() . " (" . date('Y-m-d H:i:s') . ")****\n";
+    echo "****Install nextdom from " . NextDomHelper::getNextdomVersion() . " (" . date('Y-m-d H:i:s') . ")****\n";
     /*         * ***************************INSTALLATION************************** */
     if (version_compare(PHP_VERSION, '5.6.0', '<')) {
-        throw new Exception('NextDom nécessite PHP 5.6 ou plus (actuellement : ' . PHP_VERSION . ')');
+        throw new CoreException('NextDom nécessite PHP 5.6 ou plus (actuellement : ' . PHP_VERSION . ')');
     }
-    echo "\nInstallation de NextDom " . nextdom::version() . "\n";
+    echo "\nInstallation de NextDom " . NextDomHelper::getNextdomVersion() . "\n";
     $sql = file_get_contents(__DIR__ . '/install.sql');
     echo "Installation de la base de données...";
-    DB::Prepare($sql, array(), DB::FETCH_TYPE_ROW);
+    DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ROW);
+    $nextDomUpdate = UpdateManager::byTypeAndLogicalId('core', 'nextdom');
+    if (!is_object($nextDomUpdate)) {
+        $nextDomUpdate = new Update();
+        $nextDomUpdate->setType('core');
+        $nextDomUpdate->setLogicalId('nextdom');
+        $nextDomUpdate->setRemoteVersion('');
+    }
+    if (is_dir(NEXTDOM_ROOT . '/.git') && system('git version') !== '') {
+        $gitHash = system('git rev-parse HEAD');
+        $gitBranch = system('git rev-parse --abbrev-ref HEAD');
+        $nextDomUpdate->setLocalVersion($gitHash);
+        $nextDomUpdate->setConfiguration('user', 'NextDom');
+        $nextDomUpdate->setConfiguration('repository', 'nextdom-core');
+        $nextDomUpdate->setConfiguration('version', $gitBranch);
+        $nextDomUpdate->setSource('github');
+    } else {
+        $version = "dpkg -s nextdom | grep '^Version:'";
+        $nextDomUpdate->setLocalVersion($version);
+        $nextDomUpdate->setSource('deb');
+    }
+    $nextDomUpdate->save();
     echo "OK\n";
     echo "Post installation...\n";
-    config::save('api', config::genKey());
+    ConfigManager::save('api', ConfigManager::genKey());
     require_once __DIR__ . '/consistency.php';
 
     try {
         echo "Ajout de l'utilisateur (admin,admin)\n";
-        $user = new user();
+        $user = new User();
         $user->setLogin('admin');
         $user->setPassword(sha512('admin'));
         $user->setProfils('admin');
         $user->save();
-        config::save('log::level', 400);
+        ConfigManager::save('log::level', 400);
         echo "OK\n";
-    } catch (Exception $e) {
+    } catch (\Throwable $t) {
         echo "OK : Utilisateur deja present\n";
     }
-    config::save('version', nextdom::version());
-    \NextDom\Managers\UpdateManager::checkAllUpdate();
-} catch (Exception $e) {
+    ConfigManager::save('version', NextDomHelper::getNextdomVersion());
+    UpdateManager::checkAllUpdate();
+} catch (\Throwable $e) {
     echo 'Erreur durant l\'installation : ' . $e->getMessage();
     echo 'Détails : ' . print_r($e->getTrace(), true);
     echo "[END INSTALL ERROR]\n";

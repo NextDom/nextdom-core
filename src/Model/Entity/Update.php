@@ -174,7 +174,7 @@ class Update implements EntityInterface
             return;
         }
         if ($this->getType() == 'core') {
-            NextDomHelper::update();
+            NextDomHelper::update(['core' => 1]);
         } else {
             $class = 'repo_' . $this->getSource();
             if (class_exists($class) && method_exists($class, 'downloadObject') && ConfigManager::byKey($this->getSource() . '::enable') == 1) {

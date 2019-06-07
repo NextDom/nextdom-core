@@ -41,6 +41,18 @@ core:
   disable-all-scenarios: "Désactiver tous les scénarios..."
   incorrect-sys-date: "La date du système est incorrecte (avant %s ou après %s) : "
 
+install:
+  update-sourcecode: Mise à jour du code
+  already-updated: Le code est déjà à jour.
+  update-core-error: Impossible de mettre à jour le code du core.
+  download-dependencies: Téléchargement des dépendances
+  gen-assets: Génération des ressources
+  update-in-progress-wait: Une mise à jour est déjà en cours. Attente de 10s avant un nouvel essai.
+  update-in-progress-retry: Une mise à jour est toujours en cours. Veuillez rééssayer plus tard.
+  begin-update: DEBUT DE LA MISE A JOUR
+  end-update: FIN DE LA MISE A JOUR
+  nothing-to-update: Aucune mise à jour
+
 page-title:
   administration: Administration
   users: Utilisateurs
