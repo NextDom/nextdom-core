@@ -199,16 +199,16 @@ class UpdateManager
         foreach (FileSystemHelper::ls(NEXTDOM_ROOT . '/src/Repo/', '*.php') as $repoFile) {
             if (!in_array($repoFile, $repoRenderFiles)) {
                 $className = str_replace('.php', '', $repoFile);
-                $confRepoName = strtolower(str_replace('Repo', 'repo_', $className));
+                $repoCode = strtolower(str_replace('Repo', '', $className));
                 $fullNameClass = '\\NextDom\\Repo\\' . $className;
                 if (class_exists($fullNameClass)) {
-                    $result[$confRepoName] = array(
+                    $result[$repoCode] = array(
                         'name' => $fullNameClass::$_name,
                         'class' => $fullNameClass,
                         'configuration' => $fullNameClass::$_configuration,
                         'scope' => $fullNameClass::$_scope,
                     );
-                    $result[$confRepoName]['enable'] = ConfigManager::byKey($confRepoName . '::enable');
+                    $result[$repoCode]['enable'] = ConfigManager::byKey($repoCode . '::enable');
                 }
             }
         }
