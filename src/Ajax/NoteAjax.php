@@ -56,7 +56,6 @@ class NoteAjax extends BaseAjax
                 $note = new Note();
             }
             Utils::a2o($note, $noteData);
-            var_dump($note);
             $note->save();
             AjaxHelper::success(Utils::o2a($note));
         }

@@ -71,7 +71,7 @@ class UpdateManager
             }
         }
         foreach ($updates_sources as $source => $updates) {
-            $class = 'repo_' . $source;
+            $class = 'Repo' . $source;
             if (class_exists($class) && method_exists($class, 'checkUpdate') && ConfigManager::byKey($source . '::enable') == 1) {
                 $class::checkUpdate($updates);
             }
@@ -185,29 +185,49 @@ class UpdateManager
     }
 
     /**
-     * List of rest (Source of downloads)
-     * @return array
+     * List of repositories
+     *
+     * @return array Repositories data
+     *
      * @throws \Exception
      */
     public static function listRepo(): array
     {
-        $result = array();
-        foreach (FileSystemHelper::ls(NEXTDOM_ROOT . '/core/repo', '*.repo.php') as $repoFile) {
-            if (substr_count($repoFile, '.') != 2) {
-                continue;
+        $result = [];
+        // Temp hack for specific repo render file
+        $repoRenderFiles = ['RepoMarketApi.php', 'RepoMarketDisplay.php', 'RepoMarketList.php', 'RepoMarketSend.php'];
+        foreach (FileSystemHelper::ls(NEXTDOM_ROOT . '/src/Repo/', '*.php') as $repoFile) {
+            if (!in_array($repoFile, $repoRenderFiles)) {
+                $className = str_replace('.php', '', $repoFile);
+                $repoCode = strtolower(str_replace('Repo', '', $className));
+                $fullNameClass = '\\NextDom\\Repo\\' . $className;
+                if (class_exists($fullNameClass)) {
+                    $result[$repoCode] = array(
+                        'name' => $fullNameClass::$_name,
+                        'class' => $fullNameClass,
+                        'configuration' => $fullNameClass::$_configuration,
+                        'scope' => $fullNameClass::$_scope,
+                    );
+                    $result[$repoCode]['enable'] = ConfigManager::byKey($repoCode . '::enable');
+                }
             }
-
-            $class = 'repo_' . str_replace('.repo.php', '', $repoFile);
-            /** @noinspection PhpUndefinedFieldInspection */
-            $result[str_replace('.repo.php', '', $repoFile)] = array(
-                'name' => $class::$_name,
-                'class' => $class,
-                'configuration' => $class::$_configuration,
-                'scope' => $class::$_scope,
-            );
-            $result[str_replace('.repo.php', '', $repoFile)]['enable'] = ConfigManager::byKey(str_replace('.repo.php', '', $repoFile) . '::enable');
         }
         return $result;
+    }
+
+    /**
+     * Get the class of the repo by the name
+     * @param string $name Name of the repo in jeedom format
+     * @return array Associative array
+     */
+    public static function getRepoDataFromName($name): array
+    {
+        $name = str_replace('repo_', '', $name);
+        $className = 'Repo' . ucwords($name);
+        return [
+            'className' => $className,
+            'phpClass' => '\\NextDom\\Repo\\' . $className
+        ];
     }
 
     /**
@@ -218,12 +238,13 @@ class UpdateManager
      */
     public static function repoById($id)
     {
-        $class = 'repo_' . $id;
+        $repoClassData = self::getRepoDataFromName($id);
+        $phpClass = $repoClassData['phpClass'];
         $return = array(
-            'name' => $class::$_name,
-            'class' => $class,
-            'configuration' => $class::$_configuration,
-            'scope' => $class::$_scope,
+            'name' => $phpClass::$_name,
+            'class' => $repoClassData['className'],
+            'configuration' => $phpClass::$_configuration,
+            'scope' => $phpClass::$_scope,
         );
         $return['enable'] = ConfigManager::byKey($id . '::enable');
         return $return;
@@ -233,7 +254,8 @@ class UpdateManager
      * Update all items
      * @param string $filter
      * @return bool
-     * @throws \Exception
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Throwable
      */
     public static function updateAll(string $filter = '')
     {

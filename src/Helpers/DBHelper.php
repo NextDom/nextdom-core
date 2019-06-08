@@ -809,6 +809,7 @@ class DBHelper
             $return[$_table['name']]['sql'] = trim($return[$_table['name']]['sql'], ';');
             return $return;
         }
+        $forceRebuildIndex = false;
         foreach ($_table['fields'] as $field) {
             $found = false;
             foreach ($describes as $describe) {
@@ -816,6 +817,9 @@ class DBHelper
                     continue;
                 }
                 $return[$_table['name']]['fields'] = array_merge($return[$_table['name']]['fields'], self::compareField($field, $describe, $_table['name']));
+                if (isset($return[$_table['name']]['fields'][$field['name']]) && $return[$_table['name']]['fields'][$field['name']]['status'] == 'nok') {
+                    $forceRebuildIndex = true;
+                }
                 $found = true;
             }
             if (!$found) {
@@ -850,7 +854,7 @@ class DBHelper
                 if ($showIndex['Key_name'] != $index['Key_name']) {
                     continue;
                 }
-                $return[$_table['name']]['indexes'] = array_merge($return[$_table['name']]['indexes'], self::compareIndex($index, $showIndex, $_table['name']));
+                $return[$_table['name']]['indexes'] = array_merge($return[$_table['name']]['indexes'], self::compareIndex($index, $showIndex, $_table['name'], $forceRebuildIndex));
                 $found = true;
             }
             if (!$found) {
@@ -1024,21 +1028,10 @@ class DBHelper
      * @param $_ref_index
      * @param $_real_index
      * @param $_table_name
+     * @param bool $_forceRebuild
      * @return array
      */
-    /**
-     * @param $_ref_index
-     * @param $_real_index
-     * @param $_table_name
-     * @return array
-     */
-    /**
-     * @param $_ref_index
-     * @param $_real_index
-     * @param $_table_name
-     * @return array
-     */
-    private static function compareIndex($_ref_index, $_real_index, $_table_name)
+    private static function compareIndex($_ref_index, $_real_index, $_table_name, $_forceRebuild = false)
     {
         $return = array($_ref_index['Key_name'] => array('status' => 'ok', 'presql' => '', 'sql' => ''));
         if ($_ref_index['Non_unique'] != $_real_index['Non_unique']) {
@@ -1048,6 +1041,10 @@ class DBHelper
         if ($_ref_index['columns'] != $_real_index['columns']) {
             $return[$_ref_index['Key_name']]['status'] = 'nok';
             $return[$_ref_index['Key_name']]['message'] = 'Columns nok';
+        }
+        if ($_forceRebuild) {
+            $return[$_ref_index['Key_name']]['status'] = 'nok';
+            $return[$_ref_index['Key_name']]['message'] = 'Force rebuild';
         }
         if ($return[$_ref_index['Key_name']]['status'] == 'nok') {
             $return[$_ref_index['Key_name']]['presql'] = 'ALTER TABLE `' . $_table_name . '` DROP INDEX `' . $_ref_index['Key_name'] . '`;';

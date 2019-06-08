@@ -69,143 +69,30 @@ $('#bt_refreshTimeline').on('click',function(){
     displayTimeline();
 });
 
-$("#sel_typesTimeline").change(function(){
-    displayTimeline();
-});
-
-$("#sel_objectsTimeline").change(function(){
-    displayTimeline();
-});
-
-$("#sel_categoryTimeline").change(function(){
-    displayTimeline();
-});
-
-$("#sel_pluginsTimeline").change(function(){
-    displayTimeline();
-});
-
-$('.bt_timelineZoom').on('click',function(){
-    zoom = $(this).attr('data-zoom');
-    switchFiltersState(zoom);
-    timelineFiltering(zoom);
-});
-
 timeline = null;
 
 function displayTimeline(){
-    var typefilter = $("#sel_typesTimeline").value();
-    var pluginfilter = $("#sel_pluginsTimeline").value();
-    var categoryfilter = $("#sel_categoryTimeline").value();
-    var objectfilter = $("#sel_objectsTimeline").value();
-    var end = new Date();
-    var start = new Date();
-    start.setTime(end.getTime() -  3600 * 1000);
-    end.setTime(start.getTime() + 3700 *1000);
-    nextdom.getTimelineEvents({
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function (data) {
-            if(timeline != null){
-                windowTimeline = timeline.getWindow()
-                end=windowTimeline.end
-                start = windowTimeline.start
-                timeline.destroy()
-            }
-            data_item = [];
-            id = 0;
-            for(var i in data){
-                if (typefilter != 'all' && data[i].type != typefilter) {
-                   continue;
-                }
-                if (pluginfilter != 'all' && data[i].plugins != pluginfilter && typefilter != 'scenario') {
-                   continue;
-                }
-                if (objectfilter != 'all' && data[i].object != objectfilter) {
-                   continue;
-                }
-                if (categoryfilter != 'all' && typefilter != 'scenario'){
-                   var hascat =0;
-                   for (var category in data[i].category){
-                      if (category == categoryfilter && data[i].category[category] == 1) {
-                          hascat += 1;
-                      }
-                   }
-                   if (hascat==0){
-                      continue;
-                   }
-               }
-               item = {id : id,start : data[i].date,content : data[i].html,group : data[i].group,title:data[i].date};
-               id++;
-               data_item.push(item);
-           }
-           var items = new vis.DataSet(data_item);
-           var options = {
-               groupOrder:'content',
-               verticalScroll: true,
-               zoomKey: 'ctrlKey',
-               orientation : 'top',
-               maxHeight: $('body').height() - $('header').height() - 75
-           };
-           timeline = new vis.Timeline(document.getElementById('div_visualization'),items,options);
-           switchFiltersState("h");
-           timelineFiltering("h");
-        }
-    });
-}
-
-function switchFiltersState(_zoom){
-  var aElmts = document.getElementById("dateFilters").children;
-  for(var i = 0; i < aElmts.length; i++){
-     aElmts[i].classList.remove("btn-primary");
-     aElmts[i].classList.remove("btn-default");
-     if (aElmts[i].attributes["data-zoom"].value == _zoom) {
-        aElmts[i].classList.add("btn-primary");
-     }else{
-        aElmts[i].classList.add("btn-default");
-     }
-  }
-}
-
-function timelineFiltering(_zoom){
-  var end = new Date();
-  var start = new Date();
-  switch (_zoom) {
-    case 'all':
-      timeline.fit();
-      break;
-    case 'y':
-      start.setFullYear(end.getFullYear() - 1);
-      end.setTime(start.getTime() + 390 * 24 *3600 *1000);
-      break;
-    case 'm':
-      if(end.getMonth() == 1){
-         start.setFullYear(end.getFullYear() - 1);
-         start.setMonth(12);
-         end.setTime(start.getTime() + 35 * 24 *3600 *1000);
-      }else{
-         start.setMonth(end.getMonth() - 1);
-         end.setTime(start.getTime() + 33 * 24 *3600 *1000);
+  jeedom.getTimelineEvents({
+    error: function (error) {
+      $('#div_alert').showAlert({message: error.message, level: 'danger'});
+    },
+    success: function (data) {
+      data = data.reverse();
+      var tr = '';
+      for(var i in data){
+        tr += '<tr>';
+        tr += '<td>';
+        tr += data[i].date;
+        tr += '</td>';
+        tr += '<td>';
+        tr += data[i].type;
+        tr += '</td>';
+        tr += '<td>';
+        tr += data[i].html;
+        tr += '</td>';
+        tr += '</tr>';
       }
-      break;
-    case 'w':
-      start.setTime(end.getTime() - 7 * 24 *3600 * 1000);
-      end.setTime(start.getTime() + 7.5 * 24 *3600 *1000);
-      break;
-    case 'd':
-      start.setTime(end.getTime() - 1 * 24 *3600 * 1000);
-      end.setTime(start.getTime() + 1.1 * 24 *3600 *1000);
-      break;
-    case 'h':
-      start.setTime(end.getTime() -  3600 * 1000);
-      end.setTime(start.getTime() + 3700 *1000);
-      break;
-    default:
-      start.setFullYear(end.getFullYear() - 1);
-      end.setTime(start.getTime() + 390 * 24 *3600 *1000);
-  }
-  if (_zoom != "all"){
-    timeline.setWindow(start,end);
-  }
+      $('#table_timeline tbody').empty().append(tr).trigger('update');
+    }
+  });
 }

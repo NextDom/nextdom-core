@@ -2,6 +2,7 @@
   "name": "nextdom",
   "description": "Website (English): [https://www.nextdom.org/en/](https://www.nextdom.org/en/)",
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.9.0",
     "admin-lte": "^2.4.8",
     "autosize": "^4.0.2",
     "blueimp-file-upload": "^9.25.1",
@@ -9,7 +10,6 @@
     "codemirror": "^5.41.0",
     "fancybox": "^3.0.1",
     "font-awesome": "^4.7.0",
-    "font-awesome5": "^1.0.5",
     "gridstack": "^0.4.0",
     "highcharts": "^7.0.1",
     "inputmask": "^4.0.2",
