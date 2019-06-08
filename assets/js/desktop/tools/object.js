@@ -69,7 +69,7 @@ $('#bt_removeBackgroundImage').off('click').on('click', function () {
 function loadObjectConfiguration(_id){
     try {
         $('#bt_uploadImage').fileupload('destroy');
-        $('#bt_uploadImage').parent().html('<i class="fas fa-cloud-upload-alt spacing-right"></i>{{Envoyer}}<input  id="bt_uploadImage" type="file" name="file" style="display: inline-block;">');
+        $('#bt_uploadImage').parent().html('<i class="fas fa-cloud-upload-alt"></i>{{Envoyer}}<input  id="bt_uploadImage" type="file" name="file" style="display: inline-block;">');
     }catch(error) {
 
     }
@@ -266,11 +266,11 @@ function addSummaryInfo(_el, _summary) {
     div += '  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 has-success">';
     div += '    <div class="input-group">';
     div += '      <span class="input-group-btn">';
-    div += '        <a class="btn btn-default bt_removeSummary btn-sm"><i class="fas fa-minus-circle"></i></a>';
+    div += '        <a class="btn btn-danger bt_removeSummary btn-sm"><i class="fas fa-minus-circle"></i></a>';
     div += '      </span>';
     div += '      <input class="summaryAttr form-control input-sm" data-l1key="cmd" />';
     div += '      <span class="input-group-btn">';
-    div += '        <a class="btn btn-sm listCmdInfo btn-success"><i class="fas fa-list-alt"></i></a>';
+    div += '        <a class="btn btn-sm listCmdInfo btn-default"><i class="fas fa-list-alt"></i></a>';
     div += '      </span>';
     div += '    </div>';
     div += '  </div>';

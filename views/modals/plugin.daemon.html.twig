@@ -39,9 +39,9 @@
         </td>
         <td>
             {% if daemonInfoAuto == 1 %}
-                <a class="btn btn-danger btn-sm bt_changeAutoMode" data-mode="0"><i class="fas fa-times spacing-right"></i>{{ 'Désactiver' }}</a>
+                <a class="btn btn-danger btn-sm bt_changeAutoMode" data-mode="0"><i class="fas fa-times"></i>{{ 'Désactiver' }}</a>
             {% else %}
-                <a class="btn btn-success btn-sm bt_changeAutoMode" data-mode="1"><i class="fas fa-magic spacing-right"></i>{{ 'Activer' }}</a>
+                <a class="btn btn-success btn-sm bt_changeAutoMode" data-mode="1"><i class="fas fa-magic"></i>{{ 'Activer' }}</a>
             {% endif %}
         </td>
         <td class="td_lastLaunchDeamon">
@@ -102,14 +102,14 @@
                     $('.bt_stopDeamon').hide();
                     $('.bt_changeAutoMode').removeClass('btn-success').addClass('btn-danger');
                     $('.bt_changeAutoMode').attr('data-mode', 0);
-                    $('.bt_changeAutoMode').html('<i class="fas fa-times spacing-right"></i>{{ 'Désactiver' }}');
+                    $('.bt_changeAutoMode').html('<i class="fas fa-times"></i>{{ 'Désactiver' }}');
                 } else {
                     if (data.launchable == 'ok' && data.state == 'ok') {
                         $('.bt_stopDeamon').show();
                     }
                     $('.bt_changeAutoMode').removeClass('btn-danger').addClass('btn-success');
                     $('.bt_changeAutoMode').attr('data-mode', 1);
-                    $('.bt_changeAutoMode').html('<i class="fas fa-magic spacing-right"></i>{{ 'Activer' }}');
+                    $('.bt_changeAutoMode').html('<i class="fas fa-magic"></i>{{ 'Activer' }}');
                 }
                 if (!nok) {
                     $("#div_plugin_deamon").closest('.box').removeClass('box-danger').addClass('box-success');

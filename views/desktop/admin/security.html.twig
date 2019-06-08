@@ -36,13 +36,13 @@
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
-            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'Retour'}}</a>
             {% if adminBannedIp|length != 0 %}
-                <a class="btn btn-warning btn-action-bar" id="bt_removeBanIp"><i class="fa fa-trash spacing-right"></i>{{ 'Supprimer les IP bannie(s)' }}</a>
+                <a class="btn btn-warning btn-action-bar" id="bt_removeBanIp"><i class="fas fa-trash"></i>{{ 'Supprimer les IP bannie(s)' }}</a>
             {% endif %}
         </div>
         <div class="action-group">
-            <a class="btn btn-success btn-action-bar pull-right" id="bt_savesecurity"><i class="fas fa-save spacing-right"></i>{{ 'Sauvegarder' }}</a>
+            <a class="btn btn-success btn-action-bar pull-right" id="bt_savesecurity"><i class="fas fa-save"></i>{{ 'Sauvegarder' }}</a>
         </div>
     </div>
 </section>
@@ -51,7 +51,7 @@
     <div class="box" id="security">
         <!-- Header bar -->
         <div class="box-header with-border">
-            <h3 class="box-title"><i class="fa fa-shield spacing-right"></i>{{ 'Sécurité' }}</h3>
+            <h3 class="box-title"><i class="fas fa-shield-alt"></i>{{ 'Sécurité' }}</h3>
         </div>
 
         <!-- Page content -->
@@ -132,12 +132,12 @@
                             <div class="form-group">
                                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12"></div>
                                 <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                                    <a class="btn btn-action" id="bt_testLdapConnection"><i class="fa fa-cube spacing-right"></i>{{ 'Tester' }}</a>
+                                    <a class="btn btn-action" id="bt_testLdapConnection"><i class="fas fa-rss"></i>{{ 'Tester' }}</a>
                                 </div>
                             </div>
                         </div>
                     {% else %}
-                        <div class="alert alert-info">{{ 'Librairie LDAP non trouvée. Merci de l\'installer avant de pouvoir utiliser la connexion LDAP' }}</div>
+                        <div class="alert alert-info">{{ 'Librairie LDAP non trouvée. Merci de l\'installer avant de pouvoir utiliser la connexion LDAP.' }}</div>
                     {% endif %}
                 </fieldset>
 

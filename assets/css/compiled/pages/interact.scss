@@ -33,35 +33,13 @@
 * @Email   <admin@nextdom.org>
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
+/* Need to be first */
+@import "../../graphics/_colors.scss";
 
-/* AdminLTE-Surcharge */
-.has-error {
-    border-color: $red !important;
-}
-
-/* Core-Ajout : icone semi-transparente */
-.fa-soft {
-    opacity: 0.8;
-}
-
-/* Core-Ajout : Classes NO */
-.no-border {
-    border: none !important;
-}
-.no-radius {
-    border-radius: 0px !important;
-}
-
-/* Core-Ajout */
-.status-offline:hover {
-    border: solid 1px $critical;
-}
-.status-online:hover {
-    border: solid 1px $good;
-}
-.roundedLeft {
-    border-radius: 4px 0px 0px 4px !important;
-}
-.roundedRight {
-    border-radius: 0px 4px 4px 0px !important;
+/* Tuiles intéractions */
+.interactDisplayCard {
+    img {
+        height: 80px;
+        width: auto;
+    }
 }

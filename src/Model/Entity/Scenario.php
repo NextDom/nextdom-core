@@ -455,9 +455,9 @@ class Scenario implements EntityInterface
             $object = $this->getObject();
             if ($_tag) {
                 if ($object->getDisplay('tagColor') != '') {
-                    $name .= '<span class="label label-sticker" style="text-shadow : none;background-color:' . $object->getDisplay('tagColor') . ' !important;color:' . $object->getDisplay('tagTextColor', 'white') . ' !important">' . $object->getName() . '</span>';
+                    $name .= '<span class="label label-config" style="background-color:' . $object->getDisplay('tagColor') . ' !important;color:' . $object->getDisplay('tagTextColor', 'white') . ' !important">' . $object->getName() . '</span>';
                 } else {
-                    $name .= '<span class="label label-primary label-sticker" style="text-shadow : none;">' . $object->getName() . '</span>';
+                    $name .= '<span class="label label-primary label-sticker">' . $object->getName() . '</span>';
                 }
             } else {
                 $name .= '[' . $object->getName() . ']';
@@ -465,7 +465,7 @@ class Scenario implements EntityInterface
         } else {
             if ($_complete) {
                 if ($_tag) {
-                    $name .= '<span class="label label-default label-sticker" style="text-shadow : none;">' . __('Aucun') . '</span>';
+                    $name .= '<span class="label label-default label-sticker">' . __('Aucun') . '</span>';
                 } else {
                     $name .= '[' . __('Aucun') . ']';
                 }

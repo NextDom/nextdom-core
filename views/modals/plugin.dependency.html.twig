@@ -52,7 +52,7 @@
                     {% elseif dependencyInfo['state'] == 'nok' %}
                         <span class="label label-danger label-sticker">{{ 'NOK' }}</span>
                     {% elseif dependencyInfo['state'] == 'in_progress' %}
-                        <span class="label label-primary label-sticker"><i class="fas fa-spinner fa-spin spacing-right"></i>{{ 'Installation en cours' }}
+                        <span class="label label-primary label-sticker"><i class="fas fa-spinner fa-spin"></i>{{ 'Installation en cours' }}
                             {% if dependencyInfo['progression'] is defined and dependencyInfo['progression'] != '' %}
                                  - {{ dependencyInfo['progression'] }} %
                             {% endif %}
@@ -65,7 +65,7 @@
                     {% endif %}
                 </td>
                 <td>
-                    <a class="btn btn-warning btn-sm launchInstallPluginDependancy"><i class="fas fa-bicycle spacing-right"></i>{{ 'Relancer' }}</a>
+                    <a class="btn btn-warning btn-sm launchInstallPluginDependancy"><i class="fas fa-bicycle"></i>{{ 'Relancer' }}</a>
                 </td>
                 <td class="td_lastLaunchDependancy">
                     {{ dependencyInfo['last_launch'] }}

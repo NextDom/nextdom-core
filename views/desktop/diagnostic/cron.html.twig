@@ -36,17 +36,17 @@
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
-            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
-            <a class="btn btn-success btn-action-bar" id="bt_addCron"><i class="fas fa-plus-circle spacing-right"></i>{{ 'Ajouter' }}</a>
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'Retour'}}</a>
+            <a class="btn btn-success btn-action-bar" id="bt_addCron"><i class="fas fa-plus-circle"></i>{{ 'Ajouter' }}</a>
             {% if cronEnabled == 0 %}
-                <a class="btn btn-primary btn-action-bar" id="bt_changeCronState" data-state="1"><i class="fas fa-check spacing-right"></i>{{ 'Activer le système cron' }}</a>
+                <a class="btn btn-primary btn-action-bar" id="bt_changeCronState" data-state="1"><i class="fas fa-check"></i>{{ 'Activer le système cron' }}</a>
             {% else %}
-                <a class="btn btn-danger btn-action-bar" id="bt_changeCronState" data-state="0"><i class="fas fa-times spacing-right"></i>{{ 'Désactiver le système cron' }}</a>
+                <a class="btn btn-danger btn-action-bar" id="bt_changeCronState" data-state="0"><i class="fas fa-times"></i>{{ 'Désactiver le système cron' }}</a>
             {% endif %}
         </div>
         <div class="action-group">
-            <a class="btn btn-success btn-action-bar pull-right" id="bt_save"><i class="fas fa-save spacing-right"></i>{{ 'Sauvegarder' }}</a>
-            <a class="btn btn-warning btn-action-bar pull-right" id="bt_refreshCron"><i class="fas fa-refresh spacing-right"></i>{{ 'Rafraîchir' }}</a>
+            <a class="btn btn-success btn-action-bar pull-right" id="bt_save"><i class="fas fa-save"></i>{{ 'Sauvegarder' }}</a>
+            <a class="btn btn-warning btn-action-bar pull-right" id="bt_refreshCron"><i class="fas fa-refresh"></i>{{ 'Rafraîchir' }}</a>
         </div>
     </div>
 </section>
@@ -55,9 +55,9 @@
     <div class="nav-tabs-custom config" id="cron">
         <!-- Tabs title -->
         <ul class="nav nav-tabs pull-right" role="tablist">
-            <li role="presentation" class="active"><a href="#cron-tab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tint spacing-right"></i>{{ 'Cron' }}</a></li>
-            <li role="presentation"><a href="#listener" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-flask spacing-right"></i>{{ 'Listener' }}</a></li>
-            <li class="header pull-left"><i class="fas fa-tasks spacing-right"></i>{{ 'Tâches' }}</li>
+            <li role="presentation" class="active"><a href="#cron-tab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tint"></i>{{ 'Cron' }}</a></li>
+            <li role="presentation"><a href="#listener" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-flask"></i>{{ 'Listener' }}</a></li>
+            <li class="header pull-left"><i class="fas fa-tasks"></i>{{ 'Tâches' }}</li>
         </ul>
 
         <!-- Tabs content -->
@@ -94,9 +94,9 @@
                 <table id="table_listener" class="table table-bordered table-condensed" >
                     <thead>
                          <tr>
-                             <th>Id</th>
-                             <th data-sorter="false" data-filter="false"></th>
-                             <th>{{ 'Event' }}</th>
+                             <th>{{ 'Id' }}</th>
+                             <th data-sorter="false" data-filter="false">{{ 'Détail/Run '}}</th>
+                             <th>{{ 'Evenement' }}</th>
                              <th>{{ 'Classe' }}</th>
                              <th>{{ 'Fonction' }}</th>
                          </tr>

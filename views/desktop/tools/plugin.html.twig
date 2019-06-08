@@ -37,18 +37,18 @@
     <section class="content-header">
         <div class="action-bar">
             <div class="action-group">
-                <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
-                <a class="btn btn-default btn-action-bar" id="bt_addPluginFromOtherSource"><i class="fas fa-plus spacing-right"></i>{{ 'Autre Sources' }}</a>
+                <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'Retour'}}</a>
+                <a class="btn btn-default btn-action-bar" id="bt_addPluginFromOtherSource"><i class="fas fa-plus"></i>{{ 'Autre Sources' }}</a>
             </div>
             <div class="action-group">
-                <a class="btn btn-action btn-action-bar pull-right" id="bt_pluginCollapse"><i class="fas fa-plus-square spacing-right"></i>{{ 'Déplier' }}</a>
-                <a class="btn btn-action btn-action-bar pull-right" style="display:none;" id="bt_pluginUncollapse"><i class="fas fa-minus-square spacing-right"></i>{{ 'Replier' }}</a>
-                <a class="btn btn-default btn-action-bar pull-right" href="index.php?v=d&p=update_admin"><i class="fas fa-cog spacing-right"></i>{{ 'Configurer Markets' }}</a>
+                <a class="btn btn-action btn-action-bar pull-right" id="bt_pluginCollapse"><i class="fas fa-plus-square"></i>{{ 'Déplier' }}</a>
+                <a class="btn btn-action btn-action-bar pull-right" style="display:none;" id="bt_pluginUncollapse"><i class="fas fa-minus-square"></i>{{ 'Replier' }}</a>
+                <a class="btn btn-default btn-action-bar pull-right" href="index.php?v=d&p=update_admin"><i class="fas fa-cog"></i>{{ 'Configurer Markets' }}</a>
                 {% for repoCode, repoData in pluginReposList %}
                     {% if repoData['name'] == 'Market' %}
-                        <a class="btn btn-default btn-action-bar pull-right displayStore btn-jeedom" data-repo="{{ repoCode }}"><i class="fa fa-shopping-cart spacing-right"></i>{{ 'Jeedom '}} {{ repoData['name'] }}</a>
+                        <a class="btn btn-default btn-action-bar pull-right displayStore btn-jeedom" data-repo="{{ repoCode }}"><i class="fas fa-shopping-cart"></i>{{ 'Jeedom '}} {{ repoData['name'] }}</a>
                     {% else %}
-                        <a class="btn btn-primary btn-action-bar pull-right displayStore" data-repo="{{ repoCode }}"><i class="fa fa-shopping-cart spacing-right"></i>{{ repoData['name'] }}</a>
+                        <a class="btn btn-primary btn-action-bar pull-right displayStore" data-repo="{{ repoCode }}"><i class="fas fa-shopping-cart"></i>{{ repoData['name'] }}</a>
                     {% endif %}
                 {% endfor %}
             </div>
@@ -59,9 +59,9 @@
         <div class="nav-tabs-custom config">
             <!-- Tabs title -->
             <ul class="nav nav-tabs pull-right" role="tablist">
-                <li role="presentation"><a href="#inactifs" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-toggle-off spacing-right"></i>{{ 'Inactifs' }}{% if ((pluginsList|length - pluginsListActive|length)>0) %}<span class="badge bg-yellow spacing-left">{{ pluginsList|length - pluginsListActive|length }}</span>{% endif %}</a></li>
-                <li role="presentation" class="active"><a href="#actifs" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-toggle-on spacing-right"></i>{{ 'Actifs' }}{% if (pluginsListActive|length>0) %}<span class="badge bg-yellow spacing-left">{{ pluginsListActive|length }}</span>{% endif %}</a></li>
-                <li class="header pull-left"><i class="fas fa-puzzle-piece spacing-right"></i>{{ 'Plugins installés' }}<span class="badge bg-red spacing-left">{{ pluginsList|length }}</span></li>
+                <li role="presentation"><a href="#inactifs" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-toggle-off"></i>{{ 'Inactifs' }}{% if ((pluginsList|length - pluginsListActive|length)>0) %}<span class="badge bg-yellow spacing-left">{{ pluginsList|length - pluginsListActive|length }}</span>{% endif %}</a></li>
+                <li role="presentation" class="active"><a href="#actifs" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-toggle-on"></i>{{ 'Actifs' }}{% if (pluginsListActive|length>0) %}<span class="badge bg-yellow spacing-left">{{ pluginsListActive|length }}</span>{% endif %}</a></li>
+                <li class="header pull-left"><i class="fas fa-puzzle-piece"></i>{{ 'Plugins installés' }}<span class="badge bg-red spacing-left">{{ pluginsList|length }}</span></li>
             </ul>
 
             <!-- Tabs content -->
@@ -84,8 +84,8 @@
                                                     <p><i>{{ 'Licence :' }}<i class="spacing-right"></i></i>{{ plugin.getLicense() }}</p>
                                                 </div>
                                                 <div class="box-footer clearfix text-center">
-                                                    <a class="btn btn-info btn-sm pull-left plugin_configure" title="{{'Configurer'}}"><i class="fas fa-cog spacing-right"></i>{{'Configurer'}}</a>
-                                                    <a class="btn btn-danger btn-sm remove pull-right plugin_delete" data-market_logicalid="{{ plugin.getId() }}" title="{{'Supprimer'}}"><i class="far fa-trash-alt spacing-right"></i>{{'Supprimer'}}</a>
+                                                    <a class="btn btn-info btn-sm pull-left plugin_configure" title="{{'Configurer'}}"><i class="fas fa-cog"></i>{{'Configurer'}}</a>
+                                                    <a class="btn btn-danger btn-sm remove pull-right plugin_delete" data-market_logicalid="{{ plugin.getId() }}" title="{{'Supprimer'}}"><i class="fas fa-trash"></i>{{'Supprimer'}}</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -114,8 +114,8 @@
                                                   <p><i>{{ 'Licence :' }}<i class="spacing-right"></i></i>{{ plugin.getLicense() }}</p>
                                               </div>
                                               <div class="box-footer clearfix text-center">
-                                                  <a class="btn btn-info btn-sm pull-left plugin_configure" title="{{'Configurer'}}"><i class="fas fa-cog spacing-right"></i>{{'Configurer'}}</a>
-                                                  <a class="btn btn-danger btn-sm remove pull-right plugin_delete" data-market_logicalid="{{ plugin.getId() }}" title="{{'Supprimer'}}"><i class="far fa-trash-alt spacing-right"></i>{{'Supprimer'}}</a>
+                                                  <a class="btn btn-info btn-sm pull-left plugin_configure" title="{{'Configurer'}}"><i class="fas fa-cog"></i>{{'Configurer'}}</a>
+                                                  <a class="btn btn-danger btn-sm remove pull-right plugin_delete" data-market_logicalid="{{ plugin.getId() }}" title="{{'Supprimer'}}"><i class="fas fa-trash"></i>{{'Supprimer'}}</a>
                                               </div>
                                             </div>
                                         </div>
@@ -134,7 +134,7 @@
     <section class="content-header">
         <div class="action-bar">
             <div class="action-group">
-                <a class="btn btn-action-bar btn-danger" id="bt_returnToThumbnailDisplay"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
+                <a class="btn btn-action-bar btn-danger" id="bt_returnToThumbnailDisplay"><i class="fas fa-chevron-left"></i>{{ 'Retour'}}</a>
             </div>
         </div>
     </section>
@@ -152,7 +152,7 @@
             <div class="col-sm-12">
                 <div class="box">
                     <div class="box-header with-border">
-                        <h3 class="box-title"><i class="fas fa-info-circle spacing-right"></i>{{ 'Description' }}</h3>
+                        <h3 class="box-title"><i class="fas fa-info-circle"></i>{{ 'Description' }}</h3>
                     </div>
                     <div class="box-body">
                         <span id="span_plugin_description"></span>
@@ -164,7 +164,7 @@
             <div class="col-md-6 col-sm-12">
                 <div class="box">
                     <div class="box-header with-border">
-                        <h3 class="box-title"><i class="fas fa-circle-o-notch spacing-right"></i>{{ 'Etat' }}</h3>
+                        <h3 class="box-title"><i class="fas fa-circle-o-notch"></i>{{ 'Etat' }}</h3>
                     </div>
                     <div class="box-body">
                         <form class="form-horizontal">
@@ -196,7 +196,7 @@
             <div class="col-lg-6 col-sm-12">
                 <div class="box box-primary" id="div_configLog">
                     <div class="box-header with-border">
-                        <h3 class="box-title"><i class="fas fa-file spacing-right"></i>{{ 'Log' }}</h3>
+                        <h3 class="box-title"><i class="fas fa-file"></i>{{ 'Log' }}</h3>
                     </div>
                     <div class="box-body">
                         <form class="form-horizontal">
@@ -209,7 +209,7 @@
                         </div>
                     </div>
                     <div class="box-footer clearfix text-center">
-                        <a class="btn btn-success pull-right" id="bt_savePluginLogConfig"><i class="fas fa-save spacing-right"></i>{{ 'Sauvegarder' }}</a>
+                        <a class="btn btn-success pull-right" id="bt_savePluginLogConfig"><i class="fas fa-save"></i>{{ 'Sauvegarder' }}</a>
                     </div>
                 </div>
             </div>
@@ -217,7 +217,7 @@
         <div class="row">
             <div class="col-lg-6 col-sm-12">
                 <div class="box box-danger">
-                    <div class="box-header with-border"><h3 class="box-title"><i class="fas fa-certificate spacing-right"></i>{{ 'Dépendances' }}</h3></div>
+                    <div class="box-header with-border"><h3 class="box-title"><i class="fas fa-certificate"></i>{{ 'Dépendances' }}</h3></div>
                     <div class="box-body">
                         <div id="div_plugin_dependancy"></div>
                     </div>
@@ -225,7 +225,7 @@
             </div>
             <div class="col-lg-6 col-sm-12">
                 <div class="box box-warning">
-                    <div class="box-header with-border"><h3 class="box-title"><i class="fas fa-university spacing-right"></i>{{ 'Démon' }}</h3></div>
+                    <div class="box-header with-border"><h3 class="box-title"><i class="fas fa-university"></i>{{ 'Démon' }}</h3></div>
                     <div class="box-body">
                         <div id="div_plugin_deamon"></div>
                     </div>
@@ -233,14 +233,14 @@
             </div>
         </div>
         <div class="box box-primary">
-            <div class="box-header with-border"><h3 class="box-title"><i class="fa fa-map spacing-right"></i>{{ 'Installation' }}</h3></div>
+            <div class="box-header with-border"><h3 class="box-title"><i class="fas fa-map"></i>{{ 'Installation' }}</h3></div>
             <div class="box-body">
                 <span id="span_plugin_installation"></span>
             </div>
         </div>
         <div class="box box-primary">
             <div class="box-header with-border">
-                <h3 class="box-title"><i class="fas fa-cogs spacing-right"></i>{{ 'Configuration' }}</h3>
+                <h3 class="box-title"><i class="fas fa-cogs"></i>{{ 'Configuration' }}</h3>
             </div>
             <div class="box-body">
                 <div id="div_plugin_configuration"></div>
@@ -248,14 +248,14 @@
                 </div>
             </div>
             <div class="box-footer clearfix text-center">
-                <a class="btn btn-success pull-right" id="bt_savePluginConfig"><i class="fas fa-save spacing-right"></i>{{ 'Sauvegarder' }}</a>
+                <a class="btn btn-success pull-right" id="bt_savePluginConfig"><i class="fas fa-save"></i>{{ 'Sauvegarder' }}</a>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-6 col-sm-12">
                 <div class="box box-primary" id="div_functionalityPanel">
                     <div class="box-header with-border">
-                        <h3 class="box-title"><i class="fas fa-magic spacing-right"></i>{{ 'Fonctionnalités' }}</h3>
+                        <h3 class="box-title"><i class="fas fa-magic"></i>{{ 'Fonctionnalités' }}</h3>
                     </div>
                     <div class="box-body">
                         <form class="form-horizontal">
@@ -265,14 +265,14 @@
                         </form>
                     </div>
                     <div class="box-footer clearfix text-center">
-                        <a class="btn btn-success pull-right" id="bt_savePluginFunctionalityConfig"><i class="fas fa-save spacing-right"></i>{{ 'Sauvegarder' }}</a>
+                        <a class="btn btn-success pull-right" id="bt_savePluginFunctionalityConfig"><i class="fas fa-save"></i>{{ 'Sauvegarder' }}</a>
                     </div>
                 </div>
             </div>
             <div class="col-lg-6 col-sm-12">
                 <div class="box box-primary" id="div_configPanel">
                     <div class="box-header with-border">
-                        <h3 class="box-title"><i class="fas fa-columns spacing-right"></i>{{ 'Panel' }}</h3>
+                        <h3 class="box-title"><i class="fas fa-columns"></i>{{ 'Panel' }}</h3>
                     </div>
                     <div class="box-body">
                         <form class="form-horizontal">
@@ -282,7 +282,7 @@
                         </form>
                     </div>
                     <div class="box-footer clearfix text-center">
-                        <a class="btn btn-success pull-right" id="bt_savePluginPanelConfig"><i class="fas fa-save spacing-right"></i>{{ 'Sauvegarder' }}</a>
+                        <a class="btn btn-success pull-right" id="bt_savePluginPanelConfig"><i class="fas fa-save"></i>{{ 'Sauvegarder' }}</a>
                     </div>
                 </div>
             </div>

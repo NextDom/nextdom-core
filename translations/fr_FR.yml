@@ -282,7 +282,7 @@ scenario:
   test-expression: Testeur d'expression
   variables: Variables
   summary: "Vue d'ensemble"
-  scenarios: scénario(s).
+  scenarios: scénario(s)
   save: Sauvegarder
   links: Liens
   duplicate: Dupliquer

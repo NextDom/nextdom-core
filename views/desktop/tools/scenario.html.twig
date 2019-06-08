@@ -33,24 +33,24 @@
 */
 
 #}
-<div id="scenarioThumbnailDisplay" class="blurPanel">
+<div id="scenarioThumbnailDisplay">
     <section class="content-header">
         <div class="action-bar">
             <div class="action-group">
-                <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'scenario.back'|trans }}</a>
+                <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'scenario.back'|trans }}</a>
                 {% if scenariosEnabled == 0 %}
-                    <a class="btn btn-success btn-action-bar" id="bt_changeAllScenarioState" data-state="1"><i class="fas fa-check spacing-right"></i>{{ 'scenario.enable-scenarios'|trans }}</a>
+                    <a class="btn btn-success btn-action-bar" id="bt_changeAllScenarioState" data-state="1"><i class="fas fa-check"></i>{{ 'scenario.enable-scenarios'|trans }}</a>
                 {% else %}
-                    <a class="btn btn-danger btn-action-bar" id="bt_changeAllScenarioState" data-state="0"><i class="fas fa-times spacing-right"></i>{{ 'scenario.disable-scenarios'|trans }}</a>
+                    <a class="btn btn-danger btn-action-bar" id="bt_changeAllScenarioState" data-state="0"><i class="fas fa-times"></i>{{ 'scenario.disable-scenarios'|trans }}</a>
                 {% endif %}
-                <a class="btn btn-success btn-action-bar" id="bt_addScenario"><i class="fas fa-plus-circle spacing-right"></i>{{ 'scenario.add'|trans }}</a>
+                <a class="btn btn-success btn-action-bar" id="bt_addScenario"><i class="fas fa-plus-circle"></i>{{ 'scenario.add'|trans }}</a>
             </div>
             <div class="action-group">
-                <a class="btn btn-action btn-action-bar pull-right" style="display:none;" id="bt_scenarioCollapse"><i class="fas fa-plus-square spacing-right"></i>{{ 'Déplier' }}</a>
-                <a class="btn btn-action btn-action-bar pull-right" id="bt_scenarioUncollapse"><i class="fas fa-minus-square spacing-right"></i>{{ 'Replier' }}</a>
-                <a class="btn btn-warning btn-action-bar pull-right bt_showExpressionTest"><i class="fas fa-check spacing-right"></i>{{ 'scenario.test-expression'|trans }}</a>
-                <a class="btn btn-primary btn-action-bar pull-right bt_displayScenarioVariable"><i class="fas fa-eye spacing-right"></i>{{ 'scenario.variables'|trans }}</a>
-                <a class="btn btn-default btn-action-bar pull-right bt_showScenarioSummary"><i class="fas fa-list spacing-right"></i>{{ 'scenario.summary'|trans }}</a>
+                <a class="btn btn-action btn-action-bar pull-right" style="display:none;" id="bt_scenarioCollapse"><i class="fas fa-plus-square"></i>{{ 'Déplier' }}</a>
+                <a class="btn btn-action btn-action-bar pull-right" id="bt_scenarioUncollapse"><i class="fas fa-minus-square"></i>{{ 'Replier' }}</a>
+                <a class="btn btn-warning btn-action-bar pull-right bt_showExpressionTest"><i class="fas fa-rss"></i>{{ 'scenario.test-expression'|trans }}</a>
+                <a class="btn btn-primary btn-action-bar pull-right bt_displayScenarioVariable"><i class="fas fa-eye"></i>{{ 'scenario.variables'|trans }}</a>
+                <a class="btn btn-default btn-action-bar pull-right bt_showScenarioSummary"><i class="fas fa-list"></i>{{ 'scenario.summary'|trans }}</a>
             </div>
         </div>
     </section>
@@ -58,7 +58,7 @@
     <section class="content">
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title"><i class="fas fa-film spacing-right"></i>{{ 'scenario.my-scenarios'|trans }}</h3>
+                <h3 class="box-title"><i class="fas fa-film"></i>{{ 'scenario.my-scenarios'|trans }}</h3>
             </div>
             <div class="box-body">
                 {% if scenariosEnabled == 0 %}
@@ -88,7 +88,7 @@
                                         {% if scenario.getDisplay('icon') != '' %}
                                             <span class="scenario-icon">{{ scenario.getDisplay('icon')|raw }}</span>
                                         {% else %}
-                                            <img class="backgroundColor" src="/public/img/NextDom_Scenario.png" height="70"/>
+                                            <img class="backgroundColor" src="/public/img/NextDom_Scenario.png"/>
                                         {% endif %}
                                         <p>{{ scenario.getHumanName(true, true, true, true)|raw }}
                                     </div>
@@ -117,7 +117,7 @@
                                             {% if scenario.getDisplay('icon') != '' %}
                                                 <span class="scenario-icon">{{ scenario.getDisplay('icon')|raw }}</span>
                                             {% else %}
-                                                <img class="backgroundColor" alt="scenario" src="/public/img/NextDom_Scenario.png" height="70"/>
+                                                <img class="backgroundColor" alt="scenario" src="/public/img/NextDom_Scenario.png"/>
                                             {% endif %}
                                             <p>{{ scenario.getHumanName(true, true, true, true)|raw }}
                                         </div>
@@ -137,21 +137,21 @@
     <section class="content-header">
         <div class="action-bar">
             <div class="action-group">
-                <a class="btn btn-danger btn-action-bar" id="bt_scenarioThumbnailDisplay"><i class="fas fa-chevron-left spacing-right"></i>{{ 'scenario.back'|trans }}</a>
-                <a class="btn btn-default btn-action-bar" id="bt_graphScenario"><i class="fas fa-object-group spacing-right"></i>{{ 'scenario.links'|trans }}</a>
-                <a class="btn btn-default btn-action-bar" id="bt_logScenario"><i class="far fa-file-alt spacing-right"></i>{{ 'scenario.log'|trans }}</a>
-                <a class="btn btn-default btn-action-bar" id="bt_templateScenario"><i class="fas fa-cubes spacing-right"></i>{{ 'scenario.template'|trans }}</a>
-                <a class="btn btn-primary btn-action-bar" id="bt_exportScenario"><i class="fas fa fa-share spacing-right"></i>{{ 'scenario.export'|trans }}</a>
-                <a class="btn btn-default btn-action-bar" id="bt_copyScenario"><i class="fas fa-copy spacing-right"></i>{{ 'scenario.duplicate'|trans }}</a>
-                <a class="btn btn-success btn-action-bar bt_addScenarioElement"><i class="fas fa-plus-circle spacing-right"></i>{{ 'scenario.add-block'|trans }}</a>
+                <a class="btn btn-danger btn-action-bar" id="bt_scenarioThumbnailDisplay"><i class="fas fa-chevron-left"></i>{{ 'scenario.back'|trans }}</a>
+                <a class="btn btn-default btn-action-bar" id="bt_graphScenario"><i class="fas fa-object-group"></i>{{ 'scenario.links'|trans }}</a>
+                <a class="btn btn-default btn-action-bar" id="bt_logScenario"><i class="fas fa-file-alt"></i>{{ 'scenario.log'|trans }}</a>
+                <a class="btn btn-default btn-action-bar" id="bt_templateScenario"><i class="fas fa-cubes"></i>{{ 'scenario.template'|trans }}</a>
+                <a class="btn btn-primary btn-action-bar" id="bt_exportScenario"><i class="fas fa fa-share"></i>{{ 'scenario.export'|trans }}</a>
+                <a class="btn btn-default btn-action-bar" id="bt_copyScenario"><i class="fas fa-copy"></i>{{ 'scenario.duplicate'|trans }}</a>
+                <a class="btn btn-success btn-action-bar bt_addScenarioElement"><i class="fas fa-plus-circle"></i>{{ 'scenario.add-block'|trans }}</a>
             </div>
             <div class="action-group">
-                <a class="btn btn-success btn-action-bar pull-right" id="bt_saveScenario"><i class="fas fa-save spacing-right"></i>{{ 'scenario.save'|trans }}</a>
-                <a class="btn btn-danger btn-action-bar pull-right" id="bt_stopScenario" style="display:none;"><i class="fas fa-stop spacing-right"></i>{{ 'scenario.stop'|trans }}</a>
-                <a class="btn btn-warning btn-action-bar pull-right" id="bt_testScenario" title='{{ 'scenario.execute-title'|trans }}'><i class="fas fa-gamepad spacing-right"></i>{{ 'scenario.execute'|trans }}</a>
-                <a class="btn btn-warning btn-action-bar pull-right bt_showExpressionTest"><i class="fas fa-check spacing-right"></i>{{ 'scenario.expression-test'|trans }}</a>
-                <a class="btn btn-primary btn-action-bar pull-right bt_displayScenarioVariable"><i class="fas fa-eye spacing-right"></i> {{ 'scenario.variables'|trans }}</a>
-                <a class="btn btn-danger btn-action-bar pull-right" id="bt_delScenario"><i class="fas fa-minus-circle spacing-right"></i>{{ 'scenario.delete'|trans }}</a>
+                <a class="btn btn-success btn-action-bar pull-right" id="bt_saveScenario"><i class="fas fa-save"></i>{{ 'scenario.save'|trans }}</a>
+                <a class="btn btn-danger btn-action-bar pull-right" id="bt_stopScenario" style="display:none;"><i class="fas fa-stop"></i>{{ 'scenario.stop'|trans }}</a>
+                <a class="btn btn-warning btn-action-bar pull-right" id="bt_testScenario" title='{{ 'scenario.execute-title'|trans }}'><i class="fas fa-gamepad"></i>{{ 'scenario.execute'|trans }}</a>
+                <a class="btn btn-warning btn-action-bar pull-right bt_showExpressionTest"><i class="fas fa-rss"></i>{{ 'scenario.expression-test'|trans }}</a>
+                <a class="btn btn-primary btn-action-bar pull-right bt_displayScenarioVariable"><i class="fas fa-eye"></i>{{ 'scenario.variables'|trans }}</a>
+                <a class="btn btn-danger btn-action-bar pull-right" id="bt_delScenario"><i class="fas fa-trash"></i>{{ 'scenario.delete'|trans }}</a>
             </div>
         </div>
     </section>
@@ -160,16 +160,14 @@
         <div class="nav-tabs-custom">
             <ul class="nav nav-tabs pull-right" role="tablist">
                 <li role="presentation">
-                    <a id="bt_scenarioTab" href="#scenariotab" aria-controls="profile" role="tab" data-toggle="tab">
-                        <i class="fas fa-microchip spacing-right"></i>{{ 'scenario.programmation'|trans }}
-                    </a>
+                    <a id="bt_scenarioTab" href="#scenariotab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-microchip"></i>{{ 'scenario.programmation'|trans }}</a>
                 </li>
                 <li role="presentation" class="active">
-                    <a href="#generaltab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-cog spacing-right"></i>{{ 'scenario.parameters'|trans }}</a>
+                    <a href="#generaltab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-cog"></i>{{ 'scenario.parameters'|trans }}</a>
                 </li>
                 <h4 id="span_ongoing" class="label pull-right badge spacing-right"></h4>
                 <h4 class="label label-primary pull-right badge spacing-right">{{ 'scenario.id'|trans }} : <span class="scenarioAttr" data-l1key="id"></span></h4>
-                <li class="header pull-left"><i class="fas fa-film spacing-right"></i>{{ 'scenario.scenario-edit'|trans }}</li>
+                <li class="header pull-left"><i class="fas fa-film"></i>{{ 'scenario.scenario-edit'|trans }}</li>
             </ul>
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="generaltab">
@@ -283,7 +281,7 @@
                                         <label class="col-lg-3 col-md-3 col-sm-4 col-xs-3 control-label">{{ 'scenario.icon'|trans }}</label>
                                         <div class="col-lg-8 col-md-8 col-sm-3 col-xs-12">
                                             <div class="input-group">
-                                                <a class="btn btn-action" id="bt_chooseIcon"><i class="fas fa-flag spacing-right"></i>{{ 'scenario.choose'|trans }}</a>
+                                                <a class="btn btn-action" id="bt_chooseIcon"><i class="fas fa-flag"></i><span>{{ 'scenario.choose'|trans }}</span></a>
                                                 <div class="scenarioAttr label label-icon" data-l1key="display" data-l2key="icon"></div>
                                             </div>
                                         </div>
@@ -301,8 +299,8 @@
                                                     <option value="all">{{ 'scenario.twice'|trans }}</option>
                                                 </select>
                                                 <span class="input-group-btn">
-                                                    <a class="btn btn-default" id="bt_addTrigger"><i class="fas fa-plus-square spacing-right"></i>{{ 'scenario.trigger'|trans }}</a>
-                                                    <a class="btn btn-default" id="bt_addSchedule"><i class="fas fa-plus-square spacing-right"></i>{{ 'scenario.scheduler'|trans }}</a>
+                                                    <a class="btn btn-default" id="bt_addTrigger"><i class="fas fa-plus-square"></i><span>{{ 'scenario.trigger'|trans }}<span></a>
+                                                    <a class="btn btn-default" id="bt_addSchedule"><i class="fas fa-plus-square"></i><span>{{ 'scenario.scheduler'|trans }}</span></a>
                                                 </span>
                                             </div>
                                         </div>
@@ -342,8 +340,8 @@
                        placeholder="{{ 'scenario.name'|trans }}"/><br/><br/>
             </div>
             <div class="modal-footer">
-                <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-minus-circle spacing-right"></i>{{ 'scenario.cancel'|trans }}</a>
-                <a class="btn btn-success" id="bt_copyScenarioSave"><i class="fas fa-save spacing-right"></i>{{ 'scenario.save'|trans }}</a>
+                <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-minus-circle"></i>{{ 'scenario.cancel'|trans }}</a>
+                <a class="btn btn-success" id="bt_copyScenarioSave"><i class="fas fa-save"></i>{{ 'scenario.save'|trans }}</a>
             </div>
         </div>
     </div>
@@ -388,8 +386,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-minus-circle spacing-right"></i>{{ 'scenario.cancel'|trans }}</a>
-                <a class="btn btn-success" id="bt_addElementSave"><i class="fas fa-save spacing-right"></i>{{ 'scenario.save'|trans }}</a>
+                <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-minus-circle"></i>{{ 'scenario.cancel'|trans }}</a>
+                <a class="btn btn-success" id="bt_addElementSave"><i class="fas fa-save"></i>{{ 'scenario.save'|trans }}</a>
             </div>
         </div>
     </div>

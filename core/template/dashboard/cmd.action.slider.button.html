@@ -4,22 +4,22 @@
        <div class="input-group" style="width: 100px;">
          <input type="text" class="value form-control input-sm" value="#state# #unite#" disabled style=""/>
          <span class="input-group-btn" style="position: relative;">
-           <a class="btn btn-default bt_minus" style="background-color:#cmdColor# !important;border-color : transparent !important;height:30px;width:25px"><i class="fa fa-minus" style="position: relative;left:-5px;"></i></a>
-           <a class="btn btn-default bt_plus" style="background-color:#cmdColor# !important;border-color : transparent !important;height:30px;width:25px"><i class="fa fa-plus" style="position: relative;left:-5px;"></i></a> 
+           <a class="btn btn-default bt_minus" style="background-color:#cmdColor# !important;border-color : transparent !important;height:30px;width:25px"><i class="fas fa-minus" style="position: relative;left:-5px;"></i></a>
+           <a class="btn btn-default bt_plus" style="background-color:#cmdColor# !important;border-color : transparent !important;height:30px;width:25px"><i class="fas fa-plus" style="position: relative;left:-5px;"></i></a>
          </span>
        </div>
      </center>
      <script>
        $('.cmd[data-cmd_uid=#uid#] .bt_plus').on('click', function () {
         var max = ('#maxValue#' == '') ?  Number.MAX_VALUE : parseFloat('#maxValue#');
-        if (parseFloat($('.cmd[data-cmd_uid=#uid#] .value').val()) <= max - 0.5 ){     
+        if (parseFloat($('.cmd[data-cmd_uid=#uid#] .value').val()) <= max - 0.5 ){
           nextdom.cmd.update['#id#']({display_value:parseFloat($('.cmd[data-cmd_uid=#uid#] .value').val()) + 0.5});
           $('.cmd[data-cmd_uid=#uid#] .value').trigger('change');
-        }  
+        }
       });
        $('.cmd[data-cmd_uid=#uid#] .bt_minus').on('click', function () {
         var min = ('#minValue#' == '') ? Number.MIN_VALUE : parseFloat('#minValue#');
-        if (parseFloat($('.cmd[data-cmd_uid=#uid#] .value').val()) >= min + 0.5 ){     
+        if (parseFloat($('.cmd[data-cmd_uid=#uid#] .value').val()) >= min + 0.5 ){
           nextdom.cmd.update['#id#']({display_value:parseFloat($('.cmd[data-cmd_uid=#uid#] .value').val()) - 0.5});
           $('.cmd[data-cmd_uid=#uid#] .value').trigger('change');
         }

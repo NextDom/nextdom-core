@@ -36,10 +36,10 @@
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
-            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour' }}</a>
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'Retour' }}</a>
         </div>
         <div class="action-group">
-            <a class="btn btn-success btn-action-bar pull-right" id="bt_saveapi"><i class="fas fa-save spacing-right"></i>{{ 'Sauvegarder' }}</a>
+            <a class="btn btn-success btn-action-bar pull-right" id="bt_saveapi"><i class="fas fa-save"></i>{{ 'Sauvegarder' }}</a>
         </div>
     </div>
 </section>
@@ -48,7 +48,7 @@
     <div class="box" id="API">
         <!-- Header bar -->
         <div class="box-header with-border">
-            <h3 class="box-title"><i class="fas fa-key spacing-right"></i>{{ 'API' }}</h3>
+            <h3 class="box-title"><i class="fas fa-key"></i>{{ 'API' }}</h3>
         </div>
 
         <!-- Page content -->
@@ -114,23 +114,23 @@
                 <fieldset class="legend-section">
                     <legend>{{ 'Clefs API' }}</legend>
                     <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label" data-toggle="tooltip" title="" data-original-title="{{ 'Clef API globale de' }} adminconfigs['product_name']">{{ 'Clef API Globale' }}</label>
+                        <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label" data-toggle="tooltip" title="" data-original-title="{{ 'Clef API globale de' }} {{ PRODUCT_NAME }}">{{ 'Clef API Globale' }}</label>
                         <div class="btn-group col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                            <a class="btn btn-action bt_regenerate_api" data-plugin="core"><i class="fa fa-refresh spacing-right"></i>{{'Régénérer'}}</a>
+                            <a class="btn btn-action bt_regenerate_api" data-plugin="core"><i class="fas fa-refresh"></i><span>{{'Régénérer'}}</span></a>
                             <span class="span_apikey label label-value">{{ adminConfigs['api'] }}</span>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label" data-toggle="tooltip" title="" data-original-title="{{ 'Clef API Pro de' }} {{ adminConfigs['product_name'] }}">{{ 'Clef API Pro' }}</label>
+                        <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label" data-toggle="tooltip" title="" data-original-title="{{ 'Clef API Pro de' }} {{ PRODUCT_NAME }}">{{ 'Clef API Pro' }}</label>
                         <div class="btn-group col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                            <a class="btn btn-action bt_regenerate_api" data-plugin="pro"><i class="fa fa-refresh spacing-right"></i>{{'Régénérer'}}</a>
+                            <a class="btn btn-action bt_regenerate_api" data-plugin="pro"><i class="fas fa-refresh"></i><span>{{'Régénérer'}}</span></a>
                             <span class="span_apikey label label-value">{{ adminConfigs['apipro'] }}</span>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label" data-toggle="tooltip" title="" data-original-title="{{ 'Clef Market de' }} {{ adminConfigs['product_name'] }}">{{ 'Clef Market' }}</label>
+                        <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label" data-toggle="tooltip" title="" data-original-title="{{ 'Clef Market de' }} {{ PRODUCT_NAME }}">{{ 'Clef Market' }}</label>
                         <div class="btn-group col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                            <a class="btn btn-action bt_regenerate_api" data-plugin="apimarket"><i class="fa fa-refresh spacing-right"></i>{{'Régénérer'}}</a>
+                            <a class="btn btn-action bt_regenerate_api" data-plugin="apimarket"><i class="fas fa-refresh"></i><span>{{'Régénérer'}}</span></a>
                             <span class="span_apikey label label-value">{{ adminConfigs['apimarket'] }}</span>
                         </div>
                     </div>
@@ -152,7 +152,7 @@
                                     </select>
                                 </div>
                                 <div class="btn-group col-lg-8 col-md-7 col-sm-7 col-xs-12">
-                                    <a class="btn btn-action bt_regenerate_api" data-plugin="{{ pluginData.plugin.getId() }}"><i class="fa fa-refresh spacing-right"></i>{{'Régénérer'}}</a>
+                                    <a class="btn btn-action bt_regenerate_api" data-plugin="{{ pluginData.plugin.getId() }}"><i class="fas fa-refresh"></i><span>{{'Régénérer'}}</span></a>
                                     <span class="span_apikey label label-value">{{ pluginData.api }}</span>
                                 </div>
                             </div>
