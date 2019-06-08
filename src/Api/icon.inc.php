@@ -22,7 +22,7 @@ require_once __DIR__ . "/../../src/core.php";
 
 use NextDom\Helpers\FileSystemHelper;
 
-echo '<link rel="stylesheet" href="/vendor/node_modules/font-awesome5/css/fontawesome-all.css">' . "\n";
+echo '<link rel="stylesheet" href="/vendor/node_modules/@fortawesome/fontawesome-free/css/all.css">' . "\n";
 echo '<link rel="stylesheet" href="/vendor/node_modules/font-awesome/css/font-awesome.css">' . "\n";
 
 $iconsRootDirectory = NEXTDOM_ROOT . '/public/icon/';

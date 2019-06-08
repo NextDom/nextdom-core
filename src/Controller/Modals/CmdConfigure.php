@@ -40,6 +40,7 @@ class CmdConfigure extends BaseAbstractModal
      *
      * @return string
      * @throws CoreException
+     * @throws \ReflectionException
      */
     public static function get(): string
     {

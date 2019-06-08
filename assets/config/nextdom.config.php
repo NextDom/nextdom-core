@@ -46,7 +46,7 @@ $NEXTDOM_INTERNAL_CONFIG = array(
             '!=' => array('different'),
         ),
     ),
-    'nextdom_market' => array(
+    'nextdom' => array(
         'sources' => array(
             array('name' => 'NextDom Stable', 'type' => 'json', 'code' => 'nextdom_stable', 'data' => 'https://raw.githubusercontent.com/NextDom/AlternativeMarket-Lists/master/results/nextdom-stable.json'),
             array('name' => 'NextDom draft', 'type' => 'json', 'code' => 'nextdom_draft', 'data' => 'https://raw.githubusercontent.com/NextDom/AlternativeMarket-Lists/master/results/nextdom-draft.json')

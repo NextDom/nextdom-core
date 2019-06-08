@@ -40,3 +40,5 @@ core/css
 /var
 /data.*
 /data
+/src/mobile/node_modules
+/src/mobile/assets

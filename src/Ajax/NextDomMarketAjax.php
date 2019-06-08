@@ -37,8 +37,6 @@ class NextDomMarketAjax extends BaseAjax
     /**
      * Actions de refraichissement
      *
-     * @return bool True si l'action a réussie
-     *
      * @throws \Exception
      */
     public function refresh()

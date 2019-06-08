@@ -698,6 +698,9 @@ class Cmd implements EntityInterface
                 $replace['#state#'] = $cmdValue->execCmd();
                 $replace['#valueName#'] = $cmdValue->getName();
                 $replace['#unite#'] = $cmdValue->getUnite();
+                $replace['#valueDate#'] = $cmdValue->getValueDate();
+                $replace['#collectDate#'] = $cmdValue->getCollectDate();
+                $replace['#alertLevel#'] = $cmdValue->getCache('alertLevel', 'none');
                 if (trim($replace['#state#']) == '' && ($cmdValue->getSubType() == 'binary' || $cmdValue->getSubType() == 'numeric')) {
                     $replace['#state#'] = 0;
                 }

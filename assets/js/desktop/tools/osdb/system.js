@@ -114,7 +114,7 @@ $('#bt_consitency').off('click').on('click',function(){
             $('#div_alert').showAlert({message: error.message, level: 'danger'});
         },
         success: function (data) {
-            $('#div_alert').showAlert({message: '{{Lance de la vérification fait, voir le log consistency pour voir le résultat}}', level: 'success'});
+            $('#div_alert').showAlert({message: '{{Exécution de la vérification effectuée, voir le log consistency pour afficher le résultat}}', level: 'success'});
         }
     });
 });

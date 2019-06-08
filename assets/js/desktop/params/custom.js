@@ -40,6 +40,7 @@ editorMobileCSS = null;
 
 showLoadingCustom();
 printConvertColor();
+$('.colorpick').colorpicker();
 
 nextdom.config.load({
     configuration: $('#custom').getValues('.configKey:not(.noSet)')[0],
