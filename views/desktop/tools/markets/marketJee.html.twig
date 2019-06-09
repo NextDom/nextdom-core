@@ -42,28 +42,26 @@
                 <a class="btn btn-default" id="pluginNameSearch"><i class="fas fa-tag"></i><span>{{ 'Un Nom ?' }}</span></a>
                 <a class="btn btn-primary" id="resetSearch"><i class="fas fa-times"></i></a>
             </div>
-            {% if marketType == 'plugin' %}
-                <div class="btn-group">
-                    <a class="btn btn-default bt_pluginFilterCost" data-filter="free"><i class="fas fa-gift"></i><span>{{ 'Gratuit' }}</span></a>
-                    <a class="btn btn-default bt_pluginFilterCost" data-filter="paying"><i class="fas fa-euro-sign"></i><span>{{ 'Payant' }}</span></a>
-                    <a class="btn btn-primary bt_pluginFilterCost" data-filter=""><i class="fa fa-times"></i></a>
-                </div>
-                <div class="btn-group">
-                    <a class="btn btn-default bt_pluginFilterInstall" data-filter="notInstall"><i class="fas fa-thumbs-up"></i><span>{{ 'Installé' }}</span></a>
-                    <a class="btn btn-default bt_pluginFilterInstall" data-filter="install"><i class="fas fa-thumbs-down"></i><span>{{ 'Non installé' }}</span></a>
-                    <a class="btn btn-primary bt_pluginFilterInstall" data-filter=""><i class="fa fa-times"></i></a>
-                </div>
-                <div class="btn-group">
-                    <select class="form-control" id="sel_certif">
-                        <option value="" selected>{{ 'Tous' }}</option>
-                        <option value="Officiel">{{ 'Officiel' }}</option>
-                        <option value="Conseillé">{{ 'Conseillé' }}</option>
-                        <option value="Premium">{{ 'Premium' }}</option>
-                        <option value="Partenaire">{{ 'Partenaire' }}</option>
-                        <option value="Legacy">{{ 'Legacy' }}</option>
-                    </select>
-                </div>
-            {% endif %}
+            <div class="btn-group">
+                <a class="btn btn-default bt_pluginFilterCost" data-filter="free"><i class="fas fa-gift"></i><span>{{ 'Gratuit' }}</span></a>
+                <a class="btn btn-default bt_pluginFilterCost" data-filter="paying"><i class="fas fa-euro-sign"></i><span>{{ 'Payant' }}</span></a>
+                <a class="btn btn-primary bt_pluginFilterCost" data-filter=""><i class="fa fa-times"></i></a>
+            </div>
+            <div class="btn-group">
+                <a class="btn btn-default bt_pluginFilterInstall" data-filter="notInstall"><i class="fas fa-thumbs-up"></i><span>{{ 'Installé' }}</span></a>
+                <a class="btn btn-default bt_pluginFilterInstall" data-filter="install"><i class="fas fa-thumbs-down"></i><span>{{ 'Non installé' }}</span></a>
+                <a class="btn btn-primary bt_pluginFilterInstall" data-filter=""><i class="fa fa-times"></i></a>
+            </div>
+            <div class="btn-group">
+                <select class="form-control" id="sel_certif">
+                    <option value="" selected>{{ 'Tous' }}</option>
+                    <option value="Officiel">{{ 'Officiel' }}</option>
+                    <option value="Conseillé">{{ 'Conseillé' }}</option>
+                    <option value="Premium">{{ 'Premium' }}</option>
+                    <option value="Partenaire">{{ 'Partenaire' }}</option>
+                    <option value="Legacy">{{ 'Legacy' }}</option>
+                </select>
+            </div>
         </div>
         <div class="action-group">
             <div class="btn-group">

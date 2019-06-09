@@ -1284,7 +1284,7 @@ function showLoadingCustom() {
             }
         }
         $('#jqueryLoadingDiv').show();
-        $('#div_pageContainer').addClass('blur');
+        $('.wrapper').addClass('blur');
     }
 };
 function hideLoadingCustom() {
@@ -1292,7 +1292,7 @@ function hideLoadingCustom() {
         $('#div_loadingSpinner').hide()
     } else {
         $('#jqueryLoadingDiv').hide();
-        $('#div_pageContainer').removeClass('blur');
+        $('.wrapper').removeClass('blur');
     }
 };
 
