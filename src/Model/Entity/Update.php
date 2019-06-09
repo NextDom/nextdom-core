@@ -28,6 +28,7 @@ use NextDom\Managers\ConfigManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
 use NextDom\Managers\PluginManager;
+use NextDom\Managers\UpdateManager;
 use ZipArchive;
 
 /**
@@ -176,7 +177,7 @@ class Update implements EntityInterface
         if ($this->getType() == 'core') {
             NextDomHelper::update(['core' => 1]);
         } else {
-            $class = 'Repo' . $this->getSource();
+            $class = UpdateManager::getRepoDataFromName($this->getSource())['phpClass'];
             if (class_exists($class) && method_exists($class, 'downloadObject') && ConfigManager::byKey($this->getSource() . '::enable') == 1) {
                 $this->preInstallUpdate();
                 $cibDir = NextDomHelper::getTmpFolder('market') . '/' . $this->getLogicalId();

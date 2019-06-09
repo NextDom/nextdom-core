@@ -74,7 +74,7 @@ class RepoAjax extends BaseAjax
             }
             $update = UpdateManager::byTypeAndLogicalId($repo->getType(), $repo->getLogicalId());
             if (!is_object($update)) {
-                $update = new update();
+                $update = new Update();
             }
             $update->setSource(Utils::init('repo'));
             $update->setLogicalId($repo->getLogicalId());
