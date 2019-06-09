@@ -37,8 +37,8 @@ class ComShell
 
     /**
      * @access public
-     * @param type $_cmd
-     * @param type $_background
+     * @param mixed $_cmd
+     * @param mixed $_background
      */
     public function __construct($_cmd = null, $_background = false)
     {
@@ -102,7 +102,7 @@ class ComShell
 
     /**
      * Execute commands
-     * @throws Exception
+     * @throws \Exception
      * @return string
      */
     public function exec()

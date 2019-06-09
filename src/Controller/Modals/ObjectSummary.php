@@ -50,32 +50,37 @@ class ObjectSummary extends BaseAbstractModal
 
         foreach ($pageData['objectsTree'] as $jeeObject) {
             $jeeObjectId = $jeeObject->getId();
-            foreach (ConfigManager::byKey('object:summary') as $key => $value) {
+            $objectSummaryConfiguration = $jeeObject->getConfiguration('summary');
+            foreach (ConfigManager::byKey('object:summary') as $summaryKey => $summaryData) {
                 $title = '';
-                if (!isset($jeeObject->getConfiguration('summary')[$key]) || !is_array($jeeObject->getConfiguration('summary')[$key]) || count($jeeObject->getConfiguration('summary')[$key]) == 0) {
+                // Test if jeeObject configuration exists and is valid
+                if (!isset($objectSummaryConfiguration[$summaryKey]) ||
+                    !is_array($objectSummaryConfiguration[$summaryKey]) ||
+                    count($objectSummaryConfiguration[$summaryKey]) === 0) {
                     continue;
                 }
                 $pageData['configObjectSummary'][$jeeObjectId] = [];
-                foreach ($jeeObject->getConfiguration('summary')[$key] as $summary) {
-                    if (CmdManager::byId(str_replace('#', '', $summary['cmd']))) {
-                        $title .= '&#10;' . CmdManager::byId(str_replace('#', '', $summary['cmd']))->getHumanName();
+                foreach ($objectSummaryConfiguration[$summaryKey] as $summary) {
+                    $cmd = CmdManager::byId(str_replace('#', '', $summary['cmd']));
+                    if ($cmd) {
+                        $title .= '&#10;' . $cmd->getHumanName();
                     } else {
                         $title .= '&#10;' . $summary['cmd'];
                     }
                 }
-                if (count($jeeObject->getConfiguration('summary')[$key]) > 0) {
+                if (count($objectSummaryConfiguration[$summaryKey]) > 0) {
                     $summary = [];
-                    $summary['global'] = $jeeObject->getConfiguration('summary::global::' . $key) == 1;
-                    $summary['title'] = $value['name'] . $title;
-                    $summary['icon'] = $value['icon'];
-                    $summary['count'] = count($jeeObject->getConfiguration('summary')[$key]);
+                    $summary['global'] = $jeeObject->getConfiguration('summary::global::' . $summaryKey) == 1;
+                    $summary['title'] = $summaryData['name'] . $title;
+                    $summary['icon'] = $summaryData['icon'];
+                    $summary['count'] = count($objectSummaryConfiguration[$summaryKey]);
                     $pageData['configObjectSummary'][$jeeObjectId][] = $summary;
                 }
-                if ($jeeObject->getConfiguration('summary::hide::desktop::' . $key) == 1) {
-                    $pageData['summaryDesktopHidden'][] = ['name' => $value['name'], 'icon' => $value['icon']];
+                if ($jeeObject->getConfiguration('summary::hide::desktop::' . $summaryKey) == 1) {
+                    $pageData['summaryDesktopHidden'][] = ['name' => $summaryData['name'], 'icon' => $summaryData['icon']];
                 }
-                if ($jeeObject->getConfiguration('summary::hide::mobile::' . $key) == 1) {
-                    $pageData['summaryMobileHidden'][] = ['name' => $value['name'], 'icon' => $value['icon']];
+                if ($jeeObject->getConfiguration('summary::hide::mobile::' . $summaryKey) == 1) {
+                    $pageData['summaryMobileHidden'][] = ['name' => $summaryData['name'], 'icon' => $summaryData['icon']];
                 }
             }
         }

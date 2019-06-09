@@ -296,7 +296,7 @@ class AjaxNextDomTest extends AjaxBase
     public function testSaveCustomAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'saveCustom']);
-        $this->assertContains('La version ne peut être que desktop ou mobile', (string) $result->getBody());
+        $this->assertContains('La version ne peut être que js ou css', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 

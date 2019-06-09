@@ -1017,6 +1017,7 @@ class RepoMarket
         if ($market->sendRequest('purchase::getInfo')) {
             return $market->getResult();
         }
+        return null;
     }
 
     /*     * **********************Getteur Setteur*************************** */
