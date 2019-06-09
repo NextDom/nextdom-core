@@ -404,6 +404,14 @@ $(function () {
     $(".slimScrollDiv").css("overflow", "");
     $(".sidebar").css("overflow", "");
 
+    /* Survol fabs filtre categorie dashboard */
+    $('.fab-filter').on('mouseleave',function() {
+        $('.blur-div').removeClass('blur');
+    });
+    $('.fab-filter').on('mouseenter',function() {
+        $('.blur-div').addClass('blur');
+    });
+
     /**
      * Get access to plugins
      */
@@ -1246,6 +1254,7 @@ function limitTreeviewMenu () {
 
 /* Ajustement automatiques des pages pour coller au theme NextDom */
 function adjustNextDomTheme() {
+    /* Ajustement tabs */
     $("#div_pageContainer").css('padding-top', '');
     if (!$('#div_pageContainer .nav-tabs').parent().hasClass('nav-tabs-custom')) {
         $('#div_pageContainer .nav-tabs').parent().addClass('nav-tabs-custom');
@@ -1256,6 +1265,7 @@ function adjustNextDomTheme() {
     if ($('#div_pageContainer').find('.row-overflow').children(".row").length != 0) {
         $('#div_pageContainer').find('.row-overflow').removeClass('row');
     }
+    /* Ajustement containers */
     var needContent = $("#div_pageContainer").children("section").length == 0 && $("#div_pageContainer").children().children("section").length == 0 && (getUrlVars('p') != 'plan') && (getUrlVars('p') != 'view') && (getUrlVars('p') != 'plan3d');
     if (needContent) {
         if (!$('#div_pageContainer').hasClass('content')) {
@@ -1269,6 +1279,10 @@ function adjustNextDomTheme() {
         $("#div_pageContainer").css('margin-left','');
         $("#div_pageContainer").css('margin-right','');
     }
+    /* Ajustements icones */
+    $('#div_pageContainer').find('.fas.fa-sign-in').each(function () {
+        $(this).removeClass('fa-sign-in').addClass('fa-sign-in-alt');
+    });
 }
 
 /* Icone de chargement */
@@ -1284,7 +1298,8 @@ function showLoadingCustom() {
             }
         }
         $('#jqueryLoadingDiv').show();
-        $('.wrapper').addClass('blur');
+        $('.blur-div').addClass('blur');
+        $('.content').addClass('blur');
     }
 };
 function hideLoadingCustom() {
@@ -1292,22 +1307,10 @@ function hideLoadingCustom() {
         $('#div_loadingSpinner').hide()
     } else {
         $('#jqueryLoadingDiv').hide();
-        $('.wrapper').removeClass('blur');
+        $('.blur-div').removeClass('blur');
+        $('.content').removeClass('blur');
     }
 };
-
-/* Survol fabs filtre categorie dashboard */
-if ($('[role="dialog"] .fabs').length == 0) {
-    $('.fab-filter').on('mouseleave',function() {
-        $('.blurPanel').removeClass('blur');
-    });
-
-    $('.fab-filter').on('mouseenter',function() {
-        $('.blurPanel').addClass('blur');
-    });
-} else {
-    $('.fabs').css('display', 'none');
-}
 
 /* Scroll dans la page */
 window.onscroll = function () {
