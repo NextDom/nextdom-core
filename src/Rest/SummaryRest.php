@@ -111,7 +111,7 @@ class SummaryRest
         if (!empty($eqLogics)) {
             // Get commands attached to the room
             foreach ($eqLogics as $eqLogic) {
-                $cmds = CmdRest::getVisibleByEqLogic($eqLogic['id']);
+                $cmds = CmdRest::getByEqLogic($eqLogic['id']);
                 if (!empty($cmds)) {
                     $eqLogic['cmds'] = $cmds;
                     $result[] = $eqLogic;

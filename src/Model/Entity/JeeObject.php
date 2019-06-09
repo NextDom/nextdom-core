@@ -227,6 +227,7 @@ class JeeObject implements EntityInterface
 
     /**
      * @return int
+     * @throws \Exception
      */
     public function parentNumber()
     {

@@ -61,6 +61,7 @@ class RoomRest
 
     /**
      * @param JeeObject $room
+     * @param JeeObject|null $father
      * @return array
      * @throws \Exception
      */
