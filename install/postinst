@@ -538,6 +538,10 @@ step_nextdom_var_www_html() {
   ln -s "${WEBSERVER_HOME}" /var/www/html
 }
 
+step_nexdom_build_mobile() {
+  bash ${WEBSERVER_HOME}/scripts/prepare_mobile.sh
+}
+
 step_nextdom_mysql_populate() {
   CONSTRAINT="%";
   if [ ${MYSQL_HOSTNAME} == "localhost" ]; then
@@ -685,6 +689,10 @@ main() {
 
   print_log_in "step_nextdom_permissions ..."
   step_nextdom_file_permissions
+  print_log_ok
+
+  print_log_in "step_build_mobile ..."
+  step_nexdom_build_mobile
   print_log_ok
 
   [[ -f /root/.mysqlroot ]] && rm -f /root/.mysqlroot
