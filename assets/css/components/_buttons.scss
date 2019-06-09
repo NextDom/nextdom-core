@@ -26,7 +26,11 @@
 .btn:not(.btn-app) i {
   margin-right: 8px;
 }
-.input-group>.btn i:only-child, .btn-group>.btn i:only-child, .input-group-btn>.btn i:only-child, .td-btn>.btn i:only-child {
+.input-group>.btn i:only-child,
+.btn-group>.btn i:only-child,
+.input-group-btn>.btn i:only-child,
+.td-btn>.btn i:only-child,
+.cmd-widget .btn i{
   margin-right: 0px !important;
 }
 

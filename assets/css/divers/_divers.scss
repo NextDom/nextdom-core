@@ -54,14 +54,9 @@ html {
     display: inline-block;
 }
 
-/* Attente chargement */
-#jqueryLoadingDiv .overlay {
-    background-image: url(/assets/3rdparty/jquery.utils/gritter.png);
-}
-
 /* Fond floute */
 .blur {
-    filter:blur(2px) grayscale(1);
+    filter:blur(2px);
 }
 
 /* Selecteur de date */

@@ -102,16 +102,6 @@ $('#bt_editDashboardWidgetOrder').on('click', function () {
     }
 });
 
-$('#category-filterBtn').click(function() {
-    $('.category-filter-btn-sm').toggleClass('scale-out');
-    $('#dashPanel').toggleClass('dashBlur');
-});
-
-$('.category-filter-btn-sm').click(function() {
-    $('.category-filter-btn-sm').toggleClass('scale-out');
-    $('#dashPanel').toggleClass('dashBlur');
-});
-
 $('#div_pageContainer').on( 'click','.eqLogic-widget .history', function () {
     $('#md_modal2').dialog({title: "Historique"});
     $("#md_modal2").load('index.php?v=d&modal=cmd.history&id=' + $(this).data('cmd_id')).dialog('open');

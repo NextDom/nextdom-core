@@ -162,9 +162,6 @@ function displayWidgetSubtype($_name)
 
 ?>
 
-<style type="text/css"> <!--
-    @import url("/public/css/market.css");
-    --> </style>
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">

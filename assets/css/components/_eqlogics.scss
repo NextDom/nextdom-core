@@ -163,9 +163,9 @@
   .danger {
     color: $critical;
   }
-  i {
+  i:not(.fa-times) {
     font-size: 5em !important;
-    margin-bottom: 10px;
+    margin-bottom: 2px;
   }
 }
 .eqLogicDisplayCard {
@@ -186,6 +186,9 @@
   }
 }
 
+.eqLogicThumbnailContainer .cursor span {
+    top: 15px !important;
+}
 .eqLogicDisplayCard,
 .eqLogicThumbnailContainer div {
   border: none !important;
@@ -231,4 +234,8 @@ div.cmdListContainer .tablesorter i {
 .pluginListContainer div.cursor > center > img {
   width: 90px !important;
   padding-top: 15px;
+}
+
+.eqLogicThumbnailDisplay {
+    padding-left: 15px !important;
 }
