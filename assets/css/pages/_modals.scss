@@ -125,8 +125,11 @@
         color: $nextdom_blue !important;
     }
 }
+.ui-widget .label-config a, .ui-widget .label-config i, .ui-widget .label-config * {
+    color: white !important;
+}
 
-/* COre-Adjusting */
+/* Core-Adjusting */
 .modal-padding {
     padding: 15px !important;
 }

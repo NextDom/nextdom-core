@@ -522,14 +522,14 @@ function saveScenario() {
  */
 function addTrigger(triggerCode) {
     var triggerHtml = '<div class="form-group trigger">';
-    triggerHtml += '<label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{Evénement}}</label>';
-    triggerHtml += '<div class="col-lg-10 col-md-9 col-sm-6 col-xs-12">';
+    triggerHtml += '<label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{Evénement}}</label>';
+    triggerHtml += '<div class="col-lg-9 col-md-9 col-sm-6 col-xs-12">';
     triggerHtml += '<div class="input-group">';
     triggerHtml += '<input class="scenarioAttr input-sm form-control" data-l1key="trigger" value="' + triggerCode.replace(/"/g, '&quot;') + '" >';
     triggerHtml += '<span class="input-group-btn">';
     triggerHtml += '<a class="btn btn-default btn-sm cursor bt_selectTrigger" title="{{Choisir une commande}}"><i class="fas fa-list-alt"></i></a>';
     triggerHtml += '<a class="btn btn-default btn-sm cursor bt_selectDataStoreTrigger" title="{{Choisir une variable}}"><i class="fas fa-calculator"></i></a>';
-    triggerHtml += '<a class="btn btn-default btn-sm cursor bt_removeTrigger"><i class="fas fa-minus-circle"></i></a>';
+    triggerHtml += '<a class="btn btn-danger btn-sm cursor bt_removeTrigger"><i class="fas fa-minus-circle"></i></a>';
     triggerHtml += '</span>';
     triggerHtml += '</div>';
     triggerHtml += '</div>';
@@ -544,13 +544,13 @@ function addTrigger(triggerCode) {
  */
 function addSchedule(scheduleCode) {
     var scheduleHtml = '<div class="form-group schedule">';
-    scheduleHtml += '<label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{Programmation}}</label>';
-    scheduleHtml += '<div class="col-lg-10 col-md-9 col-sm-6 col-xs-12">';
+    scheduleHtml += '<label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{Programmation}}</label>';
+    scheduleHtml += '<div class="col-lg-9 col-md-9 col-sm-6 col-xs-12">';
     scheduleHtml += '<div class="input-group">';
     scheduleHtml += '<input class="scenarioAttr input-sm form-control" data-l1key="schedule" value="' + scheduleCode.replace(/"/g, '&quot;') + '">';
     scheduleHtml += '<span class="input-group-btn">';
     scheduleHtml += '<a class="btn btn-default btn-sm cursor helpSelectCron"><i class="fas fa-question-circle"></i></a>';
-    scheduleHtml += '<a class="btn btn-default btn-sm cursor bt_removeSchedule"><i class="fas fa-minus-circle"></i></a>';
+    scheduleHtml += '<a class="btn btn-danger btn-sm cursor bt_removeSchedule"><i class="fas fa-minus-circle"></i></a>';
     scheduleHtml += '</span>';
     scheduleHtml += '</div>';
     scheduleHtml += '</div>';

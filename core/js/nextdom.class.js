@@ -380,7 +380,7 @@ nextdom.getCronSelectModal = function(_options,_callback) {
       closeText: '',
       autoOpen: false,
       modal: true,
-      height: 250,
+      height: 280,
       width: 800
     });
     jQuery.ajaxSetup({

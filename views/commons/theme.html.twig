@@ -328,13 +328,13 @@
 /* COLOR10 = Couleur de fond secondaire (titres, action-bar, footer, onglets, titre modale, boîtes d'infos...) */
 /* ########################################################################################################### */
 /* Boxs */
-.box, .panel, .box-footer {
+.box, .panel, .box-footer, .panel-heading {
   background-color: {{ COLOR10 }} !important;
 }
 .info-box-small{
   background-color: {{ COLOR10 }} !important;
 }
-.nav-tabs-custom .box .box-header, .nav-tabs-custom .box .box-footer, .nav-tabs-custom .panel .panel-heading {
+.nav-tabs-custom .box .box-header, .nav-tabs-custom .box .box-footer, .nav-tabs-custom .panel .panel-heading, .panel-default {
   border-color: {{ COLOR10 }} !important;
 }
 
@@ -556,7 +556,7 @@ pre::selection {
 /* COLOR13 = Couleur de fond des inputs (champs de saisie, listes déroulantes...) */
 /* ############################################################################## */
 /* Composants */
-.form-control {
+.form-control, .cron-period select {
   background-color: {{ COLOR13 }} !important;
 }
 .input-sm {
