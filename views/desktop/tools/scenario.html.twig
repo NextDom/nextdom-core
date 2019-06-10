@@ -179,8 +179,7 @@
                                     <div class="form-group">
                                         <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'scenario.name'|trans }}</label>
                                         <div class="col-lg-8 col-md-8 col-sm-7 col-xs-12">
-                                            <input class="form-control scenarioAttr" data-l1key="name" type="text"
-                                                   placeholder="{{ 'scenario.name'|trans }}"/>
+                                            <input class="form-control scenarioAttr" data-l1key="name" type="text" placeholder="{{ 'scenario.name'|trans }}"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -307,10 +306,10 @@
                                     </div>
                                     <div class="scheduleDisplay" style="display: none;">
                                         <div class="form-group">
-                                            <i class="col-lg-2 col-md-3 col-sm-4 col-xs-6  control-label">{{ 'scenario.previous'|trans }}</i>
-                                            <div class="col-lg-4 col-md-3 col-sm-5 col-xs-6"><span class="scenarioAttr label label-primary label-sticker-sm" data-l1key="forecast" data-l2key="prevDate" data-l3key="date"></span></div>
-                                            <i class="col-lg-2 col-md-3 col-sm-4 col-xs-6  control-label">{{ 'scenario.next'|trans }}</i>
-                                            <div class="col-lg-4 col-md-3 col-sm-5 col-xs-6"><span class="scenarioAttr label label-success label-sticker-sm" data-l1key="forecast" data-l2key="nextDate" data-l3key="date"></span></div>
+                                            <i class="col-lg-3 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'scenario.previous'|trans }}</i>
+                                            <div class="col-lg-3 col-md-3 col-sm-5 col-xs-6"><span class="scenarioAttr label label-primary label-sticker-sm" data-l1key="forecast" data-l2key="prevDate" data-l3key="date"></span></div>
+                                            <i class="col-lg-3 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'scenario.next'|trans }}</i>
+                                            <div class="col-lg-3 col-md-3 col-sm-5 col-xs-6"><span class="scenarioAttr label label-success label-sticker-sm" data-l1key="forecast" data-l2key="nextDate" data-l3key="date"></span></div>
                                         </div>
                                         <div class="scheduleMode"></div>
                                     </div>
@@ -327,24 +326,6 @@
             </div>
         </div>
     </section>
-</div>
-<div class="modal fade" id="md_copyScenario">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button class="close" data-dismiss="modal">×</button>
-                <h4>{{ 'scenario.duplicate-title'|trans }}</h4>
-            </div>
-            <div class="modal-body">
-                <input class="form-control" type="text" id="in_copyScenarioName" size="16"
-                       placeholder="{{ 'scenario.name'|trans }}"/><br/><br/>
-            </div>
-            <div class="modal-footer">
-                <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-minus-circle"></i>{{ 'scenario.cancel'|trans }}</a>
-                <a class="btn btn-success" id="bt_copyScenarioSave"><i class="fas fa-save"></i>{{ 'scenario.save'|trans }}</a>
-            </div>
-        </div>
-    </div>
 </div>
 <div class="modal fade" id="md_addElement">
     <div class="modal-dialog">
