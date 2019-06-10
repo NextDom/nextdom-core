@@ -113,3 +113,129 @@
         line-height:0px;
     }
 }
+
+/* Jeedom futur */
+.icon_blue {
+  color: $blue !important;
+}
+.icon_green {
+  color: $green !important;
+}
+.icon_orange {
+  color: $orange !important;
+}
+.icon_red {
+  color: $red !important;
+}
+.icon_yellow {
+  color: $yellow !important;
+}
+
+.eqLogicThumbnailContainer {
+  margin-bottom: 20px;
+  .label {
+    font-size: 12px !important;
+    font-weight: normal;
+  }
+  > div.cursor {
+    width : 145px !important;
+    font-size: 14px !important;
+  }
+  i {
+    font-size: 38px !important;
+    font-weight: 900;
+  }
+  .logoPrimary {
+    color: $nextdom_blue;
+  }
+  .logoSecondary {
+    color: $nextdom_bg;
+  }
+  .info {
+    color: $white;
+  }
+  .success {
+    color: $good;
+  }
+  .warning {
+    color: $warn;
+  }
+  .danger {
+    color: $critical;
+  }
+  i:not(.fa-times) {
+    font-size: 5em !important;
+    margin-bottom: 2px;
+  }
+}
+.eqLogicDisplayCard {
+  margin-bottom: 10px !important;
+  height: 170px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  span {
+    font-size: 12px !important;
+    margin-top: 6px;
+      margin-bottom: 6px;
+  }
+  > img {
+    height: 105px;
+    width: auto;
+    max-width: 95px;
+    vertical-align: baseline;
+  }
+}
+
+.eqLogicThumbnailContainer .cursor span {
+    top: 15px !important;
+}
+.eqLogicDisplayCard,
+.eqLogicThumbnailContainer div {
+  border: none !important;
+  background: transparent !important;
+  padding-top: 0!important;
+  text-align: center;
+}
+.eqLogicDisplayCard div.cursor,
+.eqLogicThumbnailContainer div.cursor {
+  margin-bottom: 5px !important;
+  padding: 5px !important;
+}
+.eqLogicDisplayCard:not(.disableCard) {
+  opacity: 1 !important;
+  transition-property: opacity;
+  transition-duration: 0.6s;
+}
+.eqLogicDisplayCard.disableCard {
+  opacity: 0.65 !important;
+  transition-property: opacity;
+  transition-duration: 0.6s;
+}
+
+.eqLogicThumbnailContainer div.cursor > center > img,
+.eqLogicThumbnailContainer div.cursor img {
+  height: 105px !important;
+  width: auto !important;
+  padding-top: 15px;
+}
+.eqLogic.eqLogic-widget .widget-name span.warning i {
+  margin-right: 5px;
+  font-size: 14px !important;
+}
+
+div.cmdListContainer .tablesorter i {
+  font-size: 14px !important;
+}
+
+.objectDisplayCard {
+  height: 130px;
+  min-height: 130px !important;
+}
+.pluginListContainer div.cursor > center > img {
+  width: 90px !important;
+  padding-top: 15px;
+}
+
+.eqLogicThumbnailDisplay {
+    padding-left: 15px !important;
+}

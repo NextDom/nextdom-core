@@ -37,7 +37,7 @@
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
-            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'Retour'}}</a>
         </div>
     </div>
 </section>
@@ -46,7 +46,7 @@
     <div class="box" id="osdb">
         <!-- Header bar -->
         <div class="box-header with-border">
-            <h3 class="box-title"><i class="fas fa-terminal spacing-right"></i>{{ 'OS/DB' }}</h3>
+            <h3 class="box-title"><i class="fas fa-terminal"></i>{{ 'OS/DB' }}</h3>
         </div>
 
         <!-- Page content -->
@@ -54,16 +54,14 @@
             <form class="form-horizontal">
 
                 <!-- Alert section -->
-                <div class="alert alert-danger">
-                    {{ 'ATTENTION : ces opérations sont risquées, vous pouvez perdre l\'accès à votre système et à ' }} {{ PRODUCT_NAME }}
-                </div>
+                <div class="alert alert-danger">{{ 'ATTENTION : ces opérations sont risquées, vous pouvez perdre l\'accès à votre système et à ' }} {{ PRODUCT_NAME }}...</div>
                 <!-- Console Section -->
                 <fieldset>
                     <legend>{{ 'Administration' }}</legend>
                     <div class="form-group">
                         <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Console Système' }}</label>
                         <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
-                            <a class="btn btn-danger" href="index.php?v=d&p=system"><i class="fas fa-exclamation-triangle spacing-right"></i>{{ 'Lancer' }}</a>
+                            <a class="btn btn-danger" href="index.php?v=d&p=system"><i class="fas fa-exclamation-triangle"></i>{{ 'Lancer' }}</a>
                         </div>
                     </div>
                 </fieldset>
@@ -74,7 +72,7 @@
                     <div class="form-group">
                         <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Editeur de fichiers' }}</label>
                         <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
-                            <a class="btn btn-danger" href="index.php?v=d&p=editor"><i class="fas fa-exclamation-triangle spacing-right"></i>{{ 'Lancer' }}</a>
+                            <a class="btn btn-danger" href="index.php?v=d&p=editor"><i class="fas fa-exclamation-triangle"></i>{{ 'Lancer' }}</a>
                         </div>
                     </div>
                 </fieldset>
@@ -85,7 +83,7 @@
                     <div class="form-group">
                         <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Administration' }}</label>
                         <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
-                            <a class="btn btn-danger" href="index.php?v=d&p=database"><i class="fas fa-exclamation-triangle spacing-right"></i>{{ 'Lancer' }}</a>
+                            <a class="btn btn-danger" href="index.php?v=d&p=database"><i class="fas fa-exclamation-triangle"></i>{{ 'Lancer' }}</a>
                         </div>
                     </div>
                     <div class="form-group">

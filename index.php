@@ -23,14 +23,46 @@ use NextDom\Enums\ViewType;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Client;
 use NextDom\Helpers\Router;
+use NextDom\Helpers\SessionHelper;
 use NextDom\Helpers\Utils;
 
 // Test if NextDom is installed. Redirection to setup if necessary
-if (!file_exists( NEXTDOM_DATA .'/config/common.config.php')) {
+if (!file_exists(NEXTDOM_DATA . '/config/common.config.php')) {
     header("location: install/setup.php");
 }
 
-$viewType = Utils::init(GetParams::VIEW_TYPE, '');
+SessionHelper::startSession();
+$goToMobile = false;
+
+// Test if user want to force desktop on mobile
+if (isset($_GET['force_desktop'])) {
+    $_SESSION['force_desktop'] = true;
+    $_SESSION['desktop_view'] = true;
+    $goToMobile = false;
+} else {
+    // Test choice in session
+    if (isset($_SESSION['desktop_view'])) {
+        if ($_SESSION['desktop_view'] === false) {
+            $goToMobile = true;
+        }
+    } else {
+        if (Client::isMobile()) {
+            $goToMobile = true;
+            $_SESSION['desktop_view'] = false;
+        } else {
+            $_SESSION['desktop_view'] = true;
+        }
+
+    }
+}
+
+if ($goToMobile) {
+    Utils::redirect('/mobile/index.html');
+    die();
+}
+
+$viewType = Utils::init(GetParams::VIEW_TYPE, ViewType::DESKTOP_VIEW);
+/*
 if ($viewType === '') {
     $getParams = ViewType::DESKTOP_VIEW;
     if (Client::isMobile()) {
@@ -44,6 +76,7 @@ if ($viewType === '') {
     $url = 'index.php?' . GetParams::VIEW_TYPE . '=' . trim($getParams, '&');
     Utils::redirect($url);
 }
+*/
 
 // Show the content
 // Start routing

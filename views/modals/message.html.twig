@@ -50,8 +50,8 @@
             </div>
         </div>
         <div class="action-group">
-            <a class="btn btn-action-bar btn-danger pull-right" id="bt_clearMessage"><i class="far fa-trash-alt spacing-right"></i>{{ 'Vider' }}</a>
-            <a class="btn btn-action-bar btn-warning pull-right" id="bt_refreshMessage"><i class="fas fa-sync spacing-right"></i>{{ 'Rafraichir' }}</a>
+            <a class="btn btn-action-bar btn-danger pull-right" id="bt_clearMessage"><i class="fas fa-trash"></i>{{ 'Vider' }}</a>
+            <a class="btn btn-action-bar btn-warning pull-right" id="bt_refreshMessage"><i class="fas fa-sync"></i>{{ 'Rafraichir' }}</a>
         </div>
     </div>
 </section>
@@ -73,7 +73,7 @@
                     {% for message in messagesList %}
                         <tr data-message_id="{{ message.getId() }}">
                             <td class="td-btn">
-                                <div class="btn btn-sm btn-danger removeMessage"><i class="far fa-trash-alt"></i></div>
+                                <div class="btn btn-sm btn-danger removeMessage"><i class="fas fa-trash"></i></div>
                             </td>
                             <td class="td-datetime">{{ message.getDate() }}</td>
                             <td>{{ message.getPlugin() }}</td>

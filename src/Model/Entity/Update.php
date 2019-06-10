@@ -28,6 +28,7 @@ use NextDom\Managers\ConfigManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
 use NextDom\Managers\PluginManager;
+use NextDom\Managers\UpdateManager;
 use ZipArchive;
 
 /**
@@ -115,7 +116,7 @@ class Update implements EntityInterface
     {
         $result = [];
         if ($this->getType() != 'core') {
-            $class = 'repo_' . $this->getSource();
+            $class = 'Repo' . $this->getSource();
             if (class_exists($class) && method_exists($class, 'objectInfo') && ConfigManager::byKey($this->getSource() . '::enable') == 1) {
                 $result = $class::objectInfo($this);
             }
@@ -176,7 +177,7 @@ class Update implements EntityInterface
         if ($this->getType() == 'core') {
             NextDomHelper::update(['core' => 1]);
         } else {
-            $class = 'repo_' . $this->getSource();
+            $class = UpdateManager::getRepoDataFromName($this->getSource())['phpClass'];
             if (class_exists($class) && method_exists($class, 'downloadObject') && ConfigManager::byKey($this->getSource() . '::enable') == 1) {
                 $this->preInstallUpdate();
                 $cibDir = NextDomHelper::getTmpFolder('market') . '/' . $this->getLogicalId();
@@ -401,7 +402,7 @@ class Update implements EntityInterface
             if (ConfigManager::byKey('core::repo::provider') == 'default') {
                 $this->setRemoteVersion(self::getLastAvailableVersion());
             } else {
-                $class = 'repo_' . ConfigManager::byKey('core::repo::provider');
+                $class = 'Repo' . ConfigManager::byKey('core::repo::provider');
                 if (!method_exists($class, 'versionCore') || ConfigManager::byKey(ConfigManager::byKey('core::repo::provider') . '::enable') != 1) {
                     $version = $this->getLocalVersion();
                 } else {
@@ -420,7 +421,7 @@ class Update implements EntityInterface
             $this->save();
         } else {
             try {
-                $class = 'repo_' . $this->getSource();
+                $class = 'Repo' . $this->getSource();
                 if (class_exists($class) && method_exists($class, 'checkUpdate') && ConfigManager::byKey($this->getSource() . '::enable') == 1) {
                     $class::checkUpdate($this);
                 }
@@ -520,7 +521,7 @@ class Update implements EntityInterface
                     break;
             }
             try {
-                $class = 'repo_' . $this->getSource();
+                $class = 'Repo' . $this->getSource();
                 if (class_exists($class) && method_exists($class, 'deleteObjet') && ConfigManager::byKey($this->getSource() . '::enable') == 1) {
                     $class::deleteObjet($this);
                 }

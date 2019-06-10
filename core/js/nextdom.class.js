@@ -335,7 +335,7 @@ nextdom.health = function (_params) {
 };
 
 nextdom.saveCustom = function (_params) {
-  var paramsRequired = ['version', 'type', 'content'];
+  var paramsRequired = ['type', 'content'];
   var paramsSpecifics = {};
   try {
     nextdom.private.checkParamsRequired(_params || {}, paramsRequired);

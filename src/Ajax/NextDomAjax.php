@@ -69,34 +69,20 @@ class NextDomAjax extends BaseAjax
         @session_write_close();
 
         $return['userProfils'] = $currentUser->getOptions();
-        $return['userProfils']['defaultMobileViewName'] = __('Vue');
         if ($currentUser->getOptions('defaultDesktopView') != '') {
             $view = ViewManager::byId($currentUser->getOptions('defaultDesktopView'));
-            if (is_object($view)) {
-                $return['userProfils']['defaultMobileViewName'] = $view->getName();
-            }
         }
-        $return['userProfils']['defaultMobileObjectName'] = __('Objet');
         if ($currentUser->getOptions('defaultDashboardObject') != '') {
             $object = ObjectManager::byId($currentUser->getOptions('defaultDashboardObject'));
-            if (is_object($object)) {
-                $return['userProfils']['defaultMobileObjectName'] = $object->getName();
-            }
         }
 
         $return['plugins'] = array();
         foreach (PluginManager::listPlugin(true) as $plugin) {
-            if ($plugin->getMobile() != '' || $plugin->getEventJs() == 1) {
-                $info_plugin = Utils::o2a($plugin);
-                $info_plugin['displayMobilePanel'] = ConfigManager::byKey('displayMobilePanel', $plugin->getId(), 0);
-                $return['plugins'][] = $info_plugin;
+            if ($plugin->getEventJs() == 1) {
+                $return['plugins'][] = Utils::o2a($plugin);
             }
         }
         $return['custom'] = array('js' => false, 'css' => false);
-        if (ConfigManager::byKey('enableCustomCss', 'core', 1) == 1) {
-            $return['custom']['js'] = file_exists(NEXTDOM_ROOT . '/mobile/custom/custom.js');
-            $return['custom']['css'] = file_exists(NEXTDOM_ROOT . '/mobile/custom/custom.css');
-        }
         AjaxHelper::success($return);
     }
 
@@ -319,15 +305,11 @@ class NextDomAjax extends BaseAjax
         AuthentificationHelper::isConnectedAsAdminOrFail();
         Utils::unautorizedInDemo();
         AjaxHelper::init(true);
-        $customVersion = Utils::init('version');
         $customType = Utils::init('type');
-        if ($customVersion != 'desktop' && $customVersion != 'mobile') {
-            throw new CoreException(__('La version ne peut être que desktop ou mobile'));
-        }
         if ($customType != 'js' && $customType != 'css') {
             throw new CoreException(__('La version ne peut être que js ou css'));
         }
-        $customDir = sprintf("%s/custom/%s/", NEXTDOM_DATA, $customVersion);
+        $customDir = sprintf("%s/custom/desktop/", NEXTDOM_DATA);
         $customPath = sprintf("%s/custom.%s", $customDir, $customType);
         file_put_contents($customPath, Utils::init('content'));
         AjaxHelper::success();

@@ -35,11 +35,10 @@
 */
 editorDesktopJS = null;
 editorDesktopCSS = null;
-editorMobileJS = null;
-editorMobileCSS = null;
 
 showLoadingCustom();
 printConvertColor();
+$('.colorpick').colorpicker();
 
 nextdom.config.load({
     configuration: $('#custom').getValues('.configKey:not(.noSet)')[0],
@@ -55,14 +54,11 @@ nextdom.config.load({
 var url = document.location.toString();
 if (url.match('#')) {
     $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
-    if (url.split('#')[1] == "desktop" || url.split('#')[1] == "mobile") {
+    if (url.split('#')[1] == "desktop") {
         $('.nav-tabs a[href="#advanced"]').tab('show');
     }
     if (url.split('#')[1] == "desktop" || url.split('#')[1] == "advanced") {
         printAdvancedDesktop();
-    }
-    if (url.split('#')[1] == "mobile") {
-        printAdvancedMobile();
     }
 }
 $('.nav-tabs a').on('shown.bs.tab', function (e) {
@@ -76,10 +72,6 @@ jwerty.key('ctrl+s/⌘+s', function (e) {
 
 $('a[data-toggle="tab"][href="#advanced"]').on('shown.bs.tab', function () {
     printAdvancedDesktop();
-});
-
-$('a[data-toggle="tab"][href="#mobile"]').on('shown.bs.tab', function (e) {
-    printAdvancedMobile();
 });
 
 $('a[data-toggle="tab"][href="#desktop"]').on('shown.bs.tab', function (e) {
@@ -105,41 +97,16 @@ function printAdvancedDesktop() {
     }
 }
 
-function printAdvancedMobile() {
-    if (editorMobileJS == null) {
-        editorMobileJS = CodeMirror.fromTextArea(document.getElementById("ta_jsMobileContent"), {
-            lineNumbers: true,
-            mode: "text/javascript",
-            matchBrackets: true,
-            viewportMargin: Infinity
-        });
-    }
-    if (editorMobileCSS == null) {
-        editorMobileCSS = CodeMirror.fromTextArea(document.getElementById("ta_cssMobileContent"), {
-            lineNumbers: true,
-            mode: "text/css",
-            matchBrackets: true,
-            viewportMargin: Infinity
-        });
-    }
-}
-
 function saveCustom() {
     if (editorDesktopJS !== null) {
-        sendCustomData('desktop', 'js', editorDesktopJS.getValue());
+        sendCustomData('js', editorDesktopJS.getValue());
     }
     if (editorDesktopCSS !== null) {
-        sendCustomData('desktop', 'css', editorDesktopCSS.getValue());
-    }
-    if (editorMobileJS !== null) {
-        sendCustomData('mobile', 'js', editorMobileJS.getValue());
-    }
-    if (editorMobileCSS !== null) {
-        sendCustomData('mobile', 'css', editorMobileCSS.getValue());
+        sendCustomData('css', editorDesktopCSS.getValue());
     }
 }
 
-function sendCustomData(version, type, content) {
+function sendCustomData(type, content) {
     nextdom.config.save({
         configuration: $('#custom').getValues('.configKey')[0],
         error: function (error) {
@@ -147,7 +114,6 @@ function sendCustomData(version, type, content) {
         },
         success: function () {
             nextdom.saveCustom({
-                version: version,
                 type: type,
                 content: content,
                 error: function (error) {

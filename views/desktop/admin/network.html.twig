@@ -37,10 +37,10 @@
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
-            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'Retour'}}</a>
         </div>
         <div class="action-group">
-            <a class="btn btn-success btn-action-bar pull-right" id="bt_savenetwork"><i class="fas fa-save spacing-right"></i>{{ 'Sauvegarder' }}</a>
+            <a class="btn btn-success btn-action-bar pull-right" id="bt_savenetwork"><i class="fas fa-save"></i>{{ 'Sauvegarder' }}</a>
         </div>
     </div>
 </section>
@@ -49,13 +49,13 @@
     <div class="box" id="network">
         <!-- Header bar -->
         <div class="box-header with-border">
-            <h3 class="box-title"><i class="fas fa-rss spacing-right"></i>{{ 'Réseaux' }}</h3>
+            <h3 class="box-title"><i class="fas fa-rss"></i>{{ 'Réseaux' }}</h3>
         </div>
 
         <!-- Page content -->
         <div class="box-body">
             <!-- Alert Section -->
-            <div class="alert alert-warning">{{ 'Attention : cette configuration n\'est là que pour informer' }} {{ adminConfigs['product_name'] }} {{ 'de sa configuration réseau et n\'a aucun impact sur les ports ou l\'IP réellement utilisés pour joindre' }} {{ adminConfigs['product_name'] }}</div>
+            <div class="alert alert-warning">{{ 'Attention : cette configuration n\'est là que pour informer' }} {{ PRODUCT_NAME }} {{ 'de sa configuration réseau et n\'a aucun impact sur les ports ou l\'IP réellement utilisés pour joindre' }} {{ PRODUCT_NAME }}.</div>
             <form class="form-horizontal">
                 <!-- Internal Access Section -->
                 <fieldset>
@@ -148,10 +148,10 @@
                         <fieldset class="legend-section">
                             <legend>{{ 'DNS (proxy)' }} {{ data['name'] }}</legend>
                             {% if adminConfigs['dns::token'] == '' %}
-                                <div class="alert alert-warning">{{ 'Attention : cette fonctionnalité n\'est pas disponible dans le service pack community (voir votre service pack sur votre page profil sur le market)' }}</div>
+                                <div class="alert alert-warning">{{ 'Attention : cette fonctionnalité n\'est pas disponible dans le service pack community (voir votre service pack sur votre page profil sur le market).' }}</div>
                             {% else %}
                                 <div class="form-group">
-                                    <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Utiliser les DNS' }} {{ adminConfigs['product_name'] }}</label>
+                                    <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Utiliser les DNS' }} {{ PRODUCT_NAME }}</label>
                                     <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
                                         <input type="checkbox" class="configKey" data-l1key="{{ pageContent['networkkey'] }}::allowDNS"/>
                                         <label for="networkkey" class="control-label label-check">{{'Autoriser'}}</label>
@@ -163,15 +163,15 @@
                                         {% if adminConfigs['market::allowDNS'] == 1 and adminDnsRun %}
                                             <span class="label label-success">{{ 'Démarré : ' }} <a href="{{ pageContent['adminNetworkExternalAccess']  }}" target="_blank" class="link-dns-success">{{ adminNetworkExternalAccess }}</a></span>
                                         {% else %}
-                                            <span class="label label-warning" data-toggle="tooltip" title="" data-original-title="{{ 'Normal si vous n\'avez pas coché la case : Utiliser les DNS' }} {{ adminConfigs['product_name'] }}">{{ 'Arrêté' }}</span>
+                                            <span class="label label-warning" data-toggle="tooltip" title="" data-original-title="{{ 'Normal si vous n\'avez pas coché la case : Utiliser les DNS' }} {{ PRODUCT_NAME }}">{{ 'Arrêté' }}</span>
                                         {% endif %}
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-xs-4 control-label">{{ 'Gestion' }}</label>
                                     <div class="col-xs-8">
-                                        <a class="btn btn-success" id="bt_restartDns"><i class="fas fa-play spacing-right"></i>{{ 'Redémarrer' }}</a>
-                                        <a class="btn btn-danger" id="bt_haltDns"><i class="fas fa-stop spacing-right"></i>{{ 'Arrêter' }}</a>
+                                        <a class="btn btn-success" id="bt_restartDns"><i class="fas fa-play"></i>{{ 'Redémarrer' }}</a>
+                                        <a class="btn btn-danger" id="bt_haltDns"><i class="fas fa-stop"></i>{{ 'Arrêter' }}</a>
                                     </div>
                                 </div>
                             {% endif %}

@@ -34,4 +34,5 @@ $CONFIG = array(
         "lib" => '#LIB_DIR#',
         "tmp" => '#TMP_DIR#',
     ),
+    'secretKey' => '#SECRET_KEY#'
 );

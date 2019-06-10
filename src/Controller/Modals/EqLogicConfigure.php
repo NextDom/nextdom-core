@@ -76,43 +76,44 @@ class EqLogicConfigure extends BaseAbstractModal
         $pageData['eqLogicDisplayParameters'] = $eqLogic->getDisplay('parameters');
 
         foreach (NextDomHelper::getConfiguration('eqLogic:displayType') as $key => $value) {
-            $eqLogicDisplayType = [];
-            $eqLogicDisplayType['key'] = $key;
-            $eqLogicDisplayType['name'] = $value['name'];
-            $eqLogicDisplayType['customVisibility'] = false;
-            if ($pageData['widgetPossibilityCustomVisibility'] && $eqLogic->widgetPossibility('custom::visibility::' . $key)) {
-                $eqLogicDisplayType['customVisibility'] = true;
-            }
-            $eqLogicDisplayType['customDisplayName'] = false;
-            if ($pageData['widgetPossibilityCustomDisplayName'] && $eqLogic->widgetPossibility('custom::displayName::' . $key)) {
-                $eqLogicDisplayType['customDisplayName'] = true;
-            }
-            $eqLogicDisplayType['customDisplayObjectName'] = false;
-            if ($pageData['widgetPossibilityCustomDisplayObjectName'] && $eqLogic->widgetPossibility('custom::displayObjectName::' . $key)) {
-                $eqLogicDisplayType['customDisplayObjectName'] = true;
-            }
-            $eqLogicDisplayType['customBackgroundColor'] = false;
-            if ($pageData['widgetPossibilityCustomBackgroundColor'] && $eqLogic->widgetPossibility('custom::background-color::' . $key)) {
-                $eqLogicDisplayType['backgroundColor'] = $eqLogic->getBackgroundColor($key);
-                $eqLogicDisplayType['customBackgroundColor'] = true;
-            }
-            $eqLogicDisplayType['customBackgroundOpacity'] = false;
-            if ($pageData['widgetPossibilityCustomBackgroundOpacity'] && $eqLogic->widgetPossibility('custom::background-opacity::' . $key)) {
-                $eqLogicDisplayType['customBackgroundOpacity'] = true;
-            }
-            $eqLogicDisplayType['customTextColor'] = false;
-            if ($pageData['widgetPossibilityCustomTextColor'] && $eqLogic->widgetPossibility('custom::text-color::' . $key)) {
-                $eqLogicDisplayType['customTextColor'] = true;
-            }
-            $eqLogicDisplayType['customBorder'] = false;
-            if ($pageData['widgetPossibilityCustomBorder'] && $eqLogic->widgetPossibility('custom::border::' . $key)) {
-                $eqLogicDisplayType['customBorder'] = true;
-            }
-            $eqLogicDisplayType['customBorderRadius'] = false;
-            if ($pageData['widgetPossibilityCustomBorderRadius'] && $eqLogic->widgetPossibility('custom::border-radius::' . $key)) {
-                $eqLogicDisplayType['customBorderRadius'] = true;
-            }
-            array_push($pageData['eqLogicConfigurationDisplayType'], $eqLogicDisplayType);
+            // TODO : A supprimer quand on aura trouvé où est initialisé eqLogic:displayType et retiré mobile
+                $eqLogicDisplayType = [];
+                $eqLogicDisplayType['key'] = $key;
+                $eqLogicDisplayType['name'] = $value['name'];
+                $eqLogicDisplayType['customVisibility'] = false;
+                if ($pageData['widgetPossibilityCustomVisibility'] && $eqLogic->widgetPossibility('custom::visibility::' . $key)) {
+                    $eqLogicDisplayType['customVisibility'] = true;
+                }
+                $eqLogicDisplayType['customDisplayName'] = false;
+                if ($pageData['widgetPossibilityCustomDisplayName'] && $eqLogic->widgetPossibility('custom::displayName::' . $key)) {
+                    $eqLogicDisplayType['customDisplayName'] = true;
+                }
+                $eqLogicDisplayType['customDisplayObjectName'] = false;
+                if ($pageData['widgetPossibilityCustomDisplayObjectName'] && $eqLogic->widgetPossibility('custom::displayObjectName::' . $key)) {
+                    $eqLogicDisplayType['customDisplayObjectName'] = true;
+                }
+                $eqLogicDisplayType['customBackgroundColor'] = false;
+                if ($pageData['widgetPossibilityCustomBackgroundColor'] && $eqLogic->widgetPossibility('custom::background-color::' . $key)) {
+                    $eqLogicDisplayType['backgroundColor'] = $eqLogic->getBackgroundColor($key);
+                    $eqLogicDisplayType['customBackgroundColor'] = true;
+                }
+                $eqLogicDisplayType['customBackgroundOpacity'] = false;
+                if ($pageData['widgetPossibilityCustomBackgroundOpacity'] && $eqLogic->widgetPossibility('custom::background-opacity::' . $key)) {
+                    $eqLogicDisplayType['customBackgroundOpacity'] = true;
+                }
+                $eqLogicDisplayType['customTextColor'] = false;
+                if ($pageData['widgetPossibilityCustomTextColor'] && $eqLogic->widgetPossibility('custom::text-color::' . $key)) {
+                    $eqLogicDisplayType['customTextColor'] = true;
+                }
+                $eqLogicDisplayType['customBorder'] = false;
+                if ($pageData['widgetPossibilityCustomBorder'] && $eqLogic->widgetPossibility('custom::border::' . $key)) {
+                    $eqLogicDisplayType['customBorder'] = true;
+                }
+                $eqLogicDisplayType['customBorderRadius'] = false;
+                if ($pageData['widgetPossibilityCustomBorderRadius'] && $eqLogic->widgetPossibility('custom::border-radius::' . $key)) {
+                    $eqLogicDisplayType['customBorderRadius'] = true;
+                }
+                array_push($pageData['eqLogicConfigurationDisplayType'], $eqLogicDisplayType);
         }
         if (is_array($eqLogic->widgetPossibility('parameters'))) {
             $pageData['parameters'] = [];

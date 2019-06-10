@@ -39,6 +39,7 @@ use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Model\Entity\User;
+use NextDom\Repo\RepoMarket;
 use PragmaRX\Google2FA\Google2FA;
 
 /**
@@ -450,13 +451,13 @@ class UserManager
             );
             $user->setOptions('registerDevice', $registerDevice);
             $user->save();
-            \repo_market::supportAccess(true, $user->getHash() . '-' . $key);
+            RepoMarket::supportAccess(true, $user->getHash() . '-' . $key);
         } else {
             $user = self::byLogin('nextdom_support');
             if (is_object($user)) {
                 $user->remove();
             }
-            \repo_market::supportAccess(false);
+            RepoMarket::supportAccess(false);
         }
     }
 

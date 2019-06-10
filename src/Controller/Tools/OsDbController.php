@@ -24,6 +24,7 @@ namespace NextDom\Controller\Tools;
 
 use NextDom\Controller\BaseController;
 use NextDom\Helpers\Render;
+use NextDom\Managers\ConfigManager;
 
 /**
  * Class OsDbController
@@ -42,7 +43,7 @@ class OsDbController extends BaseController
     public static function get(&$pageData): string
     {
         global $CONFIG;
-
+        $pageData['PRODUCT_NAME'] = ConfigManager::byKey('product_name');
         $pageData['adminDbConfig'] = $CONFIG['db'];
         $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/osdb.js';
 

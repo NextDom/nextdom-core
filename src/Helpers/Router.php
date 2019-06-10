@@ -93,9 +93,6 @@ class Router
         if ($this->viewType == ViewType::DESKTOP_VIEW) {
             $this->desktopView();
             $result = true;
-        } elseif ($this->viewType == ViewType::MOBILE_VIEW) {
-            $this->mobileView();
-            $result = true;
         } elseif ($this->viewType == ViewType::STATIC_VIEW) {
             $this->staticView();
             $result = true;
@@ -154,29 +151,7 @@ class Router
     }
 
     /**
-     * Display mobile view
-     *
-     * @throws \Exception
-     */
-    private function mobileView()
-    {
-        $filename = 'index';
-        $type = 'html';
-        $plugin = '';
-        $modal = Utils::init('modal', false);
-        if ($modal !== false) {
-            $filename = $modal;
-            $type = 'modalhtml';
-            $plugin = Utils::init('plugin');
-        } elseif (isset($_GET['p']) && isset($_GET[GetParams::AJAX_QUERY])) {
-            $filename = $_GET['p'];
-            $plugin = isset($_GET['m']) ? $_GET['m'] : $plugin;
-        }
-        FileSystemHelper::includeFile('mobile', $filename, $type, $plugin, true);
-    }
-
-    /**
-     * Echos content of requested asset
+     * Show 404 error page (Not found)
      */
     private function staticView()
     {

@@ -36,13 +36,13 @@
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
-            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
-            <a class="btn btn-default btn-action-bar" href="index.php?v=d&p=history"><i class="fas fa-chart-area spacing-right"></i>{{ 'Historiques'}}</a>
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'Retour'}}</a>
+            <a class="btn btn-default btn-action-bar" href="index.php?v=d&p=history"><i class="fas fa-chart-area"></i>{{ 'Historiques'}}</a>
         </div>
         <div class="action-group">
-            <a class="btn btn-default btn-action-bar pull-right" id="bt_configureTimelineCommand"><i class="fas fa-cogs spacing-right"></i>{{ 'Configuration des Commandes' }}</a>
-            <a class="btn btn-default btn-action-bar pull-right" id="bt_configureTimelineScenario"><i class="fas fa-cogs spacing-right"></i>{{ 'Configuration des Scénarios' }}</a>
-            <a class="btn btn-warning btn-action-bar pull-right" id="bt_refreshTimeline"><i class="fas fa-refresh spacing-right"></i>{{ 'Rafraîchir' }}</a>
+            <a class="btn btn-default btn-action-bar pull-right" id="bt_configureTimelineCommand"><i class="fas fa-cogs"></i>{{ 'Configuration des Commandes' }}</a>
+            <a class="btn btn-default btn-action-bar pull-right" id="bt_configureTimelineScenario"><i class="fas fa-cogs"></i>{{ 'Configuration des Scénarios' }}</a>
+            <a class="btn btn-warning btn-action-bar pull-right" id="bt_refreshTimeline"><i class="fas fa-refresh"></i>{{ 'Rafraîchir' }}</a>
         </div>
     </div>
 </section>
@@ -50,45 +50,20 @@
 <section class="content">
     <div class="box">
         <div class="box-header with-border">
-            <h3 class="box-title"><i class="fas fa-history spacing-right"></i>{{ 'Timeline' }}</h3>
+            <h3 class="box-title"><i class="fas fa-history"></i>{{ 'Timeline' }}</h3>
         </div>
         <div class="box-body">
-            <div class="form-group">
-                <div class="btn-group" id="dateFilters" role="group" aria-label="...">
-                    <a class="btn btn-default bt_timelineZoom" data-zoom="h">H</a>
-                    <a class="btn btn-default bt_timelineZoom" data-zoom="d">J</a>
-                    <a class="btn btn-default bt_timelineZoom" data-zoom="w">S</a>
-                    <a class="btn btn-default bt_timelineZoom" data-zoom="m">M</a>
-                    <a class="btn btn-default bt_timelineZoom" data-zoom="y">A</a>
-                    <a class="btn btn-default bt_timelineZoom" data-zoom="all">{{ 'Tous' }}</a>
-                </div>
-                <select class="form-control pull-right" id="sel_pluginsTimeline" style="width: 140px;">
-                    <option value="all">{{ 'Tous (Plugins)' }}</option>
-                    {% for plugin in historyPluginsList %}
-                        <option value="{{ plugin.getId() }}">{{ plugin.getName() }}</option>
-                    {% endfor %}
-                </select>
-                <select class="form-control pull-right" id="sel_categoryTimeline" style="width: 170px;">
-                    <option value="all">{{ 'Tous (Catégories)' }}</option>
-                    {% for categoryCode, categoryData in historyEqLogicCategories %}
-                        <option value="{{ categoryCode }}">{{ categoryData['name'] }}</option>
-                    {% endfor %}
-                </select>
-                <select class="form-control pull-right" id="sel_objectsTimeline" style="width: 140px;">
-                    <option value="all">{{ 'Tous (Objets)' }}</option>
-                    {% for object in historyObjectsList %}
-                        <option value="{{ object.getId() }}">{{ object.getName() }}</option>
-                    {% endfor %}
-                </select>
-                <select class="form-control pull-right" id="sel_typesTimeline" style="width: 140px;">
-                    <option value="all">{{ 'Tous (Types)' }}</option>
-                    <option value="cmd">{{ 'Commandes' }}</option>
-                    <option value="scenario">{{ 'Scénarios' }}</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <div id="div_visualization"></div>
-            </div>
+            <table id="table_timeline" class="table table-condensed table-bordered tablesorter">
+                <thead>
+                <tr>
+                    <th data-sorter="shortDate">{{ 'Date' }}</th>
+                    <th>{{ 'Type' }}</th>
+                    <th>{{ 'Visuel' }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
         </div>
     </div>
 </section>

@@ -302,7 +302,7 @@
   background-color: {{ COLOR10 }} !important;
 }
 
-.nav-tabs-custom .box, .nav-tabs-custom .box .box-footer, .nav-tabs-custom .box .box-body {
+.nav-tabs-custom .box, .nav-tabs-custom .box .box-footer, .nav-tabs-custom .box .box-body, .nav-tabs-custom .panel, .nav-tabs-custom .panel .panel-body, {
   background-color: {{ COLOR9 }} !important;
 }
 
@@ -318,18 +318,23 @@
   background-color: {{ COLOR9 }} !important;
 }
 
+/* Scenario */
+.scenario-icon {
+  background-color: {{ COLOR9 }} !important;
+}
+
 
 /* ########################################################################################################### */
 /* COLOR10 = Couleur de fond secondaire (titres, action-bar, footer, onglets, titre modale, boîtes d'infos...) */
 /* ########################################################################################################### */
 /* Boxs */
-.box, .box-footer {
+.box, .panel, .box-footer {
   background-color: {{ COLOR10 }} !important;
 }
 .info-box-small{
   background-color: {{ COLOR10 }} !important;
 }
-.nav-tabs-custom .box .box-header, .nav-tabs-custom .box .box-footer {
+.nav-tabs-custom .box .box-header, .nav-tabs-custom .box .box-footer, .nav-tabs-custom .panel .panel-heading {
   border-color: {{ COLOR10 }} !important;
 }
 
@@ -466,6 +471,9 @@ legend {
 /* #################################################################################################### */
 /* Textes */
 body, h1, h2, h3, h4, h5, h6  {
+  color: {{ COLOR12 }} !important;
+}
+.box-header span {
   color: {{ COLOR12 }} !important;
 }
 .nav-tabs-custom > .nav-tabs > li.header, .nav-tabs-custom > .nav-tabs > li.active > a, .nav-tabs-custom > .nav-tabs > li.active:hover > a,.nav-tabs-custom > .nav-tabs > li > a {
@@ -622,7 +630,7 @@ pre {
 /* COLOR15 = Couleur de fond des contenants (boxs, cards, pages d'onglets, tableaux...) */
 /* #################################################################################### */
 /* Box */
-.tab-content, .box-body {
+.tab-content, .box-body, .panel-body {
   background-color: {{ COLOR15 }} !important;
 }
 .right-border {

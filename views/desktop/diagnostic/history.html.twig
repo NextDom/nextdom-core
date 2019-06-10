@@ -36,12 +36,12 @@
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
-            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
-            <a class="btn btn-default btn-action-bar" href="index.php?v=d&p=timeline"><i class="fas fa-history spacing-right"></i>{{ 'Timeline'}}</a>
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'Retour'}}</a>
+            <a class="btn btn-default btn-action-bar" href="index.php?v=d&p=timeline"><i class="fas fa-history"></i>{{ 'Timeline'}}</a>
         </div>
         <div class="action-group">
-            <a id="bt_openCmdHistoryConfigure" class="btn btn-default btn-action-bar pull-right"><i class="fas fa-cogs spacing-right"></i>{{ 'Configuration des commandes' }}</a>
-            <a class="btn btn-warning btn-action-bar pull-right" id='bt_clearGraph'><i class="far fa-trash-alt spacing-right"></i>{{ 'RAZ du Graphique' }}</a>
+            <a id="bt_openCmdHistoryConfigure" class="btn btn-default btn-action-bar pull-right"><i class="fas fa-cogs"></i>{{ 'Configuration des commandes' }}</a>
+            <a class="btn btn-warning btn-action-bar pull-right" id='bt_clearGraph'><i class="fas fa-trash"></i>{{ 'RAZ du Graphique' }}</a>
         </div>
     </div>
 </section>
@@ -49,7 +49,7 @@
 <section class="content">
     <div class="box" id="div_History">
         <div class="box-header with-border">
-            <h3 class="box-title"><i class="fas fa-chart-area spacing-right"></i>{{ 'Historiques' }}</h3>
+            <h3 class="box-title"><i class="fas fa-chart-area"></i>{{ 'Historiques' }}</h3>
         </div>
         <div class="box-body">
             <fieldset>
@@ -57,8 +57,8 @@
                 <div class="input-group form-group" style="width: 100%">
                     <input class="form-control" id='in_calculHistory' placeholder="{{ 'Historique calculé...' }}"></input>
                     <span class="input-group-btn">
-                        <a class="btn btn-default" id="bt_findCmdCalculHistory" data-toggle="tooltip" data-original-title="{{ 'Sélectionner la commande' }}"><i class="fas fa-list-alt"></i></a>
-                        <a class="btn btn-success" id="bt_displayCalculHistory" data-toggle="tooltip" data-original-title="{{'Calculer et afficher la commande'}}"><i class="fas fa-check"></i></a>
+                        <a class="btn btn-default" id="bt_findCmdCalculHistory" data-toggle="tooltip" data-original-title="{{ 'Sélectionner la commande' }}"><i class="fas fa-list-alt no-spacing"></i></a>
+                        <a class="btn btn-success" id="bt_displayCalculHistory" data-toggle="tooltip" data-original-title="{{'Calculer et afficher la commande'}}"><i class="fas fa-check no-spacing"></i></a>
                         <a class="btn btn-default" id="bt_configureCalculHistory" data-toggle="tooltip" data-original-title="{{'Configurer le calcul'}}"><i class="fas fa-cogs"></i></a>
                     </span>
                 </div>
@@ -79,7 +79,7 @@
                                         {% if eqLogic.hasRight('r') %}
                                             {% if objectId != eqLogic.getObject_id %}
                                                 {% if objectId != -1 %}
-                            </div>
+                                                </div>
                                                 {% endif %}
                                                 {% set object = eqLogic.getObject() %}
                                                 {# Pour remplacer is_object #}
@@ -95,7 +95,7 @@
                                                 <div class="cmdList" data-object_id="o{{ eqLogic.getObject_id() }}" style="display:none;">
                                             {% endif %}
                                             <li class="cursor li_history" data-cmd_id="{{ cmd.getId() }}">
-                                                <a class="history"><i class="far fa-trash-alt remove spacing-right"></i>
+                                                <a class="history"><i class="fas fa-trash remove spacing-right"></i>
                                                     {{ cmd.getEqLogic().getName() }} - {{ cmd.getName() }}
                                                     {% if cmd.getSubType() == 'string' %}
                                                         <i class="fas fa-share export spacing-left"></i>
@@ -116,7 +116,7 @@
                         <div class="form-group">
                             <input id="in_startDate" class="form-control in_datepicker" style="display : inline-block; width: 150px;" value="{{ historyDate['start'] }}"/>
                             <input id="in_endDate" class="form-control in_datepicker" style="display : inline-block; width: 150px;" value="{{ historyDate['end'] }}"/>
-                            <a class="btn btn-success" id='bt_validChangeDate' data-toggle="tooltip" title="" data-original-title="{{ 'Attention : une trop grande plage de dates peut mettre très longtemps à être calculée ou même ne pas s\'afficher.' }}"><i class="fas fa-check spacing-right"></i>{{ 'Ok' }}</a>
+                            <a class="btn btn-success" id='bt_validChangeDate' data-toggle="tooltip" title="" data-original-title="{{ 'Attention : une trop grande plage de dates peut mettre très longtemps à être calculée ou même ne pas s\'afficher.' }}"><i class="fas fa-check"></i>{{ 'Ok' }}</a>
                             <select class="form-control pull-right" id="sel_groupingType" style="width: 200px;">
                                 <option value="">{{ 'Aucun groupement' }}</option>
                                 <option value="sum::hour">{{ 'Somme par heure' }}</option>
@@ -143,7 +143,7 @@
                             <select class="form-control pull-right" id="sel_chartType" style="width: 200px;">
                                 <option value="line">{{ 'Ligne' }}</option>
                                 <option value="areaspline">{{ 'Areaspline' }}</option>
-                                <option value="column">{{ 'Barre' }}</option>
+                                <option value="column">{{ 'Barre' }}<
                             </select>
                             <span class="pull-right">{{ 'Variation' }} <input type="checkbox" id="cb_derive"/></span>
                             <span class="pull-right">{{ 'Escalier' }} <input type="checkbox" id="cb_step"/></span>

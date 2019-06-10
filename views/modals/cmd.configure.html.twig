@@ -37,14 +37,14 @@
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
-            <a class="btn btn-action-bar btn-primary" id="bt_cmdConfigureRawObject"><i class="fas fa-info spacing-right"></i>{{ 'Informations' }}</a>
-            <a class="btn btn-action-bar btn-default" id="bt_cmdConfigureLogRealTime"><i class="fas fa-file-alt spacing-right"></i>{{ 'Log' }}</a>
-            <a class="btn btn-action-bar btn-default" id="bt_cmdConfigureGraph"><i class="fas fa-object-group spacing-right"></i>{{ 'Liens' }}</a>
-            <a class="btn btn-action-bar btn-warning" id="bt_cmdConfigureTest"><i class="fas fa-rss spacing-right"></i>{{ 'Tester' }}</a>
+            <a class="btn btn-action-bar btn-primary" id="bt_cmdConfigureRawObject"><i class="fas fa-info"></i>{{ 'Informations' }}</a>
+            <a class="btn btn-action-bar btn-default" id="bt_cmdConfigureLogRealTime"><i class="fas fa-file-alt"></i>{{ 'Log' }}</a>
+            <a class="btn btn-action-bar btn-default" id="bt_cmdConfigureGraph"><i class="fas fa-object-group"></i>{{ 'Liens' }}</a>
+            <a class="btn btn-action-bar btn-warning" id="bt_cmdConfigureTest"><i class="fas fa-rss"></i>{{ 'Tester' }}</a>
         </div>
         <div class="action-group">
-            <a class="btn btn-action-bar btn-success pull-right" id="bt_cmdConfigureSave"><i class="fas fa-save spacing-right"></i>{{ 'Enregistrer' }}</a>
-            <a class="btn btn-action-bar btn-default pull-right" id="bt_cmdConfigureSaveOn"><i class="fas fa-plus-circle spacing-right"></i>{{ 'Appliquer à...' }}</a>
+            <a class="btn btn-action-bar btn-success pull-right" id="bt_cmdConfigureSave"><i class="fas fa-save"></i>{{ 'Enregistrer' }}</a>
+            <a class="btn btn-action-bar btn-default pull-right" id="bt_cmdConfigureSaveOn"><i class="fas fa-plus-circle"></i>{{ 'Appliquer à...' }}</a>
         </div>
     </div>
 </section>
@@ -52,22 +52,22 @@
 <section class="content">
     <div class="nav-tabs-custom" role="tabpanel">
         <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active"><a href="#cmd_information" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-info-circle spacing-right"></i>{{ 'Informations' }}</a></li>
-            <li role="presentation"><a href="#cmd_configuration" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-wrench spacing-right"></i>{{ 'Configuration' }}</a></li>
+            <li role="presentation" class="active"><a href="#cmd_information" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-info-circle"></i>{{ 'Informations' }}</a></li>
+            <li role="presentation"><a href="#cmd_configuration" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-wrench"></i>{{ 'Configuration' }}</a></li>
             {% if cmdType == 'info' %}
-                <li role="presentation"><a href="#cmd_alert" aria-controls="messages" role="tab" data-toggle="tab"><i class="fas fa-exclamation-triangle spacing-right"></i>{{ 'Alertes' }}</a></li>
+                <li role="presentation"><a href="#cmd_alert" aria-controls="messages" role="tab" data-toggle="tab"><i class="fas fa-exclamation-triangle"></i>{{ 'Alertes' }}</a></li>
             {% endif %}
             {% if cmdWidgetPossibilityCustom %}
-                <li role="presentation"><a href="#cmd_display" aria-controls="messages" role="tab" data-toggle="tab"><i class="fas fa-desktop spacing-right"></i>{{ 'Affichage' }}</a></li>
+                <li role="presentation"><a href="#cmd_display" aria-controls="messages" role="tab" data-toggle="tab"><i class="fas fa-desktop"></i>{{ 'Affichage' }}</a></li>
             {% endif %}
             {% if cmdWidgetPossibilityCustomHtmlCode %}
-                <li role="presentation"><a href="#cmd_html" aria-controls="messages" role="tab" data-toggle="tab"><i class="fas fa-code-fork spacing-right"></i>{{ 'Code' }}</a></li>
+                <li role="presentation"><a href="#cmd_html" aria-controls="messages" role="tab" data-toggle="tab"><i class="fas fa-code-fork"></i>{{ 'Code' }}</a></li>
             {% endif %}
         </ul>
 
         <div class="tab-content" id="div_displayCmdConfigure">
             <div role="tabpanel" class="tab-pane active" id="cmd_information">
-                <legend><i class="fas fa-list-alt spacing-right"></i>{{ 'Général' }}</legend>
+                <legend><i class="fas fa-list-alt"></i>{{ 'Général' }}</legend>
                 <div class="row">
                     <form class="form-horizontal">
                         <fieldset class="col-sm-6">
@@ -146,7 +146,7 @@
                             <div class="form-group">
                                 <label class="col-xs-4 control-label">{{ 'URL directe' }}</label>
                                 <div class="col-xs-8">
-                                    <a class="label label-config" href="{{ cmdDirectUrlAccess }}" target="_blank"><i class="fas fa-external-link-alt spacing-right"></i>URL</a>
+                                    <a class="label label-config" href="{{ cmdDirectUrlAccess }}" target="_blank"><i class="fas fa-external-link-alt"></i>URL</a>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -198,11 +198,11 @@
                     </form>
                 </div>
 
-                <legend><i class="fas fa-search spacing-right"></i>{{ 'Utilisé par' }}</legend>
+                <legend><i class="fas fa-search"></i>{{ 'Utilisé par' }}</legend>
                 <div class="form-group">
-                    <a class="btn btn-sm btn-warning pull-right" id="bt_cmdConfigureReplaceMeBy"><i class="fas fa-download spacing-right" aria-hidden="true"></i>{{ 'Remplacer cette commande par la commande' }}</a>
-                    <a class="btn btn-sm btn-warning pull-right" id="bt_cmdConfigureReplaceByMe"><i class="fas fa-upload spacing-right" aria-hidden="true"></i>{{ 'Cette commande remplace la commande' }}</a>
-                    <a class="btn btn-sm btn-warning pull-right" id="bt_cmdConfigureReplaceIdByMe"><i class="fas fa-upload spacing-right" aria-hidden="true"></i>{{ 'Cette commande remplace l\'ID' }}</a>
+                    <a class="btn btn-sm btn-warning pull-right" id="bt_cmdConfigureReplaceMeBy"><i class="fas fa-download" aria-hidden="true"></i>{{ 'Remplacer cette commande par la commande' }}</a>
+                    <a class="btn btn-sm btn-warning pull-right" id="bt_cmdConfigureReplaceByMe"><i class="fas fa-upload" aria-hidden="true"></i>{{ 'Cette commande remplace la commande' }}</a>
+                    <a class="btn btn-sm btn-warning pull-right" id="bt_cmdConfigureReplaceIdByMe"><i class="fas fa-upload" aria-hidden="true"></i>{{ 'Cette commande remplace l\'ID' }}</a>
                 </div>
                 <div class="row">
                     <form class="form-horizontal">
@@ -248,7 +248,7 @@
                 <form class="form-horizontal">
                     <fieldset>
                         {% if cmdType == 'info' and cmdSubType == 'numeric' or cmdSubType == 'binary' %}
-                            <legend><i class="fas fa-table spacing-right"></i>{{ 'Calcul et arrondi' }}</legend>
+                            <legend><i class="fas fa-table"></i>{{ 'Calcul et arrondi' }}</legend>
                             <div class="form-group">
                                 <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Formule de calcul' }}</label>
                                 <div class="col-lg-8 col-md-7 col-sm-6 col-xs-12">
@@ -272,7 +272,7 @@
                         {% endif %}
                     </fieldset>
                     <fieldset class="legend-section">
-                        <legend><i class="fas fa-building spacing-right"></i>{{ 'Type générique' }}</legend>
+                        <legend><i class="fas fa-building"></i>{{ 'Type générique' }}</legend>
                         <div class="form-group">
                             <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Valeur' }}</label>
                             <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
@@ -293,7 +293,7 @@
                     </fieldset>
                     {% if cmdType == 'action' %}
                         <fieldset class="legend-section">
-                            <legend><i class="fas fa-exclamation-triangle spacing-right"></i>{{ 'Restriction de l\'action' }}</legend>
+                            <legend><i class="fas fa-exclamation-triangle"></i>{{ 'Restriction de l\'action' }}</legend>
                             <div class="form-group">
                                 <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Confirmer l\'action' }}</label>
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -310,7 +310,7 @@
                     {% endif %}
                     {% if cmdType == 'info' %}
                         <fieldset class="legend-section">
-                            <legend><i class="fas fa-sign-out-alt spacing-right"></i>{{ 'Action sur la valeur' }}</legend>
+                            <legend><i class="fas fa-sign-out-alt"></i>{{ 'Action sur la valeur' }}</legend>
                             <div class="form-group">
                                 <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Action sur valeur, si' }}</label>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
@@ -337,7 +337,7 @@
                             <div class="form-group">
                                 <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Action' }}</label>
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <a class="btn btn-success" id="bt_addActionCheckCmd"><i class="fas fa-plus-circle spacing-right"></i>{{ 'Ajouter' }}</a>
+                                    <a class="btn btn-success" id="bt_addActionCheckCmd"><i class="fas fa-plus-circle"></i>{{ 'Ajouter' }}</a>
                                 </div>
                             </div>
                             <div id="div_actionCheckCmd"></div>
@@ -358,11 +358,11 @@
                     {% endif %}
                     {% if cmdType == 'action' %}
                         <fieldset class="legend-section">
-                            <legend><i class="fas fa-sign-out-alt spacing-right"></i>{{ 'Action avant exécution de la commande' }}</legend>
+                            <legend><i class="fas fa-sign-out-alt"></i>{{ 'Action avant exécution de la commande' }}</legend>
                             <div class="form-group">
                                 <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Action' }}</label>
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <a class="btn btn-success" id="bt_addActionPreExecCmd"><i class="fas fa-plus-circle spacing-right"></i>{{ 'Ajouter' }}</a>
+                                    <a class="btn btn-success" id="bt_addActionPreExecCmd"><i class="fas fa-plus-circle"></i>{{ 'Ajouter' }}</a>
                                 </div>
                             </div>
                             <div id="div_actionPreExecCmd"></div>
@@ -381,11 +381,11 @@
                             </script>
                         </fieldset>
                         <fieldset class="legend-section">
-                            <legend><i class="fas fa-sign-out-alt spacing-right"></i>{{ 'Action après exécution de la commande' }}</legend>
+                            <legend><i class="fas fa-sign-out-alt"></i>{{ 'Action après exécution de la commande' }}</legend>
                             <div class="form-group">
                                 <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Action' }}</label>
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <a class="btn btn-success" id="bt_addActionPostExecCmd"><i class="fas fa-plus-circle spacing-right"></i>{{ 'Ajouter' }}</a>
+                                    <a class="btn btn-success" id="bt_addActionPostExecCmd"><i class="fas fa-plus-circle"></i>{{ 'Ajouter' }}</a>
                                 </div>
                             </div>
                             <div id="div_actionPostExecCmd"></div>
@@ -407,7 +407,7 @@
                     {% endif %}
                     {% if cmdType == 'info' and cmdTypeIsHistorized %}
                         <fieldset class="legend-section">
-                            <legend><i class="fas fa-bar-chart-o spacing-right"></i>{{ 'Historique' }}</legend>
+                            <legend><i class="fas fa-bar-chart-o"></i>{{ 'Historique' }}</legend>
                             <div class="form-group">
                                 <label class="col-lg-2 col-md-3 col-sm-4 col-xs-4 control-label">{{ 'Historiser' }}</label>
                                 <div class="col-xs-1">
@@ -449,7 +449,7 @@
                                 <div class="form-group">
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Copie' }}</label>
                                     <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
-                                        <a class="btn btn-warning" id="bt_cmdConfigureCopyHistory"><i class="fas fa-clone spacing-right"></i>{{ 'Copier l\'historique de cette commande sur une autre commande' }}</a>
+                                        <a class="btn btn-warning" id="bt_cmdConfigureCopyHistory"><i class="fas fa-clone"></i>{{ 'Copier l\'historique de cette commande sur une autre commande' }}</a>
                                     </div>
                                 </div>
                             {% endif %}
@@ -457,7 +457,7 @@
                     {% endif %}
                     {% if cmdType == 'info' %}
                         <fieldset class="legend-section">
-                            <legend><i class="fas fa-thermometer-three-quarters spacing-right"></i>{{ 'Gestion des valeurs' }}</legend>
+                            <legend><i class="fas fa-thermometer-three-quarters"></i>{{ 'Gestion des valeurs' }}</legend>
                             <div class="form-group">
                                 <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Valeurs interdites' }}</label>
                                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
@@ -484,7 +484,7 @@
                             </div>
                         </fieldset>
                         <fieldset class="legend-section">
-                            <legend><i class="fas fa-plus spacing-right"></i>{{ 'Autres' }}</legend>
+                            <legend><i class="fas fa-plus"></i>{{ 'Autres' }}</legend>
                             <div class="form-group">
                                 <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Gestion de la répétition' }}</label>
                                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
@@ -516,7 +516,7 @@
                         {% if alertValue['check'] %}
                             <form class="form-horizontal">
                                 <fieldset>
-                                    <legend><i class="{{ alertValue['icon'] }} spacing-right"></i>{{ 'Niveau' }}&nbsp;{{ alertValue['name'] }}</legend>
+                                    <legend><i class="{{ alertValue['icon'] }}"></i>{{ 'Niveau' }}&nbsp;{{ alertValue['name'] }}</legend>
                                     <div class="form-group">
                                         <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'En' }}&nbsp;{{ alertValue['name'] }}&nbsp;{{ 'si' }}</label>
                                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -546,7 +546,7 @@
                 <div role="tabpanel" class="tab-pane" id="cmd_display">
                     <form class="form-horizontal">
                         <fieldset>
-                            <legend><i class="fas fa-tint spacing-right"></i>{{ 'Widget' }}</legend>
+                            <legend><i class="fas fa-tint"></i>{{ 'Widget' }}</legend>
                             <table class="table table-bordered table-condensed">
                                 <thead>
                                 <tr>
@@ -566,22 +566,6 @@
                                                         <option value="default">defaut (core)</option>
                                                         {% if cmdWidgetDashboard is defined %}
                                                             {% for widget in cmdWidgetDashboard %}
-                                                                {% if widget['name'] != 'default' %}
-                                                                    <option value="{{ widget['name'] }}">{{ widget['name'] }}
-                                                                        ({{ widget['location'] }})
-                                                                    </option>
-                                                                {% endif %}
-                                                            {% endfor %}
-                                                        {% endif %}
-                                                    </select>
-                                                {% endif %}
-                                            </td>
-                                            <td>
-                                                {% if cmdWidgetCanCustomWidgetMobile %}
-                                                    <select class="form-control cmdAttr" data-l1key="template" data-l2key="mobile">
-                                                        <option value="default">defaut (core)</option>
-                                                        {% if cmdWidgetMobile is defined %}
-                                                            {% for widget in cmdWidgetMobile %}
                                                                 {% if widget['name'] != 'default' %}
                                                                     <option value="{{ widget['name'] }}">{{ widget['name'] }}
                                                                         ({{ widget['location'] }})
@@ -646,7 +630,7 @@
                             </table>
                         </fieldset>
                         <fieldset class="legend-section">
-                            <legend><i class="fas fa-level-down-alt spacing-right"></i>{{ 'Retour à la ligne' }}</legend>
+                            <legend><i class="fas fa-level-down-alt"></i>{{ 'Retour à la ligne' }}</legend>
                             <div class="form-group">
                                 <label class="col-lg-4 col-md-4 col-sm-5 col-xs-6 control-label">{{ 'Forcé avant le widget' }}</label>
                                 <div class="col-xs-1">
@@ -661,11 +645,11 @@
                         {% if cmdWidgetCanCustomOptionalParameters %}
                             <fieldset class="legend-section">
                                 <div class="col-md-9 col-xs-12 container-fluid">
-                                    <legend><i class="fas fa-pencil-alt spacing-right"></i>{{ 'Paramètres optionnels widget' }}</legend>
+                                    <legend><i class="fas fa-pencil-alt"></i>{{ 'Paramètres optionnels widget' }}</legend>
                                 </div>
                                 <div class="col-md-3 col-xs-12 container-fluid">
                                     <div class="box-tools pull-right padding-bottom">
-                                        <a class="btn btn-success btn-sm pull-right" id="bt_addWidgetParametersCmd"><i class="fas fa-plus-circle spacing-right"></i>{{ 'Ajouter' }}</a>
+                                        <a class="btn btn-success btn-sm pull-right" id="bt_addWidgetParametersCmd"><i class="fas fa-plus-circle"></i>{{ 'Ajouter' }}</a>
                                     </div>
                                 </div>
                                 <table class="table table-bordered table-condensed" id="table_widgetParametersCmd">
@@ -687,7 +671,7 @@
                                                         <input class="form-control value" value="{{ displayValue }}"/>
                                                     </td>
                                                     <td>
-                                                        <a class="btn btn-danger btn-sm removeWidgetParameter"><i class="fas fa-times spacing-right"></i>{{ 'Supprimer' }}</a>
+                                                        <a class="btn btn-danger btn-sm removeWidgetParameter"><i class="fas fa-trash"></i>{{ 'Supprimer' }}</a>
                                                     </td>
                                                 </tr>
                                             {% endfor %}
@@ -710,7 +694,7 @@
                                 <div class="col-xs-1">
                                     <input type="checkbox" class="cmdAttr" data-l1key="html" data-l2key="enable" id="enableCustom"/>
                                 </div>
-                                <a class="btn btn-warning" id="bt_reinitHtmlCode"><i class="fas fa-times spacing-right"></i>{{ 'Réinitialiser la personnalisation' }}</a>
+                                <a class="btn btn-warning" id="bt_reinitHtmlCode"><i class="fas fa-bomb"></i>{{ 'Réinitialiser la personnalisation' }}</a>
                             </div>
                         </fieldset>
                         <div class="box-group" id="accordion" role="tablist" aria-multiselectable="true">
@@ -741,26 +725,6 @@
                                 <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
                                     <div class="box-body">
                                         <textarea class="cmdAttr" id="ta_codeDplan" data-l1key="html" data-l2key="dplan" style="width: 100%;height: 350px">{{ cmdWidgetCustomHtmlValues['dplan'] }}</textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="panel box">
-                                <div class="box-header with-border cursor" role="tab" id="bt_codeMobile" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
-                                    <h4 class="box-title">{{ 'Mobile' }}</h4>
-                                </div>
-                                <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                                    <div class="box-body">
-                                        <textarea class="cmdAttr" id="ta_codeMobile" data-l1key="html" data-l2key="mobile" style="width: 100%;height: 350px">{{ cmdWidgetCustomHtmlValues['mobile'] }}</textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="panel box">
-                                <div class="box-header with-border cursor" role="tab" id="bt_codeMview" data-toggle="collapse" data-parent="#accordion" href="#collapseFive">
-                                    <h4 class="box-title">{{ 'Vue mobile' }}</h4>
-                                </div>
-                                <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-                                    <div class="box-body">
-                                        <textarea class="cmdAttr" id="ta_codeMview" data-l1key="html" data-l2key="mview" style="width: 100%;height: 350px">{{ cmdWidgetCustomHtmlValues['mview'] }}</textarea>
                                     </div>
                                 </div>
                             </div>

@@ -62,32 +62,16 @@ class ProfilsController extends BaseController
             'core::plan' => __('Design'),
             'core::plan3d' => __('Design 3D'),
         );
-        $pageData['profilsHomePageMobile'] = array(
-            'core::dashboard' => __('Dashboard'),
-            'core::view' => __('Vue'),
-            'core::plan' => __('Design'),
-            'core::plan3d' => __('Design 3D'),
-        );
-
         $pluginManagerList = PluginManager::listPlugin();
         foreach ($pluginManagerList as $pluginList) {
             if ($pluginList->isActive() == 1 && $pluginList->getDisplay() != '' && ConfigManager::byKey('displayDesktopPanel', $pluginList->getId(), 0) != 0) {
                 $pageData['profilsHomePageDesktop'][$pluginList->getId() . '::' . $pluginList->getDisplay()] = $pluginList->getName();
-            }
-            if ($pluginList->isActive() == 1 && $pluginList->getDisplay() != '' && ConfigManager::byKey('displayMobilePanel', $pluginList->getId(), 0) != 0) {
-                $pageData['profilsHomePageMobile'][$pluginList->getId() . '::' . $pluginList->getDisplay()] = $pluginList->getName();
             }
         }
         $pageData['profilsUser'] = UserManager::getStoredUser();
         $pageData['profilsSessionsList'] = SessionHelper::getSessionsList();
 
         $lsCssThemes = FileSystemHelper::ls(NEXTDOM_ROOT . '/public/themes/');
-        $pageData['profilsMobileThemes'] = [];
-        foreach ($lsCssThemes as $dir) {
-            if (is_dir(NEXTDOM_ROOT . '/public/themes/' . $dir . '/mobile')) {
-                $pageData['profilsMobileThemes'][] = trim($dir, '/');
-            }
-        }
         $pageData['profilsAvatars'] = [];
 
         $profilRootURL = "/public/img/profils/";
