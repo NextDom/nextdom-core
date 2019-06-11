@@ -36,7 +36,7 @@
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
-            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=plugin"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour' }}</a>
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=plugin"><i class="fas fa-chevron-left spacing-right"></i>{{ 'common.return' | trans }}</a>
             <div class="btn-group">
                 <a class="btn btn-default" id="authorSearch"><i class="fas fa-user spacing-right"></i>{{ 'Un Auteur ?' }}</a>
                 <a class="btn btn-default" id="pluginNameSearch"><i class="fas fa-tag spacing-right"></i>{{ 'Un Nom ?' }}</a>
@@ -55,7 +55,7 @@
                 </div>
                 <div class="btn-group">
                     <select class="form-control" id="sel_certif">
-                        <option value="" selected>{{ 'Tous' }}</option>
+                        <option value="" selected>{{ 'common.all' | trans }}</option>
                         <option value="Officiel">{{ 'Officiel' }}</option>
                         <option value="Conseillé">{{ 'Conseillé' }}</option>
                         <option value="Premium">{{ 'Premium' }}</option>
@@ -111,7 +111,7 @@
             {% if markets|length >= marketLimit %}
                 <div><p class="alert alert-warning" style="margin-bottom:0px">{{ 'Attention l\'affichage est limité à ' }}{{ marketLimit }}{{ ' résultats, utilisez les filtres ou la recherche si ce que vous cherchez n\'apparaît pas...' }}</p></div>
             {% else %}
-                <div><span>{{ markets|length }} {% if marketType == '' %}{{ 'objets' }}{% else %}{{ marketType }}{{ 's' }}{% endif %}{{ ' disponibles...' }}</span></div>
+                <div><span>{{ markets|length }} {% if marketType == '' %}{{ 'common.objects' | trans }}{% else %}{{ marketType }}{{ 's' }}{% endif %}{{ ' disponibles...' }}</span></div>
             {% endif %}
         </div>
     </div>

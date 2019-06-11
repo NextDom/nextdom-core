@@ -139,7 +139,7 @@
                         <legend>{{ 'Opacités' }}</legend>
                         {% for displayTypeCode, displayTypeData in profilsDisplayTypes %}
                             <div class="form-group">
-                                <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Widgets' }} {{ displayTypeData['name'] }}</label>
+                                <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'common.widgets' | trans }} {{ displayTypeData['name'] }}</label>
                                 <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
                                     <input type="number" min="0" max="1" class="userAttr form-control" data-l1key="options" data-l2key="widget::background-opacity::{{ displayTypeCode }}"/>
                                 </div>
@@ -314,7 +314,7 @@
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Double authentification' }}</label>
                                     <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
                                         <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="twoFactorAuthentification"/>
-                                        <label class="control-label label-check">{{ 'Activer' }}</label>
+                                        <label class="control-label label-check">{{ 'common.activate' | trans }}</label>
                                     </div>
                                 {% endif %}
                             </div>
@@ -343,10 +343,10 @@
                         <table class="table table-condensed table-bordered">
                             <thead>
                             <tr>
-                                <th>{{ 'ID' }}</th>
+                                <th>{{ 'common.id' | trans }}</th>
                                 <th>{{ 'IP' }}</th>
-                                <th>{{ 'Date' }}</th>
-                                <th>{{ 'Actions' }}</th>
+                                <th>{{ 'common.date' | trans }}</th>
+                                <th>{{ 'common.actions' | trans }}</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -379,7 +379,7 @@
                                 <th>{{ 'Identification' }}</th>
                                 <th>{{ 'IP' }}</th>
                                 <th>{{ 'Date dernière utilisation' }}</th>
-                                <th>{{ 'Action' }}</th>
+                                <th>{{ 'common.action' | trans }}</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -389,7 +389,7 @@
                                     <td>{{ sessionData['ip'] }}</td>
                                     <td>{{ sessionData['datetime'] }}</td>
                                     <td>
-                                        <a class="btn btn-warning btn-sm bt_removeRegisterDevice pull-right"><i class="fas fa-trash spacing-right"></i>{{ 'Supprimer' }}</a>
+                                        <a class="btn btn-warning btn-sm bt_removeRegisterDevice pull-right"><i class="fas fa-trash spacing-right"></i>{{ 'common.remove' | trans }}</a>
                                     </td>
                                 </tr>
                             {% endfor %}

@@ -36,10 +36,10 @@
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
-            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour' }}</a>
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'common.return' | trans }}</a>
         </div>
         <div class="action-group">
-            <a class="btn btn-success btn-action-bar pull-right" id="bt_saveapi"><i class="fas fa-save spacing-right"></i>{{ 'Sauvegarder' }}</a>
+            <a class="btn btn-success btn-action-bar pull-right" id="bt_saveapi"><i class="fas fa-save spacing-right"></i>{{ 'common.save' | trans }}</a>
         </div>
     </div>
 </section>
@@ -61,10 +61,10 @@
                         <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Accès API HTTP' }}</label>
                         <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
                             <select class="form-control configKey" data-l1key="api::core::http::mode">
-                                <option value="enable">{{ 'Activé' }}</option>
+                                <option value="enable">{{ 'common.enabled' | trans }}</option>
                                 <option value="whiteip">{{ 'IP blanche' }}</option>
                                 <option value="localhost">{{ 'Localhost' }}</option>
-                                <option value="disable">{{ 'Désactivé' }}</option>
+                                <option value="disable">{{ 'common.disabled' | trans }}</option>
                             </select>
                         </div>
                     </div>
@@ -72,10 +72,10 @@
                         <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Accès API JSONRPC' }}</label>
                         <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
                             <select class="form-control configKey" data-l1key="api::core::jsonrpc::mode">
-                                <option value="enable">{{ 'Activé' }}</option>
+                                <option value="enable">{{ 'common.enabled' | trans }}</option>
                                 <option value="whiteip">{{ 'IP blanche' }}</option>
                                 <option value="localhost">{{ 'Localhost' }}</option>
-                                <option value="disable">{{ 'Désactivé' }}</option>
+                                <option value="disable">{{ 'common.disabled' | trans }}</option>
                             </select>
                         </div>
                     </div>
@@ -83,10 +83,10 @@
                         <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Accès API TTS' }}</label>
                         <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
                             <select class="form-control configKey" data-l1key="api::core::tts::mode">
-                                <option value="enable">{{ 'Activé' }}</option>
+                                <option value="enable">{{ 'common.enabled' | trans }}</option>
                                 <option value="whiteip">{{ 'IP blanche' }}</option>
                                 <option value="localhost">{{ 'Localhost' }}</option>
-                                <option value="disable">{{ 'Désactivé' }}</option>
+                                <option value="disable">{{ 'common.disabled' | trans }}</option>
                             </select>
                         </div>
                     </div>
@@ -94,8 +94,8 @@
                         <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Accès API Pro' }}</label>
                         <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
                             <select class="form-control configKey" data-l1key="api::core::pro::mode">
-                                <option value="enable">{{ 'Activé' }}</option>
-                                <option value="disable">{{ 'Désactivé' }}</option>
+                                <option value="enable">{{ 'common.enabled' | trans }}</option>
+                                <option value="disable">{{ 'common.disabled' | trans }}</option>
                             </select>
                         </div>
                     </div>
@@ -103,8 +103,8 @@
                         <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Accès API Market' }}</label>
                         <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
                             <select class="form-control configKey" data-l1key="api::core::market::mode">
-                                <option value="enable">{{ 'Activé' }}</option>
-                                <option value="disable">{{ 'Désactivé' }}</option>
+                                <option value="enable">{{ 'common.enabled' | trans }}</option>
+                                <option value="disable">{{ 'common.disabled' | trans }}</option>
                             </select>
                         </div>
                     </div>
@@ -145,10 +145,10 @@
                                 <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label" data-original-title="{{ 'API pour le plugin' }} {{ pluginData.plugin.getName() }}">{{ pluginData.plugin.getName() }}</label>
                                 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
                                     <select class="form-control configKey" data-l1key="api::{{ pluginData.plugin.getId() }}::mode">
-                                        <option value="enable">{{ 'Activé' }}</option>
+                                        <option value="enable">{{ 'common.enabled' | trans }}</option>
                                         <option value="whiteip">{{ 'IP blanche' }}</option>
                                         <option value="localhost">{{ 'Localhost' }}</option>
-                                        <option value="disable">{{ 'Désactivé' }}</option>
+                                        <option value="disable">{{ 'common.disabled' | trans }}</option>
                                     </select>
                                 </div>
                                 <div class="btn-group col-lg-8 col-md-7 col-sm-7 col-xs-12">

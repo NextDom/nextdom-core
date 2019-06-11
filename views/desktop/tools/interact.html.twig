@@ -38,15 +38,15 @@
     <section class="content-header">
         <div class="action-bar">
             <div class="action-group">
-                <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
-                <a class="btn btn-default btn-action-bar" href="index.php?v=d&p=interact_admin"><i class="fas fa-cog spacing-right"></i>{{ 'Paramètres' }}</a>
-                <a class="btn btn-success btn-action-bar" id="bt_addInteract2"><i class="fas fa-plus-circle spacing-right"></i>{{ 'Ajouter' }}</a>
+                <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'common.return' | trans }}</a>
+                <a class="btn btn-default btn-action-bar" href="index.php?v=d&p=interact_admin"><i class="fas fa-cog spacing-right"></i>{{ 'common.settings' | trans }}</a>
+                <a class="btn btn-success btn-action-bar" id="bt_addInteract2"><i class="fas fa-plus-circle spacing-right"></i>{{ 'common.add' | trans }}</a>
             </div>
             <div class="action-group">
-                <a class="btn btn-action btn-action-bar pull-right" style="display:none;" id="bt_interactCollapse"><i class="fas fa-plus-square spacing-right"></i>{{ 'Déplier' }}</a>
-                <a class="btn btn-action btn-action-bar pull-right" id="bt_interactUncollapse"><i class="fas fa-minus-square spacing-right"></i>{{ 'Replier' }}</a>
-                <a class="btn btn-warning btn-action-bar pull-right" id="bt_regenerateInteract2"><i class="fas fa-refresh spacing-right"></i>{{ 'Régénérer' }}</a>
-                <a class="btn btn-default btn-action-bar pull-right" id="bt_testInteract2"><i class="fas fa-check spacing-right"></i>{{ 'Tester' }}</a>
+                <a class="btn btn-action btn-action-bar pull-right" style="display:none;" id="bt_interactCollapse"><i class="fas fa-plus-square spacing-right"></i>{{ 'interact.unfold' | trans }}</a>
+                <a class="btn btn-action btn-action-bar pull-right" id="bt_interactUncollapse"><i class="fas fa-minus-square spacing-right"></i>{{ 'interact.fold' | trans }}</a>
+                <a class="btn btn-warning btn-action-bar pull-right" id="bt_regenerateInteract2"><i class="fas fa-refresh spacing-right"></i>{{ 'interact.regenerate' | trans }}</a>
+                <a class="btn btn-default btn-action-bar pull-right" id="bt_testInteract2"><i class="fas fa-check spacing-right"></i>{{ 'interact.test'|trans  }}</a>
             </div>
         </div>
     </section>
@@ -54,13 +54,13 @@
     <section class="content">
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title"><i class="fas fa-comments spacing-right"></i>{{ 'Interactions' }}</h3>
+                <h3 class="box-title"><i class="fas fa-comments spacing-right"></i>{{ 'interact.interactions' | trans }}</h3>
             </div>
             <div class="box-body">
                 {% if interactTotal|length == 0 %}
-                    <div><span>{{ 'Vous n\'avez encore aucune interaction. Cliquez sur ajouter pour commencer.' }}</span></div>
+                    <div><span>{{ 'interact.no_interactions_click_add_to_start'|trans }}</span></div>
                 {% else %}
-                    <div><span>{{ 'Vous avez '}} {{ interactTotal|length }} {{ 'intéractions...' }}</span></div>
+                    <div><span>{{ 'interact.you_have_n_iterations'|trans|format(interactTotal|length) }}</span></div>
                 {% endif %}
             </div>
         </div>
@@ -71,7 +71,7 @@
                     <div class="panel box">
                         <a class="box-header with-border accordion-toggle cursor" data-toggle="collapse" data-parent="" href="#config_aucun">
                             <h3 class="box-title">
-                                <span>{{ 'Aucun - ' }} {{ interactsList[-1]|length }} {{ 'interaction(s)' }}</span>
+                                <span>{{ 'interact.none' | trans }} {{ interactsList[-1]|length }} {{ 'interact.interactions' | trans }}</span>
                             </h3>
                         </a>
                         <div id="config_aucun" class="panel-collapse collapse in">
@@ -94,7 +94,7 @@
                         <div class="panel box box-primary">
                             <a class="box-header with-border accordion-toggle cursor" data-toggle="collapse" data-parent="" href="#config_{{ index }}">
                                 <h3 class="box-title">
-                                    <span style="text-decoration:none;">{{ group['group'] }} - {{ interactsList[group['group']]|length }} {{ 'interaction(s)' }}</span>
+                                    <span style="text-decoration:none;">{{ group['group'] }} - {{ interactsList[group['group']]|length }} {{ 'interact.interactions' | trans }}</span>
                                 </h3>
                             </a>
                             <div id="config_{{ index }}" class="panel-collapse collapse in">
@@ -122,16 +122,16 @@
     <section class="content-header">
         <div class="action-bar">
             <div class="action-group">
-                <a class="btn btn-action-bar btn-danger" id="bt_interactThumbnailDisplay"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
+                <a class="btn btn-action-bar btn-danger" id="bt_interactThumbnailDisplay"><i class="fas fa-chevron-left spacing-right"></i>{{ 'common.return' | trans }}</a>
                 <div class="btn-group">
-                    <a class="btn btn-action-bar btn-default displayInteracQuery"><i class="fas fa-eye spacing-right"></i>{{ 'Phrase(s)' }}</a>
+                    <a class="btn btn-action-bar btn-default displayInteracQuery"><i class="fas fa-eye spacing-right"></i>{{ 'interact.sentences' | trans }}</a>
                     <a class="btn btn-action-bar btn-success displayInteracQuery"><span class="interactAttr" data-l1key="nbInteractQuery"></span></a>
                 </div>
             </div>
             <div class="action-group">
-                <a class="btn btn-action-bar btn-success pull-right" id="bt_saveInteract"><i class="fas fa-save spacing-right"></i>{{ 'Enregistrer' }}</a>
-                <a class="btn btn-action-bar btn-default pull-right" id="bt_duplicate"><i class="far fa-files-o spacing-right"></i>{{ 'Dupliquer' }}</a>
-                <a class="btn btn-action-bar btn-danger pull-right" id="bt_removeInteract"><i class="fas fa-minus-circle spacing-right"></i>{{ 'Supprimer' }}</a>
+                <a class="btn btn-action-bar btn-success pull-right" id="bt_saveInteract"><i class="fas fa-save spacing-right"></i>{{ 'common.save' | trans }}</a>
+                <a class="btn btn-action-bar btn-default pull-right" id="bt_duplicate"><i class="far fa-files-o spacing-right"></i>{{ 'interact.duplicate' | trans }}</a>
+                <a class="btn btn-action-bar btn-danger pull-right" id="bt_removeInteract"><i class="fas fa-minus-circle spacing-right"></i>{{ 'common.remove' | trans }}</a>
             </div>
         </div>
     </section>
@@ -140,16 +140,16 @@
         <div class="nav-tabs-custom">
             <ul class="nav nav-tabs pull-right" role="tablist">
                 <li role="presentation">
-                    <a href="#actiontab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-cogs spacing-right"></i>{{ 'Actions' }}</a>
+                    <a href="#actiontab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-cogs spacing-right"></i>{{ 'common.actions' | trans }}</a>
                 </li>
                 <li role="presentation">
-                    <a href="#filtertab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-filter spacing-right"></i>{{ 'Filtres' }}</a>
+                    <a href="#filtertab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-filter spacing-right"></i>{{ 'interact.filters' | trans }}</a>
                 </li>
                 <li role="presentation" class="active">
-                    <a href="#generaltab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tachometer-alt spacing-right"></i>{{ 'Général' }}</a>
+                    <a href="#generaltab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tachometer-alt spacing-right"></i>{{ 'common.main' | trans }}</a>
                 </li>
-                <h4 class="label label-primary pull-right badge spacing-right">{{ 'ID : ' }}<span id="interactId"></span></h4>
-                <li class="header pull-left"><i class="fas fa-comments spacing-right"></i>{{ 'Edition Intéraction' }}</li>
+                <h4 class="label label-primary pull-right badge spacing-right">{{ 'interact.id' | trans }}<span id="interactId"></span></h4>
+                <li class="header pull-left"><i class="fas fa-comments spacing-right"></i>{{ 'interact.edition_intéraction' | trans }}</li>
             </ul>
 
             <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
@@ -157,44 +157,44 @@
                     <form class="form-horizontal">
                         <fieldset>
                             <div class="form-group">
-                                <label class="col-sm-2 col-xs-12 control-label">{{ 'Nom' }}</label>
+                                <label class="col-sm-2 col-xs-12 control-label">{{ 'common.name' | trans }}</label>
                                 <div class="col-sm-9 col-xs-12">
                                     <input class="form-control interactAttr" type="text" data-l1key="name" placeholder=""/>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-2 col-xs-12 control-label">{{ 'Groupe' }}</label>
+                                <label class="col-sm-2 col-xs-12 control-label">{{ 'interact.group' | trans }}</label>
                                 <div class="col-sm-9 col-xs-12">
                                     <input class="form-control interactAttr" type="text" data-l1key="group" placeholder=""/>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-2 col-xs-12 control-label">{{ 'Actif' }}</label>
+                                <label class="col-sm-2 col-xs-12 control-label">{{ 'common.active' | trans }}</label>
                                 <div class="col-sm-9 col-xs-12">
                                     <input class="interactAttr" type="checkbox" data-l1key="enable" placeholder=""/>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-2 col-xs-12 control-label">{{ 'Demande' }}</label>
+                                <label class="col-sm-2 col-xs-12 control-label">{{ 'interact.request' | trans }}</label>
                                 <div class="col-sm-9 col-xs-12">
                                     <input class="form-control interactAttr" type="text" data-l1key="id" style="display : none;"/>
                                     <input class="form-control interactAttr" type="text" data-l1key="query" placeholder=""/>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-2 col-xs-12 control-label">{{ 'Regexp de correspondance obligatoire' }}</label>
+                                <label class="col-sm-2 col-xs-12 control-label">{{ 'interact.regexp_mandatory_correspondence' | trans }}</label>
                                 <div class="col-sm-9 col-xs-12">
                                     <input class="form-control interactAttr" type="text" data-l1key="options" data-l2key="mustcontain"/>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-2 col-xs-12 control-label">{{ 'Synonyme' }}</label>
+                                <label class="col-sm-2 col-xs-12 control-label">{{ 'interact.synonym' | trans }}</label>
                                 <div class="col-sm-9 col-xs-12">
-                                    <input class="form-control interactAttr" type="text" data-l1key="options" data-l2key="synonymes" placeholder="" title="{{ 'Remplace les mots par leurs synonymes lors de la génération des commandes' }}"/>
+                                    <input class="form-control interactAttr" type="text" data-l1key="options" data-l2key="synonymes" placeholder="" title="{{ 'interact.replaces_words_with_their_synonyms_when_generating_orders' | trans }}"/>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-2 col-xs-12 control-label">{{ 'Réponse' }}</label>
+                                <label class="col-sm-2 col-xs-12 control-label">{{ 'interact.answer' | trans }}</label>
                                 <div class="col-sm-8 col-xs-12">
                                     <textarea class="form-control interactAttr ta_autosize" type="text" data-l1key="reply" placeholder=""></textarea>
                                 </div>
@@ -203,7 +203,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-2 col-xs-12 control-label">{{ 'Attendre avant de répondre' }}</label>
+                                <label class="col-sm-2 col-xs-12 control-label">{{ 'interact.wait_before_responding' | trans }}</label>
                                 <div class="col-sm-4 col-xs-12">
                                     <div class="input-group">
                                         <input type="number" class="form-control interactAttr" type="text" data-l1key="options" data-l2key="waitBeforeReply" placeholder="" title="{{ 'Permet d\'attendre le temps que l\'état d\'une lampe soit mise à jour par exemple' }}"/>
@@ -212,15 +212,15 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-2 col-xs-12 control-label">{{ 'Conversion binaire' }}</label>
+                                <label class="col-sm-2 col-xs-12 control-label">{{ 'interact.binary_conversion' | trans }}</label>
                                 <div class="col-sm-9 col-xs-12">
-                                    <input class="form-control interactAttr" type="text" data-l1key="options" data-l2key="convertBinary" placeholder="" title="{{ 'Convertir les commandes binaires' }}"/>
+                                    <input class="form-control interactAttr" type="text" data-l1key="options" data-l2key="convertBinary" placeholder="" title="{{ 'interact.convert_binary_commands' | trans }}"/>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-2 col-xs-12 control-label">{{ 'Utilisateurs autorisés' }}</label>
+                                <label class="col-sm-2 col-xs-12 control-label">{{ 'interact.authorized_users' | trans }}</label>
                                 <div class="col-sm-9 col-xs-12">
-                                    <input class="form-control interactAttr" type="text" data-l1key="person" placeholder="" title="{{ 'Liste des utilisateurs (identifiants) séparés par un |' }}"/>
+                                    <input class="form-control interactAttr" type="text" data-l1key="person" placeholder="" title="{{ 'interact.list_of_users_identifiers_separated_by_a_pipe' | trans }}"/>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -230,10 +230,10 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-2 col-xs-12 control-label">{{ 'Autorisation' }}</label>
+                                <label class="col-sm-2 col-xs-12 control-label">{{ 'interact.authorization' | trans }}</label>
                                 <div class="col-sm-9 col-xs-12">
                                     <input type="checkbox" class="interactAttr" data-l1key="options" data-l2key="allowSyntaxCheck">
-                                    <label for="ldap" class="control-label label-check">{{ 'Autoriser NextDom à supprimer les demandes syntaxiquement incorrectes' }}</label>
+                                    <label for="ldap" class="control-label label-check">{{ 'interact.allow_nextdom_to_eliminate_malformed_requests' | trans }}</label>
                                 </div>
                             </div>
                         </fieldset>
@@ -242,9 +242,9 @@
                 <div role="tabpanel" class="tab-pane" id="filtertab">
                     <form class="form-horizontal" id="div_filtre">
                         <fieldset>
-                            <legend>{{ 'Choisissez les filtres permettant de limiter le nombre de phrases générées...' }}</legend>
+                            <legend>{{ 'interact.choose_filters_to_limit_the_number_of_generated_sentences' | trans }}</legend>
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">{{ 'Limiter aux commandes de type' }}</label>
+                                <label class="col-sm-3 control-label">{{ 'interact.limit_to_commands_of_type' | trans }}</label>
                                 <div class="col-sm-9">
                                     {% for id, type in interactCmdType %}
                                         <label class="label-option">
@@ -254,7 +254,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">{{ 'Limiter aux commandes ayant pour sous-type' }}</label>
+                                <label class="col-sm-3 control-label">{{ 'interact.limit_to_commands_of_sub_type' | trans }}</label>
                                 <div class="col-sm-9">
                                     {% for type in interactCmdType %}
                                         {% for id, subtype in type['subtype'] %}
@@ -266,11 +266,11 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">{{ 'Limiter aux commandes ayant pour unité' }}</label>
+                                <label class="col-sm-3 control-label">{{ 'interact.limit_to_commands_with_unit' | trans }}</label>
                                 <div class="col-sm-9">
                                     <label class="label-option">
                                         <input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="unite" data-l3key="none" checked="true"/>
-                                        {{ 'Sans unité' }}
+                                        {{ 'interact.without_unit' | trans }}
                                     </label>
                                     {% for unite in interactAllUnite %}
                                         {% if unite['unite']|trim != '' %}
@@ -282,7 +282,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">{{ 'Limiter aux commandes appartenant aux objets' }}</label>
+                                <label class="col-sm-3 control-label">{{ 'interact.limit_to_commands_belonging_to_objects' | trans }}</label>
                                 <div class="col-sm-9">
                                     {% for jeeObject in interactJeeObjects %}
                                         <label class="label-option">
@@ -292,7 +292,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">{{ 'Limiter aux plugins' }}</label>
+                                <label class="col-sm-3 control-label">{{ 'interact.limit_to_plugins' | trans }}</label>
                                 <div class="col-sm-9">
                                     {% for eqLogicType in interactEqLogicTypes %}
                                         <label class="label-option">
@@ -302,9 +302,9 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">{{ 'Limiter aux catégories' }}</label>
+                                <label class="col-sm-3 control-label">{{ 'interact.limit_to_categories' | trans }}</label>
                                 <div class="col-sm-9">
-                                    <label class="label-option"><input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="category" data-l3key="noCategory" checked="true"/>{{ 'Sans catégorie' }}</label>
+                                    <label class="label-option"><input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="category" data-l3key="noCategory" checked="true"/>{{ 'interact.uncategorized' | trans }}</label>
                                     {% for id, category in interactEqLogicCategories %}
                                         <label class="label-option">
                                             <input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="category" data-l3key="{{ id }}" checked="true"/>{{ category['name']|trim }}
@@ -313,18 +313,18 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">{{ 'Limiter aux visibles' }}</label>
+                                <label class="col-sm-3 control-label">{{ 'interact.limit_to_visible' | trans }}</label>
                                 <div class="col-sm-9">
-                                    <label class="label-option"><input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="visible" data-l3key="object"/>{{ 'Objets' }}</label>
-                                    <label class="label-option"><input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="visible" data-l3key="eqlogic"/>{{ 'Equipements' }}</label>
-                                    <label class="label-option"><input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="visible" data-l3key="cmd"/>{{ 'Commandes' }}</label>
+                                    <label class="label-option"><input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="visible" data-l3key="object"/>{{ 'common.objects' | trans }}</label>
+                                    <label class="label-option"><input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="visible" data-l3key="eqlogic"/>{{ 'common.devices' | trans }}</label>
+                                    <label class="label-option"><input class="interactAttr" type="checkbox" data-l1key="filtres" data-l2key="visible" data-l3key="cmd"/>{{ 'interact.commands' | trans }}</label>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">{{ 'Limiter à l\'équipement' }}</label>
                                 <div class="col-sm-6">
                                     <select class='interactAttr form-control' data-l1key='filtres' data-l2key='eqLogic_id'>
-                                        <option value="all">{{ 'Tous' }}</option>
+                                        <option value="all">{{ 'common.all' | trans }}</option>
                                         {% for eqLogic in interactEqLogics %}
                                             <option value="{{ eqLogic.getId() }}">{{ eqLogic.getHumanName() }}</option>';
                                         {% endfor %}
@@ -337,9 +337,9 @@
                 <div role="tabpanel" class="tab-pane" id="actiontab">
                     <form class="form-horizontal">
                         <fieldset>
-                            <legend class="col-xs-11">{{ 'Choisissez les actions associées à cette interaction...' }}</legend>
+                            <legend class="col-xs-11">{{ 'interact.choose_the_actions_associated_with_this_interaction' | trans }}</legend>
                             <div class="col-xs-1">
-                                <a class="btn btn-success btn-sm" id="bt_addAction"><i class="fas fa-plus-circle spacing-right"></i>{{ 'Ajouter' }}</a>
+                                <a class="btn btn-success btn-sm" id="bt_addAction"><i class="fas fa-plus-circle spacing-right"></i>{{ 'common.add' | trans }}</a>
                             </div>
                             <div id="div_action"></div>
                         </fieldset>

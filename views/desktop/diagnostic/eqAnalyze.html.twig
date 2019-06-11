@@ -36,8 +36,8 @@
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
-            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
-            <a class="btn btn-default btn-action-bar" href="index.php?v=d&p=eqlogic"><i class="fas fa-cog spacing-right"></i>{{ 'Paramètres' }}</a>
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'common.return' | trans }}</a>
+            <a class="btn btn-default btn-action-bar" href="index.php?v=d&p=eqlogic"><i class="fas fa-cog spacing-right"></i>{{ 'common.settings' | trans }}</a>
         </div>
     </div>
 </section>
@@ -83,10 +83,10 @@
                     <table class="table table-condensed tablesorter" id="table_Action">
                         <thead>
                         <tr>
-                            <th>{{ 'Equipement' }}</th>
+                            <th>{{ 'common.device' | trans }}</th>
                             <th>{{ 'Commande' }}</th>
-                            <th>{{ 'Type' }}</th>
-                            <th>{{ 'Actions' }}</th>
+                            <th>{{ 'common.type' | trans }}</th>
+                            <th>{{ 'common.actions' | trans }}</th>
                             <th></th>
                         </tr>
                         </thead>
@@ -180,7 +180,7 @@
                     <table class="table table-condensed tablesorter" id="table_deadCmd">
                         <thead>
                         <tr>
-                            <th>{{ 'Equipement' }}</th>
+                            <th>{{ 'common.device' | trans }}</th>
                             <th>{{ 'Alertes' }}</th>
                             <th>{{ 'Timeout' }}</th>
                             <th>{{ 'Seuils batterie' }}</th>
@@ -204,7 +204,7 @@
                                         <label class="col-xs-6 eqLogicAttr label label-danger" style="font-size : 0.8em">{{ 'Danger' }} {{ alert['eqLogic'].getConfiguration('battery_danger_threshold', '') }} % </label>
                                     {% endif %}
                                     {% if alert['eqLogic'].getConfiguration('battery_warning_threshold', '') != '' %}
-                                        <label class="col-xs-6 eqLogicAttr label label-warning" style="font-size : 0.8em">{{ 'Warning' }} {{ alert['eqLogic'].getConfiguration('battery_warning_threshold', '') }} % </label>
+                                        <label class="col-xs-6 eqLogicAttr label label-warning" style="font-size : 0.8em">{{ 'common.warning' | trans }} {{ alert['eqLogic'].getConfiguration('battery_warning_threshold', '') }} % </label>
                                     {% endif %}
                                 </td>
                             </tr>
@@ -218,7 +218,7 @@
                     <table class="table table-condensed tablesorter" id="table_deadCmd">
                         <thead>
                         <tr>
-                            <th>{{ 'Type' }}</th>
+                            <th>{{ 'common.type' | trans }}</th>
                             <th>{{ 'Détail' }}</th>
                             <th>{{ 'Commande' }}</th>
                             <th>{{ 'Utilisation' }}</th>
@@ -251,7 +251,7 @@
                         {% endfor %}
                         {% for scenarioDeadCmd in eqAnalyzeScenarioDeadCmd %}
                             <tr>
-                                <td>{{ 'Scénario' }}</td>
+                                <td>{{ 'common.scenario' | trans }}</td>
                                 <td>{{ scenarioDeadCmd['detail'] }}</td>
                                 <td>{{ scenarioDeadCmd['who'] }}</td>
                                 <td>{{ scenarioDeadCmd['help'] }}</td>

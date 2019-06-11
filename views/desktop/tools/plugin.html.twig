@@ -37,7 +37,7 @@
     <section class="content-header">
         <div class="action-bar">
             <div class="action-group">
-                <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
+                <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'common.return' | trans }}</a>
                 <a class="btn btn-default btn-action-bar" id="bt_addPluginFromOtherSource"><i class="fas fa-plus spacing-right"></i>{{ 'Autre Sources' }}</a>
             </div>
             <div class="action-group">
@@ -60,7 +60,7 @@
             <!-- Tabs title -->
             <ul class="nav nav-tabs pull-right" role="tablist">
                 <li role="presentation"><a href="#inactifs" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-toggle-off spacing-right"></i>{{ 'Inactifs' }}{% if ((pluginsList|length - pluginsListActive|length)>0) %}<span class="badge bg-yellow spacing-left">{{ pluginsList|length - pluginsListActive|length }}</span>{% endif %}</a></li>
-                <li role="presentation" class="active"><a href="#actifs" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-toggle-on spacing-right"></i>{{ 'Actifs' }}{% if (pluginsListActive|length>0) %}<span class="badge bg-yellow spacing-left">{{ pluginsListActive|length }}</span>{% endif %}</a></li>
+                <li role="presentation" class="active"><a href="#actifs" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-toggle-on spacing-right"></i>{{ 'common.active' | trans }}{% if (pluginsListActive|length>0) %}<span class="badge bg-yellow spacing-left">{{ pluginsListActive|length }}</span>{% endif %}</a></li>
                 <li class="header pull-left"><i class="fas fa-puzzle-piece spacing-right"></i>{{ 'Plugins installés' }}<span class="badge bg-red spacing-left">{{ pluginsList|length }}</span></li>
             </ul>
 
@@ -79,13 +79,13 @@
                                             <div id="config_{{ plugin.getId() }}" class="panel-collapse collapse">
                                                 <div class="box-body" {% if not plugin.isActive() %}style="{{ pluginInactiveOpacity }}"{% endif %}>
                                                     <p><b>{{ 'Catégorie :' }}<i class="spacing-right"></i></b>{{ plugin.getCategory() }}</p>
-                                                    <p style="white-space: nowrap;white-space: pre-line;height: 75px;overflow: hidden;text-overflow: ellipsis;"><b>{{ 'Description :' }}<i class="spacing-right"></i></b>{{ plugin.getDescription()|raw }}</p>
+                                                    <p style="white-space: nowrap;white-space: pre-line;height: 75px;overflow: hidden;text-overflow: ellipsis;"><b>{{ 'common.description' | trans }}<i class="spacing-right"></i></b>{{ plugin.getDescription()|raw }}</p>
                                                     <p><b>{{ 'Auteur :' }}<i class="spacing-right"></i></b>{{ plugin.getAuthor() }}</p>
                                                     <p><i>{{ 'Licence :' }}<i class="spacing-right"></i></i>{{ plugin.getLicense() }}</p>
                                                 </div>
                                                 <div class="box-footer clearfix text-center">
                                                     <a class="btn btn-info btn-sm pull-left plugin_configure" title="{{'Configurer'}}"><i class="fas fa-cog spacing-right"></i>{{'Configurer'}}</a>
-                                                    <a class="btn btn-danger btn-sm remove pull-right plugin_delete" data-market_logicalid="{{ plugin.getId() }}" title="{{'Supprimer'}}"><i class="far fa-trash-alt spacing-right"></i>{{'Supprimer'}}</a>
+                                                    <a class="btn btn-danger btn-sm remove pull-right plugin_delete" data-market_logicalid="{{ plugin.getId() }}" title="{{ 'common.remove' | trans }}"><i class="far fa-trash-alt spacing-right"></i>{{'Supprimer'}}</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -109,13 +109,13 @@
                                             <div id="config_{{ plugin.getId() }}" class="panel-collapse collapse">
                                               <div class="box-body" {% if not plugin.isActive() %}style="{{ pluginInactiveOpacity }}"{% endif %}>
                                                   <p><b>{{ 'Catégorie :' }}<i class="spacing-right"></i></b>{{ plugin.getCategory() }}</p>
-                                                  <p style="white-space: nowrap;white-space: pre-line;height: 75px;overflow: hidden;text-overflow: ellipsis;"><b>{{ 'Description :' }}<i class="spacing-right"></i></b>{{ plugin.getDescription()|raw }}</p>
+                                                  <p style="white-space: nowrap;white-space: pre-line;height: 75px;overflow: hidden;text-overflow: ellipsis;"><b>{{ 'common.description' | trans }}<i class="spacing-right"></i></b>{{ plugin.getDescription()|raw }}</p>
                                                   <p><b>{{ 'Auteur :' }}<i class="spacing-right"></i></b>{{ plugin.getAuthor() }}</p>
                                                   <p><i>{{ 'Licence :' }}<i class="spacing-right"></i></i>{{ plugin.getLicense() }}</p>
                                               </div>
                                               <div class="box-footer clearfix text-center">
                                                   <a class="btn btn-info btn-sm pull-left plugin_configure" title="{{'Configurer'}}"><i class="fas fa-cog spacing-right"></i>{{'Configurer'}}</a>
-                                                  <a class="btn btn-danger btn-sm remove pull-right plugin_delete" data-market_logicalid="{{ plugin.getId() }}" title="{{'Supprimer'}}"><i class="far fa-trash-alt spacing-right"></i>{{'Supprimer'}}</a>
+                                                  <a class="btn btn-danger btn-sm remove pull-right plugin_delete" data-market_logicalid="{{ plugin.getId() }}" title="{{ 'common.remove' | trans }}"><i class="far fa-trash-alt spacing-right"></i>{{'Supprimer'}}</a>
                                               </div>
                                             </div>
                                         </div>
@@ -134,7 +134,7 @@
     <section class="content-header">
         <div class="action-bar">
             <div class="action-group">
-                <a class="btn btn-action-bar btn-danger" id="bt_returnToThumbnailDisplay"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
+                <a class="btn btn-action-bar btn-danger" id="bt_returnToThumbnailDisplay"><i class="fas fa-chevron-left spacing-right"></i>{{ 'common.return' | trans }}</a>
             </div>
         </div>
     </section>
@@ -152,7 +152,7 @@
             <div class="col-sm-12">
                 <div class="box">
                     <div class="box-header with-border">
-                        <h3 class="box-title"><i class="fas fa-info-circle spacing-right"></i>{{ 'Description' }}</h3>
+                        <h3 class="box-title"><i class="fas fa-info-circle spacing-right"></i>{{ 'common.description' | trans }}</h3>
                     </div>
                     <div class="box-body">
                         <span id="span_plugin_description"></span>
@@ -196,7 +196,7 @@
             <div class="col-lg-6 col-sm-12">
                 <div class="box box-primary" id="div_configLog">
                     <div class="box-header with-border">
-                        <h3 class="box-title"><i class="fas fa-file spacing-right"></i>{{ 'Log' }}</h3>
+                        <h3 class="box-title"><i class="fas fa-file spacing-right"></i>{{ 'common.log' | trans }}</h3>
                     </div>
                     <div class="box-body">
                         <form class="form-horizontal">
@@ -209,7 +209,7 @@
                         </div>
                     </div>
                     <div class="box-footer clearfix text-center">
-                        <a class="btn btn-success pull-right" id="bt_savePluginLogConfig"><i class="fas fa-save spacing-right"></i>{{ 'Sauvegarder' }}</a>
+                        <a class="btn btn-success pull-right" id="bt_savePluginLogConfig"><i class="fas fa-save spacing-right"></i>{{ 'common.save' | trans }}</a>
                     </div>
                 </div>
             </div>
@@ -240,7 +240,7 @@
         </div>
         <div class="box box-primary">
             <div class="box-header with-border">
-                <h3 class="box-title"><i class="fas fa-cogs spacing-right"></i>{{ 'Configuration' }}</h3>
+                <h3 class="box-title"><i class="fas fa-cogs spacing-right"></i>{{ 'common.setup' | trans }}</h3>
             </div>
             <div class="box-body">
                 <div id="div_plugin_configuration"></div>
@@ -248,7 +248,7 @@
                 </div>
             </div>
             <div class="box-footer clearfix text-center">
-                <a class="btn btn-success pull-right" id="bt_savePluginConfig"><i class="fas fa-save spacing-right"></i>{{ 'Sauvegarder' }}</a>
+                <a class="btn btn-success pull-right" id="bt_savePluginConfig"><i class="fas fa-save spacing-right"></i>{{ 'common.save' | trans }}</a>
             </div>
         </div>
         <div class="row">
@@ -265,7 +265,7 @@
                         </form>
                     </div>
                     <div class="box-footer clearfix text-center">
-                        <a class="btn btn-success pull-right" id="bt_savePluginFunctionalityConfig"><i class="fas fa-save spacing-right"></i>{{ 'Sauvegarder' }}</a>
+                        <a class="btn btn-success pull-right" id="bt_savePluginFunctionalityConfig"><i class="fas fa-save spacing-right"></i>{{ 'common.save' | trans }}</a>
                     </div>
                 </div>
             </div>
@@ -282,7 +282,7 @@
                         </form>
                     </div>
                     <div class="box-footer clearfix text-center">
-                        <a class="btn btn-success pull-right" id="bt_savePluginPanelConfig"><i class="fas fa-save spacing-right"></i>{{ 'Sauvegarder' }}</a>
+                        <a class="btn btn-success pull-right" id="bt_savePluginPanelConfig"><i class="fas fa-save spacing-right"></i>{{ 'common.save' | trans }}</a>
                     </div>
                 </div>
             </div>
