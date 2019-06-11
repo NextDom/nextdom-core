@@ -53,6 +53,7 @@ class CacheController extends BaseController
         $pageData['adminRedisExists'] = class_exists('redis');
 
         $pageData['JS_END_POOL'][] = '/public/js/desktop/admin/cache.js';
+		$pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return Render::getInstance()->get('/desktop/admin/cache.html.twig', $pageData);
     }

@@ -51,6 +51,7 @@ class GeneralController extends BaseController
         $pageData['adminLastKnowDate'] = $cache->getValue();
 
         $pageData['JS_END_POOL'][] = '/public/js/desktop/params/general.js';
+		$pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return Render::getInstance()->get('/desktop/params/general.html.twig', $pageData);
     }

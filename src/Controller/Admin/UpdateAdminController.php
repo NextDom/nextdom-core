@@ -108,6 +108,7 @@ class UpdateAdminController extends BaseController
         $pageData['adminOthersLogs'] = array('scenario', 'plugin', 'market', 'api', 'connection', 'interact', 'tts', 'report', 'event');
 
         $pageData['JS_END_POOL'][] = '/public/js/desktop/admin/update_admin.js';
+		$pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return Render::getInstance()->get('/desktop/admin/update_admin.html.twig', $pageData);
     }

@@ -42,6 +42,7 @@ class CommandeController extends BaseController
     public static function get(&$pageData): string
     {
         $pageData['JS_END_POOL'][] = '/public/js/desktop/params/commandes.js';
+		$pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return Render::getInstance()->get('/desktop/params/commandes.html.twig', $pageData);
     }

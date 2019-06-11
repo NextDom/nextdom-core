@@ -48,6 +48,7 @@ class RealtimeController extends BaseController
         $pageData['JS_VARS']['log_default_search'] = Utils::init('search', '');
 
         $pageData['JS_END_POOL'][] = '/public/js/desktop/diagnostic/realtime.js';
+		$pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return Render::getInstance()->get('/desktop/diagnostic/realtime.html.twig', $pageData);
     }

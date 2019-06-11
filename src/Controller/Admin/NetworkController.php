@@ -63,6 +63,7 @@ class NetworkController extends BaseController
         $pageData['adminNetworkExternalAccess'] = NetworkHelper::getNetworkAccess('external');
 
         $pageData['JS_END_POOL'][] = '/public/js/desktop/admin/network.js';
+		$pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return Render::getInstance()->get('/desktop/admin/network.html.twig', $pageData);
     }
