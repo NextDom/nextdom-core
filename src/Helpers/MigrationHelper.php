@@ -133,7 +133,9 @@ class MigrationHelper
 
     private static function migrate_0_0_0($logFile = 'migration'){
 
-        $migrateFile = sConsoleHelper::step("%s/install/migrate/migrate.sql", NEXTDOM_ROOT);
+        //$migrateFile = ConsoleHelper::step(NEXTDOM_ROOT . "/install/migrate/migrate.sql");
+        $migrateFile = sprintf("%s/install/migrate/migrate.sql", NEXTDOM_ROOT);
+
 
         BackupManager::loadSQLFromFile($migrateFile);
 
@@ -182,18 +184,19 @@ class MigrationHelper
             }
 
             // Basic loop displaying different messages based on file or folder
-            foreach ($it as $fileinfo) {
-                if ($fileinfo->isDir() || $fileinfo->isFile()) {
-                    if(!in_array($fileinfo->getFilename(), FoldersReferential::NEXTDOMFOLDERS)
-                    && !in_array($fileinfo->getFilename(), FoldersReferential::NEXTDOMFILES)) {
-//                        printf("Folder - %s\n", $fileinfo->getFilename());
-                        $message ='Moving ' . NEXTDOM_ROOT .'/'. $fileinfo->getFilename();
+            foreach ($it as $fileInfo) {
+                if ($fileInfo->isDir() || $fileInfo->isFile()) {
+                    if(!in_array($fileInfo->getFilename(), FoldersReferential::NEXTDOMFOLDERS)
+                        && !in_array($fileInfo->getFilename(), FoldersReferential::NEXTDOMFILES)
+                        && !is_link( $fileInfo->getFilename()) ) {
+                        $message ='Moving ' . NEXTDOM_ROOT .'/'. $fileInfo->getFilename();
                         if($logFile == 'migration') {
                             LogHelper::addInfo($logFile, $message, '');
                         } else {
                             ConsoleHelper::process($message);
                         }
-                        FileSystemHelper::rmove(NEXTDOM_ROOT.'/'.$fileinfo->getFilename(),NEXTDOM_DATA.'/data/'.$fileinfo->getFilename(), false, array(), false, array());
+                        FileSystemHelper::rmove(NEXTDOM_ROOT.'/'.$fileInfo->getFilename(),NEXTDOM_DATA.'/data/'.$fileInfo->getFilename(), false, array(), false, array());
+                        FileSystemHelper::rrmdir(NEXTDOM_ROOT.'/'.$fileInfo->getFilename());
                     }
                 }
             }
@@ -209,14 +212,30 @@ class MigrationHelper
         }
 
         try {
-            foreach (PlanManager::all() as $plan) {
-                foreach (PlanVersion::getConstants() as $linkType) {
-                    $html = $plan->getHtml($linkType)['html'];
-                    // Basic loop displaying different messages based on file or folder
-                    foreach ($it as $fileinfo) {
-                        if ($html != null && strpos($html, $fileinfo->getFilename()) === true) {
-                            str_replace($fileinfo->getFilename(), 'data/' . $fileinfo->getFilename(), $html);
-                            $plan->save();
+            // Basic loop displaying different messages based on file or folder
+            foreach ($it as $fileInfo) {
+                if(!in_array($fileInfo->getFilename(), FoldersReferential::NEXTDOMFOLDERS)
+                    && !in_array($fileInfo->getFilename(), FoldersReferential::NEXTDOMFILES)
+                    && !is_link( $fileInfo->getFilename()) ) {
+                    $fileToReplace = $fileInfo->getFilename();
+                    $message = 'Migrate ' . $fileToReplace . ' to /data/' . $fileToReplace;
+                    if ($logFile == 'migration') {
+                        LogHelper::addInfo($logFile, $message, '');
+                    } else {
+                        ConsoleHelper::process($message);
+                    }
+
+                    foreach (PlanManager::all() as $plan) {
+                        foreach (PlanVersion::getConstants() as $linkType) {
+
+                            $html = $plan->getDisplay('text');
+                            if ($html !== null) {
+                                $html = str_replace($fileToReplace, 'data/' . $fileToReplace, $html);
+
+                                $plan->setDisplay('text', $html);
+                                $plan->save();
+                            }
+                            break;
                         }
                     }
                 }

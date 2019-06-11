@@ -39,6 +39,7 @@ use NextDom\Helpers\ConsoleHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Enums\FoldersReferential;
+use NextDom\Helpers\MigrationHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
 use NextDom\Helpers\Utils;
@@ -291,25 +292,25 @@ class BackupManager
         foreach ($it as $fileinfo) {
             if ($fileinfo->isDir() || $fileinfo->isFile()) {
                 if(!in_array($fileinfo->getFilename(), FoldersReferential::NEXTDOMFOLDERS)
-                    && !in_array($fileinfo->getFilename(), FoldersReferential::NEXTDOMFILES)) {
+                    && !in_array($fileinfo->getFilename(), FoldersReferential::NEXTDOMFILES) && !is_link( $fileinfo->getFilename()) ) {
                     $dest = preg_replace($pattern, "", $fileinfo->getPathname());
                     $tar->addFile($fileinfo->getPathname(), $dest);
-//                    if ($fileinfo->isDir()) {
-//                        $roots = [$fileinfo->getFilename()];
-//                        foreach ($roots as $c_root) {
-//                            $path = sprintf("%s/%s", NEXTDOM_ROOT, $c_root);
-//                            $dirIter = new RecursiveDirectoryIterator($path);
-//                            $riIter = new RecursiveIteratorIterator($dirIter);
-//                            // iterate on files recursively found
-//                            foreach ($riIter as $c_entry) {
-//                                if (false === $c_entry->isFile()) {
-//                                    continue;
-//                                }
-//                                $dest = preg_replace($pattern, "", $c_entry->getPathname());
-//                                $tar->addFile($c_entry->getPathname(), $dest);
-//                            }
-//                        }
-//                    }
+                    if ($fileinfo->isDir()) {
+                        $roots = [$fileinfo->getFilename()];
+                        foreach ($roots as $c_root) {
+                            $path = sprintf("%s/%s", NEXTDOM_ROOT, $c_root);
+                            $dirIter = new RecursiveDirectoryIterator($path);
+                            $riIter = new RecursiveIteratorIterator($dirIter);
+                            // iterate on files recursively found
+                            foreach ($riIter as $c_entry) {
+                                if (false === $c_entry->isFile()) {
+                                    continue;
+                                }
+                                $dest = preg_replace($pattern, "", $c_entry->getPathname());
+                                $tar->addFile($c_entry->getPathname(), $dest);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -477,8 +478,9 @@ class BackupManager
             printf("restoring plugins...");
             self::restorePlugins($tmpDir);
             printf("Success\n");
-            printf("migrate database...");
-            self::loadSQLMigrateScript();
+            printf("migrating data...");
+            MigrationHelper::migrate('restore');
+            //self::loadSQLMigrateScript();
             printf("Success\n");
             printf("starting nextdom system...");
             NextDomHelper::startSystem();
