@@ -41,6 +41,7 @@ class SummaryController extends BaseController
     public static function get(&$pageData): string
     {
         $pageData['JS_END_POOL'][] = '/public/js/desktop/params/summary.js';
+		$pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return Render::getInstance()->get('/desktop/params/summary.html.twig', $pageData);
     }
