@@ -21,7 +21,7 @@ namespace NextDom\Enums;
 class FoldersReferential extends Enum
 {
 
-    const NEXTDOMFOLDERS = ['assets','backup','core','data','docs','install','log','mobile','plugins','public','scripts','src','tests','translations','vendor','views'];
-    const NEXTDOMFILES = ['cache.tar.gz' ,'composer.json','composer.lock','COPYING','DB_backup.sql','favicon.ico','index.php','LICENSE','manifest.json','manifest.webmanifest','mobile.manifest.php','package.json','phpunit.xml.dist','README.md','robots.txt'];
+    const NEXTDOMFOLDERS = ['api','assets','backup','core','data','docs','install','log','mobile','plugins','public','scripts','src','tests','translations','vendor','views','var','.github','.sass-cache','.git','.idea'];
+    const NEXTDOMFILES = ['cache.tar.gz' ,'composer.json','composer.lock','COPYING','DB_backup.sql','favicon.ico','index.php','LICENSE','manifest.json','manifest.webmanifest','mobile.manifest.php','package.json','phpunit.xml.dist','README.md','robots.txt','.travis.yml','.htaccess','.coveralls.yml','.gitignore'];
 
 }

@@ -439,10 +439,10 @@ class Plan implements EntityInterface
                     $html .= $summary;
                 }
                 $html .= '</div>';
-                return array(
+                return [
                     'plan' => Utils::o2a($this),
                     'html' => $html,
-                );
+                ];
                 break;
         }
         return null;
