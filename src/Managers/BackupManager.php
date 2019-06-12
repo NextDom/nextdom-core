@@ -89,7 +89,7 @@ class BackupManager
         $status = "success";
 
         try {
-            printf("*********** starting backup procedure at %s ***********\n", date('Y-m-d H:i:s'));
+            ConsoleHelper::title("starting backup procedure at ".date('Y-m-d H:i:s')."\n");
             NextDomHelper::event('begin_backup', true);
             printf("starting plugin backup...");
             self::backupPlugins();
@@ -113,21 +113,21 @@ class BackupManager
             self::sendRemoteBackup($backupPath);
             printf("Success\n");
             NextDomHelper::event('end_backup');
-            printf(" -> STATUS: success\n");
-            printf(" -> ELAPSED TIME: %s sec(s)\n", (strtotime('now') - $startTime));
-            printf("*********** end of backup procedure at %s ***********\n", date('Y-m-d H:i:s'));
+            ConsoleHelper::step(" -> STATUS: success\n");
+            ConsoleHelper::step(" -> ELAPSED TIME: %s sec(s)\n", (strtotime('now') - $startTime));
+            ConsoleHelper::subTitle("end of backup procedure at ".date('Y-m-d H:i:s')."\n");
         } catch (\Exception $e) {
             $status = "error";
-            printf("Failure\n");
-            printf("> ERROR: %s\n", Utils::br2nl($e->getMessage()));
-            printf("> DETAILS\n");
-            printf("%s\n", print_r($e->getTrace(), true));
+            ConsoleHelper::nok();
+            ConsoleHelper::step("> ERROR: %s\n", Utils::br2nl($e->getMessage()));
+            ConsoleHelper::step("> DETAILS\n");
+            ConsoleHelper::step("%s\n", print_r($e->getTrace(), true));
             LogHelper::add('backup', 'error', $e->getMessage());
         }
 
         // the following line acts as marker used in ajax telling that the procedure is finished
         // it should be me removed
-        printf("Closing with %s\n\n", $status);
+        ConsoleHelper::title("Closing with ". $status."\n\n");
         return ($status == "success");
     }
 
@@ -454,56 +454,53 @@ class BackupManager
         $tmpDir = "";
 
         try {
-            printf("*********** starting restore procedure at %s ***********\n", date('Y-m-d H:i:s'));
+            ConsoleHelper::title("Restore Backup Process", false);
+            ConsoleHelper::subTitle("starting restore procedure at " . date('Y-m-d H:i:s'));
             NextDomHelper::event('begin_restore', true);
 
             if (($file === null) || ("" === $file)) {
                 $file = self::getLastBackupFilePath($backupDir, "newest");
             }
-            printf("file used for restoration: %s\n", $file);
-
-            printf("stopping nextdom system...");
+            ConsoleHelper::process("file used for restoration: " . $file);
+            ConsoleHelper::ok();
+            ConsoleHelper::step("stopping nextdom system...");
             NextDomHelper::stopSystem();
-            printf("Success\n");
-            printf("extracting backup archive...");
+            ConsoleHelper::ok();
+            ConsoleHelper::step("extracting backup archive...");
             $tmpDir = self::extractArchive($file);
-            printf("Success\n");
-            printf("restoring mysql database...");
+            ConsoleHelper::ok();
+            ConsoleHelper::step("restoring mysql database...");
             self::restoreDatabase($tmpDir);
-            printf("Success\n");
-            printf("importing jeedom configuration...");
+            ConsoleHelper::ok();
+            ConsoleHelper::step("importing jeedom configuration...");
             self::restoreJeedomConfig($tmpDir);
-            printf("Success\n");
-            printf("restoring plugins...");
+            ConsoleHelper::ok();
+            ConsoleHelper::step("restoring plugins...");
             self::restorePlugins($tmpDir);
-            printf("Success\n");
-            printf("migrating data...");
+            ConsoleHelper::ok();
+            ConsoleHelper::step("migrating data...");
             MigrationHelper::migrate('restore');
-            //self::loadSQLMigrateScript();
-            printf("Success\n");
-            printf("starting nextdom system...");
+            ConsoleHelper::ok();
+            ConsoleHelper::step("starting nextdom system...");
             NextDomHelper::startSystem();
-            printf("Success\n");
-            printf("updating system configuration...");
+            ConsoleHelper::ok();
+            ConsoleHelper::step("updating system configuration...");
             self::updateConfig();
-            printf("Success\n");
-            printf("chechking system consistency...");
+            ConsoleHelper::ok();
+            ConsoleHelper::step("chechking system consistency...");
             ConsistencyManager::checkConsistency();
-            printf("Success\n");
-            printf("clearing cache...");
+            ConsoleHelper::ok();
+            ConsoleHelper::step("clearing cache...");
             CacheManager::flush();
-            printf("Success\n");
+            ConsoleHelper::ok();
             SystemHelper::rrmdir($tmpDir);
             NextDomHelper::event("end_restore");
-            printf(" -> STATUS: success\n");
-            printf(" -> ELAPSED TIME: %s sec(s)\n", (strtotime('now') - $startTime));
-            printf("*********** end of restore procedure at %s ***********\n", date('Y-m-d H:i:s'));
+            ConsoleHelper::subTitle("end of restore procedure at " . date('Y-m-d H:i:s'));
+            ConsoleHelper::subTitle("elapsed time " . (strtotime('now') - $startTime));
         } catch (\Exception $e) {
             $status = "error";
-            printf("Failure\n");
-            printf("> ERROR: %s\n", Utils::br2nl($e->getMessage()));
-            printf("> DETAILS\n");
-            printf("%s\n", print_r($e->getTrace(), true));
+            ConsoleHelper::nok();
+            ConsoleHelper::error($e);
             LogHelper::add('restore', 'error', $e->getMessage());
             if (true === is_dir($tmpDir)) {
                 SystemHelper::rrmdir($tmpDir);
@@ -511,7 +508,8 @@ class BackupManager
         }
         // the following line acts as marker used in ajax telling that the procedure is finished
         // it should be me removed
-        printf("Closing with %s\n\n", $status);
+        ConsoleHelper::subTitle("Closing with " . $status);
+        ConsoleHelper::title("Restore Backup Process", true);
         return ($status == "success");
     }
 
@@ -742,3 +740,12 @@ class BackupManager
         }
     }
 }
+
+            ConsoleHelper::title("Create Backup Process", false);
+            ConsoleHelper::subTitle("starting backup procedure at " . date('Y-m-d H:i:s'));
+            ConsoleHelper::subTitle("end of backup procedure at " . date('Y-m-d H:i:s'));
+            ConsoleHelper::subTitle("elapsed time " . (strtotime('now') - $startTime));
+            ConsoleHelper::nok();
+            ConsoleHelper::error($e);
+        ConsoleHelper::subTitle("Closing with " . $status);
+        ConsoleHelper::title("Create Backup Process", true);
