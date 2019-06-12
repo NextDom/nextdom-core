@@ -18,9 +18,9 @@ class ConsoleHelper
      * Show title
      *
      * @param string $title Title to show
-     * @param Boolean $ending true if end tag
+     * @param boolean $ending true if end tag
      */
-    public static function title(string $title, Boolean $ending)
+    public static function title(string $title, $ending)
     {
         if($ending){
             printf("[ / $title ]\n");

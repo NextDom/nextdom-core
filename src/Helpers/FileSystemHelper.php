@@ -634,8 +634,9 @@ class FileSystemHelper
     /**
      * Create directory if not already exists
      *
+     * @param string $path , path to create
      * @param int $mode , see mkdir parameter
-     * @param int $recursive , see mkdir parameter
+     * @param boolean $recursive , see mkdir parameter
      * @throws CoreException when cannot create directory
      */
     public static function mkdirIfNotExists($path, $mode = 0775, $recursive = false)
