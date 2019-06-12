@@ -84,6 +84,20 @@ class ProfilsController extends BaseController
                 $pageData['profilsAvatars'][] = $url;
             }
         }
+
+        $pageData['profilsWidgetThemes'] = [];
+        $lsDir = FileSystemHelper::ls(NEXTDOM_ROOT . '/core/template/dashboard/themes/','*',true);
+        foreach ($lsDir as $themesDir) {
+            $lsThemes = FileSystemHelper::ls(NEXTDOM_ROOT . '/core/template/dashboard/themes/' .$themesDir, '*.png');
+            foreach ($lsThemes as $themeFile) {
+                $themeData = [];
+                $themeData['dir'] = '/core/template/dashboard/themes/' .$themesDir . $themeFile;
+                $themeData['name'] = $themeFile;
+                $pageData['profilsWidgetThemes'][] = $themeData;
+            }
+
+        }
+        
         $pageData['profilsDisplayTypes'] = NextDomHelper::getConfiguration('eqLogic:displayType');
         $pageData['profilsJeeObjects'] = ObjectManager::all();
         $pageData['profilsViews'] = ViewManager::all();
