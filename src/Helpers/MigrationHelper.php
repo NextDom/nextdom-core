@@ -81,7 +81,7 @@ class MigrationHelper
                 $previousVersion[2] = intval($previousVersion[2]) + 1;
             }
         }
-
+        ConfigManager::save('lastUpdateVersion', $currentVersion[0].'.'.$currentVersion[1].'.'.$currentVersion[2], 'core');
     }
 
     /**
@@ -140,7 +140,7 @@ class MigrationHelper
                         } else {
                             ConsoleHelper::process($message);
                         }
-                        FileSystemHelper::rmove(NEXTDOM_ROOT.'/'.$fileInfo->getFilename(),NEXTDOM_DATA.'/data/'.$fileInfo->getFilename(), false, array(), false, array());
+                        FileSystemHelper::rmove(NEXTDOM_ROOT.'/'.$fileInfo->getFilename(),NEXTDOM_DATA.'/data/custom/'.$fileInfo->getFilename(), false, array(), false, array());
                     }
                 }
             }
@@ -156,7 +156,7 @@ class MigrationHelper
                     && !in_array($fileInfo->getFilename(), FoldersReferential::NEXTDOMFILES)
                     && !is_link( $fileInfo->getFilename()) ) {
                     $fileToReplace = $fileInfo->getFilename();
-                    $message = 'Migrate ' . $fileToReplace . ' to /data/' . $fileToReplace;
+                    $message = 'Migrate ' . $fileToReplace . ' to /data/custom/' . $fileToReplace;
                     if ($logFile == 'migration') {
                         LogHelper::addInfo($logFile, $message, '');
                     } else {
@@ -168,7 +168,7 @@ class MigrationHelper
 
                             $html = $plan->getDisplay('text');
                             if ($html !== null) {
-                                $html = str_replace($fileToReplace, 'data/' . $fileToReplace, $html);
+                                $html = str_replace($fileToReplace, 'data/custom/' . $fileToReplace, $html);
 
                                 $plan->setDisplay('text', $html);
                                 $plan->save();

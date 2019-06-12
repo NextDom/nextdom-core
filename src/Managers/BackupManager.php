@@ -265,29 +265,19 @@ class BackupManager
         $tar->addFile($sqlPath, "DB_backup.sql");
 
         // iterate on dirs we want to include in archive
-        $roots = ["plugins"];
-        foreach ($roots as $c_root) {
-            $path = sprintf("%s/%s", NEXTDOM_ROOT, $c_root);
-            $dirIter = new RecursiveDirectoryIterator($path);
-            $riIter = new RecursiveIteratorIterator($dirIter);
-            // iterate on files recursively found
-            foreach ($riIter as $c_entry) {
-                if (false === $c_entry->isFile()) {
-                    continue;
-                }
-                $dest = preg_replace($pattern, "", $c_entry->getPathname());
-                $tar->addFile($c_entry->getPathname(), $dest);
-            }
-        }
+        $roots = [NEXTDOM_ROOT.'/plugins', NEXTDOM_DATA.'/data/custom'];
+
+        FileSystemHelper::mkdirIfNotExists(NEXTDOM_DATA.'/data/custom');
+
+        self::addPathToArchive($roots, $pattern, $tar);
         $dir = new \RecursiveDirectoryIterator(NEXTDOM_ROOT, \FilesystemIterator::SKIP_DOTS);
         // Flatten the recursive iterator, folders come before their files
         $it  = new \RecursiveIteratorIterator($dir, \RecursiveIteratorIterator::SELF_FIRST);
         // Maximum depth is 1 level deeper than the base folder
         $it->setMaxDepth(0);
-        $message ='Start moving files and folders process to ' . NEXTDOM_DATA;
-        LogHelper::addInfo("restore", $message, '');
 
-        // Basic loop displaying different messages based on file or folder
+
+        // Add all adds by user to the backup archive
         foreach ($it as $fileinfo) {
             if ($fileinfo->isDir() || $fileinfo->isFile()) {
                 if(!in_array($fileinfo->getFilename(), FoldersReferential::NEXTDOMFOLDERS)
@@ -295,20 +285,8 @@ class BackupManager
                     $dest = preg_replace($pattern, "", $fileinfo->getPathname());
                     $tar->addFile($fileinfo->getPathname(), $dest);
                     if ($fileinfo->isDir()) {
-                        $roots = [$fileinfo->getFilename()];
-                        foreach ($roots as $c_root) {
-                            $path = sprintf("%s/%s", NEXTDOM_ROOT, $c_root);
-                            $dirIter = new RecursiveDirectoryIterator($path);
-                            $riIter = new RecursiveIteratorIterator($dirIter);
-                            // iterate on files recursively found
-                            foreach ($riIter as $c_entry) {
-                                if (false === $c_entry->isFile()) {
-                                    continue;
-                                }
-                                $dest = preg_replace($pattern, "", $c_entry->getPathname());
-                                $tar->addFile($c_entry->getPathname(), $dest);
-                            }
-                        }
+                        $roots = [NEXTDOM_ROOT.'/'.$fileinfo->getFilename()];
+                        self::addPathToArchive($roots, $pattern, $tar);
                     }
                 }
             }
@@ -475,6 +453,9 @@ class BackupManager
             ConsoleHelper::step("importing jeedom configuration...");
             self::restoreJeedomConfig($tmpDir);
             ConsoleHelper::ok();
+            ConsoleHelper::step("restoring custom data...");
+            self::restoreCustomData($tmpDir);
+            ConsoleHelper::ok();
             ConsoleHelper::step("restoring plugins...");
             self::restorePlugins($tmpDir);
             ConsoleHelper::ok();
@@ -638,6 +619,31 @@ class BackupManager
         }
     }
 
+
+    /**
+     * Restore custom data from backup archive
+     *
+     * @param string $tmpDir extracted backup root directory
+     * @throws CoreException
+     */
+    private static function restoreCustomData($tmpDir)
+    {
+        $customDataDirs = glob(sprintf("%s/*", $tmpDir), GLOB_ONLYDIR);
+        $customData = sprintf("%s/data/custom/", NEXTDOM_DATA);
+
+        FileSystemHelper::mkdirIfNotExists($customData);
+
+        foreach ($customDataDirs as $c_dir) {
+            $name = basename($c_dir);
+            if(!in_array($name, FoldersReferential::NEXTDOMFOLDERS)
+                && !in_array($name, FoldersReferential::NEXTDOMFILES) && !is_link( $name) ) {
+                if (false === FileSystemHelper::mv($c_dir, sprintf("%s/%s", $customData, $name))) {
+                    // should probably fail, keeping behavior prior to install/restore.php refactoring
+                }
+            }
+        }
+    }
+
     /**
      * Restore plugins from backup archive
      *
@@ -737,6 +743,28 @@ class BackupManager
             unlink($backupFilePath);
         } else {
             throw new CoreException(__('Impossible de trouver le fichier : ') . $backupFilePath);
+        }
+    }
+
+    /**
+     * @param array $roots
+     * @param string $pattern
+     * @param Tar $tar
+     */
+    private static function addPathToArchive(array $roots, string $pattern, Tar $tar): array
+    {
+        foreach ($roots as $c_root) {
+            $path = $c_root;
+            $dirIter = new RecursiveDirectoryIterator($path);
+            $riIter = new RecursiveIteratorIterator($dirIter);
+            // iterate on files recursively found
+            foreach ($riIter as $c_entry) {
+                if (false === $c_entry->isFile()) {
+                    continue;
+                }
+                $dest = preg_replace($pattern, "", $c_entry->getPathname());
+                $tar->addFile($c_entry->getPathname(), $dest);
+            }
         }
     }
 }
