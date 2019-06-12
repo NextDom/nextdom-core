@@ -141,7 +141,6 @@ class MigrationHelper
                             ConsoleHelper::process($message);
                         }
                         FileSystemHelper::rmove(NEXTDOM_ROOT.'/'.$fileInfo->getFilename(),NEXTDOM_DATA.'/data/'.$fileInfo->getFilename(), false, array(), false, array());
-                        FileSystemHelper::rrmdir(NEXTDOM_ROOT.'/'.$fileInfo->getFilename());
                     }
                 }
             }
