@@ -9,6 +9,8 @@
 namespace NextDom\Helpers;
 
 
+use phpDocumentor\Reflection\Types\Boolean;
+
 class ConsoleHelper
 {
 
@@ -16,10 +18,15 @@ class ConsoleHelper
      * Show title
      *
      * @param string $title Title to show
+     * @param Boolean $ending true if end tag
      */
-    public static function title(string $title)
+    public static function title(string $title, Boolean $ending)
     {
-        printf("[ $title ]\n");
+        if($ending){
+            printf("[ / $title ]\n");
+        } else {
+            printf("[ $title ]\n");
+        }
     }
 
     /**
@@ -69,7 +76,7 @@ class ConsoleHelper
      */
     public static function nok()
     {
-        printf(" NOK\n");
+        printf(" Failure\n");
     }
 
     /**
@@ -77,8 +84,9 @@ class ConsoleHelper
      *
      * @param CoreException|Exception $exceptionData Data of the exception
      */
-    public static function showError($exceptionData)
+    public static function error($exceptionData)
     {
-        printf("*** ERROR *** " . $exceptionData->getMessage() . "\n");
+        printf(">> *** ERROR *** " . Utils::br2nl($exceptionData->getMessage()) . "\n");
+        printf(">> *** TRACE *** " . Utils::br2nl($exceptionData->getTrace() ) . "\n");
     }
 }
