@@ -1,14 +1,344 @@
 # Nouveau format
+common:
+    ok: OK
+    nok: NOK
+    back: Zurück
+    disabled: deaktiviert
+    error: Error
+    error-b: [Error]
+    in-progress: In Bearbeitung
+    version: Ausführung
+    next: Nächster
+    previous: Bisherige
+    ignore: Ignorieren
+    finish: Fertig
+    days: Tage
+    hours: Std
+    minutes: Protokoll
+    not-found: Nicht gefunden
+    
+connection:
+    home-msg: Melden Sie sich für den Zugriff auf die Sitzung ...
+    login-placeholder: ID ... (Standard-Admin)
+    password-placeholder: Passwort...
+    two-factors-placeholder: Code 2-Faktor ...
+    remember-title: Durch Aktivieren dieses Kontrollkästchens werden Sie nicht Ihre Login eingeben.
+    remember-label: Erinnere dich an mich ?
+    connect: Einloggen
+    forgot: "Hoppla, ich habe mein Passwort vergessen!"
+    
 core:
-  error-401: 401 - unberechtigter Zugriff
-  error-ajax: "Ajax request unknown"
-  api-connection: "User connection by API : "
-  enable-tasks: "Activate all cron tasks..."
-  disable-tasks: "Desactivate all cron tasks..."
-  disable-cron-master: "Stop the master cron task..."
-  enable-all-scenarios: "Activate all scenarios..."
-  disable-all-scenarios: "Desactivate all scenarios..."
-  incorrect-sys-date: "The system date is incorrect (before %s or after %s) : "
+    error-401: 401 - unberechtigter Zugriff
+    error-404: 404 Seite nicht gefunden
+    error-ajax: Unbekannt Ajax-Anfrage
+    error-bad-action: Der Missbrauch eines Merkmals
+    api-connection: "Verbindung API-Nutzer:"
+    enable-tasks: Aktivieren Sie alle Cron-Jobs ...
+    disable-tasks: Deaktivieren Sie alle Cron-Jobs ...
+    disable-cron-master: Stoppen Sie den Haupt-Cron-Job ...
+    enable-all-scenarios: Aktivieren Sie alle Szenarien ...
+    disable-all-scenarios: Deaktivieren Sie alle Szenarien ...
+    incorrect-sys-date: "Das Systemdatum ist falsch (vor oder nach% s% s):"
+
+page-title:
+    administration: Verwaltung
+    users: Nutzer
+    api: API
+    networks: Netzwerke
+    security: Sicherheit
+    cache: Zwischenspeicher
+    services: Dienstleistungen
+    settings: Die Einstellungen
+    general: Allgemeines
+    customization: Anpassung
+    profil: Profil
+    commands: Befehle
+    links: Links
+    interacts: Wechselwirkungen
+    equipments: Ausrüstung
+    summaries: Zusammenfassungen
+    reports: Berichte
+    logs: Logs
+    diagnostics: Diagnose
+    health: Gesundheit
+    tasks: Aufgaben
+    realtime: Echtzeit
+    historics: Geschichte
+    timeline: Zeitleiste
+    backups: Sicherungskopie
+    updates: Aktualisierung
+    notes: Anmerkungen
+    database: Datenbank
+    scenarios: Szenario
+    objects: Objekte
+    plugins: Plugins
+
+administration:
+    cpu: Zentralprozessor
+    cpu-cores: Kern
+    of-cpu-load: Belastung
+    of-memory-used: gebraucht
+    of-space-used: genutzter Flächen
+    memory: RAM
+    hdd: HDD
+    swap: Wechsel
+    http-connections-count: Anzahl der HTTP-Verbindung
+    connections-count: Anzahl der Verbindungs
+    process-count: Anzahl der Prozesse
+    uptime: Betriebszeit
+    welcome-page: Startseite
+    developer-documentation: Dev-Dokumentation.
+    power-off: Ausschalten
+    restart: Neustart
+    disconnect: Ausloggen
+
+scripts:
+    error: "Error:"
+    error-on: Fehler bei
+    scenario: "Szenario:"
+    scenario-not-found: "Skript nicht gefunden. Überprüfen ID:"
+    start-in-background: "Starten Sie im Hintergrund:"
+    launched-background-not-found: Gestartet im Hintergrund nicht gefunden
+    cron-class-or-function-not-found: "[Fehler] Klasse oder Funktion nicht gefunden"
+    cron-disable: Alle cron sind derzeit deaktiviert
+    listener-not-found: "Listener nicht gefunden:"
+    listener-id-cannot-be-empty: Die ID-Hörer kann nicht leer sein
+    file-not-found: "Datei nicht gefunden: "
+
+health:
+    apache-private-tmp-disabled: "Bitte deaktivieren privater tmp Apache (NextDom arbeiten kann). Siehe <a href=\"https://jeedom.github.io/core/fr_FR/faq#tocAnchor-1-29\" target=\"_blank\"> </a>"
+    apache-private-tmp: Apache private tmp
+    authentication-error: "Achtung: Sie immer den Benutzer admin/admin konfiguriert haben, stellt dies eine ernsthafte Sicherheitslücke, geht <a href=\"index.php?v=d&p=user\"> </a> das Kennwort admin Benutzer ändern "
+    available-memory: Verfügbare Erinnerung
+    available-swap: Swap verfügbar
+    updates: Updates verfügbar
+    need-more-than: Muss größer sein als
+    need-less-than: Nust kleiner sein als
+    cache-not-saved: "Ihr Cache wird nicht gespeichert. Beim Neustart kann einige Informationen verloren gehen. Versuchen Sie, (von motorischen Aufgaben) Aufgabe :: Cache bestehen bleiben."
+    cache-persistence: Persistence Cache
+    collapse: Zusammenbruch
+    config: Plugin-Konfiguration
+    cron-disabled: "cron-Fehler: die cron sind deaktiviert. Zur Administration -> Task Engine zu reaktivieren"
+    cron-enabled: aktiver Dienst cron
+    daemon-auto: Dämon im Automatik-Modus
+    daemon-config: Daemon-Konfiguration
+    daemon-dependencies: Abhängigkeiten
+    daemon-manual: Dämon im manuellen Modus
+    daemon-port: Port konfiguriert
+    daemon-state: Daemon-Status
+    database-version: Version Datenbank
+    default-authentication: Standard-Authentifizierungs
+    enough-memory: ausreichend Speicher
+    external-network-conf: Externe Netzwerkkonfiguration
+    harddisk-freespace: Freier Speicherplatz
+    health: Gesundheit
+    internal-network-conf: Interne Netzwerkkonfiguration
+    launch-benchmark: Starten Sie einen Benchmark
+    load: Belastung
+    network-config: "Zur Administration -> Konfiguration -> Netzwerk und ordnungsgemäß den Netzwerkteil konfiguriert"
+    no-info: Keine Gesundheitsinformationen
+    no-info-detail: "Keine Abhängigkeiten, oder Dämon oder Informationen"
+    os-version: OS Version
+    os-not-supported: Sie sind nicht auf einem O offiziell vom Team %productName% unterstützt (jede Unterstützung Antrag kann abgelehnt werden). Die offiziell unterstützten OS sind Debian und Debian Jessie Strech.
+    php-error: Eine Version von PHP größer oder gleich 7 ist erforderlich.
+    php-version: PHP-Version
+    plugins-legend: "Informationen über die Gesundheit Ihrer Plugins, klicken Sie auf den Titel zu sehen und dann die Symbole, um weitere Informationen zu fliegen."
+    plugins-title: Plugins
+    port: Port konfiguriert
+    processes-killed: "Anzahl der Prozesse durch den Kernel zu Speichermangel getötet. Ihr System ist wenig Speicher. Versuchen Sie, die Anzahl von Plugins oder Scripts zu reduzieren."
+    product-legend: Gesundheit NextDom Details Ihrer Lösung.
+    product-title: NextDom
+    product-started: Gestartet
+    product-version: Version NextDom
+    scenario-disabled: "Fehlerszenario: Alle Szenarien sind deaktiviert. Gehen Sie zu Extras -> Szenarien zu reaktivieren"
+    scenario-enabled: aktive Szenarien
+    sudo-error: Wenden Sie root-Rechte NextDom
+    sudo-rights: sudo Rechte
+    system-date-error: "Wenn die letzte aufgezeichnete Zeit falsch ist, muss es zurückgesetzt werden <a href=\"index.php?v=d&p=administration\"> </a>"
+    system-date: System Date (zuletzt aufgezeichnete Zeit)
+    title: Gesundheit Seite
+    uncollapse: uncollapse
+    unknown: unbekannte
+    update-to-date: Systemupdate
+
+plugin:
+    cant-report: Sie können einen Bericht an Bord ohne Plugin machen
+    category:
+        security: Sicherheit
+        automation-protocol: Automation Protocol
+
+welcome:
+    title: Willkommen in %productName%
+    congrats: Herzliche Glückwünsche
+    congrats-content: "Willkommen in %productName%, vielen Dank für dieses Tool für Ihre angeschlossenen auszuwandern"
+    never-show: Werden nicht angezeigt
+    hot-plugins: Beliebte Plugins
+    migrate-from: Jeedom Migration
+    doc-title: Dokumentation
+    doc-subtitle: "Lernen Sie, eine bessere Kontrolle"
+    doc-content: "die Dokumentation zu lesen, ist mühsam, aber es ist ein wichtiger Vorgang vollständig zu Hause Automatisierungslösung zu steuern."
+    doc-launch: Zugriff auf die Dokumentation
+    forum-title: Forum
+    forum-subtitle: Finden Sie Hilfe in unserem Forum
+    forum-content: "Das %productName% Forum ist eine einfache und effektive Möglichkeit, die Lösung für Ihr Problem zu finden. Sicherlich gibt es eine andere Person, die das gleiche Problem wie Sie bereits begegnet ist.Ist dies nicht der Fall ist, stellen Sie Ihre Frage, reagiert der Gemeinschaft so bald wie möglich."
+    forum-launch: Forum Zugang
+    blog-title: Blog
+    blog-subtitle: Bleib informiert
+    blog-content: Die neuesten Nachrichten aus %productName% auf unserem Blog.
+    blog-launch: Zum Blog
+    notify: Erfolgreich gespeichert
+
+footer:
+    licence: GPL Automation 2018
+    about: Über
+    
+sidebar:
+    menu-main: Hauptmenü
+    menu-manage: Menü-Management
+    dashboard: Instrumententafel
+    view: Aussicht(s)
+    design: Design(s)
+    objects-list: Objekte & Zusammenfassungen
+    default-object: Standardfach
+    show-all: Zeige alles
+    plan3d: Karte(s) 3D
+    panel: Panel(s)
+    plugins: Plugins
+    plugins-markets: Management & Märkte
+    tools: Werkzeuge
+    tools-summary: Automatisierung
+    tools-interactions: Wechselwirkungen
+    tools-scenarios: Szenarien
+    tools-notes: Anmerkungen
+    diagnostics: Diagnostik
+    diagnostics-health: Gesundheit
+    diagnostics-eqlogics: Anlagen
+    diagnostics-history: Geschichte
+    diagnostics-timeline: Zeitleiste
+    diagnostics-logs: logs
+    diagnostics-realtime: Echtzeit
+    expert: Experte
+    expert-admin: Admin & Einstellungen
+    expert-mobile: "Handy, Mobiltelefon"
+    expert-logout: Ausloggen
+    expert-restart: Neustarten
+    expert-shutdown: Ausschalten
+    expert-issue: Eine Dysfunktion?
+    online: Online
+    offline: Offline
+
+firstuse:
+    step: Schritt
+    welcome-title: Willkommen %productName%
+    welcome-content: Bravo! Sie haben gerade Ihre Hausautomationslösung installiert, der Assistent für die erste Verwendung ist aktiviert! Dieser wird Sie bei der Konfiguration Ihrer Hausautomationslösung begleiten ...
+    password-title: Sichern Sie Ihre %productName%
+    password-content: "Erstens, ich danke Ihnen ein neues Administrator-Kennwort zu definieren, die Sicherheit zu verbessern ..."
+    password-placeholder: Neues Kennwort...
+    password-confirm-placeholder: Passwort bestätigen...
+    market-title: Verbinden Sie Ihren Markt hat Jeedom %productName%!
+    market-content: Durch das Hinzufügen oder ein Markt Jeedom Konto für die Installation von Plugins verbindet ...
+    market-noaccount: Ich habe keinen Markt Konto
+    market-alreadyaccount: Ich habe bereits ein Konto Markt
+    market-wantaccount: Ich möchte erstellen!
+    market-username-placeholder: Nutzername...
+    market-password-placeholder: Passwort...
+    customize-title: Passen Sie Ihre %productName%!
+    customize-content: "Wählen Sie das Thema, das zu Ihnen passt die meisten, andere auswählbar oder anpassbare in der Anpassungsseite ..."
+    congrats-title: Herzliche Glückwünsche! Konfigurieren des %productName% ist vorbei!
+    congrats-content: Klicken Sie auf die Schaltfläche Fertig stellen Ihre Home Automation Lösung zu genießen ...
+   
+scenario:
+    no-group: Keiner
+    no-choice: Keiner
+    realtime: Echtzeit
+    default: Standard
+    my-scenarios: Meine Szenarien
+    no-scenario: Sie haben kein Szenario! Klicken Sie im Menü hinzufügen zu starten ...
+    you-have-scenarios: Sie haben %s Szenario (s).
+    back: Zurück
+    enable-scenarios: Aktivieren Szenarien
+    disable-scenarios: deaktivieren Szenarien
+    add: Hinzufügen
+    test-expression: Tester Ausdruck
+    variables: Variablen
+    summary: Überblick
+    scenarios: Szenario(s).
+    save: sparen
+    links: Links
+    duplicate: Duplikat
+    duplicate-title: Doppeltes Szenario
+    export: Export
+    template: Vorlage
+    log: Log
+    delete: Löschen
+    add-block: Fügen Sie einen Block
+    stop: Halt
+    execute-title: Bitte speichern Sie vor dem Test. Dies kann nicht gelingen.
+    execute: Ausführen
+    expression-test: Expression Test
+    programmation: Programmierung
+    parameters: die Einstellungen
+    id: ICH WÜRDE
+    identity: Identität
+    scenario-edit: Szenario Ausgabe
+    name: Szenarioname
+    name-to-show: Anzeigename
+    name-to-show-placeholder: Stellen Sie keine den Standardnamen verlassen
+    description: Beschreibung
+    enabled: Aktiv
+    visible: Sichtbar
+    multi-launch: Multi-Launch
+    multi-launch-title: Das Skript wird mehrmals gleichzeitig ausgeführt werden
+    sync-mode: synchron
+    sync-mode-title: "Das Skript ist im synchronen Modus. Achtung, dies ist das System instabil machen kann"
+    timeout: Auszeit
+    timeout-unity: Sekunden (0 = unbegrenzt)
+    paternity: Vaterschaft
+    group: Gruppe
+    scenario-group: Scenario Group
+    parent-object: Eltern-Objekt
+    follow-timeline: Folgen Sie in der Timeline
+    follow-timeline-title: Die Ausführungen des Skripts können in der Timeline zu sehen.
+    icon: Symbol
+    choose: Wählen
+    launching: Stapellauf
+    scenario-mode: Szenario-Modus
+    provoked: provozierten
+    scheduled: Programm
+    twice: Beide
+    trigger: auslösen
+    scheduler: Programmierung
+    previous: Bisherige
+    next: Nächster
+    cancel: Stornieren
+    add-item: Element hinzufügen
+    item-if: If / Then / Oder
+    item-action: Aktion
+    item-for: Schleife
+    item-in: Im
+    item-at: beim
+    item-code: Code
+    item-comment: Kommentar
+    options: Optionen
+    supervising: Überwachung
+    description-if: "Hier kann die Bedingungen in Ihrem Szenario machen. Zum Beispiel: Wenn meine Tür offen Sensor ausgelöst wird dann das Licht einzuschalten."
+    description-action: "Startet einen Anteil an einem Ihrer Module oder andere Szenarien. Zum Beispiel: Zeigen Sie mit Sirene ON."
+    description-for: "Eine Schleife kann eine Aktion wiederholt eine Anzahl von Malen durchzuführen. Zum Beispiel: Um eine Aktion von 1 bis X zu wiederholen, ist, dass X-mal sagen."
+    description-in: "Lets in X min eine Aktion zu tun. Zum Beispiel: In 5 Minuten, schalten Sie das Licht aus."
+    description-at: "Zu einem bestimmten Zeitpunkt, dieses Element wird eine Aktion starten. Zum Beispiel: Um 9:30 Uhr, öffnen Sie die Fensterläden."
+    description-code: "Dieses Element ermöglicht es Ihnen, in Ihrem Szenario Programmierung mit einem Code, PHP / Shell etc. hinzufügen"
+    description-comment: Lets Kommentar Ihr Szenario.
+
+entity:
+    note:
+        name-cannot-be-empty: Der Name der Notiz kann nicht leer sein
+
+samba:
+    error:
+        connect: Kann den Server samba stecker
+        not-found: Die Datei wird nicht auf dem Samba-Server nicht gefunden
+        already-exists: Die Datei existiert bereits auf dem Samba-Server
+        unknown: "Ein Fehler aufgetreten ist, während an den Server verbindet samba"
 
 # Ancien format
 "401 - Accès non autorisé": "401 - unberechtigter Zugriff"
@@ -247,7 +577,6 @@ core:
 "Version": "Version"
 "Se déconnecter": "Abmelden"
 "Aide sur la page en cours": "Hilfe auf der aktuellen Seite"
-"Envoyer un rapport de bug": "Fehlerbericht senden"
 "Générale": "Allgemein"
 "Détaillée": "Detailliert"
 "Ouverture d\\'un ticket": "Öffnen Sie ein Ticket"
@@ -651,7 +980,7 @@ core:
 "non fonctionel par la suite aucune demande de support ne sera acceptée (cette tentative d\\'accès est enregistrée) ?": "non fonctionel par la suite aucune demande de support ne sera acceptée (cette tentative d\\'accès est enregistrée) ?"
 "Opération réalisée avec succès": "Vorgang erfolgreich durchgeführt"
 "Ajouter interaction": "Interaktion hinzufügen"
-"Regénérer": "neu aufbauen"
+"Régénérer": "neu aufbauen"
 "Mes interactions": "Meine Interaktionen"
 "Dupliquer": "Kopieren"
 "Groupe": "Gruppe"
@@ -697,7 +1026,7 @@ core:
 "Suppression effectuée avec succès": "Löschen erfolgreich durchgeführt"
 "Tester les interactions": "Interaktion testen"
 "Sauvegarde réussie avec succès": "Erfolgreiche Sicherung erfolgreich"
-"Etes-vous sûr de vouloir regénérer toutes les interations (cela peut être très long) ?": "Sind Sie sicher, alle Interaktionen regenerieren zu wollen (das kann sehr lang dauern)? "
+"Etes-vous sûr de vouloir régénérer toutes les interations (cela peut être très long) ?": "Sind Sie sicher, alle Interaktionen regenerieren zu wollen (das kann sehr lang dauern)? "
 "Toutes les interations ont été regénérées": "Alle Interaktionen wurden regeneriert"
 "Etes-vous sûr de vouloir supprimer l\\'interaction": "Sind Sie sicher, dass Sie die Interaktion  entfernen möchten?"
 "Veuillez d\\'abord sélectionner un objet": "Bitte wählen Sie zuerst ein Objekt"
@@ -1542,36 +1871,8 @@ core:
 "Résultat : ": "Ergebnis :"
 "L\\'expression de test ne peut être vide": "Der Testausdruck kann nicht leer sein"
 "Attention : il doit y avoir un souci, car le résultat est le même que l\\'expression": "Achtung : Es muss ein Problem vorliegen, da das Ergebnis dem Ausdruck entspricht"
-"Etape 1 : Information sur les tickets": "Schritt 1: Tickets Informationen"
-"Merci de vérifier avant toute ouverture de ticket :": "Wir danken Ihnen, vor dem Öffnen einer Tickets zu überprüfen:"
-"- que la question n\\'a pas déjà été posée sur le <a href=\\'https://nextdom.com/forum\\'>forum</a>": "- dass die Frage nicht schon auf dem <a href=\\'https://nextdom.com/forum\\'>Forum gestellt worden ist "
-"- que la catégorie est bien sélectionnée pour que votre ticket soit traité dans les plus courts délais": "- dass die Kategorie richtig gewählt wird, somit kann ihre Ticket in kürzester Zeit verarbeitet werden"
-"- que la réponse n\\'est pas déjà dans la <a href=\\'https://nextdom.github.io/documentation\\'>documentation</a>": "- dass sich die Antwort nicht schon in der <a href=\\'https://nextdom.github.io/documentation\\'>Dokumentation</a>befindet"
-"IMPORTANT : si vous ouvrez un ticket pour un bug ou une demande d\\'amélioration celle-ci sont public (donc attention au informations que vous communiquez). Vous pouvez voir la liste des demandes en cours <a href=\"https://nextdom.atlassian.net/issues/?filter=-5&jql=status%20in%20(%22A%20valider%22%2C%20%22In%20Progress%22%2C%20Planifi%C3%A9%2C%20Reopened%2C%20%22To%20Do%22)%20AND%20resolution%20%3D%20Unresolved%20order%20by%20priority%20DESC%2Cupdated%20DESC\" target=\"_blank\">ici</a>. Les demandes public doivent etre parfaitement formuler avec toutes les informations necessaire car vous ne pouvez pas completer la demande par la suite. Toute demande d\\'un service pack pro est privée.": "Wichtig: Wenn Sie ein Ticket für einen Fehler oder einen Verbesserungsvorschlag öffnen Öffentlichkeit sind (so achten Sie auf die Informationen, die Sie zur Verfügung stellen). Sie können die Liste der anstehenden Anwendungen finden Sie unter <a href = „https://nextdom.atlassian.net/issues/?filter=-5&jql=status%20in%20(%22A%20valider%22%2C%20%22In%20Progress%22%2C%20Planifi%C3%A9%2C%20Reopened% 2C%20%22To% 20Do% 22) %20AND 20resolution%20%3D %%% 20Unresolved%20order 20by%20priority 20DESC %%% 2Cupdated 20DESC \"target =\" _ blank „> hier </a>. Öffentliche Bewerbungen sind perfekt mit allen notwendigen Informationen formuliert werden, da Sie die Anwendung nicht abgeschlossen werden können später. Jede Anforderung von einem professionellen Service Pack ist privat."
-"Etape 2 : Catégorie et type de la demande": "Schritt 2 : Kategorie und Art der Nachfrage"
-"Support": "Support"
-"Bug": "Bug"
-"Demande d\\'amélioration": "Verbesserung anfordern"
-"Etape 3 : Chercher dans la documentation": "Schritt 3 : Durchsuchen Sie die Dokumentation"
-"Chercher": "suchen"
-"Etape 4 : Demande de support": "Schritt 4 : Supportanfrage"
 "Ce plugin utilise un gestionnaire de demande de support": "Dieses Plugin verwendet einen Support Request Manager"
 "Accéder": "Zugriff"
-"Votre ticket a bien été ouvert. Vous pouvez le suivre": "Ihr Ticket wurde geöffnet. Sie können ihm folgen"
-"Votre ticket a bien été ouvert. Un mail va vous être envoyé": "Ihr Ticket wurde geöffnet. Eine eMail wird gesendet,"
-"Etape 2 : Choix du type de demande": "Schritt 2 : Wählen Sie die Art der Anfrage"
-"Etape 3 : Catégorie et type de la demande": "Schritt 3: Kategorie und Art der Anfrage"
-"Etape 4 : Chercher dans la documentation": "Schritt 4 : Durchsuchen Sie die Dokumentation"
-"Etape 5 : Demande de support": "Schritt 5 : Supportanfrage"
-"Assistance technique": "Technische Unterstützung"
-"Rédigez votre question à l\\'attention de notre service Technique qui y répondra dans les meilleurs délais.": "Schreiben Sie Ihre Frage an unseren technischen Service, der Ihnen so schnell wie möglich antworten wird."
-"Vous pouvez déclarer un bug qui sera publié sur notre Bug Tracker public (<strong>ATTENTION</strong> votre message sera public, il pourra être supprimé s\\'il ne s\\'agit pas d\\'un bug,  vous ne recevrez pas d\\'assistance technique suite à cette déclaration)": "Sie können einen Fehler melden, die auf unserer öffentlichen Bug Tracker (<strong> WARNUNG veröffentlicht werden: </ strong> Ihre Nachricht wird öffentlich sein, werden sie gelöscht werden, wenn es nicht ein Fehler ist, werden Sie nicht bekommen technische Hilfe im Anschluss an diese Erklärung)"
-"Vous pouvez envoyer des proposition d\\'amélioration qui seront publiée sur notre page publique dédiée et qui pourront être intégrés dans notre roadmap.": "Sie können Verbesserungsvorschläge senden, die auf unserer öffentlichen Seite veröffentlicht werden und in unsere Roadmap integriert werden können."
-"Voir les bugs": "Die Fehler sehen"
-"Voir les propositions d\\'amélioration": "Sehen Sie Verbesserungsvorschläge"
-"Vous pouvez envoyer des propositions d\\'amélioration qui seront publiées sur notre page publique dédiée et qui pourront être intégrées dans notre feuille de route.": "Vous pouvez envoyer des propositions d\\'amélioration qui seront publiées sur notre page publique dédiée et qui pourront être intégrées dans notre feuille de route."
-"Ouvrir un accès au support": "Ouvrir un accès au support"
-"Vous venez de déclarer un bug qui sera publié sur notre Bug Tracker public.<br/>Vous pouvez le suivre": "Vous venez de déclarer un bug qui sera publié sur notre Bug Tracker public.<br/>Vous pouvez le suivre"
 "Commande inconnu verifié l\\'id :": "Unbekannter Befehl  ID überprüfen :"
 "Cmd ID inconnu : ": "Cmd ID unbekannt :"
 "Attention tout ce que vous écrivez ici est global et inclus sur toutes les pages, la moindre erreur peut rendre votre nextdom non fonctionel": "Achtung, alles was Sie hier schreiben ist auf alle Seiten, der kleinste Fehler kann Ihr NextDom nicht funktionieren lassen. "
@@ -1661,3 +1962,4 @@ core:
 "Résumé Dashboard Masqué": "Résumé Dashboard Masqué"
 "Résumé Mobile Masqué": "Résumé Mobile Masqué"
 "label": "label"
+"Aucun objet racine trouvé. Pour en créer un, allez dans dashboard -> <a href=\"/index.php?v=d&p=object\">Liste objets et résumés</a>": "Kein Stammobjekt gefunden. Um eine zu erstellen, gehen Sie zu Dashboard -> <a href=\"/index.php?v=d&p=object\"> Liste der Objekte und Lebensläufe </a>."

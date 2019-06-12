@@ -161,7 +161,7 @@
 });
 
  function printUsers() {
-    $.showLoading();
+    showLoadingCustom();
     var currentUser ="";
     nextdom.user.get({
         error: function (error) {
@@ -203,28 +203,28 @@
                 ligne += '</td>';
                 ligne += '<td>';
                 if(isset(data[i].options) && isset(data[i].options.twoFactorAuthentification) && data[i].options.twoFactorAuthentification == 1 && isset(data[i].options.twoFactorAuthentificationSecret) && data[i].options.twoFactorAuthentificationSecret != ''){
-                    ligne += '<span class="label label-success label-sticker-big">{{OK}}</span>';
-                    ligne += ' <a class="btn btn-sm btn-danger bt_disableTwoFactorAuthentification pull-right btn-action-bar"><i class="fas fa-ban spacing-right"></i>{{Désactiver}}</span>';
+                    ligne += '<span class="label label-success label-sticker btn-action-bar">{{OK}}</span>';
+                    ligne += ' <a class="btn btn-sm btn-danger bt_disableTwoFactorAuthentification pull-right btn-action-bar"><i class="fas fa-ban"></i>{{Désactiver}}</span>';
                     if (isset(data[i].login) && data[i].login == currentUser){
-                        ligne += ' <a class="btn btn-sm btn-warning pull-right btn-action-bar" href="index.php?v=d&p=profils#securitytab"><i class="fas fa-cog spacing-right"></i>{{Configurer}}</span>';
+                        ligne += ' <a class="btn btn-sm btn-warning pull-right btn-action-bar" href="index.php?v=d&p=profils#securitytab"><i class="fas fa-cog"></i>{{Configurer}}</span>';
                     }else{
-                        ligne += ' <a class="btn btn-sm btn-warning pull-right btn-action-bar" href="index.php?v=d&logout=1" class="noOnePageLoad"><i class="fas fa-lock spacing-right"></i>{{Se déconnecter}}</span>';
+                        ligne += ' <a class="btn btn-sm btn-warning pull-right btn-action-bar" href="index.php?v=d&logout=1" class="noOnePageLoad"><i class="fas fa-lock"></i>{{Se déconnecter}}</span>';
                     }
                 }else{
-                   ligne += '<span class="label label-danger label-sticker-big">{{NOK}}</span>';
+                   ligne += '<span class="label label-danger label-sticker btn-action-bar">{{NOK}}</span>';
                }
                ligne += '</td>';
                ligne += '<td>';
-               ligne += '<span class="userAttr label label-value" data-l1key="options" data-l2key="lastConnection"></span>';
+               ligne += '<span class="userAttr label label-config" data-l1key="options" data-l2key="lastConnection"></span>';
                ligne += '</td>';
                ligne += '<td>';
                if(disable == ''){
-                   ligne += '<a class="cursor bt_changeHash btn btn-sm btn-warning pull-right btn-action-bar" title="{{Renouveler la clef API}}"><i class="fas fa-refresh spacing-right"></i>{{Regénération API}}</a>';
+                   ligne += '<a class="cursor bt_changeHash btn btn-sm btn-warning pull-right btn-action-bar" title="{{Renouveler la clef API}}"><i class="fas fa-refresh"></i>{{Regénération API}}</a>';
                    if (ldapEnable != '1') {
-                    ligne += '<a class="btn btn-sm btn-danger pull-right bt_del_user btn-action-bar" style="margin-bottom : 5px;"><i class="fas fa-trash-alt spacing-right"></i>{{Supprimer}}</a>';
-                    ligne += '<a class="btn btn-sm btn-warning pull-right bt_change_mdp_user btn-action-bar"><i class="fas fa-lock spacing-right"></i>{{Mot de passe}}</a>';
+                    ligne += '<a class="btn btn-sm btn-danger pull-right bt_del_user btn-action-bar" style="margin-bottom : 5px;"><i class="fas fa-trash"></i>{{Supprimer}}</a>';
+                    ligne += '<a class="btn btn-sm btn-warning pull-right bt_change_mdp_user btn-action-bar"><i class="fas fa-lock"></i>{{Mot de passe}}</a>';
                 }
-                ligne += '<a class="btn btn-sm btn-warning pull-right bt_manage_restrict_rights btn-action-bar"><i class="fas fa-align-right spacing-right"></i>{{Droits}}</a>';
+                ligne += '<a class="btn btn-sm btn-warning pull-right bt_manage_restrict_rights btn-action-bar"><i class="fas fa-align-right"></i>{{Droits}}</a>';
             }
             ligne += '</td>';
             ligne += '</tr>';
@@ -234,7 +234,7 @@
         }
         $('#table_user tbody').append(tr);
         modifyWithoutSave = false;
-        $.hideLoading();
+        hideLoadingCustom();
     }
 });
 }

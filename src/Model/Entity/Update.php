@@ -18,6 +18,8 @@
 namespace NextDom\Model\Entity;
 
 use NextDom\Exceptions\CoreException;
+use NextDom\Helpers\DBHelper;
+use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
@@ -26,6 +28,7 @@ use NextDom\Managers\ConfigManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
 use NextDom\Managers\PluginManager;
+use NextDom\Managers\UpdateManager;
 use ZipArchive;
 
 /**
@@ -34,7 +37,7 @@ use ZipArchive;
  * @ORM\Table(name="update", indexes={@ORM\Index(name="status", columns={"status"})})
  * @ORM\Entity
  */
-class Update
+class Update implements EntityInterface
 {
     /**
      * @var string
@@ -113,12 +116,50 @@ class Update
     {
         $result = [];
         if ($this->getType() != 'core') {
-            $class = 'repo_' . $this->getSource();
+            $class = 'Repo' . $this->getSource();
             if (class_exists($class) && method_exists($class, 'objectInfo') && ConfigManager::byKey($this->getSource() . '::enable') == 1) {
                 $result = $class::objectInfo($this);
             }
         }
         return $result;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param $_type
+     * @return $this
+     */
+    public function setType($_type)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->type, $_type);
+        $this->type = $_type;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSource()
+    {
+        return $this->source;
+    }
+
+    /**
+     * @param $_source
+     * @return $this
+     */
+    public function setSource($_source)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->source, $_source);
+        $this->source = $_source;
+        return $this;
     }
 
     /**
@@ -134,9 +175,9 @@ class Update
             return;
         }
         if ($this->getType() == 'core') {
-            NextDomHelper::update();
+            NextDomHelper::update(['core' => 1]);
         } else {
-            $class = 'repo_' . $this->getSource();
+            $class = UpdateManager::getRepoDataFromName($this->getSource())['phpClass'];
             if (class_exists($class) && method_exists($class, 'downloadObject') && ConfigManager::byKey($this->getSource() . '::enable') == 1) {
                 $this->preInstallUpdate();
                 $cibDir = NextDomHelper::getTmpFolder('market') . '/' . $this->getLogicalId();
@@ -184,12 +225,12 @@ class Update
 
                         }
                         if (!file_exists($cibDir . '/plugin_info')) {
-                            $files = ls($cibDir, '*');
+                            $files = FileSystemHelper::ls($cibDir, '*');
                             if (count($files) == 1 && file_exists($cibDir . '/' . $files[0] . 'plugin_info')) {
                                 $cibDir = $cibDir . '/' . $files[0];
                             }
                         }
-                        rmove($cibDir . '/', NEXTDOM_ROOT . '/plugins/' . $this->getLogicalId(), false, array(), true);
+                        rmove($cibDir, NEXTDOM_ROOT . '/plugins/' . $this->getLogicalId(), false, array(), true);
                         rrmdir($cibDir);
                         $cibDir = NextDomHelper::getTmpFolder('market') . '/' . $this->getLogicalId();
                         if (file_exists($cibDir)) {
@@ -208,57 +249,45 @@ class Update
     }
 
     /**
-     * Supprime une information de mise à jour
-     *
-     * @throws \Throwable
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
      */
-    public function deleteObjet()
+    public function getConfiguration($_key = '', $_default = '')
     {
-        if ($this->getType() == 'core') {
-            throw new \Exception(__('Vous ne pouvez pas supprimer le core de NextDom'));
-        } else {
-            switch ($this->getType()) {
-                case 'plugin':
-                    try {
-                        $plugin = PluginManager::byId($this->getLogicalId());
-                        if (is_object($plugin)) {
-                            try {
-                                $plugin->setIsEnable(0);
-                            } catch (\Exception $e) {
+        return Utils::getJsonAttr($this->configuration, $_key, $_default);
+    }
 
-                            }
-                            foreach (EqLogicManager::byType($this->getLogicalId()) as $eqLogic) {
-                                try {
-                                    $eqLogic->remove();
-                                } catch (\Exception $e) {
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
+    public function setConfiguration($_key, $_value)
+    {
+        $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
+        $this->configuration = $configuration;
+        return $this;
+    }
 
-                                }
-                            }
-                        }
-                        ConfigManager::remove('*', $this->getLogicalId());
-                    } catch (\Exception $e) {
+    /**
+     * @return string
+     */
+    public function getLogicalId()
+    {
+        return $this->logicalId;
+    }
 
-                    }
-                    break;
-            }
-            try {
-                $class = 'repo_' . $this->getSource();
-                if (class_exists($class) && method_exists($class, 'deleteObjet') && ConfigManager::byKey($this->getSource() . '::enable') == 1) {
-                    $class::deleteObjet($this);
-                }
-            } catch (\Exception $e) {
-
-            }
-            switch ($this->getType()) {
-                case 'plugin':
-                    $cibDir = NEXTDOM_ROOT . '/plugins/' . $this->getLogicalId();
-                    if (file_exists($cibDir)) {
-                        rrmdir($cibDir);
-                    }
-                    break;
-            }
-            $this->remove();
-        }
+    /**
+     * @param $_logicalId
+     * @return $this
+     */
+    public function setLogicalId($_logicalId)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->logicalId, $_logicalId);
+        $this->logicalId = $_logicalId;
+        return $this;
     }
 
     /**
@@ -325,20 +354,33 @@ class Update
     }
 
     /**
-     * Obtenir la dernière version disponible
+     * Supprime l'objet de la base de données
      *
-     * @return null|string
+     * @return bool
      */
-    public static function getLastAvailableVersion()
+    public function remove()
     {
-        try {
-            $url = 'https://raw.githubusercontent.com/nextdom/core/' . ConfigManager::byKey('core::branch', 'core', 'master') . '/core/config/version';
-            $request_http = new \com_http($url);
-            return trim($request_http->exec());
-        } catch (\Exception $e) {
+        return DBHelper::remove($this);
+    }
 
-        }
-        return null;
+    /**
+     * Sauvegarde l'objet dans la base de données
+     *
+     * @return bool
+     */
+    public function save()
+    {
+        return DBHelper::save($this);
+    }
+
+    /**
+     * Rafraichit les informations à partir de la base de données
+     *
+     * @throws \Exception
+     */
+    public function refresh()
+    {
+        DBHelper::refresh($this);
     }
 
     /**
@@ -360,7 +402,7 @@ class Update
             if (ConfigManager::byKey('core::repo::provider') == 'default') {
                 $this->setRemoteVersion(self::getLastAvailableVersion());
             } else {
-                $class = 'repo_' . ConfigManager::byKey('core::repo::provider');
+                $class = 'Repo' . ConfigManager::byKey('core::repo::provider');
                 if (!method_exists($class, 'versionCore') || ConfigManager::byKey(ConfigManager::byKey('core::repo::provider') . '::enable') != 1) {
                     $version = $this->getLocalVersion();
                 } else {
@@ -379,13 +421,122 @@ class Update
             $this->save();
         } else {
             try {
-                $class = 'repo_' . $this->getSource();
+                $class = 'Repo' . $this->getSource();
                 if (class_exists($class) && method_exists($class, 'checkUpdate') && ConfigManager::byKey($this->getSource() . '::enable') == 1) {
                     $class::checkUpdate($this);
                 }
             } catch (\Exception $ex) {
 
             }
+        }
+    }
+
+    /**
+     * Obtenir la dernière version disponible
+     *
+     * @return null|string
+     */
+    public static function getLastAvailableVersion()
+    {
+        try {
+            $url = 'https://raw.githubusercontent.com/nextdom/core/' . ConfigManager::byKey('core::branch', 'core', 'master') . '/core/config/version';
+            $request_http = new \com_http($url);
+            return trim($request_http->exec());
+        } catch (\Exception $e) {
+
+        }
+        return null;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLocalVersion()
+    {
+        return $this->localVersion;
+    }
+
+    /**
+     * @param $_localVersion
+     * @return $this
+     */
+    public function setLocalVersion($_localVersion)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->localVersion, $_localVersion);
+        $this->localVersion = $_localVersion;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRemoteVersion()
+    {
+        return $this->remoteVersion;
+    }
+
+    /**
+     * @param $_remoteVersion
+     * @return $this
+     */
+    public function setRemoteVersion($_remoteVersion)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->remoteVersion, $_remoteVersion);
+        $this->remoteVersion = $_remoteVersion;
+        return $this;
+    }
+
+    /**
+     * Supprime une information de mise à jour
+     *
+     * @throws \Throwable
+     */
+    public function deleteObjet()
+    {
+        if ($this->getType() == 'core') {
+            throw new \Exception(__('Vous ne pouvez pas supprimer le core de NextDom'));
+        } else {
+            switch ($this->getType()) {
+                case 'plugin':
+                    try {
+                        $plugin = PluginManager::byId($this->getLogicalId());
+                        if (is_object($plugin)) {
+                            try {
+                                $plugin->setIsEnable(0);
+                            } catch (\Exception $e) {
+
+                            }
+                            foreach (EqLogicManager::byType($this->getLogicalId()) as $eqLogic) {
+                                try {
+                                    $eqLogic->remove();
+                                } catch (\Exception $e) {
+
+                                }
+                            }
+                        }
+                        ConfigManager::remove('*', $this->getLogicalId());
+                    } catch (\Exception $e) {
+
+                    }
+                    break;
+            }
+            try {
+                $class = 'Repo' . $this->getSource();
+                if (class_exists($class) && method_exists($class, 'deleteObjet') && ConfigManager::byKey($this->getSource() . '::enable') == 1) {
+                    $class::deleteObjet($this);
+                }
+            } catch (\Exception $e) {
+
+            }
+            switch ($this->getType()) {
+                case 'plugin':
+                    $cibDir = NEXTDOM_ROOT . '/plugins/' . $this->getLogicalId();
+                    if (file_exists($cibDir)) {
+                        rrmdir($cibDir);
+                    }
+                    break;
+            }
+            $this->remove();
         }
     }
 
@@ -405,13 +556,22 @@ class Update
     }
 
     /**
-     * Sauvegarde l'objet dans la base de données
-     *
-     * @return bool
+     * @return string
      */
-    public function save()
+    public function getName()
     {
-        return \DB::save($this);
+        return $this->name;
+    }
+
+    /**
+     * @param $_name
+     * @return $this
+     */
+    public function setName($_name)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
+        $this->name = $_name;
+        return $this;
     }
 
     /**
@@ -424,46 +584,23 @@ class Update
         }
     }
 
-    /**
-     * Supprime l'objet de la base de données
-     *
-     * @return bool
-     */
-    public function remove()
+    public function postRemove()
     {
-        return \DB::remove($this);
+        EventManager::add('update::refreshUpdateNumber');
     }
 
     /**
-     * Rafraichit les informations à partir de la base de données
-     *
-     * @throws \Exception
+     * @return int
      */
-    public function refresh()
-    {
-        \DB::refresh($this);
-    }
-
     public function getId()
     {
         return $this->id;
     }
 
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    public function getStatus()
-    {
-        return $this->status;
-    }
-
-    public function getConfiguration($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->configuration, $_key, $_default);
-    }
-
+    /**
+     * @param $_id
+     * @return $this
+     */
     public function setId($_id)
     {
         $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
@@ -471,13 +608,18 @@ class Update
         return $this;
     }
 
-    public function setName($_name)
+    /**
+     * @return string
+     */
+    public function getStatus()
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
-        $this->name = $_name;
-        return $this;
+        return $this->status;
     }
 
+    /**
+     * @param $_status
+     * @return $this
+     */
     public function setStatus($_status)
     {
         if ($_status != $this->status) {
@@ -488,85 +630,47 @@ class Update
         return $this;
     }
 
-    public function setConfiguration($_key, $_value)
-    {
-        $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
-        $this->configuration = $configuration;
-        return $this;
-    }
-
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    public function setType($_type)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->type, $_type);
-        $this->type = $_type;
-        return $this;
-    }
-
-    public function getLocalVersion()
-    {
-        return $this->localVersion;
-    }
-
-    public function getRemoteVersion()
-    {
-        return $this->remoteVersion;
-    }
-
-    public function setLocalVersion($_localVersion)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->localVersion, $_localVersion);
-        $this->localVersion = $_localVersion;
-        return $this;
-    }
-
-    public function setRemoteVersion($_remoteVersion)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->remoteVersion, $_remoteVersion);
-        $this->remoteVersion = $_remoteVersion;
-        return $this;
-    }
-
-    public function getLogicalId()
-    {
-        return $this->logicalId;
-    }
-
-    public function setLogicalId($_logicalId)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->logicalId, $_logicalId);
-        $this->logicalId = $_logicalId;
-        return $this;
-    }
-
-    public function getSource()
-    {
-        return $this->source;
-    }
-
-    public function setSource($_source)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->source, $_source);
-        $this->source = $_source;
-        return $this;
-    }
-
+    /**
+     * @return bool
+     */
+    /**
+     * @return bool
+     */
+    /**
+     * @return bool
+     */
     public function getChanged()
     {
         return $this->_changed;
     }
 
+    /**
+     * @param $_changed
+     * @return $this
+     */
+    /**
+     * @param $_changed
+     * @return $this
+     */
+    /**
+     * @param $_changed
+     * @return $this
+     */
     public function setChanged($_changed)
     {
         $this->_changed = $_changed;
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    /**
+     * @return string
+     */
+    /**
+     * @return string
+     */
     public function getTableName()
     {
         return 'update';

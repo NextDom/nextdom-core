@@ -36,8 +36,17 @@ namespace NextDom\Helpers;
 
 use NextDom\Managers\ConfigManager;
 
+/**
+ * Class DateHelper
+ * @package NextDom\Helpers
+ */
 class DateHelper
 {
+    /**
+     * @param $dateEn
+     * @return mixed
+     * @throws \Exception
+     */
     public static function dateToFr($dateEn)
     {
         if (ConfigManager::byKey('language', 'core', 'fr_FR') == 'en_US') {
@@ -93,6 +102,11 @@ class DateHelper
         return str_replace($shortTextEn, $shortText, str_replace($longTextEn, $longText, $dateEn));
     }
 
+    /**
+     * @param $_day
+     * @return mixed
+     * @throws \Exception
+     */
     public static function convertDayFromEn($_day)
     {
         $result = $_day;
@@ -141,6 +155,9 @@ class DateHelper
         return $result;
     }
 
+    /**
+     * @return bool|false|string
+     */
     public static function getNtpTime()
     {
         $time_servers = array(

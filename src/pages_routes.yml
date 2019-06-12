@@ -1,195 +1,195 @@
-dashboard:
-  path: 'dashboard'
-  controller: NextDom\Controller\DashBoardController::get
-  condition: 'user'
-scenario:
-  path: 'scenario'
-  controller: NextDom\Controller\ScenarioController::get
-  condition: 'admin'
 administration:
   path: 'administration'
-  controller: NextDom\Controller\AdministrationController::get
+  controller: NextDom\Controller\Pages\AdministrationController::get
+  condition: 'admin'
+api:
+  path: 'api'
+  controller: NextDom\Controller\Admin\ApiController::get
   condition: 'admin'
 backup:
   path: 'backup'
-  controller: NextDom\Controller\BackupController::get
+  controller: NextDom\Controller\Tools\BackupController::get
+  condition: 'admin'
+cache:
+  path: 'cache'
+  controller: NextDom\Controller\Admin\CacheController::get
+  condition: 'admin'
+commandes:
+  path: 'commandes'
+  controller: NextDom\Controller\Params\CommandeController::get
+  condition: 'admin'
+connection:
+  path: 'connection'
+  controller: NextDom\Controller\ConnectionController::get
+  condition: ''
+cron:
+  path: 'cron'
+  controller: NextDom\Controller\Diagnostic\CronController::get
+  condition: 'admin'
+custom:
+  path: 'custom'
+  controller: NextDom\Controller\Params\CustomController::get
+  condition: 'admin'
+dashboard:
+  path: 'dashboard'
+  controller: NextDom\Controller\Pages\DashBoardController::get
+  condition: 'user'
+database:
+  path: 'database'
+  controller: NextDom\Controller\Tools\Osdb\DatabaseController::get
+  condition: 'admin'
+display:
+  path: 'display'
+  controller: NextDom\Controller\Tools\DisplayController::get
+  condition: 'admin'
+editor:
+  path: 'editor'
+  controller: NextDom\Controller\Tools\Osdb\EditorController::get
+  condition: 'admin'
+eqAnalyse:
+  path: 'eqAnalyse'
+  controller: NextDom\Controller\Diagnostic\EqAnalyzeController::get
+  condition: 'admin'
+eqlogic:
+  path: 'eqlogic'
+  controller: NextDom\Controller\Params\EqlogicController::get
   condition: 'admin'
 firstUse:
   path: 'firstUse'
   controller: NextDom\Controller\FirstUseController::get
   condition: ''
-connection:
-  path: 'connection'
-  controller: NextDom\Controller\ConnectionController::get
-  condition: ''
-object:
-  path: 'object'
-  controller: NextDom\Controller\ObjectController::get
+general:
+  path: 'general'
+  controller: NextDom\Controller\Params\GeneralController::get
   condition: 'admin'
-message:
-  path: 'message'
-  controller: NextDom\Controller\MessageController::get
-  condition: 'user'
-cron:
-  path: 'cron'
-  controller: NextDom\Controller\CronController::get
-  condition: 'admin'
-update:
-  path: 'update'
-  controller: NextDom\Controller\UpdateController::get
-  condition: 'admin'
-system:
-  path: 'system'
-  controller: NextDom\Controller\SystemController::get
-  condition: 'admin'
-database:
-  path: 'database'
-  controller: NextDom\Controller\DatabaseController::get
-  condition: 'admin'
-display:
-  path: 'display'
-  controller: NextDom\Controller\DisplayController::get
-  condition: 'admin'
-log:
-  path: 'log'
-  controller: NextDom\Controller\LogController::get
-  condition: 'admin'
-report:
-  path: 'report'
-  controller: NextDom\Controller\ReportController::get
-  condition: 'admin'
-plugin:
-  path: 'plugin'
-  controller: NextDom\Controller\PluginListController::get
-  condition: 'admin'
-editor:
-  path: 'editor'
-  controller: NextDom\Controller\EditorController::get
+health:
+  path: 'health'
+  controller: NextDom\Controller\Diagnostic\HealthController::get
   condition: 'admin'
 history:
   path: 'history'
-  controller: NextDom\Controller\HistoryController::get
+  controller: NextDom\Controller\Diagnostic\HistoryController::get
   condition: 'user'
-timeline:
-  path: 'timeline'
-  controller: NextDom\Controller\TimelineController::get
+interact:
+  path: 'interact'
+  controller: NextDom\Controller\Tools\InteractController::get
+  condition: 'admin'
+interact_admin:
+  path: 'interact_admin'
+  controller: NextDom\Controller\Params\InteractAdminController::get
+  condition: 'admin'
+links:
+  path: 'links'
+  controller: NextDom\Controller\Params\LinksController::get
+  condition: 'admin'
+log:
+  path: 'log'
+  controller: NextDom\Controller\Diagnostic\LogController::get
+  condition: 'admin'
+log_admin:
+  path: 'log_admin'
+  controller: NextDom\Controller\Params\LogAdminController::get
+  condition: 'admin'
+market:
+  path: 'market'
+  controller: NextDom\Controller\Tools\Markets\MarketController::get
+marketJee:
+  path: 'marketJee'
+  controller: NextDom\Controller\Tools\Markets\MarketJeeController::get
+  condition: 'admin'
+network:
+  path: 'network'
+  controller: NextDom\Controller\Admin\NetworkController::get
+  condition: 'admin'
+note:
+  path: 'note'
+  controller: NextDom\Controller\Tools\NoteController::get
+  condition: 'admin'
+object:
+  path: 'object'
+  controller: NextDom\Controller\Tools\ObjectController::get
+  condition: 'admin'
+osdb:
+  path: 'osdb'
+  controller: NextDom\Controller\Tools\OsDbController::get
+  condition: 'admin'
+panel:
+  path: 'panel'
+  controller: NextDom\Controller\Pages\PanelPageController::get
+  condition: 'admin'
+plan:
+  path: 'plan'
+  controller: NextDom\Controller\Pages\PlanController::get
+  condition: 'user'
+plan3d:
+  path: 'plan3d'
+  controller: NextDom\Controller\Pages\Plan3DController::get
+  condition: 'user'
+plugin:
+  path: 'plugin'
+  controller: NextDom\Controller\Tools\PluginListController::get
+  condition: 'admin'
+profils:
+  path: 'profils'
+  controller: NextDom\Controller\Params\ProfilsController::get
+  condition: 'admin'
+realtime:
+  path: 'realtime'
+  controller: NextDom\Controller\Diagnostic\RealtimeController::get
+  condition: 'admin'
+reboot:
+  path: 'reboot'
+  controller: NextDom\Controller\RebootController::get
+  condition: 'admin'
+report:
+  path: 'report'
+  controller: NextDom\Controller\Diagnostic\ReportController::get
+  condition: 'admin'
+reports_admin:
+  path: 'reports_admin'
+  controller: NextDom\Controller\Params\ReportAdminController::get
+  condition: 'admin'
+scenario:
+  path: 'scenario'
+  controller: NextDom\Controller\Tools\ScenarioController::get
+  condition: 'admin'
+security:
+  path: 'security'
+  controller: NextDom\Controller\Admin\SecurityController::get
   condition: 'admin'
 shutdown:
   path: 'shutdown'
   controller: NextDom\Controller\ShutdownController::get
   condition: 'admin'
-health:
-  path: 'health'
-  controller: NextDom\Controller\HealthController::get
-  condition: 'admin'
-profils:
-  path: 'profils'
-  controller: NextDom\Controller\ProfilsController::get
-  condition: 'admin'
-view:
-  path: 'view'
-  controller: NextDom\Controller\ViewController::get
-  condition: 'user'
-view_edit:
-  path: 'view_edit'
-  controller: NextDom\Controller\ViewEditController::get
-  condition: 'admin'
-eqAnalyse:
-  path: 'eqAnalyse'
-  controller: NextDom\Controller\EqAnalyzeController::get
-  condition: 'admin'
-plan:
-  path: 'plan'
-  controller: NextDom\Controller\PlanController::get
-  condition: 'user'
-plan3d:
-  path: 'plan3d'
-  controller: NextDom\Controller\Plan3DController::get
-  condition: 'user'
-market:
-  path: 'market'
-  controller: NextDom\Controller\MarketController::get
-reboot:
-  path: 'reboot'
-  controller: NextDom\Controller\RebootController::get
-  condition: 'admin'
-network:
-  path: 'network'
-  controller: NextDom\Controller\NetworkController::get
-  condition: 'admin'
-cache:
-  path: 'cache'
-  controller: NextDom\Controller\CacheController::get
-  condition: 'admin'
-general:
-  path: 'general'
-  controller: NextDom\Controller\GeneralController::get
-  condition: 'admin'
-log_admin:
-  path: 'log_admin'
-  controller: NextDom\Controller\LogAdminController::get
-  condition: 'admin'
-realtime:
-  path: 'realtime'
-  controller: NextDom\Controller\RealtimeController::get
-  condition: 'admin'
-custom:
-  path: 'custom'
-  controller: NextDom\Controller\CustomController::get
-  condition: 'admin'
-api:
-  path: 'api'
-  controller: NextDom\Controller\ApiController::get
-  condition: 'admin'
-commandes:
-  path: 'commandes'
-  controller: NextDom\Controller\CommandeController::get
-  condition: 'admin'
-osdb:
-  path: 'osdb'
-  controller: NextDom\Controller\OsDbController::get
-  condition: 'admin'
-reports_admin:
-  path: 'reports_admin'
-  controller: NextDom\Controller\ReportAdminController::get
-  condition: 'admin'
-eqlogic:
-  path: 'eqlogic'
-  controller: NextDom\Controller\EqlogicController::get
-  condition: 'admin'
-interact:
-  path: 'interact'
-  controller: NextDom\Controller\InteractController::get
-  condition: 'admin'
-interact_admin:
-  path: 'interact_admin'
-  controller: NextDom\Controller\InteractAdminController::get
-  condition: 'admin'
-links:
-  path: 'links'
-  controller: NextDom\Controller\LinksController::get
-  condition: 'admin'
-security:
-  path: 'security'
-  controller: NextDom\Controller\SecurityController::get
-  condition: 'admin'
 summary:
   path: 'summary'
-  controller: NextDom\Controller\SummaryController::get
+  controller: NextDom\Controller\Params\SummaryController::get
   condition: 'user'
+system:
+  path: 'system'
+  controller: NextDom\Controller\Tools\Osdb\SystemController::get
+  condition: 'admin'
+timeline:
+  path: 'timeline'
+  controller: NextDom\Controller\Diagnostic\TimelineController::get
+  condition: 'admin'
+update:
+  path: 'update'
+  controller: NextDom\Controller\Tools\UpdateController::get
+  condition: 'admin'
 update_admin:
   path: 'update_admin'
-  controller: NextDom\Controller\UpdateAdminController::get
+  controller: NextDom\Controller\Admin\UpdateAdminController::get
   condition: 'admin'
 users:
   path: 'users'
-  controller: NextDom\Controller\UsersController::get
+  controller: NextDom\Controller\Admin\UsersController::get
   condition: 'admin'
-note:
-  path: 'note'
-  controller: NextDom\Controller\NoteController::get
-  condition: 'admin'
-panel:
-  path: 'panel'
-  controller: NextDom\Controller\PanelPageController::get
+view:
+  path: 'view'
+  controller: NextDom\Controller\Pages\ViewController::get
+  condition: 'user'
+view_edit:
+  path: 'view_edit'
+  controller: NextDom\Controller\Pages\ViewEditController::get
   condition: 'admin'

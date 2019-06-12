@@ -33,94 +33,140 @@
 * @Email   <admin@nextdom.org>
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
-var isTwoFactor = 0;
 
-$('#in_login_username').on('focusout focusin change keypress',function(){
-    checkTwoFactor();
-});
+var useTwoFactor = 0;
+var ENTER_KEY = 13;
+var loginInput = $('#login');
+var passwordInput = $('#password');
+var twoFactorInput = $('#twofactor');
+var submitButton = $('#submit');
 
-$('#in_login_password').on('focusout focusin change keypress',function(){
-    checkTwoFactor();
-});
+/**
+ * Init events of the page
+ */
+function initEvents() {
+    loginInput.on('focusout keyup paste', function (userEvent) {
+        testIfUserUseTwoFactorAuth();
+        inputEvent(userEvent);
+    });
 
-$('#in_twoFactorCode').on('focusout focusin change keypress',function(){
-    checkTwoFactor();
-});
+    passwordInput.on('focusout keyup', function (userEvent) {
+        inputEvent(userEvent);
+    });
 
-$('#bt_login_validate').on('click', function() {
-    checkTwoFactorLogin();
-});
+    twoFactorInput.on('focusout keyup', function (userEvent) {
+        inputEvent(userEvent);
+    });
 
-$('#in_login_password').keypress(function(e) {
-    if(e.which == 13) {
-        checkTwoFactorLogin();
-    }
-});
+    submitButton.on('click', function () {
+        checkLogin();
+    });
 
-$('#in_twoFactorCode').keypress(function(e) {
-    if(e.which == 13) {
-        checkTwoFactorLogin();
-    }
-});
-
-function checkTwoFactor() {
-    $('#div_login_username').removeClass("has-error");
-    $('#div_login_password').removeClass("has-error");
-    $('#div_twoFactorCode').removeClass("has-error");
-    $('#div_login_username').removeClass('animationShake');
-    $('#div_login_password').removeClass('animationShake');
-    $('#div_twoFactorCode').removeClass('animationShake');
-    nextdom.user.useTwoFactorAuthentification({
-        login: $('#in_login_username').value(),
-        error: function (error) {
-           notify('core',error.message, 'danger');
-        },
-        success: function (data) {
-            isTwoFactor = data;
+    passwordInput.keypress(function (e) {
+        if (e.which === ENTER_KEY) {
+            checkLogin();
         }
     });
-    if(isTwoFactor == 1){
-        $('#div_twoFactorCode').show();
-    }else{
-        $('#div_twoFactorCode').hide();
+
+    twoFactorInput.keypress(function (e) {
+        if (e.which === ENTER_KEY) {
+            checkLogin();
+        }
+    });
+}
+
+/**
+ * Called on user event on input
+ *
+ * @param userEvent User event informations
+ */
+function inputEvent(userEvent) {
+    if (userEvent.type === 'keyup' || userEvent.type === 'paste') {
+        clearErrors();
     }
 }
 
-function checkTwoFactorLogin() {
-    checkTwoFactor();
-    if (document.getElementById("div_twoFactorCode").style.display === "none"){
-        if(isTwoFactor == 1){
-            $('#div_twoFactorCode').show();
-        }else{
-            $('#div_twoFactorCode').hide();
-            tryLogin();
-        }
-    }else{
-        if ($('#in_twoFactorCode').val() === ""){
-            $('#div_twoFactorCode').addClass("has-error");
-            $('#div_twoFactorCode').addClass('animationShake');
-        }else{
-            $('#div_twoFactorCode').hide();
-            tryLogin();
-        }
+/**
+ * Show or hide two factor visibility (depends of useTwoFactor)
+ */
+function updateTwoFactorVisibility() {
+    if (useTwoFactor === 1) {
+        twoFactorInput.parent().show();
+    } else {
+        twoFactorInput.parent().hide();
     }
 }
 
-function tryLogin() {
+/**
+ * Ask NextDom to know if user uses two factor authentication
+ */
+function testIfUserUseTwoFactorAuth() {
+    nextdom.user.useTwoFactorAuthentification({
+        login: loginInput.value(),
+        error: function (error) {
+            notify('core', error.message, 'danger');
+            passwordInput.empty();
+            twoFactorInput.empty();
+        },
+        success: function (useTwoFactorAnswer) {
+            useTwoFactor = parseInt(useTwoFactorAnswer);
+            updateTwoFactorVisibility();
+        }
+    });
+}
+
+/**
+ * Clear errors on the form
+ */
+function clearErrors() {
+    setErrorOnInput(loginInput, false);
+    setErrorOnInput(passwordInput, false);
+    setErrorOnInput(twoFactorInput, false);
+}
+
+/**
+ * Set error on form
+ *
+ * @param inputField Input where the error must be set
+ * @param state True for set error on
+ */
+function setErrorOnInput(inputField, state) {
+    var container = inputField.parent();
+    if (state) {
+        inputField.addClass("has-error");
+        container.addClass('animationShake');
+    }
+    else {
+        inputField.removeClass("has-error");
+        container.removeClass('animationShake');
+    }
+}
+
+/**
+ * Check user login
+ */
+function checkLogin() {
+    if (loginInput.val() === '') {
+        setErrorOnInput(loginInput, true);
+    }
+    if (passwordInput.val() === '') {
+        setErrorOnInput(twoFactorInput, true);
+    }
+    if (useTwoFactor && twoFactorInput.val() === '') {
+        setErrorOnInput(twoFactorInput, true);
+    }
     $('.login-box').removeClass('animationZoomIn');
     nextdom.user.login({
-        username: $('#in_login_username').val(),
-        password: $('#in_login_password').val(),
-        twoFactorCode: $('#in_twoFactorCode').val(),
-        storeConnection: $('#cb_storeConnection').value(),
+        username: loginInput.val(),
+        password: passwordInput.val(),
+        twoFactorCode: twoFactorInput.val(),
+        storeConnection: $('#storeConnection').value(),
         error: function (error) {
-            $('#div_login_username').addClass('animationShake');
-            $('#div_login_password').addClass('animationShake');
-            $('#div_twoFactorCode').addClass('animationShake');
-            $('#div_login_username').addClass("has-error");
-            $('#div_login_password').addClass("has-error");
-            $('#div_twoFactorCode').addClass("has-error");
-            notify('Core',error.message,'error');
+            setErrorOnInput(loginInput, true);
+            setErrorOnInput(passwordInput, true);
+            setErrorOnInput(twoFactorInput, true);
+            notify('Core', error.message, 'error');
+            twoFactorInput.val('');
         },
         success: function (data) {
             $('.login-box').addClass('animationZoomOut');
@@ -128,3 +174,9 @@ function tryLogin() {
         }
     });
 }
+
+/**
+ * Entry point
+ */
+initEvents();
+loginInput.focus();

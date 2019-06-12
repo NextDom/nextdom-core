@@ -35,6 +35,7 @@ namespace NextDom\Managers;
 
 use NextDom\Enums\ScenarioState;
 use NextDom\Helpers\DateHelper;
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
@@ -44,6 +45,10 @@ use NextDom\Model\Entity\Cmd;
 use NextDom\Model\Entity\Scenario;
 use NextDom\Model\Entity\ScenarioExpression;
 
+/**
+ * Class ScenarioExpressionManager
+ * @package NextDom\Managers
+ */
 class ScenarioExpressionManager
 {
     const DB_CLASS_NAME = 'scenarioExpression';
@@ -62,10 +67,10 @@ class ScenarioExpressionManager
     public static function byId($id)
     {
         $values = array('id' => $id);
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE id = :id';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -77,9 +82,9 @@ class ScenarioExpressionManager
      */
     public static function all()
     {
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME;
-        return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
 
@@ -97,11 +102,11 @@ class ScenarioExpressionManager
     public static function byScenarioSubElementId($scenarioSubElementId)
     {
         $values = array('scenarioSubElement_id' => $scenarioSubElementId);
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE scenarioSubElement_id = :scenarioSubElement_id
                 ORDER BY `order`';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -118,7 +123,7 @@ class ScenarioExpressionManager
     public static function searchExpression($expression, $options = null, $and = true)
     {
         $values = array('expression' => '%' . $expression . '%');
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE expression LIKE :expression ';
         if ($options !== null) {
@@ -129,7 +134,7 @@ class ScenarioExpressionManager
                 $sql .= 'OR options LIKE :options';
             }
         }
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -142,11 +147,11 @@ class ScenarioExpressionManager
     public static function byElement($elementId)
     {
         $values = array('expression' => $elementId);
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE expression = :expression
         AND `type` = "element"';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -264,6 +269,251 @@ class ScenarioExpressionManager
         } else {
             return $_aValue;
         }
+    }
+
+    /**
+     * TODO Faut bien les définir les tags
+     *
+     * @param $_expression
+     * @param Scenario $_scenario
+     * @param bool $_quote
+     * @param int $_nbCall
+     * @return mixed
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
+    public static function setTags($_expression, &$_scenario = null, $_quote = false, $_nbCall = 0)
+    {
+        if (file_exists(NEXTDOM_DATA . '/data/php/user.function.class.php')) {
+            require_once NEXTDOM_DATA . '/data/php/user.function.class.php';
+        }
+        if ($_nbCall > 10) {
+            return $_expression;
+        }
+        $replace1 = self::getRequestTags($_expression);
+        if ($_scenario !== null && count($_scenario->getTags()) > 0) {
+            $replace1 = array_merge($replace1, $_scenario->getTags());
+        }
+        if (is_object($_scenario)) {
+            $cmd = CmdManager::byId(str_replace('#', '', $_scenario->getRealTrigger()));
+            if (is_object($cmd)) {
+                $replace1['#trigger#'] = $cmd->getHumanName();
+                $replace1['#trigger_value#'] = $cmd->execCmd();
+            } else {
+                $replace1['#trigger#'] = $_scenario->getRealTrigger();
+            }
+        }
+        if ($_quote) {
+            foreach ($replace1 as &$value) {
+                if (strpos($value, ' ') !== false || preg_match("/[a-zA-Z]/", $value) || $value === '') {
+                    $value = '"' . trim($value, '"') . '"';
+                }
+            }
+        }
+        $replace2 = array();
+        if (!is_string($_expression)) {
+            return $_expression;
+        }
+        preg_match_all("/([a-zA-Z][a-zA-Z_]*?)\((.*?)\)/", $_expression, $matches, PREG_SET_ORDER);
+        if (is_array($matches)) {
+            foreach ($matches as $match) {
+                $function = $match[1];
+                $replace_string = $match[0];
+                if (substr_count($match[2], '(') != substr_count($match[2], ')')) {
+                    $pos = strpos($_expression, $match[2]) + strlen($match[2]);
+                    while (substr_count($match[2], '(') > substr_count($match[2], ')')) {
+                        $match[2] .= $_expression[$pos];
+                        $pos++;
+                        if ($pos > strlen($_expression)) {
+                            break;
+                        }
+                    }
+                    $arguments = self::setTags($match[2], $_scenario, $_quote, $_nbCall++);
+                    while ($arguments[0] == '(' && $arguments[strlen($arguments) - 1] == ')') {
+                        $arguments = substr($arguments, 1, -1);
+                    }
+                    $result = str_replace($match[2], $arguments, $_expression);
+                    while (substr_count($result, '(') > substr_count($result, ')')) {
+                        $result .= ')';
+                    }
+                    $result = self::setTags($result, $_scenario, $_quote, $_nbCall++);
+                    return CmdManager::cmdToValue(str_replace(array_keys($replace1), array_values($replace1), $result), $_quote);
+                } else {
+                    $arguments = explode(',', $match[2]);
+                }
+                if (method_exists(__CLASS__, $function)) {
+                    if ($function == 'trigger') {
+                        if (!isset($arguments[0])) {
+                            $arguments[0] = '';
+                        }
+                        $replace2[$replace_string] = self::trigger($arguments[0], $_scenario);
+                    } elseif ($function == 'triggerValue') {
+                        $replace2[$replace_string] = self::triggerValue($_scenario);
+                    } elseif ($function == 'tag') {
+                        if (!isset($arguments[0])) {
+                            $arguments[0] = '';
+                        }
+                        if (!isset($arguments[1])) {
+                            $arguments[1] = '';
+                        }
+                        $replace2[$replace_string] = self::tag($_scenario, $arguments[0], $arguments[1]);
+                    } else {
+                        $replace2[$replace_string] = call_user_func_array(__CLASS__ . "::" . $function, $arguments);
+                    }
+                } else if (class_exists('userFunction') && method_exists('userFunction', $function)) {
+                    $replace2[$replace_string] = call_user_func_array('userFunction' . "::" . $function, $arguments);
+                } else {
+                    if (function_exists($function)) {
+                        foreach ($arguments as &$argument) {
+                            $argument = trim(Utils::evaluate(self::setTags($argument, $_scenario, $_quote)));
+                        }
+                        $replace2[$replace_string] = call_user_func_array($function, $arguments);
+                    }
+                }
+                if ($_quote && isset($replace2[$replace_string]) && (strpos($replace2[$replace_string], ' ') !== false || preg_match("/[a-zA-Z#]/", $replace2[$replace_string]) || $replace2[$replace_string] === '')) {
+                    $replace2[$replace_string] = '"' . trim($replace2[$replace_string], '"') . '"';
+                }
+            }
+        }
+        $return = CmdManager::cmdToValue(str_replace(array_keys($replace1), array_values($replace1), str_replace(array_keys($replace2), array_values($replace2), $_expression)), $_quote);
+        return $return;
+    }
+
+    /**
+     * TODO: Je demande des tags
+     *
+     * @param $expression
+     * @return array
+     * @throws \Exception
+     */
+    public static function getRequestTags($expression)
+    {
+        $return = array();
+        preg_match_all("/#([a-zA-Z0-9]*)#/", $expression, $matches);
+        if (count($matches) == 0) {
+            return $return;
+        }
+        $matches = array_unique($matches[0]);
+        foreach ($matches as $tag) {
+            switch ($tag) {
+                case '#seconde#':
+                    $return['#seconde#'] = (int)date('s');
+                    break;
+                case '#heure#':
+                    $return['#heure#'] = (int)date('G');
+                    break;
+                case '#heure12#':
+                    $return['#heure12#'] = (int)date('g');
+                    break;
+                case '#minute#':
+                    $return['#minute#'] = (int)date('i');
+                    break;
+                case '#jour#':
+                    $return['#jour#'] = (int)date('d');
+                    break;
+                case '#mois#':
+                    $return['#mois#'] = (int)date('m');
+                    break;
+                case '#annee#':
+                    $return['#annee#'] = (int)date('Y');
+                    break;
+                case '#time#':
+                    $return['#time#'] = date('Gi');
+                    break;
+                case '#timestamp#':
+                    $return['#timestamp#'] = time();
+                    break;
+                case '#date#':
+                    $return['#date#'] = date('md');
+                    break;
+                case '#semaine#':
+                    $return['#semaine#'] = date('W');
+                    break;
+                case '#sjour#':
+                    $return['#sjour#'] = '"' . DateHelper::dateToFr(date('l')) . '"';
+                    break;
+                case '#smois#':
+                    $return['#smois#'] = '"' . DateHelper::dateToFr(date('F')) . '"';
+                    break;
+                case '#njour#':
+                    $return['#njour#'] = (int)date('w');
+                    break;
+                case '#nextdom_name#':
+                    $return['#nextdom_name#'] = '"' . ConfigManager::byKey('name') . '"';
+                    break;
+                case '#hostname#':
+                    $return['#hostname#'] = '"' . gethostname() . '"';
+                    break;
+                case '#IP#':
+                    $return['#IP#'] = '"' . NetworkHelper::getNetworkAccess('internal', 'ip', '', false) . '"';
+                    break;
+                case '#trigger#':
+                    $return['#trigger#'] = '';
+                    break;
+                case '#trigger_value#':
+                    $return['#trigger_value#'] = '';
+                    break;
+            }
+        }
+        return $return;
+    }
+
+    /**
+     * TODO ????
+     * @ il semble judicieu de rajouter l'interface SenarioInterface à $senario, elle est prete, faut se servir...
+     * @param string $name
+     * @param Scenario $scenario
+     * @return int
+     */
+    public static function trigger($name = '', &$scenario = null)
+    {
+        if ($scenario !== null) {
+            if (trim($name) == '') {
+                return $scenario->getRealTrigger();
+            }
+            if ($name == $scenario->getRealTrigger()) {
+                return 1;
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * TODO ????
+     *
+     * @param Scenario $scenario
+     * @return mixed
+     * @throws \Exception
+     */
+    public static function triggerValue(&$scenario = null)
+    {
+        if ($scenario !== null) {
+            $cmd = CmdManager::byId(str_replace('#', '', $scenario->getRealTrigger()));
+            if (is_object($cmd)) {
+                return $cmd->execCmd();
+            }
+        }
+        return false;
+    }
+
+    /**
+     * TODO: Un tag
+     *
+     * @param Scenario|null $scenario
+     * @param $name
+     * @param string $default
+     * @return string
+     */
+    public static function tag(&$scenario = null, $name, $default = '')
+    {
+        if ($scenario === null) {
+            return '"' . $default . '"';
+        }
+        $tags = $scenario->getTags();
+        if (isset($tags['#' . $name . '#'])) {
+            return $tags['#' . $name . '#'];
+        }
+        return '"' . $default . '"';
     }
 
     /**
@@ -764,6 +1014,52 @@ class ScenarioExpressionManager
     }
 
     /**
+     * @param Cmd $cmd
+     * @param string $startDate
+     * @param string $endDate
+     * @param mixed $value
+     * @return float|string
+     * @throws \Exception
+     */
+    private static function getCmdValueDuration($cmd, $startDate, $endDate, $value)
+    {
+        $value = str_replace(',', '.', $value);
+        $histories = $cmd->getHistory();
+        $nbDecimals = strlen(substr(strrchr($value, "."), 1));
+
+        if (count($histories) == 0) {
+            return '';
+        }
+
+        $duration = 0;
+        $lastDuration = strtotime($histories[0]->getDatetime());
+        $lastValue = $histories[0]->getValue();
+
+        foreach ($histories as $history) {
+            if ($history->getDatetime() >= $startDate) {
+                if ($history->getDatetime() <= $endDate) {
+                    if ($lastValue == $value) {
+                        $duration = $duration + (strtotime($history->getDatetime()) - $lastDuration);
+                    }
+                } else {
+                    if ($lastValue == $value) {
+                        $duration = $duration + (strtotime($endDate) - $lastDuration);
+                    }
+                    break;
+                }
+                $lastDuration = strtotime($history->getDatetime());
+            } else {
+                $lastDuration = strtotime($startDate);
+            }
+            $lastValue = round($history->getValue(), $nbDecimals);
+        }
+        if ($lastValue == $value && $lastDuration <= strtotime($endDate)) {
+            $duration = $duration + (strtotime($endDate) - $lastDuration);
+        }
+        return floor($duration / 60);
+    }
+
+    /**
      * Get the duration between the command has this value
      *
      * @param $cmdId
@@ -989,6 +1285,24 @@ class ScenarioExpressionManager
         return date($format, strtotime($cmd->getValueDate()));
     }
 
+    /**
+     * @param $_eqLogic_id
+     * @param string $_format
+     * @return false|int|string
+     * @throws \Exception
+     */
+    /**
+     * @param $_eqLogic_id
+     * @param string $_format
+     * @return false|int|string
+     * @throws \Exception
+     */
+    /**
+     * @param $_eqLogic_id
+     * @param string $_format
+     * @return false|int|string
+     * @throws \Exception
+     */
     public static function lastCommunication($_eqLogic_id, $_format = 'Y-m-d H:i:s')
     {
         $eqLogic = EqLogicManager::byId(trim(str_replace(array('#', '#eqLogic', 'eqLogic'), '', EqLogicManager::fromHumanReadable('#' . str_replace('#', '', $_eqLogic_id) . '#'))));
@@ -998,6 +1312,21 @@ class ScenarioExpressionManager
         return date($_format, strtotime($eqLogic->getStatus('lastCommunication', date('Y-m-d H:i:s'))));
     }
 
+    /**
+     * @param $_cmd_id
+     * @return mixed|string
+     * @throws \NextDom\Exceptions\CoreException
+     */
+    /**
+     * @param $_cmd_id
+     * @return mixed|string
+     * @throws \NextDom\Exceptions\CoreException
+     */
+    /**
+     * @param $_cmd_id
+     * @return mixed|string
+     * @throws \NextDom\Exceptions\CoreException
+     */
     public static function value($_cmd_id)
     {
         $cmd = CmdManager::byId(trim(str_replace('#', '', CmdManager::humanReadableToCmd('#' . str_replace('#', '', $_cmd_id) . '#'))));
@@ -1039,44 +1368,6 @@ class ScenarioExpressionManager
         $color->green = (strlen($color->green) == 1) ? '0' . $color->green : $color->green;
         $color->blue = (strlen($color->blue) == 1) ? '0' . $color->blue : $color->blue;
         return '#' . $color->red . $color->green . $color->blue;
-    }
-
-    /**
-     * TODO ????
-     * @ il semble judicieu de rajouter l'interface SenarioInterface à $senario, elle est prete, faut se servir...
-     * @param string $name
-     * @param Scenario $scenario
-     * @return int
-     */
-    public static function trigger($name = '', &$scenario = null)
-    {
-        if ($scenario !== null) {
-            if (trim($name) == '') {
-                return $scenario->getRealTrigger();
-            }
-            if ($name == $scenario->getRealTrigger()) {
-                return 1;
-            }
-        }
-        return 0;
-    }
-
-    /**
-     * TODO ????
-     *
-     * @param Scenario $scenario
-     * @return mixed
-     * @throws \Exception
-     */
-    public static function triggerValue(&$scenario = null)
-    {
-        if ($scenario !== null) {
-            $cmd = CmdManager::byId(str_replace('#', '', $scenario->getRealTrigger()));
-            if (is_object($cmd)) {
-                return $cmd->execCmd();
-            }
-        }
-        return false;
     }
 
     /**
@@ -1195,6 +1486,8 @@ class ScenarioExpressionManager
         return $interval->format('%a');
     }
 
+    /** @noinspection PhpOptionalBeforeRequiredParametersInspection */
+
     /**
      * TODO: L'heure mais ça à l'air plus compliqué que ça
      *
@@ -1283,214 +1576,6 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO: Je demande des tags
-     *
-     * @param $expression
-     * @return array
-     * @throws \Exception
-     */
-    public static function getRequestTags($expression)
-    {
-        $return = array();
-        preg_match_all("/#([a-zA-Z0-9]*)#/", $expression, $matches);
-        if (count($matches) == 0) {
-            return $return;
-        }
-        $matches = array_unique($matches[0]);
-        foreach ($matches as $tag) {
-            switch ($tag) {
-                case '#seconde#':
-                    $return['#seconde#'] = (int)date('s');
-                    break;
-                case '#heure#':
-                    $return['#heure#'] = (int)date('G');
-                    break;
-                case '#heure12#':
-                    $return['#heure12#'] = (int)date('g');
-                    break;
-                case '#minute#':
-                    $return['#minute#'] = (int)date('i');
-                    break;
-                case '#jour#':
-                    $return['#jour#'] = (int)date('d');
-                    break;
-                case '#mois#':
-                    $return['#mois#'] = (int)date('m');
-                    break;
-                case '#annee#':
-                    $return['#annee#'] = (int)date('Y');
-                    break;
-                case '#time#':
-                    $return['#time#'] = date('Gi');
-                    break;
-                case '#timestamp#':
-                    $return['#timestamp#'] = time();
-                    break;
-                case '#date#':
-                    $return['#date#'] = date('md');
-                    break;
-                case '#semaine#':
-                    $return['#semaine#'] = date('W');
-                    break;
-                case '#sjour#':
-                    $return['#sjour#'] = '"' . DateHelper::dateToFr(date('l')) . '"';
-                    break;
-                case '#smois#':
-                    $return['#smois#'] = '"' . DateHelper::dateToFr(date('F')) . '"';
-                    break;
-                case '#njour#':
-                    $return['#njour#'] = (int)date('w');
-                    break;
-                case '#nextdom_name#':
-                    $return['#nextdom_name#'] = '"' . ConfigManager::byKey('name') . '"';
-                    break;
-                case '#hostname#':
-                    $return['#hostname#'] = '"' . gethostname() . '"';
-                    break;
-                case '#IP#':
-                    $return['#IP#'] = '"' . NetworkHelper::getNetworkAccess('internal', 'ip', '', false) . '"';
-                    break;
-                case '#trigger#':
-                    $return['#trigger#'] = '';
-                    break;
-                case '#trigger_value#':
-                    $return['#trigger_value#'] = '';
-                    break;
-            }
-        }
-        return $return;
-    }
-
-    /** @noinspection PhpOptionalBeforeRequiredParametersInspection */
-    /**
-     * TODO: Un tag
-     *
-     * @param Scenario|null $scenario
-     * @param $name
-     * @param string $default
-     * @return string
-     */
-    public static function tag(&$scenario = null, $name, $default = '')
-    {
-        if ($scenario === null) {
-            return '"' . $default . '"';
-        }
-        $tags = $scenario->getTags();
-        if (isset($tags['#' . $name . '#'])) {
-            return $tags['#' . $name . '#'];
-        }
-        return '"' . $default . '"';
-    }
-
-    /**
-     * TODO Faut bien les définir les tags
-     *
-     * @param $_expression
-     * @param Scenario $_scenario
-     * @param bool $_quote
-     * @param int $_nbCall
-     * @return mixed
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
-    public static function setTags($_expression, &$_scenario = null, $_quote = false, $_nbCall = 0)
-    {
-        if (file_exists(NEXTDOM_ROOT . '/data/php/user.function.class.php')) {
-            require_once NEXTDOM_ROOT . '/data/php/user.function.class.php';
-        }
-        if ($_nbCall > 10) {
-            return $_expression;
-        }
-        $replace1 = self::getRequestTags($_expression);
-        if ($_scenario !== null && count($_scenario->getTags()) > 0) {
-            $replace1 = array_merge($replace1, $_scenario->getTags());
-        }
-        if (is_object($_scenario)) {
-            $cmd = CmdManager::byId(str_replace('#', '', $_scenario->getRealTrigger()));
-            if (is_object($cmd)) {
-                $replace1['#trigger#'] = $cmd->getHumanName();
-                $replace1['#trigger_value#'] = $cmd->execCmd();
-            } else {
-                $replace1['#trigger#'] = $_scenario->getRealTrigger();
-            }
-        }
-        if ($_quote) {
-            foreach ($replace1 as &$value) {
-                if (strpos($value, ' ') !== false || preg_match("/[a-zA-Z]/", $value) || $value === '') {
-                    $value = '"' . trim($value, '"') . '"';
-                }
-            }
-        }
-        $replace2 = array();
-        if (!is_string($_expression)) {
-            return $_expression;
-        }
-        preg_match_all("/([a-zA-Z][a-zA-Z_]*?)\((.*?)\)/", $_expression, $matches, PREG_SET_ORDER);
-        if (is_array($matches)) {
-            foreach ($matches as $match) {
-                $function = $match[1];
-                $replace_string = $match[0];
-                if (substr_count($match[2], '(') != substr_count($match[2], ')')) {
-                    $pos = strpos($_expression, $match[2]) + strlen($match[2]);
-                    while (substr_count($match[2], '(') > substr_count($match[2], ')')) {
-                        $match[2] .= $_expression[$pos];
-                        $pos++;
-                        if ($pos > strlen($_expression)) {
-                            break;
-                        }
-                    }
-                    $arguments = self::setTags($match[2], $_scenario, $_quote, $_nbCall++);
-                    while ($arguments[0] == '(' && $arguments[strlen($arguments) - 1] == ')') {
-                        $arguments = substr($arguments, 1, -1);
-                    }
-                    $result = str_replace($match[2], $arguments, $_expression);
-                    while (substr_count($result, '(') > substr_count($result, ')')) {
-                        $result .= ')';
-                    }
-                    $result = self::setTags($result, $_scenario, $_quote, $_nbCall++);
-                    return CmdManager::cmdToValue(str_replace(array_keys($replace1), array_values($replace1), $result), $_quote);
-                } else {
-                    $arguments = explode(',', $match[2]);
-                }
-                if (method_exists(__CLASS__, $function)) {
-                    if ($function == 'trigger') {
-                        if (!isset($arguments[0])) {
-                            $arguments[0] = '';
-                        }
-                        $replace2[$replace_string] = self::trigger($arguments[0], $_scenario);
-                    } elseif ($function == 'triggerValue') {
-                        $replace2[$replace_string] = self::triggerValue($_scenario);
-                    } elseif ($function == 'tag') {
-                        if (!isset($arguments[0])) {
-                            $arguments[0] = '';
-                        }
-                        if (!isset($arguments[1])) {
-                            $arguments[1] = '';
-                        }
-                        $replace2[$replace_string] = self::tag($_scenario, $arguments[0], $arguments[1]);
-                    } else {
-                        $replace2[$replace_string] = call_user_func_array(__CLASS__ . "::" . $function, $arguments);
-                    }
-                } else if (class_exists('userFunction') && method_exists('userFunction', $function)) {
-                    $replace2[$replace_string] = call_user_func_array('userFunction' . "::" . $function, $arguments);
-                } else {
-                    if (function_exists($function)) {
-                        foreach ($arguments as &$argument) {
-                            $argument = trim(Utils::evaluate(self::setTags($argument, $_scenario, $_quote)));
-                        }
-                        $replace2[$replace_string] = call_user_func_array($function, $arguments);
-                    }
-                }
-                if ($_quote && isset($replace2[$replace_string]) && (strpos($replace2[$replace_string], ' ') !== false || preg_match("/[a-zA-Z#]/", $replace2[$replace_string]) || $replace2[$replace_string] === '')) {
-                    $replace2[$replace_string] = '"' . trim($replace2[$replace_string], '"') . '"';
-                }
-            }
-        }
-        $return = CmdManager::cmdToValue(str_replace(array_keys($replace1), array_values($replace1), str_replace(array_keys($replace2), array_values($replace2), $_expression)), $_quote);
-        return $return;
-    }
-
-    /**
      * TODO: Créé et exécute un truc
      *
      * @param $type
@@ -1510,51 +1595,5 @@ class ScenarioExpressionManager
             }
         }
         return $scenarioExpression->execute();
-    }
-
-    /**
-     * @param Cmd $cmd
-     * @param string $startDate
-     * @param string $endDate
-     * @param mixed $value
-     * @return float|string
-     * @throws \Exception
-     */
-    private static function getCmdValueDuration($cmd, $startDate, $endDate, $value)
-    {
-        $value = str_replace(',', '.', $value);
-        $histories = $cmd->getHistory();
-        $nbDecimals = strlen(substr(strrchr($value, "."), 1));
-
-        if (count($histories) == 0) {
-            return '';
-        }
-
-        $duration = 0;
-        $lastDuration = strtotime($histories[0]->getDatetime());
-        $lastValue = $histories[0]->getValue();
-
-        foreach ($histories as $history) {
-            if ($history->getDatetime() >= $startDate) {
-                if ($history->getDatetime() <= $endDate) {
-                    if ($lastValue == $value) {
-                        $duration = $duration + (strtotime($history->getDatetime()) - $lastDuration);
-                    }
-                } else {
-                    if ($lastValue == $value) {
-                        $duration = $duration + (strtotime($endDate) - $lastDuration);
-                    }
-                    break;
-                }
-                $lastDuration = strtotime($history->getDatetime());
-            } else {
-                $lastDuration = strtotime($startDate);
-            }
-            $lastValue = round($history->getValue(), $nbDecimals);
-        }
-        if ($lastValue == $value && $lastDuration <= strtotime($endDate)) {
-            $duration = $duration + (strtotime($endDate) - $lastDuration);
-        }
-        return floor($duration / 60);
     }
 }

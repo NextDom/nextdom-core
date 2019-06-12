@@ -17,6 +17,10 @@
 
 namespace NextDom\Interfaces;
 
+/**
+ * Interface SenarioInterface
+ * @package NextDom\Interfaces
+ */
 interface SenarioInterface
 {
     function getRealTrigger();

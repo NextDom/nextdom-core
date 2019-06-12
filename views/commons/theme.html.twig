@@ -40,6 +40,7 @@
 /* COLOR19 = Couleur du texte du sous-menu latéral */
 /* COLOR20 = Couleur de bordure des boutons (bouton d'administration, bouton default) */
 /* COLOR21 = Paramètre alpha des couleurs d'alertes */
+/* COLOR22 = Couleur de fond des boîtes à onglets */
 
 /* #################################################################################################################################################################################################### */
 /* COLOR1 = Couleur d'accentuation principale (identité du thème, header nextdom, bouton primaires, messages d'info, élements actifs ou survolés, textes de liens et d'état, scrollbar, boutons fab...) */
@@ -105,8 +106,8 @@
 
 /* Scrollbar */
 ::-webkit-scrollbar-thumb {
-  background:{{ COLOR1 }} !important;
-  background-color: {{ COLOR1 }} !important;
+  background:{{ COLOR1 }}CC !important;
+  background-color: {{ COLOR1 }}CC !important;
 }
 
 /* Fabs */
@@ -137,6 +138,11 @@
   color: {{ COLOR1 }} !important;
 }
 
+/* Ombre edition mode deisgn */
+.widget-shadow-edit {
+    box-shadow: 0 0 0.5em {{ COLOR1 }} !important;
+}
+
 /* ################################################################################## */
 /* COLOR2 = Couleur de contraste (icônes et texte sur fond accentué ou de sidebar...) */
 /* ################################################################################## */
@@ -151,6 +157,10 @@
   .main-header .navbar .dropdown-menu li a {
     color: {{ COLOR2 }} !important;
   }
+}
+.main-header .navbar .nav > li > a,
+.objectSummaryGlobalHeader {
+    color: {{ COLOR2 }} !important;
 }
 
 /* Menu lateral */
@@ -168,13 +178,12 @@
   color: {{ COLOR2 }} !important;
 }
 
-/* Etiquette dysfonctionnement */
-.sidebar-warning {
+/* Logos */
+.main-header > .logo {
   color: {{ COLOR2 }} !important;
 }
 
-/* Logos */
-.main-header > .logo {
+.bootbox-close-button {
   color: {{ COLOR2 }} !important;
 }
 
@@ -225,6 +234,9 @@
 .sidebar-menu > li > .treeview-menu {
   border: solid 1px {{ COLOR6 }} !important;
 }
+.sidebar-menu > li.header {
+  border-right: 1px solid {{ COLOR6 }} !important;
+}
 
 
 /* ################################################################################### */
@@ -237,7 +249,6 @@
 .treeview-menu > li:hover {
   background-color: {{ COLOR7 }} !important;
 }
-
 
 
 /* ######################################################################### */
@@ -260,17 +271,20 @@
   background-color:{{ COLOR9 }} !important;
   border-color:{{ COLOR9 }}60 !important;
 }
+.nav-tabs-custom > .nav-tabs > li.father > a {
+  background-color:{{ COLOR9 }} !important;
+}
 
 .action-bar, .box-footer {
   border-top-color: {{ COLOR9 }} !important;
 }
 
-.tab-content {
-  border-top-color: {{ COLOR9 }} !important;
+.ui-widget-content {
+  background-color: {{ COLOR9 }} !important;
 }
 
-.ui-widget-content {
-  border: 1px solid {{ COLOR9 }} !important;
+.modal-content{
+  background-color: {{ COLOR9 }} !important;
 }
 
 .ui-dialog .ui-dialog-content {
@@ -288,16 +302,40 @@
   background-color: {{ COLOR10 }} !important;
 }
 
+.nav-tabs-custom .box, .nav-tabs-custom .box .box-footer, .nav-tabs-custom .box .box-body, .nav-tabs-custom .panel, .nav-tabs-custom .panel .panel-body, {
+  background-color: {{ COLOR9 }} !important;
+}
+
+/* Markets */
+#market-div .media {
+  background-color: {{ COLOR9 }} !important;
+}
+.market {
+  background-color: {{ COLOR9 }} !important;
+}
+
+.eqLogicSortable>li {
+  background-color: {{ COLOR9 }} !important;
+}
+
+/* Scenario */
+.scenario-icon {
+  background-color: {{ COLOR9 }} !important;
+}
+
 
 /* ########################################################################################################### */
 /* COLOR10 = Couleur de fond secondaire (titres, action-bar, footer, onglets, titre modale, boîtes d'infos...) */
 /* ########################################################################################################### */
 /* Boxs */
-.box, .box-footer {
+.box, .panel, .box-footer {
   background-color: {{ COLOR10 }} !important;
 }
 .info-box-small{
   background-color: {{ COLOR10 }} !important;
+}
+.nav-tabs-custom .box .box-header, .nav-tabs-custom .box .box-footer, .nav-tabs-custom .panel .panel-heading {
+  border-color: {{ COLOR10 }} !important;
 }
 
 /* Action bar */
@@ -320,12 +358,21 @@ body, .main-footer{
 .label-list:hover, .label-view:hover, .label-log:hover {
   background-color: {{ COLOR10 }} !important;
 }
+.nav-list > li > a:hover {
+  background-color: {{ COLOR10 }} !important;
+}
 
 /* Modale */
-.modal-content{
+.modal-header, .modal-footer{
   background-color: {{ COLOR10 }} !important;
 }
 .ui-dialog .ui-dialog-titlebar, .ui-dialog .ui-dialog-buttonpane {
+  background-color: {{ COLOR10 }} !important;
+}
+.row legend {
+  background-color: {{ COLOR10 }} !important;
+}
+.modal-body legend {
   background-color: {{ COLOR10 }} !important;
 }
 
@@ -336,6 +383,17 @@ body, .main-footer{
 .label-list:hover, .label-view:hover, .label-log:hover {
   background-color: {{ COLOR10 }} !important;
 }
+
+/* Tableaux */
+.table-striped > tbody > tr:nth-of-type(even) {
+  background-color: {{ COLOR10 }} !important;
+}
+
+/* MArket */
+.media-title {
+  background-color: {{ COLOR10 }}60 !important;
+}
+
 
 /* #################################################################### */
 /* COLOR11 = Couleur de fond des titres (légendes, tableaux, unités...) */
@@ -350,7 +408,7 @@ body, .main-footer{
 }
 
 /* Legendes de sections */
-legend {
+legend, .box legend, .panel legend {
   background-color: {{ COLOR11 }} !important;
 }
 .tablesorter-bootstrap .tablesorter-filter-row input.tablesorter-filter, .tablesorter-bootstrap .tablesorter-filter-row select.tablesorter-filter {
@@ -379,6 +437,13 @@ legend {
 pre {
   background-color: {{ COLOR11 }} !important;
 }
+.CodeMirror pre {
+  background-color: transparent !important;
+}
+pre::selection {
+  color: {{ COLOR11 }} !important;
+}
+
 .nav-tabs-custom > .nav-tabs > li.header, .nav-tabs-custom > .nav-tabs > li.active > a, .nav-tabs-custom > .nav-tabs > li.active:hover > a,.nav-tabs-custom > .nav-tabs > li > a {
   color: {{ COLOR12 }} !important;
 }
@@ -408,7 +473,13 @@ legend {
 body, h1, h2, h3, h4, h5, h6  {
   color: {{ COLOR12 }} !important;
 }
+.box-header span {
+  color: {{ COLOR12 }} !important;
+}
 .nav-tabs-custom > .nav-tabs > li.header, .nav-tabs-custom > .nav-tabs > li.active > a, .nav-tabs-custom > .nav-tabs > li.active:hover > a,.nav-tabs-custom > .nav-tabs > li > a {
+  color: {{ COLOR12 }} !important;
+}
+.nav-tabs-custom > .nav-tabs > li.father > a {
   color: {{ COLOR12 }} !important;
 }
 legend {
@@ -428,18 +499,9 @@ legend {
 .ui-dialog .ui-dialog-title {
   color: {{ COLOR12 }} !important;
 }
-.input-group .input-group-addon {
-  color: {{ COLOR12 }} !important;
-}
-.input-sm {
-  color: {{ COLOR12 }} !important;
-}
-pre {
-  color: {{ COLOR12 }} !important;
-}
 
 /* Bouton administration */
-.btn-app {
+.btn-app, .btn-selector {
   color: {{ COLOR12 }} !important;
 }
 
@@ -456,6 +518,9 @@ pre {
 pre {
   color: {{ COLOR12 }} !important;
 }
+pre::selection {
+  background-color: {{ COLOR12 }} !important;
+}
 
 /* Code mirror */
 .CodeMirror-gutters {
@@ -463,10 +528,29 @@ pre {
 }
 
 /* Listes */
-.label-list, .label-view, .label-log{
+.label-list, .label-view, .label-log {
   color: {{ COLOR12 }} !important;
 }
 
+/* Tableaux */
+.tablesorter-filter {
+  color: {{ COLOR12 }} !important;
+}
+
+/* Bouton filtres tuiles */
+.bt_editDashboardWidgetUniformize,
+.bt_editDashboardWidgetAutoResize,
+.bt_editDashboardWidgetGridResize {
+  color: {{ COLOR12 }} !important;
+}
+
+/* Summary page objets */
+.objectListContainer .objectSummaryParent {
+  color: {{ COLOR12 }} !important;
+}
+.accordion-toggle .fas {
+  color: {{ COLOR12 }} !important;
+}
 
 /* ############################################################################## */
 /* COLOR13 = Couleur de fond des inputs (champs de saisie, listes déroulantes...) */
@@ -501,16 +585,16 @@ pre {
 /* COLOR14 = Couleur de bordure (inputs, légendes, tableaux et bouton d'administration...) */
 /* ####################################################################################### */
 /* Inputs */
-.colorpick, .ui-autocomplete-input {
+.colorpick, .ui-autocomplete-input, select, textarea, input:not(.has-error) {
   border: 1px solid {{ COLOR14 }} !important;
 }
 .input-group {
-  border: 1px solid {{ COLOR14 }} !important;
-}
-.label-value {
   border-color: {{ COLOR14 }} !important;
 }
-.form-control:not(has-error) {
+.input-group>input, input[type="checkbox"], input[type="radio"] {
+  border: none !important;
+}
+.label-value {
   border-color: {{ COLOR14 }} !important;
 }
 
@@ -546,7 +630,7 @@ pre {
 /* COLOR15 = Couleur de fond des contenants (boxs, cards, pages d'onglets, tableaux...) */
 /* #################################################################################### */
 /* Box */
-.tab-content {
+.tab-content, .box-body, .panel-body {
   background-color: {{ COLOR15 }} !important;
 }
 .right-border {
@@ -570,7 +654,7 @@ pre {
 /* ################################# */
 /* COLOR17 = Bouton d'administration */
 /* ################################# */
-.btn-app {
+.btn-app, .btn-selector {
   background-color: {{ COLOR17 }} !important;
 }
 
@@ -586,7 +670,7 @@ pre {
 .sidebar-menu .treeview-menu > li > a:hover {
   color: {{ COLOR18 }} !important;
 }
-.sidebar a:not(.sidebar-warning), .accordion-toggle .fas {
+.sidebar a {
   color: {{ COLOR18 }} !important;
 }
 .user-panel > .info,
@@ -599,19 +683,11 @@ pre {
 /* COLOR19 = Couleur du texte du sous-menu latéral */
 /* ############################################### */
 /* Menu lateral */
-.sidebar-menu .treeview-menu>li>a:not(.sidebar-warning) {
+.sidebar-menu .treeview-menu>li:not(.sidebar-warning)>a {
   color: {{ COLOR19 }} !important;
 }
-.sidebar-menu .treeview-menu > li.active > a,
-.sidebar-menu .treeview-menu > li > a:hover {
-  color: {{ COLOR18 }} !important;
-}
-.sidebar a:not(.sidebar-warning), .accordion-toggle .fas {
-  color: {{ COLOR18 }} !important;
-}
-.user-panel > .info,
-.user-panel > .info > a {
-  color: {{ COLOR18 }} !important;
+.sidebar-warning a {
+    color: #000 !important;
 }
 
 
@@ -619,7 +695,7 @@ pre {
 /* COLOR20 = Couleur de bordure des boutons (bouton d'administration, bouton default) */
 /* ################################################################################## */
 /* Bouton administration */
-.btn-app, .btn-default {
+.btn-app, .btn-selector:not(.iconSelected) {
   border: 1px solid {{ COLOR20 }} !important;
 }
 
@@ -639,4 +715,13 @@ pre {
 }
 .alert-info {
     background-color: rgba(0, 192, 239, {{ COLOR21 / 100 }}) !important;
+}
+
+
+/* ############################################## */
+/* COLOR22 = Couleur de fond des boîtes à onglets */
+/* ############################################## */
+/* Tabs */
+.nav-tabs-custom>.tab-content {
+    background-color: {{ COLOR22 }} !important;
 }

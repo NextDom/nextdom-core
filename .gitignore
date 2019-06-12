@@ -2,7 +2,6 @@ nbproject/
 test.php
 core/config/common.config.php
 /plugins
-/data
 sftp-config.json
 *.iml
 
@@ -31,6 +30,16 @@ var/*
 /.sass-cache
 /DB_Backup.sql
 
-tests/gui/chromedriver*
+__pycache__/
+tests/tests/chromedriver*
 
 core/config
+core/css
+
+/var.*
+/var
+/data.*
+/data
+/src/mobile/node_modules
+/src/mobile/src/assets/icons
+/mobile

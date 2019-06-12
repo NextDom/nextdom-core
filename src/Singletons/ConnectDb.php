@@ -20,6 +20,10 @@ namespace NextDom\Singletons;
 
 use NextDom\Exceptions\DbException;
 
+/**
+ * Class ConnectDb
+ * @package NextDom\Singletons
+ */
 class ConnectDb
 {
 

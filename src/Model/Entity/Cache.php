@@ -20,6 +20,10 @@ namespace NextDom\Model\Entity;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CacheManager;
 
+/**
+ * Class Cache
+ * @package NextDom\Model\Entity
+ */
 class Cache
 {
     protected $key;
@@ -28,6 +32,10 @@ class Cache
     protected $datetime;
     protected $options = null;
 
+    /**
+     * @return bool
+     * @throws \Exception
+     */
     public function save()
     {
         $this->setDatetime(date('Y-m-d H:i:s'));
@@ -36,6 +44,39 @@ class Cache
         } else {
             return CacheManager::getCache()->save($this->getKey(), $this, $this->getLifetime());
         }
+    }
+
+    /**
+     * @return int
+     */
+    public function getLifetime()
+    {
+        return $this->lifetime;
+    }
+
+    /**
+     * @param $lifetime
+     * @return $this
+     */
+    public function setLifetime($lifetime)
+    {
+        $this->lifetime = $lifetime;
+        return $this;
+    }
+
+    public function getKey()
+    {
+        return $this->key;
+    }
+
+    /**
+     * @param $key
+     * @return $this
+     */
+    public function setKey($key)
+    {
+        $this->key = $key;
+        return $this;
     }
 
     public function remove()
@@ -47,41 +88,30 @@ class Cache
         }
     }
 
+    /**
+     * @return bool
+     */
     public function hasExpired()
     {
         return true;
     }
 
-    public function getKey()
-    {
-        return $this->key;
-    }
-
-    public function setKey($key)
-    {
-        $this->key = $key;
-        return $this;
-    }
-
+    /**
+     * @param string $_default
+     * @return null|string
+     */
     public function getValue($_default = '')
     {
         return ($this->value === null || (is_string($this->value) && trim($this->value) === '')) ? $_default : $this->value;
     }
 
+    /**
+     * @param $value
+     * @return $this
+     */
     public function setValue($value)
     {
         $this->value = $value;
-        return $this;
-    }
-
-    public function getLifetime()
-    {
-        return $this->lifetime;
-    }
-
-    public function setLifetime($lifetime)
-    {
-        $this->lifetime = $lifetime;
         return $this;
     }
 
@@ -90,23 +120,40 @@ class Cache
         return $this->datetime;
     }
 
+    /**
+     * @param $datetime
+     * @return $this
+     */
     public function setDatetime($datetime)
     {
         $this->datetime = $datetime;
         return $this;
     }
 
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
     public function getOptions($_key = '', $_default = '')
     {
         return Utils::getJsonAttr($this->options, $_key, $_default);
     }
 
+    /**
+     * @param $_key
+     * @param null $_value
+     * @return $this
+     */
     public function setOptions($_key, $_value = null)
     {
         $this->options = Utils::setJsonAttr($this->options, $_key, $_value);
         return $this;
     }
 
+    /**
+     * @param $options
+     */
     public function setOptionsFromJson($options)
     {
         $this->options = json_encode($options, JSON_UNESCAPED_UNICODE);

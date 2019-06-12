@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ViewZoneManager;
 
@@ -26,7 +27,7 @@ use NextDom\Managers\ViewZoneManager;
  * @ORM\Table(name="viewData", uniqueConstraints={@ORM\UniqueConstraint(name="unique", columns={"viewZone_id", "link_id", "type"})}, indexes={@ORM\Index(name="fk_data_zone1_idx", columns={"viewZone_id"}), @ORM\Index(name="order", columns={"order", "viewZone_id"})})
  * @ORM\Entity
  */
-class ViewData
+class ViewData implements EntityInterface
 {
 
     /**
@@ -78,16 +79,30 @@ class ViewData
 
     protected $_changed = false;
 
+    /**
+     * @return bool
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public function save()
     {
-        return \DB::save($this);
+        return DBHelper::save($this);
     }
 
+    /**
+     * @return bool
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public function remove()
     {
-        return \DB::remove($this);
+        return DBHelper::remove($this);
     }
 
+    /**
+     * @return ViewZone|null
+     * @throws \Exception
+     */
     public function getviewZone()
     {
         return ViewZoneManager::byId($this->getviewZone_id());
@@ -95,35 +110,18 @@ class ViewData
 
     /*     * **********************Getteur Setteur*************************** */
 
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
-    }
-
-    public function getOrder()
-    {
-        return $this->order;
-    }
-
-    public function setOrder($_order)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->order, $_order);
-        $this->order = $_order;
-        return $this;
-    }
-
+    /**
+     * @return ViewZone
+     */
     public function getviewZone_id()
     {
         return $this->viewZone_id;
     }
 
+    /**
+     * @param $_viewZone_id
+     * @return $this
+     */
     public function setviewZone_id($_viewZone_id)
     {
         $this->_changed = Utils::attrChanged($this->_changed, $this->viewZone_id, $_viewZone_id);
@@ -131,30 +129,47 @@ class ViewData
         return $this;
     }
 
-    public function getType()
+    /**
+     * @return int
+     */
+    public function getId()
     {
-        return $this->type;
+        return $this->id;
     }
 
-    public function setType($_type)
+    /**
+     * @param $_id
+     * @return $this
+     */
+    public function setId($_id)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->type, $_type);
-        $this->type = $_type;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
+        $this->id = $_id;
         return $this;
     }
 
-    public function getLink_id()
+    /**
+     * @return int
+     */
+    public function getOrder()
     {
-        return $this->link_id;
+        return $this->order;
     }
 
-    public function setLink_id($_link_id)
+    /**
+     * @param $_order
+     * @return $this
+     */
+    public function setOrder($_order)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->link_id, $_link_id);
-        $this->link_id = $_link_id;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->order, $_order);
+        $this->order = $_order;
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getLinkObject()
     {
         $type = $this->getType();
@@ -164,11 +179,59 @@ class ViewData
         return false;
     }
 
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param $_type
+     * @return $this
+     */
+    public function setType($_type)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->type, $_type);
+        $this->type = $_type;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLink_id()
+    {
+        return $this->link_id;
+    }
+
+    /**
+     * @param $_link_id
+     * @return $this
+     */
+    public function setLink_id($_link_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->link_id, $_link_id);
+        $this->link_id = $_link_id;
+        return $this;
+    }
+
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
     public function getConfiguration($_key = '', $_default = '')
     {
         return Utils::getJsonAttr($this->configuration, $_key, $_default);
     }
 
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
     public function setConfiguration($_key, $_value)
     {
         $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
@@ -177,11 +240,18 @@ class ViewData
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getChanged()
     {
         return $this->_changed;
     }
 
+    /**
+     * @param $_changed
+     * @return $this
+     */
     public function setChanged($_changed)
     {
         $this->_changed = $_changed;

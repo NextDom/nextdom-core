@@ -20,6 +20,7 @@ namespace NextDom\Model\Entity;
 use NextDom\Enums\EqLogicViewType;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
@@ -31,8 +32,8 @@ use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EqRealManager;
 use NextDom\Managers\EventManager;
 use NextDom\Managers\InteractDefManager;
-use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\MessageManager;
+use NextDom\Managers\ObjectManager;
 use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioManager;
@@ -56,111 +57,97 @@ use NextDom\Managers\ViewManager;
  * })
  * ORM\Entity
  */
-class EqLogic
+class EqLogic implements EntityInterface
 {
     const CLASS_NAME = EqLogic::class;
     const DB_CLASS_NAME = '`eqLogic`';
 
     const UIDDELIMITER = '__';
+    private static $_templateArray = [];
     protected $_debug = false;
     protected $_object = null;
     protected $_needRefreshWidget = false;
     protected $_timeoutUpdated = false;
     protected $_batteryUpdated = false;
     protected $_changed = false;
-    private static $_templateArray = array();
-
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=127, nullable=false)
      */
     protected $name;
-
     /**
      * @var string
      *
      * @ORM\Column(name="generic_type", type="string", length=255, nullable=true)
      */
     protected $generic_type;
-
     /**
      * @var string
      *
      * @ORM\Column(name="logicalId", type="string", length=127, nullable=true)
      */
     protected $logicalId;
-
     /**
      * @var string
      *
      * @ORM\Column(name="eqType_name", type="string", length=127, nullable=false)
      */
     protected $eqType_name;
-
     /**
      * @var string
      *
      * @ORM\Column(name="configuration", type="text", length=65535, nullable=true)
      */
     protected $configuration;
-
     /**
      * @var boolean
      *
      * @ORM\Column(name="isVisible", type="boolean", nullable=true)
      */
     protected $isVisible;
-
     /**
      * @var boolean
      *
      * @ORM\Column(name="isEnable", type="boolean", nullable=true)
      */
     protected $isEnable;
-
     /**
      * @var integer
      *
      * @ORM\Column(name="timeout", type="integer", nullable=true)
      */
     protected $timeout;
-
     /**
      * @var string
      *
      * @ORM\Column(name="category", type="text", length=65535, nullable=true)
      */
     protected $category;
-
     /**
      * @var string
      *
      * @ORM\Column(name="display", type="text", length=65535, nullable=true)
      */
     protected $display;
-
     /**
      * @var integer
      *
      * @ORM\Column(name="order", type="integer", nullable=true)
      */
     protected $order = 9999;
-
     /**
      * @var string
      *
      * @ORM\Column(name="comment", type="text", length=65535, nullable=true)
      */
     protected $comment;
-
     /**
      * @var string
      *
      * @ORM\Column(name="tags", type="string", length=255, nullable=true)
      */
     protected $tags;
-
     /**
      * @var integer
      *
@@ -169,68 +156,25 @@ class EqLogic
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
-
     /**
      * @var integer
      *
      * @ORM\Column(name="eqReal_id", type="integer", nullable=true)
      */
     protected $eqReal_id;
-
     /**
      * @var integer
      *
      * @ORM\Column(name="object_id", type="integer", nullable=true)
      */
     protected $object_id;
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @return string
-     */
-    public function getGenericType()
-    {
-        return $this->generic_type;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLogicalId()
-    {
-        return $this->logicalId;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEqType_name()
-    {
-        return $this->eqType_name;
-    }
-
-    /**
-     * @param string $configKey
-     * @param string $defaultValue
-     * @return array|bool|mixed|null|string
-     */
-    public function getConfiguration($configKey = '', $defaultValue = '')
-    {
-        return Utils::getJsonAttr($this->configuration, $configKey, $defaultValue);
-    }
+    private $_cmds = [];
 
     /**
      * @param int $defaultValue
      * @return bool|int
      */
-    public function getIsvisible($defaultValue = 0)
+    public function getIsVisible($defaultValue = 0)
     {
         if ($this->isVisible == '' || !is_numeric($this->isVisible)) {
             return $defaultValue;
@@ -239,63 +183,17 @@ class EqLogic
     }
 
     /**
-     * @param int $defaultValue
-     * @return bool|int
+     * @param $isVisible
+     * @return $this
      */
-    public function getIsEnable($defaultValue = 0)
+    public function setIsVisible($isVisible)
     {
-        if ($this->isEnable == '' || !is_numeric($this->isEnable)) {
-            return $defaultValue;
+        if ($this->isVisible != $isVisible) {
+            $this->_needRefreshWidget = true;
+            $this->_changed = true;
         }
-        return $this->isEnable;
-    }
-
-    /**
-     * @param string $statusKey
-     * @param string $defaultValue
-     *
-     * @return array|bool|mixed|null|string
-     * @throws \Exception
-     */
-    public function getStatus($statusKey = '', $defaultValue = '')
-    {
-        $status = CacheManager::byKey('eqLogicStatusAttr' . $this->getId())->getValue();
-        return Utils::getJsonAttr($status, $statusKey, $defaultValue);
-    }
-
-    /**
-     * @param null $defaultValue
-     * @return int|null
-     */
-    public function getTimeout($defaultValue = null)
-    {
-        if ($this->timeout == '' || !is_numeric($this->timeout)) {
-            return $defaultValue;
-        }
-        return $this->timeout;
-    }
-
-    /**
-     * @param string $categoryKey
-     * @param string $defaultValue
-     * @return array|bool|int|mixed|null|string
-     */
-    public function getCategory($categoryKey = '', $defaultValue = '')
-    {
-        if ($categoryKey == 'other' && strpos($this->category, "1") === false) {
-            return 1;
-        }
-        return Utils::getJsonAttr($this->category, $categoryKey, $defaultValue);
-    }
-
-    /**
-     * @param string $displayKey
-     * @param string $defaultValue
-     * @return array|bool|mixed|null|string
-     */
-    public function getDisplay($displayKey = '', $defaultValue = '')
-    {
-        return Utils::getJsonAttr($this->display, $displayKey, $defaultValue);
+        $this->isVisible = $isVisible;
+        return $this;
     }
 
     /**
@@ -310,6 +208,17 @@ class EqLogic
     }
 
     /**
+     * @param $_order
+     * @return $this
+     */
+    public function setOrder($_order)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->order, $_order);
+        $this->order = $_order;
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getComment()
@@ -318,19 +227,14 @@ class EqLogic
     }
 
     /**
-     * @return string
+     * @param $comment
+     * @return $this
      */
-    public function getTags()
+    public function setComment($comment)
     {
-        return $this->tags;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->comment, $comment);
+        $this->comment = $comment;
+        return $this;
     }
 
     /**
@@ -346,234 +250,6 @@ class EqLogic
     }
 
     /**
-     * @return array|mixed|null
-     */
-    public function getEqReal()
-    {
-        return EqRealManager::byId($this->eqReal_id);
-    }
-
-    /**
-     * @return int
-     */
-    public function getObject_id()
-    {
-        return $this->object_id;
-    }
-
-    /**
-     * @return JeeObject|null
-     * @throws \Exception
-     */
-    public function getObject()
-    {
-        if ($this->_object === null) {
-            $this->setObject(JeeObjectManager::byId($this->object_id));
-        }
-        return $this->_object;
-    }
-
-    /**
-     * @param $_name
-     * @return $this
-     */
-    public function setName($_name)
-    {
-        $_name = str_replace(array('&', '#', ']', '[', '%', "'", "\\", "/"), '', $_name);
-        if ($_name != $this->name) {
-            $this->_needRefreshWidget = true;
-            $this->_changed = true;
-        }
-        $this->name = $_name;
-        return $this;
-    }
-
-    /**
-     * @param $generic_type
-     * @return $this
-     */
-    public function setGenericType($generic_type)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->generic_type, $generic_type);
-        $this->generic_type = $generic_type;
-        return $this;
-    }
-
-    /**
-     * @param $_logicalId
-     * @return $this
-     */
-    public function setLogicalId($_logicalId)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->logicalId, $_logicalId);
-        $this->logicalId = $_logicalId;
-        return $this;
-    }
-
-    /**
-     * @param $eqType_name
-     * @return $this
-     */
-    public function setEqType_name($eqType_name)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->eqType_name, $eqType_name);
-        $this->eqType_name = $eqType_name;
-        return $this;
-    }
-
-    /**
-     * @param $configKey
-     * @param $configValue
-     * @return $this
-     */
-    public function setConfiguration($configKey, $configValue)
-    {
-        if (in_array($configKey, array('battery_warning_threshold', 'battery_danger_threshold'))) {
-            if ($this->getConfiguration($configKey, '') != $configValue) {
-                $this->_batteryUpdated = true;
-            }
-        }
-        $configuration = Utils::setJsonAttr($this->configuration, $configKey, $configValue);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
-        $this->configuration = $configuration;
-        return $this;
-    }
-
-    /**
-     * @param $_isVisible
-     * @return $this
-     */
-    public function setIsVisible($_isVisible)
-    {
-        if ($this->isVisible != $_isVisible) {
-            $this->_needRefreshWidget = true;
-            $this->_changed = true;
-        }
-        $this->isVisible = $_isVisible;
-        return $this;
-    }
-
-    /**
-     * @param $_isEnable
-     * @return $this
-     * @throws \Exception
-     */
-    public function setIsEnable($_isEnable)
-    {
-        if ($this->isEnable != $_isEnable) {
-            $this->_needRefreshWidget = true;
-            $this->_changed = true;
-        }
-        if ($_isEnable) {
-            $this->setStatus(array('lastCommunication' => date('Y-m-d H:i:s'), 'timeout' => 0));
-        }
-        $this->isEnable = $_isEnable;
-        return $this;
-    }
-
-    /**
-     * @param $_key
-     * @param null $_value
-     * @throws \Exception
-     */
-    public function setStatus($_key, $_value = null)
-    {
-        CacheManager::set('eqLogicStatusAttr' . $this->getId(), Utils::setJsonAttr(CacheManager::byKey('eqLogicStatusAttr' . $this->getId())->getValue(), $_key, $_value));
-    }
-
-    /**
-     * @param $timeout
-     * @return $this
-     */
-    public function setTimeout($timeout)
-    {
-        if ($timeout == '' || is_nan(intval($timeout)) || $timeout < 1) {
-            $timeout = null;
-        }
-        if ($timeout != $this->getTimeout()) {
-            $this->_timeoutUpdated = true;
-            $this->_changed = true;
-        }
-        $this->timeout = $timeout;
-        return $this;
-    }
-
-    /**
-     * @param $_key
-     * @param $_value
-     * @return $this
-     */
-    public function setCategory($_key, $_value)
-    {
-        if ($this->getCategory($_key) != $_value) {
-            $this->_needRefreshWidget = true;
-        }
-        $category = Utils::setJsonAttr($this->category, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->category, $category);
-        $this->category = $category;
-        return $this;
-    }
-
-    /**
-     * @param $displayKey
-     * @param $displayValue
-     */
-    public function setDisplay($displayKey, $displayValue)
-    {
-        if ($this->getDisplay($displayKey) != $displayValue) {
-            $this->_needRefreshWidget = true;
-        }
-        $display = Utils::setJsonAttr($this->display, $displayKey, $displayValue);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->display, $display);
-        $this->display = $display;
-    }
-
-    /**
-     * @param $_order
-     * @return $this
-     */
-    public function setOrder($_order)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->order, $_order);
-        $this->order = $_order;
-        return $this;
-    }
-
-    /**
-     * @param $comment
-     * @return $this
-     */
-    public function setComment($comment)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->comment, $comment);
-        $this->comment = $comment;
-        return $this;
-    }
-
-    /**
-     * @param $tags
-     * @return $this
-     */
-    public function setTags($tags)
-    {
-        $_tags = str_replace(array("'", '<', '>'), "", $tags);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->tags, $_tags);
-        $this->tags = $_tags;
-        return $this;
-    }
-
-    /**
-     * @param $_id
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
-    }
-
-    /**
      * @param $_eqReal_id
      * @return $this
      */
@@ -585,44 +261,11 @@ class EqLogic
     }
 
     /**
-     * @param null $object_id
-     * @return $this
+     * @return array|mixed|null
      */
-    public function setObject_id($object_id = null)
+    public function getEqReal()
     {
-        $object_id = (!is_numeric($object_id)) ? null : $object_id;
-        $this->_changed = Utils::attrChanged($this->_changed, $this->object_id, $object_id);
-        $this->object_id = $object_id;
-        return $this;
-    }
-
-    /**
-     * @param $_object
-     * @return $this
-     */
-    public function setObject($_object)
-    {
-        $this->_object = $_object;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getDebug()
-    {
-        return $this->_debug;
-    }
-
-    /**
-     * @param $_debug
-     */
-    public function setDebug($_debug)
-    {
-        if ($_debug) {
-            echo "Mode debug activé\n";
-        }
-        $this->_debug = $_debug;
+        return EqRealManager::byId($this->eqReal_id);
     }
 
     /**
@@ -635,6 +278,25 @@ class EqLogic
     {
         $cache = CacheManager::byKey('eqLogicCacheAttr' . $this->getId())->getValue();
         return Utils::getJsonAttr($cache, $cacheKey, $defaultValue);
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param $_id
+     * @return $this
+     */
+    public function setId($_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
+        $this->id = $_id;
+        return $this;
     }
 
     /**
@@ -704,12 +366,125 @@ class EqLogic
             $html .= '<i class="manual-threshold icon techno-fingerprint41 pull-right" title="Seuil manuel défini"></i>';
         }
         if ($batteryTime != 'NA') {
-            $html .= '<i class="icon divers-calendar2 pull-right" style="position:absolute;bottom: 3px;left: 3px;cursor:default;" title="Pile(s) changée(s) il y a ' . $batterySince . ' jour(s) (' . $batteryTime . ')"> (' . $batterySince . 'j)</i>';
+            $html .= '<i class="icon divers-calendar2 pull-right eqLogic-calendar" title="Pile(s) changée(s) il y a ' . $batterySince . ' jour(s) (' . $batteryTime . ')"> (' . $batterySince . 'j)</i>';
         } else {
-            $html .= '<i class="icon divers-calendar2 pull-right" style="position:absolute;bottom: 3px;left: 3px;cursor:default;" title="Pas de date de changement de pile(s) renseignée"></i>';
+            $html .= '<i class="icon divers-calendar2 pull-right eqLogic-calendar" title="Pas de date de changement de pile(s) renseignée"></i>';
         }
         $html .= '</div>';
         return $html;
+    }
+
+    /**
+     * @param string $configKey
+     * @param string $defaultValue
+     * @return array|bool|mixed|null|string
+     */
+    public function getConfiguration($configKey = '', $defaultValue = '')
+    {
+        return Utils::getJsonAttr($this->configuration, $configKey, $defaultValue);
+    }
+
+    /**
+     * @param $configKey
+     * @param $configValue
+     * @return $this
+     */
+    public function setConfiguration($configKey, $configValue)
+    {
+        if (in_array($configKey, array('battery_warning_threshold', 'battery_danger_threshold'))) {
+            if ($this->getConfiguration($configKey, '') != $configValue) {
+                $this->_batteryUpdated = true;
+            }
+        }
+        $configuration = Utils::setJsonAttr($this->configuration, $configKey, $configValue);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
+        $this->configuration = $configuration;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEqType_name()
+    {
+        return $this->eqType_name;
+    }
+
+    /**
+     * @param $eqTypeName
+     * @return $this
+     */
+    public function setEqType_name($eqTypeName)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->eqType_name, $eqTypeName);
+        $this->eqType_name = $eqTypeName;
+        return $this;
+    }
+
+    /**
+     * @return JeeObject|null
+     * @throws \Exception
+     */
+    public function getObject()
+    {
+        if ($this->_object === null) {
+            $this->setObject(ObjectManager::byId($this->object_id));
+        }
+        return $this->_object;
+    }
+
+    /**
+     * @param $_object
+     * @return $this
+     */
+    public function setObject($_object)
+    {
+        $this->_object = $_object;
+        return $this;
+    }
+
+    /**
+     * @param string $statusKey
+     * @param string $defaultValue
+     *
+     * @return array|bool|mixed|null|string
+     * @throws \Exception
+     */
+    public function getStatus($statusKey = '', $defaultValue = '')
+    {
+        $status = CacheManager::byKey('eqLogicStatusAttr' . $this->getId())->getValue();
+        return Utils::getJsonAttr($status, $statusKey, $defaultValue);
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param $name
+     * @return $this
+     */
+    public function setName($name)
+    {
+        $name = str_replace(array('&', '#', ']', '[', '%', "'", "\\", "/"), '', $name);
+        if ($name != $this->name) {
+            $this->_needRefreshWidget = true;
+            $this->_changed = true;
+        }
+        $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLinkToConfiguration()
+    {
+        return 'index.php?v=d&p=' . $this->getEqType_name() . '&m=' . $this->getEqType_name() . '&id=' . $this->getId();
     }
 
     /**
@@ -755,6 +530,69 @@ class EqLogic
     }
 
     /**
+     * @param int $defaultValue
+     * @return bool|int
+     */
+    public function getIsEnable($defaultValue = 0)
+    {
+        if ($this->isEnable == '' || !is_numeric($this->isEnable)) {
+            return $defaultValue;
+        }
+        return $this->isEnable;
+    }
+
+    /**
+     * @param $isEnable
+     * @return $this
+     * @throws \Exception
+     */
+    public function setIsEnable($isEnable)
+    {
+        if ($this->isEnable != $isEnable) {
+            $this->_needRefreshWidget = true;
+            $this->_changed = true;
+        }
+        if ($isEnable) {
+            $this->setStatus(array('lastCommunication' => date('Y-m-d H:i:s'), 'timeout' => 0));
+        }
+        $this->isEnable = $isEnable;
+        return $this;
+    }
+
+    /**
+     * Get all commands of the object
+     *
+     * @param null $_type
+     * @param null $_logicalId
+     * @param null $_visible
+     * @param bool $_multiple
+     * @return Cmd[]
+     * @throws \Exception
+     */
+    public function getCmd($_type = null, $_logicalId = null, $_visible = null, $_multiple = false)
+    {
+        if ($_logicalId !== null) {
+            if (isset($this->_cmds[$_logicalId . '.' . $_multiple . '.' . $_type])) {
+                return $this->_cmds[$_logicalId . '.' . $_multiple . '.' . $_type];
+            }
+            $cmds = CmdManager::byEqLogicIdAndLogicalId($this->id, $_logicalId, $_multiple, $_type);
+        } else {
+            $cmds = CmdManager::byEqLogicId($this->id, $_type, $_visible, $this);
+        }
+        if (is_array($cmds)) {
+            foreach ($cmds as $cmd) {
+                $cmd->setEqLogic($this);
+            }
+        } elseif (is_object($cmds)) {
+            $cmds->setEqLogic($this);
+        }
+        if ($_logicalId !== null && is_object($cmds)) {
+            $this->_cmds[$_logicalId . '.' . $_multiple . '.' . $_type] = $cmds;
+        }
+        return $cmds;
+    }
+
+    /**
      * @param $_name
      * @return EqLogic
      * @throws CoreException
@@ -786,377 +624,6 @@ class EqLogic
             }
         }
         return $eqLogicCopy;
-    }
-
-    /**
-     * Get the name of the SQL table where data is stored.
-     *
-     * @return string
-     */
-    public function getTableName()
-    {
-        return 'eqLogic';
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasOnlyEventOnlyCmd()
-    {
-        return true;
-    }
-
-    /**
-     * Prepare data for HTML view
-     *
-     * @param string $viewType Type of view
-     * @param array $_default
-     * @param bool $_noCache
-     * @return array|string
-     * @throws CoreException
-     * @throws \ReflectionException
-     */
-    public function preToHtml($viewType = EqLogicViewType::DASHBOARD, $_default = array(), $_noCache = false)
-    {
-        // Check if view type is valid
-        if (!EqLogicViewType::exists($viewType)) {
-            throw new CoreException(__('La version demandée ne peut pas être vide (mobile, dashboard, dview ou scénario)'));
-        }
-        if (!$this->hasRight('r')) {
-            return '';
-        }
-        if (!$this->getIsEnable()) {
-            return '';
-        }
-        $version = NextDomHelper::versionAlias($viewType, false);
-        if ($this->getDisplay('showOn' . $version, 1) == 0) {
-            return '';
-        }
-        $user_id = '';
-        if (isset($_SESSION) && is_object(UserManager::getStoredUser())) {
-            $user_id = UserManager::getStoredUser()->getId();
-        }
-        if (!$_noCache) {
-            $mc = CacheManager::byKey('widgetHtml' . $this->getId() . $viewType . $user_id);
-            if ($mc->getValue() != '') {
-                return preg_replace("/" . preg_quote(self::UIDDELIMITER) . "(.*?)" . preg_quote(self::UIDDELIMITER) . "/", self::UIDDELIMITER . mt_rand() . self::UIDDELIMITER, $mc->getValue());
-            }
-        }
-        $tagsValue = '';
-        if ($this->getTags() != null) {
-            $tagsArray = explode(',', $this->getTags());
-            foreach ($tagsArray as $tags) {
-                if ($tags == null) {
-                    continue;
-                }
-                $tagsValue .= 'tag-' . $tags . ' ';
-            }
-        }
-        $tagsValue = trim($tagsValue);
-        $replace = array(
-            '#id#' => $this->getId(),
-            '#name#' => $this->getName(),
-            '#name_display#' => $this->getName(),
-            '#hideEqLogicName#' => '',
-            '#eqLink#' => $this->getLinkToConfiguration(),
-            '#category#' => $this->getCategories(),
-            '#color#' => '#ffffff',
-            '#border#' => 'none',
-            '#border-radius#' => '0px',
-            '#style#' => '',
-            '#max_width#' => '650px',
-            '#logicalId#' => $this->getLogicalId(),
-            '#object_name#' => '',
-            '#height#' => $this->getDisplay('height', ConfigManager::byKey('widget::size') . 'px'),
-            '#width#' => $this->getDisplay('width', ConfigManager::byKey('widget::size') . 'px'),
-            '#uid#' => 'eqLogic' . $this->getId() . self::UIDDELIMITER . mt_rand() . self::UIDDELIMITER,
-            '#refresh_id#' => '',
-            '#version#' => $viewType,
-            '#alert_name#' => '',
-            '#alert_icon#' => '',
-            '#eqType#' => $this->getEqType_name(),
-            '#custom_layout#' => ($this->widgetPossibility('custom::layout')) ? 'allowLayout' : '',
-            '#tag#' => $tagsValue,
-            '#data-tags#' => $this->getTags(),
-            '#generic_type#' => $this->getGenericType()
-        );
-
-        if ($this->getDisplay('background-color-default' . $version, 1) == 1) {
-            if (isset($_default['#background-color#'])) {
-                $replace['#background-color#'] = $_default['#background-color#'];
-            } else {
-                $replace['#background-color#'] = $this->getBackgroundColor($version);
-            }
-        } else {
-            $replace['#background-color#'] = ($this->getDisplay('background-color-transparent' . $version, 0) == 1) ? 'transparent' : $this->getDisplay('background-color' . $version, $this->getBackgroundColor($version));
-        }
-        if ($this->getAlert() != '') {
-            $alert = $this->getAlert();
-            $replace['#alert_name#'] = $alert['name'];
-            $replace['#alert_icon#'] = $alert['icon'];
-            $replace['#background-color#'] = $alert['color'];
-        }
-        if ($this->getDisplay('color-default' . $version, 1) != 1) {
-            $replace['#color#'] = $this->getDisplay('color' . $version, '#ffffff');
-        }
-        if ($this->getDisplay('border-default' . $version, 1) != 1) {
-            $replace['#border#'] = $this->getDisplay('border' . $version, 'none');
-        }
-        if ($this->getDisplay('border-radius-default' . $version, 1) != 1) {
-            $replace['#border-radius#'] = $this->getDisplay('border-radius' . $version, '4') . 'px';
-        }
-        $refresh_cmd = $this->getCmd('action', 'refresh');
-        if (!is_object($refresh_cmd)) {
-            foreach ($this->getCmd('action') as $cmd) {
-                if ($cmd->getConfiguration('isRefreshCmd') == 1) {
-                    $refresh_cmd = $cmd;
-                }
-            }
-        }
-        if (is_object($refresh_cmd) && $refresh_cmd->getIsVisible() == 1 && $refresh_cmd->getDisplay('showOn' . $version, 1) == 1) {
-            $replace['#refresh_id#'] = $refresh_cmd->getId();
-        }
-        if ($this->getDisplay('showObjectNameOn' . $version, 0) == 1) {
-            $object = $this->getObject();
-            $replace['#object_name#'] = (is_object($object)) ? '(' . $object->getName() . ')' : '';
-        }
-        if ($this->getDisplay('showNameOn' . $version, 1) == 0) {
-            $replace['#hideEqLogicName#'] = 'display:none;';
-        }
-        $vcolor = 'cmdColor';
-        if ($version == 'mobile' || $viewType == 'mview') {
-            $vcolor = 'mcmdColor';
-        }
-        $parameters = $this->getDisplay('parameters');
-        $replace['#cmd-background-color#'] = ($this->getPrimaryCategory() == '') ? NextDomHelper::getConfiguration('eqLogic:category:default:' . $vcolor) : NextDomHelper::getConfiguration('eqLogic:category:' . $this->getPrimaryCategory() . ':' . $vcolor);
-        if (is_array($parameters) && isset($parameters['cmd-background-color'])) {
-            $replace['#cmd-background-color#'] = $parameters['cmd-background-color'];
-        }
-        if (is_array($parameters)) {
-            foreach ($parameters as $key => $value) {
-                $replace['#' . $key . '#'] = $value;
-            }
-        }
-        $replace['#style#'] = trim($replace['#style#'], ';');
-
-        if (is_array($this->widgetPossibility('parameters'))) {
-            foreach ($this->widgetPossibility('parameters') as $pKey => $parameter) {
-                if (!isset($parameter['allow_displayType'])) {
-                    continue;
-                }
-                if (!isset($parameter['type'])) {
-                    continue;
-                }
-                if (is_array($parameter['allow_displayType']) && !in_array($version, $parameter['allow_displayType'])) {
-                    continue;
-                }
-                if ($parameter['allow_displayType'] === false) {
-                    continue;
-                }
-                $default = '';
-                if (isset($parameter['default'])) {
-                    $default = $parameter['default'];
-                }
-                if ($this->getDisplay('advanceWidgetParameter' . $pKey . $version . '-default', 1) == 1) {
-                    $replace['#' . $pKey . '#'] = $default;
-                    continue;
-                }
-                switch ($parameter['type']) {
-                    case 'color':
-                        if ($this->getDisplay('advanceWidgetParameter' . $pKey . $version . '-transparent', 0) == 1) {
-                            $replace['#' . $pKey . '#'] = 'transparent';
-                        } else {
-                            $replace['#' . $pKey . '#'] = $this->getDisplay('advanceWidgetParameter' . $pKey . $version, $default);
-                        }
-                        break;
-                    default:
-                        $replace['#' . $pKey . '#'] = $this->getDisplay('advanceWidgetParameter' . $pKey . $version, $default);
-                        break;
-                }
-            }
-        }
-        $default_opacity = ConfigManager::byKey('widget::background-opacity');
-        if (isset($_SESSION) && is_object(UserManager::getStoredUser()) && UserManager::getStoredUser()->getOptions('widget::background-opacity::' . $version, null) !== null) {
-            $default_opacity = UserManager::getStoredUser()->getOptions('widget::background-opacity::' . $version);
-        }
-        $opacity = $this->getDisplay('background-opacity' . $version, $default_opacity);
-        if ($replace['#background-color#'] != 'transparent' && $opacity != '' && $opacity < 1) {
-            list($r, $g, $b) = sscanf($replace['#background-color#'], "#%02x%02x%02x");
-            $replace['#background-color#'] = 'rgba(' . $r . ',' . $g . ',' . $b . ',' . $opacity . ')';
-            $replace['#opacity#'] = $opacity;
-        }
-        return $replace;
-    }
-
-    /**
-     * Get HTML code depends of the view
-     *
-     * @param string $viewType Type of view : mobile, dashboard, scenario
-     *
-     * @return array|mixed
-     *
-     * @throws CoreException
-     * @throws \ReflectionException
-     */
-    public function toHtml($viewType = EqLogicViewType::DASHBOARD)
-    {
-        $replace = $this->preToHtml($viewType);
-        if (!is_array($replace)) {
-            return $replace;
-        }
-        $version = NextDomHelper::versionAlias($viewType);
-
-        switch ($this->getDisplay('layout::' . $version)) {
-            case 'table':
-                $replace['#eqLogic_class#'] = 'eqLogic_layout_table';
-                $table = EqLogicManager::generateHtmlTable($this->getDisplay('layout::' . $version . '::table::nbLine', 1), $this->getDisplay('layout::' . $version . '::table::nbColumn', 1), $this->getDisplay('layout::' . $version . '::table::parameters'));
-                $br_before = 0;
-                foreach ($this->getCmd(null, null, true) as $cmd) {
-                    if (isset($replace['#refresh_id#']) && $cmd->getId() == $replace['#refresh_id#']) {
-                        continue;
-                    }
-                    $tag = '#cmd::' . $this->getDisplay('layout::' . $version . '::table::cmd::' . $cmd->getId() . '::line', 1) . '::' . $this->getDisplay('layout::' . $version . '::table::cmd::' . $cmd->getId() . '::column', 1) . '#';
-                    if ($br_before == 0 && $cmd->getDisplay('forceReturnLineBefore', 0) == 1) {
-                        $table['tag'][$tag] .= '<br/>';
-                    }
-                    $table['tag'][$tag] .= $cmd->toHtml($viewType, '', $replace['#cmd-background-color#']);
-                    $br_before = 0;
-                    if ($cmd->getDisplay('forceReturnLineAfter', 0) == 1) {
-                        $table['tag'][$tag] .= '<br/>';
-                        $br_before = 1;
-                    }
-                }
-                $replace['#cmd#'] = Utils::templateReplace($table['tag'], $table['html']);
-                break;
-            default:
-                $replace['#eqLogic_class#'] = 'eqLogic_layout_default';
-                $cmd_html = '';
-                $br_before = 0;
-                foreach ($this->getCmd(null, null, true) as $cmd) {
-                    if (isset($replace['#refresh_id#']) && $cmd->getId() == $replace['#refresh_id#']) {
-                        continue;
-                    }
-                    if ($br_before == 0 && $cmd->getDisplay('forceReturnLineBefore', 0) == 1) {
-                        $cmd_html .= '<br/>';
-                    }
-                    $cmd_html .= $cmd->toHtml($viewType, '', $replace['#cmd-background-color#']);
-                    $br_before = 0;
-                    if ($cmd->getDisplay('forceReturnLineAfter', 0) == 1) {
-                        $cmd_html .= '<br/>';
-                        $br_before = 1;
-                    }
-                }
-                $replace['#cmd#'] = $cmd_html;
-                break;
-        }
-        if (!isset(self::$_templateArray[$version])) {
-            $default_widgetTheme = ConfigManager::byKey('widget::theme');
-            if (isset($_SESSION) && is_object(UserManager::getStoredUser()) && UserManager::getStoredUser()->getOptions('widget::theme', null) !== null) {
-                $default_widgetTheme = UserManager::getStoredUser()->getOptions('widget::theme');
-            }
-            self::$_templateArray[$version] = FileSystemHelper::getTemplateFileContent('core', $version, 'eqLogic', '', $default_widgetTheme);
-
-        }
-        return $this->postToHtml($viewType, Utils::templateReplace($replace, self::$_templateArray[$version]));
-    }
-
-    /**
-     * Store HTML view in cache
-     *
-     * @param string $viewType Define target view type
-     * @param string $htmlCode HTML code to store
-     *
-     * @return string $htmlCode
-     */
-    public function postToHtml(string $viewType, string $htmlCode)
-    {
-        $user_id = '';
-        if (isset($_SESSION) && is_object(UserManager::getStoredUser())) {
-            $user_id = UserManager::getStoredUser()->getId();
-        }
-        CacheManager::set('widgetHtml' . $this->getId() . $viewType . $user_id, $htmlCode);
-        return $htmlCode;
-    }
-
-    /**
-     *
-     */
-    public function emptyCacheWidget()
-    {
-        $users = UserManager::all();
-        foreach (array('dashboard', 'mobile', 'mview', 'dview', 'dplan', 'view', 'plan') as $version) {
-            $mc = CacheManager::byKey('widgetHtml' . $this->getId() . $version);
-            $mc->remove();
-            foreach ($users as $user) {
-                $mc = CacheManager::byKey('widgetHtml' . $this->getId() . $version . $user->getId());
-                $mc->remove();
-            }
-        }
-    }
-
-    /**
-     * @return mixed
-     * @throws \Exception
-     */
-    public function getAlert()
-    {
-        global $NEXTDOM_INTERNAL_CONFIG;
-        $hasAlert = '';
-        $maxLevel = 0;
-        foreach ($NEXTDOM_INTERNAL_CONFIG['alerts'] as $key => $data) {
-            if ($this->getStatus($key, 0) != 0 && $NEXTDOM_INTERNAL_CONFIG['alerts'][$key]['level'] > $maxLevel) {
-                $hasAlert = $data;
-                $maxLevel = $NEXTDOM_INTERNAL_CONFIG['alerts'][$key]['level'];
-            }
-        }
-        return $hasAlert;
-    }
-
-    /**
-     * @return array|bool|mixed|null|string
-     * @throws \Exception
-     */
-    public function getMaxCmdAlert()
-    {
-        $return = 'none';
-        $max = 0;
-        global $NEXTDOM_INTERNAL_CONFIG;
-        foreach ($this->getCmd('info') as $cmd) {
-            $cmdLevel = $cmd->getCache('alertLevel');
-            if (!isset($NEXTDOM_INTERNAL_CONFIG['alerts'][$cmdLevel])) {
-                continue;
-            }
-            if ($NEXTDOM_INTERNAL_CONFIG['alerts'][$cmdLevel]['level'] > $max) {
-                $return = $cmdLevel;
-                $max = $NEXTDOM_INTERNAL_CONFIG['alerts'][$cmdLevel]['level'];
-            }
-        }
-        return $return;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getShowOnChild()
-    {
-        return false;
-    }
-
-    /**
-     * @return bool
-     * @throws \Exception
-     */
-    public function remove()
-    {
-        foreach ($this->getCmd() as $cmd) {
-            $cmd->remove();
-        }
-        ViewDataManager::removeByTypeLinkId('eqLogic', $this->getId());
-        DataStoreManager::removeByTypeLinkId('eqLogic', $this->getId());
-        $this->emptyCacheWidget();
-        CacheManager::delete('eqLogicCacheAttr' . $this->getId());
-        CacheManager::delete('eqLogicStatusAttr' . $this->getId());
-        return \DB::remove($this);
     }
 
     /**
@@ -1225,7 +692,8 @@ class EqLogic
                 }
             }
         }
-        \DB::save($this, $_direct);
+        DBHelper::save($this, $_direct);
+        $this->setChanged(false);
         if ($this->_needRefreshWidget) {
             $this->_needRefreshWidget = false;
             $this->refreshWidget();
@@ -1248,138 +716,85 @@ class EqLogic
     }
 
     /**
-     * @throws \Exception
+     * @return bool
      */
-    public function refresh()
+    /**
+     * @return bool
+     */
+    /**
+     * @return bool
+     */
+    public function getChanged()
     {
-        \DB::refresh($this);
+        return $this->_changed;
     }
 
     /**
-     * @return string
+     * @param $_changed
+     * @return $this
      */
-    public function getLinkToConfiguration()
+    /**
+     * @param $_changed
+     * @return $this
+     */
+    /**
+     * @param $_changed
+     * @return $this
+     */
+    public function setChanged($_changed)
     {
-        return 'index.php?v=d&p=' . $this->getEqType_name() . '&m=' . $this->getEqType_name() . '&id=' . $this->getId();
+        $this->_changed = $_changed;
+        return $this;
     }
 
     /**
-     * @param bool $_tag
-     * @param bool $_prettify
-     * @return string
-     * @throws \Exception
+     *
      */
-    public function getHumanName($_tag = false, $_prettify = false)
+    public function emptyCacheWidget()
     {
-        $name = '';
-        $object = $this->getObject();
-        if (is_object($object)) {
-            if ($_tag) {
-                if ($object->getDisplay('tagColor') != '') {
-                    $name .= '<span class="label" style="text-shadow : none;background-color:' . $object->getDisplay('tagColor') . ';color:' . $object->getDisplay('tagTextColor', 'white') . '">' . $object->getName() . '</span>';
-                } else {
-                    $name .= '<span class="label label-primary">' . $object->getName() . '</span>';
-                }
-            } else {
-                $name .= '[' . $object->getName() . ']';
+        $users = UserManager::all();
+        foreach (array('dashboard', 'mobile', 'mview', 'dview', 'dplan', 'view', 'plan') as $version) {
+            $mc = CacheManager::byKey('widgetHtml' . $this->getId() . $version);
+            $mc->remove();
+            foreach ($users as $user) {
+                $mc = CacheManager::byKey('widgetHtml' . $this->getId() . $version . $user->getId());
+                $mc->remove();
             }
-        } else {
-            if ($_tag) {
-                $name .= '<span class="label label-default">' . __('Aucun') . '</span>';
-            } else {
-                $name .= '[' . __('Aucun') . ']';
-            }
         }
-        if ($_prettify) {
-            $name .= '<br/><strong>';
-        }
-        if ($_tag) {
-            $name .= ' ' . $this->getName();
-        } else {
-            $name .= '[' . $this->getName() . ']';
-        }
-        if ($_prettify) {
-            $name .= '</strong>';
-        }
-        return $name;
     }
 
     /**
-     * @param string $_version
-     * @return mixed
-     * @throws \Exception
+     * @param string $displayKey
+     * @param string $defaultValue
+     * @return array|bool|mixed|null|string
      */
-    public function getBackgroundColor($_version = 'dashboard')
+    public function getDisplay($displayKey = '', $defaultValue = '')
     {
-        $vcolor = ($_version == 'mobile') ? 'mcolor' : 'color';
-        $category = $this->getPrimaryCategory();
-        if ($category != '') {
-            return NextDomHelper::getConfiguration('eqLogic:category:' . $category . ':' . $vcolor);
-        }
-        return NextDomHelper::getConfiguration('eqLogic:category:default:' . $vcolor);
+        return Utils::getJsonAttr($this->display, $displayKey, $defaultValue);
     }
 
     /**
-     * @return string
+     * @param $displayKey
+     * @param $displayValue
      */
-    public function getPrimaryCategory()
+    public function setDisplay($displayKey, $displayValue)
     {
-        if ($this->getCategory('security', 0) == 1) {
-            return 'security';
+        if ($this->getDisplay($displayKey) != $displayValue) {
+            $this->_needRefreshWidget = true;
         }
-        if ($this->getCategory('heating', 0) == 1) {
-            return 'heating';
-        }
-        if ($this->getCategory('light', 0) == 1) {
-            return 'light';
-        }
-        if ($this->getCategory('automatism', 0) == 1) {
-            return 'automatism';
-        }
-        if ($this->getCategory('energy', 0) == 1) {
-            return 'energy';
-        }
-        if ($this->getCategory('multimedia', 0) == 1) {
-            return 'multimedia';
-        }
-        return '';
-    }
-
-    public function getCategories()
-    {
-        $categories = "";
-        if ($this->getCategory('security', 0) == 1) {
-            $categories = $categories . ' security';
-        }
-        if ($this->getCategory('heating', 0) == 1) {
-            $categories = $categories . ' heating';
-        }
-        if ($this->getCategory('light', 0) == 1) {
-            $categories = $categories . ' light';
-        }
-        if ($this->getCategory('automatism', 0) == 1) {
-            $categories = $categories . ' automatism';
-        }
-        if ($this->getCategory('energy', 0) == 1) {
-            $categories = $categories . ' energy';
-        }
-        if ($this->getCategory('multimedia', 0) == 1) {
-            $categories = $categories . ' multimedia';
-        }
-        if ($this->getCategory('default', 0) == 1) {
-            $categories = $categories . ' default ';
-        }
-        return $categories;
+        $display = Utils::setJsonAttr($this->display, $displayKey, $displayValue);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->display, $display);
+        $this->display = $display;
     }
 
     /**
-     * @param $_message
+     *
      */
-    public function displayDebug($_message)
+    public function refreshWidget()
     {
-        if ($this->getDebug()) {
-            echo $_message . "\n";
-        }
+        $this->_needRefreshWidget = false;
+        $this->emptyCacheWidget();
+        EventManager::add('eqLogic::update', array('eqLogic_id' => $this->getId()));
     }
 
     /**
@@ -1470,13 +885,372 @@ class EqLogic
     }
 
     /**
+     * Get HTML code for battery widget
      *
+     * @param string $display Display type
+     *
+     * @return string HTML code
+     *
+     * @param bool $_tag
+     * @param bool $_prettify
+     * @return string
+     * @throws \Exception
      */
-    public function refreshWidget()
+    public function getHumanName($_tag = false, $_prettify = false)
     {
-        $this->_needRefreshWidget = false;
-        $this->emptyCacheWidget();
-        EventManager::add('eqLogic::update', array('eqLogic_id' => $this->getId()));
+        $name = '';
+        $object = $this->getObject();
+        if (is_object($object)) {
+            if ($_tag) {
+                if ($object->getDisplay('tagColor') != '') {
+                    $name .= '<span class="label" style="text-shadow : none;background-color:' . $object->getDisplay('tagColor') . ';color:' . $object->getDisplay('tagTextColor', 'white') . '">' . $object->getName() . '</span>';
+                } else {
+                    $name .= '<span class="label label-primary">' . $object->getName() . '</span>';
+                }
+            } else {
+                $name .= '[' . $object->getName() . ']';
+            }
+        } else {
+            if ($_tag) {
+                $name .= '<span class="label label-default">' . __('Aucun') . '</span>';
+            } else {
+                $name .= '[' . __('Aucun') . ']';
+            }
+        }
+        if ($_prettify) {
+            $name .= '<br/><strong>';
+        }
+        if ($_tag) {
+            $name .= ' ' . $this->getName();
+        } else {
+            $name .= '[' . $this->getName() . ']';
+        }
+        if ($_prettify) {
+            $name .= '</strong>';
+        }
+        return $name;
+    }
+
+    /**
+     * @param $statusKey
+     * @param null $statusValue
+     * @throws \Exception
+     */
+    public function setStatus($statusKey, $statusValue = null)
+    {
+        global $NEXTDOM_INTERNAL_CONFIG;
+        $changed = false;
+        if (is_array($statusKey)) {
+            foreach ($statusKey as $key => $value) {
+                if (isset($NEXTDOM_INTERNAL_CONFIG['alerts'][$key])) {
+                    $changed = ($this->getStatus($key) != $value);
+                }
+                if ($changed) {
+                    break;
+                }
+            }
+        } else {
+            if (isset($JEEDOM_INTERNAL_CONFIG['alerts'][$statusKey])) {
+                $changed = ($this->getStatus($statusKey) !== $statusValue);
+            }
+        }
+        CacheManager::set('eqLogicStatusAttr' . $this->getId(), utils::setJsonAttr(CacheManager::byKey('eqLogicStatusAttr' . $this->getId())->getValue(), $statusKey, $statusValue));
+        if ($changed) {
+            $this->refreshWidget();
+        }
+    }
+
+    /**
+     * @param null $defaultValue
+     * @return int|null
+     */
+    public function getTimeout($defaultValue = null)
+    {
+        if ($this->timeout == '' || !is_numeric($this->timeout)) {
+            return $defaultValue;
+        }
+        return $this->timeout;
+    }
+
+    /**
+     * @param $timeout
+     * @return $this
+     */
+    public function setTimeout($timeout)
+    {
+        if ($timeout == '' || is_nan(intval($timeout)) || $timeout < 1) {
+            $timeout = null;
+        }
+        if ($timeout != $this->getTimeout()) {
+            $this->_timeoutUpdated = true;
+            $this->_changed = true;
+        }
+        $this->timeout = $timeout;
+        return $this;
+    }
+
+    /**
+     * Get the name of the SQL table where data is stored.
+     *
+     * @return string
+     */
+    public function getTableName()
+    {
+        return 'eqLogic';
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasOnlyEventOnlyCmd()
+    {
+        return true;
+    }
+
+    /**
+     * Get HTML code depends of the view
+     *
+     * @param string $viewType Type of view : mobile, dashboard, scenario
+     *
+     * @return array|mixed
+     *
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
+    public function toHtml($viewType = EqLogicViewType::DASHBOARD)
+    {
+        $replace = $this->preToHtml($viewType);
+        if (!is_array($replace)) {
+            return $replace;
+        }
+        $version = NextDomHelper::versionAlias($viewType);
+
+        switch ($this->getDisplay('layout::' . $version)) {
+            case 'table':
+                $replace['#eqLogic_class#'] = 'eqLogic_layout_table';
+                $table = EqLogicManager::generateHtmlTable($this->getDisplay('layout::' . $version . '::table::nbLine', 1), $this->getDisplay('layout::' . $version . '::table::nbColumn', 1), $this->getDisplay('layout::' . $version . '::table::parameters'));
+                $br_before = 0;
+                foreach ($this->getCmd(null, null, true) as $cmd) {
+                    if (isset($replace['#refresh_id#']) && $cmd->getId() == $replace['#refresh_id#']) {
+                        continue;
+                    }
+                    $tag = '#cmd::' . $this->getDisplay('layout::' . $version . '::table::cmd::' . $cmd->getId() . '::line', 1) . '::' . $this->getDisplay('layout::' . $version . '::table::cmd::' . $cmd->getId() . '::column', 1) . '#';
+                    if ($br_before == 0 && $cmd->getDisplay('forceReturnLineBefore', 0) == 1) {
+                        $table['tag'][$tag] .= '<br/>';
+                    }
+                    $table['tag'][$tag] .= $cmd->toHtml($viewType, '', $replace['#cmd-background-color#']);
+                    $br_before = 0;
+                    if ($cmd->getDisplay('forceReturnLineAfter', 0) == 1) {
+                        $table['tag'][$tag] .= '<br/>';
+                        $br_before = 1;
+                    }
+                }
+                $replace['#cmd#'] = Utils::templateReplace($table['tag'], $table['html']);
+                break;
+            default:
+                $replace['#eqLogic_class#'] = 'eqLogic_layout_default';
+                $cmd_html = '';
+                $br_before = 0;
+                foreach ($this->getCmd(null, null, true) as $cmd) {
+                    if (isset($replace['#refresh_id#']) && $cmd->getId() == $replace['#refresh_id#']) {
+                        continue;
+                    }
+                    if ($br_before == 0 && $cmd->getDisplay('forceReturnLineBefore', 0) == 1) {
+                        $cmd_html .= '<br/>';
+                    }
+                    $cmd_html .= $cmd->toHtml($viewType, '', $replace['#cmd-background-color#']);
+                    $br_before = 0;
+                    if ($cmd->getDisplay('forceReturnLineAfter', 0) == 1) {
+                        $cmd_html .= '<br/>';
+                        $br_before = 1;
+                    }
+                }
+                $replace['#cmd#'] = $cmd_html;
+                break;
+        }
+        if (!isset(self::$_templateArray[$version])) {
+            self::$_templateArray[$version] = FileSystemHelper::getTemplateFileContent('core', $version, 'eqLogic');
+        }
+        return $this->postToHtml($viewType, Utils::templateReplace($replace, self::$_templateArray[$version]));
+    }
+
+    /**
+     * Prepare data for HTML view
+     *
+     * @param string $viewType Type of view
+     * @param array $_default
+     * @param bool $_noCache
+     * @return array|string
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
+    public function preToHtml($viewType = EqLogicViewType::DASHBOARD, $_default = array(), $_noCache = false)
+    {
+        // Check if view type is valid
+        if (!EqLogicViewType::exists($viewType)) {
+            throw new CoreException(__('La version demandée ne peut pas être vide (dashboard, dview ou scénario)'));
+        }
+        if (!$this->hasRight('r')) {
+            return '';
+        }
+        if (!$this->getIsEnable()) {
+            return '';
+        }
+        $version = NextDomHelper::versionAlias($viewType, false);
+        if ($this->getDisplay('showOn' . $version, 1) == 0) {
+            return '';
+        }
+        $userId = '';
+        if (isset($_SESSION) && is_object(UserManager::getStoredUser())) {
+            $userId = UserManager::getStoredUser()->getId();
+        }
+        if (!$_noCache) {
+            $mc = CacheManager::byKey('widgetHtml' . $this->getId() . $viewType . $userId);
+            if ($mc->getValue() != '') {
+                return preg_replace("/" . preg_quote(self::UIDDELIMITER) . "(.*?)" . preg_quote(self::UIDDELIMITER) . "/", self::UIDDELIMITER . mt_rand() . self::UIDDELIMITER, $mc->getValue());
+            }
+        }
+        $tagsValue = '';
+        if ($this->getTags() != null) {
+            $tagsArray = explode(',', $this->getTags());
+            foreach ($tagsArray as $tags) {
+                if ($tags == null) {
+                    continue;
+                }
+                $tagsValue .= 'tag-' . $tags . ' ';
+            }
+        }
+        $tagsValue = trim($tagsValue);
+        $replace = array(
+            '#id#' => $this->getId(),
+            '#name#' => $this->getName(),
+            '#name_display#' => $this->getName(),
+            '#hideEqLogicName#' => '',
+            '#eqLink#' => $this->getLinkToConfiguration(),
+            '#category#' => $this->getCategories(),
+            '#color#' => '#ffffff',
+            '#border#' => 'none',
+            '#border-radius#' => '0px',
+            '#style#' => '',
+            '#max_width#' => '650px',
+            '#logicalId#' => $this->getLogicalId(),
+            '#object_name#' => '',
+            '#height#' => $this->getDisplay('height', ConfigManager::byKey('widget::size') . 'px'),
+            '#width#' => $this->getDisplay('width', ConfigManager::byKey('widget::size') . 'px'),
+            '#uid#' => 'eqLogic' . $this->getId() . self::UIDDELIMITER . mt_rand() . self::UIDDELIMITER,
+            '#refresh_id#' => '',
+            '#version#' => $viewType,
+            '#alert_name#' => '',
+            '#alert_icon#' => '',
+            '#eqType#' => $this->getEqType_name(),
+            '#custom_layout#' => ($this->widgetPossibility('custom::layout')) ? 'allowLayout' : '',
+            '#tag#' => $tagsValue,
+            '#data-tags#' => $this->getTags(),
+            '#generic_type#' => $this->getGenericType()
+        );
+
+        if ($this->getDisplay('background-color-default' . $version, 1) == 1) {
+            if (isset($_default['#background-color#'])) {
+                $replace['#background-color#'] = $_default['#background-color#'];
+            } else {
+                $replace['#background-color#'] = $this->getBackgroundColor($version);
+            }
+        } else {
+            $replace['#background-color#'] = ($this->getDisplay('background-color-transparent' . $version, 0) == 1) ? 'transparent' : $this->getDisplay('background-color' . $version, $this->getBackgroundColor($version));
+        }
+        if ($this->getAlert() != '') {
+            $alert = $this->getAlert();
+            $replace['#alert_name#'] = $alert['name'];
+            $replace['#alert_icon#'] = $alert['icon'];
+            $replace['#background-color#'] = $alert['color'];
+        }
+        if ($this->getDisplay('color-default' . $version, 1) != 1) {
+            $replace['#color#'] = $this->getDisplay('color' . $version, '#ffffff');
+        }
+        if ($this->getDisplay('border-default' . $version, 1) != 1) {
+            $replace['#border#'] = $this->getDisplay('border' . $version, 'none');
+        }
+        if ($this->getDisplay('border-radius-default' . $version, 1) != 1) {
+            $replace['#border-radius#'] = $this->getDisplay('border-radius' . $version, '4') . 'px';
+        }
+        $refresh_cmd = $this->getCmd('action', 'refresh');
+        if (!is_object($refresh_cmd)) {
+            foreach ($this->getCmd('action') as $cmd) {
+                if ($cmd->getConfiguration('isRefreshCmd') == 1) {
+                    $refresh_cmd = $cmd;
+                }
+            }
+        }
+        if (is_object($refresh_cmd) && $refresh_cmd->getIsVisible() == 1 && $refresh_cmd->getDisplay('showOn' . $version, 1) == 1) {
+            $replace['#refresh_id#'] = $refresh_cmd->getId();
+        }
+        if ($this->getDisplay('showObjectNameOn' . $version, 0) == 1) {
+            $object = $this->getObject();
+            $replace['#object_name#'] = (is_object($object)) ? '(' . $object->getName() . ')' : '';
+        }
+        if ($this->getDisplay('showNameOn' . $version, 1) == 0) {
+            $replace['#hideEqLogicName#'] = 'display:none;';
+        }
+        $vcolor = 'cmdColor';
+        $parameters = $this->getDisplay('parameters');
+        $replace['#cmd-background-color#'] = ($this->getPrimaryCategory() == '') ? NextDomHelper::getConfiguration('eqLogic:category:default:' . $vcolor) : NextDomHelper::getConfiguration('eqLogic:category:' . $this->getPrimaryCategory() . ':' . $vcolor);
+        if (is_array($parameters) && isset($parameters['cmd-background-color'])) {
+            $replace['#cmd-background-color#'] = $parameters['cmd-background-color'];
+        }
+        if (is_array($parameters)) {
+            foreach ($parameters as $key => $value) {
+                $replace['#' . $key . '#'] = $value;
+            }
+        }
+        $replace['#style#'] = trim($replace['#style#'], ';');
+
+        if (is_array($this->widgetPossibility('parameters'))) {
+            foreach ($this->widgetPossibility('parameters') as $pKey => $parameter) {
+                if (!isset($parameter['allow_displayType'])) {
+                    continue;
+                }
+                if (!isset($parameter['type'])) {
+                    continue;
+                }
+                if (is_array($parameter['allow_displayType']) && !in_array($version, $parameter['allow_displayType'])) {
+                    continue;
+                }
+                if ($parameter['allow_displayType'] === false) {
+                    continue;
+                }
+                $default = '';
+                if (isset($parameter['default'])) {
+                    $default = $parameter['default'];
+                }
+                if ($this->getDisplay('advanceWidgetParameter' . $pKey . $version . '-default', 1) == 1) {
+                    $replace['#' . $pKey . '#'] = $default;
+                    continue;
+                }
+                switch ($parameter['type']) {
+                    case 'color':
+                        if ($this->getDisplay('advanceWidgetParameter' . $pKey . $version . '-transparent', 0) == 1) {
+                            $replace['#' . $pKey . '#'] = 'transparent';
+                        } else {
+                            $replace['#' . $pKey . '#'] = $this->getDisplay('advanceWidgetParameter' . $pKey . $version, $default);
+                        }
+                        break;
+                    default:
+                        $replace['#' . $pKey . '#'] = $this->getDisplay('advanceWidgetParameter' . $pKey . $version, $default);
+                        break;
+                }
+            }
+        }
+        $default_opacity = ConfigManager::byKey('widget::background-opacity');
+        if (isset($_SESSION) && is_object(UserManager::getStoredUser()) && UserManager::getStoredUser()->getOptions('widget::background-opacity::' . $version, null) !== null) {
+            $default_opacity = UserManager::getStoredUser()->getOptions('widget::background-opacity::' . $version);
+        }
+        $opacity = $this->getDisplay('background-opacity' . $version, $default_opacity);
+        if ($replace['#background-color#'] != 'transparent' && $opacity != '' && $opacity < 1) {
+            list($r, $g, $b) = sscanf($replace['#background-color#'], "#%02x%02x%02x");
+            $replace['#background-color#'] = 'rgba(' . $r . ',' . $g . ',' . $b . ',' . $opacity . ')';
+            $replace['#opacity#'] = $opacity;
+        }
+        return $replace;
     }
 
     /**
@@ -1505,6 +1279,339 @@ class EqLogic
             return true;
         }
         return false;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    /**
+     * @param $tags
+     * @return $this
+     */
+    public function setTags($tags)
+    {
+        $_tags = str_replace(array("'", '<', '>'), "", $tags);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->tags, $_tags);
+        $this->tags = $_tags;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    /**
+     * @return string
+     */
+    /**
+     * @return string
+     */
+    public function getCategories()
+    {
+        $categories = "";
+        if ($this->getCategory('security', 0) == 1) {
+            $categories = $categories . ' security';
+        }
+        if ($this->getCategory('heating', 0) == 1) {
+            $categories = $categories . ' heating';
+        }
+        if ($this->getCategory('light', 0) == 1) {
+            $categories = $categories . ' light';
+        }
+        if ($this->getCategory('automatism', 0) == 1) {
+            $categories = $categories . ' automatism';
+        }
+        if ($this->getCategory('energy', 0) == 1) {
+            $categories = $categories . ' energy';
+        }
+        if ($this->getCategory('multimedia', 0) == 1) {
+            $categories = $categories . ' multimedia';
+        }
+        if ($this->getCategory('default', 0) == 1) {
+            $categories = $categories . ' default ';
+        }
+        return $categories;
+    }
+
+    /**
+     * @param string $categoryKey
+     * @param string $defaultValue
+     * @return array|bool|int|mixed|null|string
+     */
+    public function getCategory($categoryKey = '', $defaultValue = '')
+    {
+        if ($categoryKey == 'other' && strpos($this->category, "1") === false) {
+            return 1;
+        }
+        return Utils::getJsonAttr($this->category, $categoryKey, $defaultValue);
+    }
+
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
+    public function setCategory($_key, $_value)
+    {
+        if ($this->getCategory($_key) != $_value) {
+            $this->_needRefreshWidget = true;
+        }
+        $category = Utils::setJsonAttr($this->category, $_key, $_value);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->category, $category);
+        $this->category = $category;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLogicalId()
+    {
+        return $this->logicalId;
+    }
+
+    /**
+     * @param $logicalId
+     * @return $this
+     */
+    public function setLogicalId($logicalId)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->logicalId, $logicalId);
+        $this->logicalId = $logicalId;
+        return $this;
+    }
+
+    /**
+     * @param string $_key
+     * @param bool $_default
+     * @return array|bool|mixed
+     * @throws \ReflectionException
+     */
+    public function widgetPossibility($_key = '', $_default = true)
+    {
+        $class = new \ReflectionClass($this->getEqType_name());
+        $method_toHtml = $class->getMethod('toHtml');
+        $return = array();
+        if ($method_toHtml->class == EqLogic::class) {
+            $return['custom'] = true;
+        } else {
+            $return['custom'] = false;
+        }
+        $class = $this->getEqType_name();
+        if (property_exists($class, '_widgetPossibility')) {
+            /** @noinspection PhpUndefinedFieldInspection */
+            $return = $class::$_widgetPossibility;
+            if ($_key != '') {
+                if (isset($return[$_key])) {
+                    return $return[$_key];
+                }
+                $keys = explode('::', $_key);
+                foreach ($keys as $k) {
+                    if (!isset($return[$k])) {
+                        return false;
+                    }
+                    if (is_array($return[$k])) {
+                        $return = $return[$k];
+                    } else {
+                        return $return[$k];
+                    }
+                }
+                if (is_array($return) && strpos($_key, 'custom') !== false) {
+                    return $_default;
+                }
+                return $return;
+            }
+        }
+        if ($_key != '') {
+            if (isset($return['custom']) && !isset($return[$_key])) {
+                return $return['custom'];
+            }
+            return (isset($return[$_key])) ? $return[$_key] : $_default;
+        }
+        return $return;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGenericType()
+    {
+        return $this->generic_type;
+    }
+
+    /**
+     * @param $genericType
+     * @return $this
+     */
+    public function setGenericType($genericType)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->generic_type, $genericType);
+        $this->generic_type = $genericType;
+        return $this;
+    }
+
+    /**
+     * @param string $_version
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getBackgroundColor($_version = 'dashboard')
+    {
+        $category = $this->getPrimaryCategory();
+        if ($category != '') {
+            return NextDomHelper::getConfiguration('eqLogic:category:' . $category . ':color');
+        }
+        return NextDomHelper::getConfiguration('eqLogic:category:default:color');
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrimaryCategory()
+    {
+        if ($this->getCategory('security', 0) == 1) {
+            return 'security';
+        }
+        if ($this->getCategory('heating', 0) == 1) {
+            return 'heating';
+        }
+        if ($this->getCategory('light', 0) == 1) {
+            return 'light';
+        }
+        if ($this->getCategory('automatism', 0) == 1) {
+            return 'automatism';
+        }
+        if ($this->getCategory('energy', 0) == 1) {
+            return 'energy';
+        }
+        if ($this->getCategory('multimedia', 0) == 1) {
+            return 'multimedia';
+        }
+        return '';
+    }
+
+    /**
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getAlert()
+    {
+        global $NEXTDOM_INTERNAL_CONFIG;
+        $hasAlert = '';
+        $maxLevel = 0;
+        foreach ($NEXTDOM_INTERNAL_CONFIG['alerts'] as $key => $data) {
+            if ($this->getStatus($key, 0) != 0 && $NEXTDOM_INTERNAL_CONFIG['alerts'][$key]['level'] > $maxLevel) {
+                $hasAlert = $data;
+                $maxLevel = $NEXTDOM_INTERNAL_CONFIG['alerts'][$key]['level'];
+            }
+        }
+        return $hasAlert;
+    }
+
+    /**
+     * Store HTML view in cache
+     *
+     * @param string $viewType Define target view type
+     * @param string $htmlCode HTML code to store
+     *
+     * @return string $htmlCode
+     */
+    public function postToHtml(string $viewType, string $htmlCode)
+    {
+        $user_id = '';
+        if (isset($_SESSION) && is_object(UserManager::getStoredUser())) {
+            $user_id = UserManager::getStoredUser()->getId();
+        }
+        CacheManager::set('widgetHtml' . $this->getId() . $viewType . $user_id, $htmlCode);
+        return $htmlCode;
+    }
+
+    /**
+     * @return array|bool|mixed|null|string
+     * @throws \Exception
+     */
+    public function getMaxCmdAlert()
+    {
+        $return = 'none';
+        $max = 0;
+        global $NEXTDOM_INTERNAL_CONFIG;
+        foreach ($this->getCmd('info') as $cmd) {
+            $cmdLevel = $cmd->getCache('alertLevel');
+            if (!isset($NEXTDOM_INTERNAL_CONFIG['alerts'][$cmdLevel])) {
+                continue;
+            }
+            if ($NEXTDOM_INTERNAL_CONFIG['alerts'][$cmdLevel]['level'] > $max) {
+                $return = $cmdLevel;
+                $max = $NEXTDOM_INTERNAL_CONFIG['alerts'][$cmdLevel]['level'];
+            }
+        }
+        return $return;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getShowOnChild()
+    {
+        return false;
+    }
+
+    /**
+     * @return bool
+     * @throws \Exception
+     */
+    public function remove()
+    {
+        foreach ($this->getCmd() as $cmd) {
+            $cmd->remove();
+        }
+        ViewDataManager::removeByTypeLinkId('eqLogic', $this->getId());
+        DataStoreManager::removeByTypeLinkId('eqLogic', $this->getId());
+        $this->emptyCacheWidget();
+        CacheManager::delete('eqLogicCacheAttr' . $this->getId());
+        CacheManager::delete('eqLogicStatusAttr' . $this->getId());
+        return DBHelper::remove($this);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function refresh()
+    {
+        DBHelper::refresh($this);
+    }
+
+    /**
+     * @param $_message
+     */
+    public function displayDebug($_message)
+    {
+        if ($this->getDebug()) {
+            echo $_message . "\n";
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    public function getDebug()
+    {
+        return $this->_debug;
+    }
+
+    /**
+     * @param $_debug
+     */
+    public function setDebug($_debug)
+    {
+        if ($_debug) {
+            echo "Mode debug activé\n";
+        }
+        $this->_debug = $_debug;
     }
 
     /**
@@ -1660,56 +1767,6 @@ class EqLogic
     }
 
     /**
-     * @param string $_key
-     * @param bool $_default
-     * @return array|bool|mixed
-     * @throws \ReflectionException
-     */
-    public function widgetPossibility($_key = '', $_default = true)
-    {
-        $class = new \ReflectionClass($this->getEqType_name());
-        $method_toHtml = $class->getMethod('toHtml');
-        $return = array();
-        if ($method_toHtml->class == EqLogic::class) {
-            $return['custom'] = true;
-        } else {
-            $return['custom'] = false;
-        }
-        $class = $this->getEqType_name();
-        if (property_exists($class, '_widgetPossibility')) {
-            /** @noinspection PhpUndefinedFieldInspection */
-            $return = $class::$_widgetPossibility;
-            if ($_key != '') {
-                if (isset($return[$_key])) {
-                    return $return[$_key];
-                }
-                $keys = explode('::', $_key);
-                foreach ($keys as $k) {
-                    if (!isset($return[$k])) {
-                        return false;
-                    }
-                    if (is_array($return[$k])) {
-                        $return = $return[$k];
-                    } else {
-                        return $return[$k];
-                    }
-                }
-                if (is_array($return) && strpos($_key, 'custom') !== false) {
-                    return $_default;
-                }
-                return $return;
-            }
-        }
-        if ($_key != '') {
-            if (isset($return['custom']) && !isset($return[$_key])) {
-                return $return['custom'];
-            }
-            return (isset($return[$_key])) ? $return[$_key] : $_default;
-        }
-        return $return;
-    }
-
-    /**
      * @return array
      * @throws \Exception
      */
@@ -1718,16 +1775,6 @@ class EqLogic
         $return = Utils::o2a($this, true);
         $return['status'] = $this->getStatus();
         return $return;
-    }
-
-    /**
-     * @return string
-     * @throws \Exception
-     */
-    public function getImage()
-    {
-        $plugin = PluginManager::byId($this->getEqType_name());
-        return $plugin->getPathImgIcon();
     }
 
     /**
@@ -1780,6 +1827,16 @@ class EqLogic
     }
 
     /**
+     * @return string
+     * @throws \Exception
+     */
+    public function getImage()
+    {
+        $plugin = PluginManager::byId($this->getEqType_name());
+        return $plugin->getPathImgIcon();
+    }
+
+    /**
      * @return array
      * @throws \Exception
      */
@@ -1815,36 +1872,23 @@ class EqLogic
     }
 
     /**
-     * Get all commands of the object
-     *
-     * @param null $_type
-     * @param null $_logicalId
-     * @param null $_visible
-     * @param bool $_multiple
-     * @return Cmd[]
-     * @throws \Exception
+     * @return int
      */
-    public function getCmd($_type = null, $_logicalId = null, $_visible = null, $_multiple = false)
+    public function getObject_id()
     {
-        if ($_logicalId !== null) {
-            if (isset($this->_cmds[$_logicalId . '.' . $_multiple . '.' . $_type])) {
-                return $this->_cmds[$_logicalId . '.' . $_multiple . '.' . $_type];
-            }
-            $cmds = CmdManager::byEqLogicIdAndLogicalId($this->id, $_logicalId, $_multiple, $_type);
-        } else {
-            $cmds = CmdManager::byEqLogicId($this->id, $_type, $_visible, $this);
-        }
-        if (is_array($cmds)) {
-            foreach ($cmds as $cmd) {
-                $cmd->setEqLogic($this);
-            }
-        } elseif (is_object($cmds)) {
-            $cmds->setEqLogic($this);
-        }
-        if ($_logicalId !== null && is_object($cmds)) {
-            $this->_cmds[$_logicalId . '.' . $_multiple . '.' . $_type] = $cmds;
-        }
-        return $cmds;
+        return $this->object_id;
+    }
+
+    /**
+     * @param null $object_id
+     * @return $this
+     */
+    public function setObject_id($object_id = null)
+    {
+        $object_id = (!is_numeric($object_id)) ? null : $object_id;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->object_id, $object_id);
+        $this->object_id = $object_id;
+        return $this;
     }
 
     /**
@@ -1889,15 +1933,61 @@ class EqLogic
         return CmdManager::searchConfigurationEqLogic($this->id, $_configuration, $_type);
     }
 
-    public function getChanged()
+    /**
+     * @param EqLogic $srcEqLogic
+     * @return $this
+     */
+    /**
+     * @param EqLogic $srcEqLogic
+     * @return $this
+     */
+    /**
+     * @param EqLogic $srcEqLogic
+     * @return $this
+     */
+    public function castFromEqLogic(EqLogic $srcEqLogic)
     {
-        return $this->_changed;
-    }
-
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
+        $attributes = $srcEqLogic->getAllAttributes();
+        foreach ($attributes as $name => $value) {
+            $this->$name = $value;
+        }
         return $this;
     }
 
+    /**
+     * @return array
+     */
+    /**
+     * @return array
+     */
+    /**
+     * @return array
+     */
+    public function getAllAttributes()
+    {
+        return [
+            '_debug' => $this->_debug,
+            '_object' => $this->_object,
+            '_needRefreshWidget' => $this->_needRefreshWidget,
+            '_timeoutUpdated' => $this->_timeoutUpdated,
+            '_batteryUpdated' => $this->_batteryUpdated,
+            '_changed' => $this->_changed,
+            'name' => $this->name,
+            'generic_type' => $this->generic_type,
+            'logicalId' => $this->logicalId,
+            'eqType_name' => $this->eqType_name,
+            'configuration' => $this->configuration,
+            'isVisible' => $this->isVisible,
+            'isEnable' => $this->isEnable,
+            'timeout' => $this->timeout,
+            'category' => $this->category,
+            'display' => $this->display,
+            'order' => $this->order,
+            'comment' => $this->comment,
+            'tags' => $this->tags,
+            'id' => $this->id,
+            'eqReal_id' => $this->eqReal_id,
+            'object_id' => $this->object_id,
+        ];
+    }
 }

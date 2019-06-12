@@ -20,19 +20,35 @@ namespace NextDom\Helpers;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UserManager;
 
+/**
+ * Class ReportHelper
+ * @package NextDom\Helpers
+ */
 class ReportHelper
 {
     public static function clean()
     {
-        if (!file_exists(NEXTDOM_ROOT . '/data/report')) {
+        if (!file_exists(NEXTDOM_DATA . '/data/report')) {
             return;
         }
-        shell_exec('find ' . NEXTDOM_ROOT . '/data/report -type f -mtime +' . ConfigManager::byKey('report::maxdays') . ' -delete');
+        shell_exec('find ' . NEXTDOM_DATA . '/data/report -type f -mtime +' . ConfigManager::byKey('report::maxdays') . ' -delete');
     }
 
-    public static function generate($_url, $_type, $_name, $_format = 'pdf', $_parameter = array())
+    /**
+     * @param $_url
+     * @param $_type
+     * @param $_name
+     * @param string $_format
+     * @param array $_parameter
+     * @return string
+     * @throws \Exception
+     */
+    public static function generate($_url, $_type, $_name, $_format = 'png', $_parameter = array())
     {
-        $out = NEXTDOM_ROOT . '/data/report/';
+        if (!is_string($_format)) {
+            $_format = 'png';
+        }
+        $out = NEXTDOM_DATA . '/data/report/';
         $out .= $_type . '/';
         $out .= $_name . '/';
         if (!file_exists($out)) {

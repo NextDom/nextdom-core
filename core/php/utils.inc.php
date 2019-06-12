@@ -33,6 +33,7 @@
  */
 
 use NextDom\Helpers\AuthentificationHelper;
+use NextDom\Managers\CronManager;
 use NextDom\Helpers\DateHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NetworkHelper;
@@ -379,7 +380,7 @@ function getSystemMemInfo()
 
 function strContain($_string, $_words)
 {
-    return Utils::strContain($_string, $_words);
+    return Utils::strContainsOneOf($_string, $_words);
 }
 
 function makeZipSupport()
@@ -403,4 +404,18 @@ function listSession() {
 function deleteSession($_id)
 {
     SessionHelper::deleteSession($_id);
+}
+
+function checkAndFixCron($_cron)
+{
+    return CronManager::convertCronSchedule($_cron);
+}
+
+function getTZoffsetMin($_cron)
+{
+    return Utils::getTZoffsetMin($_cron);
+}
+
+function cleanComponanteName($_name){
+    return Utils::cleanComponentName($_name);
 }

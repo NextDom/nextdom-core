@@ -37,6 +37,8 @@ namespace NextDom\Helpers;
 use NextDom\Enums\GetParams;
 use NextDom\Enums\ViewType;
 use NextDom\Managers\ConfigManager;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Turnout of the display
@@ -61,6 +63,25 @@ class Router
     }
 
     /**
+     * Show 404 error page (Not found)
+     */
+    public static function showError404AndDie()
+    {
+        header("HTTP/1.0 404 Not Found");
+        require(NEXTDOM_ROOT . '/public/404.html');
+        die();
+    }
+
+    /**
+     * Show 401 error page (Unauthorized)
+     */
+    public static function showError401AndDie()
+    {
+        header("HTTP/1.1 401 Unauthorized");
+        die();
+    }
+
+    /**
      * Viewing the requested content
      *
      * @return bool True if an answer has been provided.
@@ -72,8 +93,8 @@ class Router
         if ($this->viewType == ViewType::DESKTOP_VIEW) {
             $this->desktopView();
             $result = true;
-        } elseif ($this->viewType == ViewType::MOBILE_VIEW) {
-            $this->mobileView();
+        } elseif ($this->viewType == ViewType::STATIC_VIEW) {
+            $this->staticView();
             $result = true;
         }
         return $result;
@@ -101,6 +122,7 @@ class Router
                 'language',
                 'nextdom::firstUse',
                 'nextdom::Welcome',
+                'nextdom::waitSpinner',
                 'notify::status',
                 'notify::position',
                 'notify::timeout',
@@ -129,43 +151,30 @@ class Router
     }
 
     /**
-     * Display mobile view
-     *
-     * @throws \Exception
-     */
-    private function mobileView()
-    {
-        $filename = 'index';
-        $type = 'html';
-        $plugin = '';
-        $modal = Utils::init('modal', false);
-        if ($modal !== false) {
-            $filename = $modal;
-            $type = 'modalhtml';
-            $plugin = Utils::init('plugin');
-        } elseif (isset($_GET['p']) && isset($_GET[GetParams::AJAX_QUERY])) {
-            $filename = $_GET['p'];
-            $plugin = isset($_GET['m']) ? $_GET['m'] : $plugin;
-        }
-        FileSystemHelper::includeFile('mobile', $filename, $type, $plugin, true);
-    }
-
-    /**
      * Show 404 error page (Not found)
      */
-    public static function showError404AndDie()
+    private function staticView()
     {
-        header("HTTP/1.0 404 Not Found");
-        require(NEXTDOM_ROOT . '/public/404.html');
-        die();
-    }
+        $response = new Response();
+        $request = Request::createFromGlobals();
+        $file = $request->get("file");
+        $mapped = FileSystemHelper::getAssetPath($file);
+        $data = @file_get_contents($mapped);
+        $mtime = @filemtime($mapped);
 
-    /**
-     * Show 401 error page (Unauthorized)
-     */
-    public static function showError401AndDie()
-    {
-        header("HTTP/1.1 401 Unauthorized");
-        die();
+        $response->prepare($request);
+        $response->setStatusCode(Response::HTTP_NOT_FOUND);
+
+        if (false !== $data) {
+            $response
+                ->setStatusCode(Response::HTTP_OK)
+                ->setPublic()
+                ->setMaxAge(0)
+                ->setContent($data)
+                ->setMaxAge(600)
+                ->setLastModified(new \DateTime("@" . $mtime));
+            $response->isNotModified($request);
+        }
+        $response->send();
     }
 }

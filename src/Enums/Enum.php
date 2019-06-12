@@ -20,8 +20,23 @@ namespace NextDom\Enums;
 
 use NextDom\Exceptions\OperatingSystemException;
 
+/**
+ * Class Enum
+ * @package NextDom\Enums
+ */
 abstract class Enum
 {
+    /**
+     * @param $needle
+     * @return bool
+     * @throws OperatingSystemException
+     * @throws \ReflectionException
+     */
+    public static function exists($needle): bool
+    {
+        return in_array($needle, self::getConstants());
+    }
+
     /**
      * Get list of all constants
      *
@@ -34,15 +49,10 @@ abstract class Enum
     {
         $calledClass = get_called_class();
         if ($calledClass !== false) {
-            return (new \ReflectionClass(get_called_class()))->getConstants();
+            return (new \ReflectionClass($calledClass))->getConstants();
         } else {
             throw new OperatingSystemException('Error during calling class', 500);
         }
 
-    }
-
-    public static function exists($needle): bool
-    {
-        return in_array($needle, array_values(self::getConstants()));
     }
 }

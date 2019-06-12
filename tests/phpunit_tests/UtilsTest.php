@@ -19,6 +19,60 @@ use NextDom\Helpers\Utils;
 
 class UtilsTest extends PHPUnit_Framework_TestCase
 {
+    public function testSendVarToJsInt()
+    {
+        ob_start();
+        Utils::sendVarToJS('varName', 1);
+        $result = ob_get_clean();
+        $this->assertEquals("<script>var varName = \"1\";</script>\n", $result);
+    }
+
+    public function testSendVarToJsString()
+    {
+        ob_start();
+        Utils::sendVarToJS('varName', 'a_string');
+        $result = ob_get_clean();
+        $this->assertEquals("<script>var varName = \"a_string\";</script>\n", $result);
+    }
+
+    public function testSendVarToJsArray()
+    {
+        ob_start();
+        Utils::sendVarToJS('varName', [1, 2, 3]);
+        $result = ob_get_clean();
+        $this->assertEquals("<script>var varName = jQuery.parseJSON(\"[1,2,3]\");</script>\n", $result);
+    }
+
+    public function testSendVarToJsDict()
+    {
+        ob_start();
+        Utils::sendVarToJS('varName', ["a" => "b", "c" => "d"]);
+        $result = ob_get_clean();
+        $this->assertEquals("<script>var varName = jQuery.parseJSON(\"{\\\"a\\\":\\\"b\\\",\\\"c\\\":\\\"d\\\"}\");</script>\n", $result);
+    }
+
+    public function testSendVarsToJsSimple()
+    {
+        ob_start();
+        Utils::sendVarsToJS(['var1' => 1, 'var2' => "a string"]);
+        $result = ob_get_clean();
+        $this->assertEquals("<script>\nvar var1 = \"1\";\nvar var2 = \"a string\";\n</script>\n", $result);
+    }
+
+    public function testSendVarsToJsComplex()
+    {
+        ob_start();
+        Utils::sendVarsToJS(['var1' => [0, 1], 'var2' => ["a" => 1, "b" => "ping"]]);
+        $result = ob_get_clean();
+        $this->assertEquals("<script>\nvar var1 = jQuery.parseJSON(\"[0,1]\");\nvar var2 = jQuery.parseJSON(\"{\\\"a\\\":1,\\\"b\\\":\\\"ping\\\"}\");\n</script>\n", $result);
+    }
+
+    public function testGetArrayToJQueryJson()
+    {
+        $result = Utils::getArrayToJQueryJson(['ab' => 'cd', 'e' => 'Bonjour c\'est moi']);
+        $this->assertEquals('jQuery.parseJSON("{\"ab\":\"cd\",\"e\":\"Bonjour c\\\'est moi\"}")', $result);
+    }
+
     public function testInitWithoutDataWithoutDefault()
     {
         $_GET = [];
@@ -173,6 +227,11 @@ class UtilsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('variable(commut_switch_bathroom)==0', $result);
     }
 
+    public function testEvaluateSimpleWithComplexFunc() {
+        $result = Utils::transformExpressionForEvaluation('variable(commut_switch_bathroom, second_param) == 0');
+        $this->assertEquals('variable(commut_switch_bathroom,second_param)==0', $result);
+    }
+
     public function testEvaluateComplex() {
         $result = Utils::transformExpressionForEvaluation('#[Escaliers RDC][Detecteur RDC][Présence]# == 1 OR #[Escaliers 1er][Détecteur de mouvement 1er][Présence]# == 1');
         $this->assertEquals('#[Escaliers RDC][Detecteur RDC][Présence]#==1||#[Escaliers 1er][Détecteur de mouvement 1er][Présence]#==1', $result);
@@ -182,13 +241,11 @@ class UtilsTest extends PHPUnit_Framework_TestCase
     public function testEvaluateComplexOr() {
         $result = Utils::transformExpressionForEvaluation('"Test ou piege" OU "TEST ET PIEGE"');
         $this->assertEquals('"Test ou piege"||"TEST ET PIEGE"', $result);
-
     }
 
     public function testEvaluateComplexAnd() {
         $result = Utils::transformExpressionForEvaluation('"Test ou piege" ET "TEST ET PIEGE"');
         $this->assertEquals('"Test ou piege"&&"TEST ET PIEGE"', $result);
-
     }
 
     public function testEvaluateNegation() {
@@ -211,6 +268,16 @@ class UtilsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('1.23==12.3', $result);
     }
 
+    public function testEvaluateNegativeTest() {
+        $result = Utils::transformExpressionForEvaluation('!(1 == 2.0 OR 2 == .28)');
+        $this->assertEquals('!(1==2.0||2==.28)', $result);
+    }
+
+    public function testEvaluateNegativeFuncTest() {
+        $result = Utils::transformExpressionForEvaluation('(1 == 2.0 OR !myFunc(23, 23))');
+        $this->assertEquals('(1==2.0||!myFunc(23,23))', $result);
+    }
+
     public function testEvaluateOperator() {
         $result = Utils::transformExpressionForEvaluation('1*2 + 3-#Test# == 12/3');
         $this->assertEquals('1*2+3-#Test#==12/3', $result);
@@ -224,5 +291,105 @@ class UtilsTest extends PHPUnit_Framework_TestCase
     public function testEvaluateOrSymbols() {
         $result = Utils::transformExpressionForEvaluation('133.5 > 50 || 1 == 0');
         $this->assertEquals('133.5>50||1==0', $result);
+    }
+
+    public function testEvaluateNegativeNumbers() {
+        $result = Utils::transformExpressionForEvaluation('-133.5 > 50.2 || .1 == -2');
+        $this->assertEquals('-133.5>50.2||.1==-2', $result);
+    }
+
+    public function testIsSha1WithGood() {
+        $this->assertEquals(1, Utils::isSha1(sha1('Test')));
+    }
+
+    public function testIsSha1WithBadHash() {
+        $this->assertEquals(0, Utils::isSha1('Z8EUZ8EUZ8ESDQJSDOISJDOIQSJDOIZJEZOIE'));
+    }
+
+    public function testIsSha1WithNull() {
+        $this->assertEquals(0, Utils::isSha1(null));
+    }
+
+    public function testIsSha1WithTrue() {
+        $this->assertEquals(0, Utils::isSha1(true));
+    }
+
+    public function testIsSha1WithFalse() {
+        $this->assertEquals(0, Utils::isSha1(false));
+    }
+
+    public function testIsSha1WithEmpty() {
+        $this->assertEquals(0, Utils::isSha1(''));
+    }
+
+    public function testIsSha512WithGood() {
+        $this->assertEquals(1, Utils::isSha512(hash('sha512', 'Test')));
+    }
+
+    public function testIsSha512WithBadHash() {
+        $this->assertEquals(0, Utils::isSha512('Z8EUZ8EUZ8ESDQJSDOISJDOIQSJDOIZJEZOIE'));
+    }
+
+    public function testIsSha512WithNull() {
+        $this->assertEquals(0, Utils::isSha512(null));
+    }
+
+    public function testIsSha512WithTrue() {
+        $this->assertEquals(0, Utils::isSha512(true));
+    }
+
+    public function testIsSha512WithFalse() {
+        $this->assertEquals(0, Utils::isSha512(false));
+    }
+
+    public function testIsSha512WithEmpty() {
+        $this->assertEquals(0, Utils::isSha512(''));
+    }
+
+    public function testGetMicrotime() {
+        $result = Utils::getMicrotime();
+        $this->assertTrue($result < time() + 2);
+        $this->assertTrue($result > time() - 2);
+    }
+
+    public function testParseArgsWithEquals() {
+        $args = ['scenario=189', 'eqLogic=90'];
+        $results = Utils::parseArgs($args);
+        $this->assertEquals('189', $results['scenario']);
+        $this->assertEquals('90', $results['eqLogic']);
+    }
+
+    public function testParseArgsWithSpaces() {
+        $args = ['scenario', '189', 'eqLogic', '90'];
+        $results = Utils::parseArgs($args);
+        $this->assertArrayHasKey('scenario', $results);
+        $this->assertArrayHasKey('eqLogic', $results);
+        $this->assertArrayHasKey('90', $results);
+    }
+
+    public function testStrContainsOneOfWithMatches() {
+        $testString = 'A superb test string';
+        $words = ['word', 'test'];
+        $result = Utils::strContainsOneOf($testString, $words);
+        $this->assertTrue($result);
+    }
+
+    public function testStrContainsOneOfWithoutMatches() {
+        $testString = 'A superb test string';
+        $words = ['word', 'nothing'];
+        $result = Utils::strContainsOneOf($testString, $words);
+        $this->assertFalse($result);
+    }
+
+    public function testHexToRgb() {
+        $result = Utils::hexToRgb('FF2400');
+        $this->assertEquals(255, $result[0]);
+        $this->assertEquals(36, $result[1]);
+        $this->assertEquals(0, $result[2]);
+    }
+
+    public function testSanitizeAccent() {
+        $result = Utils::sanitizeAccent('aè lçÉeÈàÀûÏ');
+        $this->assertEquals('ae lceeeaaui', $result);
     }
 }

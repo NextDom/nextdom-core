@@ -1,3 +1,35 @@
+/* This file is part of Jeedom.
+*
+* Jeedom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* Jeedom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/* This file is part of NextDom.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 $("#md_cmdConfigureSelectMultiple").dialog({
     closeText: '',
     autoOpen: false,
@@ -351,11 +383,15 @@ function addActionCmd(_action, _type, _name) {
     }
     var div = '<div class="' + _type + '">';
     div += '<div class="form-group ">';
-    div += '<div class="col-sm-1">';
+    div += '<div class="col-lg-2 col-md-3 col-sm-4 col-xs-12">';
+    div += '<div class="pull-right">';
     div += '<input type="checkbox" class="expressionAttr" data-l1key="options" data-l2key="enable" checked title="{{Décocher pour désactiver l\'action}}" />';
-    div += '<input type="checkbox" class="expressionAttr" data-l1key="options" data-l2key="background" title="{{Cocher pour que la commande s\'exécute en parallèle des autres actions}}" />';
+    div += '<label class="control-label label-check" data-toggle="tooltip" title="" data-original-title="{{Décocher pour désactiver l\'action}}">{{Activer}}</label>';
+    div += '<input type="checkbox" class="expressionAttr spacing-left" data-l1key="options" data-l2key="background" title="{{Cocher pour que la commande s\'exécute en parallèle des autres actions}}" />';
+    div += '<label class="control-label label-check" data-toggle="tooltip" title="" data-original-title="{{Cocher pour que la commande s\'exécute en parallèle des autres actions}}">{{Parallèle}}</label>';
     div += '</div>';
-    div += '<div class="col-sm-4">';
+    div += '</div>';
+    div += '<div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">';
     div += '<div class="input-group">';
     div += '<span class="input-group-btn">';
     div += '<a class="btn btn-default btn-sm bt_removeAction" data-type="' + _type + '"><i class="fas fa-minus-circle"></i></a>';
@@ -367,7 +403,7 @@ function addActionCmd(_action, _type, _name) {
     div += '</span>';
     div += '</div>';
     div += '</div>';
-    div += '<div class="col-sm-7 actionOptions">';
+    div += '<div class="col-lg-6 col-md-5 col-sm-4 col-xs-6 actionOptions">';
     div += nextdom.cmd.displayActionOption(init(_action.cmd, ''), _action.options);
     div += '</div>';
     $('#div_' + _type).append(div);
@@ -394,13 +430,13 @@ $('#bt_cmdConfigureSaveOn').on('click', function () {
             if ($(this).attr('data-state') == 0) {
                 state = true;
                 $(this).attr('data-state', 1);
-                $(this).find('i').removeClass('fa-check-circle-o').addClass('fa-circle-o');
-                $('#table_cmdConfigureSelectMultiple tbody tr .selectMultipleApplyCmd').value(1);
+                $(this).find('i').removeClass('fa-toggle-on').addClass('fa-toggle-off');
+                $('#table_cmdConfigureSelectMultiple tbody tr .selectMultipleApplyCmd:visible').value(1);
             } else {
                 state = false;
                 $(this).attr('data-state', 0);
-                $(this).find('i').removeClass('fa-circle-o').addClass('fa-check-circle-o');
-                $('#table_cmdConfigureSelectMultiple tbody tr .selectMultipleApplyCmd').value(0);
+                $(this).find('i').removeClass('fa-toggle-off').addClass('fa-toggle-on');
+                $('#table_cmdConfigureSelectMultiple tbody tr .selectMultipleApplyCmd:visible').value(0);
             }
         });
 

@@ -15,12 +15,13 @@
 * along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 */
 #}
-<!-- Main Footer -->
-<footer class="main-footer">
-    <div class="text-center footer-center">
-        <strong><a class="cursor spacing-right" href="https://www.nextdom.org" target="_blank">{{ 'footer.licence'|trans ~ ' - ' ~ 'now'|date('Y') ~ ' ' ~ PRODUCT_NAME ~ '.' }}</a></strong>{{ 'All rights reserved'}}.
-        <span><i class="fas fa-code-branch spacing-left spacing-right"></i>{{ 'common.version'|trans ~ ' ' ~ NEXTDOM_VERSION }}</span>
-        <span class="cursor" id="bt_nextdomAboutFooter"><i class="fas fa-info-circle spacing-left spacing-right"></i>{{ 'footer.about'|trans ~ ' ' ~  PRODUCT_NAME }}</span>
-    </div>
+
+<footer class="main-footer footer-center">
+    <strong><a class="cursor spacing-right" href="https://www.nextdom.org" target="_blank">{{ 'footer.licence'|trans ~ ' - ' ~ 'now'|date('Y') ~ ' ' ~ PRODUCT_NAME ~ '.' }}</a></strong>
+    <span><i class="fas fa-certificate spacing-right"></i>{{ 'footer.rights'|trans }}.</span>
+    {% if CORE_BRANCH is defined %}
+        <span class="cursor" data-toggle="tooltip" title="" data-html="true" data-original-title="{{ 'common.branch'|trans }} : {{ CORE_BRANCH }} <br>
+    {% endif %}
+    {{ 'common.jeedom-version'|trans ~ ' : ' ~ JEEDOM_VERSION }}"><i class="fas fa-code-branch spacing-left spacing-right"></i>{{ 'common.version'|trans ~ ' ' ~ NEXTDOM_VERSION }}</span>
+    <span class="cursor" id="bt_nextdomAboutFooter"><i class="fas fa-info-circle spacing-left spacing-right"></i>{{ 'footer.about'|trans ~ ' ' ~  PRODUCT_NAME }}</span>
 </footer>
-<!--/Main Footer-->

@@ -35,67 +35,19 @@ namespace NextDom\Managers;
 
 use NextDom\Enums\DaemonState;
 use NextDom\Enums\PluginManagerCron;
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Model\Entity\Plugin;
 
+/**
+ * Class PluginManager
+ * @package NextDom\Managers
+ */
 class PluginManager
 {
     private static $cache = array();
     private static $enabledPlugins = null;
-
-    /**
-     * Get a plugin from his username
-     *
-     * @param string $id Identifiant du plugin
-     *
-     * @return mixed|Plugin Plugin
-     *
-     * @throws \Exception
-     */
-    public static function byId($id)
-    {
-        global $NEXTDOM_INTERNAL_CONFIG;
-        if (is_string($id) && isset(self::$cache[$id])) {
-            return self::$cache[$id];
-        }
-        if (!file_exists($id) || strpos($id, '/') === false) {
-            $id = self::getPathById($id);
-        }
-        if (!file_exists($id)) {
-            throw new \Exception('Plugin introuvable : ' . $id);
-        }
-        $data = json_decode(file_get_contents($id), true);
-        if (!is_array($data)) {
-            throw new \Exception('Plugin introuvable (json invalide) : ' . $id . ' => ' . print_r($data, true));
-        }
-        $plugin = new Plugin();
-        $plugin->initPluginFromData($data);
-        self::$cache[$plugin->getId()] = $plugin;
-        if (!isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$plugin->getCategory()])) {
-            foreach ($NEXTDOM_INTERNAL_CONFIG['plugin']['category'] as $key => $value) {
-                if (!isset($value['alias'])) {
-                    continue;
-                }
-                if (in_array($plugin->getCategory(), $value['alias'])) {
-                    $plugin->setCategory($key);
-                    break;
-                }
-            }
-        }
-        return $plugin;
-    }
-
-    /**
-     * Get the path of the info.json file from the plugin ID
-     *
-     * @param string $id Plugin ID
-     * @return string Path to the info.json file
-     */
-    public static function getPathById(string $id): string
-    {
-        return NEXTDOM_ROOT . '/plugins/' . $id . '/plugin_info/info.json';
-    }
 
     /**
      * @param bool $activatedOnly
@@ -126,7 +78,7 @@ class PluginManager
                     FROM `config`
                     WHERE `key` = 'active'
                     AND `value` = '1'";
-            $queryResults = \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL);
+            $queryResults = DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL);
             if ($nameOnly) {
                 foreach ($queryResults as $row) {
                     $listPlugin[] = $row['plugin'];
@@ -181,6 +133,77 @@ class PluginManager
             }
         }
         return $returnValue;
+    }
+
+    /**
+     * Get a plugin from his username
+     *
+     * @param string $id Identifiant du plugin
+     *
+     * @return mixed|Plugin Plugin
+     *
+     * @throws \Exception
+     */
+    public static function byId($id)
+    {
+        global $NEXTDOM_INTERNAL_CONFIG;
+        if (is_string($id) && isset(self::$cache[$id])) {
+            return self::$cache[$id];
+        }
+        if (!file_exists($id) || strpos($id, '/') === false) {
+            $id = self::getPathById($id);
+        }
+        if (!file_exists($id)) {
+            self::forceDisablePlugin($id);
+            throw new \Exception('Plugin introuvable : ' . $id);
+        }
+        $data = json_decode(file_get_contents($id), true);
+        if (!is_array($data)) {
+            self::forceDisablePlugin($id);
+            throw new \Exception('Plugin introuvable (json invalide) : ' . $id . ' => ' . print_r($data, true));
+        }
+        $plugin = new Plugin();
+        $plugin->initPluginFromData($data);
+        self::$cache[$plugin->getId()] = $plugin;
+        if (!isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$plugin->getCategory()])) {
+            foreach ($NEXTDOM_INTERNAL_CONFIG['plugin']['category'] as $key => $value) {
+                if (!isset($value['alias'])) {
+                    continue;
+                }
+                if (in_array($plugin->getCategory(), $value['alias'])) {
+                    $plugin->setCategory($key);
+                    break;
+                }
+            }
+        }
+        return $plugin;
+    }
+
+    /**
+     * Get the path of the info.json file from the plugin ID
+     *
+     * @param string $id Plugin ID
+     * @return string Path to the info.json file
+     */
+    public static function getPathById(string $id): string
+    {
+        return NEXTDOM_ROOT . '/plugins/' . $id . '/plugin_info/info.json';
+    }
+
+    /**
+     * @param $_id
+     * @throws \NextDom\Exceptions\CoreException
+     */
+    public static function forceDisablePlugin($_id)
+    {
+        ConfigManager::save('active', 0, $_id);
+        $values = array(
+            'eqType_name' => $_id,
+        );
+        $sql = 'UPDATE eqLogic
+                SET isEnable=0
+                WHERE eqType_name=:eqType_name';
+        DBHelper::Prepare($sql, $values);
     }
 
     /**
@@ -243,6 +266,36 @@ class PluginManager
     }
 
     /**
+     * Start a cron job
+     *
+     * @param string $cronType Cron job type, see PluginManagerCronEnum
+     * // TODO Rajouter un test sur l'enum ???
+     * @throws \Exception
+     */
+    private static function startCronTask(string $cronType = '')
+    {
+        $cache = CacheManager::byKey('plugin::' . $cronType . '::inprogress');
+        if ($cache->getValue(0) > 3) {
+            MessageManager::add('core', __('La tache plugin::' . $cronType . ' n\'arrive pas à finir à cause du plugin : ') . CacheManager::byKey('plugin::' . $cronType . '::last')->getValue() . __(' nous vous conseillons de désactiver le plugin et de contacter l\'auteur'));
+        }
+        CacheManager::set('plugin::' . $cronType . '::inprogress', $cache->getValue(0) + 1);
+        foreach (self::listPlugin(true) as $plugin) {
+            if (method_exists($plugin->getId(), $cronType)) {
+                if (ConfigManager::byKey('functionality::cron::enable', $plugin->getId(), 1) == 1) {
+                    $pluginId = $plugin->getId();
+                    CacheManager::set('plugin::' . $cronType . '::last', $pluginId);
+                    try {
+                        $pluginId::$cronType();
+                    } catch (\Throwable $e) {
+                        LogHelper::add($pluginId, 'error', __('Erreur sur la fonction cron du plugin : ') . $e->getMessage());
+                    }
+                }
+            }
+        }
+        CacheManager::set('plugin::' . $cronType . '::inprogress', 0);
+    }
+
+    /**
      * Tâche exécutée toutes les 5 minutes
      *
      * @throws \Exception
@@ -290,36 +343,6 @@ class PluginManager
     public static function cronHourly()
     {
         self::startCronTask(PluginManagerCron::CRON_HOURLY);
-    }
-
-    /**
-     * Start a cron job
-     *
-     * @param string $cronType Cron job type, see PluginManagerCronEnum
-     * // TODO Rajouter un test sur l'enum ???
-     * @throws \Exception
-     */
-    private static function startCronTask(string $cronType = '')
-    {
-        $cache = CacheManager::byKey('plugin::' . $cronType . '::inprogress');
-        if ($cache->getValue(0) > 3) {
-            MessageManager::add('core', __('La tache plugin::' . $cronType . ' n\'arrive pas à finir à cause du plugin : ') . CacheManager::byKey('plugin::' . $cronType . '::last')->getValue() . __(' nous vous conseillons de désactiver le plugin et de contacter l\'auteur'));
-        }
-        CacheManager::set('plugin::' . $cronType . '::inprogress', $cache->getValue(0) + 1);
-        foreach (self::listPlugin(true) as $plugin) {
-            if (method_exists($plugin->getId(), $cronType)) {
-                if (ConfigManager::byKey('functionality::cron::enable', $plugin->getId(), 1) == 1) {
-                    $pluginId = $plugin->getId();
-                    CacheManager::set('plugin::' . $cronType . '::last', $pluginId);
-                    try {
-                        $pluginId::$cronType();
-                    } catch (\Throwable $e) {
-                        LogHelper::add($pluginId, 'error', __('Erreur sur la fonction cron du plugin : ') . $e->getMessage());
-                    }
-                }
-            }
-        }
-        CacheManager::set('plugin::' . $cronType . '::inprogress', 0);
     }
 
     /**
@@ -373,7 +396,7 @@ class PluginManager
             if (ConfigManager::byKey('deamonAutoMode', $plugin->getId(), 1) != 1) {
                 continue;
             }
-            $dependancy_info = $plugin->dependancy_info();
+            $dependancy_info = $plugin->getDependencyInfo();
             if ($dependancy_info['state'] == DaemonState::NOT_OK) {
                 try {
                     $plugin->dependancy_install();

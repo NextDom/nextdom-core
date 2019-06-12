@@ -34,14 +34,67 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Model\Entity\EqReal;
 
+/**
+ * Class EqRealManager
+ * @package NextDom\Managers
+ */
 class EqRealManager
 {
     const CLASS_NAME = EqReal::class;
     const DB_CLASS_NAME = '`eqReal`';
 
-    private static function getClass($_id)
+    /**
+     * @param $_logicalId
+     * @param $_cat
+     * @return array
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
+    public static function byLogicalId($_logicalId, $_cat)
+    {
+        $values = array(
+            'logicalId' => $_logicalId,
+            'cat' => $_cat,
+        );
+        $sql = 'SELECT id
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE logicalId = :logicalId
+                  AND cat= : cat';
+        $results = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL);
+        $return = array();
+        foreach ($results as $result) {
+            $return[] = self::byId($result['id']);
+        }
+        return $return;
+    }
+
+    /**
+     * @param $_id
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
+    public static function byId($_id)
+    {
+        $values = array(
+            'id' => $_id,
+        );
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE id = :id';
+        $class = self::getClass($_id);
+        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, $class);
+    }
+
+    /**
+     * @param $_id
+     * @return string
+     * @throws \NextDom\Exceptions\CoreException
+     */
+    protected static function getClass($_id)
     {
         if (get_called_class() != self::CLASS_NAME) {
             return get_called_class();
@@ -52,7 +105,7 @@ class EqRealManager
         $sql = 'SELECT plugin, isEnable
                 FROM `eqLogic`
                 WHERE eqReal_id = :id';
-        $result = \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW);
+        $result = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW);
         $eqTyme_name = $result['plugin'];
         if ($result['isEnable'] == 0) {
             try {
@@ -76,35 +129,5 @@ class EqRealManager
             return $eqTyme_name . 'Real';
         }
         return self::CLASS_NAME;
-    }
-
-    public static function byId($_id)
-    {
-        $values = array(
-            'id' => $_id,
-        );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE id = :id';
-        $class = self::getClass($_id);
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, $class);
-    }
-
-    public static function byLogicalId($_logicalId, $_cat)
-    {
-        $values = array(
-            'logicalId' => $_logicalId,
-            'cat' => $_cat,
-        );
-        $sql = 'SELECT id
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE logicalId = :logicalId
-                  AND cat= : cat';
-        $results = \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL);
-        $return = array();
-        foreach ($results as $result) {
-            $return[] = self::byId($result['id']);
-        }
-        return $return;
     }
 }

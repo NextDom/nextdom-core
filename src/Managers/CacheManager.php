@@ -41,24 +41,13 @@ use NextDom\Model\Entity\Cache;
 
 require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
 
+/**
+ * Class CacheManager
+ * @package NextDom\Managers
+ */
 class CacheManager
 {
     private static $cacheSystem = null;
-
-    /**
-     * Get the folder where the cache is stored
-     *
-     * @return string Cache folder
-     * @throws \Exception
-     */
-    public static function getFolder(): string
-    {
-        $return = NextDomHelper::getTmpFolder('cache');
-        if (!file_exists($return)) {
-            mkdir($return, 0777);
-        }
-        return $return;
-    }
 
     /**
      * Store object in cache
@@ -86,20 +75,6 @@ class CacheManager
     }
 
     /**
-     * Delete stored object in cache
-     *
-     * @param $key
-     * @throws \Exception
-     */
-    public static function delete($key)
-    {
-        $cacheItem = self::byKey($key);
-        if (is_object($cacheItem)) {
-            $cacheItem->remove();
-        }
-    }
-
-    /**
      * Get some stats about the cache system
      *
      * @param bool $details True for more informations
@@ -111,7 +86,8 @@ class CacheManager
     {
         $result = self::getCache()->getStats();
         $result['count'] = __('Inconnu');
-        if (ConfigManager::byKey('cache::engine') == 'FilesystemCache') {
+        $engine = ConfigManager::byKey('cache::engine');
+        if ($engine == 'FilesystemCache') {
             $result['count'] = 0;
             foreach (FileSystemHelper::ls(self::getFolder()) as $folder) {
                 foreach (FileSystemHelper::ls(self::getFolder() . '/' . $folder) as $file) {
@@ -121,6 +97,8 @@ class CacheManager
                     $result['count']++;
                 }
             }
+        } else if ($engine == 'RedisCache') {
+            $result['count'] = self::$cacheSystem->getRedis()->dbSize();
         }
         if ($details) {
             $re = '/s:\d*:(.*?);s:\d*:"(.*?)";s/';
@@ -188,34 +166,18 @@ class CacheManager
     }
 
     /**
-     * Get stored object by key
+     * Get the folder where the cache is stored
      *
-     * @param string $key Key
-     * @return mixed Stored object or null if not exists
+     * @return string Cache folder
      * @throws \Exception
      */
-    public static function byKey($key)
+    public static function getFolder(): string
     {
-        $cache = self::getCache()->fetch($key);
-        if (!is_object($cache)) {
-            $cache = new Cache();
-            $cache->setKey($key)
-                ->setDatetime(date('Y-m-d H:i:s'));
+        $return = NextDomHelper::getTmpFolder('cache');
+        if (!file_exists($return)) {
+            mkdir($return, 0775);
         }
-        return $cache;
-    }
-
-    /**
-     * Test if object exists
-     *
-     * @param string $key Key
-     *
-     * @return bool True if object exists
-     * @throws \Exception
-     */
-    public static function exists($key)
-    {
-        return is_object(self::getCache()->fetch($key));
+        return $return;
     }
 
     /**
@@ -232,6 +194,19 @@ class CacheManager
     {
         trigger_error('This method is deprecated', E_USER_DEPRECATED);
         return self::exists($key);
+    }
+
+    /**
+     * Test if object exists
+     *
+     * @param string $key Key
+     *
+     * @return bool True if object exists
+     * @throws \Exception
+     */
+    public static function exists($key)
+    {
+        return is_object(self::getCache()->fetch($key));
     }
 
     /**
@@ -268,13 +243,26 @@ class CacheManager
                 return;
         }
         try {
-            $cacheFile = NEXTDOM_ROOT . '/var/cache.tar.gz';
-            $persisCmd = 'rm -rf ' . $cacheFile . ';cd ' . $cacheDir . ';tar cfz ' . $cacheFile . ' * 2>&1 > /dev/null;chmod 775 ' . $cacheFile . ';chown ' . SystemHelper::getWWWUid() . ':' . SystemHelper::getWWWGid() . ' ' . $cacheFile . ';chmod 777 -R ' . $cacheDir . ' 2>&1 > /dev/null';
-            \com_shell::execute($persisCmd);
+            $cacheFile = self::getArchivePath();
+            $rmCmd = sprintf("rm -rf %s", $cacheFile);
+            $tarCmd = sprintf("cd %s; tar cfz %s *  2>&1 > /dev/null", $cacheDir, $cacheFile);
+            $chmodCmd = sprintf("chmod 664 %s", $cacheFile);
+            $chownCmd = sprintf("chown %s:%s %s", SystemHelper::getWWWUid(), SystemHelper::getWWWGid(), $cacheFile);
+
+            \com_shell::execute($rmCmd);
+            \com_shell::execute($tarCmd);
+            \com_shell::execute($chmodCmd);
+            \com_shell::execute($chownCmd);
         } catch (\Exception $e) {
-
         }
+    }
 
+    /**
+     * @return string
+     */
+    public static function getArchivePath()
+    {
+        return NEXTDOM_DATA . '/cache.tar.gz';
     }
 
     /**
@@ -288,7 +276,7 @@ class CacheManager
         if (ConfigManager::byKey('cache::engine') != 'FilesystemCache' && ConfigManager::byKey('cache::engine') != 'PhpFileCache') {
             return true;
         }
-        $filename = NEXTDOM_ROOT . '/var/cache.tar.gz';
+        $filename = self::getArchivePath();
         if (!file_exists($filename)) {
             return false;
         }
@@ -313,18 +301,14 @@ class CacheManager
             default:
                 return;
         }
-        if (!file_exists(NEXTDOM_ROOT . '/var/cache.tar.gz')) {
-            $cmd = 'mkdir ' . $cache_dir . ';';
-            $cmd .= 'chmod -R 777 ' . $cache_dir . ';';
-            \com_shell::execute($cmd);
+
+        if (!file_exists(self::getArchivePath())) {
             return;
         }
-        $cmd = 'rm -rf ' . $cache_dir . ';';
-        $cmd .= 'mkdir ' . $cache_dir . ';';
-        $cmd .= 'cd ' . $cache_dir . ';';
-        $cmd .= 'tar xfz ' . NEXTDOM_ROOT . '/var/cache.tar.gz;';
-        $cmd .= 'chmod -R 777 ' . $cache_dir . ' 2>&1 > /dev/null;';
-        \com_shell::execute($cmd);
+
+        SystemHelper::vsystem("rm -rf %s", $cache_dir);
+        SystemHelper::vsystem("mkdir %s", $cache_dir);
+        SystemHelper::vsystem("tar xzf %s -C %s", self::getArchivePath(), $cache_dir);
     }
 
     /**
@@ -420,13 +404,6 @@ class CacheManager
                     self::delete($key);
                 }
             }
-            if (strpos($key, 'widgetHtmlmobile') !== false) {
-                $id = str_replace('widgetHtmlmobile', '', $key);
-                if (is_numeric($id)) {
-                    self::delete($key);
-                }
-                continue;
-            }
             if (strpos($key, 'widgetHtmldashboard') !== false) {
                 $id = str_replace('widgetHtmldashboard', '', $key);
                 if (is_numeric($id)) {
@@ -467,5 +444,37 @@ class CacheManager
                 }
             }
         }
+    }
+
+    /**
+     * Delete stored object in cache
+     *
+     * @param $key
+     * @throws \Exception
+     */
+    public static function delete($key)
+    {
+        $cacheItem = self::byKey($key);
+        if (is_object($cacheItem)) {
+            $cacheItem->remove();
+        }
+    }
+
+    /**
+     * Get stored object by key
+     *
+     * @param string $key Key
+     * @return mixed Stored object or null if not exists
+     * @throws \Exception
+     */
+    public static function byKey($key)
+    {
+        $cache = self::getCache()->fetch($key);
+        if (!is_object($cache)) {
+            $cache = new Cache();
+            $cache->setKey($key)
+                ->setDatetime(date('Y-m-d H:i:s'));
+        }
+        return $cache;
     }
 }

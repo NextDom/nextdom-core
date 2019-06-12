@@ -1,0 +1,85 @@
+@charset "utf-8";
+/* This file is part of NextDom.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+*
+* @Support <https://www.nextdom.org>
+* @Email   <admin@nextdom.org>
+* @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
+*/
+
+/* Colors variables */
+/* Basic colors */
+$white:#FFF;
+$black:#000;
+$yellow:#BFFF00;
+$blue:#337ab7;
+$purple:#563d7c;
+$red:#c9302c;
+$green: #00cc00;
+$orange: #ec971f;
+
+/* Dark colors */
+$darkgrey: #999;
+$blueDarkGrey:#374850;
+
+/* Light colors */
+$lightblack:#222d32;
+$lightblue:#B3D7EF;
+$lightred:#DFAAA9;
+$lightgreen:#5cb85c;
+$lightyellow:#F3E5A7;
+$lightgolden:#fdfdf2;
+
+/* Grey */
+$lightgrey:#ddd;
+$lightenGrey:#e7e7e7;
+$whitegrey: #f5f5f5;
+$middlegrey: #e5e5e5;
+$whitelightgrey: #fafafa;
+$verydarkgrey:#333;
+$grey:#666;
+
+/* NextDom / Jeedom */
+$nextdom_bg:#ecf0f5;
+$nextdom_blue:#33b8cc;
+$jeedomgreen:#96c927;
+
+/* State Colors */
+$critical: #e74c3c;
+$warn: #f1c40f;
+$good: #2ecc71;
+
+/* Color classes */
+/* State classes */
+.good {
+    background-color: $good;
+}
+.warning {
+    background-color: $warn;
+}
+.critical {
+    background-color: $critical;
+}
+
+/* Text-color */
+.text-white{
+    color: $white !important;
+}
+.text-nextdom_blue{
+    color: $nextdom_blue !important;
+}
+.text-gray{
+    color: #707070 !important;
+}

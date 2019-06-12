@@ -34,10 +34,13 @@
 namespace NextDom\Helpers;
 
 use NextDom\Exceptions\CoreException;
-use NextDom\Managers\AjaxManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UserManager;
 
+/**
+ * Class AuthentificationHelper
+ * @package NextDom\Helpers
+ */
 class AuthentificationHelper
 {
     /**
@@ -59,25 +62,13 @@ class AuthentificationHelper
      */
     public static function init()
     {
-        $configs = ConfigManager::byKeys(array('session_lifetime', 'sso:allowRemoteUser'));
-
-        $session_lifetime = $configs['session_lifetime'];
-        if (!is_numeric($session_lifetime)) {
-            $session_lifetime = 24;
-        }
-        ini_set('session.gc_maxlifetime', $session_lifetime * 3600);
-        ini_set('session.use_cookies', 1);
-        ini_set('session.cookie_httponly', 1);
-
-        if (isset($_COOKIE['sess_id'])) {
-            session_id($_COOKIE['sess_id']);
-        }
-        @session_start();
+        $allowRemoteUser = ConfigManager::byKey('session_lifetime');
+        SessionHelper::startSession();
         $_SESSION['ip'] = NetworkHelper::getClientIp();
         if (!headers_sent()) {
             setcookie('sess_id', session_id(), time() + 24 * 3600, "/", '', false, true);
         }
-        @session_write_close();
+        session_write_close();
         if (UserManager::isBanned()) {
             header("Statut: 403 Forbidden");
             header('HTTP/1.1 403 Forbidden');
@@ -100,7 +91,7 @@ class AuthentificationHelper
             }
         }
 
-        if (!self::isConnected() && $configs['sso:allowRemoteUser'] == 1) {
+        if (!self::isConnected() && $allowRemoteUser == 1) {
             $user = UserManager::byLogin($_SERVER['REMOTE_USER']);
             if (is_object($user) && $user->getEnable() == 1) {
                 @session_start();
@@ -127,33 +118,20 @@ class AuthentificationHelper
         }
     }
 
-    public static function login($_login, $_password, $_twoFactor = null)
+    /**
+     * Get the status of the user login
+     * @return bool Status of the user connection
+     */
+    public static function isConnected(): bool
     {
-        $user = UserManager::connect($_login, $_password);
-        if (!is_object($user) || $user->getEnable() == 0) {
-            UserManager::failedLogin();
-            sleep(5);
-            return false;
-        }
-        if ($user->getOptions('localOnly', 0) == 1 && NetworkHelper::getUserLocation() != 'internal') {
-            UserManager::failedLogin();
-            sleep(5);
-            return false;
-        }
-        if (NetworkHelper::getUserLocation() != 'internal' && $user->getOptions('twoFactorAuthentification', 0) == 1 && $user->getOptions('twoFactorAuthentificationSecret') != '') {
-            if (trim($_twoFactor) == '' || $_twoFactor === null || !$user->validateTwoFactorCode($_twoFactor)) {
-                UserManager::failedLogin();
-                sleep(5);
-                return false;
-            }
-        }
-        @session_start();
-        UserManager::storeUserInSession($user);
-        @session_write_close();
-        LogHelper::add('connection', 'info', __('Connexion de l\'utilisateur : ') . $_login);
-        return true;
+        return self::$connectedState;
     }
 
+    /**
+     * @param $_key
+     * @return bool
+     * @throws \Exception
+     */
     public static function loginByHash($_key)
     {
         $key = explode('-', $_key);
@@ -195,12 +173,15 @@ class AuthentificationHelper
         UserManager::getStoredUser()->save();
         @session_write_close();
         if (!isset($_COOKIE['nextdom_token'])) {
-            setcookie('nextdom_token', AjaxManager::getToken(), time() + 365 * 24 * 3600, "/", '', false, true);
+            setcookie('nextdom_token', AjaxHelper::getToken(), time() + 365 * 24 * 3600, "/", '', false, true);
         }
         LogHelper::add('connection', 'info', __('Connexion de l\'utilisateur par clef : ') . $user->getLogin());
         return true;
     }
 
+    /**
+     *
+     */
     public static function logout()
     {
         @session_start();
@@ -247,12 +228,37 @@ class AuthentificationHelper
     }
 
     /**
-     * Get the status of the user login
-     * @return bool Status of the user connection
+     * @param      $_login
+     * @param      $_password
+     * @param null $_twoFactor
+     * @return bool
+     * @throws \Exception
      */
-    public static function isConnected(): bool
+    public static function login($_login, $_password, $_twoFactor = null)
     {
-        return self::$connectedState;
+        $user = UserManager::connect($_login, $_password);
+        if (!is_object($user) || $user->getEnable() == 0) {
+            UserManager::failedLogin();
+            sleep(5);
+            return false;
+        }
+        if ($user->getOptions('localOnly', 0) == 1 && NetworkHelper::getUserLocation() != 'internal') {
+            UserManager::failedLogin();
+            sleep(5);
+            return false;
+        }
+        if (NetworkHelper::getUserLocation() != 'internal' && $user->getOptions('twoFactorAuthentification', 0) == 1 && $user->getOptions('twoFactorAuthentificationSecret') != '') {
+            if (trim($_twoFactor) == '' || $_twoFactor === null || !$user->validateTwoFactorCode($_twoFactor)) {
+                UserManager::failedLogin();
+                sleep(5);
+                return false;
+            }
+        }
+        @session_start();
+        UserManager::storeUserInSession($user);
+        @session_write_close();
+        LogHelper::add('connection', 'info', __('Connexion de l\'utilisateur : ') . $_login);
+        return true;
     }
 
     /**

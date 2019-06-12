@@ -35,6 +35,10 @@ namespace NextDom\Market;
 
 use NextDom\Helpers\DataStorage;
 
+/**
+ * Class NextDomMarket
+ * @package NextDom\Market
+ */
 class NextDomMarket
 {
     /**
@@ -111,6 +115,25 @@ class NextDomMarket
     }
 
     /**
+     * Test si une mise à jour de la liste des dépôts est nécessaire
+     *
+     * @param string $id Identifiant de la liste des dépôts
+     *
+     * @return bool True si une mise à jour est nécessaire
+     */
+    public function isUpdateNeeded($id): bool
+    {
+        $result = true;
+        $lastUpdate = $this->dataStorage->getRawData('repo_last_update_' . $id);
+        if ($lastUpdate !== null) {
+            if (time() - $lastUpdate < self::REFRESH_TIME_LIMIT) {
+                $result = false;
+            }
+        }
+        return $result;
+    }
+
+    /**
      * Rafraichier une source JSON
      *
      * @param bool $force Forcer la mise à jour
@@ -136,25 +159,6 @@ class NextDomMarket
                     $this->dataStorage->storeRawData('repo_last_change_' . $this->source['name'], $marketData['version']);
                 }
                 $this->dataStorage->storeRawData('repo_last_update_' . $this->source['name'], time());
-            }
-        }
-        return $result;
-    }
-
-    /**
-     * Test si une mise à jour de la liste des dépôts est nécessaire
-     *
-     * @param string $id Identifiant de la liste des dépôts
-     *
-     * @return bool True si une mise à jour est nécessaire
-     */
-    public function isUpdateNeeded($id): bool
-    {
-        $result = true;
-        $lastUpdate = $this->dataStorage->getRawData('repo_last_update_' . $id);
-        if ($lastUpdate !== null) {
-            if (time() - $lastUpdate < self::REFRESH_TIME_LIMIT) {
-                $result = false;
             }
         }
         return $result;

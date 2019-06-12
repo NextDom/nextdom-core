@@ -16,56 +16,9 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-try {
+use NextDom\Ajax\ReportAjax;
 
-    require_once __DIR__ . '/../php/core.inc.php';
-    include_file('core', 'authentification', 'php');
+require_once (__DIR__ . '/../../src/core.php');
 
-    if (!isConnect('admin')) {
-        throw new Exception(__('401 - Accès non autorisé', __FILE__), -1234);
-    }
-
-    ajax::init(true);
-
-    if (init('action') == 'list') {
-        $return = array();
-        $path = __DIR__ . '/../../data/report/' . init('type') . '/' . init('id') . '/';
-        foreach (ls($path, '*') as $value) {
-            $return[$value] = array('name' => $value);
-        }
-        ajax::success($return);
-    }
-
-    if (init('action') == 'get') {
-        $path = __DIR__ . '/../../data/report/' . init('type') . '/' . init('id') . '/' . init('report');
-        $return = pathinfo($path);
-        $return['path'] = $path;
-        $return['type'] = init('type');
-        $return['id'] = init('id');
-        ajax::success($return);
-    }
-
-    if (init('action') == 'remove') {
-        $path = __DIR__ . '/../../data/report/' . init('type') . '/' . init('id') . '/' . init('report');
-        if (file_exists($path)) {
-            unlink($path);
-        }
-        if (file_exists($path)) {
-            throw new Exception(__('Impossible de supprimer : ', __FILE__) . $path);
-        }
-        ajax::success();
-    }
-
-    if (init('action') == 'removeAll') {
-        $path = __DIR__ . '/../../data/report/' . init('type') . '/' . init('id') . '/';
-        foreach (ls($path, '*') as $value) {
-            unlink($path . $value);
-        }
-        ajax::success($return);
-    }
-
-    throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
-    /*     * *********Catch exeption*************** */
-} catch (Exception $e) {
-    ajax::error(displayException($e), $e->getCode());
-}
+$reportAjax = new ReportAjax();
+$reportAjax->process();

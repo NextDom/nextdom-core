@@ -38,6 +38,9 @@ var chart;
 var noChart = 1;
 var colorChart = 0;
 var lastId = null;
+
+$('#div_graph').css('height', $('#div_mainContainer').height()-325);
+
 delete nextdom.history.chart['div_graph']
 
 initHistoryTrigger();
@@ -65,7 +68,7 @@ $('#bt_clearGraph').on('click',function(){
   $(this).closest('.li_history').removeClass('active');
 });
 
-$(".in_datepicker").datepicker();
+$(".in_datepicker").datepicker({dateFormat: "yy-mm-dd"});
 
 $(".li_history .history").on('click', function (event) {
   $.hideAlert();
@@ -230,13 +233,15 @@ function initHistoryTrigger() {
 }
 
 $('#bt_validChangeDate').on('click',function(){
-    $(nextdom.history.chart['div_graph'].chart.series).each(function(i, serie){
-        if(!isNaN(serie.options.id)){
-            var cmd_id = serie.options.id;
-            addChart(cmd_id, 0);
-            addChart(cmd_id, 1);
-        }
-    });
+    if (isset(nextdom.history.chart['div_graph']) && isset(nextdom.history.chart['div_graph'].chart) && isset(nextdom.history.chart['div_graph'].chart.series)) {
+        $(nextdom.history.chart['div_graph'].chart.series).each(function(i, serie){
+            if(!isNaN(serie.options.id)){
+                var cmd_id = serie.options.id;
+                addChart(cmd_id, 0);
+                addChart(cmd_id, 1);
+            }
+        });
+    }
 });
 
 function addChart(_cmd_id, _action,_options) {
@@ -254,14 +259,6 @@ function addChart(_cmd_id, _action,_options) {
       return;
   }
   lastId = _cmd_id;
-  if(init(_options) == ''){
-      _options = {};
-      if(_cmd_id.indexOf('#') != 1){
-          _options.graphType = $('#sel_chartType').value()
-          _options.groupingType = $('#sel_groupingType').value()
-          _options.graphStep =  ($('#cb_step').value() == 0) ? false : true;
-      }
-  }
   nextdom.history.drawChart({
       cmd_id: _cmd_id,
       el: 'div_graph',
