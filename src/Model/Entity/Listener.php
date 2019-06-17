@@ -84,7 +84,7 @@ class Listener implements EntityInterface
             $option = $this->getOption();
         }
         if (isset($option['background']) && $option['background'] == false) {
-            $this->execute($_event, $_value);
+            $this->execute($_event, $_value, $_datetime);
         } else {
             $cmd = NEXTDOM_ROOT . '/src/Api/start_listener.php';
             $cmd .= ' listener_id=' . $this->getId() . ' event_id=' . $_event . ' "value=' . escapeshellarg($_value) . '"';

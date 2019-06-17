@@ -56,6 +56,7 @@ $(document).ajaxStop(function () {
 
 /* Chargement d'une page */
 function loadPage(_url,_noPushHistory){
+    showLoadingCustom();
     if (modifyWithoutSave) {
         if (!confirm('{{Attention vous quittez une page ayant des données modifiées non sauvegardées. Voulez-vous continuer ?}}')) {
             return;
@@ -120,6 +121,7 @@ function loadPage(_url,_noPushHistory){
         adjustNextDomTheme();
         activateGlobalSearch();
     });
+    hideLoadingCustom();
     return;
 }
 
@@ -401,6 +403,14 @@ $(function () {
     $('[data-toggle="tooltip"]').tooltip();
     $(".slimScrollDiv").css("overflow", "");
     $(".sidebar").css("overflow", "");
+
+    /* Survol fabs filtre categorie dashboard */
+    $('.fab-filter').on('mouseleave',function() {
+        $('.blur-div').removeClass('blur');
+    });
+    $('.fab-filter').on('mouseenter',function() {
+        $('.blur-div').addClass('blur');
+    });
 
     /**
      * Get access to plugins
@@ -1244,19 +1254,24 @@ function limitTreeviewMenu () {
 
 /* Ajustement automatiques des pages pour coller au theme NextDom */
 function adjustNextDomTheme() {
-    $("#div_pageContainer").css('padding-top', '')
+    /* Ajustement tabs */
+    $("#div_pageContainer").css('padding-top', '');
     if (!$('#div_pageContainer .nav-tabs').parent().hasClass('nav-tabs-custom')) {
         $('#div_pageContainer .nav-tabs').parent().addClass('nav-tabs-custom');
     }
-    var needContent = $("#div_pageContainer").children("section").length == 0 && $("#div_pageContainer").children().children("section").length == 0 && !$("#div_pageContainer").children().hasClass('alert') && (getUrlVars('p') != 'plan') && (getUrlVars('p') != 'view') && (getUrlVars('p') != 'plan3d');
+    if (!$('.ui-widget-content').find('.nav-tabs').parent().hasClass("nav-tabs-custom")) {
+        $('.ui-widget-content').find('.nav-tabs').parent().addClass("nav-tabs-custom");
+    }
+    if ($('#div_pageContainer').find('.row-overflow').children(".row").length != 0) {
+        $('#div_pageContainer').find('.row-overflow').removeClass('row');
+    }
+    /* Ajustement containers */
+    var needContent = $("#div_pageContainer").children("section").length == 0 && $("#div_pageContainer").children().children("section").length == 0 && (getUrlVars('p') != 'plan') && (getUrlVars('p') != 'view') && (getUrlVars('p') != 'plan3d');
     if (needContent) {
         if (!$('#div_pageContainer').hasClass('content')) {
             $('#div_pageContainer').addClass('content');
         }
-        if ($("#div_pageContainer").children(".row").length != 0) {
-            $("#div_pageContainer").css('margin-left','15px');
-            $("#div_pageContainer").css('margin-right','15px');
-        }
+
     } else {
         if ($('#div_pageContainer').hasClass('content')) {
             $('#div_pageContainer').removeClass('content');
@@ -1264,6 +1279,10 @@ function adjustNextDomTheme() {
         $("#div_pageContainer").css('margin-left','');
         $("#div_pageContainer").css('margin-right','');
     }
+    /* Ajustements icones */
+    $('#div_pageContainer').find('.fas.fa-sign-in').each(function () {
+        $(this).removeClass('fa-sign-in').addClass('fa-sign-in-alt');
+    });
 }
 
 /* Icone de chargement */
@@ -1279,7 +1298,8 @@ function showLoadingCustom() {
             }
         }
         $('#jqueryLoadingDiv').show();
-        $('.blurPanel').addClass('blur');
+        $('.blur-div').addClass('blur');
+        $('.content').addClass('blur');
     }
 };
 function hideLoadingCustom() {
@@ -1287,22 +1307,10 @@ function hideLoadingCustom() {
         $('#div_loadingSpinner').hide()
     } else {
         $('#jqueryLoadingDiv').hide();
-        $('.blurPanel').removeClass('blur');
+        $('.blur-div').removeClass('blur');
+        $('.content').removeClass('blur');
     }
 };
-
-/* Survol fab filtre categorie dashboard */
-if ($('[role="dialog"] .fab').length == 0) {
-    $('.fab-filter').on('mouseleave',function() {
-        $('.blurPanel').removeClass('blur');
-    });
-
-    $('.fab-filter').on('mouseenter',function() {
-        $('.blurPanel').addClass('blur');
-    });
-} else {
-    $('.fab').css('display', 'none');
-}
 
 /* Scroll dans la page */
 window.onscroll = function () {

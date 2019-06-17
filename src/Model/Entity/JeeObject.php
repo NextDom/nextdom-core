@@ -227,6 +227,7 @@ class JeeObject implements EntityInterface
 
     /**
      * @return int
+     * @throws \Exception
      */
     public function parentNumber()
     {
@@ -427,7 +428,7 @@ class JeeObject implements EntityInterface
                 if ($allowDisplayZero == 0 && $result == 0) {
                     $style = 'display:none;';
                 }
-                $return .= '<span style="margin-right:8px;' . $style . '" class="objectSummaryParent cursor" data-summary="' . $key . '" data-object_id="' . $this->getId() . '" data-displayZeroValue="' . $allowDisplayZero . '">' . $value['icon'] . ' <sup><span class="objectSummary' . $key . '">' . $result . '</span> ' . $value['unit'] . '</span></sup>';
+                $return .= '<span style="' . $style . '" class="objectSummaryParent cursor" data-summary="' . $key . '" data-object_id="' . $this->getId() . '" data-displayZeroValue="' . $allowDisplayZero . '">' . $value['icon'] . ' <sup><span class="objectSummary' . $key . '">' . $result . '</span> ' . $value['unit'] . '</span></sup>';
             }
         }
         $return = trim($return) . '</span>';

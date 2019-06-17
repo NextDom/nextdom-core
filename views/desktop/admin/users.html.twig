@@ -36,14 +36,14 @@
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
-            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour' }}</a>
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'Retour' }}</a>
             {% if userLdapEnabled != '1' %}
-                <a class="btn btn-success btn-action-bar" id="bt_addUser"><i class="fas fa-plus-circle spacing-right"></i>{{ 'Ajouter un utilisateur' }}</a>
+                <a class="btn btn-success btn-action-bar" id="bt_addUser"><i class="fas fa-plus-circle"></i>{{ 'Ajouter un utilisateur' }}</a>
             {% endif %}
         </div>
         <div class="action-group">
-            <a class="btn btn-success btn-action-bar pull-right" id="bt_saveUser"><i class="fas fa-save spacing-right"></i>{{ 'Sauvegarder' }}</a>
-            <a class="btn btn-warning btn-action-bar pull-right" id="bt_removeAllRegisterDevice"><i class="fas fa-trash spacing-right"></i>{{ 'Supprimer tous les périphériques' }}</a>
+            <a class="btn btn-success btn-action-bar pull-right" id="bt_saveUser"><i class="fas fa-save"></i>{{ 'Sauvegarder' }}</a>
+            <a class="btn btn-warning btn-action-bar pull-right" id="bt_removeAllRegisterDevice"><i class="fas fa-trash"></i>{{ 'Supprimer tous les périphériques' }}</a>
         </div>
     </div>
 </section>
@@ -52,7 +52,7 @@
     <div class="box" id="users">
         <!-- Header bar -->
         <div class="box-header with-border">
-            <h3 class="box-title"><i class="fas fa-users spacing-right"></i>{{ 'Gestion des utilisateurs' }}</h3>
+            <h3 class="box-title"><i class="fas fa-users"></i>{{ 'Gestion des utilisateurs' }}</h3>
         </div>
 
         <!-- Page content -->
@@ -104,7 +104,7 @@
                                     <td>{{ sessionData['login'] }}</td>
                                     <td>{{ sessionData['ip'] }}</td>
                                     <td>{{ sessionData['datetime'] }}</td>
-                                    <td><a class="btn btn-warning btn-sm bt_deleteSession pull-right"><i class="fa fa-sign-out spacing-right"></i>{{ 'Déconnecter' }}</a></td>
+                                    <td><a class="btn btn-warning btn-sm bt_deleteSession pull-right"><i class="fas fa-sign-out-alt"></i>{{ 'Déconnecter' }}</a></td>
                                 </tr>
                             {% endfor %}
                         {% endif %}
@@ -134,7 +134,7 @@
                                         <td>{{ user.getLogin() }}</td>
                                         <td>{{ deviceData['ip'] }}</td>
                                         <td>{{ deviceData['datetime'] }}</td>
-                                        <td><a class="btn btn-warning btn-sm bt_removeRegisterDevice pull-right"><i class="fas fa-trash spacing-right"></i>{{ 'Supprimer' }}</a></td>
+                                        <td><a class="btn btn-warning btn-sm bt_removeRegisterDevice pull-right"><i class="fas fa-trash"></i>{{ 'Supprimer' }}</a></td>
                                     </tr>
                                 {% endfor %}
                             {% endif %}
@@ -158,8 +158,8 @@
                             <input class="form-control" type="password" id="in_newUserMdp" placeholder="{{ 'Mot de passe...' }}"/>
                         </div>
                         <div class="modal-footer">
-                            <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-ban spacing-right"></i>{{ 'Annuler' }}</a>
-                            <a class="btn btn-success" id="bt_newUserSave"><i class="fas fa-save spacing-right"></i>{{ 'Valider' }}</a>
+                            <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-ban"></i>{{ 'Annuler' }}</a>
+                            <a class="btn btn-success" id="bt_newUserSave"><i class="fas fa-save"></i>{{ 'Valider' }}</a>
                         </div>
                     </div>
                 </div>

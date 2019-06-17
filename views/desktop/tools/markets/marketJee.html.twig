@@ -36,34 +36,32 @@
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
-            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=plugin"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour' }}</a>
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=plugin"><i class="fas fa-chevron-left"></i>{{ 'Retour' }}</a>
             <div class="btn-group">
-                <a class="btn btn-default" id="authorSearch"><i class="fas fa-user spacing-right"></i>{{ 'Un Auteur ?' }}</a>
-                <a class="btn btn-default" id="pluginNameSearch"><i class="fas fa-tag spacing-right"></i>{{ 'Un Nom ?' }}</a>
+                <a class="btn btn-default" id="authorSearch"><i class="fas fa-user"></i><span>{{ 'Un Auteur ?' }}</span></a>
+                <a class="btn btn-default" id="pluginNameSearch"><i class="fas fa-tag"></i><span>{{ 'Un Nom ?' }}</span></a>
                 <a class="btn btn-primary" id="resetSearch"><i class="fas fa-times"></i></a>
             </div>
-            {% if marketType == 'plugin' %}
-                <div class="btn-group">
-                    <a class="btn btn-default bt_pluginFilterCost" data-filter="free"><i class="fas fa-gift spacing-right"></i>{{ 'Gratuit' }}</a>
-                    <a class="btn btn-default bt_pluginFilterCost" data-filter="paying"><i class="fas fa-euro-sign spacing-right"></i>{{ 'Payant' }}</a>
-                    <a class="btn btn-primary bt_pluginFilterCost" data-filter=""><i class="fa fa-times"></i></a>
-                </div>
-                <div class="btn-group">
-                    <a class="btn btn-default bt_pluginFilterInstall" data-filter="notInstall">{{ 'Installé' }}</a>
-                    <a class="btn btn-default bt_pluginFilterInstall" data-filter="install">{{ 'Non installé' }}</a>
-                    <a class="btn btn-primary bt_pluginFilterInstall" data-filter=""><i class="fa fa-times"></i></a>
-                </div>
-                <div class="btn-group">
-                    <select class="form-control" id="sel_certif">
-                        <option value="" selected>{{ 'Tous' }}</option>
-                        <option value="Officiel">{{ 'Officiel' }}</option>
-                        <option value="Conseillé">{{ 'Conseillé' }}</option>
-                        <option value="Premium">{{ 'Premium' }}</option>
-                        <option value="Partenaire">{{ 'Partenaire' }}</option>
-                        <option value="Legacy">{{ 'Legacy' }}</option>
-                    </select>
-                </div>
-            {% endif %}
+            <div class="btn-group">
+                <a class="btn btn-default bt_pluginFilterCost" data-filter="free"><i class="fas fa-gift"></i><span>{{ 'Gratuit' }}</span></a>
+                <a class="btn btn-default bt_pluginFilterCost" data-filter="paying"><i class="fas fa-euro-sign"></i><span>{{ 'Payant' }}</span></a>
+                <a class="btn btn-primary bt_pluginFilterCost" data-filter=""><i class="fa fa-times"></i></a>
+            </div>
+            <div class="btn-group">
+                <a class="btn btn-default bt_pluginFilterInstall" data-filter="notInstall"><i class="fas fa-thumbs-up"></i><span>{{ 'Installé' }}</span></a>
+                <a class="btn btn-default bt_pluginFilterInstall" data-filter="install"><i class="fas fa-thumbs-down"></i><span>{{ 'Non installé' }}</span></a>
+                <a class="btn btn-primary bt_pluginFilterInstall" data-filter=""><i class="fa fa-times"></i></a>
+            </div>
+            <div class="btn-group">
+                <select class="form-control" id="sel_certif">
+                    <option value="" selected>{{ 'Tous' }}</option>
+                    <option value="Officiel">{{ 'Officiel' }}</option>
+                    <option value="Conseillé">{{ 'Conseillé' }}</option>
+                    <option value="Premium">{{ 'Premium' }}</option>
+                    <option value="Partenaire">{{ 'Partenaire' }}</option>
+                    <option value="Legacy">{{ 'Legacy' }}</option>
+                </select>
+            </div>
         </div>
         <div class="action-group">
             <div class="btn-group">
@@ -87,8 +85,8 @@
             </div>
         </div>
         <div class="action-group">
-            <a class="btn btn-action btn-action-bar pull-right" style="display:none;" id="bt_marketCollapse"><i class="fas fa-plus-square spacing-right"></i>{{ 'Déplier' }}</a>
-            <a class="btn btn-action btn-action-bar pull-right" id="bt_marketUncollapse"><i class="fas fa-minus-square spacing-right"></i>{{ 'Replier' }}</a>
+            <a class="btn btn-action btn-action-bar pull-right" style="display:none;" id="bt_marketCollapse"><i class="fas fa-plus-square"></i>{{ 'Déplier' }}</a>
+            <a class="btn btn-action btn-action-bar pull-right" id="bt_marketUncollapse"><i class="fas fa-minus-square"></i>{{ 'Replier' }}</a>
         </div>
     </div>
 </section>
@@ -96,7 +94,7 @@
 <section class="content">
     <div class="box">
         <div class="box-header with-border">
-            <h3 class="box-title"><i class="fas fa-shopping-cart spacing-right"></i>{{ 'Market Jeedom' }}</h3>
+            <h3 class="box-title"><i class="fas fa-shopping-cart"></i>{{ 'Market Jeedom' }}</h3>
             {% if marketUser != '' %}
                 <span class="label label-info pull-right badge pull-right">{{marketUser}}
                     {% if marketUserTest %}
@@ -109,9 +107,9 @@
         </div>
         <div class="box-body">
             {% if markets|length >= marketLimit %}
-                <div><p class="alert alert-warning" style="margin-bottom:0px">{{ 'Attention l\'affichage est limité à ' }}{{ marketLimit }}{{ ' résultats, utilisez les filtres ou la recherche si ce que vous cherchez n\'apparaît pas...' }}</p></div>
+                <div><p class="alert alert-warning" style="margin-bottom:0px">{{ 'Attention l\'affichage est limité à ' }}{{ marketLimit }}{{ ' résultats, utilisez les filtres ou la recherche par nom ou auteur si ce que vous cherchez n\'apparaît pas...' }}</p></div>
             {% else %}
-                <div><span>{{ markets|length }} {% if marketType == '' %}{{ 'objets' }}{% else %}{{ marketType }}{{ 's' }}{% endif %}{{ ' disponibles...' }}</span></div>
+                <div><span>{{ markets|length }} {% if marketType == '' %}{{ 'objets' }}{% else %}{{ marketType }}{{ 's' }}{% endif %}{{ ' disponibles dans cette catégorie et pour la recherche globale, utilisez les filtres ou la recherche par nom ou auteur si ce que vous cherchez n\'apparaît pas...' }}</span></div>
             {% endif %}
         </div>
     </div>

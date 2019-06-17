@@ -42,7 +42,16 @@
         margin: 0px;
     }
     span.scenario-icon {
-        font-size: 3.8em;
+        font-size: 4em;
+        line-height: 88px;
+        border-radius: 10px;
+        padding: 10px;
+        vertical-align: middle;
+        padding-bottom: 2px;
+    }
+    img {
+        height: 80px;
+        width: auto;
     }
 }
 .displayScenario-overlay {

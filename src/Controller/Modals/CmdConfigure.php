@@ -40,6 +40,7 @@ class CmdConfigure extends BaseAbstractModal
      *
      * @return string
      * @throws CoreException
+     * @throws \ReflectionException
      */
     public static function get(): string
     {
@@ -50,7 +51,7 @@ class CmdConfigure extends BaseAbstractModal
             throw new CoreException(__('Commande non trouvé : ') . $cmdId);
         }
         $cmdInfo = NextDomHelper::toHumanReadable(Utils::o2a($cmd));
-        foreach (array('dashboard', 'mobile', 'dview', 'mview', 'dplan') as $value) {
+        foreach (array('dashboard', 'dview', 'mview', 'dplan') as $value) {
             if (!isset($cmdInfo['html'][$value]) || $cmdInfo['html'][$value] == '') {
                 $cmdInfo['html'][$value] = $cmd->getWidgetTemplateCode($value);
             }
@@ -110,7 +111,7 @@ class CmdConfigure extends BaseAbstractModal
         $pageData['cmdWidgetCanCustomHtml'] = $cmd->widgetPossibility('custom::htmlCode');
         if ($pageData['cmdWidgetCanCustomHtml']) {
             $html = array();
-            foreach (array('dashboard', 'mobile', 'dview', 'mview', 'dplan') as $value) {
+            foreach (array('dashboard', 'dview', 'mview', 'dplan') as $value) {
                 if ($cmd->getHtml($value) == '') {
                     $html[$value] = str_replace('textarea>', 'textarea$>', $cmd->getWidgetTemplateCode($value));
                 } else {
@@ -122,7 +123,6 @@ class CmdConfigure extends BaseAbstractModal
         $pageData['cmdWidgetCanCustom'] = $cmd->widgetPossibility('custom');
         $pageData['cmdWidgetCanCustomWidget'] = $cmd->widgetPossibility('custom::widget');
         $pageData['cmdWidgetCanCustomWidgetDashboard'] = $cmd->widgetPossibility('custom::widget::dashboard');
-        $pageData['cmdWidgetCanCustomWidgetMobile'] = $cmd->widgetPossibility('custom::widget::mobile');
         $pageData['cmdWidgetCanCustomVisibility'] = $cmd->widgetPossibility('custom::visibility');
         $pageData['cmdWidgetCanCustomDisplayName'] = $cmd->widgetPossibility('custom::displayName');
         $pageData['cmdWidgetCanCustomDisplayIconAndName'] = $cmd->widgetPossibility('custom::displayIconAndName');
@@ -132,12 +132,8 @@ class CmdConfigure extends BaseAbstractModal
         $pageData['cmdDisplayParameters'] = $cmd->getDisplay('parameters');
 
         $cmdWidgetDashboard = CmdManager::availableWidget('dashboard');
-        $cmdWidgetMobile = CmdManager::availableWidget('mobile');
         if (is_array($cmdWidgetDashboard[$cmd->getType()]) && is_array($cmdWidgetDashboard[$cmd->getType()][$cmd->getSubType()]) && count($cmdWidgetDashboard[$cmd->getType()][$cmd->getSubType()]) > 0) {
             $pageData['cmdWidgetDashboard'] = $cmdWidgetDashboard[$cmd->getType()][$cmd->getSubType()];
-        }
-        if (is_array($cmdWidgetMobile[$cmd->getType()]) && is_array($cmdWidgetMobile[$cmd->getType()][$cmd->getSubType()]) && count($cmdWidgetMobile[$cmd->getType()][$cmd->getSubType()]) > 0) {
-            $pageData['cmdWidgetMobile'] = $cmdWidgetMobile[$cmd->getType()][$cmd->getSubType()];
         }
 
         $pageData['alertsConfig'] = $NEXTDOM_INTERNAL_CONFIG['alerts'];

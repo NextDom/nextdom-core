@@ -37,11 +37,11 @@
     <section class="content-header">
         <div class="action-bar">
             <div class="action-group">
-                <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{'object.back'|trans}}</a>
+                <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{'object.back'|trans}}</a>
             </div>
             <div class="action-group">
-                <a class="btn btn-success btn-action-bar pull-right" id="bt_addObject2"><i class="fas fa-plus-circle spacing-right"></i>{{ 'object.add'|trans }}</a>
-                <a class="btn btn-primary btn-action-bar pull-right" id="bt_showObjectSummary"><i class="fas fa-list spacing-right"></i>{{ 'object.global-view'|trans }}</a>
+                <a class="btn btn-success btn-action-bar pull-right" id="bt_addObject2"><i class="fas fa-plus-circle"></i>{{ 'object.add'|trans }}</a>
+                <a class="btn btn-primary btn-action-bar pull-right" id="bt_showObjectSummary"><i class="fas fa-list"></i>{{ 'object.global-view'|trans }}</a>
             </div>
         </div>
     </section>
@@ -49,7 +49,7 @@
     <section class="content">
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title"><i class="fas fa-clone spacing-right"></i>{{ 'Objets' }}</h3>
+                <h3 class="box-title"><i class="fas fa-clone"></i>{{ 'Objets' }}</h3>
             </div>
             <div class="box-body">
                 {% if objectList|length == 0 %}
@@ -62,7 +62,7 @@
         <div class="objectListContainer row">
             {% for object in objectList %}
                 <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                    <div class="box objectDisplayCard" style='border-top:3px solid {{ object.getDisplay("tagColor") }}' data-object_id="{{ object.getId() }}" data-object_name="{{ object.getName() }}">
+                    <div class="box objectDisplayCard w-icons" style='border-top:3px solid {{ object.getDisplay("tagColor") }}' data-object_id="{{ object.getId() }}" data-object_name="{{ object.getName() }}">
                         <a class="box-header with-border cursor" href=index.php?v=d&p=dashboard&object_id={{ object.getId() }}>
                             <h4 class="box-title name object-name" style='color:{{ object.getDisplay("tagTextColor") }}'>{{ object.getDisplay('icon', '<i class="fas fa-tag"></i>')|replace({'></i>': '></i>'})|raw }}<i class="spacing-right"></i><b>{{ object.getName() }}</b></h4>
                         </a>
@@ -70,8 +70,8 @@
                             <span class="object-summary spacing-left">{% if 'objectSummaryParent' in object.getHtmlSummary() %}{{ object.getHtmlSummary()|raw }}{% else %}{{'Aucun résumé...'}}{% endif%}</span>
                         </div>
                         <div class="box-footer clearfix text-center">
-                            <a class="btn btn-danger btn-sm pull-right remove bt_removeObject"><i class="far fa-trash-alt spacing-right"></i>{{ 'object.delete'|trans }}</a>
-                            <a class="btn btn-info btn-sm pull-left bt_detailsObject"><i class="far fa-edit spacing-right"></i>{{ 'object.modify'|trans }}</a>
+                            <a class="btn btn-danger btn-sm pull-right remove bt_removeObject"><i class="fas fa-trash"></i>{{ 'object.delete'|trans }}</a>
+                            <a class="btn btn-info btn-sm pull-left bt_detailsObject"><i class="fas fa-edit"></i>{{ 'object.modify'|trans }}</a>
                         </div>
                     </div>
                 </div>
@@ -85,10 +85,10 @@
     <section class="content-header">
         <div class="action-bar">
             <div class="action-group">
-                <a class="btn btn-action-bar btn-danger" id="bt_returnToThumbnailDisplay"><i class="fas fa-chevron-left spacing-right"></i>{{ 'object.back'|trans}}</a>
+                <a class="btn btn-action-bar btn-danger" id="bt_returnToThumbnailDisplay"><i class="fas fa-chevron-left"></i>{{ 'object.back'|trans}}</a>
             </div>
             <div class="action-group">
-                <a class="btn btn-action-bar btn-success pull-right" id="bt_saveObject"><i class="fas fa-save spacing-right"></i>{{ 'object.save'|trans }}</a>
+                <a class="btn btn-action-bar btn-success pull-right" id="bt_saveObject"><i class="fas fa-save"></i>{{ 'object.save'|trans }}</a>
             </div>
         </div>
     </section>
@@ -96,10 +96,10 @@
     <section class="content">
         <div class="nav-tabs-custom">
             <ul class="nav nav-tabs pull-right" role="tablist">
-                <li role="presentation" class="active"><a href="#objecttab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-clone spacing-right"></i>{{ 'Objet' }}</a></li>
-                <li role="presentation"><a href="#summarytab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-list-alt spacing-right"></i>{{ 'Résumé' }}</a></li>
+                <li role="presentation" class="active"><a href="#objecttab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-clone"></i>{{ 'Objet' }}</a></li>
+                <li role="presentation"><a href="#summarytab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-list-alt"></i>{{ 'Résumé' }}</a></li>
                 <h4 class="label label-primary pull-right badge spacing-right">{{ 'ID : ' }}<span id="objectId"></span></h4>
-                <li class="pull-left header"><i class="fas fa-cog spacing-right"></i>{{ 'Configuration de l\'objet' }}</li>
+                <li class="pull-left header"><i class="fas fa-cog"></i>{{ 'Configuration de l\'objet' }}</li>
             </ul>
             <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
                 <div role="tabpanel" class="tab-pane active" id="objecttab">
@@ -193,7 +193,7 @@
                                         <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Icône' }}</label>
                                         <div class="col-lg-8 col-md-8 col-sm-7 col-xs-12">
                                             <div class="input-group">
-                                                <a class="btn btn-action" id="bt_chooseIcon"><i class="fas fa-flag spacing-right"></i>{{ 'Choisir' }}</a>
+                                                <a class="btn btn-action" id="bt_chooseIcon"><i class="fas fa-flag"></i><span>{{ 'Choisir' }}</span></a>
                                                 <div class="objectAttr label label-icon" data-l1key="display" data-l2key="icon"></div>
                                             </div>
                                         </div>
@@ -202,9 +202,9 @@
                                         <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Image' }}</label>
                                         <div class="col-lg-8 col-md-8 col-sm-7 col-xs-12">
                                             <span class="btn btn-default btn-file">
-                                                <i class="fas fa-cloud-upload-alt spacing-right"></i>{{ 'Envoyer' }}<input id="bt_uploadImage" type="file" name="file" style="display: inline-block;">
+                                                <i class="fas fa-cloud-upload-alt"></i>{{ 'Envoyer' }}<input id="bt_uploadImage" type="file" name="file" style="display: inline-block;">
                                             </span>
-                                            <a class="btn btn-danger" id="bt_removeBackgroundImage"><i class="fas fa-trash spacing-right"></i>{{ 'Supprimer' }}</a>
+                                            <a class="btn btn-danger" id="bt_removeBackgroundImage"><i class="fas fa-trash"></i>{{ 'Supprimer' }}</a>
                                         </div>
                                     </div>
                                 </fieldset>
@@ -218,7 +218,7 @@
                     {% else %}
                         <form class="form-horizontal">
                             <fieldset>
-                                <legend><i class="fas fa-flash spacing-right"></i>{{ 'Activations' }}</legend>
+                                <legend><i class="fas fa-flash"></i>{{ 'Activations' }}</legend>
                                 <table class="table table-bordered table-condensed">
                                     <thead>
                                     <tr>
@@ -266,7 +266,7 @@
                         </form>
                         <form class="form-horizontal">
                             <fieldset class="legend-section">
-                                <legend><i class="fas fa-tachometer-alt spacing-right"></i>{{ 'Commandes' }}</legend>
+                                <legend><i class="fas fa-tachometer-alt"></i>{{ 'Commandes' }}</legend>
                                 <div class="nav-tabs-custom">
                                     <ul class="nav nav-tabs" role="tablist">
                                         {% set active = 'active' %}
@@ -280,7 +280,7 @@
                                         {% for summaryKey, summaryValue in objectSummary %}
                                             <div role="tabpanel" class="tab-pane type{{ summaryKey }}{{ active }}" data-type="{{ summaryKey }}" id="summarytab{{ summaryKey }}">
                                                 <div class="div_summary" data-type="{{ summaryKey }}"></div>
-                                                <div class="btn btn-sm btn-success addSummary" data-type="{{ summaryKey }}"><i class="fas fa-plus-circle spacing-right"></i>{{ 'Ajouter une commande' }}</div>
+                                                <div class="btn btn-sm btn-success addSummary" data-type="{{ summaryKey }}"><i class="fas fa-plus-circle"></i>{{ 'Ajouter une commande' }}</div>
                                             </div>
                                             {% set active = '' %}
                                         {% endfor %}

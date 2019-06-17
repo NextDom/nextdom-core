@@ -36,18 +36,18 @@
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
-            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
-            <a class="btn btn-default btn-action-bar" href="index.php?v=d&p=summary"><i class="fas fa-cog spacing-right"></i>{{ 'Paramètres' }}</a>
-            <a class="btn btn-default btn-action-bar" id="bt_removeHistory"><i class="fas fa-history spacing-right" aria-hidden="true"></i>{{ 'Historique' }}</a>
-            <a class="btn btn-success btn-action-bar bt_setIsVisible" data-value="1" style="display:none;"><i class="fas fa-eye spacing-right"></i>{{ 'Visible' }}</a>
-            <a class="btn btn-warning btn-action-bar bt_setIsVisible" data-value="0" style="display:none;"><i class="fas fa-eye-slash spacing-right"></i>{{ 'Invisible' }}</a>
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'Retour'}}</a>
+            <a class="btn btn-default btn-action-bar" href="index.php?v=d&p=summary"><i class="fas fa-cog"></i>{{ 'Paramètres' }}</a>
+            <a class="btn btn-default btn-action-bar" id="bt_removeHistory"><i class="fas fa-history" aria-hidden="true"></i>{{ 'Historique' }}</a>
+            <a class="btn btn-success btn-action-bar bt_setIsVisible" data-value="1" style="display:none;"><i class="fas fa-eye"></i>{{ 'Visible' }}</a>
+            <a class="btn btn-warning btn-action-bar bt_setIsVisible" data-value="0" style="display:none;"><i class="fas fa-eye-slash"></i>{{ 'Invisible' }}</a>
         </div>
         <div class="action-group">
-            <a class="btn btn-action btn-action-bar pull-right" id="bt_displayCollapse"><i class="fas fa-plus-square spacing-right"></i>{{ 'Déplier' }}</a>
-            <a class="btn btn-action btn-action-bar pull-right" style="display:none;" id="bt_displayUncollapse"><i class="fas fa-minus-square spacing-right"></i>{{ 'Replier' }}</a>
-            <a class="btn btn-danger btn-action-bar pull-right" id="bt_removeEqlogic" style="display:none;"><i class="fas fa-trash spacing-right"></i>{{ 'Supprimer' }}</a>
-            <a class="btn btn-success btn-action-bar pull-right bt_setIsEnable" data-value="1" style="display:none;"><i class="fas fa-check spacing-right"></i>{{ 'Actif' }}</a>
-            <a class="btn btn-warning btn-action-bar pull-right bt_setIsEnable" data-value="0" style="display:none;"><i class="fas fa-times spacing-right"></i>{{ 'Inactif' }}</a>
+            <a class="btn btn-action btn-action-bar pull-right" id="bt_displayCollapse"><i class="fas fa-plus-square"></i>{{ 'Déplier' }}</a>
+            <a class="btn btn-action btn-action-bar pull-right" style="display:none;" id="bt_displayUncollapse"><i class="fas fa-minus-square"></i>{{ 'Replier' }}</a>
+            <a class="btn btn-danger btn-action-bar pull-right" id="bt_removeEqlogic" style="display:none;"><i class="fas fa-trash"></i>{{ 'Supprimer' }}</a>
+            <a class="btn btn-success btn-action-bar pull-right bt_setIsEnable" data-value="1" style="display:none;"><i class="fas fa-check"></i>{{ 'Actif' }}</a>
+            <a class="btn btn-warning btn-action-bar pull-right bt_setIsEnable" data-value="0" style="display:none;"><i class="fas fa-times"></i>{{ 'Inactif' }}</a>
         </div>
     </div>
 </section>
@@ -55,7 +55,7 @@
 <section class="content">
     <div class="box">
         <div class="box-header with-border">
-            <h3 class="box-title"><i class="fas fa-th spacing-right"></i>{{ 'Résumé domotique' }}</h3>
+            <h3 class="box-title"><i class="fas fa-th"></i>{{ 'Résumé domotique' }}</h3>
         </div>
         <div class="box-body">
             <div class="form-group">
@@ -80,7 +80,7 @@
         <div class="col-xs-4 object" data-id="-1">
             <div class="box box-primary" id="div_Health">
                 <div class="box-header with-border accordion-toggle cursor" data-toggle="collapse" data-parent="#accordionDisplay" href="#display_none">
-                    <h3 class="box-title"><i class="icon divers-caduceus3 spacing-right"></i>{{ 'Aucun' }}</h3>
+                    <h3 class="box-title"><i class="icon divers-caduceus3"></i>{{ 'Aucun' }}</h3>
                 </div>
                 <div id="display_none" class="panel-collapse collapse">
                     <div class="box-body">
@@ -118,7 +118,7 @@
                 <div class="col-xs-4 object">
                     <div class="box box-summary object" data-id="{{ object.getId() }}" style="border-top-color: {{ object.getDisplay('tagColor') }};">
                         <div class="box-header with-border accordion-toggle cursor" data-toggle="collapse" data-parent="#accordionDisplay" href="#display_{{ object.getId() }}">
-                            <h3 class="box-title">{{ object.getDisplay('icon', '<i class="fas fa-tag"></i>')|replace({'></i>': '></i>'})|raw }}<i class="spacing-right"></i>{{ object.getName() }}</h3>
+                            <h3 class="box-title">{{ object.getDisplay('icon', '<i class="fas fa-tag"></i>')|replace({'></i>': '></i>'})|raw }}{{ object.getName() }}</h3>
                             <div class="box-tools pull-right" style="line-height:36px">
                                 <a class="fas fa-external-link-square-alt openObject summary-box-tools spacing-right" data-id="index.php?v=d&p=object&id={{ object.getId() }}" title="{{ 'Aller sur la configuration de l\'objet' }}"></a>
                                 <i class="fas fa-cog cursor configureObject summary-box-tools" title="{{ 'Configuration avancée' }}"></i>

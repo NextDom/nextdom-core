@@ -155,14 +155,14 @@ function addCron(_cron) {
     tr += '<td class="option"><span class="cronAttr" data-l1key="id"></span></td>';
     tr += '<td>';
     if(init(_cron.id) != ''){
-        tr += '<a class="btn btn-default btn-sm display"><i class="fas fa-file"></i></a> ';
+        tr += '<a class="btn btn-default btn-sm display"><i class="fas fa-file no-spacing"></i></a> ';
     }
     if(init(_cron.deamon) == 0){
         if (init(_cron.state) == 'run') {
-            tr += ' <a class="btn btn-danger btn-sm stop" style="color : white;"><i class="fas fa-stop"></i></a>';
+            tr += ' <a class="btn btn-danger btn-sm stop"><i class="fas fa-stop no-spacing"></i></a>';
         }
         if (init(_cron.state) != '' && init(_cron.state) != 'starting' && init(_cron.state) != 'run' && init(_cron.state) != 'stoping') {
-            tr += ' <a class="btn btn-success btn-sm start" style="color : white;"><i class="fas fa-play"></i></a>';
+            tr += ' <a class="btn btn-success btn-sm start"><i class="fas fa-play no-spacing"></i></a>';
         }
     }
     tr += '</td>';
@@ -212,7 +212,7 @@ function addCron(_cron) {
     tr += '<span class="' + label + ' label-sticker">' + init(_cron.state) + '</span>';
     tr += '</td>';
     tr += '<td class="action">';
-    tr += '<a class="btn btn-default btn-sm"><i class="fas fa-minus-circle remove cursor"></i></a>';
+    tr += '<a class="btn btn-danger btn-sm"><i class="fas fa-minus-circle remove cursor no-spacing"></i></a>';
     tr += '</td>';
     tr += '</tr>';
     var result = $(tr);
@@ -246,7 +246,7 @@ function addListener(_listener) {
     tr += '<td class="option"><span class="listenerAttr" data-l1key="id"></span></td>';
     tr += '<td>';
     if(init(_listener.id) != ''){
-        tr += '<a class="btn btn-default btn-sm display"><i class="fas fa-file"></i></a> ';
+        tr += '<a class="btn btn-default btn-sm display"><i class="fas fa-file no-spacing"></i></a> ';
     }
     tr += '</td>';
     tr += '<td><textarea class="form-control listenerAttr input-sm" data-l1key="event_str" disabled ></textarea></td>';

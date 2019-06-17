@@ -885,6 +885,12 @@ class EqLogic implements EntityInterface
     }
 
     /**
+     * Get HTML code for battery widget
+     *
+     * @param string $display Display type
+     *
+     * @return string HTML code
+     *
      * @param bool $_tag
      * @param bool $_prettify
      * @return string
@@ -1082,7 +1088,7 @@ class EqLogic implements EntityInterface
     {
         // Check if view type is valid
         if (!EqLogicViewType::exists($viewType)) {
-            throw new CoreException(__('La version demandée ne peut pas être vide (mobile, dashboard, dview ou scénario)'));
+            throw new CoreException(__('La version demandée ne peut pas être vide (dashboard, dview ou scénario)'));
         }
         if (!$this->hasRight('r')) {
             return '';
@@ -1186,9 +1192,6 @@ class EqLogic implements EntityInterface
             $replace['#hideEqLogicName#'] = 'display:none;';
         }
         $vcolor = 'cmdColor';
-        if ($version == 'mobile' || $viewType == 'mview') {
-            $vcolor = 'mcmdColor';
-        }
         $parameters = $this->getDisplay('parameters');
         $replace['#cmd-background-color#'] = ($this->getPrimaryCategory() == '') ? NextDomHelper::getConfiguration('eqLogic:category:default:' . $vcolor) : NextDomHelper::getConfiguration('eqLogic:category:' . $this->getPrimaryCategory() . ':' . $vcolor);
         if (is_array($parameters) && isset($parameters['cmd-background-color'])) {
@@ -1458,12 +1461,11 @@ class EqLogic implements EntityInterface
      */
     public function getBackgroundColor($_version = 'dashboard')
     {
-        $vcolor = ($_version == 'mobile') ? 'mcolor' : 'color';
         $category = $this->getPrimaryCategory();
         if ($category != '') {
-            return NextDomHelper::getConfiguration('eqLogic:category:' . $category . ':' . $vcolor);
+            return NextDomHelper::getConfiguration('eqLogic:category:' . $category . ':color');
         }
-        return NextDomHelper::getConfiguration('eqLogic:category:default:' . $vcolor);
+        return NextDomHelper::getConfiguration('eqLogic:category:default:color');
     }
 
     /**

@@ -404,13 +404,6 @@ class CacheManager
                     self::delete($key);
                 }
             }
-            if (strpos($key, 'widgetHtmlmobile') !== false) {
-                $id = str_replace('widgetHtmlmobile', '', $key);
-                if (is_numeric($id)) {
-                    self::delete($key);
-                }
-                continue;
-            }
             if (strpos($key, 'widgetHtmldashboard') !== false) {
                 $id = str_replace('widgetHtmldashboard', '', $key);
                 if (is_numeric($id)) {

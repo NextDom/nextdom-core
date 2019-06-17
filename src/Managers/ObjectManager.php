@@ -38,6 +38,7 @@ use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Model\Entity\JeeObject;
 use NextDom\Model\Entity\Update;
+use NextDom\Model\Entity\User;
 
 /**
  * Class ObjectManager
@@ -113,6 +114,18 @@ class ObjectManager
             }
         }
         return $result;
+    }
+
+    public static function getDefaultUserRoom(User $user)
+    {
+        $rootRoomId = $user->getOptions('defaultDashboardObject');
+        if (empty($rootRoomId)) {
+            $defaultRoom = self::getRootObjects();
+        }
+        else {
+            $defaultRoom = self::byId($rootRoomId);
+        }
+        return $defaultRoom;
     }
 
     /**

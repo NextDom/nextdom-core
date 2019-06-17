@@ -59,3 +59,9 @@
 .status-online:hover {
     border: solid 1px $good;
 }
+.roundedLeft {
+    border-radius: 4px 0px 0px 4px !important;
+}
+.roundedRight {
+    border-radius: 0px 4px 4px 0px !important;
+}

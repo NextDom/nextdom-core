@@ -336,6 +336,9 @@ step_nextdom_directory_layout() {
 step_nextdom_configuration() {
   # recreate configuration from sample
   cp ${WEBSERVER_HOME}/core/config/common.config.sample.php ${WEBSERVER_HOME}/core/config/common.config.php
+  SECRET_KEY=$(</dev/urandom tr -dc '1234567890azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN_@;=' | head -c31; echo "")
+  # Add a special char
+  SECRET_KEY=$SECRET_KEY$(</dev/urandom tr -dc '*&!@%^#' | head -c1; echo "")
   sed -i "s/#PASSWORD#/${MYSQL_NEXTDOM_PASSWD}/g" ${WEBSERVER_HOME}/core/config/common.config.php
   sed -i "s/#DBNAME#/${MYSQL_NEXTDOM_DB}/g"       ${WEBSERVER_HOME}/core/config/common.config.php
   sed -i "s/#USERNAME#/${MYSQL_NEXTDOM_USER}/g"   ${WEBSERVER_HOME}/core/config/common.config.php
@@ -344,6 +347,7 @@ step_nextdom_configuration() {
   sed -i "s%#LOG_DIR#%${LOG_DIRECTORY}%g"         ${WEBSERVER_HOME}/core/config/common.config.php
   sed -i "s%#LIB_DIR#%${LIB_DIRECTORY}%g"         ${WEBSERVER_HOME}/core/config/common.config.php
   sed -i "s%#TMP_DIR#%${TMP_DIRECTORY}%g"         ${WEBSERVER_HOME}/core/config/common.config.php
+  sed -i "s%#SECRET_KEY#%${SECRET_KEY}%g"         ${WEBSERVER_HOME}/core/config/common.config.php
   print_verbose "wrote configuration file: ${WEBSERVER_HOME}/core/config/common.config.php"
 
   # some other compatibilty ugly stuff
@@ -536,6 +540,10 @@ step_nextdom_var_www_html() {
   ln -s "${WEBSERVER_HOME}" /var/www/html
 }
 
+step_nexdom_build_mobile() {
+  bash ${WEBSERVER_HOME}/scripts/prepare_mobile.sh
+}
+
 step_nextdom_mysql_populate() {
   CONSTRAINT="%";
   if [ ${MYSQL_HOSTNAME} == "localhost" ]; then
@@ -683,6 +691,10 @@ main() {
 
   print_log_in "step_nextdom_permissions ..."
   step_nextdom_file_permissions
+  print_log_ok
+
+  print_log_in "step_build_mobile ..."
+  step_nexdom_build_mobile
   print_log_ok
 
   [[ -f /root/.mysqlroot ]] && rm -f /root/.mysqlroot
