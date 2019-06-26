@@ -5,7 +5,6 @@
  * HorizontalLayout(_id, _className)
  */
 class HorizontalLayout extends NextDomElement {
-	layout = undefined;
 	/**
 	 * @constructor HorizontalLayout
 	 * @description simple table
@@ -25,7 +24,7 @@ class HorizontalLayout extends NextDomElement {
      * @description Create the current layout for this nextdomElement
      * @return {HTMLElement} html element result
      */
-	_createLayout : function (){
+	_createLayout(){
 		this.layout= new Div(this.id,this.className);
 		this.layout.getHTMLElement().style.display = "flex";
 		this.setContainerElement(this.layout);
@@ -40,7 +39,7 @@ class HorizontalLayout extends NextDomElement {
 	 * @param {NextDomElement} _element to add to the Layout
 	 * @return {void}
 	 */
-	addToLayout : function(_element){
+	addToLayout(_element){
 		if(!_element.getHTMLElement().style.width){
             _element.getHTMLElement().style.width = "100%";
 		}

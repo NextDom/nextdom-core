@@ -1,42 +1,12 @@
 /* exported NextDomElement */
 /* global NextDomUIDGenerator */
 
+"use strict";
 /* 
  * NextDomElement(_id,_className,_ElementType)
  */
 class NextDomElement {
-	/**
-	 * @name NextDomElement#id
-	 * @instance
-	 * @type String
-	 */
-	id = "";
-	/**
-	 * @name NextDomElement#className
-	 * @type String
-	 */
-	className = "";
-	/**
-	 * @name NextDomElement#htmlElement
-	 * @type HTMLElement
-	 */
-	htmlElement = undefined;
-	/**
-	 * @name NextDomElement#containerElement
-	 * @type NextDomElement
-	 */
-	containerElement = undefined;
-	/**
-	 * @name NextDomElement#childrenElement
-	 * @type NextDomElement[]|NextDomElement
-	 */
-	childrenElement = [];
-	/**
-	 * @name Position#position
-	 * @type Position
-	 */
-	position = undefined;
-	
+
 	/**
 	 * @constructor NextDomElement
 	 * @description a base for HTML NextDomElement
@@ -91,12 +61,12 @@ class NextDomElement {
 	 * @instance
       	 * @public
 	 * @description Create a new NextDomElement of type
-	 * @param {NextDomEnum.ElementType} ElementType The type of the NextDomElement to generate
+	 * @param {NextDomEnum.ElementType} elementType The type of the NextDomElement to generate
 	 * @return {HTMLElement} a new NextDomElement
 	 */
 
-	createHTMLElement (ElementType) {
-		var htmlElement = document.createElement(ElementType.toString());
+	createHTMLElement (elementType) {
+		var htmlElement = document.createElement(elementType.toString());
 		if (this.id) {
 			htmlElement.id = this.id;
 		} else {

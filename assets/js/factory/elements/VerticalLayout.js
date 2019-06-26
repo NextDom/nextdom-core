@@ -5,7 +5,6 @@
  * VerticalLayout(_id, _className)
  */
 class VerticalLayout extends NextDomElement {
-	layout = undefined;
 	/**
 	 * @constructor VerticalLayout
 	 * @description simple table
