@@ -73,7 +73,9 @@ $("#bt_saveProfils").on('click', function (event) {
                 },
                 success: function (data) {
                     modifyWithoutSave = false;
-                    window.location.reload();
+                    updateTheme(function() {
+                        window.location.reload();
+                    });
                 }
             });
         }

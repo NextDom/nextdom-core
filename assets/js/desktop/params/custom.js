@@ -330,6 +330,7 @@ $("input[name=theme]").click(function () {
     nextdom.config.save({
         configuration: config,
         success: function () {
+            modifyWithoutSave = false;
             updateTheme(function() {
                 notify("Info", '{{Thème parametré !}}', 'success');
                 window.location.reload();
