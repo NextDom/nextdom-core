@@ -145,38 +145,38 @@ $("#toStep5").click(function () {
     var radios = document.getElementsByName('theme');
     var config ="";
     for (var i = 0, length = radios.length; i < length; i++) {
-              if (radios[i].value == "dark" && radios[i].checked == true){
-                  console.log("dark");
-                  config = {
-                      'theme:color1' : '#33b8cc',
-                      'theme:color2' : '#ffffff',
-                      'theme:color3' : '#ffffff',
-                      'theme:color4' : '#33b8cc',
-                      'theme:color5' : '#ffffff',
-                      'theme:color6' : '#222d32',
-                      'theme:color7' : '#1e282c',
-                      'theme:color8' : '#2c3b41',
-                      'theme:color9' : '#2c3b41',
-                      'theme:color10' : '#222d32',
-                      'theme:color11' : '#2c3b41',
-                      'theme:color12' : '#e6e7e8',
-                      'theme:color13' : '#484c52',
-                      'theme:color14' : '#484c52',
-                      'theme:color15' : '#222d32',
-                      'theme:color16' : '#666666',
-                      'theme:color17' : '#2c3b41',
-                      'theme:color18' : '#e6e7e8',
-                      'theme:color19' : '#8aa4af',
-                      'theme:color20' : '#222d32',
-                      'theme:color21' : '50',
-                      'theme:color22' : '#263238',
-                  }
-                  break;
-              }
+        if (radios[i].value == "dark" && radios[i].checked == true){
+            console.log("dark");
+            config = {
+                'theme:color1' : '#33b8cc',
+                'theme:color2' : '#ffffff',
+                'theme:color3' : '#ffffff',
+                'theme:color4' : '#33b8cc',
+                'theme:color5' : '#ffffff',
+                'theme:color6' : '#222d32',
+                'theme:color7' : '#1e282c',
+                'theme:color8' : '#2c3b41',
+                'theme:color9' : '#2c3b41',
+                'theme:color10' : '#222d32',
+                'theme:color11' : '#2c3b41',
+                'theme:color12' : '#e6e7e8',
+                'theme:color13' : '#484c52',
+                'theme:color14' : '#484c52',
+                'theme:color15' : '#222d32',
+                'theme:color16' : '#666666',
+                'theme:color17' : '#2c3b41',
+                'theme:color18' : '#e6e7e8',
+                'theme:color19' : '#8aa4af',
+                'theme:color20' : '#222d32',
+                'theme:color21' : '50',
+                'theme:color22' : '#263238',
+            }
+            break;
         }
-        nextdom.config.save({
-          configuration: config,
-          success: function (error) {
+    }
+    nextdom.config.save({
+        configuration: config,
+        success: function (error) {
             updateTheme(function() {
                 notify("Info", '{{Thème parametré !}}', 'success');
             });

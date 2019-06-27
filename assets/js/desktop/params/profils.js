@@ -104,15 +104,6 @@ $('#bt_genUserKeyAPI').on('click',function(){
     });
 });
 
-$('.userAttr[data-l1key=options][data-l2key=bootstrap_theme]').on('change', function () {
-    if($(this).value() == ''){
-        $('#div_imgThemeDesktop').html('<img src="public/img/theme_default.png" height="300" class="img-thumbnail" />');
-    }else{
-        $('#div_imgThemeDesktop').html('<img src="public/themes/' + $(this).value() + '/desktop/preview.png" height="300" class="img-thumbnail" />');
-    }
-
-});
-
 nextdom.user.get({
     error: function (error) {
         notify("Erreur", error.message, 'error');
@@ -204,5 +195,5 @@ $(".themeWidget").on('click', function (event) {
     var widgetName = $(this).attr('src').split("/").pop(-1).split(".");
     $('.userAttr[data-l2key="widget::theme"]').value(widgetName[0]);
     $('#monThemeWidget').attr('src',$(this).attr('src'));
-    notify("{{Profil}}", '{{theme changé}}', 'success');
+    notify("{{Profil}}", '{{thème changé}}', 'success');
 });

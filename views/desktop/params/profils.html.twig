@@ -88,41 +88,38 @@
                     <fieldset>
                         <legend>{{ 'Widgets' }}</legend>
                         <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group col-sm-12">
-                                    <label class="control-label">{{ 'Theme appliqué' }}</label> <br />
+                            <div class="form-group col-sm-6 text-center">
+                                <div class="form-group">
+                                    <label class="control-label">{{ 'Thème appliqué' }}</label>
                                 </div>
-                                <div class="form-group col-sm-12">
+                                <div>
                                     <img id="monThemeWidget" src="/core/template/dashboard/themes/{{ profilsUser.getOptions('widget::theme') }}/{{ profilsUser.getOptions('widget::theme') }}.png" style="height:200px"></a>
-
                                 </div>
                             </div>
                             <div class="form-group col-sm-6 text-center">
-                                <div class="form-group col-sm-12">
-                                    <label class="control-label">{{ 'Themes disponibles' }}</label>
+                                <div class="form-group">
+                                    <label class="control-label">{{ 'Thèmes disponibles' }}</label>
                                 </div>
-                                <div class="form-group col-sm-12">
+                                <div class="row">
                                     {% for theme in profilsWidgetThemes %}
-                                        <div style="display:inline-block; margin:10px;border:solid 1px #eeeeee"><img class="themeWidget cursor" src="{{ theme['dir'] }}" style="height:80px"><br />{{ theme['name']|slice(0, -4) }}</div>
+                                        <div class="col-xs-6"><img class="themeWidget cursor form-group" src="{{ theme['dir'] }}" style="height:100px"><p>{{ theme['name']|slice(0, -4) }}</p></div>
                                     {% endfor %}
                                 </div>
                             </div>
                         </div>
-                        <input class="userAttr form-control" data-l1key="options" data-l2key="widget::theme" style="visibility:hidden" />
+                        <input class="userAttr form-control" data-l1key="options" data-l2key="widget::theme" style="display:none" />
                     </fieldset>
 
-                    <fieldset>
-                        <legend>{{ 'Couleurs' }}</legend>
-                        <div class="form-group">
-                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Couleur sur mobile' }}</label>
-                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
-                                <select class="userAttr form-control" data-l1key="options" data-l2key="mobile_theme_color">
-                                    {% for theme in profilsMobileThemes %}
-                                        <option value="{{ theme }}">{{ theme|capitalize|replace({'_': ' '}) }}</option>
-                                    {% endfor %}
-                                </select>
+                    <fieldset class="legend-section">
+                        <legend>{{ 'Opacités des widgets' }}</legend>
+                        {% for displayTypeCode, displayTypeData in profilsDisplayTypes %}
+                            <div class="form-group">
+                                <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ displayTypeData['name'] }}</label>
+                                <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                                    <input type="number" min="0" max="1" class="userAttr form-control" data-l1key="options" data-l2key="widget::background-opacity::{{ displayTypeCode }}"/>
+                                </div>
                             </div>
-                        </div>
+                        {% endfor %}
                     </fieldset>
 
                     <fieldset class="legend-section">
@@ -144,20 +141,6 @@
                             </div>
                         </div>
                     </fieldset>
-
-                    <fieldset class="legend-section">
-                        <legend>{{ 'Widgets' }}</legend>
-
-
-                        {% for displayTypeCode, displayTypeData in profilsDisplayTypes %}
-                            <div class="form-group">
-                                <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Opacité' }} {{ displayTypeData['name'] }}</label>
-                                <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
-                                    <input type="number" min="0" max="1" class="userAttr form-control" data-l1key="options" data-l2key="widget::background-opacity::{{ displayTypeCode }}"/>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </fieldset>
                 </form>
             </div>
 
@@ -167,8 +150,8 @@
                     <fieldset>
                         <legend>{{ 'Options d\'interfaces' }}</legend>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
-                            <div class="col-sm-2">
+                            <label class="col-lg-3 col-xs-3 control-label">{{ 'Desktop' }}</label>
+                            <div class="col-lg-2 col-md-5 col-xs-6">
                                 <select class="userAttr form-control" data-l1key="options" data-l2key="homePage">
                                     {% for homePageCode, homePageValue in profilsHomePageDesktop %}
                                         <option value="{{ homePageCode }}">{{ homePageValue }}</option>
@@ -181,8 +164,8 @@
                     <fieldset class="legend-section">
                         <legend>{{ 'Objet par défaut sur le dashboard' }}</legend>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
-                            <div class="col-sm-2">
+                            <label class="col-lg-3 col-xs-3 control-label">{{ 'Desktop' }}</label>
+                            <div class="col-lg-2 col-md-5 col-xs-6">
                                 <select class="userAttr form-control" data-l1key="options" data-l2key="defaultDashboardObject">
                                     {% for jeeObject in profilsJeeObjects %}
                                         <option value="{{ jeeObject.getId() }}">{{ jeeObject.getName() }}</option>
@@ -195,8 +178,8 @@
                     <fieldset class="legend-section">
                         <legend>{{ 'Vue par défaut' }}</legend>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
-                            <div class="col-sm-2">
+                            <label class="col-lg-3 col-xs-3 control-label">{{ 'Desktop' }}</label>
+                            <div class="col-lg-2 col-md-5 col-xs-6">
                                 <select class="userAttr form-control" data-l1key="options" data-l2key="defaultDesktopView">
                                     {% for view in profilsViews %}
                                         <option value="{{ view.getId() }}">{{ view.getName() }}</option>
@@ -209,8 +192,8 @@
                     <fieldset class="legend-section">
                         <legend>{{ 'Design par défaut' }}</legend>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
-                            <div class="col-sm-2">
+                            <label class="col-lg-3 col-xs-3 control-label">{{ 'Desktop' }}</label>
+                            <div class="col-lg-2 col-md-5 col-xs-6">
                                 <select class="userAttr form-control" data-l1key="options" data-l2key="defaultDashboardPlan">
                                     {% for plan in profilsPlans %}
                                         <option value="{{ plan.getId() }}">{{ plan.getName() }}</option>
@@ -219,8 +202,8 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">{{ 'Plein écran' }}</label>
-                            <div class="col-sm-1">
+                            <label class="col-lg-3 col-xs-3 control-label">{{ 'Plein écran' }}</label>
+                            <div class="col-lg-1 col-md-5 col-xs-6">
                                 <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="defaultPlanFullScreen"/>
                             </div>
                         </div>
@@ -229,8 +212,8 @@
                     <fieldset class="legend-section">
                         <legend>{{ 'Design 3D par défaut' }}</legend>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
-                            <div class="col-sm-2">
+                            <label class="col-lg-3 col-xs-3 control-label">{{ 'Desktop' }}</label>
+                            <div class="col-lg-2 col-md-5 col-xs-6">
                                 <select class="userAttr form-control" data-l1key="options" data-l2key="defaultDashboardPlan3d">
                                     {% for plan in profilsPlans3d %}
                                         <option value="{{ plan3d.getId() }}">{{ plan3d.getName() }}</option>
@@ -239,8 +222,8 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">{{ 'Plein écran' }}</label>
-                            <div class="col-sm-1">
+                            <label class="col-lg-3 col-xs-3 control-label">{{ 'Plein écran' }}</label>
+                            <div class="col-lg-1 col-md-5 col-xs-6">
                                 <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="defaultPlan3dFullScreen"/>
                             </div>
                         </div>
@@ -249,8 +232,8 @@
                     <fieldset class="legend-section">
                         <legend>{{ 'Vue' }}</legend>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">{{ 'Déplier le panneau des vues' }}</label>
-                            <div class="col-sm-1">
+                            <label class="col-lg-3 col-xs-3 control-label">{{ 'Déplier le panneau des vues' }}</label>
+                            <div class="col-lg-1 col-md-5 col-xs-6">
                                 <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="displayViewByDefault"/>
                             </div>
                         </div>
