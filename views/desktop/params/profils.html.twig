@@ -88,7 +88,7 @@
                     <fieldset>
                         <legend>{{ 'Widgets' }}</legend>
                         <div class="row">
-                            <div class="form-group col-sm-6 text-center">
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12 text-center">
                                 <div class="form-group">
                                     <label class="control-label">{{ 'Thème appliqué' }}</label>
                                 </div>
@@ -96,7 +96,7 @@
                                     <img id="monThemeWidget" src="/core/template/dashboard/themes/{{ profilsUser.getOptions('widget::theme') }}/{{ profilsUser.getOptions('widget::theme') }}.png" style="height:200px"></a>
                                 </div>
                             </div>
-                            <div class="form-group col-sm-6 text-center">
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12 text-center">
                                 <div class="form-group">
                                     <label class="control-label">{{ 'Thèmes disponibles' }}</label>
                                 </div>
@@ -125,7 +125,7 @@
                     <fieldset class="legend-section">
                         <legend>{{ 'Graphiques' }}</legend>
                         <div class="form-group">
-                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Graphique Desktop' }}</label>
+                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Thème' }}</label>
                             <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
                                 <select class="userAttr form-control" data-l1key="options" data-l2key="desktop_highcharts_theme">
                                     <option value="">Défaut</option>
@@ -148,10 +148,10 @@
             <div role="tabpanel" class="tab-pane" id="interfacetab">
                 <form class="form-horizontal">
                     <fieldset>
-                        <legend>{{ 'Options d\'interfaces' }}</legend>
+                        <legend>{{ 'Options d\'interfaces par défaut' }}</legend>
                         <div class="form-group">
-                            <label class="col-lg-3 col-xs-3 control-label">{{ 'Desktop' }}</label>
-                            <div class="col-lg-2 col-md-5 col-xs-6">
+                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Page Home' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
                                 <select class="userAttr form-control" data-l1key="options" data-l2key="homePage">
                                     {% for homePageCode, homePageValue in profilsHomePageDesktop %}
                                         <option value="{{ homePageCode }}">{{ homePageValue }}</option>
@@ -159,13 +159,10 @@
                                 </select>
                             </div>
                         </div>
-                    </fieldset>
 
-                    <fieldset class="legend-section">
-                        <legend>{{ 'Objet par défaut sur le dashboard' }}</legend>
                         <div class="form-group">
-                            <label class="col-lg-3 col-xs-3 control-label">{{ 'Desktop' }}</label>
-                            <div class="col-lg-2 col-md-5 col-xs-6">
+                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Objet par défaut du dashboard' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
                                 <select class="userAttr form-control" data-l1key="options" data-l2key="defaultDashboardObject">
                                     {% for jeeObject in profilsJeeObjects %}
                                         <option value="{{ jeeObject.getId() }}">{{ jeeObject.getName() }}</option>
@@ -173,13 +170,10 @@
                                 </select>
                             </div>
                         </div>
-                    </fieldset>
 
-                    <fieldset class="legend-section">
-                        <legend>{{ 'Vue par défaut' }}</legend>
                         <div class="form-group">
-                            <label class="col-lg-3 col-xs-3 control-label">{{ 'Desktop' }}</label>
-                            <div class="col-lg-2 col-md-5 col-xs-6">
+                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Vue par défaut' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
                                 <select class="userAttr form-control" data-l1key="options" data-l2key="defaultDesktopView">
                                     {% for view in profilsViews %}
                                         <option value="{{ view.getId() }}">{{ view.getName() }}</option>
@@ -187,13 +181,10 @@
                                 </select>
                             </div>
                         </div>
-                    </fieldset>
 
-                    <fieldset class="legend-section">
-                        <legend>{{ 'Design par défaut' }}</legend>
                         <div class="form-group">
-                            <label class="col-lg-3 col-xs-3 control-label">{{ 'Desktop' }}</label>
-                            <div class="col-lg-2 col-md-5 col-xs-6">
+                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Design par défaut' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
                                 <select class="userAttr form-control" data-l1key="options" data-l2key="defaultDashboardPlan">
                                     {% for plan in profilsPlans %}
                                         <option value="{{ plan.getId() }}">{{ plan.getName() }}</option>
@@ -201,19 +192,12 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-lg-3 col-xs-3 control-label">{{ 'Plein écran' }}</label>
-                            <div class="col-lg-1 col-md-5 col-xs-6">
-                                <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="defaultPlanFullScreen"/>
-                            </div>
-                        </div>
-                    </fieldset>
 
-                    <fieldset class="legend-section">
+                        {# Plan 3D désactivé
                         <legend>{{ 'Design 3D par défaut' }}</legend>
                         <div class="form-group">
-                            <label class="col-lg-3 col-xs-3 control-label">{{ 'Desktop' }}</label>
-                            <div class="col-lg-2 col-md-5 col-xs-6">
+                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Design 3D par défaut' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
                                 <select class="userAttr form-control" data-l1key="options" data-l2key="defaultDashboardPlan3d">
                                     {% for plan in profilsPlans3d %}
                                         <option value="{{ plan3d.getId() }}">{{ plan3d.getName() }}</option>
@@ -221,19 +205,32 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-lg-3 col-xs-3 control-label">{{ 'Plein écran' }}</label>
-                            <div class="col-lg-1 col-md-5 col-xs-6">
-                                <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="defaultPlan3dFullScreen"/>
-                            </div>
-                        </div>
+                        #}
                     </fieldset>
 
                     <fieldset class="legend-section">
-                        <legend>{{ 'Vue' }}</legend>
+                        <legend>{{ 'Options des Designs' }}</legend>
                         <div class="form-group">
-                            <label class="col-lg-3 col-xs-3 control-label">{{ 'Déplier le panneau des vues' }}</label>
-                            <div class="col-lg-1 col-md-5 col-xs-6">
+                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-6 control-label">{{ 'Design en plein écran' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                                <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="defaultPlanFullScreen"/>
+                            </div>
+                        </div>
+                        {# Plan 3D désactivé
+                        <div class="form-group">
+                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-6 control-label">{{ 'Design 3D en plein écran' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                                <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="defaultPlan3dFullScreen"/>
+                            </div>
+                        </div>
+                        #}
+                    </fieldset>
+
+                    <fieldset class="legend-section">
+                        <legend>{{ 'Options des Vues' }}</legend>
+                        <div class="form-group">
+                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-6 control-label">{{ 'Déplier le panneau' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
                                 <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="displayViewByDefault"/>
                             </div>
                         </div>
