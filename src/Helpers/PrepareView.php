@@ -37,7 +37,7 @@ use Symfony\Component\Routing\Loader\YamlFileLoader;
  */
 class PrepareView
 {
-    private static $NB_THEME_COLORS = 22;
+    private static $NB_THEME_COLORS = 1+22;
 
     /**
      * Used for display special pages that do not need all process (Connection, First Use)

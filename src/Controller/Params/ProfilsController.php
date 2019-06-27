@@ -72,9 +72,18 @@ class ProfilsController extends BaseController
         $pageData['profilsSessionsList'] = SessionHelper::getSessionsList();
 
         $lsCssThemes = FileSystemHelper::ls(NEXTDOM_ROOT . '/public/themes/');
-        $pageData['profilsAvatars'] = [];
+        $pageData['profilsAvatar'] = ConfigManager::byKey('avatar');
+        if (isset($_SESSION) && is_object(UserManager::getStoredUser()) && UserManager::getStoredUser()->getOptions('avatar', null) !== null) {
+            $pageData['profilsAvatar'] = UserManager::getStoredUser()->getOptions('avatar');
+        } else {
+            @session_start();
+            UserManager::getStoredUser()->setOptions('avatar', $pageData['profilsAvatar']);
+            UserManager::getStoredUser()->save();
+            @session_write_close();
+        }
 
-        $profilRootURL = "/public/img/profils/";
+        $pageData['profilsAvatars'] = [];
+        $profilRootURL = "/public/img/profils";
         $profilRootDir = sprintf("%s/public/img/profils/", NEXTDOM_ROOT);
         $lsAvatars = FileSystemHelper::ls($profilRootDir);
         foreach ($lsAvatars as $avatarFile) {
@@ -83,6 +92,16 @@ class ProfilsController extends BaseController
             if (true == is_file($path)) {
                 $pageData['profilsAvatars'][] = $url;
             }
+        }
+
+        $pageData['profilsWidgetTheme'] = ConfigManager::byKey('widget::theme');
+        if (isset($_SESSION) && is_object(UserManager::getStoredUser()) && UserManager::getStoredUser()->getOptions('widget::theme', null) !== null) {
+            $pageData['profilsWidgetTheme'] = UserManager::getStoredUser()->getOptions('widget::theme');
+        } else {
+            @session_start();
+            UserManager::getStoredUser()->setOptions('widget::theme', $pageData['profilsWidgetTheme']);
+            UserManager::getStoredUser()->save();
+            @session_write_close();
         }
 
         $pageData['profilsWidgetThemes'] = [];
@@ -97,7 +116,7 @@ class ProfilsController extends BaseController
             }
 
         }
-        
+
         $pageData['profilsDisplayTypes'] = NextDomHelper::getConfiguration('eqLogic:displayType');
         $pageData['profilsJeeObjects'] = ObjectManager::all();
         $pageData['profilsViews'] = ViewManager::all();

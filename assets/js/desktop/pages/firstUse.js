@@ -148,6 +148,7 @@ $("#toStep5").click(function () {
         if (radios[i].value == "dark" && radios[i].checked == true){
             console.log("dark");
             config = {
+                'theme:name' : 'dark',
                 'theme:color1' : '#33b8cc',
                 'theme:color2' : '#ffffff',
                 'theme:color3' : '#ffffff',
@@ -172,6 +173,33 @@ $("#toStep5").click(function () {
                 'theme:color22' : '#263238',
             }
             break;
+        } else {
+            console.log("white");
+            config = {
+                'theme:name' : 'white',
+                'theme:color1' : '#33b8cc',
+                'theme:color2' : '#ffffff',
+                'theme:color3' : '#f4f4f5',
+                'theme:color4' : '#33B8CC',
+                'theme:color5' : '#ffffff',
+                'theme:color6' : '#f9fafc',
+                'theme:color7' : '#dbdbdb',
+                'theme:color8' : '#f4f4f5',
+                'theme:color9' : '#ecf0f5',
+                'theme:color10' : '#ffffff',
+                'theme:color11' : '#f5f5f5',
+                'theme:color12' : '#555555',
+                'theme:color13' : '#f5f5f5',
+                'theme:color14' : '#dddddd',
+                'theme:color15' : '#ffffff',
+                'theme:color16' : '#dddddd',
+                'theme:color17' : '#f4f4f4',
+                'theme:color18' : '#555555',
+                'theme:color19' : '#555555',
+                'theme:color20' : '#dddddd',
+                'theme:color21' : '100',
+                'theme:color22' : '#fafafa',
+            }
         }
     }
     nextdom.config.save({

@@ -47,6 +47,12 @@ nextdom.config.load({
     },
     success: function (data) {
         $('#custom').setValues(data, '.configKey');
+        $("#theme-"+$('.configKey[data-l1key="theme:name"]').value()).attr("checked","checked");
+        if ($('.configKey[data-l1key="theme:name"]').value() == 'custom') {
+            $('#theme4').show();
+        }else{
+            $('#theme4').hide();
+        }
         modifyWithoutSave = false;
     }
 });
@@ -61,6 +67,7 @@ if (url.match('#')) {
         printAdvancedDesktop();
     }
 }
+
 $('.nav-tabs a').on('shown.bs.tab', function (e) {
     window.location.hash = e.target.hash;
 })
@@ -126,6 +133,10 @@ function sendCustomData(type, content) {
     });
 }
 
+$(".colorpick input").change(function () {
+    $('.configKey[data-l1key="theme:name"]').value('custom');
+});
+
 $("#bt_savecustom").on('click', function (event) {
     $.hideAlert();
     saveConvertColor();
@@ -136,7 +147,6 @@ $("#bt_savecustom").on('click', function (event) {
             notify("Erreur", error.message, 'error');
         },
         success: function () {
-            updateTheme(null);
             // Change config dynamically
             widget_size = config['widget::size'];
             widget_margin = config['widget::margin'];
@@ -151,7 +161,10 @@ $("#bt_savecustom").on('click', function (event) {
                 success: function (data) {
                     $('#custom').setValues(data, '.configKey');
                     modifyWithoutSave = false;
-                    notify("Info", '{{Sauvegarde réussie}}', 'success');
+                    updateTheme(function() {
+                        notify("Info", '{{Sauvegarde réussie}}', 'success');
+                        window.location.reload();
+                    });
                 }
             });
         }
@@ -248,9 +261,11 @@ $('.bt_resetColor').on('click', function () {
 
 $("input[name=theme]").click(function () {
     var radio = $(this).val();
+    $('.configKey[data-l1key="theme:name"]').value(radio);
     var config ="";
     if (radio == "dark"){
         config = {
+            'theme:name' : 'dark',
             'theme:color1' : '#33b8cc',
             'theme:color2' : '#ffffff',
             'theme:color3' : '#ffffff',
@@ -277,6 +292,7 @@ $("input[name=theme]").click(function () {
     }
     if (radio == "white"){
         config = {
+            'theme:name' : 'white',
             'theme:color1' : '#33b8cc',
             'theme:color2' : '#ffffff',
             'theme:color3' : '#f4f4f5',
@@ -303,6 +319,7 @@ $("input[name=theme]").click(function () {
     }
     if (radio == "mix"){
         config = {
+            'theme:name' : 'mix',
             'theme:color1' : '#33b8cc',
             'theme:color2' : '#ffffff',
             'theme:color3' : '#ffffff',

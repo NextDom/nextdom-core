@@ -63,7 +63,7 @@
                     <legend>{{ 'Photo de profil' }}</legend>
                     <div class="row">
                         <div class="form-group col-sm-6">
-                            <img id="monAvatar" src="{{ profilsUser.getOptions('avatar') }}" style="height:200px"></a>
+                            <img id="monAvatar" src="{{ profilsAvatar }}" style="height:200px"></a>
                         </div>
                         <div class="form-group col-sm-6">
                             {% for avatarFile in profilsAvatars %}
@@ -93,7 +93,7 @@
                                     <label class="control-label">{{ 'Thème appliqué' }}</label>
                                 </div>
                                 <div>
-                                    <img id="monThemeWidget" src="/core/template/dashboard/themes/{{ profilsUser.getOptions('widget::theme') }}/{{ profilsUser.getOptions('widget::theme') }}.png" style="height:200px"></a>
+                                    <img id="monThemeWidget" src="/core/template/dashboard/themes/{{ profilsWidgetTheme }}/{{ profilsWidgetTheme }}.png" style="height:200px"></a>
                                 </div>
                             </div>
                             <div class="form-group col-md-6 col-sm-12 col-xs-12 text-center">

@@ -42,6 +42,17 @@ $('.nav-tabs a').on('shown.bs.tab', function (e) {
     window.location.hash = e.target.hash;
 })
 
+nextdom.user.get({
+    error: function (error) {
+        notify("Erreur", error.message, 'error');
+    },
+    success: function (data) {
+        $('#div_pageContainer').setValues(data, '.userAttr');
+        $('#in_passwordCheck').value(data.password);
+        modifyWithoutSave = false;
+    }
+});
+
 jwerty.key('ctrl+s/⌘+s', function (e) {
     e.preventDefault();
     $("#bt_saveProfils").click();
@@ -104,17 +115,6 @@ $('#bt_genUserKeyAPI').on('click',function(){
             });
         }
     });
-});
-
-nextdom.user.get({
-    error: function (error) {
-        notify("Erreur", error.message, 'error');
-    },
-    success: function (data) {
-        $('#div_pageContainer').setValues(data, '.userAttr');
-        $('#in_passwordCheck').value(data.password);
-        modifyWithoutSave = false;
-    }
 });
 
 $('#div_pageContainer').delegate('.userAttr', 'change', function () {
@@ -199,3 +199,12 @@ $(".themeWidget").on('click', function (event) {
     $('#monThemeWidget').attr('src',$(this).attr('src'));
     notify("{{Profil}}", '{{thème changé}}', 'success');
 });
+
+function updateTheme(successFunc) {
+    $.ajax({
+        url: 'core/ajax/config.ajax.php',
+        type: 'GET',
+        data: {'action': 'updateTheme', 'nextdom_token': NEXTDOM_AJAX_TOKEN},
+        success: successFunc
+    });
+}
