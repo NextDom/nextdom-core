@@ -114,10 +114,17 @@ class ProfilsController extends BaseController
                 $themeData['name'] = $themeFile;
                 $pageData['profilsWidgetThemes'][] = $themeData;
             }
-
         }
 
         $pageData['profilsDisplayTypes'] = NextDomHelper::getConfiguration('eqLogic:displayType');
+        foreach ($pageData['profilsDisplayTypes'] as $key => $value) {
+            if (isset($_SESSION) && is_object(UserManager::getStoredUser()) && UserManager::getStoredUser()->getOptions('widget::background-opacity::'.$key, null) == null) {
+                @session_start();
+                UserManager::getStoredUser()->setOptions('widget::background-opacity::'.$key, 1);
+                UserManager::getStoredUser()->save();
+                @session_write_close();
+            }
+        }
         $pageData['profilsJeeObjects'] = ObjectManager::all();
         $pageData['profilsViews'] = ViewManager::all();
         $pageData['profilsPlans'] = PlanHeaderManager::all();
