@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  composer:
+    user: 1000:1000
+    image: composer:1.8
+    volumes:
+      - .:/app
+      - $HOME/.composer:/tmp
