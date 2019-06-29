@@ -42,6 +42,15 @@ $('.nav-tabs a').on('shown.bs.tab', function (e) {
     window.location.hash = e.target.hash;
 })
 
+$('.userAttr[data-l1key=options][data-l2key=bootstrap_theme]').on('change', function () {
+    if($(this).value() == ''){
+        $('#div_imgThemeDesktop').html('<img src="public/img/theme_default.png" height="300" class="img-thumbnail" />');
+    }else{
+        $('#div_imgThemeDesktop').html('<img src="public/themes/' + $(this).value() + '/desktop/preview.png" height="300" class="img-thumbnail" />');
+    }
+
+});
+
 nextdom.user.get({
     error: function (error) {
         notify("Erreur", error.message, 'error');
