@@ -118,7 +118,7 @@
     background-image: none;
     border: none !important;
     border-radius: 6px !important;
-    .btn:not(.btn-default) {
+    .btn:not(.btn-default):not(.btn-selector) {
         color: $white !important;
     }
     a:not(.btn) {

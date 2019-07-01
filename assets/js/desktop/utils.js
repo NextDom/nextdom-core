@@ -59,6 +59,7 @@ function loadPage(_url,_noPushHistory){
     showLoadingCustom();
     if (modifyWithoutSave) {
         if (!confirm('{{Attention vous quittez une page ayant des données modifiées non sauvegardées. Voulez-vous continuer ?}}')) {
+            hideLoadingCustom();
             return;
         }
         modifyWithoutSave = false;
@@ -305,11 +306,9 @@ $(function () {
         }
     });
 
-
     $(window).resize(function () {
         initRowOverflow();
     });
-
 
     if (typeof nextdom_Welcome != 'undefined' && isset(nextdom_Welcome) && nextdom_Welcome == 1 && getUrlVars('noWelcome') != 1) {
         $('#md_modal').dialog({title: "{{Bienvenue dans NextDom}}"});
@@ -415,7 +414,6 @@ $(function () {
     /**
      * Get access to plugins
      */
-
     $('[data-toggle="push-menu"]').pushMenu();
     var $pushMenu = $('[data-toggle="push-menu"]').data('lte.pushmenu');
     var $layout = $('body').data('lte.layout');
