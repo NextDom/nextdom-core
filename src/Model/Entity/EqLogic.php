@@ -262,6 +262,8 @@ class EqLogic implements EntityInterface
 
     /**
      * @return array|mixed|null
+     * @throws CoreException
+     * @throws \ReflectionException
      */
     public function getEqReal()
     {
@@ -596,6 +598,7 @@ class EqLogic implements EntityInterface
      * @param $_name
      * @return EqLogic
      * @throws CoreException
+     * @throws \ReflectionException
      */
     public function copy($_name)
     {
@@ -629,6 +632,7 @@ class EqLogic implements EntityInterface
     /**
      * @param bool $_direct
      * @throws CoreException
+     * @throws \ReflectionException
      */
     public function save($_direct = false)
     {
@@ -887,13 +891,10 @@ class EqLogic implements EntityInterface
     /**
      * Get HTML code for battery widget
      *
-     * @param string $display Display type
-     *
-     * @return string HTML code
-     *
      * @param bool $_tag
      * @param bool $_prettify
-     * @return string
+     * @return string HTML code
+     *
      * @throws \Exception
      */
     public function getHumanName($_tag = false, $_prettify = false)
@@ -1015,6 +1016,7 @@ class EqLogic implements EntityInterface
      * @return array|mixed
      *
      * @throws CoreException
+     * @throws \NextDom\Exceptions\OperatingSystemException
      * @throws \ReflectionException
      */
     public function toHtml($viewType = EqLogicViewType::DASHBOARD)
@@ -1082,6 +1084,7 @@ class EqLogic implements EntityInterface
      * @param bool $_noCache
      * @return array|string
      * @throws CoreException
+     * @throws \NextDom\Exceptions\OperatingSystemException
      * @throws \ReflectionException
      */
     public function preToHtml($viewType = EqLogicViewType::DASHBOARD, $_default = array(), $_noCache = false)
@@ -1519,6 +1522,7 @@ class EqLogic implements EntityInterface
      * @param string $htmlCode HTML code to store
      *
      * @return string $htmlCode
+     * @throws \Exception
      */
     public function postToHtml(string $viewType, string $htmlCode)
     {
@@ -1617,6 +1621,7 @@ class EqLogic implements EntityInterface
     /**
      * @param $_configuration
      * @throws CoreException
+     * @throws \ReflectionException
      */
     public function import($_configuration)
     {

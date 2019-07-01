@@ -340,6 +340,8 @@ class InteractQuery implements EntityInterface
 
     /**
      * @return InteractDef
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public function getInteractDef()
     {

@@ -134,6 +134,7 @@ class CmdRest
      * @return bool True if success
      *
      * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public static function exec(Request $request, int $cmdId)
     {

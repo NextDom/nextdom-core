@@ -118,13 +118,16 @@ class User implements EntityInterface
         return $this;
     }
 
+    /**
+     * Method called before save in database
+     */
     public function preSave()
     {
         if ($this->getLogin() == '') {
             throw new \Exception(__('Le nom d\'utilisateur ne peut pas être vide'));
         }
         $admins = UserManager::byProfils('admin', true);
-        if (count($admins) == 1 && $this->getProfils() == 'admin' && $this->getEnable() == 0) {
+        if (count($admins) == 1 && $this->getProfils() == 'admin' && !$this->isEnabled()) {
             throw new \Exception(__('Vous ne pouvez désactiver le dernier utilisateur'));
         }
         if (count($admins) == 1 && $admins[0]->getId() == $this->getid() && $this->getProfils() != 'admin') {
@@ -159,6 +162,12 @@ class User implements EntityInterface
         return $this->enable;
     }
 
+    /**
+     * @return bool
+     */
+    public function isEnabled() {
+        return $this->enable != 0;
+    }
     /**
      * @param $_enable
      * @return $this
@@ -215,10 +224,19 @@ class User implements EntityInterface
     }
 
     /**
-     *
+     * @deprecated
      * @return boolean vrai si l'utilisateur est valide
      */
     public function is_Connected()
+    {
+        return $this->isConnected();
+    }
+
+    /**
+     *
+     * @return boolean vrai si l'utilisateur est valide
+     */
+    public function isConnected()
     {
         return (is_numeric($this->id) && $this->login != '');
     }

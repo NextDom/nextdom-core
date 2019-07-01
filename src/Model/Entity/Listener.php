@@ -122,6 +122,7 @@ class Listener implements EntityInterface
      * @param $_event
      * @param $_value
      * @param string $_datetime
+     * @throws \Exception
      */
     public function execute($_event, $_value, $_datetime = '')
     {

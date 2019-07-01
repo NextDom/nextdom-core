@@ -129,6 +129,8 @@ class Authenticator
      * @param User $user
      *
      * @return string User token
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public function createTokenForUser(User $user): string
     {

@@ -133,6 +133,10 @@ class Cron implements EntityInterface
         return $this;
     }
 
+    public function isEnabled() {
+        return $this->enable == 1;
+    }
+
     /**
      * @return int|mixed
      * @throws \Exception
@@ -406,6 +410,8 @@ class Cron implements EntityInterface
      * Save cron object in database
      *
      * @return mixed
+     * @throws CoreException
+     * @throws \ReflectionException
      */
     public function save()
     {
@@ -418,6 +424,7 @@ class Cron implements EntityInterface
      * @param bool $haltBefore
      * @return mixed
      * @throws CoreException
+     * @throws \ReflectionException
      */
     public function remove($haltBefore = true)
     {

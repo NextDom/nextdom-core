@@ -60,7 +60,7 @@ class ScenarioSubElementManager
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE id = :id';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -84,10 +84,10 @@ class ScenarioSubElementManager
         if ($filterByType != '') {
             $values['type'] = $filterByType;
             $sql .= ' AND type=:type ';
-            return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+            return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
         } else {
             $sql .= ' ORDER BY `order`';
-            return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+            return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
         }
     }
 

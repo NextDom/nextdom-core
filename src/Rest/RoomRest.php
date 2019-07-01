@@ -21,7 +21,6 @@ namespace NextDom\Rest;
 
 use NextDom\Managers\ObjectManager;
 use NextDom\Model\Entity\JeeObject;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class RoomRest
@@ -46,8 +45,7 @@ class RoomRest
     /**
      * Get tree of rooms from specific room
      *
-     * @param int $rootRoomId Root rooms
-     *
+     * @param int $roomId
      * @return ObjectManager[] Tree of rooms
      * @throws \Exception
      */

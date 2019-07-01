@@ -74,7 +74,7 @@ class InteractQueryManager
             $values['interactDef_id'] = $_interactDef_id;
             $sql .= ' AND interactDef_id=:interactDef_id';
         }
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -92,7 +92,7 @@ class InteractQueryManager
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE interactDef_id=:interactDef_id
                 ORDER BY `query`';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -121,7 +121,7 @@ class InteractQueryManager
                 $sql .= ' OR actions LIKE :actions' . $i;
             }
         }
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -136,7 +136,7 @@ class InteractQueryManager
         );
         $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . '
                 WHERE interactDef_id = :interactDef_id';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -723,7 +723,7 @@ class InteractQueryManager
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE LOWER(query)=LOWER(:query)';
-        $query = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        $query = DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
         if (is_object($query)) {
             $interactDef = $query->getInteractDef();
             if ($interactDef->getOptions('mustcontain') != '' && !preg_match($interactDef->getOptions('mustcontain'), $_query)) {
@@ -738,12 +738,12 @@ class InteractQueryManager
                 FROM ' . self::DB_CLASS_NAME . '
                 GROUP BY id
                 HAVING score > 1';
-        $queries = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        $queries = DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
         if (count($queries) == 0) {
             $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                     FROM ' . self::DB_CLASS_NAME . '
                     WHERE query=:query';
-            $query = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+            $query = DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
             if (is_object($query)) {
                 $interactDef = $query->getInteractDef();
                 if ($interactDef->getOptions('mustcontain') != '' && !preg_match($interactDef->getOptions('mustcontain'), $_query)) {
@@ -834,7 +834,7 @@ class InteractQueryManager
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 ORDER BY id';
-        return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
     }
 
     /**
@@ -988,6 +988,6 @@ class InteractQueryManager
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE id=:id';
 
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 }

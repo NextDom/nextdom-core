@@ -140,10 +140,8 @@ class FileSystemHelper
      *
      * The function checks that returned file belongs to nextdom-core root directory
      *
-     * @param string $folder base folder
      * @param string $path requested path under folder
-     * @param string $extension file extension
-     * @returns string migrated file path or null when does not exists
+     * @return null|string|string[]
      */
     public static function getAssetPath($path)
     {
@@ -218,7 +216,7 @@ class FileSystemHelper
      *
      * @return string Contenu du fichier ou une chaine vide.
      */
-    public static function getTemplateFileContent($folder, $version, $filename, $pluginId): string
+    public static function getTemplateFileContent($folder, $version, $filename, $pluginId = ''): string
     {
         $result = '';
         if ($pluginId == '') {
@@ -634,8 +632,9 @@ class FileSystemHelper
     /**
      * Create directory if not already exists
      *
+     * @param $path
      * @param int $mode , see mkdir parameter
-     * @param int $recursive , see mkdir parameter
+     * @param bool $recursive , see mkdir parameter
      * @throws CoreException when cannot create directory
      */
     public static function mkdirIfNotExists($path, $mode = 0775, $recursive = false)
