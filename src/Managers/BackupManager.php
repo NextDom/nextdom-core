@@ -35,6 +35,7 @@
 namespace NextDom\Managers;
 
 use NextDom\Exceptions\CoreException;
+use NextDom\Helpers\ConsoleHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Enums\FoldersReferential;
@@ -89,45 +90,44 @@ class BackupManager
         $status = "success";
 
         try {
-            ConsoleHelper::title("starting backup procedure at ".date('Y-m-d H:i:s')."\n");
+            ConsoleHelper::title("Create Backup Process", false);
+            ConsoleHelper::subTitle("starting backup procedure at " . date('Y-m-d H:i:s'));
             NextDomHelper::event('begin_backup', true);
-            printf("starting plugin backup...");
+            ConsoleHelper::step("starting plugin backup");
             self::backupPlugins();
-            printf("Success\n");
-            printf("checking database integrity...");
+            ConsoleHelper::ok();
+            ConsoleHelper::step("checking database integrity");
             self::repairDB();
-            printf("Success\n");
-            printf("starting database backup...");
+            ConsoleHelper::ok();
+            ConsoleHelper::step("starting database backup");
             self::createDBBackup($sqlPath);
-            printf("Success\n");
-            printf("starting cache backup...");
+            ConsoleHelper::ok();
+            ConsoleHelper::step("starting cache backup");
             CacheManager::persist();
-            printf("Success\n");
-            printf("creating backup archive...");
+            ConsoleHelper::ok();
+            ConsoleHelper::step("creating backup archive");
             self::createBackupArchive($backupPath, $sqlPath, $cachePath);
-            printf("Success\n");
-            printf("rotating backup archives...");
+            ConsoleHelper::ok();
+            ConsoleHelper::step("rotating backup archives");
             self::rotateBackups($backupDir);
-            printf("Success\n");
-            printf("uploading backup to remote clouds...");
+            ConsoleHelper::ok();
+            ConsoleHelper::step("uploading backup to remote clouds");
             self::sendRemoteBackup($backupPath);
-            printf("Success\n");
+            ConsoleHelper::ok();
             NextDomHelper::event('end_backup');
-            ConsoleHelper::step(" -> STATUS: success\n");
-            ConsoleHelper::step(" -> ELAPSED TIME: %s sec(s)\n", (strtotime('now') - $startTime));
-            ConsoleHelper::subTitle("end of backup procedure at ".date('Y-m-d H:i:s')."\n");
+            ConsoleHelper::subTitle("end of backup procedure at " . date('Y-m-d H:i:s'));
+            ConsoleHelper::subTitle("elapsed time " . (strtotime('now') - $startTime));
         } catch (\Exception $e) {
             $status = "error";
             ConsoleHelper::nok();
-            ConsoleHelper::step("> ERROR: %s\n", Utils::br2nl($e->getMessage()));
-            ConsoleHelper::step("> DETAILS\n");
-            ConsoleHelper::step("%s\n", print_r($e->getTrace(), true));
+            ConsoleHelper::error($e);
             LogHelper::add('backup', 'error', $e->getMessage());
         }
 
         // the following line acts as marker used in ajax telling that the procedure is finished
         // it should be me removed
-        ConsoleHelper::title("Closing with ". $status."\n\n");
+        ConsoleHelper::subTitle("Closing with " . $status);
+        ConsoleHelper::title("Create Backup Process", true);
         return ($status == "success");
     }
 

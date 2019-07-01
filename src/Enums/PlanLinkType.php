@@ -1,5 +1,4 @@
 <?php
-
 /* This file is part of NextDom.
  *
  * NextDom is free software: you can redistribute it and/or modify
@@ -16,13 +15,18 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace NextDom\Exceptions;
+namespace NextDom\Enums;
 
-
-/**
- * Class MarketException
- * @package NextDom\Exceptions
- */
-class MarketException extends \Exception
+class PlanLinkType extends Enum
 {
+    const CMD = 'cmd';
+    const EQLOGIC = 'eqLogic';
+    const GRAPH = 'graph';
+    const IMAGE = 'image';
+    const PLAN = 'plan';
+    const SCENARIO = 'scenario';
+    const SUMMARY = 'summary';
+    const TEXT = 'text';
+    const VIEW = 'view';
+    const ZONE = 'zone';
 }
