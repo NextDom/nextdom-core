@@ -23,8 +23,20 @@ set_root() {
 }
 set_root $0
 
+# Initialise npm
+echo " > Initialise NPM"
 ${root}/gen_composer_npm.sh
+
+# Initialise assets
+echo " > Initialise Assets"
 ${root}/gen_assets.sh
+
+# Initialise docs
 if [ "$1" == "--docs" ]; then
+    echo " > Initialise Docs"
     ${root}/gen_docs.sh
 fi
+
+# Gestion vulnerability or obesolescences
+echo " > Cleaning vulnerability and obesolescences"
+rm -rf ./vendor/node_modules/morris.js/
