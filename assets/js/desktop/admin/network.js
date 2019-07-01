@@ -68,13 +68,13 @@ $('#bt_restartDns').on('click', function () {
     jeedom.config.save({
         configuration: $('#network').getValues('.configKey')[0],
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
-        },
+            notify("Core",error.message,"error");
+            },
         success: function () {
             jeedom.network.restartDns({
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
-                },
+                    notify("Core",error.message,"error");
+                    },
                 success: function (data) {
                     modifyWithoutSave = false;
                     location.reload();
@@ -90,13 +90,13 @@ $('#bt_haltDns').on('click', function () {
     jeedom.config.save({
         configuration: $('#network').getValues('.configKey')[0],
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
-        },
+            notify("Core",error.message,"error");
+            },
         success: function () {
             jeedom.network.stopDns({
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
-                },
+                    notify("Core",error.message,"error");
+                    },
                 success: function (data) {
                     modifyWithoutSave = false;
                     location.reload();
