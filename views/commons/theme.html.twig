@@ -444,30 +444,14 @@ pre::selection {
   color: {{ COLOR11 }} !important;
 }
 
-.nav-tabs-custom > .nav-tabs > li.header, .nav-tabs-custom > .nav-tabs > li.active > a, .nav-tabs-custom > .nav-tabs > li.active:hover > a,.nav-tabs-custom > .nav-tabs > li > a {
-  color: {{ COLOR12 }} !important;
-}
-legend {
-  color: {{ COLOR12 }} !important;
-}
-.CodeMirror-scroll{
-  color: {{ COLOR12 }} !important;
-}
-.footer-center, .text-muted {
-  color: {{ COLOR12 }} !important;
-}
-.ui-widget-content {
-  color: {{ COLOR12 }} !important;
-}
-
-#div_editScenario .element{
-color: {{ COLOR12 }} !important;
-
-}
-
 /* jstree */
 .jstree-hovered, .jstree-clicked {
   background-color: {{ COLOR11 }} !important;
+}
+
+/* Scenario */
+#div_editScenario .element{
+  color: {{ COLOR11 }} !important;
 }
 
 
@@ -478,7 +462,7 @@ color: {{ COLOR12 }} !important;
 body, h1, h2, h3, h4, h5, h6  {
   color: {{ COLOR12 }} !important;
 }
-.box-header span {
+.box-header span:not(.badge) {
   color: {{ COLOR12 }} !important;
 }
 .nav-tabs-custom > .nav-tabs > li.header, .nav-tabs-custom > .nav-tabs > li.active > a, .nav-tabs-custom > .nav-tabs > li.active:hover > a,.nav-tabs-custom > .nav-tabs > li > a {
@@ -653,6 +637,12 @@ pre {
 /* ########################## */
 .btn-action {
   background-color: {{ COLOR16 }} !important;
+}
+.tooltip-inner {
+  background-color: {{ COLOR16 }} !important;
+}
+.tooltip-arrow {
+    border-top-color: {{ COLOR16 }} !important;
 }
 
 
