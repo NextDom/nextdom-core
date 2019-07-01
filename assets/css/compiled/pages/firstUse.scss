@@ -85,33 +85,3 @@ input[type="checkbox"], input[type="radio"] {
 .returnBtn{
   margin-left: 20px;
 }
-
-/* Themes */
-.themeThumbnail {
-  display: block;
-  border: 1px solid rgba(150,150,150,0.2);
-  margin-bottom: 5px;
-}
-.themeThumbnailHeader {
-  display:block;
-  width: 100%;
-  float: left;
-  height: 15px;
-  text-align: left;
-  font-size: 9px;
-  i {
-    padding: 3px;
-  }
-}
-.themeThumbnailLeft {
-  display:block;
-  width: 20%;
-  float: left;
-  height: 120px;
-}
-.themeThumbnailBody {
-  display:block;
-  width: 80%;
-  float: left;
-  height: 120px;
-}
