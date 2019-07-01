@@ -113,11 +113,27 @@
   }
   font-size: 12px;
 }
+#dashboard-content .eqLogic-widget>center:first-child {
+  padding: 3px 5px;
+  text: {
+      transform: uppercase;
+      align: center;
+  }
+  font-size: 12px;
+}
 .widget-content {
     text-align: center;
 }
 
 /* Core-Ajout : Tuile header */
-#dashboard-content .widget-name {
+#dashboard-content .widget-name,
+#dashboard-content .eqLogic-widget>center:first-child {
     background: #ffffff20;
+}
+#dashboard-content .widget-name a,
+#dashboard-content .eqLogic-widget>center:first-child>a {
+    font-size: 14px !important;
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: 400;
 }
