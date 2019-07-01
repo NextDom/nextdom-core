@@ -429,6 +429,24 @@ $(function () {
         adjustNextDomTheme();
     });
 
+    /* Toggle du menu de gauche adminLTE */
+    $('.sidebar-toggle').on("click", function () {
+        if ($('body').hasClass("sidebar-collapse") || ($(window).width() < 768 && !$('body').hasClass("sidebar-open"))) {
+            $(".treeview-menu").css("overflow", "");
+            $(".sidebar-menu").css("overflow-y", "auto");
+            sideMenuResize(false);
+        } else {
+            $(".sidebar-menu").css("overflow", "");
+            $(".treeview-menu").css("overflow-y", "auto");
+            sideMenuResize(true);
+        }
+        setTimeout(function () {
+            setHeaderPosition(false);
+            adjustNextDomTheme();
+            $('.div_displayEquipement').packery();
+        }, 100);
+    });
+
     /**
      * Toggles layout classes
      *
@@ -1331,24 +1349,6 @@ window.onscroll = function () {
     setHeaderPosition(false);
     adjustNextDomTheme();
 };
-
-/* Toggle du menu de gauche adminLTE */
-$('.sidebar-toggle').on("click", function () {
-    if ($('body').hasClass("sidebar-collapse") || ($(window).width() < 768 && !$('body').hasClass("sidebar-open"))) {
-        $(".treeview-menu").css("overflow", "");
-        $(".sidebar-menu").css("overflow-y", "auto");
-        sideMenuResize(false);
-    } else {
-        $(".sidebar-menu").css("overflow", "");
-        $(".treeview-menu").css("overflow-y", "auto");
-        sideMenuResize(true);
-    }
-    setTimeout(function () {
-        setHeaderPosition(false);
-        adjustNextDomTheme();
-        $('.div_displayEquipement').packery();
-    }, 100);
-});
 
 /* Redimensionnement de la page */
 $(window).resize(function () {

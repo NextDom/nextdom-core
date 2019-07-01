@@ -37,7 +37,7 @@ use Symfony\Component\Routing\Loader\YamlFileLoader;
  */
 class PrepareView
 {
-    private static $NB_THEME_COLORS = 22;
+    private static $NB_THEME_COLORS = 1+22;
 
     /**
      * Used for display special pages that do not need all process (Connection, First Use)
@@ -406,7 +406,6 @@ class PrepareView
             'widget_size' => $configs['widget::size'],
             'widget_margin' => $configs['widget::margin'],
             'widget_padding' => $configs['widget::padding'],
-            'widget_radius' => $configs['widget::radius'],
             'widget_radius' => $configs['widget::radius'],
         ];
         $pageData['JS_VARS_RAW'] = [

@@ -19,71 +19,7 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-/* Colors */
-$Primary-Color:#33B8CC;
-.primary-bg {
-  background-color: $Primary-Color;
-}
-
-/* Sections */
-.firstUse-Page {
-    padding-top: 40px;
-    text-align: center;
-}
-body {
-  background: whitesmoke !important;
-}
-body, h1, h2, h3, h4, h5, h6 {
-  color:#333333 !important;
-}
-
-/* Boxs */
-.box, .box-body {
-  background: #fff !important;
-}
-
-/* Inputs */
-input:not(.has-error) {
-  border: 1px solid #ccc !important;
-}
-input[type="checkbox"], input[type="radio"] {
-  border: none !important;
-}
-
-/* Logo & images */
-#logo img {
-  height: 120px;
-  border-radius: 10px;
-  margin-bottom: 10px;
-}
-
-/* Resizing */
-@media (max-width: 991px) {
-  #market {
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 2rem;
-  }
-}
-
-@media (min-width: 992px) {
-  #market {
-    border-right: 1px solid #CCC;
-  }
-}
-
-/* Buttons */
-.nextBtn, .returnBtn{
-    margin-top:20px;
-    margin-bottom:7px;
-}
-.nextBtn{
-  margin-right: 20px;
-}
-.returnBtn{
-  margin-left: 20px;
-}
-
-/* Themes */
+/* AdinLTE-Ajout */
 .themeThumbnail {
   display: block;
   border: 1px solid rgba(150,150,150,0.2);
@@ -95,9 +31,9 @@ input[type="checkbox"], input[type="radio"] {
   float: left;
   height: 15px;
   text-align: left;
-  font-size: 9px;
+  font-size: 8px;
   i {
-    padding: 3px;
+      padding: 3px 5px;
   }
 }
 .themeThumbnailLeft {
