@@ -161,8 +161,8 @@ function addScenario() {
             nextdom.scenario.save({
                 scenario: {name: result},
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
-                },
+                    notify("Core",error.message,"error");
+                    },
                 success: function (data) {
                     modifyWithoutSave = false;
                     $('#scenarioThumbnailDisplay').hide();
