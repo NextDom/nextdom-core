@@ -45,7 +45,6 @@ function gen_js {
            vendor/node_modules/bootstrap/dist/js/bootstrap.min.js \
            vendor/node_modules/admin-lte/dist/js/adminlte.min.js \
            vendor/node_modules/izitoast/dist/js/iziToast.min.js \
-           assets/js/desktop/utils.js \
            core/js/core.js \
            core/js/nextdom.class.js \
            core/js/private.class.js \
@@ -133,10 +132,22 @@ function gen_js {
     echo '' >> ${tmpfile}
   done
 
+  jsFiles=(assets/js/desktop/utils.js \
+            assets/js/desktop/search.js)
+
+  tmpfileEnd=$(mktemp)
+  for c_file in ${jsFiles[*]}; do
+    cat ${c_file} >> ${tmpfileEnd}
+    echo '' >> ${tmpfileEnd}
+  done
+
   if [ $# -eq 0 ]; then
       python -m jsmin ${tmpfile} > public/js/base.js
       rm ${tmpfile}
       php scripts/translate.php public/js/base.js
+      python -m jsmin ${tmpfileEnd} > public/js/base_end.js
+      rm ${tmpfileEnd}
+      php scripts/translate.php public/js/base_end.js
 
       directories=(js/desktop \
                    js/desktop/admin \

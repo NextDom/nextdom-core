@@ -121,6 +121,7 @@ function loadPage(_url,_noPushHistory){
         limitTreeviewMenu();
         adjustNextDomTheme();
         activateGlobalSearch();
+        $('[data-toggle="tooltip"]').tooltip();
     });
     hideLoadingCustom();
     return;
