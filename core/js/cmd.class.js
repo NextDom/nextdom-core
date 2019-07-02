@@ -116,7 +116,6 @@ nextdom.cmd.execute = function (_params) {
                 }
                 return data;
               }
-
             });
           }
         } else {

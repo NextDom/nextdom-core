@@ -86,17 +86,18 @@ class PrepareView
         if (file_exists(NEXTDOM_ROOT . '/public/js/base.js')) {
             /* Loading of base.js that contain all JS in the else below via gen_assets */
             $pageData['JS_POOL'][] = '/public/js/base.js';
+            /* Loading dynamic libraries */
             $pageData['JS_POOL'][] = '/vendor/node_modules/autosize/dist/autosize.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min.js';
         } else {
             /* If base.js problem, loading of NextDom Common JS */
-            $pageData['JS_POOL'][] = 'assets/js/desktop/utils.js';
-            $pageData['JS_POOL'][] = 'assets/js/desktop/search.js';
+            $pageData['JS_POOL'][] = '/public/js/desktop/utils.js';
+            $pageData['JS_POOL'][] = '/public/js/desktop/search.js';
             /* And libraries JS */
             $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.utils/jquery.utils.js';
-            $pageData['JS_POOL'][] = 'vendor/node_modules/jquery-ui-dist/jquery-ui.min.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/bootstrap/dist/js/bootstrap.min.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/admin-lte/dist/js/adminlte.min.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/izitoast/dist/js/iziToast.min.js';
+            $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.at.caret/jquery.at.caret.min.js';
+            $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.multi-column-select/multi-column-select.js';
             $pageData['JS_POOL'][] = '/core/js/core.js';
             $pageData['JS_POOL'][] = '/core/js/nextdom.class.js';
             $pageData['JS_POOL'][] = '/core/js/private.class.js';
@@ -126,34 +127,37 @@ class PrepareView
             $pageData['JS_POOL'][] = '/core/js/note.class.js';
             $pageData['JS_POOL'][] = '/core/js/listener.class.js';
             $pageData['JS_POOL'][] = '/core/js/jeedom.class.js';
-            $pageData['JS_POOL'][] = 'assets/js/factory/NextDomElement.js';
-            $pageData['JS_POOL'][] = 'assets/js/factory/NextDomEnum.js';
-            $pageData['JS_POOL'][] = 'assets/js/factory/NextDomUIDGenerator.js';
-            $pageData['JS_POOL'][] = 'assets/js/factory/elements/A.js';
-            $pageData['JS_POOL'][] = 'assets/js/factory/elements/Br.js';
-            $pageData['JS_POOL'][] = 'assets/js/factory/elements/Button.js';
-            $pageData['JS_POOL'][] = 'assets/js/factory/elements/Div.js';
-            $pageData['JS_POOL'][] = 'assets/js/factory/elements/DivWithTooltip.js';
-            $pageData['JS_POOL'][] = 'assets/js/factory/elements/HorizontalLayout.js';
-            $pageData['JS_POOL'][] = 'assets/js/factory/elements/IFA.js';
-            $pageData['JS_POOL'][] = 'assets/js/factory/elements/InputText.js';
-            $pageData['JS_POOL'][] = 'assets/js/factory/elements/Label.js';
-            $pageData['JS_POOL'][] = 'assets/js/factory/elements/Space.js';
-            $pageData['JS_POOL'][] = 'assets/js/factory/elements/Table.js';
-            $pageData['JS_POOL'][] = 'assets/js/factory/elements/Tbody.js';
-            $pageData['JS_POOL'][] = 'assets/js/factory/elements/Td.js';
-            $pageData['JS_POOL'][] = 'assets/js/factory/elements/TextNode.js';
-            $pageData['JS_POOL'][] = 'assets/js/factory/elements/Th.js';
-            $pageData['JS_POOL'][] = 'assets/js/factory/elements/Thead.js';
-            $pageData['JS_POOL'][] = 'assets/js/factory/elements/Tr.js';
-            $pageData['JS_POOL'][] = 'assets/js/factory/elements/VerticalLayout.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/NextDomUIDGenerator.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/NextDomElement.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/NextDomEnum.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/elements/A.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/elements/Br.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/elements/Button.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/elements/Div.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/elements/DivWithTooltip.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/elements/HorizontalLayout.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/elements/IFA.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/elements/InputText.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/elements/Label.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/elements/Space.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/elements/Table.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/elements/Tbody.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/elements/Td.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/elements/TextNode.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/elements/Th.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/elements/Thead.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/elements/Tr.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/elements/VerticalLayout.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-ui-dist/jquery-ui.min.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/bootstrap/dist/js/bootstrap.min.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/admin-lte/dist/js/adminlte.min.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/izitoast/dist/js/iziToast.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/bootbox/dist/bootbox.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/highcharts/highstock.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/highcharts/highcharts-more.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/highcharts/modules/solid-gauge.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/highcharts/modules/exporting.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/highcharts/modules/export-data.js';
-            $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.at.caret/jquery.at.caret.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/jwerty/jwerty.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/packery/dist/packery.pkgd.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-lazyload/jquery.lazyload.js';
@@ -168,16 +172,16 @@ class PrepareView
             $pageData['JS_POOL'][] = '/vendor/node_modules/jstree/dist/jstree.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/blueimp-file-upload/js/jquery.iframe-transport.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/blueimp-file-upload/js/jquery.fileupload.js';
-            $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.multi-column-select/multi-column-select.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-cron/dist/jquery-cron.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/autosize/dist/autosize.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/inputmask/dist/jquery.inputmask.bundle.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/snapsvg/dist/snap.svg-min.js';
+            /* Loading dynamic libraries */
+            $pageData['JS_POOL'][] = '/vendor/node_modules/autosize/dist/autosize.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min.js';
         }
     }
 

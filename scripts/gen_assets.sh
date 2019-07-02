@@ -40,11 +40,11 @@ function gen_css {
 
 function gen_js {
 	echo " >>> Generate JS"
-  jsFiles=(assets/3rdparty/jquery.utils/jquery.utils.js \
-           vendor/node_modules/jquery-ui-dist/jquery-ui.min.js \
-           vendor/node_modules/bootstrap/dist/js/bootstrap.min.js \
-           vendor/node_modules/admin-lte/dist/js/adminlte.min.js \
-           vendor/node_modules/izitoast/dist/js/iziToast.min.js \
+  jsFiles=(assets/js/desktop/utils.js \
+           assets/js/desktop/search.js \
+           assets/3rdparty/jquery.at.caret/jquery.at.caret.min.js \
+           assets/3rdparty/jquery.multi-column-select/multi-column-select.js \
+           assets/3rdparty/jquery.utils/jquery.utils.js \
            core/js/core.js \
            core/js/nextdom.class.js \
            core/js/private.class.js \
@@ -95,13 +95,16 @@ function gen_js {
            assets/js/factory/elements/Thead.js \
            assets/js/factory/elements/Tr.js \
            assets/js/factory/elements/VerticalLayout.js \
+           vendor/node_modules/jquery-ui-dist/jquery-ui.min.js \
+           vendor/node_modules/bootstrap/dist/js/bootstrap.min.js \
+           vendor/node_modules/admin-lte/dist/js/adminlte.min.js \
+           vendor/node_modules/izitoast/dist/js/iziToast.min.js \
            vendor/node_modules/bootbox/dist/bootbox.min.js \
            vendor/node_modules/highcharts/highstock.js \
            vendor/node_modules/highcharts/highcharts-more.js \
            vendor/node_modules/highcharts/modules/solid-gauge.js \
            vendor/node_modules/highcharts/modules/exporting.js \
            vendor/node_modules/highcharts/modules/export-data.js \
-           assets/3rdparty/jquery.at.caret/jquery.at.caret.min.js \
            vendor/node_modules/jwerty/jwerty.js \
            vendor/node_modules/packery/dist/packery.pkgd.js \
            vendor/node_modules/jquery-lazyload/jquery.lazyload.js \
@@ -116,13 +119,10 @@ function gen_js {
            vendor/node_modules/jstree/dist/jstree.js \
            vendor/node_modules/blueimp-file-upload/js/jquery.iframe-transport.js \
            vendor/node_modules/blueimp-file-upload/js/jquery.fileupload.js \
-           assets/3rdparty/jquery.multi-column-select/multi-column-select.js \
            vendor/node_modules/jquery-cron/dist/jquery-cron.js \
            vendor/node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.js \
            vendor/node_modules/inputmask/dist/jquery.inputmask.bundle.js \
            vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js \
-           vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min.js \
-           vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min.js \
            vendor/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js \
            vendor/node_modules/snapsvg/dist/snap.svg-min.js)
 
@@ -132,22 +132,10 @@ function gen_js {
     echo '' >> ${tmpfile}
   done
 
-  jsFiles=(assets/js/desktop/utils.js \
-            assets/js/desktop/search.js)
-
-  tmpfileEnd=$(mktemp)
-  for c_file in ${jsFiles[*]}; do
-    cat ${c_file} >> ${tmpfileEnd}
-    echo '' >> ${tmpfileEnd}
-  done
-
   if [ $# -eq 0 ]; then
       python -m jsmin ${tmpfile} > public/js/base.js
       rm ${tmpfile}
       php scripts/translate.php public/js/base.js
-      python -m jsmin ${tmpfileEnd} > public/js/base_end.js
-      rm ${tmpfileEnd}
-      php scripts/translate.php public/js/base_end.js
 
       directories=(js/desktop \
                    js/desktop/admin \
@@ -157,7 +145,9 @@ function gen_js {
                    js/desktop/tools \
                    js/desktop/tools/markets \
                    js/desktop/tools/osdb \
-                   js/modals)
+                   js/modals \
+                   js/factory \
+                   js/factory/elements)
       for c_dir in ${directories[*]}; do
         mkdir -p public/${c_dir}
         for c_file in assets/${c_dir}/*.js; do
