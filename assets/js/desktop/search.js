@@ -34,6 +34,9 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
+/**
+ * Events declaration on load
+ */
 $(function () {
     // Search input field toggles
     $('#search-toggle').on('click', function () {

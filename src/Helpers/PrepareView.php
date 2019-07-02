@@ -101,6 +101,7 @@ class PrepareView
             $pageData['JS_POOL'][] = '/public/js/desktop/conflicts.js';
             $pageData['JS_POOL'][] = '/public/js/desktop/utils.js';
             $pageData['JS_POOL'][] = '/public/js/desktop/search.js';
+            $pageData['JS_POOL'][] = '/public/js/desktop/gui.js';
             // And libraries JS
             $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.utils/jquery.utils.js';
             $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.at.caret/jquery.at.caret.min.js';
