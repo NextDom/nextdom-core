@@ -121,7 +121,6 @@ function gen_js {
            assets/3rdparty/jquery.multi-column-select/multi-column-select.js \
            vendor/node_modules/jquery-cron/dist/jquery-cron.js \
            vendor/node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.js \
-           vendor/node_modules/autosize/dist/autosize.js \
            vendor/node_modules/inputmask/dist/jquery.inputmask.bundle.js \
            vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js \
            vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min.js \
