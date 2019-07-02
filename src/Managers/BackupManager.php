@@ -546,6 +546,7 @@ class BackupManager
     {
         $backupFile = sprintf("%s/DB_backup.sql", $tmpDir);
 
+        //TODO A faire dans une migration
         if (0 != SystemHelper::vsystem("sed -i -e 's/jeedom/nextdom/g' '%s'", $backupFile)) {
             throw new CoreException("unable to modify content of backup file " . $backupFile);
         }
@@ -558,7 +559,7 @@ class BackupManager
             \DB::Prepare($statement, array(), \DB::FETCH_TYPE_ROW);
         }
         self::loadSQLFromFile($backupFile);
-        self::loadSQLMigrateScript();
+//        self::loadSQLMigrateScript();
         \DB::Prepare("SET foreign_key_checks = 1", array(), \DB::FETCH_TYPE_ROW);
     }
 
@@ -592,7 +593,7 @@ class BackupManager
      */
     private static function loadSQLMigrateScript()
     {
-        $migrateFile = sprintf("%s/install/migrate/migrate.sql", NEXTDOM_ROOT);
+        $migrateFile = sprintf("%s/install/migrate/migrate_0_0_0.sql", NEXTDOM_ROOT);
 
         self::loadSQLFromFile($migrateFile);
     }

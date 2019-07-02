@@ -134,7 +134,7 @@ class MigrationHelper
     private static function migrate_0_0_0($logFile = 'migration'){
 
         //$migrateFile = ConsoleHelper::step(NEXTDOM_ROOT . "/install/migrate/migrate.sql");
-        $migrateFile = sprintf("%s/install/migrate/migrate.sql", NEXTDOM_ROOT);
+        $migrateFile = sprintf("%s/install/migrate/migrate_0_0_0.sql", NEXTDOM_ROOT);
 
 
         BackupManager::loadSQLFromFile($migrateFile);
