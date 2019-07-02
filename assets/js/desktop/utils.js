@@ -128,7 +128,6 @@ function loadPage(_url,_noPushHistory){
         limitTreeviewMenu();
         adjustNextDomTheme();
         activateGlobalSearch();
-        $('[data-toggle="tooltip"]').tooltip();
     });
     /* Loading end, remove wait spinner */
     hideLoadingCustom();
@@ -551,6 +550,7 @@ function initPage(){
         setTimeout(function() {
             $(window).scrollTop(scrollHeight);
         }, 0);
+
     });
 }
 

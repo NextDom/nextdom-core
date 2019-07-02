@@ -86,6 +86,7 @@ class PrepareView
         if (file_exists(NEXTDOM_ROOT . '/public/js/base.js')) {
             /* Loading of base.js that contain all JS in the else below via gen_assets */
             $pageData['JS_POOL'][] = '/public/js/base.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/autosize/dist/autosize.js';
         } else {
             /* If base.js problem, loading of NextDom Common JS */
             $pageData['JS_POOL'][] = 'assets/js/desktop/utils.js';
