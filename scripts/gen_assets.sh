@@ -45,6 +45,7 @@ function gen_js {
            vendor/node_modules/bootstrap/dist/js/bootstrap.min.js \
            vendor/node_modules/admin-lte/dist/js/adminlte.min.js \
            vendor/node_modules/izitoast/dist/js/iziToast.min.js \
+           assets/js/desktop/conflicts.js \
            assets/js/desktop/utils.js \
            assets/3rdparty/jquery.utils/jquery.utils.js \
            core/js/core.js \

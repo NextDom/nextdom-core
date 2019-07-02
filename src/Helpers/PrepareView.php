@@ -92,6 +92,7 @@ class PrepareView
             $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min.js';
         } else {
             // If base.js problem, loading of NextDom Common JS
+            $pageData['JS_POOL'][] = '/public/js/desktop/conflicts.js';
             $pageData['JS_POOL'][] = '/public/js/desktop/utils.js';
             $pageData['JS_POOL'][] = '/public/js/desktop/search.js';
             // And libraries JS
