@@ -33,21 +33,24 @@ function gen_css {
     mkdir -p public/css/modals
     sass --update --stop-on-error assets/css/compiled:public/css $COMPRESS
 
-  	# Remplacement des chemins
+  	# Path replace
   	sed -i s#\"images/ui-#\"/assets/css/vendors/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.css
   	sed -i s#\"images/ui-#\"/assets/css/vendors/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.mob.css
 }
 
 function gen_js {
 	echo " >>> Generate JS"
-  jsFiles=(assets/3rdparty/jquery.utils/jquery.utils.js \
-           vendor/node_modules/jquery-ui-dist/jquery-ui.min.js \
+  # js files to merge in base.js, respect this order to prevent conflits, can find details in PrepareView
+  jsFiles=(vendor/node_modules/jquery-ui-dist/jquery-ui.min.js \
            vendor/node_modules/bootstrap/dist/js/bootstrap.min.js \
            vendor/node_modules/admin-lte/dist/js/adminlte.min.js \
            vendor/node_modules/izitoast/dist/js/iziToast.min.js \
            assets/js/desktop/conflicts.js \
            assets/js/desktop/utils.js \
+           assets/js/desktop/search.js \
            assets/3rdparty/jquery.utils/jquery.utils.js \
+           assets/3rdparty/jquery.at.caret/jquery.at.caret.min.js \
+           assets/3rdparty/jquery.multi-column-select/multi-column-select.js \
            core/js/core.js \
            core/js/nextdom.class.js \
            core/js/private.class.js \
@@ -77,7 +80,32 @@ function gen_js {
            core/js/note.class.js \
            core/js/listener.class.js \
            core/js/jeedom.class.js \
-           assets/js/desktop/search.js \
+           vendor/node_modules/bootbox/dist/bootbox.min.js \
+           vendor/node_modules/highcharts/highstock.js \
+           vendor/node_modules/highcharts/highcharts-more.js \
+           vendor/node_modules/highcharts/modules/solid-gauge.js \
+           vendor/node_modules/highcharts/modules/exporting.js \
+           vendor/node_modules/highcharts/modules/export-data.js \
+           vendor/node_modules/jwerty/jwerty.js \
+           vendor/node_modules/packery/dist/packery.pkgd.js \
+           vendor/node_modules/jquery-lazyload/jquery.lazyload.js \
+           vendor/node_modules/codemirror/lib/codemirror.js \
+           vendor/node_modules/codemirror/addon/edit/matchbrackets.js \
+           vendor/node_modules/codemirror/mode/htmlmixed/htmlmixed.js \
+           vendor/node_modules/codemirror/mode/clike/clike.js \
+           vendor/node_modules/codemirror/mode/php/php.js \
+           vendor/node_modules/codemirror/mode/xml/xml.js \
+           vendor/node_modules/codemirror/mode/javascript/javascript.js \
+           vendor/node_modules/codemirror/mode/css/css.js \
+           vendor/node_modules/jstree/dist/jstree.js \
+           vendor/node_modules/blueimp-file-upload/js/jquery.iframe-transport.js \
+           vendor/node_modules/blueimp-file-upload/js/jquery.fileupload.js \
+           vendor/node_modules/jquery-cron/dist/jquery-cron.js \
+           vendor/node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.js \
+           vendor/node_modules/inputmask/dist/jquery.inputmask.bundle.js \
+           vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js \
+           vendor/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js \
+           vendor/node_modules/snapsvg/dist/snap.svg-min.js \
            assets/js/factory/NextDomElement.js \
            assets/js/factory/NextDomEnum.js \
            assets/js/factory/NextDomUIDGenerator.js \
@@ -98,35 +126,7 @@ function gen_js {
            assets/js/factory/elements/Th.js \
            assets/js/factory/elements/Thead.js \
            assets/js/factory/elements/Tr.js \
-           assets/js/factory/elements/VerticalLayout.js \
-           vendor/node_modules/bootbox/dist/bootbox.min.js \
-           vendor/node_modules/highcharts/highstock.js \
-           vendor/node_modules/highcharts/highcharts-more.js \
-           vendor/node_modules/highcharts/modules/solid-gauge.js \
-           vendor/node_modules/highcharts/modules/exporting.js \
-           vendor/node_modules/highcharts/modules/export-data.js \
-           assets/3rdparty/jquery.at.caret/jquery.at.caret.min.js \
-           vendor/node_modules/jwerty/jwerty.js \
-           vendor/node_modules/packery/dist/packery.pkgd.js \
-           vendor/node_modules/jquery-lazyload/jquery.lazyload.js \
-           vendor/node_modules/codemirror/lib/codemirror.js \
-           vendor/node_modules/codemirror/addon/edit/matchbrackets.js \
-           vendor/node_modules/codemirror/mode/htmlmixed/htmlmixed.js \
-           vendor/node_modules/codemirror/mode/clike/clike.js \
-           vendor/node_modules/codemirror/mode/php/php.js \
-           vendor/node_modules/codemirror/mode/xml/xml.js \
-           vendor/node_modules/codemirror/mode/javascript/javascript.js \
-           vendor/node_modules/codemirror/mode/css/css.js \
-           vendor/node_modules/jstree/dist/jstree.js \
-           vendor/node_modules/blueimp-file-upload/js/jquery.iframe-transport.js \
-           vendor/node_modules/blueimp-file-upload/js/jquery.fileupload.js \
-           assets/3rdparty/jquery.multi-column-select/multi-column-select.js \
-           vendor/node_modules/jquery-cron/dist/jquery-cron.js \
-           vendor/node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.js \
-           vendor/node_modules/inputmask/dist/jquery.inputmask.bundle.js \
-           vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js \
-           vendor/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js \
-           vendor/node_modules/snapsvg/dist/snap.svg-min.js)
+           assets/js/factory/elements/VerticalLayout.js)
 
   tmpfile=$(mktemp)
   for c_file in ${jsFiles[*]}; do

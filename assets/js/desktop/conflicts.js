@@ -34,8 +34,9 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-$.fn.bootstrapBtn = $.fn.button.noConflict();
-/*permet de regler le conflit entre bootstrap et jquery
+/* JS file for conflicts management */
 
+/*Bootstrap et jquery conflict
 A little research turned up a known issue when using jQueryUI and Twitter Bootstrap together. There’s a conflict between jQueryUI and Twitter Bootstrap buttons because they both define $.fn.button().  And as we can see from the jQuery Spinner API docs, our spinner depends on the button element.
 */
+$.fn.bootstrapBtn = $.fn.button.noConflict();

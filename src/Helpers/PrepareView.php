@@ -86,12 +86,18 @@ class PrepareView
         if (file_exists(NEXTDOM_ROOT . '/public/js/base.js')) {
             // Loading of base.js that contain all JS in the else below via gen_assets
             $pageData['JS_POOL'][] = '/public/js/base.js';
-            // Loading dynamic libraries
+            // Loading dynamic libraries, must be here
             $pageData['JS_POOL'][] = '/vendor/node_modules/autosize/dist/autosize.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min.js';
         } else {
-            // If base.js problem, loading of NextDom Common JS
+            // If base.js problem, loading JS files dynamicly
+            // First respect this files and their order to prevent conflicts
+            $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-ui-dist/jquery-ui.min.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/bootstrap/dist/js/bootstrap.min.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/admin-lte/dist/js/adminlte.min.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/izitoast/dist/js/iziToast.min.js';
+            // Then NextDom JS files
             $pageData['JS_POOL'][] = '/public/js/desktop/conflicts.js';
             $pageData['JS_POOL'][] = '/public/js/desktop/utils.js';
             $pageData['JS_POOL'][] = '/public/js/desktop/search.js';
@@ -128,31 +134,6 @@ class PrepareView
             $pageData['JS_POOL'][] = '/core/js/note.class.js';
             $pageData['JS_POOL'][] = '/core/js/listener.class.js';
             $pageData['JS_POOL'][] = '/core/js/jeedom.class.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/NextDomUIDGenerator.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/NextDomElement.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/NextDomEnum.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/elements/A.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/elements/Br.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/elements/Button.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/elements/Div.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/elements/DivWithTooltip.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/elements/HorizontalLayout.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/elements/IFA.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/elements/InputText.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/elements/Label.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/elements/Space.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/elements/Table.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/elements/Tbody.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/elements/Td.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/elements/TextNode.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/elements/Th.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/elements/Thead.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/elements/Tr.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/elements/VerticalLayout.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-ui-dist/jquery-ui.min.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/bootstrap/dist/js/bootstrap.min.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/admin-lte/dist/js/adminlte.min.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/izitoast/dist/js/iziToast.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/bootbox/dist/bootbox.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/highcharts/highstock.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/highcharts/highcharts-more.js';
@@ -179,7 +160,29 @@ class PrepareView
             $pageData['JS_POOL'][] = '/vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/snapsvg/dist/snap.svg-min.js';
-            // Loading dynamic libraries
+            // Then Factory framwework files
+            $pageData['JS_POOL'][] = '/public/js/factory/NextDomUIDGenerator.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/NextDomElement.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/NextDomEnum.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/elements/A.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/elements/Br.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/elements/Button.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/elements/Div.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/elements/DivWithTooltip.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/elements/HorizontalLayout.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/elements/IFA.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/elements/InputText.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/elements/Label.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/elements/Space.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/elements/Table.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/elements/Tbody.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/elements/Td.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/elements/TextNode.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/elements/Th.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/elements/Thead.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/elements/Tr.js';
+            $pageData['JS_POOL'][] = '/public/js/factory/elements/VerticalLayout.js';
+            // Finally dynamic libraries, must be here
             $pageData['JS_POOL'][] = '/vendor/node_modules/autosize/dist/autosize.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min.js';
