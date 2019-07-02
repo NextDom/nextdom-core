@@ -122,7 +122,8 @@ nextdom.cmd.execute = function (_params) {
         } else {
           if ('function' != typeof(_params.error)) {
             notify("Core",data.result,"error");
-            if (notify) {
+          }
+          if (notify) {
             eqLogic.find('.statusCmd').empty().append('<i class="fa fa-times"></i>');
             setTimeout(function () {
               eqLogic.find('.statusCmd').empty();
