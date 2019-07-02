@@ -34,6 +34,8 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
+/* JS file for all that talk about SEARCH */
+
 /**
  * Events declaration on load
  */

@@ -34,12 +34,14 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-/**
- * Events declaration on load
- */
-$(function () {
+/* JS file for all that talk about GUI */
 
-});
+/* Tooltip activation */
+(function($) {
+    $(function() {
+        $(document).tooltip({ selector: '[data-toggle="tooltip"]' });
+    });
+})(jQuery);
 
 /**
  * Search input field activation on dedicated pages
@@ -228,3 +230,36 @@ $(function () {
          $(this).removeClass('fa-sign-in').addClass('fa-sign-in-alt');
      });
  }
+
+ /**
+  * Custom loading wait spinner display
+  */
+ function showLoadingCustom() {
+     if ($.mobile) {
+         $('#div_loadingSpinner').show()
+     } else {
+         if ($('#jqueryLoadingDiv').length == 0) {
+             if (typeof nextdom_waitSpinner != 'undefined' && isset(nextdom_waitSpinner) && nextdom_waitSpinner != '') {
+                 $('body').append('<div id="jqueryLoadingDiv"><div class="loadingImg"><i class="fas ' + nextdom_waitSpinner + ' fa-spin icon_theme_color"></i></div></div>');
+             } else {
+                 $('body').append('<div id="jqueryLoadingDiv"><div class="loadingImg"><i class="fas fa-sync-alt fa-spin icon_theme_color"></i></div></div>');
+             }
+         }
+         $('#jqueryLoadingDiv').show();
+         $('.blur-div').addClass('blur');
+         $('.content').addClass('blur');
+     }
+ };
+
+ /**
+  * Custom loading wait spinner hidding
+  */
+ function hideLoadingCustom() {
+     if ($.mobile) {
+         $('#div_loadingSpinner').hide()
+     } else {
+         $('#jqueryLoadingDiv').hide();
+         $('.blur-div').removeClass('blur');
+         $('.content').removeClass('blur');
+     }
+ };

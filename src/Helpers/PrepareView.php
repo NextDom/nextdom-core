@@ -99,9 +99,10 @@ class PrepareView
             $pageData['JS_POOL'][] = '/vendor/node_modules/izitoast/dist/js/iziToast.min.js';
             // Then NextDom JS files
             $pageData['JS_POOL'][] = '/public/js/desktop/conflicts.js';
+            $pageData['JS_POOL'][] = '/public/js/desktop/inits.js';
+            $pageData['JS_POOL'][] = '/public/js/desktop/gui.js';
             $pageData['JS_POOL'][] = '/public/js/desktop/utils.js';
             $pageData['JS_POOL'][] = '/public/js/desktop/search.js';
-            $pageData['JS_POOL'][] = '/public/js/desktop/gui.js';
             // And libraries JS
             $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.utils/jquery.utils.js';
             $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.at.caret/jquery.at.caret.min.js';
