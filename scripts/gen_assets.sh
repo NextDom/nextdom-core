@@ -40,7 +40,9 @@ function gen_css {
 
 function gen_js {
 	echo " >>> Generate JS"
-  jsFiles=(assets/3rdparty/jquery.utils/jquery.utils.js \
+  jsFiles=(assets/js/desktop/utils.js \
+           assets/js/desktop/search.js \
+           assets/3rdparty/jquery.utils/jquery.utils.js \
            vendor/node_modules/jquery-ui-dist/jquery-ui.min.js \
            vendor/node_modules/bootstrap/dist/js/bootstrap.min.js \
            vendor/node_modules/admin-lte/dist/js/adminlte.min.js \
@@ -119,6 +121,7 @@ function gen_js {
            assets/3rdparty/jquery.multi-column-select/multi-column-select.js \
            vendor/node_modules/jquery-cron/dist/jquery-cron.js \
            vendor/node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.js \
+           vendor/node_modules/autosize/dist/autosize.js \
            vendor/node_modules/inputmask/dist/jquery.inputmask.bundle.js \
            vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js \
            vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min.js \
@@ -132,22 +135,10 @@ function gen_js {
     echo '' >> ${tmpfile}
   done
 
-  jsFiles=(assets/js/desktop/utils.js \
-            assets/js/desktop/search.js)
-
-  tmpfileEnd=$(mktemp)
-  for c_file in ${jsFiles[*]}; do
-    cat ${c_file} >> ${tmpfileEnd}
-    echo '' >> ${tmpfileEnd}
-  done
-
   if [ $# -eq 0 ]; then
       python -m jsmin ${tmpfile} > public/js/base.js
       rm ${tmpfile}
       php scripts/translate.php public/js/base.js
-      python -m jsmin ${tmpfileEnd} > public/js/base_end.js
-      rm ${tmpfileEnd}
-      php scripts/translate.php public/js/base_end.js
 
       directories=(js/desktop \
                    js/desktop/admin \

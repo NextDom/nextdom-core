@@ -44,7 +44,6 @@ class LogController extends BaseController
     {
 
         // TODO utiliser log::getpathLog
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/diagnostic/log.js';
         $currentLogfile = Utils::init('logfile');
         $logFilesList = [];
         $dir = opendir(NEXTDOM_LOG);
@@ -75,6 +74,8 @@ class LogController extends BaseController
             $logFileData['size'] = round(filesize(NEXTDOM_LOG . '/' . $logFile) / 1024);
             $pageData['logFilesList'][] = $logFileData;
         }
+
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/diagnostic/log.js';
 
         return Render::getInstance()->get('/desktop/diagnostic/logs-view.html.twig', $pageData);
     }

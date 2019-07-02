@@ -84,11 +84,13 @@ class PrepareView
     private static function initJsPool(&$pageData)
     {
         if (file_exists(NEXTDOM_ROOT . '/public/js/base.js')) {
+            /* Loading of base.js that contain all JS in the else below via gen_assets */
             $pageData['JS_POOL'][] = '/public/js/base.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/autosize/dist/autosize.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min.js';
         } else {
+            /* If base.js problem, loading of NextDom Common JS */
+            $pageData['JS_POOL'][] = 'assets/js/desktop/utils.js';
+            $pageData['JS_POOL'][] = 'assets/js/desktop/search.js';
+            /* And libraries JS */
             $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.utils/jquery.utils.js';
             $pageData['JS_POOL'][] = 'vendor/node_modules/jquery-ui-dist/jquery-ui.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/bootstrap/dist/js/bootstrap.min.js';
@@ -123,6 +125,27 @@ class PrepareView
             $pageData['JS_POOL'][] = '/core/js/note.class.js';
             $pageData['JS_POOL'][] = '/core/js/listener.class.js';
             $pageData['JS_POOL'][] = '/core/js/jeedom.class.js';
+            $pageData['JS_POOL'][] = 'assets/js/factory/NextDomElement.js';
+            $pageData['JS_POOL'][] = 'assets/js/factory/NextDomEnum.js';
+            $pageData['JS_POOL'][] = 'assets/js/factory/NextDomUIDGenerator.js';
+            $pageData['JS_POOL'][] = 'assets/js/factory/elements/A.js';
+            $pageData['JS_POOL'][] = 'assets/js/factory/elements/Br.js';
+            $pageData['JS_POOL'][] = 'assets/js/factory/elements/Button.js';
+            $pageData['JS_POOL'][] = 'assets/js/factory/elements/Div.js';
+            $pageData['JS_POOL'][] = 'assets/js/factory/elements/DivWithTooltip.js';
+            $pageData['JS_POOL'][] = 'assets/js/factory/elements/HorizontalLayout.js';
+            $pageData['JS_POOL'][] = 'assets/js/factory/elements/IFA.js';
+            $pageData['JS_POOL'][] = 'assets/js/factory/elements/InputText.js';
+            $pageData['JS_POOL'][] = 'assets/js/factory/elements/Label.js';
+            $pageData['JS_POOL'][] = 'assets/js/factory/elements/Space.js';
+            $pageData['JS_POOL'][] = 'assets/js/factory/elements/Table.js';
+            $pageData['JS_POOL'][] = 'assets/js/factory/elements/Tbody.js';
+            $pageData['JS_POOL'][] = 'assets/js/factory/elements/Td.js';
+            $pageData['JS_POOL'][] = 'assets/js/factory/elements/TextNode.js';
+            $pageData['JS_POOL'][] = 'assets/js/factory/elements/Th.js';
+            $pageData['JS_POOL'][] = 'assets/js/factory/elements/Thead.js';
+            $pageData['JS_POOL'][] = 'assets/js/factory/elements/Tr.js';
+            $pageData['JS_POOL'][] = 'assets/js/factory/elements/VerticalLayout.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/bootbox/dist/bootbox.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/highcharts/highstock.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/highcharts/highcharts-more.js';
@@ -154,12 +177,6 @@ class PrepareView
             $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/snapsvg/dist/snap.svg-min.js';
-        }
-        if (file_exists(NEXTDOM_ROOT . '/public/js/base_end.js')) {
-            $pageData['JS_END_POOL'][] = '/public/js/base_end.js';
-        } else {
-            $pageData['JS_END_POOL'][] = '/public/js/utils.js';
-            $pageData['JS_END_POOL'][] = '/public/js/search.js';
         }
     }
 

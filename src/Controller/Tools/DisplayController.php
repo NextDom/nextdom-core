@@ -44,8 +44,6 @@ class DisplayController extends BaseController
      */
     public static function get(&$pageData): string
     {
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/display.js';
-
         $nbEqlogics = 0;
         $nbCmds = 0;
         $objects = ObjectManager::all();
@@ -73,6 +71,8 @@ class DisplayController extends BaseController
         $pageData['displayNbCmds'] = $nbCmds;
         $pageData['displayEqLogics'] = $eqLogics;
         $pageData['displayCmds'] = $cmds;
+
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/display.js';
 
         return Render::getInstance()->get('/desktop/tools/display.html.twig', $pageData);
     }

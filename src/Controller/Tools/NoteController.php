@@ -42,6 +42,7 @@ class NoteController extends BaseController
     public static function get(&$pageData): string
     {
         $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/note.js';
+
         return Render::getInstance()->get('/desktop/tools/note.html.twig', $pageData);
     }
 

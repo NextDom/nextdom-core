@@ -54,9 +54,11 @@ $(document).ajaxStop(function () {
     }
 });
 
-/* Chargement d'une page */
+/* Page loading when navigation by link */
 function loadPage(_url,_noPushHistory){
+    /* Loading spinner */
     showLoadingCustom();
+    /* Catch a page leaving when setting not saved */
     if (modifyWithoutSave) {
         if (!confirm('{{Attention vous quittez une page ayant des données modifiées non sauvegardées. Voulez-vous continuer ?}}')) {
             hideLoadingCustom();
@@ -64,9 +66,11 @@ function loadPage(_url,_noPushHistory){
         }
         modifyWithoutSave = false;
     }
+    /* Unload current page before loading */
     if (typeof unload_page !== "undefined") {
         unload_page();
     }
+    /* CLosing modals */
     $("#md_modal").dialog('close');
     $("#md_modal2").dialog('close');
     if ($("#mod_insertCmdValue").length != 0) {
@@ -87,11 +91,12 @@ function loadPage(_url,_noPushHistory){
     if ($("#mod_insertScenarioValue").length != 0) {
         $("#mod_insertScenarioValue").dialog('close');
     }
-    if(!isset(_noPushHistory) || _noPushHistory == false){
-        window.history.pushState('','', _url);
-    }
     if(isset(bootbox)){
         bootbox.hideAll();
+    }
+
+    if(!isset(_noPushHistory) || _noPushHistory == false){
+        window.history.pushState('','', _url);
     }
     nextdom.cmd.update = Array();
     nextdom.scenario.update = Array();
@@ -108,8 +113,10 @@ function loadPage(_url,_noPushHistory){
     }
     $('.backgroundforJeedom').css('background-image','');
     nextdomBackgroundImg = null;
+    /* Page content loading */
     $('#div_pageContainer').empty().load(url, function(){
         $('#bt_getHelpPage').attr('data-page',getUrlVars('p')).attr('data-plugin',getUrlVars('m'));
+        /* Page title formatting */
         var title = getUrlVars('p');
         if(title !== false){
             document.title = title[0].toUpperCase() + title.slice(1) +' - NextDom';
@@ -123,6 +130,7 @@ function loadPage(_url,_noPushHistory){
         activateGlobalSearch();
         $('[data-toggle="tooltip"]').tooltip();
     });
+    /* Loading end, remove wait spinner */
     hideLoadingCustom();
     return;
 }
