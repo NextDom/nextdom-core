@@ -84,17 +84,17 @@ class PrepareView
     private static function initJsPool(&$pageData)
     {
         if (file_exists(NEXTDOM_ROOT . '/public/js/base.js')) {
-            /* Loading of base.js that contain all JS in the else below via gen_assets */
+            // Loading of base.js that contain all JS in the else below via gen_assets
             $pageData['JS_POOL'][] = '/public/js/base.js';
-            /* Loading dynamic libraries */
+            // Loading dynamic libraries
             $pageData['JS_POOL'][] = '/vendor/node_modules/autosize/dist/autosize.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min.js';
         } else {
-            /* If base.js problem, loading of NextDom Common JS */
+            // If base.js problem, loading of NextDom Common JS
             $pageData['JS_POOL'][] = '/public/js/desktop/utils.js';
             $pageData['JS_POOL'][] = '/public/js/desktop/search.js';
-            /* And libraries JS */
+            // And libraries JS
             $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.utils/jquery.utils.js';
             $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.at.caret/jquery.at.caret.min.js';
             $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.multi-column-select/multi-column-select.js';
@@ -178,7 +178,7 @@ class PrepareView
             $pageData['JS_POOL'][] = '/vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/snapsvg/dist/snap.svg-min.js';
-            /* Loading dynamic libraries */
+            // Loading dynamic libraries
             $pageData['JS_POOL'][] = '/vendor/node_modules/autosize/dist/autosize.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min.js';
