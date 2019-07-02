@@ -43,7 +43,6 @@ class LogController extends BaseController
     public static function get(&$pageData): string
     {
 
-        // TODO utiliser log::getpathLog
         $currentLogfile = Utils::init('logfile');
         $logFilesList = [];
         $dir = opendir(NEXTDOM_LOG);

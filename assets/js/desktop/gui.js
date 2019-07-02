@@ -232,7 +232,7 @@ window.onscroll = function () {
                          var scrollValue = document.documentElement.scrollTop;
                          container.children(".content-header").css("top", headerSize - scrollValue + alertHeaderHeight + alertHeaderMargin);
                          container.children("#dashboard-content").animate({"padding-top" : headerHeight + 15 - alertHeaderMargin});
-                         container.children(".content").animate({ "padding-top" : headerHeight + 30 - alertHeaderMargin}, {duration: 500});
+                         container.children(".content").animate({ "padding-top" : headerHeight + 30 - alertHeaderMargin}, {duration: 300});
                          container.children(".content-header").children("div").removeClass('fixed-shadow').addClass('scroll-shadow');
                      }
                      container.children(".content-header").show();
@@ -329,10 +329,10 @@ window.onscroll = function () {
          success : function (_number) {
              MESSAGE_NUMBER = _number;
              if (_number == 0 || _number == '0') {
-                 $('#bt_messageModal').find('.fa-envelope-open').removeClass('notifbadge');
+                 $('.notifications-menu').find('.fa-envelope-open').removeClass('notifbadge');
                  $('#span_nbMessage').hide();
              } else {
-                 $('#bt_messageModal').find('.fa-envelope-open').addClass('notifbadge');
+                 $('.notifications-menu').find('.fa-envelope-open').addClass('notifbadge');
                  $('#span_nbMessage').html(_number);
                  $('#span_nbMessage').show();
              }
@@ -351,10 +351,10 @@ function refreshUpdateNumber() {
          success : function (_number) {
              UPDATE_NUMBER = _number;
              if (_number == 0 || _number == '0') {
-                 $('#bt_messageModal').find('.fa-download').removeClass('notifbadge');
+                 $('.tasks-menu').find('.fa-download').removeClass('notifbadge');
                  $('#span_nbUpdate').hide();
              } else {
-                 $('#bt_messageModal').find('.fa-download').addClass('notifbadge');
+                 $('.tasks-menu').find('.fa-download').addClass('notifbadge');
                  $('#span_nbUpdate').html(_number);
                  $('#span_nbUpdate').show();
              }
