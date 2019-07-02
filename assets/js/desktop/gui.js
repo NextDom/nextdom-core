@@ -36,12 +36,66 @@
 
 /* JS file for all that talk about GUI */
 
-/* Tooltip activation */
+// INIT, EVENT, FIRST Loading
+
+/**
+ * Tooltip activation
+ */
 (function($) {
     $(function() {
         $(document).tooltip({ selector: '[data-toggle="tooltip"]' });
     });
 })(jQuery);
+
+/**
+ * Event for windows resizing
+ */
+$(window).resize(function () {
+    // Close left menu if small resolution comming
+    if ($(window).width() < 768) {
+        $('body').removeClass("sidebar-collapse");
+    }
+    // Left menu resize
+    if ($('body').hasClass("sidebar-collapse")) {
+        sideMenuResize(true);
+    } else {
+        sideMenuResize(false);
+    }
+    limitTreeviewMenu();
+    // Header repositionning
+    setHeaderPosition(false);
+    // Gui automatic adjusting
+    adjustNextDomTheme();
+});
+
+/**
+ * Event for scrolling inside display page
+ */
+window.onscroll = function () {
+    var goOnTopButton = document.getElementById("bt_goOnTop");
+    var sidemenuBottomPadding = 0;
+    // GoonTop button management
+    if (goOnTopButton !== undefined && goOnTopButton !== null) {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            goOnTopButton.style.display = "block";
+            sidemenuBottomPadding = 75;
+        } else {
+            goOnTopButton.style.display = "none";
+        }
+    }
+    // Left menu resize
+    if (!$('body').hasClass("sidebar-collapse")) {
+        $(".sidebar-menu").css("overflow-y", "auto");
+        sideMenuResize(false);
+        limitTreeviewMenu();
+    }
+    // Header repositionning
+    setHeaderPosition(false);
+    // Gui automatic adjusting
+    adjustNextDomTheme();
+};
+
+// FUNCTIONS
 
 /**
  * Search input field activation on dedicated pages
@@ -263,3 +317,72 @@
          $('.content').removeClass('blur');
      }
  };
+
+ /**
+  * Refresh the message number badge in the header
+  */
+ function refreshMessageNumber() {
+     nextdom.message.number({
+         error: function (error) {
+             notify("Erreur", error.message, 'error');
+         },
+         success : function (_number) {
+             MESSAGE_NUMBER = _number;
+             if (_number == 0 || _number == '0') {
+                 $('#bt_messageModal').find('.fa-envelope-open').removeClass('notifbadge');
+                 $('#span_nbMessage').hide();
+             } else {
+                 $('#bt_messageModal').find('.fa-envelope-open').addClass('notifbadge');
+                 $('#span_nbMessage').html(_number);
+                 $('#span_nbMessage').show();
+             }
+         }
+     });
+ }
+
+ /**
+  * Refresh the updates number badge in the header
+  */
+function refreshUpdateNumber() {
+     nextdom.update.number({
+         error: function (error) {
+             notify("Erreur", error.message, 'error');
+         },
+         success : function (_number) {
+             UPDATE_NUMBER = _number;
+             if (_number == 0 || _number == '0') {
+                 $('#bt_messageModal').find('.fa-download').removeClass('notifbadge');
+                 $('#span_nbUpdate').hide();
+             } else {
+                 $('#bt_messageModal').find('.fa-download').addClass('notifbadge');
+                 $('#span_nbUpdate').html(_number);
+                 $('#span_nbUpdate').show();
+             }
+         }
+     });
+ }
+
+ /**
+  * Toggle between showing and hiding notifications
+  *
+  * @param notificationState 1 for notification showed or 0 for hide.
+  */
+ function switchNotify(notificationState) {
+     nextdom.config.save({
+         configuration: {'notify::status': notificationState},
+         error: function (error) {
+             notify("Core", error.message, 'error');
+         },
+         success: function () {
+             if (notificationState) {
+                 $('.notifyIcon').removeClass("fa-bell-slash").addClass("fa-bell");
+                 $('.notifyIconLink').attr('onclick','switchNotify(0);')
+                 notify("Core",  '{{Notification activée}}', 'success');
+             } else {
+                 $('.notifyIcon').removeClass("fa-bell").addClass("fa-bell-slash");
+                 $('.notifyIconLink').attr('onclick','switchNotify(1);')
+                 notify("Core",  '{{Notification desactivée}}', 'success');
+             }
+         }
+     });
+ }

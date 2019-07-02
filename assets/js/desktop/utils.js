@@ -134,10 +134,6 @@ function loadPage(_url,_noPushHistory){
     return;
 }
 
-function removeContextualFunction(){
-    printEqLogic = undefined
-}
-
 $(function () {
     $.alertTrigger = function(){
         initRowOverflow();
@@ -492,35 +488,6 @@ $(function () {
     activateGlobalSearch();
 });
 
-function initPage(){
-    initTableSorter();
-    initReportMode();
-    $.initTableFilter();
-    initRowOverflow();
-    initHelp();
-    initTextArea();
-    $('.nav-tabs a').on('click',function (e) {
-        var scrollHeight = $(document).scrollTop();
-        $(this).tab('show');
-        $(window).scrollTop(scrollHeight);
-        setTimeout(function() {
-            $(window).scrollTop(scrollHeight);
-        }, 0);
-
-    });
-}
-
-function linkify(inputText) {
-    var replacePattern1 = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
-    var replacedText = inputText.replace(replacePattern1, '<a href="$1" target="_blank">$1</a>');
-    var replacePattern2 = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
-    var replacedText = replacedText.replace(replacePattern2, '$1<a href="http://$2" target="_blank">$2</a>');
-    var replacePattern3 = /(\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6})/gim;
-    var replacedText = replacedText.replace(replacePattern3, '<a href="mailto:$1">$1</a>');
-    return replacedText
-}
-
-
 function showHelpModal(_name, _plugin) {
     if (init(_plugin) != '' && _plugin != undefined) {
         $('#div_helpWebsite').load('index.php?v=d&modal=help.website&page=doc_plugin_' + _plugin + '.php #primary', function () {
@@ -546,67 +513,6 @@ function showHelpModal(_name, _plugin) {
         $('#div_helpSpe').load('index.php?v=d&modal=help.' + init(_name));
     }
     $('#md_pageHelp').dialog('open');
-}
-
-/* Rafraichit le badge du nombres de message dans le header */
-function refreshMessageNumber() {
-    nextdom.message.number({
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success : function (_number) {
-            MESSAGE_NUMBER = _number;
-            if (_number == 0 || _number == '0') {
-                $('#span_nbMessage').hide();
-            } else {
-                $('#span_nbMessage').html(_number);
-                $('#span_nbMessage').show();
-            }
-        }
-    });
-}
-
-/* Rafraichit le badge du nombres de mises a jour disponible dans le header */
-function refreshUpdateNumber() {
-    nextdom.update.number({
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success : function (_number) {
-            UPDATE_NUMBER = _number;
-            if (_number == 0 || _number == '0') {
-                $('#span_nbUpdate').hide();
-            } else {
-                $('#span_nbUpdate').html(_number);
-                $('#span_nbUpdate').show();
-            }
-        }
-    });
-}
-
-/**
- * Toggle between showing and hiding notifications
- *
- * @param notificationState 1 for notification showed or 0 for hide.
- */
-function switchNotify(notificationState) {
-    nextdom.config.save({
-        configuration: {'notify::status': notificationState},
-        error: function (error) {
-            notify("Core", error.message, 'error');
-        },
-        success: function () {
-            if (notificationState) {
-                $('.notifyIcon').removeClass("fa-bell-slash").addClass("fa-bell");
-                $('.notifyIconLink').attr('onclick','switchNotify(0);')
-                notify("Core",  '{{Notification activée}}', 'success');
-            } else {
-                $('.notifyIcon').removeClass("fa-bell").addClass("fa-bell-slash");
-                $('.notifyIconLink').attr('onclick','switchNotify(1);')
-                notify("Core",  '{{Notification desactivée}}', 'success');
-            }
-        }
-    });
 }
 
 function notify(_title, _text, _class_name) {
@@ -755,14 +661,6 @@ function chooseIcon(_callback) {
         }
     });
     $('#mod_selectIcon').dialog('open');
-}
-
-function calculWidgetSize(_size,_step,_margin){
-    var result = Math.ceil(_size / _step) * _step - (2*_margin);
-    if(result < _size){
-        result += Math.ceil((_size - result) / _step)* _step;
-    }
-    return result;
 }
 
 function positionEqLogic(_id,_preResize,_scenario) {
@@ -1082,6 +980,46 @@ function editWidgetCmdMode(_mode){
     }
 }
 
+// TOOLS
+
+/**
+ * Remove a Equipement context
+ */
+function removeContextualFunction(){
+    printEqLogic = undefined
+}
+
+/**
+ * Convert a text on a link
+ *
+ * @param inputText text to convert
+ */
+function linkify(inputText) {
+    var replacePattern1 = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
+    var replacedText = inputText.replace(replacePattern1, '<a href="$1" target="_blank">$1</a>');
+    var replacePattern2 = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
+    var replacedText = replacedText.replace(replacePattern2, '$1<a href="http://$2" target="_blank">$2</a>');
+    var replacePattern3 = /(\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6})/gim;
+    var replacedText = replacedText.replace(replacePattern3, '<a href="mailto:$1">$1</a>');
+    return replacedText
+}
+
+/**
+ * Widget size calcul
+ */
+function calculWidgetSize(_size,_step,_margin){
+    var result = Math.ceil(_size / _step) * _step - (2*_margin);
+    if(result < _size){
+        result += Math.ceil((_size - result) / _step)* _step;
+    }
+    return result;
+}
+
+/**
+ * Convert an hex color to RGB color
+ *
+ * @param hex color in HEX format
+ */
 function hexToRgb(hex) {
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result ? {
@@ -1090,38 +1028,3 @@ function hexToRgb(hex) {
         b: parseInt(result[3], 16)
     } : null;
 }
-
-/* Scroll dans la page */
-window.onscroll = function () {
-    var goOnTopButton = document.getElementById("bt_goOnTop");
-    var sidemenuBottomPadding = 0;
-    if (goOnTopButton !== undefined && goOnTopButton !== null) {
-        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-            goOnTopButton.style.display = "block";
-            sidemenuBottomPadding = 75;
-        } else {
-            goOnTopButton.style.display = "none";
-        }
-    }
-    if (!$('body').hasClass("sidebar-collapse")) {
-        $(".sidebar-menu").css("overflow-y", "auto");
-        sideMenuResize(false);
-    }
-    setHeaderPosition(false);
-    adjustNextDomTheme();
-};
-
-/* Redimensionnement de la page */
-$(window).resize(function () {
-    if ($(window).width() < 768) {
-        $('body').removeClass("sidebar-collapse");
-    }
-    if ($('body').hasClass("sidebar-collapse")) {
-        sideMenuResize(true);
-    } else {
-        sideMenuResize(false);
-    }
-    setHeaderPosition(false);
-    limitTreeviewMenu();
-    adjustNextDomTheme();
-});

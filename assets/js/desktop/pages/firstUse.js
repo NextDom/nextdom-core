@@ -192,7 +192,7 @@ $("#toStep5").click(function () {
                 'theme:color13' : '#f5f5f5',
                 'theme:color14' : '#dddddd',
                 'theme:color15' : '#ffffff',
-                'theme:color16' : '#dddddd',
+                'theme:color16' : '#555555',
                 'theme:color17' : '#f4f4f4',
                 'theme:color18' : '#555555',
                 'theme:color19' : '#555555',

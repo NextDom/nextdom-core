@@ -37,6 +37,26 @@
 /* JS file for all that talk INIT */
 
 /**
+ * Init of page, master of all inits
+ */
+function initPage(){
+    initTableSorter();
+    initReportMode();
+    $.initTableFilter();
+    initRowOverflow();
+    initHelp();
+    initTextArea();
+    $('.nav-tabs a').on('click',function (e) {
+        var scrollHeight = $(document).scrollTop();
+        $(this).tab('show');
+        $(window).scrollTop(scrollHeight);
+        setTimeout(function() {
+            $(window).scrollTop(scrollHeight);
+        }, 0);
+    });
+}
+
+/**
  * Init of text area
  */
 function initTextArea(){
