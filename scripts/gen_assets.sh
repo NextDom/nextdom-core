@@ -75,6 +75,27 @@ function gen_js {
            core/js/note.class.js \
            core/js/listener.class.js \
            core/js/jeedom.class.js \
+           assets/js/factory/NextDomElement.js \
+           assets/js/factory/NextDomEnum.js \
+           assets/js/factory/NextDomUIDGenerator.js \
+           assets/js/factory/elements/A.js \
+           assets/js/factory/elements/Br.js \
+           assets/js/factory/elements/Button.js \
+           assets/js/factory/elements/Div.js \
+           assets/js/factory/elements/DivWithTooltip.js \
+           assets/js/factory/elements/HorizontalLayout.js \
+           assets/js/factory/elements/IFA.js \
+           assets/js/factory/elements/InputText.js \
+           assets/js/factory/elements/Label.js \
+           assets/js/factory/elements/Space.js \
+           assets/js/factory/elements/Table.js \
+           assets/js/factory/elements/Tbody.js \
+           assets/js/factory/elements/Td.js \
+           assets/js/factory/elements/TextNode.js \
+           assets/js/factory/elements/Th.js \
+           assets/js/factory/elements/Thead.js \
+           assets/js/factory/elements/Tr.js \
+           assets/js/factory/elements/VerticalLayout.js \
            vendor/node_modules/bootbox/dist/bootbox.min.js \
            vendor/node_modules/highcharts/highstock.js \
            vendor/node_modules/highcharts/highcharts-more.js \

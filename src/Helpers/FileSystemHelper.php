@@ -218,7 +218,7 @@ class FileSystemHelper
      *
      * @return string Contenu du fichier ou une chaine vide.
      */
-    public static function getTemplateFileContent(string $folder, string $version, string $filename, string $pluginId = ''): string
+    public static function getTemplateFileContent($folder, $version, $filename, $pluginId): string
     {
         $result = '';
         if ($pluginId == '') {
