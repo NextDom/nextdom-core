@@ -36,6 +36,12 @@
 
 $.fn.bootstrapBtn = $.fn.button.noConflict();
 
+(function($) {
+    $(function() {
+        $(document).tooltip({ selector: '[data-toggle="tooltip"]' });
+    });
+})(jQuery);
+
 uniqId_count = 0;
 modifyWithoutSave = false;
 nbActiveAjaxRequest = 0;
