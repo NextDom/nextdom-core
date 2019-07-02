@@ -88,8 +88,8 @@ class BackupManager
         $cachePath = CacheManager::getArchivePath();
         $startTime = strtotime('now');
         $status = "success";
-
         try {
+
             ConsoleHelper::title("Create Backup Process", false);
             ConsoleHelper::subTitle("starting backup procedure at " . date('Y-m-d H:i:s'));
             NextDomHelper::event('begin_backup', true);
@@ -257,7 +257,7 @@ class BackupManager
      */
     public static function createBackupArchive(string $outputPath, $sqlPath, $cachePath)
     {
-        $pattern = sprintf("|^%s/+|", NEXTDOM_ROOT);
+        $pattern = NEXTDOM_ROOT .'/';
         $tar = new Tar();
         $tar->setCompression();
         $tar->create($outputPath);
@@ -751,7 +751,7 @@ class BackupManager
      * @param string $pattern
      * @param Tar $tar
      */
-    private static function addPathToArchive(array $roots, string $pattern, Tar $tar): array
+    private static function addPathToArchive( $roots, $pattern, $tar)
     {
         foreach ($roots as $c_root) {
             $path = $c_root;
@@ -768,12 +768,3 @@ class BackupManager
         }
     }
 }
-
-            ConsoleHelper::title("Create Backup Process", false);
-            ConsoleHelper::subTitle("starting backup procedure at " . date('Y-m-d H:i:s'));
-            ConsoleHelper::subTitle("end of backup procedure at " . date('Y-m-d H:i:s'));
-            ConsoleHelper::subTitle("elapsed time " . (strtotime('now') - $startTime));
-            ConsoleHelper::nok();
-            ConsoleHelper::error($e);
-        ConsoleHelper::subTitle("Closing with " . $status);
-        ConsoleHelper::title("Create Backup Process", true);
