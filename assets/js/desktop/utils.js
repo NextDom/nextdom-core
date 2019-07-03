@@ -34,487 +34,34 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-/* Initialisations */
+/* Global variables Initialisations */
 uniqId_count = 0;
 modifyWithoutSave = false;
 nbActiveAjaxRequest = 0;
 nextdomBackgroundImg = null;
 utid = Date.now();
 
-$(document).ajaxStart(function () {
-    nbActiveAjaxRequest++;
-    showLoadingCustom();
-});
-$(document).ajaxStop(function () {
-    nbActiveAjaxRequest--;
-    if (nbActiveAjaxRequest <= 0) {
-        nbActiveAjaxRequest = 0;
-        hideLoadingCustom();
+// ?
+jQuery.fn.findAtDepth = function (selector, maxDepth) {
+    var depths = [], i;
+
+    if (maxDepth > 0) {
+        for (i = 1; i <= maxDepth; i++) {
+            depths.push('> ' + new Array(i).join('* > ') + selector);
+        }
+
+        selector = depths.join(', ');
     }
-});
+    return this.find(selector);
+};
 
-/* Page loading when navigation by link */
-function loadPage(_url,_noPushHistory){
-    /* Loading spinner */
-    showLoadingCustom();
-    /* Catch a page leaving when setting not saved */
-    if (modifyWithoutSave) {
-        if (!confirm('{{Attention vous quittez une page ayant des données modifiées non sauvegardées. Voulez-vous continuer ?}}')) {
-            hideLoadingCustom();
-            return;
-        }
-        modifyWithoutSave = false;
-    }
-    /* Unload current page before loading */
-    if (typeof unload_page !== "undefined") {
-        unload_page();
-    }
-    /* CLosing modals */
-    $("#md_modal").dialog('close');
-    $("#md_modal2").dialog('close');
-    if ($("#mod_insertCmdValue").length != 0) {
-        $("#mod_insertCmdValue").dialog('close');
-    }
-    if ($("#mod_insertDataStoreValue").length != 0) {
-        $("#mod_insertDataStoreValue").dialog('close');
-    }
-    if ($("#mod_insertEqLogicValue").length != 0) {
-        $("#mod_insertEqLogicValue").dialog('close');
-    }
-    if ($("#mod_insertCronValue").length != 0) {
-        $("#mod_insertCronValue").dialog('close');
-    }
-    if ($("#mod_insertActionValue").length != 0) {
-        $("#mod_insertActionValue").dialog('close');
-    }
-    if ($("#mod_insertScenarioValue").length != 0) {
-        $("#mod_insertScenarioValue").dialog('close');
-    }
-    if(isset(bootbox)){
-        bootbox.hideAll();
-    }
-
-    if(!isset(_noPushHistory) || _noPushHistory == false){
-        window.history.pushState('','', _url);
-    }
-    nextdom.cmd.update = Array();
-    nextdom.scenario.update = Array();
-    $('main').css('padding-right','').css('padding-left','').css('margin-right','').css('margin-left','');
-    $('#div_pageContainer').add("#div_pageContainer *").off();
-    $.hideAlert();
-    $('.bt_pluginTemplateShowSidebar').remove();
-    removeContextualFunction();
-    if(_url.indexOf('#') == -1){
-        var url = _url+'&ajax=1';
-    }else{
-        var n=_url.lastIndexOf("#");
-        var url = _url.substring(0,n)+"&ajax=1"+_url.substring(n)
-    }
-    $('.backgroundforJeedom').css('background-image','');
-    nextdomBackgroundImg = null;
-    /* Page content loading */
-    $('#div_pageContainer').empty().load(url, function(){
-        $('#bt_getHelpPage').attr('data-page',getUrlVars('p')).attr('data-plugin',getUrlVars('m'));
-        /* Page title formatting */
-        var title = getUrlVars('p');
-        if(title !== false){
-            document.title = title[0].toUpperCase() + title.slice(1) +' - NextDom';
-        }
-        initPage();
-        $('body').trigger('nextdom_page_load');
-        window.scrollTo(0, 0);
-        setHeaderPosition(true);
-        limitTreeviewMenu();
-        adjustNextDomTheme();
-        activateGlobalSearch();
-        $('[data-toggle="tooltip"]').tooltip();
-    });
-    /* Loading end, remove wait spinner */
-    hideLoadingCustom();
-    return;
-}
-
-$(function () {
-    $.alertTrigger = function(){
-        initRowOverflow();
-    }
-
-    window.addEventListener('popstate', function (event){
-        if(event.state === null){
-            return;
-        }
-        var url = window.location.href.split("index.php?");
-        loadPage('index.php?'+url[1],true)
-    });
-
-    $('body').on('click','a',function(e){
-        if($(this).hasClass('noOnePageLoad')){
-            return;
-        }
-        if($(this).hasClass('fancybox-nav')){
-            return;
-        }
-        if($(this).attr('href') == undefined || $(this).attr('href') == '' || $(this).attr('href') == '#'){
-            return;
-        }
-        if ($(this).attr('href').match("^http")) {
-            return;
-        }
-        if ($(this).attr('href').match("^#")) {
-            return;
-        }
-        if($(this).attr('target') === '_blank'){
-            return;
-        }
-        $('li.dropdown.open').click();
-        if ($(this).data('reload') === 'yes') {
-            window.location.href= window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + $(this).attr('href');
-        }
-        else {
-            loadPage($(this).attr('href'));
-        }
-        e.preventDefault();
-        e.stopPropagation();
-    });
-
-    $('ul.dropdown-menu [data-toggle=dropdown]').on('click', function (event) {
-        event.preventDefault();
-        event.stopPropagation();
-        $(this).parent().siblings().removeClass('open');
-        $(this).parent().toggleClass('open');
-    });
-    if (!navigator.userAgent.match(/Android/i)
-        && !navigator.userAgent.match(/webOS/i)
-        && !navigator.userAgent.match(/iPhone/i)
-        && !navigator.userAgent.match(/iPad/i)
-        && !navigator.userAgent.match(/iPod/i)
-        && !navigator.userAgent.match(/BlackBerry/i)
-        & !navigator.userAgent.match(/Windows Phone/i)
-    ) {
-        $('ul.dropdown-menu [data-toggle=dropdown]').on('mouseenter', function (event) {
-            event.preventDefault();
-            event.stopPropagation();
-            $(this).parent().siblings().removeClass('open');
-            $(this).parent().toggleClass('open');
-        });
-    }
-
-    /********************* Date and Time********************************/
-    setInterval(function () {
-        var date = new Date();
-        // Get NextDom language for format
-        var locale = 'en-EN';
-        if (isset(nextdom_langage)) {
-            locale = nextdom_langage.replace('_','-');
-        }
-        //Date
-        var dateFormat = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        $('#horloge_date').text(date.toLocaleDateString(locale, dateFormat));
-        // Time
-        $('#horloge_time').text(date.toLocaleTimeString(locale));
-    }, 1000);
-
-    $.fn.modal.Constructor.prototype.enforceFocus = function () {
-    };
-
-    $('body').on( "show", ".modal",function () {
-        document.activeElement.blur();
-        $(this).find(".modal-body :input:visible:first").focus();
-    });
-
-    /************************Help*************************/
-    if (isset(nextdom_langage)) {
-        bootbox.setDefaults({
-            locale: nextdom_langage.substr(0, 2),
-        });
-
-    }
-
-    //Display help
-    $("#md_pageHelp").dialog({
-        autoOpen: false,
-        modal: false,
-        closeText: '',
-        height: (jQuery(window).height() - 100),
-        width: ((jQuery(window).width() - 50) < 1500) ? (jQuery(window).width() - 50) : 1500,
-        position: { my: "center bottom-10", at: "center bottom", of: window },
-        open: function () {
-            $("body").css({overflow: 'hidden'});
-            $(this).closest( ".ui-dialog" ).find(":button").blur();
-        },
-        beforeClose: function (event, ui) {
-            $("body").css({overflow: 'inherit'});
-            $("#md_pageHelp").empty();
-        }
-    });
-
-    $("#md_modal").dialog({
-        autoOpen: false,
-        modal: false,
-        closeText: '',
-        height: (jQuery(window).height() - 100),
-        width: ((jQuery(window).width() - 50) < 1500) ? (jQuery(window).width() - 50) : 1500,
-        position: {my: 'center', at: 'center', of: window},
-        open: function () {
-            $("body").css({overflow: 'hidden'});
-            $(this).closest( ".ui-dialog" ).find(":button").blur();
-        },
-        beforeClose: function (event, ui) {
-            $("body").css({overflow: 'inherit'});
-            $("#md_modal").empty();
-        }
-    });
-
-    $("#md_modal2").dialog({
-        autoOpen: false,
-        modal: false,
-        closeText: '',
-        height: (jQuery(window).height() - 100),
-        width: ((jQuery(window).width() - 50) < 1500) ? (jQuery(window).width() - 50) : 1500,
-        position: {my: 'center', at: 'center', of: window},
-        open: function () {
-            $("body").css({overflow: 'hidden'});
-            $(this).closest( ".ui-dialog" ).find(":button").blur();
-        },
-        beforeClose: function (event, ui) {
-            $("body").css({overflow: 'inherit'});
-            $("#md_modal2").empty();
-        }
-    });
-
-    $('#bt_nextdomAbout,#bt_nextdomAbout2, #bt_nextdomAboutFooter').on('click', function () {
-        $('#md_modal').dialog({title: "{{A propos}}"});
-        $('#md_modal').load('index.php?v=d&modal=about').dialog('open');
-    });
-
-    $('#bt_getHelpPage').on('click',function(){
-        nextdom.getDocumentationUrl({
-            plugin: $(this).attr('data-plugin'),
-            page: $(this).attr('data-page'),
-            error: function(error) {
-                notify("Erreur", error.message, 'error');
-            },
-            success: function(url) {
-                window.open(url,'_blank');
-            }
-        });
-    });
-
-    $('body').on( 'click','.bt_pageHelp', function () {
-        showHelpModal($(this).attr('data-name'), $(this).attr('data-plugin'));
-    });
-
-    $(window).bind('beforeunload', function (e) {
-        if (modifyWithoutSave) {
-            return '{{Attention vous quittez une page ayant des données modifiées non sauvegardées. Voulez-vous continuer ?}}';
-        }
-    });
-
-    $(window).resize(function () {
-        initRowOverflow();
-    });
-
-    if (typeof nextdom_Welcome != 'undefined' && isset(nextdom_Welcome) && nextdom_Welcome == 1 && getUrlVars('noWelcome') != 1) {
-        $('#md_modal').dialog({title: "{{Bienvenue dans NextDom}}"});
-        $("#md_modal").load('index.php?v=d&modal=welcome').dialog('open');
-    }
-
-    $('#bt_haltSystem,#bt_haltSystemAdmin').on('click', function () {
-        $.hideAlert();
-        bootbox.confirm('{{Etes-vous sûr de vouloir arrêter le système ?}}', function (result) {
-            if (result) {
-                window.location.href = 'index.php?v=d&p=shutdown';
-            }
-        });
-    });
-
-    $('#bt_rebootSystem,#bt_rebootSystemAdmin').on('click', function () {
-        $.hideAlert();
-        bootbox.confirm('{{Etes-vous sûr de vouloir redémarrer le système ?}}', function (result) {
-            if (result) {
-                window.location.href = 'index.php?v=d&p=reboot';
-            }
-        });
-    });
-
-    $('#bt_showEventInRealTime').on('click',function(){
-        $('#md_modal').dialog({title: "{{Evénement en temps réel}}"});
-        $("#md_modal").load('index.php?v=d&modal=log.display&log=event').dialog('open');
-    });
-
-    $('#bt_showNoteManager').on('click',function(){
-        $('#md_modal').dialog({title: "{{Note}}"});
-        $("#md_modal").load('index.php?v=d&modal=note.manager').dialog('open');
-    });
-
-    $('#bt_gotoDashboard').on('click',function(){
-        if('ontouchstart' in window || navigator.msMaxTouchPoints){
-              return;
-        }
-        $('ul.dropdown-menu [data-toggle=dropdown]').parent().parent().parent().siblings().removeClass('open');
-        loadPage('index.php?v=d&p=dashboard');
-    });
-
-    $('#bt_gotoView').on('click',function(){
-        if('ontouchstart' in window || navigator.msMaxTouchPoints){
-            return;
-        }
-        $('ul.dropdown-menu [data-toggle=dropdown]').parent().parent().parent().siblings().removeClass('open');
-        loadPage('index.php?v=d&p=view');
-    });
-
-    $('#bt_gotoPlan').on('click',function(){
-        if('ontouchstart' in window || navigator.msMaxTouchPoints){
-            return;
-        }
-        $('ul.dropdown-menu [data-toggle=dropdown]').parent().parent().parent().siblings().removeClass('open');
-        loadPage('index.php?v=d&p=plan');
-    });
-
-    $('#bt_gotoPlan3d').on('click',function(){
-        if('ontouchstart' in window || navigator.msMaxTouchPoints){
-            return;
-        }
-        $('ul.dropdown-menu [data-toggle=dropdown]').parent().parent().parent().siblings().removeClass('open');
-        loadPage('index.php?v=d&p=plan3d');
-    });
-
-    $('#bt_messageModal').on('click',function(){
-        $('#md_modal').dialog({title: "{{Messages NextDom}}"});
-        $('#md_modal').load('index.php?v=d&modal=message').dialog('open');
-    });
-
-    $('#bt_goOnTop').click(function (){
-        window.scrollTo(0, 0);
-    });
-
-    $('body').on('click','.objectSummaryParent',function(){
-        loadPage('index.php?v=d&p=dashboard&summary='+$(this).data('summary')+'&object_id='+$(this).data('object_id'));
-    });
-    initPage();
-    setHeaderPosition(true);
-    setTimeout(function(){
-        $('body').trigger('nextdom_page_load');
-    }, 1);
-
-    $('.colorpick_inline').colorpicker({
-        container: true,
-        inline: true
-    });
-    $('.colorpick').colorpicker();
-    $(":input").inputmask();
-    $('[data-toggle="tooltip"]').tooltip();
-    $(".slimScrollDiv").css("overflow", "");
-    $(".sidebar").css("overflow", "");
-
-    /* Survol fabs filtre categorie dashboard */
-    $('.fab-filter').on('mouseleave',function() {
-        $('.blur-div').removeClass('blur');
-    });
-    $('.fab-filter').on('mouseenter',function() {
-        $('.blur-div').addClass('blur');
-    });
-
-    /**
-     * Get access to plugins
-     */
-    $('[data-toggle="push-menu"]').pushMenu();
-    var $pushMenu = $('[data-toggle="push-menu"]').data('lte.pushmenu');
-    var $layout = $('body').data('lte.layout');
-    $(window).on('load', function () {
-        // Reinitialize variables on load
-        $pushMenu = $('[data-toggle="push-menu"]').data('lte.pushmenu');
-        $layout = $('body').data('lte.layout')
-        window.scrollTo(0, 0);
-        setHeaderPosition(true);
-        limitTreeviewMenu();
-        adjustNextDomTheme();
-    });
-
-    /* Toggle du menu de gauche adminLTE */
-    $('.sidebar-toggle').on("click", function () {
-        if ($('body').hasClass("sidebar-collapse") || ($(window).width() < 768 && !$('body').hasClass("sidebar-open"))) {
-            $(".treeview-menu").css("overflow", "");
-            $(".sidebar-menu").css("overflow-y", "auto");
-            sideMenuResize(false);
-        } else {
-            $(".sidebar-menu").css("overflow", "");
-            $(".treeview-menu").css("overflow-y", "auto");
-            sideMenuResize(true);
-        }
-        setTimeout(function () {
-            setHeaderPosition(false);
-            adjustNextDomTheme();
-            $('.div_displayEquipement').packery();
-        }, 100);
-    });
-
-    /**
-     * Toggles layout classes
-     *
-     * @param String cls the layout class to toggle
-     * @returns void
-     */
-    function changeLayout(cls) {
-        $('body').toggleClass(cls);
-        $layout.fixSidebar();
-        if ($('body').hasClass('fixed') && cls == 'fixed') {
-            $pushMenu.expandOnHover();
-            $layout.activate()
-        }
-    }
-
-    /**
-     * Retrieve default settings and apply them to the template
-     *
-     * @returns void
-     */
-    function setup() {
-        // Add the layout manager
-        $('[data-layout]').on('click', function () {
-            changeLayout($(this).data('layout'));
-        });
-
-        $('[data-enable="expandOnHover"]').on('click', function () {
-            $(this).attr('disabled', true);
-            $pushMenu.expandOnHover();
-            if (!$('body').hasClass('sidebar-collapse'))
-                $('[data-layout="sidebar-collapse"]').click();
-        });
-    }
-
-    setup();
-
-    activateGlobalSearch();
-});
-
-function showHelpModal(_name, _plugin) {
-    if (init(_plugin) != '' && _plugin != undefined) {
-        $('#div_helpWebsite').load('index.php?v=d&modal=help.website&page=doc_plugin_' + _plugin + '.php #primary', function () {
-            if ($('#div_helpWebsite').find('.alert.alert-danger').length > 0 || $.trim($('#div_helpWebsite').text()) == '') {
-                $('a[href="#div_helpSpe"]').click();
-                $('a[href="#div_helpWebsite"]').hide();
-            } else {
-                $('a[href="#div_helpWebsite"]').show();
-                $('a[href="#div_helpWebsite"]').click();
-            }
-        });
-        $('#div_helpSpe').load('index.php?v=d&plugin=' + _plugin + '&modal=help.' + init(_name));
-    } else {
-        $('#div_helpWebsite').load('index.php?v=d&modal=help.website&page=doc_' + init(_name) + '.php #primary', function () {
-            if ($('#div_helpWebsite').find('.alert.alert-danger').length > 0 || $.trim($('#div_helpWebsite').text()) == '') {
-                $('a[href="#div_helpSpe"]').click();
-                $('a[href="#div_helpWebsite"]').hide();
-            } else {
-                $('a[href="#div_helpWebsite"]').show();
-                $('a[href="#div_helpWebsite"]').click();
-            }
-        });
-        $('#div_helpSpe').load('index.php?v=d&modal=help.' + init(_name));
-    }
-    $('#md_pageHelp').dialog('open');
-}
-
+/**
+ * Floating notification
+ *
+ * @param _title title of the notification
+ * @param _text text of the notification
+ * @param _class_name equivalent to the color of notification (success, warning, error, nextdom color)
+ */
 function notify(_title, _text, _class_name) {
     if (typeof notify_status != 'undefined' && isset(notify_status) && notify_status == 1) {
         var _backgroundColor = "";
@@ -600,28 +147,11 @@ function notify(_title, _text, _class_name) {
     }
 }
 
-jQuery.fn.findAtDepth = function (selector, maxDepth) {
-    var depths = [], i;
-
-    if (maxDepth > 0) {
-        for (i = 1; i <= maxDepth; i++) {
-            depths.push('> ' + new Array(i).join('* > ') + selector);
-        }
-
-        selector = depths.join(', ');
-    }
-    return this.find(selector);
-};
-
-function sleep(milliseconds) {
-    var start = new Date().getTime();
-    for (var i = 0; i < 1e7; i++) {
-        if ((new Date().getTime() - start) > milliseconds){
-            break;
-        }
-    }
-}
-
+/**
+ * Opening a icone selector modal to choose one
+ *
+ * @param _callback callback who receive the icon code
+ */
 function chooseIcon(_callback) {
     if ($("#mod_selectIcon").length == 0) {
         $('#div_pageContainer').append('<div id="mod_selectIcon" title="{{Choisissez votre icône}}" ></div>');
@@ -663,32 +193,25 @@ function chooseIcon(_callback) {
     $('#mod_selectIcon').dialog('open');
 }
 
-function positionEqLogic(_id,_preResize,_scenario) {
-    if(_id != undefined){
-        var eqLogic = $('.eqLogic-widget[data-eqlogic_id='+_id+']');
-        var widget = (_scenario) ? $('.scenario-widget[data-scenario_id='+_id+']') : $('.eqLogic-widget[data-eqlogic_id='+_id+']');
-        widget.css('margin','0px').css('padding','0px');
-        eqLogic.trigger('resize');
-        eqLogic.addClass(eqLogic.attr('data-category'));
-        eqLogic.css('border-radius',widget_radius+'px');
-    }else{
-        $('.eqLogic-widget:not(.nextdomAlreadyPosition)').css('margin','0px').css('padding','0px');
-        $('.eqLogic-widget:not(.nextdomAlreadyPosition)').each(function () {
-            if($(this).width() == 0){
-                $(this).width('100px');
-            }
-            if($(this).height() == 0){
-                $(this).height('100px');
-            }
-
-            $(this).trigger('resize');
-            $(this).addClass($(this).attr('data-category'));
-        });
-        $('.eqLogic-widget:not(.nextdomAlreadyPosition)').css('border-radius',widget_radius+'px');
-        $('.eqLogic-widget').addClass('nextdomAlreadyPosition');
+/**
+ * Blocking sleep loop for a while
+ *
+ * @param milliseconds number of milliseconds you want to sleep execution
+ */
+function sleep(milliseconds) {
+    var start = new Date().getTime();
+    for (var i = 0; i < 1e7; i++) {
+        if ((new Date().getTime() - start) > milliseconds){
+            break;
+        }
     }
 }
 
+/**
+ * Create a unique cmd ID
+ *
+ * @param _prefix ID prefix
+ */
 function uniqId(_prefix){
     if(typeof _prefix == 'undefined'){
         _prefix = 'jee-uniq';
@@ -701,11 +224,11 @@ function uniqId(_prefix){
     return result;
 }
 
-function taAutosize(){
-    autosize($('.ta_autosize'));
-    autosize.update($('.ta_autosize'));
-}
-
+/**
+ * Save position and sizes of widgets
+ *
+ * @param _params array of param dedicated for know page in edition
+ */
 function saveWidgetDisplay(_params){
     if(init(_params) == ''){
         _params = {};
@@ -798,6 +321,11 @@ function saveWidgetDisplay(_params){
     }
 }
 
+/**
+ * Create or Destroy the right context menu
+ *
+ * @param _mode 0=destroy, 1=initialize
+ */
 function editWidgetCmdMode(_mode){
     if(!isset(_mode)){
         if($('#bt_editDashboardWidgetOrder').attr('data-mode') != undefined && $('#bt_editDashboardWidgetOrder').attr('data-mode') == 1){
@@ -980,7 +508,37 @@ function editWidgetCmdMode(_mode){
     }
 }
 
-// TOOLS
+/**
+ * ?
+ *
+ * @param _id EqLogic ID
+ * @param _preResize TRUE if pre-resizing
+ * @param _scenario TRUE if it's a scenario widget
+ */
+function positionEqLogic(_id,_preResize,_scenario) {
+    if(_id != undefined){
+        var eqLogic = $('.eqLogic-widget[data-eqlogic_id='+_id+']');
+        var widget = (_scenario) ? $('.scenario-widget[data-scenario_id='+_id+']') : $('.eqLogic-widget[data-eqlogic_id='+_id+']');
+        widget.css('margin','0px').css('padding','0px');
+        eqLogic.trigger('resize');
+        eqLogic.addClass(eqLogic.attr('data-category'));
+        eqLogic.css('border-radius',widget_radius+'px');
+    } else {
+        $('.eqLogic-widget:not(.nextdomAlreadyPosition)').css('margin','0px').css('padding','0px');
+        $('.eqLogic-widget:not(.nextdomAlreadyPosition)').each(function () {
+            if($(this).width() == 0){
+                $(this).width('100px');
+            }
+            if($(this).height() == 0){
+                $(this).height('100px');
+            }
+            $(this).trigger('resize');
+            $(this).addClass($(this).attr('data-category'));
+        });
+        $('.eqLogic-widget:not(.nextdomAlreadyPosition)').css('border-radius',widget_radius+'px');
+        $('.eqLogic-widget').addClass('nextdomAlreadyPosition');
+    }
+}
 
 /**
  * Remove a Equipement context

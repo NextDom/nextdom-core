@@ -98,6 +98,7 @@ class PrepareView
             $pageData['JS_POOL'][] = '/vendor/node_modules/izitoast/dist/js/iziToast.min.js';
             // Then NextDom JS files
             $pageData['JS_POOL'][] = '/public/js/desktop/conflicts.js';
+            $pageData['JS_POOL'][] = '/public/js/desktop/loads.js';
             $pageData['JS_POOL'][] = '/public/js/desktop/inits.js';
             $pageData['JS_POOL'][] = '/public/js/desktop/gui.js';
             $pageData['JS_POOL'][] = '/public/js/desktop/utils.js';
@@ -347,9 +348,11 @@ class PrepareView
             try {
                 FileSystemHelper::includeFile('desktop', $modalCode, 'modal', $plugin, true);
             } catch (\Exception $e) {
-                echo '<div class="alert alert-danger div_alert">';
+                echo '<section class="alert-header">';
+                echo '<div class="alert alert-danger">';
                 echo TranslateHelper::exec(Utils::displayException($e), 'desktop/' . Utils::init('p') . '.php');
                 echo '</div>';
+                echo '</section>';
             }
         } // Show modal from core
         else {
@@ -388,9 +391,11 @@ class PrepareView
             }
         } catch (\Exception $e) {
             ob_end_clean();
-            echo '<div class="alert alert-danger div_alert">';
+            echo '<section class="alert-header">';
+            echo '<div class="alert alert-danger">';
             echo TranslateHelper::exec(Utils::displayException($e), 'desktop/' . Utils::init('p') . '.php');
             echo '</div>';
+            echo '</section>';
         }
     }
 
@@ -711,9 +716,11 @@ class PrepareView
             }
         } catch (\Exception $e) {
             ob_end_clean();
-            echo '<div class="alert alert-danger div_alert">';
+            echo '<section class="alert-header">';
+            echo '<div class="alert alert-danger">';
             echo \translate::exec(Utils::displayException($e), 'desktop/' . Utils::init('p') . '.php');
             echo '</div>';
+            echo '</section>';
         }
     }
 
