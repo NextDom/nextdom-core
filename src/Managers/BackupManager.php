@@ -456,11 +456,11 @@ class BackupManager
             ConsoleHelper::step("restoring custom data...");
             self::restoreCustomData($tmpDir);
             ConsoleHelper::ok();
-            ConsoleHelper::step("restoring plugins...");
-            self::restorePlugins($tmpDir);
-            ConsoleHelper::ok();
             ConsoleHelper::step("migrating data...");
             MigrationHelper::migrate('restore');
+            ConsoleHelper::ok();
+            ConsoleHelper::step("restoring plugins...");
+            self::restorePlugins($tmpDir);
             ConsoleHelper::ok();
             ConsoleHelper::step("starting nextdom system...");
             NextDomHelper::startSystem();

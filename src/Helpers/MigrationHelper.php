@@ -20,11 +20,13 @@
 namespace NextDom\Helpers;
 
 use NextDom\Enums\FoldersReferential;
-use NextDom\Enums\PlanVersion;
 use NextDom\Exceptions\CoreException;
 use NextDom\Managers\BackupManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\InteractDefManager;
+use NextDom\Managers\Plan3dHeaderManager;
+use NextDom\Managers\Plan3dManager;
+use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PlanManager;
 
 /**
@@ -189,13 +191,19 @@ class MigrationHelper
                     if(!in_array($fileInfo->getFilename(), FoldersReferential::NEXTDOMFOLDERS)
                         && !in_array($fileInfo->getFilename(), FoldersReferential::NEXTDOMFILES)
                         && !is_link( $fileInfo->getFilename()) ) {
-                        $message ='Moving ' . NEXTDOM_ROOT .'/'. $fileInfo->getFilename();
+
+
+                        $fileToReplace = $fileInfo->getFilename();
+
+                        $message ='Moving ' . NEXTDOM_ROOT .'/'. $fileToReplace;
                         if($logFile == 'migration') {
                             LogHelper::addInfo($logFile, $message, '');
                         } else {
                             ConsoleHelper::process($message);
                         }
-                        FileSystemHelper::rmove(NEXTDOM_ROOT.'/'.$fileInfo->getFilename(),NEXTDOM_DATA.'/data/custom/'.$fileInfo->getFilename(), false, array(), false, array());
+                        FileSystemHelper::rmove(NEXTDOM_ROOT.'/'.$fileToReplace,NEXTDOM_DATA.'/data/custom', false, array(), false, array());
+
+                        self::migratePlanPath($logFile, $fileToReplace);
                     }
                 }
             }
@@ -203,19 +211,17 @@ class MigrationHelper
         } catch(\Exception $exception){
             trow (new CoreException());
         }
-        $message ='Start updating database process to plan table';
-        if($logFile == 'migration') {
-            LogHelper::addInfo($logFile, $message, '');
-        } else {
-            ConsoleHelper::process($message);
-        }
-
         try {
+            $dir = new \RecursiveDirectoryIterator(NEXTDOM_DATA.'/data/custom/', \FilesystemIterator::SKIP_DOTS);
+
+            // Flatten the recursive iterator, folders come before their files
+            $it  = new \RecursiveIteratorIterator($dir, \RecursiveIteratorIterator::SELF_FIRST);
+
+            // Maximum depth is 1 level deeper than the base folder
+            $it->setMaxDepth(0);
             // Basic loop displaying different messages based on file or folder
             foreach ($it as $fileInfo) {
-                if(!in_array($fileInfo->getFilename(), FoldersReferential::NEXTDOMFOLDERS)
-                    && !in_array($fileInfo->getFilename(), FoldersReferential::NEXTDOMFILES)
-                    && !is_link( $fileInfo->getFilename()) ) {
+                if(!is_link( $fileInfo->getFilename()) ) {
                     $fileToReplace = $fileInfo->getFilename();
                     $message = 'Migrate ' . $fileToReplace . ' to /data/custom/' . $fileToReplace;
                     if ($logFile == 'migration') {
@@ -224,19 +230,7 @@ class MigrationHelper
                         ConsoleHelper::process($message);
                     }
 
-                    foreach (PlanManager::all() as $plan) {
-                        foreach (PlanVersion::getConstants() as $linkType) {
-
-                            $html = $plan->getDisplay('text');
-                            if ($html !== null) {
-                                $html = str_replace($fileToReplace, 'data/custom/' . $fileToReplace, $html);
-
-                                $plan->setDisplay('text', $html);
-                                $plan->save();
-                            }
-                            break;
-                        }
-                    }
+                    self::migratePlanPath($logFile, $fileToReplace);
                 }
             }
         } catch(\Exception $exception){
@@ -273,5 +267,45 @@ class MigrationHelper
             }
         }
         return $migrate;
+    }
+
+    /**
+     * @param $logFile
+     * @param $fileToReplace
+     * @return string
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
+    private static function migratePlanPath($logFile, $fileToReplace): string
+    {
+        $message = 'Migrate ' . $fileToReplace . ' to /data/custom/' . $fileToReplace;
+        if ($logFile == 'migration') {
+            LogHelper::addInfo($logFile, $message, '');
+        } else {
+            ConsoleHelper::process($message);
+        }
+
+        foreach (PlanManager::all() as $plan) {
+
+            $html = $plan->getDisplay('text');
+            if ($html !== null) {
+                $html = str_replace($fileToReplace, 'data/custom/' . $fileToReplace, $html);
+
+                $plan->setDisplay('text', $html);
+                $plan->save();
+            }
+        }
+
+        foreach (Plan3dManager::all() as $plan3d) {
+
+            $html = $plan3d->getDisplay('text');
+            if ($html !== null) {
+                $html = str_replace($fileToReplace, 'data/custom/' . $fileToReplace, $html);
+
+                $plan3d->setDisplay('text', $html);
+                $plan3d->save();
+            }
+        }
+        return $message;
     }
 }
