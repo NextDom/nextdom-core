@@ -51,10 +51,14 @@
  * Event for windows resizing
  */
 $(window).resize(function () {
+    // OBSOLETE ?
+    initRowOverflow();
+
     // Close left menu if small resolution comming
     if ($(window).width() < 768) {
         $('body').removeClass("sidebar-collapse");
     }
+
     // Left menu resize
     if ($('body').hasClass("sidebar-collapse")) {
         sideMenuResize(true);
@@ -62,8 +66,10 @@ $(window).resize(function () {
         sideMenuResize(false);
     }
     limitTreeviewMenu();
+
     // Header repositionning
     setHeaderPosition(false);
+
     // Gui automatic adjusting
     adjustNextDomTheme();
 });
@@ -231,8 +237,8 @@ window.onscroll = function () {
                      } else {
                          var scrollValue = document.documentElement.scrollTop;
                          container.children(".content-header").css("top", headerSize - scrollValue + alertHeaderHeight + alertHeaderMargin);
-                         container.children("#dashboard-content").animate({"padding-top" : headerHeight + 15 - alertHeaderMargin});
-                         container.children(".content").animate({ "padding-top" : headerHeight + 30 - alertHeaderMargin}, {duration: 300});
+                         container.children("#dashboard-content").css("padding-top",headerHeight + 15 - alertHeaderMargin);
+                         container.children(".content").css("padding-top", headerHeight + 30 - alertHeaderMargin);
                          container.children(".content-header").children("div").removeClass('fixed-shadow').addClass('scroll-shadow');
                      }
                      container.children(".content-header").show();
@@ -289,33 +295,25 @@ window.onscroll = function () {
   * Custom loading wait spinner display
   */
  function showLoadingCustom() {
-     if ($.mobile) {
-         $('#div_loadingSpinner').show()
-     } else {
-         if ($('#jqueryLoadingDiv').length == 0) {
-             if (typeof nextdom_waitSpinner != 'undefined' && isset(nextdom_waitSpinner) && nextdom_waitSpinner != '') {
-                 $('body').append('<div id="jqueryLoadingDiv"><div class="loadingImg"><i class="fas ' + nextdom_waitSpinner + ' fa-spin icon_theme_color"></i></div></div>');
-             } else {
-                 $('body').append('<div id="jqueryLoadingDiv"><div class="loadingImg"><i class="fas fa-sync-alt fa-spin icon_theme_color"></i></div></div>');
-             }
+     if ($('#jqueryLoadingDiv').length == 0) {
+         if (typeof nextdom_waitSpinner != 'undefined' && isset(nextdom_waitSpinner) && nextdom_waitSpinner != '') {
+             $('body').append('<div id="jqueryLoadingDiv"><div class="loadingImg"><i class="fas ' + nextdom_waitSpinner + ' fa-spin icon_theme_color"></i></div></div>');
+         } else {
+             $('body').append('<div id="jqueryLoadingDiv"><div class="loadingImg"><i class="fas fa-sync-alt fa-spin icon_theme_color"></i></div></div>');
          }
-         $('#jqueryLoadingDiv').show();
-         $('.blur-div').addClass('blur');
-         $('.content').addClass('blur');
      }
+     $('#jqueryLoadingDiv').show();
+     $('.blur-div').addClass('blur');
+     $('.content').addClass('blur');
  };
 
  /**
   * Custom loading wait spinner hidding
   */
  function hideLoadingCustom() {
-     if ($.mobile) {
-         $('#div_loadingSpinner').hide()
-     } else {
-         $('#jqueryLoadingDiv').hide();
-         $('.blur-div').removeClass('blur');
-         $('.content').removeClass('blur');
-     }
+     $('#jqueryLoadingDiv').hide();
+     $('.blur-div').removeClass('blur');
+     $('.content').removeClass('blur');
  };
 
  /**
@@ -385,4 +383,12 @@ function refreshUpdateNumber() {
              }
          }
      });
+ }
+
+ /**
+  * Ask an autosizing of textarea
+  */
+ function taAutosize(){
+     autosize($('.ta_autosize'));
+     autosize.update($('.ta_autosize'));
  }

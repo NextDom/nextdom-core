@@ -118,7 +118,7 @@
     .btn:not(.btn-default):not(.btn-selector) {
         color: $white !important;
     }
-    a:not(.btn) {
+    a:not(.btn):not(.label-list) {
         color: $nextdom_blue !important;
     }
 }

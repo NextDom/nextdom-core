@@ -40,12 +40,15 @@
  * Init of page, master of all inits
  */
 function initPage(){
+    // Init functions calls
     initTableSorter();
     initReportMode();
     $.initTableFilter();
     initRowOverflow();
     initHelp();
     initTextArea();
+
+    // Tabs change event handler declaration
     $('.nav-tabs a').on('click',function (e) {
         var scrollHeight = $(document).scrollTop();
         $(this).tab('show');
@@ -54,6 +57,26 @@ function initPage(){
             $(window).scrollTop(scrollHeight);
         }, 0);
     });
+
+    // Trig page loaded
+    $('body').trigger('nextdom_page_load');
+}
+
+/**
+ * post Init of page, after page loaded
+ */
+function postInitPage(){
+    // Scroll to top
+    window.scrollTo(0, 0);
+
+    // post init functions calls
+    setHeaderPosition(true);
+    limitTreeviewMenu();
+    adjustNextDomTheme();
+    activateGlobalSearch();
+
+    // Loading end, remove wait spinner
+    hideLoadingCustom();
 }
 
 /**
@@ -65,6 +88,7 @@ function initTextArea(){
     });
 }
 
+// OBSOLETE ?
 /**
  * Init of row-overflow classe
  */
