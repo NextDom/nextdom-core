@@ -106,7 +106,7 @@ class BackupManager
             CacheManager::persist();
             ConsoleHelper::ok();
             ConsoleHelper::step("creating backup archive");
-            self::createBackupArchive($backupPath, $sqlPath, $cachePath);
+            self::createBackupArchive($backupPath, $sqlPath, $cachePath, 'backup');
             ConsoleHelper::ok();
             ConsoleHelper::step("rotating backup archives");
             self::rotateBackups($backupDir);
@@ -162,7 +162,7 @@ class BackupManager
     public static function getBackupFilename($name = null): string
     {
         $date = date("Y-m-d-H:i:s");
-        $version = NextDomHelper::getJeedomVersion();
+        $version = NextDomHelper::getNextdomVersion();
         $format = "backup-%s-%s-%s.tar.gz";
 
         if ($name === null) {
@@ -255,21 +255,28 @@ class BackupManager
      * @retrun bool true archive generated successfully
      * @throws \Exception when error occured while writing the tar archive
      */
-    public static function createBackupArchive(string $outputPath, $sqlPath, $cachePath)
+    public static function createBackupArchive(string $outputPath, $sqlPath, $cachePath, $logFile)
     {
-        $pattern = NEXTDOM_ROOT .'/';
+
         $tar = new Tar();
         $tar->setCompression();
         $tar->create($outputPath);
+
+        // Backup cache and SQL files
         $tar->addFile($cachePath, "var/cache.tar.gz");
         $tar->addFile($sqlPath, "DB_backup.sql");
 
-        // iterate on dirs we want to include in archive
-        $roots = [NEXTDOM_ROOT.'/plugins', NEXTDOM_DATA.'/data/custom'];
-
+        // Backup config and data folders
         FileSystemHelper::mkdirIfNotExists(NEXTDOM_DATA.'/data/custom');
+        $roots = [NEXTDOM_DATA.'/data/',NEXTDOM_DATA.'/config/'];
+        $pattern = NEXTDOM_DATA .'/';
+        self::addPathToArchive($roots, $pattern, $tar, $logFile);
 
-        self::addPathToArchive($roots, $pattern, $tar);
+        // Backup plugins folder
+        $roots = [NEXTDOM_ROOT.'/plugins/'];
+        $pattern = NEXTDOM_ROOT .'/';
+        self::addPathToArchive($roots, $pattern, $tar, $logFile);
+
         $dir = new \RecursiveDirectoryIterator(NEXTDOM_ROOT, \FilesystemIterator::SKIP_DOTS);
         // Flatten the recursive iterator, folders come before their files
         $it  = new \RecursiveIteratorIterator($dir, \RecursiveIteratorIterator::SELF_FIRST);
@@ -277,21 +284,19 @@ class BackupManager
         $it->setMaxDepth(0);
 
 
-        // Add all adds by user to the backup archive
+        // Backup all files/folder in root folder added by user
         foreach ($it as $fileinfo) {
             if ($fileinfo->isDir() || $fileinfo->isFile()) {
                 if(!in_array($fileinfo->getFilename(), FoldersReferential::NEXTDOMFOLDERS)
                     && !in_array($fileinfo->getFilename(), FoldersReferential::NEXTDOMFILES) && !is_link( $fileinfo->getFilename()) ) {
-                    $dest = preg_replace($pattern, "", $fileinfo->getPathname());
-                    $tar->addFile($fileinfo->getPathname(), $dest);
+                    $tar->addFile($fileinfo->getPathname(), $fileinfo->getFilename());
                     if ($fileinfo->isDir()) {
                         $roots = [NEXTDOM_ROOT.'/'.$fileinfo->getFilename()];
-                        self::addPathToArchive($roots, $pattern, $tar);
+                        self::addPathToArchive($roots, $pattern, $tar, $logFile);
                     }
                 }
             }
         }
-
 
         $tar->close();
     }
@@ -389,7 +394,11 @@ class BackupManager
                 continue;
             }
             LogHelper::addError("system", $c_val['class']);
-            $c_val['class']::backup_send($path);
+            try {
+                $c_val['class']::backup_send($path);
+            } catch (\Exception $e) {
+                // Even if we have a samba exception, the backup should be available
+            }
         }
         return true;
     }
@@ -454,7 +463,7 @@ class BackupManager
             self::restoreJeedomConfig($tmpDir);
             ConsoleHelper::ok();
             ConsoleHelper::step("restoring custom data...");
-            self::restoreCustomData($tmpDir);
+            self::restoreCustomData($tmpDir,'restore');
             ConsoleHelper::ok();
             ConsoleHelper::step("migrating data...");
             MigrationHelper::migrate('restore');
@@ -627,22 +636,43 @@ class BackupManager
      * @param string $tmpDir extracted backup root directory
      * @throws CoreException
      */
-    private static function restoreCustomData($tmpDir)
+    private static function restoreCustomData($tmpDir, $logFile)
     {
-        $customDataDirs = glob(sprintf("%s/*", $tmpDir), GLOB_ONLYDIR);
-        $customData = sprintf("%s/data/custom/", NEXTDOM_DATA);
+//        $customDataDirs = glob(sprintf("%s/data/custom", $tmpDir), GLOB_ONLYDIR);
+//
+//        FileSystemHelper::mkdirIfNotExists(NEXTDOM_DATA.'/data/custom');
+//
+//        foreach ($customDataDirs as $c_dir) {
+//            $name = basename($c_dir);
+//            $message ='Restoring :'.$name;
+//            if($logFile == 'migration') {
+//                LogHelper::addInfo($logFile, $message, '');
+//            } else {
+//                ConsoleHelper::process($message);
+//            }
+//            FileSystemHelper::rmove($c_dir, sprintf("%s/%s", NEXTDOM_DATA, $name));
+//        }
 
-        FileSystemHelper::mkdirIfNotExists($customData);
 
+
+        $customDataDirs = glob(sprintf("%s/data/*", $tmpDir), GLOB_ONLYDIR);
+        $customDataRoot = sprintf("%s/data", NEXTDOM_DATA);
+
+        SystemHelper::rrmdir($customDataRoot . "/*");
         foreach ($customDataDirs as $c_dir) {
             $name = basename($c_dir);
-            if(!in_array($name, FoldersReferential::NEXTDOMFOLDERS)
-                && !in_array($name, FoldersReferential::NEXTDOMFILES) && !is_link( $name) ) {
-                if (false === FileSystemHelper::mv($c_dir, sprintf("%s/%s", $customData, $name))) {
-                    // should probably fail, keeping behavior prior to install/restore.php refactoring
-                }
+            $message ='Restoring folder :'.$name;
+            if($logFile == 'migration') {
+                LogHelper::addInfo($logFile, $message, '');
+            } else {
+                ConsoleHelper::process($message);
+            }
+            if (false === FileSystemHelper::mv($c_dir, sprintf("%s/%s", $customDataRoot, $name))) {
+                // should probably fail, keeping behavior prior to install/restore.php refactoring
             }
         }
+
+
     }
 
     /**
@@ -751,8 +781,9 @@ class BackupManager
      * @param array $roots
      * @param string $pattern
      * @param Tar $tar
+     * @param string logFile
      */
-    private static function addPathToArchive( $roots, $pattern, $tar)
+    private static function addPathToArchive( $roots, $pattern, $tar, $logFile)
     {
         foreach ($roots as $c_root) {
             $path = $c_root;
@@ -763,7 +794,13 @@ class BackupManager
                 if (false === $c_entry->isFile()) {
                     continue;
                 }
-                $dest = preg_replace($pattern, "", $c_entry->getPathname());
+                $message ='Add folder to archive : '.$c_entry->getPathname();
+                if($logFile == 'migration') {
+                    LogHelper::addInfo($logFile, $message, '');
+                } else {
+                    ConsoleHelper::process($message);
+                }
+                $dest = str_replace($pattern, "", $c_entry->getPathname());
                 $tar->addFile($c_entry->getPathname(), $dest);
             }
         }

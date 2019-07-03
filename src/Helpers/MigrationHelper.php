@@ -272,11 +272,10 @@ class MigrationHelper
     /**
      * @param $logFile
      * @param $fileToReplace
-     * @return string
      * @throws CoreException
      * @throws \ReflectionException
      */
-    private static function migratePlanPath($logFile, $fileToReplace): string
+    private static function migratePlanPath($logFile, $fileToReplace)
     {
         $message = 'Migrate ' . $fileToReplace . ' to /data/custom/' . $fileToReplace;
         if ($logFile == 'migration') {
@@ -306,6 +305,5 @@ class MigrationHelper
                 $plan3d->save();
             }
         }
-        return $message;
     }
 }
