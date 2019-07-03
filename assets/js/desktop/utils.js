@@ -509,9 +509,9 @@ function editWidgetCmdMode(_mode){
 }
 
 /**
- * ?
+ * Control size of widget, and assign class category for filtering
  *
- * @param _id EqLogic ID
+ * @param _id EqLogic ID, if null>ALL
  * @param _preResize TRUE if pre-resizing
  * @param _scenario TRUE if it's a scenario widget
  */
