@@ -111,7 +111,7 @@
                     {% else %}
                         <div class="card" style="background-color:{{ child.getDisplay("tagColor") }}10;box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08); border: 1px solid {{ child.getDisplay("tagColor") }}50" ; data-father_id="{{ child.getFather_id() }}">
                             <div class="card-header card-header-icon">
-                                <div class="card-icon text-center" style="background:{{ child.getDisplay("tagColor") }}">
+                                <div class="card-icon text-center cursor openObject" style="background:{{ child.getDisplay("tagColor") }}" data-id="index.php?v=d&p=object&id={{ child.getId() }}">
                                     {{ child.getDisplay("icon")|raw }}
                                 </div>
                                 <p class="card-category" style="color:{{ child.getDisplay("tagColor") }}"><b>{{ child.getName() }}</b>
