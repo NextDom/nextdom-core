@@ -20,12 +20,14 @@
  * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
  */
 
-namespace NextDom\Controller;
+namespace NextDom\Controller\Pages;
 
+use NextDom\Controller\BaseController;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Router;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
+use NextDom\Helpers\FileSystemHelper;
 
 /**
  * Class FirstUseController
@@ -49,6 +51,19 @@ class FirstUseController extends BaseController
         if ($configs['nextdom::firstUse'] == 0) {
             Router::showError404AndDie();
         }
+
+        $pageData['profilsWidgetThemes'] = [];
+        $lsDir = FileSystemHelper::ls(NEXTDOM_ROOT . '/core/template/dashboard/themes/','*',true);
+        foreach ($lsDir as $themesDir) {
+            $lsThemes = FileSystemHelper::ls(NEXTDOM_ROOT . '/core/template/dashboard/themes/' .$themesDir, '*.png');
+            foreach ($lsThemes as $themeFile) {
+                $themeData = [];
+                $themeData['dir'] = '/core/template/dashboard/themes/' .$themesDir . $themeFile;
+                $themeData['name'] = $themeFile;
+                $pageData['profilsWidgetThemes'][] = $themeData;
+            }
+        }
+
         $pageData['JS_END_POOL'] = [];
         $pageData['TITLE'] = '1ere connexion';
         $pageData['JS_VARS'] = [
@@ -60,7 +75,6 @@ class FirstUseController extends BaseController
         $pageData['CSS_POOL'][] = '/public/css/nextdom.css';
         $pageData['CSS_POOL'][] = '/public/css/pages/firstUse.css';
         $pageData['JS_END_POOL'][] = '/public/js/desktop/pages/firstUse.js';
-
 
         return Render::getInstance()->get('desktop/pages/firstUse.html.twig', $pageData);
     }

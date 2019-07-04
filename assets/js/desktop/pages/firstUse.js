@@ -63,14 +63,14 @@ $(document).ready(function () {
 
 $('#toStep2').click(function () {
   nextdom.user.login({
-    username: 'admin',
-    password: 'admin',
-    error: function (error) {
-      notify('Core', error.message, 'error');
-    },
-    success: function (data) {
-      goToNextStep('#toStep2');
-    }
+      username: 'admin',
+      password: 'admin',
+      error: function (error) {
+        notify('Core', error.message, 'error');
+      },
+      success: function (data) {
+        changeFirstUseStatus();
+      }
   });
 });
 
@@ -80,10 +80,10 @@ $('#toStep3').click(function () {
     if (newPassword === $('#in_change_passwordToo').val()) {
       updateUserPassword(newPassword)
     } else {
-      notify('Erreur', 'Les deux mots de passe ne sont pas identiques !', 'error')
+      notify('Erreur', '{{Les deux mots de passe ne sont pas identiques !}}', 'error')
     }
   } else {
-    notify('Erreur', 'Veuillez saisir un mot de passe ...', 'error')
+    notify('Erreur', '{{Veuillez saisir un mot de passe ...}}', 'error')
   }
 });
 
@@ -172,8 +172,31 @@ $('#toStep5').click(function () {
     success: function (error) {
       updateTheme(function () {
         notify('Info', '{{Thème parametré !}}', 'success');
+        goToNextStep('#toStep5');
       });
     }
+  });
+});
+
+$('#toStep6').click(function () {
+  var profil = $('.firstUse-Page').getValues('.userAttr')[0];
+  nextdom.user.saveProfils({
+      profils: profil,
+      error: function (error) {
+          notify("Erreur", error.message, 'error');
+      },
+      success: function () {
+        notify('Info', '{{Thème Widget parametré !}}', 'success');
+        nextdom.config.save({
+          configuration: $('.firstUse-Page').getValues('.configKey')[0],
+          error: function (error) {
+            notify('Core', error.message, 'error');
+          },
+          success: function (error) {
+            goToNextStep('#toStep6');
+          }
+        });
+      }
   });
 });
 
@@ -189,16 +212,25 @@ $('#backStep3').click(function () {
   goToPreviousStep('#backStep3');
 });
 
+$('#backStep4').click(function () {
+  goToPreviousStep('#backStep4');
+});
+
+$('#backStep5').click(function () {
+  goToPreviousStep('#backStep5');
+});
+
 $('#skipStep4').click(function () {
   goToNextStep('#toStep4');
 });
 
-$('#toStep5').click(function () {
-  goToNextStep('#toStep5');
-});
-
 $('#finishConf').click(function () {
   window.location = '/';
+});
+
+$(".themeWidgetThumbnail").on('click', function (event) {
+    var widgetName = $(this).attr('src').split("/").pop(-1).split(".");
+    $('.userAttr[data-l2key="widget::theme"]').value(widgetName[0]);
 });
 
 function goToNextStep(_step) {
@@ -271,7 +303,10 @@ function updateUserPassword(newPassword) {
         error: function (error) {
           notify('Core', error.message, 'error');
         },
-        success: changeFirstUseStatus
+        success: function () {
+          notify('Core', '{{Mot de passe changé avec succès !}}', 'success');
+          goToNextStep('#toStep3');
+        }
       });
     }
   });
@@ -287,8 +322,7 @@ function changeFirstUseStatus() {
       notify('Core', error.message, 'error');
     },
     success: function () {
-      notify('Core', '{{Mot de passe changé avec succès !}}', 'success');
-      goToNextStep('#toStep3');
+      goToNextStep('#toStep2');
     }
   });
 

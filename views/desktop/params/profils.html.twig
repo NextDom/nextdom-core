@@ -86,26 +86,19 @@
             <div role="tabpanel" class="tab-pane" id="themetab">
                 <form class="form-horizontal">
                     <fieldset>
-                        <legend>{{ 'Widgets' }}</legend>
-                        <div class="row">
-                            <div class="form-group col-md-6 col-sm-12 col-xs-12 text-center">
-                                <div class="form-group">
-                                    <label class="control-label">{{ 'Thème appliqué' }}</label>
+                        <legend>{{ 'Thème des Widgets' }}</legend>
+                        <div class="row text-center">
+                            {% for theme in profilsWidgetThemes %}
+                                <div class="col-sm-12 col-md-6">
+                                    <div class="clearfix">
+                                        <label class="cursor" for={{ theme['name']|slice(0, -4) }}>
+                                            <img class="themeWidgetThumbnail" src="{{ theme['dir'] }}">
+                                        </label>
+                                    </div>
+                                    <input id={{ theme['name']|slice(0, -4) }} class="spacing-right" type="radio" name="themeWidget" value={{ theme['name']|slice(0, -4) }}/>
+                                    <label for={{ theme['name']|slice(0, -4) }}>{{ theme['name']|slice(0, -4) }}</label>
                                 </div>
-                                <div>
-                                    <img id="monThemeWidget" src="/core/template/dashboard/themes/{{ profilsWidgetTheme }}/{{ profilsWidgetTheme }}.png" style="height:200px"></a>
-                                </div>
-                            </div>
-                            <div class="form-group col-md-6 col-sm-12 col-xs-12 text-center">
-                                <div class="form-group">
-                                    <label class="control-label">{{ 'Thèmes disponibles' }}</label>
-                                </div>
-                                <div class="row">
-                                    {% for theme in profilsWidgetThemes %}
-                                        <div class="col-xs-6"><img class="themeWidget cursor form-group" src="{{ theme['dir'] }}" style="height:100px"><p>{{ theme['name']|slice(0, -4) }}</p></div>
-                                    {% endfor %}
-                                </div>
-                            </div>
+                            {% endfor %}
                         </div>
                         <input class="userAttr form-control" data-l1key="options" data-l2key="widget::theme" style="display:none" />
                     </fieldset>

@@ -49,6 +49,7 @@ nextdom.user.get({
     success: function (data) {
         $('#div_pageContainer').setValues(data, '.userAttr');
         $('#in_passwordCheck').value(data.password);
+        $("#"+$('.userAttr[data-l2key="widget::theme"]').value()).attr("checked","checked");
         modifyWithoutSave = false;
     }
 });
@@ -196,7 +197,6 @@ $(".Avatar").on('click', function (event) {
 $(".themeWidget").on('click', function (event) {
     var widgetName = $(this).attr('src').split("/").pop(-1).split(".");
     $('.userAttr[data-l2key="widget::theme"]').value(widgetName[0]);
-    $('#monThemeWidget').attr('src',$(this).attr('src'));
     notify("{{Profil}}", '{{thème changé}}', 'success');
 });
 

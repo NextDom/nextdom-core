@@ -39,6 +39,9 @@ body {
 body, h1, h2, h3, h4, h5, h6 {
   color:$verydarkgrey !important;
 }
+.login-box-msg, .register-box-msg {
+    padding: 0 20px 0px 20px;
+}
 
 /* Boxs */
 .box, .box-body {

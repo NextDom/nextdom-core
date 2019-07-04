@@ -36,7 +36,6 @@
 editorDesktopJS = null;
 editorDesktopCSS = null;
 
-showLoadingCustom();
 printConvertColor();
 $('.colorpick').colorpicker();
 

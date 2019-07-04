@@ -46,8 +46,6 @@ class CustomController extends BaseController
     {
         global $NEXTDOM_INTERNAL_CONFIG;
         // TODO: Regrouper les config::byKey
-        $pageData['customDarkThemes'] = $NEXTDOM_INTERNAL_CONFIG['themes-dark'];
-        $pageData['customLightThemes'] = $NEXTDOM_INTERNAL_CONFIG['themes-light'];
         $pageData['adminCategories'] = NextDomHelper::getConfiguration('eqLogic:category');
         $pageData['Theme'] = NextDomHelper::getConfiguration('theme');
         $pageData['customProductName'] = ConfigManager::byKey('product_name');
