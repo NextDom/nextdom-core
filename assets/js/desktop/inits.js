@@ -76,7 +76,7 @@ function postInitPage(){
     activateGlobalSearch();
 
     // Loading end, remove wait spinner
-    hideLoadingCustom();
+    //hideLoadingCustom();
 }
 
 /**
