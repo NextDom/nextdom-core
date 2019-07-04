@@ -37,6 +37,8 @@ class MigrationHelper
 {
 
     /**
+     * Main migrate process
+     * @param string $logFile log name file to display information
      * @throws \Exception
      */
     public static function migrate($logFile = 'migration')
@@ -126,13 +128,19 @@ class MigrationHelper
     }
 
     /**
-     *
+     * 0.3.0 Migration process
+     * @param string $logFile log name file to display information
+     * @throws \Exception
      */
-    private static function migrate_0_1_5($logFile = 'migration')
+    private static function migrate_0_3_0($logFile = 'migration')
     {
         self::movePersonalFoldersAndFilesToData($logFile);
     }
-
+    /**
+     * 0.0.0 Migration process
+     * @param string $logFile log name file to display information
+     * @throws \Exception
+     */
     private static function migrate_0_0_0($logFile = 'migration'){
 
         //$migrateFile = ConsoleHelper::step(NEXTDOM_ROOT . "/install/migrate/migrate.sql");
@@ -157,7 +165,7 @@ class MigrationHelper
 
     /**
      * Migration to pass during migrate_themes_to_data
-     *
+     * @param string $logFile log name file to display information
      * @throws \Exception
      */
     private static function movePersonalFoldersAndFilesToData($logFile = 'migration')
@@ -248,8 +256,8 @@ class MigrationHelper
     /**
      * @param int $currentVersionSize
      * @param int $previousVersionSize
-     * @param string $previousVersion
-     * @param string $currentVersion
+     * @param array $previousVersion
+     * @param array $currentVersion
      * @param int $index
      * @return bool
      */
