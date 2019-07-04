@@ -62,18 +62,18 @@ $(document).ajaxStop(function () {
  */
 $(function () {
     // Loading spinner
-    showLoadingCustom();
+//    showLoadingCustom();
 
     // OBSOLETE ?
     $.alertTrigger = function(){
         initRowOverflow();
-    }
+    };
 
     // ?
     $.fn.modal.Constructor.prototype.enforceFocus = function () {
     };
 
-    // CLock actualisation timer
+    // Clock actualisation timer
     setInterval(function () {
         var date = new Date();
         var locale = 'en-EN';

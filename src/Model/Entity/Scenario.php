@@ -1221,6 +1221,8 @@ class Scenario implements EntityInterface
      * @param mixed $_value
      * @param bool $_private
      * @return boolean
+     * @throws CoreException
+     * @throws \ReflectionException
      */
     public function setData($_key, $_value, $_private = false)
     {

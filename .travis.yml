@@ -24,13 +24,13 @@ before_install:
     - cd tests
     - sudo ./install_env.sh
 script:
-    - cd ${TRAVIS_BUILD_DIR}/tests
-    - python3 launch_php_tests.py
-    - python3 check_jeedom_compatibility_from_src.py
-    - python3 launch_compatibility_tests.py
-    - python3 launch_code_consistency.py
-    - python3 launch_features_tests.py
-    - python3 launch_gui_tests.py
+#    - cd ${TRAVIS_BUILD_DIR}/tests
+#    - python3 launch_php_tests.py
+#    - python3 check_jeedom_compatibility_from_src.py
+#    - python3 launch_compatibility_tests.py
+#    - python3 launch_code_consistency.py
+#    - python3 launch_features_tests.py
+    - python3 launch_gui_tests.py custom_js_css
 after_script:
     - cd ${TRAVIS_BUILD_DIR}
     - sed -i "s/\/var\/www\/html/\/home\/travis\/build\/NextDom\/nextdom-core/g" tests/coverage/clover.xml

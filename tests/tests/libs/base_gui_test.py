@@ -167,3 +167,18 @@ class BaseGuiTest(unittest.TestCase):
         :rtype:  array
         """
         return self.driver.get_log('browser')
+
+    def scroll_bottom(self):
+        """Scroll to bottom of the page
+        """
+        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+
+    def scroll_top(self):
+        """Scroll to top of the page
+        """
+        self.driver.execute_script("window.scrollTo(0, 0);")
+
+    def execute_js(self, javascript_code):
+        """Execute javascript
+        """
+        self.driver.execute_script(javascript_code)
