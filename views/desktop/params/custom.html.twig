@@ -62,24 +62,24 @@
                 <div class="row text-center">
                     <div id="theme1" class="col-sm-12 col-md-6">
                         <div class="form-group">
-                            <label class="clearfix form-group cursor themeThumbnail" for="theme-white">
+                            <label class="clearfix form-group cursor themeThumbnail" for="theme-light">
                                 <div>
-                                    <span class="themeThumbnailHeader" style="background: #33b8cc"><i class="fas fa-bars" style="color: #ffffff"></i></span>
+                                    <span class="themeThumbnailHeader" style="background: #33b8cc"><i class="fas fa-bars"></i></span>
                                 </div>
                                 <div>
                                     <span class="themeThumbnailLeft" style="background: #f9fafc"></span>
                                     <span class="themeThumbnailBody" style="background: #ecf0f5"></span>
                                 </div>
                             </label>
-                            <input id="theme-white" class="theme spacing-right" type="radio" name="theme" value="white">
-                            <label for="theme-white">{{ 'White' }}</label>
+                            <input id="theme-light" class="theme spacing-right" type="radio" name="theme" value="light">
+                            <label for="theme-light">{{ 'Light' }}</label>
                         </div>
                     </div>
                     <div id="theme2" class="col-sm-12 col-md-6">
                         <div class="form-group">
                             <label class="clearfix form-group cursor themeThumbnail" for="theme-dark">
                                 <div>
-                                    <span class="themeThumbnailHeader" style="background: #33b8cc"><i class="fas fa-bars" style="color: #ffffff"></i></span>
+                                    <span class="themeThumbnailHeader" style="background: #33b8cc"><i class="fas fa-bars"></i></span>
                                 </div>
                                 <div>
                                     <span class="themeThumbnailLeft" style="background: #222d32"></span>
@@ -96,7 +96,7 @@
                         <div class="form-group">
                             <label class="clearfix form-group cursor themeThumbnail" for="theme-mix">
                                 <div>
-                                    <span class="themeThumbnailHeader" style="background: #33b8cc"><i class="fas fa-bars" style="color: #ffffff"></i></span>
+                                    <span class="themeThumbnailHeader" style="background: #33b8cc"><i class="fas fa-bars"></i></span>
                                 </div>
                                 <div>
                                     <span class="themeThumbnailLeft" style="background: #222d32"></span>
@@ -123,7 +123,7 @@
                         </div>
                     </div>
                 </div>
-                <input class="configKey form-control" data-l1key="theme:name" style="display:none" />
+                <input type="text" class="configKey form-control" data-l1key="theme:name" value="{{ Theme['name'] }}" style="display:none"/>
             </div>
 
             <!-- Custom tab -->

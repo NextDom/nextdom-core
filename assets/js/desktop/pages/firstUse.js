@@ -141,7 +141,7 @@ $('#toStep5').click(function () {
       };
     } else {
       config = {
-        'theme:name': 'white',
+        'theme:name': 'light',
         'theme:color1': '#33b8cc',
         'theme:color2': '#ffffff',
         'theme:color3': '#f4f4f5',
@@ -220,9 +220,10 @@ $('#finishConf').click(function () {
   window.location = '/';
 });
 
-$(".themeWidgetThumbnail").on('click', function (event) {
-    var widgetName = $(this).attr('src').split("/").pop(-1).split(".");
-    $('.userAttr[data-l2key="widget::theme"]').value(widgetName[0]);
+$("input[name=themeWidget]").on('click', function (event) {
+    var radio = $(this).val();
+    $('.userAttr[data-l2key="widget::theme"]').value(radio);
+    notify("{{Profil}}", '{{thème changé}}', 'success');
 });
 
 function goToNextStep(_step) {

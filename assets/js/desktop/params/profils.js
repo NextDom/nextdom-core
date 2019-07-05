@@ -194,9 +194,9 @@ $(".Avatar").on('click', function (event) {
     notify("{{Profil}}", '{{Image changée}}', 'success');
 });
 
-$(".themeWidget").on('click', function (event) {
-    var widgetName = $(this).attr('src').split("/").pop(-1).split(".");
-    $('.userAttr[data-l2key="widget::theme"]').value(widgetName[0]);
+$("input[name=themeWidget]").on('click', function (event) {
+    var radio = $(this).val();
+    $('.userAttr[data-l2key="widget::theme"]').value(radio);
     notify("{{Profil}}", '{{thème changé}}', 'success');
 });
 
