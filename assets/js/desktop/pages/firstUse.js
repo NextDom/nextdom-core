@@ -187,15 +187,7 @@ $('#toStep6').click(function () {
       },
       success: function () {
         notify('Info', '{{Thème Widget parametré !}}', 'success');
-        nextdom.config.save({
-          configuration: $('.firstUse-Page').getValues('.configKey')[0],
-          error: function (error) {
-            notify('Core', error.message, 'error');
-          },
-          success: function (error) {
-            goToNextStep('#toStep6');
-          }
-        });
+        goToNextStep('#toStep6');
       }
   });
 });
