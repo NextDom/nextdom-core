@@ -182,3 +182,4 @@ class BaseGuiTest(unittest.TestCase):
         """Execute javascript
         """
         self.driver.execute_script(javascript_code)
+        
