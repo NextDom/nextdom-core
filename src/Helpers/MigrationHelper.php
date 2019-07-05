@@ -128,14 +128,30 @@ class MigrationHelper
     }
 
     /**
-     * 0.3.0 Migration process
-     * @param string $logFile log name file to display information
-     * @throws \Exception
+     * @param int $currentVersionSize
+     * @param int $previousVersionSize
+     * @param array $previousVersion
+     * @param array $currentVersion
+     * @param int $index
+     * @return bool
      */
-    private static function migrate_0_3_0($logFile = 'migration')
+    private static function compareDigit(int $currentVersionSize, int $previousVersionSize, array $previousVersion, array $currentVersion, int $index): bool
     {
-        self::movePersonalFoldersAndFilesToData($logFile);
+        $migrate = false;
+        if($index > 3 ){
+            return $migrate;
+        }
+        if ($currentVersionSize > $index && $previousVersionSize > $index) {
+            if ($previousVersion[$index] < $currentVersion[$index]) {
+                $migrate = true;
+            } else {
+                $migrate = self::compareDigit($currentVersionSize,$previousVersionSize,$previousVersion,$currentVersion,$index+1);
+            }
+        }
+        return $migrate;
     }
+
+    /***************************************************************** 0.0.0 Migration process *****************************************************************/
     /**
      * 0.0.0 Migration process
      * @param string $logFile log name file to display information
@@ -162,6 +178,16 @@ class MigrationHelper
         }
 
     }
+    /***************************************************************** 0.3.0 Migration process *****************************************************************/
+    /**
+     * 0.3.0 Migration process
+     * @param string $logFile log name file to display information
+     * @throws \Exception
+     */
+    private static function migrate_0_3_0($logFile = 'migration')
+    {
+        self::movePersonalFoldersAndFilesToData($logFile);
+    }
 
     /**
      * Migration to pass during migrate_themes_to_data
@@ -170,7 +196,6 @@ class MigrationHelper
      */
     private static function movePersonalFoldersAndFilesToData($logFile = 'migration')
     {
-
         $message ='Update theme folder';
         if($logFile == 'migration') {
             LogHelper::addInfo($logFile, $message, '');
@@ -198,18 +223,19 @@ class MigrationHelper
                 if ($fileInfo->isDir() || $fileInfo->isFile()) {
                     if(!in_array($fileInfo->getFilename(), FoldersReferential::NEXTDOMFOLDERS)
                         && !in_array($fileInfo->getFilename(), FoldersReferential::NEXTDOMFILES)
+                        && !in_array($fileInfo->getFilename(), FoldersReferential::JEEDOMFOLDERS)
+                        && !in_array($fileInfo->getFilename(), FoldersReferential::JEEDOMFILES)
                         && !is_link( $fileInfo->getFilename()) ) {
 
-
                         $fileToReplace = $fileInfo->getFilename();
-
                         $message ='Moving ' . NEXTDOM_ROOT .'/'. $fileToReplace;
                         if($logFile == 'migration') {
                             LogHelper::addInfo($logFile, $message, '');
                         } else {
                             ConsoleHelper::process($message);
                         }
-                        FileSystemHelper::rmove(NEXTDOM_ROOT.'/'.$fileToReplace,NEXTDOM_DATA.'/data/custom', false, array(), false, array());
+                        FileSystemHelper::mkdirIfNotExists(NEXTDOM_DATA.'/data/custom/');
+                        FileSystemHelper::mv(NEXTDOM_ROOT.'/'.$fileToReplace, sprintf("%s/%s", NEXTDOM_DATA.'/data/custom/', $fileToReplace));
 
                         self::migratePlanPath($logFile, $fileToReplace);
                     }
@@ -230,14 +256,15 @@ class MigrationHelper
             // Basic loop displaying different messages based on file or folder
             foreach ($it as $fileInfo) {
                 if(!is_link( $fileInfo->getFilename()) ) {
+
                     $fileToReplace = $fileInfo->getFilename();
-                    $message = 'Migrate ' . $fileToReplace . ' to /data/custom/' . $fileToReplace;
+
+                    $message = 'Moving ' . $fileToReplace . ' to /data/custom/' . $fileToReplace;
                     if ($logFile == 'migration') {
                         LogHelper::addInfo($logFile, $message, '');
                     } else {
                         ConsoleHelper::process($message);
                     }
-
                     self::migratePlanPath($logFile, $fileToReplace);
                 }
             }
@@ -253,33 +280,10 @@ class MigrationHelper
         }
     }
 
-    /**
-     * @param int $currentVersionSize
-     * @param int $previousVersionSize
-     * @param array $previousVersion
-     * @param array $currentVersion
-     * @param int $index
-     * @return bool
-     */
-    private static function compareDigit(int $currentVersionSize, int $previousVersionSize, array $previousVersion, array $currentVersion, int $index): bool
-    {
-        $migrate = false;
-        if($index > 3 ){
-            return $migrate;
-        }
-        if ($currentVersionSize > $index && $previousVersionSize > $index) {
-            if ($previousVersion[$index] < $currentVersion[$index]) {
-                $migrate = true;
-            } else {
-                $migrate = self::compareDigit($currentVersionSize,$previousVersionSize,$previousVersion,$currentVersion,$index+1);
-            }
-        }
-        return $migrate;
-    }
 
     /**
-     * @param $logFile
-     * @param $fileToReplace
+     * @param string $logFile
+     * @param string $fileToReplace
      * @throws CoreException
      * @throws \ReflectionException
      */
@@ -296,7 +300,8 @@ class MigrationHelper
 
             $html = $plan->getDisplay('text');
             if ($html !== null) {
-                $html = str_replace($fileToReplace, 'data/custom/' . $fileToReplace, $html);
+                $html = str_replace('src="'.$fileToReplace, 'src="data/custom/' . $fileToReplace, $html);
+                $html = str_replace('href="'.$fileToReplace, 'href="data/custom/' . $fileToReplace, $html);
 
                 $plan->setDisplay('text', $html);
                 $plan->save();
@@ -307,11 +312,14 @@ class MigrationHelper
 
             $html = $plan3d->getDisplay('text');
             if ($html !== null) {
-                $html = str_replace($fileToReplace, 'data/custom/' . $fileToReplace, $html);
+                $html = str_replace('src=\"'.$fileToReplace, 'src=\"'.'data/custom/' . $fileToReplace, $html);
+                $html = str_replace('href=\"'.$fileToReplace, 'href=\"'.'data/custom/' . $fileToReplace, $html);
 
                 $plan3d->setDisplay('text', $html);
                 $plan3d->save();
             }
         }
     }
+    /***************************************************************** X.X.X Migration process *****************************************************************/
+
 }
