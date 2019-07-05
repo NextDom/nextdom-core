@@ -34,6 +34,9 @@ class CustomJsCssPage(BaseGuiTest):
         """Test custom javascript
         """
         self.goto(self.CUSTOM_PAGE)
+        sleep(2)
+        self.scroll_top()
+        sleep(2)
         # Add javascript
         system_menu = self.get_element_by_css('a[href="#advanced"]')
         system_menu.click()
