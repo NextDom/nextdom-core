@@ -39,7 +39,9 @@ class CustomJsCssPage(BaseGuiTest):
         sleep(2)
         # Add javascript
         system_menu = self.get_element_by_css('a[href="#advanced"]')
-        system_menu.click()
+        # Click under element (problem with click)
+        self.driver.execute_script("arguments[0].click();", system_menu)
+        # system_menu.click()
         sleep(2)
         enable_custom_button = self.get_element_by_id('enableCustomCss')
         enable_custom_button.click()
