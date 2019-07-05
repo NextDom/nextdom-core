@@ -46,7 +46,6 @@ class ViewAjax extends BaseAjax
     public function remove()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $view = ViewManager::byId(Utils::init('id'));
         if (!is_object($view)) {
             throw new CoreException(__('Vue non trouvée. Vérifiez l\'iD'));
@@ -89,7 +88,6 @@ class ViewAjax extends BaseAjax
     public function save()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $view = ViewManager::byId(Utils::init('view_id'));
         if (!is_object($view)) {
             $view = new View();
@@ -142,7 +140,6 @@ class ViewAjax extends BaseAjax
     public function setEqLogicOrder()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $eqLogics = json_decode(Utils::init('eqLogics'), true);
         $sql = '';
         foreach ($eqLogics as $eqLogic_json) {
@@ -158,7 +155,7 @@ class ViewAjax extends BaseAjax
             $eqLogic->save(true);
         }
         if ($sql != '') {
-            DBHelper::Prepare($sql, array(), DB::FETCH_TYPE_ROW);
+            DBHelper::exec($sql);
         }
         AjaxHelper::success();
     }
@@ -166,7 +163,6 @@ class ViewAjax extends BaseAjax
     public function setOrder()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $order = 1;
         foreach (json_decode(Utils::init('views'), true) as $id) {
             $view = ViewManager::byId($id);
@@ -182,7 +178,6 @@ class ViewAjax extends BaseAjax
     public function removeImage()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $view = ViewManager::byId(Utils::init('id'));
         if (!is_object($view)) {
             throw new CoreException(__('Vue inconnu. Vérifiez l\'ID ') . Utils::init('id'));
@@ -196,7 +191,6 @@ class ViewAjax extends BaseAjax
     public function uploadImage()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $view = ViewManager::byId(Utils::init('id'));
         if (!is_object($view)) {
             throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));

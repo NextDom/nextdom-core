@@ -63,7 +63,7 @@ class InteractDefManager
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE id = :id';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -81,7 +81,7 @@ class InteractDefManager
             $sql .= ' WHERE `group` LIKE :group';
         }
         $sql .= ' ORDER BY `group`';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL);
+        return DBHelper::getAll($sql, $values);
     }
 
     /**
@@ -123,7 +123,7 @@ class InteractDefManager
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE query LIKE :query';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
     public static function regenerateInteract()
@@ -157,7 +157,7 @@ class InteractDefManager
                     WHERE `group` = :group
                     ORDER BY name, query';
         }
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -251,7 +251,7 @@ class InteractDefManager
         }
         if (count($list_id) > 0) {
             $sql = 'DELETE FROM ' . InteractQueryManager::DB_CLASS_NAME . ' WHERE interactDef_id NOT IN (' . implode(',', $list_id) . ')';
-            return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ROW);
+            return DBHelper::getOne($sql);
         }
         return null;
     }
@@ -306,7 +306,7 @@ class InteractDefManager
                           OR reply LIKE :search' . $i;
             }
         }
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
     /**

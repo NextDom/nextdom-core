@@ -42,6 +42,7 @@ class NetworkController extends BaseController
      * @return string Content of network page
      *
      * @throws \NextDom\Exceptions\CoreException
+     * @throws \Throwable
      */
     public static function get(&$pageData): string
     {

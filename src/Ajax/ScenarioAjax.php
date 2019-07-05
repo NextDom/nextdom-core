@@ -84,7 +84,6 @@ class ScenarioAjax extends BaseAjax
 
     public function setOrder()
     {
-        Utils::unautorizedInDemo();
         $scenarios = json_decode(Utils::init('scenarios'), true);
         foreach ($scenarios as $scenario_json) {
             if (!isset($scenario_json['id']) || trim($scenario_json['id']) == '') {
@@ -141,7 +140,6 @@ class ScenarioAjax extends BaseAjax
 
     public function removeTemplate()
     {
-        Utils::unautorizedInDemo();
         $path = __DIR__ . '/../config/scenario';
         if (file_exists($path . '/' . Utils::init('template'))) {
             unlink($path . '/' . Utils::init('template'));
@@ -198,7 +196,6 @@ class ScenarioAjax extends BaseAjax
 
     public function applyTemplate()
     {
-        Utils::unautorizedInDemo();
         $path = NEXTDOM_DATA . '/config/scenario';
         if (!file_exists($path . '/' . Utils::init('template'))) {
             throw new CoreException('Fichier non trouvé : ' . $path . '/' . Utils::init('template'));
@@ -253,7 +250,6 @@ class ScenarioAjax extends BaseAjax
 
     public function saveAll()
     {
-        Utils::unautorizedInDemo();
         $scenarios = json_decode(Utils::init('scenarios'), true);
         if (is_array($scenarios)) {
             foreach ($scenarios as $scenario_ajax) {
@@ -307,7 +303,6 @@ class ScenarioAjax extends BaseAjax
     public function remove()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $scenario = ScenarioManager::byId(Utils::init('id'));
         if (!is_object($scenario)) {
             throw new CoreException(__('Scénario ID inconnu'));
@@ -338,7 +333,6 @@ class ScenarioAjax extends BaseAjax
     public function copy()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $scenario = ScenarioManager::byId(Utils::init('id'));
         if (!is_object($scenario)) {
             throw new CoreException(__('Scénario ID inconnu'));
@@ -369,7 +363,6 @@ class ScenarioAjax extends BaseAjax
         if (!is_json(Utils::init('scenario'))) {
             throw new CoreException(__('Champs json invalide'));
         }
-        Utils::unautorizedInDemo();
         $time_dependance = 0;
         foreach (array('#time#', '#seconde#', '#heure#', '#minute#', '#jour#', '#mois#', '#annee#', '#timestamp#', '#date#', '#semaine#', '#sjour#', '#njour#', '#smois#') as $keyword) {
             if (strpos(Utils::init('scenario'), $keyword) !== false) {
@@ -440,7 +433,6 @@ class ScenarioAjax extends BaseAjax
 
     public function templateupload()
     {
-        Utils::unautorizedInDemo();
         $uploadDir = sprintf("%s/config/scenario/", NEXTDOM_DATA);
         Utils::readUploadedFile($_FILES, "file", $uploadDir, 10, array(".json"));
         AjaxHelper::success();

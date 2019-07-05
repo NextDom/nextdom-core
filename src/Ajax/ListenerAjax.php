@@ -36,14 +36,12 @@ class ListenerAjax extends BaseAjax
 
     public function save()
     {
-        Utils::unautorizedInDemo();
         Utils::processJsonObject('listener', Utils::init('listeners'));
         AjaxHelper::success();
     }
 
     public function remove()
     {
-        Utils::unautorizedInDemo();
         $listener = ListenerManager::byId(Utils::init('id'));
         if (!is_object($listener)) {
             throw new CoreException(__('Listerner id inconnu'));

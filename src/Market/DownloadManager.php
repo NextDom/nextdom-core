@@ -89,6 +89,7 @@ class DownloadManager
      *
      * @param string $url Lien du fichier
      * @param string $dest Destination du fichier
+     * @throws \Exception
      */
     public static function downloadBinary($url, $dest)
     {
@@ -108,6 +109,7 @@ class DownloadManager
      * @param bool $binary Télécharger un binaire
      *
      * @return string|bool Données téléchargées ou False en cas d'échec
+     * @throws \Exception
      */
     public static function downloadContent($url, $binary = false)
     {

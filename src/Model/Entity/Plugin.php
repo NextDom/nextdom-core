@@ -241,6 +241,7 @@ class Plugin implements EntityInterface
      * TODO: Renommer
      * @param bool $refresh
      * @return array
+     * @throws \Exception
      */
     public function dependancy_info($refresh = false)
     {

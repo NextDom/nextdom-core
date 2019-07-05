@@ -58,7 +58,7 @@ class UserAjax extends BaseAjax
         if (!AuthentificationHelper::isConnected()) {
             if (ConfigManager::byKey('sso:allowRemoteUser') == 1) {
                 $user = UserManager::byLogin($_SERVER['REMOTE_USER']);
-                if (is_object($user) && $user->getEnable() == 1) {
+                if (is_object($user) && $user->isEnabled()) {
                     @session_start();
                     $_SESSION['user'] = $user;
                     @session_write_close();
@@ -105,7 +105,6 @@ class UserAjax extends BaseAjax
         AuthentificationHelper::init();
         AuthentificationHelper::isConnectedOrFail();
         AjaxHelper::init();
-        Utils::unautorizedInDemo();
         $currentUser = UserManager::getStoredUser();
         if ($currentUser !== null) {
             @session_start();
@@ -126,7 +125,6 @@ class UserAjax extends BaseAjax
         AuthentificationHelper::init();
         AuthentificationHelper::isConnectedAsAdminOrFail();
         AjaxHelper::init();
-        Utils::unautorizedInDemo();
         $user = UserManager::byId(Utils::init('id'));
         if (!is_object($user)) {
             throw new CoreException('User ID inconnu');
@@ -169,7 +167,6 @@ class UserAjax extends BaseAjax
         AuthentificationHelper::init();
         AuthentificationHelper::isConnectedAsAdminOrFail();
         AjaxHelper::init();
-        Utils::unautorizedInDemo();
         $users = array();
         foreach (UserManager::all() as $user) {
             $user_info = Utils::o2a($user);
@@ -183,7 +180,6 @@ class UserAjax extends BaseAjax
         AuthentificationHelper::init();
         AuthentificationHelper::isConnectedAsAdminOrFail();
         AjaxHelper::init();
-        Utils::unautorizedInDemo();
         $users = json_decode(Utils::init('users'), true);
         $user = null;
         foreach ($users as &$user_json) {
@@ -210,7 +206,6 @@ class UserAjax extends BaseAjax
         AuthentificationHelper::init();
         AuthentificationHelper::isConnectedAsAdminOrFail();
         AjaxHelper::init();
-        Utils::unautorizedInDemo();
         if (ConfigManager::byKey('ldap::enable') == '1') {
             throw new CoreException(__('Vous devez désactiver l\'authentification LDAP pour pouvoir supprimer un utilisateur'));
         }
@@ -230,7 +225,6 @@ class UserAjax extends BaseAjax
         AuthentificationHelper::init();
         AuthentificationHelper::isConnectedOrFail();
         AjaxHelper::init();
-        Utils::unautorizedInDemo();
         $currentUser = UserManager::getStoredUser();
         $user_json = NextDomHelper::fromHumanReadable(json_decode(Utils::init('profils'), true));
         if (isset($user_json['id']) && $user_json['id'] != $currentUser->getId()) {
@@ -261,7 +255,6 @@ class UserAjax extends BaseAjax
     {
         AuthentificationHelper::init();
         AjaxHelper::init();
-        Utils::unautorizedInDemo();
         $user = null;
         if (Utils::init('key') == '' && Utils::init('user_id') == '') {
             AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -309,7 +302,6 @@ class UserAjax extends BaseAjax
         AuthentificationHelper::init();
         AuthentificationHelper::isConnectedOrFail();
         AjaxHelper::init();
-        Utils::unautorizedInDemo();
         $sessions = listSession();
         if (isset($sessions[init('id')])) {
             $user = UserManager::byId($sessions[init('id')]['user_id']);
@@ -333,7 +325,6 @@ class UserAjax extends BaseAjax
         AuthentificationHelper::init();
         AuthentificationHelper::isConnectedAsAdminOrFail();
         AjaxHelper::init();
-        Utils::unautorizedInDemo();
         $connection = UserManager::connectToLDAP();
         if ($connection === false) {
             throw new CoreException();
@@ -346,7 +337,6 @@ class UserAjax extends BaseAjax
         AuthentificationHelper::init();
         AuthentificationHelper::isConnectedAsAdminOrFail();
         AjaxHelper::init();
-        Utils::unautorizedInDemo();
         UserManager::removeBanIp();
         AjaxHelper::success();
     }
@@ -356,7 +346,6 @@ class UserAjax extends BaseAjax
         AuthentificationHelper::init();
         AuthentificationHelper::isConnectedAsAdminOrFail();
         AjaxHelper::init();
-        Utils::unautorizedInDemo();
         UserManager::supportAccess(Utils::init('enable'));
         AjaxHelper::success();
     }
