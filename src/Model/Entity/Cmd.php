@@ -324,7 +324,7 @@ class Cmd implements EntityInterface
 
         $template_name = 'cmd.' . $this->getType() . '.' . $this->getSubType() . '.' . $this->getTemplate($version, 'default');
         if (!isset(self::$_templateArray[$version . '::' . $template_name])) {
-            $template = FileSystemHelper::getTemplateFileContent('core', $version, $template_name);
+            $template = FileSystemHelper::getTemplateFileContent('core', $version, $template_name,'');
             if ($template == '') {
                 if (ConfigManager::byKey('active', 'widget') == 1) {
                     $template = FileSystemHelper::getTemplateFileContent('core', $version, $template_name, 'widget');
@@ -339,7 +339,7 @@ class Cmd implements EntityInterface
                 }
                 if ($template == '') {
                     $template_name = 'cmd.' . $this->getType() . '.' . $this->getSubType() . '.default';
-                    $template = FileSystemHelper::getTemplateFileContent('core', $version, $template_name);
+                    $template = FileSystemHelper::getTemplateFileContent('core', $version, $template_name,'');
                 }
             }
             self::$_templateArray[$version . '::' . $template_name] = $template;
@@ -633,12 +633,12 @@ class Cmd implements EntityInterface
             $replace['#state#'] = '';
             $replace['#tendance#'] = '';
             if ($this->getEqLogicId()->getIsEnable() == 0) {
-                $template = FileSystemHelper::getTemplateFileContent('core', $version, 'cmd.error');
+                $template = FileSystemHelper::getTemplateFileContent('core', $version, 'cmd.error','');
                 $replace['#state#'] = 'N/A';
             } else {
                 $replace['#state#'] = $this->execCmd();
                 if (strpos($replace['#state#'], 'error::') !== false) {
-                    $template = FileSystemHelper::getTemplateFileContent('core', $version, 'cmd.error');
+                    $template = FileSystemHelper::getTemplateFileContent('core', $version, 'cmd.error','');
                     $replace['#state#'] = str_replace('error::', '', $replace['#state#']);
                 } else {
                     if ($this->getSubType() == 'binary' && $this->getDisplay('invertBinary') == 1) {
