@@ -37,12 +37,14 @@
 /**
  * Entry point
  */
+var allWells = $('.setup-content');
+allWells.hide();
+
 $(document).ready(function () {
   var navListItems = $('div.setup-panel div a');
   var allWells = $('.setup-content');
 
   $('#jqueryLoadingDiv').hide();
-  allWells.hide();
 
   navListItems.click(function (e) {
     e.preventDefault();

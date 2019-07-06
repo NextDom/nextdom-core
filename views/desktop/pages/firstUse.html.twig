@@ -42,7 +42,7 @@
             <div class="box">
                 <div class="box-body">
                     <div id="logo" class="stepwizard">
-                        <img src="public/img/NextDom/NextDom_Wide_AlphaBlackBlue.png">
+                        <img src="public/img/NextDom/NextDom_Setup.png">
                     </div>
                 </div>
                 <div class="stepwizard stepwizard-progress">
@@ -137,7 +137,7 @@
                                     <h5>{{ 'firstuse.customize-content'|trans }}</h5>
                                     <div class="col-sm-12 col-md-6">
                                         <div>
-                                            <label class="clearfix form-group themeThumbnail cursor" for="theme-light">
+                                            <label class="clearfix cursor themeThumbnail cursor" for="theme-light">
                                                 <div>
                                                     <span class="themeThumbnailHeader" style="background: #33b8cc"><i class="fas fa-bars"></i></span>
                                                 </div>
@@ -152,7 +152,7 @@
                                     </div>
                                     <div class="col-sm-12 col-md-6">
                                         <div>
-                                            <label class="clearfix form-group themeThumbnail cursor" for="theme-dark">
+                                            <label class="clearfix cursor themeThumbnail cursor" for="theme-dark">
                                                 <div>
                                                     <span class="themeThumbnailHeader" style="background: #33b8cc"><i class="fas fa-bars"></i></span>
                                                 </div>
@@ -179,13 +179,13 @@
                                     <h5>{{ 'firstuse.customize-widget'|trans }}</h5>
                                     {% for theme in profilsWidgetThemes %}
                                         <div class="col-sm-12 col-md-6">
-                                            <div class="clearfix form-group">
+                                            <div class="clearfix">
                                                 <label class="cursor" for={{ theme['name']|slice(0, -4) }}>
-                                                    <img class="themeWidgetThumbnail form-group" src="{{ theme['dir'] }}">
+                                                    <img class="themeWidgetThumbnail" src="{{ theme['dir'] }}">
                                                 </label>
                                             </div>
-                                            <input id={{ theme['name']|slice(0, -4) }} class="spacing-right" type="radio" name="themeWidget" value={{ theme['name']|slice(0, -4) }}>
-                                            <label for={{ theme['name']|slice(0, -4) }}>{{ theme['name']|slice(0, -4) }}</label>
+                                            <input id={{ theme['name']|slice(0, -4) }} class="spacing-right" type="radio" name="themeWidget" value={{ theme['name']|slice(0, -4) }} {% if theme['name']|slice(0, -4) == "flat" %}checked="checked"{% endif %}/>
+                                            <label for={{ theme['name']|slice(0, -4) }}>{{ theme['name']|slice(0, -4) }}{{theme.first}}</label>
                                         </div>
                                     {% endfor %}
                                     <input class="userAttr form-control" data-l1key="options" data-l2key="widget::theme" style="display:none" />

@@ -65,7 +65,7 @@ class FirstUseController extends BaseController
         }
 
         $pageData['JS_END_POOL'] = [];
-        $pageData['TITLE'] = '1ere connexion';
+        $pageData['TITLE'] = '1ère Connexion';
         $pageData['JS_VARS'] = [
             'notify_status' => $configs['notify::status'],
             'notify_position' => $configs['notify::position'],

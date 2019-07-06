@@ -278,7 +278,7 @@ class PrepareView
     private function generateCssThemFile()
     {
         $pageData = [];
-        for ($colorIndex = 1; $colorIndex <= $this->NB_THEME_COLORS; ++$colorIndex) {
+        for ($colorIndex = 1; $colorIndex <= self::$NB_THEME_COLORS; ++$colorIndex) {
             $pageData['COLOR' . $colorIndex] = NextDomHelper::getConfiguration('theme:color' . $colorIndex);
         }
         $themeContent = Render::getInstance()->get('commons/theme.html.twig', $pageData);

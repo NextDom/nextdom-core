@@ -197,7 +197,6 @@ $(".Avatar").on('click', function (event) {
 $("input[name=themeWidget]").on('click', function (event) {
     var radio = $(this).val();
     $('.userAttr[data-l2key="widget::theme"]').value(radio);
-    notify("{{Profil}}", '{{thème changé}}', 'success');
 });
 
 function updateTheme(successFunc) {
