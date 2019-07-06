@@ -101,9 +101,8 @@ class PrepareView
      */
     private function initHeaderData(&$pageData)
     {
-        $pageData['PRODUCT_NAME'] = $configs['product_name'];
-        $pageData['PRODUCT_ICON'] = $configs['product_icon'];
-        $pageData['PRODUCT_CONNECTION_ICON'] = $configs['product_connection_image'];
+        $pageData['PRODUCT_NAME'] = $this->currentConfig['product_name'];
+        $pageData['PRODUCT_ICON'] = $this->currentConfig['product_icon'];
         $pageData['AJAX_TOKEN'] = AjaxHelper::getToken();
         $pageData['LANGUAGE'] = $this->currentConfig['language'];
 

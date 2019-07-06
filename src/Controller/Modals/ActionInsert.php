@@ -23,7 +23,6 @@
 namespace NextDom\Controller\Modals;
 
 use NextDom\Helpers\Render;
-use NextDom\Managers\ConfigManager;
 
 /**
  * Class ActionInsert
@@ -39,9 +38,6 @@ class ActionInsert extends BaseAbstractModal
      */
     public static function get(): string
     {
-        $pageData = [];
-        $pageData['productName'] = ConfigManager::byKey('product_name');
-
         return Render::getInstance()->get('/modals/action.insert.html.twig', $pageData);
     }
 }

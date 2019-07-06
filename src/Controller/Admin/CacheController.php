@@ -25,7 +25,6 @@ namespace NextDom\Controller\Admin;
 use NextDom\Controller\BaseController;
 use NextDom\Helpers\Render;
 use NextDom\Managers\CacheManager;
-use NextDom\Managers\ConfigManager;
 
 /**
  * Class CacheController
@@ -45,8 +44,6 @@ class CacheController extends BaseController
     public static function get(&$pageData): string
     {
 
-        $pageData['adminProductName'] = ConfigManager::byKey('product_name');
-        $pageData['adminCustomProductName'] = ConfigManager::byKey('name');
         $pageData['adminStats'] = CacheManager::stats();
         $pageData['adminCacheFolder'] = CacheManager::getFolder();
         $pageData['adminMemCachedExists'] = class_exists('memcached');

@@ -48,7 +48,6 @@ class CustomController extends BaseController
         // TODO: Regrouper les config::byKey
         $pageData['adminCategories'] = NextDomHelper::getConfiguration('eqLogic:category');
         $pageData['Theme'] = NextDomHelper::getConfiguration('theme');
-        $pageData['customProductName'] = ConfigManager::byKey('product_name');
         $pageData['customTheme'] = ConfigManager::byKey('theme');
         $pageData['customEnableCustomCss'] = ConfigManager::byKey('enableCustomCss');
         $pageData['customJS'] = '';
