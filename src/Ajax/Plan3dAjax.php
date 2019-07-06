@@ -44,7 +44,6 @@ class Plan3dAjax extends BaseAjax
     public function save()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $plan3ds = json_decode(Utils::init('plan3ds'), true);
         foreach ($plan3ds as $plan3d_ajax) {
             @$plan3d = Plan3dManager::byId($plan3d_ajax['id']);
@@ -74,7 +73,6 @@ class Plan3dAjax extends BaseAjax
     public function create()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         if (Utils::init('plan3d', '') === '') {
             throw new CoreException(__('L\'identifiant du plan doit être fourni', __FILE__));
         }
@@ -107,7 +105,6 @@ class Plan3dAjax extends BaseAjax
     public function remove()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $plan3d = Plan3dManager::byId(Utils::init('id'));
         if (!is_object($plan3d)) {
             throw new CoreException(__('Aucun plan3d correspondant'));
@@ -118,7 +115,6 @@ class Plan3dAjax extends BaseAjax
     public function removeplan3dHeader()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $plan3dHeader = Plan3dHeaderManager::byId(Utils::init('id'));
         if (!is_object($plan3dHeader)) {
             throw new CoreException(__('Objet inconnu verifiez l\'id'));
@@ -155,7 +151,6 @@ class Plan3dAjax extends BaseAjax
     public function saveplan3dHeader()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $plan3dHeader_ajax = json_decode(Utils::init('plan3dHeader'), true);
         $plan3dHeader = null;
         if (isset($plan3dHeader_ajax['id'])) {
@@ -172,7 +167,6 @@ class Plan3dAjax extends BaseAjax
     public function uploadModel()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $uploadDir = '/tmp';
         $plan3dHeader = Plan3dHeaderManager::byId(Utils::init('id'));
         if (!is_object($plan3dHeader)) {

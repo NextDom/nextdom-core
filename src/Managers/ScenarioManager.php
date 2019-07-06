@@ -66,7 +66,7 @@ class ScenarioManager
     {
         $values = array('name' => $name);
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . ' FROM ' . self::DB_CLASS_NAME . ' WHERE name = :name';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -101,7 +101,7 @@ class ScenarioManager
     {
         $values = array('id' => $id);
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . ' FROM ' . self::DB_CLASS_NAME . ' WHERE id = :id';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -202,7 +202,7 @@ class ScenarioManager
                 $sql .= 'AND `group` = :group_name';
             }
         }
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -223,7 +223,7 @@ class ScenarioManager
             $sql .= ' WHERE `group` LIKE :group';
         }
         $sql .= ' ORDER BY `group`';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL);
+        return DBHelper::getAll($sql, $values);
     }
 
     /**
@@ -242,7 +242,7 @@ class ScenarioManager
         $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE `scenarioElement` LIKE :element_id';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -274,7 +274,7 @@ class ScenarioManager
             $sql .= ' AND isVisible = 1';
         }
         $sql .= ' ORDER BY `order`';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -349,7 +349,7 @@ class ScenarioManager
         if ($onlyEnabled) {
             $sql .= ' AND isActive = 1';
         }
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -364,7 +364,7 @@ class ScenarioManager
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE `mode` != "provoke"
                 AND isActive = 1';
-        return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
     }
 
     /**
@@ -427,8 +427,8 @@ class ScenarioManager
             $sql1 .= 'WHERE `group` = :group ' . $sqlAndTypeFilter . 'ORDER BY ob.name, s.group, s.name';
             $sql2 = $baseSql . 'WHERE `group` = :group AND s.object_id IS NULL' . $sqlAndTypeFilter . 'ORDER BY s.group, s.name';
         }
-        $result1 = DBHelper::Prepare($sql1, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
-        $result2 = DBHelper::Prepare($sql2, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        $result1 = DBHelper::getAllObjects($sql1, $values, self::CLASS_NAME);
+        $result2 = DBHelper::getAllObjects($sql2, $values, self::CLASS_NAME);
         if (!is_array($result1)) {
             $result1 = array();
         }
@@ -502,7 +502,7 @@ class ScenarioManager
                 $sql .= ',' . $expressionId;
             }
             $sql .= ')';
-            DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL);
+            DBHelper::getAll($sql);
         }
     }
 
@@ -747,9 +747,9 @@ class ScenarioManager
         $object = $scenario->getObject();
         $return['object'] = is_object($object) ? $object->getId() : 'aucun';
         $return['html'] = '<div class="scenario" data-id="' . $event['id'] . '">'
-            . '<div style="font-weight: bold;cursor:help;">' . $event['name'] .
-            ' <i class="fas fa-file-text pull-right cursor bt_scenarioLog"></i> <i class="fas fa-share pull-right cursor bt_gotoScenario"></i></div>'
-            . '<div style="cursor:default;">Déclenché par ' . $event['trigger'] . '<div/>'
+            . '<div style="background-color:#e7e7e7;padding:1px;font-size:0.9em;font-weight: bold;cursor:help;">' . $event['name'] .
+            ' <i class="fa fa-file-text-o pull-right cursor bt_scenarioLog"></i> <i class="fa fa-share pull-right cursor bt_gotoScenario"></i></div>'
+            . '<div style="background-color:white;padding:1px;font-size:0.8em;cursor:default;">Déclenché par ' . $event['trigger'] . '<div/>'
             . '</div>';
         return $return;
     }

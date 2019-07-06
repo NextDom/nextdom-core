@@ -34,11 +34,13 @@
 
 namespace NextDom\Helpers;
 
+use NextDom\Enums\UserLocation;
 use NextDom\Exceptions\CoreException;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
+use NextDom\Model\Entity\Cmd;
 use NextDom\Model\Entity\Update;
 
 /**
@@ -51,36 +53,44 @@ use NextDom\Model\Entity\Update;
 class NetworkHelper
 {
     /**
+     * Get user source location
      * @return string
      * @throws \Exception
      */
-    public static function getUserLocation()
+    public static function getUserLocation(): string
     {
-        $client_ip = self::getClientIp();
-        $nextdom_ip = self::getNetworkAccess('internal', 'ip', '', false);
-        if (!filter_var($nextdom_ip, FILTER_VALIDATE_IP)) {
-            return 'external';
+        $clientIp = self::getClientIp();
+        $nextdomIp = self::getNetworkAccess(UserLocation::INTERNAL, 'ip', '', false);
+        // Check validate IP
+        if (!filter_var($nextdomIp, FILTER_VALIDATE_IP)) {
+            return UserLocation::EXTERNAL;
         }
-        $nextdom_ips = explode('.', $nextdom_ip);
-        if (count($nextdom_ips) != 4) {
-            return 'external';
+        // Check 4 parts of the IP
+        // TODO: Pourquoi ? Si l'ip est valide
+        $nextdomIpParts = explode('.', $nextdomIp);
+        if (count($nextdomIpParts) !== 4) {
+            return UserLocation::EXTERNAL;
         }
+        // Check all local IPs if defined
         if (ConfigManager::byKey('network::localip') != '') {
             $localIps = explode(';', ConfigManager::byKey('network::localip'));
             foreach ($localIps as $localIp) {
-                if (self::netMatch($localIp, $client_ip)) {
-                    return 'internal';
+                if (self::netMatch($localIp, $clientIp)) {
+                    return UserLocation::INTERNAL;
                 }
             }
         }
-        $match = $nextdom_ips[0] . '.' . $nextdom_ips[1] . '.' . $nextdom_ips[2] . '.*';
-        return self::netMatch($match, $client_ip) ? 'internal' : 'external';
+        // Check CIDR /24
+        $match = $nextdomIpParts[0] . '.' . $nextdomIpParts[1] . '.' . $nextdomIpParts[2] . '.*';
+        return self::netMatch($match, $clientIp) ? UserLocation::INTERNAL : UserLocation::EXTERNAL;
     }
 
     /**
-     * @return string
+     * Get server IP from PHP server data
+     *
+     * @return string Server IP
      */
-    public static function getClientIp()
+    public static function getClientIp(): string
     {
         if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
             return $_SERVER['HTTP_X_FORWARDED_FOR'];
@@ -95,6 +105,8 @@ class NetworkHelper
     }
 
     /**
+     * Get type of network access
+     *
      * @param string $_mode
      * @param string $_protocol
      * @param string $_default
@@ -107,16 +119,16 @@ class NetworkHelper
         if ($_mode == 'auto') {
             $_mode = self::getUserLocation();
         }
-        if ($_mode == 'internal' && ConfigManager::byKey('internalAddr', 'core', '') == '') {
+        if ($_mode == UserLocation::INTERNAL && ConfigManager::byKey('internalAddr', 'core', '') == '') {
             self::checkConf($_mode);
         }
-        if ($_mode == 'external' && ConfigManager::byKey('market::allowDNS') != 1 && ConfigManager::byKey('externalAddr', 'core', '') == '') {
+        if ($_mode == UserLocation::EXTERNAL && ConfigManager::byKey('market::allowDNS') != 1 && ConfigManager::byKey('externalAddr', 'core', '') == '') {
             self::checkConf($_mode);
         }
         if ($_test && !self::test($_mode)) {
             self::checkConf($_mode);
         }
-        if ($_mode == 'internal') {
+        if ($_mode == UserLocation::INTERNAL) {
             if (strpos(ConfigManager::byKey('internalAddr', 'core', $_default), 'http://') !== false || strpos(ConfigManager::byKey('internalAddr', 'core', $_default), 'https://') !== false) {
                 ConfigManager::save('internalAddr', str_replace(array('http://', 'https://'), '', ConfigManager::byKey('internalAddr', 'core', $_default)));
             }
@@ -144,7 +156,7 @@ class NetworkHelper
         if ($_mode == 'dnsnextdom') {
             return ConfigManager::byKey('nextdom::url');
         }
-        if ($_mode == 'external') {
+        if ($_mode == UserLocation::EXTERNAL) {
             if ($_protocol == 'ip') {
                 if (ConfigManager::byKey('market::allowDNS') == 1 && ConfigManager::byKey('nextdom::url') != '' && ConfigManager::byKey('network::disableMangement') == 0) {
                     return self::getIpFromString(ConfigManager::byKey('nextdom::url'));
@@ -232,7 +244,7 @@ class NetworkHelper
      * @param string $_mode
      * @throws \Exception
      */
-    public static function checkConf($_mode = 'external')
+    public static function checkConf($_mode = UserLocation::EXTERNAL)
     {
         if (ConfigManager::byKey($_mode . 'Protocol') == '') {
             ConfigManager::save($_mode . 'Protocol', 'http://');
@@ -249,7 +261,7 @@ class NetworkHelper
         if (trim(ConfigManager::byKey($_mode . 'Complement')) == '/') {
             ConfigManager::save($_mode . 'Complement', '');
         }
-        if ($_mode == 'internal') {
+        if ($_mode == UserLocation::INTERNAL) {
             foreach (self::getInterfacesList() as $interface) {
                 if ($interface == 'lo') {
                     continue;
@@ -362,12 +374,12 @@ class NetworkHelper
      * @return bool
      * @throws \Exception
      */
-    public static function test($_mode = 'external', $_timeout = 5)
+    public static function test($_mode = UserLocation::EXTERNAL, $_timeout = 5)
     {
         if (ConfigManager::byKey('network::disableMangement') == 1) {
             return true;
         }
-        if ($_mode == 'internal' && self::netMatch('127.0.*.*', self::getNetworkAccess($_mode, 'ip', '', false))) {
+        if ($_mode == UserLocation::INTERNAL && self::netMatch('127.0.*.*', self::getNetworkAccess($_mode, 'ip', '', false))) {
             return false;
         }
         $url = trim(self::getNetworkAccess($_mode, '', '', false), '/') . '/public/here.html';
@@ -377,7 +389,7 @@ class NetworkHelper
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_HEADER, false);
-        if ($_mode == 'external') {
+        if ($_mode == UserLocation::EXTERNAL) {
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         }
@@ -428,6 +440,7 @@ class NetworkHelper
             return;
         }
         $openvpn = self::dnsCreate();
+        /** @var Cmd $cmd */
         $cmd = $openvpn->getCmd('action', 'start');
         if (!is_object($cmd)) {
             throw new CoreException(__('La commande de démarrage du DNS est introuvable'));
@@ -537,15 +550,6 @@ class NetworkHelper
     /**
      * @return bool
      * @throws CoreException
-     */
-    /**
-     * @return bool
-     * @throws CoreException
-     * @throws \Throwable
-     */
-    /**
-     * @return bool
-     * @throws CoreException
      * @throws \Throwable
      */
     public static function dnsRun()
@@ -561,6 +565,7 @@ class NetworkHelper
         } catch (\Exception $e) {
             return false;
         }
+        /** @var Cmd $cmd */
         $cmd = $openvpn->getCmd('info', 'state');
         if (!is_object($cmd)) {
             throw new CoreException(__('La commande de statut du DNS est introuvable'));
@@ -574,6 +579,7 @@ class NetworkHelper
             return;
         }
         $openvpn = self::dnsCreate();
+        /** @var Cmd $cmd */
         $cmd = $openvpn->getCmd('action', 'stop');
         if (!is_object($cmd)) {
             throw new CoreException(__('La commande d\'arrêt du DNS est introuvable'));
@@ -581,16 +587,6 @@ class NetworkHelper
         $cmd->execCmd();
     }
 
-    /**
-     * @param $_interface
-     * @return bool|string
-     * @throws \Exception
-     */
-    /**
-     * @param $_interface
-     * @return bool|string
-     * @throws \Exception
-     */
     /**
      * @param $_interface
      * @return bool|string
@@ -611,11 +607,11 @@ class NetworkHelper
         if (ConfigManager::byKey('network::disableMangement') == 1) {
             return;
         }
-        if (!self::test('internal')) {
-            self::checkConf('internal');
+        if (!self::test(UserLocation::INTERNAL)) {
+            self::checkConf(UserLocation::INTERNAL);
         }
-        if (!self::test('external')) {
-            self::checkConf('external');
+        if (!self::test(UserLocation::EXTERNAL)) {
+            self::checkConf(UserLocation::EXTERNAL);
         }
         if (!NextDomHelper::isCapable('sudo') || NextDomHelper::getHardwareName() == 'docker') {
             return;

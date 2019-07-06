@@ -58,6 +58,7 @@ class CacheManager
      * @param mixed $options Options
      *
      * @return bool
+     * @throws \Exception
      */
     public static function set($key, $value, $lifetime = 0, $options = null)
     {
