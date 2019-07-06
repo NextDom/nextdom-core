@@ -166,8 +166,6 @@ function gen_js {
 function copy_assets {
   echo " >>> Copy icons"
 	cp -fr assets/icon public/
-	echo " >>> Copy themes"
-	cp -fr assets/themes public/
 	echo " >>> Copy images"
 	cp -fr assets/img public/
 	gen_css

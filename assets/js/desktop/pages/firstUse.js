@@ -173,7 +173,6 @@ $('#toStep5').click(function () {
     configuration: config,
     success: function (error) {
       updateTheme(function () {
-        notify('Info', '{{Thème parametré !}}', 'success');
         goToNextStep('#toStep5');
       });
     }
@@ -188,7 +187,6 @@ $('#toStep6').click(function () {
           notify("Erreur", error.message, 'error');
       },
       success: function () {
-        notify('Info', '{{Thème Widget parametré !}}', 'success');
         goToNextStep('#toStep6');
       }
   });
