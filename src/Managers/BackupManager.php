@@ -359,6 +359,8 @@ class BackupManager
      * Trigger remote upload for all available repos
      *
      * @param string $path path to backup archive
+     * @return bool
+     * @throws \Exception
      * @retrun bool true is everything went fine
      */
     public static function sendRemoteBackup(string $path)
@@ -370,9 +372,8 @@ class BackupManager
                 (ConfigManager::byKey($c_key . '::cloudUpload') == 0)) {
                 continue;
             }
-            $class = sprintf("repo_%s", $c_key);
-            LogHelper::addError("system", $class);
-            $class::backup_send($path);
+            LogHelper::addError("system", $c_val['class']);
+            $c_val['class']::backup_send($path);
         }
         return true;
     }
@@ -382,6 +383,7 @@ class BackupManager
      *
      * @param string $file Backup file path
      * @param bool $background Start backup task in background
+     * @throws \Exception
      */
     public static function restore(string $file = '', bool $background = false)
     {
@@ -402,8 +404,9 @@ class BackupManager
      *
      * Last output should not be removed since it act as a marker in ajax calls
      *
-     * @param bool $file path to backup archive, when empty, use last available backup
+     * @param string $file path to backup archive, when empty, use last available backup
      * @return bool false when error occurs
+     * @throws CoreException
      */
     public static function restoreBackup($file = '')
     {
@@ -494,8 +497,12 @@ class BackupManager
      * Extracts backup archive to a temporary folder
      *
      * @param string $file path to backup archive
-     * @throw CoreException when error on reading archive or creating temporary dir
      * @return string path to generated temporary directory
+     * @throws CoreException
+     * @throws \splitbrain\PHPArchive\ArchiveCorruptedException
+     * @throws \splitbrain\PHPArchive\ArchiveIOException
+     * @throws \splitbrain\PHPArchive\ArchiveIllegalCompressionException
+     * @throw CoreException when error on reading archive or creating temporary dir
      */
     private static function extractArchive($file)
     {

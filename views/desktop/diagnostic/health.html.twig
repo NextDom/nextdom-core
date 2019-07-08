@@ -36,12 +36,12 @@
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
-            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'common.back'|trans }}</a>
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'common.back'|trans }}</a>
         </div>
         <div class="action-group">
-        <a class="btn btn-action btn-action-bar pull-right" id="bt_healthCollapse"><i class="fas fa-plus-square spacing-right"></i>{{ 'health.collapse'|trans }}</a>
-        <a class="btn btn-action btn-action-bar pull-right" style="display:none;" id="bt_healthUncollapse"><i class="fas fa-minus-square spacing-right"></i>{{ 'health.uncollapse'|trans }}</a>
-        <a class="btn btn-primary btn-action-bar pull-right" id="bt_benchmarkNextDom"><i class="fas fa-tachometer-alt spacing-right"></i>{{ 'health.launch-benchmark'|trans }}</a>
+        <a class="btn btn-action btn-action-bar pull-right" id="bt_healthCollapse"><i class="fas fa-plus-square"></i>{{ 'health.collapse'|trans }}</a>
+        <a class="btn btn-action btn-action-bar pull-right" style="display:none;" id="bt_healthUncollapse"><i class="fas fa-minus-square"></i>{{ 'health.uncollapse'|trans }}</a>
+        <a class="btn btn-primary btn-action-bar pull-right" id="bt_benchmarkNextDom"><i class="fas fa-tachometer-alt"></i>{{ 'health.launch-benchmark'|trans }}</a>
         </div>
     </div>
 </section>
@@ -54,13 +54,13 @@
             {% for informations in healthPluginsInformations %}
                 {% if informations['nOk'] > 0 %}{% set count = count + 1 %}{% endif %}
             {% endfor %}
-            <li role="presentation"><a href="#div_Plugins" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-puzzle-piece spacing-right"></i>{{ 'health.plugins-title'|trans }}{% if count>0 %}<span class="badge bg-red spacing-left">{{ count }}</span>{% endif %}</a></li>
+            <li role="presentation"><a href="#div_Plugins" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-puzzle-piece"></i>{{ 'health.plugins-title'|trans }}{% if count>0 %}<span class="badge bg-red spacing-left">{{ count }}</span>{% endif %}</a></li>
             {% set count = 0 %}
             {% for informations in healthInformations %}
                 {% if informations['state'] != 1 and informations['state'] != true %}{% set count = count + 1 %}{% endif %}
             {% endfor %}
-            <li role="presentation" class="active"><a href="#div_Health" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-microchip spacing-right"></i>{{ 'health.product-title'|trans }}{% if count>0 %}<span class="badge bg-red spacing-left">{{ count }}</span>{% endif %}</a></li>
-            <li class="header pull-left"><i class="fas fa-medkit spacing-right"></i>{{ 'health.title'|trans }}</li>
+            <li role="presentation" class="active"><a href="#div_Health" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-microchip"></i>{{ 'health.product-title'|trans }}{% if count>0 %}<span class="badge bg-red spacing-left">{{ count }}</span>{% endif %}</a></li>
+            <li class="header pull-left"><i class="fas fa-medkit"></i>{{ 'health.title'|trans }}</li>
         </ul>
 
         <!-- Tabs content -->

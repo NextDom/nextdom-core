@@ -49,9 +49,9 @@ class MarketController extends BaseController
 
         $sourcesList = [];
 
-        foreach ($NEXTDOM_INTERNAL_CONFIG['nextdom_market']['sources'] as $source) {
+        foreach ($NEXTDOM_INTERNAL_CONFIG['nextdom']['sources'] as $source) {
             // TODO: Limiter les requêtes
-            if (ConfigManager::byKey('nextdom_market::' . $source['code']) == 1) {
+            if (ConfigManager::byKey('nextdom::' . $source['code']) == 1) {
                 $sourcesList[] = $source;
             }
         }
@@ -65,7 +65,7 @@ class MarketController extends BaseController
         $pageData['JS_VARS']['installedPluginStr'] = __("Plugin installé");
         $pageData['JS_VARS']['updateAvailableStr'] = __("Mise à jour disponible");
         $pageData['marketSourcesList'] = $sourcesList;
-        $pageData['marketSourcesFilter'] = ConfigManager::byKey('nextdom_market::show_sources_filters');
+        $pageData['marketSourcesFilter'] = ConfigManager::byKey('nextdom::show_sources_filters');
 
         // Affichage d'un message à un utilisateur
         if (isset($_GET['message'])) {

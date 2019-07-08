@@ -39,7 +39,7 @@
             <ul class="nav nav-tabs nav-tabs-dashboard">
                 {% for menuItem in menuLayer %}
                 <li class="cursor{% if menuItem.active %} active{% endif %}">
-                    <a href="" data-object-id="{{ menuItem.jeeObject.getId() }}">{{ menuItem.jeeObject.getDisplay('icon', '<i class="fas fa-tag"></i>')|replace({'></i>': '></i>'})|raw }}<i class="spacing-right"></i>{{ menuItem.jeeObject.getName() }}</a>
+                    <a href="" data-object-id="{{ menuItem.jeeObject.getId() }}">{{ menuItem.jeeObject.getDisplay('icon', '<i class="fas fa-tag"></i>')|replace({'></i>': '></i>'})|raw }}{{ menuItem.jeeObject.getName() }}</a>
                 <li>
                 {% endfor %}
             </ul>
@@ -48,7 +48,7 @@
 </section>
 
 <section id="dashboard-content">
-    <div class="blurPanel">
+    <div class="blur-div">
         {% if dashboardObject.getConfiguration('hideOnDashboard') == 0 %}
             <div class="div_object col-xs-{{ dashboardObject.getDisplay('dashboard::size', 12) }}">
                 <div class="card" style="background-color:{{ dashboardObject.getDisplay("tagColor") }}10;box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.08); border: 1px solid {{ dashboardObject.getDisplay("tagColor") }}50;" data-father_id="{{ dashboardObject.getFather_id() }}">
@@ -138,7 +138,7 @@
         {% endfor %}
     </div>
 
-    <div class="fab fab-filter">
+    <div class="fabs fab-filter">
         <span class="fab-action-button"><i class="fab-action-button__icon fas fa-filter"></i></span>
         <ul class="fab-buttons">
             {% if dashboardCategory =='all' %}
@@ -156,7 +156,7 @@
         </ul>
     </div>
     {% if dashboardCategory == 'all' %}
-        <div class="fab fab-bis">
+        <div class="fabs fab-bis">
             <a class="fab-action-button cursor" id="bt_editDashboardWidgetOrder" data-mode="0"><i class="fab-action-button__icon fas fa-pencil-alt"></i></a>
         </div>
     {% endif %}

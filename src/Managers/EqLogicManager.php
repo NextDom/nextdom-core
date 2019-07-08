@@ -607,19 +607,9 @@ class EqLogicManager
      * @return EqLogic|null
      * @throws \Exception
      */
-    /**
-     * @param $_string
-     * @return EqLogic|null
-     * @throws \Exception
-     */
-    /**
-     * @param $_string
-     * @return EqLogic|null
-     * @throws \Exception
-     */
     public static function byString($_string)
     {
-        $eqLogic = self::byId(str_replace('#', '', self::fromHumanReadable($_string)));
+        $eqLogic = self::byId(str_replace(array('#','eqLogic'), '', self::fromHumanReadable($_string)));
         if (!is_object($eqLogic)) {
             throw new \Exception(__('L\'équipement n\'a pas pu être trouvé : ') . $_string . __(' => ') . self::fromHumanReadable($_string));
         }
@@ -648,6 +638,7 @@ class EqLogicManager
             }
             $reflection = $reflections[$uuid];
             $properties = $reflection->getProperties();
+            /** @var \ReflectionProperty $property */
             foreach ($properties as $property) {
                 $property->setAccessible(true);
                 $value = $property->getValue($input);

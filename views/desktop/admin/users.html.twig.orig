@@ -1,0 +1,187 @@
+{#
+
+/* This file is part of Jeedom.
+*
+* Jeedom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* Jeedom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/* This file is part of NextDom.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#}
+<section class="content-header">
+    <div class="action-bar">
+        <div class="action-group">
+<<<<<<< HEAD
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'common.return' | trans }}</a>
+=======
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'Retour' }}</a>
+>>>>>>> develop
+            {% if userLdapEnabled != '1' %}
+                <a class="btn btn-success btn-action-bar" id="bt_addUser"><i class="fas fa-plus-circle"></i>{{ 'Ajouter un utilisateur' }}</a>
+            {% endif %}
+        </div>
+        <div class="action-group">
+<<<<<<< HEAD
+            <a class="btn btn-success btn-action-bar pull-right" id="bt_saveUser"><i class="fas fa-save spacing-right"></i>{{ 'common.save' | trans }}</a>
+            <a class="btn btn-warning btn-action-bar pull-right" id="bt_removeAllRegisterDevice"><i class="fas fa-trash spacing-right"></i>{{ 'Supprimer tous les périphériques' }}</a>
+=======
+            <a class="btn btn-success btn-action-bar pull-right" id="bt_saveUser"><i class="fas fa-save"></i>{{ 'Sauvegarder' }}</a>
+            <a class="btn btn-warning btn-action-bar pull-right" id="bt_removeAllRegisterDevice"><i class="fas fa-trash"></i>{{ 'Supprimer tous les périphériques' }}</a>
+>>>>>>> develop
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="box" id="users">
+        <!-- Header bar -->
+        <div class="box-header with-border">
+            <h3 class="box-title"><i class="fas fa-users"></i>{{ 'Gestion des utilisateurs' }}</h3>
+        </div>
+
+        <!-- Page content -->
+        <div class="box-body">
+            <form class="form-horizontal">
+                <!-- Users section -->
+                <fieldset>
+                    <legend>{{ 'Liste des utilisateurs' }}</legend>
+                    <div class="tab-pane" id="user">
+                        <table class="table table-condensed table-bordered" id="table_user">
+                            <thead>
+                            <th>{{ 'Utilisateur' }}</th>
+                            <th>{{ 'common.active' | trans }}</th>
+                            <th>{{ 'Profil' }}</th>
+                            <th>{{ 'Clé API' }}</th>
+                            <th>{{ 'Double authentification' }}</th>
+                            <th>{{ 'Dernière connexion' }}</th>
+                            <th>{{ 'common.actions' | trans }}</th>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </fieldset>
+
+                <!-- Sessions section -->
+                <fieldset class="legend-section">
+                    <legend>{{ 'Sessions actives' }}</legend>
+                    <table class="table table-condensed table-bordered">
+                        <thead>
+                        <tr>
+                            <th>{{ 'common.id' | trans }}</th>
+                            <th>{{ 'Utilisateur' }}</th>
+                            <th>{{ 'IP' }}</th>
+                            <th>{{ 'common.date' | trans }}</th>
+                            <th>{{ 'common.actions' | trans }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% if userSessionsList|length > 0 %}
+                            {% for sessionId, sessionData in userSessionsList %}
+                                {% if sessionData['ip'] is not defined %}
+                                    {% set sessionData = sessionData|merge({'ip': ''}) %}
+                                {% endif %}
+                                {% if sessionData['datetime'] is not defined %}
+                                    {% set sessionData = sessionData|merge({'datetime': ''}) %}
+                                {% endif %}
+                                <tr data-id="{{ sessionId }}">
+                                    <td>{{ sessionId }}</td>
+                                    <td>{{ sessionData['login'] }}</td>
+                                    <td>{{ sessionData['ip'] }}</td>
+                                    <td>{{ sessionData['datetime'] }}</td>
+                                    <td><a class="btn btn-warning btn-sm bt_deleteSession pull-right"><i class="fas fa-sign-out-alt"></i>{{ 'Déconnecter' }}</a></td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </fieldset>
+
+                <!-- Periphériques section -->
+                <fieldset class="legend-section">
+                    <legend>{{ 'Périphériques enregistrés' }}</legend>
+                    <table class="table table-bordered table-condensed">
+                        <thead>
+                        <tr>
+                            <th>{{ 'common.id' | trans }}</th>
+                            <th>{{ 'Utilisateur' }}</th>
+                            <th>{{ 'IP' }}</th>
+                            <th>{{ 'common.date' | trans }}</th>
+                            <th>{{ 'common.action' | trans }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for user in usersList %}
+                            {% if user.getOptions('registerDevice') is iterable and user.getOptions('registerDevice')|length > 0 %}
+                                {% for deviceId, deviceData in user.getOptions('registerDevice') %}
+                                    <tr data-key="{{ deviceId }}" data-user_id="{{ user.getId() }}">
+                                        <td>{{ deviceId|slice(0, 10) }}</td>
+                                        <td>{{ user.getLogin() }}</td>
+                                        <td>{{ deviceData['ip'] }}</td>
+                                        <td>{{ deviceData['datetime'] }}</td>
+<<<<<<< HEAD
+                                        <td><a class="btn btn-warning btn-sm bt_removeRegisterDevice pull-right"><i class="fas fa-trash spacing-right"></i>{{ 'common.remove' | trans }}</a></td>
+=======
+                                        <td><a class="btn btn-warning btn-sm bt_removeRegisterDevice pull-right"><i class="fas fa-trash"></i>{{ 'Supprimer' }}</a></td>
+>>>>>>> develop
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </fieldset>
+            </form>
+
+            <!-- New user modal section -->
+            <div class="modal fade" id="md_newUser">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button class="bootbox-close-button close" data-dismiss="modal">×</button>
+                            <h4>{{ 'Ajouter un utilisateur' }}</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div style="display: none;" id="div_newUserAlert"></div>
+                            <input class="form-control form-group" type="text" id="in_newUserLogin" placeholder="{{ 'Identifiant...' }}"/><br/>
+                            <input class="form-control" type="password" id="in_newUserMdp" placeholder="{{ 'Mot de passe...' }}"/>
+                        </div>
+                        <div class="modal-footer">
+<<<<<<< HEAD
+                            <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-ban spacing-right"></i>{{ 'common.cancel' | trans }}</a>
+                            <a class="btn btn-success" id="bt_newUserSave"><i class="fas fa-save spacing-right"></i>{{ 'common.validate' | trans }}</a>
+=======
+                            <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-ban"></i>{{ 'Annuler' }}</a>
+                            <a class="btn btn-success" id="bt_newUserSave"><i class="fas fa-save"></i>{{ 'Valider' }}</a>
+>>>>>>> develop
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

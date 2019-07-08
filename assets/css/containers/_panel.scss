@@ -23,6 +23,12 @@
 .panel:hover{
     box-shadow: 0 6px 12px 0 rgba(0,0,0,0.15);
 }
+.panel-title {
+    color: $white !important;
+}
+.panel-body {
+    border-radius: 4px;
+}
 
 /* AdminLTE-Surcharge : Panneau user sidemenu */
 .user-panel {

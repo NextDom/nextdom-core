@@ -1,0 +1,172 @@
+{#
+
+/* This file is part of Jeedom.
+*
+* Jeedom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* Jeedom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/* This file is part of NextDom.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#}
+<section class="content-header">
+    <div class="action-bar">
+        <div class="action-group">
+<<<<<<< HEAD
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'common.return' | trans }}</a>
+        </div>
+        <div class="action-group">
+            <a class="btn btn-success btn-action-bar pull-right" id="bt_saveapi"><i class="fas fa-save spacing-right"></i>{{ 'common.save' | trans }}</a>
+=======
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'Retour' }}</a>
+        </div>
+        <div class="action-group">
+            <a class="btn btn-success btn-action-bar pull-right" id="bt_saveapi"><i class="fas fa-save"></i>{{ 'Sauvegarder' }}</a>
+>>>>>>> develop
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="box" id="API">
+        <!-- Header bar -->
+        <div class="box-header with-border">
+            <h3 class="box-title"><i class="fas fa-key"></i>{{ 'API' }}</h3>
+        </div>
+
+        <!-- Page content -->
+        <div class="box-body">
+            <form class="form-horizontal">
+                <!-- Access Section -->
+                <fieldset>
+                    <legend>{{ 'Accès API' }}</legend>
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Accès API HTTP' }}</label>
+                        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
+                            <select class="form-control configKey" data-l1key="api::core::http::mode">
+                                <option value="enable">{{ 'common.enabled' | trans }}</option>
+                                <option value="whiteip">{{ 'IP blanche' }}</option>
+                                <option value="localhost">{{ 'Localhost' }}</option>
+                                <option value="disable">{{ 'common.disabled' | trans }}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Accès API JSONRPC' }}</label>
+                        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
+                            <select class="form-control configKey" data-l1key="api::core::jsonrpc::mode">
+                                <option value="enable">{{ 'common.enabled' | trans }}</option>
+                                <option value="whiteip">{{ 'IP blanche' }}</option>
+                                <option value="localhost">{{ 'Localhost' }}</option>
+                                <option value="disable">{{ 'common.disabled' | trans }}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Accès API TTS' }}</label>
+                        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
+                            <select class="form-control configKey" data-l1key="api::core::tts::mode">
+                                <option value="enable">{{ 'common.enabled' | trans }}</option>
+                                <option value="whiteip">{{ 'IP blanche' }}</option>
+                                <option value="localhost">{{ 'Localhost' }}</option>
+                                <option value="disable">{{ 'common.disabled' | trans }}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Accès API Pro' }}</label>
+                        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
+                            <select class="form-control configKey" data-l1key="api::core::pro::mode">
+                                <option value="enable">{{ 'common.enabled' | trans }}</option>
+                                <option value="disable">{{ 'common.disabled' | trans }}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Accès API Market' }}</label>
+                        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
+                            <select class="form-control configKey" data-l1key="api::core::market::mode">
+                                <option value="enable">{{ 'common.enabled' | trans }}</option>
+                                <option value="disable">{{ 'common.disabled' | trans }}</option>
+                            </select>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Key Section -->
+                <fieldset class="legend-section">
+                    <legend>{{ 'Clefs API' }}</legend>
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label" data-toggle="tooltip" title="" data-original-title="{{ 'Clef API globale de' }} {{ PRODUCT_NAME }}">{{ 'Clef API Globale' }}</label>
+                        <div class="btn-group col-lg-10 col-md-9 col-sm-9 col-xs-12">
+                            <a class="btn btn-action bt_regenerate_api" data-plugin="core"><i class="fas fa-refresh"></i><span>{{'Régénérer'}}</span></a>
+                            <span class="span_apikey label label-value">{{ adminConfigs['api'] }}</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label" data-toggle="tooltip" title="" data-original-title="{{ 'Clef API Pro de' }} {{ PRODUCT_NAME }}">{{ 'Clef API Pro' }}</label>
+                        <div class="btn-group col-lg-10 col-md-9 col-sm-9 col-xs-12">
+                            <a class="btn btn-action bt_regenerate_api" data-plugin="pro"><i class="fas fa-refresh"></i><span>{{'Régénérer'}}</span></a>
+                            <span class="span_apikey label label-value">{{ adminConfigs['apipro'] }}</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label" data-toggle="tooltip" title="" data-original-title="{{ 'Clef Market de' }} {{ PRODUCT_NAME }}">{{ 'Clef Market' }}</label>
+                        <div class="btn-group col-lg-10 col-md-9 col-sm-9 col-xs-12">
+                            <a class="btn btn-action bt_regenerate_api" data-plugin="apimarket"><i class="fas fa-refresh"></i><span>{{'Régénérer'}}</span></a>
+                            <span class="span_apikey label label-value">{{ adminConfigs['apimarket'] }}</span>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Plugins Section -->
+                <fieldset class="legend-section">
+                    <legend>{{ 'API Plugins' }}</legend>
+                    {% if not adminIsRescueMode and adminPluginsList|length > 0 %}
+                        {% for pluginData in adminPluginsList %}
+                            <div class="form-group">
+                                <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label" data-original-title="{{ 'API pour le plugin' }} {{ pluginData.plugin.getName() }}">{{ pluginData.plugin.getName() }}</label>
+                                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                                    <select class="form-control configKey" data-l1key="api::{{ pluginData.plugin.getId() }}::mode">
+                                        <option value="enable">{{ 'common.enabled' | trans }}</option>
+                                        <option value="whiteip">{{ 'IP blanche' }}</option>
+                                        <option value="localhost">{{ 'Localhost' }}</option>
+                                        <option value="disable">{{ 'common.disabled' | trans }}</option>
+                                    </select>
+                                </div>
+                                <div class="btn-group col-lg-8 col-md-7 col-sm-7 col-xs-12">
+                                    <a class="btn btn-action bt_regenerate_api" data-plugin="{{ pluginData.plugin.getId() }}"><i class="fas fa-refresh"></i><span>{{'Régénérer'}}</span></a>
+                                    <span class="span_apikey label label-value">{{ pluginData.api }}</span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</section>

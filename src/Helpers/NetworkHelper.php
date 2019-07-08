@@ -509,7 +509,11 @@ class NetworkHelper
         $openvpn->setEqType_name('openvpn');
         $openvpn->setConfiguration('dev', 'tun');
         $openvpn->setConfiguration('proto', 'udp');
-        $openvpn->setConfiguration('remote_host', 'vpn.dns' . ConfigManager::byKey('dns::number', 'core', 1) . '.nextdom.com');
+        if(ConfigManager::byKey('dns::vpnurl') != ''){
+            $openvpn->setConfiguration('remote_host', ConfigManager::byKey('dns::vpnurl'));
+        }else{
+            $openvpn->setConfiguration('remote_host', 'vpn.dns' . ConfigManager::byKey('dns::number', 'core', 1) . '.jeedom.com');
+        }
         $openvpn->setConfiguration('username', NextDomHelper::getHardwareKey());
         $openvpn->setConfiguration('password', ConfigManager::byKey('dns::token'));
         $openvpn->setConfiguration('compression', 'comp-lzo');

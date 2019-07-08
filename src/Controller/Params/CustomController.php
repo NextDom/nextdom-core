@@ -61,14 +61,6 @@ class CustomController extends BaseController
         if (file_exists(NEXTDOM_DATA . '/custom/desktop/custom.css')) {
             $pageData['customCSS'] = trim(file_get_contents(NEXTDOM_DATA . '/custom/desktop/custom.css'));
         }
-        $pageData['customMobileJS'] = '';
-        if (file_exists(NEXTDOM_ROOT . '/mobile/custom/custom.js')) {
-            $pageData['customMobileJS'] = trim(file_get_contents(NEXTDOM_ROOT . '/mobile/custom/custom.js'));
-        }
-        $pageData['customMobileCSS'] = '';
-        if (file_exists(NEXTDOM_ROOT . '/mobile/custom/custom.css')) {
-            $pageData['customMobileCSS'] = trim(file_get_contents(NEXTDOM_ROOT . '/mobile/custom/custom.css'));
-        }
 
         $pageData['JS_END_POOL'][] = '/public/js/desktop/params/custom.js';
 

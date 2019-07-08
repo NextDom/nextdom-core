@@ -42,7 +42,8 @@
         <div class="col-md-3 col-xs-6">
             <div class="box box-solid">
                 <div class="box-header with-border">
-                    <h3 class="box-title">{{ 'administration.cpu'|trans }} ({{ cpuCoresCount }} {{ 'administration.cpu-cores'|trans }})</h3>
+                    <h3 class="box-title"><i class="fas fa-microchip"></i>{{ 'administration.cpu'|trans }}</h3>
+                    <span class="pull-right">({{ cpuCoresCount }} {{ 'administration.cpu-cores'|trans }})</span>
                 </div>
                 <div class="box-body">
                     <div class="progress progress-sm spacing-bottom-big active">
@@ -57,7 +58,8 @@
         <div class="col-md-3 col-xs-6">
             <div class="box box-solid">
                 <div class="box-header with-border">
-                    <h3 class="box-title">{{ 'administration.memory'|trans }} ({{ totalMemory }})</h3>
+                    <h3 class="box-title"><i class="fas fa-memory"></i>{{ 'administration.memory'|trans }}</h3>
+                    <span class="pull-right">({{ totalMemory }})</span>
                 </div>
                 <div class="box-body">
                     <div class="progress progress-sm spacing-bottom-big active">
@@ -72,7 +74,8 @@
         <div class="col-md-3 col-xs-6">
             <div class="box box-solid ">
                 <div class="box-header with-border">
-                    <h3 class="box-title">{{ 'administration.hdd'|trans }} ({{hddSize}})</h3>
+                    <h3 class="box-title"><i class="fas fa-hdd"></i>{{ 'administration.hdd'|trans }}</h3>
+                    <span class="pull-right">({{hddSize}})</span>
                 </div>
                 <div class="box-body">
                     <div class="progress progress-sm spacing-bottom-big active">
@@ -87,7 +90,8 @@
         <div class="col-md-3 col-xs-6">
             <div class="box box-solid">
                 <div class="box-header with-border">
-                    <h3 class="box-title">{{ 'administration.swap'|trans }} ({{ administrationSwapTotal }})</h3>
+                    <h3 class="box-title"><i class="fas fa-database"></i>{{ 'administration.swap'|trans }}</h3>
+                    <span class="pull-right">({{ administrationSwapTotal }})</span>
                 </div>
                 <div class="box-body">
                     <div class="progress progress-sm spacing-bottom-big active">
@@ -104,13 +108,13 @@
         <div class="col-sm-6 col-xs-12">
             <div class="box box-danger">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fas fa-cog spacing-right"></i>{{ 'page-title.administration'|trans }}</h3>
+                    <h3 class="box-title"><i class="fas fa-cog"></i>{{ 'page-title.administration'|trans }}</h3>
                 </div>
                 <div class="box-body text-center">
                     <a class="btn btn-app" href="index.php?v=d&p=users"><i class="fas fa-users"></i>{{ 'page-title.users'|trans }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=api"><i class="fas fa-key"></i>{{ 'page-title.api'|trans }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=network"><i class="fas fa-rss"></i>{{ 'page-title.networks'|trans }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=security"><i class="fa fa-shield"></i>{{ 'page-title.security'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=security"><i class="fas fa-shield-alt"></i>{{ 'page-title.security'|trans }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=cache"><i class="fas fa-hdd-o"></i>{{ 'page-title.cache'|trans }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=update_admin"><i class="fas fa-credit-card"></i>{{ 'page-title.services'|trans }}</a>
                 </div>
@@ -119,7 +123,7 @@
         <div class="col-sm-6 col-xs-12">
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fas fa-sliders-h spacing-right"></i>{{ 'page-title.settings'|trans }}</h3>
+                    <h3 class="box-title"><i class="fas fa-sliders-h"></i>{{ 'page-title.settings'|trans }}</h3>
                 </div>
                 <div class="box-body text-center">
                     <a class="btn btn-app" href="index.php?v=d&p=general"><i class="fas fa-wrench"></i>{{ 'page-title.general'|trans }} </a>
@@ -140,7 +144,7 @@
         <div class="col-sm-6 col-xs-12">
             <div class="box box-success">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fas fa-stethoscope spacing-right"></i>{{ 'page-title.diagnostics'|trans }}</h3>
+                    <h3 class="box-title"><i class="fas fa-stethoscope"></i>{{ 'page-title.diagnostics'|trans }}</h3>
                 </div>
                 <div class="box-body text-center">
                     <a class="btn btn-app" href="index.php?v=d&p=health"><i class="fas fa-medkit"></i>{{ 'page-title.health'|trans }}</a>
@@ -157,7 +161,7 @@
         <div class="col-sm-6 col-xs-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fas fa-paperclip spacing-right"></i>{{ 'Outils'|trans }}</h3>
+                    <h3 class="box-title"><i class="fas fa-paperclip"></i>{{ 'Outils'|trans }}</h3>
                 </div>
                 <div class="box-body text-center">
                     <a class="btn btn-app" href="index.php?v=d&p=display"><i class="fas fa-table"></i>{{ 'page-title.summaries'|trans }}</a>
@@ -188,7 +192,7 @@
         <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
             <div class="info-box info-box-small">
               <span class="info-box-icon info-box-small-icon">
-                  <i class="fas fa-microchip"></i>
+                  <i class="fas fa-chalkboard-teacher"></i>
               </span>
               <div class="info-box-content info-box-small-content">
                   <span class="info-box-text">{{ 'administration.process-count'|trans }}</span>
@@ -214,13 +218,13 @@
     </div>
     <div class="action-bar">
         <div class="action-group">
-            <a class="btn btn-default btn-action-bar" id="btn_welcomeModal"><i class="fas fa-calendar-plus spacing-right"></i>{{ 'administration.welcome-page'|trans }}</a>
-            <a class="btn btn-default btn-action-bar" href="/docs/html/index.xhtml" target="_blank"><i class="fas fa-graduation-cap spacing-right"></i>{{ 'administration.developer-documentation'|trans }}</a>
+            <a class="btn btn-default btn-action-bar" id="btn_welcomeModal"><i class="fas fa-calendar-plus"></i>{{ 'administration.welcome-page'|trans }}</a>
+            <a class="btn btn-default btn-action-bar" href="/docs/html/index.xhtml" target="_blank"><i class="fas fa-graduation-cap"></i>{{ 'administration.developer-documentation'|trans }}</a>
         </div>
         <div class="action-group">
-            <a class="btn btn-danger btn-action-bar pull-right" href="#" id="bt_haltSystemAdmin" state="0"><i class="fas fa-power-off spacing-right"></i>{{ 'administration.power-off'|trans }}</a>
-            <a class="btn btn-warning btn-action-bar pull-right" href="#" id="bt_rebootSystemAdmin" state="0"><i class="fas fa-repeat spacing-right"></i>{{ 'administration.restart'|trans }}</a>
-            <a class="btn btn-warning btn-action-bar pull-right" href="index.php?v=d&logout=1" class="noOnePageLoad"><i class="fas fa-lock spacing-right"></i>{{ 'administration.disconnect'|trans }}</a>
+            <a class="btn btn-danger btn-action-bar pull-right" href="#" id="bt_haltSystemAdmin" state="0"><i class="fas fa-power-off"></i>{{ 'administration.power-off'|trans }}</a>
+            <a class="btn btn-warning btn-action-bar pull-right" href="#" id="bt_rebootSystemAdmin" state="0"><i class="fas fa-repeat"></i>{{ 'administration.restart'|trans }}</a>
+            <a class="btn btn-warning btn-action-bar pull-right" href="index.php?v=d&logout=1" class="noOnePageLoad"><i class="fas fa-lock"></i>{{ 'administration.disconnect'|trans }}</a>
         </div>
     </div>
 </section>

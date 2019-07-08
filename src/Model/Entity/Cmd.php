@@ -300,7 +300,7 @@ class Cmd implements EntityInterface
      */
     public function setHtml($_key, $_value)
     {
-        if (in_array($_key, array('dashboard', 'mobile', 'dview', 'mview', 'dplan')) && $this->getWidgetTemplateCode($_key, true) == $_value) {
+        if (in_array($_key, array('dashboard', 'dview', 'mview', 'dplan')) && $this->getWidgetTemplateCode($_key, true) == $_value) {
             $_value = '';
         }
         if ($this->getHtml($_key) != $_value) {
@@ -561,6 +561,7 @@ class Cmd implements EntityInterface
      * @param null $_cmdColor
      * @return mixed|string
      * @throws CoreException
+     * @throws \ReflectionException
      */
     public function toHtml($_version = 'dashboard', $_options = '', $_cmdColor = null)
     {
@@ -619,11 +620,10 @@ class Cmd implements EntityInterface
 
         if ($_cmdColor == null && $version != 'scenario') {
             $eqLogic = $this->getEqLogicId();
-            $vcolor = ($version == 'mobile') ? 'mcmdColor' : 'cmdColor';
             if ($eqLogic->getPrimaryCategory() == '') {
-                $replace['#cmdColor#'] = NextDomHelper::getConfiguration('eqLogic:category:default:' . $vcolor);
+                $replace['#cmdColor#'] = NextDomHelper::getConfiguration('eqLogic:category:default:cmdColor');
             } else {
-                $replace['#cmdColor#'] = NextDomHelper::getConfiguration('eqLogic:category:' . $eqLogic->getPrimaryCategory() . ':' . $vcolor);
+                $replace['#cmdColor#'] = NextDomHelper::getConfiguration('eqLogic:category:' . $eqLogic->getPrimaryCategory() . ':cmdColor');
             }
         } else {
             $replace['#cmdColor#'] = $_cmdColor;
@@ -698,6 +698,9 @@ class Cmd implements EntityInterface
                 $replace['#state#'] = $cmdValue->execCmd();
                 $replace['#valueName#'] = $cmdValue->getName();
                 $replace['#unite#'] = $cmdValue->getUnite();
+                $replace['#valueDate#'] = $cmdValue->getValueDate();
+                $replace['#collectDate#'] = $cmdValue->getCollectDate();
+                $replace['#alertLevel#'] = $cmdValue->getCache('alertLevel', 'none');
                 if (trim($replace['#state#']) == '' && ($cmdValue->getSubType() == 'binary' || $cmdValue->getSubType() == 'numeric')) {
                     $replace['#state#'] = 0;
                 }
@@ -762,31 +765,11 @@ class Cmd implements EntityInterface
      * @param string $_default
      * @return array|bool|mixed|null|string
      */
-    /**
-     * @param string $_key
-     * @param string $_default
-     * @return array|bool|mixed|null|string
-     */
-    /**
-     * @param string $_key
-     * @param string $_default
-     * @return array|bool|mixed|null|string
-     */
     public function getDisplay($_key = '', $_default = '')
     {
         return Utils::getJsonAttr($this->display, $_key, $_default);
     }
 
-    /**
-     * @param $_key
-     * @param $_value
-     * @return $this
-     */
-    /**
-     * @param $_key
-     * @param $_value
-     * @return $this
-     */
     /**
      * @param $_key
      * @param $_value
@@ -805,25 +788,11 @@ class Cmd implements EntityInterface
     /**
      * @return string
      */
-    /**
-     * @return string
-     */
-    /**
-     * @return string
-     */
     public function getUnite()
     {
         return $this->unite;
     }
 
-    /**
-     * @param $_unite
-     * @return $this
-     */
-    /**
-     * @param $_unite
-     * @return $this
-     */
     /**
      * @param $_unite
      * @return $this
@@ -838,25 +807,11 @@ class Cmd implements EntityInterface
     /**
      * @return string
      */
-    /**
-     * @return string
-     */
-    /**
-     * @return string
-     */
     public function getLogicalId()
     {
         return $this->logicalId;
     }
 
-    /**
-     * @param $_logicalId
-     * @return $this
-     */
-    /**
-     * @param $_logicalId
-     * @return $this
-     */
     /**
      * @param $_logicalId
      * @return $this
@@ -893,14 +848,6 @@ class Cmd implements EntityInterface
      * @param $_eqLogic
      * @return $this
      */
-    /**
-     * @param $_eqLogic
-     * @return $this
-     */
-    /**
-     * @param $_eqLogic
-     * @return $this
-     */
     public function setEqLogicId($_eqLogic)
     {
         $this->_eqLogic = $_eqLogic;
@@ -922,25 +869,11 @@ class Cmd implements EntityInterface
     /**
      * @return string
      */
-    /**
-     * @return string
-     */
-    /**
-     * @return string
-     */
     public function getGeneric_type()
     {
         return $this->generic_type;
     }
 
-    /**
-     * @param $generic_type
-     * @return $this
-     */
-    /**
-     * @param $generic_type
-     * @return $this
-     */
     /**
      * @param $generic_type
      * @return $this
@@ -968,25 +901,11 @@ class Cmd implements EntityInterface
     /**
      * @return string
      */
-    /**
-     * @return string
-     */
-    /**
-     * @return string
-     */
     public function getValue()
     {
         return $this->value;
     }
 
-    /**
-     * @param $_value
-     * @return $this
-     */
-    /**
-     * @param $_value
-     * @return $this
-     */
     /**
      * @param $_value
      * @return $this
@@ -1005,6 +924,7 @@ class Cmd implements EntityInterface
      * @param mixed $_quote
      * @return mixed result
      * @throws CoreException
+     * @throws \ReflectionException
      */
     public function execCmd($_options = null, $_sendNodeJsEvent = false, $_quote = false)
     {
@@ -1105,30 +1025,12 @@ class Cmd implements EntityInterface
      * @return array|bool|mixed|null|string
      * @throws \Exception
      */
-    /**
-     * @param string $_key
-     * @param string $_default
-     * @return array|bool|mixed|null|string
-     * @throws \Exception
-     */
-    /**
-     * @param string $_key
-     * @param string $_default
-     * @return array|bool|mixed|null|string
-     * @throws \Exception
-     */
     public function getCache($_key = '', $_default = '')
     {
         $cache = CacheManager::byKey('cmdCacheAttr' . $this->getId())->getValue();
         return Utils::getJsonAttr($cache, $_key, $_default);
     }
 
-    /**
-     * @return string
-     */
-    /**
-     * @return string
-     */
     /**
      * @return string
      */
@@ -1141,28 +1043,12 @@ class Cmd implements EntityInterface
      * @param $_collectDate
      * @return $this
      */
-    /**
-     * @param $_collectDate
-     * @return $this
-     */
-    /**
-     * @param $_collectDate
-     * @return $this
-     */
     public function setCollectDate($_collectDate)
     {
         $this->_collectDate = $_collectDate;
         return $this;
     }
 
-    /**
-     * @param array $_values
-     * @throws \Exception
-     */
-    /**
-     * @param array $_values
-     * @throws \Exception
-     */
     /**
      * @param array $_values
      * @throws \Exception
@@ -1194,16 +1080,6 @@ class Cmd implements EntityInterface
         }
     }
 
-    /**
-     * @param $_value
-     * @param bool $_quote
-     * @return float|mixed|string
-     */
-    /**
-     * @param $_value
-     * @param bool $_quote
-     * @return float|mixed|string
-     */
     /**
      * @param $_value
      * @param bool $_quote
@@ -1289,31 +1165,11 @@ class Cmd implements EntityInterface
      * @param string $_default
      * @return array|bool|mixed|null|string
      */
-    /**
-     * @param string $_key
-     * @param string $_default
-     * @return array|bool|mixed|null|string
-     */
-    /**
-     * @param string $_key
-     * @param string $_default
-     * @return array|bool|mixed|null|string
-     */
     public function getConfiguration($_key = '', $_default = '')
     {
         return Utils::getJsonAttr($this->configuration, $_key, $_default);
     }
 
-    /**
-     * @param $_key
-     * @param $_value
-     * @return $this
-     */
-    /**
-     * @param $_key
-     * @param $_value
-     * @return $this
-     */
     /**
      * @param $_key
      * @param $_value
@@ -1346,14 +1202,6 @@ class Cmd implements EntityInterface
      * @param array $_values
      * @throws \Exception
      */
-    /**
-     * @param array $_values
-     * @throws \Exception
-     */
-    /**
-     * @param array $_values
-     * @throws \Exception
-     */
     public function postExecCmd($_values = array())
     {
         if (!is_array($this->getConfiguration('nextdomPostExecCmd'))) {
@@ -1381,16 +1229,6 @@ class Cmd implements EntityInterface
         }
     }
 
-    /**
-     * @return bool
-     * @throws CoreException
-     * @throws \ReflectionException
-     */
-    /**
-     * @return bool
-     * @throws CoreException
-     * @throws \ReflectionException
-     */
     /**
      * @return bool
      * @throws CoreException
@@ -1438,25 +1276,11 @@ class Cmd implements EntityInterface
     /**
      * @return string
      */
-    /**
-     * @return string
-     */
-    /**
-     * @return string
-     */
     public function getEqType()
     {
         return $this->eqType;
     }
 
-    /**
-     * @param $_eqType
-     * @return $this
-     */
-    /**
-     * @param $_eqType
-     * @return $this
-     */
     /**
      * @param $_eqType
      * @return $this
@@ -1468,18 +1292,6 @@ class Cmd implements EntityInterface
         return $this;
     }
 
-    /**
-     * @param $_value
-     * @param bool $_allowDuring
-     * @return int|string
-     * @throws CoreException
-     */
-    /**
-     * @param $_value
-     * @param bool $_allowDuring
-     * @return int|string
-     * @throws CoreException
-     */
     /**
      * @param $_value
      * @param bool $_allowDuring
@@ -1542,31 +1354,11 @@ class Cmd implements EntityInterface
      * @param string $_default
      * @return array|bool|mixed|null|string
      */
-    /**
-     * @param string $_key
-     * @param string $_default
-     * @return array|bool|mixed|null|string
-     */
-    /**
-     * @param string $_key
-     * @param string $_default
-     * @return array|bool|mixed|null|string
-     */
     public function getAlert($_key = '', $_default = '')
     {
         return Utils::getJsonAttr($this->alert, $_key, $_default);
     }
 
-    /**
-     * @param $_key
-     * @param $_value
-     * @return $this
-     */
-    /**
-     * @param $_key
-     * @param $_value
-     * @return $this
-     */
     /**
      * @param $_key
      * @param $_value
@@ -1585,16 +1377,7 @@ class Cmd implements EntityInterface
      * @param $_level
      * @param $_value
      * @throws CoreException
-     */
-    /**
-     * @param $_level
-     * @param $_value
-     * @throws CoreException
-     */
-    /**
-     * @param $_level
-     * @param $_value
-     * @throws CoreException
+     * @throws \ReflectionException
      */
     public function actionAlertLevel($_level, $_value)
     {
@@ -1653,18 +1436,6 @@ class Cmd implements EntityInterface
      * @return $this
      * @throws \Exception
      */
-    /**
-     * @param $_key
-     * @param null $_value
-     * @return $this
-     * @throws \Exception
-     */
-    /**
-     * @param $_key
-     * @param null $_value
-     * @return $this
-     * @throws \Exception
-     */
     public function setCache($_key, $_value = null)
     {
         CacheManager::set('cmdCacheAttr' . $this->getId(), Utils::setJsonAttr(CacheManager::byKey('cmdCacheAttr' . $this->getId())->getValue(), $_key, $_value));
@@ -1676,18 +1447,7 @@ class Cmd implements EntityInterface
      * @param null $_datetime
      * @param int $_loop
      * @throws CoreException
-     */
-    /**
-     * @param $_value
-     * @param null $_datetime
-     * @param int $_loop
-     * @throws CoreException
-     */
-    /**
-     * @param $_value
-     * @param null $_datetime
-     * @param int $_loop
-     * @throws CoreException
+     * @throws \ReflectionException
      */
     public function event($_value, $_datetime = null, $_loop = 1)
     {
@@ -1791,25 +1551,11 @@ class Cmd implements EntityInterface
     /**
      * @return string
      */
-    /**
-     * @return string
-     */
-    /**
-     * @return string
-     */
     public function getValueDate()
     {
         return $this->_valueDate;
     }
 
-    /**
-     * @param $_valueDate
-     * @return $this
-     */
-    /**
-     * @param $_valueDate
-     * @return $this
-     */
     /**
      * @param $_valueDate
      * @return $this
@@ -1820,18 +1566,6 @@ class Cmd implements EntityInterface
         return $this;
     }
 
-    /**
-     * @param $_value
-     * @param string $_datetime
-     * @return null
-     * @throws CoreException
-     */
-    /**
-     * @param $_value
-     * @param string $_datetime
-     * @return null
-     * @throws CoreException
-     */
     /**
      * @param $_value
      * @param string $_datetime
@@ -1853,25 +1587,11 @@ class Cmd implements EntityInterface
     /**
      * @return string
      */
-    /**
-     * @return string
-     */
-    /**
-     * @return string
-     */
     public function getIsHistorized()
     {
         return $this->isHistorized;
     }
 
-    /**
-     * @param $_isHistorized
-     * @return $this
-     */
-    /**
-     * @param $_isHistorized
-     * @return $this
-     */
     /**
      * @param $_isHistorized
      * @return $this
@@ -1883,14 +1603,6 @@ class Cmd implements EntityInterface
         return $this;
     }
 
-    /**
-     * @param $_value
-     * @throws \Exception
-     */
-    /**
-     * @param $_value
-     * @throws \Exception
-     */
     /**
      * @param $_value
      * @throws \Exception
@@ -1913,14 +1625,6 @@ class Cmd implements EntityInterface
         }
     }
 
-    /**
-     * @param $_value
-     * @throws CoreException
-     */
-    /**
-     * @param $_value
-     * @throws CoreException
-     */
     /**
      * @param $_value
      * @throws CoreException
@@ -1961,6 +1665,9 @@ class Cmd implements EntityInterface
         }
     }
 
+    /**
+     * @throws \Exception
+     */
     public function executeAlertCmdAction()
     {
         if (!is_array($this->getConfiguration('actionCheckCmd'))) {
@@ -1979,14 +1686,6 @@ class Cmd implements EntityInterface
         }
     }
 
-    /**
-     * @param $_value
-     * @throws \Exception
-     */
-    /**
-     * @param $_value
-     * @throws \Exception
-     */
     /**
      * @param $_value
      * @throws \Exception
@@ -2024,18 +1723,6 @@ class Cmd implements EntityInterface
      * @return array
      * @throws CoreException
      */
-    /**
-     * @param $_startTime
-     * @param $_endTime
-     * @return array
-     * @throws CoreException
-     */
-    /**
-     * @param $_startTime
-     * @param $_endTime
-     * @return array
-     * @throws CoreException
-     */
     public function getStatistique($_startTime, $_endTime)
     {
         if ($this->getType() != 'info' || $this->getType() == 'string') {
@@ -2050,18 +1737,6 @@ class Cmd implements EntityInterface
      * @return float|int
      * @throws \Exception
      */
-    /**
-     * @param $_startTime
-     * @param $_endTime
-     * @return float|int
-     * @throws \Exception
-     */
-    /**
-     * @param $_startTime
-     * @param $_endTime
-     * @return float|int
-     * @throws \Exception
-     */
     public function getTendance($_startTime, $_endTime)
     {
         return HistoryManager::getTendance($this->getId(), $_startTime, $_endTime);
@@ -2070,31 +1745,11 @@ class Cmd implements EntityInterface
     /**
      * @return array|bool|mixed|null|string
      */
-    /**
-     * @return array|bool|mixed|null|string
-     */
-    /**
-     * @return array|bool|mixed|null|string
-     */
     public function getLastValue()
     {
         return $this->getConfiguration('lastCmdValue', null);
     }
 
-    /**
-     * @param $_response
-     * @param string $_plugin
-     * @param string $_network
-     * @return string
-     * @throws \Exception
-     */
-    /**
-     * @param $_response
-     * @param string $_plugin
-     * @param string $_network
-     * @return string
-     * @throws \Exception
-     */
     /**
      * @param $_response
      * @param string $_plugin
@@ -2116,16 +1771,6 @@ class Cmd implements EntityInterface
         return $return;
     }
 
-    /**
-     * @param $_response
-     * @return bool
-     */
-    /**
-     * @param $_response
-     * @return bool
-     * @throws CoreException
-     * @throws \ReflectionException
-     */
     /**
      * @param $_response
      * @return bool
@@ -2151,18 +1796,6 @@ class Cmd implements EntityInterface
         return true;
     }
 
-    /**
-     * @param $_startTime
-     * @param $_endTime
-     * @return array|float|int|null
-     * @throws \Exception
-     */
-    /**
-     * @param $_startTime
-     * @param $_endTime
-     * @return array|float|int|null
-     * @throws \Exception
-     */
     /**
      * @param $_startTime
      * @param $_endTime
@@ -2197,41 +1830,11 @@ class Cmd implements EntityInterface
      * @throws CoreException
      * @throws \ReflectionException
      */
-    /**
-     * @param null $_dateStart
-     * @param null $_dateEnd
-     * @param string $_period
-     * @param int $_offset
-     * @return array|mixed|null
-     * @throws CoreException
-     * @throws \ReflectionException
-     */
-    /**
-     * @param null $_dateStart
-     * @param null $_dateEnd
-     * @param string $_period
-     * @param int $_offset
-     * @return array|mixed|null
-     * @throws CoreException
-     * @throws \ReflectionException
-     */
     public function getPluralityHistory($_dateStart = null, $_dateEnd = null, $_period = 'day', $_offset = 0)
     {
         return HistoryManager::getPlurality($this->id, $_dateStart, $_dateEnd, $_period, $_offset);
     }
 
-    /**
-     * @param string $_key
-     * @param bool $_default
-     * @return array|bool|mixed
-     * @throws \ReflectionException
-     */
-    /**
-     * @param string $_key
-     * @param bool $_default
-     * @return array|bool|mixed
-     * @throws \ReflectionException
-     */
     /**
      * @param string $_key
      * @param bool $_default
@@ -2291,14 +1894,6 @@ class Cmd implements EntityInterface
      * @return array
      * @throws \ReflectionException
      */
-    /**
-     * @return array
-     * @throws \ReflectionException
-     */
-    /**
-     * @return array
-     * @throws \ReflectionException
-     */
     public function export()
     {
         $cmd = clone $this;
@@ -2339,14 +1934,6 @@ class Cmd implements EntityInterface
      * @return string
      * @throws \Exception
      */
-    /**
-     * @return string
-     * @throws \Exception
-     */
-    /**
-     * @return string
-     * @throws \Exception
-     */
     public function getDirectUrlAccess()
     {
         $url = '/core/api/jeeApi.php?apikey=' . ConfigManager::byKey('api') . '&type=cmd&id=' . $this->getId();
@@ -2369,17 +1956,6 @@ class Cmd implements EntityInterface
         return NetworkHelper::getNetworkAccess('external') . $url;
     }
 
-    /**
-     * @param $_code
-     * @return bool
-     * @throws CoreException
-     */
-    /**
-     * @param $_code
-     * @return bool
-     * @throws CoreException
-     * @throws \ReflectionException
-     */
     /**
      * @param $_code
      * @return bool
@@ -2407,16 +1983,6 @@ class Cmd implements EntityInterface
      * @throws CoreException
      * @throws \ReflectionException
      */
-    /**
-     * @return array
-     * @throws CoreException
-     * @throws \ReflectionException
-     */
-    /**
-     * @return array
-     * @throws CoreException
-     * @throws \ReflectionException
-     */
     public function exportApi()
     {
         $return = Utils::o2a($this);
@@ -2424,20 +1990,6 @@ class Cmd implements EntityInterface
         return $return;
     }
 
-    /**
-     * @param array $_data
-     * @param int $_level
-     * @param null $_drill
-     * @return array|null
-     * @throws \ReflectionException
-     */
-    /**
-     * @param array $_data
-     * @param int $_level
-     * @param null $_drill
-     * @return array|null
-     * @throws \ReflectionException
-     */
     /**
      * @param array $_data
      * @param int $_level
@@ -2491,16 +2043,6 @@ class Cmd implements EntityInterface
      * @return array
      * @throws \ReflectionException
      */
-    /**
-     * @param bool $_array
-     * @return array
-     * @throws \ReflectionException
-     */
-    /**
-     * @param bool $_array
-     * @return array
-     * @throws \ReflectionException
-     */
     public function getUsedBy($_array = false)
     {
         $return = array('cmd' => array(), 'eqLogic' => array(), 'scenario' => array(), 'plan' => array(), 'view' => array());
@@ -2522,30 +2064,12 @@ class Cmd implements EntityInterface
      * @return array
      * @throws \ReflectionException
      */
-    /**
-     * @return array
-     * @throws \ReflectionException
-     */
-    /**
-     * @return array
-     * @throws \ReflectionException
-     */
     public function getUse()
     {
         $json = NextDomHelper::fromHumanReadable(json_encode(Utils::o2a($this)));
         return NextDomHelper::getTypeUse($json);
     }
 
-    /**
-     * @param null $_user
-     * @return bool
-     * @throws \Exception
-     */
-    /**
-     * @param null $_user
-     * @return bool
-     * @throws \Exception
-     */
     /**
      * @param null $_user
      * @return bool
@@ -2563,25 +2087,11 @@ class Cmd implements EntityInterface
     /**
      * @return bool
      */
-    /**
-     * @return bool
-     */
-    /**
-     * @return bool
-     */
     public function getChanged()
     {
         return $this->_changed;
     }
 
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    /**
-     * @param $_changed
-     * @return $this
-     */
     /**
      * @param $_changed
      * @return $this
@@ -2596,14 +2106,6 @@ class Cmd implements EntityInterface
      * @param Cmd $srcCmd
      * @return $this
      */
-    /**
-     * @param Cmd $srcCmd
-     * @return $this
-     */
-    /**
-     * @param Cmd $srcCmd
-     * @return $this
-     */
     public function castFromCmd(Cmd $srcCmd)
     {
         $attributes = $srcCmd->getAllAttributes();
@@ -2613,12 +2115,6 @@ class Cmd implements EntityInterface
         return $this;
     }
 
-    /**
-     * @return array
-     */
-    /**
-     * @return array
-     */
     /**
      * @return array
      */

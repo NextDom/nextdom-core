@@ -34,8 +34,7 @@ $NEXTDOM_INTERNAL_CONFIG = array(
         'displayType' => array(
             'dashboard' => array('name' => 'Dashboard'),
             'plan' => array('name' => 'Design'),
-            'view' => array('name' => 'Vue'),
-            'mobile' => array('name' => 'Mobile'),
+            'view' => array('name' => 'Vue')
         ),
     ),
     'interact' => array(
@@ -46,7 +45,7 @@ $NEXTDOM_INTERNAL_CONFIG = array(
             '!=' => array('different'),
         ),
     ),
-    'nextdom_market' => array(
+    'nextdom' => array(
         'sources' => array(
             array('name' => 'NextDom Stable', 'type' => 'json', 'code' => 'nextdom_stable', 'data' => 'https://raw.githubusercontent.com/NextDom/AlternativeMarket-Lists/master/results/nextdom-stable.json'),
             array('name' => 'NextDom draft', 'type' => 'json', 'code' => 'nextdom_draft', 'data' => 'https://raw.githubusercontent.com/NextDom/AlternativeMarket-Lists/master/results/nextdom-draft.json')

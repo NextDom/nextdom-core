@@ -1,0 +1,96 @@
+eqlogic_get_all:
+  path: '/eqlogic/all'
+  controller: NextDom\Rest\EqLogicRest::getAll
+  methods: GET
+eqlogic_get_by_room:
+  path: 'eqlogic/room/{roomId}'
+  controller: NextDom\Rest\EqLogicRest::getByRoom
+  methods: GET
+  requirements:
+    roomId: \d+
+eqlogic_get_visible_by_room:
+  path: 'eqlogic/room/visible/{roomId}'
+  controller: NextDom\Rest\EqLogicRest::getVisibleByRoom
+  methods: GET
+  requirements:
+    roomId: \d+
+room_get_room:
+  path: '/room/get/{roomId}'
+  controller: NextDom\Rest\RoomRest::get
+  methods: GET
+  requirements:
+    roomId: \d+
+room_get_default_tree:
+  path: '/room/get_tree'
+  controller: NextDom\Rest\RoomRest::getDefaultTree
+  methods: GET
+room_get_tree:
+  path: '/room/get_tree/{roomId}'
+  controller: NextDom\Rest\RoomRest::getTree
+  methods: GET
+  requirements:
+    roomId: \d+
+room_get_root:
+  path: '/room/get_roots'
+  methods: GET
+  controller: NextDom\Rest\RoomRest::getRoots
+room_get_summaries:
+  path: '/room/get_summary/{roomsList}'
+  controller: NextDom\Rest\RoomRest::getRoomsSummary
+  methods: GET
+  requirements:
+    roomsList: \d+;(\d+;*)+
+room_get_summary:
+  path: '/room/get_summary/{roomId}'
+  controller: NextDom\Rest\RoomRest::getRoomSummary
+  methods: GET
+  requirements:
+    roomdId: \d+
+summary_get_room_tree:
+  path: '/summary/get_room_tree/{roomId}'
+  controller: NextDom\Rest\SummaryRest::getRoomTree
+  methods: GET
+  requirements:
+    roomId: \d+
+summary_get_default_room_tree:
+  path: '/summary/get_default_room_tree'
+  controller: NextDom\Rest\SummaryRest::getDefaultRoomTree
+  methods: GET
+changes_get:
+  path: '/changes/get/{lastUpdate}'
+  controller: NextDom\Rest\ChangesRest::get
+  methods: GET
+  requirements:
+    lastUpdate: \d+
+cmd_get_by_eqlogic:
+  path: '/cmd/eqlogic/{eqLogicId}'
+  controller: NextDom\Rest\CmdRest::getByEqLogic
+  methods: GET
+  requirements:
+    eqLogicId: \d+
+cmd_get_visible_by_eqlogic:
+  path: '/cmd/eqlogic/visible/{eqLogicId}'
+  controller: NextDom\Rest\CmdRest::getVisibleByEqLogic
+  methods: GET
+  requirements:
+    eqLogicId: \d+
+cmd_exec:
+  path: '/cmd/exec/{cmdId}'
+  controller: NextDom\Rest\CmdRest::exec
+  methods: POST
+  requirements:
+    cmdId: \d+
+scenario_get_all:
+  path: '/scenario/all'
+  controller: NextDom\Rest\ScenarioRest::getAll
+  methods: GET
+scenario_get_all_by_group:
+  path: '/scenario/all/by_group'
+  controller: NextDom\Rest\ScenarioRest::getAllByGroup
+  methods: GET
+scenario_launch:
+  path: '/scenario/launch/{scenarioId}'
+  controller: NextDom\Rest\ScenarioRest::launch
+  methods: POST
+  requirements:
+    scenarioId: \d+

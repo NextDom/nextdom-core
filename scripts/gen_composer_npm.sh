@@ -36,7 +36,7 @@ function install_nodemodules {
   echo " >>> Installing the npm modules"
   [[ ! -d ./vendor ]] && mkdir vendor
   cp package.json ./vendor/
-  npm install --prefix ./vendor
+  npm install --unsafe-perm --no-save --prefix ./vendor
 }
 
 function install_dep_composer {

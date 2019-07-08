@@ -33,7 +33,7 @@
 @import "../../../vendor/node_modules/codemirror/lib/codemirror.css";
 @import "../../../vendor/node_modules/izitoast/dist/css/iziToast.css";
 @import "../../../vendor/node_modules/font-awesome/css/font-awesome.css";
-@import "../../../vendor/node_modules/font-awesome5/css/fontawesome-all.css";
+@import "../../../vendor/node_modules/@fortawesome/fontawesome-free/css/all.css";
 @import "../../../vendor/node_modules/admin-lte/dist/css/AdminLTE.css";
 @import "../../../vendor/node_modules/jquery-datetimepicker/jquery.datetimepicker.css";
 @import "../../../vendor/node_modules/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css";
@@ -54,6 +54,7 @@
 @import "../components/_lists.scss";
 @import "../components/_scrollbars.scss";
 @import "../components/_summary.scss";
+@import "../components/_stepwizard.scss";
 @import "../components/_texts.scss";
 @import "../components/_tooltips.scss";
 /* Containers */

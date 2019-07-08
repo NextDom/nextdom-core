@@ -94,9 +94,7 @@ function createUpdateBox(updateData) {
     bgClass = 'bg-yellow';
   }
 
-  if (updateData.type !== 'core') {
-    boxUpdateClass = 'update-box';
-  }
+  boxUpdateClass = 'update-box';
   var htmlData = '<div class="objet col-lg-4 col-md-6 col-sm-6 col-xs-12">';
   htmlData += '<div class="' + boxUpdateClass + ' box ' + boxClass + '" data-id="' + init(updateData.id) + '" data-logicalId="' + init(updateData.logicalId) + '" data-type="' + init(updateData.type) + '">';
   htmlData += '<div class="box-header with-border accordion-toggle cursor" data-toggle="collapse" data-parent="#accordionUpdate" href="#update_' + init(updateData.id) + '">';
@@ -139,18 +137,18 @@ function createUpdateBox(updateData) {
   htmlData += '<div class="box-footer clearfix text-center">';
 
   if (updateData.type != 'core') {
-    htmlData += '<a class="btn btn-danger btn-sm pull-right remove" ><i class="far fa-trash-alt spacing-right"></i>{{Supprimer}}</a>';
-    htmlData += '<a class="btn btn-action btn-sm update pull-right" title="{{Re-installer}}"><i class="fas fa-refresh spacing-right"></i>{{Reinstaller}}</a> ';
+    htmlData += '<a class="btn btn-danger btn-sm pull-right remove" ><i class="fas fa-trash"></i>{{Supprimer}}</a>';
+    htmlData += '<a class="btn btn-action btn-sm update pull-right" title="{{Re-installer}}"><i class="fas fa-refresh"></i>{{Reinstaller}}</a> ';
   }
   if (updateData.status == 'update') {
-    htmlData += '<a class="btn btn-warning btn-sm update pull-right" title="{{Mettre à jour}}"><i class="fas fa-refresh spacing-right"></i>{{Mettre à jour}}</a> ';
+    htmlData += '<a class="btn btn-warning btn-sm update pull-right" title="{{Mettre à jour}}"><i class="fas fa-refresh"></i>{{Mettre à jour}}</a> ';
   }
   if (isset(updateData.plugin) && isset(updateData.plugin.changelog) && updateData.plugin.changelog != '') {
-    htmlData += '<a class="btn btn-default btn-sm pull-left cursor hidden-sm" target="_blank" href="' + updateData.plugin.changelog + '"><i class="fas fa-book spacing-right"></i>{{Changelog}}</a>';
+    htmlData += '<a class="btn btn-default btn-sm pull-left cursor hidden-sm" target="_blank" href="' + updateData.plugin.changelog + '"><i class="fas fa-book"></i>{{Changelog}}</a>';
   } else {
-    htmlData += '<a class="btn btn-default btn-sm pull-right" href="https://nextdom.github.io/core/fr_FR/changelog" target="_blank"><i class="fas fa-book spacing-right"></i>{{Changelog}}</a>';
+    htmlData += '<a class="btn btn-default btn-sm pull-right" href="https://nextdom.github.io/core/fr_FR/changelog" target="_blank"><i class="fas fa-book"></i>{{Changelog}}</a>';
   }
-  htmlData += '<a class="btn btn-info btn-sm pull-left checkUpdate" ><i class="fas fa-check spacing-right"></i>{{Vérifier}}</a>';
+  htmlData += '<a class="btn btn-info btn-sm pull-left checkUpdate" ><i class="fas fa-check"></i>{{Vérifier}}</a>';
   htmlData += '</div>';
   htmlData += '</div>';
   htmlData += '</div>';

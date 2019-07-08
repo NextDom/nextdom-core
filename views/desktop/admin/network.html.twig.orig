@@ -1,0 +1,191 @@
+{#
+
+/* This file is part of Jeedom.
+*
+* Jeedom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* Jeedom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/* This file is part of NextDom.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#}
+
+<section class="content-header">
+    <div class="action-bar">
+        <div class="action-group">
+<<<<<<< HEAD
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'common.return' | trans }}</a>
+        </div>
+        <div class="action-group">
+            <a class="btn btn-success btn-action-bar pull-right" id="bt_savenetwork"><i class="fas fa-save spacing-right"></i>{{ 'common.save' | trans }}</a>
+=======
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'Retour'}}</a>
+        </div>
+        <div class="action-group">
+            <a class="btn btn-success btn-action-bar pull-right" id="bt_savenetwork"><i class="fas fa-save"></i>{{ 'Sauvegarder' }}</a>
+>>>>>>> develop
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="box" id="network">
+        <!-- Header bar -->
+        <div class="box-header with-border">
+            <h3 class="box-title"><i class="fas fa-rss"></i>{{ 'Réseaux' }}</h3>
+        </div>
+
+        <!-- Page content -->
+        <div class="box-body">
+            <!-- Alert Section -->
+            <div class="alert alert-warning">{{ 'Attention : cette configuration n\'est là que pour informer' }} {{ PRODUCT_NAME }} {{ 'de sa configuration réseau et n\'a aucun impact sur les ports ou l\'IP réellement utilisés pour joindre' }} {{ PRODUCT_NAME }}.</div>
+            <form class="form-horizontal">
+                <!-- Internal Access Section -->
+                <fieldset>
+                    <legend>{{ 'Accès interne' }}</legend>
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Protocole' }}</label>
+                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+                            <div class="input-group">
+                                <select class="configKey form-control" data-l1key="internalProtocol">
+                                    <option value="">{{ 'common.none' | trans }}</option>
+                                    <option value="http://">HTTP</option>
+                                    <option value="https://">HTTPS</option>
+                                </select>
+                                <span class="input-group-addon">://</span>
+                                <input type="text" class="configKey form-control" data-l1key="internalAddr"/>
+                                <span class="input-group-addon">:</span>
+                                <input type="number" class="configKey form-control" data-l1key="internalPort"/>
+                                <span class="input-group-addon">/</span>
+                                <input type="text" class="configKey form-control" data-l1key="internalComplement"/>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- External Access Section -->
+                <fieldset class="legend-section">
+                    <legend>{{ 'Accès externe' }}</legend>
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Protocole' }}</label>
+                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+                            <div class="input-group">
+                                <select class="configKey form-control" data-l1key="externalProtocol">
+                                    <option value="">{{ 'common.none' | trans }}</option>
+                                    <option value="http://">HTTP</option>
+                                    <option value="https://">HTTPS</option>
+                                </select>
+                                <span class="input-group-addon">://</span>
+                                <input type="text" class="configKey form-control" data-l1key="externalAddr"/>
+                                <span class="input-group-addon">:</span>
+                                <input type="number" class="configKey form-control" data-l1key="externalPort"/>
+                                <span class="input-group-addon">/</span>
+                                <input type="text" class="configKey form-control" data-l1key="externalComplement"/>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Advanced Section -->
+                <fieldset class="legend-section">
+                    <legend>{{ 'Gestion avancée' }}</legend>
+                    <table class="table table-condensed table-bordered">
+                        <thead>
+                        <tr>
+                            <th>{{ 'Interface' }}</th>
+                            <th>{{ 'IP' }}</th>
+                            <th>{{ 'Mac' }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for interface in adminNetworkInterfaces %}
+                            <tr>
+                                <td>{{ interface['name'] }}</td>
+                                <td>{{ interface['ip'] }}</td>
+                                <td>{{ interface['mac'] }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="form-group has-error">
+                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Gestion autonome du réseau' }}</label>
+                        <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+                            <input type="checkbox" class="configKey" data-l1key="network::disableMangement" id="networkmanagement"/>
+                            <label for="networkmanagement" class="control-label label-check">{{ 'common.disable' | trans }}</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Masque IP local' }}</label>
+                        <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+                            <div class="input-group">
+                                <input type="text" class="configKey form-control" data-l1key="network::localip">
+                                <span class="input-group-addon">{{ '(pour les installations docker-like, sous la forme 192.168.1.*)' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- DNS Section -->
+                {% for repo, data in adminReposList %}
+                    {% if data['scope']['proxy'] is defined and data['scope']['proxy'] == true and adminConfigs[repo ~ '::enable'] != 0 %}
+                        <fieldset class="legend-section">
+                            <legend>{{ 'DNS (proxy)' }} {{ data['name'] }}</legend>
+                            {% if adminConfigs['dns::token'] == '' %}
+                                <div class="alert alert-warning">{{ 'Attention : cette fonctionnalité n\'est pas disponible dans le service pack community (voir votre service pack sur votre page profil sur le market).' }}</div>
+                            {% else %}
+                                <div class="form-group">
+                                    <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Utiliser les DNS' }} {{ PRODUCT_NAME }}</label>
+                                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+                                        <input type="checkbox" class="configKey" data-l1key="{{ pageContent['networkkey'] }}::allowDNS"/>
+                                        <label for="networkkey" class="control-label label-check">{{'Autoriser'}}</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'Statut DNS' }}</label>
+                                    <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+                                        {% if adminConfigs['market::allowDNS'] == 1 and adminDnsRun %}
+                                            <span class="label label-success">{{ 'Démarré : ' }} <a href="{{ pageContent['adminNetworkExternalAccess']  }}" target="_blank" class="link-dns-success">{{ adminNetworkExternalAccess }}</a></span>
+                                        {% else %}
+                                            <span class="label label-warning" data-toggle="tooltip" title="" data-original-title="{{ 'Normal si vous n\'avez pas coché la case : Utiliser les DNS' }} {{ PRODUCT_NAME }}">{{ 'Arrêté' }}</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-xs-4 control-label">{{ 'Gestion' }}</label>
+                                    <div class="col-xs-8">
+                                        <a class="btn btn-success" id="bt_restartDns"><i class="fas fa-play"></i>{{ 'Redémarrer' }}</a>
+                                        <a class="btn btn-danger" id="bt_haltDns"><i class="fas fa-stop"></i>{{ 'Arrêter' }}</a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </fieldset>
+                    {% endif %}
+                {% endfor %}
+            </form>
+        </div>
+    </div>
+</section>

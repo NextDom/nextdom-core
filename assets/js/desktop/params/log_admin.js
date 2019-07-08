@@ -150,7 +150,7 @@ function addActionOnMessage(_action) {
     div += '<div class="col-sm-6 col-xs-12">';
     div += '<div class="input-group">';
     div += '<span class="input-group-btn">';
-    div += '<a class="btn btn-default bt_removeAction btn-sm"><i class="fas fa-minus-circle"></i></a>';
+    div += '<a class="btn btn-danger bt_removeAction btn-sm"><i class="fas fa-minus-circle"></i></a>';
     div += '</span>';
     div += '<input class="expressionAttr form-control input-sm cmdAction" data-l1key="cmd" />';
     div += '<span class="input-group-btn">';

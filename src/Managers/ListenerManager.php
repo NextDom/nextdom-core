@@ -200,7 +200,7 @@ class ListenerManager
      * @param $_datetime
      * @throws \Exception
      */
-    public static function check($_event, $_value, $_datetime)
+    public static function check($_event, $_value, $_datetime = null)
     {
         $listeners = self::searchEvent($_event);
         if (count($listeners) > 0) {

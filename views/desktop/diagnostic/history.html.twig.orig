@@ -1,0 +1,164 @@
+{#
+
+/* This file is part of Jeedom.
+*
+* Jeedom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* Jeedom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/* This file is part of NextDom.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#}
+<section class="content-header">
+    <div class="action-bar">
+        <div class="action-group">
+<<<<<<< HEAD
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'common.return' | trans }}</a>
+            <a class="btn btn-default btn-action-bar" href="index.php?v=d&p=timeline"><i class="fas fa-history spacing-right"></i>{{ 'Timeline'}}</a>
+=======
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'Retour'}}</a>
+            <a class="btn btn-default btn-action-bar" href="index.php?v=d&p=timeline"><i class="fas fa-history"></i>{{ 'Timeline'}}</a>
+>>>>>>> develop
+        </div>
+        <div class="action-group">
+            <a id="bt_openCmdHistoryConfigure" class="btn btn-default btn-action-bar pull-right"><i class="fas fa-cogs"></i>{{ 'Configuration des commandes' }}</a>
+            <a class="btn btn-warning btn-action-bar pull-right" id='bt_clearGraph'><i class="fas fa-trash"></i>{{ 'RAZ du Graphique' }}</a>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="box" id="div_History">
+        <div class="box-header with-border">
+            <h3 class="box-title"><i class="fas fa-chart-area"></i>{{ 'Historiques' }}</h3>
+        </div>
+        <div class="box-body">
+            <fieldset>
+                <legend>{{ 'Vous pouvez créer ci-dessous une donnée calculée à partir de plusieurs commandes qui sera ajoutée au graphique' }}</legend>
+                <div class="input-group form-group" style="width: 100%">
+                    <input class="form-control" id='in_calculHistory' placeholder="{{ 'Historique calculé...' }}"></input>
+                    <span class="input-group-btn">
+                        <a class="btn btn-default" id="bt_findCmdCalculHistory" data-toggle="tooltip" data-original-title="{{ 'Sélectionner la commande' }}"><i class="fas fa-list-alt no-spacing"></i></a>
+                        <a class="btn btn-success" id="bt_displayCalculHistory" data-toggle="tooltip" data-original-title="{{'Calculer et afficher la commande'}}"><i class="fas fa-check no-spacing"></i></a>
+                        <a class="btn btn-default" id="bt_configureCalculHistory" data-toggle="tooltip" data-original-title="{{'Configurer le calcul'}}"><i class="fas fa-cogs"></i></a>
+                    </span>
+                </div>
+            </fieldset>
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <div class="bs-sidebar form-group">
+                        <ul id="ul_history" class="nav nav-list bs-sidenav">
+                            <fieldset>
+                                <legend>{{ 'Ajouter / Supprimer des commandes au graphique' }}</legend>
+                                <div class="filter input-group form-group">
+                                    <div class="input-group-addon"><i class="fas fa-search"></i></div>
+                                    <input class="filter form-control" placeholder="{{'Rechercher...'}}" />
+                                </div>
+                                {% set objectId = -1 %}
+                                    {% for cmd in historyCmdsList %}
+                                        {% set eqLogic = cmd.getEqLogic() %}
+                                        {% if eqLogic.hasRight('r') %}
+                                            {% if objectId != eqLogic.getObject_id %}
+                                                {% if objectId != -1 %}
+                                                </div>
+                                                {% endif %}
+                                                {% set object = eqLogic.getObject() %}
+                                                {# Pour remplacer is_object #}
+                                                {% if object != null and object is not iterable %}
+                                                    {% if object.getDisplay('tagColor') != '' %}
+                                                        <span class="label cursor displayObject label-cmd" data-object_id="o{{ eqLogic.getObject_id() }}" style="background-color: {{ object.getDisplay('tagColor') }};color: {{ object.getDisplay('tagTextColor', 'white') }}">{{ object.getName() }}...</span>
+                                                    {% else %}
+                                                        <span class="label label-primary cursor displayObject label-cmd" data-object_id="o{{ eqLogic.getObject_id() }}">{{ object.getName() }}...</span>
+                                                    {% endif %}
+                                                {% else %}
+                                                    <span class="label label-primary cursor displayObject label-cmd" data-object_id="o{{ eqLogic.getObject_id() }}">{{ 'common.none' | trans }}...</span>
+                                                {% endif %}
+                                                <div class="cmdList" data-object_id="o{{ eqLogic.getObject_id() }}" style="display:none;">
+                                            {% endif %}
+                                            <li class="cursor li_history" data-cmd_id="{{ cmd.getId() }}">
+                                                <a class="history"><i class="fas fa-trash remove spacing-right"></i>
+                                                    {{ cmd.getEqLogic().getName() }} - {{ cmd.getName() }}
+                                                    {% if cmd.getSubType() == 'string' %}
+                                                        <i class="fas fa-share export spacing-left"></i>
+                                                    {% endif %}
+                                                </a>
+                                            </li>
+                                            {% set objectId = eqLogic.getObject_id() %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            </fieldset>
+                    </div>
+                </div>
+
+                <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                    <fieldset>
+                        <legend>{{ 'Filtrage et mise en forme des données' }}</legend>
+                        <div class="form-group">
+                            <input id="in_startDate" class="form-control in_datepicker" style="display : inline-block; width: 150px;" value="{{ historyDate['start'] }}"/>
+                            <input id="in_endDate" class="form-control in_datepicker" style="display : inline-block; width: 150px;" value="{{ historyDate['end'] }}"/>
+                            <a class="btn btn-success" id='bt_validChangeDate' data-toggle="tooltip" title="" data-original-title="{{ 'Attention : une trop grande plage de dates peut mettre très longtemps à être calculée ou même ne pas s\'afficher.' }}"><i class="fas fa-check"></i>{{ 'Ok' }}</a>
+                            <select class="form-control pull-right" id="sel_groupingType" style="width: 200px;">
+                                <option value="">{{ 'Aucun groupement' }}</option>
+                                <option value="sum::hour">{{ 'Somme par heure' }}</option>
+                                <option value="average::hour">{{ 'Moyenne par heure' }}</option>
+                                <option value="low::hour">{{ 'Minimum par heure' }}</option>
+                                <option value="high::hour">{{ 'Maximum par heure' }}</option>
+                                <option value="sum::day">{{ 'Somme par jour' }}</option>
+                                <option value="average::day">{{ 'Moyenne par jour' }}</option>
+                                <option value="low::day">{{ 'Minimum par jour' }}</option>
+                                <option value="high::day">{{ 'Maximum par jour' }}</option>
+                                <option value="sum::week">{{ 'Somme par semaine' }}</option>
+                                <option value="average::week">{{ 'Moyenne par semaine' }}</option>
+                                <option value="low::week">{{ 'Minimum par semaine' }}</option>
+                                <option value="high::week">{{ 'Maximum par semaine' }}</option>
+                                <option value="sum::month">{{ 'Somme par mois' }}</option>
+                                <option value="average::month">{{ 'Moyenne par mois' }}</option>
+                                <option value="low::month">{{ 'Minimum par mois' }}</option>
+                                <option value="high::month">{{ 'Maximum par mois' }}</option>
+                                <option value="sum::year">{{ 'Somme par année' }}</option>
+                                <option value="average::year">{{ 'Moyenne par année' }}</option>
+                                <option value="low::year">{{ 'Minimum par année' }}</option>
+                                <option value="high::year">{{ 'Maximum par année' }}</option>
+                            </select>
+                            <select class="form-control pull-right" id="sel_chartType" style="width: 200px;">
+                                <option value="line">{{ 'Ligne' }}</option>
+                                <option value="areaspline">{{ 'Areaspline' }}</option>
+                                <option value="column">{{ 'Barre' }}<
+                            </select>
+                            <span class="pull-right">{{ 'Variation' }} <input type="checkbox" id="cb_derive"/></span>
+                            <span class="pull-right">{{ 'Escalier' }} <input type="checkbox" id="cb_step"/></span>
+                        </div>
+                        <div>
+                            <div class="divHightcharts" id="div_graph"></div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
