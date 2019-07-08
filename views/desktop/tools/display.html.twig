@@ -86,7 +86,7 @@
                     <div class="box-body">
                         <ul class="eqLogicSortable">
                             {% for eqLogic in displayEqLogics[-1] %}
-                                <li class="alert eqLogic cursor" data-id="{{ eqLogic.getId() }}" data-visible="{{ eqLogic.getIsVisible() }}" data-enable="{{ eqLogic.getIsEnable() }}" data-name="{{ eqLogic.getName() }}" data-type="{{ eqLogic.getEqType_name() }}">
+                                <li class="alert eqLogic cursor showCmd" data-id="{{ eqLogic.getId() }}" data-visible="{{ eqLogic.getIsVisible() }}" data-enable="{{ eqLogic.getIsEnable() }}" data-name="{{ eqLogic.getName() }}" data-type="{{ eqLogic.getEqType_name() }}">
                                     <input type="checkbox" class="cb_selEqLogic"/>
                                     {{ eqLogic.getName() }}
                                     <i style="font-size:0.9em;">({{ eqLogic.getEqType_name() }})</i>
@@ -128,7 +128,7 @@
                             <div class="box-body">
                                 <ul class="eqLogicSortable">
                                     {% for eqLogic in displayEqLogics[object.getId()] %}
-                                        <li class="alert eqLogic cursor" data-id="{{ eqLogic.getId() }}" data-visible="{{ eqLogic.getIsVisible() }}" data-enable="{{ eqLogic.getIsEnable() }}" data-name="{{ eqLogic.getName() }}" data-type="{{ eqLogic.getEqType_name() }}">
+                                        <li class="alert eqLogic cursor showCmd" data-id="{{ eqLogic.getId() }}" data-visible="{{ eqLogic.getIsVisible() }}" data-enable="{{ eqLogic.getIsEnable() }}" data-name="{{ eqLogic.getName() }}" data-type="{{ eqLogic.getEqType_name() }}">
                                             <input type="checkbox" class="cb_selEqLogic"/>
                                             {{ eqLogic.getName() }}
                                             <i style="font-size:0.9em;">({{ eqLogic.getEqType_name() }})</i>
