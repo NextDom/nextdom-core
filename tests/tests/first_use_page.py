@@ -156,7 +156,7 @@ class FirstUsePage(BaseGuiTest):
         finish_button.click()
         # Stay in fist connect page
         self.assertEqual(0, len(self.get_js_logs()))
-        self.assertIn("connexion", self.get_page_title())
+        self.assertIn("1ère Connexion", self.get_page_title())
 
     def test_full_process(self): #pylint: disable=too-many-statements
         """Test full process
