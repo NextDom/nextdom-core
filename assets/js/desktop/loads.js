@@ -61,9 +61,6 @@ $(document).ajaxStop(function () {
  * Event for first page loading or F5 loading
  */
 $(function () {
-    // Loading spinner
-//    showLoadingCustom();
-
     // OBSOLETE ?
     $.alertTrigger = function(){
         initRowOverflow();
@@ -376,7 +373,7 @@ $(function () {
     });
     $('.colorpick').colorpicker();
     $(":input").inputmask();
-        $(".slimScrollDiv").css("overflow", "");
+    $(".slimScrollDiv").css("overflow", "");
     $(".sidebar").css("overflow", "");
 
     // Post Inits launch
@@ -470,8 +467,6 @@ function loadPage(pageUrl,noPushHistory){
 
     // Page content loading
     $('#div_pageContainer').empty().load(url, function(){
-        $('#bt_getHelpPage').attr('data-page',getUrlVars('p')).attr('data-plugin',getUrlVars('m'));
-
         // Page title formatting
         var title = getUrlVars('p');
         if(title !== false){
@@ -483,6 +478,9 @@ function loadPage(pageUrl,noPushHistory){
 
         // Post Inits launch
         postInitPage();
+
+        // Init help button
+        $('#bt_getHelpPage').attr('data-page',getUrlVars('p')).attr('data-plugin',getUrlVars('m'));
     });
 
     return;

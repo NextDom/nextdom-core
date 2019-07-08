@@ -314,6 +314,7 @@ window.onscroll = function () {
      $('#jqueryLoadingDiv').hide();
      $('.blur-div').removeClass('blur');
      $('.content').removeClass('blur');
+     $('#div_pageContainer').removeClass('blur');
  };
 
  /**
