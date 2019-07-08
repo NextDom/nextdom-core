@@ -45,12 +45,6 @@ function gen_js {
            vendor/node_modules/bootstrap/dist/js/bootstrap.min.js \
            vendor/node_modules/admin-lte/dist/js/adminlte.min.js \
            vendor/node_modules/izitoast/dist/js/iziToast.min.js \
-           assets/js/desktop/conflicts.js \
-           assets/js/desktop/loads.js \
-           assets/js/desktop/inits.js \
-           assets/js/desktop/gui.js \
-           assets/js/desktop/utils.js \
-           assets/js/desktop/search.js \
            assets/3rdparty/jquery.utils/jquery.utils.js \
            assets/3rdparty/jquery.at.caret/jquery.at.caret.min.js \
            assets/3rdparty/jquery.multi-column-select/multi-column-select.js \
@@ -83,6 +77,12 @@ function gen_js {
            core/js/note.class.js \
            core/js/listener.class.js \
            core/js/jeedom.class.js \
+           assets/js/desktop/conflicts.js \
+           assets/js/desktop/loads.js \
+           assets/js/desktop/inits.js \
+           assets/js/desktop/gui.js \
+           assets/js/desktop/utils.js \
+           assets/js/desktop/search.js \
            vendor/node_modules/bootbox/dist/bootbox.min.js \
            vendor/node_modules/highcharts/highstock.js \
            vendor/node_modules/highcharts/highcharts-more.js \
