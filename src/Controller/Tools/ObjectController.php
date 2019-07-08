@@ -45,6 +45,7 @@ class ObjectController extends BaseController
      */
     public static function get(&$pageData): string
     {
+        $pageData['PRODUCT_NAME'] = ConfigManager::byKey('product_name');
         $pageData['JS_VARS']['select_id'] = Utils::init('id', '-1');
         $pageData['objectList'] = ObjectManager::buildTree(null, false);
         $pageData['objectSummary'] = ConfigManager::byKey('object:summary');

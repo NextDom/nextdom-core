@@ -78,8 +78,8 @@ $(function () {
         var date = new Date();
         var locale = 'en-EN';
         // Get NextDom language for format
-        if (isset(nextdom_langage)) {
-            locale = nextdom_langage.replace('_','-');
+        if (isset(nextdom_language)) {
+            locale = nextdom_language.replace('_','-');
         }
         // Date
         var dateFormat = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -277,9 +277,9 @@ $(function () {
     });
 
     // Define question box language
-    if (isset(nextdom_langage)) {
+    if (isset(nextdom_language)) {
         bootbox.setDefaults({
-            locale: nextdom_langage.substr(0, 2),
+            locale: nextdom_language.substr(0, 2),
         });
     }
 

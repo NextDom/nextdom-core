@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Modals;
 
 use NextDom\Helpers\Render;
+use NextDom\Managers\ConfigManager;
 
 /**
  * Class Welcome
@@ -39,6 +40,7 @@ class Welcome extends BaseAbstractModal
     public static function get(): string
     {
         $pageData = [];
+        $pageData['PRODUCT_NAME'] = ConfigManager::byKey('product_name');
         $pageData['CSS_POOL'][] = '/public/css/pages/welcome.css';
         return Render::getInstance()->get('/modals/welcome.html.twig', $pageData);
     }

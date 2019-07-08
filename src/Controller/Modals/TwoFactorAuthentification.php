@@ -25,6 +25,7 @@ namespace NextDom\Controller\Modals;
 use NextDom\Helpers\Render;
 use NextDom\Managers\UserManager;
 use PragmaRX\Google2FA\Google2FA;
+use NextDom\Managers\ConfigManager;
 
 /**
  * Class TwoFactorAuthentification
@@ -55,6 +56,7 @@ class TwoFactorAuthentification extends BaseAbstractModal
         );
 
         $pageData = [];
+        $pageData['PRODUCT_NAME'] = ConfigManager::byKey('product_name');
         $pageData['google2FaUrl'] = $google2faUrl;
         $pageData['userTwoFactorSecret'] = UserManager::getStoredUser()->getOptions('twoFactorAuthentificationSecret');
 
