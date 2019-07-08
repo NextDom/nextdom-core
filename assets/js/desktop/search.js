@@ -47,10 +47,15 @@ $(function () {
         $('.objectSummaryGlobalHeader').toggle();
     });
 
+    var delay=100, setTimeoutConst;
     $('#search-toggle').hover(function () {
-        $('.navbar-search').show();
-        $('.search-toggle').hide();
-        $('.objectSummaryGlobalHeader').hide();
+      setTimeoutConst = setTimeout(function() {
+          $('.navbar-search').show();
+          $('.search-toggle').hide();
+          $('.objectSummaryGlobalHeader').hide();
+        }, delay);
+      }, function() {
+      clearTimeout(setTimeoutConst);
     });
 
     // Close search input field
