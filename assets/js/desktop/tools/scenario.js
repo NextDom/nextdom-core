@@ -292,7 +292,7 @@ function setEditor() {
                     matchBrackets: true,
                     viewportMargin: Infinity
                 });
-            }, 1);
+            }, 100);
         }
 
     });

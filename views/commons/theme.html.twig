@@ -41,6 +41,7 @@
 /* COLOR20 = Couleur de bordure des boutons (bouton d'administration, bouton default) */
 /* COLOR21 = Paramètre alpha des couleurs d'alertes */
 /* COLOR22 = Couleur de fond des boîtes à onglets */
+/* COLOR23 = Couleur de fond des blocs codes */
 
 /* #################################################################################################################################################################################################### */
 /* COLOR1 = Couleur d'accentuation principale (identité du thème, header nextdom, bouton primaires, messages d'info, élements actifs ou survolés, textes de liens et d'état, scrollbar, boutons fab...) */
@@ -415,11 +416,6 @@ legend, .box legend, .panel legend {
   background-color: {{ COLOR11 }} !important;
 }
 
-/* Code mirror */
-.CodeMirror-scroll{
-  background-color: {{ COLOR11 }} !important;
-}
-
 /* Unités et fond colorpick */
 .colorpick .input-group-addon, .input-group .input-group-addon {
   background-color: {{ COLOR11 }} !important;
@@ -724,4 +720,12 @@ pre {
 /* Tabs */
 .nav-tabs-custom>.tab-content {
     background-color: {{ COLOR22 }} !important;
+}
+
+/* #################################################################################### */
+/* COLOR15 = Couleur de fond des contenants (boxs, cards, pages d'onglets, tableaux...) */
+/* #################################################################################### */
+/* Code mirror */
+.CodeMirror-scroll {
+    background-color: {{ COLOR23 }} !important;
 }

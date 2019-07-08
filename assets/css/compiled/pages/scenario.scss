@@ -240,13 +240,16 @@
     .CodeMirror {
         height: auto;
     }
+    .CodeMirror-scroll {
+        max-height: 300px !important;
+    }
     .expressionAttr.scenario-text {
         resize: vertical;
     }
     .expression-error {
         text-decoration: underline;
-        text-decoration-color: 'red';
-        text-decoration-style: 'dashed';
+        text-decoration-color: $red;
+        text-decoration-style: dashed;
     }
     .element {
         color: white;
@@ -258,5 +261,8 @@
     }
     div.sortable.empty {
         height: 30px;
+    }
+    .scenario-comment-text {
+        text-decoration: none !important;
     }
 }

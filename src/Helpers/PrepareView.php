@@ -37,7 +37,7 @@ use Symfony\Component\Routing\Loader\YamlFileLoader;
  */
 class PrepareView
 {
-    private static $NB_THEME_COLORS = 1+22;
+    private static $NB_THEME_COLORS = 1+23;
 
     /**
      * Read configuration

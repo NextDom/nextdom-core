@@ -52,7 +52,7 @@ $NEXTDOM_INTERNAL_CONFIG = array(
         )
     ),
     'theme' => array(
-      'name' => 'white',
+      'name' => 'toto',
       'color1' => '#33b8cc',
       'color2' => '#ffffff',
       'color3' => '#f4f4f5',
@@ -75,6 +75,7 @@ $NEXTDOM_INTERNAL_CONFIG = array(
       'color20' => '#dddddd',
       'color21' => '100',
       'color22' => '#fafafa',
+      'color23' => '#f5f5f5',
     ),
     'plugin' => array(
         'category' => array(
