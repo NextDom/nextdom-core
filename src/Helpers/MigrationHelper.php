@@ -128,6 +128,7 @@ class MigrationHelper
     }
 
     /**
+     * Compare digit version
      * @param int $currentVersionSize
      * @param int $previousVersionSize
      * @param array $previousVersion
@@ -284,6 +285,7 @@ class MigrationHelper
 
 
     /**
+     * Update plan and plan3d table to change path given in parameter
      * @param string $logFile
      * @param string $fileToReplace
      * @throws CoreException
@@ -330,24 +332,24 @@ class MigrationHelper
     {
 
         $fileToReplace = NEXTDOM_DATA . '/data/php/user.function.class.php';
-        $fromString = 'require_once dirname(__FILE__) . \'/../../core/php/core.inc.php\';';
-        $toString = 'if (file_exists(\'/usr/share/nextdom/src/core.php\')) {
-            require_once(\'/usr/share/nextdom/src/core.php\');
+        if(file_exists ( $fileToReplace )) {
+            $fromString = 'require_once dirname(__FILE__) . \'/../../core/php/core.inc.php\';';
+            $toString = 'if (file_exists(\'/usr/share/nextdom/src/core.php\')) {
+                    require_once(\'/usr/share/nextdom/src/core.php\');
+                    } else {
+                        require_once(\'/var/www/html/src/core.php\');
+                    }';
+
+            $message = 'Apply changes to ' . $fileToReplace;
+            if ($logFile == 'migration') {
+                LogHelper::addInfo($logFile, $message, '');
             } else {
-                require_once(\'/var/www/html/src/core.php\');
-            }';
-
-        $message = 'Apply changes to ' . $fileToReplace;
-        if ($logFile == 'migration') {
-            LogHelper::addInfo($logFile, $message, '');
-        } else {
-            ConsoleHelper::process($message);
+                ConsoleHelper::process($message);
+            }
+            $file_contents = file_get_contents($fileToReplace);
+            $file_contents = str_replace($fromString, $toString, $file_contents);
+            file_put_contents($fileToReplace, $file_contents);
         }
-
-        $file_contents = file_get_contents($fileToReplace);
-        $file_contents = str_replace($fromString,$toString,$file_contents);
-        file_put_contents($fileToReplace,$file_contents);
-
     }
 
 
