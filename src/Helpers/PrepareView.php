@@ -134,17 +134,11 @@ class PrepareView
             $pageData['JS_POOL'][] = '/vendor/node_modules/bootstrap/dist/js/bootstrap.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/admin-lte/dist/js/adminlte.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/izitoast/dist/js/iziToast.min.js';
-            // Then NextDom JS files
-            $pageData['JS_POOL'][] = '/public/js/desktop/conflicts.js';
-            $pageData['JS_POOL'][] = '/public/js/desktop/loads.js';
-            $pageData['JS_POOL'][] = '/public/js/desktop/inits.js';
-            $pageData['JS_POOL'][] = '/public/js/desktop/gui.js';
-            $pageData['JS_POOL'][] = '/public/js/desktop/utils.js';
-            $pageData['JS_POOL'][] = '/public/js/desktop/search.js';
-            // And libraries JS
             $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.utils/jquery.utils.js';
             $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.at.caret/jquery.at.caret.min.js';
             $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.multi-column-select/multi-column-select.js';
+
+            // Add NextDom core JS
             $pageData['JS_POOL'][] = '/core/js/core.js';
             $pageData['JS_POOL'][] = '/core/js/nextdom.class.js';
             $pageData['JS_POOL'][] = '/core/js/private.class.js';
@@ -174,6 +168,16 @@ class PrepareView
             $pageData['JS_POOL'][] = '/core/js/note.class.js';
             $pageData['JS_POOL'][] = '/core/js/listener.class.js';
             $pageData['JS_POOL'][] = '/core/js/jeedom.class.js';
+
+            // Then NextDom JS files
+            $pageData['JS_POOL'][] = '/public/js/desktop/conflicts.js';
+            $pageData['JS_POOL'][] = '/public/js/desktop/loads.js';
+            $pageData['JS_POOL'][] = '/public/js/desktop/inits.js';
+            $pageData['JS_POOL'][] = '/public/js/desktop/gui.js';
+            $pageData['JS_POOL'][] = '/public/js/desktop/utils.js';
+            $pageData['JS_POOL'][] = '/public/js/desktop/search.js';
+
+            // And libraries JS
             $pageData['JS_POOL'][] = '/vendor/node_modules/bootbox/dist/bootbox.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/highcharts/highstock.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/highcharts/highcharts-more.js';
@@ -200,6 +204,7 @@ class PrepareView
             $pageData['JS_POOL'][] = '/vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/snapsvg/dist/snap.svg-min.js';
+
             // Then Factory framwework files
             $pageData['JS_POOL'][] = '/public/js/factory/NextDomUIDGenerator.js';
             $pageData['JS_POOL'][] = '/public/js/factory/NextDomElement.js';
