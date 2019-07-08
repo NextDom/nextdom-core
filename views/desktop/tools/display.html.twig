@@ -91,18 +91,18 @@
                                     {{ eqLogic.getName() }}
                                     <i style="font-size:0.9em;">({{ eqLogic.getEqType_name() }})</i>
                                     {% if eqLogic.getIsEnable() != 1 %}
-                                        <i class="fas fa-times" title="{{ 'Non actif' }}"></i>
+                                        <i class="fas fa-times" data-toggle="tooltip" title="" data-original-title="{{ 'Non actif' }}"></i>
                                     {% endif %}
                                     {% if eqLogic.getIsVisible() != 1 %}
-                                        <i class="fas fa-eye-slash" title="{{ 'Non visible' }}"></i>
+                                        <i class="fas fa-eye-slash" data-toggle="tooltip" title="" data-original-title="{{ 'Non visible' }}"></i>
                                     {% endif %}
-                                    <i class="fas fa-chevron-right pull-right showCmd summary-box-tools" title="{{ 'Voir les commandes' }}"></i>
-                                    <i class="fas fa-cog pull-right configureEqLogic summary-box-tools spacing-right" title="{{ 'Configuration avancée' }}"></i>
-                                    <a class="fas fa-external-link-square-alt pull-right summary-box-tools spacing-right" href="{{ eqLogic.getLinkToConfiguration() }}" target="_blank" class="pull-right" title="{{ 'Aller sur la configuration de l\'équipement' }}"></a>
+                                    <i class="fas fa-chevron-right pull-right showCmd summary-box-tools" data-toggle="tooltip" title="" data-original-title="{{ 'Voir les commandes' }}"></i>
+                                    <i class="fas fa-cog pull-right configureEqLogic summary-box-tools spacing-right" data-toggle="tooltip" title="" data-original-title="{{ 'Configuration avancée' }}"></i>
+                                    <a class="fas fa-external-link-square-alt pull-right summary-box-tools spacing-right" href="{{ eqLogic.getLinkToConfiguration() }}" target="_blank" class="pull-right" data-toggle="tooltip" title="" data-original-title="{{ 'Aller sur la configuration de l\'équipement' }}"></a>
                                     <ul class="cmdSortable" style="display:none;">
                                         {% for cmd in displayCmds[eqLogic.getId()] %}
                                             <li class="alert alert-warning cmd cursor" data-id="{{ cmd.getId() }}" data-name="{{ cmd.getName() }}">{{ cmd.getName() }}
-                                                <i class="fas fa-cog pull-right configureCmd" title="{{ 'Configuration avancée' }}" style="line-height:20px"></i>
+                                                <i class="fas fa-cog pull-right configureCmd" data-toggle="tooltip" title="" data-original-title="{{ 'Configuration avancée' }}" style="line-height:20px"></i>
                                             </li>
                                         {% endfor %}
                                     </ul>
@@ -120,8 +120,8 @@
                         <div class="box-header with-border accordion-toggle cursor" data-toggle="collapse" data-parent="#accordionDisplay" href="#display_{{ object.getId() }}">
                             <h3 class="box-title">{{ object.getDisplay('icon', '<i class="fas fa-tag"></i>')|replace({'></i>': '></i>'})|raw }}{{ object.getName() }}</h3>
                             <div class="box-tools pull-right" style="line-height:36px">
-                                <a class="fas fa-external-link-square-alt openObject summary-box-tools spacing-right" data-id="index.php?v=d&p=object&id={{ object.getId() }}" title="{{ 'Aller sur la configuration de l\'objet' }}"></a>
-                                <i class="fas fa-cog cursor configureObject summary-box-tools" title="{{ 'Configuration avancée' }}"></i>
+                                <a class="fas fa-external-link-square-alt openObject summary-box-tools spacing-right" data-id="index.php?v=d&p=object&id={{ object.getId() }}" data-toggle="tooltip" title="" data-original-title="{{ 'Aller sur la configuration de l\'objet' }}"></a>
+                                <i class="fas fa-cog cursor configureObject summary-box-tools" data-toggle="tooltip" title="" data-original-title="{{ 'Configuration avancée' }}"></i>
                             </div>
                         </div>
                         <div id="display_{{ object.getId() }}" class="panel-collapse collapse">
@@ -133,18 +133,18 @@
                                             {{ eqLogic.getName() }}
                                             <i style="font-size:0.9em;">({{ eqLogic.getEqType_name() }})</i>
                                             {% if eqLogic.getIsEnable() != 1 %}
-                                                <i class="fas fa-times" title="{{ 'Non actif' }}"></i>
+                                                <i class="spacing-left fas fa-times" data-toggle="tooltip" title="" data-original-title="{{ 'Non actif' }}"></i>
                                             {% endif %}
                                             {% if eqLogic.getIsVisible() != 1 %}
-                                                <i class="fas fa-eye-slash" title="{{ 'Non visible' }}"></i>
+                                                <i class="spacing-left fas fa-eye-slash" data-toggle="tooltip" title="" data-original-title="{{ 'Non visible' }}"></i>
                                             {% endif %}
-                                            <i class="fas fa-chevron-right pull-right showCmd summary-box-tools" title="{{ 'Voir les commandes' }}"></i>
-                                            <i class="fas fa-cog pull-right configureEqLogic summary-box-tools spacing-right" title="{{ 'Configuration avancée' }}"></i>
-                                            <a class="fas fa-external-link-square-alt pull-right summary-box-tools spacing-right" href="{{ eqLogic.getLinkToConfiguration() }}" target="_blank" class="pull-right" title="{{ 'Aller sur la configuration de l\'équipement' }}"></a>
+                                            <i class="fas fa-chevron-right pull-right showCmd summary-box-tools" data-toggle="tooltip" title="" data-original-title="{{ 'Voir les commandes' }}"></i>
+                                            <i class="fas fa-cog pull-right configureEqLogic summary-box-tools spacing-right" data-toggle="tooltip" title="" data-original-title="{{ 'Configuration avancée' }}"></i>
+                                            <a class="fas fa-external-link-square-alt pull-right summary-box-tools spacing-right" href="{{ eqLogic.getLinkToConfiguration() }}" target="_blank" class="pull-right" data-toggle="tooltip" title="" data-original-title="{{ 'Aller sur la configuration de l\'équipement' }}"></a>
                                             <ul class="cmdSortable" style="display:none;">
                                                 {% for cmd in displayCmds[eqLogic.getId()] %}
                                                     <li class="alert alert-warning cmd cursor" data-id="{{ cmd.getId() }}" data-name="{{ cmd.getName() }}">{{ cmd.getName() }}
-                                                        <i class="fas fa-cog pull-right configureCmd" title="{{ 'Configuration avancée' }}" style="line-height:20px"></i>
+                                                        <i class="fas fa-cog pull-right configureCmd" data-toggle="tooltip" title="" data-original-title="{{ 'Configuration avancée' }}" style="line-height:20px"></i>
                                                     </li>
                                                 {% endfor %}
                                             </ul>
