@@ -203,6 +203,8 @@ class MigrationHelper
         } else {
             ConsoleHelper::process($message);
         }
+
+        FileSystemHelper::mkdirIfNotExists(NEXTDOM_DATA.'/data/custom/');
         $dir = new \RecursiveDirectoryIterator(NEXTDOM_ROOT, \FilesystemIterator::SKIP_DOTS);
 
         // Flatten the recursive iterator, folders come before their files
@@ -235,7 +237,6 @@ class MigrationHelper
                         } else {
                             ConsoleHelper::process($message);
                         }
-                        FileSystemHelper::mkdirIfNotExists(NEXTDOM_DATA.'/data/custom/');
                         FileSystemHelper::mv(NEXTDOM_ROOT.'/'.$fileToReplace, sprintf("%s/%s", NEXTDOM_DATA.'/data/custom/', $fileToReplace));
 
                         self::migratePlanPath($logFile, $fileToReplace);
