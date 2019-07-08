@@ -657,6 +657,9 @@ class BackupManager
                 if (true === FileSystemHelper::mv($c_dir, sprintf("%s/%s", $nextDomRoot, $name))) {
                     self::restorePublicPerms($nextDomRoot);
                 }
+                if($logFile != 'migration') {
+                    ConsoleHelper::ok();
+                }
             }
         }
 
@@ -675,6 +678,9 @@ class BackupManager
             }
             if (true === FileSystemHelper::mv($c_dir, sprintf("%s/%s", $customDataRoot, $name))) {
                 self::restorePublicPerms($customDataRoot);
+            }
+            if($logFile != 'migration') {
+                ConsoleHelper::ok();
             }
         }
 
@@ -808,6 +814,9 @@ class BackupManager
                 }
                 $dest = str_replace($pattern, "", $c_entry->getPathname());
                 $tar->addFile($c_entry->getPathname(), $dest);
+                if($logFile != 'migration') {
+                    ConsoleHelper::ok();
+                }
             }
         }
     }
