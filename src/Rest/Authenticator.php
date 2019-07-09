@@ -19,6 +19,7 @@
 
 namespace NextDom\Rest;
 
+use NextDom\Helpers\Api;
 use NextDom\Managers\UserManager;
 use NextDom\Model\Entity\User;
 use ReallySimpleJWT\Exception\TokenValidatorException;
@@ -154,6 +155,7 @@ class Authenticator
 
         if ($this->secret !== null) {
             try {
+                // Try JWT token first
                 if (Token::validate($this->request->headers->get('X-AUTH-TOKEN'), $this->secret)) {
                     $this->connectedUser = $this->getUserFromToken();
                     if (is_object($this->connectedUser)) {
@@ -165,6 +167,29 @@ class Authenticator
             }
         }
 
+        return $this->authenticated;
+    }
+
+    /**
+     * Check API Key sended in URL (?apikey=MY_KEY)
+     * Consider connected like the first admin in database
+     *
+     * @return bool True if API Key works
+     *
+     * @throws \Exception
+     */
+    public function checkApiKey(): bool
+    {
+        $apiKey = $this->request->query->get('apikey');
+        if ($apiKey !== null) {
+            if ($apiKey == Api::getApiKey('core')) {
+                $adminUser = UserManager::byProfils('admin', true);
+                if (count($adminUser) > 0) {
+                    $this->connectedUser = $adminUser[0];
+                }
+                $this->authenticated = true;
+            }
+        }
         return $this->authenticated;
     }
 

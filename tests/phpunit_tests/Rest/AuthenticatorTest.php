@@ -15,6 +15,7 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+use NextDom\Helpers\Api;
 use NextDom\Managers\UserManager;
 use NextDom\Rest\Authenticator;
 use Symfony\Component\HttpFoundation\Request;
@@ -99,5 +100,22 @@ class AuthenticatorTest extends PHPUnit_Framework_TestCase
         $testRequest->headers->set('X-AUTH-TOKEN', 'A really bad token');
         $testAuthenticator = Authenticator::init($testRequest);
         $this->assertFalse($testAuthenticator->checkSendedToken());
+    }
+
+    public function testCheckApiKeyWithGoodKey() {
+        $goodKey = Api::getApiKey('core');
+        $testRequest = new Request();
+        $testRequest->query->add(['apikey' => $goodKey]);
+        $authenticator = Authenticator::init($testRequest);
+
+        $this->assertTrue($authenticator->checkApiKey());
+    }
+
+    public function testCheckApiKeyWithBadKey() {
+        $testRequest = new Request();
+        $testRequest->query->add(['apikey' => 'This is a bad key']);
+        $authenticator = Authenticator::init($testRequest);
+
+        $this->assertFalse($authenticator->checkApiKey());
     }
 }
