@@ -617,6 +617,27 @@ class FileSystemHelper
     }
 
     /**
+     * Get the free space of a directory
+     * @param $directory Directory in which we want free space information
+     * @return int free space in Byte (Octet)
+     */
+    public static function getDirectoryFreeSpace($directory)
+    {
+        return disk_free_space ( $directory );
+    }
+
+
+    /**
+     * Get true if the file exists
+     * @param $file File we want to know if exists
+     * @return bool exists or not
+     */
+    public static function isFileExists($file)
+    {
+        return file_exists ( $file );
+    }
+
+    /**
      * Moves input file or directory to given destination (acts like mv)
      *
      * @param string $src source file or directory

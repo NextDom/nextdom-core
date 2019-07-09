@@ -160,9 +160,7 @@ class MigrationHelper
      */
     private static function migrate_0_0_0($logFile = 'migration'){
 
-        //$migrateFile = ConsoleHelper::step(NEXTDOM_ROOT . "/install/migrate/migrate.sql");
         $migrateFile = sprintf("%s/install/migrate/migrate_0_0_0.sql", NEXTDOM_ROOT);
-
 
         BackupManager::loadSQLFromFile($migrateFile);
 
@@ -332,7 +330,7 @@ class MigrationHelper
     {
 
         $fileToReplace = NEXTDOM_DATA . '/data/php/user.function.class.php';
-        if(file_exists ( $fileToReplace )) {
+        if(FileSystemHelper::isFileExists($fileToReplace)) {
             $fromString = 'require_once dirname(__FILE__) . \'/../../core/php/core.inc.php\';';
             $toString = 'if (file_exists(\'/usr/share/nextdom/src/core.php\')) {
                     require_once(\'/usr/share/nextdom/src/core.php\');

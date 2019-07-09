@@ -82,6 +82,11 @@ class BackupManager
     public static function createBackup()
     {
         $backupDir = self::getBackupDirectory();
+
+        if(FileSystemHelper::getDirectoryFreeSpace($backupDir) < 400000000){
+            throw new CoreException('Not Enough space to create local backup');
+        }
+
         $backupName = self::getBackupFilename();
         $backupPath = sprintf("%s/%s", $backupDir, $backupName);
         $sqlPath = sprintf("%s/DB_backup.sql", $backupDir);
@@ -484,7 +489,7 @@ class BackupManager
             ConsoleHelper::step("clearing cache...");
             CacheManager::flush();
             ConsoleHelper::ok();
-            //SystemHelper::rrmdir($tmpDir);
+            SystemHelper::rrmdir($tmpDir);
             NextDomHelper::event("end_restore");
             ConsoleHelper::subTitle("end of restore procedure at " . date('Y-m-d H:i:s'));
             ConsoleHelper::subTitle("elapsed time " . (strtotime('now') - $startTime));
@@ -496,6 +501,9 @@ class BackupManager
             if (true === is_dir($tmpDir)) {
                 SystemHelper::rrmdir($tmpDir);
             }
+            ConsoleHelper::step("starting nextdom system...");
+            NextDomHelper::startSystem();
+            ConsoleHelper::ok();
         }
         // the following line acts as marker used in ajax telling that the procedure is finished
         // it should be me removed
@@ -539,6 +547,9 @@ class BackupManager
         $tmpDir = sprintf("%s-restore-%s", NEXTDOM_TMP, date('Y-m-d-H:i:s'));
         if (false === mkdir($tmpDir, $mode = 0775, true)) {
             throw new CoreException("unable to create tmp directory " . $tmpDir);
+        }
+        if(FileSystemHelper::getDirectoryFreeSpace($tmpDir) < 400000000){
+            throw new CoreException('Not enough space to extract archive');
         }
         $tar = new Tar();
         $tar->open($file);
