@@ -24,9 +24,6 @@
         timeoutForLargeTests="60"
         verbose="false">
     <testsuites>
-        <testsuite name="Temp">
-            <file>NoteTest.php</file>
-        </testsuite>
         <testsuite name="Managers">
             <file>BackupManagerTest.php</file>
             <file>CmdManagerTest.php</file>
@@ -48,11 +45,15 @@
             <file>NoteTest.php</file>
             <file>qLogicTest.php</file>
         </testsuite>
+        <testsuite name="Rest">
+            <directory>../phpunit_tests/Rest</directory>
+        </testsuite>
         <testsuite name="Others">
             <file>I18nTest.php</file>
         </testsuite>
         <testsuite name="AllTests">
             <directory>../phpunit_tests</directory>
+            <directory>../phpunit_tests/Rest</directory>
         </testsuite>
     </testsuites>
     <filter>

@@ -32,7 +32,7 @@ class EqLogicTest extends PHPUnit_Framework_TestCase
 
     public static function tearDownAfterClass()
     {
-        DBHelper::Prepare('DELETE FROM ' . EqLogicManager::DB_CLASS_NAME. ' WHERE id > 2', []);
+        DBHelper::Prepare('DELETE FROM ' . EqLogicManager::DB_CLASS_NAME. ' WHERE id > 4', []);
     }
 
     public function setUp()
@@ -65,7 +65,7 @@ class EqLogicTest extends PHPUnit_Framework_TestCase
 
     public function tearDown()
     {
-        DBHelper::Prepare('DELETE FROM ' . EqLogicManager::DB_CLASS_NAME. ' WHERE id > 2', []);
+        DBHelper::Prepare('DELETE FROM ' . EqLogicManager::DB_CLASS_NAME. ' WHERE id > 4', []);
     }
 
     public function testGettersAndSetters()
