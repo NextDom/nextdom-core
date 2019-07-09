@@ -17,7 +17,7 @@ docker rm nextdom-test > /dev/null 2>&1   || true
 
 # Go to base path
 echo "step 1. creating installer container nextdom-test from ${baseImage}..."
-docker run -d -p 8765:80 -v ${rootDir}:/data --name="nextdom-test" ${baseImage} > /dev/null || {
+docker run -d -p 8765:80 -v ${rootDir}:/data --name="nextdom-test" ${baseImage} /start.sh > /dev/null || {
   echo "-> enable to run installer container"
   exit 1
 }
