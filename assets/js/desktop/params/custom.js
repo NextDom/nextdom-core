@@ -133,7 +133,7 @@ function sendCustomData(type, content) {
 }
 
 $(".colorpick input").change(function () {
-    $('.configKey[data-l1key="theme:name"]').value('custom');
+    $('.configKey[data-l1key="nextdom::theme"]').value('custom');
 });
 
 $("#bt_savecustom").on('click', function (event) {
