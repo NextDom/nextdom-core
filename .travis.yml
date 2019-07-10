@@ -8,7 +8,7 @@ addons:
 before_install:
     - docker pull sylvaner1664/nextdom-test
     - mkdir -p tests/coverage
-    - docker run -d --rm -p 8765:80 -v `pwd`:/data --name="nextdom-test" sylvaner1664/nextdom-test:latest
+    - docker run -d --rm -p 8765:80 -v `pwd`:/data --name="nextdom-test" sylvaner1664/nextdom-test:latest /start.sh
     - sudo apt update
     - sudo apt install -y python3-pip python-pip
     - sudo python3 -m pip install --upgrade pip

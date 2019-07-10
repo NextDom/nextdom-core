@@ -152,7 +152,7 @@ class UserManager
 
     /**
      * @param $_login
-     * @return array|mixed|null
+     * @return User|null
      * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
      */

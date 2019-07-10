@@ -21,6 +21,7 @@ namespace NextDom\Rest;
 
 use NextDom\Managers\UserManager;
 use NextDom\Model\Entity\User;
+use ReallySimpleJWT\Exception\TokenValidatorException;
 use ReallySimpleJWT\Token;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -151,12 +152,18 @@ class Authenticator
      */
     public function checkSendedToken(): bool
     {
-        if ($this->secret === null) {
-            $this->authenticated = false;
-        } elseif (Token::validate($this->request->headers->get('X-AUTH-TOKEN'), $this->secret)) {
-            $this->connectedUser = $this->getUserFromToken();
-            if (is_object($this->connectedUser)) {
-                $this->authenticated = true;
+        $this->authenticated = false;
+
+        if ($this->secret !== null) {
+            try {
+                if (Token::validate($this->request->headers->get('X-AUTH-TOKEN'), $this->secret)) {
+                    $this->connectedUser = $this->getUserFromToken();
+                    if (is_object($this->connectedUser)) {
+                        $this->authenticated = true;
+                    }
+                }
+            } catch (TokenValidatorException $e) {
+
             }
         }
 
@@ -169,8 +176,7 @@ class Authenticator
      * @return User|null User
      * @throws \Exception
      */
-    private
-    function getUserFromToken()
+    private function getUserFromToken()
     {
         $user = null;
         $payload = Token::getPayload($this->request->headers->get('X-AUTH-TOKEN'));
@@ -188,8 +194,7 @@ class Authenticator
      *
      * @return User Connected user
      */
-    public
-    function getConnectedUser()
+    public function getConnectedUser()
     {
         return $this->connectedUser;
     }

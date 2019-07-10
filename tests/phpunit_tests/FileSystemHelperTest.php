@@ -50,7 +50,7 @@ class FileSystemHelperTest extends PHPUnit_Framework_TestCase
     }
 
     public function testGetTemplateFileContentOnExistingTemplate() {
-        $template = FileSystemHelper::getTemplateFileContent('core', 'dashboard', 'eqLogic');
+        $template = FileSystemHelper::getTemplateFileContent('core', 'dashboard', 'eqLogic','');
         $this->assertContains('data-eqLogic_id="#id#"', $template);
         $this->assertContains('cmd refresh', $template);
     }
@@ -62,7 +62,7 @@ class FileSystemHelperTest extends PHPUnit_Framework_TestCase
     }
 
     public function testGetTemplateFileContentOnBadTemplate() {
-        $template = FileSystemHelper::getTemplateFileContent('core', 'dashboard', 'eqLogicXXXX');
+        $template = FileSystemHelper::getTemplateFileContent('core', 'dashboard', 'eqLogicXXXX','');
         $this->assertEquals('', $template);
     }
 

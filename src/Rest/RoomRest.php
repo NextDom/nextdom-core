@@ -45,14 +45,14 @@ class RoomRest
     /**
      * Get tree of rooms from specific room
      *
-     * @param int $roomId
+     * @param int $roomId Root rooms
+     *
      * @return ObjectManager[] Tree of rooms
      * @throws \Exception
      */
     public static function getTree(int $roomId)
     {
         $rootRoom = ObjectManager::byId($roomId);
-        $rootRoom->getChilds();
         $result = self::prepareResult($rootRoom);
         return $result;
     }
@@ -63,7 +63,7 @@ class RoomRest
      * @return array
      * @throws \Exception
      */
-    private static function prepareResult(JeeObject $room, JeeObject $father = null)
+    private static function prepareResult(JeeObject $room, JeeObject $father = null, $addChildren = true)
     {
         $result = [];
         $result['id'] = $room->getId();
@@ -79,12 +79,14 @@ class RoomRest
             $result['father']['name'] = $father->getName();
             $result['father']['icon'] = $father->getDisplay('icon');
         }
-        // Get all children
-        $directChildren = $room->getChild();
-        if (!empty($directChildren)) {
-            $result['children'] = [];
-            foreach ($directChildren as $child) {
-                $result['children'][] = self::prepareResult($child, $room);
+        if ($addChildren) {
+            // Get all children
+            $directChildren = $room->getChild();
+            if (!empty($directChildren)) {
+                $result['children'] = [];
+                foreach ($directChildren as $child) {
+                    $result['children'][] = self::prepareResult($child, $room);
+                }
             }
         }
         return $result;
@@ -102,7 +104,7 @@ class RoomRest
     public static function get(int $roomId)
     {
         $room = ObjectManager::byId($roomId);
-        return self::prepareResult($room);
+        return self::prepareResult($room, null, false);
     }
 
     /**

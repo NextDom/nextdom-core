@@ -41,6 +41,7 @@ use Monolog\Logger;
 use NextDom\Com\ComShell;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\MessageManager;
+use NextDom\Singletons\PHPInformation;
 use SplFileObject;
 
 define('DEFAULT_MAX_LINES_IN_LOG', 200);
@@ -89,7 +90,8 @@ class LogHelper
      */
     public static function addInfo($targetLog, $message, $logicalId = '')
     {
-        return self::add($targetLog, 'info', $message, $logicalId);
+        $message = $message . '\n' . PHPInformation::getInstance()->getCallingFunctionName(true);
+        self::add($logTarget, 'error', $message, $logicalId);
     }
 
     /**

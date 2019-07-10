@@ -67,20 +67,19 @@ class EqLogicManagerTest extends PHPUnit_Framework_TestCase
 
     public function testByIdWhatNotExists()
     {
-        $eqLogic = EqLogicManager::byId(4);
+        $eqLogic = EqLogicManager::byId(49);
         $this->assertFalse($eqLogic);
-
     }
 
     public function testAll() {
         $eqLogics = EqLogicManager::all();
-        $this->assertEquals(2, count($eqLogics));
+        $this->assertEquals(4, count($eqLogics));
         $this->assertEquals('plugin4tests', get_class($eqLogics[0]));
     }
 
     public function testAllOnlyEnabled() {
         $eqLogics = EqLogicManager::all(true);
-        $this->assertEquals(1, count($eqLogics));
+        $this->assertEquals(3, count($eqLogics));
         $this->assertEquals('plugin4tests', get_class($eqLogics[0]));
     }
 }
