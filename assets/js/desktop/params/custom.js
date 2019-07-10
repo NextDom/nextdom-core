@@ -290,9 +290,9 @@ $("input[name=theme]").click(function () {
             'theme:color23' : '#aaa',
         }
     }
-    if (radio == "light"){
+    if (radio == "lighter"){
         config = {
-            'theme:name' : 'light',
+            'theme:name' : 'lighter',
             'theme:color1' : '#33b8cc',
             'theme:color2' : '#ffffff',
             'theme:color3' : '#f4f4f5',
