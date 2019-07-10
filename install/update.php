@@ -19,6 +19,7 @@
 namespace NextDom;
 
 use Icewind\SMB\System;
+use NextDom\Helpers\MigrationHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\ScriptHelper;
 use NextDom\Helpers\SystemHelper;
@@ -106,7 +107,6 @@ function debianUpdate()
  */
 function coreUpdate()
 {
-    $versionBeforeUpdate = file_get_contents(NEXTDOM_ROOT . '/assets/config/Nextdom_version');
     // Test type of installation
     $gitInstall = is_dir(NEXTDOM_ROOT . '/.git');
 
@@ -121,10 +121,8 @@ function coreUpdate()
     } catch (\Throwable $e) {
 
     }
-    $versionAfterUpdate = file_get_contents(NEXTDOM_ROOT . '/assets/config/Nextdom_version');
 
-    // Todo: Add @slobberbone call update
-    // UPDATE $versionBeforeUpdate $versionAfterUpdate
+    MigrationHelper::migrate('migration');
 
     ConsistencyManager::checkConsistency();
 

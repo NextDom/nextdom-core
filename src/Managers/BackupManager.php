@@ -35,8 +35,11 @@
 namespace NextDom\Managers;
 
 use NextDom\Exceptions\CoreException;
+use NextDom\Helpers\ConsoleHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
+use NextDom\Enums\FoldersReferential;
+use NextDom\Helpers\MigrationHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
 use NextDom\Helpers\Utils;
@@ -79,53 +82,57 @@ class BackupManager
     public static function createBackup()
     {
         $backupDir = self::getBackupDirectory();
+
+        if(FileSystemHelper::getDirectoryFreeSpace($backupDir) < 400000000){
+            throw new CoreException('Not Enough space to create local backup');
+        }
+
         $backupName = self::getBackupFilename();
         $backupPath = sprintf("%s/%s", $backupDir, $backupName);
         $sqlPath = sprintf("%s/DB_backup.sql", $backupDir);
         $cachePath = CacheManager::getArchivePath();
         $startTime = strtotime('now');
         $status = "success";
-
         try {
-            printf("*********** starting backup procedure at %s ***********\n", date('Y-m-d H:i:s'));
+
+            ConsoleHelper::title("Create Backup Process", false);
+            ConsoleHelper::subTitle("starting backup procedure at " . date('Y-m-d H:i:s'));
             NextDomHelper::event('begin_backup', true);
-            printf("starting plugin backup...");
+            ConsoleHelper::step("starting plugin backup");
             self::backupPlugins();
-            printf("Success\n");
-            printf("checking database integrity...");
+            ConsoleHelper::ok();
+            ConsoleHelper::step("checking database integrity");
             self::repairDB();
-            printf("Success\n");
-            printf("starting database backup...");
+            ConsoleHelper::ok();
+            ConsoleHelper::step("starting database backup");
             self::createDBBackup($sqlPath);
-            printf("Success\n");
-            printf("starting cache backup...");
+            ConsoleHelper::ok();
+            ConsoleHelper::step("starting cache backup");
             CacheManager::persist();
-            printf("Success\n");
-            printf("creating backup archive...");
-            self::createBackupArchive($backupPath, $sqlPath, $cachePath);
-            printf("Success\n");
-            printf("rotating backup archives...");
+            ConsoleHelper::ok();
+            ConsoleHelper::step("creating backup archive");
+            self::createBackupArchive($backupPath, $sqlPath, $cachePath, 'backup');
+            ConsoleHelper::ok();
+            ConsoleHelper::step("rotating backup archives");
             self::rotateBackups($backupDir);
-            printf("Success\n");
-            printf("uploading backup to remote clouds...");
+            ConsoleHelper::ok();
+            ConsoleHelper::step("uploading backup to remote clouds");
             self::sendRemoteBackup($backupPath);
-            printf("Success\n");
+            ConsoleHelper::ok();
             NextDomHelper::event('end_backup');
-            printf(" -> STATUS: success\n");
-            printf(" -> ELAPSED TIME: %s sec(s)\n", (strtotime('now') - $startTime));
-            printf("*********** end of backup procedure at %s ***********\n", date('Y-m-d H:i:s'));
+            ConsoleHelper::subTitle("end of backup procedure at " . date('Y-m-d H:i:s'));
+            ConsoleHelper::subTitle("elapsed time " . (strtotime('now') - $startTime));
         } catch (\Exception $e) {
             $status = "error";
-            printf("Failure\n");
-            printf("> ERROR: %s\n", Utils::br2nl($e->getMessage()));
-            printf("> DETAILS\n");
-            printf("%s\n", print_r($e->getTrace(), true));
+            ConsoleHelper::nok();
+            ConsoleHelper::error($e);
             LogHelper::add('backup', 'error', $e->getMessage());
         }
 
         // the following line acts as marker used in ajax telling that the procedure is finished
         // it should be me removed
-        printf("Closing with %s\n\n", $status);
+        ConsoleHelper::subTitle("Closing with " . $status);
+        ConsoleHelper::title("Create Backup Process", true);
         return ($status == "success");
     }
 
@@ -160,7 +167,7 @@ class BackupManager
     public static function getBackupFilename($name = null): string
     {
         $date = date("Y-m-d-H:i:s");
-        $version = NextDomHelper::getJeedomVersion();
+        $version = NextDomHelper::getNextdomVersion();
         $format = "backup-%s-%s-%s.tar.gz";
 
         if ($name === null) {
@@ -253,30 +260,50 @@ class BackupManager
      * @retrun bool true archive generated successfully
      * @throws \Exception when error occured while writing the tar archive
      */
-    public static function createBackupArchive(string $outputPath, $sqlPath, $cachePath)
+    public static function createBackupArchive(string $outputPath, $sqlPath, $cachePath, $logFile)
     {
-        $pattern = sprintf("|^%s/+|", NEXTDOM_ROOT);
+
         $tar = new Tar();
         $tar->setCompression();
         $tar->create($outputPath);
+
+        // Backup cache and SQL files
         $tar->addFile($cachePath, "var/cache.tar.gz");
         $tar->addFile($sqlPath, "DB_backup.sql");
 
-        // iterate on dirs we want to include in archive
-        $roots = ["plugins"];
-        foreach ($roots as $c_root) {
-            $path = sprintf("%s/%s", NEXTDOM_ROOT, $c_root);
-            $dirIter = new RecursiveDirectoryIterator($path);
-            $riIter = new RecursiveIteratorIterator($dirIter);
-            // iterate on files recursively found
-            foreach ($riIter as $c_entry) {
-                if (false === $c_entry->isFile()) {
-                    continue;
+        // Backup config and data folders
+        FileSystemHelper::mkdirIfNotExists(NEXTDOM_DATA.'/data/custom');
+        $roots = [NEXTDOM_DATA.'/data/',NEXTDOM_DATA.'/config/'];
+        $pattern = NEXTDOM_DATA .'/';
+        self::addPathToArchive($roots, $pattern, $tar, $logFile);
+
+        // Backup plugins folder
+        $roots = [NEXTDOM_ROOT.'/plugins/'];
+        $pattern = NEXTDOM_ROOT .'/';
+        self::addPathToArchive($roots, $pattern, $tar, $logFile);
+
+        $dir = new \RecursiveDirectoryIterator(NEXTDOM_ROOT, \FilesystemIterator::SKIP_DOTS);
+        // Flatten the recursive iterator, folders come before their files
+        $it  = new \RecursiveIteratorIterator($dir, \RecursiveIteratorIterator::SELF_FIRST);
+        // Maximum depth is 1 level deeper than the base folder
+        $it->setMaxDepth(0);
+
+
+        // Backup all files/folder in root folder added by user
+        foreach ($it as $fileInfo) {
+            if ($fileInfo->isDir() || $fileInfo->isFile()) {
+                if(!in_array($fileInfo->getFilename(), FoldersReferential::NEXTDOMFOLDERS)
+                    && !in_array($fileInfo->getFilename(), FoldersReferential::NEXTDOMFILES)
+                    && !is_link( $fileInfo->getFilename()) ) {
+                    $tar->addFile($fileInfo->getPathname(), $fileInfo->getFilename());
+                    if ($fileInfo->isDir()) {
+                        $roots = [NEXTDOM_ROOT.'/'.$fileInfo->getFilename()];
+                        self::addPathToArchive($roots, $pattern, $tar, $logFile);
+                    }
                 }
-                $dest = preg_replace($pattern, "", $c_entry->getPathname());
-                $tar->addFile($c_entry->getPathname(), $dest);
             }
         }
+
         $tar->close();
     }
 
@@ -373,7 +400,11 @@ class BackupManager
                 continue;
             }
             LogHelper::addError("system", $c_val['class']);
-            $c_val['class']::backup_send($path);
+            try {
+                $c_val['class']::backup_send($path);
+            } catch (\Exception $e) {
+                // Even if we have a samba exception, the backup should be available
+            }
         }
         return true;
     }
@@ -416,63 +447,68 @@ class BackupManager
         $tmpDir = "";
 
         try {
-            printf("*********** starting restore procedure at %s ***********\n", date('Y-m-d H:i:s'));
+            ConsoleHelper::title("Restore Backup Process", false);
+            ConsoleHelper::subTitle("starting restore procedure at " . date('Y-m-d H:i:s'));
             NextDomHelper::event('begin_restore', true);
 
             if (($file === null) || ("" === $file)) {
                 $file = self::getLastBackupFilePath($backupDir, "newest");
             }
-            printf("file used for restoration: %s\n", $file);
-
-            printf("stopping nextdom system...");
+            ConsoleHelper::process("file used for restoration: " . $file);
+            ConsoleHelper::ok();
+            ConsoleHelper::step("stopping nextdom system...");
             NextDomHelper::stopSystem();
-            printf("Success\n");
-            printf("extracting backup archive...");
+            ConsoleHelper::ok();
+            ConsoleHelper::step("extracting backup archive...");
             $tmpDir = self::extractArchive($file);
-            printf("Success\n");
-            printf("restoring mysql database...");
+            ConsoleHelper::ok();
+            ConsoleHelper::step("restoring mysql database...");
             self::restoreDatabase($tmpDir);
-            printf("Success\n");
-            printf("importing jeedom configuration...");
+            ConsoleHelper::ok();
+            ConsoleHelper::step("importing jeedom configuration...");
             self::restoreJeedomConfig($tmpDir);
-            printf("Success\n");
-            printf("restoring plugins...");
+            ConsoleHelper::ok();
+            ConsoleHelper::step("restoring custom data...");
+            self::restoreCustomData($tmpDir,'restore');
+            ConsoleHelper::ok();
+            ConsoleHelper::step("migrating data...");
+            MigrationHelper::migrate('restore');
+            ConsoleHelper::ok();
+            ConsoleHelper::step("restoring plugins...");
             self::restorePlugins($tmpDir);
-            printf("Success\n");
-            printf("migrate database...");
-            self::loadSQLMigrateScript();
-            printf("Success\n");
-            printf("starting nextdom system...");
+            ConsoleHelper::ok();
+            ConsoleHelper::step("starting nextdom system...");
             NextDomHelper::startSystem();
-            printf("Success\n");
-            printf("updating system configuration...");
+            ConsoleHelper::ok();
+            ConsoleHelper::step("updating system configuration...");
             self::updateConfig();
-            printf("Success\n");
-            printf("chechking system consistency...");
+            ConsoleHelper::ok();
+            ConsoleHelper::step("chechking system consistency...");
             ConsistencyManager::checkConsistency();
-            printf("Success\n");
-            printf("clearing cache...");
+            ConsoleHelper::ok();
+            ConsoleHelper::step("clearing cache...");
             CacheManager::flush();
-            printf("Success\n");
+            ConsoleHelper::ok();
             SystemHelper::rrmdir($tmpDir);
             NextDomHelper::event("end_restore");
-            printf(" -> STATUS: success\n");
-            printf(" -> ELAPSED TIME: %s sec(s)\n", (strtotime('now') - $startTime));
-            printf("*********** end of restore procedure at %s ***********\n", date('Y-m-d H:i:s'));
+            ConsoleHelper::subTitle("end of restore procedure at " . date('Y-m-d H:i:s'));
+            ConsoleHelper::subTitle("elapsed time " . (strtotime('now') - $startTime));
         } catch (\Exception $e) {
             $status = "error";
-            printf("Failure\n");
-            printf("> ERROR: %s\n", Utils::br2nl($e->getMessage()));
-            printf("> DETAILS\n");
-            printf("%s\n", print_r($e->getTrace(), true));
+            ConsoleHelper::nok();
+            ConsoleHelper::error($e);
             LogHelper::add('restore', 'error', $e->getMessage());
             if (true === is_dir($tmpDir)) {
                 SystemHelper::rrmdir($tmpDir);
             }
+            ConsoleHelper::step("starting nextdom system...");
+            NextDomHelper::startSystem();
+            ConsoleHelper::ok();
         }
         // the following line acts as marker used in ajax telling that the procedure is finished
         // it should be me removed
-        printf("Closing with %s\n\n", $status);
+        ConsoleHelper::subTitle("Closing with " . $status);
+        ConsoleHelper::title("Restore Backup Process", true);
         return ($status == "success");
     }
 
@@ -512,6 +548,9 @@ class BackupManager
         if (false === mkdir($tmpDir, $mode = 0775, true)) {
             throw new CoreException("unable to create tmp directory " . $tmpDir);
         }
+        if(FileSystemHelper::getDirectoryFreeSpace($tmpDir) < 400000000){
+            throw new CoreException('Not enough space to extract archive');
+        }
         $tar = new Tar();
         $tar->open($file);
         $tar->extract($tmpDir, "", $exclude);
@@ -528,6 +567,7 @@ class BackupManager
     {
         $backupFile = sprintf("%s/DB_backup.sql", $tmpDir);
 
+        //TODO A faire dans une migration
         if (0 != SystemHelper::vsystem("sed -i -e 's/jeedom/nextdom/g' '%s'", $backupFile)) {
             throw new CoreException("unable to modify content of backup file " . $backupFile);
         }
@@ -540,7 +580,7 @@ class BackupManager
             \DB::Prepare($statement, array(), \DB::FETCH_TYPE_ROW);
         }
         self::loadSQLFromFile($backupFile);
-        self::loadSQLMigrateScript();
+//        self::loadSQLMigrateScript();
         \DB::Prepare("SET foreign_key_checks = 1", array(), \DB::FETCH_TYPE_ROW);
     }
 
@@ -550,7 +590,7 @@ class BackupManager
      * @param string $file path to file to load
      * @throw CoreException when a mysql error occurs
      */
-    private static function loadSQLFromFile($file)
+    public static function loadSQLFromFile($file)
     {
         global $CONFIG;
 
@@ -574,7 +614,7 @@ class BackupManager
      */
     private static function loadSQLMigrateScript()
     {
-        $migrateFile = sprintf("%s/install/migrate/migrate.sql", NEXTDOM_ROOT);
+        $migrateFile = sprintf("%s/install/migrate/migrate_0_0_0.sql", NEXTDOM_ROOT);
 
         self::loadSQLFromFile($migrateFile);
     }
@@ -601,6 +641,63 @@ class BackupManager
         }
     }
 
+
+    /**
+     * Restore custom data from backup archive
+     *
+     * @param string $tmpDir extracted backup root directory
+     * @throws CoreException
+     */
+    private static function restoreCustomData($tmpDir, $logFile)
+    {
+        $rootCustomDataDirs = glob(sprintf("%s/*", $tmpDir), GLOB_ONLYDIR);
+        $nextDomRoot = sprintf("%s/", NEXTDOM_ROOT);
+
+        foreach ($rootCustomDataDirs as $c_dir) {
+            $name = basename($c_dir);
+            if(!in_array($name, FoldersReferential::NEXTDOMFOLDERS)
+                && !in_array($name, FoldersReferential::NEXTDOMFILES)
+                && !in_array($name, FoldersReferential::JEEDOMFOLDERS)
+                && !in_array($name, FoldersReferential::JEEDOMFILES)) {
+                $message = 'Restoring folder :' . $name;
+                if ($logFile == 'migration') {
+                    LogHelper::addInfo($logFile, $message, '');
+                } else {
+                    ConsoleHelper::process($message);
+                }
+                if (true === FileSystemHelper::mv($c_dir, sprintf("%s/%s", $nextDomRoot, $name))) {
+                    self::restorePublicPerms($nextDomRoot);
+                }
+                if($logFile != 'migration') {
+                    ConsoleHelper::ok();
+                }
+            }
+        }
+
+
+        $customDataDirs = glob(sprintf("%s/data/*", $tmpDir), GLOB_ONLYDIR);
+        $customDataRoot = sprintf("%s/data", NEXTDOM_DATA);
+
+        SystemHelper::rrmdir($customDataRoot . "/*");
+        foreach ($customDataDirs as $c_dir) {
+            $name = basename($c_dir);
+            $message ='Restoring folder :'.$name;
+            if($logFile == 'migration') {
+                LogHelper::addInfo($logFile, $message, '');
+            } else {
+                ConsoleHelper::process($message);
+            }
+            if (true === FileSystemHelper::mv($c_dir, sprintf("%s/%s", $customDataRoot, $name))) {
+                self::restorePublicPerms($customDataRoot);
+            }
+            if($logFile != 'migration') {
+                ConsoleHelper::ok();
+            }
+        }
+
+
+    }
+
     /**
      * Restore plugins from backup archive
      *
@@ -619,7 +716,7 @@ class BackupManager
                 // should probably fail, keeping behavior prior to install/restore.php refactoring
             }
         }
-        self::restorePluginPerms();
+        self::restorePublicPerms($pluginRoot);
 
         $plugins = PluginManager::listPlugin(true);
         foreach ($plugins as $c_plugin) {
@@ -637,27 +734,27 @@ class BackupManager
     }
 
     /**
-     * Restore www-data owner and 775 permissions on plugin directory
+     * Restore www-data owner and 775 permissions on directory
      *
+     * @param $folderRoot
      * @throws CoreException on permission error
      */
-    private static function restorePluginPerms()
+    private static function restorePublicPerms($folderRoot)
     {
-        $pluginRoot = sprintf("%s/plugins", NEXTDOM_ROOT);
         $status = SystemHelper::vsystem("%s chown %s:%s -R %s",
             SystemHelper::getCmdSudo(),
             SystemHelper::getWWWUid(),
             SystemHelper::getWWWGid(),
-            $pluginRoot);
+            $folderRoot);
         if (0 != $status) {
-            throw new CoreException("unable to restore plugins filesystem owner");
+            throw new CoreException("unable to restore filesystem owner on ".$folderRoot);
         }
 
         SystemHelper::vsystem("%s chmod 775 -R %s",
             SystemHelper::getCmdSudo(),
-            $pluginRoot);
+            $folderRoot);
         if (0 != $status) {
-            throw new CoreException("unable to restore plugins filesystem rights");
+            throw new CoreException("unable to restore filesystem rights".$folderRoot);
         }
     }
 
@@ -700,6 +797,38 @@ class BackupManager
             unlink($backupFilePath);
         } else {
             throw new CoreException(__('Impossible de trouver le fichier : ') . $backupFilePath);
+        }
+    }
+
+    /**
+     * @param array $roots
+     * @param string $pattern
+     * @param Tar $tar
+     * @param string logFile
+     */
+    private static function addPathToArchive( $roots, $pattern, $tar, $logFile)
+    {
+        foreach ($roots as $c_root) {
+            $path = $c_root;
+            $dirIter = new RecursiveDirectoryIterator($path);
+            $riIter = new RecursiveIteratorIterator($dirIter);
+            // iterate on files recursively found
+            foreach ($riIter as $c_entry) {
+                if (false === $c_entry->isFile()) {
+                    continue;
+                }
+                $message ='Add folder to archive : '.$c_entry->getPathname();
+                if($logFile == 'migration') {
+                    LogHelper::addInfo($logFile, $message, '');
+                } else {
+                    ConsoleHelper::process($message);
+                }
+                $dest = str_replace($pattern, "", $c_entry->getPathname());
+                $tar->addFile($c_entry->getPathname(), $dest);
+                if($logFile != 'migration') {
+                    ConsoleHelper::ok();
+                }
+            }
         }
     }
 }
