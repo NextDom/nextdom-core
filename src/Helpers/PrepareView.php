@@ -51,6 +51,7 @@ class PrepareView
             'nextdom::firstUse',
             'nextdom::Welcome',
             'nextdom::waitSpinner',
+            'nextdom::theme',
             'notify::status',
             'notify::position',
             'notify::timeout',

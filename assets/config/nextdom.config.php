@@ -52,7 +52,6 @@ $NEXTDOM_INTERNAL_CONFIG = array(
         )
     ),
     'theme' => array(
-      'name' => 'light',
       'color1' => '#33b8cc',
       'color2' => '#ffffff',
       'color3' => '#f4f4f5',
