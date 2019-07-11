@@ -258,7 +258,7 @@ class PlanAjax extends BaseAjax
         if (false == is_object($plan)) {
             throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));
         }
-        $uploadDir = sprintf("%s/public/img/plan_%s", NEXTDOM_ROOT, $plan->getId());
+        $uploadDir = sprintf("%s/data/custom/plan/plan_%s", NEXTDOM_DATA, $plan->getId());
         shell_exec('rm -rf ' . $uploadDir);
         mkdir($uploadDir, 0775, true);
         $filename = Utils::readUploadedFile($_FILES, "file", $uploadDir, 5, array('.png', '.jpeg', '.jpg'), function ($file) {
@@ -269,7 +269,7 @@ class PlanAjax extends BaseAjax
         $imgSize = getimagesize($filepath);
         $plan->setDisplay('width', $imgSize[0]);
         $plan->setDisplay('height', $imgSize[1]);
-        $plan->setDisplay('path', 'public/img/plan_' . $plan->getId() . '/' . $filename);
+        $plan->setDisplay('path', 'data/custom/plan/plan_' . $plan->getId() . '/' . $filename);
         $plan->save();
         AjaxHelper::success();
     }

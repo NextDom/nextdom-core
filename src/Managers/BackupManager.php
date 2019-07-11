@@ -489,7 +489,7 @@ class BackupManager
             ConsoleHelper::step("clearing cache...");
             CacheManager::flush();
             ConsoleHelper::ok();
-            SystemHelper::rrmdir($tmpDir);
+            FileSystemHelper::rrmdir($tmpDir);
             NextDomHelper::event("end_restore");
             ConsoleHelper::subTitle("end of restore procedure at " . date('Y-m-d H:i:s'));
             ConsoleHelper::subTitle("elapsed time " . (strtotime('now') - $startTime));
@@ -499,7 +499,7 @@ class BackupManager
             ConsoleHelper::error($e);
             LogHelper::add('restore', 'error', $e->getMessage());
             if (true === is_dir($tmpDir)) {
-                SystemHelper::rrmdir($tmpDir);
+                FileSystemHelper::rrmdir($tmpDir);
             }
             ConsoleHelper::step("starting nextdom system...");
             NextDomHelper::startSystem();
@@ -678,7 +678,8 @@ class BackupManager
         $customDataDirs = glob(sprintf("%s/data/*", $tmpDir), GLOB_ONLYDIR);
         $customDataRoot = sprintf("%s/data", NEXTDOM_DATA);
 
-        SystemHelper::rrmdir($customDataRoot . "/*");
+        FileSystemHelper::rrmdir($customDataRoot . "/");
+        FileSystemHelper::mkdirIfNotExists($customDataRoot);
         foreach ($customDataDirs as $c_dir) {
             $name = basename($c_dir);
             $message ='Restoring folder :'.$name;
@@ -689,6 +690,27 @@ class BackupManager
             }
             if (true === FileSystemHelper::mv($c_dir, sprintf("%s/%s", $customDataRoot, $name))) {
                 self::restorePublicPerms($customDataRoot);
+            }
+            if($logFile != 'migration') {
+                ConsoleHelper::ok();
+            }
+        }
+
+        $customPlanDirs = glob(sprintf("%s/core/img/plan*", $tmpDir), GLOB_ONLYDIR);
+        $customPlanRoot = sprintf("%s/data/custom/plan", NEXTDOM_DATA);
+
+        FileSystemHelper::rrmdir($customPlanRoot . "/");
+        FileSystemHelper::mkdirIfNotExists($customPlanRoot);
+        foreach ($customPlanDirs as $c_dir) {
+            $name = basename($c_dir);
+            $message ='Restoring folder :'.$name;
+            if($logFile == 'migration') {
+                LogHelper::addInfo($logFile, $message, '');
+            } else {
+                ConsoleHelper::process($message);
+            }
+            if (true === FileSystemHelper::mv($c_dir, sprintf("%s/%s", $customPlanRoot, $name))) {
+                self::restorePublicPerms($customPlanRoot);
             }
             if($logFile != 'migration') {
                 ConsoleHelper::ok();
@@ -709,7 +731,8 @@ class BackupManager
         $plugingDirs = glob(sprintf("%s/plugins/*", $tmpDir), GLOB_ONLYDIR);
         $pluginRoot = sprintf("%s/plugins", NEXTDOM_ROOT);
 
-        SystemHelper::rrmdir($pluginRoot . "/*");
+        FileSystemHelper::rrmdir($pluginRoot . "/");
+        FileSystemHelper::mkdirIfNotExists($pluginRoot);
         foreach ($plugingDirs as $c_dir) {
             $name = basename($c_dir);
             if (false === FileSystemHelper::mv($c_dir, sprintf("%s/%s", $pluginRoot, $name))) {
