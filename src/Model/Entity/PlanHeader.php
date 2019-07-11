@@ -239,7 +239,7 @@ class PlanHeader implements EntityInterface
         if ($this->getImage('data') == '') {
             return '';
         }
-        $dir = NEXTDOM_ROOT . '/public/img/plan';
+        $dir = NEXTDOM_DATA . '/data/custom/plan/';
         if (!file_exists($dir)) {
             mkdir($dir);
         }
@@ -253,7 +253,7 @@ class PlanHeader implements EntityInterface
             file_put_contents($filepath, base64_decode($this->getImage('data')));
         }
         $size = $this->getImage('size');
-        return '<img style="z-index:997" src="/public/img/plan/' . $filename . '" data-sixe_y="' . $size[1] . '" data-sixe_x="' . $size[0] . '">';
+        return '<img style="z-index:997" src="'. $dir . $filename . '" data-size_y="' . $size[1] . '" data-size_x="' . $size[0] . '">';
     }
 
     /**
