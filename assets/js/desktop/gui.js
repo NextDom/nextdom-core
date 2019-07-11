@@ -80,7 +80,8 @@ $(window).resize(function () {
 window.onscroll = function () {
     var goOnTopButton = document.getElementById("bt_goOnTop");
     var sidemenuBottomPadding = 0;
-    // GoonTop button management
+
+    // GoOnTop button management
     if (goOnTopButton !== undefined && goOnTopButton !== null) {
         if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
             goOnTopButton.style.display = "block";
@@ -89,14 +90,17 @@ window.onscroll = function () {
             goOnTopButton.style.display = "none";
         }
     }
+
     // Left menu resize
     if (!$('body').hasClass("sidebar-collapse")) {
         $(".sidebar-menu").css("overflow-y", "auto");
         sideMenuResize(false);
-        limitTreeviewMenu();
     }
+    limitTreeviewMenu();
+
     // Header repositionning
     setHeaderPosition(false);
+
     // Gui automatic adjusting
     adjustNextDomTheme();
 };
@@ -221,6 +225,7 @@ window.onscroll = function () {
          $(".content-header").each(function() {
              var container = $(this).parent();
              if (!container.hasClass("ui-dialog-content") && !container.parent().hasClass("ui-dialog-content")) {
+                 $(this).css("padding-right", paddingSideClose);
                  if (init || container.css("display")!="none") {
                      if (container.css("display")=="none") {
                          container.show();
@@ -229,13 +234,13 @@ window.onscroll = function () {
                      } else {
                          headerHeight = container.children('.content-header').height();
                      }
-                     if (document.documentElement.scrollTop > scrollLimit) {
+                     var scrollValue = document.documentElement.scrollTop;
+                     if (scrollValue > scrollLimit) {
                          container.children(".content-header").css("top", headerSize - 15);
                          container.children("#dashboard-content").css("padding-top", headerHeight + 15);
                          container.children(".content").css("padding-top", headerHeight + 30);
                          container.children(".content-header").children("div").removeClass('scroll-shadow').addClass('fixed-shadow');
                      } else {
-                         var scrollValue = document.documentElement.scrollTop;
                          container.children(".content-header").css("top", headerSize - scrollValue + alertHeaderHeight + alertHeaderMargin);
                          container.children("#dashboard-content").css("padding-top",headerHeight + 15 - alertHeaderMargin);
                          container.children(".content").css("padding-top", headerHeight + 30 - alertHeaderMargin);
@@ -243,7 +248,6 @@ window.onscroll = function () {
                      }
                      container.children(".content-header").show();
                  }
-                 $(this).css("padding-right", paddingSideClose);
              }
          });
          $("#dashboard-header").css("padding-right", paddingSideClose);

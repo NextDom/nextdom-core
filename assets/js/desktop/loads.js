@@ -260,9 +260,13 @@ $(function () {
             $(".treeview-menu").css("overflow-y", "auto");
             sideMenuResize(true);
         }
+        limitTreeviewMenu();
         setTimeout(function () {
+            // Header repositionning
             setHeaderPosition(false);
+            // Gui automatic adjusting
             adjustNextDomTheme();
+            // Equipement reorganisation
             $('.div_displayEquipement').packery();
         }, 100);
     });
