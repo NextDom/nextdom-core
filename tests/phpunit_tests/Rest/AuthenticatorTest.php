@@ -102,7 +102,8 @@ class AuthenticatorTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($testAuthenticator->checkSendedToken());
     }
 
-    public function testCheckApiKeyWithGoodKey() {
+    public function testCheckApiKeyWithGoodKey() 
+    {
         $goodKey = Api::getApiKey('core');
         $testRequest = new Request();
         $testRequest->query->add(['apikey' => $goodKey]);
@@ -111,7 +112,8 @@ class AuthenticatorTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($authenticator->checkApiKey());
     }
 
-    public function testCheckApiKeyWithBadKey() {
+    public function testCheckApiKeyWithBadKey() 
+    {
         $testRequest = new Request();
         $testRequest->query->add(['apikey' => 'This is a bad key']);
         $authenticator = Authenticator::init($testRequest);
