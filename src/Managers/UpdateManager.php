@@ -219,15 +219,19 @@ class UpdateManager
      * Get the class of the repo by the name
      * @param string $name Name of the repo in jeedom format
      * @return array Associative array
+     * @throws \Exception
      */
     public static function getRepoDataFromName($name): array
     {
-        $name = str_replace('repo_', '', $name);
-        $className = 'Repo' . ucwords($name);
-        return [
-            'className' => $className,
-            'phpClass' => '\\NextDom\\Repo\\' . $className
-        ];
+        $repoList = self::listRepo();
+        foreach ($repoList as $repoData) {
+            if ($repoData['name'] == $name) {
+                return [
+                    'className' => str_replace('\\NextDom\\Repo\\', '', $repoData['class']),
+                    'phpClass' => $repoData['class']];
+            }
+        }
+        return [];
     }
 
     /**
