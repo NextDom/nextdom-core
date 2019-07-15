@@ -62,7 +62,7 @@ class IconSelector extends BaseAbstractModal
         $fontAwesomeTypes = ['far' => 'regular', 'fas' => 'solid', 'fab' => 'brands'];
         foreach ($fontAwesomeTypes as $cssCode => $svgFolder) {
             $data = [];
-            $data['name'] = 'Font Awesome 5 - ' . $svgFolder;
+            $data['name'] = 'Font-Awesome-5-' . $svgFolder;
             $fileList = FileSystemHelper::ls('vendor/node_modules/@fortawesome/fontawesome-free/svgs/' . $svgFolder, '*');
             $data['height'] = (ceil(count($fileList) / 14) * 40) + 80;
             $data['list'] = [];
