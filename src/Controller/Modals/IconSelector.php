@@ -40,21 +40,36 @@ class IconSelector extends BaseAbstractModal
     {
         $pageData = [];
         $pageData['iconsList'] = [];
-        foreach (FileSystemHelper::ls('public/icon', '*') as $dir) {
-            if (is_dir('public/icon/' . $dir) && file_exists('public/icon/' . $dir . '/style.css')) {
-                $cssContent = file_get_contents('public/icon/' . $dir . '/style.css');
-                $research = strtolower(str_replace('/', '', $dir));
-                $pageData['iconsList'][] = self::getIconsData($dir, $cssContent, "/\." . $research . "-(.*?):/");
+        foreach (FileSystemHelper::ls('public/icon', '*') as $iconDirectory) {
+            if (is_dir('public/icon/' . $iconDirectory) && file_exists('public/icon/' . $iconDirectory . '/style.css')) {
+                $cssFileContent = file_get_contents('public/icon/' . $iconDirectory . '/style.css');
+                $research = strtolower(str_replace('/', '', $iconDirectory));
+                $pageData['iconsList'][] = self::getIconsData($iconDirectory, $cssFileContent, "/\." . $research . "-(.*?):/");
             }
         }
+        /*
         $nodeModules = [
             ['name' => 'Font-Awesome-5', 'path' => 'vendor/node_modules/@fortawesome/fontawesome-free/css/', 'cssFile' => 'all.css', 'cssPrefix' => 'fa']
         ];
         foreach ($nodeModules as $nodeModule) {
             if (is_dir($nodeModule['path']) && file_exists($nodeModule['path'] . $nodeModule['cssFile'])) {
-                $cssContent = file_get_contents($nodeModule['path'] . $nodeModule['cssFile']);
-                $pageData['iconsList'][] = self::getIconsData($nodeModule['path'], $cssContent, "/\." . $nodeModule['cssPrefix'] . "-(.*?):/", $nodeModule['name'], 'fas');
+                $cssFileContent = file_get_contents($nodeModule['path'] . $nodeModule['cssFile']);
+                $pageData['iconsList'][] = self::getIconsData($nodeModule['path'], $cssFileContent, "/\." . $nodeModule['cssPrefix'] . "-(.*?):/", $nodeModule['name'], $nodeModule['cssPrefix']);
             }
+        }
+        */
+        // Font Awesome 5
+        $fontAwesomeTypes = ['far' => 'regular', 'fas' => 'solid', 'fab' => 'brands'];
+        foreach ($fontAwesomeTypes as $cssCode => $svgFolder) {
+            $data = [];
+            $data['name'] = 'Font-Awesome-5-' . $svgFolder;
+            $fileList = FileSystemHelper::ls('vendor/node_modules/@fortawesome/fontawesome-free/svgs/' . $svgFolder, '*');
+            $data['height'] = (ceil(count($fileList) / 14) * 40) + 80;
+            $data['list'] = [];
+            foreach ($fileList as $svgFile) {
+                $data['list'][] = $cssCode . ' fa-' . str_replace('.svg', '', $svgFile);
+            }
+            $pageData['iconsList'][] = $data;
         }
 
         return Render::getInstance()->get('/modals/icon.selector.html.twig', $pageData);
@@ -74,20 +89,20 @@ class IconSelector extends BaseAbstractModal
     private static function getIconsData($path, $cssContent, $matchPattern, $name = null, $cssClass = null)
     {
         $data = [];
-        preg_match_all($matchPattern, $cssContent, $matches, PREG_SET_ORDER);
+        preg_match_all($matchPattern, $cssContent, $matchResults, PREG_SET_ORDER);
         if ($name === null) {
             $data['name'] = str_replace('/', '', $path);
         } else {
             $data['name'] = $name;
         }
-        $data['height'] = (ceil(count($matches) / 14) * 40) + 80;
+        $data['height'] = (ceil(count($matchResults) / 14) * 40) + 80;
         $data['list'] = [];
-        foreach ($matches as $match) {
-            if (isset($match[0])) {
+        foreach ($matchResults as $result) {
+            if (isset($result[0])) {
                 if ($cssClass === null) {
-                    $data['list'][] = str_replace(array(':', '.'), '', $match[0]);
+                    $data['list'][] = str_replace(array(':', '.'), ' ', $result[0]);
                 } else {
-                    $data['list'][] = $cssClass . ' ' . str_replace(array(':', '.'), '', $match[0]);
+                    $data['list'][] = $cssClass . str_replace(array(':', '.'), ' ', $result[0]);
                 }
             }
         }
