@@ -121,7 +121,7 @@ class UpdateManager
                 );
                 $sql = 'DELETE FROM `' . self::DB_CLASS_NAME . '`
                         WHERE type=:type';
-                DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW);
+                DBHelper::exec($sql, $values);
             }
         }
     }
@@ -144,7 +144,7 @@ class UpdateManager
                 FROM `' . self::DB_CLASS_NAME . '`
                 WHERE logicalId=:logicalId
                 AND type=:type';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -162,7 +162,7 @@ class UpdateManager
         $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
                 FROM `' . self::DB_CLASS_NAME . '`
                 WHERE type=:type';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -181,7 +181,7 @@ class UpdateManager
             $sql .= 'WHERE `type`=:type ';
         }
         $sql .= 'ORDER BY FIELD( `status`, "update","ok","depreciated") ASC,FIELD( `type`,"plugin","core") DESC, `name` ASC';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -301,7 +301,7 @@ class UpdateManager
         $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
                 FROM `' . self::DB_CLASS_NAME . '`
                 WHERE id=:id';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -318,7 +318,7 @@ class UpdateManager
         $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
                 FROM `' . self::DB_CLASS_NAME . '`
                 WHERE status=:status';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -335,13 +335,13 @@ class UpdateManager
         $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
                 FROM `' . self::DB_CLASS_NAME . '`
                 WHERE logicalId=:logicalId';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
     /**
      * Get the number of pending updates
+     * @param string $filter
      * @return mixed
-     * @throws \Exception
      */
     public static function nbNeedUpdate($filter = '')
     {

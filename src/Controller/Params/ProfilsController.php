@@ -68,13 +68,25 @@ class ProfilsController extends BaseController
                 $pageData['profilsHomePageDesktop'][$pluginList->getId() . '::' . $pluginList->getDisplay()] = $pluginList->getName();
             }
         }
-        $pageData['profilsUser'] = UserManager::getStoredUser();
+        $user = Usermanager::getStoredUser();
+        $pageData['profilsUserId'] = $user->getId();
+        $pageData['profilsUserRegisteredDevices'] = $user->getOptions('registerDevice');
+        $pageData['profilsUserUseTwoFactor'] = $user->getOptions('twoFactorAuthentification', 0) == 1;
         $pageData['profilsSessionsList'] = SessionHelper::getSessionsList();
 
         $lsCssThemes = FileSystemHelper::ls(NEXTDOM_ROOT . '/public/themes/');
-        $pageData['profilsAvatars'] = [];
+        $pageData['profilsAvatar'] = ConfigManager::byKey('avatar');
+        if (isset($_SESSION) && is_object(UserManager::getStoredUser()) && UserManager::getStoredUser()->getOptions('avatar', null) !== null) {
+            $pageData['profilsAvatar'] = UserManager::getStoredUser()->getOptions('avatar');
+        } else {
+            @session_start();
+            UserManager::getStoredUser()->setOptions('avatar', $pageData['profilsAvatar']);
+            UserManager::getStoredUser()->save();
+            @session_write_close();
+        }
 
-        $profilRootURL = "/public/img/profils/";
+        $pageData['profilsAvatars'] = [];
+        $profilRootURL = "/public/img/profils";
         $profilRootDir = sprintf("%s/public/img/profils/", NEXTDOM_ROOT);
         $lsAvatars = FileSystemHelper::ls($profilRootDir);
         foreach ($lsAvatars as $avatarFile) {
@@ -84,7 +96,38 @@ class ProfilsController extends BaseController
                 $pageData['profilsAvatars'][] = $url;
             }
         }
+
+        $pageData['profilsWidgetTheme'] = ConfigManager::byKey('widget::theme');
+        if (isset($_SESSION) && is_object(UserManager::getStoredUser()) && UserManager::getStoredUser()->getOptions('widget::theme', null) !== null) {
+            $pageData['profilsWidgetTheme'] = UserManager::getStoredUser()->getOptions('widget::theme');
+        } else {
+            @session_start();
+            UserManager::getStoredUser()->setOptions('widget::theme', $pageData['profilsWidgetTheme']);
+            UserManager::getStoredUser()->save();
+            @session_write_close();
+        }
+
+        $pageData['profilsWidgetThemes'] = [];
+        $lsDir = FileSystemHelper::ls(NEXTDOM_ROOT . '/core/template/dashboard/themes/','*',true);
+        foreach ($lsDir as $themesDir) {
+            $lsThemes = FileSystemHelper::ls(NEXTDOM_ROOT . '/core/template/dashboard/themes/' .$themesDir, '*.png');
+            foreach ($lsThemes as $themeFile) {
+                $themeData = [];
+                $themeData['dir'] = '/core/template/dashboard/themes/' .$themesDir . $themeFile;
+                $themeData['name'] = $themeFile;
+                $pageData['profilsWidgetThemes'][] = $themeData;
+            }
+        }
+
         $pageData['profilsDisplayTypes'] = NextDomHelper::getConfiguration('eqLogic:displayType');
+        foreach ($pageData['profilsDisplayTypes'] as $key => $value) {
+            if (isset($_SESSION) && is_object(UserManager::getStoredUser()) && UserManager::getStoredUser()->getOptions('widget::background-opacity::'.$key, null) == null) {
+                @session_start();
+                UserManager::getStoredUser()->setOptions('widget::background-opacity::'.$key, 1);
+                UserManager::getStoredUser()->save();
+                @session_write_close();
+            }
+        }
         $pageData['profilsJeeObjects'] = ObjectManager::all();
         $pageData['profilsViews'] = ViewManager::all();
         $pageData['profilsPlans'] = PlanHeaderManager::all();

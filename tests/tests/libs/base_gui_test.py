@@ -51,6 +51,7 @@ class BaseGuiTest(unittest.TestCase):
             if (not "XAUTHORITY" in os.environ) or os.uname().nodename.startswith('travis'):
                 options.add_argument('headless')
                 options.add_argument('disable-gpu')
+                options.add_argument('window-size=1920,1080')
             options.add_argument('window-size=1920x1080')
             desired_capabilities = DesiredCapabilities.CHROME.copy()
             desired_capabilities['loggingPrefs'] = {'browser': js_logs}
@@ -167,3 +168,18 @@ class BaseGuiTest(unittest.TestCase):
         :rtype:  array
         """
         return self.driver.get_log('browser')
+
+    def scroll_bottom(self):
+        """Scroll to bottom of the page
+        """
+        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+
+    def scroll_top(self):
+        """Scroll to top of the page
+        """
+        self.driver.execute_script("window.scrollTo(0, 0);")
+
+    def execute_js(self, javascript_code):
+        """Execute javascript
+        """
+        self.driver.execute_script(javascript_code)

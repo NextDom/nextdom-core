@@ -164,12 +164,12 @@ function isActive(button) {
  */
 function setActive(button, activate) {
     if (activate) {
-        button.removeClass('btn-secondary');
+        button.removeClass('btn-action');
         button.addClass('btn-primary');
     }
     else {
         button.removeClass('btn-primary');
-        button.addClass('btn-secondary');
+        button.addClass('btn-action');
     }
 }
 

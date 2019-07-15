@@ -48,12 +48,12 @@ class IconSelector extends BaseAbstractModal
             }
         }
         $nodeModules = [
-            ['name' => 'Font-Awesome 5', 'path' => 'vendor/node_modules/@fortawesome/fontawesome-free/css/', 'cssFile' => 'all.css', 'cssPrefix' => 'fa']
+            ['name' => 'Font-Awesome-5', 'path' => 'vendor/node_modules/@fortawesome/fontawesome-free/css/', 'cssFile' => 'all.css', 'cssPrefix' => 'fa']
         ];
         foreach ($nodeModules as $nodeModule) {
             if (is_dir($nodeModule['path']) && file_exists($nodeModule['path'] . $nodeModule['cssFile'])) {
                 $cssContent = file_get_contents($nodeModule['path'] . $nodeModule['cssFile']);
-                $pageData['iconsList'][] = self::getIconsData($nodeModule['path'], $cssContent, "/\." . $nodeModule['cssPrefix'] . "-(.*?):/", $nodeModule['name'], $nodeModule['cssPrefix']);
+                $pageData['iconsList'][] = self::getIconsData($nodeModule['path'], $cssContent, "/\." . $nodeModule['cssPrefix'] . "-(.*?):/", $nodeModule['name'], 'fas');
             }
         }
 

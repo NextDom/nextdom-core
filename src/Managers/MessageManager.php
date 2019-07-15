@@ -56,6 +56,8 @@ class MessageManager
      * @param string $_action
      * @param mixed $_logicalId
      * @param bool $_writeMessage
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public static function add($_type, $_message, $_action = '', $_logicalId = '', $_writeMessage = true)
     {
@@ -92,7 +94,7 @@ class MessageManager
                 }
             }
         }
-        DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW);
+        DBHelper::exec($sql, $values);
         EventManager::add('message::refreshMessageNumber');
         return true;
     }
@@ -105,7 +107,7 @@ class MessageManager
     {
         $sql = 'SELECT count(*)
         FROM ' . self::DB_CLASS_NAME;
-        $count = DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ROW);
+        $count = DBHelper::getOne($sql);
         return $count['count(*)'];
     }
 
@@ -123,7 +125,7 @@ class MessageManager
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE id=:id';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -142,7 +144,7 @@ class MessageManager
         FROM ' . self::DB_CLASS_NAME . '
         WHERE logicalId=:logicalId
         AND plugin=:plugin';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -160,7 +162,7 @@ class MessageManager
         FROM ' . self::DB_CLASS_NAME . '
         WHERE plugin=:plugin
         ORDER BY date DESC';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -171,7 +173,7 @@ class MessageManager
     {
         $sql = 'SELECT DISTINCT(plugin)
         FROM ' . self::DB_CLASS_NAME;
-        return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL);
+        return DBHelper::getAll($sql);
     }
 
     /**
@@ -185,6 +187,6 @@ class MessageManager
         FROM ' . self::DB_CLASS_NAME . '
         ORDER BY date DESC
         LIMIT 500';
-        return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
     }
 }

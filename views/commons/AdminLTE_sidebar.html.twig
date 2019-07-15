@@ -31,9 +31,9 @@
             <div class="pull-left info">
                 <p><a href="/index.php?v=d&p=profils#profil">{{ profilsUser.getLogin() }}</a></p>
                 {% if profilsUser.is_Connected() %}
-                    <a href="/index.php?v=d&p=profils#profil"><i class="fa fa-circle text-success spacing-right"></i>{{ 'sidebar.online'|trans }}</a>
+                    <a href="/index.php?v=d&p=profils#profil"><i class="fas fa-circle text-success spacing-right"></i>{{ 'sidebar.online'|trans }}</a>
                 {% else %}
-                    <a href="/index.php?v=d&p=profils#profil"><i class="fa fa-circle text-danger spacing-right"></i>{{ 'sidebar.offline'|trans }}</a>
+                    <a href="/index.php?v=d&p=profils#profil"><i class="fas fa-circle text-danger spacing-right"></i>{{ 'sidebar.offline'|trans }}</a>
                 {% endif %}
             </div>
         </div>
@@ -50,7 +50,7 @@
                 </ul>
             </li>
             <li class="treeview" id="side2">
-                <a href="#"><i class="fa fa-picture-o spacing-right"></i><span>{{ 'sidebar.view'|trans }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
+                <a href="#"><i class="fas fa-picture-o spacing-right"></i><span>{{ 'sidebar.view'|trans }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
                 <ul class="treeview-menu">
                     <li><a href="index.php?v=d&p=view"><i class="fas fa-bullseye spacing-right"></i>{{ 'sidebar.show-all'|trans }}</a></li>
                     {% for view in MENU_VIEWS_LIST %}
@@ -97,7 +97,7 @@
                     {% if MENU_PLUGIN_CATEGORY is defined %}
                         {% for category, categoryData in MENU_PLUGIN_CATEGORY %}
                             <li class="treeview">
-                                <a href="#" data-toggle="dropdown"><i class="fas {{ categoryData.icon }} spacing-right"></i>{{ categoryData.name }}<span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                                <a href="#" data-toggle="dropdown"><i class="fas {{ categoryData.icon }} spacing-right"></i>{{ categoryData.name }}<span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
                                 <ul class="treeview-menu">
                                     {% for plugin in MENU_PLUGIN[category] %}
                                         <li class="treeview treeview-plugin-item"><a href="index.php?v=d&m={{ plugin.id }}&p={{ plugin.index }}"><img class="img-responsive spacing-right" src="{{ plugin.pathImgIcon }}"/>{{ plugin.name }}</a></li>
@@ -109,13 +109,13 @@
                 </ul>
             </li>
             <li class="treeview" id="side7">
-                <a href="#"><i class="fa fa-th-list spacing-right"></i><span>{{ 'sidebar.tools'|trans }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
+                <a href="#"><i class="fas fa-tools spacing-right"></i><span>{{ 'sidebar.tools'|trans }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
                 <ul class="treeview-menu">
                     <li><a href="index.php?v=d&p=object"><i class="fas fa-clone spacing-right"></i>{{ 'sidebar.objects-list'|trans }}</a></li>
                     <li><a href="index.php?v=d&p=display"><i class="fas fa-th spacing-right"></i>{{ 'sidebar.tools-summary'|trans }}</a></li>
                     <li><a href="index.php?v=d&p=interact"><i class="fas fa-comments spacing-right"></i>{{ 'sidebar.tools-interactions'|trans }}</a></li>
                     <li><a href="index.php?v=d&p=scenario"><i class="fas fa-film spacing-right"></i>{{ 'sidebar.tools-scenarios'|trans }}</a></li>
-                    <li><a href="index.php?v=d&p=note"><i class="fas fa-sticky-note spacing-right"></i>{{ 'sidebar.tools-notes'|trans }}</a></li>
+                    <li><a href="#" id="bt_quickNote""><i class="fas fa-sticky-note spacing-right"></i>{{ 'sidebar.quick-notes'|trans }}</a></li>
                 </ul>
             </li>
             <li class="treeview" id="side8">
@@ -126,7 +126,7 @@
                     <li><a href="index.php?v=d&p=history"><i class="fas fa-chart-area spacing-right"></i>{{ 'sidebar.diagnostics-history'|trans }}</a></li>
                     <li><a href="index.php?v=d&p=timeline"><i class="fas fa-history spacing-right"></i>{{ 'sidebar.diagnostics-timeline'|trans }}</a></li>
                     <li><a href="index.php?v=d&p=log"><i class="fas fa-file-alt spacing-right"></i>{{ 'sidebar.diagnostics-logs'|trans }}</a></li>
-                    <li><a href="index.php?v=d&p=realtime"><i class="fas fa-tachometer-alt spacing-right"></i>{{ 'sidebar.diagnostics-realtime'|trans }}</a></li>
+                    <li><a href="#" id="bt_showEventInRealTime"><i class="fas fa-tachometer-alt spacing-right"></i>{{ 'sidebar.diagnostics-realtime'|trans }}</a></li>
                 </ul>
             </li>
             <li class="treeview" id="side9">

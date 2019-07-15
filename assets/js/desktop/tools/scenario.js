@@ -161,8 +161,8 @@ function addScenario() {
             nextdom.scenario.save({
                 scenario: {name: result},
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
-                },
+                    notify("Core",error.message,"error");
+                    },
                 success: function (data) {
                     modifyWithoutSave = false;
                     $('#scenarioThumbnailDisplay').hide();
@@ -279,10 +279,10 @@ function updateElseToggle() {
  * Initialise code mirror on code element
  */
 function setEditor() {
-    $('.expressionAttr[data-l1key=type][value=code]').each(function () {
-        var expression = $(this).closest('.expression');
+    $('.elementAttr[data-l1key=type][value=code]').each(function () {
+        var expression = $(this).closest('.element');
         var code = expression.find('.expressionAttr[data-l1key=expression]');
-        if (code.attr('id') === undefined && code.is(':visible')) {
+        if (code.attr('id') == undefined ) {
             code.uniqueId();
             var id = code.attr('id');
             setTimeout(function () {
@@ -292,7 +292,7 @@ function setEditor() {
                     matchBrackets: true,
                     viewportMargin: Infinity
                 });
-            }, 1);
+            }, 100);
         }
 
     });
@@ -366,7 +366,6 @@ function setAutocomplete() {
  * @param scenarioId
  */
 function printScenario(scenarioId) {
-    showLoadingCustom();
     nextdom.scenario.update[scenarioId] = function (_options) {
         if (_options.scenario_id = !pageContainer.getValues('.scenarioAttr')[0]['id']) {
             return;
@@ -465,11 +464,9 @@ function printScenario(scenarioId) {
                     notify("Erreur", error.message, 'error');
                 },
                 success: function (data) {
-                    showLoadingCustom();
                     for (var i in data) {
                         $('#' + data[i].id).append(data[i].html.html);
                     }
-                    hideLoadingCustom();
                     taAutosize();
                 }
             });
@@ -488,6 +485,7 @@ function printScenario(scenarioId) {
             }, 1000);
         }
     });
+
 }
 
 /**
@@ -522,14 +520,14 @@ function saveScenario() {
  */
 function addTrigger(triggerCode) {
     var triggerHtml = '<div class="form-group trigger">';
-    triggerHtml += '<label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{Evénement}}</label>';
-    triggerHtml += '<div class="col-lg-10 col-md-9 col-sm-6 col-xs-12">';
+    triggerHtml += '<label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{Evénement}}</label>';
+    triggerHtml += '<div class="col-lg-9 col-md-9 col-sm-6 col-xs-12">';
     triggerHtml += '<div class="input-group">';
     triggerHtml += '<input class="scenarioAttr input-sm form-control" data-l1key="trigger" value="' + triggerCode.replace(/"/g, '&quot;') + '" >';
     triggerHtml += '<span class="input-group-btn">';
     triggerHtml += '<a class="btn btn-default btn-sm cursor bt_selectTrigger" title="{{Choisir une commande}}"><i class="fas fa-list-alt"></i></a>';
     triggerHtml += '<a class="btn btn-default btn-sm cursor bt_selectDataStoreTrigger" title="{{Choisir une variable}}"><i class="fas fa-calculator"></i></a>';
-    triggerHtml += '<a class="btn btn-default btn-sm cursor bt_removeTrigger"><i class="fas fa-minus-circle"></i></a>';
+    triggerHtml += '<a class="btn btn-danger btn-sm cursor bt_removeTrigger"><i class="fas fa-minus-circle"></i></a>';
     triggerHtml += '</span>';
     triggerHtml += '</div>';
     triggerHtml += '</div>';
@@ -544,13 +542,13 @@ function addTrigger(triggerCode) {
  */
 function addSchedule(scheduleCode) {
     var scheduleHtml = '<div class="form-group schedule">';
-    scheduleHtml += '<label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{Programmation}}</label>';
-    scheduleHtml += '<div class="col-lg-10 col-md-9 col-sm-6 col-xs-12">';
+    scheduleHtml += '<label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{Programmation}}</label>';
+    scheduleHtml += '<div class="col-lg-9 col-md-9 col-sm-6 col-xs-12">';
     scheduleHtml += '<div class="input-group">';
     scheduleHtml += '<input class="scenarioAttr input-sm form-control" data-l1key="schedule" value="' + scheduleCode.replace(/"/g, '&quot;') + '">';
     scheduleHtml += '<span class="input-group-btn">';
     scheduleHtml += '<a class="btn btn-default btn-sm cursor helpSelectCron"><i class="fas fa-question-circle"></i></a>';
-    scheduleHtml += '<a class="btn btn-default btn-sm cursor bt_removeSchedule"><i class="fas fa-minus-circle"></i></a>';
+    scheduleHtml += '<a class="btn btn-danger btn-sm cursor bt_removeSchedule"><i class="fas fa-minus-circle"></i></a>';
     scheduleHtml += '</span>';
     scheduleHtml += '</div>';
     scheduleHtml += '</div>';
@@ -1611,7 +1609,7 @@ function initGeneralFormEvents() {
         setTimeout(function () {
             setEditor();
             taAutosize();
-        }, 50);
+        }, 100);
     });
 
     pageContainer.off('click', '.helpSelectCron').on('click', '.helpSelectCron', function () {

@@ -36,7 +36,8 @@ class MessageController extends BaseAbstractModal
      * Render message page
      *
      * @return string Content of render page
-     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public static function get(): string
     {

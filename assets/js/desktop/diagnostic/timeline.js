@@ -74,8 +74,8 @@ timeline = null;
 function displayTimeline(){
   jeedom.getTimelineEvents({
     error: function (error) {
-      $('#div_alert').showAlert({message: error.message, level: 'danger'});
-    },
+        notify("Core",error.message,"error");
+        },
     success: function (data) {
       data = data.reverse();
       var tr = '';
