@@ -94,7 +94,7 @@ nextdom.history.drawChart = function (_params) {
     },
     success: function (data) {
       if (data.state != 'ok') {
-        $('#div_alert').showAlert({message: data.result, level: 'danger'});
+        notify("Erreur", data.result, 'error');
         return;
       }
       if (data.result.data.length < 1) {
@@ -492,10 +492,10 @@ nextdom.history.changePoint = function (_params) {
   var paramsRequired = ['cmd_id','datetime','value','oldValue'];
   var paramsSpecifics = {
     error: function (error) {
-      $('#div_alert').showAlert({message: error.message, level: 'danger'});
-    },
+      notify("Core",error.message,"error");
+      },
     success: function (result) {
-      $('#div_alert').showAlert({message: '{{La valeur a été éditée avec succès}}', level: 'success'});
+      notify("Core",'{{La valeur a été éditée avec succès}}',"success");
       var serie = null;
       for (var i in nextdom.history.chart) {
         serie = nextdom.history.chart[i].chart.get(_params.cmd_id);

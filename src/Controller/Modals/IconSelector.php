@@ -49,7 +49,7 @@ class IconSelector extends BaseAbstractModal
         }
         /*
         $nodeModules = [
-            ['name' => 'Font-Awesome 5', 'path' => 'vendor/node_modules/@fortawesome/fontawesome-free/css/', 'cssFile' => 'all.css', 'cssPrefix' => 'fa']
+            ['name' => 'Font-Awesome-5', 'path' => 'vendor/node_modules/@fortawesome/fontawesome-free/css/', 'cssFile' => 'all.css', 'cssPrefix' => 'fa']
         ];
         foreach ($nodeModules as $nodeModule) {
             if (is_dir($nodeModule['path']) && file_exists($nodeModule['path'] . $nodeModule['cssFile'])) {

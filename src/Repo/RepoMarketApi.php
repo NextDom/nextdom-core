@@ -39,7 +39,6 @@ if (UserManager::isBanned() && false) {
 try {
     if (!Api::apiAccess(init('apikey'), 'apimarket')) {
         UserManager::failedLogin();
-        sleep(5);
         throw new CoreException(__('Vous n\'êtes pas autorisé à effectuer cette action 1, IP : ', __FILE__) . getClientIp());
     }
     if (init('action') == 'resync') {

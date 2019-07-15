@@ -986,7 +986,7 @@ function displayObject(_plan,_html, _noRender) {
         html.css('background-color',html.css('background-color').replace(')', ','+_plan.css['opacity']+')').replace('rgb', 'rgba'));
     }
     if(_plan.link_type == 'graph'){
-        ('.div_displayObject').append(html);
+        $('.div_displayObject').append(html);
         if(isset(_plan.display) && isset(_plan.display.graph)){
             for (var i in _plan.display.graph) {
                 if (init(_plan.display.graph[i].link_id) != '') {

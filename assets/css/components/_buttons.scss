@@ -23,7 +23,7 @@
 .btn-group span {
   border-radius: 0px 5px 5px 0px;
 }
-.btn:not(.btn-app) i {
+.btn:not(.btn-app) i:not(.fa-cogs) {
   margin-right: 8px;
 }
 .input-group>.btn i:only-child,
@@ -109,7 +109,9 @@
     margin: 2px 2px;
 }
 .editDashboardButtons {
-    margin-top: -6px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
 }
 .bt_resetColor,
 .btn-reset {

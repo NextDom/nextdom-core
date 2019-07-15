@@ -25,9 +25,6 @@
     background-clip: unset;
     box-shadow:0 3px 30px rgba(0,0,0,0.6);
     padding: 0px 0 0px 0px;
-    & .ui-dialog-titlebar-close {
-        right: 0.5em;
-    }
     & .ui-dialog-title {
         padding: 7px 5px 5px 0px;
     }
@@ -118,15 +115,18 @@
     background-image: none;
     border: none !important;
     border-radius: 6px !important;
-    .btn:not(.btn-default) {
+    .btn:not(.btn-default):not(.btn-selector) {
         color: $white !important;
     }
-    a:not(.btn) {
+    a:not(.btn):not(.label-list) {
         color: $nextdom_blue !important;
     }
 }
+.ui-widget .label-config a, .ui-widget .label-config i, .ui-widget .label-config * {
+    color: white !important;
+}
 
-/* COre-Adjusting */
+/* Core-Adjusting */
 .modal-padding {
     padding: 15px !important;
 }

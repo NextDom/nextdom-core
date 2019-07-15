@@ -452,6 +452,7 @@ class ScenarioExpression implements EntityInterface
      * @param Scenario $scenario
      * @param $options
      * @throws CoreException
+     * @throws \ReflectionException
      */
     protected function executeActionEvent(&$scenario, $options)
     {
@@ -499,6 +500,7 @@ class ScenarioExpression implements EntityInterface
     /**
      * @param $scenario
      * @throws CoreException
+     * @throws \ReflectionException
      */
     protected function executeActionEquipment(&$scenario)
     {
@@ -674,6 +676,7 @@ class ScenarioExpression implements EntityInterface
      * @param Scenario $scenario
      * @param $options
      * @throws CoreException
+     * @throws \ReflectionException
      */
     protected function executeActionAsk(&$scenario, $options)
     {
@@ -787,6 +790,7 @@ class ScenarioExpression implements EntityInterface
      * @param $scenario
      * @param $options
      * @throws CoreException
+     * @throws \ReflectionException
      */
     protected function executeActionReport(&$scenario, $options)
     {
@@ -862,6 +866,7 @@ class ScenarioExpression implements EntityInterface
      * @param $options
      * @return mixed
      * @throws CoreException
+     * @throws \ReflectionException
      */
     protected function executeActionOthers(&$scenario, $options)
     {

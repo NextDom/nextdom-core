@@ -87,6 +87,7 @@ class NextDomMarketAjax extends BaseAjax
     /**
      * Rafraichir le hash de la branch à partir des données de Jeedom.
      *
+     * @param array $data
      * @return bool True si le rafraichissement à été effectué
      */
     private function refreshBranchHash(array $data)

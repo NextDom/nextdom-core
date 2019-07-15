@@ -71,10 +71,10 @@ $("#bt_changeCronState").on('click', function () {
         success: function () {
             if (el.attr('data-state') == 1) {
                 el.removeClass('btn-success').addClass('btn-danger').attr('data-state', 0);
-                el.empty().html('<i class="fas fa-times"></i> {{Désactiver le système cron}}');
+                el.empty().html('<i class="fas fa-times"></i>{{Désactiver le système cron}}');
             } else {
                 el.removeClass('btn-danger').addClass('btn-success').attr('data-state', 1);
-                el.empty().html('<i class="fas fa-check"></i> {{Activer le système cron}}</a>');
+                el.empty().html('<i class="fas fa-check"></i>{{Activer le système cron}}</a>');
             }
         }
     });
@@ -212,7 +212,7 @@ function addCron(_cron) {
     tr += '<span class="' + label + ' label-sticker">' + init(_cron.state) + '</span>';
     tr += '</td>';
     tr += '<td class="action">';
-    tr += '<a class="btn btn-danger btn-sm"><i class="fas fa-minus-circle remove cursor no-spacing"></i></a>';
+    tr += '<a class="btn btn-danger btn-sm remove"><i class="fas fa-minus-circle no-spacing"></i></a>';
     tr += '</td>';
     tr += '</tr>';
     var result = $(tr);

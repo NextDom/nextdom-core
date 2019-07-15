@@ -38,7 +38,7 @@ class OsDbController extends BaseController
      * @param array $pageData Page data
      *
      * @return string Content of osdb page
-     *
+     * @throws \Exception
      */
     public static function get(&$pageData): string
     {

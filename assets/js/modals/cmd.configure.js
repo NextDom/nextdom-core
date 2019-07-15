@@ -58,7 +58,7 @@ $('#bt_addWidgetParametersCmd').off().on('click', function () {
     tr += '<input class="form-control value" />';
     tr += '</td>';
     tr += '<td>';
-    tr += '<a class="btn btn-danger btn-sm removeWidgetParameter pull-right"><i class="fas fa-times spacing-right"></i>{{Supprimer}}</a>';
+    tr += '<a class="btn btn-danger btn-sm removeWidgetParameter pull-right"><i class="fas fa-trash"></i>{{Supprimer}}</a>';
     tr += '</td>';
     tr += '</tr>';
     $('#table_widgetParametersCmd tbody').append(tr);

@@ -222,7 +222,7 @@ class NextDomHelper
             'comment' => ($state) ? '' : __('health.php-error'),
         );
 
-        $version = DBHelper::Prepare('select version()', array(), DBHelper::FETCH_TYPE_ROW);
+        $version = DBHelper::getOne('select version()');
         $systemHealth[] = array(
             'icon' => 'fa-database',
             'name' => __('health.database-version'),
@@ -801,7 +801,6 @@ class NextDomHelper
     /**
      * Start all cron tasks and scenarios
      *
-     * @param  bool $force ignore errors when true
      * @throws \Exception
      */
     public static function startSystem()
@@ -1103,16 +1102,6 @@ class NextDomHelper
      * @param $result
      * @throws \Exception
      */
-    /**
-     * @param $matches
-     * @param $result
-     * @throws \Exception
-     */
-    /**
-     * @param $matches
-     * @param $result
-     * @throws \Exception
-     */
     private static function addTypeUseResults($matches, &$result)
     {
         for ($matchIndex = 0; $matchIndex < count($matches[0]); ++$matchIndex) {
@@ -1140,16 +1129,6 @@ class NextDomHelper
         }
     }
 
-    /**
-     * @param string $testString
-     * @return array
-     * @throws \Exception
-     */
-    /**
-     * @param string $testString
-     * @return array
-     * @throws \Exception
-     */
     /**
      * @param string $testString
      * @return array
@@ -1339,14 +1318,14 @@ class NextDomHelper
                     WHERE `key`="nextdom_benchmark"
                     AND plugin="core"';
             try {
-                DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ROW);
+                DBHelper::exec($sql);
             } catch (\Exception $e) {
 
             }
             $sql = 'INSERT INTO config
                     SET `key`="nextdom_benchmark",plugin="core",`value`="' . $i . '"';
             try {
-                DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ROW);
+                DBHelper::exec($sql);
             } catch (\Exception $e) {
 
             }
@@ -1356,7 +1335,7 @@ class NextDomHelper
         $sql = 'INSERT INTO config
                 SET `key`="nextdom_benchmark",plugin="core",`value`="0"';
         try {
-            DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ROW);
+            DBHelper::exec($sql);
         } catch (\Exception $e) {
         }
         $starttime = Utils::getMicrotime();
@@ -1366,7 +1345,7 @@ class NextDomHelper
                     WHERE `key` = "nextdom_benchmark"
                         AND plugin = "core"';
             try {
-                DBHelper::Prepare($sql, array('value' => $i), DBHelper::FETCH_TYPE_ROW);
+                DBHelper::exec($sql, ['value' => $i]);
             } catch (\Exception $e) {
 
             }

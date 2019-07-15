@@ -146,7 +146,7 @@
                             <div class="form-group">
                                 <label class="col-xs-4 control-label">{{ 'URL directe' }}</label>
                                 <div class="col-xs-8">
-                                    <a class="label label-config" href="{{ cmdDirectUrlAccess }}" target="_blank"><i class="fas fa-external-link-alt"></i>URL</a>
+                                    <a class="label label-config" href="{{ cmdDirectUrlAccess }}" target="_blank"><i class="fas fa-external-link-alt spacing-right"></i><span>{{ 'URL' }}</span></a>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -247,6 +247,26 @@
             <div role="tabpanel" class="tab-pane" id="cmd_configuration">
                 <form class="form-horizontal">
                     <fieldset>
+                        <legend><i class="fas fa-building"></i>{{ 'Type générique' }}</legend>
+                        <div class="form-group">
+                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Valeur' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                                <select class="cmdAttr form-control" data-l1key="generic_type">
+                                    <option value="">{{ 'Aucun' }}</option>
+                                    {% for informationGroup in cmdGenericTypeInformations %}
+                                        {% if informationGroup|length > 0 %}
+                                            <optgroup label="{{ informationGroup[0]['family'] }}">
+                                                {% for informationKey, informationValue in informationGroup %}
+                                                    <option value="{{ informationValue['key'] }}">{{ informationValue['name'] }}</option>
+                                                {% endfor %}
+                                            </optgroup>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset class="legend-section">
                         {% if cmdType == 'info' and cmdSubType == 'numeric' or cmdSubType == 'binary' %}
                             <legend><i class="fas fa-table"></i>{{ 'Calcul et arrondi' }}</legend>
                             <div class="form-group">
@@ -270,26 +290,6 @@
                                 </div>
                             {% endif %}
                         {% endif %}
-                    </fieldset>
-                    <fieldset class="legend-section">
-                        <legend><i class="fas fa-building"></i>{{ 'Type générique' }}</legend>
-                        <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Valeur' }}</label>
-                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
-                                <select class="cmdAttr form-control" data-l1key="generic_type">
-                                    <option value="">{{ 'Aucun' }}</option>
-                                    {% for informationGroup in cmdGenericTypeInformations %}
-                                        {% if informationGroup|length > 0 %}
-                                            <optgroup label="{{ informationGroup[0]['family'] }}">
-                                                {% for informationKey, informationValue in informationGroup %}
-                                                    <option value="{{ informationValue['key'] }}">{{ informationValue['name'] }}</option>
-                                                {% endfor %}
-                                            </optgroup>
-                                        {% endif %}
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
                     </fieldset>
                     {% if cmdType == 'action' %}
                         <fieldset class="legend-section">

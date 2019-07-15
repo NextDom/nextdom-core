@@ -43,8 +43,6 @@ class LogController extends BaseController
     public static function get(&$pageData): string
     {
 
-        // TODO utiliser log::getpathLog
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/diagnostic/log.js';
         $currentLogfile = Utils::init('logfile');
         $logFilesList = [];
         $dir = opendir(NEXTDOM_LOG);
@@ -58,23 +56,30 @@ class LogController extends BaseController
         foreach ($logFilesList as $logFile) {
             $logFileData = [];
             $logFileData['name'] = $logFile;
-            $logFileData['icon'] = 'check';
-            $logFileData['color'] = 'green';
-            if (shell_exec('grep -c -E "\[ERROR\]|\[error\]" ' . NEXTDOM_LOG . '/' . $logFile) != 0) {
-                $logFileData['icon'] = 'exclamation-triangle';
-                $logFileData['color'] = 'red';
-            } elseif (shell_exec('grep -c -E "\[WARNING\]" ' . NEXTDOM_LOG . '/' . $logFile) != 0) {
-                $logFileData['icon'] = 'exclamation-circle';
-                $logFileData['color'] = 'orange';
-            }
             if ($currentLogfile == $logFile) {
                 $logFileData['active'] = true;
             } else {
                 $logFileData['active'] = false;
             }
             $logFileData['size'] = round(filesize(NEXTDOM_LOG . '/' . $logFile) / 1024);
+            $logFileData['icon'] = 'check';
+            $logFileData['color'] = 'green';
+            if ($logFileData['size'] < 10000) {
+                if (shell_exec('grep -c -E "\[ERROR\]|\[error\]" ' . NEXTDOM_LOG . '/' . $logFile) != 0) {
+                    $logFileData['icon'] = 'exclamation-triangle';
+                    $logFileData['color'] = 'red';
+                } elseif (shell_exec('grep -c -E "\[WARNING\]" ' . NEXTDOM_LOG . '/' . $logFile) != 0) {
+                    $logFileData['icon'] = 'exclamation-circle';
+                    $logFileData['color'] = 'orange';
+                }
+            } else {
+                $logFileData['icon'] = 'exclamation-triangle';
+                $logFileData['color'] = 'red';
+            }
             $pageData['logFilesList'][] = $logFileData;
         }
+
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/diagnostic/log.js';
 
         return Render::getInstance()->get('/desktop/diagnostic/logs-view.html.twig', $pageData);
     }

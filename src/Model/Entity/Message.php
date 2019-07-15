@@ -101,7 +101,7 @@ class Message implements EntityInterface
                     FROM ' . self::DB_CLASS_NAME . '
                     WHERE plugin = :plugin
                     AND message = :message';
-            $result = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW);
+            $result = DBHelper::getOne($sql, $values);
         } else {
             $values = array(
                 'logicalId' => $this->getLogicalId(),
@@ -111,7 +111,7 @@ class Message implements EntityInterface
             FROM message
             WHERE plugin=:plugin
             AND logicalId=:logicalId';
-            $result = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW);
+            $result = DBHelper::getOne($sql, $values);
         }
         if ($result['count(*)'] != 0) {
             return null;

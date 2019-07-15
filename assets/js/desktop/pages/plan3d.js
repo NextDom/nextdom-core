@@ -67,8 +67,8 @@ $('#bt_showAllObject').on('click',function(){
     nextdom.plan3d.byplan3dHeader({
         plan3dHeader_id : plan3dHeader_id,
         error : function(error){
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
-        },
+            notify("Core",error.message,"error");
+            },
         success : function(data){
             for(var i in data){
                 var object = scene.getObjectByName(data[i].name);
@@ -91,8 +91,8 @@ $('#bt_plan3dHeaderAdd').on('click',function(){
             nextdom.plan3d.saveHeader({
                 plan3dHeader: {name: result},
                 error: function (error) {
-                    $('#div_alert').showAlert({message: error.message, level: 'danger'});
-                },
+                    notify("Core",error.message,"error");
+                    },
                 success: function (data) {
                     window.location = 'index.php?v=d&p=plan3d&plan3d_id=' + data.id;
                 }
@@ -167,8 +167,8 @@ window.addEventListener('click', function(){
             name: intersects[0].object.name,
             plan3dHeader_id: plan3dHeader_id,
             error: function (request, status, error) {
-                $('#div_alert').showAlert({message: error.message, level: 'danger'});
-            },
+                notify("Core",error.message,"error");
+                },
             success: function (data) {
                 if(data.html){
                     $('#md_plan3dWidget').empty().append(data.html)
@@ -186,8 +186,8 @@ function display3d(_id){
     nextdom.plan3d.getHeader({
         id : _id,
         error : function(error){
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
-        },
+            notify("Core",error.message,"error");
+            },
         success : function(data){
             if(!data.configuration || !data.configuration.path || !data.configuration.objfile){
                 return;
@@ -305,8 +305,8 @@ function add3dObjects(_id){
     nextdom.plan3d.byplan3dHeader({
         plan3dHeader_id : _id,
         error : function(error){
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
-        },
+            notify("Core",error.message,"error");
+            },
         success : function(data){
             for(var i in data){
                 add3dObject(data[i]);

@@ -43,6 +43,7 @@ class CmdAjax extends BaseAjax
      * Get command HTML render
      *
      * @throws CoreException
+     * @throws \ReflectionException
      */
     public function toHtml()
     {
@@ -75,6 +76,7 @@ class CmdAjax extends BaseAjax
      * Execute commande
      *
      * @throws CoreException
+     * @throws \ReflectionException
      */
     public function execCmd()
     {
@@ -122,6 +124,7 @@ class CmdAjax extends BaseAjax
      * Get command object by his id
      *
      * @throws CoreException
+     * @throws \ReflectionException
      */
     public function byId()
     {
@@ -135,7 +138,6 @@ class CmdAjax extends BaseAjax
     public function copyHistoryToCmd()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         HistoryManager::copyHistoryToCmd(Utils::init('source_id'), Utils::init('target_id'));
         AjaxHelper::success();
     }
@@ -143,7 +145,6 @@ class CmdAjax extends BaseAjax
     public function replaceCmd()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         NextDomHelper::replaceTag(array('#' . str_replace('#', '', Utils::init('source_id')) . '#' => '#' . str_replace('#', '', Utils::init('target_id')) . '#'));
         AjaxHelper::success();
     }
@@ -226,7 +227,6 @@ class CmdAjax extends BaseAjax
     public function save()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $cmd_ajax = NextDomHelper::fromHumanReadable(json_decode(Utils::init('cmd'), true));
         $cmd = CmdManager::byId($cmd_ajax['id']);
         if (!is_object($cmd)) {
@@ -240,7 +240,6 @@ class CmdAjax extends BaseAjax
     public function multiSave()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $cmds = json_decode(Utils::init('cmd'), true);
         foreach ($cmds as $cmd_ajax) {
             $cmd = CmdManager::byId($cmd_ajax['id']);
@@ -256,7 +255,6 @@ class CmdAjax extends BaseAjax
     public function changeHistoryPoint()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         if (Utils::init('cmd_id') === '') {
             throw new CoreException(__('Historique impossible'));
         }
@@ -411,7 +409,6 @@ class CmdAjax extends BaseAjax
     public function emptyHistory()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $cmd = CmdManager::byId(Utils::init('id'));
         if (!is_object($cmd)) {
             throw new CoreException(__('Commande ID inconnu : ') . Utils::init('id'));
@@ -422,7 +419,6 @@ class CmdAjax extends BaseAjax
 
     public function setOrder()
     {
-        Utils::unautorizedInDemo();
         $cmds = json_decode(Utils::init('cmds'), true);
         $eqLogics = array();
         foreach ($cmds as $cmd_json) {
