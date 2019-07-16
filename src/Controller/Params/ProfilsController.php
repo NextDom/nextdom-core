@@ -135,7 +135,6 @@ class ProfilsController extends BaseController
         $pageData['profilsAllowRemoteUsers'] = ConfigManager::byKey('sso:allowRemoteUser');
 
         $pageData['JS_END_POOL'][] = '/public/js/desktop/params/profils.js';
-		$pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return Render::getInstance()->get('/desktop/params/profils.html.twig', $pageData);
     }

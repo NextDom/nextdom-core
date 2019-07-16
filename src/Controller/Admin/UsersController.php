@@ -53,7 +53,6 @@ class UsersController extends BaseController
         $pageData['usersList'] = UserManager::all();
         $pageData['JS_VARS']['ldapEnable'] = $pageData['userLdapEnabled'];
         $pageData['JS_END_POOL'][] = '/public/js/desktop/admin/user.js';
-		$pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return Render::getInstance()->get('/desktop/admin/users.html.twig', $pageData);
     }

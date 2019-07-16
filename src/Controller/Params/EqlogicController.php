@@ -39,7 +39,6 @@ class EqlogicController extends BaseController
     public static function get(&$pageData): string
     {
         $pageData['JS_END_POOL'][] = '/public/js/desktop/params/eqlogic.js';
-		$pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return Render::getInstance()->get('/desktop/params/eqlogic.html.twig', $pageData);
     }

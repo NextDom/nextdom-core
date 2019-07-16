@@ -43,7 +43,6 @@ class InteractAdminController extends BaseController
     {
 
         $pageData['JS_END_POOL'][] = '/public/js/desktop/params/interact_admin.js';
-		$pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return Render::getInstance()->get('/desktop/params/interact_admin.html.twig', $pageData);
     }

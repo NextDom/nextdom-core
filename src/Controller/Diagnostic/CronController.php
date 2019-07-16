@@ -45,7 +45,6 @@ class CronController extends BaseController
     {
         $pageData['cronEnabled'] = ConfigManager::byKey('enableCron');
         $pageData['JS_END_POOL'][] = '/public/js/desktop/diagnostic/cron.js';
-		$pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return Render::getInstance()->get('/desktop/diagnostic/cron.html.twig', $pageData);
     }

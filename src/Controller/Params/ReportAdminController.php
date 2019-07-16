@@ -48,7 +48,6 @@ class ReportAdminController extends BaseController
         $pageData['adminDbConfig'] = $CONFIG['db'];
 
         $pageData['JS_END_POOL'][] = '/public/js/desktop/params/reports_admin.js';
-		$pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return Render::getInstance()->get('/desktop/params/reports_admin.html.twig', $pageData);
     }

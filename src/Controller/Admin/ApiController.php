@@ -71,7 +71,6 @@ class ApiController extends BaseController
         }
 
         $pageData['JS_END_POOL'][] = '/public/js/desktop/admin/api.js';
-		$pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return Render::getInstance()->get('/desktop/admin/api.html.twig', $pageData);
     }

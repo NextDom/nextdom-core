@@ -64,7 +64,6 @@ class LogAdminController extends BaseController
         $pageData['adminOthersLogs'] = array('scenario', 'plugin', 'market', 'api', 'connection', 'interact', 'tts', 'report', 'event');
 
         $pageData['JS_END_POOL'][] = '/public/js/desktop/params/log_admin.js';
-		$pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return Render::getInstance()->get('/desktop/params/log_admin.html.twig', $pageData);
     }

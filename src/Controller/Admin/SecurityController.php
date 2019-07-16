@@ -72,7 +72,6 @@ class SecurityController extends BaseController
         }
 
         $pageData['JS_END_POOL'][] = '/public/js/desktop/admin/security.js';
-		$pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return Render::getInstance()->get('/desktop/admin/security.html.twig', $pageData);
     }
