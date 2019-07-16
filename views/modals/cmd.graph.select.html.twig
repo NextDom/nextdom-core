@@ -39,98 +39,65 @@
     </table>
     <table class="table table-condensed table-bordered tablesorter" id="table_addViewData">
         <thead>
-            <tr>
-                <th style="width: 50px;">#</th>
-                <th style="width: 150px;">{{ 'Objet' }}</th>
-                <th>{{ 'Nom' }}</th>
-                <th data-sorter="false" data-filter="false">{{ 'Affichage' }}</th>
-            </tr>
+        <tr>
+            <th style="width: 50px;">#</th>
+            <th style="width: 150px;">{{ 'Objet' }}</th>
+            <th>{{ 'Nom' }}</th>
+            <th data-sorter="false" data-filter="false">{{ 'Affichage' }}</th>
+        </tr>
         </thead>
         <tbody>
-            {% for cmdData in cmdList %}
-                <tr data-link_id="{{ cmdData['cmd'].getId() }}" data-type="graph" data-viewDataType="cmd">
-                    <td>
-                        <input type="checkbox" class="enable"/>
-                        <input class="graphDataOption" data-l1key="link_id" value="{{ cmdData['cmd'].getId() }}" hidden/>
-                    </td>
-                    <td class="object_name">
-                        <input class="graphDataOption" data-l1key="type" value="cmd" hidden/>
-                        {% if cmdData['showObject'] %}
-                            {{ cmdData['eqLogicObject'].getName() }}
-                        {% endif %}
-                    </td>
-                    <td class="name">
-                        [{{ cmdData['eqLogic'].getName() }}] [{{ cmdData['cmd'].getName() }}]
-                    </td>
-                    <td class="display">
-                        <div class="option">
-                            <form class="form-inline">
-                                <div class="col-xs-12">
-                                    <div class="form-group">
-                                        <span>{{ 'Couleur' }} :</span>
-                                        <input type="color" class="graphDataOption form-control input-sm spacing-left" data-l1key="configuration" data-l2key="graphColor" style="width : 110px;"/>
-                                    </div>
-                                    <div class="form-group">
-                                        <select class="graphDataOption form-control input-sm" data-l1key="configuration" data-l2key="graphType">
-                                            <option value="line">{{ 'Ligne' }}</option>
-                                            <option value="area">{{ 'Aire' }}</option>
-                                            <option value="column">{{ 'Colonne' }}</option>
-                                            <option value="pie">{{ 'Camembert' }}</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <select class="graphDataOption form-control input-sm" data-l1key="configuration" data-l2key="groupingType">
-                                            <option value="">{{ 'Aucun groupement' }}</option>
-                                            <option value="sum::hour">{{ 'Somme par heure' }}</option>
-                                            <option value="average::hour">{{ 'Moyenne par heure' }}</option>
-                                            <option value="low::hour">{{ 'Minimum par heure' }}</option>
-                                            <option value="high::hour">{{ 'Maximum par heure' }}</option>
-                                            <option value="sum::day">{{ 'Somme par jour' }}</option>
-                                            <option value="average::day">{{ 'Moyenne par jour' }}</option>
-                                            <option value="low::day">{{ 'Minimum par jour' }}</option>
-                                            <option value="high::day">{{ 'Maximum par jour' }}</option>
-                                            <option value="sum::week">{{ 'Somme par semaine' }}</option>
-                                            <option value="average::week">{{ 'Moyenne par semaine' }}</option>
-                                            <option value="low::week">{{ 'Minimum par semaine' }}</option>
-                                            <option value="high::week">{{ 'Maximum par semaine' }}</option>
-                                            <option value="sum::month">{{ 'Somme par mois' }}</option>
-                                            <option value="average::month">{{ 'Moyenne par mois' }}</option>
-                                            <option value="low::month">{{ 'Minimum par mois' }}</option>
-                                            <option value="high::month">{{ 'Maximum par mois' }}</option>
-                                            <option value="sum::year">{{ 'Somme par année' }}</option>
-                                            <option value="average::year">{{ 'Moyenne par année' }}</option>
-                                            <option value="low::year">{{ 'Minimum par année' }}</option>
-                                            <option value="high::year">{{ 'Maximum par année' }}</option>
-                                        </select>
+        {% for cmdData in cmdList %}
+            <tr data-link_id="{{ cmdData['cmd'].getId() }}" data-type="graph" data-viewDataType="cmd">
+                <td>
+                    <input type="checkbox" class="enable"/>
+                    <input class="graphDataOption" data-l1key="link_id" value="{{ cmdData['cmd'].getId() }}" hidden/>
+                </td>
+                <td class="object_name">
+                    <input class="graphDataOption" data-l1key="type" value="cmd" hidden/>
+                    {% if cmdData['showObject'] %}
+                        {{ cmdData['eqLogicObject'].getName() }}
+                    {% endif %}
+                </td>
+                <td class="name">
+                    [{{ cmdData['eqLogic'].getName() }}] [{{ cmdData['cmd'].getName() }}]
+                </td>
+                <td class="display">
+                    <div class="option">
+                        <form class="form-inline">
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <span>{{ 'Couleur' }} :</span>
+                                    <input type="color" class="graphDataOption form-control input-sm spacing-left" data-l1key="configuration" data-l2key="graphColor" style="width : 110px;"/>
+                                </div>
+                                <div class="form-group">
+                                    <select class="graphDataOption form-control input-sm" data-l1key="configuration" data-l2key="graphType">
+                                        <option value="line">{{ 'Ligne' }}</option>
+                                        <option value="bar">{{ 'Colonne' }}</option>
+                                        <option value="bubble">{{ 'Bulles' }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 spacing-top">
+                                <div class="form-group">
+                                    <div class="form-group spacing-bottom">
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" class="graphDataOption spacing-left" data-l1key="configuration" data-l2key="graphArea">{{ 'Area' }}
+                                        </label>
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" class="graphDataOption spacing-left" data-l1key="configuration" data-l2key="graphSmooth">{{ 'Smooth' }}
+                                        </label>
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" class="graphDataOption spacing-left" data-l1key="configuration" data-l2key="graphStep">{{ 'Escalier' }}
+                                        </label>
                                     </div>
                                 </div>
-                                <div class="col-xs-12 spacing-top">
-                                    <div class="form-group">
-                                        <div class="form-group">
-                                            <span>{{ 'Echelle' }} :</span>
-                                            <select class="graphDataOption form-control input-sm spacing-left" data-l1key="configuration" data-l2key="graphScale">
-                                                <option value="0">Droite</option>
-                                                <option value="1">Gauche</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group spacing-bottom">
-                                            <label class="checkbox-inline">
-                                                <input type="checkbox" class="graphDataOption spacing-left" data-l1key="configuration" data-l2key="graphStep">{{ 'Escalier' }}
-                                            </label>
-                                            <label class="checkbox-inline">
-                                                <input type="checkbox" class="graphDataOption spacing-left" data-l1key="configuration" data-l2key="graphStack">{{ 'Empiler' }}
-                                            </label>
-                                            <label class="checkbox-inline">
-                                                <input type="checkbox" class="graphDataOption spacing-left" data-l1key="configuration" data-l2key="derive">{{ 'Variation' }}
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
-            {% endfor %}
+                            </div>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
         </tbody>
     </table>
 </section>

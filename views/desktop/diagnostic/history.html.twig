@@ -52,104 +52,89 @@
             <h3 class="box-title"><i class="fas fa-chart-area"></i>{{ 'Historiques'  | trans }}</h3>
         </div>
         <div class="box-body">
-            <fieldset>
-                <legend>{{ 'Vous pouvez créer ci-dessous une donnée calculée à partir de plusieurs commandes qui sera ajoutée au graphique'  | trans }}</legend>
-                <div class="input-group form-group" style="width: 100%">
-                    <input class="form-control" id="in_calculHistory" placeholder="{{ 'Historique calculé...' | trans }}"></input>
-                    <span class="input-group-btn">
-                        <a class="btn btn-default" id="bt_findCmdCalculHistory" data-toggle="tooltip" data-original-title="{{ 'Sélectionner la commande' | trans }}"><i class="fas fa-list-alt no-spacing"></i></a>
-                        <a class="btn btn-success" id="bt_displayCalculHistory" data-toggle="tooltip" data-original-title="{{'Calculer et afficher la commande' | trans }}"><i class="fas fa-check no-spacing"></i></a>
-                        <a class="btn btn-default" id="bt_configureCalculHistory" data-toggle="tooltip" data-original-title="{{'Configurer le calcul' | trans }}"><i class="fas fa-cogs"></i></a>
-                    </span>
-                </div>
-            </fieldset>
             <div class="row">
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                     <div class="bs-sidebar form-group">
                         <ul id="ul_history" class="nav nav-list bs-sidenav">
                             <fieldset>
-                                <legend>{{ 'Ajouter / Supprimer des commandes au graphique'  | trans }}</legend>
                                 <div class="filter input-group form-group">
                                     <div class="input-group-addon"><i class="fas fa-search"></i></div>
                                     <input class="filter form-control" placeholder="{{'Rechercher...' | trans }}" />
                                 </div>
                                 {% set objectId = -1 %}
-                                    {% for cmd in historyCmdsList %}
-                                        {% set eqLogic = cmd.getEqLogic() %}
-                                        {% if eqLogic.hasRight('r') %}
-                                            {% if objectId != eqLogic.getObject_id %}
-                                                {% if objectId != -1 %}
-                                                </div>
-                                                {% endif %}
-                                                {% set object = eqLogic.getObject() %}
-                                                {# Pour remplacer is_object #}
-                                                {% if object != null and object is not iterable %}
-                                                    {% if object.getDisplay('tagColor') != '' %}
-                                                        <span class="label cursor displayObject label-cmd" data-object_id="o{{ eqLogic.getObject_id() }}" style="background-color: {{ object.getDisplay('tagColor') }};color: {{ object.getDisplay('tagTextColor', 'white') }}">{{ object.getName() }}...</span>
-                                                    {% else %}
-                                                        <span class="label label-primary cursor displayObject label-cmd" data-object_id="o{{ eqLogic.getObject_id() }}">{{ object.getName() }}...</span>
-                                                    {% endif %}
-                                                {% else %}
-                                                    <span class="label label-primary cursor displayObject label-cmd" data-object_id="o{{ eqLogic.getObject_id() }}">{{ 'common.none' | trans }}...</span>
-                                                {% endif %}
-                                                <div class="cmdList" data-object_id="o{{ eqLogic.getObject_id() }}" style="display:none;">
-                                            {% endif %}
-                                            <li class="cursor li_history" data-cmd_id="{{ cmd.getId() }}">
-                                                <a class="history"><i class="fas fa-trash remove spacing-right"></i>
-                                                    {{ cmd.getEqLogic().getName() }} - {{ cmd.getName() }}
-                                                    {% if cmd.getSubType() == 'string' %}
-                                                        <i class="fas fa-share export spacing-left"></i>
-                                                    {% endif %}
-                                                </a>
-                                            </li>
-                                            {% set objectId = eqLogic.getObject_id() %}
-                                        {% endif %}
-                                    {% endfor %}
-                                </ul>
-                            </fieldset>
+                                {% for cmd in historyCmdsList %}
+                                {% set eqLogic = cmd.getEqLogic() %}
+                                {% if eqLogic.hasRight('r') %}
+                                {% if objectId != eqLogic.getObject_id %}
+                                {% if objectId != -1 %}
+                    </div>
+                    {% endif %}
+                    {% set object = eqLogic.getObject() %}
+                    {# Pour remplacer is_object #}
+                    {% if object != null and object is not iterable %}
+                        {% if object.getDisplay('tagColor') != '' %}
+                            <span class="label cursor displayObject label-cmd" data-object_id="o{{ eqLogic.getObject_id() }}" style="background-color: {{ object.getDisplay('tagColor') }};color: {{ object.getDisplay('tagTextColor', 'white') }}">{{ object.getName() }}...</span>
+                        {% else %}
+                            <span class="label cursor displayObject label-cmd" data-object_id="o{{ eqLogic.getObject_id() }}">{{ object.getName() }}...</span>
+                        {% endif %}
+                    {% else %}
+                        <span class="label cursor displayObject label-cmd" data-object_id="o{{ eqLogic.getObject_id() }}">{{ 'Aucun' }}...</span>
+                    {% endif %}
+                    <div class="cmdList" data-object_id="o{{ eqLogic.getObject_id() }}" style="display:none;">
+                        {% endif %}
+                        <li class="cursor li_history" data-cmd_id="{{ cmd.getId() }}">
+                            <a class="history"><i class="fa fa-circle-o text-gray spacing-right"></i>
+                                {{ cmd.getEqLogic().getName() }} - {{ cmd.getName() }}
+                                <i class="fas fa-trash fa-sm remove spacing-left"></i>
+                                {% if cmd.getSubType() == 'string' %}
+                                    <i class="fas fa-share export spacing-left"></i>
+                                {% endif %}
+                            </a>
+                        </li>
+                        {% set objectId = eqLogic.getObject_id() %}
+                        {% endif %}
+                        {% endfor %}
+                        </ul>
+                        </fieldset>
                     </div>
                 </div>
 
                 <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
                     <fieldset>
-                        <legend>{{ 'Filtrage et mise en forme des données' }}</legend>
                         <div class="form-group">
-                            <input id="in_startDate" class="form-control in_datepicker" style="display : inline-block; width: 150px;" value="{{ historyDate.start }}"/>
-                            <input id="in_endDate" class="form-control in_datepicker" style="display : inline-block; width: 150px;" value="{{ historyDate.end }}"/>
-                            <a class="btn btn-success" id="bt_validChangeDate" data-toggle="tooltip" title="" data-original-title="{{ 'Attention : une trop grande plage de dates peut mettre très longtemps à être calculée ou même ne pas s\'afficher.'  | trans }}"><i class="fas fa-check"></i>{{ 'Ok' }}</a>
-                            <select class="form-control pull-right" id="sel_groupingType" style="width: 200px;">
-                                <option value="">{{ 'Aucun groupement' | trans }}</option>
-                                <option value="sum::hour">{{ 'Somme par heure' | trans }}</option>
-                                <option value="average::hour">{{ 'Moyenne par heure'  | trans }}</option>
-                                <option value="low::hour">{{ 'Minimum par heure' | trans }}</option>
-                                <option value="high::hour">{{ 'Maximum par heure' | trans }}</option>
-                                <option value="sum::day">{{ 'Somme par jour' | trans }}</option>
-                                <option value="average::day">{{ 'Moyenne par jour' | trans }}</option>
-                                <option value="low::day">{{ 'Minimum par jour' | trans }}</option>
-                                <option value="high::day">{{ 'Maximum par jour' | trans }}</option>
-                                <option value="sum::week">{{ 'Somme par semaine' | trans }}</option>
-                                <option value="average::week">{{ 'Moyenne par semaine' | trans }}</option>
-                                <option value="low::week">{{ 'Minimum par semaine' | trans }}</option>
-                                <option value="high::week">{{ 'Maximum par semaine' | trans }}</option>
-                                <option value="sum::month">{{ 'Somme par mois' | trans }}</option>
-                                <option value="average::month">{{ 'Moyenne par mois' | trans }}</option>
-                                <option value="low::month">{{ 'Minimum par mois' | trans }}</option>
-                                <option value="high::month">{{ 'Maximum par mois' | trans }}</option>
-                                <option value="sum::year">{{ 'Somme par année' | trans }}</option>
-                                <option value="average::year">{{ 'Moyenne par année' | trans }}</option>
-                                <option value="low::year">{{ 'Minimum par année' | trans }}</option>
-                                <option value="high::year">{{ 'Maximum par année' | trans }}</option>
-                            </select>
+                            <input id="in_startDate" class="form-control in_datepicker" style="display : inline-block; width: 150px;" value="{{ historyDate['start'] }}"/>
+                            <input id="in_endDate" class="form-control in_datepicker" style="display : inline-block; width: 150px;" value="{{ historyDate['end'] }}"/>
+                            <a class="btn btn-success" id='bt_validChangeDate' data-toggle="tooltip" title="" data-original-title="{{ 'Attention : une trop grande plage de dates peut mettre très longtemps à être calculée ou même ne pas s\'afficher.' }}"><i class="fas fa-check"></i>{{ 'Ok' }}</a>
                             <select class="form-control pull-right" id="sel_chartType" style="width: 200px;">
-                                <option value="line">{{ 'Ligne'  | trans }}</option>
-                                <option value="areaspline">{{ 'Areaspline'  | trans }}</option>
-                                <option value="column">{{ 'Barre'  | trans }}<
+                                <option value="line">{{ 'Ligne' }}</option>
+                                <option value="bar">{{ 'Barre' }}</option>
+                                <option value="bubble">{{ 'bubble' }}</option>
                             </select>
-                            <span class="pull-right">{{ 'Variation' }} <input type="checkbox" id="cb_derive"/></span>
-                            <span class="pull-right">{{ 'Escalier' }} <input type="checkbox" id="cb_step"/></span>
+
                         </div>
-                        <div>
-                            <div class="divHightcharts" id="div_graph"></div>
+                        <div class="box box-primary">
+                            <div class="box-header with-border">                                        <div class="form-group spacing-bottom">
+
+                                </div>
+                                <h3 class="box-title">Area Chart</h3>
+                                <div class="box-tools pull-right">
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" id='bt_areaToggle' class="graphDataOption spacing-left btn-on" data-l1key="configuration" data-l2key="graphArea">{{ 'Area' }}
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" id='bt_smoothToggle' class="graphDataOption spacing-left btn-on" data-l1key="configuration" data-l2key="graphSmooth">{{ 'smooth' }}
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" id='bt_steppedToggle' class="graphDataOption spacing-left btn-on" data-l1key="configuration" data-l2key="graphStepped">{{ 'Escalier' }}
+                                    </label>
+                                    <a class="btn btn-sm btn-default" id='bt_resetZoom'><i class="fas fa-search"></i>{{ 'reset zoom' }}</a>
+                                    <a class="btn btn-sm btn-default" id='bt_fullscreen'><i class="fas fa-arrows-alt"></i>{{ 'fullscreen' }}</a>
+
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <canvas id="div_graph"></canvas>
+                            </div>
                         </div>
                     </fieldset>
                 </div>

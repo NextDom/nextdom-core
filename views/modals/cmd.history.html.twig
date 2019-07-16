@@ -36,56 +36,30 @@
 <div class="md_history">
     <section class="content-header">
         <div class="action-bar">
-            <div class="action-group btn-action-bar">
-                <input type="text" id="in_startDate" class="form-control in_datepicker" style="width: 150px;" value="{{ dates.start }}"/>
-                <input type="text" id="in_endDate" class="form-control in_datepicker" style="width: 150px;" value="{{ dates.end }}"/>
-                <a class="btn btn-action-bar btn-success tooltips" style="margin-top:0px" id="bt_validChangeDate" title="{{ 'Attention : une trop grande plage de dates peut mettre très longtemps à être calculée ou même ne pas s\'afficher' }}">{{ 'Ok' }}</a>
+
+            <div class="action-group">
+                <label class="checkbox-inline">
+                    <input type="checkbox" id='bt_areaToggle' class="graphDataOption spacing-left btn-on" data-l1key="configuration" data-l2key="graphArea">{{ 'Area' }}
+                </label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" id='bt_smoothToggle' class="graphDataOption spacing-left btn-on" data-l1key="configuration" data-l2key="graphSmooth">{{ 'smooth' }}
+                </label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" id='bt_steppedToggle' class="graphDataOption spacing-left btn-on" data-l1key="configuration" data-l2key="graphStep">{{ 'Escalier' }}
+                </label>
+                <a class="btn btn-default" id='bt_resetZoom'><i class="fas fa-search"></i>{{ 'reset zoom' }}</a>
             </div>
             <div class="action-group">
-                <span class="pull-right">
-                    <input type="checkbox" class="spacing-left" {% if derive == 1 %}checked{% endif %} id="cb_derive"/>
-                    <label for="cb_derive" class="control-label label-check">{{ 'Variation' }}</label>
-                </span>
-                <span class="pull-right">
-                    <input type="checkbox" class="spacing-left" {% if step == 1 %}checked{% endif %} id="cb_step"/>
-                    <label for="cb_step" class="control-label label-check">{{ 'Escalier' }}</label>
-                </span>
-            </div>
-            <div class="action-group">
-                <select class="form-control pull-right" id="sel_groupingType" style="width: 200px;">
-                    <option value="">{{ 'Aucun groupement' }}</option>
-                    <option value="sum::hour">{{ 'Somme par heure' }}</option>
-                    <option value="average::hour">{{ 'Moyenne par heure' }}</option>
-                    <option value="low::hour">{{ 'Minimum par heure' }}</option>
-                    <option value="high::hour">{{ 'Maximum par heure' }}</option>
-                    <option value="sum::day">{{ 'Somme par jour' }}</option>
-                    <option value="average::day">{{ 'Moyenne par jour' }}</option>
-                    <option value="low::day">{{ 'Minimum par jour' }}</option>
-                    <option value="high::day">{{ 'Maximum par jour' }}</option>
-                    <option value="sum::week">{{ 'Somme par semaine' }}</option>
-                    <option value="average::week">{{ 'Moyenne par semaine' }}</option>
-                    <option value="low::week">{{ 'Minimum par semaine' }}</option>
-                    <option value="high::week">{{ 'Maximum par semaine' }}</option>
-                    <option value="sum::month">{{ 'Somme par mois' }}</option>
-                    <option value="average::month">{{ 'Moyenne par mois' }}</option>
-                    <option value="low::month">{{ 'Minimum par mois' }}</option>
-                    <option value="high::month">{{ 'Maximum par mois' }}</option>
-                    <option value="sum::year">{{ 'Somme par année' }}</option>
-                    <option value="average::year">{{ 'Moyenne par année' }}</option>
-                    <option value="low::year">{{ 'Minimum par année' }}</option>
-                    <option value="high::year">{{ 'Maximum par année' }}</option>
-                </select>
                 <select class="pull-right form-control" data-cmd_id="#id#" id="sel_chartType" style="width: 100px;">
                     <option value="line">{{ 'Ligne' }}</option>
-                    <option value="area">{{ 'Aire' }}</option>
-                    <option value="column">{{ 'Colonne' }}</option>
+                    <option value="bar">{{ 'Barre' }}</option>
                 </select>
             </div>
         </div>
     </section>
 
     <section class="content">
-        <div class="divHightcharts" id="div_historyChart"></div>
+        <canvas class="divHightcharts" id="div_historyChart"></canvas>
     </section>
 </div>
 
