@@ -77,5 +77,8 @@ new Vue({
   store,
   MuseUI,
   i18n,
+  beforeCreate() {
+    this.$store.commit("initialize");
+  },
   render: h => h(App)
 }).$mount("#app");

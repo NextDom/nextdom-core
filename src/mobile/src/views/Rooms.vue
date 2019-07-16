@@ -48,6 +48,7 @@ along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
         </mu-expansion-panel>
         <mu-expansion-panel v-if="eqLogics.length > 0">
           <div slot="header">{{ $t('equipments')}}</div>
+          <!--
           <mu-list>
             <mu-list-item
               button
@@ -61,6 +62,22 @@ along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
               </mu-list-item-action>
             </mu-list-item>
           </mu-list>
+          -->
+          <draggable
+            v-model="eqLogics"
+            @start="drag=true"
+            @end="drag=false"
+            class="draggable-list"
+            v-on:update="saveOrderData"
+          >
+            <div v-for="eqLogic in eqLogics" v-bind:key="eqLogic.id">
+              <span>{{eqLogic.name}} {{ eqLogic.id }}</span>
+              <mu-icon class="draggable-handle" value="drag_handle"></mu-icon>
+              <mu-list-item-action v-on:click="changeEqLogicVisibility(eqLogic.id)">
+                <mu-icon v-bind:data-id="eqLogic.id" v-bind:value="eqLogicsVisibility[eqLogic.id]"></mu-icon>
+              </mu-list-item-action>
+            </div>
+          </draggable>
         </mu-expansion-panel>
       </mu-container>
     </template>
@@ -70,6 +87,7 @@ along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 <script>
 import RoomWidget from "@/components/RoomWidget.vue";
 import Communication from "../libs/Communication.js";
+import draggable from "vuedraggable";
 
 /**
  * Navigate in rooms tree
@@ -84,7 +102,8 @@ export default {
         isVisible: true
       },
       eqLogicsVisibility: {},
-      eqLogics: []
+      eqLogics: [],
+      orderData: {}
     };
   },
   props: {
@@ -95,7 +114,8 @@ export default {
     }
   },
   components: {
-    RoomWidget
+    RoomWidget,
+    draggable
   },
   computed: {
     /**
@@ -153,6 +173,7 @@ export default {
      * Init visibility and get data
      */
     initRoomConfig() {
+      const eqLogicsOrder = this.$store.getters.getEqLogicsOrder();
       // Init room visibility
       let isVisibleStoredValue = localStorage.getItem(
         "is-visible-room-" + this.room.id
@@ -162,11 +183,39 @@ export default {
       }
       Communication.get("/api/eqlogic/room/" + this.room.id, data => {
         // Loop with push for reactivity
-        data.forEach(eqLogic => {
-          this.initEqLogicVisibility(eqLogic.id);
-          this.eqLogics.push(eqLogic);
+        for (let eqLogicIndex = 0; eqLogicIndex < data.length; ++eqLogicIndex) {
+          this.initEqLogicVisibility(data[eqLogicIndex].id);
+          this.eqLogics.push(data[eqLogicIndex]);
+          if (!eqLogicsOrder.hasOwnProperty(data[eqLogicIndex].id)) {
+            eqLogicsOrder[data[eqLogicIndex].id] = 99999;
+          }
+        }
+        this.$store.commit("saveEqLogicsOrder", eqLogicsOrder);
+        // Sort depend of previous order stored in local sotrage
+        this.eqLogics.sort((a, b) => {
+          if (eqLogicsOrder[a.id] < eqLogicsOrder[b.id]) {
+            return -1;
+          } else if (eqLogicsOrder[a.id] > eqLogicsOrder[b.id]) {
+            return 1;
+          }
+          return 0;
         });
       });
+    },
+    /**
+     * @vuese
+     * Save order data in local storage
+     */
+    saveOrderData() {
+      let newOrder = {};
+      for (
+        let eqLogicIndex = 0;
+        eqLogicIndex < this.eqLogics.length;
+        ++eqLogicIndex
+      ) {
+        newOrder[this.eqLogics[eqLogicIndex].id] = eqLogicIndex;
+      }
+      this.$store.commit("updateEqLogicsOrder", newOrder);
     },
     /**
      * @vuese
@@ -251,5 +300,36 @@ h2 {
 
 .mu-grid-tile {
   background-color: $textPrimary;
+}
+
+.draggable-list > div {
+  width: 100%;
+  display: block;
+  height: 2rem;
+  background-color: white;
+}
+
+.draggable-list > div:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.draggable-list > div span {
+  float: left;
+  padding-left: 0.6rem;
+  line-height: 2rem;
+}
+
+.draggable-list > div .mu-item-action {
+  float: right;
+}
+
+.draggable-list > div .mu-item-action .mu-icon {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.draggable-list > div .draggable-handle {
+  float: right;
+  line-height: 2rem;
 }
 </style>

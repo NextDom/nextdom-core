@@ -89,6 +89,24 @@ export default {
      */
     initData(data) {
       this.roomData = data;
+      const eqLogicsOrder = this.$store.getters.getEqLogicsOrder();
+      // Sort list with user preferences
+      this.roomData.eqLogics = this.roomData.eqLogics.sort((a, b) => {
+        let posA = 99999;
+        let posB = 99999;
+        if (eqLogicsOrder.hasOwnProperty(a.id)) {
+          posA = eqLogicsOrder[a.id];
+        }
+        if (eqLogicsOrder.hasOwnProperty(b.id)) {
+          posB = eqLogicsOrder[b.id];
+        }
+        if (posA < posB) {
+          return -1;
+        } else if (posA > posB) {
+          return 1;
+        }
+        return 0;
+      });
       // Start update loop
       EventsManager.loop();
     }
