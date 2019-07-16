@@ -42,9 +42,11 @@ class NetworkController extends BaseController
      * @return string Content of network page
      *
      * @throws \NextDom\Exceptions\CoreException
+     * @throws \Throwable
      */
     public static function get(&$pageData): string
     {
+        $pageData['PRODUCT_NAME'] = ConfigManager::byKey('product_name');
         $pageData['adminReposList'] = UpdateManager::listRepo();
         $keys = array('dns::token', 'market::allowDNS');
         foreach ($pageData['adminReposList'] as $key => $value) {

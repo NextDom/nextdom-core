@@ -100,7 +100,7 @@ class CmdManager
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE id IN (' . $in . ')';
-        return self::cast(DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        return self::cast(DBHelper::getAllObjects($sql, [], self::CLASS_NAME));
     }
 
     /**
@@ -121,7 +121,7 @@ class CmdManager
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE id = :id';
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        return self::cast(DBHelper::getOneObject($sql, $values, self::CLASS_NAME));
     }
 
     /**
@@ -136,7 +136,7 @@ class CmdManager
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 ORDER BY id';
-        return self::cast(DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        return self::cast(DBHelper::getAllObjects($sql, [], self::CLASS_NAME));
     }
 
     /**
@@ -154,7 +154,7 @@ class CmdManager
                 WHERE isHistorized=1
                 AND type=\'info\'';
         $sql .= ' ORDER BY ob.position, ob.name, el.name, c.name';
-        $result1 = self::cast(DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        $result1 = self::cast(DBHelper::getAllObjects($sql, [], self::CLASS_NAME));
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME, 'c') . '
                 FROM ' . self::DB_CLASS_NAME . ' c
                 INNER JOIN eqLogic el ON c.eqLogic_id=el.id
@@ -162,7 +162,7 @@ class CmdManager
                 AND isHistorized=1
                 AND type=\'info\'';
         $sql .= ' ORDER BY el.name, c.name';
-        $result2 = self::cast(DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        $result2 = self::cast(DBHelper::getAllObjects($sql, [], self::CLASS_NAME));
         return array_merge($result1, $result2);
     }
 
@@ -203,7 +203,7 @@ class CmdManager
             $sql .= 'AND `generic_type` IS NOT NULL ';
         }
         $sql .= 'ORDER BY `order`,`name`';
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME), $_eqLogic);
+        return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME), $_eqLogic);
     }
 
     /**
@@ -227,7 +227,7 @@ class CmdManager
             $sql .= 'AND `type`=:type ';
         }
         $sql .= 'ORDER BY `order`';
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
     }
 
     /**
@@ -264,9 +264,9 @@ class CmdManager
         }
         $sql .= ' ORDER BY `order`';
         if ($one) {
-            return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME));
+            return self::cast(DBHelper::getOneObject($sql, $values, self::CLASS_NAME));
         }
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
     }
 
     /**
@@ -303,7 +303,7 @@ class CmdManager
             $sql .= ' AND eqType=:eqType ';
         }
         $sql .= ' ORDER BY name';
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
     }
 
     /**
@@ -329,7 +329,7 @@ class CmdManager
             $sql .= ' AND type=:type ';
         }
         $sql .= ' AND configuration LIKE :configuration';
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
     }
 
     /**
@@ -363,7 +363,7 @@ class CmdManager
             $sql .= ' AND subType = :subType ';
         }
         $sql .= ' ORDER BY name';
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
     }
 
     /**
@@ -391,9 +391,9 @@ class CmdManager
             $sql .= ' AND type = :type';
         }
         if ($multiple) {
-            return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+            return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
         }
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        return self::cast(DBHelper::getOneObject($sql, $values, self::CLASS_NAME));
     }
 
     /**
@@ -421,9 +421,9 @@ class CmdManager
             $sql .= ' AND type=:type';
         }
         if ($multiple) {
-            return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+            return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
         }
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        return self::cast(DBHelper::getOneObject($sql, $values, self::CLASS_NAME));
     }
 
     /**
@@ -465,7 +465,7 @@ class CmdManager
                 $sql .= ' AND type=:type ';
             }
         }
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
     }
 
     /**
@@ -534,7 +534,7 @@ class CmdManager
         INNER JOIN object ob ON el.object_id=ob.id
         WHERE c.name=:cmd_name
         AND ob.name=:object_name';
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        return self::cast(DBHelper::getOneObject($sql, $values, self::CLASS_NAME));
     }
 
     /**
@@ -557,7 +557,7 @@ class CmdManager
             $values['subtype'] = $subType;
             $sql .= ' AND c.subtype=:subtype';
         }
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
     }
 
     /**
@@ -712,7 +712,7 @@ class CmdManager
             AND el.name=:eqLogic_name
             AND ob.name=:object_name';
         }
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        return self::cast(DBHelper::getOneObject($sql, $values, self::CLASS_NAME));
     }
 
     /**
@@ -800,7 +800,7 @@ class CmdManager
     {
         $sql = 'SELECT distinct(type) as type
                 FROM ' . self::DB_CLASS_NAME;
-        return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL);
+        return DBHelper::getAll($sql);
     }
 
     /**
@@ -821,7 +821,7 @@ class CmdManager
             $sql .= ' WHERE type=:type';
         }
         $sql .= ' FROM ' . self::DB_CLASS_NAME;
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL);
+        return DBHelper::getAll($sql, $values);
     }
 
     /**
@@ -834,7 +834,7 @@ class CmdManager
     {
         $sql = 'SELECT distinct(unite) as unite
                 FROM ' . self::DB_CLASS_NAME;
-        return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL);
+        return DBHelper::getAll($sql);
     }
 
     /**
@@ -995,8 +995,8 @@ class CmdManager
 
         if ($event['subtype'] == 'action') {
             $return['html'] = '<div class="cmd" data-id="' . $event['id'] . '">'
-                . '<div style="background-color:#F5A9BC;padding:1px;font-size:0.9em;font-weight: bold;cursor:help;">' . $event['name'] . '<i class="fa fa-cogs pull-right cursor bt_configureCmd"></i></div>'
-                . '<div style="background-color:white;padding:1px;font-size:0.8em;cursor:default;">' . $event['options'] . '<div/>'
+                . '<div style="font-weight: bold;cursor:help;">' . $event['name'] . '<i class="fas fa-cogs pull-right cursor bt_configureCmd"></i></div>'
+                . '<div style="cursor:default;">' . $event['options'] . '<div/>'
                 . '</div>';
         } else {
             $backgroundColor = '#A9D0F5';
@@ -1004,8 +1004,8 @@ class CmdManager
                 $backgroundColor = ($event['value'] == 0 ? '#ff8693' : '#c1e5bd');
             }
             $return['html'] = '<div class="cmd" data-id="' . $event['id'] . '">'
-                . '<div style="background-color:' . $backgroundColor . ';padding:1px;font-size:0.9em;font-weight: bold;cursor:help;">' . $event['name'] . '<i class="fa fa-cogs pull-right cursor bt_configureCmd"></i></div>'
-                . '<div style="background-color:white;padding:1px;font-size:0.8em;cursor:default;">' . $event['value'] . '<div/>'
+                . '<div style="background-color:' . $backgroundColor . ';font-weight: bold;cursor:help;">' . $event['name'] . '<i class="fas fa-cogs pull-right cursor bt_configureCmd"></i></div>'
+                . '<div style="cursor:default;">' . $event['value'] . '<div/>'
                 . '</div>';
         }
         return $return;

@@ -74,7 +74,6 @@ class UpdateAjax extends BaseAjax
     public function checkAllUpdate()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         UpdateManager::checkAllUpdate();
         AjaxHelper::success();
     }
@@ -82,7 +81,6 @@ class UpdateAjax extends BaseAjax
     public function update()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         LogHelper::clear('update');
         $update = UpdateManager::byId(Utils::init('id'));
         if (!is_object($update)) {
@@ -117,7 +115,6 @@ class UpdateAjax extends BaseAjax
     public function remove()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         UpdateManager::findNewUpdateObject();
         $update = UpdateManager::byId(Utils::init('id'));
         if (!is_object($update)) {
@@ -133,7 +130,6 @@ class UpdateAjax extends BaseAjax
     public function checkUpdate()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $update = UpdateManager::byId(Utils::init('id'));
         if (!is_object($update)) {
             $update = UpdateManager::byLogicalId(Utils::init('id'));
@@ -148,7 +144,6 @@ class UpdateAjax extends BaseAjax
     public function updateAll()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         NextDomHelper::update(json_decode(Utils::init('options', '{}'), true));
         AjaxHelper::success();
     }
@@ -156,7 +151,6 @@ class UpdateAjax extends BaseAjax
     public function save()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $new = false;
         $update_json = json_decode(Utils::init('update'), true);
         if (isset($update_json['id'])) {
@@ -188,7 +182,6 @@ class UpdateAjax extends BaseAjax
     public function saves()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         Utils::processJsonObject('update', Utils::init('updates'));
         AjaxHelper::success();
     }
@@ -196,7 +189,6 @@ class UpdateAjax extends BaseAjax
     public function preUploadFile()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $uploadDir = '/tmp';
         $filename = Utils::readUploadedFile($_FILES, "file", $uploadDir, 100, array(), function ($file) {
             $remove = array(" ", "(", ")");

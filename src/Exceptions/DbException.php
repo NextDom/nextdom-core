@@ -23,5 +23,4 @@ namespace NextDom\Exceptions;
  */
 class DbException extends \Exception
 {
-
 }

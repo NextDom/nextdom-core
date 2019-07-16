@@ -43,7 +43,6 @@ class ObjectAjax extends BaseAjax
     public function remove()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $object = ObjectManager::byId(Utils::init('id'));
         if (!is_object($object)) {
             throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));
@@ -86,7 +85,6 @@ class ObjectAjax extends BaseAjax
     public function save()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $object_json = json_decode(Utils::init('object'), true);
         if (isset($object_json['id'])) {
             $object = ObjectManager::byId($object_json['id']);
@@ -266,7 +264,6 @@ class ObjectAjax extends BaseAjax
     public function removeImage()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $object = ObjectManager::byId(Utils::init('id'));
         if (!is_object($object)) {
             throw new CoreException(__('Vue inconnu. Vérifiez l\'ID ') . Utils::init('id'));
@@ -281,7 +278,6 @@ class ObjectAjax extends BaseAjax
     public function uploadImage()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $object = ObjectManager::byId(Utils::init('id'));
         if (!is_object($object)) {
             throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));

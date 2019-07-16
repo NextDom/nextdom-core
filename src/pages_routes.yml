@@ -56,7 +56,7 @@ eqlogic:
   condition: 'admin'
 firstUse:
   path: 'firstUse'
-  controller: NextDom\Controller\FirstUseController::get
+  controller: NextDom\Controller\Pages\FirstUseController::get
   condition: ''
 general:
   path: 'general'

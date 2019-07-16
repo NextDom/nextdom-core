@@ -126,6 +126,8 @@ class RepoMarket
 
     /**
      * @param Update $_update
+     * @throws CoreException
+     * @throws \ReflectionException
      */
     public static function checkUpdate(&$_update)
     {
@@ -372,7 +374,7 @@ class RepoMarket
     {
         $market = new self();
         if (!isset($_arrayMarket['id'])) {
-            return;
+            return null;
         }
         $market->setId($_arrayMarket['id'])
             ->setName($_arrayMarket['name'])

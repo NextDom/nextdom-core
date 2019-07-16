@@ -111,10 +111,10 @@
 $('#bt_consitency').off('click').on('click',function(){
     nextdom.consistency({
         error: function (error) {
-            $('#div_alert').showAlert({message: error.message, level: 'danger'});
-        },
+            notify("Core",error.message,"error");
+            },
         success: function (data) {
-            $('#div_alert').showAlert({message: '{{Exécution de la vérification effectuée, voir le log consistency pour afficher le résultat}}', level: 'success'});
+            notify("Core",'{{Exécution de la vérification effectuée, voir le log consistency pour afficher le résultat}}',"success");
         }
     });
 });

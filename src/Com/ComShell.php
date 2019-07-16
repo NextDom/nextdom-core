@@ -73,6 +73,8 @@ class ComShell
      * Execute a command
      * @param string $_cmd
      * @param bool $_background
+     * @return string
+     * @throws \Exception
      */
     public static function execute($_cmd, $_background = false)
     {

@@ -41,7 +41,6 @@ function selectCategory(_selectedCategory) {
         filterValue = '*';
     } else {
         filterValue = '.' + category;
-
     }
     var $grid = $('.div_displayEquipement').isotope({
         itemSelector: '.eqLogic-widget',
@@ -118,7 +117,6 @@ function getObjectHtml(_object_id) {
             try {
                 $('#div_ob' + _object_id).empty().html(html).parent().show();
             } catch (err) {
-                console.log(err);
             }
             setTimeout(function () {
                 positionEqLogic();

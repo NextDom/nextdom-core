@@ -139,6 +139,7 @@ class NextDomMarket
      * @param bool $force Forcer la mise à jour
      *
      * @return bool True si un rafraichissement a eu lieu
+     * @throws \Exception
      */
     public function refreshJson($force): bool
     {

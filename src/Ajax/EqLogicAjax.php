@@ -177,7 +177,6 @@ class EqLogicAjax extends BaseAjax
     public function setIsEnable()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $eqLogic = EqLogicManager::byId(Utils::init('id'));
         if (!is_object($eqLogic)) {
             throw new CoreException(__('EqLogic inconnu. Vérifiez l\'ID'));
@@ -192,7 +191,6 @@ class EqLogicAjax extends BaseAjax
 
     public function setOrder()
     {
-        Utils::unautorizedInDemo();
         $eqLogics = json_decode(Utils::init('eqLogics'), true);
         foreach ($eqLogics as $eqLogic_json) {
             if (!isset($eqLogic_json['id']) || trim($eqLogic_json['id']) == '') {
@@ -210,7 +208,6 @@ class EqLogicAjax extends BaseAjax
 
     public function removes()
     {
-        Utils::unautorizedInDemo();
         $eqLogics = json_decode(Utils::init('eqLogics'), true);
         foreach ($eqLogics as $id) {
             $eqLogic = EqLogicManager::byId($id);
@@ -227,7 +224,6 @@ class EqLogicAjax extends BaseAjax
 
     public function setIsVisibles()
     {
-        Utils::unautorizedInDemo();
         $eqLogics = json_decode(Utils::init('eqLogics'), true);
         foreach ($eqLogics as $id) {
             $eqLogic = EqLogicManager::byId($id);
@@ -245,7 +241,6 @@ class EqLogicAjax extends BaseAjax
 
     public function setIsEnables()
     {
-        Utils::unautorizedInDemo();
         $eqLogics = json_decode(Utils::init('eqLogics'), true);
         foreach ($eqLogics as $id) {
             $eqLogic = EqLogicManager::byId($id);
@@ -264,7 +259,6 @@ class EqLogicAjax extends BaseAjax
     public function simpleSave()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $eqLogicSave = json_decode(Utils::init('eqLogic'), true);
         $eqLogic = EqLogicManager::byId($eqLogicSave['id']);
         if (!is_object($eqLogic)) {
@@ -282,7 +276,6 @@ class EqLogicAjax extends BaseAjax
     public function copy()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $eqLogic = EqLogicManager::byId(Utils::init('id'));
         if (!is_object($eqLogic)) {
             throw new CoreException(__('EqLogic inconnu. Vérifiez l\'ID'));
@@ -296,7 +289,6 @@ class EqLogicAjax extends BaseAjax
     public function remove()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $eqLogic = EqLogicManager::byId(Utils::init('id'));
         if (!is_object($eqLogic)) {
             throw new CoreException(__('EqLogic inconnu. Vérifiez l\'ID ') . Utils::init('id'));
@@ -326,7 +318,6 @@ class EqLogicAjax extends BaseAjax
     public function save()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
 
         $eqLogicsSave = json_decode(Utils::init('eqLogic'), true);
 

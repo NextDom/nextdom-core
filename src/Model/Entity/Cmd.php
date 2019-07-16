@@ -209,6 +209,7 @@ class Cmd implements EntityInterface
     /**
      * @param $_options
      * @throws CoreException
+     * @throws \ReflectionException
      */
     public static function duringAlertLevel($_options)
     {
@@ -324,7 +325,7 @@ class Cmd implements EntityInterface
 
         $template_name = 'cmd.' . $this->getType() . '.' . $this->getSubType() . '.' . $this->getTemplate($version, 'default');
         if (!isset(self::$_templateArray[$version . '::' . $template_name])) {
-            $template = FileSystemHelper::getTemplateFileContent('core', $version, $template_name);
+            $template = FileSystemHelper::getTemplateFileContent('core', $version, $template_name,'');
             if ($template == '') {
                 if (ConfigManager::byKey('active', 'widget') == 1) {
                     $template = FileSystemHelper::getTemplateFileContent('core', $version, $template_name, 'widget');
@@ -339,7 +340,7 @@ class Cmd implements EntityInterface
                 }
                 if ($template == '') {
                     $template_name = 'cmd.' . $this->getType() . '.' . $this->getSubType() . '.default';
-                    $template = FileSystemHelper::getTemplateFileContent('core', $version, $template_name);
+                    $template = FileSystemHelper::getTemplateFileContent('core', $version, $template_name,'');
                 }
             }
             self::$_templateArray[$version . '::' . $template_name] = $template;
@@ -633,12 +634,12 @@ class Cmd implements EntityInterface
             $replace['#state#'] = '';
             $replace['#tendance#'] = '';
             if ($this->getEqLogicId()->getIsEnable() == 0) {
-                $template = FileSystemHelper::getTemplateFileContent('core', $version, 'cmd.error');
+                $template = FileSystemHelper::getTemplateFileContent('core', $version, 'cmd.error','');
                 $replace['#state#'] = 'N/A';
             } else {
                 $replace['#state#'] = $this->execCmd();
                 if (strpos($replace['#state#'], 'error::') !== false) {
-                    $template = FileSystemHelper::getTemplateFileContent('core', $version, 'cmd.error');
+                    $template = FileSystemHelper::getTemplateFileContent('core', $version, 'cmd.error','');
                     $replace['#state#'] = str_replace('error::', '', $replace['#state#']);
                 } else {
                     if ($this->getSubType() == 'binary' && $this->getDisplay('invertBinary') == 1) {
@@ -1297,6 +1298,7 @@ class Cmd implements EntityInterface
      * @param bool $_allowDuring
      * @return int|string
      * @throws CoreException
+     * @throws \ReflectionException
      */
     public function checkAlertLevel($_value, $_allowDuring = true)
     {
@@ -1569,7 +1571,7 @@ class Cmd implements EntityInterface
     /**
      * @param $_value
      * @param string $_datetime
-     * @return null
+     *
      * @throws CoreException
      */
     public function addHistoryValue($_value, $_datetime = '')
@@ -1580,7 +1582,6 @@ class Cmd implements EntityInterface
             $history->setValue($_value);
             $history->setDatetime($_datetime);
             $history->save($this);
-            return null;
         }
     }
 
@@ -1628,6 +1629,7 @@ class Cmd implements EntityInterface
     /**
      * @param $_value
      * @throws CoreException
+     * @throws \ReflectionException
      */
     public function checkCmdAlert($_value)
     {
@@ -1995,6 +1997,7 @@ class Cmd implements EntityInterface
      * @param int $_level
      * @param null $_drill
      * @return array|null
+     * @throws CoreException
      * @throws \ReflectionException
      */
     public function getLinkData(&$_data = array('node' => array(), 'link' => array()), $_level = 0, $_drill = null)
@@ -2041,6 +2044,7 @@ class Cmd implements EntityInterface
     /**
      * @param bool $_array
      * @return array
+     * @throws CoreException
      * @throws \ReflectionException
      */
     public function getUsedBy($_array = false)

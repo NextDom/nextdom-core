@@ -282,6 +282,7 @@ class MarketItem
      * Updates the data of the element
      *
      * @return bool True if the update was done.
+     * @throws \Exception
      */
     public function refresh(): bool
     {
@@ -443,6 +444,7 @@ class MarketItem
      * Update branch data
      *
      * @return bool True if the data was found
+     * @throws \Exception
      */
     public function downloadBranchesInformations(): bool
     {

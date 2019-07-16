@@ -104,7 +104,9 @@ class ViewZone implements EntityInterface
     }
 
     /**
-     * @return  [ViewZone]|null
+     * @return array|mixed|null [ViewZone]|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public function getViewData()
     {

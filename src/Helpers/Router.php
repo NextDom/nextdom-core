@@ -36,7 +36,6 @@ namespace NextDom\Helpers;
 
 use NextDom\Enums\GetParams;
 use NextDom\Enums\ViewType;
-use NextDom\Managers\ConfigManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -101,6 +100,34 @@ class Router
     }
 
     /**
+     * Test if modal window is requested
+     *
+     * @return bool True if modal window is requested
+     */
+    private function isModalRequest()
+    {
+        return isset($_GET[GetParams::MODAL]);
+    }
+
+    /**
+     * Test if plugin configuration page is requested
+     *
+     * @return bool True if plugin configuration page is requested
+     */
+    private function isPluginConfRequest()
+    {
+        return isset($_GET[GetParams::PLUGIN_CONF]);
+    }
+
+    /**
+     * Test if page is requested by Ajax query
+     *
+     * @return bool True if page is requested by Ajax query
+     */
+    private function isAjaxQuery() {
+        return isset($_GET[GetParams::AJAX_QUERY]) && $_GET[GetParams::AJAX_QUERY] == 1;
+    }
+    /**
      * Display for a computer
      *
      * @throws \Exception
@@ -108,50 +135,33 @@ class Router
     public function desktopView()
     {
         AuthentificationHelper::init();
-
-        if (isset($_GET[GetParams::MODAL])) {
-            PrepareView::showModal();
-        } elseif (isset($_GET[GetParams::PLUGIN_CONF])) {
+        $prepareView = new PrepareView();
+        if ($this->isModalRequest()) {
+            $prepareView->showModal();
+        } elseif ($this->isPluginConfRequest()) {
             // Displaying the configuration section of a plugin in the configuration page
             FileSystemHelper::includeFile('plugin_info', 'configuration', 'configuration', Utils::init(GetParams::PLUGIN_ID), true);
-        } elseif (isset($_GET[GetParams::AJAX_QUERY]) && $_GET[GetParams::AJAX_QUERY] == 1) {
-            PrepareView::showContentByAjax();
+        } elseif ($this->isAjaxQuery()) {
+            $prepareView->showContentByAjax();
         } else {
-            $configs = ConfigManager::byKeys(array(
-                'enableCustomCss',
-                'language',
-                'nextdom::firstUse',
-                'nextdom::Welcome',
-                'nextdom::waitSpinner',
-                'notify::status',
-                'notify::position',
-                'notify::timeout',
-                'widget::size',
-                'widget::margin',
-                'widget::padding',
-                'widget::radius',
-                'product_name',
-                'product_icon',
-                'product_connection_image',
-                'theme',
-                'default_bootstrap_theme'));
-            if ($configs['nextdom::firstUse'] == 1) {
-                PrepareView::showSpecialPage('firstUse', $configs);
+            $prepareView->initConfig();
+            if (!$prepareView->firstUseIsShowed()) {
+                $prepareView->showSpecialPage('firstUse');
             } elseif (!AuthentificationHelper::isConnected()) {
-                PrepareView::showSpecialPage('connection', $configs);
+                $prepareView->showSpecialPage('connection');
             } else {
                 if (AuthentificationHelper::isRescueMode()) {
                     AuthentificationHelper::isConnectedAsAdminOrFail();
-                    PrepareView::showRescueMode($configs);
+                    $prepareView->showRescueMode();
                 } else {
-                    PrepareView::showContent($configs);
+                    $prepareView->showContent();
                 }
             }
         }
     }
 
     /**
-     * Show 404 error page (Not found)
+     * Show static content
      */
     private function staticView()
     {

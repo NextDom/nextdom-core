@@ -40,7 +40,8 @@ class Plan3DController extends BaseController
      * @param array $pageData Page data
      *
      * @return string Content of 3d plan page
-     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public static function get(&$pageData): string
     {
