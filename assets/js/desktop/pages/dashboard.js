@@ -34,13 +34,17 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-function selectCategory(_selectedCategory) {
+function selectCategory(_selectedCategory, _selectedIcon) {
     var category = _selectedCategory;
     var filterValue = '';
     if (category == 'all') {
         filterValue = '*';
+        $("#fabEditor").show();
+        $("#fabCategory").removeClass().addClass("fab-action-button__icon fas fa-filter");
     } else {
         filterValue = '.' + category;
+        $("#fabEditor").hide();
+        $("#fabCategory").removeClass("fas fa-filter").addClass(_selectedIcon);
     }
     var $grid = $('.div_displayEquipement').isotope({
         itemSelector: '.eqLogic-widget',
@@ -94,6 +98,27 @@ function editWidgetMode(_mode, _save) {
         });
     }
     editWidgetCmdMode(_mode);
+}
+
+function isObjectHtml(_object_id) {
+    nextdom.object.toHtml({
+        id: _object_id,
+        version: 'dashboard',
+        category: SEL_CATEGORY,
+        summary: SEL_SUMMARY,
+        tag: SEL_TAG,
+        noScenario: 1,
+        error: function (error) {
+            notify('Core', error.message, 'error');
+        },
+        success: function (html) {
+            if ($.trim(html) == '') {
+                return false;
+            } else {
+                return true;
+            }
+        }
+    });
 }
 
 function getObjectHtml(_object_id) {

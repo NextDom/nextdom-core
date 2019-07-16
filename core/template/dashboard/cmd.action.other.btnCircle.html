@@ -5,7 +5,6 @@
         </a>
     <script>
         nextdom.cmd.update['#id#'] = function(_options){
-            console.log(_options);
             if (_options.display_value == '1' || _options.display_value == 1 || _options.display_value == '99' || _options.display_value == 99 || _options.display_value == 'on') {
                 if (nextdom.cmd.normalizeName('#name#') == 'on') {
                     $('.cmd[data-cmd_id=#id#]').hide();
