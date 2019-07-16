@@ -19,110 +19,118 @@ along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 -->
 <template>
-    <mu-container class="global login">
-        <h1>Login</h1>
-        <mu-form v-bind:model="form">
-            <mu-form-item label="Identifiant" icon="account_circle">
-                <mu-text-field v-model="form.username"></mu-text-field>
-            </mu-form-item>
-            <mu-form-item label="Mot de passe" icon="locked">
-                <mu-text-field type="password" v-model="form.password"></mu-text-field>
-            </mu-form-item>
-            <mu-alert color="error" v-if="error" transition="mu-scale-transition">
-                <mu-icon left value="warning"></mu-icon>
-                {{ error.status }} : {{ error.error }}
-            </mu-alert>
-            <mu-button color="primary" v-on:click="login()"><i class="fas fa-plug"></i>Connexion</mu-button>
-        </mu-form>
-        <p>
-            <mu-button color="secondary" v-on:click="forceDesktop()"><i class="fas fa-desktop"></i>Version desktop</mu-button>
-        </p>
-    </mu-container>
+  <mu-container class="global login">
+    <h1>Login</h1>
+    <mu-form v-bind:model="form">
+      <mu-form-item label="Identifiant" icon="account_circle">
+        <mu-text-field v-model="form.username"></mu-text-field>
+      </mu-form-item>
+      <mu-form-item label="Mot de passe" icon="locked">
+        <mu-text-field type="password" v-model="form.password"></mu-text-field>
+      </mu-form-item>
+      <mu-alert color="error" v-if="error" transition="mu-scale-transition">
+        <mu-icon left value="warning"></mu-icon>
+        {{ error.status }} : {{ error.error }}
+      </mu-alert>
+      <mu-button color="primary" v-on:click="login()">
+        <mu-icon left value="lock_open"></mu-icon>Connexion
+      </mu-button>
+    </mu-form>
+    <p>
+      <mu-button color="secondary" v-on:click="forceDesktop()">
+        <mu-icon left value="desktop_mac"></mu-icon>Version desktop
+      </mu-button>
+    </p>
+  </mu-container>
 </template>
 
 <script>
-  import Communication from "@/libs/Communication.js";
-  import EventsManager from "@/libs/EventsManager.js";
+import Communication from "@/libs/Communication.js";
+import EventsManager from "@/libs/EventsManager.js";
 
-  /**
-   * Login page
-   * @group Pages
-   */
-  export default {
-    name: "Login",
-    data: function() {
-      return {
-        form: {
-          username: "",
-          password: ""
-        },
-        error: null
-      };
-    },
-    mounted() {
-      /**
-       * @vuese
-       * Update tabs and URL
-       * @arg New URL
-       */
-      this.$emit("changeView", "/login");
-    },
-    methods: {
-      /**
-       * @vuese
-       * Try user inputs and submit login
-       */
-      login() {
-        if (this.form.username !== "" && this.form.password !== "") {
-          Communication.connect(
-            this.form.username,
-            this.form.password,
-            response => {
-              if (response === false) {
-                this.error = Communication.getLastError();
-              } else {
-                EventsManager.loop();
-                this.$emit("changeView", "/");
-                this.error = null;
-              }
-            }
-          );
-        }
+/**
+ * Login page
+ * @group Pages
+ */
+export default {
+  name: "Login",
+  data: function() {
+    return {
+      form: {
+        username: "",
+        password: ""
       },
-      forceDesktop() {
-        window.location = '/index.php?force_desktop=1';
+      error: null
+    };
+  },
+  mounted() {
+    /**
+     * @vuese
+     * Update tabs and URL
+     * @arg New URL
+     */
+    this.$emit("changeView", "/login");
+  },
+  methods: {
+    /**
+     * @vuese
+     * Try user inputs and submit login
+     */
+    login() {
+      if (this.form.username !== "" && this.form.password !== "") {
+        Communication.connect(
+          this.form.username,
+          this.form.password,
+          response => {
+            if (response === false) {
+              this.error = Communication.getLastError();
+            } else {
+              EventsManager.loop();
+              this.$emit("changeView", "/");
+              this.error = null;
+            }
+          }
+        );
       }
+    },
+    /**
+     * @vuese
+     * Force user to desktop page
+     */
+    forceDesktop() {
+      window.location = "/index.php?force_desktop=1";
     }
-  };
+  }
+};
 </script>
 
 <style scoped>
-    button {
-        width: 100%;
-    }
+button {
+  width: 100%;
+}
 
-    .mu-alert {
-        margin-bottom: 1rem;
-    }
+.mu-alert {
+  margin-bottom: 1rem;
+}
 
-    .mu-text-field-input {
-        padding-left: 0.5rem;
-    }
+.mu-text-field-input {
+  padding-left: 0.5rem;
+}
 
-    .mu-scale-transition-enter-active,
-    .mu-scale-transition-leave-active {
-        transition: transform 0.45s cubic-bezier(0.23, 1, 0.32, 1),
-        opacity 0.45s cubic-bezier(0.23, 1, 0.32, 1);
-        backface-visibility: hidden;
-    }
+.mu-scale-transition-enter-active,
+.mu-scale-transition-leave-active {
+  transition: transform 0.45s cubic-bezier(0.23, 1, 0.32, 1),
+    opacity 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+  backface-visibility: hidden;
+}
 
-    .mu-scale-transition-enter,
-    .mu-scale-transition-leave-active {
-        transform: scale(0);
-        opacity: 0;
-    }
+.mu-scale-transition-enter,
+.mu-scale-transition-leave-active {
+  transform: scale(0);
+  opacity: 0;
+}
 
-    .mu-button i {
-        margin-right: 0.5rem;
-    }
+.mu-button i {
+  margin-right: 0.5rem;
+}
 </style>

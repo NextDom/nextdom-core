@@ -21,8 +21,11 @@ along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 <template>
   <mu-container class="global settings">
     <h1>Paramètres</h1>
-    <mu-button id="disconnect-button" color="primary">
+    <mu-button id="disconnect-button" color="primary" v-on:click="disconnect">
       <mu-icon left value="lock_open"></mu-icon>Déconnexion
+    </mu-button>
+    <mu-button id="force-desktop-button" color="secondary" v-on:click="forceDesktop()">
+      <mu-icon left value="desktop_mac"></mu-icon>Version desktop
     </mu-button>
   </mu-container>
 </template>
@@ -51,13 +54,23 @@ export default {
      */
     disconnect: function() {
       Communication.disconnect();
+      this.$emit("changeView", "/login");
+    },
+    /**
+     * @vuese
+     * Force user to desktop page
+     */
+    forceDesktop() {
+      window.location = "/index.php?force_desktop=1";
     }
   }
 };
 </script>
 
 <style scoped>
-#disconnect-button {
+#disconnect-button,
+#force-desktop-button {
   width: 100%;
+  margin-bottom: 1rem;
 }
 </style>
