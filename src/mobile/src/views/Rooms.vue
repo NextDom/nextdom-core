@@ -20,7 +20,7 @@ along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 -->
 <template>
   <mu-container class="global rooms">
-    <h1>Rooms</h1>
+    <h1>{{ $t('roomsTitle') }}</h1>
     <template v-if="room">
       <mu-container class="button-wrapper">
         <mu-button class="pull-left" color="primary" v-bind:to="fatherLink" v-if="showFatherLink">
@@ -29,7 +29,8 @@ along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
           <template v-else>Racine</template>
         </mu-button>
         <mu-button class="pull-right" color="secondary" v-bind:to="viewLink" v-if="room.id">
-          <mu-icon left value="pageview"></mu-icon>Résumé
+          <mu-icon left value="pageview"></mu-icon>
+          {{ $t('summary')}}
         </mu-button>
       </mu-container>
       <h2 v-if="room.id">{{ room.name }}</h2>
@@ -38,15 +39,15 @@ along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
       </mu-grid-list>
       <mu-container class="room-config" v-if="room.id">
         <mu-expansion-panel>
-          <div slot="header">Configuration</div>
+          <div slot="header">{{ $t('configuration')}}</div>
           <mu-form v-bind:model="form">
-            <mu-form-item prop="switch" label="Visibilité" label-position="left">
+            <mu-form-item prop="switch" v-bind:label="$t('visibility')" label-position="left">
               <mu-switch v-model="form.isVisible" v-on:change="changeRoomVisibility"></mu-switch>
             </mu-form-item>
           </mu-form>
         </mu-expansion-panel>
         <mu-expansion-panel v-if="eqLogics.length > 0">
-          <div slot="header">Equipements</div>
+          <div slot="header">{{ $t('equipments')}}</div>
           <mu-list>
             <mu-list-item
               button

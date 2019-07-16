@@ -20,12 +20,14 @@ along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 -->
 <template>
   <mu-container class="global settings">
-    <h1>Paramètres</h1>
+    <h1>{{ $t('settingsTitle') }}</h1>
     <mu-button id="disconnect-button" color="primary" v-on:click="disconnect">
-      <mu-icon left value="lock_open"></mu-icon>Déconnexion
+      <mu-icon left value="lock_open"></mu-icon>
+      {{ $t('disconnect') }}
     </mu-button>
     <mu-button id="force-desktop-button" color="secondary" v-on:click="forceDesktop()">
-      <mu-icon left value="desktop_mac"></mu-icon>Version desktop
+      <mu-icon left value="desktop_mac"></mu-icon>
+      {{ $t('desktopVersion') }}
     </mu-button>
   </mu-container>
 </template>

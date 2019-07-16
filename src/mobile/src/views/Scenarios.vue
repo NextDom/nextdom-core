@@ -20,7 +20,7 @@ along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 -->
 <template>
   <mu-container class="global scenarios">
-    <h1>Scénarios</h1>
+    <h1>{{ $t('scenariosTitle') }}</h1>
     <mu-list toggle-nested v-if="scenarios !== null">
       <mu-list-item
         button
@@ -31,7 +31,7 @@ along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
         v-on:click="toggleItem(groupName)"
       >
         <mu-list-item-title>
-          <template v-if="groupName === 'no-group'">Aucun</template>
+          <template v-if="groupName === 'no-group'">{{ $t('nothing')}}</template>
           <template v-else>{{ groupName }}</template>
         </mu-list-item-title>
         <mu-list-item-action>
