@@ -75,6 +75,7 @@ function editWidgetMode(_mode, _save) {
             $('.div_displayEquipement .eqLogic-widget').draggable('disable');
         }
         $('.div_displayEquipement .eqLogic-widget').css('box-shadow', '');
+        $('.card-summary').show();
     } else {
         $('.div_displayEquipement .eqLogic-widget').css('box-shadow', '#33B8CC80 0px 0px 10px');
         $('.div_displayEquipement .eqLogic-widget').draggable('enable');
@@ -96,6 +97,7 @@ function editWidgetMode(_mode, _save) {
                 ui.element.closest('.div_displayEquipement').packery();
             }
         });
+        $('.card-summary').hide();
     }
     editWidgetCmdMode(_mode);
 }

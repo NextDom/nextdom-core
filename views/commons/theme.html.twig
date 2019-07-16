@@ -677,10 +677,18 @@ pre {
 .tooltip-inner {
   background-color: {{ COLOR16 }} !important;
 }
-.tooltip-arrow {
+.tooltip.top .tooltip-arrow {
     border-top-color: {{ COLOR16 }} !important;
 }
-
+.tooltip.bottom .tooltip-arrow {
+    border-bottom-color: {{ COLOR16 }} !important;
+}
+.tooltip.left .tooltip-arrow {
+    border-left-color: {{ COLOR16 }} !important;
+}
+.tooltip.right .tooltip-arrow {
+    border-right-color: {{ COLOR16 }} !important;
+}
 
 /* ################################# */
 /* COLOR17 = Bouton d'administration */
