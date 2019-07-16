@@ -308,7 +308,7 @@ $(function () {
         closeText: '',
         height: (jQuery(window).height() - 100),
         width: ((jQuery(window).width() - 50) < 1500) ? (jQuery(window).width() - 50) : 1500,
-        position: { my: "center bottom-10", at: "center bottom", of: window },
+        position: { my: "center", at: "center", of: window },
         open: function () {
             $("body").css({overflow: 'hidden'});
             $(this).closest( ".ui-dialog" ).find(":button").blur();
@@ -364,7 +364,7 @@ $(function () {
 
     // Summary link event handler declaration
     $('body').on('click','.objectSummaryParent',function(){
-        loadPage('index.php?v=d&p=dashboard&summary='+$(this).data('summary')+'&object_id='+$(this).data('object_id'));
+        loadPage('index.php?v=d&p=dashboard&summary='+$(this).data('summary')+'&object_id='+root_object_id);
     });
 
     // Inits launch
