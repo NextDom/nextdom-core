@@ -225,7 +225,7 @@ class UpdateManager
     {
         $repoList = self::listRepo();
         foreach ($repoList as $repoData) {
-            if ($repoData['name'] == $name) {
+            if (ucfirst($repoData['name']) == ucfirst($name)) {
                 return [
                     'className' => str_replace('\\NextDom\\Repo\\', '', $repoData['class']),
                     'phpClass' => $repoData['class']];
