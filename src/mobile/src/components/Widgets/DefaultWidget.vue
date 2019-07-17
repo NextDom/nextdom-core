@@ -73,7 +73,7 @@ along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 </template>
 
 <script>
-import Templates from "@/libs/NextdomTemplates.js";
+import CmdTemplates from "@/libs/NextdomCmdTemplates.js";
 import Communication from "@/libs/Communication.js";
 import AppEventsBus from "@/libs/AppEventsBus";
 
@@ -82,7 +82,7 @@ import AppEventsBus from "@/libs/AppEventsBus";
  * @group Components
  */
 export default {
-  name: "Widget",
+  name: "DefaultWidget",
   data: function() {
     return {
       refreshCmdId: null,
@@ -103,7 +103,7 @@ export default {
     }
   },
   // Inject all commands components
-  components: Object.assign(Templates.components, {}),
+  components: Object.assign(CmdTemplates.components, {}),
   computed: {
     /**
      * @vuese
@@ -220,7 +220,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../assets/theme-color.scss";
+@import "../../assets/theme-color.scss";
 
 .packery-item {
   background-color: $textPrimary;
