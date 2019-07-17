@@ -467,6 +467,10 @@ class PrepareView
         $this->initHeaderData($pageData);
 
         $currentJeeObject = ObjectManager::getRootObjects();
+        $currentJeeObjectId = '';
+        if(!empty($currentJeeObject)){
+            $currentJeeObjectId = $currentJeeObject->getId();
+        }
 
         $pageData['JS_VARS'] = [
             'user_id' => UserManager::getStoredUser()->getId(),
@@ -481,7 +485,7 @@ class PrepareView
             'widget_margin' => $this->currentConfig['widget::margin'],
             'widget_padding' => $this->currentConfig['widget::padding'],
             'widget_radius' => $this->currentConfig['widget::radius'],
-            'root_object_id' => $currentJeeObject->getId(),
+            'root_object_id' => $currentJeeObjectId
         ];
         $pageData['JS_VARS_RAW'] = [
             'userProfils' => Utils::getArrayToJQueryJson(UserManager::getStoredUser()->getOptions()),
@@ -523,7 +527,9 @@ class PrepareView
                         GetParams::VIEW_TYPE => ViewType::DESKTOP_VIEW,
                         GetParams::PAGE => $homePage[1],
                     ]);
-                $homeLink .= '&object_id=' . $defaultDashboardObject->getId();
+                if(!empty($defaultDashboardObject)) {
+                    $homeLink .= '&object_id=' . $defaultDashboardObject->getId();
+                }
             } else {
                 // TODO : m ???
                 $homeLink = 'index.php?' . http_build_query([
