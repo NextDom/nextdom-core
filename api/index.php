@@ -53,6 +53,9 @@ try {
     if ($authenticator->supportAuthentication()) {
         $authenticator->checkSendedToken();
     }
+    else {
+        $authenticator->checkApiKey();
+    }
 }
 catch (Exception $e) {
     echo $e->getMessage();
