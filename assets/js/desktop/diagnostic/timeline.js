@@ -97,9 +97,9 @@ function displayTimeline(){
                 }
                 tr += '<li>';
                 if (data[i].group == "info") {
-                    tr += '<i class="fa fa-info bg-blue"></i>';
+                    tr += '<i class="fa fa-info bg-blue" data-toggle="tooltip" title="" data-original-title="commande type info"></i>';
                 }else{
-                    tr += '<i class="fa fa-running bg-red"></i>';
+                    tr += '<i class="fa fa-rocket bg-red" data-toggle="tooltip" title="" data-original-title="commande type action"></i>';
 
                 }
                 tr +=data[i].html;

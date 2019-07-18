@@ -996,12 +996,10 @@ class CmdManager
         if ($event['subtype'] == 'action') {
             $return['html'] = '<div class="timeline-item cmd" data-id="' . $event['id'] . '">'
                 . '<span class="time"><i class="fa fa-clock-o"></i>' . substr($event['datetime'], -9) . '</span>'
-                .'<h3 class="timeline-header"><a href="#">'. $event['name'] . '</h3>'
+                .'<h3 class="timeline-header">' . $event['name'] . '</h3>'
                 .'<div class="timeline-body">'
                 .  $event['options']
                 .' <div class="timeline-footer">'
-                .'<a class="btn btn-primary btn-xs">Read more</a>'
-                .'<a class="btn btn-danger btn-xs">Delete</a>'
                 .'</div>'
                 .'</div>';
         } else {
@@ -1011,9 +1009,6 @@ class CmdManager
                 .'<div class="timeline-body">'
                 .  $event['value']
                 .' <div class="timeline-footer">'
-                .'<a class="btn btn-primary btn-xs">Read more</a>'
-                .'<a class="btn btn-danger btn-xs">Delete</a>'
-                .'</div>'
                 .'</div>'
                 .'</div>';
         }
