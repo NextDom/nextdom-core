@@ -303,6 +303,40 @@ class MigrationHelper
             trow (new CoreException());
         }
 
+        try {
+            $dir = new \RecursiveDirectoryIterator(NEXTDOM_ROOT .'/data/custom/plans', \FilesystemIterator::SKIP_DOTS);
+
+            // Flatten the recursive iterator, folders come before their files
+            $it  = new \RecursiveIteratorIterator($dir, \RecursiveIteratorIterator::SELF_FIRST);
+
+            // Maximum depth is 1 level deeper than the base folder
+            $it->setMaxDepth(0);
+            // Basic loop displaying different messages based on file or folder
+            foreach ($it as $fileInfo) {
+                if(!is_link( $fileInfo->getFilename()) && Utils::startsWith($fileInfo->getFilename(),'plan_')) {
+
+                    $fileToReplace = $fileInfo->getFilename();
+
+                    $message = 'Moving ' . $fileToReplace . ' to /data/custom/plans/' . $fileToReplace;
+                    if ($logFile == 'migration') {
+                        LogHelper::addInfo($logFile, $message, '');
+                    } else {
+                        ConsoleHelper::process($message);
+                    }
+                    self::migratePlanPath($logFile,  $fileToReplace, 'public/img/', 'data/custom/plans/');
+                    self::migratePlanPath($logFile, $fileToReplace, 'core/img/', 'data/custom/plans/');
+                }
+            }
+
+
+            self::migratePlanPath($logFile,  'plan/', 'public/img/', 'data/custom/plans/');
+            self::migratePlanPath($logFile, 'plan/', 'core/img/', 'data/custom/plans/');
+
+        } catch(\Exception $exception){
+            echo $exception;
+            trow (new CoreException());
+        }
+
         $message = 'Migrate theme to data folder is done';
         if($logFile == 'migration') {
             LogHelper::addInfo($logFile, $message, '');

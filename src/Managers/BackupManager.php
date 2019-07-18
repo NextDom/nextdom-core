@@ -562,6 +562,7 @@ class BackupManager
         if (0 != SystemHelper::vsystem("sed -i -e 's/jeedom/nextdom/g' '%s'", $backupFile)) {
             throw new CoreException("unable to modify content of backup file " . $backupFile);
         }
+
         \DB::Prepare("SET foreign_key_checks = 0", array(), \DB::FETCH_TYPE_ROW);
         $tables = \DB::Prepare("SHOW TABLES", array(), \DB::FETCH_TYPE_ALL);
         foreach ($tables as $table) {
@@ -571,7 +572,6 @@ class BackupManager
             \DB::Prepare($statement, array(), \DB::FETCH_TYPE_ROW);
         }
         self::loadSQLFromFile($backupFile);
-//        self::loadSQLMigrateScript();
         \DB::Prepare("SET foreign_key_checks = 1", array(), \DB::FETCH_TYPE_ROW);
     }
 
