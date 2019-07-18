@@ -34,21 +34,7 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-$('#bt_fullscreen').on('click',function(){
-    var ele = document.getElementById('div_History');
-    if (ele.requestFullscreen) {
-        ele.requestFullscreen();
-    } else if (ele.webkitRequestFullscreen) {
-        ele.webkitRequestFullscreen();
-    } else if (ele.mozRequestFullScreen) {
-        ele.mozRequestFullScreen();
-    } else if (ele.msRequestFullscreen) {
-        ele.msRequestFullscreen();
-    } else {
-        console.log('Fullscreen API is not supported.');
-    }
-});
-
+var chart;
 var noChart = 1;
 var colorChart = 0;
 var lastId = null;
@@ -75,25 +61,23 @@ $('#bt_configureCalculHistory').on('click',function(){
 });
 
 $('#bt_clearGraph').on('click',function(){
-    nextdom.history.chart['div_graph'].chart.data.datasets.splice(0, nextdom.history.chart['div_graph'].chart.data.datasets.length);
-    nextdom.history.chart['div_graph'].chart.update();
-    $('.li_history').removeClass('active');
-    $('.fa-circle-o').css("color", "");
+    while(nextdom.history.chart['div_graph'].chart.series.length > 0){
+        nextdom.history.chart['div_graph'].chart.series[0].remove(true);
+    }
+    delete nextdom.history.chart['div_graph'];
+    $(this).closest('.li_history').removeClass('active');
 });
 
 $(".in_datepicker").datepicker({dateFormat: "yy-mm-dd"});
 
 $(".li_history .history").on('click', function (event) {
-    var options = [];
-    options.newGraph = true;
+    $.hideAlert();
     if ($(this).closest('.li_history').hasClass('active')) {
         $(this).closest('.li_history').removeClass('active');
-        $(this).children().css("color", "");
-
         addChart($(this).closest('.li_history').attr('data-cmd_id'), 0);
     } else {
         $(this).closest('.li_history').addClass('active');
-        addChart($(this).closest('.li_history').attr('data-cmd_id'), 1, options.newGraph);
+        addChart($(this).closest('.li_history').attr('data-cmd_id'), 1);
     }
     return false;
 });
@@ -123,6 +107,10 @@ $('.displayObject').on('click', function () {
     } else {
         list.show();
     }
+});
+
+$(".li_history .export").on('click', function () {
+    window.open('core/php/export.php?type=cmdHistory&id=' + $(this).closest('.li_history').attr('data-cmd_id'), "_blank", null);
 });
 
 $('#bt_openCmdHistoryConfigure').on('click',function(){
@@ -159,6 +147,16 @@ function emptyHistory(_cmd_id,_date) {
 
 function initHistoryTrigger() {
     $('#sel_chartType').off('change').on('change', function () {
+        if(lastId == null){
+            return;
+        }
+        if(lastId.indexOf('#') != -1){
+            addChart(lastId,0);
+            addChart(lastId,1);
+            return;
+        }
+        $('.li_history[data-cmd_id=' + lastId + ']').removeClass('active');
+        addChart(lastId,0);
         nextdom.cmd.save({
             cmd: {id: lastId, display: {graphType: $(this).value()}},
             error: function (error) {
@@ -168,109 +166,123 @@ function initHistoryTrigger() {
                 $('.li_history[data-cmd_id=' + lastId + '] .history').click();
             }
         });
-        $('.li_history[data-cmd_id=' + lastId + ']').removeClass('active');
-
-        // Remove the old chart and all its event handles
-        if (nextdom.history.chart['div_graph'].chart) {
-            nextdom.history.chart['div_graph'].chart.destroy();
-        }
-
-        // Chart.js modifies the object you pass in. Pass a copy of the object so we can use the original object later
-        var options =[];
-        options.type = document.getElementById('sel_chartType').value;
-        options.newGraph = true;
-        if (options.type == "bar"){
-            nextdom.history.chart['div_graph'].chart.options.scales.xAxes.categorySpacing = 0
-        }
-        addChart(lastId,1,options);
     });
-
-
+    $('#sel_groupingType').off('change').on('change', function () {
+        if(lastId == null){
+            return;
+        }
+        if(lastId.indexOf('#') != -1){
+            addChart(lastId,0);
+            addChart(lastId,1);
+            return;
+        }
+        $('.li_history[data-cmd_id=' + lastId + ']').removeClass('active');
+        addChart(lastId,0);
+        nextdom.cmd.save({
+            cmd: {id: lastId, display: {groupingType: $(this).value()}},
+            error: function (error) {
+                notify("Erreur", error.message, 'error');
+            },
+            success: function () {
+                $('.li_history[data-cmd_id=' + lastId + '] .history').click();
+            }
+        });
+    });
+    $('#cb_derive').off('change').on('change', function () {
+        if(lastId == null){
+            return;
+        }
+        if(lastId.indexOf('#') != -1){
+            addChart(lastId,0);
+            addChart(lastId,1);
+            return;
+        }
+        $('.li_history[data-cmd_id=' + lastId + ']').removeClass('active');
+        addChart(lastId,0);
+        nextdom.cmd.save({
+            cmd: {id: lastId, display: {graphDerive: $(this).value()}},
+            error: function (error) {
+                notify("Erreur", error.message, 'error');
+            },
+            success: function () {
+                $('.li_history[data-cmd_id=' + lastId + '] .history').click();
+            }
+        });
+    });
+    $('#cb_step').off('change').on('change', function () {
+        if(lastId == null){
+            return;
+        }
+        if(lastId.indexOf('#') != -1){
+            addChart(lastId,0);
+            addChart(lastId,1);
+            return;
+        }
+        $('.li_history[data-cmd_id=' + lastId + ']').removeClass('active');
+        addChart(lastId,0);
+        nextdom.cmd.save({
+            cmd: {id: lastId, display: {graphStep: $(this).value()}},
+            error: function (error) {
+                notify("Erreur", error.message, 'error');
+            },
+            success: function () {
+                $('.li_history[data-cmd_id=' + lastId + '] .history').click();
+            }
+        });
+    });
 }
 
 $('#bt_validChangeDate').on('click',function(){
-    var options = [];
-    var ids= [];
-    options.newGraph = false;
-
-    if (isset(nextdom.history.chart['div_graph']) && isset(nextdom.history.chart['div_graph'].chart)) {
-        for (var i = 0; i < nextdom.history.chart['div_graph'].chart.data.datasets.length; i++){
-            ids[i] = nextdom.history.chart['div_graph'].chart.data.datasets[i].id;
-            nextdom.history.chart['div_graph'].chart.data.datasets.splice(i, 1);
-        }
-        console.log(ids);
-        for (var i = 0; i < ids.length; i++){
-            addChart(ids[i],1,false);
-
-
-        }
+    if (isset(nextdom.history.chart['div_graph']) && isset(nextdom.history.chart['div_graph'].chart) && isset(nextdom.history.chart['div_graph'].chart.series)) {
+        $(nextdom.history.chart['div_graph'].chart.series).each(function(i, serie){
+            if(!isNaN(serie.options.id)){
+                var cmd_id = serie.options.id;
+                addChart(cmd_id, 0);
+                addChart(cmd_id, 1);
+            }
+        });
     }
 });
 
-function addChart(_cmd_id, _action, _options) {
+function addChart(_cmd_id, _action,_options) {
     if (_action == 0) {
-        if (isset(nextdom.history.chart['div_graph']) && isset(nextdom.history.chart['div_graph'].chart)) {
-            for (var i = 0; i < nextdom.history.chart['div_graph'].chart.data.datasets.length; i++){
+        if (isset(nextdom.history.chart['div_graph']) && isset(nextdom.history.chart['div_graph'].chart) && isset(nextdom.history.chart['div_graph'].chart.series)) {
+            $(nextdom.history.chart['div_graph'].chart.series).each(function(i, serie){
                 try {
-                    if(nextdom.history.chart['div_graph'].chart.data.datasets[i].id == _cmd_id){
-                        nextdom.history.chart['div_graph'].chart.data.datasets.splice(i, 1);
-                        nextdom.history.chart['div_graph'].chart.update();
+                    if(serie.options.id == _cmd_id){
+                        serie.remove();
                     }
                 }catch(error) {
                 }
-            }
+            });
         }
         return;
     }
     lastId = _cmd_id;
     nextdom.history.drawChart({
-        newGraph: _options.newGraph,
         cmd_id: _cmd_id,
         el: 'div_graph',
         dateRange : 'all',
         dateStart : $('#in_startDate').value(),
         dateEnd :  $('#in_endDate').value(),
         height : $('#div_graph').height(),
-        type: _options.type ,
+        option : _options,
         success: function (data) {
             if(isset(data.cmd) && isset(data.cmd.display)){
                 if (init(data.cmd.display.graphStep) != '') {
                     $('#cb_step').off().value(init(data.cmd.display.graphStep));
                 }
+                if (init(data.cmd.display.graphType) != '') {
+                    $('#sel_chartType').off().value(init(data.cmd.display.graphType));
+                }
                 if (init(data.cmd.display.groupingType) != '') {
                     $('#sel_groupingType').off().value(init(data.cmd.display.groupingType));
                 }
-
+                if (init(data.cmd.display.graphDerive) != '') {
+                    $('#cb_derive').off().value(init(data.cmd.display.graphDerive));
+                }
             }
             initHistoryTrigger();
         }
     });
 }
-
-$('#bt_smoothToggle').on('click',function(){
-    var value = this.classList.toggle('btn-on');
-    nextdom.history.chart['div_graph'].chart.options.elements.line.tension = value ?  0.15 : 0.000001;
-    nextdom.history.chart['div_graph'].chart.update();
-});
-
-$('#bt_steppedToggle').on('click',function(){
-    var value = this.classList.toggle('btn-on');
-
-    for (var i = 0; i < nextdom.history.chart['div_graph'].chart.data.datasets.length; i++){
-        nextdom.history.chart['div_graph'].chart.data.datasets[i].steppedLine = value ?  'before' : false;
-    }
-    nextdom.history.chart['div_graph'].chart.update();
-});
-
-$('#bt_areaToggle').on('click',function(){
-    var value = this.classList.toggle('btn-on');
-
-    for (var i = 0; i < nextdom.history.chart['div_graph'].chart.data.datasets.length; i++){
-        nextdom.history.chart['div_graph'].chart.data.datasets[i].fill = value ?  'start' : false;
-    }
-    nextdom.history.chart['div_graph'].chart.update();
-});
-
-$('#bt_resetZoom').on('click',function(){
-    nextdom.history.chart['div_graph'].chart.resetZoom();
-});
