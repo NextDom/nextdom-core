@@ -203,7 +203,7 @@ class MigrationHelper
             ConsoleHelper::process($message);
         }
 
-        FileSystemHelper::mkdirIfNotExists(NEXTDOM_DATA.'/data/custom/');
+        FileSystemHelper::mkdirIfNotExists(NEXTDOM_DATA.'/data/custom/',0775,true);
         $dir = new \RecursiveDirectoryIterator(NEXTDOM_ROOT, \FilesystemIterator::SKIP_DOTS);
 
         // Flatten the recursive iterator, folders come before their files

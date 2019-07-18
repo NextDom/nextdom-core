@@ -272,7 +272,7 @@ class BackupManager
         $tar->addFile($sqlPath, "DB_backup.sql");
 
         // Backup config and data folders
-        FileSystemHelper::mkdirIfNotExists(NEXTDOM_DATA.'/data/custom');
+        FileSystemHelper::mkdirIfNotExists(NEXTDOM_DATA.'/data/custom',0775,true);
         $roots = [NEXTDOM_DATA.'/data/',NEXTDOM_DATA.'/config/'];
         $pattern = NEXTDOM_DATA .'/';
         self::addPathToArchive($roots, $pattern, $tar, $logFile);
@@ -679,7 +679,7 @@ class BackupManager
         $customDataRoot = sprintf("%s/data", NEXTDOM_DATA);
 
         FileSystemHelper::rrmdir($customDataRoot . "/");
-        FileSystemHelper::mkdirIfNotExists($customDataRoot);
+        FileSystemHelper::mkdirIfNotExists($customDataRoot,0775,true);
         foreach ($customDataDirs as $c_dir) {
             $name = basename($c_dir);
             $message ='Restoring folder :'.$name;
@@ -700,7 +700,7 @@ class BackupManager
         $customPlanRoot = sprintf("%s/data/custom/plan", NEXTDOM_DATA);
 
         FileSystemHelper::rrmdir($customPlanRoot . "/");
-        FileSystemHelper::mkdirIfNotExists($customPlanRoot);
+        FileSystemHelper::mkdirIfNotExists($customPlanRoot,0775,true);
         foreach ($customPlanDirs as $c_dir) {
             $name = basename($c_dir);
             $message ='Restoring folder :'.$name;
@@ -732,7 +732,7 @@ class BackupManager
         $pluginRoot = sprintf("%s/plugins", NEXTDOM_ROOT);
 
         FileSystemHelper::rrmdir($pluginRoot . "/");
-        FileSystemHelper::mkdirIfNotExists($pluginRoot);
+        FileSystemHelper::mkdirIfNotExists($pluginRoot,0775,true);
         foreach ($plugingDirs as $c_dir) {
             $name = basename($c_dir);
             if (false === FileSystemHelper::mv($c_dir, sprintf("%s/%s", $pluginRoot, $name))) {
