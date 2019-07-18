@@ -105,6 +105,8 @@ class PlanHeader implements EntityInterface
     /**
      * @param $_name
      * @return PlanHeader
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public function copy($_name)
     {
@@ -133,6 +135,8 @@ class PlanHeader implements EntityInterface
 
     /**
      * @return Plan[]
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public function getPlan()
     {

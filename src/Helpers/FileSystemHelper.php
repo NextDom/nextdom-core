@@ -140,10 +140,8 @@ class FileSystemHelper
      *
      * The function checks that returned file belongs to nextdom-core root directory
      *
-     * @param string $folder base folder
      * @param string $path requested path under folder
-     * @param string $extension file extension
-     * @returns string migrated file path or null when does not exists
+     * @return null|string|string[]
      */
     public static function getAssetPath($path)
     {
@@ -215,14 +213,20 @@ class FileSystemHelper
      * @param string $version Version du template
      * @param string $filename Nom du fichier
      * @param string $pluginId Identifiant du plugin
+     * @param string $theme Identifiant du plugin
      *
      * @return string Contenu du fichier ou une chaine vide.
      */
-    public static function getTemplateFileContent($folder, $version, $filename, $pluginId = ''): string
+    public static function getTemplateFileContent($folder, $version, $filename, $pluginId = '' , $theme = ''): string
     {
         $result = '';
+        $filePath = '';
         if ($pluginId == '') {
-            $filePath = NEXTDOM_ROOT . '/' . $folder . '/template/' . $version . '/' . $filename . '.html';
+            if ($theme == '') {
+                $filePath = NEXTDOM_ROOT . '/' . $folder . '/template/' . $version . '/' . $filename . '.html';
+            } else {
+                $filePath = NEXTDOM_ROOT . '/' . $folder . '/template/' . $version . '/themes/' . $theme . '/' . $filename . '.html';
+            }
         } else {
             $filePath = NEXTDOM_ROOT . '/plugins/' . $pluginId . '/core/template/' . $version . '/' . $filename . '.html';
         }

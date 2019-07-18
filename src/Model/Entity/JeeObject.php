@@ -313,7 +313,7 @@ class JeeObject implements EntityInterface
                 $sql .= ' AND isVisible = 1 ';
             }
             $sql .= ' ORDER BY position';
-            $this->_child[$_visible] = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+            $this->_child[$_visible] = DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
         }
         return $this->_child[$_visible];
     }
@@ -689,6 +689,8 @@ class JeeObject implements EntityInterface
      */
     /**
      * @return string
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public function getImgLink()
     {
@@ -756,6 +758,8 @@ class JeeObject implements EntityInterface
      * Save object in database
      *
      * @return bool True if save works
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public function save()
     {

@@ -94,7 +94,7 @@ class History
                     SET cmd_id=:cmd_id,
                     `datetime`=:datetime,
                     value=:value';
-                    DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW);
+                    DBHelper::exec($sql, $values);
                     return;
                 }
                 $values = array(
@@ -105,11 +105,11 @@ class History
                 FROM history
                 WHERE cmd_id=:cmd_id
                 AND `datetime`=:datetime';
-                $result = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW);
+                $result = DBHelper::getOne($sql, $values);
                 if ($result !== false) {
                     switch ($cmd->getConfiguration('historizeMode', 'avg')) {
                         case 'avg':
-                            $this->setValue(($result['value'] + $this->getValue()) / 2);
+                            $this->setValue(($result['value'] + intval($this->getValue())) / 2);
                             break;
                         case 'min':
                             $this->setValue(min($result['value'], $this->getValue()));
@@ -138,7 +138,7 @@ class History
         SET cmd_id=:cmd_id,
         `datetime`=:datetime,
         value=:value';
-        DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW);
+        DBHelper::exec($sql, $values);
     }
 
     /**

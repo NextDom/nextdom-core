@@ -84,7 +84,6 @@ class PluginAjax extends BaseAjax
     public function toggle()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $plugin = PluginManager::byId(Utils::init('id'));
         if (!is_object($plugin)) {
             throw new CoreException(__('Plugin introuvable : ') . Utils::init('id'));
@@ -115,7 +114,6 @@ class PluginAjax extends BaseAjax
     public function dependancyInstall()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $plugin = PluginManager::byId(Utils::init('id'));
         if (!is_object($plugin)) {
             AjaxHelper::success();
@@ -139,7 +137,6 @@ class PluginAjax extends BaseAjax
     public function deamonStart()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $pluginId = Utils::init('id');
         $plugin = PluginManager::byId($pluginId);
         if (!is_object($plugin)) {
@@ -152,7 +149,6 @@ class PluginAjax extends BaseAjax
     public function deamonStop()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $plugin = PluginManager::byId(Utils::init('id'));
         if (!is_object($plugin)) {
             AjaxHelper::success();
@@ -164,7 +160,6 @@ class PluginAjax extends BaseAjax
     public function deamonChangeAutoMode()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $plugin = PluginManager::byId(Utils::init('id'));
         if (!is_object($plugin)) {
             AjaxHelper::success();

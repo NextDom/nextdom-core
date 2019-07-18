@@ -63,7 +63,7 @@ class EqRealManager
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE logicalId = :logicalId
                   AND cat= : cat';
-        $results = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL);
+        $results = DBHelper::getAll($sql, $values);
         $return = array();
         foreach ($results as $result) {
             $return[] = self::byId($result['id']);
@@ -85,8 +85,8 @@ class EqRealManager
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE id = :id';
-        $class = self::getClass($_id);
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, $class);
+        $className = self::getClass($_id);
+        return DBHelper::getOneObject($sql, $values, $className);
     }
 
     /**
@@ -105,7 +105,7 @@ class EqRealManager
         $sql = 'SELECT plugin, isEnable
                 FROM `eqLogic`
                 WHERE eqReal_id = :id';
-        $result = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW);
+        $result = DBHelper::getOne($sql, $values);
         $eqTyme_name = $result['plugin'];
         if ($result['isEnable'] == 0) {
             try {

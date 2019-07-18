@@ -86,8 +86,8 @@ $("#bt_removeAllLog").on('click', function(event) {
         if (result) {
             nextdom.log.removeAll({
                 error: function (error) {
-                    $('#div_alertError').showAlert({message: error.message, level: 'danger'});
-                },
+                    notify("Core",error.message,"error");
+                    },
                 success: function(data) {
                     loadPage('index.php?v=d&p=log');
                 }

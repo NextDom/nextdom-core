@@ -35,14 +35,12 @@ class CronAjax extends BaseAjax
 
     public function save()
     {
-        Utils::unautorizedInDemo();
         Utils::processJsonObject('cron', Utils::init('crons'));
         AjaxHelper::success();
     }
 
     public function remove()
     {
-        Utils::unautorizedInDemo();
         $cron = CronManager::byId(Utils::init('id'));
         if (!is_object($cron)) {
             throw new CoreException(__('Cron id inconnu'));

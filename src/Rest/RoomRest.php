@@ -21,7 +21,6 @@ namespace NextDom\Rest;
 
 use NextDom\Managers\ObjectManager;
 use NextDom\Model\Entity\JeeObject;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class RoomRest

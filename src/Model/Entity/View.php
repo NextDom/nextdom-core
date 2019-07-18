@@ -337,6 +337,8 @@ class View implements EntityInterface
 
     /**
      * @return ViewZone[]
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public function getviewZone()
     {

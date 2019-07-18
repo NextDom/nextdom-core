@@ -35,7 +35,6 @@
 namespace NextDom\Helpers;
 
 use NextDom\Exceptions\CoreException;
-use NextDom\Managers\UserManager;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 /**
@@ -857,27 +856,6 @@ class Utils
         system('cd ' . $folder . ';tar cfz "' . $outputfile . '" * > /dev/null;chmod 777 ' . $outputfile);
         FileSystemHelper::rrmdir($folder);
         return realpath($outputfile);
-    }
-
-    /**
-     * @param null $_user
-     * @return void|null
-     * @throws CoreException
-     */
-    public static function unautorizedInDemo($_user = null)
-    {
-        if ($_user === null) {
-            if (!isset($_SESSION) || !UserManager::getStoredUser() !== null) {
-                return null;
-            }
-            $_user = UserManager::getStoredUser();
-        }
-        if (!is_object($_user)) {
-            return;
-        }
-        if ($_user->getLogin() == 'demo') {
-            throw new CoreException(__('Cette action n\'est pas autorisée en mode démo'));
-        }
     }
 
     /**

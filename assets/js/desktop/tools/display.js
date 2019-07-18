@@ -125,14 +125,24 @@ $('.openObject').on('click',function(){
 });
 
 $('.showCmd').on('click',function(){
-  if($(this).hasClass('fa-chevron-right')){
-      $(this).removeClass('fa-chevron-right').addClass('fa-chevron-down');
-      $(this).closest('.eqLogic').find('.cmdSortable').show();
-  }else{
-      $(this).removeClass('fa-chevron-down').addClass('fa-chevron-right');
-      $(this).closest('.eqLogic').find('.cmdSortable').hide();
-  }
-   $('.displayListContainer').packery();
+    if($(this).hasClass('fa-chevron-right')){
+        $(this).removeClass('fa-chevron-right').addClass('fa-chevron-down');
+        $(this).closest('.eqLogic').find('.cmdSortable').show();
+    }else if($(this).hasClass('fa-chevron-down')){
+        $(this).removeClass('fa-chevron-down').addClass('fa-chevron-right');
+        $(this).closest('.eqLogic').find('.cmdSortable').hide();
+    }else{
+        $(this).find('.summary-box-tools').each(function(){
+            if ($(this).hasClass('fa-chevron-right')){
+                $(this).removeClass('fa-chevron-right').addClass('fa-chevron-down');
+                $(this).closest('.eqLogic').find('.cmdSortable').show();
+            }else if($(this).hasClass('fa-chevron-down')){
+                $(this).removeClass('fa-chevron-down').addClass('fa-chevron-right');
+                $(this).closest('.eqLogic').find('.cmdSortable').hide();
+            }
+        });
+    }
+    $('.displayListContainer').packery();
 });
 
 $('.showEqLogic').on('click',function(){

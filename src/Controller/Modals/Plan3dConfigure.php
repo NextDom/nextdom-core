@@ -37,6 +37,8 @@ class Plan3dConfigure extends BaseAbstractModal
      * Render plan 3d configure modal
      *
      * @return string
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public static function get(): string
     {

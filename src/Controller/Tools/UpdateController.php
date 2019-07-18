@@ -38,7 +38,7 @@ class UpdateController extends BaseController
      * @param array $pageData Page data
      *
      * @return string Content of objects page
-     *
+     * @throws \Exception
      */
     public static function get(&$pageData): string
     {
@@ -54,6 +54,7 @@ class UpdateController extends BaseController
         $pageData['numberOfUpdatesScripts'] = UpdateManager::nbNeedUpdate('script');
         $pageData['numberOfUpdatesOthers'] = $pageData['numberOfUpdates'] - ($pageData['numberOfUpdatesCore'] + $pageData['numberOfUpdatesPlugins'] + $pageData['numberOfUpdatesWidgets'] + $pageData['numberOfUpdatesScripts']);
         $pageData['updatesList'] = array_reverse($updates);
+
         $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/update.js';
 
         return Render::getInstance()->get('/desktop/tools/update-view.html.twig', $pageData);

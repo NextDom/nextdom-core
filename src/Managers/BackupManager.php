@@ -78,6 +78,7 @@ class BackupManager
      * Last output should not be removed since it act as a marker in ajax calls
      *
      * @return bool true if no error
+     * @throws CoreException
      */
     public static function createBackup()
     {
@@ -162,7 +163,8 @@ class BackupManager
      * Computes backup filename from nextdom's name and current datetime
      *
      * @param string $name current nextdom name, default given by ConfigManager
-     * @returns string backup filename
+     * @return string
+     * @throws \Exception
      */
     public static function getBackupFilename($name = null): string
     {
@@ -221,6 +223,7 @@ class BackupManager
     /**
      * Creates a backup of database to given output file path
      *
+     * @param $outputFile
      * @throws CoreException true when mysqldump failed
      */
     public static function createDBBackup($outputFile)
@@ -257,8 +260,13 @@ class BackupManager
      * compatibility with jeedom archives).
      *
      * @param string $outputPath path of generated backup archive
+     * @param $sqlPath
+     * @param $cachePath
+     * @throws \splitbrain\PHPArchive\ArchiveCorruptedException
+     * @throws \splitbrain\PHPArchive\ArchiveIOException
+     * @throws \splitbrain\PHPArchive\ArchiveIllegalCompressionException
+     * @throws \splitbrain\PHPArchive\FileInfoException
      * @retrun bool true archive generated successfully
-     * @throws \Exception when error occured while writing the tar archive
      */
     public static function createBackupArchive(string $outputPath, $sqlPath, $cachePath, $logFile)
     {
@@ -348,7 +356,7 @@ class BackupManager
      *
      * @param string $backupDir backup root directory
      * @param string $order sort result by 'newest' or 'oldest' first
-     * @throws CoreException if cannot stat one of the backup files
+     * @return array
      * @retrun array of file object
      */
     public static function getBackupFileInfo($backupDir, $order = "newest")
@@ -515,9 +523,10 @@ class BackupManager
     /**
      * Returns path to last available backup archive
      *
+     * @param $backupDir
      * @param string $order sort result by 'newest' or 'oldest' first
-     * @throws CoreException when no archive is found
      * @return string archive file path
+     * @throws CoreException when no archive is found
      */
     public static function getLastBackupFilePath($backupDir, $order = "newest")
     {
@@ -588,6 +597,7 @@ class BackupManager
      * Load given file in mysql database
      *
      * @param string $file path to file to load
+     * @throws CoreException
      * @throw CoreException when a mysql error occurs
      */
     public static function loadSQLFromFile($file)

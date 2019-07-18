@@ -357,6 +357,8 @@ class Update implements EntityInterface
      * Supprime l'objet de la base de données
      *
      * @return bool
+     * @throws CoreException
+     * @throws \ReflectionException
      */
     public function remove()
     {
@@ -367,6 +369,8 @@ class Update implements EntityInterface
      * Sauvegarde l'objet dans la base de données
      *
      * @return bool
+     * @throws CoreException
+     * @throws \ReflectionException
      */
     public function save()
     {
