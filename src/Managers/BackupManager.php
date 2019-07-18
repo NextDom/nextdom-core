@@ -280,7 +280,7 @@ class BackupManager
         $tar->addFile($sqlPath, "DB_backup.sql");
 
         // Backup config and data folders
-        FileSystemHelper::mkdirIfNotExists(NEXTDOM_DATA.'/data/custom');
+        FileSystemHelper::mkdirIfNotExists(NEXTDOM_DATA.'/data/custom',0775,true);
         $roots = [NEXTDOM_DATA.'/data/',NEXTDOM_DATA.'/config/'];
         $pattern = NEXTDOM_DATA .'/';
         self::addPathToArchive($roots, $pattern, $tar, $logFile);
@@ -688,7 +688,8 @@ class BackupManager
         $customDataDirs = glob(sprintf("%s/data/*", $tmpDir), GLOB_ONLYDIR);
         $customDataRoot = sprintf("%s/data", NEXTDOM_DATA);
 
-        SystemHelper::rrmdir($customDataRoot . "/*");
+        FileSystemHelper::rrmdir($customDataRoot . "/");
+        FileSystemHelper::mkdirIfNotExists($customDataRoot,0775,true);
         foreach ($customDataDirs as $c_dir) {
             $name = basename($c_dir);
             $message ='Restoring folder :'.$name;
@@ -699,6 +700,25 @@ class BackupManager
             }
             if (true === FileSystemHelper::mv($c_dir, sprintf("%s/%s", $customDataRoot, $name))) {
                 self::restorePublicPerms($customDataRoot);
+            }
+            if($logFile != 'migration') {
+                ConsoleHelper::ok();
+            }
+        }
+
+
+        FileSystemHelper::rrmdir($customPlanRoot . "/");
+        FileSystemHelper::mkdirIfNotExists($customPlanRoot,0775,true);
+        foreach ($customPlanDirs as $c_dir) {
+            $name = basename($c_dir);
+            $message ='Restoring folder :'.$name;
+            if($logFile == 'migration') {
+                LogHelper::addInfo($logFile, $message, '');
+            } else {
+                ConsoleHelper::process($message);
+            }
+            if (true === FileSystemHelper::mv($c_dir, sprintf("%s/%s", $customPlanRoot, $name))) {
+                self::restorePublicPerms($customPlanRoot);
             }
             if($logFile != 'migration') {
                 ConsoleHelper::ok();
@@ -719,7 +739,8 @@ class BackupManager
         $plugingDirs = glob(sprintf("%s/plugins/*", $tmpDir), GLOB_ONLYDIR);
         $pluginRoot = sprintf("%s/plugins", NEXTDOM_ROOT);
 
-        SystemHelper::rrmdir($pluginRoot . "/*");
+        FileSystemHelper::rrmdir($pluginRoot . "/");
+        FileSystemHelper::mkdirIfNotExists($pluginRoot,0775,true);
         foreach ($plugingDirs as $c_dir) {
             $name = basename($c_dir);
             if (false === FileSystemHelper::mv($c_dir, sprintf("%s/%s", $pluginRoot, $name))) {
