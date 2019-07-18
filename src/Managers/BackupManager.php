@@ -1,4 +1,4 @@
-<?php
+
 /*
 * This file is part of the NextDom software (https://github.com/NextDom or http://nextdom.github.io).
 * Copyright (c) 2018 NextDom.
@@ -678,6 +678,7 @@ class BackupManager
         $customDataDirs = glob(sprintf("%s/data/*", $tmpDir), GLOB_ONLYDIR);
         $customDataRoot = sprintf("%s/data", NEXTDOM_DATA);
 
+        SystemHelper::rrmdir($customDataRoot . "/*");
         FileSystemHelper::rrmdir($customDataRoot . "/");
         FileSystemHelper::mkdirIfNotExists($customDataRoot,0775,true);
         foreach ($customDataDirs as $c_dir) {
@@ -731,6 +732,7 @@ class BackupManager
         $plugingDirs = glob(sprintf("%s/plugins/*", $tmpDir), GLOB_ONLYDIR);
         $pluginRoot = sprintf("%s/plugins", NEXTDOM_ROOT);
 
+        SystemHelper::rrmdir($pluginRoot . "/*");
         FileSystemHelper::rrmdir($pluginRoot . "/");
         FileSystemHelper::mkdirIfNotExists($pluginRoot,0775,true);
         foreach ($plugingDirs as $c_dir) {
