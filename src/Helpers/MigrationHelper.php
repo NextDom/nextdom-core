@@ -238,7 +238,7 @@ class MigrationHelper
                         }
                         FileSystemHelper::mv(NEXTDOM_ROOT.'/'.$fileToReplace, sprintf("%s/%s", NEXTDOM_DATA.'/data/custom/', $fileToReplace));
 
-                        self::migratePlanPath($logFile, $fileToReplace,'data/custom/');
+                        self::migratePlanPath($logFile, $fileToReplace,'','data/custom/');
                     }
                 }
             }
@@ -266,7 +266,7 @@ class MigrationHelper
                     } else {
                         ConsoleHelper::process($message);
                     }
-                    self::migratePlanPath($logFile, $fileToReplace,'data/custom/');
+                    self::migratePlanPath($logFile, $fileToReplace,'','data/custom/');
                 }
             }
         } catch(\Exception $exception){
@@ -294,7 +294,8 @@ class MigrationHelper
                     } else {
                         ConsoleHelper::process($message);
                     }
-                    self::migratePlanPath($logFile, $fileToReplace,'data/custom/plans/');
+                    self::migratePlanPath($logFile,  $fileToReplace, 'public/img/', 'data/custom/plans/');
+                    self::migratePlanPath($logFile, $fileToReplace, 'core/img/', 'data/custom/plans/');
                 }
             }
         } catch(\Exception $exception){
@@ -315,13 +316,17 @@ class MigrationHelper
      * Update plan and plan3d table to change path given in parameter
      * @param string $logFile
      * @param string $fileToReplace
+     * @param string $oldReferencePath
      * @param string $newReferencePath
      * @throws CoreException
      * @throws \ReflectionException
      */
-    private static function migratePlanPath($logFile, $fileToReplace, $newReferencePath)
+    private static function migratePlanPath($logFile, $fileToReplace, $oldReferencePath, $newReferencePath)
     {
-        $message = 'Migrate ' . $fileToReplace . ' to ' .$newReferencePath . $fileToReplace;
+        if(empty($oldReferencePath)){
+            $oldReferencePath = '';
+        }
+        $message = 'Migrate ' . $oldReferencePath . $fileToReplace . ' to ' .$newReferencePath . $fileToReplace;
         if ($logFile == 'migration') {
             LogHelper::addInfo($logFile, $message, '');
         } else {
@@ -332,8 +337,8 @@ class MigrationHelper
 
             $html = $plan->getDisplay('text');
             if ($html !== null) {
-                $html = str_replace('src="'.$fileToReplace, 'src="' . $newReferencePath . $fileToReplace, $html);
-                $html = str_replace('href="'.$fileToReplace, 'href="' . $newReferencePath . $fileToReplace, $html);
+                $html = str_replace('src="'. $oldReferencePath .$fileToReplace, 'src="' . $newReferencePath . $fileToReplace, $html);
+                $html = str_replace('href="'. $oldReferencePath .$fileToReplace, 'href="' . $newReferencePath . $fileToReplace, $html);
 
                 $plan->setDisplay('text', $html);
                 $plan->save();
