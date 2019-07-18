@@ -994,19 +994,27 @@ class CmdManager
         $return['category'] = $eqLogic->getCategory();
 
         if ($event['subtype'] == 'action') {
-            $return['html'] = '<div class="cmd" data-id="' . $event['id'] . '">'
-                . '<div style="font-weight: bold;cursor:help;">' . $event['name'] . '<i class="fas fa-cogs pull-right cursor bt_configureCmd"></i></div>'
-                . '<div style="cursor:default;">' . $event['options'] . '<div/>'
-                . '</div>';
+            $return['html'] = '<div class="timeline-item cmd" data-id="' . $event['id'] . '">'
+                . '<span class="time"><i class="fa fa-clock-o"></i> 12:05</span>'
+                .'<h3 class="timeline-header"><a href="#">'. $event['name'] . '</h3>'
+                .'<div class="timeline-body">'
+                .  $event['options']
+                .' <div class="timeline-footer">'
+                .'<a class="btn btn-primary btn-xs">Read more</a>'
+                .'<a class="btn btn-danger btn-xs">Delete</a>'
+                .'</div>'
+                .'</div>';
         } else {
-            $backgroundColor = '#A9D0F5';
-            if (isset($event['cmdType']) && $event['cmdType'] == 'binary') {
-                $backgroundColor = ($event['value'] == 0 ? '#ff8693' : '#c1e5bd');
-            }
-            $return['html'] = '<div class="cmd" data-id="' . $event['id'] . '">'
-                . '<div style="background-color:' . $backgroundColor . ';font-weight: bold;cursor:help;">' . $event['name'] . '<i class="fas fa-cogs pull-right cursor bt_configureCmd"></i></div>'
-                . '<div style="cursor:default;">' . $event['value'] . '<div/>'
-                . '</div>';
+            $return['html'] = '<div class="timeline-item cmd" data-id="' . $event['id'] . '">'
+                .'<h3 class="timeline-header">' . $event['name'] . '</h3>'
+                .'<div class="timeline-body">'
+                .  $event['value']
+                .' <div class="timeline-footer">'
+                .'<a class="btn btn-primary btn-xs">Read more</a>'
+                .'<a class="btn btn-danger btn-xs">Delete</a>'
+                .'</div>'
+                .'</div>'
+                .'</div>';
         }
         return $return;
     }

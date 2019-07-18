@@ -72,27 +72,41 @@ $('#bt_refreshTimeline').on('click',function(){
 timeline = null;
 
 function displayTimeline(){
-  jeedom.getTimelineEvents({
-    error: function (error) {
-        notify("Core",error.message,"error");
+    jeedom.getTimelineEvents({
+        error: function (error) {
+            notify("Core",error.message,"error");
         },
-    success: function (data) {
-      data = data.reverse();
-      var tr = '';
-      for(var i in data){
-        tr += '<tr>';
-        tr += '<td>';
-        tr += data[i].date;
-        tr += '</td>';
-        tr += '<td>';
-        tr += data[i].type;
-        tr += '</td>';
-        tr += '<td>';
-        tr += data[i].html;
-        tr += '</td>';
-        tr += '</tr>';
-      }
-      $('#table_timeline tbody').empty().append(tr).trigger('update');
-    }
-  });
+        success: function (data) {
+            data = data.reverse();
+            var tr = '';
+            for(var i in data){
+                if (i > 0) {
+                    if (moment(data[i].date).format('DD/MM/YYYY') != moment(data[i-1].date).format('DD/MM/YYYY')) {
+                        tr += '<li class="time-label">';
+                        tr += '<span class="bg-green">';
+                        tr += moment(data[i].date).format('DD/MM/YYYY');
+                        tr += '</span>';
+                        tr += ' </li>';
+                    }
+                } else {
+                    tr += '<li class="time-label">';
+                    tr += '<span class="bg-green">';
+                    tr += moment(data[i].date).format('DD/MM/YYYY');
+                    tr += '</span>';
+                    tr += ' </li>';
+                }
+                tr += '<li>';
+                if (data[i].group == "info") {
+                    tr += '<i class="fa fa-info bg-blue"></i>';
+                }else{
+                    tr += '<i class="fa fa-running bg-red"></i>';
+
+                }
+                tr +=data[i].html;
+                tr += ' </li>';
+            }
+            console.log(data[i]);
+            $('#data').append(tr).trigger('update');
+        }
+    });
 }
