@@ -288,13 +288,13 @@ class MigrationHelper
 
                     $fileToReplace = $fileInfo->getFilename();
 
-                    $message = 'Moving ' . $fileToReplace . ' to /data/custom/plan/' . $fileToReplace;
+                    $message = 'Moving ' . $fileToReplace . ' to /data/custom/plans/' . $fileToReplace;
                     if ($logFile == 'migration') {
                         LogHelper::addInfo($logFile, $message, '');
                     } else {
                         ConsoleHelper::process($message);
                     }
-                    self::migratePlanPath($logFile, $fileToReplace,'data/custom/plan');
+                    self::migratePlanPath($logFile, $fileToReplace,'data/custom/plans/');
                 }
             }
         } catch(\Exception $exception){
