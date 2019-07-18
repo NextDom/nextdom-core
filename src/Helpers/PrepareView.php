@@ -213,6 +213,11 @@ class PrepareView
             $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/moment/moment.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/vivagraphjs/dist/vivagraph.min.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/snapsvg/dist/snap.svg-min.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/moment/min/moment.min.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/chart.js/dist/Chart.bundle.min.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/hammerjs/hammer.min.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/chartjs-plugin-zoom/dist/chartjs-plugin-zoom.min.js';
 
             // Then Factory framwework files
             $pageData['JS_POOL'][] = '/public/js/factory/NextDomUIDGenerator.js';

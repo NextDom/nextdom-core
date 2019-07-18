@@ -29,7 +29,10 @@
     "vivagraphjs": "^0.10.1",
     "wowjs": "^1.1.3",
     "moment": "^2.24.0",
-    "pace-js": "^1.0.2"
+    "chart.js": "^2.8.0",
+    "hammerjs": "^2.0.8",
+    "chartjs-plugin-zoom": "^0.7.0"
+
   },
   "repository": {
     "type": "git",

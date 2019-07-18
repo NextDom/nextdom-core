@@ -115,6 +115,9 @@ function gen_js {
            vendor/node_modules/snapsvg/dist/snap.svg-min.js \
            vendor/node_modules/moment/min/moment.min.js \
            vendor/node_modules/vivagraphjs/dist/vivagraph.min.js \
+           vendor/node_modules/chart.js/dist/Chart.bundle.min.js \
+           vendor/node_modules/hammerjs/hammer.min.js \
+           vendor/node_modules/chartjs-plugin-zoom/dist/chartjs-plugin-zoom.min.js \
            assets/js/factory/NextDomElement.js \
            assets/js/factory/NextDomEnum.js \
            assets/js/factory/NextDomUIDGenerator.js \
