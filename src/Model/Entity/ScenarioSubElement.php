@@ -303,6 +303,7 @@ class ScenarioSubElement implements EntityInterface
 
     /**
      * @return array
+     * @throws \Exception
      */
     public function getAllId()
     {
@@ -323,6 +324,7 @@ class ScenarioSubElement implements EntityInterface
     /**
      * @param $_scenarioElement_id
      * @return int
+     * @throws \Exception
      */
     public function copy($_scenarioElement_id)
     {

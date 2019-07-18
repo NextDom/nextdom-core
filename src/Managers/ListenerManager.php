@@ -59,7 +59,7 @@ class ListenerManager
     {
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME;
-        return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
     }
 
     /**
@@ -76,7 +76,7 @@ class ListenerManager
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE id=:id';
-        return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getOneObject($sql, $value, self::CLASS_NAME);
     }
 
     /**
@@ -93,7 +93,7 @@ class ListenerManager
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE class=:class';
-        return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, $value, self::CLASS_NAME);
     }
 
     /**
@@ -119,7 +119,7 @@ class ListenerManager
             $value['option'] = $_option;
             $sql .= ' AND `option`=:option';
         }
-        return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getOneObject($sql, $value, self::CLASS_NAME);
     }
 
     /**
@@ -142,7 +142,7 @@ class ListenerManager
         WHERE class=:class
         AND function=:function
         AND `option` LIKE :option';
-        return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, $value, self::CLASS_NAME);
     }
 
     /**
@@ -165,7 +165,7 @@ class ListenerManager
         WHERE class=:class
         AND function=:function
         AND event=:event';
-        return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, $value, self::CLASS_NAME);
     }
 
     /**
@@ -191,7 +191,7 @@ class ListenerManager
             $value['option'] = $_option;
             $sql .= ' AND `option`=:option';
         }
-        DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ROW);
+        DBHelper::exec($sql, $value);
     }
 
     /**
@@ -229,7 +229,7 @@ class ListenerManager
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE `event` LIKE :event';
-        return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, $value, self::CLASS_NAME);
     }
 
     /**

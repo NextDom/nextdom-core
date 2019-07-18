@@ -58,56 +58,72 @@
         <!-- Tabs content -->
         <div class="global-tab-content tab-content">
             <div role="tabpanel" class="tab-pane active" id="themestab">
-                <legend>{{ 'Selectionner votre thème' }}</legend>
-                <div class="row  text-center">
-                    <div id="themes" class="col-sm-12 col-md-6">
-                        <div style="padding: 10px;">
-                            <a style="display: block;border: 1px solid #aaa;" class="clearfix form-group">
+                <legend>{{ 'Selectionner votre thème ou votre base de customisation' }}</legend>
+                <div class="row text-center">
+                    <div id="theme1" class="col-sm-12 col-md-6">
+                        <div class="form-group">
+                            <label class="clearfix cursor themeThumbnail" for="theme-light">
                                 <div>
-                                    <span style="display:block; width: 20%; float: left; height: 15px; background: #33b8cc"></span>
-                                    <span style="display:block; width: 80%; float: left; height: 15px; background: #33b8cc"></span>
+                                    <span class="themeThumbnailHeader" style="background: #33b8cc"><i class="fas fa-bars"></i></span>
                                 </div>
                                 <div>
-                                    <span style="display:block; width: 20%; float: left; height: 120px; background: #f9fafc"></span>
-                                    <span style="display:block; width: 80%; float: left; height: 120px; background: #ecf0f5"></span>
+                                    <span class="themeThumbnailLeft" style="background: #f9fafc"></span>
+                                    <span class="themeThumbnailBody" style="background: #ecf0f5"></span>
                                 </div>
-                            </a>
-                            <p class="text-center no-margin">White</p><input class="theme" type="radio" name="theme" value="white" checked="checked">
+                            </label>
+                            <input id="theme-light" class="theme spacing-right" type="radio" name="theme" value="light">
+                            <label for="theme-light">{{ 'Light' }}</label>
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-6">
-                        <div style="padding: 10px;">
-                            <a style="display: block;border: 1px solid #aaa;" class="clearfix form-group">
+                    <div id="theme2" class="col-sm-12 col-md-6">
+                        <div class="form-group">
+                            <label class="clearfix cursor themeThumbnail" for="theme-dark">
                                 <div>
-                                    <span style="display:block; width: 20%; float: left; height: 15px; background: #33b8cc"></span>
-                                    <span style="display:block; width: 80%; float: left; height: 15px; background: #33b8cc"></span>
+                                    <span class="themeThumbnailHeader" style="background: #33b8cc"><i class="fas fa-bars"></i></span>
                                 </div>
                                 <div>
-                                    <span style="display:block; width: 20%; float: left; height: 120px; background: #222d32"></span>
-                                    <span style="display:block;width: 80%;float: left;height: 120px;background: #444;"></span>
+                                    <span class="themeThumbnailLeft" style="background: #222d32"></span>
+                                    <span class="themeThumbnailBody" style="background: #2c3b41"></span>
                                 </div>
-                            </a>
-                            <p class="text-center no-margin">Dark</p><input class=theme" type="radio" name="theme" value="dark">
-                        </div>
-                    </div>
-                </div>
-                <div class="row  text-center">
-                    <div id="themes" class="col-sm-12 col-md-6">
-                        <div style="padding: 10px;">
-                            <a style="display: block;border: 1px solid #aaa;" class="clearfix form-group">
-                                <div>
-                                    <span style="display:block; width: 20%; float: left; height: 15px; background: #33b8cc"></span>
-                                    <span style="display:block; width: 80%; float: left; height: 15px; background: #33b8cc"></span>
-                                </div>
-                                <div>
-                                    <span style="display:block; width: 20%; float: left; height: 120px; background: #222d32"></span>
-                                    <span style="display:block; width: 80%; float: left; height: 120px; background: #ecf0f5"></span>
-                                </div>
-                            </a>
-                            <p class="text-center no-margin">Mix</p><input class="theme" type="radio" name="theme" value="mix">
+                            </label>
+                            <input id="theme-dark" class="theme spacing-right" type="radio" name="theme" value="dark">
+                            <label for="theme-dark">{{ 'Dark' }}</label>
                         </div>
                     </div>
                 </div>
+                <div class="row text-center">
+                    <div id="theme3" class="col-sm-12 col-md-6">
+                        <div class="form-group">
+                            <label class="clearfix form-group cursor themeThumbnail" for="theme-mix">
+                                <div>
+                                    <span class="themeThumbnailHeader" style="background: #33b8cc"><i class="fas fa-bars"></i></span>
+                                </div>
+                                <div>
+                                    <span class="themeThumbnailLeft" style="background: #222d32"></span>
+                                    <span class="themeThumbnailBody" style="background: #ecf0f5"></span>
+                                </div>
+                            </label>
+                            <input id="theme-mix" class="theme spacing-right" type="radio" name="theme" value="mix">
+                            <label for="theme-mix">{{ 'Mix' }}</label>
+                        </div>
+                    </div>
+                    <div id="theme4" class="col-sm-12 col-md-6" style="display:none;">
+                        <div class="form-group">
+                            <label class="clearfix form-group cursor themeThumbnail" for="theme-custom">
+                                <div>
+                                    <span class="themeThumbnailHeader" style="background: {{ Theme['color1'] }}"><i class="fas fa-bars" style="color: {{ Theme['color2'] }}"></i></span>
+                                </div>
+                                <div>
+                                    <span class="themeThumbnailLeft" style="background: {{ Theme['color6'] }}"></span>
+                                    <span class="themeThumbnailBody" style="background: {{ Theme['color9'] }}"></span>
+                                </div>
+                            </label>
+                            <input id="theme-custom" class="theme spacing-right" type="radio" name="theme" value="custom">
+                            <label for="theme-custom">{{ 'Custom' }}</label>
+                        </div>
+                    </div>
+                </div>
+                <input type="text" class="configKey form-control" data-l1key="nextdom::theme" style="display:none"/>
             </div>
 
             <!-- Custom tab -->
@@ -120,7 +136,7 @@
                             <label class="control-label">{{ 'Couleur d\'accentuation principale' }}</label>
                             <div class="btn-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 1 : identité du thème, header NextDom, bouton primaires, messages d\'info, elements actifs ou survolés, textes de liens et d\'état, scrollbar, boutons fab...' }}">
                                 <a class="btn btn-action bt_resetColor" data-l1key="theme:color1" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
-                                <div class=" colorpicker-component colorpick input-group">
+                                <div class="colorpicker-component colorpick input-group">
                                     <input type="text" class="configKey form-control noSet" data-l1key="theme:color1" value="{{ Theme['color1'] }}"/>
                                     <span class="input-group-addon"><i></i></span>
                                 </div>
@@ -278,6 +294,16 @@
                                 <a class="btn btn-action bt_resetColor" data-l1key="theme:color22" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
                                 <div class="colorpicker-component colorpick input-group">
                                     <input type="text" class="configKey form-control noSet" data-l1key="theme:color22" value="{{ Theme['color22'] }}"/>
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4 col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Couleur de fond des blocs codes' }}</label>
+                            <div class="btn-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 23 : Fond des blocs codes' }}">
+                                <a class="btn btn-action bt_resetColor" data-l1key="theme:color23" data-toggle="tooltip" title="" data-original-title="{{ 'Par défaut' }}"><i class="fas fa-times"></i></a>
+                                <div class="input-group">
+                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color23" value="{{ Theme['color23'] }}"/>
                                     <span class="input-group-addon"><i></i></span>
                                 </div>
                             </div>
@@ -483,7 +509,7 @@
             <!-- Advanced tab -->
             <div role="tabpanel" class="tab-pane nav-tabs-custom" id="advanced">
                 <div class="btn-group alert alert-warning" id="div_spanAlertMessage">
-                    {{ 'Attention : tout ce que vous écrivez ici est global et inclus sur toutes les pages. La moindre erreur peut rendre votre' }} {{ customProductName }} {{ 'non fonctionel.' }}
+                    {{ 'Attention : tout ce que vous écrivez ici est global et inclus sur toutes les pages. La moindre erreur peut rendre votre' }} {{ PRODUCT_NAME }} {{ 'non fonctionel.' }}
                     <div>
                         <input type="checkbox" id="enableCustomCss" class="configKey" data-l1key="enableCustomCss"{% if customEnableCustomCss %} checked="checked"{% endif %}>
                         <label for="enableCustomCss" class="control-label label-check" data-toggle="tooltip" title=""

@@ -38,7 +38,6 @@ class ConfigAjax extends BaseAjax
     public function genApiKey()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         if (Utils::init('plugin') == 'core') {
             ConfigManager::save('api', ConfigManager::genKey());
             AjaxHelper::success(ConfigManager::byKey('api'));
@@ -77,7 +76,6 @@ class ConfigAjax extends BaseAjax
     public function addKey()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $values = json_decode(Utils::init('value'), true);
         foreach ($values as $key => $value) {
             ConfigManager::save($key, NextDomHelper::fromHumanReadable($value), Utils::init('plugin', 'core'));
@@ -96,7 +94,6 @@ class ConfigAjax extends BaseAjax
 
     public function removeKey()
     {
-        Utils::unautorizedInDemo();
         $keys = Utils::init('key');
         if ($keys == '') {
             throw new CoreException(__('Aucune clef demandée'));

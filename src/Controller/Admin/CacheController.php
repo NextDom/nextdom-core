@@ -45,8 +45,7 @@ class CacheController extends BaseController
     public static function get(&$pageData): string
     {
 
-        $pageData['adminProductName'] = ConfigManager::byKey('product_name');
-        $pageData['adminCustomProductName'] = ConfigManager::byKey('name');
+        $pageData['PRODUCT_NAME'] = ConfigManager::byKey('product_name');
         $pageData['adminStats'] = CacheManager::stats();
         $pageData['adminCacheFolder'] = CacheManager::getFolder();
         $pageData['adminMemCachedExists'] = class_exists('memcached');

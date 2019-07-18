@@ -43,8 +43,10 @@ var updateLogView = $('#updateLog');
 
 /**
  * Init content of all update tabs
+ *
+ * @param updateId Id of the item to create (optional)
  */
-function initUpdateTabsContent() {
+function initUpdateTabsContent(updateId) {
   // Get list of updates
   nextdom.update.get({
     error: function (error) {
@@ -53,7 +55,7 @@ function initUpdateTabsContent() {
     success: function (updatesList) {
       tabsList.empty();
       for (var updateIndex in updatesList) {
-        createUpdateBox(updatesList[updateIndex]);
+        createUpdateBox(updatesList[updateIndex],updateId);
       }
       tabsList.trigger('update');
     }
@@ -79,8 +81,9 @@ function initUpdateTabsContent() {
  * Create update box
  *
  * @param updateData HTML data of the update box
+ * @param updateId Id of the item to create (optional)
  */
-function createUpdateBox(updateData) {
+function createUpdateBox(updateData,updateId) {
   var boxClass = 'box-success';
   var bgClass = 'bg-green';
   var boxUpdateClass = '';
@@ -97,7 +100,7 @@ function createUpdateBox(updateData) {
   boxUpdateClass = 'update-box';
   var htmlData = '<div class="objet col-lg-4 col-md-6 col-sm-6 col-xs-12">';
   htmlData += '<div class="' + boxUpdateClass + ' box ' + boxClass + '" data-id="' + init(updateData.id) + '" data-logicalId="' + init(updateData.logicalId) + '" data-type="' + init(updateData.type) + '">';
-  htmlData += '<div class="box-header with-border accordion-toggle cursor" data-toggle="collapse" data-parent="#accordionUpdate" href="#update_' + init(updateData.id) + '">';
+  htmlData += '<div class="box-header with-border accordion-toggle cursor " data-toggle="collapse" data-parent="#accordionUpdate" href="#update_' + init(updateData.id) + '">';
   if (init(updateData.type) == 'core') {
     updateIcon = '/public/img/NextDom/NextDom_Square_WhiteBlackBlue.png';
   } else {
@@ -113,7 +116,7 @@ function createUpdateBox(updateData) {
   htmlData += ' <h4 class="box-title" style="text-transform: capitalize;"><img class="box-header-icon spacing-right" src="' + updateIcon + '"/>' + updateName + '</h4>';
   htmlData += '<span data-toggle="tooltip" title="" class="updateAttr badge ' + bgClass + ' pull-right" data-original-title="" data-l1key="status" style="text-transform: uppercase;"></span>';
   htmlData += '</div>';
-  if (init(updateData.type) == 'core') {
+  if (init(updateData.type) == 'core' || init(updateData.id) == updateId) {
     htmlData += '<div id="update_' + init(updateData.id) + '" class="panel-collapse collapse in">';
   } else {
     htmlData += '<div id="update_' + init(updateData.id) + '" class="panel-collapse collapse">';
@@ -203,7 +206,7 @@ function checkSingleUpdate(updateId) {
       notify('Erreur', error.message, 'error');
     },
     success: function () {
-      initUpdateTabsContent();
+      initUpdateTabsContent(updateId);
     }
   });
 }

@@ -39,10 +39,6 @@ class NoteManager extends BaseAbstractModal
      */
     public static function get(): string
     {
-
-        $pageData = [];
-        $pageData['benchmark'] = NextDomHelper::benchmark();
-
-        return Render::getInstance()->get('/modals/nextdom.benchmark.html.twig', $pageData);
+        return Render::getInstance()->get('/modals/note.manager.html.twig', $pageData);
     }
 }

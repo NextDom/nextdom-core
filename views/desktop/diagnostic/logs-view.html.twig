@@ -66,7 +66,7 @@
                             <ul id="ul_object" class="nav nav-list bs-sidenav list-group">
                                 {% for logFile in logFilesList %}
                                     <li class="cursor label-log li_log{% if logFile['active'] %} active{% endif %}" data-log="{{ logFile['name'] }}">
-                                        <a><i class="fas fa-{{ logFile['icon'] }} spacing-right" style="color:{{ logFile['color'] }};"></i>{{ logFile['name'] }} ({{ logFile['size'] }} Ko)</a>
+                                        <a><i class="fas fa-{{ logFile['icon'] }} spacing-right" style="color:{{ logFile['color'] }};"></i>{{ logFile['name'] }} ({% if logFile['size']>=1000 %}{{ logFile['size']/1000 }} Mo{% else %}{{ logFile['size'] }} Ko{% endif %})</a>
                                     </li>
                                 {% endfor %}
                             </ul>

@@ -131,6 +131,7 @@ page-title:
   scenarios: Scénarios
   objects: Objets
   plugins: Plugins
+  tools: Outils
 
 administration:
   cpu: CPU
@@ -289,6 +290,7 @@ sidebar:
   expert-issue: Un Dysfonctionnement ?
   online: Online
   offline: Offline
+  quick-notes: Quick Notes
 
 firstuse:
   step: Étape
@@ -299,8 +301,9 @@ firstuse:
   password-title: Sécurisez votre %productName% !
   password-content: Pour commencer, merci de définir un nouveau mot de passe administrateur pour améliorer la sécurité...
   password-placeholder: Nouveau mot de passe...
+  market-productname-placeholder: ?
   password-confirm-placeholder: Confirmer le mot de passe...
-  market-title: Connectez votre market Jeedom a %productName% !
+  market-title: Connectez votre market Jeedom à %productName% !
   market-content: En ajoutant ou connectant un compte Market Jeedom pour l'installation de plugins...
   market-noaccount: Je n'ai pas de compte Market
   market-alreadyaccount: J'ai déjà un compte market
@@ -308,7 +311,10 @@ firstuse:
   market-username-placeholder: Nom d'utilisateur...
   market-password-placeholder: Mot de passe...
   customize-title: Personnalisez votre %productName% !
-  customize-content: Sélectionnez le thème qui vous correspond le plus, d'autres étant sélectionnables ou personnalisables dans la page Customisation...
+  customize-title2: Customisez votre %productName% !
+  customize-content: Sélectionnez le thème qui vous correspond le plus, personnalisation modifiable dans la page Customisation...
+  customize-widget: Sélectionnez le thème pour vos widgets, personnalisation modifiable dans la page Profil...
+  customize-name: Donnez un nom à votre solution domotique...
   congrats-title: Bravo ! La configuration de votre %productName% est terminée !
   congrats-content: Cliquez sur le bouton Terminer pour profiter de votre solution Domotique...
 

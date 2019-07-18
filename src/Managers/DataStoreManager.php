@@ -62,7 +62,7 @@ class DataStoreManager
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE id=:id';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -90,7 +90,7 @@ class DataStoreManager
                     AND `link_id` = :link_id
                     AND `key` = :key
                 ORDER BY `key`';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -133,6 +133,6 @@ class DataStoreManager
             $values['link_id'] = $linkId;
             $sql .= ' AND link_id = :link_id';
         }
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 }

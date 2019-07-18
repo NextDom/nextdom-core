@@ -141,7 +141,7 @@
     width : 145px !important;
     font-size: 14px !important;
   }
-  i {
+  i:not(.fa-cog) {
     font-size: 38px !important;
     font-weight: 900;
   }
@@ -163,7 +163,7 @@
   .danger {
     color: $critical;
   }
-  i:not(.fa-times) {
+  i:not(.fa-times):not(.fa-cog) {
     font-size: 5em !important;
     margin-bottom: 2px;
   }

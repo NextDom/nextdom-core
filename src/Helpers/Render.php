@@ -26,9 +26,6 @@ use Symfony\Component\Translation\Translator;
 use Twig\Extensions\DateExtension;
 use Twig\Extensions\I18nExtension;
 use Twig\Extensions\TextExtension;
-use Twig_Environment;
-use Twig_Extension_Debug;
-use Twig_Loader_Filesystem;
 
 /**
  * Class Render
@@ -43,7 +40,7 @@ class Render
      */
     private $translator;
     /**
-     * @var Twig_Environment
+     * @var \Twig\Environment
      */
     private $twig;
     private $twigLoader;
@@ -74,7 +71,7 @@ class Render
     private function initRenderer()
     {
         $developerMode = AuthentificationHelper::isInDeveloperMode();
-        $loader = new Twig_Loader_Filesystem(realpath('views'));
+        $loader = new \Twig\Loader\FilesystemLoader(realpath('views'));
         $this->twigLoader = $loader;
         $twigConfig = [
             'cache' => NEXTDOM_DATA . '/cache/twig',
@@ -85,17 +82,19 @@ class Render
             $twigConfig['auto_reload'] = true;
         }
 
-        $this->twig = new Twig_Environment($loader, $twigConfig);
+        $this->twig = new \Twig\Environment($loader, $twigConfig);
         $this->twig->addExtension(new I18nExtension());
         $this->twig->addExtension(new DateExtension($this->translator));
         $this->twig->addExtension(new TextExtension());
         $this->twig->addExtension(new TranslationExtension($this->translator));
         if ($developerMode) {
-            $this->twig->addExtension(new Twig_Extension_Debug());
+            $this->twig->addExtension(new \Twig\Extension\DebugExtension());
         }
     }
 
     /**
+     * Get render instance
+     *
      * @return Render
      */
     public static function getInstance(): Render
@@ -134,7 +133,7 @@ class Render
      */
     public function get($view, $data = array())
     {
-        $data['debugbar'] = $this->showDebugBar($this->twigLoader);
+        $data['debugbar'] = $this->showDebugBar();
         try {
             return $this->twig->render($view, $data);
         } catch (\Twig\Error\LoaderError $e) {
@@ -148,10 +147,9 @@ class Render
     }
 
     /**
-     * @param Twig_Loader_Filesystem $twigLoader
      * @return bool|\DebugBar\JavascriptRenderer
      */
-    private function showDebugBar(Twig_Loader_Filesystem $twigLoader)
+    private function showDebugBar()
     {
         $debugBarData = false;
         if (AuthentificationHelper::isInDeveloperMode()) {

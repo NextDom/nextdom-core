@@ -43,7 +43,7 @@ class InteractAjax extends BaseAjax
         foreach ($results as &$result) {
             // TODO TOus sélectionnés dans tous les cas
             $result['nbInteractQuery'] = count(InteractQueryManager::byInteractDefId($result['id']));
-            $result['nbEnableInteractQuery'] = count(InteractQueryManager::byInteractDefId($result['id'], true));
+            $result['nbEnableInteractQuery'] = count(InteractQueryManager::byInteractDefId($result['id']));
             if ($result['link_type'] == 'cmd' && $result['link_id'] != '') {
                 $link_id = '';
                 foreach (explode('&&', $result['link_id']) as $cmd_id) {
@@ -63,13 +63,12 @@ class InteractAjax extends BaseAjax
     {
         $result = Utils::o2a(InteractDefManager::byId(Utils::init('id')));
         $result['nbInteractQuery'] = count(InteractQueryManager::byInteractDefId($result['id']));
-        $result['nbEnableInteractQuery'] = count(InteractQueryManager::byInteractDefId($result['id'], true));
+        $result['nbEnableInteractQuery'] = count(InteractQueryManager::byInteractDefId($result['id']));
         AjaxHelper::success(NextDomHelper::toHumanReadable($result));
     }
 
     public function save()
     {
-        Utils::unautorizedInDemo();
         $interact_json = NextDomHelper::fromHumanReadable(json_decode(Utils::init('interact'), true));
         if (isset($interact_json['id'])) {
             $interact = InteractDefManager::byId($interact_json['id']);
@@ -90,7 +89,6 @@ class InteractAjax extends BaseAjax
 
     public function remove()
     {
-        Utils::unautorizedInDemo();
         $interact = InteractDefManager::byId(Utils::init('id'));
         if (!is_object($interact)) {
             throw new CoreException(__('Interaction inconnue. Vérifiez l\'ID'));
@@ -101,7 +99,6 @@ class InteractAjax extends BaseAjax
 
     public function changeState()
     {
-        Utils::unautorizedInDemo();
         $interactQuery = InteractQueryManager::byId(Utils::init('id'));
         if (!is_object($interactQuery)) {
             throw new CoreException(__('InteractQuery ID inconnu'));
@@ -113,7 +110,6 @@ class InteractAjax extends BaseAjax
 
     public function changeAllState()
     {
-        Utils::unautorizedInDemo();
         $interactQueries = InteractQueryManager::byInteractDefId(Utils::init('id'));
         if (is_array($interactQueries)) {
             foreach ($interactQueries as $interactQuery) {

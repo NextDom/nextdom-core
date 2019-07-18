@@ -78,7 +78,7 @@ class PluginManager
                     FROM `config`
                     WHERE `key` = 'active'
                     AND `value` = '1'";
-            $queryResults = DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL);
+            $queryResults = DBHelper::getAll($sql);
             if ($nameOnly) {
                 foreach ($queryResults as $row) {
                     $listPlugin[] = $row['plugin'];
@@ -203,7 +203,7 @@ class PluginManager
         $sql = 'UPDATE eqLogic
                 SET isEnable=0
                 WHERE eqType_name=:eqType_name';
-        DBHelper::Prepare($sql, $values);
+        DBHelper::exec($sql, $values);
     }
 
     /**

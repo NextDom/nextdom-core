@@ -993,7 +993,7 @@ class Scenario implements EntityInterface
             self::$_templateArray = array();
         }
         if (!isset(self::$_templateArray[$version])) {
-            self::$_templateArray[$version] = FileSystemHelper::getTemplateFileContent('core', $version, 'scenario');
+            self::$_templateArray[$version] = FileSystemHelper::getTemplateFileContent('core', $version, 'scenario','');
         }
         $html = Utils::templateReplace($replace, self::$_templateArray[$version]);
         CacheManager::set('scenarioHtml' . $version . $this->getId(), $html);
@@ -1221,6 +1221,8 @@ class Scenario implements EntityInterface
      * @param mixed $_value
      * @param bool $_private
      * @return boolean
+     * @throws CoreException
+     * @throws \ReflectionException
      */
     public function setData($_key, $_value, $_private = false)
     {

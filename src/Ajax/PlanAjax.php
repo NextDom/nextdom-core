@@ -42,7 +42,6 @@ class PlanAjax extends BaseAjax
     public function save()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $plans = json_decode(Utils::init('plans'), true);
         foreach ($plans as $plan_ajax) {
             @$plan = PlanManager::byId($plan_ajax['id']);
@@ -82,7 +81,6 @@ class PlanAjax extends BaseAjax
     public function create()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         if (Utils::init('plan', '') === '') {
             throw new CoreException(__('L\'identifiant du plan doit être fourni', __FILE__));
         }
@@ -95,7 +93,6 @@ class PlanAjax extends BaseAjax
     public function copy()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $plan = PlanManager::byId(Utils::init('id'));
         if (!is_object($plan)) {
             throw new CoreException(__('Aucun plan correspondant'));
@@ -115,7 +112,6 @@ class PlanAjax extends BaseAjax
     public function remove()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $plan = PlanManager::byId(Utils::init('id'));
         if (!is_object($plan)) {
             throw new CoreException(__('Aucun plan correspondant'));
@@ -126,7 +122,6 @@ class PlanAjax extends BaseAjax
     public function removePlanHeader()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $planHeader = PlanHeaderManager::byId(Utils::init('id'));
         if (!is_object($planHeader)) {
             throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));
@@ -164,7 +159,6 @@ class PlanAjax extends BaseAjax
     public function savePlanHeader()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $planHeader_ajax = json_decode(Utils::init('planHeader'), true);
         $planHeader = null;
         if (isset($planHeader_ajax['id'])) {
@@ -181,7 +175,6 @@ class PlanAjax extends BaseAjax
     public function copyPlanHeader()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $planHeader = PlanHeaderManager::byId(Utils::init('id'));
         if (!is_object($planHeader)) {
             throw new CoreException(__('Plan header inconnu. Vérifiez l\'ID ') . Utils::init('id'));
@@ -192,7 +185,6 @@ class PlanAjax extends BaseAjax
     public function removeImageHeader()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $planHeader = PlanHeaderManager::byId(Utils::init('id'));
         if (!is_object($planHeader)) {
             throw new CoreException(__('Plan header inconnu. Vérifiez l\'ID ') . Utils::init('id'));
@@ -207,7 +199,6 @@ class PlanAjax extends BaseAjax
     public function uploadImage()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $planHeader = PlanHeaderManager::byId(Utils::init('id'));
         if (!is_dir(NEXTDOM_DATA . '/data/plan/')) {
             mkdir(NEXTDOM_DATA . '/data/plan/');
@@ -253,7 +244,6 @@ class PlanAjax extends BaseAjax
     public function uploadImagePlan()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         $plan = PlanManager::byId(Utils::init('id'));
         if (false == is_object($plan)) {
             throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));
