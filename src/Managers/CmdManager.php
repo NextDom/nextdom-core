@@ -995,7 +995,7 @@ class CmdManager
 
         if ($event['subtype'] == 'action') {
             $return['html'] = '<div class="timeline-item cmd" data-id="' . $event['id'] . '">'
-                . '<span class="time"><i class="fa fa-clock-o"></i> 12:05</span>'
+                . '<span class="time"><i class="fa fa-clock-o"></i>' . substr($event['datetime'], -9) . '</span>'
                 .'<h3 class="timeline-header"><a href="#">'. $event['name'] . '</h3>'
                 .'<div class="timeline-body">'
                 .  $event['options']
@@ -1006,6 +1006,7 @@ class CmdManager
                 .'</div>';
         } else {
             $return['html'] = '<div class="timeline-item cmd" data-id="' . $event['id'] . '">'
+                . '<span class="time"><i class="fa fa-clock-o"></i>' . substr($event['datetime'], -9) .'</span>'
                 .'<h3 class="timeline-header">' . $event['name'] . '</h3>'
                 .'<div class="timeline-body">'
                 .  $event['value']
