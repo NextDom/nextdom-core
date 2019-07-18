@@ -99,7 +99,7 @@ function displayTimeline(){
                 if (data[i].group == "info") {
                     tr += '<i class="fa fa-info bg-blue"></i>';
                 }else{
-                    tr += '<i class="fa fa-running bg-red"></i>';
+                    tr += '<i class="fa fa-rocket bg-red"></i>';
 
                 }
                 tr +=data[i].html;
