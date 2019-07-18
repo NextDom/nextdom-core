@@ -109,6 +109,7 @@ function gen_js {
            vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js \
            vendor/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js \
            vendor/node_modules/snapsvg/dist/snap.svg-min.js \
+           vendor/node_modules/moment/min/moment.min.js \
            assets/js/factory/NextDomElement.js \
            assets/js/factory/NextDomEnum.js \
            assets/js/factory/NextDomUIDGenerator.js \
