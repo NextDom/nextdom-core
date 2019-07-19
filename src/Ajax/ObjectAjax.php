@@ -302,7 +302,11 @@ class ObjectAjax extends BaseAjax
         $object->setImage('data', base64_encode(file_get_contents($_FILES['file']['tmp_name'])));
         $object->setImage('sha512', sha512($object->getImage('data')));
         $filename = 'object' . $object->getId() . '-' . $object->getImage('sha512') . '.' . $object->getImage('type');
-        $filepath = NEXTDOM_DATA . '/data/object/' . $filename;
+        $dir = NEXTDOM_DATA . '/data/custom/object/';
+        if (!file_exists($dir)) {
+            mkdir($dir);
+        }
+        $filepath =  $dir . $filename;
         file_put_contents($filepath, file_get_contents($_FILES['file']['tmp_name']));
         if (!file_exists($filepath)) {
             throw new CoreException(__('Impossible de sauvegarder l\'image'));
