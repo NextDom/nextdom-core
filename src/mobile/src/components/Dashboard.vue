@@ -51,7 +51,7 @@ along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 <script>
 import WidgetTemplates from "@/libs/NextdomWidgetTemplates.js";
 import Communication from "@/libs/Communication.js";
-
+import "../assets/css/widgets.scss";
 /**
  * Show the dashboard of a room
  * @group Components

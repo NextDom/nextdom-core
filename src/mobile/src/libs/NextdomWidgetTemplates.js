@@ -17,13 +17,19 @@
  * @Email   <admin@nextdom.org>
  * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
  */
+import CameraWidget from "@/components/Widgets/CameraWidget.vue";
 import DefaultWidget from "@/components/Widgets/DefaultWidget.vue";
+import WeatherWidget from "@/components/Widgets/WeatherWidget.vue";
 
 export default {
   components: {
-    DefaultWidget
+    CameraWidget,
+    DefaultWidget,
+    WeatherWidget
   },
   widgets: {
+    camera: "CameraWidget",
+    weather: "WeatherWidget",
     default: "DefaultWidget"
   }
 };

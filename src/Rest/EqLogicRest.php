@@ -59,6 +59,7 @@ class EqLogicRest
             $eqLogicRow['objectId'] = $eqLogic->getObject_id();
             $eqLogicRow['enable'] = $eqLogic->getIsEnable() == 1 ? true : false;
             $eqLogicRow['visible'] = $eqLogic->getIsVisible() == 1 ? true : false;
+            $eqLogicRow['configuration'] = $eqLogic->getConfiguration();
             $result[] = $eqLogicRow;
         }
         return $result;
