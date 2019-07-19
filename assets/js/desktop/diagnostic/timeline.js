@@ -72,6 +72,7 @@ $('#bt_refreshTimeline').on('click',function(){
 timeline = null;
 
 function displayTimeline(){
+    $('#data').empty()
     jeedom.getTimelineEvents({
         error: function (error) {
             notify("Core",error.message,"error");
