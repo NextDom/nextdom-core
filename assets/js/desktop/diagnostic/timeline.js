@@ -80,33 +80,60 @@ function displayTimeline(){
         success: function (data) {
             data = data.reverse();
             var tr = '';
+            var color = '';
+
             for(var i in data){
+                $.each( data[i]['category'], function( key, value ) {
+                    var category = (value == 1) ? key: false;
+                    switch (category ) {
+                        case "energy":
+                            color = "#2eb04b";
+                            break;
+                        case "security":
+                            color = "2eb04b";
+                            break;
+                        case "heating":
+                            color = "2eb04b";
+                            break;
+                        case "light":
+                            color = "#f39c12";
+                            break;
+                        case "automatism":
+                            color = "#80808";
+                            break;
+                        case "multimedia":
+                            color = "#19bc9c";
+                            break;
+                        case "defaut":
+                            color = "grey";
+                            break;
+                    }
+                });
                 if (i > 0) {
                     if (moment(data[i].date).format('DD/MM/YYYY') != moment(data[i-1].date).format('DD/MM/YYYY')) {
                         tr += '<li class="time-label">';
-                        tr += '<span class="bg-green">';
+                        tr += '<span class="label-primary">';
                         tr += moment(data[i].date).format('DD/MM/YYYY');
                         tr += '</span>';
                         tr += ' </li>';
                     }
                 } else {
                     tr += '<li class="time-label">';
-                    tr += '<span class="bg-green">';
+                    tr += '<span class="label-primary">';
                     tr += moment(data[i].date).format('DD/MM/YYYY');
                     tr += '</span>';
                     tr += ' </li>';
                 }
                 tr += '<li>';
                 if (data[i].group == "info") {
-                    tr += '<i class="fa fa-info bg-blue" data-toggle="tooltip" title="" data-original-title="commande type info"></i>';
+                    tr += '<i class="fa fa-info" style="background-color:' + color +'" data-toggle="tooltip" title="" data-original-title="commande type info"></i>';
                 }else{
-                    tr += '<i class="fa fa-rocket bg-red" data-toggle="tooltip" title="" data-original-title="commande type action"></i>';
+                    tr += '<i class="fa fa-rocket" style="background-color:' + color +'" data-toggle="tooltip" title="" data-original-title="commande type action"></i>';
 
                 }
                 tr +=data[i].html;
                 tr += ' </li>';
             }
-            console.log(data[i]);
             $('#data').append(tr).trigger('update');
         }
     });
