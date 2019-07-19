@@ -125,11 +125,20 @@ function displayTimeline(){
                     tr += ' </li>';
                 }
                 tr += '<li>';
-                if (data[i].group == "info") {
-                    tr += '<i class="fa fa-info" style="background-color:' + color +'" data-toggle="tooltip" title="" data-original-title="commande type info"></i>';
-                }else{
-                    tr += '<i class="fa fa-rocket" style="background-color:' + color +'" data-toggle="tooltip" title="" data-original-title="commande type action"></i>';
 
+                switch (data[i].group ) {
+                    case "info" :
+                    tr += '<i class="fa fa-info" style="background-color:' + color +'" data-toggle="tooltip" title="" data-original-title="commande type info"></i>';
+                break;
+                    case "action" :
+                    tr += '<i class="fa fa-rocket" style="background-color:' + color +'" data-toggle="tooltip" title="" data-original-title="commande type action"></i>';
+                        break;
+                    case "scenario" :
+                        tr += '<i class="fa fa-film" style="background-color:' + color +'" data-toggle="tooltip" title="" data-original-title="commande type action"></i>';
+                        break;
+                    default:
+                        tr += '<i class="fa fa-question" style="background-color:' + color +'" data-toggle="tooltip" title="" data-original-title="commande type action"></i>';
+                        break;
                 }
                 tr +=data[i].html;
                 tr += ' </li>';
