@@ -112,14 +112,14 @@ function displayTimeline(){
                 if (i > 0) {
                     if (moment(data[i].date).format('DD/MM/YYYY') != moment(data[i-1].date).format('DD/MM/YYYY')) {
                         tr += '<li class="time-label">';
-                        tr += '<span class="label-primary">';
+                        tr += '<span>';
                         tr += moment(data[i].date).format('DD/MM/YYYY');
                         tr += '</span>';
                         tr += ' </li>';
                     }
                 } else {
                     tr += '<li class="time-label">';
-                    tr += '<span class="label-primary">';
+                    tr += '<span>';
                     tr += moment(data[i].date).format('DD/MM/YYYY');
                     tr += '</span>';
                     tr += ' </li>';
@@ -128,16 +128,16 @@ function displayTimeline(){
 
                 switch (data[i].group ) {
                     case "info" :
-                    tr += '<i class="fa fa-info" style="background-color:' + color +'" data-toggle="tooltip" title="" data-original-title="commande type info"></i>';
-                break;
+                        tr += '<i class="fa fa-info" style="background-color:' + color +'" data-toggle="tooltip" title="" data-original-title="{{Info}}"></i>';
+                        break;
                     case "action" :
-                    tr += '<i class="fa fa-rocket" style="background-color:' + color +'" data-toggle="tooltip" title="" data-original-title="commande type action"></i>';
+                        tr += '<i class="fa fa-rocket" style="background-color:' + color +'" data-toggle="tooltip" title="" data-original-title="{{Action}}"></i>';
                         break;
                     case "scenario" :
-                        tr += '<i class="fa fa-film" style="background-color:' + color +'" data-toggle="tooltip" title="" data-original-title="commande type action"></i>';
+                        tr += '<i class="fa fa-film timeline-scenario" data-toggle="tooltip" title="" data-original-title="{{Scénario}}"></i>';
                         break;
                     default:
-                        tr += '<i class="fa fa-question" style="background-color:' + color +'" data-toggle="tooltip" title="" data-original-title="commande type action"></i>';
+                        tr += '<i class="fa fa-question bg-yellow" data-toggle="tooltip" title="" data-original-title="{{Autre}}"></i>';
                         break;
                 }
                 tr +=data[i].html;
