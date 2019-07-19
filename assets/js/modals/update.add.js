@@ -38,6 +38,7 @@ $('.updateAttr[data-l1key=source]').on('change',function(){
 $('#bt_uploadPlugin').fileupload({
     dataType: 'json',
     replaceFileInput: false,
+    formData: {'nextdom_token': NEXTDOM_AJAX_TOKEN},
     done: function (e, data) {
         if (data.result.state != 'ok') {
             notify("Update", data.result.result, 'error');
