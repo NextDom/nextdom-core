@@ -45,6 +45,7 @@ require("../node_modules/font-awesome5/css/fontawesome-all.css");
 
 import Communication from "./libs/Communication.js";
 import { store } from "./libs/Store.js";
+import { i18n } from "./libs/i18n";
 import EventsManager from "./libs/EventsManager.js";
 
 Vue.config.productionTip = false;
@@ -75,5 +76,9 @@ new Vue({
   router,
   store,
   MuseUI,
+  i18n,
+  beforeCreate() {
+    this.$store.commit("initialize");
+  },
   render: h => h(App)
 }).$mount("#app");

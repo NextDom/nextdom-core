@@ -32,9 +32,29 @@ export const store = new Vuex.Store({
     // List component data by command id
     cmdsComponentsData: {},
     // List of eqLogics
-    eqLogicsList: {}
+    eqLogicsList: {},
+    // EqLogics position
+    eqLogicsOrder: undefined
   },
   mutations: {
+    /**
+     * Initialize data from localStorage
+     * @param {*} state
+     */
+    initialize(state) {
+      if (state.eqLogicsOrder === undefined) {
+        const rawEqLogicsOrder = localStorage.getItem("eqLogicsOrder");
+        if (rawEqLogicsOrder === undefined || rawEqLogicsOrder === null) {
+          state.eqLogicsOrder = {};
+          localStorage.setItem(
+            "eqLogicsOrder",
+            JSON.stringify(state.eqLogicsOrder)
+          );
+        } else {
+          state.eqLogicsOrder = JSON.parse(rawEqLogicsOrder);
+        }
+      }
+    },
     /**
      * Set component data linked to the command id
      * TODO: To reduce when all cases added
@@ -155,25 +175,31 @@ export const store = new Vuex.Store({
         state.actionsList[payload.cmdValue][payload.genericType] =
           payload.cmdId;
       }
-    }
+    },
     /**
-     * Set visibility of an eqLogic
+     * Update eqLogics order from incomplete list
      * @param {*} state Store access
-     * @param {*} payload EqLogicId and visibility {eqLogicId, visibility}
+     * @param {*} payload List of positions to update
      */
-    /*
-    setEqLogicVisibility(state, payload) {
-      if (!state.eqLogicsList.hasOwnProperty(payload.eqLogicId)) {
-        let eqLogicData = {
-          visibility: payload.visibility
-        }
-        state.eqLogicsList[payload.eqLogicId] = eqLogicData;
+    updateEqLogicsOrder(state, payload) {
+      let toUpdateKeys = Object.keys(payload);
+      for (let i = 0; i < toUpdateKeys.length; ++i) {
+        state.eqLogicsOrder[toUpdateKeys[i]] = payload[toUpdateKeys[i]];
       }
-      else {
-        state.eqLogicsList[payload.eqLogicId]['visibility'] = payload.visibility;
-      }
+      this.commit("saveEqLogicsOrder", state.eqLogicsOrder);
+    },
+    /**
+     * Update eqLogics order from incomplete list
+     * @param {*} state Store access
+     * @param {*} payload List to save
+     */
+    saveEqLogicsOrder(state, payload) {
+      state.eqLogicsOrder = payload;
+      localStorage.setItem(
+        "eqLogicsOrder",
+        JSON.stringify(state.eqLogicsOrder)
+      );
     }
-    */
   },
   getters: {
     /**
@@ -195,6 +221,12 @@ export const store = new Vuex.Store({
      */
     getCmdComponentData: state => payload => {
       return state.cmdsComponentsData[payload.cmdId];
+    },
+    /**
+     * Get eqLogics order
+     */
+    getEqLogicsOrder: state => payload => {
+      return state.eqLogicsOrder;
     }
   }
 });
