@@ -226,6 +226,9 @@ class MarketJeeController extends BaseController
         $types['key'] = 'script';
         $types['name'] = 'Scripts';
         $pageData['marketTypes'][] = $types;
+        $types['key'] = 'scenario';
+        $types['name'] = 'Scénarios';
+        $pageData['marketTypes'][] = $types;
 
         $pageData['marketNews'] = $news;
         $pageData['marketType'] = $type;
