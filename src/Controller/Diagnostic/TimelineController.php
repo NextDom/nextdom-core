@@ -56,8 +56,6 @@ class TimelineController extends BaseController
         $pageData['historyPluginsList'] = PluginManager::listPlugin();
         $pageData['historyEqLogicCategories'] = NextDomHelper::getConfiguration('eqLogic:category');
         $pageData['historyObjectsList'] = ObjectManager::all();
-        $pageData['JS_POOL'][] = '/vendor/node_modules/vis/dist/vis.min.js';
-        $pageData['CSS_POOL'][] = '/vendor/node_modules/vis/dist/vis.min.css';
         $pageData['JS_END_POOL'][] = '/public/js/desktop/diagnostic/timeline.js';
 
         return Render::getInstance()->get('/desktop/diagnostic/timeline.html.twig', $pageData);

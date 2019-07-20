@@ -72,27 +72,78 @@ $('#bt_refreshTimeline').on('click',function(){
 timeline = null;
 
 function displayTimeline(){
-  jeedom.getTimelineEvents({
-    error: function (error) {
-        notify("Core",error.message,"error");
+    $('#data').empty()
+    jeedom.getTimelineEvents({
+        error: function (error) {
+            notify("Core",error.message,"error");
         },
-    success: function (data) {
-      data = data.reverse();
-      var tr = '';
-      for(var i in data){
-        tr += '<tr>';
-        tr += '<td>';
-        tr += data[i].date;
-        tr += '</td>';
-        tr += '<td>';
-        tr += data[i].type;
-        tr += '</td>';
-        tr += '<td>';
-        tr += data[i].html;
-        tr += '</td>';
-        tr += '</tr>';
-      }
-      $('#table_timeline tbody').empty().append(tr).trigger('update');
-    }
-  });
+        success: function (data) {
+            data = data.reverse();
+            var tr = '';
+            var color = '';
+
+            for(var i in data){
+                $.each( data[i]['category'], function( key, value ) {
+                    var category = (value == 1) ? key: false;
+                    switch (category ) {
+                        case "energy":
+                            color = "#2eb04b";
+                            break;
+                        case "security":
+                            color = "2eb04b";
+                            break;
+                        case "heating":
+                            color = "2eb04b";
+                            break;
+                        case "light":
+                            color = "#f39c12";
+                            break;
+                        case "automatism":
+                            color = "#80808";
+                            break;
+                        case "multimedia":
+                            color = "#19bc9c";
+                            break;
+                        case "defaut":
+                            color = "grey";
+                            break;
+                    }
+                });
+                if (i > 0) {
+                    if (moment(data[i].date).format('DD/MM/YYYY') != moment(data[i-1].date).format('DD/MM/YYYY')) {
+                        tr += '<li class="time-label">';
+                        tr += '<span>';
+                        tr += moment(data[i].date).format('DD/MM/YYYY');
+                        tr += '</span>';
+                        tr += ' </li>';
+                    }
+                } else {
+                    tr += '<li class="time-label">';
+                    tr += '<span>';
+                    tr += moment(data[i].date).format('DD/MM/YYYY');
+                    tr += '</span>';
+                    tr += ' </li>';
+                }
+                tr += '<li>';
+
+                switch (data[i].group ) {
+                    case "info" :
+                        tr += '<i class="fa fa-info" style="background-color:' + color +'" data-toggle="tooltip" title="" data-original-title="{{Info}}"></i>';
+                        break;
+                    case "action" :
+                        tr += '<i class="fa fa-rocket" style="background-color:' + color +'" data-toggle="tooltip" title="" data-original-title="{{Action}}"></i>';
+                        break;
+                    case "scenario" :
+                        tr += '<i class="fa fa-film timeline-scenario" data-toggle="tooltip" title="" data-original-title="{{Scénario}}"></i>';
+                        break;
+                    default:
+                        tr += '<i class="fa fa-question bg-yellow" data-toggle="tooltip" title="" data-original-title="{{Autre}}"></i>';
+                        break;
+                }
+                tr +=data[i].html;
+                tr += ' </li>';
+            }
+            $('#data').append(tr).trigger('update');
+        }
+    });
 }

@@ -141,7 +141,13 @@
 
 /* Ombre edition mode deisgn */
 .widget-shadow-edit {
-    box-shadow: 0 0 0.5em {{ COLOR1 }} !important;
+  box-shadow: 0 0 0.5em {{ COLOR1 }} !important;
+}
+
+/* Timeline */
+.time-label span,
+.timeline-scenario {
+  background-color: {{ COLOR1 }} !important;
 }
 
 /* ################################################################################## */
@@ -321,6 +327,13 @@
 
 /* Scenario */
 .scenario-icon {
+  background-color: {{ COLOR9 }} !important;
+}
+
+/* fond des timeline*/
+.timeline-item,
+.timeline-header,
+.timeline:before {
   background-color: {{ COLOR9 }} !important;
 }
 
@@ -542,6 +555,14 @@ pre::selection {
   color: {{ COLOR12 }} !important;
 }
 
+/* timeline */
+.timeline-footer {
+  color: {{ COLOR12 }} !important;
+}
+.timeline-item {
+  color: {{ COLOR12 }} !important;
+}
+
 /* ############################################################################## */
 /* COLOR13 = Couleur de fond des inputs (champs de saisie, listes déroulantes...) */
 /* ############################################################################## */
@@ -570,6 +591,12 @@ pre::selection {
 .CodeMirror-gutters {
   background-color: {{ COLOR13 }} !important;
 }
+
+/* timeline */
+.timeline-header {
+  border-color: {{ COLOR13 }} !important;
+}
+
 
 /* ####################################################################################### */
 /* COLOR14 = Couleur de bordure (inputs, légendes, tableaux et bouton d'administration...) */
