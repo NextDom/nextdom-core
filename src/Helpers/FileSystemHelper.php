@@ -442,6 +442,15 @@ class FileSystemHelper
      */
     public static function rrmdir($dir): bool
     {
+        // Check if we remove our own folders/files only
+        if(!(substr($dir, 0, strlen(NEXTDOM_ROOT)) === NEXTDOM_ROOT
+            && substr($dir, 0, strlen(NEXTDOM_DATA)) === NEXTDOM_DATA
+            && substr($dir, 0, strlen(NEXTDOM_LOG)) === NEXTDOM_LOG
+            && substr($dir, 0, strlen(NEXTDOM_TMP)) === NEXTDOM_TMP )){
+
+            return false;
+        }
+
         if (is_dir($dir)) {
             $files = scandir($dir);
             foreach ($files as $file) {
