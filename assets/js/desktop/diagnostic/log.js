@@ -33,12 +33,17 @@
 * @Email   <admin@nextdom.org>
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
+$(document).ready(function(){
+    $('pre').height($(window).height() - 275);
+    $('#ul_object').height($(window).height() - 275);
+    $('#ul_object').css("overflow-y", "auto");
+});
 
 $('#bt_downloadLog').click(function() {
-     var logFile = $('.li_log.active').attr('data-log')
-     if (logFile !== undefined) {
-         window.open('src/Api/downloadFile.php?pathfile=log/' + logFile, "_blank", null);
-     }
+    var logFile = $('.li_log.active').attr('data-log')
+    if (logFile !== undefined) {
+        window.open('src/Api/downloadFile.php?pathfile=log/' + logFile, "_blank", null);
+    }
 });
 
 $(".li_log").on('click', function() {
@@ -59,24 +64,24 @@ $(".li_log").on('click', function() {
 });
 
 $("#bt_clearLog").on('click', function(event) {
-  nextdom.log.clear({
-    log : $('.li_log.active').attr('data-log'),
-    success: function(data) {
-        $('.li_log.active a').html($('.li_log.active').attr('data-log') + ' (0 Ko)');
-        $('.li_log.active i').removeClass().addClass('fa fa-check');
-        $('.li_log.active i').css('color','green');
-        if($('#bt_globalLogStopStart').attr('data-state') == 0){
-            $('#bt_globalLogStopStart').click();
+    nextdom.log.clear({
+        log : $('.li_log.active').attr('data-log'),
+        success: function(data) {
+            $('.li_log.active a').html($('.li_log.active').attr('data-log') + ' (0 Ko)');
+            $('.li_log.active i').removeClass().addClass('fa fa-check');
+            $('.li_log.active i').css('color','green');
+            if($('#bt_globalLogStopStart').attr('data-state') == 0){
+                $('#bt_globalLogStopStart').click();
+            }
         }
-    }
-  });
+    });
 });
 
 $("#bt_removeLog").on('click', function(event) {
     nextdom.log.remove({
         log : $('.li_log.active').attr('data-log'),
         success: function(data) {
-           loadPage('index.php?v=d&p=log');
+            loadPage('index.php?v=d&p=log');
         }
     });
 });
@@ -87,7 +92,7 @@ $("#bt_removeAllLog").on('click', function(event) {
             nextdom.log.removeAll({
                 error: function (error) {
                     notify("Core",error.message,"error");
-                    },
+                },
                 success: function(data) {
                     loadPage('index.php?v=d&p=log');
                 }
