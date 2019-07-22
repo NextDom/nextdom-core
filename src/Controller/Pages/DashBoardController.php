@@ -51,7 +51,6 @@ class DashBoardController extends BaseController
     public static function get(&$pageData): string
     {
         $objectIdFromUrl = Utils::init('object_id', '');
-        $rootJeeObject = ObjectManager::getRootObjects();
         $pageData['JS_VARS']['nextdom_Welcome'] = ConfigManager::byKey('nextdom::Welcome');
         $pageData['JS_VARS']['SEL_OBJECT_ID'] = $objectIdFromUrl;
         $pageData['JS_VARS']['SEL_CATEGORY'] = Utils::init('category', 'all');
@@ -60,23 +59,31 @@ class DashBoardController extends BaseController
 
         $defaultDashboardObjectName = UserManager::getStoredUser()->getOptions('defaultDashboardObject');
         $defaultDashboardObject = ObjectManager::byId($defaultDashboardObjectName);
+
+        $defaultDashboardObjectId ='';
+        $currentJeeObjectId = '';
+
+        if(!empty($defaultDashboardObject)) {
+            $defaultDashboardObjectId = $defaultDashboardObject->getId();
+        }
         if ($pageData['JS_VARS']['SEL_OBJECT_ID'] == '') {
             $currentJeeObject = ObjectManager::byId($defaultDashboardObjectName);
             $pageData['JS_VARS']['SEL_OBJECT_ID'] = $defaultDashboardObjectName;
         } else {
             $currentJeeObject = ObjectManager::byId($objectIdFromUrl);
         }
-
         if (!is_object($currentJeeObject)) {
             $currentJeeObject = ObjectManager::getRootObjects();
-            if ($currentJeeObject) {
-                $pageData['JS_VARS']['SEL_OBJECT_ID'] = $currentJeeObject->getId();
+
+            if(!empty($currentJeeObject)){
+                $currentJeeObjectId = $currentJeeObject->getId();
+                $pageData['JS_VARS']['SEL_OBJECT_ID'] = $currentJeeObjectId;
             } else {
                 throw new \Exception(__('Aucun objet racine trouvé. Pour en créer un, allez dans dashboard -> <a href="/index.php?v=d&p=object">Liste objets et résumés</a>'));
             }
         }
 
-        $pageData['JS_VARS']['rootObjectId'] = $currentJeeObject->getId();
+        $pageData['JS_VARS']['rootObjectId'] = $currentJeeObjectId;
         $pageData['JS_VARS']['serverTZoffsetMin'] = Utils::getTZoffsetMin();
 
         $pageData['dashboardDisplayObjectByDefault'] = UserManager::getStoredUser()->getOptions('displayObjetByDefault');
@@ -86,7 +93,7 @@ class DashBoardController extends BaseController
         $pageData['dashboardSummary'] = Utils::init('summary', 'all');
         $pageData['dashboardCategories'] = NextDomHelper::getConfiguration('eqLogic:category', true);
         $pageData['dashboardTags'] = EqLogicManager::getAllTags();
-        $pageData['dashboardDefaultObjectId'] = $defaultDashboardObject->getId();;
+        $pageData['dashboardDefaultObjectId'] = $defaultDashboardObjectId;
         $pageData['dashboardObjectId'] = $objectIdFromUrl;
         $pageData['dashboardObject'] = $currentJeeObject;
         $pageData['dashboardObjectParentNumber'] = $currentJeeObject->parentNumber();
