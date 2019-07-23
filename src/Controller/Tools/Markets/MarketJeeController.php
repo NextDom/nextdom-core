@@ -115,12 +115,18 @@ class MarketJeeController extends BaseController
                 $categorieId++;
             }
             $marketObjects2 = [];
-            $marketObjects2['name'] = end(explode('.', $marketObject->getName()));
+            $explodedName = explode('.', $marketObject->getName());
+            if (count($explodedName) > 1) {
+                $marketObjects2['name'] = $explodedName[count($explodedName) - 1];
+            }
+            else {
+                $marketObjects2['name'] = $marketObject->getName();
+            }
             $marketObjects2['author'] = $marketObject->getAuthor();
             $marketObjects2['category'] = $marketObject->getCategorie();
             $marketObjects2['id'] = $marketObject->getId();
             $marketObjects2['logicalId'] = $marketObject->getLogicalId();
-            $update = \update::byLogicalId($marketObject->getLogicalId());
+            $update = UpdateManager::byLogicalId($marketObject->getLogicalId());
             if (!is_object($update)) {
                 $marketObjects2['installed'] = 'install';
             } else {
@@ -244,7 +250,6 @@ class MarketJeeController extends BaseController
 
         $pageData['CSS_POOL'][] = '/public/css/pages/markets.css';
         $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/markets/marketJee.js';
-
         return Render::getInstance()->get('/desktop/tools/markets/marketJee.html.twig', $pageData);
     }
 
