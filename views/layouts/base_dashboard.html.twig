@@ -13,6 +13,11 @@
         <div class="fabs fab-left">
             <a class="fab-action-button cursor animationShakeDelay" style="display: none;" id="bt_goOnTop"><i class="fab-action-button__icon fas fa-angle-double-up"></i></a>
         </div>
+        {% if PLUGINS_JS_POOL is defined %}
+            {% for jsFile in PLUGINS_JS_POOL %}
+                <script src="{{ jsFile }}"></script>
+            {% endfor %}
+        {% endif %}
         {% if JS_END_POOL is defined %}
             {% for jsFile in JS_END_POOL %}
                 <script src="{{ jsFile }}"></script>

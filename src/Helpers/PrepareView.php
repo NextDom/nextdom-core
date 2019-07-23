@@ -39,6 +39,8 @@ class PrepareView
 {
     private static $NB_THEME_COLORS = 1+23;
 
+    private $currentConfig = [];
+
     /**
      * Read configuration
      * @throws \Exception
@@ -90,6 +92,7 @@ class PrepareView
     {
         $pageData = [];
         $this->initHeaderData($pageData);
+        $pageData['JS_VARS_RAW']['serverDatetime'] = Utils::getMicrotime();
         echo $this->getContentFromRoute('pages_routes.yml', $pageCode, $pageData);
     }
 
@@ -489,6 +492,7 @@ class PrepareView
         ];
         $pageData['JS_VARS_RAW'] = [
             'userProfils' => Utils::getArrayToJQueryJson(UserManager::getStoredUser()->getOptions()),
+            'serverDatetime' => Utils::getMicrotime()
         ];
 
         $this->initMenu($pageData, $currentPlugin);
@@ -585,6 +589,7 @@ class PrepareView
 
                 $pageData['MENU_PLUGIN_CATEGORY'][$categoryCode]['name'] = Render::getInstance()->getTranslation($name);
                 $pageData['MENU_PLUGIN_CATEGORY'][$categoryCode]['icon'] = $icon;
+
                 /** @var Plugin $plugin */
                 foreach ($pluginsList as $plugin) {
                     $pageData['MENU_PLUGIN'][$categoryCode][] = $plugin;
@@ -596,7 +601,7 @@ class PrepareView
                         $pageData['PANEL_MENU'][] = $plugin;
                     }
                     if ($plugin->getEventjs() == 1) {
-                        $eventJsPlugin[] = $plugin->getId();
+                        $eventsJsPlugin[] = $plugin->getId();
                     }
                 }
             }
@@ -614,11 +619,11 @@ class PrepareView
     private function initPluginsEvents($eventsJsPlugin, &$pageData)
     {
         if (count($eventsJsPlugin) > 0) {
-            foreach ($eventsJsPlugin as $value) {
-                try {
-                    $pageData['JS_POOL'][] = '/plugins/' . $value . '/public/js/desktop/events.js';
-                } catch (\Exception $e) {
-                    LogHelper::add($value, 'error', 'Event JS file not found');
+            $pageData['PLUGINS_JS_POOL'] = [];
+            foreach ($eventsJsPlugin as $pluginId) {
+                $eventJsFile = '/plugins/' . $pluginId . '/desktop/js/event.js';
+                if (file_exists(NEXTDOM_ROOT . $eventJsFile)) {
+                    $pageData['PLUGINS_JS_POOL'][] = $eventJsFile;
                 }
             }
         }
@@ -713,15 +718,16 @@ class PrepareView
         $this->initHeaderData($pageData);
         $render = Render::getInstance();
         $pageData['CSS'] = $render->getCssHtmlTag('/public/css/nextdom.css');
-        $pageData['varToJs'] = Utils::getVarsToJS([
+        $pageData['JS_VARS'] = [
             'userProfils' => UserManager::getStoredUser()->getOptions(),
             'user_id' => UserManager::getStoredUser()->getId(),
             'user_isAdmin' => AuthentificationHelper::isConnectedAsAdmin(),
             'user_login' => UserManager::getStoredUser()->getLogin(),
-            'serverTZoffsetMin' => Utils::getTZoffsetMin(),
-        ]);
+            'serverTZoffsetMin' => Utils::getTZoffsetMin()];
+        $pageData['JS_VARS_RAW'] = [
+            'serverDatetime' => Utils::getMicrotime()
+        ];
         $pageData['JS'] = '';
-
         $pageData['MENU'] = $render->get('commons/menu_rescue.html.twig');
 
         if (!NextDomHelper::isStarted()) {
