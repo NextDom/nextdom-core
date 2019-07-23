@@ -89,7 +89,7 @@ function addCommandHistory(_cmd) {
     if (_cmd.type == 'info') {
         tr += '<a class="btn btn-default btn-sm pull-right cursor bt_configureHistoryExportData" data-id="' + _cmd.id + '"><i class="fas fa-share export no-spacing"></i></a>';
     }
-    tr += '<a class="btn btn-default btn-sm pull-right cursor bt_configureHistoryAdvanceCmdConfiguration" data-id="' + _cmd.id + '"><i class="fas fa-cogs no-spacing"></i></a>';
+    tr += '<a class="btn btn-default btn-sm pull-right cursor bt_configureHistoryAdvanceCmdConfiguration" data-id="' + _cmd.id + '"><i class="fas fa-cogs"></i></a>';
     tr += '</td>';
     tr += '</tr>';
     var result = $(tr);

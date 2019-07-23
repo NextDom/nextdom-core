@@ -203,7 +203,7 @@ class MigrationHelper
             ConsoleHelper::process($message);
         }
 
-        FileSystemHelper::mkdirIfNotExists(NEXTDOM_DATA.'/data/custom/');
+        FileSystemHelper::mkdirIfNotExists(NEXTDOM_DATA.'/data/custom/',0775,true);
         $dir = new \RecursiveDirectoryIterator(NEXTDOM_ROOT, \FilesystemIterator::SKIP_DOTS);
 
         // Flatten the recursive iterator, folders come before their files
@@ -238,7 +238,7 @@ class MigrationHelper
                         }
                         FileSystemHelper::mv(NEXTDOM_ROOT.'/'.$fileToReplace, sprintf("%s/%s", NEXTDOM_DATA.'/data/custom/', $fileToReplace));
 
-                        self::migratePlanPath($logFile, $fileToReplace);
+                        self::migratePlanPath($logFile, $fileToReplace,'','data/custom/');
                     }
                 }
             }
@@ -266,13 +266,77 @@ class MigrationHelper
                     } else {
                         ConsoleHelper::process($message);
                     }
-                    self::migratePlanPath($logFile, $fileToReplace);
+                    self::migratePlanPath($logFile, $fileToReplace,'','data/custom/');
                 }
             }
         } catch(\Exception $exception){
             echo $exception;
             trow (new CoreException());
         }
+
+        try {
+            $dir = new \RecursiveDirectoryIterator(NEXTDOM_ROOT .'/public/img/', \FilesystemIterator::SKIP_DOTS);
+
+            // Flatten the recursive iterator, folders come before their files
+            $it  = new \RecursiveIteratorIterator($dir, \RecursiveIteratorIterator::SELF_FIRST);
+
+            // Maximum depth is 1 level deeper than the base folder
+            $it->setMaxDepth(0);
+            // Basic loop displaying different messages based on file or folder
+            foreach ($it as $fileInfo) {
+                if(!is_link( $fileInfo->getFilename()) && Utils::startsWith($fileInfo->getFilename(),'plan')) {
+
+                    $fileToReplace = $fileInfo->getFilename();
+
+                    $message = 'Moving ' . $fileToReplace . ' to /data/custom/plans/' . $fileToReplace;
+                    if ($logFile == 'migration') {
+                        LogHelper::addInfo($logFile, $message, '');
+                    } else {
+                        ConsoleHelper::process($message);
+                    }
+                    self::migratePlanPath($logFile,  $fileToReplace, 'public/img/', 'data/custom/plans/');
+                    self::migratePlanPath($logFile, $fileToReplace, 'core/img/', 'data/custom/plans/');
+                }
+            }
+        } catch(\Exception $exception){
+            echo $exception;
+            trow (new CoreException());
+        }
+
+        try {
+            $dir = new \RecursiveDirectoryIterator(NEXTDOM_ROOT .'/data/custom/plans', \FilesystemIterator::SKIP_DOTS);
+
+            // Flatten the recursive iterator, folders come before their files
+            $it  = new \RecursiveIteratorIterator($dir, \RecursiveIteratorIterator::SELF_FIRST);
+
+            // Maximum depth is 1 level deeper than the base folder
+            $it->setMaxDepth(0);
+            // Basic loop displaying different messages based on file or folder
+            foreach ($it as $fileInfo) {
+                if(!is_link( $fileInfo->getFilename()) && Utils::startsWith($fileInfo->getFilename(),'plan_')) {
+
+                    $fileToReplace = $fileInfo->getFilename();
+
+                    $message = 'Moving ' . $fileToReplace . ' to /data/custom/plans/' . $fileToReplace;
+                    if ($logFile == 'migration') {
+                        LogHelper::addInfo($logFile, $message, '');
+                    } else {
+                        ConsoleHelper::process($message);
+                    }
+                    self::migratePlanPath($logFile,  $fileToReplace, 'public/img/', 'data/custom/plans/');
+                    self::migratePlanPath($logFile, $fileToReplace, 'core/img/', 'data/custom/plans/');
+                }
+            }
+
+
+            self::migratePlanPath($logFile,  'plan/', 'public/img/', 'data/custom/plans/');
+            self::migratePlanPath($logFile, 'plan/', 'core/img/', 'data/custom/plans/');
+
+        } catch(\Exception $exception){
+            echo $exception;
+            trow (new CoreException());
+        }
+
         $message = 'Migrate theme to data folder is done';
         if($logFile == 'migration') {
             LogHelper::addInfo($logFile, $message, '');
@@ -286,12 +350,17 @@ class MigrationHelper
      * Update plan and plan3d table to change path given in parameter
      * @param string $logFile
      * @param string $fileToReplace
+     * @param string $oldReferencePath
+     * @param string $newReferencePath
      * @throws CoreException
      * @throws \ReflectionException
      */
-    private static function migratePlanPath($logFile, $fileToReplace)
+    private static function migratePlanPath($logFile, $fileToReplace, $oldReferencePath, $newReferencePath)
     {
-        $message = 'Migrate ' . $fileToReplace . ' to /data/custom/' . $fileToReplace;
+        if(empty($oldReferencePath)){
+            $oldReferencePath = '';
+        }
+        $message = 'Migrate ' . $oldReferencePath . $fileToReplace . ' to ' .$newReferencePath . $fileToReplace;
         if ($logFile == 'migration') {
             LogHelper::addInfo($logFile, $message, '');
         } else {
@@ -302,8 +371,8 @@ class MigrationHelper
 
             $html = $plan->getDisplay('text');
             if ($html !== null) {
-                $html = str_replace('src="'.$fileToReplace, 'src="data/custom/' . $fileToReplace, $html);
-                $html = str_replace('href="'.$fileToReplace, 'href="data/custom/' . $fileToReplace, $html);
+                $html = str_replace('src="'. $oldReferencePath .$fileToReplace, 'src="' . $newReferencePath . $fileToReplace, $html);
+                $html = str_replace('href="'. $oldReferencePath .$fileToReplace, 'href="' . $newReferencePath . $fileToReplace, $html);
 
                 $plan->setDisplay('text', $html);
                 $plan->save();
@@ -314,8 +383,8 @@ class MigrationHelper
 
             $html = $plan3d->getDisplay('text');
             if ($html !== null) {
-                $html = str_replace('src=\"'.$fileToReplace, 'src=\"'.'data/custom/' . $fileToReplace, $html);
-                $html = str_replace('href=\"'.$fileToReplace, 'href=\"'.'data/custom/' . $fileToReplace, $html);
+                $html = str_replace('src=\"'.$fileToReplace, 'src=\"' . $newReferencePath . $fileToReplace, $html);
+                $html = str_replace('href=\"'.$fileToReplace, 'href=\"' . $newReferencePath . $fileToReplace, $html);
 
                 $plan3d->setDisplay('text', $html);
                 $plan3d->save();
@@ -349,7 +418,6 @@ class MigrationHelper
             file_put_contents($fileToReplace, $file_contents);
         }
     }
-
 
 
     /***************************************************************** X.X.X Migration process *****************************************************************/
