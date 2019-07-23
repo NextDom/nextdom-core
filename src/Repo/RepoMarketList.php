@@ -157,30 +157,7 @@ function displayWidgetSubtype($_name)
 }
 ?>
 
-<style type="text/css">
-    .noPaddingLeft {
-        padding-left: 0;
-    }
-
-    .noPaddingRight {
-        padding-right: 0;
-    }
-
-    .noMarginBottom {
-        margin-bottom: 0;
-    }
-
-    .noPaddingWell {
-        padding-bottom: 0;
-        padding-top: 0;
-    }
-
-    .market:hover {
-        background-color: #F2F1EF !important;
-    }
-</style>
-
-<div style="margin-bottom: 5px; margin-top : 5px; background-color: #e7e7e7">
+<div class="action-bar">
     <form class="form-inline" role="form" onsubmit="return false;">
         <?php if (Utils::init('type', 'plugin') == 'plugin') { ?>
             <div class="form-group">
@@ -285,17 +262,27 @@ if ($name !== null && strpos($name, '$') !== false) {
             if (!$default) {
                 if (!$first) {
                     echo '</div>';
+
+                    echo '</div>';
+
                 }
+
+
+                echo '<div class="box " data-category="' . $nCategory . '">';
+                echo '<div class="box-title">';
                 if (isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categorie])) {
-                    echo '<legend style="border-bottom: 1px solid #34495e; color : #34495e;" data-category="' . $nCategory . '"><i class="fa ' . $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categorie]['icon'] . '"></i> ' . ucfirst($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categorie]['name']) . '</legend>';
+                    echo '<h3 data-category="' . $nCategory . '"><i class="fa ' . $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categorie]['icon'] . '"></i> ' . ucfirst($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categorie]['name']) . '</h3>';
                 } else {
-                    echo '<legend style="border-bottom: 1px solid #34495e; color : #34495e;" data-category="' . $nCategory . '">' . ucfirst($categorie) . '</legend>';
+                    echo '<h3 data-category="' . $nCategory . '">' . ucfirst($categorie) . '</h3>';
                 }
-                echo '<div class="pluginContainer" data-category="' . $nCategory . '">';
+                echo '</div>';
+                echo '<div class="box-body pluginContainer">';
+
             }
             $first = false;
             $nCategory++;
         }
+
         $install = 'notInstall';
         if (!is_object($update)) {
             $install = 'install';
@@ -381,85 +368,80 @@ if ($name !== null && strpos($name, '$') !== false) {
                 echo '<span style="position : absolute;bottom : 5px;right : 12px;color:#97bd44;">Gratuit</span>';
             }
         }
+
         echo '</div>';
+
     }
+
     if ($default) {
         echo '</div>';
     }
+
     ?>
 </div>
-<style>
-    .market:hover {
-        background-color: #F2F1EF !important;
-    }
-
-    #md_modal {
-        background-color: #e7e7e7
-    }
-</style>
 
 <script>
-  $(function () {
-    $('.pluginContainer').packery();
-    $("img.lazy").lazyload({
-      event: "sporty"
-    });
-    $("img.lazy").trigger("sporty");
-    initTableSorter();
-    setTimeout(function () {
-      $('#table_market tbody tr.install').hide();
-    }, 500);
-    $('.bt_pluginFilter').on('click', function () {
-      $('#md_modal').load($(this).attr('data-href'));
-    });
-    $('#sel_categorie').on('change', function () {
-      $('#md_modal').load($(this).attr('data-href') + '&categorie=' + encodeURI($(this).value()));
-    });
-    $('#bt_search').on('click', function () {
-      $('#md_modal').load($(this).attr('data-href') + '&name=' + encodeURI($('#in_search').value()));
-    });
-    $('#in_search').keypress(function (e) {
-      if (e.which == 13) {
-        $('#md_modal').load($(this).attr('data-href') + '&name=' + encodeURI($('#in_search').value()));
-      }
-    });
-    $('#bt_returnMarketList').on('click', function () {
-      $('#md_modal').load($(this).attr('data-href'));
-    });
-    $('.marketMultiple').on('click', function () {
-      $('#md_modal').load($(this).attr('data-href') + '&name=' + encodeURI('.' + $(this).attr('data-market_name')));
-    });
-    $('.bt_installFilter').on('click', function () {
-      $('.bt_installFilter').removeClass('btn-primary');
-      $('.pluginContainer').show();
-      $('.market').show();
-      if ($(this).attr('data-state') == 1) {
-        $(this).addClass('btn-primary');
-        $('.notInstall').hide();
-      }
-      if ($(this).attr('data-state') == -1) {
-        $(this).addClass('btn-primary');
-        $('.install').hide();
-      }
-      $('.pluginContainer').each(function () {
-        var hasVisible = false;
-        $(this).find('.market').each(function () {
-          if ($(this).is(':visible')) {
-            hasVisible = true;
-          }
+    $(function () {
+        $('.pluginContainer').packery();
+        $("img.lazy").lazyload({
+            event: "sporty"
         });
-        if (hasVisible) {
-          $('legend[data-category=' + $(this).attr('data-category') + ']').show();
-          $(this).packery();
-        } else {
-          $(this).hide();
-          $('legend[data-category=' + $(this).attr('data-category') + ']').hide();
-        }
-      });
+        $("img.lazy").trigger("sporty");
+        initTableSorter();
+        setTimeout(function () {
+            $('#table_market tbody tr.install').hide();
+        }, 500);
+        $('.bt_pluginFilter').on('click', function () {
+            $('#md_modal').load($(this).attr('data-href'));
+        });
+        $('#sel_categorie').on('change', function () {
+            $('#md_modal').load($(this).attr('data-href') + '&categorie=' + encodeURI($(this).value()));
+        });
+        $('#bt_search').on('click', function () {
+            $('#md_modal').load($(this).attr('data-href') + '&name=' + encodeURI($('#in_search').value()));
+        });
+        $('#in_search').keypress(function (e) {
+            if (e.which == 13) {
+                $('#md_modal').load($(this).attr('data-href') + '&name=' + encodeURI($('#in_search').value()));
+            }
+        });
+        $('#bt_returnMarketList').on('click', function () {
+            $('#md_modal').load($(this).attr('data-href'));
+        });
+        $('.marketMultiple').on('click', function () {
+            $('#md_modal').load($(this).attr('data-href') + '&name=' + encodeURI('.' + $(this).attr('data-market_name')));
+        });
+        $('.bt_installFilter').on('click', function () {
+            $('.bt_installFilter').removeClass('btn-primary');
+            $('.pluginContainer').show();
+            $('.market').show();
+            if ($(this).attr('data-state') == 1) {
+                $(this).addClass('btn-primary');
+                $('.notInstall').hide();
+            }
+            if ($(this).attr('data-state') == -1) {
+                $(this).addClass('btn-primary');
+                $('.install').hide();
+            }
+            $('.pluginContainer').each(function () {
+                var hasVisible = false;
+                $(this).find('.market').each(function () {
+                    if ($(this).is(':visible')) {
+                        hasVisible = true;
+                    }
+                });
+                if (hasVisible) {
+                    $('legend[data-category=' + $(this).attr('data-category') + ']').show();
+                    $(this).packery();
+                } else {
+                    $(this).hide();
+                    $('legend[data-category=' + $(this).attr('data-category') + ']').hide();
+                }
+            });
+        });
+        $('.market').on('click', function () {
+            $('#md_modal2').dialog({title: "{{Market Jeedom}}"});
+            $('#md_modal2').load('index.php?v=d&modal=update.display&type=' + $(this).attr('data-market_type') + '&id=' + $(this).attr('data-market_id') + '&repo=market').dialog('open');
+        });
     });
-    $('.market').on('click', function () {
-      $('#md_modal2').dialog({title: "{{Market Jeedom}}"});
-      $('#md_modal2').load('index.php?v=d&modal=update.display&type=' + $(this).attr('data-market_type') + '&id=' + $(this).attr('data-market_id') + '&repo=market').dialog('open');
-    });
-  });
 </script>
