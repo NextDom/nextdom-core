@@ -192,7 +192,7 @@ class PlanAjax extends BaseAjax
         $filename = 'planHeader' . $planHeader->getId() . '-' . $planHeader->getImage('sha512') . '.' . $planHeader->getImage('type');
         $planHeader->setImage('sha512', '');
         $planHeader->save();
-        @unlink(NEXTDOM_DATA . '/data/plan/' . $filename);
+        @unlink(NEXTDOM_DATA . '/data/custom/plans/' . $filename);
         AjaxHelper::success();
     }
 
@@ -200,8 +200,8 @@ class PlanAjax extends BaseAjax
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
         $planHeader = PlanHeaderManager::byId(Utils::init('id'));
-        if (!is_dir(NEXTDOM_DATA . '/data/plan/')) {
-            mkdir(NEXTDOM_DATA . '/data/plan/');
+        if (!is_dir(NEXTDOM_DATA . '/data/custom/plans/')) {
+            mkdir(NEXTDOM_DATA . '/data/custom/plans/');
         }
         if (!is_object($planHeader)) {
             throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));
@@ -216,10 +216,10 @@ class PlanAjax extends BaseAjax
         if (filesize($_FILES['file']['tmp_name']) > 5000000) {
             throw new CoreException(__('Le fichier est trop gros (maximum 5Mo)'));
         }
-        $files = FileSystemHelper::ls(NEXTDOM_DATA . '/data/plan/', 'plan' . $planHeader->getId() . '*');
+        $files = FileSystemHelper::ls(NEXTDOM_DATA . '/data/custom/plans/', 'plan' . $planHeader->getId() . '*');
         if (count($files) > 0) {
             foreach ($files as $file) {
-                unlink(NEXTDOM_DATA . '/data/plan/' . $file);
+                unlink(NEXTDOM_DATA . '/data/custom/plans/' . $file);
             }
         }
         $imgSize = getimagesize($_FILES['file']['tmp_name']);
@@ -230,7 +230,7 @@ class PlanAjax extends BaseAjax
         $planHeader->setImage('sha512', $sha512File);
         $planHeader->setImage('data', base64_encode($fileContent));
         $filename = 'planHeader' . $planHeader->getId() . '-' . $sha512File . '.' . $planHeader->getImage('type');
-        $filepath = NEXTDOM_DATA . '/data/plan/' . $filename;
+        $filepath = NEXTDOM_DATA . '/data/custom/plans/' . $filename;
         copy($_FILES['file']['tmp_name'], $filepath);
         if (!file_exists($filepath)) {
             throw new CoreException(__('Impossible de sauvegarder l\'image', __FILE__));
@@ -248,7 +248,7 @@ class PlanAjax extends BaseAjax
         if (false == is_object($plan)) {
             throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));
         }
-        $uploadDir = sprintf("%s/public/img/plan_%s", NEXTDOM_ROOT, $plan->getId());
+        $uploadDir = sprintf("%s/data/custom/plans/plan_%s", NEXTDOM_DATA, $plan->getId());
         shell_exec('rm -rf ' . $uploadDir);
         mkdir($uploadDir, 0775, true);
         $filename = Utils::readUploadedFile($_FILES, "file", $uploadDir, 5, array('.png', '.jpeg', '.jpg'), function ($file) {
@@ -259,7 +259,7 @@ class PlanAjax extends BaseAjax
         $imgSize = getimagesize($filepath);
         $plan->setDisplay('width', $imgSize[0]);
         $plan->setDisplay('height', $imgSize[1]);
-        $plan->setDisplay('path', 'public/img/plan_' . $plan->getId() . '/' . $filename);
+        $plan->setDisplay('path', 'data/custom/plans/plan_' . $plan->getId() . '/' . $filename);
         $plan->save();
         AjaxHelper::success();
     }
