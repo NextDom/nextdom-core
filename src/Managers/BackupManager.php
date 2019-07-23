@@ -1,35 +1,18 @@
 <?php
-/*
-* This file is part of the NextDom software (https://github.com/NextDom or http://nextdom.github.io).
-* Copyright (c) 2018 NextDom.
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, version 2.
-*
-* This program is distributed in the hope that it will be useful, but
-* WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-* General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program. If not, see <http://www.gnu.org/licenses/>.
-*/
-
-/* This file is part of Jeedom.
+/* This file is part of NextDom Software.
  *
- * Jeedom is free software: you can redistribute it and/or modify
+ * NextDom is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Jeedom is distributed in the hope that it will be useful,
+ * NextDom Software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+ * along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
  */
 
 namespace NextDom\Managers;
@@ -42,7 +25,6 @@ use NextDom\Enums\FoldersReferential;
 use NextDom\Helpers\MigrationHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
-use NextDom\Helpers\Utils;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use splitbrain\PHPArchive\Tar;
@@ -497,7 +479,7 @@ class BackupManager
             ConsoleHelper::step("clearing cache...");
             CacheManager::flush();
             ConsoleHelper::ok();
-            SystemHelper::rrmdir($tmpDir);
+            FileSystemHelper::rrmdir($tmpDir);
             NextDomHelper::event("end_restore");
             ConsoleHelper::subTitle("end of restore procedure at " . date('Y-m-d H:i:s'));
             ConsoleHelper::subTitle("elapsed time " . (strtotime('now') - $startTime));
@@ -507,7 +489,7 @@ class BackupManager
             ConsoleHelper::error($e);
             LogHelper::add('restore', 'error', $e->getMessage());
             if (true === is_dir($tmpDir)) {
-                SystemHelper::rrmdir($tmpDir);
+                FileSystemHelper::rrmdir($tmpDir);
             }
             ConsoleHelper::step("starting nextdom system...");
             NextDomHelper::startSystem();
@@ -580,6 +562,7 @@ class BackupManager
         if (0 != SystemHelper::vsystem("sed -i -e 's/jeedom/nextdom/g' '%s'", $backupFile)) {
             throw new CoreException("unable to modify content of backup file " . $backupFile);
         }
+
         \DB::Prepare("SET foreign_key_checks = 0", array(), \DB::FETCH_TYPE_ROW);
         $tables = \DB::Prepare("SHOW TABLES", array(), \DB::FETCH_TYPE_ALL);
         foreach ($tables as $table) {
@@ -589,7 +572,6 @@ class BackupManager
             \DB::Prepare($statement, array(), \DB::FETCH_TYPE_ROW);
         }
         self::loadSQLFromFile($backupFile);
-//        self::loadSQLMigrateScript();
         \DB::Prepare("SET foreign_key_checks = 1", array(), \DB::FETCH_TYPE_ROW);
     }
 

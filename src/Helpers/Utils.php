@@ -1199,4 +1199,30 @@ class Utils
     {
         return str_replace(array('&', '#', ']', '[', '%', "\\", "/", "'", '"'), '', $name);
     }
+
+    /**
+     * @param $haystack
+     * @param $needle
+     * @return bool
+     */
+    public static function startsWith($haystack, $needle)
+    {
+        $length = strlen($needle);
+        return (substr($haystack, 0, $length) === $needle);
+    }
+
+    /**
+     * @param $haystack
+     * @param $needle
+     * @return bool
+     */
+    public static function endsWith($haystack, $needle)
+    {
+        $length = strlen($needle);
+        if ($length == 0) {
+            return true;
+        }
+
+        return (substr($haystack, -$length) === $needle);
+    }
 }
