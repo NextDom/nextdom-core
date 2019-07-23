@@ -36,7 +36,7 @@
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
-            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=plugin"><i class="fas fa-chevron-left"></i>{{ 'Retour'}}</a>
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=plugin"><i class="fas fa-chevron-left"></i>{{ 'common.return' | trans }}</a>
             <div class="btn-group">
                 <button id="market-filter-installed" class="btn btn-primary btn-action-bar"><i class="fas fa-thumbs-up"></i><span>{{ 'Installés' }}</span></button>
                 <button id="market-filter-notinstalled" class="btn btn-primary btn-action-bar"><i class="fas fa-thumbs-down"></i><span>{{ 'Non installés' }}</span></button>
@@ -98,7 +98,7 @@
             <div class="modal-body" id="market-modal-content">
             </div>
             <div class="modal-footer">
-                <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-minus-circle"></i>{{ 'Annuler' }}</a>
+                <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-minus-circle"></i>{{ 'common.cancel' | trans }}</a>
                 <a class="btn btn-warning" id="market-modal-valid"><i class="fas fa-check"></i><span id="market-modal-valid-text"></span></a>
             </div>
         </div>

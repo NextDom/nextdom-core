@@ -52,9 +52,9 @@
 
     <div class="col-lg-10 col-md-9 col-sm-8" style="display: none;" id="div_view">
         <legend style="height: 35px;">
-            <a class="btn btn-default btn-xs" id="bt_editView"><i class="fas fa-pencil-alt"></i> {{ 'Configuration' }}</a>
-            <a class="btn btn-danger btn-xs pull-right" id="bt_removeView"><i class="fas fa-minus-circle"></i> {{ 'Supprimer' }}</a>
-            <a class="btn btn-success btn-xs pull-right" id="bt_saveView"><i class="far fa-check-circle"></i> {{ 'Enregistrer' }}</a>
+            <a class="btn btn-default btn-xs" id="bt_editView"><i class="fas fa-pencil-alt"></i> {{ 'common.setup' | trans }}</a>
+            <a class="btn btn-danger btn-xs pull-right" id="bt_removeView"><i class="fas fa-minus-circle"></i> {{ 'common.remove' | trans }}</a>
+            <a class="btn btn-success btn-xs pull-right" id="bt_saveView"><i class="far fa-check-circle"></i> {{ 'common.save' | trans }}</a>
             <a class="btn btn-primary btn-xs pull-right" id="bt_viewResult"><i class="fas fa fa-eye"></i> {{ 'Voir le résultat' }}</a>
             <a class="btn btn-default btn-xs pull-right" id="bt_addviewZone"><i class="fas fa-plus-circle"></i> {{ 'Ajouter une zone' }}</a>
         </legend>
@@ -75,16 +75,16 @@
                 <input id="in_addEditviewZoneEmplacement" style="display : none;"/>
                 <form class="form-horizontal" onsubmit="return false;">
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">{{ ' Nom ' }}</label>
+                        <label class="col-sm-2 control-label">{{ 'common.name' | trans }}</label>
                         <div class="col-sm-10">
-                            <input id="in_addEditviewZoneName" class="form-control" placeholder="{{ ' Nom ' }}"/>
+                            <input id="in_addEditviewZoneName" class="form-control" placeholder="{{ 'common.name' | trans }}"/>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">{{ ' Type ' }}</label>
+                        <label class="col-sm-2 control-label">{{ 'common.type' | trans }}</label>
                         <div class="col-sm-5">
                             <select class="form-control" id="sel_addEditviewZoneType">
-                                <option value="widget">{{ ' Widget ' }}</option>
+                                <option value="widget">{{ 'common.widget' | trans }}</option>
                                 <option value="graph">{{ ' Graphique ' }}</option>
                                 <option value="table">{{ ' Tableau ' }}</option>
                             </select>
@@ -93,8 +93,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <a class="btn btn-danger" data-dismiss="modal">{{ ' Annuler ' }}</a>
-                <a class="btn btn-success" id="bt_addEditviewZoneSave"><i class="fas fa-save"></i> {{ ' Enregistrer ' }}</a>
+                <a class="btn btn-danger" data-dismiss="modal">{{ 'common.cancel' | trans }}</a>
+                <a class="btn btn-success" id="bt_addEditviewZoneSave"><i class="fas fa-save"></i> {{ 'common.save' | trans }}</a>
             </div>
         </div>
     </div>
