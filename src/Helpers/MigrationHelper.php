@@ -374,7 +374,7 @@ class MigrationHelper
 
                 $html = $plan->getDisplay($displayType);
                 if ($html !== null) {
-                    if($displayType == PlanDisplayType::PATH){
+                    if($displayType == PlanDisplayType::PATH && !empty($oldReferencePath)){
                         $html = str_replace( $oldReferencePath . $fileToReplace, $newReferencePath . $fileToReplace, $html);
                     } else {
                         $html = str_replace('"' . $oldReferencePath . $fileToReplace, '"' . $newReferencePath . $fileToReplace, $html);
