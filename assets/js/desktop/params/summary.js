@@ -114,7 +114,7 @@ $('#summary').undelegate('.objectSummary .objectSummaryAction[data-l1key=createV
                 notify("Erreur", data.result, 'error');
                 return;
             }
-            notify("Info", '{{'summary.virtual_cmd_succed'|trans}}', 'success');
+            notify("Info", '{{summary.virtual_cmd_succed}}', 'success');
         }
     });
 });
@@ -169,9 +169,9 @@ function addObjectSummary(_summary) {
     tr += '</td>';
     tr += '<td>';
     tr += '<select class="objectSummaryAttr form-control input-sm" data-l1key="calcul">';
-    tr += '<option value="sum">{{"summary.calcul.sum"|trans}}</option>';
-    tr += '<option value="avg">{{"summary.calcul.avg"|trans}}</option>';
-    tr += '<option value="text">{{"summary.calcul.text"|trans}}</option>';
+    tr += '<option value="sum">{{summary.calcul.sum}}</option>';
+    tr += '<option value="avg">{{summary.calcul.avg}}</option>';
+    tr += '<option value="text">{{summary.calcul.text}}</option>';
     tr += '</select>';
     tr += '</td>';
     tr += '<td class="col-xs-1 input-group">';
@@ -192,7 +192,7 @@ function addObjectSummary(_summary) {
     tr += '</td>';
     tr += '<td>';
     if(isset(_summary) && isset(_summary.key) && _summary.key != ''){
-        tr += '<a class="btn btn-success btn-sm objectSummaryAction" data-l1key="createVirtual"><i class="fas fa-puzzle-piece"></i>{{"summary.create_virtual"|trans}}</a>';
+        tr += '<a class="btn btn-success btn-sm objectSummaryAction" data-l1key="createVirtual"><i class="fas fa-puzzle-piece"></i>{{summary.create_virtual}}</a>';
     }
     tr += '</td>';
     tr += '<td>';
