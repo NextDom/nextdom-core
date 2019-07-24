@@ -670,7 +670,6 @@ class BackupManager
         $customDataDirs = glob(sprintf("%s/data/*", $tmpDir), GLOB_ONLYDIR);
         $customDataRoot = sprintf("%s/data", NEXTDOM_DATA);
 
-        SystemHelper::rrmdir($customDataRoot . "/*");
         FileSystemHelper::rrmdir($customDataRoot . "/");
         FileSystemHelper::mkdirIfNotExists($customDataRoot,0775,true);
         foreach ($customDataDirs as $c_dir) {
@@ -689,7 +688,7 @@ class BackupManager
             }
         }
 
-        $customPlanDirs = glob(sprintf("%s/core/img/plan*", $tmpDir), GLOB_ONLYDIR);
+        $customPlanDirs = glob(sprintf("%s/data/custom/plans*", $tmpDir), GLOB_ONLYDIR);
         $customPlanRoot = sprintf("%s/data/custom/plans", NEXTDOM_DATA);
 
         FileSystemHelper::rrmdir($customPlanRoot . "/");
@@ -721,13 +720,12 @@ class BackupManager
      */
     private static function restorePlugins($tmpDir)
     {
-        $plugingDirs = glob(sprintf("%s/plugins/*", $tmpDir), GLOB_ONLYDIR);
+        $pluginDirs = glob(sprintf("%s/plugins/*", $tmpDir), GLOB_ONLYDIR);
         $pluginRoot = sprintf("%s/plugins", NEXTDOM_ROOT);
 
-        SystemHelper::rrmdir($pluginRoot . "/*");
         FileSystemHelper::rrmdir($pluginRoot . "/");
         FileSystemHelper::mkdirIfNotExists($pluginRoot,0775,true);
-        foreach ($plugingDirs as $c_dir) {
+        foreach ($pluginDirs as $c_dir) {
             $name = basename($c_dir);
             if (false === FileSystemHelper::mv($c_dir, sprintf("%s/%s", $pluginRoot, $name))) {
                 // should probably fail, keeping behavior prior to install/restore.php refactoring

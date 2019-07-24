@@ -103,6 +103,11 @@ window.onscroll = function () {
 
     // Gui automatic adjusting
     adjustNextDomTheme();
+
+    // Modals repositionning
+    jQuery('#md_modal').dialog('option','position','center');
+    jQuery('#md_modal2').dialog('option','position','center');
+    jQuery('#md_pageHelp').dialog('option','position','center');
 };
 
 // FUNCTIONS

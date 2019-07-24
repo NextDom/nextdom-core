@@ -469,6 +469,12 @@ class PrepareView
         $this->initPluginsEvents($eventsJsPlugin, $pageData);
         $this->initHeaderData($pageData);
 
+        $currentJeeObject = ObjectManager::getRootObjects();
+        $currentJeeObjectId = '';
+        if(!empty($currentJeeObject)){
+            $currentJeeObjectId = $currentJeeObject->getId();
+        }
+
         $pageData['JS_VARS'] = [
             'user_id' => UserManager::getStoredUser()->getId(),
             'user_isAdmin' => AuthentificationHelper::isConnectedAsAdmin(),
@@ -481,7 +487,8 @@ class PrepareView
             'widget_size' => $this->currentConfig['widget::size'],
             'widget_margin' => $this->currentConfig['widget::margin'],
             'widget_padding' => $this->currentConfig['widget::padding'],
-            'widget_radius' => $this->currentConfig['widget::radius']
+            'widget_radius' => $this->currentConfig['widget::radius'],
+            'root_object_id' => $currentJeeObjectId
         ];
         $pageData['JS_VARS_RAW'] = [
             'userProfils' => Utils::getArrayToJQueryJson(UserManager::getStoredUser()->getOptions()),
@@ -515,6 +522,8 @@ class PrepareView
     private function getHomeLink(): string
     {
         // Détermine la page courante
+        $defaultDashboardObjectName = UserManager::getStoredUser()->getOptions('defaultDashboardObject');
+        $defaultDashboardObject = ObjectManager::byId($defaultDashboardObjectName);
         $homePage = explode('::', UserManager::getStoredUser()->getOptions('homePage', 'core::dashboard'));
         if (count($homePage) == 2) {
             if ($homePage[0] == 'core') {
@@ -522,6 +531,9 @@ class PrepareView
                         GetParams::VIEW_TYPE => ViewType::DESKTOP_VIEW,
                         GetParams::PAGE => $homePage[1],
                     ]);
+                if(!empty($defaultDashboardObject)) {
+                    $homeLink .= '&object_id=' . $defaultDashboardObject->getId();
+                }
             } else {
                 // TODO : m ???
                 $homeLink = 'index.php?' . http_build_query([
@@ -535,6 +547,7 @@ class PrepareView
             }
         } else {
             $homeLink = 'index.php?v=d&p=dashboard';
+            $homeLink .= '&object_id=' . $defaultDashboardObject->getId();
         }
         return $homeLink;
     }

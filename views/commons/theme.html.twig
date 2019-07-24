@@ -122,7 +122,10 @@
 }
 
 /* Message d'info */
-.callout.callout-info, .alert-info, .label-info, .modal-info .modal-body {
+.callout.callout-info,
+.alert-info,
+.label-info,
+.modal-info .modal-body {
   background-color: {{ COLOR1 }} !important;
 }
 
@@ -132,7 +135,8 @@
 }
 
 /* Menu lateral */
-.sidebar-menu > li:hover > a, .sidebar-menu > li.menu-open > a {
+.sidebar-menu > li:hover > a,
+.sidebar-menu > li.menu-open > a {
   border-left-color: {{ COLOR1 }} !important;
 }
 .sidebar-menu > li.header {
@@ -190,7 +194,18 @@
   color: {{ COLOR2 }} !important;
 }
 
+/* Bouton modales */
 .bootbox-close-button {
+  color: {{ COLOR2 }} !important;
+}
+
+/* Fabs */
+.fab-buttons__link,
+.fab-action-button__icon {
+  color: {{ COLOR2 }} !important;
+}
+.fab-buttons__link:hover,
+.fab-button__icon:hover {
   color: {{ COLOR2 }} !important;
 }
 
@@ -229,6 +244,7 @@
 /* ####################################### */
 /* COLOR5 = Couleur croix fenêtres modales */
 /* ####################################### */
+
 
 
 /* ############################################################### */
@@ -274,7 +290,10 @@
 /* ########################################################################## */
 /* COLOR9 = Couleur de fond principale (dashboard et autres fond de pages...) */
 /* ########################################################################## */
-.content-wrapper, .nav-tabs-custom > .nav-tabs > li.active > a, .nav-tabs-custom > .nav-tabs > li.active:hover > a, .main-footer {
+.content-wrapper,
+.nav-tabs-custom > .nav-tabs > li.active > a,
+.nav-tabs-custom > .nav-tabs > li.active:hover > a,
+.main-footer {
   background-color:{{ COLOR9 }} !important;
   border-color:{{ COLOR9 }}60 !important;
 }
@@ -302,14 +321,20 @@
   border-color: {{ COLOR9 }} !important;
 }
 
-.nav-tabs-custom > .nav-tabs, .nav-tabs-custom > .nav-tabs > li.active > a {
+.nav-tabs-custom > .nav-tabs,
+.nav-tabs-custom > .nav-tabs > li.active > a {
   border-color: {{ COLOR9 }} !important;
 }
 .info-box-small{
   background-color: {{ COLOR10 }} !important;
 }
 
-.nav-tabs-custom .box, .nav-tabs-custom .box .box-footer, .nav-tabs-custom .box .box-body, .nav-tabs-custom .panel, .nav-tabs-custom .panel .panel-body, .nav-tabs-custom .well {
+.nav-tabs-custom .box,
+.nav-tabs-custom .box .box-footer,
+.nav-tabs-custom .box .box-body,
+.nav-tabs-custom .panel,
+.nav-tabs-custom .panel .panel-body,
+.nav-tabs-custom .well {
   background-color: {{ COLOR9 }} !important;
 }
 
@@ -342,13 +367,20 @@
 /* COLOR10 = Couleur de fond secondaire (titres, action-bar, footer, onglets, titre modale, boîtes d'infos...) */
 /* ########################################################################################################### */
 /* Boxs */
-.box, .panel, .box-footer, .panel-heading, .well {
+.box, .panel,
+.box-footer,
+.panel-heading,
+.well {
   background-color: {{ COLOR10 }} !important;
 }
 .info-box-small{
   background-color: {{ COLOR10 }} !important;
 }
-.nav-tabs-custom .box .box-header, .nav-tabs-custom .box .box-footer, .nav-tabs-custom .panel .panel-heading, .panel-default, .nav-tabs-custom .well {
+.nav-tabs-custom .box .box-header,
+.nav-tabs-custom .box .box-footer,
+.nav-tabs-custom .panel .panel-heading,
+.panel-default,
+.nav-tabs-custom .well {
   border-color: {{ COLOR10 }} !important;
 }
 
@@ -361,15 +393,19 @@
 .nav-tabs-custom {
   background-color: {{ COLOR10 }} !important;
 }
-.ui-dialog .ui-dialog-titlebar, .ui-dialog .ui-dialog-buttonpane {
+.ui-dialog .ui-dialog-titlebar,
+.ui-dialog .ui-dialog-buttonpane {
   background-color: {{ COLOR10 }} !important;
 }
 
 /* Footer */
-body, .main-footer{
+body,
+.main-footer{
   background-color: {{ COLOR10 }} !important;
 }
-.label-list:hover, .label-view:hover, .label-log:hover {
+.label-list:hover,
+.label-view:hover,
+.label-log:hover {
   background-color: {{ COLOR10 }} !important;
 }
 .nav-list > li > a:hover {
@@ -377,10 +413,12 @@ body, .main-footer{
 }
 
 /* Modale */
-.modal-header, .modal-footer{
+.modal-header,
+.modal-footer{
   background-color: {{ COLOR10 }} !important;
 }
-.ui-dialog .ui-dialog-titlebar, .ui-dialog .ui-dialog-buttonpane {
+.ui-dialog .ui-dialog-titlebar,
+.ui-dialog .ui-dialog-buttonpane {
   background-color: {{ COLOR10 }} !important;
 }
 .row legend {
@@ -391,10 +429,14 @@ body, .main-footer{
 }
 
 /* List log et autres */
-.label-list>a:hover, .label-view>a:hover, .label-log>a:hover {
+.label-list>a:hover,
+.label-view>a:hover,
+.label-log>a:hover {
   background-color: {{ COLOR10 }} !important;
 }
-.label-list:hover, .label-view:hover, .label-log:hover {
+.label-list:hover,
+.label-view:hover,
+.label-log:hover {
   background-color: {{ COLOR10 }} !important;
 }
 
@@ -422,23 +464,32 @@ body, .main-footer{
 }
 
 /* Legendes de sections */
-legend, .box legend, .panel legend {
+legend,
+.box legend,
+.panel legend {
   background-color: {{ COLOR11 }} !important;
 }
-.tablesorter-bootstrap .tablesorter-filter-row input.tablesorter-filter, .tablesorter-bootstrap .tablesorter-filter-row select.tablesorter-filter {
+.tablesorter-bootstrap .tablesorter-filter-row input.tablesorter-filter,
+.tablesorter-bootstrap .tablesorter-filter-row select.tablesorter-filter {
   background-color: {{ COLOR11 }} !important;
 }
 
 /* Unités et fond colorpick */
-.colorpick .input-group-addon, .input-group .input-group-addon {
+.colorpick .input-group-addon,
+.input-group .input-group-addon {
   background-color: {{ COLOR11 }} !important;
 }
 
 /* Tableaux */
-.table-bordered > thead > tr > th, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > tfoot > tr > td {
+.table-bordered > thead > tr > th,
+.table-bordered > tbody > tr > th,
+.table-bordered > tfoot > tr > th,
+.table-bordered > thead > tr > td,
+.table-bordered > tfoot > tr > td {
   background-color: {{ COLOR11 }} !important;
 }
-.tablesorter-bootstrap .tablesorter-filter-row input.tablesorter-filter, .tablesorter-bootstrap .tablesorter-filter-row select.tablesorter-filter {
+.tablesorter-bootstrap .tablesorter-filter-row input.tablesorter-filter,
+.tablesorter-bootstrap .tablesorter-filter-row select.tablesorter-filter {
   background-color: {{ COLOR11 }} !important;
 }
 
@@ -454,7 +505,8 @@ pre::selection {
 }
 
 /* jstree */
-.jstree-hovered, .jstree-clicked {
+.jstree-hovered,
+.jstree-clicked {
   background-color: {{ COLOR11 }} !important;
 }
 
@@ -474,7 +526,11 @@ body, h1, h2, h3, h4, h5, h6  {
 .box-header span:not(.badge) {
   color: {{ COLOR12 }} !important;
 }
-.nav-tabs-custom > .nav-tabs > li.header, .nav-tabs-custom > .nav-tabs > li.active > a, .nav-tabs-custom > .nav-tabs > li.active:hover > a,.nav-tabs-custom > .nav-tabs > li > a {
+.nav-tabs-custom > .nav-tabs > li.header,
+.nav-tabs-custom > .nav-tabs > li.active > a,
+.nav-tabs-custom > .nav-tabs > li.active:hover > a,
+.nav-tabs-custom > .nav-tabs > li > a,
+.ui-widget-content .nav-tabs-custom > .nav-tabs > li > a {
   color: {{ COLOR12 }} !important;
 }
 .nav-tabs-custom > .nav-tabs > li.father > a {
@@ -499,7 +555,8 @@ legend {
 }
 
 /* Bouton administration */
-.btn-app, .btn-selector {
+.btn-app,
+.btn-selector {
   color: {{ COLOR12 }} !important;
 }
 
@@ -526,7 +583,12 @@ pre::selection {
 }
 
 /* Listes */
-.label-list, .label-view, .label-log, .label-list>a, .label-view>a, .label-log>a {
+.label-list,
+.label-view,
+.label-log,
+.label-list>a,
+.label-view>a,
+.label-log>a {
   color: {{ COLOR12 }} !important;
 }
 
@@ -583,7 +645,9 @@ pre::selection {
 }
 
 /* Listes */
-.label-list, .label-view, .label-log{
+.label-list,
+.label-view,
+.label-log{
   background-color: {{ COLOR13 }} !important;
 }
 
@@ -602,13 +666,19 @@ pre::selection {
 /* COLOR14 = Couleur de bordure (inputs, légendes, tableaux et bouton d'administration...) */
 /* ####################################################################################### */
 /* Inputs */
-.colorpick, .ui-autocomplete-input, select, textarea, input:not(.has-error) {
+.colorpick,
+.ui-autocomplete-input,
+select,
+textarea,
+input:not(.has-error) {
   border: 1px solid {{ COLOR14 }} !important;
 }
 .input-group {
   border-color: {{ COLOR14 }} !important;
 }
-.input-group>input, input[type="checkbox"], input[type="radio"] {
+.input-group>input,
+input[type="checkbox"],
+input[type="radio"] {
   border: none !important;
 }
 .label-value {
@@ -621,12 +691,19 @@ legend {
 }
 
 /* Tableaux */
-.table-bordered > thead > tr > th, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > tbody > tr > td, .table-bordered > tfoot > tr > td {
+.table-bordered > thead > tr > th,
+.table-bordered > tbody > tr > th,
+.table-bordered > tfoot > tr > th,
+.table-bordered > thead > tr > td,
+.table-bordered > tbody > tr > td,
+.table-bordered > tfoot > tr > td {
   border: 1px solid {{ COLOR14 }} !important;
 }
 
 /* Listes */
-.label-list, .label-view, .label-log{
+.label-list,
+.label-view,
+.label-log{
   border-color: {{ COLOR14 }} !important;
 }
 
@@ -643,11 +720,14 @@ pre {
   border-right: solid 1px {{ COLOR14 }} !important;
 }
 
+
 /* #################################################################################### */
 /* COLOR15 = Couleur de fond des contenants (boxs, cards, pages d'onglets, tableaux...) */
 /* #################################################################################### */
 /* Box */
-.tab-content, .box-body, .panel-body {
+.tab-content,
+.box-body,
+.panel-body {
   background-color: {{ COLOR15 }} !important;
 }
 .right-border {
@@ -655,7 +735,8 @@ pre {
 }
 
 /* Contenu tableau */
-.table-condensed, .table-bordered {
+.table-condensed,
+.table-bordered {
   background-color: {{ COLOR11 }}60 !important;
 }
 
@@ -669,15 +750,25 @@ pre {
 .tooltip-inner {
   background-color: {{ COLOR16 }} !important;
 }
-.tooltip-arrow {
+.tooltip.top .tooltip-arrow {
     border-top-color: {{ COLOR16 }} !important;
+}
+.tooltip.bottom .tooltip-arrow {
+    border-bottom-color: {{ COLOR16 }} !important;
+}
+.tooltip.left .tooltip-arrow {
+    border-left-color: {{ COLOR16 }} !important;
+}
+.tooltip.right .tooltip-arrow {
+    border-right-color: {{ COLOR16 }} !important;
 }
 
 
 /* ################################# */
 /* COLOR17 = Bouton d'administration */
 /* ################################# */
-.btn-app, .btn-selector {
+.btn-app,
+.btn-selector {
   background-color: {{ COLOR17 }} !important;
 }
 
@@ -718,7 +809,8 @@ pre {
 /* COLOR20 = Couleur de bordure des boutons (bouton d'administration, bouton default) */
 /* ################################################################################## */
 /* Bouton administration */
-.btn-app, .btn-selector:not(.iconSelected) {
+.btn-app,
+.btn-selector:not(.iconSelected) {
   border: 1px solid {{ COLOR20 }} !important;
 }
 
