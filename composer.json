@@ -23,7 +23,7 @@
     "symfony/twig-bridge": "^3.4",
     "touki/ftp": "^1.2",
     "twig/extensions": "^1.5",
-    "symfony/routing": "^3.4",
+    "symfony/routing": "^4.1",
     "symfony/yaml": "^3.4",
     "splitbrain/php-archive": "^1.1",
     "symfony/http-foundation": "^3.4",
