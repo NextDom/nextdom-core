@@ -47,7 +47,7 @@ $(function () {
         $('.objectSummaryGlobalHeader').toggle();
     });
 
-    var delay=100, setTimeoutConst;
+    var delay=200, setTimeoutConst;
     $('#search-toggle').hover(function () {
       setTimeoutConst = setTimeout(function() {
           $('.navbar-search').show();
@@ -349,11 +349,11 @@ function generalSearchOnPages(value) {
             break;
 
         case 'update.list':
-            marketFilter('name', search);
+            marketFilter();
             break;
 
         case 'marketJee':
-            marketFilter('name', search);
+            marketFilter();
             break;
 
         case 'update':

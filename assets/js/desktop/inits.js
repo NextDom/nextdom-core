@@ -71,6 +71,7 @@ function postInitPage(){
 
     // post init functions calls
     setHeaderPosition(true);
+    sideMenuResize();
     limitTreeviewMenu();
     adjustNextDomTheme();
     activateGlobalSearch();
