@@ -20,6 +20,8 @@
 namespace NextDom\Helpers;
 
 use NextDom\Enums\FoldersReferential;
+use NextDom\Enums\PlanDisplayType;
+use NextDom\Enums\PlanLinkType;
 use NextDom\Exceptions\CoreException;
 use NextDom\Managers\BackupManager;
 use NextDom\Managers\ConfigManager;
@@ -329,8 +331,8 @@ class MigrationHelper
             }
 
 
-            self::migratePlanPath($logFile,  'plan/', 'public/img/', 'data/custom/plans/');
-            self::migratePlanPath($logFile, 'plan/', 'core/img/', 'data/custom/plans/');
+            self::migratePlanPath($logFile,  '', 'public/img/', 'data/custom/plans/');
+            self::migratePlanPath($logFile, '', 'core/img/', 'data/custom/plans/');
 
         } catch(\Exception $exception){
             echo $exception;
@@ -368,26 +370,35 @@ class MigrationHelper
         }
 
         foreach (PlanManager::all() as $plan) {
+            foreach (PlanDisplayType::getValues() as $displayType) {
 
-            $html = $plan->getDisplay('text');
-            if ($html !== null) {
-                $html = str_replace('src="'. $oldReferencePath .$fileToReplace, 'src="' . $newReferencePath . $fileToReplace, $html);
-                $html = str_replace('href="'. $oldReferencePath .$fileToReplace, 'href="' . $newReferencePath . $fileToReplace, $html);
-
-                $plan->setDisplay('text', $html);
-                $plan->save();
+                $html = $plan->getDisplay($displayType);
+                if ($html !== null) {
+                    if($displayType == PlanDisplayType::PATH){
+                        $html = str_replace( $oldReferencePath . $fileToReplace, $newReferencePath . $fileToReplace, $html);
+                    } else {
+                        $html = str_replace('"' . $oldReferencePath . $fileToReplace, '"' . $newReferencePath . $fileToReplace, $html);
+                    }
+                    $plan->setDisplay($displayType, $html);
+                    $plan->save();
+                }
             }
         }
 
         foreach (Plan3dManager::all() as $plan3d) {
 
-            $html = $plan3d->getDisplay('text');
-            if ($html !== null) {
-                $html = str_replace('src=\"'.$fileToReplace, 'src=\"' . $newReferencePath . $fileToReplace, $html);
-                $html = str_replace('href=\"'.$fileToReplace, 'href=\"' . $newReferencePath . $fileToReplace, $html);
+            foreach (PlanDisplayType::getValues() as $displayType) {
 
-                $plan3d->setDisplay('text', $html);
-                $plan3d->save();
+                $html = $plan3d->getDisplay($displayType);
+                if ($html !== null) {
+                    if($displayType == PlanDisplayType::PATH){
+                        $html = str_replace( $oldReferencePath . $fileToReplace, $newReferencePath . $fileToReplace, $html);
+                    } else {
+                        $html = str_replace('"' . $oldReferencePath . $fileToReplace, '"' . $newReferencePath . $fileToReplace, $html);
+                    }
+                    $plan3d->setDisplay($displayType, $html);
+                    $plan3d->save();
+                }
             }
         }
     }
