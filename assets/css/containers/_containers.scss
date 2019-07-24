@@ -58,6 +58,10 @@
         cursor: pointer;
     }
 }
+
+.div_backgroundPlan{
+    overflow: auto;
+}
 @media (max-width: 767px) {
   .fixed .content-wrapper, .fixed .right-side {
     padding-top: 106px;
