@@ -1,11 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "hash": "6d413ac7dc2411f94010d77ca4a87242",
-    "content-hash": "1c4cfdb879f34c1ec8f8c25ebc59ff83",
+    "content-hash": "e3a07fc09edbb8b44df1301d9b2d7561",
     "packages": [
         {
             "name": "christian-riesen/base32",
@@ -47,9 +46,9 @@
             "authors": [
                 {
                     "name": "Christian Riesen",
+                    "role": "Developer",
                     "email": "chris.riesen@gmail.com",
-                    "homepage": "http://christianriesen.com",
-                    "role": "Developer"
+                    "homepage": "http://christianriesen.com"
                 }
             ],
             "description": "Base32 encoder/decoder according to RFC 4648",
@@ -1632,7 +1631,7 @@
                 "datetime",
                 "time"
             ],
-            "time": "2018-12-28 10:07:33"
+            "time": "2018-12-28T10:07:33+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -1731,8 +1730,8 @@
             "authors": [
                 {
                     "name": "Antonio Carlos Ribeiro",
-                    "email": "acr@antoniocarlosribeiro.com",
-                    "role": "Creator & Designer"
+                    "role": "Creator & Designer",
+                    "email": "acr@antoniocarlosribeiro.com"
                 }
             ],
             "description": "A One Time Password Authentication package, compatible with Google Authenticator.",
@@ -1931,7 +1930,7 @@
                 "jwt",
                 "tokens"
             ],
-            "time": "2018-12-10 17:05:34"
+            "time": "2018-12-10T17:05:34+00:00"
         },
         {
             "name": "sabre/dav",
@@ -2843,7 +2842,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "backendtea@gmail.com"
+                    "email": "BackEndTea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",
@@ -3605,7 +3604,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2019-04-16 17:14:24"
+            "time": "2019-04-28T06:57:38+00:00"
         }
     ],
     "packages-dev": [
@@ -3757,7 +3756,7 @@
                 }
             ],
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
-            "time": "2017-11-30 07:14:17"
+            "time": "2019-04-30T17:48:53+00:00"
         },
         {
             "name": "phpdocumentor/type-resolver",
@@ -4187,8 +4186,8 @@
             "authors": [
                 {
                     "name": "Sebastian Bergmann",
-                    "email": "sebastian@phpunit.de",
-                    "role": "lead"
+                    "role": "lead",
+                    "email": "sebastian@phpunit.de"
                 }
             ],
             "description": "The PHP Unit Testing framework.",
@@ -4775,16 +4774,16 @@
         },
         {
             "name": "vrana/adminer",
-            "version": "v4.7.1",
+            "version": "v4.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vrana/adminer.git",
-                "reference": "7247f801bd06e51347d7ea671484e0fa6a883cbb"
+                "reference": "fd1691cb1d875cc23a7a51a0f890a6e932b6b304"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vrana/adminer/zipball/7247f801bd06e51347d7ea671484e0fa6a883cbb",
-                "reference": "7247f801bd06e51347d7ea671484e0fa6a883cbb",
+                "url": "https://api.github.com/repos/vrana/adminer/zipball/fd1691cb1d875cc23a7a51a0f890a6e932b6b304",
+                "reference": "fd1691cb1d875cc23a7a51a0f890a6e932b6b304",
                 "shasum": ""
             },
             "type": "library",
@@ -4809,7 +4808,7 @@
             "keywords": [
                 "database"
             ],
-            "time": "2019-01-24T14:57:17+00:00"
+            "time": "2019-07-18T06:56:37+00:00"
         },
         {
             "name": "webmozart/assert",
