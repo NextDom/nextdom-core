@@ -37,7 +37,7 @@
   "require-dev": {
     "phpunit/phpunit": "^5.7",
     "vrana/adminer": "^4.7",
-    "friendsofphp/php-cs-fixer": "^1.11.8"
+    "friendsofphp/php-cs-fixer": "^1.11"
   },
     "scripts": {
         "lint": "./vendor/bin/php-cs-fixer fix --config-file=.php_cs.dist -v --dry-run",
