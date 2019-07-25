@@ -9,6 +9,10 @@ use NextDom\Managers\UpdateManager;
 
 AuthentificationHelper::isConnectedAsAdminOrFail();
 
+$searchLimit = Utils::init('limit', 100);
+if ($searchLimit == 0) {
+  $searchLimit = '';
+}
 $type = Utils::init('type', null);
 $categorie = Utils::init('categorie', null);
 $name = Utils::init('name', null);
@@ -21,28 +25,27 @@ if ($author == null && $name === null && $categorie === null && Utils::init('cer
     $markets = RepoMarket::byFilter(array(
         'status' => 'stable',
         'type' => 'plugin',
-        'timeState' => 'popular',
+        'timeState' => 'popular'
     ));
     $markets2 = RepoMarket::byFilter(array(
         'status' => 'stable',
         'type' => 'plugin',
-        'timeState' => 'newest',
+        'timeState' => 'newest'
     ));
     $markets = array_merge($markets, $markets2);
 } else {
     $default = false;
-    $markets = RepoMarket::byFilter(
-        array(
-            'status' => null,
-            'type' => $type,
-            'categorie' => $categorie,
-            'name' => $name,
-            'author' => $author,
-            'cost' => Utils::init('cost', null),
-            'timeState' => Utils::init('timeState'),
-            'certification' => Utils::init('certification', null)
-        )
-    );
+    $markets = RepoMarket::byFilter(array(
+        'status' => null,
+        'type' => $type,
+        'categorie' => $categorie,
+        'name' => $name,
+        'author' => $author,
+        'cost' => Utils::init('cost', null),
+        'timeState' => Utils::init('timeState'),
+        'certification' => Utils::init('certification', null),
+        'limit' => $searchLimit
+    ));
 }
 function buildUrl($_key, $_value)
 {
@@ -157,36 +160,44 @@ function displayWidgetSubtype($_name)
 }
 ?>
 
-<div class="action-bar">
-    <form class="form-inline" role="form" onsubmit="return false;">
+<link rel="stylesheet" href="/public/css/pages/markets.css">
+
+<section class="content-header">
+    <div class="action-bar">
+        <?php
+        if ($name !== null && strpos($name, '$') !== false) {
+            echo '<a class="btn btn-danger btn-action-bar" id="bt_returnMarketList" style="margin-top : 50px;" data-href=' . buildUrl('name', '') . '><i class="fas fa-chevron-left"></i>{{Retour}}</a>';
+        }
+        ?>
         <?php if (Utils::init('type', 'plugin') == 'plugin') { ?>
-            <div class="form-group">
+            <div class="action-group">
                 <div class="btn-group">
-                    <a class="btn btn-default bt_pluginFilter <?php echo (Utils::init('cost') == 'free') ? 'btn-primary' : '' ?>" data-href="<?php echo buildUrl('cost', 'free'); ?>">{{Gratuit}}</a>
-                    <a class="btn btn-default bt_pluginFilter <?php echo (Utils::init('cost') == 'paying') ? 'btn-primary' : '' ?>" data-href="<?php echo buildUrl('cost', 'paying'); ?>">{{Payant}}</a>
-                    <a class="btn btn-default bt_pluginFilter" data-href="<?php echo buildUrl('cost', ''); ?>"><i class="fa fa-times"></i></a>
+                    <a class="btn bt_pluginFilter <?php echo (Utils::init('cost') == 'free') ? 'btn-primary' : 'btn-default' ?>" data-href="<?php echo buildUrl('cost', 'free'); ?>"><i class="fas fa-gift"></i><span>{{Gratuit}}</span></a>
+                    <a class="btn bt_pluginFilter <?php echo (Utils::init('cost') == 'paying') ? 'btn-primary' : 'btn-default' ?>" data-href="<?php echo buildUrl('cost', 'paying'); ?>"><i class="fas fa-euro-sign"></i><span>{{Payant}}</span></a>
+                    <a class="btn bt_pluginFilter <?php echo (Utils::init('cost') == '') ? 'btn-primary' : 'btn-default' ?>" data-href="<?php echo buildUrl('cost', ''); ?>"><i class="fas fa-times"></i></a>
                 </div>
             </div>
-        <?php }
-        ?>
-        <div class="form-group">
+        <?php } ?>
+        <div class="action-group">
             <div class="btn-group">
-                <a class="btn btn-default bt_pluginFilter <?php echo (Utils::init('certification') == 'Officiel') ? 'btn-primary' : '' ?>" data-href="<?php echo buildUrl('certification', 'Officiel'); ?>">{{Officiel}}</a>
-                <a class="btn btn-default bt_pluginFilter <?php echo (Utils::init('certification') == 'Conseillé') ? 'btn-primary' : '' ?>" data-href="<?php echo buildUrl('certification', 'Conseillé'); ?>">{{Conseillé}}</a>
-                <a class="btn btn-default bt_pluginFilter <?php echo (Utils::init('certification') == 'Premium') ? 'btn-primary' : '' ?>" data-href="<?php echo buildUrl('certification', 'Premium'); ?>">{{Premium}}</a>
-                <a class="btn btn-default bt_pluginFilter <?php echo (Utils::init('certification') == 'Partenaire') ? 'btn-primary' : '' ?>" data-href="<?php echo buildUrl('certification', 'Partenaire'); ?>">{{Partenaire}}</a>
-                <a class="btn btn-default bt_pluginFilter <?php echo (Utils::init('certification') == 'Legacy') ? 'btn-primary' : '' ?>" data-href="<?php echo buildUrl('certification', 'Legacy'); ?>">{{Legacy}}</a>
-                <a class="btn btn-default bt_pluginFilter" data-href="<?php echo buildUrl('certification', ''); ?>"><i class="fa fa-times"></i></a>
+                <a class="btn btn-default bt_installFilter" data-state="-1"><i class="fas fa-thumbs-up"></i><span>{{Installé}}</span></a>
+                <a class="btn btn-default bt_installFilter" data-state="1"><i class="fas fa-thumbs-down"></i><span>{{Non installé}}</span></a>
+                <a class="btn btn-primary bt_installFilter" data-state="0"><i class="fas fa-times"></i></a>
             </div>
         </div>
-        <div class="form-group">
+        <div class="action-group">
             <div class="btn-group">
-                <a class="btn btn-default bt_installFilter" data-state="-1">{{Installé}}</a>
-                <a class="btn btn-default bt_installFilter" data-state="1">{{Non installé}}</a>
-                <a class="btn btn-default bt_installFilter" data-state="0"><i class="fa fa-times"></i></a>
+                <select class="form-control" id="sel_certif">
+                    <option value="" selected>{{Tous}}</option>
+                    <option value="Officiel">{{Officiel}}</option>
+                    <option value="Conseillé">{{Conseillé}}</option>
+                    <option value="Premium">{{Premium}}</option>
+                    <option value="Partenaire">{{Partenaire}}</option>
+                    <option value="Legacy">{{Legacy}}</option>
+                </select>
             </div>
         </div>
-        <div class="form-group">
+        <div class="action-group">
             <select class="form-control" id="sel_categorie" data-href='<?php echo buildUrl('categorie', ''); ?>'>
                 <?php
                 if (Utils::init('categorie') == '') {
@@ -215,195 +226,230 @@ function displayWidgetSubtype($_name)
                 ?>
             </select>
         </div>
-        <div class="form-group">
-            <input class="form-control" data-href='<?php echo buildUrl('name', ''); ?>' placeholder="Rechercher" id="in_search" value="<?php echo $name ?>"/>
-            <a class="btn btn-success" id="bt_search" data-href='<?php echo buildUrl('name', ''); ?>'><i class="fa fa-search"></i></a>
+        <div class="action-group">
+            <div class="input-group">
+                <a class="input-group-addon cursor" id="bt_resetSearch" data-href='<?php echo buildUrl('name', ''); ?>'><i class="fas fa-times"></i></a>
+                <input class="form-control" data-href='<?php echo buildUrl('name', ''); ?>' placeholder="{{Rechercher...}}" id="in_search" value="<?php echo $name ?>"/>
+                <a class="input-group-addon cursor" id="bt_search" data-href='<?php echo buildUrl('name', ''); ?>'><i class="fas fa-search"></i></a>
+            </div>
         </div>
-        <div class="form-group">
+        <div class="action-group">
+            <a class="btn btn-action btn-action-bar pull-right" style="display:none;" id="bt_marketCollapse"><i class="fas fa-plus-square"></i>{{Déplier}}</a>
+            <a class="btn btn-action btn-action-bar pull-right" id="bt_marketUncollapse"><i class="fas fa-minus-square"></i>{{Replier}}</a>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="box">
+        <div class="box-header with-border">
             <?php
+            echo '<h3 class="box-title"><i class="fas fa-shopping-cart"></i>';
+            if ($type == "") {
+                echo '{{Market Jeedom}}</h3>';
+            } else {
+                echo ucfirst($type) .'{{ Jeedom}}</h3>';
+            }
             if (ConfigManager::byKey('market::username') != '') {
-                echo '<span class="label label-info pull-right" style="font-size : 1em;">' . ConfigManager::byKey('market::username');
+                echo '<span class="label label-info badge pull-right">' . ConfigManager::byKey('market::username');
                 try {
                     RepoMarket::test();
-                    echo ' <i class="fa fa-check"></i>';
+                    echo '<i class="fas fa-check spacing-left"></i>';
                 } catch (\Exception $e) {
-                    echo ' <i class="fa fa-times"></i>';
+                    echo '<i class="fas fa-times spacing-left"></i>';
                 }
                 echo '</span>';
             }
             ?>
         </div>
-    </form>
-</div>
-<?php
-
-if ($name !== null && strpos($name, '$') !== false) {
-    echo '<a class="btn btn-default" id="bt_returnMarketList" style="margin-top : 50px;" data-href=' . buildUrl('name', '') . '><i class="fa fa-arrow-circle-left"></i> {{Retour}}</a>';
-}
-?>
-
-
-<div style="padding : 5px;">
-    <?php
-    $categorie = '';
-    $first = true;
-    $nCategory = 0;
-    if ($default) {
-        echo '<div class="pluginContainer">';
-    }
-    foreach ($markets as $market) {
-        $update = UpdateManager::byLogicalId($market->getLogicalId());
-        $category = $market->getCategorie();
-        if ($category == '') {
-            $category = '{{Aucune}}';
-        }
-        if ($categorie != $category) {
-            $categorie = $category;
-            if (!$default) {
-                if (!$first) {
-                    echo '</div>';
-
-                    echo '</div>';
-
-                }
-
-
-                echo '<div class="box " data-category="' . $nCategory . '">';
-                echo '<div class="box-title">';
-                if (isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categorie])) {
-                    echo '<h3 data-category="' . $nCategory . '"><i class="fa ' . $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categorie]['icon'] . '"></i> ' . ucfirst($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categorie]['name']) . '</h3>';
+        <div class="box-body">
+            <?php
+            if (count($markets) >= $searchLimit) {
+                echo '<div>';
+                echo '<span class="alert alert-warning market-limited">{{Attention l\'affichage est limité à }}' . $searchLimit . ' {{résultats, utilisez les filtres ou la recherche si ce que vous cherchez n\'apparaît pas...}}</span>';
+                echo '<a class="btn btn-action pull-right" id="bt_resetSearchLimit" data-href="' . buildUrl('limit', '0') .'"><i class="fas fa-times"></i>{{Sans limites}}</a>';
+                echo '</div>';
+            } else {
+                echo '<div><span class="market-unlimited">' . count($markets);
+                if ($type == "") {
+                    echo '{{ objets}}';
                 } else {
-                    echo '<h3 data-category="' . $nCategory . '">' . ucfirst($categorie) . '</h3>';
+                    echo ' ' . $type . '{{s}}';
+                }
+                echo ' {{disponibles dans cette catégorie...}}</span>';
+                if (count($markets) >= 100) {
+                    echo '<a class="btn btn-action pull-right" id="bt_SearchLimit" data-href="' . buildUrl('limit', '100') .'"><i class="fas fa-filter"></i>{{Limiter à 100}}</a>';
                 }
                 echo '</div>';
-                echo '<div class="box-body pluginContainer">';
+            }
+            ?>
+        </div>
+    </div>
 
-            }
-            $first = false;
-            $nCategory++;
+    <div>
+        <?php
+        $categorie = '';
+        $first = true;
+        $nCategory = 0;
+        if ($default) {
+            echo '<div class="pluginContainer">';
         }
-
-        $install = 'notInstall';
-        if (!is_object($update)) {
-            $install = 'install';
-        }
-        echo '<div class="market cursor ' . $install . '" data-market_id="' . $market->getId() . '" data-market_type="' . $market->getType() . '" style="background-color : #ffffff; height : 220px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
-        if ($market->getType() != 'widget') {
-            if ($market->getCertification() == 'Officiel') {
-                echo '<div style="position : absolute; right : 0;top:0;width:58px;height:58px;"><img src="core/img/band_Officiel.png" /></div>';
+        foreach ($markets as $market) {
+            $update = UpdateManager::byLogicalId($market->getLogicalId());
+            $category = $market->getCategorie();
+            if ($category == '') {
+                $category = '{{Aucune}}';
             }
-            if ($market->getCertification() == 'Conseillé') {
-                echo '<div style="position : absolute; right : 0;top:0;width:58px;height:58px;"><img src="core/img/band_Conseille.png" /></div>';
-            }
-            if ($market->getCertification() == 'Legacy') {
-                echo '<div style="position : absolute; right : 0;top:0;width:58px;height:58px;"><img src="core/img/band_Legacy.png" /></div>';
-            }
-            if ($market->getCertification() == 'Obsolète') {
-                echo '<div style="position : absolute; right : 0;top:0;width:58px;height:58px;"><img src="core/img/band_Obsolete.png" /></div>';
-            }
-            if ($market->getCertification() == 'Premium') {
-                echo '<div style="position : absolute; right : 0;top:0;width:58px;height:58px;"><img src="core/img/band_Premium.png" /></div>';
-            }
-            if ($market->getCertification() == 'Partenaire') {
-                echo '<div style="position : absolute; right : 0;top:0;width:58px;height:58px;"><img src="core/img/band_Partenaire.png" /></div>';
-            }
-        }
-        if ($market->getType() == 'widget') {
-            if (strpos($market->getName(), 'mobile.') !== false) {
-                echo '<i class="fa fa-mobile" style="position: absolute;top: 15px;left: 21px;" title="{{Widget pour la version mobile}}"></i>';
-            } else {
-                echo '<i class="fa fa-desktop" style="position: absolute;top: 15px;left: 17px;" title="{{Widget pour la version bureau}}"></i>';
-            }
-        }
-        if (is_object($update)) {
-            echo '<i class="fa fa-check" style="position : absolute; right : 5px;"></i>';
-        }
-        echo "<br/><center>";
-        $default_image = 'core/img/no_image.gif';
-        switch ($market->getType()) {
-            case 'widget':
-                $default_image = 'public/img/NextDom_NoPicture_Gray.png';
-                break;
-            case 'plugin':
-                $default_image = 'public/img/NextDom_NoPicture_Gray.png';
-                break;
-            case 'script':
-                $default_image = 'public/img/NextDom_NoPicture_Gray.png';
-                break;
-        }
-        $urlPath = ConfigManager::byKey('market::address') . '/' . $market->getImg('icon');
-        if ($market->getType() == 'widget') {
-            echo '<img class="lazy" src="' . $default_image . '" data-original="' . $urlPath . '" height="105" width="95" style="margin-left: 20px;border: 1px solid #C5C5C5;border-radius:5px; padding: 3px" />';
-        } else {
-            echo '<img class="lazy" src="' . $default_image . '" data-original="' . $urlPath . '" height="105" width="95" />';
-        }
-        echo "</center>";
-        echo '<span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;">' . $market->getName() . '</span>';
-        echo '<span style="position : absolute;bottom : 25px;right : 12px;font-size : 0.7em;color:#999999;"><span style="font-size : 0.8em;">{{par}}</span> ' . $market->getAuthor() . '</span>';
-        $note = $market->getRating();
-        echo '<span style="position : absolute;bottom : 5px;left : 5px;font-size : 0.7em;">';
-        for ($i = 1; $i < 6; $i++) {
-            if ($i <= $note) {
-                echo '<i class="fa fa-star"></i>';
-            } else {
-                echo '<i class="fa fa-star-o"></i>';
-            }
-        }
-        echo '</span>';
-        if ($market->getCertification() !== 'Premium') {
-            if ($market->getCost() > 0) {
-                echo '<span style="position : absolute;bottom : 5px;right : 12px;color:#97bd44;">';
-                if ($market->getPurchase() == 1) {
-                    echo ' <i class="fa fa-check-circle"></i>';
-                } else if ($market->getCertification() == 'Premium') {
-                    echo '';
-                } else {
-                    if ($market->getCost() != $market->getRealCost()) {
-                        echo '<span style="text-decoration:line-through;">' . number_format($market->getRealCost(), 2) . ' €</span> ';
+            if ($categorie != $category) {
+                $categorie = $category;
+                if (!$default) {
+                    if (!$first) {
+                        echo '</div></div></div></div></div>';
                     }
-                    echo number_format($market->getCost(), 2) . ' €';
+                    echo '<div class="box-group" id="accordionPlugin' . $nCategory . '">';
+                    echo '<div class="panel box" data-category="' . $nCategory . '">';
+                    echo '<a class="box-header with-border accordion-toggle" data-toggle="collapse" data-parent="" href="#config_' . $nCategory . '">';
+                    echo '<h3 class="box-title">';
+                    echo '<span class="accordion-toggle" data-toggle="collapse" data-parent="#accordionPlugin' . $nCategory . '" href="#config_none" style="text-decoration:none;" data-category="' . $nCategory . '">';
+                    if (isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categorie])) {
+                        echo '<i class="fas ' . $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categorie]['icon'] . ' spacing-right"></i>' . ucfirst($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categorie]['name']) . '</span>';
+                    } else {
+                        echo ucfirst($categorie) . '</span>';
+                    }
+                    echo '</h3>';
+                    echo '</a>';
+                    echo '<div id="config_' . $nCategory . '" class="panel-collapse collapse in">';
+                    echo '<div class="box-body">';
+                    echo '<div class="pluginContainer DisplayCard text-center" data-category="' . $nCategory . '">';
+                }
+                $first = false;
+                $nCategory++;
+            }
+            $explodedName = explode('.', $market->getName());
+            if (count($explodedName) > 1) {
+                $shortName = $explodedName[count($explodedName) - 1];
+            } else {
+                $shortName = $market->getName();
+            }
+            if (strpos($market->getName(), 'mobile.') === false) {
+                $install = 'notInstall';
+                if (!is_object($update)) {
+                    $install = 'install';
+                }
+                $note = $market->getRating();
+                $cost = $market->getCost();
+                $realCost = $market->getRealCost();
+                echo '<div class="marketOverload cursor ' . $install . '" data-market_id="' . $market->getId() . '" data-market_type="' . $market->getType() . '" data-name="' . $shortName . '">';
+                switch ($market->getCertification()) {
+                    case 'Officiel':
+                        $certificationClass = 'official';
+                        break;
+                    case 'Conseillé':
+                        $certificationClass = 'advised';
+                        break;
+                    case 'Legacy':
+                        $certificationClass = 'legacy';
+                        break;
+                    case 'Obsolète':
+                        $certificationClass = 'obsolete';
+                        break;
+                    case 'Premium':
+                        $certificationClass = 'premium';
+                        $cost = -1;
+                        break;
+                    case 'Partenaire':
+                        $certificationClass = 'partner';
+                        break;
+                    default:
+                        $certificationClass = '';
+                }
+                if ($market->getType() != 'widget') {
+                    echo '<div class="market-certification market-' . $certificationClass .'">' . strtoupper($market->getCertification()) . '</div>';
+                }
+                if ($install == 'notInstall') {
+                    echo '<i class="fas fa-check market-install"></i>';
+                }
+                switch ($market->getType()) {
+                    case 'widget':
+                        $default_image = 'public/img/NextDom_Widget_Gray.png';
+                        break;
+                    case 'plugin':
+                        $default_image = 'public/img/NextDom_Plugin_Gray.png';
+                        break;
+                    case 'script':
+                        $default_image = 'public/img/NextDom_Script_Gray.png';
+                        break;
+                    default:
+                        $default_image = 'public/img/NextDom_NoPicture_Gray.gif';
+                }
+                $urlPath = ConfigManager::byKey('market::address') . '/' . $market->getImg('icon');
+                echo '<div><img class="lazy lazyload market-icon" src="' . $default_image . '" data-original="'. $urlPath . '"/></div>';
+                echo '<span class="market-name">' . $shortName . '</span>';
+                echo '<span class="market-author"><i>{{par}}</i> ' . $market->getAuthor() . '</span>';
+                echo '<span class="market-rating">';
+                for ($i = 1; $i < 6; $i++) {
+                    if ($i <= $note) {
+                        echo '<i class="fas fa-star"></i>';
+                    } else {
+                        echo '<i class="far fa-star"></i>';
+                    }
                 }
                 echo '</span>';
-            } else {
-                echo '<span style="position : absolute;bottom : 5px;right : 12px;color:#97bd44;">Gratuit</span>';
+                if ($cost > 0) {
+                    echo '<span class="market-cost">';
+                        if ($market->getPurchase() == 1) {
+                            echo '<i class="fas fa-check-circle"></i>';
+                        } else {
+                            if ($cost != $realCost) {
+                                echo '<span style="text-decoration:line-through;">' . $realCost . ' {{€}}</span>';
+                            }
+                            echo $cost . ' {{€}}';
+                        }
+                    echo '</span>';
+                } else {
+                    if ($cost < 0) {
+                        echo '<span class="market-cost">{{Nous contacter}}</span>';
+                    } else {
+                        echo '<span class="market-cost">{{Gratuit}}</span>';
+                    }
+                }
+                echo '</div>';
             }
         }
-
-        echo '</div>';
-
-    }
-
-    if ($default) {
-        echo '</div>';
-    }
-
-    ?>
-</div>
+        if ($default) {
+            echo '</div>';
+        }
+        ?>
+    </div>
+</section>
 
 <script>
     $(function () {
-        $('.pluginContainer').packery();
-        $("img.lazy").lazyload({
-            event: "sporty"
-        });
-        $("img.lazy").trigger("sporty");
+        $("img.lazy").lazyload();
         initTableSorter();
+        setTimeout(function(){
+            $('.pluginContainer').packery();
+        },200);
         setTimeout(function () {
             $('#table_market tbody tr.install').hide();
         }, 500);
         $('.bt_pluginFilter').on('click', function () {
             $('#md_modal').load($(this).attr('data-href'));
         });
+        $('#sel_certif').on('change', function () {
+            $('#md_modal').load($(this).attr('data-href') + '&certification=' + encodeURI($(this).value()));
+        });
         $('#sel_categorie').on('change', function () {
             $('#md_modal').load($(this).attr('data-href') + '&categorie=' + encodeURI($(this).value()));
         });
         $('#bt_search').on('click', function () {
-            $('#md_modal').load($(this).attr('data-href') + '&name=' + encodeURI($('#in_search').value()));
+            $('#md_modal').load($(this).attr('data-href') + '&categorie=' + '&name=' + encodeURI($('#in_search').value()));
         });
-        $('#in_search').keypress(function (e) {
-            if (e.which == 13) {
-                $('#md_modal').load($(this).attr('data-href') + '&name=' + encodeURI($('#in_search').value()));
-            }
+        $('#bt_resetSearch').on('click', function () {
+            $('#md_modal').load($(this).attr('data-href'));
+        });
+        $('#in_search').keyup(function (e) {
+            marketFilterRepo();
         });
         $('#bt_returnMarketList').on('click', function () {
             $('#md_modal').load($(this).attr('data-href'));
@@ -412,20 +458,24 @@ if ($name !== null && strpos($name, '$') !== false) {
             $('#md_modal').load($(this).attr('data-href') + '&name=' + encodeURI('.' + $(this).attr('data-market_name')));
         });
         $('.bt_installFilter').on('click', function () {
-            $('.bt_installFilter').removeClass('btn-primary');
+            $('.bt_installFilter').removeClass('btn-primary').removeClass('btn-default');
             $('.pluginContainer').show();
-            $('.market').show();
+            $('.marketOverload').show();
             if ($(this).attr('data-state') == 1) {
-                $(this).addClass('btn-primary');
                 $('.notInstall').hide();
             }
             if ($(this).attr('data-state') == -1) {
-                $(this).addClass('btn-primary');
                 $('.install').hide();
             }
+            $(this).addClass('btn-primary');
+            $('.bt_installFilter').each(function () {
+                if (!$(this).hasClass("btn-primary")) {
+                    $(this).addClass('btn-default');
+                }
+            });
             $('.pluginContainer').each(function () {
                 var hasVisible = false;
-                $(this).find('.market').each(function () {
+                $(this).find('.marketOverload').each(function () {
                     if ($(this).is(':visible')) {
                         hasVisible = true;
                     }
@@ -439,9 +489,49 @@ if ($name !== null && strpos($name, '$') !== false) {
                 }
             });
         });
-        $('.market').on('click', function () {
+        $('.marketOverload').on('click', function () {
             $('#md_modal2').dialog({title: "{{Market Jeedom}}"});
             $('#md_modal2').load('index.php?v=d&modal=update.display&type=' + $(this).attr('data-market_type') + '&id=' + $(this).attr('data-market_id') + '&repo=market').dialog('open');
         });
+        $('#bt_marketCollapse').on('click',function(){
+           $('.panel-collapse').each(function () {
+              if (!$(this).hasClass("in")) {
+                  $(this).css({'height' : '' });
+                  $(this).addClass("in");
+              }
+           });
+           $('#bt_marketCollapse').hide();
+           $('#bt_marketUncollapse').show()
+        });
+        $('#bt_marketUncollapse').on('click',function(){
+           $('.panel-collapse').each(function () {
+              if ($(this).hasClass("in")) {
+                  $(this).removeClass("in");
+              }
+           });
+           $('#bt_marketUncollapse').hide();
+           $('#bt_marketCollapse').show()
+        });
+        $('#bt_resetSearchLimit').on('click', function () {
+            $('#md_modal').load($(this).attr('data-href'));
+        });
+        $('#bt_SearchLimit').on('click', function () {
+            $('#md_modal').load($(this).attr('data-href'));
+        });
     });
+
+    function marketFilterRepo() {
+        var pluginValue = '';
+        var currentSearchValue = $('#in_search').val().toLowerCase();
+        $('.marketOverload').show();
+        $('.marketOverload').each(function () {
+            if (currentSearchValue != '') {
+                pluginValue = $(this).attr('data-name').toLowerCase();
+                if (pluginValue.indexOf(currentSearchValue) == -1) {
+                    $(this).hide();
+                }
+            }
+        });
+        $('.pluginContainer').packery();
+    };
 </script>

@@ -251,17 +251,10 @@ $(function () {
 
     // adminLTE left menu toggle link event handler declaration
     $('.sidebar-toggle').on("click", function () {
-        if ($('body').hasClass("sidebar-collapse") || ($(window).width() < 768 && !$('body').hasClass("sidebar-open"))) {
-            $(".treeview-menu").css("overflow", "");
-            $(".sidebar-menu").css("overflow-y", "auto");
-            sideMenuResize(false);
-        } else {
-            $(".sidebar-menu").css("overflow", "");
-            $(".treeview-menu").css("overflow-y", "auto");
-            sideMenuResize(true);
-        }
-        limitTreeviewMenu();
         setTimeout(function () {
+            // Resize menu
+            sideMenuResize();
+            limitTreeviewMenu();
             // Header repositionning
             setHeaderPosition(false);
             // Gui automatic adjusting

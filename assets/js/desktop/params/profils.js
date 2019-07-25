@@ -164,6 +164,7 @@ $('.bt_deleteSession').on('click',function(){
             notify("Erreur", error.message, 'error');
         },
         success: function (data) {
+            modifyWithoutSave = false;
             window.location.reload();
         }
     });

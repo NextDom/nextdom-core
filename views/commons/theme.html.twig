@@ -154,6 +154,17 @@
   background-color: {{ COLOR1 }} !important;
 }
 
+/* Market */
+.market:hover,
+.marketOverload:hover {
+    border: 1px dashed {{ COLOR1 }} !important;
+}
+
+/* Icones */
+.iconSelected {
+    border: 1px dashed {{ COLOR1 }} !important;
+}
+
 /* ################################################################################## */
 /* COLOR2 = Couleur de contraste (icônes et texte sur fond accentué ou de sidebar...) */
 /* ################################################################################## */
@@ -342,7 +353,9 @@
 #market-div .media {
   background-color: {{ COLOR9 }} !important;
 }
-.market {
+.market,
+.marketOverload,
+.marketOverload:hover {
   background-color: {{ COLOR9 }} !important;
 }
 
@@ -370,7 +383,8 @@
 .box, .panel,
 .box-footer,
 .panel-heading,
-.well {
+.well,
+.market-modale-category {
   background-color: {{ COLOR10 }} !important;
 }
 .info-box-small{
@@ -445,7 +459,7 @@ body,
   background-color: {{ COLOR10 }} !important;
 }
 
-/* MArket */
+/* Market */
 .media-title {
   background-color: {{ COLOR10 }}60 !important;
 }
@@ -564,7 +578,8 @@ legend {
 .form-control {
   color: {{ COLOR12 }} !important;
 }
-.input-group .input-group-addon {
+.input-group .input-group-addon,
+.input-group .input-group-addon i {
   color: {{ COLOR12 }} !important;
 }
 .input-sm {

@@ -51,38 +51,35 @@ class DashBoardController extends BaseController
     public static function get(&$pageData): string
     {
         $objectIdFromUrl = Utils::init('object_id', '');
+        $defaultDashboardObjectId ='';
+        $currentJeeObjectId = '';
         $pageData['JS_VARS']['nextdom_Welcome'] = ConfigManager::byKey('nextdom::Welcome');
-        $pageData['JS_VARS']['SEL_OBJECT_ID'] = $objectIdFromUrl;
         $pageData['JS_VARS']['SEL_CATEGORY'] = Utils::init('category', 'all');
         $pageData['JS_VARS']['SEL_TAG'] = Utils::init('tag', 'all');
         $pageData['JS_VARS']['SEL_SUMMARY'] = Utils::init('summary');
 
         $defaultDashboardObjectName = UserManager::getStoredUser()->getOptions('defaultDashboardObject');
         $defaultDashboardObject = ObjectManager::byId($defaultDashboardObjectName);
-
-        $defaultDashboardObjectId ='';
-        $currentJeeObjectId = '';
-
         if(!empty($defaultDashboardObject)) {
             $defaultDashboardObjectId = $defaultDashboardObject->getId();
         }
-        if ($pageData['JS_VARS']['SEL_OBJECT_ID'] == '') {
-            $currentJeeObject = ObjectManager::byId($defaultDashboardObjectName);
-            $pageData['JS_VARS']['SEL_OBJECT_ID'] = $defaultDashboardObjectName;
-        } else {
-            $currentJeeObject = ObjectManager::byId($objectIdFromUrl);
-        }
-        if (!is_object($currentJeeObject)) {
-            $currentJeeObject = ObjectManager::getRootObjects();
 
-            if(!empty($currentJeeObject)){
-                $currentJeeObjectId = $currentJeeObject->getId();
-                $pageData['JS_VARS']['SEL_OBJECT_ID'] = $currentJeeObjectId;
+        if ($objectIdFromUrl != '') {
+            $currentJeeObject = ObjectManager::byId($objectIdFromUrl);
+        } else {
+            if ($defaultDashboardObjectId != "") {
+                $currentJeeObject = ObjectManager::byId($defaultDashboardObjectId);
             } else {
-                throw new \Exception(__('Aucun objet racine trouvé. Pour en créer un, allez dans dashboard -> <a href="/index.php?v=d&p=object">Liste objets et résumés</a>'));
+                $currentJeeObject = ObjectManager::getRootObjects();
             }
         }
+        if(!empty($currentJeeObject)){
+            $currentJeeObjectId = $currentJeeObject->getId();
+        } else {
+            throw new \Exception(__('Aucun objet racine trouvé. Pour en créer un, allez dans dashboard -> <a href="/index.php?v=d&p=object">Liste objets et résumés</a>'));
+        }
 
+        $pageData['JS_VARS']['SEL_OBJECT_ID'] = $currentJeeObjectId;
         $pageData['JS_VARS']['rootObjectId'] = $currentJeeObjectId;
         $pageData['JS_VARS']['serverTZoffsetMin'] = Utils::getTZoffsetMin();
 
@@ -94,10 +91,10 @@ class DashBoardController extends BaseController
         $pageData['dashboardCategories'] = NextDomHelper::getConfiguration('eqLogic:category', true);
         $pageData['dashboardTags'] = EqLogicManager::getAllTags();
         $pageData['dashboardDefaultObjectId'] = $defaultDashboardObjectId;
-        $pageData['dashboardObjectId'] = $objectIdFromUrl;
+        $pageData['dashboardObjectId'] = $currentJeeObjectId;
         $pageData['dashboardObject'] = $currentJeeObject;
         $pageData['dashboardObjectParentNumber'] = $currentJeeObject->parentNumber();
-        $pageData['dashboardObjectListMenu'] = self::getObjectsListMenu($objectIdFromUrl);
+        $pageData['dashboardObjectListMenu'] = self::getObjectsListMenu($currentJeeObjectId);
         $pageData['dashboardChildrenObjects'] = ObjectManager::buildTree($currentJeeObject);
         $pageData['profilsUser'] = UserManager::getStoredUser();
 
