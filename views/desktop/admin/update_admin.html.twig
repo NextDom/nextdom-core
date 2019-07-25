@@ -36,10 +36,10 @@
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
-            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'Retour'}}</a>
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'common.return' | trans}}</a>
         </div>
         <div class="action-group">
-            <a class="btn btn-success btn-action-bar pull-right" id="bt_saveupdate_admin"><i class="fas fa-save"></i>{{ 'Sauvegarder' }}</a>
+            <a class="btn btn-success btn-action-bar pull-right" id="bt_saveupdate_admin"><i class="fas fa-save"></i>{{ 'common.save' | trans }}</a>
         </div>
     </div>
 </section>
@@ -68,14 +68,14 @@
                                     <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Vérification automatique' }}</label>
                                     <div class="col-lg-5 col-md-6 col-sm-7 col-xs-12">
                                         <input type="checkbox" class="configKey" data-l1key="update::autocheck" id="autocheck"/>
-                                        <label for="autocheck" class="control-label label-check">{{'Activer'}}</label>
+                                        <label for="autocheck" class="control-label label-check">{{ 'common.activate' | trans }}</label>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Source de mise à jour' }}</label>
                                     <div class="col-lg-5 col-md-6 col-sm-7 col-xs-12">
                                         <select class="configKey form-control" data-l1key="core::repo::provider">
-                                            <option value="default">{{ 'Défaut' }}</option>
+                                            <option value="default">{{ 'common.default' | trans }}</option>
                                             {% for repo, data in adminReposList %}
                                                 {% if data['scope']['core'] is defined and data['score']['core'] and adminConfigs[repo ~ '::enable' ] == 0 %}
                                                     <option value="{{ repo }}">{{ data['name'] }}</option>
@@ -126,7 +126,7 @@
                                                     {% endif %}
                                                     {% if param['type'] == 'checkbox' %}
                                                         <input type="checkbox" class="configKey" data-l1key="{{ repo }}::{{ config }}" value="{{ defaultValue }}" id="{{ repo }}::{{ config }}"/>
-                                                        <label for="{{ repo }}::{{ config }}" class="control-label label-check">{{ 'Activer' }}</label>
+                                                        <label for="{{ repo }}::{{ config }}" class="control-label label-check">{{ 'common.activate' | trans }}</label>
                                                     {% elseif param['type'] == 'input' %}
                                                         <input class="configKey form-control" data-l1key="{{ repo }}::{{ config }}" value="{{ defaultValue }}" placeholder="{{placeholder}}"/>
                                                     {% elseif param['type'] == 'number' %}

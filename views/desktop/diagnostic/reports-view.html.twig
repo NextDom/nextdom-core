@@ -36,12 +36,12 @@
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
-            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'Retour'}}</a>
-            <a class="btn btn-default btn-action-bar" href="index.php?v=d&p=reports_admin"><i class="fas fa-cog"></i>{{ 'Paramètres' }}</a>
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'common.return' | trans }}</a>
+            <a class="btn btn-default btn-action-bar" href="index.php?v=d&p=reports_admin"><i class="fas fa-cog"></i>{{ 'common.settings' | trans }}</a>
         </div>
         <div class="action-group" id="div_reportBtn" style="display:none;">
             <a class="btn btn-danger btn-action-bar pull-right" id="bt_removeAll"><i class="fas fa-trash"></i>{{ 'Tout supprimer' }}</a>
-            <a class="btn btn-warning btn-action-bar pull-right" id="bt_remove"><i class="fas fa-times"></i>{{ 'Supprimer' }}</a>
+            <a class="btn btn-warning btn-action-bar pull-right" id="bt_remove"><i class="fas fa-times"></i>{{ 'common.remove' | trans }}</a>
             <a class="btn btn-success btn-action-bar pull-right" id="bt_download"><i class="fas fa-download"></i>{{ 'Télécharger' }}</a>
         </div>
     </div>
@@ -58,7 +58,7 @@
                     <div class="bs-sidebar form-group">
                         <fieldset>
                             <ul id="ul_region" class="nav nav-list bs-sidenav">
-                                <legend><i class="fas fa-bars"></i>{{ 'Type' }}</legend>
+                                <legend><i class="fas fa-bars"></i>{{ 'common.type' | trans }}</legend>
                                 <li class="cursor label-log li_type active" data-type="view"><a><i class="fas fa-picture-o spacing-right"></i>{{ 'Vues' }}</a></li>
                                 <li class="cursor label-log li_type" data-type="plan"><a><i class="fas fa-object-group spacing-right"></i>{{ 'Designs' }}</a></li>
                                 <li class="cursor label-log li_type" data-type="plugin"><a><i class="fas fa-puzzle-piece spacing-right"></i>{{ 'Plugins' }}</a></li>
@@ -125,7 +125,7 @@
                         <fieldset>
                             <legend class="legend-title">{{ 'Rapport selectionné' }}</legend>
                             <div class="form-group">
-                                <label class="col-sm-2 col-xs-12 control-label">{{ 'Nom' }}</label>
+                                <label class="col-sm-2 col-xs-12 control-label">{{ 'common.name' | trans }}</label>
                                 <div class="col-sm-10 col-xs-12">
                                     <input class="form-control reportAttr" type="text" data-l1key="filename" disabled/>
                                 </div>
@@ -137,7 +137,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-2 col-xs-12 control-label">{{ 'Type' }}</label>
+                                <label class="col-sm-2 col-xs-12 control-label">{{ 'common.type' | trans }}</label>
                                 <div class="col-sm-10 col-xs-12">
                                     <input class="form-control reportAttr" type="text" data-l1key="type" disabled/>
                                 </div>
