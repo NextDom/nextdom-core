@@ -18,7 +18,7 @@
     "ralouphie/getallheaders": "^2.0",
     "symfony/config": "^3.4",
     "symfony/debug": "^3.4",
-    "symfony/expression-language": "^2.8",
+    "symfony/expression-language": "^4.3",
     "symfony/translation": "^3.4",
     "symfony/twig-bridge": "^3.4",
     "touki/ftp": "^1.2",
