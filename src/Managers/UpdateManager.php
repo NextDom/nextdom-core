@@ -59,21 +59,24 @@ class UpdateManager
             self::findNewUpdateObject();
         }
         $updatesList = self::all($filter);
-        $updates_sources = array();
+        $updatesToCheckBySource = array();
         if (is_array($updatesList)) {
             foreach ($updatesList as $update) {
                 if ($update->getStatus() != 'hold') {
-                    if (!isset($updates_sources[$update->getSource()])) {
-                        $updates_sources[$update->getSource()] = array();
+                    if (!isset($updatesToCheckBySource[$update->getSource()])) {
+                        $updatesToCheckBySource[$update->getSource()] = array();
                     }
-                    $updates_sources[$update->getSource()][] = $update;
+                    $updatesToCheckBySource[$update->getSource()][] = $update;
                 }
             }
         }
-        foreach ($updates_sources as $source => $updates) {
-            $class = 'Repo' . $source;
-            if (class_exists($class) && method_exists($class, 'checkUpdate') && ConfigManager::byKey($source . '::enable') == 1) {
-                $class::checkUpdate($updates);
+        foreach ($updatesToCheckBySource as $source => $updates) {
+            $repoData = self::getRepoDataFromName($source);
+            if (array_key_exists('phpClass', $repoData)) {
+                $class = $repoData['phpClass'];
+                if (class_exists($class) && method_exists($class, 'checkUpdate') && ConfigManager::byKey($source . '::enable') == 1) {
+                    $class::checkUpdate($updates);
+                }
             }
         }
         ConfigManager::save('update::lastCheck', date('Y-m-d H:i:s'));

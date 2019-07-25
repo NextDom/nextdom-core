@@ -425,7 +425,7 @@ class Update implements EntityInterface
             $this->save();
         } else {
             try {
-                $class = 'Repo' . $this->getSource();
+                $class = UpdateManager::getRepoDataFromName($this->getSource())['phpClass'];
                 if (class_exists($class) && method_exists($class, 'checkUpdate') && ConfigManager::byKey($this->getSource() . '::enable') == 1) {
                     $class::checkUpdate($this);
                 }
