@@ -729,7 +729,7 @@ class BackupManager
         FileSystemHelper::mkdirIfNotExists($pluginRoot,0775,true);
         foreach ($pluginDirs as $c_dir) {
             $name = basename($c_dir);
-            if (false === FileSystemHelper::mv($c_dir, sprintf("%s/%s", $pluginRoot, $name))) {
+            if (false === FileSystemHelper::mv($c_dir, $pluginRoot)) {
                 // should probably fail, keeping behavior prior to install/restore.php refactoring
             }
         }
