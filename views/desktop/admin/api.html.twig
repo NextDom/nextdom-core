@@ -157,6 +157,8 @@
                                 </div>
                             </div>
                         {% endfor %}
+                    {% else %}
+                        <div class="alert alert-info">{{ 'Aucun plugins ne disposant de clés API...' }}.</div>
                     {% endif %}
                 </fieldset>
             </form>

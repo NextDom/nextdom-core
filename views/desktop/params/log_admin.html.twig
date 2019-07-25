@@ -189,7 +189,7 @@
 
                 <fieldset class="legend-section">
                     <legend>{{ 'Niveau des logs plugins' }}</legend>
-                    {% if not adminIsRescueMode %}
+                    {% if not adminIsRescueMode and adminPluginsList|length > 0 %}
                         {% for pluginData in adminPluginsList %}
                             <form class="form-horizontal">
                                 <div class="form-group">
@@ -205,6 +205,8 @@
                                 </div>
                             </form>
                         {% endfor %}
+                    {% else %}
+                        <div class="alert alert-info">{{ 'Aucun plugins disponibles...' }}.</div>
                     {% endif %}
                 </fieldset>
             </form>

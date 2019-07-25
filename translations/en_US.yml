@@ -33,7 +33,7 @@ common:
     in-progress: 'In progress'
     info: 'Info'
     information: 'Information'
-    jeedom-version: 'Base Jeedom' 
+    jeedom-version: 'Base Jeedom'
     log: 'Log'
     main: 'Main'
     minutes: 'minutes'
@@ -77,7 +77,7 @@ connection:
     remember-label: Remember me ?
     connect: Log in
     forgot: "Oops: I forgot my password !"
-    
+
 core:
     error-401: 401 - Unauthorized Access
     error-404: 404 - Page not found
@@ -136,7 +136,7 @@ page-title:
     objects: Objects
     plugins: Plugins
     tools: tools
-   
+
 administration:
     cpu: CPU
     cpu-cores: cores
@@ -168,7 +168,7 @@ scripts:
     listener-not-found: "Listener not found:"
     listener-id-cannot-be-empty: The listener ID can not be empty
     file-not-found: "File not found: "
-   
+
 health:
     apache-private-tmp-disabled: "Please disable private tmp Apache (NextDom can work with). See <a href=\"https://jeedom.github.io/core/fr_FR/faq#tocAnchor-1-29\" target=\"_blank\"> </a>"
     apache-private-tmp: Apache private tmp
@@ -224,13 +224,13 @@ health:
     uncollapse: uncollapse
     unknown: Unknown
     update-to-date: System update
-    
+
 plugin:
     cant-report: You can not make a report on board without plugin
     category:
         security: security
         automation-protocol: Automation Protocol
-    
+
 welcome:
     title: Welcome to %productName%
     congrats: Congratulations
@@ -251,12 +251,12 @@ welcome:
     blog-content: All the latest news from% productName% on our blog.
     blog-launch: Go to the blog
     notify: Saved successfully
-    
+
 footer:
     licence: GPL Automation 2018
     about: A Propos de
     rights: All rights reserved
-    
+
 sidebar:
     menu-main: Main Menu
     menu-manage: menu Management
@@ -291,11 +291,11 @@ sidebar:
     expert-issue: A dysfunction ?
     online: Online
     offline: Offline
-    
+
 firstuse:
     step: Step
     welcome-title: Welcome %productName%
-    welcome-content: "Well Done! You have just installed your home automation solution, the first use wizard is activated!  This one will guide you in the process of configuring your home automation solution ..." 
+    welcome-content: "Well Done! You have just installed your home automation solution, the first use wizard is activated!  This one will guide you in the process of configuring your home automation solution ..."
     password-title: Secure your %productName%
     password-content: "First: thank you to define a new administrator password to improve security ..."
     password-placeholder: New Password...
@@ -311,7 +311,7 @@ firstuse:
     customize-content: "Select the theme that suits you the most: others being selectable or customizable in the Customization page ..."
     congrats-title: Congratulations! Configuring your% productName% is over!
     congrats-content: Click the Finish button to enjoy your Home Automation solution ...
-    
+
 backup:
     automatic_sending: "Sending Automatically"
     available_backups: "Available backups"
@@ -327,7 +327,7 @@ backup:
     manual_backup: "manual backup"
     purpose1: "You can backup here your Nexdom setup."
     purpose2: "Will save settings, dashboards, views, designs, plugins, widgets etc ... But the Core will however not be included in the backup."
-    purpose3: "It's also here that you can restore these backups"
+    purpose3: "It's also here that you can restore your backups (including those from Jeedom system)."
     remove_selected: "Remove Selected"
     restoration: "Restoration"
     restore_backup_or_mirgration: "You can restore a backup NextDom or migrate backup Jeedom"
@@ -351,6 +351,7 @@ general:
     synchronization: "Synchronization"
     nextdom_name: "Name of your NextDom "
     language: "Language"
+    language-used: "Language used"
     system_hardware: "System /  Hardware"
     installation_key: "Installation Key"
     session_timeout: "Sessions timeout"
@@ -365,6 +366,17 @@ general:
        time_zone: "Time zone used by Nexdom"
        time_server: "Time Server used for time synchronization"
        ignore_system_time: "Indicates to Nexdom to ignore system time"
+    language-list:
+        fr_FR: "Franch"
+        en_US: "English"
+        de_DE: "German"
+        es_ES: "Spanish"
+        ru_RU: "Russian"
+        id_ID: "Indonesian"
+        it_IT: "Italian"
+        ja_JP: "Japanese"
+        pt_PT: "Portuguese"
+        tr: "Turkish"
 
 update-view:
     none: "None"
@@ -393,10 +405,10 @@ update-view:
     warning_special_option: "The following option should stay on 'None' and can only be changed only because of a request comming from the support team"
 
 update:
-    do_not_update: "Do not update" 
-    branch: "Branch :"  
-    type: "Type :"          
-    version: "Version :"     
+    do_not_update: "Do not update"
+    branch: "Branch :"
+    type: "Type :"
+    version: "Version :"
 
 note:
     create_a_note: "Create a Note"
@@ -408,7 +420,7 @@ note:
     are_sure_you_want_to_delete_the_note: "Are sure you want to delete the note"
 
 osdb:
-    warning: "WARNING: you may loose access to your system (NextDom) "
+    warning: "WARNING: you may loose access to your system "
     administration: "Administration"
     system_console: "System console"
     file_editor: "File Editor"
@@ -566,7 +578,7 @@ scenario:
     description-at: "At a specific time: this element will launch an action. For example: At 9:30, open the shutters."
     description-code: "This element allows you to add in your scenario programming using a code: PHP / Shell, etc."
     description-comment: Lets comment your scenario.
-    
+
 object:
   back: Back
   add: Add
@@ -590,7 +602,7 @@ profile:
 entity:
   note:
     name-cannot-be-empty: The name of the note can not be empty
-    
+
 samba:
   error:
     connect: Unable to plug the samba server
