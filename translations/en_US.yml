@@ -135,6 +135,7 @@ page-title:
     scenarios: Scenario
     objects: Objects
     plugins: Plugins
+    tools: tools
    
 administration:
     cpu: CPU
@@ -253,7 +254,8 @@ welcome:
     
 footer:
     licence: GPL Automation 2018
-    about: About
+    about: A Propos de
+    rights: All rights reserved
     
 sidebar:
     menu-main: Main Menu
