@@ -249,7 +249,7 @@ class PrepareView
     private function initCssPool(&$pageData)
     {
         $pageData['CSS_POOL'][] = '/public/css/nextdom.css';
-        if (!file_exists(NEXTDOM_DATA . '/public/css/theme.css')) {
+        if (!file_exists(NEXTDOM_ROOT . '/var/public/css/theme.css')) {
             $this->generateCssThemFile();
         }
         $pageData['CSS_POOL'][] = '/var/public/css/theme.css';
@@ -269,10 +269,10 @@ class PrepareView
                 }
             }
             if ($this->currentConfig['enableCustomCss'] == 1) {
-                if (file_exists(NEXTDOM_DATA . '/custom/desktop/custom.css')) {
+                if (file_exists(NEXTDOM_ROOT . '/var/custom/desktop/custom.css')) {
                     $pageData['CSS_POOL'][] = '/var/custom/desktop/custom.css';
                 }
-                if (file_exists(NEXTDOM_DATA . '/custom/desktop/custom.js')) {
+                if (file_exists(NEXTDOM_ROOT . '/var/custom/desktop/custom.js')) {
                     $pageData['JS_POOL'][] = '/var/custom/desktop/custom.js';
                 }
             }
@@ -300,7 +300,7 @@ class PrepareView
         $themeContent = str_replace(": ", ":", $themeContent);
         $themeContent = str_replace(" {", "{", $themeContent);
         $themeContent = str_replace(", ", ",", $themeContent);
-        file_put_contents(NEXTDOM_DATA . '/public/css/theme.css', $themeContent);
+        file_put_contents(NEXTDOM_ROOT . '/var/public/css/theme.css', $themeContent);
     }
 
     /**

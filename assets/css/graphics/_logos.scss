@@ -28,9 +28,24 @@
         border-bottom: 0 solid transparent;
     }
     > .logo {
-      border-bottom: 0 solid transparent;
+        border-bottom: 0 solid transparent;
     }
 }
+.logo-mini-img{
+    background-size: 40px;
+    background-repeat: no-repeat;
+    background-position: center;
+    height:40px;
+}
+.logo-lg-img{
+    background-size: auto 40px;
+    background-repeat: no-repeat;
+    background-position: center;
+    height:40px;
+}
 .login-logo-img{
+    background-size: auto 100px;
+    background-repeat: no-repeat;
+    background-position: center;
     height:100px;
 }

@@ -24,6 +24,7 @@ import DefaultActionCmd from "@/components/Cmds/DefaultActionCmd.vue";
 import DontCmd from "@/components/Cmds/DontCmd.vue";
 import ActionLinkedCmd from "@/components/Cmds/ActionLinkedCmd.vue";
 import BatteryStateCmd from "@/components/Cmds/BatteryStateCmd.vue";
+import IconStateCmd from "@/components/Cmds/IconStateCmd.vue";
 import PlugStateCmd from "@/components/Cmds/PlugStateCmd.vue";
 import DoorStateCmd from "@/components/Cmds/DoorStateCmd.vue";
 import LightStateCmd from "@/components/Cmds/LightStateCmd.vue";
@@ -34,8 +35,9 @@ import LockStateCmd from "@/components/Cmds/LockStateCmd.vue";
 import PresenceStateCmd from "@/components/Cmds/PresenceStateCmd.vue";
 import ConsumptionInfoCmd from "@/components/Cmds/ConsumptionInfoCmd.vue";
 import PowerInfoCmd from "@/components/Cmds/PowerInfoCmd.vue";
-import SabotageInfoCmd from "@/components/Cmds/SabotageInfoCmd.vue";
 import RefreshCmd from "@/components/Cmds/RefreshCmd.vue";
+import SabotageInfoCmd from "@/components/Cmds/SabotageInfoCmd.vue";
+import TextStateCmd from "@/components/Cmds/TextStateCmd.vue";
 import WindowStateCmd from "@/components/Cmds/WindowStateCmd.vue";
 
 export default {
@@ -48,6 +50,7 @@ export default {
     ActionLinkedCmd,
     BatteryStateCmd,
     ColorPickerCmd,
+    IconStateCmd,
     PlugStateCmd,
     DoorStateCmd,
     LightStateCmd,
@@ -57,8 +60,9 @@ export default {
     SliderCmd,
     ConsumptionInfoCmd,
     PowerInfoCmd,
-    SabotageInfoCmd,
     RefreshCmd,
+    SabotageInfoCmd,
+    TextStateCmd,
     WindowStateCmd
   },
   cmds: {
