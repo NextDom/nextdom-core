@@ -32,7 +32,7 @@
 
 /* Core-Surcharge */
 .pluginContainer {
-    margin: 5px -5px -5px -5px;
+    margin: -5px;
 }
 .content-wrapper {
     min-height: 100%;
@@ -57,6 +57,10 @@
         margin : 10px;
         cursor: pointer;
     }
+}
+
+.div_backgroundPlan{
+    overflow: auto;
 }
 @media (max-width: 767px) {
   .fixed .content-wrapper, .fixed .right-side {

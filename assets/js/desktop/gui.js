@@ -60,11 +60,7 @@ $(window).resize(function () {
     }
 
     // Left menu resize
-    if ($('body').hasClass("sidebar-collapse")) {
-        sideMenuResize(true);
-    } else {
-        sideMenuResize(false);
-    }
+    sideMenuResize();
     limitTreeviewMenu();
 
     // Header repositionning
@@ -92,10 +88,7 @@ window.onscroll = function () {
     }
 
     // Left menu resize
-    if (!$('body').hasClass("sidebar-collapse")) {
-        $(".sidebar-menu").css("overflow-y", "auto");
-        sideMenuResize(false);
-    }
+    sideMenuResize();
     limitTreeviewMenu();
 
     // Header repositionning
@@ -103,6 +96,11 @@ window.onscroll = function () {
 
     // Gui automatic adjusting
     adjustNextDomTheme();
+
+    // Modals repositionning
+    jQuery('#md_modal').dialog('option','position','center');
+    jQuery('#md_modal2').dialog('option','position','center');
+    jQuery('#md_pageHelp').dialog('option','position','center');
 };
 
 // FUNCTIONS
@@ -112,43 +110,51 @@ window.onscroll = function () {
  *
  * @param calcul true if you want to calcul dynamicly the height of menu
  */
- function sideMenuResize(calcul) {
+ function sideMenuResize() {
      var lists = document.getElementsByTagName("li");
-     if (calcul==true) {
-         $(".sidebar-menu").css("height", "none");
-         for (var i = 0; i < lists.length; ++i) {
-             if (lists[i].getAttribute("id") !== undefined && lists[i].getAttribute("id") !== null) {
-                 if (lists[i].getAttribute("id").match("side")) {
-                     var liIndex=lists[i].getAttribute("id").slice(-1);
-                     lists[i].getElementsByClassName("treeview-menu")[0].style.maxHeight=$(window).height()-50-70-(44*liIndex)+"px";
-                 }
-             }
-         }
+     if ($('body').hasClass("sidebar-collapse") || ($(window).width() < 768 && !$('body').hasClass("sidebar-open"))) {
+        // Menu closed
+        $(".sidebar-menu").css("overflow", "");
+        $(".treeview-menu").css("overflow-y", "auto");
+
+        $(".sidebar-menu").css("height", "none");
+        for (var i = 0; i < lists.length; ++i) {
+           if (lists[i].getAttribute("id") !== undefined && lists[i].getAttribute("id") !== null) {
+               if (lists[i].getAttribute("id").match("side")) {
+                   var liIndex=lists[i].getAttribute("id").slice(-1);
+                   lists[i].getElementsByClassName("treeview-menu")[0].style.maxHeight=$(window).height()-50-70-(44*liIndex)+"px";
+               }
+           }
+        }
      } else {
-         var goOnTopButton = document.getElementById("bt_goOnTop");
-         var sidemenuBottomPadding = 0;
-         var sidemenuDoubleHeaderPadding = 0;
-         // If bt_goOnTop visible
-         if (goOnTopButton !== undefined && goOnTopButton !== null) {
-             if (goOnTopButton.style.display == "block") {
-                 sidemenuBottomPadding = 75;
-             }
-         }
+        // Menu opened
+        $(".sidebar-menu").css("overflow-y", "auto");
+        $(".treeview-menu").css("overflow", "");
 
-         // If double header because of little resolution
-         if ($(window).width() < 768) {
-             sidemenuDoubleHeaderPadding = 50;
-         }
+        var goOnTopButton = document.getElementById("bt_goOnTop");
+        var sidemenuBottomPadding = 0;
+        var sidemenuDoubleHeaderPadding = 0;
+        // If bt_goOnTop visible
+        if (goOnTopButton !== undefined && goOnTopButton !== null) {
+           if (goOnTopButton.style.display == "block") {
+               sidemenuBottomPadding = 75;
+           }
+        }
 
-         // Height adjustement
-         $(".sidebar-menu").css("height", $(window).height()-50-70-sidemenuBottomPadding-sidemenuDoubleHeaderPadding);
-         for (var i = 0; i < lists.length; ++i) {
-             if (lists[i].getAttribute("id") !== undefined && lists[i].getAttribute("id") !== null) {
-                 if (lists[i].getAttribute("id").match("side")) {
-                     lists[i].getElementsByClassName("treeview-menu")[0].style.maxHeight="none";
-                 }
-             }
-         }
+        // If double header because of little resolution
+        if ($(window).width() < 768) {
+           sidemenuDoubleHeaderPadding = 50;
+        }
+
+        // Height adjustement
+        $(".sidebar-menu").css("height", $(window).height()-50-70-sidemenuBottomPadding-sidemenuDoubleHeaderPadding);
+        for (var i = 0; i < lists.length; ++i) {
+           if (lists[i].getAttribute("id") !== undefined && lists[i].getAttribute("id") !== null) {
+               if (lists[i].getAttribute("id").match("side")) {
+                   lists[i].getElementsByClassName("treeview-menu")[0].style.maxHeight="none";
+               }
+           }
+        }
      }
  }
 
@@ -159,8 +165,12 @@ window.onscroll = function () {
  function limitTreeviewMenu () {
      var maxHeight = 0;
      $(".sidebar-menu").children(".treeview").each(function() {
-         maxHeight = window.innerHeight - document.getElementById($(this).attr('id')).offsetTop - 44 - 48 - 30;
-         $(this).children(".treeview-menu").css("max-height", maxHeight);
+         if (document.getElementsByClassName('sidebar-collapse').length == 0) {
+            $(this).children(".treeview-menu").css("max-height", "auto");
+         } else {
+            maxHeight = window.innerHeight - document.getElementById($(this).attr('id')).offsetTop - 44 - 48 - 30;
+            $(this).children(".treeview-menu").css("max-height", maxHeight);
+         }
      });
  }
 

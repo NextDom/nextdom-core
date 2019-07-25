@@ -257,6 +257,9 @@
     left: 10px;
     font-size: 0.7em;
 }
+.market-modale-rating {
+    font-size: 4em;
+}
 .market-cost {
     position: absolute;
     bottom: 5px;
@@ -270,12 +273,21 @@
     font-size: 0.7em;
     color: #999999;
 }
+.market-modale-author {
+    font-weight: bold;
+    font-size: 1.5em;
+    color: #707070 !important;
+}
 .market-name {
     position: relative;
     top: 10px;
-    word-break: break-all;
+    word-break: break-word;
     white-space: pre-wrap;
     word-wrap: break-word;
+}
+.market-modale-name {
+  font-size: 2em;
+  font-weight: bold;
 }
 .market-certification {
   top: 0px;
@@ -285,6 +297,14 @@
   padding: 1px 0px 1px 0px;
   position: absolute;
   font-size: 0.8em;
+}
+.market-modale-certification,
+.market-modale-category {
+  width: fit-content;
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 1em;
+  text-align: center;
 }
 .market-official {
   background-color: #33B8CC;
@@ -322,14 +342,19 @@
     right: 0px;
     padding: 8px;
 }
-.market {
+.market,
+.marketOverload {
     border-radius: 4px;
     height : 235px;
-    margin-bottom : 10px;
+    margin : 5px;
     padding : 5px;
     border-radius: 4px;
-    width : 190px;
-    margin-left : 10px;
+}
+.market {
+    width : 193px;
+}
+.marketOverload {
+    width : 196px;
 }
 .market-icon {
     height: 117px;
@@ -338,6 +363,26 @@
     margin-top: 22px;
     text-align: center;
     object-fit: fill;
+}
+.market-limited {
+    position: relative;
+    top: 8px;
+    padding: 8px 15px;
+}
+.market-unlimited {
+    line-height: 33px;
+}
+.market-description {
+    word-wrap: break-word;
+    white-space: -moz-pre-wrap;
+    white-space: pre-wrap;
+}
+.market-compatibility {
+    width:60px;
+    height:60px;
+}
+.market-modale-body {
+    min-height: 120px;
 }
 
 /* Core-Surcharge */

@@ -25,6 +25,7 @@ use NextDom\Enums\FoldersReferential;
 use NextDom\Helpers\MigrationHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
+use NextDom\Helpers\Utils;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use splitbrain\PHPArchive\Tar;
@@ -670,7 +671,6 @@ class BackupManager
         $customDataDirs = glob(sprintf("%s/data/*", $tmpDir), GLOB_ONLYDIR);
         $customDataRoot = sprintf("%s/data", NEXTDOM_DATA);
 
-        SystemHelper::rrmdir($customDataRoot . "/*");
         FileSystemHelper::rrmdir($customDataRoot . "/");
         FileSystemHelper::mkdirIfNotExists($customDataRoot,0775,true);
         foreach ($customDataDirs as $c_dir) {
@@ -689,24 +689,25 @@ class BackupManager
             }
         }
 
-        $customPlanDirs = glob(sprintf("%s/core/img/plan*", $tmpDir), GLOB_ONLYDIR);
+        $customPlanDirs = glob(sprintf("%s/core/img/*", $tmpDir), GLOB_ONLYDIR);
         $customPlanRoot = sprintf("%s/data/custom/plans", NEXTDOM_DATA);
 
-        FileSystemHelper::rrmdir($customPlanRoot . "/");
         FileSystemHelper::mkdirIfNotExists($customPlanRoot,0775,true);
         foreach ($customPlanDirs as $c_dir) {
             $name = basename($c_dir);
-            $message ='Restoring folder :'.$name;
-            if($logFile == 'migration') {
-                LogHelper::addInfo($logFile, $message, '');
-            } else {
-                ConsoleHelper::process($message);
-            }
-            if (true === FileSystemHelper::mv($c_dir, sprintf("%s/%s", $customPlanRoot, $name))) {
-                self::restorePublicPerms($customPlanRoot);
-            }
-            if($logFile != 'migration') {
-                ConsoleHelper::ok();
+            if(Utils::startsWith($name,'plan')) {
+                $message = 'Restoring folder :' . $name;
+                if ($logFile == 'migration') {
+                    LogHelper::addInfo($logFile, $message, '');
+                } else {
+                    ConsoleHelper::process($message);
+                }
+                if (true === FileSystemHelper::mv($c_dir, sprintf("%s/%s", $customPlanRoot, $name))) {
+                    self::restorePublicPerms($customPlanRoot);
+                }
+                if ($logFile != 'migration') {
+                    ConsoleHelper::ok();
+                }
             }
         }
 
@@ -721,15 +722,14 @@ class BackupManager
      */
     private static function restorePlugins($tmpDir)
     {
-        $plugingDirs = glob(sprintf("%s/plugins/*", $tmpDir), GLOB_ONLYDIR);
+        $pluginDirs = glob(sprintf("%s/plugins/*", $tmpDir), GLOB_ONLYDIR);
         $pluginRoot = sprintf("%s/plugins", NEXTDOM_ROOT);
 
-        SystemHelper::rrmdir($pluginRoot . "/*");
         FileSystemHelper::rrmdir($pluginRoot . "/");
         FileSystemHelper::mkdirIfNotExists($pluginRoot,0775,true);
-        foreach ($plugingDirs as $c_dir) {
+        foreach ($pluginDirs as $c_dir) {
             $name = basename($c_dir);
-            if (false === FileSystemHelper::mv($c_dir, sprintf("%s/%s", $pluginRoot, $name))) {
+            if (false === FileSystemHelper::mv($c_dir, $pluginRoot)) {
                 // should probably fail, keeping behavior prior to install/restore.php refactoring
             }
         }

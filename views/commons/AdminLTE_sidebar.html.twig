@@ -43,7 +43,7 @@
             <li class="treeview" id="side1">
                 <a href="#"><i class="fas fa-tachometer-alt spacing-right"></i><span>{{ 'sidebar.dashboard'|trans }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
                 <ul class="treeview-menu">
-                    <li class="divider"><a href="index.php?v=d&p=dashboard"><i class="fas fa-asterisk spacing-right"></i>{{ 'sidebar.default-object'|trans }}</a></li>
+                    <li class="divider"><a href="index.php?v=d&p=dashboard{% if dashboardDefaultObjectId != '' %}&object_id={{ dashboardDefaultObjectId }}{% endif %}"><i class="fas fa-asterisk spacing-right"></i>{{ 'sidebar.default-object'|trans }}</a></li>
                     {% for jeeObject in MENU_JEEOBJECT_TREE %}
                         <li style="padding-left:{{ jeeObject.parentNumber()*7 }}px"><a href="index.php?v=d&p=dashboard&object_id={{ jeeObject.getId() }}">{{ jeeObject.getHumanName(true)|raw }}</a></li>
                     {% endfor %}

@@ -39,7 +39,7 @@ initTableSorter();
 marketFilter();
 setTimeout(function(){
     $('.pluginContainer').packery();
-},100);
+},200);
 
 $('.bt_pluginFilterCost').on('click', function () {
     $('.bt_pluginFilterCost').removeClass('btn-primary');
@@ -118,18 +118,15 @@ $('#resetSearch').on('click', function () {
     $('#generalSearch').value('');
 });
 
-/*function buildUrl(key, value) {
-    var url = 'index.php?v=d&modal=update.display&';
-    foreach ($_GET as tmpkey => tmpvalue) {
-        if (key != tmpkey) {
-            url += tmpkey . '=' . urlencode($value) . '&';
-        }
-    }
-    if (key != '' && value != '') {
-        url += key . '=' . urlencode(value);
-    }
-    return url;
-}*/
+$('#bt_resetSearchLimit').on('click', function () {
+    loadPage('index.php?v=d&p=marketJee&type=' + marketType + '&categorie=' + encodeURI(marketCategory) + '&limit=');
+    $('#generalSearch').value('');
+});
+
+$('#bt_SearchLimit').on('click', function () {
+    loadPage('index.php?v=d&p=marketJee&type=' + marketType + '&categorie=' + encodeURI(marketCategory));
+    $('#generalSearch').value('');
+});
 
 function displayWidgetName(name) {
     var result = '';
@@ -230,7 +227,6 @@ function marketFilter() {
     var filterCost = '';
     var filterInstall = '';
     var pluginValue = '';
-    $('.market').hide();
     $('.bt_pluginFilterCost').each(function () {
         if ($(this).hasClass("btn-primary")) {
             filterCost = $(this).attr('data-filter');

@@ -306,6 +306,7 @@ class Cmd implements EntityInterface
         }
         if ($this->getHtml($_key) != $_value) {
             $this->_needRefreshWidget = true;
+            $this->_changed = true;
         }
         $this->html = Utils::setJsonAttr($this->html, $_key, $_value);
         return $this;

@@ -147,7 +147,7 @@ $(function () {
     });
 
     // Restart event handler declaration
-    $('#bt_rebootSystem,#bt_rebootSystemAdmin').on('click', function () {
+    $('#bt_rebootSystem').on('click', function () {
         $.hideAlert();
         bootbox.confirm('{{Etes-vous sûr de vouloir redémarrer le système ?}}', function (result) {
             if (result) {
@@ -157,7 +157,7 @@ $(function () {
     });
 
     // Shutdown event handler declaration
-    $('#bt_haltSystem,#bt_haltSystemAdmin').on('click', function () {
+    $('#bt_haltSystem').on('click', function () {
         $.hideAlert();
         bootbox.confirm('{{Etes-vous sûr de vouloir arrêter le système ?}}', function (result) {
             if (result) {
@@ -251,17 +251,10 @@ $(function () {
 
     // adminLTE left menu toggle link event handler declaration
     $('.sidebar-toggle').on("click", function () {
-        if ($('body').hasClass("sidebar-collapse") || ($(window).width() < 768 && !$('body').hasClass("sidebar-open"))) {
-            $(".treeview-menu").css("overflow", "");
-            $(".sidebar-menu").css("overflow-y", "auto");
-            sideMenuResize(false);
-        } else {
-            $(".sidebar-menu").css("overflow", "");
-            $(".treeview-menu").css("overflow-y", "auto");
-            sideMenuResize(true);
-        }
-        limitTreeviewMenu();
         setTimeout(function () {
+            // Resize menu
+            sideMenuResize();
+            limitTreeviewMenu();
             // Header repositionning
             setHeaderPosition(false);
             // Gui automatic adjusting
@@ -308,7 +301,7 @@ $(function () {
         closeText: '',
         height: (jQuery(window).height() - 100),
         width: ((jQuery(window).width() - 50) < 1500) ? (jQuery(window).width() - 50) : 1500,
-        position: { my: "center bottom-10", at: "center bottom", of: window },
+        position: { my: "center", at: "center", of: window },
         open: function () {
             $("body").css({overflow: 'hidden'});
             $(this).closest( ".ui-dialog" ).find(":button").blur();
@@ -364,7 +357,7 @@ $(function () {
 
     // Summary link event handler declaration
     $('body').on('click','.objectSummaryParent',function(){
-        loadPage('index.php?v=d&p=dashboard&summary='+$(this).data('summary')+'&object_id='+$(this).data('object_id'));
+        loadPage('index.php?v=d&p=dashboard&summary='+$(this).data('summary')+'&object_id='+root_object_id);
     });
 
     // Inits launch

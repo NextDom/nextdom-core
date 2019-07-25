@@ -45,12 +45,12 @@
             <div class="btn-group">
                 <a class="btn btn-default bt_pluginFilterCost" data-filter="free"><i class="fas fa-gift"></i><span>{{ 'Gratuit' }}</span></a>
                 <a class="btn btn-default bt_pluginFilterCost" data-filter="paying"><i class="fas fa-euro-sign"></i><span>{{ 'Payant' }}</span></a>
-                <a class="btn btn-primary bt_pluginFilterCost" data-filter=""><i class="fa fa-times"></i></a>
+                <a class="btn btn-primary bt_pluginFilterCost" data-filter=""><i class="fas fa-times"></i></a>
             </div>
             <div class="btn-group">
                 <a class="btn btn-default bt_pluginFilterInstall" data-filter="notInstall"><i class="fas fa-thumbs-up"></i><span>{{ 'Installé' }}</span></a>
                 <a class="btn btn-default bt_pluginFilterInstall" data-filter="install"><i class="fas fa-thumbs-down"></i><span>{{ 'Non installé' }}</span></a>
-                <a class="btn btn-primary bt_pluginFilterInstall" data-filter=""><i class="fa fa-times"></i></a>
+                <a class="btn btn-primary bt_pluginFilterInstall" data-filter=""><i class="fas fa-times"></i></a>
             </div>
             <div class="btn-group">
                 <select class="form-control" id="sel_certif">
@@ -96,7 +96,7 @@
         <div class="box-header with-border">
             <h3 class="box-title"><i class="fas fa-shopping-cart"></i>{{ 'Market Jeedom' }}</h3>
             {% if marketUser != '' %}
-                <span class="label label-info pull-right badge pull-right">{{marketUser}}
+                <span class="label label-info badge pull-right">{{marketUser}}
                     {% if marketUserTest %}
                         <i class="fas fa-check spacing-left"></i>
                     {% else %}
@@ -106,10 +106,18 @@
             {% endif %}
         </div>
         <div class="box-body">
-            {% if markets|length >= marketLimit %}
-                <div><p class="alert alert-warning" style="margin-bottom:0px">{{ 'Attention l\'affichage est limité à ' }}{{ marketLimit }}{{ ' résultats, utilisez les filtres ou la recherche par nom ou auteur si ce que vous cherchez n\'apparaît pas...' }}</p></div>
+            {% if markets|length >= marketLimit and marketLimit != '' %}
+                <div>
+                    <span class="alert alert-warning market-limited">{{ 'Attention l\'affichage est limité à ' }}{{ marketLimit }}{{ ' résultats, utilisez les filtres ou la recherche par nom ou auteur si ce que vous cherchez n\'apparaît pas...' }}</span>
+                    <a class="btn btn-action pull-right" id="bt_resetSearchLimit"><i class="fas fa-times"></i>{{ 'Sans limites' }}</a>
+                </div>
             {% else %}
-                <div><span>{{ markets|length }} {% if marketType == '' %}{{ 'common.objects' | trans }}{% else %}{{ marketType }}{{ 's' }}{% endif %}{{ ' disponibles dans cette catégorie et pour la recherche globale, utilisez les filtres ou la recherche par nom ou auteur si ce que vous cherchez n\'apparaît pas...' }}</span></div>
+                <div>
+                    <span class="market-unlimited">{{ markets|length }} {% if marketType == '' %}{{ 'common.objects' }}{% else %}{{ marketType }}{{ 's' }}{% endif %}{{ ' disponibles dans cette catégorie et pour la recherche globale, utilisez les filtres ou la recherche par nom ou auteur si ce que vous cherchez n\'apparaît pas...' }}</span>
+                    {% if markets|length >= 50 %}
+                        <a class="btn btn-action pull-right" id="bt_SearchLimit"><i class="fas fa-filter"></i>{{ 'Limiter à 50' }}</a>
+                    {% endif %}
+                </div>
             {% endif %}
         </div>
     </div>
@@ -126,46 +134,46 @@
                     <div class="box-body">
                         <div class="pluginContainer DisplayCard text-center" data-category="{{ objectCategory.id }}">
                             {% for object in objectCategory.objects %}
-                                <div class="market cursor {{ object.installed }}" data-install="{{ object.installed }}" data-category="{{ object.category }}" data-cost="{{ object.cost }}" data-certification="{{ object.certification }}" data-name="{{ object.name }}" data-market_id="{{ object.id }}" data-market_type="{{ object.type }}">
-                                    {% if object.type != 'widget' %}
-                                        <div class="market-certification market-{{ object.certificationClass }}">{{ object.certification|upper }}</div>
-                                    {% else %}
-                                        <i class="fas fa-{{object.mobile}}{% if object.mobile == 'mobile' %}-alt{% endif %} market-widget" title="{{ 'Widget pour la version ' }}{{ object.mobile }}"></i>
-                                    {% endif %}
-                                    {% if object.installed == 'notInstall' %}<i class="fas fa-check market-install"></i>{% endif %}
-                                    <div>
-                                        <img class="lazy lazyload market-icon" src="{{ object.default_image }}" data-original="{{ object.urlPath }}"/>
-                                    </div>
-                                    <span class="market-name">{{ object.name }}</span>
-                                    <span class="market-author"><i>{{ 'par ' }}</i>{{ object.author }}</span>
-                                    <span class="market-rating">
-                                        {% for i in 1..5 %}
-                                            {% if i <= object.note %}
-                                                <i class="fas fa-star"></i>
-                                            {% else %}
-                                                <i class="far fa-star"></i>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </span>
-                                    {% if object.cost > 0 %}
-                                        <span class="market-cost">
-                                            {% if object.purchase == 1 %}
-                                                <i class="fas fa-check-circle"></i>
-                                            {% else %}
-                                                {% if object.cost != object.realCost %}
-                                                    <span style="text-decoration:line-through;">{{ object.realCost }}{{ ' €' }}</span>
-                                                {% endif %}
-                                                {{ object.cost }}{{ ' €' }}
-                                            {% endif %}
-                                        </span>
-                                    {% else %}
-                                        {% if object.cost < 0 %}
-                                            <span class="market-cost">{{ 'Nous contacter'}}</span>
-                                        {% else %}
-                                            <span class="market-cost">{{ 'Gratuit' }}</span>
+                                {% if object.mobile != 'mobile' %}
+                                    <div class="market cursor {{ object.installed }}" data-install="{{ object.installed }}" data-category="{{ object.category }}" data-cost="{{ object.cost }}" data-certification="{{ object.certification }}" data-name="{{ object.name }}" data-market_id="{{ object.id }}" data-market_type="{{ object.type }}">
+                                        {% if object.type != 'widget' %}
+                                            <div class="market-certification market-{{ object.certificationClass }}">{{ object.certification|upper }}</div>
                                         {% endif %}
-                                    {% endif %}
-                                </div>
+                                        {% if object.installed == 'notInstall' %}<i class="fas fa-check market-install"></i>{% endif %}
+                                        <div>
+                                            <img class="lazy lazyload market-icon" src="{{ object.default_image }}" data-original="{{ object.urlPath }}"/>
+                                        </div>
+                                        <span class="market-name">{{ object.name }}</span>
+                                        <span class="market-author"><i>{{ 'par ' }}</i>{{ object.author }}</span>
+                                        <span class="market-rating">
+                                            {% for i in 1..5 %}
+                                                {% if i <= object.note %}
+                                                    <i class="fas fa-star"></i>
+                                                {% else %}
+                                                    <i class="far fa-star"></i>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </span>
+                                        {% if object.cost > 0 %}
+                                            <span class="market-cost">
+                                                {% if object.purchase == 1 %}
+                                                    <i class="fas fa-check-circle"></i>
+                                                {% else %}
+                                                    {% if object.cost != object.realCost %}
+                                                        <span style="text-decoration:line-through;">{{ object.realCost }}{{ ' €' }}</span>
+                                                    {% endif %}
+                                                    {{ object.cost }}{{ ' €' }}
+                                                {% endif %}
+                                            </span>
+                                        {% else %}
+                                            {% if object.cost < 0 %}
+                                                <span class="market-cost">{{ 'Nous contacter'}}</span>
+                                            {% else %}
+                                                <span class="market-cost">{{ 'Gratuit' }}</span>
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
                             {% endfor %}
                         </div>
                     </div>

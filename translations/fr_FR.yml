@@ -595,6 +595,12 @@ profile:
   profile: Profil
   profile-of: "Profil de %s"
 
+dashboard:
+  no-object: Aucun objet n'est associé à cette pièce ou aucun ne correspond à la catégorie choisie...
+  grid-config: Configurer la taille de la grille
+  resize-grid-step: Redimensionnement sur le pas de grille
+  resize-childs-grid-step: Redimensionner tous les équipements fils sur le pas de grille
+  all-categories: Toutes
 
 entity:
   note:
@@ -1441,7 +1447,6 @@ samba:
 "Historiques": "Historiques"
 "Historiser": "Historiser"
 "Historisé": "Historisé"
-"HOMELINK": "HOMELINK"
 "homePageValue": "homePageValue"
 "Horodatage": "Horodatage"
 "Humidité": "Humidité"

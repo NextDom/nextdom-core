@@ -21,3 +21,23 @@ $('#btn_welcomeModal').on('click', function () {
     $('#md_modal').dialog({title: "{{Bienvenue dans NextDom}}"});
     $("#md_modal").load('index.php?v=d&modal=welcome').dialog('open');
 });
+
+// Restart event handler declaration
+$('#bt_rebootSystemAdmin').on('click', function () {
+    $.hideAlert();
+    bootbox.confirm('{{Etes-vous sûr de vouloir redémarrer le système ?}}', function (result) {
+        if (result) {
+            window.location.href = 'index.php?v=d&p=reboot';
+        }
+    });
+});
+
+// Shutdown event handler declaration
+$('#bt_haltSystemAdmin').on('click', function () {
+    $.hideAlert();
+    bootbox.confirm('{{Etes-vous sûr de vouloir arrêter le système ?}}', function (result) {
+        if (result) {
+            window.location.href = 'index.php?v=d&p=shutdown';
+        }
+    });
+});

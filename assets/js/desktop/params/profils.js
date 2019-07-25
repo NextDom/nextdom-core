@@ -164,6 +164,7 @@ $('.bt_deleteSession').on('click',function(){
             notify("Erreur", error.message, 'error');
         },
         success: function (data) {
+            modifyWithoutSave = false;
             window.location.reload();
         }
     });
@@ -171,8 +172,9 @@ $('.bt_deleteSession').on('click',function(){
 
 $('#user_avatar').fileupload({
     dataType: 'json',
-    url: "core/ajax/profils.ajax.php?action=imageUpload&ajax_token=" + NEXTDOM_AJAX_TOKEN,
+    url: "core/ajax/profils.ajax.php?action=imageUpload",
     dropZone: "#bsImagesPanel",
+    formData: {'nextdom_token': NEXTDOM_AJAX_TOKEN},
     done: function (e, data) {
         if (data.result.state !== 'ok') {
             notify('Core',data.result.result,'error');

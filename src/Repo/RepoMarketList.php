@@ -9,13 +9,14 @@ use NextDom\Managers\UpdateManager;
 
 AuthentificationHelper::isConnectedAsAdminOrFail();
 
-global $NEXTDOM_INTERNAL_CONFIG;
-
+$searchLimit = Utils::init('limit', 100);
+if ($searchLimit == 0) {
+  $searchLimit = '';
+}
 $type = Utils::init('type', null);
 $categorie = Utils::init('categorie', null);
 $name = Utils::init('name', null);
 $author = Utils::init('author', null);
-
 if ($name == 'false') {
     $name = null;
 }
@@ -24,30 +25,28 @@ if ($author == null && $name === null && $categorie === null && Utils::init('cer
     $markets = RepoMarket::byFilter(array(
         'status' => 'stable',
         'type' => 'plugin',
-        'timeState' => 'popular',
+        'timeState' => 'popular'
     ));
     $markets2 = RepoMarket::byFilter(array(
         'status' => 'stable',
         'type' => 'plugin',
-        'timeState' => 'newest',
+        'timeState' => 'newest'
     ));
     $markets = array_merge($markets, $markets2);
 } else {
     $default = false;
-    $markets = RepoMarket::byFilter(
-        array(
-            'status' => null,
-            'type' => $type,
-            'categorie' => $categorie,
-            'name' => $name,
-            'author' => $author,
-            'cost' => Utils::init('cost', null),
-            'timeState' => Utils::init('timeState'),
-            'certification' => Utils::init('certification', null),
-        )
-    );
+    $markets = RepoMarket::byFilter(array(
+        'status' => null,
+        'type' => $type,
+        'categorie' => $categorie,
+        'name' => $name,
+        'author' => $author,
+        'cost' => Utils::init('cost', null),
+        'timeState' => Utils::init('timeState'),
+        'certification' => Utils::init('certification', null),
+        'limit' => $searchLimit
+    ));
 }
-
 function buildUrl($_key, $_value)
 {
     $url = 'index.php?v=d&modal=update.display&';
@@ -159,360 +158,380 @@ function displayWidgetSubtype($_name)
     }
     return $result;
 }
-
 ?>
+
+<link rel="stylesheet" href="/public/css/pages/markets.css">
 
 <section class="content-header">
     <div class="action-bar">
+        <?php
+        if ($name !== null && strpos($name, '$') !== false) {
+            echo '<a class="btn btn-danger btn-action-bar" id="bt_returnMarketList" style="margin-top : 50px;" data-href=' . buildUrl('name', '') . '><i class="fas fa-chevron-left"></i>{{Retour}}</a>';
+        }
+        ?>
+        <?php if (Utils::init('type', 'plugin') == 'plugin') { ?>
+            <div class="action-group">
+                <div class="btn-group">
+                    <a class="btn bt_pluginFilter <?php echo (Utils::init('cost') == 'free') ? 'btn-primary' : 'btn-default' ?>" data-href="<?php echo buildUrl('cost', 'free'); ?>"><i class="fas fa-gift"></i><span>{{Gratuit}}</span></a>
+                    <a class="btn bt_pluginFilter <?php echo (Utils::init('cost') == 'paying') ? 'btn-primary' : 'btn-default' ?>" data-href="<?php echo buildUrl('cost', 'paying'); ?>"><i class="fas fa-euro-sign"></i><span>{{Payant}}</span></a>
+                    <a class="btn bt_pluginFilter <?php echo (Utils::init('cost') == '') ? 'btn-primary' : 'btn-default' ?>" data-href="<?php echo buildUrl('cost', ''); ?>"><i class="fas fa-times"></i></a>
+                </div>
+            </div>
+        <?php } ?>
         <div class="action-group">
-            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=plugin"><i class="fas fa-chevron-left spacing-right"></i>{{Retour}}</a>
-            <?php if (init('type', 'plugin') == 'plugin') { ?>
-                <div class="btn-group">
-                    <a class="btn btn-default bt_pluginFilterCost" data-filter="free">{{Gratuit}}</a>
-                    <a class="btn btn-default bt_pluginFilterCost" data-filter="paying">{{Payant}}</a>
-                    <a class="btn btn-primary bt_pluginFilterCost" data-filter=""><i class="fa fa-times"></i></a>
-                </div>
-                <div class="btn-group">
-                    <a class="btn btn-default bt_pluginFilterCertification" data-filter="Officiel">{{Officiel}}</a>
-                    <a class="btn btn-default bt_pluginFilterCertification" data-filter="Conseillé">{{Conseillé}}</a>
-                    <a class="btn btn-default bt_pluginFilterCertification" data-filter="Legacy">{{Legacy}}</a>
-                    <a class="btn btn-primary bt_pluginFilterCertification" data-filter=""><i class="fa fa-times"></i></a>
-                </div>
-                <div class="btn-group">
-                    <a class="btn btn-default bt_pluginFilterInstall" data-filter="notInstall">{{Installé}}</a>
-                    <a class="btn btn-default bt_pluginFilterInstall" data-filter="install">{{Non installé}}</a>
-                    <a class="btn btn-primary bt_pluginFilterInstall" data-filter=""><i class="fa fa-times"></i></a>
-                </div>
-            <?php } ?>
             <div class="btn-group">
-                <div class="input-group">
-                    <?php
-                    $oldSearch = '';
-                    if ($name != '') {
-                        $oldSearch = $name;
-                    } else {
-                        if ($author != '') {
-                            $oldSearch = $author;
-                        }
-                    }
-                    echo '<input type="text" class="form-control" id="pluginSearch" placeholder="Recherche globale..." data-value=' . $oldSearch . '>'
-                    ?>
-                    <div class="input-group-btn">
-                        <a class="btn btn-success" id="pluginNameSearch"><i class="fas fa-search-plus"></i></a>
-                        <a class="btn btn-success" id="authorSearch"><i class="fas fa-user"></i></a>
-                        <a class="btn btn-action" id="resetSearch"><i class="fas fa-times"></i></a>
-                    </div>
-                </div>
+                <a class="btn btn-default bt_installFilter" data-state="-1"><i class="fas fa-thumbs-up"></i><span>{{Installé}}</span></a>
+                <a class="btn btn-default bt_installFilter" data-state="1"><i class="fas fa-thumbs-down"></i><span>{{Non installé}}</span></a>
+                <a class="btn btn-primary bt_installFilter" data-state="0"><i class="fas fa-times"></i></a>
             </div>
         </div>
-        <div class="form-group">
+        <div class="action-group">
             <div class="btn-group">
-                <a class="btn btn-default bt_pluginFilter <?php echo (init('certification') == 'Officiel') ? 'btn-primary' : '' ?>" data-href="<?php echo buildUrl('certification', 'Officiel'); ?>">{{Officiel}}</a>
-                <a class="btn btn-default bt_pluginFilter <?php echo (init('certification') == 'Conseillé') ? 'btn-primary' : '' ?>" data-href="<?php echo buildUrl('certification', 'Conseillé'); ?>">{{Conseillé}}</a>
-                <a class="btn btn-default bt_pluginFilter <?php echo (init('certification') == 'Premium') ? 'btn-primary' : '' ?>" data-href="<?php echo buildUrl('certification', 'Premium'); ?>">{{Premium}}</a>
-                <a class="btn btn-default bt_pluginFilter <?php echo (init('certification') == 'Partenaire') ? 'btn-primary' : '' ?>" data-href="<?php echo buildUrl('certification', 'Partenaire'); ?>">{{Partenaire}}</a>
-                <a class="btn btn-default bt_pluginFilter <?php echo (init('certification') == 'Legacy') ? 'btn-primary' : '' ?>" data-href="<?php echo buildUrl('certification', 'Legacy'); ?>">{{Legacy}}</a>
-                <a class="btn btn-default bt_pluginFilter" data-href="<?php echo buildUrl('certification', ''); ?>"><i class="fa fa-times"></i></a>
+                <select class="form-control" id="sel_certif">
+                    <option value="" selected>{{Tous}}</option>
+                    <option value="Officiel">{{Officiel}}</option>
+                    <option value="Conseillé">{{Conseillé}}</option>
+                    <option value="Premium">{{Premium}}</option>
+                    <option value="Partenaire">{{Partenaire}}</option>
+                    <option value="Legacy">{{Legacy}}</option>
+                </select>
             </div>
+        </div>
+        <div class="action-group">
+            <select class="form-control" id="sel_categorie" data-href='<?php echo buildUrl('categorie', ''); ?>'>
+                <?php
+                if (Utils::init('categorie') == '') {
+                    echo '<option value="" selected>{{Top et nouveautés}}</option>';
+                } else {
+                    echo '<option value="">{{Top et nouveautés}}</option>';
+                }
+                if ($type !== null && $type != 'plugin') {
+                    foreach (RepoMarket::distinctCategorie($type) as $id => $category) {
+                        if (trim($category) != '' && is_numeric($id)) {
+                            echo '<option value="' . $category . '"';
+                            echo (Utils::init('categorie') == $category) ? 'selected >' : '>';
+                            echo $category;
+                            echo '</option>';
+                        }
+                    }
+                } else {
+                    global $NEXTDOM_INTERNAL_CONFIG;
+                    foreach ($NEXTDOM_INTERNAL_CONFIG['plugin']['category'] as $key => $value) {
+                        echo '<option value="' . $key . '"';
+                        echo (Utils::init('categorie') == $key) ? 'selected >' : '>';
+                        echo $value['name'];
+                        echo '</option>';
+                    }
+                }
+                ?>
+            </select>
+        </div>
+        <div class="action-group">
+            <div class="input-group">
+                <a class="input-group-addon cursor" id="bt_resetSearch" data-href='<?php echo buildUrl('name', ''); ?>'><i class="fas fa-times"></i></a>
+                <input class="form-control" data-href='<?php echo buildUrl('name', ''); ?>' placeholder="{{Rechercher...}}" id="in_search" value="<?php echo $name ?>"/>
+                <a class="input-group-addon cursor" id="bt_search" data-href='<?php echo buildUrl('name', ''); ?>'><i class="fas fa-search"></i></a>
+            </div>
+        </div>
+        <div class="action-group">
+            <a class="btn btn-action btn-action-bar pull-right" style="display:none;" id="bt_marketCollapse"><i class="fas fa-plus-square"></i>{{Déplier}}</a>
+            <a class="btn btn-action btn-action-bar pull-right" id="bt_marketUncollapse"><i class="fas fa-minus-square"></i>{{Replier}}</a>
         </div>
     </div>
 </section>
-<?php
-if ($name !== null && strpos($name, '$') !== false) {
-    echo '<a class="btn btn-default" id="bt_returnMarketList" style="margin-top : 50px;" data-href=' . buildUrl('name', '') . '><i class="fa fa-arrow-circle-left spacing-right"></i>{{Retour}}</a>';
-}
-?>
+
 <section class="content">
     <div class="box">
-        <div class="box-header">
-            <div class="form-group">
-                <h3 class="box-title"><i class="fas fa-shopping-cart spacing-right"></i>{{Market Jeedom}}</h3>
-                <?php
-                if (ConfigManager::byKey('market::username') != '') {
-                    echo '<span class="label label-info pull-right label-sticker pull-right">' . ConfigManager::byKey('market::username');
-                    try {
-                        RepoMarket::test();
-                        echo ' <i class="fa fa-check"></i>';
-                    } catch (\Exception $e) {
-                        echo ' <i class="fa fa-times"></i>';
-                    }
-                    echo '</span>';
+        <div class="box-header with-border">
+            <?php
+            echo '<h3 class="box-title"><i class="fas fa-shopping-cart"></i>';
+            if ($type == "") {
+                echo '{{Market Jeedom}}</h3>';
+            } else {
+                echo ucfirst($type) .'{{ Jeedom}}</h3>';
+            }
+            if (ConfigManager::byKey('market::username') != '') {
+                echo '<span class="label label-info badge pull-right">' . ConfigManager::byKey('market::username');
+                try {
+                    RepoMarket::test();
+                    echo '<i class="fas fa-check spacing-left"></i>';
+                } catch (\Exception $e) {
+                    echo '<i class="fas fa-times spacing-left"></i>';
                 }
-                ?>
-            </div>
-            <p class="alert alert-warning" style="margin-bottom:0px">{{Attention l'affichage est limité à 100 résultats, utilisez les filtres ou la recherche si ce que vous cherchez n'apparaît pas...}}</p>
+                echo '</span>';
+            }
+            ?>
+        </div>
+        <div class="box-body">
+            <?php
+            if (count($markets) >= $searchLimit) {
+                echo '<div>';
+                echo '<span class="alert alert-warning market-limited">{{Attention l\'affichage est limité à }}' . $searchLimit . ' {{résultats, utilisez les filtres ou la recherche si ce que vous cherchez n\'apparaît pas...}}</span>';
+                echo '<a class="btn btn-action pull-right" id="bt_resetSearchLimit" data-href="' . buildUrl('limit', '0') .'"><i class="fas fa-times"></i>{{Sans limites}}</a>';
+                echo '</div>';
+            } else {
+                echo '<div><span class="market-unlimited">' . count($markets);
+                if ($type == "") {
+                    echo '{{ objets}}';
+                } else {
+                    echo ' ' . $type . '{{s}}';
+                }
+                echo ' {{disponibles dans cette catégorie...}}</span>';
+                if (count($markets) >= 100) {
+                    echo '<a class="btn btn-action pull-right" id="bt_SearchLimit" data-href="' . buildUrl('limit', '100') .'"><i class="fas fa-filter"></i>{{Limiter à 100}}</a>';
+                }
+                echo '</div>';
+            }
+            ?>
         </div>
     </div>
 
-    <?php
-    $categorie = '';
-    $first = true;
-    $nCategory = 0;
-    if ($default) {
-        echo '<div class="pluginContainer">';
-    }
-    foreach ($markets as $market) {
-        $update = UpdateManager::byLogicalId($market->getLogicalId());
-        $category = $market->getCategorie();
-        if ($category == '') {
-            $category = '{{Aucune}}';
+    <div>
+        <?php
+        $categorie = '';
+        $first = true;
+        $nCategory = 0;
+        if ($default) {
+            echo '<div class="pluginContainer">';
         }
-        if ($categorie != $category) {
-            $categorie = $category;
-            if (!$default) {
-                if (!$first) {
-                    echo '</div></div></div></div></div>';
-                }
-                echo '<div class="box-group" id="accordionPlugin' . $nCategory . '">';
-                echo '<div class="panel box">';
-                echo '<a class="box-header with-border accordion-toggle" data-toggle="collapse" data-parent="" href="#config_' . $nCategory . '">';
-                echo '<h3 class="box-title">';
-                if (isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categorie])) {
-                    echo '<span class="accordion-toggle" data-toggle="collapse" data-parent="#accordionPlugin' . $nCategory . '" href="#config_none" style="text-decoration:none;" data-category="' . $nCategory . '"><i class="fa ' . $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categorie]['icon'] . ' spacing-right"></i> ' . ucfirst($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categorie]['name']) . '</span>';
-                } else {
-                    echo '<span class="accordion-toggle" data-toggle="collapse" data-parent="#accordionPlugin' . $nCategory . '" href="#config_none" style="text-decoration:none;" data-category="' . $nCategory . '">' . ucfirst($categorie) . '</span>';
-                }
-                echo '</h3>';
-                echo '</a>';
-                echo '<div id="config_' . $nCategory . '" class="panel-collapse collapse in">';
-                echo '<div class="box-body">';
-                echo '<div class="pluginContainer DisplayCard text-center" data-category="' . $nCategory . '">';
+        foreach ($markets as $market) {
+            $update = UpdateManager::byLogicalId($market->getLogicalId());
+            $category = $market->getCategorie();
+            if ($category == '') {
+                $category = '{{Aucune}}';
             }
-            $first = false;
-            $nCategory++;
-        }
-
-        $installClass = 'notInstall';
-        if (!is_object($update)) {
-            $installClass = 'install';
-        }
-        echo '<div class="market cursor ' . $installClass . '" data-install="' . $installClass . '" data-category="' . $market->getCategorie() . '" data-cost="' . $market->getCost() . '" data-certification="' . $market->getCertification() . '" data-name="' . $market->getName() . '" data-market_id="' . $market->getId() . '" data-market_type="' . $market->getType() . '">';
-        if ($market->getType() != 'widget') {
-            if ($market->getCertification() == 'Officiel') {
-                $certificationClass = 'official';
-            }
-            if ($market->getCertification() == 'Conseillé') {
-                $certificationClass = 'advised';
-            }
-            if ($market->getCertification() == 'Premium') {
-                echo '<div style="position : absolute; right : 0;top:0;width:58px;height:58px;"><img src="core/img/band_Premium.png" /></div>';
-            }
-            if ($market->getCertification() == 'Partenaire') {
-                echo '<div style="position : absolute; right : 0;top:0;width:58px;height:58px;"><img src="core/img/band_Partenaire.png" /></div>';
-            }
-            if ($market->getCertification() == 'Legacy') {
-                $certificationClass = 'legacy';
-            }
-            if ($market->getCertification() == 'Obsolète') {
-                $certificationClass = 'obsolete';
-            }
-            echo '<div class="market-certification market-' . $certificationClass . '">' . strtoupper($market->getCertification()) . '</div>';
-        } else {
-            if (strpos($market->getName(), 'mobile.') !== false) {
-                echo '<i class="fas fa-mobile market-widget" title="{{Widget pour la version mobile}}"></i>';
-            } else {
-                echo '<i class="fas fa-desktop market-widget" title="{{Widget pour la version bureau}}"></i>';
-            }
-        }
-        if (is_object($update)) {
-            echo '<i class="fas fa-check market-install"></i>';
-        }
-        echo "<div>";
-        $default_image = 'public/img/NextDom_NoPicture_Gray.png';
-        switch ($market->getType()) {
-            case 'widget':
-                $default_image = 'public/img/NextDom_Widget_Gray.png';
-                break;
-            case 'plugin':
-                $default_image = 'public/img/NextDom_Plugin_Gray.png';
-                break;
-            case 'script':
-                $default_image = 'public/img/NextDom_Script_Gray.png';
-                break;
-        }
-
-        $urlPath = ConfigManager::byKey('market::address') . '/' . $market->getImg('icon');
-        echo '<img class="lazy market-icon" src="' . $default_image . '" data-original="' . $urlPath . '"/>';
-        echo "</div>";
-
-        $displayName = $market->getName();
-        $parts = array_reverse(explode(".", $displayName));
-        if (0 !== count($parts)) {
-            $displayName = $parts[0];
-        }
-
-        echo '<span class="market-name">' . $displayName . '</span>';
-        echo '<span class="market-author"><i>{{par }}</i>' . $market->getAuthor() . '</span>';
-
-        $note = $market->getRating();
-        echo '<span class="market-rating">';
-        for ($i = 1; $i < 6; $i++) {
-            if ($i <= $note) {
-                echo '<i class="fas fa-star"></i>';
-            } else {
-                echo '<i class="far fa-star"></i>';
-            }
-        }
-        echo '</span>';
-        if ($market->getCertification() !== 'Premium') {
-            if ($market->getCost() > 0) {
-                echo '<span style="position : absolute;bottom : 5px;right : 12px;color:#97bd44;">';
-                if ($market->getPurchase() == 1) {
-                    echo ' <i class="fa fa-check-circle"></i>';
-                } else if ($market->getCertification() == 'Premium') {
-                    echo '';
-                } else {
-                    if ($market->getCost() != $market->getRealCost()) {
-                        echo '<span style="text-decoration:line-through;">' . number_format($market->getRealCost(), 2) . ' €</span> ';
+            if ($categorie != $category) {
+                $categorie = $category;
+                if (!$default) {
+                    if (!$first) {
+                        echo '</div></div></div></div></div>';
                     }
-                    echo number_format($market->getCost(), 2) . ' €';
+                    echo '<div class="box-group" id="accordionPlugin' . $nCategory . '">';
+                    echo '<div class="panel box" data-category="' . $nCategory . '">';
+                    echo '<a class="box-header with-border accordion-toggle" data-toggle="collapse" data-parent="" href="#config_' . $nCategory . '">';
+                    echo '<h3 class="box-title">';
+                    echo '<span class="accordion-toggle" data-toggle="collapse" data-parent="#accordionPlugin' . $nCategory . '" href="#config_none" style="text-decoration:none;" data-category="' . $nCategory . '">';
+                    if (isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categorie])) {
+                        echo '<i class="fas ' . $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categorie]['icon'] . ' spacing-right"></i>' . ucfirst($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categorie]['name']) . '</span>';
+                    } else {
+                        echo ucfirst($categorie) . '</span>';
+                    }
+                    echo '</h3>';
+                    echo '</a>';
+                    echo '<div id="config_' . $nCategory . '" class="panel-collapse collapse in">';
+                    echo '<div class="box-body">';
+                    echo '<div class="pluginContainer DisplayCard text-center" data-category="' . $nCategory . '">';
+                }
+                $first = false;
+                $nCategory++;
+            }
+            $explodedName = explode('.', $market->getName());
+            if (count($explodedName) > 1) {
+                $shortName = $explodedName[count($explodedName) - 1];
+            } else {
+                $shortName = $market->getName();
+            }
+            if (strpos($market->getName(), 'mobile.') === false) {
+                $install = 'notInstall';
+                if (!is_object($update)) {
+                    $install = 'install';
+                }
+                $note = $market->getRating();
+                $cost = $market->getCost();
+                $realCost = $market->getRealCost();
+                echo '<div class="marketOverload cursor ' . $install . '" data-market_id="' . $market->getId() . '" data-market_type="' . $market->getType() . '" data-name="' . $shortName . '">';
+                switch ($market->getCertification()) {
+                    case 'Officiel':
+                        $certificationClass = 'official';
+                        break;
+                    case 'Conseillé':
+                        $certificationClass = 'advised';
+                        break;
+                    case 'Legacy':
+                        $certificationClass = 'legacy';
+                        break;
+                    case 'Obsolète':
+                        $certificationClass = 'obsolete';
+                        break;
+                    case 'Premium':
+                        $certificationClass = 'premium';
+                        $cost = -1;
+                        break;
+                    case 'Partenaire':
+                        $certificationClass = 'partner';
+                        break;
+                    default:
+                        $certificationClass = '';
+                }
+                if ($market->getType() != 'widget') {
+                    echo '<div class="market-certification market-' . $certificationClass .'">' . strtoupper($market->getCertification()) . '</div>';
+                }
+                if ($install == 'notInstall') {
+                    echo '<i class="fas fa-check market-install"></i>';
+                }
+                switch ($market->getType()) {
+                    case 'widget':
+                        $default_image = 'public/img/NextDom_Widget_Gray.png';
+                        break;
+                    case 'plugin':
+                        $default_image = 'public/img/NextDom_Plugin_Gray.png';
+                        break;
+                    case 'script':
+                        $default_image = 'public/img/NextDom_Script_Gray.png';
+                        break;
+                    default:
+                        $default_image = 'public/img/NextDom_NoPicture_Gray.gif';
+                }
+                $urlPath = ConfigManager::byKey('market::address') . '/' . $market->getImg('icon');
+                echo '<div><img class="lazy lazyload market-icon" src="' . $default_image . '" data-original="'. $urlPath . '"/></div>';
+                echo '<span class="market-name">' . $shortName . '</span>';
+                echo '<span class="market-author"><i>{{par}}</i> ' . $market->getAuthor() . '</span>';
+                echo '<span class="market-rating">';
+                for ($i = 1; $i < 6; $i++) {
+                    if ($i <= $note) {
+                        echo '<i class="fas fa-star"></i>';
+                    } else {
+                        echo '<i class="far fa-star"></i>';
+                    }
                 }
                 echo '</span>';
-            } else {
-                echo '<span style="position : absolute;bottom : 5px;right : 12px;color:#97bd44;">Gratuit</span>';
+                if ($cost > 0) {
+                    echo '<span class="market-cost">';
+                        if ($market->getPurchase() == 1) {
+                            echo '<i class="fas fa-check-circle"></i>';
+                        } else {
+                            if ($cost != $realCost) {
+                                echo '<span style="text-decoration:line-through;">' . $realCost . ' {{€}}</span>';
+                            }
+                            echo $cost . ' {{€}}';
+                        }
+                    echo '</span>';
+                } else {
+                    if ($cost < 0) {
+                        echo '<span class="market-cost">{{Nous contacter}}</span>';
+                    } else {
+                        echo '<span class="market-cost">{{Gratuit}}</span>';
+                    }
+                }
+                echo '</div>';
             }
         }
-        echo '</div>';
-    }
-    if ($default) {
-        echo '</div>';
-    }
-    ?>
+        if ($default) {
+            echo '</div>';
+        }
+        ?>
+    </div>
 </section>
 
 <script>
-  $(function () {
-    $('.pluginContainer').packery();
-
-    $("img.lazy").lazyload({
-      event: "sporty"
+    $(function () {
+        $("img.lazy").lazyload();
+        initTableSorter();
+        setTimeout(function(){
+            $('.pluginContainer').packery();
+        },200);
+        setTimeout(function () {
+            $('#table_market tbody tr.install').hide();
+        }, 500);
+        $('.bt_pluginFilter').on('click', function () {
+            $('#md_modal').load($(this).attr('data-href'));
+        });
+        $('#sel_certif').on('change', function () {
+            $('#md_modal').load($(this).attr('data-href') + '&certification=' + encodeURI($(this).value()));
+        });
+        $('#sel_categorie').on('change', function () {
+            $('#md_modal').load($(this).attr('data-href') + '&categorie=' + encodeURI($(this).value()));
+        });
+        $('#bt_search').on('click', function () {
+            $('#md_modal').load($(this).attr('data-href') + '&categorie=' + '&name=' + encodeURI($('#in_search').value()));
+        });
+        $('#bt_resetSearch').on('click', function () {
+            $('#md_modal').load($(this).attr('data-href'));
+        });
+        $('#in_search').keyup(function (e) {
+            marketFilterRepo();
+        });
+        $('#bt_returnMarketList').on('click', function () {
+            $('#md_modal').load($(this).attr('data-href'));
+        });
+        $('.marketMultiple').on('click', function () {
+            $('#md_modal').load($(this).attr('data-href') + '&name=' + encodeURI('.' + $(this).attr('data-market_name')));
+        });
+        $('.bt_installFilter').on('click', function () {
+            $('.bt_installFilter').removeClass('btn-primary').removeClass('btn-default');
+            $('.pluginContainer').show();
+            $('.marketOverload').show();
+            if ($(this).attr('data-state') == 1) {
+                $('.notInstall').hide();
+            }
+            if ($(this).attr('data-state') == -1) {
+                $('.install').hide();
+            }
+            $(this).addClass('btn-primary');
+            $('.bt_installFilter').each(function () {
+                if (!$(this).hasClass("btn-primary")) {
+                    $(this).addClass('btn-default');
+                }
+            });
+            $('.pluginContainer').each(function () {
+                var hasVisible = false;
+                $(this).find('.marketOverload').each(function () {
+                    if ($(this).is(':visible')) {
+                        hasVisible = true;
+                    }
+                });
+                if (hasVisible) {
+                    $('legend[data-category=' + $(this).attr('data-category') + ']').show();
+                    $(this).packery();
+                } else {
+                    $(this).hide();
+                    $('legend[data-category=' + $(this).attr('data-category') + ']').hide();
+                }
+            });
+        });
+        $('.marketOverload').on('click', function () {
+            $('#md_modal2').dialog({title: "{{Market Jeedom}}"});
+            $('#md_modal2').load('index.php?v=d&modal=update.display&type=' + $(this).attr('data-market_type') + '&id=' + $(this).attr('data-market_id') + '&repo=market').dialog('open');
+        });
+        $('#bt_marketCollapse').on('click',function(){
+           $('.panel-collapse').each(function () {
+              if (!$(this).hasClass("in")) {
+                  $(this).css({'height' : '' });
+                  $(this).addClass("in");
+              }
+           });
+           $('#bt_marketCollapse').hide();
+           $('#bt_marketUncollapse').show()
+        });
+        $('#bt_marketUncollapse').on('click',function(){
+           $('.panel-collapse').each(function () {
+              if ($(this).hasClass("in")) {
+                  $(this).removeClass("in");
+              }
+           });
+           $('#bt_marketUncollapse').hide();
+           $('#bt_marketCollapse').show()
+        });
+        $('#bt_resetSearchLimit').on('click', function () {
+            $('#md_modal').load($(this).attr('data-href'));
+        });
+        $('#bt_SearchLimit').on('click', function () {
+            $('#md_modal').load($(this).attr('data-href'));
+        });
     });
-    $("img.lazy").trigger("sporty");
-    initTableSorter();
-    marketFilter();
 
-    $('#pluginSearch').value($('#pluginSearch').attr('data-value'));
-
-    $('.bt_pluginFilterCost').on('click', function () {
-      $('.bt_pluginFilterCost').removeClass('btn-primary');
-      $('.bt_pluginFilterCost').addClass('btn-default');
-      $(this).addClass('btn-primary');
-      $(this).removeClass('btn-default');
-      marketFilter();
-    });
-
-    $('.bt_pluginFilterCertification').on('click', function () {
-      $('.bt_pluginFilterCertification').removeClass('btn-primary');
-      $('.bt_pluginFilterCertification').addClass('btn-default');
-      $(this).addClass('btn-primary');
-      $(this).removeClass('btn-default');
-      marketFilter();
-    });
-
-    $('.bt_pluginFilterInstall').on('click', function () {
-      $('.bt_pluginFilterInstall').removeClass('btn-primary');
-      $('.bt_pluginFilterInstall').addClass('btn-default');
-      $(this).addClass('btn-primary');
-      $(this).removeClass('btn-default');
-      marketFilter();
-    });
-
-    $('#sel_categorie').on('change', function () {
-      loadPage('index.php?v=d&modal=update.list' + '&categorie=' + encodeURI($(this).value()));
-    });
-
-    $('#bt_returnMarketList').on('click', function () {
-      $('#md_modal').load($(this).attr('data-href'));
-    });
-
-    $('.market').off('click').on('click', function () {
-      $('#md_modal2').dialog({title: "{{Market NextDom}}"});
-      $('#md_modal2').load('index.php?v=d&modal=update.display&type=' + $(this).attr('data-market_type') + '&id=' + $(this).attr('data-market_id') + '&repo=market').dialog('open');
-    });
-
-    $('#pluginNameSearch').on('click', function () {
-      loadPage('index.php?v=d&modal=update.list' + '&name=' + encodeURI($('#pluginSearch').value()));
-      $('#generalSearch').value('');
-    });
-
-    $('#authorSearch').on('click', function () {
-      loadPage('index.php?v=d&modal=update.list' + '&author=' + encodeURI($('#pluginSearch').value()));
-      $('#generalSearch').value('');
-    });
-
-    $('#resetSearch').on('click', function () {
-      loadPage('index.php?v=d&modal=update.list');
-      $('#generalSearch').value('');
-    });
-
-    $('.accordion-toggle').off('click').on('click', function () {
-      setTimeout(function () {
+    function marketFilterRepo() {
+        var pluginValue = '';
+        var currentSearchValue = $('#in_search').val().toLowerCase();
+        $('.marketOverload').show();
+        $('.marketOverload').each(function () {
+            if (currentSearchValue != '') {
+                pluginValue = $(this).attr('data-name').toLowerCase();
+                if (pluginValue.indexOf(currentSearchValue) == -1) {
+                    $(this).hide();
+                }
+            }
+        });
         $('.pluginContainer').packery();
-      }, 100);
-    });
-  });
-
-  function marketFilter() {
-    var filterCost = '';
-    var filterCertification = '';
-    var filterInstall = '';
-    var pluginValue = '';
-    $('.market').hide();
-    $('.bt_pluginFilterCost').each(function () {
-      if ($(this).hasClass("btn-primary")) {
-        filterCost = $(this).attr('data-filter');
-      }
-    });
-    $('.bt_pluginFilterCertification').each(function () {
-      if ($(this).hasClass("btn-primary")) {
-        filterCertification = $(this).attr('data-filter');
-      }
-    });
-    $('.bt_pluginFilterInstall').each(function () {
-      if ($(this).hasClass("btn-primary")) {
-        filterInstall = $(this).attr('data-filter');
-      }
-    });
-    var filterCategory = $('#sel_categorie').value();
-    var currentSearchValue = $('#generalSearch').val().toLowerCase();
-    $('.market').show();
-
-    $('.market').each(function () {
-      if (currentSearchValue != '') {
-        pluginValue = $(this).attr('data-name').toLowerCase();
-        if (pluginValue.indexOf(currentSearchValue) == -1) {
-          $(this).hide();
-        }
-      }
-
-      if (filterCertification != '') {
-        pluginValue = $(this).attr('data-certification');
-        if (pluginValue.indexOf(filterCertification) == -1) {
-          $(this).hide();
-        }
-      }
-
-      if (filterCost != '') {
-        pluginValue = $(this).attr('data-cost');
-        if ((pluginValue == 0 && filterCost == 'paying') || (pluginValue > 0 && filterCost == 'free')) {
-          $(this).hide();
-        }
-      }
-
-      if (filterCategory != '') {
-        pluginValue = $(this).attr('data-category');
-        if (pluginValue.indexOf(filterCategory) == -1) {
-          $(this).hide();
-        }
-      }
-
-      if (filterInstall != '') {
-        pluginValue = $(this).attr('data-install');
-        if (pluginValue.indexOf(filterInstall) == -1) {
-          $(this).hide();
-        }
-      }
-    });
-    $('.pluginContainer').packery();
-  };
+    };
 </script>
