@@ -18,62 +18,10 @@ along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 @Email   <admin@nextdom.org>
 @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 -->
-<template>
-  <div v-packery-item class="packery-item" v-bind:class="[isLargeWidget ? 'large' : 'small']">
-    <div class="widget-title">
-      <span class="title">{{ eqlogic.name }}</span>
-      <span class="actions pull-right">
-        <mu-button class="pull-right" slot="action" icon v-if="batteryIcon">
-          <mu-icon v-bind:value="batteryIcon"></mu-icon>
-        </mu-button>
-        <mu-button
-          class="pull-right"
-          slot="action"
-          icon
-          v-on:click="executeCmd(refreshCmdId)"
-          v-if="refreshCmdId"
-        >
-          <mu-icon value="refresh"></mu-icon>
-        </mu-button>
-      </span>
-    </div>
-    <div class="cmds-icon" v-bind:class="{ 'half-size': largeWidget}">
-      <component
-        v-bind:cmd="cmd"
-        v-bind:key="cmd.id"
-        v-for="cmd in iconCmds"
-        v-bind:is="getCmdComponent(cmd.id)"
-        v-on:executeAction="executeAction"
-      ></component>
-    </div>
-    <div class="cmds-button">
-      <component
-        v-bind:cmd="cmd"
-        v-bind:key="cmd.id"
-        v-for="cmd in buttonCmds"
-        v-bind:is="getCmdComponent(cmd.id)"
-        v-on:executeAction="executeAction"
-        v-on:executeCmd="executeCmd"
-        v-on:setRefreshCommand="setRefreshCommand"
-      ></component>
-    </div>
-    <div class="cmds-data">
-      <component
-        v-bind:cmd="cmd"
-        v-bind:key="cmd.id"
-        v-for="cmd in dataCmds"
-        v-bind:is="getCmdComponent(cmd.id)"
-        v-on:executeAction="executeAction"
-        v-on:executeCmd="executeCmd"
-        v-on:setBatteryInfo="setBatteryInfo"
-        v-on:setRefreshCommand="setRefreshCommand"
-      ></component>
-    </div>
-  </div>
-</template>
+<template></template>
 
 <script>
-import Templates from "@/libs/NextdomTemplates.js";
+import CmdTemplates from "@/libs/NextdomCmdTemplates.js";
 import Communication from "@/libs/Communication.js";
 import AppEventsBus from "@/libs/AppEventsBus";
 
@@ -82,7 +30,7 @@ import AppEventsBus from "@/libs/AppEventsBus";
  * @group Components
  */
 export default {
-  name: "Widget",
+  name: "BaseWidget",
   data: function() {
     return {
       refreshCmdId: null,
@@ -103,7 +51,7 @@ export default {
     }
   },
   // Inject all commands components
-  components: Object.assign(Templates.components, {}),
+  components: Object.assign(CmdTemplates.components, {}),
   computed: {
     /**
      * @vuese
@@ -218,124 +166,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss">
-@import "../assets/theme-color.scss";
-
-.packery-item {
-  background-color: $textPrimary;
-  margin: 1%;
-  padding-bottom: 0.5rem;
-}
-
-.packery-item.small {
-  width: 48%;
-}
-
-.packery-item.large {
-  width: 98%;
-}
-
-.widget-title {
-  position: relative;
-  width: 100%;
-  background-color: $primary;
-  color: $textPrimary;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  height: 2.2rem;
-  line-height: 2.2rem;
-  margin-bottom: 0;
-}
-
-.widget-title {
-  .title {
-    margin-left: 0.5rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 80%;
-    display: block;
-  }
-
-  span.title {
-    position: absolute;
-    left: 0;
-  }
-
-  button {
-    margin: 0;
-    padding: 0;
-    height: 2.2rem;
-    width: 2.2rem;
-  }
-}
-
-.cmds-icon {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: center;
-  align-items: stretch;
-  align-content: stretch;
-}
-
-.cmds-icon {
-  .cmd.icon {
-    font-size: 3rem;
-    display: flex;
-    flex: 1 1 auto;
-  }
-  .cmd.icon i {
-    width: 100%;
-    text-align: center;
-    margin: 0.5rem 0;
-  }
-}
-
-.packery-item .cmd::after,
-.cmds-data::before {
-  content: "";
-  clear: both;
-  display: block;
-}
-
-.cmds-data {
-  .cmd {
-    padding-right: 0.5rem;
-    padding-left: 0.5rem;
-  }
-  .cmd:nth-child(odd) {
-    background-color: $info;
-  }
-  .mu-slider {
-    margin-left: 1%;
-    margin-right: 1%;
-    margin-bottom: 0.3rem;
-    width: 98%;
-  }
-}
-
-.cmds-button {
-  text-align: center;
-  overflow: hidden;
-}
-
-.cmds-button {
-  .cmd {
-    display: inline-block;
-  }
-  button {
-    margin: 0.2rem;
-  }
-}
-.cmds-button::after {
-  content: "";
-  clear: both;
-}
-
-.packery-item .half-size {
-  width: 50%;
-  float: left;
-}
-</style>

@@ -29,12 +29,13 @@ along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
       <!-- eqLogics of the room -->
       <div v-packery="{itemSelector: '.packery-item', percentPosition: true, initLayout: true}">
         <template v-for="eqLogic in roomData.eqLogics">
-          <Widget
+          <component
+            v-bind:is="getWidgetComponent(eqLogic.type)"
             v-if="isShowedEqLogic(eqLogic.id)"
             v-bind:key="eqLogic.id"
             v-bind:cmds="eqLogic.cmds"
             v-bind:eqlogic="eqLogic"
-          ></Widget>
+          ></component>
         </template>
       </div>
       <!-- Room children -->
@@ -48,9 +49,9 @@ along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 </template>
 
 <script>
-import Widget from "./Widget";
+import WidgetTemplates from "@/libs/NextdomWidgetTemplates.js";
 import Communication from "@/libs/Communication.js";
-
+import "../assets/css/widgets.scss";
 /**
  * Show the dashboard of a room
  * @group Components
@@ -84,9 +85,7 @@ export default {
       );
     }
   },
-  components: {
-    Widget
-  },
+  components: Object.assign(WidgetTemplates.components, {}),
   methods: {
     /**
      * @vuese
@@ -101,6 +100,12 @@ export default {
         return false;
       }
       return true;
+    },
+    getWidgetComponent(widgetType) {
+      if (WidgetTemplates.widgets.hasOwnProperty(widgetType)) {
+        return WidgetTemplates.widgets[widgetType];
+      }
+      return WidgetTemplates.widgets.default;
     }
   }
 };

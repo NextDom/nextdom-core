@@ -19,7 +19,7 @@
  */
 import Vue from "vue";
 import Vuex from "vuex";
-import Templates from "@/libs/NextdomTemplates.js";
+import CmdTemplates from "@/libs/NextdomCmdTemplates.js";
 
 Vue.use(Vuex);
 
@@ -65,12 +65,13 @@ export const store = new Vuex.Store({
       let componentData = undefined;
       // Test for commands with template
       try {
-        componentData = Templates["cmds"][cmd.type][cmd.subType][cmd.template];
+        componentData =
+          CmdTemplates["cmds"][cmd.type][cmd.subType][cmd.template];
       } catch {}
       // Test generic type
       if (componentData === undefined) {
         try {
-          componentData = Templates["cmdsWithoutTemplate"][cmd.genericType];
+          componentData = CmdTemplates["cmdsWithoutTemplate"][cmd.genericType];
         } catch {}
       }
       // Specials cases
@@ -93,7 +94,8 @@ export const store = new Vuex.Store({
       // Set default
       if (componentData === undefined) {
         try {
-          componentData = Templates["cmds"][cmd.type][cmd.subType]["no_data"];
+          componentData =
+            CmdTemplates["cmds"][cmd.type][cmd.subType]["no_data"];
         } catch {}
       }
       if (componentData === undefined) {
