@@ -34,8 +34,7 @@ $NEXTDOM_INTERNAL_CONFIG = array(
         'displayType' => array(
             'dashboard' => array('name' => 'Dashboard'),
             'plan' => array('name' => 'Design'),
-            'view' => array('name' => 'Vue'),
-            'mobile' => array('name' => 'Mobile'),
+            'view' => array('name' => 'Vue')
         ),
     ),
     'interact' => array(
@@ -46,7 +45,7 @@ $NEXTDOM_INTERNAL_CONFIG = array(
             '!=' => array('different'),
         ),
     ),
-    'nextdom_market' => array(
+    'nextdom' => array(
         'sources' => array(
             array('name' => 'NextDom Stable', 'type' => 'json', 'code' => 'nextdom_stable', 'data' => 'https://raw.githubusercontent.com/NextDom/AlternativeMarket-Lists/master/results/nextdom-stable.json'),
             array('name' => 'NextDom draft', 'type' => 'json', 'code' => 'nextdom_draft', 'data' => 'https://raw.githubusercontent.com/NextDom/AlternativeMarket-Lists/master/results/nextdom-draft.json')
@@ -68,13 +67,14 @@ $NEXTDOM_INTERNAL_CONFIG = array(
       'color13' => '#f5f5f5',
       'color14' => '#dddddd',
       'color15' => '#ffffff',
-      'color16' => '#dddddd',
+      'color16' => '#555555',
       'color17' => '#f4f4f4',
       'color18' => '#555555',
       'color19' => '#555555',
       'color20' => '#dddddd',
       'color21' => '100',
       'color22' => '#fafafa',
+      'color23' => '#f5f5f5',
     ),
     'plugin' => array(
         'category' => array(

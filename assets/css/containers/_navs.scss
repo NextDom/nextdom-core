@@ -43,10 +43,22 @@
         background-color: rgba(255, 255, 255, 0.1);
     }
 }
+.tab-content {
+    height: calc(100% - 50px);
+    overflow:auto;
+    overflow-x: hidden;
+}
+.nav>.label-log>a {
+    padding: 10px 10px;
+}
+.nav-tabs-custom>.nav-tabs>li.header>.fa, .nav-tabs-custom>.nav-tabs>li.header>.fas, .nav-tabs-custom>.nav-tabs>li.header>.glyphicon, .nav-tabs-custom>.nav-tabs>li.header>.ion {
+    margin-right: 8px !important;
+}
 
 /* Core-Ajout : Filtres objets dashboard*/
 .nav-tabs-dashboard {
     border-bottom: none !important;
+    margin-bottom: 3px !important;
     a {
         padding: 8px 10px 6px 10px !important;
     }
@@ -61,14 +73,7 @@
     cursor: pointer !important;
 }
 
-/* AdminLTE-Surcharge */
-.tab-content {
-    height: calc(100% - 50px);
-    overflow:auto;
-    overflow-x: hidden;
-}
-
-/* AdminLTE-Surcharge */
-.nav>.label-log>a {
-    padding: 10px 10px;
+/* Core-Surcharge */
+.nav-tabs li a i {
+    margin-right: 8px;
 }

@@ -55,4 +55,15 @@ abstract class Enum
         }
 
     }
+
+    /**
+     * @return array
+     * @throws OperatingSystemException
+     * @throws \ReflectionException
+     */
+    public static function getValues()
+    {
+        return array_values(self::getConstants());
+    }
+
 }

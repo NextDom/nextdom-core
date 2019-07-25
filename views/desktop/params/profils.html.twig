@@ -1,4 +1,4 @@
- {#
+{#
 
 /* This file is part of Jeedom.
 *
@@ -36,10 +36,10 @@
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
-            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'profile.back'|trans }}</a>
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'profile.back'|trans }}</a>
         </div>
         <div class="action-group">
-            <a class="btn btn-success btn-action-bar pull-right" id="bt_saveProfils"><i class="fas fa-save spacing-right"></i>{{ 'profile.save'|trans }}</a>
+            <a class="btn btn-success btn-action-bar pull-right" id="bt_saveProfils"><i class="fas fa-save"></i>{{ 'profile.save'|trans }}</a>
         </div>
     </div>
 </section>
@@ -47,12 +47,12 @@
     <div class="nav-tabs-custom config" id="div_Profils">
         <!-- Tabs title -->
         <ul class="nav nav-tabs pull-right" role="tablist">
-            <li role="presentation"><a href="#themetab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tint spacing-right"></i>{{ 'profile.theme'|trans }}</a></li>
-            <li role="presentation"><a href="#interfacetab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-laptop spacing-right"></i>{{ 'profile.interface'|trans }}</a></li>
-            <li role="presentation"><a href="#notificationtab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-comments spacing-right"></i>{{ 'profile.notifications'|trans }}</a></li>
-            <li role="presentation"><a href="#securitytab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-user-secret spacing-right"></i>{{ 'profile.security'|trans }}</a></li>
-            <li role="presentation" class="active"><a href="#profil" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-user spacing-right"></i>{{ 'profile.profile'|trans }}</a></li>
-            <li class="header pull-left"><i class="fas fa-briefcase spacing-right"></i>{{ 'profile.profile-of'|trans|format(profilsUser.getLogin()) }}</li>
+            <li role="presentation"><a href="#themetab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tint"></i>{{ 'profile.theme'|trans }}</a></li>
+            <li role="presentation"><a href="#interfacetab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-laptop"></i>{{ 'profile.interface'|trans }}</a></li>
+            <li role="presentation"><a href="#notificationtab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-comments"></i>{{ 'profile.notifications'|trans }}</a></li>
+            <li role="presentation"><a href="#securitytab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-user-secret"></i>{{ 'profile.security'|trans }}</a></li>
+            <li role="presentation" class="active"><a href="#profil" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-user"></i>{{ 'profile.profile'|trans }}</a></li>
+            <li class="header pull-left"><i class="fas fa-briefcase"></i>{{ 'profile.profile-of'|trans|format(profilsUser.getLogin()) }}</li>
         </ul>
         <!-- Tabs content -->
         <div class="global-tab-content tab-content">
@@ -63,7 +63,7 @@
                     <legend>{{ 'Photo de profil' }}</legend>
                     <div class="row">
                         <div class="form-group col-sm-6">
-                            <img id="monAvatar" src="{{ profilsUser.getOptions('avatar') }}" style="height:200px"></a>
+                            <img id="monAvatar" src="{{ profilsAvatar }}" style="height:200px"></a>
                         </div>
                         <div class="form-group col-sm-6">
                             {% for avatarFile in profilsAvatars %}
@@ -86,23 +86,39 @@
             <div role="tabpanel" class="tab-pane" id="themetab">
                 <form class="form-horizontal">
                     <fieldset>
-                        <legend>{{ 'Couleurs' }}</legend>
-                        <div class="form-group">
-                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Couleur sur mobile' }}</label>
-                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
-                                <select class="userAttr form-control" data-l1key="options" data-l2key="mobile_theme_color">
-                                    {% for theme in profilsMobileThemes %}
-                                        <option value="{{ theme }}">{{ theme|capitalize|replace({'_': ' '}) }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
+                        <legend>{{ 'Thème des Widgets' }}</legend>
+                        <div class="row text-center">
+                            {% for theme in profilsWidgetThemes %}
+                                <div class="col-sm-12 col-md-6">
+                                    <div class="clearfix">
+                                        <label class="cursor" for={{ theme['name']|slice(0, -4) }}>
+                                            <img class="themeWidgetThumbnail" src="{{ theme['dir'] }}">
+                                        </label>
+                                    </div>
+                                    <input id={{ theme['name']|slice(0, -4) }} class="spacing-right" type="radio" name="themeWidget" value={{ theme['name']|slice(0, -4) }}>
+                                    <label for={{ theme['name']|slice(0, -4) }}>{{ theme['name']|slice(0, -4) }}</label>
+                                </div>
+                            {% endfor %}
                         </div>
+                        <input class="userAttr form-control" data-l1key="options" data-l2key="widget::theme" style="display:none" />
+                    </fieldset>
+
+                    <fieldset class="legend-section">
+                        <legend>{{ 'Opacités des widgets' }}</legend>
+                        {% for displayTypeCode, displayTypeData in profilsDisplayTypes %}
+                            <div class="form-group">
+                                <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ displayTypeData['name'] }}</label>
+                                <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                                    <input type="number" min="0" max="1" step="0.1" class="userAttr form-control" data-l1key="options" data-l2key="widget::background-opacity::{{ displayTypeCode }}"/>
+                                </div>
+                            </div>
+                        {% endfor %}
                     </fieldset>
 
                     <fieldset class="legend-section">
                         <legend>{{ 'Graphiques' }}</legend>
                         <div class="form-group">
-                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Graphique Desktop' }}</label>
+                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Thème' }}</label>
                             <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
                                 <select class="userAttr form-control" data-l1key="options" data-l2key="desktop_highcharts_theme">
                                     <option value="">Défaut</option>
@@ -117,34 +133,6 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Graphique mobile' }}</label>
-                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
-                                <select class="userAttr form-control" data-l1key="options" data-l2key="mobile_highcharts_theme">
-                                    <option value="">Défaut</option>
-                                    <option value="dark-blue">Dark-blue</option>
-                                    <option value="dark-green">Dark-green</option>
-                                    <option value="dark-unica">Dark-unica</option>
-                                    <option value="gray">Gray</option>
-                                    <option value="grid-light">Grid-light</option>
-                                    <option value="grid">Grid</option>
-                                    <option value="sand-signika">Sand-signika</option>
-                                    <option value="skies">Skies</option>
-                                </select>
-                            </div>
-                        </div>
-                    </fieldset>
-
-                    <fieldset class="legend-section">
-                        <legend>{{ 'Opacités' }}</legend>
-                        {% for displayTypeCode, displayTypeData in profilsDisplayTypes %}
-                            <div class="form-group">
-                                <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Widgets' }} {{ displayTypeData['name'] }}</label>
-                                <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
-                                    <input type="number" min="0" max="1" class="userAttr form-control" data-l1key="options" data-l2key="widget::background-opacity::{{ displayTypeCode }}"/>
-                                </div>
-                            </div>
-                        {% endfor %}
                     </fieldset>
                 </form>
             </div>
@@ -153,134 +141,89 @@
             <div role="tabpanel" class="tab-pane" id="interfacetab">
                 <form class="form-horizontal">
                     <fieldset>
-                        <legend>{{ 'Options d\'interfaces' }}</legend>
+                        <legend>{{ 'Options d\'interfaces par défaut' }}</legend>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
-                            <div class="col-sm-2">
+                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Page Home' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
                                 <select class="userAttr form-control" data-l1key="options" data-l2key="homePage">
                                     {% for homePageCode, homePageValue in profilsHomePageDesktop %}
                                         <option value="{{ homePageCode }}">{{ homePageValue }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
-                            <label class="col-sm-1 control-label">{{ 'Mobile' }}</label>
-                            <div class="col-sm-2">
-                                <select class="userAttr form-control" data-l1key="options" data-l2key="homePageMobile">
-                                    <option value="home">{{ 'Accueil' }}</option>
-                                    {% for homePageCode, homePageValue in profilsHomePageMobile %}
-                                        <option value="{{ homePageCode }}">{{ homePageValue }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
                         </div>
-                    </fieldset>
 
-                    <fieldset class="legend-section">
-                        <legend>{{ 'Objet par défaut sur le dashboard' }}</legend>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
-                            <div class="col-sm-2">
+                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Objet par défaut du dashboard' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
                                 <select class="userAttr form-control" data-l1key="options" data-l2key="defaultDashboardObject">
                                     {% for jeeObject in profilsJeeObjects %}
                                         <option value="{{ jeeObject.getId() }}">{{ jeeObject.getName() }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
-                            <label class="col-sm-1 control-label">{{ 'Mobile' }}</label>
-                            <div class="col-sm-2">
-                                <select class="userAttr form-control" data-l1key="options" data-l2key="defaultMobileObject">
-                                    <option value='all'>{{ 'Tout' }}</option>
-                                    {% for jeeObject in profilsJeeObjects %}
-                                        <option value="{{ jeeObject.getId() }}">{{ jeeObject.getName() }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
                         </div>
-                    </fieldset>
 
-                    <fieldset class="legend-section">
-                        <legend>{{ 'Vue par défaut' }}</legend>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
-                            <div class="col-sm-2">
+                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Vue par défaut' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
                                 <select class="userAttr form-control" data-l1key="options" data-l2key="defaultDesktopView">
                                     {% for view in profilsViews %}
                                         <option value="{{ view.getId() }}">{{ view.getName() }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
-                            <label class="col-sm-1 control-label">{{ 'Mobile' }}</label>
-                            <div class="col-sm-2">
-                                <select class="userAttr form-control" data-l1key="options" data-l2key="defaultMobileView">
-                                    {% for view in profilsViews %}
-                                        <option value="{{ view.getId() }}">{{ view.getName() }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
                         </div>
-                    </fieldset>
 
-                    <fieldset class="legend-section">
-                        <legend>{{ 'Design par défaut' }}</legend>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
-                            <div class="col-sm-2">
+                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Design par défaut' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
                                 <select class="userAttr form-control" data-l1key="options" data-l2key="defaultDashboardPlan">
                                     {% for plan in profilsPlans %}
                                         <option value="{{ plan.getId() }}">{{ plan.getName() }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
-                            <label class="col-sm-1 control-label">{{ 'Mobile' }}</label>
-                            <div class="col-sm-2">
-                                <select class="userAttr form-control" data-l1key="options" data-l2key="defaultMobilePlan">
-                                    {% for plan in profilsPlans %}
-                                        <option value="{{ plan.getId() }}">{{ plan.getName() }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">{{ 'Plein écran' }}</label>
-                            <div class="col-sm-1">
-                                <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="defaultPlanFullScreen"/>
-                            </div>
-                        </div>
-                    </fieldset>
 
-                    <fieldset class="legend-section">
+                        {# Plan 3D désactivé
                         <legend>{{ 'Design 3D par défaut' }}</legend>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">{{ 'Desktop' }}</label>
-                            <div class="col-sm-2">
+                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Design 3D par défaut' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
                                 <select class="userAttr form-control" data-l1key="options" data-l2key="defaultDashboardPlan3d">
                                     {% for plan in profilsPlans3d %}
                                         <option value="{{ plan3d.getId() }}">{{ plan3d.getName() }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
-                            <label class="col-sm-1 control-label">{{ 'Mobile' }}</label>
-                            <div class="col-sm-2">
-                                <select class="userAttr form-control" data-l1key="options" data-l2key="defaultMobilePlan3d">
-                                    {% for plan3d in profilsPlans3d %}
-                                        <option value="{{ plan3d.getId() }}">{{ plan3d.getName() }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">{{ 'Plein écran' }}</label>
-                            <div class="col-sm-1">
-                                <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="defaultPlan3dFullScreen"/>
-                            </div>
-                        </div>
+                        #}
                     </fieldset>
 
                     <fieldset class="legend-section">
-                        <legend>{{ 'Vue' }}</legend>
+                        <legend>{{ 'Options des Designs' }}</legend>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">{{ 'Déplier le panneau des vues' }}</label>
-                            <div class="col-sm-1">
+                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-6 control-label">{{ 'Design en plein écran' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                                <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="defaultPlanFullScreen"/>
+                            </div>
+                        </div>
+                        {# Plan 3D désactivé
+                        <div class="form-group">
+                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-6 control-label">{{ 'Design 3D en plein écran' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                                <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="defaultPlan3dFullScreen"/>
+                            </div>
+                        </div>
+                        #}
+                    </fieldset>
+
+                    <fieldset class="legend-section">
+                        <legend>{{ 'Options des Vues' }}</legend>
+                        <div class="form-group">
+                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-6 control-label">{{ 'Déplier le panneau' }}</label>
+                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
                                 <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="displayViewByDefault"/>
                             </div>
                         </div>
@@ -314,21 +257,21 @@
                                     <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Double authentification' }}</label>
                                     <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
                                         <input type="checkbox" class="userAttr" data-l1key="options" data-l2key="twoFactorAuthentification"/>
-                                        <label class="control-label label-check">{{ 'Activer' }}</label>
+                                        <label class="control-label label-check">{{ 'common.activate' | trans }}</label>
                                     </div>
                                 {% endif %}
                             </div>
                             <div class="form-group">
                                 <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Double authentification' }}</label>
                                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-                                    <a class="btn btn-warning" id="bt_configureTwoFactorAuthentification"><i class="fas fa-magic spacing-right"></i>{{ 'Configurer' }}</a>
+                                    <a class="btn btn-warning" id="bt_configureTwoFactorAuthentification"><i class="fas fa-magic"></i>{{ 'Configurer' }}</a>
                                 </div>
                             </div>
                         {% endif %}
                         <div class="form-group">
                             <label class="col-lg-2 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Hash de l\'utilisateur' }}</label>
                             <div class="col-lg-2 col-md-2 col-sm-3 col-xs-12">
-                                <a class="btn btn-action" id="bt_genUserKeyAPI"><i class="fas fa-refresh spacing-right"></i>{{ 'Régénérer' }}</a>
+                                <a class="btn btn-action" id="bt_genUserKeyAPI"><i class="fas fa-refresh"></i>{{ 'Régénérer' }}</a>
                             </div>
                         </div>
                         <div class="form-group">
@@ -343,10 +286,10 @@
                         <table class="table table-condensed table-bordered">
                             <thead>
                             <tr>
-                                <th>{{ 'ID' }}</th>
+                                <th>{{ 'common.id' | trans }}</th>
                                 <th>{{ 'IP' }}</th>
-                                <th>{{ 'Date' }}</th>
-                                <th>{{ 'Actions' }}</th>
+                                <th>{{ 'common.date' | trans }}</th>
+                                <th>{{ 'common.actions' | trans }}</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -356,7 +299,7 @@
                                         <td>{{ id }}</td>
                                         <td>{{ session['ip'] }}</td>
                                         <td>{{ session['datetime'] }}</td>
-                                        <td><a class="btn btn-sm btn-warning bt_deleteSession pull-right"><i class="fas fa-sign-out-alt spacing-right"></i>{{ 'Déconnecter' }}</a></td>
+                                        <td><a class="btn btn-sm btn-warning bt_deleteSession pull-right"><i class="fas fa-sign-out-alt"></i>{{ 'Déconnecter' }}</a></td>
                                     </tr>
                                 {% endif %}
                             {% endfor %}
@@ -370,7 +313,7 @@
                         </div>
                         <div class="col-md-3 col-xs-12 container-fluid">
                             <div class="box-tools pull-right padding-bottom">
-                                <a class="btn btn-warning" id="bt_removeAllRegisterDevice"><i class="fas fa-trash spacing-right"></i>{{ 'Supprimer tout' }}</a>
+                                <a class="btn btn-warning" id="bt_removeAllRegisterDevice"><i class="fas fa-trash"></i>{{ 'Supprimer tout' }}</a>
                             </div>
                         </div>
                         <table class="table table-bordered table-condensed">
@@ -379,7 +322,7 @@
                                 <th>{{ 'Identification' }}</th>
                                 <th>{{ 'IP' }}</th>
                                 <th>{{ 'Date dernière utilisation' }}</th>
-                                <th>{{ 'Action' }}</th>
+                                <th>{{ 'common.action' | trans }}</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -389,7 +332,7 @@
                                     <td>{{ sessionData['ip'] }}</td>
                                     <td>{{ sessionData['datetime'] }}</td>
                                     <td>
-                                        <a class="btn btn-warning btn-sm bt_removeRegisterDevice pull-right"><i class="fas fa-trash spacing-right"></i>{{ 'Supprimer' }}</a>
+                                        <a class="btn btn-warning btn-sm bt_removeRegisterDevice pull-right"><i class="fas fa-trash"></i>{{ 'common.remove' | trans }}</a>
                                     </td>
                                 </tr>
                             {% endfor %}

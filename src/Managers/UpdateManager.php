@@ -36,7 +36,6 @@ namespace NextDom\Managers;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
-use NextDom\Helpers\NextDomHelper;
 use NextDom\Model\Entity\Update;
 
 /**
@@ -56,52 +55,28 @@ class UpdateManager
      */
     public static function checkAllUpdate($filter = '', $findNewObjects = true)
     {
-        $findCore = false;
         if ($findNewObjects) {
             self::findNewUpdateObject();
         }
         $updatesList = self::all($filter);
-        $updates_sources = array();
+        $updatesToCheckBySource = array();
         if (is_array($updatesList)) {
             foreach ($updatesList as $update) {
-                if ($update->getType() == 'core') {
-                    if ($findCore) {
-                        $update->remove();
-                        continue;
+                if ($update->getStatus() != 'hold') {
+                    if (!isset($updatesToCheckBySource[$update->getSource()])) {
+                        $updatesToCheckBySource[$update->getSource()] = array();
                     }
-                    $findCore = true;
-                    $update->setType('core')
-                        ->setLogicalId('nextdom')
-                        ->setSource(ConfigManager::byKey('core::repo::provider'))
-                        ->setLocalVersion(NextDomHelper::getNextdomVersion());
-                    $update->save();
-                    $update->checkUpdate();
-                } else {
-                    if ($update->getStatus() != 'hold') {
-                        if (!isset($updates_sources[$update->getSource()])) {
-                            $updates_sources[$update->getSource()] = array();
-                        }
-                        $updates_sources[$update->getSource()][] = $update;
-                    }
+                    $updatesToCheckBySource[$update->getSource()][] = $update;
                 }
             }
         }
-        if (!$findCore && ($filter == '' || $filter == 'core')) {
-            $update = (new Update())
-                ->setType('core')
-                ->setLogicalId('nextdom')
-                ->setSource(ConfigManager::byKey('core::repo::provider'))
-                ->setConfiguration('user', 'NextDom')
-                ->setConfiguration('repository', 'nextdom-core')
-                ->setConfiguration('version', 'master')
-                ->setLocalVersion(NextDomHelper::getNextdomVersion());
-            $update->save();
-            $update->checkUpdate();
-        }
-        foreach ($updates_sources as $source => $updates) {
-            $class = 'repo_' . $source;
-            if (class_exists($class) && method_exists($class, 'checkUpdate') && ConfigManager::byKey($source . '::enable') == 1) {
-                $class::checkUpdate($updates);
+        foreach ($updatesToCheckBySource as $source => $updates) {
+            $repoData = self::getRepoDataFromName($source);
+            if (array_key_exists('phpClass', $repoData)) {
+                $class = $repoData['phpClass'];
+                if (class_exists($class) && method_exists($class, 'checkUpdate') && ConfigManager::byKey($source . '::enable') == 1) {
+                    $class::checkUpdate($updates);
+                }
             }
         }
         ConfigManager::save('update::lastCheck', date('Y-m-d H:i:s'));
@@ -149,7 +124,7 @@ class UpdateManager
                 );
                 $sql = 'DELETE FROM `' . self::DB_CLASS_NAME . '`
                         WHERE type=:type';
-                DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW);
+                DBHelper::exec($sql, $values);
             }
         }
     }
@@ -159,7 +134,7 @@ class UpdateManager
      *
      * @param $type
      * @param $logicalId
-     * @return array|mixed|null
+     * @return Update|null
      * @throws \Exception
      */
     public static function byTypeAndLogicalId($type, $logicalId)
@@ -172,14 +147,14 @@ class UpdateManager
                 FROM `' . self::DB_CLASS_NAME . '`
                 WHERE logicalId=:logicalId
                 AND type=:type';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
     /**
      * Obtenir les mises à jour à partir de leur type
      *
      * @param $type
-     * @return array|mixed|null
+     * @return Update[]|null
      * @throws \Exception
      */
     public static function byType($type)
@@ -190,7 +165,7 @@ class UpdateManager
         $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
                 FROM `' . self::DB_CLASS_NAME . '`
                 WHERE type=:type';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -209,33 +184,57 @@ class UpdateManager
             $sql .= 'WHERE `type`=:type ';
         }
         $sql .= 'ORDER BY FIELD( `status`, "update","ok","depreciated") ASC,FIELD( `type`,"plugin","core") DESC, `name` ASC';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
     /**
-     * List of rest (Source of downloads)
-     * @return array
+     * List of repositories
+     *
+     * @return array Repositories data
+     *
      * @throws \Exception
      */
     public static function listRepo(): array
     {
-        $result = array();
-        foreach (FileSystemHelper::ls(NEXTDOM_ROOT . '/core/repo', '*.repo.php') as $repoFile) {
-            if (substr_count($repoFile, '.') != 2) {
-                continue;
+        $result = [];
+        // Temp hack for specific repo render file
+        $repoRenderFiles = ['RepoMarketApi.php', 'RepoMarketDisplay.php', 'RepoMarketList.php', 'RepoMarketSend.php'];
+        foreach (FileSystemHelper::ls(NEXTDOM_ROOT . '/src/Repo/', '*.php') as $repoFile) {
+            if (!in_array($repoFile, $repoRenderFiles)) {
+                $className = str_replace('.php', '', $repoFile);
+                $repoCode = strtolower(str_replace('Repo', '', $className));
+                $fullNameClass = '\\NextDom\\Repo\\' . $className;
+                if (class_exists($fullNameClass)) {
+                    $result[$repoCode] = array(
+                        'name' => $fullNameClass::$_name,
+                        'class' => $fullNameClass,
+                        'configuration' => $fullNameClass::$_configuration,
+                        'scope' => $fullNameClass::$_scope,
+                    );
+                    $result[$repoCode]['enable'] = ConfigManager::byKey($repoCode . '::enable');
+                }
             }
-
-            $class = 'repo_' . str_replace('.repo.php', '', $repoFile);
-            /** @noinspection PhpUndefinedFieldInspection */
-            $result[str_replace('.repo.php', '', $repoFile)] = array(
-                'name' => $class::$_name,
-                'class' => $class,
-                'configuration' => $class::$_configuration,
-                'scope' => $class::$_scope,
-            );
-            $result[str_replace('.repo.php', '', $repoFile)]['enable'] = ConfigManager::byKey(str_replace('.repo.php', '', $repoFile) . '::enable');
         }
         return $result;
+    }
+
+    /**
+     * Get the class of the repo by the name
+     * @param string $name Name of the repo in jeedom format
+     * @return array Associative array
+     * @throws \Exception
+     */
+    public static function getRepoDataFromName($name): array
+    {
+        $repoList = self::listRepo();
+        foreach ($repoList as $repoData) {
+            if (ucfirst($repoData['name']) == ucfirst($name)) {
+                return [
+                    'className' => str_replace('\\NextDom\\Repo\\', '', $repoData['class']),
+                    'phpClass' => $repoData['class']];
+            }
+        }
+        return [];
     }
 
     /**
@@ -246,12 +245,13 @@ class UpdateManager
      */
     public static function repoById($id)
     {
-        $class = 'repo_' . $id;
+        $repoClassData = self::getRepoDataFromName($id);
+        $phpClass = $repoClassData['phpClass'];
         $return = array(
-            'name' => $class::$_name,
-            'class' => $class,
-            'configuration' => $class::$_configuration,
-            'scope' => $class::$_scope,
+            'name' => $phpClass::$_name,
+            'class' => $repoClassData['className'],
+            'configuration' => $phpClass::$_configuration,
+            'scope' => $phpClass::$_scope,
         );
         $return['enable'] = ConfigManager::byKey($id . '::enable');
         return $return;
@@ -261,7 +261,8 @@ class UpdateManager
      * Update all items
      * @param string $filter
      * @return bool
-     * @throws \Exception
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Throwable
      */
     public static function updateAll(string $filter = '')
     {
@@ -296,7 +297,7 @@ class UpdateManager
     /**
      * Get information about an update from its username
      * @param string $id ID of the update
-     * @return array|mixed|null
+     * @return Update|null
      * @throws \Exception
      */
     public static function byId($id)
@@ -307,7 +308,7 @@ class UpdateManager
         $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
                 FROM `' . self::DB_CLASS_NAME . '`
                 WHERE id=:id';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -324,7 +325,7 @@ class UpdateManager
         $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
                 FROM `' . self::DB_CLASS_NAME . '`
                 WHERE status=:status';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -341,13 +342,13 @@ class UpdateManager
         $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
                 FROM `' . self::DB_CLASS_NAME . '`
                 WHERE logicalId=:logicalId';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
     /**
      * Get the number of pending updates
+     * @param string $filter
      * @return mixed
-     * @throws \Exception
      */
     public static function nbNeedUpdate($filter = '')
     {

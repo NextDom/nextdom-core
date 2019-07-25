@@ -671,10 +671,16 @@ function fullScreen(_mode) {
         $('.wrapper').addClass('fullscreen');
         $('#wrap').css('margin-bottom', '0px');
         $('.div_backgroundPlan').height($('html').height());
+        if($('.wrapper').width() < 767) {
+            $('.content-wrapper').css("cssText", "margin-top: 50px !important;");
+        }
     }else{
         $('.wrapper').removeClass('fullscreen');
         $('#wrap').css('margin-bottom', '15px');
         $('.div_backgroundPlan').height($('body').height());
+        if($('.wrapper').width() < 767) {
+            $('.content-wrapper').css("cssText", "margin-top: 100px !important;");
+        }
     }
 }
 
@@ -986,7 +992,7 @@ function displayObject(_plan,_html, _noRender) {
         html.css('background-color',html.css('background-color').replace(')', ','+_plan.css['opacity']+')').replace('rgb', 'rgba'));
     }
     if(_plan.link_type == 'graph'){
-        ('.div_displayObject').append(html);
+        $('.div_displayObject').append(html);
         if(isset(_plan.display) && isset(_plan.display.graph)){
             for (var i in _plan.display.graph) {
                 if (init(_plan.display.graph[i].link_id) != '') {

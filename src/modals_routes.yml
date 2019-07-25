@@ -90,8 +90,8 @@ nextdom.benchmark:
   path: 'nextdom.benchmark'
   controller: NextDom\Controller\Modals\NextdomBenchmark::get
   condition: 'admin'
-node.manager:
-  path: 'node.manager'
+note.manager:
+  path: 'note.manager'
   controller: NextDom\Controller\Modals\NoteManager::get
   condition: 'admin'
 object.configure:

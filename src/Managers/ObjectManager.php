@@ -38,6 +38,7 @@ use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Model\Entity\JeeObject;
 use NextDom\Model\Entity\Update;
+use NextDom\Model\Entity\User;
 
 /**
  * Class ObjectManager
@@ -67,7 +68,7 @@ class ObjectManager
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE id = :id';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -85,7 +86,7 @@ class ObjectManager
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE name=:name';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -115,6 +116,18 @@ class ObjectManager
         return $result;
     }
 
+    public static function getDefaultUserRoom(User $user)
+    {
+        $rootRoomId = $user->getOptions('defaultDashboardObject');
+        if (empty($rootRoomId)) {
+            $defaultRoom = self::getRootObjects();
+        }
+        else {
+            $defaultRoom = self::byId($rootRoomId);
+        }
+        return $defaultRoom;
+    }
+
     /**
      * Get root objects.
      *
@@ -139,7 +152,7 @@ class ObjectManager
             $sql .= ' LIMIT 1';
             $fetchType = DBHelper::FETCH_TYPE_ROW;
         }
-        return DBHelper::Prepare($sql, array(), $fetchType, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::Prepare($sql, [], $fetchType, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
     /**
@@ -203,7 +216,7 @@ class ObjectManager
             $sql .= ' WHERE isVisible = 1';
         }
         $sql .= ' ORDER BY position,name,father_id';
-        return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
     }
 
     /**
@@ -333,7 +346,7 @@ class ObjectManager
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE `configuration` LIKE :configuration';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
     /**

@@ -50,33 +50,6 @@ class CmdManager
     const DB_CLASS_NAME = '`cmd`';
 
     /**
-     * Get historized commands
-     *
-     * @return array
-     * @throws \Exception
-     */
-    public static function allHistoryCmd()
-    {
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME, 'c') . '
-                FROM ' . self::DB_CLASS_NAME . ' c
-                INNER JOIN eqLogic el ON c.eqLogic_id=el.id
-                INNER JOIN object ob ON el.object_id=ob.id
-                WHERE isHistorized=1
-                AND type=\'info\'';
-        $sql .= ' ORDER BY ob.position, ob.name, el.name, c.name';
-        $result1 = self::cast(DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME, 'c') . '
-                FROM ' . self::DB_CLASS_NAME . ' c
-                INNER JOIN eqLogic el ON c.eqLogic_id=el.id
-                WHERE el.object_id IS NULL
-                AND isHistorized=1
-                AND type=\'info\'';
-        $sql .= ' ORDER BY el.name, c.name';
-        $result2 = self::cast(DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
-        return array_merge($result1, $result2);
-    }
-
-    /**
      * TODO: ???, repasser en privé
      *
      * @param Cmd $inputs
@@ -107,6 +80,90 @@ class CmdManager
             return $return;
         }
         return $inputs;
+    }
+
+    /**
+     * Get command by specifics IDs
+     * @param array $idsList List of ID
+     * @return Cmd[]|null List of commands
+     * @throws \Exception
+     */
+    public static function byIds($idsList)
+    {
+        if (!is_array($idsList) || count($idsList) == 0) {
+            return [];
+        }
+        $in = trim(preg_replace('/[, ]{2,}/m', ',', implode(',', $idsList)), ',');
+        if ($in === '') {
+            return [];
+        }
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE id IN (' . $in . ')';
+        return self::cast(DBHelper::getAllObjects($sql, [], self::CLASS_NAME));
+    }
+
+    /**
+     * Get command by his id
+     *
+     * @param mixed $id Command id
+     * @return Cmd|bool
+     * @throws \Exception
+     */
+    public static function byId($id)
+    {
+        if ($id == '') {
+            return null;
+        }
+        $values = array(
+            'id' => $id,
+        );
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE id = :id';
+        return self::cast(DBHelper::getOneObject($sql, $values, self::CLASS_NAME));
+    }
+
+    /**
+     * Get all commands
+     *
+     * @return Cmd[]
+     *
+     * @throws \Exception
+     */
+    public static function all()
+    {
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                ORDER BY id';
+        return self::cast(DBHelper::getAllObjects($sql, [], self::CLASS_NAME));
+    }
+
+    /**
+     * Get historized commands
+     *
+     * @return array
+     * @throws \Exception
+     */
+    public static function allHistoryCmd()
+    {
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME, 'c') . '
+                FROM ' . self::DB_CLASS_NAME . ' c
+                INNER JOIN eqLogic el ON c.eqLogic_id=el.id
+                INNER JOIN object ob ON el.object_id=ob.id
+                WHERE isHistorized=1
+                AND type=\'info\'';
+        $sql .= ' ORDER BY ob.position, ob.name, el.name, c.name';
+        $result1 = self::cast(DBHelper::getAllObjects($sql, [], self::CLASS_NAME));
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME, 'c') . '
+                FROM ' . self::DB_CLASS_NAME . ' c
+                INNER JOIN eqLogic el ON c.eqLogic_id=el.id
+                WHERE el.object_id IS NULL
+                AND isHistorized=1
+                AND type=\'info\'';
+        $sql .= ' ORDER BY el.name, c.name';
+        $result2 = self::cast(DBHelper::getAllObjects($sql, [], self::CLASS_NAME));
+        return array_merge($result1, $result2);
     }
 
     /**
@@ -146,7 +203,7 @@ class CmdManager
             $sql .= 'AND `generic_type` IS NOT NULL ';
         }
         $sql .= 'ORDER BY `order`,`name`';
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME), $_eqLogic);
+        return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME), $_eqLogic);
     }
 
     /**
@@ -170,7 +227,7 @@ class CmdManager
             $sql .= 'AND `type`=:type ';
         }
         $sql .= 'ORDER BY `order`';
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
     }
 
     /**
@@ -207,9 +264,9 @@ class CmdManager
         }
         $sql .= ' ORDER BY `order`';
         if ($one) {
-            return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME));
+            return self::cast(DBHelper::getOneObject($sql, $values, self::CLASS_NAME));
         }
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
     }
 
     /**
@@ -246,7 +303,7 @@ class CmdManager
             $sql .= ' AND eqType=:eqType ';
         }
         $sql .= ' ORDER BY name';
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
     }
 
     /**
@@ -272,7 +329,7 @@ class CmdManager
             $sql .= ' AND type=:type ';
         }
         $sql .= ' AND configuration LIKE :configuration';
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
     }
 
     /**
@@ -306,7 +363,7 @@ class CmdManager
             $sql .= ' AND subType = :subType ';
         }
         $sql .= ' ORDER BY name';
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
     }
 
     /**
@@ -334,9 +391,9 @@ class CmdManager
             $sql .= ' AND type = :type';
         }
         if ($multiple) {
-            return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+            return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
         }
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        return self::cast(DBHelper::getOneObject($sql, $values, self::CLASS_NAME));
     }
 
     /**
@@ -364,9 +421,9 @@ class CmdManager
             $sql .= ' AND type=:type';
         }
         if ($multiple) {
-            return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+            return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
         }
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        return self::cast(DBHelper::getOneObject($sql, $values, self::CLASS_NAME));
     }
 
     /**
@@ -408,7 +465,7 @@ class CmdManager
                 $sql .= ' AND type=:type ';
             }
         }
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
     }
 
     /**
@@ -477,7 +534,7 @@ class CmdManager
         INNER JOIN object ob ON el.object_id=ob.id
         WHERE c.name=:cmd_name
         AND ob.name=:object_name';
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        return self::cast(DBHelper::getOneObject($sql, $values, self::CLASS_NAME));
     }
 
     /**
@@ -500,7 +557,7 @@ class CmdManager
             $values['subtype'] = $subType;
             $sql .= ' AND c.subtype=:subtype';
         }
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
     }
 
     /**
@@ -548,27 +605,6 @@ class CmdManager
     }
 
     /**
-     * Get command by specifics IDs
-     * @param array $idsList List of ID
-     * @return Cmd[]|null List of commands
-     * @throws \Exception
-     */
-    public static function byIds($idsList)
-    {
-        if (!is_array($idsList) || count($idsList) == 0) {
-            return [];
-        }
-        $in = trim(preg_replace('/[, ]{2,}/m', ',', implode(',', $idsList)), ',');
-        if ($in === '') {
-            return [];
-        }
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE id IN (' . $in . ')';
-        return self::cast(DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
-    }
-
-    /**
      * TODO: ??
      *
      * @param $string
@@ -582,27 +618,6 @@ class CmdManager
             throw new \Exception(__('La commande n\'a pas pu être trouvée : ') . $string . __(' => ') . self::humanReadableToCmd($string));
         }
         return $cmd;
-    }
-
-    /**
-     * Get command by his id
-     *
-     * @param mixed $id Command id
-     * @return Cmd|bool
-     * @throws \Exception
-     */
-    public static function byId($id)
-    {
-        if ($id == '') {
-            return null;
-        }
-        $values = array(
-            'id' => $id,
-        );
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE id = :id';
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME));
     }
 
     /**
@@ -697,7 +712,7 @@ class CmdManager
             AND el.name=:eqLogic_name
             AND ob.name=:object_name';
         }
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        return self::cast(DBHelper::getOneObject($sql, $values, self::CLASS_NAME));
     }
 
     /**
@@ -785,7 +800,7 @@ class CmdManager
     {
         $sql = 'SELECT distinct(type) as type
                 FROM ' . self::DB_CLASS_NAME;
-        return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL);
+        return DBHelper::getAll($sql);
     }
 
     /**
@@ -806,7 +821,7 @@ class CmdManager
             $sql .= ' WHERE type=:type';
         }
         $sql .= ' FROM ' . self::DB_CLASS_NAME;
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL);
+        return DBHelper::getAll($sql, $values);
     }
 
     /**
@@ -819,7 +834,7 @@ class CmdManager
     {
         $sql = 'SELECT distinct(unite) as unite
                 FROM ' . self::DB_CLASS_NAME;
-        return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL);
+        return DBHelper::getAll($sql);
     }
 
     /**
@@ -938,21 +953,6 @@ class CmdManager
     }
 
     /**
-     * Get all commands
-     *
-     * @return Cmd[]
-     *
-     * @throws \Exception
-     */
-    public static function all()
-    {
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                ORDER BY id';
-        return self::cast(DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
-    }
-
-    /**
      * TODO: ???
      *
      * @param $options
@@ -994,19 +994,23 @@ class CmdManager
         $return['category'] = $eqLogic->getCategory();
 
         if ($event['subtype'] == 'action') {
-            $return['html'] = '<div class="cmd" data-id="' . $event['id'] . '">'
-                . '<div style="background-color:#F5A9BC;padding:1px;font-size:0.9em;font-weight: bold;cursor:help;">' . $event['name'] . '<i class="fa fa-cogs pull-right cursor bt_configureCmd"></i></div>'
-                . '<div style="background-color:white;padding:1px;font-size:0.8em;cursor:default;">' . $event['options'] . '<div/>'
-                . '</div>';
+            $return['html'] = '<div class="timeline-item cmd" data-id="' . $event['id'] . '">'
+                . '<span class="time"><i class="fa fa-clock-o"></i>' . substr($event['datetime'], -9) . '</span>'
+                .'<h3 class="timeline-header">' . $event['name'] . '</h3>'
+                .'<div class="timeline-body">'
+                .  $event['options']
+                .' <div class="timeline-footer">'
+                .'</div>'
+                .'</div>';
         } else {
-            $backgroundColor = '#A9D0F5';
-            if (isset($event['cmdType']) && $event['cmdType'] == 'binary') {
-                $backgroundColor = ($event['value'] == 0 ? '#ff8693' : '#c1e5bd');
-            }
-            $return['html'] = '<div class="cmd" data-id="' . $event['id'] . '">'
-                . '<div style="background-color:' . $backgroundColor . ';padding:1px;font-size:0.9em;font-weight: bold;cursor:help;">' . $event['name'] . '<i class="fa fa-cogs pull-right cursor bt_configureCmd"></i></div>'
-                . '<div style="background-color:white;padding:1px;font-size:0.8em;cursor:default;">' . $event['value'] . '<div/>'
-                . '</div>';
+            $return['html'] = '<div class="timeline-item cmd" data-id="' . $event['id'] . '">'
+                . '<span class="time"><i class="fa fa-clock-o"></i>' . substr($event['datetime'], -9) .'</span>'
+                .'<h3 class="timeline-header">' . $event['name'] . '</h3>'
+                .'<div class="timeline-body">'
+                .  $event['value']
+                .' <div class="timeline-footer">'
+                .'</div>'
+                .'</div>';
         }
         return $return;
     }

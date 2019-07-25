@@ -27,6 +27,7 @@ use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\UpdateManager;
+use NextDom\Repo\RepoMarket;
 
 /**
  * Class MarketJeeController
@@ -47,7 +48,7 @@ class MarketJeeController extends BaseController
     {
         global $NEXTDOM_INTERNAL_CONFIG;
 
-        $searchLimit = 50;
+        $searchLimit = Utils::init('limit', 50);
         $repoId = Utils::init('repo', 'market');
         $repo = UpdateManager::repoById($repoId);
         if ($repo['enable'] == 0) {
@@ -64,20 +65,20 @@ class MarketJeeController extends BaseController
         /* Lecture market */
         if ($author == null && $name === null && $categorie === null && Utils::init('certification', null) === null && Utils::init('cost', null) === null && $type == 'plugin') {
             $news = true;
-            $markets = \repo_market::byFilter(array(
+            $markets = RepoMarket::byFilter(array(
                 'status' => 'stable',
                 'type' => 'plugin',
-                'timeState' => 'popular',
+                'timeState' => 'popular'
             ));
-            $markets2 = \repo_market::byFilter(array(
+            $markets2 = RepoMarket::byFilter(array(
                 'status' => 'stable',
                 'type' => 'plugin',
-                'timeState' => 'newest',
+                'timeState' => 'newest'
             ));
             $markets = array_merge($markets, $markets2);
         } else {
             $news = false;
-            $markets = \repo_market::byFilter(array(
+            $markets = RepoMarket::byFilter(array(
                 'status' => null,
                 'type' => $type,
                 'categorie' => $categorie,
@@ -86,7 +87,7 @@ class MarketJeeController extends BaseController
                 'cost' => Utils::init('cost', null),
                 'timeState' => Utils::init('timeState', null),
                 'certification' => Utils::init('certification', null),
-                'limit' => $searchLimit,
+                'limit' => $searchLimit
             ));
         }
 
@@ -114,12 +115,17 @@ class MarketJeeController extends BaseController
                 $categorieId++;
             }
             $marketObjects2 = [];
-            $marketObjects2['name'] = end(explode('.', $marketObject->getName()));
+            $explodedName = explode('.', $marketObject->getName());
+            if (count($explodedName) > 1) {
+                $marketObjects2['name'] = $explodedName[count($explodedName) - 1];
+            } else {
+                $marketObjects2['name'] = $marketObject->getName();
+            }
             $marketObjects2['author'] = $marketObject->getAuthor();
             $marketObjects2['category'] = $marketObject->getCategorie();
             $marketObjects2['id'] = $marketObject->getId();
             $marketObjects2['logicalId'] = $marketObject->getLogicalId();
-            $update = \update::byLogicalId($marketObject->getLogicalId());
+            $update = UpdateManager::byLogicalId($marketObject->getLogicalId());
             if (!is_object($update)) {
                 $marketObjects2['installed'] = 'install';
             } else {
@@ -149,6 +155,8 @@ class MarketJeeController extends BaseController
                 case 'Partenaire':
                     $marketObjects2['certificationClass'] = 'partner';
                     break;
+                default:
+                    $marketObjects2['certificationClass'] = '';
             }
             $marketObjects2['type'] = $marketObject->getType();
             if (strpos($marketObject->getName(), 'mobile.') !== false) {
@@ -156,7 +164,6 @@ class MarketJeeController extends BaseController
             } else {
                 $marketObjects2['mobile'] = 'desktop';
             }
-            $marketObjects2['default_image'] = 'public/img/NextDom_NoPicture_Gray.png';
             switch ($marketObject->getType()) {
                 case 'widget':
                     $marketObjects2['default_image'] = 'public/img/NextDom_Widget_Gray.png';
@@ -167,6 +174,8 @@ class MarketJeeController extends BaseController
                 case 'script':
                     $marketObjects2['default_image'] = 'public/img/NextDom_Script_Gray.png';
                     break;
+                default:
+                    $marketObjects2['default_image'] = 'public/img/NextDom_NoPicture_Gray.png';
             }
             $marketObjects2['urlPath'] = \config::byKey('market::address') . '/' . $marketObject->getImg('icon');
             $marketObjects2['note'] = $marketObject->getRating();
@@ -185,7 +194,7 @@ class MarketJeeController extends BaseController
 
         /* Test user */
         try {
-            \repo_market::test();
+            RepoMarket::test();
             $userTest = true;
         } catch (\Exception $e) {
             $userTest = false;
@@ -194,7 +203,7 @@ class MarketJeeController extends BaseController
         /* Categories */
         $pageData['marketCategories'] = [];
         if ($type !== null && $type != 'plugin') {
-            foreach (\repo_market::distinctCategorie($type) as $id => $category) {
+            foreach (RepoMarket::distinctCategorie($type) as $id => $category) {
                 if (trim($category) != '' && is_numeric($id)) {
                     $categories = [];
                     $categories['key'] = $category;
@@ -225,10 +234,12 @@ class MarketJeeController extends BaseController
         $types['key'] = 'script';
         $types['name'] = 'Scripts';
         $pageData['marketTypes'][] = $types;
+        $types['key'] = 'scenario';
+        $types['name'] = 'Scénarios';
+        $pageData['marketTypes'][] = $types;
 
         $pageData['marketNews'] = $news;
         $pageData['marketType'] = $type;
-        $pageData['JS_VARS']['marketType'] = $type;
         $pageData['marketCategorie'] = $categorie;
         $pageData['marketName'] = $name;
         $pageData['marketAuthor'] = $author;
@@ -237,10 +248,11 @@ class MarketJeeController extends BaseController
         $pageData['marketUserTest'] = $userTest;
         $pageData['marketLimit'] = $searchLimit;
         $pageData['markets'] = $markets;
+        $pageData['JS_VARS']['marketType'] = $type;
+        $pageData['JS_VARS']['marketCategory'] = $categorie;
 
         $pageData['CSS_POOL'][] = '/public/css/pages/markets.css';
         $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/markets/marketJee.js';
-
         return Render::getInstance()->get('/desktop/tools/markets/marketJee.html.twig', $pageData);
     }
 

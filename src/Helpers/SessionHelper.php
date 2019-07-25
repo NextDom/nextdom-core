@@ -35,6 +35,7 @@
 namespace NextDom\Helpers;
 
 use NextDom\Exceptions\CoreException;
+use NextDom\Managers\ConfigManager;
 
 /**
  * Class SessionHelper
@@ -104,11 +105,35 @@ class SessionHelper
     public static function deleteSession($sessionId)
     {
         $currentSessionId = session_id();
-        @session_start();
-        session_id($sessionId);
-        session_unset();
-        session_destroy();
-        session_id($currentSessionId);
-        @session_write_close();
+        if (session_status() !== PHP_SESSION_NONE) {
+            session_start();
+            session_id($sessionId);
+            session_unset();
+            session_destroy();
+            session_id($currentSessionId);
+            session_write_close();
+        }
+    }
+
+    /**
+     * Configure and start session if not already started
+     *
+     * @throws \Exception
+     */
+    public static function startSession() {
+        if(session_status() == PHP_SESSION_NONE) {
+            $sessionLifetime = ConfigManager::byKey('session_lifetime');
+            if (!is_numeric($sessionLifetime)) {
+                $sessionLifetime = 24;
+            }
+            ini_set('session.gc_maxlifetime', $sessionLifetime * 3600);
+            ini_set('session.use_cookies', 1);
+            ini_set('session.cookie_httponly', 1);
+
+            if (isset($_COOKIE['sess_id'])) {
+                session_id($_COOKIE['sess_id']);
+            }
+            session_start();
+        }
     }
 }

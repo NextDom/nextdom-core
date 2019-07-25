@@ -38,17 +38,17 @@
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
-            <a class="btn btn-danger btn-action-bar" id="bt_repoAddClose"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour' }}</a>
+            <a class="btn btn-danger btn-action-bar" id="bt_repoAddClose"><i class="fas fa-chevron-left"></i>{{ 'Retour' }}</a>
         </div>
         <div class="action-group">
-            <a class="btn btn-success btn-action-bar pull-right" id="bt_repoAddSaveUpdate"><i class="fas fa-check-circle spacing-right"></i>{{ 'Valider' }}</a>
+            <a class="btn btn-success btn-action-bar pull-right" id="bt_repoAddSaveUpdate"><i class="fas fa-check-circle"></i>{{ 'Valider' }}</a>
         </div>
     </div>
 </section>
 
 <section class="content">
     <div class="box">
-        <div class="box-header with-border"><h3 class="box-title"><i class="fas fa-plus spacing-right"></i>{{ 'Ajout d\'un plugin via une source autre' }}</h3></div>
+        <div class="box-header with-border"><h3 class="box-title"><i class="fas fa-plus"></i>{{ 'Ajout d\'un plugin via une source autre' }}</h3></div>
         <div class="box-body">
             <form class="form-horizontal">
                 <fieldset>
@@ -97,7 +97,7 @@
                                         {% elseif param['type'] == 'file' %}
                                             <input class="updateAttr form-control" data-l1key="configuration" data-l2key="{{ paramKey }}" style="display:none;" />
                                             <span class="btn btn-default btn-file">
-                                                <i class="fas fa-cloud-upload-alt spacing-right"></i>{{ 'Envoyer un plugin' }}<input id="bt_uploadPlugin" data-key="{{ paramKey }}" type="file" name="file" data-url="core/ajax/update.ajax.php?action=preUploadFile&jeedom_token={{ ajaxToken }}" style="display : inline-block;">
+                                                <i class="fas fa-cloud-upload-alt"></i>{{ 'Envoyer un plugin' }}<input id="bt_uploadPlugin" data-key="{{ paramKey }}" type="file" name="file" data-url="core/ajax/update.ajax.php?action=preUploadFile&jeedom_token={{ ajaxToken }}" style="display : inline-block;">
                                             </span>
                                         {% endif %}
                                     </div>

@@ -36,8 +36,8 @@
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
-            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
-            <a class="btn btn-default btn-action-bar" href="index.php?v=d&p=eqlogic"><i class="fas fa-cog spacing-right"></i>{{ 'Paramètres' }}</a>
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'common.return' | trans }}</a>
+            <a class="btn btn-default btn-action-bar" href="index.php?v=d&p=eqlogic"><i class="fas fa-cog"></i>{{ 'common.settings' | trans }}</a>
         </div>
     </div>
 </section>
@@ -46,12 +46,12 @@
     <div class="nav-tabs-custom">
         <!-- Tabs title -->
         <ul class="nav nav-tabs pull-right" role="tablist" id="ul_tabBatteryAlert">
-            <li role="presentation" class="active batteries"><a href="#battery" aria-controls="battery" role="tab" data-toggle="tab"><i class="fas fa-battery-full spacing-right"></i>{{ 'Batteries' }}</a></li>
-            <li role="presentation" class="alerts"><a href="#alertEqlogic" aria-controls="alertEqlogic" role="tab" data-toggle="tab"><i class="fas fa-exclamation-triangle spacing-right"></i>{{ 'Modules en alerte' }}</a></li>
-            <li role="presentation"><a href="#actionCmd" aria-controls="actionCmd" role="tab" data-toggle="tab"><i class="fas fa-gears spacing-right"></i>{{ 'Actions définies' }}</a></li>
-            <li role="presentation"><a href="#alertCmd" aria-controls="actionCmd" role="tab" data-toggle="tab"><i class="fas fa-bell spacing-right"></i>{{ 'Alertes définies' }}</a></li>
-            <li role="presentation"><a href="#deadCmd" aria-controls="actionCmd" role="tab" data-toggle="tab"><i class="fas fa-h-square spacing-right"></i>{{ 'Commandes orphelines' }}</a></li>
-            <li class="header pull-left"><i class="fas fa-plug spacing-right"></i>{{ 'Analyse des équipements' }}</li>
+            <li role="presentation" class="active batteries"><a href="#battery" aria-controls="battery" role="tab" data-toggle="tab"><i class="fas fa-battery-full"></i>{{ 'Batteries' }}</a></li>
+            <li role="presentation" class="alerts"><a href="#alertEqlogic" aria-controls="alertEqlogic" role="tab" data-toggle="tab"><i class="fas fa-exclamation-triangle"></i>{{ 'Modules en alerte' }}</a></li>
+            <li role="presentation"><a href="#actionCmd" aria-controls="actionCmd" role="tab" data-toggle="tab"><i class="fas fa-gears"></i>{{ 'Actions définies' }}</a></li>
+            <li role="presentation"><a href="#alertCmd" aria-controls="actionCmd" role="tab" data-toggle="tab"><i class="fas fa-bell"></i>{{ 'Alertes définies' }}</a></li>
+            <li role="presentation"><a href="#deadCmd" aria-controls="actionCmd" role="tab" data-toggle="tab"><i class="fas fa-h-square"></i>{{ 'Commandes orphelines' }}</a></li>
+            <li class="header pull-left"><i class="fas fa-plug"></i>{{ 'Analyse des équipements' }}</li>
         </ul>
 
         <div class="global-tab-content tab-content">
@@ -74,7 +74,7 @@
                 </div>
                 <div class="Container">
                     {% if not hasAlert %}
-                        <div class="alert alert-success">{{ 'Aucun module en Alerte pour le moment' }}</div>
+                        <div class="alert alert-success">{{ 'Aucun module en Alerte pour le moment...' }}</div>
                     {% endif %}
                 </div>
             </div>
@@ -83,10 +83,10 @@
                     <table class="table table-condensed tablesorter" id="table_Action">
                         <thead>
                         <tr>
-                            <th>{{ 'Equipement' }}</th>
+                            <th>{{ 'common.device' | trans }}</th>
                             <th>{{ 'Commande' }}</th>
-                            <th>{{ 'Type' }}</th>
-                            <th>{{ 'Actions' }}</th>
+                            <th>{{ 'common.type' | trans }}</th>
+                            <th>{{ 'common.actions' | trans }}</th>
                             <th></th>
                         </tr>
                         </thead>
@@ -180,7 +180,7 @@
                     <table class="table table-condensed tablesorter" id="table_deadCmd">
                         <thead>
                         <tr>
-                            <th>{{ 'Equipement' }}</th>
+                            <th>{{ 'common.device' | trans }}</th>
                             <th>{{ 'Alertes' }}</th>
                             <th>{{ 'Timeout' }}</th>
                             <th>{{ 'Seuils batterie' }}</th>
@@ -204,7 +204,7 @@
                                         <label class="col-xs-6 eqLogicAttr label label-danger" style="font-size : 0.8em">{{ 'Danger' }} {{ alert['eqLogic'].getConfiguration('battery_danger_threshold', '') }} % </label>
                                     {% endif %}
                                     {% if alert['eqLogic'].getConfiguration('battery_warning_threshold', '') != '' %}
-                                        <label class="col-xs-6 eqLogicAttr label label-warning" style="font-size : 0.8em">{{ 'Warning' }} {{ alert['eqLogic'].getConfiguration('battery_warning_threshold', '') }} % </label>
+                                        <label class="col-xs-6 eqLogicAttr label label-warning" style="font-size : 0.8em">{{ 'common.warning' | trans }} {{ alert['eqLogic'].getConfiguration('battery_warning_threshold', '') }} % </label>
                                     {% endif %}
                                 </td>
                             </tr>
@@ -218,7 +218,7 @@
                     <table class="table table-condensed tablesorter" id="table_deadCmd">
                         <thead>
                         <tr>
-                            <th>{{ 'Type' }}</th>
+                            <th>{{ 'common.type' | trans }}</th>
                             <th>{{ 'Détail' }}</th>
                             <th>{{ 'Commande' }}</th>
                             <th>{{ 'Utilisation' }}</th>
@@ -251,7 +251,7 @@
                         {% endfor %}
                         {% for scenarioDeadCmd in eqAnalyzeScenarioDeadCmd %}
                             <tr>
-                                <td>{{ 'Scénario' }}</td>
+                                <td>{{ 'common.scenario' | trans }}</td>
                                 <td>{{ scenarioDeadCmd['detail'] }}</td>
                                 <td>{{ scenarioDeadCmd['who'] }}</td>
                                 <td>{{ scenarioDeadCmd['help'] }}</td>

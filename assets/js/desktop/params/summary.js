@@ -114,7 +114,7 @@ $('#summary').undelegate('.objectSummary .objectSummaryAction[data-l1key=createV
                 notify("Erreur", data.result, 'error');
                 return;
             }
-            notify("Info", '{{Création des commandes virtuel réussies}}', 'success');
+            notify("Info", '{{summary.virtual_cmd_succed}}', 'success');
         }
     });
 });
@@ -169,12 +169,12 @@ function addObjectSummary(_summary) {
     tr += '</td>';
     tr += '<td>';
     tr += '<select class="objectSummaryAttr form-control input-sm" data-l1key="calcul">';
-    tr += '<option value="sum">{{Somme}}</option>';
-    tr += '<option value="avg">{{Moyenne}}</option>';
-    tr += '<option value="text">{{Texte}}</option>';
+    tr += '<option value="sum">{{summary.calcul.sum}}</option>';
+    tr += '<option value="avg">{{summary.calcul.avg}}</option>';
+    tr += '<option value="text">{{summary.calcul.text}}</option>';
     tr += '</select>';
     tr += '</td>';
-    tr += '<td class="col-xs-1 input-group text-center">';
+    tr += '<td class="col-xs-1 input-group">';
     tr += '<a class="objectSummaryAction btn btn-action" data-l1key="chooseIcon"><i class="fas fa-plus"></i></a>';
     tr += '<span class="label label-icon objectSummaryAttr" style="min-width: 50px;" data-l1key="icon"></span>';
     tr += '</td>';
@@ -192,11 +192,11 @@ function addObjectSummary(_summary) {
     tr += '</td>';
     tr += '<td>';
     if(isset(_summary) && isset(_summary.key) && _summary.key != ''){
-        tr += '<a class="btn btn-success btn-sm objectSummaryAction" data-l1key="createVirtual"><i class="fas fa-puzzle-piece spacing-right"></i>{{Créer virtuel}}</a>';
+        tr += '<a class="btn btn-success btn-sm objectSummaryAction" data-l1key="createVirtual"><i class="fas fa-puzzle-piece"></i>{{summary.create_virtual}}</a>';
     }
     tr += '</td>';
     tr += '<td>';
-    tr += '<a class="objectSummaryAction btn btn-sm btn-danger" data-l1key="remove"><i class="fas fa-minus-circle"></i></a>';
+    tr += '<a class="objectSummaryAction btn btn-sm btn-danger" data-l1key="remove"><i class="fas fa-minus-circle no-spacing"></i></a>';
     tr += '</td>';
     tr += '</tr>';
     $('#table_objectSummary tbody').append(tr);

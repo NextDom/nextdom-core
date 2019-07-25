@@ -40,8 +40,7 @@ class ActionInsert extends BaseAbstractModal
     public static function get(): string
     {
         $pageData = [];
-        $pageData['productName'] = ConfigManager::byKey('product_name');
-
+        $pageData['PRODUCT_NAME'] = ConfigManager::byKey('product_name');
         return Render::getInstance()->get('/modals/action.insert.html.twig', $pageData);
     }
 }

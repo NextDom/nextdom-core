@@ -262,6 +262,8 @@ class EqLogic implements EntityInterface
 
     /**
      * @return array|mixed|null
+     * @throws CoreException
+     * @throws \ReflectionException
      */
     public function getEqReal()
     {
@@ -596,6 +598,7 @@ class EqLogic implements EntityInterface
      * @param $_name
      * @return EqLogic
      * @throws CoreException
+     * @throws \ReflectionException
      */
     public function copy($_name)
     {
@@ -629,6 +632,7 @@ class EqLogic implements EntityInterface
     /**
      * @param bool $_direct
      * @throws CoreException
+     * @throws \ReflectionException
      */
     public function save($_direct = false)
     {
@@ -885,9 +889,12 @@ class EqLogic implements EntityInterface
     }
 
     /**
+     * Get HTML code for battery widget
+     *
      * @param bool $_tag
      * @param bool $_prettify
-     * @return string
+     * @return string HTML code
+     *
      * @throws \Exception
      */
     public function getHumanName($_tag = false, $_prettify = false)
@@ -1009,6 +1016,7 @@ class EqLogic implements EntityInterface
      * @return array|mixed
      *
      * @throws CoreException
+     * @throws \NextDom\Exceptions\OperatingSystemException
      * @throws \ReflectionException
      */
     public function toHtml($viewType = EqLogicViewType::DASHBOARD)
@@ -1062,8 +1070,14 @@ class EqLogic implements EntityInterface
                 $replace['#cmd#'] = $cmd_html;
                 break;
         }
+
         if (!isset(self::$_templateArray[$version])) {
-            self::$_templateArray[$version] = FileSystemHelper::getTemplateFileContent('core', $version, 'eqLogic');
+            $default_widgetTheme = ConfigManager::byKey('widget::theme');
+            if (isset($_SESSION) && is_object(UserManager::getStoredUser()) && UserManager::getStoredUser()->getOptions('widget::theme', null) !== null) {
+                $default_widgetTheme = UserManager::getStoredUser()->getOptions('widget::theme');
+            }
+            self::$_templateArray[$version] = FileSystemHelper::getTemplateFileContent('core', $version, 'eqLogic', '', $default_widgetTheme);
+
         }
         return $this->postToHtml($viewType, Utils::templateReplace($replace, self::$_templateArray[$version]));
     }
@@ -1076,13 +1090,14 @@ class EqLogic implements EntityInterface
      * @param bool $_noCache
      * @return array|string
      * @throws CoreException
+     * @throws \NextDom\Exceptions\OperatingSystemException
      * @throws \ReflectionException
      */
     public function preToHtml($viewType = EqLogicViewType::DASHBOARD, $_default = array(), $_noCache = false)
     {
         // Check if view type is valid
         if (!EqLogicViewType::exists($viewType)) {
-            throw new CoreException(__('La version demandée ne peut pas être vide (mobile, dashboard, dview ou scénario)'));
+            throw new CoreException(__('La version demandée ne peut pas être vide (dashboard, dview ou scénario)'));
         }
         if (!$this->hasRight('r')) {
             return '';
@@ -1186,9 +1201,6 @@ class EqLogic implements EntityInterface
             $replace['#hideEqLogicName#'] = 'display:none;';
         }
         $vcolor = 'cmdColor';
-        if ($version == 'mobile' || $viewType == 'mview') {
-            $vcolor = 'mcmdColor';
-        }
         $parameters = $this->getDisplay('parameters');
         $replace['#cmd-background-color#'] = ($this->getPrimaryCategory() == '') ? NextDomHelper::getConfiguration('eqLogic:category:default:' . $vcolor) : NextDomHelper::getConfiguration('eqLogic:category:' . $this->getPrimaryCategory() . ':' . $vcolor);
         if (is_array($parameters) && isset($parameters['cmd-background-color'])) {
@@ -1458,12 +1470,11 @@ class EqLogic implements EntityInterface
      */
     public function getBackgroundColor($_version = 'dashboard')
     {
-        $vcolor = ($_version == 'mobile') ? 'mcolor' : 'color';
         $category = $this->getPrimaryCategory();
         if ($category != '') {
-            return NextDomHelper::getConfiguration('eqLogic:category:' . $category . ':' . $vcolor);
+            return NextDomHelper::getConfiguration('eqLogic:category:' . $category . ':color');
         }
-        return NextDomHelper::getConfiguration('eqLogic:category:default:' . $vcolor);
+        return NextDomHelper::getConfiguration('eqLogic:category:default:color');
     }
 
     /**
@@ -1517,6 +1528,7 @@ class EqLogic implements EntityInterface
      * @param string $htmlCode HTML code to store
      *
      * @return string $htmlCode
+     * @throws \Exception
      */
     public function postToHtml(string $viewType, string $htmlCode)
     {
@@ -1615,6 +1627,7 @@ class EqLogic implements EntityInterface
     /**
      * @param $_configuration
      * @throws CoreException
+     * @throws \ReflectionException
      */
     public function import($_configuration)
     {

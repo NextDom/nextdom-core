@@ -34,14 +34,12 @@ class LogAjax extends BaseAjax
 
     public function clear()
     {
-        Utils::unautorizedInDemo();
         LogHelper::clear(Utils::init('log'));
         AjaxHelper::success();
     }
 
     public function remove()
     {
-        Utils::unautorizedInDemo();
         LogHelper::remove(Utils::init('log'));
         AjaxHelper::success();
     }
@@ -53,7 +51,6 @@ class LogAjax extends BaseAjax
 
     public function removeAll()
     {
-        Utils::unautorizedInDemo();
         LogHelper::removeAll();
         AjaxHelper::success();
     }

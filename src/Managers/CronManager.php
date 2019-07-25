@@ -66,7 +66,7 @@ class CronManager
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE id = :id';
-        return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getOneObject($sql, $value, self::CLASS_NAME);
     }
 
     /**
@@ -94,7 +94,7 @@ class CronManager
             $value['option'] = $options;
             $sql .= ' AND `option` = :option';
         }
-        return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getOneObject($sql, $value, self::CLASS_NAME);
     }
 
     /**
@@ -121,7 +121,7 @@ class CronManager
             $value['option'] = '%' . $options . '%';
             $sql .= ' AND `option` LIKE :option';
         }
-        return DBHelper::Prepare($sql, $value, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, $value, self::CLASS_NAME);
     }
 
     /**
@@ -156,7 +156,7 @@ class CronManager
         if ($ordered) {
             $sql .= ' ORDER BY deamon DESC';
         }
-        return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
     }
 
     /**

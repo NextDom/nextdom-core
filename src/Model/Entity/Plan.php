@@ -17,6 +17,8 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\PlanDisplayType;
+use NextDom\Enums\PlanLinkType;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
@@ -227,7 +229,7 @@ class Plan implements EntityInterface
 
     public function execute()
     {
-        if ($this->getLink_type() != 'zone') {
+        if ($this->getLink_type() != PlanLinkType::ZONE) {
             return;
         }
         if ($this->getConfiguration('zone_mode', 'simple') == 'simple') {
@@ -316,9 +318,9 @@ class Plan implements EntityInterface
     public function getHtml($_version = 'dplan')
     {
         switch ($this->getLink_type()) {
-            case 'eqLogic':
-            case 'cmd':
-            case 'scenario':
+            case PlanLinkType::EQLOGIC:
+            case PlanLinkType::CMD:
+            case PlanLinkType::SCENARIO:
                 $link = $this->getLink();
                 if (!is_object($link)) {
                     return null;
@@ -328,10 +330,10 @@ class Plan implements EntityInterface
                     'html' => $link->toHtml($_version),
                 );
                 break;
-            case 'plan':
-                $html = '<span class="cursor plan-link-widget" data-link_id="' . $this->getLink_id() . '" data-offsetX="' . $this->getDisplay('offsetX') . '" data-offsetY="' . $this->getDisplay('offsetY') . '">';
+            case PlanLinkType::PLAN:
+                $html = '<span class="cursor plan-link-widget" data-link_id="' . $this->getLink_id() . '" data-offsetX="' . $this->getDisplay(PlanDisplayType::OFFSET_X) . '" data-offsetY="' . $this->getDisplay(PlanDisplayType::OFFSET_Y) . '">';
                 $html .= '<a style="color:' . $this->getCss('color', 'black') . ';text-decoration:none;font-size : 1.5em;">';
-                $html .= $this->getDisplay('icon') . ' ' . $this->getDisplay('name');
+                $html .= $this->getDisplay(PlanDisplayType::ICON) . ' ' . $this->getDisplay(PlanDisplayType::NAME);
                 $html .= '</a>';
                 $html .= '</span>';
                 return array(
@@ -339,11 +341,11 @@ class Plan implements EntityInterface
                     'html' => $html,
                 );
                 break;
-            case 'view':
+            case PlanLinkType::VIEW:
                 $link = 'index.php?p=view&view_id=' . $this->getLink_id();
                 $html = '<span href="' . $link . '" class="cursor view-link-widget" data-link_id="' . $this->getLink_id() . '" >';
                 $html .= '<a href="' . $link . '" class="noOnePageLoad" style="color:' . $this->getCss('color', 'black') . ';text-decoration:none;font-size : 1.5em;">';
-                $html .= $this->getDisplay('icon') . ' ' . $this->getDisplay('name');
+                $html .= $this->getDisplay(PlanDisplayType::ICON) . ' ' . $this->getDisplay(PlanDisplayType::NAME);
                 $html .= '</a>';
                 $html .= '</span>';
                 return array(
@@ -351,25 +353,25 @@ class Plan implements EntityInterface
                     'html' => $html,
                 );
                 break;
-            case 'graph':
+            case PlanLinkType::GRAPH:
                 $background_color = 'background-color : white;';
-                if ($this->getDisplay('transparentBackground', false)) {
+                if ($this->getDisplay(PlanDisplayType::TRANSPARENT_BACKGROUND, false)) {
                     $background_color = '';
                 }
                 $html = '<div class="graph-widget" data-graph_id="' . $this->getLink_id() . '" style="' . $background_color . 'border : solid 1px black;min-height:50px;min-width:50px;">';
-                $html .= '<span class="graphOptions" style="display:none;">' . json_encode($this->getDisplay('graph', array())) . '</span>';
+                $html .= '<span class="graphOptions" style="display:none;">' . json_encode($this->getDisplay(PlanDisplayType::GRAPH, array())) . '</span>';
                 $html .= '<div class="graph" id="graph' . $this->getLink_id() . '" style="width : 100%;height : 100%;"></div>';
                 $html .= '</div>';
                 return array(
                     'plan' => Utils::o2a($this),
                     'html' => $html,
                 );
-            case 'text':
+            case PlanLinkType::TEXT:
                 $html = '<div class="text-widget" data-text_id="' . $this->getLink_id() . '" style="color:' . $this->getCss('color', 'black') . ';">';
-                if ($this->getDisplay('name') != '' || $this->getDisplay('icon') != '') {
-                    $html .= $this->getDisplay('icon') . ' ' . $this->getDisplay('text');
+                if ($this->getDisplay(PlanDisplayType::NAME) != '' || $this->getDisplay(PlanDisplayType::ICON) != '') {
+                    $html .= $this->getDisplay(PlanDisplayType::ICON) . ' ' . $this->getDisplay(PlanDisplayType::TEXT);
                 } else {
-                    $html .= $this->getDisplay('text');
+                    $html .= $this->getDisplay(PlanDisplayType::TEXT);
                 }
                 $html .= '</div>';
                 return array(
@@ -377,10 +379,10 @@ class Plan implements EntityInterface
                     'html' => $html,
                 );
                 break;
-            case 'image':
+            case PlanLinkType::IMAGE:
                 $html = '<div class="image-widget" data-image_id="' . $this->getLink_id() . '" style="min-width:10px;min-height:10px;">';
                 if ($this->getConfiguration('display_mode', 'image') == 'image') {
-                    $html .= '<img style="width:100%;height:100%" src="' . $this->getDisplay('path', 'public/img/NextDom_NoPicture_Gray.png') . '"/>';
+                    $html .= '<img style="width:100%;height:100%" src="' . $this->getDisplay(PlanDisplayType::PATH, 'public/img/NextDom_NoPicture_Gray.png') . '"/>';
                 } else {
                     $camera = EqLogicManager::byId(str_replace(array('#', 'eqLogic'), array('', ''), $this->getConfiguration('camera')));
                     if (is_object($camera)) {
@@ -393,7 +395,7 @@ class Plan implements EntityInterface
                     'html' => $html,
                 );
                 break;
-            case 'zone':
+            case PlanLinkType::ZONE:
                 if ($this->getConfiguration('zone_mode', 'simple') == 'widget') {
                     $class = '';
                     if ($this->getConfiguration('showOnFly') == 1) {
@@ -411,16 +413,16 @@ class Plan implements EntityInterface
                     'html' => $html,
                 );
                 break;
-            case 'summary':
+            case PlanLinkType::SUMMARY:
                 $background_color = 'background-color : ' . $this->getCss('background-color', 'black') . ';';
-                if ($this->getDisplay('background-defaut', false)) {
+                if ($this->getDisplay(PlanDisplayType::BACKGROUND_DEFAULT, false)) {
                     $background_color = 'background-color : black;';
                 }
-                if ($this->getDisplay('background-transparent', false)) {
+                if ($this->getDisplay(PlanDisplayType::TRANSPARENT_BACKGROUND, false)) {
                     $background_color = '';
                 }
                 $color = 'color : ' . $this->getCss('color', 'black') . ';';
-                if ($this->getDisplay('color-defaut', false)) {
+                if ($this->getDisplay(PlanDisplayType::COLOR_DEFAULT, false)) {
                     $color = '';
                 }
                 $html = '<div class="summary-widget" data-summary_id="' . $this->getLink_id() . '" style="' . $background_color . $color . ';min-width:10px;min-height:10px;">';
@@ -439,10 +441,10 @@ class Plan implements EntityInterface
                     $html .= $summary;
                 }
                 $html .= '</div>';
-                return array(
+                return [
                     'plan' => Utils::o2a($this),
                     'html' => $html,
-                );
+                ];
                 break;
         }
         return null;
@@ -454,16 +456,16 @@ class Plan implements EntityInterface
      */
     public function getLink()
     {
-        if ($this->getLink_type() == 'eqLogic') {
+        if ($this->getLink_type() == PlanLinkType::EQLOGIC) {
             $eqLogic = EqLogicManager::byId($this->getLink_id());
             return $eqLogic;
-        } elseif ($this->getLink_type() == 'scenario') {
+        } elseif ($this->getLink_type() == PlanLinkType::SCENARIO) {
             $scenario = ScenarioManager::byId($this->getLink_id());
             return $scenario;
-        } elseif ($this->getLink_type() == 'cmd') {
+        } elseif ($this->getLink_type() == PlanLinkType::CMD) {
             $cmd = CmdManager::byId($this->getLink_id());
             return $cmd;
-        } elseif ($this->getLink_type() == 'summary') {
+        } elseif ($this->getLink_type() == PlanLinkType::SUMMARY) {
             $object = ObjectManager::byId($this->getLink_id());
             return $object;
         }

@@ -37,18 +37,18 @@
 <div class="box box-primary">
     <div class="box-header with-border">
         <h3 class="box-title">
-            <i class="fas fa-cogs spacing-right"></i>{{ 'Etape 1 : Installation sur le téléphone' }}
+            <i class="fas fa-cogs"></i>{{ 'Etape 1 : Installation sur le téléphone' }}
         </h3>
     </div>
     <div class="box-body">
         <p class="alert alert-info">
-            {{ 'La vérification en '}}<strong>{{ '2 étapes'}}</strong>{{ ' fournit une couche supplémentaire de protection pour votre compte' }} {{ productName }}.<br>
+            {{ 'La vérification en '}}<strong>{{ '2 étapes'}}</strong>{{ ' fournit une couche supplémentaire de protection pour votre compte' }} {{ PRODUCT_NAME }}.<br>
             {{ 'Une fois la vérification en 2 étapes configurée, votre mot de passe sera nécessaire en plus d’un code de vérification unique pour vous connecter.' }}<br>
             {{ 'Veuillez noter qu’un appareil mobile sera nécessaire pour générer des '}}<strong>{{ 'codes'}}</strong>{{ ' de vérification.' }}
         </p>
         <p class="alert alert-success">
             {{ 'Veuillez installer une application d’authentification sur votre appareil mobile.' }}<br>
-            {{ 'Si vous n’en avez pas encore installé une,' }} {{ productName }} {{ 'prend en charge les applications d’authentification suivantes : ' }}<br>
+            {{ 'Si vous n’en avez pas encore installé une,' }} {{ PRODUCT_NAME }} {{ 'prend en charge les applications d’authentification suivantes : ' }}<br>
             <strong>{{ '- Populaires  :'}}</strong>
             {{ ' Google Authenticator (' }}
             <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=fr" target="_blank">{{ 'Android' }}</a>{{', ' }}
@@ -69,7 +69,7 @@
 <div class="box box-warning">
     <div class="box-header with-border">
         <h3 class="box-title">
-            <i class="fas fa-cogs spacing-right"></i>{{ 'Etape 2 : Configuration' }}
+            <i class="fas fa-cogs"></i>{{ 'Etape 2 : Configuration' }}
         </h3>
     </div>
     <div class="box-body">
@@ -90,7 +90,7 @@
 <div class="box box-success">
     <div class="box-header with-border">
         <h3 class="box-title">
-            <i class="fas fa-cogs spacing-right"></i>{{ 'Etape 3 : Vérification' }}
+            <i class="fas fa-cogs"></i>{{ 'Etape 3 : Vérification' }}
         </h3>
     </div>
     <div class="box-body">
@@ -106,7 +106,7 @@
                         <a class="btn btn-success" id="bt_validateTestCode">{{ 'OK' }}</a>
                     </div>
                     <div class="col-xs-3">
-                        <a class="btn btn-danger" id="bt_closeTestCode" style="display:none"><i class="fas fa-times spacing-right"></i>{{ 'Fermer' }}</a>
+                        <a class="btn btn-danger" id="bt_closeTestCode" style="display:none"><i class="fas fa-times"></i>{{ 'Fermer' }}</a>
                     </div>
                 </div>
             </fieldset>

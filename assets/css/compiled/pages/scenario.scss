@@ -42,7 +42,16 @@
         margin: 0px;
     }
     span.scenario-icon {
-        font-size: 3.8em;
+        font-size: 4em;
+        line-height: 88px;
+        border-radius: 10px;
+        padding: 10px;
+        vertical-align: middle;
+        padding-bottom: 2px;
+    }
+    img {
+        height: 80px;
+        width: auto;
     }
 }
 .displayScenario-overlay {
@@ -231,13 +240,16 @@
     .CodeMirror {
         height: auto;
     }
+    .CodeMirror-scroll {
+        max-height: 300px !important;
+    }
     .expressionAttr.scenario-text {
         resize: vertical;
     }
     .expression-error {
         text-decoration: underline;
-        text-decoration-color: 'red';
-        text-decoration-style: 'dashed';
+        text-decoration-color: $red;
+        text-decoration-style: dashed;
     }
     .element {
         color: white;
@@ -249,5 +261,8 @@
     }
     div.sortable.empty {
         height: 30px;
+    }
+    .scenario-comment-text {
+        text-decoration: none !important;
     }
 }

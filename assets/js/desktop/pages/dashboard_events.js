@@ -61,37 +61,57 @@ $('#bt_editDashboardWidgetOrder').on('click', function () {
         notify('Core', '{{Vous êtes en mode édition vous pouvez déplacer les widgets, les redimensionner et changer l\'ordre des commandes dans les widgets. N\'oubliez pas de quitter le mode édition pour sauvegarder}}', 'success');
         $(this).attr('data-mode', 1);
         $('.editDashboardButtons').show();
-        $('.bt_editDashboardWidgetAutoResize').off('click').on('click', function () {
+        $('.bt_editDashboardWidgetGridAllResize').off('click').on('click', function () {
             var id_object = $(this).attr('id');
-            id_object = id_object.replace('edit_object_', '');
-            $('#div_ob' + id_object + '.div_displayEquipement .eqLogic-widget').each(function (index, element) {
-                  var id_object_2 = $(this).attr('data-eqlogic_id');
-                  if ($(element).hasClass('allowResize')) {
-                      if (($(element).height() + parseInt(widget_margin)) % (parseInt(widget_size) + parseInt(widget_margin)) != 0) {
-                          var autoHeight = Math.ceil($(element).height() / parseInt(widget_size));
-                          $(element).height(parseInt(autoHeight) * parseInt(widget_size) + ((parseInt(autoHeight)-1) * widget_margin));
-                      }
-                      if (($(element).width() + parseInt(widget_margin)) % (parseInt(widget_size) + parseInt(widget_margin)) != 0) {
-                          var autoWidth = Math.ceil($(element).width() / parseInt(widget_size));
-                          $(element).width(parseInt(autoWidth) * parseInt(widget_size) + ((parseInt(autoWidth)-1) * widget_margin));
-                      }
+            id_object = id_object.replace('edit_father_object_', '');
+            $('#dashboard-content .div_displayEquipement').each(function (index, element2) {
+                  if ($(element2).attr('data-father_id') == id_object) {
+                      $(element2).find('.eqLogic-widget').each(function (index, element) {
+                          if ($(element).hasClass('allowResize')) {
+                              $(element).height('auto');
+                              $(element).width('auto');
+                              var minWidth = (Math.trunc($(element).width() / parseInt(widget_size)));
+                              var autoWidth = Math.ceil($(element).width() / parseInt(widget_size));
+                              if (minWidth * parseInt(widget_size) + ((minWidth-1) * widget_margin) > $(element).width()) {
+                                  $(element).width(parseInt(minWidth) * parseInt(widget_size) + ((parseInt(minWidth)-1) * widget_margin));
+                              } else {
+                                  $(element).width(parseInt(autoWidth) * parseInt(widget_size) + ((parseInt(autoWidth)-1) * widget_margin));
+                              }
+                              var minHeight = (Math.trunc($(element).height() / parseInt(widget_size)));
+                              var autoHeight = Math.ceil($(element).height() / parseInt(widget_size));
+                              if (minHeight * parseInt(widget_size) + ((minHeight-1) * widget_margin) > $(element).height()) {
+                                  $(element).height(parseInt(minHeight) * parseInt(widget_size) + ((parseInt(minHeight)-1) * widget_margin));
+                              } else {
+                                  $(element).height(parseInt(autoHeight) * parseInt(widget_size) + ((parseInt(autoHeight)-1) * widget_margin));
+                              }
+                          }
+                      });
+                      $(element2).trigger('resize');
+                      $(element2).packery();
                   }
             });
-            $('#div_ob' + id_object).trigger('resize');
-            $('#div_ob' + id_object).packery();
         });
         $('.bt_editDashboardWidgetGridResize').off('click').on('click', function () {
             var id_object = $(this).attr('id');
             id_object = id_object.replace('edit_object_', '');
             $('#div_ob' + id_object + '.div_displayEquipement .eqLogic-widget').each(function (index, element) {
-                  var id_object_2 = $(this).attr('data-eqlogic_id');
                   if ($(element).hasClass('allowResize')) {
                       $(element).height('auto');
                       $(element).width('auto');
+                      var minWidth = (Math.trunc($(element).width() / parseInt(widget_size)));
                       var autoWidth = Math.ceil($(element).width() / parseInt(widget_size));
-                      $(element).width(parseInt(autoWidth) * parseInt(widget_size) + ((parseInt(autoWidth)-1) * widget_margin));
+                      if (minWidth * parseInt(widget_size) + ((minWidth-1) * widget_margin) > $(element).width()) {
+                          $(element).width(parseInt(minWidth) * parseInt(widget_size) + ((parseInt(minWidth)-1) * widget_margin));
+                      } else {
+                          $(element).width(parseInt(autoWidth) * parseInt(widget_size) + ((parseInt(autoWidth)-1) * widget_margin));
+                      }
+                      var minHeight = (Math.trunc($(element).height() / parseInt(widget_size)));
                       var autoHeight = Math.ceil($(element).height() / parseInt(widget_size));
-                      $(element).height(parseInt(autoHeight) * parseInt(widget_size) + ((parseInt(autoHeight)-1) * widget_margin));
+                      if (minHeight * parseInt(widget_size) + ((minHeight-1) * widget_margin) > $(element).height()) {
+                          $(element).height(parseInt(minHeight) * parseInt(widget_size) + ((parseInt(minHeight)-1) * widget_margin));
+                      } else {
+                          $(element).height(parseInt(autoHeight) * parseInt(widget_size) + ((parseInt(autoHeight)-1) * widget_margin));
+                      }
                   }
             });
             $('#div_ob' + id_object).trigger('resize');
@@ -100,16 +120,6 @@ $('#bt_editDashboardWidgetOrder').on('click', function () {
         editWidgetMode(1);
         $(this).html('<i class="fas fa-stop"></i>');
     }
-});
-
-$('#category-filterBtn').click(function() {
-    $('.category-filter-btn-sm').toggleClass('scale-out');
-    $('#dashPanel').toggleClass('dashBlur');
-});
-
-$('.category-filter-btn-sm').click(function() {
-    $('.category-filter-btn-sm').toggleClass('scale-out');
-    $('#dashPanel').toggleClass('dashBlur');
 });
 
 $('#div_pageContainer').on( 'click','.eqLogic-widget .history', function () {

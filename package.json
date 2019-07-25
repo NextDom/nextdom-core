@@ -2,14 +2,14 @@
   "name": "nextdom",
   "description": "Website (English): [https://www.nextdom.org/en/](https://www.nextdom.org/en/)",
   "dependencies": {
-    "admin-lte": "^2.4.8",
+    "@fortawesome/fontawesome-free": "^5.9.0",
+    "admin-lte": "^2.4.12",
     "autosize": "^4.0.2",
     "blueimp-file-upload": "^9.25.1",
-    "bootbox": "^4.4.0",
+    "bootbox": "^5.1.3",
     "codemirror": "^5.41.0",
     "fancybox": "^3.0.1",
     "font-awesome": "^4.7.0",
-    "font-awesome5": "^1.0.5",
     "gridstack": "^0.4.0",
     "highcharts": "^7.0.1",
     "inputmask": "^4.0.2",
@@ -33,7 +33,8 @@
     "tablesorter": "^2.31.0",
     "vis": "^4.21.0",
     "vivagraphjs": "^0.10.1",
-    "wowjs": "^1.1.3"
+    "wowjs": "^1.1.3",
+    "moment": "^2.24.0"
   },
   "repository": {
     "type": "git",

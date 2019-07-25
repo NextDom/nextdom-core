@@ -197,6 +197,7 @@ function startCronTargetFunction($cron, $option, $startTime)
  *
  * @param int $cronId Id of the cron
  * @throws CoreException
+ * @throws \ReflectionException
  */
 function startSingleCron($cronId)
 {
@@ -259,7 +260,7 @@ function startAllCrons()
                 continue;
             }
             $duration = strtotime('now') - strtotime($cron->getLastRun());
-            if ($cron->getEnable() == 1 && $cron->getState() != CronState::RUN && $cron->getState() != CronState::STARTING && $cron->getState() != CronState::STOPPING) {
+            if ($cron->isEnabled() && $cron->getState() != CronState::RUN && $cron->getState() != CronState::STARTING && $cron->getState() != CronState::STOPPING) {
                 if ($cron->isDue()) {
                     $cron->start();
                 }

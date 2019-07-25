@@ -317,7 +317,7 @@ class SystemHelper
     /**
      * Get uptime
      *
-     * @return int
+     * @return string
      */
     public static function getUptime(): string
     {
@@ -346,6 +346,7 @@ class SystemHelper
     /**
      * Recursively delete given path
      *
+     * @param $path
      * @return bool false when error occurs
      */
     public static function rrmdir($path)

@@ -50,6 +50,7 @@ class AjaxHelper
      */
     public static function init($checkToken = true)
     {
+        // Prepare ajax response
         if (!headers_sent()) {
             header('Content-Type: application/json');
         }

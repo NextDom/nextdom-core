@@ -94,10 +94,93 @@ class DBHelper
     }
 
     /**
+     * Get one object from database
+     *
+     * @param string $query SQL query
+     * @param array $params Query params
+     * @param string $objectClassName Class of object
+     *
+     * @return mixed|null Instance of the class
+     *
+     * @throws CoreException
+     */
+    public static function &getOneObject(string $query, array $params, string $objectClassName)
+    {
+        return self::Prepare($query, $params, self::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, $objectClassName);
+    }
+
+    /**
+     * Get objects from database
+     *
+     * @param string $query SQL query
+     * @param array $params Query params
+     * @param string $objectClassName Class of object
+     *
+     * @return mixed|null Array of instances of the class
+     *
+     * @throws CoreException
+     */
+    public static function &getAllObjects(string $query, array $params, string $objectClassName)
+    {
+        return self::Prepare($query, $params, self::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, $objectClassName);
+    }
+
+    /**
+     * Get one row data from database
+     *
+     * @param string $query SQL query
+     * @param array $params Query params
+     *
+     * @return mixed Associative array with data
+     *
+     * @throws CoreException
+     */
+    public static function &getOne(string $query, array $params = [])
+    {
+        return self::Prepare($query, $params, self::FETCH_TYPE_ROW, \PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Get data from database
+     *
+     * @param string $query SQL query
+     * @param array $params Query params
+     *
+     * @return mixed Associative array with data
+     *
+     * @throws CoreException
+     */
+    public static function &getAll(string $query, array $params = [])
+    {
+        return self::Prepare($query, $params, self::FETCH_TYPE_ALL, \PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Execute a query without result (DELETE, UPDATE, INSERT, etc.)
+     *
+     * @param string $query SQL query
+     * @param array $params Query params
+     *
+     * @return bool True on success
+     */
+    public static function exec(string $query, array $params = [])
+    {
+        $statement = self::getConnection()->prepare($query);
+        if ($statement !== false && $statement->execute($params) !== false) {
+            $errorInfo = $statement->errorInfo();
+            // TODO: Revoir cette chaine
+            if ($errorInfo[0] != 0000) {
+                return false;
+            }
+                return true;
+        }
+        return false;
+    }
+    /**
      * Prepare a query and execute
      *
      * @param $query
-     * @param $params
+     * @param array $params
      * @param int $fetchType
      * @param int $fetchParam
      * @param mixed $fetchOpt
@@ -106,7 +189,7 @@ class DBHelper
      *
      * @throws CoreException
      */
-    public static function &Prepare($query, $params, $fetchType = self::FETCH_TYPE_ROW, $fetchParam = \PDO::FETCH_ASSOC, $fetchOpt = NULL)
+    public static function &Prepare($query, $params = [], $fetchType = self::FETCH_TYPE_ROW, $fetchParam = \PDO::FETCH_ASSOC, $fetchOpt = NULL)
     {
         // Prepare statement
         $statement = self::getConnection()->prepare($query);
@@ -158,11 +241,11 @@ class DBHelper
      */
     public static function optimize()
     {
-        $tables = self::Prepare('SELECT TABLE_NAME FROM information_schema.TABLES WHERE Data_Free > 0', array(), self::FETCH_TYPE_ALL);
+        $tables = self::getAll('SELECT TABLE_NAME FROM information_schema.TABLES WHERE Data_Free > 0', []);
         foreach ($tables as $table) {
             $table = array_values($table);
             $table = $table[0];
-            self::Prepare('OPTIMIZE TABLE `' . $table . '`', array(), self::FETCH_TYPE_ROW);
+            self::exec('OPTIMIZE TABLE `' . $table . '`');
         }
     }
 
@@ -224,7 +307,7 @@ class DBHelper
             } else {
                 $sql = 'INSERT INTO `' . self::getTableName($objToSave) . '` SET ' . implode(', ', $sql);
             }
-            $res = self::Prepare($sql, $parameters, self::FETCH_TYPE_ROW);
+            $res = self::getOne($sql, $parameters);
             $reflection = self::getReflectionClass($objToSave);
             if ($reflection->hasProperty('id')) {
                 try {
@@ -251,7 +334,7 @@ class DBHelper
                     $parameters['id'] = $objToSave->getId(); //override if necessary
                 }
                 $sql = 'UPDATE `' . self::getTableName($objToSave) . '` SET ' . implode(', ', $sql) . ' WHERE id = :id';
-                $res = self::Prepare($sql, $parameters, self::FETCH_TYPE_ROW);
+                $res = self::getOne($sql, $parameters);
             } else {
                 $res = true;
             }
@@ -307,7 +390,7 @@ class DBHelper
      */
     private static function getReflectionClass($object)
     {
-        $reflections = array();
+        $reflections = [];
         $uuid = spl_object_hash($object);
         if (!isset($reflections[$uuid])) {
             $reflections[$uuid] = new \ReflectionClass($object);
@@ -331,7 +414,7 @@ class DBHelper
         }
         $reflection = is_object($object) ? self::getReflectionClass($object) : new \ReflectionClass($object);
         $properties = $reflection->getProperties();
-        self::$fieldsCache[$table] = array();
+        self::$fieldsCache[$table] = [];
         foreach ($properties as $property) {
             $name = $property->getName();
             if ('_' !== $name[0]) {
@@ -446,7 +529,7 @@ class DBHelper
         }
         // For last AND added to the query WHERE cond AND cond AND ???
         $sql .= '1';
-        $newObject = self::Prepare($sql, $parameters, self::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, get_class($objectToRefresh));
+        $newObject = self::getOneObject($sql, $parameters, get_class($objectToRefresh));
         if (!is_object($newObject)) {
             return false;
         }
@@ -465,7 +548,7 @@ class DBHelper
 
     /**
      * Build fields for query
-     * @param $_class
+     * @param $className
      * @param string $prefix
      * @return string
      * @throws \ReflectionException
@@ -477,7 +560,7 @@ class DBHelper
         if (isset(self::$fieldsQuery[$code])) {
             return self::$fieldsQuery[$code];
         } else {
-            $fields = array();
+            $fields = [];
             foreach (self::getFields($className) as $field) {
                 if ('_' !== $field[0]) {
                     if ($prefix != '') {
@@ -509,7 +592,7 @@ class DBHelper
         $class = self::getReflectionClass($objectType)->getName();
         // create query
         $query = 'SELECT ' . self::buildField($class) . ' FROM ' . $class . '';
-        $values = array();
+        $values = [];
         $where = ' WHERE ';
         foreach ($fields as $property) {
             foreach ($filters as $key => $value) {
@@ -583,7 +666,7 @@ class DBHelper
             }
         }
         $sql .= '1';
-        $res = self::Prepare($sql, $parameters, self::FETCH_TYPE_ROW);
+        $res = self::getOne($sql, $parameters);
         $reflection = self::getReflectionClass($object);
         if ($reflection->hasProperty('id')) {
             self::setField($object, 'id', null);
@@ -612,7 +695,7 @@ class DBHelper
     public static function checksum($_table)
     {
         $sql = 'CHECKSUM TABLE ' . $_table;
-        $result = self::Prepare($sql, array(), self::FETCH_TYPE_ROW);
+        $result = self::getOne($sql);
         return $result['Checksum'];
     }
 
@@ -641,7 +724,7 @@ class DBHelper
             }
         }
         $sql .= '1 LOCK IN SHARE MODE';
-        $res = self::Prepare($sql, $parameters, self::FETCH_TYPE_ROW);
+        $res = self::getOne($sql, $parameters);
         if (method_exists($object, 'postLock')) {
             $object->postLock();
         }
@@ -670,7 +753,7 @@ class DBHelper
                     if ($_verbose) {
                         echo "\nFix : " . $tinfo['sql'];
                     }
-                    self::prepare($tinfo['sql'], array());
+                    self::exec($tinfo['sql']);
                 } catch (\Exception $e) {
                     $error .= $e->getMessage() . "\n";
                 }
@@ -684,7 +767,7 @@ class DBHelper
                         if ($_verbose) {
                             echo "\nFix : " . $iinfo['presql'];
                         }
-                        self::prepare($iinfo['presql'], array());
+                        self::exec($iinfo['presql']);
                     } catch (\Exception $e) {
                         $error .= $e->getMessage() . "\n";
                     }
@@ -700,7 +783,7 @@ class DBHelper
                         if ($_verbose) {
                             echo "\nFix : " . $finfo['sql'];
                         }
-                        self::prepare($finfo['sql'], array());
+                        self::exec($finfo['sql']);
                     } catch (\Exception $e) {
                         $error .= $e->getMessage() . "\n";
                     }
@@ -715,7 +798,7 @@ class DBHelper
                         if ($_verbose) {
                             echo "\nFix : " . $iinfo['sql'];
                         }
-                        self::prepare($iinfo['sql'], array());
+                        self::exec($iinfo['sql']);
                     } catch (\Exception $e) {
                         $error .= $e->getMessage() . "\n";
                     }
@@ -748,7 +831,7 @@ class DBHelper
      */
     private static function compareDatabase($database)
     {
-        $return = array();
+        $return = [];
         foreach ($database['tables'] as $table) {
             $return = array_merge($return, self::compareTable($table));
         }
@@ -773,12 +856,12 @@ class DBHelper
     private static function compareTable($_table)
     {
         try {
-            $describes = self::Prepare('describe `' . $_table['name'] . '`', array(), self::FETCH_TYPE_ALL);
+            $describes = self::getAll('describe `' . $_table['name'] . '`', []);
         } catch (\Exception $e) {
-            $describes = array();
+            $describes = [];
         }
 
-        $return = array($_table['name'] => array('status' => 'ok', 'fields' => array(), 'indexes' => array(), 'sql' => ''));
+        $return = array($_table['name'] => array('status' => 'ok', 'fields' => [], 'indexes' => [], 'sql' => ''));
         if (count($describes) == 0) {
             $return = array($_table['name'] => array(
                 'status' => 'nok',
@@ -809,6 +892,7 @@ class DBHelper
             $return[$_table['name']]['sql'] = trim($return[$_table['name']]['sql'], ';');
             return $return;
         }
+        $forceRebuildIndex = false;
         foreach ($_table['fields'] as $field) {
             $found = false;
             foreach ($describes as $describe) {
@@ -816,6 +900,9 @@ class DBHelper
                     continue;
                 }
                 $return[$_table['name']]['fields'] = array_merge($return[$_table['name']]['fields'], self::compareField($field, $describe, $_table['name']));
+                if (isset($return[$_table['name']]['fields'][$field['name']]) && $return[$_table['name']]['fields'][$field['name']]['status'] == 'nok') {
+                    $forceRebuildIndex = true;
+                }
                 $found = true;
             }
             if (!$found) {
@@ -843,14 +930,14 @@ class DBHelper
                 );
             }
         }
-        $showIndexes = self::prepareIndexCompare(self::Prepare('show index from `' . $_table['name'] . '`', array(), self::FETCH_TYPE_ALL));
+        $showIndexes = self::prepareIndexCompare(self::getAll('show index from `' . $_table['name'] . '`', []));
         foreach ($_table['indexes'] as $index) {
             $found = false;
             foreach ($showIndexes as $showIndex) {
                 if ($showIndex['Key_name'] != $index['Key_name']) {
                     continue;
                 }
-                $return[$_table['name']]['indexes'] = array_merge($return[$_table['name']]['indexes'], self::compareIndex($index, $showIndex, $_table['name']));
+                $return[$_table['name']]['indexes'] = array_merge($return[$_table['name']]['indexes'], self::compareIndex($index, $showIndex, $_table['name'], $forceRebuildIndex));
                 $found = true;
             }
             if (!$found) {
@@ -1002,7 +1089,7 @@ class DBHelper
      */
     private static function prepareIndexCompare($indexes)
     {
-        $return = array();
+        $return = [];
         foreach ($indexes as $index) {
             if ($index['Key_name'] == 'PRIMARY') {
                 continue;
@@ -1011,7 +1098,7 @@ class DBHelper
                 $return[$index['Key_name']] = array(
                     'Key_name' => $index['Key_name'],
                     'Non_unique' => 0,
-                    'columns' => array(),
+                    'columns' => [],
                 );
             }
             $return[$index['Key_name']]['Non_unique'] = $index['Non_unique'];
@@ -1024,21 +1111,10 @@ class DBHelper
      * @param $_ref_index
      * @param $_real_index
      * @param $_table_name
+     * @param bool $_forceRebuild
      * @return array
      */
-    /**
-     * @param $_ref_index
-     * @param $_real_index
-     * @param $_table_name
-     * @return array
-     */
-    /**
-     * @param $_ref_index
-     * @param $_real_index
-     * @param $_table_name
-     * @return array
-     */
-    private static function compareIndex($_ref_index, $_real_index, $_table_name)
+    private static function compareIndex($_ref_index, $_real_index, $_table_name, $_forceRebuild = false)
     {
         $return = array($_ref_index['Key_name'] => array('status' => 'ok', 'presql' => '', 'sql' => ''));
         if ($_ref_index['Non_unique'] != $_real_index['Non_unique']) {
@@ -1048,6 +1124,10 @@ class DBHelper
         if ($_ref_index['columns'] != $_real_index['columns']) {
             $return[$_ref_index['Key_name']]['status'] = 'nok';
             $return[$_ref_index['Key_name']]['message'] = 'Columns nok';
+        }
+        if ($_forceRebuild) {
+            $return[$_ref_index['Key_name']]['status'] = 'nok';
+            $return[$_ref_index['Key_name']]['message'] = 'Force rebuild';
         }
         if ($return[$_ref_index['Key_name']]['status'] == 'nok') {
             $return[$_ref_index['Key_name']]['presql'] = 'ALTER TABLE `' . $_table_name . '` DROP INDEX `' . $_ref_index['Key_name'] . '`;';

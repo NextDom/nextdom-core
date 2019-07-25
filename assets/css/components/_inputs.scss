@@ -21,7 +21,7 @@
 
 /* Core-Surcharge */
 .input-group, select {
-    border-radius: 4px !important;
+    border-radius: 5px !important;
 }
 .input-group{
     border: 1px solid;
@@ -31,4 +31,9 @@
     box-shadow: none;
     padding-left: 10px !important;
     border-radius: 4px;
+}
+.cron-period select {
+    height: 34px;
+    padding: 6px 12px;
+    margin-left: 15px;
 }

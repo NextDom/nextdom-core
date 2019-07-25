@@ -50,6 +50,7 @@ use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\UpdateManager;
 use NextDom\Managers\ViewManager;
+use NextDom\Repo\RepoMarket;
 
 /**
  * Class NextDomHelper
@@ -221,7 +222,7 @@ class NextDomHelper
             'comment' => ($state) ? '' : __('health.php-error'),
         );
 
-        $version = DBHelper::Prepare('select version()', array(), DBHelper::FETCH_TYPE_ROW);
+        $version = DBHelper::getOne('select version()');
         $systemHealth[] = array(
             'icon' => 'fa-database',
             'name' => __('health.database-version'),
@@ -561,14 +562,10 @@ class NextDomHelper
     {
         LogHelper::clear('update');
         $params = '';
-        if (count($options) > 0) {
-            foreach ($options as $key => $value) {
-                $params .= '"' . $key . '"="' . $value . '" ';
-            }
+        foreach ($options as $key => $value) {
+            $params .= '"' . $key . '"="' . $value . '" ';
         }
-        $cmd = NEXTDOM_ROOT . '/install/update.php ' . $params;
-        $cmd .= ' >> ' . LogHelper::getPathToLog('update') . ' 2>&1 &';
-        SystemHelper::php($cmd);
+        SystemHelper::php(NEXTDOM_ROOT . '/install/update.php ' . $params . ' >> ' . LogHelper::getPathToLog('update') . ' &');
     }
 
     /**
@@ -790,7 +787,7 @@ class NextDomHelper
             try {
                 if (ConfigManager::byKey('market::enable') == 1) {
                     LogHelper::add('starting', 'debug', __('Test de connexion au market'));
-                    \repo_market::test();
+                    RepoMarket::test();
                 }
             } catch (\Exception $e) {
                 LogHelper::addError('starting', __('Erreur sur la connexion au market : ') . LogHelper::exception($e));
@@ -804,7 +801,6 @@ class NextDomHelper
     /**
      * Start all cron tasks and scenarios
      *
-     * @param  bool $force ignore errors when true
      * @throws \Exception
      */
     public static function startSystem()
@@ -852,7 +848,7 @@ class NextDomHelper
         }
         try {
             foreach (UpdateManager::listRepo() as $name => $repo) {
-                $class = 'repo_' . $name;
+                $class = 'Repo' . $name;
                 if (class_exists($class) && method_exists($class, 'cron5') && ConfigManager::byKey($name . '::enable') == 1) {
                     $class::cron5();
                 }
@@ -897,7 +893,7 @@ class NextDomHelper
         }
         try {
             foreach (UpdateManager::listRepo() as $name => $repo) {
-                $class = 'repo_' . $name;
+                $class = 'Repo' . $name;
                 if (class_exists($class) && method_exists($class, 'cronHourly') && ConfigManager::byKey($name . '::enable') == 1) {
                     $class::cronHourly();
                 }
@@ -994,7 +990,6 @@ class NextDomHelper
             }
         }
         $alias = array(
-            'mview' => 'mobile',
             'dview' => 'dashboard',
             'dplan' => 'dashboard',
         );
@@ -1107,16 +1102,6 @@ class NextDomHelper
      * @param $result
      * @throws \Exception
      */
-    /**
-     * @param $matches
-     * @param $result
-     * @throws \Exception
-     */
-    /**
-     * @param $matches
-     * @param $result
-     * @throws \Exception
-     */
     private static function addTypeUseResults($matches, &$result)
     {
         for ($matchIndex = 0; $matchIndex < count($matches[0]); ++$matchIndex) {
@@ -1144,16 +1129,6 @@ class NextDomHelper
         }
     }
 
-    /**
-     * @param string $testString
-     * @return array
-     * @throws \Exception
-     */
-    /**
-     * @param string $testString
-     * @return array
-     * @throws \Exception
-     */
     /**
      * @param string $testString
      * @return array
@@ -1343,14 +1318,14 @@ class NextDomHelper
                     WHERE `key`="nextdom_benchmark"
                     AND plugin="core"';
             try {
-                DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ROW);
+                DBHelper::exec($sql);
             } catch (\Exception $e) {
 
             }
             $sql = 'INSERT INTO config
                     SET `key`="nextdom_benchmark",plugin="core",`value`="' . $i . '"';
             try {
-                DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ROW);
+                DBHelper::exec($sql);
             } catch (\Exception $e) {
 
             }
@@ -1360,7 +1335,7 @@ class NextDomHelper
         $sql = 'INSERT INTO config
                 SET `key`="nextdom_benchmark",plugin="core",`value`="0"';
         try {
-            DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ROW);
+            DBHelper::exec($sql);
         } catch (\Exception $e) {
         }
         $starttime = Utils::getMicrotime();
@@ -1370,7 +1345,7 @@ class NextDomHelper
                     WHERE `key` = "nextdom_benchmark"
                         AND plugin = "core"';
             try {
-                DBHelper::Prepare($sql, array('value' => $i), DBHelper::FETCH_TYPE_ROW);
+                DBHelper::exec($sql, ['value' => $i]);
             } catch (\Exception $e) {
 
             }

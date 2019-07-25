@@ -98,7 +98,6 @@ class AdministrationPages(BaseGuiTest):
         back_button = self.get_link_by_title('Retour')
         self.assertIsNotNone(clean_cache_button)
         self.assertIsNotNone(back_button)
-        print(str(self.get_js_logs()))
         self.assertEqual(0, len(self.get_js_logs()))
         back_button.click()
 
@@ -318,7 +317,7 @@ class AdministrationPages(BaseGuiTest):
         """
         self.goto('index.php?v=d&p=update')
         sleep(10)
-        selective_update_button = self.get_element_by_id('bt_updateNextDom')
+        selective_update_button = self.get_element_by_id('selectiveUpdateButton')
         back_button = self.get_link_by_title('Retour')
         self.assertIsNotNone(selective_update_button)
         self.assertIsNotNone(back_button)

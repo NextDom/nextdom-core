@@ -131,6 +131,7 @@ class ScenarioElement implements EntityInterface
      * @param Scenario|null $_scenario
      * @return bool|null
      * @throws CoreException
+     * @throws \ReflectionException
      */
     public function execute(&$_scenario = null)
     {

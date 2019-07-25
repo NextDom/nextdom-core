@@ -2,25 +2,19 @@
 <div class="row row-overflow" id='div_scenarioTemplate'>
     <div class="col-lg-2 col-md-3 col-sm-5" id="div_listScenario" style="z-index:999">
         <div class="bs-sidebar nav nav-list bs-sidenav">
-            <center>
-            <span class="btn btn-default btn-file">
-              <i class="fas fa-cloud-upload-alt"></i>{{ 'Envoyer un template' }}
-              <input id="bt_uploadScenarioTemplate" type="file" name="file" data-url="core/ajax/scenario.ajax.php?action=templateupload&nextdom_token={{ uploadAjaxToken }}" style="display : inline-block;">
-            </span>
-            </center>
-            <br/>
+            <div class="form-group">
+                <a class="btn btn-default btn-file" style="width : 100%"><i class="fas fa-cloud-upload-alt"></i>{{ 'Envoyer un template' }}
+                    <input id="bt_uploadScenarioTemplate" type="file" name="file" data-url="core/ajax/scenario.ajax.php?action=templateupload&nextdom_token={{ uploadAjaxToken }}" style="display : inline-block;">
+                </a>
+            </div>
             {% for repoCode, repoValues in repoList %}
                 {% if repoValues['enable'] and (repoValues['score']['hasScenarioStore'] or repoValues['scope']['hasScenarioStore']) %}
-                    <center><a class="btn btn-default bt_scenarioTemplateDisplayStore" style="width : 91%" data-repo="{{ repoCode }}"><i class="fas fa-shopping-cart"></i> {{ repoValues['name'] }}</a></center><br/>
+                    <div class="form-group"><a class="btn btn-default bt_scenarioTemplateDisplayStore" style="width : 100%" data-repo="{{ repoCode }}"><i class="fas fa-shopping-cart"></i> {{ repoValues['name'] }}</a></div>
                 {% endif %}
             {% endfor %}
-            <div class="form-group" style="position:relative;left : -5px;">
-                <div class="col-xs-9">
-                    <input class='form-control' id='in_newTemplateName' placeholder="{{ 'Nom du template' }}"/>
-                </div>
-                <div class="col-xs-2">
-                    <a class="btn btn-default" id="bt_scenarioTemplateConvert"><i class="fas fa-plus-circle cursor"></i></a>
-                </div>
+            <div class="form-group">
+                <input class='form-control' id='in_newTemplateName' placeholder="{{ 'Nom du template' }}"/>
+                <a class="btn btn-default input-group-addon" id="bt_scenarioTemplateConvert"><i class="fas fa-plus-circle cursor"></i></a>
             </div>
             <br/><br/>
             <legend>{{ 'Template' }}</legend>
@@ -49,7 +43,6 @@
             </div>
         </form>
     </div>
-    <div class="col-lg-10 col-md-9 col-sm-7" id="div_marketScenarioTemplate" style="border-left: solid 1px #EEE; padding-left: 25px;display : none;"></div>
 </div>
 
 <script>
@@ -75,10 +68,6 @@
 
     refreshScenarioTemplateList();
 
-    $('.bt_scenarioTemplateDisplayStore').on('click', function () {
-        $('#div_listScenarioTemplate').hide();
-        $('#div_marketScenarioTemplate').load('index.php?v=d&modal=update.list&type=scenario&repo=' + $(this).attr('data-repo')).show();
-    });
 
     $('.bt_scenarioTemplateShare').on('click', function () {
         if ($('#ul_scenarioTemplateList li.active').attr('data-template') == undefined) {
@@ -143,7 +132,6 @@
 
     $('#ul_scenarioTemplateList').delegate('.li_scenarioTemplate', 'click', function () {
         $('#div_listScenarioTemplate').show();
-        $('#div_marketScenarioTemplate').hide();
         $('#ul_scenarioTemplateList .li_scenarioTemplate').removeClass('active');
         $(this).addClass('active');
         nextdom.scenario.loadTemplateDiff({

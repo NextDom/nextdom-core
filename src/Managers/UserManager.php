@@ -39,7 +39,10 @@ use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Model\Entity\User;
+use NextDom\Repo\RepoMarket;
 use PragmaRX\Google2FA\Google2FA;
+
+define('BAD_LOGIN_BLOCK_DURATION', 5);
 
 /**
  * Class UserManager
@@ -149,7 +152,7 @@ class UserManager
 
     /**
      * @param $_login
-     * @return array|mixed|null
+     * @return User|null
      * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
      */
@@ -161,7 +164,7 @@ class UserManager
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE login = :login';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -181,7 +184,7 @@ class UserManager
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE login = :login
                 AND password = :password';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -197,7 +200,7 @@ class UserManager
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE id = :id';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -213,7 +216,7 @@ class UserManager
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE hash = :hash';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -233,7 +236,7 @@ class UserManager
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE login = :login
                 AND hash = :hash';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -245,7 +248,7 @@ class UserManager
     {
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME;
-        return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
     }
 
     /**
@@ -264,7 +267,7 @@ class UserManager
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE rights LIKE :rights
                 OR rights LIKE :rights2';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -284,7 +287,7 @@ class UserManager
         if ($_enable) {
             $sql .= ' AND enable=1';
         }
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -301,7 +304,7 @@ class UserManager
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE enable=:enable';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
     public static function failedLogin()
@@ -310,6 +313,8 @@ class UserManager
         $_SESSION['failed_count'] = (isset($_SESSION['failed_count'])) ? $_SESSION['failed_count'] + 1 : 1;
         $_SESSION['failed_datetime'] = strtotime('now');
         @session_write_close();
+        // Wait 5 seconds (brute force protection)
+        sleep(BAD_LOGIN_BLOCK_DURATION);
     }
 
     public static function removeBanIp()
@@ -321,6 +326,7 @@ class UserManager
     /**
      * @deprecated
      * @return bool
+     * @throws \Exception
      */
     public static function isBan()
     {
@@ -450,13 +456,13 @@ class UserManager
             );
             $user->setOptions('registerDevice', $registerDevice);
             $user->save();
-            \repo_market::supportAccess(true, $user->getHash() . '-' . $key);
+            RepoMarket::supportAccess(true, $user->getHash() . '-' . $key);
         } else {
             $user = self::byLogin('nextdom_support');
             if (is_object($user)) {
                 $user->remove();
             }
-            \repo_market::supportAccess(false);
+            RepoMarket::supportAccess(false);
         }
     }
 

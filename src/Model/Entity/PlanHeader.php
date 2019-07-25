@@ -18,6 +18,7 @@
 namespace NextDom\Model\Entity;
 
 use NextDom\Helpers\DBHelper;
+use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\ReportHelper;
@@ -104,6 +105,8 @@ class PlanHeader implements EntityInterface
     /**
      * @param $_name
      * @return PlanHeader
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public function copy($_name)
     {
@@ -118,9 +121,9 @@ class PlanHeader implements EntityInterface
             $planCopy->save();
         }
         $filename1 = 'planHeader' . $this->getId() . '-' . $this->getImage('sha512') . '.' . $this->getImage('type');
-        if (file_exists(NEXTDOM_DATA . '/data/plan/' . $filename1)) {
+        if (file_exists(NEXTDOM_DATA . '/data/custom/plans/' . $filename1)) {
             $filename2 = 'planHeader' . $planHeaderCopy->getId() . '-' . $planHeaderCopy->getImage('sha512') . '.' . $planHeaderCopy->getImage('type');
-            copy(NEXTDOM_DATA . '/data/plan/' . $filename1, NEXTDOM_DATA . '/data/plan/' . $filename2);
+            copy(NEXTDOM_DATA . '/data/custom/plans/' . $filename1, NEXTDOM_DATA . '/data/custom/plans/' . $filename2);
         }
         return $planHeaderCopy;
     }
@@ -132,6 +135,8 @@ class PlanHeader implements EntityInterface
 
     /**
      * @return Plan[]
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public function getPlan()
     {
@@ -239,21 +244,21 @@ class PlanHeader implements EntityInterface
         if ($this->getImage('data') == '') {
             return '';
         }
-        $dir = NEXTDOM_ROOT . '/public/img/plan';
+        $dir = NEXTDOM_DATA . '/data/custom/plans/';
         if (!file_exists($dir)) {
-            mkdir($dir);
+            FileSystemHelper::mkdirIfNotExists($dir,0755,true);
         }
         if ($this->getImage('sha512') == '') {
             $this->setImage('sha512', Utils::sha512($this->getImage('data')));
             $this->save();
         }
         $filename = $this->getImage('sha512') . '.' . $this->getImage('type');
-        $filepath = $dir . '/' . $filename;
+        $filepath = $dir . $filename;
         if (!file_exists($filepath)) {
             file_put_contents($filepath, base64_decode($this->getImage('data')));
         }
         $size = $this->getImage('size');
-        return '<img style="z-index:997" src="/public/img/plan/' . $filename . '" data-sixe_y="' . $size[1] . '" data-sixe_x="' . $size[0] . '">';
+        return '<img style="z-index:997" src="'. '/data/custom/plans/' . $filename . '" data-size_y="' . $size[1] . '" data-size_x="' . $size[0] . '">';
     }
 
     /**

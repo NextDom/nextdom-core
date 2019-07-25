@@ -35,7 +35,6 @@
 namespace NextDom\Helpers;
 
 use NextDom\Exceptions\CoreException;
-use NextDom\Managers\UserManager;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 /**
@@ -860,27 +859,6 @@ class Utils
     }
 
     /**
-     * @param null $_user
-     * @return void|null
-     * @throws CoreException
-     */
-    public static function unautorizedInDemo($_user = null)
-    {
-        if ($_user === null) {
-            if (!isset($_SESSION) || !UserManager::getStoredUser() !== null) {
-                return null;
-            }
-            $_user = UserManager::getStoredUser();
-        }
-        if (!is_object($_user)) {
-            return;
-        }
-        if ($_user->getLogin() == 'demo') {
-            throw new CoreException(__('Cette action n\'est pas autorisée en mode démo'));
-        }
-    }
-
-    /**
      * @param      $_object
      * @param bool $_noToArray
      * @return array
@@ -1220,5 +1198,31 @@ class Utils
     public static function cleanComponentName($name)
     {
         return str_replace(array('&', '#', ']', '[', '%', "\\", "/", "'", '"'), '', $name);
+    }
+
+    /**
+     * @param $haystack
+     * @param $needle
+     * @return bool
+     */
+    public static function startsWith($haystack, $needle)
+    {
+        $length = strlen($needle);
+        return (substr($haystack, 0, $length) === $needle);
+    }
+
+    /**
+     * @param $haystack
+     * @param $needle
+     * @return bool
+     */
+    public static function endsWith($haystack, $needle)
+    {
+        $length = strlen($needle);
+        if ($length == 0) {
+            return true;
+        }
+
+        return (substr($haystack, -$length) === $needle);
     }
 }

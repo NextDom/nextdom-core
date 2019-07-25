@@ -114,7 +114,8 @@ class TranslateHelper
         $oldTranslationMode = false;
         $translate = self::getTranslation('fr_FR');
         // Ancienne version pour les plugins
-        if (strpos($filename, '/plugins') === 0) {
+        $pluginsPos = strpos($filename, 'plugins');
+        if ($pluginsPos === 0 || $pluginsPos === 1) {
             $filename = substr($filename, strpos($filename, 'plugins'));
             $oldTranslationMode = true;
         }

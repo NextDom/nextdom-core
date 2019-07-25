@@ -36,15 +36,15 @@
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
-            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
-            <a class="btn btn-default btn-action-bar" id="bt_updateOpenLog"><i class="fas fa-file-alt spacing-right"></i>{{ 'Log' }}</a>
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'common.return' | trans }}</a>
+            <a class="btn btn-default btn-action-bar" id="logDialogButton"><i class="fas fa-file-alt spacing-right"></i>{{ 'common.log' | trans }}</a>
         </div>
         <div class="action-group">
-            <a class="btn btn-action btn-action-bar pull-right" id="bt_updateCollapse"><i class="fas fa-plus-square spacing-right"></i>{{ 'Déplier' }}</a>
-            <a class="btn btn-action btn-action-bar pull-right" style="display:none;" id="bt_updateUncollapse"><i class="fas fa-minus-square spacing-right"></i>{{ 'Replier' }}</a>
-            <a class="btn btn-success btn-action-bar pull-right" id="bt_saveUpdate"><i class="fas fa-save spacing-right"></i>{{ 'Sauvegarder' }}</a>
-            <a class="btn btn-primary btn-action-bar pull-right" id="bt_checkAllUpdate"><i class="fas fa-refresh spacing-right"></i>{{ 'Vérifier les mises à jour' }}</a>
-            <a class="btn btn-warning btn-action-bar pull-right" id="bt_updateNextDom"><i class="fas fa-check spacing-right"></i>{{ 'Mise à jour selective' }}</a>
+            <a class="btn btn-action btn-action-bar pull-right" id="updateCollapseButton"><i class="fas fa-plus-square spacing-right"></i>{{ 'update-view.unfold' | trans }}</a>
+            <a class="btn btn-action btn-action-bar pull-right" style="display:none;" id="updateUncollapseButton"><i class="fas fa-minus-square spacing-right"></i>{{ 'update-view.fold' | trans }}</a>
+            <a class="btn btn-success btn-action-bar pull-right" id="saveUpdateChanges"><i class="fas fa-save spacing-right"></i>{{ 'common.save' | trans }}</a>
+            <a class="btn btn-primary btn-action-bar pull-right" id="checkAllUpdatesButton"><i class="fas fa-refresh spacing-right"></i>{{ 'update-view.check_updates' | trans }}</a>
+            <a class="btn btn-warning btn-action-bar pull-right" id="selectiveUpdateButton"><i class="fas fa-check spacing-right"></i>{{ 'update-view.selective_update' | trans }}</a>
         </div>
     </div>
 </section>
@@ -53,17 +53,17 @@
     <div class="nav-tabs-custom config">
         <!-- Tabs title -->
         <ul class="nav nav-tabs pull-right" role="tablist">
-            <li role="presentation"><a href="#others" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-align-justify spacing-right"></i>{{ 'Autres' }}{% if numberOfUpdatesOthers>0 %}<span class="badge bg-yellow spacing-left">{{ numberOfUpdatesOthers }}</span>{% endif %}</a></li>
-            <li role="presentation"><a href="#scripts" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-subscript spacing-right"></i>{{ 'Scripts' }}{% if numberOfUpdatesScripts>0 %}<span class="badge bg-yellow spacing-left">{{ numberOfUpdatesScripts }}</span>{% endif %}</a></li>
-            <li role="presentation"><a href="#widgets" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-boxes spacing-right"></i>{{ 'Widgets' }}{% if numberOfUpdatesWidgets>0 %}<span class="badge bg-yellow spacing-left">{{ numberOfUpdatesWidgets }}</span>{% endif %}</a></li>
-            <li role="presentation"><a href="#plugins" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-puzzle-piece spacing-right"></i>{{ 'Plugins' }}{% if numberOfUpdatesPlugins>0 %}<span class="badge bg-yellow spacing-left">{{ numberOfUpdatesPlugins }}</span>{% endif %}</a></li>
-            <li role="presentation" class="active"><a href="#core" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-microchip spacing-right"></i>{{ 'Core' }}{% if numberOfUpdatesCore>0 %}<span class="badge bg-yellow spacing-left">{{ numberOfUpdatesCore }}</span>{% endif %}</a></li>
-            <li class="header pull-left"><i class="fas fa-download spacing-right"></i>{{ 'Mise(s) à jours' }}{% if numberOfUpdates>0 %}<span class="badge bg-red spacing-left">{{ numberOfUpdates }}</span>{% endif %}</li>
+            <li role="presentation"><a href="#others" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-align-justify spacing-right"></i>{{ 'update-view.any' | trans }}{% if numberOfUpdatesOthers>0 %}<span class="badge bg-yellow spacing-left">{{ numberOfUpdatesOthers }}</span>{% endif %}</a></li>
+            <li role="presentation"><a href="#scripts" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-subscript spacing-right"></i>{{ 'update-view.scripts' | trans }}{% if numberOfUpdatesScripts>0 %}<span class="badge bg-yellow spacing-left">{{ numberOfUpdatesScripts }}</span>{% endif %}</a></li>
+            <li role="presentation"><a href="#widgets" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-boxes spacing-right"></i>{{ 'common.widgets' | trans }}{% if numberOfUpdatesWidgets>0 %}<span class="badge bg-yellow spacing-left">{{ numberOfUpdatesWidgets }}</span>{% endif %}</a></li>
+            <li role="presentation"><a href="#plugins" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-puzzle-piece spacing-right"></i>{{ 'update-view.plugins' | trans }}{% if numberOfUpdatesPlugins>0 %}<span class="badge bg-yellow spacing-left">{{ numberOfUpdatesPlugins }}</span>{% endif %}</a></li>
+            <li role="presentation" class="active"><a href="#core" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-microchip spacing-right"></i>{{ 'update-view.core' | trans }}{% if numberOfUpdatesCore>0 %}<span class="badge bg-yellow spacing-left">{{ numberOfUpdatesCore }}</span>{% endif %}</a></li>
+            <li class="header pull-left"><i class="fas fa-download spacing-right"></i>{{ 'update-view.update_s_in_days' | trans }}{% if numberOfUpdates>0 %}<span class="badge bg-red spacing-left">{{ numberOfUpdates }}</span>{% endif %}</li>
         </ul>
 
         <!-- Tabs content -->
         <div class="global-tab-content tab-content" id="accordionUpdate">
-            <legend><i class="fas fa-clock-o spacing-right"></i><span>{{ 'Dernière vérification :' }}</span><span class="label label-info badge spacing-left" id="span_lastUpdateCheck"></span></legend>
+            <legend><i class="fas fa-clock-o spacing-right"></i><span>{{ 'update-view.last_check' | trans }}</span><span class="label label-info badge spacing-left" id="lastUpdateDate"></span></legend>
             <div role="tabpanel" class="tab-pane active" id="core">
                 <div class="row">
                     <div id="listCore"></div>
@@ -96,23 +96,23 @@
         </div>
     </div>
 
-    <div id="md_updateInfo">
+    <div id="updateInfoModal">
         <section class="content">
-            <pre id="pre_updateInfo" style="overflow: scroll;"></pre>
+            <pre id="updateLog" style="overflow: scroll;"></pre>
         </section>
     </div>
 
-    <div class="modal fade" id="md_specifyUpdate">
+    <div class="modal fade" id="selectiveUpdateModal">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button class="bootbox-close-button close" data-dismiss="modal">×</button>
-                    <h4>{{ 'Mise à jour selective' }}</h4>
+                    <h4>{{ 'update-view.selective_update' | trans }}</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="alert alert-danger">{{ 'Avant toute mise à jour, merci de consulter la note de version du core de NextDom' }} <a target="_blank" href="https://nextdom.github.io/core/fr_FR/noteVersion">{{ 'ici' }}</a></div>
+                    <div class="alert alert-danger">{{ 'update-view.please_consult_release_note' | trans }} <a target="_blank" href="https://nextdom.github.io/core/fr_FR/noteVersion">{{'common.here' | trans }}</a></div>
                     <fieldset>
-                        <legend>{{ 'Options' }}</legend>
+                        <legend>{{ 'update-view.options' | trans }}</legend>
                         <div class="form-group">
                             <label class="col-xs-8 control-label label-sticker-big">{{ 'Pré-update (mettre à jour le script d\'update avant)' }}</label>
                             <div class="col-xs-4">
@@ -120,44 +120,44 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-xs-8 control-label label-sticker-big">{{ 'Sauvegarder avant' }}</label>
+                            <label class="col-xs-8 control-label label-sticker-big">{{ 'update-view.save_before' | trans }}</label>
                             <div class="col-xs-4">
                                 <input type="checkbox" class="updateOption" data-l1key="backup::before" checked/>
                             </div>
                         </div>
                     </fieldset>
                     <fieldset>
-                        <legend>{{ 'Selection des mises à jour' }}</legend>
+                        <legend>{{ 'update-view.select_updates' | trans }}</legend>
                         <div class="form-group">
-                            <label class="col-xs-8 control-label label-sticker-big">{{ 'Mettre à jour les plugins' }}</label>
+                            <label class="col-xs-8 control-label label-sticker-big">{{ 'update-view.update_plugins' | trans }}</label>
                             <div class="col-xs-4">
                                 <input type="checkbox" class="updateOption" data-l1key="plugins" checked/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-xs-8 control-label label-sticker-big">{{ 'Mettre à jour le core' }}</label>
+                            <label class="col-xs-8 control-label label-sticker-big">{{ 'update-view.update_the_core' | trans }}</label>
                             <div class="col-xs-4">
                                 <input type="checkbox" class="updateOption" data-l1key="core" checked/>
                             </div>
                         </div>
                     </fieldset>
                     <fieldset>
-                        <legend>{{ 'Expert' }}</legend>
+                        <legend>{{ 'update-view.expert' | trans }}</legend>
                         <div class="form-group has-error">
-                            <label class="col-xs-8 control-label label-sticker-big">{{ 'Mode forcé' }}</label>
+                            <label class="col-xs-8 control-label label-sticker-big">{{ 'update-view.forced_mode' | trans }}</label>
                             <div class="col-xs-4">
                                 <input type="checkbox" class="updateOption" data-l1key="force"/>
                             </div>
                         </div>
                     </fieldset>
                     <fieldset>
-                        <div class="alert alert-danger">{{ 'L\'option suivante n\'est à modifier que sur demande du support sinon il faut ABSOLUMENT qu\'elle soit sur "Aucune"' }}</div>
-                        <legend>{{ 'Restauration' }}</legend>
+                        <div class="alert alert-danger">{{ 'update-view.warning_special_option'|trans }}</div>
+                        <legend>{{ 'update-view.restoration' | trans }}</legend>
                         <div class="form-group has-warning">
-                            <label class="col-xs-6 control-label label-sticker-big">{{ 'Mise à jour à réappliquer' }}</label>
+                            <label class="col-xs-6 control-label label-sticker-big">{{ 'update-view.update_to_reapply' | trans }}</label>
                             <div class="col-xs-5">
                                 <select id="sel_updateVersion" class="form-control updateOption" data-l1key="update::reapply">
-                                    <option value="">{{ 'Aucune' }}</option>
+                                    <option value="">{{ 'update-view.none' | trans }}</option>
                                     {% for update in updatesList %}
                                         <option value="{{ update }}">{{ update }}</option>
                                     {% endfor %}
@@ -167,8 +167,8 @@
                     </fieldset>
                 </div>
                 <div class="modal-footer">
-                    <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-minus-circle spacing-right"></i>{{ 'Annuler' }}</a>
-                    <a class="btn btn-success" id="bt_doUpdate"><i class="fas fa-download spacing-right"></i>{{ 'Mettre à jour' }}</a>
+                    <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-minus-circle spacing-right"></i>{{ 'common.cancel' | trans }}</a>
+                    <a class="btn btn-success" id="startUpdateButton"><i class="fas fa-download spacing-right"></i>{{ 'update-view.update' | trans }}</a>
                 </div>
             </div>
         </div>

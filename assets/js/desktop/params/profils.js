@@ -42,6 +42,18 @@ $('.nav-tabs a').on('shown.bs.tab', function (e) {
     window.location.hash = e.target.hash;
 })
 
+nextdom.user.get({
+    error: function (error) {
+        notify("Erreur", error.message, 'error');
+    },
+    success: function (data) {
+        $('#div_pageContainer').setValues(data, '.userAttr');
+        $('#in_passwordCheck').value(data.password);
+        $("#"+$('.userAttr[data-l2key="widget::theme"]').value()).attr("checked","checked");
+        modifyWithoutSave = false;
+    }
+});
+
 jwerty.key('ctrl+s/⌘+s', function (e) {
     e.preventDefault();
     $("#bt_saveProfils").click();
@@ -73,7 +85,9 @@ $("#bt_saveProfils").on('click', function (event) {
                 },
                 success: function (data) {
                     modifyWithoutSave = false;
-                    window.location.reload();
+                    updateTheme(function() {
+                        window.location.reload();
+                    });
                 }
             });
         }
@@ -102,26 +116,6 @@ $('#bt_genUserKeyAPI').on('click',function(){
             });
         }
     });
-});
-
-$('.userAttr[data-l1key=options][data-l2key=bootstrap_theme]').on('change', function () {
-    if($(this).value() == ''){
-        $('#div_imgThemeDesktop').html('<img src="public/img/theme_default.png" height="300" class="img-thumbnail" />');
-    }else{
-        $('#div_imgThemeDesktop').html('<img src="public/themes/' + $(this).value() + '/desktop/preview.png" height="300" class="img-thumbnail" />');
-    }
-
-});
-
-nextdom.user.get({
-    error: function (error) {
-        notify("Erreur", error.message, 'error');
-    },
-    success: function (data) {
-        $('#div_pageContainer').setValues(data, '.userAttr');
-        $('#in_passwordCheck').value(data.password);
-        modifyWithoutSave = false;
-    }
 });
 
 $('#div_pageContainer').delegate('.userAttr', 'change', function () {
@@ -170,6 +164,7 @@ $('.bt_deleteSession').on('click',function(){
             notify("Erreur", error.message, 'error');
         },
         success: function (data) {
+            modifyWithoutSave = false;
             window.location.reload();
         }
     });
@@ -177,8 +172,9 @@ $('.bt_deleteSession').on('click',function(){
 
 $('#user_avatar').fileupload({
     dataType: 'json',
-    url: "core/ajax/profils.ajax.php?action=imageUpload&ajax_token=" + NEXTDOM_AJAX_TOKEN,
+    url: "core/ajax/profils.ajax.php?action=imageUpload",
     dropZone: "#bsImagesPanel",
+    formData: {'nextdom_token': NEXTDOM_AJAX_TOKEN},
     done: function (e, data) {
         if (data.result.state !== 'ok') {
             notify('Core',data.result.result,'error');
@@ -199,3 +195,17 @@ $(".Avatar").on('click', function (event) {
     $('#monAvatar').attr('src',$(this).attr('src'));
     notify("{{Profil}}", '{{Image changée}}', 'success');
 });
+
+$("input[name=themeWidget]").on('click', function (event) {
+    var radio = $(this).val();
+    $('.userAttr[data-l2key="widget::theme"]').value(radio);
+});
+
+function updateTheme(successFunc) {
+    $.ajax({
+        url: 'core/ajax/config.ajax.php',
+        type: 'GET',
+        data: {'action': 'updateTheme', 'nextdom_token': NEXTDOM_AJAX_TOKEN},
+        success: successFunc
+    });
+}

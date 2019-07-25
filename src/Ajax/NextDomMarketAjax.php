@@ -37,8 +37,6 @@ class NextDomMarketAjax extends BaseAjax
     /**
      * Actions de refraichissement
      *
-     * @return bool True si l'action a réussie
-     *
      * @throws \Exception
      */
     public function refresh()
@@ -89,6 +87,7 @@ class NextDomMarketAjax extends BaseAjax
     /**
      * Rafraichir le hash de la branch à partir des données de Jeedom.
      *
+     * @param array $data
      * @return bool True si le rafraichissement à été effectué
      */
     private function refreshBranchHash(array $data)
@@ -105,10 +104,7 @@ class NextDomMarketAjax extends BaseAjax
     /**
      * Obtenir une information
      *
-     * @param string $params Identifiant de l'information
-     * @param mixed $data Données en fonction du paramètre
-     *
-     * @return array|bool Information demandée
+     * @throws \Exception
      */
     public function get()
     {

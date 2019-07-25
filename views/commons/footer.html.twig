@@ -38,7 +38,6 @@
     var clientDatetime = new Date();
     var clientServerDiff = {{ date().timestamp }} * 1000;
     var clientServerDiffDatetime = clientServerDiff - clientDatetime.getTime();
-    var serverDatetime = {{ date().timestamp }};
     var io = null;
     NEXTDOM_PRODUCT_NAME='{{ PRODUCT_NAME }}';
     NEXTDOM_AJAX_TOKEN = '{{ AJAX_TOKEN }}';
@@ -48,19 +47,21 @@
             nextdom_token: '{{ AJAX_TOKEN }}'
         }
     });
-    var nextdom_langage = '{{ LANGUAGE }}';{# Corrigé la faute #}
-    var jeedom_langage = '{{ LANGUAGE }}';{# Pour la compatibilité #}
+    var nextdom_language = '{{ LANGUAGE }}';
+    var jeedom_langage = '{{ LANGUAGE }}';{# Keep orthograph mistake for compatibility #}
     {% if JS_VARS is defined %}
-    {% for jsVarName, jsVarValue in JS_VARS  %}
-    var {{ jsVarName }} = "{{ jsVarValue }}";
-    {% endfor %}
+      {% for jsVarName, jsVarValue in JS_VARS  %}
+        var {{ jsVarName }} = "{{ jsVarValue }}";
+      {% endfor %}
     {% endif %}
     {% if JS_VARS_RAW is defined %}
-    {% for jsVarName, jsVarValue in JS_VARS_RAW  %}
-    var {{ jsVarName }} = {{ jsVarValue|raw }};
-    {% endfor %}
+      {% for jsVarName, jsVarValue in JS_VARS_RAW  %}
+        var {{ jsVarName }} = {{ jsVarValue|raw }};
+      {% endfor %}
     {% endif %}
 </script>
+
+<!-- JS loading -->
 {% if JS_POOL is defined %}
     {% for jsFile in JS_POOL %}
         <script src="{{ jsFile }}"></script>

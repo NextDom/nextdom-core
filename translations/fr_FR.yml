@@ -1,22 +1,68 @@
 common:
-  ok: OK
-  nok: NOK
-  back: Retour
-  disabled: Désactivé
-  error: Erreur
-  error-b: "[Erreur] "
-  in-progress: En cours
-  version: Version
-  jeedom-version: Base Jeedom
-  branch: Branche
-  next: Suivant
-  previous: Précédent
-  ignore: Ignorer
-  finish: Terminer
-  days: jours
-  hours: heures
-  minutes: minutes
-  not-found: Non trouvé
+    action: "Action"
+    actions: "Actions"
+    activate: "Activer"
+    active: "Actif"
+    add: "Ajouter"
+    advanced_configuration: "Configuration avancée"
+    all: "Tous"
+    back: "Retour"
+    branch: "Branche"
+    by_default: "Par défaut"
+    cancel: "Annuler"
+    clear: "Vider"
+    date: "Date"
+    days: "jours"
+    default: "Défaut"
+    description: "Description :"
+    device: "Equipement"
+    devices: "Equipements"
+    disable: "Désactiver"
+    disabled: "Désactivé"
+    display: "Visualiser"
+    enabled: "Activé"
+    enough: "NOK"
+    error-b: "[Erreur] "
+    error: Erreur
+    finish: Terminer
+    hours: heures
+    id: ID
+    ignore: Ignorer
+    in-progress: En cours
+    info: "Info"
+    information: "Informations"
+    jeedom-version: "Base Jeedom"
+    log: "Log"
+    main: "Général"
+    minutes: "minutes"
+    name: "Nom"
+    next: "Suivant"
+    nok: "NOK"
+    none: "Aucun"
+    not-found: "Non trouvé"
+    object: "Objet"
+    objects: "Objets"
+    ok: "OK"
+    pause: "Pause"
+    previous: "Précédent"
+    remove: "Supprimer"
+    return: "Retour"
+    round: "Arrondi"
+    run: "Exécuter"
+    save: "Sauvegarder"
+    scenario: "Scénario"
+    send: "Envoyer"
+    settings: "Paramètres"
+    setup: "Configuration"
+    type: "Type"
+    validate: "Valider"
+    value: "Valeur"
+    version: "Version"
+    visible: "Visible"
+    warning: "Warning"
+    widget: "Widget"
+    widgets: "Widgets"
+    here: "Ici"
 
 connection:
   home-msg: Connectez-vous pour accéder à votre session...
@@ -40,6 +86,18 @@ core:
   enable-all-scenarios: "Activer tous les scénarios..."
   disable-all-scenarios: "Désactiver tous les scénarios..."
   incorrect-sys-date: "La date du système est incorrecte (avant %s ou après %s) : "
+
+install:
+  update-sourcecode: Mise à jour du code
+  already-updated: Le code est déjà à jour.
+  update-core-error: Impossible de mettre à jour le code du core.
+  download-dependencies: Téléchargement des dépendances
+  gen-assets: Génération des ressources
+  update-in-progress-wait: Une mise à jour est déjà en cours. Attente de 10s avant un nouvel essai.
+  update-in-progress-retry: Une mise à jour est toujours en cours. Veuillez rééssayer plus tard.
+  begin-update: DEBUT DE LA MISE A JOUR
+  end-update: FIN DE LA MISE A JOUR
+  nothing-to-update: Aucune mise à jour
 
 page-title:
   administration: Administration
@@ -73,6 +131,7 @@ page-title:
   scenarios: Scénarios
   objects: Objets
   plugins: Plugins
+  tools: Outils
 
 administration:
   cpu: CPU
@@ -231,6 +290,7 @@ sidebar:
   expert-issue: Un Dysfonctionnement ?
   online: Online
   offline: Offline
+  quick-notes: Quick Notes
 
 firstuse:
   step: Étape
@@ -241,8 +301,9 @@ firstuse:
   password-title: Sécurisez votre %productName% !
   password-content: Pour commencer, merci de définir un nouveau mot de passe administrateur pour améliorer la sécurité...
   password-placeholder: Nouveau mot de passe...
+  market-productname-placeholder: ?
   password-confirm-placeholder: Confirmer le mot de passe...
-  market-title: Connectez votre market Jeedom a %productName% !
+  market-title: Connectez votre market Jeedom à %productName% !
   market-content: En ajoutant ou connectant un compte Market Jeedom pour l'installation de plugins...
   market-noaccount: Je n'ai pas de compte Market
   market-alreadyaccount: J'ai déjà un compte market
@@ -250,9 +311,198 @@ firstuse:
   market-username-placeholder: Nom d'utilisateur...
   market-password-placeholder: Mot de passe...
   customize-title: Personnalisez votre %productName% !
-  customize-content: Sélectionnez le thème qui vous correspond le plus, d'autres étant sélectionnables ou personnalisables dans la page Customisation...
+  customize-title2: Customisez votre %productName% !
+  customize-content: Sélectionnez le thème qui vous correspond le plus, personnalisation modifiable dans la page Customisation...
+  customize-widget: Sélectionnez le thème pour vos widgets, personnalisation modifiable dans la page Profil...
+  customize-name: Donnez un nom à votre solution domotique...
   congrats-title: Bravo ! La configuration de votre %productName% est terminée !
   congrats-content: Cliquez sur le bouton Terminer pour profiter de votre solution Domotique...
+
+backup:
+    automatic_sending: "Envoi automatique"
+    available_backups: "Sauvegardes disponibles"
+    backup_settings: "Paramètres des sauvegardes"
+    backups: "Sauvegardes"
+    backups__restorations: "Sauvegardes / Restaurations"
+    days: "jours"
+    download_selection: "Télécharger la sélection"
+    downloading: "Téléchargement"
+    loading: "Chargement..."
+    local_backups: "Sauvegardes locales"
+    location: "Emplacement"
+    manual_backup: "Sauvegarde manuelle"
+    purpose1: "Cette fonction permet créer une sauvegarde en compactant dans une archive tous les élements de votre Nextdom."
+    purpose2: "Seront sauvegardé les paramètres, dashboard, vues, designs, plugins, widgets etc... Mais le Core ne sera lui en revanche pas inclus dans cette sauvegarde."
+    purpose3: "C'est ici également que vous pouvez restaurer une de vos sauvegardes (y compris celles issue du système Jeedom)."
+    remove_selected: "Supprimer la sélection"
+    restoration: "Restauration"
+    restore_backup_or_mirgration: "vous pouvez restaurer une sauvegarde NextDom ou migrer une sauvegarde Jeedom"
+    restore_selection: "Restaurer la sélection"
+    run: "Lancer"
+    saving_on: "Mémorisation su "
+    send_backup: "Envoyer une sauvegarde"
+    suppression: "Suppression"
+    the_service_is_disabled_you_can__activate: "Le service est désactivé, vous pouvez l'activer "
+    total_size: "Taille totale"
+    transfer: "Transfert"
+    mb_maximum: "Mo maximum"
+
+general:
+    last_known_date: "Dernière date connue"
+    time_zone: "Fuseau horaire"
+    hours: "Heures"
+    time: "Horodatage"
+    tells_nextdom_to_ignore_the_system_time: "Indique à NextDom de ne pas prendre en compte l'heure du système"
+    nextdom: "NextDom"
+    reset: "Remise à zéro"
+    synchronization: "Synchronisation"
+    nextdom_name: "Nom de votre NextDom "
+    language: "Langage"
+    language-used: "Langue utilisé"
+    system_hardware: "Système / Hardware"
+    installation_key: "Clef d'installation"
+    session_timeout: "Durée de vie de votre connexion"
+    time_server: "Serveur de temps optionnel"
+    ignore_system_time: "Ignorer la vérification de l'heure"
+    tooltip:
+       installation_key: "Clef d'installation qui permet d'identifier votre NextDom quand il communique avec le market"
+       session_timeout: "Durée de vie de votre connexion à NextDom si vous n'avez pas coché la case enregistrer cet ordinateur"
+       language: "Langue à utiliser dans Nexdom"
+       system_hardware: "Indique votre type de matériel"
+       nextdom_name : "Nom de votre NextDom (utilisé notamment par le market)"
+       time_zone: "Fuseau horaire de votre NextDom"
+       time_server: "Permet d'ajouter un serveur de temps à NextDom utilisé lorsque NextDom force la synchronisation de l'heure"
+       ignore_system_time: "Ignorer la vérification de l'heure système"
+    language-list:
+        fr_FR: "Français"
+        en_US: "Anglais"
+        de_DE: "Allemand"
+        es_ES: "Espagnol"
+        ru_RU: "Russe"
+        id_ID: "Indonesien"
+        it_IT: "Italien"
+        ja_JP: "Japonais"
+        pt_PT: "Portuguais"
+        tr: "Turque"
+
+update-view:
+    none: "Aucune"
+    any: "Autres"
+    please_consult_release_note: "Avant toute mise à jour, merci de consulter la note de version du core de NextDom :"
+    core: "Core"
+    last_check: "Dernière vérification :"
+    unfold: "Déplier"
+    expert: "Expert"
+    update_the_core: "Mettre à jour le core"
+    update_plugins: "Mettre à jour les plugins"
+    update: "Mettre à jour"
+    selective_update: "Mise à jour selective"
+    update_to_reapply: "Mise à jour à réappliquer"
+    update_s_in_days: "Mise(s) à jours"
+    forced_mode: "Mode forcé"
+    options: "Options"
+    plugins: "Plugins"
+    pre_update: "Pré-update (mettre à jour le script d'update avant)"
+    fold: "Replier"
+    restoration: "Restauration"
+    save_before: "Sauvegarder avant"
+    scripts: "Scripts"
+    select_updates: "Sélection des mises à jour"
+    check_updates: "Vérifier les mises à jour"
+    warning_special_option: "L'option suivante n'est à modifier que sur demande du support sinon il faut ABSOLUMENT qu'elle soit sur 'Aucune'"
+
+update:
+    do_not_update: "Ne pas mettre à jour"
+    branch: "Branche :"
+    type: "Type :"
+    version: "Version :"
+
+note:
+    create_a_note: "Créer une note"
+    list_notes: "Liste des notes"
+    note_saved_successfully: "Note sauvegardée avec succés"
+    note_selected: "Note selectionnée"
+    note_deleted_successfully: "Note supprimée avec succés"
+    notes: "Notes"
+    are_sure_you_want_to_delete_the_note: "Etes-vous sur de vouloir supprimer la note : "
+
+osdb:
+    warning: "ATTENTION : ces opérations sont risquées, vous pouvez perdre l'accès à votre système et à "
+    administration: "Administration"
+    system_console: "Console Système"
+    file_editor: "Editeur de fichiers"
+    editors: "Editeurs"
+    run: "Lancer"
+    password: "Mot de passe"
+    os__db: "OS/DB"
+    database: "Base de donnée"
+    user: "Utilisateur"
+
+interact:
+    wait_before_responding: "Attendre avant de répondre"
+    none: "Aucun - "
+    authorization: "Autorisation"
+    allow_nextdom_to_eliminate_malformed_requests: "Autoriser NextDom à supprimer les demandes syntaxiquement incorrectes"
+    choose_the_actions_associated_with_this_interaction: "Choisissez les actions associées à cette interaction..."
+    choose_filters_to_limit_the_number_of_generated_sentences: "Choisissez les filtres permettant de limiter le nombre de phrases générées..."
+    commands: "Commandes"
+    binary_conversion: "Conversion binaire"
+    convert_binary_commands: "Convertir les commandes binaires"
+    request: "Demande"
+    duplicate: "Dupliquer"
+    unfold: "Déplier"
+    edition_intéraction: "Edition Intéraction"
+    filters: "Filtres"
+    group: "Groupe"
+    id: "ID : "
+    interactions: "Interactions"
+    the_question_cannot_be_empty: "La demande ne peut être vide"
+    limit_to_categories: "Limiter aux catégories"
+    limit_to_commands_belonging_to_objects: "Limiter aux commandes appartenant aux objets"
+    limit_to_commands_of_sub_type: "Limiter aux commandes ayant pour sous-type"
+    limit_to_commands_with_unit: "Limiter aux commandes ayant pour unité"
+    limit_to_commands_of_type: "Limiter aux commandes de type"
+    limit_to_plugins: "Limiter aux plugins"
+    limit_to_visible: "Limiter aux visibles"
+    limit_to_the_device: "Limiter à l'équipement"
+    list_of_users_identifiers_separated_by_a_pipe: "Liste des utilisateurs (identifiants) séparés par un | "
+    allow_extra_time: "Permet d'attendre le temps que l'état d'une lampe soit mise a jour par exemple"
+    sentences: "Phrase(s)"
+    regex_exclusion: "Regexp d'exclusion"
+    regexp_mandatory_correspondence: "Regexp de correspondance obligatoire"
+    replaces_words_with_their_synony: "Remplace les mots par leurs synonymes lors de la génération des commandes"
+    fold: "Replier"
+    regenerate: "Régénérer"
+    answer: "Réponse"
+    result: "Résultat"
+    uncategorized: "Sans catégorie"
+    without_unit: "Sans unité"
+    synonym: "Synonyme"
+    authorized_users: "Utilisateurs autorisés"
+    you_have: "Vous avez "
+    you_have_n_iterations: "Vous avez %s iteration(s)..."
+    test: "Tester"
+    no_interactions_click_add_to_start: "Vous n'avez encore aucune interaction. Cliquez sur ajouter pour commencer."
+    interactions: "interaction(s)"
+    seconds: "secondes"
+
+summary:
+    display_if_zero: "Affichage si valeur nulle"
+    add_a_summary: "Ajouter un résumé"
+    calculation: "Calcul"
+    key: "Clé"
+    icon: "Icône"
+    link_to_a_virtual: "Lien vers un virtuel"
+    counting_method: "Méthode de comptage"
+    automation_summaries: "Résumés domotiques"
+    unit: "Unité"
+    create_virtual: "Créer virtuel"
+    virtual_cmd_succed: "Création des commandes virtuel réussies"
+    calcul:
+        sum: "Somme"
+        avg: "Moyenne"
+        text: "Texte"
+
 
 scenario:
   no-group: Aucun
@@ -270,7 +520,7 @@ scenario:
   test-expression: Testeur d'expression
   variables: Variables
   summary: "Vue d'ensemble"
-  scenarios: scénario(s).
+  scenarios: scénario(s)
   save: Sauvegarder
   links: Liens
   duplicate: Dupliquer
@@ -357,6 +607,12 @@ profile:
   profile: Profil
   profile-of: "Profil de %s"
 
+dashboard:
+  no-object: Aucun objet n'est associé à cette pièce ou aucun ne correspond à la catégorie choisie...
+  grid-config: Configurer la taille de la grille
+  resize-grid-step: Redimensionnement sur le pas de grille
+  resize-childs-grid-step: Redimensionner tous les équipements fils sur le pas de grille
+  all-categories: Toutes
 
 entity:
   note:
@@ -1203,7 +1459,6 @@ samba:
 "Historiques": "Historiques"
 "Historiser": "Historiser"
 "Historisé": "Historisé"
-"HOMELINK": "HOMELINK"
 "homePageValue": "homePageValue"
 "Horodatage": "Horodatage"
 "Humidité": "Humidité"

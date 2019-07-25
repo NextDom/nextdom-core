@@ -69,34 +69,20 @@ class NextDomAjax extends BaseAjax
         @session_write_close();
 
         $return['userProfils'] = $currentUser->getOptions();
-        $return['userProfils']['defaultMobileViewName'] = __('Vue');
         if ($currentUser->getOptions('defaultDesktopView') != '') {
             $view = ViewManager::byId($currentUser->getOptions('defaultDesktopView'));
-            if (is_object($view)) {
-                $return['userProfils']['defaultMobileViewName'] = $view->getName();
-            }
         }
-        $return['userProfils']['defaultMobileObjectName'] = __('Objet');
         if ($currentUser->getOptions('defaultDashboardObject') != '') {
             $object = ObjectManager::byId($currentUser->getOptions('defaultDashboardObject'));
-            if (is_object($object)) {
-                $return['userProfils']['defaultMobileObjectName'] = $object->getName();
-            }
         }
 
         $return['plugins'] = array();
         foreach (PluginManager::listPlugin(true) as $plugin) {
-            if ($plugin->getMobile() != '' || $plugin->getEventJs() == 1) {
-                $info_plugin = Utils::o2a($plugin);
-                $info_plugin['displayMobilePanel'] = ConfigManager::byKey('displayMobilePanel', $plugin->getId(), 0);
-                $return['plugins'][] = $info_plugin;
+            if ($plugin->getEventJs() == 1) {
+                $return['plugins'][] = Utils::o2a($plugin);
             }
         }
         $return['custom'] = array('js' => false, 'css' => false);
-        if (ConfigManager::byKey('enableCustomCss', 'core', 1) == 1) {
-            $return['custom']['js'] = file_exists(NEXTDOM_ROOT . '/mobile/custom/custom.js');
-            $return['custom']['css'] = file_exists(NEXTDOM_ROOT . '/mobile/custom/custom.css');
-        }
         AjaxHelper::success($return);
     }
 
@@ -162,7 +148,6 @@ class NextDomAjax extends BaseAjax
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
         AjaxHelper::init(true);
-        Utils::unautorizedInDemo();
         $command = Utils::init('command');
         if (strpos($command, '2>&1') === false && strpos($command, '>') === false) {
             $command .= ' 2>&1';
@@ -175,10 +160,9 @@ class NextDomAjax extends BaseAjax
     public function db()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         AjaxHelper::init(true);
         if (Utils::init('command', '') !== '') {
-            AjaxHelper::success(DBHelper::prepare(Utils::init('command'), array(), DBHelper::FETCH_TYPE_ALL));
+            AjaxHelper::success(DBHelper::getAll(Utils::init('command')));
         } else {
             AjaxHelper::error(__('Aucune requête à exécuter'));
         }
@@ -187,7 +171,6 @@ class NextDomAjax extends BaseAjax
     public function dbcorrectTable()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         AjaxHelper::init(true);
         DBHelper::compareAndFix(json_decode(file_get_contents(NEXTDOM_ROOT . '/install/database.json'), true), Utils::init('table'));
         AjaxHelper::success();
@@ -204,7 +187,6 @@ class NextDomAjax extends BaseAjax
     public function update()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         AjaxHelper::init(true);
         NextDomHelper::update();
         AjaxHelper::success();
@@ -222,7 +204,6 @@ class NextDomAjax extends BaseAjax
     public function backup()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         AjaxHelper::init(true);
         BackupManager::backup(true);
         AjaxHelper::success();
@@ -231,7 +212,6 @@ class NextDomAjax extends BaseAjax
     public function restore()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         AjaxHelper::init(true);
         BackupManager::restore(Utils::init('backup'), true);
         AjaxHelper::success();
@@ -240,7 +220,6 @@ class NextDomAjax extends BaseAjax
     public function removeBackup()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         AjaxHelper::init(true);
         BackupManager::removeBackup(Utils::init('backup'));
         AjaxHelper::success();
@@ -263,7 +242,6 @@ class NextDomAjax extends BaseAjax
     public function resetHwKey()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         AjaxHelper::init(true);
         ConfigManager::save('NextDomHelper::installKey', '');
         AjaxHelper::success();
@@ -280,7 +258,6 @@ class NextDomAjax extends BaseAjax
     public function backupupload()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         AjaxHelper::init(true);
         $uploadDir = BackupManager::getBackupDirectory();
         Utils::readUploadedFile($_FILES, "file", $uploadDir, 1000, array(".gz"));
@@ -290,7 +267,6 @@ class NextDomAjax extends BaseAjax
     public function haltSystem()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         AjaxHelper::init(true);
         NextDomHelper::haltSystem();
         AjaxHelper::success();
@@ -299,7 +275,6 @@ class NextDomAjax extends BaseAjax
     public function rebootSystem()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         AjaxHelper::init(true);
         NextDomHelper::rebootSystem();
         AjaxHelper::success();
@@ -308,7 +283,6 @@ class NextDomAjax extends BaseAjax
     public function forceSyncHour()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         AjaxHelper::init(true);
         NextDomHelper::forceSyncHour();
         AjaxHelper::success();
@@ -317,17 +291,12 @@ class NextDomAjax extends BaseAjax
     public function saveCustom()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         AjaxHelper::init(true);
-        $customVersion = Utils::init('version');
         $customType = Utils::init('type');
-        if ($customVersion != 'desktop' && $customVersion != 'mobile') {
-            throw new CoreException(__('La version ne peut être que desktop ou mobile'));
-        }
         if ($customType != 'js' && $customType != 'css') {
             throw new CoreException(__('La version ne peut être que js ou css'));
         }
-        $customDir = sprintf("%s/custom/%s/", NEXTDOM_DATA, $customVersion);
+        $customDir = sprintf("%s/custom/desktop/", NEXTDOM_DATA);
         $customPath = sprintf("%s/custom.%s", $customDir, $customType);
         file_put_contents($customPath, Utils::init('content'));
         AjaxHelper::success();
@@ -377,7 +346,6 @@ class NextDomAjax extends BaseAjax
     public function consistency()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         AjaxHelper::init(true);
         SystemHelper::consistency();
         AjaxHelper::success();
@@ -386,7 +354,6 @@ class NextDomAjax extends BaseAjax
     public function cleanFileSystemRight()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         AjaxHelper::init(true);
         SystemHelper::cleanFileSystemRight();
         AjaxHelper::success();
@@ -395,7 +362,6 @@ class NextDomAjax extends BaseAjax
     public function removeTimelineEvents()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         AjaxHelper::init(true);
         TimeLineHelper::removeTimelineEvent();
         AjaxHelper::success();
@@ -404,7 +370,6 @@ class NextDomAjax extends BaseAjax
     public function getFileFolder()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         AjaxHelper::init(true);
         AjaxHelper::success(FileSystemHelper::ls(Utils::init('path'), '*', false, array(Utils::init('type'))));
     }
@@ -412,7 +377,6 @@ class NextDomAjax extends BaseAjax
     public function getFileContent()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         AjaxHelper::init(true);
         $filePath = Utils::init('path');
         $pathinfo  = pathinfo($filePath);
@@ -429,7 +393,6 @@ class NextDomAjax extends BaseAjax
     public function setFileContent()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         AjaxHelper::init(true);
         $filePath = Utils::init('path');
         $pathInfo = pathinfo($filePath);
@@ -446,7 +409,6 @@ class NextDomAjax extends BaseAjax
     public function deleteFile()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         AjaxHelper::init(true);
         $pathinfo = pathinfo(Utils::init('path'));
         $extension = Utils::array_key_default($pathinfo, "extension", "<no-ext>");
@@ -459,7 +421,6 @@ class NextDomAjax extends BaseAjax
     public function createFile()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         AjaxHelper::init(true);
         $pathinfo = pathinfo(Utils::init('name'));
         $extension = Utils::array_key_default($pathinfo, "extension", "<no-ext>");
@@ -476,7 +437,6 @@ class NextDomAjax extends BaseAjax
     public function emptyRemoveHistory()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::unautorizedInDemo();
         AjaxHelper::init(true);
         unlink(NEXTDOM_DATA . '/data/remove_history.json');
         AjaxHelper::success();

@@ -32,7 +32,7 @@
 
 /* Core-Surcharge */
 .pluginContainer {
-    margin: 5px -5px -5px -5px;
+    margin: -5px;
 }
 .content-wrapper {
     min-height: 100%;
@@ -58,6 +58,10 @@
         cursor: pointer;
     }
 }
+
+.div_backgroundPlan{
+    overflow: auto;
+}
 @media (max-width: 767px) {
   .fixed .content-wrapper, .fixed .right-side {
     padding-top: 106px;
@@ -81,11 +85,18 @@
 }
 #dashboard-content {
     padding-top:15px;
-    -webkit-animation: slidein 0.5s;
-    -moz-animation:    slidein 0.5s;
-    -o-animation:      slidein 0.5s;
-    animation:     slidein 0.5s;
+    -webkit-animation: slidein 0.3s;
+    -moz-animation:    slidein 0.3s;
+    -o-animation:      slidein 0.3s;
+    animation:     slidein 0.3s;
 }
 .content{
     padding-top:15px;
+}
+
+.well {
+    padding: 10px;
+    border: 1px solid;
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }

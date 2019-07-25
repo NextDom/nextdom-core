@@ -136,7 +136,6 @@ nextdom.init = function () {
       _options.container = 'body';
     }
     $(_options.container).setValues(_options.data, _options.type);
-    console.log(_options);
   });
 
     $('body').on('nextdom::gotoplan', function (_event,_plan_id) {
@@ -335,7 +334,7 @@ nextdom.health = function (_params) {
 };
 
 nextdom.saveCustom = function (_params) {
-  var paramsRequired = ['version', 'type', 'content'];
+  var paramsRequired = ['type', 'content'];
   var paramsSpecifics = {};
   try {
     nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
@@ -380,7 +379,7 @@ nextdom.getCronSelectModal = function(_options,_callback) {
       closeText: '',
       autoOpen: false,
       modal: true,
-      height: 250,
+      height: 280,
       width: 800
     });
     jQuery.ajaxSetup({

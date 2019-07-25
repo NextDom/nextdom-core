@@ -38,9 +38,13 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogHandler;
 use Monolog\Handler\SyslogUdpHandler;
 use Monolog\Logger;
+use NextDom\Com\ComShell;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\MessageManager;
+use NextDom\Singletons\PHPInformation;
 use SplFileObject;
+
+define('DEFAULT_MAX_LINES_IN_LOG', 200);
 
 /**
  * Class LogHelper
@@ -48,132 +52,156 @@ use SplFileObject;
  */
 class LogHelper
 {
-    const DEFAULT_MAX_LINE = 200;
-
-    private static $logger = array();
+    /**
+     * @var array Logger cache
+     */
+    private static $logger = [];
+    /**
+     * @var array Config cache
+     */
     private static $config = null;
 
     /**
-     * @param int $_level
-     * @return string|null
+     * Log an error
+     *
+     * @param string $targetLog Target log file
+     * @param string $message Message to log
+     * @param string $logicalId Logical id linked to this log (optional)
+     *
+     * @return bool True if log added
+     *
+     * @throws \Exception
      */
-    public static function convertLogLevel($_level = 100)
+    public static function addError($targetLog, $message, $logicalId = '')
     {
-        if ($_level > logger::EMERGENCY) {
-            return 'none';
-        }
-        try {
-            return strtolower(Logger::getLevelName($_level));
-        } catch (\Exception $e) {
-
-        }
-        return null;
+        return self::add($targetLog, 'error', $message, $logicalId);
     }
 
     /**
-     * @param        $logTarget
-     * @param        $message
-     * @param string $logicalId
+     * Log an information
+     *
+     * @param string $targetLog Target log file
+     * @param string $message Message to log
+     * @param string $logicalId Logical id linked to this log (optional)
+     *
+     * @return bool True if log added
+     *
+     * @throws \Exception
      */
-    public static function addError($logTarget, $message, $logicalId = '')
+    public static function addInfo($targetLog, $message, $logicalId = '')
     {
+        $message = $message . '\n' . PHPInformation::getInstance()->getCallingFunctionName(true);
         self::add($logTarget, 'error', $message, $logicalId);
     }
 
     /**
      * Add a message to the log and ensure that there are never more than 1000 lines
      *
-     * @param $_log
-     * @param string $_type type du message à mettre dans les log
-     * @param string $_message message à mettre dans les logs
-     * @param string $_logicalId
+     * @param string $targetLog Target log file
+     * @param string $logType Type of log
+     * @param string $message Message to log
+     * @param string $logicalId Logical id linked to this log (optional)
+     *
+     * @return bool True if log added
+     *
+     * @throws \Exception
      */
-    public static function add($_log, $_type, $_message, $_logicalId = '')
+    public static function add($targetLog, $logType, $message, $logicalId = '')
     {
-        if (trim($_message) == '') {
-            return;
+        if (trim($message) === '') {
+            return false;
         }
-        $logger = self::getLogger($_log);
-        $action = 'add' . ucwords(strtolower($_type));
+        $logger = self::getLogger($targetLog);
+        $action = 'add' . ucwords(strtolower($logType));
         if (method_exists($logger, $action)) {
-            $logger->$action($_message);
+            $logger->$action($message);
             try {
-                $level = Logger::toMonologLevel($_type);
-                if ($level == Logger::ERROR && self::getConfig('addMessageForErrorLog') == 1) {
-                    @MessageManager::add($_log, $_message, '', $_logicalId);
-                } elseif ($level > Logger::ALERT) {
-                    @MessageManager::add($_log, $_message, '', $_logicalId);
+                $logLevel = Logger::toMonologLevel($logType);
+                if ($logLevel > Logger::ALERT || ($logLevel === Logger::ERROR && self::getConfig('addMessageForErrorLog') == 1)) {
+                    @MessageManager::add($targetLog, $message, '', $logicalId);
                 }
             } catch (\Exception $e) {
-
+                error_log('LOG ERROR : ' . $e->getMessage());
             }
         }
+        return true;
     }
 
     /**
-     * @param $_log
+     * Get logger depends of target
+     *
+     * @param string $targetLog Target log
+     *
      * @return mixed
+     *
      * @throws \Exception
      */
-    public static function getLogger($_log)
+    public static function getLogger($targetLog)
     {
-        if (isset(self::$logger[$_log])) {
-            return self::$logger[$_log];
+        if (isset(self::$logger[$targetLog])) {
+            return self::$logger[$targetLog];
         }
         $formatter = new LineFormatter(str_replace('\n', "\n", self::getConfig('log::formatter')));
-        self::$logger[$_log] = new Logger($_log);
+        self::$logger[$targetLog] = new Logger($targetLog);
         switch (self::getConfig('log::engine')) {
             case 'SyslogHandler':
-                $handler = new SyslogHandler(self::getLogLevel($_log));
+                $handler = new SyslogHandler(self::getLogLevel($targetLog));
                 break;
             case 'SyslogUdp':
-                $handler = new SyslogUdpHandler(ConfigManager::byKey('log::syslogudphost'), ConfigManager::byKey('log::syslogudpport'), 'user', self::getLogLevel($_log));
+                $handler = new SyslogUdpHandler(ConfigManager::byKey('log::syslogudphost'), ConfigManager::byKey('log::syslogudpport'), 'user', self::getLogLevel($targetLog));
                 break;
             case 'StreamHandler':
             default:
-                $handler = new StreamHandler(self::getPathToLog($_log), self::getLogLevel($_log));
+                $handler = new StreamHandler(self::getPathToLog($targetLog), self::getLogLevel($targetLog));
                 break;
         }
         $handler->setFormatter($formatter);
-        self::$logger[$_log]->pushHandler($handler);
-        return self::$logger[$_log];
+        self::$logger[$targetLog]->pushHandler($handler);
+        return self::$logger[$targetLog];
     }
 
     /**
-     * @param        $_key
-     * @param string $_default
+     * Get config data by key
+     *
+     * @param string $configKey
+     * @param string $defaultValue
      * @return string
      * @throws \Exception
      */
-    public static function getConfig($_key, $_default = '')
+    public static function getConfig($configKey, $defaultValue = '')
     {
+        // Load config data
         if (self::$config === null) {
             self::$config = array_merge(ConfigManager::getLogLevelPlugin(), ConfigManager::byKeys(array('log::engine', 'log::formatter', 'log::level', 'addMessageForErrorLog', 'maxLineLog')));
         }
-        if (isset(self::$config[$_key])) {
-            return self::$config[$_key];
+        if (isset(self::$config[$configKey])) {
+            return self::$config[$configKey];
         }
-        return $_default;
+        return $defaultValue;
     }
 
     /**
-     * @param $_log
+     * Get log level from config
+     *
+     * @param $targetLog
      * @return int|string
      * @throws \Exception
      */
-    public static function getLogLevel($_log)
+    public static function getLogLevel($targetLog)
     {
-        $specific_level = self::getConfig('log::level::' . $_log);
-        if (is_array($specific_level)) {
-            if (isset($specific_level['default']) && $specific_level['default'] == 1) {
+        $specificTargetLevel = self::getConfig('log::level::' . $targetLog);
+        // Get log level when user configure different level
+        if (is_array($specificTargetLevel)) {
+            if (isset($specificTargetLevel['default']) && $specificTargetLevel['default'] == 1) {
                 return self::getConfig('log::level');
             }
-            foreach ($specific_level as $key => $value) {
-                if (!is_numeric($key)) {
+            // Test all levels and return the selected
+            foreach ($specificTargetLevel as $level => $selected) {
+                if (!is_numeric($level)) {
                     continue;
                 }
-                if ($value == 1) {
-                    return $key;
+                if ($selected == 1) {
+                    return $level;
                 }
             }
         }
@@ -181,31 +209,28 @@ class LogHelper
     }
 
     /**
-     * @param string $_log
-     * @return string
+     * Get target path log (usually /var/log/nextdom)
+     *
+     * @param string $targetLog
+     *
+     * @return string Log path
      */
-    public static function getPathToLog($_log = 'core')
+    public static function getPathToLog($targetLog = 'core')
     {
-        return NEXTDOM_LOG . '/' . $_log;
+        return NEXTDOM_LOG . '/' . $targetLog;
     }
 
     /**
-     * @param        $logTarget
-     * @param        $message
-     * @param string $logicalId
-     */
-    public static function addInfo($logTarget, $message, $logicalId = '')
-    {
-        self::add($logTarget, 'info', $message, $logicalId);
-    }
-
-    /**
-     * @return bool
+     * Remove all log by deleting files
+     *
+     * @return bool True on success
+     *
      * @throws \Exception
      */
     public static function removeAll()
     {
-        foreach (array('', 'scenarioLog/') as $logPath) {
+        // find in log and sub folder scenrioLog
+        foreach (['', 'scenarioLog/'] as $logPath) {
             $logs = FileSystemHelper::ls(self::getPathToLog($logPath), '*');
             foreach ($logs as $log) {
                 self::remove($log);
@@ -215,73 +240,87 @@ class LogHelper
     }
 
     /**
-     * Vide le fichier de log
-     * @param $_log
-     * @return bool|null
+     * Delete log file
+     *
+     * @param string $targetLog Name of the log file
+     *
+     * @return bool True on success
+     *
      * @throws \Exception
      */
-    public static function remove($_log)
+    public static function remove($targetLog)
     {
-        if (strpos($_log, 'nginx.error') !== false || strpos($_log, 'http.error') !== false) {
-            self::clear($_log);
-            return null;
+        // Skip Apache and Nginx log files
+        if (strpos($targetLog, 'nginx.error') !== false || strpos($targetLog, 'http.error') !== false) {
+            self::clear($targetLog);
+            return false;
         }
-        if (self::authorizeClearLog($_log)) {
-            $path = self::getPathToLog($_log);
-            \com_shell::execute(SystemHelper::getCmdSudo() . 'chmod 664 ' . $path . ' > /dev/null 2>&1; rm ' . $path . ' 2>&1 > /dev/null');
-            return true;
+        if (self::authorizeClearLog($targetLog)) {
+            $path = self::getPathToLog($targetLog);
+            ComShell::execute(SystemHelper::getCmdSudo() . 'chmod 664 ' . $path . ' > /dev/null 2>&1; rm ' . $path . ' 2>&1 > /dev/null');
+            return false;
         }
         return null;
     }
 
     /**
-     * Vide le fichier de log
-     * @param $_log
-     * @return bool|null
+     * Clear log file
+     *
+     * @param string $targetLog Name of the log file
+     *
+     * @return bool True on success
+     *
      * @throws \Exception
      */
-    public static function clear($_log)
+    public static function clear($targetLog)
     {
-        if (self::authorizeClearLog($_log)) {
-            $path = self::getPathToLog($_log);
-            \com_shell::execute(SystemHelper::getCmdSudo() . 'chmod 664 ' . $path . '> /dev/null 2>&1;cat /dev/null > ' . $path);
+        if (self::authorizeClearLog($targetLog)) {
+            $path = self::getPathToLog($targetLog);
+            ComShell::execute(SystemHelper::getCmdSudo() . 'chmod 664 ' . $path . '> /dev/null 2>&1; cat /dev/null > ' . $path);
             return true;
         }
-        return null;
+        return false;
     }
 
     /**
-     * Autorisation de vide le fichier de log
-     * @param $_log
-     * @param string $_subPath
+     * Check if target log file is good
+     *
+     * @param string $targetLog Name of the log file
+     * @param string $subFolder Subfolder name
+     *
      * @return bool
      */
-    public static function authorizeClearLog($_log, $_subPath = '')
+    public static function authorizeClearLog($targetLog, $subFolder = '')
     {
-        $path = self::getPathToLog($_subPath . $_log);
-        return !((strpos($_log, '.htaccess') !== false)
+        $path = self::getPathToLog($subFolder . $targetLog);
+        return !((strpos($targetLog, '.htaccess') !== false)
             || (!file_exists($path) || !is_file($path)));
     }
 
     /**
-     * @param string $_log
-     * @param        $_begin
-     * @param        $_nbLines
-     * @return array|bool
+     * Get log file content
+     *
+     * @param string $targetLog Target log
+     * @param int $start Start row
+     * @param int $nbLines Number of lines to get
+     *
+     * @return array|bool Lines of the log or false on error
+     *
+     * @throws \Exception
      */
-    public static function get($_log = 'core', $_begin, $_nbLines)
+    public static function get($targetLog = 'core', $start = 0, $nbLines = DEFAULT_MAX_LINES_IN_LOG)
     {
-        self::chunk($_log);
-        $path = (!file_exists($_log) || !is_file($_log)) ? self::getPathToLog($_log) : $_log;
+        self::chunk($targetLog);
+        $path = (!file_exists($targetLog) || !is_file($targetLog)) ? self::getPathToLog($targetLog) : $targetLog;
         if (!file_exists($path)) {
             return false;
         }
-        $page = array();
+        $page = [];
         $log = new SplFileObject($path);
         if ($log) {
-            $log->seek($_begin); //Seek to the begening of lines
+            $log->seek($start); //Seek to the begening of lines
             $linesRead = 0;
-            while ($log->valid() && $linesRead != $_nbLines) {
+            while ($log->valid() && $linesRead != $nbLines) {
                 $line = trim($log->current()); //get current line
                 if ($line != '') {
                     array_unshift($page, $line);
@@ -294,13 +333,17 @@ class LogHelper
     }
 
     /**
-     * @param string $_log
+     * Reduce all logs files
+     *
+     * @param string $targetLog Target log or empty for all
+     *
+     * @throws \Exception
      */
-    public static function chunk($_log = '')
+    public static function chunk($targetLog = '')
     {
-        $paths = array();
-        if ($_log != '') {
-            $paths = array(self::getPathToLog($_log));
+        $paths = [];
+        if ($targetLog != '') {
+            $paths[] = self::getPathToLog($targetLog);
         } else {
             $relativeLogPaths = array('', 'scenarioLog/');
             foreach ($relativeLogPaths as $relativeLogPath) {
@@ -319,48 +362,68 @@ class LogHelper
     }
 
     /**
-     * @param $_path
+     * Reduce log file to DEFAULT_MAX_LINES_IN_LOG
+     *
+     * @param string $logFilePath Path of the file
+     *
      * @throws \Exception
      */
-    public static function chunkLog($_path)
+    public static function chunkLog($logFilePath)
     {
-        if (strpos($_path, '.htaccess') !== false) {
+        if (strpos($logFilePath, '.htaccess') !== false) {
             return;
         }
         $maxLineLog = self::getConfig('maxLineLog');
-        if ($maxLineLog < self::DEFAULT_MAX_LINE) {
-            $maxLineLog = self::DEFAULT_MAX_LINE;
+        if ($maxLineLog < DEFAULT_MAX_LINES_IN_LOG) {
+            $maxLineLog = DEFAULT_MAX_LINES_IN_LOG;
         }
-        \com_shell::execute(SystemHelper::getCmdSudo() . 'chmod 664 ' . $_path . ' > /dev/null 2>&1;echo "$(tail -n ' . $maxLineLog . ' ' . $_path . ')" > ' . $_path);
-        @chown($_path, SystemHelper::getCommand('www-uid'));
-        @chgrp($_path, SystemHelper::getCommand('www-gid'));
-        if (filesize($_path) > (1024 * 1024 * 10)) {
-            \com_shell::execute(SystemHelper::getCmdSudo() . 'truncate -s 0 ' . $_path);
+        ComShell::execute(SystemHelper::getCmdSudo() . 'chmod 664 ' . $logFilePath . ' > /dev/null 2>&1;echo "$(tail -n ' . $maxLineLog . ' ' . $logFilePath . ')" > ' . $logFilePath);
+        @chown($logFilePath, SystemHelper::getCommand('www-uid'));
+        @chgrp($logFilePath, SystemHelper::getCommand('www-gid'));
+        if (filesize($logFilePath) > (1024 * 1024 * 10)) {
+            ComShell::execute(SystemHelper::getCmdSudo() . 'truncate -s 0 ' . $logFilePath);
         }
-        if (filesize($_path) > (1024 * 1024 * 10)) {
-            \com_shell::execute(SystemHelper::getCmdSudo() . 'cat /dev/null > ' . $_path);
+        if (filesize($logFilePath) > (1024 * 1024 * 10)) {
+            ComShell::execute(SystemHelper::getCmdSudo() . 'cat /dev/null > ' . $logFilePath);
         }
-        if (filesize($_path) > (1024 * 1024 * 10)) {
-            \com_shell::execute(SystemHelper::getCmdSudo() . ' rm -f ' . $_path);
+        if (filesize($logFilePath) > (1024 * 1024 * 10)) {
+            ComShell::execute(SystemHelper::getCmdSudo() . ' rm -f ' . $logFilePath);
         }
     }
 
     /**
-     * @param null $_filtre
-     * @return array
+     * Get list of log files
+     *
+     * @deprecated Use getLogFileList
+     *
+     * @param string $filter Pattern matchs
+     *
+     * @return array List of files
      */
-    public static function liste($_filtre = null)
+    public static function liste($filter = null) {
+        trigger_error('This method is deprecated', E_USER_DEPRECATED);
+        return self::getLogFileList($filter);
+    }
+
+    /**
+     * Get list of log files
+     *
+     * @param string $filter Pattern matchs
+     *
+     * @return array List of files
+     */
+    public static function getLogFileList($filter = null)
     {
-        $return = array();
+        $result = [];
         foreach (FileSystemHelper::ls(self::getPathToLog(''), '*') as $log) {
-            if ($_filtre !== null && strpos($log, $_filtre) === false) {
+            if ($filter !== null && strpos($log, $filter) === false) {
                 continue;
             }
             if (!is_dir(self::getPathToLog($log))) {
-                $return[] = $log;
+                $result[] = $log;
             }
         }
-        return $return;
+        return $result;
     }
 
     /**
@@ -400,8 +463,12 @@ class LogHelper
     }
 
     /**
-     * @param $e
-     * @return mixed
+     * Get exception message
+     *
+     * @param \Exception $e Exception
+     *
+     * @return mixed Message
+     *
      * @throws \Exception
      */
     public static function exception($e)
@@ -411,5 +478,25 @@ class LogHelper
         } else {
             return print_r($e, true);
         }
+    }
+
+    /**
+     * Get log level name from log level value
+     *
+     * @param int $logLevelValue Log level value that correspond to specific level
+     *
+     * @return string|null Name of the log level or null
+     */
+    public static function convertLogLevel($logLevelValue = 100)
+    {
+        if ($logLevelValue > logger::EMERGENCY) {
+            return 'none';
+        }
+        try {
+            return strtolower(Logger::getLevelName($logLevelValue));
+        } catch (\Exception $e) {
+
+        }
+        return null;
     }
 }

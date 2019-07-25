@@ -58,6 +58,7 @@ class CacheManager
      * @param mixed $options Options
      *
      * @return bool
+     * @throws \Exception
      */
     public static function set($key, $value, $lifetime = 0, $options = null)
     {
@@ -403,13 +404,6 @@ class CacheManager
                 if (!is_object($object)) {
                     self::delete($key);
                 }
-            }
-            if (strpos($key, 'widgetHtmlmobile') !== false) {
-                $id = str_replace('widgetHtmlmobile', '', $key);
-                if (is_numeric($id)) {
-                    self::delete($key);
-                }
-                continue;
             }
             if (strpos($key, 'widgetHtmldashboard') !== false) {
                 $id = str_replace('widgetHtmldashboard', '', $key);

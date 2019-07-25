@@ -19,7 +19,6 @@ namespace NextDom\Ajax;
 
 use NextDom\Enums\UserRight;
 use NextDom\Helpers\AjaxHelper;
-use NextDom\Helpers\Utils;
 use NextDom\Managers\CacheManager;
 
 /**
@@ -35,11 +34,9 @@ class CacheAjax extends BaseAjax
     /**
      * Flush the cache
      *
-     * @throws \NextDom\Exceptions\CoreException
      */
     public function flush()
     {
-        Utils::unautorizedInDemo();
         CacheManager::flush();
         AjaxHelper::success();
     }
@@ -47,11 +44,10 @@ class CacheAjax extends BaseAjax
     /**
      * Clean the cache
      *
-     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Exception
      */
     public function clean()
     {
-        Utils::unautorizedInDemo();
         CacheManager::clean();
         AjaxHelper::success();
     }

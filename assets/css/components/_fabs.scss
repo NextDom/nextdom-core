@@ -19,8 +19,8 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-/* Vendor-Surcharge : bouton fab */
-.fab {
+/* Vendor-Surcharge : bouton fabs */
+.fabs {
     position: fixed;
     width: 49px;
     right: 15px;
@@ -31,11 +31,11 @@
         width: 40px;
     }
 }
-.fab:hover .fab-buttons {
+.fabs:hover .fab-buttons {
     opacity: 1;
     visibility: visible;
 }
-.fab:hover .fab-buttons__link {
+.fabs:hover .fab-buttons__link {
     transform: scaleY(1) scaleX(1) translateY(-16px) translateX(0px);
 }
 .fab-buttons {
@@ -71,7 +71,7 @@
     transition: .3s;
     text-align: center;
 }
-*[class^="fab"]{
+*[class^="fabs"]{
     cursor : pointer;
 }
 

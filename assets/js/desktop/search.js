@@ -34,10 +34,91 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-$('#generalSearch').keyup(function () {
-    generalSearchOnPages($(this).value().toLowerCase());
+/* JS file for all that talk about SEARCH */
+
+/**
+ * Events declaration on load
+ */
+$(function () {
+    // Search input field toggles
+    $('#search-toggle').on('click', function () {
+        $('.navbar-search').toggle();
+        $('.search-toggle').toggle();
+        $('.objectSummaryGlobalHeader').toggle();
+    });
+
+    var delay=200, setTimeoutConst;
+    $('#search-toggle').hover(function () {
+      setTimeoutConst = setTimeout(function() {
+          $('.navbar-search').show();
+          $('.search-toggle').hide();
+          $('.objectSummaryGlobalHeader').hide();
+        }, delay);
+      }, function() {
+      clearTimeout(setTimeoutConst);
+    });
+
+    // Close search input field
+    $('#search-close').on('click', function () {
+        $('#generalSearch').val('');
+        generalSearchOnPages('');
+        $('.navbar-search').toggle();
+        $('.search-toggle').toggle();
+        $('.objectSummaryGlobalHeader').toggle();
+    });
+
+    // Run search when typing
+    $('#generalSearch').keyup(function () {
+        generalSearchOnPages($(this).value().toLowerCase());
+    });
 });
 
+/**
+ * Search input field activation on dedicated pages
+ */
+function activateGlobalSearch() {
+    var fullUrl = document.location.toString();
+    if (fullUrl.indexOf('rescue') === -1) {
+        var page ='';
+        var availableSearchPage = [
+            "plugin",
+            "dashboard",
+            "interact",
+            "scenario",
+            "object",
+            "realtime",
+            "display",
+            "database",
+            "note",
+            "system",
+            "log",
+            "market",
+            "marketJee",
+            "update.list",
+            "update",
+            "health",
+        ];
+        if (fullUrl.indexOf('p=') != -1) {
+            page = fullUrl.split('p=')[1].replace('#', '').split('&')[0];
+        } else {
+              if (fullUrl.indexOf('modal=') != -1) {
+                  page = fullUrl.split('modal=')[1].replace('#', '').split('&')[0];
+              }
+        }
+
+        if(jQuery.inArray(page, availableSearchPage) != -1) {
+            $("#generalSearch").prop('disabled', false);
+        } else {
+            $("#generalSearch").prop('disabled', true);
+        }
+    }
+}
+
+/**
+ * Search elements in page
+ *
+ * @param value search caracters
+ */
 function generalSearchOnPages(value) {
     var search = value;
     var fullUrl = document.location.toString();
@@ -268,11 +349,11 @@ function generalSearchOnPages(value) {
             break;
 
         case 'update.list':
-            marketFilter('name', search);
+            marketFilter();
             break;
 
         case 'marketJee':
-            marketFilter('name', search);
+            marketFilter();
             break;
 
         case 'update':
@@ -304,23 +385,3 @@ function generalSearchOnPages(value) {
             break;
     }
 };
-
-$('#search-toggle').on('click', function () {
-    $('.navbar-search').toggle();
-    $('.search-toggle').toggle();
-    $('.objectSummaryGlobalHeader').toggle();
-});
-
-$('#search-toggle').hover(function () {
-    $('.navbar-search').show();
-    $('.search-toggle').hide();
-    $('.objectSummaryGlobalHeader').hide();
-});
-
-$('#search-close').on('click', function () {
-    $('#generalSearch').val('');
-    generalSearchOnPages('');
-    $('.navbar-search').toggle();
-    $('.search-toggle').toggle();
-    $('.objectSummaryGlobalHeader').toggle();
-});

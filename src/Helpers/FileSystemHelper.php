@@ -140,10 +140,8 @@ class FileSystemHelper
      *
      * The function checks that returned file belongs to nextdom-core root directory
      *
-     * @param string $folder base folder
      * @param string $path requested path under folder
-     * @param string $extension file extension
-     * @returns string migrated file path or null when does not exists
+     * @return null|string|string[]
      */
     public static function getAssetPath($path)
     {
@@ -215,14 +213,20 @@ class FileSystemHelper
      * @param string $version Version du template
      * @param string $filename Nom du fichier
      * @param string $pluginId Identifiant du plugin
+     * @param string $theme Identifiant du plugin
      *
      * @return string Contenu du fichier ou une chaine vide.
      */
-    public static function getTemplateFileContent(string $folder, string $version, string $filename, string $pluginId = ''): string
+    public static function getTemplateFileContent($folder, $version, $filename, $pluginId = '' , $theme = ''): string
     {
         $result = '';
+        $filePath = '';
         if ($pluginId == '') {
-            $filePath = NEXTDOM_ROOT . '/' . $folder . '/template/' . $version . '/' . $filename . '.html';
+            if ($theme == '') {
+                $filePath = NEXTDOM_ROOT . '/' . $folder . '/template/' . $version . '/' . $filename . '.html';
+            } else {
+                $filePath = NEXTDOM_ROOT . '/' . $folder . '/template/' . $version . '/themes/' . $theme . '/' . $filename . '.html';
+            }
         } else {
             $filePath = NEXTDOM_ROOT . '/plugins/' . $pluginId . '/core/template/' . $version . '/' . $filename . '.html';
         }
@@ -438,6 +442,16 @@ class FileSystemHelper
      */
     public static function rrmdir($dir): bool
     {
+        // Check if we remove our own folders/files only
+        if(!(substr($dir, 0, strlen(NEXTDOM_ROOT)) === NEXTDOM_ROOT
+            || substr($dir, 0, strlen(NEXTDOM_DATA)) === NEXTDOM_DATA
+            || substr($dir, 0, strlen(NEXTDOM_LOG)) === NEXTDOM_LOG
+            || substr($dir, 0, strlen(NEXTDOM_TMP)) === NEXTDOM_TMP
+            || substr($dir, 0, strlen('/tmp')) === '/tmp')){
+
+            return false;
+        }
+
         if (is_dir($dir)) {
             $files = scandir($dir);
             foreach ($files as $file) {
@@ -617,6 +631,27 @@ class FileSystemHelper
     }
 
     /**
+     * Get the free space of a directory
+     * @param $directory Directory in which we want free space information
+     * @return int free space in Byte (Octet)
+     */
+    public static function getDirectoryFreeSpace($directory)
+    {
+        return disk_free_space ( $directory );
+    }
+
+
+    /**
+     * Get true if the file exists
+     * @param $file File we want to know if exists
+     * @return bool exists or not
+     */
+    public static function isFileExists($file)
+    {
+        return file_exists ( $file );
+    }
+
+    /**
      * Moves input file or directory to given destination (acts like mv)
      *
      * @param string $src source file or directory
@@ -634,8 +669,9 @@ class FileSystemHelper
     /**
      * Create directory if not already exists
      *
+     * @param string $path , path to create
      * @param int $mode , see mkdir parameter
-     * @param int $recursive , see mkdir parameter
+     * @param boolean $recursive , see mkdir parameter
      * @throws CoreException when cannot create directory
      */
     public static function mkdirIfNotExists($path, $mode = 0775, $recursive = false)

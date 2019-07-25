@@ -1,23 +1,73 @@
 # Nouveau format
 
 common:
-    ok: OK
-    nok: NOK
-    back: Back
-    disabled: disabled
-    error: Error
-    error-b: [Error]
-    in-progress: In progress
-    version: Version
-    next: Next
-    previous: Previous
-    ignore: Ignore
-    finish: finish
-    days: days
-    hours: hours
-    minutes: minutes
-    not-found: Not found
-    
+    action: 'Action'
+    actions: 'Actions'
+    activate: 'Activate'
+    active: 'Active'
+    add: 'Add'
+    advanced_configuration: 'Advanced configuration'
+    all: 'All'
+    back: 'Back'
+    branch: 'Branch'
+    by_default: 'By default'
+    cancel: 'Cancel'
+    clear: 'Clear'
+    date: 'Date'
+    days: 'days'
+    default: 'Default'
+    description: 'Description:'
+    device: 'Device'
+    devices: 'Devices'
+    disable: 'Disable'
+    disabled: 'Disabled'
+    display: 'display'
+    enabled: 'Enabled'
+    enough: 'ENOUGH'
+    error-b: '[Error]'
+    error: 'Error'
+    finish: 'finish'
+    hours: 'hours'
+    id: 'ID'
+    ignore: 'Ignore'
+    in-progress: 'In progress'
+    info: 'Info'
+    information: 'Information'
+    jeedom-version: 'Base Jeedom'
+    log: 'Log'
+    main: 'Main'
+    minutes: 'minutes'
+    name: 'Name'
+    next: 'Next'
+    nok: 'NOK'
+    none: 'None'
+    not-found: 'Not found'
+    object: 'Object'
+    objects: 'Objects'
+    ok: 'OK'
+    pause: 'Pause'
+    previous: 'Previous'
+    remove: 'Remove'
+    return: 'Return'
+    round: 'Round'
+    run: 'Run'
+    save: 'Save'
+    scenario: 'Scenario'
+    send: 'Send'
+    settings: 'Settings'
+    setup: 'Setup'
+    type: 'Type'
+    validate: 'Validate'
+    value: 'Value'
+    version: 'Version'
+    visible: 'Visible'
+    warning: 'Warning'
+    widget: 'Widget'
+    widgets: 'Widgets'
+    here: 'Here'
+
+
+
 connection:
     home-msg: Log in to access your session ...
     login-placeholder: ID ... (default admin)
@@ -27,7 +77,7 @@ connection:
     remember-label: Remember me ?
     connect: Log in
     forgot: "Oops: I forgot my password !"
-    
+
 core:
     error-401: 401 - Unauthorized Access
     error-404: 404 - Page not found
@@ -40,7 +90,19 @@ core:
     enable-all-scenarios: Enable all scenarios ...
     disable-all-scenarios: Disable all scenarios ...
     incorrect-sys-date: The system date is incorrect (before or after %s %s):
-    
+
+install:
+    update-sourcecode: Update source code
+    already-updated: Already up to date.
+    update-core-error: Impossible to update core.
+    download-dependencies: Download dependencies
+    gen-assets: Generate assets
+    install.update-in-progress-wait: An update is in progress. Wait 10 s before new try.
+    install.update-in-progress-retry: An update is already in progress. Try again later.
+    install.begin-update: BEGIN UPDATE
+    install.end-update: END UPDATE
+    install.nothing-to-update: Nothing to update
+
 page-title:
     administration: Administration
     users: User
@@ -73,7 +135,8 @@ page-title:
     scenarios: Scenario
     objects: Objects
     plugins: Plugins
-   
+    tools: tools
+
 administration:
     cpu: CPU
     cpu-cores: cores
@@ -84,7 +147,7 @@ administration:
     hdd: HDD
     swap: swap
     http-connections-count: Number of HTTP connection
-    connections-count: Number of connection
+    connections-count: Number of connections
     process-count: Number of processes
     uptime: Uptime
     welcome-page: Welcome Page
@@ -105,7 +168,7 @@ scripts:
     listener-not-found: "Listener not found:"
     listener-id-cannot-be-empty: The listener ID can not be empty
     file-not-found: "File not found: "
-   
+
 health:
     apache-private-tmp-disabled: "Please disable private tmp Apache (NextDom can work with). See <a href=\"https://jeedom.github.io/core/fr_FR/faq#tocAnchor-1-29\" target=\"_blank\"> </a>"
     apache-private-tmp: Apache private tmp
@@ -161,13 +224,13 @@ health:
     uncollapse: uncollapse
     unknown: Unknown
     update-to-date: System update
-    
+
 plugin:
     cant-report: You can not make a report on board without plugin
     category:
         security: security
         automation-protocol: Automation Protocol
-    
+
 welcome:
     title: Welcome to %productName%
     congrats: Congratulations
@@ -188,11 +251,12 @@ welcome:
     blog-content: All the latest news from% productName% on our blog.
     blog-launch: Go to the blog
     notify: Saved successfully
-    
+
 footer:
     licence: GPL Automation 2018
-    about: About
-    
+    about: A Propos de
+    rights: All rights reserved
+
 sidebar:
     menu-main: Main Menu
     menu-manage: menu Management
@@ -227,11 +291,11 @@ sidebar:
     expert-issue: A dysfunction ?
     online: Online
     offline: Offline
-    
+
 firstuse:
     step: Step
     welcome-title: Welcome %productName%
-    welcome-content: "Well Done! You have just installed your home automation solution, the first use wizard is activated!  This one will guide you in the process of configuring your home automation solution ..." 
+    welcome-content: "Well Done! You have just installed your home automation solution, the first use wizard is activated!  This one will guide you in the process of configuring your home automation solution ..."
     password-title: Secure your %productName%
     password-content: "First: thank you to define a new administrator password to improve security ..."
     password-placeholder: New Password...
@@ -247,7 +311,192 @@ firstuse:
     customize-content: "Select the theme that suits you the most: others being selectable or customizable in the Customization page ..."
     congrats-title: Congratulations! Configuring your% productName% is over!
     congrats-content: Click the Finish button to enjoy your Home Automation solution ...
-    
+
+backup:
+    automatic_sending: "Sending Automatically"
+    available_backups: "Available backups"
+    backup_settings: "Backup Settings"
+    backups: "Backups"
+    backups__restorations: "Backups / Restorations"
+    days: "days"
+    download_selection: "Download selection"
+    downloading: "Download"
+    loading: "Loading..."
+    local_backups: "Local backups"
+    location: "Directory"
+    manual_backup: "manual backup"
+    purpose1: "You can backup here your Nexdom setup."
+    purpose2: "Will save settings, dashboards, views, designs, plugins, widgets etc ... But the Core will however not be included in the backup."
+    purpose3: "It's also here that you can restore your backups (including those from Jeedom system)."
+    remove_selected: "Remove Selected"
+    restoration: "Restoration"
+    restore_backup_or_mirgration: "You can restore a backup NextDom or migrate backup Jeedom"
+    restore_selection: "Restore selection"
+    run: "Run"
+    saving_on: "Saving during"
+    send_backup: "Send backup"
+    suppression: "Remove"
+    the_service_is_disabled_you_can__activate: "The service is disabled, you can activate it "
+    total_size: "Total size"
+    transfer: "Transfer"
+    mb_maximum: "MB maximum"
+
+general:
+    last_known_date: "Last known date"
+    time_zone: "Time zone"
+    hours: "Hours"
+    time: "Time"
+    nextdom: "NextDom"
+    reset: "Reset"
+    synchronization: "Synchronization"
+    nextdom_name: "Name of your NextDom "
+    language: "Language"
+    language-used: "Language used"
+    system_hardware: "System /  Hardware"
+    installation_key: "Installation Key"
+    session_timeout: "Sessions timeout"
+    time_server: "Time Server (optional)"
+    ignore_system_time: "do not check system time"
+    tooltip:
+       installation_key: "Installation key used to communicate with the Market"
+       session_timeout: "Session timeout if you haven't tick the box 'register this computer' on the logon window"
+       language: "Language to use with Nexdom"
+       system_hardware: "Indicate the type of Hardware"
+       nextdom_name : "Name of the Nexdom system"
+       time_zone: "Time zone used by Nexdom"
+       time_server: "Time Server used for time synchronization"
+       ignore_system_time: "Indicates to Nexdom to ignore system time"
+    language-list:
+        fr_FR: "Franch"
+        en_US: "English"
+        de_DE: "German"
+        es_ES: "Spanish"
+        ru_RU: "Russian"
+        id_ID: "Indonesian"
+        it_IT: "Italian"
+        ja_JP: "Japanese"
+        pt_PT: "Portuguese"
+        tr: "Turkish"
+
+update-view:
+    none: "None"
+    any: "Any"
+    please_consult_release_note: "Before any update, please consult the NextDom core release note :"
+    core: "Core"
+    last_check: "Last check:"
+    unfold: "Unfold"
+    expert: "Expert"
+    update_the_core: "Update the core"
+    update_plugins: "Update plugins"
+    update: "Update"
+    selective_update: "Selective updates"
+    update_to_reapply: "Updates to reapply"
+    update_s_in_days: "Update(s) in days"
+    forced_mode: "Forced mode"
+    options: "Options"
+    plugins: "Plugins"
+    pre_update: "Pre-update (update the update script before)"
+    fold: "Fold"
+    restoration: "Restore"
+    save_before: "Save before"
+    scripts: "scripts"
+    select_updates: "Select Updates"
+    check_updates: "Check updates"
+    warning_special_option: "The following option should stay on 'None' and can only be changed only because of a request comming from the support team"
+
+update:
+    do_not_update: "Do not update"
+    branch: "Branch :"
+    type: "Type :"
+    version: "Version :"
+
+note:
+    create_a_note: "Create a Note"
+    list_notes: "List of notes"
+    note_saved_successfully: "Note saved successfully"
+    note_selected: "Note selected"
+    note_deleted_successfully: "Note deleted successfully"
+    notes: "Notes"
+    are_sure_you_want_to_delete_the_note: "Are sure you want to delete the note"
+
+osdb:
+    warning: "WARNING: you may loose access to your system "
+    administration: "Administration"
+    system_console: "System console"
+    file_editor: "File Editor"
+    editors: "Editors"
+    run: "Run"
+    password: "Password"
+    os__db: "OS/DB"
+    database: "Database"
+    user: "User"
+
+interact:
+    wait_before_responding: "Wait before responding"
+    none: "None -"
+    authorization: "Authorization"
+    allow_nextdom_to_eliminate_malformed_requests: "Allow NextDom to eliminate malformed requests"
+    choose_the_actions_associated_with_this_interaction: "Choose the actions associated with this interaction ..."
+    choose_filters_to_limit_the_number_of_generated_sentences: "Choose filters to limit the number of generated sentences ..."
+    commands: "Commands"
+    binary_conversion: "Binary conversion"
+    convert_binary_commands: "Convert binary commands"
+    request: "Request"
+    duplicate: "Duplicate"
+    unfold: "Unfold"
+    edition_intéraction: "Edition Intéraction"
+    filters: "Filters"
+    group: "Group"
+    id: "ID:"
+    interactions: "Interactions"
+    the_question_cannot_be_empty: "The question cannot be empty"
+    limit_to_categories: "Limit to categories"
+    limit_to_commands_belonging_to_objects: "Limit to commands belonging to objects"
+    limit_to_commands_of_sub_type: "Limit to commands of sub-type"
+    limit_to_commands_with_unit: "Limit to commands with unit"
+    limit_to_commands_of_type: "Limit to commands of type"
+    limit_to_plugins: "Limit to plugins"
+    limit_to_visible: "Limit to visible"
+    limit_to_the_device: "Limit to the device"
+    list_of_users_identifiers_separated_by_a_pipe: "List of users (identifiers) separated by a |"
+    allow_extra_time: "for exemple, it allows extra time to wait for a light state change"
+    sentences: "Sentences"
+    regex_exclusion: "Regex exclusion"
+    regexp_mandatory_correspondence: "Regexp mandatory correspondence"
+    replaces_words_with_their_synony: "Replaces words with their synonyms when generating orders"
+    fold: "Fold"
+    regenerate: "Regenerate"
+    answer: "Answer"
+    result: "Result"
+    uncategorized: "Uncategorized"
+    without_unit: "Without unit"
+    synonym: "Synonym"
+    authorized_users: "Authorized users"
+    you_have_n_iterations: "You have %s iteration(s)..."
+    test: "Test"
+    no_interactions_click_add_to_start: "You do not have any interactions. Click Add to start."
+    interactions: "interaction(s)"
+    seconds: "seconds"
+
+summary:
+    display_if_zero: "Display if zero"
+    add_a_summary: "Add a summary"
+    calculation: "Calculation"
+    key: "Key"
+    icon: "Icon"
+    link_to_a_virtual: "Link to a virtual"
+    counting_method: "Counting method"
+    automation_summaries: "automation summaries"
+    unit: "Unit"
+    create_virtual: "Create virtuel"
+    virtual_cmd_succed: "Creation of virtual cmd has succeded"
+    calcul:
+        sum: "Sum"
+        avg: "Average"
+        text: "Text"
+
+
+
 scenario:
     no-group: None
     no-choice: None
@@ -329,7 +578,7 @@ scenario:
     description-at: "At a specific time: this element will launch an action. For example: At 9:30, open the shutters."
     description-code: "This element allows you to add in your scenario programming using a code: PHP / Shell, etc."
     description-comment: Lets comment your scenario.
-    
+
 object:
   back: Back
   add: Add
@@ -353,7 +602,7 @@ profile:
 entity:
   note:
     name-cannot-be-empty: The name of the note can not be empty
-    
+
 samba:
   error:
     connect: Unable to plug the samba server

@@ -69,13 +69,13 @@ $('#bt_removeBackgroundImage').off('click').on('click', function () {
 function loadObjectConfiguration(_id){
     try {
         $('#bt_uploadImage').fileupload('destroy');
-        $('#bt_uploadImage').parent().html('<i class="fas fa-cloud-upload-alt spacing-right"></i>{{Envoyer}}<input  id="bt_uploadImage" type="file" name="file" style="display: inline-block;">');
+        $('#bt_uploadImage').parent().html('<i class="fas fa-cloud-upload-alt"></i>{{Envoyer}}<input id="bt_uploadImage" type="file" name="file" style="display: inline-block;">');
     }catch(error) {
-
     }
     $('#bt_uploadImage').fileupload({
         replaceFileInput: false,
-        url: 'core/ajax/object.ajax.php?action=uploadImage&id=' +_id +'&nextdom_token='+NEXTDOM_AJAX_TOKEN,
+        url: 'core/ajax/object.ajax.php?action=uploadImage&id=' +_id,
+        formData: {'nextdom_token': NEXTDOM_AJAX_TOKEN},
         dataType: 'json',
         done: function (e, data) {
             if (data.result.state != 'ok') {
@@ -114,7 +114,6 @@ function loadObjectConfiguration(_id){
                 $('#colorpickTagText').colorpicker('setValue', data.display.tagTextColor);
                 $('#colorpickSummaryText').colorpicker('setValue', data.display['desktop::summaryTextColor']);
             }
-
             $('.objectAttr[data-l1key=father_id] option[value=' + data.id + ']').hide();
             $('.div_summary').empty();
             $('.tabnumber').empty();
@@ -131,6 +130,21 @@ function loadObjectConfiguration(_id){
                     }
 
                 }
+            }
+            var currentUrl = document.location.toString();
+            // Mise à jour d'URL
+            if (currentUrl.indexOf('id=') === -1) {
+                var hashIndex = currentUrl.indexOf('#');
+                var updatedUrl = '';
+                if (hashIndex === -1) {
+                    history.pushState({}, null, currentUrl + '&id=' + _id);
+                }
+                else {
+                    updatedUrl = currentUrl.substr(0, hashIndex);
+                    updatedUrl += '&id=' + scenarioId;
+                    updatedUrl += currentUrl.substr(hashIndex);
+                }
+                history.pushState({}, null, updatedUrl);
             }
         }
     });
@@ -266,11 +280,11 @@ function addSummaryInfo(_el, _summary) {
     div += '  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 has-success">';
     div += '    <div class="input-group">';
     div += '      <span class="input-group-btn">';
-    div += '        <a class="btn btn-default bt_removeSummary btn-sm"><i class="fas fa-minus-circle"></i></a>';
+    div += '        <a class="btn btn-danger bt_removeSummary btn-sm"><i class="fas fa-minus-circle"></i></a>';
     div += '      </span>';
     div += '      <input class="summaryAttr form-control input-sm" data-l1key="cmd" />';
     div += '      <span class="input-group-btn">';
-    div += '        <a class="btn btn-sm listCmdInfo btn-success"><i class="fas fa-list-alt"></i></a>';
+    div += '        <a class="btn btn-sm listCmdInfo btn-default"><i class="fas fa-list-alt"></i></a>';
     div += '      </span>';
     div += '    </div>';
     div += '  </div>';
@@ -287,3 +301,18 @@ $('#bt_showObjectSummary').off('click').on('click', function () {
     $('#md_modal').dialog({title: "{{Résumé Objets}}"});
     $("#md_modal").load('index.php?v=d&modal=object.summary').dialog('open');
 });
+
+/**
+ * Load object with the URL data
+ */
+function loadFromUrl() {
+    var objectIdFromUrl = getUrlVars('id');
+    if (is_numeric(objectIdFromUrl)) {
+        if ($('.objectDisplayCard[data-object_id=' + objectIdFromUrl + ']').length !== 0) {
+            var url = document.location.toString();
+            loadObjectConfiguration(objectIdFromUrl);
+        }
+    }
+}
+
+loadFromUrl();

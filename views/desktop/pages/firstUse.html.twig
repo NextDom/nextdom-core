@@ -42,7 +42,7 @@
             <div class="box">
                 <div class="box-body">
                     <div id="logo" class="stepwizard">
-                        <img src="public/img/NextDom/NextDom_Wide_AlphaBlackBlue.png">
+                        <img src="public/img/NextDom/NextDom_Setup.png">
                     </div>
                 </div>
                 <div class="stepwizard stepwizard-progress">
@@ -67,21 +67,25 @@
                             <a href="#step-5" type="button" class="btn btn-default stepwizard-btn-circle" disabled="disabled"></a>
                             <p>{{ 'firstuse.step'|trans ~ ' 5' }}</p>
                         </div>
+                        <div class="stepwizard-step">
+                            <a href="#step-6" type="button" class="btn btn-default stepwizard-btn-circle" disabled="disabled"></a>
+                            <p>{{ 'firstuse.step'|trans ~ ' 6' }}</p>
+                        </div>
                     </div>
                 </div>
                 <div class="stepwizard-box">
                     <div class="box-body">
 
-                        <!-- Step 1 section -->
+                        <!-- Step 1 section : Welcome -->
                         <div class="row setup-content" id="step-1">
                             <div class="stepwizard">
                                 <h2 class="login-box-msg">{{ 'firstuse.welcome-title'|trans({'%productName%' : PRODUCT_NAME}) }}</h2>
                                 <h5>{{ 'firstuse.welcome-content'|trans|nl2br }}</h5>
                             </div>
-                            <button id="toStep2" class="btn btn-primary nextBtn primary-bg pull-right" type="button">{{ 'common.next'|trans }}<i class="fa fa-caret-right spacing-left"></i></button>
+                            <button id="toStep2" class="btn btn-primary nextBtn primary-bg pull-right" type="button">{{ 'common.next'|trans }}<i class="fas fa-caret-right spacing-left no-spacing"></i></button>
                         </div>
 
-                        <!-- Step 2 section -->
+                        <!-- Step 2 section : Change password -->
                         <div class="row setup-content" id="step-2">
                             <div class="stepwizard">
                                 <h2 class="login-box-msg">{{ 'firstuse.password-title'|trans({'%productName%' : PRODUCT_NAME}) }}</h2>
@@ -95,16 +99,16 @@
                                     </div>
                                 </div>
                             </div>
-                            <button id="toStep3" class="btn btn-primary nextBtn pull-right primary-bg" type="button">{{ 'common.next'|trans }}<i class="fa fa-caret-right spacing-left"></i></button>
-                            <button id="backStep1" class="btn btn-primary returnBtn pull-left primary-bg" type="button"><i class="fa fa-caret-left spacing-right"></i>{{ 'common.previous'|trans }}</button>
+                            <button id="toStep3" class="btn btn-primary nextBtn pull-right primary-bg" type="button">{{ 'common.next'|trans }}<i class="fas fa-caret-right spacing-left no-spacing"></i></button>
+                            <button id="backStep1" class="btn btn-primary returnBtn pull-left primary-bg" type="button"><i class="fas fa-caret-left"></i>{{ 'common.previous'|trans }}</button>
                         </div>
 
-                        <!-- Step 3 section -->
+                        <!-- Step 3 section : Market connection -->
                         <div class="row setup-content" id="step-3">
                             <div class="stepwizard">
                                 <h2 class="login-box-msg">{{ 'firstuse.market-title'|trans({'%productName%' : PRODUCT_NAME}) }}</h2>
-                                <h5>{{ 'firstuse.market-content'|trans }}</h5>
                                 <div class="row">
+                                    <h5>{{ 'firstuse.market-content'|trans }}</h5>
                                     <div id="market" class="col-sm-12 col-md-6">
                                         <h5>{{ 'firstuse.market-noaccount'|trans }}</h5>
                                         <button class="dark btn" id="bt_compte_market"><i class="fa fa-sign-in spacing-right"></i>{{ 'firstuse.market-wantaccount'|trans }}</button>
@@ -121,60 +125,84 @@
                                 </div>
                             </div>
                             <button id="skipStep4" class="btn btn-primary nextBtn primary-bg" type="button"><i class="fa fa-ban spacing-right"></i>{{ 'common.ignore'|trans }}</button>
-                            <button id="toStep4" class="btn btn-primary nextBtn primary-bg pull-right" type="button">{{ 'common.next'|trans }}<i class="fa fa-caret-right spacing-left"></i></button>
-                            <button id="backStep2" class="btn btn-primary returnBtn primary-bg pull-left" type="button"><i class="fa fa-caret-left spacing-right"></i>{{ 'common.previous'|trans }}</button>
+                            <button id="toStep4" class="btn btn-primary nextBtn primary-bg pull-right" type="button">{{ 'common.next'|trans }}<i class="fas fa-caret-right spacing-left no-spacing"></i></button>
+                            <button id="backStep2" class="btn btn-primary returnBtn primary-bg pull-left" type="button"><i class="fas fa-caret-left"></i>{{ 'common.previous'|trans }}</button>
                         </div>
 
-                        <!-- Step 4 section -->
+                        <!-- Step 4 section : Theme choose -->
                         <div class="row setup-content" id="step-4">
                             <div class="stepwizard">
                                 <h2 class="login-box-msg">{{ 'firstuse.customize-title'|trans({'%productName%' : PRODUCT_NAME}) }}</h2>
-                                <h5>{{ 'firstuse.customize-content'|trans }}</h5>
-                                <div class="row  text-center">
-                                    <div id="themes" class="col-sm-12 col-md-6">
-                                        <div style="padding: 10px;">
-                                            <a style="display: block;border: 1px solid #aaa;" class="clearfix form-group">
+                                <div class="row">
+                                    <h5>{{ 'firstuse.customize-content'|trans }}</h5>
+                                    <div class="col-sm-12 col-md-6">
+                                        <div>
+                                            <label class="clearfix cursor themeThumbnail cursor" for="theme-light">
                                                 <div>
-                                                    <span style="display:block; width: 20%; float: left; height: 15px; background: #33b8cc"></span>
-                                                    <span style="display:block; width: 80%; float: left; height: 15px; background: #33b8cc"></span>
+                                                    <span class="themeThumbnailHeader bg-nextdom"><i class="fas fa-bars"></i></span>
                                                 </div>
                                                 <div>
-                                                    <span style="display:block; width: 20%; float: left; height: 120px; background: #f9fafc"></span>
-                                                    <span style="display:block; width: 80%; float: left; height: 120px; background: #ecf0f5"></span>
+                                                    <span class="themeThumbnailLeft" style="background: #f9fafc"></span>
+                                                    <span class="themeThumbnailBody" style="background: #ecf0f5"></span>
                                                 </div>
-                                            </a>
-                                            <p class="text-center no-margin">White</p><input class="theme" type="radio" name="theme" value="white" checked="checked"/>
+                                            </label>
+                                            <input id="theme-light" class="theme spacing-right" type="radio" name="theme" value="light" checked="checked"/>
+                                            <label for="theme-light">{{ 'Light' }}</label>
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-6">
-                                        <div style="padding: 10px;">
-                                            <a style="display: block;border: 1px solid #aaa;" class="clearfix form-group">
+                                        <div>
+                                            <label class="clearfix cursor themeThumbnail cursor" for="theme-dark">
                                                 <div>
-                                                    <span style="display:block; width: 20%; float: left; height: 15px; background: #33b8cc"></span>
-                                                    <span style="display:block; width: 80%; float: left; height: 15px; background: #33b8cc"></span>
+                                                    <span class="themeThumbnailHeader bg-nextdom"><i class="fas fa-bars"></i></span>
                                                 </div>
                                                 <div>
-                                                    <span style="display:block; width: 20%; float: left; height: 120px; background: #222d32"></span>
-                                                    <span style="display:block;width: 80%;float: left;height: 120px;background: #444;"></span>
+                                                    <span class="themeThumbnailLeft" style="background: #222d32"></span>
+                                                    <span class="themeThumbnailBody" style="background: #2c3b41;"></span>
                                                 </div>
-                                            </a>
-                                            <p class="text-center no-margin">Dark</p><input class="theme" type="radio" name="theme" value="dark"/>
+                                            </label>
+                                            <input id="theme-dark" class="theme spacing-right" type="radio" name="theme" value="dark"/>
+                                            <label for="theme-dark">{{ 'Dark' }}</label>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <button id="toStep5" class="btn btn-primary nextBtn primary-bg pull-right" type="button">{{ 'common.next'|trans }}<i class="fa fa-caret-right spacing-left"></i></button>
-                            <button id="backStep3" class="btn btn-primary returnBtn primary-bg pull-left" type="button"><i class="fa fa-caret-left spacing-right"></i>{{ 'common.previous'|trans }}</button>
+                            <button id="toStep5" class="btn btn-primary nextBtn primary-bg pull-right" type="button">{{ 'common.next'|trans }}<i class="fas fa-caret-right spacing-left no-spacing"></i></button>
+                            <button id="backStep3" class="btn btn-primary returnBtn primary-bg pull-left" type="button"><i class="fas fa-caret-left"></i>{{ 'common.previous'|trans }}</button>
                         </div>
 
-                        <!-- Step 5 section -->
+                        <!-- Step 5 section : Widget Theme choose -->
                         <div class="row setup-content" id="step-5">
+                            <div class="stepwizard">
+                                <h2 class="login-box-msg">{{ 'firstuse.customize-title2'|trans({'%productName%' : PRODUCT_NAME}) }}</h2>
+                                <div class="row">
+                                    <h5>{{ 'firstuse.customize-widget'|trans }}</h5>
+                                    {% for theme in profilsWidgetThemes %}
+                                        <div class="col-sm-12 col-md-6">
+                                            <div class="clearfix">
+                                                <label class="cursor" for={{ theme['name']|slice(0, -4) }}>
+                                                    <img class="themeWidgetThumbnail" src="{{ theme['dir'] }}">
+                                                </label>
+                                            </div>
+                                            <input id={{ theme['name']|slice(0, -4) }} class="spacing-right" type="radio" name="themeWidget" value={{ theme['name']|slice(0, -4) }} {% if theme['name']|slice(0, -4) == "flat" %}checked="checked"{% endif %}/>
+                                            <label for={{ theme['name']|slice(0, -4) }}>{{ theme['name']|slice(0, -4) }}{{theme.first}}</label>
+                                        </div>
+                                    {% endfor %}
+                                    <input class="userAttr form-control" data-l1key="options" data-l2key="widget::theme" style="display:none" />
+                                </div>
+                            </div>
+                            <button id="toStep6" class="btn btn-primary nextBtn primary-bg pull-right" type="button">{{ 'common.next'|trans }}<i class="fas fa-caret-right spacing-left no-spacing"></i></button>
+                            <button id="backStep4" class="btn btn-primary returnBtn primary-bg pull-left" type="button"><i class="fas fa-caret-left"></i>{{ 'common.previous'|trans }}</button>
+                        </div>
+
+                        <!-- Step 6 section : Finish -->
+                        <div class="row setup-content" id="step-6">
                             <div class="stepwizard">
                                 <h2 class="login-box-msg">{{ 'firstuse.congrats-title'|trans({'%productName%' : PRODUCT_NAME}) }}</h2>
                                 <h5>{{ 'firstuse.congrats-content'|trans }}</h5>
                             </div>
-                            <button id="finishConf" class="btn btn-primary nextBtn primary-bg pull-right ui-icon-closethick" type="button">{{ 'common.finish'|trans }}<i class="fa fa-check-circle spacing-left"></i></button>
-                            <button id="backStep4" class="btn btn-primary returnBtn primary-bg pull-left" type="button"><i class="fa fa-caret-left spacing-right"></i>{{ 'common.previous'|trans }}</button>
+                            <button id="finishConf" class="btn btn-primary nextBtn primary-bg pull-right ui-icon-closethick" type="button">{{ 'common.finish'|trans }}<i class="fa fa-check-circle spacing-left no-spacing"></i></button>
+                            <button id="backStep5" class="btn btn-primary returnBtn primary-bg pull-left" type="button"><i class="fas fa-caret-left"></i>{{ 'common.previous'|trans }}</button>
                         </div>
                     </div>
                 </div>

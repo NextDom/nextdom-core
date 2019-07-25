@@ -47,9 +47,10 @@ class EqLogicManager
     const DB_CLASS_NAME = '`eqLogic`';
 
     /**
-     * TODO: ???
+     * Get an EqLogic from his EqRealId
+     * No EqRealId usage founds
      *
-     * @param $eqRealId
+     * @param $eqRealId ???
      *
      * @return array|mixed
      * @throws \Exception
@@ -62,36 +63,37 @@ class EqLogicManager
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE eqReal_id = :eqReal_id';
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
     }
 
     /**
-     * TODO: ???
-     * Repasse en private
-     * @param EqLogic $inputs
+     * Cast a base eqLogic(s) to plugin eqLogic type
      *
-     * @return array|mixed
+     * @param EqLogic|EqLogic[] $eqLogicInput EqLogic to cast or array of EqLogics
+     *
+     * @return EqLogic|EqLogic[] Converted EqLogic(s)
      */
-    public static function cast($inputs)
+    public static function cast($eqLogicInput)
     {
-        if (is_object($inputs)) {
-            $targetClassName = $inputs->getEqType_name();
+        // If array of EqLogics, recursive call on each objects
+        if (is_array($eqLogicInput)) {
+            $result = [];
+            foreach ($eqLogicInput as $eqLogic) {
+                $result[] = self::cast($eqLogic);
+            }
+            return $result;
+        }
+        if (is_object($eqLogicInput)) {
+            // Get class name to cast and check if class already exists
+            $targetClassName = $eqLogicInput->getEqType_name();
             if (class_exists($targetClassName)) {
+                /** @var EqLogic $target */
                 $target = new $targetClassName();
-                $target->castFromEqLogic($inputs);
+                $target->castFromEqLogic($eqLogicInput);
                 return $target;
-//            return Utils::cast($inputs, $inputs->getEqType_name());
             }
         }
-        if (is_array($inputs)) {
-            $return = array();
-            foreach ($inputs as $input) {
-                $return[] = self::cast($input);
-            }
-
-            return $return;
-        }
-        return $inputs;
+        return $eqLogicInput;
     }
 
     /**
@@ -100,9 +102,9 @@ class EqLogicManager
      * @param mixed $objectId Object id
      * @param bool $onlyEnable Filter only enabled
      * @param bool $onlyVisible Filter only visible
-     * @param null $eqTypeName
-     * @param null $logicalId
-     * @param bool $orderByName
+     * @param null $eqTypeName Filter by eqTypeName (Plugin type)
+     * @param null $logicalId Filter by logical id (value defined by the plugin)
+     * @param bool $orderByName Order by name
      *
      * @return EqLogic[] All linked eqLogic
      *
@@ -138,21 +140,22 @@ class EqLogicManager
         } else {
             $sql .= 'ORDER BY `order`, category';
         }
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
     }
 
     /**
-     * TODO: ???
+     * Get all eqLogics filtered by logicalId (defined by plugin
      *
-     * @param $logicalId
-     * @param $eqTypeName
-     * @param bool $multiple
-     * @return array|mixed
+     * @param int|string $logicalId Plugin logical ID
+     * @param string $eqTypeName Type of the eqLogic (plugin)
+     * @param bool $multiple True for multiple results
+     *
+     * @return EqLogic|EqLogic[] EqLogic or list of EqLogics
+     *
      * @throws \Exception
      */
     public static function byLogicalId($logicalId, $eqTypeName, $multiple = false)
     {
-
         $values = [
             'logicalId' => $logicalId,
             'eqType_name' => $eqTypeName,
@@ -162,9 +165,9 @@ class EqLogicManager
                 WHERE logicalId = :logicalId
                 AND eqType_name = :eqType_name';
         if ($multiple) {
-            $data = self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+            $data = self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
         } else {
-            $data = self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME));
+            $data = self::cast(DBHelper::getOneObject($sql, $values, self::CLASS_NAME));
         }
         return $data;
     }
@@ -190,7 +193,7 @@ class EqLogicManager
             $sql .= 'AND isEnable=1 ';
         }
         $sql .= 'ORDER BY ob.name,el.name';
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
     }
 
     /**
@@ -212,7 +215,7 @@ class EqLogicManager
                 WHERE category LIKE :category
                 OR category LIKE :category2
                 ORDER BY name';
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
     }
 
     /**
@@ -234,7 +237,7 @@ class EqLogicManager
                 WHERE eqType_name = :eqType_name
                 AND configuration LIKE :configuration
                 ORDER BY name';
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
     }
 
     /**
@@ -271,7 +274,7 @@ class EqLogicManager
             $sql .= ' AND eqType_name=:eqType_name ';
         }
         $sql .= ' ORDER BY name';
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
     }
 
     /**
@@ -296,7 +299,7 @@ class EqLogicManager
                     WHERE eqType_name = :eqType_name
                     AND c.type = :typeCmd
                     ORDER BY name';
-            return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL);
+            return DBHelper::getAll($sql, $values);
         } else {
             $values = array(
                 'eqType_name' => $eqTypeName,
@@ -310,7 +313,7 @@ class EqLogicManager
                     AND c.type = :typeCmd
                     AND c.subType = :subTypeCmd
                     ORDER BY name';
-            return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL);
+            return DBHelper::getAll($sql, $values);
         }
     }
 
@@ -347,7 +350,7 @@ class EqLogicManager
             $sql .= 'AND c.type = :type ';
         }
         $sql .= 'ORDER BY name';
-        return DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL);
+        return DBHelper::getAll($sql, $values);
     }
 
     /**
@@ -360,7 +363,7 @@ class EqLogicManager
     {
         $sql = 'SELECT distinct(eqType_name) as type
                 FROM ' . self::DB_CLASS_NAME . ' ';
-        return DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL);
+        return DBHelper::getAll($sql);
     }
 
     /**
@@ -429,7 +432,7 @@ class EqLogicManager
         if ($onlyEnable) {
             $sql .= ' AND isEnable = 1';
         }
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
     }
 
     /**
@@ -497,7 +500,7 @@ class EqLogicManager
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE id = :id';
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        return self::cast(DBHelper::getOneObject($sql, $values, self::CLASS_NAME));
     }
 
     /**
@@ -527,7 +530,7 @@ class EqLogicManager
             $sql .= 'WHERE isEnable = 1 ';
         }
         $sql .= 'ORDER BY ob.name, el.name';
-        return self::cast(DBHelper::Prepare($sql, array(), DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        return self::cast(DBHelper::getAllObjects($sql, [], self::CLASS_NAME));
     }
 
     /**
@@ -591,7 +594,7 @@ class EqLogicManager
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE tags IS NOT NULL
         	    AND tags!=""';
-        $results = DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL);
+        $results = DBHelper::getAll($sql, $values);
         $return = array();
         foreach ($results as $result) {
             $tags = explode(',', $result['tags']);
@@ -607,19 +610,9 @@ class EqLogicManager
      * @return EqLogic|null
      * @throws \Exception
      */
-    /**
-     * @param $_string
-     * @return EqLogic|null
-     * @throws \Exception
-     */
-    /**
-     * @param $_string
-     * @return EqLogic|null
-     * @throws \Exception
-     */
     public static function byString($_string)
     {
-        $eqLogic = self::byId(str_replace('#', '', self::fromHumanReadable($_string)));
+        $eqLogic = self::byId(str_replace(array('#','eqLogic'), '', self::fromHumanReadable($_string)));
         if (!is_object($eqLogic)) {
             throw new \Exception(__('L\'équipement n\'a pas pu être trouvé : ') . $_string . __(' => ') . self::fromHumanReadable($_string));
         }
@@ -648,6 +641,7 @@ class EqLogicManager
             }
             $reflection = $reflections[$uuid];
             $properties = $reflection->getProperties();
+            /** @var \ReflectionProperty $property */
             foreach ($properties as $property) {
                 $property->setAccessible(true);
                 $value = $property->getValue($input);
@@ -710,6 +704,6 @@ class EqLogicManager
                     WHERE el.name=:eqLogic_name
                     AND ob.name=:object_name';
         }
-        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME));
+        return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
     }
 }
