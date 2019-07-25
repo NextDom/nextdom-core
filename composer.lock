@@ -1,11 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "hash": "6d413ac7dc2411f94010d77ca4a87242",
-    "content-hash": "1c4cfdb879f34c1ec8f8c25ebc59ff83",
+    "content-hash": "e9fb0eb554ab211206d8786132093cd6",
     "packages": [
         {
             "name": "christian-riesen/base32",
@@ -47,9 +46,9 @@
             "authors": [
                 {
                     "name": "Christian Riesen",
+                    "role": "Developer",
                     "email": "chris.riesen@gmail.com",
-                    "homepage": "http://christianriesen.com",
-                    "role": "Developer"
+                    "homepage": "http://christianriesen.com"
                 }
             ],
             "description": "Base32 encoder/decoder according to RFC 4648",
@@ -1632,7 +1631,7 @@
                 "datetime",
                 "time"
             ],
-            "time": "2018-12-28 10:07:33"
+            "time": "2018-12-28T10:07:33+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -1731,8 +1730,8 @@
             "authors": [
                 {
                     "name": "Antonio Carlos Ribeiro",
-                    "email": "acr@antoniocarlosribeiro.com",
-                    "role": "Creator & Designer"
+                    "role": "Creator & Designer",
+                    "email": "acr@antoniocarlosribeiro.com"
                 }
             ],
             "description": "A One Time Password Authentication package, compatible with Google Authenticator.",
@@ -1931,7 +1930,7 @@
                 "jwt",
                 "tokens"
             ],
-            "time": "2018-12-10 17:05:34"
+            "time": "2018-12-10T17:05:34+00:00"
         },
         {
             "name": "sabre/dav",
@@ -2117,9 +2116,9 @@
             "authors": [
                 {
                     "name": "Evert Pot",
+                    "role": "Developer",
                     "email": "me@evertpot.com",
-                    "homepage": "http://evertpot.com/",
-                    "role": "Developer"
+                    "homepage": "http://evertpot.com/"
                 }
             ],
             "description": "The sabre/http library provides utilities for dealing with http requests and responses. ",
@@ -2843,7 +2842,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "backendtea@gmail.com"
+                    "email": "BackEndTea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",
@@ -3160,34 +3159,40 @@
         },
         {
             "name": "symfony/translation",
-            "version": "v3.4.26",
+            "version": "v4.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation.git",
-                "reference": "aae26f143da71adc8707eb489f1dc86aef7d376b"
+                "reference": "934ab1d18545149e012aa898cf02e9f23790f7a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation/zipball/aae26f143da71adc8707eb489f1dc86aef7d376b",
-                "reference": "aae26f143da71adc8707eb489f1dc86aef7d376b",
+                "url": "https://api.github.com/repos/symfony/translation/zipball/934ab1d18545149e012aa898cf02e9f23790f7a0",
+                "reference": "934ab1d18545149e012aa898cf02e9f23790f7a0",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.5.9|>=7.0.8",
-                "symfony/polyfill-mbstring": "~1.0"
+                "php": "^7.1.3",
+                "symfony/polyfill-mbstring": "~1.0",
+                "symfony/translation-contracts": "^1.1.2"
             },
             "conflict": {
-                "symfony/config": "<2.8",
+                "symfony/config": "<3.4",
                 "symfony/dependency-injection": "<3.4",
                 "symfony/yaml": "<3.4"
             },
+            "provide": {
+                "symfony/translation-implementation": "1.0"
+            },
             "require-dev": {
                 "psr/log": "~1.0",
-                "symfony/config": "~2.8|~3.0|~4.0",
+                "symfony/config": "~3.4|~4.0",
+                "symfony/console": "~3.4|~4.0",
                 "symfony/dependency-injection": "~3.4|~4.0",
                 "symfony/finder": "~2.8|~3.0|~4.0",
                 "symfony/http-kernel": "~3.4|~4.0",
-                "symfony/intl": "^2.8.18|^3.2.5|~4.0",
+                "symfony/intl": "~3.4|~4.0",
+                "symfony/service-contracts": "^1.1.2",
                 "symfony/var-dumper": "~3.4|~4.0",
                 "symfony/yaml": "~3.4|~4.0"
             },
@@ -3199,7 +3204,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.4-dev"
+                    "dev-master": "4.3-dev"
                 }
             },
             "autoload": {
@@ -3226,7 +3231,64 @@
             ],
             "description": "Symfony Translation Component",
             "homepage": "https://symfony.com",
-            "time": "2019-04-10T16:00:48+00:00"
+            "time": "2019-06-13T11:03:18+00:00"
+        },
+        {
+            "name": "symfony/translation-contracts",
+            "version": "v1.1.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/translation-contracts.git",
+                "reference": "cb4b18ad7b92a26e83b65dde940fab78339e6f3c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/translation-contracts/zipball/cb4b18ad7b92a26e83b65dde940fab78339e6f3c",
+                "reference": "cb4b18ad7b92a26e83b65dde940fab78339e6f3c",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1.3"
+            },
+            "suggest": {
+                "symfony/translation-implementation": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Contracts\\Translation\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Generic abstractions related to translation",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "abstractions",
+                "contracts",
+                "decoupling",
+                "interfaces",
+                "interoperability",
+                "standards"
+            ],
+            "time": "2019-06-13T11:15:36+00:00"
         },
         {
             "name": "symfony/twig-bridge",
@@ -3605,7 +3667,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2019-04-16 17:14:24"
+            "time": "2019-04-28T06:57:38+00:00"
         }
     ],
     "packages-dev": [
@@ -3757,7 +3819,7 @@
                 }
             ],
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
-            "time": "2017-11-30 07:14:17"
+            "time": "2019-04-30T17:48:53+00:00"
         },
         {
             "name": "phpdocumentor/type-resolver",
@@ -3919,8 +3981,8 @@
             "authors": [
                 {
                     "name": "Sebastian Bergmann",
-                    "email": "sb@sebastian-bergmann.de",
-                    "role": "lead"
+                    "role": "lead",
+                    "email": "sb@sebastian-bergmann.de"
                 }
             ],
             "description": "Library that provides collection, processing, and rendering functionality for PHP code coverage information.",
@@ -4187,8 +4249,8 @@
             "authors": [
                 {
                     "name": "Sebastian Bergmann",
-                    "email": "sebastian@phpunit.de",
-                    "role": "lead"
+                    "role": "lead",
+                    "email": "sebastian@phpunit.de"
                 }
             ],
             "description": "The PHP Unit Testing framework.",
