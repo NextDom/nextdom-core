@@ -671,10 +671,16 @@ function fullScreen(_mode) {
         $('.wrapper').addClass('fullscreen');
         $('#wrap').css('margin-bottom', '0px');
         $('.div_backgroundPlan').height($('html').height());
+        if($('.wrapper').width() < 767) {
+            $('.content-wrapper').css("cssText", "margin-top: 50px !important;");
+        }
     }else{
         $('.wrapper').removeClass('fullscreen');
         $('#wrap').css('margin-bottom', '15px');
         $('.div_backgroundPlan').height($('body').height());
+        if($('.wrapper').width() < 767) {
+            $('.content-wrapper').css("cssText", "margin-top: 100px !important;");
+        }
     }
 }
 

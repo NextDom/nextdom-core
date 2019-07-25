@@ -85,7 +85,7 @@ class ConfigAjax extends BaseAjax
 
     public function updateTheme()
     {
-        $path = NEXTDOM_DATA . '/public/css/theme.css';
+        $path = NEXTDOM_ROOT . '/var/public/css/theme.css';
         if (true === file_exists($path)) {
             unlink($path);
         }
