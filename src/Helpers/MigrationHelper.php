@@ -261,13 +261,6 @@ class MigrationHelper
                 if(!is_link( $fileInfo->getFilename()) ) {
 
                     $fileToReplace = $fileInfo->getFilename();
-
-                    $message = 'Moving ' . $fileToReplace . ' to /data/custom/' . $fileToReplace;
-                    if ($logFile == 'migration') {
-                        LogHelper::addInfo($logFile, $message, '');
-                    } else {
-                        ConsoleHelper::process($message);
-                    }
                     self::migratePlanPath($logFile, $fileToReplace,'','data/custom/');
                 }
             }
@@ -289,13 +282,6 @@ class MigrationHelper
                 if(!is_link( $fileInfo->getFilename()) && Utils::startsWith($fileInfo->getFilename(),'plan')) {
 
                     $fileToReplace = $fileInfo->getFilename();
-
-                    $message = 'Moving ' . $fileToReplace . ' to /data/custom/plans/' . $fileToReplace;
-                    if ($logFile == 'migration') {
-                        LogHelper::addInfo($logFile, $message, '');
-                    } else {
-                        ConsoleHelper::process($message);
-                    }
                     self::migratePlanPath($logFile,  $fileToReplace, 'public/img/', 'data/custom/plans/');
                     self::migratePlanPath($logFile, $fileToReplace, 'core/img/', 'data/custom/plans/');
                 }
@@ -306,7 +292,7 @@ class MigrationHelper
         }
 
         try {
-            $dir = new \RecursiveDirectoryIterator(NEXTDOM_ROOT .'/data/custom/plans', \FilesystemIterator::SKIP_DOTS);
+            $dir = new \RecursiveDirectoryIterator(NEXTDOM_DATA .'/data/custom/plans', \FilesystemIterator::SKIP_DOTS);
 
             // Flatten the recursive iterator, folders come before their files
             $it  = new \RecursiveIteratorIterator($dir, \RecursiveIteratorIterator::SELF_FIRST);
@@ -318,13 +304,6 @@ class MigrationHelper
                 if(!is_link( $fileInfo->getFilename()) && Utils::startsWith($fileInfo->getFilename(),'plan_')) {
 
                     $fileToReplace = $fileInfo->getFilename();
-
-                    $message = 'Moving ' . $fileToReplace . ' to /data/custom/plans/' . $fileToReplace;
-                    if ($logFile == 'migration') {
-                        LogHelper::addInfo($logFile, $message, '');
-                    } else {
-                        ConsoleHelper::process($message);
-                    }
                     self::migratePlanPath($logFile,  $fileToReplace, 'public/img/', 'data/custom/plans/');
                     self::migratePlanPath($logFile, $fileToReplace, 'core/img/', 'data/custom/plans/');
                 }

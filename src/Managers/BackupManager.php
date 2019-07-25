@@ -692,7 +692,6 @@ class BackupManager
         $customPlanDirs = glob(sprintf("%s/core/img/*", $tmpDir), GLOB_ONLYDIR);
         $customPlanRoot = sprintf("%s/data/custom/plans", NEXTDOM_DATA);
 
-        FileSystemHelper::rrmdir($customPlanRoot . "/");
         FileSystemHelper::mkdirIfNotExists($customPlanRoot,0775,true);
         foreach ($customPlanDirs as $c_dir) {
             $name = basename($c_dir);
