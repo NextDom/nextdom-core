@@ -20,7 +20,7 @@
     "symfony/debug": "^3.4",
     "symfony/expression-language": "^2.8",
     "symfony/translation": "^3.4",
-    "symfony/twig-bridge": "^3.4",
+    "symfony/twig-bridge": "^4.1",
     "touki/ftp": "^1.2",
     "twig/extensions": "^1.5",
     "symfony/routing": "^3.4",
