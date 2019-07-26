@@ -43,6 +43,7 @@
             </div>
         </form>
     </div>
+    <div class="col-lg-10 col-md-9 col-sm-7" id="div_marketScenarioTemplate" style="border-left: solid 1px #EEE; padding-left: 25px;display : none;"></div>
 </div>
 
 <script>
@@ -68,6 +69,10 @@
 
     refreshScenarioTemplateList();
 
+    $('.bt_scenarioTemplateDisplayStore').on('click', function () {
+      $('#div_listScenarioTemplate').hide();
+      $('#div_marketScenarioTemplate').load('index.php?v=d&modal=update.list&type=scenario&repo='+$(this).attr('data-repo')).show();
+    });
 
     $('.bt_scenarioTemplateShare').on('click', function () {
         if ($('#ul_scenarioTemplateList li.active').attr('data-template') == undefined) {
