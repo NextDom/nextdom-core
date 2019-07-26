@@ -380,7 +380,7 @@ function displayWidgetSubtype($_name)
                         $default_image = 'public/img/NextDom_Script_Gray.png';
                         break;
                     default:
-                        $default_image = 'public/img/NextDom_NoPicture_Gray.gif';
+                        $default_image = 'public/img/NextDom_NoPicture_Gray.png';
                 }
                 $urlPath = ConfigManager::byKey('market::address') . '/' . $market->getImg('icon');
                 echo '<div><img class="lazy lazyload market-icon" src="' . $default_image . '" data-original="'. $urlPath . '"/></div>';

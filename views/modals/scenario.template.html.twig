@@ -12,11 +12,10 @@
                     <div class="form-group"><a class="btn btn-default bt_scenarioTemplateDisplayStore" style="width : 100%" data-repo="{{ repoCode }}"><i class="fas fa-shopping-cart"></i> {{ repoValues['name'] }}</a></div>
                 {% endif %}
             {% endfor %}
-            <div class="form-group">
+            <div class="input-group form-group">
                 <input class='form-control' id='in_newTemplateName' placeholder="{{ 'Nom du template' }}"/>
                 <a class="btn btn-default input-group-addon" id="bt_scenarioTemplateConvert"><i class="fas fa-plus-circle cursor"></i></a>
             </div>
-            <br/><br/>
             <legend>{{ 'Template' }}</legend>
             <ul id="ul_scenarioTemplateList" class="nav nav-list bs-sidenav"></ul>
         </div>
