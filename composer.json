@@ -16,7 +16,7 @@
     "paragonie/random_compat": "^2.0",
     "pragmarx/google2fa": "^1.0",
     "ralouphie/getallheaders": "^2.0",
-    "symfony/config": "^3.4",
+    "symfony/config": "^4.3",
     "symfony/debug": "^3.4",
     "symfony/expression-language": "^2.8",
     "symfony/translation": "^3.4",
