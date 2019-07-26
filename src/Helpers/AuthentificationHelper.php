@@ -53,10 +53,6 @@ class AuthentificationHelper
      */
     private static $connectedAdminState = false;
     /**
-     * @var bool Recovery mode status
-     */
-    private static $rescueMode = false;
-    /**
      * @var array Checked rights cache
      */
     private static $rightsCache = [];
@@ -123,9 +119,6 @@ class AuthentificationHelper
 
         self::$connectedState = AuthentificationHelper::isConnectedWithRights();
         self::$connectedAdminState = AuthentificationHelper::isConnectedWithRights('admin');
-        if (Utils::init('rescue', 0) == 1) {
-            self::$rescueMode = true;
-        }
     }
 
     /**
@@ -311,15 +304,6 @@ class AuthentificationHelper
     public static function isConnectedAsAdmin(): bool
     {
         return self::$connectedAdminState;
-    }
-
-    /**
-     * Get the status of the recovery mode
-     * @return bool Recovery mode status
-     */
-    public static function isRescueMode(): bool
-    {
-        return self::$rescueMode;
     }
 
     /**
