@@ -54,15 +54,6 @@ $('#bt_interactThumbnailDisplay').on('click', function () {
   loadPage('index.php?v=d&p=interact');
 });
 
-$('.interactDisplayCard').on('click', function () {
-  $('#div_tree').jstree('deselect_all');
-  $('#div_tree').jstree('select_node', 'interact' + $(this).attr('data-interact_id'));
-});
-
-$("#div_tree").jstree({
-  "plugins": ["search"]
-});
-
 $('#bt_interactCollapse').on('click',function(){
    $('#accordionInteract .panel-collapse').each(function () {
       if (!$(this).hasClass("in")) {

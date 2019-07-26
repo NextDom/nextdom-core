@@ -99,7 +99,6 @@ function gen_js {
            vendor/node_modules/codemirror/mode/xml/xml.js \
            vendor/node_modules/codemirror/mode/javascript/javascript.js \
            vendor/node_modules/codemirror/mode/css/css.js \
-           vendor/node_modules/jstree/dist/jstree.js \
            vendor/node_modules/blueimp-file-upload/js/jquery.iframe-transport.js \
            vendor/node_modules/blueimp-file-upload/js/jquery.fileupload.js \
            vendor/node_modules/jquery-cron/dist/jquery-cron.js \

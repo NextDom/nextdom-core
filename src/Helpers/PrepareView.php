@@ -198,7 +198,6 @@ class PrepareView
             $pageData['JS_POOL'][] = '/vendor/node_modules/codemirror/mode/xml/xml.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/codemirror/mode/javascript/javascript.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/codemirror/mode/css/css.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/jstree/dist/jstree.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/blueimp-file-upload/js/jquery.iframe-transport.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/blueimp-file-upload/js/jquery.fileupload.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-cron/dist/jquery-cron.js';
