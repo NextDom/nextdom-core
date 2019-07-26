@@ -47,9 +47,8 @@
     return template;
 }
 
-function handleAjaxError(_request, _status, _error, _div_alert) {
+function handleAjaxError(_request, _status, _error) {
     hideLoadingCustom();
-    var div_alert = init(_div_alert, $('#div_alert'));
     if (_request.status != '0') {
         if (init(_request.responseText, '') != '') {
             notify("Erreur", _request.responseText, 'error');

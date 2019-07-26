@@ -14,7 +14,6 @@
         opacity: 0.75;
     }
 </style>
-<div id="div_alertGraphLink"></div>
 <div id="div_graphLinkRenderer" style="height:100%;width: 100%;"></div>
 <script>
     var graph = Viva.Graph.graph();
@@ -22,7 +21,7 @@
         filter_type : filterTypeGraph,
         filter_id :  filterIdGraph ,
         error: function(error) {
-            $('#div_alertGraphLink').showAlert({message: error.message, level: 'danger'});
+            notify("Erreur", error.message, 'error');
         },
         success : function(data){
             for(var i in data.node){

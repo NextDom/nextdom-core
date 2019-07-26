@@ -148,7 +148,6 @@ Utils::sendVarToJS('market_display_info', $market_array);
         echo '<div class="alert alert-danger">{{Attention ce plugin ne semble pas être compatible avec votre système}}</div>';
     }
     ?>
-    <div style="display: none;width : 100%" id="div_alertMarketDisplay"></div>
 
     <?php if (count($market->getImg('screenshot')) > 0) {
         ?>
@@ -337,7 +336,7 @@ Utils::sendVarToJS('market_display_info', $market_array);
 
       $('body').setValues(market_display_info, '.marketAttr');
 
-      $('#div_alertMarketDisplay').closest('.ui-dialog').find('.ui-dialog-title').text('Market NextDom - ' + market_display_info_category);
+      $('.ui-dialog').find('.ui-dialog-title').text('Market NextDom - ' + market_display_info_category);
 
       $('.marketAttr[data-l1key=description]').html(linkify(market_display_info.description));
       $('.marketAttr[data-l1key=utilization]').html(linkify(market_display_info.utilization));
