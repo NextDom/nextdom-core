@@ -231,6 +231,15 @@ plugin:
         security: security
         automation-protocol: Automation Protocol
 
+menu_rescue:
+    system: System
+    database: Database
+    editor: Editor
+    personalization: Personalization
+    backup: Backup
+    task_engine: Task engine
+    logs: Logs
+
 welcome:
     title: Welcome to %productName%
     congrats: Congratulations
