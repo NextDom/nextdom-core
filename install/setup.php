@@ -247,7 +247,6 @@ if ($config) {
     $config = str_replace(array_keys($replace), $replace, file_get_contents(__DIR__ . '/../core/config/common.config.php'));
     file_put_contents(NEXTDOM_DATA . '/config/common.config.php', $config);
     shell_exec('php ' . __DIR__ . '/install.php mode=force > ' . NEXTDOM_LOG . '/nextdom_installation 2>&1 &');
-    echo '<div id="div_alertMessage" class="alert alert-warning" style="margin:15px;">';
     echo '<center style="font-size:1.2em;"><i class="fa fa-spinner fa-spin"></i> The installation nextdom is ongoing.</center>';
     echo '</div>';
     echo '<pre id="pre_installLog" style="margin:15px;"></pre>';

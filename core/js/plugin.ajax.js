@@ -131,7 +131,6 @@ $('.eqLogicThumbnailDisplay').on('click', '.eqLogicDisplayCard', function () {
 
 $('.eqLogicAction[data-action=returnToThumbnailDisplay]').on('click', function () {
     $('.eqLogic').hide();
-    $('#div_alert').hide();
     $('.eqLogicThumbnailDisplay').show();
     $('.li_eqLogic').removeClass('active');
     $('.eqLogicThumbnailContainer').packery();

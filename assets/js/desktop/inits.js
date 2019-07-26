@@ -94,13 +94,7 @@ function initTextArea(){
  * Init of row-overflow classe
  */
  function initRowOverflow() {
-     var hWindow = $(window).outerHeight() - $('header').outerHeight() - $('#div_alert').outerHeight()-5;
-     if($('#div_alert').outerHeight() > 0){
-         hWindow -= 10;
-     }
-     if($('.row-overflow').attr('data-offset') != undefined){
-         hWindow -= $('.row-overflow').attr('data-offset');
-     }
+     var hWindow = $(window).outerHeight() - $('header').outerHeight();
      $('.row-overflow > div').css('padding-top','0px').height(hWindow).css('overflow-y', 'auto').css('overflow-x', 'hidden').css('padding-top','5px');
  }
 
