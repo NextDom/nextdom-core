@@ -21,6 +21,7 @@ use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\AuthentificationHelper;
+use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
@@ -454,6 +455,35 @@ class CmdAjax extends BaseAjax
             }
             $eqLogic['eqLogic']->save(true);
         }
+        AjaxHelper::success();
+    }
+
+    /**
+     * Upload file from dashboard
+     *
+     * When file is uploaded, the method execute of the cmd is called with the filename in option.
+     * 
+     * @throws CoreException
+     */
+    public function fileUpload()
+    {
+        AuthentificationHelper::isConnectedOrFail();
+
+        $destDirectory = NEXTDOM_TMP . '/uploads';
+        FileSystemHelper::mkdirIfNotExists($destDirectory);
+
+        $filename = Utils::readUploadedFile($_FILES, "upload", $destDirectory, 8, []);
+        if (!$filename) {
+            AjaxHelper::error(__('File error'));
+        }
+
+        $cmdId = Utils::init('cmdId');
+        $cmd = CmdManager::byId($cmdId);
+        if (!is_object($cmd)) {
+            AjaxHelper::error(__('Command not found : ') . $cmdId);
+        }
+
+        $cmd->execute(['filename' => $destDirectory . '/' . $filename ]);
         AjaxHelper::success();
     }
 }
