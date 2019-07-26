@@ -150,12 +150,7 @@ class Router
             } elseif (!AuthentificationHelper::isConnected()) {
                 $prepareView->showSpecialPage('connection');
             } else {
-                if (AuthentificationHelper::isRescueMode()) {
-                    AuthentificationHelper::isConnectedAsAdminOrFail();
-                    $prepareView->showRescueMode();
-                } else {
                     $prepareView->showContent();
-                }
             }
         }
     }

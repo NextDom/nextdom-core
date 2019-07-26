@@ -100,8 +100,6 @@ def others_tests():
     run_test('tests/connection_page.py', [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])
     print_subtitle('Administrations pages')
     run_test('tests/administrations_page.py', [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])
-    print_subtitle('Rescue pages')
-    run_test('tests/rescue_page.py', [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])
     print_subtitle('Others pages')
     run_test('tests/others_pages.py', [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])
     remove_test_container(container_name)

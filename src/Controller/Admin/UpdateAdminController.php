@@ -62,23 +62,6 @@ class UpdateAdminController extends BaseController
         $pageData['adminHardwareName'] = NextDomHelper::getHardwareName();
         $pageData['adminHardwareKey'] = NextDomHelper::getHardwareKey();
         $pageData['adminLastKnowDate'] = CacheManager::byKey('hour')->getValue();
-        $pageData['adminIsRescueMode'] = AuthentificationHelper::isRescueMode();
-        $pageData['key'] = AuthentificationHelper::isRescueMode();
-
-        if (!$pageData['adminIsRescueMode']) {
-            $pageData['adminPluginsList'] = [];
-            $pluginsList = PluginManager::listPlugin(true);
-            foreach ($pluginsList as $plugin) {
-                $pluginApi = ConfigManager::byKey('api', $plugin->getId());
-
-                if ($pluginApi !== '') {
-                    $pluginData = [];
-                    $pluginData['api'] = $pluginApi;
-                    $pluginData['plugin'] = $plugin;
-                    $pageData['adminPluginsList'][] = $pluginData;
-                }
-            }
-        }
         $pageData['adminDbConfig'] = $CONFIG['db'];
         $pageData['adminUseLdap'] = function_exists('ldap_connect');
 

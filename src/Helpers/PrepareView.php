@@ -257,8 +257,6 @@ class PrepareView
                 $pageData['CSS_POOL'][] = '/public/icon/' . $dir . 'style.css';
             }
         }
-
-        if (!AuthentificationHelper::isRescueMode()) {
             if (AuthentificationHelper::isConnected()) {
                 if (UserManager::getStoredUser() !== null && UserManager::getStoredUser()->getOptions('desktop_highcharts_theme') != '') {
                     $highstockThemeFile = '/vendor/node_modules/highcharts/themes/' . UserManager::getStoredUser()->getOptions('desktop_highcharts_theme') . '.js';
@@ -273,9 +271,6 @@ class PrepareView
                     $pageData['JS_POOL'][] = '/var/custom/desktop/custom.js';
                 }
             }
-        } else {
-            $pageData['CSS_POOL'][] = '/public/css/rescue.css';
-        }
     }
 
     /**
@@ -692,53 +687,6 @@ class PrepareView
         } else {
             return $this->getContentFromRoute('pages_routes.yml', $page, $pageData);
         }
-    }
-
-    /**
-     * Show the rescue page
-     *
-     * @throws \Exception
-     */
-    public function showRescueMode()
-    {
-        global $language;
-
-        if (!in_array(Utils::init(GetParams::PAGE), ['custom', 'backup', 'cron', 'connection', 'log', 'database', 'editor', 'system'])) {
-            $_GET[GetParams::PAGE] = 'system';
-        }
-        $homeLink = 'index.php?v=d&p=dashboard';
-
-        //TODO: Tests à revoir
-        $page = Utils::init(GetParams::PAGE);
-        if ($page == '') {
-            Utils::redirect($homeLink);
-        } else {
-            $pageData['TITLE'] = ucfirst($page) . ' - ' . $this->currentConfig['product_name'];
-        }
-        $language = $this->currentConfig['language'];
-
-        // TODO: Remplacer par un include dans twig
-        $this->initHeaderData($pageData);
-        $render = Render::getInstance();
-        $pageData['CSS'] = $render->getCssHtmlTag('/public/css/nextdom.css');
-        $pageData['JS_VARS'] = [
-            'user_id' => UserManager::getStoredUser()->getId(),
-            'user_isAdmin' => AuthentificationHelper::isConnectedAsAdmin(),
-            'user_login' => UserManager::getStoredUser()->getLogin(),
-            'serverTZoffsetMin' => Utils::getTZoffsetMin()];
-        $pageData['JS_VARS_RAW'] = [
-            'userProfils' => Utils::getArrayToJQueryJson(UserManager::getStoredUser()->getOptions()),
-            'serverDatetime' => Utils::getMicrotime()
-        ];
-        $pageData['JS'] = '';
-        $pageData['MENU'] = $render->get('commons/menu_rescue.html.twig');
-
-        if (!NextDomHelper::isStarted()) {
-            $pageData['alertMsg'] = __('NextDom est en cours de démarrage, veuillez patienter. La page se rechargera automatiquement une fois le démarrage terminé.');
-        }
-        $pageData['CONTENT'] = $this->getContent($pageData, $page, null);
-
-        $render->show('layouts/base_rescue.html.twig', $pageData);
     }
 
     /**

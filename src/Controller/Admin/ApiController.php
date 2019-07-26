@@ -54,21 +54,6 @@ class ApiController extends BaseController
             $keys[] = $key . '::enable';
         }
         $pageData['adminConfigs'] = ConfigManager::byKeys($keys);
-        $pageData['adminIsRescueMode'] = AuthentificationHelper::isRescueMode();
-        if (!$pageData['adminIsRescueMode']) {
-            $pageData['adminPluginsList'] = [];
-            $pluginsList = PluginManager::listPlugin(true);
-            foreach ($pluginsList as $plugin) {
-                $pluginApi = ConfigManager::byKey('api', $plugin->getId());
-
-                if ($pluginApi !== '') {
-                    $pluginData = [];
-                    $pluginData['api'] = $pluginApi;
-                    $pluginData['plugin'] = $plugin;
-                    $pageData['adminPluginsList'][] = $pluginData;
-                }
-            }
-        }
 
         $pageData['JS_END_POOL'][] = '/public/js/desktop/admin/api.js';
 

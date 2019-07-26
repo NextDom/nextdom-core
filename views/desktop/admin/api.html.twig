@@ -139,7 +139,7 @@
                 <!-- Plugins Section -->
                 <fieldset class="legend-section">
                     <legend>{{ 'API Plugins' }}</legend>
-                    {% if not adminIsRescueMode and adminPluginsList|length > 0 %}
+                    {% if adminPluginsList|length > 0 %}
                         {% for pluginData in adminPluginsList %}
                             <div class="form-group">
                                 <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label" data-original-title="{{ 'API pour le plugin' }} {{ pluginData.plugin.getName() }}">{{ pluginData.plugin.getName() }}</label>

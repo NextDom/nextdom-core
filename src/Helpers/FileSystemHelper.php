@@ -114,15 +114,11 @@ class FileSystemHelper
             if ($_type != 'class') {
                 ob_start();
                 require_once $path;
-                if (Utils::init('rescue', 0) == 1) {
-                    echo str_replace(array('{{', '}}'), '', ob_get_clean());
-                } else {
                     if ($translate) {
                         echo TranslateHelper::exec(ob_get_clean(), $_folder . '/' . $_filename);
                     } else {
                         echo ob_get_clean();
                     }
-                }
             } else {
                 require_once $path;
             }
