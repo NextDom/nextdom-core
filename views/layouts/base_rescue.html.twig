@@ -5,7 +5,7 @@
             <main id="div_pageContainer">
                 {{ CONTENT | raw }}
             </main>
-        </div><!-- plif  -->
+        </div>
     {% if JS_END_POOL is defined %}
         {% for jsFile in JS_END_POOL %}
             <script src="{{ jsFile }}"></script>
