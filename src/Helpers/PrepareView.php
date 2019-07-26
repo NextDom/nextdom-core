@@ -188,7 +188,6 @@ class PrepareView
             $pageData['JS_POOL'][] = '/vendor/node_modules/highcharts/modules/solid-gauge.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/highcharts/modules/exporting.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/highcharts/modules/export-data.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/jwerty/jwerty.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/packery/dist/packery.pkgd.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-lazyload/jquery.lazyload.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/codemirror/lib/codemirror.js';
@@ -207,7 +206,6 @@ class PrepareView
             $pageData['JS_POOL'][] = '/vendor/node_modules/inputmask/dist/jquery.inputmask.bundle.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/snapsvg/dist/snap.svg-min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/moment/moment.js';
 
 

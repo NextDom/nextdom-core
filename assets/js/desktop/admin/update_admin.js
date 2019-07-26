@@ -34,11 +34,6 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-jwerty.key('ctrl+s/⌘+s', function (e) {
-    e.preventDefault();
-    $("#bt_saveupdate_admin").click();
-});
-
 $("#bt_saveupdate_admin").on('click', function (event) {
     $.hideAlert();
     var config = $('#update_admin').getValues('.configKey')[0];

@@ -168,11 +168,6 @@ $("#bt_addObject,#bt_addObject2").on('click', function (event) {
     });
 });
 
-jwerty.key('ctrl+s/⌘+s', function (e) {
-    e.preventDefault();
-    $("#bt_saveObject").click();
-});
-
 $('.objectAttr[data-l1key=display][data-l2key=icon]').on('dblclick',function(){
     $('.objectAttr[data-l1key=display][data-l2key=icon]').value('');
 });

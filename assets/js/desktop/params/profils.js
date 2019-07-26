@@ -73,12 +73,6 @@ function loadUserInformations() {
  * Init events on the profils page
  */
 function initProfilsEvents() {
-  // Keyboard shortcut for save
-  jwerty.key('ctrl+s/⌘+s', function (e) {
-    e.preventDefault();
-    $("#bt_saveProfils").click();
-  });
-
   // Save forms data
   $("#bt_saveProfils").on('click', function (event) {
     $.hideAlert();

@@ -195,7 +195,6 @@ $(function () {
     // Link click event handler declaration
     $('body').on('click','a',function(e){
         if ($(this).hasClass('noOnePageLoad')
-           || $(this).hasClass('fancybox-nav')
            || $(this).attr('href') == undefined
            || $(this).attr('href') == ''
            || $(this).attr('href') == '#'

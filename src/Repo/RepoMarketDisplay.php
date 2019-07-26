@@ -27,13 +27,6 @@ $update = UpdateManager::byLogicalId($market->getLogicalId());
 Utils::sendVarToJS('market_display_info', $market_array);
 ?>
 
-<link rel="stylesheet" href="/vendor/node_modules/fancybox/dist/css/jquery.fancybox.css">
-<link rel="stylesheet" href="/vendor/node_modules/slick-carousel/slick/slick.css">
-<link rel="stylesheet" href="/vendor/node_modules/slick-carousel/slick/slick-theme.css">
-<script src="/assets/3rdparty/bootstrap-rating/bootstrap-rating.js"></script>
-<script src="/vendor/node_modules/slick-carousel/slick/slick.js"></script>
-<script src="/vendor/node_modules/fancybox/dist/js/jquery.fancybox.js"></script>
-
 <div class='row form-group'>
     <div class='col-sm-2'>
         <center>
@@ -159,19 +152,17 @@ Utils::sendVarToJS('market_display_info', $market_array);
 
     <?php if (count($market->getImg('screenshot')) > 0) {
         ?>
-        <div class="market-slick">
             <div class="variable-width" style="height : 200px;">
                 <?php
                 foreach ($market->getImg('screenshot') as $screenshot) {
                     echo '<div class="item" >';
-                    echo '<a class="fancybox cursor" href="' . ConfigManager::byKey('market::address') . '/' . $screenshot . '" rel="group" >';
+                    echo '<a class="cursor" href="' . ConfigManager::byKey('market::address') . '/' . $screenshot . '" rel="group" >';
                     echo '<img data-lazy="' . ConfigManager::byKey('market::address') . '/' . $screenshot . '" style="height : 200px;" />';
                     echo '</a>';
                     echo '</div>';
                 }
                 ?>
             </div>
-        </div>
     <?php }
     ?>
     <div class='row form-group'>
@@ -335,12 +326,6 @@ Utils::sendVarToJS('market_display_info', $market_array);
             </div>
         </div>
     </div>
-
-    <style>
-        .slick-prev:before, .slick-next:before {
-            color: #707070;
-        }
-    </style>
     <script>
 
       $("img.lazy").lazyload({
@@ -349,19 +334,6 @@ Utils::sendVarToJS('market_display_info', $market_array);
       $("img.lazy").trigger("sporty");
 
       $(document).unbind('click.fb-start');
-      $(".fancybox").fancybox({
-        autoHeight: true,
-      });
-
-      $('.variable-width').slick({
-        dots: true,
-        speed: 300,
-        accessibility: true,
-        infinite: true,
-        lazyLoad: 'ondemand',
-        slidesToShow: 3,
-        slidesToScroll: 1
-      });
 
       $('body').setValues(market_display_info, '.marketAttr');
 

@@ -71,11 +71,6 @@ $('.nav-tabs a').on('shown.bs.tab', function (e) {
     window.location.hash = e.target.hash;
 })
 
-jwerty.key('ctrl+s/⌘+s', function (e) {
-    e.preventDefault();
-    $("#bt_savecustom").click();
-});
-
 $('a[data-toggle="tab"][href="#advanced"]').on('shown.bs.tab', function () {
     printAdvancedDesktop();
 });

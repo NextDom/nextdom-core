@@ -34,11 +34,6 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-jwerty.key('ctrl+s/⌘+s', function (e) {
-    e.preventDefault();
-    $("#bt_savecache").click();
-});
-
  $("#bt_savecache").on('click', function (event) {
     $.hideAlert();
     nextdom.config.save({
