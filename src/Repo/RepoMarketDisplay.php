@@ -151,16 +151,31 @@ Utils::sendVarToJS('market_display_info', $market_array);
 
     <?php if (count($market->getImg('screenshot')) > 0) {
         ?>
-            <div class="variable-width" style="height : 200px;">
+    <div class='row form-group' style="height : 200px;">
+         <div id="plugin-carousel" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
                 <?php
+                $index = 0;
                 foreach ($market->getImg('screenshot') as $screenshot) {
-                    echo '<div class="item" >';
-                    echo '<a class="cursor" href="' . ConfigManager::byKey('market::address') . '/' . $screenshot . '" rel="group" >';
-                    echo '<img data-lazy="' . ConfigManager::byKey('market::address') . '/' . $screenshot . '" style="height : 200px;" />';
-                    echo '</a>';
-                    echo '</div>';
+                    if ($index == 0) {
+                        echo '<div class="item active">';
+                    } else {
+                        echo '<div class="item">';
+                    }
+                echo '<img src="' . ConfigManager::byKey('market::address') . '/' . $screenshot . '" style="height : 200px;">';
+                echo '<div class="carousel-caption"></div>';
+                echo '</div>';
+                    $index++;
                 }
                 ?>
+                        <a class="left carousel-control text_color" href="#plugin-carousel" data-slide="prev">
+                            <span class="fa fa-angle-left"></span>
+                        </a>
+                        <a class="right carousel-control text_color" href="#plugin-carousel" data-slide="next">
+                            <span class="fa fa-angle-right"></span>
+                        </a>
+                    </div>
+                </div>
             </div>
     <?php }
     ?>
