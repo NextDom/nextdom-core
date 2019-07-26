@@ -59,11 +59,6 @@
     });
 });
 
- jwerty.key('ctrl+s/⌘+s', function (e) {
-    e.preventDefault();
-    $('#bt_saveUser').click();
-});
-
  $("#bt_saveUser").on('click', function (event) {
     nextdom.user.save({
         users: $('#table_user tbody tr').getValues('.userAttr'),

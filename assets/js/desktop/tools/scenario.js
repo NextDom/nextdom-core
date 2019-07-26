@@ -1534,10 +1534,6 @@ function initListEvents() {
     $('.scenarioListContainer').packery();
     $("#bt_changeAllScenarioState").off('click').on('click', toggleAllScenariosState);
     $("#bt_addScenario").off('click').on('click', addScenario);
-    jwerty.key('ctrl+s/⌘+s', function (e) {
-        e.preventDefault();
-        saveScenario();
-    });
 }
 
 /**

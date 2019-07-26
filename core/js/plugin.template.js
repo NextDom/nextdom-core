@@ -180,11 +180,6 @@ $('.eqLogicAction[data-action=export]').on('click', function () {
     window.open('core/php/export.php?type=eqLogic&id=' + $('.eqLogicAttr[data-l1key=id]').value(), "_blank", null);
 });
 
-jwerty.key('ctrl+s/⌘+s', function (e) {
-    e.preventDefault();
-    $('.eqLogicAction[data-action=save]').click();
-});
-
 $('.eqLogicAction[data-action=save]').on('click', function () {
     var eqLogics = [];
     $('.eqLogic').each(function () {

@@ -362,11 +362,6 @@ $('#bt_returnToThumbnailDisplay').on('click',function(){
     $('#div_confPlugin').hide();
 });
 
-jwerty.key('ctrl+s/⌘+s', function (e) {
-    e.preventDefault();
-    $("#bt_savePluginConfig").click();
-});
-
 $("#bt_savePluginConfig").on('click', function (event) {
     savePluginConfig();
     return false;

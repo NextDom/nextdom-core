@@ -46,11 +46,6 @@ $("#bt_addCron").on('click', function () {
     $('#table_cron tbody').append(addCron({}));
 });
 
-jwerty.key('ctrl+s/⌘+s', function (e) {
-    e.preventDefault();
-    $("#bt_save").click();
-});
-
 $("#bt_save").on('click', function () {
     nextdom.cron.save({
         crons: $('#table_cron tbody tr').getValues('.cronAttr'),
