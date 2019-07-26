@@ -1513,13 +1513,6 @@ function initListEvents() {
         }, 100);
     });
 
-    $("#div_tree").jstree({
-        "plugins": ["search"]
-    });
-    $('#in_treeSearch').keyup(function () {
-        $('#div_tree').jstree(true).search($('#in_treeSearch').val());
-    });
-
     /**
      * Back button
      */
