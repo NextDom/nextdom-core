@@ -41,10 +41,11 @@
     var io = null;
     NEXTDOM_PRODUCT_NAME='{{ PRODUCT_NAME }}';
     NEXTDOM_AJAX_TOKEN = '{{ AJAX_TOKEN }}';
+    JEEDOM_AJAX_TOKEN = NEXTDOM_AJAX_TOKEN;
     $.ajaxSetup({
         type: "POST",
         data: {
-            nextdom_token: '{{ AJAX_TOKEN }}'
+            nextdom_token: NEXTDOM_AJAX_TOKEN
         }
     });
     var nextdom_language = '{{ LANGUAGE }}';
