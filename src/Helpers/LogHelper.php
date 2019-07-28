@@ -84,14 +84,12 @@ class LogHelper
      * @param string $message Message to log
      * @param string $logicalId Logical id linked to this log (optional)
      *
-     * @return bool True if log added
-     *
      * @throws \Exception
      */
     public static function addInfo($targetLog, $message, $logicalId = '')
     {
         $message = $message . '\n' . PHPInformation::getInstance()->getCallingFunctionName(true);
-        self::add($logTarget, 'error', $message, $logicalId);
+        self::add($targetLog, 'error', $message, $logicalId);
     }
 
     /**
