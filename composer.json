@@ -17,7 +17,7 @@
     "pragmarx/google2fa": "^1.0",
     "ralouphie/getallheaders": "^2.0",
     "symfony/config": "^3.4",
-    "symfony/debug": "^3.4",
+    "symfony/debug": "^4.3",
     "symfony/expression-language": "^2.8",
     "symfony/translation": "^3.4",
     "symfony/twig-bridge": "^3.4",
