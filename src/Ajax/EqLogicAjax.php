@@ -38,14 +38,14 @@ class EqLogicAjax extends BaseAjax
 
     public function getEqLogicObject()
     {
-        $object = ObjectManager::byId(Utils::init('object_id'));
+        $linkedObject = ObjectManager::byId(Utils::init('object_id'));
 
-        if (!is_object($object)) {
+        if (!is_object($linkedObject)) {
             throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));
         }
-        $return = Utils::o2a($object);
+        $return = Utils::o2a($linkedObject);
         $return['eqLogic'] = array();
-        foreach ($object->getEqLogic() as $eqLogic) {
+        foreach ($linkedObject->getEqLogic() as $eqLogic) {
             if ($eqLogic->getIsVisible() == '1') {
                 $info_eqLogic = array();
                 $info_eqLogic['id'] = $eqLogic->getId();
@@ -164,8 +164,8 @@ class EqLogicAjax extends BaseAjax
             $info['eqLogic'] = Utils::o2a($eqLogic);
             $info['object'] = array('name' => 'Aucun');
             if (is_object($eqLogic)) {
-                $object = $eqLogic->getObject();
-                if (is_object($object)) {
+                $linkedObject = $eqLogic->getObject();
+                if (is_object($linkedObject)) {
                     $info['object'] = Utils::o2a($eqLogic->getObject());
                 }
             }

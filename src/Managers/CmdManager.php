@@ -50,7 +50,7 @@ class CmdManager
     const DB_CLASS_NAME = '`cmd`';
 
     /**
-     * TODO: ???, repasser en privé
+     * Cast a command from generic to plugin
      *
      * @param Cmd $inputs
      * @param EqLogic $eqLogic
@@ -64,28 +64,32 @@ class CmdManager
                 if ($eqLogic !== null) {
                     $inputs->_eqLogic = $eqLogic;
                 }
+                /** @var Cmd $target */
                 $target = new $targetClassName();
                 $target->castFromCmd($inputs);
                 return $target;
             }
         }
         if (is_array($inputs)) {
-            $return = array();
+            $result = [];
             foreach ($inputs as $input) {
                 if ($eqLogic !== null) {
                     $input->_eqLogic = $eqLogic;
                 }
-                $return[] = self::cast($input);
+                $result[] = self::cast($input);
             }
-            return $return;
+            return $result;
         }
         return $inputs;
     }
 
     /**
-     * Get command by specifics IDs
+     * Get list of commands by IDs
+     *
      * @param array $idsList List of ID
+     *
      * @return Cmd[]|null List of commands
+     *
      * @throws \Exception
      */
     public static function byIds($idsList)
@@ -107,7 +111,9 @@ class CmdManager
      * Get command by his id
      *
      * @param mixed $id Command id
-     * @return Cmd|bool
+     *
+     * @return Cmd|bool Command or false
+     *
      * @throws \Exception
      */
     public static function byId($id)
@@ -115,9 +121,9 @@ class CmdManager
         if ($id == '') {
             return null;
         }
-        $values = array(
+        $values = [
             'id' => $id,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE id = :id';
@@ -127,7 +133,7 @@ class CmdManager
     /**
      * Get all commands
      *
-     * @return Cmd[]
+     * @return Cmd[] All commands
      *
      * @throws \Exception
      */
@@ -142,7 +148,8 @@ class CmdManager
     /**
      * Get historized commands
      *
-     * @return array
+     * @return array List of historized commands
+     *
      * @throws \Exception
      */
     public static function allHistoryCmd()
@@ -151,7 +158,7 @@ class CmdManager
                 FROM ' . self::DB_CLASS_NAME . ' c
                 INNER JOIN eqLogic el ON c.eqLogic_id=el.id
                 INNER JOIN object ob ON el.object_id=ob.id
-                WHERE isHistorized=1
+                WHERE isHistorized = 1
                 AND type=\'info\'';
         $sql .= ' ORDER BY ob.position, ob.name, el.name, c.name';
         $result1 = self::cast(DBHelper::getAllObjects($sql, [], self::CLASS_NAME));
@@ -159,7 +166,7 @@ class CmdManager
                 FROM ' . self::DB_CLASS_NAME . ' c
                 INNER JOIN eqLogic el ON c.eqLogic_id=el.id
                 WHERE el.object_id IS NULL
-                AND isHistorized=1
+                AND isHistorized = 1
                 AND type=\'info\'';
         $sql .= ' ORDER BY el.name, c.name';
         $result2 = self::cast(DBHelper::getAllObjects($sql, [], self::CLASS_NAME));
@@ -174,20 +181,22 @@ class CmdManager
      * @param int|null $_visible Only visible if !== null
      * @param null $_eqLogic
      * @param null $_has_generic_type
+     *
      * @return Cmd[]|null
+     *
      * @throws \Exception
      */
     public static function byEqLogicId($eqLogicId, $_type = null, $_visible = null, $_eqLogic = null, $_has_generic_type = null)
     {
-        $values = array();
+        $values = [];
         if (is_array($eqLogicId)) {
             $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                     FROM ' . self::DB_CLASS_NAME . '
                     WHERE eqLogic_id IN (' . trim(preg_replace('/[, ]{2,}/m', ',', implode(',', $eqLogicId)), ',') . ')';
         } else {
-            $values = array(
+            $values = [
                 'eqLogic_id' => $eqLogicId,
-            );
+            ];
             $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                     FROM ' . self::DB_CLASS_NAME . '
                     WHERE eqLogic_id = :eqLogic_id ';
@@ -216,27 +225,29 @@ class CmdManager
      */
     public static function byLogicalId($logicalId, $type = null)
     {
-        $values = array(
+        $values = [
             'logicalId' => $logicalId,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE logicalId = :logicalId ';
         if ($type !== null) {
             $values['type'] = $type;
-            $sql .= 'AND `type`=:type ';
+            $sql .= 'AND `type` = :type ';
         }
         $sql .= 'ORDER BY `order`';
         return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
     }
 
     /**
-     * TODO: ???
+     * Get command by generic type (plugin)
      *
-     * @param $genericType
-     * @param null $eqLogicId
-     * @param bool $one
-     * @return array|mixed
+     * @param string $genericType Type of the command
+     * @param int $eqLogicId Commands of eqLogic
+     * @param bool $one Only the first
+     *
+     * @return Cmd|Cmd[]
+     *
      * @throws \Exception
      */
     public static function byGenericType($genericType, $eqLogicId = null, $one = false)
@@ -246,21 +257,21 @@ class CmdManager
             foreach ($genericType as $value) {
                 $in .= "'" . $value . "',";
             }
-            $values = array();
+            $values = [];
             $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                     FROM ' . self::DB_CLASS_NAME . '
                     WHERE generic_type IN (' . trim(preg_replace('/[, ]{2,}/m', ',', $in), ',') . ')';
         } else {
-            $values = array(
+            $values = [
                 'generic_type' => $genericType,
-            );
+            ];
             $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                     FROM ' . self::DB_CLASS_NAME . '
-                    WHERE generic_type=:generic_type';
+                    WHERE generic_type = :generic_type';
         }
         if ($eqLogicId !== null) {
             $values['eqLogic_id'] = $eqLogicId;
-            $sql .= ' AND `eqLogic_id`=:eqLogic_id';
+            $sql .= ' AND `eqLogic_id` = :eqLogic_id';
         }
         $sql .= ' ORDER BY `order`';
         if ($one) {
@@ -270,26 +281,28 @@ class CmdManager
     }
 
     /**
-     * TODO: ???
+     * Search in commands configuration
      *
-     * @param $configuration
-     * @param null $eqType
-     * @return array|mixed
+     * @param string $configuration String to find
+     * @param string $eqType Filter by EqLogic type
+     *
+     * @return Cmd[] List of commands
+     *
      * @throws \Exception
      */
     public static function searchConfiguration($configuration, $eqType = null)
     {
         if (!is_array($configuration)) {
-            $values = array(
+            $values = [
                 'configuration' => '%' . $configuration . '%',
-            );
+            ];
             $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                     FROM ' . self::DB_CLASS_NAME . '
                     WHERE configuration LIKE :configuration';
         } else {
-            $values = array(
+            $values = [
                 'configuration' => '%' . $configuration[0] . '%',
-            );
+            ];
             $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                     FROM ' . self::DB_CLASS_NAME . '
                     WHERE configuration LIKE :configuration';
@@ -300,54 +313,58 @@ class CmdManager
         }
         if ($eqType !== null) {
             $values['eqType'] = $eqType;
-            $sql .= ' AND eqType=:eqType ';
+            $sql .= ' AND eqType = :eqType ';
         }
         $sql .= ' ORDER BY name';
         return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
     }
 
     /**
-     * TODO: ???
+     * Search in commands configuration
      *
-     * @param $eqLogicId
-     * @param $configuration
-     * @param null $type
-     * @return array|mixed
+     * @param int $eqLogicId Filter by eqLogic
+     * @param string $configuration String to find
+     * @param string $type Command type
+     *
+     * @return Cmd[]
+     *
      * @throws \Exception
      */
     public static function searchConfigurationEqLogic($eqLogicId, $configuration, $type = null)
     {
-        $values = array(
+        $values = [
             'configuration' => '%' . $configuration . '%',
             'eqLogic_id' => $eqLogicId,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
-        WHERE eqLogic_id=:eqLogic_id';
+        WHERE eqLogic_id = :eqLogic_id';
         if ($type !== null) {
             $values['type'] = $type;
-            $sql .= ' AND type=:type ';
+            $sql .= ' AND type = :type ';
         }
         $sql .= ' AND configuration LIKE :configuration';
         return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
     }
 
     /**
-     * TODO: ??
+     * Search by template
      *
-     * @param $template
-     * @param null $eqType
-     * @param null $type
-     * @param null $subtype
+     * @param string $template Name of template
+     * @param string $eqType Filter by eqLogic type
+     * @param string $type Filter by type
+     * @param string $subtype Filter by subtype
+     *
      * @return array|mixed
+     *
      * @throws \Exception
      */
     public static function searchTemplate($template, $eqType = null, $type = null, $subtype = null)
     {
-        $values = array(
+        $values = [
             'template' => '%' . $template . '%',
-        );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        ];
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE template LIKE :template';
         if ($eqType !== null) {
@@ -367,22 +384,24 @@ class CmdManager
     }
 
     /**
-     * TODO: ??
+     * Get all commands by eqLogic and command logicalId
      *
-     * @param $eqLogicId
-     * @param $logicalId
-     * @param bool $multiple
-     * @param null $type
+     * @param int $eqLogicId EqLogic Id owner
+     * @param string $logicalId Command logicial id
+     * @param bool $multiple Multiple results
+     * @param string $type Filter by type of command
+     *
      * @return array|mixed
+     *
      * @throws \Exception
      */
     public static function byEqLogicIdAndLogicalId($eqLogicId, $logicalId, $multiple = false, $type = null)
     {
-        $values = array(
+        $values = [
             'eqLogic_id' => $eqLogicId,
             'logicalId' => $logicalId,
-        );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        ];
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE eqLogic_id = :eqLogic_id
                 AND logicalId = :logicalId';
@@ -397,28 +416,30 @@ class CmdManager
     }
 
     /**
-     * TODO: ???
+     * Get all commands by eqLogic and generic type
      *
-     * @param $eqLogicId
-     * @param $genericType
-     * @param bool $multiple
-     * @param null $type
-     * @return array|mixed
+     * @param int $eqLogicId EqLogic Id owner
+     * @param string $genericType Filter by generic type
+     * @param bool $multiple Multiple results
+     * @param string $type Filter by type
+     *
+     * @return Cmd[]
+     *
      * @throws \Exception
      */
     public static function byEqLogicIdAndGenericType($eqLogicId, $genericType, $multiple = false, $type = null)
     {
-        $values = array(
+        $values = [
             'eqLogic_id' => $eqLogicId,
             'generic_type' => $genericType,
-        );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        ];
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
-                WHERE eqLogic_id=:eqLogic_id
-                AND generic_type=:generic_type';
+                WHERE eqLogic_id = :eqLogic_id
+                AND generic_type = :generic_type';
         if ($type !== null) {
             $values['type'] = $type;
-            $sql .= ' AND type=:type';
+            $sql .= ' AND type = :type';
         }
         if ($multiple) {
             return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
@@ -427,150 +448,160 @@ class CmdManager
     }
 
     /**
-     * TODO: ???
+     * Get commands by value
      *
-     * @param $value
-     * @param null $type
-     * @param bool $onlyEnable
+     * @param int|string $value Filter by value
+     * @param string $type Filter by type
+     * @param bool $onlyEnable Only enabled commands
+     *
      * @return Cmd[]
+     *
      * @throws \Exception
      */
     public static function byValue($value, $type = null, $onlyEnable = false)
     {
-        $values = array(
+        $values = [
             'value' => $value,
             'search' => '%#' . $value . '#%',
-        );
+        ];
         if (strpos($value, 'variable(') !== false) {
             $values['search'] = '%#' . $value . '%';
         }
         if ($onlyEnable) {
             $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME, 'c') . '
-            FROM ' . self::DB_CLASS_NAME . ' c
-            INNER JOIN eqLogic el ON c.eqLogic_id=el.id
-            WHERE ( value=:value OR value LIKE :search)
-            AND el.isEnable=1
-            AND c.id!=:value';
+                    FROM ' . self::DB_CLASS_NAME . ' c
+                    INNER JOIN eqLogic el ON c.eqLogic_id=el.id
+                    WHERE (value = :value OR value LIKE :search)
+                    AND el.isEnable = 1
+                    AND c.id != :value';
             if ($type !== null) {
                 $values['type'] = $type;
-                $sql .= ' AND c.type=:type ';
+                $sql .= ' AND c.type = :type ';
             }
         } else {
             $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-            FROM ' . self::DB_CLASS_NAME . '
-            WHERE ( value=:value OR value LIKE :search)
-            AND id!=:value';
+                    FROM ' . self::DB_CLASS_NAME . '
+                    WHERE (value = :value OR value LIKE :search)
+                    AND id != :value';
             if ($type !== null) {
                 $values['type'] = $type;
-                $sql .= ' AND type=:type ';
+                $sql .= ' AND type = :type ';
             }
         }
         return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
     }
 
     /**
-     * TODO: ???
+     * Get commands by eqLogic type, eqLogic name and cmd name
      *
-     * @param $eqTypeName
-     * @param $eqLogicName
-     * @param $cmdName
-     * @return array|mixed
+     * @param string $eqTypeName EqLogic type name
+     * @param string $eqLogicName Eqlogic name
+     * @param string $cmdName Command name
+     *
+     * @return Cmd[]
+     *
      * @throws \Exception
      */
     public static function byTypeEqLogicNameCmdName($eqTypeName, $eqLogicName, $cmdName)
     {
-        $values = array(
+        $values = [
             'eqType_name' => $eqTypeName,
             'eqLogic_name' => $eqLogicName,
             'cmd_name' => $cmdName,
-        );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME, 'c') . '
+        ];
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME, 'c') . '
                 FROM ' . self::DB_CLASS_NAME . ' c
                 INNER JOIN eqLogic el ON c.eqLogic_id=el.id
-                WHERE c.name=:cmd_name
-                AND el.name=:eqLogic_name
-                AND el.eqType_name=:eqType_name';
-        return self::cast(\DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME));
+                WHERE c.name = :cmd_name
+                AND el.name = :eqLogic_name
+                AND el.eqType_name = :eqType_name';
+        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME));
     }
 
     /**
-     * TODO: ???
+     * Get commands by EqLogic Id and command name
      *
-     * @param $eqLogicId
-     * @param $cmdName
-     * @return array|mixed
+     * @param int $eqLogicId EqLogic id
+     * @param string $cmdName Command name
+     *
+     * @return Cmd[]
+     *
      * @throws \Exception
      */
     public static function byEqLogicIdCmdName($eqLogicId, $cmdName)
     {
-        $values = array(
+        $values = [
             'eqLogic_id' => $eqLogicId,
             'cmd_name' => $cmdName,
-        );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME, 'c') . '
+        ];
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME, 'c') . '
                 FROM ' . self::DB_CLASS_NAME . ' c
-                WHERE c.name=:cmd_name
-                AND c.eqLogic_id=:eqLogic_id';
-        return self::cast(\DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME));
+                WHERE c.name = :cmd_name
+                AND c.eqLogic_id = :eqLogic_id';
+        return self::cast(DBHelper::Prepare($sql, $values, DBHelper::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME));
     }
 
     /**
-     * TODO: ???
+     * Get commands by object and command name
      *
-     * @param $objectName
-     * @param $cmdName
-     * @return array|mixed
+     * @param string $objectName Filter on object name
+     * @param string $cmdName Filter by command name
+     *
+     * @return Cmd[]
+     *
      * @throws \Exception
      */
     public static function byObjectNameCmdName($objectName, $cmdName)
     {
-        $values = array(
+        $values = [
             'object_name' => $objectName,
             'cmd_name' => $cmdName,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME, 'c') . '
-        FROM ' . self::DB_CLASS_NAME . ' c
-        INNER JOIN eqLogic el ON c.eqLogic_id=el.id
-        INNER JOIN object ob ON el.object_id=ob.id
-        WHERE c.name=:cmd_name
-        AND ob.name=:object_name';
+                FROM ' . self::DB_CLASS_NAME . ' c
+                INNER JOIN eqLogic el ON c.eqLogic_id = el.id
+                INNER JOIN object ob ON el.object_id = ob.id
+                WHERE c.name = :cmd_name
+                AND ob.name = :object_name';
         return self::cast(DBHelper::getOneObject($sql, $values, self::CLASS_NAME));
     }
 
     /**
-     * TODO: ???
+     * Get commands by type and subtype
      *
-     * @param $type
-     * @param string $subType
-     * @return array|mixed
+     * @param string $type Command type
+     * @param string $subType Command subtype
+     *
+     * @return Cmd[]
+     *
      * @throws \Exception
      */
     public static function byTypeSubType($type, $subType = '')
     {
-        $values = array(
+        $values = [
             'type' => $type,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME, 'c') . '
-        FROM ' . self::DB_CLASS_NAME . ' c
-        WHERE c.type=:type';
+                FROM ' . self::DB_CLASS_NAME . ' c
+                WHERE c.type = :type';
         if ($subType != '') {
             $values['subtype'] = $subType;
-            $sql .= ' AND c.subtype=:subtype';
+            $sql .= ' AND c.subtype = :subtype';
         }
         return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
     }
 
     /**
-     * TODO: ???
+     * Convert command to human readable format
      *
-     * @param Cmd|mixed $input
-     * @return array|mixed|array|string
+     * @param Cmd|mixed $input Input data
+     * @return string Human readable command
      * @throws \ReflectionException
      */
     public static function cmdToHumanReadable($input)
     {
         if (is_object($input)) {
-            $reflections = array();
+            $reflections = [];
             $uuid = spl_object_hash($input);
             if (!isset($reflections[$uuid])) {
                 $reflections[$uuid] = new \ReflectionClass($input);
@@ -589,7 +620,7 @@ class CmdManager
         if (is_array($input)) {
             return json_decode(self::cmdToHumanReadable(json_encode($input)), true);
         }
-        $replace = array();
+        $replace = [];
         preg_match_all("/#([0-9]*)#/", $input, $matches);
         if (count($matches[1]) == 0) {
             return $input;
@@ -605,26 +636,30 @@ class CmdManager
     }
 
     /**
-     * TODO: ??
+     * Get commands by string in human readeable format
      *
-     * @param $string
-     * @return array|mixed
+     * @param string $needle String to search
+     *
+     * @return Cmd
+     *
      * @throws \Exception
      */
-    public static function byString($string)
+    public static function byString($needle)
     {
-        $cmd = self::byId(str_replace('#', '', self::humanReadableToCmd($string)));
+        $cmd = self::byId(str_replace('#', '', self::humanReadableToCmd($needle)));
         if (!is_object($cmd)) {
-            throw new \Exception(__('La commande n\'a pas pu être trouvée : ') . $string . __(' => ') . self::humanReadableToCmd($string));
+            throw new \Exception(__('La commande n\'a pas pu être trouvée : ') . $needle . __(' => ') . self::humanReadableToCmd($needle));
         }
         return $cmd;
     }
 
     /**
-     * TODO: ??
+     * Convert human readable format to command
      *
      * @param $input
-     * @return array|mixed
+     *
+     * @return Cmd
+     *
      * @throws \Exception
      */
     public static function humanReadableToCmd($input)
@@ -635,7 +670,7 @@ class CmdManager
             $input = json_decode($input, true);
         }
         if (is_object($input)) {
-            $reflections = array();
+            $reflections = [];
             $uuid = spl_object_hash($input);
             if (!isset($reflections[$uuid])) {
                 $reflections[$uuid] = new \ReflectionClass($input);
@@ -660,7 +695,7 @@ class CmdManager
             }
             return $input;
         }
-        $replace = array();
+        $replace = [];
         preg_match_all("/#\[(.*?)\]\[(.*?)\]\[(.*?)\]#/", $input, $matches);
         if (count($matches) == 4) {
             $countMatches = count($matches[0]);
@@ -680,27 +715,29 @@ class CmdManager
     }
 
     /**
-     * TODO: ???
+     * Get command by object name, eqLogic name and cmd name
      *
-     * @param $objectName
-     * @param $eqLogicName
-     * @param $cmdName
-     * @return array|mixed
+     * @param string $objectName Object name
+     * @param string $eqLogicName EqLogic name
+     * @param string $cmdName Command name
+     *
+     * @return Cmd
+     *
      * @throws \Exception
      */
     public static function byObjectNameEqLogicNameCmdName($objectName, $eqLogicName, $cmdName)
     {
-        $values = array(
+        $values = [
             'eqLogic_name' => $eqLogicName,
             'cmd_name' => (html_entity_decode($cmdName) != '') ? html_entity_decode($cmdName) : $cmdName,
-        );
+        ];
 
         if ($objectName == __('Aucun')) {
             $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME, 'c') . '
             FROM ' . self::DB_CLASS_NAME . ' c
             INNER JOIN eqLogic el ON c.eqLogic_id=el.id
-            WHERE c.name=:cmd_name
-            AND el.name=:eqLogic_name
+            WHERE c.name = :cmd_name
+            AND el.name = :eqLogic_name
             AND el.object_id IS NULL';
         } else {
             $values['object_name'] = $objectName;
@@ -708,26 +745,28 @@ class CmdManager
             FROM ' . self::DB_CLASS_NAME . ' c
             INNER JOIN eqLogic el ON c.eqLogic_id=el.id
             INNER JOIN object ob ON el.object_id=ob.id
-            WHERE c.name=:cmd_name
-            AND el.name=:eqLogic_name
-            AND ob.name=:object_name';
+            WHERE c.name = :cmd_name
+            AND el.name = :eqLogic_name
+            AND ob.name = :object_name';
         }
         return self::cast(DBHelper::getOneObject($sql, $values, self::CLASS_NAME));
     }
 
     /**
-     * TODO: ???
+     * Convert command to value
      *
-     * @param $input
-     * @param bool $quote
+     * @param mixed $input Input data
+     * @param bool $quote Quote result
+     *
      * @return array|mixed
+     *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
      */
     public static function cmdToValue($input, $quote = false)
     {
         if (is_object($input)) {
-            $reflections = array();
+            $reflections = [];
             $uuid = spl_object_hash($input);
             if (!isset($reflections[$uuid])) {
                 $reflections[$uuid] = new \ReflectionClass($input);
@@ -749,8 +788,8 @@ class CmdManager
             }
             return $input;
         }
-        $json = Utils::isJson($input);
-        $replace = array();
+
+        $replace = [];
         preg_match_all("/#([0-9]*)#/", $input, $matches);
         foreach ($matches[1] as $cmd_id) {
             if (isset($replace['#' . $cmd_id . '#'])) {
@@ -775,73 +814,75 @@ class CmdManager
             if ($quote && (strpos($cmd_value, ' ') !== false || preg_match("/[a-zA-Z#]/", $cmd_value) || $cmd_value === '')) {
                 $cmd_value = '"' . trim($cmd_value, '"') . '"';
             }
-            if (!$json) {
+            if (Utils::isJson($input)) {
+                $replace['#' . $cmd_id . '#'] = trim(json_encode($cmd_value), '"');
+                $replace['#valueDate' . $cmd_id . '#'] = trim(json_encode($valueDate), '"');
+                $replace['#collectDate' . $cmd_id . '#'] = trim(json_encode($collectDate), '"');
+            } else {
                 $replace['"#' . $cmd_id . '#"'] = $cmd_value;
                 $replace['#' . $cmd_id . '#'] = $cmd_value;
                 $replace['#collectDate' . $cmd_id . '#'] = $collectDate;
                 $replace['#valueDate' . $cmd_id . '#'] = $valueDate;
-            } else {
-                $replace['#' . $cmd_id . '#'] = trim(json_encode($cmd_value), '"');
-                $replace['#valueDate' . $cmd_id . '#'] = trim(json_encode($valueDate), '"');
-                $replace['#collectDate' . $cmd_id . '#'] = trim(json_encode($collectDate), '"');
             }
         }
         return str_replace(array_keys($replace), $replace, $input);
     }
 
     /**
-     * Get all command types
+     * Get all used command types
      *
-     * @return array|mixed|null
+     * @return array|null All commands type
      *
      * @throws \Exception
      */
     public static function allType()
     {
-        $sql = 'SELECT distinct(type) as type
+        $sql = 'SELECT DISTINCT(`type`) as type
                 FROM ' . self::DB_CLASS_NAME;
         return DBHelper::getAll($sql);
     }
 
     /**
-     * Get all command sub types
+     * Get all used command sub types
      *
-     * @param string $type
+     * @param string $type Filter by type
      *
-     * @return array|mixed|null
+     * @return array All subtype
      *
      * @throws \Exception
      */
     public static function allSubType($type = '')
     {
-        $values = array();
+        $values = [];
         $sql = 'SELECT distinct(subType) as subtype';
         if ($type != '') {
             $values['type'] = $type;
-            $sql .= ' WHERE type=:type';
+            $sql .= ' WHERE type = :type';
         }
         $sql .= ' FROM ' . self::DB_CLASS_NAME;
         return DBHelper::getAll($sql, $values);
     }
 
     /**
-     * TODO: ??? A renommer ?
+     * Get all used unites
      *
      * @return array|mixed|null
      * @throws \Exception
      */
     public static function allUnite()
     {
-        $sql = 'SELECT distinct(unite) as unite
+        $sql = 'SELECT DISTINCT(unite) as unite
                 FROM ' . self::DB_CLASS_NAME;
         return DBHelper::getAll($sql);
     }
 
     /**
-     * TODO: ???
+     * Convert color to hexadecimal code
      *
-     * @param $color
-     * @return mixed
+     * @param string $color Color identification
+     *
+     * @return string Hexadecimal format color
+     *
      * @throws \Exception
      */
     public static function convertColor($color)
@@ -854,53 +895,55 @@ class CmdManager
     }
 
     /**
-     * TODO: ???
+     * Check if widget is available
      *
-     * @param $version
+     * @param string $version Display version
+     *
      * @return array
      */
     public static function availableWidget($version)
     {
         $path = NEXTDOM_ROOT . '/core/template/' . $version;
-        $files = FileSystemHelper::ls($path, 'cmd.*', false, array('files', 'quiet'));
-        $return = array();
+        $files = FileSystemHelper::ls($path, 'cmd.*', false, ['files', 'quiet']);
+        $result = [];
         foreach ($files as $file) {
             $informations = explode('.', $file);
-            if (!isset($return[$informations[1]])) {
-                $return[$informations[1]] = array();
+            if (!isset($result[$informations[1]])) {
+                $result[$informations[1]] = [];
             }
-            if (!isset($return[$informations[1]][$informations[2]])) {
-                $return[$informations[1]][$informations[2]] = array();
+            if (!isset($result[$informations[1]][$informations[2]])) {
+                $result[$informations[1]][$informations[2]] = [];
             }
             if (isset($informations[3])) {
-                $return[$informations[1]][$informations[2]][$informations[3]] = array('name' => $informations[3], 'location' => 'core');
+                $result[$informations[1]][$informations[2]][$informations[3]] = ['name' => $informations[3], 'location' => 'core'];
             }
         }
         $path = NEXTDOM_ROOT . '/plugins/widget/core/template/' . $version;
         if (file_exists($path)) {
-            $files = FileSystemHelper::ls($path, 'cmd.*', false, array('files', 'quiet'));
+            $files = FileSystemHelper::ls($path, 'cmd.*', false, ['files', 'quiet']);
             foreach ($files as $file) {
                 $informations = explode('.', $file);
                 if (count($informations) > 3) {
-                    if (!isset($return[$informations[1]])) {
-                        $return[$informations[1]] = array();
+                    if (!isset($result[$informations[1]])) {
+                        $result[$informations[1]] = [];
                     }
-                    if (!isset($return[$informations[1]][$informations[2]])) {
-                        $return[$informations[1]][$informations[2]] = array();
+                    if (!isset($result[$informations[1]][$informations[2]])) {
+                        $result[$informations[1]][$informations[2]] = [];
                     }
-                    if (!isset($return[$informations[1]][$informations[2]][$informations[3]])) {
-                        $return[$informations[1]][$informations[2]][$informations[3]] = array('name' => $informations[3], 'location' => 'widget');
+                    if (!isset($result[$informations[1]][$informations[2]][$informations[3]])) {
+                        $result[$informations[1]][$informations[2]][$informations[3]] = ['name' => $informations[3], 'location' => 'widget'];
                     }
                 }
             }
         }
-        return $return;
+        return $result;
     }
 
     /**
-     * TODO: ???
+     * Force command to return state by event
      *
-     * @param $options
+     * @param array $options Options that contains command id
+     *
      * @throws \Exception
      */
     public static function returnState($options)
@@ -912,20 +955,21 @@ class CmdManager
     }
 
     /**
-     * TODO: ???
+     * List of dead commands
      *
-     * @return array
+     * @return array Description of all dead commands
+     *
      * @throws \Exception
      */
     public static function deadCmd()
     {
-        $return = array();
+        $result = [];
         foreach (self::all() as $cmd) {
             if (is_array($cmd->getConfiguration('actionCheckCmd', ''))) {
                 foreach ($cmd->getConfiguration('actionCheckCmd', '') as $actionCmd) {
                     if ($actionCmd['cmd'] != '' && strpos($actionCmd['cmd'], '#') !== false) {
                         if (!self::byId(str_replace('#', '', $actionCmd['cmd']))) {
-                            $return[] = array('detail' => 'Commande ' . $cmd->getName() . ' de ' . $cmd->getEqLogicId()->getName() . ' (' . $cmd->getEqLogicId()->getEqType_name() . ')', 'help' => 'Action sur valeur', 'who' => $actionCmd['cmd']);
+                            $result[] = ['detail' => 'Commande ' . $cmd->getName() . ' de ' . $cmd->getEqLogicId()->getName() . ' (' . $cmd->getEqLogicId()->getEqType_name() . ')', 'help' => 'Action sur valeur', 'who' => $actionCmd['cmd']];
                         }
                     }
                 }
@@ -934,7 +978,7 @@ class CmdManager
                 foreach ($cmd->getConfiguration('nextdomPostExecCmd', '') as $actionCmd) {
                     if ($actionCmd['cmd'] != '' && strpos($actionCmd['cmd'], '#') !== false) {
                         if (!self::byId(str_replace('#', '', $actionCmd['cmd']))) {
-                            $return[] = array('detail' => 'Commande ' . $cmd->getName() . ' de ' . $cmd->getEqLogicId()->getName() . ' (' . $cmd->getEqLogicId()->getEqType_name() . ')', 'help' => 'Post Exécution', 'who' => $actionCmd['cmd']);
+                            $result[] = ['detail' => 'Commande ' . $cmd->getName() . ' de ' . $cmd->getEqLogicId()->getName() . ' (' . $cmd->getEqLogicId()->getEqType_name() . ')', 'help' => 'Post Exécution', 'who' => $actionCmd['cmd']];
                         }
                     }
                 }
@@ -943,19 +987,20 @@ class CmdManager
                 foreach ($cmd->getConfiguration('nextdomPreExecCmd', '') as $actionCmd) {
                     if ($actionCmd['cmd'] != '' && strpos($actionCmd['cmd'], '#') !== false) {
                         if (!self::byId(str_replace('#', '', $actionCmd['cmd']))) {
-                            $return[] = array('detail' => 'Commande ' . $cmd->getName() . ' de ' . $cmd->getEqLogicId()->getName() . ' (' . $cmd->getEqLogicId()->getEqType_name() . ')', 'help' => 'Pré Exécution', 'who' => $actionCmd['cmd']);
+                            $result[] = ['detail' => 'Commande ' . $cmd->getName() . ' de ' . $cmd->getEqLogicId()->getName() . ' (' . $cmd->getEqLogicId()->getEqType_name() . ')', 'help' => 'Pré Exécution', 'who' => $actionCmd['cmd']];
                         }
                     }
                 }
             }
         }
-        return $return;
+        return $result;
     }
 
     /**
-     * TODO: ???
+     * Execute command and alert this execution
      *
-     * @param $options
+     * @param array $options Options that contains command id
+     *
      * @throws \Exception
      */
     public static function cmdAlert($options)
@@ -972,46 +1017,49 @@ class CmdManager
     }
 
     /**
-     * TODO: ???
-     * @param $event
-     * @return array|null
+     * Show command timeline
+     *
+     * @param array $event Event data
+     *
+     * @return array Timeline data
+     *
      * @throws \Exception
      */
     public static function timelineDisplay($event)
     {
-        $return = array();
-        $return['date'] = $event['datetime'];
-        $return['type'] = $event['type'];
-        $return['group'] = $event['subtype'];
+        $result = [];
+        $result['date'] = $event['datetime'];
+        $result['type'] = $event['type'];
+        $result['group'] = $event['subtype'];
         $cmd = self::byId($event['id']);
         if (!is_object($cmd)) {
             return null;
         }
         $eqLogic = $cmd->getEqLogicId();
-        $object = $eqLogic->getObject();
-        $return['object'] = is_object($object) ? $object->getId() : 'aucun';
-        $return['plugins'] = $eqLogic->getEqType_name();
-        $return['category'] = $eqLogic->getCategory();
+        $linkedObject = $eqLogic->getObject();
+        $result['object'] = is_object($linkedObject) ? $linkedObject->getId() : 'aucun';
+        $result['plugins'] = $eqLogic->getEqType_name();
+        $result['category'] = $eqLogic->getCategory();
 
         if ($event['subtype'] == 'action') {
-            $return['html'] = '<div class="timeline-item cmd" data-id="' . $event['id'] . '">'
+            $result['html'] = '<div class="timeline-item cmd" data-id="' . $event['id'] . '">'
                 . '<span class="time"><i class="fa fa-clock-o"></i>' . substr($event['datetime'], -9) . '</span>'
-                .'<h3 class="timeline-header">' . $event['name'] . '</h3>'
-                .'<div class="timeline-body">'
-                .  $event['options']
-                .' <div class="timeline-footer">'
-                .'</div>'
-                .'</div>';
+                . '<h3 class="timeline-header">' . $event['name'] . '</h3>'
+                . '<div class="timeline-body">'
+                . $event['options']
+                . ' <div class="timeline-footer">'
+                . '</div>'
+                . '</div>';
         } else {
-            $return['html'] = '<div class="timeline-item cmd" data-id="' . $event['id'] . '">'
-                . '<span class="time"><i class="fa fa-clock-o"></i>' . substr($event['datetime'], -9) .'</span>'
-                .'<h3 class="timeline-header">' . $event['name'] . '</h3>'
-                .'<div class="timeline-body">'
-                .  $event['value']
-                .' <div class="timeline-footer">'
-                .'</div>'
-                .'</div>';
+            $result['html'] = '<div class="timeline-item cmd" data-id="' . $event['id'] . '">'
+                . '<span class="time"><i class="fa fa-clock-o"></i>' . substr($event['datetime'], -9) . '</span>'
+                . '<h3 class="timeline-header">' . $event['name'] . '</h3>'
+                . '<div class="timeline-body">'
+                . $event['value']
+                . ' <div class="timeline-footer">'
+                . '</div>'
+                . '</div>';
         }
-        return $return;
+        return $result;
     }
 }

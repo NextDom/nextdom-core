@@ -65,16 +65,14 @@ use NextDom\Managers\ViewManager;
  */
 class Cmd implements EntityInterface
 {
-    private static $_templateArray = array();
-    /**
-     * TODO: Mis en public pour y accéder depuis CmdManager
-     */
+    private static $_templateArray = [];
     public $_collectDate = '';
     public $_valueDate = '';
     public $_eqLogic = null;
     public $_needRefreshWidget;
     public $_needRefreshAlert;
     protected $_changed = false;
+
     /**
      * @var string
      *
@@ -301,7 +299,7 @@ class Cmd implements EntityInterface
      */
     public function setHtml($_key, $_value)
     {
-        if (in_array($_key, array('dashboard', 'dview', 'mview', 'dplan')) && $this->getWidgetTemplateCode($_key, true) == $_value) {
+        if (in_array($_key, ['dashboard', 'dview', 'mview', 'dplan']) && $this->getWidgetTemplateCode($_key, true) == $_value) {
             $_value = '';
         }
         if ($this->getHtml($_key) != $_value) {
@@ -483,7 +481,7 @@ class Cmd implements EntityInterface
         $this->emptyHistory();
         CacheManager::delete('cmdCacheAttr' . $this->getId());
         CacheManager::delete('cmd' . $this->getId());
-        NextDomHelper::addRemoveHistory(array('id' => $this->getId(), 'name' => $this->getHumanName(), 'date' => date('Y-m-d H:i:s'), 'type' => 'cmd'));
+        NextDomHelper::addRemoveHistory(['id' => $this->getId(), 'name' => $this->getHumanName(), 'date' => date('Y-m-d H:i:s'), 'type' => 'cmd']);
         return DBHelper::remove($this);
     }
 
@@ -573,7 +571,7 @@ class Cmd implements EntityInterface
         }
         $version = NextDomHelper::versionAlias($_version);
         $html = '';
-        $replace = array(
+        $replace = [
             '#id#' => $this->getId(),
             '#name#' => $this->getName(),
             '#name_display#' => ($this->getDisplay('icon') != '') ? $this->getDisplay('icon') : $this->getName(),
@@ -588,7 +586,7 @@ class Cmd implements EntityInterface
             '#eqLogic_id#' => $this->getEqLogic_id(),
             '#generic_type#' => $this->getGeneric_type(),
             '#hideCmdName#' => '',
-        );
+        ];
         if ($this->getConfiguration('listValue', '') != '') {
             $listOption = '';
             $elements = explode(';', $this->getConfiguration('listValue', ''));
@@ -655,7 +653,7 @@ class Cmd implements EntityInterface
                 }
             }
 
-            $replace['#state#'] = str_replace(array("\'", "'"), array("'", "\'"), $replace['#state#']);
+            $replace['#state#'] = str_replace(["\'", "'"], ["'", "\'"], $replace['#state#']);
             $replace['#collectDate#'] = $this->getCollectDate();
             $replace['#valueDate#'] = $this->getValueDate();
             $replace['#alertLevel#'] = $this->getCache('alertLevel', 'none');
@@ -714,7 +712,7 @@ class Cmd implements EntityInterface
                 $replace['#valueName#'] = $this->getName();
                 $replace['#unite#'] = $this->getUnite();
             }
-            $replace['#state#'] = str_replace(array("\'", "'"), array("'", "\'"), $replace['#state#']);
+            $replace['#state#'] = str_replace(["\'", "'"], ["'", "\'"], $replace['#state#']);
             $parameters = $this->getDisplay('parameters');
             if (is_array($parameters)) {
                 foreach ($parameters as $key => $value) {
@@ -931,7 +929,7 @@ class Cmd implements EntityInterface
     public function execCmd($_options = null, $_sendNodeJsEvent = false, $_quote = false)
     {
         if ($this->getType() == 'info') {
-            $state = $this->getCache(array('collectDate', 'valueDate', 'value'));
+            $state = $this->getCache(['collectDate', 'valueDate', 'value']);
             if (isset($state['collectDate'])) {
                 $this->setCollectDate($state['collectDate']);
             } else {
@@ -972,7 +970,7 @@ class Cmd implements EntityInterface
             }
 
             if ($this->getConfiguration('timeline::enable')) {
-                TimeLineHelper::addTimelineEvent(array('type' => 'cmd', 'subtype' => 'action', 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => date('Y-m-d H:i:s'), 'options' => $str_option));
+                TimeLineHelper::addTimelineEvent(['type' => 'cmd', 'subtype' => 'action', 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => date('Y-m-d H:i:s'), 'options' => $str_option]);
             }
             $this->preExecCmd($options);
             $value = $this->formatValue($this->execute($options), $_quote);
@@ -1052,17 +1050,20 @@ class Cmd implements EntityInterface
     }
 
     /**
+     * Execute before command execution
+     *
      * @param array $_values
+     *
      * @throws \Exception
      */
-    public function preExecCmd($_values = array())
+    public function preExecCmd($_values = [])
     {
         if (!is_array($this->getConfiguration('nextdomPreExecCmd')) || count($this->getConfiguration('nextdomPreExecCmd')) == 0) {
             return;
         }
         foreach ($this->getConfiguration('nextdomPreExecCmd') as $action) {
             try {
-                $options = array();
+                $options = [];
                 if (isset($action['options'])) {
                     $options = $action['options'];
                 }
@@ -1191,27 +1192,32 @@ class Cmd implements EntityInterface
     }
 
     /**
-     * TODO ???
-     * @param $_options
-     * @return bool
+     * Execute command overrided by plugins
+     *
+     * @param array $options Execute options
+     *
+     * @return bool Always false if not overrided
      */
-    public function execute($_options)
+    public function execute($options)
     {
         return false;
     }
 
     /**
+     * Executed after execution
+     *
      * @param array $_values
+     * 
      * @throws \Exception
      */
-    public function postExecCmd($_values = array())
+    public function postExecCmd($_values = [])
     {
         if (!is_array($this->getConfiguration('nextdomPostExecCmd'))) {
             return;
         }
         foreach ($this->getConfiguration('nextdomPostExecCmd') as $action) {
             try {
-                $options = array();
+                $options = [];
                 if (isset($action['options'])) {
                     $options = $action['options'];
                 }
@@ -1324,7 +1330,7 @@ class Cmd implements EntityInterface
             return $currentLevel;
         }
         if ($_allowDuring && $this->getAlert($currentLevel . 'during') != '' && $this->getAlert($currentLevel . 'during') > 0) {
-            $cron = CronManager::byClassAndFunction('cmd', 'duringAlertLevel', array('cmd_id' => intval($this->getId())));
+            $cron = CronManager::byClassAndFunction('cmd', 'duringAlertLevel', ['cmd_id' => intval($this->getId())]);
             $next = strtotime('+ ' . $this->getAlert($currentLevel . 'during', 1) . ' minutes ' . date('Y-m-d H:i:s'));
             if (!is_object($cron)) {
                 $cron = new cron();
@@ -1337,14 +1343,14 @@ class Cmd implements EntityInterface
             $cron->setClass('cmd');
             $cron->setFunction('duringAlertLevel');
             $cron->setOnce(1);
-            $cron->setOption(array('cmd_id' => intval($this->getId())));
+            $cron->setOption(['cmd_id' => intval($this->getId())]);
             $cron->setSchedule(CronManager::convertDateToCron($next));
             $cron->setLastRun(date('Y-m-d H:i:s'));
             $cron->save();
             return 'none';
         }
         if ($_allowDuring && $currentLevel == 'none') {
-            $cron = CronManager::byClassAndFunction('cmd', 'duringAlertLevel', array('cmd_id' => intval($this->getId())));
+            $cron = CronManager::byClassAndFunction('cmd', 'duringAlertLevel', ['cmd_id' => intval($this->getId())]);
             if (is_object($cron)) {
                 $cron->remove(false);
             }
@@ -1411,20 +1417,20 @@ class Cmd implements EntityInterface
                 foreach ($cmds as $id) {
                     $cmd = CmdManager::byId(str_replace('#', '', $id));
                     if (is_object($cmd)) {
-                        $cmd->execCmd(array(
+                        $cmd->execCmd([
                             'title' => __('[' . ConfigManager::byKey('name', 'core', 'NEXTDOM') . '] ') . $message,
                             'message' => ConfigManager::byKey('name', 'core', 'NEXTDOM') . ' : ' . $message,
-                        ));
+                        ]);
                     }
                 }
             }
         }
 
         if ($prevAlert != $maxAlert) {
-            $status = array(
+            $status = [
                 'warning' => 0,
                 'danger' => 0,
-            );
+            ];
             if ($maxAlert != 'none' && isset($NEXTDOM_INTERNAL_CONFIG['alerts'][$maxAlert])) {
                 $status[$maxAlert] = 1;
             }
@@ -1474,7 +1480,7 @@ class Cmd implements EntityInterface
         $this->setCollectDate(($_datetime !== null) ? $_datetime : date('Y-m-d H:i:s'));
         $this->setCache('collectDate', $this->getCollectDate());
         $this->setValueDate(($repeat) ? $this->getValueDate() : $this->getCollectDate());
-        $eqLogic->setStatus(array('lastCommunication' => $this->getCollectDate(), 'timeout' => 0));
+        $eqLogic->setStatus(['lastCommunication' => $this->getCollectDate(), 'timeout' => 0]);
         $display_value = $value;
         if (method_exists($this, 'formatValueWidget')) {
             $display_value = $this->formatValueWidget($value);
@@ -1488,7 +1494,7 @@ class Cmd implements EntityInterface
         if ($repeat && $this->getConfiguration('repeatEventManagement', 'auto') == 'never') {
             $this->addHistoryValue($value, $this->getCollectDate());
             $eqLogic->emptyCacheWidget();
-            EventManager::adds('cmd::update', array(array('cmd_id' => $this->getId(), 'value' => $value, 'display_value' => $display_value, 'valueDate' => $this->getValueDate(), 'collectDate' => $this->getCollectDate())));
+            EventManager::adds('cmd::update', [['cmd_id' => $this->getId(), 'value' => $value, 'display_value' => $display_value, 'valueDate' => $this->getValueDate(), 'collectDate' => $this->getCollectDate()]]);
             return;
         }
         $_loop++;
@@ -1500,20 +1506,20 @@ class Cmd implements EntityInterface
             $message .= ' (répétition)';
         }
         LogHelper::add('event', 'info', $message);
-        $events = array();
+        $events = [];
         if (!$repeat) {
-            $this->setCache(array('value' => $value, 'valueDate' => $this->getValueDate()));
+            $this->setCache(['value' => $value, 'valueDate' => $this->getValueDate()]);
             ScenarioManager::check($this);
             $eqLogic->emptyCacheWidget();
             $level = $this->checkAlertLevel($value);
-            $events[] = array('cmd_id' => $this->getId(), 'value' => $value, 'display_value' => $display_value, 'valueDate' => $this->getValueDate(), 'collectDate' => $this->getCollectDate(), 'alertLevel' => $level);
+            $events[] = ['cmd_id' => $this->getId(), 'value' => $value, 'display_value' => $display_value, 'valueDate' => $this->getValueDate(), 'collectDate' => $this->getCollectDate(), 'alertLevel' => $level];
             $foundInfo = false;
             $value_cmd = CmdManager::byValue($this->getId(), null, true);
             if (is_array($value_cmd) && count($value_cmd) > 0) {
                 foreach ($value_cmd as $cmd) {
                     if ($cmd->getType() == 'action') {
                         if (!$repeat) {
-                            $events[] = array('cmd_id' => $cmd->getId(), 'value' => $value, 'display_value' => $display_value, 'valueDate' => $this->getValueDate(), 'collectDate' => $this->getCollectDate());
+                            $events[] = ['cmd_id' => $cmd->getId(), 'value' => $value, 'display_value' => $display_value, 'valueDate' => $this->getValueDate(), 'collectDate' => $this->getCollectDate()];
                         }
                     } else {
                         if ($_loop > 1) {
@@ -1528,7 +1534,7 @@ class Cmd implements EntityInterface
                 ListenerManager::backgroundCalculDependencyCmd($this->getId());
             }
         } else {
-            $events[] = array('cmd_id' => $this->getId(), 'value' => $value, 'display_value' => $display_value, 'valueDate' => $this->getValueDate(), 'collectDate' => $this->getCollectDate());
+            $events[] = ['cmd_id' => $this->getId(), 'value' => $value, 'display_value' => $display_value, 'valueDate' => $this->getValueDate(), 'collectDate' => $this->getCollectDate()];
         }
         if (count($events) > 0) {
             EventManager::adds('cmd::update', $events);
@@ -1545,7 +1551,7 @@ class Cmd implements EntityInterface
                 $this->actionAlertLevel($level, $value);
             }
             if ($this->getConfiguration('timeline::enable')) {
-                TimeLineHelper::addTimelineEvent(array('type' => 'cmd', 'subtype' => 'info', 'cmdType' => $this->getSubType(), 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => $this->getValueDate(), 'value' => $value . $this->getUnite()));
+                TimeLineHelper::addTimelineEvent(['type' => 'cmd', 'subtype' => 'info', 'cmdType' => $this->getSubType(), 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => $this->getValueDate(), 'value' => $value . $this->getUnite()]);
             }
             $this->pushUrl($value);
         }
@@ -1612,14 +1618,14 @@ class Cmd implements EntityInterface
     public function checkReturnState($_value)
     {
         if (is_numeric($this->getConfiguration('returnStateTime')) && $this->getConfiguration('returnStateTime') > 0 && $_value != $this->getConfiguration('returnStateValue') && trim($this->getConfiguration('returnStateValue')) != '') {
-            $cron = CronManager::byClassAndFunction('cmd', 'returnState', array('cmd_id' => intval($this->getId())));
+            $cron = CronManager::byClassAndFunction('cmd', 'returnState', ['cmd_id' => intval($this->getId())]);
             if (!is_object($cron)) {
                 $cron = new cron();
             }
             $cron->setClass('cmd');
             $cron->setFunction('returnState');
             $cron->setOnce(1);
-            $cron->setOption(array('cmd_id' => intval($this->getId())));
+            $cron->setOption(['cmd_id' => intval($this->getId())]);
             $next = strtotime('+ ' . ($this->getConfiguration('returnStateTime') + 1) . ' minutes ' . date('Y-m-d H:i:s'));
             $cron->setSchedule(CronManager::convertDateToCron($next));
             $cron->setLastRun(date('Y-m-d H:i:s'));
@@ -1644,7 +1650,7 @@ class Cmd implements EntityInterface
                 return;
             }
             $next = strtotime('+ ' . ($this->getConfiguration('nextdomCheckCmdTime') + 1) . ' minutes ' . date('Y-m-d H:i:s'));
-            $cron = CronManager::byClassAndFunction('cmd', 'cmdAlert', array('cmd_id' => intval($this->getId())));
+            $cron = CronManager::byClassAndFunction('cmd', 'cmdAlert', ['cmd_id' => intval($this->getId())]);
             if (!is_object($cron)) {
                 $cron = new cron();
             } else {
@@ -1656,12 +1662,12 @@ class Cmd implements EntityInterface
             $cron->setClass('cmd');
             $cron->setFunction('cmdAlert');
             $cron->setOnce(1);
-            $cron->setOption(array('cmd_id' => intval($this->getId())));
+            $cron->setOption(['cmd_id' => intval($this->getId())]);
             $cron->setSchedule(CronManager::convertDateToCron($next));
             $cron->setLastRun(date('Y-m-d H:i:s'));
             $cron->save();
         } else {
-            $cron = CronManager::byClassAndFunction('cmd', 'cmdAlert', array('cmd_id' => intval($this->getId())));
+            $cron = CronManager::byClassAndFunction('cmd', 'cmdAlert', ['cmd_id' => intval($this->getId())]);
             if (is_object($cron)) {
                 $cron->remove();
             }
@@ -1678,7 +1684,7 @@ class Cmd implements EntityInterface
         }
         foreach ($this->getConfiguration('actionCheckCmd') as $action) {
             try {
-                $options = array();
+                $options = [];
                 if (isset($action['options'])) {
                     $options = $action['options'];
                 }
@@ -1702,13 +1708,13 @@ class Cmd implements EntityInterface
         if ($url == '') {
             return;
         }
-        $replace = array(
+        $replace = [
             '#value#' => urlencode($_value),
             '#cmd_name#' => urlencode($this->getName()),
             '#cmd_id#' => $this->getId(),
             '#humanname#' => urlencode($this->getHumanName()),
             '#eq_name#' => urlencode($this->getEqLogicId()->getName()),
-        );
+        ];
         $url = str_replace(array_keys($replace), $replace, $url);
         LogHelper::add('event', 'info', __('Appels de l\'URL de push pour la commande ') . $this->getHumanName() . ' : ' . $url);
         $http = new \com_http($url);
@@ -1729,7 +1735,7 @@ class Cmd implements EntityInterface
     public function getStatistique($_startTime, $_endTime)
     {
         if ($this->getType() != 'info' || $this->getType() == 'string') {
-            return array();
+            return [];
         }
         return HistoryManager::getStatistics($this->getId(), $_startTime, $_endTime);
     }
@@ -1763,15 +1769,15 @@ class Cmd implements EntityInterface
     public function generateAskResponseLink($_response, $_plugin = 'core', $_network = 'external')
     {
         $token = $this->getCache('ask::token', ConfigManager::genKey());
-        $this->setCache(array('ask::count' => 0, 'ask::token' => $token));
-        $return = NetworkHelper::getNetworkAccess($_network) . '/core/api/jeeApi.php?';
-        $return .= 'type=ask';
-        $return .= '&plugin=' . $_plugin;
-        $return .= '&apikey=' . Api::getApiKey($_plugin);
-        $return .= '&token=' . $token;
-        $return .= '&response=' . urlencode($_response);
-        $return .= '&cmd_id=' . $this->getId();
-        return $return;
+        $this->setCache(['ask::count' => 0, 'ask::token' => $token]);
+        $result = NetworkHelper::getNetworkAccess($_network) . '/core/api/jeeApi.php?';
+        $result .= 'type=ask';
+        $result .= '&plugin=' . $_plugin;
+        $result .= '&apikey=' . Api::getApiKey($_plugin);
+        $result .= '&token=' . $token;
+        $result .= '&response=' . urlencode($_response);
+        $result .= '&cmd_id=' . $this->getId();
+        return $result;
     }
 
     /**
@@ -1795,7 +1801,7 @@ class Cmd implements EntityInterface
         $dataStore->setValue($_response);
         $dataStore->setLink_id(-1);
         $dataStore->save();
-        $this->setCache(array('ask::variable' => 'none', 'ask::count' => 0, 'ask::token' => null, 'ask::endtime' => null));
+        $this->setCache(['ask::variable' => 'none', 'ask::count' => 0, 'ask::token' => null, 'ask::endtime' => null]);
         return true;
     }
 
@@ -1808,7 +1814,7 @@ class Cmd implements EntityInterface
     public function getTemporalAvg($_startTime, $_endTime)
     {
         if ($this->getType() != 'info' || $this->getType() == 'string') {
-            return array();
+            return [];
         }
         return HistoryManager::getTemporalAvg($this->getId(), $_startTime, $_endTime);
     }
@@ -1848,49 +1854,49 @@ class Cmd implements EntityInterface
     {
         $class = new \ReflectionClass($this->getEqType());
         $method_toHtml = $class->getMethod('toHtml');
-        $return = array();
+        $result = [];
         if ($method_toHtml->class == EqLogic::class) {
-            $return['custom'] = true;
+            $result['custom'] = true;
         } else {
-            $return['custom'] = false;
+            $result['custom'] = false;
         }
         $class = new \ReflectionClass($this->getEqType() . 'Cmd');
         $method_toHtml = $class->getMethod('toHtml');
         if ($method_toHtml->class == Cmd::class) {
-            $return['custom'] = true;
+            $result['custom'] = true;
         } else {
-            $return['custom'] = false;
+            $result['custom'] = false;
         }
         $class = $this->getEqType() . 'Cmd';
         if (property_exists($class, '_widgetPossibility')) {
             /** @noinspection PhpUndefinedFieldInspection */
-            $return = $class::$_widgetPossibility;
+            $result = $class::$_widgetPossibility;
             if ($_key != '') {
                 $keys = explode('::', $_key);
                 foreach ($keys as $k) {
-                    if (!isset($return[$k])) {
+                    if (!isset($result[$k])) {
                         return false;
                     }
-                    if (is_array($return[$k])) {
-                        $return = $return[$k];
+                    if (is_array($result[$k])) {
+                        $result = $result[$k];
                     } else {
-                        return $return[$k];
+                        return $result[$k];
                     }
                 }
-                if (is_array($return)) {
+                if (is_array($result)) {
                     return $_default;
                 }
-                return $return;
+                return $result;
             }
         }
 
         if ($_key != '') {
-            if (isset($return['custom']) && !isset($return[$_key])) {
-                return $return['custom'];
+            if (isset($result['custom']) && !isset($result[$_key])) {
+                return $result['custom'];
             }
-            return (isset($return[$_key])) ? $return[$_key] : $_default;
+            return (isset($result[$_key])) ? $result[$_key] : $_default;
         }
-        return $return;
+        return $result;
     }
 
     /**
@@ -1910,27 +1916,27 @@ class Cmd implements EntityInterface
         } else {
             $cmd->setValue('');
         }
-        $return = Utils::o2a($cmd);
-        foreach ($return as $key => $value) {
+        $result = Utils::o2a($cmd);
+        foreach ($result as $key => $value) {
             if (is_array($value)) {
                 foreach ($value as $key2 => $value2) {
                     if ($value2 == '') {
-                        unset($return[$key][$key2]);
+                        unset($result[$key][$key2]);
                     }
                 }
             } else {
                 if ($value == '') {
-                    unset($return[$key]);
+                    unset($result[$key]);
                 }
             }
         }
-        if (isset($return['configuration']) && count($return['configuration']) == 0) {
-            unset($return['configuration']);
+        if (isset($result['configuration']) && count($result['configuration']) == 0) {
+            unset($result['configuration']);
         }
-        if (isset($return['display']) && count($return['display']) == 0) {
-            unset($return['display']);
+        if (isset($result['display']) && count($result['display']) == 0) {
+            unset($result['display']);
         }
-        return $return;
+        return $result;
     }
 
     /**
@@ -1988,9 +1994,9 @@ class Cmd implements EntityInterface
      */
     public function exportApi()
     {
-        $return = Utils::o2a($this);
-        $return['currentValue'] = ($this->getType() !== 'action') ? $this->execCmd(null, 2) : $this->getConfiguration('lastCmdValue', null);
-        return $return;
+        $result = Utils::o2a($this);
+        $result['currentValue'] = ($this->getType() !== 'action') ? $this->execCmd(null, 2) : $this->getConfiguration('lastCmdValue', null);
+        return $result;
     }
 
     /**
@@ -2001,7 +2007,7 @@ class Cmd implements EntityInterface
      * @throws CoreException
      * @throws \ReflectionException
      */
-    public function getLinkData(&$_data = array('node' => array(), 'link' => array()), $_level = 0, $_drill = null)
+    public function getLinkData(&$_data = ['node' => [], 'link' => []], $_level = 0, $_drill = null)
     {
         if ($_drill == null) {
             $_drill = ConfigManager::byKey('graphlink::cmd::drill');
@@ -2014,7 +2020,7 @@ class Cmd implements EntityInterface
             return $_data;
         }
         $icon = ($this->getType() == 'info') ? Utils::findCodeIcon('fa-eye') : Utils::findCodeIcon('fa-hand-paper-o');
-        $_data['node']['cmd' . $this->getId()] = array(
+        $_data['node']['cmd' . $this->getId()] = [
             'id' => 'cmd' . $this->getId(),
             'name' => $this->getName(),
             'icon' => $icon['icon'],
@@ -2025,20 +2031,20 @@ class Cmd implements EntityInterface
             'fontweight' => ($_level == 1) ? 'bold' : 'normal',
             'title' => $this->getHumanName(),
             'url' => $this->getEqLogicId()->getLinkToConfiguration(),
-        );
+        ];
         $usedBy = $this->getUsedBy();
         $use = $this->getUse();
         Utils::addGraphLink($this, 'cmd', $usedBy['scenario'], 'scenario', $_data, $_level, $_drill);
         Utils::addGraphLink($this, 'cmd', $usedBy['eqLogic'], 'eqLogic', $_data, $_level, $_drill);
         Utils::addGraphLink($this, 'cmd', $usedBy['cmd'], 'cmd', $_data, $_level, $_drill);
-        Utils::addGraphLink($this, 'cmd', $usedBy['interactDef'], 'interactDef', $_data, $_level, $_drill, array('dashvalue' => '2,6', 'lengthfactor' => 0.6));
-        Utils::addGraphLink($this, 'cmd', $usedBy['plan'], 'plan', $_data, $_level, $_drill, array('dashvalue' => '2,6', 'lengthfactor' => 0.6));
-        Utils::addGraphLink($this, 'cmd', $usedBy['view'], 'view', $_data, $_level, $_drill, array('dashvalue' => '2,6', 'lengthfactor' => 0.6));
+        Utils::addGraphLink($this, 'cmd', $usedBy['interactDef'], 'interactDef', $_data, $_level, $_drill, ['dashvalue' => '2,6', 'lengthfactor' => 0.6]);
+        Utils::addGraphLink($this, 'cmd', $usedBy['plan'], 'plan', $_data, $_level, $_drill, ['dashvalue' => '2,6', 'lengthfactor' => 0.6]);
+        Utils::addGraphLink($this, 'cmd', $usedBy['view'], 'view', $_data, $_level, $_drill, ['dashvalue' => '2,6', 'lengthfactor' => 0.6]);
         Utils::addGraphLink($this, 'cmd', $use['scenario'], 'scenario', $_data, $_level, $_drill);
         Utils::addGraphLink($this, 'cmd', $use['eqLogic'], 'eqLogic', $_data, $_level, $_drill);
         Utils::addGraphLink($this, 'cmd', $use['cmd'], 'cmd', $_data, $_level, $_drill);
         Utils::addGraphLink($this, 'cmd', $use['dataStore'], 'dataStore', $_data, $_level, $_drill);
-        Utils::addGraphLink($this, 'cmd', $this->getEqLogicId(), 'eqLogic', $_data, $_level, $_drill, array('dashvalue' => '1,0', 'lengthfactor' => 0.6));
+        Utils::addGraphLink($this, 'cmd', $this->getEqLogicId(), 'eqLogic', $_data, $_level, $_drill, ['dashvalue' => '1,0', 'lengthfactor' => 0.6]);
         return $_data;
     }
 
@@ -2050,19 +2056,19 @@ class Cmd implements EntityInterface
      */
     public function getUsedBy($_array = false)
     {
-        $return = array('cmd' => array(), 'eqLogic' => array(), 'scenario' => array(), 'plan' => array(), 'view' => array());
-        $return['cmd'] = CmdManager::searchConfiguration('#' . $this->getId() . '#');
-        $return['eqLogic'] = EqLogicManager::searchConfiguration('#' . $this->getId() . '#');
-        $return['scenario'] = ScenarioManager::searchByUse(array(array('action' => '#' . $this->getId() . '#')));
-        $return['interactDef'] = InteractDefManager::searchByUse('#' . $this->getId() . '#');
-        $return['view'] = ViewManager::searchByUse('cmd', $this->getId());
-        $return['plan'] = PlanHeaderManager::searchByUse('cmd', $this->getId());
+        $result = ['cmd' => [], 'eqLogic' => [], 'scenario' => [], 'plan' => [], 'view' => []];
+        $result['cmd'] = CmdManager::searchConfiguration('#' . $this->getId() . '#');
+        $result['eqLogic'] = EqLogicManager::searchConfiguration('#' . $this->getId() . '#');
+        $result['scenario'] = ScenarioManager::searchByUse([['action' => '#' . $this->getId() . '#']]);
+        $result['interactDef'] = InteractDefManager::searchByUse('#' . $this->getId() . '#');
+        $result['view'] = ViewManager::searchByUse('cmd', $this->getId());
+        $result['plan'] = PlanHeaderManager::searchByUse('cmd', $this->getId());
         if ($_array) {
-            foreach ($return as &$value) {
+            foreach ($result as &$value) {
                 $value = Utils::o2a($value);
             }
         }
-        return $return;
+        return $result;
     }
 
     /**
@@ -2076,21 +2082,27 @@ class Cmd implements EntityInterface
     }
 
     /**
-     * @param null $_user
-     * @return bool
+     * Check if user have right to execute the action.
+     *
+     * @param User $user User to test
+     *
+     * @return bool True if user can execute
+     *
      * @throws \Exception
      */
-    public function hasRight($_user = null)
+    public function hasRight($user = null)
     {
         if ($this->getType() == 'action') {
-            return $this->getEqLogicId()->hasRight('x', $_user);
+            return $this->getEqLogicId()->hasRight('x', $user);
         } else {
-            return $this->getEqLogicId()->hasRight('r', $_user);
+            return $this->getEqLogicId()->hasRight('r', $user);
         }
     }
 
     /**
-     * @return bool
+     * Get changed state
+     *
+     * @return bool True if attribute has changed
      */
     public function getChanged()
     {
@@ -2098,17 +2110,23 @@ class Cmd implements EntityInterface
     }
 
     /**
-     * @param $_changed
+     * Set changed state
+     *
+     * @param bool $changed New changed state
+     *
      * @return $this
      */
-    public function setChanged($_changed)
+    public function setChanged($changed)
     {
-        $this->_changed = $_changed;
+        $this->_changed = $changed;
         return $this;
     }
 
     /**
+     * Cast this object from a source command
+     *
      * @param Cmd $srcCmd
+     *
      * @return $this
      */
     public function castFromCmd(Cmd $srcCmd)
@@ -2121,7 +2139,9 @@ class Cmd implements EntityInterface
     }
 
     /**
-     * @return array
+     * Get all attributes of the Cmd class
+     *
+     * @return array List of attributes
      */
     public function getAllAttributes()
     {
