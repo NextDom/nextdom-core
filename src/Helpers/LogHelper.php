@@ -213,7 +213,7 @@ class LogHelper
      *
      * @return string Log path
      */
-    public static function getPathToLog($targetLog = 'core')
+    public static function getPathToLog($targetLog = 'core'): string
     {
         return NEXTDOM_LOG . '/' . $targetLog;
     }
@@ -270,7 +270,7 @@ class LogHelper
      *
      * @throws \Exception
      */
-    public static function clear($targetLog)
+    public static function clear($targetLog): bool
     {
         if (self::authorizeClearLog($targetLog)) {
             $path = self::getPathToLog($targetLog);
@@ -398,7 +398,8 @@ class LogHelper
      *
      * @return array List of files
      */
-    public static function liste($filter = null) {
+    public static function liste($filter = null) 
+    {
         trigger_error('This method is deprecated', E_USER_DEPRECATED);
         return self::getLogFileList($filter);
     }
@@ -410,7 +411,7 @@ class LogHelper
      *
      * @return array List of files
      */
-    public static function getLogFileList($filter = null)
+    public static function getLogFileList($filter = null): array
     {
         $result = [];
         foreach (FileSystemHelper::ls(self::getPathToLog(''), '*') as $log) {
@@ -431,7 +432,7 @@ class LogHelper
      *
      * @return array List of files
      */
-    public static function getAllLogFileList($folder = '')
+    public static function getAllLogFileList($folder = ''): array
     {
         $result = [];
         foreach (FileSystemHelper::ls(self::getPathToLog($folder), '*') as $log) {
