@@ -48,21 +48,6 @@ along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
         </mu-expansion-panel>
         <mu-expansion-panel v-if="eqLogics.length > 0">
           <div slot="header">{{ $t('equipments')}}</div>
-          <!--
-          <mu-list>
-            <mu-list-item
-              button
-              v-bind:ripple="false"
-              v-for="eqLogic in eqLogics"
-              v-bind:key="eqLogic.id"
-            >
-              <mu-list-item-title>{{ eqLogic.name }}</mu-list-item-title>
-              <mu-list-item-action v-on:click="changeEqLogicVisibility(eqLogic.id)">
-                <mu-icon v-bind:data-id="eqLogic.id" v-bind:value="eqLogicsVisibility[eqLogic.id]"></mu-icon>
-              </mu-list-item-action>
-            </mu-list-item>
-          </mu-list>
-          -->
           <draggable
             v-model="eqLogics"
             @start="drag=true"

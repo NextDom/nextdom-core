@@ -29,6 +29,59 @@ along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
       <mu-icon left value="desktop_mac"></mu-icon>
       {{ $t('desktopVersion') }}
     </mu-button>
+    <mu-expansion-panel>
+      <div slot="header">
+        <i class="fa fa-cogs"></i>
+        {{ $t('advancedFeatures') }}
+      </div>
+      <mu-button id="show-logs" color="primary" v-on:click="showLogsListDialog">{{ $t('showLogs') }}</mu-button>
+    </mu-expansion-panel>
+    <mu-dialog transition="slide-bottom" scrollable fullscreen v-bind:open.sync="logDialogOpened">
+      <mu-appbar color="primary" v-bind:title="currentLogFile">
+        <mu-button slot="left" icon v-on:click="closeLogDialog">
+          <mu-icon value="close"></mu-icon>
+        </mu-button>
+      </mu-appbar>
+      <pre v-for="(logLine, index) in logContent" v-bind:key="index">{{ logLine }}</pre>
+    </mu-dialog>
+    <mu-dialog transition="slide-bottom" scrollable v-bind:open.sync="logsListDialogOpened">
+      <mu-appbar color="primary" v-bind:title="$t('showLogs')">
+        <mu-button slot="left" icon v-on:click="closeLogsListDialog">
+          <mu-icon value="close"></mu-icon>
+        </mu-button>
+      </mu-appbar>
+      <mu-list>
+        <div v-for="(item, index) in logsList" v-bind:key="index">
+          <template v-if="item.content.length > 0">
+            <mu-list-item>
+              <mu-list-item-action>
+                <mu-icon value="folder"></mu-icon>
+              </mu-list-item-action>
+              {{ item.name }}
+            </mu-list-item>
+            <mu-list-item
+              button
+              v-on:click="showLogDialog(item.name + subItem.name)"
+              v-for="(subItem, subItemIndex) in item.content"
+              v-bind:key="subItemIndex"
+            >
+              <mu-list-item-action class="subfolder">
+                <mu-icon value="list"></mu-icon>
+              </mu-list-item-action>
+              {{ subItem.name }}
+            </mu-list-item>
+          </template>
+          <template v-else>
+            <mu-list-item button v-on:click="showLogDialog(item.name)">
+              <mu-list-item-action>
+                <mu-icon value="list"></mu-icon>
+              </mu-list-item-action>
+              {{ item.name }}
+            </mu-list-item>
+          </template>
+        </div>
+      </mu-list>
+    </mu-dialog>
   </mu-container>
 </template>
 
@@ -42,6 +95,15 @@ import Communication from "@/libs/Communication.js";
 export default {
   name: "Settings",
   components: {},
+  data() {
+    return {
+      logsListDialogOpened: false,
+      logDialogOpened: false,
+      logsList: [],
+      currentLogFile: "",
+      logContent: []
+    };
+  },
   mounted() {
     /**
      * @vuese
@@ -52,11 +114,49 @@ export default {
   },
   methods: {
     /**
+     * @vuese
      * Disconnect user
      */
     disconnect: function() {
       Communication.disconnect();
       this.$emit("changeView", "/login");
+    },
+    /**
+     * @vuese
+     * Show dialog of logs list
+     */
+    showLogsListDialog: function() {
+      Communication.get("/api/logs/list", data => {
+        this.logsList = data;
+        this.logsListDialogOpened = true;
+      });
+    },
+    /**
+     * @vuese
+     * Close dialog of logs list
+     */
+    closeLogsListDialog: function() {
+      this.logsListDialogOpened = false;
+    },
+    /**
+     * @vuese
+     * Show dialog with content of a log file
+     */
+    showLogDialog: function(logFile) {
+      this.closeLogsListDialog();
+      const preparedLogFileName = logFile.replace("/", "___");
+      Communication.get("/api/logs/get/" + preparedLogFileName, data => {
+        this.logContent = data;
+        this.currentLogFile = logFile;
+        this.logDialogOpened = true;
+      });
+    },
+    /**
+     * @vuese
+     * Close dialog of log file
+     */
+    closeLogDialog: function() {
+      this.logDialogOpened = false;
     },
     /**
      * @vuese
@@ -74,5 +174,13 @@ export default {
 #force-desktop-button {
   width: 100%;
   margin-bottom: 1rem;
+}
+
+.subfolder {
+  margin-left: 1rem;
+}
+
+pre {
+  margin: 0 1rem;
 }
 </style>
