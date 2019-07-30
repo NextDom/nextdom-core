@@ -12,6 +12,8 @@ usage() {
 usage: $0 [options]
 
 options:
+  -dev          : copy values of dist/dev.config.ini.dist in default.config.ini
+  -prod         : copy values of dist/prod.config.ini.dist in default.config.ini
   -h            : display this message
   -i <host>     : database hostname, defaults to localhost
   -z <port>     : database port, defaults to 3306
@@ -127,6 +129,9 @@ prereq_create_dirs() {
   touch ${LOG_DIRECTORY}/scenario_execution
 }
 
+step_nexdom_environement() {
+
+}
 
 step_nextdom_file_permissions() {
   # configure file permissions
