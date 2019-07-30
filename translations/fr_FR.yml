@@ -367,7 +367,7 @@ general:
     synchronization: "Synchronisation"
     nextdom_name: "Nom de votre NextDom "
     language: "Langage"
-    language-used: "Langue utilisé"
+    language-used: "Langue utilisée"
     system_hardware: "Système / Hardware"
     installation_key: "Clef d'installation"
     session_timeout: "Durée de vie de votre connexion"

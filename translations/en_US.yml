@@ -376,7 +376,7 @@ general:
        time_server: "Time Server used for time synchronization"
        ignore_system_time: "Indicates to Nexdom to ignore system time"
     language-list:
-        fr_FR: "Franch"
+        fr_FR: "French"
         en_US: "English"
         de_DE: "German"
         es_ES: "Spanish"
