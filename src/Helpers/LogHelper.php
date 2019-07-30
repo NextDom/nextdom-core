@@ -302,7 +302,7 @@ class LogHelper
      * @param int $start Start row
      * @param int $nbLines Number of lines to get
      *
-     * @return array|bool Lines of the log or false on error
+     * @return array|bool Content of the log or false on error
      *
      * @throws \Exception
      */
@@ -316,7 +316,7 @@ class LogHelper
         $page = [];
         $log = new SplFileObject($path);
         if ($log) {
-            $log->seek($start); //Seek to the begening of lines
+            $log->seek($start); //Seek to the beginning of lines
             $linesRead = 0;
             while ($log->valid() && $linesRead != $nbLines) {
                 $line = trim($log->current()); //get current line
@@ -420,6 +420,26 @@ class LogHelper
             if (!is_dir(self::getPathToLog($log))) {
                 $result[] = $log;
             }
+        }
+        return $result;
+    }
+
+    /**
+     * Get list of all log files
+     *
+     * @param string $folder Log folder
+     *
+     * @return array List of files
+     */
+    public static function getAllLogFileList($folder = '')
+    {
+        $result = [];
+        foreach (FileSystemHelper::ls(self::getPathToLog($folder), '*') as $log) {
+            $item = ['name' => $log, 'content' => []];
+            if (is_dir(self::getPathToLog($log))) {
+                $item['content'] = self::getAllLogFileList($log);
+            }
+            $result[] = $item;
         }
         return $result;
     }

@@ -9,6 +9,7 @@ export const i18n = new VueI18n({
   fallbackLocale: "en",
   messages: {
     en: {
+      advancedFeatures: "Advanced features",
       close: "Close",
       configuration: "Configuration",
       connect: "Connect",
@@ -24,11 +25,13 @@ export const i18n = new VueI18n({
       roomsTitle: "Rooms",
       scenariosTitle: "Scenarios",
       settingsTitle: "Settings",
+      showLogs: "Show logs",
       summary: "Summary",
       summaryTitle: "Summary",
       visibility: "Visibility"
     },
     fr: {
+      advancedFeatures: "Fonctions avancées",
       close: "Fermer",
       configuration: "Configuration",
       connect: "Connexion",
@@ -44,6 +47,7 @@ export const i18n = new VueI18n({
       roomsTitle: "Pièces",
       scenariosTitle: "Scénarios",
       settingsTitle: "Paramètres",
+      showLogs: "Afficher les journaux",
       summary: "Résumé",
       summaryTitle: "Résumé",
       visibility: "Visibilité"
