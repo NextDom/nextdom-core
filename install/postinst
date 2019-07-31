@@ -131,11 +131,10 @@ prereq_create_dirs() {
 }
 
 nexdom_environement() {
- echo ${env}
   if [ ${env} = "dev" ]; then
-         cp -f ${WEBSERVER_HOME}/assets/config/dist/dev.config.ini.dist ${WEBSERVER_HOME}/assets/config/default.config.ini
+         cp -f ${WEBSERVER_HOME}/assets/config/dist/default.config.ini.dev ${WEBSERVER_HOME}/assets/config/default.config.ini
     else
-        cp -f ${WEBSERVER_HOME}/assets/config/dist/prod.config.ini.dist ${WEBSERVER_HOME}/assets/config/default.config.ini
+        cp -f ${WEBSERVER_HOME}/assets/config/dist/default.config.ini.dist ${WEBSERVER_HOME}/assets/config/default.config.ini
   fi
 }
 
