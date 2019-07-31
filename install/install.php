@@ -70,9 +70,9 @@ try {
         $nextDomUpdate->setConfiguration('version', $gitBranch);
         $nextDomUpdate->setSource('github');
     } else {
-        $version = "dpkg -s nextdom | grep '^Version:'";
+        $version = system('dpkg -s nextdom | grep -Po "^Version: \K(.*)"');
         $nextDomUpdate->setLocalVersion($version);
-        $nextDomUpdate->setSource('deb');
+        $nextDomUpdate->setSource('apt');
     }
     $nextDomUpdate->save();
     echo "OK\n";
