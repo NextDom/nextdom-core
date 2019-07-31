@@ -100,11 +100,20 @@ export const store = new Vuex.Store({
           componentData =
             CmdTemplates["cmds"][cmd.type][cmd.subType]["no_data"];
         } catch {}
+      } else if (
+        componentData.component === "DefaultInfoCmd" &&
+        cmd.icon !== ""
+      ) {
+        componentData = {
+          component: "DefaultIconInfoCmd",
+          icon: true,
+          button: false
+        };
       }
       if (componentData === undefined) {
         // TODO: Peut être dans les types générique, mais il faut vérifier si il n'y a pas de cas particuliers
         if (cmd.genericType === "DONT") {
-          componentData = componentData = {
+          componentData = {
             component: "DontCmd",
             icon: false,
             button: false

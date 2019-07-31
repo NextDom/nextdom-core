@@ -18,19 +18,34 @@ along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 @Email   <admin@nextdom.org>
 @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 -->
+<template>
+  <div class="consumption-info-cmd cmd icon">
+    <div class="info-cmd">
+      <div>{{ cmd.name }}</div>
+      <i v-bind:class="icon"></i>
+      <div>{{ cmd.state }} {{ cmd.unite }}</div>
+    </div>
+  </div>
+</template>
 
 <script>
-import BaseIconInfoCmd from "./BaseIconInfoCmd";
-
 /**
- * Show power state
+ * Show consumption information
  * @group Commands
  */
 export default {
-  name: "PowerInfoCmd",
-  extends: BaseIconInfoCmd,
+  name: "BaseIconInfoCmd",
+  data: function() {
+    return {
+      icon: ''
+    }
+  },
+  props: {
+    // Command object
+    cmd: null
+  },
   mounted() {
-    this.icon = "fa fa-bolt";
+    this.$store.commit("addShowedCmd", { cmd: this.cmd });
   }
 };
 </script>

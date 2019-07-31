@@ -18,28 +18,19 @@ along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 @Email   <admin@nextdom.org>
 @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 -->
-<template>
-  <div class="consumption-info-cmd cmd icon">
-    <div class="info-cmd">
-      <i class="fas fa-chart-area"></i>
-      <div>{{ cmd.state }} {{ cmd.unite }}</div>
-    </div>
-  </div>
-</template>
 
 <script>
+import BaseIconInfoCmd from "./BaseIconInfoCmd";
+
 /**
  * Show consumption information
  * @group Commands
  */
 export default {
   name: "ConsumptionInfoCmd",
-  props: {
-    // Command object
-    cmd: null
-  },
+  extends: BaseIconInfoCmd,
   mounted() {
-    this.$store.commit("addShowedCmd", { cmd: this.cmd });
+    this.icon = "fas fa-chart-area";
   }
 };
 </script>
