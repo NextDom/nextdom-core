@@ -5,6 +5,8 @@ set -e
 DEBUG="/tmp/output.txt"
 declare -a DETAILS
 
+env="prod"
+
 # Functions
 
 usage() {
@@ -12,7 +14,7 @@ usage() {
 usage: $0 [options]
 
 options:
-  -dev          : copy values of dist/dev.config.ini.dist in default.config.ini
+  --dev         : copy values of dist/dev.config.ini.dist in default.config.ini
   -h            : display this message
   -i <host>     : database hostname, defaults to localhost
   -z <port>     : database port, defaults to 3306
@@ -128,9 +130,12 @@ prereq_create_dirs() {
   touch ${LOG_DIRECTORY}/scenario_execution
 }
 
-step_nexdom_environement() {
-  if [  ]; then
-
+nexdom_environement() {
+ echo ${env}
+  if [ ${env} = "dev" ]; then
+         cp -f ${WEBSERVER_HOME}/assets/config/dist/dev.config.ini.dist ${WEBSERVER_HOME}/assets/config/default.config.ini
+    else
+        cp -f ${WEBSERVER_HOME}/assets/config/dist/prod.config.ini.dist ${WEBSERVER_HOME}/assets/config/default.config.ini
   fi
 }
 
@@ -594,10 +599,17 @@ main() {
   TMP_DIRECTORY=/tmp/nextdom
   VERBOSE=0
 
-  while getopts "vhi:p:d:r:u:z:L:l:t:" option; do
+  while getopts "vhi:p:d:r:u:z:L:l:t:-:" option; do
     case "${option}" in
       h)
         usage
+        ;;
+      -)
+        case ${OPTARG} in
+            "dev")
+                env="dev"
+                ;;
+        esac
         ;;
       v)
         VERBOSE=1
@@ -646,6 +658,9 @@ main() {
   detect_dev_version
   prereq_create_dirs
 
+  print_log_in "step_nextdom_copy_config.ini ... "
+  nexdom_environement
+  print_log_ok
 
   print_log_in "step_nextdom_directory_layout ... "
   step_nextdom_directory_layout
