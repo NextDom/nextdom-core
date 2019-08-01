@@ -282,7 +282,7 @@
                             <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 21 : Le paramètre alpha correspond à une transparence de fond' }}">
                                 <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color21" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
                                 <span class="input-group-addon input-range-min"></span>
-                                <input class="configKey slider" type="range" min="0" max="100" step="10" data-l1key="theme:color21"/>
+                                <input class="configKey slider noSet" type="range" min="0" max="100" step="10" data-l1key="theme:color21" value="{{ Theme['color21'] }}"/>
                                 <span class="input-group-addon input-range-max"></span>
                                 <span class="input-group-addon input-range-value"></span>
                                 <span class="input-group-addon">{{ '%' }}</span>
@@ -294,7 +294,7 @@
                 <fieldset class="legend-section">
                     <legend>{{ 'Personnalisation des notifications' }}</legend>
                     <div class="row">
-                        <div class="form-group col-md-4 col-sm-6 col-xs-12 col-padding">
+                        <div class="form-group col-lg-4 col-sm-6 col-xs-12 col-padding">
                             <label class="control-label">{{ 'Position des notifications' }}</label>
                             <select class="configKey form-control" data-l1key="notify::position">
                                 <option value="topRight" selected="selected">Haut droite</option>
@@ -305,7 +305,7 @@
                                 <option value="bottomCenter">Bas centre</option>
                             </select>
                         </div>
-                        <div class="form-group col-md-4 col-sm-6 col-xs-12 col-padding">
+                        <div class="form-group col-lg-4 col-sm-6 col-xs-12 col-padding">
                             <label class="control-label">{{ 'Durée des notifications' }}</label>
                             <div class="input-group">
                                 <span class="input-group-addon input-range-min"></span>

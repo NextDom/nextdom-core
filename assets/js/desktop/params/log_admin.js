@@ -39,7 +39,19 @@ jwerty.key('ctrl+s/⌘+s', function (e) {
     $("#bt_savelog_admin").click();
 });
 
- $("#bt_savelog_admin").on('click', function (event) {
+nextdom.config.load({
+    configuration: $('#log_admin').getValues('.configKey:not(.noSet)')[0],
+    error: function (error) {
+        notify("Erreur", error.message, 'error');
+    },
+    success: function (data) {
+        $('#log_admin').setValues(data, '.configKey');
+        loadActionOnMessage();
+        modifyWithoutSave = false;
+    }
+});
+
+$("#bt_savelog_admin").on('click', function (event) {
     $.hideAlert();
     var config = $('#log_admin').getValues('.configKey')[0];
     config.actionOnMessage = json_encode($('#div_actionOnMessage .actionOnMessage').getValues('.expressionAttr'));
@@ -65,22 +77,6 @@ jwerty.key('ctrl+s/⌘+s', function (e) {
     });
 });
 
-showLoadingCustom();
-nextdom.config.load({
-    configuration: $('#log_admin').getValues('.configKey:not(.noSet)')[0],
-    error: function (error) {
-        notify("Erreur", error.message, 'error');
-    },
-    success: function (data) {
-        $('#log_admin').setValues(data, '.configKey');
-        loadAactionOnMessage();
-
-        modifyWithoutSave = false;
-    }
-});
-
-
-
 $('#log_admin').delegate('.configKey', 'change', function () {
     modifyWithoutSave = true;
 });
@@ -95,7 +91,7 @@ $('#bt_addActionOnMessage').on('click',function(){
 });
 
 
-function loadAactionOnMessage(){
+function loadActionOnMessage(){
     $('#div_actionOnMessage').empty();
     nextdom.config.load({
         configuration: 'actionOnMessage',
@@ -114,15 +110,15 @@ function loadAactionOnMessage(){
                 params : actionOptions,
                 async : false,
                 error: function (error) {
-                  notify("Erreur", error.message, 'error');
-              },
-              success : function(data){
-                for(var i in data){
-                    $('#'+data[i].id).append(data[i].html.html);
+                    notify("Erreur", error.message, 'error');
+                },
+                success : function(data){
+                    for(var i in data){
+                        $('#'+data[i].id).append(data[i].html.html);
+                    }
+                    taAutosize();
                 }
-                taAutosize();
-            }
-        });
+            });
         }
     });
 }
@@ -207,7 +203,7 @@ $("body").delegate(".listAction", 'click', function () {
   });
 });
 
-  $("body").delegate(".listCmdAction", 'click', function () {
+$("body").delegate(".listCmdAction", 'click', function () {
     var el = $(this).closest('.actionOnMessage').find('.expressionAttr[data-l1key=cmd]');
     nextdom.cmd.getSelectModal({cmd: {type: 'action'}}, function (result) {
         el.value(result.human);
