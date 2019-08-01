@@ -467,7 +467,7 @@ function refreshUpdateNumber() {
           'theme:color10' : '#ffffff',
           'theme:color11' : '#f5f5f5',
           'theme:color12' : '#555555',
-          'theme:color13' : '#f5f5f5',
+          'theme:color13' : '#ffffff',
           'theme:color14' : '#dddddd',
           'theme:color15' : '#ffffff',
           'theme:color16' : '#555555',

@@ -36,7 +36,6 @@
 editorDesktopJS = null;
 editorDesktopCSS = null;
 
-printConvertColor();
 $('.colorpick').colorpicker();
 
 nextdom.config.load({
@@ -138,7 +137,6 @@ $(".colorpick input").change(function () {
 
 $("#bt_savecustom").on('click', function (event) {
     $.hideAlert();
-    saveConvertColor();
     var config = $('#custom').getValues('.configKey')[0];
     nextdom.config.save({
         configuration: config,
@@ -176,76 +174,7 @@ $("#waitSpinnerSelect").change(function () {
     $("#waitSpinner i").removeClass('fa-info').addClass($("#waitSpinnerSelect").value());
 });
 
-function printConvertColor() {
-    $.ajax({
-        type: "POST",
-        url: "core/ajax/config.ajax.php",
-        data: {
-            action: "getKey",
-            key: 'convertColor'
-        },
-        dataType: 'json',
-        error: function (request, status, error) {
-            handleAjaxError(request, status, error);
-        },
-        success: function (data) {
-            if (data.state != 'ok') {
-                notify("Erreur", data.result, 'error');
-                return;
-            }
-
-            $('#table_convertColor tbody').empty();
-            for (var color in data.result) {
-                addConvertColor(color, data.result[color]);
-            }
-            modifyWithoutSave = false;
-        }
-    });
-}
-
-function addConvertColor(_color, _html) {
-    var tr = '<tr>';
-    tr += '<td>';
-    tr += '<input class="color form-control input-sm" value="' + init(_color) + '"/>';
-    tr += '</td>';
-    tr += '<td>';
-    tr += '<input type="color" class="html form-control input-sm" value="' + init(_html) + '" />';
-    tr += '</td>';
-    tr += '</tr>';
-    $('#table_convertColor tbody').append(tr);
-    modifyWithoutSave = false;
-}
-
-function saveConvertColor() {
-    var value = {};
-    var colors = {};
-    $('#table_convertColor tbody tr').each(function () {
-        colors[$(this).find('.color').value()] = $(this).find('.html').value();
-    });
-    value.convertColor = colors;
-    $.ajax({
-        type: "POST",
-        url: "core/ajax/config.ajax.php",
-        data: {
-            action: 'addKey',
-            value: json_encode(value)
-        },
-        dataType: 'json',
-        error: function (request, status, error) {
-            handleAjaxError(request, status, error);
-        },
-        success: function (data) {
-            if (data.state != 'ok') {
-                notify("Core", data.result, 'error');
-                return;
-            }
-            modifyWithoutSave = false;
-        }
-    });
-}
-
 $('.bt_resetColor').on('click', function () {
-    var el = $(this);
     nextdom.getConfiguration({
         key: $(this).attr('data-l1key'),
         default: 1,
@@ -253,7 +182,7 @@ $('.bt_resetColor').on('click', function () {
             notify("Core", error.message, 'error');
         },
         success: function (data) {
-            $('.configKey[data-l1key="' + el.attr('data-l1key') + '"]').parent().colorpicker('setValue', data);
+            $('.configKey[data-l1key="' + $(this).attr('data-l1key') + '"]').parent().colorpicker('setValue', data);
         }
     });
 });

@@ -36,8 +36,8 @@
 }
 
 .input-group .slider {
-    width: 96%;
-    margin: 12px 2%;
+    width: calc(100% - 20px);
+    margin: 12px 10px;
 }
 
 .slider::-webkit-slider-thumb {

@@ -360,11 +360,6 @@ $(function () {
         loadPage('index.php?v=d&p=dashboard&summary='+$(this).data('summary')+'&object_id='+root_object_id);
     });
 
-    // Sliders change event handler
-    $('input[type=range]').on('change mousemove', function () {
-        $(this).parent().children('.input-range-value').html($(this).val());
-    });
-
     // Inits launch
     initPage();
 

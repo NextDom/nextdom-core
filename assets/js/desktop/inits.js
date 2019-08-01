@@ -61,7 +61,11 @@ function initPage(){
     // Trig page loaded
     $('body').trigger('nextdom_page_load');
 
-    // Sliders init
+    // Sliders init & event handler
+    $('input[type=range]').on('change mousemove', function () {
+        $(this).parent().children('.input-range-value').html($(this).val());
+        modifyWithoutSave = true;
+    });
     $('input[type=range]').each(function () {
         $(this).parent().children('.input-range-value').html($(this).val());
         $(this).prev('.input-range-min').html($(this).attr('min'));

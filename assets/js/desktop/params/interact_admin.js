@@ -39,8 +39,23 @@ jwerty.key('ctrl+s/⌘+s', function (e) {
     $("#bt_saveinteract_admin").click();
 });
 
- $("#bt_saveinteract_admin").on('click', function (event) {
+printConvertColor();
+$('.colorpick').colorpicker();
+
+nextdom.config.load({
+    configuration: $('#interact_admin').getValues('.configKey:not(.noSet)')[0],
+    error: function (error) {
+        notify("Erreur", error.message, 'error');
+    },
+    success: function (data) {
+        $('#interact_admin').setValues(data, '.configKey');
+        modifyWithoutSave = false;
+    }
+});
+
+$("#bt_saveinteract_admin").on('click', function (event) {
     $.hideAlert();
+    saveConvertColor();
     nextdom.config.save({
         configuration: $('#interact_admin').getValues('.configKey')[0],
         error: function (error) {
@@ -63,24 +78,13 @@ jwerty.key('ctrl+s/⌘+s', function (e) {
     });
 });
 
-nextdom.config.load({
-    configuration: $('#interact_admin').getValues('.configKey:not(.noSet)')[0],
-    error: function (error) {
-        notify("Erreur", error.message, 'error');
-    },
-    success: function (data) {
-        $('#interact_admin').setValues(data, '.configKey');
-
-        modifyWithoutSave = false;
-    }
-});
-
 $('#interact_admin').delegate('.configKey', 'change', function () {
     modifyWithoutSave = true;
 });
 
 $('#bt_addColorConvert').on('click', function () {
-    addConvertColor();
+    addConvertColor('?','#FFFFFF');
+    $('.colorpick').colorpicker();
 });
 
 /********************Convertion************************/
@@ -106,6 +110,7 @@ function printConvertColor() {
             for (var color in data.result) {
                 addConvertColor(color, data.result[color]);
             }
+            $('.colorpick').colorpicker();
             modifyWithoutSave = false;
         }
     });
@@ -117,7 +122,12 @@ function addConvertColor(_color, _html) {
     tr += '<input class="color form-control input-sm" value="' + init(_color) + '"/>';
     tr += '</td>';
     tr += '<td>';
-    tr += '<input type="color" class="html form-control input-sm" value="' + init(_html) + '" />';
+    tr += '<div class="input-group">';
+    tr += '<div class="colorpicker-component colorpick">';
+    tr += '<input type="text" class="html form-control input-sm" value="' + init(_html) + '" />';
+    tr += '<span class="input-group-addon"><i></i></span>';
+    tr += '</div>';
+    tr += '</div>';
     tr += '</td>';
     tr += '</tr>';
     $('#table_convertColor tbody').append(tr);
@@ -153,21 +163,6 @@ function saveConvertColor() {
 }
 
 /*CMD color*/
-
-$('.bt_resetColor').on('click', function () {
-    var el = $(this);
-    nextdom.getConfiguration({
-        key: $(this).attr('data-l1key'),
-        default: 1,
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function (data) {
-            $('.configKey[data-l1key="' + el.attr('data-l1key') + '"]').value(data);
-        }
-    });
-});
-
 $('.bt_selectAlertCmd').on('click', function () {
     var type=$(this).attr('data-type');
     nextdom.cmd.getSelectModal({cmd: {type: 'action', subType: 'message'}}, function (result) {
