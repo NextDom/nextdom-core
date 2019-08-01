@@ -60,14 +60,18 @@
 
 .cmds-icon {
   .cmd.icon {
-    font-size: 3rem;
     display: flex;
     flex: 1 1 auto;
   }
   .cmd.icon i {
+    font-size: 3rem;
     width: 100%;
     text-align: center;
     margin: 0.5rem 0;
+  }
+  .info-cmd {
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 

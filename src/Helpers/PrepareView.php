@@ -725,12 +725,12 @@ class PrepareView
         $render = Render::getInstance();
         $pageData['CSS'] = $render->getCssHtmlTag('/public/css/nextdom.css');
         $pageData['JS_VARS'] = [
-            'userProfils' => UserManager::getStoredUser()->getOptions(),
             'user_id' => UserManager::getStoredUser()->getId(),
             'user_isAdmin' => AuthentificationHelper::isConnectedAsAdmin(),
             'user_login' => UserManager::getStoredUser()->getLogin(),
             'serverTZoffsetMin' => Utils::getTZoffsetMin()];
         $pageData['JS_VARS_RAW'] = [
+            'userProfils' => Utils::getArrayToJQueryJson(UserManager::getStoredUser()->getOptions()),
             'serverDatetime' => Utils::getMicrotime()
         ];
         $pageData['JS'] = '';

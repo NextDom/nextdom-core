@@ -64,7 +64,7 @@ export default {
      * Extract room icon class from HTML tag
      */
     roomIcon: function() {
-      return Utils.extractIcon(this.room.icon, "fas fa-times");
+      return Utils.extractIcon(this.room.icon, "fas fa-tag");
     }
   }
 };

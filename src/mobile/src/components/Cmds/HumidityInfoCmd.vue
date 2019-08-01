@@ -19,9 +19,9 @@ along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 -->
 <template>
-  <div class="power-info-cmd cmd icon">
+  <div class="humidity-info-cmd cmd icon">
     <div class="info-cmd">
-      <i class="fas fa-bolt"></i>
+      <i class="fa fa-tint"></i>
       <div>{{ cmd.state }} {{ cmd.unite }}</div>
     </div>
   </div>
@@ -29,11 +29,11 @@ along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 
 <script>
 /**
- * Show power state
+ * Show standard command that get numeric data (with unite)
  * @group Commands
  */
 export default {
-  name: "PowerInfoCmd",
+  name: "HumidityInfoCmd",
   props: {
     // Command object
     cmd: null

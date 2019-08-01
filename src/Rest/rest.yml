@@ -80,6 +80,16 @@ cmd_exec:
   methods: POST
   requirements:
     cmdId: \d+
+logs_get_list:
+  path: '/logs/list'
+  controller: NextDom\Rest\LogsRest::getList
+  methods: GET
+logs_get:
+  path: '/logs/get/{logFile}'
+  controller: NextDom\Rest\LogsRest::get
+  methods: GET
+  requirements:
+    logFile: "[-_.A-Za-z0-9]+"
 scenario_get_all:
   path: '/scenario/all'
   controller: NextDom\Rest\ScenarioRest::getAll

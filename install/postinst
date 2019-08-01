@@ -553,7 +553,16 @@ step_nextdom_var_www_html() {
 }
 
 step_nexdom_build_mobile() {
-  bash ${WEBSERVER_HOME}/scripts/prepare_mobile.sh
+   if [ 1 -eq "0${isdev}" ]; then
+     bash ${WEBSERVER_HOME}/scripts/prepare_mobile.sh
+   fi
+}
+
+step_restore_owner() {
+   chown -R www-data:www-data ${WEBSERVER_HOME}
+   if [ -d "/tmp/nextdom" ]; then
+     chown -R www-data:www-data /tmp/nextdom
+   fi
 }
 
 step_nextdom_mysql_populate() {
@@ -715,10 +724,14 @@ main() {
   step_nexdom_build_mobile
   print_log_ok
 
+  print_log_in "step_restore_owner ..."
+  step_restore_owner
+  print_log_ok
+  
   print_log_in "step_nextdom_copy_config.ini ... "
   nexdom_environement
   print_log_ok
-
+  
   [[ -f /root/.mysqlroot ]] && rm -f /root/.mysqlroot
 
   if [ -f .git  ] ; then
