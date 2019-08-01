@@ -253,7 +253,7 @@ $('.bt_resetColor').on('click', function () {
             notify("Core", error.message, 'error');
         },
         success: function (data) {
-            $('.configKey[data-l1key="' + el.attr('data-l1key') + '"]').value(data);
+            $('.configKey[data-l1key="' + el.attr('data-l1key') + '"]').parent().colorpicker('setValue', data);
         }
     });
 });
