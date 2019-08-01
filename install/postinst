@@ -51,7 +51,6 @@ print_log_in() {
   printf ${txt} >> ${LOG_DIRECTORY}/postinst.log
 }
 
-
 print_log_ok() {
   NORMAL="\\033[0;39m"
   GREEN="\\033[1;92m"
@@ -131,6 +130,9 @@ prereq_create_dirs() {
 }
 
 nexdom_environement() {
+if [ -f "${WEBSERVER_HOME}/assets/config/default.config.ini" ];then
+   rm ${WEBSERVER_HOME}/assets/config/default.config.ini
+fi
   if [ ${env} = "dev" ]; then
          cp -f ${WEBSERVER_HOME}/assets/config/dist/default.config.ini.dev ${WEBSERVER_HOME}/assets/config/default.config.ini
     else
@@ -657,10 +659,6 @@ main() {
   detect_dev_version
   prereq_create_dirs
 
-  print_log_in "step_nextdom_copy_config.ini ... "
-  nexdom_environement
-  print_log_ok
-
   print_log_in "step_nextdom_directory_layout ... "
   step_nextdom_directory_layout
   print_log_ok
@@ -715,6 +713,10 @@ main() {
 
   print_log_in "step_build_mobile ..."
   step_nexdom_build_mobile
+  print_log_ok
+
+  print_log_in "step_nextdom_copy_config.ini ... "
+  nexdom_environement
   print_log_ok
 
   [[ -f /root/.mysqlroot ]] && rm -f /root/.mysqlroot
