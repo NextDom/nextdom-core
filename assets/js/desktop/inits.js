@@ -60,6 +60,13 @@ function initPage(){
 
     // Trig page loaded
     $('body').trigger('nextdom_page_load');
+
+    // Sliders init
+    $('input[type=range]').each(function () {
+        $(this).parent().children('.input-range-value').html($(this).val());
+        $(this).prev('.input-range-min').html($(this).attr('min'));
+        $(this).next('.input-range-max').html($(this).attr('max'));
+    });
 }
 
 /**

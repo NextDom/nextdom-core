@@ -19,28 +19,49 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-/* Core-Surcharge  */
-.colorpick {
-    border-radius: 4px !important;
-    display: table;
+/* Admin-LTE Surcharge */
+.slider {
+    -webkit-appearance: none;
+    height: 8px;
+    outline: none;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
     width: 100%;
+    margin: 12px 0px;
+    -webkit-box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.3);
+    box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.3);
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 6px;
 }
-.colorpick .input-group-addon, .input-group .input-group-addon {
-    border: none;
+
+.input-group .slider {
+    width: 96%;
+    margin: 12px 2%;
 }
-.colorpick .input-group-addon:first-child, .input-group .input-group-addon:first-child {
-    border-top-left-radius: 4px;
-    border-bottom-left-radius: 4px;
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    cursor: pointer;
 }
-.colorpick .input-group-addon:last-child, .input-group .input-group-addon:last-child {
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
+
+.slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    cursor: pointer;
 }
-.colorpick>input[type="text"] {
-    border: none !important;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
+
+.input-range-value {
+    font-weight: 500;
 }
-.colorpicker-element .input-group-addon i {
-    padding: 1px;
+
+.input-range-min,
+.input-range-max {
+    cursor: not-allowed;
+    font-size: 12px;
 }

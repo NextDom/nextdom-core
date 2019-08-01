@@ -210,7 +210,6 @@ class PrepareView
             $pageData['JS_POOL'][] = '/vendor/node_modules/snapsvg/dist/snap.svg-min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/moment/moment.js';
 
-
             // Then Factory framwework files
             $pageData['JS_POOL'][] = '/public/js/factory/NextDomUIDGenerator.js';
             $pageData['JS_POOL'][] = '/public/js/factory/NextDomElement.js';
@@ -233,6 +232,7 @@ class PrepareView
             $pageData['JS_POOL'][] = '/public/js/factory/elements/Thead.js';
             $pageData['JS_POOL'][] = '/public/js/factory/elements/Tr.js';
             $pageData['JS_POOL'][] = '/public/js/factory/elements/VerticalLayout.js';
+
             // Finally dynamic libraries, must be here
             $pageData['JS_POOL'][] = '/vendor/node_modules/autosize/dist/autosize.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min.js';

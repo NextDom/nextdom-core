@@ -157,13 +157,25 @@
 /* Market */
 .market:hover,
 .marketOverload:hover {
-    border: 1px dashed {{ COLOR1 }} !important;
+  border: 1px dashed {{ COLOR1 }} !important;
 }
 
 /* Icones */
 .iconSelected {
-    border: 1px dashed {{ COLOR1 }} !important;
+  border: 1px dashed {{ COLOR1 }} !important;
 }
+
+/* Sliders */
+.slider::-webkit-slider-thumb {
+  background-color: {{ COLOR1 }} !important;
+}
+.slider::-moz-range-thumb {
+  background-color: {{ COLOR1 }} !important;
+}
+.input-group .input-range-value {
+  background-color: {{ COLOR1 }} !important;
+}
+
 
 /* ################################################################################## */
 /* COLOR2 = Couleur de contraste (icônes et texte sur fond accentué ou de sidebar...) */
@@ -217,6 +229,11 @@
 }
 .fab-buttons__link:hover,
 .fab-button__icon:hover {
+  color: {{ COLOR2 }} !important;
+}
+
+/* Sliders */
+.input-range-value {
   color: {{ COLOR2 }} !important;
 }
 
@@ -490,7 +507,7 @@ legend,
 
 /* Unités et fond colorpick */
 .colorpick .input-group-addon,
-.input-group .input-group-addon {
+.input-group .input-group-addon:not(.input-range-value) {
   background-color: {{ COLOR11 }} !important;
 }
 
@@ -578,7 +595,7 @@ legend {
 .form-control {
   color: {{ COLOR12 }} !important;
 }
-.input-group .input-group-addon,
+.input-group .input-group-addon:not(.input-range-value),
 .input-group .input-group-addon i {
   color: {{ COLOR12 }} !important;
 }
@@ -653,6 +670,9 @@ pre::selection {
 .viewZone {
   background-color: {{ COLOR13 }} !important;
 }
+.slider {
+  background-color: {{ COLOR13 }} !important;
+}
 
 /* inputs de groupe */
 .input-group>input {
@@ -681,7 +701,6 @@ pre::selection {
 /* COLOR14 = Couleur de bordure (inputs, légendes, tableaux et bouton d'administration...) */
 /* ####################################################################################### */
 /* Inputs */
-.colorpick,
 .ui-autocomplete-input,
 select,
 textarea,

@@ -20,11 +20,12 @@
 */
 
 /* Core-Surcharge */
-.input-group, select {
+.input-group {
     border-radius: 5px !important;
-}
-.input-group{
     border: 1px solid;
+}
+.input-group select {
+    border: none !important;
 }
 .form-control {
     border-color: $lightgrey;
