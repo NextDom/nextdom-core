@@ -48,64 +48,88 @@
     <div class="box" id="links">
         <!-- Header bar -->
         <div class="box-header with-border">
-            <h3 class="box-title"><i class="fas fa-sitemap"></i>{{ 'Liens' }}</h3>
+            <h3 class="box-title"><i class="fas fa-sitemap"></i>{{ 'Graphiques de Liens' }}</h3>
         </div>
 
         <!-- Page content -->
         <div class="box-body">
-            <form class="form-horizontal">
-                <!-- Profondeur Section -->
-                <fieldset>
-                    <legend>{{ 'Profondeurs' }}</legend>
-                    <div class="form-group">
-                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Profondeur pour les scénarios' }}</label>
-                        <div class="col-lg-2 col-md-3 col-sm-3 col-xs-12">
-                            <input class="configKey form-control" data-l1key="graphlink::scenario::drill"/>
+            <!-- Profondeur Section -->
+            <fieldset>
+                <legend>{{ 'Profondeurs de calcul' }}</legend>
+                <div class="row">
+                    <div class="form-group col-sm-6 col-xs-12 col-padding">
+                        <label class="control-label">{{ 'Profondeur pour les scénarios' }}</label>
+                        <div class="input-group">
+                            <span class="input-group-addon input-range-min"></span>
+                            <input class="configKey slider" type="range" min="0" max="20" step="1" data-l1key="graphlink::scenario::drill"/>
+                            <span class="input-group-addon input-range-max"></span>
+                            <span class="input-group-addon input-range-value"></span>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Profondeur pour les objets' }}</label>
-                        <div class="col-lg-2 col-md-3 col-sm-3 col-xs-12">
-                            <input class="configKey form-control" data-l1key="graphlink::object::drill"/>
+                    <div class="form-group col-sm-6 col-xs-12 col-padding">
+                        <label class="control-label">{{ 'Profondeur pour les objets' }}</label>
+                        <div class="input-group">
+                            <span class="input-group-addon input-range-min"></span>
+                            <input class="configKey slider" type="range" min="0" max="20" step="1" data-l1key="graphlink::object::drill"/>
+                            <span class="input-group-addon input-range-max"></span>
+                            <span class="input-group-addon input-range-value"></span>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Profondeur pour les équipements' }}</label>
-                        <div class="col-lg-2 col-md-3 col-sm-3 col-xs-12">
-                            <input class="configKey form-control" data-l1key="graphlink::eqLogic::drill"/>
+                    <div class="form-group col-sm-6 col-xs-12 col-padding">
+                        <label class="control-label">{{ 'Profondeur pour les équipements' }}</label>
+                        <div class="input-group">
+                            <span class="input-group-addon input-range-min"></span>
+                            <input class="configKey slider" type="range" min="0" max="20" step="1" data-l1key="graphlink::eqLogic::drill"/>
+                            <span class="input-group-addon input-range-max"></span>
+                            <span class="input-group-addon input-range-value"></span>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Profondeur pour les commandes' }}</label>
-                        <div class="col-lg-2 col-md-3 col-sm-3 col-xs-12">
-                            <input class="configKey form-control" data-l1key="graphlink::cmd::drill"/>
+                    <div class="form-group col-sm-6 col-xs-12 col-padding">
+                        <label class="control-label">{{ 'Profondeur pour les commandes' }}</label>
+                        <div class="input-group">
+                            <span class="input-group-addon input-range-min"></span>
+                            <input class="configKey slider" type="range" min="0" max="20" step="1" data-l1key="graphlink::cmd::drill"/>
+                            <span class="input-group-addon input-range-max"></span>
+                            <span class="input-group-addon input-range-value"></span>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Profondeur pour les variables' }}</label>
-                        <div class="col-lg-2 col-md-3 col-sm-3 col-xs-12">
-                            <input class="configKey form-control" data-l1key="graphlink::dataStore::drill"/>
+                    <div class="form-group col-sm-6 col-xs-12 col-padding">
+                        <label class="control-label">{{ 'Profondeur pour les variables' }}</label>
+                        <div class="input-group">
+                            <span class="input-group-addon input-range-min"></span>
+                            <input class="configKey slider" type="range" min="0" max="20" step="1" data-l1key="graphlink::dataStore::drill"/>
+                            <span class="input-group-addon input-range-max"></span>
+                            <span class="input-group-addon input-range-value"></span>
                         </div>
                     </div>
-                </fieldset>
+                </div>
+            </fieldset>
 
-                <!-- Render Section -->
-                <fieldset class="legend-section">
-                    <legend>{{ 'Render' }}</legend>
-                    <div class="form-group">
-                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Paramètre de prerender' }}</label>
-                        <div class="col-lg-2 col-md-3 col-sm-3 col-xs-12">
-                            <input class="configKey form-control" data-l1key="graphlink::prerender"/>
+            <!-- Render Section -->
+            <fieldset class="legend-section">
+                <legend>{{ 'Rendu des graphiques' }}</legend>
+                <div class="row">
+                    <div class="form-group col-sm-6 col-xs-12 col-padding">
+                        <label class="control-label">{{ 'Nombre d\'itérations de pré-rendu' }}</label>
+                        <div class="input-group">
+                            <span class="input-group-addon input-range-min"></span>
+                            <input class="configKey slider" type="range" min="0" max="100" step="1" data-l1key="graphlink::prerender"/>
+                            <span class="input-group-addon input-range-max"></span>
+                            <span class="input-group-addon input-range-value"></span>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Paramètre de render' }}</label>
-                        <div class="col-lg-2 col-md-3 col-sm-3 col-xs-12">
-                            <input class="configKey form-control" data-l1key="graphlink::render"/>
+                    <div class="form-group col-sm-6 col-xs-12 col-padding">
+                        <label class="control-label">{{ 'Décalage du rendu final' }}</label>
+                        <div class="input-group">
+                            <span class="input-group-addon input-range-min"></span>
+                            <input class="configKey slider" type="range" min="100" max="10000" step="100" data-l1key="graphlink::render"/>
+                            <span class="input-group-addon input-range-max"></span>
+                            <span class="input-group-addon input-range-value"></span>
+                            <span class="input-group-addon">{{ 'millisecondes' }}</span>
                         </div>
                     </div>
-                </fieldset>
-            </form>
+                </div>
+            </fieldset>
         </div>
     </div>
 </section>

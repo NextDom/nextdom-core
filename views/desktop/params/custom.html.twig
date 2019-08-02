@@ -114,8 +114,8 @@
                                     <span class="themeThumbnailHeader" style="background: {{ Theme['color1'] }}"><i class="fas fa-bars" style="color: {{ Theme['color2'] }}"></i></span>
                                 </div>
                                 <div>
-                                    <span class="themeThumbnailLeft" style="background: {{ Theme['color6'] }}"></span>
-                                    <span class="themeThumbnailBody" style="background: {{ Theme['color9'] }}"></span>
+                                    <span class="themeThumbnailLeft" style="background: {{ Theme['color4'] }}"></span>
+                                    <span class="themeThumbnailBody" style="background: {{ Theme['color7'] }}"></span>
                                 </div>
                             </label>
                             <input id="theme-custom" class="theme spacing-right" type="radio" name="theme" value="custom">
@@ -132,9 +132,9 @@
                 <fieldset>
                     <legend>{{ 'Couleurs dominantes du thème' }}</legend>
                     <div class="row">
-                        <div class="form-group col-lg-4 col-sm-6 col-xs-12 col-padding">
+                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
                             <label class="control-label">{{ 'Couleur d\'accentuation principale' }}</label>
-                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 1 : identité du thème, header NextDom, bouton primaires, messages d\'info, elements actifs ou survolés, textes de liens et d\'état, scrollbar, boutons fab...' }}">
+                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 1 : identité du thème, header NextDom, bouton primaires, messages d\'info, elements actifs ou survolés, textes de liens et d\'état, scrollbar, boutons fab, checkbox et radiobox...' }}">
                                 <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color1" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
                                 <div class="colorpicker-component colorpick">
                                     <input type="text" class="configKey form-control noSet" data-l1key="theme:color1" value="{{ Theme['color1'] }}"/>
@@ -142,7 +142,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group col-lg-4 col-sm-6 col-xs-12 col-padding">
+                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
                             <label class="control-label">{{ 'Couleur de contraste' }}</label>
                             <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 2 : icônes et texte sur fond accentué ou de sidebar...' }}">
                                 <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color2" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
@@ -152,32 +152,32 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group col-lg-4 col-sm-6 col-xs-12 col-padding">
+                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
                             <label class="control-label">{{ 'Couleur de fond principale' }}</label>
-                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 9 : dashboard et autres fond de pages...' }}">
-                                <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color9" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
+                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 7 : dashboard et autres fond de pages...' }}">
+                                <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color7" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
                                 <div class="colorpicker-component colorpick">
-                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color9" value="{{ Theme['color9'] }}"/>
+                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color7" value="{{ Theme['color7'] }}"/>
                                     <span class="input-group-addon"><i></i></span>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group col-lg-4 col-sm-6 col-xs-12 col-padding">
+                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
                             <label class="control-label">{{ 'Couleur de fond secondaire' }}</label>
-                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 10 : titres, action-bar, footer, onglets, titre modale, boîtes d\'infos...' }}">
+                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 8 : titres, action-bar, footer, onglets, titre modale, boîtes d\'infos...' }}">
+                                <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color8" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
+                                <div class="colorpicker-component colorpick">
+                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color8" value="{{ Theme['color8'] }}"/>
+                                    <span class="input-group-addon"><i></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Couleur des textes' }}</label>
+                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 10 : contenu, titres, footer, bouton d\'administration, unités, légendes...' }}">
                                 <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color10" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
                                 <div class="colorpicker-component colorpick">
                                     <input type="text" class="configKey form-control noSet" data-l1key="theme:color10" value="{{ Theme['color10'] }}"/>
-                                    <span class="input-group-addon"><i></i></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group col-lg-4 col-sm-6 col-xs-12 col-padding">
-                            <label class="control-label">{{ 'Couleur des textes' }}</label>
-                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 12 : contenu, titres, footer, bouton d\'administration, unités, légendes...' }}">
-                                <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color12" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
-                                <div class="colorpicker-component colorpick">
-                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color12" value="{{ Theme['color12'] }}"/>
                                     <span class="input-group-addon"><i></i></span>
                                 </div>
                             </div>
@@ -188,32 +188,22 @@
                 <fieldset class="legend-section">
                     <legend>{{ 'Personnalisation des élements' }}</legend>
                     <div class="row">
-                        <div class="form-group col-lg-4 col-sm-6 col-xs-12 col-padding">
-                            <label class="control-label">{{ 'Couleur d\'option activée' }}</label>
-                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 4 : checkbox et radiobox...' }}">
-                                <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color4" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
-                                <div class=" colorpicker-component colorpick">
-                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color4" value="{{ Theme['color4'] }}"/>
-                                    <span class="input-group-addon"><i></i></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group col-lg-4 col-sm-6 col-xs-12 col-padding">
+                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
                             <label class="control-label">{{ 'Couleur fond des inputs' }}</label>
-                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 13 : champs de saisie, listes déroulantes...' }}">
-                                <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color13" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
+                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 11 : champs de saisie, listes déroulantes...' }}">
+                                <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color11" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
                                 <div class="colorpicker-component colorpick">
-                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color13" value="{{ Theme['color13'] }}"/>
+                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color11" value="{{ Theme['color11'] }}"/>
                                     <span class="input-group-addon"><i></i></span>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group col-lg-4 col-sm-6 col-xs-12 col-padding">
+                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
                             <label class="control-label">{{ 'Couleur de fond des blocs codes' }}</label>
-                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 23 : Fond des blocs codes' }}">
-                                <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color23" data-toggle="tooltip" title="" data-original-title="{{ 'Par défaut' }}"><i class="fas fa-times"></i></a>
+                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 21 : Fond des blocs codes' }}">
+                                <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color21" data-toggle="tooltip" title="" data-original-title="{{ 'Par défaut' }}"><i class="fas fa-times"></i></a>
                                 <div class="colorpicker-component colorpick">
-                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color23" value="{{ Theme['color23'] }}"/>
+                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color21" value="{{ Theme['color21'] }}"/>
                                     <span class="input-group-addon"><i></i></span>
                                 </div>
                             </div>
@@ -224,22 +214,22 @@
                 <fieldset class="legend-section">
                     <legend>{{ 'Menu latéral' }}</legend>
                     <div class="row">
-                        <div class="form-group col-lg-4 col-sm-6 col-xs-12 col-padding">
+                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
                             <label class="control-label">{{ 'Couleur de fond du menu lateral' }}</label>
-                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 6 : fond du menu latéral' }}">
-                                <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color6" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fas fa-times"></i></a>
+                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 4 : fond du menu latéral' }}">
+                                <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color4" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fas fa-times"></i></a>
                                 <div class="colorpicker-component colorpick">
-                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color6" value="{{ Theme['color6'] }}"/>
+                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color4" value="{{ Theme['color4'] }}"/>
                                     <span class="input-group-addon"><i></i></span>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group col-lg-4 col-sm-6 col-xs-12 col-padding">
+                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
                             <label class="control-label">{{ 'Couleur de fond du sous-menu latéral' }}</label>
-                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 8 : fond du sous-menu latéral' }}">
-                                <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color8" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fas fa-times"></i></a>
+                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 6 : fond du sous-menu latéral' }}">
+                                <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color6" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fas fa-times"></i></a>
                                 <div class="colorpicker-component colorpick">
-                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color8" value="{{ Theme['color8'] }}"/>
+                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color6" value="{{ Theme['color6'] }}"/>
                                     <span class="input-group-addon"><i></i></span>
                                 </div>
                             </div>
@@ -250,7 +240,7 @@
                 <fieldset class="legend-section">
                     <legend>{{ 'Personnalisation des composants' }}</legend>
                     <div class="row">
-                        <div class="form-group col-lg-4 col-sm-6 col-xs-12 col-padding">
+                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
                             <label class="control-label">{{ 'Icône d\'attente' }}</label>
                             <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'Icône utilisée lors d\'un chargement de page par exemple' }}">
                                 <select class="configKey form-control" data-l1key="nextdom::waitSpinner" id="waitSpinnerSelect">
@@ -277,12 +267,12 @@
                                 <span class="input-group-addon" id="waitSpinner"></span>
                             </div>
                         </div>
-                        <div class="form-group col-lg-4 col-sm-6 col-xs-12 col-padding">
+                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
                             <label class="control-label">{{ 'Paramètre alpha des couleurs d\'alertes' }}</label>
-                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 21 : Le paramètre alpha correspond à une transparence de fond' }}">
-                                <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color21" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
+                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 19 : Le paramètre alpha correspond à une transparence de fond' }}">
+                                <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color19" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
                                 <span class="input-group-addon input-range-min"></span>
-                                <input class="configKey slider noSet" type="range" min="0" max="100" step="10" data-l1key="theme:color21" value="{{ Theme['color21'] }}"/>
+                                <input class="configKey slider noSet" type="range" min="0" max="100" step="10" data-l1key="theme:color19" value="{{ Theme['color19'] }}"/>
                                 <span class="input-group-addon input-range-max"></span>
                                 <span class="input-group-addon input-range-value"></span>
                                 <span class="input-group-addon">{{ '%' }}</span>
@@ -294,7 +284,7 @@
                 <fieldset class="legend-section">
                     <legend>{{ 'Personnalisation des notifications' }}</legend>
                     <div class="row">
-                        <div class="form-group col-lg-4 col-sm-6 col-xs-12 col-padding">
+                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
                             <label class="control-label">{{ 'Position des notifications' }}</label>
                             <select class="configKey form-control" data-l1key="notify::position">
                                 <option value="topRight" selected="selected">Haut droite</option>
@@ -305,7 +295,7 @@
                                 <option value="bottomCenter">Bas centre</option>
                             </select>
                         </div>
-                        <div class="form-group col-lg-4 col-sm-6 col-xs-12 col-padding">
+                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
                             <label class="control-label">{{ 'Durée des notifications' }}</label>
                             <div class="input-group">
                                 <span class="input-group-addon input-range-min"></span>
@@ -331,17 +321,17 @@
                                 <fieldset>
                                     <legend>{{ 'Couleurs dominantes du thème' }}</legend>
                                     <div class="row">
-                                        <div class="form-group col-lg-4 col-sm-6 col-xs-12 col-padding">
+                                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
                                             <label class="control-label">{{ 'Couleur de fond des contenants' }}</label>
-                                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 15 : boxs, cards, pages d\'onglets, tableaux...' }}">
-                                                <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color15" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
+                                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 13 : boxs, cards, pages d\'onglets, tableaux...' }}">
+                                                <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color13" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
                                                 <div class="colorpicker-component colorpick">
-                                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color15" value="{{ Theme['color15'] }}"/>
+                                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color13" value="{{ Theme['color13'] }}"/>
                                                     <span class="input-group-addon"><i></i></span>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group col-lg-4 col-sm-6 col-xs-12 col-padding">
+                                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
                                             <label class="control-label">{{ 'Couleur de survol principale' }}</label>
                                             <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 3 : contenu, titres, footer, bouton d\'administration, unités, légendes...' }}">
                                                 <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color3" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
@@ -357,19 +347,29 @@
                                 <fieldset class="legend-section">
                                     <legend>{{ 'Personnalisation des élements' }}</legend>
                                     <div class="row">
-                                        <div class="form-group col-lg-4 col-sm-6 col-xs-12 col-padding">
+                                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
                                             <label class="control-label">{{ 'Couleur de fond des titres' }}</label>
-                                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 11 : légendes, tableaux, unités...' }}">
-                                                <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color11" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
+                                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 9 : légendes, tableaux, unités...' }}">
+                                                <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color9" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
                                                 <div class="colorpicker-component colorpick">
-                                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color11" value="{{ Theme['color11'] }}"/>
+                                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color9" value="{{ Theme['color9'] }}"/>
                                                     <span class="input-group-addon"><i></i></span>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group col-lg-4 col-sm-6 col-xs-12 col-padding">
+                                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
                                             <label class="control-label">{{ 'Couleur de bordure' }}</label>
-                                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 14 : inputs, légendes, tableaux et bouton d\'administration...' }}">
+                                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 12 : inputs, légendes, tableaux et bouton d\'administration...' }}">
+                                                <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color12" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
+                                                <div class="colorpicker-component colorpick">
+                                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color12" value="{{ Theme['color12'] }}"/>
+                                                    <span class="input-group-addon"><i></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
+                                            <label class="control-label">{{ 'Couleur de fond des boutons d\'action' }}</label>
+                                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 14 : Fond des boutons dit d\'action, ex: Tester' }}">
                                                 <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color14" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
                                                 <div class="colorpicker-component colorpick">
                                                     <input type="text" class="configKey form-control noSet" data-l1key="theme:color14" value="{{ Theme['color14'] }}"/>
@@ -377,52 +377,32 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group col-lg-4 col-sm-6 col-xs-12 col-padding">
-                                            <label class="control-label">{{ 'Couleur croix fenêtres modales' }}</label>
-                                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 5 : Couleur croix fenêtres modales' }}">
-                                                <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color5" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
-                                                <div class=" colorpicker-component colorpick input-group">
-                                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color5" value="{{ Theme['color5'] }}"/>
-                                                    <span class="input-group-addon"><i></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group col-lg-4 col-sm-6 col-xs-12 col-padding">
-                                            <label class="control-label">{{ 'Couleur de fond des boutons d\'action' }}</label>
-                                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 16 : Fond des boutons dit d\'action, ex: Tester' }}">
-                                                <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color16" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
-                                                <div class="colorpicker-component colorpick">
-                                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color16" value="{{ Theme['color16'] }}"/>
-                                                    <span class="input-group-addon"><i></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group col-lg-4 col-sm-6 col-xs-12 col-padding">
+                                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
                                             <label class="control-label">{{ 'Couleur de fond des boutons d\'administration' }}</label>
-                                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 17 : Fond des boutons raccourcis de la page administration' }}">
-                                                <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color17" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
+                                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 15 : Fond des boutons raccourcis de la page administration' }}">
+                                                <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color15" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
                                                 <div class="colorpicker-component colorpick">
-                                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color17" value="{{ Theme['color17'] }}"/>
+                                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color15" value="{{ Theme['color15'] }}"/>
                                                     <span class="input-group-addon"><i></i></span>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group col-lg-4 col-sm-6 col-xs-12 col-padding">
+                                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
                                             <label class="control-label">{{ 'Couleur de bordure des boutons' }}</label>
-                                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 20 : bouton d\'administration, bouton default' }}">
+                                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 18 : bouton d\'administration, bouton default' }}">
+                                                <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color18" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
+                                                <div class="colorpicker-component colorpick">
+                                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color18" value="{{ Theme['color18'] }}"/>
+                                                    <span class="input-group-addon"><i></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
+                                            <label class="control-label">{{ 'Couleur de fond des boîtes à onglets' }}</label>
+                                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 20 : Fond des boîtes à onglets' }}">
                                                 <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color20" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
                                                 <div class="colorpicker-component colorpick">
                                                     <input type="text" class="configKey form-control noSet" data-l1key="theme:color20" value="{{ Theme['color20'] }}"/>
-                                                    <span class="input-group-addon"><i></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group col-lg-4 col-sm-6 col-xs-12 col-padding">
-                                            <label class="control-label">{{ 'Couleur de fond des boîtes à onglets' }}</label>
-                                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 22 : Fond des boîtes à onglets' }}">
-                                                <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color22" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
-                                                <div class="colorpicker-component colorpick">
-                                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color22" value="{{ Theme['color22'] }}"/>
                                                     <span class="input-group-addon"><i></i></span>
                                                 </div>
                                             </div>
@@ -433,32 +413,32 @@
                                 <fieldset class="legend-section">
                                     <legend>{{ 'Menu latéral' }}</legend>
                                     <div class="row">
-                                        <div class="form-group col-lg-4 col-sm-6 col-xs-12 col-padding">
+                                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
                                             <label class="control-label">{{ 'Couleur de survol du menu latéral' }}</label>
-                                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 7 : fond du sous-menu latéral au survol' }}">
-                                                <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color7" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fas fa-times"></i></a>
+                                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 5 : fond du sous-menu latéral au survol' }}">
+                                                <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color5" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fas fa-times"></i></a>
                                                 <div class="colorpicker-component colorpick">
-                                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color7" value="{{ Theme['color7'] }}"/>
+                                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color5" value="{{ Theme['color5'] }}"/>
                                                     <span class="input-group-addon"><i></i></span>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group col-lg-4 col-sm-6 col-xs-12 col-padding">
+                                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
                                             <label class="control-label">{{ 'Couleur du texte du menu latéral' }}</label>
-                                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 18 : Couleur du texte du menu latéral' }}">
-                                                <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color18" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fas fa-times"></i></a>
+                                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 16 : Couleur du texte du menu latéral' }}">
+                                                <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color16" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fas fa-times"></i></a>
                                                 <div class="colorpicker-component colorpick">
-                                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color18" value="{{ Theme['color18'] }}"/>
+                                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color16" value="{{ Theme['color16'] }}"/>
                                                     <span class="input-group-addon"><i></i></span>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group col-lg-4 col-sm-6 col-xs-12 col-padding">
+                                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
                                             <label class="control-label">{{ 'Couleur du texte du sous-menu latéral' }}</label>
-                                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 19 : Couleur du texte du sous-menu latéral' }}">
-                                                <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color19" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fas fa-times"></i></a>
+                                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'COULEUR 17 : Couleur du texte du sous-menu latéral' }}">
+                                                <a class="input-group-addon cursor bt_resetColor" data-l1key="theme:color17" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fas fa-times"></i></a>
                                                 <div class="colorpicker-component colorpick">
-                                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color19" value="{{ Theme['color19'] }}"/>
+                                                    <input type="text" class="configKey form-control noSet" data-l1key="theme:color17" value="{{ Theme['color17'] }}"/>
                                                     <span class="input-group-addon"><i></i></span>
                                                 </div>
                                             </div>
@@ -479,7 +459,7 @@
                         <div class="col-xs-12">
                             <p class="alert alert-info">{{ 'Après avoir modifié ces valeurs, nous vous conseillons d\' utiliser les fonctions de redimensionnement sur grilles de vos objets en utilisant le mode édition :' }}<i class="fas fa-pencil-alt spacing-left"></i><i class="fas fa-th spacing-left spacing-right"></i><i class="fas fa-th-large spacing-right"></i></p>
                         </div>
-                        <div class="form-group col-lg-4 col-sm-6 col-xs-12 col-padding">
+                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
                             <label class="control-label">{{ 'Opacité par défaut des widgets' }}</label>
                             <div class="input-group">
                                 <span class="input-group-addon input-range-min"></span>
@@ -488,7 +468,7 @@
                                 <span class="input-group-addon input-range-value"></span>
                             </div>
                         </div>
-                        <div class="form-group col-lg-4 col-sm-6 col-xs-12 col-padding">
+                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
                             <label class="control-label">{{ 'Taille Coins' }}</label>
                             <div class="input-group">
                                 <span class="input-group-addon input-range-min"></span>
@@ -498,7 +478,7 @@
                                 <span class="input-group-addon">{{ 'pixels' }}</span>
                             </div>
                         </div>
-                        <div class="form-group col-lg-4 col-sm-6 col-xs-12 col-padding">
+                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
                             <label class="control-label">{{ 'Marge externe' }}</label>
                             <div class="input-group">
                                 <span class="input-group-addon input-range-min"></span>
@@ -508,7 +488,7 @@
                                 <span class="input-group-addon">{{ 'pixels' }}</span>
                             </div>
                         </div>
-                        <div class="form-group col-lg-4 col-sm-6 col-xs-12 col-padding">
+                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
                             <label class="control-label">{{ 'Marge interne' }}</label>
                             <div class="input-group">
                                 <span class="input-group-addon input-range-min"></span>
@@ -518,7 +498,7 @@
                                 <span class="input-group-addon">{{ 'pixels' }}</span>
                             </div>
                         </div>
-                        <div class="form-group col-lg-4 col-sm-6 col-xs-12 col-padding">
+                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
                             <label class="control-label">{{ 'Taille Grille' }}</label>
                             <div class="input-group">
                                 <span class="input-group-addon input-range-min"></span>
@@ -536,7 +516,7 @@
                         <fieldset class="legend-section">
                             <legend>{{ 'Couleurs Catégorie' }} {{ categoryData['name'] }}</legend>
                             <div class="row">
-                                <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
                                     <label class="control-label">{{ 'Fond Dashboard' }}</label>
                                     <div class="input-group">
                                         <a class="input-group-addon cursor  bt_resetColor" data-l1key="eqLogic:category:{{ category }}:color" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fas fa-times"></i></a>
@@ -546,7 +526,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
                                     <label class="control-label">{{ 'Commande Dashboard' }}</label>
                                     <div class="input-group">
                                         <a class="input-group-addon cursor  bt_resetColor" data-l1key="eqLogic:category:{{ category }}:cmdColor" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' }}"><i class="fas fa-times"></i></a>

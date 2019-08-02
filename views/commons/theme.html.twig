@@ -19,29 +19,27 @@
 #}
 
 /* Résumé */
-/* COLOR1 = Couleur d'accentuation principale (identité du thème, header nextdom, bouton primaires, messages d'info, élements actifs ou survolés, textes de liens et d'état, scrollbar, boutons fab...) */
+/* COLOR1 = Couleur d'accentuation principale (identité du thème, header nextdom, bouton primaires, messages d'info, élements actifs ou survolés, textes de liens et d'état, scrollbar, boutons fab, checkbox et radiobox...) */
 /* COLOR2 = Couleur de contraste (icônes et texte sur fond accentué ou de sidebar...) */
 /* COLOR3 = Couleur de survol principale (contenu, titres, footer, bouton d'administration, unités, légendes...) */
-/* COLOR4 = Couleur d'option activée (checkbox et radiobox) */
-/* COLOR5 = Couleur croix fenêtres modales */
-/* COLOR6 = Couleur de fond du menu latéral (fond du menu latéral) */
-/* COLOR7 = Couleur de survol du menu latéral (fond du menu latéral au survol) */
-/* COLOR8 = Couleur de fond du sous-menu latéral (fond du sous-menu latéral) */
-/* COLOR9 = Couleur de fond principale (dashboard et autres fond de pages...) */
-/* COLOR10 = Couleur de fond secondaire (titres, action-bar, footer, onglets, titre modale, boîtes d'infos...) */
-/* COLOR11 = Couleur de fond des titres (légendes, tableaux, unités...) */
-/* COLOR12 = Couleur des textes (contenu, titres, footer, bouton d'administration, unités, légendes...) */
-/* COLOR13 = Couleur de fond des inputs (champs de saisie, listes déroulantes...) */
-/* COLOR14 = Couleur de bordure (inputs, légendes, tableaux...) */
-/* COLOR15 = Couleur de fond des contenants (boxs, cards, pages d'onglets, tableaux...) */
-/* COLOR16 = Boutons d'action */
-/* COLOR17 = Boutons d'administration */
-/* COLOR18 = Couleur du texte du menu latéral */
-/* COLOR19 = Couleur du texte du sous-menu latéral */
-/* COLOR20 = Couleur de bordure des boutons (bouton d'administration, bouton default) */
-/* COLOR21 = Paramètre alpha des couleurs d'alertes */
-/* COLOR22 = Couleur de fond des boîtes à onglets */
-/* COLOR23 = Couleur de fond des blocs codes */
+/* COLOR4 = Couleur de fond du menu latéral (fond du menu latéral) */
+/* COLOR5 = Couleur de survol du menu latéral (fond du menu latéral au survol) */
+/* COLOR6 = Couleur de fond du sous-menu latéral (fond du sous-menu latéral) */
+/* COLOR7 = Couleur de fond principale (dashboard et autres fond de pages...) */
+/* COLOR8 = Couleur de fond secondaire (titres, action-bar, footer, onglets, titre modale, boîtes d'infos...) */
+/* COLOR9 = Couleur de fond des titres (légendes, tableaux, unités...) */
+/* COLOR10 = Couleur des textes (contenu, titres, footer, bouton d'administration, unités, légendes...) */
+/* COLOR11 = Couleur de fond des inputs (champs de saisie, listes déroulantes...) */
+/* COLOR12 = Couleur de bordure (inputs, légendes, tableaux...) */
+/* COLOR13 = Couleur de fond des contenants (boxs, cards, pages d'onglets, tableaux...) */
+/* COLOR14 = Boutons d'action */
+/* COLOR15 = Boutons d'administration */
+/* COLOR16 = Couleur du texte du menu latéral */
+/* COLOR17 = Couleur du texte du sous-menu latéral */
+/* COLOR18 = Couleur de bordure des boutons (bouton d'administration, bouton default) */
+/* COLOR19 = Paramètre alpha des couleurs d'alertes */
+/* COLOR20 = Couleur de fond des boîtes à onglets */
+/* COLOR21 = Couleur de fond des blocs codes */
 
 /* #################################################################################################################################################################################################### */
 /* COLOR1 = Couleur d'accentuation principale (identité du thème, header nextdom, bouton primaires, messages d'info, élements actifs ou survolés, textes de liens et d'état, scrollbar, boutons fab...) */
@@ -176,6 +174,14 @@
   background-color: {{ COLOR1 }} !important;
 }
 
+/* Checkbox Radiobox */
+[type="checkbox"]:not(:checked):after,
+[type="checkbox"]:checked:after,
+[type="radio"]:not(:checked):after,
+[type="radio"]:checked:after {
+  background-color: {{ COLOR1 }} !important;
+}
+
 
 /* ################################################################################## */
 /* COLOR2 = Couleur de contraste (icônes et texte sur fond accentué ou de sidebar...) */
@@ -258,103 +264,86 @@
 }
 
 
-/* ############################################### */
-/* COLOR 4 = Couleur d'option activée (checkbox et radiobox) */
-/* ############################################### */
-[type="checkbox"]:not(:checked):after,
-[type="checkbox"]:checked:after,
-[type="radio"]:not(:checked):after,
-[type="radio"]:checked:after {
-  background-color: {{ COLOR4 }} !important;
-}
-
-
-/* ####################################### */
-/* COLOR5 = Couleur croix fenêtres modales */
-/* ####################################### */
-
-
-
 /* ############################################################### */
-/* COLOR6 = Couleur de fond du menu latéral (fond du menu latéral) */
+/* COLOR4 = Couleur de fond du menu latéral (fond du menu latéral) */
 /* ############################################################### */
 /* Menu lateral */
 .main-sidebar, .left-side {
-  background-color: {{ COLOR6 }} !important;
+  background-color: {{ COLOR4 }} !important;
 }
 .sidebar-menu > li > .treeview-menu {
-  border: solid 1px {{ COLOR6 }} !important;
+  border: solid 1px {{ COLOR4 }} !important;
 }
 .sidebar-menu > li.header {
-  border-right: 1px solid {{ COLOR6 }} !important;
+  border-right: 1px solid {{ COLOR4 }} !important;
 }
 
 
 /* ################################################################################### */
-/* COLOR7 = Couleur de survol du fond du menu latéral (fond du menu latéral au survol) */
+/* COLOR5 = Couleur de survol du fond du menu latéral (fond du menu latéral au survol) */
 /* ################################################################################### */
 /* Menu lateral */
 .sidebar-menu > li:hover > a, .sidebar-menu > li.menu-open > a {
-  background-color: {{ COLOR7 }} !important;
+  background-color: {{ COLOR5 }} !important;
 }
 .treeview-menu > li:hover {
-  background-color: {{ COLOR7 }} !important;
+  background-color: {{ COLOR5 }} !important;
 }
 
 
 /* ######################################################################### */
-/* COLOR8 = Couleur de fond du sous-menu latéral (fond du sous-menu latéral) */
+/* COLOR6 = Couleur de fond du sous-menu latéral (fond du sous-menu latéral) */
 /* ######################################################################### */
 /* Menu lateral */
 .sidebar-menu > li.header {
-  background-color: {{ COLOR8 }} !important;
+  background-color: {{ COLOR6 }} !important;
 }
 .sidebar-menu > li > .treeview-menu {
   margin: 0 1px;
-  background-color: {{ COLOR8 }} !important;
+  background-color: {{ COLOR6 }} !important;
 }
 
 
 /* ########################################################################## */
-/* COLOR9 = Couleur de fond principale (dashboard et autres fond de pages...) */
+/* COLOR7 = Couleur de fond principale (dashboard et autres fond de pages...) */
 /* ########################################################################## */
 .content-wrapper,
 .nav-tabs-custom > .nav-tabs > li.active > a,
 .nav-tabs-custom > .nav-tabs > li.active:hover > a,
 .main-footer {
-  background-color:{{ COLOR9 }} !important;
-  border-color:{{ COLOR9 }}60 !important;
+  background-color:{{ COLOR7 }} !important;
+  border-color:{{ COLOR7 }}60 !important;
 }
 .nav-tabs-custom > .nav-tabs > li.father > a {
-  background-color:{{ COLOR9 }} !important;
+  background-color:{{ COLOR7 }} !important;
 }
 
 .action-bar, .box-footer {
-  border-top-color: {{ COLOR9 }} !important;
+  border-top-color: {{ COLOR7 }} !important;
 }
 
 .ui-widget-content {
-  background-color: {{ COLOR9 }} !important;
+  background-color: {{ COLOR7 }} !important;
 }
 
 .modal-content{
-  background-color: {{ COLOR9 }} !important;
+  background-color: {{ COLOR7 }} !important;
 }
 
 .ui-dialog .ui-dialog-content {
-  background-color: {{ COLOR9 }} !important;
+  background-color: {{ COLOR7 }} !important;
 }
 
 .box-header.with-border{
-  border-color: {{ COLOR9 }} !important;
+  border-color: {{ COLOR7 }} !important;
 }
 
 .nav-tabs-custom > .nav-tabs,
 .nav-tabs-custom > .nav-tabs > li.active > a {
-  border-color: {{ COLOR9 }} !important;
+  border-color: {{ COLOR7 }} !important;
 }
 .info-box-small{
-  background-color: {{ COLOR10 }} !important;
+  background-color: {{ COLOR7 }} !important;
 }
 
 .nav-tabs-custom .box,
@@ -363,152 +352,152 @@
 .nav-tabs-custom .panel,
 .nav-tabs-custom .panel .panel-body,
 .nav-tabs-custom .well {
-  background-color: {{ COLOR9 }} !important;
+  background-color: {{ COLOR7 }} !important;
 }
 
 /* Markets */
 #market-div .media {
-  background-color: {{ COLOR9 }} !important;
+  background-color: {{ COLOR7 }} !important;
 }
 .market,
 .marketOverload,
 .marketOverload:hover {
-  background-color: {{ COLOR9 }} !important;
+  background-color: {{ COLOR7 }} !important;
 }
 
 .eqLogicSortable>li {
-  background-color: {{ COLOR9 }} !important;
+  background-color: {{ COLOR7 }} !important;
 }
 
 /* Scenario */
 .scenario-icon {
-  background-color: {{ COLOR9 }} !important;
+  background-color: {{ COLOR7 }} !important;
 }
 
 /* fond des timeline*/
 .timeline-item,
 .timeline-header,
 .timeline:before {
-  background-color: {{ COLOR9 }} !important;
+  background-color: {{ COLOR7 }} !important;
 }
 
 
-/* ########################################################################################################### */
-/* COLOR10 = Couleur de fond secondaire (titres, action-bar, footer, onglets, titre modale, boîtes d'infos...) */
-/* ########################################################################################################### */
+/* ########################################################################################################## */
+/* COLOR8 = Couleur de fond secondaire (titres, action-bar, footer, onglets, titre modale, boîtes d'infos...) */
+/* ########################################################################################################## */
 /* Boxs */
 .box, .panel,
 .box-footer,
 .panel-heading,
 .well,
 .market-modale-category {
-  background-color: {{ COLOR10 }} !important;
+  background-color: {{ COLOR8 }} !important;
 }
 .info-box-small{
-  background-color: {{ COLOR10 }} !important;
+  background-color: {{ COLOR8 }} !important;
 }
 .nav-tabs-custom .box .box-header,
 .nav-tabs-custom .box .box-footer,
 .nav-tabs-custom .panel .panel-heading,
 .panel-default,
 .nav-tabs-custom .well {
-  border-color: {{ COLOR10 }} !important;
+  border-color: {{ COLOR8 }} !important;
 }
 
 /* Action bar */
 .action-bar {
-  background-color: {{ COLOR10 }} !important;
+  background-color: {{ COLOR8 }} !important;
 }
 
 /* Tabs */
 .nav-tabs-custom {
-  background-color: {{ COLOR10 }} !important;
+  background-color: {{ COLOR8 }} !important;
 }
 .ui-dialog .ui-dialog-titlebar,
 .ui-dialog .ui-dialog-buttonpane {
-  background-color: {{ COLOR10 }} !important;
+  background-color: {{ COLOR8 }} !important;
 }
 
 /* Footer */
 body,
 .main-footer{
-  background-color: {{ COLOR10 }} !important;
+  background-color: {{ COLOR8 }} !important;
 }
 .label-list:hover,
 .label-view:hover,
 .label-log:hover {
-  background-color: {{ COLOR10 }} !important;
+  background-color: {{ COLOR8 }} !important;
 }
 .nav-list > li > a:hover {
-  background-color: {{ COLOR10 }} !important;
+  background-color: {{ COLOR8 }} !important;
 }
 
 /* Modale */
 .modal-header,
 .modal-footer{
-  background-color: {{ COLOR10 }} !important;
+  background-color: {{ COLOR8 }} !important;
 }
 .ui-dialog .ui-dialog-titlebar,
 .ui-dialog .ui-dialog-buttonpane {
-  background-color: {{ COLOR10 }} !important;
+  background-color: {{ COLOR8 }} !important;
 }
 .row legend {
-  background-color: {{ COLOR10 }} !important;
+  background-color: {{ COLOR8 }} !important;
 }
 .modal-body legend {
-  background-color: {{ COLOR10 }} !important;
+  background-color: {{ COLOR8 }} !important;
 }
 
 /* List log et autres */
 .label-list>a:hover,
 .label-view>a:hover,
 .label-log>a:hover {
-  background-color: {{ COLOR10 }} !important;
+  background-color: {{ COLOR8 }} !important;
 }
 .label-list:hover,
 .label-view:hover,
 .label-log:hover {
-  background-color: {{ COLOR10 }} !important;
+  background-color: {{ COLOR8 }} !important;
 }
 
 /* Tableaux */
 .table-striped > tbody > tr:nth-of-type(even) {
-  background-color: {{ COLOR10 }} !important;
+  background-color: {{ COLOR8 }} !important;
 }
 
 /* Market */
 .media-title {
-  background-color: {{ COLOR10 }}60 !important;
+  background-color: {{ COLOR8 }}60 !important;
 }
 
 
-/* #################################################################### */
-/* COLOR11 = Couleur de fond des titres (légendes, tableaux, unités...) */
-/* #################################################################### */
+/* ################################################################### */
+/* COLOR9 = Couleur de fond des titres (légendes, tableaux, unités...) */
+/* ################################################################### */
 /* Titres Tableaux */
 .table, .table-condensed>thead {
-  background-color: {{ COLOR11 }} !important;
-  border: {{ COLOR11 }} !important;
+  background-color: {{ COLOR9 }} !important;
+  border: {{ COLOR9 }} !important;
 }
 .table-striped > tbody > tr:nth-of-type(odd) {
-  background-color: {{ COLOR11 }} !important;
+  background-color: {{ COLOR9 }} !important;
 }
 
 /* Legendes de sections */
 legend,
 .box legend,
 .panel legend {
-  background-color: {{ COLOR11 }} !important;
+  background-color: {{ COLOR9 }} !important;
 }
 .tablesorter-bootstrap .tablesorter-filter-row input.tablesorter-filter,
 .tablesorter-bootstrap .tablesorter-filter-row select.tablesorter-filter {
-  background-color: {{ COLOR11 }} !important;
+  background-color: {{ COLOR9 }} !important;
 }
 
 /* Unités et fond colorpick */
 .colorpick .input-group-addon,
 .input-group .input-group-addon:not(.input-range-value) {
-  background-color: {{ COLOR11 }} !important;
+  background-color: {{ COLOR9 }} !important;
 }
 
 /* Tableaux */
@@ -517,101 +506,101 @@ legend,
 .table-bordered > tfoot > tr > th,
 .table-bordered > thead > tr > td,
 .table-bordered > tfoot > tr > td {
-  background-color: {{ COLOR11 }} !important;
+  background-color: {{ COLOR9 }} !important;
 }
 .tablesorter-bootstrap .tablesorter-filter-row input.tablesorter-filter,
 .tablesorter-bootstrap .tablesorter-filter-row select.tablesorter-filter {
-  background-color: {{ COLOR11 }} !important;
+  background-color: {{ COLOR9 }} !important;
 }
 
 /* Texte area */
 pre {
-  background-color: {{ COLOR11 }} !important;
+  background-color: {{ COLOR9 }} !important;
 }
 .CodeMirror pre {
   background-color: transparent !important;
 }
 pre::selection {
-  color: {{ COLOR11 }} !important;
+  color: {{ COLOR9 }} !important;
 }
 
 /* jstree */
 .jstree-hovered,
 .jstree-clicked {
-  background-color: {{ COLOR11 }} !important;
+  background-color: {{ COLOR9 }} !important;
 }
 
 /* Scenario */
 #div_editScenario .element{
-  color: {{ COLOR11 }} !important;
+  color: {{ COLOR9 }} !important;
 }
 
 
 /* #################################################################################################### */
-/* COLOR12 = Couleur des textes (contenu, titres, footer, bouton d'administration, unités, légendes...) */
+/* COLOR10 = Couleur des textes (contenu, titres, footer, bouton d'administration, unités, légendes...) */
 /* #################################################################################################### */
 /* Textes */
 body, h1, h2, h3, h4, h5, h6  {
-  color: {{ COLOR12 }} !important;
+  color: {{ COLOR10 }} !important;
 }
 .box-header span:not(.badge) {
-  color: {{ COLOR12 }} !important;
+  color: {{ COLOR10 }} !important;
 }
 .nav-tabs-custom > .nav-tabs > li.header,
 .nav-tabs-custom > .nav-tabs > li.active > a,
 .nav-tabs-custom > .nav-tabs > li.active:hover > a,
 .nav-tabs-custom > .nav-tabs > li > a,
 .ui-widget-content .nav-tabs-custom > .nav-tabs > li > a {
-  color: {{ COLOR12 }} !important;
+  color: {{ COLOR10 }} !important;
 }
 .nav-tabs-custom > .nav-tabs > li.father > a {
-  color: {{ COLOR12 }} !important;
+  color: {{ COLOR10 }} !important;
 }
 legend {
-  color: {{ COLOR12 }} !important;
+  color: {{ COLOR10 }} !important;
 }
 .CodeMirror-scroll{
-  color: {{ COLOR12 }} !important;
+  color: {{ COLOR10 }} !important;
 }
 .footer-center, .text-muted {
-  color: {{ COLOR12 }} !important;
+  color: {{ COLOR10 }} !important;
 }
 .ui-widget-content {
-  color: {{ COLOR12 }} !important;
+  color: {{ COLOR10 }} !important;
 }
 
 /* Titres */
 .ui-dialog .ui-dialog-title {
-  color: {{ COLOR12 }} !important;
+  color: {{ COLOR10 }} !important;
 }
 
 /* Bouton administration */
 .btn-app,
 .btn-selector {
-  color: {{ COLOR12 }} !important;
+  color: {{ COLOR10 }} !important;
 }
 
 /* Inputs */
 .form-control {
-  color: {{ COLOR12 }} !important;
+  color: {{ COLOR10 }} !important;
 }
 .input-group .input-group-addon:not(.input-range-value),
 .input-group .input-group-addon i {
-  color: {{ COLOR12 }} !important;
+  color: {{ COLOR10 }} !important;
 }
 .input-sm {
-  color: {{ COLOR12 }} !important;
+  color: {{ COLOR10 }} !important;
 }
 pre {
-  color: {{ COLOR12 }} !important;
+  color: {{ COLOR10 }} !important;
 }
 pre::selection {
-  background-color: {{ COLOR12 }} !important;
+  background-color: {{ COLOR10 }} !important;
 }
 
 /* Code mirror */
 .CodeMirror-gutters {
-  color: {{ COLOR12 }} !important;
+  color: {{ COLOR10 }} !important;
 }
 
 /* Listes */
@@ -621,94 +610,94 @@ pre::selection {
 .label-list>a,
 .label-view>a,
 .label-log>a {
-  color: {{ COLOR12 }} !important;
+  color: {{ COLOR10 }} !important;
 }
 
 /* Tableaux */
 .tablesorter-filter {
-  color: {{ COLOR12 }} !important;
+  color: {{ COLOR10 }} !important;
 }
 
 /* Bouton filtres tuiles */
 .bt_editDashboardWidgetGridAllResize,
 .bt_editDashboardWidgetGridResize {
-  color: {{ COLOR12 }} !important;
+  color: {{ COLOR10 }} !important;
 }
 .editDashboardButtons a {
-  color: {{ COLOR12 }} !important;
+  color: {{ COLOR10 }} !important;
 }
 #dashboard-content .card-summary span {
-  color: {{ COLOR12 }} !important;
+  color: {{ COLOR10 }} !important;
 }
 
 /* Summary page objets */
 .objectListContainer .objectSummaryParent {
-  color: {{ COLOR12 }} !important;
+  color: {{ COLOR10 }} !important;
 }
 .accordion-toggle .fas {
-  color: {{ COLOR12 }} !important;
+  color: {{ COLOR10 }} !important;
 }
 
 /* timeline */
 .timeline-footer {
-  color: {{ COLOR12 }} !important;
+  color: {{ COLOR10 }} !important;
 }
 .timeline-item {
-  color: {{ COLOR12 }} !important;
+  color: {{ COLOR10 }} !important;
 }
 
 /* ############################################################################## */
-/* COLOR13 = Couleur de fond des inputs (champs de saisie, listes déroulantes...) */
+/* COLOR11 = Couleur de fond des inputs (champs de saisie, listes déroulantes...) */
 /* ############################################################################## */
 /* Composants */
 .form-control, .cron-period select {
-  background-color: {{ COLOR13 }} !important;
+  background-color: {{ COLOR11 }} !important;
 }
 .input-sm {
-  background-color: {{ COLOR13 }} !important;
+  background-color: {{ COLOR11 }} !important;
 }
 .viewZone {
-  background-color: {{ COLOR13 }} !important;
+  background-color: {{ COLOR11 }} !important;
 }
 .slider {
-  background-color: {{ COLOR13 }} !important;
+  background-color: {{ COLOR11 }} !important;
 }
 
 /* inputs de groupe */
 .input-group>input {
-  border-color: {{ COLOR13 }} !important;
+  border-color: {{ COLOR11 }} !important;
 }
 
 /* Listes */
 .label-list,
 .label-view,
 .label-log{
-  background-color: {{ COLOR13 }} !important;
+  background-color: {{ COLOR11 }} !important;
 }
 
 /* Code mirror */
 .CodeMirror-gutters {
-  background-color: {{ COLOR13 }} !important;
+  background-color: {{ COLOR11 }} !important;
 }
 
 /* timeline */
 .timeline-header {
-  border-color: {{ COLOR13 }} !important;
+  border-color: {{ COLOR11 }} !important;
 }
 
 
 /* ####################################################################################### */
-/* COLOR14 = Couleur de bordure (inputs, légendes, tableaux et bouton d'administration...) */
+/* COLOR12 = Couleur de bordure (inputs, légendes, tableaux et bouton d'administration...) */
 /* ####################################################################################### */
 /* Inputs */
 .ui-autocomplete-input,
 select,
 textarea,
 input:not(.has-error) {
-  border: 1px solid {{ COLOR14 }} !important;
+  border: 1px solid {{ COLOR12 }} !important;
 }
 .input-group {
-  border-color: {{ COLOR14 }} !important;
+  border-color: {{ COLOR12 }} !important;
 }
 .input-group>input,
 input[type="checkbox"],
@@ -716,12 +705,12 @@ input[type="radio"] {
   border: none !important;
 }
 .label-value {
-  border-color: {{ COLOR14 }} !important;
+  border-color: {{ COLOR12 }} !important;
 }
 
 /* Legendes de sections */
 legend {
-  border-color: {{ COLOR14 }} !important;
+  border-color: {{ COLOR12 }} !important;
 }
 
 /* Tableaux */
@@ -731,108 +720,108 @@ legend {
 .table-bordered > thead > tr > td,
 .table-bordered > tbody > tr > td,
 .table-bordered > tfoot > tr > td {
-  border: 1px solid {{ COLOR14 }} !important;
+  border: 1px solid {{ COLOR12 }} !important;
 }
 
 /* Listes */
 .label-list,
 .label-view,
 .label-log{
-  border-color: {{ COLOR14 }} !important;
+  border-color: {{ COLOR12 }} !important;
 }
 
 /* Texte area */
 pre {
-  border-color: {{ COLOR14 }} !important;
+  border-color: {{ COLOR12 }} !important;
 }
 
 /* Listes */
 .left-border {
-  border-left: solid 1px {{ COLOR14 }} !important;
+  border-left: solid 1px {{ COLOR12 }} !important;
 }
 .right-border {
-  border-right: solid 1px {{ COLOR14 }} !important;
+  border-right: solid 1px {{ COLOR12 }} !important;
 }
 
 
 /* #################################################################################### */
-/* COLOR15 = Couleur de fond des contenants (boxs, cards, pages d'onglets, tableaux...) */
+/* COLOR13 = Couleur de fond des contenants (boxs, cards, pages d'onglets, tableaux...) */
 /* #################################################################################### */
 /* Box */
 .tab-content,
 .box-body,
 .panel-body {
-  background-color: {{ COLOR15 }} !important;
+  background-color: {{ COLOR13 }} !important;
 }
 .right-border {
-  border-right: solid 1px {{ COLOR14 }} !important;
+  border-right: solid 1px {{ COLOR13 }} !important;
 }
 
 /* Contenu tableau */
 .table-condensed,
 .table-bordered {
-  background-color: {{ COLOR11 }}60 !important;
+  background-color: {{ COLOR13 }}60 !important;
 }
 
 
 /* ########################## */
-/* COLOR16 = Boutons d'action */
+/* COLOR14 = Boutons d'action */
 /* ########################## */
 .btn-action {
-  background-color: {{ COLOR16 }} !important;
+  background-color: {{ COLOR14 }} !important;
 }
 .tooltip-inner {
-  background-color: {{ COLOR16 }} !important;
+  background-color: {{ COLOR14 }} !important;
 }
 .tooltip.top .tooltip-arrow {
-    border-top-color: {{ COLOR16 }} !important;
+    border-top-color: {{ COLOR14 }} !important;
 }
 .tooltip.bottom .tooltip-arrow {
-    border-bottom-color: {{ COLOR16 }} !important;
+    border-bottom-color: {{ COLOR14 }} !important;
 }
 .tooltip.left .tooltip-arrow {
-    border-left-color: {{ COLOR16 }} !important;
+    border-left-color: {{ COLOR14 }} !important;
 }
 .tooltip.right .tooltip-arrow {
-    border-right-color: {{ COLOR16 }} !important;
+    border-right-color: {{ COLOR14 }} !important;
 }
 
 
 /* ################################# */
-/* COLOR17 = Bouton d'administration */
+/* COLOR15 = Bouton d'administration */
 /* ################################# */
 .btn-app,
 .btn-selector {
-  background-color: {{ COLOR17 }} !important;
+  background-color: {{ COLOR15 }} !important;
 }
 
 
 /* ########################################## */
-/* COLOR18 = Couleur du texte du menu latéral */
+/* COLOR16 = Couleur du texte du menu latéral */
 /* ########################################## */
 /* Menu lateral */
 .sidebar-menu > li:hover > a, .sidebar-menu > li.menu-open > a {
-  color: {{ COLOR18 }} !important;
+  color: {{ COLOR16 }} !important;
 }
 .sidebar-menu .treeview-menu > li.active > a,
 .sidebar-menu .treeview-menu > li > a:hover {
-  color: {{ COLOR18 }} !important;
+  color: {{ COLOR16 }} !important;
 }
 .sidebar a {
-  color: {{ COLOR18 }} !important;
+  color: {{ COLOR16 }} !important;
 }
 .user-panel > .info,
 .user-panel > .info > a {
-  color: {{ COLOR18 }} !important;
+  color: {{ COLOR16 }} !important;
 }
 
 
 /* ############################################### */
-/* COLOR19 = Couleur du texte du sous-menu latéral */
+/* COLOR17 = Couleur du texte du sous-menu latéral */
 /* ############################################### */
 /* Menu lateral */
 .sidebar-menu .treeview-menu>li:not(.sidebar-warning)>a {
-  color: {{ COLOR19 }} !important;
+    color: {{ COLOR17 }} !important;
 }
 .sidebar-warning a {
     color: #000 !important;
@@ -840,50 +829,50 @@ pre {
 
 
 /* ################################################################################## */
-/* COLOR20 = Couleur de bordure des boutons (bouton d'administration, bouton default) */
+/* COLOR18 = Couleur de bordure des boutons (bouton d'administration, bouton default) */
 /* ################################################################################## */
 /* Bouton administration */
 .btn-app,
 .btn-selector:not(.iconSelected) {
-  border: 1px solid {{ COLOR20 }} !important;
+  border: 1px solid {{ COLOR18 }} !important;
 }
 
 
 /* ################################################ */
-/* COLOR21 = Paramètre alpha des couleurs d'alertes */
+/* COLOR19 = Paramètre alpha des couleurs d'alertes */
 /* ################################################ */
 /* Alertes */
 .alert-danger {
-    background-color: rgba(221, 75, 57, {{ COLOR21 / 100 }}) !important;
+    background-color: rgba(221, 75, 57, {{ COLOR19 / 100 }}) !important;
 }
 .alert-warning {
-    background-color: rgba(243, 156, 18, {{ COLOR21 / 100 }}) !important;
+    background-color: rgba(243, 156, 18, {{ COLOR19 / 100 }}) !important;
 }
 .alert-success {
-    background-color: rgba(0, 166, 90, {{ COLOR21 / 100 }}) !important;
+    background-color: rgba(0, 166, 90, {{ COLOR19 / 100 }}) !important;
 }
 .alert-info {
-    background-color: rgba(0, 192, 239, {{ COLOR21 / 100 }}) !important;
+    background-color: rgba(0, 192, 239, {{ COLOR19 / 100 }}) !important;
 }
 
 
 /* ############################################## */
-/* COLOR22 = Couleur de fond des boîtes à onglets */
+/* COLOR20 = Couleur de fond des boîtes à onglets */
 /* ############################################## */
 /* Tabs */
 .nav-tabs-custom>.tab-content {
-    background-color: {{ COLOR22 }} !important;
+    background-color: {{ COLOR20 }} !important;
 }
 /* Legendes de sections */
 .nav-tabs-custom .box legend,
 .nav-tabs-custom .panel legend {
-    background-color: {{ COLOR22 }} !important;
+    background-color: {{ COLOR20 }} !important;
 }
 
-/* #################################################################################### */
-/* COLOR15 = Couleur de fond des contenants (boxs, cards, pages d'onglets, tableaux...) */
-/* #################################################################################### */
+/* ######################################### */
+/* COLOR21 = Couleur de fond des blocs codes */
+/* ######################################### */
 /* Code mirror */
 .CodeMirror-scroll {
-    background-color: {{ COLOR23 }} !important;
+    background-color: {{ COLOR21 }} !important;
 }
