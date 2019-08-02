@@ -130,14 +130,21 @@ prereq_create_dirs() {
 }
 
 nexdom_environement() {
-if [ -f "${WEBSERVER_HOME}/assets/config/default.config.ini" ];then
-   rm ${WEBSERVER_HOME}/assets/config/default.config.ini
-fi
-  if [ ${env} = "dev" ]; then
-         cp -f ${WEBSERVER_HOME}/assets/config/dist/default.config.ini.dev ${WEBSERVER_HOME}/assets/config/default.config.ini
-    else
-        cp -f ${WEBSERVER_HOME}/assets/config/dist/default.config.ini.dist ${WEBSERVER_HOME}/assets/config/default.config.ini
+  if [ -f "${WEBSERVER_HOME}/assets/config/default.config.ini" ];then
+      rm ${WEBSERVER_HOME}/assets/config/default.config.ini
+      rm /etc/php/7.0/apache2/conf.d/10-opcache.ini
   fi
+  if [ ${env} = "dev" ]; then
+      cp -f ${WEBSERVER_HOME}/assets/config/dist/default.config.ini.dev ${WEBSERVER_HOME}/assets/config/default.config.ini
+      print_verbose "disable PHP opcache"
+      cp -f ${WEBSERVER_HOME}/assets/config/dist/opcache.ini.dev /etc/php/7.0/apache2/conf.d/10-opcache.ini
+  else
+      cp -f ${WEBSERVER_HOME}/assets/config/dist/default.config.ini.dist ${WEBSERVER_HOME}/assets/config/default.config.ini
+      print_verbose "enable PHP opcache"
+      cp -f ${WEBSERVER_HOME}/assets/config/dist/opcache.ini.dist /etc/php/7.0/apache2/conf.d/10-opcache.ini
+  fi
+  print_verbose "restart Apache"
+  service apache2 restart
 }
 
 step_nextdom_file_permissions() {
@@ -727,11 +734,11 @@ main() {
   print_log_in "step_restore_owner ..."
   step_restore_owner
   print_log_ok
-  
+
   print_log_in "step_nextdom_copy_config.ini ... "
   nexdom_environement
   print_log_ok
-  
+
   [[ -f /root/.mysqlroot ]] && rm -f /root/.mysqlroot
 
   if [ -f .git  ] ; then
