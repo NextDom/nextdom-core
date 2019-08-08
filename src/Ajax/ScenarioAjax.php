@@ -357,55 +357,68 @@ class ScenarioAjax extends BaseAjax
         AjaxHelper::success($return);
     }
 
+    /**
+     * Save scenario
+     *
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function save()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
         if (!is_json(Utils::init('scenario'))) {
             throw new CoreException(__('Champs json invalide'));
         }
-        $time_dependance = 0;
+        // Check if scenario has time dependency
+        $timeDependency = 0;
         foreach (array('#time#', '#seconde#', '#heure#', '#minute#', '#jour#', '#mois#', '#annee#', '#timestamp#', '#date#', '#semaine#', '#sjour#', '#njour#', '#smois#') as $keyword) {
             if (strpos(Utils::init('scenario'), $keyword) !== false) {
-                $time_dependance = 1;
+                $timeDependency = 1;
                 break;
             }
         }
 
-        $has_return = 0;
-        foreach (array('scenario_return') as $keyword) {
+        // Check if scenario must return a value
+        // Loop for futur cases ?
+        $hasReturn = 0;
+        foreach (['scenario_return'] as $keyword) {
             if (strpos(Utils::init('scenario'), $keyword) !== false) {
-                $has_return = 1;
+                $hasReturn = 1;
                 break;
             }
         }
 
-        $scenario_ajax = json_decode(Utils::init('scenario'), true);
-        if (isset($scenario_ajax['id'])) {
-            $scenario_db = ScenarioManager::byId($scenario_ajax['id']);
+        // Prepare object from Ajax data
+        $scenarioAjaxData = json_decode(Utils::init('scenario'), true);
+        if (isset($scenarioAjaxData['id'])) {
+            $targetScenario = ScenarioManager::byId($scenarioAjaxData['id']);
         }
-        if (!isset($scenario_db) || !is_object($scenario_db)) {
-            $scenario_db = new Scenario();
-        } elseif (!$scenario_db->hasRight('w')) {
+        if (!isset($targetScenario) || !is_object($targetScenario)) {
+            $targetScenario = new Scenario();
+        } elseif (!$targetScenario->hasRight('w')) {
             throw new CoreException(__('Vous n\'êtes pas autorisé à faire cette action'));
         }
-        if (isset($scenario_ajax['trigger'])) {
-            $scenario_db->setTrigger(array());
+        if (!isset($scenarioAjaxData['trigger'])) {
+            $targetScenario->setTrigger([]);
         }
-        if (isset($scenario_ajax['schedule'])) {
-            $scenario_db->setSchedule(array());
+        if (!isset($scenarioAjaxData['schedule'])) {
+            $targetScenario->setSchedule([]);
         }
-        Utils::a2o($scenario_db, $scenario_ajax);
-        $scenario_db->setConfiguration('timeDependency', $time_dependance);
-        $scenario_db->setConfiguration('has_return', $has_return);
-        $scenario_element_list = array();
-        if (isset($scenario_ajax['elements'])) {
-            foreach ($scenario_ajax['elements'] as $element_ajax) {
-                $scenario_element_list[] = ScenarioElementManager::saveAjaxElement($element_ajax);
+        Utils::a2o($targetScenario, $scenarioAjaxData);
+        $targetScenario->setConfiguration('timeDependency', $timeDependency);
+        $targetScenario->setConfiguration('has_return', $hasReturn);
+
+        // Save scenario elements
+        $scenarioElementList = array();
+        if (isset($scenarioAjaxData['elements'])) {
+            foreach ($scenarioAjaxData['elements'] as $elementData) {
+                $scenarioElementList[] = ScenarioElementManager::saveAjaxElement($elementData);
             }
-            $scenario_db->setScenarioElement($scenario_element_list);
+            $targetScenario->setScenarioElement($scenarioElementList);
         }
-        $scenario_db->save();
-        AjaxHelper::success(Utils::o2a($scenario_db));
+        
+        $targetScenario->save();
+        AjaxHelper::success(Utils::o2a($targetScenario));
     }
 
     public function actionToHtml()
