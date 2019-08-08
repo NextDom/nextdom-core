@@ -1792,10 +1792,13 @@ function initScenarioEditorEvents() {
         var el = $(this);
         if (el.closest('.expression').find('.expressionAttr[data-l1key=type]').value() === 'action') {
             var expression = el.closest('.expression').getValues('.expressionAttr');
-            nextdom.cmd.displayActionOption(el.value(), init(expression[0].options), function (html) {
-                el.closest('.expression').find('.expressionOptions').html(html);
-                taAutosize();
-            });
+            if (expression[0].expression !== el.value()) {
+
+                nextdom.cmd.displayActionOption(el.value(), init(expression[0].options), function (html) {
+                    el.closest('.expression').find('.expressionOptions').html(html);
+                    taAutosize();
+                });
+            }
         }
     });
 

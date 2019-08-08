@@ -507,20 +507,6 @@ class HistoryManager
      * @return array
      * @throws CoreException
      */
-    /**
-     * @param $_cmd_id
-     * @param $_startTime
-     * @param $_endTime
-     * @return array
-     * @throws CoreException
-     */
-    /**
-     * @param $_cmd_id
-     * @param $_startTime
-     * @param $_endTime
-     * @return array
-     * @throws CoreException
-     */
     public static function getStatistics($_cmd_id, $_startTime, $_endTime)
     {
         $values = array(
@@ -587,20 +573,6 @@ class HistoryManager
      * @return float|int
      * @throws \Exception
      */
-    /**
-     * @param $_cmd_id
-     * @param $_startTime
-     * @param $_endTime
-     * @return float|int
-     * @throws \Exception
-     */
-    /**
-     * @param $_cmd_id
-     * @param $_startTime
-     * @param $_endTime
-     * @return float|int
-     * @throws \Exception
-     */
     public static function getTendance($_cmd_id, $_startTime, $_endTime)
     {
         $values = array();
@@ -635,18 +607,6 @@ class HistoryManager
      * @return false|int
      * @throws CoreException
      */
-    /**
-     * @param $_cmd_id
-     * @param null $_value
-     * @return false|int
-     * @throws CoreException
-     */
-    /**
-     * @param $_cmd_id
-     * @param null $_value
-     * @return false|int
-     * @throws CoreException
-     */
     public static function stateDuration($_cmd_id, $_value = null)
     {
         $cmd = CmdManager::byId($_cmd_id);
@@ -673,18 +633,6 @@ class HistoryManager
         return $duration;
     }
 
-    /**
-     * @param $_cmd_id
-     * @param null $_value
-     * @return false|int
-     * @throws \Exception
-     */
-    /**
-     * @param $_cmd_id
-     * @param null $_value
-     * @return false|int
-     * @throws \Exception
-     */
     /**
      * @param $_cmd_id
      * @param null $_value
