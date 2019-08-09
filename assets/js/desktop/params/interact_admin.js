@@ -34,60 +34,83 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-jwerty.key('ctrl+s/⌘+s', function (e) {
-    e.preventDefault();
-    $("#bt_saveinteract_admin").click();
-});
 
+// Page init
+loadInformations();
 printConvertColor();
-$('.colorpick').colorpicker();
+initEvents();
 
-nextdom.config.load({
-    configuration: $('#interact_admin').getValues('.configKey:not(.noSet)')[0],
-    error: function (error) {
-        notify("Erreur", error.message, 'error');
-    },
-    success: function (data) {
-        $('#interact_admin').setValues(data, '.configKey');
-        modifyWithoutSave = false;
-    }
-});
-
-$("#bt_saveinteract_admin").on('click', function (event) {
-    $.hideAlert();
-    saveConvertColor();
-    nextdom.config.save({
-        configuration: $('#interact_admin').getValues('.configKey')[0],
+/**
+ * Load informations in all forms of the page
+ */
+function loadInformations() {
+    nextdom.config.load({
+        configuration: $('#interact_admin').getValues('.configKey:not(.noSet)')[0],
         error: function (error) {
             notify("Erreur", error.message, 'error');
         },
-        success: function () {
-            nextdom.config.load({
-                configuration: $('#interact_admin').getValues('.configKey')[0],
-                plugin: 'core',
-                error: function (error) {
-                    notify("Erreur", error.message, 'error');
-                },
-                success: function (data) {
-                    $('#interact_admin').setValues(data, '.configKey');
-                    modifyWithoutSave = false;
-                    notify("Info", '{{Sauvegarde réussie}}', 'success');
-                }
-            });
+        success: function (data) {
+            $('#interact_admin').setValues(data, '.configKey');
+            modifyWithoutSave = false;
         }
     });
-});
+}
 
-$('#interact_admin').delegate('.configKey', 'change', function () {
-    modifyWithoutSave = true;
-});
+/**
+ * Init events on the profils page
+ */
+function initEvents() {
+    // Save button
+    $("#bt_saveinteract_admin").on('click', function (event) {
+        saveConvertColor();
+        nextdom.config.save({
+            configuration: $('#interact_admin').getValues('.configKey')[0],
+            error: function (error) {
+                notify("Erreur", error.message, 'error');
+            },
+            success: function () {
+                nextdom.config.load({
+                    configuration: $('#interact_admin').getValues('.configKey')[0],
+                    plugin: 'core',
+                    error: function (error) {
+                        notify("Erreur", error.message, 'error');
+                    },
+                    success: function (data) {
+                        $('#interact_admin').setValues(data, '.configKey');
+                        modifyWithoutSave = false;
+                        notify("Info", '{{Sauvegarde réussie}}', 'success');
+                    }
+                });
+            }
+        });
+    });
 
-$('#bt_addColorConvert').on('click', function () {
-    addConvertColor('?','#FFFFFF');
-    $('.colorpick').colorpicker();
-});
+    // Param changed : page leaving lock by msgbox
+    $('#interact_admin').delegate('.configKey', 'change', function () {
+        modifyWithoutSave = true;
+    });
 
-/********************Convertion************************/
+    // New color add
+    $('#bt_addColorConvert').on('click', function () {
+        addConvertColor('?','#FFFFFF');
+        $('.colorpick').colorpicker();
+    });
+
+    /*CMD color*/
+    $('.bt_selectAlertCmd').on('click', function () {
+        var type=$(this).attr('data-type');
+        nextdom.cmd.getSelectModal({cmd: {type: 'action', subType: 'message'}}, function (result) {
+            $('.configKey[data-l1key="alert::'+type+'Cmd"]').atCaret('insert', result.human);
+        });
+    });
+
+    $('.bt_selectWarnMeCmd').on('click', function () {
+        nextdom.cmd.getSelectModal({cmd: {type: 'action', subType: 'message'}}, function (result) {
+            $('.configKey[data-l1key="interact::warnme::defaultreturncmd"]').value(result.human);
+        });
+    });
+}
+
 function printConvertColor() {
     $.ajax({
         type: "POST",
@@ -161,17 +184,3 @@ function saveConvertColor() {
         }
     });
 }
-
-/*CMD color*/
-$('.bt_selectAlertCmd').on('click', function () {
-    var type=$(this).attr('data-type');
-    nextdom.cmd.getSelectModal({cmd: {type: 'action', subType: 'message'}}, function (result) {
-        $('.configKey[data-l1key="alert::'+type+'Cmd"]').atCaret('insert', result.human);
-    });
-});
-
-$('.bt_selectWarnMeCmd').on('click', function () {
-    nextdom.cmd.getSelectModal({cmd: {type: 'action', subType: 'message'}}, function (result) {
-        $('.configKey[data-l1key="interact::warnme::defaultreturncmd"]').value(result.human);
-    });
-});

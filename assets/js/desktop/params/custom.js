@@ -33,55 +33,126 @@
 * @Email   <admin@nextdom.org>
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
+
+// Page init
 editorDesktopJS = null;
 editorDesktopCSS = null;
+showSelectedTabFromUrl(document.location.toString());
+loadInformations();
+initEvents();
 
-$('.colorpick').colorpicker();
-
-nextdom.config.load({
-    configuration: $('#custom').getValues('.configKey:not(.noSet)')[0],
-    error: function (error) {
-        notify("Erreur", error.message, 'error');
-    },
-    success: function (data) {
-        $('#custom').setValues(data, '.configKey');
-        $("#theme-"+$('.configKey[data-l1key="nextdom::theme"]').value()).attr("checked","checked");
-        if ($('.configKey[data-l1key="nextdom::theme"]').value() == 'custom') {
-            $('#theme4').show();
-        }else{
-            $('#theme4').hide();
+/**
+ * Show the tab indicated in the url
+ *
+ * @param url Url to check
+ */
+function showSelectedTabFromUrl(url) {
+    if (url.match('#')) {
+        $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
+        if (url.split('#')[1] == "advanced") {
+            printAdvancedDesktop();
         }
-        modifyWithoutSave = false;
     }
-});
-
-var url = document.location.toString();
-if (url.match('#')) {
-    $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
-    if (url.split('#')[1] == "desktop") {
-        $('.nav-tabs a[href="#advanced"]').tab('show');
-    }
-    if (url.split('#')[1] == "desktop" || url.split('#')[1] == "advanced") {
-        printAdvancedDesktop();
-    }
+    $('.nav-tabs a').on('shown.bs.tab', function (e) {
+        window.location.hash = e.target.hash;
+    });
 }
 
-$('.nav-tabs a').on('shown.bs.tab', function (e) {
-    window.location.hash = e.target.hash;
-})
+/**
+ * Load informations in all forms of the page
+ */
+function loadInformations() {
+    nextdom.config.load({
+        configuration: $('#custom').getValues('.configKey:not(.noSet)')[0],
+        error: function (error) {
+            notify("Erreur", error.message, 'error');
+        },
+        success: function (data) {
+            $('#custom').setValues(data, '.configKey');
+            $("#theme-"+$('.configKey[data-l1key="nextdom::theme"]').value()).attr("checked","checked");
+            if ($('.configKey[data-l1key="nextdom::theme"]').value().includes('custom')) {
+                $('#theme4').show();
+                $("#theme-custom").attr("checked","checked");
+            }else{
+                $('#theme4').hide();
+            }
+            modifyWithoutSave = false;
+            $("#bt_cancelCustom").hide();
+        }
+    });
+}
 
-jwerty.key('ctrl+s/⌘+s', function (e) {
-    e.preventDefault();
-    $("#bt_savecustom").click();
-});
+/**
+ * Init events on the page
+ */
+function initEvents() {
+    // Show confirm modal on non saved changes
+    $('#div_pageContainer').delegate('.configKey', 'change', function () {
+        modifyWithoutSave = true;
+        $("#bt_cancelCustom").show();
+    });
 
-$('a[data-toggle="tab"][href="#advanced"]').on('shown.bs.tab', function () {
-    printAdvancedDesktop();
-});
+    // Advanced custom tab loading
+    $('a[data-toggle="tab"][href="#advanced"]').on('shown.bs.tab', function () {
+        printAdvancedDesktop();
+    });
 
-$('a[data-toggle="tab"][href="#desktop"]').on('shown.bs.tab', function (e) {
-    printAdvancedDesktop();
-});
+    // Color change > theme = custom
+    $(".colorpick input").change(function () {
+        if (!$('.configKey[data-l1key="nextdom::theme"]').value().includes('custom')) {
+            $('.configKey[data-l1key="nextdom::theme"]').value('custom-' + $('.configKey[data-l1key="nextdom::theme"]').value());
+        }
+    });
+
+    // Save customs
+    $("#bt_savecustom").on('click', function (event) {
+        var config = $('#custom').getValues('.configKey')[0];
+        nextdom.config.save({
+            configuration: config,
+            error: function (error) {
+                notify("Erreur", error.message, 'error');
+            },
+            success: function () {
+                // Change config dynamically
+                widget_size = config['widget::size'];
+                widget_margin = config['widget::margin'];
+                widget_padding = config['widget::padding'];
+                widget_radius = config['widget::radius'];
+                nextdom_waitSpinner = config['nextdom::waitSpinner'];
+                nextdom.config.load({
+                    configuration: $('#custom').getValues('.configKey:not(.noSet)')[0],
+                    error: function (error) {
+                        notify("Erreur", error.message, 'error');
+                    },
+                    success: function (data) {
+                        $('#custom').setValues(data, '.configKey');
+                        modifyWithoutSave = false;
+                        // Relaod theme
+                        updateTheme(function() {
+                            notify("Info", '{{Sauvegarde réussie}}', 'success');
+                            window.location.reload();
+                        });
+                    }
+                });
+            }
+        });
+        saveCustom();
+    });
+
+    // Custom spinner change
+    $("#waitSpinnerSelect").change(function () {
+        document.getElementById("waitSpinner").innerHTML="<i class='fas fa-info'></i>";
+        $("#waitSpinner i").removeClass('fa-info').addClass($("#waitSpinnerSelect").value());
+        modifyWithoutSave = true;
+    });
+
+    // Theme choice changed
+    $("input[name=theme]").click(function () {
+        var radio = $(this).val();
+        $('.configKey[data-l1key="nextdom:theme"]').value(radio);
+        changeThemeColors(radio,true);
+    });
+}
 
 function printAdvancedDesktop() {
     if (editorDesktopJS == null) {
@@ -130,65 +201,3 @@ function sendCustomData(type, content) {
         }
     });
 }
-
-$(".colorpick input").change(function () {
-    $('.configKey[data-l1key="nextdom::theme"]').value('custom');
-});
-
-$("#bt_savecustom").on('click', function (event) {
-    $.hideAlert();
-    var config = $('#custom').getValues('.configKey')[0];
-    nextdom.config.save({
-        configuration: config,
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function () {
-            // Change config dynamically
-            widget_size = config['widget::size'];
-            widget_margin = config['widget::margin'];
-            widget_padding = config['widget::padding'];
-            widget_radius = config['widget::radius'];
-            nextdom_waitSpinner = config['nextdom::waitSpinner'];
-            nextdom.config.load({
-                configuration: $('#custom').getValues('.configKey:not(.noSet)')[0],
-                error: function (error) {
-                    notify("Erreur", error.message, 'error');
-                },
-                success: function (data) {
-                    $('#custom').setValues(data, '.configKey');
-                    modifyWithoutSave = false;
-                    updateTheme(function() {
-                        notify("Info", '{{Sauvegarde réussie}}', 'success');
-                        window.location.reload();
-                    });
-                }
-            });
-        }
-    });
-    saveCustom();
-});
-
-$("#waitSpinnerSelect").change(function () {
-    document.getElementById("waitSpinner").innerHTML="<i class='fas fa-info'></i>";
-    $("#waitSpinner i").removeClass('fa-info').addClass($("#waitSpinnerSelect").value());
-});
-
-$('.bt_resetColor').on('click', function () {
-    nextdom.getConfiguration({
-        key: $(this).attr('data-l1key'),
-        default: 1,
-        error: function (error) {
-            notify("Core", error.message, 'error');
-        },
-        success: function (data) {
-            $('.configKey[data-l1key="' + $(this).attr('data-l1key') + '"]').parent().colorpicker('setValue', data);
-        }
-    });
-});
-
-$("input[name=theme]").click(function () {
-    var radio = $(this).val();
-    $('.configKey[data-l1key="nextdom:theme"]').value(radio);
-    changeThemeColors(radio,true);
-});

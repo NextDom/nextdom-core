@@ -37,9 +37,8 @@
 /* COLOR16 = Couleur du texte du menu latéral */
 /* COLOR17 = Couleur du texte du sous-menu latéral */
 /* COLOR18 = Couleur de bordure des boutons (bouton d'administration, bouton default) */
-/* COLOR19 = Paramètre alpha des couleurs d'alertes */
-/* COLOR20 = Couleur de fond des boîtes à onglets */
-/* COLOR21 = Couleur de fond des blocs codes */
+/* COLOR19 = Couleur de fond des boîtes à onglets */
+/* COLOR20 = Couleur de fond des blocs codes */
 
 /* #################################################################################################################################################################################################### */
 /* COLOR1 = Couleur d'accentuation principale (identité du thème, header nextdom, bouton primaires, messages d'info, élements actifs ou survolés, textes de liens et d'état, scrollbar, boutons fab...) */
@@ -494,6 +493,12 @@ legend,
   background-color: {{ COLOR9 }} !important;
 }
 
+/* Labels */
+.label-value,
+.label-icon {
+  background-color: {{ COLOR9 }} !important;
+}
+
 /* Unités et fond colorpick */
 .colorpick .input-group-addon,
 .input-group .input-group-addon:not(.input-range-value) {
@@ -557,6 +562,10 @@ body, h1, h2, h3, h4, h5, h6  {
   color: {{ COLOR10 }} !important;
 }
 legend {
+  color: {{ COLOR10 }} !important;
+}
+.label-value,
+.label-icon {
   color: {{ COLOR10 }} !important;
 }
 .CodeMirror-scroll{
@@ -704,12 +713,15 @@ input[type="checkbox"],
 input[type="radio"] {
   border: none !important;
 }
-.label-value {
-  border-color: {{ COLOR12 }} !important;
-}
 
 /* Legendes de sections */
 legend {
+  border-color: {{ COLOR12 }} !important;
+}
+
+/* Labels */
+.label-value,
+.label-icon {
   border-color: {{ COLOR12 }} !important;
 }
 
@@ -838,41 +850,43 @@ pre {
 }
 
 
-/* ################################################ */
-/* COLOR19 = Paramètre alpha des couleurs d'alertes */
-/* ################################################ */
-/* Alertes */
-.alert-danger {
-    background-color: rgba(221, 75, 57, {{ COLOR19 / 100 }}) !important;
-}
-.alert-warning {
-    background-color: rgba(243, 156, 18, {{ COLOR19 / 100 }}) !important;
-}
-.alert-success {
-    background-color: rgba(0, 166, 90, {{ COLOR19 / 100 }}) !important;
-}
-.alert-info {
-    background-color: rgba(0, 192, 239, {{ COLOR19 / 100 }}) !important;
-}
-
-
 /* ############################################## */
-/* COLOR20 = Couleur de fond des boîtes à onglets */
+/* COLOR19 = Couleur de fond des boîtes à onglets */
 /* ############################################## */
 /* Tabs */
 .nav-tabs-custom>.tab-content {
-    background-color: {{ COLOR20 }} !important;
+    background-color: {{ COLOR19 }} !important;
 }
 /* Legendes de sections */
 .nav-tabs-custom .box legend,
 .nav-tabs-custom .panel legend {
-    background-color: {{ COLOR20 }} !important;
+    background-color: {{ COLOR19 }} !important;
 }
 
+
 /* ######################################### */
-/* COLOR21 = Couleur de fond des blocs codes */
+/* COLOR20 = Couleur de fond des blocs codes */
 /* ######################################### */
 /* Code mirror */
 .CodeMirror-scroll {
-    background-color: {{ COLOR21 }} !important;
+    background-color: {{ COLOR20 }} !important;
+}
+
+
+
+/* ###################################### */
+/* Paramètre alpha des couleurs d'alertes */
+/* ###################################### */
+/* Alertes */
+.alert-danger {
+    background-color: rgba(221, 75, 57, {{ ALERTALPHA / 100 }}) !important;
+}
+.alert-warning {
+    background-color: rgba(243, 156, 18, {{ ALERTALPHA / 100 }}) !important;
+}
+.alert-success {
+    background-color: rgba(0, 166, 90, {{ ALERTALPHA / 100 }}) !important;
+}
+.alert-info {
+    background-color: rgba(0, 192, 239, {{ ALERTALPHA / 100 }}) !important;
 }

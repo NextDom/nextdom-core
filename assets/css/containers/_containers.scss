@@ -104,3 +104,15 @@
 .form-group .btn-group {
     display: table;
 }
+
+.mix-group {
+    display: flex;
+    white-space: nowrap;
+    > * {
+        margin: 0px 10px;
+        margin-inline-start: 0;
+    }
+    > span {
+       white-space: normal;
+    }
+}

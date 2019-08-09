@@ -65,8 +65,22 @@
                         </div>
                     </div>
                     <div class="form-group col-sm-6 col-xs-12 col-padding">
+                        <label class="control-label">{{ 'Période d\'affichage des graphiques par défaut' }}</label>
+                        <div class="input-group">
+                            <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="history::defautShowPeriod" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                            <select class="configKey form-control" data-l1key="history::defautShowPeriod">
+                                <option value="-6 month">{{ '6 mois' }}</option>
+                                <option value="-3 month">{{ '3 mois' }}</option>
+                                <option value="-1 month">{{ '1 mois' }}</option>
+                                <option value="-1 week">{{ '1 semaine' }}</option>
+                                <option value="-1 day">{{ '1 jour' }}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-xs-12 col-padding">
                         <label class="control-label">{{ 'Période de calcul pour min, max, moy' }}</label>
                         <div class="input-group">
+                            <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="historyCalculPeriod" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
                             <span class="input-group-addon input-range-min"></span>
                             <input class="configKey slider" type="range" min="1" max="200" step="1" data-l1key="historyCalculPeriod"/>
                             <span class="input-group-addon input-range-max"></span>
@@ -77,6 +91,7 @@
                     <div class="form-group col-sm-6 col-xs-12 col-padding">
                         <label class="control-label">{{ 'Période de calcul pour la tendance' }}</label>
                         <div class="input-group">
+                            <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="historyCalculTendance" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
                             <span class="input-group-addon input-range-min"></span>
                             <input class="configKey slider" type="range" min="1" max="200" step="1" data-l1key="historyCalculTendance"/>
                             <span class="input-group-addon input-range-max"></span>
@@ -87,6 +102,7 @@
                     <div class="form-group col-sm-6 col-xs-12 col-padding">
                         <label class="control-label">{{ 'Délai avant archivage' }}</label>
                         <div class="input-group">
+                            <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="historyArchiveTime" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
                             <span class="input-group-addon input-range-min"></span>
                             <input class="configKey slider" type="range" min="1" max="200" step="1" data-l1key="historyArchiveTime"/>
                             <span class="input-group-addon input-range-max"></span>
@@ -97,6 +113,7 @@
                     <div class="form-group col-sm-6 col-xs-12 col-padding">
                         <label class="control-label">{{ 'Archiver par paquet de' }}</label>
                         <div class="input-group">
+                            <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="historyArchivePackage" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
                             <span class="input-group-addon input-range-min"></span>
                             <input class="configKey slider" type="range" min="1" max="200" step="1" data-l1key="historyArchivePackage"/>
                             <span class="input-group-addon input-range-max"></span>
@@ -107,8 +124,9 @@
                     <div class="form-group col-sm-6 col-xs-12 col-padding">
                         <label class="control-label">{{ 'Seuil de calcul de tendance bas' }}</label>
                         <div class="input-group">
+                            <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="historyCalculTendanceThresholddMin" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
                             <span class="input-group-addon input-range-min"></span>
-                            <input class="configKey slider" type="range" min="-10" max="10" step="0.1" data-l1key="historyCalculTendanceThresholddMin"/>
+                            <input class="configKey slider" type="range" min="-10" max="-0.1" step="0.1" data-l1key="historyCalculTendanceThresholddMin"/>
                             <span class="input-group-addon input-range-max"></span>
                             <span class="input-group-addon input-range-value"></span>
                         </div>
@@ -116,21 +134,12 @@
                     <div class="form-group col-sm-6 col-xs-12 col-padding">
                         <label class="control-label">{{ 'Seuil de calcul de tendance haut' }}</label>
                         <div class="input-group">
+                            <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="historyCalculTendanceThresholddMax" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
                             <span class="input-group-addon input-range-min"></span>
-                            <input class="configKey slider" type="range" min="-10" max="10" step="0.1" data-l1key="historyCalculTendanceThresholddMax"/>
+                            <input class="configKey slider" type="range" min="0.1" max="10" step="0.1" data-l1key="historyCalculTendanceThresholddMax"/>
                             <span class="input-group-addon input-range-max"></span>
                             <span class="input-group-addon input-range-value"></span>
                         </div>
-                    </div>
-                    <div class="form-group col-sm-6 col-xs-12 col-padding">
-                        <label class="control-label">{{ 'Période d\'affichage des graphiques par défaut' }}</label>
-                        <select class="configKey form-control" data-l1key="history::defautShowPeriod">
-                            <option value="-6 month">{{ '6 mois' }}</option>
-                            <option value="-3 month">{{ '3 mois' }}</option>
-                            <option value="-1 month">{{ '1 mois' }}</option>
-                            <option value="-1 week">{{ '1 semaine' }}</option>
-                            <option value="-1 day">{{ '1 jour' }}</option>
-                        </select>
                     </div>
                 </div>
             </fieldset>

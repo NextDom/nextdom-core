@@ -37,7 +37,7 @@ use Symfony\Component\Routing\Loader\YamlFileLoader;
  */
 class PrepareView
 {
-    private static $NB_THEME_COLORS = 1+21;
+    private static $NB_THEME_COLORS = 1+20;
 
     private $currentConfig = [];
 
@@ -292,6 +292,7 @@ class PrepareView
         for ($colorIndex = 1; $colorIndex <= self::$NB_THEME_COLORS; ++$colorIndex) {
             $pageData['COLOR' . $colorIndex] = NextDomHelper::getConfiguration('theme:color' . $colorIndex);
         }
+        $pageData['ALERTALPHA'] = ConfigManager::byKey('nextdom::alertAlpha');
         $themeContent = Render::getInstance()->get('commons/theme.html.twig', $pageData);
         // Minification from scratch, TODO: Use real solution
         $themeContent = preg_replace('!/\*.*?\*/!s', '', $themeContent);

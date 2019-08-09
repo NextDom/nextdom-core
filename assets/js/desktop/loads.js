@@ -363,16 +363,6 @@ $(function () {
     // Inits launch
     initPage();
 
-    // Fileds initialisation
-    $('.colorpick_inline').colorpicker({
-        container: true,
-        inline: true
-    });
-    $('.colorpick').colorpicker();
-    $(":input").inputmask();
-    $(".slimScrollDiv").css("overflow", "");
-    $(".sidebar").css("overflow", "");
-
     // Post Inits launch
     $(window).on('load', function () {
        postInitPage();

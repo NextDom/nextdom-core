@@ -425,6 +425,27 @@ function refreshUpdateNumber() {
   */
  function changeThemeColors(themeName,reload){
     var config = "";
+    config = getThemeColors(themeName);
+    config['nextdom::theme'] = themeName;
+    nextdom.config.save({
+        configuration: config,
+        error: function (error) {
+            notify("Core", error.message, 'error');
+        },
+        success: function () {
+            modifyWithoutSave = false;
+            updateTheme(function() {
+                notify("Info", '{{Thème parametré !}}', 'success');
+                if (reload == true) {
+                    window.location.reload();
+                }
+            });
+        }
+    });
+ }
+
+ function getThemeColors(themeName){
+    var config = "";
     switch (themeName) {
       case 'dark':
         config = {
@@ -446,9 +467,9 @@ function refreshUpdateNumber() {
           'theme:color16' : '#e6e7e8',
           'theme:color17' : '#8aa4af',
           'theme:color18' : '#222d32',
-          'theme:color19' : '50',
-          'theme:color20' : '#263238',
-          'theme:color21' : '#aaaaaa',
+          'theme:color19' : '#263238',
+          'theme:color20' : '#aaaaaa',
+          'nextdom::alertAlpha' : '50'
         }
         break;
       case 'light':
@@ -471,9 +492,9 @@ function refreshUpdateNumber() {
           'theme:color16' : '#555555',
           'theme:color17' : '#555555',
           'theme:color18' : '#dddddd',
-          'theme:color19' : '100',
-          'theme:color20' : '#fafafa',
-          'theme:color21' : '#f5f5f5',
+          'theme:color19' : '#fafafa',
+          'theme:color20' : '#f5f5f5',
+          'nextdom::alertAlpha' : '100'
         }
         break;
       case 'mix':
@@ -496,29 +517,14 @@ function refreshUpdateNumber() {
           'theme:color16' : '#e6e7e8',
           'theme:color17' : '#8aa4af',
           'theme:color18' : '#dddddd',
-          'theme:color19' : '100',
-          'theme:color20' : '#fafafa',
-          'theme:color21' : '#f5f5f5',
+          'theme:color19' : '#fafafa',
+          'theme:color20' : '#f5f5f5',
+          'nextdom::alertAlpha' : '100'
         }
         break;
     }
-    config['nextdom::theme'] = themeName;
-    nextdom.config.save({
-        configuration: config,
-        error: function (error) {
-            notify("Core", error.message, 'error');
-        },
-        success: function () {
-            modifyWithoutSave = false;
-            updateTheme(function() {
-                notify("Info", '{{Thème parametré !}}', 'success');
-                if (reload == true) {
-                  window.location.reload();
-                }
-            });
-        }
-    });
- }
+    return config;
+}
 
  /**
   * Ask a new version of theme.css by ajax

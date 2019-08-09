@@ -34,46 +34,57 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-jwerty.key('ctrl+s/⌘+s', function (e) {
-    e.preventDefault();
-    $("#bt_savecommandes").click();
-});
 
- $("#bt_savecommandes").on('click', function (event) {
-    $.hideAlert();
-    nextdom.config.save({
-        configuration: $('#commandes').getValues('.configKey')[0],
+// Page init
+loadInformations();
+initEvents();
+
+/**
+ * Load informations in all forms of the page
+ */
+function loadInformations() {
+    nextdom.config.load({
+        configuration: $('#commandes').getValues('.configKey:not(.noSet)')[0],
         error: function (error) {
             notify("Erreur", error.message, 'error');
         },
-        success: function () {
-            nextdom.config.load({
-                configuration: $('#commandes').getValues('.configKey')[0],
-                plugin: 'core',
-                error: function (error) {
-                    notify("Erreur", error.message, 'error');
-                },
-                success: function (data) {
-                    $('#commandes').setValues(data, '.configKey');
-                    modifyWithoutSave = false;
-                    notify("Info", '{{Sauvegarde réussie}}', 'success');
-                }
-            });
+        success: function (data) {
+            $('#commandes').setValues(data, '.configKey');
+            modifyWithoutSave = false;
         }
     });
-});
+}
 
-nextdom.config.load({
-    configuration: $('#commandes').getValues('.configKey:not(.noSet)')[0],
-    error: function (error) {
-        notify("Erreur", error.message, 'error');
-    },
-    success: function (data) {
-        $('#commandes').setValues(data, '.configKey');
-        modifyWithoutSave = false;
-    }
-});
+/**
+* Init events on the profils page
+*/
+function initEvents() {
+    // Save button
+    $("#bt_savecommandes").on('click', function (event) {
+        nextdom.config.save({
+            configuration: $('#commandes').getValues('.configKey')[0],
+            error: function (error) {
+                notify("Erreur", error.message, 'error');
+            },
+            success: function () {
+                nextdom.config.load({
+                    configuration: $('#commandes').getValues('.configKey')[0],
+                    plugin: 'core',
+                    error: function (error) {
+                        notify("Erreur", error.message, 'error');
+                    },
+                    success: function (data) {
+                        $('#commandes').setValues(data, '.configKey');
+                        modifyWithoutSave = false;
+                        notify("Info", '{{Sauvegarde réussie}}', 'success');
+                    }
+                });
+            }
+        });
+    });
 
-$('#commandes').delegate('.configKey', 'change', function () {
-    modifyWithoutSave = true;
-});
+    // Param changed : page leaving lock by msgbox
+    $('#commandes').delegate('.configKey', 'change', function () {
+        modifyWithoutSave = true;
+    });
+}
