@@ -52,26 +52,7 @@ export default {
   },
   // Inject all commands components
   components: Object.assign(CmdTemplates.components, {}),
-  computed: {
-    /**
-     * @vuese
-     * Test if a large widget must be used
-     */
-    isLargeWidget: function() {
-      let result = false;
-      // Width 2 if icons
-      if (this.cmdsIconCount === 0) {
-        result = false;
-      } else if (this.cmdsIconCount > 2) {
-        result = true;
-      }
-      // Show buttons at right if there is more than 5 commands
-      if (this.buttonCmds.length > 8) {
-        result = true;
-      }
-      return result;
-    }
-  },
+
   /**
    * Initialize cmd component data on create
    */

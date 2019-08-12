@@ -220,6 +220,7 @@ export default {
 <style lang="scss" scoped>
 .today {
   text-align: center;
+  margin-top: 0.5rem;
 
   i {
     font-size: 3rem;

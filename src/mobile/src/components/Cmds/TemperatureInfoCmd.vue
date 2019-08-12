@@ -18,28 +18,19 @@ along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 @Email   <admin@nextdom.org>
 @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 -->
-<template>
-  <div class="temperature-info-cmd cmd icon">
-    <div class="info-cmd">
-      <i class="fa fa-thermometer-empty"></i>
-      <div>{{ cmd.state }} {{ cmd.unite }}</div>
-    </div>
-  </div>
-</template>
 
 <script>
+import BaseIconInfoCmd from "./BaseIconInfoCmd";
+
 /**
  * Show standard command that get numeric data (with unite)
  * @group Commands
  */
 export default {
   name: "TemperatureInfoCmd",
-  props: {
-    // Command object
-    cmd: null
-  },
+  extends: BaseIconInfoCmd,
   mounted() {
-    this.$store.commit("addShowedCmd", { cmd: this.cmd });
+    this.icon = "fa fa-thermometer-empty";
   }
 };
 </script>

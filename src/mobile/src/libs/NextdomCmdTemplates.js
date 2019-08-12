@@ -19,6 +19,7 @@
  */
 import DefaultCmd from "@/components/Cmds/DefaultCmd.vue";
 import DefaultInfoCmd from "@/components/Cmds/DefaultInfoCmd.vue";
+import DefaultIconInfoCmd from "@/components/Cmds/DefaultIconInfoCmd.vue";
 import DefaultStringCmd from "@/components/Cmds/DefaultStringCmd.vue";
 import DefaultActionCmd from "@/components/Cmds/DefaultActionCmd.vue";
 import DontCmd from "@/components/Cmds/DontCmd.vue";
@@ -45,6 +46,7 @@ import WindowStateCmd from "@/components/Cmds/WindowStateCmd.vue";
 export default {
   components: {
     DefaultCmd,
+    DefaultIconInfoCmd,
     DefaultInfoCmd,
     DefaultStringCmd,
     DefaultActionCmd,
@@ -264,6 +266,11 @@ export default {
       button: false
     },
     TEMPERATURE: {
+      component: "TemperatureInfoCmd",
+      icon: true,
+      button: false
+    },
+    THERMOSTAT_TEMPERATURE: {
       component: "TemperatureInfoCmd",
       icon: true,
       button: false
