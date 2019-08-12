@@ -70,14 +70,14 @@ class ObjectAjax extends BaseAjax
     {
         $objects = ObjectManager::buildTree();
         if (Utils::init('onlyHasEqLogic') != '') {
-            $return = array();
+            $result = [];
             foreach ($objects as $object) {
                 if (count($object->getEqLogic(true, false, Utils::init('onlyHasEqLogic'), null, Utils::init('searchOnchild', true))) == 0) {
                     continue;
                 }
-                $return[] = $object;
+                $result[] = $object;
             }
-            $objects = $return;
+            $objects = $result;
         }
         AjaxHelper::success(Utils::o2a($objects));
     }
@@ -106,17 +106,24 @@ class ObjectAjax extends BaseAjax
         if (!is_object($object)) {
             throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));
         }
-        $return = Utils::o2a($object->getChild());
-        AjaxHelper::success($return);
+        $result = Utils::o2a($object->getChild());
+        AjaxHelper::success($result);
     }
 
+    /**
+     * Get HTML representation of the object
+     *
+     * @throws CoreException
+     * @throws \NextDom\Exceptions\OperatingSystemException
+     * @throws \ReflectionException
+     */
     public function toHtml()
     {
         if (Utils::init('id') == '' || Utils::init('id') == 'all' || is_json(Utils::init('id'))) {
             if (is_json(Utils::init('id'))) {
                 $objects = json_decode(Utils::init('id'), true);
             } else {
-                $objects = array();
+                $objects = [];
                 foreach (ObjectManager::all() as $object) {
                     if ($object->getConfiguration('hideOnDashboard', 0) == 1) {
                         continue;
@@ -124,10 +131,10 @@ class ObjectAjax extends BaseAjax
                     $objects[] = $object->getId();
                 }
             }
-            $return = array();
+            $result = [];
             $i = 0;
             foreach ($objects as $id) {
-                $html = array();
+                $html = [];
                 if (Utils::init('summary') == '') {
                     $eqLogics = EqLogicManager::byObjectId($id, true, true);
                 } else {
@@ -136,6 +143,9 @@ class ObjectAjax extends BaseAjax
                 }
                 if (count($eqLogics) > 0) {
                     foreach ($eqLogics as $eqLogic) {
+                        if ($eqLogic === null) {
+                            continue;
+                        }
                         if (Utils::init('category', 'all') != 'all' && $eqLogic->getCategory(Utils::init('category')) != 1) {
                             continue;
                         }
@@ -165,12 +175,12 @@ class ObjectAjax extends BaseAjax
                     }
                 }
                 ksort($html);
-                $return[$i . '::' . $id] = implode($html);
+                $result[$i . '::' . $id] = implode($html);
                 $i++;
             }
-            AjaxHelper::success($return);
+            AjaxHelper::success($result);
         } else {
-            $html = array();
+            $html = [];
             if (Utils::init('summary') == '') {
                 $eqLogics = EqLogicManager::byObjectId(Utils::init('id'), true, true);
             } else {
@@ -179,6 +189,9 @@ class ObjectAjax extends BaseAjax
             }
             if (count($eqLogics) > 0) {
                 foreach ($eqLogics as $eqLogic) {
+                    if ($eqLogic === null) {
+                        continue;
+                    }
                     if (Utils::init('category', 'all') != 'all' && $eqLogic->getCategory(Utils::init('category')) != 1) {
                         continue;
                     }
@@ -230,31 +243,31 @@ class ObjectAjax extends BaseAjax
     public function getSummaryHtml()
     {
         if (Utils::init('ids') != '') {
-            $return = array();
+            $result = [];
             foreach (json_decode(Utils::init('ids'), true) as $id => $value) {
                 if ($id == 'global') {
-                    $return['global'] = array(
+                    $result['global'] = [
                         'html' => ObjectManager::getGlobalHtmlSummary($value['version']),
                         'id' => 'global',
-                    );
+                    ];
                     continue;
                 }
                 $object = ObjectManager::byId($id);
                 if (!is_object($object)) {
                     continue;
                 }
-                $return[$object->getId()] = array(
+                $result[$object->getId()] = [
                     'html' => $object->getHtmlSummary($value['version']),
                     'id' => $object->getId(),
-                );
+                ];
             }
-            AjaxHelper::success($return);
+            AjaxHelper::success($result);
         } else {
             $object = ObjectManager::byId(Utils::init('id'));
             if (!is_object($object)) {
                 throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));
             }
-            $info_object = array();
+            $info_object = [];
             $info_object['id'] = $object->getId();
             $info_object['html'] = $object->getHtmlSummary(Utils::init('version'));
             AjaxHelper::success($info_object);
@@ -286,7 +299,7 @@ class ObjectAjax extends BaseAjax
             throw new CoreException(__('Aucun fichier trouvé. Vérifiez le paramètre PHP (post size limit)'));
         }
         $extension = strtolower(strrchr($_FILES['file']['name'], '.'));
-        if (!in_array($extension, array('.jpg', '.jpeg', '.png'))) {
+        if (!in_array($extension, ['.jpg', '.jpeg', '.png'])) {
             throw new CoreException('Extension du fichier non valide (autorisé .jpg .jpeg .png) : ' . $extension);
         }
         if (filesize($_FILES['file']['tmp_name']) > 5000000) {
