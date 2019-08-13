@@ -368,8 +368,8 @@ class CacheManager
                     if (!is_numeric($id)) {
                         continue;
                     }
-                    $object = $value::byId($id);
-                    if (!is_object($object)) {
+                    $resultObject = $value::byId($id);
+                    if (!is_object($resultObject)) {
                         self::delete($key);
                     }
                     continue;
@@ -380,8 +380,8 @@ class CacheManager
                 if (!is_numeric($matches[1][0])) {
                     continue;
                 }
-                $object = EqLogicManager::byId($matches[1][0]);
-                if (!is_object($object)) {
+                $resultObject = EqLogicManager::byId($matches[1][0]);
+                if (!is_object($resultObject)) {
                     self::delete($key);
                 }
             }
@@ -390,8 +390,8 @@ class CacheManager
                 if (!is_numeric($matches[1][0])) {
                     continue;
                 }
-                $object = EqLogicManager::byId($matches[1][0]);
-                if (!is_object($object)) {
+                $resultObject = EqLogicManager::byId($matches[1][0]);
+                if (!is_object($resultObject)) {
                     self::delete($key);
                 }
             }
@@ -400,8 +400,8 @@ class CacheManager
                 if (!is_numeric($matches[1][0])) {
                     continue;
                 }
-                $object = ScenarioManager::byId($matches[1][0]);
-                if (!is_object($object)) {
+                $resultObject = ScenarioManager::byId($matches[1][0]);
+                if (!is_object($resultObject)) {
                     self::delete($key);
                 }
             }

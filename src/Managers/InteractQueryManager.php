@@ -517,16 +517,6 @@ class InteractQueryManager
      * @param string $_identifier
      * @throws \Exception
      */
-    /**
-     * @param $_lastCmd
-     * @param string $_identifier
-     * @throws \Exception
-     */
-    /**
-     * @param $_lastCmd
-     * @param string $_identifier
-     * @throws \Exception
-     */
     public static function addLastInteract($_lastCmd, $_identifier = 'unknown')
     {
         $last = CacheManager::byKey('interact::lastCmd::' . $_identifier);
@@ -614,9 +604,9 @@ class InteractQueryManager
             $return = __('C\'est fait') . ' (';
             $eqLogic = $data['cmd']->getEqLogic();
             if (is_object($eqLogic)) {
-                $object = $eqLogic->getObject();
-                if (is_object($object)) {
-                    $return .= $object->getName();
+                $linkedObject = $eqLogic->getObject();
+                if (is_object($linkedObject)) {
+                    $return .= $linkedObject->getName();
                 }
                 $return .= ' ' . $data['cmd']->getEqLogic()->getName();
             }
@@ -628,19 +618,6 @@ class InteractQueryManager
         }
     }
 
-    /**
-     * @param $_query
-     * @param array $_parameters
-     * @return array|null
-     * @throws \Exception
-     */
-    /**
-     * @param $_query
-     * @param array $_parameters
-     * @return array|null
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
     /**
      * @param $_query
      * @param array $_parameters
@@ -693,18 +670,6 @@ class InteractQueryManager
         }
     }
 
-    /**
-     * @param $_query
-     * @return null
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
-    /**
-     * @param $_query
-     * @return null
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
     /**
      * @param $_query
      * @return null
@@ -842,16 +807,6 @@ class InteractQueryManager
      * @return mixed
      * @throws \Exception
      */
-    /**
-     * @param $_parameters
-     * @return mixed
-     * @throws \Exception
-     */
-    /**
-     * @param $_parameters
-     * @return mixed
-     * @throws \Exception
-     */
     public static function dontUnderstand($_parameters)
     {
         $notUnderstood = array(
@@ -868,16 +823,6 @@ class InteractQueryManager
         return $notUnderstood[$random];
     }
 
-    /**
-     * @param $_query
-     * @param $_parameters
-     * @return string
-     */
-    /**
-     * @param $_query
-     * @param $_parameters
-     * @return string
-     */
     /**
      * @param $_query
      * @param $_parameters
@@ -916,14 +861,6 @@ class InteractQueryManager
      * @return mixed
      * @throws \Exception
      */
-    /**
-     * @return mixed
-     * @throws \Exception
-     */
-    /**
-     * @return mixed
-     * @throws \Exception
-     */
     public static function replyOk()
     {
         $reply = array(
@@ -941,16 +878,6 @@ class InteractQueryManager
      * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
      */
-    /**
-     * @param $_params
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
-    /**
-     * @param $_params
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
     public static function doIn($_params)
     {
         $interactQuery = self::byId($_params['interactQuery_id']);
@@ -961,18 +888,6 @@ class InteractQueryManager
         $interactQuery->executeAndReply($_params);
     }
 
-    /**
-     * @param $_id
-     * @return array|mixed|null
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
-    /**
-     * @param $_id
-     * @return array|mixed|null
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
     /**
      * @param $_id
      * @return array|mixed|null

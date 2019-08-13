@@ -900,16 +900,16 @@ class EqLogic implements EntityInterface
     public function getHumanName($_tag = false, $_prettify = false)
     {
         $name = '';
-        $object = $this->getObject();
-        if (is_object($object)) {
+        $linkedObject = $this->getObject();
+        if (is_object($linkedObject)) {
             if ($_tag) {
-                if ($object->getDisplay('tagColor') != '') {
-                    $name .= '<span class="label" style="text-shadow : none;background-color:' . $object->getDisplay('tagColor') . ';color:' . $object->getDisplay('tagTextColor', 'white') . '">' . $object->getName() . '</span>';
+                if ($linkedObject->getDisplay('tagColor') != '') {
+                    $name .= '<span class="label" style="text-shadow : none;background-color:' . $linkedObject->getDisplay('tagColor') . ';color:' . $linkedObject->getDisplay('tagTextColor', 'white') . '">' . $linkedObject->getName() . '</span>';
                 } else {
-                    $name .= '<span class="label label-primary">' . $object->getName() . '</span>';
+                    $name .= '<span class="label label-primary">' . $linkedObject->getName() . '</span>';
                 }
             } else {
-                $name .= '[' . $object->getName() . ']';
+                $name .= '[' . $linkedObject->getName() . ']';
             }
         } else {
             if ($_tag) {
@@ -1194,8 +1194,8 @@ class EqLogic implements EntityInterface
             $replace['#refresh_id#'] = $refresh_cmd->getId();
         }
         if ($this->getDisplay('showObjectNameOn' . $version, 0) == 1) {
-            $object = $this->getObject();
-            $replace['#object_name#'] = (is_object($object)) ? '(' . $object->getName() . ')' : '';
+            $linkedObject = $this->getObject();
+            $replace['#object_name#'] = (is_object($linkedObject)) ? '(' . $linkedObject->getName() . ')' : '';
         }
         if ($this->getDisplay('showNameOn' . $version, 1) == 0) {
             $replace['#hideEqLogicName#'] = 'display:none;';
