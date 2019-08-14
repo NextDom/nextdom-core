@@ -3,7 +3,7 @@
   "description": "Website (English): [https://www.nextdom.org/en/](https://www.nextdom.org/en/)",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.9.0",
-    "admin-lte": "^2.4.12",
+    "admin-lte": "^2.4.16",
     "autosize": "^4.0.2",
     "blueimp-file-upload": "^9.25.1",
     "bootbox": "^5.1.3",
