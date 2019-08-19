@@ -182,7 +182,7 @@ class CmdManager
      * @param null $_eqLogic
      * @param null $_has_generic_type
      *
-     * @return Cmd[]|null
+     * @return Cmd|Cmd[]
      *
      * @throws \Exception
      */
@@ -423,7 +423,7 @@ class CmdManager
      * @param bool $multiple Multiple results
      * @param string $type Filter by type
      *
-     * @return Cmd[]
+     * @return Cmd|Cmd[]
      *
      * @throws \Exception
      */

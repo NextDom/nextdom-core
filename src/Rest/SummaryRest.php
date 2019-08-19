@@ -65,7 +65,13 @@ class SummaryRest
     }
 
     /**
-     * Prepare result for response
+     * Prepare result for response\n
+     * Associative array with following keys : 
+     *  - id
+     *  - name
+     *  - icon
+     *  - eqLogics (if exists)
+     *  - children (if exists)
      *
      * @param JeeObject $room Room object to prepare
      *

@@ -41,7 +41,7 @@ class LogsRest
     }
 
     /**
-     * Get the content of a log file
+     * Get the content of a log file\n
      * For subfolder, / must be replace by a triple underscore (___)
      *
      * @param string $logFile Target log file

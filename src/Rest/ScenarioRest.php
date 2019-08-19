@@ -29,6 +29,9 @@ use NextDom\Model\Entity\Scenario;
  */
 class ScenarioRest
 {
+    /**
+     * Default name of group when scenario doesn't have group
+     */
     private static $NO_GROUP_CODE = 'no-group';
 
     /**
@@ -73,7 +76,11 @@ class ScenarioRest
     }
 
     /**
-     * Prepare results for response with groups
+     * Prepare result for response\n
+     * Associative array by group with following keys : 
+     *  - id
+     *  - name
+     *  - displayIcon
      *
      * @param Scenario[] $scenarios Array of scenarios to convert
      *
