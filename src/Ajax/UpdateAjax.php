@@ -157,15 +157,13 @@ class UpdateAjax extends BaseAjax
         $updateDataJson = json_decode(Utils::init('update'), true);
         if (isset($updateDataJson['id'])) {
             $targetUpdate = UpdateManager::byId($updateDataJson['id']);
-        }
-        elseif (isset($updateDataJson['logicalId'])) {
+        } elseif (isset($updateDataJson['logicalId'])) {
             $targetUpdate = UpdateManager::byLogicalId($updateDataJson['logicalId']);
         }
         if (!isset($targetUpdate) || !is_object($targetUpdate)) {
             $targetUpdate = new Update();
             $isNewUpdate = true;
-        }
-        else {
+        } else {
             $backupUpdate = $targetUpdate;
         }
 
