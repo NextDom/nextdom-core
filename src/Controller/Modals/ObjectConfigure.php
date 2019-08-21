@@ -42,14 +42,12 @@ class ObjectConfigure extends BaseAbstractModal
      */
     public static function get(): string
     {
-
-
         $objectId = Utils::init('object_id');
-        $object = ObjectManager::byId($objectId);
-        if (!is_object($object)) {
+        $resultObject = ObjectManager::byId($objectId);
+        if (!is_object($resultObject)) {
             throw new CoreException(__('Objet non trouvé : ') . $objectId);
         }
-        Utils::sendVarToJS('objectInfo', Utils::o2a($object));
+        Utils::sendVarToJS('objectInfo', Utils::o2a($resultObject));
 
         return Render::getInstance()->get('/modals/object.configure.html.twig');
     }

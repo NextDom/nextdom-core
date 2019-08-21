@@ -744,8 +744,8 @@ class ScenarioManager
         if (!is_object($scenario)) {
             return null;
         }
-        $object = $scenario->getObject();
-        $return['object'] = is_object($object) ? $object->getId() : 'aucun';
+        $linkedObject = $scenario->getObject();
+        $return['object'] = is_object($linkedObject) ? $linkedObject->getId() : 'aucun';
         $return['html'] = '<div class="timeline-item cmd" data-id="' . $event['id'] . '">'
             . '<span class="time"><i class="fa fa-clock-o"></i>' . substr($event['datetime'], -9) . '</span>'
             .'<h3 class="timeline-header">' . $event['name'] . '</h3>'

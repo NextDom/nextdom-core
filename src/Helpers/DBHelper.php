@@ -172,10 +172,11 @@ class DBHelper
             if ($errorInfo[0] != 0000) {
                 return false;
             }
-                return true;
+            return true;
         }
         return false;
     }
+
     /**
      * Prepare a query and execute
      *
@@ -401,18 +402,18 @@ class DBHelper
     /**
      *
      *
-     * @param mixed $object
+     * @param mixed $objectToAnalyze
      * @return array List of fields
      * @throws \RuntimeException
      * @throws \ReflectionException
      */
-    private static function getFields($object)
+    private static function getFields($objectToAnalyze)
     {
-        $table = is_string($object) ? $object : self::getTableName($object);
+        $table = is_string($objectToAnalyze) ? $objectToAnalyze : self::getTableName($objectToAnalyze);
         if (isset(self::$fieldsCache[$table])) {
             return self::$fieldsCache[$table];
         }
-        $reflection = is_object($object) ? self::getReflectionClass($object) : new \ReflectionClass($object);
+        $reflection = is_object($objectToAnalyze) ? self::getReflectionClass($objectToAnalyze) : new \ReflectionClass($objectToAnalyze);
         $properties = $reflection->getProperties();
         self::$fieldsCache[$table] = [];
         foreach ($properties as $property) {
@@ -422,7 +423,7 @@ class DBHelper
             }
         }
         if (empty(self::$fieldsCache[$table])) {
-            throw new \RuntimeException('No fields found for class ' . get_class($object));
+            throw new \RuntimeException('No fields found for class ' . get_class($objectToAnalyze));
         }
         return self::$fieldsCache[$table];
     }
@@ -445,24 +446,24 @@ class DBHelper
      * Forces the value of a field of a given object, even if this field is
      * not accessible.
      *
-     * @param object $object The entity to alter
+     * @param object $targetObject The entity to alter
      * @param string $field The name of the member to alter
      * @param mixed $value The value to give to the member
      * @throws \ReflectionException
      */
-    private static function setField($object, $field, $value)
+    private static function setField($targetObject, $field, $value)
     {
         $method = 'set' . ucfirst($field);
-        if (method_exists($object, $method)) {
-            $object->$method($value);
+        if (method_exists($targetObject, $method)) {
+            $targetObject->$method($value);
         } else {
-            $reflection = self::getReflectionClass($object);
+            $reflection = self::getReflectionClass($targetObject);
             if ($reflection->hasProperty($field)) {
-                throw new \InvalidArgumentException('Unknown field ' . get_class($object) . '::' . $field);
+                throw new \InvalidArgumentException('Unknown field ' . get_class($targetObject) . '::' . $field);
             }
             $property = $reflection->getProperty($field);
             $property->setAccessible(true);
-            $property->setValue($object, $value);
+            $property->setValue($targetObject, $value);
             $property->setAccessible(false);
         }
     }

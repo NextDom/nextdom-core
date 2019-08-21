@@ -430,9 +430,9 @@ class Plan implements EntityInterface
                 if ($this->getLink_id() == 0) {
                     $summary = ObjectManager::getGlobalHtmlSummary($_version);
                 } else {
-                    $object = $this->getLink();
-                    if (is_object($object)) {
-                        $summary = $object->getHtmlSummary($_version);
+                    $linkedObject = $this->getLink();
+                    if (is_object($linkedObject)) {
+                        $summary = $linkedObject->getHtmlSummary($_version);
                     }
                 }
                 if ($summary == '') {
@@ -466,8 +466,8 @@ class Plan implements EntityInterface
             $cmd = CmdManager::byId($this->getLink_id());
             return $cmd;
         } elseif ($this->getLink_type() == PlanLinkType::SUMMARY) {
-            $object = ObjectManager::byId($this->getLink_id());
-            return $object;
+            $linkedObject = ObjectManager::byId($this->getLink_id());
+            return $linkedObject;
         }
         return null;
     }

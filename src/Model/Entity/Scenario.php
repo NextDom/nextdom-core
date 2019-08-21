@@ -452,15 +452,15 @@ class Scenario implements EntityInterface
     {
         $name = '';
         if ($_object_name && is_numeric($this->getObject_id()) && is_object($this->getObject())) {
-            $object = $this->getObject();
+            $linkedObject = $this->getObject();
             if ($_tag) {
-                if ($object->getDisplay('tagColor') != '') {
-                    $name .= '<span class="label label-config" style="background-color:' . $object->getDisplay('tagColor') . ' !important;color:' . $object->getDisplay('tagTextColor', 'white') . ' !important">' . $object->getName() . '</span>';
+                if ($linkedObject->getDisplay('tagColor') != '') {
+                    $name .= '<span class="label label-config" style="background-color:' . $linkedObject->getDisplay('tagColor') . ' !important;color:' . $linkedObject->getDisplay('tagTextColor', 'white') . ' !important">' . $linkedObject->getName() . '</span>';
                 } else {
-                    $name .= '<span class="label label-primary label-sticker">' . $object->getName() . '</span>';
+                    $name .= '<span class="label label-primary label-sticker">' . $linkedObject->getName() . '</span>';
                 }
             } else {
-                $name .= '[' . $object->getName() . ']';
+                $name .= '[' . $linkedObject->getName() . ']';
             }
         } else {
             if ($_complete) {
@@ -993,7 +993,7 @@ class Scenario implements EntityInterface
             self::$_templateArray = array();
         }
         if (!isset(self::$_templateArray[$version])) {
-            self::$_templateArray[$version] = FileSystemHelper::getTemplateFileContent('core', $version, 'scenario','');
+            self::$_templateArray[$version] = FileSystemHelper::getTemplateFileContent('core', $version, 'scenario', '');
         }
         $html = Utils::templateReplace($replace, self::$_templateArray[$version]);
         CacheManager::set('scenarioHtml' . $version . $this->getId(), $html);
