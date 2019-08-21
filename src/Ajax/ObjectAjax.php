@@ -110,6 +110,13 @@ class ObjectAjax extends BaseAjax
         AjaxHelper::success($result);
     }
 
+    /**
+     * Get HTML representation of the object
+     *
+     * @throws CoreException
+     * @throws \NextDom\Exceptions\OperatingSystemException
+     * @throws \ReflectionException
+     */
     public function toHtml()
     {
         if (Utils::init('id') == '' || Utils::init('id') == 'all' || is_json(Utils::init('id'))) {
@@ -136,6 +143,9 @@ class ObjectAjax extends BaseAjax
                 }
                 if (count($eqLogics) > 0) {
                     foreach ($eqLogics as $eqLogic) {
+                        if ($eqLogic === null) {
+                            continue;
+                        }
                         if (Utils::init('category', 'all') != 'all' && $eqLogic->getCategory(Utils::init('category')) != 1) {
                             continue;
                         }
@@ -179,6 +189,9 @@ class ObjectAjax extends BaseAjax
             }
             if (count($eqLogics) > 0) {
                 foreach ($eqLogics as $eqLogic) {
+                    if ($eqLogic === null) {
+                        continue;
+                    }
                     if (Utils::init('category', 'all') != 'all' && $eqLogic->getCategory(Utils::init('category')) != 1) {
                         continue;
                     }
