@@ -25,15 +25,15 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class CmdRest
- *
+ * 
  * @package NextDom\Rest
  */
 class CmdRest
 {
     /**
-     * Get all commands by eqLogic
+     * Get all commands linked to an eqLogic
      *
-     * @param int $eqLogicId EqLogic id linked to commands
+     * @param int $eqLogicId EqLogic id
      *
      * @return array Array of linked commands
      *
@@ -46,9 +46,9 @@ class CmdRest
     }
 
     /**
-     * Get all commands visible by eqLogic
+     * Get all commands visible linked to an eqLogic
      *
-     * @param int $eqLogicId EqLogic id linked to commands
+     * @param int $eqLogicId EqLogic id
      *
      * @return array Array of linked commands
      *
@@ -61,11 +61,23 @@ class CmdRest
     }
 
     /**
-     * Prepare result for response
+     * Prepare result for response\n
+     * Associative array with following keys : 
+     *  - id
+     *  - name
+     *  - type
+     *  - subType
+     *  - icon
+     *  - genericType
+     *  - template
+     *  - cmdValue
+     *  - value
+     *  - visible
+     *  - unite
      *
-     * @param Cmd[] $cmds Liste of commands
+     * @param Cmd[] $cmds List of commands
      *
-     * @return array API necessary data
+     * @return array Associative array with all commands data prepared
      *
      * @throws \Exception
      */
@@ -96,6 +108,7 @@ class CmdRest
 
     /**
      * Get specials data depends of type
+     * 
      * @param Cmd $cmd Command with data
      *
      * @return array Specials data
@@ -126,7 +139,8 @@ class CmdRest
     }
 
     /**
-     * Execute command
+     * Execute command\n
+     * Options must be stored in $_POST of the request.
      *
      * @param Request $request Query data
      * @param int $cmdId Command id to execute
