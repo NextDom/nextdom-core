@@ -20,7 +20,7 @@ namespace NextDom\Repo;
 
 class RepoFile
 {
-    public static $_name = 'Fichier';
+    public static $_name = 'File';
 
     public static $_scope = array(
         'plugin' => true,

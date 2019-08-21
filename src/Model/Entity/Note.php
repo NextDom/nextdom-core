@@ -29,22 +29,9 @@ use NextDom\Helpers\Utils;
  */
 class Note implements EntityInterface
 {
-
     /**
-     * @var string
+     * Id of the note
      *
-     * @ORM\Column(name="name", type="string", length=127, nullable=true)
-     */
-    protected $name;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="text", type="text", length=65535, nullable=true)
-     */
-    protected $text;
-
-    /**
      * @var integer
      *
      * @ORM\Column(name="id", type="integer")
@@ -53,7 +40,123 @@ class Note implements EntityInterface
      */
     protected $id;
 
+    /**
+     * Name of the note
+     *
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=127, nullable=true)
+     */
+    protected $name;
+
+    /**
+     * Text of the note
+     *
+     * @var string
+     *
+     * @ORM\Column(name="text", type="text", length=65535, nullable=true)
+     */
+    protected $text;
+
+    /**
+     * @var bool Data changed state
+     */
     private $_changed = false;
+
+    /**
+     * Get id of the note
+     *
+     * @return int Id of the note
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set note id
+     *
+     * @param int $id Id of the note
+     *
+     * @return $this
+     */
+    public function setId($id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $id);
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * Get the name of the note
+     *
+     * @return string Name of the note
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set the name of the note
+     *
+     * @param string $newName Name of the note
+     *
+     * @return $this
+     */
+    public function setName($newName)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $newName);
+        $this->name = $newName;
+        return $this;
+    }
+
+    /**
+     * Get the text of the note
+     *
+     * @return string Text of the note
+     */
+    public function getText()
+    {
+        return $this->text;
+    }
+
+    /**
+     * Set note text
+     *
+     * @param string $newText Text of the note
+     *
+     * @return $this
+     */
+    public function setText($newText)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->text, $newText);
+        $this->text = $newText;
+        return $this;
+    }
+
+    /**
+     * Get data change status
+     *
+     * @return bool True if change occurs
+     */
+    public function getChanged()
+    {
+        return $this->_changed;
+    }
+
+    /**
+     * Set change data state
+     *
+     * @param $newChangedState
+     *
+     * @return $this
+     */
+    public function setChanged($newChangedState)
+    {
+        $this->_changed = $newChangedState;
+        return $this;
+    }
 
     /**
      * Throw exception if note doesn't have name
@@ -67,26 +170,10 @@ class Note implements EntityInterface
     }
 
     /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param $_name
-     * @return $this
-     */
-    public function setName($_name)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
-        $this->name = $_name;
-        return $this;
-    }
-
-    /**
-     * @return bool
+     * Save note in database
+     *
+     * @return bool True on success
+     *
      * @throws CoreException
      * @throws \ReflectionException
      */
@@ -99,69 +186,21 @@ class Note implements EntityInterface
         return true;
     }
 
+    /**
+     * Remove note from database
+     *
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function remove()
     {
         DBHelper::remove($this);
     }
 
     /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $id
-     * @return $this
-     */
-    public function setId($id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $id);
-        $this->id = $id;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getText()
-    {
-        return $this->text;
-    }
-
-    /**
-     * @param $_text
-     * @return $this
-     */
-    public function setText($_text)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->text, $_text);
-        $this->text = $_text;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
-        return $this;
-    }
-
-    /**
-     * @return string
+     * Table name in database
+     *
+     * @return string Table name
      */
     public function getTableName()
     {

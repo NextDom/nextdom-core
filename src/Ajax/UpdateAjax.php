@@ -151,32 +151,35 @@ class UpdateAjax extends BaseAjax
     public function save()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $new = false;
-        $update_json = json_decode(Utils::init('update'), true);
-        if (isset($update_json['id'])) {
-            $update = UpdateManager::byId($update_json['id']);
+        $isNewUpdate = false;
+        $backupUpdate = null;
+
+        $updateDataJson = json_decode(Utils::init('update'), true);
+        if (isset($updateDataJson['id'])) {
+            $targetUpdate = UpdateManager::byId($updateDataJson['id']);
+        } elseif (isset($updateDataJson['logicalId'])) {
+            $targetUpdate = UpdateManager::byLogicalId($updateDataJson['logicalId']);
         }
-        if (isset($update_json['logicalId'])) {
-            $update = UpdateManager::byLogicalId($update_json['logicalId']);
+        if (!isset($targetUpdate) || !is_object($targetUpdate)) {
+            $targetUpdate = new Update();
+            $isNewUpdate = true;
+        } else {
+            $backupUpdate = $targetUpdate;
         }
-        if (!isset($update) || !is_object($update)) {
-            $update = new Update();
-            $new = true;
-        }
-        $old_update = $update;
-        Utils::a2o($update, $update_json);
-        $update->save();
+
+        Utils::a2o($targetUpdate, $updateDataJson);
+        $targetUpdate->save();
         try {
-            $update->doUpdate();
+            $targetUpdate->doUpdate();
         } catch (\Exception $e) {
-            if ($new) {
+            if ($isNewUpdate) {
                 throw $e;
             } else {
-                $update = $old_update;
-                $update->save();
+                $targetUpdate = $backupUpdate;
+                $targetUpdate->save();
             }
         }
-        AjaxHelper::success(Utils::o2a($update));
+        AjaxHelper::success(Utils::o2a($targetUpdate));
     }
 
     public function saves()
