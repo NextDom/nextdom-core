@@ -2,7 +2,7 @@
   "name": "nextdom",
   "description": "Website (English): [https://www.nextdom.org/en/](https://www.nextdom.org/en/)",
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.9.0",
+    "@fortawesome/fontawesome-free": "^5.10.2",
     "admin-lte": "^2.4.12",
     "autosize": "^4.0.2",
     "blueimp-file-upload": "^9.25.1",
