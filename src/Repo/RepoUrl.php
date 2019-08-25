@@ -20,6 +20,7 @@
 
 namespace NextDom\Repo;
 
+use NextDom\Com\ComShell;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
@@ -109,7 +110,7 @@ class RepoUrl
         }
         try {
             if (file_exists(NextDomHelper::getTmpFolder('url') . '/version')) {
-                \com_shell::execute(SystemHelper::getCmdSudo() . 'rm /tmp/nextdom_version');
+                ComShell::execute(SystemHelper::getCmdSudo() . 'rm /tmp/nextdom_version');
             }
             exec('wget --no-check-certificate --progress=dot --dot=mega ' . ConfigManager::byKey('url::core::version') . ' -O /tmp/nextdom_version');
             if (!file_exists(NextDomHelper::getTmpFolder('url') . '/version')) {
