@@ -47,7 +47,20 @@ along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
           </mu-list-item-action>
           <mu-list-item-title>{{ scenario.name }}</mu-list-item-title>
           <mu-list-item-action>
-            <mu-icon size="24" value="play_circle_filled" v-on:click="launch(scenario.id)"></mu-icon>
+            <mu-icon
+              v-if="scenario.state === 'stop' || scenario.state === ''"
+              size="24"
+              class="green"
+              value="play_circle_filled"
+              v-on:click="launch(scenario.id)"
+            ></mu-icon>
+            <mu-icon
+              v-if="scenario.state === 'in progress'"
+              size="24"
+              class="red"
+              value="stop_circle_filled"
+              v-on:click="stop(scenario.id)"
+            ></mu-icon>
           </mu-list-item-action>
         </mu-list-item>
       </mu-list-item>
@@ -57,6 +70,7 @@ along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 
 <script>
 import Communication from "../libs/Communication.js";
+import EventsManager from "@/libs/EventsManager.js";
 import Utils from "@/libs/Utils.js";
 
 /**
@@ -113,9 +127,16 @@ export default {
         } else {
           this.groupsListState[groupName] = true;
         }
+        for (let scenarioIndex in result[groupName]) {
+          this.$store.commit("addScenario", {
+            scenario: result[groupName][scenarioIndex]
+          });
+        }
       }
       this.scenarios = result;
     });
+    // Start update loop
+    EventsManager.loop();
   },
   methods: {
     /**
@@ -140,6 +161,14 @@ export default {
     },
     /**
      * @vuese
+     * Stop scenario
+     * @arg Id of the scenario to stop
+     */
+    stop: function(scenarioId) {
+      Communication.post("/api/scenario/stop/" + scenarioId);
+    },
+    /**
+     * @vuese
      * Get scenario icon
      * @arg Scenario object
      */
@@ -153,6 +182,13 @@ export default {
 <style scoped lang="scss">
 .mu-item-action i {
   font-size: 1.4rem;
+}
+
+.green {
+  color: rgb(55, 187, 14);
+}
+.red {
+  color: rgb(209, 0, 0);
 }
 </style>
 

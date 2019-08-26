@@ -59,6 +59,8 @@ class ScenarioRest
             $scenarioRow = [];
             $scenarioRow['id'] = $scenario->getId();
             $scenarioRow['name'] = $scenario->getName();
+            $scenarioRow['displayIcon'] = $scenario->getDisplay('icon');
+            $scenarioRow['state'] = $scenario->getState();
             $result[] = $scenarioRow;
         }
         return $result;
@@ -96,6 +98,7 @@ class ScenarioRest
             $scenarioRow['id'] = $scenario->getId();
             $scenarioRow['name'] = $scenario->getName();
             $scenarioRow['displayIcon'] = $scenario->getDisplay('icon');
+            $scenarioRow['state'] = $scenario->getState();
             $groupName = $scenario->getGroup();
             if (empty($groupName)) {
                 $groupName = self::$NO_GROUP_CODE;
@@ -124,6 +127,25 @@ class ScenarioRest
             return false;
         }
         $scenario->launch('user', 'Manual launch', 0);
+        return true;
+    }
+
+    /**
+     * Stop scenario
+     *
+     * @param int $scenarioId Id of the scenario to stop
+     *
+     * @return bool True if success
+     *
+     * @throws \Exception
+     */
+    public static function stop(int $scenarioId)
+    {
+        $scenario = ScenarioManager::byId($scenarioId);
+        if (!is_object($scenario)) {
+            return false;
+        }
+        $scenario->stop();
         return true;
     }
 
