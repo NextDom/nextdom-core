@@ -16,8 +16,9 @@ export const i18n = new VueI18n({
       desktopVersion: "Desktop version",
       disconnect: "Disconnect",
       equipments: "Equipments",
-      loginTitle: "Login",
-      login: "Login",
+      homeTitle: "Summary",
+      loginTitle: "Connexion",
+      login: "login",
       max: "Max",
       min: "Min",
       nothing: "Nothing",
@@ -27,7 +28,6 @@ export const i18n = new VueI18n({
       settingsTitle: "Settings",
       showLogs: "Show logs",
       summary: "Summary",
-      summaryTitle: "Summary",
       visibility: "Visibility"
     },
     fr: {
@@ -38,7 +38,8 @@ export const i18n = new VueI18n({
       desktopVersion: "Version desktop",
       disconnect: "Déconnexion",
       equipments: "Equipements",
-      loginTitle: "Identification",
+      homeTitle: "Résumé",
+      loginTitle: "Connexion",
       login: "Identifiant",
       max: "Max",
       min: "Min",
@@ -49,7 +50,6 @@ export const i18n = new VueI18n({
       settingsTitle: "Paramètres",
       showLogs: "Afficher les journaux",
       summary: "Résumé",
-      summaryTitle: "Résumé",
       visibility: "Visibilité"
     }
   }
