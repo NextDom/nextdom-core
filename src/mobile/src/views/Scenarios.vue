@@ -61,6 +61,13 @@ along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
               value="stop_circle_filled"
               v-on:click="stop(scenario.id)"
             ></mu-icon>
+            <mu-icon
+              v-if="scenario.state === 'error'"
+              size="24"
+              class="orange"
+              value="warning"
+              v-on:click="launch(scenario.id)"
+            ></mu-icon>
           </mu-list-item-action>
         </mu-list-item>
       </mu-list-item>
@@ -183,12 +190,16 @@ export default {
 .mu-item-action i {
   font-size: 1.4rem;
 }
-
+.mu-item-action .mu-icon {
+  cursor: pointer;
+}
 .green {
   color: rgb(55, 187, 14);
+}
+.orange {
+  color: rgb(213, 124, 13);
 }
 .red {
   color: rgb(209, 0, 0);
 }
 </style>
-
