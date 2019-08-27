@@ -332,7 +332,7 @@ step_nextdom_directory_layout() {
   ln -s ${LIB_DIRECTORY}/data ${WEBSERVER_HOME}/data
   print_verbose "created data symlink: ${WEBSERVER_HOME}/data"
   # jeedom logs compatibility
-  if [ -d /var/log/nextdom ]; then
+  if [ ! -e /var/log/nextdom ]; then
       ln -s /var/log/nextdom /var/www/html/log
   fi
 }
