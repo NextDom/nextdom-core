@@ -2226,21 +2226,21 @@
             "authors": [
                 {
                     "name": "Evert Pot",
+                    "role": "Developer",
                     "email": "me@evertpot.com",
-                    "homepage": "http://evertpot.com/",
-                    "role": "Developer"
+                    "homepage": "http://evertpot.com/"
                 },
                 {
                     "name": "Dominik Tobschall",
+                    "role": "Developer",
                     "email": "dominik@fruux.com",
-                    "homepage": "http://tobschall.de/",
-                    "role": "Developer"
+                    "homepage": "http://tobschall.de/"
                 },
                 {
                     "name": "Ivan Enderlin",
+                    "role": "Developer",
                     "email": "ivan.enderlin@hoa-project.net",
-                    "homepage": "http://mnt.io/",
-                    "role": "Developer"
+                    "homepage": "http://mnt.io/"
                 }
             ],
             "description": "The VObject library for PHP allows you to easily parse and manipulate iCalendar and vCard objects",
@@ -4774,16 +4774,16 @@
         },
         {
             "name": "vrana/adminer",
-            "version": "v4.7.1",
+            "version": "v4.7.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vrana/adminer.git",
-                "reference": "7247f801bd06e51347d7ea671484e0fa6a883cbb"
+                "reference": "32955f780271467572024b1dc91728d959efc1b6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vrana/adminer/zipball/7247f801bd06e51347d7ea671484e0fa6a883cbb",
-                "reference": "7247f801bd06e51347d7ea671484e0fa6a883cbb",
+                "url": "https://api.github.com/repos/vrana/adminer/zipball/32955f780271467572024b1dc91728d959efc1b6",
+                "reference": "32955f780271467572024b1dc91728d959efc1b6",
                 "shasum": ""
             },
             "type": "library",
@@ -4808,7 +4808,7 @@
             "keywords": [
                 "database"
             ],
-            "time": "2019-01-24T14:57:17+00:00"
+            "time": "2019-08-27T15:58:21+00:00"
         },
         {
             "name": "webmozart/assert",
