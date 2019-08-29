@@ -13,6 +13,7 @@ common:
   by_default: 'By default'
   cancel: 'Cancel'
   clear: 'Clear'
+  danger: "Danger"
   date: 'Date'
   days: 'days'
   default: 'Default'

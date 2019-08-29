@@ -62,11 +62,12 @@ function loadInformations() {
           notify('Erreur', error.message, 'error');
         },
         success: function (data) {
-          $('#div_pageContainer').setValues(data, '.userAttr');
+          $('#div_Profils').setValues(data, '.userAttr');
           $('#in_passwordCheck').value(data.password);
           $('#' + $('.userAttr[data-l2key="widget::theme"]').value()).attr('checked', 'checked');
+          $('#avatar-preview').attr('src', $('.userAttr[data-l2key=avatar]').value());
           modifyWithoutSave = false;
-          $("#bt_cancelProfils").hide();
+          $(".bt_cancelModifs").hide();
         }
     });
 }
@@ -76,13 +77,15 @@ function loadInformations() {
  */
 function initEvents() {
     // Show confirm modal on non saved changes
-    $('#div_pageContainer').delegate('.userAttr', 'change', function () {
-        modifyWithoutSave = true;
-        $("#bt_cancelProfils").show();
+    $('#div_Profils').delegate('.userAttr', 'change', function () {
+        if (!lockModify) {
+            modifyWithoutSave = true;
+            $(".bt_cancelModifs").show();
+        }
     });
 
     // Cancel modifications
-    $('#bt_cancelProfils').on('click', function () {
+    $('.bt_cancelModifs').on('click', function () {
         loadInformations();
     });
 
@@ -99,15 +102,15 @@ function initEvents() {
                 notify('Erreur', error.message, 'error');
             },
             success: function () {
-                notify('Info', '{{Sauvegarde effectuée}}', 'success');
                 nextdom.user.get({
                     error: function (error) {
                         notify('Erreur', error.message, 'error');
                     },
                     success: function (data) {
                         modifyWithoutSave = false;
-                        $("#bt_cancelProfils").hide();
+                        $(".bt_cancelModifs").hide();
                         updateInformations();
+                        notify('Info', '{{Sauvegarde effectuée}}', 'success');
                     }
                 });
             }
@@ -224,7 +227,6 @@ function initEvents() {
         $('.userAttr[data-l2key=avatar]').value(newPicture);
         $('#avatar-preview').attr('src', newPicture);
         modifyWithoutSave = true;
-        notify('{{Profil}}', '{{Image changée}}', 'success');
     });
 
     // Change widget theme

@@ -35,6 +35,8 @@
 */
 
 /* Global variables Initialisations */
+var modifyWithoutSave = false;
+var lockModify = false;
 uniqId_count = 0;
 modifyWithoutSave = false;
 nbActiveAjaxRequest = 0;
@@ -593,6 +595,7 @@ function hexToRgb(hex) {
  * @param keyElt Elt or button who handle the reset and contain the config key
  */
 function resetConfigParamKey(keyElt) {
+    lockModify = true;
     var paramKey = keyElt.attr('data-l1key');
     var defaultValue = "";
     var arrayKey = paramKey.split("::");
@@ -615,6 +618,7 @@ function resetConfigParamKey(keyElt) {
                         keyElt.siblings(".slider").value(dataLoad);
                         // Or associate fields
                         $('.configKey[data-l1key="' + paramKey + '"]').value(dataLoad)
+                        lockModify=false;
                     } else {
                         nextdom.config.load({
                             configuration: paramSubKey,
@@ -630,7 +634,8 @@ function resetConfigParamKey(keyElt) {
                                 // Direct slider
                                 keyElt.siblings(".slider").value(defaultValue);
                                 // Or associate fields
-                                $('.configKey[data-l1key="' + paramKey + '"]').value(defaultValue)
+                                $('.configKey[data-l1key="' + paramKey + '"]').value(dataSubLoad)
+                                lockModify=false;
                             }
                         });
                     }
@@ -670,6 +675,7 @@ function resetThemeParamKey(keyElt) {
  * @param keyElt Elt or button who handle the reset and contain the config key
  */
 function resetConfigColorKey(keyElt) {
+    lockModify=true;
     var paramKey = keyElt.attr('data-l1key');
     nextdom.config.remove({
         configuration: paramKey,
@@ -690,6 +696,7 @@ function resetConfigColorKey(keyElt) {
             });
         }
     });
+    lockModify=false;
 }
 
 /**

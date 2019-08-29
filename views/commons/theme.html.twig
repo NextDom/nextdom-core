@@ -501,7 +501,7 @@ legend,
 
 /* Unités et fond colorpick */
 .colorpick .input-group-addon,
-.input-group .input-group-addon:not(.input-range-value) {
+.input-group .input-group-addon:not(.input-range-value):not(.label-danger):not(.label-warning):not(.label-success) {
   background-color: {{ COLOR9 }} !important;
 }
 
@@ -593,7 +593,7 @@ legend {
 .form-control {
   color: {{ COLOR10 }} !important;
 }
-.input-group .input-group-addon:not(.input-range-value),
+.input-group .input-group-addon:not(.input-range-value):not(.label-danger):not(.label-warning):not(.label-success),
 .input-group .input-group-addon i {
   color: {{ COLOR10 }} !important;
 }

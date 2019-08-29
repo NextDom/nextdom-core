@@ -52,6 +52,7 @@ function loadInformations() {
         success: function (data) {
             $('#interact_admin').setValues(data, '.configKey');
             modifyWithoutSave = false;
+            $(".bt_cancelModifs").hide();
         }
     });
 }
@@ -60,8 +61,21 @@ function loadInformations() {
  * Init events on the profils page
  */
 function initEvents() {
+    // Param changed : page leaving lock by msgbox
+    $('#interact_admin').delegate('.configKey', 'change', function () {
+        if (!lockModify) {
+            modifyWithoutSave = true;
+            $(".bt_cancelModifs").show();
+        }
+    });
+
+    // Cancel modifications
+    $('.bt_cancelModifs').on('click', function () {
+        loadInformations();
+    });
+
     // Save button
-    $("#bt_saveinteract_admin").on('click', function (event) {
+    $('#bt_saveinteract_admin').on('click', function (event) {
         saveConvertColor();
         nextdom.config.save({
             configuration: $('#interact_admin').getValues('.configKey')[0],
@@ -78,16 +92,12 @@ function initEvents() {
                     success: function (data) {
                         $('#interact_admin').setValues(data, '.configKey');
                         modifyWithoutSave = false;
+                        $(".bt_cancelModifs").hide();
                         notify("Info", '{{Sauvegarde réussie}}', 'success');
                     }
                 });
             }
         });
-    });
-
-    // Param changed : page leaving lock by msgbox
-    $('#interact_admin').delegate('.configKey', 'change', function () {
-        modifyWithoutSave = true;
     });
 
     // New color add

@@ -50,6 +50,7 @@ function loadInformations() {
         success: function (data) {
             $('#general').setValues(data, '.configKey');
             modifyWithoutSave = false;
+            $(".bt_cancelModifs").hide();
         }
     });
 }
@@ -60,18 +61,19 @@ function loadInformations() {
 function initEvents() {
     // Param changed : page leaving lock by msgbox
     $('#general').delegate('.configKey', 'change', function () {
-        modifyWithoutSave = true;
-        $("#bt_cancelProfils").show();
+        if (!lockModify) {
+            modifyWithoutSave = true;
+            $(".bt_cancelModifs").show();
+        }
     });
 
     // Cancel modifications
-    $('#bt_cancelGeneral').on('click', function () {
+    $('.bt_cancelModifs').on('click', function () {
         loadInformations();
     });
 
     // Save button
     $("#bt_saveGeneral").on('click', function (event) {
-        $.hideAlert();
         nextdom.config.save({
             configuration: $('#general').getValues('.configKey')[0],
             error: function (error) {
@@ -87,6 +89,7 @@ function initEvents() {
                     success: function (data) {
                         $('#general').setValues(data, '.configKey');
                         modifyWithoutSave = false;
+                        $(".bt_cancelModifs").hide();
                         notify("Info", '{{Sauvegarde réussie}}', 'success');
                     }
                 });

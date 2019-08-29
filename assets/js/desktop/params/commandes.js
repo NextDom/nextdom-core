@@ -51,6 +51,7 @@ function loadInformations() {
         success: function (data) {
             $('#commandes').setValues(data, '.configKey');
             modifyWithoutSave = false;
+            $(".bt_cancelModifs").hide();
         }
     });
 }
@@ -59,6 +60,19 @@ function loadInformations() {
 * Init events on the profils page
 */
 function initEvents() {
+    // Param changed : page leaving lock by msgbox
+    $('#commandes').delegate('.configKey', 'change', function () {
+        if (!lockModify) {
+            modifyWithoutSave = true;
+            $(".bt_cancelModifs").show();
+        }
+    });
+
+    // Cancel modifications
+    $('.bt_cancelModifs').on('click', function () {
+        loadInformations();
+    });
+
     // Save button
     $("#bt_savecommandes").on('click', function (event) {
         nextdom.config.save({
@@ -76,15 +90,11 @@ function initEvents() {
                     success: function (data) {
                         $('#commandes').setValues(data, '.configKey');
                         modifyWithoutSave = false;
+                        $(".bt_cancelModifs").hide();
                         notify("Info", '{{Sauvegarde réussie}}', 'success');
                     }
                 });
             }
         });
-    });
-
-    // Param changed : page leaving lock by msgbox
-    $('#commandes').delegate('.configKey', 'change', function () {
-        modifyWithoutSave = true;
     });
 }

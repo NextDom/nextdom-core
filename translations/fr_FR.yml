@@ -11,6 +11,7 @@ common:
   by_default: "Par défaut"
   cancel: "Annuler"
   clear: "Vider"
+  danger: "Danger"
   date: "Date"
   days: "jours"
   default: "Défaut"

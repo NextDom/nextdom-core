@@ -40,7 +40,7 @@
         </div>
         <div class="action-group">
             <a class="btn btn-success btn-action-bar pull-right" id="bt_saveProfils"><i class="fas fa-save"></i>{{ 'common.save'|trans }}</a>
-            <a class="btn btn-danger btn-action-bar pull-right" id="bt_cancelProfils"><i class="fas fa-times"></i>{{ 'common.cancel'|trans }}</a>
+            <a class="btn btn-danger btn-action-bar pull-right bt_cancelModifs"><i class="fas fa-times"></i>{{ 'common.cancel'|trans }}</a>
         </div>
     </div>
 </section>
@@ -61,8 +61,8 @@
             <!-- Profil tab -->
             <div role="tabpanel" class="tab-pane active" id="profil">
                 <fieldset>
-                    <legend>{{ 'Photo de profil' }}</legend>
-                    <div class="row">
+                    <legend>{{ 'Choix de l\'Avatar' }}</legend>
+                    <div class="row text-center">
                         <div class="form-group col-sm-6">
                             <img id="avatar-preview" src="{{ profilsAvatar }}" style="height:200px"></a>
                         </div>
@@ -72,11 +72,12 @@
                             {% endfor %}
                         </div>
                     </div>
+                    <input class="userAttr form-control" data-l1key="options" data-l2key="avatar" style="display:none"/>
+                </fieldset>
+                <fieldset class="legend-section">
+                    <legend>{{ 'Ajout d\'un nouvel Avatar' }}</legend>
                     <div class="row">
-                        <div class="form-group col-sm-6">
-                            <input class="userAttr form-control" data-l1key="options" data-l2key="avatar" disabled/>
-                        </div>
-                        <div class="form-group col-sm-6">
+                        <div class="form-group col-sm-12 col-padding">
                             <input class="userAttr form-control btn btn-default" id="user_avatar" type="file" name="images" data-url="core/ajax/profils.ajax.php?action=imageUpload"/>
                         </div>
                     </div>
@@ -89,7 +90,7 @@
                     <legend>{{ 'Thème des Widgets' }}</legend>
                     <div class="row text-center">
                         {% for theme in profilsWidgetThemes %}
-                            <div class="orm-group col-sm-6 col-xs-12 col-padding">
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
                                 <div class="clearfix">
                                     <label class="cursor" for={{ theme['name']|slice(0, -4) }}>
                                         <img class="themeWidgetThumbnail" src="{{ theme['dir'] }}">

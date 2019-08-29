@@ -35,7 +35,6 @@
 */
 
 var tab = null;
-var modifyWithoutSave = false;
 var editor = [];
 var GENERAL_TAB = 'generaltab';
 var currentExpression = null;
@@ -116,6 +115,7 @@ var scenarioContainer = $('#div_scenarioElement');
  */
 function loadScenario(scenarioId, tabToShow) {
     $.hideAlert();
+    modifyWithoutSave = false;
     $('#scenarioThumbnailDisplay').hide();
     printScenario(scenarioId);
     var currentUrl = document.location.toString();

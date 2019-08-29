@@ -77,7 +77,6 @@ function loadInformations() {
                 $('#theme4').hide();
             }
             modifyWithoutSave = false;
-            $("#bt_cancelCustom").hide();
         }
     });
 }
@@ -89,7 +88,6 @@ function initEvents() {
     // Show confirm modal on non saved changes
     $('#div_pageContainer').delegate('.configKey', 'change', function () {
         modifyWithoutSave = true;
-        $("#bt_cancelCustom").show();
     });
 
     // Advanced custom tab loading

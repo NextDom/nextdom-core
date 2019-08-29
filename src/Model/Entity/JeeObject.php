@@ -699,7 +699,7 @@ class JeeObject implements EntityInterface
     public function getLinkData(&$data = ['node' => [], 'link' => []], $level = 0, $drill = null)
     {
         if ($drill === null) {
-            $drill = ConfigManager::byKey('graphlink::jeeObject::drill');
+            $drill = ConfigManager::byKey('graphlink::object::drill');
         }
         if (isset($data['node']['object' . $this->getId()])) {
             return null;
