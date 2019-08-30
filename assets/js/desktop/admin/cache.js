@@ -34,96 +34,117 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-jwerty.key('ctrl+s/⌘+s', function (e) {
-    e.preventDefault();
-    $("#bt_savecache").click();
-});
+// Page init
+loadInformations();
+initEvents();
 
- $("#bt_savecache").on('click', function (event) {
-    $.hideAlert();
-    nextdom.config.save({
-        configuration: $('#cache').getValues('.configKey')[0],
+/**
+ * Load informations in all forms of the page
+ */
+function loadInformations() {
+    nextdom.config.load({
+        configuration: $('#cache').getValues('.configKey:not(.noSet)')[0],
         error: function (error) {
             notify("Erreur", error.message, 'error');
         },
-        success: function () {
-            nextdom.config.load({
-                configuration: $('#cache').getValues('.configKey')[0],
-                plugin: 'core',
-                error: function (error) {
-                    notify("Erreur", error.message, 'error');
-                },
-                success: function (data) {
-                    $('#cache').setValues(data, '.configKey');
-                    modifyWithoutSave = false;
-                    notify("Info", '{{Sauvegarde réussie}}', 'success');
-                }
-            });
+        success: function (data) {
+            $('#cache').setValues(data, '.configKey');
+            modifyWithoutSave = false;
+            $(".bt_cancelModifs").hide();
         }
     });
-});
+}
 
-nextdom.config.load({
-    configuration: $('#cache').getValues('.configKey:not(.noSet)')[0],
-    error: function (error) {
-        notify("Erreur", error.message, 'error');
-    },
-    success: function (data) {
-        $('#cache').setValues(data, '.configKey');
-        modifyWithoutSave = false;
-    }
-});
+/**
+ * Init events on the profils page
+ */
+function initEvents() {
+    // Param changed : page leaving lock by msgbox
+    $('#cache').delegate('.configKey', 'change', function () {
+        if (!lockModify) {
+            modifyWithoutSave = true;
+            $(".bt_cancelModifs").show();
+        }
+    });
 
-$('#cache').delegate('.configKey', 'change', function () {
-    modifyWithoutSave = true;
-});
+    // Cancel modifications
+    $('.bt_cancelModifs').on('click', function () {
+        loadInformations();
+    });
 
-$('#cache').delegate('.configKey[data-l1key="cache::engine"]', 'change', function () {
- $('.cacheEngine').hide();
- $('.cacheEngine.'+$(this).value()).show();
-});
+    // Save button
+    $("#bt_savecache").on('click', function (event) {
+        nextdom.config.save({
+            configuration: $('#cache').getValues('.configKey')[0],
+            error: function (error) {
+                notify("Erreur", error.message, 'error');
+            },
+            success: function () {
+                nextdom.config.load({
+                    configuration: $('#cache').getValues('.configKey')[0],
+                    plugin: 'core',
+                    error: function (error) {
+                        notify("Erreur", error.message, 'error');
+                    },
+                    success: function (data) {
+                        $('#cache').setValues(data, '.configKey');
+                        modifyWithoutSave = false;
+                        $(".bt_cancelModifs").hide();
+                        notify("Info", '{{Sauvegarde réussie}}', 'success');
+                    }
+                });
+            }
+        });
+    });
 
-$("#bt_cleanCache").on('click', function (event) {
-    $.hideAlert();
-    cleanCache();
-});
+    // Cache engine change
+    $('#cache').delegate('.configKey[data-l1key="cache::engine"]', 'change', function () {
+       $('.cacheEngine').hide();
+       $('.cacheEngine.'+$(this).value()).show();
+    });
 
-$("#bt_flushCache").on('click', function (event) {
-    $.hideAlert();
-    flushCache();
-});
+    // Cache clean button
+    $("#bt_cleanCache").on('click', function (event) {
+        cleanCache();
+    });
+
+    // Cache flush button
+    $("#bt_flushCache").on('click', function (event) {
+        flushCache();
+    });
+}
 
 function flushCache() {
-  nextdom.cache.flush({
-    error: function (error) {
-       notify("Erreur", data.result, 'error');
-   },
-   success: function (data) {
-    updateCacheStats();
-    notify("Info", '{{Cache vidé}}', 'success');
-}
-});
+    nextdom.cache.flush({
+        error: function (error) {
+            notify("Erreur", data.result, 'error');
+        },
+        success: function (data) {
+            updateCacheStats();
+            notify("Info", '{{Cache vidé}}', 'success');
+        }
+    });
 }
 
 function cleanCache() {
     nextdom.cache.clean({
         error: function (error) {
-           notify("Erreur", data.result, 'error');
-       },
-       success: function (data) {
-        updateCacheStats();
-        notify("Info", '{{Cache nettoyé}}', 'success');
-    }
-});
+            notify("Erreur", data.result, 'error');
+        },
+        success: function (data) {
+            updateCacheStats();
+            notify("Info", '{{Cache nettoyé}}', 'success');
+        }
+    });
 }
 
 function updateCacheStats(){
-   nextdom.cache.stats({
-    error: function (error) {
-       notify("Erreur", data.result, 'error');
-   },
-   success: function (data) {
-    $('#span_cacheObject').html(data.count);
-}
-});
+    nextdom.cache.stats({
+        error: function (error) {
+            notify("Erreur", data.result, 'error');
+        },
+        success: function (data) {
+            $('#span_cacheObject').html(data.count);
+        }
+    });
 }

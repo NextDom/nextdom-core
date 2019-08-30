@@ -232,10 +232,10 @@
             <div role="tabpanel" class="tab-pane" id="securitytab">
                 <fieldset>
                     <legend>{{ 'Authentifications' }}</legend>
-                    <div class="alert alert-info">
-                        {{ 'Attention : La double authentification est désactivée en connexion locale... ' }}
-                    </div>
                     <div class="row">
+                        <div class="form-group col-xs-12 col-padding">
+                            <div class="alert alert-info">{{ 'Attention : La double authentification est désactivée en connexion locale... ' }}</div>
+                        </div>
                         {% if profilsAllowRemoteUsers != 1 %}
                             <div class="form-group col-sm-6 col-xs-12 col-padding">
                                 <label class="control-label">{{ 'Nouveau mot de passe' }}</label>

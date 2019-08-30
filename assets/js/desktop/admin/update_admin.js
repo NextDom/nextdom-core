@@ -34,87 +34,107 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-jwerty.key('ctrl+s/⌘+s', function (e) {
-    e.preventDefault();
-    $("#bt_saveupdate_admin").click();
-});
+// Page init
+loadInformations();
+initEvents();
 
-$("#bt_saveupdate_admin").on('click', function (event) {
-    $.hideAlert();
-    var config = $('#update_admin').getValues('.configKey')[0];
-    config.actionOnMessage = json_encode($('#div_actionOnMessage .actionOnMessage').getValues('.expressionAttr'));
-    nextdom.config.save({
-        configuration: config,
+/**
+ * Load informations in all forms of the page
+ */
+function loadInformations() {
+    nextdom.config.load({
+        configuration: $('#update_admin').getValues('.configKey:not(.noSet)')[0],
         error: function (error) {
             notify("Erreur", error.message, 'error');
         },
-        success: function () {
-            nextdom.config.load({
-                configuration: $('#update_admin').getValues('.configKey:not(.noSet)')[0],
-                error: function (error) {
-                    notify("Erreur", error.message, 'error');
-                },
-                success: function (data) {
-                    $('#update_admin').setValues(data, '.configKey');
-                    modifyWithoutSave = false;
-                    notify("Info", '{{Sauvegarde réussie}}', 'success');
-                }
-            });
+        success: function (data) {
+            $('#update_admin').setValues(data, '.configKey');
+            modifyWithoutSave = false;
+            $(".bt_cancelModifs").hide();
         }
     });
-});
+}
 
-nextdom.config.load({
-    configuration: $('#update_admin').getValues('.configKey:not(.noSet)')[0],
-    error: function (error) {
-        notify("Erreur", error.message, 'error');
-    },
-    success: function (data) {
-        $('#update_admin').setValues(data, '.configKey');
-
-        modifyWithoutSave = false;
-    }
-});
-
-$('#update_admin').delegate('.configKey', 'change', function () {
-    modifyWithoutSave = true;
-});
-
-$('.testRepoConnection').on('click',function(){
-    var repo = $(this).attr('data-repo');
-    nextdom.config.save({
-        configuration: $('#update_admin').getValues('.configKey')[0],
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function () {
-            nextdom.config.load({
-                configuration: $('#update_admin').getValues('.configKey:not(.noSet)')[0],
-                error: function (error) {
-                    notify("Erreur", error.message, 'error');
-                },
-                success: function (data) {
-                    $('#update_admin').setValues(data, '.configKey');
-                    modifyWithoutSave = false;
-                    nextdom.repo.test({
-                        repo: repo,
-                        error: function (error) {
-                            notify("Erreur", error.message, 'error');
-                        },
-                        success: function (data) {
-                            notify("Info", '{{Test réussi}}', 'success');
-                        }
-                    });
-                }
-            });
+/**
+ * Init events on the profils page
+ */
+function initEvents() {
+    // Param changed : page leaving lock by msgbox
+    $('#update_admin').delegate('.configKey', 'change', function () {
+        if (!lockModify) {
+            modifyWithoutSave = true;
+            $(".bt_cancelModifs").show();
         }
     });
-});
 
-$('#update_admin').delegate('.enableRepository', 'change', function () {
-    if($(this).value() == 1){
-        $('.repositoryConfiguration'+$(this).attr('data-repo')).show();
-    }else{
-        $('.repositoryConfiguration'+$(this).attr('data-repo')).hide();
-    }
-});
+    // Cancel modifications
+    $('.bt_cancelModifs').on('click', function () {
+        loadInformations();
+    });
+
+    // Save button
+    $("#bt_saveupdate_admin").on('click', function (event) {
+        var config = $('#update_admin').getValues('.configKey')[0];
+        config.actionOnMessage = json_encode($('#div_actionOnMessage .actionOnMessage').getValues('.expressionAttr'));
+        nextdom.config.save({
+            configuration: config,
+            error: function (error) {
+                notify("Erreur", error.message, 'error');
+            },
+            success: function () {
+                nextdom.config.load({
+                    configuration: $('#update_admin').getValues('.configKey:not(.noSet)')[0],
+                    error: function (error) {
+                        notify("Erreur", error.message, 'error');
+                    },
+                    success: function (data) {
+                        $('#update_admin').setValues(data, '.configKey');
+                        modifyWithoutSave = false;
+                        notify("Info", '{{Sauvegarde réussie}}', 'success');
+                    }
+                });
+            }
+        });
+    });
+
+    // Repo test button
+    $('.testRepoConnection').on('click',function(){
+        var repo = $(this).attr('data-repo');
+        nextdom.config.save({
+            configuration: $('#update_admin').getValues('.configKey')[0],
+            error: function (error) {
+                notify("Erreur", error.message, 'error');
+            },
+            success: function () {
+                nextdom.config.load({
+                    configuration: $('#update_admin').getValues('.configKey:not(.noSet)')[0],
+                    error: function (error) {
+                        notify("Erreur", error.message, 'error');
+                    },
+                    success: function (data) {
+                        $('#update_admin').setValues(data, '.configKey');
+                        modifyWithoutSave = false;
+                        nextdom.repo.test({
+                            repo: repo,
+                            error: function (error) {
+                                notify("Erreur", error.message, 'error');
+                            },
+                            success: function (data) {
+                                notify("Info", '{{Test réussi}}', 'success');
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    });
+
+    // Repo activation/desactivation
+    $('#update_admin').delegate('.enableRepository', 'change', function () {
+        if($(this).value() == 1){
+            $('.repositoryConfiguration'+$(this).attr('data-repo')).show();
+        }else{
+            $('.repositoryConfiguration'+$(this).attr('data-repo')).hide();
+        }
+    });
+}

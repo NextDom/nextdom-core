@@ -33,135 +33,203 @@
 * @Email   <admin@nextdom.org>
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
+// Page init
+printUsers();
+initEvents();
 
- printUsers();
- $("#bt_addUser").on('click', function (event) {
-    $.hideAlert();
-    $('#in_newUserLogin').value('');
-    $('#in_newUserMdp').value('');
-    $('#md_newUser').modal('show');
-});
-
- $("#bt_newUserSave").on('click', function (event) {
-    $.hideAlert();
-    var user = [{login: $('#in_newUserLogin').value(), password: $('#in_newUserMdp').value()}];
-    nextdom.user.save({
-        users: user,
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function () {
-            printUsers();
-            notify("Info", '{{Sauvegarde effectuée}}', 'success');
-            modifyWithoutSave = false;
-            $('#md_newUser').modal('hide');
+/**
+ * Init events on the profils page
+ */
+function initEvents() {
+    // Param changed : page leaving lock by msgbox
+    $('#users').delegate('.configKey', 'change', function () {
+        if (!lockModify) {
+            modifyWithoutSave = true;
+            $(".bt_cancelModifs").show();
         }
     });
-});
-
- jwerty.key('ctrl+s/⌘+s', function (e) {
-    e.preventDefault();
-    $('#bt_saveUser').click();
-});
-
- $("#bt_saveUser").on('click', function (event) {
-    nextdom.user.save({
-        users: $('#table_user tbody tr').getValues('.userAttr'),
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function () {
-            printUsers();
-            notify("Info", '{{Sauvegarde effectuée}}', 'success');
-            modifyWithoutSave = false;
+    $('#users').delegate('.userAttr', 'change', function () {
+        if (!lockModify) {
+            modifyWithoutSave = true;
+            $(".bt_cancelModifs").show();
         }
     });
-});
 
- $("#table_user").on('click',".bt_del_user",  function (event) {
-    $.hideAlert();
-    var user = {id: $(this).closest('tr').find('.userAttr[data-l1key=id]').value()};
-    bootbox.confirm('{{Etes-vous sûr de vouloir supprimer cet utilisateur ?}}', function (result) {
-        if (result) {
-            nextdom.user.remove({
-                id: user.id,
-                error: function (error) {
-                    notify("Erreur", error.message, 'error');
-                },
-                success: function () {
-                    printUsers();
-                    notify("Info", '{{L\'utilisateur a bien été supprimé}}', 'success');
-                }
-            });
-        }
+    // Cancel modifications
+    $('.bt_cancelModifs').on('click', function () {
+        printUsers();
     });
-});
 
- $("#table_user").on( 'click',".bt_change_mdp_user", function (event) {
-    $.hideAlert();
-    var user = {id: $(this).closest('tr').find('.userAttr[data-l1key=id]').value(), login: $(this).closest('tr').find('.userAttr[data-l1key=login]').value()};
-    bootbox.prompt("{{Quel est le nouveau mot de passe ?}}", function (result) {
-        if (result !== null) {
-            user.password = result;
-            nextdom.user.save({
-                users: [user],
-                error: function (error) {
-                    notify("Erreur", error.message, 'error');
-                },
-                success: function () {
-                    printUsers();
-                    notify("Info", '{{Sauvegarde effectuée}}', 'success');
-                    modifyWithoutSave = false;
-                }
-            });
-        }
+    // Add user button
+    $("#bt_addUser").on('click', function (event) {
+        $('#in_newUserLogin').value('');
+        $('#in_newUserMdp').value('');
+        $('#md_newUser').modal('show');
     });
-});
 
- $("#table_user").on( 'click',".bt_changeHash", function (event) {
-    $.hideAlert();
-    var user = {id: $(this).closest('tr').find('.userAttr[data-l1key=id]').value()};
-    bootbox.confirm("{{Etes-vous sûr de vouloir changer la clef API de l\'utilisateur ?}}", function (result) {
-        if (result) {
-            user.hash = '';
-            nextdom.user.save({
-                users: [user],
-                error: function (error) {
-                    notify("Erreur", error.message, 'error');
-                },
-                success: function () {
-                    printUsers();
-                    notify("Info", '{{Modification effectuée}}', 'success');
-                    modifyWithoutSave = false;
-                }
-            });
-        }
+    // Save new user button
+    $("#bt_newUserSave").on('click', function (event) {
+        var user = [{login: $('#in_newUserLogin').value(), password: $('#in_newUserMdp').value()}];
+        nextdom.user.save({
+            users: user,
+            error: function (error) {
+                notify("Erreur", error.message, 'error');
+            },
+            success: function () {
+                printUsers();
+                notify("Info", '{{Sauvegarde effectuée}}', 'success');
+                modifyWithoutSave = false;
+                $('#md_newUser').modal('hide');
+                $(".bt_cancelModifs").hide();
+            }
+        });
     });
-});
 
- $('#users').on('change','.userAttr',  function () {
-    modifyWithoutSave = true;
-});
-
- $('#users').on('change','.configKey',  function () {
-    modifyWithoutSave = true;
-});
-
- $('#bt_supportAccess').on('click',function(){
-    nextdom.user.supportAccess({
-        enable : $(this).attr('data-enable'),
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function (data) {
-            modifyWithoutSave = false;
-            window.location.reload();
-        }
+    // Save button
+    $("#bt_saveUser").on('click', function (event) {
+        nextdom.user.save({
+            users: $('#table_user tbody tr').getValues('.userAttr'),
+            error: function (error) {
+                notify("Erreur", error.message, 'error');
+            },
+            success: function () {
+                printUsers();
+                notify("Info", '{{Sauvegarde effectuée}}', 'success');
+                modifyWithoutSave = false;
+                $(".bt_cancelModifs").hide();
+            }
+        });
     });
-});
 
- function printUsers() {
-    showLoadingCustom();
+    // Delete user button
+    $("#table_user").on('click',".bt_del_user",  function (event) {
+      var user = {id: $(this).closest('tr').find('.userAttr[data-l1key=id]').value()};
+      bootbox.confirm('{{Etes-vous sûr de vouloir supprimer cet utilisateur ?}}', function (result) {
+          if (result) {
+              nextdom.user.remove({
+                  id: user.id,
+                  error: function (error) {
+                      notify("Erreur", error.message, 'error');
+                  },
+                  success: function () {
+                      printUsers();
+                      notify("Info", '{{L\'utilisateur a bien été supprimé}}', 'success');
+                  }
+              });
+          }
+       });
+    });
+
+    // Change password button
+    $("#table_user").on( 'click',".bt_change_mdp_user", function (event) {
+      var user = {id: $(this).closest('tr').find('.userAttr[data-l1key=id]').value(), login: $(this).closest('tr').find('.userAttr[data-l1key=login]').value()};
+      bootbox.prompt("{{Quel est le nouveau mot de passe ?}}", function (result) {
+          if (result !== null) {
+              user.password = result;
+              nextdom.user.save({
+                  users: [user],
+                  error: function (error) {
+                      notify("Erreur", error.message, 'error');
+                  },
+                  success: function () {
+                      printUsers();
+                      notify("Info", '{{Sauvegarde effectuée}}', 'success');
+                      modifyWithoutSave = false;
+                      $(".bt_cancelModifs").hide();
+                  }
+              });
+          }
+       });
+    });
+
+    // Change user hash button
+    $("#table_user").on( 'click',".bt_changeHash", function (event) {
+      var user = {id: $(this).closest('tr').find('.userAttr[data-l1key=id]').value()};
+      bootbox.confirm("{{Etes-vous sûr de vouloir changer la clef API de l\'utilisateur ?}}", function (result) {
+          if (result) {
+              user.hash = '';
+              nextdom.user.save({
+                  users: [user],
+                  error: function (error) {
+                      notify("Erreur", error.message, 'error');
+                  },
+                  success: function () {
+                      printUsers();
+                      notify("Info", '{{Modification effectuée}}', 'success');
+                      modifyWithoutSave = false;
+                      $(".bt_cancelModifs").hide();
+                  }
+              });
+          }
+       });
+    });
+
+    // Manage rights button
+    $('#table_user').on( 'click','.bt_manage_restrict_rights', function () {
+        $('#md_modal').dialog({title: "Gestion des droits"});
+        $("#md_modal").load('index.php?v=d&modal=user.rights&id=' + $(this).closest('tr').find('.userAttr[data-l1key=id]').value()).dialog('open');
+    });
+
+    // Disable Two Factor button
+    $('#table_user').on( 'click', '.bt_disableTwoFactorAuthentification',function () {
+        nextdom.user.removeTwoFactorCode({
+            id :  $(this).closest('tr').find('.userAttr[data-l1key=id]').value(),
+            error: function (error) {
+                notify("Erreur", error.message, 'error');
+            },
+            success: function (data) {
+                printUsers();
+            }
+        });
+    });
+
+    // Delete session button
+    $('.bt_deleteSession').on('click',function(){
+        var id = $(this).closest('tr').attr('data-id');
+        nextdom.user.deleteSession({
+            id : id,
+            error: function (error) {
+                notify("Erreur", error.message, 'error');
+            },
+            success: function (data) {
+                modifyWithoutSave = false;
+                window.location.reload();
+            }
+        });
+    });
+
+    // Remove device button
+    $('.bt_removeRegisterDevice').on('click',function(){
+        var key = $(this).closest('tr').attr('data-key');
+        var user_id = $(this).closest('tr').attr('data-user_id');
+        nextdom.user.removeRegisterDevice({
+            key : key,
+            user_id : user_id,
+            error: function (error) {
+                notify("Erreur", error.message, 'error');
+            },
+            success: function (data) {
+                modifyWithoutSave = false;
+                window.location.reload();
+            }
+        });
+    });
+
+    // Remove all device button
+    $('#bt_removeAllRegisterDevice').on('click',function(){
+        nextdom.user.removeRegisterDevice({
+            error: function (error) {
+                notify("Erreur", error.message, 'error');
+            },
+            success: function (data) {
+                modifyWithoutSave = false;
+                window.location.reload();
+            }
+        });
+    });
+}
+
+function printUsers() {
     var currentUser ="";
     nextdom.user.get({
         error: function (error) {
@@ -221,81 +289,20 @@
                if(disable == ''){
                    ligne += '<a class="cursor bt_changeHash btn btn-sm btn-warning pull-right btn-action-bar" title="{{Renouveler la clef API}}"><i class="fas fa-refresh"></i>{{Regénération API}}</a>';
                    if (ldapEnable != '1') {
-                    ligne += '<a class="btn btn-sm btn-danger pull-right bt_del_user btn-action-bar" style="margin-bottom : 5px;"><i class="fas fa-trash"></i>{{Supprimer}}</a>';
-                    ligne += '<a class="btn btn-sm btn-warning pull-right bt_change_mdp_user btn-action-bar"><i class="fas fa-lock"></i>{{Mot de passe}}</a>';
-                }
-                ligne += '<a class="btn btn-sm btn-warning pull-right bt_manage_restrict_rights btn-action-bar"><i class="fas fa-align-right"></i>{{Droits}}</a>';
-            }
-            ligne += '</td>';
-            ligne += '</tr>';
-            var result = $(ligne);
-            result.setValues(data[i], '.userAttr');
-            tr.push(result);
-        }
-        $('#table_user tbody').append(tr);
-        modifyWithoutSave = false;
-        hideLoadingCustom();
-    }
-});
+                        ligne += '<a class="btn btn-sm btn-danger pull-right bt_del_user btn-action-bar" style="margin-bottom : 5px;"><i class="fas fa-trash"></i>{{Supprimer}}</a>';
+                        ligne += '<a class="btn btn-sm btn-warning pull-right bt_change_mdp_user btn-action-bar"><i class="fas fa-lock"></i>{{Mot de passe}}</a>';
+                   }
+                   ligne += '<a class="btn btn-sm btn-warning pull-right bt_manage_restrict_rights btn-action-bar"><i class="fas fa-align-right"></i>{{Droits}}</a>';
+               }
+               ligne += '</td>';
+               ligne += '</tr>';
+               var result = $(ligne);
+               result.setValues(data[i], '.userAttr');
+               tr.push(result);
+          }
+          $('#table_user tbody').append(tr);
+          modifyWithoutSave = false;
+          $(".bt_cancelModifs").hide();
+      }
+  });
 }
-
-$('#table_user').on( 'click','.bt_manage_restrict_rights', function () {
-    $('#md_modal').dialog({title: "Gestion des droits"});
-    $("#md_modal").load('index.php?v=d&modal=user.rights&id=' + $(this).closest('tr').find('.userAttr[data-l1key=id]').value()).dialog('open');
-});
-
-
-$('#table_user').on( 'click', '.bt_disableTwoFactorAuthentification',function () {
-    nextdom.user.removeTwoFactorCode({
-        id :  $(this).closest('tr').find('.userAttr[data-l1key=id]').value(),
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function (data) {
-            printUsers();
-        }
-    });
-
-});
-
-$('.bt_deleteSession').on('click',function(){
- var id = $(this).closest('tr').attr('data-id');
- nextdom.user.deleteSession({
-    id : id,
-    error: function (error) {
-        notify("Erreur", error.message, 'error');
-    },
-    success: function (data) {
-        window.location.reload();
-    }
-});
-});
-
-
-$('.bt_removeRegisterDevice').on('click',function(){
-    var key = $(this).closest('tr').attr('data-key');
-    var user_id = $(this).closest('tr').attr('data-user_id');
-    nextdom.user.removeRegisterDevice({
-        key : key,
-        user_id : user_id,
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function (data) {
-            modifyWithoutSave = false;
-            window.location.reload();
-        }
-    });
-});
-
-$('#bt_removeAllRegisterDevice').on('click',function(){
-    nextdom.user.removeRegisterDevice({
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function (data) {
-            modifyWithoutSave = false;
-            window.location.reload();
-        }
-    });
-});
