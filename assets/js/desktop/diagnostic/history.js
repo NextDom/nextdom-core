@@ -42,6 +42,7 @@ var lastId = null;
 // Page init
 loadInformations();
 initEvents();
+initHistoryTrigger();
 
 /**
  * Load informations in all forms of the page
@@ -151,7 +152,12 @@ function initEvents() {
             });
         }
     });
+}
 
+/**
+ * Init history events on the profils page
+ */
+function initHistoryTrigger() {
     // Chart type change
     $('#sel_chartType').off('change').on('change', function () {
         if(lastId == null){
