@@ -229,6 +229,9 @@ function initEvents() {
     });
 }
 
+/**
+ * Display all users
+ */
 function printUsers() {
     var currentUser ="";
     nextdom.user.get({

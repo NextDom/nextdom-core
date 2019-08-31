@@ -114,6 +114,9 @@ function initEvents() {
     });
 }
 
+/**
+ * Flush cache
+ */
 function flushCache() {
     nextdom.cache.flush({
         error: function (error) {
@@ -126,6 +129,9 @@ function flushCache() {
     });
 }
 
+/**
+ * Clean cache
+ */
 function cleanCache() {
     nextdom.cache.clean({
         error: function (error) {
@@ -138,6 +144,9 @@ function cleanCache() {
     });
 }
 
+/**
+ * Update cache statistics
+ */
 function updateCacheStats(){
     nextdom.cache.stats({
         error: function (error) {

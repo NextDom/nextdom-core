@@ -40,6 +40,7 @@
         </div>
         <div class="action-group">
             <a class="btn btn-success btn-action-bar pull-right" id="bt_saveBackup"><i class="fas fa-save"></i>{{ 'common.save' | trans }}</a>
+            <a class="btn btn-danger btn-action-bar pull-right bt_cancelModifs"><i class="fas fa-times"></i>{{ 'common.cancel'|trans }}</a>
             <a class="btn btn-default btn-action-bar pull-right" id="bt_saveOpenLog"><i class="fas fa-file-alt"></i>{{ 'common.log' | trans }}</a>
         </div>
     </div>
@@ -55,99 +56,95 @@
 
             <!-- Page content -->
             <div class="box-body">
-                <form class="form-horizontal">
-                    <p class="alert alert-info">{{ 'backup.purpose1' | trans }}</br>
-                        {{ 'backup.purpose2' | trans }}</p>
-                    <p class="alert alert-success">{{ 'backup.purpose3' | trans }}</p>
+                <fieldset>
+                    <legend>{{ 'backup.backup_information' | trans }}</legend>
+                    <div class="row">
+                        <div class="form-group col-xs-12 col-padding">
+                            <p class="alert alert-info">{{ 'backup.purpose1' | trans }}</br>{{ 'backup.purpose2' | trans }}</p>
+                            <p class="alert alert-success">{{ 'backup.purpose3' | trans }}</p>
+                        </div>
+                    </div>
+
                     <!-- Sauvegardes Section -->
-                    <fieldset>
-                        <legend>{{ 'backup.backup_settings' | trans }}</legend>
-                        <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'backup.location' | trans }}</label>
-                            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                    <legend>{{ 'backup.backup_settings' | trans }}</legend>
+                    <div class="row">
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'backup.location' | trans }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="backup::path" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
                                 <input type="text" class="configKey form-control" data-l1key="backup::path"/>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'backup.saving_on' | trans }}</label>
-                            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                                <div class="input-group">
-                                    <input type="text" class="configKey form-control" data-l1key="backup::keepDays"/>
-                                    <span class="input-group-addon">{{'jours'}}</span>
-                                </div>
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'backup.saving_on' | trans }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="backup::keepDays" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                                <span class="input-group-addon input-range-min"></span>
+                                <input class="configKey slider" type="range" min="0" max="100" step="1" data-l1key="backup::keepDays"/>
+                                <span class="input-group-addon input-range-max"></span>
+                                <span class="input-group-addon input-range-value"></span>
+                                <span class="input-group-addon">{{ 'jours' }}</span>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'backup.total_size' | trans }}</label>
-                            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                                <div class="input-group">
-                                    <input type="text" class="configKey form-control" data-l1key="backup::maxSize"/>
-                                    <span class="input-group-addon">{{'Mo maximum'}}</span>
-                                </div>
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'backup.total_size' | trans }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="backup::maxSize" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                                <span class="input-group-addon input-range-min"></span>
+                                <input class="configKey slider" type="range" min="0" max="2000" step="10" data-l1key="backup::maxSize"/>
+                                <span class="input-group-addon input-range-max"></span>
+                                <span class="input-group-addon input-range-value"></span>
+                                <span class="input-group-addon">{{ 'Mo maximum' }}</span>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'backup.manual_backup' | trans }}</label>
-                            <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                                <a class="btn btn-action" id="bt_backupNextDom"><i class="fas fa-refresh fa-spin" style="display : none;"></i><i class="fas fa-floppy-o"></i>{{ 'backup.run' | trans }}</a>
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'backup.manual_backup' | trans }}</label>
+                            <div>
+                                <a class="btn btn-info" id="bt_backupNextDom"><i class="fas fa-refresh fa-spin" style="display : none;"></i><i class="fas fa-floppy-o"></i>{{ 'backup.run' | trans }}</a>
                             </div>
                         </div>
-                    </fieldset>
+                    </div>
+                </fieldset>
 
-                    <!-- Local Section -->
-                    <fieldset class="legend-section">
-                        <legend>{{ 'backup.local_backups' | trans }}</legend>
-                        <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'backup.available_backups' | trans }}</label>
-                            <div class="col-sm-6 col-xs-6">
+                <!-- Local Section -->
+                <fieldset class="legend-section">
+                    <legend>{{ 'backup.local_backups' | trans }}</legend>
+                    <div class="row">
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'backup.available_backups' | trans }}</label>
+                            <div>
                                 <select class="form-control" id="sel_restoreBackup"> </select>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label" data-toggle="tooltip" title="" data-original-title="{{'vous pouvez restaurer une sauvegarde NextDom ou migrer une sauvegarde Jeedom'}}">{{ 'backup.restoration' | trans }}</label>
-                            <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label" data-toggle="tooltip" title="" data-original-title="{{'vous pouvez restaurer une sauvegarde NextDom ou migrer une sauvegarde Jeedom'}}">{{ 'backup.selection' | trans }}</label>
+                            <div class="mix-group">
                                 <a class="btn btn-warning" id="bt_restoreNextDom"><i class="fas fa-refresh fa-spin" style="display : none;"></i><i class="fas fa-window-restore"></i>{{ 'backup.restore_selection' | trans }}</a>
+                                <a class="btn btn-danger" id="bt_removeBackup"><i class="fas fa-trash"></i>{{ 'backup.remove_selected' | trans }}</a>
+                                <a class="btn btn-success" id="bt_downloadBackup"><i class="fas fa-refresh fa-spin" style="display : none;"></i><i class="fas fa-cloud-download-alt"></i>{{ 'backup.download_selection' | trans }}</a>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'backup.suppression' | trans }}</label>
-                            <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                                <a class="btn btn-danger" id="bt_removeBackup"></i><i class="fas fa-trash"></i>{{ 'backup.remove_selected' | trans }}</a>
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'backup.transfer' | trans }}</label>
+                            <div class="mix-group">
+                                <a class="btn btn-default btn-file"><i class="fas fa-refresh fa-spin" style="display : none;"></i><i class="fas fa-cloud-upload-alt"></i>{{ 'backup.send_backup' | trans }}
+                                <input id="bt_uploadBackup" type="file" name="file" data-url="core/ajax/nextdom.ajax.php?action=backupupload&nextdom_token={{ backupAjaxToken }}"></a>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'backup.transfer' | trans }}</label>
-                            <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                                <span class="btn btn-default btn-file">
-                                    <i class="fas fa-refresh fa-spin" style="display : none;"></i><i class="fas fa-cloud-upload-alt"></i>{{ 'backup.send_backup' | trans }}<input id="bt_uploadBackup" type="file" name="file" data-url="core/ajax/nextdom.ajax.php?action=backupupload&nextdom_token={{ backupAjaxToken }}">
-                                </span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'backup.downloading' | trans }}</label>
-                            <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
-                                <i class="fas fa-refresh fa-spin" style="display : none;"></i><a class="btn btn-success" id="bt_downloadBackup"><i class="fas fa-cloud-download-alt"></i>{{ 'backup.download_selection' | trans }}</a>
-                            </div>
-                        </div>
-                    </fieldset>
+                    </div>
+                </fieldset>
 
-                    <!-- Cloud Section -->
-                    {% for repo, repoData in backupReposList %}
-                        {% if repoData['scope']['backup'] != false %}
-                            {% set cssClass = 'repo_' ~ repo %}
-                            <fieldset class="legend-section repo">
-                                <legend>{{ 'backup.backups' | trans }} {{ repoData['name'] }}</legend>
+                <!-- Cloud Section -->
+                {% for repo, repoData in backupReposList %}
+                    {% if repoData['scope']['backup'] != false %}
+                        {% set cssClass = 'repo_' ~ repo %}
+                        <fieldset class="legend-section repo">
+                            <legend>{{ 'backup.backups' | trans }} {{ repoData['name'] }}</legend>
+                            <div class="row">
                                 {% if repoData['enable'] != 0 %}
-                                    <div class="form-group">
-                                        <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'backup.automatic_sending' | trans }}</label>
-                                        <div class="col-sm-4 col-xs-6">
-                                            <input type="checkbox" class="configKey" data-l1key="{{ repo }}::cloudUpload" id="{{ repo }}"/>
-                                            <label for="{{ repo }}" class="control-label label-check">{{ 'common.activate' | trans }}</label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'backup.available_backups' | trans }}</label>
-                                        <div class="col-sm-6 col-xs-6">
+                                    <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                        <label class="control-label">{{ 'backup.available_backups' | trans }}</label>
+                                        <div>
                                             <select class="form-control" id="sel_restoreRepoNextDom" data-repo="{{ repo }}">
                                                 <option>{{ 'backup.loading' | trans }}</option>
                                             </select>
@@ -156,19 +153,28 @@
                                             </script>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="col-lg-2 col-md-3 col-sm-3 col-xs-12 control-label">{{ 'backup.restoration' | trans }}</label>
-                                        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-12">
+                                    <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                        <label class="control-label">{{ 'backup.selection' | trans }}</label>
+                                        <div class="mix-group">
                                             <a class="btn btn-warning" id="bt_restoreRepoNextDom" data-repo="{{ repo }}"><i class="fas fa-refresh fa-spin" style="display: none;"></i><i class="fas fa-window-restore"></i>{{ 'backup.restore_selection' | trans }}</a>
                                         </div>
                                     </div>
+                                    <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                        <label class="control-label">{{ 'backup.automatic_sending' | trans }}</label>
+                                        <div>
+                                            <input type="checkbox" class="configKey" data-l1key="{{ repo }}::cloudUpload" id="{{ repo }}"/>
+                                            <label for="{{ repo }}" class="control-label label-check">{{ 'common.activate' | trans }}</label>
+                                        </div>
+                                    </div>
                                 {% else %}
-                                    <p class="alert alert-warning">{{ 'backup.the_service_is_disabled_you_can__activate' | trans }}<a href="/index.php?v=d&p=update_admin">{{'common.here'|trans }}</a></p>
+                                    <div class="form-group col-xs-12 col-padding">
+                                        <p class="alert alert-warning">{{ 'backup.the_service_is_disabled_you_can__activate' | trans }}<a href="/index.php?v=d&p=update_admin">{{'common.here'|trans }}</a></p>
+                                    </div>
                                 {% endif %}
-                            </fieldset>
-                        {% endif %}
-                    {% endfor %}
-                </form>
+                            </div>
+                        </fieldset>
+                    {% endif %}
+                {% endfor %}
             </div>
         </div>
 

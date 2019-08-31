@@ -33,70 +33,90 @@
 * @Email   <admin@nextdom.org>
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
-$(document).ready(function(){
-    $('pre').height($(window).height() - 275);
-    $('#ul_object').height($(window).height() - 275);
-    $('#ul_object').css("overflow-y", "auto");
-});
 
-$('#bt_downloadLog').click(function() {
-    var logFile = $('.li_log.active').attr('data-log')
-    if (logFile !== undefined) {
-        window.open('src/Api/downloadFile.php?pathfile=log/' + logFile, "_blank", null);
-    }
-});
+// Page init
+loadInformations();
+initEvents();
 
-$(".li_log").on('click', function() {
-    $('#div_logDisplay').show();
-    $('#pre_globallog').empty();
-    $(".li_log").removeClass('active');
-    $(this).addClass('active');
-    $('#bt_globalLogStopStart').removeClass('btn-success').addClass('btn-warning');
-    $('#bt_globalLogStopStart').html('<div><i class="fas fa-pause spacing-right"></i>{{Pause}}</div>');
-    $('#bt_globalLogStopStart').attr('data-state',1);
-    nextdom.log.autoupdate({
-        log : $(this).attr('data-log'),
-        display : $('#pre_globallog'),
-        search : $('#in_globalLogSearch'),
-        control : $('#bt_globalLogStopStart'),
+/**
+ * Load informations in all forms of the page
+ */
+function loadInformations() {
+    $(document).ready(function(){
+        $('pre').height($(window).height() - 275);
+        $('#ul_object').height($(window).height() - 275);
+        $('#ul_object').css("overflow-y", "auto");
     });
-    $('#bt_downloadLog').removeAttr('disabled');
-});
+}
 
-$("#bt_clearLog").on('click', function(event) {
-    nextdom.log.clear({
-        log : $('.li_log.active').attr('data-log'),
-        success: function(data) {
-            $('.li_log.active a').html($('.li_log.active').attr('data-log') + ' (0 Ko)');
-            $('.li_log.active i').removeClass().addClass('fa fa-check');
-            $('.li_log.active i').css('color','green');
-            if($('#bt_globalLogStopStart').attr('data-state') == 0){
-                $('#bt_globalLogStopStart').click();
-            }
+/**
+ * Init events on the profils page
+ */
+function initEvents() {
+    // Download button
+    $('#bt_downloadLog').click(function() {
+        var logFile = $('.li_log.active').attr('data-log')
+        if (logFile !== undefined) {
+            window.open('src/Api/downloadFile.php?pathfile=log/' + logFile, "_blank", null);
         }
     });
-});
 
-$("#bt_removeLog").on('click', function(event) {
-    nextdom.log.remove({
-        log : $('.li_log.active').attr('data-log'),
-        success: function(data) {
-            loadPage('index.php?v=d&p=log');
-        }
+    // Log choose
+    $(".li_log").on('click', function() {
+        $('#div_logDisplay').show();
+        $('#pre_globallog').empty();
+        $(".li_log").removeClass('active');
+        $(this).addClass('active');
+        $('#bt_globalLogStopStart').removeClass('btn-success').addClass('btn-warning');
+        $('#bt_globalLogStopStart').html('<div><i class="fas fa-pause spacing-right"></i>{{Pause}}</div>');
+        $('#bt_globalLogStopStart').attr('data-state',1);
+        nextdom.log.autoupdate({
+            log : $(this).attr('data-log'),
+            display : $('#pre_globallog'),
+            search : $('#in_globalLogSearch'),
+            control : $('#bt_globalLogStopStart'),
+        });
+        $('#bt_downloadLog').removeAttr('disabled');
     });
-});
 
-$("#bt_removeAllLog").on('click', function(event) {
-    bootbox.confirm("{{Êtes-vous sûr de vouloir supprimer tous les logs ?}}", function(result) {
-        if (result) {
-            nextdom.log.removeAll({
-                error: function (error) {
-                    notify("Core",error.message,"error");
-                },
-                success: function(data) {
-                    loadPage('index.php?v=d&p=log');
+    // Clear log button
+    $("#bt_clearLog").on('click', function(event) {
+        nextdom.log.clear({
+            log : $('.li_log.active').attr('data-log'),
+            success: function(data) {
+                $('.li_log.active a').html($('.li_log.active').attr('data-log') + ' (0 Ko)');
+                $('.li_log.active i').removeClass().addClass('fa fa-check');
+                $('.li_log.active i').css('color','green');
+                if($('#bt_globalLogStopStart').attr('data-state') == 0){
+                    $('#bt_globalLogStopStart').click();
                 }
-            });
-        }
+            }
+        });
     });
-});
+
+    // Remove log button
+    $("#bt_removeLog").on('click', function(event) {
+        nextdom.log.remove({
+            log : $('.li_log.active').attr('data-log'),
+            success: function(data) {
+                loadPage('index.php?v=d&p=log');
+            }
+        });
+    });
+
+    // Remove all log button
+    $("#bt_removeAllLog").on('click', function(event) {
+        bootbox.confirm("{{Êtes-vous sûr de vouloir supprimer tous les logs ?}}", function(result) {
+            if (result) {
+                nextdom.log.removeAll({
+                    error: function (error) {
+                        notify("Core",error.message,"error");
+                    },
+                    success: function(data) {
+                        loadPage('index.php?v=d&p=log');
+                    }
+                });
+            }
+        });
+    });
+}

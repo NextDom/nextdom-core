@@ -152,6 +152,9 @@ function initEvents() {
     });
 }
 
+/**
+ * Display the personnalisation
+ */
 function printAdvancedDesktop() {
     if (editorDesktopJS == null) {
         editorDesktopJS = CodeMirror.fromTextArea(document.getElementById("ta_jsDesktopContent"), {
@@ -171,6 +174,9 @@ function printAdvancedDesktop() {
     }
 }
 
+/**
+ * Save all custom personnalisation
+ */
 function saveCustom() {
     if (editorDesktopJS !== null) {
         sendCustomData('js', editorDesktopJS.getValue());
@@ -180,6 +186,9 @@ function saveCustom() {
     }
 }
 
+/**
+ * Save a cutom personnalisation
+ */
 function sendCustomData(type, content) {
     nextdom.config.save({
         configuration: $('#custom').getValues('.configKey')[0],

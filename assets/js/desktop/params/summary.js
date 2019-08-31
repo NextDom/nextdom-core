@@ -108,6 +108,9 @@ function initEvents() {
     $("#table_objectSummary").sortable({axis: "y", cursor: "move", items: ".objectSummary", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
 }
 
+/**
+ * Display all summary
+ */
 function printObjectSummary() {
     $.ajax({
         type: "POST",
@@ -144,6 +147,9 @@ function printObjectSummary() {
     });
 }
 
+/**
+ * Add a summary
+ */
 function addObjectSummary(_summary) {
     var tr = '<tr class="objectSummary">';
     tr += '<td>';
@@ -195,6 +201,9 @@ function addObjectSummary(_summary) {
     $(".bt_cancelModifs").show();
 }
 
+/**
+ * Save all summary
+ */
 function saveObjectSummary() {
     summary = {};
     temp = $('#table_objectSummary tbody tr').getValues('.objectSummaryAttr');

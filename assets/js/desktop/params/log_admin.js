@@ -164,6 +164,9 @@ function initEvents() {
     });
 }
 
+/**
+ * Display actions on message
+ */
 function loadActionOnMessage(){
     $('#div_actionOnMessage').empty();
     nextdom.config.load({
@@ -196,6 +199,9 @@ function loadActionOnMessage(){
     });
 }
 
+/**
+ * Add an action on message
+ */
 function addActionOnMessage(_action) {
     if (!isset(_action)) {
         _action = {};

@@ -34,43 +34,37 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-displayTimeline();
-
-$('#bt_tabTimeline').on('click',function(){
-    $('#div_visualization').empty();
-    displayTimeline();
-});
-
-$('#bt_configureTimelineCommand').on('click',function(){
-    $('#md_modal').dialog({title: "{{Configuration de l'historique des commandes}}"});
-    $("#md_modal").load('index.php?v=d&modal=cmd.configureHistory').dialog('open');
-});
-
-$('#bt_configureTimelineScenario').on('click',function(){
-    $('#md_modal').dialog({title: "{{Résumé scénario}}"});
-    $("#md_modal").load('index.php?v=d&modal=scenario.summary').dialog('open');
-});
-
-$('#div_visualization').on('click','.bt_scenarioLog',function(){
-    $('#md_modal').dialog({title: "{{Log d'exécution du scénario}}"});
-    $("#md_modal").load('index.php?v=d&modal=scenario.log.execution&scenario_id=' + $(this).closest('.scenario').attr('data-id')).dialog('open');
-});
-
-$('#div_visualization').on('click','.bt_gotoScenario',function(){
-    loadPage('index.php?v=d&p=scenario&id='+ $(this).closest('.scenario').attr('data-id'));
-});
-
-$('#div_visualization').on('click','.bt_configureCmd',function(){
-    $('#md_modal').dialog({title: "{{Configuration de la commande}}"});
-    $('#md_modal').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).closest('.cmd').attr('data-id')).dialog('open');
-});
-
-$('#bt_refreshTimeline').on('click',function(){
-    displayTimeline();
-});
-
 timeline = null;
 
+// Page init
+displayTimeline();
+initEvents();
+
+/**
+ * Init events on the profils page
+ */
+function initEvents() {
+    // Configure timeline command button
+    $('#bt_configureTimelineCommand').on('click',function(){
+        $('#md_modal').dialog({title: "{{Configuration de l'historique des commandes}}"});
+        $("#md_modal").load('index.php?v=d&modal=cmd.configureHistory').dialog('open');
+    });
+
+    // Configure timeline scenario button
+    $('#bt_configureTimelineScenario').on('click',function(){
+        $('#md_modal').dialog({title: "{{Résumé scénario}}"});
+        $("#md_modal").load('index.php?v=d&modal=scenario.summary').dialog('open');
+    });
+
+    // Refresh button
+    $('#bt_refreshTimeline').on('click',function(){
+        displayTimeline();
+    });
+}
+
+/**
+ * Display the timeline
+ */
 function displayTimeline(){
     $('#data').empty()
     jeedom.getTimelineEvents({

@@ -121,6 +121,9 @@ function initEvents() {
     });
 }
 
+/**
+ * Display all colors
+ */
 function printConvertColor() {
     $.ajax({
         type: "POST",
@@ -138,7 +141,6 @@ function printConvertColor() {
                 notify("Erreur", data.result, 'error');
                 return;
             }
-
             $('#table_convertColor tbody').empty();
             for (var color in data.result) {
                 addConvertColor(color, data.result[color]);
@@ -149,6 +151,9 @@ function printConvertColor() {
     });
 }
 
+/**
+ * Add a color
+ */
 function addConvertColor(_color, _html) {
     var tr = '<tr>';
     tr += '<td>';
@@ -167,6 +172,9 @@ function addConvertColor(_color, _html) {
     modifyWithoutSave = true;
 }
 
+/**
+ * Save colors
+ */
 function saveConvertColor() {
     var value = {};
     var colors = {};
