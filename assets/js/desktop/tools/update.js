@@ -124,16 +124,18 @@ function createUpdateBox(updateData,updateId) {
   htmlData += '<div class="box-body" style="min-height: 268px;">';
   htmlData += '<span class="updateAttr" data-l1key="id" style="display:none;"></span><p><b>{{Source : }}</b><span class="updateAttr" data-l1key="source"></span></p>';
   htmlData += '<p><b>{{Type : }}</b><span class="updateAttr" data-l1key="type"></span></p>';
-  htmlData += '<p><b>{{Branche : }}</b>';
-  if (updateData.configuration && updateData.configuration.version) {
-    htmlData += updateData.configuration.version;
+  if (updateData.source === 'github') {
+    htmlData += '<p><b>{{Branche : }}</b>';
+    if (updateData.configuration && updateData.configuration.version) {
+      htmlData += updateData.configuration.version;
+    }
+    htmlData += '</p>';
   }
-  htmlData += '</p>';
   if (updateData.type == 'widget') {
     htmlData += '<p><b>{{Id : }}</b>' + init(updateData.name);
     htmlData += '</p>';
   }
-  htmlData += '<p><b>{{Version : }}</b>' + updateData.remoteVersion + '</p>';
+  htmlData += '<p><b>{{Version : }}</b><span data-l1key="version">' + updateData.remoteVersion + '</span></p>';
   htmlData += '<input type="checkbox" class="updateAttr" data-l1key="configuration" data-l2key="doNotUpdate" id="doNotUpdate_' + init(updateData.id) + '">';
   htmlData += '<label for="doNotUpdate_' + init(updateData.id) + '" class="control-label label-check">{{Ne pas mettre à jour}}</label></br>';
   htmlData += '</div>';

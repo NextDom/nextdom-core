@@ -69,7 +69,10 @@ class Authenticator
     }
 
     /**
+     * Init authenticator instance
+     * 
      * @param Request $request
+     * 
      * @return Authenticator
      */
     public static function init(Request $request): Authenticator
@@ -113,10 +116,12 @@ class Authenticator
 
     /**
      * Check user credentials
+     * 
      * @param string $login User login
      * @param string $password User passowrd
      *
      * @return User|false User object or false
+     * 
      * @throws \Exception
      */
     public function checkCredentials(string $login, string $password)
@@ -131,6 +136,7 @@ class Authenticator
      * @param User $user
      *
      * @return string User token
+     * 
      * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
      */
@@ -173,7 +179,7 @@ class Authenticator
     }
 
     /**
-     * Check API Key sended in URL (?apikey=MY_KEY)
+     * Check API Key sended in URL (?apikey=MY_KEY)\n
      * Consider connected like the first admin in database
      *
      * @return bool True if API Key works

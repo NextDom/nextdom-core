@@ -230,6 +230,7 @@ $NEXTDOM_INTERNAL_CONFIG = array(
             'SET_VOLUME' => array('name' => 'Volume', 'family' => 'Multimédia', 'type' => 'Action'),
             'CHANNEL' => array('name' => 'Chaine', 'family' => 'Multimédia', 'type' => 'Info'),
             'SET_CHANNEL' => array('name' => 'Chaine', 'family' => 'Multimédia', 'type' => 'Action'),
+            'UPLOAD' => array('name' => 'Fichier', 'family' => 'Generic', 'type' => 'Action'),
             'GENERIC_INFO' => array('name' => ' Générique', 'family' => 'Generic', 'type' => 'Info'),
             'GENERIC_ACTION' => array('name' => ' Générique', 'family' => 'Generic', 'type' => 'Action'),
             'DONT' => array('name' => 'Ne pas tenir compte de cette commande', 'family' => 'Generic', 'type' => 'All'),
@@ -347,6 +348,19 @@ $NEXTDOM_INTERNAL_CONFIG = array(
                             'icon' => array('visible' => true, 'parentVisible' => true),
                         ),
                     ),
+                    'upload' => array(
+                        'name' => 'Fichier',
+                        'configuration' => array(
+                            'minValue' => array('visible' => false),
+                            'maxValue' => array('visible' => false),
+                            'listValue' => array('visible' => true)),
+                        'unite' => array('visible' => false),
+                        'isHistorized' => array('visible' => false),
+                        'display' => array(
+                            'invertBinary' => array('visible' => false),
+                            'icon' => array('visible' => true, 'parentVisible' => true),
+                        ),
+                    )
                 ),
             ),
         ),

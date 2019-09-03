@@ -111,8 +111,10 @@ export default {
 </script>
 <style lang="scss" scoped>
 .thumbnail {
-  width: 100%;
+  max-width: 100%;
   display: block;
   height: 20rem;
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>

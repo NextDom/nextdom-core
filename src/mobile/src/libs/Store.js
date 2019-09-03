@@ -62,16 +62,19 @@ export const store = new Vuex.Store({
      * @param {Array} cmd Command object
      */
     setCmdComponentData(state, cmd) {
+      if (cmd.id == 1205 || cmd.id == 1206) {
+        console.log(cmd);
+      }
       let componentData = undefined;
-      // Test for commands with template
-      try {
-        componentData =
-          CmdTemplates["cmds"][cmd.type][cmd.subType][cmd.template];
-      } catch {}
       // Test generic type
+      try {
+        componentData = CmdTemplates["cmdsWithoutTemplate"][cmd.genericType];
+      } catch {}
+      // Test for commands with template
       if (componentData === undefined) {
         try {
-          componentData = CmdTemplates["cmdsWithoutTemplate"][cmd.genericType];
+          componentData =
+            CmdTemplates["cmds"][cmd.type][cmd.subType][cmd.template];
         } catch {}
       }
       // Specials cases
@@ -97,11 +100,20 @@ export const store = new Vuex.Store({
           componentData =
             CmdTemplates["cmds"][cmd.type][cmd.subType]["no_data"];
         } catch {}
+      } else if (
+        componentData.component === "DefaultInfoCmd" &&
+        cmd.icon !== ""
+      ) {
+        componentData = {
+          component: "DefaultIconInfoCmd",
+          icon: true,
+          button: false
+        };
       }
       if (componentData === undefined) {
         // TODO: Peut être dans les types générique, mais il faut vérifier si il n'y a pas de cas particuliers
         if (cmd.genericType === "DONT") {
-          componentData = componentData = {
+          componentData = {
             component: "DontCmd",
             icon: false,
             button: false

@@ -265,8 +265,8 @@ class Plan3d implements EntityInterface
             $cmd = CmdManager::byId($this->getLink_id());
             return $cmd;
         } else if ($this->getLink_type() == 'summary') {
-            $object = ObjectManager::byId($this->getLink_id());
-            return $object;
+            $linkedObject = ObjectManager::byId($this->getLink_id());
+            return $linkedObject;
         }
         return null;
     }

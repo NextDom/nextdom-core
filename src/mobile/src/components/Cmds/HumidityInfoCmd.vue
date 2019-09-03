@@ -23,14 +23,14 @@ along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 import BaseIconInfoCmd from "./BaseIconInfoCmd";
 
 /**
- * Show power state
+ * Show standard command that get numeric data (with unite)
  * @group Commands
  */
 export default {
-  name: "PowerInfoCmd",
+  name: "HumidityInfoCmd",
   extends: BaseIconInfoCmd,
   mounted() {
-    this.icon = "fa fa-bolt";
+    this.icon = "fa fa-tint";
   }
 };
 </script>

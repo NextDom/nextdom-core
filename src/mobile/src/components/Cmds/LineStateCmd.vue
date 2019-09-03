@@ -20,7 +20,10 @@ along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 -->
 <template>
   <mu-container class="line-state-cmd cmd">
-    <span class="pull-left">{{ cmd.name }}</span>
+    <span class="pull-left">
+      <span class="line-icon" v-if="cmd.icon != ''" v-html="cmd.icon"></span>
+      {{ cmd.name }}
+    </span>
     <i class="fas pull-right" v-bind:class="icon"></i>
   </mu-container>
 </template>

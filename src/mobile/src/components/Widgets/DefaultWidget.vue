@@ -81,6 +81,24 @@ import BaseWidget from "./BaseWidget";
  */
 export default {
   name: "DefaultWidget",
-  extends: BaseWidget
+  extends: BaseWidget,
+  computed: {
+    /**
+     * @vuese
+     * Test if a large widget must be used
+     */
+    isLargeWidget: function() {
+      let result = false;
+      // Large 2 if icons
+      if (this.iconCmds.length > 2) {
+        result = true;
+      }
+      // Show buttons at right if there is more than 5 commands
+      if (this.buttonCmds.length > 6) {
+        result = true;
+      }
+      return result;
+    }
+  }
 };
 </script>

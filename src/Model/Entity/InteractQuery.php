@@ -248,9 +248,9 @@ class InteractQuery implements EntityInterface
                         $eqLogic = $cmd->getEqLogicId();
                         if (is_object($eqLogic)) {
                             $replace['#equipement#'] = $eqLogic->getName();
-                            $object = $eqLogic->getObject();
-                            if (is_object($object)) {
-                                $replace['#objet#'] = $object->getName();
+                            $linkedObject = $eqLogic->getObject();
+                            if (is_object($linkedObject)) {
+                                $replace['#objet#'] = $linkedObject->getName();
                             }
                         }
                     }

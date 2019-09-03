@@ -859,7 +859,7 @@ class Utils
     }
 
     /**
-     * @param      $_object
+     * @param mixed $_object
      * @param bool $_noToArray
      * @return array
      * @throws \ReflectionException
@@ -950,13 +950,13 @@ class Utils
 
         $enableList = array();
         foreach ($_ajaxList as $ajaxObject) {
-            $object = $_class::byId($ajaxObject['id']);
-            if (!is_object($object)) {
-                $object = new $_class();
+            $resultObject = $_class::byId($ajaxObject['id']);
+            if (!is_object($resultObject)) {
+                $resultObject = new $_class();
             }
-            self::a2o($object, $ajaxObject);
-            $object->save();
-            $enableList[$object->getId()] = true;
+            self::a2o($resultObject, $ajaxObject);
+            $resultObject->save();
+            $enableList[$resultObject->getId()] = true;
         }
         foreach ($_dbList as $dbObject) {
             if (!isset($enableList[$dbObject->getId()])) {

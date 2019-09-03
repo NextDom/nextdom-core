@@ -84,14 +84,12 @@ class LogHelper
      * @param string $message Message to log
      * @param string $logicalId Logical id linked to this log (optional)
      *
-     * @return bool True if log added
-     *
      * @throws \Exception
      */
     public static function addInfo($targetLog, $message, $logicalId = '')
     {
         $message = $message . '\n' . PHPInformation::getInstance()->getCallingFunctionName(true);
-        self::add($logTarget, 'error', $message, $logicalId);
+        self::add($targetLog, 'error', $message, $logicalId);
     }
 
     /**
@@ -215,7 +213,7 @@ class LogHelper
      *
      * @return string Log path
      */
-    public static function getPathToLog($targetLog = 'core')
+    public static function getPathToLog($targetLog = 'core'): string
     {
         return NEXTDOM_LOG . '/' . $targetLog;
     }
@@ -272,7 +270,7 @@ class LogHelper
      *
      * @throws \Exception
      */
-    public static function clear($targetLog)
+    public static function clear($targetLog): bool
     {
         if (self::authorizeClearLog($targetLog)) {
             $path = self::getPathToLog($targetLog);
@@ -304,7 +302,7 @@ class LogHelper
      * @param int $start Start row
      * @param int $nbLines Number of lines to get
      *
-     * @return array|bool Lines of the log or false on error
+     * @return array|bool Content of the log or false on error
      *
      * @throws \Exception
      */
@@ -318,7 +316,7 @@ class LogHelper
         $page = [];
         $log = new SplFileObject($path);
         if ($log) {
-            $log->seek($start); //Seek to the begening of lines
+            $log->seek($start); //Seek to the beginning of lines
             $linesRead = 0;
             while ($log->valid() && $linesRead != $nbLines) {
                 $line = trim($log->current()); //get current line
@@ -400,7 +398,8 @@ class LogHelper
      *
      * @return array List of files
      */
-    public static function liste($filter = null) {
+    public static function liste($filter = null) 
+    {
         trigger_error('This method is deprecated', E_USER_DEPRECATED);
         return self::getLogFileList($filter);
     }
@@ -412,7 +411,7 @@ class LogHelper
      *
      * @return array List of files
      */
-    public static function getLogFileList($filter = null)
+    public static function getLogFileList($filter = null): array
     {
         $result = [];
         foreach (FileSystemHelper::ls(self::getPathToLog(''), '*') as $log) {
@@ -422,6 +421,26 @@ class LogHelper
             if (!is_dir(self::getPathToLog($log))) {
                 $result[] = $log;
             }
+        }
+        return $result;
+    }
+
+    /**
+     * Get list of all log files
+     *
+     * @param string $folder Log folder
+     *
+     * @return array List of files
+     */
+    public static function getAllLogFileList($folder = ''): array
+    {
+        $result = [];
+        foreach (FileSystemHelper::ls(self::getPathToLog($folder), '*') as $log) {
+            $item = ['name' => $log, 'content' => []];
+            if (is_dir(self::getPathToLog($log))) {
+                $item['content'] = self::getAllLogFileList($log);
+            }
+            $result[] = $item;
         }
         return $result;
     }

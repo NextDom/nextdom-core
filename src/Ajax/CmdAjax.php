@@ -17,10 +17,12 @@
 
 namespace NextDom\Ajax;
 
+use NextDom\Enums\CmdViewType;
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\AuthentificationHelper;
+use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
@@ -47,33 +49,35 @@ class CmdAjax extends BaseAjax
      */
     public function toHtml()
     {
+        // Render list of id
         if (Utils::init('ids') != '') {
-            $return = array();
+            $result = [];
             foreach (json_decode(Utils::init('ids'), true) as $id => $value) {
                 $cmd = CmdManager::byId($id);
                 if (!is_object($cmd)) {
                     continue;
                 }
-                $return[$cmd->getId()] = array(
+                $result[$cmd->getId()] = array(
                     'html' => $cmd->toHtml($value['version']),
                     'id' => $cmd->getId(),
                 );
             }
-            AjaxHelper::success($return);
+            AjaxHelper::success($result);
         } else {
+            // Render one command
             $cmd = CmdManager::byId(Utils::init('id'));
             if (!is_object($cmd)) {
                 throw new CoreException(__('Commande inconnue - Vérifiez l\'id'));
             }
-            $info_cmd = array();
-            $info_cmd['id'] = $cmd->getId();
-            $info_cmd['html'] = $cmd->toHtml(Utils::init('version'), Utils::init('option'), Utils::init('cmdColor', null));
-            AjaxHelper::success($info_cmd);
+            $result = [];
+            $result['id'] = $cmd->getId();
+            $result['html'] = $cmd->toHtml(Utils::init('version'), Utils::init('option'), Utils::init('cmdColor', null));
+            AjaxHelper::success($result);
         }
     }
 
     /**
-     * Execute commande
+     * Execute a command
      *
      * @throws CoreException
      * @throws \ReflectionException
@@ -102,20 +106,36 @@ class CmdAjax extends BaseAjax
         AjaxHelper::success($cmd->execCmd($options));
     }
 
+    /**
+     * Get an object from his name, eqLogic name and command name
+     *
+     * @throws CoreException
+     */
     public function getByObjectNameEqNameCmdName()
     {
-        $cmd = CmdManager::byObjectNameEqLogicNameCmdName(Utils::init('object_name'), Utils::init('eqLogic_name'), Utils::init('cmd_name'));
+        $objectName = Utils::init('object_name');
+        $eqLogicName = Utils::init('eqLogic_name');
+        $cmdName = Utils::init('cmd_name');
+        $cmd = CmdManager::byObjectNameEqLogicNameCmdName($objectName, $eqLogicName, $cmdName);
         if (!is_object($cmd)) {
-            throw new CoreException(__('Cmd inconnu : ') . Utils::init('object_name') . '/' . Utils::init('eqLogic_name') . '/' . Utils::init('cmd_name'));
+            throw new CoreException(__('Cmd inconnu : ') . $objectName . '/' . $eqLogicName . '/' . $cmdName);
         }
         AjaxHelper::success($cmd->getId());
     }
 
+    /**
+     * Get an object from his name and command name
+     *
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function getByObjectNameCmdName()
     {
-        $cmd = CmdManager::byObjectNameCmdName(Utils::init('object_name'), Utils::init('cmd_name'));
+        $objectName = Utils::init('object_name');
+        $cmdName = Utils::init('cmd_name');
+        $cmd = CmdManager::byObjectNameCmdName($objectName, $cmdName);
         if (!is_object($cmd)) {
-            throw new CoreException(__('Cmd inconnu : ') . Utils::init('object_name') . '/' . Utils::init('cmd_name'), 9999);
+            throw new CoreException(__('Cmd inconnu : ') . $objectName . '/' . $cmdName, 9999);
         }
         AjaxHelper::success(Utils::o2a($cmd));
     }
@@ -128,13 +148,19 @@ class CmdAjax extends BaseAjax
      */
     public function byId()
     {
-        $cmd = CmdManager::byId(Utils::init('id'));
+        $cmdId = Utils::init('id');
+        $cmd = CmdManager::byId($cmdId);
         if (!is_object($cmd)) {
-            throw new CoreException(__('Commande inconnue : ') . Utils::init('id'), 9999);
+            throw new CoreException(__('Commande inconnue : ') . $cmdId, 9999);
         }
         AjaxHelper::success(NextDomHelper::toHumanReadable(Utils::o2a($cmd)));
     }
 
+    /**
+     * Copy history from cmd to another one
+     *
+     * @throws CoreException
+     */
     public function copyHistoryToCmd()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -142,6 +168,11 @@ class CmdAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * Replace command with another one
+     *
+     * @throws CoreException
+     */
     public function replaceCmd()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -149,25 +180,38 @@ class CmdAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * Get command by human name
+     *
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function byHumanName()
     {
-        $cmd_id = CmdManager::humanReadableToCmd(Utils::init('humanName'));
+        $humanName = Utils::init('humanName');
+        $cmd_id = CmdManager::humanReadableToCmd($humanName);
         $cmd = CmdManager::byId(str_replace('#', '', $cmd_id));
         if (!is_object($cmd)) {
-            throw new CoreException(__('Commande inconnue : ') . Utils::init('humanName'), 9999);
+            throw new CoreException(__('Commande inconnue : ') . $humanName, 9999);
         }
         AjaxHelper::success(Utils::o2a($cmd));
     }
 
+    /**
+     * Get list of command, eqLogic and scenario that use a command
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function usedBy()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $cmd = CmdManager::byId(Utils::init('id'));
+        $cmdId = Utils::init('id');
+        $cmd = CmdManager::byId($cmdId);
         if (!is_object($cmd)) {
-            throw new CoreException(__('Commande inconnue : ') . Utils::init('id'), 9999);
+            throw new CoreException(__('Commande inconnue : ') . $cmdId, 9999);
         }
         $result = $cmd->getUsedBy();
-        $return = array('cmd' => array(), 'eqLogic' => array(), 'scenario' => array());
+        $return = ['cmd' => [], 'eqLogic' => [], 'scenario' => []];
         /**
          * @var Cmd $cmd
          */
@@ -198,81 +242,117 @@ class CmdAjax extends BaseAjax
         AjaxHelper::success($return);
     }
 
+    /**
+     * Get command human name
+     *
+     * @throws \ReflectionException
+     */
     public function getHumanCmdName()
     {
         AjaxHelper::success(CmdManager::cmdToHumanReadable('#' . Utils::init('id') . '#'));
     }
 
+    /**
+     * Get list of command by eqLogic id
+     * @throws \ReflectionException
+     */
     public function byEqLogic()
     {
         AjaxHelper::success(Utils::o2a(CmdManager::byEqLogicId(Utils::init('eqLogic_id'))));
     }
 
+    /**
+     * Get a command by his id
+     *
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function getCmd()
     {
-        $cmd = CmdManager::byId(Utils::init('id'));
+        $cmdId = Utils::init('id');
+        $cmd = CmdManager::byId($cmdId);
         if (!is_object($cmd)) {
-            throw new CoreException(__('Commande inconnue : ') . Utils::init('id'));
+            throw new CoreException(__('Commande inconnue : ') . $cmdId);
         }
-        $return = NextDomHelper::toHumanReadable(Utils::o2a($cmd));
+        $result = NextDomHelper::toHumanReadable(Utils::o2a($cmd));
         $eqLogic = $cmd->getEqLogicId();
-        $return['eqLogic_name'] = $eqLogic->getName();
-        $return['plugin'] = $eqLogic->getEqType_Name();
+        $result['eqLogic_name'] = $eqLogic->getName();
+        $result['plugin'] = $eqLogic->getEqType_Name();
         if ($eqLogic->getObject_id() > 0) {
-            $return['object_name'] = $eqLogic->getObject()->getName();
+            $result['object_name'] = $eqLogic->getObject()->getName();
         }
-        AjaxHelper::success($return);
+        AjaxHelper::success($result);
     }
 
+    /**
+     * Save change on command
+     *
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function save()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $cmd_ajax = NextDomHelper::fromHumanReadable(json_decode(Utils::init('cmd'), true));
-        $cmd = CmdManager::byId($cmd_ajax['id']);
+        $cmdAjaxData = NextDomHelper::fromHumanReadable(json_decode(Utils::init('cmd'), true));
+        $cmd = CmdManager::byId($cmdAjaxData['id']);
         if (!is_object($cmd)) {
             $cmd = new Cmd();
         }
-        Utils::a2o($cmd, $cmd_ajax);
+        Utils::a2o($cmd, $cmdAjaxData);
         $cmd->save();
         AjaxHelper::success(Utils::o2a($cmd));
     }
 
+    /**
+     * Save a list of command
+     *
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function multiSave()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
         $cmds = json_decode(Utils::init('cmd'), true);
-        foreach ($cmds as $cmd_ajax) {
-            $cmd = CmdManager::byId($cmd_ajax['id']);
+        foreach ($cmds as $cmdAjaxData) {
+            $cmd = CmdManager::byId($cmdAjaxData['id']);
             if (!is_object($cmd)) {
                 continue;
             }
-            Utils::a2o($cmd, $cmd_ajax);
+            Utils::a2o($cmd, $cmdAjaxData);
             $cmd->save();
         }
         AjaxHelper::success();
     }
 
+    /**
+     * Change history item from datetime to another
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function changeHistoryPoint()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        if (Utils::init('cmd_id') === '') {
+        $cmdId = Utils::init('cmd_id');
+        $targetDatetime = Utils::init('datetime');
+        $srcDatetime = Utils::init('oldValue');
+        if ($cmdId === '') {
             throw new CoreException(__('Historique impossible'));
         }
-        $history = HistoryManager::byCmdIdDatetime(Utils::init('cmd_id'), Utils::init('datetime'));
+        $history = HistoryManager::byCmdIdDatetime($cmdId, $targetDatetime);
         if (!is_object($history)) {
-            $history = HistoryManager::byCmdIdDatetime(Utils::init('cmd_id'), Utils::init('datetime'), date('Y-m-d H:i:s', strtotime(Utils::init('datetime') . ' +1 hour')), Utils::init('oldValue'));
+            $history = HistoryManager::byCmdIdDatetime($cmdId, $targetDatetime, date('Y-m-d H:i:s', strtotime($targetDatetime . ' +1 hour')), $srcDatetime);
         }
         if (!is_object($history)) {
-            $history = HistoryManager::byCmdIdDatetime(Utils::init('cmd_id'), Utils::init('datetime'), date('Y-m-d H:i:s', strtotime(Utils::init('datetime') . ' +1 day')), Utils::init('oldValue'));
+            $history = HistoryManager::byCmdIdDatetime($cmdId, $targetDatetime, date('Y-m-d H:i:s', strtotime($targetDatetime . ' +1 day')), $srcDatetime);
         }
         if (!is_object($history)) {
-            $history = HistoryManager::byCmdIdDatetime(Utils::init('cmd_id'), Utils::init('datetime'), date('Y-m-d H:i:s', strtotime(Utils::init('datetime') . ' +1 week')), Utils::init('oldValue'));
+            $history = HistoryManager::byCmdIdDatetime($cmdId, $targetDatetime, date('Y-m-d H:i:s', strtotime($targetDatetime . ' +1 week')), $srcDatetime);
         }
         if (!is_object($history)) {
-            $history = HistoryManager::byCmdIdDatetime(Utils::init('cmd_id'), Utils::init('datetime'), date('Y-m-d H:i:s', strtotime(Utils::init('datetime') . ' +1 month')), Utils::init('oldValue'));
+            $history = HistoryManager::byCmdIdDatetime($cmdId, $targetDatetime, date('Y-m-d H:i:s', strtotime($targetDatetime . ' +1 month')), $srcDatetime);
         }
         if (!is_object($history)) {
-            throw new CoreException(__('Aucun point ne correspond pour l\'historique : ') . Utils::init('cmd_id') . ' - ' . Utils::init('datetime') . ' - ' . Utils::init('oldValue'));
+            throw new CoreException(__('Aucun point ne correspond pour l\'historique : ') . $cmdId . ' - ' . $targetDatetime . ' - ' . $srcDatetime);
         }
         $value = Utils::init('value', null);
         if ($value === '') {
@@ -284,15 +364,24 @@ class CmdAjax extends BaseAjax
         AjaxHelper::success();
     }
 
+    /**
+     * Get command history
+     *
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function getHistory()
     {
         global $NEXTDOM_INTERNAL_CONFIG;
-        $return = array();
-        $data = array();
+        $result = [];
+        $data = [];
+        $userDateStart = Utils::init('dateStart');
+        $userDateEnd = Utils::init('dateEnd');
         $dateStart = null;
         $dateEnd = null;
-        if (Utils::init('dateRange') != '' && Utils::init('dateRange') != 'all') {
-            if (is_json(Utils::init('dateRange'))) {
+        $dateRange = Utils::init('dateRange');
+        if ($dateRange != '' && $dateRange != 'all') {
+            if (is_json($dateRange)) {
                 $dateRange = json_decode(Utils::init('dateRange'), true);
                 if (isset($dateRange['start'])) {
                     $dateStart = $dateRange['start'];
@@ -302,14 +391,14 @@ class CmdAjax extends BaseAjax
                 }
             } else {
                 $dateEnd = date('Y-m-d H:i:s');
-                $dateStart = date('Y-m-d 00:00:00', strtotime('- ' . Utils::init('dateRange') . ' ' . $dateEnd));
+                $dateStart = date('Y-m-d 00:00:00', strtotime('- ' . $dateRange . ' ' . $dateEnd));
             }
         }
-        if (Utils::init('dateStart') != '') {
-            $dateStart = Utils::init('dateStart');
+        if ($userDateStart != '') {
+            $dateStart = $userDateStart;
         }
-        if (Utils::init('dateEnd') != '') {
-            $dateEnd = Utils::init('dateEnd');
+        if ($userDateEnd != '') {
+            $dateEnd = $userDateEnd;
             if ($dateEnd == date('Y-m-d')) {
                 $dateEnd = date('Y-m-d H:i:s');
             }
@@ -317,46 +406,47 @@ class CmdAjax extends BaseAjax
         if (strtotime($dateEnd) > strtotime('now')) {
             $dateEnd = date('Y-m-d H:i:s');
         }
-        $return['maxValue'] = '';
-        $return['minValue'] = '';
+        $result['maxValue'] = '';
+        $result['minValue'] = '';
         if ($dateStart === null) {
-            $return['dateStart'] = '';
+            $result['dateStart'] = '';
         } else {
-            $return['dateStart'] = $dateStart;
+            $result['dateStart'] = $dateStart;
         }
         if ($dateEnd === null) {
-            $return['dateEnd'] = '';
+            $result['dateEnd'] = '';
         } else {
-            $return['dateEnd'] = $dateEnd;
+            $result['dateEnd'] = $dateEnd;
         }
 
-        if (is_numeric(Utils::init('id'))) {
-            $cmd = CmdManager::byId(Utils::init('id'));
+        $cmdId = Utils::init('id');
+        if (is_numeric($cmdId)) {
+            $cmd = CmdManager::byId($cmdId);
             if (!is_object($cmd)) {
-                throw new CoreException(__('Commande ID inconnu : ') . Utils::init('id'));
+                throw new CoreException(__('Commande ID inconnu : ') . $cmdId);
             }
             $eqLogic = $cmd->getEqLogicId();
             if (!$eqLogic->hasRight('r')) {
                 throw new CoreException(__('Vous n\'êtes pas autorisé à faire cette action'));
             }
             $histories = $cmd->getHistory($dateStart, $dateEnd);
-            $return['cmd_name'] = $cmd->getName();
-            $return['history_name'] = $cmd->getHumanName();
-            $return['unite'] = $cmd->getUnite();
-            $return['cmd'] = Utils::o2a($cmd);
-            $return['eqLogic'] = Utils::o2a($cmd->getEqLogicId());
-            $return['timelineOnly'] = $NEXTDOM_INTERNAL_CONFIG['cmd']['type']['info']['subtype'][$cmd->getSubType()]['isHistorized']['timelineOnly'];
+            $result['cmd_name'] = $cmd->getName();
+            $result['history_name'] = $cmd->getHumanName();
+            $result['unite'] = $cmd->getUnite();
+            $result['cmd'] = Utils::o2a($cmd);
+            $result['eqLogic'] = Utils::o2a($cmd->getEqLogicId());
+            $result['timelineOnly'] = $NEXTDOM_INTERNAL_CONFIG['cmd']['type']['info']['subtype'][$cmd->getSubType()]['isHistorized']['timelineOnly'];
             $previsousValue = null;
             $derive = Utils::init('derive', $cmd->getDisplay('graphDerive'));
             if (trim($derive) == '') {
                 $derive = $cmd->getDisplay('graphDerive');
             }
             foreach ($histories as $history) {
-                $info_history = array();
+                $infoHistory = [];
                 if ($cmd->getDisplay('groupingType') != '') {
-                    $info_history[] = floatval(strtotime($history->getDatetime() . " UTC")) * 1000 - 1;
+                    $infoHistory[] = floatval(strtotime($history->getDatetime() . " UTC")) * 1000 - 1;
                 } else {
-                    $info_history[] = floatval(strtotime($history->getDatetime() . " UTC")) * 1000;
+                    $infoHistory[] = floatval(strtotime($history->getDatetime() . " UTC")) * 1000;
                 }
                 if ($NEXTDOM_INTERNAL_CONFIG['cmd']['type']['info']['subtype'][$cmd->getSubType()]['isHistorized']['timelineOnly']) {
                     $value = $history->getValue();
@@ -371,76 +461,90 @@ class CmdAjax extends BaseAjax
                         $previsousValue = ($history->getValue() === null) ? null : floatval($history->getValue());
                     }
                 }
-                $info_history[] = $value;
+                $infoHistory[] = $value;
                 if (!$NEXTDOM_INTERNAL_CONFIG['cmd']['type']['info']['subtype'][$cmd->getSubType()]['isHistorized']['timelineOnly']) {
-                    if (($value !== null && $value > $return['maxValue']) || $return['maxValue'] == '') {
-                        $return['maxValue'] = round($value, 1);
+                    if (($value !== null && $value > $result['maxValue']) || $result['maxValue'] == '') {
+                        $result['maxValue'] = round($value, 1);
                     }
-                    if (($value !== null && $value < $return['minValue']) || $return['minValue'] == '') {
-                        $return['minValue'] = round($value, 1);
+                    if (($value !== null && $value < $result['minValue']) || $result['minValue'] == '') {
+                        $result['minValue'] = round($value, 1);
                     }
                 }
-                $data[] = $info_history;
+                $data[] = $infoHistory;
             }
         } else {
-            $histories = HistoryManager::getHistoryFromCalcul(NextDomHelper::fromHumanReadable(Utils::init('id')), $dateStart, $dateEnd, Utils::init('allowZero', false));
+            $histories = HistoryManager::getHistoryFromCalcul(NextDomHelper::fromHumanReadable($cmdId), $dateStart, $dateEnd, Utils::init('allowZero', false));
             if (is_array($histories)) {
                 foreach ($histories as $datetime => $value) {
-                    $info_history = array();
-                    $info_history[] = floatval($datetime) * 1000;
-                    $info_history[] = ($value === null) ? null : floatval($value);
-                    if ($value > $return['maxValue'] || $return['maxValue'] == '') {
-                        $return['maxValue'] = round($value, 1);
+                    $infoHistory = [];
+                    $infoHistory[] = floatval($datetime) * 1000;
+                    $infoHistory[] = ($value === null) ? null : floatval($value);
+                    if ($value > $result['maxValue'] || $result['maxValue'] == '') {
+                        $result['maxValue'] = round($value, 1);
                     }
-                    if ($value < $return['minValue'] || $return['minValue'] == '') {
-                        $return['minValue'] = round($value, 1);
+                    if ($value < $result['minValue'] || $result['minValue'] == '') {
+                        $result['minValue'] = round($value, 1);
                     }
-                    $data[] = $info_history;
+                    $data[] = $infoHistory;
                 }
             }
-            $return['cmd_name'] = Utils::init('id');
-            $return['history_name'] = Utils::init('id');
-            $return['unite'] = Utils::init('unite');
+            $result['cmd_name'] = $cmdId;
+            $result['history_name'] = $cmdId;
+            $result['unite'] = Utils::init('unite');
         }
-        $return['data'] = $data;
-        AjaxHelper::success($return);
+        $result['data'] = $data;
+        AjaxHelper::success($result);
     }
 
+    /**
+     * Clear history
+     *
+     * @throws CoreException
+     */
     public function emptyHistory()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $cmd = CmdManager::byId(Utils::init('id'));
+        $cmdId = Utils::init('id');
+        $cmd = CmdManager::byId($cmdId);
         if (!is_object($cmd)) {
-            throw new CoreException(__('Commande ID inconnu : ') . Utils::init('id'));
+            throw new CoreException(__('Commande ID inconnu : ') . $cmdId);
         }
         $cmd->emptyHistory(Utils::init('date'));
         AjaxHelper::success();
     }
 
+    /**
+     * Set command order
+     *
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function setOrder()
     {
         $cmds = json_decode(Utils::init('cmds'), true);
-        $eqLogics = array();
-        foreach ($cmds as $cmd_json) {
-            if (!isset($cmd_json['id']) || trim($cmd_json['id']) == '') {
+        $eqLogics = [];
+        foreach ($cmds as $cmdJsonData) {
+            if (!isset($cmdJsonData['id']) || trim($cmdJsonData['id']) == '') {
                 continue;
             }
-            $cmd = CmdManager::byId($cmd_json['id']);
+            $cmd = CmdManager::byId($cmdJsonData['id']);
             if (!is_object($cmd)) {
                 continue;
             }
-            if ($cmd->getOrder() != $cmd_json['order']) {
-                $cmd->setOrder($cmd_json['order']);
+            if ($cmd->getOrder() != $cmdJsonData['order']) {
+                $cmd->setOrder($cmdJsonData['order']);
                 $cmd->save();
             }
-            if (isset($cmd_json['line']) && isset($cmd_json['column'])) {
-                $eqLogic = $cmd->getEqLogicId();
+            if (isset($cmdJsonData['line']) && isset($cmdJsonData['column'])) {
+                $renderVersion = Utils::init('version', CmdViewType::DASHBOARD);
                 if (!isset($eqLogics[$cmd->getEqLogic_id()])) {
-                    $eqLogics[$cmd->getEqLogic_id()] = array('eqLogic' => $cmd->getEqLogic(), 'changed' => false);
+                    $eqLogics[$cmd->getEqLogic_id()] = ['eqLogic' => $cmd->getEqLogic(), 'changed' => false];
                 }
-                if ($eqLogics[$cmd->getEqLogic_id()]['eqLogic']->getDisplay('layout::' . Utils::init('version', 'dashboard') . '::table::CmdManager::' . $cmd->getId() . '::line') != $cmd_json['line'] || $eqLogics[$cmd->getEqLogic_id()]['eqLogic']->getDisplay('layout::' . Utils::init('version', 'dashboard') . '::table::CmdManager::' . $cmd->getId() . '::column') != $cmd_json['column']) {
-                    $eqLogics[$cmd->getEqLogic_id()]['eqLogic']->setDisplay('layout::' . Utils::init('version', 'dashboard') . '::table::CmdManager::' . $cmd->getId() . '::line', $cmd_json['line']);
-                    $eqLogics[$cmd->getEqLogic_id()]['eqLogic']->setDisplay('layout::' . Utils::init('version', 'dashboard') . '::table::CmdManager::' . $cmd->getId() . '::column', $cmd_json['column']);
+                $layoutDisplay = 'layout::' . $renderVersion . '::table::cmd::' . $cmd->getId();
+                if ($eqLogics[$cmd->getEqLogic_id()]['eqLogic']->getDisplay($layoutDisplay . '::line') != $cmdJsonData['line']
+                    || $eqLogics[$cmd->getEqLogic_id()]['eqLogic']->getDisplay($layoutDisplay . '::column') != $cmdJsonData['column']) {
+                    $eqLogics[$cmd->getEqLogic_id()]['eqLogic']->setDisplay($layoutDisplay . '::line', $cmdJsonData['line']);
+                    $eqLogics[$cmd->getEqLogic_id()]['eqLogic']->setDisplay($layoutDisplay . '::column', $cmdJsonData['column']);
                     $eqLogics[$cmd->getEqLogic_id()]['changed'] = true;
                 }
             }
@@ -454,6 +558,35 @@ class CmdAjax extends BaseAjax
             }
             $eqLogic['eqLogic']->save(true);
         }
+        AjaxHelper::success();
+    }
+
+    /**
+     * Upload file from dashboard
+     *
+     * When file is uploaded, the method execute of the cmd is called with the filename in option.
+     * 
+     * @throws CoreException
+     */
+    public function fileUpload()
+    {
+        AuthentificationHelper::isConnectedOrFail();
+
+        $destDirectory = NEXTDOM_TMP . '/uploads';
+        FileSystemHelper::mkdirIfNotExists($destDirectory);
+
+        $filename = Utils::readUploadedFile($_FILES, "upload", $destDirectory, 8, []);
+        if (!$filename) {
+            AjaxHelper::error(__('File error'));
+        }
+
+        $cmdId = Utils::init('cmdId');
+        $cmd = CmdManager::byId($cmdId);
+        if (!is_object($cmd)) {
+            AjaxHelper::error(__('Command not found : ') . $cmdId);
+        }
+
+        $cmd->execute(['filename' => $destDirectory . '/' . $filename ]);
         AjaxHelper::success();
     }
 }

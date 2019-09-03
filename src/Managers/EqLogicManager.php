@@ -33,6 +33,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Model\Entity\EqLogic;
@@ -75,24 +76,31 @@ class EqLogicManager
      */
     public static function cast($eqLogicInput)
     {
-        // If array of EqLogics, recursive call on each objects
-        if (is_array($eqLogicInput)) {
-            $result = [];
-            foreach ($eqLogicInput as $eqLogic) {
-                $result[] = self::cast($eqLogic);
+        try {
+            // If array of EqLogics, recursive call on each objects
+            if (is_array($eqLogicInput)) {
+                $result = [];
+                foreach ($eqLogicInput as $eqLogic) {
+                    $result[] = self::cast($eqLogic);
+                }
+                return $result;
             }
-            return $result;
-        }
-        if (is_object($eqLogicInput)) {
-            // Get class name to cast and check if class already exists
-            $targetClassName = $eqLogicInput->getEqType_name();
-            if (class_exists($targetClassName)) {
-                /** @var EqLogic $target */
-                $target = new $targetClassName();
-                $target->castFromEqLogic($eqLogicInput);
-                return $target;
+            if (is_object($eqLogicInput)) {
+                // Get class name to cast and check if class already exists
+                $targetClassName = $eqLogicInput->getEqType_name();
+                if (class_exists($targetClassName)) {
+                    /** @var EqLogic $target */
+                    $target = new $targetClassName();
+                    $target->castFromEqLogic($eqLogicInput);
+                    return $target;
+                }
             }
         }
+        catch (CoreException $e) {
+            MessageManager::add('core', $e->getMessage());
+            return null;
+        }
+
         return $eqLogicInput;
     }
 

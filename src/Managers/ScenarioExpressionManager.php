@@ -1567,11 +1567,11 @@ class ScenarioExpressionManager
             case 'eqLogic':
                 return $cmd->getEqLogicId()->getName();
             case 'object':
-                $object = $cmd->getEqLogicId()->getObject();
-                if (!is_object($object)) {
+                $linkedObject = $cmd->getEqLogicId()->getObject();
+                if (!is_object($linkedObject)) {
                     return __('Aucun');
                 }
-                return $object->getName();
+                return $linkedObject->getName();
         }
         return __('Type inconnu');
     }

@@ -41,7 +41,15 @@ class EqLogicRest
     }
 
     /**
-     * Prepare result for response
+     * Prepare result for response\n
+     * Associative array with following keys : 
+     *  - id
+     *  - name
+     *  - type (plugin id)
+     *  - objectId
+     *  - enable
+     *  - visible
+     *  - configuration
      *
      * @param EqLogic[] $eqLogics Array of eqLogics to convert
      *
@@ -53,7 +61,6 @@ class EqLogicRest
         foreach ($eqLogics as $eqLogic) {
             $eqLogicRow = [];
             $eqLogicRow['id'] = $eqLogic->getId();
-            $eqLogicRow['type'] = $eqLogic->getEqType_name();
             $eqLogicRow['name'] = $eqLogic->getName();
             $eqLogicRow['type'] = $eqLogic->getEqType_name();
             $eqLogicRow['objectId'] = $eqLogic->getObject_id();

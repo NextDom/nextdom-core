@@ -43,21 +43,21 @@ class ObjectAjax extends BaseAjax
     public function remove()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $object = ObjectManager::byId(Utils::init('id'));
-        if (!is_object($object)) {
+        $resultObject = ObjectManager::byId(Utils::init('id'));
+        if (!is_object($resultObject)) {
             throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));
         }
-        $object->remove();
+        $resultObject->remove();
         AjaxHelper::success();
     }
 
     public function byId()
     {
-        $object = ObjectManager::byId(Utils::init('id'));
-        if (!is_object($object)) {
+        $resultObject = ObjectManager::byId(Utils::init('id'));
+        if (!is_object($resultObject)) {
             throw new CoreException(__('Objet inconnu. Vérifiez l\'ID ') . Utils::init('id'));
         }
-        AjaxHelper::success(NextDomHelper::toHumanReadable(Utils::o2a($object)));
+        AjaxHelper::success(NextDomHelper::toHumanReadable(Utils::o2a($resultObject)));
     }
 
     public function createSummaryVirtual()
@@ -68,74 +68,84 @@ class ObjectAjax extends BaseAjax
 
     public function all()
     {
-        $objects = ObjectManager::buildTree();
+        $resultObjects = ObjectManager::buildTree();
         if (Utils::init('onlyHasEqLogic') != '') {
-            $return = array();
-            foreach ($objects as $object) {
-                if (count($object->getEqLogic(true, false, Utils::init('onlyHasEqLogic'), null, Utils::init('searchOnchild', true))) == 0) {
+            $result = [];
+            foreach ($resultObjects as $resultObject) {
+                if (count($resultObject->getEqLogic(true, false, Utils::init('onlyHasEqLogic'), null, Utils::init('searchOnchild', true))) == 0) {
                     continue;
                 }
-                $return[] = $object;
+                $result[] = $resultObject;
             }
-            $objects = $return;
+            $resultObjects = $result;
         }
-        AjaxHelper::success(Utils::o2a($objects));
+        AjaxHelper::success(Utils::o2a($resultObjects));
     }
 
     public function save()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $object_json = json_decode(Utils::init('object'), true);
-        if (isset($object_json['id'])) {
-            $object = ObjectManager::byId($object_json['id']);
+        $jsonObject = json_decode(Utils::init('object'), true);
+        if (isset($jsonObject['id'])) {
+            $resultObject = ObjectManager::byId($jsonObject['id']);
         }
-        if (!isset($object) || !is_object($object)) {
-            $object = new JeeObject();
+        if (!isset($resultObject) || !is_object($resultObject)) {
+            $resultObject = new JeeObject();
         }
-        Utils::a2o($object, NextDomHelper::fromHumanReadable($object_json));
-        if ($object->getName() !== '') {
-            $object->save();
-            AjaxHelper::success(Utils::o2a($object));
+        Utils::a2o($resultObject, NextDomHelper::fromHumanReadable($jsonObject));
+        if ($resultObject->getName() !== '') {
+            $resultObject->save();
+            AjaxHelper::success(Utils::o2a($resultObject));
         }
         AjaxHelper::error('Le nom de l\'objet ne peut être vide');
     }
 
     public function getChild()
     {
-        $object = ObjectManager::byId(Utils::init('id'));
-        if (!is_object($object)) {
+        $resultObject = ObjectManager::byId(Utils::init('id'));
+        if (!is_object($resultObject)) {
             throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));
         }
-        $return = Utils::o2a($object->getChild());
-        AjaxHelper::success($return);
+        $result = Utils::o2a($resultObject->getChild());
+        AjaxHelper::success($result);
     }
 
+    /**
+     * Get HTML representation of the object
+     *
+     * @throws CoreException
+     * @throws \NextDom\Exceptions\OperatingSystemException
+     * @throws \ReflectionException
+     */
     public function toHtml()
     {
         if (Utils::init('id') == '' || Utils::init('id') == 'all' || is_json(Utils::init('id'))) {
             if (is_json(Utils::init('id'))) {
-                $objects = json_decode(Utils::init('id'), true);
+                $objectsList = json_decode(Utils::init('id'), true);
             } else {
-                $objects = array();
-                foreach (ObjectManager::all() as $object) {
-                    if ($object->getConfiguration('hideOnDashboard', 0) == 1) {
+                $objectsList = [];
+                foreach (ObjectManager::all() as $resultObject) {
+                    if ($resultObject->getConfiguration('hideOnDashboard', 0) == 1) {
                         continue;
                     }
-                    $objects[] = $object->getId();
+                    $objectsList[] = $resultObject->getId();
                 }
             }
-            $return = array();
+            $result = [];
             $i = 0;
-            foreach ($objects as $id) {
-                $html = array();
+            foreach ($objectsList as $id) {
+                $html = [];
                 if (Utils::init('summary') == '') {
                     $eqLogics = EqLogicManager::byObjectId($id, true, true);
                 } else {
-                    $object = ObjectManager::byId($id);
-                    $eqLogics = $object->getEqLogicBySummary(Utils::init('summary'), true, false);
+                    $resultObject = ObjectManager::byId($id);
+                    $eqLogics = $resultObject->getEqLogicBySummary(Utils::init('summary'), true, false);
                 }
                 if (count($eqLogics) > 0) {
                     foreach ($eqLogics as $eqLogic) {
+                        if ($eqLogic === null) {
+                            continue;
+                        }
                         if (Utils::init('category', 'all') != 'all' && $eqLogic->getCategory(Utils::init('category')) != 1) {
                             continue;
                         }
@@ -165,20 +175,23 @@ class ObjectAjax extends BaseAjax
                     }
                 }
                 ksort($html);
-                $return[$i . '::' . $id] = implode($html);
+                $result[$i . '::' . $id] = implode($html);
                 $i++;
             }
-            AjaxHelper::success($return);
+            AjaxHelper::success($result);
         } else {
-            $html = array();
+            $html = [];
             if (Utils::init('summary') == '') {
                 $eqLogics = EqLogicManager::byObjectId(Utils::init('id'), true, true);
             } else {
-                $object = ObjectManager::byId(Utils::init('id'));
-                $eqLogics = $object->getEqLogicBySummary(Utils::init('summary'), true, false);
+                $resultObject = ObjectManager::byId(Utils::init('id'));
+                $eqLogics = $resultObject->getEqLogicBySummary(Utils::init('summary'), true, false);
             }
             if (count($eqLogics) > 0) {
                 foreach ($eqLogics as $eqLogic) {
+                    if ($eqLogic === null) {
+                        continue;
+                    }
                     if (Utils::init('category', 'all') != 'all' && $eqLogic->getCategory(Utils::init('category')) != 1) {
                         continue;
                     }
@@ -217,10 +230,10 @@ class ObjectAjax extends BaseAjax
         AuthentificationHelper::isConnectedAsAdminOrFail();
         $position = 1;
         foreach (json_decode(Utils::init('objects'), true) as $id) {
-            $object = ObjectManager::byId($id);
-            if (is_object($object)) {
-                $object->setPosition($position);
-                $object->save();
+            $resultObject = ObjectManager::byId($id);
+            if (is_object($resultObject)) {
+                $resultObject->setPosition($position);
+                $resultObject->save();
                 $position++;
             }
         }
@@ -230,47 +243,47 @@ class ObjectAjax extends BaseAjax
     public function getSummaryHtml()
     {
         if (Utils::init('ids') != '') {
-            $return = array();
+            $result = [];
             foreach (json_decode(Utils::init('ids'), true) as $id => $value) {
                 if ($id == 'global') {
-                    $return['global'] = array(
+                    $result['global'] = [
                         'html' => ObjectManager::getGlobalHtmlSummary($value['version']),
                         'id' => 'global',
-                    );
+                    ];
                     continue;
                 }
-                $object = ObjectManager::byId($id);
-                if (!is_object($object)) {
+                $resultObject = ObjectManager::byId($id);
+                if (!is_object($resultObject)) {
                     continue;
                 }
-                $return[$object->getId()] = array(
-                    'html' => $object->getHtmlSummary($value['version']),
-                    'id' => $object->getId(),
-                );
+                $result[$resultObject->getId()] = [
+                    'html' => $resultObject->getHtmlSummary($value['version']),
+                    'id' => $resultObject->getId(),
+                ];
             }
-            AjaxHelper::success($return);
+            AjaxHelper::success($result);
         } else {
-            $object = ObjectManager::byId(Utils::init('id'));
-            if (!is_object($object)) {
+            $resultObject = ObjectManager::byId(Utils::init('id'));
+            if (!is_object($resultObject)) {
                 throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));
             }
-            $info_object = array();
-            $info_object['id'] = $object->getId();
-            $info_object['html'] = $object->getHtmlSummary(Utils::init('version'));
-            AjaxHelper::success($info_object);
+            $infoObject = [];
+            $infoObject['id'] = $resultObject->getId();
+            $infoObject['html'] = $resultObject->getHtmlSummary(Utils::init('version'));
+            AjaxHelper::success($infoObject);
         }
     }
 
     public function removeImage()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $object = ObjectManager::byId(Utils::init('id'));
-        if (!is_object($object)) {
+        $resultObject = ObjectManager::byId(Utils::init('id'));
+        if (!is_object($resultObject)) {
             throw new CoreException(__('Vue inconnu. Vérifiez l\'ID ') . Utils::init('id'));
         }
-        $object->setImage('data', '');
-        $object->setImage('sha512', '');
-        $object->save();
+        $resultObject->setImage('data', '');
+        $resultObject->setImage('sha512', '');
+        $resultObject->save();
         @rrmdir(NEXTDOM_ROOT . '/core/img/object');
         AjaxHelper::success();
     }
@@ -278,30 +291,30 @@ class ObjectAjax extends BaseAjax
     public function uploadImage()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $object = ObjectManager::byId(Utils::init('id'));
-        if (!is_object($object)) {
+        $resultObject = ObjectManager::byId(Utils::init('id'));
+        if (!is_object($resultObject)) {
             throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));
         }
         if (!isset($_FILES['file'])) {
             throw new CoreException(__('Aucun fichier trouvé. Vérifiez le paramètre PHP (post size limit)'));
         }
         $extension = strtolower(strrchr($_FILES['file']['name'], '.'));
-        if (!in_array($extension, array('.jpg', '.jpeg', '.png'))) {
+        if (!in_array($extension, ['.jpg', '.jpeg', '.png'])) {
             throw new CoreException('Extension du fichier non valide (autorisé .jpg .jpeg .png) : ' . $extension);
         }
         if (filesize($_FILES['file']['tmp_name']) > 5000000) {
             throw new CoreException(__('Le fichier est trop gros (maximum 5Mo)'));
         }
-        $files = FileSystemHelper::ls(NEXTDOM_DATA . '/data/object/', 'object' . $object->getId() . '*');
+        $files = FileSystemHelper::ls(NEXTDOM_DATA . '/data/object/', 'object' . $resultObject->getId() . '*');
         if (count($files) > 0) {
             foreach ($files as $file) {
                 unlink(NEXTDOM_DATA . '/data/object/' . $file);
             }
         }
-        $object->setImage('type', str_replace('.', '', $extension));
-        $object->setImage('data', base64_encode(file_get_contents($_FILES['file']['tmp_name'])));
-        $object->setImage('sha512', sha512($object->getImage('data')));
-        $filename = 'object' . $object->getId() . '-' . $object->getImage('sha512') . '.' . $object->getImage('type');
+        $resultObject->setImage('type', str_replace('.', '', $extension));
+        $resultObject->setImage('data', base64_encode(file_get_contents($_FILES['file']['tmp_name'])));
+        $resultObject->setImage('sha512', sha512($resultObject->getImage('data')));
+        $filename = 'object' . $resultObject->getId() . '-' . $resultObject->getImage('sha512') . '.' . $resultObject->getImage('type');
         $dir = NEXTDOM_DATA . '/data/custom/object/';
         if (!file_exists($dir)) {
             mkdir($dir);
@@ -311,7 +324,7 @@ class ObjectAjax extends BaseAjax
         if (!file_exists($filepath)) {
             throw new CoreException(__('Impossible de sauvegarder l\'image'));
         }
-        $object->save();
+        $resultObject->save();
         AjaxHelper::success();
     }
 

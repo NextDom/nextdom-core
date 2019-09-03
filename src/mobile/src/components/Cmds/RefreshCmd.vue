@@ -18,9 +18,6 @@ along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 @Email   <admin@nextdom.org>
 @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 -->
-<template>
-  <div class="refresh-cmd"></div>
-</template>
 
 <script>
 /**
@@ -32,6 +29,9 @@ export default {
   props: {
     // Command object
     cmd: null
+  },
+  render: function() {
+    return null;
   },
   mounted() {
     this.$emit("setRefreshCommand", this.cmd.id);

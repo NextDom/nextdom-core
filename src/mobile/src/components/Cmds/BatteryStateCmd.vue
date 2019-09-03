@@ -18,10 +18,6 @@ along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 @Email   <admin@nextdom.org>
 @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 -->
-<template>
-  <div class="battery-state-cmd cmd icon"></div>
-</template>
-
 <script>
 /**
  * Add battery level on widget
@@ -38,6 +34,9 @@ export default {
       // Showed icon
       icon: "nextdom-porte-ferme"
     };
+  },
+  render: function() {
+    return null;
   },
   mounted() {
     this.update();

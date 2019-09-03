@@ -386,6 +386,7 @@ class NextDomHelper
         }
         if (!file_exists($result)) {
             mkdir($result, 0775, true);
+            system('ln -s ' . ConfigManager::byKey('folder::tmp') . ' /tmp/jeedom');
         }
         return $result;
     }

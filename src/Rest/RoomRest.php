@@ -58,9 +58,22 @@ class RoomRest
     }
 
     /**
+     * Prepare result for response\n
+     * Associative array with following keys : 
+     *  - id
+     *  - name
+     *  - icon
+     *  - father (if exists)
+     *    - id
+     *    - name
+     *    - icon
+     *  - children (if exists)
+     * 
      * @param JeeObject $room
      * @param JeeObject|null $father
+     * 
      * @return array
+     * 
      * @throws \Exception
      */
     private static function prepareResult(JeeObject $room, JeeObject $father = null, $addChildren = true)

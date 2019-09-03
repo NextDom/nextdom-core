@@ -19,30 +19,34 @@
  */
 import DefaultCmd from "@/components/Cmds/DefaultCmd.vue";
 import DefaultInfoCmd from "@/components/Cmds/DefaultInfoCmd.vue";
+import DefaultIconInfoCmd from "@/components/Cmds/DefaultIconInfoCmd.vue";
 import DefaultStringCmd from "@/components/Cmds/DefaultStringCmd.vue";
 import DefaultActionCmd from "@/components/Cmds/DefaultActionCmd.vue";
 import DontCmd from "@/components/Cmds/DontCmd.vue";
 import ActionLinkedCmd from "@/components/Cmds/ActionLinkedCmd.vue";
 import BatteryStateCmd from "@/components/Cmds/BatteryStateCmd.vue";
-import IconStateCmd from "@/components/Cmds/IconStateCmd.vue";
-import PlugStateCmd from "@/components/Cmds/PlugStateCmd.vue";
-import DoorStateCmd from "@/components/Cmds/DoorStateCmd.vue";
-import LightStateCmd from "@/components/Cmds/LightStateCmd.vue";
-import SliderCmd from "@/components/Cmds/SliderCmd.vue";
 import ColorPickerCmd from "@/components/Cmds/ColorPickerCmd.vue";
+import ConsumptionInfoCmd from "@/components/Cmds/ConsumptionInfoCmd.vue";
+import DoorStateCmd from "@/components/Cmds/DoorStateCmd.vue";
+import IconStateCmd from "@/components/Cmds/IconStateCmd.vue";
+import HumidityInfoCmd from "@/components/Cmds/HumidityInfoCmd.vue";
+import LightStateCmd from "@/components/Cmds/LightStateCmd.vue";
 import LineStateCmd from "@/components/Cmds/LineStateCmd.vue";
 import LockStateCmd from "@/components/Cmds/LockStateCmd.vue";
-import PresenceStateCmd from "@/components/Cmds/PresenceStateCmd.vue";
-import ConsumptionInfoCmd from "@/components/Cmds/ConsumptionInfoCmd.vue";
+import PlugStateCmd from "@/components/Cmds/PlugStateCmd.vue";
 import PowerInfoCmd from "@/components/Cmds/PowerInfoCmd.vue";
+import PresenceStateCmd from "@/components/Cmds/PresenceStateCmd.vue";
 import RefreshCmd from "@/components/Cmds/RefreshCmd.vue";
 import SabotageInfoCmd from "@/components/Cmds/SabotageInfoCmd.vue";
+import SliderCmd from "@/components/Cmds/SliderCmd.vue";
+import TemperatureInfoCmd from "@/components/Cmds/TemperatureInfoCmd.vue";
 import TextStateCmd from "@/components/Cmds/TextStateCmd.vue";
 import WindowStateCmd from "@/components/Cmds/WindowStateCmd.vue";
 
 export default {
   components: {
     DefaultCmd,
+    DefaultIconInfoCmd,
     DefaultInfoCmd,
     DefaultStringCmd,
     DefaultActionCmd,
@@ -50,18 +54,20 @@ export default {
     ActionLinkedCmd,
     BatteryStateCmd,
     ColorPickerCmd,
-    IconStateCmd,
-    PlugStateCmd,
+    ConsumptionInfoCmd,
     DoorStateCmd,
+    IconStateCmd,
+    HumidityInfoCmd,
     LightStateCmd,
     LineStateCmd,
     LockStateCmd,
+    PlugStateCmd,
+    PowerInfoCmd,
     PresenceStateCmd,
     SliderCmd,
-    ConsumptionInfoCmd,
-    PowerInfoCmd,
     RefreshCmd,
     SabotageInfoCmd,
+    TemperatureInfoCmd,
     TextStateCmd,
     WindowStateCmd
   },
@@ -186,7 +192,7 @@ export default {
     },
     CONSUMPTION: {
       component: "ConsumptionInfoCmd",
-      icon: false,
+      icon: true,
       button: false
     },
     ENERGY_STATE: {
@@ -210,8 +216,8 @@ export default {
       button: false
     },
     HUMIDITY: {
-      component: "DefaultInfoCmd",
-      icon: false,
+      component: "HumidityInfoCmd",
+      icon: true,
       button: false
     },
     LIGHT_STATE: {
@@ -246,7 +252,7 @@ export default {
     },
     POWER: {
       component: "PowerInfoCmd",
-      icon: false,
+      icon: true,
       button: false
     },
     PRESENCE: {
@@ -260,8 +266,13 @@ export default {
       button: false
     },
     TEMPERATURE: {
-      component: "DefaultInfoCmd",
-      icon: false,
+      component: "TemperatureInfoCmd",
+      icon: true,
+      button: false
+    },
+    THERMOSTAT_TEMPERATURE: {
+      component: "TemperatureInfoCmd",
+      icon: true,
       button: false
     },
     OPENING_WINDOW: {

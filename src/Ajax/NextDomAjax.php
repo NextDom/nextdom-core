@@ -73,7 +73,7 @@ class NextDomAjax extends BaseAjax
             $view = ViewManager::byId($currentUser->getOptions('defaultDesktopView'));
         }
         if ($currentUser->getOptions('defaultDashboardObject') != '') {
-            $object = ObjectManager::byId($currentUser->getOptions('defaultDashboardObject'));
+            $resultObject = ObjectManager::byId($currentUser->getOptions('defaultDashboardObject'));
         }
 
         $return['plugins'] = array();
@@ -307,14 +307,14 @@ class NextDomAjax extends BaseAjax
         AuthentificationHelper::isConnectedAsAdminOrFail();
         AjaxHelper::init(true);
         $return = array('node' => array(), 'link' => array());
-        $object = null;
+        $resultObject = null;
         $type = Utils::init('filter_type');
         if ($type !== '') {
-            $object = $type::byId(Utils::init('filter_id'));
-            if (!is_object($object)) {
+            $resultObject = $type::byId(Utils::init('filter_id'));
+            if (!is_object($resultObject)) {
                 throw new CoreException(__('Type :') . Utils::init('filter_type') . __(' avec id : ') . Utils::init('filter_id') . __(' inconnu'));
             }
-            AjaxHelper::success($object->getLinkData());
+            AjaxHelper::success($resultObject->getLinkData());
         } else {
             AjaxHelper::error(__('Aucun filtre'));
         }
