@@ -201,6 +201,8 @@ function loadActionOnMessage(){
 
 /**
  * Add an action on message
+ *
+ * @param _action action object with options
  */
 function addActionOnMessage(_action) {
     if (!isset(_action)) {

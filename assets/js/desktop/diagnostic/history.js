@@ -253,8 +253,11 @@ function initHistoryTrigger() {
 
 /**
  * Clear an history
+ *
+ * @param _cmd_id Id of cmd to empty chart data
+ * @param _date Date limit until now range to empty
  */
-function emptyHistory(_cmd_id,_date) {
+function emptyHistory(_cmd_id, _date) {
     $.ajax({
         type: "POST",
         url: "core/ajax/cmd.ajax.php",
@@ -283,8 +286,12 @@ function emptyHistory(_cmd_id,_date) {
 
 /**
  * Add a chart
+ *
+ * @param _cmd_id Id of cmd to display chart
+ * @param _action Action id : 0=remove
+ * @param _options Draw options
  */
-function addChart(_cmd_id, _action,_options) {
+function addChart(_cmd_id, _action, _options) {
     if (_action == 0) {
         if (isset(nextdom.history.chart['div_graph']) && isset(nextdom.history.chart['div_graph'].chart) && isset(nextdom.history.chart['div_graph'].chart.series)) {
             $(nextdom.history.chart['div_graph'].chart.series).each(function(i, serie){

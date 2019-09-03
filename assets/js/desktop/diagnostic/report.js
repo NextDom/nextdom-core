@@ -110,8 +110,11 @@ function initEvents() {
 
 /**
  * Find report list from type
+ *
+ * @param _type Report type to find
+ * @param _id Report id to find
  */
-function getReportList(_type,_id){
+function getReportList(_type, _id){
    nextdom.report.list({
        type: _type,
        id: _id,
@@ -131,8 +134,12 @@ function getReportList(_type,_id){
 
 /**
  * Get report data
+ *
+ * @param _type Report type to get data
+ * @param _id Report id to get data
+ * @param _report Report object to get data
  */
-function getReport(_type,_id,_report){
+function getReport(_type, _id, _report){
    nextdom.report.get({
        type: _type,
        id: _id,

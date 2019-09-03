@@ -218,6 +218,8 @@ function printListener() {
 
 /**
  * Add a Cron with default value
+ *
+ * @param _cron cron object
  */
 function addCron(_cron) {
     var disabled ='';

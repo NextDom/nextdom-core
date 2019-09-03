@@ -188,6 +188,9 @@ function saveCustom() {
 
 /**
  * Save a cutom personnalisation
+ *
+ * @param type advanced custom type (css or js)
+ * @param content custom code data
  */
 function sendCustomData(type, content) {
     nextdom.config.save({

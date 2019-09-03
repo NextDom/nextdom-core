@@ -149,6 +149,8 @@ function printObjectSummary() {
 
 /**
  * Add a summary
+ *
+ * @param _summary Summary object, null to creat one
  */
 function addObjectSummary(_summary) {
     var tr = '<tr class="objectSummary">';

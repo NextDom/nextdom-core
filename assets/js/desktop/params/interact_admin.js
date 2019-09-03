@@ -153,6 +153,9 @@ function printConvertColor() {
 
 /**
  * Add a color
+ *
+ * @param _color Color name
+ * @param _html Color value
  */
 function addConvertColor(_color, _html) {
     var tr = '<tr>';
