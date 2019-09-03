@@ -40,19 +40,21 @@ if (isset($_GET['force_desktop'])) {
     $_SESSION['desktop_view'] = true;
     $goToMobile = false;
 } else {
-    // Test choice in session
-    if (isset($_SESSION['desktop_view'])) {
-        if ($_SESSION['desktop_view'] === false) {
-            $goToMobile = true;
-        }
-    } else {
-        if (Client::isMobile()) {
-            $goToMobile = true;
-            $_SESSION['desktop_view'] = false;
+    if (is_dir(NEXTDOM_ROOT . '/mobile')) {
+        // Test choice in session
+        if (isset($_SESSION['desktop_view'])) {
+            if ($_SESSION['desktop_view'] === false) {
+                $goToMobile = true;
+            }
         } else {
-            $_SESSION['desktop_view'] = true;
-        }
+            if (Client::isMobile()) {
+                $goToMobile = true;
+                $_SESSION['desktop_view'] = false;
+            } else {
+                $_SESSION['desktop_view'] = true;
+            }
 
+        }
     }
 }
 
@@ -62,21 +64,6 @@ if ($goToMobile) {
 }
 
 $viewType = Utils::init(GetParams::VIEW_TYPE, ViewType::DESKTOP_VIEW);
-/*
-if ($viewType === '') {
-    $getParams = ViewType::DESKTOP_VIEW;
-    if (Client::isMobile()) {
-        $getParams = ViewType::MOBILE_VIEW;
-    }
-    // Add all others GET parameters
-    foreach ($_GET AS $var => $value) {
-        $getParams .= '&' . $var . '=' . $value;
-    }
-    // Rewrite URL and reload with the good URL
-    $url = 'index.php?' . GetParams::VIEW_TYPE . '=' . trim($getParams, '&');
-    Utils::redirect($url);
-}
-*/
 
 // Show the content
 // Start routing
