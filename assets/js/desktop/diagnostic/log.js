@@ -43,9 +43,12 @@ initEvents();
  */
 function loadInformations() {
     $(document).ready(function(){
-        $('pre').height($(window).height() - 275);
-        $('#ul_object').height($(window).height() - 275);
+        $('pre').height($(window).height() - 339);
+        $('#ul_object').height($(window).height() - 339);
         $('#ul_object').css("overflow-y", "auto");
+        $('#ul_object').css("padding-right", "5px");
+        $('.li_log').first().addClass('active');
+        getLogDisplay($('.li_log').first().attr('data-id'));
     });
 }
 
@@ -70,12 +73,7 @@ function initEvents() {
         $('#bt_globalLogStopStart').removeClass('btn-success').addClass('btn-warning');
         $('#bt_globalLogStopStart').html('<div><i class="fas fa-pause spacing-right"></i>{{Pause}}</div>');
         $('#bt_globalLogStopStart').attr('data-state',1);
-        nextdom.log.autoupdate({
-            log : $(this).attr('data-log'),
-            display : $('#pre_globallog'),
-            search : $('#in_globalLogSearch'),
-            control : $('#bt_globalLogStopStart'),
-        });
+        getLogDisplay($(this).attr('data-log'));
         $('#bt_downloadLog').removeAttr('disabled');
     });
 
@@ -118,5 +116,19 @@ function initEvents() {
                 });
             }
         });
+    });
+}
+
+/**
+ * Display note datas
+ *
+* @param _id note id
+ */
+function getLogDisplay(_id) {
+    nextdom.log.autoupdate({
+        log : _id,
+        display : $('#pre_globallog'),
+        search : $('#in_globalLogSearch'),
+        control : $('#bt_globalLogStopStart'),
     });
 }

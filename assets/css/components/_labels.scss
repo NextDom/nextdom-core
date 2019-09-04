@@ -111,6 +111,11 @@
     color: $grey !important;
     border-color: $lightgrey;
 }
+.li_noteDisplay.active .label-list ,
+.li_view.active .label-view ,
+.li_log.active .label-log {
+    border: 1px dashed !important;
+}
 .label-cmd {
     margin: 3px 0px 3px 0px;
     font-size: 100%;

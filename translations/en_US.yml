@@ -443,7 +443,7 @@ interact:
   wait_before_responding: "Wait before responding"
   none: "None -"
   authorization: "Authorization"
-  allow_nextdom_to_eliminate_malformed_requests: "Allow NextDom to eliminate malformed requests"
+  allow_nextdom_to_eliminate_malformed_requests: "Eliminate malformed requests"
   choose_the_actions_associated_with_this_interaction: "Choose the actions associated with this interaction ..."
   choose_filters_to_limit_the_number_of_generated_sentences: "Choose filters to limit the number of generated sentences ..."
   commands: "Commands"
@@ -584,6 +584,7 @@ object:
   global-view: Global view
   no-object-yet: You do not have any object yet. Press Add to start.
   you-have-n-objects: "You have %s object(s)"
+  links: Links
 
 profile:
   theme: Themes

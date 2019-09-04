@@ -90,6 +90,7 @@ function initEvents() {
                     success: function (data) {
                         $('#update_admin').setValues(data, '.configKey');
                         modifyWithoutSave = false;
+                        $(".bt_cancelModifs").hide();
                         notify("Info", '{{Sauvegarde réussie}}', 'success');
                     }
                 });

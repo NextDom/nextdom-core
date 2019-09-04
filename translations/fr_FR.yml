@@ -454,7 +454,7 @@ interact:
   wait_before_responding: "Attendre avant de répondre"
   none: "Aucun - "
   authorization: "Autorisation"
-  allow_nextdom_to_eliminate_malformed_requests: "Autoriser NextDom à supprimer les demandes syntaxiquement incorrectes"
+  allow_nextdom_to_eliminate_malformed_requests: "Supprimer les demandes syntaxiquement incorrectes"
   choose_the_actions_associated_with_this_interaction: "Choisissez les actions associées à cette interaction..."
   choose_filters_to_limit_the_number_of_generated_sentences: "Choisissez les filtres permettant de limiter le nombre de phrases générées..."
   commands: "Commandes"
@@ -598,6 +598,7 @@ object:
   global-view: Vue d'ensemble
   no-object-yet: Vous n'avez encore aucun objet. Cliquez sur ajouter pour commencer.
   you-have-n-objects: "Vous avez %s objet(s)"
+  links: Liens
 
 profile:
   theme: Thèmes
