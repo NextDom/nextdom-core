@@ -179,6 +179,10 @@ class ConsistencyManager
                     "timeout" => 5,
                     "enabled" => 1
                 ),
+                "cron10" => array(
+                    "schedule" => "*/10 * * * * *",
+                    "timeout" => 10
+                ),
                 "cron15" => array(
                     "schedule" => "*/15 * * * * *",
                     "timeout" => 15
@@ -237,7 +241,7 @@ class ConsistencyManager
     private static function saveObjects()
     {
         try {
-            foreach (ObjectManager::all() as $c_item) {
+            foreach (JeeObjectManager::all() as $c_item) {
                 $c_item->save();
             }
         } catch (\Exception $e) {

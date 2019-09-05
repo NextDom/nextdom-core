@@ -108,6 +108,11 @@ class EventManager
                 $id = $event['name'] . '::' . $event['option']['scenario_id'];
             } elseif ($event['name'] == 'jeeObject::summary::update') {
                 $id = $event['name'] . '::' . $event['option']['object_id'];
+                if(is_array($event['option']['keys']) && count($event['option']['keys']) > 0) {
+                    foreach ($event['option']['keys'] as $optionKey => $value) {
+                        $id .= $optionKey;
+                    }
+                }
             } else {
                 continue;
             }

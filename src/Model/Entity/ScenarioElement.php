@@ -249,7 +249,7 @@ class ScenarioElement implements EntityInterface
             if (!is_numeric($next) || $next < 0) {
                 throw new CoreException(__('Bloc type A : ') . $this->getId() . __(', heure programmée invalide : ') . $next);
             }
-            if ($next < date('Gi', strtotime('+1 minute' . date('G:i')))) {
+            if ($next < date('Gi')) {
                 $next = str_repeat('0', 4 - strlen($next)) . $next;
                 $next = date('Y-m-d', strtotime('+1 day' . date('Y-m-d'))) . ' ' . substr($next, 0, 2) . ':' . substr($next, 2, 4);
             } else {

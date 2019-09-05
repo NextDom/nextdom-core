@@ -25,7 +25,7 @@ namespace NextDom\Controller\Tools;
 use NextDom\Controller\BaseController;
 use NextDom\Helpers\Render;
 use NextDom\Managers\EqLogicManager;
-use NextDom\Managers\ObjectManager;
+use NextDom\Managers\JeeObjectManager;
 
 /**
  * Class DisplayController
@@ -46,7 +46,7 @@ class DisplayController extends BaseController
     {
         $nbEqlogics = 0;
         $nbCmds = 0;
-        $objects = ObjectManager::all();
+        $objects = JeeObjectManager::all();
         $eqLogics = [];
         $cmds = [];
         $eqLogics[-1] = EqLogicManager::byObjectId(null, false);

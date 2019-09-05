@@ -192,6 +192,25 @@ class MigrationHelper
     }
 
     /**
+     * 0.3.2 Migration process
+     * @param string $logFile log name file to display information
+     * @throws \Exception
+     */
+    private static function migrate_0_3_2($logFile = 'migration')
+    {
+        $migrateFile = sprintf("%s/install/migrate/migrate_0_3_2.sql", NEXTDOM_ROOT);
+
+        BackupManager::loadSQLFromFile($migrateFile);
+
+        $message ='Database basic update';
+        if($logFile == 'migration') {
+            LogHelper::addInfo($logFile, $message, '');
+        } else {
+            ConsoleHelper::process($message);
+        }
+    }
+
+    /**
      * Migration to pass during migrate_themes_to_data
      * @param string $logFile log name file to display information
      * @throws \Exception

@@ -44,7 +44,7 @@ use NextDom\Model\Entity\User;
  * Class ObjectManager
  * @package NextDom\Managers
  */
-class ObjectManager
+class JeeObjectManager
 {
     const DB_CLASS_NAME = '`object`';
     const CLASS_NAME = JeeObject::class;
@@ -307,7 +307,7 @@ class ObjectManager
             $event = array('object_id' => 'global', 'keys' => array());
             foreach ($global as $key => $value) {
                 try {
-                    $result = ObjectManager::getGlobalSummary($key);
+                    $result = JeeObjectManager::getGlobalSummary($key);
                     if ($result === null) {
                         continue;
                     }

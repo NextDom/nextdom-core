@@ -20,6 +20,11 @@ nextdom.eqLogic = function () {
 };
 
 nextdom.eqLogic.cache = Array();
+nextdom.eqLogic.displayObjectName = false;
+
+nextdom.eqLogic.changeDisplayObjectName = function(_display){
+
+};
 
 if (!isset(nextdom.eqLogic.cache.getCmd)) {
   nextdom.eqLogic.cache.getCmd = Array();

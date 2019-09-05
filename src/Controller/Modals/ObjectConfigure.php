@@ -25,7 +25,7 @@ namespace NextDom\Controller\Modals;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
-use NextDom\Managers\ObjectManager;
+use NextDom\Managers\JeeObjectManager;
 
 /**
  * Class ObjectConfigure
@@ -43,7 +43,7 @@ class ObjectConfigure extends BaseAbstractModal
     public static function get(): string
     {
         $objectId = Utils::init('object_id');
-        $resultObject = ObjectManager::byId($objectId);
+        $resultObject = JeeObjectManager::byId($objectId);
         if (!is_object($resultObject)) {
             throw new CoreException(__('Objet non trouvé : ') . $objectId);
         }

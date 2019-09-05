@@ -17,7 +17,8 @@
 
 require('vendor/autoload.php');
 
-define('TEST_URL', 'http://127.0.0.1:8765/core/ajax/');
+define('BASE_URL', 'http://127.0.0.1:8765/');
+define('TEST_URL', BASE_URL . '/core/ajax/');
 define('ADMIN_ACCOUNT', 'admin');
 define('USER_ACCOUNT', 'user');
 define('PASSWORD', 'nextdom-test');
@@ -82,7 +83,7 @@ class AjaxBase extends PHPUnit_Framework_TestCase
 
     private function getAjaxTokenFromBody()
     {
-        $res = $this->client->request('GET', 'http://127.0.0.1:8765/');
+        $res = $this->client->request('GET', BASE_URL);
         preg_match('/NEXTDOM_AJAX_TOKEN = \'(.*?)\'/', $res->getBody(), $matchResult);
         if (count($matchResult) > 1) {
             $this->ajaxToken = $matchResult[1];

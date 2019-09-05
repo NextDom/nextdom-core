@@ -253,21 +253,21 @@ class DataStore implements EntityInterface
      */
     public function getUsedBy($_array = false)
     {
-        $return = array('cmd' => array(), 'eqLogic' => array(), 'scenario' => array());
-        $return['cmd'] = CmdManager::searchConfiguration(array('"cmd":"variable"%"name":"' . $this->getKey() . '"', 'variable(' . $this->getKey() . ')', '"name":"' . $this->getKey() . '"%"cmd":"variable"'));
-        $return['eqLogic'] = EqLogicManager::searchConfiguration(array('"cmd":"variable"%"name":"' . $this->getKey() . '"', 'variable(' . $this->getKey() . ')', '"name":"' . $this->getKey() . '"%"cmd":"variable"'));
-        $return['interactDef'] = InteractDefManager::searchByUse(array('"cmd":"variable"%"name":"' . $this->getKey() . '"', 'variable(' . $this->getKey() . ')', '"name":"' . $this->getKey() . '"%"cmd":"variable"'));
-        $return['scenario'] = ScenarioManager::searchByUse(array(
+        $result = array('cmd' => array(), 'eqLogic' => array(), 'scenario' => array());
+        $result['cmd'] = CmdManager::searchConfiguration(array('"cmd":"variable"%"name":"' . $this->getKey() . '"', 'variable(' . $this->getKey() . ')', 'variable(' . $this->getKey() . ',', '"name":"' . $this->getKey() . '"%"cmd":"variable"'));
+        $result['eqLogic'] = EqLogicManager::searchConfiguration(array('"cmd":"variable"%"name":"' . $this->getKey() . '"', 'variable(' . $this->getKey() . ')', 'variable(' . $this->getKey() . ',', '"name":"' . $this->getKey() . '"%"cmd":"variable"'));
+        $result['interactDef'] = InteractDefManager::searchByUse(array('"cmd":"variable"%"name":"' . $this->getKey() . '"', 'variable(' . $this->getKey() . ')', 'variable(' . $this->getKey() . ',', '"name":"' . $this->getKey() . '"%"cmd":"variable"'));         $result['scenario'] = ScenarioManager::searchByUse(array(
             array('action' => 'variable(' . $this->getKey() . ')', 'option' => 'variable(' . $this->getKey() . ')'),
+            array('action' => 'variable(' . $this->getKey() . ',', 'option' => 'variable(' . $this->getKey() . ','),
             array('action' => 'variable', 'option' => $this->getKey(), 'and' => true),
             array('action' => 'ask', 'option' => $this->getKey(), 'and' => true),
         ));
         if ($_array) {
-            foreach ($return as &$value) {
+            foreach ($result as &$value) {
                 $value = Utils::o2a($value);
             }
         }
-        return $return;
+        return $result;
     }
 
     /**

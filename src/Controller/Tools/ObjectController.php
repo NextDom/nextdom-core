@@ -26,7 +26,7 @@ use NextDom\Controller\BaseController;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
-use NextDom\Managers\ObjectManager;
+use NextDom\Managers\JeeObjectManager;
 
 /**
  * Class ObjectController
@@ -47,7 +47,7 @@ class ObjectController extends BaseController
     {
         $pageData['PRODUCT_NAME'] = ConfigManager::byKey('product_name');
         $pageData['JS_VARS']['select_id'] = Utils::init('id', '-1');
-        $pageData['objectList'] = ObjectManager::buildTree(null, false);
+        $pageData['objectList'] = JeeObjectManager::buildTree(null, false);
         $pageData['objectSummary'] = ConfigManager::byKey('object:summary');
 
         $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/object.js';

@@ -16,11 +16,11 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 require_once __DIR__ . "/../../src/core.php";
-if (!nextdom::apiModeResult(config::byKey('api::core::tts::mode', 'core', 'enable'))) {
+if (!jeedom::apiModeResult(config::byKey('api::core::tts::mode', 'core', 'enable'))) {
     echo __('Vous n\'êtes pas autorisé à effectuer cette action', __FILE__);
     die();
 }
-if (!nextdom::apiAccess(init('apikey'))) {
+if (!jeedom::apiAccess(init('apikey'))) {
     echo __('Vous n\'êtes pas autorisé à effectuer cette action', __FILE__);
     die();
 }
@@ -38,9 +38,24 @@ if ($text == '') {
     echo __('Aucun texte à dire', __FILE__);
     die();
 }
+if(substr(init('text'), -1) == '#' && substr(init('text'), 0,1) == '#' && class_exists('songs_song')){
+    log::add('tts','debug',__('Tag detécté dans le tts et plugin song présent',__FILE__));
+    $song = songs_song::byLogicalId(strtolower(str_replace('#','',init('text'))));
+    if(is_object($song) && file_exists($song->getPath())){
+        log::add('tts','debug',__('Son trouvé path : ',__FILE__).$song->getPath());
+        if (init('path') == 1) {
+            echo $song->getPath();
+        } else {
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename=' . $song->getName() . '.mp3');
+            readfile($song->getPath());
+        }
+        die();
+    }
+}
 $text = str_replace(array('[', ']', '#', '{', '}'), '', $text);
 $md5 = md5($text);
-$tts_dir = nextdom::getTmpFolder('tts');
+$tts_dir = jeedom::getTmpFolder('tts');
 $filename = $tts_dir . '/' . $md5 . '.mp3';
 if (file_exists($filename)) {
     log::add('tts', 'debug', 'Use cache for ' . $filename . ' (' . $text . ')');
@@ -54,9 +69,6 @@ if (file_exists($filename)) {
     die();
 }
 log::add('tts', 'debug', 'Generate tts for ' . $filename . ' (' . $text . ')');
-if ($engine == 'pico' && exec('which pico2wave | wc -l') == 0) {
-    $engine = 'espeak';
-}
 try {
     switch ($engine) {
         case 'gcp':
@@ -81,7 +93,6 @@ try {
     $lang = init('lang', 'fr-FR');
     shell_exec('pico2wave -l=' . $lang . ' -w=' . $md5 . '.wav "' . $text . '" > /dev/null 2>&1;avconv -i ' . $md5 . '.wav -ar 44100 ' . $volume . ' -ac 2 -ab 192k -f mp3 ' . $filename . ' > /dev/null 2>&1;rm ' . $md5 . '.wav');
 }
-
 if (init('path') == 1) {
     echo $filename;
 } else {

@@ -321,7 +321,11 @@ class LogHelper
             while ($log->valid() && $linesRead != $nbLines) {
                 $line = trim($log->current()); //get current line
                 if ($line != '') {
-                    array_unshift($page, $line);
+                    if(function_exists('mb_convert_encoding')){
+                        array_unshift($page, mb_convert_encoding($line, 'UTF-8'));
+                    }else {
+                        array_unshift($page, $line);
+                    }
                 }
                 $log->next(); //go to next line
                 $linesRead++;
@@ -375,7 +379,11 @@ class LogHelper
         if ($maxLineLog < DEFAULT_MAX_LINES_IN_LOG) {
             $maxLineLog = DEFAULT_MAX_LINES_IN_LOG;
         }
-        ComShell::execute(SystemHelper::getCmdSudo() . 'chmod 664 ' . $logFilePath . ' > /dev/null 2>&1;echo "$(tail -n ' . $maxLineLog . ' ' . $logFilePath . ')" > ' . $logFilePath);
+        try {
+            ComShell::execute(SystemHelper::getCmdSudo() . 'chmod 664 ' . $logFilePath . ' > /dev/null 2>&1;echo "$(tail -n ' . $maxLineLog . ' ' . $logFilePath . ')" > ' . $logFilePath);
+        } catch (\Exception $e) {
+
+        }
         @chown($logFilePath, SystemHelper::getCommand('www-uid'));
         @chgrp($logFilePath, SystemHelper::getCommand('www-gid'));
         if (filesize($logFilePath) > (1024 * 1024 * 10)) {

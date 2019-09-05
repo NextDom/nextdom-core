@@ -25,7 +25,7 @@ namespace NextDom\Controller\Modals;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
-use NextDom\Managers\ObjectManager;
+use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PlanManager;
 use NextDom\Managers\ViewManager;
@@ -52,7 +52,7 @@ class PlanConfigure extends BaseAbstractModal
             throw new CoreException('Impossible de trouver le design');
         }
         $pageData['planLink'] = $pageData['planObject']->getLink();
-        $pageData['jeeObjects'] = ObjectManager::all();
+        $pageData['jeeObjects'] = JeeObjectManager::all();
         $pageData['views'] = ViewManager::all();
         $pageData['plans'] = PlanHeaderManager::all();
         Utils::sendVarToJS('id', $pageData['planObject']->getId());

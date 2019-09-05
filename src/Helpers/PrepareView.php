@@ -21,7 +21,7 @@ use NextDom\Enums\GetParams;
 use NextDom\Enums\ViewType;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\MessageManager;
-use NextDom\Managers\ObjectManager;
+use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\Plan3dHeaderManager;
 use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PluginManager;
@@ -461,7 +461,7 @@ class PrepareView
         $this->initPluginsEvents($eventsJsPlugin, $pageData);
         $this->initHeaderData($pageData);
 
-        $currentJeeObject = ObjectManager::getRootObjects();
+        $currentJeeObject = JeeObjectManager::getRootObjects();
         $currentJeeObjectId = '';
         if(!empty($currentJeeObject)){
             $currentJeeObjectId = $currentJeeObject->getId();
@@ -516,7 +516,7 @@ class PrepareView
         // Détermine la page courante
         $defaultDashboardObjectId = '';
         $defaultDashboardObjectName = UserManager::getStoredUser()->getOptions('defaultDashboardObject');
-        $defaultDashboardObject = ObjectManager::byId($defaultDashboardObjectName);
+        $defaultDashboardObject = JeeObjectManager::byId($defaultDashboardObjectName);
         if(!empty($defaultDashboardObject)) {
           $defaultDashboardObjectId = $defaultDashboardObject->getId();
         }
@@ -643,14 +643,14 @@ class PrepareView
         if ($pageData['IS_ADMIN']) {
             $pageData['MENU_NB_UPDATES'] = UpdateManager::nbNeedUpdate();
         }
-        $pageData['MENU_JEEOBJECT_TREE'] = ObjectManager::buildTree(null, false);
+        $pageData['MENU_JEEOBJECT_TREE'] = JeeObjectManager::buildTree(null, false);
         $pageData['MENU_VIEWS_LIST'] = ViewManager::all();
         $pageData['MENU_PLANS_LIST'] = PlanHeaderManager::all();
         $pageData['MENU_PLANS3D_LIST'] = Plan3dHeaderManager::all();
         if (is_object($currentPlugin) && $currentPlugin->getIssue()) {
             $pageData['MENU_CURRENT_PLUGIN_ISSUE'] = $currentPlugin->getIssue();
         }
-        $pageData['MENU_HTML_GLOBAL_SUMMARY'] = ObjectManager::getGlobalHtmlSummary();
+        $pageData['MENU_HTML_GLOBAL_SUMMARY'] = JeeObjectManager::getGlobalHtmlSummary();
         $pageData['PRODUCT_IMAGE'] = ConfigManager::byKey('product_image');
         $pageData['profilsUser'] = UserManager::getStoredUser();
         $pageData['PROFIL_AVATAR'] = UserManager::getStoredUser()->getOptions('avatar');

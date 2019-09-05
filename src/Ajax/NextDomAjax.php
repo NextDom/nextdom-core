@@ -31,7 +31,7 @@ use NextDom\Managers\BackupManager;
 use NextDom\Managers\CacheManager;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\ConfigManager;
-use NextDom\Managers\ObjectManager;
+use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\UserManager;
@@ -73,7 +73,7 @@ class NextDomAjax extends BaseAjax
             $view = ViewManager::byId($currentUser->getOptions('defaultDesktopView'));
         }
         if ($currentUser->getOptions('defaultDashboardObject') != '') {
-            $resultObject = ObjectManager::byId($currentUser->getOptions('defaultDashboardObject'));
+            $resultObject = JeeObjectManager::byId($currentUser->getOptions('defaultDashboardObject'));
         }
 
         $return['plugins'] = array();

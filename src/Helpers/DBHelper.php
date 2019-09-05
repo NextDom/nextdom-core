@@ -339,15 +339,15 @@ class DBHelper
             } else {
                 $res = true;
             }
-            if (method_exists($objToSave, 'setChanged')) {
-                $objToSave->setChanged(false);
-            }
             if (!$noProcess && method_exists($objToSave, 'postUpdate')) {
                 $objToSave->postUpdate();
             }
         }
         if (!$noProcess && method_exists($objToSave, 'postSave')) {
             $objToSave->postSave();
+        }
+        if (method_exists($objToSave, 'setChanged')) {
+            $objToSave->setChanged(false);
         }
         return (null !== $res && false !== $res);
     }

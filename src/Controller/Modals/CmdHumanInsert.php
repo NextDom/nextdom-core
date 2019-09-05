@@ -23,7 +23,7 @@
 namespace NextDom\Controller\Modals;
 
 use NextDom\Helpers\Render;
-use NextDom\Managers\ObjectManager;
+use NextDom\Managers\JeeObjectManager;
 
 /**
  * Class CmdHumanInsert
@@ -42,7 +42,7 @@ class CmdHumanInsert extends BaseAbstractModal
 
 
         $pageData = [];
-        $pageData['jeeObjects'] = ObjectManager::all();
+        $pageData['jeeObjects'] = JeeObjectManager::all();
 
         return Render::getInstance()->get('/modals/cmd.human.insert.html.twig', $pageData);
     }

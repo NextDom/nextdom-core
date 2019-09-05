@@ -55,6 +55,9 @@ class UserAjax extends BaseAjax
 
     public function login()
     {
+        if (!file_exists(session_save_path())) {
+            mkdir(session_save_path());
+        }
         if (!AuthentificationHelper::isConnected()) {
             if (ConfigManager::byKey('sso:allowRemoteUser') == 1) {
                 $user = UserManager::byLogin($_SERVER['REMOTE_USER']);
@@ -302,7 +305,7 @@ class UserAjax extends BaseAjax
         AuthentificationHelper::init();
         AuthentificationHelper::isConnectedOrFail();
         AjaxHelper::init();
-        $sessions = listSession();
+        $sessions = SessionHelper::getSessionsList();
         if (isset($sessions[init('id')])) {
             $user = UserManager::byId($sessions[init('id')]['user_id']);
             if (is_object($user)) {

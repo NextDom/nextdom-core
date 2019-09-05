@@ -55,4 +55,7 @@ class message extends \NextDom\Model\Entity\Message {
         return MessageManager::all();
     }
 
+    public static function removeByPluginLogicalId($_plugin, $_logicalId) {
+        MessageManager::removeByPluginLogicalId($_plugin, $_logicalId);
+    }
 }

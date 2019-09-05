@@ -397,11 +397,14 @@ class UpdateManager
      */
     public static function nbNeedUpdate($filter = '')
     {
-        $params = [];
-        $params['status'] = 'update';
+        $params = [
+            'status' => 'update',
+            'configuration' => '%"doNotUpdate":"1"%'
+        ];
         $sql = 'SELECT count(*)
                FROM `' . self::DB_CLASS_NAME . '`
-               WHERE status = :status';
+               WHERE `status` = :status
+               AND `configuration` NOT LIKE :configuration';
         if ($filter != '') {
             $params['type'] = $filter;
             $sql .= ' AND `type` = :type';
