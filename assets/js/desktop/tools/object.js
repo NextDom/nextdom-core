@@ -227,19 +227,19 @@ function initEvents() {
         $(this).siblings(".slider").value(1);
     });
 
-    // Reset position
+    // Reset Tag color
     $('#bt_resetTagColor').on('click', function () {
         $('.objectAttr[data-l1key=display][data-l2key=tagColor]').value('#33B8CC');
         $('#colorpickTag').colorpicker('setValue', '#33B8CC');
     });
 
-    // Reset position
+    // Reset Text tag color
     $('#bt_resetTagTextColor').on('click', function () {
         $('.objectAttr[data-l1key=display][data-l2key=tagTextColor]').value('#ffffff');
         $('#colorpickTagText').colorpicker('setValue', '#ffffff');
     });
 
-    // Reset position
+    // Reset Text color
     $('#bt_resetTextColor').on('click', function () {
         $('.objectAttr[data-l1key=display][data-l2key="desktop::summaryTextColor"]').value('#ffffff');
         $('#colorpickSummaryText').colorpicker('setValue', '#ffffff');

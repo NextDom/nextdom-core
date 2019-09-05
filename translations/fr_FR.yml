@@ -536,7 +536,7 @@ scenario:
   duplicate-title: Dupliquer le scénario
   export: Exporter
   template: Template
-  log: Log
+  log: Type de log
   add-block: Ajouter un bloc
   stop: Arrêter
   execute-title: Veuillez sauvegarder avant de tester. Ceci peut ne pas aboutir.
@@ -557,12 +557,13 @@ scenario:
   multi-launch-title: Le scénario pourra tourner plusieurs fois en même temps
   sync-mode: Mode synchrone
   sync-mode-title: Le scénario est en mode synchrone. Attention, cela peut rendre le système instable
-  timeout: Timeout
-  timeout-unity: secondes (0 = illimité)
+  timeout: Timeout (0 = illimité)
+  timeout-unity: secondes
   paternity: Paternité
   group: Groupe
   scenario-group: Groupe du scénario
   parent-object: Objet parent
+  follow: Suivi
   follow-timeline: Suivre dans la timeline
   follow-timeline-title: Les exécutions du scénario pourront être vues dans la timeline.
   icon: Icône
@@ -593,6 +594,7 @@ scenario:
   description-at: "A un temps précis, cet élément permet de lancer une action. Par exemple : A 9h30, ouvrir les volets."
   description-code: "Cet élément permet de rajouter dans votre scénario de la programmation à l’aide d’un code, PHP/Shell, etc."
   description-comment: "Permet de commenter votre scénario."
+  conditions: "Conditions"
 
 object:
   global-view: Vue d'ensemble

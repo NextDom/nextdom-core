@@ -522,7 +522,7 @@ scenario:
   duplicate-title: Duplicate scenario
   export: Export
   template: template
-  log: log
+  log: log type
   add-block: Add a block
   stop: Stop
   execute-title: Please save before testing. This may not succeed.
@@ -543,12 +543,13 @@ scenario:
   multi-launch-title: The script will run several times simultaneously
   sync-mode: synchronously
   sync-mode-title: "The script is in synchronous mode. Warning: this can make the system unstable"
-  timeout: timeout
-  timeout-unity: seconds (0 = unlimited)
+  timeout: Timeout (0 = unlimited)
+  timeout-unity: seconds
   paternity: Paternity
   group: Group
   scenario-group: Scenario Group
   parent-object: parent object
+  follow: Following
   follow-timeline: Follow in the Timeline
   follow-timeline-title: The executions of the script can be seen in the timeline.
   icon: Icon
@@ -579,6 +580,7 @@ scenario:
   description-at: "At a specific time: this element will launch an action. For example: At 9:30, open the shutters."
   description-code: "This element allows you to add in your scenario programming using a code: PHP / Shell, etc."
   description-comment: Lets comment your scenario.
+  conditions: "Conditions"
 
 object:
   global-view: Global view

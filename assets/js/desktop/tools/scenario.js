@@ -106,18 +106,498 @@ autoCompleteAction = [
     "remove_inat"
 ];
 
+/* Containers variables */
 var pageContainer = $('#div_pageContainer');
 var modalContainer = $('#md_modal');
 var scenarioContainer = $('#div_scenarioElement');
+
+// Page init
+loadInformations();
+initEvents();
+
+/**
+ * Load informations in all forms of the page
+ */
+function loadInformations() {
+    loadFromUrl();
+    setTimeout(function () {
+        $('.scenarioListContainer').packery();
+    }, 100);
+}
+
+/**
+ * Init events on the profils page
+ */
+function initEvents() {
+    initListEvents();
+    initGeneralFormEvents();
+    initScenarioEditorEvents();
+    initModalEvents();
+}
+
+/**
+ * Init modal events
+ */
+function initModalEvents() {
+    // Links modal open button
+    $('#bt_graphScenario').off('click').on('click', function () {
+        modalContainer.dialog({title: "{{Graphique de lien(s)}}"});
+        modalContainer.load('index.php?v=d&modal=graph.link&filter_type=scenario&filter_id=' + $('.scenarioAttr[data-l1key=id]').value()).dialog('open');
+    });
+
+    // Log modale open button
+    $('#bt_logScenario').off('click').on('click', function () {
+        modalContainer.dialog({title: "{{Log d'exécution du scénario}}"});
+        modalContainer.load('index.php?v=d&modal=scenario.log.execution&scenario_id=' + $('.scenarioAttr[data-l1key=id]').value()).dialog('open');
+    });
+
+    // Export modale open button
+    $('#bt_exportScenario').off('click').on('click', function () {
+        modalContainer.dialog({title: "{{Export du scénario}}"});
+        modalContainer.load('index.php?v=d&modal=scenario.export&scenario_id=' + $('.scenarioAttr[data-l1key=id]').value()).dialog('open');
+    });
+
+    // Template modale open button
+    $('#bt_templateScenario').off('click').on('click', function () {
+        modalContainer.dialog({title: "{{Template de scénario}}"});
+        modalContainer.load('index.php?v=d&modal=scenario.template&scenario_id=' + $('.scenarioAttr[data-l1key=id]').value()).dialog('open');
+    });
+}
+
+/**
+ * Init events of the list
+ */
+function initListEvents() {
+    // Scenario click to show details and programmation
+    $('.scenarioDisplayCard').off('click').on('click', function () {
+        loadScenario($(this).attr('data-scenario_id'), GENERAL_TAB);
+    });
+
+    // Category panel collapsing/uncollapsing change
+    $('.accordion-toggle').off('click').on('click', function () {
+        setTimeout(function () {
+            $('.scenarioListContainer').packery();
+        }, 100);
+    });
+
+    // Scenario list go back button
+    $('#bt_scenarioThumbnailDisplay').off('click').on('click', function () {
+        loadPage('index.php?v=d&p=scenario');
+    });
+
+    // All scenario state change button
+    $("#bt_changeAllScenarioState").off('click').on('click', toggleAllScenariosState);
+
+    // New scenario add button
+    $("#bt_addScenario").off('click').on('click', addScenario);
+}
+
+/**
+ * Init events of the general tab
+ */
+function initGeneralFormEvents() {
+    // Param changed : page leaving lock by msgbox
+    pageContainer.on('change', '.scenarioAttr', function () {
+        if (!lockModify) {
+            modifyWithoutSave = true;
+            $(".bt_cancelModifs").show();
+        }
+    });
+    pageContainer.on('change', '.expressionAttr', function () {
+        if (!lockModify) {
+            modifyWithoutSave = true;
+            $(".bt_cancelModifs").show();
+        }
+    });
+    pageContainer.on('change', '.elementAttr', function () {
+        if (!lockModify) {
+            modifyWithoutSave = true;
+            $(".bt_cancelModifs").show();
+        }
+    });
+    pageContainer.on('change', '.subElementAttr', function () {
+        if (!lockModify) {
+            modifyWithoutSave = true;
+            $(".bt_cancelModifs").show();
+        }
+    });
+
+    // Cancel modifications
+    $('.bt_cancelModifs').on('click', function () {
+        loadFromUrl();
+    });
+
+    // Choose icon in scenario form
+    $('#bt_chooseIcon').on('click', function () {
+        chooseIcon(function (_icon) {
+            $('.scenarioAttr[data-l1key=display][data-l2key=icon]').empty().append(_icon);
+        });
+    });
+
+    // Reset timeout
+    $('#bt_resetTimeout').on('click', function () {
+        $(this).siblings(".slider").value(0);
+    });
+
+    // Group autocomplete in scenario form
+    $('.scenarioAttr[data-l1key=group]').autocomplete({
+        source: function (request, response, url) {
+            $.ajax({
+                type: 'POST',
+                url: 'core/ajax/scenario.ajax.php',
+                data: {
+                    action: 'autoCompleteGroup',
+                    term: request.term
+                },
+                dataType: 'json',
+                global: false,
+                error: function (request, status, error) {
+                    handleAjaxError(request, status, error);
+                },
+                success: function (data) {
+                    if (data.state !== 'ok') {
+                        notify("Erreur", data.result, 'error');
+                        return;
+                    }
+                    response(data.result);
+                }
+            });
+        },
+        minLength: 1,
+    });
+
+    // Scenario panel collasping
+    $('#bt_scenarioCollapse').on('click',function(){
+       $('#accordionScenario .panel-collapse').each(function () {
+          if (!$(this).hasClass("in")) {
+              $(this).css({'height' : '' });
+              $(this).addClass("in");
+          }
+       });
+       $('#bt_scenarioCollapse').hide();
+       $('#bt_scenarioUncollapse').show()
+    });
+
+    // Scenario panel uncollasping
+    $('#bt_scenarioUncollapse').on('click',function(){
+       $('#accordionScenario .panel-collapse').each(function () {
+          if ($(this).hasClass("in")) {
+              $(this).removeClass("in");
+          }
+       });
+       $('#bt_scenarioUncollapse').hide();
+       $('#bt_scenarioCollapse').show()
+    });
+
+    // Save button
+    $("#bt_saveScenario").off('click').on('click', saveScenario);
+
+    // Delete button
+    $("#bt_delScenario").off('click').on('click', deleteScenario);
+
+    // Test button
+    $("#bt_testScenario").off('click').on('click', testScenario);
+
+    // Copy button
+    $("#bt_copyScenario").off('click').on('click', copyScenario);
+
+    // Stop button
+    $("#bt_stopScenario").off('click').on('click', stopScenario);
+
+    // Variables display button
+    $(".bt_displayScenarioVariable").off('click').on('click', function () {
+        modalContainer.dialog({title: "{{Variables des scénarios}}"});
+        modalContainer.load('index.php?v=d&modal=dataStore.management&type=scenario').dialog('open');
+    });
+
+    // Expression test modale display button
+    $('.bt_showExpressionTest').off('click').on('click', function () {
+        modalContainer.dialog({title: "{{Testeur d'expression}}"});
+        modalContainer.load('index.php?v=d&modal=expression.test').dialog('open');
+    });
+
+    // Summary modal display button
+    $('.bt_showScenarioSummary').off('click').on('click', function () {
+        modalContainer.dialog({title: "{{Résumé scénario}}"});
+        modalContainer.load('index.php?v=d&modal=scenario.summary').dialog('open');
+    });
+
+    // Bloc add modale element choose
+    $('#in_addElementType').off('change').on('change', function () {
+        $('.addElementTypeDescription').hide();
+        $('.addElementTypeDescription.' + $(this).value()).show();
+    });
+
+    // Programmation tab click
+    $('#bt_scenarioTab').on('click', function () {
+        setTimeout(function () {
+            setEditor();
+            taAutosize();
+        }, 100);
+    });
+
+    // Cron programmation help button
+    pageContainer.off('click', '.helpSelectCron').on('click', '.helpSelectCron', function () {
+        var el = $(this).closest('.schedule').find('.scenarioAttr[data-l1key=schedule]');
+        nextdom.getCronSelectModal({}, function (result) {
+            el.value(result.value);
+        });
+    });
+
+    // Launching mode selection
+    $('.scenarioAttr[data-l1key=mode]').off('change').on('change', function () {
+        var mode = $(this).value();
+        if (mode === 'schedule' || mode === 'all') {
+            $('.scheduleDisplay').show();
+            $('#bt_addSchedule').show();
+        } else {
+            $('.scheduleDisplay').hide();
+            $('#bt_addSchedule').hide();
+        }
+        if (mode === 'provoke' || mode === 'all') {
+            $('.provokeDisplay').show();
+            $('#bt_addTrigger').show();
+        } else {
+            $('.provokeDisplay').hide();
+            $('#bt_addTrigger').hide();
+        }
+    });
+
+    // Launching trigger add button
+    $('#bt_addTrigger').off('click').on('click', function () {
+        addTrigger('');
+    });
+
+    // Launching schedule add button
+    $('#bt_addSchedule').off('click').on('click', function () {
+        addSchedule('');
+    });
+
+    // Launching trigger remove button
+    pageContainer.off('click', '.bt_removeTrigger').on('click', '.bt_removeTrigger', function (event) {
+        $(this).closest('.trigger').remove();
+    });
+
+    // Launching schedule remove button
+    pageContainer.off('click', '.bt_removeSchedule').on('click', '.bt_removeSchedule', function (event) {
+        $(this).closest('.schedule').remove();
+    });
+
+    // Cmd choose for launching trigger
+    pageContainer.off('click', '.bt_selectTrigger').on('click', '.bt_selectTrigger', function (event) {
+        var el = $(this);
+        nextdom.cmd.getSelectModal({cmd: {type: 'info'}}, function (result) {
+            el.closest('.trigger').find('.scenarioAttr[data-l1key=trigger]').value(result.human);
+        });
+    });
+
+    // Variable choose for launching trigger
+    pageContainer.off('click', '.bt_selectDataStoreTrigger').on('click', '.bt_selectDataStoreTrigger', function (event) {
+        var el = $(this);
+        nextdom.dataStore.getSelectModal({cmd: {type: 'info'}}, function (result) {
+            el.closest('.trigger').find('.scenarioAttr[data-l1key=trigger]').value(result.human);
+        });
+    });
+}
+
+/**
+ * Init events on the scenario editor
+ */
+function initScenarioEditorEvents() {
+    // Bloc add button
+    pageContainer.off('click', '.bt_addScenarioElement').on('click', '.bt_addScenarioElement', function (event) {
+        var elementDiv = $(this).closest('.element');
+        if (elementDiv.html() === undefined) {
+            elementDiv = scenarioContainer;
+        }
+        var expression = false;
+        if ($(this).hasClass('fromSubElement')) {
+            elementDiv = $(this).closest('.subElement').find('.expressions').eq(0);
+            expression = true;
+        }
+        $('#md_addElement').modal('show');
+
+        // Bloc add validation button
+        $("#bt_addElementSave").off('click').on('click', function (event) {
+            if (expression) {
+                elementDiv.append(addExpression({type: 'element', element: {type: $("#in_addElementType").value()}}));
+            } else {
+                $('#div_scenarioElement .span_noScenarioElement').remove();
+                elementDiv.append(addElement({type: $("#in_addElementType").value()}));
+            }
+            setEditor();
+            updateSortable();
+            setInputExpressionsEvent();
+            $('#md_addElement').modal('hide');
+        });
+    });
+
+    // Bloc remove button
+    pageContainer.off('click', '.bt_removeElement').on('click', '.bt_removeElement', function (event) {
+        if ($(this).closest('.expression').length !== 0) {
+            $(this).closest('.expression').remove();
+        } else {
+            $(this).closest('.element').remove();
+        }
+    });
+
+    // Bloc action add button
+    pageContainer.off('click', '.bt_addAction').on('click', '.bt_addAction', function (event) {
+        $(this).closest('.subElement').children('.expressions').append(addExpression({type: 'action'}));
+        setAutocomplete();
+        updateSortable();
+    });
+
+    // Bloc else button
+    pageContainer.off('click', '.bt_addSinon').on('click', '.bt_addSinon', function (event) {
+        if ($(this).children("i").hasClass('fa-chevron-right')) {
+            $(this).children("i").removeClass('fa-chevron-right').addClass('fa-chevron-down');
+            $(this).closest('.subElement').next().css('display', 'table');
+        }
+        else {
+            if ($(this).closest('.subElement').next().children('.expressions').children('.expression').length > 0) {
+                alert("{{Le bloc Sinon ne peut être supprimé s'il contient des éléments}}");
+            }
+            else {
+                $(this).children("i").removeClass('fa-chevron-down').addClass('fa-chevron-right');
+                $(this).closest('.subElement').next().css('display', 'none');
+            }
+        }
+    });
+
+    // Bloc action expression clear
+    pageContainer.off('click', '.bt_removeExpression').on('click', '.bt_removeExpression', function () {
+        $(this).closest('.expression').remove();
+        updateSortable();
+    });
+
+    // Bloc action expression cmd choose button
+    pageContainer.off('click', '.bt_selectCmdExpression').on('click', '.bt_selectCmdExpression', function () {
+        selectCmdExpression($(this), $(this).closest('.expression'));
+    });
+
+    // Bloc action expression key word choose button
+    pageContainer.off('click', '.bt_selectOtherActionExpression').on('click', '.bt_selectOtherActionExpression', function (event) {
+        var expression = $(this).closest('.expression');
+        nextdom.getSelectActionModal({scenario: true}, function (result) {
+            expression.find('.expressionAttr[data-l1key=expression]').value(result.human);
+            nextdom.cmd.displayActionOption(expression.find('.expressionAttr[data-l1key=expression]').value(), '', function (html) {
+                expression.find('.expressionOptions').html(html);
+                taAutosize();
+            });
+        });
+    });
+
+    // Bloc action expression scenario choose button
+    pageContainer.off('click', '.bt_selectScenarioExpression').on('click', '.bt_selectScenarioExpression', function (event) {
+        var expression = $(this).closest('.expression');
+        nextdom.scenario.getSelectModal({}, function (result) {
+            if (expression.find('.expressionAttr[data-l1key=type]').value() === 'action') {
+                expression.find('.expressionAttr[data-l1key=expression]').value(result.human);
+            }
+            if (expression.find('.expressionAttr[data-l1key=type]').value() === 'condition') {
+                expression.find('.expressionAttr[data-l1key=expression]').atCaret('insert', result.human);
+            }
+        });
+    });
+
+    // Bloc action expression equipement choose button
+    pageContainer.off('click', '.bt_selectEqLogicExpression').on('click', '.bt_selectEqLogicExpression', function (event) {
+        var expression = $(this).closest('.expression');
+        nextdom.eqLogic.getSelectModal({}, function (result) {
+            if (expression.find('.expressionAttr[data-l1key=type]').value() === 'action') {
+                expression.find('.expressionAttr[data-l1key=expression]').value(result.human);
+            }
+            if (expression.find('.expressionAttr[data-l1key=type]').value() === 'condition') {
+                expression.find('.expressionAttr[data-l1key=expression]').atCaret('insert', result.human);
+            }
+        });
+    });
+
+    // Bloc action expression change
+    pageContainer.off('focusout', '.expression .expressionAttr[data-l1key=expression]').on('focusout', '.expression .expressionAttr[data-l1key=expression]', function (event) {
+        var el = $(this);
+        if (el.closest('.expression').find('.expressionAttr[data-l1key=type]').value() === 'action') {
+            var expression = el.closest('.expression').getValues('.expressionAttr');
+            nextdom.cmd.displayActionOption(el.value(), init(expression[0].options), function (html) {
+                el.closest('.expression').find('.expressionOptions').html(html);
+                taAutosize();
+            });
+        }
+    });
+
+    // Bloc action repetition button
+    pageContainer.on('click', '.subElementAttr[data-l1key=options][data-l2key=allowRepeatCondition]', function () {
+        if (parseInt($(this).attr('value')) === 0) {
+            $(this).attr('value', 1);
+            $(this).html('<i class="fas fa-ban text-danger"></i>');
+        } else {
+            $(this).attr('value', 0);
+            $(this).html('<i class="fas fa-refresh">');
+        }
+    });
+
+    // Bloc dragging
+    pageContainer.off('mouseenter', '.bt_sortable').on('mouseenter', '.bt_sortable', function () {
+        var expressions = $(this).closest('.expressions');
+        scenarioContainer.sortable({
+            items: ".sortable",
+            opacity: 0.7,
+            forcePlaceholderSize: true,
+            forceHelperSize: true,
+            placeholder: "sortable-placeholder",
+            tolerance: "intersect",
+            grid: [30, 15],
+            update: function (event, ui) {
+                if (ui.item.findAtDepth('.element', 2).length === 1 && ui.item.parent().attr('id') === 'div_scenarioElement') {
+                    ui.item.replaceWith(ui.item.findAtDepth('.element', 2));
+                }
+                if (ui.item.hasClass('element') && ui.item.parent().attr('id') !== 'div_scenarioElement') {
+                    ui.item.replaceWith(addExpression({
+                        type: 'element',
+                        element: {html: ui.item.clone().wrapAll("<div/>").parent().html()}
+                    }));
+                }
+                if (ui.item.hasClass('expression') && ui.item.parent().attr('id') === 'div_scenarioElement') {
+                    scenarioContainer.sortable("cancel");
+                }
+                if (ui.item.closest('.subElement').hasClass('noSortable')) {
+                    scenarioContainer.sortable("cancel");
+                }
+                updateSortable();
+            },
+            start: function (event, ui) {
+                if (expressions.find('.sortable').length < 3) {
+                    expressions.find('.sortable.empty').show();
+                }
+            }
+        });
+        scenarioContainer.sortable("enable");
+    });
+
+    // Bloc dropping
+    pageContainer.off('mouseout', '.bt_sortable').on('mouseout', '.bt_sortable', function () {
+        scenarioContainer.sortable("disable");
+    });
+}
 
 /**
  * Event on scenario card click
  */
 function loadScenario(scenarioId, tabToShow) {
-    $.hideAlert();
     modifyWithoutSave = false;
     $('#scenarioThumbnailDisplay').hide();
     printScenario(scenarioId);
+    urlUpdate(scenarioId);
+    $('.nav-tabs a[href="#' + tabToShow + '"]').tab('show');
+}
+
+/**
+ * Navigator url update with id
+ *
+ * @param scenarioId scenario id
+ */
+function urlUpdate(scenarioId) {
     var currentUrl = document.location.toString();
     // Mise à jour d'URL
     if (currentUrl.indexOf('id=') === -1) {
@@ -133,7 +613,6 @@ function loadScenario(scenarioId, tabToShow) {
         }
         history.pushState({}, null, updatedUrl);
     }
-    $('.nav-tabs a[href="#' + tabToShow + '"]').tab('show');
 }
 
 /**
@@ -169,6 +648,7 @@ function addScenario() {
                     $('#scenarioThumbnailDisplay').hide();
                     $('#bt_scenarioThumbnailDisplay').hide();
                     printScenario(data.id);
+                    urlUpdate(data.id);
                 }
             });
         }
@@ -179,7 +659,6 @@ function addScenario() {
  * Delete scenario
  */
 function deleteScenario() {
-    $.hideAlert();
     bootbox.confirm('{{Etes-vous sûr de vouloir supprimer le scénario}} <span style="font-weight: bold ;">' + $('.scenarioAttr[data-l1key=name]').value() + '</span> ?', function (result) {
         if (result) {
             nextdom.scenario.remove({
@@ -201,7 +680,6 @@ function deleteScenario() {
  * Test the scenario
  */
 function testScenario() {
-    $.hideAlert();
     nextdom.scenario.changeState({
         id: $('.scenarioAttr[data-l1key=id]').value(),
         state: 'start',
@@ -450,9 +928,11 @@ function printScenario(scenarioId) {
                     addSchedule(data.schedule);
                 }
             }
-
+            if(!isset(data.timeout)){
+                $('.scenarioAttr[data-l1key=timeout]').value(0);
+            }
             if (data.elements.length === 0) {
-                scenarioContainer.append('<div class="span_noScenarioElement"><span>{{Pour programmer votre scénario, veuillez commencer par ajouter des blocs...}}</span></div>')
+                scenarioContainer.append('<div class="span_noScenarioElement"><p class="alert alert-info">{{Pour programmer votre scénario, veuillez commencer par ajouter des blocs...}}</p></div>')
             }
             actionOptions = [];
             for (var i in data.elements) {
@@ -469,21 +949,16 @@ function printScenario(scenarioId) {
                         $('#' + data[i].id).append(data[i].html.html);
                     }
                     taAutosize();
+                    updateSortable();
+                    setInputExpressionsEvent();
+                    setAutocomplete();
+                    updateElseToggle();
+                    $('#div_editScenario').show();
+                    setEditor();
+                    modifyWithoutSave = false;
+                    $(".bt_cancelModifs").hide();
                 }
             });
-            updateSortable();
-            setInputExpressionsEvent();
-            setAutocomplete();
-            updateElseToggle();
-            $('#div_editScenario').show();
-            taAutosize();
-            setTimeout(function () {
-                setEditor();
-            }, 100);
-            modifyWithoutSave = false;
-            setTimeout(function () {
-                modifyWithoutSave = false;
-            }, 1000);
         }
     });
 
@@ -493,7 +968,6 @@ function printScenario(scenarioId) {
  * Save the scenario in the database
  */
 function saveScenario() {
-    $.hideAlert();
     var scenario = pageContainer.getValues('.scenarioAttr')[0];
     scenario.type = "expert";
     var elements = [];
@@ -508,6 +982,7 @@ function saveScenario() {
         },
         success: function (data) {
             modifyWithoutSave = false;
+            $(".bt_cancelModifs").hide();
             notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
         }
     });
@@ -520,17 +995,17 @@ function saveScenario() {
  * @param triggerCode
  */
 function addTrigger(triggerCode) {
-    var triggerHtml = '<div class="form-group trigger">';
-    triggerHtml += '<label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{Evénement}}</label>';
-    triggerHtml += '<div class="col-lg-9 col-md-9 col-sm-6 col-xs-12">';
+    var triggerHtml = '<div class="form-group col-xs-12 col-padding trigger">';
+    triggerHtml += '<label class="control-label">{{Evénement}}</label>';
     triggerHtml += '<div class="input-group">';
+    triggerHtml += '<span class="input-group-btn">';
+    triggerHtml += '<a class="btn btn-danger btn-sm cursor bt_removeTrigger"><i class="fas fa-minus-circle"></i></a>';
+    triggerHtml += '</span>';
     triggerHtml += '<input class="scenarioAttr input-sm form-control" data-l1key="trigger" value="' + triggerCode.replace(/"/g, '&quot;') + '" >';
     triggerHtml += '<span class="input-group-btn">';
     triggerHtml += '<a class="btn btn-default btn-sm cursor bt_selectTrigger" title="{{Choisir une commande}}"><i class="fas fa-list-alt"></i></a>';
     triggerHtml += '<a class="btn btn-default btn-sm cursor bt_selectDataStoreTrigger" title="{{Choisir une variable}}"><i class="fas fa-calculator"></i></a>';
-    triggerHtml += '<a class="btn btn-danger btn-sm cursor bt_removeTrigger"><i class="fas fa-minus-circle"></i></a>';
     triggerHtml += '</span>';
-    triggerHtml += '</div>';
     triggerHtml += '</div>';
     triggerHtml += '</div>';
     $('.provokeMode').append(triggerHtml);
@@ -542,16 +1017,16 @@ function addTrigger(triggerCode) {
  * @param scheduleCode
  */
 function addSchedule(scheduleCode) {
-    var scheduleHtml = '<div class="form-group schedule">';
-    scheduleHtml += '<label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{Programmation}}</label>';
-    scheduleHtml += '<div class="col-lg-9 col-md-9 col-sm-6 col-xs-12">';
+    var scheduleHtml = '<div class="form-group col-xs-12 col-padding schedule">';
+    scheduleHtml += '<label class="control-label">{{Programmation}}</label>';
     scheduleHtml += '<div class="input-group">';
+    scheduleHtml += '<span class="input-group-btn">';
+    scheduleHtml += '<a class="btn btn-danger btn-sm cursor bt_removeSchedule"><i class="fas fa-minus-circle"></i></a>';
+    scheduleHtml += '</span>';
     scheduleHtml += '<input class="scenarioAttr input-sm form-control" data-l1key="schedule" value="' + scheduleCode.replace(/"/g, '&quot;') + '">';
     scheduleHtml += '<span class="input-group-btn">';
     scheduleHtml += '<a class="btn btn-default btn-sm cursor helpSelectCron"><i class="fas fa-question-circle"></i></a>';
-    scheduleHtml += '<a class="btn btn-danger btn-sm cursor bt_removeSchedule"><i class="fas fa-minus-circle"></i></a>';
     scheduleHtml += '</span>';
-    scheduleHtml += '</div>';
     scheduleHtml += '</div>';
     scheduleHtml += '</div>';
     $('.scheduleMode').append(scheduleHtml);
