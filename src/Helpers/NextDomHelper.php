@@ -43,7 +43,7 @@ use NextDom\Managers\DataStoreManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
 use NextDom\Managers\MessageManager;
-use NextDom\Managers\ObjectManager;
+use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioExpressionManager;
@@ -386,7 +386,6 @@ class NextDomHelper
         }
         if (!file_exists($result)) {
             mkdir($result, 0775, true);
-            system('ln -s ' . ConfigManager::byKey('folder::tmp') . ' /tmp/jeedom');
         }
         return $result;
     }
@@ -813,6 +812,11 @@ class NextDomHelper
         // echo " $okStr\n";
         // echo __('core.enable-tasks');
         ConfigManager::save('enableCron', 1);
+        // Create log folder
+        self::getTmpFolder();
+        if (!is_dir('/tmp/jeedom')) {
+            system('ln -s ' . ConfigManager::byKey('folder::tmp') . ' /tmp/jeedom');
+        }
         // echo " $okStr\n";
         // } catch (\Exception $e) {
         //     if ((  true  == $force) ||
@@ -917,6 +921,14 @@ class NextDomHelper
             ReportHelper::clean();
             DBHelper::optimize();
             CacheManager::clean();
+            foreach (UpdateManager::listRepo() as $repoCode => $repoData) {
+                $classCode = 'repo_' . $repoCode;
+                $fullClassName = $repoCode['class'];
+                if (class_exists($fullClassName) && method_exists($fullClassName, 'cronDaily') && ConfigManager::byKey($classCode . '::enable') == 1) {
+                    $fullClassName::cronDaily();
+                }
+            }
+
         } catch (\Exception $e) {
             LogHelper::addError('nextdom', $e->getMessage());
         }
@@ -933,7 +945,7 @@ class NextDomHelper
         foreach ($_replaces as $key => $value) {
             $datas = array_merge($datas, CmdManager::searchConfiguration($key));
             $datas = array_merge($datas, EqLogicManager::searchConfiguration($key));
-            $datas = array_merge($datas, ObjectManager::searchConfiguration($key));
+            $datas = array_merge($datas, JeeObjectManager::searchConfiguration($key));
             $datas = array_merge($datas, ScenarioManager::searchByUse(array(array('action' => '#' . $key . '#'))));
             $datas = array_merge($datas, ScenarioExpressionManager::searchExpression($key, $key, false));
             $datas = array_merge($datas, ScenarioExpressionManager::searchExpression('variable(' . str_replace('#', '', $key) . ')'));

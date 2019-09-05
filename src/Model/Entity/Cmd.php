@@ -37,7 +37,7 @@ use NextDom\Managers\HistoryManager;
 use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\ListenerManager;
 use NextDom\Managers\MessageManager;
-use NextDom\Managers\ObjectManager;
+use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioExpressionManager;
@@ -218,6 +218,9 @@ class Cmd implements EntityInterface
         if ($cmd->getType() != 'info') {
             return;
         }
+        if(!is_object($cmd->getEqLogic()) || $cmd->getEqLogic()->getIsEnable() == 0){
+            return;
+        }
         $value = $cmd->execCmd();
         $level = $cmd->checkAlertLevel($value, false);
         if ($level != 'none') {
@@ -324,7 +327,7 @@ class Cmd implements EntityInterface
 
         $template_name = 'cmd.' . $this->getType() . '.' . $this->getSubType() . '.' . $this->getTemplate($version, 'default');
         if (!isset(self::$_templateArray[$version . '::' . $template_name])) {
-            $template = FileSystemHelper::getTemplateFileContent('core', $version, $template_name,'');
+            $template = FileSystemHelper::getTemplateFileContent('core', $version, $template_name, '');
             if ($template == '') {
                 if (ConfigManager::byKey('active', 'widget') == 1) {
                     $template = FileSystemHelper::getTemplateFileContent('core', $version, $template_name, 'widget');
@@ -339,7 +342,7 @@ class Cmd implements EntityInterface
                 }
                 if ($template == '') {
                     $template_name = 'cmd.' . $this->getType() . '.' . $this->getSubType() . '.default';
-                    $template = FileSystemHelper::getTemplateFileContent('core', $version, $template_name,'');
+                    $template = FileSystemHelper::getTemplateFileContent('core', $version, $template_name, '');
                 }
             }
             self::$_templateArray[$version . '::' . $template_name] = $template;
@@ -633,12 +636,12 @@ class Cmd implements EntityInterface
             $replace['#state#'] = '';
             $replace['#tendance#'] = '';
             if ($this->getEqLogicId()->getIsEnable() == 0) {
-                $template = FileSystemHelper::getTemplateFileContent('core', $version, 'cmd.error','');
+                $template = FileSystemHelper::getTemplateFileContent('core', $version, 'cmd.error', '');
                 $replace['#state#'] = 'N/A';
             } else {
                 $replace['#state#'] = $this->execCmd();
                 if (strpos($replace['#state#'], 'error::') !== false) {
-                    $template = FileSystemHelper::getTemplateFileContent('core', $version, 'cmd.error','');
+                    $template = FileSystemHelper::getTemplateFileContent('core', $version, 'cmd.error', '');
                     $replace['#state#'] = str_replace('error::', '', $replace['#state#']);
                 } else {
                     if ($this->getSubType() == 'binary' && $this->getDisplay('invertBinary') == 1) {
@@ -1207,7 +1210,7 @@ class Cmd implements EntityInterface
      * Executed after execution
      *
      * @param array $_values
-     * 
+     *
      * @throws \Exception
      */
     public function postExecCmd($_values = [])
@@ -1262,9 +1265,12 @@ class Cmd implements EntityInterface
         if ($this->getEqType() == '') {
             $this->setEqType($this->getEqLogicId()->getEqType_name());
         }
-        if ($this->getDisplay('generic_type') !== '' && $this->getGeneric_type() == '') {
+        if ($this->getDisplay('generic_type') != '' && $this->getGeneric_type() == '') {
             $this->setGeneric_type($this->getDisplay('generic_type'));
-            $this->setDisplay('generic_type', '');
+            $this->setDisplay('generic_type', null);
+        }
+        if ($this->getType() == 'action' && $this->getIsHistorized() == 1) {
+            $this->setIsHistorized(0);
         }
         DBHelper::save($this);
         if ($this->_needRefreshWidget) {
@@ -1326,10 +1332,7 @@ class Cmd implements EntityInterface
                 }
             }
         }
-        if ($this->getCache('alertLevel') == $currentLevel) {
-            return $currentLevel;
-        }
-        if ($_allowDuring && $this->getAlert($currentLevel . 'during') != '' && $this->getAlert($currentLevel . 'during') > 0) {
+        if ($_allowDuring && $currentLevel != 'none' && $this->getAlert($currentLevel . 'during') != '' && $this->getAlert($currentLevel . 'during') > 0) {
             $cron = CronManager::byClassAndFunction('cmd', 'duringAlertLevel', ['cmd_id' => intval($this->getId())]);
             $next = strtotime('+ ' . $this->getAlert($currentLevel . 'during', 1) . ' minutes ' . date('Y-m-d H:i:s'));
             if (!is_object($cron)) {
@@ -1393,6 +1396,9 @@ class Cmd implements EntityInterface
         if ($this->getType() != 'info') {
             return;
         }
+        if($_level == $this->getCache('alertLevel')){
+            return;
+        }
         global $NEXTDOM_INTERNAL_CONFIG;
         $this->setCache('alertLevel', $_level);
         $eqLogic = $this->getEqLogicId();
@@ -1406,7 +1412,7 @@ class Cmd implements EntityInterface
             if ($this->getAlert($_level . 'during') != '' && $this->getAlert($_level . 'during') > 0) {
                 $message .= ' ' . __('pendant plus de ') . $this->getAlert($_level . 'during') . __(' minute(s)');
             }
-            $message .= ' => ' . str_replace('#value#', $_value, $this->getAlert($_level . 'if'));
+            $message .= ' => ' . NextDomHelper::toHumanReadable(str_replace('#value#', $_value, $this->getAlert($_level . 'if')));
             LogHelper::add('event', 'info', $message);
             $eqLogic = $this->getEqLogicId();
             if (ConfigManager::byKey('alert::addMessageOn' . ucfirst($_level)) == 1) {
@@ -1541,7 +1547,7 @@ class Cmd implements EntityInterface
         }
         if (!$repeat) {
             ListenerManager::check($this->getId(), $value, $this->getCollectDate());
-            ObjectManager::checkSummaryUpdate($this->getId());
+            JeeObjectManager::checkSummaryUpdate($this->getId());
         }
         $this->addHistoryValue($value, $this->getCollectDate());
         $this->checkReturnState($value);

@@ -19,7 +19,7 @@
 
 namespace NextDom\Rest;
 
-use NextDom\Managers\ObjectManager;
+use NextDom\Managers\JeeObjectManager;
 use NextDom\Model\Entity\JeeObject;
 
 /**
@@ -38,7 +38,7 @@ class RoomRest
     {
         $authenticator = Authenticator::getInstance();
         $user = $authenticator->getConnectedUser();
-        $defaultRoom = ObjectManager::getDefaultUserRoom($user);
+        $defaultRoom = JeeObjectManager::getDefaultUserRoom($user);
         return self::getTree($defaultRoom->getId());
     }
 
@@ -47,12 +47,12 @@ class RoomRest
      *
      * @param int $roomId Root rooms
      *
-     * @return ObjectManager[] Tree of rooms
+     * @return JeeObjectManager[] Tree of rooms
      * @throws \Exception
      */
     public static function getTree(int $roomId)
     {
-        $rootRoom = ObjectManager::byId($roomId);
+        $rootRoom = JeeObjectManager::byId($roomId);
         $result = self::prepareResult($rootRoom);
         return $result;
     }
@@ -116,7 +116,7 @@ class RoomRest
      */
     public static function get(int $roomId)
     {
-        $room = ObjectManager::byId($roomId);
+        $room = JeeObjectManager::byId($roomId);
         return self::prepareResult($room, null, false);
     }
 
@@ -129,7 +129,7 @@ class RoomRest
      */
     public static function getRoots()
     {
-        $rootRooms = ObjectManager::getRootObjects(true, false);
+        $rootRooms = JeeObjectManager::getRootObjects(true, false);
         $result = [];
         $result['id'] = null;
         $result['name'] = null;
@@ -148,7 +148,7 @@ class RoomRest
      * @throws \Exception
      */
     public static function getRoomSummary(int $roomId) {
-        $room = ObjectManager::byId($roomId);
+        $room = JeeObjectManager::byId($roomId);
         if (is_object($room)) {
             return $room->getHtmlSummary();
         }

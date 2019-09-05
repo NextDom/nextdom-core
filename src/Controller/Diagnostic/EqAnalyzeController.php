@@ -28,7 +28,7 @@ use NextDom\Helpers\Render;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\InteractDefManager;
-use NextDom\Managers\ObjectManager;
+use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
@@ -174,7 +174,7 @@ class EqAnalyzeController extends BaseController
 
         $pageData['eqAnalyzeNextDomDeadCmd'] = NextDomHelper::getDeadCmd();
         $pageData['eqAnalyzeCmdDeadCmd'] = CmdManager::deadCmd();
-        $pageData['eqAnalyzeJeeObjectDeadCmd'] = ObjectManager::deadCmd();
+        $pageData['eqAnalyzeJeeObjectDeadCmd'] = JeeObjectManager::deadCmd();
         $pageData['eqAnalyzeScenarioDeadCmd'] = ScenarioManager::consystencyCheck(true);
         $pageData['eqAnalyzeInteractDefDeadCmd'] = InteractDefManager::deadCmd();
         $pageData['eqAnalyzePluginDeadCmd'] = [];

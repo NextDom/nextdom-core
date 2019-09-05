@@ -283,7 +283,7 @@ class CmdManager
     /**
      * Search in commands configuration
      *
-     * @param string $configuration String to find
+     * @param string|array $configuration String to find
      * @param string $eqType Filter by EqLogic type
      *
      * @return Cmd[] List of commands

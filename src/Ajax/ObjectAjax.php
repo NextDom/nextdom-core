@@ -25,7 +25,7 @@ use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\EqLogicManager;
-use NextDom\Managers\ObjectManager;
+use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Model\Entity\JeeObject;
 use NextDom\Model\Entity\Scenario;
@@ -43,7 +43,7 @@ class ObjectAjax extends BaseAjax
     public function remove()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $resultObject = ObjectManager::byId(Utils::init('id'));
+        $resultObject = JeeObjectManager::byId(Utils::init('id'));
         if (!is_object($resultObject)) {
             throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));
         }
@@ -53,7 +53,7 @@ class ObjectAjax extends BaseAjax
 
     public function byId()
     {
-        $resultObject = ObjectManager::byId(Utils::init('id'));
+        $resultObject = JeeObjectManager::byId(Utils::init('id'));
         if (!is_object($resultObject)) {
             throw new CoreException(__('Objet inconnu. Vérifiez l\'ID ') . Utils::init('id'));
         }
@@ -62,13 +62,13 @@ class ObjectAjax extends BaseAjax
 
     public function createSummaryVirtual()
     {
-        ObjectManager::createSummaryToVirtual(Utils::init('key'));
+        JeeObjectManager::createSummaryToVirtual(Utils::init('key'));
         AjaxHelper::success();
     }
 
     public function all()
     {
-        $resultObjects = ObjectManager::buildTree();
+        $resultObjects = JeeObjectManager::buildTree();
         if (Utils::init('onlyHasEqLogic') != '') {
             $result = [];
             foreach ($resultObjects as $resultObject) {
@@ -87,7 +87,7 @@ class ObjectAjax extends BaseAjax
         AuthentificationHelper::isConnectedAsAdminOrFail();
         $jsonObject = json_decode(Utils::init('object'), true);
         if (isset($jsonObject['id'])) {
-            $resultObject = ObjectManager::byId($jsonObject['id']);
+            $resultObject = JeeObjectManager::byId($jsonObject['id']);
         }
         if (!isset($resultObject) || !is_object($resultObject)) {
             $resultObject = new JeeObject();
@@ -102,7 +102,7 @@ class ObjectAjax extends BaseAjax
 
     public function getChild()
     {
-        $resultObject = ObjectManager::byId(Utils::init('id'));
+        $resultObject = JeeObjectManager::byId(Utils::init('id'));
         if (!is_object($resultObject)) {
             throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));
         }
@@ -124,7 +124,7 @@ class ObjectAjax extends BaseAjax
                 $objectsList = json_decode(Utils::init('id'), true);
             } else {
                 $objectsList = [];
-                foreach (ObjectManager::all() as $resultObject) {
+                foreach (JeeObjectManager::all() as $resultObject) {
                     if ($resultObject->getConfiguration('hideOnDashboard', 0) == 1) {
                         continue;
                     }
@@ -138,7 +138,7 @@ class ObjectAjax extends BaseAjax
                 if (Utils::init('summary') == '') {
                     $eqLogics = EqLogicManager::byObjectId($id, true, true);
                 } else {
-                    $resultObject = ObjectManager::byId($id);
+                    $resultObject = JeeObjectManager::byId($id);
                     $eqLogics = $resultObject->getEqLogicBySummary(Utils::init('summary'), true, false);
                 }
                 if (count($eqLogics) > 0) {
@@ -184,7 +184,7 @@ class ObjectAjax extends BaseAjax
             if (Utils::init('summary') == '') {
                 $eqLogics = EqLogicManager::byObjectId(Utils::init('id'), true, true);
             } else {
-                $resultObject = ObjectManager::byId(Utils::init('id'));
+                $resultObject = JeeObjectManager::byId(Utils::init('id'));
                 $eqLogics = $resultObject->getEqLogicBySummary(Utils::init('summary'), true, false);
             }
             if (count($eqLogics) > 0) {
@@ -230,7 +230,7 @@ class ObjectAjax extends BaseAjax
         AuthentificationHelper::isConnectedAsAdminOrFail();
         $position = 1;
         foreach (json_decode(Utils::init('objects'), true) as $id) {
-            $resultObject = ObjectManager::byId($id);
+            $resultObject = JeeObjectManager::byId($id);
             if (is_object($resultObject)) {
                 $resultObject->setPosition($position);
                 $resultObject->save();
@@ -247,12 +247,12 @@ class ObjectAjax extends BaseAjax
             foreach (json_decode(Utils::init('ids'), true) as $id => $value) {
                 if ($id == 'global') {
                     $result['global'] = [
-                        'html' => ObjectManager::getGlobalHtmlSummary($value['version']),
+                        'html' => JeeObjectManager::getGlobalHtmlSummary($value['version']),
                         'id' => 'global',
                     ];
                     continue;
                 }
-                $resultObject = ObjectManager::byId($id);
+                $resultObject = JeeObjectManager::byId($id);
                 if (!is_object($resultObject)) {
                     continue;
                 }
@@ -263,7 +263,7 @@ class ObjectAjax extends BaseAjax
             }
             AjaxHelper::success($result);
         } else {
-            $resultObject = ObjectManager::byId(Utils::init('id'));
+            $resultObject = JeeObjectManager::byId(Utils::init('id'));
             if (!is_object($resultObject)) {
                 throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));
             }
@@ -277,7 +277,7 @@ class ObjectAjax extends BaseAjax
     public function removeImage()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $resultObject = ObjectManager::byId(Utils::init('id'));
+        $resultObject = JeeObjectManager::byId(Utils::init('id'));
         if (!is_object($resultObject)) {
             throw new CoreException(__('Vue inconnu. Vérifiez l\'ID ') . Utils::init('id'));
         }
@@ -291,7 +291,7 @@ class ObjectAjax extends BaseAjax
     public function uploadImage()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $resultObject = ObjectManager::byId(Utils::init('id'));
+        $resultObject = JeeObjectManager::byId(Utils::init('id'));
         if (!is_object($resultObject)) {
             throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));
         }

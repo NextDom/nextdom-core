@@ -275,6 +275,10 @@ class PluginManager
     private static function startCronTask(string $cronType = '')
     {
         $cache = CacheManager::byKey('plugin::' . $cronType . '::inprogress');
+        if(is_array($cache->getValue(0))){
+            CacheManager::set('plugin::' . $cronType . '::inprogress', -1);
+            $cache = CacheManager::byKey('plugin::' . $cronType . '::inprogress');
+        }
         if ($cache->getValue(0) > 3) {
             MessageManager::add('core', __('La tache plugin::' . $cronType . ' n\'arrive pas à finir à cause du plugin : ') . CacheManager::byKey('plugin::' . $cronType . '::last')->getValue() . __(' nous vous conseillons de désactiver le plugin et de contacter l\'auteur'));
         }
@@ -303,6 +307,16 @@ class PluginManager
     public static function cron5()
     {
         self::startCronTask(PluginManagerCron::CRON_5);
+    }
+
+    /**
+     * Tâche exécutée toutes les 10 minutes
+     *
+     * @throws \Exception
+     */
+    public static function cron10()
+    {
+        self::startCronTask(PluginManagerCron::CRON_10);
     }
 
     /**

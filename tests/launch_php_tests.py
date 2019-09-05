@@ -22,6 +22,7 @@ def php_tests():
     exec_command_in_container(container_name, 'apt-get install -y php-xdebug > /dev/null 2>&1')
     exec_command_in_container(container_name, 'bash -c "cd /var/www/html && vendor/bin/phpunit --configuration tests/phpunit_tests/phpunit.xml --testsuite AllTests"')
     copy_file_from_container(container_name, '/var/www/html/tests/coverage/clover.xml', 'coverage/')
+    remove_test_container(container_name)
 
 if __name__ == "__main__":
     TESTS_LIST = {

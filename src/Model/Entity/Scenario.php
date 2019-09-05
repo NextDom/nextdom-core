@@ -35,7 +35,7 @@ use NextDom\Managers\DataStoreManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
 use NextDom\Managers\InteractDefManager;
-use NextDom\Managers\ObjectManager;
+use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\ScenarioElementManager;
 use NextDom\Managers\ScenarioManager;
@@ -259,6 +259,37 @@ class Scenario implements EntityInterface
         if (ConfigManager::byKey('enableScenario') != 1 || $this->getIsActive() != 1) {
             return false;
         }
+        $state = $this->getState();
+        if ($state == ScenarioState::STARTING) {
+            //Scénario bloqué en starting (Exemple de cause : trop de connexions à MySql, la connexion est refusée, le scénario plante)
+            if (strtotime('now') - $this->getCache('startingTime') > 5) {
+                LogHelper::add('scenario', 'error', __('La dernière exécution du scénario ne s\'est pas lancée. Vérifiez le log scenario_execution, ainsi que le log du scénario') . " \"" . $this->getName() . "\".");
+                $this->setLog(__('La dernière exécution du scénario ne s\'est pas lancée. Vérifiez le log scenario_execution pour l\'exécution à ') . date('Y-m-d H:i:s', $this->getCache('startingTime')) . ".");
+                $this->persistLog();
+            }
+            //Retarde le lancement du scénario si une autre instance est déjà en cours de démarrage
+            if (($this->getCache('startingTime') + 2) > strtotime('now')) {
+                $i = 0;
+                while ($state == ScenarioState::STARTING) {
+                    sleep(1);
+                    $state = $this->getState();
+                    $i++;
+                    if ($i > 10) {
+                        break;
+                    }
+                }
+                if ($state == ScenarioState::STARTING) {
+                    LogHelper::add('scenario', 'error', __('Trop d\'appel simultané du scénario, il ne peut-être exécuté une nouvelle fois. Il est conseillé de réduire les appels au scénario') . " \"" . $this->getName() . "\".");
+                    $this->setLog(__('Trop d\'appel simultané du scénario, il ne peut-être exécuté une nouvelle fois. Il est conseillé de réduire les appels à ce scénario') . ".");
+                    $this->persistLog();
+                    return false;
+                }
+            }
+        }
+        if ($state == ScenarioState::IN_PROGRESS && $this->getConfiguration('allowMultiInstance', 0) == 0) {
+            return false;
+        }
+        $this->setCache(['startingTime' => strtotime('now'), 'state' => ScenarioState::STARTING]);
         // Test execution mode
         if ($this->getConfiguration('syncmode') == 1 || $forceSyncMode) {
             $this->setLog(__('Lancement du scénario en mode synchrone'));
@@ -427,7 +458,7 @@ class Scenario implements EntityInterface
      *
      * Data are stored in scenarioCacheAttr + Scenario_ID
      *
-     * @param string $key Key to store
+     * @param string|array $key Key to store
      * @param mixed $valueToStore Value to store
      *
      * @throws \Exception
@@ -531,7 +562,7 @@ class Scenario implements EntityInterface
      */
     public function getObject()
     {
-        return ObjectManager::byId($this->object_id);
+        return JeeObjectManager::byId($this->object_id);
     }
 
     /**
@@ -1056,7 +1087,7 @@ class Scenario implements EntityInterface
     }
 
     /**
-     *
+     * TODO: Test and opti
      * @param mixed $_only_class
      * @return string
      * @throws \Exception
@@ -1066,6 +1097,8 @@ class Scenario implements EntityInterface
         if ($_only_class) {
             if ($this->getIsActive() == 1) {
                 switch ($this->getState()) {
+                    case ScenarioState::STARTING:
+                        return 'fas fa-hourglass-start';
                     case ScenarioState::IN_PROGRESS:
                         return 'fas fa-spinner fa-spin';
                     case ScenarioState::ERROR:
@@ -1082,6 +1115,8 @@ class Scenario implements EntityInterface
         } else {
             if ($this->getIsActive() == 1) {
                 switch ($this->getState()) {
+                    case ScenarioState::STARTING:
+                        return '<i class="fas fa-hourglass-start"></i>';
                     case ScenarioState::IN_PROGRESS:
                         return '<i class="fas fa-spinner fa-spin"></i>';
                     case ScenarioState::ERROR:

@@ -9,7 +9,7 @@
       $('.iconCmd#uid#').empty();
       if(_options.display_value == '0'){
         // Closed
-        if (nextdom.cmd.normalizeName('#name#') == 'fermer') {
+        if (nextdom.cmd.normalizeName('#name#') == 'off') {
                     $('.cmd[data-cmd_id=#id#]').hide();
                 }else{
                     $('.cmd[data-cmd_id=#id#]').show();
@@ -18,7 +18,7 @@
                 }
       }else if(_options.display_value == '252'){
         // Closing
-        if (nextdom.cmd.normalizeName('#name#') == 'fermer') {
+        if (nextdom.cmd.normalizeName('#name#') == 'off') {
                     $('.cmd[data-cmd_id=#id#]').hide();
                 }else{
                     $('.cmd[data-cmd_id=#id#]').show();
@@ -28,7 +28,7 @@
 
       }else if(_options.display_value == '253'){
         // Stopped
-        if (nextdom.cmd.normalizeName('#name#') == 'fermer') {
+        if (nextdom.cmd.normalizeName('#name#') == 'off') {
                     $('.cmd[data-cmd_id=#id#]').hide();
                 }else{
                   $('.cmd[data-cmd_id=#id#]').show();
@@ -38,7 +38,7 @@
 
       }else if(_options.display_value == '254'){
         // Opening
-        if (nextdom.cmd.normalizeName('#name#') == 'ouvrir') {
+        if (nextdom.cmd.normalizeName('#name#') == 'on') {
                     $('.cmd[data-cmd_id=#id#]').hide();
                 }else{
                    $('.cmd[data-cmd_id=#id#]').show();
@@ -48,7 +48,7 @@
 
       }else if(_options.display_value == '255'){
         // Opened
-        if (nextdom.cmd.normalizeName('#name#') == 'ouvrir') {
+        if (nextdom.cmd.normalizeName('#name#') == 'on') {
                     $('.cmd[data-cmd_id=#id#]').hide();
                 }else{
                   $('.cmd[data-cmd_id=#id#]').show();

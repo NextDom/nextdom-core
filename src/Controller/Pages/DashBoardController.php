@@ -28,7 +28,7 @@ use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\EqLogicManager;
-use NextDom\Managers\ObjectManager;
+use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\UserManager;
 use NextDom\Model\Entity\JeeObject;
 
@@ -59,18 +59,18 @@ class DashBoardController extends BaseController
         $pageData['JS_VARS']['SEL_SUMMARY'] = Utils::init('summary');
 
         $defaultDashboardObjectName = UserManager::getStoredUser()->getOptions('defaultDashboardObject');
-        $defaultDashboardObject = ObjectManager::byId($defaultDashboardObjectName);
+        $defaultDashboardObject = JeeObjectManager::byId($defaultDashboardObjectName);
         if(!empty($defaultDashboardObject)) {
             $defaultDashboardObjectId = $defaultDashboardObject->getId();
         }
 
         if ($objectIdFromUrl != '') {
-            $currentJeeObject = ObjectManager::byId($objectIdFromUrl);
+            $currentJeeObject = JeeObjectManager::byId($objectIdFromUrl);
         } else {
             if ($defaultDashboardObjectId != "") {
-                $currentJeeObject = ObjectManager::byId($defaultDashboardObjectId);
+                $currentJeeObject = JeeObjectManager::byId($defaultDashboardObjectId);
             } else {
-                $currentJeeObject = ObjectManager::getRootObjects();
+                $currentJeeObject = JeeObjectManager::getRootObjects();
             }
         }
         if(!empty($currentJeeObject)){
@@ -95,7 +95,7 @@ class DashBoardController extends BaseController
         $pageData['dashboardObject'] = $currentJeeObject;
         $pageData['dashboardObjectParentNumber'] = $currentJeeObject->parentNumber();
         $pageData['dashboardObjectListMenu'] = self::getObjectsListMenu($currentJeeObjectId);
-        $pageData['dashboardChildrenObjects'] = ObjectManager::buildTree($currentJeeObject);
+        $pageData['dashboardChildrenObjects'] = JeeObjectManager::buildTree($currentJeeObject);
         $pageData['profilsUser'] = UserManager::getStoredUser();
 
         $pageData['JS_POOL'][] = '/public/js/desktop/pages/dashboard.js';
@@ -118,7 +118,7 @@ class DashBoardController extends BaseController
         if ($currentObjectId === '') {
             return [];
         }
-        $currentObject = ObjectManager::byId($currentObjectId);
+        $currentObject = JeeObjectManager::byId($currentObjectId);
 
         // Get parents
         $parentObjects = [];
@@ -135,7 +135,7 @@ class DashBoardController extends BaseController
         foreach ($parentObjects as $selectedLayerObject) {
             $layerResult = [];
             if ($selectedLayerObject->getFather() === null) {
-                $layer = ObjectManager::getRootObjects(true);
+                $layer = JeeObjectManager::getRootObjects(true);
             } else {
                 $layer = $selectedLayerObject->getFather()->getChild();
             }

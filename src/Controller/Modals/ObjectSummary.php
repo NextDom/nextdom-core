@@ -25,7 +25,7 @@ namespace NextDom\Controller\Modals;
 use NextDom\Helpers\Render;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\ConfigManager;
-use NextDom\Managers\ObjectManager;
+use NextDom\Managers\JeeObjectManager;
 
 /**
  * Class ObjectSummary
@@ -43,7 +43,7 @@ class ObjectSummary extends BaseAbstractModal
     {
 
         $pageData = [];
-        $pageData['objectsTree'] = ObjectManager::buildTree(null, false);
+        $pageData['objectsTree'] = JeeObjectManager::buildTree(null, false);
         $pageData['configObjectSummary'] = [];
         $pageData['summaryDesktopHidden'] = [];
         $pageData['summaryMobileHidden'] = [];

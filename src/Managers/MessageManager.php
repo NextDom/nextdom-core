@@ -189,4 +189,20 @@ class MessageManager
         LIMIT 500';
         return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
     }
+
+    /**
+     * @param $pluginId
+     * @param $logicialId
+     * @return mixed
+     */
+    public static function removeByPluginLogicalId($pluginId, $logicialId) {
+        $values = array(
+            'logicalId' => $logicialId,
+            'plugin' => $pluginId,
+        );
+        $sql = 'DELETE FROM message
+                WHERE logicalId=:logicalId
+                AND plugin=:plugin';
+        return DBHelper::exec($sql, $values);
+    }
 }

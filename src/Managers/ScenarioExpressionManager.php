@@ -642,6 +642,53 @@ class ScenarioExpressionManager
     }
 
     /**
+     * Obtenir un dégradé de couleur
+     *
+     * @param $_from_color Couleur de départ
+     * @param $_to_color Couleur de fin
+     * @param $_min
+     * @param $_max
+     * @param $_value
+     * @return mixed
+     */
+    public static function color_gradient($_from_color, $_to_color, $_min,$_max,$_value) {
+        if(!is_numeric($_value)){
+            $value = round(NextDomHelper::evaluateExpression($_value));
+        }else{
+            $value = round($_value);
+        }
+        $graduations = $_max - $_min - 1;
+        $value -= $_min + 1;
+        $startcol = str_replace('#', '', $_from_color);
+        $endcol = str_replace('#', '', $_to_color);
+        $RedOrigin = hexdec(substr($startcol, 1, 2));
+        $GrnOrigin = hexdec(substr($startcol, 3, 2));
+        $BluOrigin = hexdec(substr($startcol, 5, 2));
+        if ($graduations >= 2) {
+            $GradientSizeRed = (hexdec(substr($endcol, 1, 2)) - $RedOrigin) / $graduations;
+            $GradientSizeGrn = (hexdec(substr($endcol, 3, 2)) - $GrnOrigin) / $graduations;
+            $GradientSizeBlu = (hexdec(substr($endcol, 5, 2)) - $BluOrigin) / $graduations;
+            for ($i = 0; $i <= $graduations; $i++) {
+                $RetVal[$i] = strtoupper("#" . str_pad(dechex($RedOrigin + ($GradientSizeRed * $i)), 2, '0', STR_PAD_LEFT) .
+                    str_pad(dechex($GrnOrigin + ($GradientSizeGrn * $i)), 2, '0', STR_PAD_LEFT) .
+                    str_pad(dechex($BluOrigin + ($GradientSizeBlu * $i)), 2, '0', STR_PAD_LEFT));
+            }
+        } elseif ($graduations == 1) {
+            $RetVal[] = $_from_color;
+            $RetVal[] = $_to_color;
+        } else {
+            $RetVal[] = $_from_color;
+        }
+        if(isset($RetVal[$value])){
+            return $RetVal[$value];
+        }
+        if($_value <= $_min){
+            return $RetVal[0];
+        }
+        return $RetVal[count($RetVal) - 1];
+    }
+
+    /**
      * Obtenir la valeur maximum sur une période TODO: de quelque chose
      *
      * @param $cmdId

@@ -93,6 +93,11 @@ class scenarioExpression extends \NextDom\Model\Entity\ScenarioExpression
         return ScenarioExpressionManager::max($_cmd_id, $_period);
     }
 
+    public static function color_gradient($_from_color, $_to_color, $_min, $_max, $_value)
+    {
+        return ScenarioExpressionManager::color_gradient($_from_color, $_to_color, $_min, $_max, $_value);
+    }
+
     public static function maxBetween($_cmd_id, $_startDate, $_endDate)
     {
         return ScenarioExpressionManager::maxBetween($_cmd_id, $_startDate, $_endDate);

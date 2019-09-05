@@ -334,7 +334,7 @@ class Plugin implements EntityInterface
         if ($this->getHasDependency() != 1 || !method_exists($plugin_id, 'dependancy_install')) {
             return;
         }
-        if ((strtotime('now') - 60) <= strtotime(ConfigManager::byKey('lastDependancyInstallTime', $plugin_id))) {
+        if (abs(strtotime('now') - strtotime(ConfigManager::byKey('lastDependancyInstallTime', $plugin_id))) <= 60) {
             $cache = CacheManager::byKey('dependancy' . $this->getID());
             $cache->remove();
             throw new \Exception(__('Vous devez attendre au moins 60 secondes entre deux lancements d\'installation de dépendances'));

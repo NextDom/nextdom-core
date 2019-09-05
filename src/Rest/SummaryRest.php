@@ -19,7 +19,7 @@
 
 namespace NextDom\Rest;
 
-use NextDom\Managers\ObjectManager;
+use NextDom\Managers\JeeObjectManager;
 use NextDom\Model\Entity\JeeObject;
 
 /**
@@ -38,7 +38,7 @@ class SummaryRest
     {
         $authenticator = Authenticator::getInstance();
         $user = $authenticator->getConnectedUser();
-        $defaultRoom = ObjectManager::getDefaultUserRoom($user);
+        $defaultRoom = JeeObjectManager::getDefaultUserRoom($user);
         if ($defaultRoom === false) {
             return false;
         }
@@ -52,13 +52,13 @@ class SummaryRest
      *
      * @param int $roomId
      *
-     * @return ObjectManager[] Tree of rooms
+     * @return JeeObjectManager[] Tree of rooms
      *
      * @throws \Exception
      */
     public static function getRoomTree(int $roomId)
     {
-        $rootRoom = ObjectManager::byId($roomId);
+        $rootRoom = JeeObjectManager::byId($roomId);
         $rootRoom->getChilds();
         $result = self::prepareResult($rootRoom);
         return $result;

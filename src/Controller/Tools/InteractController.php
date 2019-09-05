@@ -28,7 +28,7 @@ use NextDom\Helpers\Render;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\InteractDefManager;
-use NextDom\Managers\ObjectManager;
+use NextDom\Managers\JeeObjectManager;
 
 /**
  * Class InteractController
@@ -64,7 +64,7 @@ class InteractController extends BaseController
         $pageData['interactDisabledOpacity'] = NextDomHelper::getConfiguration('eqLogic:style:noactive');
         $pageData['interactCmdType'] = NextDomHelper::getConfiguration('cmd:type');
         $pageData['interactAllUnite'] = CmdManager::allUnite();
-        $pageData['interactJeeObjects'] = ObjectManager::all();
+        $pageData['interactJeeObjects'] = JeeObjectManager::all();
         $pageData['interactEqLogicTypes'] = EqLogicManager::allType();
         $pageData['interactEqLogics'] = EqLogicManager::all();
         $pageData['interactEqLogicCategories'] = NextDomHelper::getConfiguration('eqLogic:category');

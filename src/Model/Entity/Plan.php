@@ -25,7 +25,7 @@ use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\EqLogicManager;
-use NextDom\Managers\ObjectManager;
+use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PlanManager;
 use NextDom\Managers\ScenarioExpressionManager;
@@ -428,7 +428,7 @@ class Plan implements EntityInterface
                 $html = '<div class="summary-widget" data-summary_id="' . $this->getLink_id() . '" style="' . $background_color . $color . ';min-width:10px;min-height:10px;">';
                 $summary = '';
                 if ($this->getLink_id() == 0) {
-                    $summary = ObjectManager::getGlobalHtmlSummary($_version);
+                    $summary = JeeObjectManager::getGlobalHtmlSummary($_version);
                 } else {
                     $linkedObject = $this->getLink();
                     if (is_object($linkedObject)) {
@@ -466,7 +466,7 @@ class Plan implements EntityInterface
             $cmd = CmdManager::byId($this->getLink_id());
             return $cmd;
         } elseif ($this->getLink_type() == PlanLinkType::SUMMARY) {
-            $linkedObject = ObjectManager::byId($this->getLink_id());
+            $linkedObject = JeeObjectManager::byId($this->getLink_id());
             return $linkedObject;
         }
         return null;
