@@ -5,13 +5,8 @@
 >
 > ***Statut : beta***
 
-#### NEWS
-*
-
-#### AMELIORATIONS
-*
-
 #### FIXS
+* Corrections des liens symbolique dossier tmp ecris en dur par certains plugins
 * [liste ici](https://github.com/NextDom/nextdom-core/milestone/17?closed=1)
 ---
 ## 0.3.0
