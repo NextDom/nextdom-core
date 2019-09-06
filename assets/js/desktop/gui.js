@@ -423,10 +423,11 @@ function refreshUpdateNumber() {
   * @param themeName Theme name to save and use for search colors.
   * @param reload TRUE for reloading page
   */
- function changeThemeColors(themeName,reload){
-    var config = "";
-    config = getThemeColors(themeName);
-    config['nextdom::theme'] = themeName;
+ function changeThemeColors(themeName, reload){
+   var config = getThemeColors(themeName);
+   var nextdomTheme = {};
+   nextdomTheme[themeName] = 1;
+   config['nextdom::theme'] = nextdomTheme;
     nextdom.config.save({
         configuration: config,
         error: function (error) {
@@ -495,7 +496,7 @@ function refreshUpdateNumber() {
           'theme:color19' : '#fafafa',
           'theme:color20' : '#f5f5f5',
           'nextdom::alertAlpha' : '100'
-        }
+        };
         break;
       case 'mix':
         config = {
@@ -520,7 +521,10 @@ function refreshUpdateNumber() {
           'theme:color19' : '#fafafa',
           'theme:color20' : '#f5f5f5',
           'nextdom::alertAlpha' : '100'
-        }
+        };
+        break;
+      default:
+        config = {};
         break;
     }
     return config;

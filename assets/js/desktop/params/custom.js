@@ -69,13 +69,6 @@ function loadInformations() {
         },
         success: function (data) {
             $('#custom').setValues(data, '.configKey');
-            $("#theme-"+$('.configKey[data-l1key="nextdom::theme"]').value()).attr("checked","checked");
-            if ($('.configKey[data-l1key="nextdom::theme"]').value().includes('custom')) {
-                $('#theme4').show();
-                $("#theme-custom").attr("checked","checked");
-            }else{
-                $('#theme4').hide();
-            }
             modifyWithoutSave = false;
         }
     });
@@ -86,20 +79,13 @@ function loadInformations() {
  */
 function initEvents() {
     // Show confirm modal on non saved changes
-    $('#div_pageContainer').delegate('.configKey', 'change', function () {
+    $('#div_pageContainer').delegate('.configKey:not(.noSet)', 'change', function () {
         modifyWithoutSave = true;
     });
 
     // Advanced custom tab loading
     $('a[data-toggle="tab"][href="#advanced"]').on('shown.bs.tab', function () {
         printAdvancedDesktop();
-    });
-
-    // Color change > theme = custom
-    $(".colorpick input").change(function () {
-        if (!$('.configKey[data-l1key="nextdom::theme"]').value().includes('custom')) {
-            $('.configKey[data-l1key="nextdom::theme"]').value('custom-' + $('.configKey[data-l1key="nextdom::theme"]').value());
-        }
     });
 
     // Save customs
@@ -146,9 +132,7 @@ function initEvents() {
 
     // Theme choice changed
     $("input[name=theme]").click(function () {
-        var radio = $(this).val();
-        $('.configKey[data-l1key="nextdom:theme"]').value(radio);
-        changeThemeColors(radio,true);
+        changeThemeColors($(this).attr('data-l2key'),true);
     });
 }
 
