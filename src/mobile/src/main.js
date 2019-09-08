@@ -54,6 +54,7 @@ Vue.config.productionTip = false;
  * Route to login if not connected
  */
 router.beforeEach((to, from, next) => {
+  document.title = "NextDom - " + i18n.t(to.name + "Title");
   if (Communication.isConnected()) {
     next();
   } else if (to.name === "login") {
