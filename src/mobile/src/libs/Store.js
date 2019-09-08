@@ -34,7 +34,9 @@ export const store = new Vuex.Store({
     // List of eqLogics
     eqLogicsList: {},
     // EqLogics position
-    eqLogicsOrder: undefined
+    eqLogicsOrder: undefined,
+    // List of scenarios:
+    scenariosList: []
   },
   mutations: {
     /**
@@ -162,6 +164,14 @@ export const store = new Vuex.Store({
       state.showedCmds[payload.cmd.id]["updateFunc"] = payload.updateFunc;
     },
     /**
+     * Add showed scenarios in list for updates
+     * @param {*} state Store access
+     * @param {Object} payload Scenario object
+     */
+    addScenario(state, payload) {
+      state.scenariosList[payload.scenario.id] = payload.scenario;
+    },
+    /**
      * Update command state
      * @param {*} state Store access
      * @param {*} payload Data to update {cmdId, newState}
@@ -173,6 +183,16 @@ export const store = new Vuex.Store({
         if (state.showedCmds[payload.cmdId].updateFunc !== undefined) {
           state.showedCmds[payload.cmdId].updateFunc();
         }
+      }
+    },
+    /**
+     * Update scenario state
+     * @param {*} state Store access
+     * @param {*} payload Data to update {cmdId, newState}
+     */
+    updateScenario(state, payload) {
+      if (state.scenariosList[payload.scenarioId] !== undefined) {
+        state.scenariosList[payload.scenarioId].state = payload.newState;
       }
     },
     /**
