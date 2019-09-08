@@ -123,61 +123,60 @@
     </div>
 
     {% for objectCategory in marketObjectsByCategory %}
-        <div class="box-group" id="accordionPlugin{{ objectCategory.id }}">
-            <div class="panel box">
-                <a class="box-header with-border accordion-toggle" data-toggle="collapse" data-parent="" href="#config_{{ objectCategory.id }}">
-                    <h3 class="box-title">
-                        <span class="accordion-toggle" data-toggle="collapse" data-parent="#accordionPlugin{{ objectCategory.id }}" href="#config_none" style="text-decoration:none;" data-category="{{ objectCategory.id }}"><i class="fas {{ objectCategory.icon }} spacing-right"></i>{{ objectCategory.name }}</span>
-                    </h3>
-                </a>
-                <div id="config_{{ objectCategory.id }}" class="panel-collapse collapse in">
-                    <div class="box-body">
-                        <div class="pluginContainer DisplayCard text-center" data-category="{{ objectCategory.id }}">
-                            {% for object in objectCategory.objects %}
-                                {% if object.mobile != 'mobile' %}
-                                    <div class="market cursor {{ object.installed }}" data-install="{{ object.installed }}" data-category="{{ object.category }}" data-cost="{{ object.cost }}" data-certification="{{ object.certification }}" data-name="{{ object.name }}" data-market_id="{{ object.id }}" data-market_type="{{ object.type }}">
-                                        {% if object.type != 'widget' %}
-                                            <div class="market-certification market-{{ object.certificationClass }}">{{ object.certification|upper }}</div>
-                                        {% endif %}
-                                        {% if object.installed == 'notInstall' %}<i class="fas fa-check market-install"></i>{% endif %}
-                                        <div>
-                                            <img class="lazy lazyload market-icon" src="{{ object.default_image }}" data-original="{{ object.urlPath }}"/>
-                                        </div>
-                                        <span class="market-name">{{ object.name }}</span>
-                                        <span class="market-author"><i>{{ 'par ' }}</i>{{ object.author }}</span>
-                                        <span class="market-rating">
-                                            {% for i in 1..5 %}
-                                                {% if i <= object.note %}
-                                                    <i class="fas fa-star"></i>
-                                                {% else %}
-                                                    <i class="far fa-star"></i>
-                                                {% endif %}
-                                            {% endfor %}
-                                        </span>
-                                        {% if object.cost > 0 %}
-                                            <span class="market-cost">
-                                                {% if object.purchase == 1 %}
-                                                    <i class="fas fa-check-circle"></i>
-                                                {% else %}
-                                                    {% if object.cost != object.realCost %}
-                                                        <span style="text-decoration:line-through;">{{ object.realCost }}{{ ' €' }}</span>
-                                                    {% endif %}
-                                                    {{ object.cost }}{{ ' €' }}
-                                                {% endif %}
-                                            </span>
-                                        {% else %}
-                                            {% if object.cost < 0 %}
-                                                <span class="market-cost">{{ 'Nous contacter'}}</span>
-                                            {% else %}
-                                                <span class="market-cost">{{ 'Gratuit' }}</span>
-                                            {% endif %}
-                                        {% endif %}
+        <div class="panel box">
+            <a class="box-header with-border accordion-toggle" data-toggle="collapse" data-parent="" href="#config_{{ objectCategory.id }}">
+                <h3 class="box-title">
+                    <span><i class="fas {{ objectCategory.icon }} spacing-right"></i>{{ objectCategory.name }}</span>
+                </h3>
+            </a>
+            <div id="config_{{ objectCategory.id }}" class="panel-collapse collapse in">
+                <div class="box-body">
+                    <div class="pluginContainer DisplayCard text-center" data-category="{{ objectCategory.id }}">
+                        {% for object in objectCategory.objects %}
+                            {% if object.mobile != 'mobile' %}
+                                <div class="market cursor {{ object.installed }}" data-install="{{ object.installed }}" data-category="{{ object.category }}" data-cost="{{ object.cost }}" data-certification="{{ object.certification }}" data-name="{{ object.name }}" data-market_id="{{ object.id }}" data-market_type="{{ object.type }}">
+                                    {% if object.type != 'widget' %}
+                                        <div class="market-certification market-{{ object.certificationClass }}">{{ object.certification|upper }}</div>
+                                    {% endif %}
+                                    {% if object.installed == 'notInstall' %}<i class="fas fa-check market-install"></i>{% endif %}
+                                    <div>
+                                        <img class="lazy lazyload market-icon" src="{{ object.default_image }}" data-original="{{ object.urlPath }}"/>
                                     </div>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
+                                    <span class="market-name">{{ object.name }}</span>
+                                    <span class="market-author"><i>{{ 'par ' }}</i>{{ object.author }}</span>
+                                    <span class="market-rating">
+                                        {% for i in 1..5 %}
+                                            {% if i <= object.note %}
+                                                <i class="fas fa-star"></i>
+                                            {% else %}
+                                                <i class="far fa-star"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </span>
+                                    {% if object.cost > 0 %}
+                                        <span class="market-cost">
+                                            {% if object.purchase == 1 %}
+                                                <i class="fas fa-check-circle"></i>
+                                            {% else %}
+                                                {% if object.cost != object.realCost %}
+                                                    <span style="text-decoration:line-through;">{{ object.realCost }}{{ ' €' }}</span>
+                                                {% endif %}
+                                                {{ object.cost }}{{ ' €' }}
+                                            {% endif %}
+                                        </span>
+                                    {% else %}
+                                        {% if object.cost < 0 %}
+                                            <span class="market-cost">{{ 'Nous contacter'}}</span>
+                                        {% else %}
+                                            <span class="market-cost">{{ 'Gratuit' }}</span>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
                     </div>
                 </div>
-          </div>
+            </div>
+        </div>
     {% endfor %}
 </section>

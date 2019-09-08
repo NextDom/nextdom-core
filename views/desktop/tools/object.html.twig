@@ -37,10 +37,10 @@
     <section class="content-header">
         <div class="action-bar">
             <div class="action-group">
-                <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{'object.back'|trans}}</a>
+                <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{'common.back'|trans}}</a>
             </div>
             <div class="action-group">
-                <a class="btn btn-success btn-action-bar pull-right" id="bt_addObject2"><i class="fas fa-plus-circle"></i>{{ 'object.add'|trans }}</a>
+                <a class="btn btn-success btn-action-bar pull-right" id="bt_addObject"><i class="fas fa-plus-circle"></i>{{ 'common.add'|trans }}</a>
                 <a class="btn btn-primary btn-action-bar pull-right" id="bt_showObjectSummary"><i class="fas fa-list"></i>{{ 'object.global-view'|trans }}</a>
             </div>
         </div>
@@ -70,8 +70,8 @@
                             <span class="object-summary spacing-left">{% if 'objectSummaryParent' in object.getHtmlSummary() %}{{ object.getHtmlSummary()|raw }}{% else %}{{'Aucun résumé...'}}{% endif%}</span>
                         </div>
                         <div class="box-footer clearfix text-center">
-                            <a class="btn btn-danger btn-sm pull-right remove bt_removeObject"><i class="fas fa-trash"></i>{{ 'object.delete'|trans }}</a>
-                            <a class="btn btn-info btn-sm pull-left bt_detailsObject"><i class="fas fa-edit"></i>{{ 'object.modify'|trans }}</a>
+                            <a class="btn btn-danger btn-sm pull-right remove bt_removeObject"><i class="fas fa-trash"></i>{{ 'common.delete'|trans }}</a>
+                            <a class="btn btn-info btn-sm pull-left bt_detailsObject"><i class="fas fa-edit"></i>{{ 'common.modify'|trans }}</a>
                         </div>
                     </div>
                 </div>
@@ -85,10 +85,12 @@
     <section class="content-header">
         <div class="action-bar">
             <div class="action-group">
-                <a class="btn btn-action-bar btn-danger" id="bt_returnToThumbnailDisplay"><i class="fas fa-chevron-left"></i>{{ 'object.back'|trans}}</a>
+                <a class="btn btn-action-bar btn-danger" id="bt_returnToThumbnailDisplay"><i class="fas fa-chevron-left"></i>{{ 'common.back'|trans}}</a>
             </div>
             <div class="action-group">
-                <a class="btn btn-action-bar btn-success pull-right" id="bt_saveObject"><i class="fas fa-save"></i>{{ 'object.save'|trans }}</a>
+                <a class="btn btn-action-bar btn-success pull-right" id="bt_saveObject"><i class="fas fa-save"></i>{{ 'common.save'|trans }}</a>
+                <a class="btn btn-danger btn-action-bar pull-right bt_cancelModifs"><i class="fas fa-times"></i>{{ 'common.cancel'|trans }}</a>
+                <a class="btn btn-default btn-action-bar pull-right" id="bt_graphObject"><i class="fas fa-object-group"></i>{{ 'object.links'|trans }}</a>
             </div>
         </div>
     </section>
@@ -103,191 +105,193 @@
             </ul>
             <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
                 <div role="tabpanel" class="tab-pane active" id="objecttab">
-                    <form class="form-horizontal">
+                    <fieldset>
+                        <legend>{{ 'Identité' }}</legend>
                         <div class="row">
-                            <div class="col-lg-6 col-md-12">
-                                <fieldset>
-                                    <legend>{{ 'Identité' }}</legend>
-                                    <div class="form-group">
-                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Nom de l\'objet' }}</label>
-                                        <div class="col-lg-8 col-md-8 col-sm-7 col-xs-12">
-                                            <input class="form-control objectAttr" type="text" data-l1key="id" style="display : none;"/>
-                                            <input class="form-control objectAttr" type="text" data-l1key="name" placeholder="Nom de l'objet"/>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Père' }}</label>
-                                        <div class="col-lg-8 col-md-8 col-sm-7 col-xs-12">
-                                            <select class="form-control objectAttr" data-l1key="father_id">
-                                                <option value="">{{ 'common.none' | trans }}</option>
-                                                {% for object in objectList %}
-                                                    <option value="{{ object.getId() }}">{{ object.getName() }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-                                    </div>
-                                </fieldset>
-
-                                <fieldset class="legend-section">
-                                    <legend>{{ 'Couleurs' }}</legend>
-                                    <div class="form-group">
-                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Tag' }}</label>
-                                        <div class="col-lg-8 col-md-8 col-sm-7 col-xs-12">
-                                            <div class=" colorpicker-component input-group" id='colorpickTag'>
-                                                <input type="text" class="objectAttr form-control" data-l1key="display" data-l2key="tagColor"/>
-                                                <span class="input-group-addon"><i></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Texte du tag' }}</label>
-                                        <div class="col-lg-8 col-md-8 col-sm-7 col-xs-12">
-                                            <div class=" colorpicker-component input-group" id='colorpickTagText'>
-                                                <input type="text" class="objectAttr form-control" data-l1key="display" data-l2key="tagTextColor"/>
-                                                <span class="input-group-addon"><i></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Texte du résumé' }}</label>
-                                        <div class="col-lg-8 col-md-8 col-sm-7 col-xs-12">
-                                            <div class=" colorpicker-component input-group" id='colorpickSummaryText'>
-                                                <input type="text" class="objectAttr form-control" data-l1key="display" data-l2key="desktop::summaryTextColor"/>
-                                                <span class="input-group-addon"><i></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </fieldset>
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label">{{ 'Nom de l\'objet' }}</label>
+                                <div>
+                                    <input class="form-control objectAttr" type="text" data-l1key="id" style="display : none;"/>
+                                    <input class="form-control objectAttr" type="text" data-l1key="name" placeholder="Nom de l'objet"/>
+                                </div>
                             </div>
-                            <div class="col-lg-6 col-md-12">
-                                <fieldset>
-                                    <legend>{{ 'Design' }}</legend>
-                                    <div class="form-group">
-                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Taille sur le dashboard' }}</label>
-                                        <div class="col-lg-8 col-md-8 col-sm-7 col-xs-12">
-                                            <div class="input-group">
-                                                <input type="text" class="objectAttr form-control" data-l1key="display" data-l2key="dashboard::size"/>
-                                                <span class="input-group-addon">{{ '1 à 12' }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Position' }}</label>
-                                        <div class="col-lg-8 col-md-8 col-sm-7 col-xs-12">
-                                            <input type="number" class="objectAttr form-control" data-l1key="position"/>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'common.visible' | trans }}</label>
-                                        <div class="col-sm-1">
-                                            <input class="objectAttr" type="checkbox" data-l1key="isVisible" checked/>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Masquer sur le dashboard' }}</label>
-                                        <div class="col-sm-1">
-                                            <input class="objectAttr" type="checkbox" data-l1key="configuration" data-l2key="hideOnDashboard"/>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Icône' }}</label>
-                                        <div class="col-lg-8 col-md-8 col-sm-7 col-xs-12">
-                                            <div class="input-group">
-                                                <a class="btn btn-action" id="bt_chooseIcon"><i class="fas fa-flag"></i><span>{{ 'Choisir' }}</span></a>
-                                                <div class="objectAttr label label-icon" data-l1key="display" data-l2key="icon"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'Image' }}</label>
-                                        <div class="col-lg-8 col-md-8 col-sm-7 col-xs-12">
-                                            <span class="btn btn-default btn-file">
-                                                <i class="fas fa-cloud-upload-alt"></i>{{ 'common.send' | trans }}<input id="bt_uploadImage" type="file" name="file" style="display: inline-block;">
-                                            </span>
-                                            <a class="btn btn-danger" id="bt_removeBackgroundImage"><i class="fas fa-trash"></i>{{ 'common.remove' | trans }}</a>
-                                        </div>
-                                    </div>
-                                </fieldset>
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label">{{ 'Père' }}</label>
+                                <select class="form-control objectAttr" data-l1key="father_id">
+                                    <option value="">{{ 'common.none' | trans }}</option>
+                                    {% for object in objectList %}
+                                        <option value="{{ object.getId() }}">{{ object.getName() }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                         </div>
-                    </form>
+                    </fieldset>
+                    <fieldset class="legend-section">
+                        <legend>{{ 'Couleurs' }}</legend>
+                        <div class="row">
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label">{{ 'Tag' }}</label>
+                                <div class="input-group">
+                                    <a class="input-group-addon cursor" id="bt_resetTagColor" data-l1key="display" data-l2key="tagColor" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
+                                    <div class="colorpicker-component colorpick" id='colorpickTag'>
+                                        <input type="text" class="objectAttr form-control noSet" data-l1key="display" data-l2key="tagColor"/>
+                                        <span class="input-group-addon"><i></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label">{{ 'Texte du tag' }}</label>
+                                <div class="input-group">
+                                    <a class="input-group-addon cursor" id="bt_resetTagTextColor" data-l1key="display" data-l2key="tagColor" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
+                                    <div class="colorpicker-component colorpick" id='colorpickTagText'>
+                                        <input type="text" class="objectAttr form-control noSet" data-l1key="display" data-l2key="tagTextColor"/>
+                                        <span class="input-group-addon"><i></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label">{{ 'Texte du résumé' }}</label>
+                                <div class="input-group">
+                                    <a class="input-group-addon cursor" id="bt_resetTextColor" data-l1key="display" data-l2key="tagColor" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
+                                    <div class="colorpicker-component colorpick" id='colorpickSummaryText'>
+                                        <input type="text" class="objectAttr form-control noSet" data-l1key="display" data-l2key="desktop::summaryTextColor"/>
+                                        <span class="input-group-addon"><i></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset class="legend-section">
+                        <legend>{{ 'Positionnement' }}</legend>
+                        <div class="row">
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label">{{ 'Taille sur le dashboard' }}</label>
+                                <div class="input-group">
+                                    <a class="input-group-addon cursor" id="bt_resetDashboardSize" data-l1key="display" data-l2key="dashboard::size" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                                    <span class="input-group-addon input-range-min"></span>
+                                    <input class="objectAttr slider" type="range" min="1" max="12" step="1" data-l1key="display" data-l2key="dashboard::size"/>
+                                    <span class="input-group-addon input-range-max"></span>
+                                    <span class="input-group-addon input-range-value"></span>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label">{{ 'Position dans la hierarchie' }}</label>
+                                <div class="input-group">
+                                    <a class="input-group-addon cursor" id="bt_resetPosition" data-l1key="position" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                                    <span class="input-group-addon input-range-min"></span>
+                                    <input class="objectAttr slider" type="range" min="1" max={{ objectList|length|trans }} step="1" data-l1key="position"/>
+                                    <span class="input-group-addon input-range-max"></span>
+                                    <span class="input-group-addon input-range-value"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset class="legend-section">
+                        <legend>{{ 'Design' }}</legend>
+                        <div class="row">
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label">{{ 'common.visible' | trans }}</label>
+                                <div>
+                                    <input class="objectAttr" type="checkbox" data-l1key="isVisible" checked/>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label">{{ 'Masquer sur le dashboard' }}</label>
+                                <div>
+                                    <input class="objectAttr" type="checkbox" data-l1key="configuration" data-l2key="hideOnDashboard"/>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label">{{ 'Icône' }}</label>
+                                <div class="mix-group">
+                                    <a class="btn btn-action" id="bt_chooseIcon"><i class="fas fa-flag"></i><span>{{ 'Choisir' }}</span></a>
+                                    <div class="objectAttr label label-icon" data-l1key="display" data-l2key="icon"></div>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label">{{ 'Image' }}</label>
+                                <div class="mix-group">
+                                    <span class="btn btn-default btn-file">
+                                        <i class="fas fa-cloud-upload-alt"></i>{{ 'common.send' | trans }}<input id="bt_uploadImage" type="file" name="file" style="display: inline-block;">
+                                    </span>
+                                    <a class="btn btn-danger" id="bt_removeBackgroundImage"><i class="fas fa-trash"></i>{{ 'common.remove' | trans }}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="summarytab">
                     {% if objectSummary|length == 0 %}
                         <div class="alert alert-danger">{{ 'Vous n\'avez aucun résumé de créé. Allez dans l\'administration de' }} {{ PRODUCT_NAME }} {{ '-> Configuration -> onglet Résumés.' }}</div>
                     {% else %}
-                        <form class="form-horizontal">
-                            <fieldset>
-                                <legend><i class="fas fa-flash"></i>{{ 'Activations' }}</legend>
-                                <table class="table table-bordered table-condensed">
-                                    <thead>
-                                    <tr>
-                                        <th></th>
-                                        {% for summaryKey, summaryValue in objectSummary %}
-                                            <th style="cursor:default;">{{ summaryValue['name'] }}</th>
-                                        {% endfor %}
-                                    </tr>
-                                    </thead>
-                                    <tr>
-                                        <td style="cursor:default;">
-                                            {{ 'Remonter dans le résumé global' }}
-                                        </td>
-                                        {% for summaryKey, summaryValue in objectSummary %}
-                                            <td>
-                                                <input type="checkbox" class="objectAttr" data-l1key="configuration" data-l2key="summary::global::{{ summaryKey }}"/>
-
-                                            </td>
-                                        {% endfor %}
-                                    </tr>
-                                    <tr>
-                                    <tr>
-                                        <td style="cursor:default;">
-                                            {{ 'Masquer en desktop' }}
-                                        </td>
-                                        {% for summaryKey, summaryValue in objectSummary %}
-                                            <td>
-                                                <input type="checkbox" class="objectAttr" data-l1key="configuration" data-l2key="summary::hide::desktop::{{ summaryKey }}"/>
-                                            </td>
-                                        {% endfor %}
-                                    </tr>
-                                    <tr>
-                                    <tr>
+                        <fieldset>
+                            <legend><i class="fas fa-flash"></i>{{ 'Activations' }}</legend>
+                            <table class="table table-bordered table-condensed">
+                                <thead>
+                                <tr>
+                                    <th></th>
+                                    {% for summaryKey, summaryValue in objectSummary %}
+                                        <th style="cursor:default;">{{ summaryValue['name'] }}</th>
+                                    {% endfor %}
+                                </tr>
+                                </thead>
+                                <tr>
+                                    <td style="cursor:default;">
+                                        {{ 'Remonter dans le résumé global' }}
+                                    </td>
+                                    {% for summaryKey, summaryValue in objectSummary %}
                                         <td>
-                                            {{ 'Masquer en mobile' }}
+                                            <input type="checkbox" class="objectAttr" data-l1key="configuration" data-l2key="summary::global::{{ summaryKey }}"/>
+
                                         </td>
-                                        {% for summaryKey, summaryValue in objectSummary %}
-                                            <td>
-                                                <input type="checkbox" class="objectAttr" data-l1key="configuration" data-l2key="summary::hide::mobile::{{ summaryKey }}"/>
-                                            </td>
-                                        {% endfor %}
-                                    </tr>
-                                </table>
-                            </fieldset>
-                        </form>
-                        <form class="form-horizontal">
-                            <fieldset class="legend-section">
-                                <legend><i class="fas fa-tachometer-alt"></i>{{ 'Commandes' }}</legend>
-                                <div class="nav-tabs-custom">
-                                    <ul class="nav nav-tabs" role="tablist">
-                                        {% set active = 'active' %}
-                                        {% for summaryKey, summaryValue in objectSummary %}
-                                            <li class="{{ active }}"><a href="#summarytab{{ summaryKey }}" role="tab" data-toggle="tab">{{ summaryValue['icon']|raw }} {{ summaryValue['name'] }}</i>  <span class="tabnumber summarytabnumber{{ summaryKey }}"></span></a></li>
-                                            {% set active = '' %}
-                                        {% endfor %}
-                                    </ul>
-                                    <div class="tab-content">
-                                        {% set active = ' active' %}
-                                        {% for summaryKey, summaryValue in objectSummary %}
-                                            <div role="tabpanel" class="tab-pane type{{ summaryKey }}{{ active }}" data-type="{{ summaryKey }}" id="summarytab{{ summaryKey }}">
-                                                <div class="div_summary" data-type="{{ summaryKey }}"></div>
-                                                <div class="btn btn-sm btn-success addSummary" data-type="{{ summaryKey }}"><i class="fas fa-plus-circle"></i>{{ 'Ajouter une commande' }}</div>
-                                            </div>
-                                            {% set active = '' %}
-                                        {% endfor %}
-                                    </div>
+                                    {% endfor %}
+                                </tr>
+                                <tr>
+                                <tr>
+                                    <td style="cursor:default;">
+                                        {{ 'Masquer en desktop' }}
+                                    </td>
+                                    {% for summaryKey, summaryValue in objectSummary %}
+                                        <td>
+                                            <input type="checkbox" class="objectAttr" data-l1key="configuration" data-l2key="summary::hide::desktop::{{ summaryKey }}"/>
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+                                <tr>
+                                <tr>
+                                    <td>
+                                        {{ 'Masquer en mobile' }}
+                                    </td>
+                                    {% for summaryKey, summaryValue in objectSummary %}
+                                        <td>
+                                            <input type="checkbox" class="objectAttr" data-l1key="configuration" data-l2key="summary::hide::mobile::{{ summaryKey }}"/>
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+                            </table>
+                        </fieldset>
+                        <fieldset class="legend-section">
+                            <legend><i class="fas fa-tachometer-alt"></i>{{ 'Commandes' }}</legend>
+                            <div class="nav-tabs-custom">
+                                <ul class="nav nav-tabs" role="tablist">
+                                    {% set active = 'active' %}
+                                    {% for summaryKey, summaryValue in objectSummary %}
+                                        <li class="{{ active }}"><a href="#summarytab{{ summaryKey }}" role="tab" data-toggle="tab">{{ summaryValue['icon']|raw }} {{ summaryValue['name'] }}</i>  <span class="tabnumber summarytabnumber{{ summaryKey }}"></span></a></li>
+                                        {% set active = '' %}
+                                    {% endfor %}
+                                </ul>
+                                <div class="tab-content">
+                                    {% set active = ' active' %}
+                                    {% for summaryKey, summaryValue in objectSummary %}
+                                        <div role="tabpanel" class="tab-pane type{{ summaryKey }}{{ active }}" data-type="{{ summaryKey }}" id="summarytab{{ summaryKey }}">
+                                            <div class="div_summary" data-type="{{ summaryKey }}"></div>
+                                            <div class="btn btn-sm btn-success addSummary" data-type="{{ summaryKey }}"><i class="fas fa-plus-circle"></i>{{ 'Ajouter une commande' }}</div>
+                                        </div>
+                                        {% set active = '' %}
+                                    {% endfor %}
                                 </div>
-                            </fieldset>
-                        </form>
+                            </div>
+                        </fieldset>
                     {% endif %}
                 </div>
             </div>

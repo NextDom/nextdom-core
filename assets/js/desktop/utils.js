@@ -35,6 +35,8 @@
 */
 
 /* Global variables Initialisations */
+var modifyWithoutSave = false;
+var lockModify = false;
 uniqId_count = 0;
 modifyWithoutSave = false;
 nbActiveAjaxRequest = 0;
@@ -585,4 +587,138 @@ function hexToRgb(hex) {
         g: parseInt(result[2], 16),
         b: parseInt(result[3], 16)
     } : null;
+}
+
+/**
+ * Reset à config param to his default value in default.config.ini
+ *
+ * @param keyElt Elt or button who handle the reset and contain the config key
+ */
+function resetConfigParamKey(keyElt) {
+    lockModify = true;
+    var paramKey = keyElt.attr('data-l1key');
+    var defaultValue = "";
+    var arrayKey = paramKey.split("::");
+    arrayKey.pop();
+    var paramSubKey = arrayKey.join("::");
+    nextdom.config.remove({
+        configuration: paramKey,
+        error: function (error) {
+            notify("Core", error.message, 'error');
+        },
+        success: function (dataRemove) {
+            nextdom.config.load({
+                configuration: paramKey,
+                error: function (error) {
+                    notify("Core", error.message, 'error');
+                },
+                success: function (dataLoad) {
+                    if (isset(dataLoad) && dataLoad != "") {
+                        // Direct slider
+                        keyElt.siblings(".slider").value(dataLoad);
+                        // Or associate fields
+                        $('.configKey[data-l1key="' + paramKey + '"]').value(dataLoad)
+                        lockModify=false;
+                    } else {
+                        nextdom.config.load({
+                            configuration: paramSubKey,
+                            error: function (error) {
+                                notify("Core", error.message, 'error');
+                            },
+                            success: function (dataSubLoad) {
+                                if (isset(dataSubLoad) && dataSubLoad != "") {
+                                    defaultValue = dataSubLoad;
+                                } else {
+                                    defaultValue = 0;
+                                }
+                                // Direct slider
+                                keyElt.siblings(".slider").value(defaultValue);
+                                // Or associate fields
+                                $('.configKey[data-l1key="' + paramKey + '"]').value(dataSubLoad)
+                                lockModify=false;
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    });
+}
+
+/**
+ * Reset a theme param to his default value
+ *
+ * @param keyElt Elt or button who handle the reset and contain the config key
+ */
+function resetThemeParamKey(keyElt) {
+    var paramKey = keyElt.attr('data-l1key');
+    nextdom.config.load({
+        configuration: 'nextdom::theme',
+        error: function (error) {
+            notify("Core", error.message, 'error');
+        },
+        success: function (data) {
+            if (isset(data) && data != "") {
+                var config = getThemeColors(data);
+                // Direct slider
+                keyElt.siblings(".slider").value(config[paramKey]);
+                // Or associate fields
+                $('.configKey[data-l1key="' + paramKey + '"]').value(config[paramKey])
+            }
+        }
+    });
+}
+
+/**
+ * Reset a config color key to his default value
+ *
+ * @param keyElt Elt or button who handle the reset and contain the config key
+ */
+function resetConfigColorKey(keyElt) {
+    lockModify=true;
+    var paramKey = keyElt.attr('data-l1key');
+    nextdom.config.remove({
+        configuration: paramKey,
+        error: function (error) {
+            notify("Core", error.message, 'error');
+        },
+        success: function (dataRemove) {
+            nextdom.config.load({
+                configuration: paramKey,
+                error: function (error) {
+                    notify("Core", error.message, 'error');
+                },
+                success: function (dataLoad) {
+                    if (isset(dataLoad) && dataLoad != "") {
+                        $('.configKey[data-l1key="' + paramKey + '"]').parent().colorpicker('setValue', dataLoad);
+                    }
+                }
+            });
+        }
+    });
+    lockModify=false;
+}
+
+/**
+ * Reset a theme color key to his default value
+ *
+ * @param keyElt Elt or button who handle the reset and contain the config key
+ */
+function resetThemeColorKey(keyElt) {
+    var paramKey = keyElt.attr('data-l1key');
+    nextdom.config.load({
+        configuration: 'nextdom::theme',
+        error: function (error) {
+            notify("Core", error.message, 'error');
+        },
+        success: function (data) {
+            if (isset(data) && data != "") {
+                if (data.includes('custom')) {
+                    data = data.split('-')[1];
+                }
+                var config = getThemeColors(data);
+                $('.configKey[data-l1key="' + paramKey + '"]').parent().colorpicker('setValue', config[paramKey]);
+            }
+        }
+    });
 }

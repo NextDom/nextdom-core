@@ -100,3 +100,19 @@
     -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }
+
+.form-group .btn-group {
+    display: table;
+}
+
+.mix-group {
+    display: flex;
+    white-space: nowrap;
+    > * {
+        margin: 0px 10px;
+        margin-inline-start: 0;
+    }
+    > span {
+       white-space: normal;
+    }
+}

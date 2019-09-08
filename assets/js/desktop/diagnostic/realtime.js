@@ -18,25 +18,43 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-nextdom.log.autoupdate({
-    log : realtime_name,
-    default_search : log_default_search,
-    display : $('#pre_realtimelog'),
-    search : $('#generalSearch'),
-    control : $('#bt_eventRealtimeStopStart'),
-});
+// Page init
+loadInformations();
+initEvents();
 
-$("#bt_logrealtimeclearLog").on('click', function(event) {
-    nextdom.log.clear({
+/**
+ * Load informations in all forms of the page
+ */
+function loadInformations() {
+    nextdom.log.autoupdate({
         log : realtime_name,
+        default_search : log_default_search,
+        display : $('#pre_realtimelog'),
+        search : $('#generalSearch'),
+        control : $('#bt_eventRealtimeStopStart'),
     });
-});
+}
 
-$("#bt_logrealtimeremoveLog").on('click', function(event) {
-    nextdom.log.remove({
-        log : realtime_name,
+/**
+ * Init events on the profils page
+ */
+function initEvents() {
+    // Clear log button
+    $("#bt_logrealtimeclearLog").on('click', function(event) {
+        nextdom.log.clear({
+            log : realtime_name,
+        });
     });
-});
-$('#bt_logrealtimedownloadLog').click(function() {
-    window.open('src/Api/downloadFile.php?pathfile=log/' + realtime_name, "_blank", null);
-});
+
+    // Remove log button
+    $("#bt_logrealtimeremoveLog").on('click', function(event) {
+        nextdom.log.remove({
+            log : realtime_name,
+        });
+    });
+
+    // Download log button
+    $('#bt_logrealtimedownloadLog').click(function() {
+        window.open('src/Api/downloadFile.php?pathfile=log/' + realtime_name, "_blank", null);
+    });
+}

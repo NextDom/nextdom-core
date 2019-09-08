@@ -423,92 +423,11 @@ function refreshUpdateNumber() {
   * @param themeName Theme name to save and use for search colors.
   * @param reload TRUE for reloading page
   */
- function changeThemeColors(themeName,reload){
-    var config = "";
-    switch (themeName) {
-      case 'dark':
-        config = {
-          'theme:color1' : '#33b8cc',
-          'theme:color2' : '#ffffff',
-          'theme:color3' : '#ffffff',
-          'theme:color4' : '#33b8cc',
-          'theme:color5' : '#ffffff',
-          'theme:color6' : '#222d32',
-          'theme:color7' : '#1e282c',
-          'theme:color8' : '#2c3b41',
-          'theme:color9' : '#2c3b41',
-          'theme:color10' : '#222d32',
-          'theme:color11' : '#2c3b41',
-          'theme:color12' : '#e6e7e8',
-          'theme:color13' : '#484c52',
-          'theme:color14' : '#484c52',
-          'theme:color15' : '#222d32',
-          'theme:color16' : '#666666',
-          'theme:color17' : '#2c3b41',
-          'theme:color18' : '#e6e7e8',
-          'theme:color19' : '#8aa4af',
-          'theme:color20' : '#222d32',
-          'theme:color21' : '50',
-          'theme:color22' : '#263238',
-          'theme:color23' : '#aaa',
-        }
-        break;
-      case 'light':
-        config = {
-          'theme:color1' : '#33b8cc',
-          'theme:color2' : '#ffffff',
-          'theme:color3' : '#f4f4f5',
-          'theme:color4' : '#33B8CC',
-          'theme:color5' : '#ffffff',
-          'theme:color6' : '#f9fafc',
-          'theme:color7' : '#dbdbdb',
-          'theme:color8' : '#f4f4f5',
-          'theme:color9' : '#ecf0f5',
-          'theme:color10' : '#ffffff',
-          'theme:color11' : '#f5f5f5',
-          'theme:color12' : '#555555',
-          'theme:color13' : '#f5f5f5',
-          'theme:color14' : '#dddddd',
-          'theme:color15' : '#ffffff',
-          'theme:color16' : '#555555',
-          'theme:color17' : '#f4f4f4',
-          'theme:color18' : '#555555',
-          'theme:color19' : '#555555',
-          'theme:color20' : '#dddddd',
-          'theme:color21' : '100',
-          'theme:color22' : '#fafafa',
-          'theme:color23' : '#f5f5f5',
-        }
-        break;
-      case 'mix':
-        config = {
-          'theme:color1' : '#33b8cc',
-          'theme:color2' : '#ffffff',
-          'theme:color3' : '#ffffff',
-          'theme:color4' : '#33B8CC',
-          'theme:color5' : '#ffffff',
-          'theme:color6' : '#222d32',
-          'theme:color7' : '#1e282c',
-          'theme:color8' : '#2c3b41',
-          'theme:color9' : '#ecf0f5',
-          'theme:color10' : '#ffffff',
-          'theme:color11' : '#f5f5f5',
-          'theme:color12' : '#555555',
-          'theme:color13' : '#ffffff',
-          'theme:color14' : '#dddddd',
-          'theme:color15' : '#fafafa',
-          'theme:color16' : '#666666',
-          'theme:color17' : '#f4f4f4',
-          'theme:color18' : '#e6e7e8',
-          'theme:color19' : '#8aa4af',
-          'theme:color20' : '#dddddd',
-          'theme:color21' : '100',
-          'theme:color22' : '#fafafa',
-          'theme:color23' : '#f5f5f5',
-        }
-        break;
-    }
-    config['nextdom::theme'] = themeName;
+ function changeThemeColors(themeName, reload){
+   var config = getThemeColors(themeName);
+   var nextdomTheme = {};
+   nextdomTheme[themeName] = 1;
+   config['nextdom::theme'] = nextdomTheme;
     nextdom.config.save({
         configuration: config,
         error: function (error) {
@@ -519,12 +438,97 @@ function refreshUpdateNumber() {
             updateTheme(function() {
                 notify("Info", '{{Thème parametré !}}', 'success');
                 if (reload == true) {
-                  window.location.reload();
+                    window.location.reload();
                 }
             });
         }
     });
  }
+
+ function getThemeColors(themeName){
+    var config = "";
+    switch (themeName) {
+      case 'dark':
+        config = {
+          'theme:color1' : '#33b8cc',
+          'theme:color2' : '#ffffff',
+          'theme:color3' : '#ffffff',
+          'theme:color4' : '#222d32',
+          'theme:color5' : '#1e282c',
+          'theme:color6' : '#2c3b41',
+          'theme:color7' : '#2c3b41',
+          'theme:color8' : '#222d32',
+          'theme:color9' : '#2c3b41',
+          'theme:color10' : '#e6e7e8',
+          'theme:color11' : '#484c52',
+          'theme:color12' : '#484c52',
+          'theme:color13' : '#222d32',
+          'theme:color14' : '#666666',
+          'theme:color15' : '#2c3b41',
+          'theme:color16' : '#e6e7e8',
+          'theme:color17' : '#8aa4af',
+          'theme:color18' : '#222d32',
+          'theme:color19' : '#263238',
+          'theme:color20' : '#aaaaaa',
+          'nextdom::alertAlpha' : '50'
+        }
+        break;
+      case 'light':
+        config = {
+          'theme:color1' : '#33b8cc',
+          'theme:color2' : '#ffffff',
+          'theme:color3' : '#f4f4f5',
+          'theme:color4' : '#f9fafc',
+          'theme:color5' : '#dbdbdb',
+          'theme:color6' : '#f4f4f5',
+          'theme:color7' : '#ecf0f5',
+          'theme:color8' : '#ffffff',
+          'theme:color9' : '#f5f5f5',
+          'theme:color10' : '#555555',
+          'theme:color11' : '#ffffff',
+          'theme:color12' : '#dddddd',
+          'theme:color13' : '#ffffff',
+          'theme:color14' : '#555555',
+          'theme:color15' : '#f4f4f4',
+          'theme:color16' : '#555555',
+          'theme:color17' : '#555555',
+          'theme:color18' : '#dddddd',
+          'theme:color19' : '#fafafa',
+          'theme:color20' : '#f5f5f5',
+          'nextdom::alertAlpha' : '100'
+        };
+        break;
+      case 'mix':
+        config = {
+          'theme:color1' : '#33b8cc',
+          'theme:color2' : '#ffffff',
+          'theme:color3' : '#ffffff',
+          'theme:color4' : '#222d32',
+          'theme:color5' : '#1e282c',
+          'theme:color6' : '#2c3b41',
+          'theme:color7' : '#ecf0f5',
+          'theme:color8' : '#ffffff',
+          'theme:color9' : '#f5f5f5',
+          'theme:color10' : '#555555',
+          'theme:color11' : '#ffffff',
+          'theme:color12' : '#dddddd',
+          'theme:color13' : '#fafafa',
+          'theme:color14' : '#666666',
+          'theme:color15' : '#f4f4f4',
+          'theme:color16' : '#e6e7e8',
+          'theme:color17' : '#8aa4af',
+          'theme:color18' : '#dddddd',
+          'theme:color19' : '#fafafa',
+          'theme:color20' : '#f5f5f5',
+          'nextdom::alertAlpha' : '100'
+        };
+        break;
+      default:
+        config = {};
+        break;
+    }
+    return config;
+}
 
  /**
   * Ask a new version of theme.css by ajax

@@ -37,7 +37,7 @@ use Symfony\Component\Routing\Loader\YamlFileLoader;
  */
 class PrepareView
 {
-    private static $NB_THEME_COLORS = 1+23;
+    private static $NB_THEME_COLORS = 1+20;
 
     private $currentConfig = [];
 
@@ -207,7 +207,6 @@ class PrepareView
             $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/moment/moment.js';
 
-
             // Then Factory framwework files
             $pageData['JS_POOL'][] = '/public/js/factory/NextDomUIDGenerator.js';
             $pageData['JS_POOL'][] = '/public/js/factory/NextDomElement.js';
@@ -230,6 +229,7 @@ class PrepareView
             $pageData['JS_POOL'][] = '/public/js/factory/elements/Thead.js';
             $pageData['JS_POOL'][] = '/public/js/factory/elements/Tr.js';
             $pageData['JS_POOL'][] = '/public/js/factory/elements/VerticalLayout.js';
+
             // Finally dynamic libraries, must be here
             $pageData['JS_POOL'][] = '/vendor/node_modules/autosize/dist/autosize.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min.js';
@@ -284,6 +284,7 @@ class PrepareView
         for ($colorIndex = 1; $colorIndex <= self::$NB_THEME_COLORS; ++$colorIndex) {
             $pageData['COLOR' . $colorIndex] = NextDomHelper::getConfiguration('theme:color' . $colorIndex);
         }
+        $pageData['ALERTALPHA'] = ConfigManager::byKey('nextdom::alertAlpha');
         $themeContent = Render::getInstance()->get('commons/theme.html.twig', $pageData);
         // Minification from scratch, TODO: Use real solution
         $themeContent = preg_replace('!/\*.*?\*/!s', '', $themeContent);

@@ -33,38 +33,52 @@
 * @Email   <admin@nextdom.org>
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
-$('.bt_configurationPlugin').on('click',function(){
-  $('#md_modal').dialog({title: "{{Configuration du plugin}}"});
-  $("#md_modal").load('index.php?v=d&p=plugin&ajax=1&id='+$(this).attr('data-pluginid')).dialog('open');
-});
 
-$('.bt_healthSpecific').on('click', function () {
-  $('#md_modal').dialog({title: "{{Santé}} " + $(this).attr('data-pluginname')});
-  $('#md_modal').load('index.php?v=d&plugin='+$(this).attr('data-pluginid')+'&modal=health').dialog('open');
-});
+// Page init
+initEvents();
 
-$('#bt_benchmarkNextDom').on('click',function(){
-  $('#md_modal').dialog({title: "{{NextDom benchmark}}"});
-  $("#md_modal").load('index.php?v=d&modal=nextdom.benchmark').dialog('open');
-});
+/**
+ * Init events on the profils page
+ */
+function initEvents() {
+    // Plugin configuration button
+    $('.bt_configurationPlugin').on('click',function(){
+      $('#md_modal').dialog({title: "{{Configuration du plugin}}"});
+      $("#md_modal").load('index.php?v=d&p=plugin&ajax=1&id='+$(this).attr('data-pluginid')).dialog('open');
+    });
 
-$('#bt_healthCollapse').on('click',function(){
-  $('#accordionHealth .panel-collapse').each(function () {
-     if (!$(this).hasClass("in")) {
-         $(this).css({'height' : '' });
-         $(this).addClass("in");
-     }
-  });
-  $('#bt_healthCollapse').hide();
-  $('#bt_healthUncollapse').show()
-});
+    // Specific health button
+    $('.bt_healthSpecific').on('click', function () {
+      $('#md_modal').dialog({title: "{{Santé}} " + $(this).attr('data-pluginname')});
+      $('#md_modal').load('index.php?v=d&plugin='+$(this).attr('data-pluginid')+'&modal=health').dialog('open');
+    });
 
-$('#bt_healthUncollapse').on('click',function(){
-  $('#accordionHealth .panel-collapse').each(function () {
-     if ($(this).hasClass("in")) {
-         $(this).removeClass("in");
-     }
-  });
-  $('#bt_healthUncollapse').hide();
-  $('#bt_healthCollapse').show()
-});
+    // Benchmark button
+    $('#bt_benchmarkNextDom').on('click',function(){
+      $('#md_modal').dialog({title: "{{NextDom benchmark}}"});
+      $("#md_modal").load('index.php?v=d&modal=nextdom.benchmark').dialog('open');
+    });
+
+    // Plugin panel collapsing
+    $('#bt_healthCollapse').on('click',function(){
+      $('#accordionHealth .panel-collapse').each(function () {
+         if (!$(this).hasClass("in")) {
+             $(this).css({'height' : '' });
+             $(this).addClass("in");
+         }
+      });
+      $('#bt_healthCollapse').hide();
+      $('#bt_healthUncollapse').show()
+    });
+
+    // Plugin panel uncollapsing
+    $('#bt_healthUncollapse').on('click',function(){
+      $('#accordionHealth .panel-collapse').each(function () {
+         if ($(this).hasClass("in")) {
+             $(this).removeClass("in");
+         }
+      });
+      $('#bt_healthUncollapse').hide();
+      $('#bt_healthCollapse').show()
+    });
+}

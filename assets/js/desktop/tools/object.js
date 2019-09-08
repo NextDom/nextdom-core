@@ -34,38 +34,223 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-$('#bt_graphObject').on('click', function () {
-    $('#md_modal').dialog({title: "{{Graphique des liens}}"});
-    $("#md_modal").load('index.php?v=d&modal=graph.link&filter_type=object&filter_id='+$('.objectAttr[data-l1key=id]').value()).dialog('open');
-});
 
-$('#bt_returnToThumbnailDisplay').on('click',function(){
-    loadPage('index.php?v=d&p=object');
-});
+// Page init
+loadInformations();
+initEvents();
 
-$(".bt_detailsObject").on('click', function (event) {
-    $('#bt_returnToThumbnailDisplay').show();
-    var object = $(this).closest(".objectDisplayCard");
-    loadObjectConfiguration(object.attr("data-object_id"));
-    $('.objectname_resume').empty().append(object.attr('data-object_icon')+'  '+object.attr('data-object_name'));
-    if(document.location.toString().split('#')[1] == '' || document.location.toString().split('#')[1] == undefined){
-        $('.nav-tabs a[href="#objecttab"]').click();
+/**
+ * Load informations in all forms of the page
+ */
+function loadInformations() {
+    if (is_numeric(getUrlVars('id'))) {
+        if ($('.objectDisplayCard[data-object_id=' + getUrlVars('id') + ']').length != 0) {
+            $('.objectDisplayCard[data-object_id=' + getUrlVars('id') + ']').click();
+        } else {
+            $('.objectDisplayCard:first').click();
+        }
     }
-    return false;
-});
+    loadFromUrl();
+}
 
-$('#bt_removeBackgroundImage').off('click').on('click', function () {
-    nextdom.object.removeImage({
-        view: $('.objectAttr[data-l1key=id]').value(),
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function () {
-            notify("Info", '{{Image supprimée}}', 'success');
-        },
+/**
+ * Init events on the profils page
+ */
+function initEvents() {
+    // Param changed : page leaving lock by msgbox
+    $('#div_conf').delegate('.objectAttr', 'change', function () {
+        if (!lockModify) {
+            modifyWithoutSave = true;
+            $(".bt_cancelModifs").show();
+        }
     });
-});
 
+    // Cancel modifications
+    $('.bt_cancelModifs').on('click', function () {
+        loadFromUrl();
+    });
+
+    // Object links button
+    $('#bt_graphObject').on('click', function () {
+        $('#md_modal').dialog({title: "{{Graphique des liens}}"});
+        $("#md_modal").load('index.php?v=d&modal=graph.link&filter_type=object&filter_id='+$("#objectId").value()).dialog('open');
+    });
+
+    // Object list go back button
+    $('#bt_returnToThumbnailDisplay').on('click',function(){
+        loadPage('index.php?v=d&p=object');
+    });
+
+    // Object add button
+    $("#bt_addObject").on('click', function (event) {
+        bootbox.prompt("Nom de l'objet ?", function (result) {
+            if (result !== null) {
+                nextdom.object.save({
+                    object: {name: result, isVisible: 1},
+                    error: function (error) {
+                        notify("Erreur", error.message, 'error');
+                    },
+                    success: function (data) {
+                        modifyWithoutSave = false;
+                        $('#bt_returnToThumbnailDisplay').hide();
+                        loadObjectConfiguration(data.id);
+                    }
+                });
+            }
+        });
+    });
+
+    // Objet configuration button
+    $(".bt_detailsObject").on('click', function (event) {
+        $('#bt_returnToThumbnailDisplay').show();
+        var object = $(this).closest(".objectDisplayCard");
+        loadObjectConfiguration(object.attr("data-object_id"));
+        $('.objectname_resume').empty().append(object.attr('data-object_icon')+'  '+object.attr('data-object_name'));
+        if(document.location.toString().split('#')[1] == '' || document.location.toString().split('#')[1] == undefined){
+            $('.nav-tabs a[href="#objecttab"]').click();
+        }
+        return false;
+    });
+
+    // Remove object button
+    $(".bt_removeObject").on('click', function (event) {
+        var object = $(this);
+        bootbox.confirm('{{Etes-vous sûr de vouloir supprimer l\'objet}} <span style="font-weight: bold ;">' + object.closest(".objectDisplayCard").attr("data-object_name") + '</span> ?', function (result) {
+            if (result) {
+                nextdom.object.remove({
+                    id: object.closest(".objectDisplayCard").attr("data-object_id"),
+                    error: function (error) {
+                        notify("Erreur", error.message, 'error');
+                    },
+                    success: function () {
+                        modifyWithoutSave = false;
+                        loadPage('index.php?v=d&p=object');
+                        notify("Info", '{{Suppression effectuée avec succès}}', 'success');
+                    }
+                });
+            }
+        });
+        return false;
+    });
+
+    // Globale view display button
+    $('#bt_showObjectSummary').off('click').on('click', function () {
+        $('#md_modal').dialog({title: "{{Résumé Objets}}"});
+        $("#md_modal").load('index.php?v=d&modal=object.summary').dialog('open');
+    });
+
+    // Object picture remove button
+    $('#bt_removeBackgroundImage').off('click').on('click', function () {
+        nextdom.object.removeImage({
+            view: $('.objectAttr[data-l1key=id]').value(),
+            error: function (error) {
+                notify("Erreur", error.message, 'error');
+            },
+            success: function () {
+                notify("Info", '{{Image supprimée}}', 'success');
+            },
+        });
+    });
+
+    // Object configuration save button
+    $("#bt_saveObject").on('click', function (event) {
+        var object = $('.object').getValues('.objectAttr')[0];
+        if (!isset(object.configuration)) {
+            object.configuration = {};
+        }
+        if (!isset(object.configuration.summary)) {
+            object.configuration.summary = {};
+        }
+        $('.object .div_summary').each(function () {
+            var type = $(this).attr('data-type');
+            object.configuration.summary[type] = [];
+            summaries = {};
+            $(this).find('.summary').each(function () {
+                var summary = $(this).getValues('.summaryAttr')[0];
+                object.configuration.summary[type].push(summary);
+            });
+        });
+        nextdom.object.save({
+            object: object,
+            error: function (error) {
+                notify("Erreur", error.message, 'error');
+            },
+            success: function (data) {
+                modifyWithoutSave = false;
+                $(".bt_cancelModifs").hide();
+                notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
+            }
+        });
+        $('#bt_returnToThumbnailDisplay').show();
+        return false;
+    });
+
+    // Icon delete on double click
+    $('.objectAttr[data-l1key=display][data-l2key=icon]').on('dblclick',function(){
+        $('.objectAttr[data-l1key=display][data-l2key=icon]').value('');
+    });
+
+    // Icon choose button
+    $('#bt_chooseIcon').on('click', function () {
+        chooseIcon(function (_icon) {
+            $('.objectAttr[data-l1key=display][data-l2key=icon]').empty().append(_icon);
+        });
+    });
+
+    // Object summary add button
+    $('.addSummary').on('click',function(){
+        var type = $(this).attr('data-type');
+        var el = $('.type'+type);
+        addSummaryInfo(el);
+    });
+
+    // Object summary remove button
+    $('#div_conf').delegate('.bt_removeSummary', 'click', function () {
+        $(this).closest('.summary').remove();
+    });
+
+    // Object summary cmd choose button
+    $('#div_conf').delegate(".listCmdInfo", 'click', function () {
+        var el = $(this).closest('.summary').find('.summaryAttr[data-l1key=cmd]');
+        nextdom.cmd.getSelectModal({cmd: {type: 'info'}}, function (result) {
+            el.value(result.human);
+        });
+    });
+
+    // Reset dashboard size
+    $('#bt_resetDashboardSize').on('click', function () {
+        $(this).siblings(".slider").value(12);
+    });
+
+    // Reset position
+    $('#bt_resetPosition').on('click', function () {
+        $(this).siblings(".slider").value(1);
+    });
+
+    // Reset Tag color
+    $('#bt_resetTagColor').on('click', function () {
+        $('.objectAttr[data-l1key=display][data-l2key=tagColor]').value('#33B8CC');
+        $('#colorpickTag').colorpicker('setValue', '#33B8CC');
+    });
+
+    // Reset Text tag color
+    $('#bt_resetTagTextColor').on('click', function () {
+        $('.objectAttr[data-l1key=display][data-l2key=tagTextColor]').value('#ffffff');
+        $('#colorpickTagText').colorpicker('setValue', '#ffffff');
+    });
+
+    // Reset Text color
+    $('#bt_resetTextColor').on('click', function () {
+        $('.objectAttr[data-l1key=display][data-l2key="desktop::summaryTextColor"]').value('#ffffff');
+        $('#colorpickSummaryText').colorpicker('setValue', '#ffffff');
+    });
+}
+
+/**
+ * Load configuration data of an object
+ *
+ * @param _id object ID
+ */
 function loadObjectConfiguration(_id){
     try {
         $('#bt_uploadImage').fileupload('destroy');
@@ -146,144 +331,39 @@ function loadObjectConfiguration(_id){
                 }
                 history.pushState({}, null, updatedUrl);
             }
-        }
-    });
-}
-
-$("#bt_addObject,#bt_addObject2").on('click', function (event) {
-    bootbox.prompt("Nom de l'objet ?", function (result) {
-        if (result !== null) {
-            nextdom.object.save({
-                object: {name: result, isVisible: 1},
-                error: function (error) {
-                    notify("Erreur", error.message, 'error');
-                },
-                success: function (data) {
-                    modifyWithoutSave = false;
-                    $('#bt_returnToThumbnailDisplay').hide();
-                    loadObjectConfiguration(data.id);
-                }
-            });
-        }
-    });
-});
-
-$('.objectAttr[data-l1key=display][data-l2key=icon]').on('dblclick',function(){
-    $('.objectAttr[data-l1key=display][data-l2key=icon]').value('');
-});
-
-$("#bt_saveObject").on('click', function (event) {
-    var object = $('.object').getValues('.objectAttr')[0];
-    if (!isset(object.configuration)) {
-        object.configuration = {};
-    }
-    if (!isset(object.configuration.summary)) {
-        object.configuration.summary = {};
-    }
-    $('.object .div_summary').each(function () {
-        var type = $(this).attr('data-type');
-        object.configuration.summary[type] = [];
-        summaries = {};
-        $(this).find('.summary').each(function () {
-            var summary = $(this).getValues('.summaryAttr')[0];
-            object.configuration.summary[type].push(summary);
-        });
-    });
-    nextdom.object.save({
-        object: object,
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function (data) {
             modifyWithoutSave = false;
-            notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
+            $(".bt_cancelModifs").hide();
         }
     });
-    $('#bt_returnToThumbnailDisplay').show();
-    return false;
-});
-
-$(".bt_removeObject").on('click', function (event) {
-    $.hideAlert();
-    var object = $(this);
-    bootbox.confirm('{{Etes-vous sûr de vouloir supprimer l\'objet}} <span style="font-weight: bold ;">' + object.closest(".objectDisplayCard").attr("data-object_name") + '</span> ?', function (result) {
-        if (result) {
-            nextdom.object.remove({
-                id: object.closest(".objectDisplayCard").attr("data-object_id"),
-                error: function (error) {
-                    notify("Erreur", error.message, 'error');
-                },
-                success: function () {
-                    modifyWithoutSave = false;
-                    loadPage('index.php?v=d&p=object');
-                    notify("Info", '{{Suppression effectuée avec succès}}', 'success');
-                }
-            });
-        }
-    });
-    return false;
-});
-
-
-$('#bt_chooseIcon').on('click', function () {
-    chooseIcon(function (_icon) {
-        $('.objectAttr[data-l1key=display][data-l2key=icon]').empty().append(_icon);
-    });
-});
-
-if (is_numeric(getUrlVars('id'))) {
-    if ($('.objectDisplayCard[data-object_id=' + getUrlVars('id') + ']').length != 0) {
-        $('.objectDisplayCard[data-object_id=' + getUrlVars('id') + ']').click();
-    } else {
-        $('.objectDisplayCard:first').click();
-    }
 }
 
-$('#div_pageContainer').delegate('.objectAttr', 'change', function () {
-    modifyWithoutSave = true;
-});
-
-$('.addSummary').on('click',function(){
-    var type = $(this).attr('data-type');
-    var el = $('.type'+type);
-    addSummaryInfo(el);
-});
-
-$('#div_pageContainer').delegate(".listCmdInfo", 'click', function () {
-    var el = $(this).closest('.summary').find('.summaryAttr[data-l1key=cmd]');
-    nextdom.cmd.getSelectModal({cmd: {type: 'info'}}, function (result) {
-        el.value(result.human);
-    });
-});
-
-$('#div_pageContainer').delegate('.bt_removeSummary', 'click', function () {
-    $(this).closest('.summary').remove();
-});
-
-
+/**
+ * Add an object summary
+ *
+ * @param _el object section
+ * @param _summary summary datas
+ */
 function addSummaryInfo(_el, _summary) {
     if (!isset(_summary)) {
         _summary = {};
     }
     var div = '<div class="summary">';
-    div += '<div class="form-group">';
-    div += '  <label class="col-lg-2 col-md-2 col-sm-2 col-xs-6 control-label">{{Commande :}}</label>';
-    div += '  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">';
+    div += '<div class="form-group col-xs-12">';
+    div += '  <label class="control-label">{{Commande :}}</label>';
+    div += '  <div class="input-group">';
+    div += '    <span class="input-group-btn">';
+    div += '      <a class="btn btn-danger bt_removeSummary btn-sm"><i class="fas fa-minus-circle"></i></a>';
+    div += '    </span>';
+    div += '    <input class="summaryAttr form-control input-sm" data-l1key="cmd" />';
+    div += '    <span class="input-group-btn">';
+    div += '      <a class="btn btn-sm listCmdInfo btn-default"><i class="fas fa-list-alt"></i></a>';
+    div += '    </span>';
+    div += '  </div>';
+    div += '  <div>';
     div += '    <input type="checkbox" class="summaryAttr" data-l1key="enable" checked title="{{Activer}}" />';
     div += '    <label class="control-label label-check">{{Activer}}</label>';
     div += '  </div>';
-    div += '  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 has-success">';
-    div += '    <div class="input-group">';
-    div += '      <span class="input-group-btn">';
-    div += '        <a class="btn btn-danger bt_removeSummary btn-sm"><i class="fas fa-minus-circle"></i></a>';
-    div += '      </span>';
-    div += '      <input class="summaryAttr form-control input-sm" data-l1key="cmd" />';
-    div += '      <span class="input-group-btn">';
-    div += '        <a class="btn btn-sm listCmdInfo btn-default"><i class="fas fa-list-alt"></i></a>';
-    div += '      </span>';
-    div += '    </div>';
-    div += '  </div>';
-    div += '  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">';
+    div += '  <div>';
     div += '    <input type="checkbox" class="summaryAttr" data-l1key="invert" />';
     div += '    <label class="control-label label-check">{{Inverser}}</label>';
     div += '  </div>';
@@ -291,11 +371,6 @@ function addSummaryInfo(_el, _summary) {
     _el.find('.div_summary').append(div);
     _el.find('.summary:last').setValues(_summary, '.summaryAttr');
 }
-
-$('#bt_showObjectSummary').off('click').on('click', function () {
-    $('#md_modal').dialog({title: "{{Résumé Objets}}"});
-    $("#md_modal").load('index.php?v=d&modal=object.summary').dialog('open');
-});
 
 /**
  * Load object with the URL data
@@ -309,5 +384,3 @@ function loadFromUrl() {
         }
     }
 }
-
-loadFromUrl();

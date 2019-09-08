@@ -41,6 +41,7 @@
         </div>
         <div class="action-group">
             <a class="btn btn-success btn-action-bar pull-right" id="bt_savelog_admin"><i class="fas fa-save"></i>{{ 'common.save' | trans }}</a>
+            <a class="btn btn-danger btn-action-bar pull-right bt_cancelModifs"><i class="fas fa-times"></i>{{ 'common.cancel'|trans }}</a>
         </div>
     </div>
 </section>
@@ -54,74 +55,84 @@
 
         <!-- Page content -->
         <div class="box-body">
-            <form class="form-horizontal">
-                <!-- Timeline Section -->
-                <fieldset>
-                    <legend>{{ 'Timeline' }}</legend>
-                    <div class="form-group">
-                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Nombre maximum d\'évènements' }}</label>
-                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
-                            <input type="text" class="configKey form-control" data-l1key="timeline::maxevent"/>
+            <!-- Timeline Section -->
+            <fieldset>
+                <legend>{{ 'Timeline' }}</legend>
+                <div class="row">
+                    <div class="form-group col-sm-6 col-xs-12 col-padding">
+                        <label class="control-label">{{ 'Nombre maximum d\'évènements' }}</label>
+                        <div class="input-group">
+                            <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="timeline::maxevent" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                            <span class="input-group-addon input-range-min"></span>
+                            <input class="configKey slider" type="range" min="10" max="1000" step="10" data-l1key="timeline::maxevent"/>
+                            <span class="input-group-addon input-range-max"></span>
+                            <span class="input-group-addon input-range-value"></span>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Supprimer tous les évènements' }}</label>
-                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                    <div class="form-group col-sm-6 col-xs-12 col-padding">
+                        <label class="control-label">{{ 'Gestion de tous les évènements' }}</label>
+                        <div class="mix-group">
                             <a type="text" class="btn btn-danger" id="bt_removeTimelineEvent"><i class="fas fa-trash"></i>{{ 'common.remove' | trans }}</a>
                         </div>
                     </div>
-                </fieldset>
+                </div>
+            </fieldset>
 
-                <!-- Messages Section -->
-                <fieldset class="legend-section">
-                    <legend>{{ 'Messages' }}</legend>
-                    <div class="form-group">
-                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Si erreur dans les logs' }}</label>
-                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+            <!-- Messages Section -->
+            <fieldset class="legend-section">
+                <legend>{{ 'Messages' }}</legend>
+                <div class="row">
+                    <div class="form-group col-sm-6 col-xs-12 col-padding">
+                        <label class="control-label">{{ 'Si erreur dans les logs' }}</label>
+                        <div>
                             <input type="checkbox" class="configKey" data-l1key="addMessageForErrorLog" id="addMessageForErrorLog" checked/>
                             <label for="addMessageForErrorLog" class="control-label label-check">{{'Ajouter un message'}}</label>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Action sur message' }}</label>
-                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                    <div class="form-group col-sm-6 col-xs-12 col-padding">
+                        <label class="control-label">{{ 'Action sur message' }}</label>
+                        <div class="mix-group">
                             <a class="btn btn-success" id="bt_addActionOnMessage"><i class="fas fa-plus-circle"></i>{{ 'common.add' | trans }}</a>
                         </div>
                     </div>
-                    <div id="div_actionOnMessage"></div>
-                </fieldset>
+                    <div id="div_actionOnMessage" class="form-group col-xs-12 col-padding">
+                    </div>
+                </div>
+            </fieldset>
 
-                <!-- Alertes Section -->
-                <fieldset class="legend-section">
-                    <legend>{{ 'Alertes' }}</legend>
-                    {% for level, value in adminAlerts %}
-                        <div class="form-group">
-                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'A chaque' }} {{ value['name'] }}</label>
-                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
-                                <input type="checkbox" class="configKey" data-l1key="alert::addMessageOn{{ level|capitalize }}" id="addMessageOn"/>
-                                <label for="addMessageOn" class="control-label label-check">{{'Ajouter un message'}}</label>
-                            </div>
+            <!-- Alertes Section -->
+            <fieldset class="legend-section">
+                <legend>{{ 'Alertes' }}</legend>
+                <div class="row">
+                {% for level, value in adminAlerts %}
+                    <div class="form-group col-sm-6 col-xs-12 col-padding">
+                        <label class="control-label">{{ 'A chaque' }} {{ value['name'] }}</label>
+                        <div>
+                            <input type="checkbox" class="configKey" data-l1key="alert::addMessageOn{{ level|capitalize }}" id="addMessageOn"/>
+                            <label for="addMessageOn" class="control-label label-check">{{'Ajouter un message'}}</label>
                         </div>
-                        <div class="form-group">
-                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Commande sur' }} {{ value['name'] }}</label>
-                            <div class="col-lg-5 col-md-6 col-sm-6 col-xs-12">
-                                <div class="input-group">
-                                    <input type="text" class="configKey form-control" data-l1key="alert::{{ level }}Cmd"/>
-                                    <span class="input-group-btn">
-                                    <a class="btn btn-default cursor bt_selectAlertCmd" data-toggle="tooltip" title="" data-original-title="Rechercher une commande" data-type="{{ level }}"><i class="fa fa-list-alt"></i></a>
-                                </span>
-                                </div>
-                            </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-xs-12 col-padding">
+                        <label class="control-label">{{ 'Commande sur' }} {{ value['name'] }}</label>
+                        <div class="input-group">
+                            <input type="text" class="configKey form-control" data-l1key="alert::{{ level }}Cmd"/>
+                            <span class="input-group-btn">
+                                <a class="btn btn-default cursor bt_selectAlertCmd" data-toggle="tooltip" title="" data-original-title="Rechercher une commande" data-type="{{ level }}"><i class="fa fa-list-alt"></i></a>
+                            </span>
                         </div>
-                    {% endfor %}
-                </fieldset>
+                    </div>
+                {% endfor %}
+                </div>
+            </fieldset>
 
-                <!-- Log Section -->
-                <fieldset class="legend-section">
-                    <legend>{{ 'Paramètres des Logs' }}</legend>
-                    <div class="form-group">
-                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Moteur de log' }}</label>
-                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+            <!-- Log Section -->
+            <fieldset class="legend-section">
+                <legend>{{ 'Paramètres des Logs' }}</legend>
+                <div class="row">
+                    <div class="form-group col-sm-6 col-xs-12 col-padding">
+                        <label class="control-label">{{ 'Moteur de log' }}</label>
+                        <div class="input-group">
+                            <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="log::engine" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
                             <select class="configKey form-control" data-l1key="log::engine">
                                 <option value="StreamHandler">{{ 'common.default' | trans }}</option>
                                 <option value="SyslogHandler">{{ 'Syslog' }}</option>
@@ -130,34 +141,40 @@
                         </div>
                     </div>
                     <div class="logEngine SyslogUdp">
-                        <div class="form-group">
-                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Adresse syslog UDP' }}</label>
-                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Adresse syslog UDP' }}</label>
+                            <div>
                                 <input type="text" class="configKey form-control" data-l1key="log::syslogudphost"/>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Port syslog UDP' }}</label>
-                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Port syslog UDP' }}</label>
+                            <div>
                                 <input type="text" class="configKey form-control" data-l1key="log::syslogudpport"/>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Format des logs' }}</label>
-                        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+                    <div class="form-group col-sm-6 col-xs-12 col-padding">
+                        <label class="control-label">{{ 'Format des logs' }}</label>
+                        <div class="input-group">
+                            <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="log::formatter" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
                             <input type="text" class="configKey form-control" data-l1key="log::formatter"/>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Nombre de lignes maximum dans un log' }}</label>
-                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
-                            <input type="text" class="configKey form-control" data-l1key="maxLineLog"/>
+                    <div class="form-group col-sm-6 col-xs-12 col-padding">
+                        <label class="control-label">{{ 'Nombre de lignes maximum dans un log' }}</label>
+                        <div class="input-group">
+                            <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="maxLineLog" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                            <span class="input-group-addon input-range-min"></span>
+                            <input class="configKey slider" type="range" min="50" max="5000" step="50" data-l1key="maxLineLog"/>
+                            <span class="input-group-addon input-range-max"></span>
+                            <span class="input-group-addon input-range-value"></span>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Niveau de log par défaut' }}</label>
-                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                    <div class="form-group col-sm-6 col-xs-12 col-padding">
+                        <label class="control-label">{{ 'Niveau de log par défaut' }}</label>
+                        <div class="input-group">
+                            <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="log::level" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
                             <select class="configKey form-control" data-l1key="log::level">
                                 <option value="100">{{ 'Debug' }}</option>
                                 <option value="200">{{ 'common.info' | trans }}</option>
@@ -166,50 +183,52 @@
                             </select>
                         </div>
                     </div>
-                </fieldset>
+                </div>
+            </fieldset>
 
-                <fieldset class="legend-section">
-                    <legend>{{ 'Niveau des logs systèmes' }}</legend>
+            <fieldset class="legend-section">
+                <legend>{{ 'Niveau des logs systèmes' }}</legend>
+                <div class="row">
                     {% for otherLog in adminOthersLogs %}
-                        <form class="form-horizontal">
-                            <div class="form-group">
-                                <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ otherLog|capitalize }}</label>
-                                <div class="col-lg-9 col-md-8 col-sm-8 col-xs-12">
-                                    <label class="radio-inline"><input type="radio" name="rd_logupdate{{ otherLog }}" class="configKey" data-l1key="log::level::{{ otherLog }}" data-l2key="1000"/> {{ 'common.none' | trans }}</label>
-                                    <label class="radio-inline"><input type="radio" name="rd_logupdate{{ otherLog }}" class="configKey" data-l1key="log::level::{{ otherLog }}" data-l2key="default"/> {{ 'common.default' | trans }}</label>
-                                    <label class="radio-inline"><input type="radio" name="rd_logupdate{{ otherLog }}" class="configKey" data-l1key="log::level::{{ otherLog }}" data-l2key="100"/> {{ 'Debug' }}</label>
-                                    <label class="radio-inline"><input type="radio" name="rd_logupdate{{ otherLog }}" class="configKey" data-l1key="log::level::{{ otherLog }}" data-l2key="200"/> {{ 'common.info' | trans }}</label>
-                                    <label class="radio-inline"><input type="radio" name="rd_logupdate{{ otherLog }}" class="configKey" data-l1key="log::level::{{ otherLog }}" data-l2key="300"/> {{ 'common.warning' | trans }}</label>
-                                    <label class="radio-inline"><input type="radio" name="rd_logupdate{{ otherLog }}" class="configKey" data-l1key="log::level::{{ otherLog }}" data-l2key="400"/> {{ 'Erreur' }}</label>
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ otherLog|capitalize }}</label>
+                            <div>
+                                <label class="radio-inline"><input type="radio" name="rd_logupdate{{ otherLog }}" class="configKey" data-l1key="log::level::{{ otherLog }}" data-l2key="1000"/>{{ 'common.none' | trans }}</label>
+                                <label class="radio-inline"><input type="radio" name="rd_logupdate{{ otherLog }}" class="configKey" data-l1key="log::level::{{ otherLog }}" data-l2key="default" checked="checked"/>{{ 'common.default' | trans }}</label>
+                                <label class="radio-inline"><input type="radio" name="rd_logupdate{{ otherLog }}" class="configKey" data-l1key="log::level::{{ otherLog }}" data-l2key="100"/>{{ 'Debug' }}</label>
+                                <label class="radio-inline"><input type="radio" name="rd_logupdate{{ otherLog }}" class="configKey" data-l1key="log::level::{{ otherLog }}" data-l2key="200"/>{{ 'common.info' | trans }}</label>
+                                <label class="radio-inline"><input type="radio" name="rd_logupdate{{ otherLog }}" class="configKey" data-l1key="log::level::{{ otherLog }}" data-l2key="300"/>{{ 'common.warning' | trans }}</label>
+                                <label class="radio-inline"><input type="radio" name="rd_logupdate{{ otherLog }}" class="configKey" data-l1key="log::level::{{ otherLog }}" data-l2key="400"/>{{ 'Erreur' }}</label>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </fieldset>
+
+            <fieldset class="legend-section">
+                <legend>{{ 'Niveau des logs plugins' }}</legend>
+                <div class="row">
+                    {% if not adminIsRescueMode and adminPluginsList|length > 0 %}
+                        {% for pluginData in adminPluginsList %}
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label">{{ pluginData['plugin'].getName() }}</label>
+                                <div>
+                                    <label class="radio-inline"><input type="radio" name="rd_logupdate{{ pluginData['plugin'].getId() }}" class="configKey" data-l1key="log::level::{{ pluginData['plugin'].getId() }}" data-l2key="1000"/>{{ 'common.none' | trans }}</label>
+                                    <label class="radio-inline"><input type="radio" name="rd_logupdate{{ pluginData['plugin'].getId() }}" class="configKey" data-l1key="log::level::{{ pluginData['plugin'].getId() }}" data-l2key="default" checked="checked"/>{{ 'common.default' | trans }}</label>
+                                    <label class="radio-inline"><input type="radio" name="rd_logupdate{{ pluginData['plugin'].getId() }}" class="configKey" data-l1key="log::level::{{ pluginData['plugin'].getId() }}" data-l2key="100"/>{{ 'Debug' }}</label>
+                                    <label class="radio-inline"><input type="radio" name="rd_logupdate{{ pluginData['plugin'].getId() }}" class="configKey" data-l1key="log::level::{{ pluginData['plugin'].getId() }}" data-l2key="200"/>{{ 'common.info' | trans }}</label>
+                                    <label class="radio-inline"><input type="radio" name="rd_logupdate{{ pluginData['plugin'].getId() }}" class="configKey" data-l1key="log::level::{{ pluginData['plugin'].getId() }}" data-l2key="300"/>{{ 'common.warning' | trans }}</label>
+                                    <label class="radio-inline"><input type="radio" name="rd_logupdate{{ pluginData['plugin'].getId() }}" class="configKey" data-l1key="log::level::{{ pluginData['plugin'].getId() }}" data-l2key="400"/>{{ 'Erreur' }}</label>
                                 </div>
                             </div>
-                        </form>
-                    {% endfor %}
-                </fieldset>
-
-                <fieldset class="legend-section">
-                    <legend>{{ 'Niveau des logs plugins' }}</legend>
-                    {% if adminPluginsList|length > 0 %}
-                        {% for pluginData in adminPluginsList %}
-                            <form class="form-horizontal">
-                                <div class="form-group">
-                                    <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ pluginData['plugin'].getName() }}</label>
-                                    <div class="col-lg-9 col-md-8 col-sm-8 col-xs-12">
-                                        <label class="radio-inline"><input type="radio" name="rd_logupdate{{ pluginData['plugin'].getId() }}" class="configKey" data-l1key="log::level::{{ pluginData['plugin'].getId() }}" data-l2key="1000"/> {{ 'common.none' | trans }}</label>
-                                        <label class="radio-inline"><input type="radio" name="rd_logupdate{{ pluginData['plugin'].getId() }}" class="configKey" data-l1key="log::level::{{ pluginData['plugin'].getId() }}" data-l2key="default"/> {{ 'common.default' | trans }}</label>
-                                        <label class="radio-inline"><input type="radio" name="rd_logupdate{{ pluginData['plugin'].getId() }}" class="configKey" data-l1key="log::level::{{ pluginData['plugin'].getId() }}" data-l2key="100"/> {{ 'Debug' }}</label>
-                                        <label class="radio-inline"><input type="radio" name="rd_logupdate{{ pluginData['plugin'].getId() }}" class="configKey" data-l1key="log::level::{{ pluginData['plugin'].getId() }}" data-l2key="200"/> {{ 'common.info' | trans }}</label>
-                                        <label class="radio-inline"><input type="radio" name="rd_logupdate{{ pluginData['plugin'].getId() }}" class="configKey" data-l1key="log::level::{{ pluginData['plugin'].getId() }}" data-l2key="300"/> {{ 'common.warning' | trans }}</label>
-                                        <label class="radio-inline"><input type="radio" name="rd_logupdate{{ pluginData['plugin'].getId() }}" class="configKey" data-l1key="log::level::{{ pluginData['plugin'].getId() }}" data-l2key="400"/> {{ 'Erreur' }}</label>
-                                    </div>
-                                </div>
-                            </form>
                         {% endfor %}
                     {% else %}
-                        <div class="alert alert-info">{{ 'Aucun plugins disponibles...' }}.</div>
+                        <div class="form-group col-xs-12 col-padding">
+                            <div class="alert alert-info">{{ 'Aucun plugins disponibles...' }}.</div>
+                        </div>
                     {% endif %}
-                </fieldset>
-            </form>
+                </div>
+            </fieldset>
         </div>
     </div>
 </section>

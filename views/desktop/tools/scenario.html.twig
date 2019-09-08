@@ -37,13 +37,13 @@
     <section class="content-header">
         <div class="action-bar">
             <div class="action-group">
-                <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'scenario.back'|trans }}</a>
+                <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'common.back'|trans }}</a>
                 {% if scenariosEnabled == 0 %}
                     <a class="btn btn-success btn-action-bar" id="bt_changeAllScenarioState" data-state="1"><i class="fas fa-check"></i>{{ 'scenario.enable-scenarios'|trans }}</a>
                 {% else %}
                     <a class="btn btn-danger btn-action-bar" id="bt_changeAllScenarioState" data-state="0"><i class="fas fa-times"></i>{{ 'scenario.disable-scenarios'|trans }}</a>
                 {% endif %}
-                <a class="btn btn-success btn-action-bar" id="bt_addScenario"><i class="fas fa-plus-circle"></i>{{ 'scenario.add'|trans }}</a>
+                <a class="btn btn-success btn-action-bar" id="bt_addScenario"><i class="fas fa-plus-circle"></i>{{ 'common.add'|trans }}</a>
             </div>
             <div class="action-group">
                 <a class="btn btn-action btn-action-bar pull-right" style="display:none;" id="bt_scenarioCollapse"><i class="fas fa-plus-square"></i>{{ 'Déplier' }}</a>
@@ -137,7 +137,7 @@
     <section class="content-header">
         <div class="action-bar">
             <div class="action-group">
-                <a class="btn btn-danger btn-action-bar" id="bt_scenarioThumbnailDisplay"><i class="fas fa-chevron-left"></i>{{ 'scenario.back'|trans }}</a>
+                <a class="btn btn-danger btn-action-bar" id="bt_scenarioThumbnailDisplay"><i class="fas fa-chevron-left"></i>{{ 'common.back'|trans }}</a>
                 <a class="btn btn-default btn-action-bar" id="bt_graphScenario"><i class="fas fa-object-group"></i>{{ 'scenario.links'|trans }}</a>
                 <a class="btn btn-default btn-action-bar" id="bt_logScenario"><i class="fas fa-file-alt"></i>{{ 'scenario.log'|trans }}</a>
                 <a class="btn btn-default btn-action-bar" id="bt_templateScenario"><i class="fas fa-cubes"></i>{{ 'scenario.template'|trans }}</a>
@@ -146,12 +146,13 @@
                 <a class="btn btn-success btn-action-bar bt_addScenarioElement"><i class="fas fa-plus-circle"></i>{{ 'scenario.add-block'|trans }}</a>
             </div>
             <div class="action-group">
-                <a class="btn btn-success btn-action-bar pull-right" id="bt_saveScenario"><i class="fas fa-save"></i>{{ 'scenario.save'|trans }}</a>
+                <a class="btn btn-success btn-action-bar pull-right" id="bt_saveScenario"><i class="fas fa-save"></i>{{ 'common.save'|trans }}</a>
+                <a class="btn btn-danger btn-action-bar pull-right bt_cancelModifs"><i class="fas fa-times"></i>{{ 'common.cancel'|trans }}</a>
                 <a class="btn btn-danger btn-action-bar pull-right" id="bt_stopScenario" style="display:none;"><i class="fas fa-stop"></i>{{ 'scenario.stop'|trans }}</a>
                 <a class="btn btn-warning btn-action-bar pull-right" id="bt_testScenario" title='{{ 'scenario.execute-title'|trans }}'><i class="fas fa-gamepad"></i>{{ 'scenario.execute'|trans }}</a>
                 <a class="btn btn-warning btn-action-bar pull-right bt_showExpressionTest"><i class="fas fa-rss"></i>{{ 'scenario.expression-test'|trans }}</a>
                 <a class="btn btn-primary btn-action-bar pull-right bt_displayScenarioVariable"><i class="fas fa-eye"></i>{{ 'scenario.variables'|trans }}</a>
-                <a class="btn btn-danger btn-action-bar pull-right" id="bt_delScenario"><i class="fas fa-trash"></i>{{ 'scenario.delete'|trans }}</a>
+                <a class="btn btn-danger btn-action-bar pull-right" id="bt_delScenario"><i class="fas fa-trash"></i>{{ 'common.delete'|trans }}</a>
             </div>
         </div>
     </section>
@@ -162,6 +163,9 @@
                 <li role="presentation">
                     <a id="bt_scenarioTab" href="#scenariotab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-microchip"></i>{{ 'scenario.programmation'|trans }}</a>
                 </li>
+                <li role="presentation">
+                    <a href="#conditiontab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-clock"></i>{{ 'scenario.conditions'|trans }}</a>
+                </li>
                 <li role="presentation" class="active">
                     <a href="#generaltab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-cog"></i>{{ 'scenario.parameters'|trans }}</a>
                 </li>
@@ -171,154 +175,148 @@
             </ul>
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="generaltab">
-                    <form class="form-horizontal">
+                    <fieldset>
+                        <legend>{{ 'scenario.identity'|trans }}</legend>
                         <div class="row">
-                            <div class="col-lg-6 col-md-12">
-                                <fieldset>
-                                    <legend>{{ 'scenario.identity'|trans }}</legend>
-                                    <div class="form-group">
-                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'scenario.name'|trans }}</label>
-                                        <div class="col-lg-8 col-md-8 col-sm-7 col-xs-12">
-                                            <input class="form-control scenarioAttr" data-l1key="name" type="text" placeholder="{{ 'scenario.name'|trans }}"/>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'scenario.name-to-show'|trans }}</label>
-                                        <div class="col-lg-8 col-md-8 col-sm-7 col-xs-12">
-                                            <input class="form-control scenarioAttr"
-                                                   title="{{ 'scenario.name-to-show-placeholder'|trans }}"
-                                                   data-l1key="display" data-l2key="name" type="text"
-                                                   placeholder="{{ 'scenario.name-to-show'|trans }}"/>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'scenario.description'|trans }}</label>
-                                        <div class="col-lg-8 col-md-8 col-sm-7 col-xs-12">
-                                            <textarea class="form-control scenarioAttr ta_autosize" data-l1key="description" placeholder="{{ 'scenario.description'|trans }}"></textarea>
-                                        </div>
-                                    </div>
-                                </fieldset>
-                                <fieldset class="legend-section">
-                                    <legend>{{ 'scenario.options'|trans }}</legend>
-                                    <div class="form-group">
-                                        <label for="scenarioActiveAttr" class="col-lg-3 col-md-3 col-sm-4 col-xs-3 control-label">{{ 'scenario.enabled'|trans }}</label>
-                                        <div class="col-sm-1 col-xs-3">
-                                            <input id="scenarioActiveAttr" type="checkbox" class="scenarioAttr" data-l1key="isActive">
-                                        </div>
-                                        <label for="scenarioVisibleAttr" class="col-lg-3 col-md-3 col-sm-4 col-xs-3 control-label">{{ 'scenario.visible'|trans }}</label>
-                                        <div class="col-sm-1 col-xs-3">
-                                            <input id="scenarioVisibleAttr" type="checkbox" class="scenarioAttr" data-l1key="isVisible">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-3 control-label">{{ 'scenario.multi-launch'|trans }}</label>
-                                        <div class="col-sm-1 col-xs-3">
-                                            <input type="checkbox" class="scenarioAttr" data-l1key="configuration" data-l2key="allowMultiInstance"
-                                                   title="{{ 'scenario.multi-launch-title'|trans }}">
-                                        </div>
-                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-3 control-label">{{ 'scenario.sync-mode'|trans }}</label>
-                                        <div class="col-sm-1 col-xs-3">
-                                            <input type="checkbox" class="scenarioAttr" data-l1key="configuration" data-l2key="syncmode"
-                                                   title="{{ 'scenario.sync-mode-title'|trans }}">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="scenarioAttrTimeout" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'scenario.timeout'|trans }}</label>
-                                        <div class="col-lg-8 col-md-8 col-sm-7 col-xs-12">
-                                            <div class="input-group">
-                                                <input id="scenarioAttrTimeout" type="text" class="form-control scenarioAttr" data-l1key="timeout"/>
-                                                <span class="input-group-addon">{{ 'scenario.timeout-unity'|trans }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </fieldset>
-                                <fieldset class="legend-section">
-                                    <legend>{{ 'scenario.paternity'|trans }}</legend>
-                                    <div class="form-group">
-                                        <label for="scenarioGroupAttr" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'scenario.group'|trans }}</label>
-                                        <div class="col-lg-8 col-md-8 col-sm-7 col-xs-12">
-                                            <input id="scenarioGroupAttr" class="form-control scenarioAttr" data-l1key="group" type="text" placeholder="{{ 'scenario.scenario-group'|trans }}"/>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="scenarioObjectIdAttr" class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'scenario.parent-object'|trans }}</label>
-                                        <div class="col-lg-8 col-md-8 col-sm-7 col-xs-12">
-                                            <select id="scenarioObjectIdAttr" class="scenarioAttr form-control" data-l1key="object_id">
-                                                <option value="">{{ 'scenario.no-choice'|trans }}</option>
-                                                {% for object in scenarioAllObjects %}
-                                                    <option value="{{ object.getId() }}">{{ object.getName() }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-                                    </div>
-                                </fieldset>
-                                <fieldset class="legend-section">
-                                    <legend>{{ 'scenario.supervising'|trans }}</legend>
-                                    <div class="form-group">
-                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-3 control-label">{{ 'scenario.log'|trans }}</label>
-                                        <div class="col-lg-8 col-md-8 col-sm-7 col-xs-9">
-                                            <select class="scenarioAttr form-control" data-l1key="configuration" data-l2key="logmode">
-                                                <option value="default">{{ 'scenario.default'|trans }}</option>
-                                                <option value="none">{{ 'scenario.no-choice'|trans }}</option>
-                                                <option value="realtime">{{ 'scenario.realtime'|trans }}</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-3 control-label">{{ 'scenario.follow-timeline'|trans }}</label>
-                                        <div class="col-sm-1 col-xs-3">
-                                            <input type="checkbox" class="scenarioAttr" data-l1key="configuration" data-l2key="timeline::enable" title="{{ 'scenario.follow-timeline-title'|trans }}"/>
-                                        </div>
-                                    </div>
-                                    <div class="form-group"></div>
-                                </fieldset>
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label">{{ 'scenario.name'|trans }}</label>
+                                <input class="form-control scenarioAttr" data-l1key="name" type="text" placeholder="{{ 'scenario.name'|trans }}"/>
                             </div>
-                            <div class="col-lg-6 col-md-12">
-                                <fieldset>
-                                    <legend>{{ 'scenario.icon'|trans }}</legend>
-                                    <div class="form-group">
-                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-3 control-label">{{ 'scenario.icon'|trans }}</label>
-                                        <div class="col-lg-8 col-md-8 col-sm-3 col-xs-12">
-                                            <div class="input-group">
-                                                <a class="btn btn-action" id="bt_chooseIcon"><i class="fas fa-flag"></i><span>{{ 'scenario.choose'|trans }}</span></a>
-                                                <div class="scenarioAttr label label-icon" data-l1key="display" data-l2key="icon"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </fieldset>
-                                <fieldset class="legend-section">
-                                    <legend>{{ 'scenario.launching'|trans }}</legend>
-                                    <div class="form-group">
-                                        <label class="col-lg-3 col-md-3 col-sm-4 col-xs-12 control-label">{{ 'scenario.scenario-mode'|trans }}</label>
-                                        <div class="col-lg-8 col-md-8 col-sm-7 col-xs-12">
-                                            <div class="input-group">
-                                                <select class="form-control scenarioAttr" data-l1key="mode">
-                                                    <option value="provoke">{{ 'scenario.provoked'|trans }}</option>
-                                                    <option value="schedule">{{ 'scenario.scheduled'|trans }}</option>
-                                                    <option value="all">{{ 'scenario.twice'|trans }}</option>
-                                                </select>
-                                                <span class="input-group-btn">
-                                                    <a class="btn btn-default" id="bt_addTrigger"><i class="fas fa-plus-square"></i><span>{{ 'scenario.trigger'|trans }}</span></a>
-                                                    <a class="btn btn-default" id="bt_addSchedule"><i class="fas fa-plus-square"></i><span>{{ 'scenario.scheduler'|trans }}</span></a>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="scheduleDisplay" style="display: none;">
-                                        <div class="form-group">
-                                            <i class="col-lg-3 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'scenario.previous'|trans }}</i>
-                                            <div class="col-lg-3 col-md-3 col-sm-5 col-xs-6"><span class="scenarioAttr label label-primary label-sticker-sm" data-l1key="forecast" data-l2key="prevDate" data-l3key="date"></span></div>
-                                            <i class="col-lg-3 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'scenario.next'|trans }}</i>
-                                            <div class="col-lg-3 col-md-3 col-sm-5 col-xs-6"><span class="scenarioAttr label label-success label-sticker-sm" data-l1key="forecast" data-l2key="nextDate" data-l3key="date"></span></div>
-                                        </div>
-                                        <div class="scheduleMode"></div>
-                                    </div>
-                                    <div class="provokeMode provokeDisplay" style="display: none;">
-                                    </div>
-                                </fieldset>
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label">{{ 'scenario.name-to-show'|trans }}</label>
+                                <input class="form-control scenarioAttr"
+                                       title="{{ 'scenario.name-to-show-placeholder'|trans }}"
+                                       data-l1key="display" data-l2key="name" type="text"
+                                       placeholder="{{ 'scenario.name-to-show'|trans }}"/>
+                            </div>
+                            <div class="form-group col-xs-12 col-padding">
+                                <label class="control-label">{{ 'scenario.description'|trans }}</label>
+                                <textarea class="form-control scenarioAttr ta_autosize" data-l1key="description" placeholder="{{ 'scenario.description'|trans }}"></textarea>
                             </div>
                         </div>
-                    </form>
+                    </fieldset>
+                    <fieldset class="legend-section">
+                        <legend>{{ 'scenario.paternity'|trans }}</legend>
+                        <div class="row">
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label for="scenarioGroupAttr" class="control-label">{{ 'scenario.group'|trans }}</label>
+                                <input id="scenarioGroupAttr" class="form-control scenarioAttr" data-l1key="group" type="text" placeholder="{{ 'scenario.scenario-group'|trans }}"/>
+                            </div>
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label for="scenarioObjectIdAttr" class="control-label">{{ 'scenario.parent-object'|trans }}</label>
+                                <select id="scenarioObjectIdAttr" class="scenarioAttr form-control" data-l1key="object_id">
+                                    <option value="">{{ 'scenario.no-choice'|trans }}</option>
+                                    {% for object in scenarioAllObjects %}
+                                        <option value="{{ object.getId() }}">{{ object.getName() }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset class="legend-section">
+                        <legend>{{ 'scenario.supervising'|trans }}</legend>
+                        <div class="row">
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label">{{ 'scenario.follow'|trans }}</label>
+                                <div>
+                                    <input type="checkbox" id="timeline-enable" class="scenarioAttr" data-l1key="configuration" data-l2key="timeline::enable">
+                                    <label for="timeline-enable" class="control-label label-check" data-toggle="tooltip" title="" data-original-title="{{'scenario.follow-timeline-title'|trans}}">{{'scenario.follow-timeline'|trans}}</label>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label">{{ 'scenario.log'|trans }}</label>
+                                <select class="scenarioAttr form-control" data-l1key="configuration" data-l2key="logmode">
+                                    <option value="default">{{ 'scenario.default'|trans }}</option>
+                                    <option value="none">{{ 'scenario.no-choice'|trans }}</option>
+                                    <option value="realtime">{{ 'scenario.realtime'|trans }}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset class="legend-section">
+                        <legend>{{ 'scenario.icon'|trans }}</legend>
+                        <div class="row">
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label">{{ 'scenario.icon'|trans }}</label>
+                                <div class="mix-group">
+                                    <a class="btn btn-action" id="bt_chooseIcon"><i class="fas fa-flag"></i><span>{{ 'scenario.choose'|trans }}</span></a>
+                                    <div class="scenarioAttr label label-icon" data-l1key="display" data-l2key="icon"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="conditiontab">
+                    <fieldset>
+                        <legend>{{ 'scenario.options'|trans }}</legend>
+                        <div class="row">
+                            <div class="form-group col-sm-3 col-xs-6 col-padding">
+                                <label for="scenarioActiveAttr" class="control-label">{{ 'scenario.enabled'|trans }}</label>
+                                <div>
+                                    <input id="scenarioActiveAttr" type="checkbox" class="scenarioAttr" data-l1key="isActive">
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-3 col-xs-6 col-padding">
+                                <label for="scenarioVisibleAttr" class="control-label">{{ 'scenario.visible'|trans }}</label>
+                                <div>
+                                    <input id="scenarioVisibleAttr" type="checkbox" class="scenarioAttr" data-l1key="isVisible">
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-3 col-xs-6 col-padding">
+                                <label class="control-label">{{ 'scenario.multi-launch'|trans }}</label>
+                                <div>
+                                    <input type="checkbox" class="scenarioAttr" data-l1key="configuration" data-l2key="allowMultiInstance" title="{{ 'scenario.multi-launch-title'|trans }}">
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-3 col-xs-6 col-padding">
+                                <label class="control-label">{{ 'scenario.sync-mode'|trans }}</label>
+                                <div>
+                                    <input type="checkbox" class="scenarioAttr" data-l1key="configuration" data-l2key="syncmode" title="{{ 'scenario.sync-mode-title'|trans }}">
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label for="scenarioAttrTimeout" class="control-label">{{ 'scenario.timeout'|trans }}</label>
+                                <div class="input-group">
+                                    <a class="input-group-addon cursor bt_resetTimeout" data-l1key="timeout" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                                    <span class="input-group-addon input-range-min"></span>
+                                    <input class="scenarioAttr slider" type="range" min="0" max="600" step="1" data-l1key="timeout" id="scenarioAttrTimeout"/>
+                                    <span class="input-group-addon input-range-max"></span>
+                                    <span class="input-group-addon input-range-value"></span>
+                                    <span class="input-group-addon">{{ 'scenario.timeout-unity'|trans }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset class="legend-section">
+                        <legend>{{ 'scenario.launching'|trans }}</legend>
+                        <div class="row">
+                            <div class="form-group col-sm-8 col-xs-12 col-padding">
+                                <label class="control-label">{{ 'scenario.scenario-mode'|trans }}</label>
+                                <div class="mix-group">
+                                    <select class="form-control scenarioAttr" data-l1key="mode">
+                                        <option value="provoke">{{ 'scenario.provoked'|trans }}</option>
+                                        <option value="schedule">{{ 'scenario.scheduled'|trans }}</option>
+                                        <option value="all">{{ 'scenario.twice'|trans }}</option>
+                                    </select>
+                                    <a class="btn btn-default" id="bt_addTrigger"><i class="fas fa-plus-square"></i><span>{{ 'scenario.trigger'|trans }}</span></a>
+                                    <a class="btn btn-default" id="bt_addSchedule"><i class="fas fa-plus-square"></i><span>{{ 'scenario.scheduler'|trans }}</span></a>
+                                </div>
+                            </div>
+                            <div class="scheduleDisplay" style="display: none;">
+                                <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                    <i class="control-label">{{ 'scenario.previous'|trans }}</i>
+                                    <div><span class="scenarioAttr label label-primary label-sticker-sm" data-l1key="forecast" data-l2key="prevDate" data-l3key="date"></span></div>
+                                </div>
+                                <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                    <i class="control-label">{{ 'scenario.next'|trans }}</i>
+                                    <div><span class="scenarioAttr label label-success label-sticker-sm" data-l1key="forecast" data-l2key="nextDate" data-l3key="date"></span></div>
+                                </div>
+                                <div class="scheduleMode"></div>
+                            </div>
+                            <div class="provokeMode provokeDisplay" style="display: none;">
+                            </div>
+                        </div>
+                    </fieldset>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="scenariotab">
                     <div id="div_scenarioElement" class="element"></div>
@@ -367,8 +365,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-minus-circle"></i>{{ 'scenario.cancel'|trans }}</a>
-                <a class="btn btn-success" id="bt_addElementSave"><i class="fas fa-save"></i>{{ 'scenario.save'|trans }}</a>
+                <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-minus-circle"></i>{{ 'common.cancel'|trans }}</a>
+                <a class="btn btn-success" id="bt_addElementSave"><i class="fas fa-check-circle"></i>{{ 'common.add'|trans }}</a>
             </div>
         </div>
     </div>

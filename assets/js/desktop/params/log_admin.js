@@ -34,63 +34,140 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
- $("#bt_savelog_admin").on('click', function (event) {
-    $.hideAlert();
-    var config = $('#log_admin').getValues('.configKey')[0];
-    config.actionOnMessage = json_encode($('#div_actionOnMessage .actionOnMessage').getValues('.expressionAttr'));
-    nextdom.config.save({
-        configuration: config,
+// Page init
+loadInformations();
+initEvents();
+
+/**
+ * Load informations in all forms of the page
+ */
+function loadInformations() {
+    nextdom.config.load({
+        configuration: $('#log_admin').getValues('.configKey:not(.noSet)')[0],
         error: function (error) {
             notify("Erreur", error.message, 'error');
         },
-        success: function () {
-            nextdom.config.load({
-                configuration: $('#log_admin').getValues('.configKey')[0],
-                plugin: 'core',
-                error: function (error) {
-                    notify("Erreur", error.message, 'error');
-                },
-                success: function (data) {
-                    $('#log_admin').setValues(data, '.configKey');
-                    modifyWithoutSave = false;
-                    notify("Info", '{{Sauvegarde réussie}}', 'success');
-                }
-            });
+        success: function (data) {
+            $('#log_admin').setValues(data, '.configKey');
+            loadActionOnMessage();
+            modifyWithoutSave = false;
+            $(".bt_cancelModifs").hide();
         }
     });
-});
+}
 
-showLoadingCustom();
-nextdom.config.load({
-    configuration: $('#log_admin').getValues('.configKey:not(.noSet)')[0],
-    error: function (error) {
-        notify("Erreur", error.message, 'error');
-    },
-    success: function (data) {
-        $('#log_admin').setValues(data, '.configKey');
-        loadAactionOnMessage();
+/**
+ * Init events on the profils page
+ */
+function initEvents() {
+    // Param changed : page leaving lock by msgbox
+    $('#log_admin').delegate('.configKey', 'change', function () {
+        if (!lockModify) {
+            modifyWithoutSave = true;
+            $(".bt_cancelModifs").show();
+        }
+    });
 
-        modifyWithoutSave = false;
-    }
-});
+    // Cancel modifications
+    $('.bt_cancelModifs').on('click', function () {
+        loadInformations();
+    });
 
+    // Save button
+    $("#bt_savelog_admin").on('click', function (event) {
+        var config = $('#log_admin').getValues('.configKey')[0];
+        config.actionOnMessage = json_encode($('#div_actionOnMessage .actionOnMessage').getValues('.expressionAttr'));
+        nextdom.config.save({
+            configuration: config,
+            error: function (error) {
+                notify("Erreur", error.message, 'error');
+            },
+            success: function () {
+                nextdom.config.load({
+                    configuration: $('#log_admin').getValues('.configKey')[0],
+                    plugin: 'core',
+                    error: function (error) {
+                        notify("Erreur", error.message, 'error');
+                    },
+                    success: function (data) {
+                        $('#log_admin').setValues(data, '.configKey');
+                        modifyWithoutSave = false;
+                        $(".bt_cancelModifs").hide();
+                        notify("Info", '{{Sauvegarde réussie}}', 'success');
+                    }
+                });
+            }
+        });
+    });
 
+    // Log engine change
+    $('#log_admin').delegate('.configKey[data-l1key="log::engine"]', 'change', function () {
+        $('.logEngine').hide();
+        $('.logEngine.'+$(this).value()).show();
+        modifyWithoutSave = true;
+        $(".bt_cancelModifs").show();
+    });
 
-$('#log_admin').delegate('.configKey', 'change', function () {
-    modifyWithoutSave = true;
-});
+    // Add action on message
+    $('#bt_addActionOnMessage').on('click',function(){
+        actionOptions = [];
+        addActionOnMessage();
+    });
 
-$('#log_admin').delegate('.configKey[data-l1key="log::engine"]', 'change', function () {
- $('.logEngine').hide();
- $('.logEngine.'+$(this).value()).show();
-});
+    // Remove action on message
+    $("body").delegate('.bt_removeAction', 'click', function () {
+        $(this).closest('.actionOnMessage').remove();
+    });
 
-$('#bt_addActionOnMessage').on('click',function(){
-    addActionOnMessage();
-});
+    // Display option depend of choose action
+    $('body').delegate('.cmdAction.expressionAttr[data-l1key=cmd]', 'focusout', function (event) {
+        var expression = $(this).closest('.actionOnMessage').getValues('.expressionAttr');
+        var el = $(this);
+        nextdom.cmd.displayActionOption($(this).value(), init(expression[0].options), function (html) {
+            el.closest('.actionOnMessage').find('.actionOptions').html(html);
+            taAutosize();
+        })
+    });
 
+    // Timeline clear button
+    $('#bt_removeTimelineEvent').on('click',function(){
+        nextdom.removeTimelineEvents({
+            error: function (error) {
+                notify("Erreur", error.message, 'error');
+            },
+            success: function (data) {
+                notify("Info", '{{Evènement de la timeline supprimé avec succès}}', 'success');
+            }
+        });
+    });
 
-function loadAactionOnMessage(){
+    // Action buttons
+    $("body").delegate(".listAction", 'click', function () {
+        var el = $(this).closest('.actionOnMessage').find('.expressionAttr[data-l1key=cmd]');
+        nextdom.getSelectActionModal({}, function (result) {
+          el.value(result.human);
+          nextdom.cmd.displayActionOption(el.value(), '', function (html) {
+            el.closest('.actionOnMessage').find('.actionOptions').html(html);
+            taAutosize();
+        });
+      });
+    });
+    $("body").delegate(".listCmdAction", 'click', function () {
+        var el = $(this).closest('.actionOnMessage').find('.expressionAttr[data-l1key=cmd]');
+        nextdom.cmd.getSelectModal({cmd: {type: 'action'}}, function (result) {
+            el.value(result.human);
+            nextdom.cmd.displayActionOption(el.value(), '', function (html) {
+                el.closest('.actionOnMessage').find('.actionOptions').html(html);
+                taAutosize();
+            });
+        });
+    });
+}
+
+/**
+ * Display actions on message
+ */
+function loadActionOnMessage(){
     $('#div_actionOnMessage').empty();
     nextdom.config.load({
         configuration: 'actionOnMessage',
@@ -109,19 +186,24 @@ function loadAactionOnMessage(){
                 params : actionOptions,
                 async : false,
                 error: function (error) {
-                  notify("Erreur", error.message, 'error');
-              },
-              success : function(data){
-                for(var i in data){
-                    $('#'+data[i].id).append(data[i].html.html);
+                    notify("Erreur", error.message, 'error');
+                },
+                success : function(data){
+                    for(var i in data){
+                        $('#'+data[i].id).append(data[i].html.html);
+                    }
+                    taAutosize();
                 }
-                taAutosize();
-            }
-        });
+            });
         }
     });
 }
 
+/**
+ * Add an action on message
+ *
+ * @param _action action object with options
+ */
 function addActionOnMessage(_action) {
     if (!isset(_action)) {
         _action = {};
@@ -130,19 +212,18 @@ function addActionOnMessage(_action) {
         _action.options = {};
     }
     var div = '<div class="actionOnMessage">';
-    div += '<div class="form-group ">';
-    div += '<label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">Action</label>';
-    div += '<div class="col-sm-2">';
+    div += '<div class="form-group">';
+    div += '<label class="control-label">Action</label>';
+    div += '<div>';
+    div += '<label class="checkbox-inline">';
     div += '<input type="checkbox" class="expressionAttr" id="MessageActiv" data-l1key="options" data-l2key="enable" checked title="{{Décocher pour désactiver l\'action}}" />';
-    div += '<label for="MessageActiv" class="control-label label-check">{{Activer}}</label>';
-    div += '</div>';
-    div += '<div class="col-sm-2">';
+    div += '{{Activer}}</label>';
+    div += '<label class="checkbox-inline">';
     div += '<input type="checkbox" class="expressionAttr" id="MessagePara" data-l1key="options" data-l2key="background" title="{{Cocher pour que la commande s\'éxecute en parrallele des autres actions}}" />';
-    div += '<label for="MessagePara" class="control-label label-check">{{En parallèle}}</label>';
+    div += '{{En parallèle}}</label>';
     div += '</div>';
     div += '</div>';
-    div += '<div class="form-group ">';
-    div += '<div class="col-sm-6 col-xs-12">';
+    div += '<div class="form-group">';
     div += '<div class="input-group">';
     div += '<span class="input-group-btn">';
     div += '<a class="btn btn-danger bt_removeAction btn-sm"><i class="fas fa-minus-circle"></i></a>';
@@ -154,8 +235,9 @@ function addActionOnMessage(_action) {
     div += '</span>';
     div += '</div>';
     div += '</div>';
+    div += '<div class="form-group">';
     var actionOption_id = uniqId();
-    div += '<div class="col-sm-6 col-xs-12 actionOptions" id="'+actionOption_id+'">';
+    div += '<div class="actionOptions" id="'+actionOption_id+'">';
     div += '</div>';
     div += '</div>';
     $('#div_actionOnMessage').append(div);
@@ -166,49 +248,3 @@ function addActionOnMessage(_action) {
         id : actionOption_id
     });
 }
-
-$("body").delegate('.bt_removeAction', 'click', function () {
-    $(this).closest('.actionOnMessage').remove();
-});
-
-$('body').delegate('.cmdAction.expressionAttr[data-l1key=cmd]', 'focusout', function (event) {
-    var expression = $(this).closest('.actionOnMessage').getValues('.expressionAttr');
-    var el = $(this);
-    nextdom.cmd.displayActionOption($(this).value(), init(expression[0].options), function (html) {
-        el.closest('.actionOnMessage').find('.actionOptions').html(html);
-        taAutosize();
-    })
-});
-
-$('#bt_removeTimelineEvent').on('click',function(){
-    nextdom.removeTimelineEvents({
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function (data) {
-            notify("Info", '{{Evènement de la timeline supprimé avec succès}}', 'success');
-        }
-    });
-});
-
-$("body").delegate(".listAction", 'click', function () {
-    var el = $(this).closest('.actionOnMessage').find('.expressionAttr[data-l1key=cmd]');
-    nextdom.getSelectActionModal({}, function (result) {
-      el.value(result.human);
-      nextdom.cmd.displayActionOption(el.value(), '', function (html) {
-        el.closest('.actionOnMessage').find('.actionOptions').html(html);
-        taAutosize();
-    });
-  });
-});
-
-  $("body").delegate(".listCmdAction", 'click', function () {
-    var el = $(this).closest('.actionOnMessage').find('.expressionAttr[data-l1key=cmd]');
-    nextdom.cmd.getSelectModal({cmd: {type: 'action'}}, function (result) {
-        el.value(result.human);
-        nextdom.cmd.displayActionOption(el.value(), '', function (html) {
-            el.closest('.actionOnMessage').find('.actionOptions').html(html);
-            taAutosize();
-        });
-    });
-});

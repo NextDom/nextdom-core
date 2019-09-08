@@ -51,16 +51,15 @@
 
         <!-- Page content -->
         <div class="box-body">
-            <form class="form-horizontal">
-
-                <!-- Alert section -->
-                <div class="alert alert-danger">{{ 'osdb.warning'|trans }} {{ PRODUCT_NAME }}...</div>
-                <!-- Console Section -->
-                <fieldset>
-                    <legend>{{ 'osdb.administration' | trans }}</legend>
-                    <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'osdb.system_console' | trans }}</label>
-                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+            <!-- Alert section -->
+            <div class="alert alert-danger">{{ 'osdb.warning'|trans }} {{ PRODUCT_NAME }}...</div>
+            <!-- Console Section -->
+            <fieldset>
+                <legend>{{ 'osdb.tools' | trans }}</legend>
+                <div class="row">
+                    <div class="form-group col-sm-6 col-xs-12 col-padding">
+                        <label class="control-label">{{ 'osdb.system_console' | trans }}</label>
+                        <div class="mix-group">
                             <a class="btn btn-danger" href="index.php?v=d&p=system"><i class="fas fa-exclamation-triangle"></i>{{ 'osdb.run' | trans }}</a>
                         </div>
                     </div>
@@ -75,20 +74,27 @@
                             <a class="btn btn-danger" href="index.php?v=d&p=database"><i class="fas fa-exclamation-triangle"></i>{{ 'osdb.run' | trans }}</a>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'osdb.user' | trans }}</label>
-                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                </div>
+            </fieldset>
+
+            <!-- DB Section -->
+            <fieldset class="legend-section">
+                <legend>{{ 'osdb.database'|trans }}</legend>
+                <div class="row">
+                    <div class="form-group col-sm-6 col-xs-12 col-padding">
+                        <label class="control-label">{{ 'osdb.user' | trans }}</label>
+                        <div class="mix-group">
                             <span class="label label-config">{{ adminDbConfig['username'] }}</span>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'osdb.password' | trans }}</label>
-                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
+                    <div class="form-group col-sm-6 col-xs-12 col-padding">
+                        <label class="control-label">{{ 'osdb.password' | trans }}</label>
+                        <div class="mix-group">
                             <span class="label label-config">{{ adminDbConfig['password'] }}</span>
                         </div>
                     </div>
-                </fieldset>
-            </form>
+                </div>
+            </fieldset>
         </div>
     </div>
 </section>

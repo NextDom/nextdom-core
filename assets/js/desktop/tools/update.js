@@ -41,6 +41,105 @@ var updateCollapseButton = $('#updateCollapseButton');
 var updateUncollapseButton = $('#updateUncollapseButton');
 var updateLogView = $('#updateLog');
 
+// Page init
+initUpdateTabsContent();
+initDialogs();
+initEvents();
+
+/**
+ * Init all events
+ */
+function initEvents() {
+  updateLogView.height($(window).height() - $('header').height() - $('footer').height() - 150);
+  updateLogView.parent().height($(window).outerHeight() - $('header').outerHeight() - 160);
+  $('#selectiveUpdateButton').off('click').on('click', function () {
+    selectiveUpdateModal.modal('show');
+  });
+  $('.updateOption[data-l1key=force]').off('click').on('click', function () {
+    if ($(this).value() == 1) {
+      $('.updateOption[data-l1key="backup::before"]').value(0);
+      $('.updateOption[data-l1key="backup::before"]').attr('disabled', 'disabled');
+
+    } else {
+      $('.updateOption[data-l1key="backup::before"]').attr('disabled', false);
+    }
+  });
+  $('#startUpdateButton').off('click').on('click', function () {
+    selectiveUpdateModal.modal('hide');
+    updateInfoModal.dialog({title: '{{Avancement de la mise à jour}}'});
+    updateInfoModal.dialog('open');
+    var options = selectiveUpdateModal.getValues('.updateOption')[0];
+    $.hideAlert();
+    nextdom.update.doAll({
+      options: options,
+      error: function (error) {
+        notify('Erreur', error.message, 'error');
+      },
+      success: function () {
+        showLogDialog();
+      }
+    });
+  });
+
+  $('#logDialogButton').on('click', function () {
+    showLogDialog();
+  });
+
+  $('#checkAllUpdatesButton').off('click').on('click', function () {
+    $.hideAlert();
+    nextdom.update.checkAll({
+      error: function (error) {
+        notify('Erreur', error.message, 'error');
+      },
+      success: function () {
+        initUpdateTabsContent();
+      }
+    });
+  });
+
+  updateCollapseButton.on('click', function () {
+    $('#accordionUpdate .panel-collapse').each(function () {
+      if (!$(this).hasClass('in')) {
+        $(this).css({'height': ''});
+        $(this).addClass('in');
+      }
+    });
+    updateCollapseButton.hide();
+    updateUncollapseButton.show()
+  });
+
+  updateUncollapseButton.on('click', function () {
+    $('#accordionUpdate .panel-collapse').each(function () {
+      if ($(this).hasClass('in')) {
+        $(this).removeClass('in');
+      }
+    });
+    updateUncollapseButton.hide();
+    updateCollapseButton.show()
+  });
+
+  // Init update button on update box
+  tabsList.delegate('.update', 'click', function () {
+    var updateId = $(this).closest('.box').attr('data-id');
+    launchUpdate(updateId);
+  });
+
+  // Init remove button on update box
+  tabsList.delegate('.remove', 'click', function () {
+    var updateId = $(this).closest('.box').attr('data-id');
+    removeUpdate(updateId);
+  });
+
+  // Init check update button on update box
+  tabsList.delegate('.checkUpdate', 'click', function () {
+    var updateId = $(this).closest('.box').attr('data-id');
+    checkSingleUpdate(updateId);
+  });
+
+  // Save trigger
+  $('#saveUpdateChanges').click(saveUpdateChanges);
+}
+
 /**
  * Init content of all update tabs
  *
@@ -317,103 +416,13 @@ function getNextDomLog(_autoUpdate, _log) {
   });
 }
 
+/**
+ * Show log update modale
+ */
 function showLogDialog() {
   updateInfoModal.dialog({title: '{{Avancement de la mise à jour}}'});
   updateInfoModal.dialog('open');
   getNextDomLog(1, 'update');
-}
-
-/**
- * Init all events
- */
-function initEvents() {
-  updateLogView.height($(window).height() - $('header').height() - $('footer').height() - 150);
-  updateLogView.parent().height($(window).outerHeight() - $('header').outerHeight() - 160);
-  $('#selectiveUpdateButton').off('click').on('click', function () {
-    selectiveUpdateModal.modal('show');
-  });
-  $('.updateOption[data-l1key=force]').off('click').on('click', function () {
-    if ($(this).value() == 1) {
-      $('.updateOption[data-l1key="backup::before"]').value(0);
-      $('.updateOption[data-l1key="backup::before"]').attr('disabled', 'disabled');
-
-    } else {
-      $('.updateOption[data-l1key="backup::before"]').attr('disabled', false);
-    }
-  });
-  $('#startUpdateButton').off('click').on('click', function () {
-    selectiveUpdateModal.modal('hide');
-    updateInfoModal.dialog({title: '{{Avancement de la mise à jour}}'});
-    updateInfoModal.dialog('open');
-    var options = selectiveUpdateModal.getValues('.updateOption')[0];
-    $.hideAlert();
-    nextdom.update.doAll({
-      options: options,
-      error: function (error) {
-        notify('Erreur', error.message, 'error');
-      },
-      success: function () {
-        showLogDialog();
-      }
-    });
-  });
-
-  $('#logDialogButton').on('click', function () {
-    showLogDialog();
-  });
-
-  $('#checkAllUpdatesButton').off('click').on('click', function () {
-    $.hideAlert();
-    nextdom.update.checkAll({
-      error: function (error) {
-        notify('Erreur', error.message, 'error');
-      },
-      success: function () {
-        initUpdateTabsContent();
-      }
-    });
-  });
-
-  updateCollapseButton.on('click', function () {
-    $('#accordionUpdate .panel-collapse').each(function () {
-      if (!$(this).hasClass('in')) {
-        $(this).css({'height': ''});
-        $(this).addClass('in');
-      }
-    });
-    updateCollapseButton.hide();
-    updateUncollapseButton.show()
-  });
-
-  updateUncollapseButton.on('click', function () {
-    $('#accordionUpdate .panel-collapse').each(function () {
-      if ($(this).hasClass('in')) {
-        $(this).removeClass('in');
-      }
-    });
-    updateUncollapseButton.hide();
-    updateCollapseButton.show()
-  });
-
-  // Init update button on update box
-  tabsList.delegate('.update', 'click', function () {
-    var updateId = $(this).closest('.box').attr('data-id');
-    launchUpdate(updateId);
-  });
-
-  // Init remove button on update box
-  tabsList.delegate('.remove', 'click', function () {
-    var updateId = $(this).closest('.box').attr('data-id');
-    removeUpdate(updateId);
-  });
-
-  // Init check update button on update box
-  tabsList.delegate('.checkUpdate', 'click', function () {
-    var updateId = $(this).closest('.box').attr('data-id');
-    checkSingleUpdate(updateId);
-  });
-
-  $('#saveUpdateChanges').click(saveUpdateChanges);
 }
 
 /**
@@ -433,7 +442,3 @@ function initDialogs() {
     }
   });
 }
-
-initUpdateTabsContent();
-initDialogs();
-initEvents();

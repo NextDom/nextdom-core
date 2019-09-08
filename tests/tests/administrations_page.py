@@ -116,7 +116,7 @@ class AdministrationPages(BaseGuiTest):
         """Test general administration page
         """
         self.goto('index.php?v=d&p=general')
-        reset_hardware_button = self.get_element_by_id('bt_resetHardwareType')
+        reset_hardware_button = self.get_element_by_id('bt_refreshHardwareType')
         back_button = self.get_link_by_title('Retour')
         self.assertIsNotNone(reset_hardware_button)
         self.assertIsNotNone(back_button)
@@ -350,7 +350,7 @@ class AdministrationPages(BaseGuiTest):
         """Test interact administration page
         """
         self.goto('index.php?v=d&p=interact')
-        interact_button = self.get_element_by_id('bt_testInteract2')
+        interact_button = self.get_element_by_id('bt_testInteract')
         back_button = self.get_link_by_title('Retour')
         self.assertIsNotNone(interact_button)
         self.assertIsNotNone(back_button)

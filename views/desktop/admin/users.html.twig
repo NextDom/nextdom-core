@@ -43,6 +43,7 @@
         </div>
         <div class="action-group">
             <a class="btn btn-success btn-action-bar pull-right" id="bt_saveUser"><i class="fas fa-save"></i>{{ 'common.save' | trans }}</a>
+            <a class="btn btn-danger btn-action-bar pull-right bt_cancelModifs"><i class="fas fa-times"></i>{{ 'common.cancel'|trans }}</a>
             <a class="btn btn-warning btn-action-bar pull-right" id="bt_removeAllRegisterDevice"><i class="fas fa-trash"></i>{{ 'Supprimer tous les périphériques' }}</a>
         </div>
     </div>
@@ -57,11 +58,11 @@
 
         <!-- Page content -->
         <div class="box-body">
-            <form class="form-horizontal">
-                <!-- Users section -->
-                <fieldset>
-                    <legend>{{ 'Liste des utilisateurs' }}</legend>
-                    <div class="tab-pane" id="user">
+            <!-- Users section -->
+            <fieldset>
+                <legend>{{ 'Liste des utilisateurs' }}</legend>
+                <div class="row">
+                    <div class="tab-pane form-group col-xs-12 col-padding" id="user">
                         <table class="table table-condensed table-bordered" id="table_user">
                             <thead>
                             <th>{{ 'Utilisateur' }}</th>
@@ -75,74 +76,82 @@
                             <tbody></tbody>
                         </table>
                     </div>
-                </fieldset>
+                </div>
+            </fieldset>
 
-                <!-- Sessions section -->
-                <fieldset class="legend-section">
-                    <legend>{{ 'Sessions actives' }}</legend>
-                    <table class="table table-condensed table-bordered">
-                        <thead>
-                        <tr>
-                            <th>{{ 'common.id' | trans }}</th>
-                            <th>{{ 'Utilisateur' }}</th>
-                            <th>{{ 'IP' }}</th>
-                            <th>{{ 'common.date' | trans }}</th>
-                            <th>{{ 'common.actions' | trans }}</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% if userSessionsList|length > 0 %}
-                            {% for sessionId, sessionData in userSessionsList %}
-                                {% if sessionData['ip'] is not defined %}
-                                    {% set sessionData = sessionData|merge({'ip': ''}) %}
-                                {% endif %}
-                                {% if sessionData['datetime'] is not defined %}
-                                    {% set sessionData = sessionData|merge({'datetime': ''}) %}
-                                {% endif %}
-                                <tr data-id="{{ sessionId }}">
-                                    <td>{{ sessionId }}</td>
-                                    <td>{{ sessionData['login'] }}</td>
-                                    <td>{{ sessionData['ip'] }}</td>
-                                    <td>{{ sessionData['datetime'] }}</td>
-                                    <td><a class="btn btn-warning btn-sm bt_deleteSession pull-right"><i class="fas fa-sign-out-alt"></i>{{ 'Déconnecter' }}</a></td>
-                                </tr>
-                            {% endfor %}
-                        {% endif %}
-                        </tbody>
-                    </table>
-                </fieldset>
-
-                <!-- Periphériques section -->
-                <fieldset class="legend-section">
-                    <legend>{{ 'Périphériques enregistrés' }}</legend>
-                    <table class="table table-bordered table-condensed">
-                        <thead>
-                        <tr>
-                            <th>{{ 'common.id' | trans }}</th>
-                            <th>{{ 'Utilisateur' }}</th>
-                            <th>{{ 'IP' }}</th>
-                            <th>{{ 'common.date' | trans }}</th>
-                            <th>{{ 'common.action' | trans }}</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for user in usersList %}
-                            {% if user.getOptions('registerDevice') is iterable and user.getOptions('registerDevice')|length > 0 %}
-                                {% for deviceId, deviceData in user.getOptions('registerDevice') %}
-                                    <tr data-key="{{ deviceId }}" data-user_id="{{ user.getId() }}">
-                                        <td>{{ deviceId|slice(0, 10) }}</td>
-                                        <td>{{ user.getLogin() }}</td>
-                                        <td>{{ deviceData['ip'] }}</td>
-                                        <td>{{ deviceData['datetime'] }}</td>
-                                        <td><a class="btn btn-warning btn-sm bt_removeRegisterDevice pull-right"><i class="fas fa-trash"></i>{{ 'common.remove' | trans }}</a></td>
+            <!-- Sessions section -->
+            <fieldset class="legend-section">
+                <legend>{{ 'Sessions actives' }}</legend>
+                <div class="row">
+                    <div class="form-group col-xs-12 col-padding">
+                        <table class="table table-condensed table-bordered">
+                            <thead>
+                            <tr>
+                                <th>{{ 'common.id' | trans }}</th>
+                                <th>{{ 'Utilisateur' }}</th>
+                                <th>{{ 'IP' }}</th>
+                                <th>{{ 'common.date' | trans }}</th>
+                                <th>{{ 'common.actions' | trans }}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% if userSessionsList|length > 0 %}
+                                {% for sessionId, sessionData in userSessionsList %}
+                                    {% if sessionData['ip'] is not defined %}
+                                        {% set sessionData = sessionData|merge({'ip': ''}) %}
+                                    {% endif %}
+                                    {% if sessionData['datetime'] is not defined %}
+                                        {% set sessionData = sessionData|merge({'datetime': ''}) %}
+                                    {% endif %}
+                                    <tr data-id="{{ sessionId }}">
+                                        <td>{{ sessionId }}</td>
+                                        <td>{{ sessionData['login'] }}</td>
+                                        <td>{{ sessionData['ip'] }}</td>
+                                        <td>{{ sessionData['datetime'] }}</td>
+                                        <td><a class="btn btn-warning btn-sm bt_deleteSession pull-right"><i class="fas fa-sign-out-alt"></i>{{ 'Déconnecter' }}</a></td>
                                     </tr>
                                 {% endfor %}
                             {% endif %}
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </fieldset>
-            </form>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Periphériques section -->
+            <fieldset class="legend-section">
+                <legend>{{ 'Périphériques enregistrés' }}</legend>
+                <div class="row">
+                    <div class="form-group col-xs-12 col-padding">
+                        <table class="table table-bordered table-condensed">
+                            <thead>
+                            <tr>
+                                <th>{{ 'common.id' | trans }}</th>
+                                <th>{{ 'Utilisateur' }}</th>
+                                <th>{{ 'IP' }}</th>
+                                <th>{{ 'common.date' | trans }}</th>
+                                <th>{{ 'common.action' | trans }}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for user in usersList %}
+                                {% if user.getOptions('registerDevice') is iterable and user.getOptions('registerDevice')|length > 0 %}
+                                    {% for deviceId, deviceData in user.getOptions('registerDevice') %}
+                                        <tr data-key="{{ deviceId }}" data-user_id="{{ user.getId() }}">
+                                            <td>{{ deviceId|slice(0, 10) }}</td>
+                                            <td>{{ user.getLogin() }}</td>
+                                            <td>{{ deviceData['ip'] }}</td>
+                                            <td>{{ deviceData['datetime'] }}</td>
+                                            <td><a class="btn btn-warning btn-sm bt_removeRegisterDevice pull-right"><i class="fas fa-trash"></i>{{ 'common.remove' | trans }}</a></td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </fieldset>
 
             <!-- New user modal section -->
             <div class="modal fade" id="md_newUser">

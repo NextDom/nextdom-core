@@ -34,69 +34,102 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
- $("#bt_saveapi").on('click', function (event) {
-    $.hideAlert();
-    nextdom.config.save({
-        configuration: $('#API').getValues('.configKey')[0],
+// Page init
+loadInformations();
+initEvents();
+
+/**
+ * Load informations in all forms of the page
+ */
+function loadInformations() {
+    nextdom.config.load({
+        configuration: $('#API').getValues('.configKey:not(.noSet)')[0],
         error: function (error) {
             notify("Erreur", error.message, 'error');
         },
-        success: function () {
-            nextdom.config.load({
-                configuration: $('#API').getValues('.configKey')[0],
-                plugin: 'core',
-                error: function (error) {
-                    notify("Erreur", error.message, 'error');
-                },
-                success: function (data) {
-                    $('#API').setValues(data, '.configKey');
-                    modifyWithoutSave = false;
-                    notify("Info", '{{Sauvegarde réussie}}', 'success');
-                }
-            });
+        success: function (data) {
+            $('#API').setValues(data, '.configKey');
+            modifyWithoutSave = false;
+            $(".bt_cancelModifs").hide();
         }
     });
-});
+}
 
-nextdom.config.load({
-    configuration: $('#API').getValues('.configKey:not(.noSet)')[0],
-    error: function (error) {
-        notify("Erreur", error.message, 'error');
-    },
-    success: function (data) {
-        $('#API').setValues(data, '.configKey');
-        modifyWithoutSave = false;
-    }
-});
+/**
+ * Init events on the profils page
+ */
+function initEvents() {
+    // Param changed : page leaving lock by msgbox
+    $('#API').delegate('.configKey', 'change', function () {
+        if (!lockModify) {
+            modifyWithoutSave = true;
+            $(".bt_cancelModifs").show();
+        }
+    });
 
-$('#API').delegate('.configKey', 'change', function () {
-    modifyWithoutSave = true;
-});
+    // Cancel modifications
+    $('.bt_cancelModifs').on('click', function () {
+        loadInformations();
+    });
 
-$(".bt_regenerate_api").on('click', function (event) {
-    $.hideAlert();
-    var el = $(this);
-    bootbox.confirm('{{Etes-vous sûr de vouloir réinitialiser la clef API de }}'+el.attr('data-plugin')+' ?', function (result) {
-        if (result) {
-           $.ajax({
-            type: "POST",
-            url: "core/ajax/config.ajax.php",
-            data: {
-                action: "genApiKey",
-                plugin:el.attr('data-plugin'),
+    // Save button
+    $("#bt_saveapi").on('click', function (event) {
+        nextdom.config.save({
+            configuration: $('#API').getValues('.configKey')[0],
+            error: function (error) {
+                notify("Erreur", error.message, 'error');
             },
-            dataType: 'json',
-            error: function (request, status, error) {
-                handleAjaxError(request, status, error);
-            },
-            success: function (data) {
-                if (data.state != 'ok') {
-                    notify("Erreur", data.result, 'error');
-                    return;
-                }
-                el.closest('.input-group').find('.span_apikey').value(data.result);
+            success: function () {
+                nextdom.config.load({
+                    configuration: $('#API').getValues('.configKey')[0],
+                    plugin: 'core',
+                    error: function (error) {
+                        notify("Erreur", error.message, 'error');
+                    },
+                    success: function (data) {
+                        $('#API').setValues(data, '.configKey');
+                        modifyWithoutSave = false;
+                        notify("Info", '{{Sauvegarde réussie}}', 'success');
+                    }
+                });
             }
         });
-       }
-   });
-});
+    });
+
+    // Regenerate key button
+    $(".bt_regenerate_api").on('click', function (event) {
+        var el = $(this);
+        bootbox.confirm('{{Etes-vous sûr de vouloir réinitialiser la clef API de }}'+el.attr('data-plugin')+' ?', function (result) {
+            if (result) {
+               $.ajax({
+                  type: "POST",
+                  url: "core/ajax/config.ajax.php",
+                  data: {
+                      action: "genApiKey",
+                      plugin:el.attr('data-plugin'),
+                  },
+                  dataType: 'json',
+                  error: function (request, status, error) {
+                      handleAjaxError(request, status, error);
+                  },
+                  success: function (data) {
+                      if (data.state != 'ok') {
+                          notify("Erreur", data.result, 'error');
+                          return;
+                      }
+                      el.closest('.mix-group').find('.span_apikey').value(data.result);
+                  }
+              });
+           }
+       });
+    });
+
+    // Regenerate key button
+    $(".bt_copy_api").on('click', function (event) {
+        navigator.clipboard.writeText($(this).closest('.mix-group').find('.span_apikey').value()).then(function() {
+            notify("Info", '{{Clef copiée !}}', 'success');
+        }, function() {
+            notify("Info", '{{Copie refusée !}}', 'danger');
+        });
+    });
+}

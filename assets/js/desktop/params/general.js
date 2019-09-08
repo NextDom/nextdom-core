@@ -34,133 +34,136 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
- $("#bt_savegeneral").on('click', function (event) {
-    $.hideAlert();
-    nextdom.config.save({
-        configuration: $('#general').getValues('.configKey')[0],
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function () {
-            nextdom.config.load({
-                configuration: $('#general').getValues('.configKey')[0],
-                plugin: 'core',
-                error: function (error) {
-                    notify("Erreur", error.message, 'error');
-                },
-                success: function (data) {
-                    $('#general').setValues(data, '.configKey');
-                    modifyWithoutSave = false;
-                    notify("Info", '{{Sauvegarde réussie}}', 'success');
-                }
-            });
-        }
-    });
-});
+// Page init
+loadInformations();
+initEvents();
 
-nextdom.config.load({
-    configuration: $('#general').getValues('.configKey:not(.noSet)')[0],
-    error: function (error) {
-        notify("Erreur", error.message, 'error');
-    },
-    success: function (data) {
-        $('#general').setValues(data, '.configKey');
-        modifyWithoutSave = false;
-    }
-});
-
-$('#general').delegate('.configKey', 'change', function () {
-    modifyWithoutSave = true;
-});
-
-$('#bt_forceSyncHour').on('click', function () {
-    $.hideAlert();
-    nextdom.forceSyncHour({
+/**
+ * Load informations in all forms of the page
+ */
+function loadInformations() {
+    nextdom.config.load({
+        configuration: $('#general').getValues('.configKey:not(.noSet)')[0],
         error: function (error) {
             notify("Erreur", error.message, 'error');
         },
         success: function (data) {
-            notify("Info", '{{Commande réalisée avec succès}}', 'success');
-        }
-    });
-});
-
-$("#bt_clearNextDomLastDate").on('click', function (event) {
-    $.hideAlert();
-    clearNextDomDate();
-});
-
-function clearNextDomDate() {
-    $.ajax({
-        type: "POST",
-        url: "core/ajax/nextdom.ajax.php",
-        data: {
-            action: "clearDate"
-        },
-        dataType: 'json',
-        error: function (request, status, error) {
-            handleAjaxError(request, status, error);
-        },
-        success: function (data) {
-            if (data.state != 'ok') {
-                notify("Erreur", data.result, 'error');
-                return;
-            }
-            $('#in_nextdomLastDate').value('');
+            $('#general').setValues(data, '.configKey');
+            modifyWithoutSave = false;
+            $(".bt_cancelModifs").hide();
         }
     });
 }
 
-$('#bt_resetHour').on('click',function(){
- $.ajax({
-    type: "POST",
-    url: "core/ajax/nextdom.ajax.php",
-    data: {
-        action: "resetHour"
-    },
-    dataType: 'json',
-    error: function (request, status, error) {
-        handleAjaxError(request, status, error);
-    },
-    success: function (data) {
-        if (data.state != 'ok') {
-            notify("Erreur", data.result, 'error');
-            return;
-        }
-         location.reload();
-    }
-});
-});
-
-$('#bt_resetHwKey').on('click',function(){
- $.ajax({
-    type: "POST",
-    url: "core/ajax/nextdom.ajax.php",
-    data: {
-        action: "resetHwKey"
-    },
-    dataType: 'json',
-    error: function (request, status, error) {
-        handleAjaxError(request, status, error);
-    },
-    success: function (data) {
-        if (data.state != 'ok') {
-            notify("Erreur", data.result, 'error');
-            return;
-        }
-         location.reload();
-    }
-});
-});
-
-$('#bt_resetHardwareType').on('click',function(){
-    nextdom.config.save({
-        configuration: {hardware_name : ''},
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function () {
-                     location.reload();
+/**
+ * Init events on the profils page
+ */
+function initEvents() {
+    // Param changed : page leaving lock by msgbox
+    $('#general').delegate('.configKey', 'change', function () {
+        if (!lockModify) {
+            modifyWithoutSave = true;
+            $(".bt_cancelModifs").show();
         }
     });
-});
+
+    // Cancel modifications
+    $('.bt_cancelModifs').on('click', function () {
+        loadInformations();
+    });
+
+    // Save button
+    $("#bt_saveGeneral").on('click', function (event) {
+        nextdom.config.save({
+            configuration: $('#general').getValues('.configKey')[0],
+            error: function (error) {
+                notify("Erreur", error.message, 'error');
+            },
+            success: function () {
+                nextdom.config.load({
+                    configuration: $('#general').getValues('.configKey')[0],
+                    plugin: 'core',
+                    error: function (error) {
+                        notify("Erreur", error.message, 'error');
+                    },
+                    success: function (data) {
+                        $('#general').setValues(data, '.configKey');
+                        modifyWithoutSave = false;
+                        $(".bt_cancelModifs").hide();
+                        notify("Info", '{{Sauvegarde réussie}}', 'success');
+                    }
+                });
+            }
+        });
+    });
+
+    // Time Synchronisation button
+    $('#bt_forceSyncHour').on('click', function () {
+        $.hideAlert();
+        nextdom.forceSyncHour({
+            error: function (error) {
+                notify("Erreur", error.message, 'error');
+            },
+            success: function (data) {
+                notify("Info", '{{Commande réalisée avec succès}}', 'success');
+            }
+        });
+    });
+
+    // Last connection date reset
+    $('#bt_resetHour').on('click',function(){
+        $.ajax({
+            type: "POST",
+            url: "core/ajax/nextdom.ajax.php",
+            data: {
+                action: "resetHour"
+            },
+            dataType: 'json',
+            error: function (request, status, error) {
+                handleAjaxError(request, status, error);
+            },
+            success: function (data) {
+                if (data.state != 'ok') {
+                    notify("Erreur", data.result, 'error');
+                    return;
+                }
+                location.reload();
+            }
+        });
+    });
+
+    // Reset installation key button
+    $('#bt_resetHwKey').on('click',function(){
+        $.ajax({
+            type: "POST",
+            url: "core/ajax/nextdom.ajax.php",
+            data: {
+                action: "resetHwKey"
+            },
+            dataType: 'json',
+            error: function (request, status, error) {
+                handleAjaxError(request, status, error);
+            },
+            success: function (data) {
+                if (data.state != 'ok') {
+                    notify("Erreur", data.result, 'error');
+                    return;
+                }
+                location.reload();
+            }
+        });
+    });
+
+    // Refresh hardware type button
+    $('#bt_refreshHardwareType').on('click',function(){
+        nextdom.config.save({
+            configuration: {hardware_name : ''},
+            error: function (error) {
+                notify("Erreur", error.message, 'error');
+            },
+            success: function () {
+                location.reload();
+            }
+        });
+    });
+}
