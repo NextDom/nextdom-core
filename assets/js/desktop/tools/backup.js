@@ -57,6 +57,7 @@ function loadInformations() {
             $(".bt_cancelModifs").hide();
         }
     });
+    $('#pre_backupInfo').height($(window).height() - $('header').height() - $('footer').height() - 150);
 }
 
 /**
@@ -114,7 +115,6 @@ function initEvents() {
             $("body").css({overflow: 'inherit'});
         }
     });
-    $('#pre_backupInfo').height($(window).height() - $('header').height() - $('footer').height() - 150);
 
     // Open log button
     $("#bt_saveOpenLog").on('click', function (event) {

@@ -38,7 +38,7 @@
         <div class="action-group">
             <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'common.return' | trans }}</a>
             <a class="btn btn-default btn-action-bar" href="index.php?v=d&p=summary"><i class="fas fa-cog"></i>{{ 'common.settings' | trans }}</a>
-            <a class="btn btn-default btn-action-bar" id="bt_removeHistory"><i class="fas fa-history" aria-hidden="true"></i>{{ 'Historique' }}</a>
+            <a class="btn btn-default btn-action-bar" id="bt_removeHistory"><i class="fas fa-history" aria-hidden="true"></i>{{ 'Historique des suppressions' }}</a>
             <a class="btn btn-success btn-action-bar bt_setIsVisible" data-value="1" style="display:none;"><i class="fas fa-eye"></i>{{ 'common.visible' | trans }}</a>
             <a class="btn btn-warning btn-action-bar bt_setIsVisible" data-value="0" style="display:none;"><i class="fas fa-eye-slash"></i>{{ 'Invisible' }}</a>
         </div>
@@ -68,9 +68,9 @@
                     <label for="cb_visibleDisplay" class="control-label label-check" data-toggle="tooltip" title="" data-original-title="{{'Afficher les équipements invisible'}}">{{'Invisible'}}</label>
                 </div>
                 <div class="pull-right">
-                    <span class="label label-default label-sticker-big">{{ 'Nombre d\'objets :' }} {{ displayObjects|length }}</span>
-                    <span class="label label-info label-sticker-big">{{ 'Nombre d\'équipements :' }} {{ displayNbEqLogics }}</span>
-                    <span class="label label-primary label-sticker-big">{{ 'Nombre de commandes :' }} {{ displayNbCmds }}</span>
+                    <span class="label label-default label-sticker">{{ 'Nombre d\'objets :' }} {{ displayObjects|length }}</span>
+                    <span class="label label-info label-sticker">{{ 'Nombre d\'équipements :' }} {{ displayNbEqLogics }}</span>
+                    <span class="label label-primary label-sticker">{{ 'Nombre de commandes :' }} {{ displayNbCmds }}</span>
                 </div>
             </div>
         </div>

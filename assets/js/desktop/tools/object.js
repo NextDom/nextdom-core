@@ -34,7 +34,6 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-
 // Page init
 loadInformations();
 initEvents();
@@ -287,13 +286,14 @@ function loadObjectConfiguration(_id){
             $('.objectAttr[data-l1key=father_id] option').show();
             $('#summarytab input[type=checkbox]').value(0);
             $('.object').setValues(data, '.objectAttr');
-            if(data['display'] == ''){
+            if(!isset(data.display) || data.display.length == 0){
                 $('.objectAttr[data-l1key=display][data-l2key=tagColor]').value('#33B8CC');
                 $('.objectAttr[data-l1key=display][data-l2key=tagTextColor]').value('#ffffff');
                 $('.objectAttr[data-l1key=display][data-l2key="desktop::summaryTextColor"]').value('#ffffff');
-                $('#colorpickTag').colorpicker('getValue', '#33B8CC');
-                $('#colorpickTagText').colorpicker('getValue', '#ffffff');
-                $('#colorpickSummaryText').colorpicker('getValue', '#ffffff');
+                $('#colorpickTag').colorpicker('setValue', '#33B8CC');
+                $('#colorpickTagText').colorpicker('setValue', '#ffffff');
+                $('#colorpickSummaryText').colorpicker('setValue', '#ffffff');
+                $('.objectAttr[data-l1key=display][data-l2key="dashboard::size"]').value(12);
             } else {
                 $('#colorpickTag').colorpicker('setValue', data.display.tagColor);
                 $('#colorpickTagText').colorpicker('setValue', data.display.tagTextColor);

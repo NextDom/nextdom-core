@@ -79,7 +79,7 @@ function loadInformations() {
  */
 function initEvents() {
     // Show confirm modal on non saved changes
-    $('#div_pageContainer').delegate('.configKey:not(.noSet)', 'change', function () {
+    $('#custom').delegate('.configKey:not(.noSet)', 'change', function () {
         modifyWithoutSave = true;
     });
 

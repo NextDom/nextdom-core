@@ -99,7 +99,6 @@ function initEvents() {
 
     // Time Synchronisation button
     $('#bt_forceSyncHour').on('click', function () {
-        $.hideAlert();
         nextdom.forceSyncHour({
             error: function (error) {
                 notify("Erreur", error.message, 'error');

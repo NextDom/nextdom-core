@@ -72,6 +72,7 @@ function initEvents() {
         loadInformations();
     });
 
+    // Save button
     $("#bt_saveeqlogic").on('click', function (event) {
         nextdom.config.save({
             configuration: $('#eqlogic').getValues('.configKey')[0],
