@@ -19,6 +19,7 @@ namespace NextDom\Managers;
 
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\ConsoleHelper;
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Enums\FoldersReferential;
@@ -479,6 +480,7 @@ class BackupManager
             ConsoleHelper::ok();
             ConsoleHelper::step("clearing cache...");
             CacheManager::flush();
+            exec('sh ' . NEXTDOM_ROOT . '/scripts/clear_cache.sh');
             ConsoleHelper::ok();
             FileSystemHelper::rrmdir($tmpDir);
             NextDomHelper::event("end_restore");
@@ -564,16 +566,16 @@ class BackupManager
             throw new CoreException("unable to modify content of backup file " . $backupFile);
         }
 
-        \DB::Prepare("SET foreign_key_checks = 0", array(), \DB::FETCH_TYPE_ROW);
-        $tables = \DB::Prepare("SHOW TABLES", array(), \DB::FETCH_TYPE_ALL);
+        DBHelper::Prepare("SET foreign_key_checks = 0", array(), DBHelper::FETCH_TYPE_ROW);
+        $tables = DBHelper::Prepare("SHOW TABLES", array(), DBHelper::FETCH_TYPE_ALL);
         foreach ($tables as $table) {
             $table = array_values($table);
             $table = $table[0];
             $statement = sprintf("DROP TABLE IF EXISTS `%s`", $table[0]);
-            \DB::Prepare($statement, array(), \DB::FETCH_TYPE_ROW);
+            DBHelper::Prepare($statement, array(), DBHelper::FETCH_TYPE_ROW);
         }
         self::loadSQLFromFile($backupFile);
-        \DB::Prepare("SET foreign_key_checks = 1", array(), \DB::FETCH_TYPE_ROW);
+        DBHelper::Prepare("SET foreign_key_checks = 1", array(), DBHelper::FETCH_TYPE_ROW);
     }
 
     /**
