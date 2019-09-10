@@ -16,3 +16,11 @@ fi
 if [ -d ${LIB_DIRECTORY}/cache/twig ]; then
     rm -fr ${LIB_DIRECTORY}/cache/twig/*
 fi
+
+if [ -e /usr/share/nextdom/var/public/css/theme.css ]; then
+    rm -fr /usr/share/nextdom/var/public/css/theme.css
+fi
+
+if [ -e /var/www/html/nextdom/var/public/css/theme.css ]; then
+    rm -fr /var/www/html/nextdom/var/public/css/theme.css
+fi
