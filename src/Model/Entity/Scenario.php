@@ -1087,49 +1087,50 @@ class Scenario implements EntityInterface
     }
 
     /**
-     * TODO: Test and opti
-     * @param mixed $_only_class
+     * Get scenario icon
+     *
+     * @param bool $onlyClass
      * @return string
      * @throws \Exception
      */
-    public function getIcon($_only_class = false)
+    public function getIcon($onlyClass = false)
     {
-        if ($_only_class) {
-            if ($this->getIsActive() == 1) {
-                switch ($this->getState()) {
-                    case ScenarioState::STARTING:
-                        return 'fas fa-hourglass-start';
-                    case ScenarioState::IN_PROGRESS:
-                        return 'fas fa-spinner fa-spin';
-                    case ScenarioState::ERROR:
-                        return 'fas fa-exclamation-triangle';
-                    default:
-                        if (strpos($this->getDisplay('icon'), '<i') === 0) {
-                            return str_replace(array('<i', 'class=', '"', '/>'), '', $this->getDisplay('icon'));
+        $cssClass = '';
+        if ($this->getIsActive() == 1) {
+            switch ($this->getState()) {
+                case ScenarioState::STARTING:
+                    $cssClass = 'fas fa-hourglass-start';
+                    break;
+                case ScenarioState::IN_PROGRESS:
+                    $cssClass = 'fas fa-spinner fa-spin';
+                    break;
+                case ScenarioState::ERROR:
+                    $cssClass = 'fas fa-exclamation-triangle';
+                    break;
+                default:
+                    // User custom icon
+                    if (strpos($this->getDisplay('icon'), '<i') === 0) {
+                        // Icon stored with HTML
+                        if ($onlyClass) {
+                            $cssClass = str_replace(['<i', 'class=', '"', '/>'], '', $this->getDisplay('icon'));
                         }
-                        return 'fas fa-check';
-                }
-            } else {
-                return 'fas fa-times';
-            }
-        } else {
-            if ($this->getIsActive() == 1) {
-                switch ($this->getState()) {
-                    case ScenarioState::STARTING:
-                        return '<i class="fas fa-hourglass-start"></i>';
-                    case ScenarioState::IN_PROGRESS:
-                        return '<i class="fas fa-spinner fa-spin"></i>';
-                    case ScenarioState::ERROR:
-                        return '<i class="fas fa-exclamation-triangle"></i>';
-                    default:
-                        if (strpos($this->getDisplay('icon'), '<i') === 0) {
+                        else {
                             return $this->getDisplay('icon');
                         }
-                        return '<i class="fas fa-check"></i>';
-                }
-            } else {
-                return '<i class="fas fa-times"></i>';
+                    }
+                    else {
+                        $cssClass =  'fas fa-check';
+                    }
+                    break;
             }
+        } else {
+            $cssClass = 'fas fa-times';
+        }
+
+        if ($onlyClass) {
+            return $cssClass;
+        } else {
+            return '<i class="' . $cssClass . '"></i>';
         }
     }
 
