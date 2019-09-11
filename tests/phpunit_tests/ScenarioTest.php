@@ -60,7 +60,7 @@ class ScenarioTest extends PHPUnit_Framework_TestCase
         $scenario = ScenarioManager::byId(1);
         $scenario->setState(ScenarioState::STOP);
         $scenario->setDisplay('icon', '<i class="fas fa-glass"></i>');
-        $icon = $scenario->getIcon(true);
+        $icon = $scenario->getIcon(false);
         $this->assertEquals($icon, '<i class="fas fa-glass"></i>');
     }
 }
