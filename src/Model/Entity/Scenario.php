@@ -1112,7 +1112,7 @@ class Scenario implements EntityInterface
                     if (strpos($this->getDisplay('icon'), '<i') === 0) {
                         // Icon stored with HTML
                         if ($onlyClass) {
-                            $cssClass = str_replace(['<i', 'class=', '"', '/>'], '', $this->getDisplay('icon'));
+                            $cssClass = trim(str_replace(['<i', 'class=', '"', '/>', '></i>'], '', $this->getDisplay('icon')));
                         }
                         else {
                             return $this->getDisplay('icon');
