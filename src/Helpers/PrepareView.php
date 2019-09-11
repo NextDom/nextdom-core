@@ -21,7 +21,7 @@ use NextDom\Enums\GetParams;
 use NextDom\Enums\ViewType;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\MessageManager;
-use NextDom\Managers\ObjectManager;
+use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\Plan3dHeaderManager;
 use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PluginManager;
@@ -37,7 +37,7 @@ use Symfony\Component\Routing\Loader\YamlFileLoader;
  */
 class PrepareView
 {
-    private static $NB_THEME_COLORS = 1+23;
+    private static $NB_THEME_COLORS = 1+20;
 
     private $currentConfig = [];
 
@@ -188,7 +188,6 @@ class PrepareView
             $pageData['JS_POOL'][] = '/vendor/node_modules/highcharts/modules/solid-gauge.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/highcharts/modules/exporting.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/highcharts/modules/export-data.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/jwerty/jwerty.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/packery/dist/packery.pkgd.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-lazyload/jquery.lazyload.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/codemirror/lib/codemirror.js';
@@ -199,7 +198,6 @@ class PrepareView
             $pageData['JS_POOL'][] = '/vendor/node_modules/codemirror/mode/xml/xml.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/codemirror/mode/javascript/javascript.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/codemirror/mode/css/css.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/jstree/dist/jstree.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/blueimp-file-upload/js/jquery.iframe-transport.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/blueimp-file-upload/js/jquery.fileupload.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-cron/dist/jquery-cron.js';
@@ -207,9 +205,7 @@ class PrepareView
             $pageData['JS_POOL'][] = '/vendor/node_modules/inputmask/dist/jquery.inputmask.bundle.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/snapsvg/dist/snap.svg-min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/moment/moment.js';
-
 
             // Then Factory framwework files
             $pageData['JS_POOL'][] = '/public/js/factory/NextDomUIDGenerator.js';
@@ -233,6 +229,7 @@ class PrepareView
             $pageData['JS_POOL'][] = '/public/js/factory/elements/Thead.js';
             $pageData['JS_POOL'][] = '/public/js/factory/elements/Tr.js';
             $pageData['JS_POOL'][] = '/public/js/factory/elements/VerticalLayout.js';
+
             // Finally dynamic libraries, must be here
             $pageData['JS_POOL'][] = '/vendor/node_modules/autosize/dist/autosize.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min.js';
@@ -260,8 +257,6 @@ class PrepareView
                 $pageData['CSS_POOL'][] = '/public/icon/' . $dir . 'style.css';
             }
         }
-
-        if (!AuthentificationHelper::isRescueMode()) {
             if (AuthentificationHelper::isConnected()) {
                 if (UserManager::getStoredUser() !== null && UserManager::getStoredUser()->getOptions('desktop_highcharts_theme') != '') {
                     $highstockThemeFile = '/vendor/node_modules/highcharts/themes/' . UserManager::getStoredUser()->getOptions('desktop_highcharts_theme') . '.js';
@@ -276,9 +271,6 @@ class PrepareView
                     $pageData['JS_POOL'][] = '/var/custom/desktop/custom.js';
                 }
             }
-        } else {
-            $pageData['CSS_POOL'][] = '/public/css/rescue.css';
-        }
     }
 
     /**
@@ -292,6 +284,7 @@ class PrepareView
         for ($colorIndex = 1; $colorIndex <= self::$NB_THEME_COLORS; ++$colorIndex) {
             $pageData['COLOR' . $colorIndex] = NextDomHelper::getConfiguration('theme:color' . $colorIndex);
         }
+        $pageData['ALERTALPHA'] = ConfigManager::byKey('nextdom::alertAlpha');
         $themeContent = Render::getInstance()->get('commons/theme.html.twig', $pageData);
         // Minification from scratch, TODO: Use real solution
         $themeContent = preg_replace('!/\*.*?\*/!s', '', $themeContent);
@@ -469,7 +462,7 @@ class PrepareView
         $this->initPluginsEvents($eventsJsPlugin, $pageData);
         $this->initHeaderData($pageData);
 
-        $currentJeeObject = ObjectManager::getRootObjects();
+        $currentJeeObject = JeeObjectManager::getRootObjects();
         $currentJeeObjectId = '';
         if(!empty($currentJeeObject)){
             $currentJeeObjectId = $currentJeeObject->getId();
@@ -524,7 +517,7 @@ class PrepareView
         // Détermine la page courante
         $defaultDashboardObjectId = '';
         $defaultDashboardObjectName = UserManager::getStoredUser()->getOptions('defaultDashboardObject');
-        $defaultDashboardObject = ObjectManager::byId($defaultDashboardObjectName);
+        $defaultDashboardObject = JeeObjectManager::byId($defaultDashboardObjectName);
         if(!empty($defaultDashboardObject)) {
           $defaultDashboardObjectId = $defaultDashboardObject->getId();
         }
@@ -651,14 +644,14 @@ class PrepareView
         if ($pageData['IS_ADMIN']) {
             $pageData['MENU_NB_UPDATES'] = UpdateManager::nbNeedUpdate();
         }
-        $pageData['MENU_JEEOBJECT_TREE'] = ObjectManager::buildTree(null, false);
+        $pageData['MENU_JEEOBJECT_TREE'] = JeeObjectManager::buildTree(null, false);
         $pageData['MENU_VIEWS_LIST'] = ViewManager::all();
         $pageData['MENU_PLANS_LIST'] = PlanHeaderManager::all();
         $pageData['MENU_PLANS3D_LIST'] = Plan3dHeaderManager::all();
         if (is_object($currentPlugin) && $currentPlugin->getIssue()) {
             $pageData['MENU_CURRENT_PLUGIN_ISSUE'] = $currentPlugin->getIssue();
         }
-        $pageData['MENU_HTML_GLOBAL_SUMMARY'] = ObjectManager::getGlobalHtmlSummary();
+        $pageData['MENU_HTML_GLOBAL_SUMMARY'] = JeeObjectManager::getGlobalHtmlSummary();
         $pageData['PRODUCT_IMAGE'] = ConfigManager::byKey('product_image');
         $pageData['profilsUser'] = UserManager::getStoredUser();
         $pageData['PROFIL_AVATAR'] = UserManager::getStoredUser()->getOptions('avatar');
@@ -695,53 +688,6 @@ class PrepareView
         } else {
             return $this->getContentFromRoute('pages_routes.yml', $page, $pageData);
         }
-    }
-
-    /**
-     * Show the rescue page
-     *
-     * @throws \Exception
-     */
-    public function showRescueMode()
-    {
-        global $language;
-
-        if (!in_array(Utils::init(GetParams::PAGE), ['custom', 'backup', 'cron', 'connection', 'log', 'database', 'editor', 'system'])) {
-            $_GET[GetParams::PAGE] = 'system';
-        }
-        $homeLink = 'index.php?v=d&p=dashboard';
-
-        //TODO: Tests à revoir
-        $page = Utils::init(GetParams::PAGE);
-        if ($page == '') {
-            Utils::redirect($homeLink);
-        } else {
-            $pageData['TITLE'] = ucfirst($page) . ' - ' . $this->currentConfig['product_name'];
-        }
-        $language = $this->currentConfig['language'];
-
-        // TODO: Remplacer par un include dans twig
-        $this->initHeaderData($pageData);
-        $render = Render::getInstance();
-        $pageData['CSS'] = $render->getCssHtmlTag('/public/css/nextdom.css');
-        $pageData['JS_VARS'] = [
-            'user_id' => UserManager::getStoredUser()->getId(),
-            'user_isAdmin' => AuthentificationHelper::isConnectedAsAdmin(),
-            'user_login' => UserManager::getStoredUser()->getLogin(),
-            'serverTZoffsetMin' => Utils::getTZoffsetMin()];
-        $pageData['JS_VARS_RAW'] = [
-            'userProfils' => Utils::getArrayToJQueryJson(UserManager::getStoredUser()->getOptions()),
-            'serverDatetime' => Utils::getMicrotime()
-        ];
-        $pageData['JS'] = '';
-        $pageData['MENU'] = $render->get('commons/menu_rescue.html.twig');
-
-        if (!NextDomHelper::isStarted()) {
-            $pageData['alertMsg'] = __('NextDom est en cours de démarrage, veuillez patienter. La page se rechargera automatiquement une fois le démarrage terminé.');
-        }
-        $pageData['CONTENT'] = $this->getContent($pageData, $page, null);
-
-        $render->show('layouts/base_rescue.html.twig', $pageData);
     }
 
     /**

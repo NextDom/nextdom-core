@@ -34,96 +34,83 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-jwerty.key('ctrl+s/⌘+s', function (e) {
-    e.preventDefault();
-    $("#bt_savesummary").click();
-});
-
- $("#bt_savesummary").on('click', function (event) {
-    $.hideAlert();
-   saveObjectSummary();
-    nextdom.config.save({
-        configuration: $('#summary').getValues('.configKey')[0],
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function () {
-            nextdom.config.load({
-                configuration: $('#summary').getValues('.configKey')[0],
-                plugin: 'core',
-                error: function (error) {
-                    notify("Erreur", error.message, 'error');
-                },
-                success: function (data) {
-                    $('#summary').setValues(data, '.configKey');
-                    modifyWithoutSave = false;
-                    notify("Info", '{{Sauvegarde réussie}}', 'success');
-                }
-            });
-        }
-    });
-});
-
-nextdom.config.load({
-    configuration: $('#summary').getValues('.configKey:not(.noSet)')[0],
-    error: function (error) {
-        notify("Erreur", error.message, 'error');
-    },
-    success: function (data) {
-        $('#summary').setValues(data, '.configKey');
-        modifyWithoutSave = false;
-    }
-});
-
-$('#summary').delegate('.configKey', 'change', function () {
-    modifyWithoutSave = true;
-});
-
-/**************************Summary***********************************/
-
-$('#bt_addObjectSummary').on('click', function () {
-    addObjectSummary();
-});
-
-$('#summary').undelegate('.objectSummary .objectSummaryAction[data-l1key=chooseIcon]', 'click').delegate('.objectSummary .objectSummaryAction[data-l1key=chooseIcon]', 'click', function () {
-    var objectSummary = $(this).closest('.objectSummary');
-    chooseIcon(function (_icon) {
-        objectSummary.find('.objectSummaryAttr[data-l1key=icon]').empty().append(_icon);
-    });
-});
-
-$('#summary').undelegate('.objectSummary .objectSummaryAction[data-l1key=remove]', 'click').delegate('.objectSummary .objectSummaryAction[data-l1key=remove]', 'click', function () {
-    $(this).closest('.objectSummary').remove();
-});
-
-$('#summary').undelegate('.objectSummary .objectSummaryAction[data-l1key=createVirtual]', 'click').delegate('.objectSummary .objectSummaryAction[data-l1key=createVirtual]', 'click', function () {
-    var objectSummary = $(this).closest('.objectSummary');
-    $.ajax({
-        type: "POST",
-        url: "core/ajax/object.ajax.php",
-        data: {
-            action: "createSummaryVirtual",
-            key: objectSummary.find('.objectSummaryAttr[data-l1key=key]').value()
-        },
-        dataType: 'json',
-        error: function (request, status, error) {
-            handleAjaxError(request, status, error);
-        },
-        success: function (data) {
-            if (data.state != 'ok') {
-                notify("Erreur", data.result, 'error');
-                return;
-            }
-            notify("Info", '{{summary.virtual_cmd_succed}}', 'success');
-        }
-    });
-});
-
-$("#table_objectSummary").sortable({axis: "y", cursor: "move", items: ".objectSummary", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
-
-
+// Page init
 printObjectSummary();
+initEvents();
 
+/**
+ * Init events on the profils page
+ */
+function initEvents() {
+    // Param changed : page leaving lock by msgbox
+    $('#summary').delegate('.objectSummaryAttr', 'change', function () {
+        if (!lockModify) {
+            modifyWithoutSave = true;
+            $(".bt_cancelModifs").show();
+        }
+    });
+
+    // Cancel modifications
+    $('.bt_cancelModifs').on('click', function () {
+        printObjectSummary();
+    });
+
+    // Save button
+    $("#bt_savesummary").on('click', function (event) {
+        saveObjectSummary();
+    });
+
+    // add button
+    $('#bt_addObjectSummary').on('click', function () {
+        addObjectSummary();
+    });
+
+    // Delete handlers on delete summary
+    $('#summary').undelegate('.objectSummary .objectSummaryAction[data-l1key=chooseIcon]', 'click').delegate('.objectSummary .objectSummaryAction[data-l1key=chooseIcon]', 'click', function () {
+        var objectSummary = $(this).closest('.objectSummary');
+        chooseIcon(function (_icon) {
+            objectSummary.find('.objectSummaryAttr[data-l1key=icon]').empty().append(_icon);
+        });
+        modifyWithoutSave = true;
+        $(".bt_cancelModifs").show();
+    });
+
+    $('#summary').undelegate('.objectSummary .objectSummaryAction[data-l1key=remove]', 'click').delegate('.objectSummary .objectSummaryAction[data-l1key=remove]', 'click', function () {
+        $(this).closest('.objectSummary').remove();
+        modifyWithoutSave = true;
+        $(".bt_cancelModifs").show();
+    });
+
+    $('#summary').undelegate('.objectSummary .objectSummaryAction[data-l1key=createVirtual]', 'click').delegate('.objectSummary .objectSummaryAction[data-l1key=createVirtual]', 'click', function () {
+        var objectSummary = $(this).closest('.objectSummary');
+        $.ajax({
+            type: "POST",
+            url: "core/ajax/object.ajax.php",
+            data: {
+                action: "createSummaryVirtual",
+                key: objectSummary.find('.objectSummaryAttr[data-l1key=key]').value()
+            },
+            dataType: 'json',
+            error: function (request, status, error) {
+                handleAjaxError(request, status, error);
+            },
+            success: function (data) {
+                if (data.state != 'ok') {
+                    notify("Erreur", data.result, 'error');
+                    return;
+                }
+                notify("Info", '{{summary.virtual_cmd_succed}}', 'success');
+            }
+        });
+    });
+
+    // Init table of summary
+    $("#table_objectSummary").sortable({axis: "y", cursor: "move", items: ".objectSummary", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
+}
+
+/**
+ * Display all summary
+ */
 function printObjectSummary() {
     $.ajax({
         type: "POST",
@@ -143,22 +130,28 @@ function printObjectSummary() {
             }
             $('#table_objectSummary tbody').empty();
             for (var i in data.result) {
-             if(isset(data.result[i].key) && data.result[i].key == ''){
+              if(isset(data.result[i].key) && data.result[i].key == ''){
                 continue;
+              }
+              if(!isset(data.result[i].name)){
+                  continue;
+              }
+              if(!isset(data.result[i].key)){
+                  data.result[i].key = i.toLowerCase().stripAccents().replace(/\_/g, '').replace(/\-/g, '').replace(/\&/g, '').replace(/\s/g, '');
+              }
+              addObjectSummary(data.result[i]);
             }
-            if(!isset(data.result[i].name)){
-                continue;
-            }
-            if(!isset(data.result[i].key)){
-                data.result[i].key = i.toLowerCase().stripAccents().replace(/\_/g, '').replace(/\-/g, '').replace(/\&/g, '').replace(/\s/g, '');
-            }
-            addObjectSummary(data.result[i]);
+            modifyWithoutSave = false;
+            $(".bt_cancelModifs").hide();
         }
-        modifyWithoutSave = false;
-    }
-});
+    });
 }
 
+/**
+ * Add a summary
+ *
+ * @param _summary Summary object, null to creat one
+ */
 function addObjectSummary(_summary) {
     var tr = '<tr class="objectSummary">';
     tr += '<td>';
@@ -176,7 +169,7 @@ function addObjectSummary(_summary) {
     tr += '</td>';
     tr += '<td class="col-xs-1 input-group">';
     tr += '<a class="objectSummaryAction btn btn-action" data-l1key="chooseIcon"><i class="fas fa-plus"></i></a>';
-    tr += '<span class="label label-icon objectSummaryAttr" style="min-width: 50px;" data-l1key="icon"></span>';
+    tr += '<span class="label label-icon objectSummaryAttr" data-l1key="icon"></span>';
     tr += '</td>';
     tr += '<td>';
     tr += '<input class="objectSummaryAttr form-control input-sm" data-l1key="unit" />';
@@ -201,14 +194,18 @@ function addObjectSummary(_summary) {
     tr += '</tr>';
     $('#table_objectSummary tbody').append(tr);
     if (isset(_summary)){
-     $('#table_objectSummary tbody tr:last').setValues(_summary, '.objectSummaryAttr');
- }
- if(isset(_summary) && isset(_summary.key) && _summary.key != ''){
-    $('#table_objectSummary tbody tr:last .objectSummaryAttr[data-l1key=key]').attr('disabled','disabled');
-}
-modifyWithoutSave = true;
+        $('#table_objectSummary tbody tr:last').setValues(_summary, '.objectSummaryAttr');
+    }
+    if(isset(_summary) && isset(_summary.key) && _summary.key != ''){
+        $('#table_objectSummary tbody tr:last .objectSummaryAttr[data-l1key=key]').attr('disabled','disabled');
+    }
+    modifyWithoutSave = true;
+    $(".bt_cancelModifs").show();
 }
 
+/**
+ * Save all summary
+ */
 function saveObjectSummary() {
     summary = {};
     temp = $('#table_objectSummary tbody tr').getValues('.objectSummaryAttr');
@@ -238,6 +235,8 @@ function saveObjectSummary() {
             }
             printObjectSummary();
             modifyWithoutSave = false;
+            $(".bt_cancelModifs").hide();
+            notify("Info", '{{Sauvegarde réussie}}', 'success');
         }
     });
 }

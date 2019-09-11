@@ -47,16 +47,8 @@ function initPage(){
     initRowOverflow();
     initHelp();
     initTextArea();
-
-    // Tabs change event handler declaration
-    $('.nav-tabs a').on('click',function (e) {
-        var scrollHeight = $(document).scrollTop();
-        $(this).tab('show');
-        $(window).scrollTop(scrollHeight);
-        setTimeout(function() {
-            $(window).scrollTop(scrollHeight);
-        }, 0);
-    });
+    initEventHandler();
+    initFields();
 
     // Trig page loaded
     $('body').trigger('nextdom_page_load');
@@ -81,6 +73,67 @@ function postInitPage(){
 }
 
 /**
+ * Init of button and other event handler
+ */
+function initEventHandler(){
+    // Tabs change event handler declaration
+    $('.nav-tabs a').on('click',function (e) {
+        var scrollHeight = $(document).scrollTop();
+        $(this).tab('show');
+        $(window).scrollTop(scrollHeight);
+        setTimeout(function() {
+            $(window).scrollTop(scrollHeight);
+        }, 0);
+    });
+
+    // Sliders init & event handler
+    $('input[type=range]').on('change mousemove', function () {
+        $(this).parent().children('.input-range-value').html($(this).val());
+    });
+    $('input[type=range]').each(function () {
+        $(this).parent().children('.input-range-value').html($(this).val());
+        $(this).prev('.input-range-min').html($(this).attr('min'));
+        $(this).next('.input-range-max').html($(this).attr('max'));
+    });
+
+    // Reset theme color to default value
+    $('.bt_resetThemeColor').on('click', function () {
+        resetThemeColorKey($(this));
+    });
+
+    // Reset config color to default value
+    $('.bt_resetConfigColor').on('click', function () {
+        resetConfigColorKey($(this));
+    });
+
+    // Reset config param to default value
+    $('.bt_resetConfigParam').on('click', function () {
+        resetConfigParamKey($(this));
+    });
+
+    // Reset theme param to default theme value
+    $('.bt_resetThemeParam').on('click', function () {
+        resetThemeParamKey($(this));
+    });
+}
+
+/**
+ * Init of fields
+ */
+function initFields(){
+    $('.colorpick_inline').colorpicker({
+        container: true,
+        inline: true
+    });
+    $('.colorpick').colorpicker({
+        horizontal: true
+    });
+    $(":input").inputmask();
+    $(".slimScrollDiv").css("overflow", "");
+    $(".sidebar").css("overflow", "");
+}
+
+/**
  * Init of text area
  */
 function initTextArea(){
@@ -94,13 +147,7 @@ function initTextArea(){
  * Init of row-overflow classe
  */
  function initRowOverflow() {
-     var hWindow = $(window).outerHeight() - $('header').outerHeight() - $('#div_alert').outerHeight()-5;
-     if($('#div_alert').outerHeight() > 0){
-         hWindow -= 10;
-     }
-     if($('.row-overflow').attr('data-offset') != undefined){
-         hWindow -= $('.row-overflow').attr('data-offset');
-     }
+     var hWindow = $(window).outerHeight() - $('header').outerHeight();
      $('.row-overflow > div').css('padding-top','0px').height(hWindow).css('overflow-y', 'auto').css('overflow-x', 'hidden').css('padding-top','5px');
  }
 

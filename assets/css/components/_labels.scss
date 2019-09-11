@@ -39,14 +39,14 @@
     background-color: $grey;
 }
 .label-value {
-    padding: 8px 10px 10px 12px;
+    padding: 9px 10px 9px 12px;
     font: {
         size: 100%;
         weight: 400;
     }
     border: 1px solid;
     border-radius: 2px;
-    margin-left: -2px;
+    margin-left: 1px;
 }
 .label-badge {
     position: absolute;
@@ -104,18 +104,17 @@
     border-radius: 2px;
     margin: 4px 0;
 }
-.label-value,
-.label-icon {
-    background-color: $whitegrey;
-    color: $black !important;
-    border-color: $darkgrey;
-}
 .label-list ,
 .label-view ,
 .label-log {
     background-color: $lightgolden;
     color: $grey !important;
     border-color: $lightgrey;
+}
+.li_noteDisplay.active .label-list ,
+.li_view.active .label-view ,
+.li_log.active .label-log {
+    border: 1px dashed !important;
 }
 .label-cmd {
     margin: 3px 0px 3px 0px;

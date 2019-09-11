@@ -3,17 +3,18 @@ php:
     - 7.1
 services:
     - docker
-addons:
-    chrome: stable
 before_install:
     - docker pull sylvaner1664/nextdom-test
     - mkdir -p tests/coverage
     - docker run -d --rm -p 8765:80 -v `pwd`:/data --name="nextdom-test" sylvaner1664/nextdom-test:latest /start.sh
     - sudo apt update
-    - sudo apt install -y python3-pip python-pip
+    - sudo apt install -y python3-pip python-pip dpkg
     - sudo python3 -m pip install --upgrade pip
     - sudo pip3 install --ignore-installed urllib3[secure] pylint
     - sudo pip install jsmin
+    - export CHROME_SOURCE_URL=https://dl.google.com/dl/linux/direct/google-chrome-stable_current_amd64.deb
+    - wget --no-verbose -O /tmp/$(basename $CHROME_SOURCE_URL) $CHROME_SOURCE_URL
+    - sudo dpkg -i /tmp/$(basename $CHROME_SOURCE_URL)
     - ./scripts/gen_global.sh
     - composer install --dev
     - composer require --dev satooshi/php-coveralls

@@ -313,24 +313,6 @@ nextdom.cmd.refreshValue = function (_params) {
       continue;
     }
     nextdom.cmd.update[_params[i].cmd_id](_params[i]);
-
-  }
-  for (var i in _params) {
-    try {
-      for (var j in nextdom.history.chart) {
-        if (isset(nextdom.history.chart[j].chart) && isset(nextdom.history.chart[j].chart.series)) {
-          $(nextdom.history.chart['div_graph'].chart.series).each(function (k, serie) {
-            try {
-              if (serie.options.id == _params[i].cmd_id) {
-                serie.addPoint([Date.parse(_params[i].collectDate + ' UTC') - 1, _params[i].value], true, true);
-              }
-            } catch (error) {
-            }
-          });
-        }
-      }
-    } catch (e) {
-    }
   }
 };
 

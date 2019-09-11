@@ -89,7 +89,6 @@ function gen_js {
            vendor/node_modules/highcharts/modules/solid-gauge.js \
            vendor/node_modules/highcharts/modules/exporting.js \
            vendor/node_modules/highcharts/modules/export-data.js \
-           vendor/node_modules/jwerty/jwerty.js \
            vendor/node_modules/packery/dist/packery.pkgd.js \
            vendor/node_modules/jquery-lazyload/jquery.lazyload.js \
            vendor/node_modules/codemirror/lib/codemirror.js \
@@ -100,7 +99,6 @@ function gen_js {
            vendor/node_modules/codemirror/mode/xml/xml.js \
            vendor/node_modules/codemirror/mode/javascript/javascript.js \
            vendor/node_modules/codemirror/mode/css/css.js \
-           vendor/node_modules/jstree/dist/jstree.js \
            vendor/node_modules/blueimp-file-upload/js/jquery.iframe-transport.js \
            vendor/node_modules/blueimp-file-upload/js/jquery.fileupload.js \
            vendor/node_modules/jquery-cron/dist/jquery-cron.js \
@@ -108,7 +106,6 @@ function gen_js {
            vendor/node_modules/inputmask/dist/jquery.inputmask.bundle.js \
            vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js \
            vendor/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js \
-           vendor/node_modules/snapsvg/dist/snap.svg-min.js \
            vendor/node_modules/moment/min/moment.min.js \
            assets/js/factory/NextDomElement.js \
            assets/js/factory/NextDomEnum.js \

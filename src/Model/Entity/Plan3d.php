@@ -22,7 +22,7 @@ use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\EqLogicManager;
-use NextDom\Managers\ObjectManager;
+use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\Plan3dHeaderManager;
 use NextDom\Managers\Plan3dManager;
 use NextDom\Managers\ScenarioExpressionManager;
@@ -265,7 +265,7 @@ class Plan3d implements EntityInterface
             $cmd = CmdManager::byId($this->getLink_id());
             return $cmd;
         } else if ($this->getLink_type() == 'summary') {
-            $linkedObject = ObjectManager::byId($this->getLink_id());
+            $linkedObject = JeeObjectManager::byId($this->getLink_id());
             return $linkedObject;
         }
         return null;

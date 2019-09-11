@@ -57,9 +57,16 @@
         <div class="global-tab-content tab-content">
             <div role="tabpanel" class="tab-pane active" id="battery">
                 <div class="batteryListContainer">
+                    {% set hasBattery = false %}
                     {% for eqLogic in eqAnalyzeEqLogicList %}
+                        {% set hasBattery = true %}
                         {{ eqLogic.batteryWidget()|raw }}
                     {% endfor %}
+                </div>
+                <div class="Container">
+                    {% if not hasBattery %}
+                        <div class="alert alert-success">{{ 'Aucun équipement sur batterie pour le moment...' }}</div>
+                    {% endif %}
                 </div>
             </div>
             <div role="tabpanel" class="tab-pane" id="alertEqlogic">
@@ -74,7 +81,7 @@
                 </div>
                 <div class="Container">
                     {% if not hasAlert %}
-                        <div class="alert alert-success">{{ 'Aucun module en Alerte pour le moment...' }}</div>
+                        <div class="alert alert-success">{{ 'Aucun équipement en Alerte pour le moment...' }}</div>
                     {% endif %}
                 </div>
             </div>

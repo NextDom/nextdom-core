@@ -26,7 +26,7 @@ along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
       v-on:changeView="changeView"
     />
     <mu-bottom-nav class="bottom-nav" v-bind:value.sync="currentView" shift @change="changeView">
-      <mu-bottom-nav-item value="/" v-bind:title="$t('summaryTitle')" icon="home" />
+      <mu-bottom-nav-item value="/" v-bind:title="$t('homeTitle')" icon="home" />
       <mu-bottom-nav-item value="/rooms" v-bind:title="$t('roomsTitle')" icon="meeting_room" />
       <mu-bottom-nav-item
         value="/scenarios"
@@ -35,7 +35,7 @@ along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
       />
       <mu-bottom-nav-item
         value="/login"
-        v-bind:title="$t('loginTitle')"
+        v-bind:title="$t('connectTitle')"
         icon="lock"
         v-if="!isConnected"
       />

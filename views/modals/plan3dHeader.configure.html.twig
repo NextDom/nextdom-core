@@ -1,5 +1,3 @@
-<div id="div_alertplan3dHeaderConfigure"></div>
-
 <ul class="nav nav-tabs" role="tablist">
     <li role="presentation" class="active"><a href="#main" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-cog"></i> {{ 'Général' }}</a></li>
     <li role="presentation"><a href="#components" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-cubes"></i> {{ 'Composants' }}</a></li>
@@ -103,10 +101,10 @@
         nextdom.plan3d.remove({
             id: tr.attr('data-id'),
             error: function (error) {
-                $('#div_alertplan3dHeaderConfigure').showAlert({message: error.message, level: 'danger'});
+                notify("Erreur", error.message, 'error');
             },
             success: function () {
-                $('#div_alertplan3dHeaderConfigure').showAlert({message: '{{ 'Composant supprimée' }}', level: 'success'});
+                notify("Core", '{{ 'Composant supprimée' }}', 'success');
                 tr.remove();
             }
         });
@@ -122,10 +120,10 @@
         dataType: 'json',
         done: function (e, data) {
             if (data.result.state != 'ok') {
-                $('#div_alertplan3dHeaderConfigure').showAlert({message: data.result.result, level: 'danger'});
+                notify('core', data.result.result, 'error');
                 return;
             }
-            $('#div_alertplan3dHeaderConfigure').showAlert({message: '{{ 'Chargement réussi merci de recharger la page pour voir le résultat' }}', level: 'success'});
+            notify('core', '{{ 'Chargement réussi merci de recharger la page pour voir le résultat' }}', 'success');
         }
     });
 
@@ -139,7 +137,7 @@
         nextdom.plan3d.saveHeader({
             plan3dHeader: $('#div_plan3dHeaderConfigure').getValues('.plan3dHeaderAttr')[0],
             error: function (error) {
-                $('#div_alertplan3dHeaderConfigure').showAlert({message: error.message, level: 'danger'});
+                notify("Erreur", error.message, 'error');
             },
             success: function () {
                 window.location.reload();
@@ -151,7 +149,7 @@
         nextdom.plan3d.removeHeader({
             id: $('#div_plan3dHeaderConfigure').getValues('.plan3dHeaderAttr')[0].id,
             error: function (error) {
-                $('#div_alertplan3dHeaderConfigure').showAlert({message: error.message, level: 'danger'});
+                notify("Erreur", error.message, 'error');
             },
             success: function () {
                 window.location.reload();

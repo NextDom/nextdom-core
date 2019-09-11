@@ -23,7 +23,7 @@
 namespace NextDom\Controller\Modals;
 
 use NextDom\Helpers\Render;
-use NextDom\Managers\ObjectManager;
+use NextDom\Managers\JeeObjectManager;
 
 /**
  * Class EqLogicHumanInsert
@@ -40,7 +40,7 @@ class EqLogicHumanInsert extends BaseAbstractModal
     public static function get(): string
     {
         $pageData = [];
-        $pageData['jeeObjects'] = ObjectManager::all();
+        $pageData['jeeObjects'] = JeeObjectManager::all();
 
         return Render::getInstance()->get('/modals/eqLogic.human.insert.html.twig', $pageData);
     }

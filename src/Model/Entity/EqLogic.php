@@ -33,7 +33,7 @@ use NextDom\Managers\EqRealManager;
 use NextDom\Managers\EventManager;
 use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\MessageManager;
-use NextDom\Managers\ObjectManager;
+use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioManager;
@@ -713,7 +713,7 @@ class EqLogic implements EntityInterface
     public function getObject()
     {
         if ($this->_object === null) {
-            $this->setObject(ObjectManager::byId($this->object_id));
+            $this->setObject(JeeObjectManager::byId($this->object_id));
         }
         return $this->_object;
     }
@@ -908,7 +908,7 @@ class EqLogic implements EntityInterface
         $html .= '<span class="eqLogic-place">' . $attachedObject . '</span>';
         $html .= '<div class="eqLogic-battery-icon"><i class="icon nextdom-battery' . $numericLevel . ' tooltips" title="' . $this->getStatus('battery', -2) . '%"></i></div>';
         $html .= '<div class="eqLogic-percent">' . $this->getStatus('battery', -2) . '%</div>';
-        $html .= '<div>' . __('Le') . ' ' . date("d/m/y G:H:s", strtotime($this->getStatus('batteryDatetime', __('inconnue')))) . '</div>';
+        $html .= '<div>' . __('Le') . ' ' . date("Y-m-d H:i:s", strtotime($this->getStatus('batteryDatetime', __('inconnue')))) . '</div>';
         if ($this->getConfiguration('battery_type', '') != '') {
             $html .= '<span class="informations pull-right" title="Piles">' . $this->getConfiguration('battery_type', '') . '</span>';
         }
@@ -1002,12 +1002,8 @@ class EqLogic implements EntityInterface
                 }
             }
         } else {
-            foreach (MessageManager::byPluginLogicalId($this->getEqType_name(), 'warningBattery' . $this->getId()) as $message) {
-                $message->remove();
-            }
-            foreach (MessageManager::byPluginLogicalId($this->getEqType_name(), 'lowBattery' . $this->getId()) as $message) {
-                $message->remove();
-            }
+            MessageManager::removeByPluginLogicalId($this->getEqType_name(), 'warningBattery' . $this->getId());
+            MessageManager::removeByPluginLogicalId($this->getEqType_name(), 'lowBattery' . $this->getId());
             $this->setStatus('batterydanger', 0);
             $this->setStatus('batterywarning', 0);
         }
@@ -1789,11 +1785,12 @@ class EqLogic implements EntityInterface
      * Import eqLogic from a plain text array
      *
      * @param array $data Specific configuration
+     * @param bool $noRemove Avoid to remove commands
      *
      * @throws CoreException
      * @throws \ReflectionException
      */
-    public function import($data)
+    public function import($data, $noRemove = false)
     {
         $cmdClass = $this->getEqType_name() . 'Cmd';
         if (isset($data['configuration'])) {
@@ -1822,11 +1819,13 @@ class EqLogic implements EntityInterface
                     $arrayToRemove[] = $eqLogic_cmd;
                 }
             }
-            foreach ($arrayToRemove as $cmdToRemove) {
-                try {
-                    $cmdToRemove->remove();
-                } catch (\Exception $e) {
+            if (!$noRemove) {
+                foreach ($arrayToRemove as $cmdToRemove) {
+                    try {
+                        $cmdToRemove->remove();
+                    } catch (\Exception $e) {
 
+                    }
                 }
             }
             foreach ($data['commands'] as $command) {

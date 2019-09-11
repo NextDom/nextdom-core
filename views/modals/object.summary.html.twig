@@ -1,4 +1,3 @@
-<div id="div_alertObjectSummary"></div>
 <table class="table table-bordered table-condensed tablesorter" id="table_ObjectSummary">
     <thead>
     <tr>
@@ -80,7 +79,7 @@
             nextdom.object.setOrder({
                 objects: objects,
                 error: function (error) {
-                    $('#div_alertObjectSummary').showAlert({message: error.message, level: 'danger'});
+                    notify("Erreur", error.message, 'error');
                 }
             });
         }

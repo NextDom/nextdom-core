@@ -24,7 +24,7 @@ use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\EqLogicManager;
-use NextDom\Managers\ObjectManager;
+use NextDom\Managers\JeeObjectManager;
 
 /**
  * Class EqLogicAjax
@@ -38,7 +38,7 @@ class EqLogicAjax extends BaseAjax
 
     public function getEqLogicObject()
     {
-        $linkedObject = ObjectManager::byId(Utils::init('object_id'));
+        $linkedObject = JeeObjectManager::byId(Utils::init('object_id'));
 
         if (!is_object($linkedObject)) {
             throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));

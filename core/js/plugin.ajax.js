@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
-/* global getSideBarList, nextdom, jwerty, eqType, bootbox, getContainer, addCmdToTable, io, prePrintEqLogic, printEqLogic, userProfils, updateDisplayPlugin */
+/* global getSideBarList, nextdom, eqType, bootbox, getContainer, addCmdToTable, io, prePrintEqLogic, printEqLogic, userProfils, updateDisplayPlugin */
 
 var changeLeftMenuObjectOrEqLogicName = false;
 
@@ -131,7 +131,6 @@ $('.eqLogicThumbnailDisplay').on('click', '.eqLogicDisplayCard', function () {
 
 $('.eqLogicAction[data-action=returnToThumbnailDisplay]').on('click', function () {
     $('.eqLogic').hide();
-    $('#div_alert').hide();
     $('.eqLogicThumbnailDisplay').show();
     $('.li_eqLogic').removeClass('active');
     $('.eqLogicThumbnailContainer').packery();
@@ -253,11 +252,6 @@ $('.eqLogicAction[data-action=copy]').on('click', function () {
 
 $('.eqLogicAction[data-action=export]').on('click', function () {
     window.open('core/php/export.php?type=eqLogic&id=' + $('.li_eqLogic.active').attr('data-eqLogic_id'), "_blank", null);
-});
-
-jwerty.key('ctrl+s', function (e) {
-    e.preventDefault();
-    $('.eqLogicAction[data-action=save]').click();
 });
 
 $('.eqLogicAttr[data-l1key=name]').on('change', function () {

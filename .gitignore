@@ -43,3 +43,5 @@ core/css
 /src/mobile/node_modules
 /src/mobile/src/assets/icons
 /mobile
+
+/assets/config/default.config.ini

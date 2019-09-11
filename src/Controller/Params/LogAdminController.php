@@ -47,19 +47,6 @@ class LogAdminController extends BaseController
     {
 
         global $NEXTDOM_INTERNAL_CONFIG;
-        $pageData['adminIsRescueMode'] = AuthentificationHelper::isRescueMode();
-
-        if (!$pageData['adminIsRescueMode']) {
-            $pageData['adminPluginsList'] = [];
-            $pluginsList = PluginManager::listPlugin(true);
-            foreach ($pluginsList as $plugin) {
-                $pluginApi = ConfigManager::byKey('api', $plugin->getId());
-                $pluginData = [];
-                $pluginData['api'] = $pluginApi;
-                $pluginData['plugin'] = $plugin;
-                $pageData['adminPluginsList'][] = $pluginData;
-            }
-        }
         $pageData['adminAlerts'] = $NEXTDOM_INTERNAL_CONFIG['alerts'];
         $pageData['adminOthersLogs'] = array('scenario', 'plugin', 'market', 'api', 'connection', 'interact', 'tts', 'report', 'event');
 

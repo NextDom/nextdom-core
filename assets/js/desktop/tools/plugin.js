@@ -34,45 +34,187 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-if($('#div_confPlugin').is(':visible')) {
-    $('#bt_returnToThumbnailDisplay').hide();
-    $('#home').show();
-}else{
-    $('#bt_returnToThumbnailDisplay').show();
-    $('#home').hide();
+
+// Page init
+loadInformations();
+initEvents();
+
+/**
+ * Load informations in all forms of the page
+ */
+function loadInformations() {
+    if (sel_plugin_id != -1) {
+        showPlugin(sel_plugin_id);
+    }
 }
 
-$('#bt_pluginCollapse').on('click',function(){
-   $('#accordionPlugin .panel-collapse').each(function () {
-      if (!$(this).hasClass("in")) {
-          $(this).css({'height' : '' });
-          $(this).addClass("in");
-      }
-   });
-   $('#bt_pluginCollapse').hide();
-   $('#bt_pluginUncollapse').show()
-});
+/**
+ * Init events on the profils page
+ */
+function initEvents() {
+    // Panel collapsing
+    $('#bt_pluginCollapse').on('click',function(){
+       $('#accordionPlugin .panel-collapse').each(function () {
+          if (!$(this).hasClass("in")) {
+              $(this).css({'height' : '' });
+              $(this).addClass("in");
+          }
+       });
+       $('#bt_pluginCollapse').hide();
+       $('#bt_pluginUncollapse').show()
+    });
 
-$('#bt_pluginUncollapse').on('click',function(){
-   $('#accordionPlugin .panel-collapse').each(function () {
-      if ($(this).hasClass("in")) {
-          $(this).removeClass("in");
-      }
-   });
-   $('#bt_pluginUncollapse').hide();
-   $('#bt_pluginCollapse').show()
-});
+    // Plugins panels uncollapsing
+    $('#bt_pluginUncollapse').on('click',function(){
+       $('#accordionPlugin .panel-collapse').each(function () {
+          if ($(this).hasClass("in")) {
+              $(this).removeClass("in");
+          }
+       });
+       $('#bt_pluginUncollapse').hide();
+       $('#bt_pluginCollapse').show()
+    });
 
-$(".li_plugin").on('click', function () {
-    showPlugin($(this).data('plugin_id'));
-    return false;
-});
+    // Markets open buttons
+    $('.displayStore').on('click', function () {
+        var repo = $(this).attr('data-repo');
+        if (repo.indexOf('nextdom') === -1) {
+            loadPage('index.php?v=d&p=marketJee&type=plugin');
+        }
+        else {
+            loadPage('index.php?v=d&p=market&type=core');
+        }
+    });
 
-$(".plugin_configure").on('click', function () {
-    var id = $(this).closest('.pluginDisplayCard').attr('data-plugin_id');
-    showPlugin(id);
-    return false;
-});
+    // Add plugin by other source button
+    $('#bt_addPluginFromOtherSource').on('click',function(){
+        $('#md_modal').dialog({title: "{{Ajouter un plugin}}"});
+        $('#md_modal').load('index.php?v=d&modal=update.add').dialog('open');
+    });
+
+    // Plugin configure button
+    $(".plugin_configure").on('click', function () {
+        var id = $(this).closest('.pluginDisplayCard').attr('data-plugin_id');
+        showPlugin(id);
+        return false;
+    });
+
+    // Plugin delete button
+    $('.plugin_delete').on('click',function(){
+        var id = $(this).closest('.pluginDisplayCard').attr('data-plugin_id');
+        bootbox.confirm('{{Êtes-vous sûr de vouloir supprimer ce plugin ?}}', function (result) {
+            if (result) {
+                $.hideAlert();
+                nextdom.update.remove({
+                    id: id,
+                    error: function (error) {
+                        notify('Core',error.message,'error');
+                    },
+                    success: function () {
+                        loadPage('index.php?v=d&p=plugin');
+                    }
+                });
+            }
+        });
+    });
+
+    // Back plugin list button
+    $('#bt_returnToThumbnailDisplay').on('click',function(){
+        $('#div_resumePluginList').show();
+        $('#div_confPlugin').hide();
+    });
+
+    // Plugin state toggle button
+    $("#div_plugin_toggleState").delegate(".togglePlugin", 'click', function () {
+        var _el = $(this);
+        nextdom.plugin.toggle({
+            id: _el.attr('data-plugin_id'),
+            state: _el.attr('data-state'),
+            error: function (error) {
+                notify('Core',error.message,'error');
+            },
+            success: function () {
+                if($('#md_modal').is(':visible')){
+                    $("#md_modal").load('index.php?v=d&p=plugin&ajax=1&id=' + _el.attr('data-plugin_id')).dialog('open');
+                }else{
+                    window.location.href = 'index.php?v=d&p=plugin&id=' + _el.attr('data-plugin_id');
+                }
+            }
+        });
+    });
+
+    // Plugin config save button
+    $("#bt_savePluginConfig").on('click', function (event) {
+        savePluginConfig();
+        return false;
+    });
+
+    // Panel plugin config save button
+    $('#bt_savePluginPanelConfig').off('click').on('click',function(){
+        nextdom.config.save({
+            configuration: $('#div_plugin_panel').getValues('.configKey')[0],
+            plugin: sel_plugin_id,
+            error: function (error) {
+                notify('Core',error.message,'error');
+            },
+            success: function () {
+                notify("Core",'{{Sauvegarde de la configuration des panneaux effectuée}}',"success");
+                modifyWithoutSave = false;
+            }
+        });
+    })
+
+    // Functionnality plugin config save button
+    $('#bt_savePluginFunctionalityConfig').off('click').on('click',function(){
+        nextdom.config.save({
+            configuration: $('#div_plugin_functionality').getValues('.configKey')[0],
+            plugin: sel_plugin_id,
+            error: function (error) {
+                notify('Core',error.message,'error');
+            },
+            success: function () {
+                notify("Core",'{{Sauvegarde des fonctionalités effectuée}}',"success");
+                modifyWithoutSave = false;
+            }
+        });
+    })
+
+    // Log plugin config save button
+    $('#bt_savePluginLogConfig').off('click').on('click',function(){
+        nextdom.config.save({
+            configuration: $('#div_plugin_log').getValues('.configKey')[0],
+            error: function (error) {
+                notify('Core',error.message,'error');
+            },
+            success: function () {
+                notify("Core",'{{Sauvegarde de la configuration des logs effectuée}}',"success");
+                modifyWithoutSave = false;
+            }
+        });
+    })
+
+    // Plugin log display button
+    $('#div_plugin_log').on('click','.bt_plugin_conf_view_log',function(){
+        if($('#md_modal').is(':visible')){
+            $('#md_modal2').dialog({title: "{{Log du plugin}}"});
+            $("#md_modal2").load('index.php?v=d&modal=log.display&log='+$(this).attr('data-log')).dialog('open');
+        }else{
+            $('#md_modal').dialog({title: "{{Log du plugin}}"});
+            $("#md_modal").load('index.php?v=d&modal=log.display&log='+$(this).attr('data-log')).dialog('open');
+        }
+    });
+
+    // Plugin sendto market button
+    $('#div_pageContainer').delegate('.sendPluginTo', 'click', function () {
+        $('#md_modal2').dialog({title: "{{Envoyer sur le}} "+$(this).attr('data-repo')});
+        $('#md_modal2').load('index.php?v=d&modal=update.send&type=plugin&logicalId=' + $(this).attr('data-logicalId')+'&repo='+$(this).attr('data-repo')).dialog('open');
+    });
+
+    // Param changed : page leaving lock by msgbox
+    $('#div_pageContainer').delegate('.configKey', 'change', function () {
+        modifyWithoutSave = true;
+    });
+}
 
 /**
  * Show plugin configuration panel
@@ -80,10 +222,7 @@ $(".plugin_configure").on('click', function () {
  * @param pluginId string Plugin Id
  */
 function showPlugin(pluginId) {
-    $.hideAlert();
     $('#div_resumePluginList').hide();
-    $('.li_plugin').removeClass('active');
-    $('.li_plugin[data-plugin_id='+pluginId+']').addClass('active');
     showLoadingCustom();
     sel_plugin_id = pluginId;
     nextdom.plugin.get({
@@ -317,131 +456,11 @@ function showPlugin(pluginId) {
     });
 }
 
-$('.plugin_delete').on('click',function(){
-    var id = $(this).closest('.pluginDisplayCard').attr('data-plugin_id');
-    bootbox.confirm('{{Êtes-vous sûr de vouloir supprimer ce plugin ?}}', function (result) {
-        if (result) {
-            $.hideAlert();
-            nextdom.update.remove({
-                id: id,
-                error: function (error) {
-                    notify('Core',error.message,'error');
-                },
-                success: function () {
-                    loadPage('index.php?v=d&p=plugin');
-                }
-            });
-        }
-    });
-});
-
-$("#div_plugin_toggleState").delegate(".togglePlugin", 'click', function () {
-    var _el = $(this);
-    nextdom.plugin.toggle({
-        id: _el.attr('data-plugin_id'),
-        state: _el.attr('data-state'),
-        error: function (error) {
-            notify('Core',error.message,'error');
-        },
-        success: function () {
-            if($('#md_modal').is(':visible')){
-                $("#md_modal").load('index.php?v=d&p=plugin&ajax=1&id=' + _el.attr('data-plugin_id')).dialog('open');
-            }else{
-                window.location.href = 'index.php?v=d&p=plugin&id=' + _el.attr('data-plugin_id');
-            }
-        }
-    });
-});
-
-if (sel_plugin_id != -1) {
-    showPlugin(sel_plugin_id);
-}
-
-$('#bt_returnToThumbnailDisplay').on('click',function(){
-    $('#div_resumePluginList').show();
-    $('#div_confPlugin').hide();
-});
-
-jwerty.key('ctrl+s/⌘+s', function (e) {
-    e.preventDefault();
-    $("#bt_savePluginConfig").click();
-});
-
-$("#bt_savePluginConfig").on('click', function (event) {
-    savePluginConfig();
-    return false;
-});
-
-$('.displayStore').on('click', function () {
-    var repo = $(this).attr('data-repo');
-    if (repo.indexOf('nextdom') === -1) {
-        loadPage('index.php?v=d&p=marketJee&type=plugin');
-    }
-    else {
-        loadPage('index.php?v=d&p=market&type=core');
-    }
-});
-
-$('#div_pageContainer').delegate('.sendPluginTo', 'click', function () {
-    $('#md_modal2').dialog({title: "{{Envoyer sur le}} "+$(this).attr('data-repo')});
-    $('#md_modal2').load('index.php?v=d&modal=update.send&type=plugin&logicalId=' + $(this).attr('data-logicalId')+'&repo='+$(this).attr('data-repo')).dialog('open');
-});
-
-$('#div_pageContainer').delegate('.configKey', 'change', function () {
-    modifyWithoutSave = true;
-});
-
-$('#bt_savePluginPanelConfig').off('click').on('click',function(){
-    nextdom.config.save({
-        configuration: $('#div_plugin_panel').getValues('.configKey')[0],
-        plugin: sel_plugin_id,
-        error: function (error) {
-            notify('Core',error.message,'error');
-        },
-        success: function () {
-            notify("Core",'{{Sauvegarde de la configuration des panneaux effectuée}}',"success");
-            modifyWithoutSave = false;
-        }
-    });
-})
-
-$('#bt_savePluginFunctionalityConfig').off('click').on('click',function(){
-    nextdom.config.save({
-        configuration: $('#div_plugin_functionality').getValues('.configKey')[0],
-        plugin: sel_plugin_id,
-        error: function (error) {
-            notify('Core',error.message,'error');
-        },
-        success: function () {
-            notify("Core",'{{Sauvegarde des fonctionalités effectuée}}',"success");
-            modifyWithoutSave = false;
-        }
-    });
-})
-
-$('#bt_savePluginLogConfig').off('click').on('click',function(){
-    nextdom.config.save({
-        configuration: $('#div_plugin_log').getValues('.configKey')[0],
-        error: function (error) {
-            notify('Core',error.message,'error');
-        },
-        success: function () {
-            notify("Core",'{{Sauvegarde de la configuration des logs effectuée}}',"success");
-            modifyWithoutSave = false;
-        }
-    });
-})
-
-$('#div_plugin_log').on('click','.bt_plugin_conf_view_log',function(){
-    if($('#md_modal').is(':visible')){
-        $('#md_modal2').dialog({title: "{{Log du plugin}}"});
-        $("#md_modal2").load('index.php?v=d&modal=log.display&log='+$(this).attr('data-log')).dialog('open');
-    }else{
-        $('#md_modal').dialog({title: "{{Log du plugin}}"});
-        $("#md_modal").load('index.php?v=d&modal=log.display&log='+$(this).attr('data-log')).dialog('open');
-    }
-});
-
+/**
+ * Show plugin configuration panel
+ *
+ * @param _param demon relaunch option
+ */
 function savePluginConfig(_param) {
     nextdom.config.save({
         configuration: $('#div_plugin_configuration').getValues('.configKey')[0],
@@ -475,8 +494,3 @@ function savePluginConfig(_param) {
         }
     });
 }
-
-$('#bt_addPluginFromOtherSource').on('click',function(){
-    $('#md_modal').dialog({title: "{{Ajouter un plugin}}"});
-    $('#md_modal').load('index.php?v=d&modal=update.add').dialog('open');
-});

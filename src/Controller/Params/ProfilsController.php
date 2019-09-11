@@ -28,7 +28,7 @@ use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\SessionHelper;
 use NextDom\Managers\ConfigManager;
-use NextDom\Managers\ObjectManager;
+use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\Plan3dHeaderManager;
 use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PluginManager;
@@ -128,7 +128,7 @@ class ProfilsController extends BaseController
                 @session_write_close();
             }
         }
-        $pageData['profilsJeeObjects'] = ObjectManager::all();
+        $pageData['profilsJeeObjects'] = JeeObjectManager::all();
         $pageData['profilsViews'] = ViewManager::all();
         $pageData['profilsPlans'] = PlanHeaderManager::all();
         $pageData['profilsPlans3d'] = Plan3dHeaderManager::all();

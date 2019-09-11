@@ -48,7 +48,11 @@ class CustomController extends BaseController
         $pageData['PRODUCT_NAME'] = ConfigManager::byKey('product_name');
         $pageData['adminCategories'] = NextDomHelper::getConfiguration('eqLogic:category');
         $pageData['Theme'] = NextDomHelper::getConfiguration('theme');
-        $pageData['customTheme'] = ConfigManager::byKey('theme');
+        $pageData['useCustomTheme'] = false;
+        $themeChoice = ConfigManager::byKey('nextdom::theme');
+        if (isset($themeChoice['custom']) && $themeChoice['custom'] == 1) {
+            $pageData['useCustomTheme'] = true;
+        }
         $pageData['customEnableCustomCss'] = ConfigManager::byKey('enableCustomCss');
         $pageData['customJS'] = '';
         if (file_exists(NEXTDOM_DATA . '/custom/desktop/custom.js')) {

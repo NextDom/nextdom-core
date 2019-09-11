@@ -154,7 +154,7 @@ nextdom.history.drawChart = function (_params) {
                 spacingRight: 5,
                 spacingLeft: 5,
                 height : _params.height || null
-            }
+            };
             if(charts.height < 10){
                 charts.height = null;
             }
@@ -250,10 +250,6 @@ nextdom.history.drawChart = function (_params) {
                         point: {
                             events: {
                                 click: function (event) {
-                                    var deviceInfo = getDeviceType();
-                                    if ($.mobile || deviceInfo.type == 'tablet' || deviceInfo.type == 'phone') {
-                                        return
-                                    }
                                     if($('#md_modal2').is(':visible')){
                                         return;
                                     }
@@ -297,10 +293,6 @@ nextdom.history.drawChart = function (_params) {
                         point: {
                             events: {
                                 click: function (event) {
-                                    var deviceInfo = getDeviceType();
-                                    if ($.mobile || deviceInfo.type == 'tablet' || deviceInfo.type == 'phone') {
-                                        return
-                                    }
                                     if($('#md_modal2').is(':visible')){
                                         return;
                                     }
@@ -486,7 +478,7 @@ nextdom.history.generatePlotBand = function (_startTime, _endTime) {
         _startTime += 2 * pas;
     }
     return plotBands;
-}
+};
 
 nextdom.history.changePoint = function (_params) {
     var paramsRequired = ['cmd_id','datetime','value','oldValue'];
@@ -529,4 +521,4 @@ nextdom.history.changePoint = function (_params) {
         oldValue : _params.oldValue
     };
     $.ajax(paramsAJAX);
-}
+};

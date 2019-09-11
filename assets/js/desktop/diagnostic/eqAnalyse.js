@@ -34,24 +34,40 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
- positionEqLogic();
- $('.alertListContainer .nextdomAlreadyPosition').removeClass('nextdomAlreadyPosition');
- $('.batteryListContainer, .alertListContainer').packery({
-     itemSelector: ".eqLogic-widget",
-     gutter : 2
- });
- 
- $('.alerts, .batteries').on('click',function(){
-     setTimeout(function(){ 
-         positionEqLogic();
-         $('.batteryListContainer, .alertListContainer').packery({
-             itemSelector: ".eqLogic-widget",
-             gutter : 2
-         });
-     }, 10);
- });
+// Page init
+loadInformations();
+initEvents();
 
- $('.cmdAction[data-action=configure]').on('click', function () {
-     $('#md_modal').dialog({title: "{{Configuration commande}}"});
-     $('#md_modal').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).attr('data-cmd_id')).dialog('open');
- });
+/**
+ * Load informations in all forms of the page
+ */
+function loadInformations() {
+    positionEqLogic();
+    $('.alertListContainer .nextdomAlreadyPosition').removeClass('nextdomAlreadyPosition');
+    $('.batteryListContainer, .alertListContainer').packery({
+        itemSelector: ".eqLogic-widget",
+        gutter : 2
+    });
+}
+
+/**
+ * Init events on the profils page
+ */
+function initEvents() {
+    // Click on equipement
+    $('.alerts, .batteries').on('click',function(){
+       setTimeout(function(){
+           positionEqLogic();
+           $('.batteryListContainer, .alertListContainer').packery({
+               itemSelector: ".eqLogic-widget",
+               gutter : 2
+           });
+       }, 10);
+    });
+
+    // Configure button
+    $('.cmdAction[data-action=configure]').on('click', function () {
+       $('#md_modal').dialog({title: "{{Configuration commande}}"});
+       $('#md_modal').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).attr('data-cmd_id')).dialog('open');
+    });
+}

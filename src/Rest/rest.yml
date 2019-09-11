@@ -104,3 +104,9 @@ scenario_launch:
   methods: POST
   requirements:
     scenarioId: \d+
+scenario_stop:
+  path: '/scenario/stop/{scenarioId}'
+  controller: NextDom\Rest\ScenarioRest::stop
+  methods: POST
+  requirements:
+    scenarioId: \d+

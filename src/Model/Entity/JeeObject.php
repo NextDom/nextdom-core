@@ -25,7 +25,7 @@ use NextDom\Managers\CmdManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\DataStoreManager;
 use NextDom\Managers\EqLogicManager;
-use NextDom\Managers\ObjectManager;
+use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\ScenarioManager;
 
 /**
@@ -352,7 +352,7 @@ class JeeObject implements EntityInterface
      */
     public function getFather()
     {
-        return ObjectManager::byId($this->getFather_id());
+        return JeeObjectManager::byId($this->getFather_id());
     }
 
     /**
@@ -479,6 +479,12 @@ class JeeObject implements EntityInterface
      */
     public function save()
     {
+        if ($this->_changed) {
+            CacheManager::set('globalSummaryHtmldashboard', '');
+            CacheManager::set('globalSummaryHtmlmobile', '');
+            $this->setCache('summaryHtmldashboard', '');
+            $this->setCache('summaryHtmlmobile', '');
+        }
         DBHelper::save($this);
         return true;
     }
@@ -491,6 +497,10 @@ class JeeObject implements EntityInterface
     public function preRemove()
     {
         DataStoreManager::removeByTypeLinkId('object', $this->getId());
+        $sql = 'UPDATE eqLogic set object_id= NULL where object_id = :object_id';
+        DBHelper::exec($sql);
+        $sql = 'UPDATE scenario set object_id= NULL where object_id = :object_id';
+        DBHelper::exec($sql);
     }
 
     /**
@@ -579,6 +589,9 @@ class JeeObject implements EntityInterface
         $eqLogics = EqLogicManager::byObjectId($this->getId(), $onlyEnable, $onlyVisible, $eqTypeName, $logicalId);
         $eqLogics_id = [];
         foreach ($summaries[$summary] as $infos) {
+            if ($infos['enable'] != 1) {
+                continue;
+            }
             $cmd = CmdManager::byId(str_replace('#', '', $infos['cmd']));
             if (is_object($cmd)) {
                 $eqLogics_id[$cmd->getEqLogic_id()] = $cmd->getEqLogic_id();
@@ -617,8 +630,8 @@ class JeeObject implements EntityInterface
             if ($this->getConfiguration('summary::hide::' . $version . '::' . $key, 0) == 1) {
                 continue;
             }
-            $result = $this->getSummary($key);
-            if ($result !== null) {
+            $summaryResult = $this->getSummary($key);
+            if ($summaryResult !== null) {
                 $style = '';
                 if ($version == 'desktop') {
                     $style = 'color:' . $this->getDisplay($version . '::summaryTextColor', '#000000') . ';';
@@ -627,14 +640,14 @@ class JeeObject implements EntityInterface
                 if ($value['calcul'] == 'text') {
                     $allowDisplayZero = 1;
                 }
-                if ($allowDisplayZero == 0 && $result == 0) {
+                if ($allowDisplayZero == 0 && $summaryResult == 0) {
                     $style = 'display:none;';
                 }
-                $result .= '<span style="' . $style . '" class="objectSummaryParent cursor" data-summary="' . $key . '" data-object_id="' . $this->getId() . '" data-displayZeroValue="' . $allowDisplayZero . '">' . $value['icon'] . ' <sup><span class="objectSummary' . $key . '">' . $result . '</span> ' . $value['unit'] . '</span></sup>';
+                $result .= '<span style="' . $style . '" class="objectSummaryParent cursor" data-summary="' . $key . '" data-object_id="' . $this->getId() . '" data-displayZeroValue="' . $allowDisplayZero . '">' . $value['icon'] . ' <sup><span class="objectSummary' . $key . '">' . $summaryResult . '</span> ' . $value['unit'] . '</span></sup>';
             }
         }
         $result = trim($result) . '</span>';
-        $this->setCache('summaryHtml' . $version, $result);
+        $this->setCache('summaryHtml' . $version, $summaryResult);
         return $result;
     }
 
@@ -699,7 +712,7 @@ class JeeObject implements EntityInterface
     public function getLinkData(&$data = ['node' => [], 'link' => []], $level = 0, $drill = null)
     {
         if ($drill === null) {
-            $drill = ConfigManager::byKey('graphlink::jeeObject::drill');
+            $drill = ConfigManager::byKey('graphlink::object::drill');
         }
         if (isset($data['node']['object' . $this->getId()])) {
             return null;
@@ -792,7 +805,7 @@ class JeeObject implements EntityInterface
             }
         }
         if ($searchOnchild) {
-            $child_object = ObjectManager::buildTree($this);
+            $child_object = JeeObjectManager::buildTree($this);
             if (count($child_object) > 0) {
                 foreach ($child_object as $object) {
                     $eqLogics = array_merge($eqLogics, $object->getEqLogic($onlyEnable, $onlyVisible, $eqTypeName, $logicalId));

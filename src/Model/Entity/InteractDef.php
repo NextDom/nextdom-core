@@ -22,7 +22,7 @@ use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\InteractQueryManager;
-use NextDom\Managers\ObjectManager;
+use NextDom\Managers\JeeObjectManager;
 
 /**
  * Interactdef
@@ -277,7 +277,7 @@ class InteractDef implements EntityInterface
             preg_match_all("/#(.*?)#/", $input, $matches);
             $matches = $matches[1];
             if (in_array('commande', $matches) || (in_array('objet', $matches) || in_array('equipement', $matches))) {
-                foreach (ObjectManager::all() as $object) {
+                foreach (JeeObjectManager::all() as $object) {
                     if (isset($object_filter[$object->getId()]) && $object_filter[$object->getId()] == 0) {
                         continue;
                     }

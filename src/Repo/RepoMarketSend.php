@@ -37,9 +37,6 @@ if (init('type') == 'plugin') {
 }
 ?>
 
-<div style="display: none;width : 100%" id="div_alertMarketSend"></div>
-
-
 <a class="btn btn-success pull-right" style="color : white;" id="bt_sendToMarket"><i class="fa fa-cloud-upload"></i> {{Envoyer}}</a>
 
 <br/><br/>
@@ -284,7 +281,7 @@ if (is_object($market)) {
         },
         dataType: 'json',
         error: function (request, status, error) {
-          handleAjaxError(request, status, error, $('#div_alertMarketSend'));
+          handleAjaxError(request, status, error);
         },
         success: function (data) {
           if (data.state != 'ok') {
@@ -311,7 +308,7 @@ if (is_object($market)) {
         },
         dataType: 'json',
         error: function (request, status, error) {
-          handleAjaxError(request, status, error, $('#div_alertMarketSend'));
+          handleAjaxError(request, status, error);
         },
         success: function (data) {
           if (data.state != 'ok') {
@@ -322,7 +319,7 @@ if (is_object($market)) {
             showLoadingCustom();
             window.location.reload();
           } else {
-            $('#div_alertMarketSend').showAlert({message: '{{Votre objet a été envoyé avec succès sur le market}}', level: 'success'});
+              notify("Core", '{{Votre objet a été envoyé avec succès sur le market}}', 'success');
           }
 
         }

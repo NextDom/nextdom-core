@@ -26,7 +26,6 @@
 @import "../../../vendor/node_modules/jquery-ui-bootstrap/jquery.ui.theme.css";
 @import "../../3rdparty/jquery.utils/_jquery.utils.scss";
 @import "../../../vendor/node_modules/notosans-fontface/css/notosans-fontface.min.css";
-@import "../../../vendor/node_modules/jstree/dist/themes/default/style.css";
 @import "../../../vendor/node_modules/jquery-cron/dist/jquery-cron.css";
 @import "../../../vendor/node_modules/jquery-contextmenu/dist/jquery.contextMenu.css";
 @import "../../../vendor/node_modules/tablesorter/dist/css/theme.bootstrap.min.css";
@@ -53,6 +52,7 @@
 @import "../components/_legends.scss";
 @import "../components/_lists.scss";
 @import "../components/_scrollbars.scss";
+@import "../components/_sliders.scss";
 @import "../components/_summary.scss";
 @import "../components/_stepwizard.scss";
 @import "../components/_texts.scss";

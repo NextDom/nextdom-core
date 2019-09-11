@@ -42,10 +42,6 @@ display:
   path: 'display'
   controller: NextDom\Controller\Tools\DisplayController::get
   condition: 'admin'
-editor:
-  path: 'editor'
-  controller: NextDom\Controller\Tools\Osdb\EditorController::get
-  condition: 'admin'
 eqAnalyse:
   path: 'eqAnalyse'
   controller: NextDom\Controller\Diagnostic\EqAnalyzeController::get

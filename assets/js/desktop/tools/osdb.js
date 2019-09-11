@@ -34,12 +34,20 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-nextdom.config.load({
-    configuration: $('#osdb').getValues('.configKey:not(.noSet)')[0],
-    error: function (error) {
-        notify("Erreur", error.message, 'error');
-    },
-    success: function (data) {
-        $('#osdb').setValues(data, '.configKey');
-    }
-});
+// Page init
+loadInformations();
+
+/**
+ * Load informations in all forms of the page
+ */
+function loadInformations() {
+    nextdom.config.load({
+        configuration: $('#osdb').getValues('.configKey:not(.noSet)')[0],
+        error: function (error) {
+            notify("Erreur", error.message, 'error');
+        },
+        success: function (data) {
+            $('#osdb').setValues(data, '.configKey');
+        }
+    });
+}

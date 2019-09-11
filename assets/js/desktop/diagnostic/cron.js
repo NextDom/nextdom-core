@@ -34,105 +34,158 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-printCron();
-printListener();
+// Page init
+loadInformations();
+initEvents();
 
-$("#bt_refreshCron").on('click', function () {
+/**
+ * Load informations in all forms of the page
+ */
+function loadInformations() {
     printCron();
     printListener();
-});
+}
 
-$("#bt_addCron").on('click', function () {
-    $('#table_cron tbody').append(addCron({}));
-});
-
-jwerty.key('ctrl+s/⌘+s', function (e) {
-    e.preventDefault();
-    $("#bt_save").click();
-});
-
-$("#bt_save").on('click', function () {
-    nextdom.cron.save({
-        crons: $('#table_cron tbody tr').getValues('.cronAttr'),
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: printCron
-    });
-});
-
-$("#bt_changeCronState").on('click', function () {
-    var el = $(this);
-    nextdom.config.save({
-        configuration: {enableCron: el.attr('data-state')},
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function () {
-            if (el.attr('data-state') == 1) {
-                el.removeClass('btn-success').addClass('btn-danger').attr('data-state', 0);
-                el.empty().html('<i class="fas fa-times"></i>{{Désactiver le système cron}}');
-            } else {
-                el.removeClass('btn-danger').addClass('btn-success').attr('data-state', 1);
-                el.empty().html('<i class="fas fa-check"></i>{{Activer le système cron}}</a>');
-            }
+/**
+ * Init events on the profils page
+ */
+function initEvents() {
+    // Param changed : page leaving lock by msgbox
+    $('#cron').delegate('.cronAttr', 'change', function () {
+        if (!lockModify) {
+            modifyWithoutSave = true;
+            $(".bt_cancelModifs").show();
         }
     });
-});
-
-$("#table_cron").delegate(".remove", 'click', function () {
-    $(this).closest('tr').remove();
-});
-
-$("#table_cron").delegate(".stop", 'click', function () {
-    nextdom.cron.setState({
-        state: 'stop',
-        id: $(this).closest('tr').attr('id'),
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: printCron
+    $('#cron').delegate('.listenerAttr', 'change', function () {
+        if (!lockModify) {
+            modifyWithoutSave = true;
+            $(".bt_cancelModifs").show();
+        }
     });
-});
 
-$("#table_cron").delegate(".start", 'click', function () {
-    nextdom.cron.setState({
-        state: 'start',
-        id: $(this).closest('tr').attr('id'),
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: printCron
+    // Cancel modifications
+    $('.bt_cancelModifs').on('click', function () {
+        loadInformations();
     });
-});
 
-$("#table_cron").delegate(".display", 'click', function () {
-    $('#md_modal').dialog({title: "{{Détails du cron}}"});
-    $("#md_modal").load('index.php?v=d&modal=object.display&class=cron&id='+$(this).closest('tr').attr('id')).dialog('open');
-});
+    // Cron refresh button
+    $("#bt_refreshCron").on('click', function () {
+        loadInformations();
+    });
 
-$("#table_listener").delegate(".display", 'click', function () {
-    $('#md_modal').dialog({title: "{{Détails du listener}}"});
-    $("#md_modal").load('index.php?v=d&modal=object.display&class=listener&id='+$(this).closest('tr').attr('id')).dialog('open');
-});
+    // Add cron button
+    $("#bt_addCron").on('click', function () {
+        $('#table_cron tbody').append(addCron({}));
+    });
 
-$('#table_cron').delegate('.cronAttr[data-l1key=deamon]', 'change', function () {
-    if ($(this).value() == 1) {
-        $(this).closest('tr').find('.cronAttr[data-l1key=deamonSleepTime]').show();
-    } else {
-        $(this).closest('tr').find('.cronAttr[data-l1key=deamonSleepTime]').hide();
-    }
-});
+    // Add listener button
+    $("#bt_addListener").on('click', function () {
+        $('#table_listener tbody').append(addListener({}));
+    });
 
-$('#div_pageContainer').delegate('.cronAttr', 'change', function () {
-    modifyWithoutSave = true;
-});
+    // Save button
+    $("#bt_save").on('click', function () {
+        nextdom.cron.save({
+            crons: $('#table_cron tbody tr').getValues('.cronAttr'),
+            error: function (error) {
+                notify("Erreur", error.message, 'error');
+            },
+            success: function () {
+                nextdom.listener.save({
+                    listeners: $('#table_listener tbody tr').getValues('.listenerAttr'),
+                    error: function (error) {
+                        notify("Erreur", error.message, 'error');
+                    },
+                    success: function () {
+                        loadInformations();
+                    }
+                });
+            }
+        });
+    });
 
+    // Cron state change button
+    $("#bt_changeCronState").on('click', function () {
+        var el = $(this);
+        nextdom.config.save({
+            configuration: {enableCron: el.attr('data-state')},
+            error: function (error) {
+                notify("Erreur", error.message, 'error');
+            },
+            success: function () {
+                if (el.attr('data-state') == 1) {
+                    el.removeClass('btn-success').addClass('btn-danger').attr('data-state', 0);
+                    el.empty().html('<i class="fas fa-times"></i>{{Désactiver le système cron}}');
+                } else {
+                    el.removeClass('btn-danger').addClass('btn-success').attr('data-state', 1);
+                    el.empty().html('<i class="fas fa-check"></i>{{Activer le système cron}}</a>');
+                }
+            }
+        });
+    });
+
+    // Cron remove button
+    $("#table_cron").delegate(".remove", 'click', function () {
+        $(this).closest('tr').remove();
+    });
+
+    // Cron stop button
+    $("#table_cron").delegate(".stop", 'click', function () {
+        nextdom.cron.setState({
+            state: 'stop',
+            id: $(this).closest('tr').attr('id'),
+            error: function (error) {
+                notify("Erreur", error.message, 'error');
+            },
+            success: function () {
+                loadInformations();
+            }
+        });
+    });
+
+    // Cron start button
+    $("#table_cron").delegate(".start", 'click', function () {
+        nextdom.cron.setState({
+            state: 'start',
+            id: $(this).closest('tr').attr('id'),
+            error: function (error) {
+                notify("Erreur", error.message, 'error');
+            },
+            success: function () {
+                loadInformations();
+            }
+        });
+    });
+
+    // Cron detail display button
+    $("#table_cron").delegate(".display", 'click', function () {
+        $('#md_modal').dialog({title: "{{Détails du cron}}"});
+        $("#md_modal").load('index.php?v=d&modal=object.display&class=cron&id='+$(this).closest('tr').attr('id')).dialog('open');
+    });
+
+    // Listener detail display button
+    $("#table_listener").delegate(".display", 'click', function () {
+        $('#md_modal').dialog({title: "{{Détails du listener}}"});
+        $("#md_modal").load('index.php?v=d&modal=object.display&class=listener&id='+$(this).closest('tr').attr('id')).dialog('open');
+    });
+
+    // Cron demon change
+    $('#table_cron').delegate('.cronAttr[data-l1key=deamon]', 'change', function () {
+        if ($(this).value() == 1) {
+            $(this).closest('tr').find('.cronAttr[data-l1key=deamonSleepTime]').show();
+        } else {
+            $(this).closest('tr').find('.cronAttr[data-l1key=deamonSleepTime]').hide();
+        }
+    });
+}
+
+/**
+ * Display cron list and informations
+ */
 function printCron() {
-    showLoadingCustom();
     nextdom.cron.all({
         success: function (data) {
-            showLoadingCustom();
             $('#table_cron tbody').empty();
             var tr = [];
             for (var i in data) {
@@ -140,13 +193,35 @@ function printCron() {
             }
             $('#table_cron tbody').append(tr);
             modifyWithoutSave = false;
-            hideLoadingCustom();
+            $(".bt_cancelModifs").hide();
         }
     });
 }
 
+/**
+ * Display listener list and informations
+ */
+function printListener() {
+    nextdom.listener.all({
+        success: function (data) {
+            $('#table_listener tbody').empty();
+            var tr = [];
+            for (var i in data) {
+                tr.push(addListener(data[i]));
+            }
+            $('#table_listener tbody').append(tr);
+            modifyWithoutSave = false;
+            $(".bt_cancelModifs").hide();
+        }
+    });
+}
+
+/**
+ * Add a Cron with default value
+ *
+ * @param _cron cron object
+ */
 function addCron(_cron) {
-    $.hideAlert();
     var disabled ='';
     if(init(_cron.deamon) == 1){
         disabled ='disabled';
@@ -220,25 +295,9 @@ function addCron(_cron) {
     return result;
 }
 
-
-function printListener() {
-    showLoadingCustom();
-    nextdom.listener.all({
-        success: function (data) {
-            showLoadingCustom();
-            $('#table_listener tbody').empty();
-            var tr = [];
-            for (var i in data) {
-                tr.push(addListener(data[i]));
-            }
-            $('#table_listener tbody').append(tr);
-            modifyWithoutSave = false;
-            hideLoadingCustom();
-        }
-    });
-}
-
-
+/**
+ * Add a Listener with default value
+ */
 function addListener(_listener) {
     $.hideAlert();
     var disabled ='';
@@ -249,9 +308,9 @@ function addListener(_listener) {
         tr += '<a class="btn btn-default btn-sm display"><i class="fas fa-file no-spacing"></i></a> ';
     }
     tr += '</td>';
-    tr += '<td><textarea class="form-control listenerAttr input-sm" data-l1key="event_str" disabled ></textarea></td>';
-    tr += '<td><input class="form-control listenerAttr input-sm" data-l1key="class" disabled /></td>';
-    tr += '<td><input class="form-control listenerAttr input-sm" data-l1key="function" disabled /></td>';
+    tr += '<td><textarea class="form-control listenerAttr input-sm" data-l1key="event_str"></textarea></td>';
+    tr += '<td><input class="form-control listenerAttr input-sm" data-l1key="class"/></td>';
+    tr += '<td><input class="form-control listenerAttr input-sm" data-l1key="function"/></td>';
     tr += '</tr>';
     var result = $(tr);
     result.setValues(_listener, '.listenerAttr');

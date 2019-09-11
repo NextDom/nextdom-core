@@ -27,7 +27,7 @@ use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\ConfigManager;
-use NextDom\Managers\ObjectManager;
+use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\PluginManager;
 
 /**
@@ -55,9 +55,7 @@ class HistoryController extends BaseController
         $pageData['historyCmdsList'] = CmdManager::allHistoryCmd();
         $pageData['historyPluginsList'] = PluginManager::listPlugin();
         $pageData['historyEqLogicCategories'] = NextDomHelper::getConfiguration('eqLogic:category');
-        $pageData['historyObjectsList'] = ObjectManager::all();
-        $pageData['JS_POOL'][] = '/vendor/node_modules/vis/dist/vis.min.js';
-        $pageData['CSS_POOL'][] = '/vendor/node_modules/vis/dist/vis.min.css';
+        $pageData['historyObjectsList'] = JeeObjectManager::all();
         $pageData['JS_END_POOL'][] = '/public/js/desktop/diagnostic/history.js';
 
         return Render::getInstance()->get('/desktop/diagnostic/history.html.twig', $pageData);
