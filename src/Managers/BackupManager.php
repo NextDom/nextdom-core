@@ -19,6 +19,7 @@ namespace NextDom\Managers;
 
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\ConsoleHelper;
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Enums\FoldersReferential;
@@ -564,16 +565,16 @@ class BackupManager
             throw new CoreException("unable to modify content of backup file " . $backupFile);
         }
 
-        \DB::Prepare("SET foreign_key_checks = 0", array(), \DB::FETCH_TYPE_ROW);
-        $tables = \DB::Prepare("SHOW TABLES", array(), \DB::FETCH_TYPE_ALL);
+        DBHelper::exec("SET foreign_key_checks = 0");
+        $tables = DBHelper::getAll("SHOW TABLES");
         foreach ($tables as $table) {
             $table = array_values($table);
             $table = $table[0];
-            $statement = sprintf("DROP TABLE IF EXISTS `%s`", $table[0]);
-            \DB::Prepare($statement, array(), \DB::FETCH_TYPE_ROW);
+            $statement = sprintf("DROP TABLE IF EXISTS `%s`", $table);
+            DBHelper::exec($statement);
         }
         self::loadSQLFromFile($backupFile);
-        \DB::Prepare("SET foreign_key_checks = 1", array(), \DB::FETCH_TYPE_ROW);
+        DBHelper::exec("SET foreign_key_checks = 1");
     }
 
     /**
@@ -587,7 +588,7 @@ class BackupManager
     {
         global $CONFIG;
 
-        $format = "mysql --host='%s' --port='%s' --user='%s' --password='%s' --force %s < %s 2>/dev/null";
+        $format = "mysql --host='%s' --port='%s' --user='%s' --password='%s' --force %s < %s";
         $status = SystemHelper::vsystem($format,
             $CONFIG['db']['host'],
             $CONFIG['db']['port'],
