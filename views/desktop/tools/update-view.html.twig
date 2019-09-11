@@ -36,15 +36,16 @@
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
-            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'common.return' | trans }}</a>
-            <a class="btn btn-default btn-action-bar" id="logDialogButton"><i class="fas fa-file-alt spacing-right"></i>{{ 'common.log' | trans }}</a>
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'common.return' | trans }}</a>
+            <a class="btn btn-default btn-action-bar" id="logDialogButton"><i class="fas fa-file-alt"></i>{{ 'common.log' | trans }}</a>
+            <a class="label label-info label-sticker-big" style="display:none;" id="lbl_updateRunning"><i class="fas fa-refresh fa-spin spacing-right"></i>{{ 'Mise(s) à jour en cours ...' }}</a>
         </div>
         <div class="action-group">
-            <a class="btn btn-action btn-action-bar pull-right" id="updateCollapseButton"><i class="fas fa-plus-square spacing-right"></i>{{ 'update-view.unfold' | trans }}</a>
-            <a class="btn btn-action btn-action-bar pull-right" style="display:none;" id="updateUncollapseButton"><i class="fas fa-minus-square spacing-right"></i>{{ 'update-view.fold' | trans }}</a>
-            <a class="btn btn-success btn-action-bar pull-right" id="saveUpdateChanges"><i class="fas fa-save spacing-right"></i>{{ 'common.save' | trans }}</a>
-            <a class="btn btn-primary btn-action-bar pull-right" id="checkAllUpdatesButton"><i class="fas fa-refresh spacing-right"></i>{{ 'update-view.check_updates' | trans }}</a>
-            <a class="btn btn-warning btn-action-bar pull-right" id="selectiveUpdateButton"><i class="fas fa-check spacing-right"></i>{{ 'update-view.selective_update' | trans }}</a>
+            <a class="btn btn-action btn-action-bar pull-right" id="updateCollapseButton"><i class="fas fa-plus-square"></i>{{ 'update-view.unfold' | trans }}</a>
+            <a class="btn btn-action btn-action-bar pull-right" style="display:none;" id="updateUncollapseButton"><i class="fas fa-minus-square"></i>{{ 'update-view.fold' | trans }}</a>
+            <a class="btn btn-success btn-action-bar pull-right" id="saveUpdateChanges"><i class="fas fa-save"></i>{{ 'common.save' | trans }}</a>
+            <a class="btn btn-primary btn-action-bar pull-right" id="checkAllUpdatesButton"><i class="fas fa-refresh"></i>{{ 'update-view.check_updates' | trans }}</a>
+            <a class="btn btn-warning btn-action-bar pull-right" id="selectiveUpdateButton"><i class="fas fa-check"></i>{{ 'update-view.selective_update' | trans }}</a>
         </div>
     </div>
 </section>
@@ -53,17 +54,17 @@
     <div class="nav-tabs-custom config">
         <!-- Tabs title -->
         <ul class="nav nav-tabs pull-right" role="tablist">
-            <li role="presentation"><a href="#others" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-align-justify spacing-right"></i>{{ 'update-view.any' | trans }}{% if numberOfUpdatesOthers>0 %}<span class="badge bg-yellow spacing-left">{{ numberOfUpdatesOthers }}</span>{% endif %}</a></li>
-            <li role="presentation"><a href="#scripts" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-subscript spacing-right"></i>{{ 'update-view.scripts' | trans }}{% if numberOfUpdatesScripts>0 %}<span class="badge bg-yellow spacing-left">{{ numberOfUpdatesScripts }}</span>{% endif %}</a></li>
-            <li role="presentation"><a href="#widgets" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-boxes spacing-right"></i>{{ 'common.widgets' | trans }}{% if numberOfUpdatesWidgets>0 %}<span class="badge bg-yellow spacing-left">{{ numberOfUpdatesWidgets }}</span>{% endif %}</a></li>
-            <li role="presentation"><a href="#plugins" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-puzzle-piece spacing-right"></i>{{ 'update-view.plugins' | trans }}{% if numberOfUpdatesPlugins>0 %}<span class="badge bg-yellow spacing-left">{{ numberOfUpdatesPlugins }}</span>{% endif %}</a></li>
-            <li role="presentation" class="active"><a href="#core" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-microchip spacing-right"></i>{{ 'update-view.core' | trans }}{% if numberOfUpdatesCore>0 %}<span class="badge bg-yellow spacing-left">{{ numberOfUpdatesCore }}</span>{% endif %}</a></li>
-            <li class="header pull-left"><i class="fas fa-download spacing-right"></i>{{ 'update-view.update_s_in_days' | trans }}{% if numberOfUpdates>0 %}<span class="badge bg-red spacing-left">{{ numberOfUpdates }}</span>{% endif %}</li>
+            <li role="presentation"><a href="#others" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-align-justify"></i>{{ 'update-view.any' | trans }}{% if numberOfUpdatesOthers>0 %}<span class="badge bg-yellow spacing-left">{{ numberOfUpdatesOthers }}</span>{% endif %}</a></li>
+            <li role="presentation"><a href="#scripts" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-subscript"></i>{{ 'update-view.scripts' | trans }}{% if numberOfUpdatesScripts>0 %}<span class="badge bg-yellow spacing-left">{{ numberOfUpdatesScripts }}</span>{% endif %}</a></li>
+            <li role="presentation"><a href="#widgets" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-boxes"></i>{{ 'common.widgets' | trans }}{% if numberOfUpdatesWidgets>0 %}<span class="badge bg-yellow spacing-left">{{ numberOfUpdatesWidgets }}</span>{% endif %}</a></li>
+            <li role="presentation"><a href="#plugins" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-puzzle-piece"></i>{{ 'update-view.plugins' | trans }}{% if numberOfUpdatesPlugins>0 %}<span class="badge bg-yellow spacing-left">{{ numberOfUpdatesPlugins }}</span>{% endif %}</a></li>
+            <li role="presentation" class="active"><a href="#core" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-microchip"></i>{{ 'update-view.core' | trans }}{% if numberOfUpdatesCore>0 %}<span class="badge bg-yellow spacing-left">{{ numberOfUpdatesCore }}</span>{% endif %}</a></li>
+            <li class="header pull-left"><i class="fas fa-download"></i>{{ 'update-view.update_s_in_days' | trans }}{% if numberOfUpdates>0 %}<span class="badge bg-red spacing-left">{{ numberOfUpdates }}</span>{% endif %}</li>
         </ul>
 
         <!-- Tabs content -->
         <div class="global-tab-content tab-content" id="accordionUpdate">
-            <legend><i class="fas fa-clock-o spacing-right"></i><span>{{ 'update-view.last_check' | trans }}</span><span class="label label-info badge spacing-left" id="lastUpdateDate"></span></legend>
+            <legend><i class="fas fa-clock-o"></i><span>{{ 'update-view.last_check' | trans }}</span><span class="label label-info badge spacing-left" id="lastUpdateDate"></span></legend>
             <div role="tabpanel" class="tab-pane active" id="core">
                 <div class="row">
                     <div id="listCore"></div>
@@ -167,8 +168,8 @@
                     </fieldset>
                 </div>
                 <div class="modal-footer">
-                    <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-minus-circle spacing-right"></i>{{ 'common.cancel' | trans }}</a>
-                    <a class="btn btn-success" id="startUpdateButton"><i class="fas fa-download spacing-right"></i>{{ 'update-view.update' | trans }}</a>
+                    <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-minus-circle"></i>{{ 'common.cancel' | trans }}</a>
+                    <a class="btn btn-success" id="startUpdateButton"><i class="fas fa-download"></i>{{ 'update-view.update' | trans }}</a>
                 </div>
             </div>
         </div>
