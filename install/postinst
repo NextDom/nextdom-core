@@ -353,6 +353,10 @@ step_nextdom_directory_layout() {
   if [ ! -e /var/log/nextdom ]; then
       ln -s /var/log/nextdom /var/www/html/log
   fi
+
+  #clear cache
+  sh ${WEBSERVER_HOME}/scripts/clear_cache.sh
+  print_verbose "cache cleared"
 }
 
 step_nextdom_configuration() {

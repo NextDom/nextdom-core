@@ -480,6 +480,7 @@ class BackupManager
             ConsoleHelper::ok();
             ConsoleHelper::step("clearing cache...");
             CacheManager::flush();
+            exec('sh ' . NEXTDOM_ROOT . '/scripts/clear_cache.sh');
             ConsoleHelper::ok();
             FileSystemHelper::rrmdir($tmpDir);
             NextDomHelper::event("end_restore");
