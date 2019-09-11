@@ -53,9 +53,10 @@ function loadInformations() {
                     }
                 });
             }
-
         }, 1);
     });
+    // Object menu filter init
+    initObjectMenuFilter();
 }
 
 /**
@@ -148,5 +149,15 @@ function initEvents() {
     // Room title click for objets detail page
     $('.openObject').on('click',function(){
         loadPage($(this).attr('data-id'));
+    });
+}
+
+/**
+ * Initialisation of tabs object filter menu
+ */
+function initObjectMenuFilter() {
+    $('.nav-tabs-custom a').off('click').click(function() {
+        window.location.href = 'index.php?v=d&p=dashboard&object_id=' + $(this).data('object-id');
+        return false;
     });
 }

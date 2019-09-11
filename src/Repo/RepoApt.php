@@ -38,35 +38,47 @@ class RepoApt
     public static $_configuration = [];
 
     /**
-     * @param Update $targetUpdate
-     * @return bool
+     * Check for update on APT package
+     *
+     * @param Update $targetUpdate Update to check
+     *
+     * @return bool True if update is needed
+     *
      * @throws \Exception
      */
     public static function checkUpdate(&$targetUpdate)
     {
+        $result = false;
         if (is_array($targetUpdate)) {
             if (count($targetUpdate) < 1) {
-                return false;
+                $result = false;
             }
             foreach ($targetUpdate as $update) {
-                self::checkUpdate($update);
+                if (self::checkUpdate($update)) {
+                    $result = true;
+                }
             }
-            return true;
-        }
-        if ($targetUpdate->getType() === 'core' && $targetUpdate->getLogicalId() === 'nextdom') {
+        } else if ($targetUpdate->getType() === 'core' && $targetUpdate->getLogicalId() === 'nextdom') {
             exec(SystemHelper::getCmdSudo() . 'apt-get update');
             exec(SystemHelper::getCmdSudo() . "apt-cache policy nextdom | grep Installed | sed 's/Installed: \\(.*\\)/\\1/g'", $currentVersion);
             exec(SystemHelper::getCmdSudo() . "apt-cache policy nextdom | grep Candidate | sed 's/Candidate: \\(.*\\)/\\1/g'", $newVersion);
             if (count($currentVersion) > 0 && count($newVersion) > 0) {
                 $currentVersion = trim($currentVersion[0]);
                 $newVersion = trim($newVersion[0]);
+	        if (empty($targetUpdate->getLocalVersion())) {
+		    $targetUpdate->setLocalVersion($currentVersion);
+		}
                 if ($currentVersion !== $newVersion && $currentVersion !== '(none)') {
                     $targetUpdate->setRemoteVersion($newVersion);
                     $targetUpdate->setStatus('update');
                     $targetUpdate->save();
-                }
+                    $result = true;
+                } elseif (empty($targetUpdate->getRemoteVersion())) {
+		    $targetUpdate->setRemoteVersion($newVersion);
+		    $targetUpdate->save();
+		}
             }
         }
-        return true;
+        return $result;
     }
 }

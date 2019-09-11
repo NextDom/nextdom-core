@@ -43,7 +43,8 @@
         </testsuite>
         <testsuite name="Entities">
             <file>NoteTest.php</file>
-            <file>qLogicTest.php</file>
+            <file>EqLogicTest.php</file>
+            <file>ScenarioTest.php</file>
         </testsuite>
         <testsuite name="Rest">
             <directory>../phpunit_tests/Rest</directory>

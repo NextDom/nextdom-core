@@ -34,6 +34,12 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
+/**
+ * Fab category click > filtering dashboard on this category
+ *
+ * @param _selectedCategory string filter category
+ * @param _selectedIcon string filter category icon
+ */
 function selectCategory(_selectedCategory, _selectedIcon) {
     var category = _selectedCategory;
     var filterValue = '';
@@ -53,9 +59,15 @@ function selectCategory(_selectedCategory, _selectedIcon) {
     $grid.isotope({filter: filterValue});
     setTimeout(function () {
         $('.div_displayEquipement').packery();
-    }, 500);
+    }, 200);
 }
 
+/**
+ * Display elements from html
+ *
+ * @param _mode integer 0=exit edition mode, 1=start edition mode
+ * @param _save boolean save widget position and size
+ */
 function editWidgetMode(_mode, _save) {
     if (!isset(_mode)) {
         if ($('#bt_editDashboardWidgetOrder').attr('data-mode') != undefined && $('#bt_editDashboardWidgetOrder').attr('data-mode') == 1) {
@@ -65,6 +77,7 @@ function editWidgetMode(_mode, _save) {
         return;
     }
     if (_mode == 0) {
+        // Edit widget mode exit
         if (!isset(_save) || _save) {
             saveWidgetDisplay({dashboard: 1});
         }
@@ -75,8 +88,10 @@ function editWidgetMode(_mode, _save) {
             $('.div_displayEquipement .eqLogic-widget').draggable('disable');
         }
         $('.div_displayEquipement .eqLogic-widget').css('box-shadow', '');
+        // Summary re-displaying
         $('.card-summary').show();
     } else {
+        // Edit widget mode starting
         $('.div_displayEquipement .eqLogic-widget').css('box-shadow', '#33B8CC80 0px 0px 10px');
         $('.div_displayEquipement .eqLogic-widget').draggable('enable');
         $('.div_displayEquipement .eqLogic-widget').draggable({
@@ -97,32 +112,19 @@ function editWidgetMode(_mode, _save) {
                 ui.element.closest('.div_displayEquipement').packery();
             }
         });
+        // Display order items
+        orderItems();
+        // Summry hidding
         $('.card-summary').hide();
     }
     editWidgetCmdMode(_mode);
 }
 
-function isObjectHtml(_object_id) {
-    nextdom.object.toHtml({
-        id: _object_id,
-        version: 'dashboard',
-        category: SEL_CATEGORY,
-        summary: SEL_SUMMARY,
-        tag: SEL_TAG,
-        noScenario: 1,
-        error: function (error) {
-            notify('Core', error.message, 'error');
-        },
-        success: function (html) {
-            if ($.trim(html) == '') {
-                return false;
-            } else {
-                return true;
-            }
-        }
-    });
-}
-
+/**
+ * Display elements from html
+ *
+ * @param _object_id object id
+ */
 function getObjectHtml(_object_id) {
     nextdom.object.toHtml({
         id: _object_id,
@@ -157,7 +159,6 @@ function getObjectHtml(_object_id) {
                 $("select").click(function () {
                     $(this).focus();
                 });
-
                 $('#div_ob' + _object_id + '.div_displayEquipement').each(function () {
                     var container = $(this).packery({
                         itemSelector: ".eqLogic-widget",
@@ -167,26 +168,7 @@ function getObjectHtml(_object_id) {
                     });
                     var itemElems = container.find('.eqLogic-widget').draggable({ grid: [ (parseInt(widget_size) + (parseInt(widget_margin))), (parseInt(widget_size) + (parseInt(widget_margin)))]});
                     container.packery('bindUIDraggableEvents', itemElems);
-
-                    function orderItems() {
-                        setTimeout(function () {
-                            $('.div_displayEquipement').packery();
-                        }, 1);
-                        var itemElems = container.packery('getItemElements');
-                        $(itemElems).each(function (i, itemElem) {
-                            $(itemElem).attr('data-order', i + 1);
-                            value = i + 1;
-                            if ($('#bt_editDashboardWidgetOrder').attr('data-mode') == 1) {
-                                if ($(itemElem).find(".card-order-number").length) {
-                                    $(itemElem).find(".card-order-number").text(value);
-                                } else {
-                                    $(itemElem).prepend('<span class="card-order-number pull-left">' + value + '</span>');
-                                }
-                            }
-                        });
-                    }
-
-                    container.on('dragItemPositioned', orderItems);
+                    $(this).on('dragItemPositioned', orderItems);
                 });
                 $('#div_ob' + _object_id + '.div_displayEquipement .eqLogic-widget').draggable('disable');
             }, 10);
@@ -194,13 +176,24 @@ function getObjectHtml(_object_id) {
     });
 }
 
-function displayChildObject(_object_id, _recursion) {
-    if (_recursion === false) {
-        $('.div_object').hide();
-    }
-    $('.div_object[data-object_id=' + _object_id + ']').show({effect: 'drop', queue: false});
-    $('.div_object[data-father_id=' + _object_id + ']').each(function () {
-        $(this).show({effect: 'drop', queue: false});
-        displayChildObject($(this).attr('data-object_id'), true);
-    });
+/**
+ * Display order information of elements
+ */
+function orderItems() {
+    setTimeout(function () {
+      $('.div_displayEquipement').each(function () {
+          var itemElems = $(this).packery('getItemElements');
+          $(itemElems).each(function (i, itemElem) {
+              $(itemElem).attr('data-order', i + 1);
+              value = i + 1;
+              if ($('#bt_editDashboardWidgetOrder').attr('data-mode') == 1) {
+                  if ($(itemElem).find(".card-order-number").length) {
+                      $(itemElem).find(".card-order-number").text(value);
+                  } else {
+                      $(itemElem).prepend('<span class="card-order-number pull-left">' + value + '</span>');
+                  }
+              }
+          });
+      });
+    }, 200);
 }
