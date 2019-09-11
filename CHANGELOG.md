@@ -1,5 +1,32 @@
 # NextDom Core Changelog
 ---
+## 0.4.0
+> ***Release Date : 11/09/2019***
+>
+> ***Statut : beta***
+
+#### NEWS
+* Merge Jeedom 3.3.30
+* Sliders : les champs numériques deviennent des sliders au design NextDom
+* Statuts et contrôle des scénarios en version mobile
+* Nouvelle disposition plus responsive des champs dans les pages
+
+#### AMELIORATIONS
+* Ajout des titres des pages sur l'onglet navigateur en version mobile
+* Nettoyage massif du code
+* Ajouts de commentaires dans les fichier JS
+* Suppression de 6 librairies externes au profit d'une intégration adminLTE
+* Amélioration des tests
+
+#### CHANGEMENTS
+* Suppression de l'édteur de fichier
+* Suppression du mode rescue
+* Suppression des raccourcis clavier Windows & Mac de sauvegarde
+
+#### FIXS
+* Suppression dossier config
+* [liste ici](https://github.com/NextDom/nextdom-core/milestone/16?closed=1)
+---
 ## 0.3.1
 > ***Release Date : 05/09/2019***
 >
