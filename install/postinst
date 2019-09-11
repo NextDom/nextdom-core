@@ -347,13 +347,21 @@ step_nextdom_directory_layout() {
       fi
       rm -rf ${WEBSERVER_HOME}/data
   fi
-  ln -s ${LIB_DIRECTORY}/data ${WEBSERVER_HOME}/data
+  if [ -f ${WEBSERVER_HOME}/data ]; then
+      rm -f ${WEBSERVER_HOME}/data
+  fi
+  if [ ! -e ${WEBSERVER_HOME}/data ]; then
+      ln -s ${LIB_DIRECTORY}/data ${WEBSERVER_HOME}/data
+  fi
   print_verbose "created data symlink: ${WEBSERVER_HOME}/data"
+  #
   # jeedom logs compatibility
-  if [ ! -e /var/log/nextdom ]; then
+  if [ ! -f /var/www/html/log ]; then
+    rm -f /var/www/html/log
+  fi
+  if [ ! -e /var/www/html/log ]; then
       ln -s /var/log/nextdom /var/www/html/log
   fi
-
   #clear cache
   sh ${WEBSERVER_HOME}/scripts/clear_cache.sh
   print_verbose "cache cleared"
