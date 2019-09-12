@@ -1,5 +1,21 @@
 # NextDom Core Changelog
 ---
+## 0.4.2
+> ***Release Date : 13/09/2019***
+>
+> ***Statut : beta***
+
+#### FIXS
+* [liste ici](https://github.com/NextDom/nextdom-core/milestone/19?closed=1)
+---
+## 0.4.1
+> ***Release Date : 12/09/2019***
+>
+> ***Statut : beta***
+
+#### FIXS
+* [liste ici](https://github.com/NextDom/nextdom-core/milestone/20?closed=1)
+---
 ## 0.4.0
 > ***Release Date : 11/09/2019***
 >
