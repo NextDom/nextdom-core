@@ -76,6 +76,7 @@ connection:
   remember-label: Remember me ?
   connect: Log in
   forgot: "Oops: I forgot my password !"
+  mobile-install: Install mobile version
 
 core:
   error-401: 401 - Unauthorized Access

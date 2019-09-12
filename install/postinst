@@ -108,7 +108,7 @@ prereq_create_dirs() {
 
   mkdir -p ${LIB_DIRECTORY}
   mkdir -p ${LIB_DIRECTORY}/{market_cache,cache,backup}
-  mkdir -p ${LIB_DIRECTORY}/custom/{desktop,mobile}
+  mkdir -p ${LIB_DIRECTORY}/custom/desktop
   mkdir -p ${LIB_DIRECTORY}/public/css
   mkdir -p ${LIB_DIRECTORY}/public/img/plan
   mkdir -p ${LIB_DIRECTORY}/public/img/profils
@@ -576,12 +576,6 @@ step_nextdom_var_www_html() {
   ln -s "${WEBSERVER_HOME}" /var/www/html
 }
 
-step_nexdom_build_mobile() {
-   if [ 1 -eq "0${isdev}" ]; then
-     bash ${WEBSERVER_HOME}/scripts/prepare_mobile.sh
-   fi
-}
-
 step_restore_owner() {
    chown -R www-data:www-data ${WEBSERVER_HOME}
    if [ -d "/tmp/nextdom" ]; then
@@ -738,10 +732,6 @@ main() {
 
   print_log_in "step_nextdom_permissions ..."
   step_nextdom_file_permissions
-  print_log_ok
-
-  print_log_in "step_build_mobile ..."
-  step_nexdom_build_mobile
   print_log_ok
 
   print_log_in "step_restore_owner ..."

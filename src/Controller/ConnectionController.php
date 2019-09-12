@@ -22,6 +22,7 @@
 
 namespace NextDom\Controller;
 
+use NextDom\Helpers\ClientHelper;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
@@ -44,6 +45,8 @@ class ConnectionController extends BaseController
         $pageData['JS_VARS']['serverTZoffsetMin'] = Utils::getTZoffsetMin();
         $pageData['JS_END_POOL'] = [];
         $pageData['TITLE'] = 'Connexion';
+        $pageData['IS_MOBILE'] = ClientHelper::isMobile();
+        $pageData['NEXTDOM_ROOT'] = NEXTDOM_ROOT;
         $pageData['CSS_POOL'][] = '/public/css/pages/connection.css';
         $pageData['JS_END_POOL'][] = '/vendor/node_modules/admin-lte/dist/js/adminlte.min.js';
         $pageData['JS_END_POOL'][] = '/public/js/desktop/connection.js';
