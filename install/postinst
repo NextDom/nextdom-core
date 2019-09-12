@@ -356,11 +356,11 @@ step_nextdom_directory_layout() {
   print_verbose "created data symlink: ${WEBSERVER_HOME}/data"
   #
   # jeedom logs compatibility
-  if [ ! -f /var/www/html/log ]; then
-    rm -f /var/www/html/log
+  if [ ! -f ${WEBSERVER_HOME}/log ]; then
+    rm -f ${WEBSERVER_HOME}/log
   fi
-  if [ ! -e /var/www/html/log ]; then
-      ln -s /var/log/nextdom /var/www/html/log
+  if [ ! -e ${WEBSERVER_HOME}/log ]; then
+      ln -s ${LOG_DIRECTORY} ${WEBSERVER_HOME}/log
   fi
   #clear cache
   sh ${WEBSERVER_HOME}/scripts/clear_cache.sh
