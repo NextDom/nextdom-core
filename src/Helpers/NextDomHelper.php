@@ -340,9 +340,9 @@ class NextDomHelper
 
         foreach (UpdateManager::listRepo() as $repo) {
             if ($repo['enable']) {
-                $class = $repo['class'];
-                if (class_exists($class) && method_exists($class, 'health')) {
-                    $systemHealth += array_merge($systemHealth, $class::health());
+                $targetClass = $repo['class'];
+                if (class_exists($targetClass) && method_exists($targetClass, 'health')) {
+                    $systemHealth += array_merge($systemHealth, $targetClass::health());
                 }
             }
         }
@@ -853,9 +853,9 @@ class NextDomHelper
         }
         try {
             foreach (UpdateManager::listRepo() as $name => $repo) {
-                $class = 'Repo' . $name;
-                if (class_exists($class) && method_exists($class, 'cron5') && ConfigManager::byKey($name . '::enable') == 1) {
-                    $class::cron5();
+                $repoClass = 'Repo' . $name;
+                if (class_exists($repoClass) && method_exists($repoClass, 'cron5') && ConfigManager::byKey($name . '::enable') == 1) {
+                    $repoClass::cron5();
                 }
             }
         } catch (\Exception $e) {
@@ -898,9 +898,9 @@ class NextDomHelper
         }
         try {
             foreach (UpdateManager::listRepo() as $name => $repo) {
-                $class = 'Repo' . $name;
-                if (class_exists($class) && method_exists($class, 'cronHourly') && ConfigManager::byKey($name . '::enable') == 1) {
-                    $class::cronHourly();
+                $repoClass = 'Repo' . $name;
+                if (class_exists($repoClass) && method_exists($repoClass, 'cronHourly') && ConfigManager::byKey($name . '::enable') == 1) {
+                    $repoClass::cronHourly();
                 }
             }
         } catch (\Exception $e) {

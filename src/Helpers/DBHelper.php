@@ -356,23 +356,23 @@ class DBHelper
      * Returns the value of a field of a given object. It'll try to use a
      * getter first if defined. If not defined, we'll use the reflection API.
      *
-     * @param mixed $object
+     * @param mixed $targetObject
      * @param string $field
      * @return mixed
      * @throws \ReflectionException
      */
-    private static function getField($object, $field)
+    private static function getField($targetObject, $field)
     {
         $result = null;
         $method = 'get' . ucfirst($field);
-        if (method_exists($object, $method)) {
-            $result = $object->$method();
+        if (method_exists($targetObject, $method)) {
+            $result = $targetObject->$method();
         } else {
-            $reflection = self::getReflectionClass($object);
+            $reflection = self::getReflectionClass($targetObject);
             if ($reflection->hasProperty($field)) {
                 $property = $reflection->getProperty($field);
                 $property->setAccessible(true);
-                $result = $property->getValue($object);
+                $result = $property->getValue($targetObject);
                 $property->setAccessible(false);
             }
         }
@@ -385,16 +385,16 @@ class DBHelper
     /**
      * Returns the reflection class for the given object.
      *
-     * @param  object $object
+     * @param  object $targetObject
      * @return \ReflectionClass
      * @throws \ReflectionException
      */
-    private static function getReflectionClass($object)
+    private static function getReflectionClass($targetObject)
     {
         $reflections = [];
-        $uuid = spl_object_hash($object);
+        $uuid = spl_object_hash($targetObject);
         if (!isset($reflections[$uuid])) {
-            $reflections[$uuid] = new \ReflectionClass($object);
+            $reflections[$uuid] = new \ReflectionClass($targetObject);
         }
         return $reflections[$uuid];
     }
@@ -431,15 +431,15 @@ class DBHelper
     /**
      * Returns the name of the table where to save entities.
      *
-     * @param $object
+     * @param $targetObject
      * @return string
      */
-    private static function getTableName($object)
+    private static function getTableName($targetObject)
     {
-        if (method_exists($object, 'getTableName')) {
-            return $object->getTableName();
+        if (method_exists($targetObject, 'getTableName')) {
+            return $targetObject->getTableName();
         }
-        return get_class($object);
+        return get_class($targetObject);
     }
 
     /**
@@ -473,17 +473,17 @@ class DBHelper
      * first being the list of parts "key= :key" to inject in the SQL, the
      * second being the mapping of these parameters to the values.
      *
-     * @param mixed $object
+     * @param mixed $targetObject
      * @return array
      * @throws \ReflectionException
      */
-    private static function buildQuery($object)
+    private static function buildQuery($targetObject)
     {
         $parameters = [];
         $sql = [];
-        foreach (self::getFields($object) as $field) {
+        foreach (self::getFields($targetObject) as $field) {
             $sql[] = '`' . $field . '` = :' . $field;
-            $parameters[$field] = self::getField($object, $field);
+            $parameters[$field] = self::getField($targetObject, $field);
         }
         return array($sql, $parameters);
     }
@@ -590,9 +590,9 @@ class DBHelper
         // operators have to remain in this order. If you put '<' before '<=', algorithm won't make the difference & will think a '<=' is a '<'
         $operators = array('!=', '<=', '>=', '<', '>', 'NOT LIKE', 'LIKE', '=');
         $fields = self::getFields($objectType);
-        $class = self::getReflectionClass($objectType)->getName();
+        $reflectedClass = self::getReflectionClass($objectType)->getName();
         // create query
-        $query = 'SELECT ' . self::buildField($class) . ' FROM ' . $class . '';
+        $query = 'SELECT ' . self::buildField($reflectedClass) . ' FROM ' . $reflectedClass . '';
         $values = [];
         $where = ' WHERE ';
         foreach ($fields as $property) {
@@ -640,20 +640,20 @@ class DBHelper
     /**
      * Deletes an object.
      *
-     * @param mixed $object
+     * @param mixed $objectToRemove
      * @return boolean
      * @throws CoreException
      * @throws \ReflectionException
      */
-    public static function remove($object)
+    public static function remove($objectToRemove)
     {
-        if (method_exists($object, 'preRemove')) {
-            if ($object->preRemove() === false) {
+        if (method_exists($objectToRemove, 'preRemove')) {
+            if ($objectToRemove->preRemove() === false) {
                 return false;
             }
         }
-        list(, $parameters) = self::buildQuery($object);
-        $sql = 'DELETE FROM `' . self::getTableName($object) . '` WHERE ';
+        list(, $parameters) = self::buildQuery($objectToRemove);
+        $sql = 'DELETE FROM `' . self::getTableName($objectToRemove) . '` WHERE ';
         if (isset($parameters['id'])) {
             $sql .= '`id` = :id AND ';
             $parameters = array('id' => $parameters['id']);
@@ -668,12 +668,12 @@ class DBHelper
         }
         $sql .= '1';
         $res = self::getOne($sql, $parameters);
-        $reflection = self::getReflectionClass($object);
+        $reflection = self::getReflectionClass($objectToRemove);
         if ($reflection->hasProperty('id')) {
-            self::setField($object, 'id', null);
+            self::setField($objectToRemove, 'id', null);
         }
-        if (method_exists($object, 'postRemove')) {
-            $object->postRemove();
+        if (method_exists($objectToRemove, 'postRemove')) {
+            $objectToRemove->postRemove();
         }
         return null !== $res && false !== $res;
     }
@@ -703,20 +703,20 @@ class DBHelper
     /**
      * Lock an entity.
      *
-     * @param object $object
+     * @param object $objectToLock
      * @return boolean
      * @throws CoreException
      * @throws \ReflectionException
      */
-    public static function lock($object)
+    public static function lock($objectToLock)
     {
-        if (method_exists($object, 'preLock')) {
-            if ($object->preLock() === false) {
+        if (method_exists($objectToLock, 'preLock')) {
+            if ($objectToLock->preLock() === false) {
                 return false;
             }
         }
-        list(, $parameters) = self::buildQuery($object);
-        $sql = 'SELECT * FROM ' . self::getTableName($object) . ' WHERE ';
+        list(, $parameters) = self::buildQuery($objectToLock);
+        $sql = 'SELECT * FROM ' . self::getTableName($objectToLock) . ' WHERE ';
         foreach ($parameters as $field => $value) {
             if ($value != '') {
                 $sql .= '`' . $field . '` = :' . $field . ' AND ';
@@ -726,8 +726,8 @@ class DBHelper
         }
         $sql .= '1 LOCK IN SHARE MODE';
         $res = self::getOne($sql, $parameters);
-        if (method_exists($object, 'postLock')) {
-            $object->postLock();
+        if (method_exists($objectToLock, 'postLock')) {
+            $objectToLock->postLock();
         }
         return null !== $res && false !== $res;
     }

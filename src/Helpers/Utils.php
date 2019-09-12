@@ -859,41 +859,45 @@ class Utils
     }
 
     /**
-     * @param mixed $_object
+     * Convert an object to an array
+     *
+     * @param mixed $objectToConvert Object to convert
      * @param bool $_noToArray
+     *
      * @return array
+     *
      * @throws \ReflectionException
      */
-    public static function o2a($_object, $_noToArray = false)
+    public static function o2a($objectToConvert, $_noToArray = false)
     {
-        if (is_array($_object)) {
+        if (is_array($objectToConvert)) {
             $return = array();
-            foreach ($_object as $object) {
-                $return[] = self::o2a($object);
+            foreach ($objectToConvert as $subObject) {
+                $return[] = self::o2a($subObject);
             }
             return $return;
         }
         $array = array();
-        if (!is_object($_object)) {
+        if (!is_object($objectToConvert)) {
             return $array;
         }
-        if (!$_noToArray && method_exists($_object, 'toArray')) {
-            return $_object->toArray();
+        if (!$_noToArray && method_exists($objectToConvert, 'toArray')) {
+            return $objectToConvert->toArray();
         }
-        $class = get_class($_object);
-        if (!isset(self::$properties[$class])) {
-            self::$properties[$class] = (new \ReflectionClass($class))->getProperties();
+        $targetClass = get_class($objectToConvert);
+        if (!isset(self::$properties[$targetClass])) {
+            self::$properties[$targetClass] = (new \ReflectionClass($targetClass))->getProperties();
         }
         /** @var \ReflectionProperty $property */
-        foreach (self::$properties[$class] as $property) {
+        foreach (self::$properties[$targetClass] as $property) {
             $name = $property->getName();
             if ('_' !== $name[0]) {
                 $method = 'get' . ucfirst($name);
-                if (method_exists($_object, $method)) {
-                    $value = $_object->$method();
+                if (method_exists($objectToConvert, $method)) {
+                    $value = $objectToConvert->$method();
                 } else {
                     $property->setAccessible(true);
-                    $value = $property->getValue($_object);
+                    $value = $property->getValue($objectToConvert);
                     $property->setAccessible(false);
                 }
                 $array[$name] = ($value === null) ? null : Utils::isJson($value, $value);

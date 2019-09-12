@@ -362,28 +362,28 @@ class InteractQueryManager
         $return[$_type] = null;
         $synonyms = self::getQuerySynonym($return['query'], $_type);
         if ($_type == 'object') {
-            $objects = JeeObjectManager::all();
+            $jeeObjects = JeeObjectManager::all();
         } elseif ($_type == 'eqLogic') {
             if ($_data !== null && is_object($_data['object'])) {
-                $objects = $_data['object']->getEqLogic();
+                $jeeObjects = $_data['object']->getEqLogic();
             } else {
-                $objects = EqLogicManager::all(true);
+                $jeeObjects = EqLogicManager::all(true);
             }
         } elseif ($_type == 'cmd') {
             if ($_data !== null && is_object($_data['eqLogic'])) {
-                $objects = $_data['eqLogic']->getCmd();
+                $jeeObjects = $_data['eqLogic']->getCmd();
             } elseif ($_data !== null && is_object($_data['object'])) {
-                $objects = array();
+                $jeeObjects = array();
                 foreach ($_data['object']->getEqLogic() as $eqLogic) {
                     if ($eqLogic->getIsEnable() == 0) {
                         continue;
                     }
                     foreach ($eqLogic->getCmd() as $cmd) {
-                        $objects[] = $cmd;
+                        $jeeObjects[] = $cmd;
                     }
                 }
             } else {
-                $objects = CmdManager::all();
+                $jeeObjects = CmdManager::all();
             }
         } elseif ($_type == 'summary') {
             foreach (ConfigManager::byKey('object:summary') as $key => $value) {
@@ -404,17 +404,17 @@ class InteractQueryManager
             }
             return $return;
         }
-        usort($objects, array("interactQuery", "cmp_objectName"));
-        foreach ($objects as $object) {
-            if ($object->getConfiguration('interact::auto::disable', 0) == 1) {
+        usort($jeeObjects, array("interactQuery", "cmp_objectName"));
+        foreach ($jeeObjects as $jeeObject) {
+            if ($jeeObject->getConfiguration('interact::auto::disable', 0) == 1) {
                 continue;
             }
-            if (count($synonyms) > 0 && in_array(strtolower($object->getName()), $synonyms)) {
-                $return[$_type] = $object;
+            if (count($synonyms) > 0 && in_array(strtolower($jeeObject->getName()), $synonyms)) {
+                $return[$_type] = $jeeObject;
                 break;
             }
-            if (self::autoInteractWordFind($return['query'], $object->getName())) {
-                $return[$_type] = $object;
+            if (self::autoInteractWordFind($return['query'], $jeeObject->getName())) {
+                $return[$_type] = $jeeObject;
                 break;
             }
         }

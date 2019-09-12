@@ -1625,18 +1625,18 @@ class EqLogic implements EntityInterface
      */
     public function widgetPossibility($keyPossibility = '', $defaultValue = true)
     {
-        $class = new \ReflectionClass($this->getEqType_name());
-        $method_toHtml = $class->getMethod('toHtml');
+        $reflectedClass = new \ReflectionClass($this->getEqType_name());
+        $method_toHtml = $reflectedClass->getMethod('toHtml');
         $result = [];
         if ($method_toHtml->class == EqLogic::class) {
             $result['custom'] = true;
         } else {
             $result['custom'] = false;
         }
-        $class = $this->getEqType_name();
-        if (property_exists($class, '_widgetPossibility')) {
+        $reflectedClass = $this->getEqType_name();
+        if (property_exists($reflectedClass, '_widgetPossibility')) {
             /** @noinspection PhpUndefinedFieldInspection */
-            $result = $class::$_widgetPossibility;
+            $result = $reflectedClass::$_widgetPossibility;
             if ($keyPossibility != '') {
                 if (isset($result[$keyPossibility])) {
                     return $result[$keyPossibility];

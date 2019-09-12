@@ -805,10 +805,10 @@ class JeeObject implements EntityInterface
             }
         }
         if ($searchOnchild) {
-            $child_object = JeeObjectManager::buildTree($this);
-            if (count($child_object) > 0) {
-                foreach ($child_object as $object) {
-                    $eqLogics = array_merge($eqLogics, $object->getEqLogic($onlyEnable, $onlyVisible, $eqTypeName, $logicalId));
+            $childObjects = JeeObjectManager::buildTree($this);
+            if (count($childObjects) > 0) {
+                foreach ($childObjects as $childObject) {
+                    $eqLogics = array_merge($eqLogics, $childObject->getEqLogic($onlyEnable, $onlyVisible, $eqTypeName, $logicalId));
                 }
             }
         }
