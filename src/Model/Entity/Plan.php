@@ -397,14 +397,14 @@ class Plan implements EntityInterface
                 break;
             case PlanLinkType::ZONE:
                 if ($this->getConfiguration('zone_mode', 'simple') == 'widget') {
-                    $class = '';
+                    $cssClass = '';
                     if ($this->getConfiguration('showOnFly') == 1) {
-                        $class .= 'zoneEqLogicOnFly ';
+                        $cssClass .= 'zoneEqLogicOnFly ';
                     }
                     if ($this->getConfiguration('showOnClic') == 1) {
-                        $class .= 'zoneEqLogicOnClic ';
+                        $cssClass .= 'zoneEqLogicOnClic ';
                     }
-                    $html = '<div class="zone-widget cursor zoneEqLogic ' . $class . '" data-position="' . $this->getConfiguration('position') . '" data-eqLogic_id="' . str_replace(array('#', 'eqLogic'), array('', ''), $this->getConfiguration('eqLogic')) . '" data-zone_id="' . $this->getLink_id() . '" style="min-width:20px;min-height:20px;"></div>';
+                    $html = '<div class="zone-widget cursor zoneEqLogic ' . $cssClass . '" data-position="' . $this->getConfiguration('position') . '" data-eqLogic_id="' . str_replace(array('#', 'eqLogic'), array('', ''), $this->getConfiguration('eqLogic')) . '" data-zone_id="' . $this->getLink_id() . '" style="min-width:20px;min-height:20px;"></div>';
                 } else {
                     $html = '<div class="zone-widget cursor" data-zone_id="' . $this->getLink_id() . '" style="min-width:20px;min-height:20px;"></div>';
                 }

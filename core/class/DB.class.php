@@ -75,9 +75,9 @@ class DB
         return DBHelper::save($object, $_direct, $_replace);
     }
 
-    public static function refresh($object)
+    public static function refresh($target)
     {
-        return DBHelper::refresh($object);
+        return DBHelper::refresh($target);
     }
 
     /**
@@ -94,13 +94,13 @@ class DB
     /**
      * Deletes an entity.
      *
-     * @param object $object
+     * @param object $target
      * @return boolean
      * @throws \NextDom\Exceptions\CoreException
      */
-    public static function remove($object)
+    public static function remove($target)
     {
-        return DBHelper::remove($object);
+        return DBHelper::remove($target);
     }
 
     public static function checksum($_table)
@@ -111,13 +111,13 @@ class DB
     /**
      * Lock an entity.
      *
-     * @param object $object
+     * @param object $target
      * @return boolean
      * @throws \NextDom\Exceptions\CoreException
      */
-    public static function lock($object)
+    public static function lock($target)
     {
-        return DBHelper::lock($object);
+        return DBHelper::lock($target);
     }
 
     /*************************DB ANALYZER***************************/

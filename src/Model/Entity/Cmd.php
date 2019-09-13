@@ -1858,25 +1858,25 @@ class Cmd implements EntityInterface
      */
     public function widgetPossibility($_key = '', $_default = true)
     {
-        $class = new \ReflectionClass($this->getEqType());
-        $method_toHtml = $class->getMethod('toHtml');
+        $reflectedClass = new \ReflectionClass($this->getEqType());
+        $method_toHtml = $reflectedClass->getMethod('toHtml');
         $result = [];
         if ($method_toHtml->class == EqLogic::class) {
             $result['custom'] = true;
         } else {
             $result['custom'] = false;
         }
-        $class = new \ReflectionClass($this->getEqType() . 'Cmd');
-        $method_toHtml = $class->getMethod('toHtml');
+        $reflectedClass = new \ReflectionClass($this->getEqType() . 'Cmd');
+        $method_toHtml = $reflectedClass->getMethod('toHtml');
         if ($method_toHtml->class == Cmd::class) {
             $result['custom'] = true;
         } else {
             $result['custom'] = false;
         }
-        $class = $this->getEqType() . 'Cmd';
-        if (property_exists($class, '_widgetPossibility')) {
+        $reflectedClass = $this->getEqType() . 'Cmd';
+        if (property_exists($reflectedClass, '_widgetPossibility')) {
             /** @noinspection PhpUndefinedFieldInspection */
-            $result = $class::$_widgetPossibility;
+            $result = $reflectedClass::$_widgetPossibility;
             if ($_key != '') {
                 $keys = explode('::', $_key);
                 foreach ($keys as $k) {
