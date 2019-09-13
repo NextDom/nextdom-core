@@ -101,7 +101,7 @@ class AjaxObjectTest extends AjaxBase
     public function testToHtmlAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'toHtml']);
-        $this->assertContains('"result":[]', (string) $result->getBody());
+        $this->assertContains('{"state":"ok","result":{"objectHtml":[],"scenarios":[]}}', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
