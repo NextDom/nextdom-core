@@ -249,12 +249,10 @@ window.onscroll = function () {
                          var scrollValue = document.documentElement.scrollTop;
                          if (scrollValue > scrollLimit) {
                              container.children(".content-header").css("top", headerSize - 15);
-                             container.children("#dashboard-content").css("padding-top", headerHeight + 15);
                              container.children(".content").css("padding-top", headerHeight + 30);
                              container.children(".content-header").children("div").removeClass('scroll-shadow').addClass('fixed-shadow');
                          } else {
                              container.children(".content-header").css("top", headerSize - scrollValue + alertHeaderHeight + alertHeaderMargin);
-                             container.children("#dashboard-content").css("padding-top",headerHeight + 15 - alertHeaderMargin);
                              container.children(".content").css("padding-top", headerHeight + 30 - alertHeaderMargin);
                              container.children(".content-header").children("div").removeClass('fixed-shadow').addClass('scroll-shadow');
                          }
@@ -262,9 +260,7 @@ window.onscroll = function () {
                      }
                  }
              });
-             $("#dashboard-header").css("padding-right", paddingSideClose);
          } else {
-             $("#dashboard-content").css("padding-top", 15);
              $(".content").css("padding-top", 15);
          }
       } else {

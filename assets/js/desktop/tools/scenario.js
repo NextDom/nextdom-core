@@ -123,6 +123,10 @@ function loadInformations() {
     setTimeout(function () {
         $('.scenarioListContainer').packery();
     }, 100);
+    $(document).ready(function () {
+        modifyWithoutSave = false;
+        $(".bt_cancelModifs").hide();
+    });
 }
 
 /**
@@ -535,7 +539,7 @@ function initScenarioEditorEvents() {
             $(this).html('<i class="fas fa-ban text-danger"></i>');
         } else {
             $(this).attr('value', 0);
-            $(this).html('<i class="fas fa-refresh">');
+            $(this).html('<i class="fas fa-sync-alt">');
         }
     });
 
@@ -587,7 +591,6 @@ function initScenarioEditorEvents() {
  * Event on scenario card click
  */
 function loadScenario(scenarioId, tabToShow) {
-    modifyWithoutSave = false;
     $('#scenarioThumbnailDisplay').hide();
     printScenario(scenarioId);
     urlUpdate(scenarioId);
@@ -775,8 +778,13 @@ function setEditor() {
                 });
             }, 100);
         }
-
     });
+    setTimeout(function () {
+        // Unloack modification
+        modifyWithoutSave = false;
+        lockModify = false;
+        $(".bt_cancelModifs").hide();
+    }, 2000);    
 }
 
 /**
@@ -851,31 +859,7 @@ function printScenario(scenarioId) {
         if (_options.scenario_id = !pageContainer.getValues('.scenarioAttr')[0]['id']) {
             return;
         }
-        var stopScenarioBtn = $('#bt_stopScenario');
-        var scenarioState = $('#span_ongoing');
-        switch (_options.state) {
-            case 'error' :
-                stopScenarioBtn.hide();
-                scenarioState.text('{{Erreur}}');
-                scenarioState.removeClass('label-info label-danger label-success').addClass('label-warning');
-                break;
-            case 'on' :
-                stopScenarioBtn.show();
-                scenarioState.text('{{Actif}}');
-                scenarioState.removeClass('label-info label-danger label-warning').addClass('label-success');
-                break;
-            case 'in progress' :
-                stopScenarioBtn.show();
-                scenarioState.text('{{En cours}}');
-                scenarioState.addClass('label-success');
-                scenarioState.removeClass('label-success label-danger label-warning').addClass('label-info');
-                break;
-            case 'stop' :
-            default :
-                stopScenarioBtn.hide();
-                scenarioState.text('{{Arrêté}}');
-                scenarioState.removeClass('label-info label-success label-warning').addClass('label-danger');
-        }
+        updateScenarioDisplay(scenarioId, _options);
     };
     nextdom.scenario.get({
         id: scenarioId,
@@ -901,6 +885,7 @@ function printScenario(scenarioId) {
             for (var i in data.schedules) {
                 $('#div_schedules').schedule.display(data.schedules[i]);
             }
+            updateScenarioDisplay(scenarioId, data);
             nextdom.scenario.update[scenarioId](data);
             if (data.isActive !== 1) {
                 var inGoing = $('#in_going');
@@ -963,7 +948,47 @@ function printScenario(scenarioId) {
             });
         }
     });
+}
 
+/**
+ * Update the scenario display state
+ * @param _id Scenario ID
+ * @param _data Scenario datas
+ */
+function updateScenarioDisplay(_id, _data) {
+    var scenarioStartBtn = $('#bt_testScenario');
+    var scenarioStopBtn = $('#bt_stopScenario');
+    var scenarioState = $('#span_ongoing');
+    scenarioStartBtn.hide();
+    scenarioStopBtn.hide();
+    scenarioState.removeClass('label-danger label-info label-success label-warning label-default')
+    if (isset(_data.isActive) && _data.isActive != 1) {
+        scenarioState.text('{{Inactif}}');
+        scenarioState.addClass('label-default');
+    } else {
+        switch (_data.state) {
+            case 'error' :
+                scenarioStartBtn.show();
+                scenarioState.text('{{Erreur}}');
+                scenarioState.addClass('label-warning');
+                break;
+            case 'on' :
+                scenarioStopBtn.show();
+                scenarioState.text('{{Actif}}');
+                scenarioState.addClass('label-success');
+                break;
+            case 'in progress' :
+                scenarioStopBtn.show();
+                scenarioState.text('{{En cours}}');
+                scenarioState.addClass('label-info');
+                break;
+            case 'stop' :
+            default :
+                scenarioStartBtn.show();
+                scenarioState.text('{{Arrêté}}');
+                scenarioState.addClass('label-danger');
+        }
+    }
 }
 
 /**
@@ -1229,7 +1254,7 @@ function getIfSubElementHTML(subElementData) {
     htmlData += '<input type="checkbox" class="subElementAttr" data-l1key="options" data-l2key="enable" title="Décocher pour désactiver l\'élément" ' + checked + '/>';
     htmlData += '<span class="scenario-title">{{SI}}</span>';
     if (!isset(subElementData.options) || !isset(subElementData.options.allowRepeatCondition) || parseInt(subElementData.options.allowRepeatCondition) === 0) {
-        htmlData += '<a class="btn btn-default btn-sm cursor subElementAttr tooltips scenario-btn-repeat" title="{{Autoriser ou non la répétition des actions si l\'évaluation de la condition est la même que la précédente}}" data-l1key="options" data-l2key="allowRepeatCondition" value="0"><i class="fas fa-refresh"></i></a>';
+        htmlData += '<a class="btn btn-default btn-sm cursor subElementAttr tooltips scenario-btn-repeat" title="{{Autoriser ou non la répétition des actions si l\'évaluation de la condition est la même que la précédente}}" data-l1key="options" data-l2key="allowRepeatCondition" value="0"><i class="fas fa-sync-alt"></i></a>';
     } else {
         htmlData += '<a class="btn btn-default btn-sm cursor subElementAttr tooltips scenario-btn-repeat" title="{{Autoriser ou non la répétition des actions si l\'évaluation de la condition est la même que la précédente}}" data-l1key="options" data-l2key="allowRepeatCondition" value="1"><i class="fas fa-ban text-danger"></i></a>';
     }
@@ -1951,4 +1976,3 @@ function loadFromUrl() {
         }
     }
 }
-

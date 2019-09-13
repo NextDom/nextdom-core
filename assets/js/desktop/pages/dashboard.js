@@ -132,11 +132,12 @@ function getObjectHtml(_object_id) {
         category: SEL_CATEGORY,
         summary: SEL_SUMMARY,
         tag: SEL_TAG,
-        noScenario: 1,
         error: function (error) {
             notify('Core', error.message, 'error');
         },
-        success: function (html) {
+        success: function (result) {
+            var html = result['objectHtml'];
+            var scenarios = result['scenarios'];
             if ($.trim(html) == '') {
                 $('#div_ob' + _object_id).parent().children('.alert-no-child').show();
                 return;
@@ -146,6 +147,11 @@ function getObjectHtml(_object_id) {
             try {
                 $('#div_ob' + _object_id).empty().html(html).parent().show();
             } catch (err) {
+            }
+            var scenarioContainer = $('#div_sc' + _object_id);
+            for (var scenarioIndex = 0; scenarioIndex < scenarios.length; ++scenarioIndex) {
+                scenarioContainer.append(createScenarioWidget(scenarios[scenarioIndex]));
+                updateScenarioControls(scenarios[scenarioIndex].id, scenarios[scenarioIndex]);
             }
             setTimeout(function () {
                 positionEqLogic();
@@ -176,6 +182,102 @@ function getObjectHtml(_object_id) {
     });
 }
 
+/**
+ * Create a scenario widget for dashboard control
+ * @param scenarioData
+ */
+function createScenarioWidget(scenarioData) {
+    var widgetDiv = $('<div class="col-lg-3 col-sm-4 col-xs-6 scenario" data-scenario_id="' + scenarioData.id + '">');
+    var widgetDiv2 = $('<div class="div_scenario">');
+    var iconContainer = $('<a class="spacing-left scenario-open-button cursor"></a>');
+    if (scenarioData.icon !== '') {
+        iconContainer.append(scenarioData.icon);
+    }
+    else {
+        iconContainer = $('<a class="spacing-left scenario-open-button cursor"><i class="fas fa-film"></i></a>');
+    }
+    widgetDiv2.append(iconContainer);
+    widgetDiv2.append('<a class="scenario-label scenario-open-button cursor">' + scenarioData.name + '</a>');
+    var enableButton = $('<a class="btn btn-default pull-right scenario-enable-button" data-toggle="tooltip" title="" data-original-title="Activer le scénario"><i class="fas fa-toggle-on no-spacing text-good"></i></a>');
+    var playButton = $('<a class="btn btn-success pull-right scenario-play-button" data-toggle="tooltip" title="" data-original-title="Lancer le scénario"><i class="fas fa-play no-spacing"></i></a>');
+    var stopButton = $('<a class="btn btn-danger pull-right scenario-stop-button" data-toggle="tooltip" title="" data-original-title="Arrêter le scénario"><i class="fas fa-stop no-spacing"></i></a>');
+    playButton.on('click', function() {
+        nextdom.scenario.changeState({'id': $(this).parent().parent().data('scenario_id'), 'state': 'start'});
+    });
+    stopButton.on('click', function() {
+        nextdom.scenario.changeState({'id': $(this).parent().parent().data('scenario_id'), 'state': 'stop'});
+    });
+    enableButton.on('click', function() {
+        nextdom.scenario.changeState({'id': $(this).parent().parent().data('scenario_id'), 'state': 'activate'});
+    });
+    $('.scenario-open-button').on('click', function() {
+        loadPage("index.php?v=d&p=scenario&id=" + $(this).parent().parent().attr('data-scenario_id'));
+    });
+    widgetDiv2.append(enableButton);
+    widgetDiv2.append(playButton);
+    widgetDiv2.append(stopButton);
+    widgetDiv2.append('<a class="label scenario-state scenario-open-button">' + scenarioData.state + '</a>');
+    widgetDiv.append(widgetDiv2);
+    nextdom.scenario.update[scenarioData.id] = function (data) {
+        updateScenarioControls(data.scenario_id, data)
+    };
+    return widgetDiv;
+}
+
+/**
+ * Update display of scenario controls
+ * @param scenarioId
+ * @param data
+ */
+function updateScenarioControls(scenarioId, data) {
+    var scenarioContainer = $('.scenario[data-scenario_id=' + scenarioId + ']');
+    // Search fields
+    var enableButton = scenarioContainer.find('.scenario-enable-button');
+    var playButton = scenarioContainer.find('.scenario-play-button');
+    var stopButton = scenarioContainer.find('.scenario-stop-button');
+    var stateField = scenarioContainer.find('.scenario-state');
+    // Cmd button
+    if (data.state === 'in progress' || data.state === 'starting') {
+        playButton.hide();
+        stopButton.show();
+    }
+    else {
+        playButton.show();
+        stopButton.hide();
+    }
+    // Frame color
+    var color = $('.scenario[data-scenario_id="' + scenarioId + '"]').closest(".card").find(".card-icon").css("backgroundColor");
+    scenarioContainer.find(".div_scenario").css("background-color", color.replace(')', ', 0.2)').replace('rgb', 'rgba'));
+    // Status Label
+    stateField.removeClass('label-danger label-info label-success label-warning label-default')
+    if (isset(data.active) && data.active != 1) {
+        stateField.text('');
+        scenarioContainer.css('opacity','0.6');
+        enableButton.show();
+        playButton.hide();
+    } else {
+        scenarioContainer.css('opacity','');
+        enableButton.hide();
+        switch (data.state) {
+            case 'error' :
+                stateField.text('{{Erreur}}');
+                stateField.addClass('label-warning');
+                break;
+            case 'on' :
+                stateField.text('{{Actif}}');
+                stateField.addClass('label-success');
+                break;
+            case 'in progress' :
+                stateField.text('{{En cours}}');
+                stateField.addClass('label-info');
+                break;
+            case 'stop' :
+            default :
+                stateField.text('{{Arrêté}}');
+                stateField.addClass('label-danger');
+        }
+    }
+}
 /**
  * Display order information of elements
  */

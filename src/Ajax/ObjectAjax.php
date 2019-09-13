@@ -132,6 +132,7 @@ class ObjectAjax extends BaseAjax
                 }
             }
             $result = [];
+            $scenariosResult = [];
             $i = 0;
             foreach ($objectsList as $id) {
                 $html = [];
@@ -159,26 +160,27 @@ class ObjectAjax extends BaseAjax
                         $html[$order] = $eqLogic->toHtml(Utils::init('version'));
                     }
                 }
-                if (Utils::init('noScenario') == '') {
-                    $scenarios = ScenarioManager::byObjectId($id, false, true);
-                    if (count($scenarios) > 0) {
-                        /**
-                         * @var Scenario $scenario
-                         */
-                        foreach ($scenarios as $scenario) {
-                            $order = $scenario->getOrder();
-                            while (isset($html[$order])) {
-                                $order++;
-                            }
-                            $html[$order] = $scenario->toHtml(Utils::init('version'));
-                        }
+                $scenarios = ScenarioManager::byObjectId($id, false, true);
+                if (count($scenarios) > 0) {
+                    $scenariosResult[$i . '::' . $id] = [];
+                    /**
+                     * @var Scenario $scenario
+                     */
+                    foreach ($scenarios as $scenario) {
+                        $scenariosResult[$i . '::' . $id][] = [
+                            'id' => $scenario->getId(),
+                            'state' => $scenario->getState(),
+                            'name' => $scenario->getName(),
+                            'icon' => $scenario->getDisplay('icon'),
+                            'active' => $scenario->getIsActive()
+                            ];
                     }
                 }
                 ksort($html);
                 $result[$i . '::' . $id] = implode($html);
                 $i++;
             }
-            AjaxHelper::success($result);
+            AjaxHelper::success(['objectHtml' => $result, 'scenarios' => $scenariosResult]);
         } else {
             $html = [];
             if (Utils::init('summary') == '') {
@@ -205,23 +207,24 @@ class ObjectAjax extends BaseAjax
                     $html[$order] = $eqLogic->toHtml(Utils::init('version'));
                 }
             }
-            if (Utils::init('noScenario') == '') {
-                $scenarios = ScenarioManager::byObjectId(Utils::init('id'), false, true);
-                if (count($scenarios) > 0) {
-                    /**
-                     * @var Scenario $scenario
-                     */
-                    foreach ($scenarios as $scenario) {
-                        $order = $scenario->getOrder();
-                        while (isset($html[$order])) {
-                            $order++;
-                        }
-                        $html[$order] = $scenario->toHtml(Utils::init('version'));
-                    }
+            $scenarios = ScenarioManager::byObjectId(Utils::init('id'), false, true);
+            $scenariosResult = [];
+            if (count($scenarios) > 0) {
+                /**
+                 * @var Scenario $scenario
+                 */
+                foreach ($scenarios as $scenario) {
+                    $scenariosResult[] = [
+                        'id' => $scenario->getId(),
+                        'state' => $scenario->getState(),
+                        'name' => $scenario->getName(),
+                        'icon' => $scenario->getDisplay('icon'),
+                        'active' => $scenario->getIsActive()
+                    ];
                 }
             }
             ksort($html);
-            AjaxHelper::success(implode($html));
+            AjaxHelper::success(['objectHtml' => implode($html), 'scenarios' => $scenariosResult]);
         }
     }
 
