@@ -187,7 +187,7 @@ function getObjectHtml(_object_id) {
  * @param scenarioData
  */
 function createScenarioWidget(scenarioData) {
-    var widgetDiv = $('<div class="col-lg-3 col-sm-4 col-xs-6 scenario" data-scenario_id="' + scenarioData.id + '">');
+    var widgetDiv = $('<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 scenario" data-scenario_id="' + scenarioData.id + '">');
     var widgetDiv2 = $('<div class="div_scenario">');
     var iconContainer = $('<a class="spacing-left scenario-open-button cursor"></a>');
     if (scenarioData.icon !== '') {
