@@ -145,11 +145,10 @@
     font-size: 38px !important;
     font-weight: 900;
   }
-  .logoPrimary {
-    color: $nextdom_blue;
-  }
+  .logoPrimary,
   .logoSecondary {
-    color: $nextdom_bg;
+    display: flex;
+    flex-direction: column;
   }
   .info {
     color: $white;
