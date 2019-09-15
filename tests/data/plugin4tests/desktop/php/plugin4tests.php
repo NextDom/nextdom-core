@@ -22,3 +22,4 @@ if (!isConnect('admin')) {
 }
 ?>
 Desktop plugin page
+<?php include_file('core', 'plugin.template', 'js');?>
