@@ -390,10 +390,10 @@ step_nextdom_configuration() {
   if [[ -d "/tmp/jeedom" ]]; then
       if [[ -L "/tmp/jeedom" ]]; then
           rm -f /tmp/jeedom
-          ln -s ${TMP_DIRECTORY} /tmp/jeedom
           if [[ ! -d "${TMP_DIRECTORY}" ]]; then
               mkdir -p ${TMP_DIRECTORY} >> ${DEBUG} 2>&1
           fi
+          ln -s ${TMP_DIRECTORY} /tmp/jeedom
       else
         if [[ -d "${TMP_DIRECTORY}" ]]; then
             mv /tmp/jeedom/* ${TMP_DIRECTORY}/
@@ -406,6 +406,7 @@ step_nextdom_configuration() {
     if [[ ! -d "${TMP_DIRECTORY}" ]]; then
         mkdir -p ${TMP_DIRECTORY}
     fi
+    rm -f /tmp/jeedom
     ln -s ${TMP_DIRECTORY} /tmp/jeedom
   fi
   print_verbose "created temporary directory: ${TMP_DIRECTORY}"
