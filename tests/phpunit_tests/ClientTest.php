@@ -15,36 +15,36 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-use NextDom\Helpers\Client;
+use NextDom\Helpers\ClientHelper;
 
 class ClientTest extends PHPUnit_Framework_TestCase
 {
     public function testIsMobileWithoutUserAgent()
     {
-        $this->assertFalse(Client::isMobile());
+        $this->assertFalse(ClientHelper::isMobile());
     }
 
     public function testIsMobileWithEmptyUserAgent()
     {
         $_SERVER['HTTP_USER_AGENT'] = '';
-        $this->assertFalse(Client::isMobile());
+        $this->assertFalse(ClientHelper::isMobile());
     }
 
     public function testIsMobileDesktop()
     {
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36';
-        $this->assertFalse(Client::isMobile());
+        $this->assertFalse(ClientHelper::isMobile());
     }
 
     public function testIsMobileAndroid()
     {
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (Linux; U; Android 4.4.2; en-us; SCH-I535 Build/KOT49H) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30';
-        $this->assertTrue(Client::isMobile());
+        $this->assertTrue(ClientHelper::isMobile());
     }
 
     public function testIsMobileiPhone()
     {
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1';
-        $this->assertTrue(Client::isMobile());
+        $this->assertTrue(ClientHelper::isMobile());
     }
 }

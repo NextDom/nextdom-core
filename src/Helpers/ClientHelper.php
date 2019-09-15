@@ -21,7 +21,7 @@ namespace NextDom\Helpers;
  * Class Client
  * @package NextDom\Helpers
  */
-class Client
+class ClientHelper
 {
     /**
      * Test si l'utilisateur utilise un navigateur sur mobile

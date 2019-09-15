@@ -21,7 +21,7 @@ require_once __DIR__ . "/src/core.php";
 use NextDom\Enums\GetParams;
 use NextDom\Enums\ViewType;
 use NextDom\Exceptions\CoreException;
-use NextDom\Helpers\Client;
+use NextDom\Helpers\ClientHelper;
 use NextDom\Helpers\Router;
 use NextDom\Helpers\SessionHelper;
 use NextDom\Helpers\Utils;
@@ -47,7 +47,7 @@ if (isset($_GET['force_desktop'])) {
                 $goToMobile = true;
             }
         } else {
-            if (Client::isMobile()) {
+            if (ClientHelper::isMobile()) {
                 $goToMobile = true;
                 $_SESSION['desktop_view'] = false;
             } else {
