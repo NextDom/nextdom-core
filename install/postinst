@@ -5,7 +5,7 @@ set -e
 DEBUG="/tmp/output.txt"
 declare -a DETAILS
 
-env="prod"
+ENV_TYPE="prod"
 
 # Functions
 
@@ -129,19 +129,23 @@ prereq_create_dirs() {
   touch ${LOG_DIRECTORY}/scenario_execution
 }
 
-nexdom_environement() {
+step_nexdom_environement() {
+  php_ini_path=$(php --ini | head -n 1 | sed -E "s/.*Path: (.*)\/cli/\\1/")
+  if [ -e ${WEBSERVER_HOME}/assets/config/default.config.ini ]; then
+      rm ${WEBSERVER_HOME}/assets/config/default.config.ini
+  fi
+  if [ -e ${php_ini_path}/apache2/conf.d/10-opcache.ini ]; then
+      rm ${php_ini_path}/apache2/conf.d/10-opcache.ini
+  fi
 
-  rm ${WEBSERVER_HOME}/assets/config/default.config.ini
-  rm /etc/php/7.0/apache2/conf.d/10-opcache.ini
-
-  if [[ ${env} = "dev" ]] ; then
+  if [ ${ENV_TYPE} = "dev" ]; then
       cp -f ${WEBSERVER_HOME}/assets/config/dist/default.config.ini.dev ${WEBSERVER_HOME}/assets/config/default.config.ini
       print_verbose "disable PHP opcache"
-      cp -f ${WEBSERVER_HOME}/assets/config/dist/opcache.ini.dev /etc/php/7.0/apache2/conf.d/10-opcache.ini
+      cp -f ${WEBSERVER_HOME}/assets/config/dist/opcache.ini.dev ${php_ini_path}/apache2/conf.d/10-opcache.ini
   else
       cp -f ${WEBSERVER_HOME}/assets/config/dist/default.config.ini.dist ${WEBSERVER_HOME}/assets/config/default.config.ini
       print_verbose "enable PHP opcache"
-      cp -f ${WEBSERVER_HOME}/assets/config/dist/opcache.ini.dist /etc/php/7.0/apache2/conf.d/10-opcache.ini
+      cp -f ${WEBSERVER_HOME}/assets/config/dist/opcache.ini.dist ${php_ini_path}/apache2/conf.d/10-opcache.ini
   fi
   print_verbose "restart Apache"
   service apache2 restart
@@ -640,7 +644,7 @@ main() {
         usage
         ;;
       D)
-        env="dev"
+        ENV_TYPE="dev"
       ;;
       v)
         VERBOSE=1
@@ -750,7 +754,7 @@ main() {
   print_log_ok
 
   print_log_in "step_nextdom_copy_config.ini ... "
-  nexdom_environement
+  step_nexdom_environement
   print_log_ok
 
   [[ -f /root/.mysqlroot ]] && rm -f /root/.mysqlroot
