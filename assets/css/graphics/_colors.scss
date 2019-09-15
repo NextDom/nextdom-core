@@ -83,6 +83,12 @@ $good: #2ecc71;
 .text-gray{
     color: #707070 !important;
 }
+.text-critical{
+    color: $critical !important;
+}
+.text-good{
+    color: $good !important;
+}
 
 /* Background color */
 .bg-nextdom {

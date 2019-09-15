@@ -150,6 +150,13 @@ function initEvents() {
     $('.openObject').on('click',function(){
         loadPage($(this).attr('data-id'));
     });
+
+    // Room filter accordion hover toggle
+    $('#accordionRoom').hover(function(){
+      $('#accordionRoomHeader').click();
+      }, function(){
+      $('#accordionRoomHeader').click();
+    });
 }
 
 /**

@@ -267,7 +267,7 @@ footer:
 
 sidebar:
   menu-main: Main Menu
-  menu-manage: menu Management
+  menu-manage: Menu Management
   dashboard: Dashboard
   view: View(s)
   design: Design(s)
@@ -280,14 +280,15 @@ sidebar:
   plugins-markets: Management & Markets
   tools: Tools
   tools-summary: Automation Summary
-  tools-interactions: interactions
-  tools-scenarios: scenarios
+  tools-interactions: Interactions
+  tools-scenarios: Scenarios
+  tools-scenarios-manage: Scénarios Management
   tools-notes: Notes
-  diagnostics: diagnostics
+  diagnostics: Diagnostics
   diagnostics-health: Health
   diagnostics-eqlogics: Facilities
   diagnostics-history: History
-  diagnostics-timeline: timeline
+  diagnostics-timeline: Timeline
   diagnostics-logs: logs
   diagnostics-realtime: Real time
   expert: Expert

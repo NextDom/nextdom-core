@@ -247,6 +247,11 @@
   color: {{ COLOR2 }} !important;
 }
 
+/* Textes scenario dashboard */
+.div_scenario a {
+  color: {{ COLOR2 }} !important;
+}
+
 
 /* ############################################################################################################# */
 /* COLOR3 = Couleur de survol principale (contenu, titres, footer, bouton d'administration, unités, légendes...) */
@@ -378,10 +383,15 @@
   background-color: {{ COLOR7 }} !important;
 }
 
-/* fond des timeline*/
+/* fond des timeline */
 .timeline-item,
 .timeline-header,
 .timeline:before {
+  background-color: {{ COLOR7 }} !important;
+}
+
+/* fond scenario dashboard orphelins */
+.div_objectScenario_none .div_scenario {
   background-color: {{ COLOR7 }} !important;
 }
 
