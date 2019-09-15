@@ -19,6 +19,7 @@ namespace NextDom\Helpers;
 
 use Icewind\SMB\BasicAuth;
 use Icewind\SMB\ServerFactory;
+use Icewind\SMB\TimeZoneProvider;
 use NextDom\Exceptions\CoreException;
 use NextDom\Managers\ConfigManager;
 
@@ -42,7 +43,7 @@ class Samba
     public function __construct(string $host, string $user, string $password, string $share)
     {
         try {
-            $serverFactory = new ServerFactory();
+            $serverFactory = new ServerFactory(null,null,null);
             $auth = new BasicAuth($user, "WORKGROUP", $password);
             $this->client = $serverFactory->createServer($host, $auth);
             $this->share = $share;

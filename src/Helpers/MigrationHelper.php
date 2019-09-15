@@ -192,25 +192,6 @@ class MigrationHelper
     }
 
     /**
-     * 0.3.2 Migration process
-     * @param string $logFile log name file to display information
-     * @throws \Exception
-     */
-    private static function migrate_0_3_2($logFile = 'migration')
-    {
-        $migrateFile = sprintf("%s/install/migrate/migrate_0_3_2.sql", NEXTDOM_ROOT);
-
-        BackupManager::loadSQLFromFile($migrateFile);
-
-        $message ='Database basic update';
-        if($logFile == 'migration') {
-            LogHelper::addInfo($logFile, $message, '');
-        } else {
-            ConsoleHelper::process($message);
-        }
-    }
-
-    /**
      * Migration to pass during migrate_themes_to_data
      * @param string $logFile log name file to display information
      * @throws \Exception
@@ -428,6 +409,107 @@ class MigrationHelper
         }
     }
 
+
+    /***************************************************************** 0.3.2 Migration process *****************************************************************/
+    /**
+     * 0.3.2 Migration process
+     * @param string $logFile log name file to display information
+     * @throws \Exception
+     */
+    private static function migrate_0_3_2($logFile = 'migration')
+    {
+        $migrateFile = sprintf("%s/install/migrate/migrate_0_3_2.sql", NEXTDOM_ROOT);
+
+        BackupManager::loadSQLFromFile($migrateFile);
+
+        $message ='Database basic update';
+        if($logFile == 'migration') {
+            LogHelper::addInfo($logFile, $message, '');
+        } else {
+            ConsoleHelper::process($message);
+        }
+    }
+
+
+
+    /***************************************************************** 0.4.1 Migration process *****************************************************************/
+    /**
+     * 0.4.1 Migration process
+     * @param string $logFile log name file to display information
+     * @throws \Exception
+     */
+    private static function migrate_0_4_1($logFile = 'migration')
+    {
+
+        $message ='Replace jeedom in database';
+        if($logFile == 'migration') {
+            LogHelper::addInfo($logFile, $message, '');
+        } else {
+            ConsoleHelper::process($message);
+        }
+
+        //Update Config table
+
+        // firstUse config update
+        $firstUseConfig = ConfigManager::byKey('core', 'jeedom::firstUse');
+        ConfigManager::remove('core', 'jeedom::firstUse');
+        if (isset($firstUseConfig)) {
+            ConfigManager::save('core', 'nextdom::firstUse',$firstUseConfig);
+        } else {
+            ConfigManager::save('core', 'nextdom::firstUse',0);
+        }
+        // installKey config update
+        $installKey = ConfigManager::byKey('core', 'jeedom::installKey');
+        ConfigManager::remove('core', 'jeedom::installKey');
+        if (isset($installKey)) {
+            ConfigManager::save('core', 'nextdom::installKey',$installKey);
+        }
+        // url config update
+        $url = ConfigManager::byKey('core', 'jeedom::url');
+        ConfigManager::remove('core', 'jeedom::url');
+        if (isset($url)) {
+            ConfigManager::save('core', 'nextdom::url',$url);
+        }
+        // summary config update
+        $summary = ConfigManager::byKey('core','object:summary');
+        if (isset($summary)) {
+            $summary = str_replace('icon jeedom', 'icon nextdom', $summary);
+            ConfigManager::save('core', 'object:summary',$summary);
+        }
+        // benchmark config update
+        $sql = 'UPDATE `config`
+                    SET `key` = "nextdom_benchmark"
+                    WHERE `key` = "jeedom_benchmark"
+                        AND plugin = "core"';
+        try {
+            DBHelper::exec($sql);
+        } catch (\Exception $e) {
+
+        }
+
+        // Update Crons table
+
+        // benchmark config update
+        $sql = 'UPDATE `crons`
+                    SET `class` = "nextdom"
+                    WHERE `class` = "jeedom"';
+        try {
+            DBHelper::exec($sql);
+        } catch (\Exception $e) {
+
+        }
+
+        // Update Update table
+
+        // Update jeedom version
+        foreach (UpdateManager::all() as $update) {
+            if ($update->getType() == 'core' && $update->getName() == 'jeedom' && $update->getLogicalId() == 'jeedom') {
+                $update.setName('nextdom');
+                $update.setLogicalId('nextdom');
+                $update->save();
+            }
+        }
+    }
 
     /***************************************************************** X.X.X Migration process *****************************************************************/
 
