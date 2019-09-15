@@ -48,35 +48,35 @@ function gen_js {
            assets/3rdparty/jquery.utils/jquery.utils.js \
            assets/3rdparty/jquery.at.caret/jquery.at.caret.min.js \
            assets/3rdparty/jquery.multi-column-select/multi-column-select.js \
-           core/js/core.js \
-           core/js/nextdom.class.js \
-           core/js/private.class.js \
-           core/js/eqLogic.class.js \
-           core/js/cmd.class.js \
-           core/js/object.class.js \
-           core/js/scenario.class.js \
-           core/js/plugin.class.js \
-           core/js/message.class.js \
-           core/js/view.class.js \
-           core/js/config.class.js \
-           core/js/history.class.js \
-           core/js/cron.class.js \
-           core/js/security.class.js \
-           core/js/update.class.js \
-           core/js/user.class.js \
-           core/js/backup.class.js \
-           core/js/interact.class.js \
-           core/js/update.class.js \
-           core/js/plan.class.js \
-           core/js/log.class.js \
-           core/js/repo.class.js \
-           core/js/network.class.js \
-           core/js/dataStore.class.js \
-           core/js/cache.class.js \
-           core/js/report.class.js \
-           core/js/note.class.js \
-           core/js/listener.class.js \
-           core/js/jeedom.class.js \
+           assets/js/core/core.js \
+           assets/js/core/nextdom.class.js \
+           assets/js/core/private.class.js \
+           assets/js/core/eqLogic.class.js \
+           assets/js/core/cmd.class.js \
+           assets/js/core/object.class.js \
+           assets/js/core/scenario.class.js \
+           assets/js/core/plugin.class.js \
+           assets/js/core/message.class.js \
+           assets/js/core/view.class.js \
+           assets/js/core/config.class.js \
+           assets/js/core/history.class.js \
+           assets/js/core/cron.class.js \
+           assets/js/core/security.class.js \
+           assets/js/core/update.class.js \
+           assets/js/core/user.class.js \
+           assets/js/core/backup.class.js \
+           assets/js/core/interact.class.js \
+           assets/js/core/update.class.js \
+           assets/js/core/plan.class.js \
+           assets/js/core/log.class.js \
+           assets/js/core/repo.class.js \
+           assets/js/core/network.class.js \
+           assets/js/core/dataStore.class.js \
+           assets/js/core/cache.class.js \
+           assets/js/core/report.class.js \
+           assets/js/core/note.class.js \
+           assets/js/core/listener.class.js \
+           assets/js/core/jeedom.class.js \
            assets/js/desktop/conflicts.js \
            assets/js/desktop/loads.js \
            assets/js/desktop/inits.js \

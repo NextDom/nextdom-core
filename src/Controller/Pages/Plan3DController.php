@@ -77,7 +77,7 @@ class Plan3DController extends BaseController
         $pageData['JS_END_POOL'][] = '/assets/3rdparty/three.js/controls/OrbitControls.js';
         $pageData['JS_END_POOL'][] = '/assets/3rdparty/three.js/renderers/Projector.js';
         $pageData['JS_END_POOL'][] = '/assets/3rdparty/three.js/objects/Sky.js';
-        $pageData['JS_END_POOL'][] = '/core/js/plan3d.class.js';
+        $pageData['JS_END_POOL'][] = '/assets/js/core/plan3d.class.js';
         $pageData['JS_END_POOL'][] = '/public/js/desktop/pages/plan3d.js';
 
         return Render::getInstance()->get('/desktop/pages/plan3d.html.twig', $pageData);

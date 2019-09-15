@@ -339,6 +339,12 @@ step_nextdom_directory_layout() {
   ln -s ${LIB_DIRECTORY}/public/css/ ${WEBSERVER_HOME}/core/css
   print_verbose "created core/css symlink: ${WEBSERVER_HOME}/core/css"
 
+  # jeedom javascript compatibility
+  if [ ! -e ${WEBSERVER_HOME}/core/js ]; then
+      ln -s ${WEBSERVER_HOME}/assets/js/core/ ${WEBSERVER_HOME}/core/js
+  fi
+  print_verbose "created core/js symlink: ${WEBSERVER_HOME}/assets/js/core"
+
   # jeedom backup compatibility:  ./data is a symlink
   if [ -L ${WEBSERVER_HOME}/data ]; then
       rm -f ${WEBSERVER_HOME}/data
