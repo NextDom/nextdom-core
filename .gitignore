@@ -35,13 +35,13 @@ tests/tests/chromedriver*
 
 core/config
 core/css
+core/js
+core/template
 
 /var.*
 /var
 /data.*
 /data
-/src/mobile/node_modules
-/src/mobile/src/assets/icons
 /mobile
 
 /assets/config/default.config.ini
