@@ -65,18 +65,19 @@ class RepoApt
             if (count($currentVersion) > 0 && count($newVersion) > 0) {
                 $currentVersion = trim($currentVersion[0]);
                 $newVersion = trim($newVersion[0]);
-	        if (empty($targetUpdate->getLocalVersion())) {
-		    $targetUpdate->setLocalVersion($currentVersion);
-		}
+                if (empty($targetUpdate->getLocalVersion()) || $targetUpdate->getLocalVersion() !== $currentVersion) {
+                    $targetUpdate->setLocalVersion($currentVersion);
+                    $targetUpdate->save();
+                }
                 if ($currentVersion !== $newVersion && $currentVersion !== '(none)') {
                     $targetUpdate->setRemoteVersion($newVersion);
                     $targetUpdate->setStatus('update');
                     $targetUpdate->save();
                     $result = true;
                 } elseif (empty($targetUpdate->getRemoteVersion())) {
-		    $targetUpdate->setRemoteVersion($newVersion);
-		    $targetUpdate->save();
-		}
+                    $targetUpdate->setRemoteVersion($newVersion);
+                    $targetUpdate->save();
+                }
             }
         }
         return $result;
