@@ -478,9 +478,11 @@ class BackupManager
             ConsoleHelper::step("chechking system consistency...");
             ConsistencyManager::checkConsistency();
             ConsoleHelper::ok();
+            ConsoleHelper::step("init values...");
+            BackupManager::initValues();
+            ConsoleHelper::ok();
             ConsoleHelper::step("clearing cache...");
-            CacheManager::flush();
-            exec('sh ' . NEXTDOM_ROOT . '/scripts/clear_cache.sh');
+            BackupManager::clearCache();
             ConsoleHelper::ok();
             FileSystemHelper::rrmdir($tmpDir);
             NextDomHelper::event("end_restore");
@@ -849,5 +851,18 @@ class BackupManager
                 }
             }
         }
+    }
+
+    private static function clearCache() {
+        CacheManager::flush();
+        exec('sh ' . NEXTDOM_ROOT . '/scripts/clear_cache.sh');
+    }
+    /**
+     * Init default values
+     *
+     * @throws \Exception
+     */
+    private static function initValues() {
+        ConfigManager::save('nextdom::firstUse', 0);
     }
 }

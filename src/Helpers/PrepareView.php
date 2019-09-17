@@ -70,13 +70,22 @@ class PrepareView
 
     /**
      * Test if first use page must be showed
+     *
      * @return bool
      */
-    public function firstUseIsShowed()
+    public function firstUseAlreadyShowed()
     {
         $result = false;
         if (isset($this->currentConfig['nextdom::firstUse']) && $this->currentConfig['nextdom::firstUse'] == 0) {
-            $result = true;
+            return true;
+        }
+        else {
+            // Prevent F5 bug on second step
+            $user = UserManager::byLogin(Utils::sha512('admin'));
+            if (is_object($user) && $user->getPassword() === 'admin') {
+                ConfigManager::save('nextdom::firstUse', 0);
+                $result = true;
+            }
         }
         return $result;
     }
