@@ -454,6 +454,9 @@ class BackupManager
             ConsoleHelper::step("extracting backup archive...");
             $tmpDir = self::extractArchive($file);
             ConsoleHelper::ok();
+            ConsoleHelper::step("restoring plugins...");
+            self::restorePlugins($tmpDir);
+            ConsoleHelper::ok();
             ConsoleHelper::step("restoring mysql database...");
             self::restoreDatabase($tmpDir);
             ConsoleHelper::ok();
@@ -465,9 +468,6 @@ class BackupManager
             ConsoleHelper::ok();
             ConsoleHelper::step("migrating data...");
             MigrationHelper::migrate('restore');
-            ConsoleHelper::ok();
-            ConsoleHelper::step("restoring plugins...");
-            self::restorePlugins($tmpDir);
             ConsoleHelper::ok();
             ConsoleHelper::step("starting nextdom system...");
             NextDomHelper::startSystem();
