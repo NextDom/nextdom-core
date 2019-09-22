@@ -36,63 +36,77 @@ namespace NextDom\Helpers;
 
 use NextDom\Managers\ConfigManager;
 
+/**
+ * Class DateHelper
+ * @package NextDom\Helpers
+ */
 class DateHelper
 {
+    /**
+     * @param $dateEn
+     * @return mixed
+     * @throws \Exception
+     */
     public static function dateToFr($dateEn)
     {
         if (ConfigManager::byKey('language', 'core', 'fr_FR') == 'en_US') {
             return $dateEn;
         }
         $longTextEn = array(
-            "Monday", "Tuesday", "Wednesday", "Thursday",
-            "Friday", "Saturday", "Sunday", "January",
-            "February", "March", "April", "May",
-            "June", "July", "August", "September",
-            "October", "November", "December",
-        );
+            '/(^| )Monday($| )/', '/(^| )Tuesday($| )/', '/(^| )Wednesday($| )/', '/(^| )Thursday($| )/',
+            '/(^| )Friday($| )/', '/(^| )Saturday($| )/', '/(^| )Sunday($| )/', '/(^| )January($| )/',
+            '/(^| )February($| )/', '/(^| )March($| )/', '/(^| )April($| )/', '/(^| )May($| )/',
+            '/(^| )June($| )/', '/(^| )July($| )/', '/(^| )August($| )/', '/(^| )September($| )/',
+            '/(^| )October($| )/', '/(^| )November($| )/', '/(^| )December($| )/',
+            );
         $shortTextEn = array(
-            "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun",
-            "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
-            "Aug", "Sep", "Oct", "Nov", "Dec",
+            '/(^| )Mon($| )/', '/(^| )Tue($| )/', '/(^| )Wed($| )/', '/(^| )Thu($| )/', '/(^| )Fri($| )/', '/(^| )Sat($| )/', '/(^| )Sun($| )/',
+            '/(^| )Jan($| )/', '/(^| )Feb($| )/', '/(^| )Mar($| )/', '/(^| )Apr($| )/', '/(^| )May($| )/', '/(^| )Jun($| )/', '/(^| )Jul($| )/',
+            '/(^| )Aug($| )/', '/(^| )Sep($| )/', '/(^| )Oct($| )/', '/(^| )Nov($| )/', '/(^| )Dec($| )/',
         );
 
         switch (ConfigManager::byKey('language', 'core', 'fr_FR')) {
             case 'fr_FR':
                 $longText = array(
-                    "Lundi", "Mardi", "Mercredi", "Jeudi",
-                    "Vendredi", "Samedi", "Dimanche", "Janvier",
-                    "Février", "Mars", "Avril", "Mai",
-                    "Juin", "Juillet", "Août", "Septembre",
-                    "Octobre", "Novembre", "Décembre",
+                    'Lundi', 'Mardi', 'Mercredi', 'Jeudi',
+                    'Vendredi', 'Samedi', 'Dimanche', 'Janvier',
+                    'Février', 'Mars', 'Avril', 'Mai',
+                    'Juin', 'Juillet', 'Août', 'Septembre',
+                    'Octobre', 'Novembre', 'Décembre',
                 );
                 $shortText = array(
-                    "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim",
-                    "Jan", "Fev", "Mar", "Avr", "Mai", "Jui",
-                    "Jui", "Aou;", "Sep", "Oct", "Nov", "Dec",
+                    'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim',
+                    'Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin',
+                    'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.',
                 );
                 break;
             case 'de_DE':
                 $longText = array(
-                    "Montag", "Dienstag", "Mittwoch", "Donnerstag",
-                    "Freitag", "Samstag", "Sonntag", "Januar",
-                    "Februar", "März", "April", "May",
-                    "Juni", "July", "August", "September",
-                    "October", "November", "December",
+                    'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag',
+                    'Freitag', 'Samstag', 'Sonntag', 'Januar',
+                    'Februar', 'März', 'April', 'May',
+                    'Juni', 'July', 'August', 'September',
+                    'October', 'November', 'December',
                 );
 
                 $shortText = array(
-                    "Mon", "Die", "Mit", "Thu", "Don", "Sam", "Son",
-                    "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
-                    "Aug", "Sep", "Oct", "Nov", "Dec",
+                    'Mon', 'Die', 'Mit', 'Thu', 'Don', 'Sam', 'Son',
+                    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',
+                    'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
                 );
                 break;
             default:
                 return $dateEn;
                 break;
         }
-        return str_replace($shortTextEn, $shortText, str_replace($longTextEn, $longText, $dateEn));
+        return preg_replace($shortTextEn, $shortText, preg_replace($longTextEn, $longText, $dateEn));
     }
 
+    /**
+     * @param $_day
+     * @return mixed
+     * @throws \Exception
+     */
     public static function convertDayFromEn($_day)
     {
         $result = $_day;
@@ -141,6 +155,9 @@ class DateHelper
         return $result;
     }
 
+    /**
+     * @return bool|false|string
+     */
     public static function getNtpTime()
     {
         $time_servers = array(

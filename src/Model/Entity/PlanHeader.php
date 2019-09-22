@@ -17,6 +17,8 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\DBHelper;
+use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\ReportHelper;
@@ -29,7 +31,7 @@ use NextDom\Managers\PlanManager;
  * @ORM\Table(name="planHeader")
  * @ORM\Entity
  */
-class PlanHeader
+class PlanHeader implements EntityInterface
 {
 
     /**
@@ -64,6 +66,12 @@ class PlanHeader
 
     protected $_changed;
 
+    /**
+     * @param string $_format
+     * @param array $_parameters
+     * @return string
+     * @throws \Exception
+     */
     public function report($_format = 'pdf', $_parameters = array())
     {
         $url = NetworkHelper::getNetworkAccess('internal') . '/index.php?v=d&p=plan';
@@ -75,6 +83,31 @@ class PlanHeader
         return ReportHelper::generate($url, 'plan', $this->getId(), $_format, $_parameters);
     }
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param $_id
+     * @return $this
+     */
+    public function setId($_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
+        $this->id = $_id;
+        return $this;
+    }
+
+    /**
+     * @param $_name
+     * @return PlanHeader
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public function copy($_name)
     {
         $planHeaderCopy = clone $this;
@@ -87,7 +120,50 @@ class PlanHeader
             $planCopy->setPlanHeader_id($planHeaderCopy->getId());
             $planCopy->save();
         }
+        $filename1 = 'planHeader' . $this->getId() . '-' . $this->getImage('sha512') . '.' . $this->getImage('type');
+        if (file_exists(NEXTDOM_DATA . '/data/custom/plans/' . $filename1)) {
+            $filename2 = 'planHeader' . $planHeaderCopy->getId() . '-' . $planHeaderCopy->getImage('sha512') . '.' . $planHeaderCopy->getImage('type');
+            copy(NEXTDOM_DATA . '/data/custom/plans/' . $filename1, NEXTDOM_DATA . '/data/custom/plans/' . $filename2);
+        }
         return $planHeaderCopy;
+    }
+
+    public function save()
+    {
+        DBHelper::save($this);
+    }
+
+    /**
+     * @return Plan[]
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
+    public function getPlan()
+    {
+        return PlanManager::byPlanHeaderId($this->getId());
+    }
+
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
+    public function getImage($_key = '', $_default = '')
+    {
+        return Utils::getJsonAttr($this->image, $_key, $_default);
+    }
+
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
+    public function setImage($_key, $_value)
+    {
+        $image = Utils::setJsonAttr($this->image, $_key, $_value);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->image, $image);
+        $this->image = $image;
+        return $this;
     }
 
     public function preSave()
@@ -109,47 +185,89 @@ class PlanHeader
         }
     }
 
-    public function save()
+    /**
+     * @return string
+     */
+    public function getName()
     {
-        \DB::save($this);
+        return $this->name;
+    }
+
+    /**
+     * @param $_name
+     * @return $this
+     */
+    public function setName($_name)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
+        $this->name = $_name;
+        return $this;
+    }
+
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
+    public function getConfiguration($_key = '', $_default = '')
+    {
+        return Utils::getJsonAttr($this->configuration, $_key, $_default);
+    }
+
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
+    public function setConfiguration($_key, $_value)
+    {
+        if ($_key == 'accessCode' && $_value != '' && !Utils::isSha512($_value)) {
+            $_value = Utils::sha512($_value);
+        }
+        $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
+        $this->configuration = $configuration;
+        return $this;
     }
 
     public function remove()
     {
         NextDomHelper::addRemoveHistory(array('id' => $this->getId(), 'name' => $this->getName(), 'date' => date('Y-m-d H:i:s'), 'type' => 'plan'));
-        \DB::remove($this);
+        DBHelper::remove($this);
     }
 
+    /**
+     * @return string
+     */
     public function displayImage()
     {
         if ($this->getImage('data') == '') {
             return '';
         }
-        $dir = NEXTDOM_ROOT . '/public/img/plan';
+        $dir = NEXTDOM_DATA . '/data/custom/plans/';
         if (!file_exists($dir)) {
-            mkdir($dir);
+            FileSystemHelper::mkdirIfNotExists($dir,0755,true);
         }
         if ($this->getImage('sha512') == '') {
             $this->setImage('sha512', Utils::sha512($this->getImage('data')));
             $this->save();
         }
         $filename = $this->getImage('sha512') . '.' . $this->getImage('type');
-        $filepath = $dir . '/' . $filename;
+        $filepath = $dir . $filename;
         if (!file_exists($filepath)) {
             file_put_contents($filepath, base64_decode($this->getImage('data')));
         }
         $size = $this->getImage('size');
-        return '<img style="z-index:997" src="/public/img/plan/' . $filename . '" data-sixe_y="' . $size[1] . '" data-sixe_x="' . $size[0] . '">';
+        return '<img style="z-index:997" src="'. '/data/custom/plans/' . $filename . '" data-size_y="' . $size[1] . '" data-size_x="' . $size[0] . '">';
     }
 
     /**
-     * @return Plan[]
+     * @param array $_data
+     * @param int $_level
+     * @param int $_drill
+     * @return array|null
+     * @throws \Exception
      */
-    public function getPlan()
-    {
-        return PlanManager::byPlanHeaderId($this->getId());
-    }
-
     public function getLinkData(&$_data = array('node' => array(), 'link' => array()), $_level = 0, $_drill = 3)
     {
         if (isset($_data['node']['plan' . $this->getId()])) {
@@ -175,70 +293,27 @@ class PlanHeader
         return null;
     }
 
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
-    }
-
-    public function setName($_name)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
-        $this->name = $_name;
-        return $this;
-    }
-
-    public function getImage($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->image, $_key, $_default);
-    }
-
-    public function setImage($_key, $_value)
-    {
-        $image = Utils::setJsonAttr($this->image, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->image, $image);
-        $this->image = $image;
-        return $this;
-    }
-
-    public function getConfiguration($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->configuration, $_key, $_default);
-    }
-
-    public function setConfiguration($_key, $_value)
-    {
-        if ($_key == 'accessCode' && $_value != '' && !Utils::isSha512($_value)) {
-            $_value = Utils::sha512($_value);
-        }
-        $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
-        $this->configuration = $configuration;
-        return $this;
-    }
-
+    /**
+     * @return mixed
+     */
     public function getChanged()
     {
         return $this->_changed;
     }
 
+    /**
+     * @param $_changed
+     * @return $this
+     */
     public function setChanged($_changed)
     {
         $this->_changed = $_changed;
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getTableName()
     {
         return 'planHeader';

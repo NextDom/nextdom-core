@@ -1,0 +1,78 @@
+/* This file is part of Jeedom.
+*
+* Jeedom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* Jeedom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/* This file is part of NextDom.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+*
+* @Support <https://www.nextdom.org>
+* @Email   <admin@nextdom.org>
+* @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
+*/
+
+/* AdminLTE-Surcharge */
+.alert{
+    width: auto;
+    margin-bottom: 10px;
+    border-left: 5px solid $lightyellow;
+}
+.alert-danger {
+    border-left: 5px solid $lightred;
+}
+.alert-info, .alert-default {
+    border-left: 5px solid $lightblue;
+}
+.alert-success {
+    border-left: 5px solid $lightgreen;
+}
+.alert-default {
+    background-color: $lightgrey;
+}
+.callout {
+    border-radius: 3px;
+    margin: 0 0 20px 5px;
+}
+.alert .btn {
+    text-decoration: none;
+}
+
+/* Core-Ajout */
+.alert-no-child {
+    margin-bottom: 0px !important;
+    border-left: 0px;
+    padding: 10px 15px;
+}
+.alert-header {
+    padding: 15px;
+    -webkit-animation: slidein 0.5s;
+    -moz-animation:    slidein 0.5s;
+    -o-animation:      slidein 0.5s;
+    animation:     slidein 0.5s;
+}
+.alert-header .alert-danger {
+    margin-bottom: 0px;
+}

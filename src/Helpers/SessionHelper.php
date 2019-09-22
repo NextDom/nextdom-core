@@ -35,33 +35,14 @@
 namespace NextDom\Helpers;
 
 use NextDom\Exceptions\CoreException;
+use NextDom\Managers\ConfigManager;
 
+/**
+ * Class SessionHelper
+ * @package NextDom\Helpers
+ */
 class SessionHelper
 {
-    /**
-     * @param $srcData
-     * @return array
-     * @throws CoreException
-     */
-    public static function decodeSessionData($srcData)
-    {
-        $resultData = array();
-        $offset = 0;
-        while ($offset < strlen($srcData)) {
-            if (!strstr(substr($srcData, $offset), "|")) {
-                throw new CoreException("invalid data, remaining: " . substr($srcData, $offset));
-            }
-            $pos = strpos($srcData, "|", $offset);
-            $num = $pos - $offset;
-            $varName = substr($srcData, $offset, $num);
-            $offset += $num + 1;
-            $data = unserialize(substr($srcData, $offset));
-            $resultData[$varName] = $data;
-            $offset += strlen(serialize($data));
-        }
-        return $resultData;
-    }
-
     /**
      * @return array
      * @throws \Exception
@@ -95,16 +76,64 @@ class SessionHelper
     }
 
     /**
+     * @param $srcData
+     * @return array
+     * @throws CoreException
+     */
+    public static function decodeSessionData($srcData)
+    {
+        $resultData = array();
+        $offset = 0;
+        while ($offset < strlen($srcData)) {
+            if (!strstr(substr($srcData, $offset), "|")) {
+                throw new CoreException("invalid data, remaining: " . substr($srcData, $offset));
+            }
+            $pos = strpos($srcData, "|", $offset);
+            $num = $pos - $offset;
+            $varName = substr($srcData, $offset, $num);
+            $offset += $num + 1;
+            $data = unserialize(substr($srcData, $offset));
+            $resultData[$varName] = $data;
+            $offset += strlen(serialize($data));
+        }
+        return $resultData;
+    }
+
+    /**
      * @param int $sessionId
      */
     public static function deleteSession($sessionId)
     {
         $currentSessionId = session_id();
-        @session_start();
-        session_id($sessionId);
-        session_unset();
-        session_destroy();
-        session_id($currentSessionId);
-        @session_write_close();
+        if (session_status() !== PHP_SESSION_NONE) {
+            session_start();
+            session_id($sessionId);
+            session_unset();
+            session_destroy();
+            session_id($currentSessionId);
+            session_write_close();
+        }
+    }
+
+    /**
+     * Configure and start session if not already started
+     *
+     * @throws \Exception
+     */
+    public static function startSession() {
+        if(session_status() == PHP_SESSION_NONE) {
+            $sessionLifetime = ConfigManager::byKey('session_lifetime');
+            if (!is_numeric($sessionLifetime)) {
+                $sessionLifetime = 24;
+            }
+            ini_set('session.gc_maxlifetime', $sessionLifetime * 3600);
+            ini_set('session.use_cookies', 1);
+            ini_set('session.cookie_httponly', 1);
+
+            if (isset($_COOKIE['sess_id'])) {
+                session_id($_COOKIE['sess_id']);
+            }
+            session_start();
+        }
     }
 }

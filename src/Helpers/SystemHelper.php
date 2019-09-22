@@ -17,6 +17,10 @@
 
 namespace NextDom\Helpers;
 
+/**
+ * Class SystemHelper
+ * @package NextDom\Helpers
+ */
 class SystemHelper
 {
     /**
@@ -35,42 +39,18 @@ class SystemHelper
     );
 
     /**
-     * Load system from /core/config/system_cmd.json if file exists.
-     *
-     * @return array List of commands
+     * @return int
      */
-    public static function loadCommand(): array
+    public static function vsystem()
     {
-        if (file_exists(NEXTDOM_ROOT . '/core/config/system_cmd.json')) {
-            $content = file_get_contents(NEXTDOM_ROOT . '/core/config/system_cmd.json');
-            if (Utils::isJson($content)) {
-                self::$commands['custom'] = json_decode($content, true);
-            }
-        }
-        return self::$commands;
-    }
+        $status = 0;
+        $args = func_get_args();
+        $format = $args[0];
+        $params = array_slice($args, 1);
+        $cmd = vsprintf($format, $params);
 
-    /**
-     *  Get distribution name
-     *
-     * @return string Distribution name
-     */
-    public static function getDistrib(): string
-    {
-        self::loadCommand();
-        if (isset(self::$commands['custom'])) {
-            return 'custom';
-        }
-        if (self::$distrib === null) {
-            self::$distrib = trim(shell_exec('grep CPE_NAME /etc/os-release | cut -d \'"\' -f 2 | cut -d : -f 3 '));
-            if (self::$distrib == '') {
-                self::$distrib = trim(shell_exec('grep -e "^ID" /etc/os-release | cut -d \'=\' -f 2'));
-            }
-            if (self::$distrib == '' || !isset(self::$commands[self::$distrib])) {
-                self::$distrib = 'debian';
-            }
-        }
-        return self::$distrib;
+        system($cmd, $status);
+        return $status;
     }
 
     /**
@@ -100,17 +80,42 @@ class SystemHelper
     }
 
     /**
-     * Get sudo command
+     *  Get distribution name
      *
-     * @return string
-     * @throws \Exception
+     * @return string Distribution name
      */
-    public static function getCmdSudo(): string
+    public static function getDistrib(): string
     {
-        if (!NextDomHelper::isCapable('sudo')) {
-            return '';
+        self::loadCommand();
+        if (isset(self::$commands['custom'])) {
+            return 'custom';
         }
-        return 'sudo ';
+        if (self::$distrib === null) {
+            self::$distrib = trim(shell_exec('grep CPE_NAME /etc/os-release | cut -d \'"\' -f 2 | cut -d : -f 3 '));
+            if (self::$distrib == '') {
+                self::$distrib = trim(shell_exec('grep -e "^ID" /etc/os-release | cut -d \'=\' -f 2'));
+            }
+            if (self::$distrib == '' || !isset(self::$commands[self::$distrib])) {
+                self::$distrib = 'debian';
+            }
+        }
+        return self::$distrib;
+    }
+
+    /**
+     * Load system from /core/config/system_cmd.json if file exists.
+     *
+     * @return array List of commands
+     */
+    public static function loadCommand(): array
+    {
+        if (file_exists(NEXTDOM_ROOT . '/core/config/system_cmd.json')) {
+            $content = file_get_contents(NEXTDOM_ROOT . '/core/config/system_cmd.json');
+            if (Utils::isJson($content)) {
+                self::$commands['custom'] = json_decode($content, true);
+            }
+        }
+        return self::$commands;
     }
 
     /**
@@ -122,6 +127,20 @@ class SystemHelper
     public static function killProcessesWhichUsingFile(string $filename)
     {
         exec(SystemHelper::getCmdSudo() . 'fuser -k ' . $filename . ' > /dev/null 2>&1');
+    }
+
+    /**
+     * Get sudo command
+     *
+     * @return string
+     * @throws \Exception
+     */
+    public static function getCmdSudo(): string
+    {
+        if (!NextDomHelper::isCapable('sudo')) {
+            return '';
+        }
+        return 'sudo ';
     }
 
     /**
@@ -226,20 +245,13 @@ class SystemHelper
     }
 
     /**
-     * Execute PHP command
+     * Get apache group id
      *
-     * @param string $arguments
-     * @param bool $elevatedPrivileges Use elevated privileges
-     *
-     * @return string Result of the command
-     * @throws \Exception
+     * @return string Apache group id
      */
-    public static function php(string $arguments, $elevatedPrivileges = false)
+    public static function getWWWGid(): string
     {
-        if ($elevatedPrivileges) {
-            return exec(self::getCmdSudo() . ' php ' . $arguments);
-        }
-        return exec('php ' . $arguments);
+        return self::getWWWUid();
     }
 
     /**
@@ -254,16 +266,6 @@ class SystemHelper
             return 'www-data';
         }
         return 'apache';
-    }
-
-    /**
-     * Get apache group id
-     *
-     * @return string Apache group id
-     */
-    public static function getWWWGid(): string
-    {
-        return self::getWWWUid();
     }
 
     /**
@@ -319,9 +321,13 @@ class SystemHelper
      */
     public static function getUptime(): string
     {
-        return preg_replace('/\.[0-9]+/', '', file_get_contents('/proc/uptime'));
+        $uptime = preg_replace('/\.[0-9]+/', '', file_get_contents('/proc/uptime'));
+        return intval($uptime);
     }
 
+    /**
+     * @return array
+     */
     public static function getMemInfo()
     {
         $data = explode("\n", file_get_contents("/proc/meminfo"));
@@ -336,4 +342,56 @@ class SystemHelper
         }
         return $meminfo;
     }
+
+    /**
+     * Recursively delete given path
+     *
+     * @param $path
+     * @return bool false when error occurs
+     */
+    public static function rrmdir($path)
+    {
+        $status = 0;
+        $cmd = sprintf("rm -rf %s", $path);
+
+        system($cmd, $status);
+        return ($status == 0);
+    }
+
+    /**
+     *
+     */
+    public static function consistency()
+    {
+        LogHelper::clear('consistency');
+        $cmd = __DIR__ . '/../../install/consistency.php';
+        $cmd .= ' >> ' . LogHelper::getPathToLog('consistency') . ' 2>&1 &';
+        self::php($cmd, true);
+    }
+
+    /**
+     * Execute PHP command
+     *
+     * @param string $arguments
+     * @param bool $elevatedPrivileges Use elevated privileges
+     *
+     * @return string Result of the command
+     * @throws \Exception
+     */
+    public static function php(string $arguments, $elevatedPrivileges = false)
+    {
+        if ($elevatedPrivileges) {
+            return exec(self::getCmdSudo() . ' php ' . $arguments);
+        }
+        return exec('php ' . $arguments);
+    }
+
+    /**
+     *
+     */
+    public static function cleanFileSystemRight()
+    {
+        //nothing to do for NextDom
+    }
+
 }

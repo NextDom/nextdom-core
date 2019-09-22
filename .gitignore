@@ -2,7 +2,6 @@ nbproject/
 test.php
 core/config/common.config.php
 /plugins
-/data
 sftp-config.json
 *.iml
 
@@ -35,3 +34,14 @@ __pycache__/
 tests/tests/chromedriver*
 
 core/config
+core/css
+core/js
+core/template
+
+/var.*
+/var
+/data.*
+/data
+/mobile
+
+/assets/config/default.config.ini

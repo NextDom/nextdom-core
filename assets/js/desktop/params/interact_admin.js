@@ -34,56 +34,96 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-jwerty.key('ctrl+s/⌘+s', function (e) {
-    e.preventDefault();
-    $("#bt_saveinteract_admin").click();
-});
 
- $("#bt_saveinteract_admin").on('click', function (event) {
-    $.hideAlert();
-    nextdom.config.save({
-        configuration: $('#interact_admin').getValues('.configKey')[0],
+// Page init
+loadInformations();
+printConvertColor();
+initEvents();
+
+/**
+ * Load informations in all forms of the page
+ */
+function loadInformations() {
+    nextdom.config.load({
+        configuration: $('#interact_admin').getValues('.configKey:not(.noSet)')[0],
         error: function (error) {
             notify("Erreur", error.message, 'error');
         },
-        success: function () {
-            nextdom.config.load({
-                configuration: $('#interact_admin').getValues('.configKey')[0],
-                plugin: 'core',
-                error: function (error) {
-                    notify("Erreur", error.message, 'error');
-                },
-                success: function (data) {
-                    $('#interact_admin').setValues(data, '.configKey');
-                    modifyWithoutSave = false;
-                    notify("Info", '{{Sauvegarde réussie}}', 'success');
-                }
-            });
+        success: function (data) {
+            $('#interact_admin').setValues(data, '.configKey');
+            modifyWithoutSave = false;
+            $(".bt_cancelModifs").hide();
         }
     });
-});
+}
 
-nextdom.config.load({
-    configuration: $('#interact_admin').getValues('.configKey:not(.noSet)')[0],
-    error: function (error) {
-        notify("Erreur", error.message, 'error');
-    },
-    success: function (data) {
-        $('#interact_admin').setValues(data, '.configKey');
+/**
+ * Init events on the profils page
+ */
+function initEvents() {
+    // Param changed : page leaving lock by msgbox
+    $('#interact_admin').delegate('.configKey', 'change', function () {
+        if (!lockModify) {
+            modifyWithoutSave = true;
+            $(".bt_cancelModifs").show();
+        }
+    });
 
-        modifyWithoutSave = false;
-    }
-});
+    // Cancel modifications
+    $('.bt_cancelModifs').on('click', function () {
+        loadInformations();
+    });
 
-$('#interact_admin').delegate('.configKey', 'change', function () {
-    modifyWithoutSave = true;
-});
+    // Save button
+    $('#bt_saveinteract_admin').on('click', function (event) {
+        saveConvertColor();
+        nextdom.config.save({
+            configuration: $('#interact_admin').getValues('.configKey')[0],
+            error: function (error) {
+                notify("Erreur", error.message, 'error');
+            },
+            success: function () {
+                nextdom.config.load({
+                    configuration: $('#interact_admin').getValues('.configKey')[0],
+                    plugin: 'core',
+                    error: function (error) {
+                        notify("Erreur", error.message, 'error');
+                    },
+                    success: function (data) {
+                        $('#interact_admin').setValues(data, '.configKey');
+                        modifyWithoutSave = false;
+                        $(".bt_cancelModifs").hide();
+                        notify("Info", '{{Sauvegarde réussie}}', 'success');
+                    }
+                });
+            }
+        });
+    });
 
-$('#bt_addColorConvert').on('click', function () {
-    addConvertColor();
-});
+    // New color add
+    $('#bt_addColorConvert').on('click', function () {
+        addConvertColor('?','#FFFFFF');
+        $('.colorpick').colorpicker();
+    });
 
-/********************Convertion************************/
+    /*CMD color*/
+    $('.bt_selectAlertCmd').on('click', function () {
+        var type=$(this).attr('data-type');
+        nextdom.cmd.getSelectModal({cmd: {type: 'action', subType: 'message'}}, function (result) {
+            $('.configKey[data-l1key="alert::'+type+'Cmd"]').atCaret('insert', result.human);
+        });
+    });
+
+    $('.bt_selectWarnMeCmd').on('click', function () {
+        nextdom.cmd.getSelectModal({cmd: {type: 'action', subType: 'message'}}, function (result) {
+            $('.configKey[data-l1key="interact::warnme::defaultreturncmd"]').value(result.human);
+        });
+    });
+}
+
+/**
+ * Display all colors
+ */
 function printConvertColor() {
     $.ajax({
         type: "POST",
@@ -101,29 +141,43 @@ function printConvertColor() {
                 notify("Erreur", data.result, 'error');
                 return;
             }
-
             $('#table_convertColor tbody').empty();
             for (var color in data.result) {
                 addConvertColor(color, data.result[color]);
             }
+            $('.colorpick').colorpicker();
             modifyWithoutSave = false;
         }
     });
 }
 
+/**
+ * Add a color
+ *
+ * @param _color Color name
+ * @param _html Color value
+ */
 function addConvertColor(_color, _html) {
     var tr = '<tr>';
     tr += '<td>';
     tr += '<input class="color form-control input-sm" value="' + init(_color) + '"/>';
     tr += '</td>';
     tr += '<td>';
-    tr += '<input type="color" class="html form-control input-sm" value="' + init(_html) + '" />';
+    tr += '<div class="input-group">';
+    tr += '<div class="colorpicker-component colorpick">';
+    tr += '<input type="text" class="html form-control input-sm" value="' + init(_html) + '" />';
+    tr += '<span class="input-group-addon"><i></i></span>';
+    tr += '</div>';
+    tr += '</div>';
     tr += '</td>';
     tr += '</tr>';
     $('#table_convertColor tbody').append(tr);
     modifyWithoutSave = true;
 }
 
+/**
+ * Save colors
+ */
 function saveConvertColor() {
     var value = {};
     var colors = {};
@@ -151,32 +205,3 @@ function saveConvertColor() {
         }
     });
 }
-
-/*CMD color*/
-
-$('.bt_resetColor').on('click', function () {
-    var el = $(this);
-    nextdom.getConfiguration({
-        key: $(this).attr('data-l1key'),
-        default: 1,
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function (data) {
-            $('.configKey[data-l1key="' + el.attr('data-l1key') + '"]').value(data);
-        }
-    });
-});
-
-$('.bt_selectAlertCmd').on('click', function () {
-    var type=$(this).attr('data-type');
-    nextdom.cmd.getSelectModal({cmd: {type: 'action', subType: 'message'}}, function (result) {
-        $('.configKey[data-l1key="alert::'+type+'Cmd"]').atCaret('insert', result.human);
-    });
-});
-
-$('.bt_selectWarnMeCmd').on('click', function () {
-    nextdom.cmd.getSelectModal({cmd: {type: 'action', subType: 'message'}}, function (result) {
-        $('.configKey[data-l1key="interact::warnme::defaultreturncmd"]').value(result.human);
-    });
-});

@@ -34,11 +34,16 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Model\Entity\Message;
 
 require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
 
+/**
+ * Class MessageManager
+ * @package NextDom\Managers
+ */
 class MessageManager
 {
     const CLASS_NAME = Message::class;
@@ -51,6 +56,8 @@ class MessageManager
      * @param string $_action
      * @param mixed $_logicalId
      * @param bool $_writeMessage
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public static function add($_type, $_message, $_action = '', $_logicalId = '', $_writeMessage = true)
     {
@@ -63,6 +70,13 @@ class MessageManager
         $message->save($_writeMessage);
     }
 
+    /**
+     * @param string $_plugin
+     * @param string $_logicalId
+     * @param bool $_search
+     * @return bool
+     * @throws \NextDom\Exceptions\CoreException
+     */
     public static function removeAll($_plugin = '', $_logicalId = '', $_search = false)
     {
         $values = array();
@@ -80,28 +94,38 @@ class MessageManager
                 }
             }
         }
-        \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW);
+        DBHelper::exec($sql, $values);
         EventManager::add('message::refreshMessageNumber');
         return true;
     }
 
+    /**
+     * @return mixed
+     * @throws \NextDom\Exceptions\CoreException
+     */
     public static function nbMessage()
     {
         $sql = 'SELECT count(*)
         FROM ' . self::DB_CLASS_NAME;
-        $count = \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ROW);
+        $count = DBHelper::getOne($sql);
         return $count['count(*)'];
     }
 
+    /**
+     * @param $_id
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byId($_id)
     {
         $values = array(
             'id' => $_id,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE id=:id';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -116,38 +140,69 @@ class MessageManager
             'logicalId' => $_logicalId,
             'plugin' => $_plugin,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE logicalId=:logicalId
         AND plugin=:plugin';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_plugin
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byPlugin($_plugin)
     {
         $values = array(
             'plugin' => $_plugin,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE plugin=:plugin
         ORDER BY date DESC';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
+    /**
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     */
     public static function listPlugin()
     {
         $sql = 'SELECT DISTINCT(plugin)
         FROM ' . self::DB_CLASS_NAME;
-        return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL);
+        return DBHelper::getAll($sql);
     }
 
+    /**
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function all()
     {
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         ORDER BY date DESC
         LIMIT 500';
-        return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
+    }
+
+    /**
+     * @param $pluginId
+     * @param $logicialId
+     * @return mixed
+     */
+    public static function removeByPluginLogicalId($pluginId, $logicialId) {
+        $values = array(
+            'logicalId' => $logicialId,
+            'plugin' => $pluginId,
+        );
+        $sql = 'DELETE FROM message
+                WHERE logicalId=:logicalId
+                AND plugin=:plugin';
+        return DBHelper::exec($sql, $values);
     }
 }

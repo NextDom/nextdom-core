@@ -1,5 +1,4 @@
-<div id="div_alertScenarioJsonEdit"></div>
-<a class="btn btn-success btn-sm pull-right" id="bt_saveSummaryScenario"><i class="far fa-check-circle"></i> {{ 'Enregistrer' }}</a>
+<a class="btn btn-success btn-sm pull-right" id="bt_saveSummaryScenario"><i class="fas fa-save"></i>{{ 'Enregistrer' }}</a>
 <br/><br/>
 <textarea id="ta_scenarioJsonEdit_scenario">
 {{ scenarioJson }}
@@ -17,13 +16,13 @@
     $('#bt_saveSummaryScenario').on('click', function () {
         $.hideAlert();
         if (fileEditor == undefined) {
-            $('#div_alertScenarioJsonEdit').showAlert({message: '{{ 'Erreur editeur non défini' }}', level: 'danger'});
+            notify("Erreur", {{ 'Erreur editeur non défini' }}, 'error');
             return;
         }
         try {
             JSON.parse(fileEditor.getValue());
         } catch (e) {
-            $('#div_alertScenarioJsonEdit').showAlert({message: '{{ 'Champs json invalide' }}', level: 'danger'});
+            notify("Erreur", {{ 'Champs json invalide' }}, 'error');
             return;
         }
         var scenario = {
@@ -33,10 +32,10 @@
         nextdom.scenario.save({
             scenario: scenario,
             error: function (error) {
-                $('#div_alertScenarioJsonEdit').showAlert({message: error.message, level: 'danger'});
+                notify("Erreur", error.message, 'error');
             },
             success: function (data) {
-                $('#div_alertScenarioJsonEdit').showAlert({message: '{{ 'Sauvegarde réussie' }}', level: 'success'});
+                notify("Core", {{ 'Sauvegarde réussie' }}, 'success');
                 if (typeof printScenario === "function") {
                     printScenario(scenarioJsonEdit_scenario_id);
                 }

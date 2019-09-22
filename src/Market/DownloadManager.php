@@ -61,6 +61,16 @@ class DownloadManager
     }
 
     /**
+     * Obtenir le statut de la connexion
+     *
+     * @return bool True si la connexion fonctionne
+     */
+    public static function isConnected()
+    {
+        return self::$connectionStatus;
+    }
+
+    /**
      * Test le statut de la connexion.
      */
     protected static function testConnection()
@@ -75,13 +85,21 @@ class DownloadManager
     }
 
     /**
-     * Obtenir le statut de la connexion
+     * Télécharge un fichier binaire
      *
-     * @return bool True si la connexion fonctionne
+     * @param string $url Lien du fichier
+     * @param string $dest Destination du fichier
+     * @throws \Exception
      */
-    public static function isConnected()
+    public static function downloadBinary($url, $dest)
     {
-        return self::$connectionStatus;
+        $imgData = self::downloadContent($url, true);
+        if (file_exists($dest)) {
+            unlink($dest);
+        }
+        $filePointer = fopen($dest, 'wb');
+        fwrite($filePointer, $imgData);
+        fclose($filePointer);
     }
 
     /**
@@ -91,6 +109,7 @@ class DownloadManager
      * @param bool $binary Télécharger un binaire
      *
      * @return string|bool Données téléchargées ou False en cas d'échec
+     * @throws \Exception
      */
     public static function downloadContent($url, $binary = false)
     {
@@ -105,23 +124,6 @@ class DownloadManager
         }
         LogHelper::add('AlternativeMarketForJeedom', 'debug', 'Download ' . $url);
         return self::downloadContentWithCurl($url, $binary);
-    }
-
-    /**
-     * Télécharge un fichier binaire
-     *
-     * @param string $url Lien du fichier
-     * @param string $dest Destination du fichier
-     */
-    public static function downloadBinary($url, $dest)
-    {
-        $imgData = self::downloadContent($url, true);
-        if (file_exists($dest)) {
-            unlink($dest);
-        }
-        $filePointer = fopen($dest, 'wb');
-        fwrite($filePointer, $imgData);
-        fclose($filePointer);
     }
 
     /**

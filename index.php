@@ -21,29 +21,49 @@ require_once __DIR__ . "/src/core.php";
 use NextDom\Enums\GetParams;
 use NextDom\Enums\ViewType;
 use NextDom\Exceptions\CoreException;
-use NextDom\Helpers\Client;
+use NextDom\Helpers\ClientHelper;
 use NextDom\Helpers\Router;
+use NextDom\Helpers\SessionHelper;
 use NextDom\Helpers\Utils;
 
 // Test if NextDom is installed. Redirection to setup if necessary
-if (!file_exists( NEXTDOM_DATA .'/config/common.config.php')) {
+if (!file_exists(NEXTDOM_DATA . '/config/common.config.php')) {
     header("location: install/setup.php");
 }
 
-$viewType = Utils::init(GetParams::VIEW_TYPE, '');
-if ($viewType === '') {
-    $getParams = ViewType::DESKTOP_VIEW;
-    if (Client::isMobile()) {
-        $getParams = ViewType::MOBILE_VIEW;
+SessionHelper::startSession();
+$goToMobile = false;
+
+// Test if user want to force desktop on mobile
+if (isset($_GET['force_desktop'])) {
+    $_SESSION['force_desktop'] = true;
+    $_SESSION['desktop_view'] = true;
+    $goToMobile = false;
+} else {
+    if (is_dir(NEXTDOM_ROOT . '/mobile')) {
+        // Test choice in session
+        if (isset($_SESSION['desktop_view'])) {
+            if ($_SESSION['desktop_view'] === false) {
+                $goToMobile = true;
+            }
+        } else {
+            if (ClientHelper::isMobile()) {
+                $goToMobile = true;
+                $_SESSION['desktop_view'] = false;
+            } else {
+                $_SESSION['desktop_view'] = true;
+            }
+
+        }
     }
-    // Add all others GET parameters
-    foreach ($_GET AS $var => $value) {
-        $getParams .= '&' . $var . '=' . $value;
-    }
-    // Rewrite URL and reload with the good URL
-    $url = 'index.php?' . GetParams::VIEW_TYPE . '=' . trim($getParams, '&');
-    Utils::redirect($url);
 }
+
+if ($goToMobile) {
+    Utils::redirect('/mobile/index.html');
+    die();
+}
+
+$viewType = Utils::init(GetParams::VIEW_TYPE, ViewType::DESKTOP_VIEW);
 
 // Show the content
 // Start routing
@@ -51,6 +71,3 @@ $router = new Router($viewType);
 if (!$router->show()) {
     throw new CoreException(__('Erreur : veuillez contacter l\'administrateur'));
 }
-
-
- 

@@ -34,341 +34,424 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-setTimeout(function(){
-    $('#listPlugin').packery();
-    $('#listOther').packery();
-    $('#listCore').packery();
-    $('#listWidget').packery();
-    $('#listScript').packery();
-},100);
+var tabsList = $('#accordionUpdate > .tab-pane > .row > div');
+var updateInfoModal = $('#updateInfoModal');
+var selectiveUpdateModal = $('#selectiveUpdateModal');
+var updateCollapseButton = $('#updateCollapseButton');
+var updateUncollapseButton = $('#updateUncollapseButton');
+var updateLogView = $('#updateLog');
 
+// Page init
+loadInformations();
+initUpdateTabsContent();
+initDialogs();
+initEvents();
 
-$('#in_searchPlugin').off('keyup').keyup(function () {
-    var search = $(this).value();
-    if(search == ''){
-        $('.box-warning').show();
-        $('.box-success').show();
-        $('.box-danger').show();
-        $('#listPlugin').packery();
-        $('#listOther').packery();
-        $('#listCore').packery();
-        $('#listWidget').packery();
-        $('#listScript').packery();
-        return;
+/**
+ * Load informations in all forms of the page
+ */
+function loadInformations() {
+    updateLogView.height($(window).height() - $('header').height() - $('footer').height() - 150);
+    updateLogView.parent().height($(window).outerHeight() - $('header').outerHeight() - 160);
+}
+
+/**
+ * Init all events
+ */
+function initEvents() {
+  // Selective update button
+  $('#selectiveUpdateButton').off('click').on('click', function () {
+    selectiveUpdateModal.modal('show');
+  });
+
+  // Force update checkbox option
+  $('.updateOption[data-l1key=force]').off('click').on('click', function () {
+    if ($(this).value() == 1) {
+      $('.updateOption[data-l1key="backup::before"]').value(0);
+      $('.updateOption[data-l1key="backup::before"]').attr('disabled', 'disabled');
+    } else {
+      $('.updateOption[data-l1key="backup::before"]').attr('disabled', false);
     }
-    $('.box-warning').hide();
-    $('.box-success').hide();
-    $('.box-danger').hide();
-    $('.box .box-title').each(function(){
-        var text = $(this).text().toLowerCase();
-        if(text.indexOf(search.toLowerCase()) >= 0){
-            $(this)
-            $(this).closest('.box').show();
-        }
-    });
-    $('#listPlugin').packery();
-    $('#listOther').packery();
-    $('#listCore').packery();
-    $('#listWidget').packery();
-    $('#listScript').packery();
-});
+  });
 
-printUpdate();
-
-$('#pre_updateInfo').height($(window).height() - $('header').height() - $('footer').height() - 150);
-
-$('#bt_updateNextDom').off('click').on('click', function () {
-    $('#md_specifyUpdate').modal('show');
-});
-
-
-$('.updateOption[data-l1key=force]').off('click').on('click',function(){
-    if($(this).value() == 1){
-        $('.updateOption[data-l1key="backup::before"]').value(0);
-        $('.updateOption[data-l1key="backup::before"]').attr('disabled','disabled');
-
-    }else{
-        $('.updateOption[data-l1key="backup::before"]').attr('disabled',false);
-    }
-});
-
-
-$('#bt_doUpdate').off('click').on('click', function () {
-    $("#md_specifyUpdate").modal('hide');
-    $('#md_updateInfo').dialog({title: "{{Avancement de la mise à jour}}"});
-    $("#md_updateInfo").dialog('open');
-    var options = $('#md_specifyUpdate').getValues('.updateOption')[0];
-    $.hideAlert();
+  // Selective update start button
+  $('#startUpdateButton').off('click').on('click', function () {
+    selectiveUpdateModal.modal('hide');
+    showLogDialog();
+    $('#lbl_updateRunning').show();
+    var options = selectiveUpdateModal.getValues('.updateOption')[0];
     nextdom.update.doAll({
-        options: options,
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function () {
-            $('a[data-toggle=tab][href="#log"]').click();
-            getNextDomLog(1, 'update');
-        }
+      options: options,
+      error: function (error) {
+        notify('Erreur', error.message, 'error');
+      },
+      success: function () {
+        // Relaod theme
+        updateTheme(function() {
+            notify('Info', '{{L\'opération est réussie. Merci de faire F5 pour avoir les dernières nouveautés}}', 'success');
+        });
+      }
     });
-});
+  });
 
-$("#bt_updateOpenLog").on('click', function (event) {
-  $('#md_updateInfo').dialog({title: "{{Avancement de la mise à jour}}"});
-  $("#md_updateInfo").dialog('open');
-});
+  // Show log button
+  $('#logDialogButton').on('click', function () {
+    showLogDialog();
+  });
 
-$('#bt_checkAllUpdate').off('click').on('click', function () {
-    $.hideAlert();
+  // Updates check all button
+  $('#checkAllUpdatesButton').off('click').on('click', function () {
     nextdom.update.checkAll({
+      error: function (error) {
+        notify('Erreur', error.message, 'error');
+      },
+      success: function () {
+        initUpdateTabsContent();
+      }
+    });
+  });
+
+  // Panel collapse button
+  updateCollapseButton.on('click', function () {
+    $('#accordionUpdate .panel-collapse').each(function () {
+      if (!$(this).hasClass('in')) {
+        $(this).css({'height': ''});
+        $(this).addClass('in');
+      }
+    });
+    updateCollapseButton.hide();
+    updateUncollapseButton.show()
+  });
+
+  // Panel uncollapse button
+  updateUncollapseButton.on('click', function () {
+    $('#accordionUpdate .panel-collapse').each(function () {
+      if ($(this).hasClass('in')) {
+        $(this).removeClass('in');
+      }
+    });
+    updateUncollapseButton.hide();
+    updateCollapseButton.show()
+  });
+
+  // Update button on one update box
+  tabsList.delegate('.update', 'click', function () {
+    var updateId = $(this).closest('.box').attr('data-id');
+    launchUpdate(updateId);
+  });
+
+  // Remove button on one update box
+  tabsList.delegate('.remove', 'click', function () {
+    var updateId = $(this).closest('.box').attr('data-id');
+    removeUpdate(updateId);
+  });
+
+  // Check update button on one update box
+  tabsList.delegate('.checkUpdate', 'click', function () {
+    var updateId = $(this).closest('.box').attr('data-id');
+    checkSingleUpdate(updateId);
+  });
+
+  // Save button
+  $('#saveUpdateChanges').click(saveUpdateChanges);
+}
+
+/**
+ * Init content of all update tabs
+ *
+ * @param updateId Id of the item to create (optional)
+ */
+function initUpdateTabsContent(updateId) {
+  // Get list of updates
+  nextdom.update.get({
+    error: function (error) {
+      notify('Erreur', error.message, 'error');
+    },
+    success: function (updatesList) {
+      tabsList.empty();
+      for (var updateIndex in updatesList) {
+        createUpdateBox(updatesList[updateIndex],updateId);
+      }
+      tabsList.trigger('update');
+    }
+  });
+
+  // Update last check badge
+  nextdom.config.load({
+    configuration: {'update::lastCheck': 0, 'update::lastDateCore': 0},
+    error: function (error) {
+      notify('Erreur', error.message, 'error');
+    },
+    success: function (data) {
+      var lastUpdateBadge = $('#lastUpdateDate');
+      lastUpdateBadge.value(data['update::lastCheck']);
+      if (isset(data['update::lastDateCore'])) {
+        $('#lastUpdateDate').attr('title', '{{Dernière mise à jour du core : }}' + data['update::lastDateCore']);
+      }
+    }
+  });
+}
+
+/**
+ * Create update box
+ *
+ * @param updateData HTML data of the update box
+ * @param updateId Id of the item to create (optional)
+ */
+function createUpdateBox(updateData,updateId) {
+  var boxClass = 'box-success';
+  var bgClass = 'bg-green';
+  var boxUpdateClass = '';
+  var updateIcon = '';
+  var updateName = init(updateData.name);
+
+  if (init(updateData.status) == '') {
+    updateData.status = 'ok';
+  } else if (updateData.status == 'update') {
+    boxClass = 'box-warning';
+    bgClass = 'bg-yellow';
+  }
+
+  boxUpdateClass = 'update-box';
+  var htmlData = '<div class="objet col-lg-4 col-md-6 col-sm-6 col-xs-12">';
+  htmlData += '<div class="' + boxUpdateClass + ' box ' + boxClass + '" data-id="' + init(updateData.id) + '" data-logicalId="' + init(updateData.logicalId) + '" data-type="' + init(updateData.type) + '">';
+  htmlData += '<div class="box-header with-border accordion-toggle cursor " data-toggle="collapse" data-parent="#accordionUpdate" href="#update_' + init(updateData.id) + '">';
+  if (init(updateData.type) == 'core') {
+    updateIcon = '/public/img/NextDom/NextDom_Square_WhiteBlackBlue.png';
+  } else {
+    if (isset(updateData.plugin) && init(updateData.plugin.icon) != '') {
+      updateIcon = init(updateData.plugin.icon);
+    } else {
+      updateIcon = '/public/img/NextDom_' + init(updateData.type).charAt(0).toUpperCase() + init(updateData.type).slice(1) + '_Gray.png';
+    }
+  }
+  if (init(updateData.type) == 'widget') {
+    updateName = updateName.split(".").pop();
+  }
+  htmlData += ' <h4 class="box-title" style="text-transform: capitalize;"><img class="box-header-icon spacing-right" src="' + updateIcon + '"/>' + updateName + '</h4>';
+  htmlData += '<span data-toggle="tooltip" title="" class="updateAttr badge ' + bgClass + ' pull-right" data-original-title="" data-l1key="status" style="text-transform: uppercase;"></span>';
+  htmlData += '</div>';
+  if (init(updateData.type) == 'core' || init(updateData.id) == updateId) {
+    htmlData += '<div id="update_' + init(updateData.id) + '" class="panel-collapse collapse in">';
+  } else {
+    htmlData += '<div id="update_' + init(updateData.id) + '" class="panel-collapse collapse">';
+  }
+  htmlData += '<div class="box-body" style="min-height: 268px;">';
+  htmlData += '<span class="updateAttr" data-l1key="id" style="display:none;"></span><p><b>{{Source : }}</b><span class="updateAttr" data-l1key="source"></span></p>';
+  htmlData += '<p><b>{{Type : }}</b><span class="updateAttr" data-l1key="type"></span></p>';
+  if (updateData.source === 'github') {
+    htmlData += '<p><b>{{Branche : }}</b>';
+    if (updateData.configuration && updateData.configuration.version) {
+      htmlData += updateData.configuration.version;
+    }
+    htmlData += '</p>';
+  }
+  if (updateData.type == 'widget') {
+    htmlData += '<p><b>{{Id : }}</b>' + init(updateData.name);
+    htmlData += '</p>';
+  }
+  htmlData += '<p><b>{{Version : }}</b><span data-l1key="version">' + updateData.remoteVersion + '</span></p>';
+  htmlData += '<input type="checkbox" class="updateAttr" data-l1key="configuration" data-l2key="doNotUpdate" id="doNotUpdate_' + init(updateData.id) + '">';
+  htmlData += '<label for="doNotUpdate_' + init(updateData.id) + '" class="control-label label-check">{{Ne pas mettre à jour}}</label></br>';
+  htmlData += '</div>';
+  htmlData += '<div class="box-footer clearfix text-center">';
+
+  if (updateData.type != 'core') {
+    htmlData += '<a class="btn btn-danger btn-sm pull-right remove" ><i class="fas fa-trash"></i>{{Supprimer}}</a>';
+    htmlData += '<a class="btn btn-action btn-sm update pull-right" title="{{Re-installer}}"><i class="fas fa-refresh"></i>{{Reinstaller}}</a> ';
+  }
+  if (updateData.status == 'update') {
+    htmlData += '<a class="btn btn-warning btn-sm update pull-right" title="{{Mettre à jour}}"><i class="fas fa-refresh"></i>{{Mettre à jour}}</a> ';
+  }
+  if (isset(updateData.plugin) && isset(updateData.plugin.changelog) && updateData.plugin.changelog != '') {
+    htmlData += '<a class="btn btn-default btn-sm pull-left cursor hidden-sm" target="_blank" href="' + updateData.plugin.changelog + '"><i class="fas fa-book"></i>{{Changelog}}</a>';
+  } else {
+    if (updateData.configuration && updateData.configuration.version) {
+      htmlData += '<a class="btn btn-default btn-sm pull-right" href="https://github.com/NextDom/nextdom-core/blob/' + updateData.configuration.version + '/docs/fr_FR/changelog.md" target="_blank"><i class="fas fa-book"></i>{{Changelog}}</a>';
+    }else{
+      htmlData += '<a class="btn btn-default btn-sm pull-right" href="https://github.com/NextDom/nextdom-core/blob/master/docs/fr_FR/changelog.md" target="_blank"><i class="fas fa-book"></i>{{Changelog}}</a>';
+    }
+  }
+  htmlData += '<a class="btn btn-info btn-sm pull-left checkUpdate" ><i class="fas fa-check"></i>{{Vérifier}}</a>';
+  htmlData += '</div>';
+  htmlData += '</div>';
+  htmlData += '</div>';
+
+  // Select target tab of update box
+  var targetTabs = 'Other';
+  switch (updateData.type) {
+    case 'core':
+      targetTabs = 'Core';
+      break;
+    case 'plugin':
+      targetTabs = 'Plugin';
+      break;
+    case 'widget':
+      targetTabs = 'Widget';
+      break;
+    case 'script':
+      targetTabs = 'Script';
+      break;
+  }
+  // Add update box in tab
+  $('#list' + targetTabs).append(htmlData);
+  $('#list' + targetTabs + ' .box:last').setValues(updateData, '.updateAttr');
+}
+
+/**
+ * Save update changes
+ */
+function saveUpdateChanges() {
+  nextdom.update.saves({
+    updates: $('.tab-pane .box').getValues('.updateAttr'),
+    error: function (error) {
+      notify('Erreur', error.message, 'error');
+    },
+    success: function (data) {
+      notify('Info', '{{Sauvegarde effectuée}}', 'success');
+      initUpdateTabsContent();
+    }
+  });
+}
+
+/**
+ * Check for update on single item
+ *
+ * @param updateId Id of the item to check
+ */
+function checkSingleUpdate(updateId) {
+  nextdom.update.check({
+    id: updateId,
+    error: function (error) {
+      notify('Erreur', error.message, 'error');
+    },
+    success: function () {
+      initUpdateTabsContent(updateId);
+    }
+  });
+}
+
+/**
+ * Remove item from NextDom
+ *
+ * @param updateId Id of the item to remove
+ */
+function removeUpdate(updateId) {
+  bootbox.confirm('{{Êtes-vous sûr de vouloir supprimer cet objet ?}}', function (result) {
+    if (result) {
+      nextdom.update.remove({
+        id: updateId,
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+          notify('Erreur', error.message, 'error');
         },
         success: function () {
-            printUpdate();
+          initUpdateTabsContent();
         }
-    });
-});
+      });
+    }
+  });
+}
 
-
-$('#listPlugin,#listOther,#listCore,#listWidget,#listScript').delegate('.update', 'click', function () {
-    var id = $(this).closest('.box').attr('data-id');
-    bootbox.confirm('{{Etes vous sur de vouloir mettre à jour cet objet ?}}', function (result) {
-        if (result) {
-            $.hideAlert();
-            $('#md_updateInfo').dialog({title: "{{Avancement de la mise à jour}}"});
-            $("#md_updateInfo").dialog('open');
-            nextdom.update.do({
-                id: id,
-                error: function (error) {
-                    notify("Erreur", error.message, 'error');
-                },
-                success: function () {
-                    $('a[data-toggle=tab][href="#log"]').click();
-                    getNextDomLog(1, 'update');
-                }
-            });
-        }
-    });
-});
-
-$('#listPlugin,#listOther,#listCore,#listWidget,#listScript').delegate('.remove', 'click', function () {
-    var id = $(this).closest('.box').attr('data-id');
-    bootbox.confirm('{{Etês-vous sûr de vouloir supprimer cet objet ?}}', function (result) {
-        if (result) {
-            $.hideAlert();
-            nextdom.update.remove({
-                id: id,
-                error: function (error) {
-                    notify("Erreur", error.message, 'error');
-                },
-                success: function () {
-                    printUpdate();
-                }
-            });
-        }
-    });
-});
-
-$('#listPlugin,#listOther,#listCore,#listWidget,#listScript').delegate('.checkUpdate', 'click', function () {
-    var id = $(this).closest('.box').attr('data-id');
-    $.hideAlert();
-    nextdom.update.check({
-        id: id,
+/**
+ * Start update install
+ *
+ * @param updateId Id of the item to install
+ */
+function launchUpdate(updateId) {
+  bootbox.confirm('{{Etes vous sur de vouloir mettre à jour cet objet ?}}', function (result) {
+    if (result) {
+      showLogDialog();
+      $('#lbl_updateRunning').show();
+      nextdom.update.do({
+        id: updateId,
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+          notify('Erreur', error.message, 'error');
         },
         success: function () {
-            printUpdate();
+          // Relaod theme
+          updateTheme(function() {
+              notify('Info', '{{L\'opération est réussie. Merci de faire F5 pour avoir les dernières nouveautés}}', 'success');
+          });
         }
-    });
+      });
+    }
+  });
+}
 
-});
+/**
+ * Get NextDom log and show it in the modal
+ *
+ * @param _autoUpdate
+ * @param _log
+ */
+function getNextDomLog(_autoUpdate, _log) {
+  $.ajax({
+    type: 'POST',
+    url: 'core/ajax/log.ajax.php',
+    data: {
+      action: 'get',
+      log: _log,
+    },
+    dataType: 'json',
+    global: false,
+    error: function (request, status, error) {
+      setTimeout(function () {
+        getNextDomLog(_autoUpdate, _log)
+      }, 1000);
+    },
+    success: function (data) {
+      if (data.state != 'ok') {
+        setTimeout(function () {
+          getNextDomLog(_autoUpdate, _log)
+        }, 1000);
+        return;
+      }
+      var log = '';
+      if ($.isArray(data.result)) {
+        for (var i in data.result.reverse()) {
+          log += data.result[i] + "\n";
+          if (data.result[i].indexOf('[END') != -1) {
+            initUpdateTabsContent();
+            _autoUpdate = 0;
+          }
+        }
+      }
+      updateLogView.text(log);
+      updateLogView.parent().scrollTop(updateLogView.parent().height() + 200000);
+      if (init(_autoUpdate, 0) == 1) {
+        setTimeout(function () {
+          getNextDomLog(_autoUpdate, _log)
+        }, 1000);
+      } else {
+        $('#lbl_updateRunning').hide();
+      }
+    }
+  });
+}
 
-$("#md_updateInfo").dialog({
+/**
+ * Show log update modale
+ */
+function showLogDialog() {
+  updateInfoModal.dialog({title: '{{Avancement de la mise à jour}}'});
+  updateInfoModal.dialog('open');
+  getNextDomLog(1, 'update');
+}
+
+/**
+ * Init dialogs
+ */
+function initDialogs() {
+  updateInfoModal.dialog({
     closeText: '',
     autoOpen: false,
     modal: true,
     width: ((jQuery(window).width() - 50) < 1500) ? (jQuery(window).width() - 50) : 1500,
     open: function () {
-        $("body").css({overflow: 'hidden'});
+      $('body').css({overflow: 'hidden'});
     },
     beforeClose: function (event, ui) {
-        $("body").css({overflow: 'inherit'});
+      $('body').css({overflow: 'inherit'});
     }
-});
-
-function getNextDomLog(_autoUpdate, _log) {
-    $.ajax({
-        type: 'POST',
-        url: 'core/ajax/log.ajax.php',
-        data: {
-            action: 'get',
-            log: _log,
-        },
-        dataType: 'json',
-        global: false,
-        error: function (request, status, error) {
-            setTimeout(function () {
-                getNextDomLog(_autoUpdate, _log)
-            }, 1000);
-        },
-        success: function (data) {
-            if (data.state != 'ok') {
-                setTimeout(function () {
-                    getNextDomLog(_autoUpdate, _log)
-                }, 1000);
-                return;
-            }
-            var log = '';
-            if($.isArray(data.result)){
-                for (var i in data.result.reverse()) {
-                    log += data.result[i]+"\n";
-                    if(data.result[i].indexOf('[END ' + _log.toUpperCase() + ' SUCCESS]') != -1){
-                        printUpdate();
-                        notify("Info", '{{L\'opération est réussie. Merci de faire F5 pour avoir les dernières nouveautés}}', 'success');
-                        _autoUpdate = 0;
-                    }
-                    if(data.result[i].indexOf('[END ' + _log.toUpperCase() + ' ERROR]') != -1){
-                        printUpdate();
-                        notify("Erreur", '{{L\'opération a échoué}}', 'error');
-                        _autoUpdate = 0;
-                    }
-                }
-            }
-            $('#pre_' + _log + 'Info').text(log);
-            $('#pre_updateInfo').parent().scrollTop($('#pre_updateInfo').parent().height() + 200000);
-            if (init(_autoUpdate, 0) == 1) {
-                setTimeout(function () {
-                    getNextDomLog(_autoUpdate, _log)
-                }, 1000);
-            } else {
-                $('#bt_' + _log + 'NextDom .fa-refresh').hide();
-                $('.bt_' + _log + 'NextDom .fa-refresh').hide();
-            }
-        }
-    });
+  });
 }
-
-function printUpdate() {
-
-    nextdom.update.get({
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function (data) {
-            $('#listPlugin').empty();
-            $('#listOther').empty();
-            $('#listCore').empty();
-            $('#listWidget').empty();
-            $('#listScript').empty();
-            for (var i in data) {
-                addUpdate(data[i]);
-            }
-            $('#listPlugin').trigger('update');
-            $('#listOther').trigger('update');
-            $('#listCore').trigger('update');
-            $('#listWidget').trigger('update');
-            $('#listScript').trigger('update');
-        }
-    });
-
-    nextdom.config.load({
-        configuration: {"update::lastCheck":0,"update::lastDateCore": 0},
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function (data) {
-            $('#span_lastUpdateCheck').value(data['update::lastCheck']);
-            $('#span_lastUpdateCheck').attr('title','{{Dernière mise à jour du core : }}'+data['update::lastDateCore']);
-        }
-    });
-}
-
-function addUpdate(_update) {
-    var boxClass = 'box-success';
-    var bgClass = 'bg-green';
-
-    if(init(_update.status) == ''){
-        _update.status = 'ok';
-    }
-    if (_update.status == 'update'){
-        boxClass = 'box-warning';
-        bgClass = 'bg-yellow';
-    }
-
-    var tr = '<div class="objet col-lg-4 col-md-6 col-sm-6 col-xs-12">';
-    tr += '<div class="box ' + boxClass +'" data-id="' + init(_update.id) + '" data-logicalId="' + init(_update.logicalId) + ' col-lg-4 col-md-6 col-sm-6 col-xs-12" data-type="' + init(_update.type) + '">';
-    tr += '<div class="box-header with-border">';
-    if (_update.type == 'core') {
-        tr += ' <h4 class="box-title" style="text-transform: capitalize;"><img style="height:50px;padding-right:5px;" src="/public/img/NextDom/NextDom_Square_AlphaBlackBlue.png"/>' + init(_update.name)+'</h4>';
-    }else{
-        tr += ' <h4 class="box-title" style="text-transform: capitalize;"><img style="height:50px;padding-right:5px;" src="' + init(_update.icon) + '"/>' + init(_update.name)+'</h4>';
-    }
-    tr += '<span data-toggle="tooltip" title="" class="updateAttr badge ' + bgClass +' pull-right" data-original-title="" data-l1key="status" style="text-transform: uppercase;"></span>';
-    tr += '</div>';
-    tr += '<div class="box-body">';
-    tr += '<span class="updateAttr" data-l1key="id" style="display:none;"></span><p><b>{{Source : }}</b><span class="updateAttr" data-l1key="source"></span></p>';
-    tr += '<p><b>{{Type : }}</b><span class="updateAttr" data-l1key="type"></span></p>';
-    tr += '<p><b>{{Branche : }}</b>';
-    if(_update.configuration && _update.configuration.version){
-        tr += _update.configuration.version ;
-    }
-    tr += '</p>';
-    tr += '<p><b>{{Version : }}</b>'+_update.remoteVersion+'</p>';
-    if (_update.type != 'core') {
-        tr += '<input type="checkbox" class="updateAttr" data-l1key="configuration" data-l2key="doNotUpdate"><span style="font-size:1em;">{{Ne pas mettre à jour}}</span></br>';
-    }
-    tr += '</div>';
-    tr += '<div class="box-footer clearfix text-center">';
-
-    if (_update.type != 'core') {
-        tr += '<a class="btn btn-danger btn-sm pull-right remove" ><i class="far fa-trash-alt spacing-right"></i>{{Supprimer}}</a>';
-        if (_update.status == 'update') {
-            tr += '<a class="btn btn-warning btn-sm update pull-right" title="{{Mettre à jour}}"><i class="fas fa-refresh spacing-right"></i>{{Mettre à jour}}</a> ';
-        }else if (_update.type != 'core') {
-            tr += '<a class="btn  btn-default btn-sm update pull-right" title="{{Re-installer}}"><i class="fas fa-refresh spacing-right"></i>{{Reinstaller}}</a> ';
-        }
-        if (isset(_update.plugin) && isset(_update.plugin.changelog) && _update.plugin.changelog != '') {
-            tr += '<a class="btn btn-default btn-sm pull-left cursor hidden-sm" target="_blank" href="'+_update.plugin.changelog+'"><i class="fas fa-book spacing-right"></i>{{Changelog}}</a>';
-        }
-    }else{
-        tr += '<a class="btn btn-default btn-sm pull-right" href="https://nextdom.github.io/core/fr_FR/changelog" target="_blank"><i class="fas fa-book spacing-right"></i>{{Changelog}}</a>';
-    }
-    tr += '<a class="btn btn-info btn-sm pull-left checkUpdate" ><i class="fas fa-check spacing-right"></i>{{Vérifier}}</a>';
-    tr += '</div>';
-    tr += '</div>';
-
-    switch(_update.type) {
-        case 'core':
-            $('#listCore').append(tr);
-            $('#listCore .box:last').setValues(_update, '.updateAttr');
-            break;
-        case 'plugin':
-            $('#listPlugin').append(tr);
-            $('#listPlugin .box:last').setValues(_update, '.updateAttr');
-            break;
-        case 'widget':
-            $('#listWidget').append(tr);
-            $('#listWidget .box:last').setValues(_update, '.updateAttr');
-            break;
-        case 'script':
-            $('#listScript').append(tr);
-            $('#listScript .box:last').setValues(_update, '.updateAttr');
-            break;
-        default:
-            $('#listOther').append(tr);
-            $('#listOther .box:last').setValues(_update, '.updateAttr');
-    }
-}
-
-$('#bt_saveUpdate').on('click',function(){
-    nextdom.update.saves({
-        updates : $('#table_update tbody tr').getValues('.updateAttr'),
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function (data) {
-            notify("Info", '{{Sauvegarde effectuée}}', 'success');
-            printUpdate();
-        }
-    });
-});

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run all tests of administrations page
+"""Run all tests of administration pages
 """
 import unittest
 import sys
@@ -116,7 +116,7 @@ class AdministrationPages(BaseGuiTest):
         """Test general administration page
         """
         self.goto('index.php?v=d&p=general')
-        reset_hardware_button = self.get_element_by_id('bt_resetHardwareType')
+        reset_hardware_button = self.get_element_by_id('bt_refreshHardwareType')
         back_button = self.get_link_by_title('Retour')
         self.assertIsNotNone(reset_hardware_button)
         self.assertIsNotNone(back_button)
@@ -317,7 +317,7 @@ class AdministrationPages(BaseGuiTest):
         """
         self.goto('index.php?v=d&p=update')
         sleep(10)
-        selective_update_button = self.get_element_by_id('bt_updateNextDom')
+        selective_update_button = self.get_element_by_id('selectiveUpdateButton')
         back_button = self.get_link_by_title('Retour')
         self.assertIsNotNone(selective_update_button)
         self.assertIsNotNone(back_button)
@@ -350,7 +350,7 @@ class AdministrationPages(BaseGuiTest):
         """Test interact administration page
         """
         self.goto('index.php?v=d&p=interact')
-        interact_button = self.get_element_by_id('bt_testInteract2')
+        interact_button = self.get_element_by_id('bt_testInteract')
         back_button = self.get_link_by_title('Retour')
         self.assertIsNotNone(interact_button)
         self.assertIsNotNone(back_button)

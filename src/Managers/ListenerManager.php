@@ -34,53 +34,83 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\SystemHelper;
 use NextDom\Model\Entity\Listener;
 
 require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
 
+/**
+ * Class ListenerManager
+ * @package NextDom\Managers
+ */
 class ListenerManager
 {
 
     const CLASS_NAME = Listener::class;
     const DB_CLASS_NAME = '`listener`';
 
+    /**
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function all()
     {
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME;
-        return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
     }
 
+    /**
+     * @param $_id
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byId($_id)
     {
         $value = array(
             'id' => $_id,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE id=:id';
-        return \DB::Prepare($sql, $value, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getOneObject($sql, $value, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_class
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byClass($_class)
     {
         $value = array(
             'class' => $_class,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE class=:class';
-        return \DB::Prepare($sql, $value, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, $value, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_class
+     * @param $_function
+     * @param string $_option
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byClassAndFunction($_class, $_function, $_option = '')
     {
         $value = array(
             'class' => $_class,
             'function' => $_function,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE class=:class
         AND function=:function';
@@ -89,9 +119,17 @@ class ListenerManager
             $value['option'] = $_option;
             $sql .= ' AND `option`=:option';
         }
-        return \DB::Prepare($sql, $value, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getOneObject($sql, $value, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_class
+     * @param $_function
+     * @param string $_option
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function searchClassFunctionOption($_class, $_function, $_option = '')
     {
         $value = array(
@@ -99,14 +137,22 @@ class ListenerManager
             'function' => $_function,
             'option' => '%' . $_option . '%',
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE class=:class
         AND function=:function
         AND `option` LIKE :option';
-        return \DB::Prepare($sql, $value, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, $value, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_class
+     * @param $_function
+     * @param $_event
+     * @return array|mixed|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function byClassFunctionAndEvent($_class, $_function, $_event)
     {
         $value = array(
@@ -114,14 +160,21 @@ class ListenerManager
             'function' => $_function,
             'event' => $_event,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE class=:class
         AND function=:function
         AND event=:event';
-        return \DB::Prepare($sql, $value, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, $value, self::CLASS_NAME);
     }
 
+    /**
+     * @param $_class
+     * @param $_function
+     * @param $_event
+     * @param string $_option
+     * @throws \NextDom\Exceptions\CoreException
+     */
     public static function removeByClassFunctionAndEvent($_class, $_function, $_event, $_option = '')
     {
         $value = array(
@@ -138,7 +191,23 @@ class ListenerManager
             $value['option'] = $_option;
             $sql .= ' AND `option`=:option';
         }
-        \DB::Prepare($sql, $value, \DB::FETCH_TYPE_ROW);
+        DBHelper::exec($sql, $value);
+    }
+
+    /**
+     * @param $_event
+     * @param $_value
+     * @param $_datetime
+     * @throws \Exception
+     */
+    public static function check($_event, $_value, $_datetime = null)
+    {
+        $listeners = self::searchEvent($_event);
+        if (count($listeners) > 0) {
+            foreach ($listeners as $listener) {
+                $listener->run(str_replace('#', '', $_event), $_value, $_datetime);
+            }
+        }
     }
 
     /**
@@ -157,22 +226,16 @@ class ListenerManager
                 'event' => '%#' . $_event . '#%',
             );
         }
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE `event` LIKE :event';
-        return \DB::Prepare($sql, $value, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, $value, self::CLASS_NAME);
     }
 
-    public static function check($_event, $_value, $_datetime)
-    {
-        $listeners = self::searchEvent($_event);
-        if (count($listeners) > 0) {
-            foreach ($listeners as $listener) {
-                $listener->run(str_replace('#', '', $_event), $_value, $_datetime);
-            }
-        }
-    }
-
+    /**
+     * @param $_event
+     * @throws \Exception
+     */
     public static function backgroundCalculDependencyCmd($_event)
     {
         if (count(CmdManager::byValue($_event, 'info')) == 0) {

@@ -34,13 +34,19 @@
 namespace NextDom\Managers;
 
 use NextDom\Enums\ScenarioState;
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Model\Entity\Scenario;
 
-// TODO: \DB::buildField(ScenarioEntity::className) à factoriser
+// TODO: DBHelper::buildField(ScenarioEntity::className) à factoriser
+
+/**
+ * Class ScenarioManager
+ * @package NextDom\Managers
+ */
 class ScenarioManager
 {
     const DB_CLASS_NAME = 'scenario';
@@ -48,19 +54,19 @@ class ScenarioManager
     const INITIAL_TRANSLATION_FILE = '';
 
     /**
-     * Obtenir un objet scenario
+     * Get scenario by his name
      *
-     * @param int $id Identifiant du scénario
+     * @param string $name Name of the scenario
      *
-     * @return Scenario Objet demandé
+     * @return Scenario|null Requested scenario or null
      *
      * @throws \Exception
      */
-    public static function byId(int $id)
+    public static function byName(string $name)
     {
-        $values = array('id' => $id);
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . ' FROM ' . self::DB_CLASS_NAME . ' WHERE id = :id';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        $values = array('name' => $name);
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . ' FROM ' . self::DB_CLASS_NAME . ' WHERE name = :name';
+        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -83,65 +89,120 @@ class ScenarioManager
     }
 
     /**
-     * Obtenir tous les objets scenario
+     * Get scenario by his id
      *
-     * @param string $groupName Filtrer sur un groupe
-     * @param string $type Filtrer sur un type
+     * @param int $id Identifiant du scénario
      *
-     * @return  Scenario[] Liste des objets scenario
+     * @return Scenario Objet demandé
+     *
      * @throws \Exception
      */
-    public static function all($groupName = '', $type = null): array
+    public static function byId($id)
     {
-        $values = array();
-        $result1 = null;
-        $result2 = null;
-
-        $baseSql = 'SELECT ' . \DB::buildField(self::CLASS_NAME, 's') . 'FROM ' . self::DB_CLASS_NAME . ' s ';
-        $sqlWhereTypeFilter = ' ';
-        $sqlAndTypeFilter = ' ';
-        if ($type !== null) {
-            $sqlWhereTypeFilter = ' WHERE `type` = :type ';
-            $sqlAndTypeFilter = ' AND `type` = :type ';
-            $values['type'] = $type;
-        }
-
-        $sql1 = $baseSql . 'INNER JOIN object ob ON s.object_id = ob.id ';
-        if ($groupName === '') {
-            $sql1 .= $sqlWhereTypeFilter . 'ORDER BY ob.name, s.group, s.name';
-            $sql2 = $baseSql . 'WHERE s.object_id IS NULL' . $sqlAndTypeFilter . 'ORDER BY s.group, s.name';
-        } elseif ($groupName === null) {
-            $sql1 .= 'WHERE (`group` IS NULL OR `group` = "")' . $sqlAndTypeFilter . 'ORDER BY s.group, s.name';
-            $sql2 = $baseSql . 'WHERE (`group` IS NULL OR `group` = "") AND s.object_id IS NULL' . $sqlAndTypeFilter . ' ORDER BY s.name';
-        } else {
-            $values = array('group' => $groupName);
-            $sql1 .= 'WHERE `group` = :group ' . $sqlAndTypeFilter . 'ORDER BY ob.name, s.group, s.name';
-            $sql2 = $baseSql . 'WHERE `group` = :group AND s.object_id IS NULL' . $sqlAndTypeFilter . 'ORDER BY s.group, s.name';
-        }
-        $result1 = \DB::Prepare($sql1, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
-        $result2 = \DB::Prepare($sql2, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
-        if (!is_array($result1)) {
-            $result1 = array();
-        }
-        if (!is_array($result2)) {
-            $result2 = array();
-        }
-        return array_merge($result1, $result2);
+        $values = array('id' => $id);
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . ' FROM ' . self::DB_CLASS_NAME . ' WHERE id = :id';
+        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
     /**
-     * Obtenir la liste des scénarios planifiés
+     * TODO: Ca fait l'inverse, mais je sais pas quoi
      *
-     * @return array|mixed|null [scenario] Liste des scénarios planifiés
+     * @param $input
+     * @return array|mixed
+     * @throws \ReflectionException
+     */
+    public static function fromHumanReadable($input)
+    {
+        $isJson = false;
+        if (Utils::isJson($input)) {
+            $isJson = true;
+            $input = json_decode($input, true);
+        }
+        if (is_object($input)) {
+            $reflections = array();
+            $uuid = spl_object_hash($input);
+            if (!isset($reflections[$uuid])) {
+                $reflections[$uuid] = new \ReflectionClass($input);
+            }
+            $reflection = $reflections[$uuid];
+            $properties = $reflection->getProperties();
+            foreach ($properties as $property) {
+                $property->setAccessible(true);
+                $value = $property->getValue($input);
+                $property->setValue($input, self::fromHumanReadable($value));
+                $property->setAccessible(false);
+            }
+            return $input;
+        }
+        if (is_array($input)) {
+            foreach ($input as $key => $value) {
+                $input[$key] = self::fromHumanReadable($value);
+            }
+            if ($isJson) {
+                return json_encode($input, JSON_UNESCAPED_UNICODE);
+            }
+            return $input;
+        }
+        $text = $input;
+
+        preg_match_all("/#\[(.*?)\]\[(.*?)\]\[(.*?)\]#/", $text, $matches);
+        if (count($matches) == 4) {
+            $countMatches = count($matches[0]);
+            for ($i = 0; $i < $countMatches; $i++) {
+                if (isset($matches[1][$i]) && isset($matches[2][$i]) && isset($matches[3][$i])) {
+                    $scenario = self::byObjectNameGroupNameScenarioName($matches[1][$i], $matches[2][$i], $matches[3][$i]);
+                    if (is_object($scenario)) {
+                        $text = str_replace($matches[0][$i], '#scenario' . $scenario->getId() . '#', $text);
+                    }
+                }
+            }
+        }
+
+        return $text;
+    }
+
+    /**
+     * Liste des scénario triés par objet, group et nom du scénario
+     *
+     * @param $objectName
+     * @param $groupName
+     * @param $scenarioName
+     *
+     * @return mixed
      * @throws \Exception
      */
-    public static function schedule()
+    public static function byObjectNameGroupNameScenarioName($objectName, $groupName, $scenarioName)
     {
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE `mode` != "provoke"
-                AND isActive = 1';
-        return \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        $values = array(
+            'scenario_name' => html_entity_decode($scenarioName),
+        );
+
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME, 's') . '
+                FROM ' . self::DB_CLASS_NAME . ' s ';
+
+        if ($objectName == __('Aucun')) {
+            $sql .= 'WHERE s.name=:scenario_name ';
+            if ($groupName == __('Aucun')) {
+                $sql .= 'AND (`group` IS NULL OR `group` = ""  OR `group` = "Aucun" OR `group` = "None")
+                         AND s.object_id IS NULL';
+            } else {
+                $values['group_name'] = $groupName;
+                $sql .= 'AND s.object_id IS NULL
+                         AND `group` = :group_name';
+            }
+        } else {
+            $values['object_name'] = $objectName;
+            $sql .= 'INNER JOIN object ob ON s.object_id=ob.id
+                     WHERE s.name = :scenario_name
+                     AND ob.name = :object_name ';
+            if ($groupName == __('Aucun')) {
+                $sql .= 'AND (`group` IS NULL OR `group` = ""  OR `group` = "Aucun" OR `group` = "None")';
+            } else {
+                $values['group_name'] = $groupName;
+                $sql .= 'AND `group` = :group_name';
+            }
+        }
+        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -162,28 +223,7 @@ class ScenarioManager
             $sql .= ' WHERE `group` LIKE :group';
         }
         $sql .= ' ORDER BY `group`';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL);
-    }
-
-    /**
-     * Obtenir la liste des scénarios en fonction d'un déclencheur
-     *
-     * @param string $cmdId Identifiant du déclencheur
-     * @param bool $onlyEnabled Filtrer sur les scénarios activés
-     *
-     * @return array|mixed|null [] Liste des scénarios
-     * @throws \Exception
-     */
-    public static function byTrigger(string $cmdId, $onlyEnabled = true)
-    {
-        $values = array('cmd_id' => '%#' . $cmdId . '#%');
-        $sql = 'SELECT ' . \DB::buildField(self::DB_CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE mode != "schedule" AND `trigger` LIKE :cmd_id';
-        if ($onlyEnabled) {
-            $sql .= ' AND isActive = 1';
-        }
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAll($sql, $values);
     }
 
     /**
@@ -199,10 +239,10 @@ class ScenarioManager
         $values = array(
             'element_id' => '%"' . $elementId . '"%',
         );
-        $sql = 'SELECT ' . \DB::buildField(self::DB_CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE `scenarioElement` LIKE :element_id';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -219,7 +259,7 @@ class ScenarioManager
     public static function byObjectId($objectId, $onlyEnabled = true, $onlyVisible = false)
     {
         $values = array();
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME;
         if ($objectId === null) {
             $sql .= ' WHERE object_id IS NULL';
@@ -234,7 +274,7 @@ class ScenarioManager
             $sql .= ' AND isVisible = 1';
         }
         $sql .= ' ORDER BY `order`';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -292,6 +332,42 @@ class ScenarioManager
     }
 
     /**
+     * Obtenir la liste des scénarios en fonction d'un déclencheur
+     *
+     * @param string $cmdId Identifiant du déclencheur
+     * @param bool $onlyEnabled Filtrer sur les scénarios activés
+     *
+     * @return array|mixed|null [] Liste des scénarios
+     * @throws \Exception
+     */
+    public static function byTrigger(string $cmdId, $onlyEnabled = true)
+    {
+        $values = array('cmd_id' => '%#' . $cmdId . '#%');
+        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
+        FROM ' . self::DB_CLASS_NAME . '
+        WHERE mode != "schedule" AND `trigger` LIKE :cmd_id';
+        if ($onlyEnabled) {
+            $sql .= ' AND isActive = 1';
+        }
+        return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
+    }
+
+    /**
+     * Obtenir la liste des scénarios planifiés
+     *
+     * @return array|mixed|null [scenario] Liste des scénarios planifiés
+     * @throws \Exception
+     */
+    public static function schedule()
+    {
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE `mode` != "provoke"
+                AND isActive = 1';
+        return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
+    }
+
+    /**
      * Contrôle des scénarios // TODO: ???
      *
      */
@@ -313,6 +389,53 @@ class ScenarioManager
                 $scenario->persistLog();
             }
         }
+    }
+
+    /**
+     * Obtenir tous les objets scenario
+     *
+     * @param string $groupName Filtrer sur un groupe
+     * @param string $type Filtrer sur un type
+     *
+     * @return  Scenario[] Liste des objets scenario
+     * @throws \Exception
+     */
+    public static function all($groupName = '', $type = null): array
+    {
+        $values = array();
+        $result1 = null;
+        $result2 = null;
+
+        $baseSql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME, 's') . 'FROM ' . self::DB_CLASS_NAME . ' s ';
+        $sqlWhereTypeFilter = ' ';
+        $sqlAndTypeFilter = ' ';
+        if ($type !== null) {
+            $sqlWhereTypeFilter = ' WHERE `type` = :type ';
+            $sqlAndTypeFilter = ' AND `type` = :type ';
+            $values['type'] = $type;
+        }
+
+        $sql1 = $baseSql . 'INNER JOIN object ob ON s.object_id = ob.id ';
+        if ($groupName === '') {
+            $sql1 .= $sqlWhereTypeFilter . 'ORDER BY ob.name, s.group, s.name';
+            $sql2 = $baseSql . 'WHERE s.object_id IS NULL' . $sqlAndTypeFilter . 'ORDER BY s.group, s.name';
+        } elseif ($groupName === null) {
+            $sql1 .= 'WHERE (`group` IS NULL OR `group` = "")' . $sqlAndTypeFilter . 'ORDER BY s.group, s.name';
+            $sql2 = $baseSql . 'WHERE (`group` IS NULL OR `group` = "") AND s.object_id IS NULL' . $sqlAndTypeFilter . ' ORDER BY s.name';
+        } else {
+            $values = array('group' => $groupName);
+            $sql1 .= 'WHERE `group` = :group ' . $sqlAndTypeFilter . 'ORDER BY ob.name, s.group, s.name';
+            $sql2 = $baseSql . 'WHERE `group` = :group AND s.object_id IS NULL' . $sqlAndTypeFilter . 'ORDER BY s.group, s.name';
+        }
+        $result1 = DBHelper::getAllObjects($sql1, $values, self::CLASS_NAME);
+        $result2 = DBHelper::getAllObjects($sql2, $values, self::CLASS_NAME);
+        if (!is_array($result1)) {
+            $result1 = array();
+        }
+        if (!is_array($result2)) {
+            $result2 = array();
+        }
+        return array_merge($result1, $result2);
     }
 
     /**
@@ -379,7 +502,7 @@ class ScenarioManager
                 $sql .= ',' . $expressionId;
             }
             $sql .= ')';
-            \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ALL);
+            DBHelper::getAll($sql);
         }
     }
 
@@ -438,50 +561,6 @@ class ScenarioManager
     }
 
     /**
-     * Liste des scénario triés par objet, group et nom du scénario
-     *
-     * @param $objectName
-     * @param $groupName
-     * @param $scenarioName
-     *
-     * @return mixed
-     * @throws \Exception
-     */
-    public static function byObjectNameGroupNameScenarioName($objectName, $groupName, $scenarioName)
-    {
-        $values = array(
-            'scenario_name' => html_entity_decode($scenarioName),
-        );
-
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME, 's') . '
-                FROM ' . self::DB_CLASS_NAME . ' s ';
-
-        if ($objectName == __('Aucun')) {
-            $sql .= 'WHERE s.name=:scenario_name ';
-            if ($groupName == __('Aucun')) {
-                $sql .= 'AND (`group` IS NULL OR `group` = ""  OR `group` = "Aucun" OR `group` = "None")
-                         AND s.object_id IS NULL';
-            } else {
-                $values['group_name'] = $groupName;
-                $sql .= 'AND s.object_id IS NULL
-                         AND `group` = :group_name';
-            }
-        } else {
-            $values['object_name'] = $objectName;
-            $sql .= 'INNER JOIN object ob ON s.object_id=ob.id
-                     WHERE s.name = :scenario_name
-                     AND ob.name = :object_name ';
-            if ($groupName == __('Aucun')) {
-                $sql .= 'AND (`group` IS NULL OR `group` = ""  OR `group` = "Aucun" OR `group` = "None")';
-            } else {
-                $values['group_name'] = $groupName;
-                $sql .= 'AND `group` = :group_name';
-            }
-        }
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
-    }
-
-    /**
      * /TODO: Fatigué d'essayer de comprendre à quoi ça sert
      * Méthode appelée de façon recursive
      *
@@ -525,63 +604,6 @@ class ScenarioManager
                 }
             }
         }
-        return $text;
-    }
-
-    /**
-     * TODO: Ca fait l'inverse, mais je sais pas quoi
-     *
-     * @param $input
-     * @return array|mixed
-     * @throws \ReflectionException
-     */
-    public static function fromHumanReadable($input)
-    {
-        $isJson = false;
-        if (Utils::isJson($input)) {
-            $isJson = true;
-            $input = json_decode($input, true);
-        }
-        if (is_object($input)) {
-            $reflections = array();
-            $uuid = spl_object_hash($input);
-            if (!isset($reflections[$uuid])) {
-                $reflections[$uuid] = new \ReflectionClass($input);
-            }
-            $reflection = $reflections[$uuid];
-            $properties = $reflection->getProperties();
-            foreach ($properties as $property) {
-                $property->setAccessible(true);
-                $value = $property->getValue($input);
-                $property->setValue($input, self::fromHumanReadable($value));
-                $property->setAccessible(false);
-            }
-            return $input;
-        }
-        if (is_array($input)) {
-            foreach ($input as $key => $value) {
-                $input[$key] = self::fromHumanReadable($value);
-            }
-            if ($isJson) {
-                return json_encode($input, JSON_UNESCAPED_UNICODE);
-            }
-            return $input;
-        }
-        $text = $input;
-
-        preg_match_all("/#\[(.*?)\]\[(.*?)\]\[(.*?)\]#/", $text, $matches);
-        if (count($matches) == 4) {
-            $countMatches = count($matches[0]);
-            for ($i = 0; $i < $countMatches; $i++) {
-                if (isset($matches[1][$i]) && isset($matches[2][$i]) && isset($matches[3][$i])) {
-                    $scenario = self::byObjectNameGroupNameScenarioName($matches[1][$i], $matches[2][$i], $matches[3][$i]);
-                    if (is_object($scenario)) {
-                        $text = str_replace($matches[0][$i], '#scenario' . $scenario->getId() . '#', $text);
-                    }
-                }
-            }
-        }
-
         return $text;
     }
 
@@ -722,13 +744,16 @@ class ScenarioManager
         if (!is_object($scenario)) {
             return null;
         }
-        $object = $scenario->getObject();
-        $return['object'] = is_object($object) ? $object->getId() : 'aucun';
-        $return['html'] = '<div class="scenario" data-id="' . $event['id'] . '">'
-            . '<div style="background-color:#e7e7e7;padding:1px;font-size:0.9em;font-weight: bold;cursor:help;">' . $event['name'] .
-            ' <i class="fa fa-file-text-o pull-right cursor bt_scenarioLog"></i> <i class="fa fa-share pull-right cursor bt_gotoScenario"></i></div>'
-            . '<div style="background-color:white;padding:1px;font-size:0.8em;cursor:default;">Déclenché par ' . $event['trigger'] . '<div/>'
-            . '</div>';
+        $linkedObject = $scenario->getObject();
+        $return['object'] = is_object($linkedObject) ? $linkedObject->getId() : 'aucun';
+        $return['html'] = '<div class="timeline-item cmd" data-id="' . $event['id'] . '">'
+            . '<span class="time"><i class="fa fa-clock-o"></i>' . substr($event['datetime'], -9) . '</span>'
+            .'<h3 class="timeline-header">' . $event['name'] . '</h3>'
+            .'<div class="timeline-body">'
+            . 'Déclenché par ' . $event['trigger']
+            .' <div class="timeline-footer">'
+            .'</div>'
+            .'</div>';
         return $return;
     }
 }

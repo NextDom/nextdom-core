@@ -37,11 +37,12 @@
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
-            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
-            <a class="btn btn-default btn-action-bar" href="index.php?v=d&p=report"><i class="fas fa-eye spacing-right"></i>{{ 'Visualiser' }}</a>
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'common.return' | trans }}</a>
+            <a class="btn btn-default btn-action-bar" href="index.php?v=d&p=report"><i class="fas fa-eye"></i>{{ 'common.display' | trans }}</a>
         </div>
         <div class="action-group">
-            <a class="btn btn-success btn-action-bar pull-right" id="bt_savereports_admin"><i class="fas fa-save spacing-right"></i>{{ 'Sauvegarder' }}</a>
+            <a class="btn btn-success btn-action-bar pull-right" id="bt_savereports_admin"><i class="fas fa-save"></i>{{ 'common.save' | trans }}</a>
+            <a class="btn btn-danger btn-action-bar pull-right bt_cancelModifs"><i class="fas fa-times"></i>{{ 'common.cancel'|trans }}</a>
         </div>
     </div>
 </section>
@@ -50,36 +51,39 @@
     <div class="box" id="reports_admin">
         <!-- Header bar -->
         <div class="box-header with-border">
-            <h3 class="box-title"><i class="fas fa-newspaper-o spacing-right"></i>{{ 'Rapports' }}</h3>
+            <h3 class="box-title"><i class="fas fa-newspaper-o"></i>{{ 'Rapports' }}</h3>
         </div>
 
         <!-- Page content -->
         <div class="box-body">
-            <form class="form-horizontal">
-                <!-- Params Section -->
-                <fieldset>
-                    <legend>{{ 'Paramètres' }}</legend>
-                    <div class="form-group">
-                        <label class="col-lg-4 col-md-5 col-sm-5 col-xs-12 control-label">{{ 'Délai d\'attente après génération de la page' }}</label>
-                        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                            <div class="input-group">
-                                <input class="configKey form-control" data-l1key="report::delay"/>
-                                <span class="input-group-addon">{{'millisecondes'}}</span>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="form-group">
-                        <label class="col-lg-4 col-md-5 col-sm-5 col-xs-12 control-label">{{ 'Nettoyer les rapports plus anciens de' }}</label>
-                        <div class="col-lg-2 col-md-3 col-sm-3 col-xs-12">
-                            <div class="input-group">
-                                <input class="configKey form-control" data-l1key="report::maxdays"/>
-                                <span class="input-group-addon">{{'jours'}}</span>
-                            </div>
+            <!-- Params Section -->
+            <fieldset>
+                <legend>{{ 'common.settings' | trans }}</legend>
+                <div class="row">
+                    <div class="form-group col-sm-6 col-xs-12 col-padding">
+                        <label class="control-label">{{ 'Délai d\'attente après génération de la page' }}</label>
+                        <div class="input-group">
+                            <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="report::delay" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                            <span class="input-group-addon input-range-min"></span>
+                            <input class="configKey slider" type="range" min="100" max="10000" step="100" data-l1key="report::delay"/>
+                            <span class="input-group-addon input-range-max"></span>
+                            <span class="input-group-addon input-range-value"></span>
+                            <span class="input-group-addon">{{'millisecondes'}}</span>
                         </div>
                     </div>
-                </fieldset>
-            </form>
+                    <div class="form-group col-sm-6 col-xs-12 col-padding">
+                        <label class="control-label">{{ 'Nettoyer les rapports plus anciens de' }}</label>
+                        <div class="input-group">
+                            <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="report::maxdays" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                            <span class="input-group-addon input-range-min"></span>
+                            <input class="configKey slider" type="range" min="0" max="180" step="1" data-l1key="report::maxdays"/>
+                            <span class="input-group-addon input-range-max"></span>
+                            <span class="input-group-addon input-range-value"></span>
+                            <span class="input-group-addon">{{'jours'}}</span>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
         </div>
     </div>
 </section>

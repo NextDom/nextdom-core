@@ -38,8 +38,6 @@
     }
 </style>
 
-<div id="div_alertPlanHeaderConfigure"></div>
-
 <div id="div_planHeaderConfigure">
     <form class="form-horizontal">
         <fieldset>
@@ -69,7 +67,7 @@
             <div class="form-group">
                 <label class="col-lg-4 control-label">{{ 'Code d\'accès' }}</label>
                 <div class="col-lg-2">
-                    <input type="password" class="planHeaderAttr form-control" data-l1key="configuration" data-l2key="accessCode"/>
+                    <input type="password" autocomplete="new-password" class="planHeaderAttr form-control" data-l1key="configuration" data-l2key="accessCode"/>
                 </div>
             </div>
             <div class="form-group">
@@ -154,7 +152,7 @@
 
     $('#bt_uploadImage').fileupload({
         replaceFileInput: false,
-        url: 'core/ajax/plan.ajax.php?action=uploadImage&id=' + planHeader_id + '&nextdom_token=' + NEXTDOM_AJAX_TOKEN,
+        url: '/core/ajax/plan.ajax.php?action=uploadImage&id=' + planHeader_id + '&nextdom_token=' + NEXTDOM_AJAX_TOKEN,
         dataType: 'json',
         done: function (e, data) {
             if (data.result.state != 'ok') {
@@ -195,10 +193,10 @@
         jeedom.plan.remove({
             id : tr.attr('data-id'),
             error: function (error) {
-                $('#div_alertPlanHeaderConfigure').showAlert({message: error.message, level: 'danger'});
+                notify("Erreur", error.message, 'error');
             },
             success: function () {
-                $('#div_alertPlanHeaderConfigure').showAlert({message: '{{ 'Composant supprimée' }}', level: 'success'});
+                notify("Core", "Composant supprimée", 'success');
                 tr.remove();
             }
         });

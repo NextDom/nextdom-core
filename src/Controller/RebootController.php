@@ -24,6 +24,10 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\Render;
 
+/**
+ * Class RebootController
+ * @package NextDom\Controller
+ */
 class RebootController extends BaseController
 {
 
@@ -37,8 +41,6 @@ class RebootController extends BaseController
      */
     public static function get(&$pageData): string
     {
-
-        $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return Render::getInstance()->get('/desktop/reboot.html.twig', $pageData);
     }

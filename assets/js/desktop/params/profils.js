@@ -34,169 +34,218 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-var url = document.location.toString();
-if (url.match('#')) {
-    $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
+// Page init
+showSelectedTabFromUrl(document.location.toString());
+loadInformations();
+initEvents();
+
+/**
+ * Show the tab indicated in the url
+ *
+ * @param url Url to check
+ */
+function showSelectedTabFromUrl(url) {
+    if (url.match('#')) {
+      $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
+    }
+    $('.nav-tabs a').on('shown.bs.tab', function (e) {
+      window.location.hash = e.target.hash;
+    });
 }
-$('.nav-tabs a').on('shown.bs.tab', function (e) {
-    window.location.hash = e.target.hash;
-})
 
-jwerty.key('ctrl+s/⌘+s', function (e) {
-    e.preventDefault();
-    $("#bt_saveProfils").click();
-});
-
-$('#bt_configureTwoFactorAuthentification').on('click',function(){
-    var profil = $('#div_pageContainer').getValues('.userAttr')[0];
-    $('#md_modal').dialog({title: "{{Authentification 2 étapes}}"});
-    $("#md_modal").load('index.php?v=d&modal=twoFactor.authentification').dialog('open');
-});
-
-$("#bt_saveProfils").on('click', function (event) {
-    $.hideAlert();
-    var profil = $('#div_pageContainer').getValues('.userAttr')[0];
-    if (profil.password != $('#in_passwordCheck').value()) {
-        notify("Erreur", "{{Les deux mots de passe ne sont pas identiques}}", 'error');
-        return;
-    }
-    nextdom.user.saveProfils({
-        profils: profil,
+/**
+ * Load informations in all forms of the page
+ */
+function loadInformations() {
+    nextdom.user.get({
         error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function () {
-            notify("Info", "{{Sauvegarde effectuée}}", 'success');
-            nextdom.user.get({
-                error: function (error) {
-                    notify("Erreur", error.message, 'error');
-                },
-                success: function (data) {
-                    $('#div_pageContainer').setValues(data, '.userAttr');
-                    modifyWithoutSave = false;
-                }
-            });
-        }
-    });
-    return false;
-});
-
-$('#bt_genUserKeyAPI').on('click',function(){
-    var profil = $('#div_pageContainer').getValues('.userAttr')[0];
-    profil.hash = '';
-    nextdom.user.saveProfils({
-        profils: profil,
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function () {
-            notify("Info", "{{Opération effectuée}}", 'success');
-            nextdom.user.get({
-                error: function (error) {
-                    notify("Erreur", error.message, 'error');
-                },
-                success: function (data) {
-                    $('#div_pageContainer').setValues(data, '.userAttr');
-                    modifyWithoutSave = false;
-                }
-            });
-        }
-    });
-});
-
-$('.userAttr[data-l1key=options][data-l2key=bootstrap_theme]').on('change', function () {
-    if($(this).value() == ''){
-        $('#div_imgThemeDesktop').html('<img src="public/img/theme_default.png" height="300" class="img-thumbnail" />');
-    }else{
-        $('#div_imgThemeDesktop').html('<img src="public/themes/' + $(this).value() + '/desktop/preview.png" height="300" class="img-thumbnail" />');
-    }
-
-});
-
-nextdom.user.get({
-    error: function (error) {
-        notify("Erreur", error.message, 'error');
-    },
-    success: function (data) {
-        $('#div_pageContainer').setValues(data, '.userAttr');
-        $('#in_passwordCheck').value(data.password);
-        modifyWithoutSave = false;
-    }
-});
-
-$('#div_pageContainer').delegate('.userAttr', 'change', function () {
-    modifyWithoutSave = true;
-});
-
-$('.bt_selectWarnMeCmd').on('click', function () {
-    nextdom.cmd.getSelectModal({cmd: {type: 'action', subType: 'message'}}, function (result) {
-        $('.userAttr[data-l1key="options"][data-l2key="notification::cmd"]').value(result.human);
-    });
-});
-
-$('.bt_removeRegisterDevice').on('click',function(){
-    var key = $(this).closest('tr').attr('data-key');
-    nextdom.user.removeRegisterDevice({
-        key : key,
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
+          notify('Erreur', error.message, 'error');
         },
         success: function (data) {
-            modifyWithoutSave = false;
-            window.location.reload();
+          $('#div_Profils').setValues(data, '.userAttr');
+          $('#in_passwordCheck').value(data.password);
+          $('#' + $('.userAttr[data-l2key="widget::theme"]').value()).attr('checked', 'checked');
+          $('#avatar-preview').attr('src', $('.userAttr[data-l2key=avatar]').value());
+          modifyWithoutSave = false;
+          $(".bt_cancelModifs").hide();
         }
     });
-});
+}
 
-$('#bt_removeAllRegisterDevice').on('click',function(){
-    nextdom.user.removeRegisterDevice({
-        key : '',
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function (data) {
-            modifyWithoutSave = false;
-            window.location.reload();
+/**
+ * Init events on the profils page
+ */
+function initEvents() {
+    // Show confirm modal on non saved changes
+    $('#div_Profils').delegate('.userAttr', 'change', function () {
+        if (!lockModify) {
+            modifyWithoutSave = true;
+            $(".bt_cancelModifs").show();
         }
     });
-});
 
+    // Cancel modifications
+    $('.bt_cancelModifs').on('click', function () {
+        loadInformations();
+    });
 
-$('.bt_deleteSession').on('click',function(){
-    var id = $(this).closest('tr').attr('data-id');
-    nextdom.user.deleteSession({
-        id : id,
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function (data) {
-            window.location.reload();
+    // Save forms data
+    $("#bt_saveProfils").on('click', function (event) {
+        var profil = $('#div_pageContainer').getValues('.userAttr')[0];
+        if (profil.password != $('#in_passwordCheck').value()) {
+            notify('Erreur', '{{Les deux mots de passe ne sont pas identiques}}', 'error');
+            return false;
+        }
+        nextdom.user.saveProfils({
+            profils: profil,
+            error: function (error) {
+                notify('Erreur', error.message, 'error');
+            },
+            success: function () {
+                nextdom.user.get({
+                    error: function (error) {
+                        notify('Erreur', error.message, 'error');
+                    },
+                    success: function (data) {
+                        modifyWithoutSave = false;
+                        $(".bt_cancelModifs").hide();
+                        updateInformations();
+                        notify('Info', '{{Sauvegarde effectuée}}', 'success');
+                    }
+                });
+            }
+        });
+        return false;
+    });
+
+    // Show two factor authentication process
+    $('#bt_configureTwoFactorAuthentification').on('click', function () {
+        var mdModal = $('#md_modal');
+        mdModal.dialog({title: '{{Authentification 2 étapes}}'});
+        mdModal.load('index.php?v=d&modal=twoFactor.authentification').dialog('open');
+    });
+
+    // Generate new user API key
+    $('#bt_genUserKeyAPI').on('click', function () {
+        var profil = $('#div_pageContainer').getValues('.userAttr')[0];
+        profil.hash = '';
+        nextdom.user.saveProfils({
+            profils: profil,
+            error: function (error) {
+                notify('Erreur', error.message, 'error');
+            },
+            success: function () {
+                notify('Info', '{{Opération effectuée}}', 'success');
+                nextdom.user.get({
+                  error: function (error) {
+                      notify('Erreur', error.message, 'error');
+                  },
+                  success: function (data) {
+                      $('#div_pageContainer').setValues(data, '.userAttr');
+                      modifyWithoutSave = false;
+                  }
+                });
+            }
+        });
+    });
+
+    // Change notification cmd
+    $('#bt_selectWarnMeCmd').on('click', function () {
+        nextdom.cmd.getSelectModal({cmd: {type: 'action', subType: 'message'}}, function (result) {
+            $('.userAttr[data-l1key="options"][data-l2key="notification::cmd"]').value(result.human);
+        });
+    });
+
+    // Remove register device from the list
+    $('.bt_removeRegisterDevice').on('click', function () {
+        var deviceKey = $(this).closest('tr').attr('data-key');
+        nextdom.user.removeRegisterDevice({
+            key: deviceKey,
+            error: function (error) {
+                notify('Erreur', error.message, 'error');
+            },
+            success: function (data) {
+                modifyWithoutSave = false;
+                window.location.reload();
+            }
+        });
+    });
+
+    // Remove all register devices
+    $('#bt_removeAllRegisterDevice').on('click', function () {
+          nextdom.user.removeRegisterDevice({
+            key: '',
+            error: function (error) {
+                notify('Erreur', error.message, 'error');
+            },
+            success: function (data) {
+                modifyWithoutSave = false;
+                window.location.reload();
+            }
+        });
+    });
+
+    // Delete all sessions
+    $('.bt_deleteSession').on('click', function () {
+        var id = $(this).closest('tr').attr('data-id');
+        nextdom.user.deleteSession({
+            id: id,
+            error: function (error) {
+                notify('Erreur', error.message, 'error');
+            },
+            success: function (data) {
+                modifyWithoutSave = false;
+                window.location.reload();
+            }
+        });
+    });
+
+    // Uplod new picture
+    $('#user_avatar').fileupload({
+        dataType: 'json',
+        url: 'core/ajax/profils.ajax.php?action=imageUpload',
+        dropZone: '#bsImagesPanel',
+        formData: {'nextdom_token': NEXTDOM_AJAX_TOKEN},
+        done: function (e, data) {
+            if (data.result.state !== 'ok') {
+                notify('Core', data.result.result, 'error');
+                return;
+            }
+            if ($('.userAttr[data-l2key=avatar]') == '') {
+                $('.userAttr[data-l2key=avatar]').value('/public/img/profils/avatar_00.png');
+            } else {
+                $('.userAttr[data-l2key=avatar]').value('/public/img/profils/' + data.files[0]['name']);
+                $('#avatar-preview').attr('src', '/public/img/profils/' + data.files[0]['name']);
+                notify('{{Ajout d\'une Image}}', '{{Image ajoutée avec succès}}', 'success');
+            }
         }
     });
-});
 
-$('#user_avatar').fileupload({
-    dataType: 'json',
-    url: "core/ajax/profils.ajax.php?action=imageUpload",
-    dropZone: "#bsImagesPanel",
-    done: function (e, data) {
-        if (data.result.state !== 'ok') {
-            notify('Core',data.result.result,'error');
-            return;
-        }
-        if ($('.userAttr[data-l2key=avatar]') == '') {
-            $('.userAttr[data-l2key=avatar]').value('/public/img/profils/avatar_00.png');
-        }else{
-            $('.userAttr[data-l2key=avatar]').value('/public/img/profils/' + data.files[0]['name']);
-            $('#monAvatar').attr('src','/public/img/profils/' + data.files[0]['name']);
+    // Change avatar picture
+    $(".avatar").on('click', function (event) {
+        var newPicture = $(this).attr('src');
+        $('.userAttr[data-l2key=avatar]').value(newPicture);
+        $('#avatar-preview').attr('src', newPicture);
+        modifyWithoutSave = true;
+    });
 
-            notify("{{Ajout d'une Image}}", '{{Image ajoutée avec succès}}', 'success');
-        }
-    }
-});
+    // Change widget theme
+    $('input[name=themeWidget]').on('click', function (event) {
+        var radio = $(this).val();
+        $('.userAttr[data-l2key="widget::theme"]').value(radio);
+        modifyWithoutSave = true;
+    });
+}
 
-$(".Avatar").on('click', function (event) {
-    $('.userAttr[data-l2key=avatar]').value($(this).attr('src'));
-    $('#monAvatar').attr('src',$(this).attr('src'));
-    notify("{{Profil}}", '{{Image changée}}', 'success');
-});
+/**
+ * Update visible data
+ */
+function updateInformations() {
+    // Home link
+    var homeTarget = $('select[data-l2key=homePage]').val().substr(6);
+    $('header a.logo').attr('href', 'index.php?v=d&p=' + homeTarget);
+
+    // Avatar picture
+    var newAvatarPicture = $('#avatar-preview').attr('src');
+    $('#avatar-img').attr('src', newAvatarPicture);
+}

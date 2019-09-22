@@ -17,6 +17,9 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\PlanDisplayType;
+use NextDom\Enums\PlanLinkType;
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
@@ -34,7 +37,7 @@ use NextDom\Managers\ScenarioManager;
  * @ORM\Table(name="plan", indexes={@ORM\Index(name="unique", columns={"link_type", "link_id"}), @ORM\Index(name="fk_plan_planHeader1_idx", columns={"planHeader_id"})})
  * @ORM\Entity
  */
-class Plan
+class Plan implements EntityInterface
 {
 
     /**
@@ -110,6 +113,86 @@ class Plan
         }
     }
 
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
+    public function getCss($_key = '', $_default = '')
+    {
+        return Utils::getJsonAttr($this->css, $_key, $_default);
+    }
+
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
+    public function setCss($_key, $_value)
+    {
+        $css = Utils::setJsonAttr($this->css, $_key, $_value);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->css, $css);
+        $this->css = $css;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLink_type()
+    {
+        return $this->link_type;
+    }
+
+    /**
+     * @param $_link_type
+     * @return $this
+     */
+    public function setLink_type($_link_type)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->link_type, $_link_type);
+        $this->link_type = $_link_type;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLink_id()
+    {
+        return $this->link_id;
+    }
+
+    /**
+     * @param $_link_id
+     * @return $this
+     */
+    public function setLink_id($_link_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->link_id, $_link_id);
+        $this->link_id = $_link_id;
+        return $this;
+    }
+
+    /**
+     * @return PlanHeader
+     */
+    public function getPlanHeader_id()
+    {
+        return $this->planHeader_id;
+    }
+
+    /**
+     * @param $_planHeader_id
+     * @return $this
+     */
+    public function setPlanHeader_id($_planHeader_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->planHeader_id, $_planHeader_id);
+        $this->planHeader_id = $_planHeader_id;
+        return $this;
+    }
+
     public function preSave()
     {
         if ($this->getCss('zoom') != '' && (!is_numeric($this->getCss('zoom')) || $this->getCss('zoom')) < 0.1) {
@@ -120,16 +203,14 @@ class Plan
         }
     }
 
-    public function save()
-    {
-        \DB::save($this);
-    }
-
     public function remove()
     {
-        \DB::remove($this);
+        DBHelper::remove($this);
     }
 
+    /**
+     * @return Plan
+     */
     public function copy(): Plan
     {
         $planCopy = clone $this;
@@ -141,27 +222,14 @@ class Plan
         return $planCopy;
     }
 
-    public function getLink()
+    public function save()
     {
-        if ($this->getLink_type() == 'eqLogic') {
-            $eqLogic = EqLogicManager::byId($this->getLink_id());
-            return $eqLogic;
-        } elseif ($this->getLink_type() == 'scenario') {
-            $scenario = ScenarioManager::byId($this->getLink_id());
-            return $scenario;
-        } elseif ($this->getLink_type() == 'cmd') {
-            $cmd = CmdManager::byId($this->getLink_id());
-            return $cmd;
-        } elseif ($this->getLink_type() == 'summary') {
-            $object = JeeObjectManager::byId($this->getLink_id());
-            return $object;
-        }
-        return null;
+        DBHelper::save($this);
     }
 
     public function execute()
     {
-        if ($this->getLink_type() != 'zone') {
+        if ($this->getLink_type() != PlanLinkType::ZONE) {
             return;
         }
         if ($this->getConfiguration('zone_mode', 'simple') == 'simple') {
@@ -176,6 +244,33 @@ class Plan
         }
     }
 
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
+    public function getConfiguration($_key = '', $_default = '')
+    {
+        return Utils::getJsonAttr($this->configuration, $_key, $_default);
+    }
+
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
+    public function setConfiguration($_key, $_value)
+    {
+        $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
+        $this->configuration = $configuration;
+        return $this;
+    }
+
+    /**
+     * @param $_action
+     * @throws \Exception
+     */
     public function doAction($_action)
     {
         foreach ($this->getConfiguration('action_' . $_action) as $action) {
@@ -195,12 +290,37 @@ class Plan
         }
     }
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param $_id
+     * @return $this
+     */
+    public function setId($_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
+        $this->id = $_id;
+        return $this;
+    }
+
+    /**
+     * @param string $_version
+     * @return array|null
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public function getHtml($_version = 'dplan')
     {
         switch ($this->getLink_type()) {
-            case 'eqLogic':
-            case 'cmd':
-            case 'scenario':
+            case PlanLinkType::EQLOGIC:
+            case PlanLinkType::CMD:
+            case PlanLinkType::SCENARIO:
                 $link = $this->getLink();
                 if (!is_object($link)) {
                     return null;
@@ -210,10 +330,10 @@ class Plan
                     'html' => $link->toHtml($_version),
                 );
                 break;
-            case 'plan':
-                $html = '<span class="cursor plan-link-widget" data-link_id="' . $this->getLink_id() . '" data-offsetX="' . $this->getDisplay('offsetX') . '" data-offsetY="' . $this->getDisplay('offsetY') . '">';
+            case PlanLinkType::PLAN:
+                $html = '<span class="cursor plan-link-widget" data-link_id="' . $this->getLink_id() . '" data-offsetX="' . $this->getDisplay(PlanDisplayType::OFFSET_X) . '" data-offsetY="' . $this->getDisplay(PlanDisplayType::OFFSET_Y) . '">';
                 $html .= '<a style="color:' . $this->getCss('color', 'black') . ';text-decoration:none;font-size : 1.5em;">';
-                $html .= $this->getDisplay('icon') . ' ' . $this->getDisplay('name');
+                $html .= $this->getDisplay(PlanDisplayType::ICON) . ' ' . $this->getDisplay(PlanDisplayType::NAME);
                 $html .= '</a>';
                 $html .= '</span>';
                 return array(
@@ -221,11 +341,11 @@ class Plan
                     'html' => $html,
                 );
                 break;
-            case 'view':
+            case PlanLinkType::VIEW:
                 $link = 'index.php?p=view&view_id=' . $this->getLink_id();
                 $html = '<span href="' . $link . '" class="cursor view-link-widget" data-link_id="' . $this->getLink_id() . '" >';
                 $html .= '<a href="' . $link . '" class="noOnePageLoad" style="color:' . $this->getCss('color', 'black') . ';text-decoration:none;font-size : 1.5em;">';
-                $html .= $this->getDisplay('icon') . ' ' . $this->getDisplay('name');
+                $html .= $this->getDisplay(PlanDisplayType::ICON) . ' ' . $this->getDisplay(PlanDisplayType::NAME);
                 $html .= '</a>';
                 $html .= '</span>';
                 return array(
@@ -233,25 +353,25 @@ class Plan
                     'html' => $html,
                 );
                 break;
-            case 'graph':
+            case PlanLinkType::GRAPH:
                 $background_color = 'background-color : white;';
-                if ($this->getDisplay('transparentBackground', false)) {
+                if ($this->getDisplay(PlanDisplayType::TRANSPARENT_BACKGROUND, false)) {
                     $background_color = '';
                 }
                 $html = '<div class="graph-widget" data-graph_id="' . $this->getLink_id() . '" style="' . $background_color . 'border : solid 1px black;min-height:50px;min-width:50px;">';
-                $html .= '<span class="graphOptions" style="display:none;">' . json_encode($this->getDisplay('graph', array())) . '</span>';
+                $html .= '<span class="graphOptions" style="display:none;">' . json_encode($this->getDisplay(PlanDisplayType::GRAPH, array())) . '</span>';
                 $html .= '<div class="graph" id="graph' . $this->getLink_id() . '" style="width : 100%;height : 100%;"></div>';
                 $html .= '</div>';
                 return array(
                     'plan' => Utils::o2a($this),
                     'html' => $html,
                 );
-            case 'text':
+            case PlanLinkType::TEXT:
                 $html = '<div class="text-widget" data-text_id="' . $this->getLink_id() . '" style="color:' . $this->getCss('color', 'black') . ';">';
-                if ($this->getDisplay('name') != '' || $this->getDisplay('icon') != '') {
-                    $html .= $this->getDisplay('icon') . ' ' . $this->getDisplay('text');
+                if ($this->getDisplay(PlanDisplayType::NAME) != '' || $this->getDisplay(PlanDisplayType::ICON) != '') {
+                    $html .= $this->getDisplay(PlanDisplayType::ICON) . ' ' . $this->getDisplay(PlanDisplayType::TEXT);
                 } else {
-                    $html .= $this->getDisplay('text');
+                    $html .= $this->getDisplay(PlanDisplayType::TEXT);
                 }
                 $html .= '</div>';
                 return array(
@@ -259,14 +379,14 @@ class Plan
                     'html' => $html,
                 );
                 break;
-            case 'image':
+            case PlanLinkType::IMAGE:
                 $html = '<div class="image-widget" data-image_id="' . $this->getLink_id() . '" style="min-width:10px;min-height:10px;">';
                 if ($this->getConfiguration('display_mode', 'image') == 'image') {
-                    $html .= '<img style="width:100%;height:100%" src="' . $this->getDisplay('path', 'public/img/NextDom_NoPicture.png') . '"/>';
+                    $html .= '<img style="width:100%;height:100%" src="' . $this->getDisplay(PlanDisplayType::PATH, 'public/img/NextDom_NoPicture_Gray.png') . '"/>';
                 } else {
                     $camera = EqLogicManager::byId(str_replace(array('#', 'eqLogic'), array('', ''), $this->getConfiguration('camera')));
                     if (is_object($camera)) {
-                        $html .= $camera->toHtml($_version);
+                        $html .= $camera->toHtml($_version, true);
                     }
                 }
                 $html .= '</div>';
@@ -275,16 +395,16 @@ class Plan
                     'html' => $html,
                 );
                 break;
-            case 'zone':
+            case PlanLinkType::ZONE:
                 if ($this->getConfiguration('zone_mode', 'simple') == 'widget') {
-                    $class = '';
+                    $cssClass = '';
                     if ($this->getConfiguration('showOnFly') == 1) {
-                        $class .= 'zoneEqLogicOnFly ';
+                        $cssClass .= 'zoneEqLogicOnFly ';
                     }
                     if ($this->getConfiguration('showOnClic') == 1) {
-                        $class .= 'zoneEqLogicOnClic ';
+                        $cssClass .= 'zoneEqLogicOnClic ';
                     }
-                    $html = '<div class="zone-widget cursor zoneEqLogic ' . $class . '" data-position="' . $this->getConfiguration('position') . '" data-eqLogic_id="' . str_replace(array('#', 'eqLogic'), array('', ''), $this->getConfiguration('eqLogic')) . '" data-zone_id="' . $this->getLink_id() . '" style="min-width:20px;min-height:20px;"></div>';
+                    $html = '<div class="zone-widget cursor zoneEqLogic ' . $cssClass . '" data-position="' . $this->getConfiguration('position') . '" data-eqLogic_id="' . str_replace(array('#', 'eqLogic'), array('', ''), $this->getConfiguration('eqLogic')) . '" data-zone_id="' . $this->getLink_id() . '" style="min-width:20px;min-height:20px;"></div>';
                 } else {
                     $html = '<div class="zone-widget cursor" data-zone_id="' . $this->getLink_id() . '" style="min-width:20px;min-height:20px;"></div>';
                 }
@@ -293,16 +413,16 @@ class Plan
                     'html' => $html,
                 );
                 break;
-            case 'summary':
+            case PlanLinkType::SUMMARY:
                 $background_color = 'background-color : ' . $this->getCss('background-color', 'black') . ';';
-                if ($this->getDisplay('background-defaut', false)) {
+                if ($this->getDisplay(PlanDisplayType::BACKGROUND_DEFAULT, false)) {
                     $background_color = 'background-color : black;';
                 }
-                if ($this->getDisplay('background-transparent', false)) {
+                if ($this->getDisplay(PlanDisplayType::TRANSPARENT_BACKGROUND, false)) {
                     $background_color = '';
                 }
                 $color = 'color : ' . $this->getCss('color', 'black') . ';';
-                if ($this->getDisplay('color-defaut', false)) {
+                if ($this->getDisplay(PlanDisplayType::COLOR_DEFAULT, false)) {
                     $color = '';
                 }
                 $html = '<div class="summary-widget" data-summary_id="' . $this->getLink_id() . '" style="' . $background_color . $color . ';min-width:10px;min-height:10px;">';
@@ -310,9 +430,9 @@ class Plan
                 if ($this->getLink_id() == 0) {
                     $summary = JeeObjectManager::getGlobalHtmlSummary($_version);
                 } else {
-                    $object = $this->getLink();
-                    if (is_object($object)) {
-                        $summary = $object->getHtmlSummary($_version);
+                    $linkedObject = $this->getLink();
+                    if (is_object($linkedObject)) {
+                        $summary = $linkedObject->getHtmlSummary($_version);
                     }
                 }
                 if ($summary == '') {
@@ -321,79 +441,52 @@ class Plan
                     $html .= $summary;
                 }
                 $html .= '</div>';
-                return array(
+                return [
                     'plan' => Utils::o2a($this),
                     'html' => $html,
-                );
+                ];
                 break;
         }
         return null;
     }
 
-    public function getPlanHeader()
+    /**
+     * @return bool|Cmd|EqLogic|JeeObject|Scenario|null
+     * @throws \Exception
+     */
+    public function getLink()
     {
-        return PlanHeaderManager::byId($this->getPlanHeader_id());
+        if ($this->getLink_type() == PlanLinkType::EQLOGIC) {
+            $eqLogic = EqLogicManager::byId($this->getLink_id());
+            return $eqLogic;
+        } elseif ($this->getLink_type() == PlanLinkType::SCENARIO) {
+            $scenario = ScenarioManager::byId($this->getLink_id());
+            return $scenario;
+        } elseif ($this->getLink_type() == PlanLinkType::CMD) {
+            $cmd = CmdManager::byId($this->getLink_id());
+            return $cmd;
+        } elseif ($this->getLink_type() == PlanLinkType::SUMMARY) {
+            $linkedObject = JeeObjectManager::byId($this->getLink_id());
+            return $linkedObject;
+        }
+        return null;
     }
 
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    public function getLink_type()
-    {
-        return $this->link_type;
-    }
-
-    public function getLink_id()
-    {
-        return $this->link_id;
-    }
-
-    public function getPosition($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->position, $_key, $_default);
-    }
-
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
     public function getDisplay($_key = '', $_default = '')
     {
         return Utils::getJsonAttr($this->display, $_key, $_default);
     }
 
-    public function getCss($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->css, $_key, $_default);
-    }
-
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
-    }
-
-    public function setLink_type($_link_type)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->link_type, $_link_type);
-        $this->link_type = $_link_type;
-        return $this;
-    }
-
-    public function setLink_id($_link_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->link_id, $_link_id);
-        $this->link_id = $_link_id;
-        return $this;
-    }
-
-    public function setPosition($_key, $_value)
-    {
-        $position = Utils::setJsonAttr($this->position, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->position, $position);
-        $this->position = $position;
-        return $this;
-    }
-
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
     public function setDisplay($_key, $_value)
     {
         $display = Utils::setJsonAttr($this->display, $_key, $_value);
@@ -402,50 +495,59 @@ class Plan
         return $this;
     }
 
-    public function setCss($_key, $_value)
+    /**
+     * @return PlanHeader|null
+     * @throws \Exception
+     */
+    public function getPlanHeader()
     {
-        $css = Utils::setJsonAttr($this->css, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->css, $css);
-        $this->css = $css;
+        return PlanHeaderManager::byId($this->getPlanHeader_id());
+    }
+
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
+    public function getPosition($_key = '', $_default = '')
+    {
+        return Utils::getJsonAttr($this->position, $_key, $_default);
+    }
+
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
+    public function setPosition($_key, $_value)
+    {
+        $position = Utils::setJsonAttr($this->position, $_key, $_value);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->position, $position);
+        $this->position = $position;
         return $this;
     }
 
-    public function getPlanHeader_id()
-    {
-        return $this->planHeader_id;
-    }
-
-    public function setPlanHeader_id($_planHeader_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->planHeader_id, $_planHeader_id);
-        $this->planHeader_id = $_planHeader_id;
-        return $this;
-    }
-
-    public function getConfiguration($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->configuration, $_key, $_default);
-    }
-
-    public function setConfiguration($_key, $_value)
-    {
-        $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
-        $this->configuration = $configuration;
-        return $this;
-    }
-
+    /**
+     * @return bool
+     */
     public function getChanged()
     {
         return $this->_changed;
     }
 
+    /**
+     * @param $_changed
+     * @return $this
+     */
     public function setChanged($_changed)
     {
         $this->_changed = $_changed;
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getTableName()
     {
         return 'plan';

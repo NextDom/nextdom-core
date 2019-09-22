@@ -18,6 +18,10 @@
 
 namespace NextDom\Enums;
 
+/**
+ * Class AjaxActions
+ * @package NextDom\Enums
+ */
 class AjaxActions extends Enum
 {
 

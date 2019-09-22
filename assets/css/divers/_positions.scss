@@ -1,0 +1,83 @@
+/* This file is part of Jeedom.
+*
+* Jeedom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* Jeedom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/* This file is part of NextDom.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+*
+* @Support <https://www.nextdom.org>
+* @Email   <admin@nextdom.org>
+* @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
+*/
+
+/* Core-Ajout : classes d'espacement */
+.spacing-right {
+    margin-right: 8px !important;
+}
+.spacing-right-big {
+    margin-right: 14px !important;
+}
+.spacing-left {
+    margin-left: 8px !important;
+}
+.spacing-left-big {
+    margin-left: 14px !important;
+}
+.spacing-bottom {
+    margin-bottom: 5px !important;
+}
+.spacing-bottom-big {
+    margin-bottom: 10px !important;
+}
+.spacing-top {
+    margin-top: 5px !important;
+}
+.spacing-top-big {
+    margin-top: 10px !important;
+}
+.no-spacing {
+    margin-right: 0px !important;
+}
+.padding-bottom {
+    padding-bottom: 10px;
+}
+@media (min-width: 992px) {
+    .col-padding {
+        padding-left: 3%;
+        padding-right: 3%;
+    }
+}
+
+/* Core-Surcharge : classes d'espacement */
+.pull-right{
+  float: right;
+  margin-left: 5px;
+}
+.pull-left{
+  float: left;
+  margin-right: 5px;
+}

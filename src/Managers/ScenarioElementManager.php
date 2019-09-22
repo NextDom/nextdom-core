@@ -33,32 +33,20 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Model\Entity\ScenarioElement;
 use NextDom\Model\Entity\ScenarioExpression;
 use NextDom\Model\Entity\ScenarioSubElement;
 
+/**
+ * Class ScenarioElementManager
+ * @package NextDom\Managers
+ */
 class ScenarioElementManager
 {
     const DB_CLASS_NAME = '`scenarioElement`';
     const CLASS_NAME = ScenarioElement::class;
-
-    /**
-     * Get the element of a scenario from its identifier
-     * @param mixed $id Identifier of the scenario element
-     * @return ScenarioElement
-     * @throws \Exception
-     */
-    public static function byId($id)
-    {
-        $values = array(
-            'id' => $id,
-        );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE id = :id';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
-    }
 
     /**
      * Sauvegarder un élément Ajax TODO: ???
@@ -139,5 +127,22 @@ class ScenarioElementManager
         }
 
         return $elementDb->getId();
+    }
+
+    /**
+     * Get the element of a scenario from its identifier
+     * @param mixed $id Identifier of the scenario element
+     * @return ScenarioElement
+     * @throws \Exception
+     */
+    public static function byId($id)
+    {
+        $values = array(
+            'id' => $id,
+        );
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE id = :id';
+        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 }

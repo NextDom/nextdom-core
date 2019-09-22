@@ -80,12 +80,12 @@ if (version_compare(PHP_VERSION, '5.6.0', '<')) {
     echo '<center style="font-size:1.2em;">NextDom nécessite PHP 5.6 ou plus (actuellement : ' . PHP_VERSION . ')</center>';
     echo '</div>';
 }
+
 if (!file_exists('/etc/cron.d/nextdom')) {
     echo '<div class="alert alert-warning" style="margin:15px;">';
     echo '<center style="font-size:1.2em;">Veuillez ajouter une ligne crontab pour NextDom (si NextDom n\'a pas les droits sudo, cette erreur est normale) : </center>';
     echo '<pre>';
-    echo "sudo su -\n";
-    echo 'echo "* * * * * ' . get_current_user() . ' /usr/bin/php '. NEXTDOM_ROOT . '/src/Api/start_cron.php >> /dev/null" > /etc/cron.d/nextdom';
+    echo 'echo "* * * * * ' . get_current_user() . ' /usr/bin/php '. NEXTDOM_ROOT . '/src/Api/start_cron.php >> /dev/null" | sudo tee /etc/cron.d/nextdom';
     echo '</pre>';
     echo '</div>';
 }
@@ -247,7 +247,6 @@ if ($config) {
     $config = str_replace(array_keys($replace), $replace, file_get_contents(__DIR__ . '/../core/config/common.config.php'));
     file_put_contents(NEXTDOM_DATA . '/config/common.config.php', $config);
     shell_exec('php ' . __DIR__ . '/install.php mode=force > ' . NEXTDOM_LOG . '/nextdom_installation 2>&1 &');
-    echo '<div id="div_alertMessage" class="alert alert-warning" style="margin:15px;">';
     echo '<center style="font-size:1.2em;"><i class="fa fa-spinner fa-spin"></i> The installation nextdom is ongoing.</center>';
     echo '</div>';
     echo '<pre id="pre_installLog" style="margin:15px;"></pre>';

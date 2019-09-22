@@ -33,8 +33,13 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Model\Entity\ScenarioSubElement;
 
+/**
+ * Class ScenarioSubElementManager
+ * @package NextDom\Managers
+ */
 class ScenarioSubElementManager
 {
     const DB_CLASS_NAME = 'scenarioSubElement';
@@ -52,10 +57,10 @@ class ScenarioSubElementManager
     public static function byId($id)
     {
         $values = array('id' => $id);
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE id = :id';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -73,16 +78,16 @@ class ScenarioSubElementManager
         $values = array(
             'scenarioElement_id' => $scenarioElementId,
         );
-        $sql = 'SELECT ' . \DB::buildField(self::CLASS_NAME) . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE scenarioElement_id=:scenarioElement_id ';
         if ($filterByType != '') {
             $values['type'] = $filterByType;
             $sql .= ' AND type=:type ';
-            return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+            return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
         } else {
             $sql .= ' ORDER BY `order`';
-            return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+            return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
         }
     }
 

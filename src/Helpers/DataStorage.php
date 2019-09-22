@@ -40,6 +40,17 @@ class DataStorage
     }
 
     /**
+     * Créer la table des données
+     */
+    public function createDataTable()
+    {
+        if (!$this->isDataTableExists()) {
+            $statement = DBHelper::getConnection()->prepare("CREATE TABLE `" . $this->dataTableName . "` (`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, `code` VARCHAR(256) NOT NULL, `data` TEXT NULL)");
+            $statement->execute();
+        }
+    }
+
+    /**
      * Test si une table existe dans la base de données
      *
      * @return bool True si la table exists
@@ -47,7 +58,7 @@ class DataStorage
     public function isDataTableExists(): bool
     {
         $returnValue = false;
-        $statement = \DB::getConnection()->prepare("SHOW TABLES LIKE ?");
+        $statement = DBHelper::getConnection()->prepare("SHOW TABLES LIKE ?");
         $statement->execute(array($this->dataTableName));
         $dbResult = $statement->fetchAll(\PDO::FETCH_ASSOC);
         if (count($dbResult) > 0) {
@@ -57,22 +68,11 @@ class DataStorage
     }
 
     /**
-     * Créer la table des données
-     */
-    public function createDataTable()
-    {
-        if (!$this->isDataTableExists()) {
-            $statement = \DB::getConnection()->prepare("CREATE TABLE `" . $this->dataTableName . "` (`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, `code` VARCHAR(256) NOT NULL, `data` TEXT NULL)");
-            $statement->execute();
-        }
-    }
-
-    /**
      * Supprimer la table des données
      */
     public function dropDataTable()
     {
-        \DB::getConnection()->prepare("DROP TABLE IF EXISTS `" . $this->dataTableName . "`")->execute();
+        DBHelper::getConnection()->prepare("DROP TABLE IF EXISTS `" . $this->dataTableName . "`")->execute();
     }
 
     /**
@@ -82,68 +82,19 @@ class DataStorage
      */
     public function deleteData(string $code)
     {
-        $statement = \DB::getConnection()->prepare("DELETE FROM `" . $this->dataTableName . "` WHERE `code` = ?");
+        $statement = DBHelper::getConnection()->prepare("DELETE FROM `" . $this->dataTableName . "` WHERE `code` = ?");
         $statement->execute(array($code));
     }
 
     /**
-     * Obtenir une données stockée brute
+     * Stocke des données au format JSON.
      *
-     * @param string $code Codes des données
-     *
-     * @return mixed Données correspondant au code.
+     * @param string $code Code des données
+     * @param array $jsonData Données au format JSON
      */
-    public function getRawData(string $code)
+    public function storeJsonData(string $code, array $jsonData)
     {
-        $returnValue = null;
-        $statement = \DB::getConnection()->prepare("SELECT `data` FROM `" . $this->dataTableName . "` WHERE `code` = ?");
-        $statement->execute(array($code));
-        $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
-        if (count($result) > 0) {
-            $returnValue = $result[0]['data'];
-        }
-        return $returnValue;
-    }
-
-    /**
-     * Test si une donnée existe
-     *
-     * @param string $code Code de la donnée
-     *
-     * @return bool True si la données existe
-     */
-    public function isDataExists(string $code): bool
-    {
-        $result = false;
-        if ($this->getRawData($code) !== null) {
-            $result = true;
-        }
-        return $result;
-    }
-
-    /**
-     * Ajoute des données brutes
-     *
-     * @param string $code Codes des données
-     * @param string $data Données brutes
-     */
-    public function addRawData(string $code, $data)
-    {
-        $statement = \DB::getConnection()->prepare("INSERT INTO `" . $this->dataTableName . "` (`code`, `data`) VALUES (?, ?)");
-        $statement->execute(array($code, $data));
-    }
-
-    /**
-     * Met à jour une donnée brutes stockées
-     *
-     * @param string $code Codes des données
-     * @param mixed $data Données brutes
-     */
-    public function updateRawData(string $code, $data)
-    {
-        $statement = \DB::getConnection()->prepare("UPDATE `" . $this->dataTableName . "` SET `data` = ? WHERE `code` = ?");
-        $statement->execute(array($data, $code));
-
+        $this->storeRawData($code, json_encode($jsonData));
     }
 
     /**
@@ -163,14 +114,63 @@ class DataStorage
     }
 
     /**
-     * Stocke des données au format JSON.
+     * Test si une donnée existe
      *
-     * @param string $code Code des données
-     * @param array $jsonData Données au format JSON
+     * @param string $code Code de la donnée
+     *
+     * @return bool True si la données existe
      */
-    public function storeJsonData(string $code, array $jsonData)
+    public function isDataExists(string $code): bool
     {
-        $this->storeRawData($code, json_encode($jsonData));
+        $result = false;
+        if ($this->getRawData($code) !== null) {
+            $result = true;
+        }
+        return $result;
+    }
+
+    /**
+     * Obtenir une données stockée brute
+     *
+     * @param string $code Codes des données
+     *
+     * @return mixed Données correspondant au code.
+     */
+    public function getRawData(string $code)
+    {
+        $returnValue = null;
+        $statement = DBHelper::getConnection()->prepare("SELECT `data` FROM `" . $this->dataTableName . "` WHERE `code` = ?");
+        $statement->execute(array($code));
+        $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        if (count($result) > 0) {
+            $returnValue = $result[0]['data'];
+        }
+        return $returnValue;
+    }
+
+    /**
+     * Met à jour une donnée brutes stockées
+     *
+     * @param string $code Codes des données
+     * @param mixed $data Données brutes
+     */
+    public function updateRawData(string $code, $data)
+    {
+        $statement = DBHelper::getConnection()->prepare("UPDATE `" . $this->dataTableName . "` SET `data` = ? WHERE `code` = ?");
+        $statement->execute(array($data, $code));
+
+    }
+
+    /**
+     * Ajoute des données brutes
+     *
+     * @param string $code Codes des données
+     * @param string $data Données brutes
+     */
+    public function addRawData(string $code, $data)
+    {
+        $statement = DBHelper::getConnection()->prepare("INSERT INTO `" . $this->dataTableName . "` (`code`, `data`) VALUES (?, ?)");
+        $statement->execute(array($code, $data));
     }
 
     /**
@@ -192,7 +192,7 @@ class DataStorage
      */
     public function remove(string $code)
     {
-        $statement = \DB::getConnection()->prepare("DELETE FROM `" . $this->dataTableName . "` WHERE `code` LIKE ?");
+        $statement = DBHelper::getConnection()->prepare("DELETE FROM `" . $this->dataTableName . "` WHERE `code` LIKE ?");
         $statement->execute(array($code));
     }
 
@@ -205,7 +205,7 @@ class DataStorage
      */
     public function getAllByPrefix(string $prefix): array
     {
-        $statement = \DB::getConnection()->prepare("SELECT `data` FROM `" . $this->dataTableName . "` WHERE `code` LIKE ?");
+        $statement = DBHelper::getConnection()->prepare("SELECT `data` FROM `" . $this->dataTableName . "` WHERE `code` LIKE ?");
         $statement->execute(array($prefix . '%'));
         $returnValue = $statement->fetchAll(\PDO::FETCH_ASSOC);
         return $returnValue;

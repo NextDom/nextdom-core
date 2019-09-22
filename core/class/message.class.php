@@ -38,21 +38,24 @@ class message extends \NextDom\Model\Entity\Message {
     public static function byId($_id) {
         return MessageManager::byId($_id);
     }
-    
+
     public static function byPluginLogicalId($_plugin, $_logicalId) {
         return MessageManager::byPluginLogicalId($_plugin, $_logicalId);
     }
-    
+
     public static function byPlugin($_plugin) {
         return MessageManager::byPlugin($_plugin);
     }
-    
+
     public static function listPlugin() {
         return MessageManager::listPlugin();
     }
-    
+
     public static function all() {
         return MessageManager::all();
     }
-    
+
+    public static function removeByPluginLogicalId($_plugin, $_logicalId) {
+        MessageManager::removeByPluginLogicalId($_plugin, $_logicalId);
+    }
 }

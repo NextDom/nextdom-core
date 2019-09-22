@@ -61,7 +61,7 @@
         <div class="row form-group">
             <div class="col-sm-7 col-xs-12">
                 <input type="checkbox" id="storeConnection">
-                <span for="cb_storeConnection" data-toggle="tooltip" title="" data-original-title="{{ 'connection.remember-title'|trans }}">{{ 'connection.remember-label'|trans }}</span>
+                <label for="storeConnection" data-toggle="tooltip" title="" data-original-title="{{ 'connection.remember-title'|trans }}">{{ 'connection.remember-label'|trans }}</label>
             </div>
             <div class="col-sm-5 col-xs-12">
                 <button class="btn btn-primary btn-block btn-flat" id="submit"><i class="fas fa-unlock spacing-right"></i>{{ 'connection.connect'|trans }}</button>
@@ -70,10 +70,27 @@
         <a class="label-link" href="https://www.nextdom.org/knowledge-base/reinitialiser-sont-mot-de-passe/" target="_blank">{{ 'connection.forgot'|trans }}</a><br>
     </div>
 </div>
+{% if IS_MOBILE %}
+    <div id="mobile-box">
+        <div id="mobile-install" class="box box-default collapsed-box">
+            <div class="box-header with-border">
+                <h3 class="box-title">{{ 'connection.mobile-install'|trans }}</h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="box-body" style="display: none;">
+            <pre>
+git clone https://github.com/NextDom/nextdom-mobile {{ NEXTDOM_ROOT }}/mobile
+            </pre>
+            </div>
+        </div>
+    </div>
+{% endif %}
 {% if JS_END_POOL is defined %}
     {% for jsFile in JS_END_POOL %}
         <script src="{{ jsFile }}"></script>
     {% endfor %}
 {% endif %}
 </body>
-</html>

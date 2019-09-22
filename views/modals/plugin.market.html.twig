@@ -1,0 +1,116 @@
+{#
+
+/* This file is part of Jeedom.
+*
+* Jeedom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* Jeedom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/* This file is part of NextDom.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#}
+<div id="div_pluginAlternativeMarketForJeedomAlert"></div>
+
+<div id="plugin-modal">
+    <section class="form-group">
+        <div class="action-bar">
+            <div class="action-group">
+                <a class="btn btn-danger" id="close-button"><i class="fas fa-chevron-left"></i>{{ 'Retour' }}</a>
+                <a class="btn btn-action-bar btn-primary" id="update-plugin"><i class="fas fa-download"></i>{{ 'Mettre à jour' }}</a>
+                <a class="btn btn-action-bar btn-primary" id="install-plugin"><i class="fas fa-download"></i>{{ 'Installer' }}</a>
+                <a class="btn btn-action-bar btn-primary" href="" id="config-plugin"><i class="fas fa-cogs spacing-right"></i>{{ 'Configurer' }}</a>
+                <div id="install-plugin-advanced" class="btn-group hidden-btn">
+                    <a class="btn btn-action-bar btn-warning"><i class="fas fa-download"></i><span>{{ 'Installation avancée' }}</span></a>
+                    <a class="btn btn-action-bar btn-warning dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                        <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                    </ul>
+                </div>
+                <div id="get-branches-informations">
+                    <a type="button" class="btn btn-action-bar btn-warning"><i class="fas fa-plus"></i></a>
+                </div>
+            </div>
+            <div class="action-group">
+                <a class="btn btn-action-bar btn-danger pull-right" id="remove-plugin"><i class="fas fa-trash"></i>{{ 'Supprimer' }}</a>
+            </div>
+        </div>
+    </section>
+
+    <div class="box box-primary no-border">
+        <div class="box-header with-border"><h3 class="box-title"><i class="fas fa-info-circle"></i>{{ 'Détails du plugin ' }}<span id="plugin-name"></span></h3></div>
+        <div class="box-body">
+            <div class="col-xs-12 col-sm-4 col-md-3" id="market-left-pane">
+                <img id="plugin-icon" src=""/>
+                <div class="form-group">
+                    <a id="documentation-link" class="btn btn-success btn-action-bar" target="_blank" href=""><i class="fas fa-book"></i>{{ 'Documentation' }}</a>
+                    <a id="changelog-link" class="btn btn-success btn-action-bar" target="_blank" href=""><i class="fas fa-list"></i>{{ 'Changelog' }}</a>
+                    <a id="github-link" class="btn btn-success btn-action-bar" target="_blank" href=""><i class="fab fa-github"></i>{{ 'GitHub' }}</a>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-8 col-md-9">
+                <legend>{{ 'Informations' }}</legend>
+                <div class="form-group" id="description">
+                    <p><span class="list-title">{{ 'Branche : ' }}</span><span id="default-branch-information" class="list-info"></span></p>
+                    <p><span class="list-title">{{ 'Description : ' }}</span>
+                    <span id="description-content"></span></p>
+                </div>
+                <div class="form-group" id="badges">
+                    <p><span class="list-title">{{ 'Badges : ' }}</span>
+                    <span><a id="travis-badge"><img src=""/></a></span>
+                    <span><a id="coveralls-badge"><img src=""/></a></span>
+                    <span><a id="waffle-badge"><img src=""/></a></span></p>
+                </div>
+                <div id="infos">
+                    <p id="author"><span class="list-title">{{ 'Auteur' }}</span> : <span class="list-info"></span></p>
+                    <p id="licence"><span class="list-title">{{ 'Licence' }}</span> : <span class="list-info"></span></p>
+                    <p id="category"><span class="list-title">{{ 'Catégorie' }}</span> : <span class="list-info"></span></p>
+                    <p id="gitrepo"><span class="list-title">{{ 'Dépôt Git' }}</span> : <span class="list-info"></span></p>
+                    <p id="gitid"><span class="list-title">{{ 'Identifiant Git' }}</span> : <span class="list-info"></span></p>
+                </div>
+            </div>
+        </div>
+        <div id="plugin-modal-screenshots">
+            <div id="plugin-screenshots" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner" role="listbox">
+                </div>
+                <a class="left carousel-control" href="#plugin-screenshots" role="button" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                    <span class="sr-only">{{ 'Précédent' }}</span>
+                </a>
+                <a class="right carousel-control" href="#plugin-screenshots" role="button" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                    <span class="sr-only">{{ 'Suivant' }}</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/public/js/modals/plugin.market.js"></script>

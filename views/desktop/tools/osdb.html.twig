@@ -37,7 +37,7 @@
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
-            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'common.return' | trans }}</a>
         </div>
     </div>
 </section>
@@ -46,62 +46,55 @@
     <div class="box" id="osdb">
         <!-- Header bar -->
         <div class="box-header with-border">
-            <h3 class="box-title"><i class="fas fa-terminal spacing-right"></i>{{ 'OS/DB' }}</h3>
+            <h3 class="box-title"><i class="fas fa-terminal"></i>{{ 'osdb.os__db'|trans }}</h3>
         </div>
 
         <!-- Page content -->
         <div class="box-body">
-            <form class="form-horizontal">
-
-                <!-- Alert section -->
-                <div class="alert alert-danger alert-config">
-                    {{ 'ATTENTION : ces opérations sont risquées, vous pouvez perdre l\'accès à votre système et à' }} {{ adminConfigs['product_name'] }}{{ '. L\'équipe' }} {{ adminConfigs['product_name'] }} {{ 'se réserve le droit de refuser toute demande de support en cas de mauvaise manipulation.' }}
-                </div>
-                <!-- Console Section -->
-                <fieldset>
-                    <legend>{{ 'Administration' }}</legend>
-                    <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Console Système' }}</label>
-                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
-                            <a class="btn btn-danger" href="index.php?v=d&p=system"><i class="fas fa-exclamation-triangle spacing-right"></i>{{ 'Lancer' }}</a>
-                        </div>
-                    </div>
-                </fieldset>
-
-                <!-- File editor Section -->
-                <fieldset class="legend-section">
-                    <legend>{{ 'Editeurs' }}</legend>
-                    <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Editeur de fichiers' }}</label>
-                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
-                            <a class="btn btn-danger" href="index.php?v=d&p=editor"><i class="fas fa-exclamation-triangle spacing-right"></i>{{ 'Lancer' }}</a>
+            <!-- Alert section -->
+            <div class="alert alert-danger">{{ 'osdb.warning'|trans }} {{ PRODUCT_NAME }}...</div>
+            <!-- Console Section -->
+            <fieldset>
+                <legend>{{ 'osdb.tools' | trans }}</legend>
+                <div class="row">
+                    <div class="form-group col-sm-6 col-xs-12 col-padding">
+                        <label class="control-label">{{ 'osdb.system_console' | trans }}</label>
+                        <div class="mix-group">
+                            <a class="btn btn-danger" href="index.php?v=d&p=system"><i class="fas fa-exclamation-triangle"></i>{{ 'osdb.run' | trans }}</a>
                         </div>
                     </div>
                 </fieldset>
 
                 <!-- DB Section -->
                 <fieldset class="legend-section">
-                    <legend>{{ 'Base de données' }}</legend>
+                    <legend>{{ 'osdb.database'|trans }}</legend>
                     <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Administration' }}</label>
+                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'osdb.administration' | trans }}</label>
                         <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
-                            <a class="btn btn-danger" href="index.php?v=d&p=database"><i class="fas fa-exclamation-triangle spacing-right"></i>{{ 'Lancer' }}</a>
+                            <a class="btn btn-danger" href="index.php?v=d&p=database"><i class="fas fa-exclamation-triangle"></i>{{ 'osdb.run' | trans }}</a>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Utilisateur' }}</label>
-                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
-                            <span class="label label-value">{{ adminDbConfig['username'] }}</span>
+                </div>
+            </fieldset>
+
+            <!-- DB Section -->
+            <fieldset class="legend-section">
+                <legend>{{ 'osdb.database'|trans }}</legend>
+                <div class="row">
+                    <div class="form-group col-sm-6 col-xs-12 col-padding">
+                        <label class="control-label">{{ 'osdb.user' | trans }}</label>
+                        <div class="mix-group">
+                            <span class="label label-config">{{ adminDbConfig['username'] }}</span>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-lg-2 col-md-3 col-sm-4 col-xs-6 control-label">{{ 'Mot de passe' }}</label>
-                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-6">
-                            <span class="label label-value">{{ adminDbConfig['password'] }}</span>
+                    <div class="form-group col-sm-6 col-xs-12 col-padding">
+                        <label class="control-label">{{ 'osdb.password' | trans }}</label>
+                        <div class="mix-group">
+                            <span class="label label-config">{{ adminDbConfig['password'] }}</span>
                         </div>
                     </div>
-                </fieldset>
-            </form>
+                </div>
+            </fieldset>
         </div>
     </div>
 </section>

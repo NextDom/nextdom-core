@@ -34,545 +34,36 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-$.fn.bootstrapBtn = $.fn.button.noConflict();
-
+/* Global variables Initialisations */
+var modifyWithoutSave = false;
+var lockModify = false;
 uniqId_count = 0;
 modifyWithoutSave = false;
 nbActiveAjaxRequest = 0;
 nextdomBackgroundImg = null;
 utid = Date.now();
 
-$(document).ajaxStart(function () {
-    nbActiveAjaxRequest++;
-    $.showLoading();
-});
-$(document).ajaxStop(function () {
-    nbActiveAjaxRequest--;
-    if (nbActiveAjaxRequest <= 0) {
-        nbActiveAjaxRequest = 0;
-        $.hideLoading();
+// ?
+jQuery.fn.findAtDepth = function (selector, maxDepth) {
+    var depths = [], i;
+
+    if (maxDepth > 0) {
+        for (i = 1; i <= maxDepth; i++) {
+            depths.push('> ' + new Array(i).join('* > ') + selector);
+        }
+
+        selector = depths.join(', ');
     }
-});
-
-function loadPage(_url,_noPushHistory){
-    if (modifyWithoutSave) {
-        if (!confirm('{{Attention vous quittez une page ayant des données modifiées non sauvegardées. Voulez-vous continuer ?}}')) {
-            return;
-        }
-        modifyWithoutSave = false;
-    }
-    if (typeof unload_page !== "undefined") {
-        unload_page();
-    }
-    $("#md_modal").dialog('close');
-    $("#md_modal2").dialog('close');
-    if ($("#mod_insertCmdValue").length != 0) {
-        $("#mod_insertCmdValue").dialog('close');
-    }
-    if ($("#mod_insertDataStoreValue").length != 0) {
-        $("#mod_insertDataStoreValue").dialog('close');
-    }
-    if ($("#mod_insertEqLogicValue").length != 0) {
-        $("#mod_insertEqLogicValue").dialog('close');
-    }
-    if ($("#mod_insertCronValue").length != 0) {
-        $("#mod_insertCronValue").dialog('close');
-    }
-    if ($("#mod_insertActionValue").length != 0) {
-        $("#mod_insertActionValue").dialog('close');
-    }
-    if ($("#mod_insertScenarioValue").length != 0) {
-        $("#mod_insertScenarioValue").dialog('close');
-    }
-    if(!isset(_noPushHistory) || _noPushHistory == false){
-        window.history.pushState('','', _url);
-    }
-    if(isset(bootbox)){
-        bootbox.hideAll();
-    }
-    nextdom.cmd.update = Array();
-    nextdom.scenario.update = Array();
-    $('main').css('padding-right','').css('padding-left','').css('margin-right','').css('margin-left','');
-    $('#div_pageContainer').add("#div_pageContainer *").off();
-    $.hideAlert();
-    $('.bt_pluginTemplateShowSidebar').remove();
-    removeContextualFunction();
-    if(_url.indexOf('#') == -1){
-        var url = _url+'&ajax=1';
-    }else{
-        var n=_url.lastIndexOf("#");
-        var url = _url.substring(0,n)+"&ajax=1"+_url.substring(n)
-    }
-    $('.backgroundforJeedom').css('background-image','');
-    nextdomBackgroundImg = null;
-    $('#div_pageContainer').empty().load(url,function(){
-        $('#bt_getHelpPage').attr('data-page',getUrlVars('p')).attr('data-plugin',getUrlVars('m'));
-        var title = getUrlVars('p');
-        if(title !== false){
-            document.title = title[0].toUpperCase() + title.slice(1) +' - NextDom';
-        }
-        initPage();
-        $('body').trigger('nextdom_page_load');
-        window.scrollTo(0, 0);
-    });
-    return;
-}
-
-function removeContextualFunction(){
-    printEqLogic = undefined
-}
-
-$(function () {
-    $.alertTrigger = function(){
-        initRowOverflow();
-    }
-
-    window.addEventListener('popstate', function (event){
-        if(event.state === null){
-            return;
-        }
-        var url = window.location.href.split("index.php?");
-        loadPage('index.php?'+url[1],true)
-    });
-
-    $('body').on('click','a',function(e){
-        if($(this).hasClass('noOnePageLoad')){
-            return;
-        }
-        if($(this).hasClass('fancybox-nav')){
-            return;
-        }
-        if($(this).attr('href') == undefined || $(this).attr('href') == '' || $(this).attr('href') == '#'){
-            return;
-        }
-        if ($(this).attr('href').match("^http")) {
-            return;
-        }
-        if ($(this).attr('href').match("^#")) {
-            return;
-        }
-        if($(this).attr('target') === '_blank'){
-            return;
-        }
-        $('li.dropdown.open').click();
-        if ($(this).data('reload') === 'yes') {
-            window.location.href= window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + $(this).attr('href');
-        }
-        else {
-            loadPage($(this).attr('href'));
-        }
-        e.preventDefault();
-        e.stopPropagation();
-    });
-
-
-    $('ul.dropdown-menu [data-toggle=dropdown]').on('click', function (event) {
-        event.preventDefault();
-        event.stopPropagation();
-        $(this).parent().siblings().removeClass('open');
-        $(this).parent().toggleClass('open');
-    });
-    if (!navigator.userAgent.match(/Android/i)
-        && !navigator.userAgent.match(/webOS/i)
-        && !navigator.userAgent.match(/iPhone/i)
-        && !navigator.userAgent.match(/iPad/i)
-        && !navigator.userAgent.match(/iPod/i)
-        && !navigator.userAgent.match(/BlackBerry/i)
-        & !navigator.userAgent.match(/Windows Phone/i)
-    ) {
-        $('ul.dropdown-menu [data-toggle=dropdown]').on('mouseenter', function (event) {
-            event.preventDefault();
-            event.stopPropagation();
-            $(this).parent().siblings().removeClass('open');
-            $(this).parent().toggleClass('open');
-        });
-    }
-
-    /********************* Date and Time********************************/
-    setInterval(function () {
-        var date = new Date();
-        // Get NextDom language for format
-        var locale = 'en-EN';
-        if (isset(nextdom_langage)) {
-            locale = nextdom_langage.replace('_','-');
-        }
-        //Date
-        var dateFormat = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        $('#horloge_date').text(date.toLocaleDateString(locale, dateFormat));
-        // Time
-        $('#horloge_time').text(date.toLocaleTimeString(locale));
-    }, 1000);
-
-    $.fn.modal.Constructor.prototype.enforceFocus = function () {
-    };
-
-    $('body').on( "show", ".modal",function () {
-        document.activeElement.blur();
-        $(this).find(".modal-body :input:visible:first").focus();
-    });
-
-    /************************Help*************************/
-    if (isset(nextdom_langage)) {
-        bootbox.setDefaults({
-            locale: nextdom_langage.substr(0, 2),
-        });
-
-    }
-
-    //Display report bug
-    $("#md_reportBug").dialog({
-        autoOpen: false,
-        modal: false,
-        closeText: '',
-        height: ((jQuery(window).height() - 100) < 700) ? jQuery(window).height() - 100 : 700,
-        width: ((jQuery(window).width() - 100) < 900) ? (jQuery(window).width() - 100) : 900,
-        position: { my: "center bottom-10", at: "center bottom", of: window },
-        open: function () {
-            $("body").css({overflow: 'hidden'})
-            $(this).closest( ".ui-dialog" ).find(":button").blur();
-        },
-        beforeClose: function (event, ui) {
-            $("body").css({overflow: 'inherit'})
-            $("#md_reportBug").empty();
-        }
-    });
-
-    //Display help
-    $("#md_pageHelp").dialog({
-        autoOpen: false,
-        modal: false,
-        closeText: '',
-        height: (jQuery(window).height() - 100),
-        width: ((jQuery(window).width() - 100) < 1500) ? (jQuery(window).width() - 50) : 1500,
-        position: { my: "center bottom-10", at: "center bottom", of: window },
-        open: function () {
-            $("body").css({overflow: 'hidden'});
-            $(this).closest( ".ui-dialog" ).find(":button").blur();
-        },
-        beforeClose: function (event, ui) {
-            $("body").css({overflow: 'inherit'});
-            $("#md_pageHelp").empty();
-        }
-    });
-
-    $("#md_modal").dialog({
-        autoOpen: false,
-        modal: false,
-        closeText: '',
-        height: (jQuery(window).height() - 100),
-        width: ((jQuery(window).width() - 50) < 1500) ? (jQuery(window).width() - 50) : 1500,
-        position: {my: 'center', at: 'center', of: window},
-        open: function () {
-            $("body").css({overflow: 'hidden'});
-            $(this).closest( ".ui-dialog" ).find(":button").blur();
-        },
-        beforeClose: function (event, ui) {
-            $("body").css({overflow: 'inherit'});
-            $("#md_modal").empty();
-        }
-    });
-
-    $("#md_modal2").dialog({
-        autoOpen: false,
-        modal: false,
-        closeText: '',
-        height: (jQuery(window).height() - 150),
-        width: ((jQuery(window).width() - 150) < 1200) ? (jQuery(window).width() - 50) : 1200,
-        position: {my: 'center', at: 'center', of: window},
-        open: function () {
-            $("body").css({overflow: 'hidden'});
-            $(this).closest( ".ui-dialog" ).find(":button").blur();
-        },
-        beforeClose: function (event, ui) {
-            $("body").css({overflow: 'inherit'});
-            $("#md_modal2").empty();
-        }
-    });
-
-    $('#bt_nextdomAbout,#bt_nextdomAbout2, #bt_nextdomAboutFooter').on('click', function () {
-        $('#md_modal').dialog({title: "{{A propos}}"});
-        $('#md_modal').load('index.php?v=d&modal=about').dialog('open');
-    });
-
-    $('#bt_getHelpPage').on('click',function(){
-        nextdom.getDocumentationUrl({
-            plugin: $(this).attr('data-plugin'),
-            page: $(this).attr('data-page'),
-            error: function(error) {
-                notify("Erreur", error.message, 'error');
-            },
-            success: function(url) {
-                window.open(url,'_blank');
-            }
-        });
-    });
-
-    $('body').on( 'click','.bt_pageHelp', function () {
-        showHelpModal($(this).attr('data-name'), $(this).attr('data-plugin'));
-    });
-
-    $('body').on( 'click','.bt_reportBug', function () {
-        $('#md_reportBug').load('index.php?v=d&modal=report.bug').dialog('open');
-    });
-
-    $(window).bind('beforeunload', function (e) {
-        if (modifyWithoutSave) {
-            return '{{Attention vous quittez une page ayant des données modifiées non sauvegardées. Voulez-vous continuer ?}}';
-        }
-    });
-
-
-    $(window).resize(function () {
-        initRowOverflow();
-    });
-
-
-    if (typeof nextdom_Welcome != 'undefined' && isset(nextdom_Welcome) && nextdom_Welcome == 1 && getUrlVars('noWelcome') != 1) {
-        $('#md_modal').dialog({title: "{{Bienvenue dans NextDom}}"});
-        $("#md_modal").load('index.php?v=d&modal=welcome').dialog('open');
-    }
-
-    $('#bt_haltSystem,#bt_haltSystemAdmin').on('click', function () {
-        $.hideAlert();
-        bootbox.confirm('{{Etes-vous sûr de vouloir arrêter le système ?}}', function (result) {
-            if (result) {
-                window.location.href = 'index.php?v=d&p=shutdown';
-            }
-        });
-    });
-
-    $('#bt_rebootSystem,#bt_rebootSystemAdmin').on('click', function () {
-        $.hideAlert();
-        bootbox.confirm('{{Etes-vous sûr de vouloir redémarrer le système ?}}', function (result) {
-            if (result) {
-                window.location.href = 'index.php?v=d&p=reboot';
-            }
-        });
-    });
-
-    $('#bt_showEventInRealTime').on('click',function(){
-        $('#md_modal').dialog({title: "{{Evénement en temps réel}}"});
-        $("#md_modal").load('index.php?v=d&modal=log.display&log=event').dialog('open');
-    });
-
-    $('#bt_showNoteManager').on('click',function(){
-        $('#md_modal').dialog({title: "{{Note}}"});
-        $("#md_modal").load('index.php?v=d&modal=note.manager').dialog('open');
-    });
-
-    $('#bt_gotoDashboard').on('click',function(){
-        if('ontouchstart' in window || navigator.msMaxTouchPoints){
-              return;
-        }
-        $('ul.dropdown-menu [data-toggle=dropdown]').parent().parent().parent().siblings().removeClass('open');
-        loadPage('index.php?v=d&p=dashboard');
-    });
-
-    $('#bt_gotoView').on('click',function(){
-        if('ontouchstart' in window || navigator.msMaxTouchPoints){
-            return;
-        }
-        $('ul.dropdown-menu [data-toggle=dropdown]').parent().parent().parent().siblings().removeClass('open');
-        loadPage('index.php?v=d&p=view');
-    });
-
-    $('#bt_gotoPlan').on('click',function(){
-        if('ontouchstart' in window || navigator.msMaxTouchPoints){
-            return;
-        }
-        $('ul.dropdown-menu [data-toggle=dropdown]').parent().parent().parent().siblings().removeClass('open');
-        loadPage('index.php?v=d&p=plan');
-    });
-
-    $('#bt_gotoPlan3d').on('click',function(){
-        if('ontouchstart' in window || navigator.msMaxTouchPoints){
-            return;
-        }
-        $('ul.dropdown-menu [data-toggle=dropdown]').parent().parent().parent().siblings().removeClass('open');
-        loadPage('index.php?v=d&p=plan3d');
-    });
-
-    $('#bt_messageModal').on('click',function(){
-        $('#md_modal').dialog({title: "{{Messages NextDom}}"});
-        $('#md_modal').load('index.php?v=d&p=message&ajax=1').dialog('open');
-    });
-
-    $('body').on('click','.objectSummaryParent',function(){
-        loadPage('index.php?v=d&p=dashboard&summary='+$(this).data('summary')+'&object_id='+$(this).data('object_id'));
-    });
-    initPage();
-    setTimeout(function(){
-        $('body').trigger('nextdom_page_load');
-    }, 1);
-});
-
-function initTextArea(){
-    $('body').on('change keyup keydown paste cut', 'textarea.autogrow', function () {
-        $(this).height(0).height(this.scrollHeight);
-    });
-}
-
-function initPage(){
-    initTableSorter();
-    initReportMode();
-    $.initTableFilter();
-    initRowOverflow();
-    initHelp();
-    initTextArea();
-    $('.nav-tabs a').on('click',function (e) {
-        var scrollHeight = $(document).scrollTop();
-        $(this).tab('show');
-        $(window).scrollTop(scrollHeight);
-        setTimeout(function() {
-            $(window).scrollTop(scrollHeight);
-        }, 0);
-    });
-}
-
-function linkify(inputText) {
-    var replacePattern1 = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
-    var replacedText = inputText.replace(replacePattern1, '<a href="$1" target="_blank">$1</a>');
-    var replacePattern2 = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
-    var replacedText = replacedText.replace(replacePattern2, '$1<a href="http://$2" target="_blank">$2</a>');
-    var replacePattern3 = /(\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6})/gim;
-    var replacedText = replacedText.replace(replacePattern3, '<a href="mailto:$1">$1</a>');
-    return replacedText
-}
-
-function initRowOverflow() {
-    var hWindow = $(window).outerHeight() - $('header').outerHeight() - $('#div_alert').outerHeight()-5;
-    if($('#div_alert').outerHeight() > 0){
-        hWindow -= 10;
-    }
-    if($('.row-overflow').attr('data-offset') != undefined){
-        hWindow -= $('.row-overflow').attr('data-offset');
-    }
-    $('.row-overflow > div').css('padding-top','0px').height(hWindow).css('overflow-y', 'auto').css('overflow-x', 'hidden').css('padding-top','5px');
-}
-
-function initReportMode() {
-    if (getUrlVars('report') == 1) {
-        $('header').hide();
-        $('footer').hide();
-        $('#div_mainContainer').css('margin-top', '-50px');
-        $('#wrap').css('margin-bottom', '0px');
-        $('.reportModeVisible').show();
-        $('.reportModeHidden').hide();
-    }
-}
-
-function initTableSorter() {
-    $(".tablesorter").each(function () {
-        var widgets = ['uitheme', 'filter', 'zebra', 'resizable'];
-        $(".tablesorter").tablesorter({
-            theme: "bootstrap",
-            widthFixed: true,
-            headerTemplate: '{content} {icon}',
-            widgets: widgets,
-            widgetOptions: {
-                filter_ignoreCase: true,
-                resizable: true,
-                stickyHeaders_offset: $('header.navbar-fixed-top').height(),
-                zebra: ["", ""],
-            }
-        });
-    });
-}
-
-function initHelp(){
-    $('.help').each(function(){
-        if($(this).attr('data-help') != undefined){
-            $(this).append(' <sup><i class="fas fa-question-circle tooltips txtSizeNormal" title="'+$(this).attr('data-help')+'" style="color:grey;"></i></sup>');
-        }
-    });
-}
-
-function showHelpModal(_name, _plugin) {
-    if (init(_plugin) != '' && _plugin != undefined) {
-        $('#div_helpWebsite').load('index.php?v=d&modal=help.website&page=doc_plugin_' + _plugin + '.php #primary', function () {
-            if ($('#div_helpWebsite').find('.alert.alert-danger').length > 0 || $.trim($('#div_helpWebsite').text()) == '') {
-                $('a[href="#div_helpSpe"]').click();
-                $('a[href="#div_helpWebsite"]').hide();
-            } else {
-                $('a[href="#div_helpWebsite"]').show();
-                $('a[href="#div_helpWebsite"]').click();
-            }
-        });
-        $('#div_helpSpe').load('index.php?v=d&plugin=' + _plugin + '&modal=help.' + init(_name));
-    } else {
-        $('#div_helpWebsite').load('index.php?v=d&modal=help.website&page=doc_' + init(_name) + '.php #primary', function () {
-            if ($('#div_helpWebsite').find('.alert.alert-danger').length > 0 || $.trim($('#div_helpWebsite').text()) == '') {
-                $('a[href="#div_helpSpe"]').click();
-                $('a[href="#div_helpWebsite"]').hide();
-            } else {
-                $('a[href="#div_helpWebsite"]').show();
-                $('a[href="#div_helpWebsite"]').click();
-            }
-        });
-        $('#div_helpSpe').load('index.php?v=d&modal=help.' + init(_name));
-    }
-    $('#md_pageHelp').dialog('open');
-}
-
-function refreshMessageNumber() {
-    nextdom.message.number({
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success : function (_number) {
-            MESSAGE_NUMBER = _number;
-            if (_number == 0 || _number == '0') {
-                $('#span_nbMessage').hide();
-            } else {
-                $('#span_nbMessage').html(_number);
-                $('#span_nbMessage').show();
-            }
-        }
-    });
-}
-
-function refreshUpdateNumber() {
-    nextdom.update.number({
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success : function (_number) {
-            UPDATE_NUMBER = _number;
-            if (_number == 0 || _number == '0') {
-                $('#span_nbUpdate').hide();
-            } else {
-                $('#span_nbUpdate span').html(_number);
-                $('#span_nbUpdate').show();
-            }
-        }
-    });
-}
+    return this.find(selector);
+};
 
 /**
- * Toggle between showing and hiding notifications
+ * Floating notification
  *
- * @param notificationState 1 for notification showed or 0 for hide.
+ * @param _title title of the notification
+ * @param _text text of the notification
+ * @param _class_name equivalent to the color of notification (success, warning, error, nextdom color)
  */
-function switchNotify(notificationState) {
-    nextdom.config.save({
-        configuration: {'notify::status': notificationState},
-        error: function (error) {
-            notify("Core", error.message, 'error');
-        },
-        success: function () {
-            if (notificationState) {
-                $('.notifyIcon').removeClass("fa-bell-slash").addClass("fa-bell");
-                $('.notifyIconLink').attr('onclick','switchNotify(0);')
-                notify("Core",  '{{Notification activée}}', 'success');
-            } else {
-                $('.notifyIcon').removeClass("fa-bell").addClass("fa-bell-slash");
-                $('.notifyIconLink').attr('onclick','switchNotify(1);')
-                notify("Core",  '{{Notification desactivée}}', 'success');
-            }
-        }
-    });
-}
-
 function notify(_title, _text, _class_name) {
     if (typeof notify_status != 'undefined' && isset(notify_status) && notify_status == 1) {
         var _backgroundColor = "";
@@ -658,29 +149,11 @@ function notify(_title, _text, _class_name) {
     }
 }
 
-jQuery.fn.findAtDepth = function (selector, maxDepth) {
-    var depths = [], i;
-
-    if (maxDepth > 0) {
-        for (i = 1; i <= maxDepth; i++) {
-            depths.push('> ' + new Array(i).join('* > ') + selector);
-        }
-
-        selector = depths.join(', ');
-    }
-    return this.find(selector);
-};
-
-function sleep(milliseconds) {
-    var start = new Date().getTime();
-    for (var i = 0; i < 1e7; i++) {
-        if ((new Date().getTime() - start) > milliseconds){
-            break;
-        }
-    }
-}
-
-
+/**
+ * Opening a icone selector modal to choose one
+ *
+ * @param _callback callback who receive the icon code
+ */
 function chooseIcon(_callback) {
     if ($("#mod_selectIcon").length == 0) {
         $('#div_pageContainer').append('<div id="mod_selectIcon" title="{{Choisissez votre icône}}" ></div>');
@@ -722,38 +195,25 @@ function chooseIcon(_callback) {
     $('#mod_selectIcon').dialog('open');
 }
 
-
-function positionEqLogic(_id,_preResize,_scenario) {
-    if(_id != undefined){
-        var eqLogic = $('.eqLogic-widget[data-eqlogic_id='+_id+']');
-        if(_scenario){
-              var widget = $('.scenario-widget[data-scenario_id='+_id+']');
-            }else{
-              var widget = $('.eqLogic-widget[data-eqlogic_id='+_id+']');
-            }
-        widget.css('margin','0px').css('padding','0px');
-        eqLogic.trigger('resize');
-        eqLogic.addClass(eqLogic.attr('data-category'));
-        eqLogic.css('border-radius',widget_radius+'px');
-    }else{
-        $('.eqLogic-widget:not(.nextdomAlreadyPosition)').css('margin','0px').css('padding','0px');
-        $('.eqLogic-widget:not(.nextdomAlreadyPosition)').each(function () {
-            if($(this).width() == 0){
-                $(this).width('100px');
-            }
-            if($(this).height() == 0){
-                $(this).height('100px');
-            }
-
-            $(this).trigger('resize');
-            $(this).addClass($(this).attr('data-category'));
-        });
-        $('.eqLogic-widget:not(.nextdomAlreadyPosition)').css('border-radius',widget_radius+'px');
-        $('.eqLogic-widget').addClass('nextdomAlreadyPosition');
+/**
+ * Blocking sleep loop for a while
+ *
+ * @param milliseconds number of milliseconds you want to sleep execution
+ */
+function sleep(milliseconds) {
+    var start = new Date().getTime();
+    for (var i = 0; i < 1e7; i++) {
+        if ((new Date().getTime() - start) > milliseconds){
+            break;
+        }
     }
 }
 
-
+/**
+ * Create a unique cmd ID
+ *
+ * @param _prefix ID prefix
+ */
 function uniqId(_prefix){
     if(typeof _prefix == 'undefined'){
         _prefix = 'jee-uniq';
@@ -766,12 +226,11 @@ function uniqId(_prefix){
     return result;
 }
 
-
-function taAutosize(){
-    autosize($('.ta_autosize'));
-    autosize.update($('.ta_autosize'));
-}
-
+/**
+ * Save position and sizes of widgets
+ *
+ * @param _params array of param dedicated for know page in edition
+ */
 function saveWidgetDisplay(_params){
     if(init(_params) == ''){
         _params = {};
@@ -864,7 +323,11 @@ function saveWidgetDisplay(_params){
     }
 }
 
-
+/**
+ * Create or Destroy the right context menu
+ *
+ * @param _mode 0=destroy, 1=initialize
+ */
 function editWidgetCmdMode(_mode){
     if(!isset(_mode)){
         if($('#bt_editDashboardWidgetOrder').attr('data-mode') != undefined && $('#bt_editDashboardWidgetOrder').attr('data-mode') == 1){
@@ -1047,6 +510,76 @@ function editWidgetCmdMode(_mode){
     }
 }
 
+/**
+ * Control size of widget, and assign class category for filtering
+ *
+ * @param _id EqLogic ID, if null>ALL
+ * @param _preResize TRUE if pre-resizing
+ * @param _scenario TRUE if it's a scenario widget
+ */
+function positionEqLogic(_id,_preResize,_scenario) {
+    if(_id != undefined){
+        var eqLogic = $('.eqLogic-widget[data-eqlogic_id='+_id+']');
+        var widget = (_scenario) ? $('.scenario-widget[data-scenario_id='+_id+']') : $('.eqLogic-widget[data-eqlogic_id='+_id+']');
+        widget.css('margin','0px').css('padding','0px');
+        eqLogic.trigger('resize');
+        eqLogic.addClass(eqLogic.attr('data-category'));
+        eqLogic.css('border-radius',widget_radius+'px');
+    } else {
+        $('.eqLogic-widget:not(.nextdomAlreadyPosition)').css('margin','0px').css('padding','0px');
+        $('.eqLogic-widget:not(.nextdomAlreadyPosition)').each(function () {
+            if($(this).width() == 0){
+                $(this).width('100px');
+            }
+            if($(this).height() == 0){
+                $(this).height('100px');
+            }
+            $(this).trigger('resize');
+            $(this).addClass($(this).attr('data-category'));
+        });
+        $('.eqLogic-widget:not(.nextdomAlreadyPosition)').css('border-radius',widget_radius+'px');
+        $('.eqLogic-widget').addClass('nextdomAlreadyPosition');
+    }
+}
+
+/**
+ * Remove a Equipement context
+ */
+function removeContextualFunction(){
+    printEqLogic = undefined
+}
+
+/**
+ * Convert a text on a link
+ *
+ * @param inputText text to convert
+ */
+function linkify(inputText) {
+    var replacePattern1 = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
+    var replacedText = inputText.replace(replacePattern1, '<a href="$1" target="_blank">$1</a>');
+    var replacePattern2 = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
+    var replacedText = replacedText.replace(replacePattern2, '$1<a href="http://$2" target="_blank">$2</a>');
+    var replacePattern3 = /(\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6})/gim;
+    var replacedText = replacedText.replace(replacePattern3, '<a href="mailto:$1">$1</a>');
+    return replacedText
+}
+
+/**
+ * Widget size calcul
+ */
+function calculWidgetSize(_size,_step,_margin){
+    var result = Math.ceil(_size / _step) * _step - (2*_margin);
+    if(result < _size){
+        result += Math.ceil((_size - result) / _step)* _step;
+    }
+    return result;
+}
+
+/**
+ * Convert an hex color to RGB color
+ *
+ * @param hex color in HEX format
+ */
 function hexToRgb(hex) {
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result ? {
@@ -1056,25 +589,136 @@ function hexToRgb(hex) {
     } : null;
 }
 
-function toggleFullScreen() {
-    if ((document.fullScreenElement && document.fullScreenElement !== null) ||    // alternative standard method
-        (!document.mozFullScreen && !document.webkitIsFullScreen)) {               // current working methods
-        if (document.documentElement.requestFullScreen) {
-            document.documentElement.requestFullScreen();
-        } else if (document.documentElement.mozRequestFullScreen) {
-            document.documentElement.mozRequestFullScreen();
-        } else if (document.documentElement.webkitRequestFullScreen) {
-            document.documentElement.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+/**
+ * Reset à config param to his default value in default.config.ini
+ *
+ * @param keyElt Elt or button who handle the reset and contain the config key
+ */
+function resetConfigParamKey(keyElt) {
+    lockModify = true;
+    var paramKey = keyElt.attr('data-l1key');
+    var defaultValue = "";
+    var arrayKey = paramKey.split("::");
+    arrayKey.pop();
+    var paramSubKey = arrayKey.join("::");
+    nextdom.config.remove({
+        configuration: paramKey,
+        error: function (error) {
+            notify("Core", error.message, 'error');
+        },
+        success: function (dataRemove) {
+            nextdom.config.load({
+                configuration: paramKey,
+                error: function (error) {
+                    notify("Core", error.message, 'error');
+                },
+                success: function (dataLoad) {
+                    if (isset(dataLoad) && dataLoad != "") {
+                        // Direct slider
+                        keyElt.siblings(".slider").value(dataLoad);
+                        // Or associate fields
+                        $('.configKey[data-l1key="' + paramKey + '"]').value(dataLoad)
+                        lockModify=false;
+                    } else {
+                        nextdom.config.load({
+                            configuration: paramSubKey,
+                            error: function (error) {
+                                notify("Core", error.message, 'error');
+                            },
+                            success: function (dataSubLoad) {
+                                if (isset(dataSubLoad) && dataSubLoad != "") {
+                                    defaultValue = dataSubLoad;
+                                } else {
+                                    defaultValue = 0;
+                                }
+                                // Direct slider
+                                keyElt.siblings(".slider").value(defaultValue);
+                                // Or associate fields
+                                $('.configKey[data-l1key="' + paramKey + '"]').value(dataSubLoad)
+                                lockModify=false;
+                            }
+                        });
+                    }
+                }
+            });
         }
-        $('#togglefullscreen').removeClass('fa-expand').addClass('fa-compress');
-    } else {
-        if (document.cancelFullScreen) {
-            document.cancelFullScreen();
-        } else if (document.mozCancelFullScreen) {
-            document.mozCancelFullScreen();
-        } else if (document.webkitCancelFullScreen) {
-            document.webkitCancelFullScreen();
+    });
+}
+
+/**
+ * Reset a theme param to his default value
+ *
+ * @param keyElt Elt or button who handle the reset and contain the config key
+ */
+function resetThemeParamKey(keyElt) {
+    var paramKey = keyElt.attr('data-l1key');
+    nextdom.config.load({
+        configuration: 'nextdom::theme',
+        error: function (error) {
+            notify("Core", error.message, 'error');
+        },
+        success: function (data) {
+            if (isset(data) && data != "") {
+                var config = getThemeColors(data);
+                // Direct slider
+                keyElt.siblings(".slider").value(config[paramKey]);
+                // Or associate fields
+                $('.configKey[data-l1key="' + paramKey + '"]').value(config[paramKey])
+            }
         }
-        $('#togglefullscreen').removeClass('fa-compress').addClass('fa-expand');
-    }
+    });
+}
+
+/**
+ * Reset a config color key to his default value
+ *
+ * @param keyElt Elt or button who handle the reset and contain the config key
+ */
+function resetConfigColorKey(keyElt) {
+    lockModify=true;
+    var paramKey = keyElt.attr('data-l1key');
+    nextdom.config.remove({
+        configuration: paramKey,
+        error: function (error) {
+            notify("Core", error.message, 'error');
+        },
+        success: function (dataRemove) {
+            nextdom.config.load({
+                configuration: paramKey,
+                error: function (error) {
+                    notify("Core", error.message, 'error');
+                },
+                success: function (dataLoad) {
+                    if (isset(dataLoad) && dataLoad != "") {
+                        $('.configKey[data-l1key="' + paramKey + '"]').parent().colorpicker('setValue', dataLoad);
+                    }
+                }
+            });
+        }
+    });
+    lockModify=false;
+}
+
+/**
+ * Reset a theme color key to his default value
+ *
+ * @param keyElt Elt or button who handle the reset and contain the config key
+ */
+function resetThemeColorKey(keyElt) {
+    var paramKey = keyElt.attr('data-l1key');
+    nextdom.config.load({
+        configuration: 'nextdom::theme',
+        error: function (error) {
+            notify("Core", error.message, 'error');
+        },
+        success: function (data) {
+            if (isset(data) && data != "") {
+                if (data.includes('custom')) {
+                    data = data.split('-')[1];
+                }
+                var config = getThemeColors(data);
+                $('.configKey[data-l1key="' + paramKey + '"]').parent().colorpicker('setValue', config[paramKey]);
+            }
+        }
+    });
 }

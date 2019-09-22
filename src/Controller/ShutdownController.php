@@ -24,6 +24,10 @@ namespace NextDom\Controller;
 
 use NextDom\Helpers\Render;
 
+/**
+ * Class ShutdownController
+ * @package NextDom\Controller
+ */
 class ShutdownController extends BaseController
 {
     /**
@@ -36,7 +40,6 @@ class ShutdownController extends BaseController
      */
     public static function get(&$pageData): string
     {
-        $pageData['JS_END_POOL'][] = '/public/js/adminlte/utils.js';
 
         return Render::getInstance()->get('/desktop/shutdown.html.twig', $pageData);
     }

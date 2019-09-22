@@ -37,6 +37,8 @@ namespace NextDom\Helpers;
 use NextDom\Enums\GetParams;
 use NextDom\Enums\ViewType;
 use NextDom\Managers\ConfigManager;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Turnout of the display
@@ -61,96 +63,6 @@ class Router
     }
 
     /**
-     * Viewing the requested content
-     *
-     * @return bool True if an answer has been provided.
-     * @throws \Exception
-     */
-    public function show(): bool
-    {
-        $result = false;
-        if ($this->viewType == ViewType::DESKTOP_VIEW) {
-            $this->desktopView();
-            $result = true;
-        } elseif ($this->viewType == ViewType::MOBILE_VIEW) {
-            $this->mobileView();
-            $result = true;
-        }
-        return $result;
-    }
-
-    /**
-     * Display for a computer
-     *
-     * @throws \Exception
-     */
-    public function desktopView()
-    {
-        AuthentificationHelper::init();
-
-        if (isset($_GET[GetParams::MODAL])) {
-            PrepareView::showModal();
-        } elseif (isset($_GET[GetParams::PLUGIN_CONF])) {
-            // Displaying the configuration section of a plugin in the configuration page
-            FileSystemHelper::includeFile('plugin_info', 'configuration', 'configuration', Utils::init(GetParams::PLUGIN_ID), true);
-        } elseif (isset($_GET[GetParams::AJAX_QUERY]) && $_GET[GetParams::AJAX_QUERY] == 1) {
-            PrepareView::showContentByAjax();
-        } else {
-            $configs = ConfigManager::byKeys(array(
-                'enableCustomCss',
-                'language',
-                'nextdom::firstUse',
-                'nextdom::Welcome',
-                'notify::status',
-                'notify::position',
-                'notify::timeout',
-                'widget::size',
-                'widget::margin',
-                'widget::padding',
-                'widget::radius',
-                'product_name',
-                'product_icon',
-                'product_connection_image',
-                'theme',
-                'default_bootstrap_theme'));
-            if ($configs['nextdom::firstUse'] == 1) {
-                PrepareView::showSpecialPage('firstUse', $configs);
-            } elseif (!AuthentificationHelper::isConnected()) {
-                PrepareView::showSpecialPage('connection', $configs);
-            } else {
-                if (AuthentificationHelper::isRescueMode()) {
-                    AuthentificationHelper::isConnectedAsAdminOrFail();
-                    PrepareView::showRescueMode($configs);
-                } else {
-                    PrepareView::showContent($configs);
-                }
-            }
-        }
-    }
-
-    /**
-     * Display mobile view
-     *
-     * @throws \Exception
-     */
-    private function mobileView()
-    {
-        $filename = 'index';
-        $type = 'html';
-        $plugin = '';
-        $modal = Utils::init('modal', false);
-        if ($modal !== false) {
-            $filename = $modal;
-            $type = 'modalhtml';
-            $plugin = Utils::init('plugin');
-        } elseif (isset($_GET['p']) && isset($_GET[GetParams::AJAX_QUERY])) {
-            $filename = $_GET['p'];
-            $plugin = isset($_GET['m']) ? $_GET['m'] : $plugin;
-        }
-        FileSystemHelper::includeFile('mobile', $filename, $type, $plugin, true);
-    }
-
-    /**
      * Show 404 error page (Not found)
      */
     public static function showError404AndDie()
@@ -167,5 +79,109 @@ class Router
     {
         header("HTTP/1.1 401 Unauthorized");
         die();
+    }
+
+    /**
+     * Viewing the requested content
+     *
+     * @return bool True if an answer has been provided.
+     * @throws \Exception
+     */
+    public function show(): bool
+    {
+        $result = false;
+        if ($this->viewType == ViewType::DESKTOP_VIEW) {
+            $this->desktopView();
+            $result = true;
+        } elseif ($this->viewType == ViewType::STATIC_VIEW) {
+            $this->staticView();
+            $result = true;
+        }
+        return $result;
+    }
+
+    /**
+     * Test if modal window is requested
+     *
+     * @return bool True if modal window is requested
+     */
+    private function isModalRequest()
+    {
+        return isset($_GET[GetParams::MODAL]);
+    }
+
+    /**
+     * Test if plugin configuration page is requested
+     *
+     * @return bool True if plugin configuration page is requested
+     */
+    private function isPluginConfRequest()
+    {
+        return isset($_GET[GetParams::PLUGIN_CONF]);
+    }
+
+    /**
+     * Test if page is requested by Ajax query
+     *
+     * @return bool True if page is requested by Ajax query
+     */
+    private function isAjaxQuery() {
+        return isset($_GET[GetParams::AJAX_QUERY]) && $_GET[GetParams::AJAX_QUERY] == 1;
+    }
+    /**
+     * Display for a computer
+     *
+     * @throws \Exception
+     */
+    public function desktopView()
+    {
+        AuthentificationHelper::init();
+        $prepareView = new PrepareView();
+        if ($this->isModalRequest()) {
+            $prepareView->showModal();
+        } elseif ($this->isPluginConfRequest()) {
+            // Displaying the configuration section of a plugin in the configuration page
+            FileSystemHelper::includeFile('plugin_info', 'configuration', 'configuration', Utils::init(GetParams::PLUGIN_ID), true);
+        } elseif ($this->isAjaxQuery()) {
+            $prepareView->showContentByAjax();
+        } else {
+            $prepareView->initConfig();
+            if (!$prepareView->firstUseAlreadyShowed()) {
+                $prepareView->showSpecialPage('firstUse');
+
+            } elseif (!AuthentificationHelper::isConnected()) {
+                $prepareView->showSpecialPage('connection');
+            } else {
+                $prepareView->showContent();
+            }
+        }
+    }
+
+    /**
+     * Show static content
+     */
+    private function staticView()
+    {
+        $response = new Response();
+        $request = Request::createFromGlobals();
+        $file = $request->get("file");
+        $mapped = FileSystemHelper::getAssetPath($file);
+        $data = @file_get_contents($mapped);
+        $mtime = @filemtime($mapped);
+
+        $response->prepare($request);
+        $response->setStatusCode(Response::HTTP_NOT_FOUND);
+
+        if (false !== $data) {
+            $response
+                ->setStatusCode(Response::HTTP_OK)
+                ->setPublic()
+                ->setMaxAge(0)
+                ->setContent($data)
+                ->setMaxAge(600)
+                ->setLastModified(new \DateTime("@" . $mtime));
+            $response->isNotModified($request);
+        }
+        $response->send();
     }
 }

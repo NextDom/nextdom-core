@@ -1,0 +1,79 @@
+@charset "utf-8";
+
+/* This file is part of NextDom Software.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom Software is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
+*
+* @Support <https://www.nextdom.org>
+* @Email   <admin@nextdom.org>
+* @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
+*/
+
+/* AdminLTE-Surcharge */
+.nav-tabs-custom {
+    border-radius: 3px;
+    & > .tab-content {
+        background: $whitelightgrey;
+    }
+    border-left: 1px solid rgba(0,0,0,0.2);
+    border-right: 1px solid rgba(0,0,0,0.2);
+    margin-bottom: 15px;
+}
+.nav-tabs a {
+    padding: 10px 10px !important;
+}
+@media (max-width: 768px) {
+    .navbar-form {
+        position: absolute;
+        top: -12px;
+        right: 10px;
+    }
+    .main-header .navbar .dropdown-menu li.divider {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+}
+.tab-content {
+    height: calc(100% - 50px);
+    overflow:auto;
+    overflow-x: hidden;
+}
+.nav>.label-log>a {
+    padding: 10px 10px;
+}
+.nav-tabs-custom>.nav-tabs>li.header>.fa, .nav-tabs-custom>.nav-tabs>li.header>.fas, .nav-tabs-custom>.nav-tabs>li.header>.glyphicon, .nav-tabs-custom>.nav-tabs>li.header>.ion {
+    margin-right: 8px !important;
+}
+
+/* Core-Ajout : Filtres objets dashboard*/
+.nav-tabs-dashboard {
+    border-bottom: none !important;
+    margin-bottom: 3px !important;
+    a {
+        padding: 8px 10px 6px 10px !important;
+    }
+}
+.nav-tabs-custom > .nav-tabs-dashboard > li {
+    border-top: none;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -3px;
+    margin-right: 0px;
+}
+.nav-tabs-dashboard > li.active > a {
+    cursor: pointer !important;
+}
+
+/* Core-Surcharge */
+.nav-tabs li a i {
+    margin-right: 8px;
+}

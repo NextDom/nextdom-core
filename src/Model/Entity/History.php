@@ -17,6 +17,8 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\DBHelper;
+use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\HistoryManager;
 
@@ -29,7 +31,7 @@ use NextDom\Managers\HistoryManager;
 class History
 {
     /**
-     * @var \DateTime
+     * @var string
      *
      * @ORM\Column(name="datetime", type="datetime", nullable=false)
      */
@@ -52,7 +54,13 @@ class History
      */
     protected $cmd_id;
     protected $_tableName = 'history';
+    protected $_changed = false;
 
+    /**
+     * @param null $_cmd
+     * @param bool $_direct
+     * @throws \NextDom\Exceptions\CoreException
+     */
     public function save($_cmd = null, $_direct = false)
     {
         global $NEXTDOM_INTERNAL_CONFIG;
@@ -86,7 +94,7 @@ class History
                     SET cmd_id=:cmd_id,
                     `datetime`=:datetime,
                     value=:value';
-                    \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW);
+                    DBHelper::exec($sql, $values);
                     return;
                 }
                 $values = array(
@@ -97,11 +105,11 @@ class History
                 FROM history
                 WHERE cmd_id=:cmd_id
                 AND `datetime`=:datetime';
-                $result = \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW);
+                $result = DBHelper::getOne($sql, $values);
                 if ($result !== false) {
                     switch ($cmd->getConfiguration('historizeMode', 'avg')) {
                         case 'avg':
-                            $this->setValue(($result['value'] + $this->getValue()) / 2);
+                            $this->setValue(($result['value'] + intval($this->getValue())) / 2);
                             break;
                         case 'min':
                             $this->setValue(min($result['value'], $this->getValue()));
@@ -130,61 +138,113 @@ class History
         SET cmd_id=:cmd_id,
         `datetime`=:datetime,
         value=:value';
-        \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW);
+        DBHelper::exec($sql, $values);
     }
 
-    public function remove()
-    {
-        \DB::remove($this);
-    }
-
-    public function getCmd_id()
-    {
-        return $this->cmd_id;
-    }
-
+    /**
+     * @return bool|Cmd
+     * @throws \Exception
+     */
     public function getCmd()
     {
         return CmdManager::byId($this->cmd_id);
     }
 
-    public function getValue()
+    /**
+     * @return Cmd
+     */
+    public function getCmd_id()
     {
-        return $this->value;
+        return $this->cmd_id;
     }
 
+    /**
+     * @param $cmd_id
+     * @return $this
+     */
+    public function setCmd_id($cmd_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->cmd_id, $cmd_id);
+        $this->cmd_id = $cmd_id;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
     public function getDatetime()
     {
         return $this->datetime;
     }
 
+    /**
+     * @param $datetime
+     * @return $this
+     */
+    public function setDatetime($datetime)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->datetime, $datetime);
+        $this->datetime = $datetime;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    /**
+     * @param $value
+     * @return $this
+     */
+    public function setValue($value)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->value, $value);
+        $this->value = $value;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
     public function getTableName()
     {
         return $this->_tableName;
     }
 
+    /**
+     * @param $_tableName
+     * @return $this
+     */
     public function setTableName($_tableName)
     {
         $this->_tableName = $_tableName;
         return $this;
     }
 
-    public function setCmd_id($cmd_id)
+    public function remove()
     {
-        $this->cmd_id = $cmd_id;
-        return $this;
+        DBHelper::remove($this);
     }
 
-    public function setValue($value)
+    /**
+     * @return bool
+     */
+    public function getChanged()
     {
-        $this->value = $value;
-        return $this;
+        return $this->_changed;
     }
 
-    public function setDatetime($datetime)
+    /**
+     * @param $_changed
+     * @return $this
+     */
+    public function setChanged($_changed)
     {
-        $this->datetime = $datetime;
+        $this->_changed = $_changed;
         return $this;
     }
 }
-

@@ -1,30 +1,73 @@
-<div style="display: none;" id="md_cmdConfigureSelectMultipleAlert"></div>
-<div>
-    <a class="btn btn-default" id="bt_cmdConfigureSelectMultipleAlertToogle" data-state="0"><i class="far fa-check-circle"></i> {{ ' Basculer ' }}</a>
-    <a class="btn btn-success pull-right" id="bt_cmdConfigureSelectMultipleAlertApply" style="color : white;"><i class="fas fa-check"></i> {{ ' Valider ' }}</a>
-</div>
-<br/>
-<table class="table table-bordered table-condensed tablesorter" id="table_cmdConfigureSelectMultiple">
-    <thead>
-    <tr>
-        <th></th>
-        <th>{{ ' Nom ' }}</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for cmd in cmds %}
-        <tr data-cmd_id="{{ cmd.getId() }}">
-            <td>
-                {% if currentCmd.getId() == cmd.getId() %}
-                    <input type="checkbox" class="selectMultipleApplyCmd" checked/>
-                {% else %}
-                    <input type="checkbox" class="selectMultipleApplyCmd"/>
-                {% endif %}
-            </td>
-            <td>
-                {{ cmd.getHumanName(true)|raw }}
-            </td>
+{#
+/* This file is part of Jeedom.
+*
+* Jeedom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* Jeedom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/* This file is part of NextDom.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#}
+<div id="md_cmdConfigureSelectMultipleAlert" style="display: none;"></div>
+
+<section class="content-header">
+    <div class="action-bar">
+        <div class="action-group">
+            <a class="btn btn-action-bar btn-warning" id="bt_cmdConfigureSelectMultipleAlertToogle" data-state="0"><i class="fas fa-toggle-on"></i>{{ 'Basculer' }}</a>
+        </div>
+        <div class="action-group">
+            <a class="btn btn-action-bar btn-success pull-right" id="bt_cmdConfigureSelectMultipleAlertApply"><i class="fas fa-check"></i>{{ 'Valider' }}</a>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <table class="table table-bordered table-condensed tablesorter" id="table_cmdConfigureSelectMultiple">
+        <thead>
+        <tr>
+            <th style="width: 120px;" data-sorter="false" data-filter="false">{{ 'Selection' }}</th>
+            <th>{{ 'Nom' }}</th>
         </tr>
-    {% endfor %}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        {% for cmd in cmds %}
+            <tr data-cmd_id="{{ cmd.getId() }}">
+                <td>
+                    {% if currentCmd.getId() == cmd.getId() %}
+                        <input type="checkbox" class="selectMultipleApplyCmd" checked/>
+                    {% else %}
+                        <input type="checkbox" class="selectMultipleApplyCmd"/>
+                    {% endif %}
+                </td>
+                <td>
+                    {{ cmd.getHumanName(true)|raw }}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</section>

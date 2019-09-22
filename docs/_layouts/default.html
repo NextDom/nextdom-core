@@ -1,35 +1,74 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="https://NextDom.github.io/NextDom/plugins/assets/css/materialize.css">
-  <link rel="stylesheet" href="https://NextDom.github.io/NextDom/plugins/assets/css/styles.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta http-equiv="Content-Language" content="pt-br">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://nextdom.github.io/assets/css/styles.css">
+    <link rel="stylesheet" href="https://nextdom.github.io/assets/css/materialize.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="Content-Language" content="pt-br">
+
+    <link rel="icon" href="https://nextdom.github.io/favicon.ico"/>
+    <title>NextDom</title>
+
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+    <!--Import materialize.css-->
+
+    <!-- Material Design icon font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link type="text/css" rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css"
+          media="screen,projection"/>
+    <link href="https://nextdom.github.io/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.2.min.js"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    <script type="text/javascript">
+    function includeHTML() {
+        var z, i, elmnt, file, xhttp;
+        /*loop through a collection of all HTML elements:*/
+        z = document.getElementsByTagName("*");
+        for (i = 0; i < z.length; i++) {
+            elmnt = z[i];
+            /*search for elements with a certain atrribute:*/
+            file = elmnt.getAttribute("w3-include-html");
+            if (file) {
+                /*make an HTTP request using the attribute value as the file name:*/
+                xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4) {
+                        if (this.status == 200) {
+                            elmnt.innerHTML = this.responseText;
+                        }
+                        if (this.status == 404) {
+                            elmnt.innerHTML = "Page not found.";
+                        }
+                        /*remove the attribute, and call this function once more:*/
+                        elmnt.removeAttribute("w3-include-html");
+                        includeHTML();
+                    }
+                }
+                xhttp.open("GET", file, true);
+                xhttp.send();
+                /*exit the function:*/
+                return;
+            }
+        }
+    };
+</script>
+    <script type="text/javascript" src="https://nextdom.github.io/assets/js/materialize.min.js"></script>
+    <script type="text/javascript" src="https://nextdom.github.io/assets/js/jquery.inview.min.js"></script>
+    <script type="text/javascript" src="https://nextdom.github.io/assets/js/jquery.toc.js"></script>
+    <script type="text/javascript" src="https://nextdom.github.io/js/documentation.js"></script>
 </head>
+
 <body>
-<div class="navbar-fixed">
-    <nav>
-        <div class="nav-wrapper container">
-            <a id="logo-container" href="https://NextDom.github.io/" class="brand-logo left"><img class="logo" src="/NextDom/images/logoblue.png"></a>
-            <ul class="left">
-                <li><h5 style="margin-top:15px; padding-left: 75px">NextDom</h5>
-                    <ul class="left hide-on-med-and-down">
-                        <li><h6 style="padding-left: 75px; margin-top:0px">Car à plusieurs on est plus fort et ensemble on codera plus propre</h6></li>
-                    </ul>
-            </ul>
-            <a href="https://NextDom.github.io/" data-activates="nav-mobile" class="button-collapse btn-floating btn-large waves-effect waves-light jeedomcolorbg"><i class="material-icons">menu</i></a>
-            <ul class="right hide-on-med-and-down">
-                <li><a href="https://NextDom.github.io/">Site</a></li>
-            </ul>
-            <ul class="side-nav" id="nav-mobile">
-                <li><a href="https://NextDom.github.io/">Site</a></li>
-                <li><a href="https://www.jeedom.com/forum/">Forum Jeedom</a></li>
-                <li><a href="https://www.jeedom.com/site/fr/">Jeedom SAS</a></li>
-            </ul>
-        </div>
-    </nav>
-</div>
+
+<div w3-include-html="https://nextdom.github.io/header.html"></div>
 <div class="row" id="div_main">
     <div id="side-nav" class="side-nav fixed">
         <div class="container">
@@ -48,7 +87,7 @@
                 </div>
             </div>
         </div>
-        <div id="div_summary"></div>
+        <div id="div_summary" style="margin-top:-45px;padding-bottom: 45px;"></div>
     </div>
     <div>
         <i class="material-icons" id="bt_up" style="position:fixed;bottom:10px;right:10px;cursor: pointer;font-size:3em;">keyboard_arrow_up</i>
@@ -74,96 +113,11 @@
         </div>
     </div>
 </div>
-<footer class="page-footer">
-    <div class="container">
-        <div class="row">
-            <a class="col s3" style="text-align:center" href="https://creativecommons.org/licenses/by-sa/4.0/"><img src="https://creativecommons.org/images/deed/cc_blue_x2.png" height="24px" width="24px"><img src="https://creativecommons.org/images/deed/attribution_icon_blue_x2.png" height="24px" width="24px"><img src="https://creativecommons.org/images/deed/sa_blue_x2.png" height="24px" width="24px"></a>
-            <ul class="hide-on-med-and-down">
-                <a class="col s3 light-green-text" style="text-align:right"  href="https://www.jeedom.com/forum/">Forum Jeedom</a>
-                <a class="col s3 light-green-text" style="text-align:left" href="https://www.jeedom.com/site/fr/">Jeedom SAS</a>
-            </ul>
-            <a class="col s3 grey-text" style="text-align:center" href="https://github.com/NextDom/NextDom">Github</a>
-        </div>
-    </div>
-</footer>
-<script type="text/javascript" src="https://NextDom.github.io/NextDom/plugins/assets/js/jquery-2.1.1.min.js"></script>
-<script type="text/javascript" src="https://NextDom.github.io/NextDom/plugins/assets/js/materialize.min.js"></script>
-<script type="text/javascript" src="https://NextDom.github.io/NextDom/plugins/assets/js/jquery.inview.min.js"></script>
-<script type="text/javascript" src="https://NextDom.github.io/NextDom/plugins/assets/js/jquery.toc.js"></script>
+<div w3-include-html="https://nextdom.github.io/footer.html"></div>
+
 <script type="text/javascript">
-    $(document).ready(function() {
-        var title = '{{site.github.project_title}}';
-        title = title.replace('plugin-','');
-        $('#doc_title').append(title[0].toUpperCase() + title.substring(1))
-        document.title = 'Documentation NextDom | '+ title[0].toUpperCase() + title.substring(1)
-        $(".button-collapse").sideNav();
-        $('meta[name=description]').remove();
-        $('head').append( '<meta name="description" content="Ceci est la documentation du plugin "'+ title[0].toUpperCase() + title.substring(1)+'", lier à la solution domotique Jeedom.">' );
-        $('img').addClass('responsive-img');
-        $('#div_content table').addClass('striped');
-        init();
-        var regex = /\/([a-z]{2}_[A-Z]{2})\//g;
-        var corresp  = regex.exec(window.location.href)
-        if(corresp !== null && corresp[1]){
-            $('.sel_lang').val(corresp[1])
-        }
-        $('select').material_select();
-        $('.sel_lang').on('change',function(){
-            var regex = /\/([a-z]{2}_[A-Z]{2})\//g;
-            var corresp  = regex.exec(window.location.href);
-            var url = window.location.href.replace(corresp[1], $(this).find('option:selected').attr('value'));
-            if(url.endsWith('/')){
-                url += 'index';
-            }
-            window.location.href = url;
-        })
-        $('#bt_up').on('click',function(){
-            window.scrollTo(0, 0);
-        })
-        $(window).on("orientationchange", function (event) {
-            init();
-        });
-        $(window).on("resize", function (event) {
-            init();
-        });
-        function init(){
-            $('#div_summary2,#div_summary').empty();
-            var titlePlugin = title.charAt(0).toUpperCase() + title.substring(1).toLowerCase()
-            if(window.innerWidth < 992){
-                $('#div_main').addClass('container');
-                $('#div_content').toc({
-                    renderIn : "#div_summary2",
-                    selectors : 'h1,h2'
-                });
-            }else{
-                $('#div_main').removeClass('container');
-                $('#div_content').toc({
-                    renderIn : "#div_summary",
-                    selectors : 'h1,h2'
-                });
-            }
-            $('#toctitle').html('<h2 style="padding-left:5px !important;">'+titlePlugin+'</h2>');
-            $('.toclevel-2').parent().css('color', 'blue');
-        }
-
-    });
-
-    var idChapitre = null, nbrChapitre = 0, idAncre = null;
-    $('#div_content h1, #div_content h2').on('inview',function(event, isInView){
-        nbrChapitre = $('a.active').length;
-        idAncre = $(this).attr('id');
-        if(isInView){
-            $('a[href="#'+ idAncre +'"]').addClass('active');
-            if(idChapitre != null){
-                $('a[href="#'+ idChapitre +'"]').removeClass('active');
-                idChapitre = null;
-            }
-        }else if (nbrChapitre > 1){
-            $('a[href="#'+ idAncre +'"]').removeClass('active');
-        }else{
-            idChapitre = idAncre;
-        }
-    });
+    includeHTML();
 </script>
+
 </body>
 </html>

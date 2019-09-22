@@ -18,11 +18,16 @@
 
 namespace NextDom\Enums;
 
+/**
+ * Class PluginManagerCron
+ * @package NextDom\Enums
+ */
 class PluginManagerCron extends Enum
 {
 
     const CRON = 'cron';
     const CRON_5 = 'cron5';
+    const CRON_10 = 'cron10';
     const CRON_15 = 'cron15';
     const CRON_30 = 'cron30';
     const CRON_DAILY = 'cronDaily';

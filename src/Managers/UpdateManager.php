@@ -33,11 +33,19 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Enums\UpdateStatus;
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
-use NextDom\Helpers\NextDomHelper;
 use NextDom\Model\Entity\Update;
 
+/**
+ * Class UpdateManager
+ *
+ * Manage updates
+ *
+ * @package NextDom\Managers
+ */
 class UpdateManager
 {
     const DB_CLASS_NAME = 'update';
@@ -45,117 +53,252 @@ class UpdateManager
 
     /**
      * Check all updates
-     * @param string $filter
-     * @param bool $findNewObjects
+     *
+     * @param string $filter Type of update
+     * @param bool $findNewObjects Find if new objects are presents
+     *
      * @throws \Exception
      */
     public static function checkAllUpdate($filter = '', $findNewObjects = true)
     {
-        $findCore = false;
         if ($findNewObjects) {
             self::findNewUpdateObject();
         }
         $updatesList = self::all($filter);
-        $updates_sources = array();
+        $updatesToCheckBySource = [];
+        // Arrange updates by source
         if (is_array($updatesList)) {
             foreach ($updatesList as $update) {
-                if ($update->getType() == 'core') {
-                    if ($findCore) {
-                        $update->remove();
-                        continue;
+                if ($update->getStatus() != UpdateStatus::HOLD) {
+                    $updateSource = $update->getSource();
+                    if (!isset($updatesToCheckBySource[$updateSource])) {
+                        $updatesToCheckBySource[$updateSource] = [];
                     }
-                    $findCore = true;
-                    $update->setType('core')
-                        ->setLogicalId('nextdom')
-                        ->setSource(ConfigManager::byKey('core::repo::provider'))
-                        ->setLocalVersion(NextDomHelper::getNextdomVersion());
-                    $update->save();
-                    $update->checkUpdate();
-                } else {
-                    if ($update->getStatus() != 'hold') {
-                        if (!isset($updates_sources[$update->getSource()])) {
-                            $updates_sources[$update->getSource()] = array();
-                        }
-                        $updates_sources[$update->getSource()][] = $update;
+                    $updatesToCheckBySource[$updateSource][] = $update;
+                }
+            }
+        }
+
+        // Check all updates
+        foreach ($updatesToCheckBySource as $source => $updates) {
+            if (ConfigManager::byKey($source . '::enable') == 1) {
+                $repoData = self::getRepoDataFromName($source);
+                if (array_key_exists('phpClass', $repoData)) {
+                    $repoPhpClass = $repoData['phpClass'];
+                    if (class_exists($repoPhpClass) && method_exists($repoPhpClass, 'checkUpdate')) {
+                        $repoPhpClass::checkUpdate($updates);
                     }
                 }
             }
         }
-        if (!$findCore && ($filter == '' || $filter == 'core')) {
-            $update = (new Update())
-                ->setType('core')
-                ->setLogicalId('nextdom')
-                ->setSource(ConfigManager::byKey('core::repo::provider'))
-                ->setConfiguration('user', 'NextDom')
-                ->setConfiguration('repository', 'nextdom-core')
-                ->setConfiguration('version', 'master')
-                ->setLocalVersion(NextDomHelper::getNextdomVersion());
-            $update->save();
-            $update->checkUpdate();
-        }
-        foreach ($updates_sources as $source => $updates) {
-            $class = 'repo_' . $source;
-            if (class_exists($class) && method_exists($class, 'checkUpdate') && ConfigManager::byKey($source . '::enable') == 1) {
-                $class::checkUpdate($updates);
-            }
-        }
+
+        // Save last update in database
         ConfigManager::save('update::lastCheck', date('Y-m-d H:i:s'));
     }
 
     /**
-     * List of rest (Source of downloads)
-     * @return array
+     * Find if new items are presents (installed manually)
+     *
+     * @throws \Exception
+     */
+    public static function findNewUpdateObject()
+    {
+        // Look for plugins
+        foreach (PluginManager::listPlugin() as $plugin) {
+            $pluginId = $plugin->getId();
+            $update = self::byTypeAndLogicalId('plugin', $pluginId);
+            if (!is_object($update)) {
+                $update = (new Update())
+                    ->setLogicalId($pluginId)
+                    ->setType('plugin')
+                    ->setLocalVersion(date('Y-m-d H:i:s'));
+                $update->save();
+            }
+            $find = [];
+            if (method_exists($pluginId, 'listMarketObject')) {
+                $pluginIdListMarketObject = $pluginId::listMarketObject();
+                foreach ($pluginIdListMarketObject as $logicalId) {
+                    $find[$logicalId] = true;
+                    $update = self::byTypeAndLogicalId($pluginId, $logicalId);
+                    if (!is_object($update)) {
+                        $update = (new Update())
+                            ->setLogicalId($logicalId)
+                            ->setType($pluginId)
+                            ->setLocalVersion(date('Y-m-d H:i:s'));
+                        $update->save();
+                    }
+                }
+                $byTypePluginId = self::byType($pluginId);
+                foreach ($byTypePluginId as $update) {
+                    if (!isset($find[$update->getLogicalId()])) {
+                        $update->remove();
+                    }
+                }
+            } else {
+                $params = [
+                    'type' => $pluginId,
+                ];
+                $sql = 'DELETE FROM `' . self::DB_CLASS_NAME . '`
+                        WHERE `type` = :type';
+                DBHelper::exec($sql, $params);
+            }
+        }
+    }
+
+    /**
+     * Get updates from their type and logicalId
+     *
+     * @param $type
+     * @param $logicalId
+     *
+     * @return Update[]|null
+     *
+     * @throws \Exception
+     */
+    public static function byTypeAndLogicalId($type, $logicalId)
+    {
+        $params = [
+            'logicalId' => $logicalId,
+            'type' => $type,
+        ];
+        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
+                FROM `' . self::DB_CLASS_NAME . '`
+                WHERE logicalId = :logicalId
+                AND `type` = :type';
+        return DBHelper::getOneObject($sql, $params, self::CLASS_NAME);
+    }
+
+    /**
+     * Get updates by type
+     *
+     * @param $type
+     *
+     * @return Update[]|null
+     *
+     * @throws \Exception
+     */
+    public static function byType($type)
+    {
+        $params = [
+            'type' => $type,
+        ];
+        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
+                FROM `' . self::DB_CLASS_NAME . '`
+                WHERE `type` = :type';
+        return DBHelper::getAllObjects($sql, $params, self::CLASS_NAME);
+    }
+
+    /**
+     * Get all the updates.
+     *
+     * @param string $filter
+     *
+     * @return array|null List of all objects
+     *
+     * @throws \Exception
+     */
+    public static function all($filter = '')
+    {
+        $params = [];
+        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
+                FROM `' . self::DB_CLASS_NAME . '` ';
+        if ($filter != '') {
+            $params['type'] = $filter;
+            $sql .= 'WHERE `type` = :type ';
+        }
+        $sql .= 'ORDER BY FIELD( `status`, "update", "ok", "depreciated") ASC, FIELD( `type`, "plugin","core") DESC, `name` ASC';
+        return DBHelper::getAllObjects($sql, $params, self::CLASS_NAME);
+    }
+
+    /**
+     * List of repositories
+     *
+     * @return array Repositories data
+     *
      * @throws \Exception
      */
     public static function listRepo(): array
     {
-        $result = array();
-        foreach (FileSystemHelper::ls(NEXTDOM_ROOT . '/core/repo', '*.repo.php') as $repoFile) {
-            if (substr_count($repoFile, '.') != 2) {
-                continue;
+        $result = [];
+        // Temp hack for specific repo render file
+        $repoRenderFiles = ['RepoMarketApi.php', 'RepoMarketDisplay.php', 'RepoMarketList.php', 'RepoMarketSend.php'];
+        foreach (FileSystemHelper::ls(NEXTDOM_ROOT . '/src/Repo/', '*.php') as $repoFile) {
+            if (!in_array($repoFile, $repoRenderFiles)) {
+                $repoClassName = str_replace('.php', '', $repoFile);
+                $repoCode = strtolower(str_replace('Repo', '', $repoClassName));
+                $fullNameClass = '\\NextDom\\Repo\\' . $repoClassName;
+                if (class_exists($fullNameClass)) {
+                    $result[$repoCode] = [
+                        'name' => $fullNameClass::$_name,
+                        'class' => $fullNameClass,
+                        'configuration' => $fullNameClass::$_configuration,
+                        'scope' => $fullNameClass::$_scope,
+                    ];
+                    $result[$repoCode]['enable'] = ConfigManager::byKey($repoCode . '::enable');
+                }
             }
-
-            $class = 'repo_' . str_replace('.repo.php', '', $repoFile);
-            /** @noinspection PhpUndefinedFieldInspection */
-            $result[str_replace('.repo.php', '', $repoFile)] = array(
-                'name' => $class::$_name,
-                'class' => $class,
-                'configuration' => $class::$_configuration,
-                'scope' => $class::$_scope,
-            );
-            $result[str_replace('.repo.php', '', $repoFile)]['enable'] = ConfigManager::byKey(str_replace('.repo.php', '', $repoFile) . '::enable');
         }
         return $result;
     }
 
     /**
+     * Get the class of the repo by the name
+     *
+     * @param string $name Name of the repo in jeedom format
+     *
+     * @return array Associative array
+     *
+     * @throws \Exception
+     */
+    public static function getRepoDataFromName($name): array
+    {
+        $repoList = self::listRepo();
+        foreach ($repoList as $repoData) {
+            if (ucfirst($repoData['name']) == ucfirst($name)) {
+                return [
+                    'className' => str_replace('\\NextDom\\Repo\\', '', $repoData['class']),
+                    'phpClass' => $repoData['class']
+                ];
+            }
+        }
+        return [];
+    }
+
+    /**
      * Get a repo by its identifier
+     *
      * @param string $id Repo identifier
-     * @return array
+     *
+     * @return array Repo data
+     *
      * @throws \Exception
      */
     public static function repoById($id)
     {
-        $class = 'repo_' . $id;
-        $return = array(
-            'name' => $class::$_name,
-            'class' => $class,
-            'configuration' => $class::$_configuration,
-            'scope' => $class::$_scope,
-        );
-        $return['enable'] = ConfigManager::byKey($id . '::enable');
-        return $return;
+        $repoClassData = self::getRepoDataFromName($id);
+        $phpClass = $repoClassData['phpClass'];
+        $result = [
+            'name' => $phpClass::$_name,
+            'class' => $repoClassData['className'],
+            'configuration' => $phpClass::$_configuration,
+            'scope' => $phpClass::$_scope
+        ];
+        $result['enable'] = ConfigManager::byKey($id . '::enable');
+        return $result;
     }
 
     /**
      * Update all items
-     * @param string $filter
-     * @return bool
-     * @throws \Exception
+     *
+     * @param string $filter Type of updates
+     *
+     * @return bool True if all update pass
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Throwable
      */
     public static function updateAll(string $filter = '')
     {
-        //TODO: Il n'a pas l'air de servir à grand chose ce test
         $error = false;
         if ($filter == 'core') {
             foreach (self::byType($filter) as $update) {
@@ -163,13 +306,13 @@ class UpdateManager
             }
         } else {
             if ($filter == '') {
-                $updates = self::all();
+                $updatesList = self::all();
             } else {
-                $updates = self::byType($filter);
+                $updatesList = self::byType($filter);
             }
-            if (is_array($updates)) {
-                foreach ($updates as $update) {
-                    if ($update->getStatus() != 'hold' && $update->getStatus() == 'update' && $update->getType() != 'core') {
+            if (is_array($updatesList)) {
+                foreach ($updatesList as $update) {
+                    if ($update->getStatus() != UpdateStatus::HOLD && $update->getStatus() == UpdateStatus::UPDATE && $update->getType() != 'core') {
                         try {
                             $update->doUpdate();
                         } catch (\Exception $e) {
@@ -184,179 +327,97 @@ class UpdateManager
     }
 
     /**
-     * Get information about an update from its username
+     * Get update by his id
+     *
      * @param string $id ID of the update
-     * @return array|mixed|null
+     *
+     * @return Update|null Update object
+     *
      * @throws \Exception
      */
     public static function byId($id)
     {
-        $values = array(
+        $params = [
             'id' => $id,
-        );
-        $sql = 'SELECT ' . \DB::buildField(self::DB_CLASS_NAME) . '
+        ];
+        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
                 FROM `' . self::DB_CLASS_NAME . '`
-                WHERE id=:id';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
+                WHERE id = :id';
+        return DBHelper::getOneObject($sql, $params, self::CLASS_NAME);
     }
 
     /**
-     * Get updates from their status
-     * @param $status
-     * @return Update[]
+     * Get updates by their status
+     *
+     * @param string $status Status of the update (@see UpdateStatus)
+     *
+     * @return Update[] List of updates of the required status
+     *
      * @throws \Exception
      */
     public static function byStatus($status)
     {
-        $values = array(
+        $params = [
             'status' => $status,
-        );
-        $sql = 'SELECT ' . \DB::buildField(self::DB_CLASS_NAME) . '
+        ];
+        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
                 FROM `' . self::DB_CLASS_NAME . '`
-                WHERE status=:status';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+                WHERE status = :status';
+        return DBHelper::getAllObjects($sql, $params, self::CLASS_NAME);
     }
 
     /**
      * Get the bets from its logical identifier
-     * @param $logicalId
-     * @return array|mixed|null
+     *
+     * @param string $logicalId Logical Id of the update (plugin id)
+     *
+     * @return Update[]|null List of updates
+     *
      * @throws \Exception
      */
     public static function byLogicalId($logicalId)
     {
-        $values = array(
+        $params = [
             'logicalId' => $logicalId,
-        );
-        $sql = 'SELECT ' . \DB::buildField(self::DB_CLASS_NAME) . '
+        ];
+        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
                 FROM `' . self::DB_CLASS_NAME . '`
-                WHERE logicalId=:logicalId';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
-    }
-
-    /**
-     * Obtenir les mises à jour à partir de leur type
-     *
-     * @param $type
-     * @return array|mixed|null
-     * @throws \Exception
-     */
-    public static function byType($type)
-    {
-        $values = array(
-            'type' => $type,
-        );
-        $sql = 'SELECT ' . \DB::buildField(self::DB_CLASS_NAME) . '
-                FROM `' . self::DB_CLASS_NAME . '`
-                WHERE type=:type';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
-    }
-
-    /**
-     * Get updates from their type and logicalId
-     *
-     * @param $type
-     * @param $logicalId
-     * @return array|mixed|null
-     * @throws \Exception
-     */
-    public static function byTypeAndLogicalId($type, $logicalId)
-    {
-        $values = array(
-            'logicalId' => $logicalId,
-            'type' => $type,
-        );
-        $sql = 'SELECT ' . \DB::buildField(self::DB_CLASS_NAME) . '
-                FROM `' . self::DB_CLASS_NAME . '`
-                WHERE logicalId=:logicalId
-                AND type=:type';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, self::CLASS_NAME);
-    }
-
-    /**
-     * Get all the updates.
-     * @param string $filter
-     * @return array|null List of all objects
-     * @throws \Exception
-     */
-    public static function all($filter = '')
-    {
-        $values = array();
-        $sql = 'SELECT ' . \DB::buildField(self::DB_CLASS_NAME) . '
-                FROM `' . self::DB_CLASS_NAME . '` ';
-        if ($filter != '') {
-            $values['type'] = $filter;
-            $sql .= 'WHERE `type`=:type ';
-        }
-        $sql .= 'ORDER BY FIELD( `status`, "update","ok","depreciated") ASC,FIELD( `type`,"plugin","core") DESC, `name` ASC';
-        return \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ALL, \PDO::FETCH_CLASS, self::CLASS_NAME);
+                WHERE logicalId = :logicalId';
+        return DBHelper::getOneObject($sql, $params, self::CLASS_NAME);
     }
 
     /**
      * Get the number of pending updates
-     * @return mixed
-     * @throws \Exception
+     *
+     * @param string $filter Type filter
+     *
+     * @return int Count of pending updates
+     *
+     * @throws \NextDom\Exceptions\CoreException
      */
-    public static function nbNeedUpdate()
+    public static function nbNeedUpdate($filter = '')
     {
+        $params = [
+            'status' => 'update',
+            'configuration' => '%"doNotUpdate":"1"%'
+        ];
         $sql = 'SELECT count(*)
-                FROM `' . self::DB_CLASS_NAME . '`
-                WHERE `status`="update"';
-        $result = \DB::Prepare($sql, array(), \DB::FETCH_TYPE_ROW);
+               FROM `' . self::DB_CLASS_NAME . '`
+               WHERE `status` = :status
+               AND `configuration` NOT LIKE :configuration';
+        if ($filter != '') {
+            $params['type'] = $filter;
+            $sql .= ' AND `type` = :type';
+        }
+
+        $result = DBHelper::getOne($sql, $params);
         return $result['count(*)'];
     }
 
     /**
-     * Search new updates
-     * @throws \Exception
-     */
-    public static function findNewUpdateObject()
-    {
-        foreach (PluginManager::listPlugin() as $plugin) {
-            $pluginId = $plugin->getId();
-            $update = self::byTypeAndLogicalId('plugin', $pluginId);
-            if (!is_object($update)) {
-                $update = (new Update())
-                    ->setLogicalId($pluginId)
-                    ->setType('plugin')
-                    ->setLocalVersion(date('Y-m-d H:i:s'));
-                $update->save();
-            }
-            $find = array();
-            if (method_exists($pluginId, 'listMarketObject')) {
-                $pluginIdListMarketObject = $pluginId::listMarketObject();
-                foreach ($pluginIdListMarketObject as $logical_id) {
-                    $find[$logical_id] = true;
-                    $update = self::byTypeAndLogicalId($pluginId, $logical_id);
-                    if (!is_object($update)) {
-                        $update = (new Update())
-                            ->setLogicalId($logical_id)
-                            ->setType($pluginId)
-                            ->setLocalVersion(date('Y-m-d H:i:s'));
-                        $update->save();
-                    }
-                }
-                $byTypePluginId = self::byType($pluginId);
-                foreach ($byTypePluginId as $update) {
-                    if (!isset($find[$update->getLogicalId()])) {
-                        $update->remove();
-                    }
-                }
-            } else {
-                $values = array(
-                    'type' => $pluginId,
-                );
-                $sql = 'DELETE FROM `' . self::DB_CLASS_NAME . '`
-                        WHERE type=:type';
-                \DB::Prepare($sql, $values, \DB::FETCH_TYPE_ROW);
-            }
-        }
-    }
-
-    /**
-     * Liste des mises à jour du core.
+     * List core updates
      *
-     * @return array
+     * @return array List of updates
      */
     public static function listCoreUpdate()
     {

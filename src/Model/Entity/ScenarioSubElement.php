@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ScenarioElementManager;
 use NextDom\Managers\ScenarioExpressionManager;
@@ -27,7 +28,7 @@ use NextDom\Managers\ScenarioExpressionManager;
  * ORM\Table(name="scenarioSubElement", indexes={@ORM\Index(name="fk_scenarioSubElement_scenarioElement1_idx", columns={"scenarioElement_id"}), @ORM\Index(name="type", columns={"scenarioElement_id", "type"})})
  * ORM\Entity
  */
-class ScenarioSubElement
+class ScenarioSubElement implements EntityInterface
 {
 
     /**
@@ -88,24 +89,18 @@ class ScenarioSubElement
 
     protected $_changed = false;
 
-
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
-    }
-
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
     }
 
+    /**
+     * @param $_name
+     * @return $this
+     */
     public function setName($_name)
     {
         $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
@@ -113,28 +108,27 @@ class ScenarioSubElement
         return $this;
     }
 
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    public function setType($_type)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->type, $_type);
-        $this->type = $_type;
-        return $this;
-    }
-
-    public function getScenarioElement_id()
-    {
-        return $this->scenarioElement_id;
-    }
-
+    /**
+     * @return ScenarioElement
+     * @throws \Exception
+     */
     public function getElement()
     {
         return ScenarioElementManager::byId($this->getScenarioElement_id());
     }
 
+    /**
+     * @return ScenarioElement
+     */
+    public function getScenarioElement_id()
+    {
+        return $this->scenarioElement_id;
+    }
+
+    /**
+     * @param $_scenarioElement_id
+     * @return $this
+     */
     public function setScenarioElement_id($_scenarioElement_id)
     {
         $this->_changed = Utils::attrChanged($this->_changed, $this->scenarioElement_id, $_scenarioElement_id);
@@ -142,11 +136,21 @@ class ScenarioSubElement
         return $this;
     }
 
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
     public function getOptions($_key = '', $_default = '')
     {
         return Utils::getJsonAttr($this->options, $_key, $_default);
     }
 
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
     public function setOptions($_key, $_value)
     {
         $options = Utils::setJsonAttr($this->options, $_key, $_value);
@@ -155,11 +159,18 @@ class ScenarioSubElement
         return $this;
     }
 
+    /**
+     * @return int
+     */
     public function getOrder()
     {
         return $this->order;
     }
 
+    /**
+     * @param $_order
+     * @return $this
+     */
     public function setOrder($_order)
     {
         $this->_changed = Utils::attrChanged($this->_changed, $this->order, $_order);
@@ -167,29 +178,23 @@ class ScenarioSubElement
         return $this;
     }
 
-    public function getSubtype()
-    {
-        return $this->subtype;
-    }
-
-    public function setSubtype($_subtype)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->subtype, $_subtype);
-        $this->subtype = $_subtype;
-        return $this;
-    }
-
+    /**
+     * @return bool
+     */
     public function getChanged()
     {
         return $this->_changed;
     }
 
+    /**
+     * @param $_changed
+     * @return $this
+     */
     public function setChanged($_changed)
     {
         $this->_changed = $_changed;
         return $this;
     }
-
 
     /**
      * @param Scenario $_scenario
@@ -218,19 +223,48 @@ class ScenarioSubElement
         return null;
     }
 
-    public function save()
+    /**
+     * @return string
+     */
+    public function getSubtype()
     {
-        \DB::save($this);
+        return $this->subtype;
     }
 
-    public function remove()
+    /**
+     * @param $_subtype
+     * @return $this
+     */
+    public function setSubtype($_subtype)
     {
-        foreach ($this->getExpression() as $expression) {
-            $expression->remove();
-        }
-        \DB::remove($this);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->subtype, $_subtype);
+        $this->subtype = $_subtype;
+        return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param $_type
+     * @return $this
+     */
+    public function setType($_type)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->type, $_type);
+        $this->type = $_type;
+        return $this;
+    }
+
+    /**
+     * @return array|mixed|null
+     * @throws \Exception
+     */
     public function getExpression()
     {
         if (is_array($this->_expression) && count($this->_expression) > 0) {
@@ -240,6 +274,37 @@ class ScenarioSubElement
         return $this->_expression;
     }
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param $_id
+     * @return $this
+     */
+    public function setId($_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
+        $this->id = $_id;
+        return $this;
+    }
+
+    public function remove()
+    {
+        foreach ($this->getExpression() as $expression) {
+            $expression->remove();
+        }
+        DBHelper::remove($this);
+    }
+
+    /**
+     * @return array
+     * @throws \Exception
+     */
     public function getAllId()
     {
         $return = array(
@@ -256,6 +321,11 @@ class ScenarioSubElement
         return $return;
     }
 
+    /**
+     * @param $_scenarioElement_id
+     * @return int
+     * @throws \Exception
+     */
     public function copy($_scenarioElement_id)
     {
         $subElementCopy = clone $this;
@@ -268,6 +338,14 @@ class ScenarioSubElement
         return $subElementCopy->getId();
     }
 
+    public function save()
+    {
+        DBHelper::save($this);
+    }
+
+    /**
+     * @return string
+     */
     public function getTableName()
     {
         return 'scenarioSubElement';

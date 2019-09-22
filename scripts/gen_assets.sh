@@ -21,167 +21,149 @@ set_root() {
 }
 set_root $0
 
+set -e
+
 function gen_css {
     COMPRESS=""
     if [ $# -eq 0 ]; then
         COMPRESS="--style compressed"
     fi
-	echo " >>> Generate CSS"
+  	echo " >>> Generate CSS"
+    mkdir -p public/css/pages
+    mkdir -p public/css/modals
+    sass --update --stop-on-error assets/css/compiled:public/css $COMPRESS
 
-	mkdir -p public/css/adminlte
-	sass assets/css/nextdom.scss public/css/nextdom.css $COMPRESS
-	sass assets/css/nextdom.mob.scss public/css/nextdom.mob.css $COMPRESS
-	sass assets/css/firstUse.scss public/css/firstUse.css $COMPRESS
-	sass assets/css/rescue.scss public/css/rescue.css $COMPRESS
-	sass assets/css/Market/market.scss public/css/market.css $COMPRESS
-	sass assets/css/designer.scss public/css/designer.css $COMPRESS
-
-	# Remplacement des chemins
-	sed -i s#\"images/ui-#\"/assets/css/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.css
-	sed -i s#\"images/ui-#\"/assets/css/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.mob.css
+  	# Path replace
+  	sed -i s#\"images/ui-#\"/assets/css/vendors/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.css
+  	sed -i s#\"images/ui-#\"/assets/css/vendors/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.mob.css
 }
 
 function gen_js {
 	echo " >>> Generate JS"
-    jsFiles=(assets/3rdparty/jquery.utils/jquery.utils.js \
-        vendor/node_modules/jquery-ui-dist/jquery-ui.min.js \
-        vendor/node_modules/bootstrap/dist/js/bootstrap.min.js \
-        vendor/node_modules/admin-lte/dist/js/adminlte.min.js \
-        vendor/node_modules/izitoast/dist/js/iziToast.min.js \
-        assets/js/desktop/utils.js \
-        core/js/core.js \
-        core/js/nextdom.class.js \
-        core/js/private.class.js \
-        core/js/eqLogic.class.js \
-        core/js/cmd.class.js \
-        core/js/object.class.js \
-        core/js/scenario.class.js \
-        core/js/plugin.class.js \
-        core/js/message.class.js \
-        core/js/view.class.js \
-        core/js/config.class.js \
-        core/js/history.class.js \
-        core/js/cron.class.js \
-        core/js/security.class.js \
-        core/js/update.class.js \
-        core/js/user.class.js \
-        core/js/backup.class.js \
-        core/js/interact.class.js \
-        core/js/update.class.js \
-        core/js/plan.class.js \
-        core/js/log.class.js \
-        core/js/repo.class.js \
-        core/js/network.class.js \
-        core/js/dataStore.class.js \
-        core/js/cache.class.js \
-        core/js/report.class.js \
-        core/js/note.class.js \
-        core/js/listener.class.js \
-        core/js/jeedom.class.js \
-        vendor/node_modules/bootbox/bootbox.min.js \
-        vendor/node_modules/highcharts/highstock.js \
-        vendor/node_modules/highcharts/highcharts-more.js \
-        vendor/node_modules/highcharts/modules/solid-gauge.js \
-        vendor/node_modules/highcharts/modules/exporting.js \
-        vendor/node_modules/highcharts/modules/export-data.js \
-        assets/3rdparty/jquery.at.caret/jquery.at.caret.min.js \
-        vendor/node_modules/jwerty/jwerty.js \
-        vendor/node_modules/packery/dist/packery.pkgd.js \
-        vendor/node_modules/jquery-lazyload/jquery.lazyload.js \
-        vendor/node_modules/codemirror/lib/codemirror.js \
-        vendor/node_modules/codemirror/addon/edit/matchbrackets.js \
-        vendor/node_modules/codemirror/mode/htmlmixed/htmlmixed.js \
-        vendor/node_modules/codemirror/mode/clike/clike.js \
-        vendor/node_modules/codemirror/mode/php/php.js \
-        vendor/node_modules/codemirror/mode/xml/xml.js \
-        vendor/node_modules/codemirror/mode/javascript/javascript.js \
-        vendor/node_modules/codemirror/mode/css/css.js \
-        vendor/node_modules/jstree/dist/jstree.js \
-        vendor/node_modules/blueimp-file-upload/js/jquery.iframe-transport.js \
-        vendor/node_modules/blueimp-file-upload/js/jquery.fileupload.js \
-        assets/3rdparty/jquery.multi-column-select/multi-column-select.js \
-        vendor/node_modules/jquery-cron/dist/jquery-cron.js \
-        vendor/node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.js \
-        vendor/node_modules/inputmask/dist/jquery.inputmask.bundle.js \
-        vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js \
-        vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min.js \
-        vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min.js \
-        vendor/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js \
-        vendor/node_modules/snapsvg/dist/snap.svg-min.js)
-    rm -fr /tmp/temp.js
-    for jsFile in ${jsFiles[*]}
-    do
-      cat $jsFile >> /tmp/temp.js
-      echo '' >> /tmp/temp.js
-    done
+  # js files to merge in base.js, respect this order to prevent conflits, can find details in PrepareView
+  jsFiles=(vendor/node_modules/jquery-ui-dist/jquery-ui.min.js \
+           vendor/node_modules/bootstrap/dist/js/bootstrap.min.js \
+           vendor/node_modules/admin-lte/dist/js/adminlte.min.js \
+           vendor/node_modules/izitoast/dist/js/iziToast.min.js \
+           assets/3rdparty/jquery.utils/jquery.utils.js \
+           assets/3rdparty/jquery.at.caret/jquery.at.caret.min.js \
+           assets/3rdparty/jquery.multi-column-select/multi-column-select.js \
+           assets/js/core/core.js \
+           assets/js/core/nextdom.class.js \
+           assets/js/core/private.class.js \
+           assets/js/core/eqLogic.class.js \
+           assets/js/core/cmd.class.js \
+           assets/js/core/object.class.js \
+           assets/js/core/scenario.class.js \
+           assets/js/core/plugin.class.js \
+           assets/js/core/message.class.js \
+           assets/js/core/view.class.js \
+           assets/js/core/config.class.js \
+           assets/js/core/history.class.js \
+           assets/js/core/cron.class.js \
+           assets/js/core/security.class.js \
+           assets/js/core/update.class.js \
+           assets/js/core/user.class.js \
+           assets/js/core/backup.class.js \
+           assets/js/core/interact.class.js \
+           assets/js/core/update.class.js \
+           assets/js/core/plan.class.js \
+           assets/js/core/log.class.js \
+           assets/js/core/repo.class.js \
+           assets/js/core/network.class.js \
+           assets/js/core/dataStore.class.js \
+           assets/js/core/cache.class.js \
+           assets/js/core/report.class.js \
+           assets/js/core/note.class.js \
+           assets/js/core/listener.class.js \
+           assets/js/core/jeedom.class.js \
+           assets/js/desktop/conflicts.js \
+           assets/js/desktop/loads.js \
+           assets/js/desktop/inits.js \
+           assets/js/desktop/gui.js \
+           assets/js/desktop/utils.js \
+           assets/js/desktop/search.js \
+           vendor/node_modules/bootbox/dist/bootbox.min.js \
+           vendor/node_modules/highcharts/highstock.js \
+           vendor/node_modules/highcharts/highcharts-more.js \
+           vendor/node_modules/highcharts/modules/solid-gauge.js \
+           vendor/node_modules/highcharts/modules/exporting.js \
+           vendor/node_modules/highcharts/modules/export-data.js \
+           vendor/node_modules/packery/dist/packery.pkgd.js \
+           vendor/node_modules/jquery-lazyload/jquery.lazyload.js \
+           vendor/node_modules/codemirror/lib/codemirror.js \
+           vendor/node_modules/codemirror/addon/edit/matchbrackets.js \
+           vendor/node_modules/codemirror/mode/htmlmixed/htmlmixed.js \
+           vendor/node_modules/codemirror/mode/clike/clike.js \
+           vendor/node_modules/codemirror/mode/php/php.js \
+           vendor/node_modules/codemirror/mode/xml/xml.js \
+           vendor/node_modules/codemirror/mode/javascript/javascript.js \
+           vendor/node_modules/codemirror/mode/css/css.js \
+           vendor/node_modules/blueimp-file-upload/js/jquery.iframe-transport.js \
+           vendor/node_modules/blueimp-file-upload/js/jquery.fileupload.js \
+           vendor/node_modules/jquery-cron/dist/jquery-cron.js \
+           vendor/node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.js \
+           vendor/node_modules/inputmask/dist/jquery.inputmask.bundle.js \
+           vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js \
+           vendor/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js \
+           vendor/node_modules/moment/min/moment.min.js \
+           assets/js/factory/NextDomElement.js \
+           assets/js/factory/NextDomEnum.js \
+           assets/js/factory/NextDomUIDGenerator.js \
+           assets/js/factory/elements/A.js \
+           assets/js/factory/elements/Br.js \
+           assets/js/factory/elements/Button.js \
+           assets/js/factory/elements/Div.js \
+           assets/js/factory/elements/DivWithTooltip.js \
+           assets/js/factory/elements/HorizontalLayout.js \
+           assets/js/factory/elements/IFA.js \
+           assets/js/factory/elements/InputText.js \
+           assets/js/factory/elements/Label.js \
+           assets/js/factory/elements/Space.js \
+           assets/js/factory/elements/Table.js \
+           assets/js/factory/elements/Tbody.js \
+           assets/js/factory/elements/Td.js \
+           assets/js/factory/elements/TextNode.js \
+           assets/js/factory/elements/Th.js \
+           assets/js/factory/elements/Thead.js \
+           assets/js/factory/elements/Tr.js \
+           assets/js/factory/elements/VerticalLayout.js)
 
-if [ $# -eq 0 ]; then
-    python -m jsmin /tmp/temp.js > public/js/base.js
-    rm /tmp/temp.js
-    php scripts/translate.php public/js/base.js
+  tmpfile=$(mktemp)
+  for c_file in ${jsFiles[*]}; do
+    cat ${c_file} >> ${tmpfile}
+    echo '' >> ${tmpfile}
+  done
 
-    mkdir -p public/js/adminlte
-    for jsFile in assets/js/adminlte/*.js
-    do
-        python -m jsmin $jsFile > public/js/adminlte/${jsFile##*/}
-        php scripts/translate.php public/js/adminlte/${jsFile##*/}
-    done
-    mkdir -p public/js/desktop
-    for jsFile in assets/js/desktop/*.js
-    do
-        python -m jsmin $jsFile > public/js/desktop/${jsFile##*/}
-        php scripts/translate.php public/js/desktop/${jsFile##*/}
-    done
-    mkdir -p public/js/desktop/admin
-    for jsFile in assets/js/desktop/admin/*.js
-    do
-        python -m jsmin $jsFile > public/js/desktop/admin/${jsFile##*/}
-        php scripts/translate.php public/js/desktop/admin/${jsFile##*/}
-    done
-    mkdir -p public/js/desktop/diagnostic
-    for jsFile in assets/js/desktop/diagnostic/*.js
-    do
-        python -m jsmin $jsFile > public/js/desktop/diagnostic/${jsFile##*/}
-        php scripts/translate.php public/js/desktop/diagnostic/${jsFile##*/}
-    done
-    mkdir -p public/js/desktop/params
-    for jsFile in assets/js/desktop/params/*.js
-    do
-        python -m jsmin $jsFile > public/js/desktop/params/${jsFile##*/}
-        php scripts/translate.php public/js/desktop/params/${jsFile##*/}
-    done
-    mkdir -p public/js/desktop/tools
-    for jsFile in assets/js/desktop/tools/*.js
-    do
-        python -m jsmin $jsFile > public/js/desktop/tools/${jsFile##*/}
-        php scripts/translate.php public/js/desktop/tools/${jsFile##*/}
-    done
-    mkdir -p public/js/desktop/tools/osdb
-    for jsFile in assets/js/desktop/tools/osdb/*.js
-    do
-        python -m jsmin $jsFile > public/js/desktop/tools/osdb/${jsFile##*/}
-        php scripts/translate.php public/js/desktop/tools/osdb/${jsFile##*/}
-    done
-    mkdir -p public/js/modals
-    for jsFile in assets/js/modals/*.js
-    do
-        python -m jsmin $jsFile > public/js/modals/${jsFile##*/}
-        php scripts/translate.php public/js/modals/${jsFile##*/}
-    done
-    mkdir -p public/js/desktop/Market
-    for jsFile in assets/js/desktop/Market/*.js
-    do
-        python -m jsmin $jsFile > public/js/desktop/Market/${jsFile##*/}
-        php scripts/translate.php public/js/desktop/Market/${jsFile##*/}
-    done
-fi
+  if [ $# -eq 0 ]; then
+      python -m jsmin ${tmpfile} > public/js/base.js
+      rm ${tmpfile}
+      php scripts/translate.php public/js/base.js
+
+      directories=(js/desktop \
+                   js/desktop/admin \
+                   js/desktop/diagnostic \
+                   js/desktop/pages \
+                   js/desktop/params \
+                   js/desktop/tools \
+                   js/desktop/tools/markets \
+                   js/desktop/tools/osdb \
+                   js/modals \
+                   js/factory \
+                   js/factory/elements)
+      for c_dir in ${directories[*]}; do
+        mkdir -p public/${c_dir}
+        for c_file in assets/${c_dir}/*.js; do
+          python -m jsmin ${c_file} > public/${c_dir}/${c_file##*/}
+          php scripts/translate.php public/${c_dir}/${c_file##*/}
+        done
+      done
+  fi
 }
 
 function copy_assets {
   echo " >>> Copy icons"
 	cp -fr assets/icon public/
-	echo " >>> Copy themes"
-	cp -fr assets/themes public/
 	echo " >>> Copy images"
 	cp -fr assets/img public/
 	gen_css
@@ -189,7 +171,7 @@ function copy_assets {
 }
 
 function clean_cache {
-	echo " >>> Cleaning Twig Cache"
+	echo " >>> Cleaning Caches"
 	rm -rf var/cache/twig/*
 	rm -rf var/i18n/*
 	rm -fr var/cache/i18n/*
@@ -216,18 +198,18 @@ function start {
 	done
 }
 
-cd ${root}/..
 
+cd ${root}/..
 if [ "$#" == 0 ]; then
     echo "To start automatic generation, add the --watch option"
-	mkdir -p public/css
-	mkdir -p public/js
-	copy_assets;
-	clean_cache
+	  mkdir -p public/css
+	  mkdir -p public/js
+	  copy_assets;
+	  clean_cache
 elif [ "$1" == "--watch" ]; then
-	start;
+	  start;
 elif [ "$1" == "--css" ]; then
-	gen_css
+	  gen_css
 elif [ "$1" == "--js" ]; then
-	gen_js
+	  gen_js
 fi

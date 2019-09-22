@@ -16,91 +16,9 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-try {
-    require_once __DIR__ . '/../../core/php/core.inc.php';
-    include_file('core', 'authentification', 'php');
+use NextDom\Ajax\ConfigAjax;
 
-    if (!isConnect()) {
-        throw new Exception(__('401 - Accès non autorisé', __FILE__), -1234);
-    }
+require_once (__DIR__ . '/../../src/core.php');
 
-    ajax::init();
-
-    if (init('action') == 'genApiKey') {
-        if (!isConnect('admin')) {
-            throw new Exception(__('401 - Accès non autorisé', __FILE__));
-        }
-        unautorizedInDemo();
-        if (init('plugin') == 'core') {
-            config::save('api', config::genKey());
-            ajax::success(config::byKey('api'));
-        } else if (init('plugin') == 'pro') {
-            config::save('apipro', config::genKey());
-            ajax::success(config::byKey('apipro'));
-        } else {
-            config::save('api', config::genKey(), init('plugin'));
-            ajax::success(config::byKey('api', init('plugin')));
-        }
-    }
-
-    if (init('action') == 'getKey') {
-        $keys = init('key');
-        if ($keys == '') {
-            throw new Exception(__('Aucune clef demandée', __FILE__));
-        }
-        if (is_json($keys)) {
-            $keys = json_decode($keys, true);
-            $return = config::byKeys(array_keys($keys), init('plugin', 'core'));
-            if (init('convertToHumanReadable', 0)) {
-                $return = nextdom::toHumanReadable($return);
-            }
-            ajax::success($return);
-        } else {
-            $return = config::byKey($keys, init('plugin', 'core'));
-            if (init('convertToHumanReadable', 0)) {
-                $return = nextdom::toHumanReadable($return);
-            }
-            ajax::success($return);
-        }
-    }
-
-    if (init('action') == 'addKey') {
-        if (!isConnect('admin')) {
-            throw new Exception(__('401 - Accès non autorisé', __FILE__));
-        }
-        unautorizedInDemo();
-        $values = json_decode(init('value'), true);
-        foreach ($values as $key => $value) {
-            config::save($key, nextdom::fromHumanReadable($value), init('plugin', 'core'));
-        }
-        ajax::success();
-    }
-    if (init('action') == 'updateTheme') {
-        unlink(NEXTDOM_ROOT . '/public/css/theme.css');
-        ajax::success();
-    }
-
-    if (init('action') == 'removeKey') {
-        unautorizedInDemo();
-        $keys = init('key');
-        if ($keys == '') {
-            throw new Exception(__('Aucune clef demandée', __FILE__));
-        }
-        if (is_json($keys)) {
-            $keys = json_decode($keys, true);
-            $return = array();
-            foreach ($keys as $key => $value) {
-                config::remove($key, init('plugin', 'core'));
-            }
-        } else {
-            config::remove(init('key'), init('plugin', 'core'));
-        }
-        ajax::success();
-    }
-
-    throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
-/*     * *********Catch exeption*************** */
-} catch (Exception $e) {
-    ajax::error(displayException($e), $e->getCode());
-}
-?>
+$configAjax = new ConfigAjax();
+$configAjax->process();

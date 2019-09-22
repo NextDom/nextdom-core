@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
@@ -29,7 +30,7 @@ use PragmaRX\Google2FA\Google2FA;
  * @ORM\Table(name="user")
  * @ORM\Entity
  */
-class User
+class User implements EntityInterface
 {
 
     /**
@@ -98,13 +99,35 @@ class User
         }
     }
 
+    /**
+     * @return string
+     */
+    public function getLogin()
+    {
+        return $this->login;
+    }
+
+    /**
+     * @param $_login
+     * @return $this
+     */
+    public function setLogin($_login)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->login, $_login);
+        $this->login = $_login;
+        return $this;
+    }
+
+    /**
+     * Method called before save in database
+     */
     public function preSave()
     {
         if ($this->getLogin() == '') {
             throw new \Exception(__('Le nom d\'utilisateur ne peut pas être vide'));
         }
         $admins = UserManager::byProfils('admin', true);
-        if (count($admins) == 1 && $this->getProfils() == 'admin' && $this->getEnable() == 0) {
+        if (count($admins) == 1 && $this->getProfils() == 'admin' && !$this->isEnabled()) {
             throw new \Exception(__('Vous ne pouvez désactiver le dernier utilisateur'));
         }
         if (count($admins) == 1 && $admins[0]->getId() == $this->getid() && $this->getProfils() != 'admin') {
@@ -112,9 +135,69 @@ class User
         }
     }
 
-    public function save()
+    /**
+     * @return string
+     */
+    public function getProfils()
     {
-        return \DB::save($this);
+        return $this->profils;
+    }
+
+    /**
+     * @param $_profils
+     * @return $this
+     */
+    public function setProfils($_profils)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->profils, $_profils);
+        $this->profils = $_profils;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getEnable()
+    {
+        return $this->enable;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnabled() {
+        return $this->enable != 0;
+    }
+    /**
+     * @param $_enable
+     * @return $this
+     */
+    public function setEnable($_enable)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->enable, $_enable);
+        $this->enable = $_enable;
+        return $this;
+    }
+
+    /*     * **********************Getteur Setteur*************************** */
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param $_id
+     * @return $this
+     */
+    public function setId($_id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
+        $this->id = $_id;
+        return $this;
     }
 
     public function preRemove()
@@ -124,77 +207,65 @@ class User
         }
     }
 
+    /**
+     * @return bool
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public function remove()
     {
         NextDomHelper::addRemoveHistory(array('id' => $this->getId(), 'name' => $this->getLogin(), 'date' => date('Y-m-d H:i:s'), 'type' => 'user'));
-        return \DB::remove($this);
+        return DBHelper::remove($this);
     }
 
     public function refresh()
     {
-        \DB::refresh($this);
+        DBHelper::refresh($this);
+    }
+
+    /**
+     * @deprecated
+     * @return boolean vrai si l'utilisateur est valide
+     */
+    public function is_Connected()
+    {
+        return $this->isConnected();
     }
 
     /**
      *
      * @return boolean vrai si l'utilisateur est valide
      */
-    public function is_Connected()
+    public function isConnected()
     {
         return (is_numeric($this->id) && $this->login != '');
     }
 
+    /**
+     * @param $_code
+     * @return bool
+     */
     public function validateTwoFactorCode($_code)
     {
         $google2fa = new Google2FA();
         return $google2fa->verifyKey($this->getOptions('twoFactorAuthentificationSecret'), $_code);
     }
 
-    /*     * **********************Getteur Setteur*************************** */
-
-
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    public function getLogin()
-    {
-        return $this->login;
-    }
-
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
-    }
-
-    public function setLogin($_login)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->login, $_login);
-        $this->login = $_login;
-        return $this;
-    }
-
-    public function setPassword($_password)
-    {
-        $_password = (!Utils::isSha512($_password)) ? Utils::sha512($_password) : $_password;
-        $this->_changed = Utils::attrChanged($this->_changed, $this->password, $_password);
-        $this->password = $_password;
-        return $this;
-    }
-
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
     public function getOptions($_key = '', $_default = '')
     {
         return Utils::getJsonAttr($this->options, $_key, $_default);
     }
 
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
     public function setOptions($_key, $_value)
     {
         $options = Utils::setJsonAttr($this->options, $_key, $_value);
@@ -203,11 +274,41 @@ class User
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * @param $_password
+     * @return $this
+     */
+    public function setPassword($_password)
+    {
+        $_password = (!Utils::isSha512($_password)) ? Utils::sha512($_password) : $_password;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->password, $_password);
+        $this->password = $_password;
+        return $this;
+    }
+
+    /**
+     * @param string $_key
+     * @param string $_default
+     * @return array|bool|mixed|null|string
+     */
     public function getRights($_key = '', $_default = '')
     {
         return Utils::getJsonAttr($this->rights, $_key, $_default);
     }
 
+    /**
+     * @param $_key
+     * @param $_value
+     * @return $this
+     */
     public function setRights($_key, $_value)
     {
         $rights = Utils::setJsonAttr($this->rights, $_key, $_value);
@@ -216,18 +317,11 @@ class User
         return $this;
     }
 
-    public function getEnable()
-    {
-        return $this->enable;
-    }
-
-    public function setEnable($_enable)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->enable, $_enable);
-        $this->enable = $_enable;
-        return $this;
-    }
-
+    /**
+     * @return string
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public function getHash()
     {
         if ($this->hash == '' && $this->id != '') {
@@ -241,6 +335,10 @@ class User
         return $this->hash;
     }
 
+    /**
+     * @param $_hash
+     * @return $this
+     */
     public function setHash($_hash)
     {
         $this->_changed = Utils::attrChanged($this->_changed, $this->hash, $_hash);
@@ -248,29 +346,37 @@ class User
         return $this;
     }
 
-    public function getProfils()
+    /**
+     * @return bool
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
+    public function save()
     {
-        return $this->profils;
+        return DBHelper::save($this);
     }
 
-    public function setProfils($_profils)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->profils, $_profils);
-        $this->profils = $_profils;
-        return $this;
-    }
-
+    /**
+     * @return bool
+     */
     public function getChanged()
     {
         return $this->_changed;
     }
 
+    /**
+     * @param $_changed
+     * @return $this
+     */
     public function setChanged($_changed)
     {
         $this->_changed = $_changed;
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getTableName()
     {
         return 'user';

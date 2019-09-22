@@ -17,6 +17,8 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Exceptions\CoreException;
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
 
 /**
@@ -25,24 +27,11 @@ use NextDom\Helpers\Utils;
  * @ORM\Table(name="note")
  * @ORM\Entity
  */
-class Note
+class Note implements EntityInterface
 {
-
     /**
-     * @var string
+     * Id of the note
      *
-     * @ORM\Column(name="name", type="string", length=127, nullable=true)
-     */
-    protected $name;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="text", type="text", length=65535, nullable=true)
-     */
-    protected $text;
-
-    /**
      * @var integer
      *
      * @ORM\Column(name="id", type="integer")
@@ -51,73 +40,168 @@ class Note
      */
     protected $id;
 
+    /**
+     * Name of the note
+     *
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=127, nullable=true)
+     */
+    protected $name;
+
+    /**
+     * Text of the note
+     *
+     * @var string
+     *
+     * @ORM\Column(name="text", type="text", length=65535, nullable=true)
+     */
+    protected $text;
+
+    /**
+     * @var bool Data changed state
+     */
     private $_changed = false;
 
-    public function preSave()
-    {
-        if (trim($this->getName()) == '') {
-            throw new \Exception(__('Le nom de la note ne peut être vide'));
-        }
-    }
-
-    public function save()
-    {
-        \DB::save($this);
-        return true;
-    }
-
-    public function remove()
-    {
-        \DB::remove($this);
-    }
-
+    /**
+     * Get id of the note
+     *
+     * @return int Id of the note
+     */
     public function getId()
     {
         return $this->id;
     }
 
+    /**
+     * Set note id
+     *
+     * @param int $id Id of the note
+     *
+     * @return $this
+     */
+    public function setId($id)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $id);
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * Get the name of the note
+     *
+     * @return string Name of the note
+     */
     public function getName()
     {
         return $this->name;
     }
 
+    /**
+     * Set the name of the note
+     *
+     * @param string $newName Name of the note
+     *
+     * @return $this
+     */
+    public function setName($newName)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $newName);
+        $this->name = $newName;
+        return $this;
+    }
+
+    /**
+     * Get the text of the note
+     *
+     * @return string Text of the note
+     */
     public function getText()
     {
         return $this->text;
     }
 
-    public function setId($_id)
+    /**
+     * Set note text
+     *
+     * @param string $newText Text of the note
+     *
+     * @return $this
+     */
+    public function setText($newText)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->text, $newText);
+        $this->text = $newText;
         return $this;
     }
 
-    public function setName($_name)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
-        $this->name = $_name;
-        return $this;
-    }
-
-    public function setText($_text)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->text, $_text);
-        $this->text = $_text;
-        return $this;
-    }
-
+    /**
+     * Get data change status
+     *
+     * @return bool True if change occurs
+     */
     public function getChanged()
     {
         return $this->_changed;
     }
 
-    public function setChanged($_changed)
+    /**
+     * Set change data state
+     *
+     * @param $newChangedState
+     *
+     * @return $this
+     */
+    public function setChanged($newChangedState)
     {
-        $this->_changed = $_changed;
+        $this->_changed = $newChangedState;
         return $this;
     }
 
+    /**
+     * Throw exception if note doesn't have name
+     * @throws CoreException
+     */
+    public function preSave()
+    {
+        if (trim($this->getName()) == '') {
+            throw new CoreException(__('entity.note.name-cannot-be-empty'));
+        }
+    }
+
+    /**
+     * Save note in database
+     *
+     * @return bool True on success
+     *
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
+    public function save()
+    {
+        if ($this->_changed) {
+            DBHelper::save($this);
+            $this->_changed = false;
+        }
+        return true;
+    }
+
+    /**
+     * Remove note from database
+     *
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
+    public function remove()
+    {
+        DBHelper::remove($this);
+    }
+
+    /**
+     * Table name in database
+     *
+     * @return string Table name
+     */
     public function getTableName()
     {
         return 'note';

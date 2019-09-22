@@ -39,6 +39,10 @@ use NextDom\Managers\PluginManager;
 use Symfony\Component\Translation\Loader\YamlFileLoader;
 use Symfony\Component\Translation\Translator;
 
+/**
+ * Class TranslateHelper
+ * @package NextDom\Helpers
+ */
 class TranslateHelper
 {
 
@@ -68,96 +72,28 @@ class TranslateHelper
     protected static $config = null;
 
     /**
-     * Obtenir une des informations de la configuration liée à la traduction
+     * Traduction direct d'une phrase
      *
-     * @param string $informationKey
-     * @param string $defaultValue
-     * @return mixed|string
+     * @param string $sentenceToTranslate Phrase à traduire
+     * @param string $filename Nom du fichier appelant
+     * @param bool $backslash TODO: Toujours comprendre à quoi ça sert ?
+     *
+     * @return string Phrase traduite
      * @throws \Exception
      */
-    public static function getConfig(string $informationKey, string $defaultValue = ''): string
+    public static function sentence(string $sentenceToTranslate, string $filename, bool $backslash = false): string
     {
-        $result = $defaultValue;
-        // Lecture et mise en cache de la configuration
-        if (self::$config === null) {
-            self::$config = ConfigManager::byKeys(array('language', 'generateTranslation'), 'core', array('language' => 'fr_FR'));
-        }
-        // Recherche de l'information
-        if (isset(self::$config[$informationKey])) {
-            $result = self::$config[$informationKey];
+        $result = '';
+        // Ancienne méthode
+        if (strpos($filename, '/plugins') === 0) {
+            $result = self::exec("{{" . $sentenceToTranslate . "}}", $filename, $backslash);
+        } // Nouvelle méthode
+        else {
+            // S'assure que la traduction est chargée
+            self::getTranslation('fr_FR');
+            $result = self::$translator->trans($sentenceToTranslate);
         }
         return $result;
-    }
-
-    /**
-     * Obtenir la langue configurée.
-     * fr_FR par défaut
-     *
-     * @return string Langue
-     * @throws \Exception
-     */
-    public static function getLanguage(): string
-    {
-        if (self::$language === null || self::$language === '') {
-            self::$language = self::getConfig('language', 'fr_FR');
-        }
-        // TODO: Pourquoi pas défault getConfig renvoie vide
-        if (self::$language === '') {
-            self::$language = 'fr_FR';
-        }
-        return self::$language;
-    }
-
-    /**
-     * Charge les informations de traduction
-     * TODO: Même celles de tous les plugins. Les plugins sont chargés à l'ancienne
-     * @return array Données chargées
-     * @throws \Exception
-     */
-    public static function loadTranslation(): array
-    {
-        $result = [];
-        $language = self::getLanguage();
-        $filename = self::getPathTranslationFile($language);
-        if (file_exists($filename)) {
-            self::$translator = new Translator($language, null, NEXTDOM_ROOT . '/var/cache/i18n');
-            self::$translator->addLoader('yaml', new YamlFileLoader());
-            self::$translator->addResource('yaml', $filename, $language);
-            $pluginsDirList = scandir(NEXTDOM_ROOT . '/plugins');
-            foreach ($pluginsDirList as $pluginDir) {
-                if ($pluginDir !== '.' && $pluginDir !== '..' && is_dir(NEXTDOM_ROOT . '/plugins/' . $pluginDir)) {
-                    $pluginTranslationFile = NEXTDOM_ROOT . '/plugins/' . $pluginDir . '/core/i18n/' . $language . '.json';
-                    if (file_exists($pluginTranslationFile)) {
-                        $pluginTranslationFileContent = file_get_contents($pluginTranslationFile);
-                        if (Utils::isJson($pluginTranslationFileContent)) {
-                            $result = array_merge($result, json_decode($pluginTranslationFileContent, true));
-                        }
-                    }
-                }
-            }
-        }
-        return $result;
-    }
-
-    /**
-     * Obtenir les traductions pour la langue courante
-     *
-     * TODO: Vérifier le chargement pour les plugins
-     *
-     * @param string $language
-     * @return mixed
-     * @throws \Exception
-     */
-    public static function getTranslation($language): array
-    {
-        // Test si les traductions ont été mises en cache
-        if (!self::$translationLoaded) {
-            self::$translation = array(
-                self::getLanguage() => self::loadTranslation(),
-            );
-            self::$translationLoaded = true;
-        }
-        return self::$translation[self::getLanguage()];
     }
 
     /**
@@ -178,7 +114,8 @@ class TranslateHelper
         $oldTranslationMode = false;
         $translate = self::getTranslation('fr_FR');
         // Ancienne version pour les plugins
-        if (strpos($filename, '/plugins') === 0) {
+        $pluginsPos = strpos($filename, 'plugins');
+        if ($pluginsPos === 0 || $pluginsPos === 1) {
             $filename = substr($filename, strpos($filename, 'plugins'));
             $oldTranslationMode = true;
         }
@@ -229,26 +166,104 @@ class TranslateHelper
     }
 
     /**
-     * Traduction direct d'une phrase
+     * Obtenir les traductions pour la langue courante
      *
-     * @param string $sentenceToTranslate Phrase à traduire
-     * @param string $filename Nom du fichier appelant
-     * @param bool $backslash TODO: Toujours comprendre à quoi ça sert ?
+     * TODO: Vérifier le chargement pour les plugins
      *
-     * @return string Phrase traduite
+     * @param string $language
+     * @return mixed
      * @throws \Exception
      */
-    public static function sentence(string $sentenceToTranslate, string $filename, bool $backslash = false): string
+    public static function getTranslation($language): array
     {
-        $result = '';
-        // Ancienne méthode
-        if (strpos($filename, '/plugins') === 0) {
-            $result = self::exec("{{" . $sentenceToTranslate . "}}", $filename, $backslash);
-        } // Nouvelle méthode
-        else {
-            // S'assure que la traduction est chargée
-            self::getTranslation('fr_FR');
-            $result = self::$translator->trans($sentenceToTranslate);
+        // Test si les traductions ont été mises en cache
+        if (!self::$translationLoaded) {
+            self::$translation = array(
+                self::getLanguage() => self::loadTranslation(),
+            );
+            self::$translationLoaded = true;
+        }
+        return self::$translation[self::getLanguage()];
+    }
+
+    /**
+     * Obtenir la langue configurée.
+     * fr_FR par défaut
+     *
+     * @return string Langue
+     * @throws \Exception
+     */
+    public static function getLanguage(): string
+    {
+        if (self::$language === null || self::$language === '') {
+            self::$language = self::getConfig('language', 'fr_FR');
+        }
+        // TODO: Pourquoi pas défault getConfig renvoie vide
+        if (self::$language === '') {
+            self::$language = 'fr_FR';
+        }
+        return self::$language;
+    }
+
+    /**
+     * Définir la langue
+     *
+     * @param string $language Langue
+     */
+    public static function setLanguage(string $language)
+    {
+        self::$language = $language;
+    }
+
+    /**
+     * Obtenir une des informations de la configuration liée à la traduction
+     *
+     * @param string $informationKey
+     * @param string $defaultValue
+     * @return mixed|string
+     * @throws \Exception
+     */
+    public static function getConfig(string $informationKey, string $defaultValue = ''): string
+    {
+        $result = $defaultValue;
+        // Lecture et mise en cache de la configuration
+        if (self::$config === null) {
+            self::$config = ConfigManager::byKeys(array('language', 'generateTranslation'), 'core', array('language' => 'fr_FR'));
+        }
+        // Recherche de l'information
+        if (isset(self::$config[$informationKey])) {
+            $result = self::$config[$informationKey];
+        }
+        return $result;
+    }
+
+    /**
+     * Charge les informations de traduction
+     * TODO: Même celles de tous les plugins. Les plugins sont chargés à l'ancienne
+     * @return array Données chargées
+     * @throws \Exception
+     */
+    public static function loadTranslation(): array
+    {
+        $result = [];
+        $language = self::getLanguage();
+        $filename = self::getPathTranslationFile($language);
+        if (file_exists($filename)) {
+            self::$translator = new Translator($language, null, NEXTDOM_DATA . '/cache/i18n');
+            self::$translator->addLoader('yaml', new YamlFileLoader());
+            self::$translator->addResource('yaml', $filename, $language);
+            $pluginsDirList = scandir(NEXTDOM_ROOT . '/plugins');
+            foreach ($pluginsDirList as $pluginDir) {
+                if ($pluginDir !== '.' && $pluginDir !== '..' && is_dir(NEXTDOM_ROOT . '/plugins/' . $pluginDir)) {
+                    $pluginTranslationFile = NEXTDOM_ROOT . '/plugins/' . $pluginDir . '/core/i18n/' . $language . '.json';
+                    if (file_exists($pluginTranslationFile)) {
+                        $pluginTranslationFileContent = file_get_contents($pluginTranslationFile);
+                        if (Utils::isJson($pluginTranslationFileContent)) {
+                            $result = array_merge($result, json_decode($pluginTranslationFileContent, true));
+                        }
+                    }
+                }
+            }
         }
         return $result;
     }
@@ -263,6 +278,25 @@ class TranslateHelper
     public static function getPathTranslationFile(string $language): string
     {
         return NEXTDOM_ROOT . '/translations/' . $language . '.yml';
+    }
+
+    /**
+     * @param $_name
+     * @return string
+     */
+    public static function getPluginFromName($_name)
+    {
+        if (strpos($_name, 'plugins/') === false) {
+            return 'core';
+        }
+        preg_match_all('/plugins\/(.*?)\//m', $_name, $matches, PREG_SET_ORDER, 0);
+        if (isset($matches[0]) && isset($matches[0][1])) {
+            return $matches[0][1];
+        }
+        if (!isset($matches[1])) {
+            return 'core';
+        }
+        return $matches[1];
     }
 
     /**
@@ -293,16 +327,6 @@ class TranslateHelper
 
             }
         }
-    }
-
-    /**
-     * Définir la langue
-     *
-     * @param string $language Langue
-     */
-    public static function setLanguage(string $language)
-    {
-        self::$language = $language;
     }
 
 }

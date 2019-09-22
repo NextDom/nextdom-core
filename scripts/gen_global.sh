@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU General Public License
 # along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 
+set -e
+
 # Get current directory
 set_root() {
     local this=`readlink -n -f $1`
@@ -21,8 +23,20 @@ set_root() {
 }
 set_root $0
 
+# Initialise npm
+echo " > Initialise NPM"
 ${root}/gen_composer_npm.sh
+
+# Initialise assets
+echo " > Initialise Assets"
 ${root}/gen_assets.sh
+
+# Initialise docs
 if [ "$1" == "--docs" ]; then
-${root}/gen_docs.sh
+    echo " > Initialise Docs"
+    ${root}/gen_docs.sh
 fi
+
+# Gestion vulnerability or obesolescences
+echo " > Cleaning vulnerability and obesolescences"
+rm -rf ./vendor/node_modules/morris.js/

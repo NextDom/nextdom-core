@@ -15,52 +15,62 @@
 # along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 # function install_nodemodules
 
-# Get current directory
+set -e
+
 set_root() {
     local this=`readlink -n -f $1`
     root=`dirname $this`
 }
 set_root $0
 
+function run_as_superuser {
+  cmd=$@
+  if [ -z "${TRAVIS}" ] && [ ${EUID} != "0" ]; then
+      sudo $@
+  else
+    $@
+  fi
+}
+
 function install_nodemodules {
-echo " >>> Installing the npm modules"
-[[ ! -d ./vendor ]] && mkdir vendor
-cp package.json ./vendor/
-npm install --prefix ./vendor
+  echo " >>> Installing the npm modules"
+  [[ ! -d ./vendor ]] && mkdir vendor
+  cp package.json ./vendor/
+  npm install --unsafe-perm --no-save --prefix ./vendor
 }
 
 function install_dep_composer {
-echo " >>> Installation dependencies composer"
-if [[ "$1" = "--no-dev" ]] ; then
-    composer install -o --no-dev
-else
-    composer install
-fi
+  echo " >>> Installation dependencies composer"
+  if [[ "$1" = "--no-dev" ]] ; then
+      composer install -o --no-dev
+  else
+      composer install
+  fi
 }
 
 function init_dependencies {
-	npm --version > /dev/null 2>&1
-	if [ $? -ne 0 ]; then
+	npm --version > /dev/null 2>&1 || {
 		echo " >>> Installation de node et npm"
-		wget https://deb.nodesource.com/setup_10.x -O install_npm.sh
-		bash install_npm.sh
-		apt install -y nodejs
-		rm install_npm.sh
-	fi
-	sass --version > /dev/null 2>&1
-	if [ $? -ne 0 ]; then
+    tmpFile=$(mktemp)
+		wget -q https://deb.nodesource.com/setup_10.x -O ${tmpFile}
+    run_as_superuser bash ${tmpFile}
+		run_as_superuser apt install -y nodejs
+    rm -f ${tmpFile}
+  }
+
+	sass --version > /dev/null 2>&1 || {
 		echo " >>> Installation de sass"
-		npm install -g sass
-	fi
-	python -c "import jsmin" 2>&1 /dev/null
-	if [ $? -ne 0 ]; then
-	    . /etc/os-release
-	    if [[ "$NAME" == *Debian* ]]; then
-	        apt install -y python-jsmin;
-	    else
-	        pip install jsmin;
-	    fi
-	fi
+    run_as_superuser npm install -g sass
+	}
+
+	python -c "import jsmin" 2>&1 /dev/null || {
+	  . /etc/os-release
+	  if [[ "$NAME" == *Debian* ]]; then
+	      run_as_superuser apt install -y python-jsmin;
+	  else
+	    run_as_superuser pip install jsmin;
+	  fi
+  }
 }
 
 cd ${root}/..

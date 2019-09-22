@@ -36,12 +36,13 @@
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
-            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left spacing-right"></i>{{ 'Retour'}}</a>
-            <a class="btn btn-warning btn-action-bar" id="bt_cleanCache"><i class="fa fa-magic spacing-right"></i>{{ 'Nettoyer le cache' }}</a>
-            <a class="btn btn-danger btn-action-bar" id="bt_flushCache"><i class="fa fa-trash spacing-right"></i>{{ 'Vider le cache' }}</a>
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'common.return' | trans}}</a>
+            <a class="btn btn-warning btn-action-bar" id="bt_cleanCache"><i class="fas fa-magic"></i>{{ 'Nettoyer le cache' }}</a>
+            <a class="btn btn-danger btn-action-bar" id="bt_flushCache"><i class="fas fa-trash"></i>{{ 'Vider le cache' }}</a>
         </div>
         <div class="action-group">
-            <a class="btn btn-success btn-action-bar pull-right" id="bt_savecache"><i class="fas fa-save spacing-right"></i>{{ 'Sauvegarder' }}</a>
+            <a class="btn btn-success btn-action-bar pull-right" id="bt_savecache"><i class="fas fa-save"></i>{{ 'common.save' | trans }}</a>
+            <a class="btn btn-danger btn-action-bar pull-right bt_cancelModifs"><i class="fas fa-times"></i>{{ 'common.cancel'|trans }}</a>
         </div>
     </div>
 </section>
@@ -50,32 +51,35 @@
     <div class="box" id="cache">
         <!-- Header bar -->
         <div class="box-header with-border">
-            <h3 class="box-title"><i class="fas fa-hdd-o spacing-right"></i>{{ 'Cache' }}</h3>
+            <h3 class="box-title"><i class="fas fa-hdd-o"></i>{{ 'Cache' }}</h3>
         </div>
 
         <!-- Page content -->
         <div class="box-body">
-            <form class="form-horizontal">
-                <!-- Statistiques Section -->
-                <fieldset>
-                    <legend>{{ 'Statistiques' }}</legend>
-                    <div class="form-group">
-                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Statistiques' }}</label>
-                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
-                            <span class="label label-config label-primary"><span id="span_cacheObject">{{ adminStats['count'] }}</span> {{ 'objets' }}</span>
+            <!-- Statistiques Section -->
+            <fieldset>
+                <legend>{{ 'Statistiques' }}</legend>
+                <div class="row">
+                    <div class="form-group col-sm-6 col-xs-12 col-padding">
+                        <label class="control-label">{{ 'Statistiques' }}</label>
+                        <div>
+                            <span class="label label-config"><span id="span_cacheObject">{{ adminStats['count'] }}</span> {{ 'common.objects' | trans }}</span>
                         </div>
                     </div>
-                </fieldset>
+                </div>
+            </fieldset>
 
-                <!-- Moteur Section -->
-                <fieldset class="legend-section">
-                    <legend>{{ 'Moteur' }}</legend>
-                    <div class="alert alert-config alert-info">
-                        {{ 'Attention : toute modification du moteur de cache nécessite un redémarrage de votre ' }} {{ adminProductName }} {{ adminCustomProductName }}
+            <!-- Moteur Section -->
+            <fieldset>
+                <legend>{{ 'Moteur' }}</legend>
+                <div class="row">
+                    <div class="form-group col-xs-12 col-padding">
+                        <div class="alert alert-info">{{ 'Attention : toute modification du moteur de cache nécessite un redémarrage de votre ' }} {{ PRODUCT_NAME }} {{ '...' }}</div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Moteur de cache' }}</label>
-                        <div class="col-lg-5 col-md-6 col-sm-7 col-xs-12">
+                    <div class="form-group col-sm-6 col-xs-12 col-padding">
+                        <label class="control-label">{{ 'Moteur de cache' }}</label>
+                        <div class="input-group">
+                            <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="cache::engine" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
                             <select type="text" class="configKey form-control" data-l1key="cache::engine">
                                 <option value="FilesystemCache">{{ 'Système de fichiers' }} ({{ adminCacheFolder }})</option>
                                 {% if adminMemCachedExists %}
@@ -87,47 +91,58 @@
                             </select>
                         </div>
                     </div>
-                </fieldset>
+                </div>
+            </fieldset>
 
-                <!-- Parameters Section -->
-                <fieldset class="legend-section">
-                    <legend>{{ 'Paramètres' }}</legend>
+            <!-- Parameters Section -->
+            <fieldset class="legend-section">
+                <legend>{{ 'common.settings' | trans }}</legend>
+                <div class="row">
                     <div class="cacheEngine MemcachedCache">
-                        <div class="form-group">
-                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Adresse Memcache' }}</label>
-                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Adresse Memcache' }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="cache::memcacheaddr" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
                                 <input type="text" class="configKey form-control" data-l1key="cache::memcacheaddr"/>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Port Memcache' }}</label>
-                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Port Memcache' }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="cache::memcacheport" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
                                 <input type="text" class="configKey form-control" data-l1key="cache::memcacheport"/>
                             </div>
                         </div>
                     </div>
                     <div class="cacheEngine RedisCache">
-                        <div class="form-group">
-                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Adresse Redis' }}</label>
-                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Adresse Redis' }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="cache::redisaddr" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
                                 <input type="text" class="configKey form-control" data-l1key="cache::redisaddr"/>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Port redis' }}</label>
-                            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Port redis' }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="cache::redisport" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
                                 <input type="text" class="configKey form-control" data-l1key="cache::redisport"/>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-lg-3 col-md-4 col-sm-4 col-xs-12 control-label">{{ 'Temps de pause pour le long polling' }}</label>
-                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
-                            <input class="configKey form-control" data-l1key="event::waitPollingTime"/>
+                    <div class="form-group col-sm-6 col-xs-12 col-padding">
+                        <label class="control-label">{{ 'Temps de pause pour le long polling' }}</label>
+                        <div class="input-group">
+                            <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="event::waitPollingTime" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                            <span class="input-group-addon input-range-min"></span>
+                            <input class="configKey slider" type="range" min="0.1" max="20" step="0.1" data-l1key="event::waitPollingTime"/>
+                            <span class="input-group-addon input-range-max"></span>
+                            <span class="input-group-addon input-range-value"></span>
+                            <span class="input-group-addon">{{ 'secondes' }}</span>
                         </div>
                     </div>
-                </fieldset>
-            </form>
+                </div>
+            </fieldset>
         </div>
     </div>
 </section>
