@@ -189,18 +189,17 @@ function getObjectHtml(_object_id) {
 function createScenarioWidget(scenarioData) {
     var widgetDiv = $('<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 scenario" data-scenario_id="' + scenarioData.id + '">');
     var widgetDiv2 = $('<div class="div_scenario">');
-    var iconContainer = $('<a class="spacing-left scenario-open-button cursor"></a>');
+    var nameContainer = $('<a class="scenario-label scenario-open-button cursor">');
     if (scenarioData.icon !== '') {
-        iconContainer.append(scenarioData.icon);
+        nameContainer.append(scenarioData.icon + scenarioData.name);
     }
     else {
-        iconContainer = $('<a class="spacing-left scenario-open-button cursor"><i class="fas fa-film"></i></a>');
+        nameContainer.append('<i class="fas fa-film"></i>' + scenarioData.name);
     }
-    widgetDiv2.append(iconContainer);
-    widgetDiv2.append('<a class="scenario-label scenario-open-button cursor">' + scenarioData.name + '</a>');
-    var enableButton = $('<a class="btn btn-default pull-right scenario-enable-button" data-toggle="tooltip" title="" data-original-title="Activer le scénario"><i class="fas fa-toggle-on no-spacing text-good"></i></a>');
-    var playButton = $('<a class="btn btn-success pull-right scenario-play-button" data-toggle="tooltip" title="" data-original-title="Lancer le scénario"><i class="fas fa-play no-spacing"></i></a>');
-    var stopButton = $('<a class="btn btn-danger pull-right scenario-stop-button" data-toggle="tooltip" title="" data-original-title="Arrêter le scénario"><i class="fas fa-stop no-spacing"></i></a>');
+    widgetDiv2.append(nameContainer);
+    var enableButton = $('<a class="btn btn-default scenario-cmd scenario-enable-button" data-toggle="tooltip" title="" data-original-title="Activer le scénario"><i class="fas fa-toggle-on no-spacing text-good"></i></a>');
+    var playButton = $('<a class="btn btn-success scenario-cmd scenario-play-button" data-toggle="tooltip" title="" data-original-title="Lancer le scénario"><i class="fas fa-play no-spacing"></i></a>');
+    var stopButton = $('<a class="btn btn-danger scenario-cmd scenario-stop-button" data-toggle="tooltip" title="" data-original-title="Arrêter le scénario"><i class="fas fa-stop no-spacing"></i></a>');
     playButton.on('click', function() {
         nextdom.scenario.changeState({'id': $(this).parent().parent().data('scenario_id'), 'state': 'start'});
     });
