@@ -9,6 +9,17 @@
 	font-style: normal;
 }
 
+@font-face {
+	font-family: 'jeedom';
+	src:url('fonts/nextdom.eot');
+	src:url('fonts/nextdom.eot') format('embedded-opentype'),
+	url('fonts/nextdom.woff') format('woff'),
+	url('fonts/nextdom.ttf') format('truetype'),
+	url('fonts/nextdom.svg') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
 [class^="nextdom-"], [class*=" nextdom-"],
 [class^="jeedom-"], [class*=" jeedom-"] {
 	font-family: 'nextdom';
