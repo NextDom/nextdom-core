@@ -236,16 +236,12 @@ nextdom.scenario.refreshValue = function (_params) {
   if ($('.scenario[data-scenario_id=' + _params.scenario_id + ']').html() == undefined) {
     return;
   }
-  var version = $('.scenario[data-scenario_id=' + _params.scenario_id + ']').attr('data-version');
+  var version = 'dashboard';
   var paramsRequired = ['id'];
   var paramsSpecifics = {
     global: false,
     success: function (result) {
       $('.scenario[data-scenario_id=' + params.scenario_id + ']').empty().html($(result).children());
-      if ($.mobile) {
-        $('.scenario[data-scenario_id=' + params.scenario_id + ']').trigger("create");
-        setTileSize('.scenario');
-      }
     }
   };
   try {

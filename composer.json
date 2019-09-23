@@ -15,7 +15,7 @@
     "monolog/monolog": "^1.24",
     "mtdowling/cron-expression": "^1.2",
     "paragonie/random_compat": "^2.0",
-    "pragmarx/google2fa": "^1.0",
+    "pragmarx/google2fa": "^6.0",
     "ralouphie/getallheaders": "^2.0",
     "symfony/config": "^3.4",
     "symfony/debug": "^3.4",

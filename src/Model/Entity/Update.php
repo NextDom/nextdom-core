@@ -116,9 +116,9 @@ class Update implements EntityInterface
     {
         $result = [];
         if ($this->getType() != 'core') {
-            $class = 'Repo' . $this->getSource();
-            if (class_exists($class) && method_exists($class, 'objectInfo') && ConfigManager::byKey($this->getSource() . '::enable') == 1) {
-                $result = $class::objectInfo($this);
+            $repoClass = 'Repo' . $this->getSource();
+            if (class_exists($repoClass) && method_exists($repoClass, 'objectInfo') && ConfigManager::byKey($this->getSource() . '::enable') == 1) {
+                $result = $repoClass::objectInfo($this);
             }
         }
         return $result;

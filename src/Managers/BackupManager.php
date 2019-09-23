@@ -454,6 +454,9 @@ class BackupManager
             ConsoleHelper::step("extracting backup archive...");
             $tmpDir = self::extractArchive($file);
             ConsoleHelper::ok();
+            ConsoleHelper::step("restoring plugins...");
+            self::restorePlugins($tmpDir);
+            ConsoleHelper::ok();
             ConsoleHelper::step("restoring mysql database...");
             self::restoreDatabase($tmpDir);
             ConsoleHelper::ok();
@@ -466,9 +469,6 @@ class BackupManager
             ConsoleHelper::step("migrating data...");
             MigrationHelper::migrate('restore');
             ConsoleHelper::ok();
-            ConsoleHelper::step("restoring plugins...");
-            self::restorePlugins($tmpDir);
-            ConsoleHelper::ok();
             ConsoleHelper::step("starting nextdom system...");
             NextDomHelper::startSystem();
             ConsoleHelper::ok();
@@ -478,9 +478,11 @@ class BackupManager
             ConsoleHelper::step("chechking system consistency...");
             ConsistencyManager::checkConsistency();
             ConsoleHelper::ok();
+            ConsoleHelper::step("init values...");
+            BackupManager::initValues();
+            ConsoleHelper::ok();
             ConsoleHelper::step("clearing cache...");
-            CacheManager::flush();
-            exec('sh ' . NEXTDOM_ROOT . '/scripts/clear_cache.sh');
+            BackupManager::clearCache();
             ConsoleHelper::ok();
             FileSystemHelper::rrmdir($tmpDir);
             NextDomHelper::event("end_restore");
@@ -561,8 +563,11 @@ class BackupManager
     {
         $backupFile = sprintf("%s/DB_backup.sql", $tmpDir);
 
-        //TODO A faire dans une migration
-        if (0 != SystemHelper::vsystem("sed -i -e 's/jeedom/nextdom/g' '%s'", $backupFile)) {
+        //Just database comment changes, rest done in migrationHelper
+        if (0 != SystemHelper::vsystem("sed -i -e 's/Database: jeedom/Database: nextdom/g' '%s'", $backupFile)) {
+            throw new CoreException("unable to modify content of backup file " . $backupFile);
+        }
+        if (0 != SystemHelper::vsystem("sed -i -e 's/Definer=`jeedom`/Definer=`nextdom`/g' '%s'", $backupFile)) {
             throw new CoreException("unable to modify content of backup file " . $backupFile);
         }
 
@@ -849,5 +854,18 @@ class BackupManager
                 }
             }
         }
+    }
+
+    private static function clearCache() {
+        CacheManager::flush();
+        exec('sh ' . NEXTDOM_ROOT . '/scripts/clear_cache.sh');
+    }
+    /**
+     * Init default values
+     *
+     * @throws \Exception
+     */
+    private static function initValues() {
+        ConfigManager::save('nextdom::firstUse', 0);
     }
 }

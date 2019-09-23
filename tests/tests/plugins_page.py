@@ -36,6 +36,7 @@ class PluginsPage(BaseGuiTest):
         # Wait for loading page
         sleep(1)
         self.assertIn('Desktop plugin page', self.driver.page_source)
+        self.assertEqual(0, len(self.get_js_logs()))
 
     def test_dashboard_widget(self):
         """Test widget plugin

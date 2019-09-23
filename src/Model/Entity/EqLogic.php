@@ -1577,7 +1577,7 @@ class EqLogic implements EntityInterface
             if (isset($_SESSION) && is_object(UserManager::getStoredUser()) && UserManager::getStoredUser()->getOptions('widget::theme', null) !== null) {
                 $default_widgetTheme = UserManager::getStoredUser()->getOptions('widget::theme');
             }
-            self::$_templateArray[$version] = FileSystemHelper::getTemplateFileContent('core', $version, 'eqLogic', '', $default_widgetTheme);
+            self::$_templateArray[$version] = FileSystemHelper::getTemplateFileContent('views', $version, 'eqLogic', '', $default_widgetTheme);
 
         }
         return $this->postToHtml($viewType, Utils::templateReplace($replace, self::$_templateArray[$version]));
@@ -1625,18 +1625,18 @@ class EqLogic implements EntityInterface
      */
     public function widgetPossibility($keyPossibility = '', $defaultValue = true)
     {
-        $class = new \ReflectionClass($this->getEqType_name());
-        $method_toHtml = $class->getMethod('toHtml');
+        $reflectedClass = new \ReflectionClass($this->getEqType_name());
+        $method_toHtml = $reflectedClass->getMethod('toHtml');
         $result = [];
         if ($method_toHtml->class == EqLogic::class) {
             $result['custom'] = true;
         } else {
             $result['custom'] = false;
         }
-        $class = $this->getEqType_name();
-        if (property_exists($class, '_widgetPossibility')) {
+        $reflectedClass = $this->getEqType_name();
+        if (property_exists($reflectedClass, '_widgetPossibility')) {
             /** @noinspection PhpUndefinedFieldInspection */
-            $result = $class::$_widgetPossibility;
+            $result = $reflectedClass::$_widgetPossibility;
             if ($keyPossibility != '') {
                 if (isset($result[$keyPossibility])) {
                     return $result[$keyPossibility];

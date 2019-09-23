@@ -332,13 +332,13 @@ class Cron implements EntityInterface
 
     /**
      *
-     * @param $_class
+     * @param $newClass
      * @return $this
      */
-    public function setClass($_class)
+    public function setClass($newClass)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->class, $_class);
-        $this->class = $_class;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->class, $newClass);
+        $this->class = $newClass;
         return $this;
     }
 

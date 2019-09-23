@@ -277,14 +277,14 @@ class InteractDef implements EntityInterface
             preg_match_all("/#(.*?)#/", $input, $matches);
             $matches = $matches[1];
             if (in_array('commande', $matches) || (in_array('objet', $matches) || in_array('equipement', $matches))) {
-                foreach (JeeObjectManager::all() as $object) {
-                    if (isset($object_filter[$object->getId()]) && $object_filter[$object->getId()] == 0) {
+                foreach (JeeObjectManager::all() as $jeeObject) {
+                    if (isset($object_filter[$jeeObject->getId()]) && $object_filter[$jeeObject->getId()] == 0) {
                         continue;
                     }
-                    if (isset($visible_filter['object']) && $visible_filter['object'] == 1 && $object->getIsVisible() != 1) {
+                    if (isset($visible_filter['object']) && $visible_filter['object'] == 1 && $jeeObject->getIsVisible() != 1) {
                         continue;
                     }
-                    foreach ($object->getEqLogic() as $eqLogic) {
+                    foreach ($jeeObject->getEqLogic() as $eqLogic) {
                         if ($this->getFiltres('eqLogic_id', 'all') != 'all' && $eqLogic->getId() != $this->getFiltres('eqLogic_id')) {
                             continue;
                         }
@@ -335,7 +335,7 @@ class InteractDef implements EntityInterface
                             }
 
                             $replace = array(
-                                '#objet#' => strtolower($object->getName()),
+                                '#objet#' => strtolower($jeeObject->getName()),
                                 '#commande#' => strtolower($cmd->getName()),
                                 '#equipement#' => strtolower($eqLogic->getName()),
                             );

@@ -92,6 +92,7 @@ class CmdRest
             $cmdRow['subType'] = $cmd->getSubType();
             $cmdRow['icon'] = $cmd->getDisplay('icon');
             $cmdRow['genericType'] = $cmd->getGeneric_type();
+            $cmdRow['logicalId'] = $cmd->getLogicalId();
             $cmdRow['template'] = $cmd->getTemplate('dashboard');
             $cmdRow['cmdValue'] = $cmd->getCmdValue();
             $cmdRow['value'] = $cmd->getValue();

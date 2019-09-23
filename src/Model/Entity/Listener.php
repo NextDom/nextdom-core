@@ -136,10 +136,10 @@ class Listener implements EntityInterface
             $option['datetime'] = $_datetime;
             $option['listener_id'] = $this->getId();
             if ($this->getClass() != '') {
-                $class = $this->getClass();
+                $targetClass = $this->getClass();
                 $function = $this->getFunction();
-                if (class_exists($class) && method_exists($class, $function)) {
-                    $class::$function($option);
+                if (class_exists($targetClass) && method_exists($targetClass, $function)) {
+                    $targetClass::$function($option);
                 } else {
                     LogHelper::add('listener', 'debug', __('[Erreur] Classe ou fonction non trouvée ') . $this->getName());
                     $this->remove();

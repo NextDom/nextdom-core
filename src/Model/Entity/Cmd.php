@@ -327,14 +327,14 @@ class Cmd implements EntityInterface
 
         $template_name = 'cmd.' . $this->getType() . '.' . $this->getSubType() . '.' . $this->getTemplate($version, 'default');
         if (!isset(self::$_templateArray[$version . '::' . $template_name])) {
-            $template = FileSystemHelper::getTemplateFileContent('core', $version, $template_name, '');
+            $template = FileSystemHelper::getTemplateFileContent('views', $version, $template_name, '');
             if ($template == '') {
                 if (ConfigManager::byKey('active', 'widget') == 1) {
-                    $template = FileSystemHelper::getTemplateFileContent('core', $version, $template_name, 'widget');
+                    $template = FileSystemHelper::getTemplateFileContent('views', $version, $template_name, 'widget');
                 }
                 if ($template == '') {
                     foreach (PluginManager::listPlugin(true) as $plugin) {
-                        $template = FileSystemHelper::getTemplateFileContent('core', $version, $template_name, $plugin->getId());
+                        $template = FileSystemHelper::getTemplateFileContent('views', $version, $template_name, $plugin->getId());
                         if ($template != '') {
                             break;
                         }
@@ -342,7 +342,7 @@ class Cmd implements EntityInterface
                 }
                 if ($template == '') {
                     $template_name = 'cmd.' . $this->getType() . '.' . $this->getSubType() . '.default';
-                    $template = FileSystemHelper::getTemplateFileContent('core', $version, $template_name, '');
+                    $template = FileSystemHelper::getTemplateFileContent('views', $version, $template_name, '');
                 }
             }
             self::$_templateArray[$version . '::' . $template_name] = $template;
@@ -636,12 +636,12 @@ class Cmd implements EntityInterface
             $replace['#state#'] = '';
             $replace['#tendance#'] = '';
             if ($this->getEqLogicId()->getIsEnable() == 0) {
-                $template = FileSystemHelper::getTemplateFileContent('core', $version, 'cmd.error', '');
+                $template = FileSystemHelper::getTemplateFileContent('views', $version, 'cmd.error', '');
                 $replace['#state#'] = 'N/A';
             } else {
                 $replace['#state#'] = $this->execCmd();
                 if (strpos($replace['#state#'], 'error::') !== false) {
-                    $template = FileSystemHelper::getTemplateFileContent('core', $version, 'cmd.error', '');
+                    $template = FileSystemHelper::getTemplateFileContent('views', $version, 'cmd.error', '');
                     $replace['#state#'] = str_replace('error::', '', $replace['#state#']);
                 } else {
                     if ($this->getSubType() == 'binary' && $this->getDisplay('invertBinary') == 1) {
@@ -1858,25 +1858,25 @@ class Cmd implements EntityInterface
      */
     public function widgetPossibility($_key = '', $_default = true)
     {
-        $class = new \ReflectionClass($this->getEqType());
-        $method_toHtml = $class->getMethod('toHtml');
+        $reflectedClass = new \ReflectionClass($this->getEqType());
+        $method_toHtml = $reflectedClass->getMethod('toHtml');
         $result = [];
         if ($method_toHtml->class == EqLogic::class) {
             $result['custom'] = true;
         } else {
             $result['custom'] = false;
         }
-        $class = new \ReflectionClass($this->getEqType() . 'Cmd');
-        $method_toHtml = $class->getMethod('toHtml');
+        $reflectedClass = new \ReflectionClass($this->getEqType() . 'Cmd');
+        $method_toHtml = $reflectedClass->getMethod('toHtml');
         if ($method_toHtml->class == Cmd::class) {
             $result['custom'] = true;
         } else {
             $result['custom'] = false;
         }
-        $class = $this->getEqType() . 'Cmd';
-        if (property_exists($class, '_widgetPossibility')) {
+        $reflectedClass = $this->getEqType() . 'Cmd';
+        if (property_exists($reflectedClass, '_widgetPossibility')) {
             /** @noinspection PhpUndefinedFieldInspection */
-            $result = $class::$_widgetPossibility;
+            $result = $reflectedClass::$_widgetPossibility;
             if ($_key != '') {
                 $keys = explode('::', $_key);
                 foreach ($keys as $k) {

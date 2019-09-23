@@ -35,11 +35,16 @@ nextdom.changes = function(){
       }
       nextdom.datetime = data.datetime;
       var cmd_update = [];
+      var scenario_update = [];
       var eqLogic_update = [];
       var object_summary_update = [];
       for(var i in data.result){
         if(data.result[i].name == 'cmd::update'){
           cmd_update.push(data.result[i].option);
+          continue;
+        }
+        if(data.result[i].name == 'jeeObject::summary::update'){
+          scenario_update.push(data.result[i].option);
           continue;
         }
         if(data.result[i].name == 'eqLogic::update'){
@@ -58,6 +63,9 @@ nextdom.changes = function(){
       }
       if(cmd_update.length > 0){
         $('body').trigger('cmd::update',[cmd_update]);
+      }
+      if(scenario_update.length > 0){
+        $('body').trigger('scenario::update',[scenario_update]);
       }
       if(eqLogic_update.length > 0){
         $('body').trigger('eqLogic::update',[eqLogic_update]);
@@ -97,9 +105,6 @@ nextdom.changes = function(){
 nextdom.init = function () {
   nextdom.datetime = serverDatetime;
   nextdom.display.version = 'desktop';
-  if ($.mobile) {
-    nextdom.display.version = 'mobile';
-  }
   Highcharts.setOptions({
     lang: {
       months: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
@@ -112,7 +117,6 @@ nextdom.init = function () {
   $('body').on('cmd::update', function (_event,_options) {
     nextdom.cmd.refreshValue(_options);
   });
-
   $('body').on('scenario::update', function (_event,_options) {
     nextdom.scenario.refreshValue(_options);
   });

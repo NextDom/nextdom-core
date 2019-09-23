@@ -36,6 +36,7 @@ namespace NextDom\Helpers;
 
 use NextDom\Enums\GetParams;
 use NextDom\Enums\ViewType;
+use NextDom\Managers\ConfigManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -145,12 +146,13 @@ class Router
             $prepareView->showContentByAjax();
         } else {
             $prepareView->initConfig();
-            if (!$prepareView->firstUseIsShowed()) {
+            if (!$prepareView->firstUseAlreadyShowed()) {
                 $prepareView->showSpecialPage('firstUse');
+
             } elseif (!AuthentificationHelper::isConnected()) {
                 $prepareView->showSpecialPage('connection');
             } else {
-                    $prepareView->showContent();
+                $prepareView->showContent();
             }
         }
     }

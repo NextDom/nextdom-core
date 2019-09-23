@@ -76,6 +76,7 @@ connection:
   remember-label: Se souvenir de moi ?
   connect: Connexion
   forgot: Oups, j'ai oublié mon mot de passe !
+  mobile-install: Installer la version mobile
 
 core:
   error-401: 401 - Accès non autorisé
@@ -285,6 +286,7 @@ sidebar:
   tools-summary: Résumé domotique
   tools-interactions: Interactions
   tools-scenarios: Scénarios
+  tools-scenarios-manage: Gestion Scénarios
   tools-notes: Notes
   diagnostics: Diagnostics
   diagnostics-health: Santé

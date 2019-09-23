@@ -142,3 +142,37 @@
 .callback {
     padding-top: 7px;
 }
+
+/* AdminLTE-Surcharge */
+.sidebar-menu > li .badge {
+    margin-top: -2px;
+}
+.scenario-label {
+    > i {
+      margin-right: 5px;
+    }
+    padding: 6px;
+    word-break: break-all;
+    position: absolute;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: calc(100% - 120px);
+    z-index: 0;
+}
+.scenario-state {
+    display: inline-flex;
+    float: right;
+    font-size: 14px;
+    padding: 8px;
+    margin: 1px;
+    position: relative;
+    z-index: 1;
+}
+.scenario-cmd {
+    display: inline-flex;
+    float: right;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}

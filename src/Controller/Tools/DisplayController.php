@@ -46,7 +46,7 @@ class DisplayController extends BaseController
     {
         $nbEqlogics = 0;
         $nbCmds = 0;
-        $objects = JeeObjectManager::all();
+        $jeeObjects = JeeObjectManager::all();
         $eqLogics = [];
         $cmds = [];
         $eqLogics[-1] = EqLogicManager::byObjectId(null, false);
@@ -57,16 +57,16 @@ class DisplayController extends BaseController
         }
         $nbEqlogics += count($eqLogics[-1]);
 
-        foreach ($objects as $object) {
-            $eqLogics[$object->getId()] = $object->getEqLogic(false, false);
-            foreach ($eqLogics[$object->getId()] as $eqLogic) {
+        foreach ($jeeObjects as $jeeObject) {
+            $eqLogics[$jeeObject->getId()] = $jeeObject->getEqLogic(false, false);
+            foreach ($eqLogics[$jeeObject->getId()] as $eqLogic) {
                 $cmds[$eqLogic->getId()] = $eqLogic->getCmd();
                 $nbCmds += count($cmds[$eqLogic->getId()]);
             }
-            $nbEqlogics += count($eqLogics[$object->getId()]);
+            $nbEqlogics += count($eqLogics[$jeeObject->getId()]);
         }
 
-        $pageData['displayObjects'] = $objects;
+        $pageData['displayObjects'] = $jeeObjects;
         $pageData['displayNbEqLogics'] = $nbEqlogics;
         $pageData['displayNbCmds'] = $nbCmds;
         $pageData['displayEqLogics'] = $eqLogics;
