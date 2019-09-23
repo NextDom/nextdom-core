@@ -218,10 +218,13 @@ class FileSystemHelper
         $result = '';
         $filePath = '';
         if ($pluginId == '') {
+            if ($folder === 'core') {
+                $folder = 'views';
+            }
             if ($theme == '') {
-                $filePath = NEXTDOM_ROOT . '/' . $folder . '/template/' . $version . '/' . $filename . '.html';
+                $filePath = NEXTDOM_ROOT . '/' . $folder . '/templates/' . $version . '/' . $filename . '.html';
             } else {
-                $filePath = NEXTDOM_ROOT . '/' . $folder . '/template/' . $version . '/themes/' . $theme . '/' . $filename . '.html';
+                $filePath = NEXTDOM_ROOT . '/' . $folder . '/templates/' . $version . '/themes/' . $theme . '/' . $filename . '.html';
             }
         } else {
             $filePath = NEXTDOM_ROOT . '/plugins/' . $pluginId . '/core/template/' . $version . '/' . $filename . '.html';

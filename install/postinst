@@ -345,6 +345,12 @@ step_nextdom_directory_layout() {
   fi
   print_verbose "created core/js symlink: ${WEBSERVER_HOME}/assets/js/core"
 
+  # jeedom template location compatibility
+  if [ ! -e ${WEBSERVER_HOME}/core/template ]; then
+      ln -s ${WEBSERVER_HOME}/views/templates/ ${WEBSERVER_HOME}/core/template
+  fi
+  print_verbose "created core/template symlink: ${WEBSERVER_HOME}/core/template"
+
   # jeedom backup compatibility:  ./data is a symlink
   if [ -L ${WEBSERVER_HOME}/data ]; then
       rm -f ${WEBSERVER_HOME}/data
