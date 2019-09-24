@@ -94,6 +94,7 @@ class RepoGitHub
             return;
         }
         $client = self::getGithubClient();
+        // Check if core data is correct and change type or repository if necessary
         if ($targetUpdate->getType() === 'core') {
             exec('cd ' . NEXTDOM_ROOT . ' && git rev-parse --abbrev-ref HEAD 2> /dev/null', $currentBranch);
             if (is_array($currentBranch) && count($currentBranch) > 0) {
@@ -122,6 +123,12 @@ class RepoGitHub
             return;
         }
         $targetUpdate->setRemoteVersion($branch['commit']['sha']);
+        // Read local version
+        exec('cd ' . NEXTDOM_ROOT . ' && git rev-parse HEAD 2> /dev/null', $localVersion);
+        if (is_array($currentBranch) && count($currentBranch) > 0) {
+            $targetUpdate->setLocalVersion($localVersion[0]);
+        }
+        // Compare
         if ($branch['commit']['sha'] != $targetUpdate->getLocalVersion()) {
             $targetUpdate->setStatus('update');
         } else {
