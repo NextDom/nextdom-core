@@ -79,6 +79,11 @@ class RepoApt
                     $targetUpdate->save();
                 }
             }
+            else {
+                $targetUpdate->setSource('github');
+                RepoGitHub::checkUpdate($targetUpdate);
+                $result = true;
+            }
         }
         return $result;
     }

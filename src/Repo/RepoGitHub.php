@@ -23,6 +23,7 @@ use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
 use NextDom\Managers\ConfigManager;
+use NextDom\Model\Entity\Update;
 
 require_once __DIR__ . '/../../core/php/core.inc.php';
 
@@ -78,39 +79,55 @@ class RepoGitHub
 
     /*     * ***********************Méthodes statiques*************************** */
 
-    public static function checkUpdate(&$_update)
+    /**
+     * @param Update $targetUpdate
+     */
+    public static function checkUpdate(&$targetUpdate)
     {
-        if (is_array($_update)) {
-            if (count($_update) < 1) {
+        if (is_array($targetUpdate)) {
+            if (count($targetUpdate) < 1) {
                 return;
             }
-            foreach ($_update as $update) {
+            foreach ($targetUpdate as $update) {
                 self::checkUpdate($update);
             }
             return;
         }
         $client = self::getGithubClient();
+        if ($targetUpdate->getType() === 'core') {
+            exec('cd ' . NEXTDOM_ROOT . ' && git rev-parse --abbrev-ref HEAD 2> /dev/null', $currentBranch);
+            if (is_array($currentBranch) && count($currentBranch) > 0) {
+                $targetUpdate->setConfiguration('version', $currentBranch[0]);
+                $targetUpdate->save();
+            }
+            elseif (!is_dir(NEXTDOM_ROOT . '/.git')) {
+                $targetUpdate->setSource('apt');
+                $targetUpdate->save();
+                RepoApt::checkUpdate($targetUpdate);
+                return;
+            }
+        }
         try {
-            $branch = $client->api('repo')->branches($_update->getConfiguration('user'), $_update->getConfiguration('repository'), $_update->getConfiguration('version', 'master'));
+            $branch = $client->api('repo')->branches($targetUpdate->getConfiguration('user'), $targetUpdate->getConfiguration('repository'), $targetUpdate->getConfiguration('version', 'master'));
         } catch (\Exception $e) {
-            $_update->setRemoteVersion('repository not found');
-            $_update->setStatus('ok');
-            $_update->save();
+            $targetUpdate->setRemoteVersion('repository not found');
+            $targetUpdate->setStatus('ok');
+            $targetUpdate->save();
             return;
         }
         if (!isset($branch['commit']) || !isset($branch['commit']['sha'])) {
-            $_update->setRemoteVersion('error');
-            $_update->setStatus('ok');
-            $_update->save();
+            $targetUpdate->setRemoteVersion('error');
+            $targetUpdate->setStatus('ok');
+            $targetUpdate->save();
             return;
         }
-        $_update->setRemoteVersion($branch['commit']['sha']);
-        if ($branch['commit']['sha'] != $_update->getLocalVersion()) {
-            $_update->setStatus('update');
+        $targetUpdate->setRemoteVersion($branch['commit']['sha']);
+        if ($branch['commit']['sha'] != $targetUpdate->getLocalVersion()) {
+            $targetUpdate->setStatus('update');
         } else {
-            $_update->setStatus('ok');
+            $targetUpdate->setStatus('ok');
         }
-        $_update->save();
+        $targetUpdate->save();
     }
 
     public static function getGithubClient()
