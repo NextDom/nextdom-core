@@ -454,6 +454,9 @@ class BackupManager
             ConsoleHelper::step("extracting backup archive...");
             $tmpDir = self::extractArchive($file);
             ConsoleHelper::ok();
+            ConsoleHelper::step("restoring plugins...");
+            self::restorePlugins($tmpDir);
+            ConsoleHelper::ok();
             ConsoleHelper::step("restoring mysql database...");
             self::restoreDatabase($tmpDir);
             ConsoleHelper::ok();
@@ -465,9 +468,6 @@ class BackupManager
             ConsoleHelper::ok();
             ConsoleHelper::step("migrating data...");
             MigrationHelper::migrate('restore');
-            ConsoleHelper::ok();
-            ConsoleHelper::step("restoring plugins...");
-            self::restorePlugins($tmpDir);
             ConsoleHelper::ok();
             ConsoleHelper::step("starting nextdom system...");
             NextDomHelper::startSystem();
@@ -563,8 +563,11 @@ class BackupManager
     {
         $backupFile = sprintf("%s/DB_backup.sql", $tmpDir);
 
-        //TODO A faire dans une migration
-        if (0 != SystemHelper::vsystem("sed -i -e 's/jeedom/nextdom/g' '%s'", $backupFile)) {
+        //Just database comment changes, rest done in migrationHelper
+        if (0 != SystemHelper::vsystem("sed -i -e 's/Database: jeedom/Database: nextdom/g' '%s'", $backupFile)) {
+            throw new CoreException("unable to modify content of backup file " . $backupFile);
+        }
+        if (0 != SystemHelper::vsystem("sed -i -e 's/Definer=`jeedom`/Definer=`nextdom`/g' '%s'", $backupFile)) {
             throw new CoreException("unable to modify content of backup file " . $backupFile);
         }
 

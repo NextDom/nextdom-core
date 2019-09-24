@@ -175,7 +175,7 @@ class ScenarioExpressionManager
             $return['html'] = trim($cmd->toHtml('scenario', $options));
             return $return;
         }
-        $return['template'] = FileSystemHelper::getTemplateFileContent('core', 'scenario', $expression . '.default');
+        $return['template'] = FileSystemHelper::getTemplateFileContent('views', 'scenario', $expression . '.default');
         $_options = Utils::isJson($options, $options);
         if (is_array($options) && count($options) > 0) {
             foreach ($options as $key => $value) {

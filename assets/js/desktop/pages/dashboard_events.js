@@ -155,7 +155,6 @@ function initEvents() {
     $('#accordionRoom').hover(function(){
       $('#accordionRoomHeader').click();
       }, function(){
-      $('#accordionRoomHeader').click();
     });
 }
 
