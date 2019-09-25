@@ -57,13 +57,18 @@ class ConsistencyManager
         'power' => array('key' => 'power', 'name' => 'Puissance', 'calcul' => 'sum', 'icon' => '<i class="fa fa-bolt"></i>', 'unit' => 'W', 'allowDisplayZero' => false),
     );
 
+    /**
+     * Start consistency check of the system
+     *
+     * @throws CoreException
+     */
     public static function checkConsistency()
     {
         try {
             self::ensureConfiguration();
             CronManager::clean();
-            self::deleteDeprecatedCrons();
-            self::ensureCrons();
+            self::removeDeprecatedCrons();
+            self::checkAllDefaultCrons();
             self::cleanWidgetCache();
             self::saveObjects();
             self::resetCommandsActionID();
@@ -73,6 +78,10 @@ class ConsistencyManager
         }
     }
 
+    /**
+     * TODO: ???
+     * @throws \Exception
+     */
     private static function ensureConfiguration()
     {
         $summary = ConfigManager::byKey("object:summary");
@@ -86,7 +95,13 @@ class ConsistencyManager
         }
     }
 
-    private static function deleteDeprecatedCrons()
+    /**
+     * Remove deprecated cron task
+     *
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
+    private static function removeDeprecatedCrons()
     {
         $cronTasksToRemove = [
             ['target_class' => 'nextdom', 'action' => 'persist'],
@@ -104,7 +119,10 @@ class ConsistencyManager
         }
     }
 
-    private static function ensureCrons()
+    /**
+     * Check if all default cron task are present and add it
+     */
+    private static function checkAllDefaultCrons()
     {
         foreach (self::getDefaultCrons() as $c_class => $c_data) {
             foreach ($c_data as $c_name => $c_config) {
@@ -262,14 +280,17 @@ class ConsistencyManager
         }
     }
 
+    /**
+     * Check if user.function.class.php has been deletedd
+     */
     private static function ensureUserFunctionExists()
     {
-        $source = sprintf("%s/data/php/user.function.class.sample.php", NEXTDOM_DATA);
+        $baseFile = sprintf("%s/data/php/user.function.class.sample.php", NEXTDOM_DATA);
         $dest = sprintf("%s/data/php/user.function.class.php", NEXTDOM_DATA);
 
         if ((false == file_exists($dest)) &&
-            (true == file_exists($source))) {
-            copy($source, $dest);
+            (true == file_exists($baseFile))) {
+            copy($baseFile, $dest);
         }
     }
 }

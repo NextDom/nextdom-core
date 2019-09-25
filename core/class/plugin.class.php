@@ -58,6 +58,11 @@ class plugin extends \NextDom\Model\Entity\Plugin
         PluginManager::cron5();
     }
 
+    public static function cron10()
+    {
+        PluginManager::cron10();
+    }
+
     public static function cron15()
     {
         PluginManager::cron15();

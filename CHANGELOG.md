@@ -1,5 +1,19 @@
 # NextDom Core Changelog
 ---
+## 0.5.0-RC0
+
+> ***Release Date : 23/09/2019***
+>
+> ***Statut : Release candidate
+
+* Amélioration de la migration depuis Jeedom
+* Possibilité de commander les scénarios depuis le dashboard
+* Déplacement du code du core
+* Amélioration de compatibilité PHP > 7.2 et Debian Buster
+* Correction de bugs
+* Correction de l'affichage des updates du Core
+* Mise à jour des dépendances
+
 ## 0.4.2
 > ***Release Date : 13/09/2019***
 >
