@@ -125,7 +125,7 @@ class RepoGitHub
         $targetUpdate->setRemoteVersion($branch['commit']['sha']);
         // Read local version
         exec('cd ' . NEXTDOM_ROOT . ' && git rev-parse HEAD 2> /dev/null', $localVersion);
-        if (is_array($currentBranch) && count($currentBranch) > 0) {
+        if (is_array($localVersion) && count($localVersion) > 0) {
             $targetUpdate->setLocalVersion($localVersion[0]);
         }
         // Compare
