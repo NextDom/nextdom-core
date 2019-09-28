@@ -254,6 +254,7 @@ step_nextdom_prerequisites_verification() {
       mkdir -p /etc/systemd/system/apache2.service.d
       cp ${srcdir}/privatetmp.conf /etc/systemd/system/apache2.service.d/privatetmp.conf >> ${DEBUG} 2>&1
       print_verbose "created file: /etc/systemd/system/apache2.service.d/privatetmp.conf"
+      systemctl daemon-reload
   fi
 
   # Windows hack (bash for windows)
