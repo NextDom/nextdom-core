@@ -18,8 +18,8 @@ options:
   -h            : display this message
   -i <host>     : database hostname, defaults to localhost
   -z <port>     : database port, defaults to 3306
-  -d <name>     : database name, detaults to nextdom (nextdomdev for dev version)
-  -u <username> : database user name, detaults to nextdom (nextdomdev for dev version)
+  -d <name>     : database name, defaults to nextdom (nextdomdev for dev version)
+  -u <username> : database user name, defaults to nextdom (nextdomdev for dev version)
   -p <password> : database user password, randomly generated if not given
   -r <password> : database root password
   -L <dir>      : set log directory, defaults to /var/log/nextdom
