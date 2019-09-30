@@ -59,30 +59,33 @@ class RepoApt
                 }
             }
         } else if ($targetUpdate->getType() === 'core' && $targetUpdate->getLogicalId() === 'nextdom') {
-            exec(SystemHelper::getCmdSudo() . 'apt-get update');
-            exec(SystemHelper::getCmdSudo() . "apt-cache policy nextdom | grep Installed | sed 's/Installed: \\(.*\\)/\\1/g'", $currentVersion);
-            exec(SystemHelper::getCmdSudo() . "apt-cache policy nextdom | grep Candidate | sed 's/Candidate: \\(.*\\)/\\1/g'", $newVersion);
-            if (count($currentVersion) > 0 && count($newVersion) > 0) {
-                $currentVersion = trim($currentVersion[0]);
-                $newVersion = trim($newVersion[0]);
-                if (empty($targetUpdate->getLocalVersion()) || $targetUpdate->getLocalVersion() !== $currentVersion) {
-                    $targetUpdate->setLocalVersion($currentVersion);
-                    $targetUpdate->save();
+            exec(SystemHelper::getCmdSudo(). 'lsof /var/lib/dpkg/lock', $aptLocked);
+            if (count($aptLocked) === 0) {
+                exec(SystemHelper::getCmdSudo() . 'apt-get update');
+                exec(SystemHelper::getCmdSudo() . "apt-cache policy nextdom | grep Installed | sed 's/Installed: \\(.*\\)/\\1/g'", $currentVersion);
+                exec(SystemHelper::getCmdSudo() . "apt-cache policy nextdom | grep Candidate | sed 's/Candidate: \\(.*\\)/\\1/g'", $newVersion);
+                if (count($currentVersion) > 0 && count($newVersion) > 0) {
+                    $currentVersion = trim($currentVersion[0]);
+                    $newVersion = trim($newVersion[0]);
+                    if (empty($targetUpdate->getLocalVersion()) || $targetUpdate->getLocalVersion() !== $currentVersion) {
+                        $targetUpdate->setLocalVersion($currentVersion);
+                        $targetUpdate->save();
+                    }
+                    if ($currentVersion !== $newVersion && $currentVersion !== '(none)') {
+                        $targetUpdate->setRemoteVersion($newVersion);
+                        $targetUpdate->setStatus('update');
+                        $targetUpdate->save();
+                        $result = true;
+                    } elseif (empty($targetUpdate->getRemoteVersion())) {
+                        $targetUpdate->setRemoteVersion($newVersion);
+                        $targetUpdate->save();
+                    }
                 }
-                if ($currentVersion !== $newVersion && $currentVersion !== '(none)') {
-                    $targetUpdate->setRemoteVersion($newVersion);
-                    $targetUpdate->setStatus('update');
-                    $targetUpdate->save();
+                else {
+                    $targetUpdate->setSource('github');
+                    RepoGitHub::checkUpdate($targetUpdate);
                     $result = true;
-                } elseif (empty($targetUpdate->getRemoteVersion())) {
-                    $targetUpdate->setRemoteVersion($newVersion);
-                    $targetUpdate->save();
                 }
-            }
-            else {
-                $targetUpdate->setSource('github');
-                RepoGitHub::checkUpdate($targetUpdate);
-                $result = true;
             }
         }
         return $result;
