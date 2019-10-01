@@ -430,6 +430,7 @@ note:
   are_sure_you_want_to_delete_the_note: "Are sure you want to delete the note"
 
 osdb:
+  administration: Administration
   warning: "WARNING: you may loose access to your system "
   tools: "Tools"
   system_console: "System console"

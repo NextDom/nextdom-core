@@ -441,6 +441,7 @@ note:
   are_sure_you_want_to_delete_the_note: "Etes-vous sur de vouloir supprimer la note : "
 
 osdb:
+  administration: Administration
   warning: "ATTENTION : ces opérations sont risquées, vous pouvez perdre l'accès à votre système et à "
   tools: "Outils"
   system_console: "Console Système"
