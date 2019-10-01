@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use Monolog\Logger;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Api;
 use NextDom\Helpers\DBHelper;
@@ -233,7 +234,6 @@ class Cmd implements EntityInterface
      */
     public function getEqType_name()
     {
-        trigger_error('This method is deprecated. Use getEqType', E_USER_DEPRECATED);
         return $this->eqType;
     }
 
