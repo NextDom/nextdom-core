@@ -1,18 +1,29 @@
 # NextDom Core Changelog
 ---
-## 0.5.0-RC0
+## 0.5.0
 
-> ***Release Date : 23/09/2019***
+> ***Release Date : 13/10/2019***
 >
-> ***Statut : Release candidate
+> ***Statut : beta***
 
-* Amélioration de la migration depuis Jeedom
-* Possibilité de commander les scénarios depuis le dashboard
-* Déplacement du code du core
-* Amélioration de compatibilité PHP > 7.2 et Debian Buster
-* Correction de bugs
-* Correction de l'affichage des updates du Core
+#### NEWS
+* Affichage des scénarios sur le dashboard
+* Possibilité de commander les scénarios sur le dashboard
+* Déplacement du code du core (/core)
 * Mise à jour des dépendances
+* Séparation de la version mobile qui devient indépendante, l'installation est proposée au login
+* Nouveau tests unitaires du core (coverall > 22%)
+* Test unitaires version mobile (coverall > 41%)
+
+#### AMELIORATIONS
+* Amélioration de la migration depuis Jeedom
+* Amélioration de compatibilité PHP > 7.2 et Debian Buster
+* Amélioration du système de validation (ajout des nightly et d'un triple LXC de validation automatique d'install & update)
+
+#### FIXS
+* Correction de l'affichage des updates du Core
+* [liste ici](https://github.com/NextDom/nextdom-core/milestone/18?closed=1)
+---
 
 ## 0.4.2
 > ***Release Date : 13/09/2019***
