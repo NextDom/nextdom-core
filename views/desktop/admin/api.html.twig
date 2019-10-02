@@ -151,7 +151,7 @@
             <!-- Plugins Section -->
             <fieldset class="legend-section">
                 <legend>{{ 'Accès et Clefs API Plugins' }}</legend>
-                {% if not adminIsRescueMode and adminPluginsList|length > 0 %}
+                {% if adminPluginsList|length > 0 %}
                     <div class="row">
                         {% for pluginData in adminPluginsList %}
                             <div class="form-group col-lg-6 col-xs-12 col-padding">
