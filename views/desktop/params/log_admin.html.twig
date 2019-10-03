@@ -208,7 +208,7 @@
             <fieldset class="legend-section">
                 <legend>{{ 'Niveau des logs plugins' }}</legend>
                 <div class="row">
-                    {% if not adminIsRescueMode and adminPluginsList|length > 0 %}
+                    {% if adminPluginsList|length > 0 %}
                         {% for pluginData in adminPluginsList %}
                             <div class="form-group col-sm-6 col-xs-12 col-padding">
                                 <label class="control-label">{{ pluginData['plugin'].getName() }}</label>

@@ -49,7 +49,15 @@ class LogAdminController extends BaseController
         global $NEXTDOM_INTERNAL_CONFIG;
         $pageData['adminAlerts'] = $NEXTDOM_INTERNAL_CONFIG['alerts'];
         $pageData['adminOthersLogs'] = array('scenario', 'plugin', 'market', 'api', 'connection', 'interact', 'tts', 'report', 'event');
-
+        $pageData['adminPluginsList'] = [];
+        $pluginsList = PluginManager::listPlugin(true);
+        foreach ($pluginsList as $plugin) {
+            $pluginApi = ConfigManager::byKey('api', $plugin->getId());
+            $pluginData = [];
+            $pluginData['api'] = $pluginApi;
+            $pluginData['plugin'] = $plugin;
+            $pageData['adminPluginsList'][] = $pluginData;
+        }
         $pageData['JS_END_POOL'][] = '/public/js/desktop/params/log_admin.js';
 
         return Render::getInstance()->get('/desktop/params/log_admin.html.twig', $pageData);
