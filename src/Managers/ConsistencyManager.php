@@ -124,20 +124,20 @@ class ConsistencyManager
      */
     private static function checkAllDefaultCrons()
     {
-        foreach (self::getDefaultCrons() as $c_class => $c_data) {
-            foreach ($c_data as $c_name => $c_config) {
+        foreach (self::getDefaultCrons() as $cronClass => $cronData) {
+            foreach ($cronData as $cronName => $cronConfig) {
                 try {
-                    $cron = CronManager::byClassAndFunction($c_class, $c_name);
+                    $cron = CronManager::byClassAndFunction($cronClass, $cronName);
                     if (false == is_object($cron)) {
                         $cron = new Cron();
                     }
-                    $cron->setClass($c_class);
-                    $cron->setFunction($c_name);
-                    $cron->setSchedule($c_config["schedule"]);
-                    $cron->setTimeout($c_config["timeout"]);
+                    $cron->setClass($cronClass);
+                    $cron->setFunction($cronName);
+                    $cron->setSchedule($cronConfig["schedule"]);
+                    $cron->setTimeout($cronConfig["timeout"]);
                     $cron->setDeamon(0);
-                    if (true == array_key_exists("enabled", $c_config)) {
-                        $cron->setEnable($c_config["enabled"]);
+                    if (true == array_key_exists("enabled", $cronConfig)) {
+                        $cron->setEnable($cronConfig["enabled"]);
                     }
                     $cron->save();
                 } catch (\Exception $e) {
@@ -149,7 +149,7 @@ class ConsistencyManager
     /**
      * @return array
      */
-    private static function getDefaultCrons()
+    public static function getDefaultCrons()
     {
         return array(
             "nextdom" => array(
