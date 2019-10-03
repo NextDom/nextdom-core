@@ -233,6 +233,7 @@ class Cmd implements EntityInterface
      */
     public function getEqType_name()
     {
+        @trigger_error('This method is deprecated. Use getEqType', E_USER_DEPRECATED);
         return $this->eqType;
     }
 
