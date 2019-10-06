@@ -539,7 +539,7 @@ scenario:
   duplicate-title: Dupliquer le scénario
   export: Exporter
   template: Template
-  log: Type de log
+  log: Log
   add-block: Ajouter un bloc
   stop: Arrêter
   execute-title: Veuillez sauvegarder avant de tester. Ceci peut ne pas aboutir.
