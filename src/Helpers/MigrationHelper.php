@@ -24,10 +24,13 @@ use NextDom\Enums\PlanDisplayType;
 use NextDom\Exceptions\CoreException;
 use NextDom\Managers\BackupManager;
 use NextDom\Managers\ConfigManager;
+use NextDom\Managers\ConsistencyManager;
+use NextDom\Managers\CronManager;
 use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\Plan3dManager;
 use NextDom\Managers\PlanManager;
 use NextDom\Managers\UpdateManager;
+use NextDom\Model\Entity\Cron;
 
 /**
  * Class MigrationHelper
@@ -124,6 +127,7 @@ class MigrationHelper
                 $previousVersion[0] += 1;
             }
         }
+        self::replaceJeedomInDatabase($logFile);
         ConfigManager::save('lastUpdateVersion', $currentVersion[0] . '.' . $currentVersion[1] . '.' . $currentVersion[2], 'core');
     }
 
@@ -409,15 +413,15 @@ class MigrationHelper
         }
     }
 
-    /***************************************************************** 0.4.2 Migration process *****************************************************************/
     /**
-     * 0.4.1 Migration process
+     * Replace jeedom to nextdom in database
+     *
      * @param string $logFile log name file to display information
+     *
      * @throws \Exception
      */
-    private static function migrate_0_4_2($logFile = 'migration')
+    private static function replaceJeedomInDatabase($logFile = 'migration')
     {
-
         $message = 'Replace jeedom in database';
         if ($logFile == 'migration') {
             LogHelper::addInfo($logFile, $message, '');
@@ -437,15 +441,31 @@ class MigrationHelper
         }
         ConfigManager::save('nextdom::firstUse', 0, 'core');
         // Update Crons table
-
-        // benchmark config update
-        $sql = 'UPDATE `crons`
+        $sql = 'UPDATE `cron`
                    SET `class` = "nextdom"
                  WHERE `class` = "jeedom"';
         try {
             DBHelper::exec($sql);
         } catch (\Exception $e) {
 
+        }
+        // Check doublon on update
+        foreach (ConsistencyManager::getDefaultCrons() as $cronClass => $cronData) {
+            foreach ($cronData as $cronName => $cronConfig) {
+                $sql = 'SELECT ' . DBHelper::buildField(CronManager::CLASS_NAME) . '
+                        FROM ' . CronManager::DB_CLASS_NAME . '
+                        WHERE class = :class
+                        AND function = :function';
+                $params = [
+                    'class' => $cronClass,
+                    'function' => $cronName,
+                ];
+                /** @var Cron[] $result */
+                $result = DBHelper::getAllObjects($sql, $params, CronManager::CLASS_NAME);
+                if (count($result) > 1) {
+                    $result[1]->remove();
+                }
+            }
         }
 
         // Update Update table
