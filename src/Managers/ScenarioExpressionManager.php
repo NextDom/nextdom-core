@@ -56,27 +56,27 @@ class ScenarioExpressionManager
     const WAIT_LIMIT = 7200;
 
     /**
-     * Obtenir une expression de scénario à partir de son identifiant
+     * Get expression from his id
      *
      * @param mixed $id Identifiant
      *
-     * @return array|mixed|null
+     * @return ScenarioExpression|null
      *
      * @throws \Exception
      */
     public static function byId($id)
     {
-        $values = array('id' => $id);
+        $params = ['id' => $id];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE id = :id';
-        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
+        return DBHelper::getOneObject($sql, $params, self::CLASS_NAME);
     }
 
     /**
-     * Obtenir toutes les expressions de scénario
+     * Get all scenario expressions
      *
-     * @return array|mixed|null
+     * @return ScenarioExpression|null
      *
      * @throws \Exception
      */
@@ -91,22 +91,20 @@ class ScenarioExpressionManager
     /**
      * Get the sub-element of a scenario from its identifier
      *
-     * TODO: Remplacable par ScenarioSubElementManager:byId si j'ai bien compris
+     * @param int|string $scenarioSubElementId Scenario sub element ID
      *
-     * @param $scenarioSubElementId
-     *
-     * @return array|mixed|null
+     * @return ScenarioExpression|null
      *
      * @throws \Exception
      */
     public static function byScenarioSubElementId($scenarioSubElementId)
     {
-        $values = array('scenarioSubElement_id' => $scenarioSubElementId);
+        $params = ['scenarioSubElement_id' => $scenarioSubElementId];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE scenarioSubElement_id = :scenarioSubElement_id
                 ORDER BY `order`';
-        return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, $params, self::CLASS_NAME);
     }
 
     /**
@@ -116,29 +114,29 @@ class ScenarioExpressionManager
      * @param string $options Option searched
      * @param bool $and True if the expression and the option are a criterion, if not the expression or the option
      *
-     * @return array|mixed|null
+     * @return ScenarioExpression[]|null
      *
      * @throws \Exception
      */
     public static function searchExpression($expression, $options = null, $and = true)
     {
-        $values = array('expression' => '%' . $expression . '%');
+        $params = ['expression' => '%' . $expression . '%'];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE expression LIKE :expression ';
         if ($options !== null) {
-            $values['options'] = '%' . $options . '%';
+            $params['options'] = '%' . $options . '%';
             if ($and) {
                 $sql .= 'AND options LIKE :options';
             } else {
                 $sql .= 'OR options LIKE :options';
             }
         }
-        return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
+        return DBHelper::getAllObjects($sql, $params, self::CLASS_NAME);
     }
 
     /**
-     * Searches for an expression of type "element" where the expression is equal to the identifier of the element TODO ????
+     * Searches for an expression on scenario expression of type "element"
      *
      * @param $elementId
      * @return array|mixed|null
@@ -146,12 +144,12 @@ class ScenarioExpressionManager
      */
     public static function byElement($elementId)
     {
-        $values = array('expression' => $elementId);
+        $params = ['expression' => $elementId];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE expression = :expression
-        AND `type` = "element"';
-        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE expression = :expression
+                AND `type` = "element"';
+        return DBHelper::getOneObject($sql, $params, self::CLASS_NAME);
     }
 
     /**
@@ -166,17 +164,17 @@ class ScenarioExpressionManager
      */
     public static function getExpressionOptions($expression, $options)
     {
-        $replace = array(
-            '#uid#' => 'exp' . mt_rand(),
-        );
-        $return = array('html' => '');
+        $replace = [
+            '#uid#' => 'exp' . mt_rand()
+        ];
+        $result = array('html' => '');
         $cmd = CmdManager::byId(str_replace('#', '', CmdManager::humanReadableToCmd($expression)));
         if (is_object($cmd)) {
-            $return['html'] = trim($cmd->toHtml('scenario', $options));
-            return $return;
+            $result['html'] = trim($cmd->toHtml('scenario', $options));
+            return $result;
         }
-        $return['template'] = FileSystemHelper::getTemplateFileContent('views', 'scenario', $expression . '.default');
-        $_options = Utils::isJson($options, $options);
+        $result['template'] = FileSystemHelper::getTemplateFileContent('views', 'scenario', $expression . '.default');
+        $options = Utils::isJson($options, $options);
         if (is_array($options) && count($options) > 0) {
             foreach ($options as $key => $value) {
                 $replace['#' . $key . '#'] = str_replace('"', '&quot;', $value);
@@ -185,15 +183,15 @@ class ScenarioExpressionManager
         if (!isset($replace['#id#'])) {
             $replace['#id#'] = mt_rand();
         }
-        $return['html'] = Utils::templateReplace(CmdManager::cmdToHumanReadable($replace), $return['template']);
-        preg_match_all("/#[a-zA-Z_]*#/", $return['template'], $matches);
+        $result['html'] = Utils::templateReplace(CmdManager::cmdToHumanReadable($replace), $result['template']);
+        preg_match_all("/#[a-zA-Z_]*#/", $result['template'], $matches);
         foreach ($matches[0] as $value) {
             if (!isset($replace[$value])) {
                 $replace[$value] = '';
             }
         }
-        $return['html'] = TranslateHelper::exec(Utils::templateReplace($replace, $return['html']), 'core/template/scenario/' . $expression . '.default');
-        return $return;
+        $result['html'] = TranslateHelper::exec(Utils::templateReplace($replace, $result['html']), 'core/template/scenario/' . $expression . '.default');
+        return $result;
     }
 
     /**

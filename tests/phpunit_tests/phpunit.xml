@@ -30,20 +30,22 @@
             <file>ConfigManagerTest.php</file>
             <file>EqLogicManagerTest.php</file>
             <file>EventManagerTest.php</file>
-            <file>ObjectManagerTest.php</file>
             <file>NoteManagerTest.php</file>
+            <file>ObjectManagerTest.php</file>
+            <file>ScenarioExpressionManagerTest.php</file>
             <file>UserManagerTest.php</file>
         </testsuite>
         <testsuite name="Helpers">
             <file>AjaxHelperTest.php</file>
             <file>ClientTest.php</file>
-            <file>NextDomHelperTest.php</file>
             <file>FileSystemHelperTest.php</file>
+            <file>NextDomHelperTest.php</file>
             <file>UtilsTest.php</file>
         </testsuite>
         <testsuite name="Entities">
-            <file>NoteTest.php</file>
+            <file>CronTest.php</file>
             <file>EqLogicTest.php</file>
+            <file>NoteTest.php</file>
             <file>ScenarioTest.php</file>
         </testsuite>
         <testsuite name="Rest">
@@ -55,6 +57,9 @@
         <testsuite name="AllTests">
             <directory>../phpunit_tests</directory>
             <directory>../phpunit_tests/Rest</directory>
+        </testsuite>
+        <testsuite name="current">
+            <directory>../phpunit_tests/CronTest.php</directory>
         </testsuite>
     </testsuites>
     <filter>
