@@ -117,7 +117,7 @@ page-title:
   profil: Profil
   commands: Commandes
   links: Liens
-  interacts: Intéractions
+  interacts: Interactions
   equipments: Équipements
   summaries: Résumés
   reports: Rapports
@@ -466,7 +466,7 @@ interact:
   request: "Demande"
   duplicate: "Dupliquer"
   unfold: "Déplier"
-  edition_intéraction: "Edition Intéraction"
+  edition_interaction: "Edition Interaction"
   filters: "Filtres"
   group: "Groupe"
   id: "ID : "
@@ -495,7 +495,7 @@ interact:
   synonym: "Synonyme"
   authorized_users: "Utilisateurs autorisés"
   you_have: "Vous avez "
-  you_have_n_iterations: "Vous avez %s iteration(s)..."
+  you_have_n_interactions: "Vous avez %s interaction(s)..."
   test: "Tester"
   no_interactions_click_add_to_start: "Vous n'avez encore aucune interaction. Cliquez sur ajouter pour commencer."
   interactions: "interaction(s)"
@@ -1556,7 +1556,7 @@ samba:
 "InteractQuery ID inconnu": "InteractQuery ID inconnu"
 "Interdire dans les interactions automatique": "Interdire dans les interactions automatiques"
 "Interface": "Interface"
-"Intéractions": "Intéractions"
+"Interactions": "Interactions"
 "Inverser": "Inverser"
 "Inversé": "Inversé"
 "Invisible": "Invisible"

@@ -60,7 +60,7 @@
                 {% if interactTotal|length == 0 %}
                     <div><span>{{ 'interact.no_interactions_click_add_to_start'|trans }}</span></div>
                 {% else %}
-                    <div><span>{{ 'interact.you_have_n_iterations'|trans|format(interactTotal|length) }}</span></div>
+                    <div><span>{{ 'interact.you_have_n_interactions'|trans|format(interactTotal|length) }}</span></div>
                 {% endif %}
             </div>
         </div>
@@ -150,7 +150,7 @@
                     <a href="#generaltab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tachometer-alt"></i>{{ 'common.main' | trans }}</a>
                 </li>
                 <h4 class="label label-primary pull-right badge spacing-right">{{ 'interact.id' | trans }}<span id="interactId"></span></h4>
-                <li class="header pull-left"><i class="fas fa-comments"></i>{{ 'interact.edition_intéraction' | trans }}</li>
+                <li class="header pull-left"><i class="fas fa-comments"></i>{{ 'interact.edition_interaction' | trans }}</li>
             </ul>
 
             <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
@@ -177,7 +177,7 @@
                     </fieldset>
 
                     <fieldset class="legend-section">
-                        <legend>{{ 'Intéraction' }}</legend>
+                        <legend>{{ 'Interaction' }}</legend>
                         <div class="row">
                             <div class="form-group col-xs-12 col-padding">
                                 <label class="control-label">{{ 'interact.request' | trans }}</label>
