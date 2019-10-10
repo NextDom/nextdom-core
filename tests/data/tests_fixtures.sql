@@ -9,6 +9,7 @@ DELETE FROM `scenarioElement`;
 DELETE FROM `scenarioSubElement`;
 DELETE FROM `scenarioExpression`;
 DELETE FROM `cron`;
+DELETE FROM `update`;
 DELETE FROM `config` WHERE `key` LIKE '%plugin4tests%';
 DELETE FROM `config` WHERE `plugin` LIKE '%plugin4tests%';
 INSERT INTO `user` VALUES (1,'admin','admin','fea6ef74405b298a3fc654cfac01a3ed2e4cf010f394c0c555df15f14eed4833424545561c68461fc099843b06140ad4ba5c5694e209d30d10a5eb5b034d6a83','{\"localOnly\":\"0\",\"lastConnection\":\"\"}','VVZtg2HUxbE4XWStXTVWc2ONs0b0fXtt','[]',1);
@@ -49,4 +50,5 @@ INSERT INTO `scenarioSubElement` VALUES (7,0,4,'action','action',NULL,'{\"enable
 INSERT INTO `cron` VALUES (1,1,'nextdom','cron5','*/5 * * * * *',5,0,1,NULL,0);
 INSERT INTO `cron` VALUES (2,1,'nextdom','cron','* * * * * *',2,0,1,NULL,0);
 INSERT INTO `cron` VALUES (3,0,'nextdom','cronHourly','0 * * * * *',2,0,1,NULL,0);
+INSERT INTO `update` VALUES (1,'core','nextdom','nextdom','', '', 'github', 'ok', '[]');
 SET FOREIGN_KEY_CHECKS=1;

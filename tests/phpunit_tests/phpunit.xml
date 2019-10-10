@@ -33,6 +33,7 @@
             <file>NoteManagerTest.php</file>
             <file>ObjectManagerTest.php</file>
             <file>ScenarioExpressionManagerTest.php</file>
+            <file>UpdateManagerTest.php</file>
             <file>UserManagerTest.php</file>
         </testsuite>
         <testsuite name="Helpers">
@@ -53,6 +54,7 @@
             <directory>../phpunit_tests/Rest</directory>
         </testsuite>
         <testsuite name="Others">
+            <file>EnumTest.php</file>
             <file>I18nTest.php</file>
         </testsuite>
         <testsuite name="AllTests">
@@ -60,19 +62,20 @@
             <directory>../phpunit_tests/Rest</directory>
         </testsuite>
         <testsuite name="current">
-            <directory>../phpunit_tests/PluginTest.php</directory>
+            <directory>../phpunit_tests/EnumTest.php</directory>
         </testsuite>
     </testsuites>
     <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
+        <whitelist addUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">../../</directory>
             <exclude>
-                <directory>../../vendor</directory>
+                <directory>../../core</directory>
                 <directory>../../assets</directory>
                 <directory>../../install</directory>
                 <directory>../../scripts</directory>
-                <directory>../../var</directory>
                 <directory>../../tests</directory>
+                <directory>../../var</directory>
+                <directory>../../vendor</directory>
             </exclude>
         </whitelist>
     </filter>
