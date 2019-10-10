@@ -101,5 +101,4 @@ class CronTest extends PHPUnit_Framework_TestCase
         $this->preparedCron->save();
         $this->assertEquals(1, $this->preparedCron->getOnce(1));
     }
-
 }

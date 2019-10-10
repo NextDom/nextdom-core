@@ -46,6 +46,7 @@
             <file>CronTest.php</file>
             <file>EqLogicTest.php</file>
             <file>NoteTest.php</file>
+            <file>PluginTest.php</file>
             <file>ScenarioTest.php</file>
         </testsuite>
         <testsuite name="Rest">
@@ -59,7 +60,7 @@
             <directory>../phpunit_tests/Rest</directory>
         </testsuite>
         <testsuite name="current">
-            <directory>../phpunit_tests/CronTest.php</directory>
+            <directory>../phpunit_tests/PluginTest.php</directory>
         </testsuite>
     </testsuites>
     <filter>
