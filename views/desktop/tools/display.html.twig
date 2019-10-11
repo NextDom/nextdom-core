@@ -55,22 +55,22 @@
 <section class="content">
     <div class="box">
         <div class="box-header with-border">
-            <h3 class="box-title"><i class="fas fa-th"></i>{{ 'Résumé domotique' }}</h3>
+            <h3 class="box-title"><i class="fas fa-th"></i>{{ 'Résumé domotique' | trans }}</h3>
         </div>
         <div class="box-body">
             <div class="form-group">
                 <div class="pull-left">
                     <input type="checkbox" class="configKey" id="cb_actifDisplay" data-l1key="cb_actifDisplay" checked>
-                    <label for="cb_actifDisplay" class="control-label label-check" data-toggle="tooltip" title="" data-original-title="{{'Afficher les équipements inactifs'}}">{{'Inactif'}}</label>
+                    <label for="cb_actifDisplay" class="control-label label-check" data-toggle="tooltip" title="" data-original-title="{{'Afficher les équipements inactifs' | trans }}">{{'Inactif' | trans }}</label>
                 </div>
                 <div class="pull-left spacing-left">
                     <input type="checkbox" class="configKey" id="cb_visibleDisplay" data-l1key="cb_visibleDisplay" checked>
-                    <label for="cb_visibleDisplay" class="control-label label-check" data-toggle="tooltip" title="" data-original-title="{{'Afficher les équipements invisible'}}">{{'Invisible'}}</label>
+                    <label for="cb_visibleDisplay" class="control-label label-check" data-toggle="tooltip" title="" data-original-title="{{'Afficher les équipements invisible' | trans }}">{{'Invisible' | trans }}</label>
                 </div>
                 <div class="pull-right">
-                    <span class="label label-default label-sticker">{{ 'Nombre d\'objets :' }} {{ displayObjects|length }}</span>
-                    <span class="label label-info label-sticker">{{ 'Nombre d\'équipements :' }} {{ displayNbEqLogics }}</span>
-                    <span class="label label-primary label-sticker">{{ 'Nombre de commandes :' }} {{ displayNbCmds }}</span>
+                    <span class="label label-default label-sticker">{{ 'Nombre d\'objets :' | trans }} {{ displayObjects|length }}</span>
+                    <span class="label label-info label-sticker">{{ 'Nombre d\'équipements :' | trans }} {{ displayNbEqLogics }}</span>
+                    <span class="label label-primary label-sticker">{{ 'Nombre de commandes :' | trans }} {{ displayNbCmds }}</span>
                 </div>
             </div>
         </div>
@@ -91,10 +91,10 @@
                                     {{ eqLogic.getName() }}
                                     <i style="font-size:0.9em;">({{ eqLogic.getEqType_name() }})</i>
                                     {% if eqLogic.getIsEnable() != 1 %}
-                                        <i class="fas fa-times" data-toggle="tooltip" title="" data-original-title="{{ 'Non actif' }}"></i>
+                                        <i class="fas fa-times" data-toggle="tooltip" title="" data-original-title="{{ 'Non actif' | trans }}"></i>
                                     {% endif %}
                                     {% if eqLogic.getIsVisible() != 1 %}
-                                        <i class="fas fa-eye-slash" data-toggle="tooltip" title="" data-original-title="{{ 'Non visible' }}"></i>
+                                        <i class="fas fa-eye-slash" data-toggle="tooltip" title="" data-original-title="{{ 'Non visible' | trans }}"></i>
                                     {% endif %}
                                     <i class="fas fa-chevron-right pull-right showCmd summary-box-tools" data-toggle="tooltip" title="" data-original-title="{{ 'Voir les commandes' }}"></i>
                                     <i class="fas fa-cog pull-right configureEqLogic summary-box-tools spacing-right" data-toggle="tooltip" title="" data-original-title="{{ 'common.advanced_configuration' | trans }}"></i>

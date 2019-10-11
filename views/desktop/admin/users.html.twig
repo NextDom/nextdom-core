@@ -105,9 +105,9 @@
                                     {% endif %}
                                     <tr data-id="{{ sessionId }}">
                                         <td>{{ sessionId }}</td>
-                                        <td>{{ sessionData['login'] }}</td>
-                                        <td>{{ sessionData['ip'] }}</td>
-                                        <td>{{ sessionData['datetime'] }}</td>
+                                        <td>{{ sessionData.login }}</td>
+                                        <td>{{ sessionData.ip }}</td>
+                                        <td>{{ sessionData.datetime }}</td>
                                         <td><a class="btn btn-warning btn-sm bt_deleteSession pull-right"><i class="fas fa-sign-out-alt"></i>{{ 'Déconnecter' }}</a></td>
                                     </tr>
                                 {% endfor %}
@@ -140,8 +140,8 @@
                                         <tr data-key="{{ deviceId }}" data-user_id="{{ user.getId() }}">
                                             <td>{{ deviceId|slice(0, 10) }}</td>
                                             <td>{{ user.getLogin() }}</td>
-                                            <td>{{ deviceData['ip'] }}</td>
-                                            <td>{{ deviceData['datetime'] }}</td>
+                                            <td>{{ deviceData.ip }}</td>
+                                            <td>{{ deviceData.datetime }}</td>
                                             <td><a class="btn btn-warning btn-sm bt_removeRegisterDevice pull-right"><i class="fas fa-trash"></i>{{ 'common.remove' | trans }}</a></td>
                                         </tr>
                                     {% endfor %}

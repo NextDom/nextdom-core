@@ -133,7 +133,7 @@
                         <label class="control-label" data-toggle="tooltip" title="" data-original-title="{{ 'Clef API Pro de' }} {{ PRODUCT_NAME }}">{{ 'Clef API Pro' }}</label>
                         <div class="mix-group">
                             <a class="btn btn-action bt_regenerate_api" data-plugin="pro"><i class="fas fa-refresh"></i><span>{{'Régénérer'}}</span></a>
-                            <span class="span_apikey label label-value">{{ adminConfigs['apipro'] }}</span>
+                            <span class="span_apikey label label-value">{{ adminConfigs.apipro }}</span>
                             <a class="btn btn-default bt_copy_api" data-plugin="pro"><i class="fas fa-copy no-spacing"></i><span></span></a>
                         </div>
                     </div>
@@ -141,7 +141,7 @@
                         <label class="control-label" data-toggle="tooltip" title="" data-original-title="{{ 'Clef Market de' }} {{ PRODUCT_NAME }}">{{ 'Clef Market' }}</label>
                         <div class="mix-group">
                             <a class="btn btn-action bt_regenerate_api" data-plugin="apimarket"><i class="fas fa-refresh"></i><span>{{'Régénérer'}}</span></a>
-                            <span class="span_apikey label label-value">{{ adminConfigs['apimarket'] }}</span>
+                            <span class="span_apikey label label-value">{{ adminConfigs.apimarket }}</span>
                             <a class="btn btn-default bt_copy_api" data-plugin="apimarket"><i class="fas fa-copy no-spacing"></i><span></span></a>
                         </div>
                     </div>
@@ -150,8 +150,8 @@
 
             <!-- Plugins Section -->
             <fieldset class="legend-section">
-                <legend>{{ 'Accès et Clefs API Plugins' }}</legend>
-                {% if adminPluginsList|length > 0 %}
+                <legend>{{ 'Accès et CLefs API Plugins' }}</legend>
+                {% if not adminIsRescueMode and adminPluginsList|length > 0 %}
                     <div class="row">
                         {% for pluginData in adminPluginsList %}
                             <div class="form-group col-lg-6 col-xs-12 col-padding">
@@ -171,7 +171,7 @@
                         {% endfor %}
                     </div>
                 {% else %}
-                    <div class="alert alert-info">{{ 'Aucun plugin ne disposant de clefs API...' }}.</div>
+                    <div class="alert alert-info">{{ 'Aucun plugins ne disposant de clés API...' | trans }}.</div>
                 {% endif %}
             </fieldset>
         </div>
