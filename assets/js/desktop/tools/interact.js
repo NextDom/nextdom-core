@@ -68,7 +68,7 @@ function initEvents() {
 
     // Interaction Sentence list display
     $('.displayInteracQuery').on('click', function () {
-      $('#md_modal').dialog({title: "{{Liste des intéractions}}"});
+      $('#md_modal').dialog({title: "{{Liste des interactions}}"});
       $('#md_modal').load('index.php?v=d&modal=interact.query.display&interactDef_id=' + $('.interactAttr[data-l1key=id]').value()).dialog('open');
     });
 
@@ -141,7 +141,7 @@ function initEvents() {
 
     // Interaction test button
     $('#bt_testInteract').on('click', function () {
-      $('#md_modal').dialog({title: "{{Tester les intéractions}}"});
+      $('#md_modal').dialog({title: "{{Tester les interactions}}"});
       $('#md_modal').load('index.php?v=d&modal=interact.test').dialog('open');
     });
 
@@ -167,7 +167,7 @@ function initEvents() {
 
     // Interaction regenerate button
     $("#bt_regenerateInteract").on('click', function () {
-      bootbox.confirm('{{Etes-vous sûr de vouloir régénérer toutes les intérations (cela peut être très long) ?}}', function (result) {
+      bootbox.confirm('{{Etes-vous sûr de vouloir regénérer toutes les interactions (cela peut être très long) ?}}', function (result) {
         if (result) {
           nextdom.interact.regenerateInteract({
             interact: {query: result},
@@ -175,7 +175,7 @@ function initEvents() {
               notify("Erreur", error.message, 'error');
             },
             success: function (data) {
-             notify("Info", '{{Toutes les interations ont été regénérées}}', 'success');
+             notify("Info", '{{Toutes les interactions ont été regénérées}}', 'success');
             }
           });
         }
@@ -184,7 +184,7 @@ function initEvents() {
 
     // Interaction add new button
     $("#bt_addInteract").on('click', function () {
-        bootbox.prompt("{{Nom de votre intéraction ?}}", function (result) {
+        bootbox.prompt("{{Nom de votre interaction ?}}", function (result) {
             if (result !== null) {
                 bootbox.prompt("{{Demande formulée ?}}", function (result2) {
                     if (result2 !== null) {
@@ -206,7 +206,7 @@ function initEvents() {
 
     // Interaction delete button
     $("#bt_removeInteract").on('click', function () {
-      bootbox.confirm('{{Etes-vous sûr de vouloir supprimer l\'intéraction}} <span style="font-weight: bold ;">' + $('.interactDisplayCard.active .name').text() + '</span> ?', function (result) {
+      bootbox.confirm('{{Etes-vous sûr de vouloir supprimer l\'interaction}} <span style="font-weight: bold ;">' + $('.interactDisplayCard.active .name').text() + '</span> ?', function (result) {
         if (result) {
           nextdom.interact.remove({
             id: $('.interactDisplayCard.active').attr('data-interact_id'),
