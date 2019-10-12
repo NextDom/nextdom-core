@@ -83,7 +83,7 @@
                                 <input class="configKey slider" type="range" min="0" max="100" step="1" data-l1key="backup::keepDays"/>
                                 <span class="input-group-addon input-range-max"></span>
                                 <span class="input-group-addon input-range-value"></span>
-                                <span class="input-group-addon">{{ 'jours' }}</span>
+                                <span class="input-group-addon">{{ 'jours' | trans }}</span>
                             </div>
                         </div>
                         <div class="form-group col-sm-6 col-xs-12 col-padding">
@@ -94,7 +94,7 @@
                                 <input class="configKey slider" type="range" min="0" max="2000" step="10" data-l1key="backup::maxSize"/>
                                 <span class="input-group-addon input-range-max"></span>
                                 <span class="input-group-addon input-range-value"></span>
-                                <span class="input-group-addon">{{ 'Mo maximum' }}</span>
+                                <span class="input-group-addon">{{ 'Mo maximum'  | trans }}</span>
                             </div>
                         </div>
                         <div class="form-group col-sm-6 col-xs-12 col-padding">
@@ -136,10 +136,10 @@
 
                 <!-- Cloud Section -->
                 {% for repo, repoData in backupReposList %}
-                    {% if repoData['scope']['backup'] != false %}
+                    {% if repoData.scope.backup != false %}
                         {% set cssClass = 'repo_' ~ repo %}
                         <fieldset class="legend-section repo">
-                            <legend>{{ 'backup.backups' | trans }} {{ repoData['name'] }}</legend>
+                            <legend>{{ 'backup.backups' | trans }} {{ repoData.name }}</legend>
                             <div class="row">
                                 {% if repoData['enable'] != 0 %}
                                     <div class="form-group col-sm-6 col-xs-12 col-padding">

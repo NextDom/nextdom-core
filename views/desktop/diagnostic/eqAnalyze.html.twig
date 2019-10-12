@@ -65,7 +65,7 @@
                 </div>
                 <div class="Container">
                     {% if not hasBattery %}
-                        <div class="alert alert-success">{{ 'Aucun équipement sur batterie pour le moment...' }}</div>
+                        <div class="alert alert-success">{{ 'Aucun équipement sur batterie pour le moment...'  | trans }}</div>
                     {% endif %}
                 </div>
             </div>
@@ -81,7 +81,7 @@
                 </div>
                 <div class="Container">
                     {% if not hasAlert %}
-                        <div class="alert alert-success">{{ 'Aucun équipement en Alerte pour le moment...' }}</div>
+                        <div class="alert alert-success">{{ 'Aucun équipement en Alerte pour le moment...'  | trans }}</div>
                     {% endif %}
                 </div>
             </div>
@@ -91,7 +91,7 @@
                         <thead>
                         <tr>
                             <th>{{ 'common.device' | trans }}</th>
-                            <th>{{ 'Commande' }}</th>
+                            <th>{{ 'Commande'  | trans }}</th>
                             <th>{{ 'common.type' | trans }}</th>
                             <th>{{ 'common.actions' | trans }}</th>
                             <th></th>
@@ -99,80 +99,80 @@
                         </thead>
                         <tbody>
                         {% for cmdData in eqAnalyzeCmdData %}
-                            {% for infoCmd in cmdData['infoCmds'] %}
+                            {% for infoCmd in cmdData.infoCmds %}
                                 <tr>
                                     <td>
-                                        <a href="{{ cmdData['eqLogic'].getLinkToConfiguration() }}" style="text-decoration: none;">{{ cmdData['eqLogic'].getHumanName(true)|raw }}</a>
+                                        <a href="{{ cmdData['eqLogic'].getLinkToConfiguration() }}" style="text-decoration: none;">{{ cmdData.eqLogic.getHumanName(true)|raw }}</a>
                                     </td>
-                                    <td>{{ infoCmd['cmd'].getName() }} ({{ infoCmd['cmd'].getId() }})</td>
-                                    <td>{{ 'Action sur état' }}</td>
-                                    <td>{{ 'Si' }} {{ infoCmd['cmd'].getConfiguration('nextdomCheckCmdOperator') }} {{ infoCmd['cmd'].getConfiguration('nextdomCheckCmdTest') }} {{ 'plus de' }} {{ infoCmd['cmd'].getConfiguration('nextdomCheckCmdTime') }} {{ 'minutes alors' }} :
+                                    <td>{{ infoCmd.cmd.getName() }} ({{ infoCmd.cmd.getId() }})</td>
+                                    <td>{{ 'Action sur état'  | trans }}</td>
+                                    <td>{{ 'Si' }} {{ infoCmd.cmd.getConfiguration('nextdomCheckCmdOperator') }} {{ infoCmd.cmd.getConfiguration('nextdomCheckCmdTest') }} {{ 'plus de'  | trans }} {{ infoCmd['cmd'].getConfiguration('nextdomCheckCmdTime') }} {{ 'minutes alors'  | trans }} :
                                         {{ infoCmd['actions']|join('|') }}
                                     </td>
                                     <td>
-                                        <a class="btn btn-default btn-xs cmdAction pull-right" data-action="configure" data-cmd_id="{{ infoCmd['cmd'].getId() }}"><i class="fas fa-cogs"></i></a>
+                                        <a class="btn btn-default btn-xs cmdAction pull-right" data-action="configure" data-cmd_id="{{ infoCmd.cmd.getId() }}"><i class="fas fa-cogs"></i></a>
                                     </td>
                                 </tr>
                             {% endfor %}
-                            {% for actionCmd in cmdData['actionCmds'] %}
-                                {% if actionCmd['preExecCmds'] is defined %}
+                            {% for actionCmd in cmdData.actionCmds %}
+                                {% if actionCmd.preExecCmds is defined %}
                                     <tr>
                                         <td>
-                                            <a href="{{ cmdData['eqLogic'].getLinkToConfiguration() }}" style="text-decoration: none;">{{ cmdData['eqLogic'].getHumanName(true)|raw }}</a>
+                                            <a href="{{ cmdData.eqLogic.getLinkToConfiguration() }}" style="text-decoration: none;">{{ cmdData.eqLogic.getHumanName(true)|raw }}</a>
                                         </td>
-                                        <td>{{ actionCmd['cmd'].getName() }} ({{ actionCmd['cmd'].getId() }})</td>
-                                        <td>{{ 'Pre exécution' }}</td>
+                                        <td>{{ actionCmd.cmd.getName() }} ({{ actionCmd.cmd.getId() }})</td>
+                                        <td>{{ 'Pre exécution' | trans }}</td>
                                         <td>
-                                            {{ actionData['preExecCmds']|join('|') }}
+                                            {{ actionData.preExecCmds | join('|') }}
                                         </td>
                                         <td>
-                                            <a class="btn btn-default btn-xs cmdAction pull-right" data-action="configure" data-cmd_id="{{ actionCmd['cmd'].getId() }}"><i class="fas fa-cogs"></i></a>
+                                            <a class="btn btn-default btn-xs cmdAction pull-right" data-action="configure" data-cmd_id="{{ actionCmd.cmd.getId() }}"><i class="fas fa-cogs"></i></a>
                                         </td>
                                     </tr>
                                 {% endif %}
                                 {% if actionCmd['postExecCmds'] is defined %}
                                     <tr>
                                         <td>
-                                            <a href="{{ cmdData['eqLogic'].getLinkToConfiguration() }}" style="text-decoration: none;">{{ cmdData['eqLogic'].getHumanName(true)|raw }}</a>
+                                            <a href="{{ cmdData.eqLogic.getLinkToConfiguration() }}" style="text-decoration: none;">{{ cmdData.eqLogic.getHumanName(true)|raw }}</a>
                                         </td>
-                                        <td>{{ actionCmd['cmd'].getName() }} ({{ actionCmd['cmd'].getId() }})</td>
-                                        <td>{{ 'Pre exécution' }}</td>
+                                        <td>{{ actionCmd.cmd.getName() }} ({{ actionCmd.cmd.getId() }})</td>
+                                        <td>{{ 'Pre exécution'  | trans }}</td>
                                         <td>
-                                            {{ actionData['postExecCmds']|join('|') }}
+                                            {{ actionData.postExecCmds|join('|') }}
                                         </td>
                                         <td>
-                                            <a class="btn btn-default btn-xs cmdAction pull-right" data-action="configure" data-cmd_id="{{ actionCmd['cmd'].getId() }}"><i class="fas fa-cogs"></i></a>
+                                            <a class="btn btn-default btn-xs cmdAction pull-right" data-action="configure" data-cmd_id="{{ actionCmd.cmd.getId() }}"><i class="fas fa-cogs"></i></a>
                                         </td>
                                     </tr>
                                 {% endif %}
                                 {% set code = '' %}
-                                {% if actionCmd['cmd'].getConfiguration('actionConfirm') %}
-                                    {% if actionCmd['cmd'].getConfiguration('actionCodeAccess') %}
+                                {% if actionCmd.cmd.getConfiguration('actionConfirm') %}
+                                    {% if actionCmd.cmd.getConfiguration('actionCodeAccess') %}
                                         {% set code = ' avec code' %}
                                     {% endif %}
                                     <tr>
                                         <td>
                                             <a href="{{ eqLogic.getLinkToConfiguration() }}" style="text-decoration: none;">{{ eqLogic.getHumanName(true) }}</a></td>
-                                        <td>{{ actionCmd['cmd'].getName() }} ({{ actionCmd['cmd'].getId() }})</td>
-                                        <td>{{ 'Confirmation' }} {{ code }}</td>
+                                        <td>{{ actionCmd.cmd.getName() }} ({{ actionCmd.cmd.getId() }})</td>
+                                        <td>{{ 'Confirmation'  | trans }} {{ code }}</td>
                                         <td>
-                                            {{ 'Confirmation de l\'action' }} {{ code }}
+                                            {{ 'Confirmation de l\'action'  | trans }} {{ code }}
                                         </td>
                                         <td>
                                             <a class="btn btn-default btn-xs cmdAction pull-right" data-action="configure" data-cmd_id="{{ actionCmd['cmd'].getId() }}"><i class="fas fa-cogs"></i></a>
                                         </td>
                                     </tr>
                                 {% endif %}
-                                {% if actionCmd['cmd'].getConfiguration('actionCodeAccess') and not actionCmd['cmd'].getConfiguration('actionConfirm') %}
+                                {% if actionCmd.cmd.getConfiguration('actionCodeAccess') and not actionCmd.cmd.getConfiguration('actionConfirm') %}
                                     <tr>
-                                        <td><a href="{{ cmdData['eqLogic'].getLinkToConfiguration() }}" style="text-decoration: none;">{{ cmdData['eqLogic'].getHumanName(true) }}</a></td>
-                                        <td>{{ actionCmd['cmd'].getName() }} ({{ actionCmd['cmd'].getId() }})</td>
-                                        <td>{{ 'Confirmation' }} {{ code }}</td>
+                                        <td><a href="{{ cmdData.eqLogic.getLinkToConfiguration() }}" style="text-decoration: none;">{{ cmdData.eqLogic.getHumanName(true) }}</a></td>
+                                        <td>{{ actionCmd.cmd.getName() }} ({{ actionCmd.cmd.getId() }})</td>
+                                        <td>{{ 'Confirmation'  | trans }} {{ code }}</td>
                                         <td>
-                                            {{ 'Code de confirmation de l\'action' }}
+                                            {{ 'Code de confirmation de l\'action'  | trans }}
                                         </td>
                                         <td>
-                                            <a class="btn btn-default btn-xs cmdAction pull-right" data-action="configure" data-cmd_id="{{ actionCmd['cmd'].getId() }}"><i class="fas fa-cogs"></i></a>
+                                            <a class="btn btn-default btn-xs cmdAction pull-right" data-action="configure" data-cmd_id="{{ actionCmd.cmd.getId() }}"><i class="fas fa-cogs"></i></a>
                                         </td>
                                     </tr>
                                 {% endif %}
@@ -188,30 +188,30 @@
                         <thead>
                         <tr>
                             <th>{{ 'common.device' | trans }}</th>
-                            <th>{{ 'Alertes' }}</th>
-                            <th>{{ 'Timeout' }}</th>
-                            <th>{{ 'Seuils batterie' }}</th>
+                            <th>{{ 'Alertes'  | trans }}</th>
+                            <th>{{ 'Timeout'  | trans }}</th>
+                            <th>{{ 'Seuils batterie'  | trans }}</th>
                         </tr>
                         </thead>
                         <tbody>
                         {% for alert in eqAnalyzeAlerts %}
                             <tr>
                                 <td>
-                                    <a href="{{ alert['eqLogic'].getLinkToConfiguration() }}" style="text-decoration: none;">{{ alert['eqLogic'].getHumanName(true)|raw }}</a></td>
+                                    <a href="{{ alert.eqLogic.getLinkToConfiguration() }}" style="text-decoration: none;">{{ alert.eqLogic.getHumanName(true)|raw }}</a></td>
                                 <td>
                                     {{ alert['msg'] }}
                                 </td>
                                 <td>
-                                    {% if alert['eqLogic'].getTimeout('') != '' %}
-                                        {{ alert['eqLogic'].getTimeout('') }} {{ 'minute(s)' }}
+                                    {% if alert.qLogic.getTimeout('') != '' %}
+                                        {{ alert.eqLogic.getTimeout('') }} {{ 'minute(s)'  | trans }}
                                     {% endif %}
                                 </td>
                                 <td>
-                                    {% if alert['eqLogic'].getConfiguration('battery_danger_threshold', '') != '' %}
-                                        <label class="col-xs-6 eqLogicAttr label label-danger" style="font-size : 0.8em">{{ 'Danger' }} {{ alert['eqLogic'].getConfiguration('battery_danger_threshold', '') }} % </label>
+                                    {% if alert.eqLogic.getConfiguration('battery_danger_threshold', '') != '' %}
+                                        <label class="col-xs-6 eqLogicAttr label label-danger" style="font-size : 0.8em">{{ 'Danger'  | trans }} {{ alert.eqLogic.getConfiguration('battery_danger_threshold', '') }} % </label>
                                     {% endif %}
-                                    {% if alert['eqLogic'].getConfiguration('battery_warning_threshold', '') != '' %}
-                                        <label class="col-xs-6 eqLogicAttr label label-warning" style="font-size : 0.8em">{{ 'common.warning' | trans }} {{ alert['eqLogic'].getConfiguration('battery_warning_threshold', '') }} % </label>
+                                    {% if alert.eqLogic.getConfiguration('battery_warning_threshold', '') != '' %}
+                                        <label class="col-xs-6 eqLogicAttr label label-warning" style="font-size : 0.8em">{{ 'common.warning' | trans }} {{ alert.eqLogic.getConfiguration('battery_warning_threshold', '') }} % </label>
                                     {% endif %}
                                 </td>
                             </tr>
@@ -226,58 +226,58 @@
                         <thead>
                         <tr>
                             <th>{{ 'common.type' | trans }}</th>
-                            <th>{{ 'Détail' }}</th>
-                            <th>{{ 'Commande' }}</th>
-                            <th>{{ 'Utilisation' }}</th>
+                            <th>{{ 'Détail'  | trans }}</th>
+                            <th>{{ 'Commande'  | trans }}</th>
+                            <th>{{ 'Utilisation'  | trans }}</th>
                         </tr>
                         </thead>
                         <tbody>
                         {% for nextDomDeadCmd in eqAnalyzeNextDomDeadCmd %}
                             <tr>
                                 <td>{{ 'Core' }}</td>
-                                <td>{{ nextDomDeadCmd['detail'] }}</td>
-                                <td>{{ nextDomDeadCmd['who'] }}</td>
-                                <td>{{ nextDomDeadCmd['help'] }}</td>
+                                <td>{{ nextDomDeadCmd.detail }}</td>
+                                <td>{{ nextDomDeadCmd.who }}</td>
+                                <td>{{ nextDomDeadCmd.help }}</td>
                             </tr>
                         {% endfor %}
                         {% for cmdDeadCmd in eqAnalyzeCmdDeadCmd %}
                             <tr>
-                                <td>{{ 'Commande' }}</td>
-                                <td>{{ cmdDeadCmd['detail'] }}</td>
-                                <td>{{ cmdDeadCmd['who'] }}</td>
-                                <td>{{ cmdDeadCmd['help'] }}</td>
+                                <td>{{ 'Commande' | trans }}</td>
+                                <td>{{ cmdDeadCmd.detail }}</td>
+                                <td>{{ cmdDeadCmd.who }}</td>
+                                <td>{{ cmdDeadCmd.help }}</td>
                             </tr>
                         {% endfor %}
                         {% for jeeObjectDeadCmd in eqAnalyzeJeeObjectDeadCmd %}
                             <tr>
                                 <td>{{ 'Core' }}</td>
-                                <td>{{ jeeObjectDeadCmd['detail'] }}</td>
-                                <td>{{ jeeObjectDeadCmd['who'] }}</td>
-                                <td>{{ jeeObjectDeadCmd['help'] }}</td>
+                                <td>{{ jeeObjectDeadCmd.detail }}</td>
+                                <td>{{ jeeObjectDeadCmd.who }}</td>
+                                <td>{{ jeeObjectDeadCmd.help }}</td>
                             </tr>
                         {% endfor %}
                         {% for scenarioDeadCmd in eqAnalyzeScenarioDeadCmd %}
                             <tr>
                                 <td>{{ 'common.scenario' | trans }}</td>
-                                <td>{{ scenarioDeadCmd['detail'] }}</td>
-                                <td>{{ scenarioDeadCmd['who'] }}</td>
-                                <td>{{ scenarioDeadCmd['help'] }}</td>
+                                <td>{{ scenarioDeadCmd.detail }}</td>
+                                <td>{{ scenarioDeadCmd.who }}</td>
+                                <td>{{ scenarioDeadCmd.help }}</td>
                             </tr>
                         {% endfor %}
                         {% for interactDefDeadCmd in eqAnalyzeInteractDefDeadCmd %}
                             <tr>
                                 <td>{{ 'Core' }}</td>
-                                <td>{{ interactDefDeadCmd['detail'] }}</td>
-                                <td>{{ interactDefDeadCmd['who'] }}</td>
-                                <td>{{ interactDefDeadCmd['help'] }}</td>
+                                <td>{{ interactDefDeadCmd.detail }}</td>
+                                <td>{{ interactDefDeadCmd.who }}</td>
+                                <td>{{ interactDefDeadCmd.help }}</td>
                             </tr>
                         {% endfor %}
                         {% for pluginDeadCmd in eqAnalyzePluginDeadCmd %}
                             <tr>
                                 <td>{{ 'Core' }}</td>
-                                <td>{{ pluginDeadCmd['detail'] }}</td>
-                                <td>{{ pluginDeadCmd['who'] }}</td>
-                                <td>{{ pluginDeadCmd['help'] }}</td>
+                                <td>{{ pluginDeadCmd.detail }}</td>
+                                <td>{{ pluginDeadCmd.who }}</td>
+                                <td>{{ pluginDeadCmd.help }}</td>
                             </tr>
                         {% endfor %}
                         </tbody>

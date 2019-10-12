@@ -45,14 +45,14 @@
     <div class="box" id="div_rowSystemCommand">
         <!-- Header bar -->
         <div class="box-header with-border">
-            <h3 class="box-title"><i class="fas fa-terminal"></i>{{ 'Console Système' }}</h3>
+            <h3 class="box-title"><i class="fas fa-terminal"></i>{{ 'Console Système' | trans }}</h3>
         </div>
 
         <!-- Page content -->
         <div class="box-body">
             <div class="row">
                 <div class="col-lg-2 col-md-3 col-sm-4" style="overflow-y:auto;overflow-x:hidden;">
-                    <legend>{{ 'Liste des commandes' }}</legend>
+                    <legend>{{ 'Liste des commandes' | trans }}</legend>
                     <div class="bs-sidebar form-group">
                         <ul class="nav nav-list bs-sidenav list-group">
                             {% if systemCanSudo %}

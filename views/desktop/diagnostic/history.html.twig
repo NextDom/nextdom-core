@@ -37,11 +37,11 @@
     <div class="action-bar">
         <div class="action-group">
             <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'common.return' | trans }}</a>
-            <a class="btn btn-default btn-action-bar" href="index.php?v=d&p=timeline"><i class="fas fa-history"></i>{{ 'Timeline' }}</a>
+            <a class="btn btn-default btn-action-bar" href="index.php?v=d&p=timeline"><i class="fas fa-history"></i>{{ 'Timeline'  | trans }}</a>
         </div>
         <div class="action-group">
-            <a id="bt_openCmdHistoryConfigure" class="btn btn-default btn-action-bar pull-right"><i class="fas fa-cogs spacing-right"></i>{{ 'Configuration des commandes' }}</a>
-            <a class="btn btn-warning btn-action-bar pull-right" id='bt_clearGraph'><i class="fas fa-trash"></i>{{ 'RAZ du Graphique' }}</a>
+            <a id="bt_openCmdHistoryConfigure" class="btn btn-default btn-action-bar pull-right"><i class="fas fa-cogs spacing-right"></i>{{ 'Configuration des commandes'  | trans }}</a>
+            <a class="btn btn-warning btn-action-bar pull-right" id='bt_clearGraph'><i class="fas fa-trash"></i>{{ 'RAZ du Graphique'  | trans }}</a>
         </div>
     </div>
 </section>
@@ -49,17 +49,17 @@
 <section class="content">
     <div class="box" id="div_History">
         <div class="box-header with-border">
-            <h3 class="box-title"><i class="fas fa-chart-area"></i>{{ 'Historiques' }}</h3>
+            <h3 class="box-title"><i class="fas fa-chart-area"></i>{{ 'Historiques'  | trans }}</h3>
         </div>
         <div class="box-body">
             <fieldset>
-                <legend>{{ 'Vous pouvez créer ci-dessous une donnée calculée à partir de plusieurs commandes qui sera ajoutée au graphique' }}</legend>
+                <legend>{{ 'Vous pouvez créer ci-dessous une donnée calculée à partir de plusieurs commandes qui sera ajoutée au graphique'  | trans }}</legend>
                 <div class="input-group form-group" style="width: 100%">
-                    <input class="form-control" id='in_calculHistory' placeholder="{{ 'Historique calculé...' }}"></input>
+                    <input class="form-control" id='in_calculHistory' placeholder="{{ 'Historique calculé...' | trans }}"></input>
                     <span class="input-group-btn">
-                        <a class="btn btn-default" id="bt_findCmdCalculHistory" data-toggle="tooltip" data-original-title="{{ 'Sélectionner la commande' }}"><i class="fas fa-list-alt no-spacing"></i></a>
-                        <a class="btn btn-success" id="bt_displayCalculHistory" data-toggle="tooltip" data-original-title="{{'Calculer et afficher la commande'}}"><i class="fas fa-check no-spacing"></i></a>
-                        <a class="btn btn-default" id="bt_configureCalculHistory" data-toggle="tooltip" data-original-title="{{'Configurer le calcul'}}"><i class="fas fa-cogs"></i></a>
+                        <a class="btn btn-default" id="bt_findCmdCalculHistory" data-toggle="tooltip" data-original-title="{{ 'Sélectionner la commande' | trans }}"><i class="fas fa-list-alt no-spacing"></i></a>
+                        <a class="btn btn-success" id="bt_displayCalculHistory" data-toggle="tooltip" data-original-title="{{'Calculer et afficher la commande' | trans }}"><i class="fas fa-check no-spacing"></i></a>
+                        <a class="btn btn-default" id="bt_configureCalculHistory" data-toggle="tooltip" data-original-title="{{'Configurer le calcul' | trans }}"><i class="fas fa-cogs"></i></a>
                     </span>
                 </div>
             </fieldset>
@@ -68,10 +68,10 @@
                     <div class="bs-sidebar form-group">
                         <ul id="ul_history" class="nav nav-list bs-sidenav">
                             <fieldset>
-                                <legend>{{ 'Ajouter / Supprimer des commandes au graphique' }}</legend>
+                                <legend>{{ 'Ajouter / Supprimer des commandes au graphique'  | trans }}</legend>
                                 <div class="filter input-group form-group">
                                     <div class="input-group-addon"><i class="fas fa-search"></i></div>
-                                    <input class="filter form-control" placeholder="{{'Rechercher...'}}" />
+                                    <input class="filter form-control" placeholder="{{'Rechercher...' | trans }}" />
                                 </div>
                                 {% set objectId = -1 %}
                                     {% for cmd in historyCmdsList %}
@@ -114,36 +114,36 @@
                     <fieldset>
                         <legend>{{ 'Filtrage et mise en forme des données' }}</legend>
                         <div class="form-group">
-                            <input id="in_startDate" class="form-control in_datepicker" style="display : inline-block; width: 150px;" value="{{ historyDate['start'] }}"/>
-                            <input id="in_endDate" class="form-control in_datepicker" style="display : inline-block; width: 150px;" value="{{ historyDate['end'] }}"/>
-                            <a class="btn btn-success" id='bt_validChangeDate' data-toggle="tooltip" title="" data-original-title="{{ 'Attention : une trop grande plage de dates peut mettre très longtemps à être calculée ou même ne pas s\'afficher.' }}"><i class="fas fa-check"></i>{{ 'Ok' }}</a>
+                            <input id="in_startDate" class="form-control in_datepicker" style="display : inline-block; width: 150px;" value="{{ historyDate.start }}"/>
+                            <input id="in_endDate" class="form-control in_datepicker" style="display : inline-block; width: 150px;" value="{{ historyDate.end }}"/>
+                            <a class="btn btn-success" id='bt_validChangeDate' data-toggle="tooltip" title="" data-original-title="{{ 'Attention : une trop grande plage de dates peut mettre très longtemps à être calculée ou même ne pas s\'afficher.'  | trans }}"><i class="fas fa-check"></i>{{ 'Ok' }}</a>
                             <select class="form-control pull-right" id="sel_groupingType" style="width: 200px;">
-                                <option value="">{{ 'Aucun groupement' }}</option>
-                                <option value="sum::hour">{{ 'Somme par heure' }}</option>
-                                <option value="average::hour">{{ 'Moyenne par heure' }}</option>
-                                <option value="low::hour">{{ 'Minimum par heure' }}</option>
-                                <option value="high::hour">{{ 'Maximum par heure' }}</option>
-                                <option value="sum::day">{{ 'Somme par jour' }}</option>
-                                <option value="average::day">{{ 'Moyenne par jour' }}</option>
-                                <option value="low::day">{{ 'Minimum par jour' }}</option>
-                                <option value="high::day">{{ 'Maximum par jour' }}</option>
-                                <option value="sum::week">{{ 'Somme par semaine' }}</option>
-                                <option value="average::week">{{ 'Moyenne par semaine' }}</option>
-                                <option value="low::week">{{ 'Minimum par semaine' }}</option>
-                                <option value="high::week">{{ 'Maximum par semaine' }}</option>
-                                <option value="sum::month">{{ 'Somme par mois' }}</option>
-                                <option value="average::month">{{ 'Moyenne par mois' }}</option>
-                                <option value="low::month">{{ 'Minimum par mois' }}</option>
-                                <option value="high::month">{{ 'Maximum par mois' }}</option>
-                                <option value="sum::year">{{ 'Somme par année' }}</option>
-                                <option value="average::year">{{ 'Moyenne par année' }}</option>
-                                <option value="low::year">{{ 'Minimum par année' }}</option>
-                                <option value="high::year">{{ 'Maximum par année' }}</option>
+                                <option value="">{{ 'Aucun groupement' | trans }}</option>
+                                <option value="sum::hour">{{ 'Somme par heure' | trans }}</option>
+                                <option value="average::hour">{{ 'Moyenne par heure'  | trans }}</option>
+                                <option value="low::hour">{{ 'Minimum par heure' | trans }}</option>
+                                <option value="high::hour">{{ 'Maximum par heure' | trans }}</option>
+                                <option value="sum::day">{{ 'Somme par jour' | trans }}</option>
+                                <option value="average::day">{{ 'Moyenne par jour' | trans }}</option>
+                                <option value="low::day">{{ 'Minimum par jour' | trans }}</option>
+                                <option value="high::day">{{ 'Maximum par jour' | trans }}</option>
+                                <option value="sum::week">{{ 'Somme par semaine' | trans }}</option>
+                                <option value="average::week">{{ 'Moyenne par semaine' | trans }}</option>
+                                <option value="low::week">{{ 'Minimum par semaine' | trans }}</option>
+                                <option value="high::week">{{ 'Maximum par semaine' | trans }}</option>
+                                <option value="sum::month">{{ 'Somme par mois' | trans }}</option>
+                                <option value="average::month">{{ 'Moyenne par mois' | trans }}</option>
+                                <option value="low::month">{{ 'Minimum par mois' | trans }}</option>
+                                <option value="high::month">{{ 'Maximum par mois' | trans }}</option>
+                                <option value="sum::year">{{ 'Somme par année' | trans }}</option>
+                                <option value="average::year">{{ 'Moyenne par année' | trans }}</option>
+                                <option value="low::year">{{ 'Minimum par année' | trans }}</option>
+                                <option value="high::year">{{ 'Maximum par année' | trans }}</option>
                             </select>
                             <select class="form-control pull-right" id="sel_chartType" style="width: 200px;">
-                                <option value="line">{{ 'Ligne' }}</option>
-                                <option value="areaspline">{{ 'Areaspline' }}</option>
-                                <option value="column">{{ 'Barre' }}<
+                                <option value="line">{{ 'Ligne'  | trans }}</option>
+                                <option value="areaspline">{{ 'Areaspline'  | trans }}</option>
+                                <option value="column">{{ 'Barre'  | trans }}<
                             </select>
                             <span class="pull-right">{{ 'Variation' }} <input type="checkbox" id="cb_derive"/></span>
                             <span class="pull-right">{{ 'Escalier' }} <input type="checkbox" id="cb_step"/></span>

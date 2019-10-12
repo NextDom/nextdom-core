@@ -55,22 +55,22 @@
                     <legend>{{ 'Liste des commandes' }}</legend>
                     <div class="bs-sidebar form-group">
                         <ul class="nav nav-list bs-sidenav list-group" id='ul_listSqlRequest'>
-                            <li class="cursor list-group-item"><a class="bt_dbCommand label-list" data-command="SHOW TABLES;">{{ 'Tables' }}</a></li>
+                            <li class="cursor list-group-item"><a class="bt_dbCommand label-list" data-command="SHOW TABLES;">{{ 'Tables' | trans }}</a></li>
                         </ul>
                     </div>
-                    <legend>{{ 'Historique' }}</legend>
+                    <legend>{{ 'Historique' | trans }}</legend>
                     <div class="bs-sidebar form-group">
                         <ul class="nav nav-list bs-sidenav list-group" id='ul_listSqlHistory'></ul>
                     </div>
                 </fieldset>
 
                 <fieldset class="col-lg-10 col-md-9 col-sm-8 left-border" style="overflow-y:hidden;overflow-x:hidden;">
-                    <legend>{{ 'Cliquez sur une commande de la liste ou tapez une commande personnalisée ci-dessous :' }}</legend>
+                    <legend>{{ 'Cliquez sur une commande de la liste ou tapez une commande personnalisée ci-dessous :' | trans }}</legend>
                     <div class="input-group form-group">
-                        <input class="form-control" id='in_specificCommand' placeholder="{{ 'Commande personnalisée...' }}"></input>
+                        <input class="form-control" id='in_specificCommand' placeholder="{{ 'Commande personnalisée...' | trans }}"></input>
                         <span class="input-group-btn">
-                            <a class="btn btn-action" id="bt_resetSpecifiCommand" data-toggle="tooltip" data-original-title="{{ 'Vider la commande' }}"><i class="fas fa-times"></i></a>
-                            <a class="btn btn-warning" id="bt_validateSpecifiCommand" data-toggle="tooltip" data-original-title="{{ 'Sélectionner la commande' }}"><i class="fas fa-check spacing-right"></i><span>{{ 'OK' }}</span></a>
+                            <a class="btn btn-action" id="bt_resetSpecifiCommand" data-toggle="tooltip" data-original-title="{{ 'Vider la commande' | trans }}"><i class="fas fa-times"></i></a>
+                            <a class="btn btn-warning" id="bt_validateSpecifiCommand" data-toggle="tooltip" data-original-title="{{ 'Sélectionner la commande' | trans }}"><i class="fas fa-check spacing-right"></i><span>{{ 'OK' }}</span></a>
                         </span>
                     </div>
                     <div id="div_commandResult">
