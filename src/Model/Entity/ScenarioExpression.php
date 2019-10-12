@@ -626,18 +626,6 @@ class ScenarioExpression implements EntityInterface
      * @throws CoreException
      * @throws \ReflectionException
      */
-    /**
-     * @param $scenario
-     * @param $options
-     * @throws CoreException
-     * @throws \ReflectionException
-     */
-    /**
-     * @param $scenario
-     * @param $options
-     * @throws CoreException
-     * @throws \ReflectionException
-     */
     protected function executeActionVariable(&$scenario, $options)
     {
         $options['value'] = ScenarioExpressionManager::setTags($options['value'], $scenario);
@@ -780,16 +768,6 @@ class ScenarioExpression implements EntityInterface
      * @param $scenario
      * @param $options
      * @throws CoreException
-     */
-    /**
-     * @param $scenario
-     * @param $options
-     * @throws CoreException
-     */
-    /**
-     * @param $scenario
-     * @param $options
-     * @throws CoreException
      * @throws \ReflectionException
      */
     protected function executeActionReport(&$scenario, $options)
@@ -897,14 +875,6 @@ class ScenarioExpression implements EntityInterface
      * @return array
      * @throws \Exception
      */
-    /**
-     * @return array
-     * @throws \Exception
-     */
-    /**
-     * @return array
-     * @throws \Exception
-     */
     public function getAllId()
     {
         $return = array(
@@ -932,25 +902,11 @@ class ScenarioExpression implements EntityInterface
     /**
      * @return int
      */
-    /**
-     * @return int
-     */
-    /**
-     * @return int
-     */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * @param $_id
-     * @return $this
-     */
-    /**
-     * @param $_id
-     * @return $this
-     */
     /**
      * @param $_id
      * @return $this
@@ -962,18 +918,6 @@ class ScenarioExpression implements EntityInterface
         return $this;
     }
 
-    /**
-     * @param $_scenarioSubElement_id
-     * @return int
-     * @throws CoreException
-     * @throws \ReflectionException
-     */
-    /**
-     * @param $_scenarioSubElement_id
-     * @return int
-     * @throws CoreException
-     * @throws \ReflectionException
-     */
     /**
      * @param $_scenarioSubElement_id
      * @return int
@@ -1001,16 +945,6 @@ class ScenarioExpression implements EntityInterface
      * @throws CoreException
      * @throws \ReflectionException
      */
-    /**
-     * @return bool
-     * @throws CoreException
-     * @throws \ReflectionException
-     */
-    /**
-     * @return bool
-     * @throws CoreException
-     * @throws \ReflectionException
-     */
     public function save()
     {
         $this->checkBackground();
@@ -1027,14 +961,6 @@ class ScenarioExpression implements EntityInterface
      * @return null
      * @throws \Exception
      */
-    /**
-     * @return null
-     * @throws \Exception
-     */
-    /**
-     * @return null
-     * @throws \Exception
-     */
     public function resetRepeatIfStatus()
     {
         if ($this->getType() != 'element') {
@@ -1044,16 +970,9 @@ class ScenarioExpression implements EntityInterface
         if (is_object($element)) {
             $element->resetRepeatIfStatus();
         }
+        return null;
     }
 
-    /**
-     * @return array|string
-     * @throws \Exception
-     */
-    /**
-     * @return array|string
-     * @throws \Exception
-     */
     /**
      * @return array|string
      * @throws \Exception
@@ -1103,14 +1022,6 @@ class ScenarioExpression implements EntityInterface
      * @return array|mixed|null
      * @throws \Exception
      */
-    /**
-     * @return array|mixed|null
-     * @throws \Exception
-     */
-    /**
-     * @return array|mixed|null
-     * @throws \Exception
-     */
     public function getSubElement()
     {
         return ScenarioSubElementManager::byId($this->getScenarioSubElement_id());
@@ -1119,25 +1030,11 @@ class ScenarioExpression implements EntityInterface
     /**
      * @return int
      */
-    /**
-     * @return int
-     */
-    /**
-     * @return int
-     */
     public function getScenarioSubElement_id()
     {
         return $this->scenarioSubElement_id;
     }
 
-    /**
-     * @param $_scenarioSubElement_id
-     * @return $this
-     */
-    /**
-     * @param $_scenarioSubElement_id
-     * @return $this
-     */
     /**
      * @param $_scenarioSubElement_id
      * @return $this
@@ -1152,25 +1049,11 @@ class ScenarioExpression implements EntityInterface
     /**
      * @return string
      */
-    /**
-     * @return string
-     */
-    /**
-     * @return string
-     */
     public function getSubtype()
     {
         return $this->subtype;
     }
 
-    /**
-     * @param $_subtype
-     * @return $this
-     */
-    /**
-     * @param $_subtype
-     * @return $this
-     */
     /**
      * @param $_subtype
      * @return $this
@@ -1185,25 +1068,11 @@ class ScenarioExpression implements EntityInterface
     /**
      * @return int
      */
-    /**
-     * @return int
-     */
-    /**
-     * @return int
-     */
     public function getOrder()
     {
         return $this->order;
     }
 
-    /**
-     * @param $_order
-     * @return $this
-     */
-    /**
-     * @param $_order
-     * @return $this
-     */
     /**
      * @param $_order
      * @return $this
@@ -1218,12 +1087,6 @@ class ScenarioExpression implements EntityInterface
     /**
      * @return string
      */
-    /**
-     * @return string
-     */
-    /**
-     * @return string
-     */
     public function getTableName()
     {
         return 'scenarioExpression';
@@ -1232,25 +1095,11 @@ class ScenarioExpression implements EntityInterface
     /**
      * @return bool
      */
-    /**
-     * @return bool
-     */
-    /**
-     * @return bool
-     */
     public function getChanged()
     {
         return $this->_changed;
     }
 
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    /**
-     * @param $_changed
-     * @return $this
-     */
     /**
      * @param $_changed
      * @return $this

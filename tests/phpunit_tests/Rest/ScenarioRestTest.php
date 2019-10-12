@@ -24,9 +24,9 @@ class ScenarioRestTest extends PHPUnit_Framework_TestCase
     public function testGetAll()
     {
         $result = ScenarioRest::getAll();
-        $this->assertCount(2, $result);
-        $this->assertEquals('Test scenario', $result[0]['name']);
-        $this->assertEquals('Empty scenario', $result[1]['name']);
+        $this->assertCount(3, $result);
+        $this->assertEquals('Scenario with expressions', $result[0]['name']);
+        $this->assertEquals('Test scenario', $result[1]['name']);
     }
 
     public function testGetAllByGroup() {

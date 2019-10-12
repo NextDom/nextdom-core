@@ -107,6 +107,7 @@ class UpdateManager
         foreach (PluginManager::listPlugin() as $plugin) {
             $pluginId = $plugin->getId();
             $update = self::byTypeAndLogicalId('plugin', $pluginId);
+            // Add update data if plugin not exists
             if (!is_object($update)) {
                 $update = (new Update())
                     ->setLogicalId($pluginId)
@@ -115,11 +116,14 @@ class UpdateManager
                 $update->save();
             }
             $find = [];
+            // Check for plugin with market
             if (method_exists($pluginId, 'listMarketObject')) {
                 $pluginIdListMarketObject = $pluginId::listMarketObject();
+                // Check all object from this market
                 foreach ($pluginIdListMarketObject as $logicalId) {
                     $find[$logicalId] = true;
                     $update = self::byTypeAndLogicalId($pluginId, $logicalId);
+                    // Add update if not exists
                     if (!is_object($update)) {
                         $update = (new Update())
                             ->setLogicalId($logicalId)
@@ -135,6 +139,7 @@ class UpdateManager
                     }
                 }
             } else {
+                // Remove all update if plugin is removed
                 $params = [
                     'type' => $pluginId,
                 ];
@@ -193,7 +198,7 @@ class UpdateManager
      *
      * @param string $filter
      *
-     * @return array|null List of all objects
+     * @return Update[]|null List of all objects
      *
      * @throws \Exception
      */

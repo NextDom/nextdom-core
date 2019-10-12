@@ -65,7 +65,7 @@ class BaseGuiTest(unittest.TestCase):
             print("Chromedriver needed to run tests on Chrome.")
             print("Download it on https://sites.google.com/a/chromium.org/chromedriver/downloads")
             print(err)
-            exit(1)
+            sys.exit(1)
 
     @classmethod
     def connect_to_nextdom(cls):
