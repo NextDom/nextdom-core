@@ -387,6 +387,29 @@ class SystemHelper
     }
 
     /**
+     * Stop a service
+     *
+     * @param string serviceName
+     * @return string Result of the command
+     * @throws \Exception
+     */
+    public static function stopService(string $serviceName)
+    {
+        return exec(self::getCmdSudo() . ' service ' . $serviceName .' stop');
+    }
+    /**
+     * Start a service
+     *
+     * @param string serviceName
+     * @return string Result of the command
+     * @throws \Exception
+     */
+    public static function startService(string $serviceName)
+    {
+        return exec(self::getCmdSudo() . ' service ' . $serviceName .' start');
+    }
+
+    /**
      *
      */
     public static function cleanFileSystemRight()
