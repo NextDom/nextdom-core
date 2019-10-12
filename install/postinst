@@ -221,8 +221,11 @@ step_nextdom_mysql_parameters() {
 
   # slow start of docker mysql
   try=0
-  while [ ${try} -lt 5 ]; do
+  iret=1
+  while [ ${try} -lt 5 ] && [ $iret -eq 1 ]; do
     mysql -uroot ${HOSTPASS} -e "SHOW DATABASES;" >/dev/null 2>&1 || {
+      iret=$?
+      if [[ $iret -eq 0 ]] ; then break ; fi
       try=$((try + 1))
       sleep 5
       continue
