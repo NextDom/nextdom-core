@@ -137,7 +137,7 @@
                                 {% if pluginData.nOk == 0 and pluginData.pending == 0 %}
                                     <div class="col-lg-4 col-md-6 col-xs-12"><div class="box box-success">
                                 {% endif %}
-                                    <div class="box-header with-border accordion-toggle cursor" data-toggle="collapse" data-parent="#accordionHealth" href="#config_{{ pluginData.plugin..getId() }}">
+                                    <div class="box-header with-border accordion-toggle cursor" data-toggle="collapse" data-parent="#accordionHealth" href="#config_{{ pluginData.plugin.getId() }}">
                                         <h3 class="box-title">
                                             <img class="box-header-icon spacing-right" src="{{ pluginData.plugin.getPathImgIcon() }}"/>{{ pluginData.plugin.getName() }}
                                         </h3>
