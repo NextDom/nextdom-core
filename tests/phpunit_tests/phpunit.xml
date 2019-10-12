@@ -50,6 +50,9 @@
             <file>PluginTest.php</file>
             <file>ScenarioTest.php</file>
         </testsuite>
+        <testsuite name="Controllers">
+            <directory>../phpunit_tests/Controllers</directory>
+        </testsuite>
         <testsuite name="Rest">
             <directory>../phpunit_tests/Rest</directory>
         </testsuite>
@@ -60,6 +63,7 @@
         <testsuite name="AllTests">
             <directory>../phpunit_tests</directory>
             <directory>../phpunit_tests/Rest</directory>
+            <directory>../phpunit_tests/Controllers</directory>
         </testsuite>
         <testsuite name="current">
             <directory>../phpunit_tests/EnumTest.php</directory>
