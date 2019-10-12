@@ -48,48 +48,12 @@ class UpdateAdminController extends BaseController
      */
     public static function get(&$pageData): string
     {
-        global $CONFIG;
-        global $NEXTDOM_INTERNAL_CONFIG;
-
         $pageData['adminReposList'] = UpdateManager::listRepo();
         $keys = array('market::allowDNS', 'ldap::enable');
         foreach ($pageData['adminReposList'] as $key => $value) {
             $keys[] = $key . '::enable';
         }
         $pageData['adminConfigs'] = ConfigManager::byKeys($keys);
-        $pageData['JS_VARS']['ldapEnable'] = $pageData['adminConfigs']['ldap::enable'];
-        $pageData['adminIsBan'] = UserManager::isBanned();
-        $pageData['adminHardwareName'] = NextDomHelper::getHardwareName();
-        $pageData['adminHardwareKey'] = NextDomHelper::getHardwareKey();
-        $pageData['adminLastKnowDate'] = CacheManager::byKey('hour')->getValue();
-        $pageData['adminDbConfig'] = $CONFIG['db'];
-        $pageData['adminUseLdap'] = function_exists('ldap_connect');
-
-        $pageData['adminBannedIp'] = [];
-        $cache = CacheManager::byKey('security::banip');
-        $values = json_decode($cache->getValue('[]'), true);
-
-        if (is_array($values) && count($values) > 0) {
-            foreach ($values as $value) {
-                $bannedData = [];
-                $bannedData['ip'] = $value['ip'];
-                $bannedData['startDate'] = date('Y-m-d H:i:s', $value['datetime']);
-                if ($pageData['adminConfigs']['security::bantime'] < 0) {
-                    $bannedData['endDate'] = __('Jamais');
-                } else {
-                    $bannedData['endDate'] = date('Y-m-d H:i:s', $value['datetime'] + $pageData['adminConfigs']['security::bantime']);
-                }
-                $pageData['adminBannedIp'][] = $bannedData;
-            }
-        }
-
-        $pageData['adminStats'] = CacheManager::stats();
-        $pageData['adminCacheFolder'] = CacheManager::getFolder();
-        $pageData['adminMemCachedExists'] = class_exists('memcached');
-        $pageData['adminRedisExists'] = class_exists('redis');
-        $pageData['adminAlerts'] = $NEXTDOM_INTERNAL_CONFIG['alerts'];
-        $pageData['adminOthersLogs'] = array('scenario', 'plugin', 'market', 'api', 'connection', 'interact', 'tts', 'report', 'event');
-
         $pageData['JS_END_POOL'][] = '/public/js/desktop/admin/update_admin.js';
 
         return Render::getInstance()->get('/desktop/admin/update_admin.html.twig', $pageData);

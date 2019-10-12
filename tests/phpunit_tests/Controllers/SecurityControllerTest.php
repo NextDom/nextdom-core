@@ -15,9 +15,11 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+use NextDom\Managers\CacheManager;
+
 require_once(__DIR__ . '/../../../src/core.php');
 
-class ConnectionControllerTest extends PHPUnit_Framework_TestCase
+class SecurityControllerTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
@@ -25,26 +27,15 @@ class ConnectionControllerTest extends PHPUnit_Framework_TestCase
 
     public function tearDown()
     {
-        if (isset($_SERVER['HTTP_USER_AGENT'])) {
-            unset($_SERVER['HTTP_USER_AGENT']);
-        }
     }
 
 
     public function testSimple()
     {
         $pageData = [];
-        $result = \NextDom\Controller\ConnectionController::get($pageData);
-        $this->assertFalse($pageData['IS_MOBILE']);
-        $this->assertArrayHasKey('TITLE', $pageData);
-        $this->assertEquals(4, substr_count($result, 'input'));
-    }
-
-    public function testMobile() {
-        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (Linux; U; Android 4.0.2; en-us; Galaxy Nexus Build/ICL53F) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30';
-        $pageData = [];
-        $result = \NextDom\Controller\ConnectionController::get($pageData);
-        $this->assertTrue($pageData['IS_MOBILE']);
-        $this->assertContains('mobile', $result);
+        $result = \NextDom\Controller\Admin\SecurityController::get($pageData);
+        $this->assertArrayHasKey('adminUseLdap', $pageData);
+        $this->assertFalse($pageData['adminUseLdap']);
+        $this->assertContains('data-l1key="security::whiteips"', $result);
     }
 }
