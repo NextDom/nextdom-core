@@ -129,20 +129,6 @@ prereq_create_dirs() {
   touch ${LOG_DIRECTORY}/scenario_execution
 }
 
-restart_apache_service() {
-  print_verbose "restart Apache"
-  set +e
-  service apache2 restart >> ${DEBUG} 2>&1
-  if [ $? -ne 0 ]; then
-      service apache2 restart >> ${DEBUG} 2>&1
-      if [ $? -ne 0 ]; then
-          print_error "Unable to restart Apache service"
-          exit 1
-      fi
-  fi
-  set -e
-}
-
 step_nexdom_environement() {
   php_ini_path=$(php --ini | head -n 1 | sed -E "s/.*Path: (.*)\/cli/\\1/")
   if [ -e ${WEBSERVER_HOME}/assets/config/default.config.ini ]; then
@@ -161,8 +147,8 @@ step_nexdom_environement() {
       print_verbose "enable PHP opcache"
       cp -f ${WEBSERVER_HOME}/assets/config/dist/opcache.ini.dist ${php_ini_path}/apache2/conf.d/10-opcache.ini
   fi
-
-  restart_apache_service
+  print_verbose "restart Apache"
+  service apache2 restart
 }
 
 step_nextdom_file_permissions() {
@@ -221,11 +207,8 @@ step_nextdom_mysql_parameters() {
 
   # slow start of docker mysql
   try=0
-  iret=1
-  while [ ${try} -lt 5 ] && [ $iret -eq 1 ]; do
+  while [ ${try} -lt 5 ]; do
     mysql -uroot ${HOSTPASS} -e "SHOW DATABASES;" >/dev/null 2>&1 || {
-      iret=$?
-      if [[ $iret -eq 0 ]] ; then break ; fi
       try=$((try + 1))
       sleep 5
       continue
@@ -303,7 +286,11 @@ step_nextdom_apache_php() {
   print_verbose "apache: enabled site nextdom"
   print_verbose "apache: enabled site nextdom-ssl"
 
-  restart_apache_service
+  service apache2 restart >> ${DEBUG} 2>&1 || {
+    service apache2 restart >> ${DEBUG} 2>&1 || {
+      print_error "unable to restart apache2"
+    }
+  }
 }
 
 step_nextdom_directory_layout() {
@@ -707,6 +694,11 @@ main() {
       echo "Veuillez lancer sudo $0 ou connectez-vous en tant que root, puis relancez $0"
       exit 1
   fi
+
+  # Start all services
+  service apache2 start
+  service cron start
+  service mysql start
 
   set_root $0
   detect_dev_version
