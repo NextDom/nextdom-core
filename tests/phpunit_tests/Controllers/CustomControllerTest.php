@@ -18,7 +18,7 @@
 require_once(__DIR__ . '/../../../src/core.php');
 require_once(__DIR__ . '/BaseControllerTest.php');
 
-class SecurityControllerTest extends BaseControllerTest
+class CustomControllerTest extends BaseControllerTest
 {
     public function setUp()
     {
@@ -32,16 +32,15 @@ class SecurityControllerTest extends BaseControllerTest
     public function testSimple()
     {
         $pageData = [];
-        $result = \NextDom\Controller\Admin\SecurityController::get($pageData);
-        $this->assertArrayHasKey('adminUseLdap', $pageData);
-        $this->assertFalse($pageData['adminUseLdap']);
-        $this->assertContains('data-l1key="security::whiteips"', $result);
+        $result = \NextDom\Controller\Params\CustomController::get($pageData);
+        $this->assertEquals(false, $pageData['useCustomTheme']);
+        $this->assertContains('id="custom"', $result);
     }
 
     public function testPageDataVars()
     {
         $pageData = [];
-        \NextDom\Controller\Admin\SecurityController::get($pageData);
-        $this->pageDataVars('desktop/admin/security.html.twig', $pageData);
+        \NextDom\Controller\Params\CustomController::get($pageData);
+        $this->pageDataVars('desktop/params/custom.html.twig', $pageData);
     }
 }

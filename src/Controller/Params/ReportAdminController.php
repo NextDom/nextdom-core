@@ -41,12 +41,6 @@ class ReportAdminController extends BaseController
      */
     public static function get(&$pageData): string
     {
-
-
-        global $CONFIG;
-
-        $pageData['adminDbConfig'] = $CONFIG['db'];
-
         $pageData['JS_END_POOL'][] = '/public/js/desktop/params/reports_admin.js';
 
         return Render::getInstance()->get('/desktop/params/reports_admin.html.twig', $pageData);

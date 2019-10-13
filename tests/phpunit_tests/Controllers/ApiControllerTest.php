@@ -18,8 +18,9 @@
 use NextDom\Managers\ConfigManager;
 
 require_once(__DIR__ . '/../../../src/core.php');
+require_once(__DIR__ . '/BaseControllerTest.php');
 
-class ApiControllerTest extends PHPUnit_Framework_TestCase
+class ApiControllerTest extends BaseControllerTest
 {
     public function setUp()
     {
@@ -40,5 +41,12 @@ class ApiControllerTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('api', $pageData['adminConfigs']);
         $this->assertContains('Sauvegarder', $result);
         $this->assertContains('GPaCCxccAwyZx8kNgLlDkGlZxp0W3vaM', $result);
+    }
+
+    public function testPageDataVars()
+    {
+        $pageData = [];
+        \NextDom\Controller\Admin\ApiController::get($pageData);
+        $this->pageDataVars('desktop/admin/api.html.twig', $pageData);
     }
 }

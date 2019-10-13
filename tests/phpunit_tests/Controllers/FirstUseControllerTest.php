@@ -15,10 +15,12 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+use NextDom\Managers\ConfigManager;
+
 require_once(__DIR__ . '/../../../src/core.php');
 require_once(__DIR__ . '/BaseControllerTest.php');
 
-class SecurityControllerTest extends BaseControllerTest
+class FirstUseControllerTest extends BaseControllerTest
 {
     public function setUp()
     {
@@ -26,22 +28,24 @@ class SecurityControllerTest extends BaseControllerTest
 
     public function tearDown()
     {
+        ConfigManager::remove('nextdom::firstUse');
     }
 
 
     public function testSimple()
     {
+        ConfigManager::save('nextdom::firstUse', 1);
         $pageData = [];
-        $result = \NextDom\Controller\Admin\SecurityController::get($pageData);
-        $this->assertArrayHasKey('adminUseLdap', $pageData);
-        $this->assertFalse($pageData['adminUseLdap']);
-        $this->assertContains('data-l1key="security::whiteips"', $result);
+        $result = \NextDom\Controller\Pages\FirstUseController::get($pageData);
+        $this->assertArrayHasKey('profilsWidgetThemes', $pageData);
+        $this->assertContains('stepwizard', $result);
     }
 
     public function testPageDataVars()
     {
+        ConfigManager::save('nextdom::firstUse', 1);
         $pageData = [];
-        \NextDom\Controller\Admin\SecurityController::get($pageData);
-        $this->pageDataVars('desktop/admin/security.html.twig', $pageData);
+        \NextDom\Controller\Pages\FirstUseController::get($pageData);
+        $this->pageDataVars('desktop/pages/firstUse.html.twig', $pageData);
     }
 }

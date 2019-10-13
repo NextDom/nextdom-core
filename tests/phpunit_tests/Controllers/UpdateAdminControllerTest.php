@@ -15,11 +15,10 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-use NextDom\Managers\CacheManager;
-
 require_once(__DIR__ . '/../../../src/core.php');
+require_once(__DIR__ . '/BaseControllerTest.php');
 
-class UpdateAdminControllerTest extends PHPUnit_Framework_TestCase
+class UpdateAdminControllerTest extends BaseControllerTest
 {
     public function setUp()
     {
@@ -36,5 +35,12 @@ class UpdateAdminControllerTest extends PHPUnit_Framework_TestCase
         $result = \NextDom\Controller\Admin\UpdateAdminController::get($pageData);
         $this->assertArrayHasKey('adminReposList', $pageData);
         $this->assertContains('href="#tabgithub"', $result);
+    }
+
+    public function testPageDataVars()
+    {
+        $pageData = [];
+        \NextDom\Controller\Admin\UpdateAdminController::get($pageData);
+        $this->pageDataVars('desktop/admin/update_admin.html.twig', $pageData);
     }
 }

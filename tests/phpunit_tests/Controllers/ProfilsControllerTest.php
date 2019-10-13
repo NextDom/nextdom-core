@@ -18,30 +18,36 @@
 require_once(__DIR__ . '/../../../src/core.php');
 require_once(__DIR__ . '/BaseControllerTest.php');
 
-class SecurityControllerTest extends BaseControllerTest
+class ProfilsControllerTest extends BaseControllerTest
 {
     public function setUp()
     {
+        @session_start();
     }
 
     public function tearDown()
     {
+        if (isset($_SESSION['user'])) {
+            unset($_SESSION['user']);
+        }
+        @session_abort();
     }
 
 
     public function testSimple()
     {
+        $_SESSION['user'] = \NextDom\Managers\UserManager::byId(1);
         $pageData = [];
-        $result = \NextDom\Controller\Admin\SecurityController::get($pageData);
-        $this->assertArrayHasKey('adminUseLdap', $pageData);
-        $this->assertFalse($pageData['adminUseLdap']);
-        $this->assertContains('data-l1key="security::whiteips"', $result);
+        $result = \NextDom\Controller\Params\ProfilsController::get($pageData);
+        $this->assertCount(3, $pageData['profilsDisplayTypes']);
+        $this->assertContains('id="div_Profils"', $result);
     }
 
     public function testPageDataVars()
     {
+        $_SESSION['user'] = \NextDom\Managers\UserManager::byId(1);
         $pageData = [];
-        \NextDom\Controller\Admin\SecurityController::get($pageData);
-        $this->pageDataVars('desktop/admin/security.html.twig', $pageData);
+        \NextDom\Controller\Params\ProfilsController::get($pageData);
+        $this->pageDataVars('desktop/params/profils.html.twig', $pageData);
     }
 }
