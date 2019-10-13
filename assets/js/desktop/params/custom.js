@@ -102,7 +102,6 @@ function initEvents() {
                 widget_margin = config['widget::margin'];
                 widget_padding = config['widget::padding'];
                 widget_radius = config['widget::radius'];
-                nextdom_waitSpinner = config['nextdom::waitSpinner'];
                 nextdom.config.load({
                     configuration: $('#custom').getValues('.configKey:not(.noSet)')[0],
                     error: function (error) {
@@ -121,13 +120,6 @@ function initEvents() {
             }
         });
         saveCustom();
-    });
-
-    // Custom spinner change
-    $("#waitSpinnerSelect").change(function () {
-        document.getElementById("waitSpinner").innerHTML="<i class='fas fa-info'></i>";
-        $("#waitSpinner i").removeClass('fa-info').addClass($("#waitSpinnerSelect").value());
-        modifyWithoutSave = true;
     });
 
     // Theme choice changed
