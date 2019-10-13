@@ -107,11 +107,18 @@ class Cron implements EntityInterface
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
+
+    /**
+     * @var bool
+     */
     protected $_changed = false;
 
     /**
-     * @param int $defaultValue
-     * @return int
+     * Get enabled state of the cron task
+     *
+     * @param int $defaultValue Default value if cron task is not initialized
+     *
+     * @return int 1 for enabled task, 0 for disabled, or defaultValue
      */
     public function getEnable($defaultValue = 0)
     {
@@ -122,23 +129,34 @@ class Cron implements EntityInterface
     }
 
     /**
+     * Set enabled state of the cron task
      *
-     * @param $_enable
+     * @param int $newState 1 for enable task, 0 for disable
+     *
      * @return $this
      */
-    public function setEnable($_enable)
+    public function setEnable($newState)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->enable, $_enable);
-        $this->enable = $_enable;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->enable, $newState);
+        $this->enable = $newState;
         return $this;
     }
 
+    /**
+     * Get bool enabled state
+     *
+     * @return bool True is task is enabled
+     */
     public function isEnabled() {
         return $this->enable == 1;
     }
 
     /**
-     * @return int|mixed
+     * Get timeout of the task
+     * If timeout is not configured, return default value from
+     *
+     * @return int Timeout
+     *
      * @throws \Exception
      */
     public function getTimeout()

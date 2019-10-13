@@ -44,7 +44,7 @@ class PluginAjax extends BaseAjax
         $update = UpdateManager::byLogicalId(Utils::init('id'));
         $return = Utils::o2a($plugin);
         $return['activate'] = $plugin->isActive();
-        $return['configurationPath'] = $plugin->getPathToConfigurationById();
+        $return['configurationPath'] = $plugin->getPathToConfiguration();
         $return['checkVersion'] = version_compare(NextDomHelper::getJeedomVersion(), $plugin->getRequire());
         if (is_object($update)) {
             $repoClass = UpdateManager::getRepoDataFromName($update->getSource())['phpClass'];

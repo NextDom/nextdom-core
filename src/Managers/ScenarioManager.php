@@ -340,7 +340,7 @@ class ScenarioManager
      * @return array|mixed|null [] Liste des scénarios
      * @throws \Exception
      */
-    public static function byTrigger(string $cmdId, $onlyEnabled = true)
+    public static function byTrigger($cmdId, $onlyEnabled = true)
     {
         $values = array('cmd_id' => '%#' . $cmdId . '#%');
         $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '

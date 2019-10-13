@@ -1,1 +1,0 @@
-ALTER TABLE `cron` MODIFY `type` VARCHAR(511);

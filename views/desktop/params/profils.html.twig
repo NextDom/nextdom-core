@@ -61,7 +61,7 @@
             <!-- Profil tab -->
             <div role="tabpanel" class="tab-pane active" id="profil">
                 <fieldset>
-                    <legend>{{ 'Choix de l\'Avatar' }}</legend>
+                    <legend>{{ 'Choix de l\'Avatar'  | trans }}</legend>
                     <div class="row text-center">
                         <div class="form-group col-sm-6">
                             <img id="avatar-preview" src="{{ profilsAvatar }}" style="height:200px"></a>
@@ -75,7 +75,7 @@
                     <input class="userAttr form-control" data-l1key="options" data-l2key="avatar" style="display:none"/>
                 </fieldset>
                 <fieldset class="legend-section">
-                    <legend>{{ 'Ajout d\'un nouvel Avatar' }}</legend>
+                    <legend>{{ 'Ajout d\'un nouvel Avatar'  | trans }}</legend>
                     <div class="row">
                         <div class="form-group col-sm-12 col-padding">
                             <input class="userAttr form-control btn btn-default" id="user_avatar" type="file" name="images" data-url="core/ajax/profils.ajax.php?action=imageUpload"/>
@@ -92,12 +92,12 @@
                         {% for theme in profilsWidgetThemes %}
                             <div class="form-group col-sm-6 col-xs-12 col-padding">
                                 <div class="clearfix">
-                                    <label class="cursor" for={{ theme['name']|slice(0, -4) }}>
-                                        <img class="themeWidgetThumbnail" src="{{ theme['dir'] }}">
+                                    <label class="cursor" for={{ theme.name|slice(0, -4) }}>
+                                        <img class="themeWidgetThumbnail" src="{{ theme.dir }}">
                                     </label>
                                 </div>
-                                <input id={{ theme['name']|slice(0, -4) }} class="spacing-right" type="radio" name="themeWidget" value={{ theme['name']|slice(0, -4) }}>
-                                <label for={{ theme['name']|slice(0, -4) }}>{{ theme['name']|slice(0, -4) }}</label>
+                                <input id={{ theme.name|slice(0, -4) }} class="spacing-right" type="radio" name="themeWidget" value={{ theme.name |slice(0, -4) }}>
+                                <label for={{ theme.name|slice(0, -4) }}>{{ theme.name|slice(0, -4) }}</label>
                             </div>
                         {% endfor %}
                     </div>

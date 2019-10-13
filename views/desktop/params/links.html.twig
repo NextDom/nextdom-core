@@ -49,7 +49,7 @@
     <div class="box" id="links">
         <!-- Header bar -->
         <div class="box-header with-border">
-            <h3 class="box-title"><i class="fas fa-sitemap"></i>{{ 'Graphiques de Liens' }}</h3>
+            <h3 class="box-title"><i class="fas fa-sitemap"></i>{{ 'Graphiques de Liens' | trans }}</h3>
         </div>
 
         <!-- Page content -->
@@ -91,7 +91,7 @@
                     <div class="form-group col-sm-6 col-xs-12 col-padding">
                         <label class="control-label">{{ 'Profondeur pour les commandes' }}</label>
                         <div class="input-group">
-                            <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="graphlink::cmd::drill"" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                            <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="graphlink::cmd::drill"  data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
                             <span class="input-group-addon input-range-min"></span>
                             <input class="configKey slider" type="range" min="0" max="20" step="1" data-l1key="graphlink::cmd::drill"/>
                             <span class="input-group-addon input-range-max"></span>

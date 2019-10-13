@@ -18,8 +18,8 @@ options:
   -h            : display this message
   -i <host>     : database hostname, defaults to localhost
   -z <port>     : database port, defaults to 3306
-  -d <name>     : database name, detaults to nextdom (nextdomdev for dev version)
-  -u <username> : database user name, detaults to nextdom (nextdomdev for dev version)
+  -d <name>     : database name, defaults to nextdom (nextdomdev for dev version)
+  -u <username> : database user name, defaults to nextdom (nextdomdev for dev version)
   -p <password> : database user password, randomly generated if not given
   -r <password> : database root password
   -L <dir>      : set log directory, defaults to /var/log/nextdom
@@ -344,6 +344,12 @@ step_nextdom_directory_layout() {
       ln -s ${WEBSERVER_HOME}/assets/js/core/ ${WEBSERVER_HOME}/core/js
   fi
   print_verbose "created core/js symlink: ${WEBSERVER_HOME}/assets/js/core"
+
+  # jeedom template location compatibility
+  if [ ! -e ${WEBSERVER_HOME}/core/template ]; then
+      ln -s ${WEBSERVER_HOME}/views/templates/ ${WEBSERVER_HOME}/core/template
+  fi
+  print_verbose "created core/template symlink: ${WEBSERVER_HOME}/core/template"
 
   # jeedom backup compatibility:  ./data is a symlink
   if [ -L ${WEBSERVER_HOME}/data ]; then
@@ -688,6 +694,11 @@ main() {
       echo "Veuillez lancer sudo $0 ou connectez-vous en tant que root, puis relancez $0"
       exit 1
   fi
+
+  # Start all services
+  service apache2 start
+  service cron start
+  service mysql start
 
   set_root $0
   detect_dev_version

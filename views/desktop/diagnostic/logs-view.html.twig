@@ -65,8 +65,8 @@
                         <div class="bs-sidebar">
                             <ul id="ul_object" class="nav nav-list bs-sidenav list-group">
                                 {% for logFile in logFilesList %}
-                                    <li class="cursor li_log{% if logFile['active'] %} active{% endif %}" data-log="{{ logFile['name'] }}">
-                                        <a class="label-log"><i class="fas fa-{{ logFile['icon'] }} spacing-right" style="color:{{ logFile['color'] }};"></i>{{ logFile['name'] }} ({% if logFile['size']>=1000 %}{{ logFile['size']/1000 }} Mo{% else %}{{ logFile['size'] }} Ko{% endif %})</a>
+                                    <li class="cursor li_log{% if logFile.active %} active{% endif %}" data-log="{{ logFile.name }}">
+                                        <a class="label-log"><i class="fas fa-{{ logFile.icon }} spacing-right" style="color:{{ logFile['color'] }};"></i>{{ logFile['name'] }} ({% if logFile.size>=1000 %}{{ logFile.size /1000 }} Mo{% else %}{{ logFile.size }} Ko{% endif %})</a>
                                     </li>
                                 {% endfor %}
                             </ul>
@@ -79,7 +79,7 @@
                         <div class="box-tools padding-bottom">
                             <div class="input-group">
                                 <div class="input-group-addon"><i class="fa fa-search"></i></div>
-                                <input class="form-control" id="in_globalLogSearch" placeholder="{{ 'Rechercher dans le log...' }}"/>
+                                <input class="form-control" id="in_globalLogSearch" placeholder="{{ 'Rechercher dans le log...' | trans }}"/>
                             </div>
                         </div>
                         <pre id='pre_globallog' style='height:auto;overflow: auto;'></pre>

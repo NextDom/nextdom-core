@@ -141,6 +141,14 @@ function initEvents() {
         });
     });
 
+    // ALert cmd
+    $('.bt_selectAlertCmd').on('click', function () {
+        var type=$(this).attr('data-type');
+        nextdom.cmd.getSelectModal({cmd: {type: 'action', subType: 'message'}}, function (result) {
+            $('.configKey[data-l1key="alert::'+type+'Cmd"]').atCaret('insert', result.human);
+        });
+    });
+
     // Action buttons
     $("body").delegate(".listAction", 'click', function () {
         var el = $(this).closest('.actionOnMessage').find('.expressionAttr[data-l1key=cmd]');

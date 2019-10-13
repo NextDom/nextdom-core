@@ -46,15 +46,24 @@ class ApiController extends BaseController
      */
     public static function get(&$pageData): string
     {
-
-        $pageData['adminReposList'] = UpdateManager::listRepo();
         $pageData['PRODUCT_NAME'] = ConfigManager::byKey('product_name');
-        $keys = array('api', 'apipro', 'apimarket');
-        foreach ($pageData['adminReposList'] as $key => $value) {
+        $keys = ['api', 'apipro', 'apimarket'];
+        foreach (UpdateManager::listRepo() as $key => $value) {
             $keys[] = $key . '::enable';
         }
         $pageData['adminConfigs'] = ConfigManager::byKeys($keys);
+        $pageData['adminPluginsList'] = [];
+        $pluginsList = PluginManager::listPlugin(true);
+        foreach ($pluginsList as $plugin) {
+            $pluginApi = ConfigManager::byKey('api', $plugin->getId());
 
+            if ($pluginApi !== '') {
+                $pluginData = [];
+                $pluginData['api'] = $pluginApi;
+                $pluginData['plugin'] = $plugin;
+                $pageData['adminPluginsList'][] = $pluginData;
+            }
+        }
         $pageData['JS_END_POOL'][] = '/public/js/desktop/admin/api.js';
 
         return Render::getInstance()->get('/desktop/admin/api.html.twig', $pageData);

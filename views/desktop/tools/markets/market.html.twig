@@ -50,27 +50,27 @@
             {% endif %}
             <div class="btn-group">
                 <select class="form-control" id="market-filter-category">
-                    <option value="all">{{ 'Toutes les Catégories' }}</option>
-                    <option value="security">{{ 'Sécurité' }}</option>
-                    <option value="automation protocol">{{ 'Protocole domotique' }}</option>
-                    <option value="programming">{{ 'Programmation' }}</option>
-                    <option value="organization">{{ 'Organisation' }}</option>
-                    <option value="weather">{{ 'Météo' }}</option>
-                    <option value="communication">{{ 'Communication' }}</option>
-                    <option value="devicecommunication">{{ 'Objets communicants' }}</option>
-                    <option value="multimedia">{{ 'Multimédia' }}</option>
-                    <option value="wellness">{{ 'Bien-être' }}</option>
-                    <option value="monitoring">{{ 'Monitoring' }}</option>
-                    <option value="health">{{ 'Santé' }}</option>
-                    <option value="nature">{{ 'Nature' }}</option>
-                    <option value="automatisation">{{ 'Automatisme' }}</option>
-                    <option value="energy">{{ 'Energie' }}</option>
+                    <option value="all">{{ 'Toutes les Catégories' | trans }}</option>
+                    <option value="security">{{ 'Sécurité' | trans }}</option>
+                    <option value="automation protocol">{{ 'Protocole domotique' | trans }}</option>
+                    <option value="programming">{{ 'Programmation' | trans }}</option>
+                    <option value="organization">{{ 'Organisation' | trans }}</option>
+                    <option value="weather">{{ 'Météo' | trans }}</option>
+                    <option value="communication">{{ 'Communication' | trans }}</option>
+                    <option value="devicecommunication">{{ 'Objets communicants' | trans }}</option>
+                    <option value="multimedia">{{ 'Multimédia' | trans }}</option>
+                    <option value="wellness">{{ 'Bien-être' | trans}}</option>
+                    <option value="monitoring">{{ 'Monitoring' | trans }}</option>
+                    <option value="health">{{ 'Santé' | trans }}</option>
+                    <option value="nature">{{ 'Nature' | trans }}</option>
+                    <option value="automatisation">{{ 'Automatisme' | trans }}</option>
+                    <option value="energy">{{ 'Energie' | trans }}</option>
                 </select>
             </div>
         </div>
         <div class="action-group" id="admin-buttons">
-            <a class="btn btn-warning btn-action-bar pull-right" id="mass-update"><i class="fas fa-download"></i>{{ 'Mise(s) à jour' }}</a>
-            <a class="btn btn-primary btn-action-bar pull-right" id="refresh-markets"><i class="fas fa-refresh"></i>{{ 'Rafraîchir' }}</a>
+            <a class="btn btn-warning btn-action-bar pull-right" id="mass-update"><i class="fas fa-download"></i>{{ 'Mise(s) à jour'  | trans }}</a>
+            <a class="btn btn-primary btn-action-bar pull-right" id="refresh-markets"><i class="fas fa-refresh"></i>{{ 'Rafraîchir'  | trans }}</a>
         </div>
     </div>
 </section>
@@ -78,7 +78,7 @@
 <section class="content">
     <div class="box">
         <div class="box-header with-border">
-            <h3 class="box-title"><i class="fas fa-shopping-cart"></i>{{ 'Market Nextdom' }}</h3>
+            <h3 class="box-title"><i class="fas fa-shopping-cart"></i>{{ 'Market Nextdom'  | trans }}</h3>
         </div>
         <div class="box-body">
             <div class="row" id="market-div">

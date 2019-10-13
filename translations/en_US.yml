@@ -430,6 +430,7 @@ note:
   are_sure_you_want_to_delete_the_note: "Are sure you want to delete the note"
 
 osdb:
+  administration: Administration
   warning: "WARNING: you may loose access to your system "
   tools: "Tools"
   system_console: "System console"
@@ -454,7 +455,7 @@ interact:
   request: "Request"
   duplicate: "Duplicate"
   unfold: "Unfold"
-  edition_intéraction: "Edition Intéraction"
+  edition_interaction: "Edition Interaction"
   filters: "Filters"
   group: "Group"
   id: "ID:"
@@ -482,7 +483,7 @@ interact:
   without_unit: "Without unit"
   synonym: "Synonym"
   authorized_users: "Authorized users"
-  you_have_n_iterations: "You have %s iteration(s)..."
+  you_have_n_interactions: "You have %s interaction(s)..."
   test: "Test"
   no_interactions_click_add_to_start: "You do not have any interactions. Click Add to start."
   interactions: "interaction(s)"
