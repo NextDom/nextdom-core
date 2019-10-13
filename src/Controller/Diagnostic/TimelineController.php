@@ -47,15 +47,6 @@ class TimelineController extends BaseController
      */
     public static function get(&$pageData): string
     {
-        $pageData['historyDate'] = [
-            'start' => date('Y-m-d', strtotime(ConfigManager::byKey('history::defautShowPeriod') . ' ' . date('Y-m-d'))),
-            'end' => date('Y-m-d'),
-        ];
-
-        $pageData['historyCmdsList'] = CmdManager::allHistoryCmd();
-        $pageData['historyPluginsList'] = PluginManager::listPlugin();
-        $pageData['historyEqLogicCategories'] = NextDomHelper::getConfiguration('eqLogic:category');
-        $pageData['historyObjectsList'] = JeeObjectManager::all();
         $pageData['JS_END_POOL'][] = '/public/js/desktop/diagnostic/timeline.js';
 
         return Render::getInstance()->get('/desktop/diagnostic/timeline.html.twig', $pageData);

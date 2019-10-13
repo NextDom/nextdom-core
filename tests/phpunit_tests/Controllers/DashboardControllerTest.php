@@ -18,7 +18,7 @@
 require_once(__DIR__ . '/../../../src/core.php');
 require_once(__DIR__ . '/BaseControllerTest.php');
 
-class SecurityControllerTest extends BaseControllerTest
+class DashboardControllerTest extends BaseControllerTest
 {
     public function setUp()
     {
@@ -26,22 +26,27 @@ class SecurityControllerTest extends BaseControllerTest
 
     public function tearDown()
     {
+        if (isset($_SESSION['user'])) {
+            unset($_SESSION['user']);
+        }
     }
 
 
     public function testSimple()
     {
+        $_SESSION['user'] = \NextDom\Managers\UserManager::byId(1);
         $pageData = [];
-        $result = \NextDom\Controller\Admin\SecurityController::get($pageData);
-        $this->assertArrayHasKey('adminUseLdap', $pageData);
-        $this->assertFalse($pageData['adminUseLdap']);
-        $this->assertContains('data-l1key="security::whiteips"', $result);
+        $result = \NextDom\Controller\Pages\DashBoardController::get($pageData);
+        $this->assertArrayHasKey('dashboardObjectListMenu', $pageData);
+        $this->assertEquals('1', $pageData['dashboardObjectId']);
+        $this->assertContains('dashboard-content', $result);
     }
 
     public function testPageDataVars()
     {
+        $_SESSION['user'] = \NextDom\Managers\UserManager::byId(1);
         $pageData = [];
-        \NextDom\Controller\Admin\SecurityController::get($pageData);
-        $this->pageDataVars('desktop/admin/security.html.twig', $pageData);
+        \NextDom\Controller\Pages\DashBoardController::get($pageData);
+        $this->pageDataVars('desktop/pages/dashboard.html.twig', $pageData, ['dashboardObjectId']);
     }
 }

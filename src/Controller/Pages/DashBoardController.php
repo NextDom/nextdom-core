@@ -83,20 +83,15 @@ class DashBoardController extends BaseController
         $pageData['JS_VARS']['rootObjectId'] = $currentJeeObjectId;
         $pageData['JS_VARS']['serverTZoffsetMin'] = Utils::getTZoffsetMin();
 
-        $pageData['dashboardDisplayObjectByDefault'] = UserManager::getStoredUser()->getOptions('displayObjetByDefault');
-        $pageData['dashboardDisplayScenarioByDefault'] = UserManager::getStoredUser()->getOptions('displayScenarioByDefault');
         $pageData['dashboardCategory'] = Utils::init('category', 'all');
-        $pageData['dashboardTag'] = Utils::init('tag', 'all');
         $pageData['dashboardSummary'] = Utils::init('summary', 'all');
         $pageData['dashboardCategories'] = NextDomHelper::getConfiguration('eqLogic:category', true);
-        $pageData['dashboardTags'] = EqLogicManager::getAllTags();
         $pageData['dashboardDefaultObjectId'] = $defaultDashboardObjectId;
         $pageData['dashboardObjectId'] = $currentJeeObjectId;
         $pageData['dashboardObject'] = $currentJeeObject;
         $pageData['dashboardObjectParentNumber'] = $currentJeeObject->parentNumber();
         $pageData['dashboardObjectListMenu'] = self::getObjectsListMenu($currentJeeObjectId);
         $pageData['dashboardChildrenObjects'] = JeeObjectManager::buildTree($currentJeeObject);
-        $pageData['profilsUser'] = UserManager::getStoredUser();
 
         $pageData['JS_POOL'][] = '/public/js/desktop/pages/dashboard.js';
         $pageData['JS_END_POOL'][] = '/public/js/desktop/pages/dashboard_events.js';

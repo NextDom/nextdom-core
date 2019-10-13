@@ -45,10 +45,6 @@ class UsersController extends BaseController
     public static function get(&$pageData): string
     {
         $pageData['userLdapEnabled'] = ConfigManager::byKey('ldap::enable');
-        if ($pageData['userLdapEnabled'] != '1') {
-            $user = UserManager::byLogin('nextdom_support');
-            $pageData['userSupportExists'] = is_object($user);
-        }
         $pageData['userSessionsList'] = SessionHelper::getSessionsList();
         $pageData['usersList'] = UserManager::all();
         $pageData['JS_VARS']['ldapEnable'] = $pageData['userLdapEnabled'];

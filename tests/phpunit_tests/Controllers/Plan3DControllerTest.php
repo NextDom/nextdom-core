@@ -15,10 +15,12 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+use NextDom\Managers\ConfigManager;
+
 require_once(__DIR__ . '/../../../src/core.php');
 require_once(__DIR__ . '/BaseControllerTest.php');
 
-class SecurityControllerTest extends BaseControllerTest
+class Plan3DControllerTest extends BaseControllerTest
 {
     public function setUp()
     {
@@ -26,22 +28,26 @@ class SecurityControllerTest extends BaseControllerTest
 
     public function tearDown()
     {
+        if (isset($_SESSION['user'])) {
+            unset($_SESSION['user']);
+        }
     }
 
 
     public function testSimple()
     {
+        $_SESSION['user'] = \NextDom\Managers\UserManager::byId(1);
         $pageData = [];
-        $result = \NextDom\Controller\Admin\SecurityController::get($pageData);
-        $this->assertArrayHasKey('adminUseLdap', $pageData);
-        $this->assertFalse($pageData['adminUseLdap']);
-        $this->assertContains('data-l1key="security::whiteips"', $result);
+        $result = \NextDom\Controller\Pages\Plan3DController::get($pageData);
+        $this->assertArrayHasKey('plan3dHeader', $pageData);
+        $this->assertContains('bt_plan3dHeaderFullScreen', $result);
     }
 
     public function testPageDataVars()
     {
+        $_SESSION['user'] = \NextDom\Managers\UserManager::byId(1);
         $pageData = [];
-        \NextDom\Controller\Admin\SecurityController::get($pageData);
-        $this->pageDataVars('desktop/admin/security.html.twig', $pageData);
+        \NextDom\Controller\Pages\Plan3DController::get($pageData);
+        $this->pageDataVars('desktop/pages/plan3d.html.twig', $pageData);
     }
 }

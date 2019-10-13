@@ -18,8 +18,9 @@
 use NextDom\Managers\CacheManager;
 
 require_once(__DIR__ . '/../../../src/core.php');
+require_once(__DIR__ . '/BaseControllerTest.php');
 
-class CacheControllerTest extends PHPUnit_Framework_TestCase
+class CacheControllerTest extends BaseControllerTest
 {
     public function setUp()
     {
@@ -36,5 +37,12 @@ class CacheControllerTest extends PHPUnit_Framework_TestCase
         $result = \NextDom\Controller\Admin\CacheController::get($pageData);
         $this->assertArrayHasKey('adminCacheFolder', $pageData);
         $this->assertContains(CacheManager::getFolder(), $result);
+    }
+
+    public function testPageDataVars()
+    {
+        $pageData = [];
+        \NextDom\Controller\Admin\CacheController::get($pageData);
+        $this->pageDataVars('desktop/admin/cache.html.twig', $pageData);
     }
 }

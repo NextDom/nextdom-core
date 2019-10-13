@@ -16,8 +16,9 @@
  */
 
 require_once(__DIR__ . '/../../../src/core.php');
+require_once(__DIR__ . '/BaseControllerTest.php');
 
-class ConnectionControllerTest extends PHPUnit_Framework_TestCase
+class ConnectionControllerTest extends BaseControllerTest
 {
     public function setUp()
     {
@@ -30,7 +31,6 @@ class ConnectionControllerTest extends PHPUnit_Framework_TestCase
         }
     }
 
-
     public function testSimple()
     {
         $pageData = [];
@@ -40,11 +40,19 @@ class ConnectionControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(4, substr_count($result, 'input'));
     }
 
-    public function testMobile() {
+    public function testMobile()
+    {
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (Linux; U; Android 4.0.2; en-us; Galaxy Nexus Build/ICL53F) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30';
         $pageData = [];
         $result = \NextDom\Controller\ConnectionController::get($pageData);
         $this->assertTrue($pageData['IS_MOBILE']);
         $this->assertContains('mobile', $result);
+    }
+
+    public function testPageDataVars()
+    {
+        $pageData = [];
+        \NextDom\Controller\ConnectionController::get($pageData);
+        $this->pageDataVars('desktop/connection.html.twig', $pageData);
     }
 }

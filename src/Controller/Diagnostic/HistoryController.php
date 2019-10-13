@@ -53,9 +53,6 @@ class HistoryController extends BaseController
             'end' => date('Y-m-d'),
         );
         $pageData['historyCmdsList'] = CmdManager::allHistoryCmd();
-        $pageData['historyPluginsList'] = PluginManager::listPlugin();
-        $pageData['historyEqLogicCategories'] = NextDomHelper::getConfiguration('eqLogic:category');
-        $pageData['historyObjectsList'] = JeeObjectManager::all();
         $pageData['JS_END_POOL'][] = '/public/js/desktop/diagnostic/history.js';
 
         return Render::getInstance()->get('/desktop/diagnostic/history.html.twig', $pageData);
