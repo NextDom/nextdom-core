@@ -44,6 +44,9 @@ use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\ViewDataManager;
 use NextDom\Managers\ViewManager;
+use \influxDB\Client;
+use \influxDB\Database;
+use \influxDB\Point;
 
 /**
  * Cmd
@@ -1561,6 +1564,7 @@ class Cmd implements EntityInterface
             }
             $this->pushUrl($value);
         }
+        $this->influxDb($value);
     }
 
     /**
@@ -1730,6 +1734,35 @@ class Cmd implements EntityInterface
         } catch (\Exception $e) {
             LogHelper::addError('cmd', __('Erreur push sur : ') . $url . ' => ' . $e->getMessage());
         }
+    }
+
+    /**
+     * @param $_value
+     * @throws \Exception
+     */
+    public function influxDb($_value)
+    {
+        $ip = ConfigManager::byKey('influxdbIp');
+        $port = ConfigManager::byKey('influxdbPort');
+        $dbName = ConfigManager::byKey('influxdbDbName');
+
+        if ($ip == '') {
+            return;
+        }
+
+        $client = new \InfluxDB\Client($ip, $port);
+        $database = $client->selectDB($dbName);
+
+        $points = [
+            new \InfluxDB\Point(
+                $this->getUnite(),
+                $_value,
+                ['equipment' => $this->getHumanName()]
+            ),
+        ];
+
+        $database->writePoints($points);
+
     }
 
     /**
