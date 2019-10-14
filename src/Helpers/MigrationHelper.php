@@ -249,7 +249,7 @@ class MigrationHelper
             }
 
         } catch (\Exception $exception) {
-            trow(new CoreException());
+            throw(new CoreException());
         }
         try {
             $dir = new \RecursiveDirectoryIterator(NEXTDOM_DATA . '/data/custom/', \FilesystemIterator::SKIP_DOTS);
@@ -269,7 +269,7 @@ class MigrationHelper
             }
         } catch (\Exception $exception) {
             echo $exception;
-            trow(new CoreException());
+            throw(new CoreException());
         }
 
         try {
@@ -291,7 +291,7 @@ class MigrationHelper
             }
         } catch (\Exception $exception) {
             echo $exception;
-            trow(new CoreException());
+            throw(new CoreException());
         }
 
         try {
@@ -318,7 +318,7 @@ class MigrationHelper
 
         } catch (\Exception $exception) {
             echo $exception;
-            trow(new CoreException());
+            throw(new CoreException());
         }
 
         $message = 'Migrate theme to data folder is done';
