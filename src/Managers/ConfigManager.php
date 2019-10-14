@@ -185,7 +185,7 @@ class ConfigManager
     /**
      * Get configuration by key
      *
-     * @param string $configKey nom de la clef dont on veut la valeur
+     * @param string $configKey nom de la clé dont on veut la valeur
      * @param string $pluginId Plugin id or core
      * @param string $defaultValue Default value if config key is not found
      * @param bool $forceRefresh Force to refresh the value in the cache
@@ -275,7 +275,7 @@ class ConfigManager
     /**
      * Find config key in database
      *
-     * @param string $configKey nom de la clef dont on veut la valeur
+     * @param string $configKey nom de la clé dont on veut la valeur
      * @param string $pluginId Plugin id or core
      * @return mixed
      * @throws \Exception

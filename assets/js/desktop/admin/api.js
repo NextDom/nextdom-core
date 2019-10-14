@@ -99,7 +99,7 @@ function initEvents() {
     // Regenerate key button
     $(".bt_regenerate_api").on('click', function (event) {
         var el = $(this);
-        bootbox.confirm('{{Etes-vous sûr de vouloir réinitialiser la clef API de }}'+el.attr('data-plugin')+' ?', function (result) {
+        bootbox.confirm('{{Etes-vous sûr de vouloir réinitialiser la clé API de }}'+el.attr('data-plugin')+' ?', function (result) {
             if (result) {
                $.ajax({
                   type: "POST",
@@ -127,7 +127,7 @@ function initEvents() {
     // Regenerate key button
     $(".bt_copy_api").on('click', function (event) {
         navigator.clipboard.writeText($(this).closest('.mix-group').find('.span_apikey').value()).then(function() {
-            notify("Info", '{{Clef copiée !}}', 'success');
+            notify("Info", '{{Clé copiée !}}', 'success');
         }, function() {
             notify("Info", '{{Copie refusée !}}', 'danger');
         });

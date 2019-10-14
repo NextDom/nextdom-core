@@ -88,7 +88,7 @@ class DataStore implements EntityInterface
             throw new \Exception(__('Link_id doit être un chiffre'));
         }
         if ($this->getKey() == '') {
-            throw new \Exception(__('La clef ne peut pas être vide'));
+            throw new \Exception(__('La clé ne peut pas être vide'));
         }
         if ($this->getId() == '') {
             $dataStore = DataStoreManager::byTypeLinkIdKey($this->getType(), $this->getLink_id(), $this->getKey());

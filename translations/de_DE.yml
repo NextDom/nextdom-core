@@ -16,7 +16,7 @@ common:
     hours: Std
     minutes: Protokoll
     not-found: Nicht gefunden
-    
+
 connection:
     home-msg: Melden Sie sich für den Zugriff auf die Sitzung ...
     login-placeholder: ID ... (Standard-Admin)
@@ -26,7 +26,7 @@ connection:
     remember-label: Erinnere dich an mich ?
     connect: Einloggen
     forgot: "Hoppla, ich habe mein Passwort vergessen!"
-    
+
 core:
     error-401: 401 - unberechtigter Zugriff
     error-404: 404 Seite nicht gefunden
@@ -191,7 +191,7 @@ welcome:
 footer:
     licence: GPL Automation 2018
     about: Über
-    
+
 sidebar:
     menu-main: Hauptmenü
     menu-manage: Menü-Management
@@ -246,7 +246,7 @@ firstuse:
     customize-content: "Wählen Sie das Thema, das zu Ihnen passt die meisten, andere auswählbar oder anpassbare in der Anpassungsseite ..."
     congrats-title: Herzliche Glückwünsche! Konfigurieren des %productName% ist vorbei!
     congrats-content: Klicken Sie auf die Schaltfläche Fertig stellen Ihre Home Automation Lösung zu genießen ...
-   
+
 scenario:
     no-group: Keiner
     no-choice: Keiner
@@ -434,7 +434,7 @@ samba:
 ") trouvée dans le scénario : ": ") im Szenario gefunden :"
 "Sélectionner le scénario": "Szenario auswählen"
 "Accueil": "Herzlich Willkommen"
-"Connexion de l\\'utilisateur par clef : ": "Verbindung des Benutzers durch Schlüssel: "
+"Connexion de l\\'utilisateur par clé : ": "Verbindung des Benutzers durch Schlüssel: "
 "Connexion de l\\'utilisateur : ": "Verbindung des Benutzers : "
 "Vue": "Ansicht"
 "Objet": "Objekt"
@@ -677,8 +677,8 @@ samba:
 "Indique votre type de matériel": "Geräteart angeben "
 "Système": "Systeme"
 "Rafraîchir": "Aktualisieren"
-"Clef d\\'installation qui permet d\\'identifier votre NextDom quand il communique avec le market": "Der Installationsschlüssel identifiziert Ihr NextDom, wenn es mit dem Markt kommuniziert"
-"Clef d\\'installation": "Installationsschlüssel"
+"Clé d\\'installation qui permet d\\'identifier votre NextDom quand il communique avec le market": "Der Installationsschlüssel identifiziert Ihr NextDom, wenn es mit dem Markt kommuniziert"
+"Clé d\\'installation": "Installationsschlüssel"
 "Remise à zéro": "Rücksetzen"
 "Langue de votre NextDom": "Ihre NextDom Sprache"
 "Langue": "Sprache"
@@ -692,7 +692,7 @@ samba:
 "Serveur de temps optionnel": "Zeitserver optional"
 "Indique à NextDom de ne pas prendre en compte l\\'heure du système": "Weist NextDom an nicht die Systemzeit zu berücksichtigen"
 "Ignorer la vérification de l\\'heure": "Die Überprüfung der Zeit ignorieren"
-"Clefs API": "API Schlüssel "
+"Clés API": "API Schlüssel "
 "Accès API HTTP": "HTTP API-Zugriff"
 "Activé": "Aktiv"
 "IP blanche": "white IP"
@@ -700,12 +700,12 @@ samba:
 "Désactivé": "Deaktiviert"
 "Accès API JSONRPC": "JSONRPC API-Zugriff"
 "Accès API TTS": "TTS API-Zugriff"
-"Clef API globale de NextDom": "allgemeiner NextDom API-Schlüssel "
-"Clef API": "API Schlüssel "
-"Clef API Pro de NextDom": "API-Schlüssel NextDom Pro"
-"Clef API Pro": "API-Schlüssel Pro"
+"Clé API globale de NextDom": "allgemeiner NextDom API-Schlüssel "
+"Clé API": "API Schlüssel "
+"Clé API Pro de NextDom": "API-Schlüssel NextDom Pro"
+"Clé API Pro": "API-Schlüssel Pro"
 "Accès API": "API-Zugriff"
-"Clef API pour le plugin": "API Schlüssel für das Plugin"
+"Clé API pour le plugin": "API Schlüssel für das Plugin"
 "Système (OS)": "System (OS)"
 "ATTENTION : ces opérations sont risquées, vous pouvez perdre l\\'accès à votre système et à NextDom. L\\'équipe NextDom se réserve le droit de refuser toute demande de support en cas de mauvaise manipulation.": "Achtung : Diese Vorgänge sind riskant, sie können den Zugriff auf das System und NextDom verlieren. Das NextDom-Team behält sich das Recht vor, jeden Antrag auf Unterstützung bei unsachgemäßer Handhabung zu verweigern."
 "Accès à l\\'interface d\\'administration": "Zugriff auf die Administrationsoberfläche"
@@ -796,11 +796,11 @@ samba:
 "Synonyme pour les objets": "Synonym für die Objekte"
 "Synonyme pour les équipements": "Synonym für Ausrüstung"
 "Synonyme pour les commandes": "Synonym für den Befehl"
-"Synonyme pour les résumé": "Synonym für die Zusammenfassung"
+"Synonyme pour les résumés": "Synonym für die Zusammenfassung"
 "Couleurs": "Farbe"
 "Code HTML": "HTML Code"
 "Configuration des résumés d\\'objet": "Konfiguration der Objekt Zusammenfassung"
-"Clef": "Schlüssel "
+"Clé": "Schlüssel "
 "Calcul": "Berechnung"
 "Icone": "Symbol"
 "Unité": "Unit"
@@ -927,7 +927,7 @@ samba:
 "Ajouter": "Hinzufügen"
 "Nom de votre NextDom2 (utilisé notamment par le market)": "Nom de votre NextDom2 (utilisé notamment par le market)"
 "Nom de votre": "Nom de votre"
-"Clef d\\'installation qui permet d\\'identifier votre": "Clef d\\'installation qui permet d\\'identifier votre"
+"Clé d\\'installation qui permet d\\'identifier votre": "Clé d\\'installation qui permet d\\'identifier votre"
 "quand il communique avec le market": "quand il communique avec le market"
 "Langue de votre": "Langue de votre"
 "Option pour les développeurs permettant à": "Option pour les développeurs permettant à"
@@ -940,8 +940,8 @@ samba:
 "force la synchronisation de l\\'heure": "force la synchronisation de l\\'heure"
 "Indique à": "Indique à"
 "de ne pas prendre en compte l\\'heure du système": "de ne pas prendre en compte l\\'heure du système"
-"Clef API globale de": "Clef API globale de"
-"Clef API Pro de": "Clef API Pro de"
+"Clé API globale de": "Clé API globale de"
+"Clé API Pro de": "Clé API Pro de"
 "ATTENTION : ces opérations sont risquées, vous pouvez perdre l\\'accès à votre système et à": "ATTENTION : ces opérations sont risquées, vous pouvez perdre l\\'accès à votre système et à"
 ". L\\'équipe": ". L\\'équipe"
 "se réserve le droit de refuser toute demande de support en cas de mauvaise manipulation.": "se réserve le droit de refuser toute demande de support en cas de mauvaise manipulation."
@@ -953,7 +953,7 @@ samba:
 "Mise à jour de": "Mise à jour de"
 "Mode développement": "Mode développement"
 "Vider le cache assets": "Vider le cache assets"
-"Etes-vous sûr de vouloir réinitialiser la clef API de ": "Sind Sie sicher, dass Sie den API-Schlüssel zurücksetzen möchten"
+"Etes-vous sûr de vouloir réinitialiser la clé API de ": "Sind Sie sicher, dass Sie den API-Schlüssel zurücksetzen möchten"
 "Commande réalisée avec succès": "Befehl erfolgreich durchgeführt"
 "Sauvegarde réussie": "Speichern erfolgreich"
 "Attention ceci est une opération risquée. Confirmez-vous que vous comprennez bien les risques et qu\\'en cas de NextDom non fonctionel par la suite aucune demande de support ne sera acceptée (cette tentative d\\'accès est enregistrée) ?": "Bitte beachten Sie, dies ist eine riskante Operation! Können Sie bestätigen, dass Sie auch die Risiken verstehen und wenn NextDom danach nicht mehr funktioniert wird kein Support Anfrage akzeptiert werden? (der Zugangsversuch wird aufgezeichnet)"
@@ -1482,18 +1482,16 @@ samba:
 "Etes-vous sûr de vouloir supprimer cet utilisateur ?": "Sind Sie sicher, Sie wollen diesen Benutzer löschen?"
 "L\\'utilisateur a bien été supprimé": "Der Benutzer wurde gelöscht"
 "Quel est le nouveau mot de passe ?": "Wie ist das neue Passwort?"
-"Etês vous sur de vouloir changer la clef API de l\\'utilisateur ?": "Sind Sie sicher, dass Sie den API-Schlüssel des Benutzers ändern wollen ?"
+"Etês vous sur de vouloir changer la clé API de l\\'utilisateur ?": "Sind Sie sicher, dass Sie den API-Schlüssel des Benutzers ändern wollen ?"
 "Modification effectuée": "Änderung  ausgeführt"
 "Local seulement": "nur lokal"
 "Administrateur": "Administrator"
 "Utilisateur limité": "Eingeschränkter Benutzer"
-"Renouveler la clef API": "API-Schlüssel erneuern"
-"Regenérer clef API": "API-Schlüssel regenerieren"
+"Renouveler la clé API": "API-Schlüssel erneuern"
 "Changer le mot de passe": "Kennwort ändern"
-"Gerer les droits": "Rechte verwalten"
-"Régénérer clef API": "API-Schlüssel regenerieren"
+"Régénérer clé API": "API-Schlüssel regenerieren"
 "Gérer les droits": "Rechte verwalten"
-"Etes-vous sûr de vouloir changer la clef API de l\\'utilisateur ?": "Sind Sie sicher, dass Sie den API-Schlüssel des Benutzers ändern wollen ?"
+"Etes-vous sûr de vouloir changer la clé API de l\\'utilisateur ?": "Sind Sie sicher, dass Sie den API-Schlüssel des Benutzers ändern wollen ?"
 "Local": "Lokal"
 "Régénérer API": "API regenerieren"
 "Droits": "Rechte"

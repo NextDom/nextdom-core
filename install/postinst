@@ -629,7 +629,7 @@ step_nextdom_mysql_populate() {
   print_verbose "configured table privileges: ${MYSQL_NEXTDOM_DB}"
 
   php ${WEBSERVER_HOME}/install/install.php mode=force >> ${DEBUG} 2>&1 || {
-    print_error "nexdom installation script failed"
+    print_error "NextDom installation script failed"
   }
   print_verbose "ran installation procedure: ${WEBSERVER_HOME}/install/install.php"
 }
