@@ -311,20 +311,6 @@ window.onscroll = function () {
  }
 
  /**
-  * Custom loading wait spinner display
-  */
- function showLoadingCustom() {
-    Pace.restart();
- };
-
- /**
-  * Custom loading wait spinner hidding
-  */
- function hideLoadingCustom() {
-    Pace.stop();
- };
-
- /**
   * Refresh the message number badge in the header
   */
  function refreshMessageNumber() {

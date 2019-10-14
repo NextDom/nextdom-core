@@ -67,9 +67,6 @@ function postInitPage(){
     limitTreeviewMenu();
     adjustNextDomTheme();
     activateGlobalSearch();
-
-    // Loading end, remove wait spinner
-    hideLoadingCustom();
 }
 
 /**

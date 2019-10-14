@@ -48,7 +48,6 @@
 }
 
 function handleAjaxError(_request, _status, _error) {
-    hideLoadingCustom();
     if (_request.status != '0') {
         if (init(_request.responseText, '') != '') {
             notify("Erreur", _request.responseText, 'error');
