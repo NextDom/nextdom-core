@@ -379,14 +379,7 @@ general:
   language-list:
       fr_FR: "French"
       en_US: "English"
-      de_DE: "German"
-      es_ES: "Spanish"
-      ru_RU: "Russian"
-      id_ID: "Indonesian"
-      it_IT: "Italian"
-      ja_JP: "Japanese"
-      pt_PT: "Portuguese"
-      tr: "Turkish"
+      
 
 update-view:
   none: "None"

@@ -390,14 +390,7 @@ general:
   language-list:
       fr_FR: "Français"
       en_US: "Anglais"
-      de_DE: "Allemand"
-      es_ES: "Espagnol"
-      ru_RU: "Russe"
-      id_ID: "Indonesien"
-      it_IT: "Italien"
-      ja_JP: "Japonais"
-      pt_PT: "Portuguais"
-      tr: "Turque"
+      
 
 update-view:
   none: "Aucune"
