@@ -441,6 +441,13 @@ osdb:
   os__db: "OS/DB"
   database: "Database"
   user: "User"
+  command_list: Commands list
+  historic: Historic
+  click_on_command: "Click on a command of the list or type a personalized command below :"
+  personalized_command: Personalized command...
+  clean_command: Clean command
+  select_command: Select command
+  tables: Tables
 
 interact:
   wait_before_responding: "Wait before responding"

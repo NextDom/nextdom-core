@@ -45,14 +45,14 @@
     <div class="box" id="div_rowSystemCommand">
         <!-- Header bar -->
         <div class="box-header with-border">
-            <h3 class="box-title"><i class="fas fa-terminal"></i>{{ 'Console Système' | trans }}</h3>
+            <h3 class="box-title"><i class="fas fa-terminal"></i>{{ 'osdb.system_console' | trans }}</h3>
         </div>
 
         <!-- Page content -->
         <div class="box-body">
             <div class="row">
                 <div class="col-lg-2 col-md-3 col-sm-4" style="overflow-y:auto;overflow-x:hidden;">
-                    <legend>{{ 'Liste des commandes' | trans }}</legend>
+                    <legend>{{ 'osdb.command_list' | trans }}</legend>
                     <div class="bs-sidebar form-group">
                         <ul class="nav nav-list bs-sidenav list-group">
                             {% if systemCanSudo %}
@@ -74,18 +74,18 @@
                             <li class="cursor list-group-item"><a class="bt_systemCommand list-group-item-danger" data-command="sudo reboot">{{ 'sudo reboot' }}</a></li>
                         </ul>
                     </div>
-                    <legend>{{ 'Historique' }}</legend>
+                    <legend>{{ 'osdb.historic' | trans }}</legend>
                     <div class="bs-sidebar form-group">
                         <ul class="nav nav-list bs-sidenav list-group" id='ul_listSystemHistory'></ul>
                     </div>
                 </div>
                 <div class="col-lg-10 col-md-9 col-sm-8 left-border" style="overflow-y:hidden;overflow-x:hidden;">
-                    <legend>{{ 'Cliquez sur une commande de la liste ou tapez une commande personnalisée ci-dessous :' }}</legend>
+                    <legend>{{ 'osdb.click_on_command' | trans }}</legend>
                     <div class="input-group form-group">
-                        <input class="form-control" id='in_specificCommand' placeholder="{{ 'Commande personnalisée...' }}"></input>
+                        <input class="form-control" id='in_specificCommand' placeholder="{{ 'osdb.personalized_command' | trans }}"></input>
                         <span class="input-group-btn">
-                            <a class="btn btn-action" id="bt_resetSpecifiCommand" data-toggle="tooltip" data-original-title="{{ 'Vider la commande' }}"><i class="fas fa-times"></i></a>
-                            <a class="btn btn-warning" id="bt_validateSpecifiCommand" data-toggle="tooltip" data-original-title="{{ 'Sélectionner la commande' }}"><i class="fas fa-check spacing-right"></i><span>{{ 'OK' }}</span></a>
+                            <a class="btn btn-action" id="bt_resetSpecifiCommand" data-toggle="tooltip" data-original-title="{{ 'osdb.clean_command' | trans }}"><i class="fas fa-times"></i></a>
+                            <a class="btn btn-warning" id="bt_validateSpecifiCommand" data-toggle="tooltip" data-original-title="{{ 'osdb.select_command' | trans }}"><i class="fas fa-check spacing-right"></i><span>{{ 'common.ok' | trans }}</span></a>
                         </span>
                     </div>
                     <pre id="pre_commandResult" class="form-control ta_autosize" style="height:auto;overflow: auto;" data-l1key="text" disabled></pre>

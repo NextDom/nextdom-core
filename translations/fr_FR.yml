@@ -345,7 +345,7 @@ backup:
   local_backups: "Sauvegardes locales"
   location: "Emplacement"
   manual_backup: "Sauvegarde manuelle"
-  purpose1: "Cette fonction permet créer une sauvegarde en compactant dans une archive tous les élements de votre Nextdom."
+  purpose1: "Cette fonction permet de créer une sauvegarde en compactant dans une archive tous les élements de votre Nextdom."
   purpose2: "Seront sauvegardé les paramètres, dashboard, vues, designs, plugins, widgets etc... Mais le Core ne sera lui en revanche pas inclus dans cette sauvegarde."
   purpose3: "C'est ici également que vous pouvez restaurer une de vos sauvegardes (y compris celles issue du système Jeedom)."
   remove_selected: "Supprimer"
@@ -452,6 +452,13 @@ osdb:
   os__db: "OS/DB"
   database: "Base de donnée"
   user: "Utilisateur"
+  command_list: Liste des commandes
+  historic: Historique
+  click_on_command: "Cliquez sur une commande de la liste ou tapez une commande personnalisée ci-dessous :"
+  personalized_command: Commande personnalisée...
+  clean_command: Vider la commande
+  select_command: Sélectionner la commande
+  tables: Tables
 
 interact:
   wait_before_responding: "Attendre avant de répondre"
@@ -630,6 +637,9 @@ samba:
     not-found: Le fichier est introuvable sur le serveur samba
     already-exists: Le fichier existe déjà sur le serveur samba
     unknown: Une erreur s'est produite lors de la connexion au serveur samba
+
+system:
+
 
 # Ancien format
 "401 - Accès non autorisé": "401 - Accès non autorisé"
