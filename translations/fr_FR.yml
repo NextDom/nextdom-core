@@ -1,3 +1,44 @@
+# Nouveau format
+
+admin:
+  api_access: Accès API
+  api_access_http: Accès API HTTP
+  api_access_jsonrpc: Accès API JSONRPC
+  api_access_tts: Accès API TTS
+  api_access_pro: Accès API PRO
+  api_access_market: Accès API Market
+  api_key: Clé API
+  api_key_global_of: "API globale de :"
+  api_key_global: Clé API globale
+  whitelist: Liste IP blanche
+  regenerate: Régénérer
+  api_key_pro_of: Clé API PRO de
+  api_key_pro: Clé API PRO
+  market_key_of: Clé Market de
+  market_key: Clé Market
+  access_plugins_api_key: Accès et clés API Plugins
+  api_for_plugin: API pour le plugin
+  no_api_plugin: "Aucun plugin ne dispose de clés API..."
+
+administration:
+  cpu: CPU
+  cpu-cores: cœurs
+  of-cpu-load: de charge
+  of-memory-used: utilisée
+  of-space-used: d'espace utilisé
+  memory: RAM
+  hdd: HDD
+  swap: Swap
+  http-connections-count: Nombre de connexion HTTP
+  connections-count: Nombre de connexion
+  process-count: Nombre de processus
+  uptime: Système démarré depuis
+  welcome-page: Page de bienvenue
+  developer-documentation: Documentation Dev.
+  power-off: Éteindre
+  restart: Redémarrer
+  disconnect: Se déconnecter
+
 common:
   action: "Action"
   actions: "Actions"
@@ -136,25 +177,6 @@ page-title:
   objects: Objets
   plugins: Plugins
   tools: Outils
-
-administration:
-  cpu: CPU
-  cpu-cores: cœurs
-  of-cpu-load: de charge
-  of-memory-used: utilisée
-  of-space-used: d'espace utilisé
-  memory: RAM
-  hdd: HDD
-  swap: Swap
-  http-connections-count: Nombre de connexion HTTP
-  connections-count: Nombre de connexion
-  process-count: Nombre de processus
-  uptime: Système démarré depuis
-  welcome-page: Page de bienvenue
-  developer-documentation: Documentation Dev.
-  power-off: Éteindre
-  restart: Redémarrer
-  disconnect: Se déconnecter
 
 scripts:
   error: "Erreur : "
@@ -390,7 +412,7 @@ general:
   language-list:
       fr_FR: "Français"
       en_US: "Anglais"
-      
+
 
 update-view:
   none: "Aucune"
@@ -966,16 +988,10 @@ system:
 "Choisissez les filtres permettant de limiter le nombre de phrases générées...": "Choisissez les filtres permettant de limiter le nombre de phrases générées..."
 "Choisissez votre icône": "Choisissez votre icône"
 "Classe": "Classe"
-"Clé API Globale": "Clé API Globale"
-"Clé API Pro": "Clé API Pro"
-"Clé d'installation": "Clé d'installation"
-"Clé Market": "Clé Market"
-"Clés API": "Clés API"
 "Cliquer sur le bouton Terminer pour profiter de votre solution Domotique...": "Cliquer sur le bouton Terminer pour profiter de votre solution Domotique..."
 "Cliquez sur une commande à droite ou tapez une commande personnalisée ci-dessous": "Cliquez sur une commande à droite ou tapez une commande personnalisée ci-dessous"
 "Cloud monitoring actif": "Cloud monitoring actif"
 "Clé": "Clé"
-"Clé API": "Clé API"
 "Cmd inconnu :": "Cmd inconnu :"
 "Cmd introuvable :": "Cmd introuvable :"
 "cmdCacheValue": "cmdCacheValue"

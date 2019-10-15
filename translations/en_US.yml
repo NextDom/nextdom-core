@@ -1,5 +1,44 @@
 # Nouveau format
 
+admin:
+  api_access: API Access
+  api_access_http: HTTP API Access
+  api_access_jsonrpc: JSON RPC API Access
+  api_access_tts: TTS API Access
+  api_access_pro: PRO API Access
+  api_access_market: Market API Access
+  api_key: API Key
+  api_key_global_of: "Global API key of :"
+  api_key_global: Global API key
+  whitelist: IP white list
+  regenerate: Regenerate
+  api_key_pro_of: PRO API key of
+  api_key_pro: PRO API key
+  market_key_of: Market key of
+  market_key: Market key
+  access_plugins_api_key: Access and plugins API keys
+  api_for_plugin: API for the plugin
+  no_api_plugin: "No plugin has API keys..."
+
+administration:
+  cpu: CPU
+  cpu-cores: cores
+  of-cpu-load: load
+  of-memory-used: used
+  of-space-used: of used space
+  memory: RAM
+  hdd: HDD
+  swap: swap
+  http-connections-count: Number of HTTP connection
+  connections-count: Number of connections
+  process-count: Number of processes
+  uptime: Uptime
+  welcome-page: Welcome Page
+  developer-documentation: Dev documentation.
+  power-off: Power Off
+  restart: Restart
+  disconnect: Sign out
+
 common:
   action: 'Action'
   actions: 'Actions'
@@ -137,24 +176,7 @@ page-title:
   plugins: Plugins
   tools: tools
 
-administration:
-  cpu: CPU
-  cpu-cores: cores
-  of-cpu-load: load
-  of-memory-used: used
-  of-space-used: of used space
-  memory: RAM
-  hdd: HDD
-  swap: swap
-  http-connections-count: Number of HTTP connection
-  connections-count: Number of connections
-  process-count: Number of processes
-  uptime: Uptime
-  welcome-page: Welcome Page
-  developer-documentation: Dev documentation.
-  power-off: Power Off
-  restart: Restart
-  disconnect: Sign out
+
 
 scripts:
   error: "Error:"
@@ -379,7 +401,7 @@ general:
   language-list:
       fr_FR: "French"
       en_US: "English"
-      
+
 
 update-view:
   none: "None"
@@ -992,17 +1014,8 @@ samba:
 "Clés API": "Api Keys"
 "Accès API HTTP": "HTTP API access"
 "Activé": "Enabled"
-"IP blanche": "Whitelist"
 "Localhost": "Localhost"
 "Désactivé": "Disabled"
-"Accès API JSONRPC": "JSONRPC API access"
-"Accès API TTS": "TTS API access"
-"Clé API globale de NextDom": "Global API key NextDom"
-"Clé API": "API key"
-"Clé API Pro de NextDom": "API Key Pro of NextDom"
-"Clé API Pro": "API Key pro"
-"Accès API": "API access"
-"Clé API pour le plugin": "API key for the plugin"
 "Système (OS)": "System (OS)"
 "ATTENTION : ces opérations sont risquées, vous pouvez perdre l\\'accès à votre système et à NextDom. L\\'équipe NextDom se réserve le droit de refuser toute demande de support en cas de mauvaise manipulation.": "CAUTION ! These operations are risky. You might lose access to your system and to NextDom. NextDom support team reserves the right to refuse any request for support in case of mishandling."
 "Accès à l\\'interface d\\'administration": "Access to the administration interface"
@@ -1169,7 +1182,6 @@ samba:
 "Mac": "Mac"
 "Nettoyer les rapport plus anciens de (jours)": "Clear reports older than (days)"
 "API": "API"
-"OS/DB": "OS / DB"
 "Réseaux": "networks"
 "Commandes": "Commands"
 "Cache": "Cache"
@@ -1237,8 +1249,6 @@ samba:
 "force la synchronisation de l\\'heure": "force la synchronisation de l\\'heure"
 "Indique à": "Indique à"
 "de ne pas prendre en compte l\\'heure du système": "de ne pas prendre en compte l\\'heure du système"
-"Clé API globale de": "Clé API globale de"
-"Clé API Pro de": "Clé API Pro de"
 "ATTENTION : ces opérations sont risquées, vous pouvez perdre l\\'accès à votre système et à": "ATTENTION : ces opérations sont risquées, vous pouvez perdre l\\'accès à votre système et à"
 ". L\\'équipe": ". L\\'équipe"
 "se réserve le droit de refuser toute demande de support en cas de mauvaise manipulation.": "se réserve le droit de refuser toute demande de support en cas de mauvaise manipulation."
