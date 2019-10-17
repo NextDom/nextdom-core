@@ -30,43 +30,65 @@
             <file>ConfigManagerTest.php</file>
             <file>EqLogicManagerTest.php</file>
             <file>EventManagerTest.php</file>
-            <file>ObjectManagerTest.php</file>
             <file>NoteManagerTest.php</file>
+            <file>ObjectManagerTest.php</file>
+            <file>ScenarioExpressionManagerTest.php</file>
+            <file>UpdateManagerTest.php</file>
             <file>UserManagerTest.php</file>
         </testsuite>
         <testsuite name="Helpers">
             <file>AjaxHelperTest.php</file>
             <file>ClientTest.php</file>
-            <file>NextDomHelperTest.php</file>
             <file>FileSystemHelperTest.php</file>
+            <file>NextDomHelperTest.php</file>
             <file>UtilsTest.php</file>
         </testsuite>
         <testsuite name="Entities">
-            <file>NoteTest.php</file>
+            <file>CronTest.php</file>
             <file>EqLogicTest.php</file>
+            <file>NoteTest.php</file>
+            <file>PluginTest.php</file>
             <file>ScenarioTest.php</file>
+        </testsuite>
+        <testsuite name="Controllers">
+            <directory>../phpunit_tests/Controllers</directory>
         </testsuite>
         <testsuite name="Rest">
             <directory>../phpunit_tests/Rest</directory>
         </testsuite>
         <testsuite name="Others">
+            <file>EnumTest.php</file>
             <file>I18nTest.php</file>
         </testsuite>
         <testsuite name="AllTests">
             <directory>../phpunit_tests</directory>
             <directory>../phpunit_tests/Rest</directory>
+            <directory>../phpunit_tests/Controllers</directory>
+        </testsuite>
+        <testsuite name="current">
+            <directory>../phpunit_tests/Controllers/CommandeControllerTest.php</directory>
+            <directory>../phpunit_tests/Controllers/CustomControllerTest.php</directory>
+            <directory>../phpunit_tests/Controllers/EqLogicControllerTest.php</directory>
+            <directory>../phpunit_tests/Controllers/GeneralControllerTest.php</directory>
+            <directory>../phpunit_tests/Controllers/InteractAdminControllerTest.php</directory>
+            <directory>../phpunit_tests/Controllers/LinksControllerTest.php</directory>
+            <directory>../phpunit_tests/Controllers/LogAdminControllerTest.php</directory>
+            <directory>../phpunit_tests/Controllers/ProfilsControllerTest.php</directory>
+            <directory>../phpunit_tests/Controllers/ReportAdminControllerTest.php</directory>
+            <directory>../phpunit_tests/Controllers/SummaryControllerTest.php</directory>
         </testsuite>
     </testsuites>
     <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
+        <whitelist addUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">../../</directory>
             <exclude>
-                <directory>../../vendor</directory>
+                <directory>../../core</directory>
                 <directory>../../assets</directory>
                 <directory>../../install</directory>
                 <directory>../../scripts</directory>
-                <directory>../../var</directory>
                 <directory>../../tests</directory>
+                <directory>../../var</directory>
+                <directory>../../vendor</directory>
             </exclude>
         </whitelist>
     </filter>

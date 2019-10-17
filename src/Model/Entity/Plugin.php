@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NetworkHelper;
@@ -58,9 +59,10 @@ class Plugin implements EntityInterface
     protected $issue = '';
     protected $changelog = '';
     protected $documentation = '';
-    protected $info = array();
-    protected $include = array();
-    protected $functionality = array();
+    protected $info = [];
+    protected $include = [];
+    // TODO : Pas sur que ça serve
+    protected $functionality = [];
 
     /**
      * @param $data
@@ -168,6 +170,15 @@ class Plugin implements EntityInterface
         return $this;
     }
 
+    public function getPathToConfiguration(): string
+    {
+        $result = '';
+        if (file_exists(NEXTDOM_ROOT . '/plugins/' . $this->id . '/plugin_info/configuration.php')) {
+            $result = 'plugins/' . $this->id . '/plugin_info/configuration.php';
+        }
+        return $result;
+    }
+
     /**
      * Obtenir le fichier de configuration du plugin
      *
@@ -175,11 +186,8 @@ class Plugin implements EntityInterface
      */
     public function getPathToConfigurationById(): string
     {
-        $result = '';
-        if (file_exists(NEXTDOM_ROOT . '/plugins/' . $this->id . '/plugin_info/configuration.php')) {
-            $result = 'plugins/' . $this->id . '/plugin_info/configuration.php';
-        }
-        return $result;
+        @trigger_error('This method is deprecated. Use getPathToConfiguration', E_USER_DEPRECATED);
+        return $this->getPathToConfiguration();
     }
 
     /**
@@ -322,7 +330,7 @@ class Plugin implements EntityInterface
     }
 
     /**
-     * Proécude d'installation des dépendances
+     * Procédure d'installation des dépendances
      * TODO: Corriger la faute
      * @return null
      *
@@ -522,7 +530,7 @@ class Plugin implements EntityInterface
     public function setIsEnable($state)
     {
         if (version_compare(NextDomHelper::getJeedomVersion(), $this->getRequire()) == -1 && $state == 1) {
-            throw new \Exception(__('Votre version de NextDom n\'est pas assez récente pour activer ce plugin'));
+            throw new CoreException(__('Votre version de NextDom n\'est pas assez récente pour activer ce plugin'));
         }
         $alreadyActive = ConfigManager::byKey('active', $this->getId(), 0);
         if ($state == 1) {
@@ -742,8 +750,8 @@ class Plugin implements EntityInterface
     }
 
     /**
-     * Obtenir une mise à jour
-     * TODO: C'est à dire
+     * Get plugin update data
+     *
      * @return array|mixed|null
      * @throws \Exception
      */
@@ -752,12 +760,6 @@ class Plugin implements EntityInterface
         return UpdateManager::byTypeAndLogicalId('plugin', $this->getId());
     }
 
-    /**
-     * @return string
-     */
-    /**
-     * @return string
-     */
     /**
      * @return string
      */
@@ -785,7 +787,7 @@ class Plugin implements EntityInterface
      */
     public function getLogList(): array
     {
-        $result = array();
+        $result = [];
         foreach (FileSystemHelper::ls(LogHelper::getPathToLog(''), '*') as $log) {
             if ($log == $this->getId()) {
                 $result[] = $log;
@@ -848,14 +850,6 @@ class Plugin implements EntityInterface
         return $this->category;
     }
 
-    /**
-     * @param $key
-     * @return $this
-     */
-    /**
-     * @param $key
-     * @return $this
-     */
     /**
      * @param $key
      * @return $this

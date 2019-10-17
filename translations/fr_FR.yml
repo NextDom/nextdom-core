@@ -117,7 +117,7 @@ page-title:
   profil: Profil
   commands: Commandes
   links: Liens
-  interacts: Intéractions
+  interacts: Interactions
   equipments: Équipements
   summaries: Résumés
   reports: Rapports
@@ -345,7 +345,7 @@ backup:
   local_backups: "Sauvegardes locales"
   location: "Emplacement"
   manual_backup: "Sauvegarde manuelle"
-  purpose1: "Cette fonction permet créer une sauvegarde en compactant dans une archive tous les élements de votre Nextdom."
+  purpose1: "Cette fonction permet de créer une sauvegarde en compactant dans une archive tous les élements de votre Nextdom."
   purpose2: "Seront sauvegardé les paramètres, dashboard, vues, designs, plugins, widgets etc... Mais le Core ne sera lui en revanche pas inclus dans cette sauvegarde."
   purpose3: "C'est ici également que vous pouvez restaurer une de vos sauvegardes (y compris celles issue du système Jeedom)."
   remove_selected: "Supprimer"
@@ -374,12 +374,12 @@ general:
   language: "Langage"
   language-used: "Langue utilisée"
   system_hardware: "Système / Hardware"
-  installation_key: "Clef d'installation"
+  installation_key: "Clé d'installation"
   session_timeout: "Durée de vie de votre connexion"
   time_server: "Serveur de temps optionnel"
   ignore_system_time: "Ignorer la vérification"
   tooltip:
-     installation_key: "Clef d'installation qui permet d'identifier votre NextDom quand il communique avec le market"
+     installation_key: "Clé d'installation qui permet d'identifier votre NextDom quand il communique avec le market"
      session_timeout: "Durée de vie de votre connexion à NextDom si vous n'avez pas coché la case enregistrer cet ordinateur"
      language: "Langue à utiliser dans Nexdom"
      system_hardware: "Indique votre type de matériel"
@@ -390,14 +390,7 @@ general:
   language-list:
       fr_FR: "Français"
       en_US: "Anglais"
-      de_DE: "Allemand"
-      es_ES: "Espagnol"
-      ru_RU: "Russe"
-      id_ID: "Indonesien"
-      it_IT: "Italien"
-      ja_JP: "Japonais"
-      pt_PT: "Portuguais"
-      tr: "Turque"
+      
 
 update-view:
   none: "Aucune"
@@ -452,6 +445,13 @@ osdb:
   os__db: "OS/DB"
   database: "Base de donnée"
   user: "Utilisateur"
+  command_list: Liste des commandes
+  historic: Historique
+  click_on_command: "Cliquez sur une commande de la liste ou tapez une commande personnalisée ci-dessous :"
+  personalized_command: Commande personnalisée...
+  clean_command: Vider la commande
+  select_command: Sélectionner la commande
+  tables: Tables
 
 interact:
   wait_before_responding: "Attendre avant de répondre"
@@ -466,7 +466,7 @@ interact:
   request: "Demande"
   duplicate: "Dupliquer"
   unfold: "Déplier"
-  edition_intéraction: "Edition Intéraction"
+  edition_interaction: "Edition Interaction"
   filters: "Filtres"
   group: "Groupe"
   id: "ID : "
@@ -495,7 +495,7 @@ interact:
   synonym: "Synonyme"
   authorized_users: "Utilisateurs autorisés"
   you_have: "Vous avez "
-  you_have_n_iterations: "Vous avez %s iteration(s)..."
+  you_have_n_interactions: "Vous avez %s interaction(s)..."
   test: "Tester"
   no_interactions_click_add_to_start: "Vous n'avez encore aucune interaction. Cliquez sur ajouter pour commencer."
   interactions: "interaction(s)"
@@ -539,7 +539,7 @@ scenario:
   duplicate-title: Dupliquer le scénario
   export: Exporter
   template: Template
-  log: Type de log
+  log: Log
   add-block: Ajouter un bloc
   stop: Arrêter
   execute-title: Veuillez sauvegarder avant de tester. Ceci peut ne pas aboutir.
@@ -630,6 +630,9 @@ samba:
     not-found: Le fichier est introuvable sur le serveur samba
     already-exists: Le fichier existe déjà sur le serveur samba
     unknown: Une erreur s'est produite lors de la connexion au serveur samba
+
+system:
+
 
 # Ancien format
 "401 - Accès non autorisé": "401 - Accès non autorisé"
@@ -842,7 +845,7 @@ samba:
 "Aucun texte à dire": "Aucun texte à dire"
 "Aucune": "Aucune"
 "Aucune adresse pour le market n'est renseignée": "Aucune adresse pour le market n'est renseignée"
-"Aucune clef demandée": "Aucune clef demandée"
+"Aucune clé demandée": "Aucune clé demandée"
 "Aucune commande correspondant à l'ID :": "Aucune commande correspondant à l'ID :"
 "Aucune correspondance pour l'ID :": "Aucune correspondance pour l'ID :"
 "Aucune correspondance trouvée": "Aucune correspondance trouvée"
@@ -963,11 +966,11 @@ samba:
 "Choisissez les filtres permettant de limiter le nombre de phrases générées...": "Choisissez les filtres permettant de limiter le nombre de phrases générées..."
 "Choisissez votre icône": "Choisissez votre icône"
 "Classe": "Classe"
-"Clef API Globale": "Clef API Globale"
-"Clef API Pro": "Clef API Pro"
-"Clef d'installation": "Clef d'installation"
-"Clef Market": "Clef Market"
-"Clefs API": "Clefs API"
+"Clé API Globale": "Clé API Globale"
+"Clé API Pro": "Clé API Pro"
+"Clé d'installation": "Clé d'installation"
+"Clé Market": "Clé Market"
+"Clés API": "Clés API"
 "Cliquer sur le bouton Terminer pour profiter de votre solution Domotique...": "Cliquer sur le bouton Terminer pour profiter de votre solution Domotique..."
 "Cliquez sur une commande à droite ou tapez une commande personnalisée ci-dessous": "Cliquez sur une commande à droite ou tapez une commande personnalisée ci-dessous"
 "Cloud monitoring actif": "Cloud monitoring actif"
@@ -1049,7 +1052,7 @@ samba:
 "Connection au LDAP OK": "Connection au LDAP OK"
 "Connexion de l'utilisateur": "Connexion de l'utilisateur"
 "Connexion de l'utilisateur :": "Connexion de l'utilisateur :"
-"Connexion de l'utilisateur par clef :": "Connexion de l'utilisateur par clef :"
+"Connexion de l'utilisateur par clé :": "Connexion de l'utilisateur par clé :"
 "Connexion de l'utilisateur par REMOTE_USER :": "Connexion de l'utilisateur par REMOTE_USER :"
 "Connexion réussie": "Connexion réussie"
 "connexion valide et verifiée :": "connexion valide et verifiée :"
@@ -1335,7 +1338,7 @@ samba:
 "Etes vous sur de vouloir mettre à jour cet objet ?": "Etes vous sûr de vouloir mettre à jour cet objet ?"
 "Etes-vous sûr de vouloir appliquer le template ? Cela écrasera votre scénario": "Etes-vous sûr de vouloir appliquer le template ? Cela écrasera votre scénario"
 "Etes-vous sûr de vouloir arrêter le système ?": "Etes-vous sûr de vouloir arrêter le système ?"
-"Etes-vous sûr de vouloir changer la clef API de l'utilisateur ?": "Etes-vous sûr de vouloir changer la clef API de l'utilisateur ?"
+"Etes-vous sûr de vouloir changer la clé API de l'utilisateur ?": "Etes-vous sûr de vouloir changer la clé API de l'utilisateur ?"
 "Etes-vous sûr de vouloir copier l'historique de": "Etes-vous sûr de vouloir copier l'historique de"
 "Etes-vous sûr de vouloir envoyer une sauvegarde de": "Etes-vous sûr de vouloir envoyer une sauvegarde de"
 "Etes-vous sûr de vouloir faire cette action ?": "Etes-vous sûr de vouloir faire cette action ?"
@@ -1346,7 +1349,7 @@ samba:
 "Etes-vous sûr de vouloir remplacer": "Etes-vous sûr de vouloir remplacer"
 "Etes-vous sûr de vouloir remplacer l'ID": "Etes-vous sûr de vouloir remplacer l'ID"
 "Etes-vous sûr de vouloir restaurer": "Etes-vous sûr de vouloir restaurer"
-"Etes-vous sûr de vouloir réinitialiser la clef API de": "Etes-vous sûr de vouloir réinitialiser la clef API de"
+"Etes-vous sûr de vouloir réinitialiser la clé API de": "Etes-vous sûr de vouloir réinitialiser la clé API de"
 "Etes-vous sûr de vouloir supprimer ce design ?": "Etes-vous sûr de vouloir supprimer ce design ?"
 "Etes-vous sûr de vouloir supprimer ce fichier :": "Etes-vous sûr de vouloir supprimer ce fichier :"
 "Etes-vous sûr de vouloir supprimer cet utilisateur ?": "Etes-vous sûr de vouloir supprimer cet utilisateur ?"
@@ -1556,7 +1559,7 @@ samba:
 "InteractQuery ID inconnu": "InteractQuery ID inconnu"
 "Interdire dans les interactions automatique": "Interdire dans les interactions automatiques"
 "Interface": "Interface"
-"Intéractions": "Intéractions"
+"Interactions": "Interactions"
 "Inverser": "Inverser"
 "Inversé": "Inversé"
 "Invisible": "Invisible"
@@ -1596,7 +1599,7 @@ samba:
 "L'utilisateur a bien été supprimé": "L'utilisateur a bien été supprimé"
 "La classe demandée n'a pas de méthode byId :": "La classe demandée n'a pas de méthode byId :"
 "La classe demandée n'existe pas :": "La classe demandée n'existe pas :"
-"La clef ne peut pas être vide": "La clef ne peut pas être vide"
+"La clé ne peut pas être vide": "La clé ne peut pas être vide"
 "La commande (demande": "La commande (demande"
 "La commande cible n'est pas de type info": "La commande cible n'est pas de type info"
 "La commande cible n'existe pas :": "La commande cible n'existe pas :"
@@ -2105,7 +2108,7 @@ samba:
 "Remplacement réalisé avec succès": "Remplacement réalisé avec succès"
 "Remplacer cette commande par la commande": "Remplacer cette commande par la commande"
 "Render": "Render"
-"Renouveler la clef API": "Renouveler la clef API"
+"Renouveler la clé API": "Renouveler la clé API"
 "repo": "repo"
 "repoCode": "repoCode"
 "Reprise": "Reprise"

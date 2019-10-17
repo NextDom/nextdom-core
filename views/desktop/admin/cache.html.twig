@@ -63,7 +63,7 @@
                     <div class="form-group col-sm-6 col-xs-12 col-padding">
                         <label class="control-label">{{ 'Statistiques' }}</label>
                         <div>
-                            <span class="label label-config"><span id="span_cacheObject">{{ adminStats['count'] }}</span> {{ 'common.objects' | trans }}</span>
+                            <span class="label label-config"><span id="span_cacheObject">{{ adminStats.count }}</span> {{ 'common.objects' | trans }}</span>
                         </div>
                     </div>
                 </div>
@@ -74,7 +74,7 @@
                 <legend>{{ 'Moteur' }}</legend>
                 <div class="row">
                     <div class="form-group col-xs-12 col-padding">
-                        <div class="alert alert-info">{{ 'Attention : toute modification du moteur de cache nécessite un redémarrage de votre ' }} {{ PRODUCT_NAME }} {{ '...' }}</div>
+                        <div class="alert alert-info">{{ 'Attention : toute modification du moteur de cache nécessite un redémarrage de votre ' | trans }} {{ PRODUCT_NAME }} {{ '...' }}</div>
                     </div>
                     <div class="form-group col-sm-6 col-xs-12 col-padding">
                         <label class="control-label">{{ 'Moteur de cache' }}</label>

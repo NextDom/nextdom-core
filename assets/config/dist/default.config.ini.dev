@@ -1,6 +1,5 @@
 [core]
 ;General
-maxExecTimeCrontask = 240
 maxExecTimeScript = 10
 timezone = Europe/Brussels
 session_lifetime = 24

@@ -107,13 +107,6 @@ function initEvents() {
     });
 
     /*CMD color*/
-    $('.bt_selectAlertCmd').on('click', function () {
-        var type=$(this).attr('data-type');
-        nextdom.cmd.getSelectModal({cmd: {type: 'action', subType: 'message'}}, function (result) {
-            $('.configKey[data-l1key="alert::'+type+'Cmd"]').atCaret('insert', result.human);
-        });
-    });
-
     $('.bt_selectWarnMeCmd').on('click', function () {
         nextdom.cmd.getSelectModal({cmd: {type: 'action', subType: 'message'}}, function (result) {
             $('.configKey[data-l1key="interact::warnme::defaultreturncmd"]').value(result.human);

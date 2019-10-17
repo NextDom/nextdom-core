@@ -58,7 +58,7 @@ class AjaxConfigTest extends AjaxBase
     public function testGetKeyAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'getKey']);
-        $this->assertContains('Aucune clef demand', (string) $result->getBody());
+        $this->assertContains('Aucune clé demandée', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
@@ -79,7 +79,7 @@ class AjaxConfigTest extends AjaxBase
     public function testRemoveKeyAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'removeKey']);
-        $this->assertContains('Aucune clef demand', (string) $result->getBody());
+        $this->assertContains('Aucune clé demandée', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
         // TODO : Pas normal ça
     }

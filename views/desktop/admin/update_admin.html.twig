@@ -51,7 +51,7 @@
             <ul class="nav nav-tabs pull-right" role="tablist">
                 {% for repo, data in adminReposList %}
                     <li role="presentation">
-                        <a href="#tab{{ repo }}" aria-controls="tab{{ repo }}" role="tab" data-toggle="tab">{{ data['name'] }}</a>
+                        <a href="#tab{{ repo }}" aria-controls="tab{{ repo }}" role="tab" data-toggle="tab">{{ data.name }}</a>
                     </li>
                 {% endfor %}
                 <li role="presentation" class="active">
@@ -78,8 +78,8 @@
                                     <select class="configKey form-control" data-l1key="core::repo::provider">
                                         <option value="default">{{ 'common.default' | trans }}</option>
                                         {% for repo, data in adminReposList %}
-                                            {% if data['scope']['core'] is defined and data['scope']['core'] and adminConfigs[repo ~ '::enable' ] == 0 %}
-                                                <option value="{{ repo }}">{{ data['name'] }}</option>
+                                            {% if data.scope.core is defined and data.scope.core and adminConfigs[repo ~ '::enable' ] == 0 %}
+                                                <option value="{{ repo }}">{{ data.name }}</option>
                                             {% endif %}
                                         {% endfor %}
                                     </select>
@@ -101,7 +101,7 @@
                 {% for repo, data in adminReposList %}
                     <div role="tabpanel" class="tab-pane" id="tab{{ repo }}">
                         <fieldset>
-                            <legend>{{ 'Paramètres du service' }} {{ data['name'] }}</legend>
+                            <legend>{{ 'Paramètres du service' }} {{ data.name }}</legend>
                             <div class="row">
                                 <div class="form-group col-xs-12 col-padding">
                                     <label class="control-label">{{ 'Activation' }}</label>
@@ -114,13 +114,13 @@
                                     <div class="repositoryConfiguration{{ repo }}" style="display:none;">
                                         {% for config, param in data['configuration']['configuration'] %}
                                             <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                                <label class="control-label">{{ param['name'] }}</label>
+                                                <label class="control-label">{{ param.name }}</label>
                                                 {% set placeholder = '' %}
                                                 {% if param['placeholder'] is defined %}
-                                                    {% set placeholder = param['placeholder'] %}
+                                                    {% set placeholder = param.placeholder %}
                                                 {% endif %}
                                                 {% if param['default'] is defined %}
-                                                    {% set defaultValue = param['default'] %}
+                                                    {% set defaultValue = param.default %}
                                                 {% else %}
                                                     {% set defaultValue = '' %}
                                                 {% endif %}
@@ -129,7 +129,7 @@
                                                         <input type="checkbox" class="configKey" data-l1key="{{ repo }}::{{ config }}" value="{{ defaultValue }}" id="{{ repo }}::{{ config }}"/>
                                                         <label for="{{ repo }}::{{ config }}" class="control-label label-check">{{ 'common.activate' | trans }}</label>
                                                     </div>
-                                                {% elseif param['type'] == 'input' %}
+                                                {% elseif param.type == 'input' %}
                                                     <div class="input-group">
                                                         <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="{{ repo }}::{{ config }}" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
                                                         <input class="configKey form-control" data-l1key="{{ repo }}::{{ config }}" value="{{ defaultValue }}" placeholder="{{placeholder}}"/>
@@ -139,7 +139,7 @@
                                                         <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="{{ repo }}::{{ config }}" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
                                                         <input type="number" class="configKey form-control" data-l1key="{{ repo }}::{{ config }}" value="{{ defaultValue }}" placeholder="{{placeholder}}"/>
                                                     </div>
-                                                {% elseif param['type'] == 'password' %}
+                                                {% elseif param.type == 'password' %}
                                                     <div>
                                                         <input type="password" class="configKey form-control" data-l1key="{{ repo }}::{{ config }}" value="{{ defaultValue }}" placeholder="{{placeholder}}"/>
                                                     </div>
@@ -151,7 +151,7 @@
                                                 {% endif %}
                                             </div>
                                         {% endfor %}
-                                        {% if data['scope']['test'] is defined and data['scope']['test'] %}
+                                        {% if data.scope.test is defined and data.scope.test %}
                                             <div class="form-group col-sm-6 col-xs-12 col-padding">
                                                 <label class="control-label">{{ 'Tester' }}</label>
                                                 <div>

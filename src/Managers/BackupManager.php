@@ -101,7 +101,7 @@ class BackupManager
             ConsoleHelper::step("rotating backup archives");
             self::rotateBackups($backupDir);
             ConsoleHelper::ok();
-            ConsoleHelper::step("uploading backup to remote clouds");
+            ConsoleHelper::step("uploading backup to remote SAMBA sharing");
             self::sendRemoteBackup($backupPath);
             ConsoleHelper::ok();
             NextDomHelper::event('end_backup');
@@ -448,7 +448,7 @@ class BackupManager
             }
             ConsoleHelper::process("file used for restoration: " . $file);
             ConsoleHelper::ok();
-            ConsoleHelper::step("stopping nextdom system...");
+            ConsoleHelper::step("stopping Nextdom system...");
             NextDomHelper::stopSystem();
             ConsoleHelper::ok();
             ConsoleHelper::step("extracting backup archive...");
@@ -460,11 +460,11 @@ class BackupManager
             ConsoleHelper::step("restoring mysql database...");
             self::restoreDatabase($tmpDir);
             ConsoleHelper::ok();
-            ConsoleHelper::step("importing jeedom configuration...");
+            ConsoleHelper::step("importing Jeedom configuration...");
             self::restoreJeedomConfig($tmpDir);
             ConsoleHelper::ok();
             ConsoleHelper::step("restoring custom data...");
-            self::restoreCustomData($tmpDir,'restore');
+            //self::restoreCustomData($tmpDir,'restore');
             ConsoleHelper::ok();
             ConsoleHelper::step("migrating data...");
             MigrationHelper::migrate('restore');
@@ -475,7 +475,7 @@ class BackupManager
             ConsoleHelper::step("updating system configuration...");
             self::updateConfig();
             ConsoleHelper::ok();
-            ConsoleHelper::step("chechking system consistency...");
+            ConsoleHelper::step("checking system consistency...");
             ConsistencyManager::checkConsistency();
             ConsoleHelper::ok();
             ConsoleHelper::step("init values...");
@@ -496,7 +496,7 @@ class BackupManager
             if (true === is_dir($tmpDir)) {
                 FileSystemHelper::rrmdir($tmpDir);
             }
-            ConsoleHelper::step("starting nextdom system...");
+            ConsoleHelper::step("starting Nextdom system...");
             NextDomHelper::startSystem();
             ConsoleHelper::ok();
         }

@@ -692,6 +692,7 @@ class NextDomHelper
             }
         }
         // echo " $okStr\n";
+        SystemHelper::stopService('cron');
     }
 
     /**
@@ -817,16 +818,7 @@ class NextDomHelper
         if (!is_dir('/tmp/jeedom')) {
             system('ln -s ' . ConfigManager::byKey('folder::tmp') . ' /tmp/jeedom');
         }
-        // echo " $okStr\n";
-        // } catch (\Exception $e) {
-        //     if ((  true  == $force) ||
-        //         (  false == isset($_GET['mode'])) ||
-        //         ("force" != $_GET['mode'])) {
-        //         throw $e;
-        //     } else {
-        //         // echo '***ERROR*** ' . $e->getMessage();
-        //     }
-        // }
+        SystemHelper::startService('cron');
     }
 
     /**

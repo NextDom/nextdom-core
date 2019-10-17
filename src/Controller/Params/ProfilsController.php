@@ -52,7 +52,6 @@ class ProfilsController extends BaseController
      */
     public static function get(&$pageData): string
     {
-
         @session_start();
         UserManager::getStoredUser()->refresh();
         @session_write_close();
@@ -68,10 +67,6 @@ class ProfilsController extends BaseController
                 $pageData['profilsHomePageDesktop'][$pluginList->getId() . '::' . $pluginList->getDisplay()] = $pluginList->getName();
             }
         }
-        $user = Usermanager::getStoredUser();
-        $pageData['profilsUserId'] = $user->getId();
-        $pageData['profilsUserRegisteredDevices'] = $user->getOptions('registerDevice');
-        $pageData['profilsUserUseTwoFactor'] = $user->getOptions('twoFactorAuthentification', 0) == 1;
         $pageData['profilsSessionsList'] = SessionHelper::getSessionsList();
 
         $lsCssThemes = FileSystemHelper::ls(NEXTDOM_ROOT . '/public/themes/');

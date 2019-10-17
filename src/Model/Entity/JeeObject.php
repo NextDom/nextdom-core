@@ -626,24 +626,27 @@ class JeeObject implements EntityInterface
         }
         $result = '<span class="objectSummary' . $this->getId() . '" data-version="' . $version . '">';
         $def = ConfigManager::byKey('object:summary');
-        foreach ($def as $key => $value) {
-            if ($this->getConfiguration('summary::hide::' . $version . '::' . $key, 0) == 1) {
-                continue;
-            }
-            $summaryResult = $this->getSummary($key);
-            if ($summaryResult !== null) {
-                $style = '';
-                if ($version == 'desktop') {
-                    $style = 'color:' . $this->getDisplay($version . '::summaryTextColor', '#000000') . ';';
+        $summaryResult = '';
+        if (!empty($def)) {
+            foreach ($def as $key => $value) {
+                if ($this->getConfiguration('summary::hide::' . $version . '::' . $key, 0) == 1) {
+                    continue;
                 }
-                $allowDisplayZero = $value['allowDisplayZero'];
-                if ($value['calcul'] == 'text') {
-                    $allowDisplayZero = 1;
+                $summaryResult = $this->getSummary($key);
+                if ($summaryResult !== null) {
+                    $style = '';
+                    if ($version == 'desktop') {
+                        $style = 'color:' . $this->getDisplay($version . '::summaryTextColor', '#000000') . ';';
+                    }
+                    $allowDisplayZero = $value['allowDisplayZero'];
+                    if ($value['calcul'] == 'text') {
+                        $allowDisplayZero = 1;
+                    }
+                    if ($allowDisplayZero == 0 && $summaryResult == 0) {
+                        $style = 'display:none;';
+                    }
+                    $result .= '<span style="' . $style . '" class="objectSummaryParent cursor" data-summary="' . $key . '" data-object_id="' . $this->getId() . '" data-displayZeroValue="' . $allowDisplayZero . '">' . $value['icon'] . ' <sup><span class="objectSummary' . $key . '">' . $summaryResult . '</span> ' . $value['unit'] . '</span></sup>';
                 }
-                if ($allowDisplayZero == 0 && $summaryResult == 0) {
-                    $style = 'display:none;';
-                }
-                $result .= '<span style="' . $style . '" class="objectSummaryParent cursor" data-summary="' . $key . '" data-object_id="' . $this->getId() . '" data-displayZeroValue="' . $allowDisplayZero . '">' . $value['icon'] . ' <sup><span class="objectSummary' . $key . '">' . $summaryResult . '</span> ' . $value['unit'] . '</span></sup>';
             }
         }
         $result = trim($result) . '</span>';

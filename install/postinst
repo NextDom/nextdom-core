@@ -629,7 +629,7 @@ step_nextdom_mysql_populate() {
   print_verbose "configured table privileges: ${MYSQL_NEXTDOM_DB}"
 
   php ${WEBSERVER_HOME}/install/install.php mode=force >> ${DEBUG} 2>&1 || {
-    print_error "nexdom installation script failed"
+    print_error "NextDom installation script failed"
   }
   print_verbose "ran installation procedure: ${WEBSERVER_HOME}/install/install.php"
 }
@@ -694,6 +694,11 @@ main() {
       echo "Veuillez lancer sudo $0 ou connectez-vous en tant que root, puis relancez $0"
       exit 1
   fi
+
+  # Start all services
+  service apache2 start
+  service cron start
+  service mysql start
 
   set_root $0
   detect_dev_version
