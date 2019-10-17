@@ -719,7 +719,7 @@ class RepoMarket
     public static function backup_errorAnalyzed($_error)
     {
         if (strpos($_error, 'decryption failed: Bad session key') !== false) {
-            return __('Clef de chiffrement invalide. Si vous oubliez votre mot de passe aucune récupération n\'est possible. Veuillez supprimer le backup à partir de votre page profil sur le market');
+            return __('Clé de chiffrement invalide. Si vous oubliez votre mot de passe aucune récupération n\'est possible. Veuillez supprimer le backup à partir de votre page profil sur le market');
         }
         return null;
     }

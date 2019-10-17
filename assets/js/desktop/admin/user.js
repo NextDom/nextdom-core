@@ -145,7 +145,7 @@ function initEvents() {
     // Change user hash button
     $("#table_user").on( 'click',".bt_changeHash", function (event) {
       var user = {id: $(this).closest('tr').find('.userAttr[data-l1key=id]').value()};
-      bootbox.confirm("{{Etes-vous sûr de vouloir changer la clef API de l\'utilisateur ?}}", function (result) {
+      bootbox.confirm("{{Etes-vous sûr de vouloir changer la clé API de l\'utilisateur ?}}", function (result) {
           if (result) {
               user.hash = '';
               nextdom.user.save({
@@ -290,7 +290,7 @@ function printUsers() {
                ligne += '</td>';
                ligne += '<td>';
                if(disable == ''){
-                   ligne += '<a class="cursor bt_changeHash btn btn-sm btn-warning pull-right btn-action-bar" title="{{Renouveler la clef API}}"><i class="fas fa-refresh"></i>{{Regénération API}}</a>';
+                   ligne += '<a class="cursor bt_changeHash btn btn-sm btn-warning pull-right btn-action-bar" title="{{Renouveler la clé API}}"><i class="fas fa-refresh"></i>{{Regénération API}}</a>';
                    if (ldapEnable != '1') {
                         ligne += '<a class="btn btn-sm btn-danger pull-right bt_del_user btn-action-bar" style="margin-bottom : 5px;"><i class="fas fa-trash"></i>{{Supprimer}}</a>';
                         ligne += '<a class="btn btn-sm btn-warning pull-right bt_change_mdp_user btn-action-bar"><i class="fas fa-lock"></i>{{Mot de passe}}</a>';

@@ -55,7 +55,7 @@ class ConfigAjax extends BaseAjax
     {
         $keys = Utils::init('key');
         if ($keys == '') {
-            throw new CoreException(__('Aucune clef demandée'));
+            throw new CoreException(__('Aucune clé demandée'));
         }
         if (is_json($keys)) {
             $keys = json_decode($keys, true);
@@ -96,7 +96,7 @@ class ConfigAjax extends BaseAjax
     {
         $keys = Utils::init('key');
         if ($keys == '') {
-            throw new CoreException(__('Aucune clef demandée'));
+            throw new CoreException(__('Aucune clé demandée'));
         }
         if (is_json($keys)) {
             $keys = json_decode($keys, true);

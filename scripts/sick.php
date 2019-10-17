@@ -71,7 +71,7 @@ try {
 }
 
 /* Check log dir */
-echo "Vérifie si les log sont en écriture...";
+echo "Vérifie si les logs sont en écriture...";
 if (!file_exists(NEXTDOM_LOG )) {
 	echo "introuvable\n";
 	echo "Faites : mkdir ". NEXTDOM_LOG . ".'\n";

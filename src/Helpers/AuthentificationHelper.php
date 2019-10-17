@@ -182,7 +182,7 @@ class AuthentificationHelper
         if (!isset($_COOKIE['nextdom_token'])) {
             setcookie('nextdom_token', AjaxHelper::getToken(), time() + 365 * 24 * 3600, "/", '', false, true);
         }
-        LogHelper::add('connection', 'info', __('Connexion de l\'utilisateur par clef : ') . $user->getLogin());
+        LogHelper::add('connection', 'info', __('Connexion de l\'utilisateur par clé : ') . $user->getLogin());
         return true;
     }
 

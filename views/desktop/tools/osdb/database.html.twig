@@ -45,32 +45,32 @@
     <div class="box" id="div_rowSystemCommand">
         <!-- Header bar -->
         <div class="box-header with-border">
-            <h3 class="box-title"><i class="fas fa-database"></i>{{ 'Base de Données' }}</h3>
+            <h3 class="box-title"><i class="fas fa-database"></i>{{ 'osdb.database' | trans }}</h3>
         </div>
 
         <!-- Page content -->
         <div class="box-body">
             <div class="row">
                 <fieldset class="col-lg-2 col-md-3 col-sm-4" style="overflow-y:auto;overflow-x:hidden;">
-                    <legend>{{ 'Liste des commandes' }}</legend>
+                    <legend>{{ 'osdb.command_list' | trans }}</legend>
                     <div class="bs-sidebar form-group">
                         <ul class="nav nav-list bs-sidenav list-group" id='ul_listSqlRequest'>
-                            <li class="cursor list-group-item"><a class="bt_dbCommand label-list" data-command="SHOW TABLES;">{{ 'Tables' | trans }}</a></li>
+                            <li class="cursor list-group-item"><a class="bt_dbCommand label-list" data-command="SHOW TABLES;">{{ 'osdb.tables' | trans }}</a></li>
                         </ul>
                     </div>
-                    <legend>{{ 'Historique' | trans }}</legend>
+                    <legend>{{ osdb.historic | trans }}</legend>
                     <div class="bs-sidebar form-group">
                         <ul class="nav nav-list bs-sidenav list-group" id='ul_listSqlHistory'></ul>
                     </div>
                 </fieldset>
 
                 <fieldset class="col-lg-10 col-md-9 col-sm-8 left-border" style="overflow-y:hidden;overflow-x:hidden;">
-                    <legend>{{ 'Cliquez sur une commande de la liste ou tapez une commande personnalisée ci-dessous :' | trans }}</legend>
+                    <legend>{{ 'osdb.click_on_command' | trans }}</legend>
                     <div class="input-group form-group">
-                        <input class="form-control" id='in_specificCommand' placeholder="{{ 'Commande personnalisée...' | trans }}"></input>
+                        <input class="form-control" id='in_specificCommand' placeholder="{{ 'osdb.personalized_command' | trans }}"></input>
                         <span class="input-group-btn">
-                            <a class="btn btn-action" id="bt_resetSpecifiCommand" data-toggle="tooltip" data-original-title="{{ 'Vider la commande' | trans }}"><i class="fas fa-times"></i></a>
-                            <a class="btn btn-warning" id="bt_validateSpecifiCommand" data-toggle="tooltip" data-original-title="{{ 'Sélectionner la commande' | trans }}"><i class="fas fa-check spacing-right"></i><span>{{ 'OK' }}</span></a>
+                            <a class="btn btn-action" id="bt_resetSpecifiCommand" data-toggle="tooltip" data-original-title="{{ 'osdb.clean_command' | trans }}"><i class="fas fa-times"></i></a>
+                            <a class="btn btn-warning" id="bt_validateSpecifiCommand" data-toggle="tooltip" data-original-title="{{ 'osdb.select_command' | trans }}"><i class="fas fa-check spacing-right"></i><span>{{ 'common.ok' | trans }}</span></a>
                         </span>
                     </div>
                     <div id="div_commandResult">

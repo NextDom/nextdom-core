@@ -167,7 +167,7 @@ function initEvents() {
 
     // Interaction regenerate button
     $("#bt_regenerateInteract").on('click', function () {
-      bootbox.confirm('{{Etes-vous sûr de vouloir regénérer toutes les interactions (cela peut être très long) ?}}', function (result) {
+      bootbox.confirm('{{Etes-vous sûr de vouloir régénérer toutes les interactions (cela peut être très long) ?}}', function (result) {
         if (result) {
           nextdom.interact.regenerateInteract({
             interact: {query: result},
