@@ -311,32 +311,6 @@ window.onscroll = function () {
  }
 
  /**
-  * Custom loading wait spinner display
-  */
- function showLoadingCustom() {
-     if ($('#jqueryLoadingDiv').length == 0) {
-         if (typeof nextdom_waitSpinner != 'undefined' && isset(nextdom_waitSpinner) && nextdom_waitSpinner != '') {
-             $('body').append('<div id="jqueryLoadingDiv"><div class="loadingImg"><i class="fas ' + nextdom_waitSpinner + ' fa-spin icon_theme_color"></i></div></div>');
-         } else {
-             $('body').append('<div id="jqueryLoadingDiv"><div class="loadingImg"><i class="fas fa-sync-alt fa-spin icon_theme_color"></i></div></div>');
-         }
-     }
-     $('#jqueryLoadingDiv').show();
-     $('.blur-div').addClass('blur');
-     $('.content').addClass('blur');
- };
-
- /**
-  * Custom loading wait spinner hidding
-  */
- function hideLoadingCustom() {
-     $('#jqueryLoadingDiv').hide();
-     $('.blur-div').removeClass('blur');
-     $('.content').removeClass('blur');
-     $('#div_pageContainer').removeClass('blur');
- };
-
- /**
   * Refresh the message number badge in the header
   */
  function refreshMessageNumber() {

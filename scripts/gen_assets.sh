@@ -43,6 +43,7 @@ function gen_js {
   # js files to merge in base.js, respect this order to prevent conflits, can find details in PrepareView
   jsFiles=(vendor/node_modules/jquery-ui-dist/jquery-ui.min.js \
            vendor/node_modules/bootstrap/dist/js/bootstrap.min.js \
+           vendor/node_modules/pace-js/pace.min.js \
            vendor/node_modules/admin-lte/dist/js/adminlte.min.js \
            vendor/node_modules/izitoast/dist/js/iziToast.min.js \
            assets/3rdparty/jquery.utils/jquery.utils.js \

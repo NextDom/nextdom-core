@@ -192,7 +192,6 @@ function display3d(_id){
             if(!data.configuration || !data.configuration.path || !data.configuration.objfile){
                 return;
             }
-            showLoadingCustom();
             projector = new THREE.Projector();
             mouseVector = new THREE.Vector3();
             THREE.Vector3.Zero = new THREE.Vector3( 0, 0, 0 );
@@ -216,11 +215,9 @@ function display3d(_id){
             renderer.setSize(SCREEN_WIDTH,SCREEN_HEIGHT);
             container.appendChild( renderer.domElement );
             if(data.configuration.mtlfile && data.configuration.mtlfile != ''){
-                showLoadingCustom();
                 var mtlLoader = new THREE.MTLLoader();
                 mtlLoader.setPath(data.configuration.path);
                 mtlLoader.load(data.configuration.mtlfile, function(materials) {
-                    showLoadingCustom();
                     materials.lights = false;
                     materials.preload();
                     var objLoader = new THREE.OBJLoader();
@@ -249,7 +246,6 @@ function display3d(_id){
                     console.log(error)
                 });
             }else{
-                showLoadingCustom();
                 var objLoader = new THREE.OBJLoader();
                 objLoader.load(data.configuration.path+data.configuration.objfile,function (object){
                     $('#span_loadPercent3dPlan').remove();
