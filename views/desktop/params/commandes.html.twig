@@ -156,15 +156,15 @@
                 </div>
             </fieldset>
             <fieldset class="legend-section">
-                <legend>{{ 'InfluxDB' }}</legend>
+                <legend>InfluxDB</legend>
                 <div class="row">
                     <div class="form-group col-xs-12 col-padding">
-                        <label class="control-label">{{ 'influxDB IP' }}</label>
-                        <input type="text" class="configKey form-control" data-l1key="influxdbIp" data-toggle="tooltip" title="" data-original-title="{{ 'ip' }}"/>
-                        <label class="control-label">{{ 'influxDB Port' }}</label>
-                        <input type="text" class="configKey form-control" data-l1key="influxdbPort" data-toggle="tooltip" title="" data-original-title="{{ 'Port' }}"/>
-                        <label class="control-label">{{ 'influxDB DB name' }}</label>
-                        <input type="text" class="configKey form-control" data-l1key="influxdbDbName" data-toggle="tooltip" title="" data-original-title="{{ 'DB name' }}"/>
+                        <label class="control-label" for="influxdbIp">{{ 'commandes.influxDbIPLabel'|trans }}</label>
+                        <input type="text" class="configKey form-control" id="influxdbIp" data-l1key="influxDbIp"/>
+                        <label class="control-label" for="influxdbPort">{{ 'commandes.influxDbPortLabel'|trans }}</label>
+                        <input type="text" class="configKey form-control" id="influxDbPort" data-l1key="influxDbPort"/>
+                        <label class="control-label" for="influxDbDatabase">{{ 'commandes.influxDbDatabaseNameLabel'|trans }}</label>
+                        <input type="text" class="configKey form-control" id="influxDbDatabase" data-l1key="influxDbDatabase"/>
                     </div>
                 </div>
             </fieldset>
