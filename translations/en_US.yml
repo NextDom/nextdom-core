@@ -610,6 +610,11 @@ samba:
     already-exists: The file already exists on the samba server
     unknown: An error occurred while connecting to the samba server
 
+commandes:
+  influxDbIPLabel: IP
+  influxDbPortLabel: Port
+  influxDbDatabaseNameLabel: Database
+
 # Ancien format
 "401 - Accès non autorisé": "401 - Access not allowed"
 "Aucune méthode correspondante à : ": "No method corresponding to: "
