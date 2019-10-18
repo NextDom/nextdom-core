@@ -40,8 +40,6 @@ class PluginDaemon extends BaseAbstractModal
      */
     public static function get(): string
     {
-
-
         $pluginId = Utils::init('plugin_id');
         if (!class_exists($pluginId)) {
             die();

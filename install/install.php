@@ -93,7 +93,6 @@ try {
         echo "OK : Utilisateur deja present\n";
     }
     ConfigManager::save('version', NextDomHelper::getNextdomVersion());
-    UpdateManager::checkAllUpdate();
 } catch (\Throwable $e) {
     echo 'Erreur durant l\'installation : ' . $e->getMessage();
     echo 'Détails : ' . print_r($e->getTrace(), true);

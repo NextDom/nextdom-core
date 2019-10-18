@@ -41,7 +41,7 @@ class CmdConfigureHistory extends BaseAbstractModal
     public static function get(): string
     {
         $dataCount = ['history' => 0, 'timeline' => 0];
-        $listCmd = array();
+        $listCmd = [];
 
         foreach (CmdManager::all() as $cmd) {
             $info_cmd = Utils::o2a($cmd);

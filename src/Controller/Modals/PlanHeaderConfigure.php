@@ -42,8 +42,6 @@ class PlanHeaderConfigure extends BaseAbstractModal
      */
     public static function get(): string
     {
-
-
         $planHeader = PlanHeaderManager::byId(Utils::init('planHeader_id'));
         if (!is_object($planHeader)) {
             throw new CoreException('Impossible de trouver le plan');

@@ -15,8 +15,6 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-use NextDom\Managers\ConfigManager;
-
 require_once(__DIR__ . '/../../../src/core.php');
 require_once(__DIR__ . '/BaseControllerTest.php');
 
@@ -24,10 +22,14 @@ class PlanControllerTest extends BaseControllerTest
 {
     public function setUp()
     {
+        $_SESSION['user'] = \NextDom\Managers\UserManager::byId(1);
     }
 
     public function tearDown()
     {
+        if (isset($_SESSION['user'])) {
+            unset($_SESSION['user']);
+        }
     }
 
 

@@ -42,7 +42,7 @@ class ViewConfigure extends BaseAbstractModal
      */
     public static function get(): string
     {
-        $view = ViewManager::byId(init('view_id'));
+        $view = ViewManager::byId(Utils::init('view_id'));
         if (!is_object($view)) {
             throw new CoreException('Impossible de trouver la vue');
         }
