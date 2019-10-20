@@ -15,8 +15,6 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-use NextDom\Managers\ConfigManager;
-
 require_once(__DIR__ . '/../../../src/core.php');
 require_once(__DIR__ . '/BaseControllerTest.php');
 

@@ -24,6 +24,7 @@ namespace NextDom\Controller\Modals;
 
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
+use NextDom\Helpers\Utils;
 use NextDom\Managers\ScenarioManager;
 
 /**
@@ -41,7 +42,7 @@ class ScenarioExport extends BaseAbstractModal
     public static function get(): string
     {
 
-        $scenario = ScenarioManager::byId(init('scenario_id'));
+        $scenario = ScenarioManager::byId(Utils::init('scenario_id'));
 
         if (!is_object($scenario)) {
             throw new CoreException(__('Scénario introuvable'));

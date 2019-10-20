@@ -47,7 +47,7 @@ class ScenarioController extends BaseController
     public static function get(&$pageData): string
     {
 
-        $pageData['scenarios'] = array();
+        $pageData['scenarios'] = [];
         // Get all scenarios without groups
         $pageData['scenariosWithoutGroup'] = ScenarioManager::all(null);
         $pageData['scenarioListGroup'] = ScenarioManager::listGroup();

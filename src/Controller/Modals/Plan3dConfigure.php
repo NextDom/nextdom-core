@@ -42,13 +42,12 @@ class Plan3dConfigure extends BaseAbstractModal
      */
     public static function get(): string
     {
-
         $pageData = [];
-        $plan3d = Plan3dManager::byName3dHeaderId(init('name'), Utils::init('plan3dHeader_id'));
+        $plan3d = Plan3dManager::byName3dHeaderId(Utils::init('name'), Utils::init('plan3dHeader_id'));
         if (!is_object($plan3d)) {
             $plan3d = (new Plan3d())
-                ->setName(init('name'))
-                ->setPlan3dHeader_id(init('plan3dHeader_id'));
+                ->setName(Utils::init('name'))
+                ->setPlan3dHeader_id(Utils::init('plan3dHeader_id'));
             $plan3d->save();
         }
         Utils::sendVarToJS('id', $plan3d->getId());

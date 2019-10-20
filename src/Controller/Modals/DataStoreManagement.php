@@ -38,8 +38,6 @@ class DataStoreManagement extends BaseAbstractModal
      */
     public static function get(): string
     {
-
-
         Utils::sendVarsToJS([
             'dataStore_type' => Utils::init('type'),
             'dataStore_link_id' => Utils::init('link_id', -1)

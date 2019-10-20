@@ -464,7 +464,7 @@ class BackupManager
             self::restoreJeedomConfig($tmpDir);
             ConsoleHelper::ok();
             ConsoleHelper::step("restoring custom data...");
-            //self::restoreCustomData($tmpDir,'restore');
+            self::restoreCustomData($tmpDir,'restore');
             ConsoleHelper::ok();
             ConsoleHelper::step("migrating data...");
             MigrationHelper::migrate('restore');

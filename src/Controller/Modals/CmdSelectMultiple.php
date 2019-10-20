@@ -41,8 +41,6 @@ class CmdSelectMultiple extends BaseAbstractModal
      */
     public static function get(): string
     {
-
-
         $cmdId = Utils::init('cmd_id');
         $cmd = CmdManager::byId($cmdId);
         if (!is_object($cmd)) {
