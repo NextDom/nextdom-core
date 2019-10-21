@@ -2,7 +2,7 @@
 ---
 ## 0.5.0
 
-> ***Release Date : 13/10/2019***
+> ***Release Date : 20/10/2019***
 >
 > ***Statut : beta***
 
@@ -12,7 +12,7 @@
 * Déplacement du code du core (/core)
 * Mise à jour des dépendances
 * Séparation de la version mobile qui devient indépendante, l'installation est proposée au login
-* Nouveau tests unitaires du core (coverall > 22%)
+* Nouveau tests unitaires du core (coverall > 10%) (La couverture à chutée du fait d'une couverture structurelle globale du core)
 * Test unitaires version mobile (coverall > 41%)
 
 #### AMELIORATIONS

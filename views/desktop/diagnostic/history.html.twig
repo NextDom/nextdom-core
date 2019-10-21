@@ -41,7 +41,7 @@
         </div>
         <div class="action-group">
             <a id="bt_openCmdHistoryConfigure" class="btn btn-default btn-action-bar pull-right"><i class="fas fa-cogs spacing-right"></i>{{ 'Configuration des commandes'  | trans }}</a>
-            <a class="btn btn-warning btn-action-bar pull-right" id='bt_clearGraph'><i class="fas fa-trash"></i>{{ 'RAZ du Graphique'  | trans }}</a>
+            <a class="btn btn-warning btn-action-bar pull-right" id="bt_clearGraph"><i class="fas fa-trash"></i>{{ 'RAZ du Graphique'  | trans }}</a>
         </div>
     </div>
 </section>
@@ -55,7 +55,7 @@
             <fieldset>
                 <legend>{{ 'Vous pouvez créer ci-dessous une donnée calculée à partir de plusieurs commandes qui sera ajoutée au graphique'  | trans }}</legend>
                 <div class="input-group form-group" style="width: 100%">
-                    <input class="form-control" id='in_calculHistory' placeholder="{{ 'Historique calculé...' | trans }}"></input>
+                    <input class="form-control" id="in_calculHistory" placeholder="{{ 'Historique calculé...' | trans }}"></input>
                     <span class="input-group-btn">
                         <a class="btn btn-default" id="bt_findCmdCalculHistory" data-toggle="tooltip" data-original-title="{{ 'Sélectionner la commande' | trans }}"><i class="fas fa-list-alt no-spacing"></i></a>
                         <a class="btn btn-success" id="bt_displayCalculHistory" data-toggle="tooltip" data-original-title="{{'Calculer et afficher la commande' | trans }}"><i class="fas fa-check no-spacing"></i></a>
@@ -116,7 +116,7 @@
                         <div class="form-group">
                             <input id="in_startDate" class="form-control in_datepicker" style="display : inline-block; width: 150px;" value="{{ historyDate.start }}"/>
                             <input id="in_endDate" class="form-control in_datepicker" style="display : inline-block; width: 150px;" value="{{ historyDate.end }}"/>
-                            <a class="btn btn-success" id='bt_validChangeDate' data-toggle="tooltip" title="" data-original-title="{{ 'Attention : une trop grande plage de dates peut mettre très longtemps à être calculée ou même ne pas s\'afficher.'  | trans }}"><i class="fas fa-check"></i>{{ 'Ok' }}</a>
+                            <a class="btn btn-success" id="bt_validChangeDate" data-toggle="tooltip" title="" data-original-title="{{ 'Attention : une trop grande plage de dates peut mettre très longtemps à être calculée ou même ne pas s\'afficher.'  | trans }}"><i class="fas fa-check"></i>{{ 'Ok' }}</a>
                             <select class="form-control pull-right" id="sel_groupingType" style="width: 200px;">
                                 <option value="">{{ 'Aucun groupement' | trans }}</option>
                                 <option value="sum::hour">{{ 'Somme par heure' | trans }}</option>

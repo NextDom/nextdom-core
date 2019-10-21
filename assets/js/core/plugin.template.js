@@ -98,13 +98,11 @@ $(".li_eqLogic,.eqLogicDisplayCard").on('click', function () {
     if (!url.match('#')) {
        $('.nav-tabs a[href="#eqlogictab"]').click();
    }
-   showLoadingCustom();
    nextdom.eqLogic.print({
     type: isset($(this).attr('data-eqLogic_type')) ? $(this).attr('data-eqLogic_type') : eqType,
     id: $(this).attr('data-eqLogic_id'),
     status : 1,
     error: function (error) {
-        hideLoadingCustom();
         notify("Core",error.message,"error");
     },
     success: function (data) {
@@ -130,7 +128,6 @@ $(".li_eqLogic,.eqLogicDisplayCard").on('click', function () {
             nextdom.cmd.changeSubType($(this).closest('.cmd'));
         });
         changeLeftMenuObjectOrEqLogicName = false;
-        hideLoadingCustom();
         modifyWithoutSave = false;
     }
 });

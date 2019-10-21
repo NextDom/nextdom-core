@@ -43,6 +43,7 @@ function gen_js {
   # js files to merge in base.js, respect this order to prevent conflits, can find details in PrepareView
   jsFiles=(vendor/node_modules/jquery-ui-dist/jquery-ui.min.js \
            vendor/node_modules/bootstrap/dist/js/bootstrap.min.js \
+           vendor/node_modules/pace-js/pace.min.js \
            vendor/node_modules/admin-lte/dist/js/adminlte.min.js \
            vendor/node_modules/izitoast/dist/js/iziToast.min.js \
            assets/3rdparty/jquery.utils/jquery.utils.js \
@@ -83,6 +84,7 @@ function gen_js {
            assets/js/desktop/gui.js \
            assets/js/desktop/utils.js \
            assets/js/desktop/search.js \
+           assets/js/desktop/jeedomCompatibility.js \
            vendor/node_modules/bootbox/dist/bootbox.min.js \
            vendor/node_modules/highcharts/highstock.js \
            vendor/node_modules/highcharts/highcharts-more.js \
@@ -106,6 +108,7 @@ function gen_js {
            vendor/node_modules/inputmask/dist/jquery.inputmask.bundle.js \
            vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js \
            vendor/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js \
+           vendor/node_modules/snapsvg/dist/snap.svg-min.js \
            vendor/node_modules/moment/min/moment.min.js \
            assets/js/factory/NextDomElement.js \
            assets/js/factory/NextDomEnum.js \

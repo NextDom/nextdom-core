@@ -242,34 +242,6 @@
                     <legend>{{ 'Personnalisation des composants' }}</legend>
                     <div class="row">
                         <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
-                            <label class="control-label">{{ 'Icône d\'attente' }}</label>
-                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'Icône utilisée lors d\'un chargement de page par exemple' }}">
-                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="nextdom::waitSpinner" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
-                                <select class="configKey form-control" data-l1key="nextdom::waitSpinner" id="waitSpinnerSelect">
-                                    <option value="fa-sync-alt"></i>{{ 'Sync Alt' }}</option>
-                                    <option value="fa-refresh"></i>{{ 'Refresh' }}</option>
-                                    <option value="fa-hourglass">{{ 'Hourglass' }}</option>
-                                    <option value="fa-history">{{ 'History' }}</option>
-                                    <option value="fa-asterisk">{{ 'Asterisk' }}</option>
-                                    <option value="fa-certificate">{{ 'Certificate' }}</option>
-                                    <option value="fa-circle-notch">{{ 'Circle Notch' }}</option>
-                                    <option value="fa-cog">{{ 'Cog' }}</option>
-                                    <option value="fa-compass">{{ 'Compass' }}</option>
-                                    <option value="fa-crosshairs">{{ 'Crosshairs' }}</option>
-                                    <option value="fa-futbol">{{ 'Futbol' }}</option>
-                                    <option value="fa-globe">{{ 'Globe' }}</option>
-                                    <option value="fa-life-ring">{{ 'Life Ring' }}</option>
-                                    <option value="fa-recycle">{{ 'Recycle' }}</option>
-                                    <option value="fa-snowflake">{{ 'Snowflake' }}</option>
-                                    <option value="fa-spinner">{{ 'Spinner' }}</option>
-                                    <option value="fa-sun">{{ 'Sun' }}</option>
-                                    <option value="fa-star">{{ 'Star' }}</option>
-                                    <option value="fa-compass">{{ 'Compass' }}</option>
-                                </select>
-                                <span class="input-group-addon" id="waitSpinner"></span>
-                            </div>
-                        </div>
-                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
                             <label class="control-label">{{ 'Paramètre alpha des couleurs d\'alertes' }}</label>
                             <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'Le paramètre alpha correspond à une transparence de fond' | trans }}">
                                 <a class="input-group-addon cursor bt_resetThemeParam" data-l1key="nextdom::alertAlpha" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
@@ -279,6 +251,9 @@
                                 <span class="input-group-addon input-range-value"></span>
                                 <span class="input-group-addon">{{ '%' }}</span>
                             </div>
+                        </div>
+                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
+                            
                         </div>
                     </div>
                 </fieldset>

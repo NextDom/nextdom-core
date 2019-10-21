@@ -1,8 +1,8 @@
 <ul class="nav nav-tabs" role="tablist">
     <li role="presentation" class="active"><a href="#main" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-cog"></i> {{ 'Général' }}</a></li>
     <li role="presentation"><a href="#components" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-cubes"></i> {{ 'Composants' }}</a></li>
-    <a class='btn btn-danger btn-sm pull-right cursor' style="color: white;" id='bt_removeConfigureplan3dHeader'><i class="fas fa-times"></i> {{ 'Supprimer' }}</a>
-    <a class='btn btn-success btn-sm pull-right cursor' style="color: white;" id='bt_saveConfigureplan3dHeader'><i class="fas fa-check"></i> {{ 'Sauvegarder' }}</a>
+    <a class='btn btn-danger btn-sm pull-right cursor' style="color: white;" id="bt_removeConfigureplan3dHeader"><i class="fas fa-times"></i> {{ 'Supprimer' }}</a>
+    <a class='btn btn-success btn-sm pull-right cursor' style="color: white;" id="bt_saveConfigureplan3dHeader"><i class="fas fa-check"></i> {{ 'Sauvegarder' }}</a>
 </ul>
 <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" id="main">
@@ -116,7 +116,7 @@
 
     $('#bt_upload3dModel').fileupload({
         replaceFileInput: false,
-        url: 'core/ajax/plan3d.ajax.php?action=uploadModel&id=' + id + '&nextdom_token=' + NEXTDOM_AJAX_TOKEN,
+        url: 'core/ajax/plan3d.ajax.php?action=uploadModel&id=" + id + "&nextdom_token=' + NEXTDOM_AJAX_TOKEN,
         dataType: 'json',
         done: function (e, data) {
             if (data.result.state != 'ok') {

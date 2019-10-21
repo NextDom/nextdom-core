@@ -653,8 +653,10 @@ samba:
     already-exists: Le fichier existe déjà sur le serveur samba
     unknown: Une erreur s'est produite lors de la connexion au serveur samba
 
-system:
-
+commandes:
+  influxDbIPLabel: IP
+  influxDbPortLabel: Port
+  influxDbDatabaseNameLabel: Base de données
 
 # Ancien format
 "401 - Accès non autorisé": "401 - Accès non autorisé"

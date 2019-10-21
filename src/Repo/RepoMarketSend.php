@@ -289,7 +289,6 @@ if (is_object($market)) {
             return;
           }
           if (market.id == undefined || market.id == '') {
-            showLoadingCustom();
             window.location.reload();
           } else {
             notify("Core", '{{Votre objet a été envoyé avec succès sur le market}}', "success");
@@ -316,7 +315,6 @@ if (is_object($market)) {
             return;
           }
           if (market.id == undefined || market.id == '') {
-            showLoadingCustom();
             window.location.reload();
           } else {
               notify("Core", '{{Votre objet a été envoyé avec succès sur le market}}', 'success');

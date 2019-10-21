@@ -267,9 +267,9 @@ function createUpdateBox(updateData,updateId) {
     htmlData += '<a class="btn btn-default btn-sm pull-left cursor hidden-sm" target="_blank" href="' + updateData.plugin.changelog + '"><i class="fas fa-book"></i>{{Changelog}}</a>';
   } else {
     if (updateData.configuration && updateData.configuration.version) {
-      htmlData += '<a class="btn btn-default btn-sm pull-right" href="https://github.com/NextDom/nextdom-core/blob/' + updateData.configuration.version + '/docs/fr_FR/changelog.md" target="_blank"><i class="fas fa-book"></i>{{Changelog}}</a>';
+      htmlData += '<a class="btn btn-default btn-sm pull-right" href="https://github.com/NextDom/nextdom-core/blob/' + updateData.configuration.version + '/CHANGELOG..md" target="_blank"><i class="fas fa-book"></i>{{Changelog}}</a>';
     }else{
-      htmlData += '<a class="btn btn-default btn-sm pull-right" href="https://github.com/NextDom/nextdom-core/blob/master/docs/fr_FR/changelog.md" target="_blank"><i class="fas fa-book"></i>{{Changelog}}</a>';
+      htmlData += '<a class="btn btn-default btn-sm pull-right" href="https://github.com/NextDom/nextdom-core/blob/master/CHANGELOG.md" target="_blank"><i class="fas fa-book"></i>{{Changelog}}</a>';
     }
   }
   htmlData += '<a class="btn btn-info btn-sm pull-left checkUpdate" ><i class="fas fa-check"></i>{{Vérifier}}</a>';
