@@ -72,17 +72,20 @@ class PrepareView
      * Test if first use page must be showed
      *
      * @return bool
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public function firstUseAlreadyShowed()
     {
         $result = false;
         if (isset($this->currentConfig['nextdom::firstUse']) && $this->currentConfig['nextdom::firstUse'] == 0) {
-            return true;
+            $result = true;
         }
         else {
             // Prevent F5 bug on second step
-            $user = UserManager::byLogin(Utils::sha512('admin'));
-            if (is_object($user) && $user->getPassword() === 'admin') {
+            $user = UserManager::byLogin('admin');
+            if (is_object($user) && $user->getPassword() !== Utils::sha512('admin')) {
                 ConfigManager::save('nextdom::firstUse', 0);
                 $result = true;
             }
