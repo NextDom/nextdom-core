@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Params;
 
 use NextDom\Controller\BaseController;
+use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
 use NextDom\Managers\ConfigManager;
@@ -44,8 +45,8 @@ class CustomController extends BaseController
      */
     public static function get(&$pageData): string
     {
-        global $NEXTDOM_INTERNAL_CONFIG;
         $pageData['PRODUCT_NAME'] = ConfigManager::byKey('product_name');
+        $pageData['customThemeFiles'] = FileSystemHelper::ls('public/css/themes/', '*.css');
         $pageData['adminCategories'] = NextDomHelper::getConfiguration('eqLogic:category');
         $pageData['Theme'] = NextDomHelper::getConfiguration('theme');
         $pageData['useCustomTheme'] = false;

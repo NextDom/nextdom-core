@@ -256,10 +256,13 @@ class PrepareView
     private function initCssPool(&$pageData)
     {
         $pageData['CSS_POOL'][] = '/public/css/nextdom.css';
+        /*
         if (!file_exists(NEXTDOM_ROOT . '/var/public/css/theme.css')) {
             $this->generateCssThemFile();
         }
-        $pageData['CSS_POOL'][] = '/var/public/css/theme.css';
+        */
+
+        $pageData['CSS_POOL'][] = '/public/css/themes/' . ConfigManager::byKey('nextdom::user-theme', 'core', 'dark') . '.css';
         // Icônes
         $rootDir = NEXTDOM_ROOT . '/public/icon/';
         foreach (FileSystemHelper::ls($rootDir, '*') as $dir) {

@@ -60,6 +60,16 @@
         <!-- Tabs content -->
         <div class="global-tab-content tab-content">
             <div role="tabpanel" class="tab-pane active" id="themestab">
+                <div class="row">
+                    <div class="form-group">
+                        <label for="user-theme">Thème</label>
+                        <select id="user-theme" class="configKey" data-l1key="nextdom::user-theme" name="theme">
+                            {% for customThemeFile in customThemeFiles %}
+                                <option value="{{ customThemeFile|slice(0, -4) }}">{{ customThemeFile|slice(0, -4) }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
                 <legend>{{ 'Selectionner votre thème ou votre base de customisation' }}</legend>
                 <div class="row text-center">
                     <div id="theme1" class="col-sm-12 col-md-6">
