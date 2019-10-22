@@ -267,20 +267,12 @@ class PrepareView
                 $pageData['CSS_POOL'][] = '/public/icon/' . $dir . 'style.css';
             }
         }
-            if (AuthentificationHelper::isConnected()) {
-                if (UserManager::getStoredUser() !== null && UserManager::getStoredUser()->getOptions('desktop_highcharts_theme') != '') {
-                    $highstockThemeFile = '/vendor/node_modules/highcharts/themes/' . UserManager::getStoredUser()->getOptions('desktop_highcharts_theme') . '.js';
-                    $pageData['JS_POOL'][] = $highstockThemeFile;
-                }
+        if (AuthentificationHelper::isConnected()) {
+            if (UserManager::getStoredUser() !== null && UserManager::getStoredUser()->getOptions('desktop_highcharts_theme') != '') {
+                $highstockThemeFile = '/vendor/node_modules/highcharts/themes/' . UserManager::getStoredUser()->getOptions('desktop_highcharts_theme') . '.js';
+                $pageData['JS_POOL'][] = $highstockThemeFile;
             }
-            if ($this->currentConfig['enableCustomCss'] == 1) {
-                if (file_exists(NEXTDOM_ROOT . '/var/custom/desktop/custom.css')) {
-                    $pageData['CSS_POOL'][] = '/var/custom/desktop/custom.css';
-                }
-                if (file_exists(NEXTDOM_ROOT . '/var/custom/desktop/custom.js')) {
-                    $pageData['JS_POOL'][] = '/var/custom/desktop/custom.js';
-                }
-            }
+        }
     }
 
     /**
