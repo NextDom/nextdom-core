@@ -157,6 +157,25 @@ install:
   end-update: FIN DE LA MISE A JOUR
   nothing-to-update: Aucune mise à jour
 
+network:
+  advanced: "Configuration avancée"
+  config: "Protocole, Adresse et Port"
+  dns-management: "Configuration DNS"
+  dns-proxy: "Attention : cette fonctionnalité n'est pas disponible dans le service pack community (voir votre service pack sur votre page profil sur le market)."
+  dns-use: "Utiliser les DNS"
+  dns-status: "Statut des DNS"
+  docker-like: "(pour les installations docker-like, sous la forme 192.168.1.*)"
+  internal-access: "Accès interne"
+  external-access: "Accès externe"
+  management: "Gestion autonome du réseau"
+  mask: "Masque d'IP local"
+  networks: "Réseaux"
+  started: "Démarré : "
+  stopped: "Arrêté"
+  use-dns: "Normal si vous n'avez pas coché la case : Utiliser les DNS"
+  warning-part-1: "Attention : cette configuration n'est là que pour informer "
+  warning-part-2: "de sa configuration réseau et n'a aucun impact sur les ports ou l'IP réellement utilisés pour joindre "
+
 page-title:
   administration: Administration
   users: Utilisateurs
@@ -1927,7 +1946,6 @@ commandes:
 "Non installés": "Non installés"
 "Non visible": "Non visible"
 "Normal": "Normal"
-"Normal si vous n'avez pas coché la case : Utiliser les DNS": "Normal si vous n'avez pas coché la case : Utiliser les DNS"
 "Note": "Note"
 "Note créée avec succès": "Note créée avec succès"
 "Note inconnue. Vérifiez l'ID": "Note inconnue. Vérifiez l'ID"
@@ -2279,7 +2297,6 @@ commandes:
 "statusLastCommunication": "statusLastCommunication"
 "statusNumberTryWithoutSuccess": "statusNumberTryWithoutSuccess"
 "Statut": "Statut"
-"Statut DNS": "Statut DNS"
 "Statut démon": "Statut démon"
 "Stop": "Stop"
 "Style du tableau (CSS)": "Style du tableau (CSS)"
@@ -2360,7 +2377,6 @@ commandes:
 "Template appliqué avec succès": "Template appliqué avec succès"
 "Template de scénario": "Template de scénario"
 "Temps": "Temps"
-"Temps de pause pour le long polling": "Temps de pause pour le long polling"
 "Temps maxi. entre les échecs": "Temps maxi. entre les échecs"
 "Temps réel": "Temps réel"
 "Température": "Température"
@@ -2448,7 +2464,6 @@ commandes:
 "Utilisateurs": "Utilisateurs"
 "Utilisateurs autorisés": "Utilisateurs autorisés"
 "Utilisation": "Utilisation"
-"Utiliser les DNS": "Utiliser les DNS"
 "Utilisé par": "Utilisé par"
 "Utilisée dans": "Utilisée dans"
 "Valeur": "Valeur"

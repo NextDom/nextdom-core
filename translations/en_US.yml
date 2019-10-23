@@ -55,6 +55,7 @@ common:
   add: "Add"
   advanced_configuration: "Advanced configuration"
   all: "All"
+  allow: "Allow"
   back: "Back"
   branch: "Branch"
   by_default: "By default"
@@ -153,6 +154,26 @@ install:
   install.begin-update: BEGIN UPDATE
   install.end-update: END UPDATE
   install.nothing-to-update: Nothing to update
+
+network:
+  advanced: "Advanced configuration"
+  config: "Protocol, Adress and Port"
+  dns-management: "Management"
+  dns-proxy: "Warning : this feature is not available in the service pack community (see your service pack on your profile page on the market)."
+  dns-use: "Use DNS"
+  dns-status: "DNS status"
+  docker-like: "(for docker-like installations, in the form 192.168.1. *)"
+  internal-access: "Internal access"
+  external-access: "External access"
+  management: "Independent network management"
+  mask: "Local IP mask"
+  networks: "Networks"
+  started: "Started : "
+  stopped: "Stopped"
+  use-dns: "Normal if you have not checked the box : Use DNS"
+  warning-part-1: "Warning : this configuration is only there to inform "
+  warning-part-2: "of its network configuration and has no impact on the ports or IP actually used to reach "
+
 
 page-title:
   administration: Administration
@@ -1056,9 +1077,6 @@ commandes:
 "Désactiver la gestion du réseau par NextDom": "Disable the NextDom network manager"
 "Adresse mac": "Mac address"
 "Proxy": "proxy"
-"Utiliser les DNS NextDom": "Use NextDom DNS"
-"Statut DNS": "DNS status"
-"Normal si vous n\\'avez pas coché la case : Utiliser les DNS NextDom": "Expected if you did not check the box: Use NextDom DNS"
 "Arrêté": "Stop"
 "(Re)démarrer": "Start/ Restart"
 "Arrêter": "Stop"
@@ -1096,7 +1114,6 @@ commandes:
 "Adresse Redis": "Redis address"
 "Port redis": "Redis port"
 "Vider toutes les données en cache": "Clear all cache data"
-"Temps de pause pour le long polling": "Time of pause for the polling long"
 "Configuration des interactions": "Interaction setup"
 "Général": "Main"
 "Plus la sensibilité est basse (proche de 1) plus la corrrespondance doit être exacte": "The lower the sensitivity (close to 1) the more accurate the match must be"
@@ -1265,7 +1282,6 @@ commandes:
 "Attention : cette configuration n\\'est là que pour informer": "Attention : cette configuration n\\'est là que pour informer"
 "de sa configuration réseau et n\\'a aucun impact sur les ports ou l\\'IP réellement utilisés pour joindre": "de sa configuration réseau et n\\'a aucun impact sur les ports ou l\\'IP réellement utilisés pour joindre"
 "Désactiver la gestion du réseau par": "Désactiver la gestion du réseau par"
-"Utiliser les DNS": "Utiliser les DNS"
 "Attention : toute modification du moteur de cache nécessite un redémarrage de": "Attention : toute modification du moteur de cache nécessite un redémarrage de"
 "Mise à jour de": "Mise à jour de"
 "Mode développement": "Mode développement"
