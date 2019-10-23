@@ -53,15 +53,6 @@ def migration_with_last_backup_file_tests():
     run_test('tests/migration_page.py', [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])
     remove_test_container(container_name)
 
-def custom_js_css_tests():
-    """Starts gui tests related to the Custom JS and CSS page
-    """
-    container_name = 'custom-js-css'
-    print_subtitle('Custom JS/CSS')
-    start_test_container(container_name, NEXTDOM_PASSWORD)
-    run_test('tests/custom_js_css_page.py', [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])
-    remove_test_container(container_name)
-
 def plugins_tests():
     """Starts gui tests related to the plugin page
     """
@@ -109,7 +100,6 @@ if __name__ == "__main__":
         'first_use': first_use_tests,
         'migration': migration_tests,
         'migration_with_last_backup_file': migration_with_last_backup_file_tests,
-        'custom_js_css': custom_js_css_tests,
         'plugins': plugins_tests,
         'others': others_tests
     }
