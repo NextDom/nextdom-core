@@ -93,16 +93,6 @@ function initEventHandler(){
         $(this).next('.input-range-max').html($(this).attr('max'));
     });
 
-    // Reset theme color to default value
-    $('.bt_resetThemeColor').on('click', function () {
-        resetThemeColorKey($(this));
-    });
-
-    // Reset config color to default value
-    $('.bt_resetConfigColor').on('click', function () {
-        resetConfigColorKey($(this));
-    });
-
     // Reset config param to default value
     $('.bt_resetConfigParam').on('click', function () {
         resetConfigParamKey($(this));

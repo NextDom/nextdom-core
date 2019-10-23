@@ -1,7 +1,35 @@
-$themes: (
+@charset "utf-8";
+/* This file is part of NextDom Software.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom Software is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
+*
+* @Support <https://www.nextdom.org>
+* @Email   <admin@nextdom.org>
+* @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
+*/
+
+/* Function to create color theme array from theme type, primary color and contrast color */
+@function get_theme($type: 'dark', $colorPrimary: #33b8cc, $colorContrast: #ffffff) {
+    $color_theme_base: map_get($themes_types, $type);
+    $color_theme_base_primary: map_merge($color_theme_base, (color1: $colorPrimary));
+    $color_theme: map_merge($color_theme_base_primary, (color2: $colorContrast));
+    @return $color_theme;
+}
+
+/* Theme types array, use by get_theme function */
+$themes_types: (
         dark: (
-                color1: #33b8cc,
-                color2: #ffffff,
                 color3: #ffffff,
                 color4: #222d32,
                 color5: #1e282c,
@@ -20,11 +48,9 @@ $themes: (
                 color18: #222d32,
                 color19: #263238,
                 color20: #aaaaaa,
-                alertAlpha: 50
+                alertAlpha: 0.5
         ),
         light: (
-                color1: #33b8cc,
-                color2: #ffffff,
                 color3: #f4f4f5,
                 color4: #f9fafc,
                 color5: #dbdbdb,
@@ -43,11 +69,9 @@ $themes: (
                 color18: #dddddd,
                 color19: #fafafa,
                 color20: #f5f5f5,
-                alertAlpha: 100
+                alertAlpha: 1
         ),
         mix: (
-                color1: #33b8cc,
-                color2: #ffffff,
                 color3: #ffffff,
                 color4: #222d32,
                 color5: #1e282c,
@@ -66,6 +90,6 @@ $themes: (
                 color18: #dddddd,
                 color19: #fafafa,
                 color20: #f5f5f5,
-                alertAlpha: 100
+                alertAlpha: 1
         )
 )

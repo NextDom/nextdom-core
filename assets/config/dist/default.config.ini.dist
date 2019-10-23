@@ -13,7 +13,7 @@ avatar = /public/img/profils/avatar_00.png
 language = fr_FR
 nextdom::firstUse = 1
 nextdom::Welcome = 1
-nextdom::theme = light
+nextdom::theme = dark-nextdom
 
 ;History
 historyCalculTendance = 2

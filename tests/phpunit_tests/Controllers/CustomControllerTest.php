@@ -33,8 +33,6 @@ class CustomControllerTest extends BaseControllerTest
     {
         $pageData = [];
         $result = \NextDom\Controller\Params\CustomController::get($pageData);
-        $this->assertEquals(false, $pageData['useCustomTheme']);
-        $this->assertContains('id="custom"', $result);
     }
 
     public function testPageDataVars()

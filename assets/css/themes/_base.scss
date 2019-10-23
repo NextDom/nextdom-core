@@ -1,3 +1,4 @@
+@charset "utf-8";
 /* This file is part of NextDom Software.
 *
 * NextDom is free software: you can redistribute it and/or modify
@@ -85,9 +86,6 @@
 }
 .nav-tabs-custom>.nav-tabs-dashboard>li.active {
   border-bottom-color:map_get($color_theme, 'color180') !important;
-}
-.main-header .navbar .sidebar-toggle:hover {
-  background-color: map_get($color_theme, 'color1') !important;
 }
 @media (max-width: 767px) {
   .main-header .navbar .dropdown-menu li a:hover {
@@ -190,7 +188,7 @@
 .main-header .logo {
   color: map_get($color_theme, 'color2') !important;
 }
-.main-header .navbar .sidebar-toggle {
+.main-header .navbar .sidebar-toggle, .main-header .navbar .search-toggle {
   color: map_get($color_theme, 'color2') !important;
 }
 @media (max-width: 767px) {
@@ -267,7 +265,7 @@
   color: map_get($color_theme, 'color3') !important;
 }
 
-.main-header .navbar .sidebar-toggle:hover {
+.main-header .navbar .sidebar-toggle:hover, .main-header .navbar .search-toggle:hover {
   background-color: rgba(0, 0, 0, 0.1);
   color: map_get($color_theme, 'color3') !important;
 }
@@ -893,14 +891,14 @@ pre {
 /* ###################################### */
 /* Alertes */
 .alert-danger {
-  background-color: rgba(221, 75, 57, map_get($color_theme, 'alertAlpha') / 100) !important;
+  background-color: rgba(221, 75, 57, map_get($color_theme, 'alertAlpha')) !important;
 }
 .alert-warning {
-  background-color: rgba(243, 156, 18, map_get($color_theme, 'alertAlpha') / 100) !important;
+  background-color: rgba(243, 156, 18, map_get($color_theme, 'alertAlpha')) !important;
 }
 .alert-success {
-  background-color: rgba(0, 166, 90, map_get($color_theme, 'alertAlpha') / 100) !important;
+  background-color: rgba(0, 166, 90, map_get($color_theme, 'alertAlpha')) !important;
 }
 .alert-info {
-  background-color: rgba(0, 192, 239, map_get($color_theme, 'alertAlpha') / 100) !important;
+  background-color: rgba(0, 192, 239, map_get($color_theme, 'alertAlpha')) !important;
 }

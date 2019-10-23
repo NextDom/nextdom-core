@@ -44,8 +44,6 @@ $(document).ready(function () {
   var navListItems = $('div.setup-panel div a');
   var allWells = $('.setup-content');
 
-  $('#jqueryLoadingDiv').hide();
-
   navListItems.click(function (e) {
     e.preventDefault();
     var target = $($(this).attr('href'));
@@ -61,6 +59,16 @@ $(document).ready(function () {
     }
   });
   $('div.setup-panel div a.btn-primary').trigger('click');
+  
+  nextdom.config.load({
+      configuration: $('.firstUse-Page').getValues('.configKey:not(.noSet)')[0],
+      error: function (error) {
+          notify("Erreur", error.message, 'error');
+      },
+      success: function (data) {
+          $('.firstUse-Page').setValues(data, '.configKey');
+      }
+  });
 });
 
 $('#toStep2').click(function () {
@@ -112,14 +120,16 @@ $('#toStep4').click(function () {
 });
 
 $('#toStep5').click(function () {
-  var radios = document.getElementsByName('theme');
-  var config = '';
-  for (var i = 0; i < radios.length; ++i) {
-    if (radios[i].checked == true) {
-      changeThemeColors(radios[i].value,false);
-      goToNextStep('#toStep5');
-    }
-  }
+  var config = $('.firstUse-Page').getValues('.configKey')[0];
+  nextdom.config.save({
+      configuration: config,
+      error: function (error) {
+          notify("Erreur", error.message, 'error');
+      },
+      success: function () {
+          goToNextStep('#toStep5');
+      }
+  });
 });
 
 $('#toStep6').click(function () {
@@ -130,7 +140,7 @@ $('#toStep6').click(function () {
           notify("Erreur", error.message, 'error');
       },
       success: function () {
-        goToNextStep('#toStep6');
+          goToNextStep('#toStep6');
       }
   });
 });
@@ -166,6 +176,11 @@ $('#finishConf').click(function () {
 $("input[name=themeWidget]").on('click', function (event) {
     var radio = $(this).val();
     $('.userAttr[data-l2key="widget::theme"]').value(radio);
+});
+
+$("input[name=themeNextDom]").on('click', function (event) {
+    var radio = $(this).val();
+    $('.configKey[data-l1key="nextdom::theme"]').value(radio);
 });
 
 function goToNextStep(_step) {

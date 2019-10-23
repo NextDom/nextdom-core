@@ -137,7 +137,7 @@
                                     <h5>{{ 'firstuse.customize-content'|trans }}</h5>
                                     <div class="col-sm-12 col-md-6">
                                         <div>
-                                            <label class="clearfix cursor themeThumbnail cursor" for="theme-light">
+                                            <label class="clearfix cursor themeThumbnail cursor" for="light-nextdom">
                                                 <div>
                                                     <span class="themeThumbnailHeader bg-nextdom"><i class="fas fa-bars"></i></span>
                                                 </div>
@@ -146,13 +146,13 @@
                                                     <span class="themeThumbnailBody" style="background: #ecf0f5"></span>
                                                 </div>
                                             </label>
-                                            <input id="theme-light" class="theme spacing-right" type="radio" name="theme" value="light" checked="checked"/>
-                                            <label for="theme-light">{{ 'Light' }}</label>
+                                            <input id="light-nextdom" class="theme spacing-right" type="radio" name="themeNextDom" value="light-nextdom" checked="checked"/>
+                                            <label for="light-nextdom">{{ 'Light' }}</label>
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-6">
                                         <div>
-                                            <label class="clearfix cursor themeThumbnail cursor" for="theme-dark">
+                                            <label class="clearfix cursor themeThumbnail cursor" for="dark-nextdom">
                                                 <div>
                                                     <span class="themeThumbnailHeader bg-nextdom"><i class="fas fa-bars"></i></span>
                                                 </div>
@@ -161,10 +161,11 @@
                                                     <span class="themeThumbnailBody" style="background: #2c3b41;"></span>
                                                 </div>
                                             </label>
-                                            <input id="theme-dark" class="theme spacing-right" type="radio" name="theme" value="dark"/>
-                                            <label for="theme-dark">{{ 'Dark' }}</label>
+                                            <input id="dark-nextdom" class="theme spacing-right" type="radio" name="themeNextDom" value="dark-nextdom"/>
+                                            <label for="dark-nextdom">{{ 'Dark' }}</label>
                                         </div>
                                     </div>
+                                    <input class="configKey form-control" data-l1key="nextdom::theme" style="display:none" />
                                 </div>
                             </div>
                             <button id="toStep5" class="btn btn-primary nextBtn primary-bg pull-right" type="button">{{ 'common.next'|trans }}<i class="fas fa-caret-right spacing-left no-spacing"></i></button>

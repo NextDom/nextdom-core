@@ -88,6 +88,14 @@ function initEvents() {
         printAdvancedDesktop();
     });
 
+    // Theme config changing
+    $("#themeBase").on('change', function (event) {
+        $('.configKey[data-l1key="nextdom::theme"]').value($("#themeBase").value() + "-" + $("#themeIdentity").value());
+    });
+    $("#themeIdentity").on('change', function (event) {
+        $('.configKey[data-l1key="nextdom::theme"]').value($("#themeBase").value() + "-" + $("#themeIdentity").value());
+    });
+
     // Save customs
     $("#bt_savecustom").on('click', function (event) {
         var config = $('#custom').getValues('.configKey')[0];
@@ -110,21 +118,13 @@ function initEvents() {
                     success: function (data) {
                         $('#custom').setValues(data, '.configKey');
                         modifyWithoutSave = false;
-                        // Relaod theme
-                        updateTheme(function() {
-                            notify("Info", '{{Sauvegarde réussie}}', 'success');
-                            window.location.reload();
-                        });
+                        notify("Info", '{{Sauvegarde réussie}}', 'success');
+                        window.location.reload();
                     }
                 });
             }
         });
         saveCustom();
-    });
-
-    // Theme choice changed
-    $("input[name=theme]").click(function () {
-        changeThemeColors($(this).attr('data-l2key'),true);
     });
 }
 

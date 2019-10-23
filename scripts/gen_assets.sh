@@ -35,7 +35,7 @@ function gen_css {
     sass --update --stop-on-error assets/css/compiled:public/css $COMPRESS
     echo " >>> Generate Themes"
     for theme_file in assets/css/themes/output/*.scss; do
-        sass --update --stop-on-error ${theme_file}:public/css/themes/$(basename "${theme_file}") $COMPRESS
+        sass --update --stop-on-error ${theme_file}:public/css/themes/$(basename "${theme_file}" .scss).css $COMPRESS
     done
   	# Path replace
   	sed -i s#\"images/ui-#\"/assets/css/vendors/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.css

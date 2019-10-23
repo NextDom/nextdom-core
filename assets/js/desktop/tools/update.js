@@ -86,10 +86,8 @@ function initEvents() {
         notify('Erreur', error.message, 'error');
       },
       success: function () {
-        // Relaod theme
-        updateTheme(function() {
-            notify('Info', '{{L\'opération est réussie. Merci de faire F5 pour avoir les dernières nouveautés}}', 'success');
-        });
+        notify("Info", '{{L\'opération est réussie.}}', 'success');
+        window.location.reload();
       }
     });
   });
@@ -368,10 +366,8 @@ function launchUpdate(updateId) {
           notify('Erreur', error.message, 'error');
         },
         success: function () {
-          // Relaod theme
-          updateTheme(function() {
-              notify('Info', '{{L\'opération est réussie. Merci de faire F5 pour avoir les dernières nouveautés}}', 'success');
-          });
+          notify("Info", '{{L\'opération est réussie.}}', 'success');
+          window.location.reload();
         }
       });
     }

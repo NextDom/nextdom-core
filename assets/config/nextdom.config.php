@@ -51,28 +51,6 @@ $NEXTDOM_INTERNAL_CONFIG = array(
             array('name' => 'NextDom draft', 'type' => 'json', 'code' => 'nextdom_draft', 'data' => 'https://raw.githubusercontent.com/NextDom/AlternativeMarket-Lists/master/results/nextdom-draft.json')
         )
     ),
-    'theme' => array(
-      'color1' => '#33b8cc',
-      'color2' => '#ffffff',
-      'color3' => '#f4f4f5',
-      'color4' => '#f9fafc',
-      'color5' => '#dbdbdb',
-      'color6' => '#f4f4f5',
-      'color7' => '#ecf0f5',
-      'color8' => '#ffffff',
-      'color9' => '#f5f5f5',
-      'color10' => '#555555',
-      'color11' => '#f5f5f5',
-      'color12' => '#dddddd',
-      'color13' => '#ffffff',
-      'color14' => '#555555',
-      'color15' => '#f4f4f4',
-      'color16' => '#555555',
-      'color17' => '#555555',
-      'color18' => '#dddddd',
-      'color19' => '#fafafa',
-      'color20' => '#f5f5f5',
-    ),
     'plugin' => array(
         'category' => array(
             'security' => array('name' => 'Sécurité', 'icon' => 'fa-lock'),
