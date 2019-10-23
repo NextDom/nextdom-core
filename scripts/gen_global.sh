@@ -37,6 +37,6 @@ if [ "$1" == "--docs" ]; then
     ${root}/gen_docs.sh
 fi
 
-# Gestion vulnerability or obesolescences
-echo " > Cleaning vulnerability and obesolescences"
+# Gestion vulnerability or obsolescences
+echo " > Cleaning vulnerability and obsolescences"
 rm -rf ./vendor/node_modules/morris.js/

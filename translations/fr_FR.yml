@@ -1,43 +1,51 @@
 # Nouveau format
 
-admin:
-  api_access: Accès API
-  api_access_http: Accès API HTTP
-  api_access_jsonrpc: Accès API JSONRPC
-  api_access_tts: Accès API TTS
-  api_access_pro: Accès API PRO
-  api_access_market: Accès API Market
-  api_key: Clé API
-  api_key_global_of: "API globale de :"
-  api_key_global: Clé API globale
-  whitelist: Liste IP blanche
-  regenerate: Régénérer
-  api_key_pro_of: Clé API PRO de
-  api_key_pro: Clé API PRO
-  market_key_of: Clé Market de
-  market_key: Clé Market
-  access_plugins_api_key: Accès et clés API Plugins
-  api_for_plugin: API pour le plugin
-  no_api_plugin: "Aucun plugin ne dispose de clés API..."
-
 administration:
-  cpu: CPU
-  cpu-cores: cœurs
-  of-cpu-load: de charge
-  of-memory-used: utilisée
-  of-space-used: d'espace utilisé
-  memory: RAM
-  hdd: HDD
-  swap: Swap
-  http-connections-count: Nombre de connexion HTTP
-  connections-count: Nombre de connexion
-  process-count: Nombre de processus
-  uptime: Système démarré depuis
-  welcome-page: Page de bienvenue
-  developer-documentation: Documentation Dev.
-  power-off: Éteindre
-  restart: Redémarrer
-  disconnect: Se déconnecter
+  cpu: "CPU"
+  cpu-cores: "cœurs"
+  of-cpu-load: "de charge"
+  of-memory-used: "utilisée"
+  of-space-used: "d'espace utilisé"
+  memory: "RAM"
+  hdd: "HDD"
+  swap: "Swap"
+  http-connections-count: "Nombre de connexion HTTP"
+  connections-count: "Nombre de connexion"
+  process-count: "Nombre de processus"
+  uptime: "Système démarré depuis"
+  welcome-page: "Page de bienvenue"
+  developer-documentation: "Documentation Dev."
+  power-off: "Éteindre"
+  restart: "Redémarrer"
+  disconnect: "Se déconnecter"
+
+api:
+  access: "Accès API"
+  access-http: "Accès API HTTP"
+  access-jsonrpc: "Accès API JSONRPC"
+  access-tts: "Accès API TTS"
+  access-pro: "Accès API PRO"
+  access-market: "Accès API Market"
+  key: "Clé API"
+  key-global-of: "API globale de :"
+  key-global: "Clé API globale"
+  key-pro-of: "Clé API PRO de"
+  key-pro: "Clé API PRO"
+  market-key-of: "Clé Market de"
+  market-key: "Clé Market"
+  access-plugins-api-key: "Accès et clés API Plugins"
+  api-for-plugin: "API pour le plugin"
+  no-api-plugin: "Aucun plugin ne dispose de clés API..."
+
+cache:
+  alert: "Attention : toute modification du moteur de cache nécessite un redémarrage de votre "
+  cache-engine: "Moteur de cache"
+  clean: "Nettoyer le cache"
+  clear: "Vider le cache"
+  engine: "Moteur"
+  file-system: "Système de fichiers"
+  statistics: "Statistiques"
+  time-pause: "Temps de pause pour le long polling"
 
 common:
   action: "Action"
@@ -66,15 +74,17 @@ common:
   enabled: "Activé"
   enough: "NOK"
   error-b: "[Erreur] "
-  error: Erreur
-  finish: Terminer
-  hours: heures
-  id: ID
-  ignore: Ignorer
-  in-progress: En cours
+  error: "Erreur"
+  finish: "Terminer"
+  here: "Ici"
+  hours: "heures"
+  id: "ID"
+  ignore: "Ignorer"
+  in-progress: "En cours"
   info: "Info"
   information: "Informations"
   jeedom-version: "Base Jeedom"
+  localhost: "Localhost"
   log: "Log"
   main: "Général"
   minutes: "minutes"
@@ -95,6 +105,7 @@ common:
   run: "Exécuter"
   save: "Sauvegarder"
   scenario: "Scénario"
+  seconds: "seconde(s)"
   send: "Envoyer"
   settings: "Paramètres"
   setup: "Configuration"
@@ -106,7 +117,9 @@ common:
   warning: "Warning"
   widget: "Widget"
   widgets: "Widgets"
-  here: "Ici"
+  whitelist: "Liste IP blanche"
+  regenerate: "Régénérer"
+
 
 connection:
   home-msg: Connectez-vous pour accéder à votre session...
@@ -1582,8 +1595,6 @@ commandes:
 "Inversé": "Inversé"
 "Invisible": "Invisible"
 "IP": "IP"
-"IP \"blanche\"": "IPs \"blanches\""
-"IP blanche": "IP blanches"
 "IPs bannies": "IPs bannies"
 "Italiano": "Italiano"
 "J'ai déjà un compte market :": "J'ai déjà un compte market :"
@@ -1744,7 +1755,6 @@ commandes:
 "Listener": "Listener"
 "Listener non trouvé :": "Listener non trouvé :"
 "Local": "Local"
-"Localhost": "Localhost"
 "Log": "Log"
 "Log d'exécution du scénario": "Log d'exécution du scénario"
 "Log du plugin": "Log du plugin"

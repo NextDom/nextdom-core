@@ -56,46 +56,46 @@
         <div class="box-body">
             <!-- Access Section -->
             <fieldset>
-                <legend>{{ 'admin.api_access' | trans }}</legend>
+                <legend>{{ 'api.access' | trans }}</legend>
                 <div class="row">
                     <div class="form-group col-sm-6 col-xs-12 col-padding">
-                        <label class="control-label">{{ 'admin.api_access_http' | trans }}</label>
+                        <label class="control-label">{{ 'api.access-http' | trans }}</label>
                         <div class="input-group">
                             <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="api::core::http::mode" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
                             <select class="form-control configKey" data-l1key="api::core::http::mode">
                                 <option value="enable">{{ 'common.enabled' | trans }}</option>
-                                <option value="whiteip">{{ 'admin.whitelist' | trans }}</option>
-                                <option value="localhost">{{ 'Localhost' }}</option>
+                                <option value="whiteip">{{ 'common.whitelist' | trans }}</option>
+                                <option value="localhost">{{ 'common.localhost' | trans }}</option>
                                 <option value="disable">{{ 'common.disabled' | trans }}</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group col-sm-6 col-xs-12 col-padding">
-                        <label class="control-label">{{ 'admin.api_access_jsonrpc' | trans }}</label>
+                        <label class="control-label">{{ 'api.access-jsonrpc' | trans }}</label>
                         <div class="input-group">
                             <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="api::core::jsonrpc::mode" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
                             <select class="form-control configKey" data-l1key="api::core::jsonrpc::mode">
                                 <option value="enable">{{ 'common.enabled' | trans }}</option>
-                                <option value="whiteip">{{ 'admin.whitelist' | trans }}</option>
-                                <option value="localhost">{{ 'Localhost' }}</option>
+                                <option value="whiteip">{{ 'common.whitelist' | trans }}</option>
+                                <option value="localhost">{{ 'common.localhost' | trans }}</option>
                                 <option value="disable">{{ 'common.disabled' | trans }}</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group col-sm-6 col-xs-12 col-padding">
-                        <label class="control-label">{{ 'admin.api_access_tts' | trans }}</label>
+                        <label class="control-label">{{ 'api.access-tts' | trans }}</label>
                         <div class="input-group">
                             <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="api::core::tts::mode" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
                             <select class="form-control configKey" data-l1key="api::core::tts::mode">
                                 <option value="enable">{{ 'common.enabled' | trans }}</option>
-                                <option value="whiteip">{{ 'admin.whitelist' | trans }}</option>
-                                <option value="localhost">{{ 'Localhost' }}</option>
+                                <option value="whiteip">{{ 'common.whitelist' | trans }}</option>
+                                <option value="localhost">{{ 'common.localhost' | trans }}</option>
                                 <option value="disable">{{ 'common.disabled' | trans }}</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group col-sm-6 col-xs-12 col-padding">
-                        <label class="control-label">{{ 'admin.api_access_pro' | trans }}</label>
+                        <label class="control-label">{{ 'api.access-pro' | trans }}</label>
                         <div class="input-group">
                             <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="api::core::pro::mode" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
                             <select class="form-control configKey" data-l1key="api::core::pro::mode">
@@ -105,7 +105,7 @@
                         </div>
                     </div>
                     <div class="form-group col-sm-6 col-xs-12 col-padding">
-                        <label class="control-label">{{ 'admin.api_access_market' | trans }}</label>
+                        <label class="control-label">{{ 'api.access-market' | trans }}</label>
                         <div class="input-group">
                             <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="api::core::market::mode" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
                             <select class="form-control configKey" data-l1key="api::core::market::mode">
@@ -119,28 +119,28 @@
 
             <!-- Key Section -->
             <fieldset class="legend-section">
-                <legend>{{ 'admin.api_key' | trans }}</legend>
+                <legend>{{ 'api.key' | trans }}</legend>
                 <div class="row">
                     <div class="form-group col-lg-6 col-xs-12 col-padding">
-                        <label class="control-label" data-toggle="tooltip" title="" data-original-title="{{ 'admin.api_key_global_of' | trans }} {{ PRODUCT_NAME }}">{{ 'admin.api_key_global' | trans }}</label>
+                        <label class="control-label" data-toggle="tooltip" title="" data-original-title="{{ 'api.key-global-of' | trans }} {{ PRODUCT_NAME }}">{{ 'api.key-global' | trans }}</label>
                         <div class="mix-group">
-                            <a class="btn btn-action bt_regenerate_api" data-plugin="core"><i class="fas fa-refresh"></i><span>{{ 'admin.regenerate' | trans }}</span></a>
+                            <a class="btn btn-action bt_regenerate_api" data-plugin="core"><i class="fas fa-refresh"></i><span>{{ 'common.regenerate' | trans }}</span></a>
                             <span class="span_apikey label label-value">{{ adminConfigs['api'] }}</span>
                             <a class="btn btn-default bt_copy_api" data-plugin="core"><i class="fas fa-copy no-spacing"></i><span></span></a>
                         </div>
                     </div>
                     <div class="form-group col-lg-6 col-xs-12 col-padding">
-                        <label class="control-label" data-toggle="tooltip" title="" data-original-title="{{ 'admin.api_key_pro_of' | trans }} {{ PRODUCT_NAME }}">{{ 'admin.api_key_pro' | trans  }}</label>
+                        <label class="control-label" data-toggle="tooltip" title="" data-original-title="{{ 'api.key-pro-of' | trans }} {{ PRODUCT_NAME }}">{{ 'api.key-pro' | trans  }}</label>
                         <div class="mix-group">
-                            <a class="btn btn-action bt_regenerate_api" data-plugin="pro"><i class="fas fa-refresh"></i><span>{{ 'admin.regenerate' | trans }}</span></a>
+                            <a class="btn btn-action bt_regenerate_api" data-plugin="pro"><i class="fas fa-refresh"></i><span>{{ 'common.regenerate' | trans }}</span></a>
                             <span class="span_apikey label label-value">{{ adminConfigs.apipro }}</span>
                             <a class="btn btn-default bt_copy_api" data-plugin="pro"><i class="fas fa-copy no-spacing"></i><span></span></a>
                         </div>
                     </div>
                     <div class="form-group col-lg-6 col-xs-12 col-padding">
-                        <label class="control-label" data-toggle="tooltip" title="" data-original-title="{{ 'admin.market_key_of' | trans }} {{ PRODUCT_NAME }}">{{ 'admin.market_key' | trans }}</label>
+                        <label class="control-label" data-toggle="tooltip" title="" data-original-title="{{ 'api.market-key-of' | trans }} {{ PRODUCT_NAME }}">{{ 'api.market-key' | trans }}</label>
                         <div class="mix-group">
-                            <a class="btn btn-action bt_regenerate_api" data-plugin="apimarket"><i class="fas fa-refresh"></i><span>{{ 'admin.regenerate' | trans }}</span></a>
+                            <a class="btn btn-action bt_regenerate_api" data-plugin="apimarket"><i class="fas fa-refresh"></i><span>{{ 'common.regenerate' | trans }}</span></a>
                             <span class="span_apikey label label-value">{{ adminConfigs.apimarket }}</span>
                             <a class="btn btn-default bt_copy_api" data-plugin="apimarket"><i class="fas fa-copy no-spacing"></i><span></span></a>
                         </div>
@@ -150,20 +150,20 @@
 
             <!-- Plugins Section -->
             <fieldset class="legend-section">
-                <legend>{{ 'admin.access_plugins_api_key' | trans }}</legend>
+                <legend>{{ 'api.access-plugins-api-key' | trans }}</legend>
                 {% if adminPluginsList|length > 0 %}
                     <div class="row">
                         {% for pluginData in adminPluginsList %}
                             <div class="form-group col-lg-6 col-xs-12 col-padding">
-                                <label class="control-label" data-original-title="{{ 'admin.api_for_plugins' | trans }} {{ pluginData.plugin.getName() }}">{{ pluginData.plugin.getName() }}</label>
+                                <label class="control-label" data-original-title="{{ 'api.for-plugins' | trans }} {{ pluginData.plugin.getName() }}">{{ pluginData.plugin.getName() }}</label>
                                 <select class="form-control form-group configKey" data-l1key="api::{{ pluginData.plugin.getId() }}::mode">
                                     <option value="enable">{{ 'common.enabled' | trans }}</option>
-                                    <option value="whiteip">{{ 'admin.whitelist' | trans }}</option>
-                                    <option value="localhost">{{ 'Localhost' }}</option>
+                                    <option value="whiteip">{{ 'common.whitelist' | trans }}</option>
+                                    <option value="localhost">{{ 'common.localhost' | trans }}</option>
                                     <option value="disable">{{ 'common.disabled' | trans }}</option>
                                 </select>
                                 <div class="mix-group">
-                                    <a class="btn btn-action bt_regenerate_api" data-plugin="{{ pluginData.plugin.getId() }}"><i class="fas fa-refresh"></i><span>{{ 'admin.regenerate' | trans }}</span></a>
+                                    <a class="btn btn-action bt_regenerate_api" data-plugin="{{ pluginData.plugin.getId() }}"><i class="fas fa-refresh"></i><span>{{ 'common.regenerate' | trans }}</span></a>
                                     <span class="span_apikey label label-value">{{ pluginData.api }}</span>
                                     <a class="btn btn-default bt_copy_api" data-plugin="{{ pluginData.plugin.getId() }}"><i class="fas fa-copy no-spacing"></i><span></span></a>
                                 </div>
@@ -171,7 +171,7 @@
                         {% endfor %}
                     </div>
                 {% else %}
-                    <div class="alert alert-info">{{ 'admin.no_api_plugin' | trans }}.</div>
+                    <div class="alert alert-info">{{ 'api.no-api-plugin' | trans }}.</div>
                 {% endif %}
             </fieldset>
         </div>

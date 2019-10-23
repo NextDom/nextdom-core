@@ -36,9 +36,9 @@
 <section class="content-header">
     <div class="action-bar">
         <div class="action-group">
-            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'common.return' | trans}}</a>
-            <a class="btn btn-warning btn-action-bar" id="bt_cleanCache"><i class="fas fa-magic"></i>{{ 'Nettoyer le cache' }}</a>
-            <a class="btn btn-danger btn-action-bar" id="bt_flushCache"><i class="fas fa-trash"></i>{{ 'Vider le cache' }}</a>
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'common.return' | trans }}</a>
+            <a class="btn btn-warning btn-action-bar" id="bt_cleanCache"><i class="fas fa-magic"></i>{{ 'cache.clean' | trans }}</a>
+            <a class="btn btn-danger btn-action-bar" id="bt_flushCache"><i class="fas fa-trash"></i>{{ 'cache.clear' | trans }}</a>
         </div>
         <div class="action-group">
             <a class="btn btn-success btn-action-bar pull-right" id="bt_savecache"><i class="fas fa-save"></i>{{ 'common.save' | trans }}</a>
@@ -58,10 +58,10 @@
         <div class="box-body">
             <!-- Statistiques Section -->
             <fieldset>
-                <legend>{{ 'Statistiques' }}</legend>
+                <legend>{{ 'cache.statistics' | trans }}</legend>
                 <div class="row">
                     <div class="form-group col-sm-6 col-xs-12 col-padding">
-                        <label class="control-label">{{ 'Statistiques' }}</label>
+                        <label class="control-label">{{ 'cache.statistics' | trans }}</label>
                         <div>
                             <span class="label label-config"><span id="span_cacheObject">{{ adminStats.count }}</span> {{ 'common.objects' | trans }}</span>
                         </div>
@@ -71,17 +71,17 @@
 
             <!-- Moteur Section -->
             <fieldset>
-                <legend>{{ 'Moteur' }}</legend>
+                <legend>{{ 'cache.engine' | trans }}</legend>
                 <div class="row">
                     <div class="form-group col-xs-12 col-padding">
-                        <div class="alert alert-info">{{ 'Attention : toute modification du moteur de cache nécessite un redémarrage de votre ' | trans }} {{ PRODUCT_NAME }} {{ '...' }}</div>
+                        <div class="alert alert-info">{{ 'cache.alert' | trans }} {{ PRODUCT_NAME }} {{ '...' }}</div>
                     </div>
                     <div class="form-group col-sm-6 col-xs-12 col-padding">
-                        <label class="control-label">{{ 'Moteur de cache' }}</label>
+                        <label class="control-label">{{ 'cache.cache-engine' | trans }}</label>
                         <div class="input-group">
                             <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="cache::engine" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
                             <select type="text" class="configKey form-control" data-l1key="cache::engine">
-                                <option value="FilesystemCache">{{ 'Système de fichiers' }} ({{ adminCacheFolder }})</option>
+                                <option value="FilesystemCache">{{ 'cache.file-system' | trans }} ({{ adminCacheFolder }})</option>
                                 {% if adminMemCachedExists %}
                                     <option value="MemcachedCache">{{ 'Memcached' }}</option>
                                 {% endif %}
@@ -131,14 +131,14 @@
                         </div>
                     </div>
                     <div class="form-group col-sm-6 col-xs-12 col-padding">
-                        <label class="control-label">{{ 'Temps de pause pour le long polling' }}</label>
+                        <label class="control-label">{{ 'cache.time-pause' | trans }}</label>
                         <div class="input-group">
                             <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="event::waitPollingTime" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
                             <span class="input-group-addon input-range-min"></span>
                             <input class="configKey slider" type="range" min="0.1" max="20" step="0.1" data-l1key="event::waitPollingTime"/>
                             <span class="input-group-addon input-range-max"></span>
                             <span class="input-group-addon input-range-value"></span>
-                            <span class="input-group-addon">{{ 'secondes' }}</span>
+                            <span class="input-group-addon">{{ 'common.seconds' | trans }}</span>
                         </div>
                     </div>
                 </div>
