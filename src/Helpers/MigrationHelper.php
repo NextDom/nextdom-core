@@ -295,27 +295,28 @@ class MigrationHelper
         }
 
         try {
-            $dir = new \RecursiveDirectoryIterator(NEXTDOM_DATA . '/data/custom/plans', \FilesystemIterator::SKIP_DOTS);
+            if (file_exists(NEXTDOM_DATA . '/data/custom/plans')) {
+                $dir = new \RecursiveDirectoryIterator(NEXTDOM_DATA . '/data/custom/plans', \FilesystemIterator::SKIP_DOTS);
 
-            // Flatten the recursive iterator, folders come before their files
-            $it = new \RecursiveIteratorIterator($dir, \RecursiveIteratorIterator::SELF_FIRST);
+                // Flatten the recursive iterator, folders come before their files
+                $it = new \RecursiveIteratorIterator($dir, \RecursiveIteratorIterator::SELF_FIRST);
 
-            // Maximum depth is 1 level deeper than the base folder
-            $it->setMaxDepth(0);
-            // Basic loop displaying different messages based on file or folder
-            foreach ($it as $fileInfo) {
-                if (!is_link($fileInfo->getFilename()) && Utils::startsWith($fileInfo->getFilename(), 'plan_')) {
+                // Maximum depth is 1 level deeper than the base folder
+                $it->setMaxDepth(0);
+                // Basic loop displaying different messages based on file or folder
+                foreach ($it as $fileInfo) {
+                    if (!is_link($fileInfo->getFilename()) && Utils::startsWith($fileInfo->getFilename(), 'plan_')) {
 
-                    $fileToReplace = $fileInfo->getFilename();
-                    self::migratePlanPath($logFile, $fileToReplace, 'public/img/', 'data/custom/plans/');
-                    self::migratePlanPath($logFile, $fileToReplace, 'core/img/', 'data/custom/plans/');
+                        $fileToReplace = $fileInfo->getFilename();
+                        self::migratePlanPath($logFile, $fileToReplace, 'public/img/', 'data/custom/plans/');
+                        self::migratePlanPath($logFile, $fileToReplace, 'core/img/', 'data/custom/plans/');
+                    }
                 }
+
+
+                self::migratePlanPath($logFile, '', 'public/img/', 'data/custom/plans/');
+                self::migratePlanPath($logFile, '', 'core/img/', 'data/custom/plans/');
             }
-
-
-            self::migratePlanPath($logFile, '', 'public/img/', 'data/custom/plans/');
-            self::migratePlanPath($logFile, '', 'core/img/', 'data/custom/plans/');
-
         } catch (\Exception $exception) {
             echo $exception;
             throw(new CoreException());

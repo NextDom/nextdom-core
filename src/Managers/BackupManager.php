@@ -482,10 +482,10 @@ class BackupManager
             ConsistencyManager::checkConsistency();
             ConsoleHelper::ok();
             ConsoleHelper::step("init values...");
-            BackupManager::initValues();
+            self::initValues();
             ConsoleHelper::ok();
             ConsoleHelper::step("clearing cache...");
-            BackupManager::clearCache();
+            self::clearCache();
             ConsoleHelper::ok();
             FileSystemHelper::rrmdir($tmpDir);
             NextDomHelper::event("end_restore");
@@ -862,6 +862,7 @@ class BackupManager
         CacheManager::flush();
         exec('sh ' . NEXTDOM_ROOT . '/scripts/clear_cache.sh');
     }
+
     /**
      * Init default values
      *
