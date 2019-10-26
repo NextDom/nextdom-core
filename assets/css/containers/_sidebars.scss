@@ -80,7 +80,7 @@
     -o-transition: -o-transform 0.2s ease-in, width 0.2s ease-in;
     transition: transform 0.2s ease-in, width 0.2s ease-in;
 }
-@media (min-width: 768px) {
+@media (min-width: 767px) {
     .sidebar-mini.sidebar-collapse .main-sidebar {
         z-index: 1020;
     }
