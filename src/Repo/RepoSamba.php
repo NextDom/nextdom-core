@@ -38,99 +38,139 @@ use NextDom\Helpers\Samba;
 use NextDom\Managers\BackupManager;
 use NextDom\Managers\ConfigManager;
 
+/**
+ * Access to samba functionality
+ *
+ * @package NextDom\Repo
+ */
 class RepoSamba
 {
+    /**
+     * @var string General name
+     */
     public static $_name = 'Samba';
 
-    public static $_scope = array(
+    /**
+     * @var array Availability
+     */
+    public static $_scope = [
         'plugin' => true,
         'backup' => true,
         'hasConfiguration' => true,
         'core' => true,
-    );
+    ];
 
-    public static $_configuration = array(
-        'parameters_for_add' => array(
-            'path' => array(
+    /**
+     * @var array Configuration fields
+     */
+    public static $_configuration = [
+        'parameters_for_add' => [
+            'path' => [
                 'name' => 'Chemin',
                 'type' => 'input',
-            ),
-        ),
-        'configuration' => array(
-            'backup::ip' => array(
-                'name' => '[Backup] IP',
+            ],
+        ],
+        'configuration' => [
+            'backup::ip' => [
+                'name' => 'repo.samba.conf.ip.name',
                 'type' => 'input',
-                'placeholder' => '192.168.1.57 or mafreebox.free.fr',
-            ),
-            'backup::username' => array(
-                'name' => '[Backup] Utilisateur',
+                'placeholder' => 'repo.samba.conf.ip.placeholder',
+            ],
+            'backup::username' => [
+                'name' => 'repo.samba.conf.user.name',
                 'type' => 'input',
-                'placeholder' => 'my-samba-user',
-            ),
-            'backup::password' => array(
-                'name' => '[Backup] Mot de passe',
+                'placeholder' => 'repo.samba.conf.user.placeholder',
+            ],
+            'backup::password' => [
+                'name' => 'repo.samba.conf.password.name',
                 'type' => 'password',
-            ),
-            'backup::share' => array(
-                'name' => '[Backup] Partage',
+            ],
+            'backup::share' => [
+                'name' => 'repo.samba.conf.share.name',
                 'type' => 'input',
-                'placeholder' => 'share-name',
-            ),
-            'backup::folder' => array(
-                'name' => '[Backup] Chemin',
+                'placeholder' => 'repo.samba.conf.share.placeholder',
+            ],
+            'backup::folder' => [
+                'name' => 'repo.samba.conf.folder.name',
                 'type' => 'input',
-                'placeholder' => '/example/path/',
-            ),
-        ),
-    );
+                'placeholder' => 'repo.samba.conf.folder.placeholder',
+            ],
+        ],
+    ];
 
-    public static function backup_send($path)
+    /**
+     * Send backup to the share
+     *
+     * @param string $backupPath Path of the backup
+     *
+     * @throws \Exception
+     */
+    public static function backup_send($backupPath)
     {
         $backupFolder = ConfigManager::byKey('samba::backup::folder');
-        $pathinfo = pathinfo($path);
+        $pathinfo = pathinfo($backupPath);
         $filename = Samba::cleanName($pathinfo['basename']);
-        $backupDest = sprintf("%s/%s", $backupFolder, $filename);
+        $backupDest = $backupFolder . '/' . $filename;
 
-        $samba = Samba::createFromConfig("backup");
-        $samba->put($path, $backupDest);
+        $sambaConnection = Samba::createFromConfig('backup');
+        $sambaConnection->put($backupPath, $backupDest);
         self::cleanBackups();
     }
 
+    /**
+     * Remove old backups on the server
+     *
+     * @throws \Exception
+     */
     private static function cleanBackups()
     {
-        $backupFolder = ConfigManager::byKey('samba::backup::folder');
-        $maxMtime = strtotime(sprintf('- %s days', ConfigManager::byKey('backup::keepDays')));
+        $backupConfig = ConfigManager::byKeys(['samba::backup::folder', 'backup::keepDays']);
+        $maxMtime = strtotime('- ' . $backupConfig['backup::keepDays'] . ' days');
 
-        $samba = Samba::createFromConfig("backup");
-        $files = $samba->getFiles($backupFolder);
-        foreach ($files as $c_file) {
-            if ($c_file->getMTime() < $maxMtime) {
-                $samba->del($c_file->getPath());
+        $sambaConnection = Samba::createFromConfig('backup');
+        $folderContent = $sambaConnection->getFiles($backupConfig['samba::backup::folder']);
+        foreach ($folderContent as $currentFile) {
+            if ($currentFile->getMTime() < $maxMtime) {
+                $sambaConnection->del($currentFile->getPath());
             }
         }
     }
 
+    /**
+     * Get list of backups
+     *
+     * @return array List of backups
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     */
     public static function backup_list()
     {
         $result = [];
         $backupFolder = ConfigManager::byKey('samba::backup::folder');
 
-        $samba = Samba::createFromConfig("backup");
-        $files = $samba->getFiles($backupFolder, "mtime", "desc");
-        foreach ($files as $c_file) {
-            $result[] = $c_file->getName();
+        $sambaConnection = Samba::createFromConfig("backup");
+        $folderContent = $sambaConnection->getFiles($backupFolder, "mtime", "desc");
+        foreach ($folderContent as $currentFile) {
+            $result[] = $currentFile->getName();
         }
         return $result;
     }
 
+    /**
+     * Start restore process
+     *
+     * @param string $file Selected restore file
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     */
     public static function backup_restore($file)
     {
         $backupDir = BackupManager::getBackupDirectory();
-        $backupFile = sprintf("%s/%s", $backupDir, $file);
+        $backupFile = $backupDir . '/' . $file;
 
-        $samba = Samba::createFromConfig("backup");
+        $sambaConnection = Samba::createFromConfig("backup");
         $backupFolder = ConfigManager::byKey('samba::backup::folder');
-        $samba->get($backupFolder . '/' . $file, $backupFile);
+        $sambaConnection->get($backupFolder . '/' . $file, $backupFile);
         BackupManager::restore($backupFile, true);
     }
 }

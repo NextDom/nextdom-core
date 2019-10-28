@@ -615,6 +615,19 @@ commandes:
   influxDbPortLabel: Port
   influxDbDatabaseNameLabel: Database
 
+repo:
+  samba:
+    conf:
+      ip.name: Server IP
+      ip.placeholder: 192.168.1.57 or mafreebox.free.fr
+      user.name: User of the share
+      user.placeholder: Username
+      password.name: Password
+      share.name: Share path
+      share.placeholder: \\192.168.1.57\MyShare ou \\mafreebox.free.fr\MyShare
+      folder.name: Folder
+      folder.placeholder: Target folder (/nextdom/)
+
 # Ancien format
 "401 - Accès non autorisé": "401 - Access not allowed"
 "Aucune méthode correspondante à : ": "No method corresponding to: "

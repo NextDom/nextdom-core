@@ -470,7 +470,6 @@ interact:
   filters: "Filtres"
   group: "Groupe"
   id: "ID : "
-  interactions: "Interactions"
   the_question_cannot_be_empty: "La demande ne peut être vide"
   limit_to_categories: "Limiter aux catégories"
   limit_to_commands_belonging_to_objects: "Limiter aux commandes appartenant aux objets"
@@ -635,6 +634,19 @@ commandes:
   influxDbIPLabel: IP
   influxDbPortLabel: Port
   influxDbDatabaseNameLabel: Base de données
+
+repo:
+  samba:
+    conf:
+      ip.name: IP du serveur
+      ip.placeholder: 192.168.1.57 ou mafreebox.free.fr
+      user.name: Utilisateur du partage
+      user.placeholder: Nom de l'utilisateur
+      password.name: Mot de passe
+      share.name: Chemin du partage
+      share.placeholder: \\192.168.1.57\MonPartage ou \\mafreebox.free.fr\MonPartage
+      folder.name: Répertoire
+      folder.placeholder: Répertoire de destination (/nextdom/)
 
 # Ancien format
 "401 - Accès non autorisé": "401 - Accès non autorisé"
@@ -1555,7 +1567,6 @@ commandes:
 "Interaction": "Interaction"
 "Interaction inconnue. Vérifiez l'ID": "Interaction inconnue. Vérifiez l'ID"
 "Interaction non comprise": "Interaction non comprise"
-"Interactions": "Interactions"
 "Interactions \"préviens moi\"": "Interactions \"préviens moi\""
 "Interactions automatiques": "Interactions automatiques"
 "InteractQuery ID inconnu": "InteractQuery ID inconnu"
@@ -2111,7 +2122,6 @@ commandes:
 "Remplacer cette commande par la commande": "Remplacer cette commande par la commande"
 "Render": "Render"
 "Renouveler la clé API": "Renouveler la clé API"
-"repo": "repo"
 "repoCode": "repoCode"
 "Reprise": "Reprise"
 "Requête invalide. Version JSON-RPC invalide :": "Requête invalide. Version JSON-RPC invalide :"
