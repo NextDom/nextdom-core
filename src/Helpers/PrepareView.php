@@ -51,7 +51,7 @@ class PrepareView
             'nextdom::firstUse',
             'nextdom::Welcome',
             'nextdom::waitSpinner',
-            'nextdom::theme',
+            'nextdom::user-theme',
             'notify::status',
             'notify::position',
             'notify::timeout',
@@ -254,7 +254,7 @@ class PrepareView
     private function initCssPool(&$pageData)
     {
         $pageData['CSS_POOL'][] = '/public/css/nextdom.css';
-        $pageData['CSS_POOL'][] = '/public/css/themes/' . ConfigManager::byKey('nextdom::theme', 'core', 'dark-nextdom') . '.css';
+        $pageData['CSS_POOL'][] = '/public/css/themes/' . ConfigManager::byKey('nextdom::user-theme', 'core', 'dark-nextdom') . '.css';
         // Icônes
         $rootDir = NEXTDOM_ROOT . '/public/icon/';
         foreach (FileSystemHelper::ls($rootDir, '*') as $dir) {

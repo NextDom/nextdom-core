@@ -319,7 +319,7 @@
 .nav-tabs-custom > .nav-tabs > li.active:hover > a,
 .main-footer {
   background-color:map_get($color_theme, 'color7') !important;
-  border-color:map_get($color_theme, 'color760') !important;
+  border-color:map_get($color_theme, 'color7') !important;
 }
 .nav-tabs-custom > .nav-tabs > li.father > a {
   background-color:map_get($color_theme, 'color7') !important;
@@ -479,7 +479,7 @@ body,
 
 /* Market */
 .media-title {
-  background-color: map_get($color_theme, 'color860') !important;
+  background-color: map_get($color_theme, 'color8') !important;
 }
 
 
@@ -785,7 +785,7 @@ pre {
 /* Contenu tableau */
 .table-condensed,
 .table-bordered {
-  background-color: map_get($color_theme, 'color1360') !important;
+  background-color: map_get($color_theme, 'color13') !important;
 }
 
 

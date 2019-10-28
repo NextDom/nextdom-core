@@ -127,9 +127,7 @@ class AdministrationPages(BaseGuiTest):
         """Test custom administration page
         """
         self.goto('index.php?v=d&p=custom')
-        color2_input = self.get_element_by_css('input[data-l1key="theme:color2"]')
         back_button = self.get_link_by_title('Retour')
-        self.assertIsNotNone(color2_input)
         self.assertIsNotNone(back_button)
         self.assertEqual(0, len(self.get_js_logs()))
         back_button.click()

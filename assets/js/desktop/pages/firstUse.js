@@ -59,7 +59,7 @@ $(document).ready(function () {
     }
   });
   $('div.setup-panel div a.btn-primary').trigger('click');
-  
+
   nextdom.config.load({
       configuration: $('.firstUse-Page').getValues('.configKey:not(.noSet)')[0],
       error: function (error) {
@@ -180,7 +180,7 @@ $("input[name=themeWidget]").on('click', function (event) {
 
 $("input[name=themeNextDom]").on('click', function (event) {
     var radio = $(this).val();
-    $('.configKey[data-l1key="nextdom::theme"]').value(radio);
+    $('.configKey[data-l1key="nextdom::user-theme"]').value(radio);
 });
 
 function goToNextStep(_step) {

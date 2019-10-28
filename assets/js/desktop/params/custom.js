@@ -90,10 +90,12 @@ function initEvents() {
 
     // Theme config changing
     $("#themeBase").on('change', function (event) {
-        $('.configKey[data-l1key="nextdom::theme"]').value($("#themeBase").value() + "-" + $("#themeIdentity").value());
+        $('.configKey[data-l1key="nextdom::user-theme"]').value($("#themeBase").value() + "-" + $("#themeIdentity").value());
+        $('#customPreview').contents().find("head").append($("<link href='/public/css/themes/" + $('.configKey[data-l1key="nextdom::user-theme"]').value() + ".css' rel='stylesheet'>"));
     });
     $("#themeIdentity").on('change', function (event) {
-        $('.configKey[data-l1key="nextdom::theme"]').value($("#themeBase").value() + "-" + $("#themeIdentity").value());
+        $('.configKey[data-l1key="nextdom::user-theme"]').value($("#themeBase").value() + "-" + $("#themeIdentity").value());
+        $('#customPreview').contents().find("head").append($("<link href='/public/css/themes/" + $('.configKey[data-l1key="nextdom::user-theme"]').value() + ".css' rel='stylesheet'>"));
     });
 
     // Save customs

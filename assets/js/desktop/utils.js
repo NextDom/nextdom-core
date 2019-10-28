@@ -644,27 +644,3 @@ function resetConfigParamKey(keyElt) {
         }
     });
 }
-
-/**
- * Reset a theme param to his default value
- *
- * @param keyElt Elt or button who handle the reset and contain the config key
- */
-function resetThemeParamKey(keyElt) {
-    var paramKey = keyElt.attr('data-l1key');
-    nextdom.config.load({
-        configuration: 'nextdom::theme',
-        error: function (error) {
-            notify("Core", error.message, 'error');
-        },
-        success: function (data) {
-            if (isset(data) && data != "") {
-                var config = getThemeColors(data);
-                // Direct slider
-                keyElt.siblings(".slider").value(config[paramKey]);
-                // Or associate fields
-                $('.configKey[data-l1key="' + paramKey + '"]').value(config[paramKey])
-            }
-        }
-    });
-}

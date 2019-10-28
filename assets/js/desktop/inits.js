@@ -97,11 +97,6 @@ function initEventHandler(){
     $('.bt_resetConfigParam').on('click', function () {
         resetConfigParamKey($(this));
     });
-
-    // Reset theme param to default theme value
-    $('.bt_resetThemeParam').on('click', function () {
-        resetThemeParamKey($(this));
-    });
 }
 
 /**

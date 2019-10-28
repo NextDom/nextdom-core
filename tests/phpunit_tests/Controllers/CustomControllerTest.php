@@ -31,8 +31,6 @@ class CustomControllerTest extends BaseControllerTest
 
     public function testSimple()
     {
-        $pageData = [];
-        $result = \NextDom\Controller\Params\CustomController::get($pageData);
     }
 
     public function testPageDataVars()
