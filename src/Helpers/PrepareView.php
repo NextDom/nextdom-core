@@ -51,7 +51,6 @@ class PrepareView
             'nextdom::firstUse',
             'nextdom::Welcome',
             'nextdom::waitSpinner',
-            'nextdom::user-theme',
             'notify::status',
             'notify::position',
             'notify::timeout',
@@ -62,7 +61,6 @@ class PrepareView
             'product_name',
             'product_icon',
             'product_connection_image',
-            'theme',
             'default_bootstrap_theme'));
     }
 
@@ -255,7 +253,6 @@ class PrepareView
     {
         $pageData['CSS_POOL'][] = '/public/css/nextdom.css';
         $pageData['CSS_POOL'][] = '/public/css/themes/' . ConfigManager::byKey('nextdom::user-theme', 'core', 'dark-nextdom') . '.css';
-        // Icônes
         $rootDir = NEXTDOM_ROOT . '/public/icon/';
         foreach (FileSystemHelper::ls($rootDir, '*') as $dir) {
             if (is_dir($rootDir . $dir) && file_exists($rootDir . $dir . '/style.css')) {

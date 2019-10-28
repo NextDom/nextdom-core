@@ -46,11 +46,18 @@ class CustomController extends BaseController
     public static function get(&$pageData): string
     {
         $pageData['PRODUCT_NAME'] = ConfigManager::byKey('product_name');
-        $pageData['customThemesIdentities'] = FileSystemHelper::ls('public/css/themes/', 'dark*.css');
-        $pageData['customThemesBases'] = FileSystemHelper::ls('public/css/themes/', '*nextdom.css');
+        $themesBases = FileSystemHelper::ls('public/css/themes/', '*nextdom.css');
+        $pageData['customThemesBases'] = [];
+        foreach ($themesBases as $themeBase) {
+            $pageData['customThemesBases'][] = substr($themeBase, 0, -12);
+        }
+        $themesIdentities = FileSystemHelper::ls('public/css/themes/', 'dark*.css');
+        $pageData['customThemesIdentities'] = [];
+        foreach ($themesIdentities as $themeIdentity) {
+            $pageData['customThemesIdentities'][] = substr($themeIdentity, 5, -4);
+        }
         $pageData['customThemeChoice'] = ConfigManager::byKey('nextdom::user-theme');
         $pageData['adminCategories'] = NextDomHelper::getConfiguration('eqLogic:category');
-        $pageData['Theme'] = NextDomHelper::getConfiguration('theme');
         $pageData['customEnableCustomCss'] = ConfigManager::byKey('enableCustomCss');
         $pageData['customJS'] = '';
         if (file_exists(NEXTDOM_DATA . '/custom/desktop/custom.js')) {

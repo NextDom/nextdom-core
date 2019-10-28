@@ -64,15 +64,15 @@
                             <label class="control-label">{{ 'Base du Thème' }}</label>
                             <select id="themeBase" class="form-control">
                                 {% for customThemesBase in customThemesBases %}
-                                    <option value="{{ customThemesBase|split('-')[0] }}"{% if customThemesBase|split('-')[0] == customThemeChoice|split('-')[0] %} selected="selected"{% endif %}>{{ customThemesBase|split('-')[0] }}</option>
+                                    <option value="{{ customThemesBase }}"{% if customThemesBase == customThemeChoice|split('-')[0] %} selected="selected"{% endif %}>{{ customThemesBase }}</option>
                                 {% endfor %}
                             </select>
                         </div>
                         <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
                             <label class="control-label">{{ 'Identité du Thème' }}</label>
                             <select id="themeIdentity" class="form-control">
-                                {% for customThemesIdentitie in customThemesIdentities %}
-                                    <option value="{{ customThemesIdentitie|split('-')[1]|slice(0,-4) }}"{% if customThemesIdentitie|split('-')[1]|slice(0,-4) == customThemeChoice|split('-')[1] %} selected="selected"{% endif %}>{{ customThemesIdentitie|split('-')[1]|slice(0,-4) }}</option>
+                                {% for customThemesIdentity in customThemesIdentities %}
+                                    <option value="{{ customThemesIdentity }}"{% if customThemesIdentity == customThemeChoice|split('-')[1] %} selected="selected"{% endif %}>{{ customThemesIdentity }}</option>
                                 {% endfor %}
                             </select>
                         </div>
