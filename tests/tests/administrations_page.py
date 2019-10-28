@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# line 100 caracters max or #pylint: disable=line-too-long
+####################################################################################################
 """Run all tests of administration pages
 """
 import unittest
@@ -38,12 +40,16 @@ class AdministrationPages(BaseGuiTest):
         """Test global administration page
         """
         self.goto('index.php?v=d&p=administration')
-        users_button = self.get_element_by_css('a[href="index.php?v=d&p=users"]')
-        interact_admin_button = self.get_element_by_css('a[href="index.php?v=d&p=interact_admin"]')
-        cache_button = self.get_element_by_css('a[href="index.php?v=d&p=cache"]')
-        self.assertIsNotNone(users_button)
-        self.assertIsNotNone(interact_admin_button)
-        self.assertIsNotNone(cache_button)
+        link_buttons = ['users', 'api', 'network', 'security', 'cache', 'services',
+                        'general', 'custom', 'profils', 'commandes', 'links', 'interact_config',
+                        'eqlogic', 'summary', 'report_config', 'log_config',
+                        'health', 'cron', 'eqAnalyse', 'realtime', 'history', 'timeline',
+                        'report', 'log',
+                        'display', 'backup', 'update', 'osdb', 'interact', 'scenario',
+                        'object', 'plugin']
+        for link_button in link_buttons:
+            admin_button = self.get_element_by_css('a[href="index.php?v=d&p='+link_button+'"]')
+            self.assertIsNotNone(admin_button)
         self.assertEqual(0, len(self.get_js_logs()))
 
     def test_users_page(self):
@@ -102,9 +108,9 @@ class AdministrationPages(BaseGuiTest):
         back_button.click()
 
     def test_service_page(self):
-        """Test service administration page
+        """Test services administration page
         """
-        self.goto('index.php?v=d&p=update_admin')
+        self.goto('index.php?v=d&p=services')
         test_repo_buttons = self.driver.find_element_by_class_name('testRepoConnection')
         back_button = self.get_link_by_title('Retour')
         self.assertIsNotNone(test_repo_buttons)
@@ -168,10 +174,10 @@ class AdministrationPages(BaseGuiTest):
         self.assertEqual(0, len(self.get_js_logs()))
         back_button.click()
 
-    def test_interact_admin_page(self):
-        """Test interact administration page
+    def test_interact_config_page(self):
+        """Test interact config administration page
         """
-        self.goto('index.php?v=d&p=interact_admin')
+        self.goto('index.php?v=d&p=interact_config')
         add_color_button = self.get_element_by_id('bt_addColorConvert')
         back_button = self.get_link_by_title('Retour')
         self.assertIsNotNone(add_color_button)
@@ -190,10 +196,10 @@ class AdministrationPages(BaseGuiTest):
         self.assertEqual(0, len(self.get_js_logs()))
         back_button.click()
 
-    def test_reports_admin_page(self):
-        """Test reports administration page
+    def test_report_config_page(self):
+        """Test report config administration page
         """
-        self.goto('index.php?v=d&p=reports_admin')
+        self.goto('index.php?v=d&p=report_config')
         report_delay_input = self.get_element_by_css('input[data-l1key="report::delay"]')
         back_button = self.get_link_by_title('Retour')
         self.assertIsNotNone(report_delay_input)
@@ -201,10 +207,10 @@ class AdministrationPages(BaseGuiTest):
         self.assertEqual(0, len(self.get_js_logs()))
         back_button.click()
 
-    def test_log_admin_page(self):
-        """Test log view administration page
+    def test_log_config_page(self):
+        """Test log config administration page
         """
-        self.goto('index.php?v=d&p=log_admin')
+        self.goto('index.php?v=d&p=log_config')
         max_event_input = self.get_element_by_css('input[data-l1key="timeline::maxevent"]')
         back_button = self.get_link_by_title('Retour')
         self.assertIsNotNone(max_event_input)

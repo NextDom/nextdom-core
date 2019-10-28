@@ -18,7 +18,7 @@
 require_once(__DIR__ . '/../../../src/core.php');
 require_once(__DIR__ . '/BaseControllerTest.php');
 
-class UpdateAdminControllerTest extends BaseControllerTest
+class ReportConfigControllerTest extends BaseControllerTest
 {
     public function setUp()
     {
@@ -32,15 +32,14 @@ class UpdateAdminControllerTest extends BaseControllerTest
     public function testSimple()
     {
         $pageData = [];
-        $result = \NextDom\Controller\Admin\UpdateAdminController::get($pageData);
-        $this->assertArrayHasKey('adminReposList', $pageData);
-        $this->assertContains('href="#tabgithub"', $result);
+        $result = \NextDom\Controller\Params\ReportConfigController::get($pageData);
+        $this->assertContains('id="report_config"', $result);
     }
 
     public function testPageDataVars()
     {
         $pageData = [];
-        \NextDom\Controller\Admin\UpdateAdminController::get($pageData);
-        $this->pageDataVars('desktop/admin/update_admin.html.twig', $pageData);
+        \NextDom\Controller\Params\ReportConfigController::get($pageData);
+        $this->pageDataVars('desktop/params/report_config.html.twig', $pageData);
     }
 }

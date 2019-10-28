@@ -45,12 +45,12 @@ initEvents();
  */
 function loadInformations() {
     nextdom.config.load({
-        configuration: $('#interact_admin').getValues('.configKey:not(.noSet)')[0],
+        configuration: $('#interact_config').getValues('.configKey:not(.noSet)')[0],
         error: function (error) {
             notify("Erreur", error.message, 'error');
         },
         success: function (data) {
-            $('#interact_admin').setValues(data, '.configKey');
+            $('#interact_config').setValues(data, '.configKey');
             modifyWithoutSave = false;
             $(".bt_cancelModifs").hide();
         }
@@ -62,7 +62,7 @@ function loadInformations() {
  */
 function initEvents() {
     // Param changed : page leaving lock by msgbox
-    $('#interact_admin').delegate('.configKey', 'change', function () {
+    $('#interact_config').delegate('.configKey', 'change', function () {
         if (!lockModify) {
             modifyWithoutSave = true;
             $(".bt_cancelModifs").show();
@@ -75,22 +75,22 @@ function initEvents() {
     });
 
     // Save button
-    $('#bt_saveinteract_admin').on('click', function (event) {
+    $('#bt_saveinteract_config').on('click', function (event) {
         saveConvertColor();
         nextdom.config.save({
-            configuration: $('#interact_admin').getValues('.configKey')[0],
+            configuration: $('#interact_config').getValues('.configKey')[0],
             error: function (error) {
                 notify("Erreur", error.message, 'error');
             },
             success: function () {
                 nextdom.config.load({
-                    configuration: $('#interact_admin').getValues('.configKey')[0],
+                    configuration: $('#interact_config').getValues('.configKey')[0],
                     plugin: 'core',
                     error: function (error) {
                         notify("Erreur", error.message, 'error');
                     },
                     success: function (data) {
-                        $('#interact_admin').setValues(data, '.configKey');
+                        $('#interact_config').setValues(data, '.configKey');
                         modifyWithoutSave = false;
                         $(".bt_cancelModifs").hide();
                         notify("Info", '{{Sauvegarde réussie}}', 'success');

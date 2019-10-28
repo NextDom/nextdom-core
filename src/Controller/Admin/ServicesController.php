@@ -20,46 +20,42 @@
  * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
  */
 
-namespace NextDom\Controller\Params;
+namespace NextDom\Controller\Admin;
 
 use NextDom\Controller\BaseController;
 use NextDom\Helpers\AuthentificationHelper;
+use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
+use NextDom\Managers\CacheManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\PluginManager;
+use NextDom\Managers\UpdateManager;
+use NextDom\Managers\UserManager;
 
 /**
- * Class LogAdminController
- * @package NextDom\Controller\Params
+ * Class ServicesController
+ * @package NextDom\Controller\Admin
  */
-class LogAdminController extends BaseController
+class ServicesController extends BaseController
 {
-    /**
-     * Render logAdmin page
+    /** Render Services page
      *
      * @param array $pageData Page data
      *
-     * @return string Content of log_admin page
+     * @return string Content of update_admin page
      *
      * @throws \Exception
      */
     public static function get(&$pageData): string
     {
-
-        global $NEXTDOM_INTERNAL_CONFIG;
-        $pageData['adminAlerts'] = $NEXTDOM_INTERNAL_CONFIG['alerts'];
-        $pageData['adminOthersLogs'] = array('scenario', 'plugin', 'market', 'api', 'connection', 'interact', 'tts', 'report', 'event');
-        $pageData['adminPluginsList'] = [];
-        $pluginsList = PluginManager::listPlugin(true);
-        foreach ($pluginsList as $plugin) {
-            $pluginApi = ConfigManager::byKey('api', $plugin->getId());
-            $pluginData = [];
-            $pluginData['api'] = $pluginApi;
-            $pluginData['plugin'] = $plugin;
-            $pageData['adminPluginsList'][] = $pluginData;
+        $pageData['adminReposList'] = UpdateManager::listRepo();
+        $keys = array('market::allowDNS', 'ldap::enable');
+        foreach ($pageData['adminReposList'] as $key => $value) {
+            $keys[] = $key . '::enable';
         }
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/params/log_admin.js';
+        $pageData['adminConfigs'] = ConfigManager::byKeys($keys);
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/admin/services.js';
 
-        return Render::getInstance()->get('/desktop/params/log_admin.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/admin/services.html.twig', $pageData);
     }
 }

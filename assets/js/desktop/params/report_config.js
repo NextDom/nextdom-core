@@ -43,12 +43,12 @@ initEvents();
  */
 function loadInformations() {
     nextdom.config.load({
-        configuration: $('#reports_admin').getValues('.configKey:not(.noSet)')[0],
+        configuration: $('#report_config').getValues('.configKey:not(.noSet)')[0],
         error: function (error) {
             notify("Erreur", error.message, 'error');
         },
         success: function (data) {
-            $('#reports_admin').setValues(data, '.configKey');
+            $('#report_config').setValues(data, '.configKey');
             modifyWithoutSave = false;
             $(".bt_cancelModifs").hide();
         }
@@ -60,7 +60,7 @@ function loadInformations() {
  */
 function initEvents() {
     // Param changed : page leaving lock by msgbox
-    $('#reports_admin').delegate('.configKey', 'change', function () {
+    $('#report_config').delegate('.configKey', 'change', function () {
         if (!lockModify) {
             modifyWithoutSave = true;
             $(".bt_cancelModifs").show();
@@ -73,21 +73,21 @@ function initEvents() {
     });
 
     // Save button
-    $("#bt_savereports_admin").on('click', function (event) {
+    $("#bt_savereport_config").on('click', function (event) {
       nextdom.config.save({
-          configuration: $('#reports_admin').getValues('.configKey')[0],
+          configuration: $('#report_config').getValues('.configKey')[0],
           error: function (error) {
               notify("Erreur", error.message, 'error');
           },
           success: function () {
               nextdom.config.load({
-                  configuration: $('#reports_admin').getValues('.configKey')[0],
+                  configuration: $('#report_config').getValues('.configKey')[0],
                   plugin: 'core',
                   error: function (error) {
                       notify("Erreur", error.message, 'error');
                   },
                   success: function (data) {
-                      $('#reports_admin').setValues(data, '.configKey');
+                      $('#report_config').setValues(data, '.configKey');
                       modifyWithoutSave = false;
                       notify("Info", '{{Sauvegarde réussie}}', 'success');
                   }

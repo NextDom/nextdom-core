@@ -18,7 +18,7 @@
 require_once(__DIR__ . '/../../../src/core.php');
 require_once(__DIR__ . '/BaseControllerTest.php');
 
-class ReportAdminControllerTest extends BaseControllerTest
+class InteractConfigControllerTest extends BaseControllerTest
 {
     public function setUp()
     {
@@ -32,14 +32,14 @@ class ReportAdminControllerTest extends BaseControllerTest
     public function testSimple()
     {
         $pageData = [];
-        $result = \NextDom\Controller\Params\ReportAdminController::get($pageData);
-        $this->assertContains('id="reports_admin"', $result);
+        $result = \NextDom\Controller\Params\InteractConfigController::get($pageData);
+        $this->assertContains('id="interact_config"', $result);
     }
 
     public function testPageDataVars()
     {
         $pageData = [];
-        \NextDom\Controller\Params\ReportAdminController::get($pageData);
-        $this->pageDataVars('desktop/params/reports_admin.html.twig', $pageData);
+        \NextDom\Controller\Params\InteractConfigController::get($pageData);
+        $this->pageDataVars('desktop/params/interact_config.html.twig', $pageData);
     }
 }

@@ -18,7 +18,7 @@
 require_once(__DIR__ . '/../../../src/core.php');
 require_once(__DIR__ . '/BaseControllerTest.php');
 
-class LogAdminControllerTest extends BaseControllerTest
+class ServicesControllerTest extends BaseControllerTest
 {
     public function setUp()
     {
@@ -32,15 +32,15 @@ class LogAdminControllerTest extends BaseControllerTest
     public function testSimple()
     {
         $pageData = [];
-        $result = \NextDom\Controller\Params\LogAdminController::get($pageData);
-        $this->assertArrayHasKey('adminPluginsList', $pageData);
-        $this->assertContains('id="log_admin"', $result);
+        $result = \NextDom\Controller\Admin\ServicesController::get($pageData);
+        $this->assertArrayHasKey('adminReposList', $pageData);
+        $this->assertContains('href="#tabgithub"', $result);
     }
 
     public function testPageDataVars()
     {
         $pageData = [];
-        \NextDom\Controller\Params\LogAdminController::get($pageData);
-        $this->pageDataVars('desktop/params/log_admin.html.twig', $pageData);
+        \NextDom\Controller\Admin\ServicesController::get($pageData);
+        $this->pageDataVars('desktop/admin/services.html.twig', $pageData);
     }
 }

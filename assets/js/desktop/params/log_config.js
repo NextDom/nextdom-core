@@ -43,12 +43,12 @@ initEvents();
  */
 function loadInformations() {
     nextdom.config.load({
-        configuration: $('#log_admin').getValues('.configKey:not(.noSet)')[0],
+        configuration: $('#log_config').getValues('.configKey:not(.noSet)')[0],
         error: function (error) {
             notify("Erreur", error.message, 'error');
         },
         success: function (data) {
-            $('#log_admin').setValues(data, '.configKey');
+            $('#log_config').setValues(data, '.configKey');
             loadActionOnMessage();
             modifyWithoutSave = false;
             $(".bt_cancelModifs").hide();
@@ -61,7 +61,7 @@ function loadInformations() {
  */
 function initEvents() {
     // Param changed : page leaving lock by msgbox
-    $('#log_admin').delegate('.configKey', 'change', function () {
+    $('#log_config').delegate('.configKey', 'change', function () {
         if (!lockModify) {
             modifyWithoutSave = true;
             $(".bt_cancelModifs").show();
@@ -74,8 +74,8 @@ function initEvents() {
     });
 
     // Save button
-    $("#bt_savelog_admin").on('click', function (event) {
-        var config = $('#log_admin').getValues('.configKey')[0];
+    $("#bt_savelog_config").on('click', function (event) {
+        var config = $('#log_config').getValues('.configKey')[0];
         config.actionOnMessage = json_encode($('#div_actionOnMessage .actionOnMessage').getValues('.expressionAttr'));
         nextdom.config.save({
             configuration: config,
@@ -84,13 +84,13 @@ function initEvents() {
             },
             success: function () {
                 nextdom.config.load({
-                    configuration: $('#log_admin').getValues('.configKey')[0],
+                    configuration: $('#log_config').getValues('.configKey')[0],
                     plugin: 'core',
                     error: function (error) {
                         notify("Erreur", error.message, 'error');
                     },
                     success: function (data) {
-                        $('#log_admin').setValues(data, '.configKey');
+                        $('#log_config').setValues(data, '.configKey');
                         modifyWithoutSave = false;
                         $(".bt_cancelModifs").hide();
                         notify("Info", '{{Sauvegarde réussie}}', 'success');
@@ -101,7 +101,7 @@ function initEvents() {
     });
 
     // Log engine change
-    $('#log_admin').delegate('.configKey[data-l1key="log::engine"]', 'change', function () {
+    $('#log_config').delegate('.configKey[data-l1key="log::engine"]', 'change', function () {
         $('.logEngine').hide();
         $('.logEngine.'+$(this).value()).show();
         modifyWithoutSave = true;

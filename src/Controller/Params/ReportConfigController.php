@@ -26,13 +26,13 @@ use NextDom\Controller\BaseController;
 use NextDom\Helpers\Render;
 
 /**
- * Class ReportAdminController
+ * Class ReportConfigController
  * @package NextDom\Controller\Params
  */
-class ReportAdminController extends BaseController
+class ReportConfigController extends BaseController
 {
     /**
-     * Render reportsAdmin page
+     * Render ReportConfig page
      *
      * @param array $pageData Page data
      *
@@ -41,8 +41,8 @@ class ReportAdminController extends BaseController
      */
     public static function get(&$pageData): string
     {
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/params/reports_admin.js';
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/params/report_config.js';
 
-        return Render::getInstance()->get('/desktop/params/reports_admin.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/params/report_config.html.twig', $pageData);
     }
 }

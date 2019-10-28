@@ -43,12 +43,12 @@ initEvents();
  */
 function loadInformations() {
     nextdom.config.load({
-        configuration: $('#update_admin').getValues('.configKey:not(.noSet)')[0],
+        configuration: $('#services').getValues('.configKey:not(.noSet)')[0],
         error: function (error) {
             notify("Erreur", error.message, 'error');
         },
         success: function (data) {
-            $('#update_admin').setValues(data, '.configKey');
+            $('#services').setValues(data, '.configKey');
             modifyWithoutSave = false;
             $(".bt_cancelModifs").hide();
         }
@@ -60,7 +60,7 @@ function loadInformations() {
  */
 function initEvents() {
     // Param changed : page leaving lock by msgbox
-    $('#update_admin').delegate('.configKey', 'change', function () {
+    $('#services').delegate('.configKey', 'change', function () {
         if (!lockModify) {
             modifyWithoutSave = true;
             $(".bt_cancelModifs").show();
@@ -73,8 +73,8 @@ function initEvents() {
     });
 
     // Save button
-    $("#bt_saveupdate_admin").on('click', function (event) {
-        var config = $('#update_admin').getValues('.configKey')[0];
+    $("#bt_saveservices").on('click', function (event) {
+        var config = $('#services').getValues('.configKey')[0];
         config.actionOnMessage = json_encode($('#div_actionOnMessage .actionOnMessage').getValues('.expressionAttr'));
         nextdom.config.save({
             configuration: config,
@@ -83,12 +83,12 @@ function initEvents() {
             },
             success: function () {
                 nextdom.config.load({
-                    configuration: $('#update_admin').getValues('.configKey:not(.noSet)')[0],
+                    configuration: $('#services').getValues('.configKey:not(.noSet)')[0],
                     error: function (error) {
                         notify("Erreur", error.message, 'error');
                     },
                     success: function (data) {
-                        $('#update_admin').setValues(data, '.configKey');
+                        $('#services').setValues(data, '.configKey');
                         modifyWithoutSave = false;
                         $(".bt_cancelModifs").hide();
                         notify("Info", '{{Sauvegarde réussie}}', 'success');
@@ -102,18 +102,18 @@ function initEvents() {
     $('.testRepoConnection').on('click',function(){
         var repo = $(this).attr('data-repo');
         nextdom.config.save({
-            configuration: $('#update_admin').getValues('.configKey')[0],
+            configuration: $('#services').getValues('.configKey')[0],
             error: function (error) {
                 notify("Erreur", error.message, 'error');
             },
             success: function () {
                 nextdom.config.load({
-                    configuration: $('#update_admin').getValues('.configKey:not(.noSet)')[0],
+                    configuration: $('#services').getValues('.configKey:not(.noSet)')[0],
                     error: function (error) {
                         notify("Erreur", error.message, 'error');
                     },
                     success: function (data) {
-                        $('#update_admin').setValues(data, '.configKey');
+                        $('#services').setValues(data, '.configKey');
                         modifyWithoutSave = false;
                         nextdom.repo.test({
                             repo: repo,
@@ -131,7 +131,7 @@ function initEvents() {
     });
 
     // Repo activation/desactivation
-    $('#update_admin').delegate('.enableRepository', 'change', function () {
+    $('#services').delegate('.enableRepository', 'change', function () {
         if($(this).value() == 1){
             $('.repositoryConfiguration'+$(this).attr('data-repo')).show();
         }else{

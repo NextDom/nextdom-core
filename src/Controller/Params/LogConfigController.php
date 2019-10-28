@@ -23,28 +23,43 @@
 namespace NextDom\Controller\Params;
 
 use NextDom\Controller\BaseController;
+use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\Render;
+use NextDom\Managers\ConfigManager;
+use NextDom\Managers\PluginManager;
 
 /**
- * Class InteractAdminController
+ * Class LogConfigController
  * @package NextDom\Controller\Params
  */
-class InteractAdminController extends BaseController
+class LogConfigController extends BaseController
 {
     /**
-     * Render interactAdmin page
+     * Render logConfig page
      *
      * @param array $pageData Page data
      *
-     * @return string Content of interact_admin page
+     * @return string Content of log_admin page
      *
+     * @throws \Exception
      */
     public static function get(&$pageData): string
     {
 
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/params/interact_admin.js';
+        global $NEXTDOM_INTERNAL_CONFIG;
+        $pageData['adminAlerts'] = $NEXTDOM_INTERNAL_CONFIG['alerts'];
+        $pageData['adminOthersLogs'] = array('scenario', 'plugin', 'market', 'api', 'connection', 'interact', 'tts', 'report', 'event');
+        $pageData['adminPluginsList'] = [];
+        $pluginsList = PluginManager::listPlugin(true);
+        foreach ($pluginsList as $plugin) {
+            $pluginApi = ConfigManager::byKey('api', $plugin->getId());
+            $pluginData = [];
+            $pluginData['api'] = $pluginApi;
+            $pluginData['plugin'] = $plugin;
+            $pageData['adminPluginsList'][] = $pluginData;
+        }
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/params/log_config.js';
 
-        return Render::getInstance()->get('/desktop/params/interact_admin.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/params/log_config.html.twig', $pageData);
     }
-
 }

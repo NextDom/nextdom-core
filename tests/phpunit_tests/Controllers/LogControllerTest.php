@@ -42,7 +42,7 @@ class LogControllerTest extends BaseControllerTest
     {
         $pageData = [];
         \NextDom\Controller\Diagnostic\LogController::get($pageData);
-        $this->pageDataVars('desktop/diagnostic/logs-view.html.twig', $pageData);
+        $this->pageDataVars('desktop/diagnostic/log.html.twig', $pageData);
     }
 
 }
