@@ -129,7 +129,8 @@ class RepoSamba
         $backupFile = sprintf("%s/%s", $backupDir, $file);
 
         $samba = Samba::createFromConfig("backup");
-        $samba->get($file, $backupFile);
+        $backupFolder = ConfigManager::byKey('samba::backup::folder');
+        $samba->get($backupFolder . '/' . $file, $backupFile);
         BackupManager::restore($backupFile, true);
     }
 }

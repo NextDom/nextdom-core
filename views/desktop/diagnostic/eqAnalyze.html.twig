@@ -107,7 +107,7 @@
                                     <td>{{ infoCmd.cmd.getName() }} ({{ infoCmd.cmd.getId() }})</td>
                                     <td>{{ 'Action sur état'  | trans }}</td>
                                     <td>{{ 'Si' }} {{ infoCmd.cmd.getConfiguration('nextdomCheckCmdOperator') }} {{ infoCmd.cmd.getConfiguration('nextdomCheckCmdTest') }} {{ 'plus de'  | trans }} {{ infoCmd['cmd'].getConfiguration('nextdomCheckCmdTime') }} {{ 'minutes alors'  | trans }} :
-                                        {{ infoCmd['actions']|join('|') }}
+                                        {{ infoCmd['actions']|join('|')|raw }}
                                     </td>
                                     <td>
                                         <a class="btn btn-default btn-xs cmdAction pull-right" data-action="configure" data-cmd_id="{{ infoCmd.cmd.getId() }}"><i class="fas fa-cogs"></i></a>
@@ -199,7 +199,7 @@
                                 <td>
                                     <a href="{{ alert.eqLogic.getLinkToConfiguration() }}" style="text-decoration: none;">{{ alert.eqLogic.getHumanName(true)|raw }}</a></td>
                                 <td>
-                                    {{ alert['msg'] }}
+                                    {{ alert['msg']|raw }}
                                 </td>
                                 <td>
                                     {% if alert.qLogic.getTimeout('') != '' %}
@@ -208,10 +208,10 @@
                                 </td>
                                 <td>
                                     {% if alert.eqLogic.getConfiguration('battery_danger_threshold', '') != '' %}
-                                        <label class="col-xs-6 eqLogicAttr label label-danger" style="font-size : 0.8em">{{ 'Danger'  | trans }} {{ alert.eqLogic.getConfiguration('battery_danger_threshold', '') }} % </label>
+                                        <label class="col-xs-6 eqLogicAttr label label-danger" style="font-size : 0.8em">{{ 'Danger'  | trans }} {{ alert.eqLogic.getConfiguration('battery_danger_threshold', '')|raw }} % </label>
                                     {% endif %}
                                     {% if alert.eqLogic.getConfiguration('battery_warning_threshold', '') != '' %}
-                                        <label class="col-xs-6 eqLogicAttr label label-warning" style="font-size : 0.8em">{{ 'common.warning' | trans }} {{ alert.eqLogic.getConfiguration('battery_warning_threshold', '') }} % </label>
+                                        <label class="col-xs-6 eqLogicAttr label label-warning" style="font-size : 0.8em">{{ 'common.warning' | trans }} {{ alert.eqLogic.getConfiguration('battery_warning_threshold', '')|raw }} % </label>
                                     {% endif %}
                                 </td>
                             </tr>

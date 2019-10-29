@@ -35,8 +35,6 @@
 */
 
 // Page init
-editorDesktopJS = null;
-editorDesktopCSS = null;
 showSelectedTabFromUrl(document.location.toString());
 loadInformations();
 initEvents();
@@ -49,9 +47,6 @@ initEvents();
 function showSelectedTabFromUrl(url) {
     if (url.match('#')) {
         $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
-        if (url.split('#')[1] == "advanced") {
-            printAdvancedDesktop();
-        }
     }
     $('.nav-tabs a').on('shown.bs.tab', function (e) {
         window.location.hash = e.target.hash;
@@ -130,62 +125,3 @@ function initEvents() {
     });
 }
 
-/**
- * Display the personnalisation
- */
-function printAdvancedDesktop() {
-    if (editorDesktopJS == null) {
-        editorDesktopJS = CodeMirror.fromTextArea(document.getElementById("ta_jsDesktopContent"), {
-            lineNumbers: true,
-            mode: "text/javascript",
-            matchBrackets: true,
-            viewportMargin: Infinity
-        });
-    }
-    if (editorDesktopCSS == null) {
-        editorDesktopCSS = CodeMirror.fromTextArea(document.getElementById("ta_cssDesktopContent"), {
-            lineNumbers: true,
-            mode: "text/css",
-            matchBrackets: true,
-            viewportMargin: Infinity
-        });
-    }
-}
-
-/**
- * Save all custom personnalisation
- */
-function saveCustom() {
-    if (editorDesktopJS !== null) {
-        sendCustomData('js', editorDesktopJS.getValue());
-    }
-    if (editorDesktopCSS !== null) {
-        sendCustomData('css', editorDesktopCSS.getValue());
-    }
-}
-
-/**
- * Save a cutom personnalisation
- *
- * @param type advanced custom type (css or js)
- * @param content custom code data
- */
-function sendCustomData(type, content) {
-    nextdom.config.save({
-        configuration: $('#custom').getValues('.configKey')[0],
-        error: function (error) {
-            notify("Erreur", error.message, 'error');
-        },
-        success: function () {
-            nextdom.saveCustom({
-                type: type,
-                content: content,
-                error: function (error) {
-                    notify("Erreur", error.message, 'error');
-                },
-                success: function (data) {
-                }
-            });
-        }
-    });
-}

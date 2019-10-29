@@ -19,6 +19,7 @@
 namespace NextDom\Helpers;
 
 
+use NextDom\Exceptions\CoreException;
 use phpDocumentor\Reflection\Types\Boolean;
 
 class ConsoleHelper
@@ -28,7 +29,7 @@ class ConsoleHelper
      * Show title
      *
      * @param string $title Title to show
-     * @param boolean $ending true if end tag
+     * @param bool $ending true if end tag
      */
     public static function title(string $title, $ending)
     {
@@ -92,7 +93,7 @@ class ConsoleHelper
     /**
      * Show error message
      *
-     * @param CoreException|Exception $exceptionData Data of the exception
+     * @param CoreException|\Exception $exceptionData Data of the exception
      */
     public static function error($exceptionData)
     {

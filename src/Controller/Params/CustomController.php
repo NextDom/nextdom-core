@@ -58,16 +58,12 @@ class CustomController extends BaseController
         }
         $pageData['customThemeChoice'] = ConfigManager::byKey('nextdom::user-theme');
         $pageData['adminCategories'] = NextDomHelper::getConfiguration('eqLogic:category');
-        $pageData['customEnableCustomCss'] = ConfigManager::byKey('enableCustomCss');
-        $pageData['customJS'] = '';
-        if (file_exists(NEXTDOM_DATA . '/custom/desktop/custom.js')) {
-            $pageData['customJS'] = trim(file_get_contents(NEXTDOM_DATA . '/custom/desktop/custom.js'));
+        $pageData['Theme'] = NextDomHelper::getConfiguration('theme');
+        $pageData['useCustomTheme'] = false;
+        $themeChoice = ConfigManager::byKey('nextdom::theme');
+        if (isset($themeChoice['custom']) && $themeChoice['custom'] == 1) {
+            $pageData['useCustomTheme'] = true;
         }
-        $pageData['customCSS'] = '';
-        if (file_exists(NEXTDOM_DATA . '/custom/desktop/custom.css')) {
-            $pageData['customCSS'] = trim(file_get_contents(NEXTDOM_DATA . '/custom/desktop/custom.css'));
-        }
-
         $pageData['JS_END_POOL'][] = '/public/js/desktop/params/custom.js';
 
         return Render::getInstance()->get('/desktop/params/custom.html.twig', $pageData);

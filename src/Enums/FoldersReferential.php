@@ -22,7 +22,7 @@ class FoldersReferential extends Enum
 {
 
     const NEXTDOMFOLDERS = ['api','assets','backup','core','data','docs','install','log','mobile','node_modules','plugins','public','scripts','src','tests','tmp','translations','vendor','views','var','.github','.sass-cache','.git','.idea'];
-    const NEXTDOMFILES = ['cache.tar.gz' ,'composer.json','composer.lock','COPYING','DB_backup.sql','favicon.ico','index.php','LICENSE','manifest.json','manifest.webmanifest','mobile.manifest.php','package.json','package-lock.json','phpunit.xml.dist','README.md','robots.txt','.travis.yml','.htaccess','.coveralls.yml','.gitignore'];
+    const NEXTDOMFILES = ['cache.tar.gz' ,'CHANGELOG.md','composer.json','composer.lock','COPYING','DB_backup.sql','favicon.ico','index.php','LICENSE','manifest.json','manifest.webmanifest','mobile.manifest.php','package.json','package-lock.json','phpunit.xml.dist','README.md','robots.txt','.travis.yml','.htaccess','.coveralls.yml','.gitignore'];
 
     const PUBLICFOLDERS = ['css', 'icon', 'img', 'js', 'themes'];
     const PUBLICFILES = ['404.html', 'here.html'];

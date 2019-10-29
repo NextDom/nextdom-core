@@ -631,7 +631,7 @@ class FileSystemHelper
 
     /**
      * Get the free space of a directory
-     * @param $directory Directory in which we want free space information
+     * @param string $directory Directory in which we want free space information
      * @return int free space in Byte (Octet)
      */
     public static function getDirectoryFreeSpace($directory)
@@ -642,7 +642,7 @@ class FileSystemHelper
 
     /**
      * Get true if the file exists
-     * @param $file File we want to know if exists
+     * @param string $file File we want to know if exists
      * @return bool exists or not
      */
     public static function isFileExists($file)

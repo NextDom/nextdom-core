@@ -54,8 +54,8 @@ class EqAnalyzeController extends BaseController
 
         $pageData['eqAnalyzeEqLogicList'] = [];
 
-        $eqLogicMangerAll = EqLogicManager::all();
-        foreach ($eqLogicMangerAll as $eqLogic) {
+        $eqLogics = EqLogicManager::all();
+        foreach ($eqLogics as $eqLogic) {
             if ($eqLogic->getStatus('battery', -2) != -2) {
                 $pageData['eqAnalyzeEqLogicList'][] = $eqLogic;
             }
@@ -71,7 +71,7 @@ class EqAnalyzeController extends BaseController
         });
 
         $cmdDataArray = [];
-        foreach ($eqLogicMangerAll as $eqLogic) {
+        foreach ($eqLogics as $eqLogic) {
             $cmdData = [];
             $cmdData['eqLogic'] = $eqLogic;
             $cmdData['infoCmds'] = [];
