@@ -75,6 +75,7 @@ connection:
   remember-title: "By checking this box: you will not have to enter your login."
   remember-label: Remember me ?
   connect: Log in
+  valid: Validation
   forgot: "Oops: I forgot my password !"
   mobile-install: Install mobile version
 
@@ -379,7 +380,7 @@ general:
   language-list:
       fr_FR: "French"
       en_US: "English"
-      
+
 
 update-view:
   none: "None"

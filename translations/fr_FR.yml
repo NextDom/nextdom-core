@@ -75,6 +75,7 @@ connection:
   remember-title: En cochant cette case, vous n'aurez plus besoin de saisir vos identifiants.
   remember-label: Se souvenir de moi ?
   connect: Connexion
+  valid: Valider
   forgot: Oups, j'ai oublié mon mot de passe !
   mobile-install: Installer la version mobile
 
@@ -390,7 +391,7 @@ general:
   language-list:
       fr_FR: "Français"
       en_US: "Anglais"
-      
+
 
 update-view:
   none: "Aucune"
