@@ -78,11 +78,6 @@ function initEvents() {
         modifyWithoutSave = true;
     });
 
-    // Advanced custom tab loading
-    $('a[data-toggle="tab"][href="#advanced"]').on('shown.bs.tab', function () {
-        printAdvancedDesktop();
-    });
-
     // Theme config changing
     $("#themeBase").on('change', function (event) {
         $('.configKey[data-l1key="nextdom::user-theme"]').value($("#themeBase").value() + "-" + $("#themeIdentity").value());
@@ -124,4 +119,3 @@ function initEvents() {
         saveCustom();
     });
 }
-
