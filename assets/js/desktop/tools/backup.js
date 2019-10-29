@@ -199,6 +199,11 @@ function initEvents() {
     $('#bt_uploadBackup').fileupload({
         dataType: 'json',
         replaceFileInput: false,
+        start: function (e, data) {
+          $('#bt_uploadBackup').parent().addClass('disabled');
+          $('#bt_uploadBackup').parent().find('.fa-refresh').show();
+          $('#bt_uploadBackup').parent().find('.fa-cloud-upload-alt').hide();
+        },
         done: function (e, data) {
             if (data.result.state != 'ok') {
                 notify("Erreur", data.result.result, 'error');
@@ -206,7 +211,12 @@ function initEvents() {
             }
             updateListBackup();
             notify("Info", '{{Fichier(s) ajouté(s) avec succès}}', 'success');
-        }
+        },
+        always: function (e, data) {
+          $('#bt_uploadBackup').parent().removeClass('disabled');
+          $('#bt_uploadBackup').parent().find('.fa-refresh').hide();
+          $('#bt_uploadBackup').parent().find('.fa-cloud-upload-alt').show();
+        },
     });
 
     // Samba restore button
