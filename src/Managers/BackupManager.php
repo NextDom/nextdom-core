@@ -668,7 +668,7 @@ class BackupManager
                     ConsoleHelper::process($message);
                 }
                 if (true === FileSystemHelper::mv($c_dir, sprintf("%s/%s", NEXTDOM_ROOT, $name))) {
-                    //self::restorePublicPerms(NEXTDOM_ROOT);
+                    self::restorePublicPerms(NEXTDOM_ROOT);
                 }
                 if($logFile != 'migration') {
                     ConsoleHelper::ok();
