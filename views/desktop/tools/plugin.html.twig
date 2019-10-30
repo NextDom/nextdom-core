@@ -43,7 +43,7 @@
             <div class="action-group">
                 <a class="btn btn-action btn-action-bar pull-right" id="bt_pluginCollapse"><i class="fas fa-plus-square"></i>{{ 'Déplier' }}</a>
                 <a class="btn btn-action btn-action-bar pull-right" style="display:none;" id="bt_pluginUncollapse"><i class="fas fa-minus-square"></i>{{ 'Replier' }}</a>
-                <a class="btn btn-default btn-action-bar pull-right" href="index.php?v=d&p=update_admin"><i class="fas fa-cog"></i>{{ 'Configurer Markets' }}</a>
+                <a class="btn btn-default btn-action-bar pull-right" href="index.php?v=d&p=services"><i class="fas fa-cog"></i>{{ 'Configurer Markets' }}</a>
                 {% for repoCode, repoData in pluginReposList %}
                     {% if repoData['name'] == 'Market' %}
                         <a class="btn btn-default btn-action-bar pull-right displayStore btn-jeedom" data-repo="{{ repoCode }}"><i class="fas fa-shopping-cart"></i>{{ 'Jeedom '}} {{ repoData['name'] }}</a>

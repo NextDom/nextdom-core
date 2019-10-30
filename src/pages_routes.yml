@@ -70,9 +70,9 @@ interact:
   path: 'interact'
   controller: NextDom\Controller\Tools\InteractController::get
   condition: 'admin'
-interact_admin:
-  path: 'interact_admin'
-  controller: NextDom\Controller\Params\InteractAdminController::get
+interact_config:
+  path: 'interact_config'
+  controller: NextDom\Controller\Params\InteractConfigController::get
   condition: 'admin'
 links:
   path: 'links'
@@ -82,9 +82,9 @@ log:
   path: 'log'
   controller: NextDom\Controller\Diagnostic\LogController::get
   condition: 'admin'
-log_admin:
-  path: 'log_admin'
-  controller: NextDom\Controller\Params\LogAdminController::get
+log_config:
+  path: 'log_config'
+  controller: NextDom\Controller\Params\LogConfigController::get
   condition: 'admin'
 market:
   path: 'market'
@@ -141,9 +141,9 @@ report:
   path: 'report'
   controller: NextDom\Controller\Diagnostic\ReportController::get
   condition: 'admin'
-reports_admin:
-  path: 'reports_admin'
-  controller: NextDom\Controller\Params\ReportAdminController::get
+report_config:
+  path: 'report_config'
+  controller: NextDom\Controller\Params\ReportConfigController::get
   condition: 'admin'
 scenario:
   path: 'scenario'
@@ -152,6 +152,10 @@ scenario:
 security:
   path: 'security'
   controller: NextDom\Controller\Admin\SecurityController::get
+  condition: 'admin'
+services:
+  path: 'services'
+  controller: NextDom\Controller\Admin\ServicesController::get
   condition: 'admin'
 shutdown:
   path: 'shutdown'
@@ -172,10 +176,6 @@ timeline:
 update:
   path: 'update'
   controller: NextDom\Controller\Tools\UpdateController::get
-  condition: 'admin'
-update_admin:
-  path: 'update_admin'
-  controller: NextDom\Controller\Admin\UpdateAdminController::get
   condition: 'admin'
 users:
   path: 'users'

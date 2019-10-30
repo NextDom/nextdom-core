@@ -18,7 +18,7 @@
 require_once(__DIR__ . '/../../../src/core.php');
 require_once(__DIR__ . '/BaseControllerTest.php');
 
-class InteractAdminControllerTest extends BaseControllerTest
+class LogConfigControllerTest extends BaseControllerTest
 {
     public function setUp()
     {
@@ -32,14 +32,15 @@ class InteractAdminControllerTest extends BaseControllerTest
     public function testSimple()
     {
         $pageData = [];
-        $result = \NextDom\Controller\Params\InteractAdminController::get($pageData);
-        $this->assertContains('id="interact_admin"', $result);
+        $result = \NextDom\Controller\Params\LogConfigController::get($pageData);
+        $this->assertArrayHasKey('adminPluginsList', $pageData);
+        $this->assertContains('id="log_config"', $result);
     }
 
     public function testPageDataVars()
     {
         $pageData = [];
-        \NextDom\Controller\Params\InteractAdminController::get($pageData);
-        $this->pageDataVars('desktop/params/interact_admin.html.twig', $pageData);
+        \NextDom\Controller\Params\LogConfigController::get($pageData);
+        $this->pageDataVars('desktop/params/log_config.html.twig', $pageData);
     }
 }

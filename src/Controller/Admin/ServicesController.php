@@ -20,31 +20,42 @@
  * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
  */
 
-namespace NextDom\Controller\Params;
+namespace NextDom\Controller\Admin;
 
 use NextDom\Controller\BaseController;
+use NextDom\Helpers\AuthentificationHelper;
+use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
+use NextDom\Managers\CacheManager;
+use NextDom\Managers\ConfigManager;
+use NextDom\Managers\PluginManager;
+use NextDom\Managers\UpdateManager;
+use NextDom\Managers\UserManager;
 
 /**
- * Class InteractAdminController
- * @package NextDom\Controller\Params
+ * Class ServicesController
+ * @package NextDom\Controller\Admin
  */
-class InteractAdminController extends BaseController
+class ServicesController extends BaseController
 {
-    /**
-     * Render interactAdmin page
+    /** Render Services page
      *
      * @param array $pageData Page data
      *
-     * @return string Content of interact_admin page
+     * @return string Content of services page
      *
+     * @throws \Exception
      */
     public static function get(&$pageData): string
     {
+        $pageData['adminReposList'] = UpdateManager::listRepo();
+        $keys = array('market::allowDNS', 'ldap::enable');
+        foreach ($pageData['adminReposList'] as $key => $value) {
+            $keys[] = $key . '::enable';
+        }
+        $pageData['adminConfigs'] = ConfigManager::byKeys($keys);
+        $pageData['JS_END_POOL'][] = '/public/js/desktop/admin/services.js';
 
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/params/interact_admin.js';
-
-        return Render::getInstance()->get('/desktop/params/interact_admin.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/admin/services.html.twig', $pageData);
     }
-
 }

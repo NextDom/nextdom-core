@@ -81,7 +81,7 @@ class LogController extends BaseController
 
         $pageData['JS_END_POOL'][] = '/public/js/desktop/diagnostic/log.js';
 
-        return Render::getInstance()->get('/desktop/diagnostic/logs-view.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/diagnostic/log.html.twig', $pageData);
     }
 
 
