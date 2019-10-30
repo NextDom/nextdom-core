@@ -83,15 +83,6 @@ class ConfigAjax extends BaseAjax
         AjaxHelper::success();
     }
 
-    public function updateTheme()
-    {
-        $path = NEXTDOM_ROOT . '/var/public/css/theme.css';
-        if (true === file_exists($path)) {
-            unlink($path);
-        }
-        AjaxHelper::success();
-    }
-
     public function removeKey()
     {
         $keys = Utils::init('key');

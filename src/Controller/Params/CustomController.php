@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Params;
 
 use NextDom\Controller\BaseController;
+use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
 use NextDom\Managers\ConfigManager;
@@ -44,15 +45,19 @@ class CustomController extends BaseController
      */
     public static function get(&$pageData): string
     {
-        global $NEXTDOM_INTERNAL_CONFIG;
         $pageData['PRODUCT_NAME'] = ConfigManager::byKey('product_name');
-        $pageData['adminCategories'] = NextDomHelper::getConfiguration('eqLogic:category');
-        $pageData['Theme'] = NextDomHelper::getConfiguration('theme');
-        $pageData['useCustomTheme'] = false;
-        $themeChoice = ConfigManager::byKey('nextdom::theme');
-        if (isset($themeChoice['custom']) && $themeChoice['custom'] == 1) {
-            $pageData['useCustomTheme'] = true;
+        $themesBases = FileSystemHelper::ls('public/css/themes/', '*nextdom.css');
+        $pageData['customThemesBases'] = [];
+        foreach ($themesBases as $themeBase) {
+            $pageData['customThemesBases'][] = substr($themeBase, 0, -12);
         }
+        $themesIdentities = FileSystemHelper::ls('public/css/themes/', 'dark*.css');
+        $pageData['customThemesIdentities'] = [];
+        foreach ($themesIdentities as $themeIdentity) {
+            $pageData['customThemesIdentities'][] = substr($themeIdentity, 5, -4);
+        }
+        $pageData['customThemeChoice'] = ConfigManager::byKey('nextdom::user-theme');
+        $pageData['adminCategories'] = NextDomHelper::getConfiguration('eqLogic:category');
         $pageData['JS_END_POOL'][] = '/public/js/desktop/params/custom.js';
 
         return Render::getInstance()->get('/desktop/params/custom.html.twig', $pageData);

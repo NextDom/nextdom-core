@@ -1,5 +1,4 @@
-{#
-
+@charset "utf-8";
 /* This file is part of NextDom Software.
 *
 * NextDom is free software: you can redistribute it and/or modify
@@ -15,8 +14,6 @@
 * You should have received a copy of the GNU General Public License
 * along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
 */
-
-#}
 
 /* Résumé */
 /* COLOR1 = Couleur d'accentuation principale (identité du thème, header nextdom, bouton primaires, messages d'info, élements actifs ou survolés, textes de liens et d'état, scrollbar, boutons fab, checkbox et radiobox...) */
@@ -45,77 +42,74 @@
 /* #################################################################################################################################################################################################### */
 /* Fond global */
 .backgroundColor{
-  background-color: {{ COLOR1 }} !important;
+  background-color: map_get($color_theme, 'color1') !important;
 }
 
 /* Fond logo page login */
 .login-logo{
-  background-color: {{ COLOR1 }} !important;
+  background-color: map_get($color_theme, 'color1') !important;
 }
 
 /* Header */
 .main-header .logo {
-  background-color: {{ COLOR1 }} !important;
+  background-color: map_get($color_theme, 'color1') !important;
 }
 .main-header li.user-header {
-  background-color: {{ COLOR1 }} !important;
+  background-color: map_get($color_theme, 'color1') !important;
 }
 
 /* Textes & labels */
 .label-config {
-  background-color: {{ COLOR1 }} !important;
+  background-color: map_get($color_theme, 'color1') !important;
 }
 .label-link {
-  color: {{ COLOR1 }} !important;
+  color: map_get($color_theme, 'color1') !important;
 }
 .li_noteDisplay.active .label-list,
 .li_view.active .label-view,
 .li_log.active .label-log {
-    border-color: {{ COLOR1 }} !important;
+  border-color: map_get($color_theme, 'color1') !important;
 }
 
 /* Bouton primaires */
 .btn-primary {
-  background-color: {{ COLOR1 }} !important;
-  border-color: {{ COLOR1 }} !important;
+  background-color: map_get($color_theme, 'color1') !important;
+  border-color: map_get($color_theme, 'color1') !important;
 }
 
 /* Elements actifs ou survolés */
 .main-header .logo:hover {
-  background-color: {{ COLOR1 }} !important;
+  background-color: map_get($color_theme, 'color1') !important;
 }
 .nav-tabs-custom>.nav-tabs>li.active {
-  border-top-color: {{ COLOR1 }} !important;
+  border-top-color: map_get($color_theme, 'color1') !important;
 }
 .nav-tabs-custom>.nav-tabs-dashboard>li.active {
-  border-bottom-color:{{ COLOR1 }}80 !important;
-}
-.main-header .navbar .sidebar-toggle:hover {
-  background-color: {{ COLOR1 }} !important;
+  border-bottom-color:map_get($color_theme, 'color180') !important;
 }
 @media (max-width: 767px) {
   .main-header .navbar .dropdown-menu li a:hover {
-    background-color: {{ COLOR1 }} !important;
+    background-color: map_get($color_theme, 'color1') !important;
   }
 }
 .main-header > .logo:hover {
-  background-color: {{ COLOR1 }} !important;
+  background-color: map_get($color_theme, 'color1') !important;
 }
 
 /* Scrollbar */
 ::-webkit-scrollbar-thumb {
-  background: {{ COLOR1 }}CC !important;
-  background-color: {{ COLOR1 }}CC !important;
+  background: map_get($color_theme, 'color1')CC !important;
+  background-color: map_get($color_theme, 'color1')CC !important;
 }
 
 /* Fabs */
 .fab-action-button  {
-  background-color: {{ COLOR1 }} !important;
+  background-color: map_get($color_theme, 'color1') !important;
 }
 
 /* Logos */
 .main-header > .logo {
-  background-color: {{ COLOR1 }} !important;
+  background-color: map_get($color_theme, 'color1') !important;
 }
 
 /* Message d'info */
@@ -123,54 +117,54 @@
 .alert-info,
 .label-info,
 .modal-info .modal-body {
-  background-color: {{ COLOR1 }} !important;
+  background-color: map_get($color_theme, 'color1') !important;
 }
 
 /* Navbars */
 .main-header .navbar {
-  background-color: {{ COLOR1 }} !important;
+  background-color: map_get($color_theme, 'color1') !important;
 }
 
 /* Menu lateral */
 .sidebar-menu > li:hover > a,
 .sidebar-menu > li.menu-open > a {
-  border-left-color: {{ COLOR1 }} !important;
+  border-left-color: map_get($color_theme, 'color1') !important;
 }
 .sidebar-menu > li.header {
-  color: {{ COLOR1 }} !important;
+  color: map_get($color_theme, 'color1') !important;
 }
 
 /* Ombre edition mode deisgn */
 .widget-shadow-edit {
-  box-shadow: 0 0 0.5em {{ COLOR1 }} !important;
+  box-shadow: 0 0 0.5em map_get($color_theme, 'color1') !important;
 }
 
 /* Timeline */
 .time-label span,
 .timeline-scenario {
-  background-color: {{ COLOR1 }} !important;
+  background-color: map_get($color_theme, 'color1') !important;
 }
 
 /* Market */
 .market:hover,
 .marketOverload:hover {
-  border: 1px dashed {{ COLOR1 }} !important;
+  border: 1px dashed map_get($color_theme, 'color1') !important;
 }
 
 /* Icones */
 .iconSelected {
-  border: 1px dashed {{ COLOR1 }} !important;
+  border: 1px dashed map_get($color_theme, 'color1') !important;
 }
 
 /* Sliders */
 .slider::-webkit-slider-thumb {
-  background-color: {{ COLOR1 }} !important;
+  background-color: map_get($color_theme, 'color1') !important;
 }
 .slider::-moz-range-thumb {
-  background-color: {{ COLOR1 }} !important;
+  background-color: map_get($color_theme, 'color1') !important;
 }
 .input-group .input-range-value {
-  background-color: {{ COLOR1 }} !important;
+  background-color: map_get($color_theme, 'color1') !important;
 }
 
 /* Checkbox Radiobox */
@@ -178,12 +172,12 @@
 [type="checkbox"]:checked:after,
 [type="radio"]:not(:checked):after,
 [type="radio"]:checked:after {
-  background-color: {{ COLOR1 }} !important;
+  background-color: map_get($color_theme, 'color1') !important;
 }
 
 /* Plugins icons */
 .logoPrimary {
-  color: {{ COLOR1 }} !important;
+  color: map_get($color_theme, 'color1') !important;
 }
 
 
@@ -192,69 +186,69 @@
 /* ################################################################################## */
 /* Header */
 .main-header .logo {
-  color: {{ COLOR2 }} !important;
+  color: map_get($color_theme, 'color2') !important;
 }
-.main-header .navbar .sidebar-toggle {
-  color: {{ COLOR2 }} !important;
+.main-header .navbar .sidebar-toggle, .main-header .navbar .search-toggle {
+  color: map_get($color_theme, 'color2') !important;
 }
 @media (max-width: 767px) {
   .main-header .navbar .dropdown-menu li a {
-    color: {{ COLOR2 }} !important;
+    color: map_get($color_theme, 'color2') !important;
   }
 }
 .main-header .navbar .nav > li > a,
 .objectSummaryGlobalHeader {
-    color: {{ COLOR2 }} !important;
+  color: map_get($color_theme, 'color2') !important;
 }
 
 /* Menu lateral */
 .sidebar-form input[type="text"]:focus,
 .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
-  background-color: {{ COLOR2 }} !important;
+  background-color: map_get($color_theme, 'color2') !important;
   color: #666;
 }
 .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
-  border-left-color: {{ COLOR2 }} !important;
+  border-left-color: map_get($color_theme, 'color2') !important;
 }
 
 /* Bouton action */
 .btn-action {
-  color: {{ COLOR2 }} !important;
+  color: map_get($color_theme, 'color2') !important;
 }
 
 /* Logos */
 .main-header > .logo {
-  color: {{ COLOR2 }} !important;
+  color: map_get($color_theme, 'color2') !important;
 }
 
 /* Bouton modales */
 .bootbox-close-button {
-  color: {{ COLOR2 }} !important;
+  color: map_get($color_theme, 'color2') !important;
 }
 
 /* Fabs */
 .fab-buttons__link,
 .fab-action-button__icon {
-  color: {{ COLOR2 }} !important;
+  color: map_get($color_theme, 'color2') !important;
 }
 .fab-buttons__link:hover,
 .fab-button__icon:hover {
-  color: {{ COLOR2 }} !important;
+  color: map_get($color_theme, 'color2') !important;
 }
 
 /* Sliders */
 .input-range-value {
-  color: {{ COLOR2 }} !important;
+  color: map_get($color_theme, 'color2') !important;
 }
 
 /* Textes scenario dashboard */
 .div_scenario a {
-  color: {{ COLOR2 }} !important;
+  color: map_get($color_theme, 'color2') !important;
 }
 
 /* Barre de chargement */
 .pace .pace-progress {
-	background: {{ COLOR2 }};
+  background: map_get($color_theme, 'color2');
 }
 
 /* ############################################################################################################# */
@@ -268,12 +262,12 @@
 .main-header .navbar .nav .open > a:focus,
 .main-header .navbar .nav > .active > a {
   background-color: rgba(0, 0, 0, 0.1);
-  color: {{ COLOR3 }} !important;
+  color: map_get($color_theme, 'color3') !important;
 }
 
-.main-header .navbar .sidebar-toggle:hover {
+.main-header .navbar .sidebar-toggle:hover, .main-header .navbar .search-toggle:hover {
   background-color: rgba(0, 0, 0, 0.1);
-  color: {{ COLOR3 }} !important;
+  color: map_get($color_theme, 'color3') !important;
 }
 
 
@@ -282,13 +276,13 @@
 /* ############################################################### */
 /* Menu lateral */
 .main-sidebar, .left-side {
-  background-color: {{ COLOR4 }} !important;
+  background-color: map_get($color_theme, 'color4') !important;
 }
 .sidebar-menu > li > .treeview-menu {
-  border: solid 1px {{ COLOR4 }} !important;
+  border: solid 1px map_get($color_theme, 'color4') !important;
 }
 .sidebar-menu > li.header {
-  border-right: 1px solid {{ COLOR4 }} !important;
+  border-right: 1px solid map_get($color_theme, 'color4') !important;
 }
 
 
@@ -297,10 +291,10 @@
 /* ################################################################################### */
 /* Menu lateral */
 .sidebar-menu > li:hover > a, .sidebar-menu > li.menu-open > a {
-  background-color: {{ COLOR5 }} !important;
+  background-color: map_get($color_theme, 'color5') !important;
 }
 .treeview-menu > li:hover {
-  background-color: {{ COLOR5 }} !important;
+  background-color: map_get($color_theme, 'color5') !important;
 }
 
 
@@ -309,11 +303,11 @@
 /* ######################################################################### */
 /* Menu lateral */
 .sidebar-menu > li.header {
-  background-color: {{ COLOR6 }} !important;
+  background-color: map_get($color_theme, 'color6') !important;
 }
 .sidebar-menu > li > .treeview-menu {
   margin: 0 1px;
-  background-color: {{ COLOR6 }} !important;
+  background-color: map_get($color_theme, 'color6') !important;
 }
 
 
@@ -324,39 +318,39 @@
 .nav-tabs-custom > .nav-tabs > li.active > a,
 .nav-tabs-custom > .nav-tabs > li.active:hover > a,
 .main-footer {
-  background-color:{{ COLOR7 }} !important;
-  border-color:{{ COLOR7 }}60 !important;
+  background-color:map_get($color_theme, 'color7') !important;
+  border-color:map_get($color_theme, 'color7') !important;
 }
 .nav-tabs-custom > .nav-tabs > li.father > a {
-  background-color:{{ COLOR7 }} !important;
+  background-color:map_get($color_theme, 'color7') !important;
 }
 
 .action-bar, .box-footer {
-  border-top-color: {{ COLOR7 }} !important;
+  border-top-color: map_get($color_theme, 'color7') !important;
 }
 
 .ui-widget-content {
-  background-color: {{ COLOR7 }} !important;
+  background-color: map_get($color_theme, 'color7') !important;
 }
 
 .modal-content{
-  background-color: {{ COLOR7 }} !important;
+  background-color: map_get($color_theme, 'color7') !important;
 }
 
 .ui-dialog .ui-dialog-content {
-  background-color: {{ COLOR7 }} !important;
+  background-color: map_get($color_theme, 'color7') !important;
 }
 
 .box-header.with-border{
-  border-color: {{ COLOR7 }} !important;
+  border-color: map_get($color_theme, 'color7') !important;
 }
 
 .nav-tabs-custom > .nav-tabs,
 .nav-tabs-custom > .nav-tabs > li.active > a {
-  border-color: {{ COLOR7 }} !important;
+  border-color: map_get($color_theme, 'color7') !important;
 }
 .info-box-small{
-  background-color: {{ COLOR7 }} !important;
+  background-color: map_get($color_theme, 'color7') !important;
 }
 
 .nav-tabs-custom .box,
@@ -365,38 +359,38 @@
 .nav-tabs-custom .panel,
 .nav-tabs-custom .panel .panel-body,
 .nav-tabs-custom .well {
-  background-color: {{ COLOR7 }} !important;
+  background-color: map_get($color_theme, 'color7') !important;
 }
 
 /* Markets */
 #market-div .media {
-  background-color: {{ COLOR7 }} !important;
+  background-color: map_get($color_theme, 'color7') !important;
 }
 .market,
 .marketOverload,
 .marketOverload:hover {
-  background-color: {{ COLOR7 }} !important;
+  background-color: map_get($color_theme, 'color7') !important;
 }
 
 .eqLogicSortable>li {
-  background-color: {{ COLOR7 }} !important;
+  background-color: map_get($color_theme, 'color7') !important;
 }
 
 /* Scenario */
 .scenario-icon {
-  background-color: {{ COLOR7 }} !important;
+  background-color: map_get($color_theme, 'color7') !important;
 }
 
 /* fond des timeline */
 .timeline-item,
 .timeline-header,
 .timeline:before {
-  background-color: {{ COLOR7 }} !important;
+  background-color: map_get($color_theme, 'color7') !important;
 }
 
 /* fond scenario dashboard orphelins */
 .div_objectScenario_none .div_scenario {
-  background-color: {{ COLOR7 }} !important;
+  background-color: map_get($color_theme, 'color7') !important;
 }
 
 
@@ -409,83 +403,83 @@
 .panel-heading,
 .well,
 .market-modale-category {
-  background-color: {{ COLOR8 }} !important;
+  background-color: map_get($color_theme, 'color8') !important;
 }
 .info-box-small{
-  background-color: {{ COLOR8 }} !important;
+  background-color: map_get($color_theme, 'color8') !important;
 }
 .nav-tabs-custom .box .box-header,
 .nav-tabs-custom .box .box-footer,
 .nav-tabs-custom .panel .panel-heading,
 .panel-default,
 .nav-tabs-custom .well {
-  border-color: {{ COLOR8 }} !important;
+  border-color: map_get($color_theme, 'color8') !important;
 }
 
 /* Action bar */
 .action-bar {
-  background-color: {{ COLOR8 }} !important;
+  background-color: map_get($color_theme, 'color8') !important;
 }
 
 /* Tabs */
 .nav-tabs-custom {
-  background-color: {{ COLOR8 }} !important;
+  background-color: map_get($color_theme, 'color8') !important;
 }
 .ui-dialog .ui-dialog-titlebar,
 .ui-dialog .ui-dialog-buttonpane {
-  background-color: {{ COLOR8 }} !important;
+  background-color: map_get($color_theme, 'color8') !important;
 }
 
 /* Footer */
 body,
 .main-footer{
-  background-color: {{ COLOR8 }} !important;
+  background-color: map_get($color_theme, 'color8') !important;
 }
 .label-list:hover,
 .label-view:hover,
 .label-log:hover {
-  background-color: {{ COLOR8 }} !important;
+  background-color: map_get($color_theme, 'color8') !important;
 }
 .nav-list > li > a:hover {
-  background-color: {{ COLOR8 }} !important;
+  background-color: map_get($color_theme, 'color8') !important;
 }
 
 /* Modale */
 .modal-header,
 .modal-footer{
-  background-color: {{ COLOR8 }} !important;
+  background-color: map_get($color_theme, 'color8') !important;
 }
 .ui-dialog .ui-dialog-titlebar,
 .ui-dialog .ui-dialog-buttonpane {
-  background-color: {{ COLOR8 }} !important;
+  background-color: map_get($color_theme, 'color8') !important;
 }
 .row legend {
-  background-color: {{ COLOR8 }} !important;
+  background-color: map_get($color_theme, 'color8') !important;
 }
 .modal-body legend {
-  background-color: {{ COLOR8 }} !important;
+  background-color: map_get($color_theme, 'color8') !important;
 }
 
 /* List log et autres */
 .label-list>a:hover,
 .label-view>a:hover,
 .label-log>a:hover {
-  background-color: {{ COLOR8 }} !important;
+  background-color: map_get($color_theme, 'color8') !important;
 }
 .label-list:hover,
 .label-view:hover,
 .label-log:hover {
-  background-color: {{ COLOR8 }} !important;
+  background-color: map_get($color_theme, 'color8') !important;
 }
 
 /* Tableaux */
 .table-striped > tbody > tr:nth-of-type(even) {
-  background-color: {{ COLOR8 }} !important;
+  background-color: map_get($color_theme, 'color8') !important;
 }
 
 /* Market */
 .media-title {
-  background-color: {{ COLOR8 }}60 !important;
+  background-color: map_get($color_theme, 'color8') !important;
 }
 
 
@@ -494,34 +488,34 @@ body,
 /* ################################################################### */
 /* Titres Tableaux */
 .table, .table-condensed>thead {
-  background-color: {{ COLOR9 }} !important;
-  border: {{ COLOR9 }} !important;
+  background-color: map_get($color_theme, 'color9') !important;
+  border: map_get($color_theme, 'color9') !important;
 }
 .table-striped > tbody > tr:nth-of-type(odd) {
-  background-color: {{ COLOR9 }} !important;
+  background-color: map_get($color_theme, 'color9') !important;
 }
 
 /* Legendes de sections */
 legend,
 .box legend,
 .panel legend {
-  background-color: {{ COLOR9 }} !important;
+  background-color: map_get($color_theme, 'color9') !important;
 }
 .tablesorter-bootstrap .tablesorter-filter-row input.tablesorter-filter,
 .tablesorter-bootstrap .tablesorter-filter-row select.tablesorter-filter {
-  background-color: {{ COLOR9 }} !important;
+  background-color: map_get($color_theme, 'color9') !important;
 }
 
 /* Labels */
 .label-value,
 .label-icon {
-  background-color: {{ COLOR9 }} !important;
+  background-color: map_get($color_theme, 'color9') !important;
 }
 
 /* Unités et fond colorpick */
 .colorpick .input-group-addon,
 .input-group .input-group-addon:not(.input-range-value):not(.label-danger):not(.label-warning):not(.label-success) {
-  background-color: {{ COLOR9 }} !important;
+  background-color: map_get($color_theme, 'color9') !important;
 }
 
 /* Tableaux */
@@ -530,33 +524,33 @@ legend,
 .table-bordered > tfoot > tr > th,
 .table-bordered > thead > tr > td,
 .table-bordered > tfoot > tr > td {
-  background-color: {{ COLOR9 }} !important;
+  background-color: map_get($color_theme, 'color9') !important;
 }
 .tablesorter-bootstrap .tablesorter-filter-row input.tablesorter-filter,
 .tablesorter-bootstrap .tablesorter-filter-row select.tablesorter-filter {
-  background-color: {{ COLOR9 }} !important;
+  background-color: map_get($color_theme, 'color9') !important;
 }
 
 /* Texte area */
 pre {
-  background-color: {{ COLOR9 }} !important;
+  background-color: map_get($color_theme, 'color9') !important;
 }
 .CodeMirror pre {
   background-color: transparent !important;
 }
 pre::selection {
-  color: {{ COLOR9 }} !important;
+  color: map_get($color_theme, 'color9') !important;
 }
 
 /* jstree */
 .jstree-hovered,
 .jstree-clicked {
-  background-color: {{ COLOR9 }} !important;
+  background-color: map_get($color_theme, 'color9') !important;
 }
 
 /* Scenario */
 #div_editScenario .element{
-  color: {{ COLOR9 }} !important;
+  color: map_get($color_theme, 'color9') !important;
 }
 
 
@@ -565,70 +559,70 @@ pre::selection {
 /* #################################################################################################### */
 /* Textes */
 body, h1, h2, h3, h4, h5, h6  {
-  color: {{ COLOR10 }} !important;
+  color: map_get($color_theme, 'color10') !important;
 }
 .box-header span:not(.badge) {
-  color: {{ COLOR10 }} !important;
+  color: map_get($color_theme, 'color10') !important;
 }
 .nav-tabs-custom > .nav-tabs > li.header,
 .nav-tabs-custom > .nav-tabs > li.active > a,
 .nav-tabs-custom > .nav-tabs > li.active:hover > a,
 .nav-tabs-custom > .nav-tabs > li > a,
 .ui-widget-content .nav-tabs-custom > .nav-tabs > li > a {
-  color: {{ COLOR10 }} !important;
+  color: map_get($color_theme, 'color10') !important;
 }
 .nav-tabs-custom > .nav-tabs > li.father > a {
-  color: {{ COLOR10 }} !important;
+  color: map_get($color_theme, 'color10') !important;
 }
 legend {
-  color: {{ COLOR10 }} !important;
+  color: map_get($color_theme, 'color10') !important;
 }
 .label-value,
 .label-icon {
-  color: {{ COLOR10 }} !important;
+  color: map_get($color_theme, 'color10') !important;
 }
 .CodeMirror-scroll{
-  color: {{ COLOR10 }} !important;
+  color: map_get($color_theme, 'color10') !important;
 }
 .footer-center, .text-muted {
-  color: {{ COLOR10 }} !important;
+  color: map_get($color_theme, 'color10') !important;
 }
 .ui-widget-content {
-  color: {{ COLOR10 }} !important;
+  color: map_get($color_theme, 'color10') !important;
 }
 
 /* Titres */
 .ui-dialog .ui-dialog-title {
-  color: {{ COLOR10 }} !important;
+  color: map_get($color_theme, 'color10') !important;
 }
 
 /* Bouton administration */
 .btn-app,
 .btn-selector {
-  color: {{ COLOR10 }} !important;
+  color: map_get($color_theme, 'color10') !important;
 }
 
 /* Inputs */
 .form-control {
-  color: {{ COLOR10 }} !important;
+  color: map_get($color_theme, 'color10') !important;
 }
 .input-group .input-group-addon:not(.input-range-value):not(.label-danger):not(.label-warning):not(.label-success),
 .input-group .input-group-addon i {
-  color: {{ COLOR10 }} !important;
+  color: map_get($color_theme, 'color10') !important;
 }
 .input-sm {
-  color: {{ COLOR10 }} !important;
+  color: map_get($color_theme, 'color10') !important;
 }
 pre {
-  color: {{ COLOR10 }} !important;
+  color: map_get($color_theme, 'color10') !important;
 }
 pre::selection {
-  background-color: {{ COLOR10 }} !important;
+  background-color: map_get($color_theme, 'color10') !important;
 }
 
 /* Code mirror */
 .CodeMirror-gutters {
-  color: {{ COLOR10 }} !important;
+  color: map_get($color_theme, 'color10') !important;
 }
 
 /* Listes */
@@ -638,40 +632,40 @@ pre::selection {
 .label-list>a,
 .label-view>a,
 .label-log>a {
-  color: {{ COLOR10 }} !important;
+  color: map_get($color_theme, 'color10') !important;
 }
 
 /* Tableaux */
 .tablesorter-filter {
-  color: {{ COLOR10 }} !important;
+  color: map_get($color_theme, 'color10') !important;
 }
 
 /* Bouton filtres tuiles */
 .bt_editDashboardWidgetGridAllResize,
 .bt_editDashboardWidgetGridResize {
-  color: {{ COLOR10 }} !important;
+  color: map_get($color_theme, 'color10') !important;
 }
 .editDashboardButtons a {
-  color: {{ COLOR10 }} !important;
+  color: map_get($color_theme, 'color10') !important;
 }
 #dashboard-content .card-summary span {
-  color: {{ COLOR10 }} !important;
+  color: map_get($color_theme, 'color10') !important;
 }
 
 /* Summary page objets */
 .objectListContainer .objectSummaryParent {
-  color: {{ COLOR10 }} !important;
+  color: map_get($color_theme, 'color10') !important;
 }
 .accordion-toggle .fas {
-  color: {{ COLOR10 }} !important;
+  color: map_get($color_theme, 'color10') !important;
 }
 
 /* timeline */
 .timeline-footer {
-  color: {{ COLOR10 }} !important;
+  color: map_get($color_theme, 'color10') !important;
 }
 .timeline-item {
-  color: {{ COLOR10 }} !important;
+  color: map_get($color_theme, 'color10') !important;
 }
 
 /* ############################################################################## */
@@ -679,38 +673,38 @@ pre::selection {
 /* ############################################################################## */
 /* Composants */
 .form-control, .cron-period select {
-  background-color: {{ COLOR11 }} !important;
+  background-color: map_get($color_theme, 'color11') !important;
 }
 .input-sm {
-  background-color: {{ COLOR11 }} !important;
+  background-color: map_get($color_theme, 'color11') !important;
 }
 .viewZone {
-  background-color: {{ COLOR11 }} !important;
+  background-color: map_get($color_theme, 'color11') !important;
 }
 .slider {
-  background-color: {{ COLOR11 }} !important;
+  background-color: map_get($color_theme, 'color11') !important;
 }
 
 /* inputs de groupe */
 .input-group>input {
-  border-color: {{ COLOR11 }} !important;
+  border-color: map_get($color_theme, 'color11') !important;
 }
 
 /* Listes */
 .label-list,
 .label-view,
 .label-log{
-  background-color: {{ COLOR11 }} !important;
+  background-color: map_get($color_theme, 'color11') !important;
 }
 
 /* Code mirror */
 .CodeMirror-gutters {
-  background-color: {{ COLOR11 }} !important;
+  background-color: map_get($color_theme, 'color11') !important;
 }
 
 /* timeline */
 .timeline-header {
-  border-color: {{ COLOR11 }} !important;
+  border-color: map_get($color_theme, 'color11') !important;
 }
 
 
@@ -722,10 +716,10 @@ pre::selection {
 select,
 textarea,
 input:not(.has-error) {
-  border: 1px solid {{ COLOR12 }} !important;
+  border: 1px solid map_get($color_theme, 'color12') !important;
 }
 .input-group {
-  border-color: {{ COLOR12 }} !important;
+  border-color: map_get($color_theme, 'color12') !important;
 }
 .input-group>input,
 input[type="checkbox"],
@@ -735,13 +729,13 @@ input[type="radio"] {
 
 /* Legendes de sections */
 legend {
-  border-color: {{ COLOR12 }} !important;
+  border-color: map_get($color_theme, 'color12') !important;
 }
 
 /* Labels */
 .label-value,
 .label-icon {
-  border-color: {{ COLOR12 }} !important;
+  border-color: map_get($color_theme, 'color12') !important;
 }
 
 /* Tableaux */
@@ -751,27 +745,27 @@ legend {
 .table-bordered > thead > tr > td,
 .table-bordered > tbody > tr > td,
 .table-bordered > tfoot > tr > td {
-  border: 1px solid {{ COLOR12 }} !important;
+  border: 1px solid map_get($color_theme, 'color12') !important;
 }
 
 /* Listes */
 .label-list,
 .label-view,
 .label-log{
-  border-color: {{ COLOR12 }} !important;
+  border-color: map_get($color_theme, 'color12') !important;
 }
 
 /* Texte area */
 pre {
-  border-color: {{ COLOR12 }} !important;
+  border-color: map_get($color_theme, 'color12') !important;
 }
 
 /* Listes */
 .left-border {
-  border-left: solid 1px {{ COLOR12 }} !important;
+  border-left: solid 1px map_get($color_theme, 'color12') !important;
 }
 .right-border {
-  border-right: solid 1px {{ COLOR12 }} !important;
+  border-right: solid 1px map_get($color_theme, 'color12') !important;
 }
 
 
@@ -782,16 +776,16 @@ pre {
 .tab-content,
 .box-body,
 .panel-body {
-  background-color: {{ COLOR13 }} !important;
+  background-color: map_get($color_theme, 'color13') !important;
 }
 .right-border {
-  border-right: solid 1px {{ COLOR13 }} !important;
+  border-right: solid 1px map_get($color_theme, 'color13') !important;
 }
 
 /* Contenu tableau */
 .table-condensed,
 .table-bordered {
-  background-color: {{ COLOR13 }}60 !important;
+  background-color: map_get($color_theme, 'color13') !important;
 }
 
 
@@ -799,22 +793,22 @@ pre {
 /* COLOR14 = Boutons d'action */
 /* ########################## */
 .btn-action {
-  background-color: {{ COLOR14 }} !important;
+  background-color: map_get($color_theme, 'color14') !important;
 }
 .tooltip-inner {
-  background-color: {{ COLOR14 }} !important;
+  background-color: map_get($color_theme, 'color14') !important;
 }
 .tooltip.top .tooltip-arrow {
-    border-top-color: {{ COLOR14 }} !important;
+  border-top-color: map_get($color_theme, 'color14') !important;
 }
 .tooltip.bottom .tooltip-arrow {
-    border-bottom-color: {{ COLOR14 }} !important;
+  border-bottom-color: map_get($color_theme, 'color14') !important;
 }
 .tooltip.left .tooltip-arrow {
-    border-left-color: {{ COLOR14 }} !important;
+  border-left-color: map_get($color_theme, 'color14') !important;
 }
 .tooltip.right .tooltip-arrow {
-    border-right-color: {{ COLOR14 }} !important;
+  border-right-color: map_get($color_theme, 'color14') !important;
 }
 
 
@@ -823,7 +817,7 @@ pre {
 /* ################################# */
 .btn-app,
 .btn-selector {
-  background-color: {{ COLOR15 }} !important;
+  background-color: map_get($color_theme, 'color15') !important;
 }
 
 
@@ -832,18 +826,18 @@ pre {
 /* ########################################## */
 /* Menu lateral */
 .sidebar-menu > li:hover > a, .sidebar-menu > li.menu-open > a {
-  color: {{ COLOR16 }} !important;
+  color: map_get($color_theme, 'color16') !important;
 }
 .sidebar-menu .treeview-menu > li.active > a,
 .sidebar-menu .treeview-menu > li > a:hover {
-  color: {{ COLOR16 }} !important;
+  color: map_get($color_theme, 'color16') !important;
 }
 .sidebar a {
-  color: {{ COLOR16 }} !important;
+  color: map_get($color_theme, 'color16') !important;
 }
 .user-panel > .info,
 .user-panel > .info > a {
-  color: {{ COLOR16 }} !important;
+  color: map_get($color_theme, 'color16') !important;
 }
 
 
@@ -852,10 +846,10 @@ pre {
 /* ############################################### */
 /* Menu lateral */
 .sidebar-menu .treeview-menu>li:not(.sidebar-warning)>a {
-    color: {{ COLOR17 }} !important;
+  color: map_get($color_theme, 'color17') !important;
 }
 .sidebar-warning a {
-    color: #000 !important;
+  color: #000 !important;
 }
 
 
@@ -865,7 +859,7 @@ pre {
 /* Bouton administration */
 .btn-app,
 .btn-selector:not(.iconSelected) {
-  border: 1px solid {{ COLOR18 }} !important;
+  border: 1px solid map_get($color_theme, 'color18') !important;
 }
 
 
@@ -874,12 +868,12 @@ pre {
 /* ############################################## */
 /* Tabs */
 .nav-tabs-custom>.tab-content {
-    background-color: {{ COLOR19 }} !important;
+  background-color: map_get($color_theme, 'color19') !important;
 }
 /* Legendes de sections */
 .nav-tabs-custom .box legend,
 .nav-tabs-custom .panel legend {
-    background-color: {{ COLOR19 }} !important;
+  background-color: map_get($color_theme, 'color19') !important;
 }
 
 
@@ -888,7 +882,7 @@ pre {
 /* ######################################### */
 /* Code mirror */
 .CodeMirror-scroll {
-    background-color: {{ COLOR20 }} !important;
+  background-color: map_get($color_theme, 'color20') !important;
 }
 
 
@@ -897,14 +891,14 @@ pre {
 /* ###################################### */
 /* Alertes */
 .alert-danger {
-    background-color: rgba(221, 75, 57, {{ ALERTALPHA / 100 }}) !important;
+  background-color: rgba(221, 75, 57, map_get($color_theme, 'alertAlpha')) !important;
 }
 .alert-warning {
-    background-color: rgba(243, 156, 18, {{ ALERTALPHA / 100 }}) !important;
+  background-color: rgba(243, 156, 18, map_get($color_theme, 'alertAlpha')) !important;
 }
 .alert-success {
-    background-color: rgba(0, 166, 90, {{ ALERTALPHA / 100 }}) !important;
+  background-color: rgba(0, 166, 90, map_get($color_theme, 'alertAlpha')) !important;
 }
 .alert-info {
-    background-color: rgba(0, 192, 239, {{ ALERTALPHA / 100 }}) !important;
+  background-color: rgba(0, 192, 239, map_get($color_theme, 'alertAlpha')) !important;
 }

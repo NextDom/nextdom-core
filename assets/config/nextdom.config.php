@@ -51,28 +51,6 @@ $NEXTDOM_INTERNAL_CONFIG = array(
             array('name' => 'NextDom draft', 'type' => 'json', 'code' => 'nextdom_draft', 'data' => 'https://raw.githubusercontent.com/NextDom/AlternativeMarket-Lists/master/results/nextdom-draft.json')
         )
     ),
-    'theme' => array(
-      'color1' => '#33b8cc',
-      'color2' => '#ffffff',
-      'color3' => '#f4f4f5',
-      'color4' => '#f9fafc',
-      'color5' => '#dbdbdb',
-      'color6' => '#f4f4f5',
-      'color7' => '#ecf0f5',
-      'color8' => '#ffffff',
-      'color9' => '#f5f5f5',
-      'color10' => '#555555',
-      'color11' => '#f5f5f5',
-      'color12' => '#dddddd',
-      'color13' => '#ffffff',
-      'color14' => '#555555',
-      'color15' => '#f4f4f4',
-      'color16' => '#555555',
-      'color17' => '#555555',
-      'color18' => '#dddddd',
-      'color19' => '#fafafa',
-      'color20' => '#f5f5f5',
-    ),
     'plugin' => array(
         'category' => array(
             'security' => array('name' => 'Sécurité', 'icon' => 'fa-lock'),
@@ -366,24 +344,6 @@ $NEXTDOM_INTERNAL_CONFIG = array(
                 ),
             ),
         ),
-    ),
-    'themes-dark' => array(
-        'NextDom' => array('#367fa9', '#3c8dbc', '#222d32', '#f4f5f7'),
-        'Blue'    => array('#367fa9', '#3c8dbc', '#222d32', '#f4f5f7'),
-        'Black'   => array('#fefefe', '#fefefe', '#222', '#f4f5f7'),
-        'Purple'   => array('#555299', '#605ca8', '#222d32', '#f4f5f7'),
-        'Green'   => array('#008d4c', '#00a65a', '#222d32', '#f4f5f7'),
-        'Red'   => array('#d33724', '#dd4b39', '#222d32', '#f4f5f7'),
-        'Yellow'   => array('#db8b0b', '#f39c12', '#222d32', '#f4f5f7')
-    ),
-    'themes-light' => array(
-        'NextDom-Light' => array('#367fa9', '#3c8dbc', '#f9fafc', '#f4f5f7'),
-        'Blue-Light'    => array('#367fa9', '#3c8dbc', '#f9fafc', '#f4f5f7'),
-        'Black-Light'   => array('#fefefe', '#fefefe', '#f9fafc', '#f4f5f7'),
-        'Purple-Light'   => array('#555299', '#605ca8', '#f9fafc', '#f4f5f7'),
-        'Green-Light'   => array('#008d4c', '#00a65a', '#f9fafc', '#f4f5f7'),
-        'Red-Light'   => array('#d33724', '#dd4b39', '#f9fafc', '#f4f5f7'),
-        'Yellow-Light'   => array('#db8b0b', '#f39c12', '#f9fafc', '#f4f5f7')
     )
 );
 global $JEEDOM_INTERNAL_CONFIG;
