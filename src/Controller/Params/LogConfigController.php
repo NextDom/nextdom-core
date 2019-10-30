@@ -39,7 +39,7 @@ class LogConfigController extends BaseController
      *
      * @param array $pageData Page data
      *
-     * @return string Content of log_admin page
+     * @return string Content of log config page
      *
      * @throws \Exception
      */

@@ -36,7 +36,7 @@ class InteractConfigController extends BaseController
      *
      * @param array $pageData Page data
      *
-     * @return string Content of interact_admin page
+     * @return string Content of interaction config page
      *
      */
     public static function get(&$pageData): string

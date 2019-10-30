@@ -37,7 +37,7 @@ class RealtimeController extends BaseController
      *
      * @param array $pageData Page data
      *
-     * @return string Content of log_admin page
+     * @return string Content of realtime page
      *
      */
     public static function get(&$pageData): string

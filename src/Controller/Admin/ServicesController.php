@@ -42,7 +42,7 @@ class ServicesController extends BaseController
      *
      * @param array $pageData Page data
      *
-     * @return string Content of update_admin page
+     * @return string Content of services page
      *
      * @throws \Exception
      */

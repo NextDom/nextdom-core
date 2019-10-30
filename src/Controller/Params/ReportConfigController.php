@@ -36,7 +36,7 @@ class ReportConfigController extends BaseController
      *
      * @param array $pageData Page data
      *
-     * @return string Content of report_admin page
+     * @return string Content of report config page
      *
      */
     public static function get(&$pageData): string
