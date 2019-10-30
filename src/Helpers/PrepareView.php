@@ -72,17 +72,20 @@ class PrepareView
      * Test if first use page must be showed
      *
      * @return bool
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
      */
     public function firstUseAlreadyShowed()
     {
         $result = false;
         if (isset($this->currentConfig['nextdom::firstUse']) && $this->currentConfig['nextdom::firstUse'] == 0) {
-            return true;
+            $result = true;
         }
         else {
             // Prevent F5 bug on second step
-            $user = UserManager::byLogin(Utils::sha512('admin'));
-            if (is_object($user) && $user->getPassword() === 'admin') {
+            $user = UserManager::byLogin('admin');
+            if (is_object($user) && $user->getPassword() !== Utils::sha512('admin')) {
                 ConfigManager::save('nextdom::firstUse', 0);
                 $result = true;
             }
@@ -146,6 +149,7 @@ class PrepareView
             $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-ui-dist/jquery-ui.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/bootstrap/dist/js/bootstrap.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/admin-lte/dist/js/adminlte.min.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/pace-js/pace.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/izitoast/dist/js/iziToast.min.js';
             $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.utils/jquery.utils.js';
             $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.at.caret/jquery.at.caret.min.js';
@@ -266,20 +270,12 @@ class PrepareView
                 $pageData['CSS_POOL'][] = '/public/icon/' . $dir . 'style.css';
             }
         }
-            if (AuthentificationHelper::isConnected()) {
-                if (UserManager::getStoredUser() !== null && UserManager::getStoredUser()->getOptions('desktop_highcharts_theme') != '') {
-                    $highstockThemeFile = '/vendor/node_modules/highcharts/themes/' . UserManager::getStoredUser()->getOptions('desktop_highcharts_theme') . '.js';
-                    $pageData['JS_POOL'][] = $highstockThemeFile;
-                }
+        if (AuthentificationHelper::isConnected()) {
+            if (UserManager::getStoredUser() !== null && UserManager::getStoredUser()->getOptions('desktop_highcharts_theme') != '') {
+                $highstockThemeFile = '/vendor/node_modules/highcharts/themes/' . UserManager::getStoredUser()->getOptions('desktop_highcharts_theme') . '.js';
+                $pageData['JS_POOL'][] = $highstockThemeFile;
             }
-            if ($this->currentConfig['enableCustomCss'] == 1) {
-                if (file_exists(NEXTDOM_ROOT . '/var/custom/desktop/custom.css')) {
-                    $pageData['CSS_POOL'][] = '/var/custom/desktop/custom.css';
-                }
-                if (file_exists(NEXTDOM_ROOT . '/var/custom/desktop/custom.js')) {
-                    $pageData['JS_POOL'][] = '/var/custom/desktop/custom.js';
-                }
-            }
+        }
     }
 
     /**

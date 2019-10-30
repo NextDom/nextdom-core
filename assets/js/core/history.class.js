@@ -70,7 +70,6 @@ nextdom.history.copyHistoryToCmd = function (_params) {
 }
 
 nextdom.history.drawChart = function (_params) {
-    showLoadingCustom();
     if ($.type(_params.dateRange) == 'object') {
         _params.dateRange = json_encode(_params.dateRange);
     }
@@ -450,7 +449,6 @@ nextdom.history.drawChart = function (_params) {
             for(var i in plotband){
                 nextdom.history.chart[_params.el].chart.xAxis[0].addPlotBand(plotband[i]);
             }
-            hideLoadingCustom();
             if (typeof (init(_params.success)) == 'function') {
                 _params.success(data.result);
             }

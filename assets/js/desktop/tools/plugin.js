@@ -223,7 +223,6 @@ function initEvents() {
  */
 function showPlugin(pluginId) {
     $('#div_resumePluginList').hide();
-    showLoadingCustom();
     sel_plugin_id = pluginId;
     nextdom.plugin.get({
         id: pluginId,

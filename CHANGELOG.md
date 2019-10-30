@@ -1,5 +1,23 @@
 # NextDom Core Changelog
 ---
+## 0.5.1
+
+> ***Release Date : 27/10/2019***
+>
+> ***Statut : beta***
+>
+> ***Coverall : 14%***
+
+#### NEWS
+* Changement du "Loading" par défaut par le "Pace Loading" AdminLTE
+
+#### AMELIORATIONS / MODIFICATIONS
+* Suppression de la fonctionnalité Personnalisation JS/Css du Core
+* Nouveau tests unitaires du core
+
+#### FIXS
+* [liste ici](https://github.com/NextDom/nextdom-core/milestone/21?closed=1)
+---
 ## 0.5.0
 
 > ***Release Date : 20/10/2019***

@@ -244,8 +244,11 @@ class BackupManager
      * compatibility with jeedom archives).
      *
      * @param string $outputPath path of generated backup archive
-     * @param $sqlPath
-     * @param $cachePath
+     * @param string $sqlPath
+     * @param string $cachePath
+     * @param string $logFile
+     *
+     * @throws CoreException
      * @throws \splitbrain\PHPArchive\ArchiveCorruptedException
      * @throws \splitbrain\PHPArchive\ArchiveIOException
      * @throws \splitbrain\PHPArchive\ArchiveIllegalCompressionException
@@ -463,8 +466,8 @@ class BackupManager
             ConsoleHelper::step("importing Jeedom configuration...");
             self::restoreJeedomConfig($tmpDir);
             ConsoleHelper::ok();
-            ConsoleHelper::step("restoring custom data...");
-            //self::restoreCustomData($tmpDir,'restore');
+            ConsoleHelper::step("restoring custom data...\n");
+            self::restoreCustomData($tmpDir,'restore');
             ConsoleHelper::ok();
             ConsoleHelper::step("migrating data...");
             MigrationHelper::migrate('restore');
@@ -479,10 +482,10 @@ class BackupManager
             ConsistencyManager::checkConsistency();
             ConsoleHelper::ok();
             ConsoleHelper::step("init values...");
-            BackupManager::initValues();
+            self::initValues();
             ConsoleHelper::ok();
             ConsoleHelper::step("clearing cache...");
-            BackupManager::clearCache();
+            self::clearCache();
             ConsoleHelper::ok();
             FileSystemHelper::rrmdir($tmpDir);
             NextDomHelper::event("end_restore");
@@ -651,7 +654,6 @@ class BackupManager
     private static function restoreCustomData($tmpDir, $logFile)
     {
         $rootCustomDataDirs = glob(sprintf("%s/*", $tmpDir), GLOB_ONLYDIR);
-        $nextDomRoot = sprintf("%s/", NEXTDOM_ROOT);
 
         foreach ($rootCustomDataDirs as $c_dir) {
             $name = basename($c_dir);
@@ -659,14 +661,14 @@ class BackupManager
                 && !in_array($name, FoldersReferential::NEXTDOMFILES)
                 && !in_array($name, FoldersReferential::JEEDOMFOLDERS)
                 && !in_array($name, FoldersReferential::JEEDOMFILES)) {
-                $message = 'Restoring folder :' . $name;
+                $message = 'Restoring folder: ' . $name;
                 if ($logFile == 'migration') {
                     LogHelper::addInfo($logFile, $message, '');
                 } else {
                     ConsoleHelper::process($message);
                 }
-                if (true === FileSystemHelper::mv($c_dir, sprintf("%s/%s", $nextDomRoot, $name))) {
-                    self::restorePublicPerms($nextDomRoot);
+                if (true === FileSystemHelper::mv($c_dir, sprintf("%s/%s", NEXTDOM_ROOT, $name))) {
+                    self::restorePublicPerms(NEXTDOM_ROOT);
                 }
                 if($logFile != 'migration') {
                     ConsoleHelper::ok();
@@ -732,7 +734,7 @@ class BackupManager
         $pluginDirs = glob(sprintf("%s/plugins/*", $tmpDir), GLOB_ONLYDIR);
         $pluginRoot = sprintf("%s/plugins", NEXTDOM_ROOT);
 
-        FileSystemHelper::rrmdir($pluginRoot . "/");
+        FileSystemHelper::rrmdir($pluginRoot);
         FileSystemHelper::mkdirIfNotExists($pluginRoot,0775,true);
         foreach ($pluginDirs as $c_dir) {
             $name = basename($c_dir);
@@ -860,6 +862,7 @@ class BackupManager
         CacheManager::flush();
         exec('sh ' . NEXTDOM_ROOT . '/scripts/clear_cache.sh');
     }
+
     /**
      * Init default values
      *

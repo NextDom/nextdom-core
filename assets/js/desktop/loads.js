@@ -43,7 +43,6 @@
  */
 $(document).ajaxStart(function () {
     nbActiveAjaxRequest++;
-    showLoadingCustom();
 });
 
 /**
@@ -53,7 +52,6 @@ $(document).ajaxStop(function () {
     nbActiveAjaxRequest--;
     if (nbActiveAjaxRequest <= 0) {
         nbActiveAjaxRequest = 0;
-        hideLoadingCustom();
     }
 });
 
@@ -377,13 +375,9 @@ $(function () {
  * @param noPushHistory TRUE to not have the new page in history, so go back to previous page if F5
  */
 function loadPage(pageUrl,noPushHistory){
-    // Loading spinner
-    showLoadingCustom();
-
     // Catch a page leaving when setting not saved
     if (modifyWithoutSave) {
         if (!confirm('{{Attention vous quittez une page ayant des données modifiées non sauvegardées. Voulez-vous continuer ?}}')) {
-            hideLoadingCustom();
             return;
         }
         modifyWithoutSave = false;

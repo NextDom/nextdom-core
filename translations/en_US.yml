@@ -1,71 +1,123 @@
 # Nouveau format
 
+administration:
+  cpu: "CPU"
+  cpu-cores: "cores"
+  of-cpu-load: "load"
+  of-memory-used: "used"
+  of-space-used: "of used space"
+  memory: "RAM"
+  hdd: "HDD"
+  swap: "swap"
+  http-connections-count: "Number of HTTP connection"
+  connections-count: "Number of connections"
+  process-count: "Number of process"
+  uptime: "Uptime"
+  welcome-page: "Welcome Page"
+  developer-documentation: "Dev documentation."
+  power-off: "Power Off"
+  restart: "Restart"
+  disconnect: "Log off"
+
+api:
+  access: "API Access"
+  access-http: "HTTP API Access"
+  access-jsonrpc: "JSON RPC API Access"
+  access-tts: "TTS API Access"
+  access-pro: "PRO API Access"
+  access-market: "Market API Access"
+  key: "API Key"
+  key-global-of: "Global API key of :"
+  key-global: "Global API key"
+  key-pro-of: "PRO API key of"
+  key-pro: "PRO API key"
+  market-key-of: "Market key of"
+  market-key: "Market key"
+  access-plugins-api-key: "Access and plugins API keys"
+  api-for-plugin: "API for the plugin"
+  no-api-plugin: "No plugin has API keys..."
+
+cache:
+  alert: "Caution : any changes to the cache engine require a restart of your "
+  cache-engine: "Cache engine"
+  clean: "Clean cache"
+  clear: "Empty cache"
+  engine: "Engine"
+  file-system: "System file"
+  statistics: "Statistics"
+  time-pause: "Pause time for long polling"
+
 common:
-  action: 'Action'
-  actions: 'Actions'
-  activate: 'Activate'
-  active: 'Active'
-  add: 'Add'
-  advanced_configuration: 'Advanced configuration'
-  all: 'All'
-  back: 'Back'
-  branch: 'Branch'
-  by_default: 'By default'
-  cancel: 'Cancel'
-  clear: 'Clear'
+  action: "Action"
+  actions: "Actions"
+  activate: "Activate"
+  active: "Active"
+  add: "Add"
+  advanced_configuration: "Advanced configuration"
+  all: "All"
+  allow: "Allow"
+  back: "Back"
+  branch: "Branch"
+  by_default: "By default"
+  cancel: "Cancel"
+  clear: "Clear"
   danger: "Danger"
-  date: 'Date'
-  days: 'days'
-  default: 'Default'
-  description: 'Description:'
-  device: 'Device'
-  devices: 'Devices'
-  disable: 'Disable'
-  disabled: 'Disabled'
-  display: 'display'
-  enabled: 'Enabled'
-  enough: 'ENOUGH'
-  error-b: '[Error]'
-  error: 'Error'
-  finish: 'finish'
-  hours: 'hours'
-  id: 'ID'
-  ignore: 'Ignore'
-  in-progress: 'In progress'
-  info: 'Info'
-  information: 'Information'
-  jeedom-version: 'Base Jeedom'
-  log: 'Log'
-  main: 'Main'
-  minutes: 'minutes'
-  name: 'Name'
-  next: 'Next'
-  nok: 'NOK'
-  none: 'None'
-  not-found: 'Not found'
-  object: 'Object'
-  objects: 'Objects'
-  ok: 'OK'
-  pause: 'Pause'
-  previous: 'Previous'
-  remove: 'Remove'
-  return: 'Return'
-  round: 'Round'
-  run: 'Run'
-  save: 'Save'
-  scenario: 'Scenario'
-  send: 'Send'
-  settings: 'Settings'
-  setup: 'Setup'
-  type: 'Type'
-  validate: 'Validate'
-  value: 'Value'
-  version: 'Version'
-  visible: 'Visible'
-  warning: 'Warning'
-  widget: 'Widget'
-  widgets: 'Widgets'
-  here: 'Here'
+  date: "Date"
+  days: "days"
+  default: "Default"
+  description: "Description:"
+  device: "Device"
+  devices: "Devices"
+  disable: "Disable"
+  disabled: "Disabled"
+  display: "display"
+  enabled: "Enabled"
+  enough: "ENOUGH"
+  error-b: "[Error]"
+  error: "Error"
+  finish: "finish"
+  hours: "hours"
+  id: "ID"
+  ignore: "Ignore"
+  in-progress: "In progress"
+  info: "Info"
+  information: "Information"
+  jeedom-version: "Base Jeedom"
+  localhost: "Localhost"
+  log: "Log"
+  main: "Main"
+  minutes: "minutes"
+  name: "Name"
+  next: "Next"
+  nok: "NOK"
+  none: "None"
+  not-found: "Not found"
+  object: "Object"
+  objects: "Objects"
+  ok: "OK"
+  pause: "Pause"
+  previous: "Previous"
+  regenerate: "Regenerate"
+  remove: "Remove"
+  return: "Return"
+  round: "Round"
+  run: "Run"
+  save: "Save"
+  seconds: "second(s)"
+  scenario: "Scenario"
+  send: "Send"
+  settings: "Settings"
+  setup: "Setup"
+  type: "Type"
+  validate: "Validate"
+  value: "Value"
+  version: "Version"
+  visible: "Visible"
+  warning: "Warning"
+  widget: "Widget"
+  widgets: "Widgets"
+  whitelist: "Whitelist"
+  here: "Here"
 
 connection:
   home-msg: Log in to access your session ...
@@ -103,6 +155,26 @@ install:
   install.end-update: END UPDATE
   install.nothing-to-update: Nothing to update
 
+network:
+  advanced: "Advanced configuration"
+  config: "Protocol, Adress and Port"
+  dns-management: "Management"
+  dns-proxy: "Warning : this feature is not available in the service pack community (see your service pack on your profile page on the market)."
+  dns-use: "Use DNS"
+  dns-status: "DNS status"
+  docker-like: "(for docker-like installations, in the form 192.168.1. *)"
+  internal-access: "Internal access"
+  external-access: "External access"
+  management: "Independent network management"
+  mask: "Local IP mask"
+  networks: "Networks"
+  started: "Started : "
+  stopped: "Stopped"
+  use-dns: "Normal if you have not checked the box : Use DNS"
+  warning-part-1: "Warning : this configuration is only there to inform "
+  warning-part-2: "of its network configuration and has no impact on the ports or IP actually used to reach "
+
+
 page-title:
   administration: Administration
   users: User
@@ -137,24 +209,7 @@ page-title:
   plugins: Plugins
   tools: tools
 
-administration:
-  cpu: CPU
-  cpu-cores: cores
-  of-cpu-load: load
-  of-memory-used: used
-  of-space-used: of used space
-  memory: RAM
-  hdd: HDD
-  swap: swap
-  http-connections-count: Number of HTTP connection
-  connections-count: Number of connections
-  process-count: Number of processes
-  uptime: Uptime
-  welcome-page: Welcome Page
-  developer-documentation: Dev documentation.
-  power-off: Power Off
-  restart: Restart
-  disconnect: Sign out
+
 
 scripts:
   error: "Error:"
@@ -379,7 +434,7 @@ general:
   language-list:
       fr_FR: "French"
       en_US: "English"
-      
+
 
 update-view:
   none: "None"
@@ -609,6 +664,11 @@ samba:
     not-found: The file is not found on the samba server
     already-exists: The file already exists on the samba server
     unknown: An error occurred while connecting to the samba server
+
+commandes:
+  influxDbIPLabel: IP
+  influxDbPortLabel: Port
+  influxDbDatabaseNameLabel: Database
 
 # Ancien format
 "401 - Accès non autorisé": "401 - Access not allowed"
@@ -989,20 +1049,8 @@ samba:
 "Serveur de temps optionnel": "Optional Time Server"
 "Indique à NextDom de ne pas prendre en compte l\\'heure du système": "Tells NextDom to ignore the system time"
 "Ignorer la vérification de l\\'heure": "Ignore time checking"
-"Clés API": "Api Keys"
-"Accès API HTTP": "HTTP API access"
 "Activé": "Enabled"
-"IP blanche": "Whitelist"
-"Localhost": "Localhost"
 "Désactivé": "Disabled"
-"Accès API JSONRPC": "JSONRPC API access"
-"Accès API TTS": "TTS API access"
-"Clé API globale de NextDom": "Global API key NextDom"
-"Clé API": "API key"
-"Clé API Pro de NextDom": "API Key Pro of NextDom"
-"Clé API Pro": "API Key pro"
-"Accès API": "API access"
-"Clé API pour le plugin": "API key for the plugin"
 "Système (OS)": "System (OS)"
 "ATTENTION : ces opérations sont risquées, vous pouvez perdre l\\'accès à votre système et à NextDom. L\\'équipe NextDom se réserve le droit de refuser toute demande de support en cas de mauvaise manipulation.": "CAUTION ! These operations are risky. You might lose access to your system and to NextDom. NextDom support team reserves the right to refuse any request for support in case of mishandling."
 "Accès à l\\'interface d\\'administration": "Access to the administration interface"
@@ -1011,7 +1059,6 @@ samba:
 "Nombre d\\'échec toléré": "Number of fails allowed"
 "Temps maximum entre les échecs (s)": "Maximum time between fail(s)"
 "Durée du bannissement (s), -1 pour infini": "Ban duration (s), -1 for infinity"
-"IP \"blanche\"": "Whitelist"
 "IP": "IP"
 "Date de fin": "End date"
 "Base de données": "Database"
@@ -1020,19 +1067,10 @@ samba:
 "Machine (hostname)": "Computer name (hostname)"
 "Utilisateur": "User"
 "Mot de passe": "Password"
-"Configuration réseaux": "Network setup"
-"Attention : cette configuration n\\'est là que pour informer NextDom de sa configuration réseau et n\\'a aucun impact sur les ports ou l\\'IP réellement utilisés pour joindre NextDom": "Please note : this configuration is only to inform NextDom of its network configuration and has no impact on ports or IP actually used to join NextDom"
-"Accès interne": "Internal access"
 "Protocole": "Protocol"
 "Statut": "Statut"
-"Accès externe": "External access"
-"Gestion avancée": "Advanced management"
-"Désactiver la gestion du réseau par NextDom": "Disable the NextDom network manager"
 "Adresse mac": "Mac address"
 "Proxy": "proxy"
-"Utiliser les DNS NextDom": "Use NextDom DNS"
-"Statut DNS": "DNS status"
-"Normal si vous n\\'avez pas coché la case : Utiliser les DNS NextDom": "Expected if you did not check the box: Use NextDom DNS"
 "Arrêté": "Stop"
 "(Re)démarrer": "Start/ Restart"
 "Arrêter": "Stop"
@@ -1060,20 +1098,12 @@ samba:
 "Push": "Push"
 "URL de push globale": "Global push URL"
 "Mettez ici l\\'URL à appeler lors d\\'une mise à jour de la valeur des commandes. Vous pouvez utiliser les tags suivants : #value# (valeur de la commande), #cmd_id# (id de la commande) et #cmd_name# (nom de la commande)": "Put here the URL to call in an update of the value of command. You can use this tags: #value# (command value), #cmd_id# (command id) and #cmd_name# (command name)"
-"Configuration du cache": "Cache setup"
-"Attention toute modification du moteur de cache nécessite un redémarrage de NextDom": "Please note : any changes to the cache engine requires a reboot of NextDom"
-"Statistiques": "Statistics"
 "Moteur de cache": "Cache engine"
-"Système de fichier (/tmp/nextdom-cache)": "File system (/tmp/nextdom-cache)"
 "Memcached": "Memcached"
 "Adresse Memcache": "Memcache address"
 "Port Memcache": "Memcache port"
 "Adresse Redis": "Redis address"
 "Port redis": "Redis port"
-"Nettoyer le cache": "Empty cache"
-"Nettoyer": "Clean"
-"Vider toutes les données en cache": "Clear all cache data"
-"Temps de pause pour le long polling": "Time of pause for the polling long"
 "Configuration des interactions": "Interaction setup"
 "Général": "Main"
 "Plus la sensibilité est basse (proche de 1) plus la corrrespondance doit être exacte": "The lower the sensitivity (close to 1) the more accurate the match must be"
@@ -1169,7 +1199,6 @@ samba:
 "Mac": "Mac"
 "Nettoyer les rapport plus anciens de (jours)": "Clear reports older than (days)"
 "API": "API"
-"OS/DB": "OS / DB"
 "Réseaux": "networks"
 "Commandes": "Commands"
 "Cache": "Cache"
@@ -1237,16 +1266,9 @@ samba:
 "force la synchronisation de l\\'heure": "force la synchronisation de l\\'heure"
 "Indique à": "Indique à"
 "de ne pas prendre en compte l\\'heure du système": "de ne pas prendre en compte l\\'heure du système"
-"Clé API globale de": "Clé API globale de"
-"Clé API Pro de": "Clé API Pro de"
 "ATTENTION : ces opérations sont risquées, vous pouvez perdre l\\'accès à votre système et à": "ATTENTION : ces opérations sont risquées, vous pouvez perdre l\\'accès à votre système et à"
 ". L\\'équipe": ". L\\'équipe"
 "se réserve le droit de refuser toute demande de support en cas de mauvaise manipulation.": "se réserve le droit de refuser toute demande de support en cas de mauvaise manipulation."
-"Attention : cette configuration n\\'est là que pour informer": "Attention : cette configuration n\\'est là que pour informer"
-"de sa configuration réseau et n\\'a aucun impact sur les ports ou l\\'IP réellement utilisés pour joindre": "de sa configuration réseau et n\\'a aucun impact sur les ports ou l\\'IP réellement utilisés pour joindre"
-"Désactiver la gestion du réseau par": "Désactiver la gestion du réseau par"
-"Utiliser les DNS": "Utiliser les DNS"
-"Attention : toute modification du moteur de cache nécessite un redémarrage de": "Attention : toute modification du moteur de cache nécessite un redémarrage de"
 "Mise à jour de": "Mise à jour de"
 "Mode développement": "Mode développement"
 "Vider le cache assets": "Vider le cache assets"

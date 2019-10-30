@@ -95,7 +95,7 @@ class AuthentificationHelper
         }
 
         // Login with user/password
-        if (!self::isConnected() && $allowRemoteUser == 1) {
+        if (!self::isConnected() && $allowRemoteUser == 1 && isset($_SERVER['REMOTE_USER'])) {
             $user = UserManager::byLogin($_SERVER['REMOTE_USER']);
             if (is_object($user) && $user->getEnable() == 1) {
                 @session_start();

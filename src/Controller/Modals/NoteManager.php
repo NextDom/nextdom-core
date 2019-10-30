@@ -39,6 +39,6 @@ class NoteManager extends BaseAbstractModal
      */
     public static function get(): string
     {
-        return Render::getInstance()->get('/modals/note.manager.html.twig', $pageData);
+        return Render::getInstance()->get('/modals/note.manager.html.twig');
     }
 }

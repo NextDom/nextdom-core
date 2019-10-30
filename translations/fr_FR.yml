@@ -1,3 +1,52 @@
+# Nouveau format
+
+administration:
+  cpu: "CPU"
+  cpu-cores: "cœurs"
+  of-cpu-load: "de charge"
+  of-memory-used: "utilisée"
+  of-space-used: "d'espace utilisé"
+  memory: "RAM"
+  hdd: "HDD"
+  swap: "Swap"
+  http-connections-count: "Nombre de connexion HTTP"
+  connections-count: "Nombre de connexion"
+  process-count: "Nombre de processus"
+  uptime: "Système démarré depuis"
+  welcome-page: "Page de bienvenue"
+  developer-documentation: "Documentation Dev."
+  power-off: "Éteindre"
+  restart: "Redémarrer"
+  disconnect: "Se déconnecter"
+
+api:
+  access: "Accès API"
+  access-http: "Accès API HTTP"
+  access-jsonrpc: "Accès API JSONRPC"
+  access-tts: "Accès API TTS"
+  access-pro: "Accès API PRO"
+  access-market: "Accès API Market"
+  key: "Clé API"
+  key-global-of: "API globale de :"
+  key-global: "Clé API globale"
+  key-pro-of: "Clé API PRO de"
+  key-pro: "Clé API PRO"
+  market-key-of: "Clé Market de"
+  market-key: "Clé Market"
+  access-plugins-api-key: "Accès et clés API Plugins"
+  api-for-plugin: "API pour le plugin"
+  no-api-plugin: "Aucun plugin ne dispose de clés API..."
+
+cache:
+  alert: "Attention : toute modification du moteur de cache nécessite un redémarrage de votre "
+  cache-engine: "Moteur de cache"
+  clean: "Nettoyer le cache"
+  clear: "Vider le cache"
+  engine: "Moteur"
+  file-system: "Système de fichiers"
+  statistics: "Statistiques"
+  time-pause: "Temps de pause pour le long polling"
+
 common:
   action: "Action"
   actions: "Actions"
@@ -25,15 +74,17 @@ common:
   enabled: "Activé"
   enough: "NOK"
   error-b: "[Erreur] "
-  error: Erreur
-  finish: Terminer
-  hours: heures
-  id: ID
-  ignore: Ignorer
-  in-progress: En cours
+  error: "Erreur"
+  finish: "Terminer"
+  here: "Ici"
+  hours: "heures"
+  id: "ID"
+  ignore: "Ignorer"
+  in-progress: "En cours"
   info: "Info"
   information: "Informations"
   jeedom-version: "Base Jeedom"
+  localhost: "Localhost"
   log: "Log"
   main: "Général"
   minutes: "minutes"
@@ -54,6 +105,7 @@ common:
   run: "Exécuter"
   save: "Sauvegarder"
   scenario: "Scénario"
+  seconds: "seconde(s)"
   send: "Envoyer"
   settings: "Paramètres"
   setup: "Configuration"
@@ -65,7 +117,9 @@ common:
   warning: "Warning"
   widget: "Widget"
   widgets: "Widgets"
-  here: "Ici"
+  whitelist: "Liste IP blanche"
+  regenerate: "Régénérer"
+
 
 connection:
   home-msg: Connectez-vous pour accéder à votre session...
@@ -103,6 +157,25 @@ install:
   end-update: FIN DE LA MISE A JOUR
   nothing-to-update: Aucune mise à jour
 
+network:
+  advanced: "Configuration avancée"
+  config: "Protocole, Adresse et Port"
+  dns-management: "Configuration DNS"
+  dns-proxy: "Attention : cette fonctionnalité n'est pas disponible dans le service pack community (voir votre service pack sur votre page profil sur le market)."
+  dns-use: "Utiliser les DNS"
+  dns-status: "Statut des DNS"
+  docker-like: "(pour les installations docker-like, sous la forme 192.168.1.*)"
+  internal-access: "Accès interne"
+  external-access: "Accès externe"
+  management: "Gestion autonome du réseau"
+  mask: "Masque d'IP local"
+  networks: "Réseaux"
+  started: "Démarré : "
+  stopped: "Arrêté"
+  use-dns: "Normal si vous n'avez pas coché la case : Utiliser les DNS"
+  warning-part-1: "Attention : cette configuration n'est là que pour informer "
+  warning-part-2: "de sa configuration réseau et n'a aucun impact sur les ports ou l'IP réellement utilisés pour joindre "
+
 page-title:
   administration: Administration
   users: Utilisateurs
@@ -136,25 +209,6 @@ page-title:
   objects: Objets
   plugins: Plugins
   tools: Outils
-
-administration:
-  cpu: CPU
-  cpu-cores: cœurs
-  of-cpu-load: de charge
-  of-memory-used: utilisée
-  of-space-used: d'espace utilisé
-  memory: RAM
-  hdd: HDD
-  swap: Swap
-  http-connections-count: Nombre de connexion HTTP
-  connections-count: Nombre de connexion
-  process-count: Nombre de processus
-  uptime: Système démarré depuis
-  welcome-page: Page de bienvenue
-  developer-documentation: Documentation Dev.
-  power-off: Éteindre
-  restart: Redémarrer
-  disconnect: Se déconnecter
 
 scripts:
   error: "Erreur : "
@@ -390,7 +444,7 @@ general:
   language-list:
       fr_FR: "Français"
       en_US: "Anglais"
-      
+
 
 update-view:
   none: "Aucune"
@@ -631,8 +685,10 @@ samba:
     already-exists: Le fichier existe déjà sur le serveur samba
     unknown: Une erreur s'est produite lors de la connexion au serveur samba
 
-system:
-
+commandes:
+  influxDbIPLabel: IP
+  influxDbPortLabel: Port
+  influxDbDatabaseNameLabel: Base de données
 
 # Ancien format
 "401 - Accès non autorisé": "401 - Accès non autorisé"
@@ -812,14 +868,11 @@ system:
 "Attendre avant de répondre": "Attendre avant de répondre"
 "Attention": "Attention"
 "ATTENTION : ces opérations sont risquées, vous pouvez perdre l'accès à votre système et à": "ATTENTION : ces opérations sont risquées, vous pouvez perdre l'accès à votre système et à"
-"Attention : cette configuration n'est là que pour informer": "Attention : cette configuration n'est là que pour informer"
-"Attention : cette fonctionnalité n'est pas disponible dans le service pack community (voir votre service pack sur votre page profil sur le market)": "Attention : cette fonctionnalité n'est pas disponible dans le service pack community (voir votre service pack sur votre page profil sur le market)"
 "Attention : il doit y avoir un souci, car le résultat est le même que l'expression": "Attention : il doit y avoir un souci, car le résultat est le même que l'expression"
 "Attention : installation des dépendances lancée": "Attention : installation des dépendances lancée"
 "Attention : l'installation des dépendances a dépassé le temps maximum autorisé :": "Attention : l'installation des dépendances a dépassé le temps maximum autorisé :"
 "Attention : le compte utilisateur n'a pas un profil \"Utilisateur limité\", aucune restriction mise ici ne pourra donc s'appliquer": "Attention : le compte utilisateur n'a pas un profil \"Utilisateur limité\", aucune restriction mise ici ne pourra donc s'appliquer"
 "Attention : tout ce que vous écrivez ici est global et inclus sur toutes les pages. La moindre erreur peut rendre votre": "Attention : tout ce que vous écrivez ici est global et inclus sur toutes les pages. La moindre erreur peut rendre votre"
-"Attention : toute modification du moteur de cache nécessite un redémarrage de votre": "Attention : toute modification du moteur de cache nécessite un redémarrage de votre"
 "Attention ce plugin n'est pas un plugin officiel en cas de soucis avec celui-ci (direct ou indirect) toute demande de support peut être refusée": "Attention ce plugin n'est pas un plugin officiel en cas de soucis avec celui-ci (direct ou indirect) toute demande de support peut être refusée"
 "Attention ce plugin ne semble pas être compatible avec votre système": "Attention ce plugin ne semble pas être compatible avec votre système"
 "Attention je pense qu'il y a un soucis avec le démon que j'ai relancé plus de 3 fois consecutivement": "Attention je pense qu'il y a un soucis avec le démon que j'ai relancé plus de 3 fois consecutivement"
@@ -966,16 +1019,10 @@ system:
 "Choisissez les filtres permettant de limiter le nombre de phrases générées...": "Choisissez les filtres permettant de limiter le nombre de phrases générées..."
 "Choisissez votre icône": "Choisissez votre icône"
 "Classe": "Classe"
-"Clé API Globale": "Clé API Globale"
-"Clé API Pro": "Clé API Pro"
-"Clé d'installation": "Clé d'installation"
-"Clé Market": "Clé Market"
-"Clés API": "Clés API"
 "Cliquer sur le bouton Terminer pour profiter de votre solution Domotique...": "Cliquer sur le bouton Terminer pour profiter de votre solution Domotique..."
 "Cliquez sur une commande à droite ou tapez une commande personnalisée ci-dessous": "Cliquez sur une commande à droite ou tapez une commande personnalisée ci-dessous"
 "Cloud monitoring actif": "Cloud monitoring actif"
 "Clé": "Clé"
-"Clé API": "Clé API"
 "Cmd inconnu :": "Cmd inconnu :"
 "Cmd introuvable :": "Cmd introuvable :"
 "cmdCacheValue": "cmdCacheValue"
@@ -1564,8 +1611,6 @@ system:
 "Inversé": "Inversé"
 "Invisible": "Invisible"
 "IP": "IP"
-"IP \"blanche\"": "IPs \"blanches\""
-"IP blanche": "IP blanches"
 "IPs bannies": "IPs bannies"
 "Italiano": "Italiano"
 "J'ai déjà un compte market :": "J'ai déjà un compte market :"
@@ -1726,7 +1771,6 @@ system:
 "Listener": "Listener"
 "Listener non trouvé :": "Listener non trouvé :"
 "Local": "Local"
-"Localhost": "Localhost"
 "Log": "Log"
 "Log d'exécution du scénario": "Log d'exécution du scénario"
 "Log du plugin": "Log du plugin"
@@ -1899,7 +1943,6 @@ system:
 "Non installés": "Non installés"
 "Non visible": "Non visible"
 "Normal": "Normal"
-"Normal si vous n'avez pas coché la case : Utiliser les DNS": "Normal si vous n'avez pas coché la case : Utiliser les DNS"
 "Note": "Note"
 "Note créée avec succès": "Note créée avec succès"
 "Note inconnue. Vérifiez l'ID": "Note inconnue. Vérifiez l'ID"
@@ -2251,7 +2294,6 @@ system:
 "statusLastCommunication": "statusLastCommunication"
 "statusNumberTryWithoutSuccess": "statusNumberTryWithoutSuccess"
 "Statut": "Statut"
-"Statut DNS": "Statut DNS"
 "Statut démon": "Statut démon"
 "Stop": "Stop"
 "Style du tableau (CSS)": "Style du tableau (CSS)"
@@ -2332,7 +2374,6 @@ system:
 "Template appliqué avec succès": "Template appliqué avec succès"
 "Template de scénario": "Template de scénario"
 "Temps": "Temps"
-"Temps de pause pour le long polling": "Temps de pause pour le long polling"
 "Temps maxi. entre les échecs": "Temps maxi. entre les échecs"
 "Temps réel": "Temps réel"
 "Température": "Température"
@@ -2420,7 +2461,6 @@ system:
 "Utilisateurs": "Utilisateurs"
 "Utilisateurs autorisés": "Utilisateurs autorisés"
 "Utilisation": "Utilisation"
-"Utiliser les DNS": "Utiliser les DNS"
 "Utilisé par": "Utilisé par"
 "Utilisée dans": "Utilisée dans"
 "Valeur": "Valeur"

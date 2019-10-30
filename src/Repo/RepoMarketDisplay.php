@@ -397,7 +397,6 @@ Utils::sendVarToJS('market_display_info', $market_array);
             notify('Core', error.message, 'error');
           },
           success: function (data) {
-            showLoadingCustom();
             window.location.reload();
           }
         });

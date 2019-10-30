@@ -50,7 +50,7 @@ function install_dep_composer {
 
 function init_dependencies {
 	npm --version > /dev/null 2>&1 || {
-		echo " >>> Installation de node et npm"
+		echo " >>> Installation of node and npm"
     tmpFile=$(mktemp)
 		wget -q https://deb.nodesource.com/setup_10.x -O ${tmpFile}
     run_as_superuser bash ${tmpFile}
@@ -59,7 +59,7 @@ function init_dependencies {
   }
 
 	sass --version > /dev/null 2>&1 || {
-		echo " >>> Installation de sass"
+		echo " >>> Installation of sass"
     run_as_superuser npm install -g sass
 	}
 

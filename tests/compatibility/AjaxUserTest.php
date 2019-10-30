@@ -65,7 +65,7 @@ class AjaxUserTest extends AjaxBase
     public function testValidateTwoFactorCodeAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'validateTwoFactorCode']);
-        $this->assertContains('Secret key is too short.', (string) $result->getBody());
+        $this->assertContains('Invalid characters in the base32 string.', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
