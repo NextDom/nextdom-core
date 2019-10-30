@@ -56,11 +56,6 @@
         {% endfor %}
     {% endif %}
 
-    <!-- Custom CSS loading -->
-    {% if CUSTOM_CSS is defined %}
-        {{ CUSTOM_CSS|raw }}
-    {% endif %}
-
     <!-- Footer loading -->
     {% include '/commons/footer.html.twig' %}
 

@@ -288,20 +288,6 @@ class NextDomAjax extends BaseAjax
         AjaxHelper::success();
     }
 
-    public function saveCustom()
-    {
-        AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init(true);
-        $customType = Utils::init('type');
-        if ($customType != 'js' && $customType != 'css') {
-            throw new CoreException(__('La version ne peut être que js ou css'));
-        }
-        $customDir = sprintf("%s/custom/desktop/", NEXTDOM_DATA);
-        $customPath = sprintf("%s/custom.%s", $customDir, $customType);
-        file_put_contents($customPath, Utils::init('content'));
-        AjaxHelper::success();
-    }
-
     public function getGraphData()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
