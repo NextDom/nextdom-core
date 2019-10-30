@@ -40,6 +40,7 @@ var loginInput = $('#login');
 var passwordInput = $('#password');
 var twoFactorInput = $('#twofactor');
 var submitButton = $('#submit');
+var installMobile = $('pre');
 
 /**
  * Init events of the page
@@ -73,6 +74,21 @@ function initEvents() {
             checkLogin();
         }
     });
+    if (installMobile !== undefined) {
+        installMobile.click(function() {
+           if (document.selection) {
+               var selectedRange = document.body.createTextRange();
+               selectedRange.moveToElementText(installMobile[0]);
+               selectedRange.select();
+           }
+           else if (window.getSelection) {
+               var selectedRange = document.createRange();
+               selectedRange.selectNodeContents(installMobile[0]);
+               window.getSelection().removeAllRanges();
+               window.getSelection().addRange(selectedRange);
+           }
+        });
+    }
 }
 
 /**

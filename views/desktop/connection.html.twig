@@ -70,7 +70,7 @@
         <a class="label-link" href="https://www.nextdom.org/knowledge-base/reinitialiser-sont-mot-de-passe/" target="_blank">{{ 'connection.forgot'|trans }}</a><br>
     </div>
 </div>
-{% if IS_MOBILE %}
+{% if IS_MOBILE and not MOBILE_INSTALLED%}
     <div id="mobile-box">
         <div id="mobile-install" class="box box-default collapsed-box">
             <div class="box-header with-border">
@@ -81,9 +81,11 @@
                 </div>
             </div>
             <div class="box-body" style="display: none;">
-            <pre>
-git clone https://github.com/NextDom/nextdom-mobile-dist {{ NEXTDOM_ROOT }}/mobile
-            </pre>
+                {% if INSTALL_TYPE == 'apt' %}
+                    <pre>apt install nextdom-mobile</pre>
+                {% else %}
+                    <pre>git clone https://github.com/NextDom/nextdom-mobile-dist {{ NEXTDOM_ROOT }}/mobile</pre>
+                {% endif %}
             </div>
         </div>
     </div>
