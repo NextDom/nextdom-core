@@ -186,7 +186,6 @@ page-title:
   services: Services
   settings: Paramètres
   general: Général
-  customization: Customisation
   profil: Profil
   commands: Commandes
   links: Liens
@@ -660,12 +659,15 @@ object:
   links: Liens
 
 profile:
-  theme: Thèmes
+  avatar: Avatar
   interface: Interface
   notifications: Notifications
-  security: Sécurité
   profile: Profil
   profile-of: "Profil de %s"
+  security: Sécurité
+  theme: Thème
+  tiles: Tuiles
+  widgets: Widgets
 
 dashboard:
   no-object: Aucun objet n'est associé à cette pièce ou aucun ne correspond à la catégorie choisie...
