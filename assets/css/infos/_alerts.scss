@@ -79,8 +79,10 @@
 
 /* Core-Surcharge */
 #div_alert {
-    padding-top: 77px;
-    padding-left: 15px;
-    padding-right: 15px;
+    padding:{
+        top: 77px;
+        left: 15px;
+        right: 15px;
+    }
     margin-bottom: -78px;
 }
