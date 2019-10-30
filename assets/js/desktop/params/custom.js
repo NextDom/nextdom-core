@@ -116,6 +116,5 @@ function initEvents() {
                 });
             }
         });
-        saveCustom();
     });
 }
