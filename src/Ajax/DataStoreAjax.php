@@ -19,7 +19,6 @@ namespace NextDom\Ajax;
 
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
-use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\DataStoreManager;
 use NextDom\Model\Entity\Cmd;
@@ -45,7 +44,7 @@ class DataStoreAjax extends BaseAjax
             throw new CoreException(__('Dépôt de données inconnu. Vérifiez l\'ID : ') . Utils::init('id'));
         }
         $dataStore->remove();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function save()
@@ -63,7 +62,7 @@ class DataStoreAjax extends BaseAjax
         }
         $dataStore->setValue(Utils::init('value'));
         $dataStore->save();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function all()
@@ -109,6 +108,6 @@ class DataStoreAjax extends BaseAjax
         } else {
             $return = Utils::o2a($dataStores);
         }
-        AjaxHelper::success($return);
+        $this->ajax->success($return);
     }
 }

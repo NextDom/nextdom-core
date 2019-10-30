@@ -19,7 +19,6 @@ namespace NextDom\Ajax;
 
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
-use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
@@ -56,7 +55,7 @@ class InteractAjax extends BaseAjax
                 $result['link_id'] = trim(trim($link_id), '&&');
             }
         }
-        AjaxHelper::success($results);
+        $this->ajax->success($results);
     }
 
     public function byId()
@@ -64,7 +63,7 @@ class InteractAjax extends BaseAjax
         $result = Utils::o2a(InteractDefManager::byId(Utils::init('id')));
         $result['nbInteractQuery'] = count(InteractQueryManager::byInteractDefId($result['id']));
         $result['nbEnableInteractQuery'] = count(InteractQueryManager::byInteractDefId($result['id']));
-        AjaxHelper::success(NextDomHelper::toHumanReadable($result));
+        $this->ajax->success(NextDomHelper::toHumanReadable($result));
     }
 
     public function save()
@@ -78,13 +77,13 @@ class InteractAjax extends BaseAjax
         }
         Utils::a2o($interact, $interact_json);
         $interact->save();
-        AjaxHelper::success(Utils::o2a($interact));
+        $this->ajax->success(Utils::o2a($interact));
     }
 
     public function regenerateInteract()
     {
         InteractDefManager::regenerateInteract();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function remove()
@@ -94,7 +93,7 @@ class InteractAjax extends BaseAjax
             throw new CoreException(__('Interaction inconnue. Vérifiez l\'ID'));
         }
         $interact->remove();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function changeState()
@@ -105,7 +104,7 @@ class InteractAjax extends BaseAjax
         }
         $interactQuery->setEnable(Utils::init('enable'));
         $interactQuery->save();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function changeAllState()
@@ -117,11 +116,11 @@ class InteractAjax extends BaseAjax
                 $interactQuery->save();
             }
         }
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function execute()
     {
-        AjaxHelper::success(InteractQueryManager::tryToReply(Utils::init('query')));
+        $this->ajax->success(InteractQueryManager::tryToReply(Utils::init('query')));
     }
 }

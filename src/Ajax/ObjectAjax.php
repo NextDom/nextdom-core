@@ -19,7 +19,6 @@ namespace NextDom\Ajax;
 
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
-use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
@@ -48,7 +47,7 @@ class ObjectAjax extends BaseAjax
             throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));
         }
         $resultObject->remove();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function byId()
@@ -57,13 +56,13 @@ class ObjectAjax extends BaseAjax
         if (!is_object($resultObject)) {
             throw new CoreException(__('Objet inconnu. Vérifiez l\'ID ') . Utils::init('id'));
         }
-        AjaxHelper::success(NextDomHelper::toHumanReadable(Utils::o2a($resultObject)));
+        $this->ajax->success(NextDomHelper::toHumanReadable(Utils::o2a($resultObject)));
     }
 
     public function createSummaryVirtual()
     {
         JeeObjectManager::createSummaryToVirtual(Utils::init('key'));
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function all()
@@ -79,7 +78,7 @@ class ObjectAjax extends BaseAjax
             }
             $resultObjects = $result;
         }
-        AjaxHelper::success(Utils::o2a($resultObjects));
+        $this->ajax->success(Utils::o2a($resultObjects));
     }
 
     public function save()
@@ -95,9 +94,9 @@ class ObjectAjax extends BaseAjax
         Utils::a2o($resultObject, NextDomHelper::fromHumanReadable($jsonObject));
         if ($resultObject->getName() !== '') {
             $resultObject->save();
-            AjaxHelper::success(Utils::o2a($resultObject));
+            $this->ajax->success(Utils::o2a($resultObject));
         }
-        AjaxHelper::error('Le nom de l\'objet ne peut être vide');
+        $this->ajax->error('Le nom de l\'objet ne peut être vide');
     }
 
     public function getChild()
@@ -107,7 +106,7 @@ class ObjectAjax extends BaseAjax
             throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));
         }
         $result = Utils::o2a($resultObject->getChild());
-        AjaxHelper::success($result);
+        $this->ajax->success($result);
     }
 
     /**
@@ -173,14 +172,14 @@ class ObjectAjax extends BaseAjax
                             'name' => $scenario->getName(),
                             'icon' => $scenario->getDisplay('icon'),
                             'active' => $scenario->getIsActive()
-                            ];
+                        ];
                     }
                 }
                 ksort($html);
                 $result[$i . '::' . $id] = implode($html);
                 $i++;
             }
-            AjaxHelper::success(['objectHtml' => $result, 'scenarios' => $scenariosResult]);
+            $this->ajax->success(['objectHtml' => $result, 'scenarios' => $scenariosResult]);
         } else {
             $html = [];
             if (Utils::init('summary') == '') {
@@ -224,7 +223,7 @@ class ObjectAjax extends BaseAjax
                 }
             }
             ksort($html);
-            AjaxHelper::success(['objectHtml' => implode($html), 'scenarios' => $scenariosResult]);
+            $this->ajax->success(['objectHtml' => implode($html), 'scenarios' => $scenariosResult]);
         }
     }
 
@@ -240,7 +239,7 @@ class ObjectAjax extends BaseAjax
                 $position++;
             }
         }
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function getSummaryHtml()
@@ -264,7 +263,7 @@ class ObjectAjax extends BaseAjax
                     'id' => $resultObject->getId(),
                 ];
             }
-            AjaxHelper::success($result);
+            $this->ajax->success($result);
         } else {
             $resultObject = JeeObjectManager::byId(Utils::init('id'));
             if (!is_object($resultObject)) {
@@ -273,7 +272,7 @@ class ObjectAjax extends BaseAjax
             $infoObject = [];
             $infoObject['id'] = $resultObject->getId();
             $infoObject['html'] = $resultObject->getHtmlSummary(Utils::init('version'));
-            AjaxHelper::success($infoObject);
+            $this->ajax->success($infoObject);
         }
     }
 
@@ -288,7 +287,7 @@ class ObjectAjax extends BaseAjax
         $resultObject->setImage('sha512', '');
         $resultObject->save();
         @rrmdir(NEXTDOM_ROOT . '/core/img/object');
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function uploadImage()
@@ -322,13 +321,13 @@ class ObjectAjax extends BaseAjax
         if (!file_exists($dir)) {
             mkdir($dir);
         }
-        $filepath =  $dir . $filename;
+        $filepath = $dir . $filename;
         file_put_contents($filepath, file_get_contents($_FILES['file']['tmp_name']));
         if (!file_exists($filepath)) {
             throw new CoreException(__('Impossible de sauvegarder l\'image'));
         }
         $resultObject->save();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
 }

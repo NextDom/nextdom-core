@@ -19,7 +19,6 @@ namespace NextDom\Ajax;
 
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
-use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
@@ -51,7 +50,7 @@ class PlanAjax extends BaseAjax
             Utils::a2o($plan, NextDomHelper::fromHumanReadable($plan_ajax));
             $plan->save();
         }
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function execute()
@@ -60,7 +59,7 @@ class PlanAjax extends BaseAjax
         if (!is_object($plan)) {
             throw new CoreException(__('Aucun plan correspondant'));
         }
-        AjaxHelper::success($plan->execute());
+        $this->ajax->success($plan->execute());
     }
 
     public function planHeader()
@@ -75,7 +74,7 @@ class PlanAjax extends BaseAjax
                 $return[] = $result;
             }
         }
-        AjaxHelper::success($return);
+        $this->ajax->success($return);
     }
 
     public function create()
@@ -87,7 +86,7 @@ class PlanAjax extends BaseAjax
         $plan = new Plan();
         Utils::a2o($plan, json_decode(Utils::init('plan'), true));
         $plan->save();
-        AjaxHelper::success($plan->getHtml(Utils::init('version')));
+        $this->ajax->success($plan->getHtml(Utils::init('version')));
     }
 
     public function copy()
@@ -97,7 +96,7 @@ class PlanAjax extends BaseAjax
         if (!is_object($plan)) {
             throw new CoreException(__('Aucun plan correspondant'));
         }
-        AjaxHelper::success($plan->copy()->getHtml(Utils::init('version', 'dplan')));
+        $this->ajax->success($plan->copy()->getHtml(Utils::init('version', 'dplan')));
     }
 
     public function get()
@@ -106,7 +105,7 @@ class PlanAjax extends BaseAjax
         if (!is_object($plan)) {
             throw new CoreException(__('Aucun plan correspondant'));
         }
-        AjaxHelper::success(NextDomHelper::toHumanReadable(Utils::o2a($plan)));
+        $this->ajax->success(NextDomHelper::toHumanReadable(Utils::o2a($plan)));
     }
 
     public function remove()
@@ -116,7 +115,7 @@ class PlanAjax extends BaseAjax
         if (!is_object($plan)) {
             throw new CoreException(__('Aucun plan correspondant'));
         }
-        AjaxHelper::success($plan->remove());
+        $this->ajax->success($plan->remove());
     }
 
     public function removePlanHeader()
@@ -127,7 +126,7 @@ class PlanAjax extends BaseAjax
             throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));
         }
         $planHeader->remove();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function allHeader()
@@ -139,7 +138,7 @@ class PlanAjax extends BaseAjax
             unset($info_planHeader['image']);
             $return[] = $info_planHeader;
         }
-        AjaxHelper::success($return);
+        $this->ajax->success($return);
     }
 
     public function getPlanHeader()
@@ -153,7 +152,7 @@ class PlanAjax extends BaseAjax
         }
         $return = Utils::o2a($planHeader);
         $return['image'] = $planHeader->displayImage();
-        AjaxHelper::success($return);
+        $this->ajax->success($return);
     }
 
     public function savePlanHeader()
@@ -169,7 +168,7 @@ class PlanAjax extends BaseAjax
         }
         Utils::a2o($planHeader, $planHeader_ajax);
         $planHeader->save();
-        AjaxHelper::success(Utils::o2a($planHeader));
+        $this->ajax->success(Utils::o2a($planHeader));
     }
 
     public function copyPlanHeader()
@@ -179,7 +178,7 @@ class PlanAjax extends BaseAjax
         if (!is_object($planHeader)) {
             throw new CoreException(__('Plan header inconnu. Vérifiez l\'ID ') . Utils::init('id'));
         }
-        AjaxHelper::success(Utils::o2a($planHeader->copy(Utils::init('name'))));
+        $this->ajax->success(Utils::o2a($planHeader->copy(Utils::init('name'))));
     }
 
     public function removeImageHeader()
@@ -193,7 +192,7 @@ class PlanAjax extends BaseAjax
         $planHeader->setImage('sha512', '');
         $planHeader->save();
         @unlink(NEXTDOM_DATA . '/data/custom/plans/' . $filename);
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function uploadImage()
@@ -238,7 +237,7 @@ class PlanAjax extends BaseAjax
         $planHeader->setConfiguration('desktopSizeX', $imgSize[0]);
         $planHeader->setConfiguration('desktopSizeY', $imgSize[1]);
         $planHeader->save();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function uploadImagePlan()
@@ -261,6 +260,6 @@ class PlanAjax extends BaseAjax
         $plan->setDisplay('height', $imgSize[1]);
         $plan->setDisplay('path', 'data/custom/plans/plan_' . $plan->getId() . '/' . $filename);
         $plan->save();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 }

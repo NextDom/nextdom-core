@@ -47,9 +47,21 @@ abstract class BaseAjax
      */
     protected $CHECK_AJAX_TOKEN = true;
     /**
-     * @var [string] Forbidden callable methods from ajax
+     * @var AjaxHelper
+     */
+    protected $ajax = null;
+    /**
+     * @var string Forbidden callable methods from ajax
      */
     private $FORBIDDEN_METHODS = ['checkIfActionExists', 'process', 'checkAccessOrFail'];
+
+    /**
+     * Initialize Ajax helper
+     * @throws \Exception
+     */
+    public function __construct() {
+        $this->ajax = new AjaxHelper();
+    }
 
     /**
      * Start the process
@@ -59,7 +71,9 @@ abstract class BaseAjax
     {
         try {
             $this->checkAccessOrFail($this->MUST_BE_CONNECTED, $this->NEEDED_RIGHTS);
-            AjaxHelper::init($this->CHECK_AJAX_TOKEN);
+            if ($this->CHECK_AJAX_TOKEN) {
+                $this->ajax->checkToken();
+            }
 
             // Check and call the method for the action in query
             $actionCode = Utils::init('action', '');
@@ -69,7 +83,7 @@ abstract class BaseAjax
                 throw new CoreException(__('core.error-ajax'), 401);
             }
         } catch (\Throwable $throwable) {
-            AjaxHelper::error(Utils::displayException($throwable), $throwable->getCode());
+            $this->ajax->error(Utils::displayException($throwable), $throwable->getCode());
         }
 
     }

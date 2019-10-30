@@ -19,7 +19,6 @@ namespace NextDom\Ajax;
 
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
-use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
@@ -41,7 +40,7 @@ class UpdateAjax extends BaseAjax
 
     public function nbUpdate()
     {
-        AjaxHelper::success(UpdateManager::nbNeedUpdate());
+        $this->ajax->success(UpdateManager::nbNeedUpdate());
     }
 
     public function all()
@@ -68,14 +67,14 @@ class UpdateAjax extends BaseAjax
             }
             $return[] = $infos;
         }
-        AjaxHelper::success($return);
+        $this->ajax->success($return);
     }
 
     public function checkAllUpdate()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
         UpdateManager::checkAllUpdate();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function update()
@@ -110,7 +109,7 @@ class UpdateAjax extends BaseAjax
                 LogHelper::add('update', 'alert', __("[END UPDATE ERROR]"));
             }
         }
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function remove()
@@ -125,7 +124,7 @@ class UpdateAjax extends BaseAjax
             throw new CoreException(__('Aucune correspondance pour l\'ID : ' . Utils::init('id')));
         }
         $update->deleteObjet();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function checkUpdate()
@@ -139,14 +138,14 @@ class UpdateAjax extends BaseAjax
             throw new CoreException(__('Aucune correspondance pour l\'ID : ' . Utils::init('id')));
         }
         $update->checkUpdate();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function updateAll()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
         NextDomHelper::update(json_decode(Utils::init('options', '{}'), true));
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function save()
@@ -180,14 +179,14 @@ class UpdateAjax extends BaseAjax
                 $targetUpdate->save();
             }
         }
-        AjaxHelper::success(Utils::o2a($targetUpdate));
+        $this->ajax->success(Utils::o2a($targetUpdate));
     }
 
     public function saves()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
         Utils::processJsonObject('update', Utils::init('updates'));
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function preUploadFile()
@@ -199,6 +198,6 @@ class UpdateAjax extends BaseAjax
             return str_replace($remove, "", $file["name"]);
         });
         $filepath = sprintf("%s/%s", $uploadDir, $filename);
-        AjaxHelper::success($filepath);
+        $this->ajax->success($filepath);
     }
 }

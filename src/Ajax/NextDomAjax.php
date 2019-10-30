@@ -58,7 +58,7 @@ class NextDomAjax extends BaseAjax
         $return['serverDatetime'] = Utils::getmicrotime();
         if (!isConnect()) {
             $return['connected'] = false;
-            AjaxHelper::success($return);
+            $this->ajax->success($return);
         }
 
         $return['user_id'] = UserManager::getStoredUser()->getId();
@@ -83,13 +83,13 @@ class NextDomAjax extends BaseAjax
             }
         }
         $return['custom'] = array('js' => false, 'css' => false);
-        AjaxHelper::success($return);
+        $this->ajax->success($return);
     }
 
     public function getDocumentationUrl()
     {
         AuthentificationHelper::isConnectedOrFail();
-        AjaxHelper::init(true);
+        $this->ajax->checkToken();
         $pluginId = Utils::init('plugin');
         $plugin = null;
         if ($pluginId != '' || $pluginId == 'false') {
@@ -101,7 +101,7 @@ class NextDomAjax extends BaseAjax
         }
         if (isset($plugin) && is_object($plugin)) {
             if ($plugin->getDocumentation() != '') {
-                AjaxHelper::success($plugin->getDocumentation());
+                $this->ajax->success($plugin->getDocumentation());
             }
         } else {
             $page = Utils::init('page');
@@ -114,7 +114,7 @@ class NextDomAjax extends BaseAjax
             } else if (Utils::init('page') == 'plan3d') {
                 $page = 'design3d';
             }
-            AjaxHelper::success('https://nextdom.github.io/core/' . ConfigManager::byKey('language', 'core', 'fr_FR') . '/' . secureXSS($page));
+            $this->ajax->success('https://nextdom.github.io/core/' . ConfigManager::byKey('language', 'core', 'fr_FR') . '/' . secureXSS($page));
         }
         throw new CoreException(__('Aucune documentation trouvée'), -1234);
     }
@@ -122,7 +122,7 @@ class NextDomAjax extends BaseAjax
     public function addWarnme()
     {
         AuthentificationHelper::isConnectedOrFail();
-        AjaxHelper::init(true);
+        $this->ajax->checkToken();
         $cmd = CmdManager::byId(Utils::init('cmd_id'));
         if (!is_object($cmd)) {
             throw new CoreException(__('Commande non trouvée : ') . Utils::init('cmd_id'));
@@ -140,158 +140,158 @@ class NextDomAjax extends BaseAjax
         );
         $listener->setOption($options);
         $listener->save(true);
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
 
     public function ssh()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init(true);
+        $this->ajax->checkToken();
         $command = Utils::init('command');
         if (strpos($command, '2>&1') === false && strpos($command, '>') === false) {
             $command .= ' 2>&1';
         }
         $output = array();
         exec($command, $output);
-        AjaxHelper::success(implode("\n", $output));
+        $this->ajax->success(implode("\n", $output));
     }
 
     public function db()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init(true);
+        $this->ajax->checkToken();
         if (Utils::init('command', '') !== '') {
-            AjaxHelper::success(DBHelper::getAll(Utils::init('command')));
+            $this->ajax->success(DBHelper::getAll(Utils::init('command')));
         } else {
-            AjaxHelper::error(__('Aucune requête à exécuter'));
+            $this->ajax->error(__('Aucune requête à exécuter'));
         }
     }
 
     public function dbcorrectTable()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init(true);
+        $this->ajax->checkToken();
         DBHelper::compareAndFix(json_decode(file_get_contents(NEXTDOM_ROOT . '/install/database.json'), true), Utils::init('table'));
-        AjaxHelper::success();
+        $this->ajax->success();
 
     }
 
     public function health()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init(true);
-        AjaxHelper::success(NextDomHelper::health());
+        $this->ajax->checkToken();
+        $this->ajax->success(NextDomHelper::health());
     }
 
     public function update()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init(true);
+        $this->ajax->checkToken();
         NextDomHelper::update();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function clearDate()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init(true);
+        $this->ajax->checkToken();
         $cache = CacheManager::byKey('NextDomHelper::lastDate');
         $cache->remove();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function backup()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init(true);
+        $this->ajax->checkToken();
         BackupManager::backup(true);
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function restore()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init(true);
+        $this->ajax->checkToken();
         BackupManager::restore(Utils::init('backup'), true);
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function removeBackup()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init(true);
+        $this->ajax->checkToken();
         BackupManager::removeBackup(Utils::init('backup'));
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function listBackup()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init(true);
-        AjaxHelper::success(BackupManager::listBackup());
+        $this->ajax->checkToken();
+        $this->ajax->success(BackupManager::listBackup());
     }
 
     public function getConfiguration()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init(true);
-        AjaxHelper::success(NextDomHelper::getConfiguration(Utils::init('key'), Utils::init('default')));
+        $this->ajax->checkToken();
+        $this->ajax->success(NextDomHelper::getConfiguration(Utils::init('key'), Utils::init('default')));
     }
 
     public function resetHwKey()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init(true);
+        $this->ajax->checkToken();
         ConfigManager::save('NextDomHelper::installKey', '');
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function resetHour()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init(true);
+        $this->ajax->checkToken();
         CacheManager::delete('hour');
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function backupupload()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init(true);
+        $this->ajax->checkToken();
         $uploadDir = BackupManager::getBackupDirectory();
         Utils::readUploadedFile($_FILES, "file", $uploadDir, 1000, array(".gz"));
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function haltSystem()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init(true);
+        $this->ajax->checkToken();
         NextDomHelper::haltSystem();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function rebootSystem()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init(true);
+        $this->ajax->checkToken();
         NextDomHelper::rebootSystem();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function forceSyncHour()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init(true);
+        $this->ajax->checkToken();
         NextDomHelper::forceSyncHour();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function saveCustom()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init(true);
+        $this->ajax->checkToken();
         $customType = Utils::init('type');
         if ($customType != 'js' && $customType != 'css') {
             throw new CoreException(__('La version ne peut être que js ou css'));
@@ -299,13 +299,13 @@ class NextDomAjax extends BaseAjax
         $customDir = sprintf("%s/custom/desktop/", NEXTDOM_DATA);
         $customPath = sprintf("%s/custom.%s", $customDir, $customType);
         file_put_contents($customPath, Utils::init('content'));
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function getGraphData()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init(true);
+        $this->ajax->checkToken();
         $return = array('node' => array(), 'link' => array());
         $resultObject = null;
         $type = Utils::init('filter_type');
@@ -314,16 +314,16 @@ class NextDomAjax extends BaseAjax
             if (!is_object($resultObject)) {
                 throw new CoreException(__('Type :') . Utils::init('filter_type') . __(' avec id : ') . Utils::init('filter_id') . __(' inconnu'));
             }
-            AjaxHelper::success($resultObject->getLinkData());
+            $this->ajax->success($resultObject->getLinkData());
         } else {
-            AjaxHelper::error(__('Aucun filtre'));
+            $this->ajax->error(__('Aucun filtre'));
         }
     }
 
     public function getTimelineEvents()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init(true);
+        $this->ajax->checkToken();
         $return = array();
         $events = TimeLineHelper::getTimelineEvent();
         foreach ($events as $event) {
@@ -340,88 +340,88 @@ class NextDomAjax extends BaseAjax
                 $return[] = $info;
             }
         }
-        AjaxHelper::success($return);
+        $this->ajax->success($return);
     }
 
     public function consistency()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init(true);
+        $this->ajax->checkToken();
         SystemHelper::consistency();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function cleanFileSystemRight()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init(true);
+        $this->ajax->checkToken();
         SystemHelper::cleanFileSystemRight();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function removeTimelineEvents()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init(true);
+        $this->ajax->checkToken();
         TimeLineHelper::removeTimelineEvent();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function getFileFolder()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init(true);
-        AjaxHelper::success(FileSystemHelper::ls(Utils::init('path'), '*', false, array(Utils::init('type'))));
+        $this->ajax->checkToken();
+        $this->ajax->success(FileSystemHelper::ls(Utils::init('path'), '*', false, array(Utils::init('type'))));
     }
 
     public function getFileContent()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init(true);
+        $this->ajax->checkToken();
         $filePath = Utils::init('path');
-        $pathinfo  = pathinfo($filePath);
+        $pathinfo = pathinfo($filePath);
         $extension = Utils::array_key_default($pathinfo, "extension", "<no-ext>");
-        if (!in_array($extension, array('php', 'js', 'json', 'sql', 'ini','html','py','css'))) {
+        if (!in_array($extension, array('php', 'js', 'json', 'sql', 'ini', 'html', 'py', 'css'))) {
             throw new CoreException(__('Vous ne pouvez éditer ce type d\'extension : ' . $extension));
         }
         if (!is_writable($filePath)) {
             throw new CoreException(__('Vous n\'avez pas les droits pour éditer ce fichier.'));
         }
-        AjaxHelper::success(file_get_contents(Utils::init('path')));
+        $this->ajax->success(file_get_contents(Utils::init('path')));
     }
 
     public function setFileContent()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init(true);
+        $this->ajax->checkToken();
         $filePath = Utils::init('path');
         $pathInfo = pathinfo($filePath);
         $extension = Utils::array_key_default($pathInfo, "extension", "<no-ext>");
-        if (!in_array($extension, array('php', 'js', 'json', 'sql', 'ini','html','py','css'))) {
+        if (!in_array($extension, array('php', 'js', 'json', 'sql', 'ini', 'html', 'py', 'css'))) {
             throw new CoreException(__('Vous ne pouvez éditer ce type d\'extension : ') . $extension);
         }
         if (!is_writable($filePath)) {
             throw new CoreException(__('Vous n\'avez pas les droits pour éditer ce fichier.'));
         }
-        AjaxHelper::success(file_put_contents($filePath, Utils::init('content')));
+        $this->ajax->success(file_put_contents($filePath, Utils::init('content')));
     }
 
     public function deleteFile()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init(true);
+        $this->ajax->checkToken();
         $pathinfo = pathinfo(Utils::init('path'));
         $extension = Utils::array_key_default($pathinfo, "extension", "<no-ext>");
         if (!in_array($extension, array('php', 'js', 'json', 'sql', 'ini', 'css'))) {
             throw new CoreException(__('Vous ne pouvez éditer ce type d\'extension : ' . $extension, __FILE__));
         }
-        AjaxHelper::success(unlink(Utils::init('path')));
+        $this->ajax->success(unlink(Utils::init('path')));
     }
 
     public function createFile()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init(true);
+        $this->ajax->checkToken();
         $pathinfo = pathinfo(Utils::init('name'));
         $extension = Utils::array_key_default($pathinfo, "extension", "<no-ext>");
         if (!in_array($extension, array('php', 'js', 'json', 'sql', 'ini', 'css'))) {
@@ -431,14 +431,14 @@ class NextDomAjax extends BaseAjax
         if (!file_exists(Utils::init('path') . Utils::init('name'))) {
             throw new CoreException(__('Impossible de créer le fichier, vérifiez les droits'));
         }
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function emptyRemoveHistory()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init(true);
+        $this->ajax->checkToken();
         unlink(NEXTDOM_DATA . '/data/remove_history.json');
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 }

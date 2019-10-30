@@ -72,7 +72,7 @@ class NextDomHelperTest extends PHPUnit_Framework_TestCase
 
     public function testGetConfigurationAllData() {
         $configuration = NextDomHelper::getConfiguration();
-        $this->assertArrayHasKey('user-theme', $configuration);
+        $this->assertArrayHasKey('eqLogic', $configuration);
         $this->assertArrayHasKey('cmd', $configuration);
     }
 
