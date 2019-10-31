@@ -379,7 +379,7 @@ general:
   language-list:
       fr_FR: "French"
       en_US: "English"
-      
+
 
 update-view:
   none: "None"
@@ -605,10 +605,10 @@ entity:
 
 samba:
   error:
-    connect: Unable to plug the samba server
-    not-found: The file is not found on the samba server
-    already-exists: The file already exists on the samba server
-    unknown: An error occurred while connecting to the samba server
+    connect: "Unable to plug the samba server"
+    not-found: "The file is not found on the samba server"
+    already-exists: "The file already exists on the samba server"
+    unknown: "An error occurred while connecting to the samba server"
 
 commandes:
   influxDbIPLabel: IP
@@ -618,15 +618,15 @@ commandes:
 repo:
   samba:
     conf:
-      ip.name: Server IP
-      ip.placeholder: 192.168.1.57 or mafreebox.free.fr
-      user.name: User of the share
-      user.placeholder: Username
-      password.name: Password
-      share.name: Share path
-      share.placeholder: \\192.168.1.57\MyShare ou \\mafreebox.free.fr\MyShare
-      folder.name: Folder
-      folder.placeholder: Target folder (/nextdom/)
+      ip.name: "Server IP"
+      ip.placeholder: "192.168.1.57 or mafreebox.free.fr"
+      user.name: "User of the share"
+      user.placeholder: "Username"
+      password.name: "Password"
+      share.name: "Share path"
+      share.placeholder: "MyShare"
+      folder.name: "Folder"
+      folder.placeholder: "Target folder (/Folder)"
 
 # Ancien format
 "401 - Accès non autorisé": "401 - Access not allowed"

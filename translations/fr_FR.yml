@@ -390,7 +390,7 @@ general:
   language-list:
       fr_FR: "Français"
       en_US: "Anglais"
-      
+
 
 update-view:
   none: "Aucune"
@@ -625,10 +625,10 @@ entity:
 
 samba:
   error:
-    connect: Impossible de se connecteur au serveur samba
-    not-found: Le fichier est introuvable sur le serveur samba
-    already-exists: Le fichier existe déjà sur le serveur samba
-    unknown: Une erreur s'est produite lors de la connexion au serveur samba
+    connect: "Impossible de se connecteur au serveur samba"
+    not-found: "Le fichier est introuvable sur le serveur samba"
+    already-exists: "Le fichier existe déjà sur le serveur samba"
+    unknown: "Une erreur s'est produite lors de la connexion au serveur samba"
 
 commandes:
   influxDbIPLabel: IP
@@ -638,15 +638,15 @@ commandes:
 repo:
   samba:
     conf:
-      ip.name: IP du serveur
-      ip.placeholder: 192.168.1.57 ou mafreebox.free.fr
-      user.name: Utilisateur du partage
-      user.placeholder: Nom de l'utilisateur
-      password.name: Mot de passe
-      share.name: Chemin du partage
-      share.placeholder: \\192.168.1.57\MonPartage ou \\mafreebox.free.fr\MonPartage
-      folder.name: Répertoire
-      folder.placeholder: Répertoire de destination (/nextdom/)
+      ip.name: "IP du serveur"
+      ip.placeholder: "192.168.1.57 ou mafreebox.free.fr"
+      user.name: "Utilisateur du partage"
+      user.placeholder: "Nom de l'utilisateur"
+      password.name: "Mot de passe"
+      share.name: "Chemin du partage"
+      share.placeholder: "MonPartage"
+      folder.name: "Répertoire"
+      folder.placeholder: "Répertoire de destination (/MonRépertoire)"
 
 # Ancien format
 "401 - Accès non autorisé": "401 - Accès non autorisé"
