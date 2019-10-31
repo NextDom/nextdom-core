@@ -114,7 +114,7 @@
                                     <div class="repositoryConfiguration{{ repo }}" style="display:none;">
                                         {% for config, param in data['configuration']['configuration'] %}
                                             <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                                <label class="control-label">{{ param.name }}</label>
+                                                <label class="control-label">{{ param.name | trans }}</label>
                                                 {% set placeholder = '' %}
                                                 {% if param['placeholder'] is defined %}
                                                     {% set placeholder = param.placeholder %}
@@ -132,7 +132,7 @@
                                                 {% elseif param.type == 'input' %}
                                                     <div class="input-group">
                                                         <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="{{ repo }}::{{ config }}" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
-                                                        <input class="configKey form-control" data-l1key="{{ repo }}::{{ config }}" value="{{ defaultValue }}" placeholder="{{placeholder}}"/>
+                                                        <input class="configKey form-control" data-l1key="{{ repo }}::{{ config }}" value="{{ defaultValue }}" placeholder="{{ placeholder | trans}}"/>
                                                     </div>
                                                 {% elseif param['type'] == 'number' %}
                                                     <div class="input-group">
