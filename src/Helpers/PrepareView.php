@@ -122,6 +122,7 @@ class PrepareView
         $this->initCssPool($pageData);
         ob_start();
         require_once(NEXTDOM_ROOT . '/src/Api/icon.inc.php');
+        $pageData['CUSTOM_CSS'] = ob_get_clean();
     }
 
     /**
