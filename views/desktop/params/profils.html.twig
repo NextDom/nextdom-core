@@ -48,11 +48,13 @@
     <div class="nav-tabs-custom config" id="div_Profils">
         <!-- Tabs title -->
         <ul class="nav nav-tabs pull-right" role="tablist">
-            <li role="presentation"><a href="#themetab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tint"></i>{{ 'profile.theme'|trans }}</a></li>
-            <li role="presentation"><a href="#interfacetab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-laptop"></i>{{ 'profile.interface'|trans }}</a></li>
-            <li role="presentation"><a href="#notificationtab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-comments"></i>{{ 'profile.notifications'|trans }}</a></li>
             <li role="presentation"><a href="#securitytab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-user-secret"></i>{{ 'profile.security'|trans }}</a></li>
-            <li role="presentation" class="active"><a href="#profil" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-user"></i>{{ 'profile.profile'|trans }}</a></li>
+            <li role="presentation"><a href="#interfacetab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-laptop"></i>{{ 'profile.interface'|trans }}</a></li>
+            <li role="presentation"><a href="#notificationtab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-comment-alt"></i>{{ 'profile.notifications'|trans }}</a></li>
+            <li role="presentation"><a href="#colortab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-th-large"></i>{{ 'profile.tiles' | trans }}</a></li>
+            <li role="presentation"><a href="#widgettab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-layer-group"></i>{{ 'profile.widgets'|trans }}</a></li>
+            <li role="presentation"><a href="#themetab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-palette"></i>{{ 'profile.theme'|trans }}</a></li>
+            <li role="presentation" class="active"><a href="#profil" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-user"></i>{{ 'profile.avatar'|trans }}</a></li>
             <li class="header pull-left"><i class="fas fa-briefcase"></i>{{ 'profile.profile-of'|trans|format(profilsUser.getLogin()) }}</li>
         </ul>
         <!-- Tabs content -->
@@ -63,12 +65,12 @@
                 <fieldset>
                     <legend>{{ 'Choix de l\'Avatar'  | trans }}</legend>
                     <div class="row text-center">
-                        <div class="form-group col-sm-6">
+                        <div class="form-group col-sm-4 col-padding">
                             <img id="avatar-preview" src="{{ profilsAvatar }}" style="height:200px"></a>
                         </div>
-                        <div class="form-group col-sm-6">
+                        <div class="form-group col-sm-8 col-padding">
                             {% for avatarFile in profilsAvatars %}
-                                <img class="avatar cursor" src="{{ avatarFile }}" style="height:66px"></a>
+                                <img class="avatar cursor" src="{{ avatarFile }}"></a>
                             {% endfor %}
                         </div>
                     </div>
@@ -84,8 +86,44 @@
                 </fieldset>
             </div>
 
-            <!-- Themes tab -->
+            <!-- Theme tab -->
             <div role="tabpanel" class="tab-pane" id="themetab">
+                <fieldset>
+                    <legend>{{ 'Configurez votre thème' }}</legend>
+                    <div class="row">
+                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Base du Thème' }}</label>
+                            <select id="themeBase" class="form-control">
+                                {% for customThemesBase in customThemesBases %}
+                                    <option value="{{ customThemesBase }}"{% if customThemesBase == customThemeChoice|split('-')[0] %} selected="selected"{% endif %}>{{ customThemesBase }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Identité du Thème' }}</label>
+                            <select id="themeIdentity" class="form-control">
+                                {% for customThemesIdentity in customThemesIdentities %}
+                                    <option value="{{ customThemesIdentity }}"{% if customThemesIdentity == customThemeChoice|split('-')[1] %} selected="selected"{% endif %}>{{ customThemesIdentity }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-12 col-padding" style="display:none">
+                            <input class="configKey form-control" data-l1key="nextdom::user-theme" />
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset class="legend-section">
+                    <legend>{{ 'Prévisualisez votre thème' }}</legend>
+                    <div class="row">
+                        <div class="form-group col-lg-12 col-padding">
+                            <iframe id="customPreview" src="/index.php?v=d&p=administration" marginwidth="0" marginheight="0" frameborder="0" width="100%" height="600"></iframe>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+
+            <!-- Widgets theme tab -->
+            <div role="tabpanel" class="tab-pane" id="widgettab">
                 <fieldset>
                     <legend>{{ 'Thème des Widgets' }}</legend>
                     <div class="row text-center">
@@ -334,7 +372,36 @@
             <!-- Notification tab -->
             <div role="tabpanel" class="tab-pane" id="notificationtab">
                 <fieldset>
-                    <legend>{{ 'Gestion des notifications utilisateurs' }}</legend>
+                    <legend>{{ 'Notifications système' }}</legend>
+                    <div class="row">
+                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Position des notifications' }}</label>
+                            <div class="input-group" data-toggle="tooltip" title="" data-original-title="{{ 'Position sur l\'écran des notifications' }}">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="notify::position" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                                <select class="configKey form-control" data-l1key="notify::position">
+                                    <option value="topRight" selected="selected">Haut droite</option>
+                                    <option value="topLeft">Haut gauche</option>
+                                    <option value="bottomRight">Bas droite</option>
+                                    <option value="bottomLeft">Bas gauche</option>
+                                    <option value="topCenter">Haut centre</option>
+                                    <option value="bottomCenter">Bas centre</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Durée des notifications' }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="notify::timeout" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                                <span class="input-group-addon input-range-min"></span>
+                                <input class="configKey slider" type="range" min="0" max="20" step="1" data-l1key="notify::timeout"/>
+                                <span class="input-group-addon input-range-max"></span>
+                                <span class="input-group-addon input-range-value"></span>
+                                <span class="input-group-addon">{{ 'secondes' }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <legend class="legend-section">{{ 'Relai des notifications aux utilisateurs' }}</legend>
                     <div class="row">
                         <div class="form-group col-xs-12 col-padding">
                             <label class="control-label">{{ 'Commande pour l\'envoi' }}</label>
@@ -347,6 +414,102 @@
                         </div>
                     </div>
                 </fieldset>
+            </div>
+
+            <!-- Tuiles tab -->
+            <div role="tabpanel" class="tab-pane" id="colortab">
+                <fieldset>
+                    <legend>{{ 'Paramètrage de l\'aspect des tuiles du dashboard' }}</legend>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <p class="alert alert-info">{{ 'Après avoir modifié ces valeurs, nous vous conseillons d\' utiliser les fonctions de redimensionnement sur grilles de vos objets en utilisant le mode édition :' }}<i class="fas fa-pencil-alt spacing-left"></i><i class="fas fa-th spacing-left spacing-right"></i><i class="fas fa-th-large spacing-right"></i></p>
+                        </div>
+                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Opacité par défaut des widgets' }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="widget::background-opacity" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                                <span class="input-group-addon input-range-min"></span>
+                                <input class="configKey slider" type="range" min="0" max="1" step="0.1" data-l1key="widget::background-opacity"/>
+                                <span class="input-group-addon input-range-max"></span>
+                                <span class="input-group-addon input-range-value"></span>
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Taille Coins' }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="widget::radius" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                                <span class="input-group-addon input-range-min"></span>
+                                <input class="configKey slider" type="range" min="0" max="20" step="1" data-l1key="widget::radius"/>
+                                <span class="input-group-addon input-range-max"></span>
+                                <span class="input-group-addon input-range-value"></span>
+                                <span class="input-group-addon">{{ 'pixels' }}</span>
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Marge externe' }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="widget::margin" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                                <span class="input-group-addon input-range-min"></span>
+                                <input class="configKey slider" type="range" min="0" max="20" step="1" data-l1key="widget::margin"/>
+                                <span class="input-group-addon input-range-max"></span>
+                                <span class="input-group-addon input-range-value"></span>
+                                <span class="input-group-addon">{{ 'pixels' }}</span>
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Marge interne' }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="widget::padding" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                                <span class="input-group-addon input-range-min"></span>
+                                <input class="configKey slider" type="range" min="0" max="20" step="1" data-l1key="widget::padding"/>
+                                <span class="input-group-addon input-range-max"></span>
+                                <span class="input-group-addon input-range-value"></span>
+                                <span class="input-group-addon">{{ 'pixels' }}</span>
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Taille Grille' }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="widget::size" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                                <span class="input-group-addon input-range-min"></span>
+                                <input class="configKey slider" type="range" min="10" max="200" step="5" data-l1key="widget::size"/>
+                                <span class="input-group-addon input-range-max"></span>
+                                <span class="input-group-addon input-range-value"></span>
+                                <span class="input-group-addon">{{ 'pixels' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <div id="colortab-list">
+                    {% for category, categoryData in adminCategories %}
+                        <fieldset class="legend-section">
+                            <legend>{{ 'Couleurs Catégorie' | trans }} {{ categoryData.name }}</legend>
+                            <div class="row">
+                                <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
+                                    <label class="control-label">{{ 'Fond Dashboard' | trans }}</label>
+                                    <div class="input-group">
+                                        <a class="input-group-addon cursor bt_resetConfigColor" data-l1key="eqLogic:category:{{ category }}:color" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' | trans }}"><i class="fas fa-times"></i></a>
+                                        <div class="colorpicker-component colorpick">
+                                            <input type="text" class="configKey form-control noSet" data-l1key="eqLogic:category:{{ category }}:color" value="{{ categoryData.color }}"/>
+                                            <span class="input-group-addon"><i></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
+                                    <label class="control-label">{{ 'Commande Dashboard' }}</label>
+                                    <div class="input-group">
+                                        <a class="input-group-addon cursor bt_resetConfigColor" data-l1key="eqLogic:category:{{ category }}:cmdColor" data-toggle="tooltip" title="" data-original-title="{{ 'Remettre par défaut' | trans }}"><i class="fas fa-times"></i></a>
+                                        <div class="colorpicker-component colorpick">
+                                            <input type="text" class="configKey form-control cursor noSet" data-l1key="eqLogic:category:{{ category }}:cmdColor" value="{{ categoryData.cmdColor }}"/>
+                                            <span class="input-group-addon"><i></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>

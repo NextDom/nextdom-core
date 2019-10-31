@@ -186,7 +186,6 @@ page-title:
   services: Services
   settings: Settings
   general: General
-  customization: Customization
   profil: Profile
   commands: Commands
   links: Links
@@ -648,12 +647,15 @@ object:
   links: Links
 
 profile:
-  theme: Themes
+  avatar: Avatar
   interface: Interface
   notifications: Notifications
-  security: Security
   profile: Profile
   profile-of: "%s's profile"
+  security: Security
+  theme: Theme
+  tiles: Tiles
+  widgets: Widgets
 
 entity:
   note:

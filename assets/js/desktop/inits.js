@@ -96,6 +96,7 @@ function initEventHandler(){
     // Reset config param to default value
     $('.bt_resetConfigParam').on('click', function () {
         resetConfigParamKey($(this));
+        notify("Info", '{{Reset effectué et sauvegardé}}', 'success');
     });
 }
 

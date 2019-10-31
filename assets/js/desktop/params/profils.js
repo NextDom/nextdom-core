@@ -66,10 +66,20 @@ function loadInformations() {
           $('#in_passwordCheck').value(data.password);
           $('#' + $('.userAttr[data-l2key="widget::theme"]').value()).attr('checked', 'checked');
           $('#avatar-preview').attr('src', $('.userAttr[data-l2key=avatar]').value());
-          modifyWithoutSave = false;
-          $(".bt_cancelModifs").hide();
+          nextdom.config.load({
+              configuration: $('#div_Profils').getValues('.configKey:not(.noSet)')[0],
+              error: function (error) {
+                  notify("Erreur", error.message, 'error');
+              },
+              success: function (data) {
+                  $('#div_Profils').setValues(data, '.configKey');
+                  modifyWithoutSave = false;
+                  $(".bt_cancelModifs").hide();
+              }
+          });
         }
     });
+
 }
 
 /**
@@ -83,10 +93,27 @@ function initEvents() {
             $(".bt_cancelModifs").show();
         }
     });
+    // Show confirm modal on non saved changes
+    $('#div_Profils').delegate('.configKey:not(.noSet)', 'change', function () {
+        if (!lockModify) {
+            modifyWithoutSave = true;
+            $(".bt_cancelModifs").show();
+        }
+    });
 
     // Cancel modifications
     $('.bt_cancelModifs').on('click', function () {
         loadInformations();
+    });
+
+    // Theme config changing
+    $("#themeBase").on('change', function (event) {
+        $('.configKey[data-l1key="nextdom::user-theme"]').value($("#themeBase").value() + "-" + $("#themeIdentity").value());
+        $('#customPreview').contents().find("head").append($("<link href='/public/css/themes/" + $('.configKey[data-l1key="nextdom::user-theme"]').value() + ".css' rel='stylesheet'>"));
+    });
+    $("#themeIdentity").on('change', function (event) {
+        $('.configKey[data-l1key="nextdom::user-theme"]').value($("#themeBase").value() + "-" + $("#themeIdentity").value());
+        $('#customPreview').contents().find("head").append($("<link href='/public/css/themes/" + $('.configKey[data-l1key="nextdom::user-theme"]').value() + ".css' rel='stylesheet'>"));
     });
 
     // Save forms data
@@ -107,10 +134,34 @@ function initEvents() {
                         notify('Erreur', error.message, 'error');
                     },
                     success: function (data) {
-                        modifyWithoutSave = false;
-                        $(".bt_cancelModifs").hide();
-                        updateInformations();
-                        notify('Info', '{{Sauvegarde effectuée}}', 'success');
+                        var config = $('#div_Profils').getValues('.configKey')[0];
+                        nextdom.config.save({
+                            configuration: config,
+                            error: function (error) {
+                                notify("Erreur", error.message, 'error');
+                            },
+                            success: function () {
+                                // Change config dynamically
+                                widget_size = config['widget::size'];
+                                widget_margin = config['widget::margin'];
+                                widget_padding = config['widget::padding'];
+                                widget_radius = config['widget::radius'];
+                                nextdom.config.load({
+                                    configuration: $('#div_Profils').getValues('.configKey:not(.noSet)')[0],
+                                    error: function (error) {
+                                        notify("Erreur", error.message, 'error');
+                                    },
+                                    success: function (data) {
+                                        $('#div_Profils').setValues(data, '.configKey');
+                                        modifyWithoutSave = false;
+                                        $(".bt_cancelModifs").hide();
+                                        updateInformations();
+                                        notify("Info", '{{Sauvegarde réussie}}', 'success');
+                                        window.location.reload();
+                                    }
+                                });
+                            }
+                        });
                     }
                 });
             }

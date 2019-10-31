@@ -54,6 +54,7 @@ class ProfilsController extends BaseController
     {
         @session_start();
         UserManager::getStoredUser()->refresh();
+        $pageData['profilsUser'] = UserManager::getStoredUser();
         @session_write_close();
         $pageData['profilsHomePageDesktop'] = array(
             'core::dashboard' => __('Dashboard'),
@@ -128,6 +129,19 @@ class ProfilsController extends BaseController
         $pageData['profilsPlans'] = PlanHeaderManager::all();
         $pageData['profilsPlans3d'] = Plan3dHeaderManager::all();
         $pageData['profilsAllowRemoteUsers'] = ConfigManager::byKey('sso:allowRemoteUser');
+
+        $themesBases = FileSystemHelper::ls('public/css/themes/', '*nextdom.css');
+        $pageData['customThemesBases'] = [];
+        foreach ($themesBases as $themeBase) {
+            $pageData['customThemesBases'][] = substr($themeBase, 0, -12);
+        }
+        $themesIdentities = FileSystemHelper::ls('public/css/themes/', 'dark*.css');
+        $pageData['customThemesIdentities'] = [];
+        foreach ($themesIdentities as $themeIdentity) {
+            $pageData['customThemesIdentities'][] = substr($themeIdentity, 5, -4);
+        }
+        $pageData['customThemeChoice'] = ConfigManager::byKey('nextdom::user-theme');
+        $pageData['adminCategories'] = NextDomHelper::getConfiguration('eqLogic:category');
 
         $pageData['JS_END_POOL'][] = '/public/js/desktop/params/profils.js';
 

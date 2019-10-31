@@ -26,10 +26,6 @@ cron:
   path: 'cron'
   controller: NextDom\Controller\Diagnostic\CronController::get
   condition: 'admin'
-custom:
-  path: 'custom'
-  controller: NextDom\Controller\Params\CustomController::get
-  condition: 'admin'
 dashboard:
   path: 'dashboard'
   controller: NextDom\Controller\Pages\DashBoardController::get

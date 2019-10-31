@@ -41,7 +41,7 @@ class AdministrationPages(BaseGuiTest):
         """
         self.goto('index.php?v=d&p=administration')
         link_buttons = ['users', 'api', 'network', 'security', 'cache', 'services',
-                        'general', 'custom', 'profils', 'commandes', 'links', 'interact_config',
+                        'general', 'profils', 'commandes', 'links', 'interact_config',
                         'eqlogic', 'summary', 'report_config', 'log_config',
                         'health', 'cron', 'eqAnalyse', 'realtime', 'history', 'timeline',
                         'report', 'log',
@@ -125,15 +125,6 @@ class AdministrationPages(BaseGuiTest):
         reset_hardware_button = self.get_element_by_id('bt_refreshHardwareType')
         back_button = self.get_link_by_title('Retour')
         self.assertIsNotNone(reset_hardware_button)
-        self.assertIsNotNone(back_button)
-        self.assertEqual(0, len(self.get_js_logs()))
-        back_button.click()
-
-    def test_custom_page(self):
-        """Test custom administration page
-        """
-        self.goto('index.php?v=d&p=custom')
-        back_button = self.get_link_by_title('Retour')
         self.assertIsNotNone(back_button)
         self.assertEqual(0, len(self.get_js_logs()))
         back_button.click()
