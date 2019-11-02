@@ -69,18 +69,9 @@ $(function () {
     };
 
     // Clock actualisation timer
+    displayClock();
     setInterval(function () {
-        var date = new Date();
-        var locale = 'en-EN';
-        // Get NextDom language for format
-        if (isset(nextdom_language)) {
-            locale = nextdom_language.replace('_','-');
-        }
-        // Date
-        var dateFormat = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        $('#horloge_date').text(date.toLocaleDateString(locale, dateFormat));
-        // Time
-        $('#horloge_time').text(date.toLocaleTimeString(locale));
+        displayClock();
     }, 1000);
 
     // History push listener declaration
