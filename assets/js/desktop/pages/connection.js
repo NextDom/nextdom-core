@@ -40,55 +40,80 @@ var loginInput = $('#login');
 var passwordInput = $('#password');
 var twoFactorInput = $('#twofactor');
 var submitButton = $('#submit');
-var installMobile = $('pre');
-
+var submitTwoFactorButton = $('#submitTwoFactor');
+var divLogin = $('#login-part1');
+var divTwoFactor = $('#login-part2');
+var installMobile = $('.btn-install-mobile');
+var installMobilePre = $('.mobile-pre');
 /**
  * Init events of the page
  */
 function initEvents() {
+    // Login input value change or focus out
     loginInput.on('focusout keyup paste', function (userEvent) {
-        testIfUserUseTwoFactorAuth();
         inputEvent(userEvent);
     });
 
+    // Password input value change
     passwordInput.on('focusout keyup', function (userEvent) {
         inputEvent(userEvent);
     });
 
+    // Two factor input value change
     twoFactorInput.on('focusout keyup', function (userEvent) {
         inputEvent(userEvent);
     });
 
+    // Connexion buttons
     submitButton.on('click', function () {
+        testIfUserUseTwoFactorAuth();
+    });
+    submitTwoFactorButton.on('click', function () {
         checkLogin();
     });
 
+    // Password input ENTER key click
     passwordInput.keypress(function (e) {
         if (e.which === ENTER_KEY) {
-            checkLogin();
+            testIfUserUseTwoFactorAuth();
         }
     });
 
+    // Two factor input ENTER key click
     twoFactorInput.keypress(function (e) {
         if (e.which === ENTER_KEY) {
             checkLogin();
         }
     });
+
+    // Mobile install line copy
     if (installMobile !== undefined) {
         installMobile.click(function() {
-           if (document.selection) {
-               var selectedRange = document.body.createTextRange();
-               selectedRange.moveToElementText(installMobile[0]);
-               selectedRange.select();
-           }
-           else if (window.getSelection) {
-               var selectedRange = document.createRange();
-               selectedRange.selectNodeContents(installMobile[0]);
-               window.getSelection().removeAllRanges();
-               window.getSelection().addRange(selectedRange);
-           }
+            copyInstallCode();
+        });
+        installMobilePre.click(function() {
+            copyInstallCode();
         });
     }
+}
+
+/**
+ * Copy to clipboard the install line code
+ *
+ */
+function copyInstallCode() {
+    if (document.selection) {
+       var selectedRange = document.body.createTextRange();
+       selectedRange.moveToElementText(installMobilePre[0]);
+       selectedRange.select();
+    }
+    else if (window.getSelection) {
+       var selectedRange = document.createRange();
+       selectedRange.selectNodeContents(installMobilePre[0]);
+       window.getSelection().removeAllRanges();
+       window.getSelection().addRange(selectedRange);
+    }
+    document.execCommand('copy');
 }
 
 /**
@@ -107,9 +132,11 @@ function inputEvent(userEvent) {
  */
 function updateTwoFactorVisibility() {
     if (useTwoFactor === 1) {
-        twoFactorInput.parent().show();
+        divLogin.hide();
+        divTwoFactor.show();
     } else {
-        twoFactorInput.parent().hide();
+        divLogin.show();
+        divTwoFactor.hide();
     }
 }
 
@@ -126,7 +153,11 @@ function testIfUserUseTwoFactorAuth() {
         },
         success: function (useTwoFactorAnswer) {
             useTwoFactor = parseInt(useTwoFactorAnswer);
-            updateTwoFactorVisibility();
+            if (useTwoFactor === 1) {
+                updateTwoFactorVisibility();
+            } else {
+                checkLogin();
+            }
         }
     });
 }
@@ -172,6 +203,12 @@ function checkLogin() {
         setErrorOnInput(twoFactorInput, true);
     }
     $('.login-box').removeClass('animationZoomIn');
+    submitButton.addClass('disabled');
+    submitButton.find('.fa-refresh').show();
+    submitButton.find('.fa-unlock').hide();
+    submitTwoFactorButton.addClass('disabled');
+    submitTwoFactorButton.find('.fa-refresh').show();
+    submitTwoFactorButton.find('.fa-lock-open').hide();
     nextdom.user.login({
         username: loginInput.val(),
         password: passwordInput.val(),
@@ -182,7 +219,16 @@ function checkLogin() {
             setErrorOnInput(passwordInput, true);
             setErrorOnInput(twoFactorInput, true);
             notify('Core', error.message, 'error');
+            useTwoFactor = 0;
+            passwordInput.val('');
             twoFactorInput.val('');
+            updateTwoFactorVisibility();
+            submitButton.removeClass('disabled');
+            submitButton.find('.fa-refresh').hide();
+            submitButton.find('.fa-unlock').show();
+            submitTwoFactorButton.removeClass('disabled');
+            submitTwoFactorButton.find('.fa-refresh').hide();
+            submitTwoFactorButton.find('.fa-lock-open').show();
         },
         success: function (data) {
             $('.login-box').addClass('animationZoomOut');

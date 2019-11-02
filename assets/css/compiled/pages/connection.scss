@@ -31,8 +31,15 @@
 /* Boxs */
 .login-box,
 #mobile-box {
-    width: 380px;
+    width: 430px;
     margin: 7% auto;
+}
+@media (max-width: 768px) {
+  .login-box, .register-box, #mobile-box {
+      width: 90%;
+      margin-top: 20px;
+      margin: 7% auto;
+  }
 }
 .login-box-msg {
     padding: 0 20px 7px 20px;
@@ -63,6 +70,10 @@
 .login-page label {
     font-weight: 400 !important;
 }
+.login-page pre {
+    white-space: normal;
+    word-break: break-word;
+}
 
 /* Logos */
 .login-logo {
@@ -73,7 +84,17 @@
     }
     padding: {
         bottom: 15px;
-        top: 25px;
+        top: 15px;
+    }
+    margin-bottom: 0;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+
+/* Mobile */
+.login-mobile-header {
+    padding: {
+        bottom: 15px;
+        top: 15px;
     }
     margin-bottom: 0;
     box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);

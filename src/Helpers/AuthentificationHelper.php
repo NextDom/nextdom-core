@@ -75,8 +75,7 @@ class AuthentificationHelper
             header("Statut: 403 Forbidden");
             header('HTTP/1.1 403 Forbidden');
             $_SERVER['REDIRECT_STATUS'] = 403;
-            echo '<p>' . __('403 Access Forbidden') . '</p>';
-            echo '<p>' . __('Votre accès a été verrouillé pour votre sécurité ') . '</p>';
+            require(NEXTDOM_ROOT . '/public/403.html');
             die();
         }
 

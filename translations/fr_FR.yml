@@ -129,8 +129,12 @@ connection:
   remember-title: En cochant cette case, vous n'aurez plus besoin de saisir vos identifiants.
   remember-label: Se souvenir de moi ?
   connect: Connexion
+  valid: Valider
   forgot: Oups, j'ai oublié mon mot de passe !
   mobile-install: Installer la version mobile
+  mobile-msg: Voici la commande d'installation de la version mobile correspondant à votre type d'installation...
+  mobile-copy: Copier
+
 
 core:
   error-401: 401 - Accès non autorisé
