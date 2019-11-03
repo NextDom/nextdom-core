@@ -43,6 +43,11 @@ use NextDom\Managers\ConfigManager;
 class AjaxHelper
 {
     /**
+     * @var bool Answer state
+     */
+    private $answerSended = false;
+
+    /**
      * Init ajax communication
      *
      * @throws \Exception
@@ -95,7 +100,23 @@ class AjaxHelper
      */
     public function error($errorData = '', $errorCode = 0)
     {
-        echo self::getResponse($errorData, $errorCode);
+        if (!$this->answerSended) {
+            echo $this->getResponse($errorData, $errorCode);
+            $this->answerSended = true;
+        }
+    }
+
+    /**
+     * Send answer
+     *
+     * @param string $answer Answer to send
+     */
+    public function success($answer = '')
+    {
+        if (!$this->answerSended) {
+            echo $this->getResponse($answer);
+            $this->answerSended = true;
+        }
     }
 
     /**
@@ -119,15 +140,5 @@ class AjaxHelper
             $response['code'] = $errorCode;
         }
         return json_encode($response, JSON_UNESCAPED_UNICODE);
-    }
-
-    /**
-     * Send answer
-     *
-     * @param string $answer Answer to send
-     */
-    public function success($answer = '')
-    {
-        echo self::getResponse($answer);
     }
 }
