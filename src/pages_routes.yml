@@ -20,7 +20,7 @@ commandes:
   condition: 'admin'
 connection:
   path: 'connection'
-  controller: NextDom\Controller\ConnectionController::get
+  controller: NextDom\Controller\Pages\ConnectionController::get
   condition: ''
 cron:
   path: 'cron'

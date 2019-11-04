@@ -79,20 +79,35 @@
         </div>
     </div>
 </div>
-{% if IS_MOBILE %}
-    <div id="mobile-box">
-        <div id="mobile-install" class="box box-default collapsed-box">
-            <div class="box-header with-border">
-                <h3 class="box-title">{{ 'connection.mobile-install'|trans }}</h3>
-                <div class="box-tools pull-right">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
-                    </button>
+{% if IS_MOBILE and not MOBILE_INSTALLED %}
+    <div class="login-box animationZoomIn" id="mobile-box">
+        <!-- Section logo -->
+        <div class="login-mobile-header">
+            <h4 class="login-mobile-title text-center"><i class="fas fa-mobile-alt"></i>{{ 'connection.mobile-install'|trans }}</h4>
+        </div>
+
+        <!-- Section connexion -->
+        <div class="login-box-body">
+            <div class="form-group">
+                <p class="login-box-msg">{{ 'connection.mobile-msg'|trans }}</p>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    {% if INSTALL_TYPE == 'apt' %}
+                        <pre class="mobile-pre">apt install nextdom-mobile</pre>
+                    {% else %}
+                        <pre class="mobile-pre">git clone https://github.com/NextDom/nextdom-mobile-dist {{ NEXTDOM_ROOT }}/mobile</pre>
+                    {% endif %}
                 </div>
             </div>
-            <div class="box-body" style="display: none;">
-            <pre>
-git clone https://github.com/NextDom/nextdom-mobile-dist {{ NEXTDOM_ROOT }}/mobile
-            </pre>
+            <div class="row">
+                <div class="col-xs-12">
+                    {% if INSTALL_TYPE == 'apt' %}
+                        <button class="btn btn-primary btn-block btn-flat btn-install-mobile"><i class="fas fa-clipboard spacing-right"></i>{{ 'connection.mobile-copy'|trans }}</button>
+                    {% else %}
+                        <button class="btn btn-primary btn-block btn-flat btn-install-mobile"><i class="fas fa-clipboard spacing-right"></i>{{ 'connection.mobile-copy'|trans }}</button>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>

@@ -34,7 +34,7 @@ class ConnectionControllerTest extends BaseControllerTest
     public function testSimple()
     {
         $pageData = [];
-        $result = \NextDom\Controller\ConnectionController::get($pageData);
+        $result = \NextDom\Controller\Pages\ConnectionController::get($pageData);
         $this->assertFalse($pageData['IS_MOBILE']);
         $this->assertArrayHasKey('TITLE', $pageData);
         $this->assertEquals(4, substr_count($result, 'input'));
@@ -44,7 +44,7 @@ class ConnectionControllerTest extends BaseControllerTest
     {
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (Linux; U; Android 4.0.2; en-us; Galaxy Nexus Build/ICL53F) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30';
         $pageData = [];
-        $result = \NextDom\Controller\ConnectionController::get($pageData);
+        $result = \NextDom\Controller\Pages\ConnectionController::get($pageData);
         $this->assertTrue($pageData['IS_MOBILE']);
         $this->assertContains('mobile', $result);
     }
@@ -52,7 +52,7 @@ class ConnectionControllerTest extends BaseControllerTest
     public function testPageDataVars()
     {
         $pageData = [];
-        \NextDom\Controller\ConnectionController::get($pageData);
-        $this->pageDataVars('desktop/connection.html.twig', $pageData);
+        \NextDom\Controller\Pages\ConnectionController::get($pageData);
+        $this->pageDataVars('desktop/pages/connection.html.twig', $pageData);
     }
 }

@@ -41,11 +41,12 @@ class PrepareView
 
     /**
      * Read configuration
+     *
      * @throws \Exception
      */
     public function initConfig()
     {
-        $this->currentConfig = ConfigManager::byKeys(array(
+        $this->currentConfig = ConfigManager::byKeys([
             'enableCustomCss',
             'language',
             'nextdom::firstUse',
@@ -61,7 +62,7 @@ class PrepareView
             'product_name',
             'product_icon',
             'product_connection_image',
-            'default_bootstrap_theme'));
+            'default_bootstrap_theme']);
     }
 
     /**
@@ -485,6 +486,8 @@ class PrepareView
      * Get the current home link
      *
      * @return string Home link
+     *
+     * @throws \Exception
      */
     private function getHomeLink(): string
     {
@@ -613,6 +616,7 @@ class PrepareView
     {
         $pageData['IS_ADMIN'] = AuthentificationHelper::isConnectedAsAdmin();
         $pageData['CAN_SUDO'] = NextDomHelper::isCapable('sudo');
+        $pageData['SHOW_MOBILE_IN_MENU'] = is_dir(NEXTDOM_ROOT . '/mobile');
         $pageData['MENU_NB_MESSAGES'] = MessageManager::nbMessage();
         $pageData['NOTIFY_STATUS'] = ConfigManager::byKey('notify::status');
         if ($pageData['IS_ADMIN']) {

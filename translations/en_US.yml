@@ -130,6 +130,8 @@ connection:
   valid: Validation
   forgot: "Oops: I forgot my password !"
   mobile-install: Install mobile version
+  mobile-msg: Show below the mobile version installation line for your installation type...
+  mobile-copy: Copy
 
 core:
   error-401: 401 - Unauthorized Access
