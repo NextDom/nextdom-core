@@ -286,20 +286,6 @@ class AjaxNextDomTest extends AjaxBase
         $this->assertEquals(200, $result->getStatusCode());
     }
 
-    public function testSaveCustomAsUser() {
-        $this->connectAsUser();
-        $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'saveCustom']);
-        $this->assertContains('401 - ', (string) $result->getBody());
-        $this->assertEquals(200, $result->getStatusCode());
-    }
-
-    public function testSaveCustomAsAdmin() {
-        $this->connectAsAdmin();
-        $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'saveCustom']);
-        $this->assertContains('La version ne peut être que js ou css', (string) $result->getBody());
-        $this->assertEquals(200, $result->getStatusCode());
-    }
-
     public function testGetGraphDataAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'getGraphData']);

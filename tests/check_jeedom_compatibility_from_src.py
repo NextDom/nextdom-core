@@ -162,6 +162,7 @@ def class_methods_to_ignore(file_to_check, method_to_check):
         ],
         'nextdom.class.php': [
             'getThemeConfig', # No usage
+            'saveCustom', # Removed
             'checkValueInconfiguration' # Usage only static and private (in manager)
         ]
     }
