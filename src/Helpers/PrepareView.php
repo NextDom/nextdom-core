@@ -47,11 +47,9 @@ class PrepareView
     public function initConfig()
     {
         $this->currentConfig = ConfigManager::byKeys([
-            'enableCustomCss',
             'language',
             'nextdom::firstUse',
             'nextdom::Welcome',
-            'nextdom::waitSpinner',
             'notify::status',
             'notify::position',
             'notify::timeout',
@@ -59,9 +57,6 @@ class PrepareView
             'widget::margin',
             'widget::padding',
             'widget::radius',
-            'product_name',
-            'product_icon',
-            'product_connection_image',
             'default_bootstrap_theme']);
     }
 
@@ -114,8 +109,6 @@ class PrepareView
      */
     private function initHeaderData(&$pageData)
     {
-        $pageData['PRODUCT_NAME'] = $this->currentConfig['product_name'];
-        $pageData['PRODUCT_ICON'] = $this->currentConfig['product_icon'];
         $pageData['AJAX_TOKEN'] = AjaxHelper::getToken();
         $pageData['LANGUAGE'] = $this->currentConfig['language'];
 
@@ -430,7 +423,7 @@ class PrepareView
         if ($page == '') {
             Utils::redirect($pageData['HOMELINK']);
         } else {
-            $pageData['TITLE'] = ucfirst($page) . ' - ' . $this->currentConfig['product_name'];
+            $pageData['TITLE'] = ucfirst($page) . ' - NextDom';
         }
 
         $currentPlugin = $this->initPluginsData($pageData, $eventsJsPlugin);
@@ -448,7 +441,6 @@ class PrepareView
             'user_isAdmin' => AuthentificationHelper::isConnectedAsAdmin(),
             'user_login' => UserManager::getStoredUser()->getLogin(),
             'nextdom_Welcome' => $this->currentConfig['nextdom::Welcome'],
-            'nextdom_waitSpinner' => $this->currentConfig['nextdom::waitSpinner'],
             'notify_status' => $this->currentConfig['notify::status'],
             'notify_position' => $this->currentConfig['notify::position'],
             'notify_timeout' => $this->currentConfig['notify::timeout'],
@@ -571,7 +563,7 @@ class PrepareView
                     $pageData['MENU_PLUGIN'][$categoryCode][] = $plugin;
                     if ($plugin->getId() == Utils::init('m')) {
                         $currentPlugin = $plugin;
-                        $pageData['title'] = ucfirst($currentPlugin->getName()) . ' - ' . $this->currentConfig['product_name'];
+                        $pageData['title'] = ucfirst($currentPlugin->getName()) . ' - NextDom';
                     }
                     if ($plugin->getDisplay() != '' && ConfigManager::bykey('displayDesktopPanel', $plugin->getId(), 0) != 0) {
                         $pageData['PANEL_MENU'][] = $plugin;
@@ -630,10 +622,10 @@ class PrepareView
             $pageData['MENU_CURRENT_PLUGIN_ISSUE'] = $currentPlugin->getIssue();
         }
         $pageData['MENU_HTML_GLOBAL_SUMMARY'] = JeeObjectManager::getGlobalHtmlSummary();
-        $pageData['PRODUCT_IMAGE'] = ConfigManager::byKey('product_image');
         $pageData['profilsUser'] = UserManager::getStoredUser();
         $pageData['PROFIL_AVATAR'] = UserManager::getStoredUser()->getOptions('avatar');
         $pageData['PROFIL_LOGIN'] = UserManager::getStoredUser()->getLogin();
+        $pageData['NEXTDOM_ICON'] = ConfigManager::byKey('nextdom::user-icon');
         $pageData['NEXTDOM_VERSION'] = NextDomHelper::getNextdomVersion();
         $pageData['JEEDOM_VERSION'] = NextDomHelper::getJeedomVersion();
         $coreUpdates = UpdateManager::byType('core');

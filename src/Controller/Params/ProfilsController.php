@@ -130,16 +130,23 @@ class ProfilsController extends BaseController
         $pageData['profilsAllowRemoteUsers'] = ConfigManager::byKey('sso:allowRemoteUser');
 
         $themesBases = FileSystemHelper::ls('public/css/themes/', '*nextdom.css');
-        $pageData['customThemesBases'] = [];
+        $pageData['profilsThemesBases'] = [];
         foreach ($themesBases as $themeBase) {
-            $pageData['customThemesBases'][] = substr($themeBase, 0, -12);
+            $pageData['profilsThemesBases'][] = substr($themeBase, 0, -12);
         }
         $themesIdentities = FileSystemHelper::ls('public/css/themes/', 'dark*.css');
-        $pageData['customThemesIdentities'] = [];
+        $pageData['profilsThemesIdentities'] = [];
         foreach ($themesIdentities as $themeIdentity) {
-            $pageData['customThemesIdentities'][] = substr($themeIdentity, 5, -4);
+            $pageData['profilsThemesIdentities'][] = substr($themeIdentity, 5, -4);
         }
-        $pageData['customThemeChoice'] = ConfigManager::byKey('nextdom::user-theme');
+        $themesIcons = FileSystemHelper::ls('public/img/NextDom/', 'NextDom_Square_*.png');
+        $pageData['profilsThemesIcons'] = [];
+        foreach ($themesIcons as $themesIcon) {
+            $pageData['profilsThemesIcons'][] = substr($themesIcon, 15, -4);
+        }
+        $pageData['profilsThemeChoice'] = ConfigManager::byKey('nextdom::user-theme');
+        $pageData['profilsIconChoice'] = ConfigManager::byKey('nextdom::user-icon');
+
         $pageData['adminCategories'] = NextDomHelper::getConfiguration('eqLogic:category');
 
         $pageData['JS_END_POOL'][] = '/public/js/desktop/params/profils.js';

@@ -260,7 +260,7 @@ health:
   no-info: Pas d'informations de santé
   no-info-detail: Aucune dépendances, ni daemon, ni informations
   os-version: Version OS
-  os-not-supported: Vous n'êtes pas sur un OS officiellement supporté par l'équipe %productName% (toute demande de support pourra donc être refusée). Les OS officiellement supportés sont Debian Jessie et Debian Strech.
+  os-not-supported: Vous n'êtes pas sur un OS officiellement supporté par l'équipe NextDom (toute demande de support pourra donc être refusée). Les OS officiellement supportés sont Debian Jessie et Debian Strech.
   php-error: Une version de PHP supérieure ou égale à 7 est nécessaire.
   php-version: Version PHP
   plugins-legend: Détails de la santé de vos plugins, cliquez sur le titre pour avoir le détail puis survolez les icônes pour plus d'informations.
@@ -289,9 +289,9 @@ plugin:
     automation-protocol: Protocole domotique
 
 welcome:
-  title: Bienvenue dans %productName%
+  title: Bienvenue dans NextDom
   congrats: Félicitations
-  congrats-content: Bienvenue dans %productName%, merci d'avoir choisi cet outil pour votre habitat connecté.
+  congrats-content: Bienvenue dans NextDom, merci d'avoir choisi cet outil pour votre habitat connecté.
   never-show: Ne plus afficher
   hot-plugins: Plugins populaires
   migrate-from: Migration Jeedom
@@ -302,13 +302,13 @@ welcome:
   forum-title: Forum
   forum-subtitle : Trouver de l'aide sur notre forum
   forum-content: |
-                Le forum %productName% est un moyen simple et efficace de trouver la solution a votre problème.
+                Le forum NextDom est un moyen simple et efficace de trouver la solution a votre problème.
                 Il y a sûrement une autre personne qui a déja rencontré le même problème que vous.
                 Si ce n'est pas le cas, posez votre question, la communauté y répondra au plus vite.
   forum-launch: Accéder au forum
   blog-title: Blog
   blog-subtitle: Restez informé
-  blog-content: Retrouvez toute l'actualité de %productName% sur notre blog.
+  blog-content: Retrouvez toute l'actualité de NextDom sur notre blog.
   blog-launch: Accéder au blog
   notify: Sauvegarde réussie
 
@@ -356,28 +356,28 @@ sidebar:
 
 firstuse:
   step: Étape
-  welcome-title: Bienvenue sur %productName% !
+  welcome-title: Bienvenue sur NextDom !
   welcome-content: |
     Bravo ! Vous venez d'installer votre solution domotique, l'assistant de première utilisation est activé !
     Celui-ci va vous guider dans le processus de configuration de votre solution domotique...
-  password-title: Sécurisez votre %productName% !
+  password-title: Sécurisez votre NextDom !
   password-content: Pour commencer, merci de définir un nouveau mot de passe administrateur pour améliorer la sécurité...
   password-placeholder: Nouveau mot de passe...
   market-productname-placeholder: ?
   password-confirm-placeholder: Confirmer le mot de passe...
-  market-title: Connectez votre market Jeedom à %productName% !
+  market-title: Connectez votre market Jeedom à NextDom !
   market-content: En ajoutant ou connectant un compte Market Jeedom pour l'installation de plugins...
   market-noaccount: Je n'ai pas de compte Market
   market-alreadyaccount: J'ai déjà un compte market
   market-wantaccount: Je veux en créer un !
   market-username-placeholder: Nom d'utilisateur...
   market-password-placeholder: Mot de passe...
-  customize-title: Personnalisez votre %productName% !
-  customize-title2: Customisez votre %productName% !
+  customize-title: Personnalisez votre NextDom !
+  customize-title2: Customisez votre NextDom !
   customize-content: Sélectionnez le thème qui vous correspond le plus, personnalisation modifiable dans la page Customisation...
   customize-widget: Sélectionnez le thème pour vos widgets, personnalisation modifiable dans la page Profil...
   customize-name: Donnez un nom à votre solution domotique...
-  congrats-title: Bravo ! La configuration de votre %productName% est terminée !
+  congrats-title: Bravo ! La configuration de votre NextDom est terminée !
   congrats-content: Cliquez sur le bouton Terminer pour profiter de votre solution Domotique...
 
 backup:

@@ -94,21 +94,32 @@
                         <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
                             <label class="control-label">{{ 'Base du Thème' }}</label>
                             <select id="themeBase" class="form-control">
-                                {% for customThemesBase in customThemesBases %}
-                                    <option value="{{ customThemesBase }}"{% if customThemesBase == customThemeChoice|split('-')[0] %} selected="selected"{% endif %}>{{ customThemesBase }}</option>
+                                {% for profilsThemesBase in profilsThemesBases %}
+                                    <option value="{{ profilsThemesBase }}"{% if profilsThemesBase == profilsThemeChoice|split('-')[0] %} selected="selected"{% endif %}>{{ profilsThemesBase }}</option>
                                 {% endfor %}
                             </select>
                         </div>
                         <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
                             <label class="control-label">{{ 'Identité du Thème' }}</label>
                             <select id="themeIdentity" class="form-control">
-                                {% for customThemesIdentity in customThemesIdentities %}
-                                    <option value="{{ customThemesIdentity }}"{% if customThemesIdentity == customThemeChoice|split('-')[1] %} selected="selected"{% endif %}>{{ customThemesIdentity }}</option>
+                                {% for profilsThemesIdentity in profilsThemesIdentities %}
+                                    <option value="{{ profilsThemesIdentity }}"{% if profilsThemesIdentity == profilsThemeChoice|split('-')[1] %} selected="selected"{% endif %}>{{ profilsThemesIdentity }}</option>
                                 {% endfor %}
                             </select>
                         </div>
-                        <div class="form-group col-lg-12 col-padding" style="display:none">
+                        <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Icône du Thème' }}</label>
+                            <select id="themeIcon" class="form-control">
+                                {% for profilsThemesIcon in profilsThemesIcons %}
+                                    <option value="{{ profilsThemesIcon }}"{% if profilsThemesIcon == profilsIconChoice %} selected="selected"{% endif %}>{{ profilsThemesIcon }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-6 col-padding" style="display:none">
                             <input class="configKey form-control" data-l1key="nextdom::user-theme" />
+                        </div>
+                        <div class="form-group col-lg-6 col-padding" style="display:none">
+                            <input class="configKey form-control" data-l1key="nextdom::user-icon" />
                         </div>
                     </div>
                 </fieldset>
@@ -116,7 +127,7 @@
                     <legend>{{ 'Prévisualisez votre thème' }}</legend>
                     <div class="row">
                         <div class="form-group col-lg-12 col-padding">
-                            <iframe id="customPreview" src="/index.php?v=d&p=administration" marginwidth="0" marginheight="0" frameborder="0" width="100%" height="600"></iframe>
+                            <iframe id="themePreview" src="/index.php?v=d&p=administration" marginwidth="0" marginheight="0" frameborder="0" width="100%" height="600"></iframe>
                         </div>
                     </div>
                 </fieldset>

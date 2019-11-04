@@ -45,7 +45,6 @@ class AjaxNextDomTest extends AjaxBase
         $this->connectAsUser();
         $this->resetAjaxToken();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'getInfoApplication']);
-        $this->assertContains('"product_name":"NextDom"', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 

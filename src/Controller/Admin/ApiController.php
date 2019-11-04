@@ -46,7 +46,6 @@ class ApiController extends BaseController
      */
     public static function get(&$pageData): string
     {
-        $pageData['PRODUCT_NAME'] = ConfigManager::byKey('product_name');
         $keys = ['api', 'apipro', 'apimarket'];
         foreach (UpdateManager::listRepo() as $key => $value) {
             $keys[] = $key . '::enable';
