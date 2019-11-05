@@ -266,26 +266,4 @@ class CronManager
         }
         return $return;
     }
-
-
-
-    /**
-     * convert cron schedule string
-     *
-     * @param string $cron F cron schedule format to re
-     * @return string
-     * @throws \Exception
-     */
-    public static function modifyCron($oldcron,$newCron)
-    {
-        // Save in database
-        $values = array(
-            'class' => $pluginId,
-        );
-        $sql = 'REPLACE ' . self::DB_CLASS_NAME . '
-                SET `key` = :key,
-                    `value` = :value,
-                     `plugin` = :plugin';
-        DBHelper::exec($sql, $values);
-    }
-    }
+}

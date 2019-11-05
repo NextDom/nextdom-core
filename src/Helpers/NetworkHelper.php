@@ -202,7 +202,7 @@ class NetworkHelper
                     }
                     if (isset($url['host'])) {
                         if (isset($url['port'])) {
-                            return $return . $url['host'];
+                            return $return . $url['host'] . ':' . $url['port'];
                         } else {
                             return $return . $url['host'];
                         }

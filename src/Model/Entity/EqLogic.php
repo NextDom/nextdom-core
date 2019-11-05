@@ -1292,7 +1292,7 @@ class EqLogic implements EntityInterface
                 }
             }
         } else {
-            if (isset($JEEDOM_INTERNAL_CONFIG['alerts'][$statusKey])) {
+            if (isset($NEXTDOM_INTERNAL_CONFIG['alerts'][$statusKey])) {
                 $changed = ($this->getStatus($statusKey) !== $statusValue);
             }
         }

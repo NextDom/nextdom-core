@@ -42,8 +42,8 @@ use NextDom\Managers\CronManager;
 use NextDom\Managers\DataStoreManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
-use NextDom\Managers\MessageManager;
 use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\MessageManager;
 use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioExpressionManager;
@@ -90,16 +90,12 @@ class NextDomHelper
         global $NEXTDOM_INTERNAL_CONFIG;
         $result = array();
         $cmd = ConfigManager::byKey('interact::warnme::defaultreturncmd', 'core', '');
-        if ($cmd != '') {
-            if (!CmdManager::byId(str_replace('#', '', $cmd))) {
-                $result[] = array('detail' => 'Administration', 'help' => __('Commande retour interactions'), 'who' => $cmd);
-            }
+        if ($cmd != '' && !CmdManager::byId(str_replace('#', '', $cmd))) {
+            $result[] = array('detail' => 'Administration', 'help' => __('Commande retour interactions'), 'who' => $cmd);
         }
         $cmd = ConfigManager::byKey('emailAdmin', 'core', '');
-        if ($cmd != '') {
-            if (!CmdManager::byId(str_replace('#', '', $cmd))) {
-                $result[] = array('detail' => 'Administration', 'help' => __('Commande information utilisateur'), 'who' => $cmd);
-            }
+        if ($cmd != '' && !CmdManager::byId(str_replace('#', '', $cmd))) {
+            $result[] = array('detail' => 'Administration', 'help' => __('Commande information utilisateur'), 'who' => $cmd);
         }
         foreach ($NEXTDOM_INTERNAL_CONFIG['alerts'] as $level => $value) {
             $cmds = ConfigManager::byKey('alert::' . $level . 'Cmd', 'core', '');
@@ -134,10 +130,10 @@ class NextDomHelper
             $state = false;
         } else {
             $version = trim(strtolower(file_get_contents('/etc/debian_version')));
-            if (version_compare($version, '8', '<')) {
-                if (strpos($version, 'jessie') === false && strpos($version, 'stretch') === false) {
-                    $state = false;
-                }
+            if (version_compare($version, '8', '<')
+                && strpos($version, 'jessie') === false
+                && strpos($version, 'stretch') === false) {
+                $state = false;
             }
         }
         $systemHealth[] = array(
@@ -452,7 +448,7 @@ class NextDomHelper
                     return true;
                 }
             }
-            $result = (shell_exec('sudo -l > /dev/null 2>&1; echo $?') == 0) ? true : false;
+            $result = shell_exec('sudo -l > /dev/null 2>&1; echo $?') == 0;
             CacheManager::set('nextdom::isCapable::sudo', $result);
             return $result;
         }
