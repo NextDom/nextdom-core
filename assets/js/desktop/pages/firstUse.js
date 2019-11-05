@@ -59,16 +59,6 @@ $(document).ready(function () {
     }
   });
   $('div.setup-panel div a.btn-primary').trigger('click');
-
-  nextdom.config.load({
-      configuration: $('.firstUse-Page').getValues('.configKey:not(.noSet)')[0],
-      error: function (error) {
-          notify("Erreur", error.message, 'error');
-      },
-      success: function (data) {
-          $('.firstUse-Page').setValues(data, '.configKey');
-      }
-  });
 });
 
 $('#toStep2').click(function () {
@@ -112,6 +102,15 @@ $('#toStep4').click(function () {
           notify('Core', error.message, 'error');
         },
         success: function () {
+          nextdom.config.load({
+              configuration: $('.firstUse-Page').getValues('.configKey:not(.noSet)')[0],
+              error: function (error) {
+                  notify("Erreur", error.message, 'error');
+              },
+              success: function (data) {
+                  $('.firstUse-Page').setValues(data, '.configKey');
+              }
+          });
           goToNextStep('#toStep4');
         }
       });

@@ -46,7 +46,7 @@
 }
 
 /* Fond logo page login */
-.login-logo{
+.login-logo, .login-mobile-header{
   background-color: map_get($color_theme, 'color1') !important;
 }
 
@@ -248,7 +248,11 @@
 
 /* Barre de chargement */
 .pace .pace-progress {
-  background: map_get($color_theme, 'color2');
+  background: map_get($color_theme, 'color2') !important;
+}
+
+.login-mobile-title{
+  color: map_get($color_theme, 'color2') !important;
 }
 
 /* ############################################################################################################# */
@@ -532,7 +536,7 @@ legend,
 }
 
 /* Texte area */
-pre {
+pre:not(.mobile-pre) {
   background-color: map_get($color_theme, 'color9') !important;
 }
 .CodeMirror pre {
@@ -613,7 +617,7 @@ legend {
 .input-sm {
   color: map_get($color_theme, 'color10') !important;
 }
-pre {
+pre:not(.mobile-pre) {
   color: map_get($color_theme, 'color10') !important;
 }
 pre::selection {
@@ -756,7 +760,7 @@ legend {
 }
 
 /* Texte area */
-pre {
+pre:not(.mobile-pre) {
   border-color: map_get($color_theme, 'color12') !important;
 }
 

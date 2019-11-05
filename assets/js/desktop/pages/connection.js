@@ -43,42 +43,77 @@ var submitButton = $('#submit');
 var submitTwoFactorButton = $('#submitTwoFactor');
 var divLogin = $('#login-part1');
 var divTwoFactor = $('#login-part2');
-
+var installMobile = $('.btn-install-mobile');
+var installMobilePre = $('.mobile-pre');
 /**
  * Init events of the page
  */
 function initEvents() {
+    // Login input value change or focus out
     loginInput.on('focusout keyup paste', function (userEvent) {
         inputEvent(userEvent);
     });
 
+    // Password input value change
     passwordInput.on('focusout keyup', function (userEvent) {
         inputEvent(userEvent);
     });
 
+    // Two factor input value change
     twoFactorInput.on('focusout keyup', function (userEvent) {
         inputEvent(userEvent);
     });
 
+    // Connexion buttons
     submitButton.on('click', function () {
         testIfUserUseTwoFactorAuth();
     });
-
     submitTwoFactorButton.on('click', function () {
         checkLogin();
     });
 
+    // Password input ENTER key click
     passwordInput.keypress(function (e) {
         if (e.which === ENTER_KEY) {
             testIfUserUseTwoFactorAuth();
         }
     });
 
+    // Two factor input ENTER key click
     twoFactorInput.keypress(function (e) {
         if (e.which === ENTER_KEY) {
             checkLogin();
         }
     });
+
+    // Mobile install line copy
+    if (installMobile !== undefined) {
+        installMobile.click(function() {
+            copyInstallCode();
+        });
+        installMobilePre.click(function() {
+            copyInstallCode();
+        });
+    }
+}
+
+/**
+ * Copy to clipboard the install line code
+ *
+ */
+function copyInstallCode() {
+    if (document.selection) {
+       var selectedRange = document.body.createTextRange();
+       selectedRange.moveToElementText(installMobilePre[0]);
+       selectedRange.select();
+    }
+    else if (window.getSelection) {
+       var selectedRange = document.createRange();
+       selectedRange.selectNodeContents(installMobilePre[0]);
+       window.getSelection().removeAllRanges();
+       window.getSelection().addRange(selectedRange);
+    }
+    document.execCommand('copy');
 }
 
 /**
