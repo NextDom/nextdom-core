@@ -124,7 +124,8 @@ class Utils
         if ($forceType == 'JS' || headers_sent() || isset($_GET['ajax'])) {
             echo '<script type="text/javascript">window.location.href="' . $url . '"</script>';
         } else {
-            exit(header("Location: $url"));
+            header("Location: $url");
+            exit(0);
         }
     }
 

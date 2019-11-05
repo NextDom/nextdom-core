@@ -407,19 +407,20 @@ class ScenarioExpression implements EntityInterface
             try {
                 $options['duration'] = floatval(Utils::evaluate($options['duration']));
             } catch (\Exception $e) {
-
+                $this->setLog($scenario, __('La durée n\'est pas valide : ') . $options['duration']);
             }
             if (is_numeric($options['duration']) && $options['duration'] > 0) {
                 $this->setLog($scenario, __('Pause de ') . $options['duration'] . __(' seconde(s)'));
                 if ($options['duration'] < 1) {
-                    return usleep($options['duration'] * 1000000);
+                    usleep($options['duration'] * 1000000);
                 } else {
-                    return sleep($options['duration']);
+                    sleep($options['duration']);
                 }
             }
         }
-        $this->setLog($scenario, __('Aucune durée trouvée pour l\'action sleep ou la durée n\'est pas valide : ') . $options['duration']);
-        return null;
+        else {
+            $this->setLog($scenario, __('Aucune durée trouvée pour l\'action sleep : ') . $options['duration']);
+        }
     }
 
     /**

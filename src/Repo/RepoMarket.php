@@ -504,6 +504,11 @@ class RepoMarket
         return $this;
     }
 
+    /**
+     * @param Update $_update
+     * @return array
+     * @throws CoreException
+     */
     public static function downloadObject($_update)
     {
         $market = self::byLogicalIdAndType($_update->getLogicalId(), $_update->getType());
@@ -602,6 +607,11 @@ class RepoMarket
         }
     }
 
+    /**
+     * @param Update $_update
+     * @return array
+     * @throws \Exception
+     */
     public static function objectInfo($_update)
     {
         $url = 'https://nextdom.github.io/documentation/plugins/' . $_update->getLogicalId() . '/' . ConfigManager::byKey('language', 'core', 'fr_FR') . '/index.html';
@@ -989,7 +999,7 @@ class RepoMarket
             }
             $_ticket['user_plugin'] .= ',';
         }
-        trim($_ticket['user_plugin'], ',');
+        $_ticket['user_plugin'] = trim($_ticket['user_plugin'], ',');
         if (isset($_ticket['options']['page'])) {
             $_ticket['options']['page'] = substr($_ticket['options']['page'], strpos($_ticket['options']['page'], 'index.php'));
         }

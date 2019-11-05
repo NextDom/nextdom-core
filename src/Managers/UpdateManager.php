@@ -156,7 +156,7 @@ class UpdateManager
      * @param $type
      * @param $logicalId
      *
-     * @return Update[]|null
+     * @return Update|null
      *
      * @throws \Exception
      */
