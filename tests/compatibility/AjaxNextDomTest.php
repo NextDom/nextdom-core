@@ -52,7 +52,7 @@ class AjaxNextDomTest extends AjaxBase
     public function testGetDocumentationUrlAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'getDocumentationUrl']);
-        $this->assertContains('nextdom.github.io', (string) $result->getBody());
+        $this->assertContains('jeedom.github.io', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
