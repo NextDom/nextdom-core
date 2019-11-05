@@ -22,8 +22,20 @@ require_once __DIR__ . '/../../core/php/core.inc.php';
 use NextDom\Helpers\AjaxHelper;
 
 class ajax {
-    public static function init($_checkToken = true) {
-        AjaxHelper::init($_checkToken);
+    private static $ajax = null;
+
+    private static function getAjaxHelper() {
+        if (self::$ajax === null) {
+            self::$ajax = new AjaxHelper();
+        }
+        return self::$ajax;
+    }
+
+    public static function init($checkToken = true) {
+        $ajax = self::getAjaxHelper();
+        if ($checkToken) {
+            $ajax->checkToken();
+        }
     }
 
     public static function getToken() {
@@ -31,14 +43,14 @@ class ajax {
     }
 
     public static function success($_data = '') {
-        AjaxHelper::success($_data);
+        self::getAjaxHelper()->success($_data);
     }
 
     public static function error($_data = '', $_errorCode = 0) {
-        AjaxHelper::error($_data, $_errorCode);
+        self::getAjaxHelper()->error($_data, $_errorCode);
     }
 
     public static function getResponse($_data = '', $_errorCode = null) {
-        return AjaxHelper::getResponse($_data, $_errorCode);
+        self::getAjaxHelper()->getResponse($_data, $_errorCode);
     }
 }

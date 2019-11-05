@@ -19,6 +19,13 @@ use NextDom\Helpers\AjaxHelper;
 
 class AjaxHelperTest extends PHPUnit_Framework_TestCase
 {
+    /** @var AjaxHelper */
+    public $ajax = null;
+
+    public function setUp() {
+        $this->ajax = new AjaxHelper();
+    }
+
     public function testGetTokenWithSameSession() {
         $token1 = AjaxHelper::getToken();
         $token2 = AjaxHelper::getToken();
@@ -40,22 +47,22 @@ class AjaxHelperTest extends PHPUnit_Framework_TestCase
     }
 
     public function testGetResponseWithStringAndErrorCode() {
-        $result = AjaxHelper::getResponse('A message', 12);
+        $result = $this->ajax->getResponse('A message', 12);
         $this->assertEquals('{"state":"error","result":"A message","code":12}', $result);
     }
 
     public function testGetResponseWithStringWithoutErrorCode() {
-        $result = AjaxHelper::getResponse('A message');
+        $result = $this->ajax->getResponse('A message');
         $this->assertEquals('{"state":"ok","result":"A message"}', $result);
     }
 
     public function testGetResponseWithArrayAndErrorCode() {
-        $result = AjaxHelper::getResponse(['ab' => 3, 'c' => 'd'], 12);
+        $result = $this->ajax->getResponse(['ab' => 3, 'c' => 'd'], 12);
         $this->assertEquals('{"state":"error","result":{"ab":3,"c":"d"},"code":12}', $result);
     }
 
     public function testGetResponseWithArrayWithoutErrorCode() {
-        $result = AjaxHelper::getResponse(['ab' => 3, 'c' => 'd']);
+        $result = $this->ajax->getResponse(['ab' => 3, 'c' => 'd']);
         $this->assertEquals('{"state":"ok","result":{"ab":3,"c":"d"}}', $result);
     }
 

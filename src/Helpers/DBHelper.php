@@ -35,6 +35,7 @@
 namespace NextDom\Helpers;
 
 use NextDom\Exceptions\CoreException;
+use NextDom\Model\Entity\EntityInterface;
 
 /**
  * Class DBHelper
@@ -292,8 +293,8 @@ class DBHelper
         if (!$noProcess && method_exists($objToSave, 'preSave')) {
             $objToSave->preSave();
         }
-        // TODO: Ne sont ils pas tous censé avoir un ID ? Dans ce cas, get_field semble inutile
-        if (is_subclass_of($objToSave, 'EntityInterface') || !self::getField($objToSave, 'id')) {
+        // Check if id is defined
+        if (!self::getField($objToSave, 'id')) {
             //New object to save.
             $fields = self::getFields($objToSave);
             if (in_array('id', $fields)) {

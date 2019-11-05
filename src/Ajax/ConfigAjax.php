@@ -19,7 +19,6 @@ namespace NextDom\Ajax;
 
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
-use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
@@ -40,14 +39,14 @@ class ConfigAjax extends BaseAjax
         AuthentificationHelper::isConnectedAsAdminOrFail();
         if (Utils::init('plugin') == 'core') {
             ConfigManager::save('api', ConfigManager::genKey());
-            AjaxHelper::success(ConfigManager::byKey('api'));
+            $this->ajax->success(ConfigManager::byKey('api'));
         } else if (Utils::init('plugin') == 'pro') {
             ConfigManager::save('apipro', ConfigManager::genKey());
-            AjaxHelper::success(ConfigManager::byKey('apipro'));
+            $this->ajax->success(ConfigManager::byKey('apipro'));
         } else {
             $plugin = Utils::init('plugin');
             ConfigManager::save('api', ConfigManager::genKey(), $plugin);
-            AjaxHelper::success(ConfigManager::byKey('api', $plugin));
+            $this->ajax->success(ConfigManager::byKey('api', $plugin));
         }
     }
 
@@ -63,13 +62,13 @@ class ConfigAjax extends BaseAjax
             if (Utils::init('convertToHumanReadable', 0)) {
                 $return = NextDomHelper::toHumanReadable($return);
             }
-            AjaxHelper::success($return);
+            $this->ajax->success($return);
         } else {
             $return = ConfigManager::byKey($keys, Utils::init('plugin', 'core'));
             if (Utils::init('convertToHumanReadable', 0)) {
                 $return = NextDomHelper::toHumanReadable($return);
             }
-            AjaxHelper::success($return);
+            $this->ajax->success($return);
         }
     }
 
@@ -80,7 +79,7 @@ class ConfigAjax extends BaseAjax
         foreach ($values as $key => $value) {
             ConfigManager::save($key, NextDomHelper::fromHumanReadable($value), Utils::init('plugin', 'core'));
         }
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function removeKey()
@@ -97,6 +96,6 @@ class ConfigAjax extends BaseAjax
         } else {
             ConfigManager::remove(Utils::init('key'), Utils::init('plugin', 'core'));
         }
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 }

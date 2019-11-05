@@ -17,10 +17,8 @@
 
 namespace NextDom\Ajax;
 
-use DB;
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
-use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
@@ -51,12 +49,12 @@ class ViewAjax extends BaseAjax
             throw new CoreException(__('Vue non trouvée. Vérifiez l\'iD'));
         }
         $view->remove();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function all()
     {
-        AjaxHelper::success(Utils::o2a(ViewManager::all()));
+        $this->ajax->success(Utils::o2a(ViewManager::all()));
     }
 
     public function get()
@@ -75,13 +73,13 @@ class ViewAjax extends BaseAjax
             foreach ($views as $view) {
                 $return[$view->getId()] = $view->toAjax(Utils::init('version', 'dview'), Utils::init('html'));
             }
-            AjaxHelper::success($return);
+            $this->ajax->success($return);
         } else {
             $view = ViewManager::byId(Utils::init('id'));
             if (!is_object($view)) {
                 throw new CoreException(__('Vue non trouvée. Vérifiez l\'ID'));
             }
-            AjaxHelper::success($view->toAjax(Utils::init('version', 'dview'), Utils::init('html')));
+            $this->ajax->success($view->toAjax(Utils::init('version', 'dview'), Utils::init('html')));
         }
     }
 
@@ -115,7 +113,7 @@ class ViewAjax extends BaseAjax
                 }
             }
         }
-        AjaxHelper::success(Utils::o2a($view));
+        $this->ajax->success(Utils::o2a($view));
     }
 
     public function getEqLogicviewZone()
@@ -134,7 +132,7 @@ class ViewAjax extends BaseAjax
             $infoViewDatat['html'] = $viewData->getLinkObject()->toHtml(Utils::init('version'));
             $return['viewData'][] = $infoViewDatat;
         }
-        AjaxHelper::success($return);
+        $this->ajax->success($return);
     }
 
     public function setEqLogicOrder()
@@ -157,7 +155,7 @@ class ViewAjax extends BaseAjax
         if ($sql != '') {
             DBHelper::exec($sql);
         }
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function setOrder()
@@ -172,7 +170,7 @@ class ViewAjax extends BaseAjax
                 $order++;
             }
         }
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function removeImage()
@@ -185,7 +183,7 @@ class ViewAjax extends BaseAjax
         $view->setImage('sha512', '');
         $view->save();
         @rrmdir(NEXTDOM_ROOT . '/public/img/view');
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function uploadImage()
@@ -221,6 +219,6 @@ class ViewAjax extends BaseAjax
         }
         $view->save();
         @rrmdir(NEXTDOM_ROOT . '/public/img/view');
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 }

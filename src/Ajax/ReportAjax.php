@@ -19,7 +19,6 @@ namespace NextDom\Ajax;
 
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
-use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\Utils;
 
@@ -40,7 +39,7 @@ class ReportAjax extends BaseAjax
         foreach (FileSystemHelper::ls($path, '*') as $value) {
             $return[$value] = array('name' => $value);
         }
-        AjaxHelper::success($return);
+        $this->ajax->success($return);
     }
 
     public function get()
@@ -50,7 +49,7 @@ class ReportAjax extends BaseAjax
         $return['path'] = $path;
         $return['type'] = Utils::init('type');
         $return['id'] = Utils::init('id');
-        AjaxHelper::success($return);
+        $this->ajax->success($return);
     }
 
     public function remove()
@@ -62,7 +61,7 @@ class ReportAjax extends BaseAjax
         if (file_exists($path)) {
             throw new CoreException(__('Impossible de supprimer : ') . $path);
         }
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function removeAll()
@@ -71,6 +70,6 @@ class ReportAjax extends BaseAjax
         foreach (FileSystemHelper::ls($path, '*') as $value) {
             unlink($path . $value);
         }
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 }

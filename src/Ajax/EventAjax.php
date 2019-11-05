@@ -18,7 +18,6 @@
 namespace NextDom\Ajax;
 
 use NextDom\Enums\UserRight;
-use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\EventManager;
 
@@ -34,6 +33,6 @@ class EventAjax extends BaseAjax
 
     protected function changes()
     {
-        AjaxHelper::success(EventManager::changes(Utils::init('datetime', 0), 59));
+        $this->ajax->success(EventManager::changes(Utils::init('datetime', 0), 59));
     }
 }

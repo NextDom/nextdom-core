@@ -45,12 +45,12 @@ class UserAjax extends BaseAjax
     {
         $user = UserManager::byLogin(Utils::init('login'));
         if (!is_object($user)) {
-            AjaxHelper::success(0);
+            $this->ajax->success(0);
         }
         if (NetworkHelper::getUserLocation() == 'internal') {
-            AjaxHelper::success(0);
+            $this->ajax->success(0);
         }
-        AjaxHelper::success($user->getOptions('twoFactorAuthentification', 0));
+        $this->ajax->success($user->getOptions('twoFactorAuthentification', 0));
     }
 
     public function login()
@@ -92,7 +92,7 @@ class UserAjax extends BaseAjax
                 setcookie('nextdom_token', AjaxHelper::getToken(), time() + 365 * 24 * 3600, "/", '', false, true);
             }
         }
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function getApikey()
@@ -100,14 +100,13 @@ class UserAjax extends BaseAjax
         if (!AuthentificationHelper::login(Utils::init('username'), Utils::init('password'), Utils::init('twoFactorCode'))) {
             throw new CoreException('Mot de passe ou nom d\'utilisateur incorrect');
         }
-        AjaxHelper::success(UserManager::getStoredUser()->getHash());
+        $this->ajax->success(UserManager::getStoredUser()->getHash());
     }
 
     public function validateTwoFactorCode()
     {
         AuthentificationHelper::init();
         AuthentificationHelper::isConnectedOrFail();
-        AjaxHelper::init();
         $currentUser = UserManager::getStoredUser();
         if ($currentUser !== null) {
             @session_start();
@@ -118,71 +117,65 @@ class UserAjax extends BaseAjax
                 $currentUser->save();
             }
             @session_write_close();
-            AjaxHelper::success($result);
+            $this->ajax->success($result);
         }
-        AjaxHelper::error('Problème d\'utilisateur');
+        $this->ajax->error('Problème d\'utilisateur');
     }
 
     public function removeTwoFactorCode()
     {
         AuthentificationHelper::init();
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init();
         $user = UserManager::byId(Utils::init('id'));
         if (!is_object($user)) {
             throw new CoreException('User ID inconnu');
         }
         $user->setOptions('twoFactorAuthentification', 0);
         $user->save();
-        AjaxHelper::success(true);
+        $this->ajax->success(true);
     }
 
     public function isConnect()
     {
         AuthentificationHelper::init();
         AuthentificationHelper::isConnectedOrFail();
-        AjaxHelper::init();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function refresh()
     {
         AuthentificationHelper::init();
         AuthentificationHelper::isConnectedOrFail();
-        AjaxHelper::init();
         @session_start();
         UserManager::getStoredUser()->refresh();
         @session_write_close();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function logout()
     {
         AuthentificationHelper::init();
         AuthentificationHelper::isConnectedOrFail();
-        AjaxHelper::init();
         AuthentificationHelper::logout();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function all()
     {
         AuthentificationHelper::init();
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init();
         $users = array();
         foreach (UserManager::all() as $user) {
             $user_info = Utils::o2a($user);
             $users[] = $user_info;
         }
-        AjaxHelper::success($users);
+        $this->ajax->success($users);
     }
 
     public function save()
     {
         AuthentificationHelper::init();
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init();
         $users = json_decode(Utils::init('users'), true);
         $user = null;
         foreach ($users as &$user_json) {
@@ -201,14 +194,13 @@ class UserAjax extends BaseAjax
         @session_start();
         UserManager::getStoredUser()->refresh();
         @session_write_close();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function remove()
     {
         AuthentificationHelper::init();
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init();
         if (ConfigManager::byKey('ldap::enable') == '1') {
             throw new CoreException(__('Vous devez désactiver l\'authentification LDAP pour pouvoir supprimer un utilisateur'));
         }
@@ -220,14 +212,13 @@ class UserAjax extends BaseAjax
             throw new CoreException('User ID inconnu');
         }
         $user->remove();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function saveProfils()
     {
         AuthentificationHelper::init();
         AuthentificationHelper::isConnectedOrFail();
-        AjaxHelper::init();
         $currentUser = UserManager::getStoredUser();
         $user_json = NextDomHelper::fromHumanReadable(json_decode(Utils::init('profils'), true));
         if (isset($user_json['id']) && $user_json['id'] != $currentUser->getId()) {
@@ -245,19 +236,18 @@ class UserAjax extends BaseAjax
         $currentUser->save();
         @session_write_close();
         EqLogicManager::clearCacheWidget();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function get()
     {
-        AjaxHelper::init();
-        AjaxHelper::success(NextDomHelper::toHumanReadable(Utils::o2a($_SESSION['user'])));
+        AuthentificationHelper::init();
+        $this->ajax->success(NextDomHelper::toHumanReadable(Utils::o2a(UserManager::getStoredUser())));
     }
 
     public function removeRegisterDevice()
     {
         AuthentificationHelper::init();
-        AjaxHelper::init();
         $user = null;
         if (Utils::init('key') == '' && Utils::init('user_id') == '') {
             AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -270,7 +260,7 @@ class UserAjax extends BaseAjax
                     $user->save();
                 }
             }
-            AjaxHelper::success();
+            $this->ajax->success();
         }
         if (Utils::init('user_id') != '') {
             AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -297,14 +287,13 @@ class UserAjax extends BaseAjax
             UserManager::getStoredUser()->save();
             @session_write_close();
         }
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function deleteSession()
     {
         AuthentificationHelper::init();
         AuthentificationHelper::isConnectedOrFail();
-        AjaxHelper::init();
         $sessions = SessionHelper::getSessionsList();
         if (isset($sessions[init('id')])) {
             $user = UserManager::byId($sessions[init('id')]['user_id']);
@@ -320,36 +309,33 @@ class UserAjax extends BaseAjax
             }
         }
         SessionHelper::deleteSession(Utils::init('id'));
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function testLdapConnection()
     {
         AuthentificationHelper::init();
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init();
         $connection = UserManager::connectToLDAP();
         if ($connection === false) {
             throw new CoreException();
         }
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function removeBanIp()
     {
         AuthentificationHelper::init();
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init();
         UserManager::removeBanIp();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function supportAccess()
     {
         AuthentificationHelper::init();
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        AjaxHelper::init();
         UserManager::supportAccess(Utils::init('enable'));
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 }

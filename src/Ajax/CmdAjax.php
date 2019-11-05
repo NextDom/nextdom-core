@@ -20,7 +20,6 @@ namespace NextDom\Ajax;
 use NextDom\Enums\CmdViewType;
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
-use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
@@ -42,7 +41,7 @@ class CmdAjax extends BaseAjax
     protected $CHECK_AJAX_TOKEN = true;
 
     /**
-     * Get command HTML render
+     * Get one or more command(s) HTML render
      *
      * @throws CoreException
      * @throws \ReflectionException
@@ -62,7 +61,7 @@ class CmdAjax extends BaseAjax
                     'id' => $cmd->getId(),
                 );
             }
-            AjaxHelper::success($result);
+            $this->ajax->success($result);
         } else {
             // Render one command
             $cmd = CmdManager::byId(Utils::init('id'));
@@ -72,7 +71,7 @@ class CmdAjax extends BaseAjax
             $result = [];
             $result['id'] = $cmd->getId();
             $result['html'] = $cmd->toHtml(Utils::init('version'), Utils::init('option'), Utils::init('cmdColor', null));
-            AjaxHelper::success($result);
+            $this->ajax->success($result);
         }
     }
 
@@ -103,7 +102,7 @@ class CmdAjax extends BaseAjax
         if (Utils::init('utid') != '') {
             $options['utid'] = Utils::init('utid');
         }
-        AjaxHelper::success($cmd->execCmd($options));
+        $this->ajax->success($cmd->execCmd($options));
     }
 
     /**
@@ -120,7 +119,7 @@ class CmdAjax extends BaseAjax
         if (!is_object($cmd)) {
             throw new CoreException(__('Cmd inconnu : ') . $objectName . '/' . $eqLogicName . '/' . $cmdName);
         }
-        AjaxHelper::success($cmd->getId());
+        $this->ajax->success($cmd->getId());
     }
 
     /**
@@ -137,7 +136,7 @@ class CmdAjax extends BaseAjax
         if (!is_object($cmd)) {
             throw new CoreException(__('Cmd inconnu : ') . $objectName . '/' . $cmdName, 9999);
         }
-        AjaxHelper::success(Utils::o2a($cmd));
+        $this->ajax->success(Utils::o2a($cmd));
     }
 
     /**
@@ -153,7 +152,7 @@ class CmdAjax extends BaseAjax
         if (!is_object($cmd)) {
             throw new CoreException(__('Commande inconnue : ') . $cmdId, 9999);
         }
-        AjaxHelper::success(NextDomHelper::toHumanReadable(Utils::o2a($cmd)));
+        $this->ajax->success(NextDomHelper::toHumanReadable(Utils::o2a($cmd)));
     }
 
     /**
@@ -165,7 +164,7 @@ class CmdAjax extends BaseAjax
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
         HistoryManager::copyHistoryToCmd(Utils::init('source_id'), Utils::init('target_id'));
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     /**
@@ -177,7 +176,7 @@ class CmdAjax extends BaseAjax
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
         NextDomHelper::replaceTag(array('#' . str_replace('#', '', Utils::init('source_id')) . '#' => '#' . str_replace('#', '', Utils::init('target_id')) . '#'));
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     /**
@@ -194,7 +193,7 @@ class CmdAjax extends BaseAjax
         if (!is_object($cmd)) {
             throw new CoreException(__('Commande inconnue : ') . $humanName, 9999);
         }
-        AjaxHelper::success(Utils::o2a($cmd));
+        $this->ajax->success(Utils::o2a($cmd));
     }
 
     /**
@@ -239,7 +238,7 @@ class CmdAjax extends BaseAjax
             $info['link'] = $scenario->getLinkToConfiguration();
             $return['scenario'][] = $info;
         }
-        AjaxHelper::success($return);
+        $this->ajax->success($return);
     }
 
     /**
@@ -249,7 +248,7 @@ class CmdAjax extends BaseAjax
      */
     public function getHumanCmdName()
     {
-        AjaxHelper::success(CmdManager::cmdToHumanReadable('#' . Utils::init('id') . '#'));
+        $this->ajax->success(CmdManager::cmdToHumanReadable('#' . Utils::init('id') . '#'));
     }
 
     /**
@@ -258,11 +257,11 @@ class CmdAjax extends BaseAjax
      */
     public function byEqLogic()
     {
-        AjaxHelper::success(Utils::o2a(CmdManager::byEqLogicId(Utils::init('eqLogic_id'))));
+        $this->ajax->success(Utils::o2a(CmdManager::byEqLogicId(Utils::init('eqLogic_id'))));
     }
 
     /**
-     * Get a command by his id
+     * Get a command by his id with eqLogic name and Object name
      *
      * @throws CoreException
      * @throws \ReflectionException
@@ -281,7 +280,7 @@ class CmdAjax extends BaseAjax
         if ($eqLogic->getObject_id() > 0) {
             $result['object_name'] = $eqLogic->getObject()->getName();
         }
-        AjaxHelper::success($result);
+        $this->ajax->success($result);
     }
 
     /**
@@ -300,7 +299,7 @@ class CmdAjax extends BaseAjax
         }
         Utils::a2o($cmd, $cmdAjaxData);
         $cmd->save();
-        AjaxHelper::success(Utils::o2a($cmd));
+        $this->ajax->success(Utils::o2a($cmd));
     }
 
     /**
@@ -321,7 +320,7 @@ class CmdAjax extends BaseAjax
             Utils::a2o($cmd, $cmdAjaxData);
             $cmd->save();
         }
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     /**
@@ -361,7 +360,7 @@ class CmdAjax extends BaseAjax
             $history->setValue($value);
             $history->save(null, true);
         }
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     /**
@@ -493,7 +492,7 @@ class CmdAjax extends BaseAjax
             $result['unite'] = Utils::init('unite');
         }
         $result['data'] = $data;
-        AjaxHelper::success($result);
+        $this->ajax->success($result);
     }
 
     /**
@@ -510,7 +509,7 @@ class CmdAjax extends BaseAjax
             throw new CoreException(__('Commande ID inconnu : ') . $cmdId);
         }
         $cmd->emptyHistory(Utils::init('date'));
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     /**
@@ -558,14 +557,14 @@ class CmdAjax extends BaseAjax
             }
             $eqLogic['eqLogic']->save(true);
         }
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     /**
      * Upload file from dashboard
      *
      * When file is uploaded, the method execute of the cmd is called with the filename in option.
-     * 
+     *
      * @throws CoreException
      */
     public function fileUpload()
@@ -577,16 +576,16 @@ class CmdAjax extends BaseAjax
 
         $filename = Utils::readUploadedFile($_FILES, "upload", $destDirectory, 8, []);
         if (!$filename) {
-            AjaxHelper::error(__('File error'));
+            $this->ajax->error(__('File error'));
         }
 
         $cmdId = Utils::init('cmdId');
         $cmd = CmdManager::byId($cmdId);
         if (!is_object($cmd)) {
-            AjaxHelper::error(__('Command not found : ') . $cmdId);
+            $this->ajax->error(__('Command not found : ') . $cmdId);
         }
 
-        $cmd->execute(['filename' => $destDirectory . '/' . $filename ]);
-        AjaxHelper::success();
+        $cmd->execute(['filename' => $destDirectory . '/' . $filename]);
+        $this->ajax->success();
     }
 }

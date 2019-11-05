@@ -301,7 +301,7 @@ class NetworkHelper
      */
     public static function getInterfaceIp($_interface)
     {
-        $ip = trim(shell_exec(SystemHelper::getCmdSudo() . "ip addr show " . $_interface . " | grep \"inet .*" . $_interface . "\" | awk '{print $2}' | cut -d '/' -f 1"));
+        $ip = trim(shell_exec(SystemHelper::getCmdSudo() . "ip addr show " . $_interface . " 2> /dev/null | grep \"inet .*" . $_interface . "\" | awk '{print $2}' | cut -d '/' -f 1"));
         if (filter_var($ip, FILTER_VALIDATE_IP)) {
             return $ip;
         }
