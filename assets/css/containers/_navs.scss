@@ -51,7 +51,11 @@
 .nav>.label-log>a {
     padding: 10px 10px;
 }
-.nav-tabs-custom>.nav-tabs>li.header>.fa, .nav-tabs-custom>.nav-tabs>li.header>.fas, .nav-tabs-custom>.nav-tabs>li.header>.glyphicon, .nav-tabs-custom>.nav-tabs>li.header>.ion {
+.nav-tabs-custom>.nav-tabs>li.header>.fa,
+.nav-tabs-custom>.nav-tabs>li.header>.fas,
+.nav-tabs-custom>.nav-tabs>li.header>.fab,
+.nav-tabs-custom>.nav-tabs>li.header>.glyphicon,
+.nav-tabs-custom>.nav-tabs>li.header>.ion {
     margin-right: 8px !important;
 }
 

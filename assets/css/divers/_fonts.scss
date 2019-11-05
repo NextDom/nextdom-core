@@ -28,12 +28,14 @@ body, h1, h2, h3, h4, h5, h6 {
 /* Headers */
 .main-header .navbar .nav > li.user > a > .fa,
 .main-header .navbar .nav > li.user > a > .fas,
+.main-header .navbar .nav > li.user > a > .fab,
 .main-header .navbar .nav > li.user > a > .glyphicon,
 .main-header .navbar .nav > li.user > a > .ion {
   margin-right: 5px;
 }
 .content-header > .breadcrumb > li > a > .fa,
 .content-header > .breadcrumb > li > a > .fas,
+.content-header > .breadcrumb > li > a > .fab,
 .content-header > .breadcrumb > li > a > .glyphicon,
 .content-header > .breadcrumb > li > a > .ion {
   margin-right: 5px;
@@ -42,6 +44,7 @@ body, h1, h2, h3, h4, h5, h6 {
 /* Navs */
 .nav-pills > li > a > .fa,
 .nav-pills > li > a > .fas,
+.nav-pills > li > a > .fab,
 .nav-pills > li > a > .glyphicon,
 .nav-pills > li > a > .ion {
   margin-right: 5px;
@@ -52,6 +55,7 @@ body, h1, h2, h3, h4, h5, h6 {
 }
 .nav-tabs-custom > .nav-tabs > li.header > .fa,
 .nav-tabs-custom > .nav-tabs > li.header > .fas,
+.nav-tabs-custom > .nav-tabs > li.header > .fab,
 .nav-tabs-custom > .nav-tabs > li.header > .glyphicon,
 .nav-tabs-custom > .nav-tabs > li.header > .ion {
   margin-right: 5px;
@@ -59,6 +63,7 @@ body, h1, h2, h3, h4, h5, h6 {
 .navbar-nav > .notifications-menu > .dropdown-menu > li .menu > li > a > .glyphicon,
 .navbar-nav > .notifications-menu > .dropdown-menu > li .menu > li > a > .fa,
 .navbar-nav > .notifications-menu > .dropdown-menu > li .menu > li > a > .fas,
+.navbar-nav > .notifications-menu > .dropdown-menu > li .menu > li > a > .fab,
 .navbar-nav > .notifications-menu > .dropdown-menu > li .menu > li > a > .ion {
   width: 20px;
 }
@@ -66,6 +71,7 @@ body, h1, h2, h3, h4, h5, h6 {
 /* Btns */
 .btn-app > .fa,
 .btn-app > .fas,
+.btn-app > .fab,
 .btn-app > .glyphicon,
 .btn-app > .ion,
 .btn-app > .icon {
@@ -76,6 +82,7 @@ body, h1, h2, h3, h4, h5, h6 {
 /* Panels */
 .user-panel > .info > a > .fa,
 .user-panel > .info > a > .fas,
+.user-panel > .info > a > .fab,
 .user-panel > .info > a > .ion,
 .user-panel > .info > a > .glyphicon {
   margin-right: 3px;
@@ -84,6 +91,7 @@ body, h1, h2, h3, h4, h5, h6 {
 /* Sidebar */
 .sidebar-menu > li > a > .fa,
 .sidebar-menu > li > a > .fas,
+.sidebar-menu > li > a > .fab,
 .sidebar-menu > li > a > .glyphicon,
 .sidebar-menu > li > a > .ion {
   width: 20px;
@@ -94,11 +102,13 @@ body, h1, h2, h3, h4, h5, h6 {
 .dropdown-menu > li > a > .glyphicon,
 .dropdown-menu > li > a > .fa,
 .dropdown-menu > li > a > .fas,
+.dropdown-menu > li > a > .fab,
 .dropdown-menu > li > a > .ion {
   margin-right: 10px;
 }
 .treeview-menu > li > a > .fa,
 .treeview-menu > li > a > .fas,
+.treeview-menu > li > a > .fab,
 .treeview-menu > li > a > .glyphicon,
 .treeview-menu > li > a > .ion,
 .treeview-menu > li > a > .icon {
@@ -110,6 +120,7 @@ body, h1, h2, h3, h4, h5, h6 {
 /* Boxs */
 .box-header > .fa,
 .box-header > .fas,
+.box-header > .fab,
 .box-header > .glyphicon,
 .box-header > .ion,
 .box-header .box-title {
@@ -121,6 +132,7 @@ body, h1, h2, h3, h4, h5, h6 {
 }
 .box-header > .fa,
 .box-header > .fas,
+.box-header > .fab,
 .box-header > .glyphicon,
 .box-header > .ion {
   margin-right: 5px;

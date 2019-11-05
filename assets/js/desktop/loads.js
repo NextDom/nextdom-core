@@ -265,6 +265,8 @@ $(function () {
         });
     }
 
+    // Init help button
+    $('#bt_getHelpPage').attr('data-page',getUrlVars('p')).attr('data-plugin',getUrlVars('m'));
     // Help triggers declaration
     $('#bt_getHelpPage').on('click',function(){
         nextdom.getDocumentationUrl({
@@ -306,7 +308,7 @@ $(function () {
         modal: false,
         closeText: '',
         height: (jQuery(window).height() - 100),
-        width: ((jQuery(window).width() - 50) < 1500) ? (jQuery(window).width() - 50) : 1500,
+        width: (jQuery(window).width() < 1000) ? "96%" : ((jQuery(window).width() < 1300) ? "80%" : "70%"),
         position: {my: 'center', at: 'center', of: window},
         open: function () {
             $("body").css({overflow: 'hidden'});
@@ -324,7 +326,7 @@ $(function () {
         modal: false,
         closeText: '',
         height: (jQuery(window).height() - 100),
-        width: ((jQuery(window).width() - 50) < 1500) ? (jQuery(window).width() - 50) : 1500,
+        width: (jQuery(window).width() < 1000) ? "96%" : ((jQuery(window).width() < 1300) ? "80%" : "70%"),
         position: {my: 'center', at: 'center', of: window},
         open: function () {
             $("body").css({overflow: 'hidden'});
