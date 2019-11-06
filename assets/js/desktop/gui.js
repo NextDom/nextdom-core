@@ -68,6 +68,9 @@ $(window).resize(function () {
 
     // Gui automatic adjusting
     adjustNextDomTheme();
+
+    // Modale resize
+    modalesAdjust();
 });
 
 /**
@@ -142,7 +145,7 @@ window.onscroll = function () {
         }
 
         // If double header because of little resolution
-        if ($(window).width() < 768) {
+        if ($(window).width() < 767) {
            sidemenuDoubleHeaderPadding = 50;
         }
 
@@ -393,4 +396,15 @@ function refreshUpdateNumber() {
      $('#horloge_date').text(date.toLocaleDateString(locale, dateFormat));
      // Time
      $('#horloge_time').text(date.toLocaleTimeString(locale));
+ }
+
+ /**
+  * Adjust size and position of jquery modales
+  */
+ function modalesAdjust(){
+     // Modale resize
+     jQuery('#md_modal').dialog('option','width',(jQuery(window).width() < 1000) ? "96%" : ((jQuery(window).width() < 1300) ? "80%" : "70%"));
+     jQuery('#md_modal').dialog('option','position',{my: 'center', at: 'center', of: window});
+     jQuery('#md_modal2').dialog('option','width',(jQuery(window).width() < 1000) ? "96%" : ((jQuery(window).width() < 1300) ? "80%" : "70%"));
+     jQuery('#md_modal2').dialog('option','position',{my: 'center', at: 'center', of: window});
  }
