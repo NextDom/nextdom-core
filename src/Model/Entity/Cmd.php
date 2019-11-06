@@ -1755,18 +1755,22 @@ class Cmd implements EntityInterface
         $influxDbConf = ConfigManager::byKeys(['influxDbIp', 'influxDbPort', 'influxDbDatabase']);
 
         if ($influxDbConf['influxDbIp'] !== '') {
-            $client = new \InfluxDB\Client($influxDbConf['influxDbIp'], $influxDbConf['influxDbPort']);
-            $influxDbDatabase = $client->selectDB($influxDbConf['influxDbDatabase']);
+            if ($this->getType() == 'info' ) {
+                if ($this->getSubType() == 'numeric' || $this->getSubType() == 'binary') {
+                    $client = new \InfluxDB\Client($influxDbConf['influxDbIp'], $influxDbConf['influxDbPort']);
+                    $influxDbDatabase = $client->selectDB($influxDbConf['influxDbDatabase']);
 
-            $points = [
-                new \InfluxDB\Point(
-                    $this->getUnite(),
-                    $valueToSend,
-                    ['equipment' => $this->getHumanName()]
-                ),
-            ];
+                    $points = [
+                        new \InfluxDB\Point(
+                            $this->getUnite(),
+                            $valueToSend,
+                            ['equipment' => $this->getHumanName()]
+                        ),
+                    ];
 
-            $influxDbDatabase->writePoints($points);
+                    $influxDbDatabase->writePoints($points);
+                }
+            }
         }
     }
 
