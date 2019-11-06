@@ -18,10 +18,10 @@
 namespace NextDom\Enums;
 
 /**
- * Class CmdViewType
+ * Class EventType
  * @package NextDom\Enums
  */
-class CmdViewType extends Enum
+class EventType extends Enum
 {
-    const DASHBOARD = 'dashboard';
+    const CMD_UPDATE = 'cmd::update';
 }

@@ -216,23 +216,36 @@ class FileSystemHelper
     public static function getTemplateFileContent($folder, $version, $filename, $pluginId = '' , $theme = ''): string
     {
         $result = '';
-        $filePath = '';
+        $filePath = NEXTDOM_ROOT . '/';
         if ($pluginId == '') {
             if ($folder === 'core') {
                 $folder = 'views';
             }
             if ($theme == '') {
-                $filePath = NEXTDOM_ROOT . '/' . $folder . '/templates/' . $version . '/' . $filename . '.html';
+                $filePath .= $folder . '/templates/' . $version . '/' . $filename . '.html';
             } else {
-                $filePath = NEXTDOM_ROOT . '/' . $folder . '/templates/' . $version . '/themes/' . $theme . '/' . $filename . '.html';
+                $filePath .= $folder . '/templates/' . $version . '/themes/' . $theme . '/' . $filename . '.html';
             }
         } else {
-            $filePath = NEXTDOM_ROOT . '/plugins/' . $pluginId . '/core/template/' . $version . '/' . $filename . '.html';
+            $filePath = 'plugins/' . $pluginId . '/core/template/' . $version . '/' . $filename . '.html';
         }
         if (file_exists($filePath)) {
             $result = file_get_contents($filePath);
         }
         return $result;
+    }
+
+    /**
+     * Read content of a core template file
+     * @param string $version View version
+     * @param string $filename Name of the template file
+     * @param string $pluginId Plugin (todo: remove)
+     * @param string $theme Theme if necessary
+     * @return string
+     */
+    public static function getCoreTemplateFileContent($version, $filename, $pluginId = '', $theme = ''): string
+    {
+        self::getTemplateFileContent($version, $filename, $pluginId, $theme);
     }
 
     /**

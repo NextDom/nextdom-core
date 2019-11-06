@@ -18,10 +18,11 @@
 namespace NextDom\Enums;
 
 /**
- * Class CmdViewType
+ * Class LogTarget
  * @package NextDom\Enums
  */
-class CmdViewType extends Enum
+class LogTarget extends Enum
 {
-    const DASHBOARD = 'dashboard';
+    const CMD = 'cmd';
+    const EVENT = 'event';
 }

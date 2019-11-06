@@ -18,10 +18,17 @@
 namespace NextDom\Enums;
 
 /**
- * Class CmdViewType
+ * Class CmdSubType
  * @package NextDom\Enums
  */
-class CmdViewType extends Enum
+class CmdSubType extends Enum
 {
-    const DASHBOARD = 'dashboard';
+    const NUMERIC = 'numeric';
+    const BINARY = 'binary';
+    const STRING = 'string';
+    const OTHER = 'other';
+    const SLIDER = 'slider';
+    const COLOR = 'color';
+    const MESSAGE = 'message';
+    const SELECT = 'select';
 }

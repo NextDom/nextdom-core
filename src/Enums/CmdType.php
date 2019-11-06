@@ -18,10 +18,12 @@
 namespace NextDom\Enums;
 
 /**
- * Class CmdViewType
+ * Class CmdType
  * @package NextDom\Enums
  */
-class CmdViewType extends Enum
+class CmdType extends Enum
 {
-    const DASHBOARD = 'dashboard';
+    const INFO = 'info';
+    const ACTION = 'action';
+    const STRING = 'string';
 }

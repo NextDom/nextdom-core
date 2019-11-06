@@ -1577,7 +1577,7 @@ class EqLogic implements EntityInterface
             if (isset($_SESSION) && is_object(UserManager::getStoredUser()) && UserManager::getStoredUser()->getOptions('widget::theme', null) !== null) {
                 $default_widgetTheme = UserManager::getStoredUser()->getOptions('widget::theme');
             }
-            self::$_templateArray[$version] = FileSystemHelper::getTemplateFileContent('views', $version, 'eqLogic', '', $default_widgetTheme);
+            self::$_templateArray[$version] = FileSystemHelper::getCoreTemplateFileContent($version, 'eqLogic', '', $default_widgetTheme);
 
         }
         return $this->postToHtml($viewType, Utils::templateReplace($replace, self::$_templateArray[$version]));
