@@ -207,50 +207,6 @@ function initEvents() {
         });
     });
 
-    // Remove register device from the list
-    $('.bt_removeRegisterDevice').on('click', function () {
-        var deviceKey = $(this).closest('tr').attr('data-key');
-        nextdom.user.removeRegisterDevice({
-            key: deviceKey,
-            error: function (error) {
-                notify('Erreur', error.message, 'error');
-            },
-            success: function (data) {
-                modifyWithoutSave = false;
-                window.location.reload();
-            }
-        });
-    });
-
-    // Remove all register devices
-    $('#bt_removeAllRegisterDevice').on('click', function () {
-          nextdom.user.removeRegisterDevice({
-            key: '',
-            error: function (error) {
-                notify('Erreur', error.message, 'error');
-            },
-            success: function (data) {
-                modifyWithoutSave = false;
-                window.location.reload();
-            }
-        });
-    });
-
-    // Delete all sessions
-    $('.bt_deleteSession').on('click', function () {
-        var id = $(this).closest('tr').attr('data-id');
-        nextdom.user.deleteSession({
-            id: id,
-            error: function (error) {
-                notify('Erreur', error.message, 'error');
-            },
-            success: function (data) {
-                modifyWithoutSave = false;
-                window.location.reload();
-            }
-        });
-    });
-
     // Uplod new picture
     $('#user_avatar').fileupload({
         dataType: 'json',
