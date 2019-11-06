@@ -308,65 +308,6 @@
                         </div>
                     </div>
                 </fieldset>
-
-                <fieldset class="legend-section">
-                    <legend>{{ 'Sessions actives' }}</legend>
-                    <table class="table table-condensed table-bordered">
-                        <thead>
-                        <tr>
-                            <th>{{ 'common.id' | trans }}</th>
-                            <th>{{ 'IP' }}</th>
-                            <th>{{ 'common.date' | trans }}</th>
-                            <th>{{ 'common.actions' | trans }}</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for id, session in profilsSessionsList %}
-                            {% if session['user_id'] == profilsUser.getId() %}
-                                <tr data-id="{{ id }}">
-                                    <td>{{ id }}</td>
-                                    <td>{{ session['ip'] }}</td>
-                                    <td>{{ session['datetime'] }}</td>
-                                    <td><a class="btn btn-sm btn-warning bt_deleteSession pull-right"><i class="fas fa-sign-out-alt"></i>{{ 'Déconnecter' }}</a></td>
-                                </tr>
-                            {% endif %}
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </fieldset>
-
-                <fieldset class="legend-section">
-                    <div class="col-md-9 col-xs-12 container-fluid">
-                        <legend>{{ 'Périphériques enregistrés' }}</legend>
-                    </div>
-                    <div class="col-md-3 col-xs-12 container-fluid">
-                        <div class="box-tools pull-right padding-bottom">
-                            <a class="btn btn-warning" id="bt_removeAllRegisterDevice"><i class="fas fa-trash"></i>{{ 'Supprimer tout' }}</a>
-                        </div>
-                    </div>
-                    <table class="table table-bordered table-condensed">
-                        <thead>
-                        <tr>
-                            <th>{{ 'Identification' }}</th>
-                            <th>{{ 'IP' }}</th>
-                            <th>{{ 'Date dernière utilisation' }}</th>
-                            <th>{{ 'common.action' | trans }}</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for sessionCode, sessionData in profilsUser.getOptions('registerDevice') %}
-                            <tr data-key="{{ sessionCode }}">
-                                <td>{{ sessionCode|slice(0, 10) }}</td>
-                                <td>{{ sessionData['ip'] }}</td>
-                                <td>{{ sessionData['datetime'] }}</td>
-                                <td>
-                                    <a class="btn btn-warning btn-sm bt_removeRegisterDevice pull-right"><i class="fas fa-trash"></i>{{ 'common.remove' | trans }}</a>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </fieldset>
             </div>
 
             <!-- Notification tab -->
