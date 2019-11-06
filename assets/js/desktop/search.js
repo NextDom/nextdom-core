@@ -78,39 +78,37 @@ $(function () {
  */
 function activateGlobalSearch() {
     var fullUrl = document.location.toString();
-    if (fullUrl.indexOf('rescue') === -1) {
-        var page ='';
-        var availableSearchPage = [
-            "plugin",
-            "dashboard",
-            "interact",
-            "scenario",
-            "object",
-            "realtime",
-            "display",
-            "database",
-            "note",
-            "system",
-            "log",
-            "market",
-            "marketJee",
-            "update.list",
-            "update",
-            "health",
-        ];
-        if (fullUrl.indexOf('p=') != -1) {
-            page = fullUrl.split('p=')[1].replace('#', '').split('&')[0];
-        } else {
-              if (fullUrl.indexOf('modal=') != -1) {
-                  page = fullUrl.split('modal=')[1].replace('#', '').split('&')[0];
-              }
-        }
+    var page ='';
+    var availableSearchPage = [
+        "plugin",
+        "dashboard",
+        "interact",
+        "scenario",
+        "object",
+        "realtime",
+        "display",
+        "database",
+        "note",
+        "system",
+        "log",
+        "market",
+        "marketJee",
+        "update.list",
+        "update",
+        "health",
+    ];
+    if (fullUrl.indexOf('p=') != -1) {
+        page = fullUrl.split('p=')[1].replace('#', '').split('&')[0];
+    } else {
+          if (fullUrl.indexOf('modal=') != -1) {
+              page = fullUrl.split('modal=')[1].replace('#', '').split('&')[0];
+          }
+    }
 
-        if(jQuery.inArray(page, availableSearchPage) != -1) {
-            $("#generalSearch").prop('disabled', false);
-        } else {
-            $("#generalSearch").prop('disabled', true);
-        }
+    if(jQuery.inArray(page, availableSearchPage) != -1) {
+        $("#generalSearch").prop('disabled', false);
+    } else {
+        $("#generalSearch").prop('disabled', true);
     }
 }
 

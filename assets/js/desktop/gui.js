@@ -230,46 +230,37 @@ window.onscroll = function () {
          alertHeaderHeight = $('.alert-header').height();
          alertHeaderMargin = 15;
      }
-     var fullUrl = document.location.toString();
-     if (fullUrl.indexOf('rescue') === -1) {
-         if ($('*').hasClass("content-header")) {
-             var scrollLimit = 14 + alertHeaderHeight;
-             $(".content-header").each(function() {
-                 var container = $(this).parent();
-                 if (!container.hasClass("ui-dialog-content") && !container.parent().hasClass("ui-dialog-content")) {
-                     $(this).css("padding-right", paddingSideClose);
-                     if (init || container.css("display")!="none") {
-                         if (container.css("display")=="none") {
-                             container.show();
-                             headerHeight = container.children('.content-header').height();
-                             container.hide();
-                         } else {
-                             headerHeight = container.children('.content-header').height();
-                         }
-                         var scrollValue = document.documentElement.scrollTop;
-                         if (scrollValue > scrollLimit) {
-                             container.children(".content-header").css("top", headerSize - 15);
-                             container.children(".content").css("padding-top", headerHeight + 30);
-                             container.children(".content-header").children("div").removeClass('scroll-shadow').addClass('fixed-shadow');
-                         } else {
-                             container.children(".content-header").css("top", headerSize - scrollValue + alertHeaderHeight + alertHeaderMargin);
-                             container.children(".content").css("padding-top", headerHeight + 30 - alertHeaderMargin);
-                             container.children(".content-header").children("div").removeClass('fixed-shadow').addClass('scroll-shadow');
-                         }
-                         container.children(".content-header").show();
+     if ($('*').hasClass("content-header")) {
+         var scrollLimit = 14 + alertHeaderHeight;
+         $(".content-header").each(function() {
+             var container = $(this).parent();
+             if (!container.hasClass("ui-dialog-content") && !container.parent().hasClass("ui-dialog-content")) {
+                 $(this).css("padding-right", paddingSideClose);
+                 if (init || container.css("display")!="none") {
+                     if (container.css("display")=="none") {
+                         container.show();
+                         headerHeight = container.children('.content-header').height();
+                         container.hide();
+                     } else {
+                         headerHeight = container.children('.content-header').height();
                      }
+                     var scrollValue = document.documentElement.scrollTop;
+                     if (scrollValue > scrollLimit) {
+                         container.children(".content-header").css("top", headerSize - 15);
+                         container.children(".content").css("padding-top", headerHeight + 30);
+                         container.children(".content-header").children("div").removeClass('scroll-shadow').addClass('fixed-shadow');
+                     } else {
+                         container.children(".content-header").css("top", headerSize - scrollValue + alertHeaderHeight + alertHeaderMargin);
+                         container.children(".content").css("padding-top", headerHeight + 30 - alertHeaderMargin);
+                         container.children(".content-header").children("div").removeClass('fixed-shadow').addClass('scroll-shadow');
+                     }
+                     container.children(".content-header").show();
                  }
-             });
-         } else {
-             $(".content").css("padding-top", 15);
-         }
-      } else {
-          $(".content-header").css("padding-right", 15);
-          $(".content-header").css("top", 50);
-          $(".content").css("padding-top", 30);
-          // Hide back button
-          $(".content-header").find(".fa-chevron-left").parent().hide();
-      }
+             }
+         });
+     } else {
+         $(".content").css("padding-top", 15);
+     }
  }
 
  /**

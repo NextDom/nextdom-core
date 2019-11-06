@@ -288,15 +288,6 @@ plugin:
     security: Sécurité
     automation-protocol: Protocole domotique
 
-menu_rescue:
-  system: Système
-  database: Base de données
-  editor: Editeur
-  personalization: Personalisation
-  backup: Sauvegarde
-  task_engine: Moteur de tâches
-  logs: Journaux
-
 welcome:
   title: Bienvenue dans %productName%
   congrats: Félicitations
