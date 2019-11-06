@@ -77,6 +77,7 @@ $(function () {
  * Search input field activation on dedicated pages
  */
 function activateGlobalSearch() {
+    var fullUrl = document.location.toString();
     var page ='';
     var availableSearchPage = [
         "plugin",
