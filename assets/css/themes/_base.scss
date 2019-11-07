@@ -98,8 +98,8 @@
 
 /* Scrollbar */
 ::-webkit-scrollbar-thumb {
-  background: map_get($color_theme, 'color1')CC !important;
-  background-color: map_get($color_theme, 'color1')CC !important;
+  background: map_get($color_theme, 'color1') !important;
+  background-color: map_get($color_theme, 'color1') !important;
 }
 
 /* Fabs */
@@ -660,7 +660,9 @@ pre::selection {
 .objectListContainer .objectSummaryParent {
   color: map_get($color_theme, 'color10') !important;
 }
-.accordion-toggle .fas {
+.accordion-toggle .fa,
+.accordion-toggle .fas,
+.accordion-toggle .fab {
   color: map_get($color_theme, 'color10') !important;
 }
 
