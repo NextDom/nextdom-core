@@ -36,6 +36,7 @@ api:
   access-plugins-api-key: "Access and plugins API keys"
   api-for-plugin: "API for the plugin"
   no-api-plugin: "No plugin has API keys..."
+  no-api: "Unavailable"
 
 cache:
   alert: "Caution : any changes to the cache engine require a restart of your "
