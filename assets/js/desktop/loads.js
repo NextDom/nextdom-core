@@ -278,9 +278,6 @@ $(function () {
             }
         });
     });
-    $('body').on( 'click','.bt_pageHelp', function () {
-        showHelpModal($(this).attr('data-name'), $(this).attr('data-plugin'));
-    });
 
     // Help modal trigger declaration
     $("#md_pageHelp").dialog({
@@ -461,37 +458,4 @@ function loadPage(pageUrl,noPushHistory){
     });
 
     return;
-}
-
-/**
- * Help modal loading
- *
- * @param helpName help file or link name
- * @param pluginName plugin name if the help file or link concern a plugin
- */
-function showHelpModal(helpName, pluginName) {
-    if (init(pluginName) != '' && pluginName != undefined) {
-        $('#div_helpWebsite').load('index.php?v=d&modal=help.website&page=doc_plugin_' + pluginName + '.php #primary', function () {
-            if ($('#div_helpWebsite').find('.alert.alert-danger').length > 0 || $.trim($('#div_helpWebsite').text()) == '') {
-                $('a[href="#div_helpSpe"]').click();
-                $('a[href="#div_helpWebsite"]').hide();
-            } else {
-                $('a[href="#div_helpWebsite"]').show();
-                $('a[href="#div_helpWebsite"]').click();
-            }
-        });
-        $('#div_helpSpe').load('index.php?v=d&plugin=' + pluginName + '&modal=help.' + init(helpName));
-    } else {
-        $('#div_helpWebsite').load('index.php?v=d&modal=help.website&page=doc_' + init(helpName) + '.php #primary', function () {
-            if ($('#div_helpWebsite').find('.alert.alert-danger').length > 0 || $.trim($('#div_helpWebsite').text()) == '') {
-                $('a[href="#div_helpSpe"]').click();
-                $('a[href="#div_helpWebsite"]').hide();
-            } else {
-                $('a[href="#div_helpWebsite"]').show();
-                $('a[href="#div_helpWebsite"]').click();
-            }
-        });
-        $('#div_helpSpe').load('index.php?v=d&modal=help.' + init(helpName));
-    }
-    $('#md_pageHelp').dialog('open');
 }
