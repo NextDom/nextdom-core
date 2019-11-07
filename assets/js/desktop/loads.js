@@ -270,8 +270,8 @@ $(function () {
     // Help triggers declaration
     $('#bt_getHelpPage').on('click',function(){
         nextdom.getDocumentationUrl({
-            plugin: $('#bt_getHelpPage').attr('data-plugin'),
-            page: $('#bt_getHelpPage').attr('data-page'),
+            plugin: $(this).attr('data-plugin'),
+            page: $(this).attr('data-page'),
             error: function(error) {
                 notify("Erreur", error.message, 'error');
             },
