@@ -52,7 +52,7 @@ class Utils
      * Add javascript variable in HTML code
      *
      * @param string $varName Name of javascript variable
-     * @param string $varValue Value of the javascript variable
+     * @param string|array $varValue Value of the javascript variable
      */
     public static function sendVarToJs(string $varName, $varValue)
     {
@@ -63,7 +63,7 @@ class Utils
      * Convert variable in javascript format
      *
      * @param string $varName Nom de la variable
-     * @param mixed $varValue Valeur
+     * @param string|array $varValue Valeur
      *
      * @return string Déclaration javascript
      */
