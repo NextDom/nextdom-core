@@ -265,13 +265,17 @@ $(function () {
         });
     }
 
-    // Init help button
-    $('#bt_getHelpPage').attr('data-page',getUrlVars('p')).attr('data-plugin',getUrlVars('m'));
     // Help triggers declaration
     $('#bt_getHelpPage').on('click',function(){
+        // Init help button
+        var pageName = getUrlVars('p');
+        var pluginName = getUrlVars('m');
+        if (pluginName === false) {
+            pluginName = '';
+        }
         nextdom.getDocumentationUrl({
-            plugin: $(this).attr('data-plugin'),
-            page: $(this).attr('data-page'),
+            plugin: pluginName,
+            page: pageName,
             error: function(error) {
                 notify("Erreur", error.message, 'error');
             },
@@ -454,10 +458,5 @@ function loadPage(pageUrl,noPushHistory){
 
         // Post Inits launch
         postInitPage();
-
-        // Init help button
-        $('#bt_getHelpPage').attr('data-page',getUrlVars('p')).attr('data-plugin',getUrlVars('m'));
     });
-
-    return;
 }

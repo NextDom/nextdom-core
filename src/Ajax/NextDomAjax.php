@@ -86,39 +86,52 @@ class NextDomAjax extends BaseAjax
         $this->ajax->success($return);
     }
 
+    /**
+     * Get documentation link
+     *
+     * @throws CoreException
+     */
     public function getDocumentationUrl()
     {
         AuthentificationHelper::isConnectedOrFail();
         $this->ajax->checkToken();
-        $pluginId = Utils::init('plugin');
-        $plugin = null;
-        if ($pluginId != '' || $pluginId == 'false') {
-            try {
-                $plugin = PluginManager::byId($pluginId);
-            } catch (\Exception $e) {
 
-            }
-        }
-        if (isset($plugin) && is_object($plugin)) {
-            if ($plugin->getDocumentation() != '') {
-                $this->ajax->success($plugin->getDocumentation());
+        $pluginId = Utils::init('plugin');
+        if ($pluginId !== '') {
+            $plugin = PluginManager::byId($pluginId);
+            if (is_object($plugin)) {
+                if ($plugin->getDocumentation() !== '') {
+                    $this->ajax->success($plugin->getDocumentation());
+                }
+                else {
+                    $this->ajax->error(__('Ce plugin ne possède pas de documentation'));
+                }
             }
         } else {
-            $page = Utils::init('page');
             $adminPages = ['api','cache','network', 'security', 'services', 'realtime', 'commandes', 'eqlogic', 'general', 'links'];
             $noDocPages = ['connection','firstUse','note'];
-            $redirectPage = ['view_edit' => 'view', 'plan' => 'design', 'plan3d' => 'design3d', 'scenarioAssist' => 'scenario', 'users' => 'user',
-                            'timeline' => 'history', 'interat_config' => 'interact', 'log_config' => 'log', 'summary' => 'display', 'report_config' => 'report',
-                            'update-view' => 'update'];
-            if (in_array($page, $noDocPages)) {
-                AjaxHelper::success('https://jeedom.github.io/documentation/');
+            $redirectPage = ['view_edit' => 'view',
+                             'plan' => 'design',
+                             'plan3d' => 'design3d',
+                             'scenarioAssist' => 'scenario',
+                             'users' => 'user',
+                             'timeline' => 'history',
+                             'interact_config' => 'interact',
+                             'log_config' => 'log',
+                             'summary' => 'display',
+                             'report_config' => 'report',
+                             'update-view' => 'update'];
+
+            $documentationPage = Utils::init('page');
+            if (in_array($documentationPage, $noDocPages)) {
+                $this->ajax->success('https://jeedom.github.io/documentation/');
             } else {
-                if (in_array($page, $adminPages)) {
-                    $page = 'administration';
-                } elseif (array_key_exists ($page, $redirectPage)) {
-                    $page = $redirectPage[$page];
+                if (in_array($documentationPage, $adminPages)) {
+                    $documentationPage = 'administration';
+                } elseif (array_key_exists($documentationPage, $redirectPage)) {
+                    $documentationPage = $redirectPage[$documentationPage];
                 }
-                $this->ajax->success('https://jeedom.github.io/core/' . ConfigManager::byKey('language', 'core', 'fr_FR') . '/' . secureXSS($page));
+                $this->ajax->success('https://jeedom.github.io/core/' . ConfigManager::byKey('language', 'core', 'fr_FR') . '/' . secureXSS($documentationPage));
             }
         }
         throw new CoreException(__('Aucune documentation trouvée'), -1234);
