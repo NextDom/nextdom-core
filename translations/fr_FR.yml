@@ -36,6 +36,7 @@ api:
   access-plugins-api-key: "Accès et clés API Plugins"
   api-for-plugin: "API pour le plugin"
   no-api-plugin: "Aucun plugin ne dispose de clés API..."
+  no-api: "Indisponible"
 
 cache:
   alert: "Attention : toute modification du moteur de cache nécessite un redémarrage de votre "

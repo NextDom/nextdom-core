@@ -114,6 +114,7 @@ function copyInstallCode() {
        window.getSelection().addRange(selectedRange);
     }
     document.execCommand('copy');
+    notify("Info", '{{Code d\'installation copié !}}', 'success');
 }
 
 /**
