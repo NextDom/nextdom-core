@@ -27,6 +27,7 @@ class CmdConfiguration extends Enum
     const ACTION_CHECK_CMD = 'actionCheckCmd';
     const CALCUL_VALUE_OFFSET = 'calculValueOffset';
     const CMD_CACHE_ATTR = 'cmdCacheAttr';
+    const DENY_VALUES = 'denyValues';
     const HISTORIZE_ROUND = 'historizeRound';
     const LAST_CMD_VALUE = 'lastCmdValue';
     const LIST_VALUE = 'listValue';
@@ -34,12 +35,16 @@ class CmdConfiguration extends Enum
     const MIN_VALUE_REPLACE = 'minValueReplace';
     const MAX_VALUE = 'maxValue';
     const MAX_VALUE_REPLACE = 'maxValueReplace';
-    const REPEAT_EVENT_MGMT = 'repeatEventManagement';
-    const RETURN_STATE_VALUE = 'returnStateValue';
-    const RETURN_STATE_TIME = 'returnStateTime';
     const NEVER_FAIL = 'nerverFail';
+    const NEXTDOM_CHECK_CMD_OPERATOR = 'nextdomCheckCmdOperator';
+    const NEXTDOM_CHECK_CMD_TEST = 'nextdomCheckCmdTest';
+    const NEXTDOM_CHECK_CMD_TIME = 'nextdomCheckCmdTime';
     const NEXTDOM_POST_EXEC_CMD = 'nextdomPostExecCmd';
     const NEXTDOM_PRE_EXEC_CMD = 'nextdomPreExecCmd';
     const NEXTDOM_PUSH_URL = 'nextdomPushUrl';
+    const REPEAT_EVENT_MGMT = 'repeatEventManagement';
+    const RETURN_STATE_VALUE = 'returnStateValue';
+    const RETURN_STATE_TIME = 'returnStateTime';
+    const TIMELIME_ENABLE = 'timeline::enable';
     const UPDATE_CMD_ID = 'updateCmdId';
 }

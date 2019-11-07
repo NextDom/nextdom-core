@@ -68,7 +68,6 @@ class ProfilsController extends BaseController
                 $pageData['profilsHomePageDesktop'][$pluginList->getId() . '::' . $pluginList->getDisplay()] = $pluginList->getName();
             }
         }
-        $pageData['profilsSessionsList'] = SessionHelper::getSessionsList();
 
         $lsCssThemes = FileSystemHelper::ls(NEXTDOM_ROOT . '/public/themes/');
         $pageData['profilsAvatar'] = ConfigManager::byKey('avatar');

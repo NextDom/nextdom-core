@@ -227,7 +227,7 @@ class FileSystemHelper
                 $filePath .= $folder . '/templates/' . $version . '/themes/' . $theme . '/' . $filename . '.html';
             }
         } else {
-            $filePath = 'plugins/' . $pluginId . '/core/template/' . $version . '/' . $filename . '.html';
+            $filePath .= 'plugins/' . $pluginId . '/core/template/' . $version . '/' . $filename . '.html';
         }
         if (file_exists($filePath)) {
             $result = file_get_contents($filePath);
@@ -245,7 +245,7 @@ class FileSystemHelper
      */
     public static function getCoreTemplateFileContent($version, $filename, $pluginId = '', $theme = ''): string
     {
-        self::getTemplateFileContent($version, $filename, $pluginId, $theme);
+        return self::getTemplateFileContent('views', $version, $filename, $pluginId, $theme);
     }
 
     /**

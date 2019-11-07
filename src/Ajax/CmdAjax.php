@@ -17,6 +17,7 @@
 
 namespace NextDom\Ajax;
 
+use NextDom\Enums\CmdType;
 use NextDom\Enums\CmdViewType;
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
@@ -89,13 +90,13 @@ class CmdAjax extends BaseAjax
             throw new CoreException(__('Commande ID inconnu : ') . $cmdId);
         }
         $eqLogic = $cmd->getEqLogicId();
-        if ($cmd->getType() == 'action' && !$eqLogic->hasRight('x')) {
+        if ($cmd->getType() == CmdType::ACTION && !$eqLogic->hasRight('x')) {
             throw new CoreException(__('Vous n\'êtes pas autorisé à faire cette action'));
         }
         if (!$cmd->checkAccessCode(Utils::init('codeAccess'))) {
             throw new CoreException(__('Cette action nécessite un code d\'accès'), -32005);
         }
-        if ($cmd->getType() == 'action' && $cmd->getConfiguration('actionConfirm') == 1 && Utils::init('confirmAction') != 1) {
+        if ($cmd->getType() == CmdType::ACTION && $cmd->getConfiguration('actionConfirm') == 1 && Utils::init('confirmAction') != 1) {
             throw new CoreException(__('Cette action nécessite une confirmation'), -32006);
         }
         $options = json_decode(Utils::init('value', '{}'), true);
