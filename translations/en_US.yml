@@ -322,6 +322,15 @@ sidebar:
   design: Design(s)
   objects-list: List Objects & Summaries
   default-object: Default Subject
+  help: Help
+  help-wiki: Wiki
+  help-jeedom-doc: Jeedom Documentation
+  help-nextdom-doc: Documentation
+  help-page: Page or plugin help
+  help-site: Nextdom.org Website
+  help-forum: Forum
+  help-github: Github
+  help-chat: Chat
   show-all: Show all
   plan3d: Map(s) 3D
   panel: Panel(s)

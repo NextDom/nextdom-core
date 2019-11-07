@@ -265,6 +265,8 @@ $(function () {
         });
     }
 
+    // Init help button
+    $('#bt_getHelpPage').attr('data-page',getUrlVars('p')).attr('data-plugin',getUrlVars('m'));
     // Help triggers declaration
     $('#bt_getHelpPage').on('click',function(){
         nextdom.getDocumentationUrl({
