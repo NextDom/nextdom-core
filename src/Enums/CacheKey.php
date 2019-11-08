@@ -18,11 +18,12 @@
 namespace NextDom\Enums;
 
 /**
- * Class ConfigKey
+ * Class CacheKey
  * @package NextDom\Enums
  */
-class ConfigKey extends Enum
+class CacheKey extends Enum
 {
-    const MARKET_ADDRESS = 'market::address';
-    const WIDGET_BACKGROUND_OPACITY = 'widget::background-opacity';
+    const EQLOGIC_CACHE_ATTR = 'eqLogicCacheAttr';
+    const EQLOGIC_STATUS_ATTR = 'eqLogicStatusAttr';
+    const WIDGET_HTML = 'widgetHtml';
 }

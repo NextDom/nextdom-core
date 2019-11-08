@@ -20,7 +20,7 @@ def ajax_tests():
     return_code = os.system('cd .. && ./vendor/bin/phpunit --configuration tests/compatibility/phpunit.xml --testsuite AllTests') #pylint: disable=line-too-long
     remove_test_container(container_name)
     if return_code != 0:
-        sys.exit(return_code)
+        sys.exit(1)
     return False
 
 if __name__ == "__main__":

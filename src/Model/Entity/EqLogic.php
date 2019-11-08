@@ -17,6 +17,12 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\BatteryStatus;
+use NextDom\Enums\CacheKey;
+use NextDom\Enums\ConfigKey;
+use NextDom\Enums\DateFormat;
+use NextDom\Enums\EqLogicCategory;
+use NextDom\Enums\EqLogicConfigKey;
 use NextDom\Enums\EqLogicViewType;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
@@ -320,7 +326,7 @@ class EqLogic implements EntityInterface
      */
     public function setConfiguration($configKey, $configValue)
     {
-        if (in_array($configKey, ['battery_warning_threshold', 'battery_danger_threshold'])) {
+        if (in_array($configKey, [EqLogicConfigKey::BATTERY_WARNING_THRESHOLD, EqLogicConfigKey::BATTERY_DANGER_THRESHOLD])) {
             if ($this->getConfiguration($configKey, '') != $configValue) {
                 $this->_batteryUpdated = true;
             }
@@ -394,7 +400,7 @@ class EqLogic implements EntityInterface
             $this->_changed = true;
         }
         if ($isEnable) {
-            $this->setStatus(['lastCommunication' => date('Y-m-d H:i:s'), 'timeout' => 0]);
+            $this->setStatus(['lastCommunication' => date(DateFormat::FULL), 'timeout' => 0]);
         }
         $this->isEnable = $isEnable;
         return $this;
@@ -478,60 +484,21 @@ class EqLogic implements EntityInterface
      */
     public function getPrimaryCategory()
     {
-        if ($this->getCategory('security', 0) == 1) {
-            return 'security';
-        }
-        if ($this->getCategory('heating', 0) == 1) {
-            return 'heating';
-        }
-        if ($this->getCategory('light', 0) == 1) {
-            return 'light';
-        }
-        if ($this->getCategory('automatism', 0) == 1) {
-            return 'automatism';
-        }
-        if ($this->getCategory('energy', 0) == 1) {
-            return 'energy';
-        }
-        if ($this->getCategory('multimedia', 0) == 1) {
-            return 'multimedia';
+        $categoryOrder = [
+            EqLogicCategory::SECURITY,
+            EqLogicCategory::HEATING,
+            EqLogicCategory::LIGHT,
+            EqLogicCategory::AUTOMATISM,
+            EqLogicCategory::ENERGY,
+            EqLogicCategory::MULTIMEDIA
+            ];
+        foreach ($categoryOrder as $categoryCode) {
+            if ($this->getCategory($categoryCode, 0) == 1) {
+                return $categoryCode;
+            }
         }
         return '';
     }
-
-
-    /**
-     * Get list of category in one string
-     *
-     * @return string
-     */
-    public function getCategories(): string
-    {
-        $categories = "";
-        if ($this->getCategory('security', 0) == 1) {
-            $categories = $categories . ' security';
-        }
-        if ($this->getCategory('heating', 0) == 1) {
-            $categories = $categories . ' heating';
-        }
-        if ($this->getCategory('light', 0) == 1) {
-            $categories = $categories . ' light';
-        }
-        if ($this->getCategory('automatism', 0) == 1) {
-            $categories = $categories . ' automatism';
-        }
-        if ($this->getCategory('energy', 0) == 1) {
-            $categories = $categories . ' energy';
-        }
-        if ($this->getCategory('multimedia', 0) == 1) {
-            $categories = $categories . ' multimedia';
-        }
-        if ($this->getCategory('default', 0) == 1) {
-            $categories = $categories . ' default ';
-        }
-        return $categories;
-    }
-
 
     /**
      * Get display parameters
@@ -791,7 +758,7 @@ class EqLogic implements EntityInterface
      */
     public function getCache($cacheKey = '', $defaultValue = '')
     {
-        $cache = CacheManager::byKey('eqLogicCacheAttr' . $this->getId())->getValue();
+        $cache = CacheManager::byKey(CacheKey::EQLOGIC_CACHE_ATTR . $this->getId())->getValue();
         return Utils::getJsonAttr($cache, $cacheKey, $defaultValue);
     }
 
@@ -805,7 +772,7 @@ class EqLogic implements EntityInterface
      */
     public function setCache($cacheKey, $cacheValue = null)
     {
-        CacheManager::set('eqLogicCacheAttr' . $this->getId(), Utils::setJsonAttr(CacheManager::byKey('eqLogicCacheAttr' . $this->getId())->getValue(), $cacheKey, $cacheValue));
+        CacheManager::set(CacheKey::EQLOGIC_CACHE_ATTR . $this->getId(), Utils::setJsonAttr(CacheManager::byKey(CacheKey::EQLOGIC_CACHE_ATTR . $this->getId())->getValue(), $cacheKey, $cacheValue));
     }
 
     /**
@@ -857,7 +824,7 @@ class EqLogic implements EntityInterface
      */
     public function getStatus($statusKey = '', $defaultValue = '')
     {
-        $status = CacheManager::byKey('eqLogicStatusAttr' . $this->getId())->getValue();
+        $status = CacheManager::byKey(CacheKey::EQLOGIC_STATUS_ATTR . $this->getId())->getValue();
         return Utils::getJsonAttr($status, $statusKey, $defaultValue);
     }
 
@@ -870,15 +837,15 @@ class EqLogic implements EntityInterface
      *
      * @throws \Exception
      */
-    public function batteryWidget(string $display = 'dashboard'): string
+    public function batteryWidget(string $display = EqLogicViewType::DASHBOARD): string
     {
         $level = 'good';
         $numericLevel = '3';
-        $batteryType = $this->getConfiguration('battery_type', 'none');
-        $batteryTime = $this->getConfiguration('batterytime', 'NA');
+        $batteryType = $this->getConfiguration(EqLogicConfigKey::BATTERY_TYPE, 'none');
+        $batteryTime = $this->getConfiguration(EqLogicConfigKey::BATTERY_TIME, 'NA');
         $lastBatteryCheck = 'NA';
         if ($batteryTime !== 'NA') {
-            $lastBatteryCheck = ((strtotime(date("Y-m-d")) - strtotime(date("Y-m-d", strtotime($batteryTime)))) / 86400);
+            $lastBatteryCheck = ((strtotime(date(DateFormat::FULL_DAY)) - strtotime(date(DateFormat::FULL_DAY, strtotime($batteryTime)))) / 86400);
         }
         if (strpos($batteryType, ' ') !== false) {
             $batteryType = substr(strrchr($batteryType, " "), 1);
@@ -888,10 +855,10 @@ class EqLogic implements EntityInterface
         if (is_object($this->getObject())) {
             $attachedObject = $this->getObject()->getName();
         }
-        if ($this->getStatus('battery') <= $this->getConfiguration('battery_danger_threshold', ConfigManager::byKey('battery::danger'))) {
+        if ($this->getStatus('battery') <= $this->getConfiguration(EqLogicConfigKey::BATTERY_DANGER_THRESHOLD, ConfigManager::byKey('battery::danger'))) {
             $level = 'critical';
             $numericLevel = '0';
-        } else if ($this->getStatus('battery') <= $this->getConfiguration('battery_warning_threshold', ConfigManager::byKey('battery::warning'))) {
+        } else if ($this->getStatus('battery') <= $this->getConfiguration(EqLogicConfigKey::BATTERY_WARNING_THRESHOLD, ConfigManager::byKey('battery::warning'))) {
             $level = 'warning';
             $numericLevel = '1';
         } else if ($this->getStatus('battery') <= 75) {
@@ -913,7 +880,7 @@ class EqLogic implements EntityInterface
             $html .= '<span class="informations pull-right" title="Piles">' . $this->getConfiguration('battery_type', '') . '</span>';
         }
         $html .= '<span class="informations pull-left" title="Plugin">' . ucfirst($this->getEqType_name()) . '</span>';
-        if ($this->getConfiguration('battery_danger_threshold') != '' || $this->getConfiguration('battery_warning_threshold') != '') {
+        if ($this->getConfiguration(EqLogicConfigKey::BATTERY_DANGER_THRESHOLD) != '' || $this->getConfiguration(EqLogicConfigKey::BATTERY_WARNING_THRESHOLD) != '') {
             $html .= '<i class="manual-threshold icon techno-fingerprint41 pull-right" title="Seuil manuel défini"></i>';
         }
         if ($batteryTime != 'NA') {
@@ -935,7 +902,7 @@ class EqLogic implements EntityInterface
      */
     public function batteryStatus($percent = '', $batteyDateTime = '')
     {
-        if ($this->getConfiguration('noBatterieCheck', 0) == 1) {
+        if ($this->getConfiguration(EqLogicConfigKey::NO_BATTERY_CHECK, 0) == 1) {
             return;
         }
         if ($percent == '') {
@@ -948,16 +915,16 @@ class EqLogic implements EntityInterface
         if ($percent < 0) {
             $percent = 0;
         }
-        $warningThreshold = $this->getConfiguration('battery_warning_threshold', ConfigManager::byKey('battery::warning'));
-        $dangerThreshold = $this->getConfiguration('battery_danger_threshold', ConfigManager::byKey('battery::danger'));
+        $warningThreshold = $this->getConfiguration(EqLogicConfigKey::BATTERY_WARNING_THRESHOLD, ConfigManager::byKey('battery::warning'));
+        $dangerThreshold = $this->getConfiguration(EqLogicConfigKey::BATTERY_DANGER_THRESHOLD, ConfigManager::byKey('battery::danger'));
         if ($percent != '' && $percent < $dangerThreshold) {
-            $prevStatus = $this->getStatus('batterydanger', 0);
+            $prevStatus = $this->getStatus(BatteryStatus::DANGER, 0);
             $logicalId = 'lowBattery' . $this->getId();
             $message = 'Le module ' . $this->getEqType_name() . ' ' . $this->getHumanName() . ' a moins de ' . $dangerThreshold . '% de batterie (niveau danger avec ' . $percent . '% de batterie)';
             if ($this->getConfiguration('battery_type') != '') {
                 $message .= ' (' . $this->getConfiguration('battery_type') . ')';
             }
-            $this->setStatus('batterydanger', 1);
+            $this->setStatus(BatteryStatus::DANGER, 1);
             if ($prevStatus == 0) {
                 if (ConfigManager::ByKey('alert::addMessageOnBatterydanger') == 1) {
                     MessageManager::add($this->getEqType_name(), $message, '', $logicalId);
@@ -976,14 +943,14 @@ class EqLogic implements EntityInterface
                 }
             }
         } else if ($percent != '' && $percent < $warningThreshold) {
-            $prevStatus = $this->getStatus('batterywarning', 0);
+            $prevStatus = $this->getStatus(BatteryStatus::WARNING, 0);
             $logicalId = 'warningBattery' . $this->getId();
             $message = 'Le module ' . $this->getEqType_name() . ' ' . $this->getHumanName() . ' a moins de ' . $warningThreshold . '% de batterie (niveau warning avec ' . $percent . '% de batterie)';
             if ($this->getConfiguration('battery_type') != '') {
                 $message .= ' (' . $this->getConfiguration('battery_type') . ')';
             }
-            $this->setStatus('batterywarning', 1);
-            $this->setStatus('batterydanger', 0);
+            $this->setStatus(BatteryStatus::WARNING, 1);
+            $this->setStatus(BatteryStatus::DANGER, 0);
             if ($prevStatus == 0) {
                 if (ConfigManager::ByKey('alert::addMessageOnBatterywarning') == 1) {
                     MessageManager::add($this->getEqType_name(), $message, '', $logicalId);
@@ -1004,11 +971,11 @@ class EqLogic implements EntityInterface
         } else {
             MessageManager::removeByPluginLogicalId($this->getEqType_name(), 'warningBattery' . $this->getId());
             MessageManager::removeByPluginLogicalId($this->getEqType_name(), 'lowBattery' . $this->getId());
-            $this->setStatus('batterydanger', 0);
-            $this->setStatus('batterywarning', 0);
+            $this->setStatus(BatteryStatus::DANGER, 0);
+            $this->setStatus(BatteryStatus::WARNING, 0);
         }
 
-        $this->setStatus(['battery' => $percent, 'batteryDatetime' => ($batteyDateTime != '') ? $batteyDateTime : date('Y-m-d H:i:s')]);
+        $this->setStatus(['battery' => $percent, 'batteryDatetime' => ($batteyDateTime != '') ? $batteyDateTime : date(DateFormat::FULL)]);
     }
 
     /**
@@ -1055,11 +1022,11 @@ class EqLogic implements EntityInterface
                 $cmd->event($newValue, $updateEventTime);
                 return true;
             }
-        } else if ($cmd->getConfiguration('repeatEventManagement', 'auto') == 'always') {
+        } else if ($cmd->getConfiguration(EqLogicConfigKey::REPEAT_EVENT_MANAGEMENT, 'auto') == 'always') {
             $cmd->event($newValue, $updateEventTime);
             return true;
         }
-        $cmd->setCache('collectDate', date('Y-m-d H:i:s'));
+        $cmd->setCache('collectDate', date(DateFormat::FULL));
         return false;
     }
 
@@ -1123,9 +1090,9 @@ class EqLogic implements EntityInterface
         if ($this->getChanged()) {
             if ($this->id != '') {
                 $this->emptyCacheWidget();
-                $this->setConfiguration('updatetime', date('Y-m-d H:i:s'));
+                $this->setConfiguration('updatetime', date(DateFormat::FULL));
             } else {
-                $this->setConfiguration('createtime', date('Y-m-d H:i:s'));
+                $this->setConfiguration('createtime', date(DateFormat::FULL));
             }
 
             if ($this->getDisplay('showObjectNameOnview', -1) == -1) {
@@ -1209,11 +1176,11 @@ class EqLogic implements EntityInterface
     public function emptyCacheWidget()
     {
         $users = UserManager::all();
-        foreach (['dashboard', 'mobile', 'mview', 'dview', 'dplan', 'view', 'plan'] as $version) {
-            $mc = CacheManager::byKey('widgetHtml' . $this->getId() . $version);
+        foreach (EqLogicViewType::getValues() as $version) {
+            $mc = CacheManager::byKey(CacheKey::WIDGET_HTML . $this->getId() . $version);
             $mc->remove();
             foreach ($users as $user) {
-                $mc = CacheManager::byKey('widgetHtml' . $this->getId() . $version . $user->getId());
+                $mc = CacheManager::byKey(CacheKey::WIDGET_HTML . $this->getId() . $version . $user->getId());
                 $mc->remove();
             }
         }
@@ -1342,7 +1309,7 @@ class EqLogic implements EntityInterface
             $userId = UserManager::getStoredUser()->getId();
         }
         if (!$_noCache) {
-            $mc = CacheManager::byKey('widgetHtml' . $this->getId() . $viewType . $userId);
+            $mc = CacheManager::byKey(CacheKey::WIDGET_HTML . $this->getId() . $viewType . $userId);
             if ($mc->getValue() != '') {
                 return preg_replace("/" . preg_quote(self::UIDDELIMITER) . "(.*?)" . preg_quote(self::UIDDELIMITER) . "/", self::UIDDELIMITER . mt_rand() . self::UIDDELIMITER, $mc->getValue());
             }
@@ -1364,7 +1331,7 @@ class EqLogic implements EntityInterface
             '#name_display#' => $this->getName(),
             '#hideEqLogicName#' => '',
             '#eqLink#' => $this->getLinkToConfiguration(),
-            '#category#' => $this->getCategories(),
+            '#category#' => $this->getPrimaryCategory(),
             '#color#' => '#ffffff',
             '#border#' => 'none',
             '#border-radius#' => '0px',
@@ -1456,8 +1423,8 @@ class EqLogic implements EntityInterface
                     continue;
                 }
                 $default = '';
-                if (isset($parameter['default'])) {
-                    $default = $parameter['default'];
+                if (isset($parameter[EqLogicCategory::DEFAULT])) {
+                    $default = $parameter[EqLogicCategory::DEFAULT];
                 }
                 if ($this->getDisplay('advanceWidgetParameter' . $pKey . $version . '-default', 1) == 1) {
                     $replace['#' . $pKey . '#'] = $default;
@@ -1477,7 +1444,7 @@ class EqLogic implements EntityInterface
                 }
             }
         }
-        $default_opacity = ConfigManager::byKey('widget::background-opacity');
+        $default_opacity = ConfigManager::byKey(ConfigKey::WIDGET_BACKGROUND_OPACITY);
         if (isset($_SESSION) && is_object(UserManager::getStoredUser()) && UserManager::getStoredUser()->getOptions('widget::background-opacity::' . $version, null) !== null) {
             $default_opacity = UserManager::getStoredUser()->getOptions('widget::background-opacity::' . $version);
         }
@@ -1505,7 +1472,7 @@ class EqLogic implements EntityInterface
         if (isset($_SESSION) && is_object(UserManager::getStoredUser())) {
             $user_id = UserManager::getStoredUser()->getId();
         }
-        CacheManager::set('widgetHtml' . $this->getId() . $viewType . $user_id, $htmlCode);
+        CacheManager::set(CacheKey::WIDGET_HTML . $this->getId() . $viewType . $user_id, $htmlCode);
         return $htmlCode;
     }
 
@@ -1755,7 +1722,7 @@ class EqLogic implements EntityInterface
         ViewDataManager::removeByTypeLinkId('eqLogic', $this->getId());
         DataStoreManager::removeByTypeLinkId('eqLogic', $this->getId());
         $this->emptyCacheWidget();
-        CacheManager::delete('eqLogicCacheAttr' . $this->getId());
+        CacheManager::delete(CacheKey::EQLOGIC_CACHE_ATTR . $this->getId());
         CacheManager::delete('eqLogicStatusAttr' . $this->getId());
         return DBHelper::remove($this);
     }

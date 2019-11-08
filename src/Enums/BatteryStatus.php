@@ -1,4 +1,5 @@
 <?php
+
 /* This file is part of NextDom.
  *
  * NextDom is free software: you can redistribute it and/or modify
@@ -18,11 +19,13 @@
 namespace NextDom\Enums;
 
 /**
- * Class ConfigKey
+ * Class BatteryStatus
  * @package NextDom\Enums
  */
-class ConfigKey extends Enum
+class BatteryStatus extends Enum
 {
-    const MARKET_ADDRESS = 'market::address';
-    const WIDGET_BACKGROUND_OPACITY = 'widget::background-opacity';
+
+    const DANGER = 'batterydanger';
+    const WARNING = 'batterywarning';
+
 }

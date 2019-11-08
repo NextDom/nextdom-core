@@ -18,11 +18,12 @@
 namespace NextDom\Enums;
 
 /**
- * Class ConfigKey
+ * Class DateFormat
  * @package NextDom\Enums
  */
-class ConfigKey extends Enum
+class DateFormat extends Enum
 {
-    const MARKET_ADDRESS = 'market::address';
-    const WIDGET_BACKGROUND_OPACITY = 'widget::background-opacity';
+    const FULL = 'Y-m-d H:i:s';
+    const FULL_DAY = 'Y-m-d';
+    const FULL_HOUR = 'H:i:s';
 }

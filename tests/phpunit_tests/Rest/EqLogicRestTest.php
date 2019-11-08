@@ -28,18 +28,18 @@ class EqLogicRestTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals('A lamp', $result[0]['name']);
         $this->assertEquals('plugin4tests', $result[0]['type']);
-        $this->assertEquals('Second eqLogic', $result[1]['name']);
+        $this->assertEquals('Test eqLogic', $result[1]['name']);
         $this->assertEquals('1', $result[1]['objectId']);
-        $this->assertEquals('Test eqLogic', $result[2]['name']);
-        $this->assertEquals('Third eqLogic', $result[3]['name']);
+        $this->assertEquals('Third eqLogic', $result[2]['name']);
+        $this->assertEquals('Second eqLogic', $result[3]['name']);
     }
 
     public function testGetByRoomWhatExists()
     {
         $result = EqLogicRest::getByRoom(1);
         $this->assertCount(2, $result);
-        $this->assertEquals('Test eqLogic', $result[0]['name']);
-        $this->assertEquals('Third eqLogic', $result[1]['name']);
+        $this->assertEquals('Third eqLogic', $result[0]['name']);
+        $this->assertEquals('Test eqLogic', $result[1]['name']);
     }
 
     public function testGetByRoomWhatNotExists()

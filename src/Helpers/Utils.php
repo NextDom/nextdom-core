@@ -152,6 +152,17 @@ class Utils
     }
 
     /**
+     * Obtenir un entier passé en paramètre
+     * @param string $name Nom de la variable
+     * @param mixed $default Valeur par défaut
+     *
+     * @return mixed Valeur de la variable
+     */
+    public static function initInt(string $name, $default = 0): int {
+        return intval(self::init($name), $default);
+    }
+
+    /**
      * @param $_array
      * @param $_subject
      * @return mixed

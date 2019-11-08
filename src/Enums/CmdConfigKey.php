@@ -21,7 +21,7 @@ namespace NextDom\Enums;
  * Common configuration keys
  * @package NextDom\Enums
  */
-class CmdConfiguration extends Enum
+class CmdConfigKey extends Enum
 {
     const ACTION_CODE_ACCESS = 'actionCodeAccess';
     const ACTION_CHECK_CMD = 'actionCheckCmd';

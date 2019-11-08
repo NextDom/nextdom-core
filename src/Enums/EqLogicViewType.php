@@ -28,4 +28,6 @@ class EqLogicViewType extends Enum
     const DASHBOARD = 'dashboard';
     const DVIEW = 'dview';
     const DPLAN = 'dplan';
+    const VIEW = 'view';
+    const PLAN = 'plan';
 }

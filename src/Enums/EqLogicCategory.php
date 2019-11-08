@@ -18,11 +18,16 @@
 namespace NextDom\Enums;
 
 /**
- * Class ConfigKey
+ * Common configuration keys
  * @package NextDom\Enums
  */
-class ConfigKey extends Enum
+class EqLogicCategory extends Enum
 {
-    const MARKET_ADDRESS = 'market::address';
-    const WIDGET_BACKGROUND_OPACITY = 'widget::background-opacity';
+    const SECURITY = 'security';
+    const HEATING = 'heating';
+    const LIGHT = 'light';
+    const AUTOMATISM = 'automatism';
+    const ENERGY = 'energy';
+    const MULTIMEDIA = 'multimedia';
+    const DEFAULT = 'default';
 }

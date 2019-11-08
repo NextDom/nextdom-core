@@ -18,11 +18,15 @@
 namespace NextDom\Enums;
 
 /**
- * Class ConfigKey
+ * Common configuration keys
  * @package NextDom\Enums
  */
-class ConfigKey extends Enum
+class EqLogicConfigKey extends Enum
 {
-    const MARKET_ADDRESS = 'market::address';
-    const WIDGET_BACKGROUND_OPACITY = 'widget::background-opacity';
+    const BATTERY_WARNING_THRESHOLD = 'battery_warning_threshold';
+    const BATTERY_DANGER_THRESHOLD = 'battery_danger_threshold';
+    const BATTERY_TIME = 'batterytime';
+    const BATTERY_TYPE = 'battery_type';
+    const NO_BATTERY_CHECK = 'noBatterieCheck';
+    const REPEAT_EVENT_MANAGEMENT = 'repeatEventManagement';
 }

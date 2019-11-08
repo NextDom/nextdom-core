@@ -339,17 +339,11 @@ class CmdAjax extends BaseAjax
             throw new CoreException(__('Historique impossible'));
         }
         $history = HistoryManager::byCmdIdDatetime($cmdId, $targetDatetime);
-        if (!is_object($history)) {
-            $history = HistoryManager::byCmdIdDatetime($cmdId, $targetDatetime, date('Y-m-d H:i:s', strtotime($targetDatetime . ' +1 hour')), $srcDatetime);
-        }
-        if (!is_object($history)) {
-            $history = HistoryManager::byCmdIdDatetime($cmdId, $targetDatetime, date('Y-m-d H:i:s', strtotime($targetDatetime . ' +1 day')), $srcDatetime);
-        }
-        if (!is_object($history)) {
-            $history = HistoryManager::byCmdIdDatetime($cmdId, $targetDatetime, date('Y-m-d H:i:s', strtotime($targetDatetime . ' +1 week')), $srcDatetime);
-        }
-        if (!is_object($history)) {
-            $history = HistoryManager::byCmdIdDatetime($cmdId, $targetDatetime, date('Y-m-d H:i:s', strtotime($targetDatetime . ' +1 month')), $srcDatetime);
+        foreach (['+1 hour', '+1 day', '+1 week', '+1 month'] as $timeStep) {
+            if (is_object($history)) {
+                break;
+            }
+            $history = HistoryManager::byCmdIdDatetime($cmdId, $targetDatetime, date('Y-m-d H:i:s', strtotime($targetDatetime . $timeStep)), $srcDatetime);
         }
         if (!is_object($history)) {
             throw new CoreException(__('Aucun point ne correspond pour l\'historique : ') . $cmdId . ' - ' . $targetDatetime . ' - ' . $srcDatetime);
