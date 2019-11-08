@@ -1754,22 +1754,28 @@ class Cmd implements EntityInterface
     public function influxDb($valueToSend)
     {
         $influxDbConf = ConfigManager::byKeys(['influxDbIp', 'influxDbPort', 'influxDbDatabase']);
+        if ($influxDbConf['influxDbIp'] !== '') {
+            if (empty($this->getUnite())) {
+                $unite = 'state';
+            } else {
+                $unite = $this->getUnite();
+            }
 
-        if ($influxDbConf['influxDbIp'] !== ''
-            && $this->getType() == 'info'
-            && ($this->getSubType() == 'numeric' || $this->getSubType() == 'binary')) {
-            $client = new \InfluxDB\Client($influxDbConf['influxDbIp'], $influxDbConf['influxDbPort']);
-            $influxDbDatabase = $client->selectDB($influxDbConf['influxDbDatabase']);
+            if ($this->getType() == CmdType::INFO
+                && ($this->getSubType() == 'numeric' || $this->getSubType() == 'binary')) {
+                $client = new \InfluxDB\Client($influxDbConf['influxDbIp'], $influxDbConf['influxDbPort']);
+                $influxDbDatabase = $client->selectDB($influxDbConf['influxDbDatabase']);
 
-            $points = [
-                new \InfluxDB\Point(
-                    $this->getUnite(),
-                    $valueToSend,
-                    ['equipment' => $this->getHumanName()]
-                ),
-            ];
+                $points = [
+                    new \InfluxDB\Point(
+                        $unite,
+                        $valueToSend,
+                        ['equipment' => $this->getHumanName()]
+                    ),
+                ];
 
-            $influxDbDatabase->writePoints($points);
+                $influxDbDatabase->writePoints($points);
+            }
         }
     }
 
