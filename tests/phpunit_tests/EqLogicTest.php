@@ -111,4 +111,12 @@ class EqLogicTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $savedEqLogic->getObject_id());
         $this->assertFalse($eqLogic->getChanged());
     }
+
+    public function testGetCategoriesSecurity() {
+
+    }
+
+    public function testGetCategoriesDefault() {
+
+    }
 }

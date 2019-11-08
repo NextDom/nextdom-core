@@ -144,7 +144,7 @@ def exec_command_in_container(container_name, command):
     :type container_name:  str
     :type command:         str
     """
-    os.system('docker exec -i nextdom-test-' + container_name + ' ' + command)
+    return os.system('docker exec -i nextdom-test-' + container_name + ' ' + command)
 
 def copy_file_in_container(container_name, src, dest):
     """Copy a file in a test container
