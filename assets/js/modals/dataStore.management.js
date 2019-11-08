@@ -30,9 +30,8 @@
 * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
 */
 
-$(function() {
-    initTableSorter();
-    refreshDataStoreMangementTable();
+function initEvents() {
+    // Remove data button
     $('#table_dataStore').delegate('.bt_removeDataStore', 'click', function() {
         var tr = $(this).closest('tr');
         bootbox.confirm('Etes-vous sûr de vouloir supprimer la variable <span class="text-bold">' + tr.find('.key').value() + '</span> ?', function(result) {
@@ -51,6 +50,7 @@ $(function() {
         });
     });
 
+    // Save data button
     $('#table_dataStore').delegate('.bt_saveDataStore', 'click', function() {
       var tr = $(this).closest('tr');
       nextdom.dataStore.save({
@@ -69,12 +69,14 @@ $(function() {
        });
     });
 
+    // Link data button
     $('#table_dataStore').delegate('.bt_graphDataStore', 'click', function() {
         var tr = $(this).closest('tr');
-        $('#md_modal2').dialog({title: "{{ 'Graphique de lien(s)' }}"});
+        $('#md_modal2').dialog({title: "{{ Graphique de lien(s) }}"});
         $("#md_modal2").load('index.php?v=d&modal=graph.link&filter_type=dataStore&filter_id='+tr.attr('data-dataStore_id')).dialog('open');
     });
 
+    // Add data button
     $('#bt_dataStoreManagementAdd').on('click', function() {
         var tr = '<tr data-dataStore_id="">';
         tr += '<td>';
@@ -85,8 +87,8 @@ $(function() {
         tr += '</td>';
         tr += '<td>';
         tr += '</td>';
-        tr += '<td style="min-width:130px;">';
-        tr += '<a class="btn btn-success pull-right btn-sm bt_saveDataStore"><i class="fas fa-check no-spacing"></i></a>';
+        tr += '<td style="width:127px">';
+        tr += '<a class="btn btn-success pull-right btn-sm bt_saveDataStore"><i class="fas fa-save no-spacing"></i></a>';
         tr += '<a class="btn btn-danger pull-right btn-sm bt_removeDataStore"><i class="fas fa-trash no-spacing"></i></a>';
         tr += '<a class="btn btn-default pull-right btn-sm bt_graphDataStore"><i class="fas fa-object-group no-spacing"></i></a>';
         tr += '</td>';
@@ -94,49 +96,53 @@ $(function() {
         $('#table_dataStore tbody').append(tr);
         $("#table_dataStore").trigger("update");
     });
+}
 
-    function refreshDataStoreMangementTable() {
-        nextdom.dataStore.all({
-          type: dataStore_type,
-          usedBy : 1,
-          error: function (error) {
-             notify("Core", error.message, 'error');
-          },
-          success: function (data) {
-            $('#table_dataStore tbody').empty();
-            var tr = '';
-            for (var i in data) {
-              tr += '<tr data-dataStore_id="' + data[i].id + '">';
-              tr += '<td>';
-              tr += '<span style="display : none;">' + data[i].key + '</span><input class="form-control input-sm key" style="width:400px" value="' + data[i].key + '" disabled />';
-              tr += '</td>';
-              tr += '<td>';
-              tr += '<span style="display : none;">' + data[i].value + '</span><input class="form-control input-sm value" style="width:400px" value="' + data[i].value + '" />';
-              tr += '</td>';
-              tr += '<td>';
-              for(var j in data[i].usedBy.scenario){
-                  tr += '<span class="label label-primary">'+data[i].usedBy.scenario[j]+'</span> ';
-              }
-              for(var j in data[i].usedBy.eqLogic){
-                  tr += '<span class="label label-primary">'+data[i].usedBy.eqLogic[j]+'</span> ';
-              }
-              for(var j in data[i].usedBy.cmd){
-                  tr += '<span class="label label-primary">'+data[i].usedBy.cmd[j]+'</span> ';
-              }
-              for(var j in data[i].usedBy.interactDef){
-                  tr += '<span class="label label-primary">'+data[i].usedBy.interactDef[j]+'</span> ';
-              }
-              tr += '</td>';
-              tr += '<td style="min-width:130px;">';
-              tr += '<a class="btn btn-success pull-right btn-sm bt_saveDataStore"><i class="fas fa-check no-spacing"></i></a>';
-              tr += '<a class="btn btn-danger pull-right btn-sm bt_removeDataStore"><i class="fas fa-trash no-spacing"></i></a>';
-              tr += '<a class="btn btn-default pull-right btn-sm bt_graphDataStore"><i class="fas fa-object-group no-spacing"></i></a>';
-              tr += '</td>';
-              tr += '</tr>';
-            }
-            $('#table_dataStore tbody').append(tr);
-            $("#table_dataStore").trigger("update");
+function refreshDataStoreMangementTable() {
+    nextdom.dataStore.all({
+      type: dataStore_type,
+      usedBy : 1,
+      error: function (error) {
+         notify("Core", error.message, 'error');
+      },
+      success: function (data) {
+        $('#table_dataStore tbody').empty();
+        var tr = '';
+        for (var i in data) {
+          tr += '<tr data-dataStore_id="' + data[i].id + '">';
+          tr += '<td>';
+          tr += '<span style="display : none;">' + data[i].key + '</span><input class="form-control input-sm key" value="' + data[i].key + '" disabled />';
+          tr += '</td>';
+          tr += '<td>';
+          tr += '<span style="display : none;">' + data[i].value + '</span><input class="form-control input-sm value" value="' + data[i].value + '" />';
+          tr += '</td>';
+          tr += '<td>';
+          for(var j in data[i].usedBy.scenario){
+              tr += '<span class="label label-primary">'+data[i].usedBy.scenario[j]+'</span> ';
           }
-      });
-    }
-});
+          for(var j in data[i].usedBy.eqLogic){
+              tr += '<span class="label label-primary">'+data[i].usedBy.eqLogic[j]+'</span> ';
+          }
+          for(var j in data[i].usedBy.cmd){
+              tr += '<span class="label label-primary">'+data[i].usedBy.cmd[j]+'</span> ';
+          }
+          for(var j in data[i].usedBy.interactDef){
+              tr += '<span class="label label-primary">'+data[i].usedBy.interactDef[j]+'</span> ';
+          }
+          tr += '</td>';
+          tr += '<td style="width:127px">';
+          tr += '<a class="btn btn-success pull-right btn-sm bt_saveDataStore"><i class="fas fa-save no-spacing"></i></a>';
+          tr += '<a class="btn btn-danger pull-right btn-sm bt_removeDataStore"><i class="fas fa-trash no-spacing"></i></a>';
+          tr += '<a class="btn btn-default pull-right btn-sm bt_graphDataStore"><i class="fas fa-object-group no-spacing"></i></a>';
+          tr += '</td>';
+          tr += '</tr>';
+        }
+        $('#table_dataStore tbody').append(tr);
+        $("#table_dataStore").trigger("update");
+      }
+  });
+}
+
+initEvents();
+initTableSorter();
+refreshDataStoreMangementTable();

@@ -403,8 +403,8 @@ function refreshUpdateNumber() {
   */
  function modalesAdjust(){
      // Modale resize
-     jQuery('#md_modal').dialog('option','width',(jQuery(window).width() < 1000) ? "96%" : ((jQuery(window).width() < 1300) ? "80%" : "70%"));
+     jQuery('#md_modal').dialog('option','width',(jQuery(window).width() < 1000) ? "96%" : "80%");
      jQuery('#md_modal').dialog('option','position',{my: 'center', at: 'center', of: window});
-     jQuery('#md_modal2').dialog('option','width',(jQuery(window).width() < 1000) ? "96%" : ((jQuery(window).width() < 1300) ? "80%" : "70%"));
+     jQuery('#md_modal2').dialog('option','width',(jQuery(window).width() < 1000) ? "96%" : "80%");
      jQuery('#md_modal2').dialog('option','position',{my: 'center', at: 'center', of: window});
  }
