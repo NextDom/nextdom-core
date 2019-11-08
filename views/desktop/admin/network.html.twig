@@ -56,7 +56,7 @@
         <!-- Page content -->
         <div class="box-body">
             <!-- Alert Section -->
-            <div class="alert alert-warning">{{ 'network.warning-part-1' | trans }} {{ PRODUCT_NAME }} {{ 'network.warning-part-2' | trans }} {{ PRODUCT_NAME }}.</div>
+            <div class="alert alert-warning">{{ 'network.warning-part-1' | trans }} {{ 'NextDom' }} {{ 'network.warning-part-2' | trans }} {{ 'NextDom' }}.</div>
             <!-- Internal Access Section -->
             <fieldset>
                 <legend>{{ 'network.internal-access' | trans }}</legend>
@@ -156,7 +156,7 @@
                                 </div>
                             {% else %}
                                 <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                    <label class="control-label">{{ 'network.dns-use' | trans }} {{ PRODUCT_NAME }}</label>
+                                    <label class="control-label">{{ 'network.dns-use' | trans }} {{ 'NextDom' }}</label>
                                     <div>
                                         <input type="checkbox" class="configKey" data-l1key="{{ pageContent['networkkey'] }}::allowDNS" id="networkkey">
                                         <label for="networkkey" class="control-label label-check">{{ 'common.allow' | trans }}</label>
@@ -168,7 +168,7 @@
                                         {% if adminConfigs['market::allowDNS'] == 1 and adminDnsRun %}
                                             <span class="label label-success">{{ 'network.started' | trans }} <a href="{{ pageContent['adminNetworkExternalAccess']  }}" target="_blank" class="link-dns-success">{{ adminNetworkExternalAccess }}</a></span>
                                         {% else %}
-                                            <span class="label label-warning" data-toggle="tooltip" title="" data-original-title="{{ 'network.use-dns' | trans }} {{ PRODUCT_NAME }}">{{ 'network.stopped' | trans }}</span>
+                                            <span class="label label-warning" data-toggle="tooltip" title="" data-original-title="{{ 'network.use-dns' | trans }} {{ 'NextDom' }}">{{ 'network.stopped' | trans }}</span>
                                         {% endif %}
                                     </div>
                                 </div>

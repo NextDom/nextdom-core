@@ -290,9 +290,9 @@ plugin:
       automation-protocol: Automation Protocol
 
 welcome:
-  title: Welcome to %productName%
+  title: Welcome to NextDom
   congrats: Congratulations
-  congrats-content: "Welcome to %productName%: thanks for choosing this tool for your connected home"
+  congrats-content: "Welcome to NextDom: thanks for choosing this tool for your connected home"
   never-show: Do not display
   hot-plugins: Popular plugins
   migrate-from: Jeedom migration
@@ -302,7 +302,7 @@ welcome:
   doc-launch: Access the documentation
   forum-title: Forum
   forum-subtitle: Find help on our forum
-  forum-content: "The %productName% forum is a simple and effective way to find the solution to your problem. Surely there is another person who has already encountered the same problem as you. If this is not the case: ask your question, the community will respond as soon as possible."
+  forum-content: "The NextDom forum is a simple and effective way to find the solution to your problem. Surely there is another person who has already encountered the same problem as you. If this is not the case: ask your question, the community will respond as soon as possible."
   forum-launch: Forum access
   blog-title: Blog
   blog-subtitle: Stay informed
@@ -362,9 +362,9 @@ sidebar:
 
 firstuse:
   step: Step
-  welcome-title: Welcome %productName%
+  welcome-title: Welcome NextDom
   welcome-content: "Well Done! You have just installed your home automation solution, the first use wizard is activated!  This one will guide you in the process of configuring your home automation solution ..."
-  password-title: Secure your %productName%
+  password-title: Secure your NextDom
   password-content: "First: thank you to define a new administrator password to improve security ..."
   password-placeholder: New Password...
   password-confirm-placeholder: Confirm password...

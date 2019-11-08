@@ -51,9 +51,6 @@ class NextDomAjax extends BaseAjax
     public function getInfoApplication()
     {
         $return = array();
-        $return['product_name'] = ConfigManager::byKey('product_name');
-        $return['product_icon'] = ConfigManager::byKey('product_icon');
-        $return['product_image'] = ConfigManager::byKey('product_image');
         $return['widget_margin'] = ConfigManager::byKey('widget::margin');
         $return['serverDatetime'] = Utils::getmicrotime();
         if (!isConnect()) {

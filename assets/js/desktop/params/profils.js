@@ -109,11 +109,16 @@ function initEvents() {
     // Theme config changing
     $("#themeBase").on('change', function (event) {
         $('.configKey[data-l1key="nextdom::user-theme"]').value($("#themeBase").value() + "-" + $("#themeIdentity").value());
-        $('#customPreview').contents().find("head").append($("<link href='/public/css/themes/" + $('.configKey[data-l1key="nextdom::user-theme"]').value() + ".css' rel='stylesheet'>"));
+        $('#themePreview').contents().find("head").append($("<link href='/public/css/themes/" + $('.configKey[data-l1key="nextdom::user-theme"]').value() + ".css' rel='stylesheet'>"));
     });
     $("#themeIdentity").on('change', function (event) {
         $('.configKey[data-l1key="nextdom::user-theme"]').value($("#themeBase").value() + "-" + $("#themeIdentity").value());
-        $('#customPreview').contents().find("head").append($("<link href='/public/css/themes/" + $('.configKey[data-l1key="nextdom::user-theme"]').value() + ".css' rel='stylesheet'>"));
+        $('#themePreview').contents().find("head").append($("<link href='/public/css/themes/" + $('.configKey[data-l1key="nextdom::user-theme"]').value() + ".css' rel='stylesheet'>"));
+    });
+    $("#themeIcon").on('change', function (event) {
+        $('.configKey[data-l1key="nextdom::user-icon"]').value($("#themeIcon").value());
+        $('#themePreview').contents().find(".logo-mini-img").attr( "src", "/public/img/NextDom/NextDom_Square_" + $('.configKey[data-l1key="nextdom::user-icon"]').value() + ".png");
+        $('#themePreview').contents().find(".logo-lg-img").attr( "src", "/public/img/NextDom/NextDom_Wide_" + $('.configKey[data-l1key="nextdom::user-icon"]').value() + ".png");
     });
 
     // Save forms data

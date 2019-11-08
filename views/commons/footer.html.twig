@@ -39,7 +39,6 @@
     var clientServerDiff = {{ date().timestamp }} * 1000;
     var clientServerDiffDatetime = clientServerDiff - clientDatetime.getTime();
     var io = null;
-    NEXTDOM_PRODUCT_NAME='{{ PRODUCT_NAME }}';
     NEXTDOM_AJAX_TOKEN = '{{ AJAX_TOKEN }}';
     JEEDOM_AJAX_TOKEN = NEXTDOM_AJAX_TOKEN;
     $.ajaxSetup({
