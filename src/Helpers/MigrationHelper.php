@@ -191,7 +191,6 @@ class MigrationHelper
     private static function migrate_0_3_0($logFile = 'migration')
     {
         self::movePersonalFoldersAndFilesToData($logFile);
-        self::migrateUserFunctionClass($logFile);
     }
 
     /**
@@ -383,34 +382,6 @@ class MigrationHelper
                     $plan3d->save();
                 }
             }
-        }
-    }
-
-    /**
-     * Change require_once line in /data/php/user.function.class.php
-     * @param string $logFile
-     */
-    private static function migrateUserFunctionClass($logFile)
-    {
-
-        $fileToReplace = NEXTDOM_DATA . '/data/php/user.function.class.php';
-        if (FileSystemHelper::isFileExists($fileToReplace)) {
-            $fromString = 'require_once dirname(__FILE__) . \'/../../core/php/core.inc.php\';';
-            $toString = 'if (file_exists(\'/usr/share/nextdom/src/core.php\')) {
-                    require_once(\'/usr/share/nextdom/src/core.php\');
-                    } else {
-                        require_once(\'/var/www/html/src/core.php\');
-                    }';
-
-            $message = 'Apply changes to ' . $fileToReplace;
-            if ($logFile == 'migration') {
-                LogHelper::addInfo($logFile, $message, '');
-            } else {
-                ConsoleHelper::process($message);
-            }
-            $file_contents = file_get_contents($fileToReplace);
-            $file_contents = str_replace($fromString, $toString, $file_contents);
-            file_put_contents($fileToReplace, $file_contents);
         }
     }
 
