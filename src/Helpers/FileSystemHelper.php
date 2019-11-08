@@ -493,6 +493,19 @@ class FileSystemHelper
     }
 
     /**
+     * @abstract removes file
+     * @param $file
+     * @return bool
+     */
+    public static function rrmfile($file): bool
+    {
+        if (file_exists($file)) {
+            return unlink($file);
+        }
+        return false;
+    }
+
+    /**
      * @param       $src
      * @param       $dst
      * @param bool $_emptyDest

@@ -1,5 +1,33 @@
 # NextDom Core Changelog
 ---
+## 0.5.2
+
+> ***Release Date : 10/11/2019***
+>
+> ***Statut : beta***
+>
+> ***Coverall : 17%***
+
+#### NEWS
+* Nouvelle gestion des themes
+* Fusion des pages Customisation et Profil
+* Ajout du choix de l'icone NextDom
+* Réintegration de l'aide
+* Intégration de SonarCloud pour améliorer la qualité du code
+* Authentification 2 factors se fait maintenant en 2 étapes
+
+#### AMELIORATIONS / MODIFICATIONS
+* Suppression de la fonctionnalité user.function
+* Suppression de la fonctionnalité envoi plugin sur le market
+* Amelioration du comportement des modales
+* Amélioration de l'intégration de la version mobile
+* Amélioration de la couverture des traductions
+* Nettoyage du code
+
+#### FIXS
+* [liste ici](https://github.com/NextDom/nextdom-core/milestone/22?closed=1)
+---
+---
 ## 0.5.1
 
 > ***Release Date : 27/10/2019***
