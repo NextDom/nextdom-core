@@ -1,4 +1,5 @@
 <?php
+
 /* This file is part of NextDom.
  *
  * NextDom is free software: you can redistribute it and/or modify
@@ -18,17 +19,27 @@
 namespace NextDom\Enums;
 
 /**
- * Class ConfigKey
+ * Class AjaxParams
  * @package NextDom\Enums
  */
-class ConfigKey extends Enum
+class AjaxParams extends Enum
 {
-    const ENABLE_CRON = 'enableCron';
-    const ENABLE_SCENARIO = 'enableScenario';
-    const HARDWARE_NAME = 'hardware_name';
-    const IGNORE_HOUR_CHECK = 'ignoreHourCheck';
-    const MARKET_ADDRESS = 'market::address';
-    const NEXTDOM_INSTALL_KEY = 'nextdom::installKey';
-    const TMP_FOLDER = 'folder::tmp';
-    const WIDGET_BACKGROUND_OPACITY = 'widget::background-opacity';
+    const CMD_ID = 'cmd_id';
+    const CATEGORY = 'category';
+    const COMMAND = 'command';
+    const DEFAULT = 'default';
+    const EXPRESSION = 'expression';
+    const ID = 'id';
+    const KEY = 'key';
+    const OBJECT = 'object';
+    const OPTION = 'option';
+    const PARAMS = 'params';
+    const PROFILS = 'profils';
+    const SCENARIO = 'scenario';
+    const SCENARIOS = 'scenarios';
+    const STATE = 'state';
+    const SUMMARY = 'summary';
+    const TEMPLATE = 'template';
+    const USER_ID = 'user_id';
+    const VERSION = 'version';
 }

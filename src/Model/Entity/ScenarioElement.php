@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\DateFormat;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\LogHelper;
@@ -232,12 +233,12 @@ class ScenarioElement implements EntityInterface
                 $cron->setClass('scenario');
                 $cron->setFunction('doIn');
                 $cron->setOption(array('scenario_id' => intval($_scenario->getId()), 'scenarioElement_id' => intval($this->getId()), 'second' => date('s'), 'tags' => $_scenario->getTags()));
-                $cron->setLastRun(date('Y-m-d H:i:s'));
+                $cron->setLastRun(date(DateFormat::FULL));
                 $cron->setOnce(1);
                 $next = strtotime('+ ' . $time . ' min');
                 $cron->setSchedule(CronManager::convertDateToCron($next));
                 $cron->save();
-                $_scenario->setLog(__('Tâche : ') . $this->getId() . __(' programmé à : ') . date('Y-m-d H:i:s', $next) . ' (+ ' . $time . ' min)');
+                $_scenario->setLog(__('Tâche : ') . $this->getId() . __(' programmé à : ') . date(DateFormat::FULL, $next) . ' (+ ' . $time . ' min)');
             }
             return true;
         } elseif ($this->getType() == 'at') {
@@ -272,7 +273,7 @@ class ScenarioElement implements EntityInterface
             $cron->setClass('scenario');
             $cron->setFunction('doIn');
             $cron->setOption(array('scenario_id' => intval($_scenario->getId()), 'scenarioElement_id' => intval($this->getId()), 'second' => 0, 'tags' => $_scenario->getTags()));
-            $cron->setLastRun(date('Y-m-d H:i:s', strtotime('now')));
+            $cron->setLastRun(date(DateFormat::FULL, strtotime('now')));
             $cron->setOnce(1);
             $cron->setSchedule(CronManager::convertDateToCron($next));
             $cron->save();

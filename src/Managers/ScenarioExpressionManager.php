@@ -33,6 +33,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Enums\DateFormat;
 use NextDom\Enums\ScenarioState;
 use NextDom\Helpers\DateHelper;
 use NextDom\Helpers\DBHelper;
@@ -593,14 +594,14 @@ class ScenarioExpressionManager
                 return '';
             }
             if (str_word_count($period) == 1 && is_numeric(trim($period)[0])) {
-                $startHist = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -' . $period));
+                $startHist = date(DateFormat::FULL, strtotime(date(DateFormat::FULL) . ' -' . $period));
             } else {
-                $startHist = date('Y-m-d H:i:s', strtotime($period));
-                if ($startHist == date('Y-m-d H:i:s', strtotime(0))) {
+                $startHist = date(DateFormat::FULL, strtotime($period));
+                if ($startHist == date(DateFormat::FULL, strtotime(0))) {
                     return '';
                 }
             }
-            $historyStatistique = $cmd->getStatistique($startHist, date('Y-m-d H:i:s'));
+            $historyStatistique = $cmd->getStatistique($startHist, date(DateFormat::FULL));
             if (!isset($historyStatistique['avg']) || $historyStatistique['avg'] == '') {
                 return $cmd->execCmd();
             }
@@ -625,8 +626,8 @@ class ScenarioExpressionManager
         if (!is_object($cmd) || $cmd->getIsHistorized() == 0) {
             return '';
         }
-        $startDate = date('Y-m-d H:i:s', strtotime(self::setTags($startDate)));
-        $endDate = date('Y-m-d H:i:s', strtotime(self::setTags($endDate)));
+        $startDate = date(DateFormat::FULL, strtotime(self::setTags($startDate)));
+        $endDate = date(DateFormat::FULL, strtotime(self::setTags($endDate)));
         $historyStatistique = $cmd->getStatistique($startDate, $endDate);
         if (!isset($historyStatistique['avg'])) {
             return '';
@@ -717,14 +718,14 @@ class ScenarioExpressionManager
                 return '';
             }
             if (str_word_count($period) == 1 && is_numeric(trim($period)[0])) {
-                $startHist = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -' . $period));
+                $startHist = date(DateFormat::FULL, strtotime(date(DateFormat::FULL) . ' -' . $period));
             } else {
-                $startHist = date('Y-m-d H:i:s', strtotime($period));
-                if ($startHist == date('Y-m-d H:i:s', strtotime(0))) {
+                $startHist = date(DateFormat::FULL, strtotime($period));
+                if ($startHist == date(DateFormat::FULL, strtotime(0))) {
                     return '';
                 }
             }
-            $historyStatistique = $cmd->getStatistique($startHist, date('Y-m-d H:i:s'));
+            $historyStatistique = $cmd->getStatistique($startHist, date(DateFormat::FULL));
             if (!isset($historyStatistique['max']) || $historyStatistique['max'] == '') {
                 return $cmd->execCmd();
             }
@@ -748,8 +749,8 @@ class ScenarioExpressionManager
         if (!is_object($cmd) || $cmd->getIsHistorized() == 0) {
             return '';
         }
-        $startDate = date('Y-m-d H:i:s', strtotime(self::setTags($startDate)));
-        $endDate = date('Y-m-d H:i:s', strtotime(self::setTags($endDate)));
+        $startDate = date(DateFormat::FULL, strtotime(self::setTags($startDate)));
+        $endDate = date(DateFormat::FULL, strtotime(self::setTags($endDate)));
         $historyStatistique = $cmd->getStatistique(self::setTags($startDate), self::setTags($endDate));
         if (!isset($historyStatistique['max'])) {
             return '';
@@ -819,14 +820,14 @@ class ScenarioExpressionManager
                 return '';
             }
             if (str_word_count($period) == 1 && is_numeric(trim($period)[0])) {
-                $startHist = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -' . $period));
+                $startHist = date(DateFormat::FULL, strtotime(date(DateFormat::FULL) . ' -' . $period));
             } else {
-                $startHist = date('Y-m-d H:i:s', strtotime($period));
-                if ($startHist == date('Y-m-d H:i:s', strtotime(0))) {
+                $startHist = date(DateFormat::FULL, strtotime($period));
+                if ($startHist == date(DateFormat::FULL, strtotime(0))) {
                     return '';
                 }
             }
-            $historyStatistique = $cmd->getStatistique($startHist, date('Y-m-d H:i:s'));
+            $historyStatistique = $cmd->getStatistique($startHist, date(DateFormat::FULL));
             if (!isset($historyStatistique['min']) || $historyStatistique['min'] == '') {
                 return $cmd->execCmd();
             }
@@ -850,8 +851,8 @@ class ScenarioExpressionManager
         if (!is_object($cmd) || $cmd->getIsHistorized() == 0) {
             return '';
         }
-        $startDate = date('Y-m-d H:i:s', strtotime(self::setTags($startDate)));
-        $endDate = date('Y-m-d H:i:s', strtotime(self::setTags($endDate)));
+        $startDate = date(DateFormat::FULL, strtotime(self::setTags($startDate)));
+        $endDate = date(DateFormat::FULL, strtotime(self::setTags($endDate)));
         $historyStatistique = $cmd->getStatistique($startDate, $endDate);
         if (!isset($historyStatistique['min'])) {
             return '';
@@ -914,12 +915,12 @@ class ScenarioExpressionManager
         if ($cmd->getIsHistorized() == 0) {
             return '';
         }
-        $endTime = date('Y-m-d H:i:s');
+        $endTime = date(DateFormat::FULL);
         if (str_word_count($period) == 1 && is_numeric(trim($period)[0])) {
-            $startTime = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -' . $period));
+            $startTime = date(DateFormat::FULL, strtotime(date(DateFormat::FULL) . ' -' . $period));
         } else {
-            $startTime = date('Y-m-d H:i:s', strtotime($period));
-            if ($startTime == date('Y-m-d H:i:s', strtotime(0))) {
+            $startTime = date(DateFormat::FULL, strtotime($period));
+            if ($startTime == date(DateFormat::FULL, strtotime(0))) {
                 return '';
             }
         }
@@ -983,7 +984,7 @@ class ScenarioExpressionManager
                 $value = null;
             }
         }
-        return HistoryManager::stateChanges($cmd_id, $value, date('Y-m-d H:i:s', strtotime('-' . $period)), date('Y-m-d H:i:s'));
+        return HistoryManager::stateChanges($cmd_id, $value, date(DateFormat::FULL, strtotime('-' . $period)), date(DateFormat::FULL));
     }
 
     /**
@@ -1014,8 +1015,8 @@ class ScenarioExpressionManager
             $startDate = func_get_arg(1);
             $value = null;
         }
-        $startDate = date('Y-m-d H:i:s', strtotime(self::setTags($startDate)));
-        $endDate = date('Y-m-d H:i:s', strtotime(self::setTags($endDate)));
+        $startDate = date(DateFormat::FULL, strtotime(self::setTags($startDate)));
+        $endDate = date(DateFormat::FULL, strtotime(self::setTags($endDate)));
 
         return HistoryManager::stateChanges($cmd_id, $value, $startDate, $endDate);
     }
@@ -1041,14 +1042,14 @@ class ScenarioExpressionManager
         }
 
         if (str_word_count($period) == 1 && is_numeric(trim($period)[0])) {
-            $startDate = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -' . $period));
+            $startDate = date(DateFormat::FULL, strtotime(date(DateFormat::FULL) . ' -' . $period));
         } else {
-            $startDate = date('Y-m-d H:i:s', strtotime($period));
-            if ($startDate == date('Y-m-d H:i:s', strtotime(0))) {
+            $startDate = date(DateFormat::FULL, strtotime($period));
+            if ($startDate == date(DateFormat::FULL, strtotime(0))) {
                 return '';
             }
         }
-        $endDate = date('Y-m-d H:i:s');
+        $endDate = date(DateFormat::FULL);
 
         return self::getCmdValueDuration($cmd, $startDate, $endDate, $value);
     }
@@ -1120,8 +1121,8 @@ class ScenarioExpressionManager
             return '';
         }
 
-        $startDate = date('Y-m-d H:i:s', strtotime(self::setTags($startDate)));
-        $endDate = date('Y-m-d H:i:s', strtotime(self::setTags($endDate)));
+        $startDate = date(DateFormat::FULL, strtotime(self::setTags($startDate)));
+        $endDate = date(DateFormat::FULL, strtotime(self::setTags($endDate)));
 
         return self::getCmdValueDuration($cmd, $startDate, $endDate, $value);
     }
@@ -1142,8 +1143,8 @@ class ScenarioExpressionManager
         if (!is_object($cmd) || $cmd->getIsHistorized() == 0) {
             return '';
         }
-        $startDate = date('Y-m-d H:i:s', strtotime(self::setTags($startDate)));
-        $endDate = date('Y-m-d H:i:s', strtotime(self::setTags($endDate)));
+        $startDate = date(DateFormat::FULL, strtotime(self::setTags($startDate)));
+        $endDate = date(DateFormat::FULL, strtotime(self::setTags($endDate)));
         $historyStatistique = $cmd->getStatistique($startDate, $endDate);
         return round($historyStatistique['last'], 1);
     }
@@ -1165,15 +1166,15 @@ class ScenarioExpressionManager
             return '';
         }
         if (str_word_count($period) == 1 && is_numeric(trim($period)[0])) {
-            $startHist = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -' . $period));
+            $startHist = date(DateFormat::FULL, strtotime(date(DateFormat::FULL) . ' -' . $period));
         } else {
-            $startHist = date('Y-m-d H:i:s', strtotime($period));
-            if ($startHist == date('Y-m-d H:i:s', strtotime(0))) {
+            $startHist = date(DateFormat::FULL, strtotime($period));
+            if ($startHist == date(DateFormat::FULL, strtotime(0))) {
                 return '';
             }
         }
         $calc = str_replace(' ', '', $calc);
-        $historyStatistique = $cmd->getStatistique($startHist, date('Y-m-d H:i:s'));
+        $historyStatistique = $cmd->getStatistique($startHist, date(DateFormat::FULL));
         if ($historyStatistique['min'] == '') {
             return $cmd->execCmd();
         }
@@ -1198,8 +1199,8 @@ class ScenarioExpressionManager
             return '';
         }
         $calc = str_replace(' ', '', $calc);
-        $startDate = date('Y-m-d H:i:s', strtotime(self::setTags($startDate)));
-        $endDate = date('Y-m-d H:i:s', strtotime(self::setTags($endDate)));
+        $startDate = date(DateFormat::FULL, strtotime(self::setTags($startDate)));
+        $endDate = date(DateFormat::FULL, strtotime(self::setTags($endDate)));
         $historyStatistique = $cmd->getStatistique(self::setTags($startDate), self::setTags($endDate));
         return $historyStatistique[$calc];
     }
@@ -1294,7 +1295,7 @@ class ScenarioExpressionManager
      * @return false|int|string
      * @throws \Exception
      */
-    public static function collectDate($cmdId, $format = 'Y-m-d H:i:s')
+    public static function collectDate($cmdId, $format = DateFormat::FULL)
     {
         $cmdObj = CmdManager::byId(trim(str_replace('#', '', $cmdId)));
         if (!is_object($cmdObj)) {
@@ -1315,7 +1316,7 @@ class ScenarioExpressionManager
      * @return false|string
      * @throws \Exception
      */
-    public static function valueDate($cmdId, $format = 'Y-m-d H:i:s')
+    public static function valueDate($cmdId, $format = DateFormat::FULL)
     {
         $cmd = CmdManager::byId(trim(str_replace('#', '', $cmdId)));
         if (!is_object($cmd)) {
@@ -1343,13 +1344,13 @@ class ScenarioExpressionManager
      * @return false|int|string
      * @throws \Exception
      */
-    public static function lastCommunication($_eqLogic_id, $_format = 'Y-m-d H:i:s')
+    public static function lastCommunication($_eqLogic_id, $_format = DateFormat::FULL)
     {
         $eqLogic = EqLogicManager::byId(trim(str_replace(array('#', '#eqLogic', 'eqLogic'), '', EqLogicManager::fromHumanReadable('#' . str_replace('#', '', $_eqLogic_id) . '#'))));
         if (!is_object($eqLogic)) {
             return -1;
         }
-        return date($_format, strtotime($eqLogic->getStatus('lastCommunication', date('Y-m-d H:i:s'))));
+        return date($_format, strtotime($eqLogic->getStatus('lastCommunication', date(DateFormat::FULL))));
     }
 
     /**

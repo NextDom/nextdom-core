@@ -17,6 +17,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Enums\DateFormat;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\ConsoleHelper;
 use NextDom\Helpers\DBHelper;
@@ -81,7 +82,7 @@ class BackupManager
         try {
 
             ConsoleHelper::title("Create Backup Process", false);
-            ConsoleHelper::subTitle("starting backup procedure at " . date('Y-m-d H:i:s'));
+            ConsoleHelper::subTitle("starting backup procedure at " . date(DateFormat::FULL));
             NextDomHelper::event('begin_backup', true);
             ConsoleHelper::step("starting plugin backup");
             self::backupPlugins();
@@ -105,7 +106,7 @@ class BackupManager
             self::sendRemoteBackup($backupPath);
             ConsoleHelper::ok();
             NextDomHelper::event('end_backup');
-            ConsoleHelper::subTitle("end of backup procedure at " . date('Y-m-d H:i:s'));
+            ConsoleHelper::subTitle("end of backup procedure at " . date(DateFormat::FULL));
             ConsoleHelper::subTitle("elapsed time " . (strtotime('now') - $startTime));
         } catch (\Exception $e) {
             $status = "error";
@@ -443,7 +444,7 @@ class BackupManager
 
         try {
             ConsoleHelper::title("Restore Backup Process", false);
-            ConsoleHelper::subTitle("starting restore procedure at " . date('Y-m-d H:i:s'));
+            ConsoleHelper::subTitle("starting restore procedure at " . date(DateFormat::FULL));
             NextDomHelper::event('begin_restore', true);
 
             if (($file === null) || ("" === $file)) {
@@ -489,7 +490,7 @@ class BackupManager
             ConsoleHelper::ok();
             FileSystemHelper::rrmdir($tmpDir);
             NextDomHelper::event("end_restore");
-            ConsoleHelper::subTitle("end of restore procedure at " . date('Y-m-d H:i:s'));
+            ConsoleHelper::subTitle("end of restore procedure at " . date(DateFormat::FULL));
             ConsoleHelper::subTitle("elapsed time " . (strtotime('now') - $startTime));
         } catch (\Exception $e) {
             $status = "error";

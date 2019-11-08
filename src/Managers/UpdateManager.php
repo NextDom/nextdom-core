@@ -33,6 +33,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Enums\DateFormat;
 use NextDom\Enums\UpdateStatus;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
@@ -93,7 +94,7 @@ class UpdateManager
         }
 
         // Save last update in database
-        ConfigManager::save('update::lastCheck', date('Y-m-d H:i:s'));
+        ConfigManager::save('update::lastCheck', date(DateFormat::FULL));
     }
 
     /**
@@ -112,7 +113,7 @@ class UpdateManager
                 $update = (new Update())
                     ->setLogicalId($pluginId)
                     ->setType('plugin')
-                    ->setLocalVersion(date('Y-m-d H:i:s'));
+                    ->setLocalVersion(date(DateFormat::FULL));
                 $update->save();
             }
             $find = [];
@@ -128,7 +129,7 @@ class UpdateManager
                         $update = (new Update())
                             ->setLogicalId($logicalId)
                             ->setType($pluginId)
-                            ->setLocalVersion(date('Y-m-d H:i:s'));
+                            ->setLocalVersion(date(DateFormat::FULL));
                         $update->save();
                     }
                 }

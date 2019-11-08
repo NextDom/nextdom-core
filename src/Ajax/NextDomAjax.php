@@ -17,6 +17,7 @@
 
 namespace NextDom\Ajax;
 
+use NextDom\Enums\AjaxParams;
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AjaxHelper;
@@ -50,22 +51,22 @@ class NextDomAjax extends BaseAjax
 
     public function getInfoApplication()
     {
-        $return = array();
-        $return['widget_margin'] = ConfigManager::byKey('widget::margin');
-        $return['serverDatetime'] = Utils::getmicrotime();
+        $result = [];
+        $result['widget_margin'] = ConfigManager::byKey('widget::margin');
+        $result['serverDatetime'] = Utils::getmicrotime();
         if (!isConnect()) {
-            $return['connected'] = false;
-            $this->ajax->success($return);
+            $result['connected'] = false;
+            $this->ajax->success($result);
         }
 
-        $return['user_id'] = UserManager::getStoredUser()->getId();
-        $return['nextdom_token'] = AjaxHelper::getToken();
+        $result['user_id'] = UserManager::getStoredUser()->getId();
+        $result['nextdom_token'] = AjaxHelper::getToken();
         @session_start();
         $currentUser = UserManager::getStoredUser();
         $currentUser->refresh();
         @session_write_close();
 
-        $return['userProfils'] = $currentUser->getOptions();
+        $result['userProfils'] = $currentUser->getOptions();
         if ($currentUser->getOptions('defaultDesktopView') != '') {
             $view = ViewManager::byId($currentUser->getOptions('defaultDesktopView'));
         }
@@ -73,14 +74,14 @@ class NextDomAjax extends BaseAjax
             $resultObject = JeeObjectManager::byId($currentUser->getOptions('defaultDashboardObject'));
         }
 
-        $return['plugins'] = array();
+        $result['plugins'] = [];
         foreach (PluginManager::listPlugin(true) as $plugin) {
             if ($plugin->getEventJs() == 1) {
-                $return['plugins'][] = Utils::o2a($plugin);
+                $result['plugins'][] = Utils::o2a($plugin);
             }
         }
-        $return['custom'] = array('js' => false, 'css' => false);
-        $this->ajax->success($return);
+        $result['custom'] = ['js' => false, 'css' => false];
+        $this->ajax->success($result);
     }
 
     /**
@@ -138,9 +139,9 @@ class NextDomAjax extends BaseAjax
     {
         AuthentificationHelper::isConnectedOrFail();
         $this->ajax->checkToken();
-        $cmd = CmdManager::byId(Utils::init('cmd_id'));
+        $cmd = CmdManager::byId(Utils::init(AjaxParams::CMD_ID));
         if (!is_object($cmd)) {
-            throw new CoreException(__('Commande non trouvée : ') . Utils::init('cmd_id'));
+            throw new CoreException(__('Commande non trouvée : ') . Utils::init(AjaxParams::CMD_ID));
         }
         $listener = new Listener();
         $listener->setClass('interactQuery');
@@ -163,7 +164,7 @@ class NextDomAjax extends BaseAjax
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
         $this->ajax->checkToken();
-        $command = Utils::init('command');
+        $command = Utils::init(AjaxParams::COMMAND);
         if (strpos($command, '2>&1') === false && strpos($command, '>') === false) {
             $command .= ' 2>&1';
         }
@@ -177,7 +178,7 @@ class NextDomAjax extends BaseAjax
         AuthentificationHelper::isConnectedAsAdminOrFail();
         $this->ajax->checkToken();
         if (Utils::init('command', '') !== '') {
-            $this->ajax->success(DBHelper::getAll(Utils::init('command')));
+            $this->ajax->success(DBHelper::getAll(Utils::init(AjaxParams::COMMAND)));
         } else {
             $this->ajax->error(__('Aucune requête à exécuter'));
         }
@@ -251,7 +252,7 @@ class NextDomAjax extends BaseAjax
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
         $this->ajax->checkToken();
-        $this->ajax->success(NextDomHelper::getConfiguration(Utils::init('key'), Utils::init('default')));
+        $this->ajax->success(NextDomHelper::getConfiguration(Utils::init(AjaxParams::KEY), Utils::init(AjaxParams::DEFAULT)));
     }
 
     public function resetHwKey()

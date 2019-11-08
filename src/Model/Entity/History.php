@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\DateFormat;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
@@ -74,7 +75,7 @@ class History
             $cmd = $_cmd;
         }
         if ($this->getDatetime() == '') {
-            $this->setDatetime(date('Y-m-d H:i:s'));
+            $this->setDatetime(date(DateFormat::FULL));
         }
         if ($cmd->getConfiguration('historizeRound') !== '' && is_numeric($cmd->getConfiguration('historizeRound')) && $cmd->getConfiguration('historizeRound') >= 0 && $this->getValue() !== null) {
             $this->setValue(round($this->getValue(), $cmd->getConfiguration('historizeRound')));
@@ -83,7 +84,7 @@ class History
             if ($this->getTableName() == 'history') {
                 $time = strtotime($this->getDatetime());
                 $time -= $time % 300;
-                $this->setDatetime(date('Y-m-d H:i:s', $time));
+                $this->setDatetime(date(DateFormat::FULL, $time));
                 if ($this->getValue() === 0) {
                     $values = array(
                         'cmd_id' => $this->getCmd_id(),
