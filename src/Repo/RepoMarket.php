@@ -47,7 +47,7 @@ class RepoMarket
         'backup' => false,
         'hasConfiguration' => true,
         'proxy' => true,
-        'sendPlugin' => true,
+        'sendPlugin' => false,
         'hasStore' => true,
         'hasScenarioStore' => true,
         'test' => true,
@@ -1195,77 +1195,6 @@ class RepoMarket
         if (!$market->sendRequest('market::setRating', array('rating' => $_rating, 'id' => $this->getId()))) {
             throw new CoreException($market->getError());
         }
-    }
-
-    public function save()
-    {
-        $cache = CacheManager::byKey('market::info::' . $this->getLogicalId());
-        if (is_object($cache)) {
-            $cache->remove();
-        }
-        $market = self::getJsonRpc();
-        $params = Utils::o2a($this);
-        if (isset($params['changelog'])) {
-            unset($params['changelog']);
-        }
-        switch ($this->getType()) {
-            case 'plugin':
-                $plugin_id = $this->getLogicalId();
-                $cibDir = NextDomHelper::getTmpFolder('market') . '/' . $plugin_id;
-                if (file_exists($cibDir)) {
-                    rrmdir($cibDir);
-                }
-                mkdir($cibDir);
-                $exclude = array('tmp', '.git', '.DStore');
-                if (property_exists($plugin_id, '_excludeOnSendPlugin')) {
-                    $exclude = array_merge($plugin_id::$_excludeOnSendPlugin);
-                }
-                exec('find ' . realpath(__DIR__ . '/../../plugins/' . $plugin_id) . ' -name "*.sh" -type f -exec dos2unix {} \;');
-                rcopy(realpath(__DIR__ . '/../../plugins/' . $plugin_id), $cibDir, true, $exclude, true);
-                if (file_exists($cibDir . '/data')) {
-                    rrmdir($cibDir . '/data');
-                }
-                $tmp = NextDomHelper::getTmpFolder('market') . '/' . $plugin_id . '.zip';
-                if (file_exists($tmp)) {
-                    if (!unlink($tmp)) {
-                        throw new CoreException(__('Impossible de supprimer : ') . $tmp . __('. Vérifiez les droits'));
-                    }
-                }
-                if (!create_zip($cibDir, $tmp)) {
-                    throw new CoreException(__('Echec de création de l\'archive zip'));
-                }
-                rrmdir($cibDir);
-                break;
-            default:
-                $type = $this->getType();
-                if (!class_exists($type) || !method_exists($type, 'shareOnMarket')) {
-                    throw new CoreException(__('Aucune fonction correspondante à : ') . $type . '::shareOnMarket');
-                }
-                $tmp = $type::shareOnMarket($this);
-                break;
-        }
-        if (!file_exists($tmp)) {
-            throw new CoreException(__('Impossible de trouver le fichier à envoyer : ') . $tmp);
-        }
-        $file = array(
-            'file' => '@' . realpath($tmp),
-        );
-        if (!$market->sendRequest('market::save', $params, 30, $file)) {
-            throw new CoreException($market->getError());
-        }
-        unlink($tmp);
-        $update = UpdateManager::byTypeAndLogicalId($this->getType(), $this->getLogicalId());
-        if (!is_object($update)) {
-            $update = new update();
-            $update->setLogicalId($this->getLogicalId());
-            $update->setType($this->getType());
-        }
-        if ($update->getSource() == 'market') {
-            $update->setConfiguration('version', 'beta');
-            $update->setLocalVersion(date('Y-m-d H:i:s', strtotime('+10 minute' . date('Y-m-d H:i:s'))));
-            $update->save();
-        }
-        $update->checkUpdate();
     }
 
     public function getName()

@@ -282,9 +282,6 @@ class ScenarioExpressionManager
      */
     public static function setTags($_expression, &$_scenario = null, $_quote = false, $_nbCall = 0)
     {
-        if (file_exists(NEXTDOM_DATA . '/data/php/user.function.class.php')) {
-            require_once NEXTDOM_DATA . '/data/php/user.function.class.php';
-        }
         if ($_nbCall > 10) {
             return $_expression;
         }
@@ -358,8 +355,6 @@ class ScenarioExpressionManager
                     } else {
                         $replace2[$replace_string] = call_user_func_array(__CLASS__ . "::" . $function, $arguments);
                     }
-                } else if (class_exists('userFunction') && method_exists('userFunction', $function)) {
-                    $replace2[$replace_string] = call_user_func_array('userFunction' . "::" . $function, $arguments);
                 } else {
                     if (function_exists($function)) {
                         foreach ($arguments as &$argument) {

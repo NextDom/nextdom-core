@@ -34,6 +34,8 @@ script:
     - python3 launch_gui_tests.py
 after_script:
     - cd ${TRAVIS_BUILD_DIR}
-    - head -n 100 tests/coverage/clover.xml
+    - head -n 200 tests/coverage/clover.xml
     - sed -i "s/\/var\/www\/html/\/home\/travis\/build\/NextDom\/nextdom-core/g" tests/coverage/clover.xml
+    - sed -i "s/\/usr\/share\/nextdom\///g" tests/coverage/clover.xml
+    - head -n 200 tests/coverage/clover.xml
     - php vendor/bin/php-coveralls -v

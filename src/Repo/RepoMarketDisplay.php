@@ -30,32 +30,35 @@ Utils::sendVarToJS('market_display_info', $marketInformations);
 $marketCertification = $market->getCertification();
 
 ?>
-<div class='row form-group'>
-    <div class='col-sm-2'>
-        <center>
-            <?php
-            switch ($market->getType()) {
-                case 'widget':
-                    $default_image = '/public/img/NextDom_Widget_Gray.png';
-                    break;
-                case 'plugin':
-                    $default_image = '/public/img/NextDom_Plugin_Gray.png';
-                    break;
-                case 'script':
-                    $default_image = '/public/img/NextDom_Script_Gray.png';
-                    break;
-                default:
-                    $default_image = 'public/img/NextDom_NoPicture_Gray.png';
-                    break;
-            }
-            $urlPath = ConfigManager::byKey(ConfigKey::MARKET_ADDRESS) . '/' . $market->getImg('icon');
-            echo '<img src="' . $default_image . '" data-original="' . $urlPath . '"  class="lazy img-responsive" style="height: 150px;"/>';
-            ?>
-        </center>
+<style>
+    .centered {
+        text-align: center;
+    }
+</style>
+<div class="row form-group">
+    <div class="col-sm-2 centered">
+        <?php
+        switch ($market->getType()) {
+            case 'widget':
+                $default_image = '/public/img/NextDom_Widget_Gray.png';
+                break;
+            case 'plugin':
+                $default_image = '/public/img/NextDom_Plugin_Gray.png';
+                break;
+            case 'script':
+                $default_image = '/public/img/NextDom_Script_Gray.png';
+                break;
+            default:
+                $default_image = 'public/img/NextDom_NoPicture_Gray.png';
+                break;
+        }
+        $urlPath = ConfigManager::byKey(ConfigKey::MARKET_ADDRESS) . '/' . $market->getImg('icon');
+        echo '<img src="' . $default_image . '" data-original="' . $urlPath . '"  class="lazy img-responsive" style="height: 150px;"/>';
+        ?>
     </div>
     <div class='col-sm-4'>
         <input class="form-control marketAttr" data-l1key="id" style="display: none;">
-        <div class="marketAttr form-group market-modale-name" data-l1key="name" placeholder="{{Nom}}"></div>
+        <div class="marketAttr form-group market-modale-name" data-l1key="name"></div>
         <div class="span_author cursor form-group market-modale-author" data-author="<?php echo $market->getAuthor(); ?>">{{Développé par}} <?php echo $market->getAuthor(); ?></div>
         <?php
         $certificationClass = [
@@ -233,21 +236,17 @@ $marketCertification = $market->getCertification();
                 <div class="box-body market-modale-body">
                     <form class="form-horizontal">
                         <fieldset>
-                            <div class='col-sm-6'>
-                                <center>
-                                    <span class="marketAttr market-modale-rating" data-l1key="rating"></span>/5
-                                </center>
+                            <div class="col-sm-6 centered">
+                                <span class="marketAttr market-modale-rating" data-l1key="rating"></span>/5
                             </div>
-                            <div class='col-sm-6'>
+                            <div class="col-sm-6 centered">
                                 <?php if (ConfigManager::byKey('market::apikey') != '' || (ConfigManager::byKey('market::username') != '' && ConfigManager::byKey('market::password') != '')) { ?>
-                                    <center>
                                         <div class="form-group">
                                             <label class="col-sm-4 control-label">{{Ma Note}}</label>
                                         </div>
                                         <div class="form-group">
                                             <span><input style="display:none;" type="number" class="rating" id="in_myRating" data-max="5" data-empty-value="0" data-min="1" data-clearable="Effacer" value="<?php echo $market->getRating('user') ?>"/></span>
                                         </div>
-                                    </center>
                                 <?php }
                                 ?>
                             </div>
