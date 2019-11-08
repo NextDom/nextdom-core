@@ -23,6 +23,7 @@
 * Amélioration de l'intégration de la version mobile
 * Amélioration de la couverture des traductions
 * Nettoyage du code
+* Correction InfluxDb
 
 #### FIXS
 * [liste ici](https://github.com/NextDom/nextdom-core/milestone/22?closed=1)
