@@ -74,7 +74,7 @@ $marketCertification = $market->getCertification();
         }
         global $NEXTDOM_INTERNAL_CONFIG;
         if (isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$market->getCategorie()])) {
-            echo '<div class="form-group market-modale-category"><i class="fa ' . $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$market->getCategorie()]['icon'] . '"></i> ' . $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$market->getCategorie()]['name'] . '</div>';
+            echo '<div class="form-group market-modale-category"><i aria-hidden="true" class="fa ' . $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$market->getCategorie()]['icon'] . '"></i> ' . $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$market->getCategorie()]['name'] . '</div>';
             Utils::sendVarToJS('market_display_info_category', $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$market->getCategorie()]['name']);
         } else {
             echo '<div class="form-group market-modale-category">' . $market->getCategorie() . '</div>';
@@ -89,7 +89,7 @@ $marketCertification = $market->getCertification();
                 $allowVersion = $market->getAllowVersion();
                 foreach ($allowVersion as $branch) {
                     if ($market->getStatus($branch) == 1) {
-                        echo '<a class="btn btn-default bt_installFromMarket spacing-right" data-version="' . $branch . '" data-market_logicalId="' . $market->getLogicalId() . '" data-market_id="' . $market->getId() . '" ><i class="fas fa-plus-circle spacing-right"></i>{{Installer}} ' . $branch . '</a>';
+                        echo '<a class="btn btn-default bt_installFromMarket spacing-right" data-version="' . $branch . '" data-market_logicalId="' . $market->getLogicalId() . '" data-market_id="' . $market->getId() . '" ><i aria-hidden="true" class="fas fa-plus-circle spacing-right"></i>{{Installer}} ' . $branch . '</a>';
                     }
                 }
             } else if ($market->getPrivate() === 1) {
@@ -99,12 +99,12 @@ $marketCertification = $market->getCertification();
                     $purchase_info = RepoMarket::getPurchaseInfo();
                     if (isset($purchase_info['user_id']) && is_numeric($purchase_info['user_id'])) {
                         if ($market->getCost() > 0 && $market->getPurchase() != 1) {
-                            echo '<a class="btn btn-action spacing-right" href="https://www.jeedom.com/market/index.php?v=d&p=profils#buyHistory" target="_blank"><i class="fas fa-eur spacing-right"></i>{{Code promo}}</a>';
+                            echo '<a class="btn btn-action spacing-right" href="https://www.jeedom.com/market/index.php?v=d&p=profils#buyHistory" target="_blank"><i aria-hidden="true" class="fas fa-eur spacing-right"></i>{{Code promo}}</a>';
                         }
                         if ($marketCertification === JeedomMarketCert::PREMIUM) {
-                            echo '<a class="btn btn-default spacing-right" target="_blank" href="mailto:supportpro@jeedom.com"><i class="fas fa-envelope spacing-right"></i>{{Nous Contacter}}</a>';
+                            echo '<a class="btn btn-default spacing-right" target="_blank" href="mailto:supportpro@jeedom.com"><i aria-hidden="true" class="fas fa-envelope spacing-right"></i>{{Nous Contacter}}</a>';
                         } else {
-                            echo '<a class="btn btn-default" target="_blank" href="' . ConfigManager::byKey('market::address') . '/index.php?v=d&p=purchaseItem&user_id=' . $purchase_info['user_id'] . '&type=plugin&id=' . $market->getId() . '"><i class="fas fa-shopping-cart spacing-right"></i>{{Acheter}}</a>';
+                            echo '<a class="btn btn-default" target="_blank" href="' . ConfigManager::byKey('market::address') . '/index.php?v=d&p=purchaseItem&user_id=' . $purchase_info['user_id'] . '&type=plugin&id=' . $market->getId() . '"><i aria-hidden="true" class="fas fa-shopping-cart spacing-right"></i>{{Acheter}}</a>';
                         }
                     } else {
                         echo '<div class="alert alert-info">{{Cet article est payant. Vous devez avoir un compte sur le market et avoir renseigné les identifiants market dans NextDom pour pouvoir l\'acheter}}</div>';
@@ -115,10 +115,10 @@ $marketCertification = $market->getCertification();
             }
             if (is_object($update)) {
                 ?>
-                <a class="btn btn-danger" id="bt_removeFromMarket" data-market_id="<?php echo $market->getId(); ?>"><i class="fas fa-minus-circle spacing-right"></i>{{Supprimer}}</a>
+                <a class="btn btn-danger" id="bt_removeFromMarket" data-market_id="<?php echo $market->getId(); ?>"><i aria-hidden="true" class="fas fa-minus-circle spacing-right"></i>{{Supprimer}}</a>
             <?php }
             echo '</div>';
-            echo '<div class="form-group"><i class="fas fa-credit-card spacing-left spacing-right"></i>';
+            echo '<div class="form-group"><i aria-hidden="true" class="fas fa-credit-card spacing-left spacing-right"></i>';
             if ($marketCertification === JeedomMarketCert::PREMIUM) {
                 echo '<span data-l1key="rating" style="font-size: 1.5em;">{{Nous Contacter}}</span>';
             } else {
@@ -179,7 +179,7 @@ $marketCertification = $market->getCertification();
         <div class='col-sm-6'>
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fas fa-info-circle"></i>{{Description}}</h3>
+                    <h3 class="box-title"><i aria-hidden="true" class="fas fa-info-circle"></i>{{Description}}</h3>
                 </div>
                 <div class="box-body">
                     <form class="form-horizontal">
@@ -189,8 +189,8 @@ $marketCertification = $market->getCertification();
                 </div>
                 <div class="box-footer">
                     <form class="form-horizontal">
-                        <a class="btn btn-primary pull-left" target="_blank" href="<?php echo $market->getDoc() ?>"><i class="fas fa-book spacing-right"></i>{{Documentation}}</a>
-                        <a class="btn btn-default pull-right" target="_blank" href="<?php echo $market->getChangelog() ?>"><i class="fas fa-list spacing-right"></i>{{Changelog}}</a>
+                        <a class="btn btn-primary pull-left" target="_blank" href="<?php echo $market->getDoc() ?>"><i aria-hidden="true" class="fas fa-book spacing-right"></i>{{Documentation}}</a>
+                        <a class="btn btn-default pull-right" target="_blank" href="<?php echo $market->getChangelog() ?>"><i aria-hidden="true" class="fas fa-list spacing-right"></i>{{Changelog}}</a>
                     </form>
                 </div>
             </div>
@@ -198,7 +198,7 @@ $marketCertification = $market->getCertification();
         <div class='col-sm-6'>
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fas fa-drafting-compass"></i>{{Compatibilité plateforme}}</h3>
+                    <h3 class="box-title"><i aria-hidden="true" class="fas fa-drafting-compass"></i>{{Compatibilité plateforme}}</h3>
                 </div>
                 <div class="box-body">
                     <form class="form-horizontal">
@@ -231,7 +231,7 @@ $marketCertification = $market->getCertification();
         <div class='col-sm-6'>
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fas fa-comments"></i>{{Avis}}</h3>
+                    <h3 class="box-title"><i aria-hidden="true" class="fas fa-comments"></i>{{Avis}}</h3>
                 </div>
                 <div class="box-body market-modale-body">
                     <form class="form-horizontal">
@@ -257,7 +257,7 @@ $marketCertification = $market->getCertification();
         <div class='col-sm-6'>
             <div class="box box-success">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fas fa-business-time"></i>{{Utilisation}}</h3>
+                    <h3 class="box-title"><i aria-hidden="true" class="fas fa-business-time"></i>{{Utilisation}}</h3>
                 </div>
                 <div class="box-body market-modale-body">
                     <form class="form-horizontal">
@@ -272,7 +272,7 @@ $marketCertification = $market->getCertification();
         <div class='col-sm-12'>
             <div class="box">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fas fa-barcode"></i>{{Informations complementaires}}</h3>
+                    <h3 class="box-title"><i aria-hidden="true" class="fas fa-barcode"></i>{{Informations complementaires}}</h3>
                 </div>
                 <div class="box-body market-modale-body">
                     <form class="form-horizontal">
@@ -284,11 +284,11 @@ $marketCertification = $market->getCertification();
                             <div class='col-sm-2'>
                                 <label class="control-label">{{Lien}}</label><br/>
                                 <?php if ($market->getLink('video') != '' && $market->getLink('video') != 'null') { ?>
-                                    <a class="btn btn-default btn-xs" target="_blank" href="<?php echo $market->getLink('video'); ?>"><i class="fa fa-youtube"></i> Video</a><br/>
+                                    <a class="btn btn-default btn-xs" target="_blank" href="<?php echo $market->getLink('video'); ?>"><i aria-hidden="true" class="fa fa-youtube"></i> Video</a><br/>
                                 <?php }
                                 ?>
                                 <?php if ($market->getLink('forum') != '' && $market->getLink('forum') != 'null') { ?>
-                                    <a class="btn btn-default btn-xs" target="_blank" href="<?php echo $market->getLink('forum'); ?>"><i class="fa fa-users"></i> Forum</a><br/>
+                                    <a class="btn btn-default btn-xs" target="_blank" href="<?php echo $market->getLink('forum'); ?>"><i aria-hidden="true" class="fa fa-users"></i> Forum</a><br/>
                                 <?php }
                                 ?>
                             </div>
