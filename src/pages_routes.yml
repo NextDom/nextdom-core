@@ -125,10 +125,6 @@ profils:
   path: 'profils'
   controller: NextDom\Controller\Params\ProfilsController::get
   condition: 'admin'
-realtime:
-  path: 'realtime'
-  controller: NextDom\Controller\Diagnostic\RealtimeController::get
-  condition: 'admin'
 reboot:
   path: 'reboot'
   controller: NextDom\Controller\RebootController::get

@@ -43,7 +43,7 @@ class AdministrationPages(BaseGuiTest):
         link_buttons = ['users', 'api', 'network', 'security', 'cache', 'services',
                         'general', 'profils', 'commandes', 'links', 'interact_config',
                         'eqlogic', 'summary', 'report_config', 'log_config',
-                        'health', 'cron', 'eqAnalyse', 'realtime', 'history', 'timeline',
+                        'health', 'cron', 'eqAnalyse', 'history', 'timeline',
                         'report', 'log',
                         'display', 'backup', 'update', 'osdb', 'interact', 'scenario',
                         'object', 'plugin']
@@ -237,17 +237,6 @@ class AdministrationPages(BaseGuiTest):
         tabs_div = self.get_element_by_id('ul_tabBatteryAlert')
         back_button = self.get_link_by_title('Retour')
         self.assertIsNotNone(tabs_div)
-        self.assertIsNotNone(back_button)
-        self.assertEqual(0, len(self.get_js_logs()))
-        back_button.click()
-
-    def test_realtime_page(self):
-        """Test realtime administration page
-        """
-        self.goto('index.php?v=d&p=realtime')
-        remove_logs_button = self.get_element_by_id('bt_logrealtimeremoveLog')
-        back_button = self.get_link_by_title('Retour')
-        self.assertIsNotNone(remove_logs_button)
         self.assertIsNotNone(back_button)
         self.assertEqual(0, len(self.get_js_logs()))
         back_button.click()
