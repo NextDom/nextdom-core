@@ -22,11 +22,11 @@ class FoldersReferential extends Enum
 {
 
     const NEXTDOMFOLDERS = ['api','assets','backup','core','data','docs','install','log','mobile','node_modules','plugins','public','scripts','src','tests','tmp','translations','vendor','views','var','.github','.sass-cache','.git','.idea'];
-    const NEXTDOMFILES = ['cache.tar.gz' ,'CHANGELOG.md','composer.json','composer.lock','COPYING','DB_backup.sql','favicon.ico','index.php','LICENSE','manifest.json','manifest.webmanifest','mobile.manifest.php','package.json','package-lock.json','phpunit.xml.dist','README.md','robots.txt','.travis.yml','.htaccess','.coveralls.yml','.gitignore'];
+    const NEXTDOMFILES = ['cache.tar.gz' ,'CHANGELOG.md','composer.json','composer.lock','COPYING','DB_backup.sql','index.php','LICENSE','manifest.json','manifest.webmanifest','mobile.manifest.php','package.json','package-lock.json','phpunit.xml.dist','README.md','robots.txt','.travis.yml','.htaccess','.coveralls.yml','.gitignore','.sonarcloud.properties'];
 
     const PUBLICFOLDERS = ['css', 'icon', 'img', 'js', 'themes'];
-    const PUBLICFILES = ['404.html', 'here.html'];
+    const PUBLICFILES = ['403.html','404.html','500.html', 'here.html'];
 
     const JEEDOMFOLDERS = ['3rdparty','core','data','desktop','install','mobile','script','.github','.sass-cache','.git','.idea'];
-    const JEEDOMFILES = ['cache.tar.gz' ,'composer.json','composer.lock','COPYING','Dockerfile','DB_backup.sql','favicon.ico','health.sh','here.html','index.php','index-1.php','LICENSE','manifest.json','manifest.webmanifest','mobile.manifest.php','README.md','robots.txt','sick.php','.htaccess','.gitignore'];
+    const JEEDOMFILES = ['cache.tar.gz' ,'composer.json','composer.lock','COPYING','Dockerfile','DB_backup.sql','health.sh','here.html','index.php','index-1.php','LICENSE','manifest.json','manifest.webmanifest','mobile.manifest.php','README.md','robots.txt','sick.php','.htaccess','.gitignore'];
 }

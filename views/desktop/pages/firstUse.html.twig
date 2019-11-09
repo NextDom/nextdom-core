@@ -79,7 +79,7 @@
                         <!-- Step 1 section : Welcome -->
                         <div class="row setup-content" id="step-1">
                             <div class="stepwizard">
-                                <h2 class="login-box-msg">{{ 'firstuse.welcome-title'|trans({'%productName%' : PRODUCT_NAME}) }}</h2>
+                                <h2 class="login-box-msg">{{ 'firstuse.welcome-title'|trans }}</h2>
                                 <h5>{{ 'firstuse.welcome-content'|trans|nl2br }}</h5>
                             </div>
                             <button id="toStep2" class="btn btn-primary nextBtn primary-bg pull-right" type="button">{{ 'common.next'|trans }}<i class="fas fa-caret-right spacing-left no-spacing"></i></button>
@@ -88,7 +88,7 @@
                         <!-- Step 2 section : Change password -->
                         <div class="row setup-content" id="step-2">
                             <div class="stepwizard">
-                                <h2 class="login-box-msg">{{ 'firstuse.password-title'|trans({'%productName%' : PRODUCT_NAME}) }}</h2>
+                                <h2 class="login-box-msg">{{ 'firstuse.password-title'|trans }}</h2>
                                 <h5>{{ 'firstuse.password-content'|trans }}</h5>
                                 <div id="register" tabindex="500">
                                     <div class="passwd stepwizard-passwd">
@@ -106,7 +106,7 @@
                         <!-- Step 3 section : Market connection -->
                         <div class="row setup-content" id="step-3">
                             <div class="stepwizard">
-                                <h2 class="login-box-msg">{{ 'firstuse.market-title'|trans({'%productName%' : PRODUCT_NAME}) }}</h2>
+                                <h2 class="login-box-msg">{{ 'firstuse.market-title'|trans }}</h2>
                                 <div class="row">
                                     <h5>{{ 'firstuse.market-content'|trans }}</h5>
                                     <div id="market" class="col-sm-12 col-md-6">
@@ -132,7 +132,7 @@
                         <!-- Step 4 section : Theme choose -->
                         <div class="row setup-content" id="step-4">
                             <div class="stepwizard">
-                                <h2 class="login-box-msg">{{ 'firstuse.customize-title'|trans({'%productName%' : PRODUCT_NAME}) }}</h2>
+                                <h2 class="login-box-msg">{{ 'firstuse.customize-title'|trans }}</h2>
                                 <div class="row">
                                     <h5>{{ 'firstuse.customize-content'|trans }}</h5>
                                     <div class="col-sm-12 col-md-6">
@@ -175,7 +175,7 @@
                         <!-- Step 5 section : Widget Theme choose -->
                         <div class="row setup-content" id="step-5">
                             <div class="stepwizard">
-                                <h2 class="login-box-msg">{{ 'firstuse.customize-title2'|trans({'%productName%' : PRODUCT_NAME}) }}</h2>
+                                <h2 class="login-box-msg">{{ 'firstuse.customize-title2'|trans }}</h2>
                                 <div class="row">
                                     <h5>{{ 'firstuse.customize-widget'|trans }}</h5>
                                     {% for theme in profilsWidgetThemes %}
@@ -203,7 +203,7 @@
                         <!-- Step 6 section : Finish -->
                         <div class="row setup-content" id="step-6">
                             <div class="stepwizard">
-                                <h2 class="login-box-msg">{{ 'firstuse.congrats-title'|trans({'%productName%' : PRODUCT_NAME}) }}</h2>
+                                <h2 class="login-box-msg">{{ 'firstuse.congrats-title'|trans }}</h2>
                                 <h5>{{ 'firstuse.congrats-content'|trans }}</h5>
                             </div>
                             <button id="finishConf" class="btn btn-primary nextBtn primary-bg pull-right ui-icon-closethick" type="button">{{ 'common.finish'|trans }}<i class="fa fa-check-circle spacing-left no-spacing"></i></button>
