@@ -69,7 +69,7 @@ abstract class BaseAjax
      */
     public function process()
     {
-//        try {
+        try {
             $this->checkAccessOrFail($this->MUST_BE_CONNECTED, $this->NEEDED_RIGHTS);
             if ($this->CHECK_AJAX_TOKEN) {
                 $this->ajax->checkToken();
@@ -82,9 +82,9 @@ abstract class BaseAjax
             } else {
                 throw new CoreException(__('core.error-ajax'), 401);
             }
-//        } catch (\Throwable $throwable) {
-//            $this->ajax->error(Utils::displayException($throwable), $throwable->getCode());
-//        }
+        } catch (\Throwable $throwable) {
+            $this->ajax->error(Utils::displayException($throwable), $throwable->getCode());
+        }
     }
 
     /**
