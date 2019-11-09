@@ -310,10 +310,6 @@ function makeZipSupport()
     return Utils::makeZipSupport();
 }
 
-function unautorizedInDemo($_user = null) {
-    return Utils::unautorizedInDemo($_user);
-}
-
 function decodeSessionData($_data)
 {
     return SessionHelper::decodeSessionData($_data);

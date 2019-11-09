@@ -32,8 +32,7 @@ if (UserManager::isBanned() && false) {
     header("Status: 404 Not Found");
     header('HTTP/1.0 404 Not Found');
     $_SERVER['REDIRECT_STATUS'] = 404;
-    echo "<h1>404 Not Found</h1>";
-    echo "The page that you have requested could not be found.";
+    require(NEXTDOM_ROOT . '/public/404.html');
     die();
 }
 try {
