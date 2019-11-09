@@ -1,8 +1,26 @@
 # NextDom Core Changelog
 ---
+## 0.5.3
+
+> ***Release Date : 09/11/2019***
+>
+> ***Statut : beta***
+>
+> ***Coverall : 17%***
+
+#### NEWS
+* Choix du logo NextDom pour le thème
+
+#### AMELIORATIONS / MODIFICATIONS
+* Nettoyage du code inutile
+* Suppression page realtime
+
+#### FIXS
+* [liste ici](https://github.com/NextDom/nextdom-core/milestone/23?closed=1)
+---
 ## 0.5.2
 
-> ***Release Date : 10/11/2019***
+> ***Release Date : 08/11/2019***
 >
 > ***Statut : beta***
 >
@@ -27,7 +45,6 @@
 
 #### FIXS
 * [liste ici](https://github.com/NextDom/nextdom-core/milestone/22?closed=1)
----
 ---
 ## 0.5.1
 
