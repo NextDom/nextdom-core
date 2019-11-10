@@ -155,12 +155,6 @@ $(function () {
         });
     });
 
-    // Realtime log link event handler
-    $('#bt_showEventInRealTime').on('click',function(){
-        $('#md_modal').dialog({title: "{{Evénement en temps réel}}"});
-        $("#md_modal").load('index.php?v=d&modal=log.display&log=event').dialog('open');
-    });
-
     // Quick note button event handler declaration
     $('#bt_showNoteManager').on('click',function(){
         $('#md_modal').dialog({title: "{{Note}}"});

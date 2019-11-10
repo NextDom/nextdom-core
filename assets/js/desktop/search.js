@@ -85,7 +85,6 @@ function activateGlobalSearch() {
         "interact",
         "scenario",
         "object",
-        "realtime",
         "display",
         "database",
         "note",
