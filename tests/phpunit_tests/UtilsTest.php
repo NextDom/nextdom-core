@@ -154,6 +154,36 @@ class UtilsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('GET', $toTest);
     }
 
+    public function testInitPathWithGoodPath() {
+        $_GET['path'] = NEXTDOM_ROOT . '/src';
+        $this->assertEquals(NEXTDOM_ROOT . '/src', Utils::initPath('path'));
+    }
+
+    public function testInitPathWithBadPath() {
+        $_GET['path'] = '/something';
+        $this->assertFalse(Utils::initPath('path'));
+    }
+
+    public function testInitFilename() {
+        $_GET['filename'] = '/../a_file && rm -fr /';
+        $this->assertEquals('..a_file  rm -fr ', Utils::initFilename('filename'));
+    }
+
+    public function testInitIntWithString() {
+        $_GET['a_int'] = '1';
+        $this->assertTrue(Utils::initInt('a_int') === 1);
+    }
+
+    public function testInitIntWithGoodInt() {
+        $_GET['a_int'] = 2;
+        $this->assertTrue(Utils::initInt('a_int') === 2);
+    }
+
+    public function testInitIntWithBadInt() {
+        $_GET['a_int'] = "a bad int";
+        $this->assertTrue(Utils::initInt('a_int') === 0);
+    }
+
     public function testSendVarToJsSimpleVar()
     {
         ob_start();

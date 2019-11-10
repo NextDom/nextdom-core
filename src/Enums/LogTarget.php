@@ -23,6 +23,9 @@ namespace NextDom\Enums;
  */
 class LogTarget extends Enum
 {
+    const BACKUP = 'backup';
     const CMD = 'cmd';
     const EVENT = 'event';
+    const MIGRATION = 'migration';
+    const RESTORE = 'restore';
 }

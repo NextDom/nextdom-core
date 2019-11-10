@@ -18,6 +18,8 @@
 namespace NextDom\Managers;
 
 use NextDom\Enums\DateFormat;
+use NextDom\Enums\LogTarget;
+use NextDom\Enums\NextDomObj;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\ConsoleHelper;
 use NextDom\Helpers\DBHelper;
@@ -47,10 +49,10 @@ class BackupManager
     public static function backup(bool $background = false)
     {
         if (true === $background) {
-            LogHelper::clear('backup');
+            LogHelper::clear(LogTarget::BACKUP);
             $script = sprintf("%s/install/backup.php interactive=false  > %s 2>&1 &",
                 NEXTDOM_ROOT,
-                LogHelper::getPathToLog('backup'));
+                LogHelper::getPathToLog(LogTarget::BACKUP));
             SystemHelper::php($script);
         } else {
             self::createBackup();
@@ -133,13 +135,11 @@ class BackupManager
     public static function getBackupDirectory()
     {
         $dir = ConfigManager::byKey('backup::path');
-        if ("/" != substr($dir, 0, 1)) {
+        if ('/' != substr($dir, 0, 1)) {
             $dir = sprintf("%s/%s", NEXTDOM_DATA, $dir);
         }
-        if (false === is_dir($dir)) {
-            if (false === mkdir($dir, 0775, true)) {
-                throw new CoreException("unable to create backup directory " . $dir);
-            }
+        if (!is_dir($dir) && !mkdir($dir, 0775, true)) {
+            throw new CoreException("unable to create backup directory " . $dir);
         }
         return $dir;
     }
@@ -153,15 +153,15 @@ class BackupManager
      */
     public static function getBackupFilename($name = null): string
     {
-        $date = date("Y-m-d-H:i:s");
+        $date = date("Y-m-d-H-i-s");
         $version = NextDomHelper::getNextdomVersion();
         $format = "backup-%s-%s-%s.tar.gz";
 
         if ($name === null) {
             $name = ConfigManager::byKey('name', 'core', 'NextDom');
         }
-        $cleanName = str_replace(array('&', '#', "'", '"', '+', "-"), "", $name);
-        $cleanName = str_replace(" ", "_", $cleanName);
+        $cleanName = str_replace(['&', '#', "'", '"', '+', '-'], '', $name);
+        $cleanName = str_replace(' ', '_', $cleanName);
 
         return sprintf($format, $cleanName, $version, $date);
     }
@@ -269,7 +269,7 @@ class BackupManager
 
         // Backup config and data folders
         FileSystemHelper::mkdirIfNotExists(NEXTDOM_DATA.'/data/custom',0775,true);
-        $roots = [NEXTDOM_DATA.'/data/',NEXTDOM_DATA.'/config/'];
+        $roots = [NEXTDOM_DATA.'/data/', NEXTDOM_DATA.'/config/'];
         $pattern = NEXTDOM_DATA .'/';
         self::addPathToArchive($roots, $pattern, $tar, $logFile);
 
@@ -287,15 +287,13 @@ class BackupManager
 
         // Backup all files/folder in root folder added by user
         foreach ($it as $fileInfo) {
-            if ($fileInfo->isDir() || $fileInfo->isFile()) {
-                if(!in_array($fileInfo->getFilename(), FoldersReferential::NEXTDOMFOLDERS)
-                    && !in_array($fileInfo->getFilename(), FoldersReferential::NEXTDOMFILES)
-                    && !is_link( $fileInfo->getFilename()) ) {
-                    $tar->addFile($fileInfo->getPathname(), $fileInfo->getFilename());
-                    if ($fileInfo->isDir()) {
-                        $roots = [NEXTDOM_ROOT.'/'.$fileInfo->getFilename()];
-                        self::addPathToArchive($roots, $pattern, $tar, $logFile);
-                    }
+            if (($fileInfo->isDir() || $fileInfo->isFile()) && !in_array($fileInfo->getFilename(), FoldersReferential::NEXTDOMFOLDERS)
+                && !in_array($fileInfo->getFilename(), FoldersReferential::NEXTDOMFILES)
+                && !is_link( $fileInfo->getFilename())) {
+                $tar->addFile($fileInfo->getPathname(), $fileInfo->getFilename());
+                if ($fileInfo->isDir()) {
+                    $roots = [NEXTDOM_ROOT.'/'.$fileInfo->getFilename()];
+                    self::addPathToArchive($roots, $pattern, $tar, $logFile);
                 }
             }
         }
@@ -419,7 +417,7 @@ class BackupManager
             $script = sprintf("%s/install/restore.php file=%s interactive=false > %s 2>&1 &",
                 NEXTDOM_ROOT,
                 $file,
-                LogHelper::getPathToLog('restore'));
+                LogHelper::getPathToLog(LogTarget::RESTORE));
             SystemHelper::php($script);
         } else {
             self::restoreBackup($file);
@@ -468,10 +466,10 @@ class BackupManager
             self::restoreJeedomConfig($tmpDir);
             ConsoleHelper::ok();
             ConsoleHelper::step("restoring custom data...\n");
-            self::restoreCustomData($tmpDir,'restore');
+            self::restoreCustomData($tmpDir,LogTarget::RESTORE);
             ConsoleHelper::ok();
             ConsoleHelper::step("migrating data...");
-            MigrationHelper::migrate('restore');
+            MigrationHelper::migrate(LogTarget::RESTORE);
             ConsoleHelper::ok();
             ConsoleHelper::step("starting nextdom system...");
             NextDomHelper::startSystem();
@@ -496,19 +494,19 @@ class BackupManager
             $status = "error";
             ConsoleHelper::nok();
             ConsoleHelper::error($e);
-            LogHelper::add('restore', 'error', $e->getMessage());
+            LogHelper::addError(LogTarget::RESTORE, $e->getMessage());
             if (true === is_dir($tmpDir)) {
                 FileSystemHelper::rrmdir($tmpDir);
             }
-            ConsoleHelper::step("starting Nextdom system...");
+            ConsoleHelper::step('starting Nextdom system...');
             NextDomHelper::startSystem();
             ConsoleHelper::ok();
         }
         // the following line acts as marker used in ajax telling that the procedure is finished
         // it should be me removed
-        ConsoleHelper::subTitle("Closing with " . $status);
-        ConsoleHelper::title("Restore Backup Process", true);
-        return ($status == "success");
+        ConsoleHelper::subTitle('Closing with ' . $status);
+        ConsoleHelper::title('Restore Backup Process', true);
+        return ($status == 'success');
     }
 
     /**
@@ -523,8 +521,8 @@ class BackupManager
     {
         $files = self::getBackupFileInfo($backupDir, $order);
 
-        if (true === empty($files)) {
-            throw new CoreException("unable to find any backup file");
+        if (empty($files)) {
+            throw new CoreException('unable to find any backup file');
         }
         return $files[0]["file"];
     }
@@ -545,7 +543,7 @@ class BackupManager
         $excludeDirs = array("AlternativeMarketForJeedom", "musicast");
         $exclude = sprintf("/^(%s)$/", join("|", $excludeDirs));
         $tmpDir = sprintf("%s-restore-%s", NEXTDOM_TMP, date('Y-m-d-H:i:s'));
-        if (false === mkdir($tmpDir, $mode = 0775, true)) {
+        if (false === mkdir($tmpDir, 0775, true)) {
             throw new CoreException("unable to create tmp directory " . $tmpDir);
         }
         if(FileSystemHelper::getDirectoryFreeSpace($tmpDir) < 400000000){
@@ -637,8 +635,7 @@ class BackupManager
         if (true == file_exists($jeedomConfig)) {
             @unlink($jeedomConfig);
         }
-        if ((false === file_exists($commonConfig)) &&
-            (true === file_exists($commonBackup))) {
+        if (!file_exists($commonConfig) && file_exists($commonBackup)) {
             if (false === FileSystemHelper::mv($commonBackup, $commonConfig)) {
                 // should at least warn, silent fail kept from install/restore.php refactoring
             }
@@ -663,7 +660,7 @@ class BackupManager
                 && !in_array($name, FoldersReferential::JEEDOMFOLDERS)
                 && !in_array($name, FoldersReferential::JEEDOMFILES)) {
                 $message = 'Restoring folder: ' . $name;
-                if ($logFile == 'migration') {
+                if ($logFile == LogTarget::MIGRATION) {
                     LogHelper::addInfo($logFile, $message, '');
                 } else {
                     ConsoleHelper::process($message);
@@ -671,7 +668,7 @@ class BackupManager
                 if (true === FileSystemHelper::mv($c_dir, sprintf("%s/%s", NEXTDOM_ROOT, $name))) {
                     self::restorePublicPerms(NEXTDOM_ROOT);
                 }
-                if($logFile != 'migration') {
+                if($logFile != LogTarget::MIGRATION) {
                     ConsoleHelper::ok();
                 }
             }
@@ -686,7 +683,7 @@ class BackupManager
         foreach ($customDataDirs as $c_dir) {
             $name = basename($c_dir);
             $message ='Restoring folder :'.$name;
-            if($logFile == 'migration') {
+            if($logFile == LogTarget::MIGRATION) {
                 LogHelper::addInfo($logFile, $message, '');
             } else {
                 ConsoleHelper::process($message);
@@ -694,7 +691,7 @@ class BackupManager
             if (true === FileSystemHelper::mv($c_dir, sprintf("%s/%s", $customDataRoot, $name))) {
                 self::restorePublicPerms($customDataRoot);
             }
-            if($logFile != 'migration') {
+            if($logFile != LogTarget::MIGRATION) {
                 ConsoleHelper::ok();
             }
         }
@@ -705,9 +702,9 @@ class BackupManager
         FileSystemHelper::mkdirIfNotExists($customPlanRoot,0775,true);
         foreach ($customPlanDirs as $c_dir) {
             $name = basename($c_dir);
-            if(Utils::startsWith($name,'plan')) {
+            if(Utils::startsWith($name,NextDomObj::PLAN)) {
                 $message = 'Restoring folder :' . $name;
-                if ($logFile == 'migration') {
+                if ($logFile == LogTarget::MIGRATION) {
                     LogHelper::addInfo($logFile, $message, '');
                 } else {
                     ConsoleHelper::process($message);
@@ -715,7 +712,7 @@ class BackupManager
                 if (true === FileSystemHelper::mv($c_dir, sprintf("%s/%s", $customPlanRoot, $name))) {
                     self::restorePublicPerms($customPlanRoot);
                 }
-                if ($logFile != 'migration') {
+                if ($logFile != LogTarget::MIGRATION) {
                     ConsoleHelper::ok();
                 }
             }
@@ -738,7 +735,6 @@ class BackupManager
         FileSystemHelper::rrmdir($pluginRoot);
         FileSystemHelper::mkdirIfNotExists($pluginRoot,0775,true);
         foreach ($pluginDirs as $c_dir) {
-            $name = basename($c_dir);
             if (false === FileSystemHelper::mv($c_dir, $pluginRoot)) {
                 // should probably fail, keeping behavior prior to install/restore.php refactoring
             }
@@ -749,7 +745,6 @@ class BackupManager
         foreach ($plugins as $c_plugin) {
             // call plugin restore hook, if any
             $pluginID = $c_plugin->getId();
-            $dependencyInfo = $c_plugin->getDependencyInfo(true);
             if (method_exists($pluginID, 'restore')) {
                 $pluginID::restore();
             }
@@ -801,10 +796,10 @@ class BackupManager
     public static function listBackup(): array
     {
         $backupDir = self::getBackupDirectory();
-        $backups = self::getBackupFileInfo($backupDir, "newest");
-        $results = array();
+        $backups = self::getBackupFileInfo($backupDir, 'newest');
+        $results = [];
         foreach ($backups as $c_backup) {
-            $path = $c_backup["file"];
+            $path = $c_backup['file'];
             $name = basename($path);
             $results[$path] = $name;
         }
@@ -820,7 +815,7 @@ class BackupManager
      */
     public static function removeBackup(string $backupFilePath)
     {
-        if (file_exists($backupFilePath)) {
+        if (Utils::checkPath($backupFilePath) && file_exists($backupFilePath)) {
             unlink($backupFilePath);
         } else {
             throw new CoreException(__('Impossible de trouver le fichier : ') . $backupFilePath);
@@ -845,14 +840,14 @@ class BackupManager
                     continue;
                 }
                 $message ='Add folder to archive : '.$c_entry->getPathname();
-                if($logFile == 'migration') {
+                if($logFile == LogTarget::MIGRATION) {
                     LogHelper::addInfo($logFile, $message, '');
                 } else {
                     ConsoleHelper::process($message);
                 }
                 $dest = str_replace($pattern, "", $c_entry->getPathname());
                 $tar->addFile($c_entry->getPathname(), $dest);
-                if($logFile != 'migration') {
+                if($logFile != LogTarget::MIGRATION) {
                     ConsoleHelper::ok();
                 }
             }
