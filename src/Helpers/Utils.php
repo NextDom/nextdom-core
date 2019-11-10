@@ -173,7 +173,7 @@ class Utils
      */
     public static function initFilename(string $name, $default = ''): string
     {
-        return preg_replace('/[^0-9a-zA-ZàâäôéèëêïîçùûüÿæœÀÂÄÔÉÈËÊÏÎŸÇÙÛÜÆŒ\.\-_]+/', '', self::init($name, $default));
+        return preg_replace('/[^0-9a-zA-ZàâäôéèëêïîçùûüÿæœÀÂÄÔÉÈËÊÏÎŸÇÙÛÜÆŒ \.\-_]+/', '', self::init($name, $default));
     }
 
     /**
@@ -184,15 +184,29 @@ class Utils
      *
      * @return mixed Valeur de la variable
      */
-    public static function initPath(string $name, $default = NEXTDOM_TMP): string
+    public static function initPath(string $name)
     {
-        $path = realpath(self::init($name, $default));
+        $path = realpath(self::init($name));
+        if ($path !== false && self::checkPath($path)) {
+            return $path;
+        }
+        return false;
+    }
+
+    /**
+     * Check if path is valid
+     *
+     * @param string $path Path to test
+     *
+     * @return bool
+     */
+    public static function checkPath(string $path): bool {
         foreach ([NEXTDOM_ROOT, NEXTDOM_DATA, NEXTDOM_TMP, NEXTDOM_LOG] as $authorizedPath) {
             if (strpos($path, $authorizedPath) === 0) {
-                return $path;
+                return true;
             }
         }
-        return $default;
+        return false;
     }
 
 

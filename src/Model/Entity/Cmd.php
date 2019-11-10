@@ -1137,13 +1137,13 @@ class Cmd implements EntityInterface
                         }
                     }
                     $value = strtolower($_value);
-                    if ($value == 'on' || $value == 'high' || $value == 'true' || $value == true) {
+                    if ($value == 'on' || $value == 'high' || $value == 'true' || $value === true) {
                         return 1;
                     }
-                    if ($value == 'off' || $value == 'low' || $value == 'false' || $value == false) {
+                    if ($value == 'off' || $value == 'low' || $value == 'false' || $value === false) {
                         return 0;
                     }
-                    if ((is_numeric(intval($_value)) && intval($_value) > 1) || $_value == true || $_value == 1) {
+                    if ((is_numeric(intval($_value)) && intval($_value) > 1) || $_value === true || $_value == 1) {
                         return 1;
                     }
                     return 0;
