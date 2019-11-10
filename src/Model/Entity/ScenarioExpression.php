@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\DateFormat;
 use NextDom\Enums\ScenarioExpressionAction;
 use NextDom\Enums\ScenarioExpressionType;
 use NextDom\Exceptions\CoreException;
@@ -783,8 +784,8 @@ class ScenarioExpression implements EntityInterface
                 }
                 $this->setLog($scenario, __('Génération du rapport ') . $view->getName());
                 $cmd_parameters['files'] = array($view->report($options['export_type'], $options));
-                $cmd_parameters['title'] = __('[' . ConfigManager::byKey('name') . '] Rapport ') . $view->getName() . __(' du ') . date('Y-m-d H:i:s');
-                $cmd_parameters['message'] = __('Veuillez trouver ci-joint le rapport ') . $view->getName() . __(' généré le ') . date('Y-m-d H:i:s');
+                $cmd_parameters['title'] = __('[' . ConfigManager::byKey('name') . '] Rapport ') . $view->getName() . __(' du ') . date(DateFormat::FULL);
+                $cmd_parameters['message'] = __('Veuillez trouver ci-joint le rapport ') . $view->getName() . __(' généré le ') . date(DateFormat::FULL);
                 break;
             case 'plan':
                 $plan = PlanHeaderManager::byId($options['plan_id']);
@@ -793,8 +794,8 @@ class ScenarioExpression implements EntityInterface
                 }
                 $this->setLog($scenario, __('Génération du rapport ') . $plan->getName());
                 $cmd_parameters['files'] = array($plan->report($options['export_type'], $options));
-                $cmd_parameters['title'] = __('[' . ConfigManager::byKey('name') . '] Rapport ') . $plan->getName() . __(' du ') . date('Y-m-d H:i:s');
-                $cmd_parameters['message'] = __('Veuillez trouver ci-joint le rapport ') . $plan->getName() . __(' généré le ') . date('Y-m-d H:i:s');
+                $cmd_parameters['title'] = __('[' . ConfigManager::byKey('name') . '] Rapport ') . $plan->getName() . __(' du ') . date(DateFormat::FULL);
+                $cmd_parameters['message'] = __('Veuillez trouver ci-joint le rapport ') . $plan->getName() . __(' généré le ') . date(DateFormat::FULL);
                 break;
             case 'plugin':
                 $plugin = PluginManager::byId($options['plugin_id']);
@@ -803,15 +804,15 @@ class ScenarioExpression implements EntityInterface
                 }
                 $this->setLog($scenario, __('Génération du rapport ') . $plugin->getName());
                 $cmd_parameters['files'] = array($plugin->report($options['export_type'], $options));
-                $cmd_parameters['title'] = __('[' . ConfigManager::byKey('name') . '] Rapport ') . $plugin->getName() . __(' du ') . date('Y-m-d H:i:s');
-                $cmd_parameters['message'] = __('Veuillez trouver ci-joint le rapport ') . $plugin->getName() . __(' généré le ') . date('Y-m-d H:i:s');
+                $cmd_parameters['title'] = __('[' . ConfigManager::byKey('name') . '] Rapport ') . $plugin->getName() . __(' du ') . date(DateFormat::FULL);
+                $cmd_parameters['message'] = __('Veuillez trouver ci-joint le rapport ') . $plugin->getName() . __(' généré le ') . date(DateFormat::FULL);
                 break;
             case 'eqAnalyse':
                 $url = NetworkHelper::getNetworkAccess('internal') . '/index.php?v=d&p=eqAnalyse&report=1';
                 $this->setLog($scenario, __('Génération du rapport ') . $url);
                 $cmd_parameters['files'] = array(ReportHelper::generate($url, 'other', 'eqAnalyse', $options['export_type'], $options));
-                $cmd_parameters['title'] = __('[' . ConfigManager::byKey('name') . '] Rapport équipement du ') . date('Y-m-d H:i:s');
-                $cmd_parameters['message'] = __('Veuillez trouver ci-joint le rapport équipement généré le ') . date('Y-m-d H:i:s');
+                $cmd_parameters['title'] = __('[' . ConfigManager::byKey('name') . '] Rapport équipement du ') . date(DateFormat::FULL);
+                $cmd_parameters['message'] = __('Veuillez trouver ci-joint le rapport équipement généré le ') . date(DateFormat::FULL);
                 break;
         }
         if ($cmd_parameters['files'] === null) {

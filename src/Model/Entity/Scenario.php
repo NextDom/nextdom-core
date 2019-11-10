@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\DateFormat;
 use NextDom\Enums\ScenarioState;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
@@ -181,6 +182,11 @@ class Scenario implements EntityInterface
         return $this;
     }
 
+    public function isVisible()
+    {
+        return intval($this->isVisible) == 1;
+    }
+
     /**
      * @return string
      */
@@ -264,7 +270,7 @@ class Scenario implements EntityInterface
             //Scénario bloqué en starting (Exemple de cause : trop de connexions à MySql, la connexion est refusée, le scénario plante)
             if (strtotime('now') - $this->getCache('startingTime') > 5) {
                 LogHelper::add('scenario', 'error', __('La dernière exécution du scénario ne s\'est pas lancée. Vérifiez le log scenario_execution, ainsi que le log du scénario') . " \"" . $this->getName() . "\".");
-                $this->setLog(__('La dernière exécution du scénario ne s\'est pas lancée. Vérifiez le log scenario_execution pour l\'exécution à ') . date('Y-m-d H:i:s', $this->getCache('startingTime')) . ".");
+                $this->setLog(__('La dernière exécution du scénario ne s\'est pas lancée. Vérifiez le log scenario_execution pour l\'exécution à ') . date(DateFormat::FULL, $this->getCache('startingTime')) . ".");
                 $this->persistLog();
             }
             //Retarde le lancement du scénario si une autre instance est déjà en cours de démarrage
@@ -386,12 +392,12 @@ class Scenario implements EntityInterface
         if (is_object($cmd)) {
             LogHelper::add('event', 'info', __('Exécution du scénario ') . $this->getHumanName() . __(' déclenché par : ') . $cmd->getHumanName());
             if ($this->getConfiguration('timeline::enable')) {
-                TimeLineHelper::addTimelineEvent(array('type' => 'scenario', 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => date('Y-m-d H:i:s'), 'trigger' => $cmd->getHumanName(true)));
+                TimeLineHelper::addTimelineEvent(array('type' => 'scenario', 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => date(DateFormat::FULL), 'trigger' => $cmd->getHumanName(true)));
             }
         } else {
             LogHelper::add('event', 'info', __('Exécution du scénario ') . $this->getHumanName() . __(' déclenché par : ') . $trigger);
             if ($this->getConfiguration('timeline::enable')) {
-                TimeLineHelper::addTimelineEvent(array('type' => 'scenario', 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => date('Y-m-d H:i:s'), 'trigger' => $trigger == 'schedule' ? 'programmation' : $trigger));
+                TimeLineHelper::addTimelineEvent(array('type' => 'scenario', 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => date(DateFormat::FULL), 'trigger' => $trigger == 'schedule' ? 'programmation' : $trigger));
             }
         }
         if (count($this->getTags()) == 0) {
@@ -399,7 +405,7 @@ class Scenario implements EntityInterface
         } else {
             $this->setLog('Start : ' . trim($message, "'") . '. Tags : ' . json_encode($this->getTags()));
         }
-        $this->setLastLaunch(date('Y-m-d H:i:s'));
+        $this->setLastLaunch(date(DateFormat::FULL));
         $this->setState(ScenarioState::IN_PROGRESS);
         $this->setPID(getmypid());
         $this->setRealTrigger($trigger);
@@ -648,7 +654,7 @@ class Scenario implements EntityInterface
      */
     public function setLog($log)
     {
-        $this->_log .= '[' . date('Y-m-d H:i:s') . '][SCENARIO] ' . $log . "\n";
+        $this->_log .= '[' . date(DateFormat::FULL) . '][SCENARIO] ' . $log . "\n";
         if ($this->getConfiguration('logmode', 'default') == 'realtime') {
             $this->persistLog(true);
             $this->_log = '';
@@ -919,8 +925,8 @@ class Scenario implements EntityInterface
             foreach ($this->getSchedule() as $schedule) {
                 try {
                     $c = new \Cron\CronExpression($schedule, new \Cron\FieldFactory);
-                    $calculatedDate_tmp['prevDate'] = $c->getPreviousRunDate()->format('Y-m-d H:i:s');
-                    $calculatedDate_tmp['nextDate'] = $c->getNextRunDate()->format('Y-m-d H:i:s');
+                    $calculatedDate_tmp['prevDate'] = $c->getPreviousRunDate()->format(DateFormat::FULL);
+                    $calculatedDate_tmp['nextDate'] = $c->getNextRunDate()->format(DateFormat::FULL);
                 } catch (\Exception $exc) {
 
                 }
@@ -934,8 +940,8 @@ class Scenario implements EntityInterface
         } else {
             try {
                 $c = new \Cron\CronExpression($this->getSchedule(), new \Cron\FieldFactory);
-                $calculatedDate['prevDate'] = $c->getPreviousRunDate()->format('Y-m-d H:i:s');
-                $calculatedDate['nextDate'] = $c->getNextRunDate()->format('Y-m-d H:i:s');
+                $calculatedDate['prevDate'] = $c->getPreviousRunDate()->format(DateFormat::FULL);
+                $calculatedDate['nextDate'] = $c->getNextRunDate()->format(DateFormat::FULL);
             } catch (\Exception $exc) {
 
             }

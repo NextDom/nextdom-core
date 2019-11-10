@@ -17,6 +17,8 @@
 
 namespace NextDom\Ajax;
 
+use NextDom\Enums\AjaxParams;
+use NextDom\Enums\DateFormat;
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AjaxHelper;
@@ -80,7 +82,7 @@ class UserAjax extends BaseAjax
                 $registerDevice = array();
             }
             $registerDevice[sha512($rdk)] = array();
-            $registerDevice[sha512($rdk)]['datetime'] = date('Y-m-d H:i:s');
+            $registerDevice[sha512($rdk)]['datetime'] = date(DateFormat::FULL);
             $registerDevice[sha512($rdk)]['ip'] = NetworkHelper::getClientIp();
             $registerDevice[sha512($rdk)]['session_id'] = session_id();
             setcookie('registerDevice', $_SESSION['user']->getHash() . '-' . $rdk, time() + 365 * 24 * 3600, "/", '', false, true);
@@ -126,7 +128,7 @@ class UserAjax extends BaseAjax
     {
         AuthentificationHelper::init();
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $user = UserManager::byId(Utils::init('id'));
+        $user = UserManager::byId(Utils::initInt(AjaxParams::ID));
         if (!is_object($user)) {
             throw new CoreException('User ID inconnu');
         }
@@ -204,10 +206,10 @@ class UserAjax extends BaseAjax
         if (ConfigManager::byKey('ldap::enable') == '1') {
             throw new CoreException(__('Vous devez désactiver l\'authentification LDAP pour pouvoir supprimer un utilisateur'));
         }
-        if (Utils::init('id') == UserManager::getStoredUser()->getId()) {
+        if (Utils::initInt(AjaxParams::ID) == UserManager::getStoredUser()->getId()) {
             throw new CoreException(__('Vous ne pouvez pas supprimer le compte avec lequel vous êtes connecté'));
         }
-        $user = UserManager::byId(Utils::init('id'));
+        $user = UserManager::byId(Utils::initInt(AjaxParams::ID));
         if (!is_object($user)) {
             throw new CoreException('User ID inconnu');
         }
@@ -220,7 +222,7 @@ class UserAjax extends BaseAjax
         AuthentificationHelper::init();
         AuthentificationHelper::isConnectedOrFail();
         $currentUser = UserManager::getStoredUser();
-        $user_json = NextDomHelper::fromHumanReadable(json_decode(Utils::init('profils'), true));
+        $user_json = NextDomHelper::fromHumanReadable(json_decode(Utils::init(AjaxParams::PROFILS), true));
         if (isset($user_json['id']) && $user_json['id'] != $currentUser->getId()) {
             throw new CoreException('401 - Accès non autorisé');
         }
@@ -249,7 +251,7 @@ class UserAjax extends BaseAjax
     {
         AuthentificationHelper::init();
         $user = null;
-        if (Utils::init('key') == '' && Utils::init('user_id') == '') {
+        if (Utils::init(AjaxParams::KEY) == '' && Utils::init(AjaxParams::USER_ID) == '') {
             AuthentificationHelper::isConnectedAsAdminOrFail();
             foreach (UserManager::all() as $user) {
                 if ($user->getId() == UserManager::getStoredUser()->getId()) {
@@ -262,23 +264,23 @@ class UserAjax extends BaseAjax
             }
             $this->ajax->success();
         }
-        if (Utils::init('user_id') != '') {
+        if (Utils::init(AjaxParams::USER_ID) != '') {
             AuthentificationHelper::isConnectedAsAdminOrFail();
-            $user = UserManager::byId(Utils::init('user_id'));
+            $user = UserManager::byId(Utils::init(AjaxParams::USER_ID));
             if (!is_object($user)) {
-                throw new CoreException(__('Utilisateur non trouvé : ') . Utils::init('user_id'));
+                throw new CoreException(__('Utilisateur non trouvé : ') . Utils::init(AjaxParams::USER_ID));
             }
             $registerDevice = $user->getOptions('registerDevice', array());
         } else {
             $registerDevice = UserManager::getStoredUser()->getOptions('registerDevice', array());
         }
 
-        if (Utils::init('key') == '') {
+        if (Utils::init(AjaxParams::KEY) == '') {
             $registerDevice = array();
         } elseif (isset($registerDevice[init('key')])) {
             unset($registerDevice[init('key')]);
         }
-        if (Utils::init('user_id') != '') {
+        if (Utils::init(AjaxParams::USER_ID) != '') {
             $user->setOptions('registerDevice', $registerDevice);
             $user->save();
         } else {
@@ -300,7 +302,7 @@ class UserAjax extends BaseAjax
             if (is_object($user)) {
                 $registerDevice = $user->getOptions('registerDevice', array());
                 foreach ($user->getOptions('registerDevice', array()) as $key => $value) {
-                    if ($value['session_id'] == Utils::init('id')) {
+                    if ($value['session_id'] == Utils::init(AjaxParams::ID)) {
                         unset($registerDevice[$key]);
                     }
                 }
@@ -308,7 +310,7 @@ class UserAjax extends BaseAjax
                 $user->save();
             }
         }
-        SessionHelper::deleteSession(Utils::init('id'));
+        SessionHelper::deleteSession(Utils::init(AjaxParams::ID));
         $this->ajax->success();
     }
 

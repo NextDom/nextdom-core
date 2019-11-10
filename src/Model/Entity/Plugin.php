@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\DateFormat;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
@@ -293,7 +294,7 @@ class Plugin implements EntityInterface
         }
         if ($result['state'] == 'in_progress') {
             if (ConfigManager::byKey('lastDependancyInstallTime', $pluginId) == '') {
-                ConfigManager::save('lastDependancyInstallTime', date('Y-m-d H:i:s'), $pluginId);
+                ConfigManager::save('lastDependancyInstallTime', date(DateFormat::FULL), $pluginId);
             }
             $result['duration'] = round((strtotime('now') - strtotime(ConfigManager::byKey('lastDependancyInstallTime', $pluginId))) / 60);
         } else {
@@ -368,7 +369,7 @@ class Plugin implements EntityInterface
                 if (NextDomHelper::isCapable('sudo')) {
                     $this->deamon_stop();
                     MessageManager::add($plugin_id, __('Attention : installation des dépendances lancée'));
-                    ConfigManager::save('lastDependancyInstallTime', date('Y-m-d H:i:s'), $plugin_id);
+                    ConfigManager::save('lastDependancyInstallTime', date(DateFormat::FULL), $plugin_id);
                     exec(SystemHelper::getCmdSudo() . '/bin/bash ' . $script . ' >> ' . $cmd['log'] . ' 2>&1 &');
                     sleep(1);
                 } else {
@@ -509,7 +510,7 @@ class Plugin implements EntityInterface
                         ConfigManager::save('deamonRestartNumber', ConfigManager::byKey('deamonRestartNumber', $pluginId, 0) + 1, $pluginId);
                     }
                     CacheManager::set('deamonStart' . $this->getId() . 'inprogress', array('datetime' => strtotime('now')));
-                    ConfigManager::save('lastDeamonLaunchTime', date('Y-m-d H:i:s'), $pluginId);
+                    ConfigManager::save('lastDeamonLaunchTime', date(DateFormat::FULL), $pluginId);
                     $pluginId::deamon_start();
                 }
             }

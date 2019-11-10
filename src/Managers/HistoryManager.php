@@ -34,6 +34,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Enums\DateFormat;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\NextDomHelper;
@@ -160,7 +161,7 @@ class HistoryManager
         if (ConfigManager::byKey('historyArchivePackage') >= ConfigManager::byKey('historyArchiveTime')) {
             ConfigManager::save('historyArchivePackage', ConfigManager::byKey('historyArchiveTime') - 1);
         }
-        $archiveDatetime = (ConfigManager::byKey('historyArchiveTime') < 1) ? date('Y-m-d H:i:s', strtotime('- 1 hours')) : date('Y-m-d H:i:s', strtotime('- ' . ConfigManager::byKey('historyArchiveTime', 'core', 1) . ' hours'));
+        $archiveDatetime = (ConfigManager::byKey('historyArchiveTime') < 1) ? date(DateFormat::FULL, strtotime('- 1 hours')) : date(DateFormat::FULL, strtotime('- ' . ConfigManager::byKey('historyArchiveTime', 'core', 1) . ' hours'));
         if (ConfigManager::byKey('historyArchivePackage') < 1) {
             $archivePackage = '00:' . ConfigManager::byKey('historyArchivePackage') * 60 . ':00';
         } else {
@@ -170,7 +171,7 @@ class HistoryManager
             }
         }
         if ($archiveDatetime === false) {
-            $archiveDatetime = date('Y-m-d H:i:s', strtotime('- 1 hours'));
+            $archiveDatetime = date(DateFormat::FULL, strtotime('- 1 hours'));
         }
         $values = array(
             'archiveDatetime' => $archiveDatetime,
@@ -185,7 +186,7 @@ class HistoryManager
                 continue;
             }
             if ($cmd->getConfiguration('historyPurge', '') != '') {
-                $purgeTime = date('Y-m-d H:i:s', strtotime($cmd->getConfiguration('historyPurge', '')));
+                $purgeTime = date(DateFormat::FULL, strtotime($cmd->getConfiguration('historyPurge', '')));
                 if ($purgeTime !== false) {
                     $values = array(
                         'cmd_id' => $cmd->getId(),
@@ -628,7 +629,7 @@ class HistoryManager
                 break;
             }
         }
-        $dateTo = date('Y-m-d H:i:s');
+        $dateTo = date(DateFormat::FULL);
         $duration = strtotime($dateTo) - strtotime($histories[$i]->getDatetime());
         return $duration;
     }
@@ -661,7 +662,7 @@ class HistoryManager
             $currentValue = round($currentValue, $_decimal);
         }
         $duration = 0;
-        $dateTo = date('Y-m-d H:i:s');
+        $dateTo = date(DateFormat::FULL);
         if ($_value === null || $_value == $currentValue) {
             $_value = $currentValue;
             $duration = strtotime($dateTo) - strtotime($histories[0]->getDatetime());
@@ -728,7 +729,7 @@ class HistoryManager
         if (is_numeric($_value)) {
             $currentValue = round($currentValue, $_decimal);
         }
-        $dateTo = date('Y-m-d H:i:s');
+        $dateTo = date(DateFormat::FULL);
         $duration = strtotime($dateTo) - strtotime($histories[0]->getDatetime());
         if ($_value === null) {
             $_value = $currentValue;
@@ -794,7 +795,7 @@ class HistoryManager
         }
 
         if ($_endTime === null) {
-            $_dateTime .= ' AND `datetime`<="' . date('Y-m-d H:i:s') . '"';
+            $_dateTime .= ' AND `datetime`<="' . date(DateFormat::FULL) . '"';
         } else {
             $_dateTime .= ' AND `datetime`<="' . $_endTime . '"';
         }

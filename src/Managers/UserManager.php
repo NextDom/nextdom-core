@@ -33,6 +33,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Enums\DateFormat;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NetworkHelper;
@@ -74,37 +75,37 @@ class UserManager
                 ldap_set_option($ad, LDAP_OPT_PROTOCOL_VERSION, 3);
                 ldap_set_option($ad, LDAP_OPT_REFERRALS, 0);
                 if (!ldap_bind($ad, 'uid=' . $_login . ',' . ConfigManager::byKey('ldap:basedn'), $_mdp)) {
-                    LogHelper::add("connection", "info", __('Mot de passe erroné (') . $_login . ')');
+                    LogHelper::addInfo("connection", __('Mot de passe erroné (') . $_login . ')');
                     return false;
                 }
                 LogHelper::add("connection", "debug", __('Bind user OK'));
                 $result = ldap_search($ad, ConfigManager::byKey('ldap::usersearch') . '=' . $_login . ',' . ConfigManager::byKey('ldap:basedn'), ConfigManager::byKey('ldap:filter'));
-                LogHelper::add("connection", "info", __('Recherche LDAP (') . $_login . ')');
+                LogHelper::addInfo("connection", __('Recherche LDAP (') . $_login . ')');
                 if ($result) {
                     $entries = ldap_get_entries($ad, $result);
                     if ($entries['count'] > 0) {
                         $user = self::byLogin($_login);
                         if (is_object($user)) {
                             $user->setPassword($sMdp)
-                                ->setOptions('lastConnection', date('Y-m-d H:i:s'));
+                                ->setOptions('lastConnection', date(DateFormat::FULL));
                             $user->save();
                             return $user;
                         }
                         $user = (new User())
                             ->setLogin($_login)
                             ->setPassword($sMdp)
-                            ->setOptions('lastConnection', date('Y-m-d H:i:s'));
+                            ->setOptions('lastConnection', date(DateFormat::FULL));
                         $user->save();
-                        LogHelper::add("connection", "info", __('Utilisateur créé depuis le LDAP : ') . $_login);
+                        LogHelper::addInfo("connection", __('Utilisateur créé depuis le LDAP : ') . $_login);
                         NextDomHelper::event('user_connect');
-                        LogHelper::add('event', 'info', __('Connexion de l\'utilisateur ') . $_login);
+                        LogHelper::addInfo('event', __('Connexion de l\'utilisateur ') . $_login);
                         return $user;
                     } else {
                         $user = self::byLogin($_login);
                         if (is_object($user)) {
                             $user->remove();
                         }
-                        LogHelper::add("connection", "info", __('Utilisateur non autorisé à accéder à NextDom (') . $_login . ')');
+                        LogHelper::addInfo("connection", __('Utilisateur non autorisé à accéder à NextDom (') . $_login . ')');
                         return false;
                     }
                 } else {
@@ -112,11 +113,11 @@ class UserManager
                     if (is_object($user)) {
                         $user->remove();
                     }
-                    LogHelper::add("connection", "info", __('Utilisateur non autorisé à accéder à NextDom (') . $_login . ')');
+                    LogHelper::addInfo("connection", __('Utilisateur non autorisé à accéder à NextDom (') . $_login . ')');
                     return false;
                 }
             } else {
-                LogHelper::add("connection", "info", __('Impossible de se connecter au LDAP'));
+                LogHelper::addInfo("connection", __('Impossible de se connecter au LDAP'));
             }
         }
         $user = self::byLoginAndPassword($_login, $sMdp);
@@ -127,10 +128,10 @@ class UserManager
             }
         }
         if (is_object($user)) {
-            $user->setOptions('lastConnection', date('Y-m-d H:i:s'));
+            $user->setOptions('lastConnection', date(DateFormat::FULL));
             $user->save();
             NextDomHelper::event('user_connect');
-            LogHelper::add('event', 'info', __('Connexion de l\'utilisateur ') . $_login);
+            LogHelper::addInfo('event', __('Connexion de l\'utilisateur ') . $_login);
         }
         return $user;
     }
@@ -421,7 +422,7 @@ class UserManager
         $key = ConfigManager::genKey();
         $registerDevice = array(
             Utils::sha512($key) => array(
-                'datetime' => date('Y-m-d H:i:s'),
+                'datetime' => date(DateFormat::FULL),
                 'ip' => '127.0.0.1',
                 'session_id' => 'none',
             ),
@@ -449,7 +450,7 @@ class UserManager
             $key = ConfigManager::genKey();
             $registerDevice = array(
                 Utils::sha512($key) => array(
-                    'datetime' => date('Y-m-d H:i:s'),
+                    'datetime' => date(DateFormat::FULL),
                     'ip' => '127.0.0.1',
                     'session_id' => 'none',
                 ),

@@ -109,8 +109,7 @@ class Utils
         foreach ($listOfVarsWithValues as $varName => $value) {
             $result .= self::getVarInJs($varName, $value) . "\n";
         }
-        $result .= "</script>\n";
-        return $result;
+        return $result . "</script>\n";
     }
 
     /**
@@ -153,14 +152,49 @@ class Utils
 
     /**
      * Obtenir un entier passé en paramètre
+     *
      * @param string $name Nom de la variable
      * @param mixed $default Valeur par défaut
      *
      * @return mixed Valeur de la variable
      */
-    public static function initInt(string $name, $default = 0): int {
-        return intval(self::init($name), $default);
+    public static function initInt(string $name, $default = 0): int
+    {
+        return intval(self::init($name, $default));
     }
+
+    /**
+     * Obtenir une chaine de caractère passée en paramètre pour un nom de fichier
+     *
+     * @param string $name Nom de la variable
+     * @param mixed $default Valeur par défaut
+     *
+     * @return mixed Valeur de la variable
+     */
+    public static function initFilename(string $name, $default = ''): string
+    {
+        return preg_replace('/[^0-9a-zA-ZàâäôéèëêïîçùûüÿæœÀÂÄÔÉÈËÊÏÎŸÇÙÛÜÆŒ\.\-_]+/', '', self::init($name, $default));
+    }
+
+    /**
+     * Obtenir un chemin passé en paramètre
+     *
+     * @param string $name Nom de la variable
+     * @param mixed $default Valeur par défaut
+     *
+     * @return mixed Valeur de la variable
+     */
+    public static function initPath(string $name, $default = NEXTDOM_TMP): string
+    {
+        $path = realpath(self::init($name, $default));
+        foreach ([NEXTDOM_ROOT, NEXTDOM_DATA, NEXTDOM_TMP, NEXTDOM_LOG] as $authorizedPath) {
+            if (strpos($path, $authorizedPath) === 0) {
+                return $path;
+            }
+        }
+        return $default;
+    }
+
 
     /**
      * @param $_array
@@ -194,11 +228,9 @@ class Utils
 
         $offcet_x = ($width - $dest_width) / 2;
         $offcet_y = ($height - $dest_height) / 2;
-        if ($dest_image && $contents) {
-            if (!imagecopyresampled($dest_image, $contents, $offcet_x, $offcet_y, 0, 0, $dest_width, $dest_height, $width_orig, $height_orig)) {
-                error_log("Error image copy resampled");
-                return false;
-            }
+        if ($dest_image && $contents && !imagecopyresampled($dest_image, $contents, $offcet_x, $offcet_y, 0, 0, $dest_width, $dest_height, $width_orig, $height_orig)) {
+            error_log("Error image copy resampled");
+            return false;
         }
 // start buffering
         ob_start();
@@ -224,15 +256,14 @@ class Utils
     public static function convertDuration($time): string
     {
         $result = '';
-        $unities = array('j' => 86400, 'h' => 3600, 'min' => 60);
+        $unities = ['j' => 86400, 'h' => 3600, 'min' => 60];
         foreach ($unities as $unity => $value) {
             if ($time >= $value || $result != '') {
                 $result .= floor($time / $value) . $unity . ' ';
                 $time %= $value;
             }
         }
-        $result .= $time . 's';
-        return $result;
+        return $result . $time . 's';
     }
 
     /**
@@ -484,13 +515,11 @@ class Utils
         try {
             return $GLOBALS['ExpressionLanguage']->evaluate($expr);
         } catch (\Exception $e) {
-            //log::add('expression', 'debug', '[Parser 1] Expression : ' . $_string . ' tranformé en ' . $expr . ' => ' . $e->getMessage());
         }
         try {
             $expr = str_replace('""', '"', $expr);
             return $GLOBALS['ExpressionLanguage']->evaluate($expr);
         } catch (\Exception $e) {
-            //log::add('expression', 'debug', '[Parser 2] Expression : ' . $_string . ' tranformé en ' . $expr . ' => ' . $e->getMessage());
         }
         return $_string;
     }
@@ -997,23 +1026,19 @@ class Utils
                     if (is_array($value)) {
                         if ($function->getNumberOfRequiredParameters() == 2) {
                             foreach ($value as $arrayKey => $arrayValue) {
-                                if (is_array($arrayValue)) {
-                                    if ($function->getNumberOfRequiredParameters() == 3) {
-                                        foreach ($arrayValue as $arrayArraykey => $arrayArrayvalue) {
-                                            $_object->$method($arrayKey, $arrayArraykey, $arrayArrayvalue);
-                                        }
-                                        continue;
+                                if (is_array($arrayValue) && $function->getNumberOfRequiredParameters() == 3) {
+                                    foreach ($arrayValue as $arrayArraykey => $arrayArrayvalue) {
+                                        $_object->$method($arrayKey, $arrayArraykey, $arrayArrayvalue);
                                     }
+                                    continue;
                                 }
                                 $_object->$method($arrayKey, $arrayValue);
                             }
                         } else {
                             $_object->$method(json_encode($value, JSON_UNESCAPED_UNICODE));
                         }
-                    } else {
-                        if ($function->getNumberOfRequiredParameters() < 2) {
-                            $_object->$method($value);
-                        }
+                    } elseif ($function->getNumberOfRequiredParameters() < 2) {
+                        $_object->$method($value);
                     }
                 }
             }
@@ -1135,8 +1160,9 @@ class Utils
      */
     public static function array_key_default($array, $key, $default)
     {
-        if (true === array_key_exists($key, $array))
+        if (array_key_exists($key, $array)) {
             return $array[$key];
+        }
         return $default;
     }
 
@@ -1154,14 +1180,14 @@ class Utils
      */
     public static function readUploadedFile($files, $key, $destDir, $maxSizeMB, $extensions, $cleaner = null)
     {
-        if (false == isset($files[$key])) {
+        if (!isset($files[$key])) {
             $message = __('Aucun fichier trouvé. Vérifiez le paramètre PHP (post size limit)');
             throw new CoreException($message);
         }
 
         if (0 != count($extensions)) {
             $extension = strtolower(strrchr($files[$key]['name'], '.'));
-            if (false == in_array($extension, $extensions)) {
+            if (!in_array($extension, $extensions)) {
                 $message = __('Extension du fichier non valide, autorisé :') . join(",", $extensions);
                 throw new CoreException($message);
             }
@@ -1179,12 +1205,12 @@ class Utils
         }
 
         $destPath = sprintf("%s/%s", $destDir, $name);
-        if (false == move_uploaded_file($files[$key]['tmp_name'], $destPath)) {
+        if (!move_uploaded_file($files[$key]['tmp_name'], $destPath)) {
             $message = __('Impossible de déplacer le fichier temporaire');
             throw new CoreException($message);
         }
 
-        if (false == file_exists($destPath)) {
+        if (!file_exists($destPath)) {
             $message = __('Impossible de téléverser le fichier');
             throw new CoreException($message);
         }
@@ -1213,7 +1239,7 @@ class Utils
      */
     public static function cleanComponentName($name)
     {
-        return str_replace(array('&', '#', ']', '[', '%', "\\", "/", "'", '"'), '', $name);
+        return str_replace(['&', '#', ']', '[', '%', "\\", "/", "'", '"'], '', $name);
     }
 
     /**

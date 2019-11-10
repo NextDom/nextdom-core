@@ -19,6 +19,7 @@ namespace NextDom\Ajax;
 
 use NextDom\Enums\CmdType;
 use NextDom\Enums\CmdViewType;
+use NextDom\Enums\DateFormat;
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
@@ -343,7 +344,7 @@ class CmdAjax extends BaseAjax
             if (is_object($history)) {
                 break;
             }
-            $history = HistoryManager::byCmdIdDatetime($cmdId, $targetDatetime, date('Y-m-d H:i:s', strtotime($targetDatetime . $timeStep)), $srcDatetime);
+            $history = HistoryManager::byCmdIdDatetime($cmdId, $targetDatetime, date(DateFormat::FULL, strtotime($targetDatetime . $timeStep)), $srcDatetime);
         }
         if (!is_object($history)) {
             throw new CoreException(__('Aucun point ne correspond pour l\'historique : ') . $cmdId . ' - ' . $targetDatetime . ' - ' . $srcDatetime);
@@ -384,7 +385,7 @@ class CmdAjax extends BaseAjax
                     $dateEnd = $dateRange['end'];
                 }
             } else {
-                $dateEnd = date('Y-m-d H:i:s');
+                $dateEnd = date(DateFormat::FULL);
                 $dateStart = date('Y-m-d 00:00:00', strtotime('- ' . $dateRange . ' ' . $dateEnd));
             }
         }
@@ -394,11 +395,11 @@ class CmdAjax extends BaseAjax
         if ($userDateEnd != '') {
             $dateEnd = $userDateEnd;
             if ($dateEnd == date('Y-m-d')) {
-                $dateEnd = date('Y-m-d H:i:s');
+                $dateEnd = date(DateFormat::FULL);
             }
         }
         if (strtotime($dateEnd) > strtotime('now')) {
-            $dateEnd = date('Y-m-d H:i:s');
+            $dateEnd = date(DateFormat::FULL);
         }
         $result['maxValue'] = '';
         $result['minValue'] = '';
