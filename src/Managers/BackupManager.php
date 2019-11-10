@@ -99,6 +99,7 @@ class BackupManager
             CacheManager::persist();
             ConsoleHelper::ok();
             ConsoleHelper::step("creating backup archive");
+            ConsoleHelper::enter();
             self::createBackupArchive($backupPath, $sqlPath, $cachePath, 'backup');
             ConsoleHelper::ok();
             ConsoleHelper::step("rotating backup archives");
@@ -834,22 +835,14 @@ class BackupManager
             $path = $c_root;
             $dirIter = new RecursiveDirectoryIterator($path);
             $riIter = new RecursiveIteratorIterator($dirIter);
+            ConsoleHelper::stepLine('Add files of ' . $c_root .' to archive');
             // iterate on files recursively found
             foreach ($riIter as $c_entry) {
                 if (false === $c_entry->isFile()) {
                     continue;
                 }
-                $message ='Add folder to archive : '.$c_entry->getPathname();
-                if($logFile == LogTarget::MIGRATION) {
-                    LogHelper::addInfo($logFile, $message, '');
-                } else {
-                    ConsoleHelper::process($message);
-                }
                 $dest = str_replace($pattern, "", $c_entry->getPathname());
                 $tar->addFile($c_entry->getPathname(), $dest);
-                if($logFile != LogTarget::MIGRATION) {
-                    ConsoleHelper::ok();
-                }
             }
         }
     }
