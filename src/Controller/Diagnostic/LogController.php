@@ -51,7 +51,6 @@ class LogController extends BaseController
                 $logFilesList[] = $file;
             }
         }
-        natcasesort($logFilesList);
         $pageData['logFilesList'] = [];
         foreach ($logFilesList as $logFile) {
             $logFileData = [];
@@ -64,6 +63,7 @@ class LogController extends BaseController
             $logFileData['size'] = round(filesize(NEXTDOM_LOG . '/' . $logFile) / 1024);
             $logFileData['icon'] = 'check';
             $logFileData['color'] = 'green';
+            $logFileData['timing'] = date("YmdHis", filemtime(NEXTDOM_LOG . '/' . $logFile));
             if ($logFileData['size'] < 10000) {
                 if (shell_exec('grep -c -E "\[ERROR\]|\[error\]" ' . NEXTDOM_LOG . '/' . $logFile) != 0) {
                     $logFileData['icon'] = 'exclamation-triangle';

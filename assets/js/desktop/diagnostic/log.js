@@ -47,8 +47,9 @@ function loadInformations() {
         $('#ul_object').height($(window).height() - 339);
         $('#ul_object').css("overflow-y", "auto");
         $('#ul_object').css("padding-right", "5px");
+        sortList("#ul_object","timing");
         $('.li_log').first().addClass('active');
-        getLogDisplay($('.li_log').first().attr('data-id'));
+        getLogDisplay($('.li_log').first().attr('data-log'));
     });
 }
 
@@ -117,12 +118,30 @@ function initEvents() {
             }
         });
     });
+
+    // Display log by alphabetic sort
+    $("#bt_LogAlphabetic").on('click', function(event) {
+        sortList("#ul_object","log");
+        $('.li_log').first().addClass('active');
+        $('#bt_LogAlphabetic').removeClass('btn-action').addClass('btn-info');
+        $('#bt_LogChronologic').removeClass('btn-info').addClass('btn-action');
+        getLogDisplay($('.li_log').first().attr('data-log'));
+    });
+
+    // Display log by timing sort
+    $("#bt_LogChronologic").on('click', function(event) {
+        sortList("#ul_object","timing");
+        $('.li_log').first().addClass('active');
+        $('#bt_LogChronologic').removeClass('btn-action').addClass('btn-info');
+        $('#bt_LogAlphabetic').removeClass('btn-info').addClass('btn-action');
+        getLogDisplay($('.li_log').first().attr('data-log'));
+    });
 }
 
 /**
  * Display note datas
  *
-* @param _id note id
+ * @param _id note id
  */
 function getLogDisplay(_id) {
     nextdom.log.autoupdate({
@@ -131,4 +150,20 @@ function getLogDisplay(_id) {
         search : $('#in_globalLogSearch'),
         control : $('#bt_globalLogStopStart'),
     });
+}
+
+/**
+ * Sort the list by data-XXX
+ *
+ * @param selector list element
+ * @param filter XXX name of data-XXX
+ */
+function sortList(selector, filter) {
+    var items = $(selector).find("li");
+    items.sort(function(a, b){
+      if($(a).data(filter) < $(b).data(filter)) { return -1; }
+      if($(a).data(filter) > $(b).data(filter)) { return 1; }
+      return 0;
+    });
+    items.appendTo(selector);
 }
