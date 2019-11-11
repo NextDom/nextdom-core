@@ -18,18 +18,13 @@
 namespace NextDom\Enums;
 
 /**
- * Class ConfigKey
+ * Class LogLevel
  * @package NextDom\Enums
  */
-class ConfigKey extends Enum
+class LogLevel extends Enum
 {
-    const ENABLE_CRON = 'enableCron';
-    const ENABLE_SCENARIO = 'enableScenario';
-    const HARDWARE_NAME = 'hardware_name';
-    const IGNORE_HOUR_CHECK = 'ignoreHourCheck';
-    const LOG_LEVEL = 'log::level';
-    const MARKET_ADDRESS = 'market::address';
-    const NEXTDOM_INSTALL_KEY = 'nextdom::installKey';
-    const TMP_FOLDER = 'folder::tmp';
-    const WIDGET_BACKGROUND_OPACITY = 'widget::background-opacity';
+    const DEBUG = 100;
+    const INFO = 200;
+    const WARNING = 300;
+    const ERROR = 400;
 }

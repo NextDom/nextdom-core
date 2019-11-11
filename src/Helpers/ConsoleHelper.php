@@ -58,6 +58,16 @@ class ConsoleHelper
     {
         printf("$stepTitle... ");
     }
+
+    /**
+     * Show step information
+     * @param string $stepTitle Step title to show
+     */
+    public static function stepLine(string $stepTitle)
+    {
+        printf("$stepTitle...\n");
+    }
+
     /**
      * Show process information
      * @param string $processTitle Process title to show
