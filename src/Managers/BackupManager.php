@@ -17,7 +17,9 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Enums\ConfigKey;
 use NextDom\Enums\DateFormat;
+use NextDom\Enums\LogLevel;
 use NextDom\Enums\LogTarget;
 use NextDom\Enums\NextDomObj;
 use NextDom\Exceptions\CoreException;
@@ -40,6 +42,8 @@ use splitbrain\PHPArchive\Tar;
  */
 class BackupManager
 {
+    private static $logLevel = null;
+
     /**
      * Creates a backup archive
      *
@@ -74,7 +78,7 @@ class BackupManager
         if(FileSystemHelper::getDirectoryFreeSpace($backupDir) < 400000000){
             throw new CoreException('Not Enough space to create local backup');
         }
-
+        self::$logLevel = ConfigManager::byKey(ConfigKey::LOG_LEVEL, 'core', LogLevel::ERROR);
         $backupName = self::getBackupFilename();
         $backupPath = sprintf("%s/%s", $backupDir, $backupName);
         $sqlPath = sprintf("%s/DB_backup.sql", $backupDir);
@@ -100,7 +104,7 @@ class BackupManager
             ConsoleHelper::ok();
             ConsoleHelper::step("creating backup archive");
             ConsoleHelper::enter();
-            self::createBackupArchive($backupPath, $sqlPath, $cachePath, 'backup');
+            self::createBackupArchive($backupPath, $sqlPath, $cachePath, LogTarget::BACKUP);
             ConsoleHelper::ok();
             ConsoleHelper::step("rotating backup archives");
             self::rotateBackups($backupDir);
@@ -829,7 +833,7 @@ class BackupManager
      * @param Tar $tar
      * @param string logFile
      */
-    private static function addPathToArchive( $roots, $pattern, $tar, $logFile)
+    private static function addPathToArchive($roots, $pattern, $tar, $logFile)
     {
         foreach ($roots as $c_root) {
             $path = $c_root;
@@ -840,6 +844,10 @@ class BackupManager
             foreach ($riIter as $c_entry) {
                 if (false === $c_entry->isFile()) {
                     continue;
+                }
+                $message ='Add folder to archive : '.$c_entry->getPathname();
+                if(self::$logLevel == LogLevel::DEBUG && $logFile === LogTarget::BACKUP) {
+                    LogHelper::addDebug($logFile, $message);
                 }
                 $dest = str_replace($pattern, "", $c_entry->getPathname());
                 $tar->addFile($c_entry->getPathname(), $dest);
