@@ -109,7 +109,7 @@ class ScenarioAjax extends BaseAjax
         $return = [];
         $scenario = null;
         $return['evaluate'] = ScenarioExpressionManager::setTags(NextDomHelper::fromHumanReadable(Utils::init(AjaxParams::EXPRESSION)), $scenario, true);
-        $return['result'] = evaluate($return['evaluate']);
+        $return['result'] = Utils::evaluate($return['evaluate']);
         $return['correct'] = 'ok';
         if (trim($return['result']) == trim($return['evaluate'])) {
             $return['correct'] = 'nok';
