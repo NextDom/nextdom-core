@@ -24,6 +24,7 @@ use NextDom\Enums\CmdViewType;
 use NextDom\Enums\DateFormat;
 use NextDom\Enums\EventType;
 use NextDom\Enums\LogTarget;
+use NextDom\Enums\NextDomObj;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Api;
 use NextDom\Helpers\DBHelper;
@@ -335,14 +336,14 @@ class Cmd implements EntityInterface
         $templateName = 'cmd.' . $this->getType() . '.' . $this->getSubType() . '.' . $this->getTemplate($version, 'default');
         $cacheKey = $version . '::' . $templateName;
         if (!isset(self::$_templateArray[$cacheKey])) {
-            $templateContent = FileSystemHelper::getTemplateFileContent('views', $version, $templateName, '');
+            $templateContent = FileSystemHelper::getCoreTemplateFileContent('views', $version, $templateName, '');
             if ($templateContent == '') {
                 if (ConfigManager::byKey('active', 'widget') == 1) {
-                    $templateContent = FileSystemHelper::getTemplateFileContent('views', $version, $templateName, 'widget');
+                    $templateContent = FileSystemHelper::getCoreTemplateFileContent($version, $templateName, 'widget');
                 }
                 if ($templateContent == '') {
                     foreach (PluginManager::listPlugin(true) as $plugin) {
-                        $templateContent = FileSystemHelper::getTemplateFileContent('views', $version, $templateName, $plugin->getId());
+                        $templateContent = FileSystemHelper::getCoreTemplateFileContent($version, $templateName, $plugin->getId());
                         if ($templateContent != '') {
                             break;
                         }
@@ -581,7 +582,7 @@ class Cmd implements EntityInterface
             return '';
         }
         $version = NextDomHelper::versionAlias($viewVersion);
-        $html = '';
+        $htmlRender = '';
         $replace = [
             '#id#' => $this->getId(),
             '#name#' => $this->getName(),
@@ -731,9 +732,9 @@ class Cmd implements EntityInterface
                 }
             }
 
-            $html .= Utils::templateReplace($replace, $templateCode);
-            if (trim($html) == '') {
-                return $html;
+            $htmlRender .= Utils::templateReplace($replace, $templateCode);
+            if (trim($htmlRender) == '') {
+                return $htmlRender;
             }
             if ($_options != '') {
                 $options = NextDomHelper::toHumanReadable($_options);
@@ -766,7 +767,7 @@ class Cmd implements EntityInterface
             $replace['#title_possibility_list#'] = str_replace("'", "\'", $this->getDisplay('title_possibility_list', ''));
             $replace['#slider_placeholder#'] = $this->getDisplay('slider_placeholder', __('Valeur'));
             $replace['#other_tooltips#'] = ($replace['#name#'] != $this->getName()) ? $this->getName() : '';
-            return Utils::templateReplace($replace, $html);
+            return Utils::templateReplace($replace, $htmlRender);
         }
     }
 
@@ -1114,12 +1115,8 @@ class Cmd implements EntityInterface
         }
         if ($this->getType() == CmdType::INFO) {
             switch ($this->getSubType()) {
-                case CmdSubType::STRING:
-                    if ($_quote) {
-                        return '"' . $_value . '"';
-                    }
-                    return $_value;
                 case CmdSubType::OTHER:
+                case CmdSubType::STRING:
                     if ($_quote) {
                         return '"' . $_value . '"';
                     }
@@ -1137,13 +1134,13 @@ class Cmd implements EntityInterface
                         }
                     }
                     $value = strtolower($_value);
-                    if ($value == 'on' || $value == 'high' || $value == 'true' || $value == true) {
+                    if ($value == 'on' || $value == 'high' || $value == 'true' || $value === true) {
                         return 1;
                     }
-                    if ($value == 'off' || $value == 'low' || $value == 'false' || $value == false) {
+                    if ($value == 'off' || $value == 'low' || $value == 'false' || $value === false) {
                         return 0;
                     }
-                    if ((is_numeric(intval($_value)) && intval($_value) > 1) || $_value == true || $_value == 1) {
+                    if ((is_numeric(intval($_value)) && intval($_value) > 1) || $_value === true || $_value == 1) {
                         return 1;
                     }
                     return 0;
@@ -1194,10 +1191,9 @@ class Cmd implements EntityInterface
      */
     public function setConfiguration($configKey, $configValue)
     {
-        if ($configKey == CmdConfigKey::ACTION_CODE_ACCESS && $configValue != '') {
-            if (!Utils::isSha1($configValue) && !Utils::isSha512($configValue)) {
-                $configValue = Utils::sha512($configValue);
-            }
+        if ($configKey == CmdConfigKey::ACTION_CODE_ACCESS && $configValue != ''
+            && !Utils::isSha1($configValue) && !Utils::isSha512($configValue)) {
+            $configValue = Utils::sha512($configValue);
         }
         $configuration = Utils::setJsonAttr($this->configuration, $configKey, $configValue);
         $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
@@ -1908,18 +1904,10 @@ class Cmd implements EntityInterface
         $reflectedClass = new \ReflectionClass($this->getEqType());
         $method_toHtml = $reflectedClass->getMethod('toHtml');
         $result = [];
-        if ($method_toHtml->class == EqLogic::class) {
-            $result['custom'] = true;
-        } else {
-            $result['custom'] = false;
-        }
+        $result['custom'] = $method_toHtml->class == EqLogic::class;
         $reflectedClass = new \ReflectionClass($this->getEqType() . 'Cmd');
         $method_toHtml = $reflectedClass->getMethod('toHtml');
-        if ($method_toHtml->class == Cmd::class) {
-            $result['custom'] = true;
-        } else {
-            $result['custom'] = false;
-        }
+        $result['custom'] = $method_toHtml->class == Cmd::class;
         $reflectedClass = $this->getEqType() . 'Cmd';
         if (property_exists($reflectedClass, '_widgetPossibility')) {
             /** @noinspection PhpUndefinedFieldInspection */
@@ -2087,17 +2075,17 @@ class Cmd implements EntityInterface
         ];
         $usedBy = $this->getUsedBy();
         $use = $this->getUse();
-        Utils::addGraphLink($this, 'cmd', $usedBy['scenario'], 'scenario', $_data, $_level, $_drill);
-        Utils::addGraphLink($this, 'cmd', $usedBy['eqLogic'], 'eqLogic', $_data, $_level, $_drill);
-        Utils::addGraphLink($this, 'cmd', $usedBy['cmd'], 'cmd', $_data, $_level, $_drill);
-        Utils::addGraphLink($this, 'cmd', $usedBy['interactDef'], 'interactDef', $_data, $_level, $_drill, ['dashvalue' => '2,6', 'lengthfactor' => 0.6]);
-        Utils::addGraphLink($this, 'cmd', $usedBy['plan'], 'plan', $_data, $_level, $_drill, ['dashvalue' => '2,6', 'lengthfactor' => 0.6]);
-        Utils::addGraphLink($this, 'cmd', $usedBy['view'], 'view', $_data, $_level, $_drill, ['dashvalue' => '2,6', 'lengthfactor' => 0.6]);
-        Utils::addGraphLink($this, 'cmd', $use['scenario'], 'scenario', $_data, $_level, $_drill);
-        Utils::addGraphLink($this, 'cmd', $use['eqLogic'], 'eqLogic', $_data, $_level, $_drill);
-        Utils::addGraphLink($this, 'cmd', $use['cmd'], 'cmd', $_data, $_level, $_drill);
-        Utils::addGraphLink($this, 'cmd', $use['dataStore'], 'dataStore', $_data, $_level, $_drill);
-        Utils::addGraphLink($this, 'cmd', $this->getEqLogicId(), 'eqLogic', $_data, $_level, $_drill, ['dashvalue' => '1,0', 'lengthfactor' => 0.6]);
+        Utils::addGraphLink($this, NextDomObj::CMD, $usedBy[NextDomObj::SCENARIO], NextDomObj::SCENARIO, $_data, $_level, $_drill);
+        Utils::addGraphLink($this, NextDomObj::CMD, $usedBy[NextDomObj::EQLOGIC], NextDomObj::EQLOGIC, $_data, $_level, $_drill);
+        Utils::addGraphLink($this, NextDomObj::CMD, $usedBy[NextDomObj::CMD], NextDomObj::CMD, $_data, $_level, $_drill);
+        Utils::addGraphLink($this, NextDomObj::CMD, $usedBy[NextDomObj::INTERACT_DEF], NextDomObj::INTERACT_DEF, $_data, $_level, $_drill, ['dashvalue' => '2,6', 'lengthfactor' => 0.6]);
+        Utils::addGraphLink($this, NextDomObj::CMD, $usedBy[NextDomObj::PLAN], NextDomObj::PLAN, $_data, $_level, $_drill, ['dashvalue' => '2,6', 'lengthfactor' => 0.6]);
+        Utils::addGraphLink($this, NextDomObj::CMD, $usedBy[NextDomObj::VIEW], NextDomObj::VIEW, $_data, $_level, $_drill, ['dashvalue' => '2,6', 'lengthfactor' => 0.6]);
+        Utils::addGraphLink($this, NextDomObj::CMD, $use[NextDomObj::SCENARIO], NextDomObj::SCENARIO, $_data, $_level, $_drill);
+        Utils::addGraphLink($this, NextDomObj::CMD, $use[NextDomObj::EQLOGIC], NextDomObj::EQLOGIC, $_data, $_level, $_drill);
+        Utils::addGraphLink($this, NextDomObj::CMD, $use[NextDomObj::CMD], NextDomObj::CMD, $_data, $_level, $_drill);
+        Utils::addGraphLink($this, NextDomObj::CMD, $use[NextDomObj::DATASTORE], NextDomObj::DATASTORE, $_data, $_level, $_drill);
+        Utils::addGraphLink($this, NextDomObj::CMD, $this->getEqLogicId(), NextDomObj::EQLOGIC, $_data, $_level, $_drill, ['dashvalue' => '1,0', 'lengthfactor' => 0.6]);
         return $_data;
     }
 
@@ -2109,13 +2097,13 @@ class Cmd implements EntityInterface
      */
     public function getUsedBy($resultHasArray = false)
     {
-        $result = ['cmd' => [], 'eqLogic' => [], 'scenario' => [], 'plan' => [], 'view' => []];
-        $result['cmd'] = CmdManager::searchConfiguration('#' . $this->getId() . '#');
-        $result['eqLogic'] = EqLogicManager::searchConfiguration('#' . $this->getId() . '#');
-        $result['scenario'] = ScenarioManager::searchByUse([['action' => '#' . $this->getId() . '#']]);
-        $result['interactDef'] = InteractDefManager::searchByUse('#' . $this->getId() . '#');
-        $result['view'] = ViewManager::searchByUse('cmd', $this->getId());
-        $result['plan'] = PlanHeaderManager::searchByUse('cmd', $this->getId());
+        $result = [NextDomObj::CMD => [], NextDomObj::EQLOGIC => [], NextDomObj::SCENARIO => [], NextDomObj::PLAN => [], NextDomObj::VIEW => []];
+        $result[NextDomObj::CMD] = CmdManager::searchConfiguration('#' . $this->getId() . '#');
+        $result[NextDomObj::EQLOGIC] = EqLogicManager::searchConfiguration('#' . $this->getId() . '#');
+        $result[NextDomObj::SCENARIO] = ScenarioManager::searchByUse([['action' => '#' . $this->getId() . '#']]);
+        $result[NextDomObj::INTERACT_DEF] = InteractDefManager::searchByUse('#' . $this->getId() . '#');
+        $result[NextDomObj::VIEW] = ViewManager::searchByUse(NextDomObj::CMD, $this->getId());
+        $result[NextDomObj::PLAN] = PlanHeaderManager::searchByUse(NextDomObj::CMD, $this->getId());
         if ($resultHasArray) {
             foreach ($result as &$usage) {
                 $usage = Utils::o2a($usage);

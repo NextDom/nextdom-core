@@ -27,6 +27,7 @@ class NextDomObj extends Enum
     const SCENARIO = 'scenario';
     const EQLOGIC = 'eqLogic';
     const DATASTORE = 'dataStore';
+    const INTERACT_DEF = 'interactDef';
     const PLAN = 'plan';
     const VIEW = 'view';
 }
