@@ -162,7 +162,7 @@ function initEvents() {
                                         $(".bt_cancelModifs").hide();
                                         updateInformations();
                                         notify("Info", '{{Sauvegarde réussie}}', 'success');
-                                        window.location.reload();
+                                        window.location.reload(true);
                                     }
                                 });
                             }

@@ -87,7 +87,7 @@ github::enable = 1
 apt::enable = 1
 
 ;Widget
-widget::size = 70
+widget::size = 40
 widget::background-opacity = 1
 widget::step::width = 40
 widget::step::height = 20

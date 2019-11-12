@@ -300,6 +300,10 @@
 .treeview-menu > li:hover {
   background-color: map_get($color_theme, 'color5') !important;
 }
+.fab-action-button:hover,
+.fab-action-button i:hover {
+  color: map_get($color_theme, 'color5') !important;
+}
 
 
 /* ######################################################################### */
@@ -402,11 +406,13 @@
 /* COLOR8 = Couleur de fond secondaire (titres, action-bar, footer, onglets, titre modale, boîtes d'infos...) */
 /* ########################################################################################################## */
 /* Boxs */
-.box, .panel,
+.box,
 .box-footer,
+.panel,
 .panel-heading,
 .well,
-.market-modale-category {
+.market-modale-category,
+.eqLogic-widget>.box-header {
   background-color: map_get($color_theme, 'color8') !important;
 }
 .info-box-small{

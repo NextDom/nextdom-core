@@ -98,11 +98,12 @@
     & a{
         color:inherit;
     }
+    overflow: hidden;
 }
 .cmd-widget{
     display: inline-block;
     position : relative;
-    vertical-align: top;
+    vertical-align: middle;
     & .statistiques{
         position : absolute;
         bottom: 0;

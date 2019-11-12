@@ -277,6 +277,7 @@ function updateScenarioControls(scenarioId, data) {
         }
     }
 }
+
 /**
  * Display order information of elements
  */
@@ -291,7 +292,7 @@ function orderItems() {
                   if ($(itemElem).find(".card-order-number").length) {
                       $(itemElem).find(".card-order-number").text(value);
                   } else {
-                      $(itemElem).prepend('<span class="card-order-number pull-left">' + value + '</span>');
+                      $(itemElem).find(".widget-name").prepend('<span class="card-order-number pull-left">' + value + '</span>');
                   }
               }
           });
