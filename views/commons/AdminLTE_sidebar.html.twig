@@ -93,9 +93,9 @@
             <li class="treeview" id="side6">
                 <a href="#"><i class="fas fa-puzzle-piece spacing-right"></i><span>{{ 'sidebar.plugins'|trans }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
                 <ul class="treeview-menu">
-                    <li class="treeview"><a href="index.php?v=d&p=plugin"><i class="fas fa-tags spacing-right"></i>{{ 'sidebar.plugins-markets'|trans }}</a></li>
+                    <li class="treeview divider"><a href="index.php?v=d&p=plugin"><i class="fas fa-tags spacing-right"></i>{{ 'sidebar.plugins-markets'|trans }}</a></li>
                     {% if MENU_PLUGIN_CATEGORY is defined %}
-                        {% for category, categoryData in MENU_PLUGIN_CATEGORY %}
+                        {% for category, categoryData in MENU_PLUGIN_CATEGORY|sort %}
                             <li class="treeview">
                                 <a href="#" data-toggle="dropdown"><i class="fas {{ categoryData.icon }} spacing-right"></i>{{ categoryData.name }}<span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
                                 <ul class="treeview-menu">
