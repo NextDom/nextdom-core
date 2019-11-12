@@ -17,30 +17,36 @@ class OtherPages(BaseGuiTest):
         """
         cls.init_driver(True)
 
-    def test_display_page(self):
-        """Test display page
+    def test_scenarios_page(self):
+        """Test object page
         """
-        self.goto('index.php?v=d&p=display')
+        self.goto('index.php?v=d&p=object')
         self.assertIsNotNone(self.get_link_by_title('Retour'))
-        self.assertIsNotNone(self.get_element_with_text('h3', 'My Room'))
-        self.get_element_by_id('bt_removeHistory').click()
+        self.assertIsNotNone(self.get_element_with_text('h3', 'Objets'))
+
+        self.get_element_by_id('bt_showObjectSummary').click()
         sleep(2)
-        self.assertIsNotNone(self.get_element_by_id('bt_emptyRemoveHistory'))
+        self.assertIsNotNone(self.get_element_with_text('span', 'Résumé Objets'))
         ActionChains(self.driver).send_keys(Keys.ESCAPE).perform()
         sleep(1)
         self.assertEqual(0, len(self.get_js_logs()))
 
-    def test_interact_page(self):
-        """Test interact page
+    def test_scenarios_edit_page(self):
+        """Test object edit page
         """
-        self.goto('index.php?v=d&p=interact')
-        self.assertIsNotNone(self.get_link_by_title('Retour'))
-        self.assertIsNotNone(self.get_element_by_id('bt_regenerateInteract'))
-        self.get_element_by_id('bt_testInteract').click()
+        self.goto('index.php?v=d&p=object')
         sleep(2)
-        self.assertIsNotNone(self.get_element_by_id('in_testInteractQuery'))
-        ActionChains(self.driver).send_keys(Keys.ESCAPE).perform()
+        self.get_element_by_css('div[data-object_id="1"] .bt_detailsObject').click()
+        sleep(2)
+        self.scroll_bottom()
         sleep(1)
+        self.scroll_top()
+        sleep(1)
+        self.assertIsNotNone(self.get_element_by_id('colorpickTagText'))
+        # Tab summary
+        self.get_element_by_css('a[href="#summarytab"]').click()
+        self.assertIsNotNone(self.get_element_by_id('summarytabsecurity'))
+
         self.assertEqual(0, len(self.get_js_logs()))
 
 # Entry point

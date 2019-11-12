@@ -48,10 +48,13 @@ class BaseGuiTest(unittest.TestCase):
         try:
             options = webdriver.ChromeOptions()
             # For travis environment and headless servers, disable render
-            if (not "XAUTHORITY" in os.environ) or os.uname().nodename.startswith('travis'):
+            headless = False
+            for argv in sys.argv:
+                if argv == '--headless':
+                    headless = True
+            if headless or os.uname().nodename.startswith('travis'):
                 options.add_argument('headless')
                 options.add_argument('disable-gpu')
-                options.add_argument('window-size=1920,1080')
             options.add_argument('window-size=1920x1080')
             desired_capabilities = DesiredCapabilities.CHROME.copy()
             desired_capabilities['loggingPrefs'] = {'browser': js_logs}
@@ -147,6 +150,16 @@ class BaseGuiTest(unittest.TestCase):
         """
         return self.driver.find_element_by_link_text(title)
 
+    def get_element_with_text(self, tag, text):
+        """Get element by text content
+        :param tag:  HTML tag
+        :param text: Text to find
+        :type tag:   str
+        :type text:  str
+        :rtype:      WebElement
+        """
+        return self.driver.find_element_by_xpath("//" + tag + "[contains(text(),'" + text + "')]")
+
     def get_page_title(self):
         """Get the title of the page
         :return: Title of the page
@@ -167,7 +180,10 @@ class BaseGuiTest(unittest.TestCase):
         :return: Javascript logs
         :rtype:  array
         """
-        return self.driver.get_log('browser')
+        js_logs = self.driver.get_log('browser')
+        if len(js_logs) > 0:
+            print(js_logs)
+        return js_logs
 
     def scroll_bottom(self):
         """Scroll to bottom of the page

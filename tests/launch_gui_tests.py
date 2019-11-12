@@ -91,6 +91,10 @@ def others_tests():
     run_test('tests/connection_page.py', [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])
     print_subtitle('Administrations pages')
     run_test('tests/administrations_page.py', [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])
+    print_subtitle('Scenario pages')
+    run_test('tests/scenario_pages.py', [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])
+    print_subtitle('Object pages')
+    run_test('tests/object_pages.py', [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])
     print_subtitle('Others pages')
     run_test('tests/others_pages.py', [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])
     remove_test_container(container_name)
@@ -107,4 +111,7 @@ if __name__ == "__main__":
     if len(sys.argv) == 1:
         start_all_tests('GUI Tests', TESTS_LIST)
     else:
-        start_specific_test(sys.argv[1], TESTS_LIST)
+        if sys.argv[1] == '--headless':
+            start_all_tests('GUI Tests', TESTS_LIST)
+        else:
+            start_specific_test(sys.argv[1], TESTS_LIST)
