@@ -4,11 +4,11 @@
 import unittest
 import sys
 from time import sleep
-from libs.base_gui_test import BaseGuiTest
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
+from libs.base_gui_test import BaseGuiTest
 
-class OtherPages(BaseGuiTest):
+class ObjectPages(BaseGuiTest):
     """Test all specifics pages
     """
     @classmethod
@@ -51,7 +51,7 @@ class OtherPages(BaseGuiTest):
 
 # Entry point
 if __name__ == "__main__":
-    OtherPages.parse_cli_args()
+    ObjectPages.parse_cli_args()
     # unittest use sys.argv
     del sys.argv[1:]
     # failfast=True pour arrêter à la première erreur
