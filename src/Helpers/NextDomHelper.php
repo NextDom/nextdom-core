@@ -135,9 +135,10 @@ class NextDomHelper
             $version = trim(strtolower(file_get_contents('/etc/debian_version')));
             if (version_compare($version, '8', '<')
                 && strpos($version, 'jessie') === false
-                && strpos($version, 'stretch') === false) {
+                && strpos($version, 'stretch') === false
+                && strpos($version, 'buster') === false) {
                 $state = false;
-            }
+            }   
         }
         $systemHealth[] = array(
             'icon' => 'fa-cogs',
