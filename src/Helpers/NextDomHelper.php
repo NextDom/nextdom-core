@@ -1018,7 +1018,7 @@ class NextDomHelper
     /**
      * TODO: Ca évalue des choses dans les expressions
      *
-     * @param $input
+     * @param string $input
      * @param null $scenario
      *
      * @return mixed|string

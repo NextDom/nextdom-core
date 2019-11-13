@@ -19,7 +19,7 @@ namespace NextDom\Model\Entity;
 
 use NextDom\Enums\DateFormat;
 use NextDom\Enums\ScenarioExpressionAction;
-use NextDom\Enums\ScenarioExpressionType;
+use NextDom\Enums\ScenarioItemType;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\NetworkHelper;
@@ -138,7 +138,7 @@ class ScenarioExpression implements EntityInterface
         }
         $message = '';
         try {
-            if ($this->getType() == ScenarioExpressionType::ELEMENT) {
+            if ($this->getType() == ScenarioItemType::ELEMENT) {
                 $element = ScenarioElementManager::byId($this->getExpression());
                 if (is_object($element)) {
                     $this->setLog($scenario, __('Exécution d\'un bloc élément : ') . $this->getExpression());
@@ -160,9 +160,9 @@ class ScenarioExpression implements EntityInterface
                     }
                 }
             }
-            if ($this->getType() == ScenarioExpressionType::ACTION) {
+            if ($this->getType() == ScenarioItemType::ACTION) {
                 $this->executeAction($scenario, $options);
-            } elseif ($this->getType() == ScenarioExpressionType::CONDITION) {
+            } elseif ($this->getType() == ScenarioItemType::CONDITION) {
                 $expression = ScenarioExpressionManager::setTags($this->getExpression(), $scenario, true);
                 $message = __('Evaluation de la condition : [') . $expression . '] = ';
                 $result = Utils::evaluate($expression);
@@ -177,7 +177,7 @@ class ScenarioExpression implements EntityInterface
                 }
                 $this->setLog($scenario, $message);
                 return $result;
-            } elseif ($this->getType() == ScenarioExpressionType::CODE) {
+            } elseif ($this->getType() == ScenarioItemType::CODE) {
                 $this->setLog($scenario, __('Exécution d\'un bloc code'));
                 return eval($this->getExpression());
             }

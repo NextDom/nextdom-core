@@ -22,10 +22,16 @@ namespace NextDom\Enums;
  * Class ScenarioExpressionType
  * @package NextDom\Enums
  */
-class ScenarioExpressionType extends Enum
+class ScenarioItemType extends Enum
 {
-    const ELEMENT = 'element';
     const ACTION = 'action';
     const CODE = 'code';
     const CONDITION = 'condition';
+    const DO = 'do';
+    const ELEMENT = 'element';
+    const ELSE = 'else';
+    const FOR = 'for';
+    const IF = 'if';
+    const IN = 'in';
+    const THEN = 'then';
 }

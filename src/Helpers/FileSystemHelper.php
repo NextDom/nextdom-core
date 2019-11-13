@@ -373,6 +373,37 @@ class FileSystemHelper
     }
 
     /**
+     * Ignore file depend of params
+     *
+     * @param string $filePath File path
+     * @param int $fileSize File size
+     * @param array $params Array of params
+     *
+     * @return bool True if file is ignored
+     */
+    private static function ignoreFile($filePath, $fileSize, $params = []) {
+        if (isset($_params['ignoreFileSizeUnder']) && $fileSize < $params['ignoreFileSizeUnder']) {
+            if (strpos(realpath($filePath), 'empty') !== false) {
+                return true;
+            }
+            if (strpos(realpath($filePath), '.git') !== false) {
+                return true;
+            }
+            if (strpos(realpath($filePath), '.html') !== false) {
+                return true;
+            }
+            if (strpos(realpath($filePath), '.txt') !== false) {
+                return true;
+            }
+            if (isset($params['log']) && $params['log']) {
+                echo 'Ignore file ' . $filePath . ' because size is ' . $fileSize . "\n";
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * @param       $src
      * @param       $dst
      * @param bool $_emptyDest
@@ -381,7 +412,7 @@ class FileSystemHelper
      * @param array $_params
      * @return bool
      */
-    public static function rcopy($src, $dst, $_emptyDest = true, $_exclude = array(), $_noError = false, $_params = array())
+    public static function rcopy($src, $dst, $_emptyDest = true, $_exclude = array(), $_noError = false, $_params = [])
     {
         if (!file_exists($src)) {
             return true;
@@ -404,22 +435,7 @@ class FileSystemHelper
         } else {
             if (!in_array(basename($src), $_exclude) && !in_array(realpath($src), $_exclude)) {
                 $srcSize = filesize($src);
-                if (isset($_params['ignoreFileSizeUnder']) && $srcSize < $_params['ignoreFileSizeUnder']) {
-                    if (strpos(realpath($src), 'empty') !== false) {
-                        return true;
-                    }
-                    if (strpos(realpath($src), '.git') !== false) {
-                        return true;
-                    }
-                    if (strpos(realpath($src), '.html') !== false) {
-                        return true;
-                    }
-                    if (strpos(realpath($src), '.txt') !== false) {
-                        return true;
-                    }
-                    if (isset($_params['log']) && $_params['log']) {
-                        echo 'Ignore file ' . $src . ' because size is ' . $srcSize . "\n";
-                    }
+                if (self::ignoreFile($src, $srcSize, $_params)) {
                     return true;
                 }
                 if (!copy($src, $dst)) {
@@ -537,22 +553,7 @@ class FileSystemHelper
         } else {
             if (!in_array(basename($src), $_exclude) && !in_array(realpath($src), $_exclude)) {
                 $srcSize = filesize($src);
-                if (isset($_params['ignoreFileSizeUnder']) && $srcSize < $_params['ignoreFileSizeUnder']) {
-                    if (strpos(realpath($src), 'empty') !== false) {
-                        return true;
-                    }
-                    if (strpos(realpath($src), '.git') !== false) {
-                        return true;
-                    }
-                    if (strpos(realpath($src), '.html') !== false) {
-                        return true;
-                    }
-                    if (strpos(realpath($src), '.txt') !== false) {
-                        return true;
-                    }
-                    if (isset($_params['log']) && $_params['log']) {
-                        echo 'Ignore file ' . $src . ' because size is ' . $srcSize . "\n";
-                    }
+                if (self::ignoreFile($src, $srcSize, $_params)) {
                     return true;
                 }
                 if (!rename($src, $dst)) {

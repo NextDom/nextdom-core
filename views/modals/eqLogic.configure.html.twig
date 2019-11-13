@@ -54,9 +54,9 @@
     <div class="nav-tabs-custom">
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active"><a href="#eqLogic_information" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-info-circle"></i>{{ 'Informations' }}</a></li>
-            {% if widgetPossibilityCustom %}
+            {% if custom %}
                 <li role="presentation"><a href="#eqLogic_display" aria-controls="messages" role="tab" data-toggle="tab"><i class="fas fa-desktop"></i>{{ 'Affichage' }}</a></li>
-                {% if widgetPossibilityCustomLayout %}
+                {% if customLayout %}
                     <li role="presentation"><a href="#eqLogic_layout" aria-controls="messages" role="tab" data-toggle="tab"><i class="fas fa-th"></i>{{ 'Disposition' }}</a></li>
                 {% endif %}
             {% endif %}
@@ -162,7 +162,7 @@
                     </fieldset>
                 </form>
             </div>
-            {% if widgetPossibilityCustom %}
+            {% if custom %}
                 <div role="tabpanel" class="tab-pane" id="eqLogic_display">
                     <legend>{{ 'Widget' }}</legend>
                     <table class="table table-bordered table-condensed">
@@ -181,7 +181,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        {% if widgetPossibilityCustomVisibility %}
+                        {% if customVisibility %}
                             <tr>
                                 <td>{{ 'Visible' }}</td>
                                 {% for eqLogicDisplayType in eqLogicConfigurationDisplayType %}
@@ -193,7 +193,7 @@
                                 {% endfor %}
                             </tr>
                         {% endif %}
-                        {% if widgetPossibilityCustomDisplayName %}
+                        {% if customDisplayName %}
                             <tr>
                                 <td>{{ 'Afficher le nom' }}</td>
                                 {% for eqLogicDisplayType in eqLogicConfigurationDisplayType %}
@@ -205,7 +205,7 @@
                                 {% endfor %}
                             </tr>
                         {% endif %}
-                        {% if widgetPossibilityCustomDisplayObjectName %}
+                        {% if customDisplayObjectName %}
                             <tr>
                                 <td>{{ 'Afficher le nom de l\'objet' }}</td>
                                 {% for eqLogicDisplayType in eqLogicConfigurationDisplayType %}
@@ -217,7 +217,7 @@
                                 {% endfor %}
                             </tr>
                         {% endif %}
-                        {% if widgetPossibilityCustomBackgroundColor %}
+                        {% if customBackgroundColor %}
                             <tr>
                                 <td>{{ 'Couleur de fond' }}</td>
                                 {% for eqLogicDisplayType in eqLogicConfigurationDisplayType %}
@@ -233,7 +233,7 @@
                                 {% endfor %}
                             </tr>
                         {% endif %}
-                        {% if widgetPossibilityCustomBackgroundOpacity %}
+                        {% if customBackgroundOpacity %}
                             <tr>
                                 <td>{{ 'Opacité' }}
                                 </td>
@@ -246,7 +246,7 @@
                                 {% endfor %}
                             </tr>
                         {% endif %}
-                        {% if widgetPossibilityCustomTextColor %}
+                        {% if customTextColor %}
                             <tr>
                                 <td>{{ 'Couleur du texte' }}</td>
                                 {% for eqLogicDisplayType in eqLogicConfigurationDisplayType %}
@@ -259,7 +259,7 @@
                                 {% endfor %}
                             </tr>
                         {% endif %}
-                        {% if widgetPossibilityCustomBorder %}
+                        {% if customBorder %}
                             <tr>
                                 <td>{{ 'Bordures' }}</td>
                                 {% for eqLogicDisplayType in eqLogicConfigurationDisplayType %}
@@ -272,7 +272,7 @@
                                 {% endfor %}
                             </tr>
                         {% endif %}
-                        {% if widgetPossibilityCustomBorderRadius %}
+                        {% if customBorderRadius %}
                             <tr>
                                 <td>{{ 'Arrondi des bordures (en px)' }}</td>
                                 {% for eqLogicDisplayType in eqLogicConfigurationDisplayType %}
@@ -317,7 +317,7 @@
                         {% endif %}
                         </tbody>
                     </table>
-                    {% if widgetPossibilityCustomOptionalParameters %}
+                    {% if customOptionalParameters %}
                         <legend>{{ 'Paramètres optionnels sur la tuile' }} <a class="btn btn-success btn-xs pull-right" id="bt_addWidgetParameters"><i class="fas fa-plus-circle"></i>{{ 'Ajouter' }}</a></legend>
                         <table class="table table-bordered table-condensed" id="table_widgetParameters">
                             <thead>

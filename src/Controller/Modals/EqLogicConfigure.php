@@ -57,17 +57,23 @@ class EqLogicConfigure extends BaseAbstractModal
                 'eqLogicInfoSearchString' => urlencode(str_replace('#', '', $eqLogic->getHumanName()))]);
 
         $pageData = [];
-        $pageData['widgetPossibilityCustom'] = $eqLogic->widgetPossibility('custom');
-        $pageData['widgetPossibilityCustomLayout'] = $eqLogic->widgetPossibility('custom::layout');
-        $pageData['widgetPossibilityCustomVisibility'] = $eqLogic->widgetPossibility('custom::visibility');
-        $pageData['widgetPossibilityCustomDisplayName'] = $eqLogic->widgetPossibility('custom::displayName');
-        $pageData['widgetPossibilityCustomDisplayObjectName'] = $eqLogic->widgetPossibility('custom::displayObjectName');
-        $pageData['widgetPossibilityCustomBackgroundColor'] = $eqLogic->widgetPossibility('custom::background-color');
-        $pageData['widgetPossibilityCustomBackgroundOpacity'] = $eqLogic->widgetPossibility('custom::background-opacity');
-        $pageData['widgetPossibilityCustomTextColor'] = $eqLogic->widgetPossibility('custom::text-color');
-        $pageData['widgetPossibilityCustomBorder'] = $eqLogic->widgetPossibility('custom::border');
-        $pageData['widgetPossibilityCustomBorderRadius'] = $eqLogic->widgetPossibility('custom::border-radius');
-        $pageData['widgetPossibilityCustomOptionalParameters'] = $eqLogic->widgetPossibility('custom::optionalParameters');
+        
+        $widgetPossibilities = [
+            ['code' => 'customVisibility', 'key' => 'custom::visibility'],
+            ['code' => 'customDisplayName', 'key' => 'custom::displayName'],
+            ['code' => 'customDisplayObjectName', 'key' => 'custom::displayObjectName'],
+            ['code' => 'customBackgroundColor', 'key' => 'custom::background-color'],
+            ['code' => 'customBackgroundOpacity', 'key' => 'custom::background-opacity'],
+            ['code' => 'customTextColor', 'key' => 'custom::text-color'],
+            ['code' => 'customBorder', 'key' => 'custom::border'],
+            ['code' => 'customBorderRadius', 'key' => 'custom::border-radius'],
+            ['code' => 'custom', 'key' => 'custom'],
+            ['code' => 'customLayout', 'key' => 'custom::layout'],
+            ['code' => 'customOptionalParameters', 'key' => 'custom::optionalParameters']
+        ];
+        foreach ($widgetPossibilities as $widgetPossibility) {
+            $pageData[$widgetPossibility['code']] = $eqLogic->widgetPossibility($widgetPossibility['key']);
+        }
 
         $pageData['statusNumberTryWithoutSuccess'] = $eqLogic->getStatus('numberTryWithoutSuccess', 0);
         $pageData['statusLastCommunication'] = $eqLogic->getStatus('lastCommunication');
@@ -80,38 +86,14 @@ class EqLogicConfigure extends BaseAbstractModal
                 $eqLogicDisplayType = [];
                 $eqLogicDisplayType['key'] = $key;
                 $eqLogicDisplayType['name'] = $value['name'];
-                $eqLogicDisplayType['customVisibility'] = false;
-                if ($pageData['widgetPossibilityCustomVisibility'] && $eqLogic->widgetPossibility('custom::visibility::' . $key)) {
-                    $eqLogicDisplayType['customVisibility'] = true;
-                }
-                $eqLogicDisplayType['customDisplayName'] = false;
-                if ($pageData['widgetPossibilityCustomDisplayName'] && $eqLogic->widgetPossibility('custom::displayName::' . $key)) {
-                    $eqLogicDisplayType['customDisplayName'] = true;
-                }
-                $eqLogicDisplayType['customDisplayObjectName'] = false;
-                if ($pageData['widgetPossibilityCustomDisplayObjectName'] && $eqLogic->widgetPossibility('custom::displayObjectName::' . $key)) {
-                    $eqLogicDisplayType['customDisplayObjectName'] = true;
-                }
-                $eqLogicDisplayType['customBackgroundColor'] = false;
-                if ($pageData['widgetPossibilityCustomBackgroundColor'] && $eqLogic->widgetPossibility('custom::background-color::' . $key)) {
-                    $eqLogicDisplayType['backgroundColor'] = $eqLogic->getBackgroundColor($key);
-                    $eqLogicDisplayType['customBackgroundColor'] = true;
-                }
-                $eqLogicDisplayType['customBackgroundOpacity'] = false;
-                if ($pageData['widgetPossibilityCustomBackgroundOpacity'] && $eqLogic->widgetPossibility('custom::background-opacity::' . $key)) {
-                    $eqLogicDisplayType['customBackgroundOpacity'] = true;
-                }
-                $eqLogicDisplayType['customTextColor'] = false;
-                if ($pageData['widgetPossibilityCustomTextColor'] && $eqLogic->widgetPossibility('custom::text-color::' . $key)) {
-                    $eqLogicDisplayType['customTextColor'] = true;
-                }
-                $eqLogicDisplayType['customBorder'] = false;
-                if ($pageData['widgetPossibilityCustomBorder'] && $eqLogic->widgetPossibility('custom::border::' . $key)) {
-                    $eqLogicDisplayType['customBorder'] = true;
-                }
-                $eqLogicDisplayType['customBorderRadius'] = false;
-                if ($pageData['widgetPossibilityCustomBorderRadius'] && $eqLogic->widgetPossibility('custom::border-radius::' . $key)) {
-                    $eqLogicDisplayType['customBorderRadius'] = true;
+                foreach ($widgetPossibilities as $widgetPossibility) {
+                    $eqLogicDisplayType[$widgetPossibility['code']] = false;
+                    if ($pageData[$widgetPossibility['code']] && $eqLogic->widgetPossibility($widgetPossibility['key'] . '::' . $key)) {
+                        if ($widgetPossibility['code'] == 'customBackgroundColor') {
+                            $eqLogicDisplayType['backgroundColor'] = $eqLogic->getBackgroundColor($key);
+                        }
+                        $eqLogicDisplayType[$widgetPossibility['code']] = true;
+                    }
                 }
                 array_push($pageData['eqLogicConfigurationDisplayType'], $eqLogicDisplayType);
         }
