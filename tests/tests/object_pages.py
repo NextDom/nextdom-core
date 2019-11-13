@@ -17,7 +17,7 @@ class ObjectPages(BaseGuiTest):
         """
         cls.init_driver(True)
 
-    def test_scenarios_page(self):
+    def test_objects_page(self):
         """Test object page
         """
         self.goto('index.php?v=d&p=object')
@@ -31,7 +31,7 @@ class ObjectPages(BaseGuiTest):
         sleep(1)
         self.assertEqual(0, len(self.get_js_logs()))
 
-    def test_scenarios_edit_page(self):
+    def test_object_edit_page(self):
         """Test object edit page
         """
         self.goto('index.php?v=d&p=object')
@@ -44,7 +44,8 @@ class ObjectPages(BaseGuiTest):
         sleep(1)
         self.assertIsNotNone(self.get_element_by_id('colorpickTagText'))
         # Tab summary
-        self.get_element_by_css('a[href="#summarytab"]').click()
+        #self.get_element_by_css('a[href="#summarytab"]').click()
+        self.click_on_invisible('a[href="#summarytab"]')
         self.assertIsNotNone(self.get_element_by_id('summarytabsecurity'))
 
         self.assertEqual(0, len(self.get_js_logs()))

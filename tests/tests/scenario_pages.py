@@ -8,6 +8,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 from libs.base_gui_test import BaseGuiTest
 
+
 class ScenarioPages(BaseGuiTest):
     """Test all specifics pages
     """
@@ -54,17 +55,20 @@ class ScenarioPages(BaseGuiTest):
         self.scroll_bottom()
         sleep(1)
         self.scroll_top()
-        sleep(1)
-        scenario_name_input = self.get_element_by_css('input[data-l1key="name"]')
+        sleep(2)
+        scenario_name_input = self.get_element_by_css(
+            'input[data-l1key="name"]')
         self.assertIsNotNone(scenario_name_input)
-        self.assertEqual('Test scenario', scenario_name_input.get_attribute('value'))
+        self.assertEqual(
+            'Test scenario', scenario_name_input.get_attribute('value'))
         # Tab condition
-        self.get_element_by_css('a[href="#conditiontab"]').click()
+        self.click_on_invisible('a[href="#conditiontab"]')
         self.assertIsNotNone(self.get_element_by_id('scenarioVisibleAttr'))
         # Tab Programmation
-        self.get_element_by_css('a[href="#scenariotab"]').click()
+        self.click_on_invisible('a[href="#scenariotab"]')
         self.assertIsNotNone(self.get_element_by_id('div_scenarioElement'))
         self.assertEqual(0, len(self.get_js_logs()))
+
 
 # Entry point
 if __name__ == "__main__":

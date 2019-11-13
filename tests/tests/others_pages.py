@@ -49,7 +49,7 @@ class OtherPages(BaseGuiTest):
         self.goto('index.php?v=d&p=health')
         self.assertIsNotNone(self.get_link_by_title('Retour'))
         self.assertIsNotNone(self.get_element_by_id('bt_benchmarkNextDom'))
-        self.get_element_by_css('a[href="#div_Plugins"]').click()
+        self.click_on_invisible('a[href="#div_Plugins"]')
         self.assertIsNotNone(self.get_element_by_id('div_Plugins'))
         self.assertEqual(0, len(self.get_js_logs()))
 
@@ -59,15 +59,15 @@ class OtherPages(BaseGuiTest):
         self.goto('index.php?v=d&p=eqAnalyse')
         self.assertIsNotNone(self.get_link_by_title('Retour'))
         self.assertIsNotNone(self.get_element_by_css('a[href="index.php?v=d&p=eqlogic"]'))
-        self.get_element_by_css('a[href="#battery"]').click()
+        self.click_on_invisible('a[href="#battery"]')
         self.assertIsNotNone(self.get_element_by_id('battery'))
-        self.get_element_by_css('a[href="#alertEqlogic"]').click()
+        self.click_on_invisible('a[href="#alertEqlogic"]')
         self.assertIsNotNone(self.get_element_by_id('alertEqlogic'))
-        self.get_element_by_css('a[href="#actionCmd"]').click()
+        self.click_on_invisible('a[href="#actionCmd"]')
         self.assertIsNotNone(self.get_element_by_id('actionCmd'))
-        self.get_element_by_css('a[href="#alertCmd"]').click()
+        self.click_on_invisible('a[href="#alertCmd"]')
         self.assertIsNotNone(self.get_element_by_id('alertCmd'))
-        self.get_element_by_css('a[href="#deadCmd"]').click()
+        self.click_on_invisible('a[href="#deadCmd"]')
         self.assertIsNotNone(self.get_element_by_id('deadCmd'))
         self.assertEqual(0, len(self.get_js_logs()))
 
@@ -113,9 +113,9 @@ class OtherPages(BaseGuiTest):
         self.assertIsNotNone(self.get_element_by_css('select[data-l1key="source"]'))
         ActionChains(self.driver).send_keys(Keys.ESCAPE).perform()
         sleep(1)
-        self.get_element_by_css('a[href="#actifs"]').click()
+        self.click_on_invisible('a[href="#actifs"]')
         self.assertIsNotNone(self.get_element_by_id('actifs'))
-        self.get_element_by_css('a[href="#inactifs"]').click()
+        self.click_on_invisible('a[href="#inactifs"]')
         self.assertIsNotNone(self.get_element_by_id('inactifs'))
         self.assertEqual(0, len(self.get_js_logs()))
 
@@ -129,15 +129,15 @@ class OtherPages(BaseGuiTest):
         self.assertIsNotNone(self.get_element_by_id('updateLog'))
         ActionChains(self.driver).send_keys(Keys.ESCAPE).perform()
         sleep(1)
-        self.get_element_by_css('a[href="#core"]').click()
+        self.click_on_invisible('a[href="#core"]')
         self.assertIsNotNone(self.get_element_by_id('core'))
-        self.get_element_by_css('a[href="#plugins"]').click()
+        self.click_on_invisible('a[href="#plugins"]')
         self.assertIsNotNone(self.get_element_by_id('plugins'))
-        self.get_element_by_css('a[href="#widgets"]').click()
+        self.click_on_invisible('a[href="#widgets"]')
         self.assertIsNotNone(self.get_element_by_id('widgets'))
-        self.get_element_by_css('a[href="#scripts"]').click()
+        self.click_on_invisible('a[href="#scripts"]')
         self.assertIsNotNone(self.get_element_by_id('scripts'))
-        self.get_element_by_css('a[href="#others"]').click()
+        self.click_on_invisible('a[href="#others"]')
         self.assertIsNotNone(self.get_element_by_id('others'))
         self.assertEqual(0, len(self.get_js_logs()))
 
@@ -149,6 +149,50 @@ class OtherPages(BaseGuiTest):
         sleep(2)
         self.assertIsNotNone(self.get_element_by_id('bt_clearMessage'))
         ActionChains(self.driver).send_keys(Keys.ESCAPE).perform()
+        sleep(1)
+        self.assertEqual(0, len(self.get_js_logs()))
+
+    def test_profils_page(self):
+        """Test profils page
+        """
+        self.goto('index.php?v=d&p=profils')
+        self.assertIsNotNone(self.get_link_by_title('Retour'))
+        self.assertIsNotNone(self.get_element_by_id('bt_saveProfils'))
+        # Tab profil
+        self.click_on_invisible('a[href="#profil"]')
+        self.assertIsNotNone(self.get_element_by_id('avatar-preview'))
+        # Tab theme
+        self.click_on_invisible('a[href="#themetab"]')
+        self.assertIsNotNone(self.get_element_by_id('themeIcon'))
+        # Tab widget
+        self.click_on_invisible('a[href="#widgettab"]')
+        self.assertIsNotNone(self.get_element_by_css('input[data-l2key="widget::background-opacity::plan"]')) #pylint: disable=line-too-long
+        # Tab tiles
+        self.click_on_invisible('a[href="#colortab"]')
+        self.assertIsNotNone(self.get_element_by_css('input[data-l1key="widget::radius"]'))
+        # Tab notification
+        self.click_on_invisible('a[href="#notificationtab"]')
+        self.assertIsNotNone(self.get_element_by_css('input[data-l1key="notify::timeout"]'))
+        # Tab interface
+        self.click_on_invisible('a[href="#interfacetab"]')
+        self.assertIsNotNone(self.get_element_by_id('displayViewByDefault'))
+        # Tab security
+        self.click_on_invisible('a[href="#securitytab"]')
+        self.assertIsNotNone(self.get_element_by_id('bt_configureTwoFactorAuthentification'))
+        self.assertEqual(0, len(self.get_js_logs()))
+
+    def test_users_page(self):
+        """Test users page
+        """
+        self.goto('index.php?v=d&p=users')
+        self.assertIsNotNone(self.get_link_by_title('Retour'))
+        self.assertIsNotNone(self.get_element_by_id('bt_saveUser'))
+        self.assertIsNotNone(self.get_element_with_text('span', 'simple'))
+        self.assertIsNotNone(self.get_element_with_text('span', 'admin'))
+        self.get_element_by_id('bt_addUser').click()
+        sleep(2)
+        self.assertIsNotNone(self.get_element_by_id('in_newUserLogin'))
+        self.get_element_by_css('#md_newUser a.btn-danger').click()
         sleep(1)
         self.assertEqual(0, len(self.get_js_logs()))
 

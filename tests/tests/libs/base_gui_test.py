@@ -185,6 +185,13 @@ class BaseGuiTest(unittest.TestCase):
             print(js_logs)
         return js_logs
 
+    def click_on_invisible(self, css_selector):
+        """Click on invisible HTML element
+        :param css_selector: CSS selector of the HTML element
+        :type css_selector:  str
+        """
+        self.driver.execute_script("$('" + css_selector + "').click()")
+
     def scroll_bottom(self):
         """Scroll to bottom of the page
         """
