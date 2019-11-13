@@ -109,7 +109,7 @@ class BackupManager
             ConsoleHelper::step("rotating backup archives");
             self::rotateBackups($backupDir);
             ConsoleHelper::ok();
-            ConsoleHelper::step("uploading backup to remote SAMBA sharing");
+            ConsoleHelper::step("checking remote backup systems");
             self::sendRemoteBackup($backupPath);
             ConsoleHelper::ok();
             NextDomHelper::event('end_backup');
@@ -398,7 +398,7 @@ class BackupManager
                 (ConfigManager::byKey($c_key . '::cloudUpload') == 0)) {
                 continue;
             }
-            LogHelper::addError("system", $c_val['class']);
+            LogHelper::addInfo("system", $c_val['class']);
             try {
                 $c_val['class']::backup_send($path);
             } catch (\Exception $e) {
