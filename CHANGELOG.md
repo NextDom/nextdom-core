@@ -1,5 +1,44 @@
 # NextDom Core Changelog
 ---
+## 0.6.0
+
+> ***Release Date : XX/11/2019***
+>
+> ***Statut : beta***
+>
+> ***Coverall : 17%***
+
+#### NEWS
+* Contenu des tuiles du dashboard centré verticalement
+
+#### AMELIORATIONS / MODIFICATIONS
+* Ajout d'un lien direct au testeur d'expression dans le sidemenu
+* Tri alphabétique des catégories et nom de plugins dans le sidemenu
+* Nettoyage et Amélioration visuelle de la page services
+* Revue des pages administration
+  * Mise en onglet pour aérer la lecture
+  * Onglet iconisés dynamique suivant résolution
+
+#### FIXS
+* [liste ici](https://github.com/NextDom/nextdom-core/milestone/19?closed=1)
+---
+## 0.5.4
+
+> ***Release Date : 13/11/2019***
+>
+> ***Statut : beta***
+>
+> ***Coverall : 17%***
+
+#### NEWS
+* Possibilité de trier les logs chronologiquement ou alphabetiquement
+
+#### AMELIORATIONS / MODIFICATIONS
+* Amélioration du score SonarCloud
+
+#### FIXS
+* [liste ici](https://github.com/NextDom/nextdom-core/milestone/24?closed=1)
+---
 ## 0.5.3
 
 > ***Release Date : 09/11/2019***

@@ -49,11 +49,6 @@ class ServicesController extends BaseController
     public static function get(&$pageData): string
     {
         $pageData['adminReposList'] = UpdateManager::listRepo();
-        $keys = array('market::allowDNS', 'ldap::enable');
-        foreach ($pageData['adminReposList'] as $key => $value) {
-            $keys[] = $key . '::enable';
-        }
-        $pageData['adminConfigs'] = ConfigManager::byKeys($keys);
         $pageData['JS_END_POOL'][] = '/public/js/desktop/admin/services.js';
 
         return Render::getInstance()->get('/desktop/admin/services.html.twig', $pageData);

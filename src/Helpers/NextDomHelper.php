@@ -860,7 +860,7 @@ class NextDomHelper
             LogHelper::addError('nextdom', $e->getMessage());
         }
         try {
-            if (ConfigManager::byKey('update::autocheck', 'core', 1) == 1 && (ConfigManager::byKey('update::lastCheck') == '' || (strtotime('now') - strtotime(ConfigManager::byKey('update::lastCheck'))) > (23 * 3600))) {
+            if ((ConfigManager::byKey('update::lastCheck') == '' || (strtotime('now') - strtotime(ConfigManager::byKey('update::lastCheck'))) > (23 * 3600))) {
                 UpdateManager::checkAllUpdate();
                 $updates = UpdateManager::byStatus('update');
                 $toUpdate = '';

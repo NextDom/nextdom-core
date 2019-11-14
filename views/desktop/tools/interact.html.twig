@@ -140,15 +140,9 @@
     <section class="content">
         <div class="nav-tabs-custom">
             <ul class="nav nav-tabs pull-right" role="tablist">
-                <li role="presentation">
-                    <a href="#actiontab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-cogs spacing-right"></i>{{ 'common.actions' | trans }}</a>
-                </li>
-                <li role="presentation">
-                    <a href="#filtertab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-filter"></i>{{ 'interact.filters' | trans }}</a>
-                </li>
-                <li role="presentation" class="active">
-                    <a href="#generaltab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tachometer-alt"></i>{{ 'common.main' | trans }}</a>
-                </li>
+                <li role="presentation"><a href="#actiontab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-cogs spacing-right"></i><span>{{ 'common.actions' | trans }}</span></a></li>
+                <li role="presentation"><a href="#filtertab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-filter"></i><span>{{ 'interact.filters' | trans }}</span></a></li>
+                <li role="presentation" class="active"><a href="#generaltab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tachometer-alt"></i><span>{{ 'common.main' | trans }}</span></a></li>
                 <h4 class="label label-primary pull-right badge spacing-right">{{ 'interact.id' | trans }}<span id="interactId"></span></h4>
                 <li class="header pull-left"><i class="fas fa-comments"></i>{{ 'interact.edition_interaction' | trans }}</li>
             </ul>

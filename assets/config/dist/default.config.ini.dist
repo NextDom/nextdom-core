@@ -55,7 +55,6 @@ update::backupBefore = 1
 update::check = 00 06 * * *
 core::repo::provider = github
 core::branch = master
-update::autocheck = 1
 
 ;Cron
 deamonsSleepTime = 1

@@ -27,6 +27,8 @@ use NextDom\Model\Entity\Update;
 class RepoApt
 {
     public static $_name = 'Apt';
+    public static $_icon = 'fab fa-ubuntu';
+    public static $_description = 'repo.apt.description';
 
     public static $_scope = array(
         'plugin' => false,

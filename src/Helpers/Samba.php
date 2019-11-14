@@ -60,7 +60,7 @@ class Samba
             $this->client = $serverFactory->createServer($host, $auth);
             $this->share = $share;
         } catch (\Exception $e) {
-            CoreException::do_throw('{samba.error.connect}: %s', $e->getMessage());
+            CoreException::do_throw('{repo.samba.error.connect}: %s', $e->getMessage());
         }
     }
 
@@ -120,9 +120,9 @@ class Samba
         try {
             $this->getShare()->get($src, $dest);
         } catch (\Icewind\SMB\Exception\NotFoundException $e) {
-            CoreException::do_throw('{samba.error.not-found}: %s', $src);
+            CoreException::do_throw('{repo.samba.error.not-found}: %s', $src);
         } catch (\Throwable $e) {
-            CoreException::do_throw('{samba.error.unknown}: %s', $e->getMessage());
+            CoreException::do_throw('{repo.samba.error.unknown}: %s', $e->getMessage());
         }
     }
 
@@ -139,9 +139,9 @@ class Samba
         try {
             $this->getShare()->put($src, $dest);
         } catch (\Icewind\SMB\Exception\NotFoundException $e) {
-            CoreException::do_throw('{samba.error.not-found}: %s', $src);
+            CoreException::do_throw('{repo.samba.error.not-found}: %s', $src);
         } catch (\Throwable $e) {
-            CoreException::do_throw('{samba.error.unknown}: %s', $e->getMessage());
+            CoreException::do_throw('{repo.samba.error.unknown}: %s', $e->getMessage());
         }
     }
 
@@ -159,9 +159,9 @@ class Samba
         try {
             return $this->getShare()->dir($path);
         } catch (\Icewind\SMB\Exception\NotFoundException $e) {
-            CoreException::do_throw('{samba.error.not-found}: %s', $path);
+            CoreException::do_throw('{repo.samba.error.not-found}: %s', $path);
         } catch (\Throwable $e) {
-            CoreException::do_throw('{samba.error.unknown}: %s', $e->getMessage());
+            CoreException::do_throw('{repo.samba.error.unknown}: %s', $e->getMessage());
         }
         return null;
     }
@@ -180,9 +180,9 @@ class Samba
         try {
             $this->getShare()->del($path);
         } catch (\Icewind\SMB\Exception\NotFoundException $e) {
-            CoreException::do_throw('{samba.error.not-found}: %s', $path);
+            CoreException::do_throw('{repo.samba.error.not-found}: %s', $path);
         } catch (\Throwable $e) {
-            CoreException::do_throw('{samba.error.unknown}: %s', $e->getMessage());
+            CoreException::do_throw('{repo.samba.error.unknown}: %s', $e->getMessage());
         }
         return null;
     }
@@ -204,7 +204,7 @@ class Samba
         try {
             return $this->client->getShare($name);
         } catch (\Exception $e) {
-            CoreException::do_throw('{samba.error.connect}: %s', $e->getMessage());
+            CoreException::do_throw('{repo.samba.error.connect}: %s', $e->getMessage());
         }
         return null;
     }

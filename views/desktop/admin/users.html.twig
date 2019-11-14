@@ -51,125 +51,132 @@
 
 <section class="content">
     <div class="box" id="users">
-        <!-- Header bar -->
-        <div class="box-header with-border">
-            <h3 class="box-title"><i class="fas fa-users"></i>{{ 'Gestion des utilisateurs' }}</h3>
+        <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs pull-right" role="tablist">
+                <li role="presentation"><a href="#tabPeriph" aria-controls="tabPeriph" role="tab" data-toggle="tab"><i class="fas fa-laptop"></i><span>{{ 'Périphériques' }}</span></a></li>
+                <li role="presentation"><a href="#tabSessions" aria-controls="tabSessions" role="tab" data-toggle="tab"><i class="fas fa-chalkboard-teacher"></i><span>{{ 'Sessions' }}</span></a></li>
+                <li role="presentation" class="active"><a href="#tabUsers" aria-controls="tabUsers" role="tab" data-toggle="tab"><i class="fas fa-user"></i><span>{{ 'Utilisateurs' }}</span></a></li>
+                <li class="header pull-left"><i class="fas fa-users"></i>{{ 'Gestion des utilisateurs' }}</li>
+            </ul>
+            <div class="global-tab-content tab-content">
+                <div role="tabpanel" class="tab-pane active" id="tabUsers">
+                    <fieldset>
+                        <legend>{{ 'Liste des utilisateurs' }}</legend>
+                        <div class="row">
+                            <div class="form-group col-xs-12" id="user">
+                                <table class="table table-condensed table-bordered text-center" id="table_user">
+                                    <thead>
+                                    <th>{{ 'Utilisateur' }}</th>
+                                    <th>{{ 'common.active' | trans }}</th>
+                                    <th>{{ 'Profil' }}</th>
+                                    <th>{{ 'Clé API' }}</th>
+                                    <th>{{ 'Double authentification' }}</th>
+                                    <th>{{ 'Dernière connexion' }}</th>
+                                    <th>{{ 'common.actions' | trans }}</th>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <div role="tabpanel" class="tab-pane" id="tabSessions">
+                    <!-- Sessions section -->
+                    <fieldset>
+                        <legend>{{ 'Sessions actives' }}</legend>
+                        <div class="row">
+                            <div class="form-group col-xs-12">
+                                <table class="table table-condensed table-bordered text-center">
+                                    <thead>
+                                    <tr>
+                                        <th>{{ 'common.id' | trans }}</th>
+                                        <th>{{ 'Utilisateur' }}</th>
+                                        <th>{{ 'IP' }}</th>
+                                        <th>{{ 'common.date' | trans }}</th>
+                                        <th>{{ 'common.actions' | trans }}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% if userSessionsList|length > 0 %}
+                                        {% for sessionId, sessionData in userSessionsList %}
+                                            {% if sessionData['ip'] is not defined %}
+                                                {% set sessionData = sessionData|merge({'ip': ''}) %}
+                                            {% endif %}
+                                            {% if sessionData['datetime'] is not defined %}
+                                                {% set sessionData = sessionData|merge({'datetime': ''}) %}
+                                            {% endif %}
+                                            <tr data-id="{{ sessionId }}">
+                                                <td>{{ sessionId }}</td>
+                                                <td>{{ sessionData.login }}</td>
+                                                <td>{{ sessionData.ip }}</td>
+                                                <td>{{ sessionData.datetime }}</td>
+                                                <td><a class="btn btn-warning btn-sm bt_deleteSession pull-right"><i class="fas fa-sign-out-alt"></i>{{ 'Déconnecter' }}</a></td>
+                                            </tr>
+                                        {% endfor %}
+                                    {% endif %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <div role="tabpanel" class="tab-pane" id="tabPeriph">
+                    <!-- Periphériques section -->
+                    <fieldset>
+                        <legend>{{ 'Périphériques enregistrés' }}</legend>
+                        <div class="row">
+                            <div class="form-group col-xs-12">
+                                <table class="table table-bordered table-condensed text-center">
+                                    <thead>
+                                    <tr>
+                                        <th>{{ 'common.id' | trans }}</th>
+                                        <th>{{ 'Utilisateur' }}</th>
+                                        <th>{{ 'IP' }}</th>
+                                        <th>{{ 'common.date' | trans }}</th>
+                                        <th>{{ 'common.action' | trans }}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for user in usersList %}
+                                        {% if user.getOptions('registerDevice') is iterable and user.getOptions('registerDevice')|length > 0 %}
+                                            {% for deviceId, deviceData in user.getOptions('registerDevice') %}
+                                                <tr data-key="{{ deviceId }}" data-user_id="{{ user.getId() }}">
+                                                    <td>{{ deviceId|slice(0, 10) }}</td>
+                                                    <td>{{ user.getLogin() }}</td>
+                                                    <td>{{ deviceData.ip }}</td>
+                                                    <td>{{ deviceData.datetime }}</td>
+                                                    <td><a class="btn btn-warning btn-sm bt_removeRegisterDevice pull-right"><i class="fas fa-trash"></i>{{ 'common.remove' | trans }}</a></td>
+                                                </tr>
+                                            {% endfor %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
         </div>
 
-        <!-- Page content -->
-        <div class="box-body">
-            <!-- Users section -->
-            <fieldset>
-                <legend>{{ 'Liste des utilisateurs' }}</legend>
-                <div class="row">
-                    <div class="tab-pane form-group col-xs-12 col-padding" id="user">
-                        <table class="table table-condensed table-bordered" id="table_user">
-                            <thead>
-                            <th>{{ 'Utilisateur' }}</th>
-                            <th>{{ 'common.active' | trans }}</th>
-                            <th>{{ 'Profil' }}</th>
-                            <th>{{ 'Clé API' }}</th>
-                            <th>{{ 'Double authentification' }}</th>
-                            <th>{{ 'Dernière connexion' }}</th>
-                            <th>{{ 'common.actions' | trans }}</th>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+        <!-- New user modal section -->
+        <div class="modal fade" id="md_newUser">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button class="bootbox-close-button close" data-dismiss="modal">×</button>
+                        <h4>{{ 'Ajouter un utilisateur' }}</h4>
                     </div>
-                </div>
-            </fieldset>
-
-            <!-- Sessions section -->
-            <fieldset class="legend-section">
-                <legend>{{ 'Sessions actives' }}</legend>
-                <div class="row">
-                    <div class="form-group col-xs-12 col-padding">
-                        <table class="table table-condensed table-bordered">
-                            <thead>
-                            <tr>
-                                <th>{{ 'common.id' | trans }}</th>
-                                <th>{{ 'Utilisateur' }}</th>
-                                <th>{{ 'IP' }}</th>
-                                <th>{{ 'common.date' | trans }}</th>
-                                <th>{{ 'common.actions' | trans }}</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% if userSessionsList|length > 0 %}
-                                {% for sessionId, sessionData in userSessionsList %}
-                                    {% if sessionData['ip'] is not defined %}
-                                        {% set sessionData = sessionData|merge({'ip': ''}) %}
-                                    {% endif %}
-                                    {% if sessionData['datetime'] is not defined %}
-                                        {% set sessionData = sessionData|merge({'datetime': ''}) %}
-                                    {% endif %}
-                                    <tr data-id="{{ sessionId }}">
-                                        <td>{{ sessionId }}</td>
-                                        <td>{{ sessionData.login }}</td>
-                                        <td>{{ sessionData.ip }}</td>
-                                        <td>{{ sessionData.datetime }}</td>
-                                        <td><a class="btn btn-warning btn-sm bt_deleteSession pull-right"><i class="fas fa-sign-out-alt"></i>{{ 'Déconnecter' }}</a></td>
-                                    </tr>
-                                {% endfor %}
-                            {% endif %}
-                            </tbody>
-                        </table>
+                    <div class="modal-body">
+                        <div style="display: none;" id="div_newUserAlert"></div>
+                        <input class="form-control form-group" type="text" id="in_newUserLogin" placeholder="{{ 'Identifiant...' }}"/><br/>
+                        <input class="form-control" type="password" id="in_newUserMdp" placeholder="{{ 'Mot de passe...' }}"/>
                     </div>
-                </div>
-            </fieldset>
-
-            <!-- Periphériques section -->
-            <fieldset class="legend-section">
-                <legend>{{ 'Périphériques enregistrés' }}</legend>
-                <div class="row">
-                    <div class="form-group col-xs-12 col-padding">
-                        <table class="table table-bordered table-condensed">
-                            <thead>
-                            <tr>
-                                <th>{{ 'common.id' | trans }}</th>
-                                <th>{{ 'Utilisateur' }}</th>
-                                <th>{{ 'IP' }}</th>
-                                <th>{{ 'common.date' | trans }}</th>
-                                <th>{{ 'common.action' | trans }}</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for user in usersList %}
-                                {% if user.getOptions('registerDevice') is iterable and user.getOptions('registerDevice')|length > 0 %}
-                                    {% for deviceId, deviceData in user.getOptions('registerDevice') %}
-                                        <tr data-key="{{ deviceId }}" data-user_id="{{ user.getId() }}">
-                                            <td>{{ deviceId|slice(0, 10) }}</td>
-                                            <td>{{ user.getLogin() }}</td>
-                                            <td>{{ deviceData.ip }}</td>
-                                            <td>{{ deviceData.datetime }}</td>
-                                            <td><a class="btn btn-warning btn-sm bt_removeRegisterDevice pull-right"><i class="fas fa-trash"></i>{{ 'common.remove' | trans }}</a></td>
-                                        </tr>
-                                    {% endfor %}
-                                {% endif %}
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </fieldset>
-
-            <!-- New user modal section -->
-            <div class="modal fade" id="md_newUser">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button class="bootbox-close-button close" data-dismiss="modal">×</button>
-                            <h4>{{ 'Ajouter un utilisateur' }}</h4>
-                        </div>
-                        <div class="modal-body">
-                            <div style="display: none;" id="div_newUserAlert"></div>
-                            <input class="form-control form-group" type="text" id="in_newUserLogin" placeholder="{{ 'Identifiant...' }}"/><br/>
-                            <input class="form-control" type="password" id="in_newUserMdp" placeholder="{{ 'Mot de passe...' }}"/>
-                        </div>
-                        <div class="modal-footer">
-                            <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-ban"></i>{{ 'common.cancel' | trans }}</a>
-                            <a class="btn btn-success" id="bt_newUserSave"><i class="fas fa-save"></i>{{ 'common.validate' | trans }}</a>
-                        </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-ban"></i>{{ 'common.cancel' | trans }}</a>
+                        <a class="btn btn-success" id="bt_newUserSave"><i class="fas fa-save"></i>{{ 'common.validate' | trans }}</a>
                     </div>
                 </div>
             </div>
