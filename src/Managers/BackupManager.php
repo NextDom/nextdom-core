@@ -86,10 +86,12 @@ class BackupManager
         $startTime = strtotime('now');
         $status = "success";
         try {
-
             ConsoleHelper::title("Create Backup Process", false);
             ConsoleHelper::subTitle("starting backup procedure at " . date(DateFormat::FULL));
             NextDomHelper::event('begin_backup', true);
+            ConsoleHelper::step("stopping NextDom (cron & scenario)");
+            NextDomHelper::stopSystem();
+            ConsoleHelper::ok();
             ConsoleHelper::step("starting plugin backup");
             self::backupPlugins();
             ConsoleHelper::ok();
@@ -112,14 +114,18 @@ class BackupManager
             ConsoleHelper::step("checking remote backup systems");
             self::sendRemoteBackup($backupPath);
             ConsoleHelper::ok();
-            NextDomHelper::event('end_backup');
-            ConsoleHelper::subTitle("end of backup procedure at " . date(DateFormat::FULL));
-            ConsoleHelper::subTitle("elapsed time " . (strtotime('now') - $startTime));
         } catch (\Exception $e) {
             $status = "error";
             ConsoleHelper::nok();
             ConsoleHelper::error($e);
             LogHelper::add('backup', 'error', $e->getMessage());
+        } finally {
+            ConsoleHelper::step("starting NextDom (cron & scenario)");
+            NextDomHelper::startSystem();
+            ConsoleHelper::ok();
+            NextDomHelper::event('end_backup');
+            ConsoleHelper::subTitle("end of backup procedure at " . date(DateFormat::FULL));
+            ConsoleHelper::subTitle("elapsed time " . (strtotime('now') - $startTime));
         }
 
         // the following line acts as marker used in ajax telling that the procedure is finished
