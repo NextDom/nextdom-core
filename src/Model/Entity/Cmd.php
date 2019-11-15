@@ -336,7 +336,7 @@ class Cmd implements EntityInterface
         $templateName = 'cmd.' . $this->getType() . '.' . $this->getSubType() . '.' . $this->getTemplate($version, 'default');
         $cacheKey = $version . '::' . $templateName;
         if (!isset(self::$_templateArray[$cacheKey])) {
-            $templateContent = FileSystemHelper::getCoreTemplateFileContent('views', $version, $templateName, '');
+            $templateContent = FileSystemHelper::getCoreTemplateFileContent($version, $templateName, '');
             if ($templateContent == '') {
                 if (ConfigManager::byKey('active', 'widget') == 1) {
                     $templateContent = FileSystemHelper::getCoreTemplateFileContent($version, $templateName, 'widget');
