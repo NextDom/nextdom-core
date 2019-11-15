@@ -239,6 +239,8 @@ class UpdateManager
                         'class' => $fullNameClass,
                         'configuration' => $fullNameClass::$_configuration,
                         'scope' => $fullNameClass::$_scope,
+                        'description' => $fullNameClass::$_description,
+                        'icon' => $fullNameClass::$_icon
                     ];
                     $result[$repoCode]['enable'] = ConfigManager::byKey($repoCode . '::enable');
                 }
@@ -287,7 +289,9 @@ class UpdateManager
             'name' => $phpClass::$_name,
             'class' => $repoClassData['className'],
             'configuration' => $phpClass::$_configuration,
-            'scope' => $phpClass::$_scope
+            'scope' => $phpClass::$_scope,
+            'description' => $phpClass::$_description,
+            'icon' => $phpClass::$_icon
         ];
         $result['enable'] = ConfigManager::byKey($id . '::enable');
         return $result;

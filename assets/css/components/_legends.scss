@@ -33,6 +33,9 @@ legend {
         margin-right: 8px;
     }
 }
+legend:not(:first-child) {
+    margin-top: 30px;
+}
 h1 > i,
 h2 > i,
 h3 > i,
@@ -40,9 +43,4 @@ h4 > i,
 h5 > i,
 h6 > i {
   margin-right: 8px;
-}
-
-/* Core-Ajout : legendes */
-.legend-section {
-    margin-top: 30px;
 }

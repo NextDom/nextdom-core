@@ -43,6 +43,16 @@
         background-color: rgba(255, 255, 255, 0.1);
     }
 }
+@media (max-width: 992px) {
+    .nav-tabs.pull-right li {
+        a span {
+            display: none;
+        }
+        i {
+            margin-left: 8px;
+        }
+    }
+}
 .tab-content {
     height: calc(100% - 50px);
     overflow:auto;

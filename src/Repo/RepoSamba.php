@@ -50,6 +50,8 @@ class RepoSamba
      * @var string General name
      */
     public static $_name = 'Samba';
+    public static $_icon = 'fas fa-server';
+    public static $_description = 'repo.samba.description';
 
     /**
      * @var array Availability
@@ -83,7 +85,7 @@ class RepoSamba
                 'placeholder' => 'repo.samba.conf.user.placeholder',
             ],
             'backup::password' => [
-                'name' => 'repo.samba.conf.password.name',
+                'name' => 'repo.samba.conf.password',
                 'type' => 'password',
             ],
             'backup::share' => [

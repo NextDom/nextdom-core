@@ -652,7 +652,7 @@ class JeeObject implements EntityInterface
             }
         }
         $result = trim($result) . '</span>';
-        $this->setCache('summaryHtml' . $version, $summaryResult);
+        $this->setCache('summaryHtml' . $version, $result);
         return $result;
     }
 

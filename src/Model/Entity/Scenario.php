@@ -1638,25 +1638,11 @@ class Scenario implements EntityInterface
     /**
      * @return string
      */
-    /**
-     * @return string
-     */
-    /**
-     * @return string
-     */
     public function getDescription()
     {
         return $this->description;
     }
 
-    /**
-     * @param $_description
-     * @return $this
-     */
-    /**
-     * @param $_description
-     * @return $this
-     */
     /**
      * @param $_description
      * @return $this

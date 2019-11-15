@@ -41,6 +41,8 @@ class RepoMarket
     /*     * *************************Attributs****************************** */
 
     public static $_name = 'Market';
+    public static $_icon = 'fas fa-shopping-cart';
+    public static $_description = 'repo.market.description';
 
     public static $_scope = array(
         'plugin' => true,
@@ -56,35 +58,35 @@ class RepoMarket
     public static $_configuration = array(
         'configuration' => array(
             'address' => array(
-                'name' => 'Adresse',
+                'name' => 'repo.market.conf.address.name',
                 'type' => 'input',
+                'placeholder' => 'repo.market.conf.address.placeholder',
             ),
             'username' => array(
-                'name' => 'Nom d\'utilisateur',
+                'name' => 'repo.market.conf.user',
                 'type' => 'input',
             ),
             'password' => array(
-                'name' => 'Mot de passe',
+                'name' => 'repo.market.conf.password',
                 'type' => 'password',
             ),
-
             'cloud::backup::name' => array(
-                'name' => '[Backup cloud] Nom',
+                'name' => 'repo.market.conf.cloud.name',
                 'type' => 'input',
             ),
             'cloud::backup::password' => array(
-                'name' => '[Backup cloud] Mot de passe',
+                'name' => 'repo.market.conf.cloud.password',
                 'type' => 'password',
             ),
             'cloud::backup::fullfrequency' => array(
-                'name' => '[Backup cloud] Fréquence backup full',
+                'name' => 'repo.market.conf.cloud.frequency',
                 'type' => 'select',
-                'values' => array('1D' => 'Chaque jour', '1W' => 'Chaque semaine', '1M' => 'Chaque mois'),
+                'values' => array('1D' => 'repo.market.conf.cloud.day', '1W' => 'repo.market.conf.cloud.week', '1M' => 'repo.market.conf.cloud.month'),
             ),
         ),
         'parameters_for_add' => array(
             'version' => array(
-                'name' => 'Version : beta, stable',
+                'name' => 'repo.market.conf.version',
                 'type' => 'input',
             ),
         ),

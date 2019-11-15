@@ -780,7 +780,6 @@ pre:not(.mobile-pre) {
 /* #################################################################################### */
 /* Box */
 .tab-content,
-.box-body,
 .panel-body {
   background-color: map_get($color_theme, 'color13') !important;
 }
@@ -873,7 +872,8 @@ pre:not(.mobile-pre) {
 /* COLOR19 = Couleur de fond des boîtes à onglets */
 /* ############################################## */
 /* Tabs */
-.nav-tabs-custom>.tab-content {
+.nav-tabs-custom>.tab-content,
+.box-body, {
   background-color: map_get($color_theme, 'color19') !important;
 }
 /* Legendes de sections */

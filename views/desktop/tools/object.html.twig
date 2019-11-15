@@ -67,7 +67,7 @@
                             <h4 class="box-title name object-name" style='color:{{ object.getDisplay("tagTextColor") }}'>{{ object.getDisplay('icon', '<i class="fas fa-tag"></i>')|replace({'></i>': '></i>'})|raw }}<i class="spacing-right"></i><b>{{ object.getName() }}</b></h4>
                         </a>
                         <div class="box-body">
-                            <span class="object-summary spacing-left">{% if 'objectSummaryParent' in object.getHtmlSummary() %}{{ object.getHtmlSummary()|raw }}{% else %}{{'Aucun résumé...'}}{% endif%}</span>
+                            <span class="object-summary spacing-left">{% if 'objectSummaryParent' in object.getHtmlSummary() %}{{ object.getHtmlSummary()|raw }}{% else %}{{'Aucun résumé...'}}{% endif %}</span>
                         </div>
                         <div class="box-footer clearfix text-center">
                             <a class="btn btn-danger btn-sm pull-right remove bt_removeObject"><i class="fas fa-trash"></i>{{ 'common.delete'|trans }}</a>
@@ -98,12 +98,13 @@
     <section class="content">
         <div class="nav-tabs-custom">
             <ul class="nav nav-tabs pull-right" role="tablist">
-                <li role="presentation" class="active"><a href="#objecttab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-clone"></i>{{ 'common.object' | trans }}</a></li>
-                <li role="presentation"><a href="#summarytab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-list-alt"></i>{{ 'Résumé' }}</a></li>
+                <li role="presentation"><a href="#summarytab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-list-alt"></i><span>{{ 'Résumé' }}</span></a></li>
+                <li role="presentation"><a href="#colortab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-palette"></i><span>{{ 'Couleurs' }}</span></a></li>
+                <li role="presentation" class="active"><a href="#objecttab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-clone"></i><span>{{ 'common.object' | trans }}</span></a></li>
                 <h4 class="label label-primary pull-right badge spacing-right">{{ 'ID : ' }}<span id="objectId"></span></h4>
                 <li class="pull-left header"><i class="fas fa-cog"></i>{{ 'Configuration de l\'objet' }}</li>
             </ul>
-            <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
+            <div class="global-tab-content tab-content">
                 <div role="tabpanel" class="tab-pane active" id="objecttab">
                     <fieldset>
                         <legend>{{ 'Identité' }}</legend>
@@ -125,8 +126,130 @@
                                 </select>
                             </div>
                         </div>
+
+                        <legend>{{ 'Positionnement' }}</legend>
+                        <div class="row">
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label">{{ 'Taille sur le dashboard' }}</label>
+                                <div class="input-group">
+                                    <a class="input-group-addon cursor" id="bt_resetDashboardSize" data-l1key="display" data-l2key="dashboard::size" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                                    <span class="input-group-addon input-range-min"></span>
+                                    <input class="objectAttr slider" type="range" min="1" max="12" step="1" data-l1key="display" data-l2key="dashboard::size"/>
+                                    <span class="input-group-addon input-range-max"></span>
+                                    <span class="input-group-addon input-range-value"></span>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label">{{ 'Position dans la hierarchie' }}</label>
+                                <div class="input-group">
+                                    <a class="input-group-addon cursor" id="bt_resetPosition" data-l1key="position" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                                    <span class="input-group-addon input-range-min"></span>
+                                    <input class="objectAttr slider" type="range" min="1" max={{ objectList|length|trans }} step="1" data-l1key="position"/>
+                                    <span class="input-group-addon input-range-max"></span>
+                                    <span class="input-group-addon input-range-value"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <legend>{{ 'Design' }}</legend>
+                        <div class="row">
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label">{{ 'common.visible' | trans }}</label>
+                                <div>
+                                    <input class="objectAttr" type="checkbox" data-l1key="isVisible" checked/>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label">{{ 'Masquer sur le dashboard' }}</label>
+                                <div>
+                                    <input class="objectAttr" type="checkbox" data-l1key="configuration" data-l2key="hideOnDashboard"/>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label">{{ 'Icône' }}</label>
+                                <div class="mix-group">
+                                    <a class="btn btn-action" id="bt_chooseIcon"><i class="fas fa-flag"></i><span>{{ 'Choisir' }}</span></a>
+                                    <div class="objectAttr label label-icon" data-l1key="display" data-l2key="icon"></div>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label">{{ 'Image' }}</label>
+                                <div class="mix-group">
+                                    <span class="btn btn-default btn-file">
+                                        <i class="fas fa-cloud-upload-alt"></i>{{ 'common.send' | trans }}<input id="bt_uploadImage" type="file" name="file" style="display: inline-block;">
+                                    </span>
+                                    <a class="btn btn-danger" id="bt_removeBackgroundImage"><i class="fas fa-trash"></i>{{ 'common.remove' | trans }}</a>
+                                </div>
+                            </div>
+                        </div>
                     </fieldset>
-                    <fieldset class="legend-section">
+                </div>
+
+                <div role="tabpanel" class="tab-pane" id="summarytab">
+                    {% if objectSummary|length == 0 %}
+                        <div class="alert alert-danger">{{ 'Vous n\'avez aucun résumé de créé. Allez dans l\'administration de NextDom -> Configuration -> onglet Résumés.' }}</div>
+                    {% else %}
+                        <fieldset>
+                            <legend><i class="fas fa-flash"></i>{{ 'Activations' }}</legend>
+                            <table class="table table-bordered table-condensed text-center">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        {% for summaryKey, summaryValue in objectSummary %}
+                                            <th style="cursor:default;">{{ summaryValue['name'] }}</th>
+                                        {% endfor %}
+                                    </tr>
+                                </thead>
+                                <tr>
+                                    <td style="cursor:default;">
+                                        {{ 'Remonter dans le résumé global' }}
+                                    </td>
+                                    {% for summaryKey, summaryValue in objectSummary %}
+                                        <td>
+                                            <input type="checkbox" class="objectAttr" data-l1key="configuration" data-l2key="summary::global::{{ summaryKey }}"/>
+
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+                                <tr>
+                                    <td style="cursor:default;">
+                                        {{ 'Masquer en desktop' }}
+                                    </td>
+                                    {% for summaryKey, summaryValue in objectSummary %}
+                                        <td>
+                                            <input type="checkbox" class="objectAttr" data-l1key="configuration" data-l2key="summary::hide::desktop::{{ summaryKey }}"/>
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+                            </table>
+                        </fieldset>
+                        <fieldset class="legend-section">
+                            <legend><i class="fas fa-tachometer-alt"></i>{{ 'Commandes' }}</legend>
+                            <div class="nav-tabs-custom">
+                                <ul class="nav nav-tabs" role="tablist">
+                                    {% set active = 'active' %}
+                                    {% for summaryKey, summaryValue in objectSummary %}
+                                        <li class="{{ active }}"><a href="#summarytab{{ summaryKey }}" role="tab" data-toggle="tab">{{ summaryValue['icon']|raw }} {{ summaryValue['name'] }}</i>  <span class="tabnumber summarytabnumber{{ summaryKey }}"></span></a></li>
+                                        {% set active = '' %}
+                                    {% endfor %}
+                                </ul>
+                                <div class="tab-content">
+                                    {% set active = ' active' %}
+                                    {% for summaryKey, summaryValue in objectSummary %}
+                                        <div role="tabpanel" class="tab-pane type{{ summaryKey }}{{ active }}" data-type="{{ summaryKey }}" id="summarytab{{ summaryKey }}">
+                                            <div class="div_summary" data-type="{{ summaryKey }}"></div>
+                                            <div class="btn btn-sm btn-success addSummary" data-type="{{ summaryKey }}"><i class="fas fa-plus-circle"></i>{{ 'Ajouter une commande' }}</div>
+                                        </div>
+                                        {% set active = '' %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </fieldset>
+                    {% endif %}
+                </div>
+
+                <div role="tabpanel" class="tab-pane" id="colortab">
+                    <fieldset>
                         <legend>{{ 'Couleurs' }}</legend>
                         <div class="row">
                             <div class="form-group col-sm-6 col-xs-12 col-padding">
@@ -161,138 +284,6 @@
                             </div>
                         </div>
                     </fieldset>
-                    <fieldset class="legend-section">
-                        <legend>{{ 'Positionnement' }}</legend>
-                        <div class="row">
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Taille sur le dashboard' }}</label>
-                                <div class="input-group">
-                                    <a class="input-group-addon cursor" id="bt_resetDashboardSize" data-l1key="display" data-l2key="dashboard::size" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
-                                    <span class="input-group-addon input-range-min"></span>
-                                    <input class="objectAttr slider" type="range" min="1" max="12" step="1" data-l1key="display" data-l2key="dashboard::size"/>
-                                    <span class="input-group-addon input-range-max"></span>
-                                    <span class="input-group-addon input-range-value"></span>
-                                </div>
-                            </div>
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Position dans la hierarchie' }}</label>
-                                <div class="input-group">
-                                    <a class="input-group-addon cursor" id="bt_resetPosition" data-l1key="position" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
-                                    <span class="input-group-addon input-range-min"></span>
-                                    <input class="objectAttr slider" type="range" min="1" max={{ objectList|length|trans }} step="1" data-l1key="position"/>
-                                    <span class="input-group-addon input-range-max"></span>
-                                    <span class="input-group-addon input-range-value"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </fieldset>
-                    <fieldset class="legend-section">
-                        <legend>{{ 'Design' }}</legend>
-                        <div class="row">
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label">{{ 'common.visible' | trans }}</label>
-                                <div>
-                                    <input class="objectAttr" type="checkbox" data-l1key="isVisible" checked/>
-                                </div>
-                            </div>
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Masquer sur le dashboard' }}</label>
-                                <div>
-                                    <input class="objectAttr" type="checkbox" data-l1key="configuration" data-l2key="hideOnDashboard"/>
-                                </div>
-                            </div>
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Icône' }}</label>
-                                <div class="mix-group">
-                                    <a class="btn btn-action" id="bt_chooseIcon"><i class="fas fa-flag"></i><span>{{ 'Choisir' }}</span></a>
-                                    <div class="objectAttr label label-icon" data-l1key="display" data-l2key="icon"></div>
-                                </div>
-                            </div>
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Image' }}</label>
-                                <div class="mix-group">
-                                    <span class="btn btn-default btn-file">
-                                        <i class="fas fa-cloud-upload-alt"></i>{{ 'common.send' | trans }}<input id="bt_uploadImage" type="file" name="file" style="display: inline-block;">
-                                    </span>
-                                    <a class="btn btn-danger" id="bt_removeBackgroundImage"><i class="fas fa-trash"></i>{{ 'common.remove' | trans }}</a>
-                                </div>
-                            </div>
-                        </div>
-                    </fieldset>
-                </div>
-                <div role="tabpanel" class="tab-pane" id="summarytab">
-                    {% if objectSummary|length == 0 %}
-                        <div class="alert alert-danger">{{ 'Vous n\'avez aucun résumé de créé. Allez dans l\'administration de NextDom -> Configuration -> onglet Résumés.' }}</div>
-                    {% else %}
-                        <fieldset>
-                            <legend><i class="fas fa-flash"></i>{{ 'Activations' }}</legend>
-                            <table class="table table-bordered table-condensed">
-                                <thead>
-                                <tr>
-                                    <th></th>
-                                    {% for summaryKey, summaryValue in objectSummary %}
-                                        <th style="cursor:default;">{{ summaryValue['name'] }}</th>
-                                    {% endfor %}
-                                </tr>
-                                </thead>
-                                <tr>
-                                    <td style="cursor:default;">
-                                        {{ 'Remonter dans le résumé global' }}
-                                    </td>
-                                    {% for summaryKey, summaryValue in objectSummary %}
-                                        <td>
-                                            <input type="checkbox" class="objectAttr" data-l1key="configuration" data-l2key="summary::global::{{ summaryKey }}"/>
-
-                                        </td>
-                                    {% endfor %}
-                                </tr>
-                                <tr>
-                                <tr>
-                                    <td style="cursor:default;">
-                                        {{ 'Masquer en desktop' }}
-                                    </td>
-                                    {% for summaryKey, summaryValue in objectSummary %}
-                                        <td>
-                                            <input type="checkbox" class="objectAttr" data-l1key="configuration" data-l2key="summary::hide::desktop::{{ summaryKey }}"/>
-                                        </td>
-                                    {% endfor %}
-                                </tr>
-                                <tr>
-                                <tr>
-                                    <td>
-                                        {{ 'Masquer en mobile' }}
-                                    </td>
-                                    {% for summaryKey, summaryValue in objectSummary %}
-                                        <td>
-                                            <input type="checkbox" class="objectAttr" data-l1key="configuration" data-l2key="summary::hide::mobile::{{ summaryKey }}"/>
-                                        </td>
-                                    {% endfor %}
-                                </tr>
-                            </table>
-                        </fieldset>
-                        <fieldset class="legend-section">
-                            <legend><i class="fas fa-tachometer-alt"></i>{{ 'Commandes' }}</legend>
-                            <div class="nav-tabs-custom">
-                                <ul class="nav nav-tabs" role="tablist">
-                                    {% set active = 'active' %}
-                                    {% for summaryKey, summaryValue in objectSummary %}
-                                        <li class="{{ active }}"><a href="#summarytab{{ summaryKey }}" role="tab" data-toggle="tab">{{ summaryValue['icon']|raw }} {{ summaryValue['name'] }}</i>  <span class="tabnumber summarytabnumber{{ summaryKey }}"></span></a></li>
-                                        {% set active = '' %}
-                                    {% endfor %}
-                                </ul>
-                                <div class="tab-content">
-                                    {% set active = ' active' %}
-                                    {% for summaryKey, summaryValue in objectSummary %}
-                                        <div role="tabpanel" class="tab-pane type{{ summaryKey }}{{ active }}" data-type="{{ summaryKey }}" id="summarytab{{ summaryKey }}">
-                                            <div class="div_summary" data-type="{{ summaryKey }}"></div>
-                                            <div class="btn btn-sm btn-success addSummary" data-type="{{ summaryKey }}"><i class="fas fa-plus-circle"></i>{{ 'Ajouter une commande' }}</div>
-                                        </div>
-                                        {% set active = '' %}
-                                    {% endfor %}
-                                </div>
-                            </div>
-                        </fieldset>
-                    {% endif %}
                 </div>
             </div>
         </div>

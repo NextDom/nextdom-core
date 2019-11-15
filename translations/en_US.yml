@@ -1,24 +1,21 @@
-# Nouveau format
-
 administration:
+  connections-count: "Number of connections"
   cpu: "CPU"
   cpu-cores: "cores"
+  developer-documentation: "Dev documentation."
+  disconnect: "Log off"
+  hdd: "HDD"
+  http-connections-count: "Number of HTTP connection"
   of-cpu-load: "load"
   of-memory-used: "used"
   of-space-used: "of used space"
   memory: "RAM"
-  hdd: "HDD"
-  swap: "swap"
-  http-connections-count: "Number of HTTP connection"
-  connections-count: "Number of connections"
+  power-off: "Power Off"
   process-count: "Number of process"
+  restart: "Restart"
+  swap: "swap"
   uptime: "Uptime"
   welcome-page: "Welcome Page"
-  developer-documentation: "Dev documentation."
-  power-off: "Power Off"
-  restart: "Restart"
-  disconnect: "Log off"
-
 api:
   access: "API Access"
   access-http: "HTTP API Access"
@@ -26,6 +23,8 @@ api:
   access-tts: "TTS API Access"
   access-pro: "PRO API Access"
   access-market: "Market API Access"
+  access-plugins-api-key: "Access and plugins API keys"
+  api-for-plugin: "API for the plugin"
   key: "API Key"
   key-global-of: "Global API key of :"
   key-global: "Global API key"
@@ -33,11 +32,36 @@ api:
   key-pro: "PRO API key"
   market-key-of: "Market key of"
   market-key: "Market key"
-  access-plugins-api-key: "Access and plugins API keys"
-  api-for-plugin: "API for the plugin"
   no-api-plugin: "No plugin has API keys..."
   no-api: "Unavailable"
-
+backup:
+  automatic_sending: "Sending Automatically"
+  available_backups: "Available backups"
+  backup_information: "Informations"
+  backup_settings: "Backup Settings"
+  backups: "Backups"
+  backups__restorations: "Backups / Restorations"
+  days: "days"
+  download_selection: "Download selection"
+  loading: "Loading..."
+  local_backups: "Local backups"
+  location: "Directory"
+  manual_backup: "manual backup"
+  mb_maximum: "MB maximum"
+  purpose1: "You can backup here your Nexdom setup."
+  purpose2: "Will save settings, dashboards, views, designs, plugins, widgets etc ... But the Core will however not be included in the backup."
+  purpose3: "It's also here that you can restore your backups (including those from Jeedom system)."
+  remove_selected: "Remove"
+  selection: "Selected backup actions"
+  restore_backup_or_mirgration: "You can restore a backup NextDom or migrate backup Jeedom"
+  restore_selection: "Restore"
+  run: "Run"
+  saving_on: "Saving during"
+  send_backup: "Send backup"
+  suppression: "Remove"
+  the_service_is_disabled_you_can__activate: "The service is disabled, you can activate it "
+  total_size: "Total size"
+  transfer: "Backup management"
 cache:
   alert: "Caution : any changes to the cache engine require a restart of your "
   cache-engine: "Cache engine"
@@ -47,7 +71,10 @@ cache:
   file-system: "System file"
   statistics: "Statistics"
   time-pause: "Pause time for long polling"
-
+commandes:
+  influxDbIPLabel: IP
+  influxDbPortLabel: Port
+  influxDbDatabaseNameLabel: Database
 common:
   action: "Action"
   actions: "Actions"
@@ -66,6 +93,7 @@ common:
   date: "Date"
   days: "days"
   default: "Default"
+  delete: "Delete"
   description: "Description:"
   device: "Device"
   devices: "Devices"
@@ -77,6 +105,7 @@ common:
   error-b: "[Error]"
   error: "Error"
   finish: "finish"
+  here: "Here"
   hours: "hours"
   id: "ID"
   ignore: "Ignore"
@@ -88,6 +117,7 @@ common:
   log: "Log"
   main: "Main"
   minutes: "minutes"
+  modify: "Modify"
   name: "Name"
   next: "Next"
   nok: "NOK"
@@ -104,8 +134,8 @@ common:
   round: "Round"
   run: "Run"
   save: "Save"
-  seconds: "second(s)"
   scenario: "Scenario"
+  seconds: "second(s)"
   send: "Send"
   settings: "Settings"
   setup: "Setup"
@@ -118,114 +148,98 @@ common:
   widget: "Widget"
   widgets: "Widgets"
   whitelist: "Whitelist"
-  here: "Here"
-
 connection:
+  connect: Log in
+  forgot: "Oops: I forgot my password !"
   home-msg: Log in to access your session ...
   login-placeholder: ID ... (default admin)
-  password-placeholder: Password...
-  two-factors-placeholder: Code 2 factor ...
-  remember-title: "By checking this box: you will not have to enter your login."
-  remember-label: Remember me ?
-  connect: Log in
-  valid: Validation
-  forgot: "Oops: I forgot my password !"
   mobile-install: Install mobile version
   mobile-msg: Show below the mobile version installation line for your installation type...
   mobile-copy: Copy
-
+  password-placeholder: Password...
+  remember-title: "By checking this box: you will not have to enter your login."
+  remember-label: Remember me ?
+  two-factors-placeholder: Code 2 factor ...
+  valid: Validation
 core:
+  api-connection: "Connection API users:"
+  disable-tasks: Disable all cron jobs ...
+  disable-all-scenarios: Disable all scenarios ...
+  disable-cron-master: Stop the main cron job ...
+  enable-tasks: Enable all cron jobs ...
+  enable-all-scenarios: Enable all scenarios ...
   error-401: 401 - Unauthorized Access
   error-404: 404 - Page not found
   error-ajax: Unknown Ajax request
   error-bad-action: Misuse of a feature
-  api-connection: "Connection API users:"
-  enable-tasks: Enable all cron jobs ...
-  disable-tasks: Disable all cron jobs ...
-  disable-cron-master: Stop the main cron job ...
-  enable-all-scenarios: Enable all scenarios ...
-  disable-all-scenarios: Disable all scenarios ...
   incorrect-sys-date: The system date is incorrect (before or after %s %s):
-
-install:
-  update-sourcecode: Update source code
-  already-updated: Already up to date.
-  update-core-error: Impossible to update core.
-  download-dependencies: Download dependencies
-  gen-assets: Generate assets
-  install.update-in-progress-wait: An update is in progress. Wait 10 s before new try.
-  install.update-in-progress-retry: An update is already in progress. Try again later.
-  install.begin-update: BEGIN UPDATE
-  install.end-update: END UPDATE
-  install.nothing-to-update: Nothing to update
-
-network:
-  advanced: "Advanced configuration"
-  config: "Protocol, Adress and Port"
-  dns-management: "Management"
-  dns-proxy: "Warning : this feature is not available in the service pack community (see your service pack on your profile page on the market)."
-  dns-use: "Use DNS"
-  dns-status: "DNS status"
-  docker-like: "(for docker-like installations, in the form 192.168.1. *)"
-  internal-access: "Internal access"
-  external-access: "External access"
-  management: "Independent network management"
-  mask: "Local IP mask"
-  networks: "Networks"
-  started: "Started : "
-  stopped: "Stopped"
-  use-dns: "Normal if you have not checked the box : Use DNS"
-  warning-part-1: "Warning : this configuration is only there to inform "
-  warning-part-2: "of its network configuration and has no impact on the ports or IP actually used to reach "
-
-
-page-title:
-  administration: Administration
-  users: User
-  api: API
-  networks: Networks
-  security: Security
-  cache: Cache
-  services: Services
-  settings: Settings
-  general: General
-  profil: Profile
-  commands: Commands
-  links: Links
-  interacts: Interactions
-  equipments: Equipment
-  summaries: Summaries
-  reports: Reports
-  logs: Logs
-  diagnostics: Diagnostics
-  health: Health
-  tasks: Tasks
-  historics: History
-  timeline: Timeline
-  backups: Backup
-  updates: Updates
-  notes: Notes
-  database: Database
-  scenarios: Scenario
-  objects: Objects
-  plugins: Plugins
-  tools: tools
-
-
-
-scripts:
-  error: "Error:"
-  error-on: Error with
-  scenario: "Scenario :"
-  scenario-not-found: "Script not found. Check ID:"
-  start-in-background: "Launch in background:"
-  launched-background-not-found: Launched in background not found
-  cron-class-or-function-not-found: "[Error] class or function not found"
-  cron-disable: All cron are currently disabled
-  listener-not-found: "Listener not found:"
-  listener-id-cannot-be-empty: The listener ID can not be empty
-  file-not-found: "File not found: "
-
+dashboard:
+  all-categories: All
+  grid-config: Configure the size of the grid
+  no-object: No object is associated with this part or none corresponding to the chosen category...
+  packery-step: Reposition the equipment on the grid
+  resize-grid-step: Scaling on the grid step
+  resize-childs-grid-step: Resize all child equipment on the grid step
+entity:
+  note:
+    name-cannot-be-empty: The name of the note can not be empty
+firstuse:
+  congrats-title: Congratulations! Configuring your NextDom is over!
+  congrats-content: Click the Finish button to enjoy your Home Automation solution ...
+  customize-title: Personalize your NextDom!
+  customize-title2: Customize votre NextDom !
+  customize-content: "Select the theme that suits you the most: others being selectable or customizable in the Customization page ..."
+  customize-widget: Select the theme for your widgets, editable customization in the Profile page...
+  market-alreadyaccount: I already have an account market
+  market-content: By adding or connecting a Market Jeedom account for installing plugins ...
+  market-noaccount: I have no Market account
+  market-password-placeholder: Password...
+  market-productname-placeholder: ?
+  market-title: Connect your market has Jeedom to NextDom!
+  market-username-placeholder: Username...
+  market-wantaccount: I want to create one!
+  password-title: Secure your NextDom
+  password-content: "First: thank you to define a new administrator password to improve security ..."
+  password-placeholder: New Password...
+  password-confirm-placeholder: Confirm password...
+  step: Step
+  welcome-title: Welcome NextDom
+  welcome-content: |
+    Well Done! You have just installed your home automation solution, the first use wizard is activated!
+    This one will guide you in the process of configuring your home automation solution ..."
+footer:
+  about: A Propos de
+  licence: GPL Automation 2018
+  rights: All rights reserved
+general:
+  hours: "Hours"
+  ignore_system_time: "do not check system time"
+  installation_key: "Installation Key"
+  language: "Language"
+  language-used: "Language used"
+  language-list:
+      fr_FR: "French"
+      en_US: "English"
+  last_known_date: "Last known date"
+  nextdom: "NextDom"
+  nextdom_name: "Name of your NextDom "
+  reset: "Reset"
+  session_timeout: "Sessions timeout"
+  synchronization: "Synchronization"
+  system_hardware: "System /  Hardware"
+  tells_nextdom_to_ignore_the_system_time: "Instructs NextDom not to consider system time"
+  time: "Time"
+  time_zone: "Time zone"
+  time_server: "Time Server (optional)"
+  tooltip:
+     installation_key: "Installation key used to communicate with the Market"
+     session_timeout: "Session timeout if you haven't tick the box 'register this computer' on the logon window"
+     language: "Language to use with Nexdom"
+     system_hardware: "Indicate the type of Hardware"
+     nextdom_name : "Name of the Nexdom system"
+     time_zone: "Time zone used by Nexdom"
+     time_server: "Time Server used for time synchronization"
+     ignore_system_time: "Indicates to Nexdom to ignore system time"
 health:
   apache-private-tmp-disabled: "Please disable private tmp Apache (NextDom can work with). See <a href=\"https://jeedom.github.io/core/fr_FR/faq#tocAnchor-1-29\" target=\"_blank\"> </a>"
   apache-private-tmp: Apache private tmp
@@ -260,7 +274,7 @@ health:
   no-info: No health information
   no-info-detail: "No dependencies: or daemon, or information"
   os-version: OS version
-  os-not-supported: You're not on an OS officially supported by the team% productName% (any support request may be refused). The officially supported OS are Debian and Debian Jessie Strech.
+  os-not-supported: You're not on an OS officially supported by the team NextDom (any support request may be refused). The officially supported OS are Debian and Debian Jessie Strech.
   php-error: A version of PHP greater than or equal to 7 is necessary.
   php-version: PHP version
   plugins-legend: "Details of the health of your plugins: click on the title to see details and then fly over the icons for more information."
@@ -281,67 +295,326 @@ health:
   uncollapse: uncollapse
   unknown: Unknown
   update-to-date: System update
-
+install:
+  already-updated: Already up to date.
+  begin-update: BEGIN UPDATE
+  download-dependencies: Download dependencies
+  end-update: END UPDATE
+  gen-assets: Generate assets
+  nothing-to-update: Nothing to update
+  update-sourcecode: Update source code
+  update-core-error: Impossible to update core.
+  update-in-progress-wait: An update is in progress. Wait 10 s before new try.
+  update-in-progress-retry: An update is already in progress. Try again later.
+interact:
+  allow_extra_time: "for exemple, it allows extra time to wait for a light state change"
+  allow_nextdom_to_eliminate_malformed_requests: "Eliminate malformed requests"
+  answer: "Answer"
+  authorized_users: "Authorized users"
+  authorization: "Authorization"
+  binary_conversion: "Binary conversion"
+  choose_the_actions_associated_with_this_interaction: "Choose the actions associated with this interaction ..."
+  choose_filters_to_limit_the_number_of_generated_sentences: "Choose filters to limit the number of generated sentences ..."
+  commands: "Commands"
+  convert_binary_commands: "Convert binary commands"
+  duplicate: "Duplicate"
+  edition_interaction: "Edition Interaction"
+  filters: "Filters"
+  fold: "Fold"
+  group: "Group"
+  id: "ID:"
+  interactions: "interaction(s)"
+  limit_to_categories: "Limit to categories"
+  limit_to_commands_belonging_to_objects: "Limit to commands belonging to objects"
+  limit_to_commands_of_sub_type: "Limit to commands of sub-type"
+  limit_to_commands_with_unit: "Limit to commands with unit"
+  limit_to_commands_of_type: "Limit to commands of type"
+  limit_to_plugins: "Limit to plugins"
+  limit_to_visible: "Limit to visible"
+  limit_to_the_device: "Limit to the device"
+  list_of_users_identifiers_separated_by_a_pipe: "List of users (identifiers) separated by a |"
+  none: "None -"
+  no_interactions_click_add_to_start: "You do not have any interactions. Click Add to start."
+  regenerate: "Regenerate"
+  regex_exclusion: "Regex exclusion"
+  regexp_mandatory_correspondence: "Regexp mandatory correspondence"
+  replaces_words_with_their_synony: "Replaces words with their synonyms when generating orders"
+  request: "Request"
+  result: "Result"
+  seconds: "seconds"
+  sentences: "Sentences"
+  synonym: "Synonym"
+  test: "Test"
+  the_question_cannot_be_empty: "The question cannot be empty"
+  uncategorized: "Uncategorized"
+  unfold: "Unfold"
+  wait_before_responding: "Wait before responding"
+  without_unit: "Without unit"
+  you_have: "Vous avez "
+  you_have_n_interactions: "You have %s interaction(s)..."
+network:
+  advanced: "Advanced configuration"
+  config: "Protocol, Adress and Port"
+  dns-management: "Management"
+  dns-proxy: "Warning : this feature is not available in the service pack community (see your service pack on your profile page on the market)."
+  dns-use: "Use DNS"
+  dns-status: "DNS status"
+  docker-like: "(for docker-like installations, in the form 192.168.1. *)"
+  internal-access: "Internal access"
+  external-access: "External access"
+  management: "Independent network management"
+  mask: "Local IP mask"
+  networks: "Networks"
+  started: "Started : "
+  stopped: "Stopped"
+  use-dns: "Normal if you have not checked the box : Use DNS"
+  warning-part-1: "Warning : this configuration is only there to inform "
+  warning-part-2: "of its network configuration and has no impact on the ports or IP actually used to reach "
+note:
+  are_sure_you_want_to_delete_the_note: "Are sure you want to delete the note"
+  create_a_note: "Create a Note"
+  list_notes: "List of notes"
+  note_saved_successfully: "Note saved successfully"
+  note_selected: "Note selected"
+  note_deleted_successfully: "Note deleted successfully"
+  notes: "Notes"
+object:
+  global-view: Global view
+  links: Links
+  no-object-yet: You do not have any object yet. Press Add to start.
+  you-have-n-objects: "You have %s object(s)"
+osdb:
+  administration: Administration
+  clean_command: Clean command
+  click_on_command: "Click on a command of the list or type a personalized command below :"
+  command_list: Commands list
+  database: "Database"
+  editors: "Editors"
+  file_editor: "File Editor"
+  historic: Historic
+  os__db: "OS/DB"
+  password: "Password"
+  personalized_command: Personalized command...
+  run: "Run"
+  select_command: Select command
+  system_console: "System console"
+  tables: Tables
+  tools: "Tools"
+  user: "User"
+  warning: "WARNING: you may loose access to your system "
+page-title:
+  administration: Administration
+  api: API
+  backups: Backup
+  cache: Cache
+  commands: Commands
+  database: Database
+  diagnostics: Diagnostics
+  equipments: Equipment
+  general: General
+  health: Health
+  historics: History
+  interacts: Interactions
+  links: Links
+  logs: Logs
+  networks: Networks
+  notes: Notes
+  objects: Objects
+  plugins: Plugins
+  profil: Profile
+  reports: Reports
+  scenarios: Scenario
+  security: Security
+  services: Services
+  settings: Settings
+  summaries: Summaries
+  tasks: Tasks
+  timeline: Timeline
+  tools: tools
+  updates: Updates
+  users: User
 plugin:
   cant-report: You can not make a report on board without plugin
   category:
-      security: security
       automation-protocol: Automation Protocol
-
-welcome:
-  title: Welcome to NextDom
-  congrats: Congratulations
-  congrats-content: "Welcome to NextDom: thanks for choosing this tool for your connected home"
-  never-show: Do not display
-  hot-plugins: Popular plugins
-  migrate-from: Jeedom migration
-  doc-title: Documentation
-  doc-subtitle: Learn to better control
-  doc-content: Reading the documentation is tedious but it is an essential operation to fully control your home automation solution.
-  doc-launch: Access the documentation
-  forum-title: Forum
-  forum-subtitle: Find help on our forum
-  forum-content: "The NextDom forum is a simple and effective way to find the solution to your problem. Surely there is another person who has already encountered the same problem as you. If this is not the case: ask your question, the community will respond as soon as possible."
-  forum-launch: Forum access
-  blog-title: Blog
-  blog-subtitle: Stay informed
-  blog-content: All the latest news from% productName% on our blog.
-  blog-launch: Go to the blog
-  notify: Saved successfully
-
-footer:
-  licence: GPL Automation 2018
-  about: A Propos de
-  rights: All rights reserved
-
+      security: security
+profile:
+  avatar: Avatar
+  interface: Interface
+  notifications: Notifications
+  profile: Profile
+  profile-of: "%s's profile"
+  security: Security
+  theme: Theme
+  tiles: Tiles
+  widgets: Widgets
+repo:
+  apt:
+    description: "This service allows you to activate the Debian package manager, used for updating the Core if your installation is in Debian format."
+  file:
+    description: "This service allows you to use the file manager of the client machine (Windows, Linux ...) to install a plugin for example ..."
+    conf:
+      path: "Path"
+  github:
+    description: "This service allows you to connect NextDom to a Github account to either get the updates of the Core if your installation is in Git format, or install plugins hosted under Github ..."
+    conf:
+      user: "Repository user or organization"
+      repo: "Repository name"
+      branch: "Branch"
+      token: "Token (optional)"
+      core:
+        user: "NextDom core repository user or organization"
+        repo:
+          name: "NextDom core repository name"
+          placeholder: "nextdom-core"
+        branch:
+          name: "NextDom core branch"
+          placeholder: "master"
+  market:
+    description: "This service allows you to connect to Market Jeedom to access all these services ..."
+    conf:
+      address:
+        name: "Address"
+        placeholder: "https://www.jeedom.com/market"
+      user: "Username"
+      password: "Password"
+      version: "Version : beta, stable"
+      cloud:
+        name: "[Cloud backup] Name"
+        password: "[Cloud backup] Password"
+        frequency: "[Cloud backup] Full backup frequency"
+        day: "Every day"
+        week: "Every week"
+        month: "Every month"
+  nextdom:
+    description: "This service is none other than the Market of plugins coded by the NextDom team ..."
+    conf:
+      stable: "NextDom Stable"
+      draft: "NextDom Draft"
+      filters: "Display source filters"
+  samba:
+    conf:
+      ip:
+        name: "Server IP"
+        placeholder: "192.168.1.57 or mafreebox.free.fr"
+      user:
+        name: "User of the share"
+        placeholder: "Username"
+      password: "Password"
+      share:
+        name: "Share path"
+        placeholder: "MyShare"
+      folder:
+        name: "Folder"
+        placeholder: "Target folder (/Folder)"
+    description: "This service allows you to connect a decentralized Samba server to NextDom, for example to store your backups (backup / restore page) or to get a backup of the plugin ..."
+    error:
+      already-exists: "The file already exists on the samba server"
+      connect: "Unable to plug the samba server"
+      not-found: "The file is not found on the samba server"
+      unknown: "An error occurred while connecting to the samba server"
+  url:
+    description: "This service allows you to directly use a URL for example the installation of plugins ..."
+    conf:
+      zip: "Zip file URL"
+      core:
+        url: "NextDom core URL"
+        version: "NextDom core version"
+scenario:
+  add-block: Add a block
+  add-item: Add element
+  choose: To choose
+  conditions: "Conditions"
+  default: Default
+  description: Description
+  description-if: "Lets make the conditions in your scenario. For example: If my door open sensor is triggered then turn on the light."
+  description-action: "Starts a share on one of your modules: or other scenarios. For example: Place your siren ON."
+  description-for: "A loop allows to perform an action repeatedly a number of times. For example: To repeat an action from 1 to X: that is to say X times."
+  description-in: "Lets do an action in X min. For example: In 5 min: turn off the light."
+  description-at: "At a specific time: this element will launch an action. For example: At 9:30, open the shutters."
+  description-code: "This element allows you to add in your scenario programming using a code: PHP / Shell, etc."
+  description-comment: Lets comment your scenario.
+  disable-scenarios: Disable scenarios
+  duplicate: Duplicate
+  duplicate-title: Duplicate scenario
+  enabled: Active
+  enable-scenarios: Enable scenarios
+  execute: Execute
+  execute-title: Please save before testing. This may not succeed.
+  export: Export
+  expression-test: Expression test
+  follow: Following
+  follow-timeline: Follow in the Timeline
+  follow-timeline-title: The executions of the script can be seen in the timeline.
+  group: Group
+  icon: Icon
+  id: ID
+  identity: Identity
+  item-if: If / Then / Or
+  item-action: Action
+  item-for: Loop
+  item-in: In
+  item-at: at
+  item-code: Code
+  item-comment: Comment
+  launching: Launching
+  links: Links
+  log: log type
+  multi-launch: Multi-Launch
+  multi-launch-title: The script will run several times simultaneously
+  my-scenarios: My scenarios
+  name: Scenario name
+  name-to-show: Display Name
+  name-to-show-placeholder: Do not put anything to leave the default name
+  next: Next
+  no-group: None
+  no-choice: None
+  no-scenario: You do not have any scenario! Click Add in the menu to start ...
+  options: options
+  parameters: Settings
+  parent-object: parent object
+  paternity: Paternity
+  previous: Previous
+  programmation: Programming
+  provoked: provoked
+  realtime: Real time
+  scenarios: scenario (s).
+  scenario-disabled: The scenario manager is disabled, so all scenarios are disabled...
+  scenario-edit: Scenario Edition
+  scenario-group: Scenario Group
+  scenario-mode: Scenario Mode
+  scheduled: Program
+  scheduler: Programming
+  stop: Stop
+  summary: Overview
+  supervising: surveillance
+  sync-mode: synchronously
+  sync-mode-title: "The script is in synchronous mode. Warning: this can make the system unstable"
+  template: template
+  test-expression: expression tester
+  timeout: Timeout (0 = unlimited)
+  timeout-unity: seconds
+  trigger: trigger
+  twice: Both
+  variables: variables
+  visible: Visible
+  you-have-scenarios: You have %s scenario(s).
+scripts:
+  cron-class-or-function-not-found: "[Error] class or function not found"
+  cron-disable: All cron are currently disabled
+  error: "Error:"
+  error-on: Error with
+  file-not-found: "File not found: "
+  launched-background-not-found: Launched in background not found
+  listener-not-found: "Listener not found:"
+  listener-id-cannot-be-empty: The listener ID can not be empty
+  scenario: "Scenario :"
+  scenario-not-found: "Script not found. Check ID:"
+  start-in-background: "Launch in background:"
 sidebar:
-  menu-main: Main Menu
-  menu-manage: Menu Management
   dashboard: Dashboard
-  view: View(s)
   design: Design(s)
-  objects-list: List Objects & Summaries
   default-object: Default Subject
-  help: Help
-  help-wiki: Wiki
-  help-jeedom-doc: Jeedom Documentation
-  help-nextdom-doc: Documentation
-  help-page: Page or plugin help
-  help-site: Nextdom.org Website
-  help-forum: Forum
-  help-github: Github
-  help-chat: Chat
-  show-all: Show all
-  plan3d: Map(s) 3D
-  panel: Panel(s)
-  plugins: plugins
-  plugins-markets: Management & Markets
-  tools: Tools
-  tools-summary: Automation Summary
-  tools-interactions: Interactions
-  tools-scenarios: Scenarios
-  tools-scenarios-manage: Scénarios Management
-  tools-notes: Notes
   diagnostics: Diagnostics
   diagnostics-health: Health
   diagnostics-eqlogics: Facilities
@@ -356,337 +629,99 @@ sidebar:
   expert-restart: To restart
   expert-shutdown: Switch off
   expert-issue: A dysfunction ?
-  online: Online
+  help: Help
+  help-wiki: Wiki
+  help-jeedom-doc: Jeedom Documentation
+  help-nextdom-doc: Documentation
+  help-page: Page or plugin help
+  help-site: Nextdom.org Website
+  help-forum: Forum
+  help-github: Github
+  help-chat: Chat
+  menu-main: Main Menu
+  menu-manage: Menu Management
+  objects-list: List Objects & Summaries
   offline: Offline
-
-firstuse:
-  step: Step
-  welcome-title: Welcome NextDom
-  welcome-content: "Well Done! You have just installed your home automation solution, the first use wizard is activated!  This one will guide you in the process of configuring your home automation solution ..."
-  password-title: Secure your NextDom
-  password-content: "First: thank you to define a new administrator password to improve security ..."
-  password-placeholder: New Password...
-  password-confirm-placeholder: Confirm password...
-  market-title: Connect your market has Jeedom% productName%!
-  market-content: By adding or connecting a Market Jeedom account for installing plugins ...
-  market-noaccount: I have no Market account
-  market-alreadyaccount: I already have an account market
-  market-wantaccount: I want to create one!
-  market-username-placeholder: Username...
-  market-password-placeholder: Password...
-  customize-title: Customize your% productName%!
-  customize-content: "Select the theme that suits you the most: others being selectable or customizable in the Customization page ..."
-  congrats-title: Congratulations! Configuring your% productName% is over!
-  congrats-content: Click the Finish button to enjoy your Home Automation solution ...
-
-backup:
-  automatic_sending: "Sending Automatically"
-  available_backups: "Available backups"
-  backup_information: "Informations"
-  backup_settings: "Backup Settings"
-  backups: "Backups"
-  backups__restorations: "Backups / Restorations"
-  days: "days"
-  download_selection: "Download selection"
-  loading: "Loading..."
-  local_backups: "Local backups"
-  location: "Directory"
-  manual_backup: "manual backup"
-  purpose1: "You can backup here your Nexdom setup."
-  purpose2: "Will save settings, dashboards, views, designs, plugins, widgets etc ... But the Core will however not be included in the backup."
-  purpose3: "It's also here that you can restore your backups (including those from Jeedom system)."
-  remove_selected: "Remove"
-  selection: "Selected backup actions"
-  restore_backup_or_mirgration: "You can restore a backup NextDom or migrate backup Jeedom"
-  restore_selection: "Restore"
-  run: "Run"
-  saving_on: "Saving during"
-  send_backup: "Send backup"
-  suppression: "Remove"
-  the_service_is_disabled_you_can__activate: "The service is disabled, you can activate it "
-  total_size: "Total size"
-  transfer: "Backup management"
-  mb_maximum: "MB maximum"
-
-general:
-  last_known_date: "Last known date"
-  time_zone: "Time zone"
-  hours: "Hours"
-  time: "Time"
-  nextdom: "NextDom"
-  reset: "Reset"
-  synchronization: "Synchronization"
-  nextdom_name: "Name of your NextDom "
-  language: "Language"
-  language-used: "Language used"
-  system_hardware: "System /  Hardware"
-  installation_key: "Installation Key"
-  session_timeout: "Sessions timeout"
-  time_server: "Time Server (optional)"
-  ignore_system_time: "do not check system time"
-  tooltip:
-     installation_key: "Installation key used to communicate with the Market"
-     session_timeout: "Session timeout if you haven't tick the box 'register this computer' on the logon window"
-     language: "Language to use with Nexdom"
-     system_hardware: "Indicate the type of Hardware"
-     nextdom_name : "Name of the Nexdom system"
-     time_zone: "Time zone used by Nexdom"
-     time_server: "Time Server used for time synchronization"
-     ignore_system_time: "Indicates to Nexdom to ignore system time"
-  language-list:
-      fr_FR: "French"
-      en_US: "English"
-
-
-update-view:
-  none: "None"
-  any: "Any"
-  please_consult_release_note: "Before any update, please consult the NextDom core release note :"
-  core: "Core"
-  last_check: "Last check:"
-  unfold: "Unfold"
-  expert: "Expert"
-  update_the_core: "Update the core"
-  update_plugins: "Update plugins"
-  update: "Update"
-  selective_update: "Selective updates"
-  update_to_reapply: "Updates to reapply"
-  update_s_in_days: "Update(s) in days"
-  forced_mode: "Forced mode"
-  options: "Options"
-  plugins: "Plugins"
-  pre_update: "Pre-update (update the update script before)"
-  fold: "Fold"
-  restoration: "Restore"
-  save_before: "Save before"
-  scripts: "scripts"
-  select_updates: "Select Updates"
-  check_updates: "Check updates"
-  warning_special_option: "The following option should stay on 'None' and can only be changed only because of a request comming from the support team"
-
-update:
-  do_not_update: "Do not update"
-  branch: "Branch :"
-  type: "Type :"
-  version: "Version :"
-
-note:
-  create_a_note: "Create a Note"
-  list_notes: "List of notes"
-  note_saved_successfully: "Note saved successfully"
-  note_selected: "Note selected"
-  note_deleted_successfully: "Note deleted successfully"
-  notes: "Notes"
-  are_sure_you_want_to_delete_the_note: "Are sure you want to delete the note"
-
-osdb:
-  administration: Administration
-  warning: "WARNING: you may loose access to your system "
-  tools: "Tools"
-  system_console: "System console"
-  file_editor: "File Editor"
-  editors: "Editors"
-  run: "Run"
-  password: "Password"
-  os__db: "OS/DB"
-  database: "Database"
-  user: "User"
-  command_list: Commands list
-  historic: Historic
-  click_on_command: "Click on a command of the list or type a personalized command below :"
-  personalized_command: Personalized command...
-  clean_command: Clean command
-  select_command: Select command
-  tables: Tables
-
-interact:
-  wait_before_responding: "Wait before responding"
-  none: "None -"
-  authorization: "Authorization"
-  allow_nextdom_to_eliminate_malformed_requests: "Eliminate malformed requests"
-  choose_the_actions_associated_with_this_interaction: "Choose the actions associated with this interaction ..."
-  choose_filters_to_limit_the_number_of_generated_sentences: "Choose filters to limit the number of generated sentences ..."
-  commands: "Commands"
-  binary_conversion: "Binary conversion"
-  convert_binary_commands: "Convert binary commands"
-  request: "Request"
-  duplicate: "Duplicate"
-  unfold: "Unfold"
-  edition_interaction: "Edition Interaction"
-  filters: "Filters"
-  group: "Group"
-  id: "ID:"
-  interactions: "Interactions"
-  the_question_cannot_be_empty: "The question cannot be empty"
-  limit_to_categories: "Limit to categories"
-  limit_to_commands_belonging_to_objects: "Limit to commands belonging to objects"
-  limit_to_commands_of_sub_type: "Limit to commands of sub-type"
-  limit_to_commands_with_unit: "Limit to commands with unit"
-  limit_to_commands_of_type: "Limit to commands of type"
-  limit_to_plugins: "Limit to plugins"
-  limit_to_visible: "Limit to visible"
-  limit_to_the_device: "Limit to the device"
-  list_of_users_identifiers_separated_by_a_pipe: "List of users (identifiers) separated by a |"
-  allow_extra_time: "for exemple, it allows extra time to wait for a light state change"
-  sentences: "Sentences"
-  regex_exclusion: "Regex exclusion"
-  regexp_mandatory_correspondence: "Regexp mandatory correspondence"
-  replaces_words_with_their_synony: "Replaces words with their synonyms when generating orders"
-  fold: "Fold"
-  regenerate: "Regenerate"
-  answer: "Answer"
-  result: "Result"
-  uncategorized: "Uncategorized"
-  without_unit: "Without unit"
-  synonym: "Synonym"
-  authorized_users: "Authorized users"
-  you_have_n_interactions: "You have %s interaction(s)..."
-  test: "Test"
-  no_interactions_click_add_to_start: "You do not have any interactions. Click Add to start."
-  interactions: "interaction(s)"
-  seconds: "seconds"
-
+  online: Online
+  plan3d: Map(s) 3D
+  panel: Panel(s)
+  plugins: plugins
+  plugins-markets: Management & Markets
+  quick-notes: Quick Notes
+  show-all: Show all
+  tools: Tools
+  tools-summary: Automation Summary
+  tools-interactions: Interactions
+  tools-scenarios: Scenarios
+  tools-scenarios-manage: Scénarios Management
+  tools-notes: Notes
+  view: View(s)
 summary:
-  display_if_zero: "Display if zero"
   add_a_summary: "Add a summary"
-  calculation: "Calculation"
-  key: "Key"
-  icon: "Icon"
-  link_to_a_virtual: "Link to a virtual"
-  counting_method: "Counting method"
   automation_summaries: "automation summaries"
-  unit: "Unit"
-  create_virtual: "Create virtuel"
-  virtual_cmd_succed: "Creation of virtual cmd has succeded"
   calcul:
       sum: "Sum"
       avg: "Average"
       text: "Text"
-
-scenario:
-  no-group: None
-  no-choice: None
-  realtime: Real time
-  default: Default
-  my-scenarios: My scenarios
-  no-scenario: You do not have any scenario! Click Add in the menu to start ...
-  you-have-scenarios: You have %s scenario(s).
-  enable-scenarios: Enable scenarios
-  disable-scenarios: Disable scenarios
-  test-expression: expression tester
-  variables: variables
-  summary: Overview
-  scenarios: scenario (s).
-  links: Links
-  duplicate: Duplicate
-  duplicate-title: Duplicate scenario
-  export: Export
-  template: template
-  log: log type
-  add-block: Add a block
-  stop: Stop
-  execute-title: Please save before testing. This may not succeed.
-  execute: Execute
-  expression-test: Expression test
-  programmation: Programming
-  parameters: Settings
-  id: ID
-  identity: Identity
-  scenario-edit: Scenario Edition
-  name: Scenario name
-  name-to-show: Display Name
-  name-to-show-placeholder: Do not put anything to leave the default name
-  description: Description
-  enabled: Active
-  visible: Visible
-  multi-launch: Multi-Launch
-  multi-launch-title: The script will run several times simultaneously
-  sync-mode: synchronously
-  sync-mode-title: "The script is in synchronous mode. Warning: this can make the system unstable"
-  timeout: Timeout (0 = unlimited)
-  timeout-unity: seconds
-  paternity: Paternity
-  group: Group
-  scenario-group: Scenario Group
-  parent-object: parent object
-  follow: Following
-  follow-timeline: Follow in the Timeline
-  follow-timeline-title: The executions of the script can be seen in the timeline.
-  icon: Icon
-  choose: To choose
-  launching: Launching
-  scenario-mode: Scenario Mode
-  provoked: provoked
-  scheduled: Program
-  twice: Both
-  trigger: trigger
-  scheduler: Programming
-  previous: Previous
-  next: Next
-  add-item: Add element
-  item-if: If / Then / Or
-  item-action: Action
-  item-for: Loop
-  item-in: In
-  item-at: at
-  item-code: Code
-  item-comment: Comment
-  options: options
-  supervising: surveillance
-  description-if: "Lets make the conditions in your scenario. For example: If my door open sensor is triggered then turn on the light."
-  description-action: "Starts a share on one of your modules: or other scenarios. For example: Place your siren ON."
-  description-for: "A loop allows to perform an action repeatedly a number of times. For example: To repeat an action from 1 to X: that is to say X times."
-  description-in: "Lets do an action in X min. For example: In 5 min: turn off the light."
-  description-at: "At a specific time: this element will launch an action. For example: At 9:30, open the shutters."
-  description-code: "This element allows you to add in your scenario programming using a code: PHP / Shell, etc."
-  description-comment: Lets comment your scenario.
-  conditions: "Conditions"
-
-object:
-  global-view: Global view
-  no-object-yet: You do not have any object yet. Press Add to start.
-  you-have-n-objects: "You have %s object(s)"
-  links: Links
-
-profile:
-  avatar: Avatar
-  interface: Interface
-  notifications: Notifications
-  profile: Profile
-  profile-of: "%s's profile"
-  security: Security
-  theme: Theme
-  tiles: Tiles
-  widgets: Widgets
-
-entity:
-  note:
-    name-cannot-be-empty: The name of the note can not be empty
-
-samba:
-  error:
-    connect: "Unable to plug the samba server"
-    not-found: "The file is not found on the samba server"
-    already-exists: "The file already exists on the samba server"
-    unknown: "An error occurred while connecting to the samba server"
-
-commandes:
-  influxDbIPLabel: IP
-  influxDbPortLabel: Port
-  influxDbDatabaseNameLabel: Database
-
-repo:
-  samba:
-    conf:
-      ip.name: "Server IP"
-      ip.placeholder: "192.168.1.57 or mafreebox.free.fr"
-      user.name: "User of the share"
-      user.placeholder: "Username"
-      password.name: "Password"
-      share.name: "Share path"
-      share.placeholder: "MyShare"
-      folder.name: "Folder"
-      folder.placeholder: "Target folder (/Folder)"
+  calculation: "Calculation"
+  counting_method: "Counting method"
+  create_virtual: "Create virtuel"
+  display_if_zero: "Display if zero"
+  icon: "Icon"
+  key: "Key"
+  link_to_a_virtual: "Link to a virtual"
+  unit: "Unit"
+  virtual_cmd_succed: "Creation of virtual cmd has succeded"
+update:
+  branch: "Branch :"
+  do_not_update: "Do not update"
+  type: "Type :"
+  version: "Version :"
+update-view:
+  any: "Any"
+  check_updates: "Check updates"
+  core: "Core"
+  expert: "Expert"
+  fold: "Fold"
+  forced_mode: "Forced mode"
+  last_check: "Last check:"
+  none: "None"
+  options: "Options"
+  please_consult_release_note: "Before any update, please consult the NextDom core release note :"
+  plugins: "Plugins"
+  pre_update: "Pre-update (update the update script before)"
+  scripts: "scripts"
+  save_before: "Save before"
+  select_updates: "Select Updates"
+  selective_update: "Selective updates"
+  restoration: "Restore"
+  unfold: "Unfold"
+  update: "Update"
+  update_plugins: "Update plugins"
+  update_the_core: "Update the core"
+  update_to_reapply: "Updates to reapply"
+  update_s_in_days: "Update(s) in days"
+  warning_special_option: "The following option should stay on 'None' and can only be changed only because of a request comming from the support team"
+welcome:
+  blog-title: Blog
+  blog-subtitle: Stay informed
+  blog-content: All the latest news from NextDom on our blog.
+  blog-launch: Go to the blog
+  congrats: Congratulations
+  congrats-content: "Welcome to NextDom: thanks for choosing this tool for your connected home"
+  doc-title: Documentation
+  doc-subtitle: Learn to better control
+  doc-content: Reading the documentation is tedious but it is an essential operation to fully control your home automation solution.
+  doc-launch: Access the documentation
+  forum-title: Forum
+  forum-subtitle: Find help on our forum
+  forum-content: "The NextDom forum is a simple and effective way to find the solution to your problem. Surely there is another person who has already encountered the same problem as you. If this is not the case: ask your question, the community will respond as soon as possible."
+  forum-launch: Forum access
+  hot-plugins: Popular plugins
+  migrate-from: Jeedom migration
+  never-show: Do not display
+  notify: Saved successfully
+  title: Welcome to NextDom
 
 # Ancien format
 "401 - Accès non autorisé": "401 - Access not allowed"

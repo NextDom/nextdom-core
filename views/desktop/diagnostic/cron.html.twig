@@ -57,8 +57,8 @@
     <div class="nav-tabs-custom config" id="cron">
         <!-- Tabs title -->
         <ul class="nav nav-tabs pull-right" role="tablist">
-            <li role="presentation" class="active"><a href="#cron-tab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tint"></i>{{ 'Cron' }}</a></li>
-            <li role="presentation"><a href="#listener" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-flask"></i>{{ 'Listener' }}</a></li>
+            <li role="presentation" class="active"><a href="#cron-tab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-tint"></i><span>{{ 'Cron' }}</span></a></li>
+            <li role="presentation"><a href="#listener" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-flask"></i><span>{{ 'Listener' }}</span></a></li>
             <li class="header pull-left"><i class="fas fa-tasks"></i>{{ 'Tâches' | trans }}</li>
         </ul>
 
@@ -93,7 +93,7 @@
             </div>
 
             <div role="tabpanel" class="tab-pane" id="listener">
-                <table id="table_listener" class="table table-bordered table-condensed" >
+                <table id="table_listener" class="table table-bordered table-condensed text-center">
                     <thead>
                          <tr>
                              <th>{{ 'Id' }}</th>

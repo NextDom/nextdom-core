@@ -32,6 +32,8 @@ class RepoUrl
     /*     * *************************Attributs****************************** */
 
     public static $_name = 'URL';
+    public static $_icon = 'fas fa-at';
+    public static $_description = 'repo.url.description';
 
     public static $_scope = array(
         'plugin' => true,
@@ -43,17 +45,17 @@ class RepoUrl
     public static $_configuration = array(
         'parameters_for_add' => array(
             'url' => array(
-                'name' => 'URL du fichier ZIP',
+                'name' => 'repo.url.conf.zip',
                 'type' => 'input',
             ),
         ),
         'configuration' => array(
             'core::url' => array(
-                'name' => 'URL core NextDom',
+                'name' => 'repo.url.conf.core.url',
                 'type' => 'input',
             ),
             'core::version' => array(
-                'name' => 'URL version core NextDom',
+                'name' => 'repo.url.conf.core.version',
                 'type' => 'input',
             ),
         ),
