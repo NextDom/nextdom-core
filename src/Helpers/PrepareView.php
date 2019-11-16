@@ -116,9 +116,6 @@ class PrepareView
 
         $this->initJsPool($pageData);
         $this->initCssPool($pageData);
-        ob_start();
-        require_once(NEXTDOM_ROOT . '/src/Api/icon.inc.php');
-        $pageData['CUSTOM_CSS'] = ob_get_clean();
     }
 
     /**
@@ -254,12 +251,6 @@ class PrepareView
     {
         $pageData['CSS_POOL'][] = '/public/css/nextdom.css';
         $pageData['CSS_POOL'][] = '/public/css/themes/' . ConfigManager::byKey('nextdom::user-theme', 'core', 'dark-nextdom') . '.css';
-        $rootDir = NEXTDOM_ROOT . '/public/icon/';
-        foreach (FileSystemHelper::ls($rootDir, '*') as $dir) {
-            if (is_dir($rootDir . $dir) && file_exists($rootDir . $dir . '/style.css')) {
-                $pageData['CSS_POOL'][] = '/public/icon/' . $dir . 'style.css';
-            }
-        }
         if (AuthentificationHelper::isConnected()) {
             if (UserManager::getStoredUser() !== null && UserManager::getStoredUser()->getOptions('desktop_highcharts_theme') != '') {
                 $highstockThemeFile = '/vendor/node_modules/highcharts/themes/' . UserManager::getStoredUser()->getOptions('desktop_highcharts_theme') . '.js';
