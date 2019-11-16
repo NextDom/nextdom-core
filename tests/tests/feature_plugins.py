@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# line 100 caracters max or #pylint: disable=line-too-long
+####################################################################################################
 """Test plugins features
 """
 import unittest
@@ -8,7 +10,6 @@ from time import sleep
 class PluginsTest(unittest.TestCase):
     """Test plugins features
     """
-
     def test_plugin_cron_execution(self):
         """Test cron from plugin execution
         """
@@ -18,6 +19,7 @@ class PluginsTest(unittest.TestCase):
         self.assertIn('plugin4tests', shell_output.decode('utf-8'))
         shell_output = subprocess.check_output('docker exec -it nextdom-test-plugins cat /var/log/nextdom/plugin4tests'.split(' ')) #pylint: disable=line-too-long
         self.assertIn('CRON TEST', shell_output.decode('utf-8'))
+
 
 # Entry point
 if __name__ == "__main__":

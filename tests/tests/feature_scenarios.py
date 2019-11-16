@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# line 100 caracters max or #pylint: disable=line-too-long
+####################################################################################################
 """Test scenario features
 """
 import subprocess
@@ -8,7 +10,6 @@ from time import sleep
 class ScenariosTest(unittest.TestCase):
     """Test scenarios features
     """
-
     def test_scenario_cron_execution(self):
         """Test cron execution of a scenario
         """
@@ -18,6 +19,7 @@ class ScenariosTest(unittest.TestCase):
         self.assertIn('scenario1.log', shell_output.decode('utf-8'))
         shell_output = subprocess.check_output('docker exec -it nextdom-test-scenarios cat /var/log/nextdom/scenarioLog/scenario1.log'.split(' ')) #pylint: disable=line-too-long
         self.assertIn('automatiquement sur programmation', shell_output.decode('utf-8'))
+
 
 # Entry point
 if __name__ == "__main__":

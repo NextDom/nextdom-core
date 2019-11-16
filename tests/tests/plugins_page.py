@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# line 100 caracters max or #pylint: disable=line-too-long
+####################################################################################################
 """Test plugins page
 """
 import unittest
@@ -8,9 +10,8 @@ from selenium.webdriver.common.action_chains import ActionChains
 from libs.base_gui_test import BaseGuiTest
 
 class PluginsPage(BaseGuiTest):
-    """Test all pages linked in administration page
+    """Test all plugins
     """
-
     @classmethod
     def setUpClass(cls):
         """Init chrome driver
@@ -50,6 +51,7 @@ class PluginsPage(BaseGuiTest):
         self.assertIsNotNone(widget_content)
         self.assertIn('TEST EQLOGIC', widget_label.text)
         self.assertIn('Cmd 1', widget_content.text)
+
 
 # Entry point
 if __name__ == "__main__":

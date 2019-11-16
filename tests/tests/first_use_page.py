@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
+# line 100 caracters max or #pylint: disable=line-too-long
+####################################################################################################
 """Test first use process pages
 """
-
 import unittest
 import sys
 import os
@@ -287,6 +288,7 @@ class FirstUsePage(BaseGuiTest):
         # Stay in fist connect page
         self.assertEqual(0, len(self.get_js_logs()))
         self.assertIn("Dashboard", self.get_page_title())
+
 
 # Entry point
 if __name__ == "__main__":
