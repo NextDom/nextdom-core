@@ -92,6 +92,8 @@ def check_ajax_file(file_to_check, actions_list):
                     # Skip removed functions
                     if test_name == 'NextDom' and action == 'saveCustom':
                         continue
+                    if test_name == 'Repo' and action == 'pullInstall':
+                        continue
                     print_warning('In ' + test_name + ', test for action ' + action + ' not found.') #pylint: disable=line-too-long
                     result = False
     else:
@@ -238,8 +240,8 @@ def checkout_jeedom():
     """Checkout or update jeedom-core
     """
     checkout_cmd = "git clone https://github.com/jeedom/core /tmp/jeedom-core > /dev/null 2>&1"
-    branch_cmd = "cd /tmp/jeedom-core && git checkout stable -f > /dev/null 2>&1"
-    update_cmd = "cd /tmp/jeedom-core && git fetch -apt > /dev/null 2>&1 && git pull -f origin stable > /dev/null 2>&1" #pylint: disable=line-too-long
+    branch_cmd = "cd /tmp/jeedom-core && git checkout master -f > /dev/null 2>&1"
+    update_cmd = "cd /tmp/jeedom-core && git fetch -apt > /dev/null 2>&1 && git pull -f origin master > /dev/null 2>&1" #pylint: disable=line-too-long
     if os.path.exists("/tmp/jeedom-core"):
         print_info("updating jeedom-core in /tmp/jeedom-core")
         if os.system(update_cmd) != 0:

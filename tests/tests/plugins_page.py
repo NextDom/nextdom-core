@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 # line 100 caracters max or #pylint: disable=line-too-long
 ####################################################################################################
 """Test plugins page
@@ -6,8 +7,10 @@
 import unittest
 import sys
 from time import sleep
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 from libs.base_gui_test import BaseGuiTest
+
 
 class PluginsPage(BaseGuiTest):
     """Test all plugins
@@ -23,8 +26,10 @@ class PluginsPage(BaseGuiTest):
         """
         self.goto('index.php?v=d&p=dashboard')
         # Put the mouse hover the menu to show the plugin link
-        menu_to_hover = self.get_element_by_css('.treeview>a>i.fa-puzzle-piece')
-        menu_hover_action = ActionChains(self.driver).move_to_element(menu_to_hover)
+        menu_to_hover = self.get_element_by_css(
+            '.treeview>a>i.fa-puzzle-piece')
+        menu_hover_action = ActionChains(
+            self.driver).move_to_element(menu_to_hover)
         menu_hover_action.perform()
         # Wait for mouse event
         sleep(1)
@@ -33,11 +38,43 @@ class PluginsPage(BaseGuiTest):
         # Wait for mouse event
         sleep(1)
         # Click on menu item
-        self.get_element_by_css('a[href="index.php?v=d&m=plugin4tests&p=plugin4tests"]').click()
+        self.get_element_by_css(
+            'a[href="index.php?v=d&m=plugin4tests&p=plugin4tests"]').click()
         # Wait for loading page
-        sleep(1)
-        self.assertIn('Desktop plugin page', self.driver.page_source)
+        sleep(3)
+        self.assertIsNotNone(self.get_element_by_id('add-eqlogic-btn'))
         self.assertEqual(0, len(self.get_js_logs()))
+
+    def test_plugin_eqlogics_render(self):
+        """Test plugin principal page
+        """
+        self.goto('index.php?v=d&m=plugin4tests&p=plugin4tests')
+        sleep(2)
+        self.assertEqual(
+            4, len(self.driver.find_elements_by_class_name("eqLogicDisplayCard")))
+        self.assertEqual(0, len(self.get_js_logs()))
+
+    def test_plugin_config_page(self):
+        """Test plugin config page
+        """
+        self.goto('index.php?v=d&m=plugin4tests&p=plugin4tests')
+        sleep(2)
+        self.get_element_by_id('config-btn').click()
+        sleep(8)
+        self.assertIsNotNone(self.get_element_by_id('div_confPlugin'))
+        config_input = self.get_element_by_css(
+            '.configKey[data-l1key="text_option"]')
+        config_input.send_keys('Just a test')
+        sleep(1)
+        self.click_on_invisible('#bt_savePluginConfig')
+        sleep(2)
+        ActionChains(self.driver).send_keys(Keys.ESCAPE).perform()
+        self.get_element_by_id('config-btn').click()
+        sleep(8)
+        config_input = self.get_element_by_css(
+            '.configKey[data-l1key="text_option"]')
+        self.assertEqual('Just a test', config_input.get_property('value'))
+        sleep(5)
 
     def test_dashboard_widget(self):
         """Test widget plugin

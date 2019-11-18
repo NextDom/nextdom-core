@@ -10,6 +10,7 @@ NEXTDOM_URL = 'http://127.0.0.1:8765'
 NEXTDOM_LOGIN = 'admin'
 NEXTDOM_PASSWORD = 'nextdom-test'
 
+
 def first_use_tests():
     """Starts gui tests related to the first use page
     """
@@ -18,6 +19,7 @@ def first_use_tests():
     start_test_container(container_name)
     run_test('tests/first_use_page.py', [NEXTDOM_URL])
     remove_test_container(container_name)
+
 
 def administration_tests():
     """Starts administration gui tests
@@ -36,16 +38,22 @@ def administration_tests():
         container_name,
         '/usr/bin/mysql -u root nextdomdev < data/tests_fixtures.sql')
     print_subtitle('Administration page')
-    run_test('tests/administration_page.py', [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])
+    run_test('tests/administration_page.py',
+             [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])
     print_subtitle('Admins pages')
-    run_test('tests/admin_pages.py', [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])
+    run_test('tests/admin_pages.py',
+             [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])
     print_subtitle('Diagnotics page')
-    run_test('tests/diagnostic_pages.py', [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])
+    run_test('tests/diagnostic_pages.py',
+             [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])
     print_subtitle('Params page')
-    run_test('tests/params_pages.py', [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])
+    run_test('tests/params_pages.py',
+             [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])
     print_subtitle('Tools page')
-    run_test('tests/tools_pages.py', [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])
+    run_test('tests/tools_pages.py',
+             [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])
     remove_test_container(container_name)
+
 
 def specific_tests():
     """Starts others gui tests
@@ -64,8 +72,10 @@ def specific_tests():
         container_name,
         '/usr/bin/mysql -u root nextdomdev < data/tests_fixtures.sql')
     print_subtitle('Connection page')
-    run_test('tests/connection_page.py', [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD]) #pylint: disable=line-too-long
+    run_test('tests/connection_page.py',
+             [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])  # pylint: disable=line-too-long
     remove_test_container(container_name)
+
 
 def plugins_tests():
     """Starts gui tests related to the plugin page
@@ -81,9 +91,11 @@ def plugins_tests():
         '/bin/chown www-data:www-data -R /var/www/html/plugins')
     exec_command_in_container(
         container_name,
-        '/usr/bin/mysql -u root nextdomdev < data/plugin_test.sql')
-    run_test('tests/plugins_page.py', [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD]) #pylint: disable=line-too-long
+        '/usr/bin/mysql -u root nextdomdev < data/tests_fixtures.sql')
+    run_test('tests/plugins_page.py', [NEXTDOM_URL, NEXTDOM_LOGIN,
+                                       NEXTDOM_PASSWORD])  # pylint: disable=line-too-long
     remove_test_container(container_name)
+
 
 def modal_tests():
     """Starts gui tests related to the modal pages
@@ -100,7 +112,8 @@ def modal_tests():
     exec_command_in_container(
         container_name,
         '/usr/bin/mysql -u root nextdomdev < data/tests_fixtures.sql')
-    run_test('tests/modal_pages.py', [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD]) #pylint: disable=line-too-long
+    run_test('tests/modal_pages.py', [NEXTDOM_URL, NEXTDOM_LOGIN,
+                                      NEXTDOM_PASSWORD])  # pylint: disable=line-too-long
     remove_test_container(container_name)
 
 
