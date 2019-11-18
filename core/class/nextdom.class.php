@@ -129,7 +129,7 @@ class nextdom
         BackupManager::restore($backupFilePath, $taskInBackground);
     }
 
-    public static function update($options = array())
+    public static function update($options = [])
     {
         NextDomHelper::update($options);
     }

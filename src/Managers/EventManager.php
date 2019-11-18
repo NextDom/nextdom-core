@@ -33,6 +33,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Enums\DateFormat;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 
@@ -98,8 +99,13 @@ class EventManager
     protected static function cleanEvent($events)
     {
         $events = array_slice(array_values($events), -self::$MAX_EVENTS_BY_PROCESS, self::$MAX_EVENTS_BY_PROCESS);
-        $find = array();
+        $find = [];
+        $currentTime = strtotime(DateFormat::NOW) + 300;
         foreach (array_values($events) as $key => $event) {
+            if($event['datetime'] > $currentTime){
+                unset($events[$key]);
+                continue;
+            }
             if ($event['name'] == 'eqLogic::update') {
                 $id = $event['name'] . '::' . $event['option']['eqLogic_id'];
             } elseif ($event['name'] == 'cmd::update') {

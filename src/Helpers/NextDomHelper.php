@@ -250,7 +250,7 @@ class NextDomHelper
             'comment' => __('health.need-more-than') . ': 15%',
         );
 
-        $value = shell_exec('sudo dmesg | grep oom | wc -l');
+        $value = shell_exec('sudo dmesg | grep oom | grep -v deprecated | wc -l');
         $systemHealth[] = array(
             'icon' => 'fa-th-large',
             'name' => __('health.enough-memory'),
@@ -483,6 +483,15 @@ class NextDomHelper
             $result = 'docker';
         } else if (file_exists('/usr/bin/raspi-config')) {
             $result = 'rpi';
+            $hardware_revision = strtolower(shell_exec('cat /proc/cpuinfo | grep Revision'));
+            global $NEXTDOM_RPI_HARDWARE;
+            foreach ($NEXTDOM_RPI_HARDWARE as $key => $values) {
+                foreach ($values as $value) {
+                    if(strpos($hardware_revision,$value) !== false){
+                        $result = $key;
+                    }
+                }
+            }
         } else if (strpos($uname, 'cubox') !== false || strpos($uname, 'imx6') !== false || file_exists('/media/boot/multiboot/meson64_odroidc2.dtb.linux')) {
             $result = 'miniplus';
         }
@@ -558,7 +567,7 @@ class NextDomHelper
      * @param array $options Options list of /install/update.php script
      * @throws \Exception
      */
-    public static function update($options = array())
+    public static function update($options = [])
     {
         LogHelper::clear('update');
         $params = '';

@@ -343,7 +343,7 @@ class Plugin implements EntityInterface
         if ($this->getHasDependency() != 1 || !method_exists($plugin_id, 'dependancy_install')) {
             return;
         }
-        if (abs(strtotime('now') - strtotime(ConfigManager::byKey('lastDependancyInstallTime', $plugin_id))) <= 60) {
+        if (abs(strtotime(DateFormat::NOW) - strtotime(ConfigManager::byKey('lastDependancyInstallTime', $plugin_id))) <= 60) {
             $cache = CacheManager::byKey('dependancy' . $this->getID());
             $cache->remove();
             throw new \Exception(__('Vous devez attendre au moins 60 secondes entre deux lancements d\'installation de dépendances'));
@@ -500,7 +500,10 @@ class Plugin implements EntityInterface
                     $inprogress = CacheManager::byKey('deamonStart' . $this->getId() . 'inprogress');
                     $info = $inprogress->getValue(array('datetime' => strtotime('now') - 60));
                     $info['datetime'] = (isset($info['datetime'])) ? $info['datetime'] : strtotime('now') - 60;
-                    if (abs(strtotime('now') - $info['datetime']) < 45) {
+                    if (abs(strtotime(DateFormat::NOW) - $info['datetime']) < 45) {
+                        if ($auto) {
+                            return;
+                        }
                         throw new \Exception(__('Vous devez attendre au moins 45 secondes entre deux lancements du démon. Dernier lancement : ' . date("Y-m-d H:i:s", $info['datetime'])));
                     }
                     if (ConfigManager::byKey('deamonRestartNumber', $pluginId, 0) > 3) {

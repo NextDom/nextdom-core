@@ -845,7 +845,7 @@ class EqLogic implements EntityInterface
         $batteryTime = $this->getConfiguration(EqLogicConfigKey::BATTERY_TIME, 'NA');
         $lastBatteryCheck = 'NA';
         if ($batteryTime !== 'NA') {
-            $lastBatteryCheck = ((strtotime(date(DateFormat::FULL_DAY)) - strtotime(date(DateFormat::FULL_DAY, strtotime($batteryTime)))) / 86400);
+            $lastBatteryCheck = round((strtotime(date(DateFormat::FULL_DAY)) - strtotime(date(DateFormat::FULL_DAY, strtotime($batteryTime)))) / 86400, 1);
         }
         if (strpos($batteryType, ' ') !== false) {
             $batteryType = substr(strrchr($batteryType, " "), 1);
@@ -905,7 +905,7 @@ class EqLogic implements EntityInterface
         if ($this->getConfiguration(EqLogicConfigKey::NO_BATTERY_CHECK, 0) == 1) {
             return;
         }
-        if ($percent == '') {
+        if ($percent === '') {
             $percent = $this->getStatus('battery');
             $batteyDateTime = $this->getStatus('batteryDatetime');
         }
@@ -1017,7 +1017,7 @@ class EqLogic implements EntityInterface
             $cmd->event($newValue, $updateEventTime);
             return true;
         }
-        if ($updateEventTime !== null) {
+        if ($updateEventTime !== null && $updateEventTime !== false) {
             if (strtotime($cmd->getCollectDate()) < strtotime($updateEventTime)) {
                 $cmd->event($newValue, $updateEventTime);
                 return true;
@@ -1119,7 +1119,7 @@ class EqLogic implements EntityInterface
                         $this->setDisplay('layout::' . $key . '::table::nbLine', 1);
                     }
                     if ($this->getDisplay('layout::' . $key . '::table::nbColumn') == '') {
-                        $this->setDisplay('layout::' . $key . '::table::nbLine', 1);
+                        $this->setDisplay('layout::' . $key . '::table::nbColumn', 1);
                     }
                 }
                 foreach ($this->getCmd() as $cmd) {

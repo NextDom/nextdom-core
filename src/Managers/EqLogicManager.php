@@ -125,7 +125,7 @@ class EqLogicManager
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . ' ';
         if ($objectId === null) {
-            $sql .= 'WHERE object_id IS NULL ';
+            $sql .= 'WHERE object_id IS NULL OR object_id = -1 ';
         } else {
             $values['object_id'] = $objectId;
             $sql .= 'WHERE object_id = :object_id ';
