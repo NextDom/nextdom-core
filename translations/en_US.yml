@@ -449,23 +449,77 @@ profile:
   tiles: Tiles
   widgets: Widgets
 repo:
+  apt:
+    description: "This service allows you to activate the Debian package manager, used for updating the Core if your installation is in Debian format."
+  file:
+    description: "This service allows you to use the file manager of the client machine (Windows, Linux ...) to install a plugin for example ..."
+    conf:
+      path: "Path"
+  github:
+    description: "This service allows you to connect NextDom to a Github account to either get the updates of the Core if your installation is in Git format, or install plugins hosted under Github ..."
+    conf:
+      user: "Repository user or organization"
+      repo: "Repository name"
+      branch: "Branch"
+      token: "Token (optional)"
+      core:
+        user: "NextDom core repository user or organization"
+        repo:
+          name: "NextDom core repository name"
+          placeholder: "nextdom-core"
+        branch:
+          name: "NextDom core branch"
+          placeholder: "master"
+  market:
+    description: "This service allows you to connect to Market Jeedom to access all these services ..."
+    conf:
+      address:
+        name: "Address"
+        placeholder: "https://www.jeedom.com/market"
+      user: "Username"
+      password: "Password"
+      version: "Version : beta, stable"
+      cloud:
+        name: "[Cloud backup] Name"
+        password: "[Cloud backup] Password"
+        frequency: "[Cloud backup] Full backup frequency"
+        day: "Every day"
+        week: "Every week"
+        month: "Every month"
+  nextdom:
+    description: "This service is none other than the Market of plugins coded by the NextDom team ..."
+    conf:
+      stable: "NextDom Stable"
+      draft: "NextDom Draft"
+      filters: "Display source filters"
   samba:
     conf:
-      folder.name: "Folder"
-      folder.placeholder: "Target folder (/Folder)"
-      ip.name: "Server IP"
-      ip.placeholder: "192.168.1.57 or mafreebox.free.fr"
-      password.name: "Password"
-      share.name: "Share path"
-      share.placeholder: "MyShare"
-      user.name: "User of the share"
-      user.placeholder: "Username"
-samba:
-  error:
-    already-exists: "The file already exists on the samba server"
-    connect: "Unable to plug the samba server"
-    not-found: "The file is not found on the samba server"
-    unknown: "An error occurred while connecting to the samba server"
+      ip:
+        name: "Server IP"
+        placeholder: "192.168.1.57 or mafreebox.free.fr"
+      user:
+        name: "User of the share"
+        placeholder: "Username"
+      password: "Password"
+      share:
+        name: "Share path"
+        placeholder: "MyShare"
+      folder:
+        name: "Folder"
+        placeholder: "Target folder (/Folder)"
+    description: "This service allows you to connect a decentralized Samba server to NextDom, for example to store your backups (backup / restore page) or to get a backup of the plugin ..."
+    error:
+      already-exists: "The file already exists on the samba server"
+      connect: "Unable to plug the samba server"
+      not-found: "The file is not found on the samba server"
+      unknown: "An error occurred while connecting to the samba server"
+  url:
+    description: "This service allows you to directly use a URL for example the installation of plugins ..."
+    conf:
+      zip: "Zip file URL"
+      core:
+        url: "NextDom core URL"
+        version: "NextDom core version"
 scenario:
   add-block: Add a block
   add-item: Add element
