@@ -449,23 +449,77 @@ profile:
   tiles: Tuiles
   widgets: Widgets
 repo:
+  apt:
+    description: "Ce service permet d'activer le gestionnaire de paquets Debian, utilisé pour la mise à jour du Core si votre installation est au format Deb..."
+  file:
+    description: "Ce service vous permet d'utiliser le gestionnaire de fichiers de la machine client (Windows, Linux...) pour installer un plugin par exemple..."
+    conf:
+      path: "Chemin"
+  github:
+    description: "Ce service vous permet de connecter NextDom à un compte Github pour soit récuperer les mises à jour du Core si votre installation est au format Git, soit installer des plugins hébergés sous Github..."
+    conf:
+      user: "Utilisateur ou organisation du dépôt"
+      repo: "Nom du dépôt"
+      branch: "Branche"
+      token: "Token (facultatif)"
+      core:
+        user: "Utilisateur ou organisation du dépôt pour le core NextDom"
+        repo:
+          name: "Nom du dépôt pour le core NextDom"
+          placeholder: "nextdom-core"
+        branch:
+          name: "Branche pour le core NextDom"
+          placeholder: "master"
+  market:
+    description: "Ce service vous permet de vous connecter au Market Jeedom pour avoir accès à tous ces propres services..."
+    conf:
+      address:
+        name: "Adresse"
+        placeholder: "https://www.jeedom.com/market"
+      user: "Nom d'utilisateur"
+      password: "Mot de passe"
+      version: "Version : beta, stable"
+      cloud:
+        name: "[Backup cloud] Nom"
+        password: "[Backup cloud] Mot de passe"
+        frequency: "[Backup cloud] Fréquence backup complet"
+        day: "Chaque jour"
+        week: "Chaque semaine"
+        month: "Chaque mois"
+  nextdom:
+    description: "Ce service n'est autre que le Market de plugins codés par l'équipe NextDom..."
+    conf:
+      stable: "NextDom Stable"
+      draft: "NextDom Draft"
+      filters: "Afficher les filtres des sources"
   samba:
     conf:
-      folder.name: "Répertoire"
-      folder.placeholder: "Répertoire de destination (/MonRépertoire)"
-      ip.name: "IP du serveur"
-      ip.placeholder: "192.168.1.57 ou mafreebox.free.fr"
-      password.name: "Mot de passe"
-      share.name: "Chemin du partage"
-      share.placeholder: "MonPartage"
-      user.name: "Utilisateur du partage"
-      user.placeholder: "Nom de l'utilisateur"
-samba:
-  error:
-    already-exists: "Le fichier existe déjà sur le serveur samba"
-    connect: "Impossible de se connecteur au serveur samba"
-    not-found: "Le fichier est introuvable sur le serveur samba"
-    unknown: "Une erreur s'est produite lors de la connexion au serveur samba"
+      ip:
+        name: "IP du serveur"
+        placeholder: "192.168.1.57 ou mafreebox.free.fr"
+      user:
+        name: "Utilisateur du partage"
+        placeholder: "Nom de l'utilisateur"
+      password: "Mot de passe"
+      share:
+        name: "Chemin du partage"
+        placeholder: "MonPartage"
+      folder:
+        name: "Répertoire"
+        placeholder: "Répertoire de destination (/MonRépertoire)"
+    description: "Ce service vous permet de connecter à NextDom un serveur Samba décentralisé, afin par exemple de stocker vos backups (page sauvegarde/restauration) ou récuperer une sauvegarde de plugin..."
+    error:
+      already-exists: "Le fichier existe déjà sur le serveur samba"
+      connect: "Impossible de se connecteur au serveur samba"
+      not-found: "Le fichier est introuvable sur le serveur samba"
+      unknown: "Une erreur s'est produite lors de la connexion au serveur samba"
+  url:
+    description: "Ce service vous permet d'utiliser directement une URL pour par exemple l'installation de plugins..."
+    conf:
+      zip: "URL du fichier ZIP"
+      core:
+        url: "URL core NextDom"
+        version: "Version core NextDom"
 scenario:
   add-block: Ajouter un bloc
   add-item: Ajouter élément
