@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-
+# line 100 caracters max or #pylint: disable=line-too-long
+####################################################################################################
 """Launch NextDom GUI tests
 """
 import sys

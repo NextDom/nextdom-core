@@ -1,0 +1,41 @@
+#ul_eqLogic a {
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+#ul_eqLogic .filter {
+    margin-bottom: 5px;
+}
+
+#ul_eqLogic .filter input {
+    width: 100%;
+}
+
+.eqLogicThumbnailDisplay .eqLogicDisplayCard i {
+    margin-bottom: 0 !important;
+}
+
+.eqLogic {
+    border-left: solid 1px #eee;
+    padding-left: 25px;
+}
+
+.eqLogic-form {
+    height: calc(100% - 50px);
+    overflow: auto;
+    overflow-x: hidden;
+}
+
+.cmdAttrHidden,
+input[data-l1key="id"] {
+    display: none;
+}
+
+#add-eqlogic-btn {
+    color: #33b8cc;
+}
+
+#config-btn {
+    color: #767676;
+}
