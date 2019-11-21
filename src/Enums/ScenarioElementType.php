@@ -1,4 +1,5 @@
 <?php
+
 /* This file is part of NextDom.
  *
  * NextDom is free software: you can redistribute it and/or modify
@@ -18,17 +19,18 @@
 namespace NextDom\Enums;
 
 /**
- * Class LogTarget
+ * Class ScenarioExpressionType
  * @package NextDom\Enums
  */
-class LogTarget extends Enum
+class ScenarioElementType extends Enum
 {
-    const BACKUP = 'backup';
-    const CMD = 'cmd';
-    const EVENT = 'event';
-    const MIGRATION = 'migration';
-    const NEXTDOM = 'nextdom';
-    const RESTORE = 'restore';
-    const STARTING = 'starting';
-    const SCENARIO = 'scenario';
+    const ACTION = 'action';
+    const AT = 'at';
+    const CODE = 'code';
+    const DO = 'do';
+    const ELSE = 'else';
+    const FOR = 'for';
+    const IF = 'if';
+    const IN = 'in';
+    const THEN = 'then';
 }

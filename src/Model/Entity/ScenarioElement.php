@@ -19,6 +19,9 @@ namespace NextDom\Model\Entity;
 
 use NextDom\Enums\DateFormat;
 use NextDom\Enums\NextDomObj;
+use NextDom\Enums\ScenarioElementType;
+use NextDom\Enums\ScenarioExpressionType;
+use NextDom\Enums\ScenarioSubElementType;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\LogHelper;
@@ -143,53 +146,53 @@ class ScenarioElement implements EntityInterface
         if (!is_object($this->getSubElement($this->getType()))) {
             return null;
         }
-        if ($this->getType() == 'if') {
-            if ($this->getSubElement('if')->getOptions('enable', 1) == 0) {
+        if ($this->getType() == ScenarioElementType::IF) {
+            if ($this->getSubElement(ScenarioSubElementType::IF)->getOptions('enable', 1) == 0) {
                 return true;
             }
-            $result = $this->getSubElement('if')->execute($_scenario);
+            $result = $this->getSubElement(ScenarioSubElementType::IF)->execute($_scenario);
             if (is_string($result) && strlen($result) > 1) {
                 $_scenario->setLog(__('Expression non valide : ') . $result);
                 return null;
             }
             if ($result) {
-                if ($this->getSubElement('if')->getOptions('allowRepeatCondition', 0) == 1) {
-                    if ($this->getSubElement('if')->getOptions('previousState', -1) != 1) {
-                        $this->getSubElement('if')->setOptions('previousState', 1);
-                        $this->getSubElement('if')->save();
+                if ($this->getSubElement(ScenarioSubElementType::IF)->getOptions('allowRepeatCondition', 0) == 1) {
+                    if ($this->getSubElement(ScenarioSubElementType::IF)->getOptions('previousState', -1) != 1) {
+                        $this->getSubElement(ScenarioSubElementType::IF)->setOptions('previousState', 1);
+                        $this->getSubElement(ScenarioSubElementType::IF)->save();
                     } else {
                         $_scenario->setLog(__('Non exécution des actions pour cause de répétition'));
                         return null;
                     }
                 }
-                return $this->getSubElement('then')->execute($_scenario);
+                return $this->getSubElement(ScenarioSubElementType::THEN)->execute($_scenario);
             }
-            if (!is_object($this->getSubElement('else'))) {
+            if (!is_object($this->getSubElement(ScenarioSubElementType::ELSE))) {
                 return null;
             }
-            if ($this->getSubElement('if')->getOptions('allowRepeatCondition', 0) == 1) {
-                if ($this->getSubElement('if')->getOptions('previousState', -1) != 0) {
-                    $this->getSubElement('if')->setOptions('previousState', 0);
-                    $this->getSubElement('if')->save();
+            if ($this->getSubElement(ScenarioSubElementType::IF)->getOptions('allowRepeatCondition', 0) == 1) {
+                if ($this->getSubElement(ScenarioSubElementType::IF)->getOptions('previousState', -1) != 0) {
+                    $this->getSubElement(ScenarioSubElementType::IF)->setOptions('previousState', 0);
+                    $this->getSubElement(ScenarioSubElementType::IF)->save();
                 } else {
                     $_scenario->setLog(__('Non exécution des actions pour cause de répétition'));
                     return null;
                 }
             }
-            return $this->getSubElement('else')->execute($_scenario);
+            return $this->getSubElement(ScenarioSubElementType::ELSE)->execute($_scenario);
 
-        } elseif ($this->getType() == 'action') {
-            if ($this->getSubElement('action')->getOptions('enable', 1) == 0) {
+        } elseif ($this->getType() == ScenarioElementType::ACTION) {
+            if ($this->getSubElement(ScenarioSubElementType::ACTION)->getOptions('enable', 1) == 0) {
                 return true;
             }
-            return $this->getSubElement('action')->execute($_scenario);
-        } elseif ($this->getType() == 'code') {
-            if ($this->getSubElement('code')->getOptions('enable', 1) == 0) {
+            return $this->getSubElement(ScenarioSubElementType::ACTION)->execute($_scenario);
+        } elseif ($this->getType() == ScenarioElementType::CODE) {
+            if ($this->getSubElement(ScenarioSubElementType::CODE)->getOptions('enable', 1) == 0) {
                 return true;
             }
-            return $this->getSubElement('code')->execute($_scenario);
-        } elseif ($this->getType() == 'for') {
-            $for = $this->getSubElement('for');
+            return $this->getSubElement(ScenarioSubElementType::CODE)->execute($_scenario);
+        } elseif ($this->getType() == ScenarioElementType::FOR) {
+            $for = $this->getSubElement(ScenarioElementType::FOR);
             if ($for->getOptions('enable', 1) == 0) {
                 return true;
             }
@@ -204,8 +207,8 @@ class ScenarioElement implements EntityInterface
                 $return = $this->getSubElement('do')->execute($_scenario);
             }
             return $return;
-        } elseif ($this->getType() == 'in') {
-            $in = $this->getSubElement('in');
+        } elseif ($this->getType() == ScenarioElementType::IN) {
+            $in = $this->getSubElement(ScenarioSubElementType::IN);
             if ($in->getOptions('enable', 1) == 0) {
                 return true;
             }
@@ -231,7 +234,7 @@ class ScenarioElement implements EntityInterface
                     }
                 }
                 $cron = new cron();
-                $cron->setClass('scenario');
+                $cron->setClass(NextDomObj::SCENARIO);
                 $cron->setFunction('doIn');
                 $cron->setOption(array('scenario_id' => intval($_scenario->getId()), 'scenarioElement_id' => intval($this->getId()), 'second' => date('s'), 'tags' => $_scenario->getTags()));
                 $cron->setLastRun(date(DateFormat::FULL));
@@ -242,8 +245,8 @@ class ScenarioElement implements EntityInterface
                 $_scenario->setLog(__('Tâche : ') . $this->getId() . __(' programmé à : ') . date(DateFormat::FULL, $next) . ' (+ ' . $time . ' min)');
             }
             return true;
-        } elseif ($this->getType() == 'at') {
-            $at = $this->getSubElement('at');
+        } elseif ($this->getType() == ScenarioElementType::AT) {
+            $at = $this->getSubElement(ScenarioSubElementType::AT);
             if ($at->getOptions('enable', 1) == 0) {
                 return true;
             }
@@ -259,7 +262,7 @@ class ScenarioElement implements EntityInterface
                 $next = date(DateFormat::FULL_DAY) . ' ' . substr($next, 0, 2) . ':' . substr($next, 2, 4);
             }
             $next = strtotime($next);
-            if ($next < strtotime('now')) {
+            if ($next < strtotime(DateFormat::NOW)) {
                 throw new CoreException(__('Bloc type A : ') . $this->getId() . __(', heure programmée invalide : ') . date('Y-m-d H:i:00', $next));
             }
             $crons = CronManager::searchClassAndFunction('scenario', 'doIn', '"scenarioElement_id":' . $this->getId() . ',');
@@ -325,7 +328,7 @@ class ScenarioElement implements EntityInterface
                 unset($return['_expression']);
             }
         }
-        $return['subElements'] = array();
+        $return['subElements'] = [];
         foreach ($this->getSubElement() as $subElement) {
             $subElement_ajax = Utils::o2a($subElement);
             if ($_mode == 'array') {
@@ -342,7 +345,7 @@ class ScenarioElement implements EntityInterface
                     unset($subElement_ajax['_expression']);
                 }
             }
-            $subElement_ajax['expressions'] = array();
+            $subElement_ajax['expressions'] = [];
             foreach ($subElement->getExpression() as $expression) {
                 $expression_ajax = Utils::o2a($expression);
                 if ($_mode == 'array') {
@@ -359,7 +362,7 @@ class ScenarioElement implements EntityInterface
                         unset($expression_ajax['_expression']);
                     }
                 }
-                if ($expression->getType() == 'element') {
+                if ($expression->getType() == ScenarioExpressionType::ELEMENT) {
                     $element = ScenarioElementManager::byId($expression->getExpression());
                     if (is_object($element)) {
                         $expression_ajax['element'] = $element->getAjaxElement($_mode);
@@ -430,31 +433,31 @@ class ScenarioElement implements EntityInterface
         foreach ($this->getSubElement() as $subElement) {
             $return .= "\n";
             switch ($subElement->getType()) {
-                case 'if':
+                case ScenarioElementType::IF:
                     $return .= __('SI');
                     break;
-                case 'then':
+                case ScenarioElementType::THEN:
                     $return .= __('ALORS');
                     break;
-                case 'else':
+                case ScenarioElementType::ELSE:
                     $return .= __('SINON');
                     break;
-                case 'for':
+                case ScenarioElementType::FOR:
                     $return .= __('POUR');
                     break;
-                case 'do':
+                case ScenarioElementType::DO:
                     $return .= __('FAIRE');
                     break;
-                case 'code':
+                case ScenarioElementType::CODE:
                     $return .= __('CODE');
                     break;
-                case 'action':
+                case ScenarioElementType::ACTION:
                     $return .= __('ACTION');
                     break;
-                case 'in':
+                case ScenarioElementType::IN:
                     $return .= __('DANS');
                     break;
-                case 'at':
+                case ScenarioElementType::AT:
                     $return .= __('A');
                     break;
                 default:
@@ -543,31 +546,11 @@ class ScenarioElement implements EntityInterface
      * @param string $_default
      * @return array|bool|mixed|null|string
      */
-    /**
-     * @param string $_key
-     * @param string $_default
-     * @return array|bool|mixed|null|string
-     */
-    /**
-     * @param string $_key
-     * @param string $_default
-     * @return array|bool|mixed|null|string
-     */
     public function getOptions($_key = '', $_default = '')
     {
         return Utils::getJsonAttr($this->options, $_key, $_default);
     }
 
-    /**
-     * @param $_key
-     * @param $_value
-     * @return $this
-     */
-    /**
-     * @param $_key
-     * @param $_value
-     * @return $this
-     */
     /**
      * @param $_key
      * @param $_value
@@ -584,25 +567,11 @@ class ScenarioElement implements EntityInterface
     /**
      * @return int
      */
-    /**
-     * @return int
-     */
-    /**
-     * @return int
-     */
     public function getOrder()
     {
         return $this->order;
     }
 
-    /**
-     * @param $_order
-     * @return $this
-     */
-    /**
-     * @param $_order
-     * @return $this
-     */
     /**
      * @param $_order
      * @return $this
@@ -617,25 +586,11 @@ class ScenarioElement implements EntityInterface
     /**
      * @return bool
      */
-    /**
-     * @return bool
-     */
-    /**
-     * @return bool
-     */
     public function getChanged()
     {
         return $this->_changed;
     }
 
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    /**
-     * @param $_changed
-     * @return $this
-     */
     /**
      * @param $_changed
      * @return $this
@@ -646,12 +601,6 @@ class ScenarioElement implements EntityInterface
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    /**
-     * @return string
-     */
     /**
      * @return string
      */

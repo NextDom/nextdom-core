@@ -17,7 +17,10 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\CacheKey;
 use NextDom\Enums\DateFormat;
+use NextDom\Enums\LogTarget;
+use NextDom\Enums\NextDomObj;
 use NextDom\Enums\ScenarioState;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
@@ -269,7 +272,7 @@ class Scenario implements EntityInterface
         if ($state == ScenarioState::STARTING) {
             //Scénario bloqué en starting (Exemple de cause : trop de connexions à MySql, la connexion est refusée, le scénario plante)
             if (strtotime('now') - $this->getCache('startingTime') > 5) {
-                LogHelper::add('scenario', 'error', __('La dernière exécution du scénario ne s\'est pas lancée. Vérifiez le log scenario_execution, ainsi que le log du scénario') . " \"" . $this->getName() . "\".");
+                LogHelper::addError(LogTarget::SCENARIO, __('La dernière exécution du scénario ne s\'est pas lancée. Vérifiez le log scenario_execution, ainsi que le log du scénario') . " \"" . $this->getName() . "\".");
                 $this->setLog(__('La dernière exécution du scénario ne s\'est pas lancée. Vérifiez le log scenario_execution pour l\'exécution à ') . date(DateFormat::FULL, $this->getCache('startingTime')) . ".");
                 $this->persistLog();
             }
@@ -285,7 +288,7 @@ class Scenario implements EntityInterface
                     }
                 }
                 if ($state == ScenarioState::STARTING) {
-                    LogHelper::add('scenario', 'error', __('Trop d\'appel simultané du scénario, il ne peut-être exécuté une nouvelle fois. Il est conseillé de réduire les appels au scénario') . " \"" . $this->getName() . "\".");
+                    LogHelper::addError(LogTarget::SCENARIO, __('Trop d\'appel simultané du scénario, il ne peut-être exécuté une nouvelle fois. Il est conseillé de réduire les appels au scénario') . " \"" . $this->getName() . "\".");
                     $this->setLog(__('Trop d\'appel simultané du scénario, il ne peut-être exécuté une nouvelle fois. Il est conseillé de réduire les appels à ce scénario') . ".");
                     $this->persistLog();
                     return false;
@@ -399,14 +402,14 @@ class Scenario implements EntityInterface
 
         $cmd = CmdManager::byId(str_replace('#', '', $trigger));
         if (is_object($cmd)) {
-            LogHelper::add('event', 'info', __('Exécution du scénario ') . $this->getHumanName() . __(' déclenché par : ') . $cmd->getHumanName());
+            LogHelper::addInfo(LogTarget::EVENT, __('Exécution du scénario ') . $this->getHumanName() . __(' déclenché par : ') . $cmd->getHumanName());
             if ($this->getConfiguration('timeline::enable')) {
-                TimeLineHelper::addTimelineEvent(array('type' => 'scenario', 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => date(DateFormat::FULL), 'trigger' => $cmd->getHumanName(true)));
+                TimeLineHelper::addTimelineEvent(array('type' => NextDomObj::SCENARIO, 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => date(DateFormat::FULL), 'trigger' => $cmd->getHumanName(true)));
             }
         } else {
-            LogHelper::add('event', 'info', __('Exécution du scénario ') . $this->getHumanName() . __(' déclenché par : ') . $trigger);
+            LogHelper::addInfo(LogTarget::EVENT, __('Exécution du scénario ') . $this->getHumanName() . __(' déclenché par : ') . $trigger);
             if ($this->getConfiguration('timeline::enable')) {
-                TimeLineHelper::addTimelineEvent(array('type' => 'scenario', 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => date(DateFormat::FULL), 'trigger' => $trigger == 'schedule' ? 'programmation' : $trigger));
+                TimeLineHelper::addTimelineEvent(array('type' => NextDomObj::SCENARIO, 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => date(DateFormat::FULL), 'trigger' => $trigger == 'schedule' ? 'programmation' : $trigger));
             }
         }
         if (count($this->getTags()) == 0) {
@@ -445,7 +448,7 @@ class Scenario implements EntityInterface
      */
     public function getCache($key = '', $defaultValue = '')
     {
-        $scenarioCacheAttr = CacheManager::byKey('scenarioCacheAttr' . $this->getId())->getValue();
+        $scenarioCacheAttr = CacheManager::byKey(CacheKey::SCENARIO_CACHE_ATTR . $this->getId())->getValue();
         return Utils::getJsonAttr($scenarioCacheAttr, $key, $defaultValue);
     }
 
@@ -480,7 +483,7 @@ class Scenario implements EntityInterface
      */
     public function setCache($key, $valueToStore = null)
     {
-        CacheManager::set('scenarioCacheAttr' . $this->getId(), Utils::setJsonAttr(CacheManager::byKey('scenarioCacheAttr' . $this->getId())->getValue(), $key, $valueToStore));
+        CacheManager::set(CacheKey::SCENARIO_CACHE_ATTR . $this->getId(), Utils::setJsonAttr(CacheManager::byKey(CacheKey::SCENARIO_CACHE_ATTR . $this->getId())->getValue(), $key, $valueToStore));
     }
 
     /**
@@ -1039,7 +1042,7 @@ class Scenario implements EntityInterface
             self::$_templateArray = array();
         }
         if (!isset(self::$_templateArray[$version])) {
-            self::$_templateArray[$version] = FileSystemHelper::getCoreTemplateFileContent($version, 'scenario', '');
+            self::$_templateArray[$version] = FileSystemHelper::getCoreTemplateFileContent($version, NextDomObj::SCENARIO, '');
         }
         $html = Utils::templateReplace($replace, self::$_templateArray[$version]);
         CacheManager::set('scenarioHtml' . $version . $this->getId(), $html);
@@ -1059,7 +1062,7 @@ class Scenario implements EntityInterface
             if ($_user->getProfils() == 'admin' || $_user->getProfils() == 'user') {
                 return true;
             }
-            if (strpos($_user->getRights('scenario' . $this->getId()), $_right) !== false) {
+            if (strpos($_user->getRights(NextDomObj::SCENARIO . $this->getId()), $_right) !== false) {
                 return true;
             }
             return false;
@@ -1070,7 +1073,7 @@ class Scenario implements EntityInterface
         if (AuthentificationHelper::isConnectedAsAdmin() || AuthentificationHelper::isConnectedWithRights('user')) {
             return true;
         }
-        if (strpos(UserManager::getStoredUser()->getRights('scenario' . $this->getId()), $_right) !== false) {
+        if (strpos(UserManager::getStoredUser()->getRights(NextDomObj::SCENARIO . $this->getId()), $_right) !== false) {
             return true;
         }
         return false;
@@ -1233,8 +1236,8 @@ class Scenario implements EntityInterface
      */
     public function remove()
     {
-        ViewDataManager::removeByTypeLinkId('scenario', $this->getId());
-        DataStoreManager::removeByTypeLinkId('scenario', $this->getId());
+        ViewDataManager::removeByTypeLinkId(NextDomObj::SCENARIO, $this->getId());
+        DataStoreManager::removeByTypeLinkId(NextDomObj::SCENARIO, $this->getId());
         foreach ($this->getElement() as $element) {
             $element->remove();
         }
@@ -1242,7 +1245,7 @@ class Scenario implements EntityInterface
         if (file_exists(NEXTDOM_LOG . '/scenarioLog/scenario' . $this->getId() . '.log')) {
             unlink(NEXTDOM_LOG . '/scenarioLog/scenario' . $this->getId() . '.log');
         }
-        CacheManager::delete('scenarioCacheAttr' . $this->getId());
+        CacheManager::delete(CacheKey::SCENARIO_CACHE_ATTR . $this->getId());
         return DBHelper::remove($this);
     }
 
@@ -1256,9 +1259,9 @@ class Scenario implements EntityInterface
     public function removeData($_key, $_private = false)
     {
         if ($_private) {
-            $dataStore = DataStoreManager::byTypeLinkIdKey('scenario', $this->getId(), $_key);
+            $dataStore = DataStoreManager::byTypeLinkIdKey(NextDomObj::SCENARIO, $this->getId(), $_key);
         } else {
-            $dataStore = DataStoreManager::byTypeLinkIdKey('scenario', -1, $_key);
+            $dataStore = DataStoreManager::byTypeLinkIdKey(NextDomObj::SCENARIO, -1, $_key);
         }
         if (is_object($dataStore)) {
             return $dataStore->remove();
@@ -1278,7 +1281,7 @@ class Scenario implements EntityInterface
     public function setData($_key, $_value, $_private = false)
     {
         $dataStore = new DataStore();
-        $dataStore->setType('scenario');
+        $dataStore->setType(NextDomObj::SCENARIO);
         $dataStore->setKey($_key);
         $dataStore->setValue($_value);
         if ($_private) {
@@ -1314,9 +1317,9 @@ class Scenario implements EntityInterface
     public function getData($key, $protected = false, $default = '')
     {
         if ($protected !== false) {
-            $dataStore = DataStoreManager::byTypeLinkIdKey('scenario', $this->getId(), $key);
+            $dataStore = DataStoreManager::byTypeLinkIdKey(NextDomObj::SCENARIO, $this->getId(), $key);
         } else {
-            $dataStore = DataStoreManager::byTypeLinkIdKey('scenario', -1, $key);
+            $dataStore = DataStoreManager::byTypeLinkIdKey(NextDomObj::SCENARIO, -1, $key);
         }
         if (is_object($dataStore)) {
             return $dataStore->getValue($default);
@@ -1397,7 +1400,7 @@ class Scenario implements EntityInterface
      */
     public function stop()
     {
-        $crons = CronManager::searchClassAndFunction('scenario', 'doIn', '"scenario_id":' . $this->getId());
+        $crons = CronManager::searchClassAndFunction(NextDomObj::SCENARIO, 'doIn', '"scenario_id":' . $this->getId());
         if (is_array($crons)) {
             foreach ($crons as $cron) {
                 if ($cron->getState() == 'run') {
@@ -1405,7 +1408,7 @@ class Scenario implements EntityInterface
                         $cron->halt();
                         $cron->remove();
                     } catch (\Exception $e) {
-                        LogHelper::add('scenario', 'info', __('Can not stop subtask : ') . print_r($cron->getOption(), true));
+                        LogHelper::addInfo(LogTarget::SCENARIO, __('Can not stop subtask : ') . print_r($cron->getOption(), true));
                     }
                 }
             }
@@ -1499,7 +1502,7 @@ class Scenario implements EntityInterface
         if ($_drill === null) {
             $_drill = ConfigManager::byKey('graphlink::scenario::drill');
         }
-        if (isset($_data['node']['scenario' . $this->getId()])) {
+        if (isset($_data['node'][NextDomObj::SCENARIO . $this->getId()])) {
             return null;
         }
         if ($this->getIsActive() == 0 && $_level > 0) {
@@ -1510,8 +1513,8 @@ class Scenario implements EntityInterface
             return $_data;
         }
 
-        $_data['node']['scenario' . $this->getId()] = array(
-            'id' => 'scenario' . $this->getId(),
+        $_data['node'][NextDomObj::SCENARIO . $this->getId()] = array(
+            'id' => NextDomObj::SCENARIO . $this->getId(),
             'name' => $this->getName(),
             'fontweight' => ($_level == 1) ? 'bold' : 'normal',
             'shape' => 'rect',
@@ -1524,19 +1527,19 @@ class Scenario implements EntityInterface
         );
         $use = $this->getUse();
         $usedBy = $this->getUsedBy();
-        Utils::addGraphLink($this, 'scenario', $this->getObject(), 'object', $_data, $_level + 1, $_drill, array('dashvalue' => '1,0', 'lengthfactor' => 0.6));
-        Utils::addGraphLink($this, 'scenario', $use['cmd'], 'cmd', $_data, $_level, $_drill);
-        Utils::addGraphLink($this, 'scenario', $use['scenario'], 'scenario', $_data, $_level, $_drill);
-        Utils::addGraphLink($this, 'scenario', $use['eqLogic'], 'eqLogic', $_data, $_level, $_drill);
-        Utils::addGraphLink($this, 'scenario', $use['dataStore'], 'dataStore', $_data, $_level, $_drill);
-        Utils::addGraphLink($this, 'scenario', $use['view'], 'view', $_data, $_level, $_drill);
-        Utils::addGraphLink($this, 'scenario', $use['plan'], 'plan', $_data, $_level, $_drill);
-        Utils::addGraphLink($this, 'scenario', $usedBy['cmd'], 'cmd', $_data, $_level, $_drill);
-        Utils::addGraphLink($this, 'scenario', $usedBy['scenario'], 'scenario', $_data, $_level, $_drill);
-        Utils::addGraphLink($this, 'scenario', $usedBy['eqLogic'], 'eqLogic', $_data, $_level, $_drill);
-        Utils::addGraphLink($this, 'scenario', $usedBy['interactDef'], 'interactDef', $_data, $_level, $_drill, array('dashvalue' => '2,6', 'lengthfactor' => 0.6));
-        Utils::addGraphLink($this, 'scenario', $usedBy['plan'], 'plan', $_data, $_level, $_drill, array('dashvalue' => '2,6', 'lengthfactor' => 0.6));
-        Utils::addGraphLink($this, 'scenario', $usedBy['view'], 'view', $_data, $_level, $_drill, array('dashvalue' => '2,6', 'lengthfactor' => 0.6));
+        Utils::addGraphLink($this, NextDomObj::SCENARIO, $this->getObject(), 'object', $_data, $_level + 1, $_drill, array('dashvalue' => '1,0', 'lengthfactor' => 0.6));
+        Utils::addGraphLink($this, NextDomObj::SCENARIO, $use['cmd'], 'cmd', $_data, $_level, $_drill);
+        Utils::addGraphLink($this, NextDomObj::SCENARIO, $use[NextDomObj::SCENARIO], NextDomObj::SCENARIO, $_data, $_level, $_drill);
+        Utils::addGraphLink($this, NextDomObj::SCENARIO, $use['eqLogic'], 'eqLogic', $_data, $_level, $_drill);
+        Utils::addGraphLink($this, NextDomObj::SCENARIO, $use['dataStore'], 'dataStore', $_data, $_level, $_drill);
+        Utils::addGraphLink($this, NextDomObj::SCENARIO, $use['view'], 'view', $_data, $_level, $_drill);
+        Utils::addGraphLink($this, NextDomObj::SCENARIO, $use['plan'], 'plan', $_data, $_level, $_drill);
+        Utils::addGraphLink($this, NextDomObj::SCENARIO, $usedBy['cmd'], 'cmd', $_data, $_level, $_drill);
+        Utils::addGraphLink($this, NextDomObj::SCENARIO, $usedBy[NextDomObj::SCENARIO], NextDomObj::SCENARIO, $_data, $_level, $_drill);
+        Utils::addGraphLink($this, NextDomObj::SCENARIO, $usedBy['eqLogic'], 'eqLogic', $_data, $_level, $_drill);
+        Utils::addGraphLink($this, NextDomObj::SCENARIO, $usedBy['interactDef'], 'interactDef', $_data, $_level, $_drill, array('dashvalue' => '2,6', 'lengthfactor' => 0.6));
+        Utils::addGraphLink($this, NextDomObj::SCENARIO, $usedBy['plan'], 'plan', $_data, $_level, $_drill, array('dashvalue' => '2,6', 'lengthfactor' => 0.6));
+        Utils::addGraphLink($this, NextDomObj::SCENARIO, $usedBy['view'], 'view', $_data, $_level, $_drill, array('dashvalue' => '2,6', 'lengthfactor' => 0.6));
         return $_data;
     }
 
@@ -1671,17 +1674,16 @@ class Scenario implements EntityInterface
      */
     public function getUsedBy($_array = false)
     {
-        $return = ['cmd' => [], 'eqLogic' => [], 'scenario' => [], 'plan' => [], 'view' => []];
-        $return['cmd'] = CmdManager::searchConfiguration('#scenario' . $this->getId() . '#');
-        $return['eqLogic'] = EqLogicManager::searchConfiguration(['#scenario' . $this->getId() . '#', '"scenario_id":"' . $this->getId()]);
-        $return['interactDef'] = InteractDefManager::searchByUse(['#scenario' . $this->getId() . '#', '"scenario_id":"' . $this->getId()]);
+        $return = [NextDomObj::CMD => [], NextDomObj::EQLOGIC => [], NextDomObj::SCENARIO => [], NextDomObj::PLAN => [], NextDomObj::VIEW => []];
+        $return[NextDomObj::EQLOGIC] = EqLogicManager::searchConfiguration(['#scenario' . $this->getId() . '#', '"scenario_id":"' . $this->getId()]);
+        $return[NextDomObj::INTERACT_DEF] = InteractDefManager::searchByUse(['#scenario' . $this->getId() . '#', '"scenario_id":"' . $this->getId()]);
         // TODO: scenario_id, pas de guillemet ouvrant, à vérifier
-        $return['scenario'] = ScenarioManager::searchByUse([
-            ['action' => 'scenario', 'option' => 'scenario_id":"' . $this->getId() . '"', 'and' => true],
-            ['action' => '#scenario' . $this->getId() . '#']
+        $return[NextDomObj::SCENARIO] = ScenarioManager::searchByUse([
+            ['action' => NextDomObj::SCENARIO, 'option' => $this->getId(), 'and' => true],
+            ['action' => '#scenario' . $this->getId() . '#'],
         ]);
-        $return['view'] = ViewManager::searchByUse('scenario', $this->getId());
-        $return['plan'] = PlanHeaderManager::searchByUse('scenario', $this->getId());
+        $return[NextDomObj::VIEW] = ViewManager::searchByUse(NextDomObj::SCENARIO, $this->getId());
+        $return[NextDomObj::PLAN] = PlanHeaderManager::searchByUse(NextDomObj::SCENARIO, $this->getId());
         if ($_array) {
             foreach ($return as &$value) {
                 $value = Utils::o2a($value);

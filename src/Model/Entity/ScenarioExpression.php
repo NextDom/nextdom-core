@@ -19,6 +19,7 @@ namespace NextDom\Model\Entity;
 
 use NextDom\Enums\DateFormat;
 use NextDom\Enums\ScenarioExpressionAction;
+use NextDom\Enums\ScenarioExpressionSubType;
 use NextDom\Enums\ScenarioExpressionType;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
@@ -394,6 +395,7 @@ class ScenarioExpression implements EntityInterface
             sleep(1);
         }
         $this->setLog($scenario, __('[Wait] Condition valide : ') . $expression . ' => ' . $result);
+        return null;
     }
 
     /**
@@ -852,7 +854,7 @@ class ScenarioExpression implements EntityInterface
     {
         $cmd = CmdManager::byId(str_replace('#', '', $this->getExpression()));
         if (is_object($cmd)) {
-            if ($cmd->getSubType() == 'slider' && isset($options['slider'])) {
+            if ($cmd->getSubType() == ScenarioExpressionSubType::SLIDER && isset($options['slider'])) {
                 $options['slider'] = Utils::evaluate($options['slider']);
             }
             if (is_array($options) && (count($options) > 1 || (isset($options['background']) && $options['background'] == 1))) {

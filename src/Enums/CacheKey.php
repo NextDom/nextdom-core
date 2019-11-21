@@ -25,5 +25,6 @@ class CacheKey extends Enum
 {
     const EQLOGIC_CACHE_ATTR = 'eqLogicCacheAttr';
     const EQLOGIC_STATUS_ATTR = 'eqLogicStatusAttr';
+    const SCENARIO_CACHE_ATTR = 'scenarioCacheAttr';
     const WIDGET_HTML = 'widgetHtml';
 }

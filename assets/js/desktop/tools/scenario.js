@@ -1211,10 +1211,11 @@ function addExpression(expressionToAdd) {
 /**
  * Get the first expression HTML code
  * @param subElementData
+ * @param expressionType
  * @returns {string}
  */
-function addFirstExpressionHTML(subElementData) {
-    var expression = {type: 'condition'};
+function addFirstExpressionHTML(subElementData, expressionType) {
+    var expression = {type: expressionType};
     if (isset(subElementData.expressions) && isset(subElementData.expressions[0])) {
         expression = subElementData.expressions[0];
     }
@@ -1242,7 +1243,7 @@ function addAllExpressionsHTML(subElementData) {
  * @param subElementData
  * @returns {string}
  */
-function getIfSubElementHTML(subElementData) {
+function  getIfSubElementHTML(subElementData) {
     var htmlData = '';
     htmlData += '<input class="subElementAttr" data-l1key="subtype" type="hidden" value="condition"/>';
     htmlData += '<div class="scenario-si">';
@@ -1260,7 +1261,7 @@ function getIfSubElementHTML(subElementData) {
     }
     htmlData += '</div>';
     htmlData += '<div class="expressions scenario-condition">';
-    htmlData += addFirstExpressionHTML(subElementData);
+    htmlData += addFirstExpressionHTML(subElementData, 'condition');
     htmlData += '</div>';
     htmlData += '<div class="scenario-delete"><i class="fas fa-minus-circle pull-right cursor bt_removeElement"></i></div>';
     return htmlData;
@@ -1347,7 +1348,7 @@ function getForSubElementHTML(subElementData, elementColorIndex) {
     htmlData += '<span class="scenario-title">{{DE 1 A}}</span>';
     htmlData += '</div>';
     htmlData += '<div class="expressions scenario-condition">';
-    htmlData += addFirstExpressionHTML(subElementData);
+    htmlData += addFirstExpressionHTML(subElementData, 'condition');
     htmlData += '</div>';
     htmlData += '<div class="scenario-delete"><i class="fas fa-minus-circle pull-right cursor bt_removeElement"></i></div>';
     return htmlData;
@@ -1374,7 +1375,7 @@ function getInSubElementHTML(subElementData, elementColorIndex) {
     htmlData += '<span class="scenario-unity">(en min)</span>';
     htmlData += '</div>';
     htmlData += '<div class="expressions scenario-condition">';
-    htmlData += addFirstExpressionHTML(subElementData);
+    htmlData += addFirstExpressionHTML(subElementData, 'condition');
     htmlData += '</div>';
     htmlData += '<div class="scenario-delete"><i class="fas fa-minus-circle pull-right cursor bt_removeElement"></i></div>';
     return htmlData;
@@ -1401,7 +1402,7 @@ function getAtSubElementHTML(subElementData, elementColorIndex) {
     htmlData += '<span class="scenario-unity-line">{{(Hmm)}}</span>';
     htmlData += '</div>';
     htmlData += '<div class="expressions scenario-condition">';
-    htmlData += addFirstExpressionHTML(subElementData);
+    htmlData += addFirstExpressionHTML(subElementData, 'condition');
     htmlData += '</div>';
     htmlData += '<div class="scenario-delete"><i class="fas fa-minus-circle pull-right cursor bt_removeElement"></i></div>';
     return htmlData;
@@ -1456,7 +1457,7 @@ function getCodeSubElementHTML(subElementData, elementColorIndex) {
     htmlData += '<span class="scenario-title">{{CODE}}</span>';
     htmlData += '</div>';
     htmlData += '<div class="expressions scenario-condition" style="background-color: ' + listColor[elementColorIndex] + ';">';
-    htmlData += addFirstExpressionHTML(subElementData);
+    htmlData += addFirstExpressionHTML(subElementData, 'code');
     htmlData += '</div>';
     htmlData += '<div class="scenario-delete"><i class="fas fa-minus-circle pull-right cursor bt_removeElement"></i></div>';
     return htmlData;
@@ -1476,7 +1477,7 @@ function getCommentSubElementHTML(subElementData, elementColorIndex) {
     htmlData += '<i class="fas fa-sort bt_sortable"></i>';
     htmlData += '</div>';
     htmlData += '<div class="expressions scenario-condition" style="background-color: ' + listColor[elementColorIndex] + ';">';
-    htmlData += addFirstExpressionHTML(subElementData);
+    htmlData += addFirstExpressionHTML(subElementData, 'comment');
     htmlData += '</div>';
     htmlData += '<div class="scenario-delete"><i class="fas fa-minus-circle pull-right cursor bt_removeElement"></i></div>';
     return htmlData;
