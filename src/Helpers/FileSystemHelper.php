@@ -107,7 +107,7 @@ class FileSystemHelper
             $path = NEXTDOM_ROOT . '/' . $_folder . '/' . $_filename;
         }
         if (!file_exists($path)) {
-            throw new CoreException('Fichier introuvable : ' . $path, 35486);
+            throw new CoreException('File not found : ' . Utils::secureXSS($path), 35486);
         }
         if ($type == 'php') {
             // Les fichiers php sont traduits
