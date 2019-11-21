@@ -169,6 +169,11 @@ class nextdom
         NextDomHelper::event($event, $forceSyncMode);
     }
 
+    public static function cron10()
+    {
+        NextDomHelper::cron10();
+    }
+
     public static function cron5()
     {
         NextDomHelper::cron5();

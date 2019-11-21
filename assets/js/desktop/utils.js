@@ -397,7 +397,7 @@ function editWidgetCmdMode(_mode){
                         return !$(this).hasClass('allowLayout') || !$(this).hasClass('eqLogic_layout_table');
                     },
                     callback: function(key, opt){
-                        saveWidgetDisplay()
+                        saveWidgetDisplay();
                         nextdom.eqLogic.simpleSave({
                             eqLogic : {
                                 id : $(this).attr('data-eqLogic_id'),
@@ -416,7 +416,7 @@ function editWidgetCmdMode(_mode){
                         return !$(this).hasClass('allowLayout') || $(this).hasClass('eqLogic_layout_table');
                     },
                     callback: function(key, opt){
-                        saveWidgetDisplay()
+                        saveWidgetDisplay();
                         nextdom.eqLogic.simpleSave({
                             eqLogic : {
                                 id : $(this).attr('data-eqLogic_id'),
@@ -436,11 +436,15 @@ function editWidgetCmdMode(_mode){
                         return !$(this).hasClass('eqLogic_layout_table');
                     },
                     callback: function(key, opt){
-                        saveWidgetDisplay()
+                        saveWidgetDisplay();
+                        var column = 0;
+                        if($(this).find('table.tableCmd').attr('data-column') !== undefined){
+                            column = parseInt($(this).find('table.tableCmd').attr('data-column'));
+                        }
                         nextdom.eqLogic.simpleSave({
                             eqLogic : {
                                 id : $(this).attr('data-eqLogic_id'),
-                                display : {'layout::dashboard::table::nbColumn' : parseInt($(this).find('table.tableCmd').attr('data-column')) + 1},
+                                display : {'layout::dashboard::table::nbColumn' : column + 1},
                             },
                             error: function (error) {
                                 notify("Erreur", error.message, 'error');
@@ -455,11 +459,15 @@ function editWidgetCmdMode(_mode){
                         return !$(this).hasClass('eqLogic_layout_table');
                     },
                     callback: function(key, opt){
-                        saveWidgetDisplay()
+                        saveWidgetDisplay();
+                        var line = 0;
+                        if($(this).find('table.tableCmd').attr('data-line') !== undefined){
+                            line = parseInt($(this).find('table.tableCmd').attr('data-line'));
+                        }
                         nextdom.eqLogic.simpleSave({
                             eqLogic : {
                                 id : $(this).attr('data-eqLogic_id'),
-                                display : {'layout::dashboard::table::nbLine' : parseInt($(this).find('table.tableCmd').attr('data-line')) + 1},
+                                display : {'layout::dashboard::table::nbLine' : line + 1},
                             },
                             error: function (error) {
                                 notify("Erreur", error.message, 'error');
@@ -474,11 +482,16 @@ function editWidgetCmdMode(_mode){
                         return !$(this).hasClass('eqLogic_layout_table');
                     },
                     callback: function(key, opt){
-                        saveWidgetDisplay()
+                        saveWidgetDisplay();
+                        var column = 0;
+                        if($(this).find('table.tableCmd').attr('data-column') !== undefined){
+                            column = parseInt($(this).find('table.tableCmd').attr('data-column')) - 1;
+                            column = (column < 0) ? 0 : column;
+                        }
                         nextdom.eqLogic.simpleSave({
                             eqLogic : {
                                 id : $(this).attr('data-eqLogic_id'),
-                                display : {'layout::dashboard::table::nbColumn' : parseInt($(this).find('table.tableCmd').attr('data-column')) - 1},
+                                display : {'layout::dashboard::table::nbColumn' : column},
                             },
                             error: function (error) {
                                 notify("Erreur", error.message, 'error');
@@ -493,11 +506,16 @@ function editWidgetCmdMode(_mode){
                         return !$(this).hasClass('eqLogic_layout_table');
                     },
                     callback: function(key, opt){
-                        saveWidgetDisplay()
+                        saveWidgetDisplay();
+                        var line = 0;
+                        if($(this).find('table.tableCmd').attr('data-line') !== undefined){
+                            line = parseInt($(this).find('table.tableCmd').attr('data-line')) - 1;
+                            line = (line < 0) ? 0 : line;
+                        }
                         nextdom.eqLogic.simpleSave({
                             eqLogic : {
                                 id : $(this).attr('data-eqLogic_id'),
-                                display : {'layout::dashboard::table::nbLine' : parseInt($(this).find('table.tableCmd').attr('data-line')) - 1},
+                                display : {'layout::dashboard::table::nbLine' : line},
                             },
                             error: function (error) {
                                 notify("Erreur", error.message, 'error');

@@ -364,6 +364,7 @@ network:
   external-access: "Accès externe"
   management: "Gestion autonome du réseau"
   mask: "Masque d'IP local"
+  mobile: "Ma connexion internet est une ligne mobile"
   networks: "Réseaux"
   started: "Démarré : "
   stopped: "Arrêté"

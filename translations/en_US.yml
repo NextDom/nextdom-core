@@ -364,6 +364,7 @@ network:
   external-access: "External access"
   management: "Independent network management"
   mask: "Local IP mask"
+  mobile: "I use mobile connection"
   networks: "Networks"
   started: "Started : "
   stopped: "Stopped"

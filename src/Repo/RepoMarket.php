@@ -20,6 +20,7 @@
 
 namespace NextDom\Repo;
 
+use Icewind\SMB\System;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Api;
 use NextDom\Helpers\LogHelper;
@@ -890,6 +891,12 @@ class RepoMarket
 
     public static function monitoring_status()
     {
+        if(!file_exists('/etc/zabbix/zabbix_agentd.conf')){
+            return false;
+        }
+        if(exec('grep "jeedom.com" /etc/zabbix/zabbix_agentd.conf | grep -v "zabbix.jeedom.com" | wc -l') == 0){
+            return false;
+        }
         return (count(SystemHelper::ps('zabbix')) > 0);
     }
 
