@@ -109,6 +109,22 @@ class LogHelper
     }
 
     /**
+     * Log a critical message
+     *
+     * @param string $targetLog Target log file
+     * @param string $message Message to log
+     * @param string $logicalId Logical id linked to this log (optional)
+     *
+     * @return bool
+     *
+     * @throws \Exception
+     */
+    public static function addCritical($targetLog, $message, $logicalId = '')
+    {
+        return self::add($targetLog, 'critical', $message, $logicalId);
+    }
+
+    /**
      * Add a message to the log and ensure that there are never more than 1000 lines
      *
      * @param string $targetLog Target log file

@@ -20,6 +20,7 @@
 namespace NextDom\Helpers;
 
 use NextDom\Enums\FoldersReferential;
+use NextDom\Enums\LogTarget;
 use NextDom\Enums\PlanDisplayType;
 use NextDom\Exceptions\CoreException;
 use NextDom\Managers\BackupManager;
@@ -44,11 +45,11 @@ class MigrationHelper
      * @param string $logFile log name file to display information
      * @throws \Exception
      */
-    public static function migrate($logFile = 'migration')
+    public static function migrate($logFile = LogTarget::MIGRATION)
     {
         $migrate = false;
 
-        if ($logFile == 'migration') {
+        if ($logFile == LogTarget::MIGRATION) {
             LogHelper::clear($logFile);
         }
 
@@ -62,7 +63,7 @@ class MigrationHelper
         }
         $previousVersion = array_map('intval', $previousVersion);
         $message = 'Migration/Update process from --> ' . implode('.', $previousVersion);
-        if ($logFile == 'migration') {
+        if ($logFile == LogTarget::MIGRATION) {
             LogHelper::addInfo($logFile, $message, '');
         } else {
             ConsoleHelper::process($message);
@@ -72,7 +73,7 @@ class MigrationHelper
         $currentVersion = explode('.', NextDomHelper::getNextdomVersion());
         $currentVersion = array_map('intval', $currentVersion);
         $message = 'Migration/Update process to --> ' . implode('.', $currentVersion);
-        if ($logFile == 'migration') {
+        if ($logFile == LogTarget::MIGRATION) {
             LogHelper::addInfo($logFile, $message, '');
         } else {
             ConsoleHelper::process($message);
@@ -93,7 +94,7 @@ class MigrationHelper
                         if (method_exists(get_class(), 'migrate_' . $previousVersion[0] . '_' . $previousVersion[1] . '_' . $previousVersion[2])) {
                             $migrateMethod = 'migrate_' . $previousVersion[0] . '_' . $previousVersion[1] . '_' . $previousVersion[2];
                             $message = 'Start migration process for ' . $migrateMethod;
-                            if ($logFile == 'migration') {
+                            if ($logFile == LogTarget::MIGRATION) {
                                 LogHelper::addInfo($logFile, $message, '');
                             } else {
                                 ConsoleHelper::process($message);
@@ -104,7 +105,7 @@ class MigrationHelper
                                 throw new CoreException();
                             }
                             $message = 'Done migration process for ' . $migrateMethod;
-                            if ($logFile == 'migration') {
+                            if ($logFile == LogTarget::MIGRATION) {
                                 LogHelper::addInfo($logFile, $message, '');
                             } else {
                                 ConsoleHelper::process($message);
@@ -112,7 +113,7 @@ class MigrationHelper
                             ConfigManager::save('lastUpdateVersion', $previousVersion[0] . '.' . $previousVersion[1] . '.' . $previousVersion[2], 'core');
 
                             $message = 'Save migration process for ' . $migrateMethod;
-                            if ($logFile == 'migration') {
+                            if ($logFile == LogTarget::MIGRATION) {
                                 LogHelper::addInfo($logFile, $message, '');
                             } else {
                                 ConsoleHelper::process($message);
@@ -163,10 +164,10 @@ class MigrationHelper
      *
      * @throws \Exception
      */
-    private static function replaceJeedomInDatabase($logFile = 'migration')
+    private static function replaceJeedomInDatabase($logFile = LogTarget::MIGRATION)
     {
         $message = 'Replace jeedom in database';
-        if ($logFile == 'migration') {
+        if ($logFile == LogTarget::MIGRATION) {
             LogHelper::addInfo($logFile, $message, '');
         } else {
             ConsoleHelper::process($message);
@@ -228,7 +229,7 @@ class MigrationHelper
      * @param string $logFile log name file to display information
      * @throws \Exception
      */
-    private static function migrate_0_0_0($logFile = 'migration')
+    private static function migrate_0_0_0($logFile = LogTarget::MIGRATION)
     {
 
         $migrateFile = sprintf("%s/install/migrate/migrate_0_0_0.sql", NEXTDOM_ROOT);
@@ -236,7 +237,7 @@ class MigrationHelper
         BackupManager::loadSQLFromFile($migrateFile);
 
         $message = 'Database basic update';
-        if ($logFile == 'migration') {
+        if ($logFile == LogTarget::MIGRATION) {
             LogHelper::addInfo($logFile, $message, '');
         } else {
             ConsoleHelper::process($message);
@@ -256,7 +257,7 @@ class MigrationHelper
      * @param string $logFile log name file to display information
      * @throws \Exception
      */
-    private static function migrate_0_3_0($logFile = 'migration')
+    private static function migrate_0_3_0($logFile = LogTarget::MIGRATION)
     {
         self::movePersonalFoldersAndFilesToData($logFile);
     }
@@ -266,10 +267,10 @@ class MigrationHelper
      * @param string $logFile log name file to display information
      * @throws \Exception
      */
-    private static function movePersonalFoldersAndFilesToData($logFile = 'migration')
+    private static function movePersonalFoldersAndFilesToData($logFile = LogTarget::MIGRATION)
     {
         $message = 'Update theme folder';
-        if ($logFile == 'migration') {
+        if ($logFile == LogTarget::MIGRATION) {
             LogHelper::addInfo($logFile, $message, '');
         } else {
             ConsoleHelper::process($message);
@@ -286,7 +287,7 @@ class MigrationHelper
 
         try {
             $message = 'Start moving files and folders process to ' . NEXTDOM_DATA;
-            if ($logFile == 'migration') {
+            if ($logFile == LogTarget::MIGRATION) {
                 LogHelper::addInfo($logFile, $message, '');
             } else {
                 ConsoleHelper::process($message);
@@ -303,7 +304,7 @@ class MigrationHelper
 
                         $fileToReplace = $fileInfo->getFilename();
                         $message = 'Moving ' . NEXTDOM_ROOT . '/' . $fileToReplace;
-                        if ($logFile == 'migration') {
+                        if ($logFile == LogTarget::MIGRATION) {
                             LogHelper::addInfo($logFile, $message, '');
                         } else {
                             ConsoleHelper::process($message);
@@ -390,7 +391,7 @@ class MigrationHelper
         }
 
         $message = 'Migrate theme to data folder is done';
-        if ($logFile == 'migration') {
+        if ($logFile == LogTarget::MIGRATION) {
             LogHelper::addInfo($logFile, $message, '');
         } else {
             ConsoleHelper::process($message);
@@ -413,7 +414,7 @@ class MigrationHelper
             $oldReferencePath = '';
         }
         $message = 'Migrate ' . $oldReferencePath . $fileToReplace . ' to ' . $newReferencePath . $fileToReplace;
-        if ($logFile == 'migration') {
+        if ($logFile == LogTarget::MIGRATION) {
             LogHelper::addInfo($logFile, $message, '');
         } else {
             ConsoleHelper::process($message);
@@ -460,18 +461,23 @@ class MigrationHelper
      * @param string $logFile log name file to display information
      * @throws \Exception
      */
-    private static function migrate_0_5_2($logFile = 'migration')
+    private static function migrate_0_5_2($logFile = LogTarget::MIGRATION)
     {
           if (is_dir(NEXTDOM_DATA . '/data/php')) {
               FileSystemHelper::rrmfile(NEXTDOM_DATA . '/data/php/user.function.class.php');
               FileSystemHelper::rrmfile(NEXTDOM_DATA . '/data/php/user.function.class.sample.php');
           }
           $message = 'user.function files removed';
-          if ($logFile == 'migration') {
+          if ($logFile == LogTarget::MIGRATION) {
               LogHelper::addInfo($logFile, $message, '');
           } else {
               ConsoleHelper::process($message);
           }
     }
     /***********************************************************************************************************************************************************/
+
+    private static function migrate_0_6_1($logFile = LogTarget::MIGRATION) {
+        exec("sudo sed -i '/vm.swappiness=/d' /etc/sysctl.d/99-sysctl.conf");
+        exec("sudo echo 'vm.swappiness=10' >> /etc/sysctl.d/99-sysctl.conf");
+    }
 }

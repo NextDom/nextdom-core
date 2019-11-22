@@ -54,7 +54,9 @@ class FileSystemHelper
      */
     public static function includeFile($_folder, $_filename, $_type, $_plugin = '', $translate = false)
     {
-        // Aucune particularité pour les 3rdparty
+        if(strpos($_folder,'..') !== false || strpos($_filename,'..') !== false){
+            return;
+        }        // Aucune particularité pour les 3rdparty
         if ($_folder == '3rdparty') {
             if ($_plugin === '') {
                 $file = sprintf("%s/%s.%s", $_folder, $_filename, $_type);
@@ -107,7 +109,7 @@ class FileSystemHelper
             $path = NEXTDOM_ROOT . '/' . $_folder . '/' . $_filename;
         }
         if (!file_exists($path)) {
-            throw new CoreException('Fichier introuvable : ' . $path, 35486);
+            throw new CoreException('Fichier introuvable : ' . Utils::secureXSS($path), 35486);
         }
         if ($type == 'php') {
             // Les fichiers php sont traduits

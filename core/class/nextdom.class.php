@@ -129,7 +129,7 @@ class nextdom
         BackupManager::restore($backupFilePath, $taskInBackground);
     }
 
-    public static function update($options = array())
+    public static function update($options = [])
     {
         NextDomHelper::update($options);
     }
@@ -167,6 +167,11 @@ class nextdom
     public static function event($event, $forceSyncMode = false)
     {
         NextDomHelper::event($event, $forceSyncMode);
+    }
+
+    public static function cron10()
+    {
+        NextDomHelper::cron10();
     }
 
     public static function cron5()

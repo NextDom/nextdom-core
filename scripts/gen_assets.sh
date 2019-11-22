@@ -39,7 +39,6 @@ function gen_css {
     done
   	# Path replace
   	sed -i s#\"images/ui-#\"/assets/css/vendors/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.css
-  	sed -i s#\"images/ui-#\"/assets/css/vendors/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.mob.css
 }
 
 function gen_js {
@@ -53,6 +52,7 @@ function gen_js {
            assets/3rdparty/jquery.utils/jquery.utils.js \
            assets/3rdparty/jquery.at.caret/jquery.at.caret.min.js \
            assets/3rdparty/jquery.multi-column-select/multi-column-select.js \
+           assets/3rdparty/jquery.ui-touch-punch/jquery.ui.touch-punch.min.js \
            assets/js/core/core.js \
            assets/js/core/nextdom.class.js \
            assets/js/core/private.class.js \

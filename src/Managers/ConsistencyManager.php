@@ -167,6 +167,10 @@ class ConsistencyManager
                     "timeout" => 60,
                     "enabled" => 1
                 ),
+                "cron10" => array(
+                    "schedule" => "*/10 * * * * *",
+                    "timeout" => 10
+                ),
                 "cron5" => array(
                     "schedule" => "*/5 * * * * *",
                     "timeout" => 5

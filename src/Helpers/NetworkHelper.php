@@ -532,6 +532,11 @@ class NetworkHelper
         $openvpn->setConfiguration('compression', 'comp-lzo');
         $openvpn->setConfiguration('remote_port', ConfigManager::byKey('vpn::port', 'core', 1194));
         $openvpn->setConfiguration('auth_mode', 'password');
+        if(ConfigManager::byKey('connection::4g') == 1){
+            $openvpn->setConfiguration('optionsAfterStart', 'sudo ip link set dev #interface# mtu 1300');
+        }else{
+            $openvpn->setConfiguration('optionsAfterStart', '');
+        }
         $openvpn->save(true);
         if (!file_exists(NEXTDOM_ROOT . '/plugins/openvpn/data')) {
             shell_exec('mkdir -p ' . NEXTDOM_ROOT . '/plugins/openvpn/data');

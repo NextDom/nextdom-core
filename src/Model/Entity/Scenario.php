@@ -1671,14 +1671,15 @@ class Scenario implements EntityInterface
      */
     public function getUsedBy($_array = false)
     {
-        $return = array('cmd' => array(), 'eqLogic' => array(), 'scenario' => array(), 'plan' => array(), 'view' => array());
+        $return = ['cmd' => [], 'eqLogic' => [], 'scenario' => [], 'plan' => [], 'view' => []];
         $return['cmd'] = CmdManager::searchConfiguration('#scenario' . $this->getId() . '#');
-        $return['eqLogic'] = EqLogicManager::searchConfiguration(array('#scenario' . $this->getId() . '#', '"scenario_id":"' . $this->getId()));
-        $return['interactDef'] = InteractDefManager::searchByUse(array('#scenario' . $this->getId() . '#', '"scenario_id":"' . $this->getId()));
-        $return['scenario'] = ScenarioManager::searchByUse(array(
-            array('action' => 'scenario', 'option' => $this->getId(), 'and' => true),
-            array('action' => '#scenario' . $this->getId() . '#'),
-        ));
+        $return['eqLogic'] = EqLogicManager::searchConfiguration(['#scenario' . $this->getId() . '#', '"scenario_id":"' . $this->getId()]);
+        $return['interactDef'] = InteractDefManager::searchByUse(['#scenario' . $this->getId() . '#', '"scenario_id":"' . $this->getId()]);
+        // TODO: scenario_id, pas de guillemet ouvrant, à vérifier
+        $return['scenario'] = ScenarioManager::searchByUse([
+            ['action' => 'scenario', 'option' => 'scenario_id":"' . $this->getId() . '"', 'and' => true],
+            ['action' => '#scenario' . $this->getId() . '#']
+        ]);
         $return['view'] = ViewManager::searchByUse('scenario', $this->getId());
         $return['plan'] = PlanHeaderManager::searchByUse('scenario', $this->getId());
         if ($_array) {

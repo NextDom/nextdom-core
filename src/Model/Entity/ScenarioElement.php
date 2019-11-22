@@ -18,6 +18,7 @@
 namespace NextDom\Model\Entity;
 
 use NextDom\Enums\DateFormat;
+use NextDom\Enums\NextDomObj;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\LogHelper;
@@ -250,12 +251,12 @@ class ScenarioElement implements EntityInterface
             if (!is_numeric($next) || $next < 0) {
                 throw new CoreException(__('Bloc type A : ') . $this->getId() . __(', heure programmée invalide : ') . $next);
             }
-            if ($next < date('Gi')) {
+            if ($next <= date('Gi')) {
                 $next = str_repeat('0', 4 - strlen($next)) . $next;
-                $next = date('Y-m-d', strtotime('+1 day' . date('Y-m-d'))) . ' ' . substr($next, 0, 2) . ':' . substr($next, 2, 4);
+                $next = date(DateFormat::FULL_DAY, strtotime('+1 day' . date(DateFormat::FULL_DAY))) . ' ' . substr($next, 0, 2) . ':' . substr($next, 2, 4);
             } else {
                 $next = str_repeat('0', 4 - strlen($next)) . $next;
-                $next = date('Y-m-d') . ' ' . substr($next, 0, 2) . ':' . substr($next, 2, 4);
+                $next = date(DateFormat::FULL_DAY) . ' ' . substr($next, 0, 2) . ':' . substr($next, 2, 4);
             }
             $next = strtotime($next);
             if ($next < strtotime('now')) {
@@ -269,8 +270,8 @@ class ScenarioElement implements EntityInterface
                     }
                 }
             }
-            $cron = new cron();
-            $cron->setClass('scenario');
+            $cron = new Cron();
+            $cron->setClass(NextDomObj::SCENARIO);
             $cron->setFunction('doIn');
             $cron->setOption(array('scenario_id' => intval($_scenario->getId()), 'scenarioElement_id' => intval($this->getId()), 'second' => 0, 'tags' => $_scenario->getTags()));
             $cron->setLastRun(date(DateFormat::FULL, strtotime('now')));

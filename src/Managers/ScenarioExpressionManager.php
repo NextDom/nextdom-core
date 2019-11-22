@@ -601,11 +601,11 @@ class ScenarioExpressionManager
                     return '';
                 }
             }
-            $historyStatistique = $cmd->getStatistique($startHist, date(DateFormat::FULL));
-            if (!isset($historyStatistique['avg']) || $historyStatistique['avg'] == '') {
+            $historyStatistic = $cmd->getStatistique($startHist, date(DateFormat::FULL));
+            if (!isset($historyStatistic['avg']) || $historyStatistic['avg'] == '') {
                 return $cmd->execCmd();
             }
-            return round($historyStatistique['avg'], 1);
+            return round($historyStatistic['avg'], 1);
         }
     }
 
@@ -628,11 +628,11 @@ class ScenarioExpressionManager
         }
         $startDate = date(DateFormat::FULL, strtotime(self::setTags($startDate)));
         $endDate = date(DateFormat::FULL, strtotime(self::setTags($endDate)));
-        $historyStatistique = $cmd->getStatistique($startDate, $endDate);
-        if (!isset($historyStatistique['avg'])) {
+        $historyStatistic = $cmd->getStatistique($startDate, $endDate);
+        if (!isset($historyStatistic['avg'])) {
             return '';
         }
-        return round($historyStatistique['avg'], 1);
+        return round($historyStatistic['avg'], 1);
     }
 
     /**
@@ -645,10 +645,11 @@ class ScenarioExpressionManager
      * @param $_value
      * @return mixed
      */
-    public static function color_gradient($_from_color, $_to_color, $_min,$_max,$_value) {
-        if(!is_numeric($_value)){
+    public static function color_gradient($_from_color, $_to_color, $_min, $_max, $_value)
+    {
+        if (!is_numeric($_value)) {
             $value = round(NextDomHelper::evaluateExpression($_value));
-        }else{
+        } else {
             $value = round($_value);
         }
         $graduations = $_max - $_min - 1;
@@ -673,10 +674,10 @@ class ScenarioExpressionManager
         } else {
             $RetVal[] = $_from_color;
         }
-        if(isset($RetVal[$value])){
+        if (isset($RetVal[$value])) {
             return $RetVal[$value];
         }
-        if($_value <= $_min){
+        if ($_value <= $_min) {
             return $RetVal[0];
         }
         return $RetVal[count($RetVal) - 1];
@@ -1145,8 +1146,11 @@ class ScenarioExpressionManager
         }
         $startDate = date(DateFormat::FULL, strtotime(self::setTags($startDate)));
         $endDate = date(DateFormat::FULL, strtotime(self::setTags($endDate)));
-        $historyStatistique = $cmd->getStatistique($startDate, $endDate);
-        return round($historyStatistique['last'], 1);
+        $historyStatistic = $cmd->getStatistique($startDate, $endDate);
+        if (!$historyStatistic['last']) {
+            return '';
+        }
+        return round($historyStatistic['last'], 1);
     }
 
     /**

@@ -27,5 +27,7 @@ class LogTarget extends Enum
     const CMD = 'cmd';
     const EVENT = 'event';
     const MIGRATION = 'migration';
+    const NEXTDOM = 'nextdom';
     const RESTORE = 'restore';
+    const STARTING = 'starting';
 }

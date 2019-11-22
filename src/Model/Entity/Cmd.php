@@ -230,7 +230,7 @@ class Cmd implements EntityInterface
             return;
         }
         $value = $cmd->execCmd();
-        $level = $cmd->checkAlertLevel($value, false);
+        $level = $cmd->checkAlertLevel($value, false, $_options['level']);
         if ($level != 'none') {
             $cmd->actionAlertLevel($level, $value);
         }
@@ -1316,56 +1316,63 @@ class Cmd implements EntityInterface
     /**
      * @param $_value
      * @param bool $_allowDuring
+     * @param string $_checkLevel
      * @return int|string
      * @throws CoreException
      * @throws \ReflectionException
      */
-    public function checkAlertLevel($_value, $_allowDuring = true)
+    public function checkAlertLevel($_value, $_allowDuring = true, $_checkLevel = 'none')
     {
-        if ($this->getType() != CmdType::INFO || ($this->getAlert('warningif') == '' && $this->getAlert('dangerif') == '')) {
+        if ($this->getType() != 'info' || ($this->getAlert('warningif') == '' && $this->getAlert('dangerif') == '')) {
             return 'none';
         }
         global $NEXTDOM_INTERNAL_CONFIG;
-
-        $currentLevel = 'none';
+        $returnLevel = 'none';
         foreach ($NEXTDOM_INTERNAL_CONFIG['alerts'] as $level => $value) {
-            if (!$value['check']) {
-                continue;
-            }
             if ($this->getAlert($level . 'if') != '') {
                 $check = NextDomHelper::evaluateExpression(str_replace('#value#', $_value, $this->getAlert($level . 'if')));
                 if ($check == 1 || $check || $check == '1') {
                     $currentLevel = $level;
+                    if ($_allowDuring && $currentLevel != 'none' && $this->getAlert($currentLevel . 'during') != '' && $this->getAlert($currentLevel . 'during') > 0) {
+                        $cron = CronManager::byClassAndFunction('cmd', 'duringAlertLevel', array('cmd_id' => intval($this->getId()), 'level' => $currentLevel));
+                        $next = strtotime('+ ' . $this->getAlert($currentLevel . 'during', 1) . ' minutes ' . date(DateFormat::FULL));
+                        if ($currentLevel != $this->getCache('alertLevel')) {
+                            if (!is_object($cron)) {
+                                if (!($currentLevel == 'warning' && $this->getCache('alertLevel') == 'danger')) {
+                                    $cron = new Cron();
+                                    $cron->setClass(NextDomObj::CMD);
+                                    $cron->setFunction('duringAlertLevel');
+                                    $cron->setOnce(1);
+                                    $cron->setOption(['cmd_id' => intval($this->getId()), 'level' => $currentLevel]);
+                                    $cron->setSchedule(CronManager::convertDateToCron($next));
+                                    $cron->setLastRun(date(DateFormat::FULL));
+                                    $cron->save();
+                                } else { //je suis en condition de warning et le cron n'existe pas mais j'etais en danger, je suppose que le cron a expiré
+                                    $returnLevel = $currentLevel;
+                                }
+                            }
+                        } else { // il n'y a pas de cron mais j'etais deja dans ce niveau, j'y reste
+                            $returnLevel = $this->getCache('alertLevel');
+                        }
+                    }
+                    if (!($_allowDuring && $this->getAlert($currentLevel . 'during') != '' && $this->getAlert($currentLevel . 'during') > 0)) { //je suis en alerte sans delai ou en execution de cron
+                        if ($_checkLevel == $currentLevel || $_checkLevel == 'none') { //si c'etait un cron, je ne teste que le niveau demandé
+                            if (!($_checkLevel == 'warning' && $this->getCache('alertLevel') == 'danger')) {
+                                $returnLevel = $currentLevel;
+                            } else { // le cron me demande de passer en warning mais je suis deja en danger, je reste en danger
+                                $returnLevel = $this->getCache('alertLevel');
+                            }
+                        }
+                    }
+                } else { // je ne suis pas dans la condition, je supprime le cron
+                    $cron = CronManager::byClassAndFunction(NextDomObj::CMD, 'duringAlertLevel', ['cmd_id' => intval($this->getId()), 'level' => $level]);
+                    if (is_object($cron)) {
+                        $cron->remove(false);
+                    }
                 }
             }
         }
-        if ($_allowDuring && $currentLevel != 'none' && $this->getAlert($currentLevel . 'during') != '' && $this->getAlert($currentLevel . 'during') > 0) {
-            $cron = CronManager::byClassAndFunction('cmd', 'duringAlertLevel', ['cmd_id' => intval($this->getId())]);
-            $next = strtotime('+ ' . $this->getAlert($currentLevel . 'during', 1) . ' minutes ' . date(DateFormat::FULL));
-            if (!is_object($cron)) {
-                $cron = new cron();
-            } else {
-                $nextRun = $cron->getNextRunDate();
-                if ($nextRun !== false && $next > strtotime($nextRun) && strtotime($nextRun) > strtotime('now')) {
-                    return 'none';
-                }
-            }
-            $cron->setClass('cmd');
-            $cron->setFunction('duringAlertLevel');
-            $cron->setOnce(1);
-            $cron->setOption(['cmd_id' => intval($this->getId())]);
-            $cron->setSchedule(CronManager::convertDateToCron($next));
-            $cron->setLastRun(date(DateFormat::FULL));
-            $cron->save();
-            return 'none';
-        }
-        if ($_allowDuring && $currentLevel == 'none') {
-            $cron = CronManager::byClassAndFunction('cmd', 'duringAlertLevel', ['cmd_id' => intval($this->getId())]);
-            if (is_object($cron)) {
-                $cron->remove(false);
-            }
-        }
-        return $currentLevel;
+        return $returnLevel;
     }
 
     /**
@@ -1408,7 +1415,10 @@ class Cmd implements EntityInterface
         }
         global $NEXTDOM_INTERNAL_CONFIG;
         $this->setCache('alertLevel', $_level);
-        $eqLogic = $this->getEqLogicId();
+        $eqLogic = $this->getEqLogic();
+        if($eqLogic->getIsEnable() == 0){
+            return;
+        }
         $maxAlert = $eqLogic->getMaxCmdAlert();
         $prevAlert = $eqLogic->getAlert();
         if (!$_value) {
@@ -1490,7 +1500,7 @@ class Cmd implements EntityInterface
         }
         $oldValue = $this->execCmd();
         $repeat = ($oldValue == $eventValue && $oldValue !== '' && $oldValue !== null);
-        $this->setCollectDate(($_datetime !== null) ? $_datetime : date(DateFormat::FULL));
+        $this->setCollectDate(($_datetime != null) ? $_datetime : date(DateFormat::FULL));
         $this->setCache('collectDate', $this->getCollectDate());
         $this->setValueDate(($repeat) ? $this->getValueDate() : $this->getCollectDate());
         $eqLogic->setStatus(['lastCommunication' => $this->getCollectDate(), 'timeout' => 0]);
@@ -1732,6 +1742,7 @@ class Cmd implements EntityInterface
             '#cmd_id#' => $this->getId(),
             '#humanname#' => urlencode($this->getHumanName()),
             '#eq_name#' => urlencode($this->getEqLogicId()->getName()),
+            '"' => ''
         ];
         $url = str_replace(array_keys($replace), $replace, $url);
         LogHelper::addInfo(LogTarget::EVENT, __('Appels de l\'URL de push pour la commande ') . $this->getHumanName() . ' : ' . $url);

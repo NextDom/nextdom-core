@@ -116,24 +116,35 @@
       padding: 2px 2px 0px 2px;
   }
 }
-#dashboard-content .eqLogic-widget>center:first-child {
-  padding: 6px 5px;
-  text: {
-      transform: uppercase;
-      align: center;
+#dashboard-content {
+  .widget-vertical-align {
+      position: relative;
+      transform: translateY(-50%);
+      top: calc(50% - 28px);
+      div {
+          margin: auto;
+      }
   }
-  font-size: 12px;
+  .widget-name {
+      background: #ffffff20;
+  }
+  .card-header {
+      margin-bottom: -20px;
+      min-height: 70px;
+  }
+  .card {
+      min-height: 35px;
+  }
+  .widget-name a,
+  .eqLogic-widget .box-header .box-title {
+      font-size: 14px !important;
+      text-transform: uppercase;
+      text-align: center;
+      font-weight: 400;
+  }
 }
 .widget-content {
     text-align: center;
-}
-.widget-vertical-align {
-    position: relative;
-    transform: translateY(-50%);
-    top: calc(50% - 28px);
-    div {
-        margin: auto;
-    }
 }
 .statusCmd {
     position : absolute;
@@ -141,25 +152,4 @@
     bottom : 0px;
     width : 30px;
     z-index: 1030;
-}
-
-/* Core-Ajout : Tuile header */
-#dashboard-content .widget-name,
-#dashboard-content .eqLogic-widget>center:first-child {
-    background: #ffffff20;
-}
-#dashboard-content .widget-name a,
-#dashboard-content .eqLogic-widget>center:first-child>a,
-#dashboard-content .eqLogic-widget .box-header .box-title {
-    font-size: 14px !important;
-    text-transform: uppercase;
-    text-align: center;
-    font-weight: 400;
-}
-#dashboard-content .card-header {
-    margin-bottom: -20px;
-    min-height: 70px;
-}
-#dashboard-content .card {
-    min-height: 35px;
 }

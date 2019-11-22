@@ -144,6 +144,7 @@ class PrepareView
             $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.utils/jquery.utils.js';
             $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.at.caret/jquery.at.caret.min.js';
             $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.multi-column-select/multi-column-select.js';
+            $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.ui-touch-punch/jquery.ui.touch-punch.min.js';
 
             // Add NextDom core JS
             $pageData['JS_POOL'][] = '/assets/js/core/core.js';

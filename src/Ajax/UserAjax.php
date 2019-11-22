@@ -17,6 +17,7 @@
 
 namespace NextDom\Ajax;
 
+use NextDom\Com\ComShell;
 use NextDom\Enums\AjaxParams;
 use NextDom\Enums\DateFormat;
 use NextDom\Enums\UserRight;
@@ -27,6 +28,7 @@ use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SessionHelper;
+use NextDom\Helpers\SystemHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\EqLogicManager;
@@ -58,7 +60,17 @@ class UserAjax extends BaseAjax
     public function login()
     {
         if (!file_exists(session_save_path())) {
-            mkdir(session_save_path());
+            try {
+                ComShell::execute(SystemHelper::getCmdSudo() . ' mkdir ' . session_save_path() . ';' . SystemHelper::getCmdSudo() . ' chmod 777 -R ' . session_save_path());
+            } catch (CoreException $e) {
+
+            }
+        }
+        try {
+            if (ComShell::execute(SystemHelper::getCmdSudo() . ' ls ' . session_save_path() . ' | wc -l') > 500) {
+                ComShell::execute(SystemHelper::getCmdSudo() . '/usr/lib/php/sessionclean');
+            }
+        } catch (CoreException $e) {
         }
         if (!AuthentificationHelper::isConnected()) {
             if (ConfigManager::byKey('sso:allowRemoteUser') == 1) {
