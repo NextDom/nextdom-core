@@ -12,14 +12,19 @@
 * Contenu des tuiles du dashboard centré verticalement
 
 #### AMELIORATIONS / MODIFICATIONS
+* Merge Jeedom 3.3.38
 * Ajout d'un lien direct au testeur d'expression dans le sidemenu
 * Tri alphabétique des catégories et nom de plugins dans le sidemenu
 * Nettoyage et Amélioration visuelle de la page services
 * Revue des pages administration
   * Mise en onglet pour aérer la lecture
   * Onglet iconisés dynamique suivant résolution
+* Ajout de tests unitaires
+* Amélioration du score sonarCloud
 
 #### FIXS
+* Fix de l'interpretation mauvaise des ON/OFF dans les expressions et des commandes binaires
+* Fix failles de sécurité
 * [liste ici](https://github.com/NextDom/nextdom-core/milestone/19?closed=1)
 ---
 ## 0.5.4
