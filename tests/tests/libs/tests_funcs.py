@@ -211,7 +211,15 @@ def run_test(path, parameters=None):
     test_cmd = 'python3 -W ignore ' + path
     if parameters is not None:
         test_cmd = test_cmd + ' ' + ' '.join(parameters)
-    std_out, status = get_command_output(test_cmd)
-    print(std_out)
+    cmd_process = subprocess.Popen(test_cmd,
+                                   stdout=subprocess.PIPE,
+                                   stderr=subprocess.STDOUT,
+                                   shell=True)
+
+    while cmd_process.poll() is None:
+        line = cmd_process.stdout.readline()
+        if line:
+            print(line.strip().decode('utf-8'))
+    status = cmd_process.returncode
     if status != 0:
         sys.exit(1)

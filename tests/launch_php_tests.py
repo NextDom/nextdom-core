@@ -28,6 +28,7 @@ def php_tests():
     if return_code != 0:
         sys.exit(1)
     copy_file_from_container(container_name, '/var/www/html/tests/coverage/clover.xml', 'coverage/') #pylint: disable=line-too-long
+    copy_file_from_container(container_name, '/var/www/html/tests/coverage/junitlog.xml', 'coverage/') #pylint: disable=line-too-long
     remove_test_container(container_name)
 
 if __name__ == "__main__":
