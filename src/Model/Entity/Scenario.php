@@ -338,6 +338,15 @@ class Scenario implements EntityInterface
     }
 
     /**
+     * Get active state of the scenario
+     *
+     * @return bool Active state
+     */
+    public function isActive(): bool {
+        return $this->isActive == 1;
+    }
+
+    /**
      *
      * @param string $key
      * @param mixed $defaultValue

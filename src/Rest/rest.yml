@@ -110,3 +110,15 @@ scenario_stop:
   methods: POST
   requirements:
     scenarioId: \d+
+scenario_enable:
+  path: '/scenario/enable/{scenarioId}'
+  controller: NextDom\Rest\ScenarioRest::enable
+  methods: POST
+  requirements:
+    scenarioId: \d+
+scenario_disable:
+  path: '/scenario/disable/{scenarioId}'
+  controller: NextDom\Rest\ScenarioRest::disable
+  methods: POST
+  requirements:
+    scenarioId: \d+
