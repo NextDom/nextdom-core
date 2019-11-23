@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\DataStoreManager;
@@ -124,7 +125,7 @@ class EqReal implements EntityInterface
     public function save()
     {
         if ($this->getName() == '') {
-            throw new \Exception(__('Le nom de l\'équipement réel ne peut pas être vide'));
+            throw new CoreException(__('Le nom de l\'équipement réel ne peut pas être vide'));
         }
         return DBHelper::save($this);
     }

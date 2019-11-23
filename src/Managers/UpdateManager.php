@@ -34,6 +34,8 @@
 namespace NextDom\Managers;
 
 use NextDom\Enums\DateFormat;
+use NextDom\Enums\LogTarget;
+use NextDom\Enums\NextDomObj;
 use NextDom\Enums\UpdateStatus;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
@@ -49,6 +51,7 @@ use NextDom\Model\Entity\Update;
  */
 class UpdateManager
 {
+    const REPO_CLASS_PATH = '\\NextDom\\Repo\\';
     const DB_CLASS_NAME = 'update';
     const CLASS_NAME = Update::class;
 
@@ -107,12 +110,12 @@ class UpdateManager
         // Look for plugins
         foreach (PluginManager::listPlugin() as $plugin) {
             $pluginId = $plugin->getId();
-            $update = self::byTypeAndLogicalId('plugin', $pluginId);
+            $update = self::byTypeAndLogicalId(NextDomObj::PLUGIN, $pluginId);
             // Add update data if plugin not exists
             if (!is_object($update)) {
                 $update = (new Update())
                     ->setLogicalId($pluginId)
-                    ->setType('plugin')
+                    ->setType(NextDomObj::PLUGIN)
                     ->setLocalVersion(date(DateFormat::FULL));
                 $update->save();
             }
@@ -217,39 +220,6 @@ class UpdateManager
     }
 
     /**
-     * List of repositories
-     *
-     * @return array Repositories data
-     *
-     * @throws \Exception
-     */
-    public static function listRepo(): array
-    {
-        $result = [];
-        // Temp hack for specific repo render file
-        $repoRenderFiles = ['RepoMarketApi.php', 'RepoMarketDisplay.php', 'RepoMarketList.php', 'RepoMarketSend.php'];
-        foreach (FileSystemHelper::ls(NEXTDOM_ROOT . '/src/Repo/', '*.php') as $repoFile) {
-            if (!in_array($repoFile, $repoRenderFiles)) {
-                $repoClassName = str_replace('.php', '', $repoFile);
-                $repoCode = strtolower(str_replace('Repo', '', $repoClassName));
-                $fullNameClass = '\\NextDom\\Repo\\' . $repoClassName;
-                if (class_exists($fullNameClass)) {
-                    $result[$repoCode] = [
-                        'name' => $fullNameClass::$_name,
-                        'class' => $fullNameClass,
-                        'configuration' => $fullNameClass::$_configuration,
-                        'scope' => $fullNameClass::$_scope,
-                        'description' => $fullNameClass::$_description,
-                        'icon' => $fullNameClass::$_icon
-                    ];
-                    $result[$repoCode]['enable'] = ConfigManager::byKey($repoCode . '::enable');
-                }
-            }
-        }
-        return $result;
-    }
-
-    /**
      * Get the class of the repo by the name
      *
      * @param string $name Name of the repo in jeedom format
@@ -264,12 +234,41 @@ class UpdateManager
         foreach ($repoList as $repoData) {
             if (ucfirst($repoData['name']) == ucfirst($name)) {
                 return [
-                    'className' => str_replace('\\NextDom\\Repo\\', '', $repoData['class']),
+                    'className' => str_replace(self::REPO_CLASS_PATH, '', $repoData['class']),
                     'phpClass' => $repoData['class']
                 ];
             }
         }
         return [];
+    }
+
+    /**
+     * List of repositories
+     *
+     * @return array Repositories data
+     *
+     * @throws \Exception
+     */
+    public static function listRepo(): array
+    {
+        $result = [];
+        foreach (FileSystemHelper::ls(NEXTDOM_ROOT . '/src/Repo/', '*.php') as $repoFile) {
+            $repoClassName = str_replace('.php', '', $repoFile);
+            $fullNameClass = self::REPO_CLASS_PATH . $repoClassName;
+            if (class_exists($fullNameClass) && is_subclass_of($fullNameClass, '\\NextDom\\Interfaces\\BaseRepo')) {
+                $repoCode = strtolower(str_replace('Repo', '', $repoClassName));
+                $result[$repoCode] = [
+                    'name' => $fullNameClass::$_name,
+                    'class' => $fullNameClass,
+                    'configuration' => $fullNameClass::$_configuration,
+                    'scope' => $fullNameClass::$_scope,
+                    'description' => $fullNameClass::$_description,
+                    'icon' => $fullNameClass::$_icon
+                ];
+                $result[$repoCode]['enable'] = ConfigManager::byKey($repoCode . '::enable');
+            }
+        }
+        return $result;
     }
 
     /**
@@ -326,7 +325,7 @@ class UpdateManager
                         try {
                             $update->doUpdate();
                         } catch (\Exception $e) {
-                            LogHelper::add('update', 'update', $e->getMessage());
+                            LogHelper::addUpdate(LogTarget::UPDATE, $e->getMessage());
                             $error = true;
                         }
                     }

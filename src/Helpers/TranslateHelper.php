@@ -121,7 +121,7 @@ class TranslateHelper
         }
 
         $modify = false;
-        $replace = array();
+        $replace = [];
         preg_match_all("/{{(.*?)}}/s", $content, $matches);
         if ($oldTranslationMode) {
             foreach ($matches[1] as $text) {
@@ -138,7 +138,7 @@ class TranslateHelper
                     if (strpos($filename, '#') === false) {
                         $modify = true;
                         if (!isset($translate[$filename])) {
-                            $translate[$filename] = array();
+                            $translate[$filename] = [];
                         }
                         $translate[$filename][$text] = $text;
                     }
@@ -178,9 +178,9 @@ class TranslateHelper
     {
         // Test si les traductions ont été mises en cache
         if (!self::$translationLoaded) {
-            self::$translation = array(
+            self::$translation = [
                 self::getLanguage() => self::loadTranslation(),
-            );
+            ];
             self::$translationLoaded = true;
         }
         return self::$translation[self::getLanguage()];
@@ -228,7 +228,7 @@ class TranslateHelper
         $result = $defaultValue;
         // Lecture et mise en cache de la configuration
         if (self::$config === null) {
-            self::$config = ConfigManager::byKeys(array('language', 'generateTranslation'), 'core', array('language' => 'fr_FR'));
+            self::$config = ConfigManager::byKeys(['language', 'generateTranslation'], 'core', ['language' => 'fr_FR']);
         }
         // Recherche de l'information
         if (isset(self::$config[$informationKey])) {
@@ -313,7 +313,7 @@ class TranslateHelper
                 $plugin = substr($page, strpos($page, 'plugins/') + 8);
                 $plugin = substr($plugin, 0, strpos($plugin, '/'));
                 if (!isset($plugins[$plugin])) {
-                    $plugins[$plugin] = array();
+                    $plugins[$plugin] = [];
                 }
                 $plugins[$plugin][$page] = $translation;
             }

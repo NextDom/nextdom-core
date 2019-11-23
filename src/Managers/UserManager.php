@@ -34,6 +34,7 @@
 namespace NextDom\Managers;
 
 use NextDom\Enums\DateFormat;
+use NextDom\Enums\LogTarget;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NetworkHelper;
@@ -67,10 +68,10 @@ class UserManager
     {
         $sMdp = (!Utils::isSha512($_mdp)) ? Utils::sha512($_mdp) : $_mdp;
         if (ConfigManager::byKey('ldap:enable') == '1' && function_exists('ldap_connect')) {
-            LogHelper::add("connection", "debug", __('Authentification par LDAP'));
+            LogHelper::addDebug(LogTarget::CONNECTION, __('Authentification par LDAP'));
             $ad = self::connectToLDAP();
             if ($ad !== false) {
-                LogHelper::add("connection", "debug", __('Connection au LDAP OK'));
+                LogHelper::addDebug(LogTarget::CONNECTION, __('Connection au LDAP OK'));
                 $ad = ldap_connect(ConfigManager::byKey('ldap:host'), ConfigManager::byKey('ldap:port'));
                 ldap_set_option($ad, LDAP_OPT_PROTOCOL_VERSION, 3);
                 ldap_set_option($ad, LDAP_OPT_REFERRALS, 0);
@@ -78,7 +79,7 @@ class UserManager
                     LogHelper::addInfo("connection", __('Mot de passe erroné (') . $_login . ')');
                     return false;
                 }
-                LogHelper::add("connection", "debug", __('Bind user OK'));
+                LogHelper::addDebug(LogTarget::CONNECTION, __('Bind user OK'));
                 $result = ldap_search($ad, ConfigManager::byKey('ldap::usersearch') . '=' . $_login . ',' . ConfigManager::byKey('ldap:basedn'), ConfigManager::byKey('ldap:filter'));
                 LogHelper::addInfo("connection", __('Recherche LDAP (') . $_login . ')');
                 if ($result) {
@@ -159,9 +160,9 @@ class UserManager
      */
     public static function byLogin($_login)
     {
-        $values = array(
+        $values = [
             'login' => $_login,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE login = :login';
@@ -177,10 +178,10 @@ class UserManager
      */
     public static function byLoginAndPassword($_login, $_password)
     {
-        $values = array(
+        $values = [
             'login' => $_login,
             'password' => $_password,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE login = :login
@@ -195,9 +196,9 @@ class UserManager
      */
     public static function byId($_id)
     {
-        $values = array(
+        $values = [
             'id' => $_id,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE id = :id';
@@ -211,9 +212,9 @@ class UserManager
      */
     public static function byHash($_hash)
     {
-        $values = array(
+        $values = [
             'hash' => $_hash,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE hash = :hash';
@@ -229,10 +230,10 @@ class UserManager
      */
     public static function byLoginAndHash($_login, $_hash)
     {
-        $values = array(
+        $values = [
             'login' => $_login,
             'hash' => $_hash,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE login = :login
@@ -260,10 +261,10 @@ class UserManager
      */
     public static function searchByRight($_rights)
     {
-        $values = array(
+        $values = [
             'rights' => '%"' . $_rights . '":1%',
             'rights2' => '%"' . $_rights . '":"1"%',
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE rights LIKE :rights
@@ -279,9 +280,9 @@ class UserManager
      */
     public static function byProfils($_profils, $_enable = false)
     {
-        $values = array(
+        $values = [
             'profils' => $_profils,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE profils = :profils';
@@ -299,9 +300,9 @@ class UserManager
      */
     public static function byEnable($_enable)
     {
-        $values = array(
+        $values = [
             'enable' => $_enable,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE enable=:enable';
@@ -355,9 +356,9 @@ class UserManager
         $cache = CacheManager::byKey('security::banip');
         $values = json_decode($cache->getValue('[]'), true);
         if (!is_array($values)) {
-            $values = array();
+            $values = [];
         }
-        $values_tmp = array();
+        $values_tmp = [];
         if (count($values) > 0) {
             foreach ($values as $value) {
                 if (ConfigManager::byKey('security::bantime') >= 0 && $value['datetime'] + ConfigManager::byKey('security::bantime') < strtotime('now')) {
@@ -368,7 +369,7 @@ class UserManager
         }
         $values = $values_tmp;
         if (isset($_SESSION['failed_count']) && $_SESSION['failed_count'] >= ConfigManager::byKey('security::maxFailedLogin') && (strtotime('now') - ConfigManager::byKey('security::timeLoginFailed')) < $_SESSION['failed_datetime']) {
-            $values_tmp = array();
+            $values_tmp = [];
             foreach ($values as $value) {
                 if ($value['ip'] == $ip) {
                     continue;
@@ -376,7 +377,7 @@ class UserManager
                 $values_tmp[] = $value;
             }
             $values = $values_tmp;
-            $values[] = array('datetime' => strtotime('now'), 'ip' => NetworkHelper::getClientIp());
+            $values[] = ['datetime' => strtotime('now'), 'ip' => NetworkHelper::getClientIp()];
             @session_start();
             $_SESSION['failed_count'] = 0;
             $_SESSION['failed_datetime'] = -1;
@@ -384,7 +385,7 @@ class UserManager
         }
         CacheManager::set('security::banip', json_encode($values));
         if (!is_array($values)) {
-            $values = array();
+            $values = [];
         }
         if (count($values) == 0) {
             return false;
@@ -420,13 +421,13 @@ class UserManager
         $user->setProfils('admin');
         $user->setEnable(1);
         $key = ConfigManager::genKey();
-        $registerDevice = array(
-            Utils::sha512($key) => array(
+        $registerDevice = [
+            Utils::sha512($key) => [
                 'datetime' => date(DateFormat::FULL),
                 'ip' => '127.0.0.1',
                 'session_id' => 'none',
-            ),
-        );
+            ],
+        ];
         $user->setOptions('registerDevice', $registerDevice);
         $user->save();
         return $user->getHash() . '-' . $key;
@@ -448,13 +449,13 @@ class UserManager
             $user->setProfils('admin');
             $user->setEnable(1);
             $key = ConfigManager::genKey();
-            $registerDevice = array(
-                Utils::sha512($key) => array(
+            $registerDevice = [
+                Utils::sha512($key) => [
                     'datetime' => date(DateFormat::FULL),
                     'ip' => '127.0.0.1',
                     'session_id' => 'none',
-                ),
-            );
+                ],
+            ];
             $user->setOptions('registerDevice', $registerDevice);
             $user->save();
             RepoMarket::supportAccess(true, $user->getHash() . '-' . $key);

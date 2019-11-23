@@ -25,10 +25,20 @@ class LogTarget extends Enum
 {
     const BACKUP = 'backup';
     const CMD = 'cmd';
+    const CONNECTION = 'connection';
+    const CRON = 'cron';
     const EVENT = 'event';
+    const INTERACT = 'interact';
+    const JEE_EVENT = 'jeeEvent';
+    const LISTENER = 'listener';
+    const MARKET = 'market';
     const MIGRATION = 'migration';
+    const NETWORK = 'network';
     const NEXTDOM = 'nextdom';
+    const PLUGIN = 'plugin';
+    const REPORT = 'report';
     const RESTORE = 'restore';
     const STARTING = 'starting';
     const SCENARIO = 'scenario';
+    const UPDATE = 'update';
 }

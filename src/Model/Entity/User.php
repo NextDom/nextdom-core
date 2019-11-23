@@ -17,6 +17,8 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\DateFormat;
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
@@ -95,7 +97,7 @@ class User implements EntityInterface
     public function preInsert()
     {
         if (is_object(UserManager::byLogin($this->getLogin()))) {
-            throw new \Exception(__('Ce nom d\'utilisateur est déja pris'));
+            throw new CoreException(__('Ce nom d\'utilisateur est déja pris'));
         }
     }
 
@@ -124,14 +126,14 @@ class User implements EntityInterface
     public function preSave()
     {
         if ($this->getLogin() == '') {
-            throw new \Exception(__('Le nom d\'utilisateur ne peut pas être vide'));
+            throw new CoreException(__('Le nom d\'utilisateur ne peut pas être vide'));
         }
         $admins = UserManager::byProfils('admin', true);
         if (count($admins) == 1 && $this->getProfils() == 'admin' && !$this->isEnabled()) {
-            throw new \Exception(__('Vous ne pouvez désactiver le dernier utilisateur'));
+            throw new CoreException(__('Vous ne pouvez désactiver le dernier utilisateur'));
         }
         if (count($admins) == 1 && $admins[0]->getId() == $this->getid() && $this->getProfils() != 'admin') {
-            throw new \Exception(__('Vous ne pouvez changer le profil du dernier administrateur'));
+            throw new CoreException(__('Vous ne pouvez changer le profil du dernier administrateur'));
         }
     }
 
@@ -155,31 +157,12 @@ class User implements EntityInterface
     }
 
     /**
-     * @return int
-     */
-    public function getEnable()
-    {
-        return $this->enable;
-    }
-
-    /**
      * @return bool
      */
-    public function isEnabled() {
+    public function isEnabled()
+    {
         return $this->enable != 0;
     }
-    /**
-     * @param $_enable
-     * @return $this
-     */
-    public function setEnable($_enable)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->enable, $_enable);
-        $this->enable = $_enable;
-        return $this;
-    }
-
-    /*     * **********************Getteur Setteur*************************** */
 
     /**
      * @return int
@@ -200,10 +183,31 @@ class User implements EntityInterface
         return $this;
     }
 
+    /*     * **********************Getteur Setteur*************************** */
+
+    /**
+     * @return int
+     */
+    public function getEnable()
+    {
+        return $this->enable;
+    }
+
+    /**
+     * @param $_enable
+     * @return $this
+     */
+    public function setEnable($_enable)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->enable, $_enable);
+        $this->enable = $_enable;
+        return $this;
+    }
+
     public function preRemove()
     {
         if (count(UserManager::byProfils('admin', true)) == 1 && $this->getProfils() == 'admin') {
-            throw new \Exception(__('Vous ne pouvez supprimer le dernier administrateur'));
+            throw new CoreException(__('Vous ne pouvez supprimer le dernier administrateur'));
         }
     }
 
@@ -214,7 +218,7 @@ class User implements EntityInterface
      */
     public function remove()
     {
-        NextDomHelper::addRemoveHistory(array('id' => $this->getId(), 'name' => $this->getLogin(), 'date' => date('Y-m-d H:i:s'), 'type' => 'user'));
+        NextDomHelper::addRemoveHistory(['id' => $this->getId(), 'name' => $this->getLogin(), 'date' => date(DateFormat::FULL), 'type' => 'user']);
         return DBHelper::remove($this);
     }
 

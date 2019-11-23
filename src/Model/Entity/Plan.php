@@ -108,7 +108,7 @@ class Plan implements EntityInterface
         if ($this->getCss('z-index') == '') {
             $this->setCss('z-index', 1000);
         }
-        if (in_array($this->getLink_type(), array('eqLogic', 'cmd', 'scenario'))) {
+        if (in_array($this->getLink_type(), ['eqLogic', 'cmd', 'scenario'])) {
             PlanManager::removeByLinkTypeLinkIdPlanHedaerId($this->getLink_type(), $this->getLink_id(), $this->getPlanHeader_id());
         }
     }
@@ -279,7 +279,7 @@ class Plan implements EntityInterface
                 if (is_object($cmd) && $this->getId() == $cmd->getEqLogic_id()) {
                     continue;
                 }
-                $options = array();
+                $options = [];
                 if (isset($action['options'])) {
                     $options = $action['options'];
                 }
@@ -314,6 +314,7 @@ class Plan implements EntityInterface
      * @return array|null
      * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
+     * @throws \NextDom\Exceptions\OperatingSystemException
      */
     public function getHtml($_version = 'dplan')
     {
@@ -325,10 +326,10 @@ class Plan implements EntityInterface
                 if (!is_object($link)) {
                     return null;
                 }
-                return array(
+                return [
                     'plan' => Utils::o2a($this),
                     'html' => $link->toHtml($_version),
-                );
+                ];
                 break;
             case PlanLinkType::PLAN:
                 $html = '<span class="cursor plan-link-widget" data-link_id="' . $this->getLink_id() . '" data-offsetX="' . $this->getDisplay(PlanDisplayType::OFFSET_X) . '" data-offsetY="' . $this->getDisplay(PlanDisplayType::OFFSET_Y) . '">';
@@ -336,10 +337,10 @@ class Plan implements EntityInterface
                 $html .= $this->getDisplay(PlanDisplayType::ICON) . ' ' . $this->getDisplay(PlanDisplayType::NAME);
                 $html .= '</a>';
                 $html .= '</span>';
-                return array(
+                return [
                     'plan' => Utils::o2a($this),
                     'html' => $html,
-                );
+                ];
                 break;
             case PlanLinkType::VIEW:
                 $link = 'index.php?p=view&view_id=' . $this->getLink_id();
@@ -348,10 +349,10 @@ class Plan implements EntityInterface
                 $html .= $this->getDisplay(PlanDisplayType::ICON) . ' ' . $this->getDisplay(PlanDisplayType::NAME);
                 $html .= '</a>';
                 $html .= '</span>';
-                return array(
+                return [
                     'plan' => Utils::o2a($this),
                     'html' => $html,
-                );
+                ];
                 break;
             case PlanLinkType::GRAPH:
                 $background_color = 'background-color : white;';
@@ -359,13 +360,13 @@ class Plan implements EntityInterface
                     $background_color = '';
                 }
                 $html = '<div class="graph-widget" data-graph_id="' . $this->getLink_id() . '" style="' . $background_color . 'border : solid 1px black;min-height:50px;min-width:50px;">';
-                $html .= '<span class="graphOptions" style="display:none;">' . json_encode($this->getDisplay(PlanDisplayType::GRAPH, array())) . '</span>';
+                $html .= '<span class="graphOptions" style="display:none;">' . json_encode($this->getDisplay(PlanDisplayType::GRAPH, [])) . '</span>';
                 $html .= '<div class="graph" id="graph' . $this->getLink_id() . '" style="width : 100%;height : 100%;"></div>';
                 $html .= '</div>';
-                return array(
+                return [
                     'plan' => Utils::o2a($this),
                     'html' => $html,
-                );
+                ];
             case PlanLinkType::TEXT:
                 $html = '<div class="text-widget" data-text_id="' . $this->getLink_id() . '" style="color:' . $this->getCss('color', 'black') . ';">';
                 if ($this->getDisplay(PlanDisplayType::NAME) != '' || $this->getDisplay(PlanDisplayType::ICON) != '') {
@@ -374,26 +375,26 @@ class Plan implements EntityInterface
                     $html .= $this->getDisplay(PlanDisplayType::TEXT);
                 }
                 $html .= '</div>';
-                return array(
+                return [
                     'plan' => Utils::o2a($this),
                     'html' => $html,
-                );
+                ];
                 break;
             case PlanLinkType::IMAGE:
                 $html = '<div class="image-widget" data-image_id="' . $this->getLink_id() . '" style="min-width:10px;min-height:10px;">';
                 if ($this->getConfiguration('display_mode', 'image') == 'image') {
                     $html .= '<img style="width:100%;height:100%" src="' . $this->getDisplay(PlanDisplayType::PATH, 'public/img/NextDom_NoPicture_Gray.png') . '"/>';
                 } else {
-                    $camera = EqLogicManager::byId(str_replace(array('#', 'eqLogic'), array('', ''), $this->getConfiguration('camera')));
+                    $camera = EqLogicManager::byId(str_replace(['#', 'eqLogic'], ['', ''], $this->getConfiguration('camera')));
                     if (is_object($camera)) {
                         $html .= $camera->toHtml($_version, true);
                     }
                 }
                 $html .= '</div>';
-                return array(
+                return [
                     'plan' => Utils::o2a($this),
                     'html' => $html,
-                );
+                ];
                 break;
             case PlanLinkType::ZONE:
                 if ($this->getConfiguration('zone_mode', 'simple') == 'widget') {
@@ -404,14 +405,14 @@ class Plan implements EntityInterface
                     if ($this->getConfiguration('showOnClic') == 1) {
                         $cssClass .= 'zoneEqLogicOnClic ';
                     }
-                    $html = '<div class="zone-widget cursor zoneEqLogic ' . $cssClass . '" data-position="' . $this->getConfiguration('position') . '" data-eqLogic_id="' . str_replace(array('#', 'eqLogic'), array('', ''), $this->getConfiguration('eqLogic')) . '" data-zone_id="' . $this->getLink_id() . '" style="min-width:20px;min-height:20px;"></div>';
+                    $html = '<div class="zone-widget cursor zoneEqLogic ' . $cssClass . '" data-position="' . $this->getConfiguration('position') . '" data-eqLogic_id="' . str_replace(['#', 'eqLogic'], ['', ''], $this->getConfiguration('eqLogic')) . '" data-zone_id="' . $this->getLink_id() . '" style="min-width:20px;min-height:20px;"></div>';
                 } else {
                     $html = '<div class="zone-widget cursor" data-zone_id="' . $this->getLink_id() . '" style="min-width:20px;min-height:20px;"></div>';
                 }
-                return array(
+                return [
                     'plan' => NextDomHelper::toHumanReadable(Utils::o2a($this)),
                     'html' => $html,
-                );
+                ];
                 break;
             case PlanLinkType::SUMMARY:
                 $background_color = 'background-color : ' . $this->getCss('background-color', 'black') . ';';

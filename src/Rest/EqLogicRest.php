@@ -42,7 +42,7 @@ class EqLogicRest
 
     /**
      * Prepare result for response\n
-     * Associative array with following keys : 
+     * Associative array with following keys :
      *  - id
      *  - name
      *  - type (plugin id)
@@ -64,8 +64,8 @@ class EqLogicRest
             $eqLogicRow['name'] = $eqLogic->getName();
             $eqLogicRow['type'] = $eqLogic->getEqType_name();
             $eqLogicRow['objectId'] = $eqLogic->getObject_id();
-            $eqLogicRow['enable'] = $eqLogic->getIsEnable() == 1 ? true : false;
-            $eqLogicRow['visible'] = $eqLogic->getIsVisible() == 1 ? true : false;
+            $eqLogicRow['enable'] = $eqLogic->isEnabled();
+            $eqLogicRow['visible'] = $eqLogic->isVisible();
             $eqLogicRow['configuration'] = $eqLogic->getConfiguration();
             $result[] = $eqLogicRow;
         }

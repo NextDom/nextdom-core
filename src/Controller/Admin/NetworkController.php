@@ -47,7 +47,7 @@ class NetworkController extends BaseController
     public static function get(&$pageData): string
     {
         $pageData['adminReposList'] = UpdateManager::listRepo();
-        $keys = array('dns::token', 'market::allowDNS');
+        $keys = ['dns::token', 'market::allowDNS'];
         foreach ($pageData['adminReposList'] as $key => $value) {
             $keys[] = $key . '::enable';
         }

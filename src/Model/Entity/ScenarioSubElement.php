@@ -307,11 +307,11 @@ class ScenarioSubElement implements EntityInterface
      */
     public function getAllId()
     {
-        $return = array(
-            'element' => array(),
-            'subelement' => array($this->getId()),
-            'expression' => array(),
-        );
+        $return = [
+            'element' => [],
+            'subelement' => [$this->getId()],
+            'expression' => [],
+        ];
         foreach ($this->getExpression() as $expression) {
             $result = $expression->getAllId();
             $return['element'] = array_merge($return['element'], $result['element']);

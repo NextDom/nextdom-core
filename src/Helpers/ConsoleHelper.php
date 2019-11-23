@@ -20,7 +20,6 @@ namespace NextDom\Helpers;
 
 
 use NextDom\Exceptions\CoreException;
-use phpDocumentor\Reflection\Types\Boolean;
 
 class ConsoleHelper
 {
@@ -33,7 +32,7 @@ class ConsoleHelper
      */
     public static function title(string $title, $ending)
     {
-        if($ending){
+        if ($ending) {
             printf("[ / $title ]\n");
         } else {
             printf("[ $title ]\n");
@@ -84,6 +83,7 @@ class ConsoleHelper
     {
         printf("\n");
     }
+
     /**
      * Show ok message
      */
@@ -108,6 +108,6 @@ class ConsoleHelper
     public static function error($exceptionData)
     {
         printf(">> *** ERROR *** " . Utils::br2nl($exceptionData->getMessage()) . "\n");
-        printf(">> *** TRACE *** " . Utils::br2nl($exceptionData->getTrace() ) . "\n");
+        printf(">> *** TRACE *** " . Utils::br2nl($exceptionData->getTrace()) . "\n");
     }
 }

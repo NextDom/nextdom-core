@@ -56,9 +56,9 @@ class DataStoreManager
      */
     public static function byId($id)
     {
-        $values = array(
+        $values = [
             'id' => $id,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE id=:id';
@@ -79,11 +79,11 @@ class DataStoreManager
      */
     public static function byTypeLinkIdKey($dataType, $linkId, $key)
     {
-        $values = array(
+        $values = [
             'type' => $dataType,
             'link_id' => $linkId,
             'key' => $key,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE `type` = :type
@@ -123,9 +123,9 @@ class DataStoreManager
      */
     public static function byTypeLinkId($dataType, $linkId = '')
     {
-        $values = array(
+        $values = [
             'type' => $dataType,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE type=:type';

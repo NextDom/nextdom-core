@@ -17,6 +17,7 @@
 
 namespace NextDom\Ajax;
 
+use NextDom\Enums\AjaxParams;
 use NextDom\Enums\UserRight;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\Utils;
@@ -33,19 +34,19 @@ class LogAjax extends BaseAjax
 
     public function clear()
     {
-        LogHelper::clear(Utils::init('log'));
+        LogHelper::clear(Utils::init(AjaxParams::LOG));
         $this->ajax->success();
     }
 
     public function remove()
     {
-        LogHelper::remove(Utils::init('log'));
+        LogHelper::remove(Utils::init(AjaxParams::LOG));
         $this->ajax->success();
     }
 
     public function list()
     {
-        $this->ajax->success(LogHelper::liste());
+        $this->ajax->success(LogHelper::getLogFileList());
     }
 
     public function removeAll()
@@ -56,6 +57,6 @@ class LogAjax extends BaseAjax
 
     public function get()
     {
-        $this->ajax->success(LogHelper::get(Utils::init('log'), Utils::init('start', 0), Utils::init('nbLine', 99999)));
+        $this->ajax->success(LogHelper::get(Utils::init(AjaxParams::LOG), Utils::init(AjaxParams::START, 0), Utils::init('nbLine', 99999)));
     }
 }

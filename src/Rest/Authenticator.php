@@ -70,9 +70,9 @@ class Authenticator
 
     /**
      * Init authenticator instance
-     * 
+     *
      * @param Request $request
-     * 
+     *
      * @return Authenticator
      */
     public static function init(Request $request): Authenticator
@@ -116,12 +116,12 @@ class Authenticator
 
     /**
      * Check user credentials
-     * 
+     *
      * @param string $login User login
      * @param string $password User passowrd
      *
      * @return User|false User object or false
-     * 
+     *
      * @throws \Exception
      */
     public function checkCredentials(string $login, string $password)
@@ -136,7 +136,7 @@ class Authenticator
      * @param User $user
      *
      * @return string User token
-     * 
+     *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
      */
@@ -179,6 +179,25 @@ class Authenticator
     }
 
     /**
+     * Get the user from the token
+     *
+     * @return User|null User
+     * @throws \Exception
+     */
+    private function getUserFromToken()
+    {
+        $user = null;
+        $payload = Token::getPayload($this->request->headers->get('X-AUTH-TOKEN'));
+        if (!empty($payload)) {
+            $payloadData = json_decode($payload, true);
+            if (isset($payloadData['user_id'])) {
+                $user = UserManager::byId($payloadData['user_id']);
+            }
+        }
+        return $user;
+    }
+
+    /**
      * Check API Key sended in URL (?apikey=MY_KEY)\n
      * Consider connected like the first admin in database
      *
@@ -199,25 +218,6 @@ class Authenticator
             }
         }
         return $this->authenticated;
-    }
-
-    /**
-     * Get the user from the token
-     *
-     * @return User|null User
-     * @throws \Exception
-     */
-    private function getUserFromToken()
-    {
-        $user = null;
-        $payload = Token::getPayload($this->request->headers->get('X-AUTH-TOKEN'));
-        if (!empty($payload)) {
-            $payloadData = json_decode($payload, true);
-            if (isset($payloadData['user_id'])) {
-                $user = UserManager::byId($payloadData['user_id']);
-            }
-        }
-        return $user;
     }
 
     /**

@@ -21,13 +21,16 @@
 namespace NextDom\Repo;
 
 use NextDom\Com\ComShell;
+use NextDom\Enums\DateFormat;
+use NextDom\Enums\LogTarget;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
+use NextDom\Interfaces\BaseRepo;
 use NextDom\Managers\ConfigManager;
 
-class RepoUrl
+class RepoUrl implements BaseRepo
 {
     /*     * *************************Attributs****************************** */
 
@@ -35,31 +38,31 @@ class RepoUrl
     public static $_icon = 'fas fa-at';
     public static $_description = 'repo.url.description';
 
-    public static $_scope = array(
+    public static $_scope = [
         'plugin' => true,
         'backup' => false,
         'hasConfiguration' => true,
         'core' => true,
-    );
+    ];
 
-    public static $_configuration = array(
-        'parameters_for_add' => array(
-            'url' => array(
+    public static $_configuration = [
+        'parameters_for_add' => [
+            'url' => [
                 'name' => 'repo.url.conf.zip',
                 'type' => 'input',
-            ),
-        ),
-        'configuration' => array(
-            'core::url' => array(
+            ],
+        ],
+        'configuration' => [
+            'core::url' => [
                 'name' => 'repo.url.conf.core.url',
                 'type' => 'input',
-            ),
-            'core::version' => array(
+            ],
+            'core::version' => [
                 'name' => 'repo.url.conf.core.version',
                 'type' => 'input',
-            ),
-        ),
-    );
+            ],
+        ],
+    ];
 
     /*     * ***********************Méthodes statiques*************************** */
 
@@ -82,8 +85,8 @@ class RepoUrl
             throw new CoreException(__('Impossible d\'écrire dans le répertoire : ', __FILE__) . $tmp . __('. Exécuter la commande suivante en SSH : sudo chmod 777 -R ', __FILE__) . $tmp_dir);
         }
         $result = exec('wget --no-check-certificate --progress=dot --dot=mega ' . $_update->getConfiguration('url') . ' -O ' . $tmp);
-        LogHelper::add('update', 'alert', $result);
-        return array('path' => $tmp, 'localVersion' => date('Y-m-d H:i:s'));
+        LogHelper::addAlert(LogTarget::UPDATE, $result);
+        return ['path' => $tmp, 'localVersion' => date(DateFormat::FULL)];
     }
 
     public static function deleteObjet($_update)
@@ -93,10 +96,10 @@ class RepoUrl
 
     public static function objectInfo($_update)
     {
-        return array(
+        return [
             'doc' => '',
             'changelog' => '',
-        );
+        ];
     }
 
     public static function downloadCore($_path)

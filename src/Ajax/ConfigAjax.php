@@ -17,6 +17,7 @@
 
 namespace NextDom\Ajax;
 
+use NextDom\Enums\AjaxParams;
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
@@ -37,14 +38,14 @@ class ConfigAjax extends BaseAjax
     public function genApiKey()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        if (Utils::init('plugin') == 'core') {
+        if (Utils::init(AjaxParams::PLUGIN) == 'core') {
             ConfigManager::save('api', ConfigManager::genKey());
             $this->ajax->success(ConfigManager::byKey('api'));
-        } else if (Utils::init('plugin') == 'pro') {
+        } else if (Utils::init(AjaxParams::PLUGIN) == 'pro') {
             ConfigManager::save('apipro', ConfigManager::genKey());
             $this->ajax->success(ConfigManager::byKey('apipro'));
         } else {
-            $plugin = Utils::init('plugin');
+            $plugin = Utils::init(AjaxParams::PLUGIN);
             ConfigManager::save('api', ConfigManager::genKey(), $plugin);
             $this->ajax->success(ConfigManager::byKey('api', $plugin));
         }
@@ -52,19 +53,19 @@ class ConfigAjax extends BaseAjax
 
     public function getKey()
     {
-        $keys = Utils::init('key');
+        $keys = Utils::init(AjaxParams::KEY);
         if ($keys == '') {
             throw new CoreException(__('Aucune clé demandée'));
         }
         if (is_json($keys)) {
             $keys = json_decode($keys, true);
-            $return = ConfigManager::byKeys(array_keys($keys), Utils::init('plugin', 'core'));
+            $return = ConfigManager::byKeys(array_keys($keys), Utils::init(AjaxParams::PLUGIN, 'core'));
             if (Utils::init('convertToHumanReadable', 0)) {
                 $return = NextDomHelper::toHumanReadable($return);
             }
             $this->ajax->success($return);
         } else {
-            $return = ConfigManager::byKey($keys, Utils::init('plugin', 'core'));
+            $return = ConfigManager::byKey($keys, Utils::init(AjaxParams::PLUGIN, 'core'));
             if (Utils::init('convertToHumanReadable', 0)) {
                 $return = NextDomHelper::toHumanReadable($return);
             }
@@ -84,17 +85,17 @@ class ConfigAjax extends BaseAjax
 
     public function removeKey()
     {
-        $keys = Utils::init('key');
+        $keys = Utils::init(AjaxParams::KEY);
         if ($keys == '') {
             throw new CoreException(__('Aucune clé demandée'));
         }
         if (is_json($keys)) {
             $keys = json_decode($keys, true);
             foreach ($keys as $key => $value) {
-                ConfigManager::remove($key, Utils::init('plugin', 'core'));
+                ConfigManager::remove($key, Utils::init(AjaxParams::PLUGIN, 'core'));
             }
         } else {
-            ConfigManager::remove(Utils::init('key'), Utils::init('plugin', 'core'));
+            ConfigManager::remove(Utils::init(AjaxParams::KEY), Utils::init(AjaxParams::PLUGIN, 'core'));
         }
         $this->ajax->success();
     }

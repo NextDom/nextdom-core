@@ -17,6 +17,7 @@
 
 namespace NextDom\Ajax;
 
+use NextDom\Enums\AjaxParams;
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\FileSystemHelper;
@@ -34,27 +35,27 @@ class ReportAjax extends BaseAjax
 
     public function list()
     {
-        $return = array();
-        $path = NEXTDOM_DATA . '/data/report/' . Utils::init('type') . '/' . Utils::init('id') . '/';
+        $return = [];
+        $path = NEXTDOM_DATA . '/data/report/' . Utils::init('type') . '/' . Utils::init(AjaxParams::ID) . '/';
         foreach (FileSystemHelper::ls($path, '*') as $value) {
-            $return[$value] = array('name' => $value);
+            $return[$value] = ['name' => $value];
         }
         $this->ajax->success($return);
     }
 
     public function get()
     {
-        $path = NEXTDOM_DATA . '/data/report/' . Utils::init('type') . '/' . Utils::init('id') . '/' . Utils::init('report');
+        $path = NEXTDOM_DATA . '/data/report/' . Utils::init('type') . '/' . Utils::init(AjaxParams::ID) . '/' . Utils::init('report');
         $return = pathinfo($path);
         $return['path'] = $path;
         $return['type'] = Utils::init('type');
-        $return['id'] = Utils::init('id');
+        $return['id'] = Utils::init(AjaxParams::ID);
         $this->ajax->success($return);
     }
 
     public function remove()
     {
-        $path = NEXTDOM_DATA . '/data/report/' . Utils::init('type') . '/' . Utils::init('id') . '/' . Utils::init('report');
+        $path = NEXTDOM_DATA . '/data/report/' . Utils::init('type') . '/' . Utils::init(AjaxParams::ID) . '/' . Utils::init('report');
         if (file_exists($path)) {
             unlink($path);
         }
@@ -66,7 +67,7 @@ class ReportAjax extends BaseAjax
 
     public function removeAll()
     {
-        $path = NEXTDOM_DATA . '/data/report/' . Utils::init('type') . '/' . Utils::init('id') . '/';
+        $path = NEXTDOM_DATA . '/data/report/' . Utils::init('type') . '/' . Utils::init(AjaxParams::ID) . '/';
         foreach (FileSystemHelper::ls($path, '*') as $value) {
             unlink($path . $value);
         }

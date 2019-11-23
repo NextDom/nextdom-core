@@ -17,6 +17,8 @@
 
 namespace NextDom\Ajax;
 
+use NextDom\Enums\AjaxParams;
+use NextDom\Enums\LogTarget;
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
@@ -46,7 +48,7 @@ class UpdateAjax extends BaseAjax
     public function all()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $return = array();
+        $result = [];
         /**
          * @var Update $update
          */
@@ -65,9 +67,9 @@ class UpdateAjax extends BaseAjax
 
                 }
             }
-            $return[] = $infos;
+            $result[] = $infos;
         }
-        $this->ajax->success($return);
+        $this->ajax->success($result);
     }
 
     public function checkAllUpdate()
@@ -80,18 +82,18 @@ class UpdateAjax extends BaseAjax
     public function update()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        LogHelper::clear('update');
-        $update = UpdateManager::byId(Utils::init('id'));
+        LogHelper::clear(LogTarget::UPDATE);
+        $update = UpdateManager::byId(Utils::init(AjaxParams::ID));
         if (!is_object($update)) {
-            throw new CoreException(__('Aucune correspondance pour l\'ID : ' . Utils::init('id')));
+            throw new CoreException(__('Aucune correspondance pour l\'ID : ' . Utils::init(AjaxParams::ID)));
         }
         try {
             if ($update->getType() != 'core') {
-                LogHelper::add('update', 'alert', __("[START UPDATE]"));
+                LogHelper::addAlert(LogTarget::UPDATE, __("[START UPDATE]"));
             }
             $update->doUpdate();
             if ($update->getType() != 'core') {
-                LogHelper::add('update', 'alert', __("Launch cron dependancy plugins"));
+                LogHelper::addAlert(LogTarget::UPDATE, __("Launch cron dependancy plugins"));
                 try {
                     $cron = CronManager::byClassAndFunction('plugin', 'checkDeamon');
                     if (is_object($cron)) {
@@ -100,13 +102,13 @@ class UpdateAjax extends BaseAjax
                 } catch (\Exception $e) {
 
                 }
-                LogHelper::add('update', 'alert', __("[END UPDATE SUCCESS]"));
-                LogHelper::add('update', 'alert', __("Refresh with F5 key to discover news"));
+                LogHelper::addAlert(LogTarget::UPDATE, __("[END UPDATE SUCCESS]"));
+                LogHelper::addAlert(LogTarget::UPDATE, __("Refresh with F5 key to discover news"));
             }
         } catch (\Exception $e) {
             if ($update->getType() != 'core') {
-                LogHelper::add('update', 'alert', $e->getMessage());
-                LogHelper::add('update', 'alert', __("[END UPDATE ERROR]"));
+                LogHelper::addAlert(LogTarget::UPDATE, $e->getMessage());
+                LogHelper::addAlert(LogTarget::UPDATE, __("[END UPDATE ERROR]"));
             }
         }
         $this->ajax->success();
@@ -116,12 +118,12 @@ class UpdateAjax extends BaseAjax
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
         UpdateManager::findNewUpdateObject();
-        $update = UpdateManager::byId(Utils::init('id'));
+        $update = UpdateManager::byId(Utils::init(AjaxParams::ID));
         if (!is_object($update)) {
-            $update = UpdateManager::byLogicalId(Utils::init('id'));
+            $update = UpdateManager::byLogicalId(Utils::init(AjaxParams::ID));
         }
         if (!is_object($update)) {
-            throw new CoreException(__('Aucune correspondance pour l\'ID : ' . Utils::init('id')));
+            throw new CoreException(__('Aucune correspondance pour l\'ID : ' . Utils::init(AjaxParams::ID)));
         }
         $update->deleteObjet();
         $this->ajax->success();
@@ -130,12 +132,12 @@ class UpdateAjax extends BaseAjax
     public function checkUpdate()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $update = UpdateManager::byId(Utils::init('id'));
+        $update = UpdateManager::byId(Utils::init(AjaxParams::ID));
         if (!is_object($update)) {
-            $update = UpdateManager::byLogicalId(Utils::init('id'));
+            $update = UpdateManager::byLogicalId(Utils::init(AjaxParams::ID));
         }
         if (!is_object($update)) {
-            throw new CoreException(__('Aucune correspondance pour l\'ID : ' . Utils::init('id')));
+            throw new CoreException(__('Aucune correspondance pour l\'ID : ' . Utils::init(AjaxParams::ID)));
         }
         $update->checkUpdate();
         $this->ajax->success();
@@ -193,8 +195,8 @@ class UpdateAjax extends BaseAjax
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
         $uploadDir = '/tmp';
-        $filename = Utils::readUploadedFile($_FILES, "file", $uploadDir, 100, array(), function ($file) {
-            $remove = array(" ", "(", ")");
+        $filename = Utils::readUploadedFile($_FILES, "file", $uploadDir, 100, [], function ($file) {
+            $remove = [" ", "(", ")"];
             return str_replace($remove, "", $file["name"]);
         });
         $filepath = sprintf("%s/%s", $uploadDir, $filename);

@@ -28,10 +28,10 @@ class ComShell
 
     private static $instance;
 
-    private $cmds = array();
+    private $cmds = [];
     private $background;
-    private $cache = array();
-    private $history = array();
+    private $cache = [];
+    private $history = [];
 
     /*     * ********************Functions static********************* */
 
@@ -99,7 +99,7 @@ class ComShell
     public function clear()
     {
         $this->cache = array_merge($this->cache, $this->cmds);
-        $this->cmds = array();
+        $this->cmds = [];
     }
 
     /**
@@ -109,9 +109,9 @@ class ComShell
      */
     public function exec()
     {
-        $output = array();
+        $output = [];
         $retval = 0;
-        $return = array();
+        $return = [];
         foreach ($this->cmds as $cmd) {
             if (strpos($cmd, '2>&1') === false) {
                 $cmd .= ' 2>&1';
@@ -124,7 +124,7 @@ class ComShell
             $this->history[] = $cmd;
         }
         $this->cmds = $this->cache;
-        $this->cache = array();
+        $this->cache = [];
         return implode("\n", $return);
     }
 
@@ -156,7 +156,7 @@ class ComShell
 
     public function clearHistory()
     {
-        $this->history = array();
+        $this->history = [];
     }
 
     public function getCmd()

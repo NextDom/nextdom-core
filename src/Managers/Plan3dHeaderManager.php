@@ -53,9 +53,9 @@ class Plan3dHeaderManager
      */
     public static function byId($_id)
     {
-        $values = array(
+        $values = [
             'id' => $_id,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE id=:id';
@@ -84,7 +84,7 @@ class Plan3dHeaderManager
      */
     public static function searchByUse($_type, $_id)
     {
-        $return = array();
+        $return = [];
         $search = '#' . str_replace('cmd', '', $_type . $_id) . '#';
         $plan3ds = array_merge(Plan3dManager::byLinkTypeLinkId($_type, $_id), Plan3dManager::searchByConfiguration($search, 'eqLogic'));
         foreach ($plan3ds as $plan3d) {

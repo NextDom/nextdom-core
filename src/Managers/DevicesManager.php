@@ -58,17 +58,17 @@ class DevicesManager
     {
         $cache = CacheManager::byKey('nextdom::usbMapping');
         if (!Utils::isJson($cache->getValue()) || $name == '') {
-            $usbMapping = array();
+            $usbMapping = [];
             foreach (FileSystemHelper::ls('/dev/', 'ttyUSB*') as $usb) {
                 $vendor = '';
                 $model = '';
                 $devsList = shell_exec('/sbin/udevadm info --name=/dev/' . $usb . ' --query=all');
                 foreach (explode("\n", $devsList) as $line) {
                     if (strpos($line, 'E: ID_MODEL=') !== false) {
-                        $model = trim(str_replace(array('E: ID_MODEL=', '"'), '', $line));
+                        $model = trim(str_replace(['E: ID_MODEL=', '"'], '', $line));
                     }
                     if (strpos($line, 'E: ID_VENDOR=') !== false) {
-                        $vendor = trim(str_replace(array('E: ID_VENDOR=', '"'), '', $line));
+                        $vendor = trim(str_replace(['E: ID_VENDOR=', '"'], '', $line));
                     }
                 }
                 if ($vendor == '' && $model == '') {
@@ -140,7 +140,7 @@ class DevicesManager
     {
         $cache = CacheManager::byKey('nextdom::bluetoothMapping');
         if (!Utils::isJson($cache->getValue()) || $name == '') {
-            $bluetoothMapping = array();
+            $bluetoothMapping = [];
             foreach (explode("\n", shell_exec('hcitool dev')) as $line) {
                 if (strpos($line, 'hci') === false || trim($line) == '') {
                     continue;

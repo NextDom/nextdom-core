@@ -70,9 +70,9 @@ class ListenerManager
      */
     public static function byId($_id)
     {
-        $value = array(
+        $value = [
             'id' => $_id,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE id=:id';
@@ -87,9 +87,9 @@ class ListenerManager
      */
     public static function byClass($_class)
     {
-        $value = array(
+        $value = [
             'class' => $_class,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE class=:class';
@@ -106,10 +106,10 @@ class ListenerManager
      */
     public static function byClassAndFunction($_class, $_function, $_option = '')
     {
-        $value = array(
+        $value = [
             'class' => $_class,
             'function' => $_function,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE class=:class
@@ -132,11 +132,11 @@ class ListenerManager
      */
     public static function searchClassFunctionOption($_class, $_function, $_option = '')
     {
-        $value = array(
+        $value = [
             'class' => $_class,
             'function' => $_function,
             'option' => '%' . $_option . '%',
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE class=:class
@@ -155,11 +155,11 @@ class ListenerManager
      */
     public static function byClassFunctionAndEvent($_class, $_function, $_event)
     {
-        $value = array(
+        $value = [
             'class' => $_class,
             'function' => $_function,
             'event' => $_event,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE class=:class
@@ -177,11 +177,11 @@ class ListenerManager
      */
     public static function removeByClassFunctionAndEvent($_class, $_function, $_event, $_option = '')
     {
-        $value = array(
+        $value = [
             'class' => $_class,
             'function' => $_function,
             'event' => $_event,
-        );
+        ];
         $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . '
         WHERE class=:class
         AND function=:function
@@ -218,13 +218,13 @@ class ListenerManager
     public static function searchEvent($_event)
     {
         if (strpos($_event, '#') !== false) {
-            $value = array(
+            $value = [
                 'event' => '%' . $_event . '%',
-            );
+            ];
         } else {
-            $value = array(
+            $value = [
                 'event' => '%#' . $_event . '#%',
-            );
+            ];
         }
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '

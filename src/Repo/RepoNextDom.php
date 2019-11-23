@@ -20,7 +20,9 @@
 
 namespace NextDom\Repo;
 
-class RepoNextDom
+use NextDom\Interfaces\BaseRepo;
+
+class RepoNextDom implements BaseRepo
 {
     /*     * *************************Attributs****************************** */
 
@@ -28,7 +30,7 @@ class RepoNextDom
     public static $_icon = 'fas fa-store';
     public static $_description = 'repo.nextdom.description';
 
-    public static $_scope = array(
+    public static $_scope = [
         'plugin' => true,
         'backup' => false,
         'hasConfiguration' => true,
@@ -37,24 +39,24 @@ class RepoNextDom
         'hasStore' => true,
         'hasScenarioStore' => false,
         'test' => false,
-    );
+    ];
 
-    public static $_configuration = array(
-        'configuration' => array(
-            'nextdom_stable' => array(
+    public static $_configuration = [
+        'configuration' => [
+            'nextdom_stable' => [
                 'name' => 'repo.nextdom.conf.stable',
                 'type' => 'checkbox',
-            ),
-            'nextdom_draft' => array(
+            ],
+            'nextdom_draft' => [
                 'name' => 'repo.nextdom.conf.draft',
                 'type' => 'checkbox',
-            ),
-            'show_sources_filters' => array(
+            ],
+            'show_sources_filters' => [
                 'name' => 'repo.nextdom.conf.filters',
                 'type' => 'checkbox',
-            ),
-        )
-    );
+            ],
+        ]
+    ];
 
     /*     * ***********************Méthodes statiques*************************** */
 

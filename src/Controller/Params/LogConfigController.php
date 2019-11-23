@@ -23,7 +23,6 @@
 namespace NextDom\Controller\Params;
 
 use NextDom\Controller\BaseController;
-use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\Render;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\PluginManager;
@@ -48,7 +47,7 @@ class LogConfigController extends BaseController
 
         global $NEXTDOM_INTERNAL_CONFIG;
         $pageData['adminAlerts'] = $NEXTDOM_INTERNAL_CONFIG['alerts'];
-        $pageData['adminOthersLogs'] = array('scenario', 'plugin', 'market', 'api', 'connection', 'interact', 'tts', 'report', 'event');
+        $pageData['adminOthersLogs'] = ['scenario', 'plugin', 'market', 'api', 'connection', 'interact', 'tts', 'report', 'event'];
         $pageData['adminPluginsList'] = [];
         $pluginsList = PluginManager::listPlugin(true);
         foreach ($pluginsList as $plugin) {

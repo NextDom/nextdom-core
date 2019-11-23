@@ -17,6 +17,7 @@
 
 namespace NextDom\Ajax;
 
+use NextDom\Enums\AjaxParams;
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Utils;
@@ -40,7 +41,7 @@ class CronAjax extends BaseAjax
 
     public function remove()
     {
-        $cron = CronManager::byId(Utils::init('id'));
+        $cron = CronManager::byId(Utils::initInt(AjaxParams::ID));
         if (!is_object($cron)) {
             throw new CoreException(__('Cron id inconnu'));
         }
@@ -59,7 +60,7 @@ class CronAjax extends BaseAjax
 
     public function start()
     {
-        $cron = CronManager::byId(Utils::init('id'));
+        $cron = CronManager::byId(Utils::initInt(AjaxParams::ID));
         if (!is_object($cron)) {
             throw new CoreException(__('Cron id inconnu'));
         }
@@ -70,7 +71,7 @@ class CronAjax extends BaseAjax
 
     public function stop()
     {
-        $cron = CronManager::byId(Utils::init('id'));
+        $cron = CronManager::byId(Utils::initInt(AjaxParams::ID));
         if (!is_object($cron)) {
             throw new CoreException(__('Cron id inconnu'));
         }

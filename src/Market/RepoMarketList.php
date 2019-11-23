@@ -2,6 +2,7 @@
 
 namespace NextDom\Repo;
 
+use NextDom\Enums\AjaxParams;
 use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
@@ -11,31 +12,31 @@ AuthentificationHelper::isConnectedAsAdminOrFail();
 
 $searchLimit = Utils::init('limit', 100);
 if ($searchLimit == 0) {
-  $searchLimit = '';
+    $searchLimit = '';
 }
-$type = Utils::init('type', null);
+$type = Utils::init(AjaxParams::TYPE, null);
 $categorie = Utils::init('categorie', null);
-$name = Utils::init('name', null);
+$name = Utils::init(AjaxParams::NAME, null);
 $author = Utils::init('author', null);
 if ($name == 'false') {
     $name = null;
 }
 if ($author == null && $name === null && $categorie === null && Utils::init('certification', null) === null && Utils::init('cost', null) === null && $type == 'plugin') {
     $default = true;
-    $markets = RepoMarket::byFilter(array(
+    $markets = RepoMarket::byFilter([
         'status' => 'stable',
         'type' => 'plugin',
         'timeState' => 'popular'
-    ));
-    $markets2 = RepoMarket::byFilter(array(
+    ]);
+    $markets2 = RepoMarket::byFilter([
         'status' => 'stable',
         'type' => 'plugin',
         'timeState' => 'newest'
-    ));
+    ]);
     $markets = array_merge($markets, $markets2);
 } else {
     $default = false;
-    $markets = RepoMarket::byFilter(array(
+    $markets = RepoMarket::byFilter([
         'status' => null,
         'type' => $type,
         'categorie' => $categorie,
@@ -45,7 +46,7 @@ if ($author == null && $name === null && $categorie === null && Utils::init('cer
         'timeState' => Utils::init('timeState'),
         'certification' => Utils::init('certification', null),
         'limit' => $searchLimit
-    ));
+    ]);
 }
 function buildUrl($_key, $_value)
 {
@@ -102,7 +103,7 @@ function displayWidgetName($_name)
             $result .= $name[2];
             break;
     }
-    return $result .= $name[3];
+    return $result . $name[3];
 }
 
 function displayWidgetType($_name)
@@ -158,6 +159,7 @@ function displayWidgetSubtype($_name)
     }
     return $result;
 }
+
 ?>
 
 <link rel="stylesheet" href="/public/css/pages/markets.css">
@@ -248,7 +250,7 @@ function displayWidgetSubtype($_name)
             if ($type == "") {
                 echo '{{Market Jeedom}}</h3>';
             } else {
-                echo ucfirst($type) .'{{ Jeedom}}</h3>';
+                echo ucfirst($type) . '{{ Jeedom}}</h3>';
             }
             if (ConfigManager::byKey('market::username') != '') {
                 echo '<span class="label label-info badge pull-right">' . ConfigManager::byKey('market::username');
@@ -267,7 +269,7 @@ function displayWidgetSubtype($_name)
             if (count($markets) >= $searchLimit) {
                 echo '<div>';
                 echo '<span class="alert alert-warning market-limited">{{Attention l\'affichage est limité à }}' . $searchLimit . ' {{résultats, utilisez les filtres ou la recherche si ce que vous cherchez n\'apparaît pas...}}</span>';
-                echo '<a class="btn btn-action pull-right" id="bt_resetSearchLimit" data-href="' . buildUrl('limit', '0') .'"><i aria-hidden="true" class="fas fa-times"></i>{{Sans limites}}</a>';
+                echo '<a class="btn btn-action pull-right" id="bt_resetSearchLimit" data-href="' . buildUrl('limit', '0') . '"><i aria-hidden="true" class="fas fa-times"></i>{{Sans limites}}</a>';
                 echo '</div>';
             } else {
                 echo '<div><span class="market-unlimited">' . count($markets);
@@ -278,7 +280,7 @@ function displayWidgetSubtype($_name)
                 }
                 echo ' {{disponibles dans cette catégorie...}}</span>';
                 if (count($markets) >= 100) {
-                    echo '<a class="btn btn-action pull-right" id="bt_SearchLimit" data-href="' . buildUrl('limit', '100') .'"><i aria-hidden="true" class="fas fa-filter"></i>{{Limiter à 100}}</a>';
+                    echo '<a class="btn btn-action pull-right" id="bt_SearchLimit" data-href="' . buildUrl('limit', '100') . '"><i aria-hidden="true" class="fas fa-filter"></i>{{Limiter à 100}}</a>';
                 }
                 echo '</div>';
             }
@@ -364,7 +366,7 @@ function displayWidgetSubtype($_name)
                         $certificationClass = '';
                 }
                 if ($market->getType() != 'widget') {
-                    echo '<div class="market-certification market-' . $certificationClass .'">' . strtoupper($market->getCertification()) . '</div>';
+                    echo '<div class="market-certification market-' . $certificationClass . '">' . strtoupper($market->getCertification()) . '</div>';
                 }
                 if ($install == 'notInstall') {
                     echo '<i aria-hidden="true" class="fas fa-check market-install"></i>';
@@ -383,7 +385,7 @@ function displayWidgetSubtype($_name)
                         $default_image = 'public/img/NextDom_NoPicture_Gray.png';
                 }
                 $urlPath = ConfigManager::byKey('market::address') . '/' . $market->getImg('icon');
-                echo '<div><img class="lazy lazyload market-icon" src="' . $default_image . '" data-original="'. $urlPath . '"/></div>';
+                echo '<div><img class="lazy lazyload market-icon" src="' . $default_image . '" data-original="' . $urlPath . '"/></div>';
                 echo '<span class="market-name">' . $shortName . '</span>';
                 echo '<span class="market-author"><i>{{par}}</i> ' . $market->getAuthor() . '</span>';
                 echo '<span class="market-rating">';
@@ -397,14 +399,14 @@ function displayWidgetSubtype($_name)
                 echo '</span>';
                 if ($cost > 0) {
                     echo '<span class="market-cost">';
-                        if ($market->getPurchase() == 1) {
-                            echo '<i aria-hidden="true" class="fas fa-check-circle"></i>';
-                        } else {
-                            if ($cost != $realCost) {
-                                echo '<span style="text-decoration:line-through;">' . $realCost . ' {{€}}</span>';
-                            }
-                            echo $cost . ' {{€}}';
+                    if ($market->getPurchase() == 1) {
+                        echo '<i aria-hidden="true" class="fas fa-check-circle"></i>';
+                    } else {
+                        if ($cost != $realCost) {
+                            echo '<span style="text-decoration:line-through;">' . $realCost . ' {{€}}</span>';
                         }
+                        echo $cost . ' {{€}}';
+                    }
                     echo '</span>';
                 } else {
                     if ($cost < 0) {
@@ -424,114 +426,114 @@ function displayWidgetSubtype($_name)
 </section>
 
 <script>
-    $(function () {
-        $("img.lazy").lazyload();
-        initTableSorter();
-        setTimeout(function(){
-            $('.pluginContainer').packery();
-        },200);
-        setTimeout(function () {
-            $('#table_market tbody tr.install').hide();
-        }, 500);
-        $('.bt_pluginFilter').on('click', function () {
-            $('#md_modal').load($(this).attr('data-href'));
-        });
-        $('#sel_certif').on('change', function () {
-            $('#md_modal').load($(this).attr('data-href') + '&certification=' + encodeURI($(this).value()));
-        });
-        $('#sel_categorie').on('change', function () {
-            $('#md_modal').load($(this).attr('data-href') + '&categorie=' + encodeURI($(this).value()));
-        });
-        $('#bt_search').on('click', function () {
-            $('#md_modal').load($(this).attr('data-href') + '&categorie=' + '&name=' + encodeURI($('#in_search').value()));
-        });
-        $('#bt_resetSearch').on('click', function () {
-            $('#md_modal').load($(this).attr('data-href'));
-        });
-        $('#in_search').keyup(function (e) {
-            marketFilterRepo();
-        });
-        $('#bt_returnMarketList').on('click', function () {
-            $('#md_modal').load($(this).attr('data-href'));
-        });
-        $('.marketMultiple').on('click', function () {
-            $('#md_modal').load($(this).attr('data-href') + '&name=' + encodeURI('.' + $(this).attr('data-market_name')));
-        });
-        $('.bt_installFilter').on('click', function () {
-            $('.bt_installFilter').removeClass('btn-primary').removeClass('btn-default');
-            $('.pluginContainer').show();
-            $('.marketOverload').show();
-            if ($(this).attr('data-state') == 1) {
-                $('.notInstall').hide();
-            }
-            if ($(this).attr('data-state') == -1) {
-                $('.install').hide();
-            }
-            $(this).addClass('btn-primary');
-            $('.bt_installFilter').each(function () {
-                if (!$(this).hasClass("btn-primary")) {
-                    $(this).addClass('btn-default');
-                }
-            });
-            $('.pluginContainer').each(function () {
-                var hasVisible = false;
-                $(this).find('.marketOverload').each(function () {
-                    if ($(this).is(':visible')) {
-                        hasVisible = true;
-                    }
-                });
-                if (hasVisible) {
-                    $('legend[data-category=' + $(this).attr('data-category') + ']').show();
-                    $(this).packery();
-                } else {
-                    $(this).hide();
-                    $('legend[data-category=' + $(this).attr('data-category') + ']').hide();
-                }
-            });
-        });
-        $('.marketOverload').on('click', function () {
-            $('#md_modal2').dialog({title: "{{Market Jeedom}}"});
-            $('#md_modal2').load('index.php?v=d&modal=update.display&type=' + $(this).attr('data-market_type') + '&id=' + $(this).attr('data-market_id') + '&repo=market').dialog('open');
-        });
-        $('#bt_marketCollapse').on('click',function(){
-           $('.panel-collapse').each(function () {
-              if (!$(this).hasClass("in")) {
-                  $(this).css({'height' : '' });
-                  $(this).addClass("in");
-              }
-           });
-           $('#bt_marketCollapse').hide();
-           $('#bt_marketUncollapse').show()
-        });
-        $('#bt_marketUncollapse').on('click',function(){
-           $('.panel-collapse').each(function () {
-              if ($(this).hasClass("in")) {
-                  $(this).removeClass("in");
-              }
-           });
-           $('#bt_marketUncollapse').hide();
-           $('#bt_marketCollapse').show()
-        });
-        $('#bt_resetSearchLimit').on('click', function () {
-            $('#md_modal').load($(this).attr('data-href'));
-        });
-        $('#bt_SearchLimit').on('click', function () {
-            $('#md_modal').load($(this).attr('data-href'));
-        });
+  $(function () {
+    $("img.lazy").lazyload();
+    initTableSorter();
+    setTimeout(function () {
+      $('.pluginContainer').packery();
+    }, 200);
+    setTimeout(function () {
+      $('#table_market tbody tr.install').hide();
+    }, 500);
+    $('.bt_pluginFilter').on('click', function () {
+      $('#md_modal').load($(this).attr('data-href'));
     });
-
-    function marketFilterRepo() {
-        var pluginValue = '';
-        var currentSearchValue = $('#in_search').val().toLowerCase();
-        $('.marketOverload').show();
-        $('.marketOverload').each(function () {
-            if (currentSearchValue != '') {
-                pluginValue = $(this).attr('data-name').toLowerCase();
-                if (pluginValue.indexOf(currentSearchValue) == -1) {
-                    $(this).hide();
-                }
-            }
+    $('#sel_certif').on('change', function () {
+      $('#md_modal').load($(this).attr('data-href') + '&certification=' + encodeURI($(this).value()));
+    });
+    $('#sel_categorie').on('change', function () {
+      $('#md_modal').load($(this).attr('data-href') + '&categorie=' + encodeURI($(this).value()));
+    });
+    $('#bt_search').on('click', function () {
+      $('#md_modal').load($(this).attr('data-href') + '&categorie=' + '&name=' + encodeURI($('#in_search').value()));
+    });
+    $('#bt_resetSearch').on('click', function () {
+      $('#md_modal').load($(this).attr('data-href'));
+    });
+    $('#in_search').keyup(function (e) {
+      marketFilterRepo();
+    });
+    $('#bt_returnMarketList').on('click', function () {
+      $('#md_modal').load($(this).attr('data-href'));
+    });
+    $('.marketMultiple').on('click', function () {
+      $('#md_modal').load($(this).attr('data-href') + '&name=' + encodeURI('.' + $(this).attr('data-market_name')));
+    });
+    $('.bt_installFilter').on('click', function () {
+      $('.bt_installFilter').removeClass('btn-primary').removeClass('btn-default');
+      $('.pluginContainer').show();
+      $('.marketOverload').show();
+      if ($(this).attr('data-state') == 1) {
+        $('.notInstall').hide();
+      }
+      if ($(this).attr('data-state') == -1) {
+        $('.install').hide();
+      }
+      $(this).addClass('btn-primary');
+      $('.bt_installFilter').each(function () {
+        if (!$(this).hasClass("btn-primary")) {
+          $(this).addClass('btn-default');
+        }
+      });
+      $('.pluginContainer').each(function () {
+        var hasVisible = false;
+        $(this).find('.marketOverload').each(function () {
+          if ($(this).is(':visible')) {
+            hasVisible = true;
+          }
         });
-        $('.pluginContainer').packery();
-    };
+        if (hasVisible) {
+          $('legend[data-category=' + $(this).attr('data-category') + ']').show();
+          $(this).packery();
+        } else {
+          $(this).hide();
+          $('legend[data-category=' + $(this).attr('data-category') + ']').hide();
+        }
+      });
+    });
+    $('.marketOverload').on('click', function () {
+      $('#md_modal2').dialog({title: "{{Market Jeedom}}"});
+      $('#md_modal2').load('index.php?v=d&modal=update.display&type=' + $(this).attr('data-market_type') + '&id=' + $(this).attr('data-market_id') + '&repo=market').dialog('open');
+    });
+    $('#bt_marketCollapse').on('click', function () {
+      $('.panel-collapse').each(function () {
+        if (!$(this).hasClass("in")) {
+          $(this).css({'height': ''});
+          $(this).addClass("in");
+        }
+      });
+      $('#bt_marketCollapse').hide();
+      $('#bt_marketUncollapse').show()
+    });
+    $('#bt_marketUncollapse').on('click', function () {
+      $('.panel-collapse').each(function () {
+        if ($(this).hasClass("in")) {
+          $(this).removeClass("in");
+        }
+      });
+      $('#bt_marketUncollapse').hide();
+      $('#bt_marketCollapse').show()
+    });
+    $('#bt_resetSearchLimit').on('click', function () {
+      $('#md_modal').load($(this).attr('data-href'));
+    });
+    $('#bt_SearchLimit').on('click', function () {
+      $('#md_modal').load($(this).attr('data-href'));
+    });
+  });
+
+  function marketFilterRepo() {
+    var pluginValue = '';
+    var currentSearchValue = $('#in_search').val().toLowerCase();
+    $('.marketOverload').show();
+    $('.marketOverload').each(function () {
+      if (currentSearchValue != '') {
+        pluginValue = $(this).attr('data-name').toLowerCase();
+        if (pluginValue.indexOf(currentSearchValue) == -1) {
+          $(this).hide();
+        }
+      }
+    });
+    $('.pluginContainer').packery();
+  };
 </script>

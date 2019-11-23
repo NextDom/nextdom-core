@@ -2,6 +2,7 @@
 
 namespace NextDom\Repo;
 
+use NextDom\Enums\AjaxParams;
 use NextDom\Enums\ConfigKey;
 use NextDom\Enums\JeedomMarketCert;
 use NextDom\Exceptions\CoreException;
@@ -13,11 +14,11 @@ use NextDom\Managers\UpdateManager;
 
 AuthentificationHelper::isConnectedAsAdminOrFail();
 
-if (Utils::init('id') != '') {
+if (Utils::init(AjaxParams::ID) != '') {
     $market = RepoMarket::byId(Utils::init('id'));
 }
-if (Utils::init('logicalId') != '' && Utils::init('type') != '') {
-    $market = RepoMarket::byLogicalIdAndType(Utils::init('logicalId'), Utils::init('type'));
+if (Utils::init(AjaxParams::LOGICAL_ID) != '' && Utils::init(AjaxParams::TYPE) != '') {
+    $market = RepoMarket::byLogicalIdAndType(Utils::init(AjaxParams::LOGICAL_ID), Utils::init(AjaxParams::TYPE));
 }
 if (!isset($market)) {
     throw new CoreException('404 not found');
@@ -29,6 +30,31 @@ $update = UpdateManager::byLogicalId($market->getLogicalId());
 Utils::sendVarToJS('market_display_info', $marketInformations);
 $marketCertification = $market->getCertification();
 
+switch ($market->getType()) {
+    case 'widget':
+        $defaultImage = '/public/img/NextDom_Widget_Gray.png';
+        break;
+    case 'plugin':
+        $defaultImage = '/public/img/NextDom_Plugin_Gray.png';
+        break;
+    case 'script':
+        $defaultImage = '/public/img/NextDom_Script_Gray.png';
+        break;
+    default:
+        $defaultImage = 'public/img/NextDom_NoPicture_Gray.png';
+        break;
+}
+$urlPath = ConfigManager::byKey(ConfigKey::MARKET_ADDRESS) . '/' . $market->getImg('icon');
+
+$certificationClass = [
+    JeedomMarketCert::OFFICIAL => 'official',
+    JeedomMarketCert::ADVISED => 'advised',
+    JeedomMarketCert::LEGACY => 'legacy',
+    JeedomMarketCert::OBSOLETE => 'obsolete',
+    JeedomMarketCert::PREMIUM => 'premium',
+    JeedomMarketCert::PARTNER => 'partner'
+];
+
 ?>
 <style>
     .centered {
@@ -38,22 +64,7 @@ $marketCertification = $market->getCertification();
 <div class="row form-group">
     <div class="col-sm-2 centered">
         <?php
-        switch ($market->getType()) {
-            case 'widget':
-                $default_image = '/public/img/NextDom_Widget_Gray.png';
-                break;
-            case 'plugin':
-                $default_image = '/public/img/NextDom_Plugin_Gray.png';
-                break;
-            case 'script':
-                $default_image = '/public/img/NextDom_Script_Gray.png';
-                break;
-            default:
-                $default_image = 'public/img/NextDom_NoPicture_Gray.png';
-                break;
-        }
-        $urlPath = ConfigManager::byKey(ConfigKey::MARKET_ADDRESS) . '/' . $market->getImg('icon');
-        echo '<img src="' . $default_image . '" data-original="' . $urlPath . '"  class="lazy img-responsive" style="height: 150px;"/>';
+        echo '<img src="' . $defaultImage . '" data-original="' . $urlPath . '"  class="lazy img-responsive" style="height: 150px;"/>';
         ?>
     </div>
     <div class='col-sm-4'>
@@ -61,14 +72,6 @@ $marketCertification = $market->getCertification();
         <div class="marketAttr form-group market-modale-name" data-l1key="name"></div>
         <div class="span_author cursor form-group market-modale-author" data-author="<?php echo $market->getAuthor(); ?>">{{Développé par}} <?php echo $market->getAuthor(); ?></div>
         <?php
-        $certificationClass = [
-            JeedomMarketCert::OFFICIAL => 'official',
-            JeedomMarketCert::ADVISED => 'advised',
-            JeedomMarketCert::LEGACY => 'legacy',
-            JeedomMarketCert::OBSOLETE => 'obsolete',
-            JeedomMarketCert::PREMIUM => 'premium',
-            JeedomMarketCert::PARTNER => 'partner'
-        ];
         if ($marketCertification !== '' && array_key_exists($marketCertification, $certificationClass)) {
             echo '<div class="form-group market-modale-certification market-' . $certificationClass[$marketCertification] . '">' . $marketCertification . '</div>';
         }
@@ -241,12 +244,12 @@ $marketCertification = $market->getCertification();
                             </div>
                             <div class="col-sm-6 centered">
                                 <?php if (ConfigManager::byKey('market::apikey') != '' || (ConfigManager::byKey('market::username') != '' && ConfigManager::byKey('market::password') != '')) { ?>
-                                        <div class="form-group">
-                                            <label class="col-sm-4 control-label">{{Ma Note}}</label>
-                                        </div>
-                                        <div class="form-group">
-                                            <span><input style="display:none;" type="number" class="rating" id="in_myRating" data-max="5" data-empty-value="0" data-min="1" data-clearable="Effacer" value="<?php echo $market->getRating('user') ?>"/></span>
-                                        </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">{{Ma Note}}</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <span><input style="display:none;" type="number" class="rating" id="in_myRating" data-max="5" data-empty-value="0" data-min="1" data-clearable="Effacer" value="<?php echo $market->getRating('user') ?>"/></span>
+                                    </div>
                                 <?php }
                                 ?>
                             </div>
@@ -297,38 +300,38 @@ $marketCertification = $market->getCertification();
                                 <span class="marketAttr"><?php echo $market->getNbInstall() ?></span>
                             </div>
 
-                        <div class='col-sm-1'>
-                            <label class="control-label">{{Type}}</label><br/>
-                            <span class="marketAttr" data-l1key="type"></span>
-                        </div>
-                        <div class='col-sm-2'>
-                            <label class="control-label">{{Langue disponible}}</label><br/>
-                            <?php
-                            echo '<img src="/public/img/flags/francais.png" width="30" />';
-                            if ($market->getLanguage('en_US') == 1) {
-                                echo '<img src="/public/img/flags/anglais.png" width="30" />';
-                            }
-                            if ($market->getLanguage('de_DE') == 1) {
-                                echo '<img src="/public/img/flags/allemand.png" width="30" />';
-                            }
-                            if ($market->getLanguage('sp_SP') == 1) {
-                                echo '<img src="/public/img/flags/espagnol.png" width="30" />';
-                            }
-                            if ($market->getLanguage('ru_RU') == 1) {
-                                echo '<img src="/public/img/flags/russe.png" width="30" />';
-                            }
-                            if ($market->getLanguage('id_ID') == 1) {
-                                echo '<img src="/public/img/flags/indonesien.png" width="30" />';
-                            }
-                            if ($market->getLanguage('it_IT') == 1) {
-                                echo '<img src="/public/img/flags/italien.png" width="30" />';
-                            }
-                            ?>
-                        </div>
-                        <div class='col-sm-3'>
-                            <label class="control-label">{{Dernière mise à jour le}}</label><br/>
-                            <?php echo $market->getDatetime('stable') ?>
-                        </div>
+                            <div class='col-sm-1'>
+                                <label class="control-label">{{Type}}</label><br/>
+                                <span class="marketAttr" data-l1key="type"></span>
+                            </div>
+                            <div class='col-sm-2'>
+                                <label class="control-label">{{Langue disponible}}</label><br/>
+                                <?php
+                                echo '<img src="/public/img/flags/francais.png" width="30" />';
+                                if ($market->getLanguage('en_US') == 1) {
+                                    echo '<img src="/public/img/flags/anglais.png" width="30" />';
+                                }
+                                if ($market->getLanguage('de_DE') == 1) {
+                                    echo '<img src="/public/img/flags/allemand.png" width="30" />';
+                                }
+                                if ($market->getLanguage('sp_SP') == 1) {
+                                    echo '<img src="/public/img/flags/espagnol.png" width="30" />';
+                                }
+                                if ($market->getLanguage('ru_RU') == 1) {
+                                    echo '<img src="/public/img/flags/russe.png" width="30" />';
+                                }
+                                if ($market->getLanguage('id_ID') == 1) {
+                                    echo '<img src="/public/img/flags/indonesien.png" width="30" />';
+                                }
+                                if ($market->getLanguage('it_IT') == 1) {
+                                    echo '<img src="/public/img/flags/italien.png" width="30" />';
+                                }
+                                ?>
+                            </div>
+                            <div class='col-sm-3'>
+                                <label class="control-label">{{Dernière mise à jour le}}</label><br/>
+                                <?php echo $market->getDatetime('stable') ?>
+                            </div>
                     </form>
                 </div>
             </div>

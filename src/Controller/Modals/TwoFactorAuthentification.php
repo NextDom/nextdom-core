@@ -25,7 +25,6 @@ namespace NextDom\Controller\Modals;
 use NextDom\Helpers\Render;
 use NextDom\Managers\UserManager;
 use PragmaRX\Google2FA\Google2FA;
-use NextDom\Managers\ConfigManager;
 
 /**
  * Class TwoFactorAuthentification

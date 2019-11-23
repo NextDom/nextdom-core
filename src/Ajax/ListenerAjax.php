@@ -17,6 +17,7 @@
 
 namespace NextDom\Ajax;
 
+use NextDom\Enums\AjaxParams;
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\NextDomHelper;
@@ -41,7 +42,7 @@ class ListenerAjax extends BaseAjax
 
     public function remove()
     {
-        $listener = ListenerManager::byId(Utils::init('id'));
+        $listener = ListenerManager::byId(Utils::init(AjaxParams::ID));
         if (!is_object($listener)) {
             throw new CoreException(__('Listerner id inconnu'));
         }

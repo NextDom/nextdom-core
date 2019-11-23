@@ -33,6 +33,8 @@
 
 namespace NextDom\Helpers;
 
+use NextDom\Enums\DateFormat;
+use NextDom\Enums\LogTarget;
 use NextDom\Exceptions\CoreException;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UserManager;
@@ -100,7 +102,7 @@ class AuthentificationHelper
                 @session_start();
                 UserManager::storeUserInSession($user);
                 @session_write_close();
-                LogHelper::add('connection', 'info', __('Connexion de l\'utilisateur par REMOTE_USER : ') . $user->getLogin());
+                LogHelper::addInfo(LogTarget::CONNECTION, __('Connexion de l\'utilisateur par REMOTE_USER : ') . $user->getLogin());
             }
         }
 
@@ -171,7 +173,7 @@ class AuthentificationHelper
             $registeredDevices = [];
         }
         $registeredDevices[$currentDeviceHash] = [];
-        $registeredDevices[$currentDeviceHash]['datetime'] = date('Y-m-d H:i:s');
+        $registeredDevices[$currentDeviceHash]['datetime'] = date(DateFormat::FULL);
         $registeredDevices[$currentDeviceHash]['ip'] = NetworkHelper::getClientIp();
         $registeredDevices[$currentDeviceHash]['session_id'] = session_id();
         @session_start();
@@ -181,7 +183,7 @@ class AuthentificationHelper
         if (!isset($_COOKIE['nextdom_token'])) {
             setcookie('nextdom_token', AjaxHelper::getToken(), time() + 365 * 24 * 3600, "/", '', false, true);
         }
-        LogHelper::add('connection', 'info', __('Connexion de l\'utilisateur par clé : ') . $user->getLogin());
+        LogHelper::addInfo(LogTarget::CONNECTION, __('Connexion de l\'utilisateur par clé : ') . $user->getLogin());
         return true;
     }
 
@@ -216,13 +218,11 @@ class AuthentificationHelper
 
         if (!is_object($user) || session_status() == PHP_SESSION_DISABLED) {
             $result = false;
-        }
-        else {
+        } else {
             // Check cache
             if (isset(self::$rightsCache[$rightsKey]) && self::$rightsCache[$rightsKey]) {
                 $result = self::$rightsCache[$rightsKey];
-            }
-            elseif ($user->isConnected()) {
+            } elseif ($user->isConnected()) {
                 // Check specific rights
                 if (!empty($rights)) {
                     if (UserManager::getStoredUser()->getProfils() == $rights) {
@@ -266,7 +266,7 @@ class AuthentificationHelper
         @session_start();
         UserManager::storeUserInSession($user);
         @session_write_close();
-        LogHelper::add('connection', 'info', __('Connexion de l\'utilisateur : ') . $login);
+        LogHelper::addInfo(LogTarget::CONNECTION, __('Connexion de l\'utilisateur : ') . $login);
         return true;
     }
 

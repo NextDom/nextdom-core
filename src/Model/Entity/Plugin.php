@@ -18,6 +18,7 @@
 namespace NextDom\Model\Entity;
 
 use NextDom\Enums\DateFormat;
+use NextDom\Enums\LogTarget;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
@@ -129,25 +130,25 @@ class Plugin implements EntityInterface
             $this->mobile = (isset($data['mobile'])) ? $data['mobile'] : $data['id'];
         }
         if (isset($data['include'])) {
-            $this->include = array(
+            $this->include = [
                 'file' => $data['include']['file'],
                 'type' => $data['include']['type'],
-            );
+            ];
         } else {
-            $this->include = array(
+            $this->include = [
                 'file' => $data['id'],
                 'type' => 'class',
-            );
+            ];
         }
-        $this->functionality['interact'] = array('exists' => method_exists($this->getId(), 'interact'), 'controlable' => 1);
-        $this->functionality['cron'] = array('exists' => method_exists($this->getId(), 'cron'), 'controlable' => 1);
-        $this->functionality['cron5'] = array('exists' => method_exists($this->getId(), 'cron5'), 'controlable' => 1);
-        $this->functionality['cron15'] = array('exists' => method_exists($this->getId(), 'cron15'), 'controlable' => 1);
-        $this->functionality['cron30'] = array('exists' => method_exists($this->getId(), 'cron30'), 'controlable' => 1);
-        $this->functionality['cronHourly'] = array('exists' => method_exists($this->getId(), 'cronHourly'), 'controlable' => 1);
-        $this->functionality['cronDaily'] = array('exists' => method_exists($this->getId(), 'cronDaily'), 'controlable' => 1);
-        $this->functionality['deadcmd'] = array('exists' => method_exists($this->getId(), 'deadCmd'), 'controlable' => 0);
-        $this->functionality['health'] = array('exists' => method_exists($this->getId(), 'health'), 'controlable' => 0);
+        $this->functionality['interact'] = ['exists' => method_exists($this->getId(), 'interact'), 'controlable' => 1];
+        $this->functionality['cron'] = ['exists' => method_exists($this->getId(), 'cron'), 'controlable' => 1];
+        $this->functionality['cron5'] = ['exists' => method_exists($this->getId(), 'cron5'), 'controlable' => 1];
+        $this->functionality['cron15'] = ['exists' => method_exists($this->getId(), 'cron15'), 'controlable' => 1];
+        $this->functionality['cron30'] = ['exists' => method_exists($this->getId(), 'cron30'), 'controlable' => 1];
+        $this->functionality['cronHourly'] = ['exists' => method_exists($this->getId(), 'cronHourly'), 'controlable' => 1];
+        $this->functionality['cronDaily'] = ['exists' => method_exists($this->getId(), 'cronDaily'), 'controlable' => 1];
+        $this->functionality['deadcmd'] = ['exists' => method_exists($this->getId(), 'deadCmd'), 'controlable' => 0];
+        $this->functionality['health'] = ['exists' => method_exists($this->getId(), 'health'), 'controlable' => 0];
     }
 
     /**
@@ -171,15 +172,6 @@ class Plugin implements EntityInterface
         return $this;
     }
 
-    public function getPathToConfiguration(): string
-    {
-        $result = '';
-        if (file_exists(NEXTDOM_ROOT . '/plugins/' . $this->id . '/plugin_info/configuration.php')) {
-            $result = 'plugins/' . $this->id . '/plugin_info/configuration.php';
-        }
-        return $result;
-    }
-
     /**
      * Obtenir le fichier de configuration du plugin
      *
@@ -189,6 +181,15 @@ class Plugin implements EntityInterface
     {
         @trigger_error('This method is deprecated. Use getPathToConfiguration', E_USER_DEPRECATED);
         return $this->getPathToConfiguration();
+    }
+
+    public function getPathToConfiguration(): string
+    {
+        $result = '';
+        if (file_exists(NEXTDOM_ROOT . '/plugins/' . $this->id . '/plugin_info/configuration.php')) {
+            $result = 'plugins/' . $this->id . '/plugin_info/configuration.php';
+        }
+        return $result;
     }
 
     /**
@@ -202,10 +203,10 @@ class Plugin implements EntityInterface
      *
      * @throws \Exception
      */
-    public function report($outputFormat = 'pdf', $parameters = array())
+    public function report($outputFormat = 'pdf', $parameters = [])
     {
         if ($this->getDisplay() == '') {
-            throw new \Exception(__('core.cant-report'));
+            throw new CoreException(__('core.cant-report'));
         }
         $url = NetworkHelper::getNetworkAccess('internal') . '/index.php?v=d&p=' . $this->getDisplay();
         $url .= '&m=' . $this->getId();
@@ -267,7 +268,7 @@ class Plugin implements EntityInterface
     {
         $pluginId = $this->getId();
         if ($this->getHasDependency() != 1 || !method_exists($pluginId, 'dependancy_info')) {
-            return array('state' => 'nok', 'log' => 'nok');
+            return ['state' => 'nok', 'log' => 'nok'];
         }
         $cache = CacheManager::byKey('dependancy' . $this->getID());
         if ($refresh) {
@@ -346,11 +347,11 @@ class Plugin implements EntityInterface
         if (abs(strtotime(DateFormat::NOW) - strtotime(ConfigManager::byKey('lastDependancyInstallTime', $plugin_id))) <= 60) {
             $cache = CacheManager::byKey('dependancy' . $this->getID());
             $cache->remove();
-            throw new \Exception(__('Vous devez attendre au moins 60 secondes entre deux lancements d\'installation de dépendances'));
+            throw new CoreException(__('Vous devez attendre au moins 60 secondes entre deux lancements d\'installation de dépendances'));
         }
         $dependancy_info = $this->getDependencyInfo(true);
         if ($dependancy_info['state'] == 'in_progress') {
-            throw new \Exception(__('Les dépendances sont déjà en cours d\'installation'));
+            throw new CoreException(__('Les dépendances sont déjà en cours d\'installation'));
         }
         foreach (PluginManager::listPlugin(true) as $plugin) {
             if ($plugin->getId() == $this->getId()) {
@@ -358,7 +359,7 @@ class Plugin implements EntityInterface
             }
             $dependancy_info = $plugin->getDependencyInfo();
             if ($dependancy_info['state'] == 'in_progress') {
-                throw new \Exception(__('Les dépendances d\'un autre plugin sont déjà en cours, veuillez attendre qu\'elles soient finies : ') . $plugin->getId());
+                throw new CoreException(__('Les dépendances d\'un autre plugin sont déjà en cours, veuillez attendre qu\'elles soient finies : ') . $plugin->getId());
             }
         }
         $cmd = $plugin_id::dependancy_install();
@@ -373,10 +374,10 @@ class Plugin implements EntityInterface
                     exec(SystemHelper::getCmdSudo() . '/bin/bash ' . $script . ' >> ' . $cmd['log'] . ' 2>&1 &');
                     sleep(1);
                 } else {
-                    LogHelper::add($plugin_id, 'error', __('Veuillez exécuter le script : ') . '/bin/bash ' . $script);
+                    LogHelper::addError($plugin_id, __('Veuillez exécuter le script : ') . '/bin/bash ' . $script);
                 }
             } else {
-                LogHelper::add($plugin_id, 'error', __('Aucun script ne correspond à votre type de Linux : ') . $cmd['script'] . __(' avec #stype# : ') . SystemHelper::getCommand('type'));
+                LogHelper::addError($plugin_id, __('Aucun script ne correspond à votre type de Linux : ') . $cmd['script'] . __(' avec #stype# : ') . SystemHelper::getCommand('type'));
             }
         }
         $cache = CacheManager::byKey('dependancy' . $this->getID());
@@ -398,7 +399,7 @@ class Plugin implements EntityInterface
                 }
             }
         } catch (\Throwable $e) {
-            LogHelper::add($plugin_id, 'error', __('Erreur sur la fonction deamon_stop du plugin : ') . $e->getMessage());
+            LogHelper::addError($plugin_id, __('Erreur sur la fonction deamon_stop du plugin : ') . $e->getMessage());
         }
     }
 
@@ -423,7 +424,7 @@ class Plugin implements EntityInterface
 
         $plugin_id = $this->getId();
         if ($this->getHasOwnDeamon() != 1 || !method_exists($plugin_id, 'deamon_info')) {
-            return array('launchable_message' => '', 'launchable' => 'nok', 'state' => 'nok', 'log' => 'nok', 'auto' => 0);
+            return ['launchable_message' => '', 'launchable' => 'nok', 'state' => 'nok', 'log' => 'nok', 'auto' => 0];
         }
         $result = $plugin_id::deamon_info();
         if ($this->getHasDependency() == 1 && method_exists($plugin_id, 'dependancy_info') && $result['launchable'] == 'ok') {
@@ -498,27 +499,27 @@ class Plugin implements EntityInterface
                 }
                 if ($deamon_info['launchable'] == 'ok' && $deamon_info['state'] == 'nok' && method_exists($pluginId, 'deamon_start')) {
                     $inprogress = CacheManager::byKey('deamonStart' . $this->getId() . 'inprogress');
-                    $info = $inprogress->getValue(array('datetime' => strtotime('now') - 60));
+                    $info = $inprogress->getValue(['datetime' => strtotime('now') - 60]);
                     $info['datetime'] = (isset($info['datetime'])) ? $info['datetime'] : strtotime('now') - 60;
                     if (abs(strtotime(DateFormat::NOW) - $info['datetime']) < 45) {
                         if ($auto) {
                             return;
                         }
-                        throw new \Exception(__('Vous devez attendre au moins 45 secondes entre deux lancements du démon. Dernier lancement : ' . date("Y-m-d H:i:s", $info['datetime'])));
+                        throw new CoreException(__('Vous devez attendre au moins 45 secondes entre deux lancements du démon. Dernier lancement : ' . date("Y-m-d H:i:s", $info['datetime'])));
                     }
                     if (ConfigManager::byKey('deamonRestartNumber', $pluginId, 0) > 3) {
-                        LogHelper::add($pluginId, 'error', __('Attention je pense qu\'il y a un soucis avec le démon que j\'ai relancé plus de 3 fois consecutivement'));
+                        LogHelper::addError($pluginId, __('Attention je pense qu\'il y a un soucis avec le démon que j\'ai relancé plus de 3 fois consecutivement'));
                     }
                     if (!$forceRestart) {
                         ConfigManager::save('deamonRestartNumber', ConfigManager::byKey('deamonRestartNumber', $pluginId, 0) + 1, $pluginId);
                     }
-                    CacheManager::set('deamonStart' . $this->getId() . 'inprogress', array('datetime' => strtotime('now')));
+                    CacheManager::set('deamonStart' . $this->getId() . 'inprogress', ['datetime' => strtotime('now')]);
                     ConfigManager::save('lastDeamonLaunchTime', date(DateFormat::FULL), $pluginId);
                     $pluginId::deamon_start();
                 }
             }
         } catch (\Throwable $e) {
-            LogHelper::add($pluginId, 'error', __('Erreur sur la fonction deamon_start du plugin : ') . $e->getMessage());
+            LogHelper::addError($pluginId, __('Erreur sur la fonction deamon_start du plugin : ') . $e->getMessage());
         }
     }
 
@@ -576,12 +577,12 @@ class Plugin implements EntityInterface
         }
         try {
             if ($state == 1) {
-                LogHelper::add($this->getId(), 'info', 'Début d\'activation du plugin');
+                LogHelper::addInfo($this->getId(), 'Début d\'activation du plugin');
                 $this->deamon_stop();
 
                 $deamon_info = $this->deamon_info();
                 sleep(1);
-                LogHelper::add($this->getId(), 'info', 'Info sur le démon : ' . print_r($deamon_info, true));
+                LogHelper::addInfo($this->getId(), 'Info sur le démon : ' . print_r($deamon_info, true));
                 if ($deamon_info['state'] == 'ok') {
                     $this->deamon_stop();
                 }
@@ -599,7 +600,7 @@ class Plugin implements EntityInterface
                 rrmdir(NextDomHelper::getTmpFolder($this->getId()));
             }
             if (isset($out) && trim($out) != '') {
-                LogHelper::add($this->getId(), 'info', "Installation/remove/update result : " . $out);
+                LogHelper::addInfo($this->getId(), "Installation/remove/update result : " . $out);
             }
         } catch (\Throwable $e) {
             ConfigManager::save('active', $alreadyActive, $this->getId());
@@ -647,30 +648,21 @@ class Plugin implements EntityInterface
     {
         if ($direct) {
             // Lancement de la procédure de préinstallation
+            $targetFile = 'install.php';
             if (strpos($functionToCall, 'pre_') !== false) {
-                LogHelper::add('plugin', 'debug', 'Recherche de ' . NEXTDOM_ROOT . '/plugins/' . $this->getId() . '/plugin_info/pre_install.php');
-                if (file_exists(NEXTDOM_ROOT . '/plugins/' . $this->getId() . '/plugin_info/pre_install.php')) {
-                    LogHelper::add('plugin', 'debug', 'Fichier d\'installation trouvé pour  : ' . $this->getId());
-                    require_once NEXTDOM_ROOT . '/plugins/' . $this->getId() . '/plugin_info/pre_install.php';
-                    ob_start();
-                    $function = $this->getId() . '_' . $functionToCall;
-                    if (function_exists($this->getId() . '_' . $functionToCall)) {
-                        $function();
-                    }
-                    return ob_get_clean();
+                $targetFile = 'pre_install.php';
+            }
+            LogHelper::addDebug(LogTarget::PLUGIN, 'Recherche de ' . NEXTDOM_ROOT . '/plugins/' . $this->getId() . '/plugin_info/' . $targetFile);
+            if (file_exists(NEXTDOM_ROOT . '/plugins/' . $this->getId() . '/plugin_info/' . $targetFile)) {
+                LogHelper::addDebug(LogTarget::PLUGIN, 'Fichier d\'installation trouvé pour  : ' . $this->getId());
+                /** @noinspection PhpIncludeInspection */
+                require_once NEXTDOM_ROOT . '/plugins/' . $this->getId() . '/plugin_info/' . $targetFile;
+                ob_start();
+                $function = $this->getId() . '_' . $functionToCall;
+                if (function_exists($this->getId() . '_' . $functionToCall)) {
+                    $function();
                 }
-            } else {
-                LogHelper::add('plugin', 'debug', 'Recherche de ' . NEXTDOM_ROOT . '/plugins/' . $this->getId() . '/plugin_info/install.php');
-                if (file_exists(NEXTDOM_ROOT . '/plugins/' . $this->getId() . '/plugin_info/install.php')) {
-                    LogHelper::add('plugin', 'debug', 'Fichier d\'installation trouvé pour  : ' . $this->getId());
-                    require_once NEXTDOM_ROOT . '/plugins/' . $this->getId() . '/plugin_info/install.php';
-                    ob_start();
-                    $function = $this->getId() . '_' . $functionToCall;
-                    if (function_exists($this->getId() . '_' . $functionToCall)) {
-                        $function();
-                    }
-                    return ob_get_clean();
-                }
+                return ob_get_clean();
             }
         } else {
             return $this->launch($functionToCall, true);
@@ -691,10 +683,10 @@ class Plugin implements EntityInterface
     public function launch($functionToCall, $callInstallFunction = false)
     {
         if ($functionToCall == '') {
-            throw new \Exception('La fonction à lancer ne peut être vide');
+            throw new CoreException('La fonction à lancer ne peut être vide');
         }
         if (!$callInstallFunction && (!class_exists($this->getId()) || !method_exists($this->getId(), $functionToCall))) {
-            throw new \Exception('Il n\'existe aucune méthode : ' . $this->getId() . '::' . $functionToCall . '()');
+            throw new CoreException('Il n\'existe aucune méthode : ' . $this->getId() . '::' . $functionToCall . '()');
         }
         $cmd = NEXTDOM_ROOT . '/src/Api/start_plugin_func.php ';
         $cmd .= ' plugin_id=' . $this->getId();
@@ -703,7 +695,7 @@ class Plugin implements EntityInterface
         if (NextDomHelper::checkOngoingThread($cmd) > 0) {
             return true;
         }
-        LogHelper::add($this->getId(), 'debug', __('Lancement de : ') . $cmd);
+        LogHelper::addDebug($this->getId(), __('Lancement de : ') . $cmd);
         if ($callInstallFunction) {
             return SystemHelper::php($cmd . ' >> /dev/null 2>&1');
         } else {

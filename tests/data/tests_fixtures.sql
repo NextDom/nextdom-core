@@ -60,7 +60,11 @@ INSERT INTO `scenarioSubElement` VALUES (7,0,4,'action','action',NULL,'{\"enable
 INSERT INTO `cron` VALUES (1,1,'nextdom','cron5','*/5 * * * * *',5,0,1,NULL,0);
 INSERT INTO `cron` VALUES (2,1,'nextdom','cron10','*/10 * * * * *',10,0,1,NULL,0);
 INSERT INTO `cron` VALUES (3,1,'nextdom','cron','* * * * * *',2,0,1,NULL,0);
-INSERT INTO `cron` VALUES (4,0,'nextdom','cronHourly','0 * * * * *',2,0,1,NULL,0);
+INSERT INTO `cron` VALUES (4,0,'nextdom','cronHourly','0 * * * * *',60,0,1,NULL,0);
+INSERT INTO `cron` VALUES (5,1,'plugin','cron5','*/5 * * * * *',5,0,1,NULL,0);
+INSERT INTO `cron` VALUES (6,1,'plugin','cron10','*/10 * * * * *',10,0,1,NULL,0);
+INSERT INTO `cron` VALUES (7,1,'plugin','cron','* * * * * *',2,0,1,NULL,0);
+INSERT INTO `cron` VALUES (8,0,'plugin','cronHourly','0 * * * * *',60,0,1,NULL,0);
 INSERT INTO `update` VALUES (1,'core','nextdom','nextdom','', '', 'github', 'ok', '[]');
 INSERT INTO `view` VALUES (1,'Test view','[]',NULL,'[]','[]');
 INSERT INTO `message` VALUES (1,'2019-05-03 22:00:03','newUpdate','update','De nouvelles mises à jour sont disponibles : nextdom,openzwave','');

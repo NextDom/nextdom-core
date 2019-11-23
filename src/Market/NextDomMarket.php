@@ -33,6 +33,7 @@
 
 namespace NextDom\Market;
 
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DataStorage;
 
 /**
@@ -87,7 +88,7 @@ class NextDomMarket
                 $result = $this->refreshJson($force);
             }
         } else {
-            throw new \Exception('Pas de connection internet', 500);
+            throw new CoreException('Pas de connection internet', 500);
         }
         return $result;
     }
@@ -190,7 +191,7 @@ class NextDomMarket
      */
     public function getItemsFromJson(): array
     {
-        $result = array();
+        $result = [];
         $plugins = $this->dataStorage->getJsonData('repo_data_' . $this->source['name']);
         foreach ($plugins as $plugin) {
             if ($plugin['id'] !== 'AlternativeMarketForJeedom') {

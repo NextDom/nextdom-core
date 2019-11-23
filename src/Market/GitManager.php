@@ -19,6 +19,7 @@
 
 namespace NextDom\Market;
 
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DataStorage;
 
 /**
@@ -69,9 +70,9 @@ class GitManager
         $jsonList = $this->downloadRepositoriesList();
         if ($jsonList !== false) {
             $jsonAnswer = json_decode($jsonList, true);
-            $dataToStore = array();
+            $dataToStore = [];
             foreach ($jsonAnswer as $repository) {
-                $data = array();
+                $data = [];
                 $data['name'] = $repository['name'];
                 $data['full_name'] = $repository['full_name'];
                 $data['description'] = $repository['description'];
@@ -104,10 +105,10 @@ class GitManager
             $content = DownloadManager::downloadContent($this->githubApiDomain . '/rate_limit');
             $gitHubLimitData = json_decode($content, true);
             $refreshDate = date('H:i', $gitHubLimitData['resources']['core']['reset']);
-            throw new \Exception('Limite de l\'API GitHub atteinte. Le rafraichissement sera accessible à ' . $refreshDate);
+            throw new CoreException('Limite de l\'API GitHub atteinte. Le rafraichissement sera accessible à ' . $refreshDate);
         } elseif (strstr($content, 'Bad credentials')) {
             // Le token GitHub n'est pas bon
-            throw new \Exception('Problème de Token GitHub');
+            throw new CoreException('Problème de Token GitHub');
         } else {
             // Test si c'est un dépôt d'organisation
             if (strstr($content, '"message":"Not Found"')) {
@@ -115,7 +116,7 @@ class GitManager
                 $content = DownloadManager::downloadContent($this->githubApiDomain . '/users/' . $this->gitId . '/repos?per_page=100');
                 // Test si c'est un dépot d'utilisateur
                 if (strstr($content, '"message":"Not Found"') || strlen($content) < 10) {
-                    throw new \Exception('Le dépôt ' . $this->gitId . ' n\'existe pas.');
+                    throw new CoreException('Le dépôt ' . $this->gitId . ' n\'existe pas.');
                 } else {
                     $result = $content;
                 }
@@ -142,6 +143,7 @@ class GitManager
      * @param string $sourceName Nom de la source
      * @param array $repositoriesList Liste des dépots
      * @param bool $force Forcer les mises à jour
+     * @throws \Exception
      */
     public function updateRepositories($sourceName, $repositoriesList, $force)
     {
@@ -165,7 +167,7 @@ class GitManager
      */
     protected function getIgnoreList()
     {
-        $result = array();
+        $result = [];
         $jsonList = $this->dataStorage->getJsonData('repo_ignore_' . $this->gitId);
         if ($jsonList !== null) {
             $result = $jsonList;
@@ -182,7 +184,7 @@ class GitManager
      */
     public function getItems($sourceName)
     {
-        $result = array();
+        $result = [];
         $repositories = $this->getRepositoriesList();
         $ignoreList = $this->getIgnoreList();
         foreach ($repositories as $repository) {

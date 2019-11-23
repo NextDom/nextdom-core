@@ -181,7 +181,7 @@ class BaseGuiTest(unittest.TestCase):
         :rtype:  array
         """
         js_logs = self.driver.get_log('browser')
-        if len(js_logs) > 0:
+        if js_logs:
             print(js_logs)
         return js_logs
 

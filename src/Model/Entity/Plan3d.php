@@ -17,6 +17,9 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\CmdSubType;
+use NextDom\Enums\CmdType;
+use NextDom\Enums\Common;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
@@ -103,7 +106,7 @@ class Plan3d implements EntityInterface
 
     public function preInsert()
     {
-        if (in_array($this->getLink_type(), array('eqLogic', 'cmd', 'scenario'))) {
+        if (in_array($this->getLink_type(), ['eqLogic', 'cmd', 'scenario'])) {
             Plan3dManager::removeByLinkTypeLinkId3dHeaderId($this->getLink_type(), $this->getLink_id(), $this->getPlan3dHeader_id());
         }
     }
@@ -167,7 +170,7 @@ class Plan3d implements EntityInterface
 
     public function preSave()
     {
-        $default = array(
+        $default = [
             '3d::widget::light::power' => 6,
             '3d::widget::text::fontsize' => 24,
             '3d::widget::text::backgroundcolor' => '#ff6464',
@@ -189,7 +192,7 @@ class Plan3d implements EntityInterface
             '3d::widget::door::shutterclose::enableColor' => 0,
             '3d::widget::door::translate' => 0,
             '3d::widget::door::translate::repeat' => 1,
-        );
+        ];
         foreach ($default as $key => $value) {
             $this->setConfiguration($key, $this->getConfiguration($key, $value));
         }
@@ -233,18 +236,19 @@ class Plan3d implements EntityInterface
      * @return array|null
      * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
+     * @throws \NextDom\Exceptions\OperatingSystemException
      */
     public function getHtml($_version = 'dplan')
     {
-        if (in_array($this->getLink_type(), array('eqLogic', 'cmd', 'scenario'))) {
+        if (in_array($this->getLink_type(), ['eqLogic', 'cmd', 'scenario'])) {
             $link = $this->getLink();
             if (!is_object($link)) {
                 return null;
             }
-            return array(
+            return [
                 '3d' => Utils::o2a($this),
                 'html' => $link->toHtml($_version),
-            );
+            ];
         }
         return null;
     }
@@ -256,7 +260,7 @@ class Plan3d implements EntityInterface
     public function getLink()
     {
         if ($this->getLink_type() == 'eqLogic') {
-            $eqLogic = EqLogicManager::byId(str_replace(array('#', 'eqLogic'), '', $this->getLink_id()));
+            $eqLogic = EqLogicManager::byId(str_replace(['#', 'eqLogic'], '', $this->getLink_id()));
             return $eqLogic;
         } else if ($this->getLink_type() == 'scenario') {
             $scenario = ScenarioManager::byId($this->getLink_id());
@@ -264,7 +268,7 @@ class Plan3d implements EntityInterface
         } else if ($this->getLink_type() == 'cmd') {
             $cmd = CmdManager::byId($this->getLink_id());
             return $cmd;
-        } else if ($this->getLink_type() == 'summary') {
+        } else if ($this->getLink_type() == Common::SUMMARY) {
             $linkedObject = JeeObjectManager::byId($this->getLink_id());
             return $linkedObject;
         }
@@ -278,10 +282,10 @@ class Plan3d implements EntityInterface
      */
     public function additionalData()
     {
-        $return = array();
+        $return = [];
         $return['cmd_id'] = str_replace('#', '', $this->getConfiguration('cmd::state'));
         $cmd = CmdManager::byId($return['cmd_id']);
-        if (is_object($cmd) && $cmd->getType() == 'info') {
+        if (is_object($cmd) && $cmd->isType(CmdType::INFO)) {
             $return['state'] = $cmd->execCmd();
             $return['subType'] = $cmd->getSubType();
         }
@@ -292,21 +296,21 @@ class Plan3d implements EntityInterface
                 $return['cmds'] = $matches[1];
             }
             if ($this->getConfiguration('3d::widget') == 'door') {
-                $return['cmds'] = array(str_replace('#', '', $this->getConfiguration('3d::widget::door::window')), str_replace('#', '', $this->getConfiguration('3d::widget::door::shutter')));
+                $return['cmds'] = [str_replace('#', '', $this->getConfiguration('3d::widget::door::window')), str_replace('#', '', $this->getConfiguration('3d::widget::door::shutter'))];
                 $return['state'] = 0;
                 $cmd = CmdManager::byId(str_replace('#', '', $this->getConfiguration('3d::widget::door::window')));
-                if (is_object($cmd) && $cmd->getType() == 'info') {
+                if (is_object($cmd) && $cmd->isType(CmdType::INFO)) {
                     $cmd_value = $cmd->execCmd();
-                    if ($cmd->getSubType() == 'binary' && $cmd->getDisplay('invertBinary') == 1) {
+                    if ($this->isSubType(CmdSubType::BINARY) && $cmd->getDisplay('invertBinary') == 1) {
                         $cmd_value = ($cmd_value == 1) ? 0 : 1;
                     }
                     $return['state'] = $cmd_value;
                 }
                 if ($return['state'] > 0) {
                     $cmd = CmdManager::byId(str_replace('#', '', $this->getConfiguration('3d::widget::door::shutter')));
-                    if (is_object($cmd) && $cmd->getType() == 'info') {
+                    if (is_object($cmd) && $cmd->isType(CmdType::INFO)) {
                         $cmd_value = $cmd->execCmd();
-                        if ($cmd->getSubType() == 'binary' && $cmd->getDisplay('invertBinary') == 1) {
+                        if ($this->isSubType(CmdSubType::BINARY) && $cmd->getDisplay('invertBinary') == 1) {
                             $cmd_value = ($cmd_value == 1) ? 0 : 1;
                         }
                         if ($cmd_value) {
@@ -317,7 +321,7 @@ class Plan3d implements EntityInterface
             }
             if ($this->getConfiguration('3d::widget') == 'conditionalColor') {
                 $return['color'] = '';
-                $return['cmds'] = array();
+                $return['cmds'] = [];
                 $conditions = $this->getConfiguration('3d::widget::conditionalColor::condition');
                 if (!is_array($conditions) || count($conditions) == 0) {
                     return $return;
@@ -351,7 +355,7 @@ class Plan3d implements EntityInterface
 
         } elseif ($this->getLink_type() == 'cmd') {
 
-        } elseif ($this->getLink_type() == 'summary') {
+        } elseif ($this->getLink_type() == Common::SUMMARY) {
 
         }
         return $return;

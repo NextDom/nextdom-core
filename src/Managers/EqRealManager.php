@@ -55,16 +55,16 @@ class EqRealManager
      */
     public static function byLogicalId($_logicalId, $_cat)
     {
-        $values = array(
+        $values = [
             'logicalId' => $_logicalId,
             'cat' => $_cat,
-        );
+        ];
         $sql = 'SELECT id
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE logicalId = :logicalId
                   AND cat= : cat';
         $results = DBHelper::getAll($sql, $values);
-        $return = array();
+        $return = [];
         foreach ($results as $result) {
             $return[] = self::byId($result['id']);
         }
@@ -79,9 +79,9 @@ class EqRealManager
      */
     public static function byId($_id)
     {
-        $values = array(
+        $values = [
             'id' => $_id,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE id = :id';
@@ -99,9 +99,9 @@ class EqRealManager
         if (get_called_class() != self::CLASS_NAME) {
             return get_called_class();
         }
-        $values = array(
+        $values = [
             'id' => $_id,
-        );
+        ];
         $sql = 'SELECT plugin, isEnable
                 FROM `eqLogic`
                 WHERE eqReal_id = :id';

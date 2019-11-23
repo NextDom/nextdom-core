@@ -48,7 +48,7 @@ class ReportController extends BaseController
     {
 
         $pageData['JS_END_POOL'][] = '/public/js/desktop/diagnostic/report.js';
-        $reportPath = NEXTDOM_DATA. '/data/custom/report/';
+        $reportPath = NEXTDOM_DATA . '/data/custom/report/';
         $pageData['reportViews'] = [];
         $allViews = ViewManager::all();
         foreach ($allViews as $view) {

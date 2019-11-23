@@ -34,7 +34,7 @@ class LogDisplayModalControllerTest extends BaseControllerTest
         ob_start();
         $result = \NextDom\Controller\Modals\LogDisplay::get();
         $scriptResult = ob_get_clean();
-        $this->assertContains('src="/public/js/desktop/diagnostic/realtime.js"', $result);
-        $this->assertContains('var realtime_name', $scriptResult);
+        $this->assertContains('src="/public/js/modals/log.display.js"', $result);
+        $this->assertContains('var log_default_search', $scriptResult);
     }
 }

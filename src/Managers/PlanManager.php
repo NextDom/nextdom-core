@@ -59,9 +59,9 @@ class PlanManager
      */
     public static function byId($_id)
     {
-        $values = array(
+        $values = [
             'id' => $_id,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE id = :id';
@@ -76,9 +76,9 @@ class PlanManager
      */
     public static function byPlanHeaderId($_planHeader_id)
     {
-        $values = array(
+        $values = [
             'planHeader_id' => $_planHeader_id,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE planHeader_id = :planHeader_id';
@@ -94,10 +94,10 @@ class PlanManager
      */
     public static function byLinkTypeLinkId($_link_type, $_link_id)
     {
-        $values = array(
+        $values = [
             'link_type' => $_link_type,
             'link_id' => $_link_id,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE link_type = :link_type
@@ -115,11 +115,11 @@ class PlanManager
      */
     public static function byLinkTypeLinkIdPlanHedaerId($_link_type, $_link_id, $_planHeader_id)
     {
-        $values = array(
+        $values = [
             'link_type' => $_link_type,
             'link_id' => $_link_id,
             'planHeader_id' => $_planHeader_id,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE link_type = :link_type
@@ -137,11 +137,11 @@ class PlanManager
      */
     public static function removeByLinkTypeLinkIdPlanHedaerId($_link_type, $_link_id, $_planHeader_id)
     {
-        $values = array(
+        $values = [
             'link_type' => $_link_type,
             'link_id' => $_link_id,
             'planHeader_id' => $_planHeader_id,
-        );
+        ];
         $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . '
         WHERE link_type = :link_type
         AND link_id = :link_id
@@ -169,9 +169,9 @@ class PlanManager
      */
     public static function searchByDisplay($_search)
     {
-        $value = array(
+        $value = [
             'search' => '%' . $_search . '%',
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE display LIKE :search';
@@ -187,10 +187,10 @@ class PlanManager
      */
     public static function searchByConfiguration($_search, $_not = '')
     {
-        $value = array(
+        $value = [
             'search' => '%' . $_search . '%',
             'not' => $_not,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE configuration LIKE :search

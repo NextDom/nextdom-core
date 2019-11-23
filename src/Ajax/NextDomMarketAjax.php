@@ -18,6 +18,7 @@
 namespace NextDom\Ajax;
 
 use NextDom\Enums\UserRight;
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Utils;
 use NextDom\Market\DownloadManager;
 use NextDom\Market\MarketItem;
@@ -78,7 +79,7 @@ class NextDomMarketAjax extends BaseAjax
                 $market->refresh($force);
             }
         } else {
-            throw new \Exception('Aucune source configurée');
+            throw new CoreException('Aucune source configurée');
         }
         return $result;
     }

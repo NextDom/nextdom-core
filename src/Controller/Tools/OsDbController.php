@@ -24,7 +24,6 @@ namespace NextDom\Controller\Tools;
 
 use NextDom\Controller\BaseController;
 use NextDom\Helpers\Render;
-use NextDom\Managers\ConfigManager;
 
 /**
  * Class OsDbController

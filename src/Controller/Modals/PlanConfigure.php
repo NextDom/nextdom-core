@@ -22,6 +22,7 @@
 
 namespace NextDom\Controller\Modals;
 
+use NextDom\Enums\AjaxParams;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
@@ -47,7 +48,7 @@ class PlanConfigure extends BaseAbstractModal
     {
 
         $pageData = [];
-        $pageData['planObject'] = PlanManager::byId(Utils::init('id'));
+        $pageData['planObject'] = PlanManager::byId(Utils::init(AjaxParams::ID));
         if (!is_object($pageData['planObject'])) {
             throw new CoreException('Impossible de trouver le design');
         }
