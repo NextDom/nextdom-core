@@ -37,6 +37,7 @@ namespace NextDom\Helpers;
 use NextDom\Enums\ConfigKey;
 use NextDom\Enums\DateFormat;
 use NextDom\Enums\NextDomObj;
+use NextDom\Enums\SystemCron;
 use NextDom\Exceptions\CoreException;
 use NextDom\Managers\CacheManager;
 use NextDom\Managers\CmdManager;
@@ -649,14 +650,18 @@ class NextDomHelper
 
     /**
      * Stop all cron tasks and scenarios
+     * @param $isBackupProcess if true stop all except backup cron
+     * @throws \Exception
      */
-    public static function stopSystem()
+    public static function stopSystem($isBackupProcess)
     {
         // $okStr = __('common.ok');
         // echo __('core.disable-tasks');
         ConfigManager::save('enableCron', 0);
         foreach (CronManager::all() as $cron) {
-            if ($cron->running()) {
+            if($isBackupProcess && $cron->getClass() === SystemCron::NEXTDOM_BACKUP[0] && $cron->getFunction() === SystemCron::NEXTDOM_BACKUP[1] ){
+                LogHelper::addInfo("Stopping all cron in backup context. Backup's cron won't be stop");
+            } else if ($cron->running()) {
                 try {
                     $cron->halt();
                 } catch (\Exception $e) {

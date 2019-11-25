@@ -146,7 +146,7 @@ class nextdom
 
     public static function stop()
     {
-        NextDomHelper::stopSystem();
+        NextDomHelper::stopSystem(false);
     }
 
     public static function start()
