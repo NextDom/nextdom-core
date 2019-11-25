@@ -111,7 +111,7 @@ function coreUpdate()
     $gitInstall = is_dir(NEXTDOM_ROOT . '/.git');
 
     // Begin process
-    NextDomHelper::stopSystem();
+    NextDomHelper::stopSystem(false);
     try {
         if ($gitInstall) {
             gitUpdate();
