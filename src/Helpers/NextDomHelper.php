@@ -749,7 +749,7 @@ class NextDomHelper
         ConfigManager::save('enableCron', 0);
         foreach (CronManager::all() as $cron) {
             if($isBackupProcess && $cron->getClass() === SystemCron::NEXTDOM_BACKUP[0] && $cron->getFunction() === SystemCron::NEXTDOM_BACKUP[1] ){
-                LogHelper::addInfo("Stopping all cron in backup context. Backup's cron won't be stop");
+                LogHelper::addInfo(LogTarget::MIGRATION, "Stopping all cron in backup context. Backup's cron won't be stop");
             } else if ($cron->running()) {
                 try {
                     $cron->halt();
