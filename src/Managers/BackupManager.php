@@ -90,7 +90,7 @@ class BackupManager
             ConsoleHelper::subTitle("starting backup procedure at " . date(DateFormat::FULL));
             NextDomHelper::event('begin_backup', true);
             ConsoleHelper::step("stopping NextDom (cron & scenario)");
-            NextDomHelper::stopSystem();
+            NextDomHelper::stopSystem(true);
             ConsoleHelper::ok();
             ConsoleHelper::step("starting plugin backup");
             self::backupPlugins();
@@ -462,7 +462,7 @@ class BackupManager
             ConsoleHelper::process("file used for restoration: " . $file);
             ConsoleHelper::ok();
             ConsoleHelper::step("stopping Nextdom system...");
-            NextDomHelper::stopSystem();
+            NextDomHelper::stopSystem(false);
             ConsoleHelper::ok();
             ConsoleHelper::step("extracting backup archive...");
             $tmpDir = self::extractArchive($file);
