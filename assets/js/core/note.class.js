@@ -1,4 +1,3 @@
-
 /* This file is part of Jeedom.
  *
  * Jeedom is free software: you can redistribute it and/or modify
@@ -15,80 +14,44 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-nextdom.note = function() {
+nextdom.note = function () {
 };
 
-nextdom.note.remove = function(_params) {
-    var paramsRequired = ['id'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/note.ajax.php';
-    paramsAJAX.data = {
-        action: "remove",
-        id: _params.id
-    };
-    $.ajax(paramsAJAX);
-}
+nextdom.note.remove = function (queryParams) {
+  var paramsRequired = ['id'];
+  var paramsSpecifics = {};
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getAjaxParams(params, 'Note', 'remove');
+    ajaxParams.data['id'] = queryParams.id;
+    $.ajax(ajaxParams);
+  }
+};
 
-nextdom.note.byId = function(_params) {
-    var paramsRequired = ['id'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/note.ajax.php';
-    paramsAJAX.data = {
-        action: "byId",
-        id: _params.id
-    };
-    $.ajax(paramsAJAX);
-}
+nextdom.note.byId = function (queryParams) {
+  var paramsRequired = ['id'];
+  var paramsSpecifics = {};
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getAjaxParams(params, 'Note', 'byId');
+    ajaxParams.data['id'] = queryParams.id;
+    $.ajax(ajaxParams);
+  }
+};
 
-nextdom.note.save = function(_params) {
-    var paramsRequired = ['note'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/note.ajax.php';
-    paramsAJAX.data = {
-        action: 'save',
-        note: json_encode(_params.note),
-    };
-    $.ajax(paramsAJAX);
-}
+nextdom.note.save = function (queryParams) {
+  var paramsRequired = ['note'];
+  var paramsSpecifics = {};
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getAjaxParams(params, 'Note', 'save');
+    ajaxParams.data['note'] = json_encode(queryParams.note);
+    $.ajax(ajaxParams);
+  }
+};
 
-nextdom.note.all = function(_params) {
-    var paramsRequired = [];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/note.ajax.php';
-    paramsAJAX.data = {
-        action: 'all'
-    };
-    $.ajax(paramsAJAX);
-}
+nextdom.note.all = function (queryParams) {
+  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
+  var ajaxParams = nextdom.private.getAjaxParams(params, 'Note', 'all');
+  $.ajax(ajaxParams);
+};

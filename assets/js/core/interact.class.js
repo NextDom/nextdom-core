@@ -1,4 +1,3 @@
-
 /* This file is part of Jeedom.
  *
  * Jeedom is free software: you can redistribute it and/or modify
@@ -16,100 +15,64 @@
  */
 
 
-nextdom.interact = function() {
+nextdom.interact = function () {
 };
 
-nextdom.interact.remove = function(_params) {
-    var paramsRequired = ['id'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/interact.ajax.php';
-    paramsAJAX.data = {
-        action: "remove",
-        id: _params.id
-    };
-    $.ajax(paramsAJAX);
-}
+nextdom.interact.remove = function (queryParams) {
+  var paramsRequired = ['id'];
+  var paramsSpecifics = {};
+  try {
+    nextdom.private.checkParamsRequired(queryParams || {}, paramsRequired);
+  } catch (e) {
+    (queryParams.error || paramsSpecifics.error || nextdom.private.defaultqueryParams.error)(e);
+    return;
+  }
+  var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+  var ajaxParams = nextdom.private.getAjaxParams(params, 'Interact', 'remove');
+  ajaxParams.data['id'] = queryParams.id;
+  $.ajax(ajaxParams);
+};
 
 
-nextdom.interact.get = function(_params) {
-    var paramsRequired = ['id'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/interact.ajax.php';
-    paramsAJAX.data = {
-        action: "byId",
-        id: _params.id
-    };
-    $.ajax(paramsAJAX);
-}
+nextdom.interact.get = function (queryParams) {
+  var paramsRequired = ['id'];
+  var paramsSpecifics = {};
+  try {
+    nextdom.private.checkParamsRequired(queryParams || {}, paramsRequired);
+  } catch (e) {
+    (queryParams.error || paramsSpecifics.error || nextdom.private.defaultqueryParams.error)(e);
+    return;
+  }
+  var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+  var ajaxParams = nextdom.private.getAjaxParams(params, 'Interact', 'byId');
+  ajaxParams.data['id'] = queryParams.id;
+  $.ajax(ajaxParams);
+};
 
-nextdom.interact.save = function(_params) {
-    var paramsRequired = ['interact'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/interact.ajax.php';
-    paramsAJAX.data = {
-        action: 'save',
-        interact: json_encode(_params.interact),
-    };
-    $.ajax(paramsAJAX);
-}
+nextdom.interact.save = function (queryParams) {
+  var paramsRequired = ['interact'];
+  var paramsSpecifics = {};
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getAjaxParams(params, 'Interact', 'save');
+    ajaxParams.data['interact'] = json_encode(queryParams.interact);
+    $.ajax(ajaxParams);
+  }
+};
 
-nextdom.interact.regenerateInteract = function(_params) {
-    var paramsRequired = [];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/interact.ajax.php';
-    paramsAJAX.data = {
-        action: 'regenerateInteract',
-    };
-    $.ajax(paramsAJAX);
-}
+nextdom.interact.regenerateInteract = function (queryParams) {
+  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
+  var ajaxParams = nextdom.private.getAjaxParams(params, 'Interact', 'regenerateInteract');
+  $.ajax(ajaxParams);
+};
 
-nextdom.interact.execute = function(_params) {
-    var paramsRequired = ['query'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/interact.ajax.php';
-    paramsAJAX.data = {
-        action: 'execute',
-        query: _params.query,
-    };
-    $.ajax(paramsAJAX);
-}
+nextdom.interact.execute = function (queryParams) {
+  var paramsRequired = ['query'];
+  var paramsSpecifics = {};
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getAjaxParams(params, 'Interact', 'execute');
+    ajaxParams.data['query'] = queryParams.query;
+    $.ajax(ajaxParams);
+  }
+};

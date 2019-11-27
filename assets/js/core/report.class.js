@@ -1,4 +1,3 @@
-
 /* This file is part of Jeedom.
  *
  * Jeedom is free software: you can redistribute it and/or modify
@@ -16,88 +15,56 @@
  */
 
 
- nextdom.report = function () {
- };
+nextdom.report = function () {
+};
 
 
- nextdom.report.list = function (_params) {
-    var paramsRequired = ['type','id'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/report.ajax.php';
-    paramsAJAX.data = {
-        action: 'list',
-        id: _params.id,
-        type: _params.type
-    };
-    $.ajax(paramsAJAX);
-}
+nextdom.report.list = function (queryParams) {
+  var paramsRequired = ['type', 'id'];
+  var paramsSpecifics = {};
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getAjaxParams(params, 'Report', 'list');
+    ajaxParams.data['id'] = queryParams.id;
+    ajaxParams.data['type'] = queryParams.type;
+    $.ajax(ajaxParams);
+  }
+};
 
-nextdom.report.get = function (_params) {
-    var paramsRequired = ['type','id','report'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/report.ajax.php';
-    paramsAJAX.data = {
-        action: 'get',
-        id: _params.id,
-        type: _params.type,
-        report: _params.report
-    };
-    $.ajax(paramsAJAX);
-}
+nextdom.report.get = function (queryParams) {
+  var paramsRequired = ['type', 'id', 'report'];
+  var paramsSpecifics = {};
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getAjaxParams(params, 'Report', 'get');
+    ajaxParams.data['id'] = queryParams.id;
+    ajaxParams.data['type'] = queryParams.type;
+    ajaxParams.data['report'] = queryParams.report;
+    $.ajax(ajaxParams);
+  }
+};
 
-nextdom.report.remove = function (_params) {
-    var paramsRequired = ['type','id','report'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/report.ajax.php';
-    paramsAJAX.data = {
-        action: 'remove',
-        id: _params.id,
-        type: _params.type,
-        report: _params.report
-    };
-    $.ajax(paramsAJAX);
-}
+nextdom.report.remove = function (queryParams) {
+  var paramsRequired = ['type', 'id', 'report'];
+  var paramsSpecifics = {};
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getAjaxParams(params, 'Report', 'remove');
+    ajaxParams.data['id'] = queryParams.id;
+    ajaxParams.data['type'] = queryParams.type;
+    ajaxParams.data['report'] = queryParams.report;
+    $.ajax(ajaxParams);
+  }
+};
 
-nextdom.report.removeAll = function (_params) {
-    var paramsRequired = ['type','id'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/report.ajax.php';
-    paramsAJAX.data = {
-        action: 'removeAll',
-        id: _params.id,
-        type: _params.type
-    };
-    $.ajax(paramsAJAX);
-}
+nextdom.report.removeAll = function (queryParams) {
+  var paramsRequired = ['type', 'id'];
+  var paramsSpecifics = {};
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getAjaxParams(params, 'Report', 'removeAll');
+    ajaxParams.data['id'] = queryParams.id;
+    ajaxParams.data['type'] = queryParams.type;
+    $.ajax(ajaxParams);
+  }
+};

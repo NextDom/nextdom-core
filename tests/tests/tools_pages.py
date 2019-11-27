@@ -195,8 +195,8 @@ class AdminToolsPages(BaseGuiTest):
         self.assertIsNotNone(back_button)
         self.assertIsNotNone(self.get_element_by_id('colorpickTagText'))
         # Tab summary
-        #self.get_element_by_css('a[href="#summarytab"]').click()
         self.click_on_invisible('a[href="#summarytab"]')
+        sleep(2)
         self.assertIsNotNone(self.get_element_by_id('summarytabsecurity'))
         self.assertEqual(0, len(self.get_js_logs()))
         back_button.click()

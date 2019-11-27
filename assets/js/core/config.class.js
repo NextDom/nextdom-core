@@ -1,4 +1,3 @@
-
 /* This file is part of Jeedom.
  *
  * Jeedom is free software: you can redistribute it and/or modify
@@ -19,63 +18,40 @@ nextdom.config = function () {
 };
 
 
-nextdom.config.save = function (_params) {
-    var paramsRequired = ['configuration'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/config.ajax.php';
-    paramsAJAX.data = {
-        action: 'addKey',
-        value: json_encode(_params.configuration),
-        plugin: _params.plugin || 'core'
-    };
-    $.ajax(paramsAJAX);
-}
-
-nextdom.config.load = function (_params) {
-    var paramsRequired = ['configuration'];
-    var paramsSpecifics = {global: _params.global || true};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/config.ajax.php';
-    paramsAJAX.data = {
-        action: 'getKey',
-        key: ($.isArray(_params.configuration) || $.isPlainObject(_params.configuration)) ? json_encode(_params.configuration) : _params.configuration,
-        plugin: _params.plugin || 'core',
-        convertToHumanReadable :  _params.convertToHumanReadable || false
-    };
-    $.ajax(paramsAJAX);
+nextdom.config.save = function (queryParams) {
+  var paramsRequired = ['configuration'];
+  var paramsSpecifics = {};
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getAjaxParams(params, 'Config', 'addKey');
+    ajaxParams.data['value'] = json_encode(queryParams.configuration);
+    ajaxParams.data['plugin'] = queryParams.plugin || 'core';
+    $.ajax(ajaxParams);
+  }
 };
 
-nextdom.config.remove = function (_params) {
-    var paramsRequired = ['configuration'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/config.ajax.php';
-    paramsAJAX.data = {
-        action: 'removeKey',
-        key: ($.isArray(_params.configuration) || $.isPlainObject(_params.configuration)) ? json_encode(_params.configuration) : _params.configuration,
-        plugin: _params.plugin || 'core'
-    };
-    $.ajax(paramsAJAX);
+nextdom.config.load = function (queryParams) {
+  var paramsRequired = ['configuration'];
+  var paramsSpecifics = {global: queryParams.global || true};
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getAjaxParams(params, 'Config', 'getKey');
+    ajaxParams.data['key'] = ($.isArray(queryParams.configuration) || $.isPlainObject(queryParams.configuration)) ? json_encode(queryParams.configuration) : queryParams.configuration;
+    ajaxParams.data['plugin'] = queryParams.plugin || 'core';
+    ajaxParams.data['convertToHumanReadable'] = queryParams.convertToHumanReadable || false;
+    $.ajax(ajaxParams);
+  }
+};
+
+nextdom.config.remove = function (queryParams) {
+  var paramsRequired = ['configuration'];
+  var paramsSpecifics = {};
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getAjaxParams(params, 'Config', 'removeKey');
+    ajaxParams.data['action'] = 'removeKey';
+    ajaxParams.data['key'] = ($.isArray(queryParams.configuration) || $.isPlainObject(queryParams.configuration)) ? json_encode(queryParams.configuration) : queryParams.configuration;
+    ajaxParams.data['plugin'] = queryParams.plugin || 'core';
+    $.ajax(ajaxParams);
+  }
 };

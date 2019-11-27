@@ -1,4 +1,3 @@
-
 /* This file is part of Jeedom.
  *
  * Jeedom is free software: you can redistribute it and/or modify
@@ -16,43 +15,27 @@
  */
 
 
-nextdom.security = function() {
+nextdom.security = function () {
 };
 
-nextdom.security.remove = function(_params) {
-    var paramsRequired = ['id'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/connection.ajax.php';
-    paramsAJAX.data = {
-        action: 'remove',
-        id: _params.id
-    };
-    $.ajax(paramsAJAX);
-}
+nextdom.security.remove = function (queryParams) {
+  var paramsRequired = ['id'];
+  var paramsSpecifics = {};
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getAjaxParams(params, 'Connection', 'remove');
+    ajaxParams.data['id'] = queryParams.id;
+    $.ajax(ajaxParams);
+  }
+};
 
-nextdom.security.ban = function(_params) {
-    var paramsRequired = ['id'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/connection.ajax.php';
-    paramsAJAX.data = {
-        action: 'ban',
-        id: _params.id
-    };
-    $.ajax(paramsAJAX);
-}
+nextdom.security.ban = function (queryParams) {
+  var paramsRequired = ['id'];
+  var paramsSpecifics = {};
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getAjaxParams(params, 'Connection', 'ban');
+    ajaxParams.data['id'] = queryParams.id;
+    $.ajax(ajaxParams);
+  }
+};

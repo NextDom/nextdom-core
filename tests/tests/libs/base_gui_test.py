@@ -173,7 +173,7 @@ class BaseGuiTest(unittest.TestCase):
         :type page:  str
         """
         self.driver.get(self.url + page)
-        sleep(4)
+        sleep(5)
 
     def get_js_logs(self):
         """Get javascript browser logs
