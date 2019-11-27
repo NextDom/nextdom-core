@@ -4,9 +4,9 @@ php:
 services:
     - docker
 before_install:
-    - docker pull sylvaner1664/nextdom-test
+    - docker pull nextdom/nextdom-test:latest
     - mkdir -p tests/coverage
-    - docker run -d --rm -p 8765:80 -v `pwd`:/data --name="nextdom-test" sylvaner1664/nextdom-test:latest /start.sh
+    - docker run -d --rm -p 8765:80 -v `pwd`:/data --name="nextdom-test" nextdom/nextdom-test:latest /start.sh
     - sudo apt update
     - sudo apt install -y python3-pip python-pip python3-setuptools dpkg
     - sudo python -m pip install --upgrade pip jsmin
@@ -16,8 +16,8 @@ before_install:
     - wget --no-verbose -O /tmp/$(basename $CHROME_SOURCE_URL) $CHROME_SOURCE_URL
     - sudo dpkg -i /tmp/$(basename $CHROME_SOURCE_URL)
     - ./scripts/gen_global.sh
-    - composer install --dev
     - composer require --dev satooshi/php-coveralls
+    - composer install --dev
     - "while true; do DOCKER_LOGS=$(docker logs --tail 10 nextdom-test 2>&1); if [[ \"$DOCKER_LOGS\" =~ .*NEXTDOM.TEST.READY.* ]]; then break; fi; sleep 2; done"
     - docker exec -it nextdom-test bash -c "cd /var/www/html && composer install --dev"
     - docker commit nextdom-test nextdom-test-snap
@@ -34,5 +34,6 @@ script:
     - python3 launch_gui_tests.py
 after_script:
     - cd ${TRAVIS_BUILD_DIR}
-    - sed -i "s/\/var\/www\/html/\/home\/travis\/build\/NextDom\/nextdom-core/g" tests/coverage/clover.xml
+    - ls tests/coverage/
+    - sed -i "s/\/usr\/share\/nextdom\///g" tests/coverage/clover.xml
     - php vendor/bin/php-coveralls -v

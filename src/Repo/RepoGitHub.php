@@ -30,6 +30,8 @@ require_once __DIR__ . '/../../core/php/core.inc.php';
 class RepoGitHub
 {
     public static $_name = 'Github';
+    public static $_icon = 'fab fa-github';
+    public static $_description = 'repo.github.description';
 
     public static $_scope = array(
         'plugin' => true,
@@ -41,38 +43,40 @@ class RepoGitHub
     public static $_configuration = array(
         'parameters_for_add' => array(
             'user' => array(
-                'name' => 'Utilisateur ou organisation du dépôt',
+                'name' => 'repo.github.conf.user',
                 'type' => 'input',
             ),
             'repository' => array(
-                'name' => 'Nom du dépôt',
+                'name' => 'repo.github.conf.repo',
                 'type' => 'input',
             ),
             'version' => array(
-                'name' => 'Branche',
+                'name' => 'repo.github.conf.branch',
                 'type' => 'input',
                 'default' => 'master',
             ),
         ),
         'configuration' => array(
             'token' => array(
-                'name' => 'Token (facultatif)',
+                'name' => 'repo.github.conf.token',
                 'type' => 'input',
             ),
             'core::user' => array(
-                'name' => 'Utilisateur ou organisation du dépôt pour le core NextDom',
+                'name' => 'repo.github.conf.core.user',
                 'type' => 'input',
                 'default' => 'nextdom',
             ),
             'core::repository' => array(
-                'name' => 'Nom du dépôt pour le core NextDom',
+                'name' => 'repo.github.conf.core.repo.name',
                 'type' => 'input',
-                'default' => 'core',
+                'default' => 'nextdom-core',
+                'placeholder' => 'repo.github.conf.core.repo.placeholder',
             ),
             'core::branch' => array(
-                'name' => 'Branche pour le core NextDom',
+                'name' => 'repo.github.conf.core.branch.name',
                 'type' => 'input',
-                'default' => 'stable',
+                'default' => 'master',
+                'placeholder' => 'repo.github.conf.core.branch.placeholder',
             ),
         ),
     );

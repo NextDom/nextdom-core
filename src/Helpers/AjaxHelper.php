@@ -43,18 +43,31 @@ use NextDom\Managers\ConfigManager;
 class AjaxHelper
 {
     /**
+     * @var bool Answer state
+     */
+    private $answerSended = false;
+
+    /**
      * Init ajax communication
      *
-     * @param bool $checkToken
      * @throws \Exception
      */
-    public static function init($checkToken = true)
+    public function __construct()
     {
         // Prepare ajax response
         if (!headers_sent()) {
             header('Content-Type: application/json');
         }
-        if ($checkToken && Utils::init('nextdom_token') != self::getToken()) {
+    }
+
+    /**
+     * Check ajax token validity
+     *
+     * @throws \Exception
+     */
+    public function checkToken()
+    {
+        if (Utils::init('nextdom_token') != self::getToken()) {
             self::error(__('Token d\'accès invalide'));
         }
     }
@@ -85,10 +98,25 @@ class AjaxHelper
      * @param string $errorData Error description
      * @param int $errorCode Error code
      */
-    public static function error($errorData = '', $errorCode = 0)
+    public function error($errorData = '', $errorCode = 0)
     {
-        echo self::getResponse($errorData, $errorCode);
-        die();
+        if (!$this->answerSended) {
+            echo $this->getResponse($errorData, $errorCode);
+            $this->answerSended = true;
+        }
+    }
+
+    /**
+     * Send answer
+     *
+     * @param string $answer Answer to send
+     */
+    public function success($answer = '')
+    {
+        if (!$this->answerSended) {
+            echo $this->getResponse($answer);
+            $this->answerSended = true;
+        }
     }
 
     /**
@@ -98,7 +126,7 @@ class AjaxHelper
      * @param null $errorCode Error code
      * @return mixed
      */
-    public static function getResponse($data = '', $errorCode = null)
+    public function getResponse($data = '', $errorCode = null)
     {
         // TODO: Tester l'incidence de l'ordre des résultat si result est inséré en dernier
         // et donc éviter la ligne en double
@@ -112,16 +140,5 @@ class AjaxHelper
             $response['code'] = $errorCode;
         }
         return json_encode($response, JSON_UNESCAPED_UNICODE);
-    }
-
-    /**
-     * Send answer
-     *
-     * @param string $answer Answer to send
-     */
-    public static function success($answer = '')
-    {
-        echo self::getResponse($answer);
-        die();
     }
 }

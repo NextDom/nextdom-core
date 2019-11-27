@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
@@ -198,8 +199,9 @@ class JeeObject implements EntityInterface
      */
     public function isVisible(): bool
     {
-        if ($this->getIsVisible() === 1)
+        if ($this->getIsVisible() === 1) {
             return true;
+        }
         return false;
     }
 
@@ -451,7 +453,7 @@ class JeeObject implements EntityInterface
     public function preSave()
     {
         if (is_numeric($this->getFather_id()) && $this->getFather_id() === $this->getId()) {
-            throw new \Exception(__('L\'objet ne peut pas être son propre père', __FILE__));
+            throw new CoreException(__('L\'objet ne peut pas être son propre père'));
         }
         $this->checkTreeConsistency();
 
@@ -531,7 +533,7 @@ class JeeObject implements EntityInterface
         if (is_object($father)) {
             // Check if the object is in ancestors (loop)
             if (in_array($this->getFather_id(), $ancestors)) {
-                throw new \Exception(__('Problème dans l\'arbre des objets', __FILE__));
+                throw new CoreException(__('Problème dans l\'arbre des objets'));
             }
             $ancestors[] = $this->getId();
 
@@ -650,7 +652,7 @@ class JeeObject implements EntityInterface
             }
         }
         $result = trim($result) . '</span>';
-        $this->setCache('summaryHtml' . $version, $summaryResult);
+        $this->setCache('summaryHtml' . $version, $result);
         return $result;
     }
 

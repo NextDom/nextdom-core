@@ -262,7 +262,7 @@ class ScenarioSubElement implements EntityInterface
     }
 
     /**
-     * @return array|mixed|null
+     * @return ScenarioExpression|ScenarioExpression[]|null
      * @throws \Exception
      */
     public function getExpression()

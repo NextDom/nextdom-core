@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-
+# line 100 caracters max or #pylint: disable=line-too-long
+####################################################################################################
 """Launch NextDom GUI tests
 """
 import sys
@@ -17,10 +18,10 @@ def ajax_tests():
     start_test_container(container_name, NEXTDOM_PASSWORD)
     # Create standard user
     exec_command_in_container(container_name, '/usr/bin/mysql -u root nextdomdev -e "INSERT INTO \\`user\\` VALUES (NULL, \'user\', \'user\', SHA2(\'nextdom-test\', 512), \'{\\\"localOnly\\\":\\\"0\\\",\\\"lastConnection\\\":\\\"\\\"}\', \'VD5OOmHSVT3VFYjng4XEaZF5wAI9jEi8\', \'[]\', 1)"') #pylint: disable=line-too-long
-    ret_code = os.system('cd .. && ./vendor/bin/phpunit --configuration tests/compatibility/phpunit.xml --testsuite AllTests') #pylint: disable=line-too-long
+    return_code = os.system('cd .. && ./vendor/bin/phpunit --configuration tests/compatibility/phpunit.xml --testsuite AllTests') #pylint: disable=line-too-long
     remove_test_container(container_name)
-    if ret_code != 0:
-        return True
+    if return_code != 0:
+        sys.exit(1)
     return False
 
 if __name__ == "__main__":
@@ -29,7 +30,6 @@ if __name__ == "__main__":
     }
     init_docker()
     if len(sys.argv) == 1:
-        if not start_all_tests('Compatibility Tests', TESTS_LIST):
-            sys.exit(1)
+        start_all_tests('Compatibility Tests', TESTS_LIST)
     else:
         start_specific_test(sys.argv[1], TESTS_LIST)

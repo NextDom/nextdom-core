@@ -72,7 +72,6 @@ class ConsistencyManager
             self::cleanWidgetCache();
             self::saveObjects();
             self::resetCommandsActionID();
-            self::ensureUserFunctionExists();
         } catch (\Exception $e) {
             throw new CoreException("error while checking system consistency: " . $e->getMessage());
         }
@@ -167,6 +166,10 @@ class ConsistencyManager
                     "schedule" => "00 * * * * *",
                     "timeout" => 60,
                     "enabled" => 1
+                ),
+                "cron10" => array(
+                    "schedule" => "*/10 * * * * *",
+                    "timeout" => 10
                 ),
                 "cron5" => array(
                     "schedule" => "*/5 * * * * *",
@@ -277,20 +280,6 @@ class ConsistencyManager
                 $c_cmd->save();
             } catch (\Exception $e) {
             }
-        }
-    }
-
-    /**
-     * Check if user.function.class.php has been deletedd
-     */
-    private static function ensureUserFunctionExists()
-    {
-        $baseFile = sprintf("%s/data/php/user.function.class.sample.php", NEXTDOM_DATA);
-        $dest = sprintf("%s/data/php/user.function.class.php", NEXTDOM_DATA);
-
-        if ((false == file_exists($dest)) &&
-            (true == file_exists($baseFile))) {
-            copy($baseFile, $dest);
         }
     }
 }

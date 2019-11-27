@@ -20,6 +20,7 @@
 
 namespace NextDom\Repo;
 
+use Icewind\SMB\System;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Api;
 use NextDom\Helpers\LogHelper;
@@ -41,13 +42,15 @@ class RepoMarket
     /*     * *************************Attributs****************************** */
 
     public static $_name = 'Market';
+    public static $_icon = 'fas fa-shopping-cart';
+    public static $_description = 'repo.market.description';
 
     public static $_scope = array(
         'plugin' => true,
         'backup' => false,
         'hasConfiguration' => true,
         'proxy' => true,
-        'sendPlugin' => true,
+        'sendPlugin' => false,
         'hasStore' => true,
         'hasScenarioStore' => true,
         'test' => true,
@@ -56,35 +59,35 @@ class RepoMarket
     public static $_configuration = array(
         'configuration' => array(
             'address' => array(
-                'name' => 'Adresse',
+                'name' => 'repo.market.conf.address.name',
                 'type' => 'input',
+                'placeholder' => 'repo.market.conf.address.placeholder',
             ),
             'username' => array(
-                'name' => 'Nom d\'utilisateur',
+                'name' => 'repo.market.conf.user',
                 'type' => 'input',
             ),
             'password' => array(
-                'name' => 'Mot de passe',
+                'name' => 'repo.market.conf.password',
                 'type' => 'password',
             ),
-
             'cloud::backup::name' => array(
-                'name' => '[Backup cloud] Nom',
+                'name' => 'repo.market.conf.cloud.name',
                 'type' => 'input',
             ),
             'cloud::backup::password' => array(
-                'name' => '[Backup cloud] Mot de passe',
+                'name' => 'repo.market.conf.cloud.password',
                 'type' => 'password',
             ),
             'cloud::backup::fullfrequency' => array(
-                'name' => '[Backup cloud] Fréquence backup full',
+                'name' => 'repo.market.conf.cloud.frequency',
                 'type' => 'select',
-                'values' => array('1D' => 'Chaque jour', '1W' => 'Chaque semaine', '1M' => 'Chaque mois'),
+                'values' => array('1D' => 'repo.market.conf.cloud.day', '1W' => 'repo.market.conf.cloud.week', '1M' => 'repo.market.conf.cloud.month'),
             ),
         ),
         'parameters_for_add' => array(
             'version' => array(
-                'name' => 'Version : beta, stable',
+                'name' => 'repo.market.conf.version',
                 'type' => 'input',
             ),
         ),
@@ -504,6 +507,11 @@ class RepoMarket
         return $this;
     }
 
+    /**
+     * @param Update $_update
+     * @return array
+     * @throws CoreException
+     */
     public static function downloadObject($_update)
     {
         $market = self::byLogicalIdAndType($_update->getLogicalId(), $_update->getType());
@@ -602,6 +610,11 @@ class RepoMarket
         }
     }
 
+    /**
+     * @param Update $_update
+     * @return array
+     * @throws \Exception
+     */
     public static function objectInfo($_update)
     {
         $url = 'https://nextdom.github.io/documentation/plugins/' . $_update->getLogicalId() . '/' . ConfigManager::byKey('language', 'core', 'fr_FR') . '/index.html';
@@ -878,6 +891,12 @@ class RepoMarket
 
     public static function monitoring_status()
     {
+        if(!file_exists('/etc/zabbix/zabbix_agentd.conf')){
+            return false;
+        }
+        if(exec('grep "jeedom.com" /etc/zabbix/zabbix_agentd.conf | grep -v "zabbix.jeedom.com" | wc -l') == 0){
+            return false;
+        }
         return (count(SystemHelper::ps('zabbix')) > 0);
     }
 
@@ -989,7 +1008,7 @@ class RepoMarket
             }
             $_ticket['user_plugin'] .= ',';
         }
-        trim($_ticket['user_plugin'], ',');
+        $_ticket['user_plugin'] = trim($_ticket['user_plugin'], ',');
         if (isset($_ticket['options']['page'])) {
             $_ticket['options']['page'] = substr($_ticket['options']['page'], strpos($_ticket['options']['page'], 'index.php'));
         }
@@ -1185,77 +1204,6 @@ class RepoMarket
         if (!$market->sendRequest('market::setRating', array('rating' => $_rating, 'id' => $this->getId()))) {
             throw new CoreException($market->getError());
         }
-    }
-
-    public function save()
-    {
-        $cache = CacheManager::byKey('market::info::' . $this->getLogicalId());
-        if (is_object($cache)) {
-            $cache->remove();
-        }
-        $market = self::getJsonRpc();
-        $params = Utils::o2a($this);
-        if (isset($params['changelog'])) {
-            unset($params['changelog']);
-        }
-        switch ($this->getType()) {
-            case 'plugin':
-                $plugin_id = $this->getLogicalId();
-                $cibDir = NextDomHelper::getTmpFolder('market') . '/' . $plugin_id;
-                if (file_exists($cibDir)) {
-                    rrmdir($cibDir);
-                }
-                mkdir($cibDir);
-                $exclude = array('tmp', '.git', '.DStore');
-                if (property_exists($plugin_id, '_excludeOnSendPlugin')) {
-                    $exclude = array_merge($plugin_id::$_excludeOnSendPlugin);
-                }
-                exec('find ' . realpath(__DIR__ . '/../../plugins/' . $plugin_id) . ' -name "*.sh" -type f -exec dos2unix {} \;');
-                rcopy(realpath(__DIR__ . '/../../plugins/' . $plugin_id), $cibDir, true, $exclude, true);
-                if (file_exists($cibDir . '/data')) {
-                    rrmdir($cibDir . '/data');
-                }
-                $tmp = NextDomHelper::getTmpFolder('market') . '/' . $plugin_id . '.zip';
-                if (file_exists($tmp)) {
-                    if (!unlink($tmp)) {
-                        throw new CoreException(__('Impossible de supprimer : ') . $tmp . __('. Vérifiez les droits'));
-                    }
-                }
-                if (!create_zip($cibDir, $tmp)) {
-                    throw new CoreException(__('Echec de création de l\'archive zip'));
-                }
-                rrmdir($cibDir);
-                break;
-            default:
-                $type = $this->getType();
-                if (!class_exists($type) || !method_exists($type, 'shareOnMarket')) {
-                    throw new CoreException(__('Aucune fonction correspondante à : ') . $type . '::shareOnMarket');
-                }
-                $tmp = $type::shareOnMarket($this);
-                break;
-        }
-        if (!file_exists($tmp)) {
-            throw new CoreException(__('Impossible de trouver le fichier à envoyer : ') . $tmp);
-        }
-        $file = array(
-            'file' => '@' . realpath($tmp),
-        );
-        if (!$market->sendRequest('market::save', $params, 30, $file)) {
-            throw new CoreException($market->getError());
-        }
-        unlink($tmp);
-        $update = UpdateManager::byTypeAndLogicalId($this->getType(), $this->getLogicalId());
-        if (!is_object($update)) {
-            $update = new update();
-            $update->setLogicalId($this->getLogicalId());
-            $update->setType($this->getType());
-        }
-        if ($update->getSource() == 'market') {
-            $update->setConfiguration('version', 'beta');
-            $update->setLocalVersion(date('Y-m-d H:i:s', strtotime('+10 minute' . date('Y-m-d H:i:s'))));
-            $update->save();
-        }
-        $update->checkUpdate();
     }
 
     public function getName()

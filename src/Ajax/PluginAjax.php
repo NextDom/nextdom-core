@@ -19,7 +19,6 @@ namespace NextDom\Ajax;
 
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
-use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
@@ -78,7 +77,7 @@ class PluginAjax extends BaseAjax
         $return['logs'] = array();
         $return['logs'][-1] = array('id' => -1, 'name' => 'local', 'log' => $plugin->getLogList());
         $return['icon'] = $plugin->getPathImgIcon();
-        AjaxHelper::success($return);
+        $this->ajax->success($return);
     }
 
     public function toggle()
@@ -89,7 +88,7 @@ class PluginAjax extends BaseAjax
             throw new CoreException(__('Plugin introuvable : ') . Utils::init('id'));
         }
         $plugin->setIsEnable(Utils::init('state'));
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function all()
@@ -97,7 +96,7 @@ class PluginAjax extends BaseAjax
         if (!isConnect()) {
             throw new CoreException(__('401 - Accès non autorisé'));
         }
-        AjaxHelper::success(Utils::o2a(PluginManager::listPlugin()));
+        $this->ajax->success(Utils::o2a(PluginManager::listPlugin()));
     }
 
     public function getDependancyInfo()
@@ -108,7 +107,7 @@ class PluginAjax extends BaseAjax
         if (is_object($plugin)) {
             $return = $plugin->getDependencyInfo();
         }
-        AjaxHelper::success($return);
+        $this->ajax->success($return);
     }
 
     public function dependancyInstall()
@@ -116,9 +115,9 @@ class PluginAjax extends BaseAjax
         AuthentificationHelper::isConnectedAsAdminOrFail();
         $plugin = PluginManager::byId(Utils::init('id'));
         if (!is_object($plugin)) {
-            AjaxHelper::success();
+            $this->ajax->success();
         }
-        AjaxHelper::success($plugin->dependancy_install());
+        $this->ajax->success($plugin->dependancy_install());
     }
 
     public function getDeamonInfo()
@@ -131,7 +130,7 @@ class PluginAjax extends BaseAjax
             $return = $plugin->deamon_info();
         }
         $return['plugin'] = Utils::o2a($plugin);
-        AjaxHelper::success($return);
+        $this->ajax->success($return);
     }
 
     public function deamonStart()
@@ -140,10 +139,10 @@ class PluginAjax extends BaseAjax
         $pluginId = Utils::init('id');
         $plugin = PluginManager::byId($pluginId);
         if (!is_object($plugin)) {
-            AjaxHelper::success();
+            $this->ajax->success();
         }
         $plugin->deamon_start(Utils::init('forceRestart', 0));
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function deamonStop()
@@ -151,10 +150,10 @@ class PluginAjax extends BaseAjax
         AuthentificationHelper::isConnectedAsAdminOrFail();
         $plugin = PluginManager::byId(Utils::init('id'));
         if (!is_object($plugin)) {
-            AjaxHelper::success();
+            $this->ajax->success();
         }
         $plugin->deamon_stop();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function deamonChangeAutoMode()
@@ -162,10 +161,10 @@ class PluginAjax extends BaseAjax
         AuthentificationHelper::isConnectedAsAdminOrFail();
         $plugin = PluginManager::byId(Utils::init('id'));
         if (!is_object($plugin)) {
-            AjaxHelper::success();
+            $this->ajax->success();
         }
         $plugin->deamon_changeAutoMode(Utils::init('mode'));
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
 }

@@ -62,11 +62,12 @@
         </testsuite>
         <testsuite name="AllTests">
             <directory>../phpunit_tests</directory>
+            <directory>../phpunit_tests/Ajax</directory>
             <directory>../phpunit_tests/Rest</directory>
             <directory>../phpunit_tests/Controllers</directory>
         </testsuite>
         <testsuite name="current">
-            <directory>../phpunit_tests/PrepareViewTest.php</directory>
+            <directory>../phpunit_tests/Ajax/MessageAjaxTest.php</directory>
         </testsuite>
     </testsuites>
     <filter>
@@ -85,5 +86,6 @@
     </filter>
     <logging>
         <log type="coverage-clover" target="../coverage/clover.xml"/>
+        <log type="junit" target="../coverage/junitlog.xml"/>
     </logging>
 </phpunit>

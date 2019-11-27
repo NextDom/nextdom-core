@@ -19,7 +19,6 @@ namespace NextDom\Ajax;
 
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
-use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CronManager;
 
@@ -36,7 +35,7 @@ class CronAjax extends BaseAjax
     public function save()
     {
         Utils::processJsonObject('cron', Utils::init('crons'));
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function remove()
@@ -46,7 +45,7 @@ class CronAjax extends BaseAjax
             throw new CoreException(__('Cron id inconnu'));
         }
         $cron->remove();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function all()
@@ -55,7 +54,7 @@ class CronAjax extends BaseAjax
         foreach ($crons as $cron) {
             $cron->refresh();
         }
-        AjaxHelper::success(Utils::o2a($crons));
+        $this->ajax->success(Utils::o2a($crons));
     }
 
     public function start()
@@ -66,7 +65,7 @@ class CronAjax extends BaseAjax
         }
         $cron->run();
         sleep(1);
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function stop()
@@ -77,6 +76,6 @@ class CronAjax extends BaseAjax
         }
         $cron->halt();
         sleep(1);
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 }

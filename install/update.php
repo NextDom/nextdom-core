@@ -111,7 +111,7 @@ function coreUpdate()
     $gitInstall = is_dir(NEXTDOM_ROOT . '/.git');
 
     // Begin process
-    NextDomHelper::stopSystem();
+    NextDomHelper::stopSystem(false);
     try {
         if ($gitInstall) {
             gitUpdate();
@@ -189,105 +189,3 @@ if (!updateInProgress()) {
     }
 
 }
-
-/*
-
-$update = false;
-$backup_ok = false;
-$update_begin = false;
-try {
-    if (init('core', 1) == 1) {
-        if (init('mode') == 'force') {
-            echo "/!\ Force update /!\ \n";
-        }
-        nextdom::stop();
-
-
-        try {
-            echo "Check nextdom consistency...";
-            require_once __DIR__ . '/consistency.php';
-            echo "OK\n";
-        } catch (Exception $ex) {
-            echo "***ERREUR*** " . $ex->getMessage() . "\n";
-        }
-        try {
-            echo "Check update...";
-            update::checkAllUpdate('core', false);
-            config::save('version', nextdom::version());
-            echo "OK\n";
-        } catch (Exception $ex) {
-            echo "***ERREUR*** " . $ex->getMessage() . "\n";
-        }
-        echo "***************NextDom is up to date in " . nextdom::version() . "***************\n";
-    }
-    if (init('plugins', 1) == 1) {
-        echo "***************Update plugins***************\n";
-        update::updateAll();
-        echo "***************Update plugin successfully***************\n";
-    }
-    try {
-        message::removeAll('update', 'newUpdate');
-        echo "Check update\n";
-        update::checkAllUpdate();
-        echo "OK\n";
-    } catch (Exception $ex) {
-        echo "***ERREUR*** " . $ex->getMessage() . "\n";
-    }
-    try {
-        nextdom::start();
-    } catch (Exception $ex) {
-        echo "***ERREUR*** " . $ex->getMessage() . "\n";
-    }
-
-    config::save('version', nextdom::version());
-} catch (Exception $e) {
-    if ($update) {
-        if ($backup_ok && $update_begin) {
-            nextdom::restore();
-        }
-        nextdom::start();
-    }
-    echo 'Error during update : ' . $e->getMessage();
-    echo 'Details : ' . print_r($e->getTrace(), true);
-    echo "[END UPDATE ERROR]\n";
-    throw $e;
-}
-
-try {
-    echo "Launch cron dependancy plugins...";
-    $cron = cron::byClassAndFunction('plugin', 'checkDeamon');
-    if (is_object($cron)) {
-        $cron->start();
-    }
-    echo "OK\n";
-} catch (Exception $e) {
-
-}
-
-try {
-    echo "Send end of update event...";
-    nextdom::event('end_update');
-    echo "OK\n";
-} catch (Exception $e) {
-
-}
-echo "Update duration : " . (strtotime('now') - $starttime) . "s\n";
-echo "[END UPDATE SUCCESS]\n";
-
-function incrementVersion($_version) {
-    $version = explode('.', $_version);
-    if ($version[2] < 100) {
-        $version[2]++;
-    } else {
-        if ($version[1] < 100) {
-            $version[1]++;
-            $version[2] = 0;
-        } else {
-            $version[0]++;
-            $version[1] = 0;
-            $version[2] = 0;
-        }
-    }
-    return $version[0] . '.' . $version[1] . '.' . $version[2];
-}
-*/

@@ -33,6 +33,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Enums\DateFormat;
 use NextDom\Enums\UpdateStatus;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
@@ -93,7 +94,7 @@ class UpdateManager
         }
 
         // Save last update in database
-        ConfigManager::save('update::lastCheck', date('Y-m-d H:i:s'));
+        ConfigManager::save('update::lastCheck', date(DateFormat::FULL));
     }
 
     /**
@@ -112,7 +113,7 @@ class UpdateManager
                 $update = (new Update())
                     ->setLogicalId($pluginId)
                     ->setType('plugin')
-                    ->setLocalVersion(date('Y-m-d H:i:s'));
+                    ->setLocalVersion(date(DateFormat::FULL));
                 $update->save();
             }
             $find = [];
@@ -128,7 +129,7 @@ class UpdateManager
                         $update = (new Update())
                             ->setLogicalId($logicalId)
                             ->setType($pluginId)
-                            ->setLocalVersion(date('Y-m-d H:i:s'));
+                            ->setLocalVersion(date(DateFormat::FULL));
                         $update->save();
                     }
                 }
@@ -156,7 +157,7 @@ class UpdateManager
      * @param $type
      * @param $logicalId
      *
-     * @return Update[]|null
+     * @return Update|null
      *
      * @throws \Exception
      */
@@ -238,6 +239,8 @@ class UpdateManager
                         'class' => $fullNameClass,
                         'configuration' => $fullNameClass::$_configuration,
                         'scope' => $fullNameClass::$_scope,
+                        'description' => $fullNameClass::$_description,
+                        'icon' => $fullNameClass::$_icon
                     ];
                     $result[$repoCode]['enable'] = ConfigManager::byKey($repoCode . '::enable');
                 }
@@ -286,7 +289,9 @@ class UpdateManager
             'name' => $phpClass::$_name,
             'class' => $repoClassData['className'],
             'configuration' => $phpClass::$_configuration,
-            'scope' => $phpClass::$_scope
+            'scope' => $phpClass::$_scope,
+            'description' => $phpClass::$_description,
+            'icon' => $phpClass::$_icon
         ];
         $result['enable'] = ConfigManager::byKey($id . '::enable');
         return $result;

@@ -181,7 +181,7 @@ function addObjectSummary(_summary) {
     tr += '</select>';
     tr += '</td>';
     tr += '<td>';
-    tr += '<center><input type="checkbox" class="objectSummaryAttr" data-l1key="allowDisplayZero" /></center>';
+    tr += '<input type="checkbox" class="objectSummaryAttr" data-l1key="allowDisplayZero"/>';
     tr += '</td>';
     tr += '<td>';
     if(isset(_summary) && isset(_summary.key) && _summary.key != ''){

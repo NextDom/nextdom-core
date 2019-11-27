@@ -51,6 +51,7 @@ class ScenarioRest
      * @param Scenario[] $scenarios Array of scenarios to convert
      *
      * @return array
+     * @throws \Exception
      */
     private static function prepareResults($scenarios)
     {
@@ -61,6 +62,7 @@ class ScenarioRest
             $scenarioRow['name'] = $scenario->getName();
             $scenarioRow['displayIcon'] = $scenario->getDisplay('icon');
             $scenarioRow['state'] = $scenario->getState();
+            $scenarioRow['active'] = $scenario->isActive();
             $result[] = $scenarioRow;
         }
         return $result;
@@ -99,6 +101,7 @@ class ScenarioRest
             $scenarioRow['name'] = $scenario->getName();
             $scenarioRow['displayIcon'] = $scenario->getDisplay('icon');
             $scenarioRow['state'] = $scenario->getState();
+            $scenarioRow['active'] = $scenario->isActive();
             $groupName = $scenario->getGroup();
             if (empty($groupName)) {
                 $groupName = self::$NO_GROUP_CODE;
@@ -126,7 +129,52 @@ class ScenarioRest
         if (!is_object($scenario)) {
             return false;
         }
+        if (!$scenario->isActive()) {
+            return false;
+        }
         $scenario->launch('user', 'Manual launch', 0);
+        return true;
+    }
+
+    /**
+     * Enable scenario
+     * @param int $scenarioId Id of the scenario to enable
+     * @return bool True on success
+     * @throws \Exception
+     */
+    public static function enable(int $scenarioId) {
+        return self::changeScenarioActiveState($scenarioId, true);
+    }
+
+    /**
+     * Disable scenario
+     * @param int $scenarioId Id of the scenario to disable
+     * @return bool True on success
+     * @throws \Exception
+     */
+    public static function disable(int $scenarioId) {
+        return self::changeScenarioActiveState($scenarioId, false);
+    }
+
+    /**
+     * Disable scenario
+     * @param int $scenarioId Id of the scenario to disable
+     * @param bool $newState New state
+     * @return bool True on success
+     * @throws \Exception
+     */
+    private static function changeScenarioActiveState(int $scenarioId, bool $newState) {
+        $scenario = ScenarioManager::byId($scenarioId);
+        if (!is_object($scenario)) {
+            return false;
+        }
+        if ($newState) {
+            $scenario->setIsActive(1);
+        }
+        else {
+            $scenario->setIsActive(0);
+        }
+        $scenario->save();
         return true;
     }
 

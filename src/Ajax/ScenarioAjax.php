@@ -17,9 +17,9 @@
 
 namespace NextDom\Ajax;
 
+use NextDom\Enums\AjaxParams;
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
-use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
@@ -40,16 +40,21 @@ class ScenarioAjax extends BaseAjax
     protected $MUST_BE_CONNECTED = true;
     protected $CHECK_AJAX_TOKEN = true;
 
+    /**
+     * Change scenario state
+     *
+     * @throws CoreException
+     */
     public function changeState()
     {
-        $scenario = ScenarioManager::byId(Utils::init('id'));
+        $scenario = ScenarioManager::byId(Utils::initInt(AjaxParams::ID));
         if (!is_object($scenario)) {
-            throw new CoreException(__('Scénario ID inconnu : ') . Utils::init('id'));
+            throw new CoreException(__('Scénario ID inconnu : ') . Utils::initInt(AjaxParams::ID));
         }
         if (!$scenario->hasRight('x')) {
             throw new CoreException(__('Vous n\'êtes pas autorisé à faire cette action'));
         }
-        switch (Utils::init('state')) {
+        switch (Utils::init(AjaxParams::STATE)) {
             case 'start':
                 if (!$scenario->getIsActive()) {
                     throw new CoreException(__('Impossible de lancer le scénario car il est désactivé. Veuillez l\'activer'));
@@ -68,23 +73,23 @@ class ScenarioAjax extends BaseAjax
                 $scenario->save();
                 break;
         }
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function listScenarioHtml()
     {
         $return = [];
         foreach (ScenarioManager::all() as $scenario) {
-            if ($scenario->getIsVisible() == 1) {
-                $return[] = $scenario->toHtml(Utils::init('version'));
+            if ($scenario->isVisible()) {
+                $return[] = $scenario->toHtml(Utils::init(AjaxParams::VERSION));
             }
         }
-        AjaxHelper::success($return);
+        $this->ajax->success($return);
     }
 
     public function setOrder()
     {
-        $scenarios = json_decode(Utils::init('scenarios'), true);
+        $scenarios = json_decode(Utils::init(AjaxParams::SCENARIOS), true);
         foreach ($scenarios as $scenario_json) {
             if (!isset($scenario_json['id']) || trim($scenario_json['id']) == '') {
                 continue;
@@ -96,25 +101,25 @@ class ScenarioAjax extends BaseAjax
             Utils::a2o($scenario, $scenario_json);
             $scenario->save();
         }
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function testExpression()
     {
         $return = [];
         $scenario = null;
-        $return['evaluate'] = ScenarioExpressionManager::setTags(NextDomHelper::fromHumanReadable(Utils::init('expression')), $scenario, true);
-        $return['result'] = evaluate($return['evaluate']);
+        $return['evaluate'] = ScenarioExpressionManager::setTags(NextDomHelper::fromHumanReadable(Utils::init(AjaxParams::EXPRESSION)), $scenario, true);
+        $return['result'] = Utils::evaluate($return['evaluate']);
         $return['correct'] = 'ok';
         if (trim($return['result']) == trim($return['evaluate'])) {
             $return['correct'] = 'nok';
         }
-        AjaxHelper::success($return);
+        $this->ajax->success($return);
     }
 
     public function getTemplate()
     {
-        AjaxHelper::success(ScenarioManager::getTemplate());
+        $this->ajax->success(ScenarioManager::getTemplate());
     }
 
     /**
@@ -123,42 +128,42 @@ class ScenarioAjax extends BaseAjax
      */
     public function convertToTemplate()
     {
-        $scenario = ScenarioManager::byId(Utils::init('id'));
+        $scenario = ScenarioManager::byId(Utils::initInt(AjaxParams::ID));
         if (!is_object($scenario)) {
-            throw new CoreException(__('Scénario ID inconnu : ') . Utils::init('id'));
+            throw new CoreException(__('Scénario ID inconnu : ') . Utils::initInt(AjaxParams::ID));
         }
         $path = NEXTDOM_DATA . '/config/scenario';
         if (!file_exists($path)) {
             mkdir($path);
         }
-        if (trim(Utils::init('template')) == '' || trim(Utils::init('template')) == '.json') {
+        $template = trim(Utils::initFilename(AjaxParams::TEMPLATE));
+        if ($template == '' || $template == '.json') {
             throw new CoreException(__('Le nom du template ne peut être vide '));
         }
-        $name = Utils::init('template');
-        file_put_contents($path . '/' . $name, json_encode($scenario->export('array'), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-        if (!file_exists($path . '/' . $name)) {
-            throw new CoreException(__('Impossible de créer le template, vérifiez les droits : ') . $path . '/' . $name);
+        file_put_contents($path . '/' . $template, json_encode($scenario->export('array'), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+        if (!file_exists($path . '/' . $template)) {
+            throw new CoreException(__('Impossible de créer le template, vérifiez les droits : ') . $path . '/' . $template);
         }
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function removeTemplate()
     {
-        $path = __DIR__ . '/../config/scenario';
-        if (file_exists($path . '/' . Utils::init('template'))) {
-            unlink($path . '/' . Utils::init('template'));
+        $templateFile = NEXTDOM_DATA . '/config/scenario/' . Utils::initFilename(AjaxParams::TEMPLATE);
+        if (file_exists($templateFile)) {
+            unlink($templateFile);
         }
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function loadTemplateDiff()
     {
-        $path = NEXTDOM_DATA . '/config/scenario';
-        if (!file_exists($path . '/' . Utils::init('template'))) {
-            throw new CoreException('Fichier non trouvé : ' . $path . '/' . Utils::init('template'));
+        $templateFile = NEXTDOM_DATA . '/config/scenario/' . Utils::initFilename(AjaxParams::TEMPLATE);
+        if (!file_exists($templateFile)) {
+            throw new CoreException('Fichier non trouvé : ' . $templateFile);
         }
         $return = [];
-        foreach (preg_split("/((\r?\n)|(\r\n?))/", file_get_contents($path . '/' . Utils::init('template'))) as $line) {
+        foreach (preg_split("/((\r?\n)|(\r\n?))/", file_get_contents($templateFile)) as $line) {
             preg_match_all("/#\[(.*?)\]\[(.*?)\]\[(.*?)\]#/", $line, $matches, PREG_SET_ORDER);
             if (count($matches) > 0) {
                 foreach ($matches as $match) {
@@ -195,14 +200,14 @@ class ScenarioAjax extends BaseAjax
                 }
             }
         }
-        AjaxHelper::success($return);
+        $this->ajax->success($return);
     }
 
     public function applyTemplate()
     {
-        $path = NEXTDOM_DATA . '/config/scenario';
-        if (!file_exists($path . '/' . Utils::init('template'))) {
-            throw new CoreException('Fichier non trouvé : ' . $path . '/' . Utils::init('template'));
+        $templateFile = NEXTDOM_DATA . '/config/scenario/' . Utils::initFilename(AjaxParams::TEMPLATE);
+        if (!file_exists($templateFile)) {
+            throw new CoreException('Fichier non trouvé : ' . $templateFile);
         }
         $converts = [];
         foreach (json_decode(Utils::init('convert'), true) as $value) {
@@ -211,7 +216,7 @@ class ScenarioAjax extends BaseAjax
             }
             $converts[$value['begin']] = $value['end'];
         }
-        $content = str_replace(array_keys($converts), $converts, file_get_contents($path . '/' . Utils::init('template')));
+        $content = str_replace(array_keys($converts), $converts, file_get_contents($templateFile));
         $scenario_ajax = json_decode($content, true);
         if (isset($scenario_ajax['name'])) {
             unset($scenario_ajax['name']);
@@ -219,9 +224,9 @@ class ScenarioAjax extends BaseAjax
         if (isset($scenario_ajax['group'])) {
             unset($scenario_ajax['group']);
         }
-        $scenario_db = ScenarioManager::byId(Utils::init('id'));
+        $scenario_db = ScenarioManager::byId(Utils::initInt(AjaxParams::ID));
         if (!is_object($scenario_db)) {
-            throw new CoreException(__('Scénario ID inconnu : ') . Utils::init('id'));
+            throw new CoreException(__('Scénario ID inconnu : ') . Utils::initInt(AjaxParams::ID));
         }
         if (!$scenario_db->hasRight('w')) {
             throw new CoreException(__('Vous n\'êtes pas autorisé à faire cette action'));
@@ -238,7 +243,7 @@ class ScenarioAjax extends BaseAjax
             $scenario_db->setScenarioElement($scenario_element_list);
         }
         $scenario_db->save();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function all()
@@ -250,12 +255,12 @@ class ScenarioAjax extends BaseAjax
             $info_scenario['humanName'] = $scenario->getHumanName();
             $return[] = $info_scenario;
         }
-        AjaxHelper::success($return);
+        $this->ajax->success($return);
     }
 
     public function saveAll()
     {
-        $scenarios = json_decode(Utils::init('scenarios'), true);
+        $scenarios = json_decode(Utils::init(AjaxParams::SCENARIOS), true);
         if (is_array($scenarios)) {
             foreach ($scenarios as $scenario_ajax) {
                 $scenario = ScenarioManager::byId($scenario_ajax['id']);
@@ -266,7 +271,7 @@ class ScenarioAjax extends BaseAjax
                 $scenario->save();
             }
         }
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function autoCompleteGroup()
@@ -276,14 +281,15 @@ class ScenarioAjax extends BaseAjax
         foreach (ScenarioManager::listGroup(Utils::init('term')) as $group) {
             $return[] = $group['group'];
         }
-        AjaxHelper::success($return);
+        $this->ajax->success($return);
     }
 
     public function toHtml()
     {
-        if (Utils::init('id') == 'all' || is_json(Utils::init('id'))) {
-            if (is_json(Utils::init('id'))) {
-                $scenario_ajax = json_decode(Utils::init('id'), true);
+        $target = Utils::init(AjaxParams::ID);
+        if ($target == 'all' || is_json($target)) {
+            if (is_json($target)) {
+                $scenario_ajax = json_decode($target, true);
                 $scenarios = [];
                 foreach ($scenario_ajax as $id) {
                     $scenarios[] = ScenarioManager::byId($id);
@@ -295,20 +301,20 @@ class ScenarioAjax extends BaseAjax
             foreach ($scenarios as $scenario) {
                 $return[] = $scenario->toHtml(Utils::init('version'));
             }
-            AjaxHelper::success($return);
+            $this->ajax->success($return);
         } else {
-            $scenario = ScenarioManager::byId(Utils::init('id'));
+            $scenario = ScenarioManager::byId($target);
             if (is_object($scenario)) {
-                AjaxHelper::success($scenario->toHtml(Utils::init('version')));
+                $this->ajax->success($scenario->toHtml(Utils::init('version')));
             }
         }
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function remove()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $scenario = ScenarioManager::byId(Utils::init('id'));
+        $scenario = ScenarioManager::byId(Utils::initInt(AjaxParams::ID));
         if (!is_object($scenario)) {
             throw new CoreException(__('Scénario ID inconnu'));
         }
@@ -316,13 +322,13 @@ class ScenarioAjax extends BaseAjax
             throw new CoreException(__('Vous n\'êtes pas autorisé à faire cette action'));
         }
         $scenario->remove();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function emptyLog()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $scenario = ScenarioManager::byId(Utils::init('id'));
+        $scenario = ScenarioManager::byId(Utils::initInt(AjaxParams::ID));
         if (!is_object($scenario)) {
             throw new CoreException(__('Scénario ID inconnu'));
         }
@@ -332,22 +338,22 @@ class ScenarioAjax extends BaseAjax
         if (file_exists(NEXTDOM_LOG . '/scenarioLog/scenario' . $scenario->getId() . '.log')) {
             unlink(NEXTDOM_LOG . '/scenarioLog/scenario' . $scenario->getId() . '.log');
         }
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function copy()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $scenario = ScenarioManager::byId(Utils::init('id'));
+        $scenario = ScenarioManager::byId(Utils::initInt(AjaxParams::ID));
         if (!is_object($scenario)) {
             throw new CoreException(__('Scénario ID inconnu'));
         }
-        AjaxHelper::success(Utils::o2a($scenario->copy(Utils::init('name'))));
+        $this->ajax->success(Utils::o2a($scenario->copy(Utils::init('name'))));
     }
 
     public function get()
     {
-        $scenario = ScenarioManager::byId(Utils::init('id'));
+        $scenario = ScenarioManager::byId(Utils::initInt(AjaxParams::ID));
         if (!is_object($scenario)) {
             throw new CoreException(__('Scénario ID inconnu'));
         }
@@ -359,7 +365,7 @@ class ScenarioAjax extends BaseAjax
             $return['elements'][] = $element->getAjaxElement();
         }
 
-        AjaxHelper::success($return);
+        $this->ajax->success($return);
     }
 
     /**
@@ -371,13 +377,13 @@ class ScenarioAjax extends BaseAjax
     public function save()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        if (!is_json(Utils::init('scenario'))) {
+        if (!is_json(Utils::init(AjaxParams::SCENARIO))) {
             throw new CoreException(__('Champs json invalide'));
         }
         // Check if scenario has time dependency
         $timeDependency = 0;
         foreach (['#time#', '#seconde#', '#heure#', '#minute#', '#jour#', '#mois#', '#annee#', '#timestamp#', '#date#', '#semaine#', '#sjour#', '#njour#', '#smois#'] as $keyword) {
-            if (strpos(Utils::init('scenario'), $keyword) !== false) {
+            if (strpos(Utils::init(AjaxParams::SCENARIO), $keyword) !== false) {
                 $timeDependency = 1;
                 break;
             }
@@ -387,14 +393,14 @@ class ScenarioAjax extends BaseAjax
         // Loop for futur cases ?
         $hasReturn = 0;
         foreach (['scenario_return'] as $keyword) {
-            if (strpos(Utils::init('scenario'), $keyword) !== false) {
+            if (strpos(Utils::init(AjaxParams::SCENARIO), $keyword) !== false) {
                 $hasReturn = 1;
                 break;
             }
         }
 
         // Prepare object from Ajax data
-        $scenarioAjaxData = json_decode(Utils::init('scenario'), true);
+        $scenarioAjaxData = json_decode(Utils::init(AjaxParams::SCENARIO), true);
         if (isset($scenarioAjaxData['id'])) {
             $targetScenario = ScenarioManager::byId($scenarioAjaxData['id']);
         }
@@ -423,14 +429,15 @@ class ScenarioAjax extends BaseAjax
         }
 
         $targetScenario->save();
-        AjaxHelper::success(Utils::o2a($targetScenario));
+        $this->ajax->success(Utils::o2a($targetScenario));
     }
 
     public function actionToHtml()
     {
-        if (Utils::init('params') != '' && is_json(Utils::init('params'))) {
-            $return = [];
-            $params = json_decode(Utils::init('params'), true);
+        $result = null;
+        if (Utils::init(AjaxParams::PARAMS) != '' && is_json(Utils::init(AjaxParams::PARAMS))) {
+            $result = [];
+            $params = json_decode(Utils::init(AjaxParams::PARAMS), true);
             foreach ($params as $param) {
                 if (!isset($param['options'])) {
                     $param['options'] = [];
@@ -439,20 +446,24 @@ class ScenarioAjax extends BaseAjax
                 if (!isset($html['html']) || $html['html'] == '') {
                     continue;
                 }
-                $return[] = [
+                $result[] = [
                     'html' => $html,
                     'id' => $param['id'],
                 ];
             }
-            AjaxHelper::success($return);
         }
-        AjaxHelper::success(ScenarioExpressionManager::getExpressionOptions(Utils::init('expression'), Utils::init('option')));
+        if ($result !== null) {
+            $this->ajax->success($result);
+        }
+        else {
+            $this->ajax->success(ScenarioExpressionManager::getExpressionOptions(Utils::init(AjaxParams::EXPRESSION), Utils::init(AjaxParams::OPTION)));
+        }
     }
 
     public function templateupload()
     {
         $uploadDir = sprintf("%s/config/scenario/", NEXTDOM_DATA);
         Utils::readUploadedFile($_FILES, "file", $uploadDir, 10, [".json"]);
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 }

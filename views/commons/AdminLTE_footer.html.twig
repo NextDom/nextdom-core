@@ -17,12 +17,12 @@
 #}
 
 <footer class="main-footer footer-center">
-    <strong><a class="cursor spacing-right" href="https://www.nextdom.org" target="_blank">{{ 'footer.licence'|trans ~ ' - ' ~ 'now'|date('Y') ~ ' ' ~ PRODUCT_NAME ~ '.' }}</a></strong>
+    <strong><a class="cursor spacing-right" href="https://www.nextdom.org" target="_blank">{{ 'footer.licence'|trans ~ ' - ' ~ 'now'|date('Y') ~ ' NextDom.' }}</a></strong>
     <span><i class="fas fa-certificate spacing-right"></i>{{ 'footer.rights'|trans }}.</span>
     <span class="cursor" data-toggle="tooltip" title="" data-html="true"
         data-original-title="{% if CORE_BRANCH is defined %}{{ 'common.branch'|trans ~ ' : ' ~ CORE_BRANCH }}<br>{% endif %}
         {% if JEEDOM_VERSION is defined %}{{ 'common.jeedom-version'|trans ~ ' : ' ~ JEEDOM_VERSION }}{% endif %}">
         <i class="fas fa-code-branch spacing-left spacing-right"></i>{{ 'common.version'|trans ~ ' ' ~ NEXTDOM_VERSION }}
     </span>
-    <span class="cursor" id="bt_nextdomAboutFooter"><i class="fas fa-info-circle spacing-left spacing-right"></i>{{ 'footer.about'|trans ~ ' ' ~  PRODUCT_NAME }}</span>
+    <span class="cursor" id="bt_nextdomAboutFooter"><i class="fas fa-info-circle spacing-left spacing-right"></i>{{ 'footer.about'|trans ~ ' NextDom.' }}</span>
 </footer>

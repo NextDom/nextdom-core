@@ -33,9 +33,8 @@ use NextDom\Managers\UserManager;
 use NextDom\Model\Entity\JeeObject;
 
 /**
- * Description of toto
- *
- * @author luc
+ * Class DashboardController
+ * @package NextDom\Controller
  */
 class DashBoardController extends BaseController
 {

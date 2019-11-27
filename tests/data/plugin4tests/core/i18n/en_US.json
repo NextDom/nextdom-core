@@ -1,0 +1,34 @@
+{
+  "plugins/plugin4tests/desktop/php/raw_network.php": {
+    "Activer": "Activate",
+    "Actions": "Actions",
+    "Ajouter": "Add",
+    "Ajouter un équipement": "Add an equipment",
+    "Ajouter une commande": "Add a command",
+    "Configuration avancée": "Advanced configuration",
+    "Choisir": "Choose",
+    "Commandes": "Commands",
+    "Configuration": "Configuration",
+    "Supprimer": "Delete",
+    "Equipement": "Equipment",
+    "Rechercher": "Find",
+    "Icône": "Icon",
+    "Adresse IP": "IP address",
+    "Gestion": "Manage",
+    "Mes équipements": "My equipments",
+    "Nom": "Name",
+    "Aucun": "Nothing",
+    "Type de protocole": "Protocol type",
+    "Données du paquet": "Packet data",
+    "Objet parent": "Parent object",
+    "Port": "Port",
+    "Sauvegarder": "Save",
+    "Afficher": "Show",
+    "Visible": "Visible"
+  },
+  "plugins/raw_network/desktop/js/raw_network.js": {
+    "Nom": "Name",
+    "Afficher": "Show",
+    "Tester": "Test"
+  }
+}

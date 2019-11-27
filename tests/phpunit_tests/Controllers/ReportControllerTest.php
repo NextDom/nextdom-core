@@ -41,6 +41,6 @@ class ReportControllerTest extends BaseControllerTest
     {
         $pageData = [];
         \NextDom\Controller\Diagnostic\ReportController::get($pageData);
-        $this->pageDataVars('desktop/diagnostic/reports-view.html.twig', $pageData);
+        $this->pageDataVars('desktop/diagnostic/report.html.twig', $pageData);
     }
 }

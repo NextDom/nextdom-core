@@ -20,6 +20,7 @@
 namespace NextDom\Helpers;
 
 use NextDom\Enums\FoldersReferential;
+use NextDom\Enums\LogTarget;
 use NextDom\Enums\PlanDisplayType;
 use NextDom\Exceptions\CoreException;
 use NextDom\Managers\BackupManager;
@@ -44,11 +45,11 @@ class MigrationHelper
      * @param string $logFile log name file to display information
      * @throws \Exception
      */
-    public static function migrate($logFile = 'migration')
+    public static function migrate($logFile = LogTarget::MIGRATION)
     {
         $migrate = false;
 
-        if ($logFile == 'migration') {
+        if ($logFile == LogTarget::MIGRATION) {
             LogHelper::clear($logFile);
         }
 
@@ -62,7 +63,7 @@ class MigrationHelper
         }
         $previousVersion = array_map('intval', $previousVersion);
         $message = 'Migration/Update process from --> ' . implode('.', $previousVersion);
-        if ($logFile == 'migration') {
+        if ($logFile == LogTarget::MIGRATION) {
             LogHelper::addInfo($logFile, $message, '');
         } else {
             ConsoleHelper::process($message);
@@ -72,7 +73,7 @@ class MigrationHelper
         $currentVersion = explode('.', NextDomHelper::getNextdomVersion());
         $currentVersion = array_map('intval', $currentVersion);
         $message = 'Migration/Update process to --> ' . implode('.', $currentVersion);
-        if ($logFile == 'migration') {
+        if ($logFile == LogTarget::MIGRATION) {
             LogHelper::addInfo($logFile, $message, '');
         } else {
             ConsoleHelper::process($message);
@@ -93,7 +94,7 @@ class MigrationHelper
                         if (method_exists(get_class(), 'migrate_' . $previousVersion[0] . '_' . $previousVersion[1] . '_' . $previousVersion[2])) {
                             $migrateMethod = 'migrate_' . $previousVersion[0] . '_' . $previousVersion[1] . '_' . $previousVersion[2];
                             $message = 'Start migration process for ' . $migrateMethod;
-                            if ($logFile == 'migration') {
+                            if ($logFile == LogTarget::MIGRATION) {
                                 LogHelper::addInfo($logFile, $message, '');
                             } else {
                                 ConsoleHelper::process($message);
@@ -104,7 +105,7 @@ class MigrationHelper
                                 throw new CoreException();
                             }
                             $message = 'Done migration process for ' . $migrateMethod;
-                            if ($logFile == 'migration') {
+                            if ($logFile == LogTarget::MIGRATION) {
                                 LogHelper::addInfo($logFile, $message, '');
                             } else {
                                 ConsoleHelper::process($message);
@@ -112,7 +113,7 @@ class MigrationHelper
                             ConfigManager::save('lastUpdateVersion', $previousVersion[0] . '.' . $previousVersion[1] . '.' . $previousVersion[2], 'core');
 
                             $message = 'Save migration process for ' . $migrateMethod;
-                            if ($logFile == 'migration') {
+                            if ($logFile == LogTarget::MIGRATION) {
                                 LogHelper::addInfo($logFile, $message, '');
                             } else {
                                 ConsoleHelper::process($message);
@@ -156,13 +157,79 @@ class MigrationHelper
         return $migrate;
     }
 
+    /**
+     * Replace jeedom to nextdom in database
+     *
+     * @param string $logFile log name file to display information
+     *
+     * @throws \Exception
+     */
+    private static function replaceJeedomInDatabase($logFile = LogTarget::MIGRATION)
+    {
+        $message = 'Replace jeedom in database';
+        if ($logFile == LogTarget::MIGRATION) {
+            LogHelper::addInfo($logFile, $message, '');
+        } else {
+            ConsoleHelper::process($message);
+        }
+
+        //Update Config table
+        $allConfigKeys = ConfigManager::searchKey('', 'core');
+        foreach ($allConfigKeys as $keyData) {
+            if (strpos($keyData['key'], 'jeedom') !== false) {
+                $configValue = ConfigManager::byKey($keyData['key'], 'core');
+                ConfigManager::save(str_replace('jeedom', 'nextdom', $keyData['key']), $configValue, 'core');
+                ConfigManager::remove($keyData['key'], 'core');
+            }
+        }
+        ConfigManager::save('nextdom::firstUse', 0, 'core');
+
+        // Update Crons table
+        $sql = 'UPDATE `cron`
+                   SET `class` = "nextdom"
+                 WHERE `class` = "jeedom"';
+        try {
+            DBHelper::exec($sql);
+        } catch (\Exception $e) {
+
+        }
+
+        // Check doublon on update
+        foreach (ConsistencyManager::getDefaultCrons() as $cronClass => $cronData) {
+            foreach ($cronData as $cronName => $cronConfig) {
+                $sql = 'SELECT ' . DBHelper::buildField(CronManager::CLASS_NAME) . '
+                        FROM ' . CronManager::DB_CLASS_NAME . '
+                        WHERE class = :class
+                        AND function = :function';
+                $params = [
+                    'class' => $cronClass,
+                    'function' => $cronName,
+                ];
+                /** @var Cron[] $result */
+                $result = DBHelper::getAllObjects($sql, $params, CronManager::CLASS_NAME);
+                if (count($result) > 1) {
+                    $result[1]->remove();
+                }
+            }
+        }
+
+        // Update jeedom version
+        foreach (UpdateManager::all() as $update) {
+            if ($update->getType() == 'core' && $update->getName() == 'jeedom' && $update->getLogicalId() == 'jeedom') {
+                $update->setName('nextdom');
+                $update->setLogicalId('nextdom');
+                $update->save();
+            }
+        }
+    }
+
     /***************************************************************** 0.0.0 Migration process *****************************************************************/
     /**
      * 0.0.0 Migration process
      * @param string $logFile log name file to display information
      * @throws \Exception
      */
-    private static function migrate_0_0_0($logFile = 'migration')
+    private static function migrate_0_0_0($logFile = LogTarget::MIGRATION)
     {
 
         $migrateFile = sprintf("%s/install/migrate/migrate_0_0_0.sql", NEXTDOM_ROOT);
@@ -170,7 +237,7 @@ class MigrationHelper
         BackupManager::loadSQLFromFile($migrateFile);
 
         $message = 'Database basic update';
-        if ($logFile == 'migration') {
+        if ($logFile == LogTarget::MIGRATION) {
             LogHelper::addInfo($logFile, $message, '');
         } else {
             ConsoleHelper::process($message);
@@ -182,16 +249,17 @@ class MigrationHelper
         }
 
     }
+    /***********************************************************************************************************************************************************/
+
     /***************************************************************** 0.3.0 Migration process *****************************************************************/
     /**
      * 0.3.0 Migration process
      * @param string $logFile log name file to display information
      * @throws \Exception
      */
-    private static function migrate_0_3_0($logFile = 'migration')
+    private static function migrate_0_3_0($logFile = LogTarget::MIGRATION)
     {
         self::movePersonalFoldersAndFilesToData($logFile);
-        self::migrateUserFunctionClass($logFile);
     }
 
     /**
@@ -199,10 +267,10 @@ class MigrationHelper
      * @param string $logFile log name file to display information
      * @throws \Exception
      */
-    private static function movePersonalFoldersAndFilesToData($logFile = 'migration')
+    private static function movePersonalFoldersAndFilesToData($logFile = LogTarget::MIGRATION)
     {
         $message = 'Update theme folder';
-        if ($logFile == 'migration') {
+        if ($logFile == LogTarget::MIGRATION) {
             LogHelper::addInfo($logFile, $message, '');
         } else {
             ConsoleHelper::process($message);
@@ -219,7 +287,7 @@ class MigrationHelper
 
         try {
             $message = 'Start moving files and folders process to ' . NEXTDOM_DATA;
-            if ($logFile == 'migration') {
+            if ($logFile == LogTarget::MIGRATION) {
                 LogHelper::addInfo($logFile, $message, '');
             } else {
                 ConsoleHelper::process($message);
@@ -236,7 +304,7 @@ class MigrationHelper
 
                         $fileToReplace = $fileInfo->getFilename();
                         $message = 'Moving ' . NEXTDOM_ROOT . '/' . $fileToReplace;
-                        if ($logFile == 'migration') {
+                        if ($logFile == LogTarget::MIGRATION) {
                             LogHelper::addInfo($logFile, $message, '');
                         } else {
                             ConsoleHelper::process($message);
@@ -323,7 +391,7 @@ class MigrationHelper
         }
 
         $message = 'Migrate theme to data folder is done';
-        if ($logFile == 'migration') {
+        if ($logFile == LogTarget::MIGRATION) {
             LogHelper::addInfo($logFile, $message, '');
         } else {
             ConsoleHelper::process($message);
@@ -346,7 +414,7 @@ class MigrationHelper
             $oldReferencePath = '';
         }
         $message = 'Migrate ' . $oldReferencePath . $fileToReplace . ' to ' . $newReferencePath . $fileToReplace;
-        if ($logFile == 'migration') {
+        if ($logFile == LogTarget::MIGRATION) {
             LogHelper::addInfo($logFile, $message, '');
         } else {
             ConsoleHelper::process($message);
@@ -385,102 +453,31 @@ class MigrationHelper
             }
         }
     }
+    /***********************************************************************************************************************************************************/
 
+    /***************************************************************** 0.5.2 Migration process *****************************************************************/
     /**
-     * Change require_once line in /data/php/user.function.class.php
-     * @param string $logFile
-     */
-    private static function migrateUserFunctionClass($logFile)
-    {
-
-        $fileToReplace = NEXTDOM_DATA . '/data/php/user.function.class.php';
-        if (FileSystemHelper::isFileExists($fileToReplace)) {
-            $fromString = 'require_once dirname(__FILE__) . \'/../../core/php/core.inc.php\';';
-            $toString = 'if (file_exists(\'/usr/share/nextdom/src/core.php\')) {
-                    require_once(\'/usr/share/nextdom/src/core.php\');
-                    } else {
-                        require_once(\'/var/www/html/src/core.php\');
-                    }';
-
-            $message = 'Apply changes to ' . $fileToReplace;
-            if ($logFile == 'migration') {
-                LogHelper::addInfo($logFile, $message, '');
-            } else {
-                ConsoleHelper::process($message);
-            }
-            $file_contents = file_get_contents($fileToReplace);
-            $file_contents = str_replace($fromString, $toString, $file_contents);
-            file_put_contents($fileToReplace, $file_contents);
-        }
-    }
-
-    /**
-     * Replace jeedom to nextdom in database
-     *
+     * 0.5.2 Migration process
      * @param string $logFile log name file to display information
-     *
      * @throws \Exception
      */
-    private static function replaceJeedomInDatabase($logFile = 'migration')
+    private static function migrate_0_5_2($logFile = LogTarget::MIGRATION)
     {
-        $message = 'Replace jeedom in database';
-        if ($logFile == 'migration') {
-            LogHelper::addInfo($logFile, $message, '');
-        } else {
-            ConsoleHelper::process($message);
-        }
-
-        //Update Config table
-
-        $allConfigKeys = ConfigManager::searchKey('', 'core');
-        foreach ($allConfigKeys as $keyData) {
-            if (strpos($keyData['key'], 'jeedom') !== false) {
-                $configValue = ConfigManager::byKey($keyData['key'], 'core');
-                ConfigManager::save(str_replace('jeedom', 'nextdom', $keyData['key']), $configValue, 'core');
-                ConfigManager::remove($keyData['key'], 'core');
-            }
-        }
-        ConfigManager::save('nextdom::firstUse', 0, 'core');
-        // Update Crons table
-        $sql = 'UPDATE `cron`
-                   SET `class` = "nextdom"
-                 WHERE `class` = "jeedom"';
-        try {
-            DBHelper::exec($sql);
-        } catch (\Exception $e) {
-
-        }
-        // Check doublon on update
-        foreach (ConsistencyManager::getDefaultCrons() as $cronClass => $cronData) {
-            foreach ($cronData as $cronName => $cronConfig) {
-                $sql = 'SELECT ' . DBHelper::buildField(CronManager::CLASS_NAME) . '
-                        FROM ' . CronManager::DB_CLASS_NAME . '
-                        WHERE class = :class
-                        AND function = :function';
-                $params = [
-                    'class' => $cronClass,
-                    'function' => $cronName,
-                ];
-                /** @var Cron[] $result */
-                $result = DBHelper::getAllObjects($sql, $params, CronManager::CLASS_NAME);
-                if (count($result) > 1) {
-                    $result[1]->remove();
-                }
-            }
-        }
-
-        // Update Update table
-
-        // Update jeedom version
-        foreach (UpdateManager::all() as $update) {
-            if ($update->getType() == 'core' && $update->getName() == 'jeedom' && $update->getLogicalId() == 'jeedom') {
-                $update->setName('nextdom');
-                $update->setLogicalId('nextdom');
-                $update->save();
-            }
-        }
+          if (is_dir(NEXTDOM_DATA . '/data/php')) {
+              FileSystemHelper::rrmfile(NEXTDOM_DATA . '/data/php/user.function.class.php');
+              FileSystemHelper::rrmfile(NEXTDOM_DATA . '/data/php/user.function.class.sample.php');
+          }
+          $message = 'user.function files removed';
+          if ($logFile == LogTarget::MIGRATION) {
+              LogHelper::addInfo($logFile, $message, '');
+          } else {
+              ConsoleHelper::process($message);
+          }
     }
+    /***********************************************************************************************************************************************************/
 
-    /***************************************************************** X.X.X Migration process *****************************************************************/
-
+    private static function migrate_0_6_1($logFile = LogTarget::MIGRATION) {
+        exec("sudo sed -i '/vm.swappiness=/d' /etc/sysctl.d/99-sysctl.conf");
+        exec("sudo echo 'vm.swappiness=10' >> /etc/sysctl.d/99-sysctl.conf");
+    }
 }

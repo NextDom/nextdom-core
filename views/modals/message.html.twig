@@ -62,7 +62,6 @@
             <table class="table table-condensed table-bordered tablesorter" id="table_message">
                 <thead>
                 <tr>
-                    <th data-sorter="false" data-filter="false"></th>
                     <th>{{ 'Date et heure' }}</th>
                     <th>{{ 'Plugin' }}</th>
                     <th>{{ 'common.description' | trans }}</th>
@@ -72,13 +71,13 @@
                 <tbody>
                     {% for message in messagesList %}
                         <tr data-message_id="{{ message.getId() }}">
-                            <td class="td-btn">
-                                <div class="btn btn-sm btn-danger removeMessage"><i class="fas fa-trash"></i></div>
-                            </td>
                             <td class="td-datetime">{{ message.getDate() }}</td>
                             <td>{{ message.getPlugin() }}</td>
                             <td class="td-description">{{ message.getMessage()|raw }}</td>
-                            <td>{{ message.getAction() }}</td>
+                            <td class="td-btn">
+                                <span>{{ message.getAction() }}</span>
+                                <div class="btn btn-sm btn-danger removeMessage"><i class="fas fa-trash"></i></div>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>

@@ -17,7 +17,9 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\DateFormat;
 use NextDom\Enums\ScenarioExpressionAction;
+use NextDom\Enums\ScenarioExpressionSubType;
 use NextDom\Enums\ScenarioExpressionType;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
@@ -393,6 +395,7 @@ class ScenarioExpression implements EntityInterface
             sleep(1);
         }
         $this->setLog($scenario, __('[Wait] Condition valide : ') . $expression . ' => ' . $result);
+        return null;
     }
 
     /**
@@ -407,19 +410,20 @@ class ScenarioExpression implements EntityInterface
             try {
                 $options['duration'] = floatval(Utils::evaluate($options['duration']));
             } catch (\Exception $e) {
-
+                $this->setLog($scenario, __('La durée n\'est pas valide : ') . $options['duration']);
             }
             if (is_numeric($options['duration']) && $options['duration'] > 0) {
                 $this->setLog($scenario, __('Pause de ') . $options['duration'] . __(' seconde(s)'));
                 if ($options['duration'] < 1) {
-                    return usleep($options['duration'] * 1000000);
+                    usleep($options['duration'] * 1000000);
                 } else {
-                    return sleep($options['duration']);
+                    sleep($options['duration']);
                 }
             }
         }
-        $this->setLog($scenario, __('Aucune durée trouvée pour l\'action sleep ou la durée n\'est pas valide : ') . $options['duration']);
-        return null;
+        else {
+            $this->setLog($scenario, __('Aucune durée trouvée pour l\'action sleep : ') . $options['duration']);
+        }
     }
 
     /**
@@ -782,8 +786,8 @@ class ScenarioExpression implements EntityInterface
                 }
                 $this->setLog($scenario, __('Génération du rapport ') . $view->getName());
                 $cmd_parameters['files'] = array($view->report($options['export_type'], $options));
-                $cmd_parameters['title'] = __('[' . ConfigManager::byKey('name') . '] Rapport ') . $view->getName() . __(' du ') . date('Y-m-d H:i:s');
-                $cmd_parameters['message'] = __('Veuillez trouver ci-joint le rapport ') . $view->getName() . __(' généré le ') . date('Y-m-d H:i:s');
+                $cmd_parameters['title'] = __('[' . ConfigManager::byKey('name') . '] Rapport ') . $view->getName() . __(' du ') . date(DateFormat::FULL);
+                $cmd_parameters['message'] = __('Veuillez trouver ci-joint le rapport ') . $view->getName() . __(' généré le ') . date(DateFormat::FULL);
                 break;
             case 'plan':
                 $plan = PlanHeaderManager::byId($options['plan_id']);
@@ -792,8 +796,8 @@ class ScenarioExpression implements EntityInterface
                 }
                 $this->setLog($scenario, __('Génération du rapport ') . $plan->getName());
                 $cmd_parameters['files'] = array($plan->report($options['export_type'], $options));
-                $cmd_parameters['title'] = __('[' . ConfigManager::byKey('name') . '] Rapport ') . $plan->getName() . __(' du ') . date('Y-m-d H:i:s');
-                $cmd_parameters['message'] = __('Veuillez trouver ci-joint le rapport ') . $plan->getName() . __(' généré le ') . date('Y-m-d H:i:s');
+                $cmd_parameters['title'] = __('[' . ConfigManager::byKey('name') . '] Rapport ') . $plan->getName() . __(' du ') . date(DateFormat::FULL);
+                $cmd_parameters['message'] = __('Veuillez trouver ci-joint le rapport ') . $plan->getName() . __(' généré le ') . date(DateFormat::FULL);
                 break;
             case 'plugin':
                 $plugin = PluginManager::byId($options['plugin_id']);
@@ -802,15 +806,15 @@ class ScenarioExpression implements EntityInterface
                 }
                 $this->setLog($scenario, __('Génération du rapport ') . $plugin->getName());
                 $cmd_parameters['files'] = array($plugin->report($options['export_type'], $options));
-                $cmd_parameters['title'] = __('[' . ConfigManager::byKey('name') . '] Rapport ') . $plugin->getName() . __(' du ') . date('Y-m-d H:i:s');
-                $cmd_parameters['message'] = __('Veuillez trouver ci-joint le rapport ') . $plugin->getName() . __(' généré le ') . date('Y-m-d H:i:s');
+                $cmd_parameters['title'] = __('[' . ConfigManager::byKey('name') . '] Rapport ') . $plugin->getName() . __(' du ') . date(DateFormat::FULL);
+                $cmd_parameters['message'] = __('Veuillez trouver ci-joint le rapport ') . $plugin->getName() . __(' généré le ') . date(DateFormat::FULL);
                 break;
             case 'eqAnalyse':
                 $url = NetworkHelper::getNetworkAccess('internal') . '/index.php?v=d&p=eqAnalyse&report=1';
                 $this->setLog($scenario, __('Génération du rapport ') . $url);
                 $cmd_parameters['files'] = array(ReportHelper::generate($url, 'other', 'eqAnalyse', $options['export_type'], $options));
-                $cmd_parameters['title'] = __('[' . ConfigManager::byKey('name') . '] Rapport équipement du ') . date('Y-m-d H:i:s');
-                $cmd_parameters['message'] = __('Veuillez trouver ci-joint le rapport équipement généré le ') . date('Y-m-d H:i:s');
+                $cmd_parameters['title'] = __('[' . ConfigManager::byKey('name') . '] Rapport équipement du ') . date(DateFormat::FULL);
+                $cmd_parameters['message'] = __('Veuillez trouver ci-joint le rapport équipement généré le ') . date(DateFormat::FULL);
                 break;
         }
         if ($cmd_parameters['files'] === null) {
@@ -850,7 +854,7 @@ class ScenarioExpression implements EntityInterface
     {
         $cmd = CmdManager::byId(str_replace('#', '', $this->getExpression()));
         if (is_object($cmd)) {
-            if ($cmd->getSubType() == 'slider' && isset($options['slider'])) {
+            if ($cmd->getSubType() == ScenarioExpressionSubType::SLIDER && isset($options['slider'])) {
                 $options['slider'] = Utils::evaluate($options['slider']);
             }
             if (is_array($options) && (count($options) > 1 || (isset($options['background']) && $options['background'] == 1))) {

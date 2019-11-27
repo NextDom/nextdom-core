@@ -31,11 +31,14 @@ function gen_css {
   	echo " >>> Generate CSS"
     mkdir -p public/css/pages
     mkdir -p public/css/modals
+    mkdir -p public/css/themes
     sass --update --stop-on-error assets/css/compiled:public/css $COMPRESS
-
+    echo " >>> Generate Themes"
+    for theme_file in assets/css/themes/output/*.scss; do
+        sass --update --stop-on-error ${theme_file}:public/css/themes/$(basename "${theme_file}" .scss).css $COMPRESS
+    done
   	# Path replace
   	sed -i s#\"images/ui-#\"/assets/css/vendors/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.css
-  	sed -i s#\"images/ui-#\"/assets/css/vendors/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.mob.css
 }
 
 function gen_js {
@@ -49,6 +52,7 @@ function gen_js {
            assets/3rdparty/jquery.utils/jquery.utils.js \
            assets/3rdparty/jquery.at.caret/jquery.at.caret.min.js \
            assets/3rdparty/jquery.multi-column-select/multi-column-select.js \
+           assets/3rdparty/jquery.ui-touch-punch/jquery.ui.touch-punch.min.js \
            assets/js/core/core.js \
            assets/js/core/nextdom.class.js \
            assets/js/core/private.class.js \
@@ -110,6 +114,7 @@ function gen_js {
            vendor/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js \
            vendor/node_modules/snapsvg/dist/snap.svg-min.js \
            vendor/node_modules/moment/min/moment.min.js \
+           vendor/node_modules/vivagraphjs/dist/vivagraph.min.js \
            assets/js/factory/NextDomElement.js \
            assets/js/factory/NextDomEnum.js \
            assets/js/factory/NextDomUIDGenerator.js \

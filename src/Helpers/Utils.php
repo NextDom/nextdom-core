@@ -52,7 +52,7 @@ class Utils
      * Add javascript variable in HTML code
      *
      * @param string $varName Name of javascript variable
-     * @param string $varValue Value of the javascript variable
+     * @param string|array $varValue Value of the javascript variable
      */
     public static function sendVarToJs(string $varName, $varValue)
     {
@@ -63,7 +63,7 @@ class Utils
      * Convert variable in javascript format
      *
      * @param string $varName Nom de la variable
-     * @param mixed $varValue Valeur
+     * @param string|array $varValue Valeur
      *
      * @return string Déclaration javascript
      */
@@ -109,8 +109,7 @@ class Utils
         foreach ($listOfVarsWithValues as $varName => $value) {
             $result .= self::getVarInJs($varName, $value) . "\n";
         }
-        $result .= "</script>\n";
-        return $result;
+        return $result . "</script>\n";
     }
 
     /**
@@ -124,7 +123,8 @@ class Utils
         if ($forceType == 'JS' || headers_sent() || isset($_GET['ajax'])) {
             echo '<script type="text/javascript">window.location.href="' . $url . '"</script>';
         } else {
-            exit(header("Location: $url"));
+            header("Location: $url");
+            exit(0);
         }
     }
 
@@ -149,6 +149,67 @@ class Utils
         }
         return $default;
     }
+
+    /**
+     * Obtenir un entier passé en paramètre
+     *
+     * @param string $name Nom de la variable
+     * @param mixed $default Valeur par défaut
+     *
+     * @return mixed Valeur de la variable
+     */
+    public static function initInt(string $name, $default = 0): int
+    {
+        return intval(self::init($name, $default));
+    }
+
+    /**
+     * Obtenir une chaine de caractère passée en paramètre pour un nom de fichier
+     *
+     * @param string $name Nom de la variable
+     * @param mixed $default Valeur par défaut
+     *
+     * @return mixed Valeur de la variable
+     */
+    public static function initFilename(string $name, $default = ''): string
+    {
+        return preg_replace('/[^0-9a-zA-ZàâäôéèëêïîçùûüÿæœÀÂÄÔÉÈËÊÏÎŸÇÙÛÜÆŒ \.\-_]+/', '', self::init($name, $default));
+    }
+
+    /**
+     * Obtenir un chemin passé en paramètre
+     *
+     * @param string $name Nom de la variable
+     * @param mixed $default Valeur par défaut
+     *
+     * @return mixed Valeur de la variable
+     */
+    public static function initPath(string $name)
+    {
+        $path = realpath(self::init($name));
+        if ($path !== false && self::checkPath($path)) {
+            return $path;
+        }
+        return false;
+    }
+
+    /**
+     * Check if path is valid
+     *
+     * @param string $path Path to test
+     *
+     * @return bool
+     */
+    public static function checkPath(string $path): bool
+    {
+        foreach ([NEXTDOM_ROOT, NEXTDOM_DATA, NEXTDOM_TMP, NEXTDOM_LOG] as $authorizedPath) {
+            if (strpos($path, $authorizedPath) === 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     /**
      * @param $_array
@@ -182,11 +243,9 @@ class Utils
 
         $offcet_x = ($width - $dest_width) / 2;
         $offcet_y = ($height - $dest_height) / 2;
-        if ($dest_image && $contents) {
-            if (!imagecopyresampled($dest_image, $contents, $offcet_x, $offcet_y, 0, 0, $dest_width, $dest_height, $width_orig, $height_orig)) {
-                error_log("Error image copy resampled");
-                return false;
-            }
+        if ($dest_image && $contents && !imagecopyresampled($dest_image, $contents, $offcet_x, $offcet_y, 0, 0, $dest_width, $dest_height, $width_orig, $height_orig)) {
+            error_log("Error image copy resampled");
+            return false;
         }
 // start buffering
         ob_start();
@@ -212,15 +271,14 @@ class Utils
     public static function convertDuration($time): string
     {
         $result = '';
-        $unities = array('j' => 86400, 'h' => 3600, 'min' => 60);
+        $unities = ['j' => 86400, 'h' => 3600, 'min' => 60];
         foreach ($unities as $unity => $value) {
             if ($time >= $value || $result != '') {
                 $result .= floor($time / $value) . $unity . ' ';
                 $time %= $value;
             }
         }
-        $result .= $time . 's';
-        return $result;
+        return $result . $time . 's';
     }
 
     /**
@@ -472,13 +530,11 @@ class Utils
         try {
             return $GLOBALS['ExpressionLanguage']->evaluate($expr);
         } catch (\Exception $e) {
-            //log::add('expression', 'debug', '[Parser 1] Expression : ' . $_string . ' tranformé en ' . $expr . ' => ' . $e->getMessage());
         }
         try {
             $expr = str_replace('""', '"', $expr);
             return $GLOBALS['ExpressionLanguage']->evaluate($expr);
         } catch (\Exception $e) {
-            //log::add('expression', 'debug', '[Parser 2] Expression : ' . $_string . ' tranformé en ' . $expr . ' => ' . $e->getMessage());
         }
         return $_string;
     }
@@ -722,30 +778,51 @@ class Utils
 
     /**
      * @param $_pathimg
-     * @return string
+     * @return string|array
      */
-    public static function getDominantColor($_pathimg): string
+    function getDominantColor($_pathimg, $_level = null, $_ignoreDarkColor = false)
     {
-        $rTotal = 0;
-        $gTotal = 0;
-        $bTotal = 0;
-        $total = 0;
+        $colors = array();
         $i = imagecreatefromjpeg($_pathimg);
         $imagesX = imagesx($i);
+        $imagesY = imagesy($i);
+        $ratio = $imagesX / $imagesY;
+        $size = 270;
+        $img = imagecreatetruecolor($size, $size / $ratio);
+        imagecopyresized($img, $i, 0, 0, 0, 0, $size, $size / $ratio, $imagesX, $imagesY);
+        $imagesX = $size;
+        $imagesY = $size / $ratio;
         for ($x = 0; $x < $imagesX; $x++) {
-            $imagesY = imagesy($i);
             for ($y = 0; $y < $imagesY; $y++) {
-                $rgb = imagecolorat($i, $x, $y);
-                $r = ($rgb >> 16) & 0xFF;
-                $g = ($rgb >> 8) & 0xFF;
-                $b = $rgb & 0xFF;
-                $rTotal += $r;
-                $gTotal += $g;
-                $bTotal += $b;
-                $total++;
+                $rgb = imagecolorat($img, $x, $y);
+                if ($_ignoreDarkColor) {
+                    $sum = (($rgb >> 16) & 0xFF) + (($rgb >> 8) & 0xFF) + ($rgb & 0xFF);
+                    if ($sum < 10) {
+                        continue;
+                    }
+                }
+                if (!isset($colors[$rgb])) {
+                    $colors[$rgb] = array('value' => $rgb, 'nb' => 0);
+                }
+                $colors[$rgb]['nb']++;
             }
         }
-        return '#' . sprintf('%02x', round($rTotal / $total)) . sprintf('%02x', round($gTotal / $total)) . sprintf('%02x', round($bTotal / $total));
+        usort($colors, function ($a, $b) {
+            return $b['nb'] - $a['nb'];
+        });
+
+        if ($_level == null) {
+            if ($colors[0]['value'] == 0) {
+                return '#' . substr("000000" . dechex($colors[1]['value']), -6);
+            }
+            return '#' . substr("000000" . dechex($colors[0]['value']), -6);
+        }
+        $return = array();
+        $colors = array_slice($colors, 0, $_level);
+        foreach ($colors as $color) {
+            $return[] = '#' . substr("000000" . dechex($color['value']), -6);
+        }
+        return $return;
     }
 
     /**
@@ -985,23 +1062,19 @@ class Utils
                     if (is_array($value)) {
                         if ($function->getNumberOfRequiredParameters() == 2) {
                             foreach ($value as $arrayKey => $arrayValue) {
-                                if (is_array($arrayValue)) {
-                                    if ($function->getNumberOfRequiredParameters() == 3) {
-                                        foreach ($arrayValue as $arrayArraykey => $arrayArrayvalue) {
-                                            $_object->$method($arrayKey, $arrayArraykey, $arrayArrayvalue);
-                                        }
-                                        continue;
+                                if (is_array($arrayValue) && $function->getNumberOfRequiredParameters() == 3) {
+                                    foreach ($arrayValue as $arrayArraykey => $arrayArrayvalue) {
+                                        $_object->$method($arrayKey, $arrayArraykey, $arrayArrayvalue);
                                     }
+                                    continue;
                                 }
                                 $_object->$method($arrayKey, $arrayValue);
                             }
                         } else {
                             $_object->$method(json_encode($value, JSON_UNESCAPED_UNICODE));
                         }
-                    } else {
-                        if ($function->getNumberOfRequiredParameters() < 2) {
-                            $_object->$method($value);
-                        }
+                    } elseif ($function->getNumberOfRequiredParameters() < 2) {
+                        $_object->$method($value);
                     }
                 }
             }
@@ -1123,8 +1196,9 @@ class Utils
      */
     public static function array_key_default($array, $key, $default)
     {
-        if (true === array_key_exists($key, $array))
+        if (array_key_exists($key, $array)) {
             return $array[$key];
+        }
         return $default;
     }
 
@@ -1142,14 +1216,14 @@ class Utils
      */
     public static function readUploadedFile($files, $key, $destDir, $maxSizeMB, $extensions, $cleaner = null)
     {
-        if (false == isset($files[$key])) {
+        if (!isset($files[$key])) {
             $message = __('Aucun fichier trouvé. Vérifiez le paramètre PHP (post size limit)');
             throw new CoreException($message);
         }
 
         if (0 != count($extensions)) {
             $extension = strtolower(strrchr($files[$key]['name'], '.'));
-            if (false == in_array($extension, $extensions)) {
+            if (!in_array($extension, $extensions)) {
                 $message = __('Extension du fichier non valide, autorisé :') . join(",", $extensions);
                 throw new CoreException($message);
             }
@@ -1167,12 +1241,12 @@ class Utils
         }
 
         $destPath = sprintf("%s/%s", $destDir, $name);
-        if (false == move_uploaded_file($files[$key]['tmp_name'], $destPath)) {
+        if (!move_uploaded_file($files[$key]['tmp_name'], $destPath)) {
             $message = __('Impossible de déplacer le fichier temporaire');
             throw new CoreException($message);
         }
 
-        if (false == file_exists($destPath)) {
+        if (!file_exists($destPath)) {
             $message = __('Impossible de téléverser le fichier');
             throw new CoreException($message);
         }
@@ -1201,7 +1275,7 @@ class Utils
      */
     public static function cleanComponentName($name)
     {
-        return str_replace(array('&', '#', ']', '[', '%', "\\", "/", "'", '"'), '', $name);
+        return str_replace(['&', '#', ']', '[', '%', "\\", "/", "'", '"'], '', $name);
     }
 
     /**

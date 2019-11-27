@@ -21,6 +21,8 @@ namespace NextDom\Repo;
 class RepoFile
 {
     public static $_name = 'File';
+    public static $_icon = 'fas fa-file-invoice';
+    public static $_description = 'repo.file.description';
 
     public static $_scope = array(
         'plugin' => true,
@@ -31,7 +33,7 @@ class RepoFile
     public static $_configuration = array(
         'parameters_for_add' => array(
             'path' => array(
-                'name' => 'Chemin',
+                'name' => 'repo.file.conf.path',
                 'type' => 'file',
             ),
         ),

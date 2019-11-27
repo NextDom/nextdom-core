@@ -126,10 +126,19 @@ function initEvents() {
 
     // Regenerate key button
     $(".bt_copy_api").on('click', function (event) {
-        navigator.clipboard.writeText($(this).closest('.mix-group').find('.span_apikey').value()).then(function() {
-            notify("Info", '{{Clé copiée !}}', 'success');
-        }, function() {
-            notify("Info", '{{Copie refusée !}}', 'danger');
-        });
+        var apiKeyField = $(this).closest('.mix-group').find('.span_apikey');
+        if (document.selection) {
+           var selectedRange = document.body.createTextRange();
+           selectedRange.moveToElementText(apiKeyField[0]);
+           selectedRange.select();
+        }
+        else if (window.getSelection) {
+           var selectedRange = document.createRange();
+           selectedRange.selectNodeContents(apiKeyField[0]);
+           window.getSelection().removeAllRanges();
+           window.getSelection().addRange(selectedRange);
+        }
+        document.execCommand('copy');
+        notify("Info", '{{Clé copiée !}}', 'success');
     });
 }

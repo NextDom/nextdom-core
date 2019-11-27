@@ -1,0 +1,95 @@
+{#
+
+/* This file is part of Jeedom.
+*
+* Jeedom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* Jeedom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/* This file is part of NextDom.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#}
+<section class="content-header">
+    <div class="action-bar">
+        <div class="action-group">
+            <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'common.return' | trans }}</a>
+            <a class="btn btn-default btn-action-bar" href="index.php?v=d&p=log_config"><i class="fas fa-cog"></i>{{ 'common.settings' | trans }}</a>
+            <a class="btn btn-warning btn-action-bar" data-state="1" id="bt_globalLogStopStart"><i class="fas fa-pause"></i>{{ 'common.pause' | trans }}</a>
+        </div>
+        <div class="action-group">
+            <a class="btn btn-primary btn-action-bar pull-right" id="bt_downloadLog" disabled="disabled"><i class="fas fa-cloud-download-alt"></i>{{ 'Télécharger' }}</a>
+            <a class="btn btn-warning btn-action-bar pull-right" id="bt_clearLog"><i class="fas fa-times"></i>{{ 'common.clear' | trans }}</a>
+            <a class="btn btn-danger btn-action-bar pull-right" id="bt_removeLog"><i class="fas fa-trash"></i>{{ 'common.remove' | trans }}</a>
+            <a class="btn btn-danger btn-action-bar pull-right" id="bt_removeAllLog"><i class="fas fa-trash"></i>{{ 'Supprimer tous' }}</a>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="box" id="div_Log">
+        <!-- Header bar -->
+        <div class="box-header with-border">
+            <h3 class="box-title"><i class="fas fa-file-alt"></i>{{ 'Logs' }}</h3>
+        </div>
+
+        <!-- Page content -->
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-3 col-sm-4 padding-bottom" id="div_displayLogList">
+                    <fieldset>
+                        <div class="mix-group">
+                            <legend>{{ 'Liste des logs' }}</legend>
+                            <a class="btn btn-info" id="bt_LogChronologic"><i class="fas fa-history no-spacing"></i></a>
+                            <a class="btn btn-action" id="bt_LogAlphabetic"><i class="fas fa-sort-alpha-up no-spacing"></i></a>
+                        </div>
+                        <div class="bs-sidebar">
+                            <ul id="ul_object" class="nav nav-list bs-sidenav list-group">
+                                {% for logFile in logFilesList %}
+                                    <li class="cursor li_log{% if logFile.active %} active{% endif %}" data-log="{{ logFile.name }}" data-timing="{{ logFile.timing }}">
+                                        <a class="label-log"><i class="fas fa-{{ logFile.icon }} spacing-right" style="color:{{ logFile['color'] }};"></i>{{ logFile['name'] }} ({% if logFile.size>=1000 %}{{ logFile.size /1000 }} Mo{% else %}{{ logFile.size }} Ko{% endif %})</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <div class="col-md-9 col-sm-8 left-border" id="div_logDisplay">
+                    <fieldset>
+                        <div class="box-tools padding-bottom">
+                            <div class="input-group">
+                                <div class="input-group-addon"><i class="fa fa-search"></i></div>
+                                <input class="form-control" id="in_globalLogSearch" placeholder="{{ 'Rechercher dans le log...' | trans }}"/>
+                            </div>
+                        </div>
+                        <pre id="pre_globallog" style='height:auto;overflow: auto;'></pre>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

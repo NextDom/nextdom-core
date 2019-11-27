@@ -204,12 +204,6 @@ function initEvents() {
         }
     });
 
-    // Plugin sendto market button
-    $('#div_pageContainer').delegate('.sendPluginTo', 'click', function () {
-        $('#md_modal2').dialog({title: "{{Envoyer sur le}} "+$(this).attr('data-repo')});
-        $('#md_modal2').load('index.php?v=d&modal=update.send&type=plugin&logicalId=' + $(this).attr('data-logicalId')+'&repo='+$(this).attr('data-repo')).dialog('open');
-    });
-
     // Param changed : page leaving lock by msgbox
     $('#div_pageContainer').delegate('.configKey', 'change', function () {
         modifyWithoutSave = true;
@@ -269,15 +263,6 @@ function showPlugin(pluginId) {
                 $("#div_plugin_deamon").load('index.php?v=d&modal=plugin.deamon&plugin_id='+data.id);
             }
 
-            $('#span_plugin_market').empty();
-            if (isset(data.status) && isset(data.status.owner)) {
-                for(var i in data.status.owner){
-                    if(data.status.owner[i] != 1){
-                        continue;
-                    }
-                    $('#span_plugin_market').append('<a class="btn btn-warning sendPluginTo" data-repo="'+i+'" data-logicalId="' + data.id + '"><i class="fas fa-cloud-upload-alt spacing-right"></i>{{Envoyer sur le}} '+i+'</a> ');
-                }
-            }
             $('#span_plugin_doc').empty();
             if(isset(data.documentation) && data.documentation != ''){
                 $('#span_plugin_doc').append('<a class="btn btn-success" target="_blank" href="'+data.documentation+'"><i class="fas fa-book spacing-right"></i>{{Documentation}}</a> ');
@@ -367,7 +352,7 @@ function showPlugin(pluginId) {
                 $('#div_plugin_toggleState').html(html);
             }else{
                 $('#div_plugin_toggleState').closest('.panel').removeClass('panel-default panel-success').addClass('panel-danger');
-                $('#div_plugin_toggleState').html('{{Votre version de}} '+NEXTDOM_PRODUCT_NAME+' {{ne permet pas d\'activer ce plugin}}');
+                $('#div_plugin_toggleState').html('{{Votre version de NextDom ne permet pas d\'activer ce plugin}}');
             }
             var log_conf = '';
             for(var i in  data.logs){

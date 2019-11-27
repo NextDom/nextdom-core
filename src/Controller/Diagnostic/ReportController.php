@@ -81,6 +81,6 @@ class ReportController extends BaseController
             }
         }
 
-        return Render::getInstance()->get('/desktop/diagnostic/reports-view.html.twig', $pageData);
+        return Render::getInstance()->get('/desktop/diagnostic/report.html.twig', $pageData);
     }
 }

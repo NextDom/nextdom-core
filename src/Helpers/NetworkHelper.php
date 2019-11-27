@@ -202,7 +202,7 @@ class NetworkHelper
                     }
                     if (isset($url['host'])) {
                         if (isset($url['port'])) {
-                            return $return . $url['host'];
+                            return $return . $url['host'] . ':' . $url['port'];
                         } else {
                             return $return . $url['host'];
                         }
@@ -301,7 +301,7 @@ class NetworkHelper
      */
     public static function getInterfaceIp($_interface)
     {
-        $ip = trim(shell_exec(SystemHelper::getCmdSudo() . "ip addr show " . $_interface . " | grep \"inet .*" . $_interface . "\" | awk '{print $2}' | cut -d '/' -f 1"));
+        $ip = trim(shell_exec(SystemHelper::getCmdSudo() . "ip addr show " . $_interface . " 2> /dev/null | grep \"inet .*" . $_interface . "\" | awk '{print $2}' | cut -d '/' -f 1"));
         if (filter_var($ip, FILTER_VALIDATE_IP)) {
             return $ip;
         }
@@ -532,6 +532,11 @@ class NetworkHelper
         $openvpn->setConfiguration('compression', 'comp-lzo');
         $openvpn->setConfiguration('remote_port', ConfigManager::byKey('vpn::port', 'core', 1194));
         $openvpn->setConfiguration('auth_mode', 'password');
+        if(ConfigManager::byKey('connection::4g') == 1){
+            $openvpn->setConfiguration('optionsAfterStart', 'sudo ip link set dev #interface# mtu 1300');
+        }else{
+            $openvpn->setConfiguration('optionsAfterStart', '');
+        }
         $openvpn->save(true);
         if (!file_exists(NEXTDOM_ROOT . '/plugins/openvpn/data')) {
             shell_exec('mkdir -p ' . NEXTDOM_ROOT . '/plugins/openvpn/data');

@@ -111,4 +111,31 @@ class EqLogicTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $savedEqLogic->getObject_id());
         $this->assertFalse($eqLogic->getChanged());
     }
+
+    public function testGetPrimaryCategoryWithOne() {
+        $eqLogic = EqLogicManager::byId(1);
+        $this->assertEquals('security', $eqLogic->getPrimaryCategory());
+    }
+
+    public function testGetPrimaryCategoryWithPriority() {
+        $eqLogic = EqLogicManager::byId(3);
+        $this->assertEquals('energy', $eqLogic->getPrimaryCategory());
+    }
+
+    public function testGetCategoryWithoutArgs() {
+        $eqLogic = EqLogicManager::byId(1);
+        $result = $eqLogic->getCategory();
+        $this->assertCount(7, $result);
+        $this->assertEquals(1, $result['security']);
+    }
+
+    public function testGetCategoryWithDefaultUseless() {
+        $eqLogic = EqLogicManager::byId(2);
+        $this->assertEquals(1, $eqLogic->getCategory('light', 0));
+    }
+
+    public function testGetCategoryWithDefaultUsefull() {
+        $eqLogic = EqLogicManager::byId(4);
+        $this->assertEquals(1, $eqLogic->getCategory('energy', 1));
+    }
 }

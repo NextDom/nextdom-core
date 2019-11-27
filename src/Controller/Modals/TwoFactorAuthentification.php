@@ -56,7 +56,6 @@ class TwoFactorAuthentification extends BaseAbstractModal
         );
 
         $pageData = [];
-        $pageData['PRODUCT_NAME'] = ConfigManager::byKey('product_name');
         $pageData['google2FaUrl'] = $google2faUrl;
         $pageData['userTwoFactorSecret'] = UserManager::getStoredUser()->getOptions('twoFactorAuthentificationSecret');
 

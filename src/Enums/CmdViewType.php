@@ -18,7 +18,7 @@
 namespace NextDom\Enums;
 
 /**
- * Class EqLogicViewType
+ * Class CmdViewType
  * @package NextDom\Enums
  */
 class CmdViewType extends Enum

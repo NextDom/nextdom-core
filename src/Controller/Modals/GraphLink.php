@@ -49,7 +49,8 @@ class GraphLink extends BaseAbstractModal
             'prerenderGraph' => $configData['graphlink::prerender'],
             'renderGraph' => $configData['graphlink::render'],
             'filterTypeGraph' => Utils::init('filter_type'),
-            'filterIdGraph' => Utils::init('filter_id')
+            'filterIdGraph' => Utils::init('filter_id'),
+            'userTheme' => ConfigManager::byKey('nextdom::user-theme')
         ]);
 
         return Render::getInstance()->get('/modals/graph.link.html.twig');

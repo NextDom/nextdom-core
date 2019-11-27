@@ -33,6 +33,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Enums\DateFormat;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
@@ -124,7 +125,7 @@ class EqLogicManager
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . ' ';
         if ($objectId === null) {
-            $sql .= 'WHERE object_id IS NULL ';
+            $sql .= 'WHERE object_id IS NULL OR object_id = -1 ';
         } else {
             $values['object_id'] = $objectId;
             $sql .= 'WHERE object_id = :object_id ';
@@ -389,7 +390,7 @@ class EqLogicManager
             if ($sendReport) {
                 $noReponseTimeLimit = $eqLogic->getTimeout();
                 if (count(MessageManager::byPluginLogicalId('core', $logicalId)) == 0) {
-                    if ($eqLogic->getStatus('lastCommunication', date('Y-m-d H:i:s')) < date('Y-m-d H:i:s', strtotime('-' . $noReponseTimeLimit . ' minutes' . date('Y-m-d H:i:s')))) {
+                    if ($eqLogic->getStatus('lastCommunication', date(DateFormat::FULL)) < date(DateFormat::FULL, strtotime('-' . $noReponseTimeLimit . ' minutes' . date(DateFormat::FULL)))) {
                         $message = __('Attention') . ' ' . $eqLogic->getHumanName();
                         $message .= __(' n\'a pas envoyé de message depuis plus de ') . $noReponseTimeLimit . __(' min (vérifiez les piles)');
                         $eqLogic->setStatus('timeout', 1);
@@ -410,7 +411,7 @@ class EqLogicManager
                         }
                     }
                 } else {
-                    if ($eqLogic->getStatus('lastCommunication', date('Y-m-d H:i:s')) > date('Y-m-d H:i:s', strtotime('-' . $noReponseTimeLimit . ' minutes' . date('Y-m-d H:i:s')))) {
+                    if ($eqLogic->getStatus('lastCommunication', date(DateFormat::FULL)) > date(DateFormat::FULL, strtotime('-' . $noReponseTimeLimit . ' minutes' . date(DateFormat::FULL)))) {
                         foreach (MessageManager::byPluginLogicalId('core', $logicalId) as $message) {
                             $message->remove();
                         }

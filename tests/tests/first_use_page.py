@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
+# line 100 caracters max or #pylint: disable=line-too-long
+####################################################################################################
 """Test first use process pages
 """
-
 import unittest
 import sys
 import os
@@ -50,8 +51,8 @@ class FirstUsePage(BaseGuiTest):
         password1_button = self.get_element_by_id('in_change_password')
         password2_button = self.get_element_by_id('in_change_passwordToo')
         step_3_skip_button = self.get_element_by_id('skipStep4')
-        theme_checkboxes.append(self.get_element_by_css('input[value="dark"]'))
-        theme_checkboxes.append(self.get_element_by_css('input[value="light"]'))
+        theme_checkboxes.append(self.get_element_by_css('input[value="dark-nextdom"]'))
+        theme_checkboxes.append(self.get_element_by_css('input[value="light-nextdom"]'))
         widget_checkboxes.append(self.get_element_by_css('input[value="adminlte"]'))
         widget_checkboxes.append(self.get_element_by_css('input[value="flat"]'))
         finish_button = self.get_element_by_id('finishConf')
@@ -174,8 +175,8 @@ class FirstUsePage(BaseGuiTest):
         password1_button = self.get_element_by_id('in_change_password')
         password2_button = self.get_element_by_id('in_change_passwordToo')
         step_3_skip_button = self.get_element_by_id('skipStep4')
-        theme_checkboxes.append(self.get_element_by_css('input[value="dark"]'))
-        theme_checkboxes.append(self.get_element_by_css('input[value="light"]'))
+        theme_checkboxes.append(self.get_element_by_css('input[value="dark-nextdom"]'))
+        theme_checkboxes.append(self.get_element_by_css('input[value="light-nextdom"]'))
         widget_checkboxes.append(self.get_element_by_css('input[value="adminlte"]'))
         widget_checkboxes.append(self.get_element_by_css('input[value="flat"]'))
         finish_button = self.get_element_by_id('finishConf')
@@ -287,6 +288,7 @@ class FirstUsePage(BaseGuiTest):
         # Stay in fist connect page
         self.assertEqual(0, len(self.get_js_logs()))
         self.assertIn("Dashboard", self.get_page_title())
+
 
 # Entry point
 if __name__ == "__main__":

@@ -15,21 +15,29 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+use NextDom\Managers\ScenarioManager;
 use NextDom\Rest\ScenarioRest;
 
 require_once(__DIR__ . '/../../../src/core.php');
 
 class ScenarioRestTest extends PHPUnit_Framework_TestCase
 {
+    public function tearDown()
+    {
+        ScenarioManager::byId(3)->setIsActive(1);
+        ScenarioManager::byId(4)->setIsActive(0);
+    }
+
     public function testGetAll()
     {
         $result = ScenarioRest::getAll();
-        $this->assertCount(3, $result);
-        $this->assertEquals('Scenario with expressions', $result[0]['name']);
-        $this->assertEquals('Test scenario', $result[1]['name']);
+        $this->assertCount(4, $result);
+        $this->assertEquals('Disabled scenario', $result[0]['name']);
+        $this->assertEquals('Scenario with expressions', $result[1]['name']);
     }
 
-    public function testGetAllByGroup() {
+    public function testGetAllByGroup()
+    {
         $result = ScenarioRest::getAllByGroup();
         $this->assertArrayHasKey('no-group', $result);
         $this->assertArrayHasKey('Small group', $result);
@@ -37,13 +45,47 @@ class ScenarioRestTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Empty scenario', $result['Small group'][0]['name']);
     }
 
-    public function testLaunchOnExisting() {
+    public function testLaunchOnExisting()
+    {
         $result = ScenarioRest::launch(1);
         $this->assertTrue($result);
     }
 
-    public function testLaunchOnBadId() {
+    public function testLaunchOnBadId()
+    {
         $result = ScenarioRest::launch(39);
+        $this->assertFalse($result);
+    }
+
+    public function testLaunchOnDisabled()
+    {
+        $result = ScenarioRest::launch(4);
+        $this->assertFalse($result);
+    }
+
+    public function testEnable()
+    {
+        $result = ScenarioRest::enable(4);
+        $this->assertTrue($result);
+        $this->assertTrue(ScenarioManager::ById(4)->isActive());
+    }
+
+    public function testEnableOnBadId()
+    {
+        $result = ScenarioRest::enable(40);
+        $this->assertFalse($result);
+    }
+
+    public function testDisable()
+    {
+        $result = ScenarioRest::disable(3);
+        $this->assertTrue($result);
+        $this->assertFalse(ScenarioManager::ById(3)->isActive());
+    }
+
+    public function testDisableOnBadId()
+    {
+        $result = ScenarioRest::enable(40);
         $this->assertFalse($result);
     }
 }

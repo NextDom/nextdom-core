@@ -37,12 +37,12 @@
     <div class="action-bar">
         <div class="action-group">
             <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'Retour'}}</a>
-            <a class="btn btn-warning btn-action-bar" data-state="1" id="bt_eventRealtimeStopStart"><i class="fas fa-pause"></i>{{ 'Pause' }}</a>
+            <a class="btn btn-warning btn-action-bar" data-state="1" id="bt_eventLogStopStart"><i class="fas fa-pause"></i>{{ 'Pause' }}</a>
         </div>
         <div class="action-group">
-            <a class="btn btn-primary btn-action-bar pull-right" id="bt_logrealtimedownloadLog"><i class="fas fa-cloud-download-alt"></i>{{ 'Télécharger' }}</a>
-            <a class="btn btn-warning btn-action-bar pull-right" id="bt_logrealtimeclearLog"><i class="fas fa-times"></i>{{ 'Vider' }}</a>
-            <a class="btn btn-danger btn-action-bar pull-right" id="bt_logrealtimeremoveLog"><i class="fas fa-trash"></i>{{ 'Supprimer' }}</a>
+            <a class="btn btn-primary btn-action-bar pull-right" id="bt_logDownload"><i class="fas fa-cloud-download-alt"></i>{{ 'Télécharger' }}</a>
+            <a class="btn btn-warning btn-action-bar pull-right" id="bt_logClear"><i class="fas fa-times"></i>{{ 'Vider' }}</a>
+            <a class="btn btn-danger btn-action-bar pull-right" id="bt_logRemove"><i class="fas fa-trash"></i>{{ 'Supprimer' }}</a>
         </div>
     </div>
 </section>
@@ -51,14 +51,20 @@
     <div class="box" id="realtime">
         <!-- Header bar -->
         <div class="box-header with-border">
-            <h3 class="box-title"><i class="fas fa-tachometer-alt"></i>{{ 'Temps réel' }}</h3>
+            <h3 class="box-title"><i class="fas fa-tachometer-alt"></i>{{ 'Log' }} {{ logName }} {{ 'en temps réel' }}</h3>
         </div>
 
         <!-- Page content -->
         <div class="box-body">
-            <pre id="pre_realtimelog" style='overflow: scroll;'></pre>
+            <div class="box-tools padding-bottom">
+                <div class="input-group">
+                    <div class="input-group-addon"><i class="fa fa-search"></i></div>
+                    <input class="form-control" id="in_globalLogSearch" placeholder="{{ 'Rechercher dans le log...' | trans }}"/>
+                </div>
+            </div>
+            <pre id="pre_log" style='overflow: scroll;'></pre>
         </div>
     </div>
 </section>
 
-<script src="/public/js/desktop/diagnostic/realtime.js"></script>
+<script src="/public/js/modals/log.display.js"></script>

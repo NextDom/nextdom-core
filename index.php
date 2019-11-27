@@ -26,11 +26,6 @@ use NextDom\Helpers\Router;
 use NextDom\Helpers\SessionHelper;
 use NextDom\Helpers\Utils;
 
-// Test if NextDom is installed. Redirection to setup if necessary
-if (!file_exists(NEXTDOM_DATA . '/config/common.config.php')) {
-    header("location: install/setup.php");
-}
-
 SessionHelper::startSession();
 $goToMobile = false;
 

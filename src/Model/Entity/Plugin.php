@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\DateFormat;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
@@ -293,7 +294,7 @@ class Plugin implements EntityInterface
         }
         if ($result['state'] == 'in_progress') {
             if (ConfigManager::byKey('lastDependancyInstallTime', $pluginId) == '') {
-                ConfigManager::save('lastDependancyInstallTime', date('Y-m-d H:i:s'), $pluginId);
+                ConfigManager::save('lastDependancyInstallTime', date(DateFormat::FULL), $pluginId);
             }
             $result['duration'] = round((strtotime('now') - strtotime(ConfigManager::byKey('lastDependancyInstallTime', $pluginId))) / 60);
         } else {
@@ -342,7 +343,7 @@ class Plugin implements EntityInterface
         if ($this->getHasDependency() != 1 || !method_exists($plugin_id, 'dependancy_install')) {
             return;
         }
-        if (abs(strtotime('now') - strtotime(ConfigManager::byKey('lastDependancyInstallTime', $plugin_id))) <= 60) {
+        if (abs(strtotime(DateFormat::NOW) - strtotime(ConfigManager::byKey('lastDependancyInstallTime', $plugin_id))) <= 60) {
             $cache = CacheManager::byKey('dependancy' . $this->getID());
             $cache->remove();
             throw new \Exception(__('Vous devez attendre au moins 60 secondes entre deux lancements d\'installation de dépendances'));
@@ -368,7 +369,7 @@ class Plugin implements EntityInterface
                 if (NextDomHelper::isCapable('sudo')) {
                     $this->deamon_stop();
                     MessageManager::add($plugin_id, __('Attention : installation des dépendances lancée'));
-                    ConfigManager::save('lastDependancyInstallTime', date('Y-m-d H:i:s'), $plugin_id);
+                    ConfigManager::save('lastDependancyInstallTime', date(DateFormat::FULL), $plugin_id);
                     exec(SystemHelper::getCmdSudo() . '/bin/bash ' . $script . ' >> ' . $cmd['log'] . ' 2>&1 &');
                     sleep(1);
                 } else {
@@ -499,7 +500,10 @@ class Plugin implements EntityInterface
                     $inprogress = CacheManager::byKey('deamonStart' . $this->getId() . 'inprogress');
                     $info = $inprogress->getValue(array('datetime' => strtotime('now') - 60));
                     $info['datetime'] = (isset($info['datetime'])) ? $info['datetime'] : strtotime('now') - 60;
-                    if (abs(strtotime('now') - $info['datetime']) < 45) {
+                    if (abs(strtotime(DateFormat::NOW) - $info['datetime']) < 45) {
+                        if ($auto) {
+                            return;
+                        }
                         throw new \Exception(__('Vous devez attendre au moins 45 secondes entre deux lancements du démon. Dernier lancement : ' . date("Y-m-d H:i:s", $info['datetime'])));
                     }
                     if (ConfigManager::byKey('deamonRestartNumber', $pluginId, 0) > 3) {
@@ -509,7 +513,7 @@ class Plugin implements EntityInterface
                         ConfigManager::save('deamonRestartNumber', ConfigManager::byKey('deamonRestartNumber', $pluginId, 0) + 1, $pluginId);
                     }
                     CacheManager::set('deamonStart' . $this->getId() . 'inprogress', array('datetime' => strtotime('now')));
-                    ConfigManager::save('lastDeamonLaunchTime', date('Y-m-d H:i:s'), $pluginId);
+                    ConfigManager::save('lastDeamonLaunchTime', date(DateFormat::FULL), $pluginId);
                     $pluginId::deamon_start();
                 }
             }

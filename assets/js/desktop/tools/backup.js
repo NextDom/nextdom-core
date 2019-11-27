@@ -125,7 +125,7 @@ function initEvents() {
     // Backup button
     $("#bt_backupNextDom").on('click', function (event) {
         var el = $(this);
-        bootbox.confirm('{{Etes-vous sûr de vouloir faire une sauvegarde de}} '+NEXTDOM_PRODUCT_NAME+' {{?</br>Une fois lancée cette opération ne peut pas être annulée...}}', function (result) {
+        bootbox.confirm('{{Etes-vous sûr de vouloir faire une sauvegarde de votre NextDom ?</br>Une fois lancée cette opération ne peut pas être annulée...}}', function (result) {
             if (result) {
                 $('#bt_backupNextDom').addClass('disabled');
                 el.find('.fa-refresh').show();
@@ -147,7 +147,7 @@ function initEvents() {
     // Restore button
     $("#bt_restoreNextDom").on('click', function (event) {
         var el = $(this);
-        bootbox.confirm('{{Etes-vous sûr de vouloir restaurer}} '+NEXTDOM_PRODUCT_NAME+' {{avec la sauvegarde}} <b>' + $('#sel_restoreBackup option:selected').text() + '</b> ?</br>{{Une fois lancée cette opération ne peut pas être annulée...}}</br><span style="color:red;font-weight: bold;">{{IMPORTANT la restauration d\'un backup est une opération risquée et n\'est à utiliser qu\'en dernier recours.}}</span>', function (result) {
+        bootbox.confirm('{{Etes-vous sûr de vouloir restaurer NextDom avec la sauvegarde}} <b>' + $('#sel_restoreBackup option:selected').text() + '</b> ?</br>{{Une fois lancée cette opération ne peut pas être annulée...}}</br><span style="color:red;font-weight: bold;">{{IMPORTANT la restauration d\'un backup est une opération risquée et n\'est à utiliser qu\'en dernier recours.}}</span>', function (result) {
             if (result) {
                 switchNotify(0);
                 $('#bt_restoreNextDom').addClass('disabled');
@@ -199,6 +199,11 @@ function initEvents() {
     $('#bt_uploadBackup').fileupload({
         dataType: 'json',
         replaceFileInput: false,
+        start: function (e, data) {
+          $('#bt_uploadBackup').parent().addClass('disabled');
+          $('#bt_uploadBackup').parent().find('.fa-refresh').show();
+          $('#bt_uploadBackup').parent().find('.fa-cloud-upload-alt').hide();
+        },
         done: function (e, data) {
             if (data.result.state != 'ok') {
                 notify("Erreur", data.result.result, 'error');
@@ -206,13 +211,18 @@ function initEvents() {
             }
             updateListBackup();
             notify("Info", '{{Fichier(s) ajouté(s) avec succès}}', 'success');
-        }
+        },
+        always: function (e, data) {
+          $('#bt_uploadBackup').parent().removeClass('disabled');
+          $('#bt_uploadBackup').parent().find('.fa-refresh').hide();
+          $('#bt_uploadBackup').parent().find('.fa-cloud-upload-alt').show();
+        },
     });
 
     // Samba restore button
     $("#bt_restoreRepoNextDom").on('click', function (event) {
         var el = $(this);
-        bootbox.confirm('{{Etes-vous sûr de vouloir restaurer}} '+NEXTDOM_PRODUCT_NAME+' {{avec la sauvegarde Cloud}} <b>' + $('#sel_restoreRepoNextDom option:selected').text() + '</b> ?</br>{{Une fois lancée cette opération ne peut pas être annulée...}}</br><span style="color:red;font-weight: bold;">{{IMPORTANT la restauration d\'un backup est une opération risquée et n\'est à utiliser qu\'en dernier recours.}}</span>', function (result) {
+        bootbox.confirm('{{Etes-vous sûr de vouloir restaurer NextDom avec la sauvegarde Cloud}} <b>' + $('#sel_restoreRepoNextDom option:selected').text() + '</b> ?</br>{{Une fois lancée cette opération ne peut pas être annulée...}}</br><span style="color:red;font-weight: bold;">{{IMPORTANT la restauration d\'un backup est une opération risquée et n\'est à utiliser qu\'en dernier recours.}}</span>', function (result) {
             if (result) {
                 switchNotify(0);
                 $.hideAlert();

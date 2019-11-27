@@ -1,5 +1,95 @@
 # NextDom Core Changelog
 ---
+## 0.6.0
+
+> ***Release Date : XX/11/2019***
+>
+> ***Statut : beta***
+>
+> ***Coverall : 17%***
+
+#### NEWS
+* Contenu des tuiles du dashboard centré verticalement
+
+#### AMELIORATIONS / MODIFICATIONS
+* Merge Jeedom 3.3.38
+* Ajout d'un lien direct au testeur d'expression dans le sidemenu
+* Tri alphabétique des catégories et nom de plugins dans le sidemenu
+* Nettoyage et Amélioration visuelle de la page services
+* Revue des pages administration
+  * Mise en onglet pour aérer la lecture
+  * Onglet iconisés dynamique suivant résolution
+* Ajout de tests unitaires
+* Amélioration du score sonarCloud
+
+#### FIXS
+* Fix de l'interpretation mauvaise des ON/OFF dans les expressions et des commandes binaires
+* Fix failles de sécurité
+* [liste ici](https://github.com/NextDom/nextdom-core/milestone/19?closed=1)
+---
+## 0.5.4
+
+> ***Release Date : 13/11/2019***
+>
+> ***Statut : beta***
+>
+> ***Coverall : 17%***
+
+#### NEWS
+* Possibilité de trier les logs chronologiquement ou alphabetiquement
+
+#### AMELIORATIONS / MODIFICATIONS
+* Amélioration du score SonarCloud
+
+#### FIXS
+* [liste ici](https://github.com/NextDom/nextdom-core/milestone/24?closed=1)
+---
+## 0.5.3
+
+> ***Release Date : 09/11/2019***
+>
+> ***Statut : beta***
+>
+> ***Coverall : 17%***
+
+#### NEWS
+* Choix du logo NextDom pour le thème
+
+#### AMELIORATIONS / MODIFICATIONS
+* Nettoyage du code inutile
+* Suppression page realtime
+
+#### FIXS
+* [liste ici](https://github.com/NextDom/nextdom-core/milestone/23?closed=1)
+---
+## 0.5.2
+
+> ***Release Date : 08/11/2019***
+>
+> ***Statut : beta***
+>
+> ***Coverall : 17%***
+
+#### NEWS
+* Nouvelle gestion des themes
+* Fusion des pages Customisation et Profil
+* Ajout du choix de l'icone NextDom
+* Réintegration de l'aide
+* Intégration de SonarCloud pour améliorer la qualité du code
+* Authentification 2 factors se fait maintenant en 2 étapes
+
+#### AMELIORATIONS / MODIFICATIONS
+* Suppression de la fonctionnalité user.function
+* Suppression de la fonctionnalité envoi plugin sur le market
+* Amelioration du comportement des modales
+* Amélioration de l'intégration de la version mobile
+* Amélioration de la couverture des traductions
+* Nettoyage du code
+* Correction InfluxDb
+
+#### FIXS
+* [liste ici](https://github.com/NextDom/nextdom-core/milestone/22?closed=1)
+---
 ## 0.5.1
 
 > ***Release Date : 27/10/2019***

@@ -19,7 +19,6 @@ namespace NextDom\Ajax;
 
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
-use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
@@ -55,7 +54,7 @@ class EqLogicAjax extends BaseAjax
                 $return['eqLogic'][] = $info_eqLogic;
             }
         }
-        AjaxHelper::success($return);
+        $this->ajax->success($return);
     }
 
     public function byId()
@@ -64,7 +63,7 @@ class EqLogicAjax extends BaseAjax
         if (!is_object($eqLogic)) {
             throw new CoreException(__('EqLogic inconnu. Vérifiez l\'ID'));
         }
-        AjaxHelper::success(Utils::o2a($eqLogic));
+        $this->ajax->success(Utils::o2a($eqLogic));
     }
 
     public function toHtml()
@@ -83,7 +82,7 @@ class EqLogicAjax extends BaseAjax
                     'object_id' => $eqLogic->getObject_id(),
                 );
             }
-            AjaxHelper::success($return);
+            $this->ajax->success($return);
         } else {
             $eqLogic = EqLogicManager::byId(Utils::init('id'));
             if (!is_object($eqLogic)) {
@@ -94,7 +93,7 @@ class EqLogicAjax extends BaseAjax
             $info_eqLogic['type'] = $eqLogic->getEqType_name();
             $info_eqLogic['object_id'] = $eqLogic->getObject_id();
             $info_eqLogic['html'] = $eqLogic->toHtml(Utils::init('version'));
-            AjaxHelper::success($info_eqLogic);
+            $this->ajax->success($info_eqLogic);
         }
     }
 
@@ -112,7 +111,7 @@ class EqLogicAjax extends BaseAjax
                 'object_id' => $eqLogic->getObject_id(),
             );
         }
-        AjaxHelper::success($return);
+        $this->ajax->success($return);
     }
 
     public function htmlBattery()
@@ -135,24 +134,24 @@ class EqLogicAjax extends BaseAjax
                 'object_id' => $eqLogic->getObject_id(),
             );
         }
-        AjaxHelper::success($return);
+        $this->ajax->success($return);
     }
 
     public function listByType()
     {
-        AjaxHelper::success(Utils::a2o(EqLogicManager::byType(Utils::init('type'))));
+        $this->ajax->success(Utils::a2o(EqLogicManager::byType(Utils::init('type'))));
     }
 
     public function listByObjectAndCmdType()
     {
         $object_id = (Utils::init('object_id') != -1) ? Utils::init('object_id') : null;
-        AjaxHelper::success(EqLogicManager::listByObjectAndCmdType($object_id, Utils::init('typeCmd'), Utils::init('subTypeCmd')));
+        $this->ajax->success(EqLogicManager::listByObjectAndCmdType($object_id, Utils::init('typeCmd'), Utils::init('subTypeCmd')));
     }
 
     public function listByObject()
     {
         $object_id = (Utils::init('object_id') != -1) ? Utils::init('object_id') : null;
-        AjaxHelper::success(Utils::o2a(EqLogicManager::byObjectId($object_id, Utils::init('onlyEnable', true), Utils::init('onlyVisible', false), Utils::init('eqType_name', null), Utils::init('logicalId', null), Utils::init('orderByName', false))));
+        $this->ajax->success(Utils::o2a(EqLogicManager::byObjectId($object_id, Utils::init('onlyEnable', true), Utils::init('onlyVisible', false), Utils::init('eqType_name', null), Utils::init('logicalId', null), Utils::init('orderByName', false))));
     }
 
     public function listByTypeAndCmdType()
@@ -171,7 +170,7 @@ class EqLogicAjax extends BaseAjax
             }
             $return[] = $info;
         }
-        AjaxHelper::success($return);
+        $this->ajax->success($return);
     }
 
     public function setIsEnable()
@@ -186,7 +185,7 @@ class EqLogicAjax extends BaseAjax
         }
         $eqLogic->setIsEnable(Utils::init('isEnable'));
         $eqLogic->save();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function setOrder()
@@ -203,7 +202,7 @@ class EqLogicAjax extends BaseAjax
             Utils::a2o($eqLogic, $eqLogic_json);
             $eqLogic->save(true);
         }
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function removes()
@@ -219,7 +218,7 @@ class EqLogicAjax extends BaseAjax
             }
             $eqLogic->remove();
         }
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function setIsVisibles()
@@ -236,7 +235,7 @@ class EqLogicAjax extends BaseAjax
             $eqLogic->setIsVisible(Utils::init('isVisible'));
             $eqLogic->save();
         }
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function setIsEnables()
@@ -253,7 +252,7 @@ class EqLogicAjax extends BaseAjax
             $eqLogic->setIsEnable(Utils::init('isEnable'));
             $eqLogic->save();
         }
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function simpleSave()
@@ -270,7 +269,7 @@ class EqLogicAjax extends BaseAjax
         }
         Utils::a2o($eqLogic, $eqLogicSave);
         $eqLogic->save();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function copy()
@@ -283,7 +282,7 @@ class EqLogicAjax extends BaseAjax
         if (Utils::init('name') == '') {
             throw new CoreException(__('Le nom de la copie de l\'équipement ne peut être vide'));
         }
-        AjaxHelper::success(Utils::o2a($eqLogic->copy(Utils::init('name'))));
+        $this->ajax->success(Utils::o2a($eqLogic->copy(Utils::init('name'))));
     }
 
     public function remove()
@@ -297,7 +296,7 @@ class EqLogicAjax extends BaseAjax
             throw new CoreException(__('Vous n\'êtes pas autorisé à faire cette action'));
         }
         $eqLogic->remove();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function get()
@@ -312,7 +311,7 @@ class EqLogicAjax extends BaseAjax
         }
         $return = Utils::o2a($eqLogic);
         $return['cmd'] = Utils::o2a($eqLogic->getCmd());
-        AjaxHelper::success(NextDomHelper::toHumanReadable($return));
+        $this->ajax->success(NextDomHelper::toHumanReadable($return));
     }
 
     public function save()
@@ -389,9 +388,9 @@ class EqLogicAjax extends BaseAjax
                     throw new CoreException($e->getMessage());
                 }
             }
-            AjaxHelper::success(Utils::o2a($eqLogic));
+            $this->ajax->success(Utils::o2a($eqLogic));
         }
-        AjaxHelper::success(null);
+        $this->ajax->success(null);
     }
 
     public function getAlert()
@@ -403,6 +402,6 @@ class EqLogicAjax extends BaseAjax
             }
             $alerts[] = $eqLogic->toHtml(Utils::init('version'));
         }
-        AjaxHelper::success($alerts);
+        $this->ajax->success($alerts);
     }
 }

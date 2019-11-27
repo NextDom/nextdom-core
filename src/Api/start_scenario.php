@@ -45,7 +45,7 @@ require_once __DIR__ . "/../../src/core.php";
 ScriptHelper::cliOrCrash();
 ScriptHelper::parseArgumentsToGET();
 
-$scenarioId = Utils::init('scenario_id');
+$scenarioId = intval(Utils::init('scenario_id'));
 if (Utils::init('scenarioElement_id') != '') {
     // Execute an element of the scenario
     ScenarioManager::doIn([

@@ -288,11 +288,11 @@ class PluginManager
                 if (ConfigManager::byKey('functionality::cron::enable', $plugin->getId(), 1) == 1) {
                     $pluginId = $plugin->getId();
                     CacheManager::set('plugin::' . $cronType . '::last', $pluginId);
-                    try {
+                    //try {
                         $pluginId::$cronType();
-                    } catch (\Throwable $e) {
-                        LogHelper::add($pluginId, 'error', __('Erreur sur la fonction cron du plugin : ') . $e->getMessage());
-                    }
+                    //} catch (\Throwable $e) {
+//                        LogHelper::add($pluginId, 'error', __('Erreur sur la fonction cron du plugin : ') . $e->getMessage());
+                    //}
                 }
             }
         }

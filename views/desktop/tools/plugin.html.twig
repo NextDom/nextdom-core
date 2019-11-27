@@ -43,7 +43,7 @@
             <div class="action-group">
                 <a class="btn btn-action btn-action-bar pull-right" id="bt_pluginCollapse"><i class="fas fa-plus-square"></i>{{ 'Déplier' }}</a>
                 <a class="btn btn-action btn-action-bar pull-right" style="display:none;" id="bt_pluginUncollapse"><i class="fas fa-minus-square"></i>{{ 'Replier' }}</a>
-                <a class="btn btn-default btn-action-bar pull-right" href="index.php?v=d&p=update_admin"><i class="fas fa-cog"></i>{{ 'Configurer Markets' }}</a>
+                <a class="btn btn-default btn-action-bar pull-right" href="index.php?v=d&p=services"><i class="fas fa-cog"></i>{{ 'Configurer Markets' }}</a>
                 {% for repoCode, repoData in pluginReposList %}
                     {% if repoData['name'] == 'Market' %}
                         <a class="btn btn-default btn-action-bar pull-right displayStore btn-jeedom" data-repo="{{ repoCode }}"><i class="fas fa-shopping-cart"></i>{{ 'Jeedom '}} {{ repoData['name'] }}</a>
@@ -59,8 +59,8 @@
         <div class="nav-tabs-custom config">
             <!-- Tabs title -->
             <ul class="nav nav-tabs pull-right" role="tablist">
-                <li role="presentation"><a href="#inactifs" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-toggle-off"></i>{{ 'Inactifs' }}{% if ((pluginsList|length - pluginsListActive|length)>0) %}<span class="badge bg-yellow spacing-left">{{ pluginsList|length - pluginsListActive|length }}</span>{% endif %}</a></li>
-                <li role="presentation" class="active"><a href="#actifs" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-toggle-on"></i>{{ 'common.active' | trans }}{% if (pluginsListActive|length>0) %}<span class="badge bg-yellow spacing-left">{{ pluginsListActive|length }}</span>{% endif %}</a></li>
+                <li role="presentation"><a href="#inactifs" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-toggle-off"></i><span>{{ 'Inactifs' }}</span>{% if ((pluginsList|length - pluginsListActive|length)>0) %}<label class="badge bg-yellow spacing-left">{{ pluginsList|length - pluginsListActive|length }}</label>{% endif %}</a></li>
+                <li role="presentation" class="active"><a href="#actifs" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-toggle-on"></i><span>{{ 'common.active' | trans }}</span>{% if (pluginsListActive|length>0) %}<label class="badge bg-yellow spacing-left">{{ pluginsListActive|length }}</span>{% endif %}</label></a></li>
                 <li class="header pull-left"><i class="fas fa-puzzle-piece"></i>{{ 'Plugins installés' }}<span class="badge bg-red spacing-left">{{ pluginsList|length }}</span></li>
             </ul>
 
@@ -145,7 +145,6 @@
                 <img style="height:30px;padding-right:5px" src="" id="span_plugin_icon">
                 <span id="span_plugin_name"></span> (<span id="span_plugin_id"></span>) - <span id="span_plugin_install_version"></span>
             </h3>
-            <span id="span_plugin_market" class="pull-right"></span>
             <span id="span_plugin_doc" class="pull-right"></span>
         </div>
         <div class="row">

@@ -25,6 +25,8 @@ class RepoNextDom
     /*     * *************************Attributs****************************** */
 
     public static $_name = 'NextDom Market';
+    public static $_icon = 'fas fa-store';
+    public static $_description = 'repo.nextdom.description';
 
     public static $_scope = array(
         'plugin' => true,
@@ -40,15 +42,15 @@ class RepoNextDom
     public static $_configuration = array(
         'configuration' => array(
             'nextdom_stable' => array(
-                'name' => 'NextDom Stable',
+                'name' => 'repo.nextdom.conf.stable',
                 'type' => 'checkbox',
             ),
             'nextdom_draft' => array(
-                'name' => 'NextDom Draft',
+                'name' => 'repo.nextdom.conf.draft',
                 'type' => 'checkbox',
             ),
             'show_sources_filters' => array(
-                'name' => 'Afficher les filtres des sources',
+                'name' => 'repo.nextdom.conf.filters',
                 'type' => 'checkbox',
             ),
         )

@@ -33,7 +33,7 @@
 .nav-tabs a {
     padding: 10px 10px !important;
 }
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .navbar-form {
         position: absolute;
         top: -12px;
@@ -41,6 +41,16 @@
     }
     .main-header .navbar .dropdown-menu li.divider {
         background-color: rgba(255, 255, 255, 0.1);
+    }
+}
+@media (max-width: 992px) {
+    .nav-tabs.pull-right li {
+        a span {
+            display: none;
+        }
+        i {
+            margin-left: 8px;
+        }
     }
 }
 .tab-content {
@@ -51,7 +61,11 @@
 .nav>.label-log>a {
     padding: 10px 10px;
 }
-.nav-tabs-custom>.nav-tabs>li.header>.fa, .nav-tabs-custom>.nav-tabs>li.header>.fas, .nav-tabs-custom>.nav-tabs>li.header>.glyphicon, .nav-tabs-custom>.nav-tabs>li.header>.ion {
+.nav-tabs-custom>.nav-tabs>li.header>.fa,
+.nav-tabs-custom>.nav-tabs>li.header>.fas,
+.nav-tabs-custom>.nav-tabs>li.header>.fab,
+.nav-tabs-custom>.nav-tabs>li.header>.glyphicon,
+.nav-tabs-custom>.nav-tabs>li.header>.ion {
     margin-right: 8px !important;
 }
 

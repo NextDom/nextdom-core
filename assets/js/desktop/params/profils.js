@@ -66,10 +66,20 @@ function loadInformations() {
           $('#in_passwordCheck').value(data.password);
           $('#' + $('.userAttr[data-l2key="widget::theme"]').value()).attr('checked', 'checked');
           $('#avatar-preview').attr('src', $('.userAttr[data-l2key=avatar]').value());
-          modifyWithoutSave = false;
-          $(".bt_cancelModifs").hide();
+          nextdom.config.load({
+              configuration: $('#div_Profils').getValues('.configKey:not(.noSet)')[0],
+              error: function (error) {
+                  notify("Erreur", error.message, 'error');
+              },
+              success: function (data) {
+                  $('#div_Profils').setValues(data, '.configKey');
+                  modifyWithoutSave = false;
+                  $(".bt_cancelModifs").hide();
+              }
+          });
         }
     });
+
 }
 
 /**
@@ -83,10 +93,32 @@ function initEvents() {
             $(".bt_cancelModifs").show();
         }
     });
+    // Show confirm modal on non saved changes
+    $('#div_Profils').delegate('.configKey:not(.noSet)', 'change', function () {
+        if (!lockModify) {
+            modifyWithoutSave = true;
+            $(".bt_cancelModifs").show();
+        }
+    });
 
     // Cancel modifications
     $('.bt_cancelModifs').on('click', function () {
         loadInformations();
+    });
+
+    // Theme config changing
+    $("#themeBase").on('change', function (event) {
+        $('.configKey[data-l1key="nextdom::user-theme"]').value($("#themeBase").value() + "-" + $("#themeIdentity").value());
+        $('#themePreview').contents().find("head").append($("<link href='/public/css/themes/" + $('.configKey[data-l1key="nextdom::user-theme"]').value() + ".css' rel='stylesheet'>"));
+    });
+    $("#themeIdentity").on('change', function (event) {
+        $('.configKey[data-l1key="nextdom::user-theme"]').value($("#themeBase").value() + "-" + $("#themeIdentity").value());
+        $('#themePreview').contents().find("head").append($("<link href='/public/css/themes/" + $('.configKey[data-l1key="nextdom::user-theme"]').value() + ".css' rel='stylesheet'>"));
+    });
+    $("#themeIcon").on('change', function (event) {
+        $('.configKey[data-l1key="nextdom::user-icon"]').value($("#themeIcon").value());
+        $('#themePreview').contents().find(".logo-mini-img").attr( "src", "/public/img/NextDom/NextDom_Square_" + $('.configKey[data-l1key="nextdom::user-icon"]').value() + ".png");
+        $('#themePreview').contents().find(".logo-lg-img").attr( "src", "/public/img/NextDom/NextDom_Wide_" + $('.configKey[data-l1key="nextdom::user-icon"]').value() + ".png");
     });
 
     // Save forms data
@@ -107,10 +139,34 @@ function initEvents() {
                         notify('Erreur', error.message, 'error');
                     },
                     success: function (data) {
-                        modifyWithoutSave = false;
-                        $(".bt_cancelModifs").hide();
-                        updateInformations();
-                        notify('Info', '{{Sauvegarde effectuée}}', 'success');
+                        var config = $('#div_Profils').getValues('.configKey')[0];
+                        nextdom.config.save({
+                            configuration: config,
+                            error: function (error) {
+                                notify("Erreur", error.message, 'error');
+                            },
+                            success: function () {
+                                // Change config dynamically
+                                widget_size = config['widget::size'];
+                                widget_margin = config['widget::margin'];
+                                widget_padding = config['widget::padding'];
+                                widget_radius = config['widget::radius'];
+                                nextdom.config.load({
+                                    configuration: $('#div_Profils').getValues('.configKey:not(.noSet)')[0],
+                                    error: function (error) {
+                                        notify("Erreur", error.message, 'error');
+                                    },
+                                    success: function (data) {
+                                        $('#div_Profils').setValues(data, '.configKey');
+                                        modifyWithoutSave = false;
+                                        $(".bt_cancelModifs").hide();
+                                        updateInformations();
+                                        notify("Info", '{{Sauvegarde réussie}}', 'success');
+                                        window.location.reload(true);
+                                    }
+                                });
+                            }
+                        });
                     }
                 });
             }
@@ -153,50 +209,6 @@ function initEvents() {
     $('#bt_selectWarnMeCmd').on('click', function () {
         nextdom.cmd.getSelectModal({cmd: {type: 'action', subType: 'message'}}, function (result) {
             $('.userAttr[data-l1key="options"][data-l2key="notification::cmd"]').value(result.human);
-        });
-    });
-
-    // Remove register device from the list
-    $('.bt_removeRegisterDevice').on('click', function () {
-        var deviceKey = $(this).closest('tr').attr('data-key');
-        nextdom.user.removeRegisterDevice({
-            key: deviceKey,
-            error: function (error) {
-                notify('Erreur', error.message, 'error');
-            },
-            success: function (data) {
-                modifyWithoutSave = false;
-                window.location.reload();
-            }
-        });
-    });
-
-    // Remove all register devices
-    $('#bt_removeAllRegisterDevice').on('click', function () {
-          nextdom.user.removeRegisterDevice({
-            key: '',
-            error: function (error) {
-                notify('Erreur', error.message, 'error');
-            },
-            success: function (data) {
-                modifyWithoutSave = false;
-                window.location.reload();
-            }
-        });
-    });
-
-    // Delete all sessions
-    $('.bt_deleteSession').on('click', function () {
-        var id = $(this).closest('tr').attr('data-id');
-        nextdom.user.deleteSession({
-            id: id,
-            error: function (error) {
-                notify('Erreur', error.message, 'error');
-            },
-            success: function (data) {
-                modifyWithoutSave = false;
-                window.location.reload();
-            }
         });
     });
 

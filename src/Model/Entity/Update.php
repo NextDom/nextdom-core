@@ -198,7 +198,7 @@ class Update implements EntityInterface
                         throw new \Exception(__('Impossible de trouver le fichier zip : ') . $this->getConfiguration('path'));
                     }
                     if (filesize($tmp) < 100) {
-                        throw new \Exception(__('Echec lors du téléchargement du fichier. Veuillez réessayer plus tard (taille inférieure à 100 octets). Cela peut être lié à un manque de place, une version minimale requise non consistente avec votre version de NextDom, un soucis du plugin sur le market, etc.'));
+                        throw new \Exception(__('Échec lors du téléchargement du fichier. Veuillez réessayer plus tard (taille inférieure à 100 octets). Cela peut être lié à un manque de place, une version minimale requise non consistente avec votre version de NextDom, un soucis du plugin sur le market, etc.'));
                     }
                     $extension = strtolower(strrchr($tmp, '.'));
                     if (!in_array($extension, array('.zip'))) {

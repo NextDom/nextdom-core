@@ -45,14 +45,13 @@ class AjaxNextDomTest extends AjaxBase
         $this->connectAsUser();
         $this->resetAjaxToken();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'getInfoApplication']);
-        $this->assertContains('"product_name":"NextDom"', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testGetDocumentationUrlAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'getDocumentationUrl']);
-        $this->assertContains('nextdom.github.io', (string) $result->getBody());
+        $this->assertContains('jeedom.github.io', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
@@ -283,20 +282,6 @@ class AjaxNextDomTest extends AjaxBase
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'forceSyncHour']);
         $this->assertContains('"result":""', (string) $result->getBody());
-        $this->assertEquals(200, $result->getStatusCode());
-    }
-
-    public function testSaveCustomAsUser() {
-        $this->connectAsUser();
-        $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'saveCustom']);
-        $this->assertContains('401 - ', (string) $result->getBody());
-        $this->assertEquals(200, $result->getStatusCode());
-    }
-
-    public function testSaveCustomAsAdmin() {
-        $this->connectAsAdmin();
-        $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'saveCustom']);
-        $this->assertContains('La version ne peut être que js ou css', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 

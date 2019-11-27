@@ -43,7 +43,6 @@ initEvents();
  */
 function loadInformations() {
     $(document).ready(function(){
-        $('#ul_noteList').height($(window).height() - 339);
         $('#ul_noteList').css("overflow-y", "auto");
         $('#ul_noteList').css("padding-right", "5px");
         updateNoteList();

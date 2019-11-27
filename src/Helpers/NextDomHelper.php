@@ -34,6 +34,11 @@
 
 namespace NextDom\Helpers;
 
+use NextDom\Enums\ConfigKey;
+use NextDom\Enums\DateFormat;
+use NextDom\Enums\LogTarget;
+use NextDom\Enums\NextDomObj;
+use NextDom\Enums\SystemCron;
 use NextDom\Exceptions\CoreException;
 use NextDom\Managers\CacheManager;
 use NextDom\Managers\CmdManager;
@@ -42,8 +47,8 @@ use NextDom\Managers\CronManager;
 use NextDom\Managers\DataStoreManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
-use NextDom\Managers\MessageManager;
 use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\MessageManager;
 use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioExpressionManager;
@@ -90,16 +95,12 @@ class NextDomHelper
         global $NEXTDOM_INTERNAL_CONFIG;
         $result = array();
         $cmd = ConfigManager::byKey('interact::warnme::defaultreturncmd', 'core', '');
-        if ($cmd != '') {
-            if (!CmdManager::byId(str_replace('#', '', $cmd))) {
-                $result[] = array('detail' => 'Administration', 'help' => __('Commande retour interactions'), 'who' => $cmd);
-            }
+        if ($cmd != '' && !CmdManager::byId(str_replace('#', '', $cmd))) {
+            $result[] = array('detail' => 'Administration', 'help' => __('Commande retour interactions'), 'who' => $cmd);
         }
         $cmd = ConfigManager::byKey('emailAdmin', 'core', '');
-        if ($cmd != '') {
-            if (!CmdManager::byId(str_replace('#', '', $cmd))) {
-                $result[] = array('detail' => 'Administration', 'help' => __('Commande information utilisateur'), 'who' => $cmd);
-            }
+        if ($cmd != '' && !CmdManager::byId(str_replace('#', '', $cmd))) {
+            $result[] = array('detail' => 'Administration', 'help' => __('Commande information utilisateur'), 'who' => $cmd);
         }
         foreach ($NEXTDOM_INTERNAL_CONFIG['alerts'] as $level => $value) {
             $cmds = ConfigManager::byKey('alert::' . $level . 'Cmd', 'core', '');
@@ -134,11 +135,12 @@ class NextDomHelper
             $state = false;
         } else {
             $version = trim(strtolower(file_get_contents('/etc/debian_version')));
-            if (version_compare($version, '8', '<')) {
-                if (strpos($version, 'jessie') === false && strpos($version, 'stretch') === false) {
-                    $state = false;
-                }
-            }
+            if (version_compare($version, '8', '<')
+                && strpos($version, 'jessie') === false
+                && strpos($version, 'stretch') === false
+                && strpos($version, 'buster') === false) {
+                $state = false;
+            }   
         }
         $systemHealth[] = array(
             'icon' => 'fa-cogs',
@@ -156,24 +158,27 @@ class NextDomHelper
             'state' => $state,
             'result' => ($state) ? $okStr : $nbNeededUpdate . ' ' . __('health.updates'),
             'comment' => '',
+            'key' => 'uptodate'
         );
 
-        $state = (ConfigManager::byKey('enableCron', 'core', 1, true) != 0) ? true : false;
+        $state = ConfigManager::byKey(ConfigKey::ENABLE_CRON, 'core', 1, true) != 0;
         $systemHealth[] = array(
             'icon' => 'fa-calendar-alt',
             'name' => __('health.cron-enabled'),
             'state' => $state,
             'result' => ($state) ? $okStr : $nokStr,
             'comment' => ($state) ? '' : __('health.cron-disabled'),
+            'key' => 'cron::enable'
         );
 
-        $state = (ConfigManager::byKey('enableScenario') == 0 && count(ScenarioManager::all()) > 0) ? false : true;
+        $state = !(ConfigManager::byKey(ConfigKey::ENABLE_SCENARIO) == 0 && count(ScenarioManager::all()) > 0);
         $systemHealth[] = array(
             'icon' => 'fa-film',
             'name' => __('health.scenario-enabled'),
             'state' => $state,
             'result' => ($state) ? $okStr : $nokStr,
             'comment' => ($state) ? '' : __('health.scenario-disabled'),
+            'key' => 'scenario::enable'
         );
 
         $state = self::isStarted();
@@ -183,6 +188,7 @@ class NextDomHelper
             'state' => $state,
             'result' => ($state) ? $okStr . ' - ' . file_get_contents(self::getStartedFilePath()) : $nokStr,
             'comment' => '',
+            'key' => 'isStarted'
         );
 
         $state = self::isDateOk();
@@ -192,8 +198,9 @@ class NextDomHelper
             'icon' => 'fa-clock',
             'name' => __('health.system-date'),
             'state' => $state,
-            'result' => ($state) ? $okStr . ' - ' . date('Y-m-d H:i:s') . ' (' . $lastKnowDate . ')' : date('Y-m-d H:i:s'),
+            'result' => ($state) ? $okStr . ' - ' . date(DateFormat::FULL) . ' (' . $lastKnowDate . ')' : date(DateFormat::FULL),
             'comment' => ($state) ? '' : __('health.system-date-error'),
+            'key' => 'hour'
         );
 
         $state = self::isCapable('sudo', true);
@@ -203,6 +210,7 @@ class NextDomHelper
             'state' => ($state) ? 1 : 2,
             'result' => ($state) ? $okStr : $nokStr,
             'comment' => ($state) ? '' : __('sudo-error'),
+            'key' => 'sudo::right'
         );
 
         $systemHealth[] = array(
@@ -211,6 +219,7 @@ class NextDomHelper
             'state' => true,
             'result' => self::getNextdomVersion(),
             'comment' => '',
+            'key' => 'nextdom::version'
         );
 
         $state = version_compare(phpversion(), '7.0', '>=');
@@ -222,6 +231,36 @@ class NextDomHelper
             'comment' => ($state) ? '' : __('health.php-error'),
         );
 
+        $state = version_compare(phpversion(), '5.5', '>=');
+        $systemHealth[] = array(
+            'name' => __('Version PHP'),
+            'state' => $state,
+            'result' => phpversion(),
+            'comment' => ($state) ? '' : __('Si vous êtes en version 5.4.x on vous indiquera quand la version 5.5 sera obligatoire'),
+            'key' => 'php::version'
+        );
+
+        $state = true;
+        $version = '';
+        $uname = shell_exec('uname -a');
+        if (SystemHelper::getDistrib() != 'debian') {
+            $state = false;
+        } else {
+            $version = trim(strtolower(file_get_contents('/etc/debian_version')));
+            if (version_compare($version, '8', '<')) {
+                if (strpos($version, 'jessie') === false && strpos($version, 'stretch') === false) {
+                    $state = false;
+                }
+            }
+        }
+        $systemHealth[] = array(
+            'name' => __('Version OS'),
+            'state' => $state,
+            'result' => ($state) ? $uname . ' [' . $version . ']' : $uname,
+            'comment' => ($state) ? '' : __('Vous n\'êtes pas sur un OS officiellement supporté par l\'équipe Jeedom (toute demande de support pourra donc être refusée). Les OS officiellement supporté sont Debian Jessie et Debian Strech (voir <a href="https://jeedom.github.io/documentation/compatibility/fr_FR/index" target="_blank">ici</a>)'),
+            'key' => 'os::version'
+        );
+
         $version = DBHelper::getOne('select version()');
         $systemHealth[] = array(
             'icon' => 'fa-database',
@@ -229,6 +268,8 @@ class NextDomHelper
             'state' => true,
             'result' => $version['version()'],
             'comment' => '',
+            'key' => 'database::version'
+
         );
 
         $value = self::checkSpaceLeft();
@@ -238,6 +279,16 @@ class NextDomHelper
             'state' => ($value > 10),
             'result' => $value . ' %',
             'comment' => __('health.need-more-than') . ': 10%',
+            'key' => 'space::root'
+        );
+
+        $value = self::checkSpaceLeft(self::getTmpFolder());
+        $systemHealth[] = array(
+            'name' => __('Espace disque libre tmp'),
+            'state' => ($value > 10),
+            'result' => $value . ' %',
+            'comment' => __('En cas d\'erreur essayez de redémarrer. Si le problème persiste, testez en désactivant les plugins un à un jusqu\'à trouver le coupable'),
+            'key' => 'space::tmp'
         );
 
         $values = SystemHelper::getMemInfo();
@@ -248,15 +299,33 @@ class NextDomHelper
             'state' => ($value > 15),
             'result' => $value . ' %',
             'comment' => __('health.need-more-than') . ': 15%',
+            'key' => 'meminfo'
         );
 
-        $value = shell_exec('sudo dmesg | grep oom | wc -l');
+        $value = shell_exec('sudo dmesg | grep oom | grep -v deprecated | wc -l');
         $systemHealth[] = array(
             'icon' => 'fa-th-large',
             'name' => __('health.enough-memory'),
             'state' => ($value == 0),
             'result' => ($state == 0) ? $nokStr : $okStr,
             'comment' => ($value == 0) ? '' : __('health.processes-killed'),
+            'key' => 'oom'
+        );
+
+        $value = shell_exec('sudo dmesg | grep "CRC error" | grep "mmcblk0" | grep "card status" | wc -l');
+        if(!is_numeric($value)){
+            $value = 0;
+        }
+        $value2 = @shell_exec('sudo dmesg | grep "I/O error" | wc -l');
+        if(is_numeric($value2)){
+            $value += $value2;
+        }
+        $systemHealth[] = array(
+            'name' => __('Erreur I/O'),
+            'state' => ($value == 0),
+            'result' => $value,
+            'comment' => ($value == 0) ? '' : __('Il y a des erreurs disque, cela peut indiquer un soucis avec le disque ou un problème d\'alimentation'),
+            'key' => 'io_error'
         );
 
         if ($values['SwapTotal'] != 0 && $values['SwapTotal'] !== null) {
@@ -267,6 +336,7 @@ class NextDomHelper
                 'state' => ($value > 15),
                 'result' => $value . ' %',
                 'comment' => __('health.need-more-than') . ': 15%',
+                'key' => 'swap'
             );
         } else {
             $systemHealth[] = array(
@@ -275,6 +345,7 @@ class NextDomHelper
                 'state' => 2,
                 'result' => __('health.unknow'),
                 'comment' => '',
+                'key' => 'swap'
             );
         }
 
@@ -285,6 +356,7 @@ class NextDomHelper
             'state' => ($values[2] < 20),
             'result' => $values[0] . ' - ' . $values[1] . ' - ' . $values[2],
             'comment' => __('health.need-less-than') . ': 20',
+            'key' => 'load'
         );
 
         $state = NetworkHelper::test('internal');
@@ -294,6 +366,7 @@ class NextDomHelper
             'state' => $state,
             'result' => ($state) ? $okStr : $nokStr,
             'comment' => ($state) ? '' : __('health.network-config'),
+            'key' => 'network::internal'
         );
 
         $state = NetworkHelper::test('external');
@@ -303,6 +376,7 @@ class NextDomHelper
             'state' => $state,
             'result' => ($state) ? $okStr : $nokStr,
             'comment' => ($state) ? '' : __('health.network-config'),
+            'key' => 'network::external'
         );
 
         $cache_health = array(
@@ -317,7 +391,7 @@ class NextDomHelper
                 $cache_health['result'] = $okStr;
             } else {
                 $cache_path = CacheManager::getArchivePath();
-                $cache_time = date('Y-m-d H:i:s', filemtime($cache_path));
+                $cache_time = date(DateFormat::FULL, filemtime($cache_path));
                 $cache_health['state'] = true;
                 $cache_health['result'] = sprintf("%s (%s)", $okStr, $cache_time);
             }
@@ -336,6 +410,7 @@ class NextDomHelper
             'state' => $state,
             'result' => ($state) ? $okStr : $nokStr,
             'comment' => ($state) ? '' : __('health.apache-private-tmp-disabled'),
+            'key' => 'apache2::privateTmp'
         );
 
         foreach (UpdateManager::listRepo() as $repo) {
@@ -418,7 +493,7 @@ class NextDomHelper
             self::forceSyncHour();
             sleep(3);
             if (strtotime('now') < $mindate || strtotime('now') > $maxdate) {
-                LogHelper::addError('core', sprintf(__('core.incorrect-sys-date'), $minDateValue, $maxDateValue) . (new \DateTime())->format('Y-m-d H:i:s'), 'dateCheckFailed');
+                LogHelper::addError('core', sprintf(__('core.incorrect-sys-date'), $minDateValue, $maxDateValue) . (new \DateTime())->format(DateFormat::FULL), 'dateCheckFailed');
                 return false;
             }
         }
@@ -452,7 +527,7 @@ class NextDomHelper
                     return true;
                 }
             }
-            $result = (shell_exec('sudo -l > /dev/null 2>&1; echo $?') == 0) ? true : false;
+            $result = shell_exec('sudo -l > /dev/null 2>&1; echo $?') == 0;
             CacheManager::set('nextdom::isCapable::sudo', $result);
             return $result;
         }
@@ -474,8 +549,8 @@ class NextDomHelper
      */
     public static function getHardwareName()
     {
-        if (ConfigManager::byKey('hardware_name') != '') {
-            return ConfigManager::byKey('hardware_name');
+        if (ConfigManager::byKey(ConfigKey::HARDWARE_NAME) != '') {
+            return ConfigManager::byKey(ConfigKey::HARDWARE_NAME);
         }
         $result = 'diy';
         $uname = shell_exec('uname -a');
@@ -483,14 +558,23 @@ class NextDomHelper
             $result = 'docker';
         } else if (file_exists('/usr/bin/raspi-config')) {
             $result = 'rpi';
+            $hardware_revision = strtolower(shell_exec('cat /proc/cpuinfo | grep Revision'));
+            global $NEXTDOM_RPI_HARDWARE;
+            foreach ($NEXTDOM_RPI_HARDWARE as $key => $values) {
+                foreach ($values as $value) {
+                    if(strpos($hardware_revision,$value) !== false){
+                        $result = $key;
+                    }
+                }
+            }
         } else if (strpos($uname, 'cubox') !== false || strpos($uname, 'imx6') !== false || file_exists('/media/boot/multiboot/meson64_odroidc2.dtb.linux')) {
             $result = 'miniplus';
         }
         if (file_exists('/media/boot/multiboot/meson64_odroidc2.dtb.linux')) {
             $result = 'smart';
         }
-        ConfigManager::save('hardware_name', $result);
-        return ConfigManager::byKey('hardware_name');
+        ConfigManager::save(ConfigKey::HARDWARE_NAME, $result);
+        return ConfigManager::byKey(ConfigKey::HARDWARE_NAME);
     }
 
     /**
@@ -511,9 +595,15 @@ class NextDomHelper
      *
      * @return float
      */
-    public static function checkSpaceLeft(): float
+    public static function checkSpaceLeft($directory = null): float
     {
-        return round(disk_free_space(NEXTDOM_ROOT) / disk_total_space(NEXTDOM_ROOT) * 100);
+        if ($directory == null) {
+            $pathToCheck = NEXTDOM_ROOT;
+        }
+        else {
+            $pathToCheck = $directory;
+        }
+        return round(disk_free_space($pathToCheck) / disk_total_space($pathToCheck) * 100);
     }
 
     /**
@@ -540,13 +630,13 @@ class NextDomHelper
         if (!self::isDateOk()) {
             return false;
         }
-        if (ConfigManager::byKey('enableScenario') == 0 && count(ScenarioManager::all()) > 0) {
+        if (ConfigManager::byKey(ConfigKey::ENABLE_SCENARIO) == 0 && count(ScenarioManager::all()) > 0) {
             return false;
         }
         if (!self::isCapable('sudo')) {
             return false;
         }
-        if (ConfigManager::byKey('enableCron', 'core', 1, true) == 0) {
+        if (ConfigManager::byKey(ConfigKey::ENABLE_CRON, 'core', 1, true) == 0) {
             return false;
         }
         return true;
@@ -558,7 +648,7 @@ class NextDomHelper
      * @param array $options Options list of /install/update.php script
      * @throws \Exception
      */
-    public static function update($options = array())
+    public static function update($options = [])
     {
         LogHelper::clear('update');
         $params = '';
@@ -649,17 +739,20 @@ class NextDomHelper
 
     /**
      * Stop all cron tasks and scenarios
+     * @param $isBackupProcess if true stop all except backup cron
+     * @throws \Exception
      */
-    public static function stopSystem()
+    public static function stopSystem($isBackupProcess)
     {
         // $okStr = __('common.ok');
         // echo __('core.disable-tasks');
         ConfigManager::save('enableCron', 0);
         foreach (CronManager::all() as $cron) {
-            if ($cron->running()) {
+            if($isBackupProcess && $cron->getClass() === SystemCron::NEXTDOM_BACKUP[0] && $cron->getFunction() === SystemCron::NEXTDOM_BACKUP[1] ){
+                LogHelper::addInfo(LogTarget::MIGRATION, "Stopping all cron in backup context. Backup's cron won't be stop");
+            } else if ($cron->running()) {
                 try {
                     $cron->halt();
-                    // echo '.';
                 } catch (\Exception $e) {
                     sleep(5);
                     $cron->halt();
@@ -672,26 +765,21 @@ class NextDomHelper
         /*         * **********arrêt des crons********************* */
 
         if (CronManager::jeeCronRun()) {
-            // echo __('core.disable-cron-master');
             $pid = CronManager::getPidFile();
             SystemHelper::kill($pid);
-            // echo " $okStr\n";
         }
 
         /*         * *********Arrêt des scénarios**************** */
 
-        // echo __('core.disable-all-scenarios');
         ConfigManager::save('enableScenario', 0);
         foreach (ScenarioManager::all() as $scenario) {
             try {
                 $scenario->stop();
-                // echo '.';
             } catch (\Exception $e) {
                 sleep(5);
                 $scenario->stop();
             }
         }
-        // echo " $okStr\n";
         SystemHelper::stopService('cron');
     }
 
@@ -701,10 +789,10 @@ class NextDomHelper
     public static function cron()
     {
         if (!self::isStarted()) {
-            echo date('Y-m-d H:i:s') . ' starting NextDom';
-            LogHelper::add('starting', 'debug', __('Démarrage de nextdom'));
+            echo date(DateFormat::FULL) . ' starting NextDom';
+            LogHelper::addDebug(LogTarget::STARTING, __('Démarrage de nextdom'));
             try {
-                LogHelper::add('starting', 'debug', __('Arrêt des crons'));
+                LogHelper::addDebug(LogTarget::STARTING, __('Arrêt des crons'));
                 foreach (CronManager::all() as $cron) {
                     if ($cron->running() && $cron->getClass() != 'nextdom' && $cron->getFunction() != 'cron') {
                         try {
@@ -715,26 +803,26 @@ class NextDomHelper
                     }
                 }
             } catch (\Exception $e) {
-                LogHelper::addError('starting', __('Erreur sur l\'arrêt des tâches crons : ') . LogHelper::exception($e));
+                LogHelper::addError(LogTarget::STARTING, __('Erreur sur l\'arrêt des tâches crons : ') . LogHelper::exception($e));
             }
 
             try {
-                LogHelper::add('starting', 'debug', __('Restauration du cache'));
+                LogHelper::addDebug(LogTarget::STARTING, __('Restauration du cache'));
                 CacheManager::restore();
             } catch (\Exception $e) {
-                LogHelper::addError('starting', __('Erreur sur la restauration du CacheManager : ') . LogHelper::exception($e));
+                LogHelper::addError(LogTarget::STARTING, __('Erreur sur la restauration du CacheManager : ') . LogHelper::exception($e));
             }
 
             try {
-                LogHelper::add('starting', 'debug', __('Nettoyage du cache des péripheriques USB'));
+                LogHelper::addDebug(LogTarget::STARTING, __('Nettoyage du cache des péripheriques USB'));
                 $cache = CacheManager::byKey('nextdom::usbMapping');
                 $cache->remove();
             } catch (\Exception $e) {
-                LogHelper::addError('starting', __('Erreur sur le nettoyage du CacheManager des péripheriques USB : ') . LogHelper::exception($e));
+                LogHelper::addError(LogTarget::STARTING, __('Erreur sur le nettoyage du CacheManager des péripheriques USB : ') . LogHelper::exception($e));
             }
 
             try {
-                LogHelper::add('starting', 'debug', __('Nettoyage du cache des péripheriques Bluetooth'));
+                LogHelper::addDebug('starting', __('Nettoyage du cache des péripheriques Bluetooth'));
                 $cache = CacheManager::byKey('nextdom::bluetoothMapping');
                 $cache->remove();
             } catch (\Exception $e) {
@@ -742,15 +830,15 @@ class NextDomHelper
             }
 
             try {
-                LogHelper::add('starting', 'debug', __('Démarrage des processus Internet de NextDom'));
+                LogHelper::addDebug('starting', __('Démarrage des processus Internet de NextDom'));
                 self::startSystem();
             } catch (\Exception $e) {
                 LogHelper::addError('starting', __('Erreur sur le démarrage interne de NextDom : ') . LogHelper::exception($e));
             }
 
             try {
-                LogHelper::add('starting', 'debug', __('Ecriture du fichier ') . self::getStartedFilePath());
-                if (file_put_contents(self::getStartedFilePath(), date('Y-m-d H:i:s')) === false) {
+                LogHelper::addDebug('starting', __('Ecriture du fichier ') . self::getStartedFilePath());
+                if (file_put_contents(self::getStartedFilePath(), date(DateFormat::FULL)) === false) {
                     LogHelper::addError('starting', __('Impossible d\'écrire ' . self::getStartedFilePath()));
                 }
             } catch (\Exception $e) {
@@ -758,42 +846,42 @@ class NextDomHelper
             }
 
             if (!file_exists(self::getStartedFilePath())) {
-                LogHelper::add('starting', 'critical', __('Impossible d\'écrire ' . self::getStartedFilePath() . ' pour une raison inconnue. NextDom ne peut démarrer'));
+                LogHelper::addCritical(LogTarget::STARTING, __('Impossible d\'écrire ' . self::getStartedFilePath() . ' pour une raison inconnue. NextDom ne peut démarrer'));
                 return;
             }
 
             try {
-                LogHelper::add('starting', 'debug', __('Vérification de la configuration réseau interne'));
+                LogHelper::addDebug(LogTarget::STARTING, __('Vérification de la configuration réseau interne'));
                 if (!NetworkHelper::test('internal')) {
                     NetworkHelper::checkConf('internal');
                 }
             } catch (\Exception $e) {
-                LogHelper::addError('starting', __('Erreur sur la configuration réseau interne : ') . LogHelper::exception($e));
+                LogHelper::addError(LogTarget::STARTING, __('Erreur sur la configuration réseau interne : ') . LogHelper::exception($e));
             }
 
             try {
-                LogHelper::add('starting', 'debug', __('Envoi de l\'événement de démarrage'));
+                LogHelper::addDebug(LogTarget::STARTING, __('Envoi de l\'événement de démarrage'));
                 self::event('start');
             } catch (\Exception $e) {
-                LogHelper::addError('starting', __('Erreur sur l\'envoi de l\'événement de démarrage : ') . LogHelper::exception($e));
+                LogHelper::addError(LogTarget::STARTING, __('Erreur sur l\'envoi de l\'événement de démarrage : ') . LogHelper::exception($e));
             }
 
             try {
-                LogHelper::add('starting', 'debug', __('Démarrage des plugins'));
+                LogHelper::addDebug(LogTarget::STARTING, __('Démarrage des plugins'));
                 PluginManager::start();
             } catch (\Exception $e) {
-                LogHelper::addError('starting', __('Erreur sur le démarrage des plugins : ') . LogHelper::exception($e));
+                LogHelper::addError(LogTarget::STARTING, __('Erreur sur le démarrage des plugins : ') . LogHelper::exception($e));
             }
 
             try {
                 if (ConfigManager::byKey('market::enable') == 1) {
-                    LogHelper::add('starting', 'debug', __('Test de connexion au market'));
+                    LogHelper::addDebug(LogTarget::STARTING, __('Test de connexion au market'));
                     RepoMarket::test();
                 }
             } catch (\Exception $e) {
-                LogHelper::addError('starting', __('Erreur sur la connexion au market : ') . LogHelper::exception($e));
+                LogHelper::addError(LogTarget::STARTING, __('Erreur sur la connexion au market : ') . LogHelper::exception($e));
             }
-            LogHelper::add('starting', 'debug', __('Démarrage de nextdom fini avec succès'));
+            LogHelper::addDebug(LogTarget::STARTING, __('Démarrage de nextdom fini avec succès'));
             EventManager::add('refresh');
         }
         self::isDateOk();
@@ -806,17 +894,12 @@ class NextDomHelper
      */
     public static function startSystem()
     {
-        // $okStr = __('common.ok');
-        // try {
-        // echo __('core.enable-all-scenarios');
-        ConfigManager::save('enableScenario', 1);
-        // echo " $okStr\n";
-        // echo __('core.enable-tasks');
-        ConfigManager::save('enableCron', 1);
+        ConfigManager::save(ConfigKey::ENABLE_SCENARIO, 1);
+        ConfigManager::save(ConfigKey::ENABLE_CRON, 1);
         // Create log folder
         self::getTmpFolder();
         if (!is_dir('/tmp/jeedom')) {
-            system('ln -s ' . ConfigManager::byKey('folder::tmp') . ' /tmp/jeedom');
+            system('ln -s ' . ConfigManager::byKey(ConfigKey::TMP_FOLDER) . ' /tmp/jeedom');
         }
         SystemHelper::startService('cron');
     }
@@ -851,12 +934,25 @@ class NextDomHelper
                 }
             }
         } catch (\Exception $e) {
-            LogHelper::addError('nextdom', $e->getMessage());
+            LogHelper::addError(LogTarget::NEXTDOM, $e->getMessage());
         }
         try {
             EqLogicManager::checkAlive();
         } catch (\Exception $e) {
 
+        }
+    }
+
+    public static function cron10() {
+        try {
+            foreach (UpdateManager::listRepo() as $name => $repo) {
+                $repoClass = 'Repo' . $name;
+                if (class_exists($repoClass) && method_exists($repoClass, 'cron10') && ConfigManager::byKey($name . '::enable') == 1) {
+                    $repoClass::cron10();
+                }
+            }
+        } catch (\Exception $e) {
+            LogHelper::addError(LogTarget::NEXTDOM, $e->getMessage());
         }
     }
 
@@ -866,12 +962,12 @@ class NextDomHelper
     public static function cronHourly()
     {
         try {
-            CacheManager::set('hour', date('Y-m-d H:i:s'));
+            CacheManager::set('hour', date(DateFormat::FULL));
         } catch (\Exception $e) {
             LogHelper::addError('nextdom', $e->getMessage());
         }
         try {
-            if (ConfigManager::byKey('update::autocheck', 'core', 1) == 1 && (ConfigManager::byKey('update::lastCheck') == '' || (strtotime('now') - strtotime(ConfigManager::byKey('update::lastCheck'))) > (23 * 3600))) {
+            if ((ConfigManager::byKey('update::lastCheck') == '' || (strtotime('now') - strtotime(ConfigManager::byKey('update::lastCheck'))) > (23 * 3600))) {
                 UpdateManager::checkAllUpdate();
                 $updates = UpdateManager::byStatus('update');
                 $toUpdate = '';
@@ -1080,7 +1176,7 @@ class NextDomHelper
      */
     public static function getTypeUse($testString = '')
     {
-        $results = array('cmd' => [], 'scenario' => [], 'eqLogic' => [], 'dataStore' => [], 'plan' => [], 'view' => []);
+        $results = array(NextDomObj::CMD => [], NextDomObj::SCENARIO => [], NextDomObj::EQLOGIC => [], NextDomObj::DATASTORE => [], NextDomObj::PLAN => [], NextDomObj::VIEW => []);
         // Look for human readable strings
         preg_match_all('/#(eqLogic|scenario)?(\d+)#/', $testString, $humanReadableResults);
         self::addTypeUseResults($humanReadableResults, $results);
@@ -1112,7 +1208,7 @@ class NextDomHelper
         for ($matchIndex = 0; $matchIndex < count($matches[0]); ++$matchIndex) {
             $typeName = $matches[1][$matchIndex];
             if (empty($typeName)) {
-                $typeName = 'cmd';
+                $typeName = NextDomObj::CMD;
             }
             $typeId = $matches[2][$matchIndex];
             $target = null;
@@ -1141,7 +1237,7 @@ class NextDomHelper
      */
     public static function getTypeUseOld($testString = '')
     {
-        $result = array('cmd' => [], 'scenario' => [], 'eqLogic' => [], 'dataStore' => [], 'plan' => [], 'view' => []);
+        $result = array(NextDomObj::CMD => [], NextDomObj::SCENARIO => [], NextDomObj::EQLOGIC => [], NextDomObj::DATASTORE => [], NextDomObj::PLAN => [], NextDomObj::VIEW => []);
         // Test commands human readable
         preg_match_all("/#([0-9]*)#/", $testString, $matches);
         foreach ($matches[1] as $cmdId) {
@@ -1152,7 +1248,7 @@ class NextDomHelper
             if (!is_object($cmd)) {
                 continue;
             }
-            $result['cmd'][$cmdId] = $cmd;
+            $result[NextDomObj::CMD][$cmdId] = $cmd;
         }
         // Test scenarios from parameters
         preg_match_all('/"scenario_id":"([0-9]*)"/', $testString, $matches);
@@ -1164,79 +1260,79 @@ class NextDomHelper
             if (!is_object($scenario)) {
                 continue;
             }
-            $result['scenario'][$scenario_id] = $scenario;
+            $result[NextDomObj::SCENARIO][$scenario_id] = $scenario;
         }
         // Test scenario human readable
         preg_match_all("/#scenario([0-9]*)#/", $testString, $matches);
         foreach ($matches[1] as $scenario_id) {
-            if (isset($result['scenario'][$scenario_id])) {
+            if (isset($result[NextDomObj::SCENARIO][$scenario_id])) {
                 continue;
             }
             $scenario = ScenarioManager::byId($scenario_id);
             if (!is_object($scenario)) {
                 continue;
             }
-            $result['scenario'][$scenario_id] = $scenario;
+            $result[NextDomObj::SCENARIO][$scenario_id] = $scenario;
         }
         // Test eqLogic human readable
         preg_match_all("/#eqLogic([0-9]*)#/", $testString, $matches);
         foreach ($matches[1] as $eqLogicId) {
-            if (isset($result['eqLogic'][$eqLogicId])) {
+            if (isset($result[NextDomObj::EQLOGIC][$eqLogicId])) {
                 continue;
             }
             $eqLogic = EqLogicManager::byId($eqLogicId);
             if (!is_object($eqLogic)) {
                 continue;
             }
-            $result['eqLogic'][$eqLogicId] = $eqLogic;
+            $result[NextDomObj::EQLOGIC][$eqLogicId] = $eqLogic;
         }
         // Test eqLogic from parameters
         preg_match_all('/"eqLogic":"([0-9]*)"/', $testString, $matches);
         foreach ($matches[1] as $eqLogicId) {
-            if (isset($result['eqLogic'][$eqLogicId])) {
+            if (isset($result[NextDomObj::EQLOGIC][$eqLogicId])) {
                 continue;
             }
             $eqLogic = EqLogicManager::byId($eqLogicId);
             if (!is_object($eqLogic)) {
                 continue;
             }
-            $result['eqLogic'][$eqLogicId] = $eqLogic;
+            $result[NextDomObj::EQLOGIC][$eqLogicId] = $eqLogic;
         }
         // Test variable
         preg_match_all('/variable\((.*?)\)/', $testString, $matches);
         foreach ($matches[1] as $variable) {
-            if (isset($result['dataStore'][$variable])) {
+            if (isset($result[NextDomObj::DATASTORE][$variable])) {
                 continue;
             }
             $dataStore = DataStoreManager::byTypeLinkIdKey('scenario', -1, trim($variable));
             if (!is_object($dataStore)) {
                 continue;
             }
-            $result['dataStore'][$variable] = $dataStore;
+            $result[NextDomObj::DATASTORE][$variable] = $dataStore;
         }
         // Test view id from parameters
         preg_match_all('/"view_id":"([0-9]*)"/', $testString, $matches);
         foreach ($matches[1] as $viewId) {
-            if (isset($result['view'][$viewId])) {
+            if (isset($result[NextDomObj::VIEW][$viewId])) {
                 continue;
             }
             $view = ViewManager::byId($viewId);
             if (!is_object($view)) {
                 continue;
             }
-            $result['view'][$viewId] = $view;
+            $result[NextDomObj::VIEW][$viewId] = $view;
         }
         // Test plan_id from parameters
         preg_match_all('/"plan_id":"([0-9]*)"/', $testString, $matches);
         foreach ($matches[1] as $planId) {
-            if (isset($result['plan'][$planId])) {
+            if (isset($result[NextDomObj::PLAN][$planId])) {
                 continue;
             }
             $plan = PlanHeaderManager::byId($planId);
             if (!is_object($plan)) {
                 continue;
             }
-            $result['plan'][$planId] = $plan;
+            $result[NextDomObj::PLAN][$planId] = $plan;
         }
         return $result;
     }
@@ -1284,10 +1380,10 @@ class NextDomHelper
      */
     public static function getHardwareKey()
     {
-        $result = ConfigManager::byKey('nextdom::installKey');
+        $result = ConfigManager::byKey(ConfigKey::NEXTDOM_INSTALL_KEY);
         if ($result == '') {
             $result = substr(Utils::sha512(microtime() . ConfigManager::genKey()), 0, 63);
-            ConfigManager::save('nextdom::installKey', $result);
+            ConfigManager::save(ConfigKey::NEXTDOM_INSTALL_KEY, $result);
         }
         return $result;
     }

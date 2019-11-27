@@ -19,7 +19,6 @@ namespace NextDom\Ajax;
 
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
-use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\NoteManager;
 use NextDom\Model\Entity\Note;
@@ -36,19 +35,19 @@ class NoteAjax extends BaseAjax
 
     public function all()
     {
-        AjaxHelper::success(Utils::o2a(NoteManager::all()));
+        $this->ajax->success(Utils::o2a(NoteManager::all()));
     }
 
     public function byId()
     {
-        AjaxHelper::success(Utils::o2a(NoteManager::byId(Utils::init('id'))));
+        $this->ajax->success(Utils::o2a(NoteManager::byId(Utils::init('id'))));
     }
 
     public function save()
     {
         $noteData = json_decode(Utils::init('note'), true);
         if (empty($noteData['name'])) {
-            AjaxHelper::error(__('entity.note.name-cannot-be-empty'));
+            $this->ajax->error(__('entity.note.name-cannot-be-empty'));
         } else {
             if (isset($noteData['id'])) {
                 $note = NoteManager::byId($noteData['id']);
@@ -57,7 +56,7 @@ class NoteAjax extends BaseAjax
             }
             Utils::a2o($note, $noteData);
             $note->save();
-            AjaxHelper::success(Utils::o2a($note));
+            $this->ajax->success(Utils::o2a($note));
         }
     }
 
@@ -68,7 +67,7 @@ class NoteAjax extends BaseAjax
             throw new CoreException(__('Note inconnue. Vérifiez l\'ID'));
         }
         $note->remove();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
 }

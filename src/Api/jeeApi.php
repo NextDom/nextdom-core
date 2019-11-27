@@ -16,6 +16,22 @@
 * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
 */
 
+/* This file is part of NextDom Software.
+ *
+ * NextDom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * NextDom Software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 header('Access-Control-Allow-Origin: *');
 
 require_once __DIR__ . "/../../src/core.php";
@@ -24,8 +40,7 @@ if (user::isBan()) {
     header("Status: 404 Not Found");
     header('HTTP/1.0 404 Not Found');
     $_SERVER['REDIRECT_STATUS'] = 404;
-    echo "<h1>404 Not Found</h1>";
-    echo "The page that you have requested could not be found.";
+    require(NEXTDOM_ROOT . '/public/404.html');
     die();
 }
 if (isset($argv)) {
@@ -334,7 +349,6 @@ try {
     }
     /*             * ************************config*************************** */
     if ($jsonrpc->getMethod() == 'config::byKey') {
-        unautorizedInDemo();
         if (!isset($params['default'])) {
             $params['default'] = '';
         }
@@ -345,7 +359,6 @@ try {
     }
 
     if ($jsonrpc->getMethod() == 'config::save') {
-        unautorizedInDemo();
         if (!isset($params['plugin'])) {
             $params['plugin'] = 'core';
         }
@@ -363,7 +376,6 @@ try {
     }
 
     if ($jsonrpc->getMethod() == 'jeedom::halt') {
-        unautorizedInDemo();
         if (is_object($_USER_GLOBAL) && $_USER_GLOBAL->getProfils() != 'admin') {
             throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action ', __FILE__) . $jsonrpc->getMethod(), -32001);
         }
@@ -372,7 +384,6 @@ try {
     }
 
     if ($jsonrpc->getMethod() == 'jeedom::reboot') {
-        unautorizedInDemo();
         if (is_object($_USER_GLOBAL) && $_USER_GLOBAL->getProfils() != 'admin') {
             throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action ', __FILE__) . $jsonrpc->getMethod(), -32001);
         }
@@ -381,7 +392,6 @@ try {
     }
 
     if ($jsonrpc->getMethod() == 'jeedom::update') {
-        unautorizedInDemo();
         if (is_object($_USER_GLOBAL) && $_USER_GLOBAL->getProfils() != 'admin') {
             throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action ', __FILE__) . $jsonrpc->getMethod(), -32001);
         }
@@ -390,7 +400,6 @@ try {
     }
 
     if ($jsonrpc->getMethod() == 'jeedom::backup') {
-        unautorizedInDemo();
         if (is_object($_USER_GLOBAL) && $_USER_GLOBAL->getProfils() != 'admin') {
             throw new Exception(__('Vous n\'êtes pas autorisé à effectuer cette action ', __FILE__) . $jsonrpc->getMethod(), -32001);
         }
@@ -459,7 +468,6 @@ try {
     }
 
     if ($jsonrpc->getMethod() == 'jeeObject::save' || $jsonrpc->getMethod() == 'object::save') {
-        unautorizedInDemo();
         if (isset($params['id'])) {
             $jeeObject = jeeObject::byId($params['id']);
         }
@@ -506,7 +514,6 @@ try {
     }
 
     if ($jsonrpc->getMethod() == 'datastore::save') {
-        unautorizedInDemo();
         $dataStore = new dataStore();
         $dataStore->setType($params['type']);
         $dataStore->setKey($params['key']);
@@ -551,7 +558,6 @@ try {
     }
 
     if ($jsonrpc->getMethod() == 'eqLogic::save') {
-        unautorizedInDemo();
         $typeEqLogic = $params['eqType_name'];
         $typeCmd = $typeEqLogic . 'Cmd';
         if ($typeEqLogic == '' || !class_exists($typeEqLogic) || !class_exists($typeCmd)) {
@@ -746,7 +752,6 @@ try {
     }
 
     if ($jsonrpc->getMethod() == 'cmd::save') {
-        unautorizedInDemo();
         $typeEqLogic = $params['eqType_name'];
         $typeCmd = $typeEqLogic . 'Cmd';
         if ($typeEqLogic == '' || !class_exists($typeEqLogic) || !class_exists($typeCmd)) {
@@ -828,7 +833,6 @@ try {
     }
 
     if ($jsonrpc->getMethod() == 'scenario::import') {
-        unautorizedInDemo();
         if (isset($params['id'])) {
             $scenario = scenario::byId($params['id']);
             if (!is_object($scenario)) {
@@ -883,7 +887,6 @@ try {
     }
 
     if ($jsonrpc->getMethod() == 'log::remove') {
-        unautorizedInDemo();
         $jsonrpc->makeSuccess(log::remove($params['log']));
     }
 
@@ -922,7 +925,6 @@ try {
 
     /*             * ************************Plugin*************************** */
     if ($jsonrpc->getMethod() == 'plugin::install') {
-        unautorizedInDemo();
         if (isset($params['plugin_id'])) {
             $update = update::byId($params['plugin_id']);
         }
@@ -938,7 +940,6 @@ try {
     }
 
     if ($jsonrpc->getMethod() == 'plugin::remove') {
-        unautorizedInDemo();
         if (isset($params['plugin_id'])) {
             $update = update::byId($params['plugin_id']);
         }
@@ -957,11 +958,10 @@ try {
         if (!is_object($plugin)) {
             $jsonrpc->makeSuccess(array('state' => 'nok', 'log' => 'nok'));
         }
-        $jsonrpc->makeSuccess($plugin->dependancy_info());
+        $jsonrpc->makeSuccess($plugin->getDependencyInfo());
     }
 
     if ($jsonrpc->getMethod() == 'plugin::dependancyInstall') {
-        unautorizedInDemo();
         $plugin = plugin::byId($params['plugin_id']);
         if (!is_object($plugin)) {
             $jsonrpc->makeSuccess();
@@ -994,7 +994,6 @@ try {
     }
 
     if ($jsonrpc->getMethod() == 'plugin::deamonStop') {
-        unautorizedInDemo();
         $plugin = plugin::byId($params['plugin_id']);
         if (!is_object($plugin)) {
             $jsonrpc->makeSuccess();
@@ -1004,7 +1003,6 @@ try {
     }
 
     if ($jsonrpc->getMethod() == 'plugin::deamonChangeAutoMode') {
-        unautorizedInDemo();
         $plugin = plugin::byId($params['plugin_id']);
         if (!is_object($plugin)) {
             $jsonrpc->makeSuccess();
@@ -1023,7 +1021,6 @@ try {
     }
 
     if ($jsonrpc->getMethod() == 'update::update') {
-        unautorizedInDemo();
         jeedom::update('', 0);
         $jsonrpc->makeSuccess('ok');
     }
@@ -1033,17 +1030,29 @@ try {
         $jsonrpc->makeSuccess('ok');
     }
 
+    if ($jsonrpc->getMethod() == 'update::doUpdate') {
+        if (isset($params['plugin_id'])) {
+            $update = update::byId($params['plugin_id']);
+        }
+        if (isset($params['logicalId'])) {
+            $update = update::byLogicalId($params['logicalId']);
+        }
+        if (!is_object($update)) {
+            throw new Exception(__('Impossible de trouver l\'objet', __FILE__));
+        }
+        $update->doUpdate();
+        $jsonrpc->makeSuccess('ok');
+    }
+
     /*             * ************************Network*************************** */
 
     if ($jsonrpc->getMethod() == 'network::restartDns') {
-        unautorizedInDemo();
         config::save('market::allowDNS', 1);
         network::dns_start();
         $jsonrpc->makeSuccess();
     }
 
     if ($jsonrpc->getMethod() == 'network::stopDns') {
-        unautorizedInDemo();
         config::save('market::allowDNS', 0);
         network::dns_stop();
         $jsonrpc->makeSuccess();

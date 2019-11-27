@@ -241,9 +241,9 @@ function addCron(_cron) {
         }
     }
     tr += '</td>';
-    tr += '<td class="enable"><center>';
+    tr += '<td class="enable">';
     tr += '<input type="checkbox"class="cronAttr" data-l1key="enable" checked '+disabled+'/>';
-    tr += '</center></td>';
+    tr += '</td>';
     tr += '<td>';
     tr += init(_cron.pid);
     tr += '</td>';

@@ -19,7 +19,6 @@ namespace NextDom\Ajax;
 
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
-use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ListenerManager;
@@ -37,7 +36,7 @@ class ListenerAjax extends BaseAjax
     public function save()
     {
         Utils::processJsonObject('listener', Utils::init('listeners'));
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function remove()
@@ -47,7 +46,7 @@ class ListenerAjax extends BaseAjax
             throw new CoreException(__('Listerner id inconnu'));
         }
         $listener->remove();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function all()
@@ -60,7 +59,7 @@ class ListenerAjax extends BaseAjax
             }
             $listener['event_str'] = NextDomHelper::toHumanReadable(trim($listener['event_str'], ','));
         }
-        AjaxHelper::success($listeners);
+        $this->ajax->success($listeners);
     }
 
 }

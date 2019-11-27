@@ -69,18 +69,9 @@ $(function () {
     };
 
     // Clock actualisation timer
+    displayClock();
     setInterval(function () {
-        var date = new Date();
-        var locale = 'en-EN';
-        // Get NextDom language for format
-        if (isset(nextdom_language)) {
-            locale = nextdom_language.replace('_','-');
-        }
-        // Date
-        var dateFormat = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        $('#horloge_date').text(date.toLocaleDateString(locale, dateFormat));
-        // Time
-        $('#horloge_time').text(date.toLocaleTimeString(locale));
+        displayClock();
     }, 1000);
 
     // History push listener declaration
@@ -109,6 +100,12 @@ $(function () {
     $('#bt_quickNote').on('click',function(){
       $('#md_modal').dialog({title: "{{Quick Notes}}"});
       $("#md_modal").load('index.php?v=d&modal=note.manager').dialog('open');
+    });
+
+    // Quick note link event handler declaration
+    $('#bt_showExpressionTest').on('click',function(){
+      $('#md_modal').dialog({title: "{{Testeur d'expression}}"});
+      $("#md_modal").load('index.php?v=d&modal=expression.test').dialog('open');
     });
 
     // View page link event handler declaration
@@ -162,12 +159,6 @@ $(function () {
                 window.location.href = 'index.php?v=d&p=shutdown';
             }
         });
-    });
-
-    // Realtime log link event handler
-    $('#bt_showEventInRealTime').on('click',function(){
-        $('#md_modal').dialog({title: "{{Evénement en temps réel}}"});
-        $("#md_modal").load('index.php?v=d&modal=log.display&log=event').dialog('open');
     });
 
     // Quick note button event handler declaration
@@ -276,9 +267,15 @@ $(function () {
 
     // Help triggers declaration
     $('#bt_getHelpPage').on('click',function(){
+        // Init help button
+        var pageName = getUrlVars('p');
+        var pluginName = getUrlVars('m');
+        if (pluginName === false) {
+            pluginName = '';
+        }
         nextdom.getDocumentationUrl({
-            plugin: $(this).attr('data-plugin'),
-            page: $(this).attr('data-page'),
+            plugin: pluginName,
+            page: pageName,
             error: function(error) {
                 notify("Erreur", error.message, 'error');
             },
@@ -287,9 +284,6 @@ $(function () {
             }
         });
     });
-    $('body').on( 'click','.bt_pageHelp', function () {
-        showHelpModal($(this).attr('data-name'), $(this).attr('data-plugin'));
-    });
 
     // Help modal trigger declaration
     $("#md_pageHelp").dialog({
@@ -297,8 +291,10 @@ $(function () {
         modal: false,
         closeText: '',
         height: (jQuery(window).height() - 100),
-        width: ((jQuery(window).width() - 50) < 1500) ? (jQuery(window).width() - 50) : 1500,
+        width: (jQuery(window).width() < 1000) ? "96%" : "80%",
         position: { my: "center", at: "center", of: window },
+        show: { effect: "blind", duration: 200 },
+        resizable: false,
         open: function () {
             $("body").css({overflow: 'hidden'});
             $(this).closest( ".ui-dialog" ).find(":button").blur();
@@ -315,8 +311,10 @@ $(function () {
         modal: false,
         closeText: '',
         height: (jQuery(window).height() - 100),
-        width: ((jQuery(window).width() - 50) < 1500) ? (jQuery(window).width() - 50) : 1500,
+        width: (jQuery(window).width() < 1000) ? "96%" : "80%",
         position: {my: 'center', at: 'center', of: window},
+        show: { effect: "blind", duration: 200 },
+        resizable: false,
         open: function () {
             $("body").css({overflow: 'hidden'});
             $(this).closest( ".ui-dialog" ).find(":button").blur();
@@ -333,8 +331,10 @@ $(function () {
         modal: false,
         closeText: '',
         height: (jQuery(window).height() - 100),
-        width: ((jQuery(window).width() - 50) < 1500) ? (jQuery(window).width() - 50) : 1500,
+        width: (jQuery(window).width() < 1000) ? "96%" : "80%",
         position: {my: 'center', at: 'center', of: window},
+        show: { effect: "blind", duration: 200 },
+        resizable: false,
         open: function () {
             $("body").css({overflow: 'hidden'});
             $(this).closest( ".ui-dialog" ).find(":button").blur();
@@ -458,43 +458,5 @@ function loadPage(pageUrl,noPushHistory){
 
         // Post Inits launch
         postInitPage();
-
-        // Init help button
-        $('#bt_getHelpPage').attr('data-page',getUrlVars('p')).attr('data-plugin',getUrlVars('m'));
     });
-
-    return;
-}
-
-/**
- * Help modal loading
- *
- * @param helpName help file or link name
- * @param pluginName plugin name if the help file or link concern a plugin
- */
-function showHelpModal(helpName, pluginName) {
-    if (init(pluginName) != '' && pluginName != undefined) {
-        $('#div_helpWebsite').load('index.php?v=d&modal=help.website&page=doc_plugin_' + pluginName + '.php #primary', function () {
-            if ($('#div_helpWebsite').find('.alert.alert-danger').length > 0 || $.trim($('#div_helpWebsite').text()) == '') {
-                $('a[href="#div_helpSpe"]').click();
-                $('a[href="#div_helpWebsite"]').hide();
-            } else {
-                $('a[href="#div_helpWebsite"]').show();
-                $('a[href="#div_helpWebsite"]').click();
-            }
-        });
-        $('#div_helpSpe').load('index.php?v=d&plugin=' + pluginName + '&modal=help.' + init(helpName));
-    } else {
-        $('#div_helpWebsite').load('index.php?v=d&modal=help.website&page=doc_' + init(helpName) + '.php #primary', function () {
-            if ($('#div_helpWebsite').find('.alert.alert-danger').length > 0 || $.trim($('#div_helpWebsite').text()) == '') {
-                $('a[href="#div_helpSpe"]').click();
-                $('a[href="#div_helpWebsite"]').hide();
-            } else {
-                $('a[href="#div_helpWebsite"]').show();
-                $('a[href="#div_helpWebsite"]').click();
-            }
-        });
-        $('#div_helpSpe').load('index.php?v=d&modal=help.' + init(helpName));
-    }
-    $('#md_pageHelp').dialog('open');
 }

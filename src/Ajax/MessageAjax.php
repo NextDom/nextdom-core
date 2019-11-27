@@ -19,7 +19,6 @@ namespace NextDom\Ajax;
 
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
-use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\MessageManager;
 
@@ -36,12 +35,12 @@ class MessageAjax extends BaseAjax
     public function clearMessage()
     {
         MessageManager::removeAll(Utils::init('plugin'));
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function nbMessage()
     {
-        AjaxHelper::success(MessageManager::nbMessage());
+        $this->ajax->success(MessageManager::nbMessage());
     }
 
     public function all()
@@ -54,7 +53,7 @@ class MessageAjax extends BaseAjax
         foreach ($messages as &$message) {
             $message['message'] = htmlentities($message['message']);
         }
-        AjaxHelper::success($messages);
+        $this->ajax->success($messages);
     }
 
     public function removeMessage()
@@ -64,6 +63,6 @@ class MessageAjax extends BaseAjax
             throw new CoreException(__('Message inconnu. Vérifiez l\'ID'));
         }
         $message->remove();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 }

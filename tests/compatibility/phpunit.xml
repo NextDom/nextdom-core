@@ -27,6 +27,9 @@
         <testsuite name="AllTests">
             <directory>../compatibility</directory>
         </testsuite>
+        <testsuite name="current">
+            <directory>../compatibility/AjaxCronTest.php</directory>
+        </testsuite>
     </testsuites>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">

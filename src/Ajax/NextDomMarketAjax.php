@@ -18,7 +18,6 @@
 namespace NextDom\Ajax;
 
 use NextDom\Enums\UserRight;
-use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Market\DownloadManager;
 use NextDom\Market\MarketItem;
@@ -57,7 +56,7 @@ class NextDomMarketAjax extends BaseAjax
             default :
                 $result = false;
         }
-        AjaxHelper::success($result);
+        $this->ajax->success($result);
     }
 
     /**
@@ -171,6 +170,6 @@ class NextDomMarketAjax extends BaseAjax
             default :
                 $result = false;
         }
-        AjaxHelper::success($result);
+        $this->ajax->success($result);
     }
 }

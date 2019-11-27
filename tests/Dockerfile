@@ -23,16 +23,16 @@ RUN apt-get clean autoclean && \
     rm -fr /var/lib/{apt,dpkg,cache,log}/
 RUN rm -fr /data/core/config
 RUN echo "#!/bin/sh" > /start.sh && \
-    echo "rsync -av --info=progress2 /data/ /var/www/html/ --exclude scripts/phpdox --exclude plugins --exclude docs --exclude vendor --exclude public --exclude .git  --exclude .sass-cache --exclude docs --exclude backup" >> /start.sh && \
-    echo "cd /var/www/html" >> /start.sh && \
+    echo "rsync -av --info=progress2 /data/ /usr/share/nextdom/ --exclude scripts/phpdox --exclude plugins --exclude docs --exclude vendor --exclude public --exclude .git  --exclude .sass-cache --exclude docs --exclude backup --exclude var" >> /start.sh && \
+    echo "cd /usr/share/nextdom" >> /start.sh && \
     echo "mkdir plugins public backup .git" >> /start.sh && \
     echo "service cron start" >> /start.sh && \
     echo "service mysql start" >> /start.sh && \
     echo "service apache2 start" >> /start.sh && \
     echo "./scripts/gen_global.sh" >> /start.sh && \
-    echo "./install/postinst" >> /start.sh && \
-    echo "composer install --dev" >> /start.sh && \
-    echo "mysql -u root -e \"UPDATE nextdomdev.user SET password = SHA2('nextdom_test', 512)\"" >> /start.sh && \
+    echo "bash -x install/postinst" >> /start.sh && \
+    echo "composer install --dev" && \
+    echo "mysql -u root -e \"UPDATE nextdomdev.user SET password = SHA2('nextdom-test', 512)\"" >> /start.sh && \
     echo "echo NEXTDOM TEST READY" >> /start.sh && \
     echo "while true; do" >> /start.sh && \
     echo "  sleep 50" >> /start.sh && \
@@ -47,5 +47,4 @@ RUN echo "#!/bin/sh" > /launch.sh && \
     echo "done" >> /launch.sh && \
     chmod +x /launch.sh
 VOLUME /data
-#ENTRYPOINT ["bash", "/start.sh"]
 CMD ["bash", "/launch.sh"]

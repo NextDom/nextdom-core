@@ -50,11 +50,36 @@ if ($update_in_progress > 1) {
 $output = array();
 /********************************Date****************************************/
 echo 'Check Date => ';
-echo date('Y-m-d')."\n";
-if(date('Y') < 2019 || date('Y') > 2040){
+echo date('Y-m-d') . "\n";
+if (date('Y') < 2019 || date('Y') > 2040) {
     echo 'Invalid date found, try correct it';
     exec('sudo service ntp stop;sudo ntpdate -s time.nist.gov;sudo service ntp start');
 }
+
+/********************************Free space****************************************/
+
+$freespace = round(disk_free_space(NEXTDOM_ROOT) / disk_total_space(NEXTDOM_ROOT) * 100);
+echo 'Check Free space (' . $freespace . '%) => ';
+if ($freespace <= 1) {
+    echo "NOK\n";
+    echo "Trying cleaning\n";
+    if (file_exists(NEXTDOM_TMP)) {
+        shell_exec('rm -rf ' . NEXTDOM_TMP . '/*');
+    }
+    if (file_exists(NEXTDOM_LOG)) {
+        shell_exec('rm -rf ' . NEXTDOM_LOG . '/*');
+    }
+    $freespace = round(disk_free_space(NEXTDOM_ROOT) / disk_total_space(NEXTDOM_ROOT) * 100);
+    echo "Recheck Free space ('.$freespace.'%) => ";
+    if ($freespace <= 1) {
+        echo "NOK. Please do somethink manually...\n";
+    } else {
+        echo "OK\n";
+    }
+} else {
+    echo "OK\n";
+}
+
 /******************************Database***************************************/
 /********************************MySQL****************************************/
 echo 'Check MySql => ';

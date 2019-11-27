@@ -39,11 +39,13 @@ class LogDisplay extends BaseAbstractModal
      */
     public static function get(): string
     {
+        $pageData = [];
+        $pageData['logName'] = Utils::init('log', 'event');
         Utils::sendVarsToJS([
-            'realtime_name' => Utils::init('log', 'event'),
+            'log_name' => Utils::init('log', 'event'),
             'log_default_search' => Utils::init('search', '')
         ]);
-        return Render::getInstance()->get('/modals/log.display.html.twig');
+        return Render::getInstance()->get('/modals/log.display.html.twig', $pageData);
     }
 
 }

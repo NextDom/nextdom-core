@@ -93,9 +93,9 @@
             <li class="treeview" id="side6">
                 <a href="#"><i class="fas fa-puzzle-piece spacing-right"></i><span>{{ 'sidebar.plugins'|trans }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
                 <ul class="treeview-menu">
-                    <li class="treeview"><a href="index.php?v=d&p=plugin"><i class="fas fa-tags spacing-right"></i>{{ 'sidebar.plugins-markets'|trans }}</a></li>
+                    <li class="treeview divider"><a href="index.php?v=d&p=plugin"><i class="fas fa-tags spacing-right"></i>{{ 'sidebar.plugins-markets'|trans }}</a></li>
                     {% if MENU_PLUGIN_CATEGORY is defined %}
-                        {% for category, categoryData in MENU_PLUGIN_CATEGORY %}
+                        {% for category, categoryData in MENU_PLUGIN_CATEGORY|sort %}
                             <li class="treeview">
                                 <a href="#" data-toggle="dropdown"><i class="fas {{ categoryData.icon }} spacing-right"></i>{{ categoryData.name }}<span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
                                 <ul class="treeview-menu">
@@ -118,7 +118,7 @@
                     <li><a href="index.php?v=d&p=scenario"><i class="fas fa-film spacing-right"></i>{{ 'sidebar.tools-scenarios'|trans }}</a></li>
                 </ul>
             </li>
-            <li class="treeview" id="side8">
+            <li class="treeview divider" id="side8">
                 <a href="#"><i class="fas fa-stethoscope spacing-right"></i><span>{{ 'sidebar.diagnostics'|trans }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
                 <ul class="treeview-menu">
                     <li><a href="index.php?v=d&p=health"><i class="fas fa-medkit spacing-right"></i>{{ 'sidebar.diagnostics-health'|trans }}</a></li>
@@ -126,14 +126,29 @@
                     <li><a href="index.php?v=d&p=history"><i class="fas fa-chart-area spacing-right"></i>{{ 'sidebar.diagnostics-history'|trans }}</a></li>
                     <li><a href="index.php?v=d&p=timeline"><i class="fas fa-history spacing-right"></i>{{ 'sidebar.diagnostics-timeline'|trans }}</a></li>
                     <li><a href="index.php?v=d&p=log"><i class="fas fa-file-alt spacing-right"></i>{{ 'sidebar.diagnostics-logs'|trans }}</a></li>
-                    <li><a href="#" id="bt_showEventInRealTime"><i class="fas fa-tachometer-alt spacing-right"></i>{{ 'sidebar.diagnostics-realtime'|trans }}</a></li>
+                    <li><a href="#" id="bt_showExpressionTest"><i class="fas fa-rss spacing-right"></i>{{ 'scenario.test-expression'|trans }}</a></li>
                 </ul>
             </li>
             <li class="treeview" id="side9">
+                <a href="#"><i class="fas fa-question-circle spacing-right"></i><span>{{ 'sidebar.help'|trans }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
+                <ul class="treeview-menu">
+                    <li class="divider"><a id="bt_getHelpPage" class="cursor"><i class="fas fa-life-ring spacing-right"></i>{{ 'sidebar.help-page'|trans }}</a></li>
+                    <li><a href="https://github.com/NextDom/NextDom/wiki" target="_blank"><i class="fas fa-university spacing-right"></i>{{ 'sidebar.help-wiki'|trans }}</a></li>
+                    <li class="divider"><a href="https://nextdom.github.io/" target="_blank"><i class="fas fa-book spacing-right"></i>{{ 'sidebar.help-nextdom-doc'|trans }}</a></li>
+                    <li class="divider"><a href="https://jeedom.github.io/documentation/" target="_blank"><i class="fas fa-book spacing-right"></i>{{ 'sidebar.help-jeedom-doc'|trans }}</a></li>
+                    <li><a href="https://www.nextdom.org/" target="_blank"><i class="fas fa-bookmark spacing-right"></i>{{ 'sidebar.help-site'|trans }}</a></li>
+                    <li><a href="https://www.nextdom.org/forum/" target="_blank"><i class="fab fa-wpforms spacing-right"></i>{{ 'sidebar.help-forum'|trans }}</a></li>
+                    <li><a href="https://github.com/NextDom" target="_blank"><i class="fab fa-github spacing-right"></i>{{ 'sidebar.help-github'|trans }}</a></li>
+                    <li><a href="https://discord.gg/RUd44pn" target="_blank"><i class="fab fa-discord spacing-right"></i>{{ 'sidebar.help-chat'|trans }}</a></li>
+                </ul>
+            </li>
+            <li class="treeview" id="side10">
                 <a href="#"><i class="fas fa-cog spacing-right"></i><span>{{ 'sidebar.expert'|trans }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
                 <ul class="treeview-menu">
                     <li><a href="index.php?v=d&p=administration"><i class="fas fa-wrench spacing-right"></i>{{ 'sidebar.expert-admin'|trans }}</a></li>
-                    <li class="divider"><a href="/mobile/index.html" data-reload="yes"><i class="fas fa-mobile-alt spacing-right"></i>{{ 'sidebar.expert-mobile'|trans }}</a></li>
+                    {% if SHOW_MOBILE_IN_MENU %}
+                        <li class="divider"><a href="/mobile/index.html" data-reload="yes"><i class="fas fa-mobile-alt spacing-right"></i>{{ 'sidebar.expert-mobile'|trans }}</a></li>
+                    {% endif %}
                     <li><a href="index.php?v=d&logout=1" class="noOnePageLoad"><i class="fas fa-lock spacing-right"></i>{{ 'sidebar.expert-logout'|trans }}</a></li>
                     {% if IS_ADMIN and CAN_SUDO %}
                         <li><a href="#" id="bt_rebootSystem" state="0"><i class="fas fa-repeat spacing-right"></i>{{ 'sidebar.expert-restart'|trans }}</a></li>

@@ -54,6 +54,7 @@ class ProfilsController extends BaseController
     {
         @session_start();
         UserManager::getStoredUser()->refresh();
+        $pageData['profilsUser'] = UserManager::getStoredUser();
         @session_write_close();
         $pageData['profilsHomePageDesktop'] = array(
             'core::dashboard' => __('Dashboard'),
@@ -67,7 +68,6 @@ class ProfilsController extends BaseController
                 $pageData['profilsHomePageDesktop'][$pluginList->getId() . '::' . $pluginList->getDisplay()] = $pluginList->getName();
             }
         }
-        $pageData['profilsSessionsList'] = SessionHelper::getSessionsList();
 
         $lsCssThemes = FileSystemHelper::ls(NEXTDOM_ROOT . '/public/themes/');
         $pageData['profilsAvatar'] = ConfigManager::byKey('avatar');
@@ -128,6 +128,26 @@ class ProfilsController extends BaseController
         $pageData['profilsPlans'] = PlanHeaderManager::all();
         $pageData['profilsPlans3d'] = Plan3dHeaderManager::all();
         $pageData['profilsAllowRemoteUsers'] = ConfigManager::byKey('sso:allowRemoteUser');
+
+        $themesBases = FileSystemHelper::ls('public/css/themes/', '*nextdom.css');
+        $pageData['profilsThemesBases'] = [];
+        foreach ($themesBases as $themeBase) {
+            $pageData['profilsThemesBases'][] = substr($themeBase, 0, -12);
+        }
+        $themesIdentities = FileSystemHelper::ls('public/css/themes/', 'dark*.css');
+        $pageData['profilsThemesIdentities'] = [];
+        foreach ($themesIdentities as $themeIdentity) {
+            $pageData['profilsThemesIdentities'][] = substr($themeIdentity, 5, -4);
+        }
+        $themesIcons = FileSystemHelper::ls('public/img/NextDom/', 'NextDom_Square_*.png');
+        $pageData['profilsThemesIcons'] = [];
+        foreach ($themesIcons as $themesIcon) {
+            $pageData['profilsThemesIcons'][] = substr($themesIcon, 15, -4);
+        }
+        $pageData['profilsThemeChoice'] = ConfigManager::byKey('nextdom::user-theme');
+        $pageData['profilsIconChoice'] = ConfigManager::byKey('nextdom::user-icon');
+
+        $pageData['adminCategories'] = NextDomHelper::getConfiguration('eqLogic:category');
 
         $pageData['JS_END_POOL'][] = '/public/js/desktop/params/profils.js';
 

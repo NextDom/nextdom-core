@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
+# line 100 caracters max or #pylint: disable=line-too-long
+####################################################################################################
 """Test connection page
 """
-
 import unittest
 import sys
 from time import sleep
@@ -60,6 +61,7 @@ class ConnectionPage(BaseGuiTest):
         # Wait Dashboard
         sleep(8)
         self.assertIn('Connexion', self.get_page_title())
+
 
 # Entry point
 if __name__ == "__main__":

@@ -19,7 +19,6 @@ namespace NextDom\Ajax;
 
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
-use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
@@ -53,7 +52,7 @@ class Plan3dAjax extends BaseAjax
             Utils::a2o($plan3d, NextDomHelper::fromHumanReadable($plan3d_ajax));
             $plan3d->save();
         }
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function plan3dHeader()
@@ -67,7 +66,7 @@ class Plan3dAjax extends BaseAjax
             $info['additionalData'] = $plan3d->additionalData();
             $return[] = $info;
         }
-        AjaxHelper::success($return);
+        $this->ajax->success($return);
     }
 
     public function create()
@@ -79,7 +78,7 @@ class Plan3dAjax extends BaseAjax
         $plan3d = new Plan3d();
         Utils::a2o($plan3d, json_decode(Utils::init('plan3d'), true));
         $plan3d->save();
-        AjaxHelper::success($plan3d->getHtml(Utils::init('version')));
+        $this->ajax->success($plan3d->getHtml(Utils::init('version')));
     }
 
     public function get()
@@ -90,16 +89,16 @@ class Plan3dAjax extends BaseAjax
         }
         $return = NextDomHelper::toHumanReadable(Utils::o2a($plan3d));
         $return['additionalData'] = $plan3d->additionalData();
-        AjaxHelper::success($return);
+        $this->ajax->success($return);
     }
 
     public function byName()
     {
         $plan3d = Plan3dManager::byName3dHeaderId(Utils::init('name'), Utils::init('plan3dHeader_id'));
         if (!is_object($plan3d)) {
-            AjaxHelper::success();
+            $this->ajax->success();
         }
-        AjaxHelper::success($plan3d->getHtml());
+        $this->ajax->success($plan3d->getHtml());
     }
 
     public function remove()
@@ -109,7 +108,7 @@ class Plan3dAjax extends BaseAjax
         if (!is_object($plan3d)) {
             throw new CoreException(__('Aucun plan3d correspondant'));
         }
-        AjaxHelper::success($plan3d->remove());
+        $this->ajax->success($plan3d->remove());
     }
 
     public function removeplan3dHeader()
@@ -120,7 +119,7 @@ class Plan3dAjax extends BaseAjax
             throw new CoreException(__('Objet inconnu verifiez l\'id'));
         }
         $plan3dHeader->remove();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 
     public function allHeader()
@@ -132,7 +131,7 @@ class Plan3dAjax extends BaseAjax
             unset($info_plan3dHeader['image']);
             $return[] = $info_plan3dHeader;
         }
-        AjaxHelper::success($return);
+        $this->ajax->success($return);
     }
 
     public function getplan3dHeader()
@@ -145,7 +144,7 @@ class Plan3dAjax extends BaseAjax
             throw new CoreException(__('Code d\'acces invalide'), -32005);
         }
         $return = Utils::o2a($plan3dHeader);
-        AjaxHelper::success($return);
+        $this->ajax->success($return);
     }
 
     public function saveplan3dHeader()
@@ -161,7 +160,7 @@ class Plan3dAjax extends BaseAjax
         }
         Utils::a2o($plan3dHeader, $plan3dHeader_ajax);
         $plan3dHeader->save();
-        AjaxHelper::success(Utils::o2a($plan3dHeader));
+        $this->ajax->success(Utils::o2a($plan3dHeader));
     }
 
     public function uploadModel()
@@ -204,6 +203,6 @@ class Plan3dAjax extends BaseAjax
             $plan3dHeader->setConfiguration('mtlfile', $mtlfile[0]);
         }
         $plan3dHeader->save();
-        AjaxHelper::success();
+        $this->ajax->success();
     }
 }

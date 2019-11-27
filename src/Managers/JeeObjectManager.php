@@ -52,19 +52,17 @@ class JeeObjectManager
     /**
      * Get an object by with his id.
      *
-     * @param mixed $id Identifiant de l'objet
+     * @param int $id Identifiant de l'objet
      * @return JeeObject|null
      *
      * @throws \Exception
      */
     public static function byId($id)
     {
-        if ($id == '') {
+        if ($id == '' || $id == -1) {
             return null;
         }
-        $values = array(
-            'id' => $id,
-        );
+        $values = ['id' => $id];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE id = :id';
@@ -74,7 +72,7 @@ class JeeObjectManager
     /**
      * Get an object by with his name.
      *
-     * @param $name
+     * @param string $name
      * @return JeeObject|null
      * @throws \Exception
      */

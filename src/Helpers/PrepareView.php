@@ -37,23 +37,19 @@ use Symfony\Component\Routing\Loader\YamlFileLoader;
  */
 class PrepareView
 {
-    private static $NB_THEME_COLORS = 1+20;
-
     private $currentConfig = [];
 
     /**
      * Read configuration
+     *
      * @throws \Exception
      */
     public function initConfig()
     {
         $this->currentConfig = ConfigManager::byKeys(array(
-            'enableCustomCss',
             'language',
             'nextdom::firstUse',
             'nextdom::Welcome',
-            'nextdom::waitSpinner',
-            'nextdom::theme',
             'notify::status',
             'notify::position',
             'notify::timeout',
@@ -61,10 +57,6 @@ class PrepareView
             'widget::margin',
             'widget::padding',
             'widget::radius',
-            'product_name',
-            'product_icon',
-            'product_connection_image',
-            'theme',
             'default_bootstrap_theme'));
     }
 
@@ -117,8 +109,6 @@ class PrepareView
      */
     private function initHeaderData(&$pageData)
     {
-        $pageData['PRODUCT_NAME'] = $this->currentConfig['product_name'];
-        $pageData['PRODUCT_ICON'] = $this->currentConfig['product_icon'];
         $pageData['AJAX_TOKEN'] = AjaxHelper::getToken();
         $pageData['LANGUAGE'] = $this->currentConfig['language'];
 
@@ -154,6 +144,7 @@ class PrepareView
             $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.utils/jquery.utils.js';
             $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.at.caret/jquery.at.caret.min.js';
             $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.multi-column-select/multi-column-select.js';
+            $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.ui-touch-punch/jquery.ui.touch-punch.min.js';
 
             // Add NextDom core JS
             $pageData['JS_POOL'][] = '/assets/js/core/core.js';
@@ -219,6 +210,7 @@ class PrepareView
             $pageData['JS_POOL'][] = '/vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/moment/moment.js';
+            $pageData['JS_POOL'][] = '/vendor/node_modules/vivagraphjs/dist/vivagraph.min.js';
 
             // Then Factory framwework files
             $pageData['JS_POOL'][] = '/public/js/factory/NextDomUIDGenerator.js';
@@ -259,11 +251,7 @@ class PrepareView
     private function initCssPool(&$pageData)
     {
         $pageData['CSS_POOL'][] = '/public/css/nextdom.css';
-        if (!file_exists(NEXTDOM_ROOT . '/var/public/css/theme.css')) {
-            $this->generateCssThemFile();
-        }
-        $pageData['CSS_POOL'][] = '/var/public/css/theme.css';
-        // Icônes
+        $pageData['CSS_POOL'][] = '/public/css/themes/' . ConfigManager::byKey('nextdom::user-theme', 'core', 'dark-nextdom') . '.css';
         $rootDir = NEXTDOM_ROOT . '/public/icon/';
         foreach (FileSystemHelper::ls($rootDir, '*') as $dir) {
             if (is_dir($rootDir . $dir) && file_exists($rootDir . $dir . '/style.css')) {
@@ -276,29 +264,6 @@ class PrepareView
                 $pageData['JS_POOL'][] = $highstockThemeFile;
             }
         }
-    }
-
-    /**
-     * Generate CSS Theme file
-     * Minification
-     * @throws \Exception
-     */
-    private function generateCssThemFile()
-    {
-        $pageData = [];
-        for ($colorIndex = 1; $colorIndex <= self::$NB_THEME_COLORS; ++$colorIndex) {
-            $pageData['COLOR' . $colorIndex] = NextDomHelper::getConfiguration('theme:color' . $colorIndex);
-        }
-        $pageData['ALERTALPHA'] = ConfigManager::byKey('nextdom::alertAlpha');
-        $themeContent = Render::getInstance()->get('commons/theme.html.twig', $pageData);
-        // Minification from scratch, TODO: Use real solution
-        $themeContent = preg_replace('!/\*.*?\*/!s', '', $themeContent);
-        $themeContent = str_replace("\n", "", $themeContent);
-        $themeContent = str_replace(";}", "}", $themeContent);
-        $themeContent = str_replace(": ", ":", $themeContent);
-        $themeContent = str_replace(" {", "{", $themeContent);
-        $themeContent = str_replace(", ", ",", $themeContent);
-        file_put_contents(NEXTDOM_ROOT . '/var/public/css/theme.css', $themeContent);
     }
 
     /**
@@ -460,7 +425,7 @@ class PrepareView
         if ($page == '') {
             Utils::redirect($pageData['HOMELINK']);
         } else {
-            $pageData['TITLE'] = ucfirst($page) . ' - ' . $this->currentConfig['product_name'];
+            $pageData['TITLE'] = ucfirst($page) . ' - NextDom';
         }
 
         $currentPlugin = $this->initPluginsData($pageData, $eventsJsPlugin);
@@ -478,7 +443,6 @@ class PrepareView
             'user_isAdmin' => AuthentificationHelper::isConnectedAsAdmin(),
             'user_login' => UserManager::getStoredUser()->getLogin(),
             'nextdom_Welcome' => $this->currentConfig['nextdom::Welcome'],
-            'nextdom_waitSpinner' => $this->currentConfig['nextdom::waitSpinner'],
             'notify_status' => $this->currentConfig['notify::status'],
             'notify_position' => $this->currentConfig['notify::position'],
             'notify_timeout' => $this->currentConfig['notify::timeout'],
@@ -516,6 +480,8 @@ class PrepareView
      * Get the current home link
      *
      * @return string Home link
+     *
+     * @throws \Exception
      */
     private function getHomeLink(): string
     {
@@ -599,7 +565,7 @@ class PrepareView
                     $pageData['MENU_PLUGIN'][$categoryCode][] = $plugin;
                     if ($plugin->getId() == Utils::init('m')) {
                         $currentPlugin = $plugin;
-                        $pageData['title'] = ucfirst($currentPlugin->getName()) . ' - ' . $this->currentConfig['product_name'];
+                        $pageData['title'] = ucfirst($currentPlugin->getName()) . ' - NextDom';
                     }
                     if ($plugin->getDisplay() != '' && ConfigManager::bykey('displayDesktopPanel', $plugin->getId(), 0) != 0) {
                         $pageData['PANEL_MENU'][] = $plugin;
@@ -644,6 +610,7 @@ class PrepareView
     {
         $pageData['IS_ADMIN'] = AuthentificationHelper::isConnectedAsAdmin();
         $pageData['CAN_SUDO'] = NextDomHelper::isCapable('sudo');
+        $pageData['SHOW_MOBILE_IN_MENU'] = is_dir(NEXTDOM_ROOT . '/mobile');
         $pageData['MENU_NB_MESSAGES'] = MessageManager::nbMessage();
         $pageData['NOTIFY_STATUS'] = ConfigManager::byKey('notify::status');
         if ($pageData['IS_ADMIN']) {
@@ -657,10 +624,10 @@ class PrepareView
             $pageData['MENU_CURRENT_PLUGIN_ISSUE'] = $currentPlugin->getIssue();
         }
         $pageData['MENU_HTML_GLOBAL_SUMMARY'] = JeeObjectManager::getGlobalHtmlSummary();
-        $pageData['PRODUCT_IMAGE'] = ConfigManager::byKey('product_image');
         $pageData['profilsUser'] = UserManager::getStoredUser();
         $pageData['PROFIL_AVATAR'] = UserManager::getStoredUser()->getOptions('avatar');
         $pageData['PROFIL_LOGIN'] = UserManager::getStoredUser()->getLogin();
+        $pageData['NEXTDOM_ICON'] = ConfigManager::byKey('nextdom::user-icon');
         $pageData['NEXTDOM_VERSION'] = NextDomHelper::getNextdomVersion();
         $pageData['JEEDOM_VERSION'] = NextDomHelper::getJeedomVersion();
         $coreUpdates = UpdateManager::byType('core');

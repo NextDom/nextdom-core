@@ -444,7 +444,7 @@
   });
   $('#bt_uploadImagePlan').fileupload({
     replaceFileInput: false,
-    url: 'core/ajax/plan.ajax.php?action=uploadImagePlan&id=" + id + "&nextdom_token=' + NEXTDOM_AJAX_TOKEN,
+    url: 'core/ajax/plan.ajax.php?action=uploadImagePlan&id=' + id + '&nextdom_token=' + NEXTDOM_AJAX_TOKEN,
     dataType: 'json',
     done: function (e, data) {
       if (data.result.state != 'ok') {

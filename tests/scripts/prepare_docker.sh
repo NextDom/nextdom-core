@@ -7,7 +7,7 @@ else
     rootDir=$(dirname $(dirname $(dirname $(readlink -n -f $0))))
 fi
 
-baseImage="sylvaner1664/nextdom-test:latest"
+baseImage="nextdom/nextdom-test:latest"
 if [ ! -z "$1" ]; then
     baseImage=$1;
 fi

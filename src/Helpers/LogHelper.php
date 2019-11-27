@@ -41,7 +41,6 @@ use Monolog\Logger;
 use NextDom\Com\ComShell;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\MessageManager;
-use NextDom\Singletons\PHPInformation;
 use SplFileObject;
 
 define('DEFAULT_MAX_LINES_IN_LOG', 200);
@@ -84,12 +83,45 @@ class LogHelper
      * @param string $message Message to log
      * @param string $logicalId Logical id linked to this log (optional)
      *
+     * @return bool
+     *
      * @throws \Exception
      */
     public static function addInfo($targetLog, $message, $logicalId = '')
     {
-        $message = $message . '\n' . PHPInformation::getInstance()->getCallingFunctionName(true);
-        self::add($targetLog, 'error', $message, $logicalId);
+        return self::add($targetLog, 'info', $message, $logicalId);
+    }
+
+    /**
+     * Log a debug
+     *
+     * @param string $targetLog Target log file
+     * @param string $message Message to log
+     * @param string $logicalId Logical id linked to this log (optional)
+     *
+     * @return bool
+     *
+     * @throws \Exception
+     */
+    public static function addDebug($targetLog, $message, $logicalId = '')
+    {
+        return self::add($targetLog, 'debug', $message, $logicalId);
+    }
+
+    /**
+     * Log a critical message
+     *
+     * @param string $targetLog Target log file
+     * @param string $message Message to log
+     * @param string $logicalId Logical id linked to this log (optional)
+     *
+     * @return bool
+     *
+     * @throws \Exception
+     */
+    public static function addCritical($targetLog, $message, $logicalId = '')
+    {
+        return self::add($targetLog, 'critical', $message, $logicalId);
     }
 
     /**

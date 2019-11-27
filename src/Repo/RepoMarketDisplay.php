@@ -2,6 +2,8 @@
 
 namespace NextDom\Repo;
 
+use NextDom\Enums\ConfigKey;
+use NextDom\Enums\JeedomMarketCert;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\NextDomHelper;
@@ -21,64 +23,58 @@ if (!isset($market)) {
     throw new CoreException('404 not found');
 }
 
-$market_array = Utils::o2a($market);
-$market_array['rating'] = $market->getRating();
+$marketInformations = Utils::o2a($market);
+$marketInformations['rating'] = $market->getRating();
 $update = UpdateManager::byLogicalId($market->getLogicalId());
-Utils::sendVarToJS('market_display_info', $market_array);
-?>
+Utils::sendVarToJS('market_display_info', $marketInformations);
+$marketCertification = $market->getCertification();
 
-<div class='row form-group'>
-    <div class='col-sm-2'>
-        <center>
-            <?php
-            switch ($market->getType()) {
-                case 'widget':
-                    $default_image = '/public/img/NextDom_Widget_Gray.png';
-                    break;
-                case 'plugin':
-                    $default_image = '/public/img/NextDom_Plugin_Gray.png';
-                    break;
-                case 'script':
-                    $default_image = '/public/img/NextDom_Script_Gray.png';
-                    break;
-                default:
-                    $default_image = 'public/img/NextDom_NoPicture_Gray.png';
-            }
-            $urlPath = ConfigManager::byKey('market::address') . '/' . $market->getImg('icon');
-            echo '<img src="' . $default_image . '" data-original="' . $urlPath . '"  class="lazy img-responsive" style="height : 150px;"/>';
-            ?>
-        </center>
+?>
+<style>
+    .centered {
+        text-align: center;
+    }
+</style>
+<div class="row form-group">
+    <div class="col-sm-2 centered">
+        <?php
+        switch ($market->getType()) {
+            case 'widget':
+                $default_image = '/public/img/NextDom_Widget_Gray.png';
+                break;
+            case 'plugin':
+                $default_image = '/public/img/NextDom_Plugin_Gray.png';
+                break;
+            case 'script':
+                $default_image = '/public/img/NextDom_Script_Gray.png';
+                break;
+            default:
+                $default_image = 'public/img/NextDom_NoPicture_Gray.png';
+                break;
+        }
+        $urlPath = ConfigManager::byKey(ConfigKey::MARKET_ADDRESS) . '/' . $market->getImg('icon');
+        echo '<img src="' . $default_image . '" data-original="' . $urlPath . '"  class="lazy img-responsive" style="height: 150px;"/>';
+        ?>
     </div>
     <div class='col-sm-4'>
         <input class="form-control marketAttr" data-l1key="id" style="display: none;">
-        <div class="marketAttr form-group market-modale-name" data-l1key="name" placeholder="{{Nom}}"></div>
+        <div class="marketAttr form-group market-modale-name" data-l1key="name"></div>
         <div class="span_author cursor form-group market-modale-author" data-author="<?php echo $market->getAuthor(); ?>">{{Développé par}} <?php echo $market->getAuthor(); ?></div>
         <?php
-        $certification = $market->getCertification();
-        if ($certification == 'Officiel') {
-            echo '<div class="form-group market-modale-certification market-official">';
-        }
-        if ($certification == 'Conseillé') {
-            echo '<div class="form-group market-modale-certification market-advised">';
-        }
-        if ($certification == 'Legacy') {
-            echo '<div class="form-group market-modale-certification market-legacy">';
-        }
-        if ($certification == 'Obsolète') {
-            echo '<div class="form-group market-modale-certification market-obsolete">';
-        }
-        if ($certification == 'Premium') {
-            echo '<div class="form-group market-modale-certification market-premium">';
-        }
-        if ($certification == 'Partenaire') {
-            echo '<div class="form-group market-modale-certification market-partner">';
-        }
-        if ($certification != '') {
-            echo $certification . '</div>';
+        $certificationClass = [
+            JeedomMarketCert::OFFICIAL => 'official',
+            JeedomMarketCert::ADVISED => 'advised',
+            JeedomMarketCert::LEGACY => 'legacy',
+            JeedomMarketCert::OBSOLETE => 'obsolete',
+            JeedomMarketCert::PREMIUM => 'premium',
+            JeedomMarketCert::PARTNER => 'partner'
+        ];
+        if ($marketCertification !== '' && array_key_exists($marketCertification, $certificationClass)) {
+            echo '<div class="form-group market-modale-certification market-' . $certificationClass[$marketCertification] . '">' . $marketCertification . '</div>';
         }
         global $NEXTDOM_INTERNAL_CONFIG;
         if (isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$market->getCategorie()])) {
-            echo '<div class="form-group market-modale-category"><i class="fa ' . $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$market->getCategorie()]['icon'] . '"></i> ' . $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$market->getCategorie()]['name'] . '</div>';
+            echo '<div class="form-group market-modale-category"><i aria-hidden="true" class="fa ' . $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$market->getCategorie()]['icon'] . '"></i> ' . $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$market->getCategorie()]['name'] . '</div>';
             Utils::sendVarToJS('market_display_info_category', $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$market->getCategorie()]['name']);
         } else {
             echo '<div class="form-group market-modale-category">' . $market->getCategorie() . '</div>';
@@ -93,7 +89,7 @@ Utils::sendVarToJS('market_display_info', $market_array);
                 $allowVersion = $market->getAllowVersion();
                 foreach ($allowVersion as $branch) {
                     if ($market->getStatus($branch) == 1) {
-                        echo '<a class="btn btn-default bt_installFromMarket spacing-right" data-version="' . $branch . '" data-market_logicalId="' . $market->getLogicalId() . '" data-market_id="' . $market->getId() . '" ><i class="fas fa-plus-circle spacing-right"></i>{{Installer}} ' . $branch . '</a>';
+                        echo '<a class="btn btn-default bt_installFromMarket spacing-right" data-version="' . $branch . '" data-market_logicalId="' . $market->getLogicalId() . '" data-market_id="' . $market->getId() . '" ><i aria-hidden="true" class="fas fa-plus-circle spacing-right"></i>{{Installer}} ' . $branch . '</a>';
                     }
                 }
             } else if ($market->getPrivate() === 1) {
@@ -103,12 +99,12 @@ Utils::sendVarToJS('market_display_info', $market_array);
                     $purchase_info = RepoMarket::getPurchaseInfo();
                     if (isset($purchase_info['user_id']) && is_numeric($purchase_info['user_id'])) {
                         if ($market->getCost() > 0 && $market->getPurchase() != 1) {
-                            echo '<a class="btn btn-action spacing-right" href="https://www.jeedom.com/market/index.php?v=d&p=profils#buyHistory" target="_blank"><i class="fas fa-eur spacing-right"></i>{{Code promo}}</a>';
+                            echo '<a class="btn btn-action spacing-right" href="https://www.jeedom.com/market/index.php?v=d&p=profils#buyHistory" target="_blank"><i aria-hidden="true" class="fas fa-eur spacing-right"></i>{{Code promo}}</a>';
                         }
-                        if ($market->getCertification() === 'Premium') {
-                            echo '<a class="btn btn-default spacing-right" target="_blank" href="mailto:supportpro@jeedom.com"><i class="fas fa-envelope spacing-right"></i>{{Nous Contacter}}</a>';
+                        if ($marketCertification === JeedomMarketCert::PREMIUM) {
+                            echo '<a class="btn btn-default spacing-right" target="_blank" href="mailto:supportpro@jeedom.com"><i aria-hidden="true" class="fas fa-envelope spacing-right"></i>{{Nous Contacter}}</a>';
                         } else {
-                            echo '<a class="btn btn-default" target="_blank" href="' . ConfigManager::byKey('market::address') . '/index.php?v=d&p=purchaseItem&user_id=' . $purchase_info['user_id'] . '&type=plugin&id=' . $market->getId() . '"><i class="fas fa-shopping-cart spacing-right"></i>{{Acheter}}</a>';
+                            echo '<a class="btn btn-default" target="_blank" href="' . ConfigManager::byKey('market::address') . '/index.php?v=d&p=purchaseItem&user_id=' . $purchase_info['user_id'] . '&type=plugin&id=' . $market->getId() . '"><i aria-hidden="true" class="fas fa-shopping-cart spacing-right"></i>{{Acheter}}</a>';
                         }
                     } else {
                         echo '<div class="alert alert-info">{{Cet article est payant. Vous devez avoir un compte sur le market et avoir renseigné les identifiants market dans NextDom pour pouvoir l\'acheter}}</div>';
@@ -119,11 +115,11 @@ Utils::sendVarToJS('market_display_info', $market_array);
             }
             if (is_object($update)) {
                 ?>
-                <a class="btn btn-danger" id="bt_removeFromMarket" data-market_id="<?php echo $market->getId(); ?>"><i class="fas fa-minus-circle spacing-right"></i>{{Supprimer}}</a>
+                <a class="btn btn-danger" id="bt_removeFromMarket" data-market_id="<?php echo $market->getId(); ?>"><i aria-hidden="true" class="fas fa-minus-circle spacing-right"></i>{{Supprimer}}</a>
             <?php }
             echo '</div>';
-            echo '<div class="form-group"><i class="fas fa-credit-card spacing-left spacing-right"></i>';
-            if ($market->getCertification() === 'Premium') {
+            echo '<div class="form-group"><i aria-hidden="true" class="fas fa-credit-card spacing-left spacing-right"></i>';
+            if ($marketCertification === JeedomMarketCert::PREMIUM) {
                 echo '<span data-l1key="rating" style="font-size: 1.5em;">{{Nous Contacter}}</span>';
             } else {
                 if ($market->getCost() > 0) {
@@ -140,7 +136,7 @@ Utils::sendVarToJS('market_display_info', $market_array);
         </div>
     </div>
     <?php
-    if ($market->getCertification() !== 'Officiel' && $market->getCertification() !== 'Premium' && $market->getCertification() !== 'Legacy') {
+    if ($marketCertification !== JeedomMarketCert::OFFICIAL && $marketCertification !== JeedomMarketCert::PREMIUM && $marketCertification !== JeedomMarketCert::LEGACY) {
         echo '<div class="alert alert-warning">{{Attention ce plugin n\'est pas un plugin officiel en cas de soucis avec celui-ci (direct ou indirect) toute demande de support peut être refusée}}</div>';
     }
     $compatibilityHardware = $market->getHardwareCompatibility();
@@ -151,49 +147,50 @@ Utils::sendVarToJS('market_display_info', $market_array);
 
     <?php if (count($market->getImg('screenshot')) > 0) {
         ?>
-    <div class='row form-group' style="height : 200px;">
-         <div id="plugin-carousel" class="carousel slide" data-ride="carousel">
-                    <div class="carousel-inner">
-                <?php
-                $index = 0;
-                foreach ($market->getImg('screenshot') as $screenshot) {
-                    if ($index == 0) {
-                        echo '<div class="item active">';
-                    } else {
-                        echo '<div class="item">';
+        <div class='row form-group' style="height : 200px;">
+            <div id="plugin-carousel" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    <?php
+                    $index = 0;
+                    foreach ($market->getImg('screenshot') as $screenshot) {
+                        if ($index == 0) {
+                            echo '<div class="item active">';
+                        } else {
+                            echo '<div class="item">';
+                        }
+                        echo '<img src="' . ConfigManager::byKey(ConfigKey::MARKET_ADDRESS) . '/' . $screenshot . '" style="height : 200px;">';
+                        echo '<div class="carousel-caption"></div>';
+                        echo '</div>';
+                        $index++;
                     }
-                echo '<img src="' . ConfigManager::byKey('market::address') . '/' . $screenshot . '" style="height : 200px;">';
-                echo '<div class="carousel-caption"></div>';
-                echo '</div>';
-                    $index++;
-                }
-                ?>
-                        <a class="left carousel-control text_color" href="#plugin-carousel" data-slide="prev">
-                            <span class="fa fa-angle-left"></span>
-                        </a>
-                        <a class="right carousel-control text_color" href="#plugin-carousel" data-slide="next">
-                            <span class="fa fa-angle-right"></span>
-                        </a>
-                    </div>
+                    ?>
+                    <a class="left carousel-control text_color" href="#plugin-carousel" data-slide="prev">
+                        <span class="fa fa-angle-left"></span>
+                    </a>
+                    <a class="right carousel-control text_color" href="#plugin-carousel" data-slide="next">
+                        <span class="fa fa-angle-right"></span>
+                    </a>
                 </div>
             </div>
+        </div>
     <?php }
     ?>
     <div class='row form-group'>
         <div class='col-sm-6'>
             <div class="box box-primary">
                 <div class="box-header with-border">
-                      <h3 class="box-title"><i class="fas fa-info-circle"></i>{{Description}}</h3>
+                    <h3 class="box-title"><i aria-hidden="true" class="fas fa-info-circle"></i>{{Description}}</h3>
                 </div>
                 <div class="box-body">
-                    <form class="form-horizontal"><fieldset>
-                        <span class="marketAttr market-description" data-l1key="description"></span>
+                    <form class="form-horizontal">
+                        <fieldset>
+                            <span class="marketAttr market-description" data-l1key="description"></span>
                     </form>
                 </div>
                 <div class="box-footer">
                     <form class="form-horizontal">
-                        <a class="btn btn-primary pull-left" target="_blank" href="<?php echo $market->getDoc() ?>"><i class="fas fa-book spacing-right"></i>{{Documentation}}</a>
-                        <a class="btn btn-default pull-right" target="_blank" href="<?php echo $market->getChangelog() ?>"><i class="fas fa-list spacing-right"></i>{{Changelog}}</a>
+                        <a class="btn btn-primary pull-left" target="_blank" href="<?php echo $market->getDoc() ?>"><i aria-hidden="true" class="fas fa-book spacing-right"></i>{{Documentation}}</a>
+                        <a class="btn btn-default pull-right" target="_blank" href="<?php echo $market->getChangelog() ?>"><i aria-hidden="true" class="fas fa-list spacing-right"></i>{{Changelog}}</a>
                     </form>
                 </div>
             </div>
@@ -201,32 +198,30 @@ Utils::sendVarToJS('market_display_info', $market_array);
         <div class='col-sm-6'>
             <div class="box box-warning">
                 <div class="box-header with-border">
-                      <h3 class="box-title"><i class="fas fa-drafting-compass"></i>{{Compatibilité plateforme}}</h3>
+                    <h3 class="box-title"><i aria-hidden="true" class="fas fa-drafting-compass"></i>{{Compatibilité plateforme}}</h3>
                 </div>
                 <div class="box-body">
-                    <form class="form-horizontal"><fieldset>
-                        <?php
-                        $oneCompatibility=0;
-                        if ($market->getHardwareCompatibility('diy') == 1) {
-                            echo '<img src="/public/img/logo_diy.png" class="market-compatibility"/>';
-                            $oneCompatibility=1;
-                        }
-                        if ($market->getHardwareCompatibility('rpi') == 1) {
-                            echo '<img src="/public/img/logo_rpi12.png" class="market-compatibility"/>';
-                            $oneCompatibility=1;
-                        }
-                        if ($market->getHardwareCompatibility('docker') == 1) {
-                            echo '<img src="/public/img/logo_docker.png" class="market-compatibility"/>';
-                            $oneCompatibility=1;
-                        }
-                        if ($market->getHardwareCompatibility('miniplus') == 1) {
-                            echo '<img src="/public/img/logo_nextdomboard.png" class="market-compatibility"/>';
-                            $oneCompatibility=1;
-                        }
-                        if ($oneCompatibility == 0) {
-                            echo '<img src="/public/img/logo_notset.png" class="market-compatibility"/>';
-                        }
-                        ?>
+                    <form class="form-horizontal">
+                        <fieldset>
+                            <?php
+                            $oneCompatibility = 0;
+                            $compatibilityIcons = [
+                                'diy' => 'diy',
+                                'rpi' => 'rpi12',
+                                'docker' => 'docker',
+                                'miniplus' => 'nextdomboard',
+                            ];
+
+                            foreach ($compatibilityIcons as $hardware => $icon) {
+                                if ($market->getHardwareCompatibility($hardware) == 1) {
+                                    echo '<img src="/public/img/logo_' . $icon . '.png" class="market-compatibility"/>';
+                                    $oneCompatibility = 1;
+                                }
+                            }
+                            if ($oneCompatibility == 0) {
+                                echo '<img src="/public/img/logo_notset.png" class="market-compatibility"/>';
+                            }
+                            ?>
                     </form>
                 </div>
             </div>
@@ -236,28 +231,25 @@ Utils::sendVarToJS('market_display_info', $market_array);
         <div class='col-sm-6'>
             <div class="box box-primary">
                 <div class="box-header with-border">
-                      <h3 class="box-title"><i class="fas fa-comments"></i>{{Avis}}</h3>
+                    <h3 class="box-title"><i aria-hidden="true" class="fas fa-comments"></i>{{Avis}}</h3>
                 </div>
                 <div class="box-body market-modale-body">
-                    <form class="form-horizontal"><fieldset>
-                        <div class='col-sm-6'>
-                            <center>
+                    <form class="form-horizontal">
+                        <fieldset>
+                            <div class="col-sm-6 centered">
                                 <span class="marketAttr market-modale-rating" data-l1key="rating"></span>/5
-                            </center>
-                        </div>
-                        <div class='col-sm-6'>
-                            <?php if (ConfigManager::byKey('market::apikey') != '' || (ConfigManager::byKey('market::username') != '' && ConfigManager::byKey('market::password') != '')) { ?>
-                                <center>
-                                    <div class="form-group">
-                                        <label class="col-sm-4 control-label">{{Ma Note}}</label>
-                                    </div>
-                                    <div class="form-group">
-                                        <span><input style="display:none;" type="number" class="rating" id="in_myRating" data-max="5" data-empty-value="0" data-min="1" data-clearable="Effacer" value="<?php echo $market->getRating('user') ?>"/></span>
-                                    </div>
-                                </center>
-                            <?php }
-                            ?>
-                        </div>
+                            </div>
+                            <div class="col-sm-6 centered">
+                                <?php if (ConfigManager::byKey('market::apikey') != '' || (ConfigManager::byKey('market::username') != '' && ConfigManager::byKey('market::password') != '')) { ?>
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label">{{Ma Note}}</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <span><input style="display:none;" type="number" class="rating" id="in_myRating" data-max="5" data-empty-value="0" data-min="1" data-clearable="Effacer" value="<?php echo $market->getRating('user') ?>"/></span>
+                                        </div>
+                                <?php }
+                                ?>
+                            </div>
                     </form>
                 </div>
             </div>
@@ -265,11 +257,12 @@ Utils::sendVarToJS('market_display_info', $market_array);
         <div class='col-sm-6'>
             <div class="box box-success">
                 <div class="box-header with-border">
-                      <h3 class="box-title"><i class="fas fa-business-time"></i>{{Utilisation}}</h3>
+                    <h3 class="box-title"><i aria-hidden="true" class="fas fa-business-time"></i>{{Utilisation}}</h3>
                 </div>
                 <div class="box-body market-modale-body">
-                    <form class="form-horizontal"><fieldset>
-                        <span class="marketAttr market-description" data-l1key="utilization"></span>
+                    <form class="form-horizontal">
+                        <fieldset>
+                            <span class="marketAttr market-description" data-l1key="utilization"></span>
                     </form>
                 </div>
             </div>
@@ -279,29 +272,30 @@ Utils::sendVarToJS('market_display_info', $market_array);
         <div class='col-sm-12'>
             <div class="box">
                 <div class="box-header with-border">
-                      <h3 class="box-title"><i class="fas fa-barcode"></i>{{Informations complementaires}}</h3>
+                    <h3 class="box-title"><i aria-hidden="true" class="fas fa-barcode"></i>{{Informations complementaires}}</h3>
                 </div>
                 <div class="box-body market-modale-body">
-                    <form class="form-horizontal"><fieldset>
-                        <div class='col-sm-2'>
-                            <label class="control-label">{{Taille}}</label><br/>
-                            <span><?php echo $market->getParameters('size'); ?></span>
-                        </div>
-                        <div class='col-sm-2'>
-                            <label class="control-label">{{Lien}}</label><br/>
-                            <?php if ($market->getLink('video') != '' && $market->getLink('video') != 'null') { ?>
-                                <a class="btn btn-default btn-xs" target="_blank" href="<?php echo $market->getLink('video'); ?>"><i class="fa fa-youtube"></i> Video</a><br/>
-                            <?php }
-                            ?>
-                            <?php if ($market->getLink('forum') != '' && $market->getLink('forum') != 'null') { ?>
-                                <a class="btn btn-default btn-xs" target="_blank" href="<?php echo $market->getLink('forum'); ?>"><i class="fa fa-users"></i> Forum</a><br/>
-                            <?php }
-                            ?>
-                        </div>
-                        <div class='col-sm-2'>
-                            <label class="control-label">{{Installation}}</label>
-                            <span class="marketAttr"><?php echo $market->getNbInstall() ?></span>
-                        </div>
+                    <form class="form-horizontal">
+                        <fieldset>
+                            <div class='col-sm-2'>
+                                <label class="control-label">{{Taille}}</label><br/>
+                                <span><?php echo $market->getParameters('size'); ?></span>
+                            </div>
+                            <div class='col-sm-2'>
+                                <label class="control-label">{{Lien}}</label><br/>
+                                <?php if ($market->getLink('video') != '' && $market->getLink('video') != 'null') { ?>
+                                    <a class="btn btn-default btn-xs" target="_blank" href="<?php echo $market->getLink('video'); ?>"><i aria-hidden="true" class="fa fa-youtube"></i> Video</a><br/>
+                                <?php }
+                                ?>
+                                <?php if ($market->getLink('forum') != '' && $market->getLink('forum') != 'null') { ?>
+                                    <a class="btn btn-default btn-xs" target="_blank" href="<?php echo $market->getLink('forum'); ?>"><i aria-hidden="true" class="fa fa-users"></i> Forum</a><br/>
+                                <?php }
+                                ?>
+                            </div>
+                            <div class='col-sm-2'>
+                                <label class="control-label">{{Installation}}</label>
+                                <span class="marketAttr"><?php echo $market->getNbInstall() ?></span>
+                            </div>
 
                         <div class='col-sm-1'>
                             <label class="control-label">{{Type}}</label><br/>
@@ -310,24 +304,24 @@ Utils::sendVarToJS('market_display_info', $market_array);
                         <div class='col-sm-2'>
                             <label class="control-label">{{Langue disponible}}</label><br/>
                             <?php
-                            echo '<img src="/public/img/francais.png" width="30" />';
+                            echo '<img src="/public/img/flags/francais.png" width="30" />';
                             if ($market->getLanguage('en_US') == 1) {
-                                echo '<img src="/public/img/anglais.png" width="30" />';
+                                echo '<img src="/public/img/flags/anglais.png" width="30" />';
                             }
                             if ($market->getLanguage('de_DE') == 1) {
-                                echo '<img src="/public/img/allemand.png" width="30" />';
+                                echo '<img src="/public/img/flags/allemand.png" width="30" />';
                             }
                             if ($market->getLanguage('sp_SP') == 1) {
-                                echo '<img src="/public/img/espagnol.png" width="30" />';
+                                echo '<img src="/public/img/flags/espagnol.png" width="30" />';
                             }
                             if ($market->getLanguage('ru_RU') == 1) {
-                                echo '<img src="/public/img/russe.png" width="30" />';
+                                echo '<img src="/public/img/flags/russe.png" width="30" />';
                             }
                             if ($market->getLanguage('id_ID') == 1) {
-                                echo '<img src="/public/img/indonesien.png" width="30" />';
+                                echo '<img src="/public/img/flags/indonesien.png" width="30" />';
                             }
                             if ($market->getLanguage('it_IT') == 1) {
-                                echo '<img src="/public/img/italien.png" width="30" />';
+                                echo '<img src="/public/img/flags/italien.png" width="30" />';
                             }
                             ?>
                         </div>

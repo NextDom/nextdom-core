@@ -54,7 +54,9 @@ class FileSystemHelper
      */
     public static function includeFile($_folder, $_filename, $_type, $_plugin = '', $translate = false)
     {
-        // Aucune particularité pour les 3rdparty
+        if(strpos($_folder,'..') !== false || strpos($_filename,'..') !== false){
+            return;
+        }        // Aucune particularité pour les 3rdparty
         if ($_folder == '3rdparty') {
             if ($_plugin === '') {
                 $file = sprintf("%s/%s.%s", $_folder, $_filename, $_type);
@@ -107,7 +109,7 @@ class FileSystemHelper
             $path = NEXTDOM_ROOT . '/' . $_folder . '/' . $_filename;
         }
         if (!file_exists($path)) {
-            throw new CoreException('Fichier introuvable : ' . $path, 35486);
+            throw new CoreException('Fichier introuvable : ' . Utils::secureXSS($path), 35486);
         }
         if ($type == 'php') {
             // Les fichiers php sont traduits
@@ -216,23 +218,36 @@ class FileSystemHelper
     public static function getTemplateFileContent($folder, $version, $filename, $pluginId = '' , $theme = ''): string
     {
         $result = '';
-        $filePath = '';
+        $filePath = NEXTDOM_ROOT . '/';
         if ($pluginId == '') {
             if ($folder === 'core') {
                 $folder = 'views';
             }
             if ($theme == '') {
-                $filePath = NEXTDOM_ROOT . '/' . $folder . '/templates/' . $version . '/' . $filename . '.html';
+                $filePath .= $folder . '/templates/' . $version . '/' . $filename . '.html';
             } else {
-                $filePath = NEXTDOM_ROOT . '/' . $folder . '/templates/' . $version . '/themes/' . $theme . '/' . $filename . '.html';
+                $filePath .= $folder . '/templates/' . $version . '/themes/' . $theme . '/' . $filename . '.html';
             }
         } else {
-            $filePath = NEXTDOM_ROOT . '/plugins/' . $pluginId . '/core/template/' . $version . '/' . $filename . '.html';
+            $filePath .= 'plugins/' . $pluginId . '/core/template/' . $version . '/' . $filename . '.html';
         }
         if (file_exists($filePath)) {
             $result = file_get_contents($filePath);
         }
         return $result;
+    }
+
+    /**
+     * Read content of a core template file
+     * @param string $version View version
+     * @param string $filename Name of the template file
+     * @param string $pluginId Plugin (todo: remove)
+     * @param string $theme Theme if necessary
+     * @return string
+     */
+    public static function getCoreTemplateFileContent($version, $filename, $pluginId = '', $theme = ''): string
+    {
+        return self::getTemplateFileContent('views', $version, $filename, $pluginId, $theme);
     }
 
     /**
@@ -477,6 +492,19 @@ class FileSystemHelper
             }
         }
         return true;
+    }
+
+    /**
+     * @abstract removes file
+     * @param $file
+     * @return bool
+     */
+    public static function rrmfile($file): bool
+    {
+        if (file_exists($file)) {
+            return unlink($file);
+        }
+        return false;
     }
 
     /**
