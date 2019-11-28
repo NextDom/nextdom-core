@@ -30,6 +30,7 @@ class ConfigKey extends Enum
     const LOG_LEVEL = 'log::level';
     const MARKET_ADDRESS = 'market::address';
     const NEXTDOM_INSTALL_KEY = 'nextdom::installKey';
+    const OBJECT_SUMMARY = 'object:summary';
     const TMP_FOLDER = 'folder::tmp';
     const WIDGET_BACKGROUND_OPACITY = 'widget::background-opacity';
 }

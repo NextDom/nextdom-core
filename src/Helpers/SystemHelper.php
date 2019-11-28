@@ -30,13 +30,13 @@ class SystemHelper
     /**
      * @var array Distribution specific commands
      */
-    private static $commands = array(
-        'suse' => array('cmd_check' => ' rpm -qa | grep ', 'cmd_install' => ' zypper in --non-interactive ', 'www-uid' => 'wwwrun', 'www-gid' => 'www', 'type' => 'zypper'),
-        'sles' => array('cmd_check' => ' rpm -qa | grep ', 'cmd_install' => ' zypper in --non-interactive ', 'www-uid' => 'wwwrun', 'www-gid' => 'www', 'type' => 'zypper'),
-        'redhat' => array('cmd_check' => ' rpm -qa | grep ', 'cmd_install' => ' yum install ', 'www-uid' => 'www-data', 'www-gid' => 'www-data', 'type' => 'yum'),
-        'fedora' => array('cmd_check' => ' rpm -qa | grep ', 'cmd_install' => ' dnf install ', 'www-uid' => 'www-data', 'www-gid' => 'www-data', 'type' => 'dnf'),
-        'debian' => array('cmd_check' => ' dpkg --get-selections | grep -v deinstall | grep ', 'cmd_install' => ' apt-get install -y ', 'www-uid' => 'www-data', 'www-gid' => 'www-data', 'type' => 'apt'),
-    );
+    private static $commands = [
+        'suse' => ['cmd_check' => ' rpm -qa | grep ', 'cmd_install' => ' zypper in --non-interactive ', 'www-uid' => 'wwwrun', 'www-gid' => 'www', 'type' => 'zypper'],
+        'sles' => ['cmd_check' => ' rpm -qa | grep ', 'cmd_install' => ' zypper in --non-interactive ', 'www-uid' => 'wwwrun', 'www-gid' => 'www', 'type' => 'zypper'],
+        'redhat' => ['cmd_check' => ' rpm -qa | grep ', 'cmd_install' => ' yum install ', 'www-uid' => 'www-data', 'www-gid' => 'www-data', 'type' => 'yum'],
+        'fedora' => ['cmd_check' => ' rpm -qa | grep ', 'cmd_install' => ' dnf install ', 'www-uid' => 'www-data', 'www-gid' => 'www-data', 'type' => 'dnf'],
+        'debian' => ['cmd_check' => ' dpkg --get-selections | grep -v deinstall | grep ', 'cmd_install' => ' apt-get install -y ', 'www-uid' => 'www-data', 'www-gid' => 'www-data', 'type' => 'apt'],
+    ];
 
     /**
      * @return int
@@ -164,11 +164,11 @@ class SystemHelper
      */
     public static function ps(string $find, $without = null)
     {
-        $return = array();
+        $return = [];
         $cmd = '(ps ax || ps w) | grep -ie "' . $find . '" | grep -v "grep"';
         if ($without !== null) {
             if (!is_array($without)) {
-                $without = array($without);
+                $without = [$without];
             }
             foreach ($without as $value) {
                 $cmd .= ' | grep -v "' . $value . '"';
@@ -178,13 +178,13 @@ class SystemHelper
         if (!is_array($results) || count($results) == 0) {
             return $return;
         }
-        $order = array('pid', 'tty', 'stat', 'time', 'command');
+        $order = ['pid', 'tty', 'stat', 'time', 'command'];
         foreach ($results as $result) {
             if (trim($result) == '') {
                 continue;
             }
             $explodes = explode(" ", $result);
-            $info = array();
+            $info = [];
             $i = 0;
             foreach ($explodes as $value) {
                 if (trim($value) == '') {
@@ -331,7 +331,7 @@ class SystemHelper
     public static function getMemInfo()
     {
         $data = explode("\n", file_get_contents("/proc/meminfo"));
-        $meminfo = array();
+        $meminfo = [];
         foreach ($data as $line) {
             $info = explode(":", $line);
             if (count($info) != 2) {
@@ -395,8 +395,9 @@ class SystemHelper
      */
     public static function stopService(string $serviceName)
     {
-        return exec(self::getCmdSudo() . ' service ' . $serviceName .' stop');
+        return exec(self::getCmdSudo() . ' service ' . $serviceName . ' stop');
     }
+
     /**
      * Start a service
      *
@@ -406,7 +407,12 @@ class SystemHelper
      */
     public static function startService(string $serviceName)
     {
-        return exec(self::getCmdSudo() . ' service ' . $serviceName .' start');
+        return exec(self::getCmdSudo() . ' service ' . $serviceName . ' start');
+    }
+
+    public static function getSystemInformations()
+    {
+        return shell_exec('uname -a');
     }
 
     /**

@@ -1,4 +1,3 @@
-
 /* This file is part of Jeedom.
  *
  * Jeedom is free software: you can redistribute it and/or modify
@@ -16,41 +15,17 @@
  */
 
 
- nextdom.network = function () {
- };
-
- nextdom.network.restartDns = function (_params) {
-    var paramsRequired = [];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/network.ajax.php';
-    paramsAJAX.data = {
-        action: 'restartDns',
-    };
-    $.ajax(paramsAJAX);
+nextdom.network = function () {
 };
 
-nextdom.network.stopDns = function (_params) {
-    var paramsRequired = [];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/network.ajax.php';
-    paramsAJAX.data = {
-        action: 'stopDns',
-    };
-    $.ajax(paramsAJAX);
+nextdom.network.restartDns = function (queryParams) {
+  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
+  var ajaxParams = nextdom.private.getAjaxParams(params, 'Network', 'restartDns');
+  $.ajax(ajaxParams);
+};
+
+nextdom.network.stopDns = function (queryParams) {
+  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
+  var ajaxParams = nextdom.private.getAjaxParams(params, 'Network', 'stopDns');
+  $.ajax(ajaxParams);
 };

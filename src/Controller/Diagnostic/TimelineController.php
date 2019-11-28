@@ -23,12 +23,7 @@
 namespace NextDom\Controller\Diagnostic;
 
 use NextDom\Controller\BaseController;
-use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
-use NextDom\Managers\CmdManager;
-use NextDom\Managers\ConfigManager;
-use NextDom\Managers\JeeObjectManager;
-use NextDom\Managers\PluginManager;
 
 /**
  * Class TimelineController

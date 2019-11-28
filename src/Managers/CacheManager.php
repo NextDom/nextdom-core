@@ -34,6 +34,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Enums\DateFormat;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
@@ -103,7 +104,7 @@ class CacheManager
         }
         if ($details) {
             $re = '/s:\d*:(.*?);s:\d*:"(.*?)";s/';
-            $result = array();
+            $result = [];
             foreach (FileSystemHelper::ls(self::getFolder()) as $folder) {
                 foreach (FileSystemHelper::ls(self::getFolder() . '/' . $folder) as $file) {
                     $path = self::getFolder() . '/' . $folder . '/' . $file;
@@ -225,7 +226,7 @@ class CacheManager
      */
     public static function search(): array
     {
-        return array();
+        return [];
     }
 
     /**
@@ -323,7 +324,7 @@ class CacheManager
             return;
         }
         $re = '/s:\d*:(.*?);s:\d*:"(.*?)";s/';
-        $result = array();
+        $result = [];
         foreach (FileSystemHelper::ls(self::getFolder()) as $folder) {
             foreach (FileSystemHelper::ls(self::getFolder() . '/' . $folder) as $file) {
                 $path = self::getFolder() . '/' . $folder . '/' . $file;
@@ -339,7 +340,7 @@ class CacheManager
                 $result[] = $matches[2][0];
             }
         }
-        $cleanCache = array(
+        $cleanCache = [
             'cmdCacheAttr' => 'cmd',
             'cmd' => 'cmd',
             'eqLogicCacheAttr' => 'eqLogic',
@@ -347,7 +348,7 @@ class CacheManager
             'scenarioCacheAttr' => 'scenario',
             'cronCacheAttr' => 'cron',
             'cron' => 'cron',
-        );
+        ];
         foreach ($result as $key) {
             $matches = null;
             if (strpos($key, '::lastCommunication') !== false) {
@@ -474,7 +475,7 @@ class CacheManager
         if (!is_object($cache)) {
             $cache = new Cache();
             $cache->setKey($key)
-                ->setDatetime(date('Y-m-d H:i:s'));
+                ->setDatetime(date(DateFormat::FULL));
         }
         return $cache;
     }

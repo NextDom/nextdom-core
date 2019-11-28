@@ -121,7 +121,7 @@ class Render
      * @param string $view
      * @param array $data
      */
-    public function show($view, $data = array())
+    public function show($view, $data = [])
     {
         echo $this->get($view, $data);
     }
@@ -131,7 +131,7 @@ class Render
      * @param array $data
      * @return mixed
      */
-    public function get($view, $data = array())
+    public function get($view, $data = [])
     {
         $data['debugbar'] = $this->showDebugBar();
         try {

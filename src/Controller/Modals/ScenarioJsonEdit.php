@@ -22,6 +22,7 @@
 
 namespace NextDom\Controller\Modals;
 
+use NextDom\Enums\AjaxParams;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
@@ -43,14 +44,14 @@ class ScenarioJsonEdit extends BaseAbstractModal
     public static function get(): string
     {
 
-        $scenarioId = Utils::init('id');
+        $scenarioId = Utils::init(AjaxParams::ID);
         $pageData = [];
         $scenario = ScenarioManager::byId($scenarioId);
         if (!is_object($scenario)) {
             throw new CoreException(__('Aucun scénario ne correspondant à : ') . $scenarioId);
         }
         Utils::sendVarToJs('scenarioJsonEdit_scenario_id', $scenarioId);
-        $json = array();
+        $json = [];
         foreach ($scenario->getElement() as $element) {
             $json[] = $element->getAjaxElement();
         }

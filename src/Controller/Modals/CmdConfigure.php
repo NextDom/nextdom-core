@@ -22,6 +22,8 @@
 
 namespace NextDom\Controller\Modals;
 
+use NextDom\Enums\CmdSubType;
+use NextDom\Enums\CmdType;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
@@ -51,7 +53,7 @@ class CmdConfigure extends BaseAbstractModal
             throw new CoreException(__('Commande non trouvé : ') . $cmdId);
         }
         $cmdInfo = NextDomHelper::toHumanReadable(Utils::o2a($cmd));
-        foreach (array('dashboard', 'dview', 'mview', 'dplan') as $value) {
+        foreach (['dashboard', 'dview', 'mview', 'dplan'] as $value) {
             if (!isset($cmdInfo['html'][$value]) || $cmdInfo['html'][$value] == '') {
                 $cmdInfo['html'][$value] = $cmd->getWidgetTemplateCode($value);
             }
@@ -72,7 +74,7 @@ class CmdConfigure extends BaseAbstractModal
             $pageData['cmdCacheValue'] = $cmd->getCache('value');
             $pageData['cmdCollectDate'] = $cmd->getCache('collectDate');
             $pageData['cmdValueDate'] = $cmd->getCache('valueDate');
-            if ($cmd->getSubType() == 'numeric') {
+            if ($cmd->isSubType(CmdSubType::NUMERIC)) {
                 $pageData['cmdShowMinMax'] = true;
             }
         }
@@ -80,7 +82,7 @@ class CmdConfigure extends BaseAbstractModal
         $pageData['cmdUsedBy'] = $cmd->getUsedBy();
         $pageData['cmdGenericTypes'] = NextDomHelper::getConfiguration('cmd::generic_type');
 
-        $pageData['cmdGenericTypeInformations'] = array();
+        $pageData['cmdGenericTypeInformations'] = [];
         foreach (NextDomHelper::getConfiguration('cmd::generic_type') as $key => $info) {
             if (strtolower($cmd->getType()) != strtolower($info['type'])) {
                 continue;
@@ -102,7 +104,7 @@ class CmdConfigure extends BaseAbstractModal
         }
         global $NEXTDOM_INTERNAL_CONFIG;
         $pageData['cmdTypeIsHistorized'] = false;
-        if ($cmd->getType() == 'info' && $NEXTDOM_INTERNAL_CONFIG['cmd']['type']['info']['subtype'][$cmd->getSubType()]['isHistorized']['visible']) {
+        if ($cmd->isType(CmdType::INFO) && $NEXTDOM_INTERNAL_CONFIG['cmd']['type']['info']['subtype'][$cmd->getSubType()]['isHistorized']['visible']) {
             $pageData['cmdIsHistorizedCanBeSmooth'] = $NEXTDOM_INTERNAL_CONFIG['cmd']['type']['info']['subtype'][$cmd->getSubType()]['isHistorized']['canBeSmooth'];
             $pageData['cmdTypeIsHistorized'] = true;
             $pageData['cmdIsHistorized'] = $cmd->getIsHistorized();
@@ -110,8 +112,8 @@ class CmdConfigure extends BaseAbstractModal
 
         $pageData['cmdWidgetCanCustomHtml'] = $cmd->widgetPossibility('custom::htmlCode');
         if ($pageData['cmdWidgetCanCustomHtml']) {
-            $html = array();
-            foreach (array('dashboard', 'dview', 'mview', 'dplan') as $value) {
+            $html = [];
+            foreach (['dashboard', 'dview', 'mview', 'dplan'] as $value) {
                 if ($cmd->getHtml($value) == '') {
                     $html[$value] = str_replace('textarea>', 'textarea$>', $cmd->getWidgetTemplateCode($value));
                 } else {

@@ -1,8 +1,14 @@
+dist: trusty
 language: php
 php:
     - 7.3
 services:
     - docker
+#addons:
+#    sonarcloud:
+#        organization: "nextdom"
+#        token:
+#            secure: GtxUlb7OHChNapdoSpicL5YFLzNLXF7qEjRLk+mjYb7UF8drSSj67L6pxohbCl01kbG8OtEazzplzsnNpbrHhyAwfyuKtP8NYOOcC6nMptDUF9Fx1i45vM7Vom+pPnzPRxztLqZfZ2e1Ua9XrEFybZ7aiAN+KufYSrXwjoI6Ngt7xY76lbbwj4O+2mdR4OCR5YoC6NbdeOBclWTF2fER9bda1rAOTeNkht/+ZRvrPWVv43ELzXUAHFz4A9nqIx+v4ho+9Gy1qpv7B7OUQPlNqkHZL1UWgZ48XZ8Cz8boBrce9mPsHcxjXyB+hfMfbljNbweEMERTilz0q2pT30Cn2WBRaf+/BMau2LHaUxMS26pp4V5dvVIlmAW4nJbYOT2FFTG0HXAxMuRvzCC+3PdUHK08/BUET6NNitnCwf2+E+Zwva53wautdpgfC9sk+G+DbevkXAcQoOfhHXR8jMFBurZEsXEkpiQLpgplT7YS5iOtpq50eaBH6CYH0mutFB7z4tEV4/3V7WN02aJ/5HJY5lrXx4eMoI+AHp69iVmGdT27fWG7GvbOh+Mb2yYSJAQANSH3DnAV0rA/sFLTW1wmht8P9/Ms+lprIytzj1dBdcKwyUBUtGgtx3HZBJqL+P9YfQaFWNZJrvr0W2TeN4PPtnc7MwXPsoK3vGk5GygJMTE=
 before_install:
     - docker pull nextdom/nextdom-test:latest
     - mkdir -p tests/coverage
@@ -37,3 +43,7 @@ after_script:
     - ls tests/coverage/
     - sed -i "s/\/usr\/share\/nextdom\///g" tests/coverage/clover.xml
     - php vendor/bin/php-coveralls -v
+#    - sonar-scanner -X
+#env:
+#    global:
+#        secure: GtxUlb7OHChNapdoSpicL5YFLzNLXF7qEjRLk+mjYb7UF8drSSj67L6pxohbCl01kbG8OtEazzplzsnNpbrHhyAwfyuKtP8NYOOcC6nMptDUF9Fx1i45vM7Vom+pPnzPRxztLqZfZ2e1Ua9XrEFybZ7aiAN+KufYSrXwjoI6Ngt7xY76lbbwj4O+2mdR4OCR5YoC6NbdeOBclWTF2fER9bda1rAOTeNkht/+ZRvrPWVv43ELzXUAHFz4A9nqIx+v4ho+9Gy1qpv7B7OUQPlNqkHZL1UWgZ48XZ8Cz8boBrce9mPsHcxjXyB+hfMfbljNbweEMERTilz0q2pT30Cn2WBRaf+/BMau2LHaUxMS26pp4V5dvVIlmAW4nJbYOT2FFTG0HXAxMuRvzCC+3PdUHK08/BUET6NNitnCwf2+E+Zwva53wautdpgfC9sk+G+DbevkXAcQoOfhHXR8jMFBurZEsXEkpiQLpgplT7YS5iOtpq50eaBH6CYH0mutFB7z4tEV4/3V7WN02aJ/5HJY5lrXx4eMoI+AHp69iVmGdT27fWG7GvbOh+Mb2yYSJAQANSH3DnAV0rA/sFLTW1wmht8P9/Ms+lprIytzj1dBdcKwyUBUtGgtx3HZBJqL+P9YfQaFWNZJrvr0W2TeN4PPtnc7MwXPsoK3vGk5GygJMTE=

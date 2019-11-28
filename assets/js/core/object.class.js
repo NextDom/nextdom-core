@@ -1,4 +1,3 @@
-
 /* This file is part of Jeedom.
  *
  * Jeedom is free software: you can redistribute it and/or modify
@@ -16,316 +15,244 @@
  */
 
 
- nextdom.object = function() {
- };
+nextdom.object = function () {
+};
 
- nextdom.object.cache = Array();
+nextdom.object.cache = Array();
 
- if (!isset(nextdom.object.cache.getEqLogic)) {
-    nextdom.object.cache.getEqLogic = Array();
+if (!isset(nextdom.object.cache.getEqLogic)) {
+  nextdom.object.cache.getEqLogic = Array();
 }
 
 if (!isset(nextdom.object.cache.byId)) {
-    nextdom.object.cache.byId = Array();
+  nextdom.object.cache.byId = Array();
 }
 
-nextdom.object.getEqLogic = function(_params) {
-    var paramsRequired = ['id'];
-    var paramsSpecifics = {
-        pre_success: function(data) {
-            nextdom.object.cache.getEqLogic[_params.id] = data.result;
-            return data;
-        }
-    };
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
+nextdom.object.getEqLogic = function (queryParams) {
+  var paramsRequired = ['id'];
+  var paramsSpecifics = {
+    pre_success: function (data) {
+      nextdom.object.cache.getEqLogic[queryParams.id] = data.result;
+      return data;
     }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
+  };
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
     if (isset(nextdom.object.cache.getEqLogic[params.id])) {
-        params.success(nextdom.object.cache.getEqLogic[params.id]);
-        return;
+      params.success(nextdom.object.cache.getEqLogic[params.id]);
+      return;
     }
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/eqLogic.ajax.php';
-    paramsAJAX.data = {
-        action: "listByObject",
-        object_id: _params.id,
-        onlyEnable: _params.onlyEnable || 0,
-        orderByName : _params.orderByName || 0
-    };
-    $.ajax(paramsAJAX);
+    var ajaxParams = nextdom.private.getAjaxParams(params, 'EqLogic', 'listByObject');
+    ajaxParams.data['object_id'] = queryParams.id;
+    ajaxParams.data['onlyEnable'] = queryParams.onlyEnable || 0;
+    ajaxParams.data['orderByName'] = queryParams.orderByName || 0;
+    $.ajax(ajaxParams);
+  }
 };
 
-nextdom.object.all = function(_params) {
-    var paramsRequired = [];
-    var paramsSpecifics = {
-        pre_success: function(data) {
-            if(!isset(_params.onlyHasEqLogic)){
-                nextdom.object.cache.all = data.result;
-            }
-            return data;
-        }
-    };
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
+nextdom.object.all = function (queryParams) {
+  var paramsRequired = [];
+  var paramsSpecifics = {
+    pre_success: function (data) {
+      if (!isset(queryParams.onlyHasEqLogic)) {
+        nextdom.object.cache.all = data.result;
+      }
+      return data;
     }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    if (isset(nextdom.object.cache.all) && !isset(_params.onlyHasEqLogic)) {
-        params.success(nextdom.object.cache.all);
-        return;
+  };
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+    if (isset(nextdom.object.cache.all) && !isset(queryParams.onlyHasEqLogic)) {
+      params.success(nextdom.object.cache.all);
+      return;
     }
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/object.ajax.php';
-    paramsAJAX.data = {
-        action: 'all',
-        onlyHasEqLogic : _params.onlyHasEqLogic || '',
-        searchOnchild : _params.searchOnchild || '1'
-    };
-    $.ajax(paramsAJAX);
+    var ajaxParams = nextdom.private.getAjaxParams(params, 'Object', 'all');
+    ajaxParams.data['onlyHasEqLogic'] = queryParams.onlyHasEqLogic || 0;
+    ajaxParams.data['searchOnchild'] = queryParams.searchOnchild || 0;
+    $.ajax(ajaxParams);
+  }
 };
 
-nextdom.object.toHtml = function(_params) {
-    var paramsRequired = ['id'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/object.ajax.php';
-    paramsAJAX.data = {
-        action: 'toHtml',
-        id: ($.isArray(_params.id)) ? json_encode(_params.id) : _params.id,
-        version: _params.version || 'dashboard',
-        category :  _params.category || 'all',
-        summary :  _params.summary || '',
-        tag :  _params.tag || 'all'
-    };
-    $.ajax(paramsAJAX);
+nextdom.object.toHtml = function (queryParams) {
+  var paramsRequired = ['id'];
+  var paramsSpecifics = {};
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getAjaxParams(params, 'Object', 'toHtml');
+    ajaxParams.data['id'] = ($.isArray(queryParams.id)) ? json_encode(queryParams.id) : queryParams.id;
+    ajaxParams.data['version'] = queryParams.version || 'dashboard';
+    ajaxParams.data['category'] = queryParams.category || 'all';
+    ajaxParams.data['summary'] = queryParams.summary || '';
+    ajaxParams.data['tag'] = queryParams.tag || 'all';
+    $.ajax(ajaxParams);
+  }
 };
 
-nextdom.object.remove = function(_params) {
-    var paramsRequired = ['id'];
-    var paramsSpecifics = {
-        pre_success: function(data) {
-            if (isset(nextdom.object.cache.all)) {
-                delete nextdom.object.cache.all;
-            }
-            if (isset(nextdom.object.cache.getEqLogic[_params.id])) {
-                delete nextdom.object.cache.getEqLogic[_params.id];
-            }
-            if(isset(nextdom.object.cache.byId[_params.id])){
-                delete nextdom.object.cache.byId[_params.id];
-            }
-            return data;
-        }
-    };
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
+nextdom.object.remove = function (queryParams) {
+  var paramsRequired = ['id'];
+  var paramsSpecifics = {
+    pre_success: function (data) {
+      if (isset(nextdom.object.cache.all)) {
+        delete nextdom.object.cache.all;
+      }
+      if (isset(nextdom.object.cache.getEqLogic[queryParams.id])) {
+        delete nextdom.object.cache.getEqLogic[queryParams.id];
+      }
+      if (isset(nextdom.object.cache.byId[queryParams.id])) {
+        delete nextdom.object.cache.byId[queryParams.id];
+      }
+      return data;
     }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/object.ajax.php';
-    paramsAJAX.data = {
-        action: 'remove',
-        id: _params.id
-    };
-    $.ajax(paramsAJAX);
+  };
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getAjaxParams(params, 'Object', 'remove');
+    ajaxParams.data['id'] = queryParams.id;
+    $.ajax(ajaxParams);
+  }
 };
 
-nextdom.object.save = function(_params) {
-    var paramsRequired = ['object'];
-    var paramsSpecifics = {
-        pre_success: function(data) {
-            if (isset(nextdom.object.cache.all)) {
-                delete nextdom.object.cache.all;
-            }
-            if (isset(nextdom.object.cache.getEqLogic[data.result.id])) {
-                delete nextdom.object.cache.getEqLogic[data.result.id];
-            }
-            if(isset(nextdom.object.cache.byId[data.result.id])){
-                delete nextdom.object.cache.byId[data.result.id];
-            }
-            return data;
-        }
-    };
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
+nextdom.object.save = function (queryParams) {
+  var paramsRequired = ['object'];
+  var paramsSpecifics = {
+    pre_success: function (data) {
+      if (isset(nextdom.object.cache.all)) {
+        delete nextdom.object.cache.all;
+      }
+      if (isset(nextdom.object.cache.getEqLogic[data.result.id])) {
+        delete nextdom.object.cache.getEqLogic[data.result.id];
+      }
+      if (isset(nextdom.object.cache.byId[data.result.id])) {
+        delete nextdom.object.cache.byId[data.result.id];
+      }
+      return data;
     }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/object.ajax.php';
-    paramsAJAX.data = {
-        action: 'save',
-        object: json_encode(_params.object),
-    };
-    $.ajax(paramsAJAX);
+  };
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getAjaxParams(params, 'Object', 'save');
+    ajaxParams.data['object'] = json_encode(queryParams.object);
+    $.ajax(ajaxParams);
+  }
 };
 
 
-nextdom.object.byId = function(_params) {
-    var paramsRequired = ['id'];
-    var paramsSpecifics = {
-        pre_success: function(data) {
-            nextdom.object.cache.byId[data.result.id] = data.result;
-            return data;
-        }
-    };
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
+nextdom.object.byId = function (queryParams) {
+  var paramsRequired = ['id'];
+  var paramsSpecifics = {
+    pre_success: function (data) {
+      nextdom.object.cache.byId[data.result.id] = data.result;
+      return data;
     }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    if (isset(nextdom.object.cache.byId[params.id]) && init(_params.cache,true) == true) {
-        params.success(nextdom.object.cache.byId[params.id]);
-        return;
+  };
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+    if (isset(nextdom.object.cache.byId[params.id]) && init(queryParams.cache, true) == true) {
+      params.success(nextdom.object.cache.byId[params.id]);
+      return;
     }
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/object.ajax.php';
-    paramsAJAX.data = {
-        action: 'byId',
-        id: _params.id
-    };
-    $.ajax(paramsAJAX);
+    var ajaxParams = nextdom.private.getAjaxParams(params, 'Object', 'byId');
+    ajaxParams.data['id'] = queryParams.id;
+    $.ajax(ajaxParams);
+  }
 };
 
-nextdom.object.setOrder = function(_params) {
-    var paramsRequired = ['objects'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/object.ajax.php';
-    paramsAJAX.data = {
-        action: 'setOrder',
-        objects: json_encode(_params.objects)
-    };
-    $.ajax(paramsAJAX);
+nextdom.object.setOrder = function (queryParams) {
+  var paramsRequired = ['objects'];
+  var paramsSpecifics = {};
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getAjaxParams(params, 'Object', 'setOrder');
+    ajaxParams.data['objects'] = json_encode(queryParams.objects);
+    $.ajax(ajaxParams);
+  }
 };
 
 
-nextdom.object.summaryUpdate = function(_params) {
-    var objects = {};
-    var sends = {};
-    for(var i in _params){
-        var object = $('.objectSummary' + _params[i].object_id);
-        if (object.html() == undefined || object.attr('data-version') == undefined) {
+nextdom.object.summaryUpdate = function (queryParams) {
+  var objects = {};
+  var sends = {};
+  for (var i in queryParams) {
+    var object = $('.objectSummary' + queryParams[i].object_id);
+    if (object.html() === undefined || object.attr('data-version') === undefined) {
+      continue;
+    }
+    if (isset(queryParams[i]['keys'])) {
+      var updated = false;
+      for (var j in queryParams[i]['keys']) {
+        var keySpan = object.find('.objectSummary' + j);
+        if (keySpan.html() !== undefined) {
+          updated = true;
+          if (keySpan.closest('.objectSummaryParent').attr('data-displayZeroValue') == 0 && queryParams[i]['keys'][j]['value'] === 0) {
+            keySpan.closest('.objectSummaryParent').hide();
             continue;
+          }
+          if (queryParams[i]['keys'][j]['value'] === null) {
+            continue;
+          }
+          keySpan.closest('.objectSummaryParent').show();
+          keySpan.empty().append(queryParams[i]['keys'][j]['value']);
         }
-        if(isset(_params[i]['keys'])){
-            var updated = false;
-            for(var j in _params[i]['keys']){
-                var keySpan = object.find('.objectSummary'+j);
-                if(keySpan.html() != undefined){
-                    updated = true;
-                    if(keySpan.closest('.objectSummaryParent').attr('data-displayZeroValue') == 0 && _params[i]['keys'][j]['value'] === 0){
-                        keySpan.closest('.objectSummaryParent').hide();
-                        continue;
-                    }
-                    if(_params[i]['keys'][j]['value'] === null){
-                        continue;
-                    }
-                    keySpan.closest('.objectSummaryParent').show();
-                    keySpan.empty().append(_params[i]['keys'][j]['value']);
-                }
-            }
-            if(updated){
-                continue;
-            }
+      }
+      if (updated) {
+        continue;
+      }
+    }
+    objects[queryParams[i].object_id] = {object: object, version: object.attr('data-version')};
+    sends[queryParams[i].object_id] = {version: object.attr('data-version')};
+  }
+  if (Object.keys(objects).length == 0) {
+    return;
+  }
+  var paramsRequired = [];
+  var paramsSpecifics = {
+    global: false,
+    success: function (result) {
+      for (var i in result) {
+        objects[i].object.replaceWith($(result[i].html));
+        if ($('.objectSummary' + i).closest('.objectSummaryHide') != []) {
+          if ($(result[i].html).html() == '') {
+            $('.objectSummary' + i).closest('.objectSummaryHide').hide();
+          } else {
+            $('.objectSummary' + i).closest('.objectSummaryHide').show();
+          }
         }
-        objects[_params[i].object_id] = {object : object, version : object.attr('data-version')};
-        sends[_params[i].object_id] = {version : object.attr('data-version')};
+      }
     }
-    if (Object.keys(objects).length == 0){
-        return;
-    }
-    var paramsRequired = [];
-    var paramsSpecifics = {
-        global: false,
-        success: function (result) {
-            for(var i in result){
-                objects[i].object.replaceWith($(result[i].html));
-                if($('.objectSummary' + i).closest('.objectSummaryHide') != []){
-                    if($(result[i].html).html() == ''){
-                        $('.objectSummary' + i).closest('.objectSummaryHide').hide();
-                    }else{
-                        $('.objectSummary' + i).closest('.objectSummaryHide').show();
-                    }
-                }
-            }
-        }
-    };
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/object.ajax.php';
-    paramsAJAX.data = {
-        action: 'getSummaryHtml',
-        ids: json_encode(sends),
-    };
-    $.ajax(paramsAJAX);
+  };
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getAjaxParams(params, 'Object', 'getSummaryHtml');
+    ajaxParams.data['ids'] = queryParams.ids;
+    $.ajax(ajaxParams);
+  }
 };
 
-nextdom.object.getImgPath = function(_params){
-    nextdom.object.byId({
-        id : _params.id,
-        global: false,
-        async : false,
-        error : function(data){
-            return;
-        },
-        success : function(data){
-            if(!isset(data.img)){
-                return '';
-            }
-           _params.success(data.img);
-        }
-    });
-}
-
-
-nextdom.object.removeImage = function (_params) {
-    var paramsRequired = ['id'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
+nextdom.object.getImgPath = function (queryParams) {
+  nextdom.object.byId({
+    id: queryParams.id,
+    global: false,
+    async: false,
+    error: function (data) {
+      return;
+    },
+    success: function (data) {
+      if (!isset(data.img)) {
+        return '';
+      }
+      queryParams.success(data.img);
     }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/object.ajax.php';
-    paramsAJAX.data = {
-        action: 'removeImage',
-        id: _params.id
-    };
-    $.ajax(paramsAJAX);
+  });
+};
+
+
+nextdom.object.removeImage = function (queryParams) {
+  var paramsRequired = ['id'];
+  var paramsSpecifics = {};
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getAjaxParams(params, 'Object', 'removeImage');
+    ajaxParams.data['id'] = queryParams.id;
+    $.ajax(ajaxParams);
+  }
 };

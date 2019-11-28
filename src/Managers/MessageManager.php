@@ -34,6 +34,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Enums\DateFormat;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Model\Entity\Message;
@@ -65,7 +66,7 @@ class MessageManager
             ->setPlugin(Utils::secureXSS($_type))
             ->setMessage(Utils::secureXSS($_message))
             ->setAction(Utils::secureXSS($_action))
-            ->setDate(date('Y-m-d H:i:s'))
+            ->setDate(date(DateFormat::FULL_DAY))
             ->setLogicalId(Utils::secureXSS($_logicalId));
         $message->save($_writeMessage);
     }
@@ -79,7 +80,7 @@ class MessageManager
      */
     public static function removeAll($_plugin = '', $_logicalId = '', $_search = false)
     {
-        $values = array();
+        $values = [];
         $sql = 'DELETE FROM ' . self::DB_CLASS_NAME;
         if ($_plugin != '') {
             $values['plugin'] = $_plugin;
@@ -119,9 +120,9 @@ class MessageManager
      */
     public static function byId($_id)
     {
-        $values = array(
+        $values = [
             'id' => $_id,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE id=:id';
@@ -136,10 +137,10 @@ class MessageManager
      */
     public static function byPluginLogicalId($_plugin, $_logicalId)
     {
-        $values = array(
+        $values = [
             'logicalId' => $_logicalId,
             'plugin' => $_plugin,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE logicalId=:logicalId
@@ -155,9 +156,9 @@ class MessageManager
      */
     public static function byPlugin($_plugin)
     {
-        $values = array(
+        $values = [
             'plugin' => $_plugin,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE plugin=:plugin
@@ -195,11 +196,12 @@ class MessageManager
      * @param $logicialId
      * @return mixed
      */
-    public static function removeByPluginLogicalId($pluginId, $logicialId) {
-        $values = array(
+    public static function removeByPluginLogicalId($pluginId, $logicialId)
+    {
+        $values = [
             'logicalId' => $logicialId,
             'plugin' => $pluginId,
-        );
+        ];
         $sql = 'DELETE FROM message
                 WHERE logicalId=:logicalId
                 AND plugin=:plugin';

@@ -93,20 +93,20 @@ class Message implements EntityInterface
         }
         if ($this->getLogicalId() == '') {
             $this->setLogicalId($this->getPlugin() . '::' . ConfigManager::genKey());
-            $values = array(
+            $values = [
                 'message' => $this->getMessage(),
                 'plugin' => $this->getPlugin(),
-            );
+            ];
             $sql = 'SELECT count(*)
                     FROM ' . self::DB_CLASS_NAME . '
                     WHERE plugin = :plugin
                     AND message = :message';
             $result = DBHelper::getOne($sql, $values);
         } else {
-            $values = array(
+            $values = [
                 'logicalId' => $this->getLogicalId(),
                 'plugin' => $this->getPlugin(),
-            );
+            ];
             $sql = 'SELECT count(*)
             FROM message
             WHERE plugin=:plugin
@@ -116,17 +116,17 @@ class Message implements EntityInterface
         if ($result['count(*)'] != 0) {
             return null;
         }
-        EventManager::add('notify', array('title' => __('Message de ') . $this->getPlugin(), 'message' => $this->getMessage(), 'category' => 'message'));
+        EventManager::add('notify', ['title' => __('Message de ') . $this->getPlugin(), 'message' => $this->getMessage(), 'category' => 'message']);
         if ($_writeMessage) {
             DBHelper::save($this);
-            $params = array(
+            $params = [
                 '#plugin#' => $this->getPlugin(),
                 '#message#' => $this->getMessage(),
-            );
+            ];
             $actions = ConfigManager::byKey('actionOnMessage');
             if (is_array($actions) && count($actions) > 0) {
                 foreach ($actions as $action) {
-                    $options = array();
+                    $options = [];
                     if (isset($action['options'])) {
                         $options = $action['options'];
                     }

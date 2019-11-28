@@ -241,6 +241,8 @@ general:
      time_server: "Time Server used for time synchronization"
      ignore_system_time: "Indicates to Nexdom to ignore system time"
 health:
+  tmp-space-left: "Tmp space left"
+  tmp-problem: "On error, try to restart. If this doesn't work, disable plugin one by one."
   apache-private-tmp-disabled: "Please disable private tmp Apache (NextDom can work with). See <a href=\"https://jeedom.github.io/core/fr_FR/faq#tocAnchor-1-29\" target=\"_blank\"> </a>"
   apache-private-tmp: Apache private tmp
   authentication-error: "Warning: you always have the user admin/admin configured: this represents a serious security flaw, go <a href=\"index.php?v=d&p=user\"> </a> to change the password admin user "

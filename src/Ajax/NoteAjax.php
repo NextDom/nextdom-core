@@ -17,6 +17,7 @@
 
 namespace NextDom\Ajax;
 
+use NextDom\Enums\AjaxParams;
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Utils;
@@ -40,7 +41,7 @@ class NoteAjax extends BaseAjax
 
     public function byId()
     {
-        $this->ajax->success(Utils::o2a(NoteManager::byId(Utils::init('id'))));
+        $this->ajax->success(Utils::o2a(NoteManager::byId(Utils::init(AjaxParams::ID))));
     }
 
     public function save()
@@ -62,7 +63,7 @@ class NoteAjax extends BaseAjax
 
     public function remove()
     {
-        $note = NoteManager::byId(Utils::init('id'));
+        $note = NoteManager::byId(Utils::init(AjaxParams::ID));
         if (!is_object($note)) {
             throw new CoreException(__('Note inconnue. Vérifiez l\'ID'));
         }

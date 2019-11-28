@@ -19,13 +19,15 @@
 
 namespace NextDom\Rest;
 
+use NextDom\Enums\CmdSubType;
+use NextDom\Enums\CmdType;
 use NextDom\Managers\CmdManager;
 use NextDom\Model\Entity\Cmd;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class CmdRest
- * 
+ *
  * @package NextDom\Rest
  */
 class CmdRest
@@ -46,23 +48,8 @@ class CmdRest
     }
 
     /**
-     * Get all commands visible linked to an eqLogic
-     *
-     * @param int $eqLogicId EqLogic id
-     *
-     * @return array Array of linked commands
-     *
-     * @throws \Exception
-     */
-    public static function getVisibleByEqLogic(int $eqLogicId)
-    {
-        $cmds = CmdManager::byEqLogicId($eqLogicId, null, true);
-        return self::prepareResults($cmds);
-    }
-
-    /**
      * Prepare result for response\n
-     * Associative array with following keys : 
+     * Associative array with following keys :
      *  - id
      *  - name
      *  - type
@@ -109,7 +96,7 @@ class CmdRest
 
     /**
      * Get specials data depends of type
-     * 
+     *
      * @param Cmd $cmd Command with data
      *
      * @return array Specials data
@@ -117,17 +104,16 @@ class CmdRest
     private static function getSpecialData($cmd)
     {
         $result = [];
-        if ($cmd->getType() === 'info') {
+        if ($cmd->isType(CmdType::INFO)) {
             try {
                 $result['state'] = $cmd->execCmd();
-                if ($cmd->getSubType() === 'numeric' && empty($result['state'])) {
+                if ($cmd->isSubType(CmdSubType::NUMERIC) && empty($result['state'])) {
                     $result['state'] = 0;
                 }
             } catch (\Exception $e) {
 
             }
-        }
-        elseif ($cmd->getType() === 'action') {
+        } elseif ($cmd->isType(CmdType::ACTION)) {
             $configuration = $cmd->getConfiguration();
             if (isset($configuration['minValue'])) {
                 $result['minValue'] = $configuration['minValue'];
@@ -137,6 +123,21 @@ class CmdRest
             }
         }
         return $result;
+    }
+
+    /**
+     * Get all commands visible linked to an eqLogic
+     *
+     * @param int $eqLogicId EqLogic id
+     *
+     * @return array Array of linked commands
+     *
+     * @throws \Exception
+     */
+    public static function getVisibleByEqLogic(int $eqLogicId)
+    {
+        $cmds = CmdManager::byEqLogicId($eqLogicId, null, true);
+        return self::prepareResults($cmds);
     }
 
     /**

@@ -17,11 +17,14 @@
 
 namespace NextDom\Helpers;
 
+use NextDom\Enums\AjaxParams;
+use NextDom\Enums\Common;
 use NextDom\Enums\GetParams;
+use NextDom\Enums\NextDomObj;
 use NextDom\Enums\ViewType;
 use NextDom\Managers\ConfigManager;
-use NextDom\Managers\MessageManager;
 use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\MessageManager;
 use NextDom\Managers\Plan3dHeaderManager;
 use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PluginManager;
@@ -46,7 +49,7 @@ class PrepareView
      */
     public function initConfig()
     {
-        $this->currentConfig = ConfigManager::byKeys(array(
+        $this->currentConfig = ConfigManager::byKeys([
             'language',
             'nextdom::firstUse',
             'nextdom::Welcome',
@@ -57,7 +60,7 @@ class PrepareView
             'widget::margin',
             'widget::padding',
             'widget::radius',
-            'default_bootstrap_theme'));
+            'default_bootstrap_theme']);
     }
 
     /**
@@ -73,8 +76,7 @@ class PrepareView
         $result = false;
         if (isset($this->currentConfig['nextdom::firstUse']) && $this->currentConfig['nextdom::firstUse'] == 0) {
             $result = true;
-        }
-        else {
+        } else {
             // Prevent F5 bug on second step
             $user = UserManager::byLogin('admin');
             if (is_object($user) && $user->getPassword() !== Utils::sha512('admin')) {
@@ -346,8 +348,8 @@ class PrepareView
      */
     public function showModal()
     {
-        $plugin = Utils::init('plugin', '');
-        $modalCode = Utils::init('modal', '');
+        $plugin = Utils::init(AjaxParams::PLUGIN, '');
+        $modalCode = Utils::init(AjaxParams::MODAL, '');
         // Show modal from plugin (old way)
         if ($plugin !== '') {
             try {
@@ -434,7 +436,7 @@ class PrepareView
 
         $currentJeeObject = JeeObjectManager::getRootObjects();
         $currentJeeObjectId = '';
-        if(!empty($currentJeeObject)){
+        if (!empty($currentJeeObject)) {
             $currentJeeObjectId = $currentJeeObject->getId();
         }
 
@@ -489,8 +491,8 @@ class PrepareView
         $defaultDashboardObjectId = '';
         $defaultDashboardObjectName = UserManager::getStoredUser()->getOptions('defaultDashboardObject');
         $defaultDashboardObject = JeeObjectManager::byId($defaultDashboardObjectName);
-        if(!empty($defaultDashboardObject)) {
-          $defaultDashboardObjectId = $defaultDashboardObject->getId();
+        if (!empty($defaultDashboardObject)) {
+            $defaultDashboardObjectId = $defaultDashboardObject->getId();
         }
         $homePage = explode('::', UserManager::getStoredUser()->getOptions('homePage', 'core::dashboard'));
         if (count($homePage) == 2) {
@@ -499,7 +501,7 @@ class PrepareView
                         GetParams::VIEW_TYPE => ViewType::DESKTOP_VIEW,
                         GetParams::PAGE => $homePage[1],
                     ]);
-                if($defaultDashboardObjectId != '') {
+                if ($defaultDashboardObjectId != '') {
                     $homeLink .= '&object_id=' . $defaultDashboardObjectId;
                 }
             } else {
@@ -515,8 +517,8 @@ class PrepareView
             }
         } else {
             $homeLink = 'index.php?v=d&p=dashboard';
-            if($defaultDashboardObjectId != '') {
-              $homeLink .= '&object_id=' . $defaultDashboardObjectId;
+            if ($defaultDashboardObjectId != '') {
+                $homeLink .= '&object_id=' . $defaultDashboardObjectId;
             }
         }
         return $homeLink;
@@ -552,13 +554,13 @@ class PrepareView
                 $icon = '';
                 $name = $categoryCode;
 
-                if (isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categoryCode])) {
-                    $icon = $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categoryCode]['icon'];
-                    $name = $NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$categoryCode]['name'];
+                if (isset($NEXTDOM_INTERNAL_CONFIG[NextDomObj::PLUGIN][Common::CATEGORY][$categoryCode])) {
+                    $icon = $NEXTDOM_INTERNAL_CONFIG[NextDomObj::PLUGIN][Common::CATEGORY][$categoryCode][Common::ICON];
+                    $name = $NEXTDOM_INTERNAL_CONFIG[NextDomObj::PLUGIN][Common::CATEGORY][$categoryCode][Common::NAME];
                 }
 
-                $pageData['MENU_PLUGIN_CATEGORY'][$categoryCode]['name'] = Render::getInstance()->getTranslation($name);
-                $pageData['MENU_PLUGIN_CATEGORY'][$categoryCode]['icon'] = $icon;
+                $pageData['MENU_PLUGIN_CATEGORY'][$categoryCode][Common::NAME] = Render::getInstance()->getTranslation($name);
+                $pageData['MENU_PLUGIN_CATEGORY'][$categoryCode][Common::ICON] = $icon;
 
                 /** @var Plugin $plugin */
                 foreach ($pluginsList as $plugin) {

@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Admin;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\DateFormat;
 use NextDom\Helpers\Render;
 use NextDom\Managers\CacheManager;
 use NextDom\Managers\ConfigManager;
@@ -44,7 +45,7 @@ class SecurityController extends BaseController
      */
     public static function get(&$pageData): string
     {
-        $keys = array('security::bantime', 'ldap::enable');
+        $keys = ['security::bantime', 'ldap::enable'];
         $configs = ConfigManager::byKeys($keys);
 
         $pageData['JS_VARS']['ldapEnable'] = $configs['ldap::enable'];
@@ -61,11 +62,11 @@ class SecurityController extends BaseController
             foreach ($values as $value) {
                 $bannedData = [];
                 $bannedData['ip'] = $value['ip'];
-                $bannedData['startDate'] = date('Y-m-d H:i:s', $value['datetime']);
+                $bannedData['startDate'] = date(DateFormat::FULL, $value['datetime']);
                 if ($configs['security::bantime'] < 0) {
                     $bannedData['endDate'] = __('Jamais');
                 } else {
-                    $bannedData['endDate'] = date('Y-m-d H:i:s', $value['datetime'] + $pageData['adminConfigs']['security::bantime']);
+                    $bannedData['endDate'] = date(DateFormat::FULL, $value['datetime'] + $pageData['adminConfigs']['security::bantime']);
                 }
                 $pageData['adminBannedIp'][] = $bannedData;
             }

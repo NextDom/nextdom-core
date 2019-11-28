@@ -127,6 +127,28 @@ class Samba
     }
 
     /**
+     * Get current share
+     *
+     * @param string|null $name Share name
+     *
+     * @return \Icewind\SMB\IShare|null Current share
+     *
+     * @throws CoreException
+     */
+    public function getShare(string $name = null)
+    {
+        if ($name === null) {
+            $name = $this->share;
+        }
+        try {
+            return $this->client->getShare($name);
+        } catch (\Exception $e) {
+            CoreException::do_throw('{repo.samba.error.connect}: %s', $e->getMessage());
+        }
+        return null;
+    }
+
+    /**
      * Copy file on the server
      *
      * @param string $src Path of the file to copy
@@ -146,27 +168,6 @@ class Samba
     }
 
     /**
-     * List folder content on the server
-     *
-     * @param string $path Path of the folder
-     *
-     * @return IFileInfo[]|null Content of the folder
-     *
-     * @throws CoreException
-     */
-    public function dir($path)
-    {
-        try {
-            return $this->getShare()->dir($path);
-        } catch (\Icewind\SMB\Exception\NotFoundException $e) {
-            CoreException::do_throw('{repo.samba.error.not-found}: %s', $path);
-        } catch (\Throwable $e) {
-            CoreException::do_throw('{repo.samba.error.unknown}: %s', $e->getMessage());
-        }
-        return null;
-    }
-
-    /**
      * Delete a file from the server
      *
      * @param string $path Path of the file
@@ -183,28 +184,6 @@ class Samba
             CoreException::do_throw('{repo.samba.error.not-found}: %s', $path);
         } catch (\Throwable $e) {
             CoreException::do_throw('{repo.samba.error.unknown}: %s', $e->getMessage());
-        }
-        return null;
-    }
-
-    /**
-     * Get current share
-     *
-     * @param string|null $name Share name
-     *
-     * @return \Icewind\SMB\IShare|null Current share
-     *
-     * @throws CoreException
-     */
-    public function getShare(string $name = null)
-    {
-        if ($name === null) {
-            $name = $this->share;
-        }
-        try {
-            return $this->client->getShare($name);
-        } catch (\Exception $e) {
-            CoreException::do_throw('{repo.samba.error.connect}: %s', $e->getMessage());
         }
         return null;
     }
@@ -258,6 +237,27 @@ class Samba
             }
         }
         return $entries;
+    }
+
+    /**
+     * List folder content on the server
+     *
+     * @param string $path Path of the folder
+     *
+     * @return IFileInfo[]|null Content of the folder
+     *
+     * @throws CoreException
+     */
+    public function dir($path)
+    {
+        try {
+            return $this->getShare()->dir($path);
+        } catch (\Icewind\SMB\Exception\NotFoundException $e) {
+            CoreException::do_throw('{repo.samba.error.not-found}: %s', $path);
+        } catch (\Throwable $e) {
+            CoreException::do_throw('{repo.samba.error.unknown}: %s', $e->getMessage());
+        }
+        return null;
     }
 
     /**

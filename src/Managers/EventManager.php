@@ -70,7 +70,7 @@ class EventManager
             if (!is_array($value)) {
                 $value = [];
             }
-            $value[] = array('datetime' => Utils::getMicrotime(), 'name' => $eventName, 'option' => $options);
+            $value[] = ['datetime' => Utils::getMicrotime(), 'name' => $eventName, 'option' => $options];
             CacheManager::set('event', json_encode(self::cleanEvent($value)));
             flock($fd, LOCK_UN);
         }
@@ -102,7 +102,7 @@ class EventManager
         $find = [];
         $currentTime = strtotime(DateFormat::NOW) + 300;
         foreach (array_values($events) as $key => $event) {
-            if($event['datetime'] > $currentTime){
+            if ($event['datetime'] > $currentTime) {
                 unset($events[$key]);
                 continue;
             }
@@ -114,7 +114,7 @@ class EventManager
                 $id = $event['name'] . '::' . $event['option']['scenario_id'];
             } elseif ($event['name'] == 'jeeObject::summary::update') {
                 $id = $event['name'] . '::' . $event['option']['object_id'];
-                if(is_array($event['option']['keys']) && count($event['option']['keys']) > 0) {
+                if (is_array($event['option']['keys']) && count($event['option']['keys']) > 0) {
                     foreach ($event['option']['keys'] as $optionKey => $value) {
                         $id .= $optionKey;
                     }
@@ -150,7 +150,7 @@ class EventManager
             }
             $value = [];
             foreach ($values as $option) {
-                $value[] = array('datetime' => Utils::getMicrotime(), 'name' => $eventName, 'option' => $option);
+                $value[] = ['datetime' => Utils::getMicrotime(), 'name' => $eventName, 'option' => $option];
             }
             CacheManager::set('event', json_encode(self::cleanEvent(array_merge($value_src, $value))));
             flock($fd, LOCK_UN);
@@ -214,8 +214,8 @@ class EventManager
         if ($_filter == null) {
             return $_data;
         }
-        $filters = ($_filter !== null) ? CacheManager::byKey($_filter . '::event')->getValue(array()) : array();
-        $return = array('datetime' => $_data['datetime'], 'result' => array());
+        $filters = ($_filter !== null) ? CacheManager::byKey($_filter . '::event')->getValue([]) : [];
+        $return = ['datetime' => $_data['datetime'], 'result' => []];
         foreach ($_data['result'] as $value) {
             if ($_filter !== null && isset($_filter::$_listenEvents) && !in_array($value['name'], $_filter::$_listenEvents)) {
                 continue;
@@ -239,11 +239,11 @@ class EventManager
      */
     protected static function changesSince($_datetime)
     {
-        $return = array('datetime' => $_datetime, 'result' => array());
+        $return = ['datetime' => $_datetime, 'result' => []];
         $cache = CacheManager::byKey('event');
         $events = json_decode($cache->getValue('[]'), true);
         if (!is_array($events)) {
-            $events = array();
+            $events = [];
         }
         $values = array_reverse($events);
         if (count($values) > 0) {

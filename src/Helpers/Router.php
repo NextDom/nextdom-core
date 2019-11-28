@@ -36,7 +36,6 @@ namespace NextDom\Helpers;
 
 use NextDom\Enums\GetParams;
 use NextDom\Enums\ViewType;
-use NextDom\Managers\ConfigManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -101,34 +100,6 @@ class Router
     }
 
     /**
-     * Test if modal window is requested
-     *
-     * @return bool True if modal window is requested
-     */
-    private function isModalRequest()
-    {
-        return isset($_GET[GetParams::MODAL]);
-    }
-
-    /**
-     * Test if plugin configuration page is requested
-     *
-     * @return bool True if plugin configuration page is requested
-     */
-    private function isPluginConfRequest()
-    {
-        return isset($_GET[GetParams::PLUGIN_CONF]);
-    }
-
-    /**
-     * Test if page is requested by Ajax query
-     *
-     * @return bool True if page is requested by Ajax query
-     */
-    private function isAjaxQuery() {
-        return isset($_GET[GetParams::AJAX_QUERY]) && $_GET[GetParams::AJAX_QUERY] == 1;
-    }
-    /**
      * Display for a computer
      *
      * @throws \Exception
@@ -155,6 +126,36 @@ class Router
                 $prepareView->showContent();
             }
         }
+    }
+
+    /**
+     * Test if modal window is requested
+     *
+     * @return bool True if modal window is requested
+     */
+    private function isModalRequest()
+    {
+        return isset($_GET[GetParams::MODAL]);
+    }
+
+    /**
+     * Test if plugin configuration page is requested
+     *
+     * @return bool True if plugin configuration page is requested
+     */
+    private function isPluginConfRequest()
+    {
+        return isset($_GET[GetParams::PLUGIN_CONF]);
+    }
+
+    /**
+     * Test if page is requested by Ajax query
+     *
+     * @return bool True if page is requested by Ajax query
+     */
+    private function isAjaxQuery()
+    {
+        return isset($_GET[GetParams::AJAX_QUERY]) && $_GET[GetParams::AJAX_QUERY] == 1;
     }
 
     /**

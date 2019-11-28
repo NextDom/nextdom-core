@@ -56,7 +56,7 @@ class ScenarioSubElementManager
      */
     public static function byId($id)
     {
-        $values = array('id' => $id);
+        $values = ['id' => $id];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE id = :id';
@@ -75,9 +75,9 @@ class ScenarioSubElementManager
      */
     public static function byScenarioElementId($scenarioElementId, $filterByType = '')
     {
-        $values = array(
+        $values = [
             'scenarioElement_id' => $scenarioElementId,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE scenarioElement_id=:scenarioElement_id ';

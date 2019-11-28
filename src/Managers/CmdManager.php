@@ -33,6 +33,9 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Enums\CmdType;
+use NextDom\Enums\DateFormat;
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
@@ -48,6 +51,34 @@ class CmdManager
 {
     const CLASS_NAME = Cmd::class;
     const DB_CLASS_NAME = '`cmd`';
+
+    /**
+     * Get historized commands
+     *
+     * @return array List of historized commands
+     *
+     * @throws \Exception
+     */
+    public static function allHistoryCmd()
+    {
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME, 'c') . '
+                FROM ' . self::DB_CLASS_NAME . ' c
+                INNER JOIN eqLogic el ON c.eqLogic_id=el.id
+                INNER JOIN object ob ON el.object_id=ob.id
+                WHERE isHistorized = 1
+                AND type=\'info\'';
+        $sql .= ' ORDER BY ob.position, ob.name, el.name, c.name';
+        $result1 = self::cast(DBHelper::getAllObjects($sql, [], self::CLASS_NAME));
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME, 'c') . '
+                FROM ' . self::DB_CLASS_NAME . ' c
+                INNER JOIN eqLogic el ON c.eqLogic_id=el.id
+                WHERE el.object_id IS NULL
+                AND isHistorized = 1
+                AND type=\'info\'';
+        $sql .= ' ORDER BY el.name, c.name';
+        $result2 = self::cast(DBHelper::getAllObjects($sql, [], self::CLASS_NAME));
+        return array_merge($result1, $result2);
+    }
 
     /**
      * Cast a command from generic to plugin
@@ -81,96 +112,6 @@ class CmdManager
             return $result;
         }
         return $inputs;
-    }
-
-    /**
-     * Get list of commands by IDs
-     *
-     * @param array $idsList List of ID
-     *
-     * @return Cmd[]|null List of commands
-     *
-     * @throws \Exception
-     */
-    public static function byIds($idsList)
-    {
-        if (!is_array($idsList) || count($idsList) == 0) {
-            return [];
-        }
-        $in = trim(preg_replace('/[, ]{2,}/m', ',', implode(',', $idsList)), ',');
-        if ($in === '') {
-            return [];
-        }
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE id IN (' . $in . ')';
-        return self::cast(DBHelper::getAllObjects($sql, [], self::CLASS_NAME));
-    }
-
-    /**
-     * Get command by his id
-     *
-     * @param mixed $id Command id
-     *
-     * @return Cmd|bool Command or false
-     *
-     * @throws \Exception
-     */
-    public static function byId($id)
-    {
-        if ($id == '') {
-            return null;
-        }
-        $values = [
-            'id' => $id,
-        ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE id = :id';
-        return self::cast(DBHelper::getOneObject($sql, $values, self::CLASS_NAME));
-    }
-
-    /**
-     * Get all commands
-     *
-     * @return Cmd[] All commands
-     *
-     * @throws \Exception
-     */
-    public static function all()
-    {
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                ORDER BY id';
-        return self::cast(DBHelper::getAllObjects($sql, [], self::CLASS_NAME));
-    }
-
-    /**
-     * Get historized commands
-     *
-     * @return array List of historized commands
-     *
-     * @throws \Exception
-     */
-    public static function allHistoryCmd()
-    {
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME, 'c') . '
-                FROM ' . self::DB_CLASS_NAME . ' c
-                INNER JOIN eqLogic el ON c.eqLogic_id=el.id
-                INNER JOIN object ob ON el.object_id=ob.id
-                WHERE isHistorized = 1
-                AND type=\'info\'';
-        $sql .= ' ORDER BY ob.position, ob.name, el.name, c.name';
-        $result1 = self::cast(DBHelper::getAllObjects($sql, [], self::CLASS_NAME));
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME, 'c') . '
-                FROM ' . self::DB_CLASS_NAME . ' c
-                INNER JOIN eqLogic el ON c.eqLogic_id=el.id
-                WHERE el.object_id IS NULL
-                AND isHistorized = 1
-                AND type=\'info\'';
-        $sql .= ' ORDER BY el.name, c.name';
-        $result2 = self::cast(DBHelper::getAllObjects($sql, [], self::CLASS_NAME));
-        return array_merge($result1, $result2);
     }
 
     /**
@@ -636,6 +577,30 @@ class CmdManager
     }
 
     /**
+     * Get list of commands by IDs
+     *
+     * @param array $idsList List of ID
+     *
+     * @return Cmd[]|null List of commands
+     *
+     * @throws \Exception
+     */
+    public static function byIds($idsList)
+    {
+        if (!is_array($idsList) || count($idsList) == 0) {
+            return [];
+        }
+        $in = trim(preg_replace('/[, ]{2,}/m', ',', implode(',', $idsList)), ',');
+        if ($in === '') {
+            return [];
+        }
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE id IN (' . $in . ')';
+        return self::cast(DBHelper::getAllObjects($sql, [], self::CLASS_NAME));
+    }
+
+    /**
      * Get commands by string in human readeable format
      *
      * @param string $needle String to search
@@ -648,9 +613,32 @@ class CmdManager
     {
         $cmd = self::byId(str_replace('#', '', self::humanReadableToCmd($needle)));
         if (!is_object($cmd)) {
-            throw new \Exception(__('La commande n\'a pas pu être trouvée : ') . $needle . __(' => ') . self::humanReadableToCmd($needle));
+            throw new CoreException(__('La commande n\'a pas pu être trouvée : ') . $needle . __(' => ') . self::humanReadableToCmd($needle));
         }
         return $cmd;
+    }
+
+    /**
+     * Get command by his id
+     *
+     * @param mixed $id Command id
+     *
+     * @return Cmd|bool Command or false
+     *
+     * @throws \Exception
+     */
+    public static function byId($id)
+    {
+        if ($id == '') {
+            return null;
+        }
+        $values = [
+            'id' => $id,
+        ];
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE id = :id';
+        return self::cast(DBHelper::getOneObject($sql, $values, self::CLASS_NAME));
     }
 
     /**
@@ -799,12 +787,12 @@ class CmdManager
             $cmdCacheAttrValue = $mc->getValue();
             if (Utils::getJsonAttr($cmdCacheAttrValue, 'value', null) !== null) {
                 $cmdCacheAttrValue = $mc->getValue();
-                $collectDate = Utils::getJsonAttr($cmdCacheAttrValue, 'collectDate', date('Y-m-d H:i:s'));
-                $valueDate = Utils::getJsonAttr($cmdCacheAttrValue, 'valueDate', date('Y-m-d H:i:s'));
+                $collectDate = Utils::getJsonAttr($cmdCacheAttrValue, 'collectDate', date(DateFormat::FULL));
+                $valueDate = Utils::getJsonAttr($cmdCacheAttrValue, 'valueDate', date(DateFormat::FULL));
                 $cmd_value = Utils::getJsonAttr($cmdCacheAttrValue, 'value', '');
             } else {
                 $cmd = self::byId($cmd_id);
-                if (!is_object($cmd) || $cmd->getType() != 'info') {
+                if (!is_object($cmd) || $cmd->isType(CmdType::INFO)) {
                     continue;
                 }
                 $cmd_value = $cmd->execCmd(null, true, $quote);
@@ -891,7 +879,7 @@ class CmdManager
         if (isset($colors[$color])) {
             return $colors[$color];
         }
-        throw new \Exception(__('Impossible de traduire la couleur en code hexadécimal :') . $color);
+        throw new CoreException(__('Impossible de traduire la couleur en code hexadécimal :') . $color);
     }
 
     /**
@@ -994,6 +982,21 @@ class CmdManager
             }
         }
         return $result;
+    }
+
+    /**
+     * Get all commands
+     *
+     * @return Cmd[] All commands
+     *
+     * @throws \Exception
+     */
+    public static function all()
+    {
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                ORDER BY id';
+        return self::cast(DBHelper::getAllObjects($sql, [], self::CLASS_NAME));
     }
 
     /**

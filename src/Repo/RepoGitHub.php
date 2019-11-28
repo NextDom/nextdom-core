@@ -18,73 +18,77 @@
 
 namespace NextDom\Repo;
 
+use NextDom\Enums\LogTarget;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
+use NextDom\Interfaces\BaseRepo;
 use NextDom\Managers\ConfigManager;
 use NextDom\Model\Entity\Update;
 
 require_once __DIR__ . '/../../core/php/core.inc.php';
 
-class RepoGitHub
+class RepoGitHub implements BaseRepo
 {
     public static $_name = 'Github';
     public static $_icon = 'fab fa-github';
     public static $_description = 'repo.github.description';
 
-    public static $_scope = array(
+    public static $_scope = [
         'plugin' => true,
         'backup' => false,
         'hasConfiguration' => true,
         'core' => true,
-    );
+    ];
 
-    public static $_configuration = array(
-        'parameters_for_add' => array(
-            'user' => array(
+    public static $_configuration = [
+        'parameters_for_add' => [
+            'user' => [
                 'name' => 'repo.github.conf.user',
                 'type' => 'input',
-            ),
-            'repository' => array(
+            ],
+            'repository' => [
                 'name' => 'repo.github.conf.repo',
                 'type' => 'input',
-            ),
-            'version' => array(
+            ],
+            'version' => [
                 'name' => 'repo.github.conf.branch',
                 'type' => 'input',
                 'default' => 'master',
-            ),
-        ),
-        'configuration' => array(
-            'token' => array(
+            ],
+        ],
+        'configuration' => [
+            'token' => [
                 'name' => 'repo.github.conf.token',
                 'type' => 'input',
-            ),
-            'core::user' => array(
+            ],
+            'core::user' => [
                 'name' => 'repo.github.conf.core.user',
                 'type' => 'input',
                 'default' => 'nextdom',
-            ),
-            'core::repository' => array(
+            ],
+            'core::repository' => [
                 'name' => 'repo.github.conf.core.repo.name',
                 'type' => 'input',
                 'default' => 'nextdom-core',
                 'placeholder' => 'repo.github.conf.core.repo.placeholder',
-            ),
-            'core::branch' => array(
+            ],
+            'core::branch' => [
                 'name' => 'repo.github.conf.core.branch.name',
                 'type' => 'input',
                 'default' => 'master',
                 'placeholder' => 'repo.github.conf.core.branch.placeholder',
-            ),
-        ),
-    );
+            ],
+        ],
+    ];
 
     /*     * ***********************Méthodes statiques*************************** */
 
     /**
      * @param Update $targetUpdate
+     * @throws CoreException
+     * @throws \ReflectionException
      */
     public static function checkUpdate(&$targetUpdate)
     {
@@ -104,8 +108,7 @@ class RepoGitHub
             if (is_array($currentBranch) && count($currentBranch) > 0) {
                 $targetUpdate->setConfiguration('version', $currentBranch[0]);
                 $targetUpdate->save();
-            }
-            elseif (!is_dir(NEXTDOM_ROOT . '/.git')) {
+            } elseif (!is_dir(NEXTDOM_ROOT . '/.git')) {
                 $targetUpdate->setSource('apt');
                 $targetUpdate->save();
                 RepoApt::checkUpdate($targetUpdate);
@@ -144,7 +147,7 @@ class RepoGitHub
     public static function getGithubClient()
     {
         $client = new \Github\Client(
-            new \Github\HttpClient\CachedHttpClient(array('cache_dir' => NextDomHelper::getTmpFolder('github') . '/cache'))
+            new \Github\HttpClient\CachedHttpClient(['cache_dir' => NextDomHelper::getTmpFolder('github') . '/cache'])
         );
         if (ConfigManager::byKey('github::token') != '') {
             $client->authenticate(ConfigManager::byKey('github::token'), '', \Github\Client::AUTH_URL_TOKEN);
@@ -173,18 +176,18 @@ class RepoGitHub
         }
 
         $url = 'https://api.github.com/repos/' . $_update->getConfiguration('user') . '/' . $_update->getConfiguration('repository') . '/zipball/' . $_update->getConfiguration('version', 'master');
-        LogHelper::add('update', 'alert', __('Téléchargement de ') . $_update->getLogicalId() . '...');
+        LogHelper::addAlert(LogTarget::UPDATE, __('Téléchargement de ') . $_update->getLogicalId() . '...');
         if (ConfigManager::byKey('github::token') == '') {
             $result = shell_exec('curl -s -L ' . $url . ' > ' . $tmp);
         } else {
             $result = shell_exec('curl -s -H "Authorization: token ' . ConfigManager::byKey('github::token') . '" -L ' . $url . ' > ' . $tmp);
         }
-        LogHelper::add('update', 'alert', $result);
+        LogHelper::addAlert(LogTarget::UPDATE, $result);
 
         if (!isset($branch['commit']) || !isset($branch['commit']['sha'])) {
-            return array('path' => $tmp);
+            return ['path' => $tmp];
         }
-        return array('localVersion' => $branch['commit']['sha'], 'path' => $tmp);
+        return ['localVersion' => $branch['commit']['sha'], 'path' => $tmp];
     }
 
     public static function deleteObjet($_update)
@@ -194,10 +197,10 @@ class RepoGitHub
 
     public static function objectInfo($_update)
     {
-        return array(
+        return [
             'doc' => 'https://github.com/' . $_update->getConfiguration('user') . '/' . $_update->getConfiguration('repository') . '/blob/' . $_update->getConfiguration('version', 'master') . '/doc/' . ConfigManager::byKey('language', 'core', 'fr_FR') . '/index.asciidoc',
             'changelog' => 'https://github.com/' . $_update->getConfiguration('user') . '/' . $_update->getConfiguration('repository') . '/commits/' . $_update->getConfiguration('version', 'master'),
-        );
+        ];
     }
 
     public static function downloadCore($_path)

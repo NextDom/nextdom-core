@@ -22,6 +22,8 @@
 
 namespace NextDom\Controller\Modals;
 
+use NextDom\Enums\AjaxParams;
+use NextDom\Enums\DateFormat;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
@@ -41,14 +43,14 @@ class CmdHistory extends BaseAbstractModal
     public static function get(): string
     {
         $pageData = [];
-        $pageData['dates'] = array(
-            'start' => Utils::init('startDate', date('Y-m-d', strtotime(ConfigManager::byKey('history::defautShowPeriod') . ' ' . date('Y-m-d')))),
-            'end' => Utils::init('endDate', date('Y-m-d')),
-        );
+        $pageData['dates'] = [
+            'start' => Utils::init('startDate', date(DateFormat::FULL_DAY, strtotime(ConfigManager::byKey('history::defautShowPeriod') . ' ' . date(DateFormat::FULL_DAY)))),
+            'end' => Utils::init('endDate', date(DateFormat::FULL_DAY)),
+        ];
         $pageData['derive'] = Utils::init('derive', 0);
         $pageData['step'] = Utils::init('step', 0);
-        $pageData['id'] = Utils::init('id');
-        Utils::sendVarsToJS(['historyId' => Utils::init('id')]);
+        $pageData['id'] = Utils::init(AjaxParams::ID);
+        Utils::sendVarsToJS(['historyId' => Utils::init(AjaxParams::ID)]);
 
         return Render::getInstance()->get('/modals/cmd.history.html.twig', $pageData);
     }

@@ -17,6 +17,9 @@
 
 namespace NextDom\Ajax;
 
+use NextDom\Enums\AjaxParams;
+use NextDom\Enums\Common;
+use NextDom\Enums\NextDomObj;
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Utils;
@@ -37,77 +40,85 @@ class DataStoreAjax extends BaseAjax
     protected $MUST_BE_CONNECTED = true;
     protected $CHECK_AJAX_TOKEN = true;
 
+    /**
+     * Remove variable from the dataStore
+     * @throws CoreException
+     */
     public function remove()
     {
-        $dataStore = DataStoreManager::byId(Utils::init('id'));
+        $dataStoreId = Utils::initInt('id');
+        $dataStore = DataStoreManager::byId($dataStoreId);
         if (!is_object($dataStore)) {
-            throw new CoreException(__('Dépôt de données inconnu. Vérifiez l\'ID : ') . Utils::init('id'));
+            throw new CoreException(__('Dépôt de données inconnu. Vérifiez l\'ID : ') . $dataStoreId);
         }
         $dataStore->remove();
         $this->ajax->success();
     }
 
+    /**
+     * Save variable in the dataStore
+     *
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function save()
     {
-        if (Utils::init('id') == '') {
+        $dataStoreId = Utils::initInt('id', -1);
+        if ($dataStoreId <= 0) {
             $dataStore = new DataStore();
             $dataStore->setKey(Utils::init('key'));
             $dataStore->setLink_id(Utils::init('link_id'));
             $dataStore->setType(Utils::init('type'));
         } else {
-            $dataStore = DataStoreManager::byId(Utils::init('id'));
+            $dataStore = DataStoreManager::byId($dataStoreId);
         }
         if (!is_object($dataStore)) {
-            throw new CoreException(__('Dépôt de données inconnu. Vérifiez l\'ID : ') . Utils::init('id'));
+            throw new CoreException(__('Dépôt de données inconnu. Vérifiez l\'ID : ') . $dataStoreId);
         }
         $dataStore->setValue(Utils::init('value'));
         $dataStore->save();
         $this->ajax->success();
     }
 
+    /**
+     * Get all variables from the dataStore
+     * @throws \ReflectionException
+     */
     public function all()
     {
         $dataStores = DataStoreManager::byTypeLinkId(Utils::init('type'));
-        $return = array();
-        if (Utils::init('usedBy') == 1) {
+        $result = [];
+        if (Utils::init(AjaxParams::USED_BY) == 1) {
+            $linkedObjectTypes = [
+                NextDomObj::SCENARIO => [],
+                NextDomObj::EQLOGIC => [],
+                NextDomObj::CMD => [],
+                NextDomObj::INTERACT_DEF => [],
+            ];
+            /**
+             * Loop on all variables
+             */
             foreach ($dataStores as $datastore) {
-                $info_datastore = Utils::o2a($datastore);
-                $info_datastore['usedBy'] = array(
-                    'scenario' => array(),
-                    'eqLogic' => array(),
-                    'cmd' => array(),
-                    'interactDef' => array(),
-                );
+                $dataStoreInformations = Utils::o2a($datastore);
+                $dataStoreInformations[Common::USED_BY] = $linkedObjectTypes;
                 $usedBy = $datastore->getUsedBy();
                 /**
-                 * @var Scenario $scenario
+                 * Loop on all linked objects to the variable
                  */
-                foreach ($usedBy['scenario'] as $scenario) {
-                    $info_datastore['usedBy']['scenario'][] = $scenario->getHumanName();
+                foreach (array_keys($linkedObjectTypes) as $objectType) {
+                    /**
+                     * @var Scenario|EqLogic|Cmd|InteractDef $objectToConvert
+                     */
+                    foreach ($usedBy[$objectType] as $objectToConvert) {
+                        $dataStoreInformations[Common::USED_BY][$objectType][] = $objectToConvert->getHumanName();
+                    }
+
                 }
-                /**
-                 * @var EqLogic $eqLogic
-                 */
-                foreach ($usedBy['eqLogic'] as $eqLogic) {
-                    $info_datastore['usedBy']['eqLogic'][] = $eqLogic->getHumanName();
-                }
-                /**
-                 * @var Cmd $cmd
-                 */
-                foreach ($usedBy['cmd'] as $cmd) {
-                    $info_datastore['usedBy']['cmd'][] = $cmd->getHumanName();
-                }
-                /**
-                 * @var InteractDef $interactDef
-                 */
-                foreach ($usedBy['interactDef'] as $interactDef) {
-                    $info_datastore['usedBy']['interactDef'][] = $interactDef->getHumanName();
-                }
-                $return[] = $info_datastore;
+                $result[] = $dataStoreInformations;
             }
         } else {
-            $return = Utils::o2a($dataStores);
+            $result = Utils::o2a($dataStores);
         }
-        $this->ajax->success($return);
+        $this->ajax->success($result);
     }
 }

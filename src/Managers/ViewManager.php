@@ -64,9 +64,9 @@ class ViewManager
      */
     public static function byId($_id)
     {
-        $value = array(
+        $value = [
             'id' => $_id,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE id = :id';
@@ -81,7 +81,7 @@ class ViewManager
      */
     public static function searchByUse($_type, $_id)
     {
-        $return = array();
+        $return = [];
         $viewDatas = ViewDataManager::byTypeLinkId($_type, $_id);
         $search = '#' . str_replace('cmd', '', $_type . $_id) . '#';
         $viewDatas = array_merge($viewDatas, ViewDataManager::searchByConfiguration($search));

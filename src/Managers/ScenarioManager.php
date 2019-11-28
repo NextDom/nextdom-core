@@ -34,6 +34,7 @@
 namespace NextDom\Managers;
 
 use NextDom\Enums\ScenarioState;
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
@@ -64,7 +65,7 @@ class ScenarioManager
      */
     public static function byName(string $name)
     {
-        $values = array('name' => $name);
+        $values = ['name' => $name];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . ' FROM ' . self::DB_CLASS_NAME . ' WHERE name = :name';
         return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
@@ -78,12 +79,13 @@ class ScenarioManager
      * @return Scenario Objet demandé
      *
      * @throws \ReflectionException
+     * @throws CoreException
      */
     public static function byString(string $scenarioName, $commandNotFoundString)
     {
         $scenario = self::byId(str_replace('#scenario', '', self::fromHumanReadable($scenarioName)));
         if (!is_object($scenario)) {
-            throw new \Exception($commandNotFoundString . $scenarioName . ' => ' . self::fromHumanReadable($scenarioName));
+            throw new CoreException($commandNotFoundString . $scenarioName . ' => ' . self::fromHumanReadable($scenarioName));
         }
         return $scenario;
     }
@@ -99,7 +101,7 @@ class ScenarioManager
      */
     public static function byId($id)
     {
-        $values = array('id' => $id);
+        $values = ['id' => $id];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . ' FROM ' . self::DB_CLASS_NAME . ' WHERE id = :id';
         return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
@@ -119,7 +121,7 @@ class ScenarioManager
             $input = json_decode($input, true);
         }
         if (is_object($input)) {
-            $reflections = array();
+            $reflections = [];
             $uuid = spl_object_hash($input);
             if (!isset($reflections[$uuid])) {
                 $reflections[$uuid] = new \ReflectionClass($input);
@@ -173,9 +175,9 @@ class ScenarioManager
      */
     public static function byObjectNameGroupNameScenarioName($objectName, $groupName, $scenarioName)
     {
-        $values = array(
+        $values = [
             'scenario_name' => html_entity_decode($scenarioName),
-        );
+        ];
 
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME, 's') . '
                 FROM ' . self::DB_CLASS_NAME . ' s ';
@@ -215,7 +217,7 @@ class ScenarioManager
      */
     public static function listGroup($groupPattern = null)
     {
-        $values = array();
+        $values = [];
         $sql = 'SELECT DISTINCT(`group`)
         FROM ' . self::DB_CLASS_NAME;
         if ($groupPattern !== null) {
@@ -236,9 +238,9 @@ class ScenarioManager
     public static function byElement(string $elementId)
     {
         // TODO: Vérifier, bizarre les guillemets dans le like
-        $values = array(
+        $values = [
             'element_id' => '%"' . $elementId . '"%',
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE `scenarioElement` LIKE :element_id';
@@ -258,7 +260,7 @@ class ScenarioManager
      */
     public static function byObjectId($objectId, $onlyEnabled = true, $onlyVisible = false)
     {
-        $values = array();
+        $values = [];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME;
         if ($objectId === null) {
@@ -314,11 +316,9 @@ class ScenarioManager
             $scheduledScenarios = self::schedule();
             $trigger = 'schedule';
             if (NextDomHelper::isDateOk()) {
-                foreach ($scheduledScenarios as $key => $scenario) {
-                    if ($scenario->getState() != ScenarioState::IN_PROGRESS) {
-                        if ($scenario->isDue()) {
-                            $scenarios[] = $scenario;
-                        }
+                foreach ($scheduledScenarios as $scenario) {
+                    if ($scenario->getState() != ScenarioState::IN_PROGRESS && $scenario->isDue()) {
+                        $scenarios[] = $scenario;
                     }
                 }
             }
@@ -342,7 +342,7 @@ class ScenarioManager
      */
     public static function byTrigger($cmdId, $onlyEnabled = true)
     {
-        $values = array('cmd_id' => '%#' . $cmdId . '#%');
+        $values = ['cmd_id' => '%#' . $cmdId . '#%'];
         $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE mode != "schedule" AND `trigger` LIKE :cmd_id';
@@ -402,7 +402,7 @@ class ScenarioManager
      */
     public static function all($groupName = '', $type = null): array
     {
-        $values = array();
+        $values = [];
         $result1 = null;
         $result2 = null;
 
@@ -423,17 +423,17 @@ class ScenarioManager
             $sql1 .= 'WHERE (`group` IS NULL OR `group` = "")' . $sqlAndTypeFilter . 'ORDER BY s.group, s.name';
             $sql2 = $baseSql . 'WHERE (`group` IS NULL OR `group` = "") AND s.object_id IS NULL' . $sqlAndTypeFilter . ' ORDER BY s.name';
         } else {
-            $values = array('group' => $groupName);
+            $values = ['group' => $groupName];
             $sql1 .= 'WHERE `group` = :group ' . $sqlAndTypeFilter . 'ORDER BY ob.name, s.group, s.name';
             $sql2 = $baseSql . 'WHERE `group` = :group AND s.object_id IS NULL' . $sqlAndTypeFilter . 'ORDER BY s.group, s.name';
         }
         $result1 = DBHelper::getAllObjects($sql1, $values, self::CLASS_NAME);
         $result2 = DBHelper::getAllObjects($sql2, $values, self::CLASS_NAME);
         if (!is_array($result1)) {
-            $result1 = array();
+            $result1 = [];
         }
         if (!is_array($result2)) {
-            $result2 = array();
+            $result2 = [];
         }
         return array_merge($result1, $result2);
     }
@@ -476,11 +476,11 @@ class ScenarioManager
      */
     public static function cleanTable()
     {
-        $ids = array(
-            'element' => array(),
-            'subelement' => array(),
-            'expression' => array(),
-        );
+        $ids = [
+            'element' => [],
+            'subelement' => [],
+            'expression' => [],
+        ];
         foreach (self::all() as $scenario) {
             foreach ($scenario->getElement() as $element) {
                 $result = $element->getAllId();
@@ -516,12 +516,10 @@ class ScenarioManager
      */
     public static function consystencyCheck($needsReturn = false)
     {
-        $return = array();
+        $return = [];
         foreach (self::all() as $scenario) {
-            if ($scenario->getIsActive() != 1) {
-                if (!$needsReturn) {
-                    continue;
-                }
+            if ($scenario->getIsActive() != 1 && !$needsReturn) {
+                continue;
             }
             if ($scenario->getMode() == 'provoke' || $scenario->getMode() == 'all') {
                 $trigger_list = '';
@@ -532,7 +530,7 @@ class ScenarioManager
                 foreach ($matches[1] as $cmd_id) {
                     if (is_numeric($cmd_id)) {
                         if ($needsReturn) {
-                            $return[] = array('detail' => 'Scénario ' . $scenario->getHumanName(), 'help' => 'Déclencheur du scénario', 'who' => '#' . $cmd_id . '#');
+                            $return[] = ['detail' => 'Scénario ' . $scenario->getHumanName(), 'help' => 'Déclencheur du scénario', 'who' => '#' . $cmd_id . '#'];
                         } else {
                             LogHelper::addError('scenario', __('Un déclencheur du scénario : ') . $scenario->getHumanName() . __(' est introuvable'));
                         }
@@ -547,7 +545,7 @@ class ScenarioManager
             foreach ($matches[1] as $cmd_id) {
                 if (is_numeric($cmd_id)) {
                     if ($needsReturn) {
-                        $return[] = array('detail' => 'Scénario ' . $scenario->getHumanName(), 'help' => 'Utilisé dans le scénario', 'who' => '#' . $cmd_id . '#');
+                        $return[] = ['detail' => 'Scénario ' . $scenario->getHumanName(), 'help' => 'Utilisé dans le scénario', 'who' => '#' . $cmd_id . '#'];
                     } else {
                         LogHelper::addError('scenario', __('Une commande du scénario : ') . $scenario->getHumanName() . __(' est introuvable'));
                     }
@@ -573,7 +571,7 @@ class ScenarioManager
     public static function toHumanReadable($input)
     {
         if (is_object($input)) {
-            $reflections = array();
+            $reflections = [];
             $uuid = spl_object_hash($input);
             if (!isset($reflections[$uuid])) {
                 $reflections[$uuid] = new \ReflectionClass($input);
@@ -615,9 +613,9 @@ class ScenarioManager
      */
     public static function searchByUse(array $searchs)
     {
-        $return = array();
-        $expressions = array();
-        $scenarios = array();
+        $return = [];
+        $expressions = [];
+        $scenarios = [];
         foreach ($searchs as $search) {
             $_cmd_id = str_replace('#', '', $search['action']);
             $return = array_merge($return, self::byTrigger($_cmd_id, false));
@@ -684,16 +682,16 @@ class ScenarioManager
     {
         $moduleFile = NEXTDOM_ROOT . '/core/config/scenario/' . $market->getLogicalId() . '.json';
         if (!file_exists($moduleFile)) {
-            throw new \Exception('Impossible de trouver le fichier de configuration ' . $moduleFile);
+            throw new CoreException('Impossible de trouver le fichier de configuration ' . $moduleFile);
         }
         $tmp = NextDomHelper::getTmpFolder('market') . '/' . $market->getLogicalId() . '.zip';
         if (file_exists($tmp)) {
             if (!unlink($tmp)) {
-                throw new \Exception(__('Impossible de supprimer : ') . $tmp . __('. Vérifiez les droits'));
+                throw new CoreException(__('Impossible de supprimer : ') . $tmp . __('. Vérifiez les droits'));
             }
         }
         if (!FileSystemHelper::createZip($moduleFile, $tmp)) {
-            throw new \Exception(__('Echec de création du zip. Répertoire source : ') . $moduleFile . __(' / Répertoire cible : ') . $tmp);
+            throw new CoreException(__('Echec de création du zip. Répertoire source : ') . $moduleFile . __(' / Répertoire cible : ') . $tmp);
         }
         return $tmp;
     }
@@ -715,7 +713,7 @@ class ScenarioManager
             $zip->extractTo($cibDir . '/');
             $zip->close();
         } else {
-            throw new \Exception('Impossible de décompresser l\'archive zip : ' . $path);
+            throw new CoreException('Impossible de décompresser l\'archive zip : ' . $path);
         }
     }
 
@@ -725,7 +723,7 @@ class ScenarioManager
      */
     public static function listMarketObject()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -748,12 +746,12 @@ class ScenarioManager
         $return['object'] = is_object($linkedObject) ? $linkedObject->getId() : 'aucun';
         $return['html'] = '<div class="timeline-item cmd" data-id="' . $event['id'] . '">'
             . '<span class="time"><i class="fa fa-clock-o"></i>' . substr($event['datetime'], -9) . '</span>'
-            .'<h3 class="timeline-header">' . $event['name'] . '</h3>'
-            .'<div class="timeline-body">'
+            . '<h3 class="timeline-header">' . $event['name'] . '</h3>'
+            . '<div class="timeline-body">'
             . 'Déclenché par ' . $event['trigger']
-            .' <div class="timeline-footer">'
-            .'</div>'
-            .'</div>';
+            . ' <div class="timeline-footer">'
+            . '</div>'
+            . '</div>';
         return $return;
     }
 }

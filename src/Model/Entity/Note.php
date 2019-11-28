@@ -88,30 +88,6 @@ class Note implements EntityInterface
     }
 
     /**
-     * Get the name of the note
-     *
-     * @return string Name of the note
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Set the name of the note
-     *
-     * @param string $newName Name of the note
-     *
-     * @return $this
-     */
-    public function setName($newName)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $newName);
-        $this->name = $newName;
-        return $this;
-    }
-
-    /**
      * Get the text of the note
      *
      * @return string Text of the note
@@ -167,6 +143,30 @@ class Note implements EntityInterface
         if (trim($this->getName()) == '') {
             throw new CoreException(__('entity.note.name-cannot-be-empty'));
         }
+    }
+
+    /**
+     * Get the name of the note
+     *
+     * @return string Name of the note
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set the name of the note
+     *
+     * @param string $newName Name of the note
+     *
+     * @return $this
+     */
+    public function setName($newName)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $newName);
+        $this->name = $newName;
+        return $this;
     }
 
     /**

@@ -33,6 +33,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Enums\CmdType;
 use NextDom\Enums\DateFormat;
 use NextDom\Enums\ScenarioState;
 use NextDom\Helpers\DateHelper;
@@ -168,7 +169,7 @@ class ScenarioExpressionManager
         $replace = [
             '#uid#' => 'exp' . mt_rand()
         ];
-        $result = array('html' => '');
+        $result = ['html' => ''];
         $cmd = CmdManager::byId(str_replace('#', '', CmdManager::humanReadableToCmd($expression)));
         if (is_object($cmd)) {
             $result['html'] = trim($cmd->toHtml('scenario', $options));
@@ -306,7 +307,7 @@ class ScenarioExpressionManager
                 }
             }
         }
-        $replace2 = array();
+        $replace2 = [];
         if (!is_string($_expression)) {
             return $_expression;
         }
@@ -382,7 +383,7 @@ class ScenarioExpressionManager
      */
     public static function getRequestTags($expression)
     {
-        $return = array();
+        $return = [];
         preg_match_all("/#([a-zA-Z0-9]*)#/", $expression, $matches);
         if (count($matches) == 0) {
             return $return;
@@ -520,7 +521,7 @@ class ScenarioExpressionManager
      */
     public static function scenario(string $scenarioExpression)
     {
-        $id = str_replace(array('scenario', '#'), '', trim($scenarioExpression));
+        $id = str_replace(['scenario', '#'], '', trim($scenarioExpression));
         $scenario = ScenarioManager::byId($id);
         if (!is_object($scenario)) {
             return -2;
@@ -548,7 +549,7 @@ class ScenarioExpressionManager
      */
     public static function eqEnable($eqLogicId)
     {
-        $id = str_replace(array('eqLogic', '#'), '', trim($eqLogicId));
+        $id = str_replace(['eqLogic', '#'], '', trim($eqLogicId));
         $eqLogic = EqLogicManager::byId($id);
         if (!is_object($eqLogic)) {
             return -2;
@@ -570,7 +571,7 @@ class ScenarioExpressionManager
     {
         $args = func_get_args();
         if (count($args) > 2 || strpos($period, '#') !== false || is_numeric($period)) {
-            $values = array();
+            $values = [];
             foreach ($args as $arg) {
                 if (is_numeric($arg)) {
                     $values[] = $arg;
@@ -695,7 +696,7 @@ class ScenarioExpressionManager
     {
         $args = func_get_args();
         if (count($args) > 2 || strpos($period, '#') !== false || is_numeric($period)) {
-            $values = array();
+            $values = [];
             foreach ($args as $arg) {
                 if (is_numeric($arg)) {
                     $values[] = $arg;
@@ -797,7 +798,7 @@ class ScenarioExpressionManager
     {
         $args = func_get_args();
         if (count($args) > 2 || strpos($period, '#') !== false || is_numeric($period)) {
-            $values = array();
+            $values = [];
             foreach ($args as $arg) {
                 if (is_numeric($arg)) {
                     $values[] = $arg;
@@ -871,7 +872,7 @@ class ScenarioExpressionManager
     public static function median()
     {
         $args = func_get_args();
-        $values = array();
+        $values = [];
         foreach ($args as $arg) {
             if (is_numeric($arg)) {
                 $values[] = $arg;
@@ -1284,7 +1285,7 @@ class ScenarioExpressionManager
      */
     public static function lastScenarioExecution($scenarioId)
     {
-        $scenario = ScenarioManager::byId(str_replace(array('#scenario', '#'), '', $scenarioId));
+        $scenario = ScenarioManager::byId(str_replace(['#scenario', '#'], '', $scenarioId));
         if (!is_object($scenario)) {
             return 0;
         }
@@ -1305,7 +1306,7 @@ class ScenarioExpressionManager
         if (!is_object($cmdObj)) {
             return -1;
         }
-        if ($cmdObj->getType() != 'info') {
+        if (!$cmdObj->isType(CmdType::INFO)) {
             return -2;
         }
         $cmdObj->execCmd();
@@ -1350,7 +1351,7 @@ class ScenarioExpressionManager
      */
     public static function lastCommunication($_eqLogic_id, $_format = DateFormat::FULL)
     {
-        $eqLogic = EqLogicManager::byId(trim(str_replace(array('#', '#eqLogic', 'eqLogic'), '', EqLogicManager::fromHumanReadable('#' . str_replace('#', '', $_eqLogic_id) . '#'))));
+        $eqLogic = EqLogicManager::byId(trim(str_replace(['#', '#eqLogic', 'eqLogic'], '', EqLogicManager::fromHumanReadable('#' . str_replace('#', '', $_eqLogic_id) . '#'))));
         if (!is_object($eqLogic)) {
             return -1;
         }

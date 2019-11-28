@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\DateFormat;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CacheManager;
 
@@ -38,7 +39,7 @@ class Cache
      */
     public function save()
     {
-        $this->setDatetime(date('Y-m-d H:i:s'));
+        $this->setDatetime(date(DateFormat::FULL));
         if ($this->getLifetime() == 0) {
             return CacheManager::getCache()->save($this->getKey(), $this);
         } else {

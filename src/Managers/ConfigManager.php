@@ -51,44 +51,11 @@ class ConfigManager
     /**
      * @var array Default configuration
      */
-    private static $defaultConfiguration = array();
+    private static $defaultConfiguration = [];
     /**
      * @var array Configuration cache
      */
-    private static $cache = array();
-
-    /**
-     * Get default configuration from default.config.ini
-     *
-     * Configuration file is in /var/lib/nextdom/config/default.config.ini or
-     * NEXTDOM_ROOT/plugins/PLUGIN_ID/core/config/PLUGIN_ID.config.ini
-     *
-     * @param string $pluginId Target configuration plugin or core
-     *
-     * @return mixed
-     */
-    public static function getDefaultConfiguration($pluginId = 'core')
-    {
-        if (!isset(self::$defaultConfiguration[$pluginId])) {
-            if ($pluginId === 'core') {
-                self::$defaultConfiguration[$pluginId] = parse_ini_file(NEXTDOM_DATA . '/config/default.config.ini', true);
-                $customPath = sprintf("%s/custom/custom.config.ini", NEXTDOM_DATA);
-                if (file_exists($customPath)) {
-                    $custom = parse_ini_file($customPath, true);
-                    self::$defaultConfiguration[$pluginId]['core'] = array_merge(self::$defaultConfiguration[$pluginId]['core'], $custom['core']);
-                }
-            } else {
-                $filename = NEXTDOM_ROOT . '/plugins/' . $pluginId . '/core/config/' . $pluginId . '.config.ini';
-                if (is_file($filename)) {
-                    self::$defaultConfiguration[$pluginId] = parse_ini_file($filename, true);
-                }
-            }
-        }
-        if (!isset(self::$defaultConfiguration[$pluginId])) {
-            self::$defaultConfiguration[$pluginId] = array();
-        }
-        return self::$defaultConfiguration[$pluginId];
-    }
+    private static $cache = [];
 
     /**
      * Save new configuration value in the database
@@ -124,16 +91,16 @@ class ConfigManager
 
         // Parse new value with preConfig methode
         $configClass = ($pluginId == 'core') ? 'ConfigManager' : $pluginId;
-        $configMethod = 'preConfig_' . str_replace(array('::', ':'), '_', $configKey);
+        $configMethod = 'preConfig_' . str_replace(['::', ':'], '_', $configKey);
         if (method_exists($configClass, $configMethod)) {
             $configValue = $configClass::$configMethod($configValue);
         }
         // Save in database
-        $values = array(
+        $values = [
             'plugin' => $pluginId,
             'key' => $configKey,
             'value' => $configValue,
-        );
+        ];
         $sql = 'REPLACE ' . self::DB_CLASS_NAME . '
                 SET `key` = :key,
                     `value` = :value,
@@ -141,11 +108,44 @@ class ConfigManager
         DBHelper::exec($sql, $values);
 
         // Execute postConfig method
-        $configMethod = 'postConfig_' . str_replace(array('::', ':'), '_', $configKey);
+        $configMethod = 'postConfig_' . str_replace(['::', ':'], '_', $configKey);
         if (method_exists($configClass, $configMethod)) {
             $configClass::$configMethod($configValue);
         }
         return true;
+    }
+
+    /**
+     * Get default configuration from default.config.ini
+     *
+     * Configuration file is in /var/lib/nextdom/config/default.config.ini or
+     * NEXTDOM_ROOT/plugins/PLUGIN_ID/core/config/PLUGIN_ID.config.ini
+     *
+     * @param string $pluginId Target configuration plugin or core
+     *
+     * @return mixed
+     */
+    public static function getDefaultConfiguration($pluginId = 'core')
+    {
+        if (!isset(self::$defaultConfiguration[$pluginId])) {
+            if ($pluginId === 'core') {
+                self::$defaultConfiguration[$pluginId] = parse_ini_file(NEXTDOM_DATA . '/config/default.config.ini', true);
+                $customPath = sprintf("%s/custom/custom.config.ini", NEXTDOM_DATA);
+                if (file_exists($customPath)) {
+                    $custom = parse_ini_file($customPath, true);
+                    self::$defaultConfiguration[$pluginId]['core'] = array_merge(self::$defaultConfiguration[$pluginId]['core'], $custom['core']);
+                }
+            } else {
+                $filename = NEXTDOM_ROOT . '/plugins/' . $pluginId . '/core/config/' . $pluginId . '.config.ini';
+                if (is_file($filename)) {
+                    self::$defaultConfiguration[$pluginId] = parse_ini_file($filename, true);
+                }
+            }
+        }
+        if (!isset(self::$defaultConfiguration[$pluginId])) {
+            self::$defaultConfiguration[$pluginId] = [];
+        }
+        return self::$defaultConfiguration[$pluginId];
     }
 
     /**
@@ -160,17 +160,17 @@ class ConfigManager
     public static function remove($configKey, $pluginId = 'core')
     {
         if ($configKey == "*" && $pluginId != 'core') {
-            $values = array(
+            $values = [
                 'plugin' => $pluginId,
-            );
+            ];
             $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . '
                     WHERE `plugin` = :plugin';
             return DBHelper::getOne($sql, $values);
         } else {
-            $values = array(
+            $values = [
                 'plugin' => $pluginId,
                 'key' => $configKey,
-            );
+            ];
             $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . '
                     WHERE `key` = :key
                         AND `plugin` = :plugin';
@@ -198,10 +198,10 @@ class ConfigManager
         if (!$forceRefresh && isset(self::$cache[$pluginId . '::' . $configKey])) {
             return self::$cache[$pluginId . '::' . $configKey];
         }
-        $values = array(
+        $values = [
             'plugin' => $pluginId,
             'key' => $configKey,
-        );
+        ];
         $sql = 'SELECT `value`
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE `key` = :key
@@ -235,18 +235,18 @@ class ConfigManager
     public static function byKeys($configKeys, $pluginId = 'core', $defaultValue = '')
     {
         if (!is_array($configKeys) || count($configKeys) == 0) {
-            return array();
+            return [];
         }
-        $values = array(
+        $values = [
             'plugin' => $pluginId,
-        );
+        ];
         $keys = '(\'' . implode('\',\'', $configKeys) . '\')';
         $sql = 'SELECT `key`,`value`
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE `key` IN ' . $keys . '
                     AND plugin=:plugin';
         $values = DBHelper::getAll($sql, $values);
-        $result = array();
+        $result = [];
         foreach ($values as $value) {
             $result[$value['key']] = $value['value'];
         }
@@ -282,10 +282,10 @@ class ConfigManager
      */
     public static function searchKey($configKey, $pluginId = 'core')
     {
-        $values = array(
+        $values = [
             'plugin' => $pluginId,
             'key' => '%' . $configKey . '%',
-        );
+        ];
         $sql = 'SELECT *
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE `key` LIKE :key
@@ -346,7 +346,7 @@ class ConfigManager
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE `key` = \'active\'';
         $values = DBHelper::getAll($sql);
-        $result = array();
+        $result = [];
         foreach ($values as $value) {
             $result[$value['plugin']] = $value['value'];
         }
@@ -365,7 +365,7 @@ class ConfigManager
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE `key` LIKE \'log::level::%\'';
         $values = DBHelper::getAll($sql);
-        $return = array();
+        $return = [];
         foreach ($values as $value) {
             $return[$value['key']] = Utils::isJson($value['value'], $value['value']);
         }

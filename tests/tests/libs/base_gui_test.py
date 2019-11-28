@@ -173,7 +173,7 @@ class BaseGuiTest(unittest.TestCase):
         :type page:  str
         """
         self.driver.get(self.url + page)
-        sleep(4)
+        sleep(5)
 
     def get_js_logs(self):
         """Get javascript browser logs
@@ -181,7 +181,7 @@ class BaseGuiTest(unittest.TestCase):
         :rtype:  array
         """
         js_logs = self.driver.get_log('browser')
-        if len(js_logs) > 0:
+        if js_logs:
             print(js_logs)
         return js_logs
 

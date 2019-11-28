@@ -24,22 +24,44 @@ namespace NextDom\Enums;
  */
 class AjaxParams extends Enum
 {
+    const ACTION = 'action';
+    const BACKUP = 'backup';
     const CMD_ID = 'cmd_id';
     const CATEGORY = 'category';
+    const CODE = 'code';
     const COMMAND = 'command';
     const DEFAULT = 'default';
+    const ENABLE = 'enable';
     const EXPRESSION = 'expression';
+    const FORCE_RESTART = 'forceRestart';
+    const HTML = 'html';
     const ID = 'id';
+    const IDS = 'ids';
+    const IMAGE = 'image';
     const KEY = 'key';
+    const LOGICAL_ID = 'logicalId';
+    const LOG = 'log';
+    const MODAL = 'modal';
+    const MODE = 'mode';
     const OBJECT = 'object';
+    const OBJECT_ID = 'object_id';
     const OPTION = 'option';
+    const NAME = 'name';
     const PARAMS = 'params';
+    const PLUGIN = 'plugin';
     const PROFILS = 'profils';
+    const REPO = 'repo';
     const SCENARIO = 'scenario';
     const SCENARIOS = 'scenarios';
+    const START = 'start';
     const STATE = 'state';
     const SUMMARY = 'summary';
+    const TAG = 'tag';
     const TEMPLATE = 'template';
+    const TEST = 'test';
+    const TYPE = 'type';
+    const USED_BY = 'usedBy';
     const USER_ID = 'user_id';
     const VERSION = 'version';
+    const VIEW_ID = 'view_id';
 }

@@ -18,6 +18,7 @@
 namespace NextDom\Helpers;
 
 use NextDom\Enums\ApiMode;
+use NextDom\Enums\LogTarget;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UserManager;
 
@@ -59,7 +60,7 @@ class Api
             }
             GLOBAL $_USER_GLOBAL;
             $_USER_GLOBAL = $user;
-            LogHelper::add('connection', 'info', __('core.api-connection') . $user->getLogin());
+            LogHelper::addInfo(LogTarget::CONNECTION, __('core.api-connection') . $user->getLogin());
             return true;
         }
         return false;

@@ -31,7 +31,7 @@ class JsonRPCClient
     protected $result;
     protected $rawResult;
     protected $apikey = '';
-    protected $options = array();
+    protected $options = [];
     protected $apiAddr;
     protected $cb_function = '';
     protected $cb_class = '';
@@ -44,7 +44,7 @@ class JsonRPCClient
      * @param $_apikey
      * @param $_options
      */
-    public function __construct($_apiAddr, $_apikey, $_options = array())
+    public function __construct($_apiAddr, $_apikey, $_options = [])
     {
         $this->apiAddr = $_apiAddr;
         $this->apikey = $_apikey;
@@ -64,13 +64,13 @@ class JsonRPCClient
     {
         $_params['apikey'] = $this->apikey;
         $_params = array_merge($_params, $this->options);
-        $request = array(
-            'request' => json_encode(array(
+        $request = [
+            'request' => json_encode([
                 'jsonrpc' => '2.0',
                 'id' => mt_rand(1, 9999),
                 'method' => $_method,
                 'params' => $_params,
-            )));
+            ])];
         $this->rawResult = preg_replace('/[^[:print:]]/', '', trim($this->send($request, $_timeout, $_file, $_maxRetry)));
 
         if ($this->rawResult === false) {

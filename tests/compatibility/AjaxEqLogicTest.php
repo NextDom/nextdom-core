@@ -79,7 +79,7 @@ class AjaxEqLogicTest extends AjaxBase
     public function testListByTypeAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'listByType']);
-        $this->assertContains('"result":null', (string) $result->getBody());
+        $this->assertContains('"result":[]', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 

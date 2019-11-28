@@ -52,9 +52,9 @@ class PlanHeaderManager
      */
     public static function byId($_id)
     {
-        $values = array(
+        $values = [
             'id' => $_id,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE id=:id';
@@ -82,7 +82,7 @@ class PlanHeaderManager
      */
     public static function searchByUse($_type, $_id)
     {
-        $return = array();
+        $return = [];
         $search = '#' . str_replace('cmd', '', $_type . $_id) . '#';
         $plans = array_merge(PlanManager::byLinkTypeLinkId($_type, $_id), PlanManager::searchByConfiguration($search, 'eqLogic'));
         foreach ($plans as $plan) {

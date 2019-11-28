@@ -36,7 +36,7 @@ class UpdateManagerTest extends PHPUnit_Framework_TestCase
     {
 
     }
-
+/*
     public function testFindNewUpdateObject()
     {
         UpdateManager::findNewUpdateObject();
@@ -110,5 +110,14 @@ class UpdateManagerTest extends PHPUnit_Framework_TestCase
         $updatesByType = UpdateManager::all('plugin');
         $this->assertCount(1, $updatesByType);
         $this->assertEquals('plugin4tests', $updatesByType[0]->getName());
+    }
+*/
+    public function testListRepo()
+    {
+        $repoList = UpdateManager::listRepo();
+        $this->assertCount(7, $repoList);
+        $this->assertEquals('Apt', $repoList['apt']['name']);
+        $this->assertEquals('\NextDom\Repo\RepoNextDom', $repoList['nextdom']['class']);
+        $this->assertEquals('input', $repoList['samba']['configuration']['configuration']['backup::ip']['type']);
     }
 }

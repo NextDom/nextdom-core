@@ -39,6 +39,7 @@ use Monolog\Handler\SyslogHandler;
 use Monolog\Handler\SyslogUdpHandler;
 use Monolog\Logger;
 use NextDom\Com\ComShell;
+use NextDom\Exceptions\CoreException;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\MessageManager;
 use SplFileObject;
@@ -74,54 +75,6 @@ class LogHelper
     public static function addError($targetLog, $message, $logicalId = '')
     {
         return self::add($targetLog, 'error', $message, $logicalId);
-    }
-
-    /**
-     * Log an information
-     *
-     * @param string $targetLog Target log file
-     * @param string $message Message to log
-     * @param string $logicalId Logical id linked to this log (optional)
-     *
-     * @return bool
-     *
-     * @throws \Exception
-     */
-    public static function addInfo($targetLog, $message, $logicalId = '')
-    {
-        return self::add($targetLog, 'info', $message, $logicalId);
-    }
-
-    /**
-     * Log a debug
-     *
-     * @param string $targetLog Target log file
-     * @param string $message Message to log
-     * @param string $logicalId Logical id linked to this log (optional)
-     *
-     * @return bool
-     *
-     * @throws \Exception
-     */
-    public static function addDebug($targetLog, $message, $logicalId = '')
-    {
-        return self::add($targetLog, 'debug', $message, $logicalId);
-    }
-
-    /**
-     * Log a critical message
-     *
-     * @param string $targetLog Target log file
-     * @param string $message Message to log
-     * @param string $logicalId Logical id linked to this log (optional)
-     *
-     * @return bool
-     *
-     * @throws \Exception
-     */
-    public static function addCritical($targetLog, $message, $logicalId = '')
-    {
-        return self::add($targetLog, 'critical', $message, $logicalId);
     }
 
     /**
@@ -202,7 +155,7 @@ class LogHelper
     {
         // Load config data
         if (self::$config === null) {
-            self::$config = array_merge(ConfigManager::getLogLevelPlugin(), ConfigManager::byKeys(array('log::engine', 'log::formatter', 'log::level', 'addMessageForErrorLog', 'maxLineLog')));
+            self::$config = array_merge(ConfigManager::getLogLevelPlugin(), ConfigManager::byKeys(['log::engine', 'log::formatter', 'log::level', 'addMessageForErrorLog', 'maxLineLog']));
         }
         if (isset(self::$config[$configKey])) {
             return self::$config[$configKey];
@@ -248,6 +201,86 @@ class LogHelper
     public static function getPathToLog($targetLog = 'core'): string
     {
         return NEXTDOM_LOG . '/' . $targetLog;
+    }
+
+    /**
+     * Log an information
+     *
+     * @param string $targetLog Target log file
+     * @param string $message Message to log
+     * @param string $logicalId Logical id linked to this log (optional)
+     *
+     * @return bool
+     *
+     * @throws \Exception
+     */
+    public static function addInfo($targetLog, $message, $logicalId = '')
+    {
+        return self::add($targetLog, 'info', $message, $logicalId);
+    }
+
+    /**
+     * Log a debug
+     *
+     * @param string $targetLog Target log file
+     * @param string $message Message to log
+     * @param string $logicalId Logical id linked to this log (optional)
+     *
+     * @return bool
+     *
+     * @throws \Exception
+     */
+    public static function addDebug($targetLog, $message, $logicalId = '')
+    {
+        return self::add($targetLog, 'debug', $message, $logicalId);
+    }
+
+    /**
+     * Log a critical message
+     *
+     * @param string $targetLog Target log file
+     * @param string $message Message to log
+     * @param string $logicalId Logical id linked to this log (optional)
+     *
+     * @return bool
+     *
+     * @throws \Exception
+     */
+    public static function addCritical($targetLog, $message, $logicalId = '')
+    {
+        return self::add($targetLog, 'critical', $message, $logicalId);
+    }
+
+    /**
+     * Log an update message
+     *
+     * @param string $targetLog Target log file
+     * @param string $message Message to log
+     * @param string $logicalId Logical id linked to this log (optional)
+     *
+     * @return bool
+     *
+     * @throws \Exception
+     */
+    public static function addUpdate($targetLog, $message, $logicalId = '')
+    {
+        return self::add($targetLog, 'update', $message, $logicalId);
+    }
+
+    /**
+     * Log an alert message
+     *
+     * @param string $targetLog Target log file
+     * @param string $message Message to log
+     * @param string $logicalId Logical id linked to this log (optional)
+     *
+     * @return bool
+     *
+     * @throws \Exception
+     */
+    public static function addAlert($targetLog, $message, $logicalId = '')
+    {
+        return self::add($targetLog, 'alert', $message, $logicalId);
     }
 
     /**
@@ -353,9 +386,9 @@ class LogHelper
             while ($log->valid() && $linesRead != $nbLines) {
                 $line = trim($log->current()); //get current line
                 if ($line != '') {
-                    if(function_exists('mb_convert_encoding')){
+                    if (function_exists('mb_convert_encoding')) {
                         array_unshift($page, mb_convert_encoding($line, 'UTF-8'));
-                    }else {
+                    } else {
                         array_unshift($page, $line);
                     }
                 }
@@ -379,7 +412,7 @@ class LogHelper
         if ($targetLog != '') {
             $paths[] = self::getPathToLog($targetLog);
         } else {
-            $relativeLogPaths = array('', 'scenarioLog/');
+            $relativeLogPaths = ['', 'scenarioLog/'];
             foreach ($relativeLogPaths as $relativeLogPath) {
                 $logPath = self::getPathToLog($relativeLogPath);
                 $logs = FileSystemHelper::ls($logPath, '*');
@@ -438,7 +471,7 @@ class LogHelper
      *
      * @return array List of files
      */
-    public static function liste($filter = null) 
+    public static function liste($filter = null)
     {
         trigger_error('This method is deprecated', E_USER_DEPRECATED);
         return self::getLogFileList($filter);
@@ -516,7 +549,7 @@ class LogHelper
                 error_reporting(E_ERROR | E_PARSE);
                 break;
             default:
-                throw new \Exception('log::level invalide ("' . $log_level . '")');
+                throw new CoreException('log::level invalide ("' . $log_level . '")');
                 break;
         }
     }

@@ -53,9 +53,9 @@ class Plan3dManager
      */
     public static function byId($_id)
     {
-        $values = array(
+        $values = [
             'id' => $_id,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE id=:id';
@@ -69,9 +69,9 @@ class Plan3dManager
      */
     public static function byPlan3dHeaderId($_plan3dHeader_id)
     {
-        $values = array(
+        $values = [
             'plan3dHeader_id' => $_plan3dHeader_id,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE plan3dHeader_id=:plan3dHeader_id';
@@ -87,10 +87,10 @@ class Plan3dManager
      */
     public static function byLinkTypeLinkId($_link_type, $_link_id)
     {
-        $values = array(
+        $values = [
             'link_type' => $_link_type,
             'link_id' => $_link_id,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE link_type=:link_type
@@ -107,10 +107,10 @@ class Plan3dManager
      */
     public static function byName3dHeaderId($_name, $_plan3dHeader_id)
     {
-        $values = array(
+        $values = [
             'name' => $_name,
             'plan3dHeader_id' => $_plan3dHeader_id,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE name=:name
@@ -128,11 +128,11 @@ class Plan3dManager
      */
     public static function byLinkTypeLinkId3dHeaderId($_link_type, $_link_id, $_plan3dHeader_id)
     {
-        $values = array(
+        $values = [
             'link_type' => $_link_type,
             'link_id' => $_link_id,
             'plan3dHeader_id' => $_plan3dHeader_id,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE link_type=:link_type
@@ -150,11 +150,11 @@ class Plan3dManager
      */
     public static function removeByLinkTypeLinkId3dHeaderId($_link_type, $_link_id, $_plan3dHeader_id)
     {
-        $values = array(
+        $values = [
             'link_type' => $_link_type,
             'link_id' => $_link_id,
             'plan3dHeader_id' => $_plan3dHeader_id,
-        );
+        ];
         $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . '
         WHERE link_type=:link_type
         AND link_id=:link_id
@@ -182,9 +182,9 @@ class Plan3dManager
      */
     public static function searchByDisplay($_search)
     {
-        $value = array(
+        $value = [
             'search' => '%' . $_search . '%',
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE display LIKE :search';
@@ -200,10 +200,10 @@ class Plan3dManager
      */
     public static function searchByConfiguration($_search, $_not = '')
     {
-        $value = array(
+        $value = [
             'search' => '%' . $_search . '%',
             'not' => $_not,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE configuration LIKE :search

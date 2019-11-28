@@ -20,7 +20,8 @@
 
 namespace NextDom\Repo;
 
-use Icewind\SMB\System;
+use NextDom\Enums\DateFormat;
+use NextDom\Enums\LogTarget;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Api;
 use NextDom\Helpers\LogHelper;
@@ -28,6 +29,7 @@ use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
 use NextDom\Helpers\Utils;
+use NextDom\Interfaces\BaseRepo;
 use NextDom\Managers\BackupManager;
 use NextDom\Managers\CacheManager;
 use NextDom\Managers\ConfigManager;
@@ -37,7 +39,7 @@ use NextDom\Managers\UpdateManager;
 use NextDom\Managers\UserManager;
 use NextDom\Model\Entity\Update;
 
-class RepoMarket
+class RepoMarket implements BaseRepo
 {
     /*     * *************************Attributs****************************** */
 
@@ -45,7 +47,7 @@ class RepoMarket
     public static $_icon = 'fas fa-shopping-cart';
     public static $_description = 'repo.market.description';
 
-    public static $_scope = array(
+    public static $_scope = [
         'plugin' => true,
         'backup' => false,
         'hasConfiguration' => true,
@@ -54,44 +56,44 @@ class RepoMarket
         'hasStore' => true,
         'hasScenarioStore' => true,
         'test' => true,
-    );
+    ];
 
-    public static $_configuration = array(
-        'configuration' => array(
-            'address' => array(
+    public static $_configuration = [
+        'configuration' => [
+            'address' => [
                 'name' => 'repo.market.conf.address.name',
                 'type' => 'input',
                 'placeholder' => 'repo.market.conf.address.placeholder',
-            ),
-            'username' => array(
+            ],
+            'username' => [
                 'name' => 'repo.market.conf.user',
                 'type' => 'input',
-            ),
-            'password' => array(
+            ],
+            'password' => [
                 'name' => 'repo.market.conf.password',
                 'type' => 'password',
-            ),
-            'cloud::backup::name' => array(
+            ],
+            'cloud::backup::name' => [
                 'name' => 'repo.market.conf.cloud.name',
                 'type' => 'input',
-            ),
-            'cloud::backup::password' => array(
+            ],
+            'cloud::backup::password' => [
                 'name' => 'repo.market.conf.cloud.password',
                 'type' => 'password',
-            ),
-            'cloud::backup::fullfrequency' => array(
+            ],
+            'cloud::backup::fullfrequency' => [
                 'name' => 'repo.market.conf.cloud.frequency',
                 'type' => 'select',
-                'values' => array('1D' => 'repo.market.conf.cloud.day', '1W' => 'repo.market.conf.cloud.week', '1M' => 'repo.market.conf.cloud.month'),
-            ),
-        ),
-        'parameters_for_add' => array(
-            'version' => array(
+                'values' => ['1D' => 'repo.market.conf.cloud.day', '1W' => 'repo.market.conf.cloud.week', '1M' => 'repo.market.conf.cloud.month'],
+            ],
+        ],
+        'parameters_for_add' => [
+            'version' => [
                 'name' => 'repo.market.conf.version',
                 'type' => 'input',
-            ),
-        ),
-    );
+            ],
+        ],
+    ];
 
     private $id;
     private $name;
@@ -123,7 +125,7 @@ class RepoMarket
     private $parameters;
     private $hardwareCompatibility;
     private $nbInstall;
-    private $allowVersion = array();
+    private $allowVersion = [];
 
     /*     * ***********************Méthodes statiques*************************** */
 
@@ -138,10 +140,10 @@ class RepoMarket
             if (count($_update) < 1) {
                 return;
             }
-            $markets = array('logicalId' => array(), 'version' => array());
-            $marketObject = array();
+            $markets = ['logicalId' => [], 'version' => []];
+            $marketObject = [];
             foreach ($_update as $update) {
-                $markets['logicalId'][] = array('logicalId' => $update->getLogicalId(), 'type' => $update->getType());
+                $markets['logicalId'][] = ['logicalId' => $update->getLogicalId(), 'type' => $update->getType()];
                 $markets['version'][] = $update->getConfiguration('version', 'stable');
                 $marketObject[$update->getType() . $update->getLogicalId()] = $update;
             }
@@ -160,7 +162,7 @@ class RepoMarket
             }
             return;
         }
-        $market_info = self::getInfo(array('logicalId' => $_update->getLogicalId(), 'type' => $_update->getType()), $_update->getConfiguration('version', 'stable'));
+        $market_info = self::getInfo(['logicalId' => $_update->getLogicalId(), 'type' => $_update->getType()], $_update->getConfiguration('version', 'stable'));
         $_update->setStatus($market_info['status']);
         $_update->setConfiguration('market', $market_info['market']);
         $_update->setRemoteVersion($market_info['datetime']);
@@ -169,7 +171,6 @@ class RepoMarket
 
     public static function getInfo($_logicalId, $_version = 'stable')
     {
-        $returns = array();
         if (is_array($_logicalId) && is_array($_version) && count($_logicalId) == count($_version)) {
             if (is_array(reset($_logicalId))) {
                 $markets = self::byLogicalIdAndType($_logicalId);
@@ -177,7 +178,7 @@ class RepoMarket
                 $markets = self::byLogicalId($_logicalId);
             }
 
-            $returns = array();
+            $returns = [];
             $countLogicalId = count($_logicalId);
             for ($i = 0; $i < $countLogicalId; $i++) {
                 if (is_array($_logicalId[$i])) {
@@ -185,7 +186,7 @@ class RepoMarket
                 } else {
                     $logicalId = $_logicalId[$i];
                 }
-                $return['owner'] = array();
+                $return['owner'] = [];
                 $return['datetime'] = '0000-01-01 00:00:00';
                 if ($logicalId == '' || ConfigManager::byKey('market::address') == '') {
                     $return['owner']['market'] = 0;
@@ -224,16 +225,16 @@ class RepoMarket
                         $return['status'] = 'ok';
                     }
                 } catch (\Exception $e) {
-                    LogHelper::add('market', 'debug', __('Erreur self::getinfo : ') . $e->getMessage());
+                    LogHelper::addDebug(LogTarget::MARKET, __('Erreur self::getinfo : ') . $e->getMessage());
                     $return['status'] = 'ok';
                 }
                 $returns[$logicalId] = $return;
             }
             return $returns;
         }
-        $return = array();
+        $return = [];
         $return['datetime'] = '0000-01-01 00:00:00';
-        $return['owner'] = array();
+        $return['owner'] = [];
         if (ConfigManager::byKey('market::address') == '') {
             $return['market'] = 0;
             $return['owner']['market'] = 0;
@@ -272,7 +273,7 @@ class RepoMarket
                 }
             }
         } catch (\Exception $e) {
-            LogHelper::add('market', 'debug', __('Erreur self::getinfo : ') . $e->getMessage());
+            LogHelper::addDebug(LogTarget::MARKET, __('Erreur self::getinfo : ') . $e->getMessage());
             $return['status'] = 'ok';
         }
         return $return;
@@ -285,22 +286,22 @@ class RepoMarket
             $options = $_logicalId;
             $timeout = 240;
         } else {
-            $options = array('logicalId' => $_logicalId, 'type' => $_type);
+            $options = ['logicalId' => $_logicalId, 'type' => $_type];
             $timeout = 10;
         }
         if ($market->sendRequest('market::byLogicalIdAndType', $options, $timeout, null, 1)) {
             if (is_array($_logicalId)) {
-                $return = array();
+                $result = [];
                 foreach ($market->getResult() as $logicalId => $result) {
                     if (isset($result['id'])) {
-                        $return[$logicalId] = self::construct($result);
+                        $result[$logicalId] = self::construct($result);
                     }
                 }
-                return $return;
+                return $result;
             }
             return self::construct($market->getResult());
         } else {
-            LogHelper::add('market', 'debug', print_r($market, true));
+            LogHelper::addDebug(LogTarget::MARKET, print_r($market, true));
             throw new CoreException($market->getError(), $market->getErrorCode());
         }
     }
@@ -313,43 +314,43 @@ class RepoMarket
         } catch (\Exception $e) {
 
         }
-        $uname = shell_exec('uname -a');
+        $uname = SystemHelper::getSystemInformations();
         if (ConfigManager::byKey('market::username') != '' && ConfigManager::byKey('market::password') != '') {
-            $params = array(
+            $params = [
                 'username' => ConfigManager::byKey('market::username'),
                 'password' => self::getPassword(),
                 'password_type' => 'sha1',
                 'nextdomversion' => NextDomHelper::getNextdomVersion(),
                 'hwkey' => NextDomHelper::getHardwareKey(),
-                'information' => array(
+                'information' => [
                     'nbMessage' => MessageManager::nbMessage(),
                     'nbUpdate' => UpdateManager::nbNeedUpdate(),
                     'hardware' => (method_exists('nextdom', 'getHardwareName')) ? NextDomHelper::getHardwareName() : '',
                     'uname' => $uname,
-                ),
+                ],
                 'market_api_key' => Api::getApiKey('apimarket'),
                 'localIp' => $internalIp,
                 'nextdom_name' => ConfigManager::byKey('name'),
                 'plugin_install_list' => PluginManager::listPlugin(true, false, true),
-            );
+            ];
             if (ConfigManager::byKey('market::allowDNS') != 1 || ConfigManager::byKey('network::disableMangement') == 1) {
                 $params['url'] = NetworkHelper::getNetworkAccess('external');
             }
             $jsonrpc = new \jsonrpcClient(ConfigManager::byKey('market::address') . '/core/api/api.php', '', $params);
         } else {
-            $jsonrpc = new \jsonrpcClient(ConfigManager::byKey('market::address') . '/core/api/api.php', '', array(
+            $jsonrpc = new \jsonrpcClient(ConfigManager::byKey('market::address') . '/core/api/api.php', '', [
                 'nextdomversion' => NextDomHelper::getNextdomVersion(),
                 'hwkey' => NextDomHelper::getHardwareKey(),
                 'localIp' => $internalIp,
                 'nextdom_name' => ConfigManager::byKey('name'),
                 'plugin_install_list' => PluginManager::listPlugin(true, false, true),
-                'information' => array(
+                'information' => [
                     'nbMessage' => MessageManager::nbMessage(),
                     'nbUpdate' => UpdateManager::nbNeedUpdate(),
                     'hardware' => (method_exists('nextdom', 'getHardwareName')) ? NextDomHelper::getHardwareName() : '',
                     'uname' => $uname,
-                ),
-            ));
+                ],
+            ]);
         }
         $jsonrpc->setCb_class('RepoMarket');
         $jsonrpc->setCb_function('postJsonRpc');
@@ -444,18 +445,18 @@ class RepoMarket
             $options = $_logicalId;
             $timeout = 240;
         } else {
-            $options = array('logicalId' => $_logicalId);
+            $options = ['logicalId' => $_logicalId];
             $timeout = 10;
         }
         if ($market->sendRequest('market::byLogicalId', $options, $timeout, null, 1)) {
             if (is_array($_logicalId)) {
-                $return = array();
+                $result = [];
                 foreach ($market->getResult() as $logicalId => $result) {
                     if (isset($result['id'])) {
-                        $return[$logicalId] = self::construct($result);
+                        $result[$logicalId] = self::construct($result);
                     }
                 }
-                return $return;
+                return $result;
             }
             return self::construct($market->getResult());
         } else {
@@ -520,7 +521,7 @@ class RepoMarket
         } else {
             throw new CoreException(__('Objet introuvable sur le market : ') . $_update->getLogicalId() . '/' . $_update->getType());
         }
-        return array('path' => $file, 'localVersion' => $market->getDatetime($_update->getConfiguration('version', 'stable')));
+        return ['path' => $file, 'localVersion' => $market->getDatetime($_update->getConfiguration('version', 'stable'))];
     }
 
     /*     * ***********************CRON*************************** */
@@ -540,19 +541,19 @@ class RepoMarket
         }
 
         $url = ConfigManager::byKey('market::address') . "/core/php/downloadFile.php?id=" . $this->getId() . '&version=' . $_version . '&nextdomversion=' . NextDomHelper::getNextdomVersion() . '&hwkey=' . NextDomHelper::getHardwareKey() . '&username=' . urlencode(ConfigManager::byKey('market::username')) . '&password=' . self::getPassword() . '&password_type=sha1';
-        LogHelper::add('update', 'alert', __('Téléchargement de ') . $this->getLogicalId() . '...');
+        LogHelper::addAlert(LogTarget::UPDATE, __('Téléchargement de ') . $this->getLogicalId() . '...');
         exec('wget --no-check-certificate "' . $url . '" -O ' . $tmp . ' 2>&1 >> ' . LogHelper::getPathToLog('update'));
         switch ($this->getType()) {
             case 'plugin':
                 return $tmp;
                 break;
             default:
-                LogHelper::add('update', 'alert', __('Installation des plugin, widget, scénario...'));
+                LogHelper::addAlert(LogTarget::UPDATE, __('Installation des plugin, widget, scénario...'));
                 $type = $this->getType();
                 if (class_exists($type) && method_exists($type, 'getFromMarket')) {
                     $type::getFromMarket($this, $tmp);
                 }
-                LogHelper::add('update', 'alert', __("OK\n"));
+                LogHelper::addAlert(LogTarget::UPDATE, __("OK\n"));
                 break;
         }
         return false;
@@ -629,44 +630,44 @@ class RepoMarket
         } elseif ($_update->getConfiguration('third_plugin', 0) == 1) {
             $url = 'https://nextdom.github.io/documentation/third_plugin/' . $_update->getLogicalId() . '/' . ConfigManager::byKey('language', 'core', 'fr_FR') . '/index.html';
         }
-        return array(
+        return [
             'doc' => $url,
             'changelog' => $url . '#_changelog',
             'display' => 'https://www.jeedom.fr/market/index.php?v=d&p=market&type=plugin&plugin_id=' . $_update->getLogicalId(),
-        );
+        ];
     }
 
     public static function backup_send($_path)
     {
         if (ConfigManager::byKey('market::backupServer') == '' || ConfigManager::byKey('market::backupPassword') == '') {
-            throw new \Exception(__('Aucun serveur de backup defini. Avez vous bien un abonnement au backup cloud ?'));
+            throw new CoreException(__('Aucun serveur de backup defini. Avez vous bien un abonnement au backup cloud ?'));
         }
         if (ConfigManager::byKey('market::cloud::backup::password') == '') {
-            throw new \Exception(__('Vous devez obligatoirement avoir un mot de passe pour le backup cloud'));
+            throw new CoreException(__('Vous devez obligatoirement avoir un mot de passe pour le backup cloud'));
         }
         shell_exec(SystemHelper::getCmdSudo() . ' rm -rf /tmp/duplicity-*-tempdir');
         self::backup_createFolderIsNotExist();
         self::backup_install();
-        $base_dir = realpath(__DIR__ . '/../../');
-        if (!file_exists($base_dir . '/tmp')) {
-            mkdir($base_dir . '/tmp');
+        $baseDir = realpath(__DIR__ . '/../../');
+        if (!file_exists($baseDir . '/tmp')) {
+            mkdir($baseDir . '/tmp');
         }
-        $excludes = array(
-            $base_dir . '/tmp',
-            $base_dir . '/log',
-            $base_dir . '/backup',
-            $base_dir . '/doc',
-            $base_dir . '/docs',
-            $base_dir . '/plugins/*/doc',
-            $base_dir . '/plugins/*/docs',
-            $base_dir . '/tests',
-            $base_dir . '/.git',
-            $base_dir . '/.log',
-            $base_dir . '/core/config/common.config.php',
-            $base_dir . '/' . ConfigManager::byKey('backup::path'),
-        );
+        $excludes = [
+            $baseDir . '/tmp',
+            $baseDir . '/log',
+            $baseDir . '/backup',
+            $baseDir . '/doc',
+            $baseDir . '/docs',
+            $baseDir . '/plugins/*/doc',
+            $baseDir . '/plugins/*/docs',
+            $baseDir . '/tests',
+            $baseDir . '/.git',
+            $baseDir . '/.log',
+            $baseDir . '/core/config/common.config.php',
+            $baseDir . '/' . ConfigManager::byKey('backup::path'),
+        ];
         if (ConfigManager::byKey('recordDir', 'camera') != '') {
-            $excludes[] = $base_dir . '/' . ConfigManager::byKey('recordDir', 'camera');
+            $excludes[] = $baseDir . '/' . ConfigManager::byKey('recordDir', 'camera');
         }
         $cmd = SystemHelper::getCmdSudo() . ' PASSPHRASE="' . ConfigManager::byKey('market::cloud::backup::password') . '"';
         $cmd .= ' duplicity incremental --full-if-older-than ' . ConfigManager::byKey('market::cloud::backup::fullfrequency', 'core', '1M');
@@ -675,8 +676,8 @@ class RepoMarket
         }
         $cmd .= ' --num-retries 2';
         $cmd .= ' --ssl-no-check-certificate';
-        $cmd .= ' --tempdir ' . $base_dir;
-        $cmd .= ' ' . $base_dir . '  "webdavs://' . ConfigManager::byKey('market::username') . ':' . ConfigManager::byKey('market::backupPassword');
+        $cmd .= ' --tempdir ' . $baseDir;
+        $cmd .= ' ' . $baseDir . '  "webdavs://' . ConfigManager::byKey('market::username') . ':' . ConfigManager::byKey('market::backupPassword');
         $cmd .= '@' . ConfigManager::byKey('market::backupServer') . '/remote.php/webdav/' . ConfigManager::byKey('market::cloud::backup::name') . '"';
         try {
             \com_shell::execute($cmd);
@@ -688,7 +689,7 @@ class RepoMarket
                 self::backup_clean();
             }
             SystemHelper::kill('duplicity');
-            shell_exec(SystemHelper::getCmdSudo() . ' rm -rf ' . $base_dir . '/tmp/duplicity*');
+            shell_exec(SystemHelper::getCmdSudo() . ' rm -rf ' . $baseDir . '/tmp/duplicity*');
             shell_exec(SystemHelper::getCmdSudo() . ' rm -rf ~/.cache/duplicity/*');
             \com_shell::execute($cmd);
         }
@@ -696,11 +697,11 @@ class RepoMarket
 
     public static function backup_createFolderIsNotExist()
     {
-        $client = new \Sabre\DAV\Client(array(
+        $client = new \Sabre\DAV\Client([
             'baseUri' => 'https://' . ConfigManager::byKey('market::backupServer'),
             'userName' => ConfigManager::byKey('market::username'),
             'password' => ConfigManager::byKey('market::backupPassword'),
-        ));
+        ]);
         $adapter = new \League\Flysystem\WebDAV\WebDAVAdapter($client);
         $filesystem = new \League\Flysystem\Filesystem($adapter);
         $folders = $filesystem->listContents('/remote.php/webdav/');
@@ -776,14 +777,14 @@ class RepoMarket
     public static function backup_list()
     {
         if (ConfigManager::byKey('market::backupServer') == '' || ConfigManager::byKey('market::backupPassword') == '') {
-            return array();
+            return [];
         }
         if (ConfigManager::byKey('market::cloud::backup::password') == '') {
-            return array();
+            return [];
         }
         self::backup_createFolderIsNotExist();
         self::backup_install();
-        $return = array();
+        $backupList = [];
         $cmd = SystemHelper::getCmdSudo();
         $cmd .= ' duplicity collection-status';
         $cmd .= ' --ssl-no-check-certificate';
@@ -801,9 +802,9 @@ class RepoMarket
             if (strpos($line, 'Full') === false && strpos($line, 'Incremental') === false && strpos($line, 'Complète') === false && strpos($line, 'Incrémentale') === false) {
                 continue;
             }
-            $return[] = trim(substr($line, 0, -1));
+            $backupList[] = trim(substr($line, 0, -1));
         }
-        return array_reverse($return);
+        return array_reverse($backupList);
     }
 
     public static function backup_restore($_backup)
@@ -825,7 +826,7 @@ class RepoMarket
             mkdir($base_dir);
         }
         mkdir($restore_dir);
-        $timestamp = strtotime(trim(str_replace(array('Full', 'Incremental'), '', $_backup)));
+        $timestamp = strtotime(trim(str_replace(['Full', 'Incremental'], '', $_backup)));
         $backup_name = str_replace(' ', '_', 'backup-cloud-' . ConfigManager::byKey('market::cloud::backup::name') . '-' . date("Y-m-d-H\hi", $timestamp) . '.tar.gz');
         $cmd = SystemHelper::getCmdSudo() . ' PASSPHRASE="' . ConfigManager::byKey('market::cloud::backup::password') . '"';
         $cmd .= ' duplicity --file-to-restore /';
@@ -891,10 +892,10 @@ class RepoMarket
 
     public static function monitoring_status()
     {
-        if(!file_exists('/etc/zabbix/zabbix_agentd.conf')){
+        if (!file_exists('/etc/zabbix/zabbix_agentd.conf')) {
             return false;
         }
-        if(exec('grep "jeedom.com" /etc/zabbix/zabbix_agentd.conf | grep -v "zabbix.jeedom.com" | wc -l') == 0){
+        if (exec('grep "jeedom.com" /etc/zabbix/zabbix_agentd.conf | grep -v "zabbix.jeedom.com" | wc -l') == 0) {
             return false;
         }
         return (count(SystemHelper::ps('zabbix')) > 0);
@@ -983,15 +984,15 @@ class RepoMarket
 
     public static function health()
     {
-        $return = array();
+        $return = [];
         if (ConfigManager::byKey('market::monitoringServer') != '') {
             $monitoring_state = self::monitoring_status();
-            $return[] = array(
+            $return[] = [
                 'name' => __('Cloud monitoring actif'),
                 'state' => $monitoring_state,
                 'result' => ($monitoring_state) ? __('OK') : __('NOK'),
                 'comment' => ($monitoring_state) ? '' : __('Attendez 10 minutes si le service ne redémarre pas contacter le support'),
-            );
+            ];
         }
         return $return;
     }
@@ -1013,8 +1014,8 @@ class RepoMarket
             $_ticket['options']['page'] = substr($_ticket['options']['page'], strpos($_ticket['options']['page'], 'index.php'));
         }
         $_ticket['options']['nextdom_version'] = NextDomHelper::getNextdomVersion();
-        $_ticket['options']['uname'] = shell_exec('uname -a');
-        if (!$jsonrpc->sendRequest('ticket::save', array('ticket' => $_ticket), 300)) {
+        $_ticket['options']['uname'] = SystemHelper::getSystemInformations();
+        if (!$jsonrpc->sendRequest('ticket::save', ['ticket' => $_ticket], 300)) {
             throw new CoreException($jsonrpc->getErrorMessage());
         }
         if ($_ticket['openSupport'] == 1) {
@@ -1027,7 +1028,7 @@ class RepoMarket
     {
         $jsonrpc = self::getJsonRpc();
         $url = NetworkHelper::getNetworkAccess('external') . '/index.php?auth=' . $_key;
-        if (!$jsonrpc->sendRequest('register::supportAccess', array('enable' => $_enable, 'urlSupport' => $url))) {
+        if (!$jsonrpc->sendRequest('register::supportAccess', ['enable' => $_enable, 'urlSupport' => $url])) {
             throw new CoreException($jsonrpc->getErrorMessage());
         }
     }
@@ -1046,7 +1047,7 @@ class RepoMarket
     public static function distinctCategorie($_type)
     {
         $market = self::getJsonRpc();
-        if ($market->sendRequest('market::distinctCategorie', array('type' => $_type))) {
+        if ($market->sendRequest('market::distinctCategorie', ['type' => $_type])) {
             return $market->getResult();
         } else {
             throw new CoreException($market->getError(), $market->getErrorCode());
@@ -1055,7 +1056,7 @@ class RepoMarket
 
     public static function postJsonRpc(&$_result)
     {
-        ConfigManager::save('market::lastCommunication', date('Y-m-d H:i:s'));
+        ConfigManager::save('market::lastCommunication', date(DateFormat::FULL));
         if (is_array($_result)) {
             $restart_dns = false;
             $restart_monitoring = false;
@@ -1117,7 +1118,7 @@ class RepoMarket
     public static function byId($_id)
     {
         $market = self::getJsonRpc();
-        if ($market->sendRequest('market::byId', array('id' => $_id))) {
+        if ($market->sendRequest('market::byId', ['id' => $_id])) {
             return self::construct($market->getResult());
         } else {
             throw new CoreException($market->getError(), $market->getErrorCode());
@@ -1127,8 +1128,8 @@ class RepoMarket
     public static function byMe()
     {
         $market = self::getJsonRpc();
-        if ($market->sendRequest('market::byAuthor', array())) {
-            $return = array();
+        if ($market->sendRequest('market::byAuthor', [])) {
+            $return = [];
             foreach ($market->getResult() as $result) {
                 if (isset($result['id'])) {
                     $return[] = self::construct($result);
@@ -1143,8 +1144,8 @@ class RepoMarket
     public static function byStatusAndType($_status, $_type)
     {
         $market = self::getJsonRpc();
-        if ($market->sendRequest('market::byStatusAndType', array('status' => $_status, 'type' => $_type))) {
-            $return = array();
+        if ($market->sendRequest('market::byStatusAndType', ['status' => $_status, 'type' => $_type])) {
+            $return = [];
             foreach ($market->getResult() as $result) {
                 if (isset($result['id'])) {
                     $return[] = self::construct($result);
@@ -1152,7 +1153,7 @@ class RepoMarket
             }
             return $return;
         } else {
-            LogHelper::add('market', 'debug', print_r($market, true));
+            LogHelper::addDebug(LogTarget::MARKET, print_r($market, true));
             throw new CoreException($market->getError(), $market->getErrorCode());
         }
     }
@@ -1160,8 +1161,8 @@ class RepoMarket
     public static function byStatus($_status)
     {
         $market = self::getJsonRpc();
-        if ($market->sendRequest('market::byStatus', array('status' => $_status))) {
-            $return = array();
+        if ($market->sendRequest('market::byStatus', ['status' => $_status])) {
+            $return = [];
             foreach ($market->getResult() as $result) {
                 if (isset($result['id'])) {
                     $return[] = self::construct($result);
@@ -1177,7 +1178,7 @@ class RepoMarket
     {
         $market = self::getJsonRpc();
         if ($market->sendRequest('market::byFilter', $_filter)) {
-            $return = array();
+            $return = [];
             foreach ($market->getResult() as $result) {
                 if (isset($result['id'])) {
                     $return[] = self::construct($result);
@@ -1201,7 +1202,7 @@ class RepoMarket
     public function setRating($_rating)
     {
         $market = self::getJsonRpc();
-        if (!$market->sendRequest('market::setRating', array('rating' => $_rating, 'id' => $this->getId()))) {
+        if (!$market->sendRequest('market::setRating', ['rating' => $_rating, 'id' => $this->getId()])) {
             throw new CoreException($market->getError());
         }
     }

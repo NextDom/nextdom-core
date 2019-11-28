@@ -39,7 +39,7 @@ class ComHttp
     private $post = '';
     private $put = '';
     private $delete = '';
-    private $header = array('Connection: close');
+    private $header = ['Connection: close'];
     private $cookiesession = false;
     private $allowEmptyReponse = false;
     private $noReportError = false;
@@ -130,7 +130,7 @@ class ComHttp
                     return $response;
                 }
                 if ($this->getNoReportError() === false && $this->getLogError()) {
-                    LogHelper::add('http.com', 'error', __('Erreur cURL : ') . $curl_error . __(' sur la commande ') . $this->url . __(' après ') . $nbRetry . __(' relance(s)'));
+                    LogHelper::addError('http.com', __('Erreur cURL : ') . $curl_error . __(' sur la commande ') . $this->url . __(' après ') . $nbRetry . __(' relance(s)'));
                 }
                 if ($this->getNoReportError() === false) {
                     throw new CoreException(__('Echec de la requête HTTP : ') . $this->url . ' cURL error : ' . $curl_error, 404);
@@ -209,6 +209,17 @@ class ComHttp
         return $this;
     }
 
+    public function getDelete()
+    {
+        return $this->delete;
+    }
+
+    public function setDelete($delete = [])
+    {
+        $this->delete = $delete;
+        return $this;
+    }
+
     public function getUserAgent()
     {
         return $this->userAgent;
@@ -283,15 +294,6 @@ class ComHttp
     public function setUrl($url)
     {
         $this->url = $url;
-        return $this;
-    }
-
-    public function getDelete() {
-        return $this->delete;
-    }
-
-    public function setDelete($delete = []) {
-        $this->delete = $delete;
         return $this;
     }
 }

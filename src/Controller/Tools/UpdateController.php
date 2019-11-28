@@ -42,9 +42,9 @@ class UpdateController extends BaseController
      */
     public static function get(&$pageData): string
     {
-        $updates = array();
+        $updates = [];
         foreach (UpdateManager::listCoreUpdate() as $udpate) {
-            $updates[str_replace(array('.php', '.sql'), '', $udpate)] = str_replace(array('.php', '.sql'), '', $udpate);
+            $updates[str_replace(['.php', '.sql'], '', $udpate)] = str_replace(['.php', '.sql'], '', $udpate);
         }
         usort($updates, 'version_compare');
         $pageData['numberOfUpdates'] = UpdateManager::nbNeedUpdate();

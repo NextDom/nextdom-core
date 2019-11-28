@@ -17,6 +17,8 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\DateFormat;
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
@@ -59,7 +61,7 @@ class Plan3dHeader implements EntityInterface
     public function preSave()
     {
         if (trim($this->getName()) == '') {
-            throw new \Exception(__('Le nom du l\'objet ne peut pas être vide'));
+            throw new CoreException(__('Le nom du l\'objet ne peut pas être vide'));
         }
     }
 
@@ -93,7 +95,7 @@ class Plan3dHeader implements EntityInterface
         if (file_exists($cibDir) && $this->getConfiguration('path', '') != '') {
             rrmdir($cibDir);
         }
-        NextDomHelper::addRemoveHistory(array('id' => $this->getId(), 'name' => $this->getName(), 'date' => date('Y-m-d H:i:s'), 'type' => 'plan3d'));
+        NextDomHelper::addRemoveHistory(['id' => $this->getId(), 'name' => $this->getName(), 'date' => date(DateFormat::FULL), 'type' => 'plan3d']);
         DBHelper::remove($this);
     }
 

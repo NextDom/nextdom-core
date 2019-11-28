@@ -17,6 +17,8 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\DateFormat;
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
@@ -86,7 +88,7 @@ class View implements EntityInterface
      * @return string
      * @throws \Exception
      */
-    public function report($_format = 'pdf', $_parameters = array())
+    public function report($_format = 'pdf', $_parameters = [])
     {
         $url = NetworkHelper::getNetworkAccess('internal') . '/index.php?v=d&p=view';
         $url .= '&view_id=' . $this->getId();
@@ -123,7 +125,7 @@ class View implements EntityInterface
     public function presave()
     {
         if (trim($this->getName()) == '') {
-            throw new \Exception(__('Le nom de la vue ne peut pas être vide'));
+            throw new CoreException(__('Le nom de la vue ne peut pas être vide'));
         }
     }
 
@@ -153,7 +155,7 @@ class View implements EntityInterface
      */
     public function remove()
     {
-        NextDomHelper::addRemoveHistory(array('id' => $this->getId(), 'name' => $this->getName(), 'date' => date('Y-m-d H:i:s'), 'type' => 'view'));
+        NextDomHelper::addRemoveHistory(['id' => $this->getId(), 'name' => $this->getName(), 'date' => date(DateFormat::FULL), 'type' => 'view']);
         return DBHelper::remove($this);
     }
 
@@ -250,10 +252,10 @@ class View implements EntityInterface
     public function toAjax($_version = 'dview', $_html = false)
     {
         $return = Utils::o2a($this);
-        $return['viewZone'] = array();
+        $return['viewZone'] = [];
         foreach ($this->getViewZone() as $viewZone) {
             $viewZone_info = Utils::o2a($viewZone);
-            $viewZone_info['viewData'] = array();
+            $viewZone_info['viewData'] = [];
             foreach ($viewZone->getViewData() as $viewData) {
                 $viewData_info = Utils::o2a($viewData);
                 $viewData_info['name'] = '';
@@ -309,7 +311,7 @@ class View implements EntityInterface
                         for ($j = 0; $j < $configurationViewZoneColumn; $j++) {
                             $viewZone_info['html'] .= '<td><center>';
                             if (isset($viewData['configuration'][$i][$j])) {
-                                $replace = array();
+                                $replace = [];
                                 preg_match_all("/#([0-9]*)#/", $viewData['configuration'][$i][$j], $matches);
                                 foreach ($matches[1] as $cmd_id) {
                                     $cmd = CmdManager::byId($cmd_id);
@@ -352,7 +354,7 @@ class View implements EntityInterface
      * @return array|null
      * @throws \Exception
      */
-    public function getLinkData(&$_data = array('node' => array(), 'link' => array()), $_level = 0, $_drill = 3)
+    public function getLinkData(&$_data = ['node' => [], 'link' => []], $_level = 0, $_drill = 3)
     {
         if (isset($_data['node']['view' . $this->getId()])) {
             return null;
@@ -362,7 +364,7 @@ class View implements EntityInterface
             return $_data;
         }
         $icon = Utils::findCodeIcon('fa-picture-o');
-        $_data['node']['view' . $this->getId()] = array(
+        $_data['node']['view' . $this->getId()] = [
             'id' => 'interactDef' . $this->getId(),
             'name' => substr($this->getName(), 0, 20),
             'icon' => $icon['icon'],
@@ -373,7 +375,7 @@ class View implements EntityInterface
             'textx' => 0,
             'title' => __('Vue :') . ' ' . $this->getName(),
             'url' => 'index.php?v=d&p=view&view_id=' . $this->getId(),
-        );
+        ];
         return null;
     }
 

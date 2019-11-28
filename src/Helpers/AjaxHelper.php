@@ -107,19 +107,6 @@ class AjaxHelper
     }
 
     /**
-     * Send answer
-     *
-     * @param string $answer Answer to send
-     */
-    public function success($answer = '')
-    {
-        if (!$this->answerSended) {
-            echo $this->getResponse($answer);
-            $this->answerSended = true;
-        }
-    }
-
-    /**
      * Convert data to JSON response
      *
      * @param string $data Data to convert
@@ -140,5 +127,18 @@ class AjaxHelper
             $response['code'] = $errorCode;
         }
         return json_encode($response, JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
+     * Send answer
+     *
+     * @param string $answer Answer to send
+     */
+    public function success($answer = '')
+    {
+        if (!$this->answerSended) {
+            echo $this->getResponse($answer);
+            $this->answerSended = true;
+        }
     }
 }

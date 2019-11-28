@@ -66,9 +66,9 @@ class ViewDataManager
      */
     public static function byId($_id)
     {
-        $value = array(
+        $value = [
             'id' => $_id,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE id=:id';
@@ -83,9 +83,9 @@ class ViewDataManager
      */
     public static function byViewZoneId($_viewZone_id)
     {
-        $value = array(
+        $value = [
             'viewZone_id' => $_viewZone_id,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE viewZone_id=:viewZone_id
@@ -100,9 +100,9 @@ class ViewDataManager
      */
     public static function searchByConfiguration($_search)
     {
-        $value = array(
+        $value = [
             'search' => '%' . $_search . '%',
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE configuration LIKE :search';
@@ -132,10 +132,10 @@ class ViewDataManager
      */
     public static function byTypeLinkId($_type, $_link_id)
     {
-        $value = array(
+        $value = [
             'type' => $_type,
             'link_id' => $_link_id,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE type=:type

@@ -34,6 +34,7 @@
 
 namespace NextDom\Helpers;
 
+use NextDom\Enums\DateFormat;
 use NextDom\Exceptions\CoreException;
 use NextDom\Managers\ConfigManager;
 
@@ -49,7 +50,7 @@ class SessionHelper
      */
     public static function getSessionsList()
     {
-        $result = array();
+        $result = [];
         try {
             $sessions = explode("\n", \com_shell::execute(SystemHelper::getCmdSudo() . ' ls ' . session_save_path()));
             foreach ($sessions as $session) {
@@ -62,9 +63,9 @@ class SessionHelper
                     continue;
                 }
                 $session_id = str_replace('sess_', '', $session);
-                $result[$session_id] = array(
-                    'datetime' => date('Y-m-d H:i:s', \com_shell::execute(SystemHelper::getCmdSudo() . ' stat -c "%Y" ' . session_save_path() . '/' . $session)),
-                );
+                $result[$session_id] = [
+                    'datetime' => date(DateFormat::FULL, \com_shell::execute(SystemHelper::getCmdSudo() . ' stat -c "%Y" ' . session_save_path() . '/' . $session)),
+                ];
                 $result[$session_id]['login'] = $data_session['user']->getLogin();
                 $result[$session_id]['user_id'] = $data_session['user']->getId();
                 $result[$session_id]['ip'] = (isset($data_session['ip'])) ? $data_session['ip'] : '';
@@ -82,7 +83,7 @@ class SessionHelper
      */
     public static function decodeSessionData($srcData)
     {
-        $resultData = array();
+        $resultData = [];
         $offset = 0;
         while ($offset < strlen($srcData)) {
             if (!strstr(substr($srcData, $offset), "|")) {
@@ -120,8 +121,9 @@ class SessionHelper
      *
      * @throws \Exception
      */
-    public static function startSession() {
-        if(session_status() == PHP_SESSION_NONE) {
+    public static function startSession()
+    {
+        if (session_status() == PHP_SESSION_NONE) {
             $sessionLifetime = ConfigManager::byKey('session_lifetime');
             if (!is_numeric($sessionLifetime)) {
                 $sessionLifetime = 24;

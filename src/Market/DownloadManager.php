@@ -122,7 +122,7 @@ class DownloadManager
                 $url = $url . '?' . $toAdd;
             }
         }
-        LogHelper::add('AlternativeMarketForJeedom', 'debug', 'Download ' . $url);
+        LogHelper::addDebug('AlternativeMarketForJeedom', 'Download ' . $url);
         return self::downloadContentWithCurl($url, $binary);
     }
 

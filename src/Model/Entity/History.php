@@ -86,11 +86,11 @@ class History
                 $time -= $time % 300;
                 $this->setDatetime(date(DateFormat::FULL, $time));
                 if ($this->getValue() === 0) {
-                    $values = array(
+                    $values = [
                         'cmd_id' => $this->getCmd_id(),
                         'datetime' => date('Y-m-d H:i:00', strtotime($this->getDatetime()) + 300),
                         'value' => $this->getValue(),
-                    );
+                    ];
                     $sql = 'REPLACE INTO history
                     SET cmd_id=:cmd_id,
                     `datetime`=:datetime,
@@ -98,10 +98,10 @@ class History
                     DBHelper::exec($sql, $values);
                     return;
                 }
-                $values = array(
+                $values = [
                     'cmd_id' => $this->getCmd_id(),
                     'datetime' => $this->getDatetime(),
-                );
+                ];
                 $sql = 'SELECT `value`
                 FROM history
                 WHERE cmd_id=:cmd_id
@@ -127,11 +127,11 @@ class History
                 $this->setDatetime(date('Y-m-d H:00:00', strtotime($this->getDatetime())));
             }
         }
-        $values = array(
+        $values = [
             'cmd_id' => $this->getCmd_id(),
             'datetime' => $this->getDatetime(),
             'value' => $this->getValue(),
-        );
+        ];
         if ($values['value'] === '') {
             $values['value'] = null;
         }

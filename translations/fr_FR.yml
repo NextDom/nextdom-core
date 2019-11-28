@@ -241,6 +241,8 @@ general:
      time_server: "Permet d'ajouter un serveur de temps à NextDom utilisé lorsque NextDom force la synchronisation de l'heure"
      ignore_system_time: "Ignorer la vérification de l'heure système"
 health:
+  tmp-space-left: "Espace temporaire disponible"
+  tmp-problem: "En cas d'erreur essayez de redémarrer. Si le problème persiste, testez en désactivant les plugins un à un jusqu'à trouver le coupable"
   apache-private-tmp-disabled: Veuillez désactiver le private tmp d'Apache (NextDom ne peut fonctionner avec). Voir <a href=\"https://jeedom.github.io/core/fr_FR/faq#tocAnchor-1-29\" target=\"_blank\">ici</a>
   apache-private-tmp: Apache private tmp
   authentication-error: "Attention : vous avez toujours l'utilisateur admin/admin configuré, cela représente une grave faille de sécurité, allez <a href=\"index.php?v=d&p=user\">ici</a> pour modifier le mot de passe de l'utilisateur admin"

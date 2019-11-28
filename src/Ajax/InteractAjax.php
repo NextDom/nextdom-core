@@ -17,6 +17,7 @@
 
 namespace NextDom\Ajax;
 
+use NextDom\Enums\AjaxParams;
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\NextDomHelper;
@@ -60,7 +61,7 @@ class InteractAjax extends BaseAjax
 
     public function byId()
     {
-        $result = Utils::o2a(InteractDefManager::byId(Utils::init('id')));
+        $result = Utils::o2a(InteractDefManager::byId(Utils::init(AjaxParams::ID)));
         $result['nbInteractQuery'] = count(InteractQueryManager::byInteractDefId($result['id']));
         $result['nbEnableInteractQuery'] = count(InteractQueryManager::byInteractDefId($result['id']));
         $this->ajax->success(NextDomHelper::toHumanReadable($result));
@@ -88,7 +89,7 @@ class InteractAjax extends BaseAjax
 
     public function remove()
     {
-        $interact = InteractDefManager::byId(Utils::init('id'));
+        $interact = InteractDefManager::byId(Utils::init(AjaxParams::ID));
         if (!is_object($interact)) {
             throw new CoreException(__('Interaction inconnue. Vérifiez l\'ID'));
         }
@@ -98,21 +99,21 @@ class InteractAjax extends BaseAjax
 
     public function changeState()
     {
-        $interactQuery = InteractQueryManager::byId(Utils::init('id'));
+        $interactQuery = InteractQueryManager::byId(Utils::init(AjaxParams::ID));
         if (!is_object($interactQuery)) {
             throw new CoreException(__('InteractQuery ID inconnu'));
         }
-        $interactQuery->setEnable(Utils::init('enable'));
+        $interactQuery->setEnable(Utils::init(AjaxParams::ENABLE));
         $interactQuery->save();
         $this->ajax->success();
     }
 
     public function changeAllState()
     {
-        $interactQueries = InteractQueryManager::byInteractDefId(Utils::init('id'));
+        $interactQueries = InteractQueryManager::byInteractDefId(Utils::init(AjaxParams::ID));
         if (is_array($interactQueries)) {
             foreach ($interactQueries as $interactQuery) {
-                $interactQuery->setEnable(Utils::init('enable'));
+                $interactQuery->setEnable(Utils::init(AjaxParams::ENABLE));
                 $interactQuery->save();
             }
         }
