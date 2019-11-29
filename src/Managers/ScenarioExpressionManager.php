@@ -155,8 +155,8 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO ????
-     * TODO Revoir la génération des UID
+     * @TODO ????
+     * @TODO Revoir la génération des UID
      *
      * @param $expression
      * @param $options
@@ -197,7 +197,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO ????
+     * @TODO ????
      *
      * @param $baseAction
      *
@@ -243,8 +243,8 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO ???
-     * TODO Result n'est jamais utilisé, le bloc Try peut normalement être supprimé
+     * @TODO ???
+     * @TODO Result n'est jamais utilisé, le bloc Try peut normalement être supprimé
      * @param $_sValue
      *
      * @return array|mixed
@@ -272,7 +272,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO Faut bien les définir les tags
+     * @TODO Faut bien les définir les tags
      *
      * @param $_expression
      * @param Scenario $_scenario
@@ -375,7 +375,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO: Je demande des tags
+     * @TODO: Je demande des tags
      *
      * @param $expression
      * @return array
@@ -454,7 +454,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO ????
+     * @TODO ????
      * @ il semble judicieu de rajouter l'interface SenarioInterface à $senario, elle est prete, faut se servir...
      * @param string $name
      * @param Scenario $scenario
@@ -474,7 +474,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO ????
+     * @TODO ????
      *
      * @param Scenario $scenario
      * @return mixed
@@ -492,7 +492,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO: Un tag
+     * @TODO: Un tag
      *
      * @param Scenario|null $scenario
      * @param $name
@@ -513,10 +513,10 @@ class ScenarioExpressionManager
 
     /**
      * Get a scenario from its expression
-     * TODO: Format ???
+     * @TODO: Format ???
      *
      * @param $scenarioExpression
-     * @return int TODO -1, -2, -3 ????
+     * @return int @TODO -1, -2, -3 ????
      * @throws \Exception
      */
     public static function scenario(string $scenarioExpression)
@@ -541,7 +541,7 @@ class ScenarioExpressionManager
 
     /**
      * Enables an eqLogic object
-     * TODO: -2 en -1 ?
+     * @TODO: -2 en -1 ?
      * @param mixed $eqLogicId Identifiant du l'objet
      *
      * @return int 0 If the object is not activated, 1 if the object is activated, -2 if the object does not exist
@@ -558,8 +558,8 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO: Fait une moyenne de quelque chose
-     * TODO: Mettre en place la gestion du nombre de paramètres variables
+     * @TODO: Fait une moyenne de quelque chose
+     * @TODO: Mettre en place la gestion du nombre de paramètres variables
      *
      * @param mixed $cmdId Identifiant de la commande
      * @param string $period Période sur laquelle la moyenne doit être calculée
@@ -611,7 +611,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO: Calcule une moyenne de quelque chose entre deux dates
+     * @TODO: Calcule une moyenne de quelque chose entre deux dates
      *
      * @param $cmdId
      * @param $startDate
@@ -685,7 +685,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * Obtenir la valeur maximum sur une période TODO: de quelque chose
+     * Obtenir la valeur maximum sur une période @TODO: de quelque chose
      *
      * @param $cmdId
      * @param string $period
@@ -736,7 +736,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * Obtenir la valeur maximum entre deux dates TODO: de quelque chose
+     * Obtenir la valeur maximum entre deux dates @TODO: de quelque chose
      *
      * @param $cmdId
      * @param $startDate
@@ -788,7 +788,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * Obtenir la valeur minimum sur une période TODO: ??? Toujours sur quoi ?
+     * Obtenir la valeur minimum sur une période @TODO: ??? Toujours sur quoi ?
      * @param $cmdId
      * @param string $period
      * @return float|mixed|string
@@ -838,7 +838,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * Obtenir la valeur minimum entre deux dates TODO: De quoi ?
+     * Obtenir la valeur minimum entre deux dates @TODO: De quoi ?
      *
      * @param $cmdId
      * @param $startDate
@@ -863,7 +863,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * Obtenir une valeur médiane TODO: De quoi ?
+     * Obtenir une valeur médiane @TODO: De quoi ?
      *
      * @return int|mixed
      * @throws \NextDom\Exceptions\CoreException
@@ -900,7 +900,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * Renvoie une tendance TODO de ?
+     * Renvoie une tendance @TODO de ?
      *
      * @param $cmdId
      * @param string $period
@@ -944,7 +944,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO: j'en sais rien, durée pendant laquelle il a conserver son état sans doute
+     * @TODO: j'en sais rien, durée pendant laquelle il a conserver son état sans doute
      *
      * @param $cmdId
      * @param null $value
@@ -957,7 +957,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO Changement d'état, ou de pantalon, ou de slip
+     * @TODO Changement d'état, ou de pantalon, ou de slip
      *
      * @param $cmdId
      * @param null $value
@@ -990,7 +990,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * Changement entre deux dates //TODO: Woohoo
+     * Changement entre deux dates //@TODO: Woohoo
      *
      * @param $cmdId
      * @param $value
@@ -1130,7 +1130,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO: Dernier entre deux dates ???
+     * @TODO: Dernier entre deux dates ???
      *
      * @param $cmdId
      * @param $startDate
@@ -1155,7 +1155,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO: Statistiques de quelque chose
+     * @TODO: Statistiques de quelque chose
      *
      * @param $cmdId
      * @param $calc
@@ -1187,7 +1187,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO: Statistiques de quelque chose entre deux dates
+     * @TODO: Statistiques de quelque chose entre deux dates
      *
      * @param $cmdId
      * @param $calc
@@ -1220,7 +1220,7 @@ class ScenarioExpressionManager
      */
     public static function variable($name, $defaultValue = '')
     {
-        // TODO: Yolo sur les trims
+        // @TODO: Yolo sur les trims
         $name = trim(trim(trim($name), '"'));
         $dataStore = DataStoreManager::byTypeLinkIdKey('scenario', -1, trim($name));
         if (is_object($dataStore)) {
@@ -1244,7 +1244,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO: Dernier changement de la durée de ???
+     * @TODO: Dernier changement de la durée de ???
      *
      * @param $cmdId
      * @param $value
@@ -1258,7 +1258,7 @@ class ScenarioExpressionManager
 
     /**
      * Tester si une valeur est paire
-     * TODO: Changer en binaire le résultat
+     * @TODO: Changer en binaire le résultat
      *
      * @param mixed $value
      *
@@ -1293,7 +1293,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO: Collecter une date
+     * @TODO: Collecter une date
      *
      * @param $cmdId
      * @param string $format
@@ -1314,7 +1314,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO: Valeur d'une date
+     * @TODO: Valeur d'une date
      *
      * @param $cmdId
      * @param string $format
@@ -1446,7 +1446,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO:? ???
+     * @TODO:? ???
      *
      * @param $time
      * @param $value
@@ -1490,7 +1490,7 @@ class ScenarioExpressionManager
      * @param $startInverval
      * @param $endInterval
      *
-     * @return int TODO: 0, 1
+     * @return int @TODO: 0, 1
      * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
      */
@@ -1536,7 +1536,7 @@ class ScenarioExpressionManager
     /** @noinspection PhpOptionalBeforeRequiredParametersInspection */
 
     /**
-     * TODO: L'heure mais ça à l'air plus compliqué que ça
+     * @TODO: L'heure mais ça à l'air plus compliqué que ça
      *
      * @param $value
      * @return int|mixed|string
@@ -1569,7 +1569,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO: Formate l'heure
+     * @TODO: Formate l'heure
      *
      * @param $time
      * @return string
@@ -1591,7 +1591,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO: My name is Bond, James Bond
+     * @TODO: My name is Bond, James Bond
      *
      * @param $type
      * @param $cmdId
@@ -1623,7 +1623,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO: Créé et exécute un truc
+     * @TODO: Créé et exécute un truc
      *
      * @param $type
      * @param $cmd

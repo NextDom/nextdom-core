@@ -116,7 +116,7 @@ class Utils
      * Redirect to target url
      *
      * @param string $url Target url
-     * @param null $forceType Forcage si 'JS' TODO: ???
+     * @param null $forceType Forcage si 'JS' @TODO: ???
      */
     public static function redirect(string $url, $forceType = null)
     {
@@ -540,7 +540,7 @@ class Utils
     }
 
     /**
-     * TODO: Stocker la version évaluée
+     * @TODO: Stocker la version évaluée
      *
      * @param $_string
      * @return string
@@ -647,7 +647,7 @@ class Utils
     }
 
     /**
-     * TODO: Pourquoi en minuscule ?
+     * @TODO: Pourquoi en minuscule ?
      * @param $_message
      * @return string|string[]|null
      */

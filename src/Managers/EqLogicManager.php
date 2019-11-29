@@ -181,7 +181,7 @@ class EqLogicManager
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      *
      * @param $eqTypeName
      * @param bool $onlyEnable
@@ -227,7 +227,7 @@ class EqLogicManager
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      *
      * @param $eqTypeName
      * @param $configuration
@@ -249,7 +249,7 @@ class EqLogicManager
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      *
      * @param $configuration
      * @param null $type
@@ -286,7 +286,7 @@ class EqLogicManager
     }
 
     /**
-     * TODO: ??
+     * @TODO: ??
      *
      * @param $eqTypeName
      * @param $typeCmd
@@ -326,7 +326,7 @@ class EqLogicManager
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      *
      * @param $objectId
      * @param $typeCmd
@@ -362,7 +362,7 @@ class EqLogicManager
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      *
      * @return array|mixed|null
      * @throws \Exception
@@ -422,7 +422,7 @@ class EqLogicManager
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      *
      * @param int $timeout
      * @param bool $onlyEnable
@@ -444,7 +444,7 @@ class EqLogicManager
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      *
      * @param $input
      * @return array|mixed
@@ -512,7 +512,7 @@ class EqLogicManager
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      */
     public static function clearCacheWidget()
     {
@@ -542,7 +542,7 @@ class EqLogicManager
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      *
      * @param $nbLine
      * @param $nbColumn
@@ -628,7 +628,7 @@ class EqLogicManager
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      *
      * @param $input
      * @return array|mixed
@@ -684,7 +684,7 @@ class EqLogicManager
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      *
      * @param $objectName
      * @param $eqLogicName

@@ -42,7 +42,7 @@ use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Model\Entity\Scenario;
 
-// TODO: DBHelper::buildField(ScenarioEntity::className) à factoriser
+// @TODO: DBHelper::buildField(ScenarioEntity::className) à factoriser
 
 /**
  * Class ScenarioManager
@@ -107,7 +107,7 @@ class ScenarioManager
     }
 
     /**
-     * TODO: Ca fait l'inverse, mais je sais pas quoi
+     * @TODO: Ca fait l'inverse, mais je sais pas quoi
      *
      * @param $input
      * @return array|mixed
@@ -229,7 +229,7 @@ class ScenarioManager
     }
 
     /**
-     * Obtenir la liste des scénarios à partir d'un élément TODO: Kesako
+     * Obtenir la liste des scénarios à partir d'un élément @TODO: Kesako
      *
      * @param string $elementId
      * @return mixed
@@ -248,7 +248,7 @@ class ScenarioManager
     }
 
     /**
-     * Obtenir un scénario à partir de l'identifiant d'un objet //TODO: Comprendre ce que c'est
+     * Obtenir un scénario à partir de l'identifiant d'un objet //@TODO: Comprendre ce que c'est
      *
      * @param int $objectId Identifiant de l'objet
      * @param bool $onlyEnabled Filtrer uniquement les scénarios activés
@@ -281,12 +281,12 @@ class ScenarioManager
 
     /**
      * Vérifier un scénario
-     * TODO: Virer les strings
+     * @TODO: Virer les strings
      *
      * @param string $event Evènement déclencheur
      * @param bool $forceSyncMode Forcer le mode synchrone
      *
-     * @return bool Renvoie toujours true //TODO: A voir
+     * @return bool Renvoie toujours true //@TODO: A voir
      * @throws \Exception
      */
     public static function check($event = null, $forceSyncMode = false)
@@ -294,7 +294,7 @@ class ScenarioManager
         $message = '';
         $scenarios = [];
         if ($event !== null) {
-            // TODO: Event ne peut pas être un objet
+            // @TODO: Event ne peut pas être un objet
             if (is_object($event)) {
                 $eventScenarios = self::byTrigger($event->getId());
                 $trigger = '#' . $event->getId() . '#';
@@ -368,21 +368,21 @@ class ScenarioManager
     }
 
     /**
-     * Contrôle des scénarios // TODO: ???
+     * Contrôle des scénarios // @TODO: ???
      *
      */
     public static function control()
     {
         foreach (self::all() as $scenario) {
             if ($scenario->getState() != ScenarioState::IN_PROGRESS) {
-                continue; // TODO: To be or not to be
+                continue; // @TODO: To be or not to be
             }
             if (!$scenario->running()) {
                 $scenario->setState(ScenarioState::ERROR);
-                continue; // TODO: To be or not to be
+                continue; // @TODO: To be or not to be
             }
             $runtime = strtotime('now') - strtotime($scenario->getLastLaunch());
-            // TODO: Optimisation
+            // @TODO: Optimisation
             if (is_numeric($scenario->getTimeout()) && $scenario->getTimeout() != '' && $scenario->getTimeout() != 0 && $runtime > $scenario->getTimeout()) {
                 $scenario->stop();
                 $scenario->setLog(__('Arret du scénario car il a dépassé son temps de timeout : ') . $scenario->getTimeout() . 's');
@@ -439,7 +439,7 @@ class ScenarioManager
     }
 
     /**
-     * Fait dedans ??? TODO: Trouver un nom explicite
+     * Fait dedans ??? @TODO: Trouver un nom explicite
      *
      * @param array $options ???
      *
@@ -472,7 +472,7 @@ class ScenarioManager
     }
 
     /**
-     * Nettoie la table TODO: Avec l'éponge et grosse optimisation à faire
+     * Nettoie la table @TODO: Avec l'éponge et grosse optimisation à faire
      */
     public static function cleanTable()
     {
@@ -507,7 +507,7 @@ class ScenarioManager
     }
 
     /**
-     * Test la validité des scénarios TODO: Je suppose
+     * Test la validité des scénarios @TODO: Je suppose
      *
      * @param bool $needsReturn Argument à virer
      *
@@ -559,12 +559,12 @@ class ScenarioManager
     }
 
     /**
-     * /TODO: Fatigué d'essayer de comprendre à quoi ça sert
+     * /@TODO: Fatigué d'essayer de comprendre à quoi ça sert
      * Méthode appelée de façon recursive
      *
-     * @param $input /TODO: Ca entre en effect
+     * @param $input /@TODO: Ca entre en effect
      *
-     * @return mixed TODO: Quelque chose de lisible à priori
+     * @return mixed @TODO: Quelque chose de lisible à priori
      *
      * @throws \Exception
      */
@@ -606,7 +606,7 @@ class ScenarioManager
     }
 
     /**
-     * TODO:
+     * @TODO:
      * @param array $searchs
      * @return array
      * @throws \Exception
@@ -652,7 +652,7 @@ class ScenarioManager
     }
 
     /**
-     *TODO: PATH pointe vers rien
+     *@TODO: PATH pointe vers rien
      *
      * @param string $template
      *
@@ -663,14 +663,14 @@ class ScenarioManager
         $path = NEXTDOM_ROOT . '/core/config/scenario';
         /**
          * if (isset($template) && $template != '') {
-         * // TODO Magic trixxxxxx
+         * // @TODO Magic trixxxxxx
          * }
          */
         return FileSystemHelper::ls($path, '*.json', false, ['files', 'quiet']);
     }
 
     /**
-     * TODO:
+     * @TODO:
      *
      * @param $market
      *
@@ -697,7 +697,7 @@ class ScenarioManager
     }
 
     /**
-     * TODO:
+     * @TODO:
      * @param mixed $market
      * @param mixed $path
      * @throws \Exception
@@ -718,7 +718,7 @@ class ScenarioManager
     }
 
     /**
-     * TODO: Trixxxxxx
+     * @TODO: Trixxxxxx
      * @return array
      */
     public static function listMarketObject()
@@ -727,7 +727,7 @@ class ScenarioManager
     }
 
     /**
-     * TODO: Le CSS C'est pour les faibles
+     * @TODO: Le CSS C'est pour les faibles
      * @param array $event
      * @return array|null
      * @throws \Exception

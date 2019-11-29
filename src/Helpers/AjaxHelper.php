@@ -115,7 +115,7 @@ class AjaxHelper
      */
     public function getResponse($data = '', $errorCode = null)
     {
-        // TODO: Tester l'incidence de l'ordre des résultat si result est inséré en dernier
+        // @TODO: Tester l'incidence de l'ordre des résultat si result est inséré en dernier
         // et donc éviter la ligne en double
         $response = [];
         if ($errorCode === null) {

@@ -18,7 +18,8 @@
 namespace NextDom\Model\Entity;
 
 /**
- * Config
+ * Config object
+ * Used for store core configuration
  *
  * @ORM\Table(name="config")
  * @ORM\Entity
@@ -27,14 +28,14 @@ class Config
 {
 
     /**
-     * @var string
+     * @var string Value to store
      *
      * @ORM\Column(name="value", type="text", length=65535, nullable=true)
      */
     protected $value;
 
     /**
-     * @var string
+     * @var string Key for storage
      *
      * @ORM\Column(name="key", type="string", length=255)
      * @ORM\Id
@@ -43,7 +44,7 @@ class Config
     protected $key;
 
     /**
-     * @var string
+     * @var string Linked plugin or 'core'
      *
      * @ORM\Column(name="plugin", type="string", length=127)
      * @ORM\Id
@@ -52,6 +53,8 @@ class Config
     protected $plugin;
 
     /**
+     * Get the value of the config
+     *
      * @return string
      */
     public function getValue()
@@ -60,7 +63,10 @@ class Config
     }
 
     /**
+     * Set the value for the config
+     *
      * @param $value
+     *
      * @return $this
      */
     public function setValue($value)
@@ -70,6 +76,8 @@ class Config
     }
 
     /**
+     * Get the key of the config
+     *
      * @return string
      */
     public function getKey(): string
@@ -78,7 +86,10 @@ class Config
     }
 
     /**
+     * Set the key of the config
+     *
      * @param $key
+     *
      * @return $this
      */
     public function setKey($key)
@@ -88,6 +99,8 @@ class Config
     }
 
     /**
+     * Get linked plugin
+     *
      * @return string
      */
     public function getPlugin()
@@ -96,7 +109,10 @@ class Config
     }
 
     /**
+     * Set linked plugin
+     *
      * @param $plugin
+     *
      * @return $this
      */
     public function setPlugin($plugin)

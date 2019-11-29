@@ -172,7 +172,7 @@ class CronManager
     /**
      * Return number of process on system
      *
-     * TODO: Move to other place ?
+     * @TODO: Move to other place ?
      *
      * @return int Number of process on system
      */
@@ -184,7 +184,7 @@ class CronManager
     /**
      * Return array of load average
      *
-     * TODO: Inutile, autant appeler directement la fonction
+     * @TODO: Inutile, autant appeler directement la fonction
      *
      * @return array Load average
      */

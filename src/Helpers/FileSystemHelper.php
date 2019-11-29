@@ -44,7 +44,7 @@ class FileSystemHelper
 {
     /**
      * Inclut un fichier à partir de son type et son nom.
-     * TODO: Doit être revue
+     * @TODO: Doit être revue
      * @param string $_folder Répertoire du fichier
      * @param string $_filename Nom du fichier
      * @param string $_type Type de fichier
@@ -125,10 +125,10 @@ class FileSystemHelper
                 require_once $path;
             }
         } elseif ($type == 'css') {
-            // TODO : MD5
+            // @TODO : MD5
             echo '<link href="' . $_folder . '/' . $_filename . '?md5=' . md5_file($path) . '" rel="stylesheet" />';
         } elseif ($type == 'js') {
-            // TODO : MD5
+            // @TODO : MD5
             echo '<script type="text/javascript" src="src/Api/getResource.php?file=' . $_folder . '/' . $_filename . '&md5=' . md5_file($path) . '&lang=' . TranslateHelper::getLanguage() . '"></script>';
         }
     }

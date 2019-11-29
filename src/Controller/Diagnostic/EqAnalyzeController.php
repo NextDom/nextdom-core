@@ -116,7 +116,7 @@ class EqAnalyzeController extends BaseController
             $cmdDataArray[] = $cmdData;
         }
         $pageData['eqAnalyzeCmdData'] = $cmdDataArray;
-//TODO: Imbriquer les boucles quand le fonctionnement sera sûr
+//@TODO: Imbriquer les boucles quand le fonctionnement sera sûr
         $pageData['eqAnalyzeAlerts'] = [];
 
         $eqLogicManagerAll = EqLogicManager::all();

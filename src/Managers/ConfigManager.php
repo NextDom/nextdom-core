@@ -64,7 +64,7 @@ class ConfigManager
      * @param string|object|array $configValue Configuration value
      * @param string $pluginId Plugin id or core
      *
-     * @return boolean Always True (TODO: No return)
+     * @return boolean Always True (@TODO: No return)
      * @throws \Exception
      */
     public static function save($configKey, $configValue, $pluginId = 'core')

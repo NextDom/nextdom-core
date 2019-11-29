@@ -505,7 +505,7 @@ class PrepareView
                     $homeLink .= '&object_id=' . $defaultDashboardObjectId;
                 }
             } else {
-                // TODO : m ???
+                // @TODO : m ???
                 $homeLink = 'index.php?' . http_build_query([
                         GetParams::VIEW_TYPE => ViewType::DESKTOP_VIEW,
                         'm' => $homePage[0],

@@ -33,7 +33,7 @@ class CommandeController extends BaseController
 {
     /**
      * Render commandes page
-     * TODO: A renommer
+     * @TODO: A renommer
      * @param array $pageData Page data
      *
      * @return string Content of commandes page

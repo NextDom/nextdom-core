@@ -43,5 +43,6 @@ core/template
 /data.*
 /data
 /mobile
+/docs
 
 /assets/config/default.config.ini

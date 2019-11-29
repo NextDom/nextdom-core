@@ -47,7 +47,7 @@ use NextDom\Model\Entity\Update;
 /**
  * Class NetworkHelper
  *
- * TODO: Dépendance avec le plugin OpenVPN
+ * @TODO: Dépendance avec le plugin OpenVPN
  *
  * @package NextDom\Helpers
  */
@@ -67,7 +67,7 @@ class NetworkHelper
             return UserLocation::EXTERNAL;
         }
         // Check 4 parts of the IP
-        // TODO: Pourquoi ? Si l'ip est valide
+        // @TODO: Pourquoi ? Si l'ip est valide
         $nextdomIpParts = explode('.', $nextdomIp);
         if (count($nextdomIpParts) !== 4) {
             return UserLocation::EXTERNAL;
