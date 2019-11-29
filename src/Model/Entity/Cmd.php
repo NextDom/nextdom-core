@@ -322,7 +322,7 @@ class Cmd implements EntityInterface
     }
 
     /**
-     * TODO: Déplacer dans CmdManager ???
+     * @TODO: Déplacer dans CmdManager ???
      *
      * @param string $viewVersion
      * @param bool $_noCustom
@@ -982,7 +982,7 @@ class Cmd implements EntityInterface
             }
 
             if ($this->getConfiguration(CmdConfigKey::TIMELIME_ENABLE)) {
-                // TODO: Problème Type et Subtype
+                // @TODO: Problème Type et Subtype
                 TimeLineHelper::addTimelineEvent(['type' => 'cmd', 'subtype' => 'action', 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => date(DateFormat::FULL), 'options' => $str_option]);
             }
             $this->preExecCmd($options);
@@ -1574,7 +1574,7 @@ class Cmd implements EntityInterface
                 $this->actionAlertLevel($level, $eventValue);
             }
             if ($this->getConfiguration(CmdConfigKey::TIMELIME_ENABLE)) {
-                // TODO: Il doit y avoir un problème avec les Types et SubType
+                // @TODO: Il doit y avoir un problème avec les Types et SubType
                 TimeLineHelper::addTimelineEvent(['type' => 'cmd', 'subtype' => 'info', 'cmdType' => $this->getSubType(), 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => $this->getValueDate(), 'value' => $eventValue . $this->getUnite()]);
             }
             $this->pushUrl($eventValue);

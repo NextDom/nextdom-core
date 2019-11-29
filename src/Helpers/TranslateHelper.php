@@ -76,7 +76,7 @@ class TranslateHelper
      *
      * @param string $sentenceToTranslate Phrase à traduire
      * @param string $filename Nom du fichier appelant
-     * @param bool $backslash TODO: Toujours comprendre à quoi ça sert ?
+     * @param bool $backslash @TODO: Toujours comprendre à quoi ça sert ?
      *
      * @return string Phrase traduite
      * @throws \Exception
@@ -101,7 +101,7 @@ class TranslateHelper
      *
      * @param string $content Contenu à traduire
      * @param string $filename Nom du fichier contenant les informations à traduire (ancienne version)
-     * @param bool $backslash TODO: Comprendre à quoi ça sert
+     * @param bool $backslash @TODO: Comprendre à quoi ça sert
      * @return string Texte traduit
      * @throws \Exception
      */
@@ -155,7 +155,7 @@ class TranslateHelper
                 $replace['{{' . $text . '}}'] = self::$translator->trans($text);
             }
         }
-        // TODO: Refaire la génération de fichiers de traduction
+        // @TODO: Refaire la génération de fichiers de traduction
         /*
           if ($language == 'fr_FR' && $modify) {
           static::$translation[self::getLanguage()] = $translate;
@@ -168,7 +168,7 @@ class TranslateHelper
     /**
      * Obtenir les traductions pour la langue courante
      *
-     * TODO: Vérifier le chargement pour les plugins
+     * @TODO: Vérifier le chargement pour les plugins
      *
      * @param string $language
      * @return mixed
@@ -198,7 +198,7 @@ class TranslateHelper
         if (self::$language === null || self::$language === '') {
             self::$language = self::getConfig('language', 'fr_FR');
         }
-        // TODO: Pourquoi pas défault getConfig renvoie vide
+        // @TODO: Pourquoi pas défault getConfig renvoie vide
         if (self::$language === '') {
             self::$language = 'fr_FR';
         }
@@ -239,7 +239,7 @@ class TranslateHelper
 
     /**
      * Charge les informations de traduction
-     * TODO: Même celles de tous les plugins. Les plugins sont chargés à l'ancienne
+     * @TODO: Même celles de tous les plugins. Les plugins sont chargés à l'ancienne
      * @return array Données chargées
      * @throws \Exception
      */
@@ -300,7 +300,7 @@ class TranslateHelper
     }
 
     /**
-     * TODO: Génération des fichiers de traduction
+     * @TODO: Génération des fichiers de traduction
      */
     public static function saveTranslation()
     {

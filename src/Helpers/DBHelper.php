@@ -67,7 +67,7 @@ class DBHelper
 
     /**
      * Call procedure
-     * TODO: Y en a-t-il d'utilisé ?
+     * @TODO: Y en a-t-il d'utilisé ?
      *
      * @param string $procName Procedure name
      * @param array $params Parameters
@@ -169,7 +169,7 @@ class DBHelper
         $statement = self::getConnection()->prepare($query);
         if ($statement !== false && $statement->execute($params) !== false) {
             $errorInfo = $statement->errorInfo();
-            // TODO: Revoir cette chaine
+            // @TODO: Revoir cette chaine
             if ($errorInfo[0] != 0000) {
                 return false;
             }
@@ -214,7 +214,7 @@ class DBHelper
         }
         // Get error
         $errorInfo = $statement->errorInfo();
-        // TODO: Revoir cette chaine
+        // @TODO: Revoir cette chaine
         if ($errorInfo[0] != 0000) {
             throw new CoreException('[MySQL] Error code : ' . $errorInfo[0] . ' (' . $errorInfo[1] . '). ' . $errorInfo[2] . '  : ' . $query);
         }
@@ -281,7 +281,7 @@ class DBHelper
      *
      * @param mixed $objToSave Object to save
      * @param bool $noProcess Don't call process before and after (preSave, preInsert, postSave, etc.)
-     * @param bool $forceReplace TODO: Force le remplacement si pas d'ID ????
+     * @param bool $forceReplace @TODO: Force le remplacement si pas d'ID ????
      *
      * @return boolean True on save success
      *
@@ -491,7 +491,7 @@ class DBHelper
 
     /**
      * Get the last insert id
-     * TODO: ???? Ca me parait dangereux si il y a une écriture en bdd entre temps
+     * @TODO: ???? Ca me parait dangereux si il y a une écriture en bdd entre temps
      * @return mixed
      * @throws CoreException
      */

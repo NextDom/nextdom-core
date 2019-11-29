@@ -154,7 +154,7 @@ class JeeObjectManager
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      *
      * Data restrictions :
      *  - $restrict['object'][OBJECT_ID] : Skip objects
@@ -218,7 +218,7 @@ class JeeObjectManager
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      *
      * @return array
      * @throws \Exception
@@ -239,7 +239,7 @@ class JeeObjectManager
     }
 
     /**
-     * TODO ???
+     * @TODO ???
      *
      * @param string $cmdId
      * @throws \Exception
@@ -330,7 +330,7 @@ class JeeObjectManager
     }
 
     /**
-     * Search object configuration TODO: ??
+     * Search object configuration @TODO: ??
      *
      * @param string $search
      * @return array|mixed|null
@@ -348,7 +348,7 @@ class JeeObjectManager
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      *
      * @param string $key
      * @return float|null|string
@@ -382,7 +382,7 @@ class JeeObjectManager
     }
 
     /**
-     * TODO ???
+     * @TODO ???
      *
      * @param string $version
      *
@@ -443,7 +443,7 @@ class JeeObjectManager
     }
 
     /**
-     * TODO ???
+     * @TODO ???
      *
      * @param string $key
      * @throws \Throwable

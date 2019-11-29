@@ -82,7 +82,7 @@ class EqLogicConfigure extends BaseAbstractModal
       $pageData['eqLogicDisplayParameters'] = $eqLogic->getDisplay('parameters');
 
       foreach (NextDomHelper::getConfiguration('eqLogic:displayType') as $key => $value) {
-          // TODO : A supprimer quand on aura trouvé où est initialisé eqLogic:displayType et retiré mobile
+          // @TODO : A supprimer quand on aura trouvé où est initialisé eqLogic:displayType et retiré mobile
               $eqLogicDisplayType = [];
               $eqLogicDisplayType['key'] = $key;
               $eqLogicDisplayType['name'] = $value['name'];

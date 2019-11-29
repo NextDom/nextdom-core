@@ -269,7 +269,7 @@ class PluginManager
      * Start a cron job
      *
      * @param string $cronType Cron job type, see PluginManagerCronEnum
-     * // TODO Rajouter un test sur l'enum ???
+     * // @TODO Rajouter un test sur l'enum ???
      * @throws \Exception
      */
     private static function startCronTask(string $cronType = '')
@@ -400,7 +400,7 @@ class PluginManager
     }
 
     /**
-     * Test le daemon TODO ??
+     * Test le daemon @TODO ??
      *
      * @throws \Exception
      */
@@ -434,7 +434,7 @@ class PluginManager
 
     /**
      * Test si le plugin est actif
-     * TODO: Doit passer en static
+     * @TODO: Doit passer en static
      * @param $id
      * @return int
      * @throws \Exception

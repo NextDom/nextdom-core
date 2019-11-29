@@ -41,20 +41,24 @@ use NextDom\Model\Entity\Cmd;
 use NextDom\Model\Entity\EqLogic;
 
 /**
- * Class CmdManager
+ * Manage command
+ *
  * @package NextDom\Managers
  */
 class CmdManager
 {
+    /** @var string Class of the commands */
     const CLASS_NAME = Cmd::class;
+    /** @var string Table name of the class in database */
     const DB_CLASS_NAME = '`cmd`';
 
     /**
-     * Cast a command from generic to plugin
+     * Cast a command from generic to specific plugin
      *
-     * @param Cmd $inputs
-     * @param EqLogic $eqLogic
-     * @return array|mixed
+     * @param Cmd|Cmd[] $inputs Commands to cast
+     * @param EqLogic $eqLogic Link to a specific EqLogic
+     *
+     * @return array|mixed Casted command
      */
     public static function cast($inputs, $eqLogic = null)
     {
@@ -218,9 +222,11 @@ class CmdManager
     /**
      * Get command by logical id
      *
-     * @param $logicalId
-     * @param null $type
+     * @param int $logicalId Filter by logical id
+     * @param string $type Filter by type
+     *
      * @return array|mixed
+     *
      * @throws \Exception
      */
     public static function byLogicalId($logicalId, $type = null)
@@ -658,7 +664,7 @@ class CmdManager
      *
      * @param $input
      *
-     * @return Cmd
+     * @return string
      *
      * @throws \Exception
      */

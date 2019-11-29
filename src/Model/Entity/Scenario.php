@@ -55,7 +55,9 @@ use NextDom\Managers\ViewManager;
  */
 class Scenario implements EntityInterface
 {
-
+    /**
+     * @var array
+     */
     protected static $_templateArray;
     /**
      * @var string
@@ -1475,7 +1477,7 @@ class Scenario implements EntityInterface
     {
         $return = Utils::o2a($this, true);
         $cache = $this->getCache(array('state', 'lastLaunch'));
-        // TODO: Pourquoi ce test a-t-il dû être rajouté ?
+        // @TODO: Pourquoi ce test a-t-il dû être rajouté ?
         if (isset($cache['state'])) {
             $return['state'] = $cache['state'];
         } else {
@@ -1677,7 +1679,7 @@ class Scenario implements EntityInterface
         $return = [NextDomObj::CMD => [], NextDomObj::EQLOGIC => [], NextDomObj::SCENARIO => [], NextDomObj::PLAN => [], NextDomObj::VIEW => []];
         $return[NextDomObj::EQLOGIC] = EqLogicManager::searchConfiguration(['#scenario' . $this->getId() . '#', '"scenario_id":"' . $this->getId()]);
         $return[NextDomObj::INTERACT_DEF] = InteractDefManager::searchByUse(['#scenario' . $this->getId() . '#', '"scenario_id":"' . $this->getId()]);
-        // TODO: scenario_id, pas de guillemet ouvrant, à vérifier
+        // @TODO: scenario_id, pas de guillemet ouvrant, à vérifier
         $return[NextDomObj::SCENARIO] = ScenarioManager::searchByUse([
             ['action' => NextDomObj::SCENARIO, 'option' => $this->getId(), 'and' => true],
             ['action' => '#scenario' . $this->getId() . '#'],

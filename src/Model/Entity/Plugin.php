@@ -62,7 +62,7 @@ class Plugin implements EntityInterface
     protected $documentation = '';
     protected $info = [];
     protected $include = [];
-    // TODO : Pas sur que ça serve
+    // @TODO : Pas sur que ça serve
     protected $functionality = [];
 
     /**
@@ -193,7 +193,7 @@ class Plugin implements EntityInterface
 
     /**
      * Génère un rapport si le plugin le permet
-     * TODO: Fonction getDisplay
+     * @TODO: Fonction getDisplay
      *
      * @param string $outputFormat Format de sortie
      * @param array $parameters Paramètres du format de sortie
@@ -214,7 +214,7 @@ class Plugin implements EntityInterface
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      *
      * @return string
      */
@@ -224,7 +224,7 @@ class Plugin implements EntityInterface
     }
 
     /**
-     * TODO: ??
+     * @TODO: ??
      * @param $display
      * @return $this
      */
@@ -236,7 +236,7 @@ class Plugin implements EntityInterface
 
     /**
      * Test si le plugin est actif
-     * TODO: Doit passer en static
+     * @TODO: Doit passer en static
      * @return int
      * @throws \Exception
      */
@@ -247,7 +247,7 @@ class Plugin implements EntityInterface
 
     /**
      * Obtenir des informations sur les dépendances
-     * TODO: Renommer
+     * @TODO: Renommer
      * @param bool $refresh
      * @return array
      * @throws \Exception
@@ -310,7 +310,7 @@ class Plugin implements EntityInterface
     /**
      * Savoir si le plugin a des dépendances
      *
-     * @return int TODO mettre un bool
+     * @return int @TODO mettre un bool
      */
     public function getHasDependency()
     {
@@ -332,7 +332,7 @@ class Plugin implements EntityInterface
 
     /**
      * Procédure d'installation des dépendances
-     * TODO: Corriger la faute
+     * @TODO: Corriger la faute
      * @return null
      *
      * @throws \Exception
@@ -460,7 +460,7 @@ class Plugin implements EntityInterface
     }
 
     /**
-     * TODO Surement le mode de chargement du daemon au démarrage. Sans doute
+     * @TODO Surement le mode de chargement du daemon au démarrage. Sans doute
      *
      * @param $_mode
      * @throws \Exception
@@ -631,13 +631,13 @@ class Plugin implements EntityInterface
 
     /**
      * Appelle les fonctions liées aux actions d'installation/préinstallation/mise à jour et suppression d'un plugin
-     * La fonction de préinstallation nommé TODO:TROUVER SON NOM doit se trouver dans un fichier nommé "pre_install.php" situé dans le répertoire plugin_info du plugin
+     * La fonction de préinstallation nommé @TODO:TROUVER SON NOM doit se trouver dans un fichier nommé "pre_install.php" situé dans le répertoire plugin_info du plugin
      * Les autres fonctions doivent se trouver dans le fichier install.php située dans le répertoire plugin_info du plugin
      *
      * @param $functionToCall
      * @param bool $direct Lance la fonction passée en paramètre directement
      *
-     * TODO: Amélioration possible, tester si le fichier existe, l'inclure, puis tester si la méthode existe plutot que de lire le contenu du fichier
+     * @TODO: Amélioration possible, tester si le fichier existe, l'inclure, puis tester si la méthode existe plutot que de lire le contenu du fichier
      *
      * @return bool|string
      *
@@ -679,7 +679,7 @@ class Plugin implements EntityInterface
     }
 
     /**
-     * TODO: Lance un truc, peut être un Nokia 3310
+     * @TODO: Lance un truc, peut être un Nokia 3310
      *
      * @param $functionToCall
      * @param bool $callInstallFunction
@@ -740,7 +740,7 @@ class Plugin implements EntityInterface
 
     /**
      * Sauvegarde un traduction
-     * TODO: Changer le format
+     * @TODO: Changer le format
      * @param $_language
      * @param $_translation
      */
@@ -894,7 +894,7 @@ class Plugin implements EntityInterface
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      * @return mixed
      */
     public function getIndex()
@@ -903,7 +903,7 @@ class Plugin implements EntityInterface
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      * @return array
      */
     public function getInclude()
@@ -912,7 +912,7 @@ class Plugin implements EntityInterface
     }
 
     /**
-     * TODO: ??
+     * @TODO: ??
      *
      * @return mixed
      */
@@ -922,7 +922,7 @@ class Plugin implements EntityInterface
     }
 
     /**
-     * TODO: ??
+     * @TODO: ??
      * @param $mobile
      * @return $this
      */
@@ -933,7 +933,7 @@ class Plugin implements EntityInterface
     }
 
     /**
-     * TODO ??
+     * @TODO ??
      * @return int
      */
     public function getEventjs()
@@ -942,7 +942,7 @@ class Plugin implements EntityInterface
     }
 
     /**
-     * TODO ??
+     * @TODO ??
      * @param $eventjs
      * @return $this
      */
@@ -989,7 +989,7 @@ class Plugin implements EntityInterface
     }
 
     /**
-     * TODO ????
+     * @TODO ????
      * @return string
      */
     public function getIssue()
@@ -998,7 +998,7 @@ class Plugin implements EntityInterface
     }
 
     /**
-     * Définir une issue TODO ???
+     * Définir une issue @TODO ???
      * @param $issue
      * @return $this
      */

@@ -676,7 +676,7 @@ class NextDomHelper
         if (!is_array(self::$nextdomConfiguration)) {
             self::$nextdomConfiguration = array();
         }
-        // TODO: Bizarre
+        // @TODO: Bizarre
         if (!$defaultValue && isset(self::$nextdomConfiguration[$askedKey])) {
             return self::$nextdomConfiguration[$askedKey];
         }
@@ -697,7 +697,7 @@ class NextDomHelper
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      *
      * @param string $configKey
      * @param mixed $configValue
@@ -1023,7 +1023,7 @@ class NextDomHelper
     }
 
     /**
-     * TODO: ????
+     * @TODO: ????
      * @param array $_replaces
      * @throws \Exception
      */
@@ -1048,7 +1048,7 @@ class NextDomHelper
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      *
      * @param $cmd
      *
@@ -1072,7 +1072,7 @@ class NextDomHelper
     }
 
     /**
-     * TODO: ??
+     * @TODO: ??
      *
      * @param $version
      * @param bool $lightMode
@@ -1098,7 +1098,7 @@ class NextDomHelper
     }
 
     /**
-     * TODO: ?? Ca fait plein de choses
+     * @TODO: ?? Ca fait plein de choses
      *
      * @param $input
      *
@@ -1111,7 +1111,7 @@ class NextDomHelper
     }
 
     /**
-     * TODO: ?? Ca aussi ça fait plein de choses
+     * @TODO: ?? Ca aussi ça fait plein de choses
      *
      * @param $input
      *
@@ -1124,7 +1124,7 @@ class NextDomHelper
     }
 
     /**
-     * TODO: Ca évalue des choses dans les expressions
+     * @TODO: Ca évalue des choses dans les expressions
      *
      * @param $input
      * @param null $scenario
@@ -1146,7 +1146,7 @@ class NextDomHelper
     }
 
     /**
-     * TODO: Calcul les stats de quelquechose
+     * @TODO: Calcul les stats de quelquechose
      *
      * @param $calcType
      * @param $values
@@ -1346,7 +1346,7 @@ class NextDomHelper
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      *
      * @param string $command Command to execute after stop preparation
      * @param string $errorMessage Message to show if actions failed

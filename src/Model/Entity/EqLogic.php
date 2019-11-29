@@ -608,7 +608,7 @@ class EqLogic implements EntityInterface
     }
 
     /**
-     * TODO: Unused
+     * @TODO: Unused
      * @param null $defaultValue
      * @return int|null
      */
@@ -621,7 +621,7 @@ class EqLogic implements EntityInterface
     }
 
     /**
-     * TODO: Unused
+     * @TODO: Unused
      * @param $_eqReal_id
      * @return $this
      */
@@ -633,7 +633,7 @@ class EqLogic implements EntityInterface
     }
 
     /**
-     * TODO: Unused
+     * @TODO: Unused
      * @return array|mixed|null
      * @throws CoreException
      * @throws \ReflectionException
@@ -1699,7 +1699,7 @@ class EqLogic implements EntityInterface
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      * @return bool
      */
     public function getShowOnChild()
@@ -2028,7 +2028,7 @@ class EqLogic implements EntityInterface
     }
 
     /**
-     * Get list of usage in string (TODO: ???)
+     * Get list of usage in string (@TODO: ???)
      *
      * @return array List of usage
      *

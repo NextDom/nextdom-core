@@ -132,7 +132,7 @@ class MarketItem
     public function __construct($sourceName)
     {
         $this->dataStorage = new DataStorage('market');
-        // TODO: A supprimer
+        // @TODO: A supprimer
         if (!$this->dataStorage->isDataTableExists()) {
             $this->dataStorage->createDataTable();
         }

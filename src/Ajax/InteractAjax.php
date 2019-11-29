@@ -40,7 +40,7 @@ class InteractAjax extends BaseAjax
     {
         $results = Utils::o2a(InteractDefManager::all());
         foreach ($results as &$result) {
-            // TODO TOus sélectionnés dans tous les cas
+            // @TODO TOus sélectionnés dans tous les cas
             $result['nbInteractQuery'] = count(InteractQueryManager::byInteractDefId($result['id']));
             $result['nbEnableInteractQuery'] = count(InteractQueryManager::byInteractDefId($result['id']));
             if ($result['link_type'] == 'cmd' && $result['link_id'] != '') {

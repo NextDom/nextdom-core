@@ -50,7 +50,7 @@ class MarketController extends BaseController
         $sourcesList = [];
 
         foreach ($NEXTDOM_INTERNAL_CONFIG['nextdom']['sources'] as $source) {
-            // TODO: Limiter les requêtes
+            // @TODO: Limiter les requêtes
             if (ConfigManager::byKey('nextdom::' . $source['code']) == 1) {
                 $sourcesList[] = $source;
             }

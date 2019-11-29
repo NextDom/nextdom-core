@@ -78,7 +78,7 @@ class ConsistencyManager
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      * @throws \Exception
      */
     private static function ensureConfiguration()
