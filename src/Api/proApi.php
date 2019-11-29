@@ -21,6 +21,7 @@ require_once __DIR__ . "/../../src/core.php";
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\BackupManager;
+use NextDom\Enums\NextDomFile;
 
 if (isset($argv)) {
     foreach ($argv as $arg) {
@@ -200,7 +201,7 @@ try {
                 if (config::byKey('cache::engine') != 'FilesystemCache' && config::byKey('cache::engine') != 'PhpFileCache') {
                     $result = 'OK';
                 } else {
-                    $filename = NEXTDOM_DATA . '/cache.tar.gz';
+                    $filename = NEXTDOM_DATA . '/' . NextDomFile::CACHE_TAR_GZ;
                     $result = 'OK (' . date('Y-m-d H:i:s', filemtime($filename)) . ')';
                 }
             } else {

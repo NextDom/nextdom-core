@@ -19,10 +19,12 @@ namespace NextDom\Managers;
 
 use NextDom\Enums\ConfigKey;
 use NextDom\Enums\DateFormat;
-use NextDom\Enums\FoldersReferential;
+use NextDom\Enums\FoldersAndFilesReferential;
 use NextDom\Enums\LogLevel;
 use NextDom\Enums\LogTarget;
+use NextDom\Enums\NextDomFolder;
 use NextDom\Enums\NextDomObj;
+use NextDom\Enums\NextDomFile;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\ConsoleHelper;
 use NextDom\Helpers\DBHelper;
@@ -298,8 +300,8 @@ class BackupManager
 
         // Backup all files/folder in root folder added by user
         foreach ($it as $fileInfo) {
-            if (($fileInfo->isDir() || $fileInfo->isFile()) && !in_array($fileInfo->getFilename(), FoldersReferential::NEXTDOMFOLDERS)
-                && !in_array($fileInfo->getFilename(), FoldersReferential::NEXTDOMFILES)
+            if (($fileInfo->isDir() || $fileInfo->isFile()) && !in_array($fileInfo->getFilename(), FoldersAndFilesReferential::NEXTDOM_ROOT_FOLDERS)
+                && !in_array($fileInfo->getFilename(), FoldersAndFilesReferential::NEXTDOM_ROOT_FILES)
                 && !is_link($fileInfo->getFilename())) {
                 $tar->addFile($fileInfo->getPathname(), $fileInfo->getFilename());
                 if ($fileInfo->isDir()) {
@@ -527,6 +529,9 @@ class BackupManager
             ConsoleHelper::step("clearing cache...");
             self::clearCache();
             ConsoleHelper::ok();
+            ConsoleHelper::step("restoring cache...");
+            self::restoreCache($tmpDir);
+            ConsoleHelper::ok();
             FileSystemHelper::rrmdir($tmpDir);
             NextDomHelper::event("end_restore");
             ConsoleHelper::subTitle("end of restore procedure at " . date(DateFormat::FULL));
@@ -742,10 +747,10 @@ class BackupManager
 
         foreach ($rootCustomDataDirs as $c_dir) {
             $name = basename($c_dir);
-            if (!in_array($name, FoldersReferential::NEXTDOMFOLDERS)
-                && !in_array($name, FoldersReferential::NEXTDOMFILES)
-                && !in_array($name, FoldersReferential::JEEDOMFOLDERS)
-                && !in_array($name, FoldersReferential::JEEDOMFILES)) {
+            if (!in_array($name, FoldersAndFilesReferential::NEXTDOM_ROOT_FOLDERS)
+                && !in_array($name, FoldersAndFilesReferential::NEXTDOM_ROOT_FILES)
+                && !in_array($name, FoldersAndFilesReferential::JEEDOM_BACKUP_FOLDERS)
+                && !in_array($name, FoldersAndFilesReferential::JEEDOM_BACKUP_FILES)) {
                 $message = 'Restoring folder: ' . $name;
                 if ($logFile == LogTarget::MIGRATION) {
                     LogHelper::addInfo($logFile, $message, '');
@@ -808,6 +813,20 @@ class BackupManager
 
     }
 
+    /**
+     * Restore cache from backup archive
+     *
+     * @param string $tmpDir extracted backup root directory
+     * @throws CoreException
+     */
+    private static function restoreCache($tmpDir)
+    {
+
+        FileSystemHelper::rrmfile(CacheManager::getArchivePath());
+        FileSystemHelper::mv($tmpDir . '/' . NextDomFolder::VAR . '/' . NextDomFile::CACHE_TAR_GZ, CacheManager::getArchivePath());
+
+        CacheManager::restore();
+    }
     private static function updateConfig()
     {
         ConfigManager::save('hardware_name', '');
