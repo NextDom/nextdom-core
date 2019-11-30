@@ -141,9 +141,11 @@ class Render
      * @param array $data
      * @return string|null
      */
-    public function get($view, $data = [])
+    public function get($view, array $data = [])
     {
-        $data['debugbar'] = $this->showDebugBar();
+        if (isset($data['debugbar'])) {
+            $data['debugbar'] = $this->showDebugBar();
+        }
         try {
             return $this->twig->render($view, $data);
         } catch (\Throwable $e) {
