@@ -74,6 +74,10 @@ def specific_tests():
     print_subtitle('Connection page')
     run_test('tests/connection_page.py',
              [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])  # pylint: disable=line-too-long
+    run_test('tests/view_page.py',
+             [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])  # pylint: disable=line-too-long
+    run_test('tests/plan_page.py',
+             [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])  # pylint: disable=line-too-long
     remove_test_container(container_name)
 
 
@@ -132,4 +136,5 @@ if __name__ == "__main__":
         if sys.argv[1] == '--headless':
             start_all_tests('GUI Tests', TESTS_LIST)
         else:
+            print_title('GUI Tests')
             start_specific_test(sys.argv[1], TESTS_LIST)
