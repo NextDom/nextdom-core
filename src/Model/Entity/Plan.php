@@ -553,5 +553,4 @@ class Plan implements EntityInterface
     {
         return 'plan';
     }
-
 }

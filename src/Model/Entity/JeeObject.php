@@ -20,6 +20,7 @@ namespace NextDom\Model\Entity;
 use NextDom\Enums\Common;
 use NextDom\Enums\ConfigKey;
 use NextDom\Enums\DateFormat;
+use NextDom\Enums\NextDomObj;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\NextDomHelper;
@@ -425,10 +426,11 @@ class JeeObject implements EntityInterface
     public function preRemove()
     {
         DataStoreManager::removeByTypeLinkId('object', $this->getId());
+        $params = ['object_id' => $this->getId()];
         $sql = 'UPDATE eqLogic set object_id= NULL where object_id = :object_id';
-        DBHelper::exec($sql);
+        DBHelper::exec($sql, $params);
         $sql = 'UPDATE scenario set object_id= NULL where object_id = :object_id';
-        DBHelper::exec($sql);
+        DBHelper::exec($sql, $params);
     }
 
     /**
@@ -441,7 +443,7 @@ class JeeObject implements EntityInterface
      */
     public function remove()
     {
-        NextDomHelper::addRemoveHistory(['id' => $this->getId(), 'name' => $this->getName(), 'date' => date(DateFormat::FULL), 'type' => 'object']);
+        NextDomHelper::addRemoveHistory([Common::ID => $this->getId(), Common::NAME => $this->getName(), Common::DATE => date(DateFormat::FULL), Common::TYPE => NextDomObj::OBJECT]);
         return DBHelper::remove($this);
     }
 
@@ -458,15 +460,15 @@ class JeeObject implements EntityInterface
     /**
      * Set object name
      *
-     * @param string $_name Object name
+     * @param string $name Object name
      *
      * @return $this
      */
-    public function setName($_name)
+    public function setName($name)
     {
-        $_name = str_replace(['&', '#', ']', '[', '%'], '', $_name);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
-        $this->name = $_name;
+        $name = str_replace(['&', '#', ']', '[', '%'], '', $name);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $name);
+        $this->name = $name;
         return $this;
     }
 

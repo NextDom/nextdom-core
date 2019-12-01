@@ -37,7 +37,7 @@ class CmdAjaxTest extends BaseAjaxTest
     public function tearDown()
     {
         $this->cleanGetParams();
-        DBHelper::exec('DELETE FROM cmd WHERE id > 3');
+        DBHelper::exec('DELETE FROM cmd WHERE id > 4');
     }
 
     public function testToHtmlOnlyOne()
@@ -184,8 +184,7 @@ class CmdAjaxTest extends BaseAjaxTest
 
     public function testUsedBy()
     {
-        AuthentificationHelper::login('admin', 'nextdom-test');
-        AuthentificationHelper::init();
+        $this->connectAdAdmin();
         $_GET['id'] = '3';
         ob_start();
         $this->cmdAjax->usedBy();
@@ -222,8 +221,7 @@ class CmdAjaxTest extends BaseAjaxTest
 
     public function testSave()
     {
-        AuthentificationHelper::login('admin', 'nextdom-test');
-        AuthentificationHelper::init();
+        $this->connectAdAdmin();
 
         $cmd4 = new Cmd();
         $cmd4->setName('Save test');
@@ -244,8 +242,7 @@ class CmdAjaxTest extends BaseAjaxTest
 
     public function testMultiSave()
     {
-        AuthentificationHelper::login('admin', 'nextdom-test');
-        AuthentificationHelper::init();
+        $this->connectAdAdmin();
 
         $cmd4 = new Cmd();
         $cmd4->setName('Save test');

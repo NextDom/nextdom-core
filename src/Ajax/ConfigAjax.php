@@ -18,6 +18,8 @@
 namespace NextDom\Ajax;
 
 use NextDom\Enums\AjaxParams;
+use NextDom\Enums\Common;
+use NextDom\Enums\ConfigKey;
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
@@ -35,22 +37,32 @@ class ConfigAjax extends BaseAjax
     protected $MUST_BE_CONNECTED = true;
     protected $CHECK_AJAX_TOKEN = true;
 
+    /**
+     * Generate a new Api key
+     *
+     * @throws CoreException
+     */
     public function genApiKey()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        if (Utils::init(AjaxParams::PLUGIN) == 'core') {
-            ConfigManager::save('api', ConfigManager::genKey());
-            $this->ajax->success(ConfigManager::byKey('api'));
+        if (Utils::init(AjaxParams::PLUGIN) == Common::CORE) {
+            ConfigManager::save(ConfigKey::API, ConfigManager::genKey());
+            $this->ajax->success(ConfigManager::byKey(ConfigKey::API));
         } else if (Utils::init(AjaxParams::PLUGIN) == 'pro') {
             ConfigManager::save('apipro', ConfigManager::genKey());
             $this->ajax->success(ConfigManager::byKey('apipro'));
         } else {
             $plugin = Utils::init(AjaxParams::PLUGIN);
-            ConfigManager::save('api', ConfigManager::genKey(), $plugin);
-            $this->ajax->success(ConfigManager::byKey('api', $plugin));
+            ConfigManager::save(ConfigKey::API, ConfigManager::genKey(), $plugin);
+            $this->ajax->success(ConfigManager::byKey(ConfigKey::API, $plugin));
         }
     }
 
+    /**
+     * Get key from the database
+     *
+     * @throws CoreException
+     */
     public function getKey()
     {
         $keys = Utils::init(AjaxParams::KEY);
@@ -59,43 +71,55 @@ class ConfigAjax extends BaseAjax
         }
         if (is_json($keys)) {
             $keys = json_decode($keys, true);
-            $return = ConfigManager::byKeys(array_keys($keys), Utils::init(AjaxParams::PLUGIN, 'core'));
-            if (Utils::init('convertToHumanReadable', 0)) {
-                $return = NextDomHelper::toHumanReadable($return);
+            $result = ConfigManager::byKeys(array_keys($keys), Utils::init(AjaxParams::PLUGIN, Common::CORE));
+            if (Utils::init(AjaxParams::CONVERT_TO_HUMAN_READABLE, 0)) {
+                $result = NextDomHelper::toHumanReadable($result);
             }
-            $this->ajax->success($return);
+            $this->ajax->success($result);
         } else {
-            $return = ConfigManager::byKey($keys, Utils::init(AjaxParams::PLUGIN, 'core'));
-            if (Utils::init('convertToHumanReadable', 0)) {
-                $return = NextDomHelper::toHumanReadable($return);
+            $result = ConfigManager::byKey($keys, Utils::init(AjaxParams::PLUGIN, Common::CORE));
+            if (Utils::init(AjaxParams::CONVERT_TO_HUMAN_READABLE, 0)) {
+                $result = NextDomHelper::toHumanReadable($result);
             }
-            $this->ajax->success($return);
+            $this->ajax->success($result);
         }
     }
 
+    /**
+     * Store key in the database
+     *
+     * @throws CoreException
+     */
     public function addKey()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $values = json_decode(Utils::init('value'), true);
-        foreach ($values as $key => $value) {
-            ConfigManager::save($key, NextDomHelper::fromHumanReadable($value), Utils::init('plugin', 'core'));
+        $keysToAdd = json_decode(Utils::init(AjaxParams::VALUE), true);
+        $plugin = Utils::init(AjaxParams::PLUGIN, Common::CORE);
+        foreach ($keysToAdd as $key => $value) {
+            ConfigManager::save($key, NextDomHelper::fromHumanReadable($value), $plugin);
         }
         $this->ajax->success();
     }
 
+    /**
+     * Remove key from the database
+     *
+     * @throws CoreException
+     */
     public function removeKey()
     {
         $keys = Utils::init(AjaxParams::KEY);
+        $plugin = Utils::init(AjaxParams::PLUGIN, Common::CORE);
         if ($keys == '') {
             throw new CoreException(__('Aucune clé demandée'));
         }
         if (is_json($keys)) {
             $keys = json_decode($keys, true);
             foreach ($keys as $key => $value) {
-                ConfigManager::remove($key, Utils::init(AjaxParams::PLUGIN, 'core'));
+                ConfigManager::remove($key, $plugin);
             }
         } else {
-            ConfigManager::remove(Utils::init(AjaxParams::KEY), Utils::init(AjaxParams::PLUGIN, 'core'));
+            ConfigManager::remove(Utils::init($keys), $plugin);
         }
         $this->ajax->success();
     }

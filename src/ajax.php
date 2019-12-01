@@ -19,11 +19,12 @@
 namespace NextDom;
 
 use NextDom\Ajax\BaseAjax;
+use NextDom\Enums\AjaxParams;
 use NextDom\Helpers\Utils;
 
 require_once('core.php');
 
-$target = Utils::initStr('target');
+$target = Utils::initStr(AjaxParams::TARGET);
 $targetClass = '\\NextDom\\Ajax\\' . $target . 'Ajax';
 if (class_exists($targetClass)) {
     /** @var BaseAjax $ajaxClass */

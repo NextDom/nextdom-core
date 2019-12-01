@@ -50,6 +50,7 @@ use NextDom\Managers\EventManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\MessageManager;
 use NextDom\Managers\PlanHeaderManager;
+use NextDom\Managers\PlanManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
@@ -423,6 +424,7 @@ class NextDomHelper
     /**
      * Check space left
      *
+     * @param null $directory
      * @return float
      */
     public static function checkSpaceLeft($directory = null): float
@@ -568,7 +570,7 @@ class NextDomHelper
 
     /**
      * Stop all cron tasks and scenarios
-     * @param $isBackupProcess if true stop all except backup cron
+     * @param bool $isBackupProcess if true stop all except backup cron
      * @throws \Exception
      */
     public static function stopSystem($isBackupProcess)
@@ -1011,18 +1013,18 @@ class NextDomHelper
         preg_match_all('/#(eqLogic|scenario)?(\d+)#/', $testString, $humanReadableResults);
         self::addTypeUseResults($humanReadableResults, $results);
         // Look in json string
-        preg_match_all('/"((?:scenario|view|plan)_id|eqLogic)":"(\d+)"/', $testString, $jsonResults);
+        preg_match_all('/"(scenario|view|plan|eqLogic)(?:_id)?":"(\d+)"/', $testString, $jsonResults);
         self::addTypeUseResults($jsonResults, $results);
         preg_match_all('/variable\((.*?)\)/', $testString, $dataStoreResults);
         foreach ($dataStoreResults[1] as $variable) {
-            if (isset($results['dataStore'][$variable])) {
+            if (isset($results[NextDomObj::DATASTORE][$variable])) {
                 continue;
             }
-            $dataStore = DataStoreManager::byTypeLinkIdKey('scenario', -1, trim($variable));
+            $dataStore = DataStoreManager::byTypeLinkIdKey(NextDomObj::SCENARIO, -1, trim($variable));
             if (!is_object($dataStore)) {
                 continue;
             }
-            $results['dataStore'][$variable] = $dataStore;
+            $results[NextDomObj::DATASTORE][$variable] = $dataStore;
         }
 
         return $results;
@@ -1045,12 +1047,25 @@ class NextDomHelper
             if (isset($result[$typeName][$typeId])) {
                 continue;
             }
-            if ($typeName[0] === 'c') {
-                $target = CmdManager::byId($typeId);
-            } elseif ($typeName[0] === 'e') {
-                $target = EqLogicManager::byId($typeId);
-            } elseif ($typeName[0] === 's') {
-                $target = ScenarioManager::byId($typeId);
+            switch ($typeName[0]) {
+                case 'c':
+                    $target = CmdManager::byId($typeId);
+                    break;
+                case 'e':
+                    $target = EqLogicManager::byId($typeId);
+                    break;
+                case 's':
+                    $target = ScenarioManager::byId($typeId);
+                    break;
+                case 'p':
+                    $target = PlanHeaderManager::byId($typeId);
+                    break;
+                case 'v':
+                    $target = ViewManager::byId($typeId);
+                    break;
+                default:
+                    $target = null;
+                    break;
             }
             if (!is_object($target)) {
                 continue;

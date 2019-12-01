@@ -24,6 +24,10 @@ class plugin4tests extends eqLogic
         log::add('plugin4tests', 'info', 'CRON TEST');
     }
 
+    public static function cron5() {
+        log::add('plugin4tests', 'error', 'CRON ERROR');
+    }
+
     public function preInsert()
     {
         
