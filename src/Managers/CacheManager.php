@@ -35,6 +35,7 @@
 namespace NextDom\Managers;
 
 use NextDom\Enums\DateFormat;
+use NextDom\Enums\NextDomFile;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
@@ -264,7 +265,7 @@ class CacheManager
      */
     public static function getArchivePath()
     {
-        return NEXTDOM_DATA . '/cache.tar.gz';
+        return NEXTDOM_DATA . '/' . NextDomFile::CACHE_TAR_GZ;
     }
 
     /**

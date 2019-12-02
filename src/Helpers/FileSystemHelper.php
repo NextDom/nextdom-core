@@ -473,7 +473,7 @@ class FileSystemHelper
                     self::rrmdir("$dir/$file");
                 }
             }
-            if (!rmdir($dir)) {
+            if (!is_writable($dir) || !rmdir($dir)) {
                 $output = [];
                 $retval = 0;
                 exec('sudo rm -rf ' . $dir, $output, $retval);
@@ -482,7 +482,7 @@ class FileSystemHelper
                 }
             }
         } elseif (file_exists($dir)) {
-            if (!unlink($dir)) {
+            if (!is_writable($dir) || !unlink($dir)) {
                 $output = [];
                 $retval = 0;
                 exec('sudo rm -rf ' . $dir, $output, $retval);
