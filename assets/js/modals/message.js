@@ -62,7 +62,7 @@ function initEvents() {
     });
 
     $('#table_message').delegate('.removeMessage', 'click', function () {
-        var messageRow = $(this).closest('tr');
+        var messageRow = $(this).closest('li');
         nextdom.message.remove({
             id: messageRow.attr('data-message_id'),
             error: function (error) {
