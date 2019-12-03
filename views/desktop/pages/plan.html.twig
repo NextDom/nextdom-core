@@ -37,6 +37,42 @@
 {% if planHeaderError %}
     <div class="alert alert-danger">{{ 'Aucun design n\'existe, cliquez ' | trans }}<a id="bt_createNewDesign" class="cursor">{{ 'ici'  | trans }}</a>{{ ' pour en créer un.'  | trans }}</div>
 {% endif %}
-<div class="div_backgroundPlan">
-    <div class="container-fluid div_displayObject"></div>
+<div id="div_backgroundPlan" class="div_backgroundPlan">
+    <div id="lines" class="lines">
+        <span class="vert"></span>
+        <span class="hori"></span>
+    </div>
+    <div id="div_displayObject" class="container-fluid div_displayObject"></div>
+
+    <div id="lines" class="lines">
+        <span class="vert"></span>
+        <span class="hori"></span>
+    </div>
+    <div id="div_displayObject" class="container-fluid div_displayObject"></div>
+    <div class="fabs fab-filter">
+        <span class="fab-action-button"><i id="fabCategory" class="fab-action-button__icon fas fa-filter"></i></span>
+        <ul class="fab-buttons">
+            <li class="fab-buttons__item"><a class="fab-buttons__link cursor bg-green" data-tooltip="{{ 'plan.add-graph'|trans }}" onclick='addGraphWidget();'><i class="fas fa-graph"></i></a></li>
+            <li class="fab-buttons__item"><a class="fab-buttons__link cursor bg-green" data-tooltip="{{ 'plan.add-textHtml'|trans }}" onclick='addTextHtmlWidget();'><i class="fas fa-code"></i></a></li>
+            <li class="fab-buttons__item"><a class="fab-buttons__link cursor bg-green" data-tooltip="{{ 'plan.add-scenario'|trans }}" onclick='addScenarioWidget();'><i class="fas fa-asterisk"></i></a></li>
+            <li class="fab-buttons__item"><a class="fab-buttons__link cursor bg-green" data-tooltip="{{ 'plan.add-viewLink'|trans }}" onclick='addViewLinkWidget();'><i class="fas fa-asterisk"></i></a></li>
+            <li class="fab-buttons__item"><a class="fab-buttons__link cursor bg-green" data-tooltip="{{ 'plan.add-designLink'|trans }}" onclick='addDesignLinkWidget();'><i class="fas fa-asterisk"></i></a></li>
+            <li class="fab-buttons__item"><a class="fab-buttons__link cursor bg-green" data-tooltip="{{ 'plan.add-device'|trans }}" onclick='addDeviceWidget();'><i class="fas fa-asterisk"></i></a></li>
+            <li class="fab-buttons__item"><a class="fab-buttons__link cursor bg-green" data-tooltip="{{ 'plan.add-command'|trans }}" onclick='addCommandWidget();'><i class="fas fa-asterisk"></i></a></li>
+            <li class="fab-buttons__item"><a class="fab-buttons__link cursor bg-green" data-tooltip="{{ 'plan.add-picture'|trans }}" onclick='addPictureWidget();'><i class="fas fa-image"></i></a></li>
+            <li class="fab-buttons__item"><a class="fab-buttons__link cursor bg-green" data-tooltip="{{ 'plan.add-area'|trans }}" onclick='addAreaWidget();'><i class="fas fa-asterisk"></i></a></li>
+            <li class="fab-buttons__item"><a class="fab-buttons__link cursor bg-green" data-tooltip="{{ 'plan.add-resume'|trans }}" onclick='addResumeWidget();'><i class="fas fa-asterisk"></i></a></li>
+
+        </ul>
+    </div>
+    <div class="fabs fab-bis" id="fabEditor">
+        <a class="fab-action-button cursor" id="bt_editPlanAction" data-mode="0"><i class="fab-action-button__icon fas fa-pencil-alt"></i></a>
+        <ul class="fab-buttons">
+            <li class="fab-buttons__item"><a class="fab-buttons__link cursor bg-green" data-tooltip="{{ 'plan.edition'|trans }}" onclick='editionModeAction();'><i class="fas fa-asterisk"></i></a></li>
+            <li class="fab-buttons__item"><a class="fab-buttons__link cursor bg-green" data-tooltip="{{ 'plan.fullscreen'|trans }}" onclick='fullscreen();'><i class="fas fa-computer"></i></a></li>
+            <li class="fab-buttons__item"><a class="fab-buttons__link cursor bg-green" data-tooltip="{{ 'plan.remove'|trans }}" onclick='removePlanAction();'><i class="fas fa-asterisk"></i></a></li>
+            <li class="fab-buttons__item"><a class="fab-buttons__link cursor bg-green" data-tooltip="{{ 'plan.duplication'|trans }}" onclick='duplicatePlanAction();'><i class="fas fa-asterisk"></i></a></li>
+            <li class="fab-buttons__item"><a class="fab-buttons__link cursor bg-green" data-tooltip="{{ 'plan.configure'|trans }}" onclick='configurePlanAction();'><i class="fas fa-asterisk"></i></a></li>
+        </ul>
+    </div>
 </div>
