@@ -59,13 +59,13 @@
                             <i class="fas fa-envelope-open"></i>
                         {% endif %}
                     </a>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu" id="table_message">
                         <li class="header">Vous avez {{ MENU_NB_MESSAGES }} messages</li>
                         <li>
                             <!-- inner menu: contains the actual data -->
                             <ul class="menu">
                                 {% for message in messagesList %}
-                                    <li><!-- start message -->
+                                    <li data-message_id="{{ message.getId() }}"><!-- start message -->
                                         <a href="#">
                                             <div class="pull-left">
                                                 <img src="/public/img/NextDom/NextDom_Square_WhiteBlackBlue.png" class="img-circle" alt="User Image" height="32" width="32">
@@ -89,7 +89,6 @@
                             </ul>
                         </li>
                     </ul>
-                    <script src="/public/js/modals/message.js"></script>
 
                 </li>
                 {% if IS_ADMIN %}
@@ -118,3 +117,5 @@
         </div>
     </nav>
 </header>
+
+<script src="/public/js/modals/message.js"></script>
