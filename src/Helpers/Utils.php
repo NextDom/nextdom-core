@@ -616,15 +616,15 @@ class Utils
     }
 
     /**
-     * @param $_string
+     * @param $string
      * @return mixed|null
      */
-    public static function secureXSS($_string)
+    public static function secureXSS($string = null)
     {
-        if ($_string === null) {
+        if ($string === null) {
             return null;
         }
-        return str_replace('&amp;', '&', htmlspecialchars(strip_tags($_string), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+        return str_replace('&amp;', '&', htmlspecialchars(strip_tags($string), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
     }
 
     /**
@@ -648,10 +648,10 @@ class Utils
 
     /**
      * @TODO: Pourquoi en minuscule ?
-     * @param $_message
+     * @param $message
      * @return string|string[]|null
      */
-    public static function sanitizeAccent($_message)
+    public static function sanitizeAccent(string $message)
     {
         $caracteres = [
             'À' => 'a', 'Á' => 'a', 'Â' => 'a', 'Ä' => 'a', 'à' => 'a', 'á' => 'a', 'â' => 'a', 'ä' => 'a', '@' => 'a',
@@ -662,7 +662,7 @@ class Utils
             'Ù' => 'u', 'Ú' => 'u', 'Û' => 'u', 'Ü' => 'u', 'ù' => 'u', 'ú' => 'u', 'û' => 'u', 'ü' => 'u', 'µ' => 'u',
             'Œ' => 'oe', 'œ' => 'oe',
             '$' => 's'];
-        return preg_replace('#[^A-Za-z0-9 \n\.\'=\*:]+\#\)\(#', '', strtr($_message, $caracteres));
+        return preg_replace('#[^A-Za-z0-9 \n\.\'=\*:]+\#\)\(#', '', strtr($message, $caracteres));
     }
 
     /**
@@ -750,14 +750,14 @@ class Utils
     }
 
     /**
-     * @param $_string
+     * @param $string
      * @return array
      */
-    public static function arg2array($_string): array
+    public static function arg2array($string): array
     {
         $result = [];
         $re = '/[\/-]?(([a-zA-Z0-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœ_#]+)(?:[=:]("[^"]+"|[^\s"]+))?)(?:\s+|$)/';
-        preg_match_all($re, $_string, $matches, PREG_SET_ORDER, 0);
+        preg_match_all($re, $string, $matches, PREG_SET_ORDER, 0);
         foreach ($matches as $match) {
             if (count($match) != 4) {
                 continue;
@@ -803,12 +803,12 @@ class Utils
     }
 
     /**
-     * @param $_string
+     * @param string $string
      * @return string
      */
-    public static function sha512($_string): string
+    public static function sha512( string $string): string
     {
-        return hash('sha512', $_string);
+        return hash('sha512', $string);
     }
 
     /**
@@ -1281,13 +1281,17 @@ class Utils
     }
 
     /**
-     * @param $_pathimg
-     * @return string|array
+     * @param      $pathImg
+     * @param null $level
+     * @param bool $ignoreDarkColor
+     * @return array|string
      */
-    function getDominantColor($_pathimg, $_level = null, $_ignoreDarkColor = false)
+    public function getDominantColor($pathImg, $level = null, $ignoreDarkColor = false)
     {
+
+
         $colors = [];
-        $i = imagecreatefromjpeg($_pathimg);
+        $i = imagecreatefromjpeg($pathImg);
         $imagesX = imagesx($i);
         $imagesY = imagesy($i);
         $ratio = $imagesX / $imagesY;
@@ -1299,7 +1303,7 @@ class Utils
         for ($x = 0; $x < $imagesX; $x++) {
             for ($y = 0; $y < $imagesY; $y++) {
                 $rgb = imagecolorat($img, $x, $y);
-                if ($_ignoreDarkColor) {
+                if ($ignoreDarkColor) {
                     $sum = (($rgb >> 16) & 0xFF) + (($rgb >> 8) & 0xFF) + ($rgb & 0xFF);
                     if ($sum < 10) {
                         continue;
@@ -1315,14 +1319,14 @@ class Utils
             return $b['nb'] - $a['nb'];
         });
 
-        if ($_level == null) {
+        if ($level == null) {
             if ($colors[0]['value'] == 0) {
                 return '#' . substr("000000" . dechex($colors[1]['value']), -6);
             }
             return '#' . substr("000000" . dechex($colors[0]['value']), -6);
         }
         $result = [];
-        $colors = array_slice($colors, 0, $_level);
+        $colors = array_slice($colors, 0, $level);
         foreach ($colors as $color) {
             $result[] = '#' . substr("000000" . dechex($color['value']), -6);
         }
