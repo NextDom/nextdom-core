@@ -24,4 +24,7 @@ namespace NextDom\Enums;
 class CmdViewType extends Enum
 {
     const DASHBOARD = 'dashboard';
+    const DVIEW = 'dview';
+    const MVIEW = 'mview';
+    const DPLAN = 'dplan';
 }
