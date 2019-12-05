@@ -18,6 +18,9 @@
 namespace NextDom\Ajax;
 
 use NextDom\Enums\AjaxParams;
+use NextDom\Enums\Common;
+use NextDom\Enums\EqLogicViewType;
+use NextDom\Enums\NextDomObj;
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
@@ -41,6 +44,12 @@ class ObjectAjax extends BaseAjax
     protected $MUST_BE_CONNECTED = true;
     protected $CHECK_AJAX_TOKEN = true;
 
+    /**
+     * Remove object
+     *
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function remove()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -52,6 +61,12 @@ class ObjectAjax extends BaseAjax
         $this->ajax->success();
     }
 
+    /**
+     * Get object by his Id
+     *
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function byId()
     {
         $resultObject = JeeObjectManager::byId(Utils::initInt(AjaxParams::ID));
@@ -67,6 +82,11 @@ class ObjectAjax extends BaseAjax
         $this->ajax->success();
     }
 
+    /**
+     * Get all objects
+     *
+     * @throws \ReflectionException
+     */
     public function all()
     {
         $resultObjects = JeeObjectManager::buildTree();
@@ -83,6 +103,12 @@ class ObjectAjax extends BaseAjax
         $this->ajax->success(Utils::o2a($resultObjects));
     }
 
+    /**
+     * Save object passed in json format
+     *
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function save()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -101,6 +127,12 @@ class ObjectAjax extends BaseAjax
         $this->ajax->error('Le nom de l\'objet ne peut être vide');
     }
 
+    /**
+     * Get child objects
+     *
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function getChild()
     {
         $resultObject = JeeObjectManager::byId(Utils::initInt(AjaxParams::ID));
@@ -118,9 +150,10 @@ class ObjectAjax extends BaseAjax
      */
     public function toHtml()
     {
-        if (Utils::init(AjaxParams::ID) == '' || Utils::init(AjaxParams::ID) == 'all' || is_json(Utils::init(AjaxParams::ID))) {
-            if (is_json(Utils::init(AjaxParams::ID))) {
-                $objectsList = json_decode(Utils::init(AjaxParams::ID), true);
+        $objectId = Utils::init(AjaxParams::ID);
+        if ($objectId == '' || $objectId == 'all' || is_json($objectId)) {
+            if (is_json($objectId)) {
+                $objectsList = json_decode($objectId, true);
             } else {
                 $objectsList = [];
                 foreach (JeeObjectManager::all() as $resultObject) {
@@ -153,7 +186,7 @@ class ObjectAjax extends BaseAjax
                             'id' => $scenario->getId(),
                             'state' => $scenario->getState(),
                             'name' => $scenario->getName(),
-                            'icon' => $scenario->getDisplay('icon'),
+                            'icon' => $scenario->getDisplay(Common::ICON),
                             'active' => $scenario->getIsActive()
                         ];
                     }
@@ -162,17 +195,18 @@ class ObjectAjax extends BaseAjax
                 $result[$i . '::' . $id] = implode($html);
                 $i++;
             }
-            $this->ajax->success(['objectHtml' => $result, 'scenarios' => $scenariosResult]);
+            $this->ajax->success([Common::OBJECT_HTML => $result, NextDomObj::SCENARIOS => $scenariosResult]);
         } else {
+            $objectId = intval($objectId);
             $html = [];
             if (Utils::init(AjaxParams::SUMMARY) == '') {
-                $eqLogics = EqLogicManager::byObjectId(Utils::initInt(AjaxParams::ID), true, true);
+                $eqLogics = EqLogicManager::byObjectId($objectId, true, true);
             } else {
-                $resultObject = JeeObjectManager::byId(Utils::initInt(AjaxParams::ID));
-                $eqLogics = $resultObject->getEqLogicBySummary(Utils::init(AjaxParams::SUMMARY), true, false);
+                $resultObject = JeeObjectManager::byId($objectId);
+                $eqLogics = $resultObject->getEqLogicBySummary($objectId, true, false);
             }
             $this->toHtmlEqLogics($html, $eqLogics);
-            $scenarios = ScenarioManager::byObjectId(Utils::initInt(AjaxParams::ID), false, true);
+            $scenarios = ScenarioManager::byObjectId($objectId, false, true);
             $scenariosResult = [];
             if (count($scenarios) > 0) {
                 /**
@@ -189,35 +223,54 @@ class ObjectAjax extends BaseAjax
                 }
             }
             ksort($html);
-            $this->ajax->success(['objectHtml' => implode($html), 'scenarios' => $scenariosResult]);
+            $this->ajax->success([Common::OBJECT_HTML => implode($html), NextDomObj::SCENARIOS => $scenariosResult]);
         }
     }
 
     /**
-     * @param array $html
-     * @param Eqlogic[] $eqLogics
+     * Test if eqLogic must be ignored
+     *
+     * @param EqLogic $eqLogic EqLogic to test
+     * @param string $category Filter by category
+     * @param string $tag Filter by tag
+     *
+     * @return bool True if eqLogic must be ignored
+     */
+    private function toHtmlIgnoreEqLogics($eqLogic, $category, $tag)
+    {
+        if ($eqLogic === null ||
+            ($category != Common::ALL && $eqLogic->getCategory($category) != 1) ||
+            ($tag != Common::ALL && strpos($eqLogic->getTags(), $tag) === false)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Get HTML render of eqLogics
+     *
+     * @param array $html Render buffer
+     * @param Eqlogic[] $eqLogics List of eqLogics to render
+     *
      * @throws CoreException
      * @throws \NextDom\Exceptions\OperatingSystemException
      * @throws \ReflectionException
      */
-    public function toHtmlEqLogics(&$html, $eqLogics)
+    private function toHtmlEqLogics(&$html, $eqLogics)
     {
         if (count($eqLogics) > 0) {
+            $category = Utils::init(Common::CATEGORY, Common::ALL);
+            $tag = Utils::init(Common::TAG, Common::ALL);
+            $version = Utils::init(AjaxParams::VERSION, EqLogicViewType::DASHBOARD);
             foreach ($eqLogics as $eqLogic) {
-                if ($eqLogic === null) {
-                    continue;
-                }
-                if (Utils::init('category', 'all') != 'all' && $eqLogic->getCategory(Utils::init(AjaxParams::CATEGORY)) != 1) {
-                    continue;
-                }
-                if (Utils::init('tag', 'all') != 'all' && strpos($eqLogic->getTags(), Utils::init('tag')) === false) {
+                if ($this->toHtmlIgnoreEqLogics($eqLogic, $category, $tag)) {
                     continue;
                 }
                 $order = $eqLogic->getOrder();
                 while (isset($html[$order])) {
                     $order++;
                 }
-                $html[$order] = $eqLogic->toHtml(Utils::init(AjaxParams::VERSION));
+                $html[$order] = $eqLogic->toHtml($version);
             }
         }
     }
@@ -226,7 +279,7 @@ class ObjectAjax extends BaseAjax
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
         $position = 1;
-        foreach (json_decode(Utils::init('objects'), true) as $id) {
+        foreach (json_decode(Utils::init(AjaxParams::OBJECTS), true) as $id) {
             $resultObject = JeeObjectManager::byId($id);
             if (is_object($resultObject)) {
                 $resultObject->setPosition($position);
@@ -237,15 +290,21 @@ class ObjectAjax extends BaseAjax
         $this->ajax->success();
     }
 
+    /**
+     * Get HTML of the summary
+     *
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function getSummaryHtml()
     {
-        if (Utils::init('ids') != '') {
+        if (Utils::init(Utils::init(AjaxParams::IDS)) != '') {
             $result = [];
-            foreach (json_decode(Utils::init('ids'), true) as $id => $value) {
-                if ($id == 'global') {
-                    $result['global'] = [
-                        'html' => JeeObjectManager::getGlobalHtmlSummary($value['version']),
-                        'id' => 'global',
+            foreach (json_decode(Utils::init(AjaxParams::IDS), true) as $id => $value) {
+                if ($id == Common::GLOBAL) {
+                    $result[Common::GLOBAL] = [
+                        Common::HTML => JeeObjectManager::getGlobalHtmlSummary($value[Common::VERSION]),
+                        Common::ID => Common::GLOBAL
                     ];
                     continue;
                 }
@@ -254,8 +313,8 @@ class ObjectAjax extends BaseAjax
                     continue;
                 }
                 $result[$resultObject->getId()] = [
-                    'html' => $resultObject->getHtmlSummary($value['version']),
-                    'id' => $resultObject->getId(),
+                    Common::HTML => $resultObject->getHtmlSummary($value[Common::VERSION]),
+                    Common::ID => $resultObject->getId()
                 ];
             }
             $this->ajax->success($result);
@@ -265,12 +324,18 @@ class ObjectAjax extends BaseAjax
                 throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));
             }
             $infoObject = [];
-            $infoObject['id'] = $resultObject->getId();
-            $infoObject['html'] = $resultObject->getHtmlSummary(Utils::init(AjaxParams::VERSION));
+            $infoObject[Common::ID] = $resultObject->getId();
+            $infoObject[Common::HTML] = $resultObject->getHtmlSummary(Utils::init(AjaxParams::VERSION));
             $this->ajax->success($infoObject);
         }
     }
 
+    /**
+     * Remove image linked to an object
+     *
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function removeImage()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -285,6 +350,12 @@ class ObjectAjax extends BaseAjax
         $this->ajax->success();
     }
 
+    /**
+     * Link an image to the object
+     *
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function uploadImage()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();

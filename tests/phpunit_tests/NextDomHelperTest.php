@@ -70,23 +70,27 @@ class NextDomHelperTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, strpos($fileContent, '["Line 20","Line 21"'));
     }
 
-    public function testGetConfigurationAllData() {
+    public function testGetConfigurationAllData()
+    {
         $configuration = NextDomHelper::getConfiguration();
         $this->assertArrayHasKey('eqLogic', $configuration);
         $this->assertArrayHasKey('cmd', $configuration);
     }
 
-    public function testGetConfigurationWithKey() {
+    public function testGetConfigurationWithKey()
+    {
         $alertsConf = NextDomHelper::getConfiguration('alerts');
         $this->assertArrayHasKey('batterywarning', $alertsConf);
     }
 
-    public function testGetTmpFolder() {
+    public function testGetTmpFolder()
+    {
         $tmpFolder = NextDomHelper::getTmpFolder();
         $this->assertEquals('/tmp/nextdom', $tmpFolder);
     }
 
-    public function testGetTmpFolderWithNewFolder() {
+    public function testGetTmpFolderWithNewFolder()
+    {
         $testPath = '/tmp/nextdom/just_a_test';
         if (is_dir($testPath)) {
             rmdir($testPath);
@@ -97,19 +101,105 @@ class NextDomHelperTest extends PHPUnit_Framework_TestCase
         rmdir($testPath);
     }
 
-    public function testIsCapableSudo() {
+    public function testIsCapableSudo()
+    {
         $result = NextDomHelper::isCapable('sudo');
         $this->assertTrue($result);
     }
 
-    public function testGetHardwareName() {
+    public function testGetHardwareName()
+    {
         $result = NextDomHelper::getHardwareName();
         $this->assertEquals('docker', $result);
     }
 
-    public function testGetHardwareNameWithRemovedConfig() {
+    public function testGetHardwareNameWithRemovedConfig()
+    {
         ConfigManager::remove('hardware_name');
         $result = NextDomHelper::getHardwareName();
         $this->assertEquals('docker', $result);
+    }
+
+    public function testGetTypeUseWithCmd()
+    {
+        $result = NextDomHelper::getTypeUse('#1#');
+        $this->assertCount(1, $result['cmd']);
+        $this->assertEquals('Cmd 1', $result['cmd'][1]->getName());
+        $result = NextDomHelper::getTypeUse('#1##2#');
+        $this->assertCount(2, $result['cmd']);
+        $this->assertEquals('Cmd 2', $result['cmd'][2]->getName());
+    }
+
+    public function testGetTypeUseWithScenario()
+    {
+        $result = NextDomHelper::getTypeUse('#scenario1#');
+        $this->assertCount(1, $result['scenario']);
+        $this->assertEquals('Test scenario', $result['scenario'][1]->getName());
+        $result = NextDomHelper::getTypeUse('#scenario1##scenario2#');
+        $this->assertCount(2, $result['scenario']);
+        $this->assertEquals('Empty scenario', $result['scenario'][2]->getName());
+        $result = NextDomHelper::getTypeUse('"scenario_id":"3"');
+        $this->assertCount(1, $result['scenario']);
+        $this->assertEquals('Scenario with expressions', $result['scenario'][3]->getName());
+        $result = NextDomHelper::getTypeUse('"scenario_id":"3""scenario_id":"4"');
+        $this->assertCount(2, $result['scenario']);
+        $this->assertEquals('Disabled scenario', $result['scenario'][4]->getName());
+    }
+
+    public function testGetTypeUseWithEqLogic()
+    {
+        $result = NextDomHelper::getTypeUse('#eqLogic1#');
+        $this->assertCount(1, $result['eqLogic']);
+        $this->assertEquals('Test eqLogic', $result['eqLogic'][1]->getName());
+        $result = NextDomHelper::getTypeUse('#eqLogic1##eqLogic2#');
+        $this->assertCount(2, $result['eqLogic']);
+        $this->assertEquals('Second eqLogic', $result['eqLogic'][2]->getName());
+        $result = NextDomHelper::getTypeUse('#"eqLogic":"3"#');
+        $this->assertCount(1, $result['eqLogic']);
+        $this->assertEquals('Third eqLogic', $result['eqLogic'][3]->getName());
+        $result = NextDomHelper::getTypeUse('#"eqLogic":"3"##"eqLogic":"4"#');
+        $this->assertCount(2, $result['eqLogic']);
+        $this->assertEquals('A lamp', $result['eqLogic'][4]->getName());
+    }
+
+    public function testGetTypeUseWithView()
+    {
+        $result = NextDomHelper::getTypeUse('"view_id":"1"');
+        $this->assertCount(1, $result['view']);
+        $this->assertEquals('Test view', $result['view'][1]->getName());
+    }
+
+    public function testGetTypeUseWithPlan()
+    {
+        $result = NextDomHelper::getTypeUse('"plan_id":"1"');
+        $this->assertCount(1, $result['plan']);
+        $this->assertEquals('Plan test', $result['plan'][1]->getName());
+    }
+
+    public function testGetTypeUseWithVariable()
+    {
+        $result = NextDomHelper::getTypeUse('variable(numeric_data)');
+        $this->assertCount(1, $result['dataStore']);
+        $this->assertEquals('42', $result['dataStore']['numeric_data']->getValue());
+        $result = NextDomHelper::getTypeUse('variable(numeric_data)variable(text_data)');
+        $this->assertCount(2, $result['dataStore']);
+        $this->assertEquals('H2G2', $result['dataStore']['text_data']->getValue());
+    }
+
+    public function testGetTypeUseWithAll()
+    {
+        $result = NextDomHelper::getTypeUse('#1##scenario1##eqLogic1#"view_id":"1""plan_id":"1"variable(numeric_data)');
+        $this->assertCount(1, $result['cmd']);
+        $this->assertEquals('Cmd 1', $result['cmd'][1]->getName());
+        $this->assertCount(1, $result['scenario']);
+        $this->assertEquals('Test scenario', $result['scenario'][1]->getName());
+        $this->assertCount(1, $result['eqLogic']);
+        $this->assertEquals('Test eqLogic', $result['eqLogic'][1]->getName());
+        $this->assertCount(1, $result['view']);
+        $this->assertEquals('Test view', $result['view'][1]->getName());
+        $this->assertCount(1, $result['plan']);
+        $this->assertEquals('Plan test', $result['plan'][1]->getName());
+        $this->assertCount(1, $result['dataStore']);
+        $this->assertEquals('42', $result['dataStore']['numeric_data']->getValue());
     }
 }

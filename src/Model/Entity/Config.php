@@ -121,4 +121,13 @@ class Config
         return $this;
     }
 
+    /**
+     * Get the name of the SQL table where data is stored.
+     *
+     * @return string
+     */
+    public function getTableName()
+    {
+        return 'config';
+    }
 }
