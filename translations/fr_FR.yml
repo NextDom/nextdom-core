@@ -614,6 +614,14 @@ scripts:
   scenario: "Scenario : "
   scenario-not-found: "Scénario non trouvé. Vérifiez ID : "
   start-in-background: "Lancement en arrière-plan de : "
+security:
+  rules: Pour améliorer la sécurité, augmenter le nombre de caractères, mixer minuscules / majuscules, ajouter un ou plusieurs chiffres et caractères spéciaux...
+  no-password: Aucune sécurité
+  very-low: Sécurité Trés Faible
+  low: Sécurité Faible
+  medium: Sécurité Moyenne
+  high: Sécurité Forte
+  very-high: Sécurité Trés Forte
 sidebar:
   dashboard: Dashboard
   design: Design(s)

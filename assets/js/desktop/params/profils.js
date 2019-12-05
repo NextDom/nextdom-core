@@ -64,6 +64,7 @@ function loadInformations() {
         success: function (data) {
           $('#div_Profils').setValues(data, '.userAttr');
           $('#in_passwordCheck').value(data.password);
+          passwordScore($("#in_passwordCheck").value(),$("#newPasswordProgress"),$("#newPasswordLevel"));
           $('#' + $('.userAttr[data-l2key="widget::theme"]').value()).attr('checked', 'checked');
           $('#avatar-preview').attr('src', $('.userAttr[data-l2key=avatar]').value());
           nextdom.config.load({
@@ -246,6 +247,18 @@ function initEvents() {
         var radio = $(this).val();
         $('.userAttr[data-l2key="widget::theme"]').value(radio);
         modifyWithoutSave = true;
+    });
+
+    // Password new changed
+    $("#in_newPassword").on('input', function (event) {
+        passwordScore($(this).value(),$("#newPasswordProgress"),$("#newPasswordLevel"));
+        $("#in_passwordCheck").value('');
+        modifyWithoutSave = true;
+    });
+
+    // Password new click
+    $("#in_newPassword").on('click', function (event) {
+        $(this).select();
     });
 }
 

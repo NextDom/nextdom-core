@@ -64,7 +64,13 @@ function initEvents() {
     $("#bt_addUser").on('click', function (event) {
         $('#in_newUserLogin').value('');
         $('#in_newUserMdp').value('');
+        passwordScore($("#in_newUserMdp").value(),$("#newUserPasswordProgress"),$("#newUserPasswordLevel"));
         $('#md_newUser').modal('show');
+    });
+
+    // Password changed
+    $("#in_newUserMdp").on('input', function (event) {
+        passwordScore($(this).value(),$("#newUserPasswordProgress"),$("#newUserPasswordLevel"));
     });
 
     // Save new user button
@@ -122,24 +128,34 @@ function initEvents() {
 
     // Change password button
     $("#table_user").on( 'click',".bt_change_mdp_user", function (event) {
-      var user = {id: $(this).closest('tr').find('.userAttr[data-l1key=id]').value(), login: $(this).closest('tr').find('.userAttr[data-l1key=login]').value()};
-      bootbox.prompt("{{Quel est le nouveau mot de passe ?}}", function (result) {
-          if (result !== null) {
-              user.password = result;
-              nextdom.user.save({
-                  users: [user],
-                  error: function (error) {
-                      notify("Erreur", error.message, 'error');
-                  },
-                  success: function () {
-                      printUsers();
-                      notify("Info", '{{Sauvegarde effectuée}}', 'success');
-                      modifyWithoutSave = false;
-                      $(".bt_cancelModifs").hide();
-                  }
-              });
+      $('#in_newPassword').value('');
+      passwordScore($("#in_newPassword").value(),$("#newPasswordProgress"),$("#newPasswordLevel"));
+      $('#md_newPassword').attr("data-id",$(this).closest('tr').find('.userAttr[data-l1key=id]').value());
+      $('#md_newPassword').attr("data-login",$(this).closest('tr').find('.userAttr[data-l1key=login]').value());
+      $('#md_newPassword').modal('show');
+    });
+
+    // Password changed
+    $("#in_newPassword").on('input', function (event) {
+        passwordScore($(this).value(),$("#newPasswordProgress"),$("#newPasswordLevel"));
+    });
+
+    // Save new password button
+    $("#bt_newPasswordSave").on('click', function (event) {
+      var user = [{id: $('#md_newPassword').attr("data-id"), login: $('#md_newPassword').attr("data-login"), password: $('#md_newPassword').value()}];
+      nextdom.user.save({
+          users: user,
+          error: function (error) {
+              notify("Erreur", error.message, 'error');
+          },
+          success: function () {
+              printUsers();
+              notify("Info", '{{Sauvegarde effectuée}}', 'success');
+              modifyWithoutSave = false;
+              $('#md_newPassword').modal('hide');
+              $(".bt_cancelModifs").hide();
           }
-       });
+      });
     });
 
     // Change user hash button
