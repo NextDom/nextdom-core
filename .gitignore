@@ -44,5 +44,6 @@ core/template
 /data
 /mobile
 /docs
+/tests/coverage
 
 /assets/config/default.config.ini

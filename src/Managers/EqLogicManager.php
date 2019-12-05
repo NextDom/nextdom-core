@@ -198,7 +198,7 @@ class EqLogicManager
                 LEFT JOIN object ob ON el.object_id = ob.id
                 WHERE eqType_name = :eqType_name ';
         if ($onlyEnable) {
-            $sql .= 'AND isEnable=1 ';
+            $sql .= 'AND isEnable = 1 ';
         }
         $sql .= 'ORDER BY ob.name,el.name';
         return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));

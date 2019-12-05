@@ -74,16 +74,19 @@ class EqLogicAjax extends BaseAjax
     {
         if (Utils::init(AjaxParams::IDS) != '') {
             $result = [];
-            foreach (json_decode(Utils::init(AjaxParams::IDS), true) as $id => $value) {
-                $eqLogic = EqLogicManager::byId($id);
+            foreach (json_decode(Utils::init(AjaxParams::IDS), true) as $eqLogicId => $eqLogicData) {
+                $eqLogic = EqLogicManager::byId($eqLogicId);
                 if (!is_object($eqLogic)) {
                     continue;
                 }
+                if (!isset($eqLogicData[AjaxParams::VERSION])) {
+                    throw new CoreException(__('Pas de version indiqué pour le rendu HTML'));
+                }
                 $result[$eqLogic->getId()] = [
-                    Common::HTML => $eqLogic->toHtml($value['version']),
                     Common::ID => $eqLogic->getId(),
                     Common::TYPE => $eqLogic->getEqType_name(),
                     Common::OBJECT_ID => $eqLogic->getObject_id(),
+                    Common::HTML => $eqLogic->toHtml($eqLogicData[AjaxParams::VERSION]),
                 ];
             }
             $this->ajax->success($result);
@@ -123,12 +126,20 @@ class EqLogicAjax extends BaseAjax
         $result = [];
         $list = [];
         foreach (EqLogicManager::all() as $eqLogic) {
-            if ($eqLogic->getStatus('battery', -2) != -2) {
+            if ($eqLogic->getStatus(Common::BATTERY, -2) != -2) {
                 $list[] = $eqLogic;
             }
         }
         usort($list, function ($a, $b) {
-            return ($a->getStatus('battery') < $b->getStatus('battery')) ? -1 : (($a->getStatus('battery') > $b->getStatus('battery')) ? 1 : 0);
+            $aStatus = $a->getStatus(Common::BATTERY);
+            $bStatus = $b->getStatus(Common::BATTERY);
+            if ($aStatus < $bStatus) {
+                return -1;
+            } elseif ($aStatus > $bStatus) {
+                return 1;
+            } else {
+                return 0;
+            }
         });
         foreach ($list as $eqLogic) {
             $result[] = [
@@ -144,8 +155,9 @@ class EqLogicAjax extends BaseAjax
     public function listByType()
     {
         $result = [];
-        foreach (EqLogicManager::byType(Utils::init(AjaxParams::TYPE)) as $eqLogic) {
-            $result[$eqLogic->getId()] = utils::o2a($eqLogic);
+        $eqLogics = EqLogicManager::byType(Utils::init(AjaxParams::TYPE));
+        foreach ($eqLogics as $eqLogic) {
+            $result[$eqLogic->getId()] = Utils::o2a($eqLogic);
             $result[$eqLogic->getId()][Common::HUMAN_NAME] = $eqLogic->getHumanName();
         }
         $this->ajax->success(array_values($result));
@@ -153,19 +165,35 @@ class EqLogicAjax extends BaseAjax
 
     public function listByObjectAndCmdType()
     {
-        $object_id = (Utils::init(AjaxParams::OBJECT_ID) != -1) ? Utils::init(AjaxParams::OBJECT_ID) : null;
-        $this->ajax->success(EqLogicManager::listByObjectAndCmdType($object_id, Utils::init('typeCmd'), Utils::init('subTypeCmd')));
+        $objectId = (Utils::init(AjaxParams::OBJECT_ID) != -1) ? Utils::init(AjaxParams::OBJECT_ID) : null;
+        $this->ajax->success(
+            EqLogicManager::listByObjectAndCmdType(
+                $objectId,
+                Utils::init(AjaxParams::TYPE_CMD),
+                Utils::init(AjaxParams::SUB_TYPE_CMD)
+            )
+        );
     }
 
     public function listByObject()
     {
-        $object_id = (Utils::init(AjaxParams::OBJECT_ID) != -1) ? Utils::init(AjaxParams::OBJECT_ID) : null;
-        $this->ajax->success(Utils::o2a(EqLogicManager::byObjectId($object_id, Utils::init('onlyEnable', true), Utils::init('onlyVisible', false), Utils::init('eqType_name', null), Utils::init(AjaxParams::LOGICAL_ID, null), Utils::init('orderByName', false))));
+        $objectId = (Utils::init(AjaxParams::OBJECT_ID) != -1) ? Utils::init(AjaxParams::OBJECT_ID) : null;
+        $this->ajax->success(
+            Utils::o2a(
+                EqLogicManager::byObjectId(
+                    $objectId,
+                    Utils::init(AjaxParams::ONLY_ENABLE, true),
+                    Utils::init(AjaxParams::ONLY_VISIBLE, false),
+                    Utils::init(AjaxParams::EQTYPE_NAME, null),
+                    Utils::init(AjaxParams::LOGICAL_ID, null),
+                    Utils::init(AjaxParams::ORDER_BY_NAME, false))
+            )
+        );
     }
 
     public function listByTypeAndCmdType()
     {
-        $eqLogicList = EqLogicManager::listByTypeAndCmdType(Utils::init(AjaxParams::TYPE), Utils::init('typeCmd'), Utils::init('subTypeCmd'));
+        $eqLogicList = EqLogicManager::listByTypeAndCmdType(Utils::init(AjaxParams::TYPE), Utils::init(AjaxParams::TYPE_CMD), Utils::init(AjaxParams::SUB_TYPE_CMD));
         $result = [];
         foreach ($eqLogicList as $eqLogic) {
             $eqLogic = EqLogicManager::byId($eqLogic[Common::ID]);

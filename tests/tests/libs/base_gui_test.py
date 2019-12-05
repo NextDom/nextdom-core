@@ -26,7 +26,7 @@ class BaseGuiTest(unittest.TestCase):
         """
         nb_args = len(sys.argv)
         if nb_args < 2:
-            print('Usage : ' + sys.argv[0]+ ' url [login] [password]')
+            print('Usage : ' + sys.argv[0] + ' url [login] [password]')
             sys.exit(1)
         else:
             if sys.argv[1][:-1] == '/':
@@ -44,7 +44,8 @@ class BaseGuiTest(unittest.TestCase):
         :param connect: Connect with user
         :type connect:  bool
         """
-        driver_path = os.path.dirname(os.path.abspath(__file__ + os.sep + '..')) + os.sep + 'chromedriver' #pylint: disable=line-too-long
+        driver_path = os.path.dirname(os.path.abspath(
+            __file__ + os.sep + '..')) + os.sep + 'chromedriver'  # pylint: disable=line-too-long
         try:
             options = webdriver.ChromeOptions()
             # For travis environment and headless servers, disable render
@@ -66,7 +67,8 @@ class BaseGuiTest(unittest.TestCase):
                 cls.connect_to_nextdom()
         except WebDriverException as err:
             print("Chromedriver needed to run tests on Chrome.")
-            print("Download it on https://sites.google.com/a/chromium.org/chromedriver/downloads")
+            print(
+                "Download it on https://sites.google.com/a/chromium.org/chromedriver/downloads")
             print(err)
             sys.exit(1)
 
@@ -195,7 +197,8 @@ class BaseGuiTest(unittest.TestCase):
     def scroll_bottom(self):
         """Scroll to bottom of the page
         """
-        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        self.driver.execute_script(
+            "window.scrollTo(0, document.body.scrollHeight);")
 
     def scroll_top(self):
         """Scroll to top of the page

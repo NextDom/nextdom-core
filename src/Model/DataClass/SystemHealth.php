@@ -69,6 +69,7 @@ class SystemHealth
 
     /**
      * @param mixed $result
+     * @return SystemHealth
      */
     public function setResult($result)
     {
@@ -87,6 +88,7 @@ class SystemHealth
 
     /**
      * @param mixed $comment
+     * @return SystemHealth
      */
     public function setComment($comment)
     {

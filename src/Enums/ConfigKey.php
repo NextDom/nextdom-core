@@ -23,6 +23,7 @@ namespace NextDom\Enums;
  */
 class ConfigKey extends Enum
 {
+    const API = 'api';
     const ENABLE_CRON = 'enableCron';
     const ENABLE_SCENARIO = 'enableScenario';
     const HARDWARE_NAME = 'hardware_name';

@@ -112,7 +112,10 @@ class Router
             $prepareView->showModal();
         } elseif ($this->isPluginConfRequest()) {
             // Displaying the configuration section of a plugin in the configuration page
-            FileSystemHelper::includeFile('plugin_info', 'configuration', 'configuration', Utils::init(GetParams::PLUGIN_ID), true);
+            if (AuthentificationHelper::isConnectedAsAdminOrFail())
+            {
+                FileSystemHelper::includeFile('plugin_info', 'configuration', 'configuration', Utils::init(GetParams::PLUGIN_ID), true);
+            }
         } elseif ($this->isAjaxQuery()) {
             $prepareView->showContentByAjax();
         } else {

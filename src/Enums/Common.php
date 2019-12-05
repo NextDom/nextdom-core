@@ -26,6 +26,7 @@ class Common extends Enum
     const ACTION = 'action';
     const ACTIVE = 'active';
     const ALL = 'all';
+    const BATTERY = 'battery';
     const CATEGORY = 'category';
     const CHANGED = 'changed';
     const CLASS_NAME = 'className';
@@ -34,8 +35,10 @@ class Common extends Enum
     const CORE = 'core';
     const CUSTOM = 'custom';
     const DASH_VALUE = 'dashvalue';
+    const DATE = 'date';
     const DETAIL = 'detail';
     const DISPLAY = 'display';
+    const GLOBAL = 'global';
     const HUMAN_NAME = 'humanName';
     const ICON = 'icon';
     const ID = 'id';
@@ -45,8 +48,10 @@ class Common extends Enum
     const KEYS = 'keys';
     const HTML = 'html';
     const LENGTH_FACTOR = 'lengthfactor';
+    const LOGICAL_ID = 'logicalId';
     const NAME = 'name';
     const OBJECT_ID = 'object_id';
+    const OBJECT_HTML = 'objectHtml';
     const ORDER = 'order';
     const PHP_CLASS = 'phpClass';
     const PROFILE = 'profile';
@@ -56,6 +61,7 @@ class Common extends Enum
     const SUB_PROCESS = 'subprocess';
     const SUBTYPE = 'subtype';
     const SUMMARY = 'summary';
+    const TAG = 'tag';
     const TIMELINE_ONLY = 'timelineOnly';
     const TYPE = 'type';
     const USED_BY = 'usedBy';

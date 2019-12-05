@@ -18,7 +18,9 @@
 namespace NextDom\Ajax;
 
 use NextDom\Enums\AjaxParams;
+use NextDom\Enums\Common;
 use NextDom\Enums\LogTarget;
+use NextDom\Enums\NextDomObj;
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
@@ -52,7 +54,7 @@ class UpdateAjax extends BaseAjax
         /**
          * @var Update $update
          */
-        foreach (UpdateManager::all(Utils::init('filter')) as $update) {
+        foreach (UpdateManager::all(Utils::init(AjaxParams::FILTER)) as $update) {
             $infos = Utils::o2a($update);
             if ($update->getType() == 'plugin') {
                 try {
@@ -156,11 +158,11 @@ class UpdateAjax extends BaseAjax
         $isNewUpdate = false;
         $backupUpdate = null;
 
-        $updateDataJson = json_decode(Utils::init('update'), true);
-        if (isset($updateDataJson['id'])) {
-            $targetUpdate = UpdateManager::byId($updateDataJson['id']);
+        $updateDataJson = json_decode(Utils::init(AjaxParams::UPDATE), true);
+        if (isset($updateDataJson[Common::ID])) {
+            $targetUpdate = UpdateManager::byId($updateDataJson[Common::ID]);
         } elseif (isset($updateDataJson['logicalId'])) {
-            $targetUpdate = UpdateManager::byLogicalId($updateDataJson['logicalId']);
+            $targetUpdate = UpdateManager::byLogicalId($updateDataJson[Common::LOGICAL_ID]);
         }
         if (!isset($targetUpdate) || !is_object($targetUpdate)) {
             $targetUpdate = new Update();
@@ -187,7 +189,7 @@ class UpdateAjax extends BaseAjax
     public function saves()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        Utils::processJsonObject('update', Utils::init('updates'));
+        Utils::processJsonObject(NextDomObj::UPDATE, Utils::init(AjaxParams::UPDATES));
         $this->ajax->success();
     }
 

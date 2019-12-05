@@ -29,14 +29,14 @@ class UpdateManagerTest extends PHPUnit_Framework_TestCase
     public static function tearDownAfterClass()
     {
         // Keep only core
-        DBHelper::exec('DELETE FROM `update` WHERE id > 1');
+        DBHelper::exec('DELETE FROM `update` WHERE id > 2');
     }
 
     public function setUp()
     {
 
     }
-/*
+
     public function testFindNewUpdateObject()
     {
         UpdateManager::findNewUpdateObject();
@@ -111,7 +111,7 @@ class UpdateManagerTest extends PHPUnit_Framework_TestCase
         $this->assertCount(1, $updatesByType);
         $this->assertEquals('plugin4tests', $updatesByType[0]->getName());
     }
-*/
+
     public function testListRepo()
     {
         $repoList = UpdateManager::listRepo();
