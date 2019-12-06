@@ -62,34 +62,27 @@
                     <ul class="dropdown-menu" id="table_message">
                         <li class="header">Vous avez {{ MENU_NB_MESSAGES }} messages</li>
                         <li>
-                            <!-- inner menu: contains the actual data -->
                             <ul class="menu">
                                 {% for message in messagesList %}
-                                    <li data-message_id="{{ message.getId() }}"><!-- start message -->
+                                    <li data-message_id="{{ message.getId() }}">
                                         <a href="#">
                                             <div class="pull-left">
-                                                <img src="/public/img/NextDom/NextDom_Square_WhiteBlackBlue.png" class="img-circle" alt="User Image" height="32" width="32">
+                                                <img src="/public/img/NextDom/NextDom_Square_WhiteBlackBlue.png">
                                             </div>
-                                            <h4>
-                                                {{ message.getPlugin() }}
-                                                <small class="pull-right" ><i class="fa fa-clock-o"></i> {{ message.getDate() }}</small>
-                                            </h4>
+                                            <h4>{{ message.getPlugin() }}<small class="pull-right"><i class="fas fa-clock spacing-right"></i>{{ message.getDate() }}</small></h4>
                                             <div class="pull-left">
                                                 <p>{{ message.getMessage()|raw }}</p>
                                             </div>
                                             <p>
                                                 <span>{{ message.getAction() }}</span>
-                                            <div class="btn btn-sm btn-danger removeMessage pull-right"><i class="fas fa-trash"></i></div>
+                                                <div class="btn btn-sm btn-danger removeMessage pull-right"><i class="fas fa-trash no-spacing"></i></div>
                                             </p>
                                         </a>
                                     </li>
                                 {% endfor %}
-                                <!-- end message -->
-
                             </ul>
                         </li>
                     </ul>
-
                 </li>
                 {% if IS_ADMIN %}
                     <li class="dropdown tasks-menu task_update_mobile">

@@ -647,7 +647,6 @@ class PrepareView
         } else {
             $pageData['messagesList'] = MessageManager::all();
         }
-        $pageData['messagePluginsList'] = MessageManager::listPlugin();
     }
 
     /**
