@@ -99,12 +99,15 @@ function initEvents() {
 
   // Updates check all button
   $('#checkAllUpdatesButton').off('click').on('click', function () {
+    $('#checkAllUpdatesButton').children().addClass('fa-spin');
     nextdom.update.checkAll({
       error: function (error) {
         notify('Erreur', error.message, 'error');
+        $('#checkAllUpdatesButton').children().removeClass('fa-spin');
       },
       success: function () {
         initUpdateTabsContent();
+        $('#checkAllUpdatesButton').children().removeClass('fa-spin');
       }
     });
   });
@@ -197,7 +200,7 @@ function initUpdateTabsContent(updateId) {
  * @param updateId Id of the item to create (optional)
  */
 function createUpdateBox(updateData,updateId) {
-  var boxClass = 'box-success';
+  var boxClass = '';
   var bgClass = 'bg-green';
   var boxUpdateClass = '';
   var updateIcon = '';

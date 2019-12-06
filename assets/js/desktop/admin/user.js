@@ -142,7 +142,7 @@ function initEvents() {
 
     // Save new password button
     $("#bt_newPasswordSave").on('click', function (event) {
-      var user = [{id: $('#md_newPassword').attr("data-id"), login: $('#md_newPassword').attr("data-login"), password: $('#md_newPassword').value()}];
+      var user = [{id: $('#md_newPassword').attr("data-id"), login: $('#md_newPassword').attr("data-login"), password: $('#in_newPassword').value()}];
       nextdom.user.save({
           users: user,
           error: function (error) {
