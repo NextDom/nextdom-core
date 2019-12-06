@@ -75,20 +75,28 @@ function initEvents() {
 
     // Save new user button
     $("#bt_newUserSave").on('click', function (event) {
-        var user = [{login: $('#in_newUserLogin').value(), password: $('#in_newUserMdp').value()}];
-        nextdom.user.save({
-            users: user,
-            error: function (error) {
-                notify("Erreur", error.message, 'error');
-            },
-            success: function () {
-                printUsers();
-                notify("Info", '{{Sauvegarde effectuée}}', 'success');
-                modifyWithoutSave = false;
-                $('#md_newUser').modal('hide');
-                $(".bt_cancelModifs").hide();
+        if ($('#in_newUserMdp').value() != '') {
+            if ($('#in_newUserMdp').value() == $('#in_newUserMdpConfirm').value()) {
+                var user = [{login: $('#in_newUserLogin').value(), password: $('#in_newUserMdp').value()}];
+                nextdom.user.save({
+                    users: user,
+                    error: function (error) {
+                        notify("Erreur", error.message, 'error');
+                    },
+                    success: function () {
+                        printUsers();
+                        notify("Info", '{{Sauvegarde effectuée}}', 'success');
+                        modifyWithoutSave = false;
+                        $('#md_newUser').modal('hide');
+                        $(".bt_cancelModifs").hide();
+                    }
+                });
+            } else {
+                notify("Erreur", '{{Les mots de passe ne sont pas identique !}}', 'error');
             }
-        });
+        } else {
+            notify("Erreur", '{{Le mot de passe ne peut pas être vide !}}', 'error');
+        }
     });
 
     // Save button
@@ -129,6 +137,7 @@ function initEvents() {
     // Change password button
     $("#table_user").on( 'click',".bt_change_mdp_user", function (event) {
       $('#in_newPassword').value('');
+      $('#in_newPasswordConfirm').value('');
       passwordScore($("#in_newPassword").value(),$("#newPasswordProgress"),$("#newPasswordLevel"));
       $('#md_newPassword').attr("data-id",$(this).closest('tr').find('.userAttr[data-l1key=id]').value());
       $('#md_newPassword').attr("data-login",$(this).closest('tr').find('.userAttr[data-l1key=login]').value());
@@ -142,20 +151,28 @@ function initEvents() {
 
     // Save new password button
     $("#bt_newPasswordSave").on('click', function (event) {
-      var user = [{id: $('#md_newPassword').attr("data-id"), login: $('#md_newPassword').attr("data-login"), password: $('#in_newPassword').value()}];
-      nextdom.user.save({
-          users: user,
-          error: function (error) {
-              notify("Erreur", error.message, 'error');
-          },
-          success: function () {
-              printUsers();
-              notify("Info", '{{Sauvegarde effectuée}}', 'success');
-              modifyWithoutSave = false;
-              $('#md_newPassword').modal('hide');
-              $(".bt_cancelModifs").hide();
-          }
-      });
+        if ($('#in_newPassword').value() != '') {
+            if ($('#in_newPassword').value() == $('#in_newPasswordConfirm').value()) {
+                var user = {id: $('#md_newPassword').attr("data-id"), login: $('#md_newPassword').attr("data-login"), password: $('#in_newPassword').value()};
+                nextdom.user.save({
+                    users: [user],
+                    error: function (error) {
+                        notify("Erreur", error.message, 'error');
+                    },
+                    success: function () {
+                        printUsers();
+                        notify("Info", '{{Sauvegarde effectuée}}', 'success');
+                        modifyWithoutSave = false;
+                        $('#md_newPassword').modal('hide');
+                        $(".bt_cancelModifs").hide();
+                    }
+                });
+            } else {
+                notify("Erreur", '{{Les mots de passe ne sont pas identique !}}', 'error');
+            }
+        } else {
+            notify("Erreur", '{{Le mot de passe ne peut pas être vide !}}', 'error');
+        }
     });
 
     // Change user hash button

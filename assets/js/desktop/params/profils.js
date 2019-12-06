@@ -128,8 +128,13 @@ function initEvents() {
     $("#bt_saveProfils").on('click', function (event) {
         var profil = $('#div_pageContainer').getValues('.userAttr')[0];
         if (profil.password != $('#in_passwordCheck').value()) {
-            notify('Erreur', '{{Les deux mots de passe ne sont pas identiques}}', 'error');
+            notify('Erreur', '{{Les mots de passe ne sont pas identiques !}}', 'error');
             return false;
+        } else {
+            if ($('#in_passwordCheck').value() == '') {
+                notify('Erreur', '{{Le mot de passe ne peut pas être vide !}}', 'error');
+                return false;
+            }
         }
         nextdom.user.saveProfils({
             profils: profil,
