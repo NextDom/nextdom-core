@@ -640,6 +640,14 @@ class PrepareView
         }
         $pageData['MENU_PLUGIN_HELP'] = Utils::init('m');
         $pageData['MENU_PLUGIN_PAGE'] = Utils::init('p');
+
+        $pageData['messageSelectedPlugin'] = Utils::init('plugin_id');
+        if ($pageData['messageSelectedPlugin'] != '') {
+            $pageData['messagesList'] = MessageManager::byPlugin($pageData['messageSelectedPlugin']);
+        } else {
+            $pageData['messagesList'] = MessageManager::all();
+        }
+        $pageData['messagePluginsList'] = MessageManager::listPlugin();
     }
 
     /**
