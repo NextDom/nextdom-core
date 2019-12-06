@@ -64,7 +64,9 @@ function loadInformations() {
         success: function (data) {
           $('#div_Profils').setValues(data, '.userAttr');
           $('#in_passwordCheck').value(data.password);
-          passwordScore($("#in_passwordCheck").value(),$("#newPasswordProgress"),$("#newPasswordLevel"));
+          $("#newPasswordProgress").width('0%');
+          $("#newPasswordProgress").removeClass('progress-bar-green').removeClass('progress-bar-yellow').removeClass('progress-bar-red');
+          $("#newPasswordLevel").html('<i class="fas fa-clock"></i>{{Attente saisie nouveau mot de passe}}');
           $('#' + $('.userAttr[data-l2key="widget::theme"]').value()).attr('checked', 'checked');
           $('#avatar-preview').attr('src', $('.userAttr[data-l2key=avatar]').value());
           nextdom.config.load({
@@ -254,6 +256,7 @@ function initEvents() {
         passwordScore($(this).value(),$("#newPasswordProgress"),$("#newPasswordLevel"));
         $("#in_passwordCheck").value('');
         modifyWithoutSave = true;
+        $(".bt_cancelModifs").show();
     });
 
     // Password new click
