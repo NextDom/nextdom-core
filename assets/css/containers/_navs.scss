@@ -96,10 +96,10 @@
     width: 580px !important
 }
 
-.navbar-nav > .messages-menu > .dropdown-menu > li .menu > li > a {
+.navbar-nav > .notifications-menu > .dropdown-menu > li .menu > li > a, .navbar-nav > .messages-menu > .dropdown-menu > li .menu > li > a, .navbar-nav > .tasks-menu > .dropdown-menu > li .menu > li > a {
     white-space: normal !important;
 }
 
-.navbar-nav > .messages-menu > .dropdown-menu > li .menu {
+.navbar-nav > .notifications-menu > .dropdown-menu > li .menu, .navbar-nav > .messages-menu > .dropdown-menu > li .menu, .navbar-nav > .tasks-menu > .dropdown-menu > li .menu {
     max-height: 500px;
 }
