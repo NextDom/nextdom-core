@@ -614,6 +614,14 @@ scripts:
   scenario: "Scenario :"
   scenario-not-found: "Script not found. Check ID:"
   start-in-background: "Launch in background:"
+security:
+  rules: To improve security, increase the number of characters, mix lowercase / uppercase, add one or more digits and special characters ...
+  no-password: No security
+  very-low: Very Low Security
+  low: Low Security
+  medium: Medium Security
+  high: Strong Security
+  very-high: Very Strong Security
 sidebar:
   dashboard: Dashboard
   design: Design(s)
