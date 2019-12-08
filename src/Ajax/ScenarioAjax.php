@@ -160,7 +160,7 @@ class ScenarioAjax extends BaseAjax
     {
         $templateFile = NEXTDOM_DATA . '/config/scenario/' . Utils::initFilename(AjaxParams::TEMPLATE);
         if (!file_exists($templateFile)) {
-            throw new CoreException('Fichier non trouvé : ' . $templateFile);
+            throw new CoreException(__('Fichier non trouvé : ') . $templateFile);
         }
         $result = [];
         foreach (preg_split("/((\r?\n)|(\r\n?))/", file_get_contents($templateFile)) as $line) {
@@ -207,7 +207,7 @@ class ScenarioAjax extends BaseAjax
     {
         $templateFile = NEXTDOM_DATA . '/config/scenario/' . Utils::initFilename(AjaxParams::TEMPLATE);
         if (!file_exists($templateFile)) {
-            throw new CoreException('Fichier non trouvé : ' . $templateFile);
+            throw new CoreException(__('Fichier non trouvé : ') . $templateFile);
         }
         $converts = [];
         foreach (json_decode(Utils::init('convert'), true) as $value) {

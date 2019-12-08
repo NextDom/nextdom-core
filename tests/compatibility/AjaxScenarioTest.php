@@ -93,14 +93,14 @@ class AjaxScenarioTest extends AjaxBase
     public function testLoadTemplateDiffAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'loadTemplateDiff']);
-        $this->assertContains('"result":[]', (string) $result->getBody());
+        $this->assertContains('Fichier non trouvé', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testApplyTemplateAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'applyTemplate']);
-        $this->assertContains('Scénario ID inconnu', (string) $result->getBody());
+        $this->assertContains('Fichier non trouvé', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
