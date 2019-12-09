@@ -53,7 +53,7 @@ class BaseGuiTest(unittest.TestCase):
             for argv in sys.argv:
                 if argv == '--headless':
                     headless = True
-            if headless or os.uname().nodename.startswith('travis'):
+            if headless or (os.name != 'nt' and os.uname().nodename.startswith('travis')):
                 options.add_argument('headless')
                 options.add_argument('disable-gpu')
             options.add_argument('window-size=1920x1080')
