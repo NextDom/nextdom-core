@@ -19,7 +19,6 @@ namespace NextDom\Managers;
 
 use NextDom\Enums\ConfigKey;
 use NextDom\Enums\DateFormat;
-use NextDom\Enums\FoldersAndFilesReferential;
 use NextDom\Enums\LogLevel;
 use NextDom\Enums\LogTarget;
 use NextDom\Enums\NextDomFolder;
@@ -45,6 +44,17 @@ use splitbrain\PHPArchive\Tar;
 class BackupManager
 {
     private static $logLevel = null;
+
+    const NEXTDOM_ROOT_FOLDERS = [NextDomFolder::API, NextDomFolder::ASSETS, NextDomFolder::BACKUP, NextDomFolder::CORE, NextDomFolder::DATA, NextDomFolder::DOCS, NextDomFolder::INSTALL, NextDomFolder::LOG, NextDomFolder::MOBILE, NextDomFolder::NODE_MODULES, NextDomFolder::PLUGINS, NextDomFolder::PUBLIC, NextDomFolder::SCRIPTS, NextDomFolder::SRC, NextDomFolder::TESTS, NextDomFolder::TMP, NextDomFolder::TRANSLATIONS, NextDomFolder::VENDOR, NextDomFolder::VIEWS, NextDomFolder::VAR, NextDomFolder::_GITHUB, NextDomFolder::_SASS_CACHE, NextDomFolder::_GIT, NextDomFolder::_IDEA];
+    const NEXTDOM_ROOT_FILES = [NextDomFile::CACHE_TAR_GZ , NextDomFile::CHANGELOG_MD, NextDomFile::COMPOSER_JSON, NextDomFile::COMPOSER_LOCK, NextDomFile::COPYING, NextDomFile::DB_BACKUP_SQL, NextDomFile::INDEX_PHP, NextDomFile::LICENSE, NextDomFile::MANIFEST_JSON, NextDomFile::MANIFEST_WEBMANIFEST, NextDomFile::MOBILE_MANIFEST_PHP, NextDomFile::PACKAGE_JSON, NextDomFile::PACKAGE_LOCK_JSON, NextDomFile::PHPUNIT_XML_dist, NextDomFile::README_MD, NextDomFile::ROBOTS_TXT, NextDomFile::_TRAVIS_YML, NextDomFile::_HTACCESS, NextDomFile::_COVERALLS_YML, NextDomFile::_GITIGNORE, NextDomFile::_SONARCLOUD_PROPERTIES];
+
+    const NEXTDOM_PUBLIC_FOLDERS = ['css', 'icon', 'img', 'js', 'themes'];
+    const NEXTDOM_PUBLIC_FILES = ['403.html', '404.html', '500.html', 'here.html'];
+
+    const JEEDOM_BACKUP_FOLDERS = ['3rdparty', 'core', 'data', 'desktop', 'install', 'mobile', 'script', '.github', '.sass-cache', '.git', '.idea'];
+    const JEEDOM_BACKUP_FILES = ['cache.tar.gz', 'composer.json', 'composer.lock', 'COPYING', 'Dockerfile', 'DB_backup.sql', 'health.sh', 'here.html', 'index.php', 'index-1.php', 'LICENSE', 'manifest.json', 'manifest.webmanifest', 'mobile.manifest.php', 'README.md', 'robots.txt', 'sick.php', '.htaccess', '.gitignore'];
+
+
 
     /**
      * Creates a backup archive
@@ -300,8 +310,8 @@ class BackupManager
 
         // Backup all files/folder in root folder added by user
         foreach ($it as $fileInfo) {
-            if (($fileInfo->isDir() || $fileInfo->isFile()) && !in_array($fileInfo->getFilename(), FoldersAndFilesReferential::NEXTDOM_ROOT_FOLDERS)
-                && !in_array($fileInfo->getFilename(), FoldersAndFilesReferential::NEXTDOM_ROOT_FILES)
+            if (($fileInfo->isDir() || $fileInfo->isFile()) && !in_array($fileInfo->getFilename(), self::NEXTDOM_ROOT_FOLDERS)
+                && !in_array($fileInfo->getFilename(), self::NEXTDOM_ROOT_FILES)
                 && !is_link($fileInfo->getFilename())) {
                 $tar->addFile($fileInfo->getPathname(), $fileInfo->getFilename());
                 if ($fileInfo->isDir()) {
@@ -747,10 +757,10 @@ class BackupManager
 
         foreach ($rootCustomDataDirs as $c_dir) {
             $name = basename($c_dir);
-            if (!in_array($name, FoldersAndFilesReferential::NEXTDOM_ROOT_FOLDERS)
-                && !in_array($name, FoldersAndFilesReferential::NEXTDOM_ROOT_FILES)
-                && !in_array($name, FoldersAndFilesReferential::JEEDOM_BACKUP_FOLDERS)
-                && !in_array($name, FoldersAndFilesReferential::JEEDOM_BACKUP_FILES)) {
+            if (!in_array($name, self::NEXTDOM_ROOT_FOLDERS)
+                && !in_array($name, self::NEXTDOM_ROOT_FILES)
+                && !in_array($name, self::JEEDOM_BACKUP_FOLDERS)
+                && !in_array($name, self::JEEDOM_BACKUP_FILES)) {
                 $message = 'Restoring folder: ' . $name;
                 if ($logFile == LogTarget::MIGRATION) {
                     LogHelper::addInfo($logFile, $message, '');
