@@ -18,35 +18,43 @@
 
 namespace NextDom\Repo;
 
-class RepoFile
+use NextDom\Enums\DateFormat;
+use NextDom\Interfaces\BaseRepo;
+use NextDom\Model\Entity\Update;
+
+class RepoFile implements BaseRepo
 {
     public static $_name = 'File';
     public static $_icon = 'fas fa-file-invoice';
     public static $_description = 'repo.file.description';
 
-    public static $_scope = array(
+    public static $_scope = [
         'plugin' => true,
         'backup' => false,
         'hasConfiguration' => false,
-    );
+    ];
 
-    public static $_configuration = array(
-        'parameters_for_add' => array(
-            'path' => array(
+    public static $_configuration = [
+        'parameters_for_add' => [
+            'path' => [
                 'name' => 'repo.file.conf.path',
                 'type' => 'file',
-            ),
-        ),
-    );
+            ],
+        ],
+    ];
 
     public static function checkUpdate($_update)
     {
 
     }
 
+    /**
+     * @param Update $_update
+     * @return array
+     */
     public static function downloadObject($_update)
     {
-        return array('localVersion' => date('Y-m-d H:i:s'), 'path' => $_update->getConfiguration('path'));
+        return ['localVersion' => date(DateFormat::FULL), 'path' => $_update->getConfiguration('path')];
     }
 
     public static function deleteObjet($_update)
@@ -56,9 +64,9 @@ class RepoFile
 
     public static function objectInfo($_update)
     {
-        return array(
+        return [
             'doc' => '',
             'changelog' => '',
-        );
+        ];
     }
 }

@@ -17,6 +17,10 @@
 
 namespace NextDom\Ajax;
 
+use NextDom\Enums\ActionRight;
+use NextDom\Enums\AjaxParams;
+use NextDom\Enums\Common;
+use NextDom\Enums\NextDomObj;
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
@@ -37,29 +41,29 @@ class EqLogicAjax extends BaseAjax
 
     public function getEqLogicObject()
     {
-        $linkedObject = JeeObjectManager::byId(Utils::init('object_id'));
+        $linkedObject = JeeObjectManager::byId(Utils::init(AjaxParams::OBJECT_ID));
 
         if (!is_object($linkedObject)) {
             throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));
         }
-        $return = Utils::o2a($linkedObject);
-        $return['eqLogic'] = array();
+        $result = Utils::o2a($linkedObject);
+        $result[NextDomObj::EQLOGIC] = [];
         foreach ($linkedObject->getEqLogic() as $eqLogic) {
-            if ($eqLogic->getIsVisible() == '1') {
-                $info_eqLogic = array();
-                $info_eqLogic['id'] = $eqLogic->getId();
-                $info_eqLogic['type'] = $eqLogic->getEqType_name();
-                $info_eqLogic['object_id'] = $eqLogic->getObject_id();
-                $info_eqLogic['html'] = $eqLogic->toHtml(Utils::init('version'));
-                $return['eqLogic'][] = $info_eqLogic;
+            if ($eqLogic->isVisible()) {
+                $info_eqLogic = [];
+                $info_eqLogic[Common::ID] = $eqLogic->getId();
+                $info_eqLogic[Common::TYPE] = $eqLogic->getEqType_name();
+                $info_eqLogic[Common::OBJECT_ID] = $eqLogic->getObject_id();
+                $info_eqLogic[Common::HTML] = $eqLogic->toHtml(Utils::init(AjaxParams::VERSION));
+                $result[NextDomObj::EQLOGIC][] = $info_eqLogic;
             }
         }
-        $this->ajax->success($return);
+        $this->ajax->success($result);
     }
 
     public function byId()
     {
-        $eqLogic = EqLogicManager::byId(Utils::init('id'));
+        $eqLogic = EqLogicManager::byId(Utils::init(AjaxParams::ID));
         if (!is_object($eqLogic)) {
             throw new CoreException(__('EqLogic inconnu. Vérifiez l\'ID'));
         }
@@ -68,119 +72,152 @@ class EqLogicAjax extends BaseAjax
 
     public function toHtml()
     {
-        if (Utils::init('ids') != '') {
-            $return = array();
-            foreach (json_decode(Utils::init('ids'), true) as $id => $value) {
-                $eqLogic = EqLogicManager::byId($id);
+        if (Utils::init(AjaxParams::IDS) != '') {
+            $result = [];
+            foreach (json_decode(Utils::init(AjaxParams::IDS), true) as $eqLogicId => $eqLogicData) {
+                $eqLogic = EqLogicManager::byId($eqLogicId);
                 if (!is_object($eqLogic)) {
                     continue;
                 }
-                $return[$eqLogic->getId()] = array(
-                    'html' => $eqLogic->toHtml($value['version']),
-                    'id' => $eqLogic->getId(),
-                    'type' => $eqLogic->getEqType_name(),
-                    'object_id' => $eqLogic->getObject_id(),
-                );
+                if (!isset($eqLogicData[AjaxParams::VERSION])) {
+                    throw new CoreException(__('Pas de version indiqué pour le rendu HTML'));
+                }
+                $result[$eqLogic->getId()] = [
+                    Common::ID => $eqLogic->getId(),
+                    Common::TYPE => $eqLogic->getEqType_name(),
+                    Common::OBJECT_ID => $eqLogic->getObject_id(),
+                    Common::HTML => $eqLogic->toHtml($eqLogicData[AjaxParams::VERSION]),
+                ];
             }
-            $this->ajax->success($return);
+            $this->ajax->success($result);
         } else {
-            $eqLogic = EqLogicManager::byId(Utils::init('id'));
+            $eqLogic = EqLogicManager::byId(Utils::init(AjaxParams::ID));
             if (!is_object($eqLogic)) {
                 throw new CoreException(__('Eqlogic inconnu. Vérifiez l\'ID'));
             }
-            $info_eqLogic = array();
-            $info_eqLogic['id'] = $eqLogic->getId();
-            $info_eqLogic['type'] = $eqLogic->getEqType_name();
-            $info_eqLogic['object_id'] = $eqLogic->getObject_id();
-            $info_eqLogic['html'] = $eqLogic->toHtml(Utils::init('version'));
-            $this->ajax->success($info_eqLogic);
+            $eqLogicInfo = [];
+            $eqLogicInfo[Common::ID] = $eqLogic->getId();
+            $eqLogicInfo[Common::TYPE] = $eqLogic->getEqType_name();
+            $eqLogicInfo[Common::OBJECT_ID] = $eqLogic->getObject_id();
+            $eqLogicInfo[Common::HTML] = $eqLogic->toHtml(Utils::init(AjaxParams::VERSION));
+            $this->ajax->success($eqLogicInfo);
         }
     }
 
     public function htmlAlert()
     {
-        $return = array();
+        $result = [];
         foreach (EqLogicManager::all() as $eqLogic) {
             if ($eqLogic->getAlert() == '') {
                 continue;
             }
-            $return[$eqLogic->getId()] = array(
-                'html' => $eqLogic->toHtml(Utils::init('version')),
-                'id' => $eqLogic->getId(),
-                'type' => $eqLogic->getEqType_name(),
-                'object_id' => $eqLogic->getObject_id(),
-            );
+            $result[$eqLogic->getId()] = [
+                Common::HTML => $eqLogic->toHtml(Utils::init(AjaxParams::VERSION)),
+                Common::ID => $eqLogic->getId(),
+                Common::TYPE => $eqLogic->getEqType_name(),
+                Common::OBJECT_ID => $eqLogic->getObject_id(),
+            ];
         }
-        $this->ajax->success($return);
+        $this->ajax->success($result);
     }
 
     public function htmlBattery()
     {
-        $return = array();
-        $list = array();
+        $result = [];
+        $list = [];
         foreach (EqLogicManager::all() as $eqLogic) {
-            if ($eqLogic->getStatus('battery', -2) != -2) {
+            if ($eqLogic->getStatus(Common::BATTERY, -2) != -2) {
                 $list[] = $eqLogic;
             }
         }
         usort($list, function ($a, $b) {
-            return ($a->getStatus('battery') < $b->getStatus('battery')) ? -1 : (($a->getStatus('battery') > $b->getStatus('battery')) ? 1 : 0);
+            $aStatus = $a->getStatus(Common::BATTERY);
+            $bStatus = $b->getStatus(Common::BATTERY);
+            if ($aStatus < $bStatus) {
+                return -1;
+            } elseif ($aStatus > $bStatus) {
+                return 1;
+            } else {
+                return 0;
+            }
         });
         foreach ($list as $eqLogic) {
-            $return[] = array(
-                'html' => $eqLogic->batteryWidget(Utils::init('version')),
-                'id' => $eqLogic->getId(),
-                'type' => $eqLogic->getEqType_name(),
-                'object_id' => $eqLogic->getObject_id(),
-            );
+            $result[] = [
+                Common::HTML => $eqLogic->batteryWidget(Utils::init(AjaxParams::VERSION)),
+                Common::ID => $eqLogic->getId(),
+                Common::TYPE => $eqLogic->getEqType_name(),
+                Common::OBJECT_ID => $eqLogic->getObject_id(),
+            ];
         }
-        $this->ajax->success($return);
+        $this->ajax->success($result);
     }
 
     public function listByType()
     {
-        $this->ajax->success(Utils::a2o(EqLogicManager::byType(Utils::init('type'))));
+        $result = [];
+        $eqLogics = EqLogicManager::byType(Utils::init(AjaxParams::TYPE));
+        foreach ($eqLogics as $eqLogic) {
+            $result[$eqLogic->getId()] = Utils::o2a($eqLogic);
+            $result[$eqLogic->getId()][Common::HUMAN_NAME] = $eqLogic->getHumanName();
+        }
+        $this->ajax->success(array_values($result));
     }
 
     public function listByObjectAndCmdType()
     {
-        $object_id = (Utils::init('object_id') != -1) ? Utils::init('object_id') : null;
-        $this->ajax->success(EqLogicManager::listByObjectAndCmdType($object_id, Utils::init('typeCmd'), Utils::init('subTypeCmd')));
+        $objectId = (Utils::init(AjaxParams::OBJECT_ID) != -1) ? Utils::init(AjaxParams::OBJECT_ID) : null;
+        $this->ajax->success(
+            EqLogicManager::listByObjectAndCmdType(
+                $objectId,
+                Utils::init(AjaxParams::TYPE_CMD),
+                Utils::init(AjaxParams::SUB_TYPE_CMD)
+            )
+        );
     }
 
     public function listByObject()
     {
-        $object_id = (Utils::init('object_id') != -1) ? Utils::init('object_id') : null;
-        $this->ajax->success(Utils::o2a(EqLogicManager::byObjectId($object_id, Utils::init('onlyEnable', true), Utils::init('onlyVisible', false), Utils::init('eqType_name', null), Utils::init('logicalId', null), Utils::init('orderByName', false))));
+        $objectId = (Utils::init(AjaxParams::OBJECT_ID) != -1) ? Utils::init(AjaxParams::OBJECT_ID) : null;
+        $this->ajax->success(
+            Utils::o2a(
+                EqLogicManager::byObjectId(
+                    $objectId,
+                    Utils::init(AjaxParams::ONLY_ENABLE, true),
+                    Utils::init(AjaxParams::ONLY_VISIBLE, false),
+                    Utils::init(AjaxParams::EQTYPE_NAME, null),
+                    Utils::init(AjaxParams::LOGICAL_ID, null),
+                    Utils::init(AjaxParams::ORDER_BY_NAME, false))
+            )
+        );
     }
 
     public function listByTypeAndCmdType()
     {
-        $results = EqLogicManager::listByTypeAndCmdType(Utils::init('type'), Utils::init('typeCmd'), Utils::init('subTypeCmd'));
-        $return = array();
-        foreach ($results as $result) {
-            $eqLogic = EqLogicManager::byId($result['id']);
-            $info['eqLogic'] = Utils::o2a($eqLogic);
-            $info['object'] = array('name' => 'Aucun');
+        $eqLogicList = EqLogicManager::listByTypeAndCmdType(Utils::init(AjaxParams::TYPE), Utils::init(AjaxParams::TYPE_CMD), Utils::init(AjaxParams::SUB_TYPE_CMD));
+        $result = [];
+        foreach ($eqLogicList as $eqLogic) {
+            $eqLogic = EqLogicManager::byId($eqLogic[Common::ID]);
+            $info[NextDomObj::EQLOGIC] = Utils::o2a($eqLogic);
+            $info[NextDomObj::OBJECT] = ['name' => 'Aucun'];
             if (is_object($eqLogic)) {
                 $linkedObject = $eqLogic->getObject();
                 if (is_object($linkedObject)) {
                     $info['object'] = Utils::o2a($eqLogic->getObject());
                 }
             }
-            $return[] = $info;
+            $result[] = $info;
         }
-        $this->ajax->success($return);
+        $this->ajax->success($result);
     }
 
     public function setIsEnable()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $eqLogic = EqLogicManager::byId(Utils::init('id'));
+        $eqLogic = EqLogicManager::byId(Utils::init(AjaxParams::ID));
         if (!is_object($eqLogic)) {
             throw new CoreException(__('EqLogic inconnu. Vérifiez l\'ID'));
         }
-        if (!$eqLogic->hasRight('w')) {
+        if (!$eqLogic->hasRight(ActionRight::WRITE)) {
             throw new CoreException(__('Vous n\'êtes pas autorisé à faire cette action'));
         }
         $eqLogic->setIsEnable(Utils::init('isEnable'));
@@ -192,10 +229,10 @@ class EqLogicAjax extends BaseAjax
     {
         $eqLogics = json_decode(Utils::init('eqLogics'), true);
         foreach ($eqLogics as $eqLogic_json) {
-            if (!isset($eqLogic_json['id']) || trim($eqLogic_json['id']) == '') {
+            if (!isset($eqLogic_json[Common::ID]) || trim($eqLogic_json[Common::ID]) == '') {
                 continue;
             }
-            $eqLogic = EqLogicManager::byId($eqLogic_json['id']);
+            $eqLogic = EqLogicManager::byId($eqLogic_json[Common::ID]);
             if (!is_object($eqLogic)) {
                 continue;
             }
@@ -213,7 +250,7 @@ class EqLogicAjax extends BaseAjax
             if (!is_object($eqLogic)) {
                 throw new CoreException(__('EqLogic inconnu. Vérifiez l\'ID') . ' ' . $id);
             }
-            if (!$eqLogic->hasRight('w')) {
+            if (!$eqLogic->hasRight(ActionRight::WRITE)) {
                 continue;
             }
             $eqLogic->remove();
@@ -229,7 +266,7 @@ class EqLogicAjax extends BaseAjax
             if (!is_object($eqLogic)) {
                 throw new CoreException(__('EqLogic inconnu. Vérifiez l\'ID') . ' ' . $id);
             }
-            if (!$eqLogic->hasRight('w')) {
+            if (!$eqLogic->hasRight(ActionRight::WRITE)) {
                 continue;
             }
             $eqLogic->setIsVisible(Utils::init('isVisible'));
@@ -246,7 +283,7 @@ class EqLogicAjax extends BaseAjax
             if (!is_object($eqLogic)) {
                 throw new CoreException(__('EqLogic inconnu. Vérifiez l\'ID') . ' ' . $id);
             }
-            if (!$eqLogic->hasRight('w')) {
+            if (!$eqLogic->hasRight(ActionRight::WRITE)) {
                 continue;
             }
             $eqLogic->setIsEnable(Utils::init('isEnable'));
@@ -258,13 +295,13 @@ class EqLogicAjax extends BaseAjax
     public function simpleSave()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $eqLogicSave = json_decode(Utils::init('eqLogic'), true);
-        $eqLogic = EqLogicManager::byId($eqLogicSave['id']);
+        $eqLogicSave = json_decode(Utils::init(NextDomObj::EQLOGIC), true);
+        $eqLogic = EqLogicManager::byId($eqLogicSave[Common::ID]);
         if (!is_object($eqLogic)) {
-            throw new CoreException(__('EqLogic inconnu. Vérifiez l\'ID ') . $eqLogicSave['id']);
+            throw new CoreException(__('EqLogic inconnu. Vérifiez l\'ID ') . $eqLogicSave[Common::ID]);
         }
 
-        if (!$eqLogic->hasRight('w')) {
+        if (!$eqLogic->hasRight(ActionRight::WRITE)) {
             throw new CoreException(__('Vous n\'êtes pas autorisé à faire cette action'));
         }
         Utils::a2o($eqLogic, $eqLogicSave);
@@ -275,7 +312,7 @@ class EqLogicAjax extends BaseAjax
     public function copy()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $eqLogic = EqLogicManager::byId(Utils::init('id'));
+        $eqLogic = EqLogicManager::byId(Utils::init(AjaxParams::ID));
         if (!is_object($eqLogic)) {
             throw new CoreException(__('EqLogic inconnu. Vérifiez l\'ID'));
         }
@@ -288,11 +325,11 @@ class EqLogicAjax extends BaseAjax
     public function remove()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $eqLogic = EqLogicManager::byId(Utils::init('id'));
+        $eqLogic = EqLogicManager::byId(Utils::init(AjaxParams::ID));
         if (!is_object($eqLogic)) {
-            throw new CoreException(__('EqLogic inconnu. Vérifiez l\'ID ') . Utils::init('id'));
+            throw new CoreException(__('EqLogic inconnu. Vérifiez l\'ID ') . Utils::init(AjaxParams::ID));
         }
-        if (!$eqLogic->hasRight('w')) {
+        if (!$eqLogic->hasRight(ActionRight::WRITE)) {
             throw new CoreException(__('Vous n\'êtes pas autorisé à faire cette action'));
         }
         $eqLogic->remove();
@@ -301,44 +338,44 @@ class EqLogicAjax extends BaseAjax
 
     public function get()
     {
-        $typeEqLogic = Utils::init('type');
+        $typeEqLogic = Utils::init(AjaxParams::TYPE);
         if ($typeEqLogic == '' || !class_exists($typeEqLogic)) {
             throw new CoreException(__('Type incorrect (classe équipement inexistante) : ') . $typeEqLogic);
         }
-        $eqLogic = $typeEqLogic::byId(Utils::init('id'));
+        $eqLogic = $typeEqLogic::byId(Utils::init(AjaxParams::ID));
         if (!is_object($eqLogic)) {
-            throw new CoreException(__('EqLogic inconnu. Vérifiez l\'ID ') . Utils::init('id'));
+            throw new CoreException(__('EqLogic inconnu. Vérifiez l\'ID ') . Utils::init(AjaxParams::ID));
         }
-        $return = Utils::o2a($eqLogic);
-        $return['cmd'] = Utils::o2a($eqLogic->getCmd());
-        $this->ajax->success(NextDomHelper::toHumanReadable($return));
+        $result = Utils::o2a($eqLogic);
+        $result[NextDomObj::CMD] = Utils::o2a($eqLogic->getCmd());
+        $this->ajax->success(NextDomHelper::toHumanReadable($result));
     }
 
     public function save()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
 
-        $eqLogicsSave = json_decode(Utils::init('eqLogic'), true);
+        $eqLogicsSave = json_decode(Utils::init(NextDomObj::EQLOGIC), true);
 
         foreach ($eqLogicsSave as $eqLogicSave) {
             try {
                 if (!is_array($eqLogicSave)) {
                     throw new CoreException(__('Informations reçues incorrectes'));
                 }
-                $typeEqLogic = Utils::init('type');
-                $typeCmd = $typeEqLogic . 'Cmd';
+                $typeEqLogic = Utils::init(AjaxParams::TYPE);
+                $typeCmd = $typeEqLogic . NextDomObj::CMD;
                 if ($typeEqLogic == '' || !class_exists($typeEqLogic) || !class_exists($typeCmd)) {
                     throw new CoreException(__('Type incorrect, (classe commande inexistante)') . $typeCmd);
                 }
                 $eqLogic = null;
-                if (isset($eqLogicSave['id'])) {
-                    $eqLogic = $typeEqLogic::byId($eqLogicSave['id']);
+                if (isset($eqLogicSave[Common::ID])) {
+                    $eqLogic = $typeEqLogic::byId($eqLogicSave[Common::ID]);
                 }
                 if (!is_object($eqLogic)) {
                     $eqLogic = new $typeEqLogic();
-                    $eqLogic->setEqType_name(Utils::init('type'));
+                    $eqLogic->setEqType_name(Utils::init(AjaxParams::TYPE));
                 } else {
-                    if (!$eqLogic->hasRight('w')) {
+                    if (!$eqLogic->hasRight(ActionRight::WRITE)) {
                         throw new CoreException(__('Vous n\'êtes pas autorisé à faire cette action'));
                     }
                 }
@@ -349,14 +386,14 @@ class EqLogicAjax extends BaseAjax
                 Utils::a2o($eqLogic, $eqLogicSave);
                 $dbList = $typeCmd::byEqLogicId($eqLogic->getId());
                 $eqLogic->save();
-                $enableList = array();
+                $enableList = [];
 
-                if (isset($eqLogicSave['cmd'])) {
+                if (isset($eqLogicSave[NextDomObj::CMD])) {
                     $cmd_order = 0;
-                    foreach ($eqLogicSave['cmd'] as $cmd_info) {
+                    foreach ($eqLogicSave[NextDomObj::CMD] as $cmd_info) {
                         $cmd = null;
-                        if (isset($cmd_info['id'])) {
-                            $cmd = $typeCmd::byId($cmd_info['id']);
+                        if (isset($cmd_info[Common::ID])) {
+                            $cmd = $typeCmd::byId($cmd_info[Common::ID]);
                         }
                         if (!is_object($cmd)) {
                             $cmd = new $typeCmd();
@@ -379,9 +416,9 @@ class EqLogicAjax extends BaseAjax
                 }
             } catch (\Exception $e) {
                 if (strpos($e->getMessage(), '[MySQL] Error code : 23000') !== false) {
-                    if ($e->getTrace()[2]['class'] == 'eqLogic') {
+                    if ($e->getTrace()[2]['class'] == NextDomObj::EQLOGIC) {
                         throw new CoreException(__('Un équipement portant ce nom (') . $e->getTrace()[0]['args'][1]['name'] . __(') existe déjà pour cet objet'));
-                    } elseif ($e->getTrace()[2]['class'] == 'cmd') {
+                    } elseif ($e->getTrace()[2]['class'] == NextDomObj::CMD) {
                         throw new CoreException(__('Une commande portant ce nom (') . $e->getTrace()[0]['args'][1]['name'] . __(') existe déjà pour cet équipement'));
                     }
                 } else {
@@ -395,12 +432,12 @@ class EqLogicAjax extends BaseAjax
 
     public function getAlert()
     {
-        $alerts = array();
+        $alerts = [];
         foreach (EqLogicManager::all() as $eqLogic) {
             if ($eqLogic->getAlert() == '') {
                 continue;
             }
-            $alerts[] = $eqLogic->toHtml(Utils::init('version'));
+            $alerts[] = $eqLogic->toHtml(Utils::init(AjaxParams::VERSION));
         }
         $this->ajax->success($alerts);
     }

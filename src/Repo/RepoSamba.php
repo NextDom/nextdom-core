@@ -36,6 +36,7 @@ namespace NextDom\Repo;
 
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\Samba;
+use NextDom\Interfaces\BaseRepo;
 use NextDom\Managers\BackupManager;
 use NextDom\Managers\ConfigManager;
 
@@ -44,7 +45,7 @@ use NextDom\Managers\ConfigManager;
  *
  * @package NextDom\Repo
  */
-class RepoSamba
+class RepoSamba implements BaseRepo
 {
     /**
      * @var string General name
@@ -117,7 +118,7 @@ class RepoSamba
 
         $sambaConnection = Samba::createFromConfig('backup');
         $sambaConnection->put($backupPath, $backupDest);
-        LogHelper::addInfo("system","Backup to remote samba server done.");
+        LogHelper::addInfo("system", "Backup to remote samba server done.");
         self::cleanBackups();
     }
 

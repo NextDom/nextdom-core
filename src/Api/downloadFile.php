@@ -60,7 +60,7 @@ try {
 
     // Block some kind of files for non-admin users
     if (!AuthentificationHelper::isConnectedWithRights('admin')) {
-        $adminFiles = array('backup', '.sql', 'scenario', '.tar', '.gz');
+        $adminFiles = ['backup', '.sql', 'scenario', '.tar', '.gz'];
         foreach ($adminFiles as $adminFile) {
             if (strpos($filePath, $adminFile) !== false) {
                 Router::showError401AndDie();

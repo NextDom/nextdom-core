@@ -23,14 +23,16 @@
 namespace NextDom\Controller\Pages;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\AjaxParams;
+use NextDom\Enums\Common;
+use NextDom\Enums\NextDomObj;
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
-use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\UserManager;
-use NextDom\Model\Entity\JeeObject;
 
 /**
  * Class DashboardController
@@ -49,17 +51,17 @@ class DashBoardController extends BaseController
      */
     public static function get(&$pageData): string
     {
-        $objectIdFromUrl = Utils::init('object_id', '');
-        $defaultDashboardObjectId ='';
+        $objectIdFromUrl = Utils::init(AjaxParams::OBJECT_ID, '');
+        $defaultDashboardObjectId = '';
         $currentJeeObjectId = '';
         $pageData['JS_VARS']['nextdom_Welcome'] = ConfigManager::byKey('nextdom::Welcome');
-        $pageData['JS_VARS']['SEL_CATEGORY'] = Utils::init('category', 'all');
-        $pageData['JS_VARS']['SEL_TAG'] = Utils::init('tag', 'all');
-        $pageData['JS_VARS']['SEL_SUMMARY'] = Utils::init('summary');
+        $pageData['JS_VARS']['SEL_CATEGORY'] = Utils::init(AjaxParams::CATEGORY, 'all');
+        $pageData['JS_VARS']['SEL_TAG'] = Utils::init(AjaxParams::TAG, 'all');
+        $pageData['JS_VARS']['SEL_SUMMARY'] = Utils::init(AjaxParams::SUMMARY);
 
         $defaultDashboardObjectName = UserManager::getStoredUser()->getOptions('defaultDashboardObject');
         $defaultDashboardObject = JeeObjectManager::byId($defaultDashboardObjectName);
-        if(!empty($defaultDashboardObject)) {
+        if (!empty($defaultDashboardObject)) {
             $defaultDashboardObjectId = $defaultDashboardObject->getId();
         }
 
@@ -72,18 +74,18 @@ class DashBoardController extends BaseController
                 $currentJeeObject = JeeObjectManager::getRootObjects();
             }
         }
-        if(!empty($currentJeeObject)){
+        if (!empty($currentJeeObject)) {
             $currentJeeObjectId = $currentJeeObject->getId();
         } else {
-            throw new \Exception(__('Aucun objet racine trouvé. Pour en créer un, allez dans dashboard -> <a href="/index.php?v=d&p=object">Liste objets et résumés</a>'));
+            throw new CoreException(__('Aucun objet racine trouvé. Pour en créer un, allez dans dashboard -> <a href="/index.php?v=d&p=object">Liste objets et résumés</a>'));
         }
 
         $pageData['JS_VARS']['SEL_OBJECT_ID'] = $currentJeeObjectId;
         $pageData['JS_VARS']['rootObjectId'] = $currentJeeObjectId;
         $pageData['JS_VARS']['serverTZoffsetMin'] = Utils::getTZoffsetMin();
 
-        $pageData['dashboardCategory'] = Utils::init('category', 'all');
-        $pageData['dashboardSummary'] = Utils::init('summary', 'all');
+        $pageData['dashboardCategory'] = Utils::init(AjaxParams::CATEGORY, Common::ALL);
+        $pageData['dashboardSummary'] = Utils::init(AjaxParams::SUMMARY, Common::ALL);
         $pageData['dashboardCategories'] = NextDomHelper::getConfiguration('eqLogic:category', true);
         $pageData['dashboardDefaultObjectId'] = $defaultDashboardObjectId;
         $pageData['dashboardObjectId'] = $currentJeeObjectId;
@@ -103,7 +105,7 @@ class DashBoardController extends BaseController
 
     /**
      * Get layers
-     * @param JeeObject $currentObjectId
+     * @param int $currentObjectId
      * @return array
      * @throws \Exception
      */
@@ -135,10 +137,10 @@ class DashBoardController extends BaseController
             }
             foreach ($layer as $item) {
                 $itemData = [];
-                $itemData['jeeObject'] = $item;
-                $itemData['active'] = false;
+                $itemData[NextDomObj::JEE_OBJECT] = $item;
+                $itemData[Common::ACTIVE] = false;
                 if ($item->getId() == $selectedLayerObject->getId()) {
-                    $itemData['active'] = true;
+                    $itemData[Common::ACTIVE] = true;
                 }
                 $layerResult[] = $itemData;
             }
@@ -149,8 +151,8 @@ class DashBoardController extends BaseController
         $childrenLayer = [];
         foreach ($children as $item) {
             $itemData = [];
-            $itemData['jeeObject'] = $item;
-            $itemData['active'] = false;
+            $itemData[NextDomObj::JEE_OBJECT] = $item;
+            $itemData[Common::ACTIVE] = false;
             $childrenLayer[] = $itemData;
         }
         $result[] = $childrenLayer;

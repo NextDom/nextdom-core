@@ -33,7 +33,12 @@ use Twig\Extensions\TextExtension;
  */
 class Render
 {
+
     const DEFAULT_LANGUAGE = 'fr';
+
+    /**
+     * @var Render
+     */
     private static $instance;
     /**
      * @var Translator
@@ -45,6 +50,10 @@ class Render
     private $twig;
     private $twigLoader;
 
+    /**
+     * Render constructor.
+     * @throws \Exception
+     */
     private function __construct()
     {
         $language = ConfigManager::byKey('language', 'core', 'fr_FR');
@@ -53,7 +62,7 @@ class Render
     }
 
     /**
-     * @param $language
+     * @param string $language
      */
     private function initTranslation(string $language)
     {
@@ -96,11 +105,12 @@ class Render
      * Get render instance
      *
      * @return Render
+     * @throws \Exception
      */
     public static function getInstance(): Render
     {
-        if (is_null(self::$instance)) {
-            self::$instance = new Render();
+        if (self::$instance === null) {
+            self::$instance = new self();
         }
         return self::$instance;
     }
@@ -111,7 +121,7 @@ class Render
      */
     public function getTranslation(string $sentence): string
     {
-        if (!is_null(self::$instance)) {
+        if (self::$instance !== null) {
             return $this->translator->trans($sentence);
         }
         return $sentence;
@@ -121,26 +131,24 @@ class Render
      * @param string $view
      * @param array $data
      */
-    public function show($view, $data = array())
+    public function show($view, $data = [])
     {
         echo $this->get($view, $data);
     }
 
     /**
-     * @param $view
+     * @param       $view
      * @param array $data
-     * @return mixed
+     * @return string|null
      */
-    public function get($view, $data = array())
+    public function get($view, array $data = [])
     {
-        $data['debugbar'] = $this->showDebugBar();
+        if (isset($data['debugbar'])) {
+            $data['debugbar'] = $this->showDebugBar();
+        }
         try {
             return $this->twig->render($view, $data);
-        } catch (\Twig\Error\LoaderError $e) {
-            echo $e->getMessage();
-        } catch (\Twig\Error\RuntimeError $e) {
-            echo $e->getMessage();
-        } catch (\Twig\Error\SyntaxError $e) {
+        } catch (\Throwable $e) {
             echo $e->getMessage();
         }
         return null;

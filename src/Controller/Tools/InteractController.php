@@ -48,7 +48,7 @@ class InteractController extends BaseController
     public static function get(&$pageData): string
     {
 
-        $interacts = array();
+        $interacts = [];
         $pageData['interactTotal'] = InteractDefManager::all();
         $interacts[-1] = InteractDefManager::all(null);
         $interactListGroup = InteractDefManager::listGroup();

@@ -65,20 +65,20 @@ class MarketJeeController extends BaseController
         /* Lecture market */
         if ($author == null && $name === null && $categorie === null && Utils::init('certification', null) === null && Utils::init('cost', null) === null && $type == 'plugin') {
             $news = true;
-            $markets = RepoMarket::byFilter(array(
+            $markets = RepoMarket::byFilter([
                 'status' => 'stable',
                 'type' => 'plugin',
                 'timeState' => 'popular'
-            ));
-            $markets2 = RepoMarket::byFilter(array(
+            ]);
+            $markets2 = RepoMarket::byFilter([
                 'status' => 'stable',
                 'type' => 'plugin',
                 'timeState' => 'newest'
-            ));
+            ]);
             $markets = array_merge($markets, $markets2);
         } else {
             $news = false;
-            $markets = RepoMarket::byFilter(array(
+            $markets = RepoMarket::byFilter([
                 'status' => null,
                 'type' => $type,
                 'categorie' => $categorie,
@@ -88,7 +88,7 @@ class MarketJeeController extends BaseController
                 'timeState' => Utils::init('timeState', null),
                 'certification' => Utils::init('certification', null),
                 'limit' => $searchLimit
-            ));
+            ]);
         }
 
         $pageData['marketObjectsByCategory'] = [];

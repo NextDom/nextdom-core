@@ -30,7 +30,6 @@
 * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
 */
 
-console.log(cmds_history_configure);
 initTableSorter();
 $("#table_cmdConfigureHistory").tablesorter({headers: {0: {sorter: 'checkbox'}}});
 table_history = [];
@@ -117,7 +116,7 @@ $('#bt_cmdConfigureCmdHistoryApply').on('click', function () {
         if ($(this).attr('data-change') == '1') {
             cmds.push($(this).getValues('.cmdAttr')[0]);
         }
-    })
+    });
     nextdom.cmd.multiSave({
         cmds: cmds,
         error: function (error) {

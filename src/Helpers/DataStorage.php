@@ -59,7 +59,7 @@ class DataStorage
     {
         $returnValue = false;
         $statement = DBHelper::getConnection()->prepare("SHOW TABLES LIKE ?");
-        $statement->execute(array($this->dataTableName));
+        $statement->execute([$this->dataTableName]);
         $dbResult = $statement->fetchAll(\PDO::FETCH_ASSOC);
         if (count($dbResult) > 0) {
             $returnValue = true;
@@ -83,7 +83,7 @@ class DataStorage
     public function deleteData(string $code)
     {
         $statement = DBHelper::getConnection()->prepare("DELETE FROM `" . $this->dataTableName . "` WHERE `code` = ?");
-        $statement->execute(array($code));
+        $statement->execute([$code]);
     }
 
     /**
@@ -140,7 +140,7 @@ class DataStorage
     {
         $returnValue = null;
         $statement = DBHelper::getConnection()->prepare("SELECT `data` FROM `" . $this->dataTableName . "` WHERE `code` = ?");
-        $statement->execute(array($code));
+        $statement->execute([$code]);
         $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
         if (count($result) > 0) {
             $returnValue = $result[0]['data'];
@@ -157,7 +157,7 @@ class DataStorage
     public function updateRawData(string $code, $data)
     {
         $statement = DBHelper::getConnection()->prepare("UPDATE `" . $this->dataTableName . "` SET `data` = ? WHERE `code` = ?");
-        $statement->execute(array($data, $code));
+        $statement->execute([$data, $code]);
 
     }
 
@@ -170,7 +170,7 @@ class DataStorage
     public function addRawData(string $code, $data)
     {
         $statement = DBHelper::getConnection()->prepare("INSERT INTO `" . $this->dataTableName . "` (`code`, `data`) VALUES (?, ?)");
-        $statement->execute(array($code, $data));
+        $statement->execute([$code, $data]);
     }
 
     /**
@@ -193,7 +193,7 @@ class DataStorage
     public function remove(string $code)
     {
         $statement = DBHelper::getConnection()->prepare("DELETE FROM `" . $this->dataTableName . "` WHERE `code` LIKE ?");
-        $statement->execute(array($code));
+        $statement->execute([$code]);
     }
 
     /**
@@ -206,7 +206,7 @@ class DataStorage
     public function getAllByPrefix(string $prefix): array
     {
         $statement = DBHelper::getConnection()->prepare("SELECT `data` FROM `" . $this->dataTableName . "` WHERE `code` LIKE ?");
-        $statement->execute(array($prefix . '%'));
+        $statement->execute([$prefix . '%']);
         $returnValue = $statement->fetchAll(\PDO::FETCH_ASSOC);
         return $returnValue;
     }

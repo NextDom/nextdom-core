@@ -23,11 +23,11 @@
 namespace NextDom\Controller\Pages;
 
 use NextDom\Controller\BaseController;
+use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Router;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
-use NextDom\Helpers\FileSystemHelper;
 
 /**
  * Class FirstUseController
@@ -43,22 +43,22 @@ class FirstUseController extends BaseController
      */
     public static function get(&$pageData): string
     {
-        $configs = ConfigManager::byKeys(array(
+        $configs = ConfigManager::byKeys([
             'notify::status',
             'notify::position',
             'notify::timeout',
-            'nextdom::firstUse'));
+            'nextdom::firstUse']);
         if ($configs['nextdom::firstUse'] == 0) {
             Router::showError404AndDie();
         }
 
         $pageData['profilsWidgetThemes'] = [];
-        $lsDir = FileSystemHelper::ls(NEXTDOM_ROOT . '/core/template/dashboard/themes/','*',true);
+        $lsDir = FileSystemHelper::ls(NEXTDOM_ROOT . '/core/template/dashboard/themes/', '*', true);
         foreach ($lsDir as $themesDir) {
-            $lsThemes = FileSystemHelper::ls(NEXTDOM_ROOT . '/core/template/dashboard/themes/' .$themesDir, '*.png');
+            $lsThemes = FileSystemHelper::ls(NEXTDOM_ROOT . '/core/template/dashboard/themes/' . $themesDir, '*.png');
             foreach ($lsThemes as $themeFile) {
                 $themeData = [];
-                $themeData['dir'] = '/core/template/dashboard/themes/' .$themesDir . $themeFile;
+                $themeData['dir'] = '/core/template/dashboard/themes/' . $themesDir . $themeFile;
                 $themeData['name'] = $themeFile;
                 $pageData['profilsWidgetThemes'][] = $themeData;
             }

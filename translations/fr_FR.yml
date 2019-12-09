@@ -241,6 +241,8 @@ general:
      time_server: "Permet d'ajouter un serveur de temps à NextDom utilisé lorsque NextDom force la synchronisation de l'heure"
      ignore_system_time: "Ignorer la vérification de l'heure système"
 health:
+  tmp-space-left: "Espace temporaire disponible"
+  tmp-problem: "En cas d'erreur essayez de redémarrer. Si le problème persiste, testez en désactivant les plugins un à un jusqu'à trouver le coupable"
   apache-private-tmp-disabled: Veuillez désactiver le private tmp d'Apache (NextDom ne peut fonctionner avec). Voir <a href=\"https://jeedom.github.io/core/fr_FR/faq#tocAnchor-1-29\" target=\"_blank\">ici</a>
   apache-private-tmp: Apache private tmp
   authentication-error: "Attention : vous avez toujours l'utilisateur admin/admin configuré, cela représente une grave faille de sécurité, allez <a href=\"index.php?v=d&p=user\">ici</a> pour modifier le mot de passe de l'utilisateur admin"
@@ -472,7 +474,7 @@ repo:
           name: "Branche pour le core NextDom"
           placeholder: "master"
   market:
-    description: "Ce service vous permet de vous connecter au Market Jeedom pour avoir accès à tous ces propres services..."
+    description: "Ce service vous permet de vous connecter au Market Jeedom pour avoir accès à tous ses propres services..."
     conf:
       address:
         name: "Adresse"
@@ -510,10 +512,10 @@ repo:
         placeholder: "Répertoire de destination (/MonRépertoire)"
     description: "Ce service vous permet de connecter à NextDom un serveur Samba décentralisé, afin par exemple de stocker vos backups (page sauvegarde/restauration) ou récuperer une sauvegarde de plugin..."
     error:
-      already-exists: "Le fichier existe déjà sur le serveur samba"
-      connect: "Impossible de se connecteur au serveur samba"
-      not-found: "Le fichier est introuvable sur le serveur samba"
-      unknown: "Une erreur s'est produite lors de la connexion au serveur samba"
+      already-exists: "Le fichier existe déjà sur le serveur Samba"
+      connect: "Impossible de se connecteur au serveur Samba"
+      not-found: "Le fichier est introuvable sur le serveur Samba"
+      unknown: "Une erreur s'est produite lors de la connexion au serveur Samba"
   url:
     description: "Ce service vous permet d'utiliser directement une URL pour par exemple l'installation de plugins..."
     conf:
@@ -523,7 +525,7 @@ repo:
         version: "Version core NextDom"
 scenario:
   add-block: Ajouter un bloc
-  add-item: Ajouter élément
+  add-item: Ajouter un élément
   choose: Choisir
   conditions: "Conditions"
   default : Défaut
@@ -612,6 +614,14 @@ scripts:
   scenario: "Scenario : "
   scenario-not-found: "Scénario non trouvé. Vérifiez ID : "
   start-in-background: "Lancement en arrière-plan de : "
+security:
+  rules: Pour améliorer la sécurité, augmenter le nombre de caractères, mixer minuscules / majuscules, ajouter un ou plusieurs chiffres et caractères spéciaux...
+  no-password: Aucune sécurité
+  very-low: Sécurité Trés Faible
+  low: Sécurité Faible
+  medium: Sécurité Moyenne
+  high: Sécurité Forte
+  very-high: Sécurité Trés Forte
 sidebar:
   dashboard: Dashboard
   design: Design(s)

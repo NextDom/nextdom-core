@@ -100,9 +100,9 @@ class IconSelector extends BaseAbstractModal
         foreach ($matchResults as $result) {
             if (isset($result[0])) {
                 if ($cssClass === null) {
-                    $data['list'][] = str_replace(array(':', '.'), ' ', $result[0]);
+                    $data['list'][] = str_replace([':', '.'], ' ', $result[0]);
                 } else {
-                    $data['list'][] = $cssClass . str_replace(array(':', '.'), ' ', $result[0]);
+                    $data['list'][] = $cssClass . str_replace([':', '.'], ' ', $result[0]);
                 }
             }
         }

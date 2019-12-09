@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Diagnostic;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\CmdType;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
 use NextDom\Managers\CmdManager;
@@ -79,9 +80,9 @@ class EqAnalyzeController extends BaseController
             $cmdData['infoCmds'] = [];
             $cmdData['actionCmds'] = [];
 
-            $eqlogicGetCmdInfo = $eqLogic->getCmd('info');
+            $eqlogicGetCmdInfo = $eqLogic->getCmd(CmdType::INFO);
             foreach ($eqlogicGetCmdInfo as $cmd) {
-                if ($cmd != null && count($cmd->getConfiguration('actionCheckCmd', array())) > 0) {
+                if ($cmd != null && count($cmd->getConfiguration('actionCheckCmd', [])) > 0) {
                     $data = [];
                     $data['cmd'] = $cmd;
                     $data['actions'] = [];
@@ -92,7 +93,7 @@ class EqAnalyzeController extends BaseController
                 }
             }
 
-            $eqLogicGetCmdAction = $eqLogic->getCmd('action');
+            $eqLogicGetCmdAction = $eqLogic->getCmd(CmdType::ACTION);
             foreach ($eqLogicGetCmdAction as $cmd) {
                 $actionCmdData = [];
                 $actionCmdData['cmd'] = $cmd;
@@ -117,7 +118,7 @@ class EqAnalyzeController extends BaseController
             $cmdDataArray[] = $cmdData;
         }
         $pageData['eqAnalyzeCmdData'] = $cmdDataArray;
-//TODO: Imbriquer les boucles quand le fonctionnement sera sûr
+//@TODO: Imbriquer les boucles quand le fonctionnement sera sûr
         $pageData['eqAnalyzeAlerts'] = [];
 
         $eqLogicManagerAll = EqLogicManager::all();
@@ -127,7 +128,7 @@ class EqAnalyzeController extends BaseController
             $hasSomeAlerts = 0;
 
             $listCmds = [];
-            $eqLogicGetCmdInfo = $eqLogic->getCmd('info');
+            $eqLogicGetCmdInfo = $eqLogic->getCmd(CmdType::INFO);
             foreach ($eqLogicGetCmdInfo as $cmd) {
                 foreach ($NEXTDOM_INTERNAL_CONFIG['alerts'] as $level => $value) {
 

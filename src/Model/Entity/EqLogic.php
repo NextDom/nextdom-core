@@ -19,11 +19,14 @@ namespace NextDom\Model\Entity;
 
 use NextDom\Enums\BatteryStatus;
 use NextDom\Enums\CacheKey;
+use NextDom\Enums\CmdType;
+use NextDom\Enums\Common;
 use NextDom\Enums\ConfigKey;
 use NextDom\Enums\DateFormat;
 use NextDom\Enums\EqLogicCategory;
 use NextDom\Enums\EqLogicConfigKey;
 use NextDom\Enums\EqLogicViewType;
+use NextDom\Enums\NextDomObj;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\DBHelper;
@@ -38,8 +41,8 @@ use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EqRealManager;
 use NextDom\Managers\EventManager;
 use NextDom\Managers\InteractDefManager;
-use NextDom\Managers\MessageManager;
 use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\MessageManager;
 use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioManager;
@@ -76,8 +79,6 @@ class EqLogic implements EntityInterface
     protected $_timeoutUpdated = false;
     protected $_batteryUpdated = false;
     protected $_changed = false;
-    private $_cmds = [];
-
     /**
      * @var integer
      *
@@ -176,165 +177,16 @@ class EqLogic implements EntityInterface
      * @ORM\Column(name="object_id", type="integer", nullable=true)
      */
     protected $object_id;
+    private $_cmds = [];
 
     /**
-     * Get Id
+     * Get eqLogic visibility
      *
-     * @return int EqLogic id
+     * @return bool True if eqLogic is visible
      */
-    public function getId()
+    public function isVisible()
     {
-        return $this->id;
-    }
-
-    /**
-     * Change id
-     *
-     * @param int|string $newId New id or '' if you want to reset id
-     *
-     * @return $this
-     */
-    public function setId($newId)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $newId);
-        $this->id = $newId;
-        return $this;
-    }
-
-    /**
-     * Get EqLogic name
-     *
-     * @return string EqLogic name
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Set eqLogic name
-     *
-     * @param string $name New name
-     *
-     * @return $this
-     */
-    public function setName($name)
-    {
-        // Remove forbidden characters
-        $name = str_replace(['&', '#', ']', '[', '%', "'", "\\", "/"], '', $name);
-        if ($name !== $this->name) {
-            $this->_needRefreshWidget = true;
-            $this->_changed = true;
-        }
-        $this->name = $name;
-        return $this;
-    }
-
-    /**
-     * Get generic type for simple eqLogic
-     *
-     * @return string Generic type
-     */
-    public function getGenericType()
-    {
-        return $this->generic_type;
-    }
-
-    /**
-     * Set generic type for simple EqLogic
-     *
-     * @param string $genericType Generic type
-     *
-     * @return $this
-     */
-    public function setGenericType($genericType)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->generic_type, $genericType);
-        $this->generic_type = $genericType;
-        return $this;
-    }
-
-    /**
-     * Set logicalId (Id used by plugins)
-     *
-     * @return string Logical Id
-     */
-    public function getLogicalId()
-    {
-        return $this->logicalId;
-    }
-
-    /**
-     * Get logicalId (Id used by plugins)
-     *
-     * @param string $logicalId logical Id
-     *
-     * @return $this
-     */
-    public function setLogicalId($logicalId)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->logicalId, $logicalId);
-        $this->logicalId = $logicalId;
-        return $this;
-    }
-
-    /**
-     * Get eqLogic type name (linked plugin)
-     *
-     * @return string EqLogic type (plugin ID)
-     */
-    public function getEqType_name()
-    {
-        return $this->eqType_name;
-    }
-
-
-    /**
-     * Set eqLogic type name (linked plugin)
-     *
-     * @param string $eqTypeName EqLogic type (plugin ID)
-     *
-     * @return $this
-     */
-    public function setEqType_name($eqTypeName)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->eqType_name, $eqTypeName);
-        $this->eqType_name = $eqTypeName;
-        return $this;
-    }
-
-    /**
-     * Get object specific configuration data
-     *
-     * @param string $configKey Configuration key
-     * @param string $defaultValue Default value if not found
-     *
-     * @return mixed
-     */
-    public function getConfiguration($configKey = '', $defaultValue = '')
-    {
-        return Utils::getJsonAttr($this->configuration, $configKey, $defaultValue);
-    }
-
-    /**
-     * Set object specific configuration data
-     *
-     * @param string $configKey Configuration key
-     * @param string $configValue Value to define
-     *
-     * @return $this
-     */
-    public function setConfiguration($configKey, $configValue)
-    {
-        if (in_array($configKey, [EqLogicConfigKey::BATTERY_WARNING_THRESHOLD, EqLogicConfigKey::BATTERY_DANGER_THRESHOLD])) {
-            if ($this->getConfiguration($configKey, '') != $configValue) {
-                $this->_batteryUpdated = true;
-            }
-        }
-        $configuration = Utils::setJsonAttr($this->configuration, $configKey, $configValue);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
-        $this->configuration = $configuration;
-        return $this;
+        return $this->getIsVisible() == 1;
     }
 
     /**
@@ -366,170 +218,6 @@ class EqLogic implements EntityInterface
             $this->_changed = true;
             $this->isVisible = $isVisible;
         }
-        return $this;
-    }
-
-    /**
-     * Get eqLogic enabled state
-     *
-     * @param int $defaultValue Default value if not set
-     *
-     * @return int
-     */
-    public function getIsEnable($defaultValue = 0)
-    {
-        if ($this->isEnable == '' || !is_numeric($this->isEnable)) {
-            return $defaultValue;
-        }
-        return $this->isEnable;
-    }
-
-    /**
-     * Set if the eqLogic is enabled
-     *
-     * @param int $isEnable 1 if eqLogic is enabled or 0 to disable
-     *
-     * @return $this
-     *
-     * @throws \Exception
-     */
-    public function setIsEnable($isEnable)
-    {
-        if ($this->isEnable != $isEnable) {
-            $this->_needRefreshWidget = true;
-            $this->_changed = true;
-        }
-        if ($isEnable) {
-            $this->setStatus(['lastCommunication' => date(DateFormat::FULL), 'timeout' => 0]);
-        }
-        $this->isEnable = $isEnable;
-        return $this;
-    }
-
-    /**
-     * Get eqLogic timeout
-     *
-     * @param int|string $defaultValue Default value if timeout is not define
-     *
-     * @return int|null
-     */
-    public function getTimeout($defaultValue = null)
-    {
-        if ($this->timeout == '' || !is_numeric($this->timeout)) {
-            return $defaultValue;
-        }
-        return $this->timeout;
-    }
-
-    /**
-     * Get eqLogic timeout
-     *
-     * @param int $timeout Timeout
-     *
-     * @return $this
-     */
-    public function setTimeout($timeout)
-    {
-        if ($timeout == '' || is_nan(intval($timeout)) || $timeout < 1) {
-            $timeout = null;
-        }
-        if ($timeout != $this->getTimeout()) {
-            $this->_timeoutUpdated = true;
-            $this->_changed = true;
-        }
-        $this->timeout = $timeout;
-        return $this;
-    }
-
-
-    /**
-     * Test if the object belongs to a category
-     *
-     * @param string $categoryKey Key of the category
-     * @param string $defaultValue Default value if not set
-     *
-     * @return mixed 1 if object belongs the category
-     */
-    public function getCategory($categoryKey = '', $defaultValue = '')
-    {
-        if ($categoryKey == 'other' && strpos($this->category, "1") === false) {
-            return 1;
-        }
-        return Utils::getJsonAttr($this->category, $categoryKey, $defaultValue);
-    }
-
-    /**
-     * Define if the object belongs to a category
-     *
-     * @param string $categoryKey Key of the category
-     * @param int $belong 1 if eqLogic belong the category or 0
-     *
-     * @return $this
-     */
-    public function setCategory($categoryKey, $belong)
-    {
-        if ($this->getCategory($categoryKey) != $belong) {
-            $this->_needRefreshWidget = true;
-        }
-        $category = Utils::setJsonAttr($this->category, $categoryKey, $belong);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->category, $category);
-        $this->category = $category;
-        return $this;
-    }
-
-    /**
-     * Get primary category
-     *
-     * @return string
-     */
-    public function getPrimaryCategory()
-    {
-        $categoryOrder = [
-            EqLogicCategory::SECURITY,
-            EqLogicCategory::HEATING,
-            EqLogicCategory::LIGHT,
-            EqLogicCategory::AUTOMATISM,
-            EqLogicCategory::ENERGY,
-            EqLogicCategory::MULTIMEDIA
-            ];
-        foreach ($categoryOrder as $categoryCode) {
-            if ($this->getCategory($categoryCode, 0) == 1) {
-                return $categoryCode;
-            }
-        }
-        return '';
-    }
-
-    /**
-     * Get display parameters
-     *
-     * @param string $displayKey Parameter key
-     * @param mixed $defaultValue Default value if not defined
-     *
-     * @return mixed Parameters depends of the key
-     */
-    public function getDisplay($displayKey = '', $defaultValue = '')
-    {
-        return Utils::getJsonAttr($this->display, $displayKey, $defaultValue);
-    }
-
-    /**
-     * Set a display parameters
-     *
-     * @param string $displayKey Key for storage
-     * @param mixed $displayValue Data to store
-     *
-     * @return $this
-     */
-    public function setDisplay($displayKey, $displayValue)
-    {
-        if ($this->getDisplay($displayKey) != $displayValue) {
-            $this->_needRefreshWidget = true;
-        }
-        $display = Utils::setJsonAttr($this->display, $displayKey, $displayValue);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->display, $display);
-        $this->display = $display;
-
         return $this;
     }
 
@@ -583,31 +271,6 @@ class EqLogic implements EntityInterface
     }
 
     /**
-     * Get list of eqLogic tags
-     *
-     * @return mixed List of eqLogic tags
-     */
-    public function getTags()
-    {
-        return $this->tags;
-    }
-
-    /**
-     * Define list of eqLogics tags
-     *
-     * @param mixed $tags List of tags
-     *
-     * @return $this
-     */
-    public function setTags($tags)
-    {
-        $_tags = str_replace(["'", '<', '>'], "", $tags);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->tags, $_tags);
-        $this->tags = $_tags;
-        return $this;
-    }
-
-    /**
      * TODO: Unused
      * @param null $defaultValue
      * @return int|null
@@ -621,7 +284,7 @@ class EqLogic implements EntityInterface
     }
 
     /**
-     * TODO: Unused
+     * @TODO: Unused
      * @param $_eqReal_id
      * @return $this
      */
@@ -633,7 +296,7 @@ class EqLogic implements EntityInterface
     }
 
     /**
-     * TODO: Unused
+     * @TODO: Unused
      * @return array|mixed|null
      * @throws CoreException
      * @throws \ReflectionException
@@ -641,109 +304,6 @@ class EqLogic implements EntityInterface
     public function getEqReal()
     {
         return EqRealManager::byId($this->eqReal_id);
-    }
-
-
-    /**
-     * Get id of the attached object
-     *
-     * @return int Id of the attached object
-     */
-    public function getObject_id()
-    {
-        return $this->object_id;
-    }
-
-    /**
-     * Set attached room id
-     *
-     * @param int $object_id Room id
-     *
-     * @return $this
-     */
-    public function setObject_id($object_id = null)
-    {
-        $object_id = (!is_numeric($object_id)) ? null : $object_id;
-        $this->_changed = Utils::attrChanged($this->_changed, $this->object_id, $object_id);
-        $this->object_id = $object_id;
-        return $this;
-    }
-
-
-    /**
-     * Get attached object
-     *
-     * @return JeeObject|null Attached object or null
-     *
-     * @throws \Exception
-     */
-    public function getObject()
-    {
-        if ($this->_object === null) {
-            $this->setObject(JeeObjectManager::byId($this->object_id));
-        }
-        return $this->_object;
-    }
-
-
-    /**
-     * Set attached object
-     *
-     * @param JeeObject $_object Object to link
-     *
-     * @return $this
-     */
-    public function setObject($_object)
-    {
-        $this->_object = $_object;
-        return $this;
-    }
-
-    /**
-     * Get debug state
-     *
-     * @return bool True if debug is activated
-     */
-    public function getDebug()
-    {
-        return $this->_debug;
-    }
-
-    /**
-     * Set debug state
-     *
-     * @param bool $newDebugState True for activate debug
-     */
-    public function setDebug($newDebugState)
-    {
-        if ($newDebugState) {
-            echo "Mode debug activé\n";
-        }
-        $this->_debug = $newDebugState;
-    }
-
-
-    /**
-     * Get changed data state
-     *
-     * @return bool True if a data changed since last save
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * Set changed data state
-     *
-     * @param bool $newChangedStatus New data changed state
-     *
-     * @return $this
-     */
-    public function setChanged($newChangedStatus)
-    {
-        $this->_changed = $newChangedStatus;
-        return $this;
     }
 
     /**
@@ -763,6 +323,30 @@ class EqLogic implements EntityInterface
     }
 
     /**
+     * Get Id
+     *
+     * @return int EqLogic id
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Change id
+     *
+     * @param int|string $newId New id or '' if you want to reset id
+     *
+     * @return $this
+     */
+    public function setId($newId)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $newId);
+        $this->id = $newId;
+        return $this;
+    }
+
+    /**
      * Store data in cache
      *
      * @param string $cacheKey Key of the data
@@ -773,6 +357,297 @@ class EqLogic implements EntityInterface
     public function setCache($cacheKey, $cacheValue = null)
     {
         CacheManager::set(CacheKey::EQLOGIC_CACHE_ATTR . $this->getId(), Utils::setJsonAttr(CacheManager::byKey(CacheKey::EQLOGIC_CACHE_ATTR . $this->getId())->getValue(), $cacheKey, $cacheValue));
+    }
+
+    /**
+     * Get HTML code for battery widget
+     *
+     * @param string $display Display type (dashboard or mobile)
+     *
+     * @return string HTML code
+     *
+     * @throws \Exception
+     */
+    public function batteryWidget(string $display = EqLogicViewType::DASHBOARD): string
+    {
+        $level = 'good';
+        $numericLevel = '3';
+        $batteryType = $this->getConfiguration(EqLogicConfigKey::BATTERY_TYPE, 'none');
+        $batteryTime = $this->getConfiguration(EqLogicConfigKey::BATTERY_TIME, 'NA');
+        $lastBatteryCheck = 'NA';
+        if ($batteryTime !== 'NA') {
+            $lastBatteryCheck = round((strtotime(date(DateFormat::FULL_DAY)) - strtotime(date(DateFormat::FULL_DAY, strtotime($batteryTime)))) / 86400, 1);
+        }
+        if (strpos($batteryType, ' ') !== false) {
+            $batteryType = substr(strrchr($batteryType, " "), 1);
+        }
+        $plugins = $this->getEqType_name();
+        $attachedObject = __('Aucun');
+        if (is_object($this->getObject())) {
+            $attachedObject = $this->getObject()->getName();
+        }
+        if ($this->getStatus('battery') <= $this->getConfiguration(EqLogicConfigKey::BATTERY_DANGER_THRESHOLD, ConfigManager::byKey('battery::danger'))) {
+            $level = 'critical';
+            $numericLevel = '0';
+        } else if ($this->getStatus('battery') <= $this->getConfiguration(EqLogicConfigKey::BATTERY_WARNING_THRESHOLD, ConfigManager::byKey('battery::warning'))) {
+            $level = 'warning';
+            $numericLevel = '1';
+        } else if ($this->getStatus('battery') <= 75) {
+            $numericLevel = '2';
+        }
+        $cssClassAttr = $level . ' ' . $batteryType . ' ' . $plugins . ' ' . $attachedObject;
+        $idAttr = $level . '__' . $batteryType . '__' . $plugins . '__' . $attachedObject;
+        $html = '<div id="' . $idAttr . '" class="eqLogic eqLogic-widget eqLogic-battery ' . $cssClassAttr . '">';
+        if ($display == 'mobile') {
+            $html .= '<span class="eqLogic-name">' . $this->getName() . '</span>';
+        } else {
+            $html .= '<a class="eqLogic-name" href="' . $this->getLinkToConfiguration() . '">' . $this->getName() . '</a>';
+        }
+        $html .= '<span class="eqLogic-place">' . $attachedObject . '</span>';
+        $html .= '<div class="eqLogic-battery-icon"><i class="icon nextdom-battery' . $numericLevel . ' tooltips" title="' . $this->getStatus('battery', -2) . '%"></i></div>';
+        $html .= '<div class="eqLogic-percent">' . $this->getStatus('battery', -2) . '%</div>';
+        $html .= '<div>' . __('Le') . ' ' . date("Y-m-d H:i:s", strtotime($this->getStatus('batteryDatetime', __('inconnue')))) . '</div>';
+        if ($this->getConfiguration('battery_type', '') != '') {
+            $html .= '<span class="informations pull-right" title="Piles">' . $this->getConfiguration('battery_type', '') . '</span>';
+        }
+        $html .= '<span class="informations pull-left" title="Plugin">' . ucfirst($this->getEqType_name()) . '</span>';
+        if ($this->getConfiguration(EqLogicConfigKey::BATTERY_DANGER_THRESHOLD) != '' || $this->getConfiguration(EqLogicConfigKey::BATTERY_WARNING_THRESHOLD) != '') {
+            $html .= '<i class="manual-threshold icon techno-fingerprint41 pull-right" title="Seuil manuel défini"></i>';
+        }
+        if ($batteryTime != 'NA') {
+            $html .= '<i class="icon divers-calendar2 pull-right eqLogic-calendar" title="Pile(s) changée(s) il y a ' . $lastBatteryCheck . ' jour(s) (' . $batteryTime . ')"> (' . $lastBatteryCheck . 'j)</i>';
+        } else {
+            $html .= '<i class="icon divers-calendar2 pull-right eqLogic-calendar" title="Pas de date de changement de pile(s) renseignée"></i>';
+        }
+        return $html . '</div>';
+    }
+
+    /**
+     * Get object specific configuration data
+     *
+     * @param string $configKey Configuration key
+     * @param string $defaultValue Default value if not found
+     *
+     * @return mixed
+     */
+    public function getConfiguration($configKey = '', $defaultValue = '')
+    {
+        return Utils::getJsonAttr($this->configuration, $configKey, $defaultValue);
+    }
+
+    /**
+     * Set object specific configuration data
+     *
+     * @param string $configKey Configuration key
+     * @param string $configValue Value to define
+     *
+     * @return $this
+     */
+    public function setConfiguration($configKey, $configValue)
+    {
+        if (in_array($configKey, [EqLogicConfigKey::BATTERY_WARNING_THRESHOLD, EqLogicConfigKey::BATTERY_DANGER_THRESHOLD]) &&
+            $this->getConfiguration($configKey, '') != $configValue) {
+            $this->_batteryUpdated = true;
+        }
+        $configuration = Utils::setJsonAttr($this->configuration, $configKey, $configValue);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
+        $this->configuration = $configuration;
+        return $this;
+    }
+
+    /**
+     * Get eqLogic type name (linked plugin)
+     *
+     * @return string EqLogic type (plugin ID)
+     */
+    public function getEqType_name()
+    {
+        return $this->eqType_name;
+    }
+
+    /**
+     * Set eqLogic type name (linked plugin)
+     *
+     * @param string $eqTypeName EqLogic type (plugin ID)
+     *
+     * @return $this
+     */
+    public function setEqType_name($eqTypeName)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->eqType_name, $eqTypeName);
+        $this->eqType_name = $eqTypeName;
+        return $this;
+    }
+
+    /**
+     * Get attached object
+     *
+     * @return JeeObject|null Attached object or null
+     *
+     * @throws \Exception
+     */
+    public function getObject()
+    {
+        if ($this->_object === null) {
+            $this->setObject(JeeObjectManager::byId($this->object_id));
+        }
+        return $this->_object;
+    }
+
+    /**
+     * Set attached object
+     *
+     * @param JeeObject $_object Object to link
+     *
+     * @return $this
+     */
+    public function setObject($_object)
+    {
+        $this->_object = $_object;
+        return $this;
+    }
+
+    /**
+     * Get status from cache
+     *
+     * @param string $statusKey Status key
+     * @param string $defaultValue Default value of the status
+     *
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getStatus($statusKey = '', $defaultValue = '')
+    {
+        $status = CacheManager::byKey(CacheKey::EQLOGIC_STATUS_ATTR . $this->getId())->getValue();
+        return Utils::getJsonAttr($status, $statusKey, $defaultValue);
+    }
+
+    /**
+     * Get EqLogic name
+     *
+     * @return string EqLogic name
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set eqLogic name
+     *
+     * @param string $name New name
+     *
+     * @return $this
+     */
+    public function setName($name)
+    {
+        // Remove forbidden characters
+        $name = str_replace(['&', '#', ']', '[', '%', "'", "\\", "/"], '', $name);
+        if ($name !== $this->name) {
+            $this->_needRefreshWidget = true;
+            $this->_changed = true;
+        }
+        $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * Get configuration URL
+     *
+     * @return string Configuration URL
+     */
+    public function getLinkToConfiguration()
+    {
+        return 'index.php?v=d&p=' . $this->getEqType_name() . '&m=' . $this->getEqType_name() . '&id=' . $this->getId();
+    }
+
+    /**
+     * Check and update a command information
+     *
+     * @param string|Cmd $logicalId Logical id or cmd object
+     * @param mixed $newValue Value to update
+     * @param null $updateEventTime Date of the update
+     *
+     * @return bool True if new value is different of the old value.
+     *
+     * @throws \Exception
+     */
+    public function checkAndUpdateCmd($logicalId, $newValue, $updateEventTime = null)
+    {
+        if (!$this->isEnabled()) {
+            return false;
+        }
+        if (is_object($logicalId)) {
+            $cmd = $logicalId;
+        } else {
+            $cmd = $this->getCmd(CmdType::INFO, $logicalId);
+        }
+        if (!is_object($cmd)) {
+            return false;
+        }
+        $oldValue = $cmd->execCmd();
+        if (($oldValue != $cmd->formatValue($newValue)) || $oldValue === '') {
+            $cmd->event($newValue, $updateEventTime);
+            return true;
+        }
+        if ($updateEventTime !== null && $updateEventTime !== false) {
+            if (strtotime($cmd->getCollectDate()) < strtotime($updateEventTime)) {
+                $cmd->event($newValue, $updateEventTime);
+                return true;
+            }
+        } else if ($cmd->getConfiguration(EqLogicConfigKey::REPEAT_EVENT_MANAGEMENT, 'auto') == 'always') {
+            $cmd->event($newValue, $updateEventTime);
+            return true;
+        }
+        $cmd->setCache('collectDate', date(DateFormat::FULL));
+        return false;
+    }
+
+    /**
+     * Get eqLogic enable status
+     *
+     * @return bool True if eqLogic is enabled
+     */
+    public function isEnabled()
+    {
+        return $this->getIsEnable() == 1;
+    }
+
+    /**
+     * Get eqLogic enabled state
+     *
+     * @param int $defaultValue Default value if not set
+     *
+     * @return int
+     */
+    public function getIsEnable($defaultValue = 0)
+    {
+        if ($this->isEnable == '' || !is_numeric($this->isEnable)) {
+            return $defaultValue;
+        }
+        return $this->isEnable;
+    }
+
+    /**
+     * Set if the eqLogic is enabled
+     *
+     * @param int $isEnable 1 if eqLogic is enabled or 0 to disable
+     *
+     * @return $this
+     *
+     * @throws \Exception
+     */
+    public function setIsEnable($isEnable)
+    {
+        if ($this->isEnable != $isEnable) {
+            $this->_needRefreshWidget = true;
+            $this->_changed = true;
+        }
+        if ($isEnable) {
+            $this->setStatus(['lastCommunication' => date(DateFormat::FULL), 'timeout' => 0]);
+        }
+        $this->isEnable = $isEnable;
+        return $this;
     }
 
     /**
@@ -811,223 +686,6 @@ class EqLogic implements EntityInterface
             $this->_cmds[$logicalId . '.' . $multiple . '.' . $cmdType] = $result;
         }
         return $result;
-    }
-
-    /**
-     * Get status from cache
-     *
-     * @param string $statusKey Status key
-     * @param string $defaultValue Default value of the status
-     *
-     * @return mixed
-     * @throws \Exception
-     */
-    public function getStatus($statusKey = '', $defaultValue = '')
-    {
-        $status = CacheManager::byKey(CacheKey::EQLOGIC_STATUS_ATTR . $this->getId())->getValue();
-        return Utils::getJsonAttr($status, $statusKey, $defaultValue);
-    }
-
-    /**
-     * Get HTML code for battery widget
-     *
-     * @param string $display Display type (dashboard or mobile)
-     *
-     * @return string HTML code
-     *
-     * @throws \Exception
-     */
-    public function batteryWidget(string $display = EqLogicViewType::DASHBOARD): string
-    {
-        $level = 'good';
-        $numericLevel = '3';
-        $batteryType = $this->getConfiguration(EqLogicConfigKey::BATTERY_TYPE, 'none');
-        $batteryTime = $this->getConfiguration(EqLogicConfigKey::BATTERY_TIME, 'NA');
-        $lastBatteryCheck = 'NA';
-        if ($batteryTime !== 'NA') {
-            $lastBatteryCheck = round((strtotime(date(DateFormat::FULL_DAY)) - strtotime(date(DateFormat::FULL_DAY, strtotime($batteryTime)))) / 86400, 1);
-        }
-        if (strpos($batteryType, ' ') !== false) {
-            $batteryType = substr(strrchr($batteryType, " "), 1);
-        }
-        $plugins = $this->getEqType_name();
-        $attachedObject = 'Aucun';
-        if (is_object($this->getObject())) {
-            $attachedObject = $this->getObject()->getName();
-        }
-        if ($this->getStatus('battery') <= $this->getConfiguration(EqLogicConfigKey::BATTERY_DANGER_THRESHOLD, ConfigManager::byKey('battery::danger'))) {
-            $level = 'critical';
-            $numericLevel = '0';
-        } else if ($this->getStatus('battery') <= $this->getConfiguration(EqLogicConfigKey::BATTERY_WARNING_THRESHOLD, ConfigManager::byKey('battery::warning'))) {
-            $level = 'warning';
-            $numericLevel = '1';
-        } else if ($this->getStatus('battery') <= 75) {
-            $numericLevel = '2';
-        }
-        $cssClassAttr = $level . ' ' . $batteryType . ' ' . $plugins . ' ' . $attachedObject;
-        $idAttr = $level . '__' . $batteryType . '__' . $plugins . '__' . $attachedObject;
-        $html = '<div id="' . $idAttr . '" class="eqLogic eqLogic-widget eqLogic-battery ' . $cssClassAttr . '">';
-        if ($display == 'mobile') {
-            $html .= '<span class="eqLogic-name">' . $this->getName() . '</span>';
-        } else {
-            $html .= '<a class="eqLogic-name" href="' . $this->getLinkToConfiguration() . '">' . $this->getName() . '</a>';
-        }
-        $html .= '<span class="eqLogic-place">' . $attachedObject . '</span>';
-        $html .= '<div class="eqLogic-battery-icon"><i class="icon nextdom-battery' . $numericLevel . ' tooltips" title="' . $this->getStatus('battery', -2) . '%"></i></div>';
-        $html .= '<div class="eqLogic-percent">' . $this->getStatus('battery', -2) . '%</div>';
-        $html .= '<div>' . __('Le') . ' ' . date("Y-m-d H:i:s", strtotime($this->getStatus('batteryDatetime', __('inconnue')))) . '</div>';
-        if ($this->getConfiguration('battery_type', '') != '') {
-            $html .= '<span class="informations pull-right" title="Piles">' . $this->getConfiguration('battery_type', '') . '</span>';
-        }
-        $html .= '<span class="informations pull-left" title="Plugin">' . ucfirst($this->getEqType_name()) . '</span>';
-        if ($this->getConfiguration(EqLogicConfigKey::BATTERY_DANGER_THRESHOLD) != '' || $this->getConfiguration(EqLogicConfigKey::BATTERY_WARNING_THRESHOLD) != '') {
-            $html .= '<i class="manual-threshold icon techno-fingerprint41 pull-right" title="Seuil manuel défini"></i>';
-        }
-        if ($batteryTime != 'NA') {
-            $html .= '<i class="icon divers-calendar2 pull-right eqLogic-calendar" title="Pile(s) changée(s) il y a ' . $lastBatteryCheck . ' jour(s) (' . $batteryTime . ')"> (' . $lastBatteryCheck . 'j)</i>';
-        } else {
-            $html .= '<i class="icon divers-calendar2 pull-right eqLogic-calendar" title="Pas de date de changement de pile(s) renseignée"></i>';
-        }
-        $html .= '</div>';
-        return $html;
-    }
-
-    /**
-     * Update battery status
-     *
-     * @param string $percent
-     * @param string $batteyDateTime
-     *
-     * @throws \Exception
-     */
-    public function batteryStatus($percent = '', $batteyDateTime = '')
-    {
-        if ($this->getConfiguration(EqLogicConfigKey::NO_BATTERY_CHECK, 0) == 1) {
-            return;
-        }
-        if ($percent === '') {
-            $percent = $this->getStatus('battery');
-            $batteyDateTime = $this->getStatus('batteryDatetime');
-        }
-        if ($percent > 100) {
-            $percent = 100;
-        }
-        if ($percent < 0) {
-            $percent = 0;
-        }
-        $warningThreshold = $this->getConfiguration(EqLogicConfigKey::BATTERY_WARNING_THRESHOLD, ConfigManager::byKey('battery::warning'));
-        $dangerThreshold = $this->getConfiguration(EqLogicConfigKey::BATTERY_DANGER_THRESHOLD, ConfigManager::byKey('battery::danger'));
-        if ($percent != '' && $percent < $dangerThreshold) {
-            $prevStatus = $this->getStatus(BatteryStatus::DANGER, 0);
-            $logicalId = 'lowBattery' . $this->getId();
-            $message = 'Le module ' . $this->getEqType_name() . ' ' . $this->getHumanName() . ' a moins de ' . $dangerThreshold . '% de batterie (niveau danger avec ' . $percent . '% de batterie)';
-            if ($this->getConfiguration('battery_type') != '') {
-                $message .= ' (' . $this->getConfiguration('battery_type') . ')';
-            }
-            $this->setStatus(BatteryStatus::DANGER, 1);
-            if ($prevStatus == 0) {
-                if (ConfigManager::ByKey('alert::addMessageOnBatterydanger') == 1) {
-                    MessageManager::add($this->getEqType_name(), $message, '', $logicalId);
-                }
-                $cmds = explode(('&&'), ConfigManager::byKey('alert::batterydangerCmd'));
-                if (count($cmds) > 0 && trim(ConfigManager::byKey('alert::batterydangerCmd')) != '') {
-                    foreach ($cmds as $id) {
-                        $cmd = CmdManager::byId(str_replace('#', '', $id));
-                        if (is_object($cmd)) {
-                            $cmd->execCmd([
-                                'title' => __('[' . ConfigManager::byKey('name', 'core', 'NEXTDOM') . '] ') . $message,
-                                'message' => ConfigManager::byKey('name', 'core', 'NEXTDOM') . ' : ' . $message,
-                            ]);
-                        }
-                    }
-                }
-            }
-        } else if ($percent != '' && $percent < $warningThreshold) {
-            $prevStatus = $this->getStatus(BatteryStatus::WARNING, 0);
-            $logicalId = 'warningBattery' . $this->getId();
-            $message = 'Le module ' . $this->getEqType_name() . ' ' . $this->getHumanName() . ' a moins de ' . $warningThreshold . '% de batterie (niveau warning avec ' . $percent . '% de batterie)';
-            if ($this->getConfiguration('battery_type') != '') {
-                $message .= ' (' . $this->getConfiguration('battery_type') . ')';
-            }
-            $this->setStatus(BatteryStatus::WARNING, 1);
-            $this->setStatus(BatteryStatus::DANGER, 0);
-            if ($prevStatus == 0) {
-                if (ConfigManager::ByKey('alert::addMessageOnBatterywarning') == 1) {
-                    MessageManager::add($this->getEqType_name(), $message, '', $logicalId);
-                }
-                $cmds = explode(('&&'), ConfigManager::byKey('alert::batterywarningCmd'));
-                if (count($cmds) > 0 && trim(ConfigManager::byKey('alert::batterywarningCmd')) != '') {
-                    foreach ($cmds as $id) {
-                        $cmd = CmdManager::byId(str_replace('#', '', $id));
-                        if (is_object($cmd)) {
-                            $cmd->execCmd([
-                                'title' => __('[' . ConfigManager::byKey('name', 'core', 'NEXTDOM') . '] ') . $message,
-                                'message' => ConfigManager::byKey('name', 'core', 'NEXTDOM') . ' : ' . $message,
-                            ]);
-                        }
-                    }
-                }
-            }
-        } else {
-            MessageManager::removeByPluginLogicalId($this->getEqType_name(), 'warningBattery' . $this->getId());
-            MessageManager::removeByPluginLogicalId($this->getEqType_name(), 'lowBattery' . $this->getId());
-            $this->setStatus(BatteryStatus::DANGER, 0);
-            $this->setStatus(BatteryStatus::WARNING, 0);
-        }
-
-        $this->setStatus(['battery' => $percent, 'batteryDatetime' => ($batteyDateTime != '') ? $batteyDateTime : date(DateFormat::FULL)]);
-    }
-
-    /**
-     * Get configuration URL
-     *
-     * @return string Configuration URL
-     */
-    public function getLinkToConfiguration()
-    {
-        return 'index.php?v=d&p=' . $this->getEqType_name() . '&m=' . $this->getEqType_name() . '&id=' . $this->getId();
-    }
-
-    /**
-     * Check and update a command information
-     *
-     * @param string|Cmd $logicalId Logical id or cmd object
-     * @param mixed $newValue Value to update
-     * @param null $updateEventTime Date of the update
-     *
-     * @return bool True if new value is different of the old value.
-     *
-     * @throws \Exception
-     */
-    public function checkAndUpdateCmd($logicalId, $newValue, $updateEventTime = null)
-    {
-        if ($this->getIsEnable() == 0) {
-            return false;
-        }
-        if (is_object($logicalId)) {
-            $cmd = $logicalId;
-        } else {
-            $cmd = $this->getCmd('info', $logicalId);
-        }
-        if (!is_object($cmd)) {
-            return false;
-        }
-        $oldValue = $cmd->execCmd();
-        if (($oldValue != $cmd->formatValue($newValue)) || $oldValue === '') {
-            $cmd->event($newValue, $updateEventTime);
-            return true;
-        }
-        if ($updateEventTime !== null && $updateEventTime !== false) {
-            if (strtotime($cmd->getCollectDate()) < strtotime($updateEventTime)) {
-                $cmd->event($newValue, $updateEventTime);
-                return true;
-            }
-        } else if ($cmd->getConfiguration(EqLogicConfigKey::REPEAT_EVENT_MANAGEMENT, 'auto') == 'always') {
-            $cmd->event($newValue, $updateEventTime);
-            return true;
-        }
-        $cmd->setCache('collectDate', date(DateFormat::FULL));
-        return false;
     }
 
     /**
@@ -1171,6 +829,29 @@ class EqLogic implements EntityInterface
     }
 
     /**
+     * Get changed data state
+     *
+     * @return bool True if a data changed since last save
+     */
+    public function getChanged()
+    {
+        return $this->_changed;
+    }
+
+    /**
+     * Set changed data state
+     *
+     * @param bool $newChangedStatus New data changed state
+     *
+     * @return $this
+     */
+    public function setChanged($newChangedStatus)
+    {
+        $this->_changed = $newChangedStatus;
+        return $this;
+    }
+
+    /**
      * Remove widget render in cache
      */
     public function emptyCacheWidget()
@@ -1187,6 +868,39 @@ class EqLogic implements EntityInterface
     }
 
     /**
+     * Get display parameters
+     *
+     * @param string $displayKey Parameter key
+     * @param mixed $defaultValue Default value if not defined
+     *
+     * @return mixed Parameters depends of the key
+     */
+    public function getDisplay($displayKey = '', $defaultValue = '')
+    {
+        return Utils::getJsonAttr($this->display, $displayKey, $defaultValue);
+    }
+
+    /**
+     * Set a display parameters
+     *
+     * @param string $displayKey Key for storage
+     * @param mixed $displayValue Data to store
+     *
+     * @return $this
+     */
+    public function setDisplay($displayKey, $displayValue)
+    {
+        if ($this->getDisplay($displayKey) != $displayValue) {
+            $this->_needRefreshWidget = true;
+        }
+        $display = Utils::setJsonAttr($this->display, $displayKey, $displayValue);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->display, $display);
+        $this->display = $display;
+
+        return $this;
+    }
+
+    /**
      * Refresh widget if change occurs since la render
      */
     public function refreshWidget()
@@ -1194,6 +908,92 @@ class EqLogic implements EntityInterface
         $this->_needRefreshWidget = false;
         $this->emptyCacheWidget();
         EventManager::add('eqLogic::update', ['eqLogic_id' => $this->getId()]);
+    }
+
+    /**
+     * Update battery status
+     *
+     * @param string $percent
+     * @param string $batteyDateTime
+     *
+     * @throws \Exception
+     */
+    public function batteryStatus($percent = '', $batteyDateTime = '')
+    {
+        if ($this->getConfiguration(EqLogicConfigKey::NO_BATTERY_CHECK, 0) == 1) {
+            return;
+        }
+        if ($percent === '') {
+            $percent = $this->getStatus('battery');
+            $batteyDateTime = $this->getStatus('batteryDatetime');
+        }
+        if ($percent > 100) {
+            $percent = 100;
+        }
+        if ($percent < 0) {
+            $percent = 0;
+        }
+        $warningThreshold = $this->getConfiguration(EqLogicConfigKey::BATTERY_WARNING_THRESHOLD, ConfigManager::byKey('battery::warning'));
+        $dangerThreshold = $this->getConfiguration(EqLogicConfigKey::BATTERY_DANGER_THRESHOLD, ConfigManager::byKey('battery::danger'));
+        if ($percent != '' && $percent < $dangerThreshold) {
+            $prevStatus = $this->getStatus(BatteryStatus::DANGER, 0);
+            $logicalId = 'lowBattery' . $this->getId();
+            $message = 'Le module ' . $this->getEqType_name() . ' ' . $this->getHumanName() . ' a moins de ' . $dangerThreshold . '% de batterie (niveau danger avec ' . $percent . '% de batterie)';
+            if ($this->getConfiguration('battery_type') != '') {
+                $message .= ' (' . $this->getConfiguration('battery_type') . ')';
+            }
+            $this->setStatus(BatteryStatus::DANGER, 1);
+            if ($prevStatus == 0) {
+                if (ConfigManager::ByKey('alert::addMessageOnBatterydanger') == 1) {
+                    MessageManager::add($this->getEqType_name(), $message, '', $logicalId);
+                }
+                $cmds = explode(('&&'), ConfigManager::byKey('alert::batterydangerCmd'));
+                if (count($cmds) > 0 && trim(ConfigManager::byKey('alert::batterydangerCmd')) != '') {
+                    foreach ($cmds as $id) {
+                        $cmd = CmdManager::byId(str_replace('#', '', $id));
+                        if (is_object($cmd)) {
+                            $cmd->execCmd([
+                                'title' => __('[' . ConfigManager::byKey('name', 'core', 'NEXTDOM') . '] ') . $message,
+                                'message' => ConfigManager::byKey('name', 'core', 'NEXTDOM') . ' : ' . $message,
+                            ]);
+                        }
+                    }
+                }
+            }
+        } else if ($percent != '' && $percent < $warningThreshold) {
+            $prevStatus = $this->getStatus(BatteryStatus::WARNING, 0);
+            $logicalId = 'warningBattery' . $this->getId();
+            $message = 'Le module ' . $this->getEqType_name() . ' ' . $this->getHumanName() . ' a moins de ' . $warningThreshold . '% de batterie (niveau warning avec ' . $percent . '% de batterie)';
+            if ($this->getConfiguration('battery_type') != '') {
+                $message .= ' (' . $this->getConfiguration('battery_type') . ')';
+            }
+            $this->setStatus(BatteryStatus::WARNING, 1);
+            $this->setStatus(BatteryStatus::DANGER, 0);
+            if ($prevStatus == 0) {
+                if (ConfigManager::ByKey('alert::addMessageOnBatterywarning') == 1) {
+                    MessageManager::add($this->getEqType_name(), $message, '', $logicalId);
+                }
+                $cmds = explode(('&&'), ConfigManager::byKey('alert::batterywarningCmd'));
+                if (count($cmds) > 0 && trim(ConfigManager::byKey('alert::batterywarningCmd')) != '') {
+                    foreach ($cmds as $id) {
+                        $cmd = CmdManager::byId(str_replace('#', '', $id));
+                        if (is_object($cmd)) {
+                            $cmd->execCmd([
+                                'title' => __('[' . ConfigManager::byKey('name', 'core', 'NEXTDOM') . '] ') . $message,
+                                'message' => ConfigManager::byKey('name', 'core', 'NEXTDOM') . ' : ' . $message,
+                            ]);
+                        }
+                    }
+                }
+            }
+        } else {
+            MessageManager::removeByPluginLogicalId($this->getEqType_name(), 'warningBattery' . $this->getId());
+            MessageManager::removeByPluginLogicalId($this->getEqType_name(), 'lowBattery' . $this->getId());
+            $this->setStatus(BatteryStatus::DANGER, 0);
+            $this->setStatus(BatteryStatus::WARNING, 0);
+        }
+
+        $this->setStatus(['battery' => $percent, 'batteryDatetime' => ($batteyDateTime != '') ? $batteyDateTime : date(DateFormat::FULL)]);
     }
 
     /**
@@ -1270,11 +1070,117 @@ class EqLogic implements EntityInterface
     }
 
     /**
+     * Get eqLogic timeout
+     *
+     * @param int|string $defaultValue Default value if timeout is not define
+     *
+     * @return int|null
+     */
+    public function getTimeout($defaultValue = null)
+    {
+        if ($this->timeout == '' || !is_numeric($this->timeout)) {
+            return $defaultValue;
+        }
+        return $this->timeout;
+    }
+
+    /**
+     * Get eqLogic timeout
+     *
+     * @param int $timeout Timeout
+     *
+     * @return $this
+     */
+    public function setTimeout($timeout)
+    {
+        if ($timeout == '' || is_nan(intval($timeout)) || $timeout < 1) {
+            $timeout = null;
+        }
+        if ($timeout != $this->getTimeout()) {
+            $this->_timeoutUpdated = true;
+            $this->_changed = true;
+        }
+        $this->timeout = $timeout;
+        return $this;
+    }
+
+    /**
      * @return bool
      */
     public function hasOnlyEventOnlyCmd()
     {
         return true;
+    }
+
+    /**
+     * Get HTML code depends of the view
+     *
+     * @param string $viewType Type of view : mobile, dashboard, scenario
+     *
+     * @return array|mixed
+     *
+     * @throws CoreException
+     * @throws \NextDom\Exceptions\OperatingSystemException
+     * @throws \ReflectionException
+     */
+    public function toHtml($viewType = EqLogicViewType::DASHBOARD)
+    {
+        $replace = $this->preToHtml($viewType);
+        if (!is_array($replace)) {
+            return $replace;
+        }
+        $version = NextDomHelper::versionAlias($viewType);
+
+        if ($this->getDisplay('layout::' . $version) == 'table') {
+            $replace['#eqLogic_class#'] = 'eqLogic_layout_table';
+            $table = EqLogicManager::generateHtmlTable($this->getDisplay('layout::' . $version . '::table::nbLine', 1), $this->getDisplay('layout::' . $version . '::table::nbColumn', 1), $this->getDisplay('layout::' . $version . '::table::parameters'));
+            $br_before = 0;
+            foreach ($this->getCmd(null, null, true) as $cmd) {
+                if (isset($replace['#refresh_id#']) && $cmd->getId() == $replace['#refresh_id#']) {
+                    continue;
+                }
+                $tag = '#cmd::' . $this->getDisplay('layout::' . $version . '::table::cmd::' . $cmd->getId() . '::line', 1) . '::' . $this->getDisplay('layout::' . $version . '::table::cmd::' . $cmd->getId() . '::column', 1) . '#';
+                if ($br_before == 0 && $cmd->getDisplay('forceReturnLineBefore', 0) == 1) {
+                    $table['tag'][$tag] .= '<br/>';
+                }
+                $table['tag'][$tag] .= $cmd->toHtml($viewType, '', $replace['#cmd-background-color#']);
+                $br_before = 0;
+                if ($cmd->getDisplay('forceReturnLineAfter', 0) == 1) {
+                    $table['tag'][$tag] .= '<br/>';
+                    $br_before = 1;
+                }
+            }
+            $replace['#cmd#'] = Utils::templateReplace($table['tag'], $table['html']);
+        } else {
+            $replace['#eqLogic_class#'] = 'eqLogic_layout_default';
+            $cmd_html = '';
+            $br_before = 0;
+            foreach ($this->getCmd(null, null, true) as $cmd) {
+                if (isset($replace['#refresh_id#']) && $cmd->getId() == $replace['#refresh_id#']) {
+                    continue;
+                }
+                if ($br_before == 0 && $cmd->getDisplay('forceReturnLineBefore', 0) == 1) {
+                    $cmd_html .= '<br/>';
+                }
+                $cmd_html .= $cmd->toHtml($viewType, '', $replace['#cmd-background-color#']);
+                $br_before = 0;
+                if ($cmd->getDisplay('forceReturnLineAfter', 0) == 1) {
+                    $cmd_html .= '<br/>';
+                    $br_before = 1;
+                }
+            }
+            $replace['#cmd#'] = $cmd_html;
+        }
+
+        if (!isset(self::$_templateArray[$version])) {
+            $default_widgetTheme = ConfigManager::byKey('widget::theme');
+            if (isset($_SESSION) && is_object(UserManager::getStoredUser()) && UserManager::getStoredUser()->getOptions('widget::theme', null) !== null) {
+                $default_widgetTheme = UserManager::getStoredUser()->getOptions('widget::theme');
+            }
+            self::$_templateArray[$version] = FileSystemHelper::getCoreTemplateFileContent($version, 'eqLogic', '', $default_widgetTheme);
+
+        }
+        return $this->postToHtml($viewType, Utils::templateReplace($replace, self::$_templateArray[$version]));
     }
 
     /**
@@ -1297,7 +1203,7 @@ class EqLogic implements EntityInterface
         if (!$this->hasRight('r')) {
             return '';
         }
-        if (!$this->getIsEnable()) {
+        if (!$this->isEnabled()) {
             return '';
         }
         $version = NextDomHelper::versionAlias($viewType, false);
@@ -1377,15 +1283,15 @@ class EqLogic implements EntityInterface
         if ($this->getDisplay('border-radius-default' . $version, 1) != 1) {
             $replace['#border-radius#'] = $this->getDisplay('border-radius' . $version, '4') . 'px';
         }
-        $refresh_cmd = $this->getCmd('action', 'refresh');
+        $refresh_cmd = $this->getCmd(CmdType::ACTION, 'refresh');
         if (!is_object($refresh_cmd)) {
-            foreach ($this->getCmd('action') as $cmd) {
+            foreach ($this->getCmd(CmdType::ACTION) as $cmd) {
                 if ($cmd->getConfiguration('isRefreshCmd') == 1) {
                     $refresh_cmd = $cmd;
                 }
             }
         }
-        if (is_object($refresh_cmd) && $refresh_cmd->getIsVisible() == 1 && $refresh_cmd->getDisplay('showOn' . $version, 1) == 1) {
+        if (is_object($refresh_cmd) && $refresh_cmd->isVisible() && $refresh_cmd->getDisplay('showOn' . $version, 1) == 1) {
             $replace['#refresh_id#'] = $refresh_cmd->getId();
         }
         if ($this->getDisplay('showObjectNameOn' . $version, 0) == 1) {
@@ -1430,17 +1336,14 @@ class EqLogic implements EntityInterface
                     $replace['#' . $pKey . '#'] = $default;
                     continue;
                 }
-                switch ($parameter['type']) {
-                    case 'color':
-                        if ($this->getDisplay('advanceWidgetParameter' . $pKey . $version . '-transparent', 0) == 1) {
-                            $replace['#' . $pKey . '#'] = 'transparent';
-                        } else {
-                            $replace['#' . $pKey . '#'] = $this->getDisplay('advanceWidgetParameter' . $pKey . $version, $default);
-                        }
-                        break;
-                    default:
+                if ($parameter['type'] == 'color') {
+                    if ($this->getDisplay('advanceWidgetParameter' . $pKey . $version . '-transparent', 0) == 1) {
+                        $replace['#' . $pKey . '#'] = 'transparent';
+                    } else {
                         $replace['#' . $pKey . '#'] = $this->getDisplay('advanceWidgetParameter' . $pKey . $version, $default);
-                        break;
+                    }
+                } else {
+                    $replace['#' . $pKey . '#'] = $this->getDisplay('advanceWidgetParameter' . $pKey . $version, $default);
                 }
             }
         }
@@ -1455,99 +1358,6 @@ class EqLogic implements EntityInterface
             $replace['#opacity#'] = $opacity;
         }
         return $replace;
-    }
-
-    /**
-     * Store HTML view in cache
-     *
-     * @param string $viewType Define target view type
-     * @param string $htmlCode HTML code to store
-     *
-     * @return string $htmlCode
-     * @throws \Exception
-     */
-    public function postToHtml(string $viewType, string $htmlCode)
-    {
-        $user_id = '';
-        if (isset($_SESSION) && is_object(UserManager::getStoredUser())) {
-            $user_id = UserManager::getStoredUser()->getId();
-        }
-        CacheManager::set(CacheKey::WIDGET_HTML . $this->getId() . $viewType . $user_id, $htmlCode);
-        return $htmlCode;
-    }
-
-    /**
-     * Get HTML code depends of the view
-     *
-     * @param string $viewType Type of view : mobile, dashboard, scenario
-     *
-     * @return array|mixed
-     *
-     * @throws CoreException
-     * @throws \NextDom\Exceptions\OperatingSystemException
-     * @throws \ReflectionException
-     */
-    public function toHtml($viewType = EqLogicViewType::DASHBOARD)
-    {
-        $replace = $this->preToHtml($viewType);
-        if (!is_array($replace)) {
-            return $replace;
-        }
-        $version = NextDomHelper::versionAlias($viewType);
-
-        switch ($this->getDisplay('layout::' . $version)) {
-            case 'table':
-                $replace['#eqLogic_class#'] = 'eqLogic_layout_table';
-                $table = EqLogicManager::generateHtmlTable($this->getDisplay('layout::' . $version . '::table::nbLine', 1), $this->getDisplay('layout::' . $version . '::table::nbColumn', 1), $this->getDisplay('layout::' . $version . '::table::parameters'));
-                $br_before = 0;
-                foreach ($this->getCmd(null, null, true) as $cmd) {
-                    if (isset($replace['#refresh_id#']) && $cmd->getId() == $replace['#refresh_id#']) {
-                        continue;
-                    }
-                    $tag = '#cmd::' . $this->getDisplay('layout::' . $version . '::table::cmd::' . $cmd->getId() . '::line', 1) . '::' . $this->getDisplay('layout::' . $version . '::table::cmd::' . $cmd->getId() . '::column', 1) . '#';
-                    if ($br_before == 0 && $cmd->getDisplay('forceReturnLineBefore', 0) == 1) {
-                        $table['tag'][$tag] .= '<br/>';
-                    }
-                    $table['tag'][$tag] .= $cmd->toHtml($viewType, '', $replace['#cmd-background-color#']);
-                    $br_before = 0;
-                    if ($cmd->getDisplay('forceReturnLineAfter', 0) == 1) {
-                        $table['tag'][$tag] .= '<br/>';
-                        $br_before = 1;
-                    }
-                }
-                $replace['#cmd#'] = Utils::templateReplace($table['tag'], $table['html']);
-                break;
-            default:
-                $replace['#eqLogic_class#'] = 'eqLogic_layout_default';
-                $cmd_html = '';
-                $br_before = 0;
-                foreach ($this->getCmd(null, null, true) as $cmd) {
-                    if (isset($replace['#refresh_id#']) && $cmd->getId() == $replace['#refresh_id#']) {
-                        continue;
-                    }
-                    if ($br_before == 0 && $cmd->getDisplay('forceReturnLineBefore', 0) == 1) {
-                        $cmd_html .= '<br/>';
-                    }
-                    $cmd_html .= $cmd->toHtml($viewType, '', $replace['#cmd-background-color#']);
-                    $br_before = 0;
-                    if ($cmd->getDisplay('forceReturnLineAfter', 0) == 1) {
-                        $cmd_html .= '<br/>';
-                        $br_before = 1;
-                    }
-                }
-                $replace['#cmd#'] = $cmd_html;
-                break;
-        }
-
-        if (!isset(self::$_templateArray[$version])) {
-            $default_widgetTheme = ConfigManager::byKey('widget::theme');
-            if (isset($_SESSION) && is_object(UserManager::getStoredUser()) && UserManager::getStoredUser()->getOptions('widget::theme', null) !== null) {
-                $default_widgetTheme = UserManager::getStoredUser()->getOptions('widget::theme');
-            }
-            self::$_templateArray[$version] = FileSystemHelper::getCoreTemplateFileContent($version, 'eqLogic', '', $default_widgetTheme);
-
-        }
-        return $this->postToHtml($viewType, Utils::templateReplace($replace, self::$_templateArray[$version]));
     }
 
     /**
@@ -1581,6 +1391,113 @@ class EqLogic implements EntityInterface
     }
 
     /**
+     * Get list of eqLogic tags
+     *
+     * @return mixed List of eqLogic tags
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    /**
+     * Define list of eqLogics tags
+     *
+     * @param mixed $tags List of tags
+     *
+     * @return $this
+     */
+    public function setTags($tags)
+    {
+        $_tags = str_replace(["'", '<', '>'], "", $tags);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->tags, $_tags);
+        $this->tags = $_tags;
+        return $this;
+    }
+
+    /**
+     * Get primary category
+     *
+     * @return string
+     */
+    public function getPrimaryCategory()
+    {
+        $categoryOrder = [
+            EqLogicCategory::SECURITY,
+            EqLogicCategory::HEATING,
+            EqLogicCategory::LIGHT,
+            EqLogicCategory::AUTOMATISM,
+            EqLogicCategory::ENERGY,
+            EqLogicCategory::MULTIMEDIA
+        ];
+        foreach ($categoryOrder as $categoryCode) {
+            if ($this->getCategory($categoryCode, 0) == 1) {
+                return $categoryCode;
+            }
+        }
+        return '';
+    }
+
+    /**
+     * Test if the object belongs to a category
+     *
+     * @param string $categoryKey Key of the category
+     * @param string $defaultValue Default value if not set
+     *
+     * @return mixed 1 if object belongs the category
+     */
+    public function getCategory($categoryKey = '', $defaultValue = '')
+    {
+        if ($categoryKey == 'other' && strpos($this->category, "1") === false) {
+            return 1;
+        }
+        return Utils::getJsonAttr($this->category, $categoryKey, $defaultValue);
+    }
+
+    /**
+     * Define if the object belongs to a category
+     *
+     * @param string $categoryKey Key of the category
+     * @param int $belong 1 if eqLogic belong the category or 0
+     *
+     * @return $this
+     */
+    public function setCategory($categoryKey, $belong)
+    {
+        if ($this->getCategory($categoryKey) != $belong) {
+            $this->_needRefreshWidget = true;
+        }
+        $category = Utils::setJsonAttr($this->category, $categoryKey, $belong);
+        $this->_changed = Utils::attrChanged($this->_changed, $this->category, $category);
+        $this->category = $category;
+        return $this;
+    }
+
+    /**
+     * Set logicalId (Id used by plugins)
+     *
+     * @return string Logical Id
+     */
+    public function getLogicalId()
+    {
+        return $this->logicalId;
+    }
+
+    /**
+     * Get logicalId (Id used by plugins)
+     *
+     * @param string $logicalId logical Id
+     *
+     * @return $this
+     */
+    public function setLogicalId($logicalId)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->logicalId, $logicalId);
+        $this->logicalId = $logicalId;
+        return $this;
+    }
+
+    /**
      * Get widget specific possibility
      *
      * @param string $keyPossibility Key of the possibility
@@ -1595,11 +1512,7 @@ class EqLogic implements EntityInterface
         $reflectedClass = new \ReflectionClass($this->getEqType_name());
         $method_toHtml = $reflectedClass->getMethod('toHtml');
         $result = [];
-        if ($method_toHtml->class == EqLogic::class) {
-            $result['custom'] = true;
-        } else {
-            $result['custom'] = false;
-        }
+        $result[Common::CUSTOM] = $method_toHtml->class == EqLogic::class;
         $reflectedClass = $this->getEqType_name();
         if (property_exists($reflectedClass, '_widgetPossibility')) {
             /** @noinspection PhpUndefinedFieldInspection */
@@ -1619,19 +1532,43 @@ class EqLogic implements EntityInterface
                         return $result[$k];
                     }
                 }
-                if (is_array($result) && strpos($keyPossibility, 'custom') !== false) {
+                if (is_array($result) && strpos($keyPossibility, Common::CUSTOM) !== false) {
                     return $defaultValue;
                 }
                 return $result;
             }
         }
         if ($keyPossibility != '') {
-            if (isset($result['custom']) && !isset($result[$keyPossibility])) {
-                return $result['custom'];
+            if (isset($result[Common::CUSTOM]) && !isset($result[$keyPossibility])) {
+                return $result[Common::CUSTOM];
             }
             return (isset($result[$keyPossibility])) ? $result[$keyPossibility] : $defaultValue;
         }
         return $result;
+    }
+
+    /**
+     * Get generic type for simple eqLogic
+     *
+     * @return string Generic type
+     */
+    public function getGenericType()
+    {
+        return $this->generic_type;
+    }
+
+    /**
+     * Set generic type for simple EqLogic
+     *
+     * @param string $genericType Generic type
+     *
+     * @return $this
+     */
+    public function setGenericType($genericType)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->generic_type, $genericType);
+        $this->generic_type = $genericType;
+        return $this;
     }
 
     /**
@@ -1645,9 +1582,9 @@ class EqLogic implements EntityInterface
      */
     public function getBackgroundColor($version = 'dashboard')
     {
-        $category = $this->getPrimaryCategory();
-        if ($category != '') {
-            return NextDomHelper::getConfiguration('eqLogic:category:' . $category . ':color');
+        $primaryCategory = $this->getPrimaryCategory();
+        if ($primaryCategory != '') {
+            return NextDomHelper::getConfiguration('eqLogic:category:' . $primaryCategory . ':color');
         }
         return NextDomHelper::getConfiguration('eqLogic:category:default:color');
     }
@@ -1674,6 +1611,25 @@ class EqLogic implements EntityInterface
     }
 
     /**
+     * Store HTML view in cache
+     *
+     * @param string $viewType Define target view type
+     * @param string $htmlCode HTML code to store
+     *
+     * @return string $htmlCode
+     * @throws \Exception
+     */
+    public function postToHtml(string $viewType, string $htmlCode)
+    {
+        $user_id = '';
+        if (isset($_SESSION) && is_object(UserManager::getStoredUser())) {
+            $user_id = UserManager::getStoredUser()->getId();
+        }
+        CacheManager::set(CacheKey::WIDGET_HTML . $this->getId() . $viewType . $user_id, $htmlCode);
+        return $htmlCode;
+    }
+
+    /**
      * Get max command alter for this eqLogic
      *
      * @return mixed Max command alert
@@ -1682,24 +1638,24 @@ class EqLogic implements EntityInterface
      */
     public function getMaxCmdAlert()
     {
-        $return = 'none';
+        $result = 'none';
         $max = 0;
         global $NEXTDOM_INTERNAL_CONFIG;
-        foreach ($this->getCmd('info') as $cmd) {
+        foreach ($this->getCmd(CmdType::INFO) as $cmd) {
             $cmdLevel = $cmd->getCache('alertLevel');
             if (!isset($NEXTDOM_INTERNAL_CONFIG['alerts'][$cmdLevel])) {
                 continue;
             }
             if ($NEXTDOM_INTERNAL_CONFIG['alerts'][$cmdLevel]['level'] > $max) {
-                $return = $cmdLevel;
+                $result = $cmdLevel;
                 $max = $NEXTDOM_INTERNAL_CONFIG['alerts'][$cmdLevel]['level'];
             }
         }
-        return $return;
+        return $result;
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      * @return bool
      */
     public function getShowOnChild()
@@ -1746,6 +1702,29 @@ class EqLogic implements EntityInterface
         if ($this->getDebug()) {
             echo $_message . "\n";
         }
+    }
+
+    /**
+     * Get debug state
+     *
+     * @return bool True if debug is activated
+     */
+    public function getDebug()
+    {
+        return $this->_debug;
+    }
+
+    /**
+     * Set debug state
+     *
+     * @param bool $newDebugState True for activate debug
+     */
+    public function setDebug($newDebugState)
+    {
+        if ($newDebugState) {
+            echo "Mode debug activé\n";
+        }
+        $this->_debug = $newDebugState;
     }
 
     /**
@@ -1812,8 +1791,8 @@ class EqLogic implements EntityInterface
                         $cmd->setEqLogic_id($this->getId());
                     } else {
                         $command['name'] = $cmd->getName();
-                        if (isset($command['display'])) {
-                            unset($command['display']);
+                        if (isset($command[Common::DISPLAY])) {
+                            unset($command[Common::DISPLAY]);
                         }
                     }
                     Utils::a2o($cmd, $command);
@@ -1899,8 +1878,8 @@ class EqLogic implements EntityInterface
         if (isset($result['configuration']) && count($result['configuration']) == 0) {
             unset($result['configuration']);
         }
-        if (isset($result['display']) && count($result['display']) == 0) {
-            unset($result['display']);
+        if (isset($result[Common::DISPLAY]) && count($result[Common::DISPLAY]) == 0) {
+            unset($result[Common::DISPLAY]);
         }
         if ($withCommands) {
             $result['cmd'] = [];
@@ -1997,19 +1976,19 @@ class EqLogic implements EntityInterface
         ];
         $use = $this->getUse();
         $usedBy = $this->getUsedBy();
-        Utils::addGraphLink($this, 'eqLogic', $this->getCmd(), 'cmd', $data, $distance, $drill, ['dashvalue' => '1,0', 'lengthfactor' => 0.6]);
-        Utils::addGraphLink($this, 'eqLogic', $use['cmd'], 'cmd', $data, $distance, $drill);
-        Utils::addGraphLink($this, 'eqLogic', $use['scenario'], 'scenario', $data, $distance, $drill);
-        Utils::addGraphLink($this, 'eqLogic', $use['eqLogic'], 'eqLogic', $data, $distance, $drill);
-        Utils::addGraphLink($this, 'eqLogic', $use['dataStore'], 'dataStore', $data, $distance, $drill);
-        Utils::addGraphLink($this, 'eqLogic', $usedBy['cmd'], 'cmd', $data, $distance, $drill);
-        Utils::addGraphLink($this, 'eqLogic', $usedBy['scenario'], 'scenario', $data, $distance, $drill);
-        Utils::addGraphLink($this, 'eqLogic', $usedBy['eqLogic'], 'eqLogic', $data, $distance, $drill);
-        Utils::addGraphLink($this, 'eqLogic', $usedBy['interactDef'], 'interactDef', $data, $distance, $drill, ['dashvalue' => '2,6', 'lengthfactor' => 0.6]);
-        Utils::addGraphLink($this, 'eqLogic', $usedBy['plan'], 'plan', $data, $distance, $drill, ['dashvalue' => '2,6', 'lengthfactor' => 0.6]);
-        Utils::addGraphLink($this, 'eqLogic', $usedBy['view'], 'view', $data, $distance, $drill, ['dashvalue' => '2,6', 'lengthfactor' => 0.6]);
+        Utils::addGraphLink($this, NextDomObj::EQLOGIC, $this->getCmd(), NextDomObj::CMD, $data, $distance, $drill, [Common::DASH_VALUE => '1,0', Common::LENGTH_FACTOR => 0.6]);
+        Utils::addGraphLink($this, NextDomObj::EQLOGIC, $use[NextDomObj::CMD], NextDomObj::CMD, $data, $distance, $drill);
+        Utils::addGraphLink($this, NextDomObj::EQLOGIC, $use[NextDomObj::SCENARIO], NextDomObj::SCENARIO, $data, $distance, $drill);
+        Utils::addGraphLink($this, NextDomObj::EQLOGIC, $use[NextDomObj::EQLOGIC], NextDomObj::EQLOGIC, $data, $distance, $drill);
+        Utils::addGraphLink($this, NextDomObj::EQLOGIC, $use[NextDomObj::DATASTORE], NextDomObj::DATASTORE, $data, $distance, $drill);
+        Utils::addGraphLink($this, NextDomObj::EQLOGIC, $usedBy[NextDomObj::CMD], NextDomObj::CMD, $data, $distance, $drill);
+        Utils::addGraphLink($this, NextDomObj::EQLOGIC, $usedBy[NextDomObj::SCENARIO], NextDomObj::SCENARIO, $data, $distance, $drill);
+        Utils::addGraphLink($this, NextDomObj::EQLOGIC, $usedBy[NextDomObj::EQLOGIC], NextDomObj::EQLOGIC, $data, $distance, $drill);
+        Utils::addGraphLink($this, NextDomObj::EQLOGIC, $usedBy[NextDomObj::INTERACT_DEF], NextDomObj::INTERACT_DEF, $data, $distance, $drill, [Common::DASH_VALUE => '2,6', Common::LENGTH_FACTOR => 0.6]);
+        Utils::addGraphLink($this, NextDomObj::EQLOGIC, $usedBy[NextDomObj::PLAN], NextDomObj::PLAN, $data, $distance, $drill, [Common::DASH_VALUE => '2,6', Common::LENGTH_FACTOR => 0.6]);
+        Utils::addGraphLink($this, NextDomObj::EQLOGIC, $usedBy[NextDomObj::VIEW], NextDomObj::VIEW, $data, $distance, $drill, [Common::DASH_VALUE => '2,6', Common::LENGTH_FACTOR => 0.6]);
         if (!isset($data['object' . $this->getObject_id()])) {
-            Utils::addGraphLink($this, 'eqLogic', $this->getObject(), 'object', $data, $distance, $drill, ['dashvalue' => '1,0', 'lengthfactor' => 0.6]);
+            Utils::addGraphLink($this, NextDomObj::EQLOGIC, $this->getObject(), NextDomObj::OBJECT, $data, $distance, $drill, [Common::DASH_VALUE => '1,0', Common::LENGTH_FACTOR => 0.6]);
         }
         return $data;
     }
@@ -2028,7 +2007,7 @@ class EqLogic implements EntityInterface
     }
 
     /**
-     * Get list of usage in string (TODO: ???)
+     * Get list of usage in string (@TODO: ???)
      *
      * @return array List of usage
      *
@@ -2070,6 +2049,31 @@ class EqLogic implements EntityInterface
     }
 
     /**
+     * Get id of the attached object
+     *
+     * @return int Id of the attached object
+     */
+    public function getObject_id()
+    {
+        return $this->object_id;
+    }
+
+    /**
+     * Set attached room id
+     *
+     * @param int $object_id Room id
+     *
+     * @return $this
+     */
+    public function setObject_id($object_id = null)
+    {
+        $object_id = (!is_numeric($object_id)) ? null : $object_id;
+        $this->_changed = Utils::attrChanged($this->_changed, $this->object_id, $object_id);
+        $this->object_id = $object_id;
+        return $this;
+    }
+
+    /**
      * Get object data in array
      *
      * @return array
@@ -2078,9 +2082,9 @@ class EqLogic implements EntityInterface
      */
     public function toArray()
     {
-        $return = Utils::o2a($this, true);
-        $return['status'] = $this->getStatus();
-        return $return;
+        $result = Utils::o2a($this, true);
+        $result['status'] = $this->getStatus();
+        return $result;
     }
 
     /**

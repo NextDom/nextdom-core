@@ -22,6 +22,7 @@
 
 namespace NextDom\Controller\Modals;
 
+use NextDom\Enums\AjaxParams;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
@@ -44,7 +45,7 @@ class UserRights extends BaseAbstractModal
      */
     public static function get(): string
     {
-        $userId = Utils::init('id');
+        $userId = Utils::initInt(AjaxParams::ID);
         $user = UserManager::byId($userId);
 
         if (!is_object($user)) {

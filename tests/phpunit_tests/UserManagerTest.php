@@ -21,14 +21,6 @@ require_once(__DIR__ . '/../../src/core.php');
 
 class UserManagerTest extends PHPUnit_Framework_TestCase
 {
-    public static function setUpBeforeClass()
-    {
-    }
-
-    public static function tearDownAfterClass()
-    {
-    }
-
     public function setUp()
     {
 

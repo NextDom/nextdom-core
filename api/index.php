@@ -27,6 +27,7 @@ use Symfony\Component\Routing\Loader\YamlFileLoader;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 // Load core
 require_once(__DIR__ . '/../src/core.php');
@@ -91,22 +92,22 @@ if ($authenticator->isAuthenticated()) {
     }
     catch (ResourceNotFoundException $resourceNotFoundException) {
         // Bad route
-        $response->setStatusCode(404);
+        $response->setStatusCode(Response::HTTP_NOT_FOUND);
         $response->setData(['error' => $resourceNotFoundException->getMessage()]);
     }
     catch (MethodNotAllowedException $methodNotAllowedException) {
         // Bad method
-        $response->setStatusCode(404);
+        $response->setStatusCode(Response::HTTP_NOT_FOUND);
         $response->setData(['error' => 'Method not allowed.']);
     }
     catch (\TypeError $e) {
         // Bad arguments
-        $response->setStatusCode(400);
+        $response->setStatusCode(Response::HTTP_BAD_REQUEST);
         $response->setData(['error' => $e->getMessage()]);
     }
     catch (\Throwable $t) {
         // Others errors
-        $response->setStatusCode(400);
+        $response->setStatusCode(Response::HTTP_BAD_REQUEST);
         $response->setData(['error' => $t->getMessage()]);
     }
 }
@@ -123,17 +124,17 @@ else {
                     $response->setData(['token' => $token]);
                 }
                 else {
-                    $response->setStatusCode(400);
+                    $response->setStatusCode(Response::HTTP_BAD_REQUEST);
                     $response->setData('Bad credentials');
                 }
             } catch (Exception $e) {
-                $response->setStatusCode(400);
+                $response->setStatusCode(Response::HTTP_BAD_REQUEST);
                 $response->setData('Get user error ' . $e->getMessage());
             }
         }
     }
     else {
-        $response->setStatusCode(403);
+        $response->setStatusCode(Response::HTTP_FORBIDDEN);
         $response->setData('Forbidden access');
     }
 }

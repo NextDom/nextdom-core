@@ -1,39 +1,51 @@
+dist: trusty
 language: php
 php:
-    - 7.3
+- 7.3
 services:
-    - docker
+- docker
 before_install:
-    - docker pull nextdom/nextdom-test:latest
-    - mkdir -p tests/coverage
-    - docker run -d --rm -p 8765:80 -v `pwd`:/data --name="nextdom-test" nextdom/nextdom-test:latest /start.sh
-    - sudo apt update
-    - sudo apt install -y python3-pip python-pip python3-setuptools dpkg
-    - sudo python -m pip install --upgrade pip jsmin
-    - sudo python3 -m pip install --upgrade pip jsmin
-    - sudo pip3 install --ignore-installed urllib3[secure] pylint
-    - export CHROME_SOURCE_URL=https://dl.google.com/dl/linux/direct/google-chrome-stable_current_amd64.deb
-    - wget --no-verbose -O /tmp/$(basename $CHROME_SOURCE_URL) $CHROME_SOURCE_URL
-    - sudo dpkg -i /tmp/$(basename $CHROME_SOURCE_URL)
-    - ./scripts/gen_global.sh
-    - composer require --dev satooshi/php-coveralls
-    - composer install --dev
-    - "while true; do DOCKER_LOGS=$(docker logs --tail 10 nextdom-test 2>&1); if [[ \"$DOCKER_LOGS\" =~ .*NEXTDOM.TEST.READY.* ]]; then break; fi; sleep 2; done"
-    - docker exec -it nextdom-test bash -c "cd /var/www/html && composer install --dev"
-    - docker commit nextdom-test nextdom-test-snap
-    - docker kill nextdom-test
-    - cd tests
-    - sudo ./install_env.sh
+- docker pull nextdom/nextdom-test:latest
+- mkdir -p tests/coverage
+- docker run -d --rm -p 8765:80 -v `pwd`:/data --name="nextdom-test" nextdom/nextdom-test:latest /start.sh
+- sudo apt update
+- sudo apt install -y python3-pip python-pip python3-setuptools dpkg
+- sudo python -m pip install --upgrade pip jsmin
+- sudo python3 -m pip install --upgrade pip jsmin
+# Fix travis error
+- python3 -c "import fcntl; fcntl.fcntl(1, fcntl.F_SETFL, 0)"
+- sudo pip3 install --ignore-installed urllib3[secure] pylint
+- export CHROME_SOURCE_URL=https://dl.google.com/dl/linux/direct/google-chrome-stable_current_amd64.deb
+- wget --no-verbose -O /tmp/$(basename $CHROME_SOURCE_URL) $CHROME_SOURCE_URL
+- sudo dpkg -i /tmp/$(basename $CHROME_SOURCE_URL)
+- "./scripts/gen_global.sh"
+- composer require --dev satooshi/php-coveralls
+- composer install --dev
+- while true; do DOCKER_LOGS=$(docker logs --tail 10 nextdom-test 2>&1); if [[ "$DOCKER_LOGS" =~ .*NEXTDOM.TEST.READY.* ]]; then break; fi; sleep 2; done
+- docker exec -it nextdom-test bash -c "cd /var/www/html && composer install --dev"
+- docker commit nextdom-test nextdom-test-snap
+- docker kill nextdom-test
+- cd tests
+- sudo ./install_env.sh
 script:
-    - cd ${TRAVIS_BUILD_DIR}/tests
-    - python3 launch_php_tests.py
-    - python3 check_jeedom_compatibility_from_src.py
-    - python3 launch_compatibility_tests.py
-    - python3 launch_code_consistency.py
-    - python3 launch_features_tests.py
-    - python3 launch_gui_tests.py
+- cd ${TRAVIS_BUILD_DIR}/tests
+- python3 launch_php_tests.py
+- python3 check_jeedom_compatibility_from_src.py
+- python3 launch_compatibility_tests.py
+- python3 launch_code_consistency.py
+- python3 launch_features_tests.py
+#- python3 launch_gui_tests.py
+- python3 launch_gui_tests.py first_use
+- python3 launch_gui_tests.py administration
+- python3 launch_gui_tests.py specific
+- python3 launch_gui_tests.py plugins
+- python3 launch_gui_tests.py modal
 after_script:
-    - cd ${TRAVIS_BUILD_DIR}
-    - ls tests/coverage/
-    - sed -i "s/\/usr\/share\/nextdom\///g" tests/coverage/clover.xml
-    - php vendor/bin/php-coveralls -v
+- cd ${TRAVIS_BUILD_DIR}
+- ls tests/coverage/
+- sed -i "s/\/usr\/share\/nextdom\///g" tests/coverage/clover.xml
+- php vendor/bin/php-coveralls -v
+- ./scripts/push_doc.sh
+env:
+  global:
+    secure: XH1F7R5rvX8CLj8kT63ye3YwMiSM3YYN2rL6E4u1jM9/UZ7MB3GLtNzoarXe0jr/6C0Ugh+hhkolhaaOAzqNFft2QzyOfBcOElpzjyVhl0BZtEDANd2xFJZi3hfHpULptzbGiNxwmaB2PYxD+6eVcMwXXOfE1k1zpqiFdjmhZzsE4s6rC6SIDIV06ySp4bWzJpbv+JYitZbmA9Sm7UQCoTAUtX0iKS66h94Anlyg6GUka2iPBP93rZu31D2TEAxyHTuFJzNHfdx8lcisAdSaxbRb/4qYsmKJzG63OUX6qoCYZBkZWcyMOZGVNhFaa1kaixkTULc3SNYcR3C7U8VekYUV5hppDBk7OoJ8+mG4EQvl1yy4xZueMQhfuCyUKXkqDKJRP8PciB9Mpu/qD7Yj9HxNpMYnurx40aVZZ2aAIPebYGSdbDg4416+A28eO2wVWMPOdllyFgil8rQnHZ8IFRSoCu0SWIpd2TTYoiuXgHmMonpyp8Yw/vw+E5I5FeXD59viRU4xREv+tcS0BHJ1ncTX0Dwegs7dSVxspwftwAeWaI489JiWDMUDgayqUH4y3bgW8iYFvharckKiUbaKg+U0v8IuWlqpKjE38StNiarzMs+xzAY2IIiWJxIEGQ1pXxXI8JNJrH6RSNik+px/z066YZgTbTQBhe4K45azJ/Y=

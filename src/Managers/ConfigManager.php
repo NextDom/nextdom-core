@@ -51,11 +51,69 @@ class ConfigManager
     /**
      * @var array Default configuration
      */
-    private static $defaultConfiguration = array();
+    private static $defaultConfiguration = [];
     /**
      * @var array Configuration cache
      */
-    private static $cache = array();
+    private static $cache = [];
+
+    /**
+     * Save new configuration value in the database
+     *
+     * @param string $configKey Configuration key
+     * @param string|object|array $configValue Configuration value
+     * @param string $pluginId Plugin id or core
+     *
+     * @return boolean Always True (@TODO: No return)
+     * @throws \Exception
+     */
+    public static function save($configKey, $configValue, $pluginId = 'core')
+    {
+        if (is_object($configValue) || is_array($configValue)) {
+            $configValue = json_encode($configValue, JSON_UNESCAPED_UNICODE);
+        }
+        if (isset(self::$cache[$pluginId . '::' . $configKey])) {
+            unset(self::$cache[$pluginId . '::' . $configKey]);
+        }
+        $defaultConfiguration = self::getDefaultConfiguration($pluginId);
+        // Remove configuration from the database if configValue is the same of the default configuration
+        if (isset($defaultConfiguration[$pluginId][$configKey]) && $configValue == $defaultConfiguration[$pluginId][$configKey]) {
+            self::remove($configKey, $pluginId);
+            return true;
+        }
+        if ($pluginId == 'core') {
+            $nextdomConfig = NextDomHelper::getConfiguration($configKey, true);
+            if ($nextdomConfig != '' && $nextdomConfig == $configValue) {
+                self::remove($configKey);
+                return true;
+            }
+        }
+
+        // Parse new value with preConfig methode
+        $configClass = ($pluginId == 'core') ? 'ConfigManager' : $pluginId;
+        $configMethod = 'preConfig_' . str_replace(['::', ':'], '_', $configKey);
+        if (method_exists($configClass, $configMethod)) {
+            $configValue = $configClass::$configMethod($configValue);
+        }
+        // Save in database
+        $values = [
+            'plugin' => $pluginId,
+            'key' => $configKey,
+            'value' => $configValue,
+        ];
+        $sql = 'REPLACE ' . self::DB_CLASS_NAME . '
+                SET `key` = :key,
+                    `value` = :value,
+                     `plugin` = :plugin';
+        DBHelper::exec($sql, $values);
+
+        // Execute postConfig method
+        $configMethod = 'postConfig_' . str_replace(['::', ':'], '_', $configKey);
+        if (method_exists($configClass, $configMethod)) {
+            $configClass::$configMethod($configValue);
+        }
+        return true;
+    }
 
     /**
      * Get default configuration from default.config.ini
@@ -85,67 +143,9 @@ class ConfigManager
             }
         }
         if (!isset(self::$defaultConfiguration[$pluginId])) {
-            self::$defaultConfiguration[$pluginId] = array();
+            self::$defaultConfiguration[$pluginId] = [];
         }
         return self::$defaultConfiguration[$pluginId];
-    }
-
-    /**
-     * Save new configuration value in the database
-     *
-     * @param string $configKey Configuration key
-     * @param string|object|array $configValue Configuration value
-     * @param string $pluginId Plugin id or core
-     *
-     * @return boolean Always True (TODO: No return)
-     * @throws \Exception
-     */
-    public static function save($configKey, $configValue, $pluginId = 'core')
-    {
-        if (is_object($configValue) || is_array($configValue)) {
-            $configValue = json_encode($configValue, JSON_UNESCAPED_UNICODE);
-        }
-        if (isset(self::$cache[$pluginId . '::' . $configKey])) {
-            unset(self::$cache[$pluginId . '::' . $configKey]);
-        }
-        $defaultConfiguration = self::getDefaultConfiguration($pluginId);
-        // Remove configuration from the database if configValue is the same of the default configuration
-        if (isset($defaultConfiguration[$pluginId][$configKey]) && $configValue == $defaultConfiguration[$pluginId][$configKey]) {
-            self::remove($configKey, $pluginId);
-            return true;
-        }
-        if ($pluginId == 'core') {
-            $nextdomConfig = NextDomHelper::getConfiguration($configKey, true);
-            if ($nextdomConfig != '' && $nextdomConfig == $configValue) {
-                self::remove($configKey);
-                return true;
-            }
-        }
-
-        // Parse new value with preConfig methode
-        $configClass = ($pluginId == 'core') ? 'ConfigManager' : $pluginId;
-        $configMethod = 'preConfig_' . str_replace(array('::', ':'), '_', $configKey);
-        if (method_exists($configClass, $configMethod)) {
-            $configValue = $configClass::$configMethod($configValue);
-        }
-        // Save in database
-        $values = array(
-            'plugin' => $pluginId,
-            'key' => $configKey,
-            'value' => $configValue,
-        );
-        $sql = 'REPLACE ' . self::DB_CLASS_NAME . '
-                SET `key` = :key,
-                    `value` = :value,
-                     `plugin` = :plugin';
-        DBHelper::exec($sql, $values);
-
-        // Execute postConfig method
-        $configMethod = 'postConfig_' . str_replace(array('::', ':'), '_', $configKey);
-        if (method_exists($configClass, $configMethod)) {
-            $configClass::$configMethod($configValue);
-        }
-        return true;
     }
 
     /**
@@ -160,17 +160,17 @@ class ConfigManager
     public static function remove($configKey, $pluginId = 'core')
     {
         if ($configKey == "*" && $pluginId != 'core') {
-            $values = array(
+            $values = [
                 'plugin' => $pluginId,
-            );
+            ];
             $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . '
                     WHERE `plugin` = :plugin';
             return DBHelper::getOne($sql, $values);
         } else {
-            $values = array(
+            $values = [
                 'plugin' => $pluginId,
                 'key' => $configKey,
-            );
+            ];
             $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . '
                     WHERE `key` = :key
                         AND `plugin` = :plugin';
@@ -198,10 +198,10 @@ class ConfigManager
         if (!$forceRefresh && isset(self::$cache[$pluginId . '::' . $configKey])) {
             return self::$cache[$pluginId . '::' . $configKey];
         }
-        $values = array(
+        $values = [
             'plugin' => $pluginId,
             'key' => $configKey,
-        );
+        ];
         $sql = 'SELECT `value`
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE `key` = :key
@@ -235,18 +235,18 @@ class ConfigManager
     public static function byKeys($configKeys, $pluginId = 'core', $defaultValue = '')
     {
         if (!is_array($configKeys) || count($configKeys) == 0) {
-            return array();
+            return [];
         }
-        $values = array(
+        $values = [
             'plugin' => $pluginId,
-        );
+        ];
         $keys = '(\'' . implode('\',\'', $configKeys) . '\')';
         $sql = 'SELECT `key`,`value`
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE `key` IN ' . $keys . '
                     AND plugin=:plugin';
         $values = DBHelper::getAll($sql, $values);
-        $result = array();
+        $result = [];
         foreach ($values as $value) {
             $result[$value['key']] = $value['value'];
         }
@@ -282,10 +282,10 @@ class ConfigManager
      */
     public static function searchKey($configKey, $pluginId = 'core')
     {
-        $values = array(
+        $values = [
             'plugin' => $pluginId,
             'key' => '%' . $configKey . '%',
-        );
+        ];
         $sql = 'SELECT *
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE `key` LIKE :key
@@ -346,7 +346,7 @@ class ConfigManager
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE `key` = \'active\'';
         $values = DBHelper::getAll($sql);
-        $result = array();
+        $result = [];
         foreach ($values as $value) {
             $result[$value['plugin']] = $value['value'];
         }
@@ -365,7 +365,7 @@ class ConfigManager
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE `key` LIKE \'log::level::%\'';
         $values = DBHelper::getAll($sql);
-        $return = array();
+        $return = [];
         foreach ($values as $value) {
             $return[$value['key']] = Utils::isJson($value['value'], $value['value']);
         }

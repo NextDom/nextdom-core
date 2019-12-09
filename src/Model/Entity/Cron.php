@@ -18,6 +18,8 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\DateFormat;
+use NextDom\Enums\LogTarget;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\LogHelper;
@@ -147,7 +149,8 @@ class Cron implements EntityInterface
      *
      * @return bool True is task is enabled
      */
-    public function isEnabled() {
+    public function isEnabled()
+    {
         return $this->enable == 1;
     }
 
@@ -519,7 +522,7 @@ class Cron implements EntityInterface
             $this->setState('stop');
             $this->setPID();
         } else {
-            LogHelper::add('cron', 'info', __('Arrêt de ') . $this->getClass() . '::' . $this->getFunction() . '(), PID : ' . $this->getPID());
+            LogHelper::addInfo(LogTarget::CRON, __('Arrêt de ') . $this->getClass() . '::' . $this->getFunction() . '(), PID : ' . $this->getPID());
             if ($this->getPID() > 0) {
                 SystemHelper::kill($this->getPID());
                 $retry = 0;
@@ -651,7 +654,7 @@ class Cron implements EntityInterface
                 return true;
             }
         } catch (\Exception $e) {
-            LogHelper::add('cron', 'debug', 'Error on isDue : ' . $e->getMessage() . ', cron : ' . $this->getSchedule());
+            LogHelper::addDebug(LogTarget::CRON, 'Error on isDue : ' . $e->getMessage() . ', cron : ' . $this->getSchedule());
         }
         return false;
     }
@@ -676,7 +679,7 @@ class Cron implements EntityInterface
     {
         try {
             $cronExpression = new \Cron\CronExpression($this->getSchedule(), new \Cron\FieldFactory);
-            return $cronExpression->getNextRunDate()->format('Y-m-d H:i:s');
+            return $cronExpression->getNextRunDate()->format(DateFormat::FULL);
         } catch (\Exception $e) {
 
         }

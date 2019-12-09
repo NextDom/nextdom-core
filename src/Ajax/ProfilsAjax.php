@@ -17,6 +17,7 @@
 
 namespace NextDom\Ajax;
 
+use NextDom\Enums\AjaxParams;
 use NextDom\Enums\UserRight;
 use NextDom\Helpers\Utils;
 
@@ -33,7 +34,7 @@ class ProfilsAjax extends BaseAjax
     public function removeImage()
     {
         $uploaddir = sprintf("%s/public/img/profils", NEXTDOM_ROOT);
-        $pathInfo = pathinfo(init('image'));
+        $pathInfo = pathinfo(Utils::init(AjaxParams::IMAGE));
         $extension = Utils::array_key_default($pathInfo, "extension", "<no-ext>");
         $path = sprintf("%s/%s.%s", $uploaddir, $pathInfo['basename'], $extension);
         $this->ajax->success(unlink($path));
@@ -42,7 +43,7 @@ class ProfilsAjax extends BaseAjax
     public function imageUpload()
     {
         $uploadDir = sprintf("%s/public/img/profils", NEXTDOM_ROOT);
-        Utils::readUploadedFile($_FILES, "images", $uploadDir, 8, array('.png', '.jpg', '.jpeg'));
+        Utils::readUploadedFile($_FILES, "images", $uploadDir, 8, ['.png', '.jpg', '.jpeg']);
         $this->ajax->success();
     }
 }

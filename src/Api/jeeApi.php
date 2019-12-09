@@ -32,6 +32,8 @@
  * along with NextDom Software. If not, see <http://www.gnu.org/licenses/>.
  */
 
+use NextDom\Enums\CmdType;
+
 header('Access-Control-Allow-Origin: *');
 
 require_once __DIR__ . "/../../src/core.php";
@@ -57,7 +59,7 @@ if (init('type') != '') {
     try {
         $type = init('type');
         $plugin = init('plugin', 'core');
-        if ($plugin == 'core' && !in_array(init('type'), array('ask', 'cmd', 'interact', 'scenario', 'message', 'object', 'eqLogic', 'command', 'fullData', 'variable'))) {
+        if ($plugin == 'core' && !in_array(init('type'), ['ask', 'cmd', 'interact', 'scenario', 'message', 'object', 'eqLogic', 'command', 'fullData', 'variable'])) {
             $plugin = init('type');
         }
         if (!jeedom::apiAccess(init('apikey', init('api')), $plugin)) {
@@ -93,7 +95,7 @@ if (init('type') != '') {
         if ($type == 'cmd') {
             if (is_json(init('id'))) {
                 $ids = json_decode(init('id'), true);
-                $result = array();
+                $result = [];
                 foreach ($ids as $id) {
                     $cmd = cmd::byId($id);
                     if (!is_object($cmd)) {
@@ -138,7 +140,7 @@ if (init('type') != '') {
             if (init('utf8', 0) == 1) {
                 $query = utf8_encode($query);
             }
-            $param = array();
+            $param = [];
             if (init('emptyReply') != '') {
                 $param['emptyReply'] = init('emptyReply');
             }
@@ -168,12 +170,12 @@ if (init('type') != '') {
             switch (init('action')) {
                 case 'start':
                     log::add('api', 'debug', __('Démarrage scénario de : ', __FILE__) . $scenario->getHumanName());
-                    $tags = array();
+                    $tags = [];
                     foreach ($_REQUEST as $key => $value) {
                         $tags['#' . $key . '#'] = $value;
                     }
                     if (init('tags') != '' && !is_array(init('tags'))) {
-                        $_tags = array();
+                        $_tags = [];
                         $args = arg2array(init('tags'));
                         foreach ($args as $key => $value) {
                             $_tags['#' . trim(trim($key), '#') . '#'] = scenarioExpression::setTags(trim($value), $scenario);
@@ -455,10 +457,10 @@ try {
             throw new Exception(__('Objet introuvable : ', __FILE__) . secureXSS($params['id']), -32601);
         }
         $return = utils::o2a($jeeObject);
-        $return['eqLogics'] = array();
+        $return['eqLogics'] = [];
         foreach ($jeeObject->getEqLogic() as $eqLogic) {
             $eqLogic_return = utils::o2a($eqLogic);
-            $eqLogic_return['cmds'] = array();
+            $eqLogic_return['cmds'] = [];
             foreach ($eqLogic->getCmd() as $cmd) {
                 $eqLogic_return['cmds'][] = $cmd->exportApi();
             }
@@ -485,7 +487,7 @@ try {
         if (isset($params['key'])) {
             $jsonrpc->makeSuccess(jeeObject::getGlobalSummary($params['key']));
         }
-        $return = array();
+        $return = [];
         $def = config::byKey('object:summary');
         foreach ($def as $key => $value) {
             $return[$key] = jeeObject::getGlobalSummary($key);
@@ -550,7 +552,7 @@ try {
             throw new Exception(__('EqLogic introuvable : ', __FILE__) . secureXSS($params['id']), -32602);
         }
         $return = utils::o2a($eqLogic);
-        $return['cmds'] = array();
+        $return['cmds'] = [];
         foreach ($eqLogic->getCmd() as $cmd) {
             $return['cmds'][] = $cmd->exportApi();
         }
@@ -578,7 +580,7 @@ try {
         $eqLogic->save();
         $dbList = $typeCmd::byEqLogicId($eqLogic->getId());
         $eqLogic->save();
-        $enableList = array();
+        $enableList = [];
         if (isset($params['cmd'])) {
             $cmd_order = 0;
             foreach ($params['cmd'] as $cmd_info) {
@@ -606,9 +608,9 @@ try {
     }
 
     if ($jsonrpc->getMethod() == 'eqLogic::byTypeAndId') {
-        $return = array();
+        $return = [];
         foreach ($params['eqType'] as $eqType) {
-            $info_eqLogics = array();
+            $info_eqLogics = [];
             foreach (eqLogic::byType($eqType) as $eqLogic) {
                 $info_eqLogic = utils::o2a($eqLogic);
                 foreach ($eqLogic->getCmd() as $cmd) {
@@ -633,7 +635,7 @@ try {
 
     /*             * ************************Commande*************************** */
     if ($jsonrpc->getMethod() == 'cmd::all') {
-        $return = array();
+        $return = [];
         foreach (cmd::all() as $cmd) {
             if (is_object($_USER_GLOBAL) && !$cmd->hasRight($_USER_GLOBAL)) {
                 continue;
@@ -644,7 +646,7 @@ try {
     }
 
     if ($jsonrpc->getMethod() == 'cmd::byEqLogicId') {
-        $return = array();
+        $return = [];
         foreach (cmd::byEqLogicId($params['eqLogic_id']) as $cmd) {
             if (is_object($_USER_GLOBAL) && !$cmd->hasRight($_USER_GLOBAL)) {
                 continue;
@@ -666,7 +668,7 @@ try {
     }
 
     if ($jsonrpc->getMethod() == 'cmd::execCmd') {
-        $return = array();
+        $return = [];
         if (is_array($params['id'])) {
             foreach ($params['id'] as $id) {
                 $cmd = cmd::byId($id);
@@ -686,8 +688,8 @@ try {
                 if ($cmd->getType() == 'action' && $cmd->getConfiguration('actionConfirm') == 1 && $params['confirmAction'] != 1) {
                     throw new Exception(__('Cette action nécessite une confirmation', __FILE__), -32006);
                 }
-                if ($cmd->getType() == 'info') {
-                    $return[$id] = array('value' => $cmd->execCmd($params['options']), 'collectDate' => $cmd->getCollectDate());
+                if ($cmd->isType(CmdType::INFO)) {
+                    $return[$id] = ['value' => $cmd->execCmd($params['options']), 'collectDate' => $cmd->getCollectDate()];
                 } else {
                     $cmd->execCmd($params['options']);
                 }
@@ -710,7 +712,7 @@ try {
                 throw new Exception(__('Cette action nécessite une confirmation', __FILE__), -32006);
             }
             if ($cmd->getType() == 'info') {
-                $return = array('value' => $cmd->execCmd($params['options']), 'collectDate' => $cmd->getCollectDate());
+                $return = ['value' => $cmd->execCmd($params['options']), 'collectDate' => $cmd->getCollectDate()];
             } else {
                 $cmd->execCmd($params['options']);
             }
@@ -829,7 +831,7 @@ try {
         if (!is_object($scenario)) {
             throw new Exception(__('Scénario introuvable : ', __FILE__) . secureXSS($params['id']), -32702);
         }
-        $jsonrpc->makeSuccess(array('humanName' => $scenario->getHumanName(), 'export' => $scenario->export('array')));
+        $jsonrpc->makeSuccess(['humanName' => $scenario->getHumanName(), 'export' => $scenario->export('array')]);
     }
 
     if ($jsonrpc->getMethod() == 'scenario::import') {
@@ -855,11 +857,11 @@ try {
         if ($scenario->getName() == '') {
             $scenario->setName(config::genKey());
         }
-        $scenario->setTrigger(array());
-        $scenario->setSchedule(array());
+        $scenario->setTrigger([]);
+        $scenario->setSchedule([]);
         utils::a2o($scenario, $params['import']);
         $scenario->save();
-        $scenario_element_list = array();
+        $scenario_element_list = [];
         if (isset($params['import']['elements'])) {
             foreach ($params['import']['elements'] as $element_ajax) {
                 $scenario_element_list[] = scenarioElement::saveAjaxElement($element_ajax);
@@ -956,7 +958,7 @@ try {
     if ($jsonrpc->getMethod() == 'plugin::dependancyInfo') {
         $plugin = plugin::byId($params['plugin_id']);
         if (!is_object($plugin)) {
-            $jsonrpc->makeSuccess(array('state' => 'nok', 'log' => 'nok'));
+            $jsonrpc->makeSuccess(['state' => 'nok', 'log' => 'nok']);
         }
         $jsonrpc->makeSuccess($plugin->getDependencyInfo());
     }
@@ -973,7 +975,7 @@ try {
     if ($jsonrpc->getMethod() == 'plugin::deamonInfo') {
         $plugin = plugin::byId($params['plugin_id']);
         if (!is_object($plugin)) {
-            $jsonrpc->makeSuccess(array('launchable_message' => '', 'launchable' => 'nok', 'state' => 'nok', 'log' => 'nok', 'auto' => 0));
+            $jsonrpc->makeSuccess(['launchable_message' => '', 'launchable' => 'nok', 'state' => 'nok', 'log' => 'nok', 'auto' => 0]);
         }
         $jsonrpc->makeSuccess($plugin->deamon_info());
     }

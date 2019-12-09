@@ -236,7 +236,7 @@ class ScenarioElement implements EntityInterface
                 $cron = new cron();
                 $cron->setClass(NextDomObj::SCENARIO);
                 $cron->setFunction('doIn');
-                $cron->setOption(array('scenario_id' => intval($_scenario->getId()), 'scenarioElement_id' => intval($this->getId()), 'second' => date('s'), 'tags' => $_scenario->getTags()));
+                $cron->setOption(['scenario_id' => intval($_scenario->getId()), 'scenarioElement_id' => intval($this->getId()), 'second' => date('s'), 'tags' => $_scenario->getTags()]);
                 $cron->setLastRun(date(DateFormat::FULL));
                 $cron->setOnce(1);
                 $next = strtotime('+ ' . $time . ' min');
@@ -276,7 +276,7 @@ class ScenarioElement implements EntityInterface
             $cron = new Cron();
             $cron->setClass(NextDomObj::SCENARIO);
             $cron->setFunction('doIn');
-            $cron->setOption(array('scenario_id' => intval($_scenario->getId()), 'scenarioElement_id' => intval($this->getId()), 'second' => 0, 'tags' => $_scenario->getTags()));
+            $cron->setOption(['scenario_id' => intval($_scenario->getId()), 'scenarioElement_id' => intval($this->getId()), 'second' => 0, 'tags' => $_scenario->getTags()]);
             $cron->setLastRun(date(DateFormat::FULL, strtotime('now')));
             $cron->setOnce(1);
             $cron->setSchedule(CronManager::convertDateToCron($next));
@@ -396,11 +396,11 @@ class ScenarioElement implements EntityInterface
      */
     public function getAllId()
     {
-        $return = array(
-            'element' => array($this->getId()),
-            'subelement' => array(),
-            'expression' => array(),
-        );
+        $return = [
+            'element' => [$this->getId()],
+            'subelement' => [],
+            'expression' => [],
+        ];
         foreach ($this->getSubElement() as $subelement) {
             $result = $subelement->getAllId();
             $return['element'] = array_merge($return['element'], $result['element']);

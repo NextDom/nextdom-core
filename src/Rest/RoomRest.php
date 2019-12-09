@@ -59,7 +59,7 @@ class RoomRest
 
     /**
      * Prepare result for response\n
-     * Associative array with following keys : 
+     * Associative array with following keys :
      *  - id
      *  - name
      *  - icon
@@ -68,12 +68,13 @@ class RoomRest
      *    - name
      *    - icon
      *  - children (if exists)
-     * 
+     *
      * @param JeeObject $room
      * @param JeeObject|null $father
-     * 
+     *
+     * @param bool $addChildren
      * @return array
-     * 
+     *
      * @throws \Exception
      */
     private static function prepareResult(JeeObject $room, JeeObject $father = null, $addChildren = true)
@@ -142,26 +143,13 @@ class RoomRest
     }
 
     /**
-     * Get HTML room summary
-     * @param int $roomId Target room id
-     * @return bool|string HTML summary or false if no summary
-     * @throws \Exception
-     */
-    public static function getRoomSummary(int $roomId) {
-        $room = JeeObjectManager::byId($roomId);
-        if (is_object($room)) {
-            return $room->getHtmlSummary();
-        }
-        return false;
-    }
-
-    /**
      * Get HTML summary from list of rooms passed in argument separated by ;
      * @param string $roomsList List of rooms Id separated by ;
      * @return string[]
      * @throws \Exception
      */
-    public static function getRoomsSummary(string $roomsList) {
+    public static function getRoomsSummary(string $roomsList)
+    {
         $result = [];
         $roomsList = explode(';', $roomsList);
         if (is_array($roomsList) && count($roomsList) > 1) {
@@ -170,5 +158,20 @@ class RoomRest
             }
         }
         return $result;
+    }
+
+    /**
+     * Get HTML room summary
+     * @param int $roomId Target room id
+     * @return bool|string HTML summary or false if no summary
+     * @throws \Exception
+     */
+    public static function getRoomSummary(int $roomId)
+    {
+        $room = JeeObjectManager::byId($roomId);
+        if (is_object($room)) {
+            return $room->getHtmlSummary();
+        }
+        return false;
     }
 }

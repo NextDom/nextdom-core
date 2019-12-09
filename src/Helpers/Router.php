@@ -36,7 +36,6 @@ namespace NextDom\Helpers;
 
 use NextDom\Enums\GetParams;
 use NextDom\Enums\ViewType;
-use NextDom\Managers\ConfigManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -101,6 +100,38 @@ class Router
     }
 
     /**
+     * Display for a computer
+     *
+     * @throws \Exception
+     */
+    public function desktopView()
+    {
+        AuthentificationHelper::init();
+        $prepareView = new PrepareView();
+        if ($this->isModalRequest()) {
+            $prepareView->showModal();
+        } elseif ($this->isPluginConfRequest()) {
+            // Displaying the configuration section of a plugin in the configuration page
+            if (AuthentificationHelper::isConnectedAsAdminOrFail())
+            {
+                FileSystemHelper::includeFile('plugin_info', 'configuration', 'configuration', Utils::init(GetParams::PLUGIN_ID), true);
+            }
+        } elseif ($this->isAjaxQuery()) {
+            $prepareView->showContentByAjax();
+        } else {
+            $prepareView->initConfig();
+            if (!$prepareView->firstUseAlreadyShowed()) {
+                $prepareView->showSpecialPage('firstUse');
+
+            } elseif (!AuthentificationHelper::isConnected()) {
+                $prepareView->showSpecialPage('connection');
+            } else {
+                $prepareView->showContent();
+            }
+        }
+    }
+
+    /**
      * Test if modal window is requested
      *
      * @return bool True if modal window is requested
@@ -125,36 +156,9 @@ class Router
      *
      * @return bool True if page is requested by Ajax query
      */
-    private function isAjaxQuery() {
-        return isset($_GET[GetParams::AJAX_QUERY]) && $_GET[GetParams::AJAX_QUERY] == 1;
-    }
-    /**
-     * Display for a computer
-     *
-     * @throws \Exception
-     */
-    public function desktopView()
+    private function isAjaxQuery()
     {
-        AuthentificationHelper::init();
-        $prepareView = new PrepareView();
-        if ($this->isModalRequest()) {
-            $prepareView->showModal();
-        } elseif ($this->isPluginConfRequest()) {
-            // Displaying the configuration section of a plugin in the configuration page
-            FileSystemHelper::includeFile('plugin_info', 'configuration', 'configuration', Utils::init(GetParams::PLUGIN_ID), true);
-        } elseif ($this->isAjaxQuery()) {
-            $prepareView->showContentByAjax();
-        } else {
-            $prepareView->initConfig();
-            if (!$prepareView->firstUseAlreadyShowed()) {
-                $prepareView->showSpecialPage('firstUse');
-
-            } elseif (!AuthentificationHelper::isConnected()) {
-                $prepareView->showSpecialPage('connection');
-            } else {
-                $prepareView->showContent();
-            }
-        }
+        return isset($_GET[GetParams::AJAX_QUERY]) && $_GET[GetParams::AJAX_QUERY] == 1;
     }
 
     /**

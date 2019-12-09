@@ -17,6 +17,8 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\DateFormat;
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NetworkHelper;
@@ -72,7 +74,7 @@ class PlanHeader implements EntityInterface
      * @return string
      * @throws \Exception
      */
-    public function report($_format = 'pdf', $_parameters = array())
+    public function report($_format = 'pdf', $_parameters = [])
     {
         $url = NetworkHelper::getNetworkAccess('internal') . '/index.php?v=d&p=plan';
         $url .= '&plan_id=' . $this->getId();
@@ -169,7 +171,7 @@ class PlanHeader implements EntityInterface
     public function preSave()
     {
         if (trim($this->getName()) == '') {
-            throw new \Exception(__('Le nom du plan ne peut pas être vide'));
+            throw new CoreException(__('Le nom du plan ne peut pas être vide'));
         }
         if ($this->getConfiguration('desktopSizeX') == '') {
             $this->setConfiguration('desktopSizeX', 500);
@@ -232,12 +234,13 @@ class PlanHeader implements EntityInterface
 
     public function remove()
     {
-        NextDomHelper::addRemoveHistory(array('id' => $this->getId(), 'name' => $this->getName(), 'date' => date('Y-m-d H:i:s'), 'type' => 'plan'));
+        NextDomHelper::addRemoveHistory(['id' => $this->getId(), 'name' => $this->getName(), 'date' => date(DateFormat::FULL), 'type' => 'plan']);
         DBHelper::remove($this);
     }
 
     /**
      * @return string
+     * @throws CoreException
      */
     public function displayImage()
     {
@@ -246,7 +249,7 @@ class PlanHeader implements EntityInterface
         }
         $dir = NEXTDOM_DATA . '/data/custom/plans/';
         if (!file_exists($dir)) {
-            FileSystemHelper::mkdirIfNotExists($dir,0755,true);
+            FileSystemHelper::mkdirIfNotExists($dir, 0755, true);
         }
         if ($this->getImage('sha512') == '') {
             $this->setImage('sha512', Utils::sha512($this->getImage('data')));
@@ -258,7 +261,7 @@ class PlanHeader implements EntityInterface
             file_put_contents($filepath, base64_decode($this->getImage('data')));
         }
         $size = $this->getImage('size');
-        return '<img style="z-index:997" src="'. '/data/custom/plans/' . $filename . '" data-size_y="' . $size[1] . '" data-size_x="' . $size[0] . '">';
+        return '<img style="z-index:997" src="' . '/data/custom/plans/' . $filename . '" data-size_y="' . $size[1] . '" data-size_x="' . $size[0] . '">';
     }
 
     /**
@@ -268,7 +271,7 @@ class PlanHeader implements EntityInterface
      * @return array|null
      * @throws \Exception
      */
-    public function getLinkData(&$_data = array('node' => array(), 'link' => array()), $_level = 0, $_drill = 3)
+    public function getLinkData(&$_data = ['node' => [], 'link' => []], $_level = 0, $_drill = 3)
     {
         if (isset($_data['node']['plan' . $this->getId()])) {
             return null;
@@ -278,7 +281,7 @@ class PlanHeader implements EntityInterface
             return $_data;
         }
         $icon = Utils::findCodeIcon('fa-paint-brush');
-        $_data['node']['plan' . $this->getId()] = array(
+        $_data['node']['plan' . $this->getId()] = [
             'id' => 'interactDef' . $this->getId(),
             'name' => substr($this->getName(), 0, 20),
             'icon' => $icon['icon'],
@@ -289,7 +292,7 @@ class PlanHeader implements EntityInterface
             'textx' => 0,
             'title' => __('Design :') . ' ' . $this->getName(),
             'url' => 'index.php?v=d&p=plan&view_id=' . $this->getId(),
-        );
+        ];
         return null;
     }
 

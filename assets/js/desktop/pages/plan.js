@@ -383,8 +383,7 @@ if (user_isAdmin == 1) {
         },
         callback: function (key, opt) {
           savePlan(false, false);
-          $('#md_modal').dialog({title: "{{Configuration du design}}"});
-          $('#md_modal').load('index.php?v=d&modal=planHeader.configure&planHeader_id=' + planHeader_id).dialog('open');
+          showConfigModal();
         }
       },
       sep3: "---------",
@@ -905,6 +904,11 @@ function savePlan(_refreshDisplay, _async) {
       }
     },
   });
+}
+
+function showConfigModal() {
+  $('#md_modal').dialog({title: "{{Configuration du design}}"});
+  $('#md_modal').load('index.php?v=d&modal=planHeader.configure&planHeader_id=' + planHeader_id).dialog('open');
 }
 
 function displayObject(_plan, _html, _noRender) {

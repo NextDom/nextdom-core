@@ -17,6 +17,7 @@
 
 namespace NextDom\Ajax;
 
+use NextDom\Enums\AjaxParams;
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
@@ -44,7 +45,7 @@ class ViewAjax extends BaseAjax
     public function remove()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $view = ViewManager::byId(Utils::init('id'));
+        $view = ViewManager::byId(Utils::init(AjaxParams::ID));
         if (!is_object($view)) {
             throw new CoreException(__('Vue non trouvée. Vérifiez l\'iD'));
         }
@@ -59,27 +60,27 @@ class ViewAjax extends BaseAjax
 
     public function get()
     {
-        if (Utils::init('id') == 'all' || is_json(Utils::init('id'))) {
+        if (Utils::init(AjaxParams::ID) == 'all' || is_json(Utils::init(AjaxParams::ID))) {
             $views = [];
-            if (is_json(Utils::init('id'))) {
-                $view_ajax = json_decode(Utils::init('id'), true);
+            if (is_json(Utils::init(AjaxParams::ID))) {
+                $view_ajax = json_decode(Utils::init(AjaxParams::ID), true);
                 foreach ($view_ajax as $id) {
                     $views[] = ViewManager::byId($id);
                 }
             } else {
                 $views = ViewManager::all();
             }
-            $return = array();
+            $return = [];
             foreach ($views as $view) {
-                $return[$view->getId()] = $view->toAjax(Utils::init('version', 'dview'), Utils::init('html'));
+                $return[$view->getId()] = $view->toAjax(Utils::init(AjaxParams::VERSION, 'dview'), Utils::init('html'));
             }
             $this->ajax->success($return);
         } else {
-            $view = ViewManager::byId(Utils::init('id'));
+            $view = ViewManager::byId(Utils::init(AjaxParams::ID));
             if (!is_object($view)) {
                 throw new CoreException(__('Vue non trouvée. Vérifiez l\'ID'));
             }
-            $this->ajax->success($view->toAjax(Utils::init('version', 'dview'), Utils::init('html')));
+            $this->ajax->success($view->toAjax(Utils::init(AjaxParams::VERSION, 'dview'), Utils::init(AjaxParams::HTML)));
         }
     }
 
@@ -123,13 +124,13 @@ class ViewAjax extends BaseAjax
             throw new CoreException(__('Vue non trouvée. Vérifiez l\'ID'));
         }
         $return = Utils::o2a($viewZone);
-        $return['eqLogic'] = array();
+        $return['eqLogic'] = [];
         /**
          * @var ViewData $viewData
          */
         foreach ($viewZone->getViewData() as $viewData) {
             $infoViewDatat = Utils::o2a($viewData->getLinkObject());
-            $infoViewDatat['html'] = $viewData->getLinkObject()->toHtml(Utils::init('version'));
+            $infoViewDatat['html'] = $viewData->getLinkObject()->toHtml(Utils::init(AjaxParams::VERSION));
             $return['viewData'][] = $infoViewDatat;
         }
         $this->ajax->success($return);
@@ -176,9 +177,9 @@ class ViewAjax extends BaseAjax
     public function removeImage()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $view = ViewManager::byId(Utils::init('id'));
+        $view = ViewManager::byId(Utils::init(AjaxParams::ID));
         if (!is_object($view)) {
-            throw new CoreException(__('Vue inconnu. Vérifiez l\'ID ') . Utils::init('id'));
+            throw new CoreException(__('Vue inconnu. Vérifiez l\'ID ') . Utils::init(AjaxParams::ID));
         }
         $view->setImage('sha512', '');
         $view->save();
@@ -189,7 +190,7 @@ class ViewAjax extends BaseAjax
     public function uploadImage()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $view = ViewManager::byId(Utils::init('id'));
+        $view = ViewManager::byId(Utils::init(AjaxParams::ID));
         if (!is_object($view)) {
             throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));
         }
@@ -197,7 +198,7 @@ class ViewAjax extends BaseAjax
             throw new CoreException(__('Aucun fichier trouvé. Vérifiez le paramètre PHP (post size limit)'));
         }
         $extension = strtolower(strrchr($_FILES['file']['name'], '.'));
-        if (!in_array($extension, array('.jpg', '.jpeg', '.png'))) {
+        if (!in_array($extension, ['.jpg', '.jpeg', '.png'])) {
             throw new CoreException('Extension du fichier non valide (autorisé .jpg .jpeg .png) : ' . $extension);
         }
         if (filesize($_FILES['file']['tmp_name']) > 5000000) {

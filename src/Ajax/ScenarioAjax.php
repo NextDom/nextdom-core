@@ -106,15 +106,15 @@ class ScenarioAjax extends BaseAjax
 
     public function testExpression()
     {
-        $return = [];
+        $result = [];
         $scenario = null;
-        $return['evaluate'] = ScenarioExpressionManager::setTags(NextDomHelper::fromHumanReadable(Utils::init(AjaxParams::EXPRESSION)), $scenario, true);
-        $return['result'] = Utils::evaluate($return['evaluate']);
-        $return['correct'] = 'ok';
-        if (trim($return['result']) == trim($return['evaluate'])) {
-            $return['correct'] = 'nok';
+        $result['evaluate'] = ScenarioExpressionManager::setTags(NextDomHelper::fromHumanReadable(Utils::init(AjaxParams::EXPRESSION)), $scenario, true);
+        $result['result'] = Utils::evaluate($result['evaluate']);
+        $result['correct'] = 'ok';
+        if (trim($result['result']) == trim($result['evaluate'])) {
+            $result['correct'] = 'nok';
         }
-        $this->ajax->success($return);
+        $this->ajax->success($result);
     }
 
     public function getTemplate()
@@ -160,19 +160,19 @@ class ScenarioAjax extends BaseAjax
     {
         $templateFile = NEXTDOM_DATA . '/config/scenario/' . Utils::initFilename(AjaxParams::TEMPLATE);
         if (!file_exists($templateFile)) {
-            throw new CoreException('Fichier non trouvé : ' . $templateFile);
+            throw new CoreException(__('Fichier non trouvé : ') . $templateFile);
         }
-        $return = [];
+        $result = [];
         foreach (preg_split("/((\r?\n)|(\r\n?))/", file_get_contents($templateFile)) as $line) {
             preg_match_all("/#\[(.*?)\]\[(.*?)\]\[(.*?)\]#/", $line, $matches, PREG_SET_ORDER);
             if (count($matches) > 0) {
                 foreach ($matches as $match) {
-                    $return[$match[0]] = '';
+                    $result[$match[0]] = '';
                     $cmd = null;
                     try {
                         $cmd = CmdManager::byString($match[0]);
                         if (is_object($cmd)) {
-                            $return[$match[0]] = '#' . $cmd->getHumanName() . '#';
+                            $result[$match[0]] = '#' . $cmd->getHumanName() . '#';
                         }
                     } catch (\Exception $e) {
 
@@ -182,11 +182,11 @@ class ScenarioAjax extends BaseAjax
             preg_match_all("/#\[(.*?)\]\[(.*?)\]#/", $line, $matches, PREG_SET_ORDER);
             if (count($matches) > 0) {
                 foreach ($matches as $match) {
-                    $return[$match[0]] = '';
+                    $result[$match[0]] = '';
                     try {
                         $eqLogic = EqLogicManager::byString($match[0]);
                         if (is_object($eqLogic)) {
-                            $return[$match[0]] = '#' . $eqLogic->getHumanName() . '#';
+                            $result[$match[0]] = '#' . $eqLogic->getHumanName() . '#';
                         }
                     } catch (\Exception $e) {
 
@@ -196,18 +196,18 @@ class ScenarioAjax extends BaseAjax
             preg_match_all("/variable\((.*?)\)/", $line, $matches, PREG_SET_ORDER);
             if (count($matches) > 0) {
                 foreach ($matches as $match) {
-                    $return[$match[1]] = $match[1];
+                    $result[$match[1]] = $match[1];
                 }
             }
         }
-        $this->ajax->success($return);
+        $this->ajax->success($result);
     }
 
     public function applyTemplate()
     {
         $templateFile = NEXTDOM_DATA . '/config/scenario/' . Utils::initFilename(AjaxParams::TEMPLATE);
         if (!file_exists($templateFile)) {
-            throw new CoreException('Fichier non trouvé : ' . $templateFile);
+            throw new CoreException(__('Fichier non trouvé : ') . $templateFile);
         }
         $converts = [];
         foreach (json_decode(Utils::init('convert'), true) as $value) {
@@ -249,13 +249,13 @@ class ScenarioAjax extends BaseAjax
     public function all()
     {
         $scenarios = ScenarioManager::all();
-        $return = [];
+        $result = [];
         foreach ($scenarios as $scenario) {
             $info_scenario = Utils::o2a($scenario);
             $info_scenario['humanName'] = $scenario->getHumanName();
-            $return[] = $info_scenario;
+            $result[] = $info_scenario;
         }
-        $this->ajax->success($return);
+        $this->ajax->success($result);
     }
 
     public function saveAll()
@@ -277,11 +277,11 @@ class ScenarioAjax extends BaseAjax
     public function autoCompleteGroup()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $return = [];
+        $result = [];
         foreach (ScenarioManager::listGroup(Utils::init('term')) as $group) {
-            $return[] = $group['group'];
+            $result[] = $group['group'];
         }
-        $this->ajax->success($return);
+        $this->ajax->success($result);
     }
 
     public function toHtml()
@@ -297,15 +297,15 @@ class ScenarioAjax extends BaseAjax
             } else {
                 $scenarios = ScenarioManager::all();
             }
-            $return = [];
+            $result = [];
             foreach ($scenarios as $scenario) {
-                $return[] = $scenario->toHtml(Utils::init('version'));
+                $result[] = $scenario->toHtml(Utils::init(AjaxParams::VERSION));
             }
-            $this->ajax->success($return);
+            $this->ajax->success($result);
         } else {
             $scenario = ScenarioManager::byId($target);
             if (is_object($scenario)) {
-                $this->ajax->success($scenario->toHtml(Utils::init('version')));
+                $this->ajax->success($scenario->toHtml(Utils::init(AjaxParams::VERSION)));
             }
         }
         $this->ajax->success();
@@ -357,15 +357,15 @@ class ScenarioAjax extends BaseAjax
         if (!is_object($scenario)) {
             throw new CoreException(__('Scénario ID inconnu'));
         }
-        $return = Utils::o2a($scenario);
-        $return['trigger'] = NextDomHelper::toHumanReadable($return['trigger']);
-        $return['forecast'] = $scenario->calculateScheduleDate();
-        $return['elements'] = [];
+        $result = Utils::o2a($scenario);
+        $result['trigger'] = NextDomHelper::toHumanReadable($result['trigger']);
+        $result['forecast'] = $scenario->calculateScheduleDate();
+        $result['elements'] = [];
         foreach ($scenario->getElement() as $element) {
-            $return['elements'][] = $element->getAjaxElement();
+            $result['elements'][] = $element->getAjaxElement();
         }
 
-        $this->ajax->success($return);
+        $this->ajax->success($result);
     }
 
     /**
@@ -454,8 +454,7 @@ class ScenarioAjax extends BaseAjax
         }
         if ($result !== null) {
             $this->ajax->success($result);
-        }
-        else {
+        } else {
             $this->ajax->success(ScenarioExpressionManager::getExpressionOptions(Utils::init(AjaxParams::EXPRESSION), Utils::init(AjaxParams::OPTION)));
         }
     }

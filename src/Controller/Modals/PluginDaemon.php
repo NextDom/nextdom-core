@@ -49,7 +49,7 @@ class PluginDaemon extends BaseAbstractModal
         if (count($daemonInfo) == 0) {
             die();
         }
-        $refresh = array();
+        $refresh = [];
         $refresh[0] = 0;
         $pageData = [];
         $pageData['daemonInfoState'] = $daemonInfo['state'];

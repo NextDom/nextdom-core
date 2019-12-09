@@ -33,6 +33,9 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Enums\CmdType;
+use NextDom\Enums\DateFormat;
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
@@ -41,109 +44,16 @@ use NextDom\Model\Entity\Cmd;
 use NextDom\Model\Entity\EqLogic;
 
 /**
- * Class CmdManager
+ * Manage command
+ *
  * @package NextDom\Managers
  */
 class CmdManager
 {
+    /** @var string Class of the commands */
     const CLASS_NAME = Cmd::class;
+    /** @var string Table name of the class in database */
     const DB_CLASS_NAME = '`cmd`';
-
-    /**
-     * Cast a command from generic to plugin
-     *
-     * @param Cmd $inputs
-     * @param EqLogic $eqLogic
-     * @return array|mixed
-     */
-    public static function cast($inputs, $eqLogic = null)
-    {
-        if (is_object($inputs)) {
-            $targetClassName = $inputs->getEqType() . 'Cmd';
-            if (class_exists($targetClassName)) {
-                if ($eqLogic !== null) {
-                    $inputs->_eqLogic = $eqLogic;
-                }
-                /** @var Cmd $target */
-                $target = new $targetClassName();
-                $target->castFromCmd($inputs);
-                return $target;
-            }
-        }
-        if (is_array($inputs)) {
-            $result = [];
-            foreach ($inputs as $input) {
-                if ($eqLogic !== null) {
-                    $input->_eqLogic = $eqLogic;
-                }
-                $result[] = self::cast($input);
-            }
-            return $result;
-        }
-        return $inputs;
-    }
-
-    /**
-     * Get list of commands by IDs
-     *
-     * @param array $idsList List of ID
-     *
-     * @return Cmd[]|null List of commands
-     *
-     * @throws \Exception
-     */
-    public static function byIds($idsList)
-    {
-        if (!is_array($idsList) || count($idsList) == 0) {
-            return [];
-        }
-        $in = trim(preg_replace('/[, ]{2,}/m', ',', implode(',', $idsList)), ',');
-        if ($in === '') {
-            return [];
-        }
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE id IN (' . $in . ')';
-        return self::cast(DBHelper::getAllObjects($sql, [], self::CLASS_NAME));
-    }
-
-    /**
-     * Get command by his id
-     *
-     * @param mixed $id Command id
-     *
-     * @return Cmd|bool Command or false
-     *
-     * @throws \Exception
-     */
-    public static function byId($id)
-    {
-        if ($id == '') {
-            return null;
-        }
-        $values = [
-            'id' => $id,
-        ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE id = :id';
-        return self::cast(DBHelper::getOneObject($sql, $values, self::CLASS_NAME));
-    }
-
-    /**
-     * Get all commands
-     *
-     * @return Cmd[] All commands
-     *
-     * @throws \Exception
-     */
-    public static function all()
-    {
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                ORDER BY id';
-        return self::cast(DBHelper::getAllObjects($sql, [], self::CLASS_NAME));
-    }
 
     /**
      * Get historized commands
@@ -171,6 +81,41 @@ class CmdManager
         $sql .= ' ORDER BY el.name, c.name';
         $result2 = self::cast(DBHelper::getAllObjects($sql, [], self::CLASS_NAME));
         return array_merge($result1, $result2);
+    }
+
+    /**
+     * Cast a command from generic to plugin
+     *
+     * @param Cmd|Cmd[] $inputs Commands to cast
+     * @param EqLogic $eqLogic Link to a specific EqLogic
+     *
+     * @return array|mixed Casted command
+     */
+    public static function cast($inputs, $eqLogic = null)
+    {
+        if (is_object($inputs)) {
+            $targetClassName = $inputs->getEqType() . 'Cmd';
+            if (class_exists($targetClassName)) {
+                if ($eqLogic !== null) {
+                    $inputs->_eqLogic = $eqLogic;
+                }
+                /** @var Cmd $target */
+                $target = new $targetClassName();
+                $target->castFromCmd($inputs);
+                return $target;
+            }
+        }
+        if (is_array($inputs)) {
+            $result = [];
+            foreach ($inputs as $input) {
+                if ($eqLogic !== null) {
+                    $input->_eqLogic = $eqLogic;
+                }
+                $result[] = self::cast($input);
+            }
+            return $result;
+        }
+        return $inputs;
     }
 
     /**
@@ -218,9 +163,11 @@ class CmdManager
     /**
      * Get command by logical id
      *
-     * @param $logicalId
-     * @param null $type
+     * @param int $logicalId Filter by logical id
+     * @param string $type Filter by type
+     *
      * @return array|mixed
+     *
      * @throws \Exception
      */
     public static function byLogicalId($logicalId, $type = null)
@@ -636,6 +583,30 @@ class CmdManager
     }
 
     /**
+     * Get list of commands by IDs
+     *
+     * @param array $idsList List of ID
+     *
+     * @return Cmd[]|null List of commands
+     *
+     * @throws \Exception
+     */
+    public static function byIds($idsList)
+    {
+        if (!is_array($idsList) || count($idsList) == 0) {
+            return [];
+        }
+        $in = trim(preg_replace('/[, ]{2,}/m', ',', implode(',', $idsList)), ',');
+        if ($in === '') {
+            return [];
+        }
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE id IN (' . $in . ')';
+        return self::cast(DBHelper::getAllObjects($sql, [], self::CLASS_NAME));
+    }
+
+    /**
      * Get commands by string in human readeable format
      *
      * @param string $needle String to search
@@ -648,9 +619,32 @@ class CmdManager
     {
         $cmd = self::byId(str_replace('#', '', self::humanReadableToCmd($needle)));
         if (!is_object($cmd)) {
-            throw new \Exception(__('La commande n\'a pas pu être trouvée : ') . $needle . __(' => ') . self::humanReadableToCmd($needle));
+            throw new CoreException(__('La commande n\'a pas pu être trouvée : ') . $needle . __(' => ') . self::humanReadableToCmd($needle));
         }
         return $cmd;
+    }
+
+    /**
+     * Get command by his id
+     *
+     * @param mixed $id Command id
+     *
+     * @return Cmd|bool Command or false
+     *
+     * @throws \Exception
+     */
+    public static function byId($id)
+    {
+        if ($id == '') {
+            return null;
+        }
+        $values = [
+            'id' => $id,
+        ];
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE id = :id';
+        return self::cast(DBHelper::getOneObject($sql, $values, self::CLASS_NAME));
     }
 
     /**
@@ -658,7 +652,7 @@ class CmdManager
      *
      * @param $input
      *
-     * @return Cmd
+     * @return string
      *
      * @throws \Exception
      */
@@ -799,12 +793,12 @@ class CmdManager
             $cmdCacheAttrValue = $mc->getValue();
             if (Utils::getJsonAttr($cmdCacheAttrValue, 'value', null) !== null) {
                 $cmdCacheAttrValue = $mc->getValue();
-                $collectDate = Utils::getJsonAttr($cmdCacheAttrValue, 'collectDate', date('Y-m-d H:i:s'));
-                $valueDate = Utils::getJsonAttr($cmdCacheAttrValue, 'valueDate', date('Y-m-d H:i:s'));
+                $collectDate = Utils::getJsonAttr($cmdCacheAttrValue, 'collectDate', date(DateFormat::FULL));
+                $valueDate = Utils::getJsonAttr($cmdCacheAttrValue, 'valueDate', date(DateFormat::FULL));
                 $cmd_value = Utils::getJsonAttr($cmdCacheAttrValue, 'value', '');
             } else {
                 $cmd = self::byId($cmd_id);
-                if (!is_object($cmd) || $cmd->getType() != 'info') {
+                if (!is_object($cmd) || $cmd->isType(CmdType::INFO)) {
                     continue;
                 }
                 $cmd_value = $cmd->execCmd(null, true, $quote);
@@ -891,7 +885,7 @@ class CmdManager
         if (isset($colors[$color])) {
             return $colors[$color];
         }
-        throw new \Exception(__('Impossible de traduire la couleur en code hexadécimal :') . $color);
+        throw new CoreException(__('Impossible de traduire la couleur en code hexadécimal :') . $color);
     }
 
     /**
@@ -994,6 +988,21 @@ class CmdManager
             }
         }
         return $result;
+    }
+
+    /**
+     * Get all commands
+     *
+     * @return Cmd[] All commands
+     *
+     * @throws \Exception
+     */
+    public static function all()
+    {
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                ORDER BY id';
+        return self::cast(DBHelper::getAllObjects($sql, [], self::CLASS_NAME));
     }
 
     /**

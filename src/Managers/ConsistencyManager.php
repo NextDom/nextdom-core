@@ -43,19 +43,19 @@ use NextDom\Model\Entity\Cron;
  */
 class ConsistencyManager
 {
-    private static $defaultSummary = array(
-        'security' => array('key' => 'security', 'name' => 'Alerte', 'calcul' => 'sum', 'icon' => '<i class="icon nextdom-alerte2"></i>', 'unit' => '', 'count' => 'binary', 'allowDisplayZero' => false),
-        'motion' => array('key' => 'motion', 'name' => 'Mouvement', 'calcul' => 'sum', 'icon' => '<i class="icon nextdom-mouvement"></i>', 'unit' => '', 'count' => 'binary', 'allowDisplayZero' => false),
-        'door' => array('key' => 'door', 'name' => 'Porte', 'calcul' => 'sum', 'icon' => '<i class="icon nextdom-porte-ouverte"></i>', 'unit' => '', 'count' => 'binary', 'allowDisplayZero' => false),
-        'windows' => array('key' => 'windows', 'name' => 'Fenêtre', 'calcul' => 'sum', 'icon' => '<i class="icon nextdom-fenetre-ouverte"></i>', 'unit' => '', 'count' => 'binary', 'allowDisplayZero' => false),
-        'shutter' => array('key' => 'shutter', 'name' => 'Volet', 'calcul' => 'sum', 'icon' => '<i class="icon nextdom-volet-ouvert"></i>', 'unit' => '', 'count' => 'binary', 'allowDisplayZero' => false),
-        'light' => array('key' => 'light', 'name' => 'Lumière', 'calcul' => 'sum', 'icon' => '<i class="icon nextdom-lumiere-on"></i>', 'unit' => '', 'count' => 'binary', 'allowDisplayZero' => false),
-        'outlet' => array('key' => 'outlet', 'name' => 'Prise', 'calcul' => 'sum', 'icon' => '<i class="icon nextdom-prise"></i>', 'unit' => '', 'count' => 'binary', 'allowDisplayZero' => false),
-        'temperature' => array('key' => 'temperature', 'name' => 'Température', 'calcul' => 'avg', 'icon' => '<i class="icon divers-thermometer31"></i>', 'unit' => '°C', 'allowDisplayZero' => true),
-        'humidity' => array('key' => 'humidity', 'name' => 'Humidité', 'calcul' => 'avg', 'icon' => '<i class="fa fa-tint"></i>', 'unit' => '%', 'allowDisplayZero' => true),
-        'luminosity' => array('key' => 'luminosity', 'name' => 'Luminosité', 'calcul' => 'avg', 'icon' => '<i class="icon meteo-soleil"></i>', 'unit' => 'lx', 'allowDisplayZero' => false),
-        'power' => array('key' => 'power', 'name' => 'Puissance', 'calcul' => 'sum', 'icon' => '<i class="fa fa-bolt"></i>', 'unit' => 'W', 'allowDisplayZero' => false),
-    );
+    private static $defaultSummary = [
+        'security' => ['key' => 'security', 'name' => 'Alerte', 'calcul' => 'sum', 'icon' => '<i class="icon nextdom-alerte2"></i>', 'unit' => '', 'count' => 'binary', 'allowDisplayZero' => false],
+        'motion' => ['key' => 'motion', 'name' => 'Mouvement', 'calcul' => 'sum', 'icon' => '<i class="icon nextdom-mouvement"></i>', 'unit' => '', 'count' => 'binary', 'allowDisplayZero' => false],
+        'door' => ['key' => 'door', 'name' => 'Porte', 'calcul' => 'sum', 'icon' => '<i class="icon nextdom-porte-ouverte"></i>', 'unit' => '', 'count' => 'binary', 'allowDisplayZero' => false],
+        'windows' => ['key' => 'windows', 'name' => 'Fenêtre', 'calcul' => 'sum', 'icon' => '<i class="icon nextdom-fenetre-ouverte"></i>', 'unit' => '', 'count' => 'binary', 'allowDisplayZero' => false],
+        'shutter' => ['key' => 'shutter', 'name' => 'Volet', 'calcul' => 'sum', 'icon' => '<i class="icon nextdom-volet-ouvert"></i>', 'unit' => '', 'count' => 'binary', 'allowDisplayZero' => false],
+        'light' => ['key' => 'light', 'name' => 'Lumière', 'calcul' => 'sum', 'icon' => '<i class="icon nextdom-lumiere-on"></i>', 'unit' => '', 'count' => 'binary', 'allowDisplayZero' => false],
+        'outlet' => ['key' => 'outlet', 'name' => 'Prise', 'calcul' => 'sum', 'icon' => '<i class="icon nextdom-prise"></i>', 'unit' => '', 'count' => 'binary', 'allowDisplayZero' => false],
+        'temperature' => ['key' => 'temperature', 'name' => 'Température', 'calcul' => 'avg', 'icon' => '<i class="icon divers-thermometer31"></i>', 'unit' => '°C', 'allowDisplayZero' => true],
+        'humidity' => ['key' => 'humidity', 'name' => 'Humidité', 'calcul' => 'avg', 'icon' => '<i class="fa fa-tint"></i>', 'unit' => '%', 'allowDisplayZero' => true],
+        'luminosity' => ['key' => 'luminosity', 'name' => 'Luminosité', 'calcul' => 'avg', 'icon' => '<i class="icon meteo-soleil"></i>', 'unit' => 'lx', 'allowDisplayZero' => false],
+        'power' => ['key' => 'power', 'name' => 'Puissance', 'calcul' => 'sum', 'icon' => '<i class="fa fa-bolt"></i>', 'unit' => 'W', 'allowDisplayZero' => false],
+    ];
 
     /**
      * Start consistency check of the system
@@ -78,7 +78,7 @@ class ConsistencyManager
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      * @throws \Exception
      */
     private static function ensureConfiguration()
@@ -150,103 +150,103 @@ class ConsistencyManager
      */
     public static function getDefaultCrons()
     {
-        return array(
-            "nextdom" => array(
-                "backup" => array(
+        return [
+            "nextdom" => [
+                "backup" => [
                     "schedule" => mt_rand(10, 59) . ' 0' . mt_rand(0, 7) . ' * * *',
                     "timeout" => 60,
                     "enabled" => 1
-                ),
-                "cronDaily" => array(
+                ],
+                "cronDaily" => [
                     "schedule" => "00 00 * * * *",
                     "timeout" => 240,
                     "enabled" => 1
-                ),
-                "cronHourly" => array(
+                ],
+                "cronHourly" => [
                     "schedule" => "00 * * * * *",
                     "timeout" => 60,
                     "enabled" => 1
-                ),
-                "cron10" => array(
+                ],
+                "cron10" => [
                     "schedule" => "*/10 * * * * *",
                     "timeout" => 10
-                ),
-                "cron5" => array(
+                ],
+                "cron5" => [
                     "schedule" => "*/5 * * * * *",
                     "timeout" => 5
-                ),
-                "cron" => array(
+                ],
+                "cron" => [
                     "schedule" => "* * * * * *",
                     "timeout" => 2
-                ),
-            ),
-            "plugin" => array(
-                "cronDaily" => array(
+                ],
+            ],
+            "plugin" => [
+                "cronDaily" => [
                     "schedule" => "00 00 * * * *",
                     "timeout" => 240,
                     "enabled" => 1
-                ),
-                "cronHourly" => array(
+                ],
+                "cronHourly" => [
                     "schedule" => "00 * * * * *",
                     "timeout" => 60,
                     "enabled" => 1
-                ),
-                "cron" => array(
+                ],
+                "cron" => [
                     "schedule" => "* * * * * *",
                     "timeout" => 2
-                ),
-                "cron5" => array(
+                ],
+                "cron5" => [
                     "schedule" => "*/5 * * * * *",
                     "timeout" => 5,
                     "enabled" => 1
-                ),
-                "cron10" => array(
+                ],
+                "cron10" => [
                     "schedule" => "*/10 * * * * *",
                     "timeout" => 10
-                ),
-                "cron15" => array(
+                ],
+                "cron15" => [
                     "schedule" => "*/15 * * * * *",
                     "timeout" => 15
-                ),
-                "cron30" => array(
+                ],
+                "cron30" => [
                     "schedule" => "*/15 * * * * *",
                     "timeout" => 30
-                ),
-                "checkDeamon" => array(
+                ],
+                "checkDeamon" => [
                     "schedule" => "*/5 * * * * *",
                     "timeout" => 5
-                ),
-                "heartbeat" => array(
+                ],
+                "heartbeat" => [
                     "schedule" => "*/5 * * * * *",
                     "timeout" => 10,
                     "enabled" => 1
-                ),
-            ),
-            "scenario" => array(
-                "check" => array(
+                ],
+            ],
+            "scenario" => [
+                "check" => [
                     "schedule" => "* * * * * *",
                     "timeout" => 30,
                     "enabled" => 1
-                ),
-                "control" => array(
+                ],
+                "control" => [
                     "schedule" => "* * * * * *",
                     "timeout" => 30,
                     "enabled" => 1
-                ),
-            ),
-            "cache" => array(
-                "persist" => array(
+                ],
+            ],
+            "cache" => [
+                "persist" => [
                     "schedule" => "*/30 * * * * *",
                     "timeout" => 30
-                ),
-            ),
-            "history" => array(
-                "archive" => array(
+                ],
+            ],
+            "history" => [
+                "archive" => [
                     "schedule" => "00 5 * * * *",
                     "timeout" => 240
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     private static function cleanWidgetCache()

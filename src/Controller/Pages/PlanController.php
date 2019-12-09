@@ -46,9 +46,9 @@ class PlanController extends BaseController
     {
         $planHeader = null;
         $planHeaders = PlanHeaderManager::all();
-        $planHeadersSendToJS = array();
+        $planHeadersSendToJS = [];
         foreach ($planHeaders as $planHeader_select) {
-            $planHeadersSendToJS[] = array('id' => $planHeader_select->getId(), 'name' => $planHeader_select->getName());
+            $planHeadersSendToJS[] = ['id' => $planHeader_select->getId(), 'name' => $planHeader_select->getName()];
         }
         $pageData['JS_VARS_RAW']['planHeader'] = Utils::getArrayToJQueryJson($planHeadersSendToJS);
         if (Utils::init('plan_id') == '') {

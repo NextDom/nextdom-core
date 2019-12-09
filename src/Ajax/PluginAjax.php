@@ -17,6 +17,8 @@
 
 namespace NextDom\Ajax;
 
+use NextDom\Enums\AjaxParams;
+use NextDom\Enums\Common;
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
@@ -39,55 +41,55 @@ class PluginAjax extends BaseAjax
     public function getConf()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $plugin = PluginManager::byId(Utils::init('id'));
-        $update = UpdateManager::byLogicalId(Utils::init('id'));
-        $return = Utils::o2a($plugin);
-        $return['activate'] = $plugin->isActive();
-        $return['configurationPath'] = $plugin->getPathToConfiguration();
-        $return['checkVersion'] = version_compare(NextDomHelper::getJeedomVersion(), $plugin->getRequire());
+        $plugin = PluginManager::byId(Utils::init(AjaxParams::ID));
+        $update = UpdateManager::byLogicalId(Utils::init(AjaxParams::ID));
+        $result = Utils::o2a($plugin);
+        $result['activate'] = $plugin->isActive();
+        $result['configurationPath'] = $plugin->getPathToConfiguration();
+        $result['checkVersion'] = version_compare(NextDomHelper::getJeedomVersion(), $plugin->getRequire());
         if (is_object($update)) {
             $repoClass = UpdateManager::getRepoDataFromName($update->getSource())['phpClass'];
             if (method_exists($repoClass, 'getInfo')) {
-                $return['status'] = $repoClass::getInfo(array('logicalId' => $plugin->getId(), 'type' => 'plugin'));
+                $result[Common::STATUS] = $repoClass::getInfo(['logicalId' => $plugin->getId(), 'type' => 'plugin']);
             }
-            if (!isset($return['status'])) {
-                $return['status'] = array();
+            if (!isset($result[Common::STATUS])) {
+                $result[Common::STATUS] = [];
             }
-            if (!isset($return['status']['owner'])) {
-                $return['status']['owner'] = array();
+            if (!isset($result['status']['owner'])) {
+                $result['status']['owner'] = [];
             }
             foreach (UpdateManager::listRepo() as $key => $repo) {
                 if (!isset($repo['scope']['sendPlugin']) || !$repo['scope']['sendPlugin']) {
                     continue;
                 }
                 if ($update->getSource() != $key) {
-                    $return['status']['owner'][$key] = 0;
+                    $result['status']['owner'][$key] = 0;
                     $repoClass = UpdateManager::getRepoDataFromName($key)['phpClass'];
                     if (ConfigManager::byKey($key . '::enable')) {
-                        $info = $repoClass::getInfo(array('logicalId' => $plugin->getId(), 'type' => 'plugin'));
+                        $info = $repoClass::getInfo(['logicalId' => $plugin->getId(), 'type' => 'plugin']);
                         if (isset($info['owner']) && isset($info['owner'][$key])) {
-                            $return['status']['owner'][$key] = $info['owner'][$key];
+                            $result['status']['owner'][$key] = $info['owner'][$key];
                         }
                     }
                 }
             }
         }
 
-        $return['update'] = Utils::o2a($update);
-        $return['logs'] = array();
-        $return['logs'][-1] = array('id' => -1, 'name' => 'local', 'log' => $plugin->getLogList());
-        $return['icon'] = $plugin->getPathImgIcon();
-        $this->ajax->success($return);
+        $result['update'] = Utils::o2a($update);
+        $result['logs'] = [];
+        $result['logs'][-1] = ['id' => -1, 'name' => 'local', 'log' => $plugin->getLogList()];
+        $result['icon'] = $plugin->getPathImgIcon();
+        $this->ajax->success($result);
     }
 
     public function toggle()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $plugin = PluginManager::byId(Utils::init('id'));
+        $plugin = PluginManager::byId(Utils::init(AjaxParams::ID));
         if (!is_object($plugin)) {
-            throw new CoreException(__('Plugin introuvable : ') . Utils::init('id'));
+            throw new CoreException(__('Plugin introuvable : ') . Utils::init(AjaxParams::ID));
         }
-        $plugin->setIsEnable(Utils::init('state'));
+        $plugin->setIsEnable(Utils::init(AjaxParams::STATE));
         $this->ajax->success();
     }
 
@@ -102,8 +104,8 @@ class PluginAjax extends BaseAjax
     public function getDependancyInfo()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $return = array('state' => 'nok', 'log' => 'nok');
-        $plugin = PluginManager::byId(Utils::init('id'));
+        $return = ['state' => 'nok', 'log' => 'nok'];
+        $plugin = PluginManager::byId(Utils::init(AjaxParams::ID));
         if (is_object($plugin)) {
             $return = $plugin->getDependencyInfo();
         }
@@ -113,7 +115,7 @@ class PluginAjax extends BaseAjax
     public function dependancyInstall()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $plugin = PluginManager::byId(Utils::init('id'));
+        $plugin = PluginManager::byId(Utils::init(AjaxParams::ID));
         if (!is_object($plugin)) {
             $this->ajax->success();
         }
@@ -123,32 +125,32 @@ class PluginAjax extends BaseAjax
     public function getDeamonInfo()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $pluginId = Utils::init('id');
-        $return = array('launchable_message' => '', 'launchable' => 'nok', 'state' => 'nok', 'log' => 'nok', 'auto' => 0);
+        $pluginId = Utils::init(AjaxParams::ID);
+        $result = ['launchable_message' => '', 'launchable' => 'nok', 'state' => 'nok', 'log' => 'nok', 'auto' => 0];
         $plugin = PluginManager::byId($pluginId);
         if (is_object($plugin)) {
-            $return = $plugin->deamon_info();
+            $result = $plugin->deamon_info();
         }
-        $return['plugin'] = Utils::o2a($plugin);
-        $this->ajax->success($return);
+        $result['plugin'] = Utils::o2a($plugin);
+        $this->ajax->success($result);
     }
 
     public function deamonStart()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $pluginId = Utils::init('id');
+        $pluginId = Utils::init(AjaxParams::ID);
         $plugin = PluginManager::byId($pluginId);
         if (!is_object($plugin)) {
             $this->ajax->success();
         }
-        $plugin->deamon_start(Utils::init('forceRestart', 0));
+        $plugin->deamon_start(Utils::init(AjaxParams::FORCE_RESTART, 0));
         $this->ajax->success();
     }
 
     public function deamonStop()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $plugin = PluginManager::byId(Utils::init('id'));
+        $plugin = PluginManager::byId(Utils::init(AjaxParams::ID));
         if (!is_object($plugin)) {
             $this->ajax->success();
         }
@@ -159,11 +161,11 @@ class PluginAjax extends BaseAjax
     public function deamonChangeAutoMode()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $plugin = PluginManager::byId(Utils::init('id'));
+        $plugin = PluginManager::byId(Utils::init(AjaxParams::ID));
         if (!is_object($plugin)) {
             $this->ajax->success();
         }
-        $plugin->deamon_changeAutoMode(Utils::init('mode'));
+        $plugin->deamon_changeAutoMode(Utils::init(AjaxParams::MODE));
         $this->ajax->success();
     }
 

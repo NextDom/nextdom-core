@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\LogTarget;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
@@ -171,7 +172,7 @@ class Update implements EntityInterface
     public function doUpdate()
     {
         if ($this->getConfiguration('doNotUpdate') == 1 && $this->getType() != 'core') {
-            LogHelper::add('update', 'alert', __('Vérification des mises à jour, mise à jour et réinstallation désactivées sur ') . $this->getLogicalId());
+            LogHelper::addAlert(LogTarget::UPDATE, __('Vérification des mises à jour, mise à jour et réinstallation désactivées sur ') . $this->getLogicalId());
             return;
         }
         if ($this->getType() == 'core') {
@@ -186,31 +187,31 @@ class Update implements EntityInterface
                 }
                 mkdir($cibDir);
                 if (!file_exists($cibDir) && !mkdir($cibDir, 0775, true)) {
-                    throw new \Exception(__('Impossible de créer le dossier  : ' . $cibDir . '. Problème de droits ?'));
+                    throw new CoreException(__('Impossible de créer le dossier  : ' . $cibDir . '. Problème de droits ?'));
                 }
-                LogHelper::add('update', 'alert', __('Téléchargement du plugin...'));
+                LogHelper::addAlert(LogTarget::UPDATE, __('Téléchargement du plugin...'));
                 $info = $class::downloadObject($this);
                 if ($info['path'] !== false) {
                     $tmp = $info['path'];
-                    LogHelper::add('update', 'alert', __("OK\n"));
+                    LogHelper::addAlert(LogTarget::UPDATE, __("OK\n"));
 
                     if (!file_exists($tmp)) {
-                        throw new \Exception(__('Impossible de trouver le fichier zip : ') . $this->getConfiguration('path'));
+                        throw new CoreException(__('Impossible de trouver le fichier zip : ') . $this->getConfiguration('path'));
                     }
                     if (filesize($tmp) < 100) {
-                        throw new \Exception(__('Échec lors du téléchargement du fichier. Veuillez réessayer plus tard (taille inférieure à 100 octets). Cela peut être lié à un manque de place, une version minimale requise non consistente avec votre version de NextDom, un soucis du plugin sur le market, etc.'));
+                        throw new CoreException(__('Échec lors du téléchargement du fichier. Veuillez réessayer plus tard (taille inférieure à 100 octets). Cela peut être lié à un manque de place, une version minimale requise non consistente avec votre version de NextDom, un soucis du plugin sur le market, etc.'));
                     }
                     $extension = strtolower(strrchr($tmp, '.'));
-                    if (!in_array($extension, array('.zip'))) {
-                        throw new \Exception('Extension du fichier non valide (autorisé .zip) : ' . $extension);
+                    if (!in_array($extension, ['.zip'])) {
+                        throw new CoreException('Extension du fichier non valide (autorisé .zip) : ' . $extension);
                     }
-                    LogHelper::add('update', 'alert', __('Décompression du zip...'));
+                    LogHelper::addAlert(LogTarget::UPDATE, __('Décompression du zip...'));
                     $zip = new ZipArchive;
                     $res = $zip->open($tmp);
                     if ($res === TRUE) {
                         if (!$zip->extractTo($cibDir . '/')) {
                             $content = file_get_contents($tmp);
-                            throw new \Exception(__('Impossible d\'installer le plugin. Les fichiers n\'ont pas pu être décompressés : ') . substr($content, 255));
+                            throw new CoreException(__('Impossible d\'installer le plugin. Les fichiers n\'ont pas pu être décompressés : ') . substr($content, 255));
                         }
                         $zip->close();
                         unlink($tmp);
@@ -230,15 +231,15 @@ class Update implements EntityInterface
                                 $cibDir = $cibDir . '/' . $files[0];
                             }
                         }
-                        rmove($cibDir, NEXTDOM_ROOT . '/plugins/' . $this->getLogicalId(), false, array(), true);
+                        rmove($cibDir, NEXTDOM_ROOT . '/plugins/' . $this->getLogicalId(), false, [], true);
                         rrmdir($cibDir);
                         $cibDir = NextDomHelper::getTmpFolder('market') . '/' . $this->getLogicalId();
                         if (file_exists($cibDir)) {
                             rrmdir($cibDir);
                         }
-                        LogHelper::add('update', 'alert', __("OK\n"));
+                        LogHelper::addAlert(LogTarget::UPDATE, __("OK\n"));
                     } else {
-                        throw new \Exception(__('Impossible de décompresser l\'archive zip : ') . $tmp . ' => ' . Utils::getZipErrorMessage($res));
+                        throw new CoreException(__('Impossible de décompresser l\'archive zip : ') . $tmp . ' => ' . Utils::getZipErrorMessage($res));
                     }
                 }
                 $this->postInstallUpdate($info);
@@ -303,19 +304,19 @@ class Update implements EntityInterface
             @chgrp(NEXTDOM_ROOT . '/plugins', SystemHelper::getWWWGid());
             @chmod(NEXTDOM_ROOT . '/plugins', 0775);
         }
-        LogHelper::add('update', 'alert', __('Début de la mise à jour de : ') . $this->getLogicalId() . "\n");
+        LogHelper::addAlert(LogTarget::UPDATE, __('Début de la mise à jour de : ') . $this->getLogicalId() . "\n");
         switch ($this->getType()) {
             case 'plugin':
                 $cibDir = NEXTDOM_ROOT . '/plugins/' . $this->getLogicalId();
                 if (!file_exists($cibDir) && !mkdir($cibDir, 0775, true)) {
-                    throw new \Exception(__('Impossible de créer le dossier  : ' . $cibDir . '. Problème de droits ?'));
+                    throw new CoreException(__('Impossible de créer le dossier  : ' . $cibDir . '. Problème de droits ?'));
                 }
                 try {
                     $plugin = PluginManager::byId($this->getLogicalId());
                     if (is_object($plugin)) {
-                        LogHelper::add('update', 'alert', __('Action de pré-update...'));
+                        LogHelper::addAlert(LogTarget::UPDATE, __('Action de pré-update...'));
                         $plugin->callInstallFunction('pre_update');
-                        LogHelper::add('update', 'alert', __("OK\n"));
+                        LogHelper::addAlert(LogTarget::UPDATE, __("OK\n"));
                     }
                 } catch (\Exception $e) {
 
@@ -332,7 +333,7 @@ class Update implements EntityInterface
      */
     public function postInstallUpdate($informations)
     {
-        LogHelper::add('update', 'alert', __('Post-installation de ') . $this->getLogicalId() . '...');
+        LogHelper::addAlert(LogTarget::UPDATE, __('Post-installation de ') . $this->getLogicalId() . '...');
         switch ($this->getType()) {
             case 'plugin':
                 try {
@@ -350,7 +351,7 @@ class Update implements EntityInterface
             $this->setLocalVersion($informations['localVersion']);
         }
         $this->save();
-        LogHelper::add('update', 'alert', __("OK\n"));
+        LogHelper::addAlert(LogTarget::UPDATE, __("OK\n"));
     }
 
     /**
@@ -396,7 +397,7 @@ class Update implements EntityInterface
     public function checkUpdate()
     {
         if ($this->getConfiguration('doNotUpdate') == 1 && $this->getType() != 'core') {
-            LogHelper::add('update', 'alert', __('Vérification des mises à jour, mise à jour et réinstallation désactivées sur ') . $this->getLogicalId());
+            LogHelper::addAlert(LogTarget::UPDATE, __('Vérification des mises à jour, mise à jour et réinstallation désactivées sur ') . $this->getLogicalId());
             return;
         }
         if ($this->getType() == 'core') {
@@ -498,7 +499,7 @@ class Update implements EntityInterface
     public function deleteObjet()
     {
         if ($this->getType() == 'core') {
-            throw new \Exception(__('Vous ne pouvez pas supprimer le core de NextDom'));
+            throw new CoreException(__('Vous ne pouvez pas supprimer le core de NextDom'));
         } else {
             switch ($this->getType()) {
                 case 'plugin':
@@ -546,7 +547,7 @@ class Update implements EntityInterface
 
     /**
      * Prépare l'objet avant la sauvegarde
-     * TODO: Bizarre, en gros le nom = logicialId
+     * @TODO: Bizarre, en gros le nom = logicialId
      * @throws CoreException
      */
     public function preSave()

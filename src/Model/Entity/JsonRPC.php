@@ -31,7 +31,7 @@ class JsonRPC
     protected $id = 99999;
     protected $startTime;
     protected $applicationName;
-    protected $additionnalParams = array();
+    protected $additionnalParams = [];
 
     /**
      *
@@ -62,14 +62,14 @@ class JsonRPC
      */
     public function makeError($_code, $_message)
     {
-        $return = array(
+        $return = [
             'jsonrpc' => '2.0',
             'id' => $this->id,
-            'error' => array(
+            'error' => [
                 'code' => $_code,
                 'message' => $_message,
-            ),
-        );
+            ],
+        ];
         $return = array_merge($return, $this->getAdditionnalParams());
         if (Utils::init('callback') != '') {
             echo Utils::init('callback') . '(' . json_encode($return) . ')';
@@ -97,7 +97,7 @@ class JsonRPC
      */
     public function setAdditionnalParams($_key, $_value)
     {
-        if (in_array($_key, array('result', 'jsonrpc', 'id'))) {
+        if (in_array($_key, ['result', 'jsonrpc', 'id'])) {
             return;
         }
         $this->additionnalParams = Utils::setJsonAttr($this->additionnalParams, $_key, $_value);
@@ -108,11 +108,11 @@ class JsonRPC
      */
     public function makeSuccess($_result = 'ok')
     {
-        $return = array(
+        $return = [
             'jsonrpc' => '2.0',
             'id' => $this->id,
             'result' => $_result,
-        );
+        ];
         $return = array_merge($return, $this->getAdditionnalParams());
         if (Utils::init('callback') != '') {
             echo Utils::init('callback') . '(' . json_encode($return) . ')';

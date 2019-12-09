@@ -34,6 +34,7 @@
 
 namespace NextDom\Helpers;
 
+use NextDom\Enums\LogTarget;
 use NextDom\Enums\UserLocation;
 use NextDom\Exceptions\CoreException;
 use NextDom\Managers\ConfigManager;
@@ -46,7 +47,7 @@ use NextDom\Model\Entity\Update;
 /**
  * Class NetworkHelper
  *
- * TODO: Dépendance avec le plugin OpenVPN
+ * @TODO: Dépendance avec le plugin OpenVPN
  *
  * @package NextDom\Helpers
  */
@@ -66,7 +67,7 @@ class NetworkHelper
             return UserLocation::EXTERNAL;
         }
         // Check 4 parts of the IP
-        // TODO: Pourquoi ? Si l'ip est valide
+        // @TODO: Pourquoi ? Si l'ip est valide
         $nextdomIpParts = explode('.', $nextdomIp);
         if (count($nextdomIpParts) !== 4) {
             return UserLocation::EXTERNAL;
@@ -130,7 +131,7 @@ class NetworkHelper
         }
         if ($_mode == UserLocation::INTERNAL) {
             if (strpos(ConfigManager::byKey('internalAddr', 'core', $_default), 'http://') !== false || strpos(ConfigManager::byKey('internalAddr', 'core', $_default), 'https://') !== false) {
-                ConfigManager::save('internalAddr', str_replace(array('http://', 'https://'), '', ConfigManager::byKey('internalAddr', 'core', $_default)));
+                ConfigManager::save('internalAddr', str_replace(['http://', 'https://'], '', ConfigManager::byKey('internalAddr', 'core', $_default)));
             }
             if ($_protocol == 'ip' || $_protocol == 'dns') {
                 return ConfigManager::byKey('internalAddr', 'core', $_default);
@@ -395,13 +396,13 @@ class NetworkHelper
         }
         $data = curl_exec($ch);
         if (curl_errno($ch)) {
-            LogHelper::add('network', 'debug', 'Erreur sur ' . $url . ' => ' . curl_errno($ch));
+            LogHelper::addDebug(LogTarget::NETWORK, 'Erreur sur ' . $url . ' => ' . curl_errno($ch));
             curl_close($ch);
             return false;
         }
         curl_close($ch);
         if (trim($data) != 'ok') {
-            LogHelper::add('network', 'debug', 'Retour NOK sur ' . $url . ' => ' . $data);
+            LogHelper::addDebug(LogTarget::NETWORK, 'Retour NOK sur ' . $url . ' => ' . $data);
             return false;
         }
         return true;
@@ -417,7 +418,7 @@ class NetworkHelper
         if (isset($result['host'])) {
             $_string = $result['host'];
         } else {
-            $_string = str_replace(array('https://', 'http://'), '', $_string);
+            $_string = str_replace(['https://', 'http://'], '', $_string);
             if (strpos($_string, '/') !== false) {
                 $_string = substr($_string, 0, strpos($_string, '/'));
             }
@@ -522,9 +523,9 @@ class NetworkHelper
         $openvpn->setEqType_name('openvpn');
         $openvpn->setConfiguration('dev', 'tun');
         $openvpn->setConfiguration('proto', 'udp');
-        if(ConfigManager::byKey('dns::vpnurl') != ''){
+        if (ConfigManager::byKey('dns::vpnurl') != '') {
             $openvpn->setConfiguration('remote_host', ConfigManager::byKey('dns::vpnurl'));
-        }else{
+        } else {
             $openvpn->setConfiguration('remote_host', 'vpn.dns' . ConfigManager::byKey('dns::number', 'core', 1) . '.jeedom.com');
         }
         $openvpn->setConfiguration('username', NextDomHelper::getHardwareKey());
@@ -532,9 +533,9 @@ class NetworkHelper
         $openvpn->setConfiguration('compression', 'comp-lzo');
         $openvpn->setConfiguration('remote_port', ConfigManager::byKey('vpn::port', 'core', 1194));
         $openvpn->setConfiguration('auth_mode', 'password');
-        if(ConfigManager::byKey('connection::4g') == 1){
+        if (ConfigManager::byKey('connection::4g') == 1) {
             $openvpn->setConfiguration('optionsAfterStart', 'sudo ip link set dev #interface# mtu 1300');
-        }else{
+        } else {
             $openvpn->setConfiguration('optionsAfterStart', '');
         }
         $openvpn->save(true);

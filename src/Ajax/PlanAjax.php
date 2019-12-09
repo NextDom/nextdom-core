@@ -17,6 +17,7 @@
 
 namespace NextDom\Ajax;
 
+use NextDom\Enums\AjaxParams;
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
@@ -55,7 +56,7 @@ class PlanAjax extends BaseAjax
 
     public function execute()
     {
-        $plan = PlanManager::byId(Utils::init('id'));
+        $plan = PlanManager::byId(Utils::init(AjaxParams::ID));
         if (!is_object($plan)) {
             throw new CoreException(__('Aucun plan correspondant'));
         }
@@ -64,12 +65,12 @@ class PlanAjax extends BaseAjax
 
     public function planHeader()
     {
-        $return = array();
+        $return = [];
         /**
          * @var Plan $plan
          */
         foreach (PlanManager::byPlanHeaderId(Utils::init('planHeader_id')) as $plan) {
-            $result = $plan->getHtml(Utils::init('version'));
+            $result = $plan->getHtml(Utils::init(AjaxParams::VERSION));
             if (is_array($result)) {
                 $return[] = $result;
             }
@@ -81,27 +82,27 @@ class PlanAjax extends BaseAjax
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
         if (Utils::init('plan', '') === '') {
-            throw new CoreException(__('L\'identifiant du plan doit être fourni', __FILE__));
+            throw new CoreException(__('L\'identifiant du plan doit être fourni'));
         }
         $plan = new Plan();
         Utils::a2o($plan, json_decode(Utils::init('plan'), true));
         $plan->save();
-        $this->ajax->success($plan->getHtml(Utils::init('version')));
+        $this->ajax->success($plan->getHtml(Utils::init(AjaxParams::VERSION)));
     }
 
     public function copy()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $plan = PlanManager::byId(Utils::init('id'));
+        $plan = PlanManager::byId(Utils::init(AjaxParams::ID));
         if (!is_object($plan)) {
             throw new CoreException(__('Aucun plan correspondant'));
         }
-        $this->ajax->success($plan->copy()->getHtml(Utils::init('version', 'dplan')));
+        $this->ajax->success($plan->copy()->getHtml(Utils::init(AjaxParams::VERSION, 'dplan')));
     }
 
     public function get()
     {
-        $plan = PlanManager::byId(Utils::init('id'));
+        $plan = PlanManager::byId(Utils::init(AjaxParams::ID));
         if (!is_object($plan)) {
             throw new CoreException(__('Aucun plan correspondant'));
         }
@@ -111,7 +112,7 @@ class PlanAjax extends BaseAjax
     public function remove()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $plan = PlanManager::byId(Utils::init('id'));
+        $plan = PlanManager::byId(Utils::init(AjaxParams::ID));
         if (!is_object($plan)) {
             throw new CoreException(__('Aucun plan correspondant'));
         }
@@ -121,7 +122,7 @@ class PlanAjax extends BaseAjax
     public function removePlanHeader()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $planHeader = PlanHeaderManager::byId(Utils::init('id'));
+        $planHeader = PlanHeaderManager::byId(Utils::init(AjaxParams::ID));
         if (!is_object($planHeader)) {
             throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));
         }
@@ -132,27 +133,27 @@ class PlanAjax extends BaseAjax
     public function allHeader()
     {
         $planHeaders = PlanHeaderManager::all();
-        $return = array();
+        $result = [];
         foreach ($planHeaders as $planHeader) {
             $info_planHeader = Utils::o2a($planHeader);
             unset($info_planHeader['image']);
-            $return[] = $info_planHeader;
+            $result[] = $info_planHeader;
         }
-        $this->ajax->success($return);
+        $this->ajax->success($result);
     }
 
     public function getPlanHeader()
     {
-        $planHeader = PlanHeaderManager::byId(Utils::init('id'));
+        $planHeader = PlanHeaderManager::byId(Utils::init(AjaxParams::ID));
         if (!is_object($planHeader)) {
-            throw new CoreException(__('Plan header inconnu. Vérifiez l\'ID ') . Utils::init('id'));
+            throw new CoreException(__('Plan header inconnu. Vérifiez l\'ID ') . Utils::init(AjaxParams::ID));
         }
         if (trim($planHeader->getConfiguration('accessCode', '')) != '' && $planHeader->getConfiguration('accessCode', '') != sha512(Utils::init('code'))) {
             throw new CoreException(__('Code d\'acces invalide'), -32005);
         }
-        $return = Utils::o2a($planHeader);
-        $return['image'] = $planHeader->displayImage();
-        $this->ajax->success($return);
+        $result = Utils::o2a($planHeader);
+        $result['image'] = $planHeader->displayImage();
+        $this->ajax->success($result);
     }
 
     public function savePlanHeader()
@@ -174,9 +175,9 @@ class PlanAjax extends BaseAjax
     public function copyPlanHeader()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $planHeader = PlanHeaderManager::byId(Utils::init('id'));
+        $planHeader = PlanHeaderManager::byId(Utils::init(AjaxParams::ID));
         if (!is_object($planHeader)) {
-            throw new CoreException(__('Plan header inconnu. Vérifiez l\'ID ') . Utils::init('id'));
+            throw new CoreException(__('Plan header inconnu. Vérifiez l\'ID ') . Utils::init(AjaxParams::ID));
         }
         $this->ajax->success(Utils::o2a($planHeader->copy(Utils::init('name'))));
     }
@@ -184,9 +185,9 @@ class PlanAjax extends BaseAjax
     public function removeImageHeader()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $planHeader = PlanHeaderManager::byId(Utils::init('id'));
+        $planHeader = PlanHeaderManager::byId(Utils::init(AjaxParams::ID));
         if (!is_object($planHeader)) {
-            throw new CoreException(__('Plan header inconnu. Vérifiez l\'ID ') . Utils::init('id'));
+            throw new CoreException(__('Plan header inconnu. Vérifiez l\'ID ') . Utils::init(AjaxParams::ID));
         }
         $filename = 'planHeader' . $planHeader->getId() . '-' . $planHeader->getImage('sha512') . '.' . $planHeader->getImage('type');
         $planHeader->setImage('sha512', '');
@@ -198,7 +199,7 @@ class PlanAjax extends BaseAjax
     public function uploadImage()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $planHeader = PlanHeaderManager::byId(Utils::init('id'));
+        $planHeader = PlanHeaderManager::byId(Utils::init(AjaxParams::ID));
         if (!is_dir(NEXTDOM_DATA . '/data/custom/plans/')) {
             mkdir(NEXTDOM_DATA . '/data/custom/plans/');
         }
@@ -209,7 +210,7 @@ class PlanAjax extends BaseAjax
             throw new CoreException(__('Aucun fichier trouvé. Vérifiez le paramètre PHP (post size limit)'));
         }
         $extension = strtolower(strrchr($_FILES['file']['name'], '.'));
-        if (!in_array($extension, array('.jpg', '.jpeg', '.png'))) {
+        if (!in_array($extension, ['.jpg', '.jpeg', '.png'])) {
             throw new CoreException('Extension du fichier non valide (autorisé .jpg .jpeg .png) : ' . $extension);
         }
         if (filesize($_FILES['file']['tmp_name']) > 5000000) {
@@ -232,7 +233,7 @@ class PlanAjax extends BaseAjax
         $filepath = NEXTDOM_DATA . '/data/custom/plans/' . $filename;
         copy($_FILES['file']['tmp_name'], $filepath);
         if (!file_exists($filepath)) {
-            throw new CoreException(__('Impossible de sauvegarder l\'image', __FILE__));
+            throw new CoreException(__('Impossible de sauvegarder l\'image'));
         }
         $planHeader->setConfiguration('desktopSizeX', $imgSize[0]);
         $planHeader->setConfiguration('desktopSizeY', $imgSize[1]);
@@ -243,14 +244,14 @@ class PlanAjax extends BaseAjax
     public function uploadImagePlan()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $plan = PlanManager::byId(Utils::init('id'));
+        $plan = PlanManager::byId(Utils::init(AjaxParams::ID));
         if (false == is_object($plan)) {
             throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));
         }
         $uploadDir = sprintf("%s/data/custom/plans/plan_%s", NEXTDOM_DATA, $plan->getId());
         shell_exec('rm -rf ' . $uploadDir);
         mkdir($uploadDir, 0775, true);
-        $filename = Utils::readUploadedFile($_FILES, "file", $uploadDir, 5, array('.png', '.jpeg', '.jpg'), function ($file) {
+        $filename = Utils::readUploadedFile($_FILES, "file", $uploadDir, 5, ['.png', '.jpeg', '.jpg'], function ($file) {
             $content = file_get_contents($file['tmp_name']);
             return sha512(base64_encode($content));
         });

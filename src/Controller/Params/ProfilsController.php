@@ -26,7 +26,6 @@ use NextDom\Controller\BaseController;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
-use NextDom\Helpers\SessionHelper;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\Plan3dHeaderManager;
@@ -56,12 +55,12 @@ class ProfilsController extends BaseController
         UserManager::getStoredUser()->refresh();
         $pageData['profilsUser'] = UserManager::getStoredUser();
         @session_write_close();
-        $pageData['profilsHomePageDesktop'] = array(
+        $pageData['profilsHomePageDesktop'] = [
             'core::dashboard' => __('Dashboard'),
             'core::view' => __('Vue'),
             'core::plan' => __('Design'),
             'core::plan3d' => __('Design 3D'),
-        );
+        ];
         $pluginManagerList = PluginManager::listPlugin();
         foreach ($pluginManagerList as $pluginList) {
             if ($pluginList->isActive() == 1 && $pluginList->getDisplay() != '' && ConfigManager::byKey('displayDesktopPanel', $pluginList->getId(), 0) != 0) {
@@ -103,12 +102,12 @@ class ProfilsController extends BaseController
         }
 
         $pageData['profilsWidgetThemes'] = [];
-        $lsDir = FileSystemHelper::ls(NEXTDOM_ROOT . '/core/template/dashboard/themes/','*',true);
+        $lsDir = FileSystemHelper::ls(NEXTDOM_ROOT . '/core/template/dashboard/themes/', '*', true);
         foreach ($lsDir as $themesDir) {
-            $lsThemes = FileSystemHelper::ls(NEXTDOM_ROOT . '/core/template/dashboard/themes/' .$themesDir, '*.png');
+            $lsThemes = FileSystemHelper::ls(NEXTDOM_ROOT . '/core/template/dashboard/themes/' . $themesDir, '*.png');
             foreach ($lsThemes as $themeFile) {
                 $themeData = [];
-                $themeData['dir'] = '/core/template/dashboard/themes/' .$themesDir . $themeFile;
+                $themeData['dir'] = '/core/template/dashboard/themes/' . $themesDir . $themeFile;
                 $themeData['name'] = $themeFile;
                 $pageData['profilsWidgetThemes'][] = $themeData;
             }
@@ -116,9 +115,9 @@ class ProfilsController extends BaseController
 
         $pageData['profilsDisplayTypes'] = NextDomHelper::getConfiguration('eqLogic:displayType');
         foreach ($pageData['profilsDisplayTypes'] as $key => $value) {
-            if (isset($_SESSION) && is_object(UserManager::getStoredUser()) && UserManager::getStoredUser()->getOptions('widget::background-opacity::'.$key, null) == null) {
+            if (isset($_SESSION) && is_object(UserManager::getStoredUser()) && UserManager::getStoredUser()->getOptions('widget::background-opacity::' . $key, null) == null) {
                 @session_start();
-                UserManager::getStoredUser()->setOptions('widget::background-opacity::'.$key, 1);
+                UserManager::getStoredUser()->setOptions('widget::background-opacity::' . $key, 1);
                 UserManager::getStoredUser()->save();
                 @session_write_close();
             }

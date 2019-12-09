@@ -463,20 +463,22 @@ class MigrationHelper
      */
     private static function migrate_0_5_2($logFile = LogTarget::MIGRATION)
     {
-          if (is_dir(NEXTDOM_DATA . '/data/php')) {
-              FileSystemHelper::rrmfile(NEXTDOM_DATA . '/data/php/user.function.class.php');
-              FileSystemHelper::rrmfile(NEXTDOM_DATA . '/data/php/user.function.class.sample.php');
-          }
-          $message = 'user.function files removed';
-          if ($logFile == LogTarget::MIGRATION) {
-              LogHelper::addInfo($logFile, $message, '');
-          } else {
-              ConsoleHelper::process($message);
-          }
+        if (is_dir(NEXTDOM_DATA . '/data/php')) {
+            FileSystemHelper::rrmfile(NEXTDOM_DATA . '/data/php/user.function.class.php');
+            FileSystemHelper::rrmfile(NEXTDOM_DATA . '/data/php/user.function.class.sample.php');
+        }
+        $message = 'user.function files removed';
+        if ($logFile == LogTarget::MIGRATION) {
+            LogHelper::addInfo($logFile, $message, '');
+        } else {
+            ConsoleHelper::process($message);
+        }
     }
+
     /***********************************************************************************************************************************************************/
 
-    private static function migrate_0_6_1($logFile = LogTarget::MIGRATION) {
+    private static function migrate_0_6_1($logFile = LogTarget::MIGRATION)
+    {
         exec("sudo sed -i '/vm.swappiness=/d' /etc/sysctl.d/99-sysctl.conf");
         exec("sudo echo 'vm.swappiness=10' >> /etc/sysctl.d/99-sysctl.conf");
     }

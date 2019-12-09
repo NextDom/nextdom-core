@@ -23,22 +23,14 @@ class i18nValidityTest extends PHPUnit_Framework_TestCase
     public function testsLanguages()
     {
         $languagesToTest = [
-            'de_DE',
             'en_US',
-            'es_ES',
-            'fr_FR',
-            'id_ID',
-            'it_IT',
-            'ja_JP',
-            'pt_PT',
-            'ru_RU',
-            'tr'
+            'fr_FR'
         ];
         foreach ($languagesToTest as $language) {
             $translator = new Translator($language);
             $translator->addLoader('yaml', new YamlFileLoader());
-            $translator->addResource('yaml', 'translations/'.$language.'.yml', $language);
-            $this->assertTrue(is_string($translator->trans('core.error-401')));
+            $translator->addResource('yaml', __DIR__ . '/../../translations/'.$language.'.yml', $language);
+            $this->assertTrue(is_string($translator->trans('connection.connect')));
         }
     }
 }

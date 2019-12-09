@@ -34,10 +34,13 @@
 namespace NextDom\Managers;
 
 use NextDom\Enums\DaemonState;
+use NextDom\Enums\DateFormat;
 use NextDom\Enums\PluginManagerCron;
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
+use NextDom\Helpers\Utils;
 use NextDom\Model\Entity\Plugin;
 
 /**
@@ -46,7 +49,7 @@ use NextDom\Model\Entity\Plugin;
  */
 class PluginManager
 {
-    private static $cache = array();
+    private static $cache = [];
     private static $enabledPlugins = null;
 
     /**
@@ -72,7 +75,7 @@ class PluginManager
      */
     public static function listPlugin(bool $activatedOnly = false, bool $orderByCategory = false, bool $nameOnly = false): array
     {
-        $listPlugin = array();
+        $listPlugin = [];
         if ($activatedOnly) {
             $sql = "SELECT plugin
                     FROM `config`
@@ -108,7 +111,7 @@ class PluginManager
                 }
             }
         }
-        $returnValue = array();
+        $returnValue = [];
         if ($orderByCategory) {
             if (count($listPlugin) > 0) {
                 foreach ($listPlugin as $plugin) {
@@ -117,7 +120,7 @@ class PluginManager
                         $category = __('Autre');
                     }
                     if (!isset($returnValue[$category])) {
-                        $returnValue[$category] = array();
+                        $returnValue[$category] = [];
                     }
                     $returnValue[$category][] = $plugin;
                 }
@@ -138,32 +141,39 @@ class PluginManager
     /**
      * Get a plugin from his username
      *
-     * @param string $id Identifiant du plugin
+     * @param string $pluginId Plugin Id or path to info.json
      *
      * @return mixed|Plugin Plugin
      *
      * @throws \Exception
      */
-    public static function byId($id)
+    public static function byId($pluginId)
     {
         global $NEXTDOM_INTERNAL_CONFIG;
-        if (is_string($id) && isset(self::$cache[$id])) {
-            return self::$cache[$id];
+        $pluginInfoFilePath = '';
+
+        // Check plugin data in cache
+        if (is_string($pluginId) && isset(self::$cache[$pluginId])) {
+            return self::$cache[$pluginId];
         }
-        if (!file_exists($id) || strpos($id, '/') === false) {
-            $id = self::getPathById($id);
+        if (!file_exists($pluginId) || strpos($pluginId, '/') === false) {
+            $pluginInfoFilePath = self::getPathById($pluginId);
+        } else {
+            // Info.json passed directly
+            $pluginInfoFilePath = realpath((string)$pluginId);
         }
-        if (!file_exists($id)) {
-            self::forceDisablePlugin($id);
-            throw new \Exception('Plugin introuvable : ' . $id);
+
+        if (!Utils::checkPath($pluginInfoFilePath) || !file_exists($pluginInfoFilePath)) {
+            self::forceDisablePlugin($pluginId);
+            throw new CoreException(__('Plugin introuvable : ') . $pluginId);
         }
-        $data = json_decode(file_get_contents($id), true);
-        if (!is_array($data)) {
-            self::forceDisablePlugin($id);
-            throw new \Exception('Plugin introuvable (json invalide) : ' . $id . ' => ' . print_r($data, true));
+        $pluginData = json_decode(file_get_contents($pluginInfoFilePath), true);
+        if (!is_array($pluginData)) {
+            self::forceDisablePlugin($pluginId);
+            throw new CoreException(__('Plugin introuvable (json invalide) : ') . $pluginInfoFilePath . ' => ' . print_r($pluginData, true));
         }
         $plugin = new Plugin();
-        $plugin->initPluginFromData($data);
+        $plugin->initPluginFromData($pluginData);
         self::$cache[$plugin->getId()] = $plugin;
         if (!isset($NEXTDOM_INTERNAL_CONFIG['plugin']['category'][$plugin->getCategory()])) {
             foreach ($NEXTDOM_INTERNAL_CONFIG['plugin']['category'] as $key => $value) {
@@ -187,7 +197,7 @@ class PluginManager
      */
     public static function getPathById(string $id): string
     {
-        return NEXTDOM_ROOT . '/plugins/' . $id . '/plugin_info/info.json';
+        return realpath(NEXTDOM_ROOT . '/plugins/' . $id . '/plugin_info/info.json');
     }
 
     /**
@@ -197,12 +207,12 @@ class PluginManager
     public static function forceDisablePlugin($_id)
     {
         ConfigManager::save('active', 0, $_id);
-        $values = array(
+        $values = [
             'eqType_name' => $_id,
-        );
+        ];
         $sql = 'UPDATE eqLogic
-                SET isEnable=0
-                WHERE eqType_name=:eqType_name';
+                SET isEnable = 0
+                WHERE eqType_name = :eqType_name';
         DBHelper::exec($sql, $values);
     }
 
@@ -236,7 +246,7 @@ class PluginManager
                 }
                 $ok = false;
                 foreach ($eqLogics as $eqLogic) {
-                    if ($eqLogic->getStatus('lastCommunication', date('Y-m-d H:i:s')) > date('Y-m-d H:i:s', strtotime('-' . $heartbeat . ' minutes' . date('Y-m-d H:i:s')))) {
+                    if ($eqLogic->getStatus('lastCommunication', date(DateFormat::FULL)) > date(DateFormat::FULL, strtotime('-' . $heartbeat . ' minutes' . date(DateFormat::FULL)))) {
                         $ok = true;
                         break;
                     }
@@ -269,13 +279,13 @@ class PluginManager
      * Start a cron job
      *
      * @param string $cronType Cron job type, see PluginManagerCronEnum
-     * // TODO Rajouter un test sur l'enum ???
+     * // @TODO Rajouter un test sur l'enum ???
      * @throws \Exception
      */
     private static function startCronTask(string $cronType = '')
     {
         $cache = CacheManager::byKey('plugin::' . $cronType . '::inprogress');
-        if(is_array($cache->getValue(0))){
+        if (is_array($cache->getValue(0))) {
             CacheManager::set('plugin::' . $cronType . '::inprogress', -1);
             $cache = CacheManager::byKey('plugin::' . $cronType . '::inprogress');
         }
@@ -289,9 +299,9 @@ class PluginManager
                     $pluginId = $plugin->getId();
                     CacheManager::set('plugin::' . $cronType . '::last', $pluginId);
                     //try {
-                        $pluginId::$cronType();
+                    $pluginId::$cronType();
                     //} catch (\Throwable $e) {
-//                        LogHelper::add($pluginId, 'error', __('Erreur sur la fonction cron du plugin : ') . $e->getMessage());
+//                        LogHelper::addError($pluginId, __('Erreur sur la fonction cron du plugin : ') . $e->getMessage());
                     //}
                 }
             }
@@ -373,7 +383,7 @@ class PluginManager
                 try {
                     $pluginId::start();
                 } catch (\Throwable $e) {
-                    LogHelper::add($pluginId, 'error', __('Erreur sur la fonction start du plugin : ') . $e->getMessage());
+                    LogHelper::addError($pluginId, __('Erreur sur la fonction start du plugin : ') . $e->getMessage());
                 }
             }
         }
@@ -393,14 +403,14 @@ class PluginManager
                 try {
                     $pluginId::stop();
                 } catch (\Throwable $e) {
-                    LogHelper::add($pluginId, 'error', __('Erreur sur la fonction stop du plugin : ') . $e->getMessage());
+                    LogHelper::addError($pluginId, __('Erreur sur la fonction stop du plugin : ') . $e->getMessage());
                 }
             }
         }
     }
 
     /**
-     * Test le daemon TODO ??
+     * Test le daemon @TODO ??
      *
      * @throws \Exception
      */
@@ -422,7 +432,7 @@ class PluginManager
                     shell_exec('rm ' . $dependancy_info['progress_file']);
                 }
                 ConfigManager::save('deamonAutoMode', 0, $plugin->getId());
-                LogHelper::add($plugin->getId(), 'error', __('Attention : l\'installation des dépendances a dépassé le temps maximum autorisé : ') . $plugin->getMaxDependancyInstallTime() . 'min');
+                LogHelper::addError($plugin->getId(), __('Attention : l\'installation des dépendances a dépassé le temps maximum autorisé : ') . $plugin->getMaxDependancyInstallTime() . 'min');
             }
             try {
                 $plugin->deamon_start(false, true);
@@ -434,7 +444,7 @@ class PluginManager
 
     /**
      * Test si le plugin est actif
-     * TODO: Doit passer en static
+     * @TODO: Doit passer en static
      * @param $id
      * @return int
      * @throws \Exception

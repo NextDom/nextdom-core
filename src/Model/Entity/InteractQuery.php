@@ -17,6 +17,8 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\DateFormat;
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
@@ -76,10 +78,10 @@ class InteractQuery implements EntityInterface
     public function save()
     {
         if ($this->getQuery() == '') {
-            throw new \Exception(__('La commande vocale ne peut pas être vide'));
+            throw new CoreException(__('La commande vocale ne peut pas être vide'));
         }
         if ($this->getInteractDef_id() == '') {
-            throw new \Exception(__('InteractDef_id ne peut pas être vide'));
+            throw new CoreException(__('InteractDef_id ne peut pas être vide'));
         }
         DBHelper::save($this);
         return $this;
@@ -156,7 +158,7 @@ class InteractQuery implements EntityInterface
             }
         }
         $reply = $interactDef->selectReply();
-        $replace = array('#query#' => $this->getQuery());
+        $replace = ['#query#' => $this->getQuery()];
         foreach ($_parameters as $key => $value) {
             $replace['#' . $key . '#'] = $value;
         }
@@ -171,17 +173,17 @@ class InteractQuery implements EntityInterface
         $executeDate = null;
 
         if (isset($replace['#duration#'])) {
-            $dateConvert = array(
+            $dateConvert = [
                 'heure' => 'hour',
                 'mois' => 'month',
                 'semaine' => 'week',
                 'année' => 'year',
-            );
+            ];
             $replace['#duration#'] = str_replace(array_keys($dateConvert), $dateConvert, $replace['#duration#']);
             $executeDate = strtotime('+' . $replace['#duration#']);
         }
         if (isset($replace['#time#'])) {
-            $time = str_replace(array('h'), array(':'), $replace['#time#']);
+            $time = str_replace(['h'], [':'], $replace['#time#']);
             if (strlen($time) == 1) {
                 $time .= ':00';
             } else if (strlen($time) == 2) {
@@ -213,12 +215,12 @@ class InteractQuery implements EntityInterface
             $cron = new Cron();
             $cron->setClass('interactQuery');
             $cron->setFunction('doIn');
-            $cron->setOption(array_merge(array('interactQuery_id' => intval($this->getId())), $_parameters));
-            $cron->setLastRun(date('Y-m-d H:i:s'));
+            $cron->setOption(array_merge(['interactQuery_id' => intval($this->getId())], $_parameters));
+            $cron->setLastRun(date(DateFormat::FULL));
             $cron->setOnce(1);
             $cron->setSchedule(CronManager::convertDateToCron($executeDate));
             $cron->save();
-            $replace['#valeur#'] = date('Y-m-d H:i:s', $executeDate);
+            $replace['#valeur#'] = date(DateFormat::FULL, $executeDate);
             $result = ScenarioExpressionManager::setTags(str_replace(array_keys($replace), $replace, $reply));
             return $result;
         }
@@ -227,7 +229,7 @@ class InteractQuery implements EntityInterface
         if (is_array($this->getActions('cmd'))) {
             foreach ($this->getActions('cmd') as $action) {
                 try {
-                    $options = array();
+                    $options = [];
                     if (isset($action['options'])) {
                         $options = $action['options'];
                     }
@@ -254,7 +256,7 @@ class InteractQuery implements EntityInterface
                             }
                         }
                     }
-                    $tags = array();
+                    $tags = [];
                     if (isset($options['tags'])) {
                         $options['tags'] = Utils::arg2array($options['tags']);
                         foreach ($options['tags'] as $key => $value) {

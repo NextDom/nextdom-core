@@ -21,6 +21,7 @@ require_once __DIR__ . "/../../src/core.php";
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\BackupManager;
+use NextDom\Enums\NextDomFile;
 
 if (isset($argv)) {
     foreach ($argv as $arg) {
@@ -86,7 +87,7 @@ try {
 
         /*             * ***********************Health********************************* */
         if ($jsonrpc->getMethod() == 'health') {
-            $health = array();
+            $health = [];
 
             $defaut = 0;
             $result = 'OK';
@@ -96,7 +97,7 @@ try {
                 $defaut = 1;
                 $result = $nbNeedUpdate;
             }
-            $health[] = array('plugin' => 'core', 'type' => 'Système à jour', 'defaut' => $defaut, 'result' => $result, 'advice' => $advice);
+            $health[] = ['plugin' => 'core', 'type' => 'Système à jour', 'defaut' => $defaut, 'result' => $result, 'advice' => $advice];
 
             $defaut = 0;
             $result = 'OK';
@@ -106,7 +107,7 @@ try {
                 $result = 'NOK';
                 $advice = __('Erreur cron : les crons sont désactivés. Allez dans Administration -> Moteur de tâches pour les réactiver', __FILE__);
             }
-            $health[] = array('plugin' => 'core', 'type' => 'Cron actif', 'defaut' => $defaut, 'result' => $result, 'advice' => $advice);
+            $health[] = ['plugin' => 'core', 'type' => 'Cron actif', 'defaut' => $defaut, 'result' => $result, 'advice' => $advice];
 
             $defaut = 0;
             $result = 'OK';
@@ -116,7 +117,7 @@ try {
                 $result = 'NOK';
                 $advice = __('Erreur scénario : tous les scénarios sont désactivés. Allez dans Outils -> Scénarios pour les réactiver', __FILE__);
             }
-            $health[] = array('plugin' => 'core', 'type' => 'Scénario actif', 'defaut' => $defaut, 'result' => $result, 'advice' => $advice);
+            $health[] = ['plugin' => 'core', 'type' => 'Scénario actif', 'defaut' => $defaut, 'result' => $result, 'advice' => $advice];
 
             $defaut = 0;
             $result = 'OK';
@@ -125,7 +126,7 @@ try {
                 $defaut = 1;
                 $result = 'NOK';
             }
-            $health[] = array('plugin' => 'core', 'type' => 'Démarré', 'defaut' => $defaut, 'result' => $result, 'advice' => $advice);
+            $health[] = ['plugin' => 'core', 'type' => 'Démarré', 'defaut' => $defaut, 'result' => $result, 'advice' => $advice];
 
             $defaut = 0;
             $result = 'OK';
@@ -134,7 +135,7 @@ try {
                 $defaut = 1;
                 $result = date('Y-m-d H:i:s');
             }
-            $health[] = array('plugin' => 'core', 'type' => 'Date système', 'defaut' => $defaut, 'result' => $result, 'advice' => $advice);
+            $health[] = ['plugin' => 'core', 'type' => 'Date système', 'defaut' => $defaut, 'result' => $result, 'advice' => $advice];
 
             $defaut = 0;
             $result = 'OK';
@@ -144,12 +145,12 @@ try {
                 $result = 'NOK';
                 $advice = 'Donnez les droits root à NextDom.';
             }
-            $health[] = array('plugin' => 'core', 'type' => 'Droits sudo', 'defaut' => $defaut, 'result' => $result, 'advice' => $advice);
+            $health[] = ['plugin' => 'core', 'type' => 'Droits sudo', 'defaut' => $defaut, 'result' => $result, 'advice' => $advice];
 
             $defaut = 0;
             $result = nextdom::version();
             $advice = '';
-            $health[] = array('plugin' => 'core', 'type' => 'Version NextDom', 'defaut' => $defaut, 'result' => $result, 'advice' => $advice);
+            $health[] = ['plugin' => 'core', 'type' => 'Version NextDom', 'defaut' => $defaut, 'result' => $result, 'advice' => $advice];
 
             $defaut = 0;
             $result = phpversion();
@@ -158,13 +159,13 @@ try {
                 $defaut = 1;
                 $advice = __('Si vous êtes en version 5.4.x, on vous indiquera quand la version 5.5 sera obligatoire', __FILE__);
             }
-            $health[] = array('plugin' => 'core', 'type' => 'Version PHP', 'defaut' => $defaut, 'result' => $result, 'advice' => $advice);
+            $health[] = ['plugin' => 'core', 'type' => 'Version PHP', 'defaut' => $defaut, 'result' => $result, 'advice' => $advice];
 
             $defaut = 0;
-            $version = DB::Prepare('select version()', array(), DB::FETCH_TYPE_ROW);
+            $version = DB::Prepare('select version()', [], DB::FETCH_TYPE_ROW);
             $result = $version['version()'];
             $advice = '';
-            $health[] = array('plugin' => 'core', 'type' => 'Version database', 'defaut' => $defaut, 'result' => $result, 'advice' => $advice);
+            $health[] = ['plugin' => 'core', 'type' => 'Version database', 'defaut' => $defaut, 'result' => $result, 'advice' => $advice];
 
             $defaut = 0;
             $result = nextdom::checkSpaceLeft();
@@ -172,7 +173,7 @@ try {
             if ($result < 10) {
                 $defaut = 1;
             }
-            $health[] = array('plugin' => 'core', 'type' => 'Espace disque libre', 'defaut' => $defaut, 'result' => $result . ' %', 'advice' => $advice);
+            $health[] = ['plugin' => 'core', 'type' => 'Espace disque libre', 'defaut' => $defaut, 'result' => $result . ' %', 'advice' => $advice];
 
             $defaut = 0;
             $result = 'OK';
@@ -182,7 +183,7 @@ try {
                 $result = 'NOK';
                 $advice = __('Allez sur Administration -> Configuration -> Réseaux, puis configurez correctement la partie réseau', __FILE__);
             }
-            $health[] = array('plugin' => 'core', 'type' => 'Configuration réseau interne', 'defaut' => $defaut, 'result' => $result, 'advice' => $advice);
+            $health[] = ['plugin' => 'core', 'type' => 'Configuration réseau interne', 'defaut' => $defaut, 'result' => $result, 'advice' => $advice];
 
             $defaut = 0;
             $result = 'OK';
@@ -192,7 +193,7 @@ try {
                 $result = 'NOK';
                 $advice = __('Allez sur Administration -> Configuration -> Réseaux, puis configurez correctement la partie réseau', __FILE__);
             }
-            $health[] = array('plugin' => 'core', 'type' => 'Configuration réseau externe', 'defaut' => $defaut, 'result' => $result, 'advice' => $advice);
+            $health[] = ['plugin' => 'core', 'type' => 'Configuration réseau externe', 'defaut' => $defaut, 'result' => $result, 'advice' => $advice];
 
             $defaut = 0;
             $advice = '';
@@ -200,7 +201,7 @@ try {
                 if (config::byKey('cache::engine') != 'FilesystemCache' && config::byKey('cache::engine') != 'PhpFileCache') {
                     $result = 'OK';
                 } else {
-                    $filename = NEXTDOM_DATA . '/cache.tar.gz';
+                    $filename = NEXTDOM_DATA . '/' . NextDomFile::CACHE_TAR_GZ;
                     $result = 'OK (' . date('Y-m-d H:i:s', filemtime($filename)) . ')';
                 }
             } else {
@@ -208,7 +209,7 @@ try {
                 $defaut = 1;
                 $advice = __('Votre cache n\'est pas sauvegardé. En cas de redémarrage, certaines informations peuvent être perdues. Essayez de lancer (à partir du moteur de tâches) la tâche cache::persist.', __FILE__);
             }
-            $health[] = array('plugin' => 'core', 'type' => 'Persistance du cache', 'defaut' => $defaut, 'result' => $result, 'advice' => $advice);
+            $health[] = ['plugin' => 'core', 'type' => 'Persistance du cache', 'defaut' => $defaut, 'result' => $result, 'advice' => $advice];
 
             foreach (plugin::listPlugin(true) as $plugin) {
                 $plugin_id = $plugin->getId();
@@ -236,7 +237,7 @@ try {
                             default:
                                 break;
                         }
-                        $health[] = array('plugin' => $plugin_id, 'type' => 'dépendance', 'defaut' => $defaut, 'result' => $result, 'advice' => $advice);
+                        $health[] = ['plugin' => $plugin_id, 'type' => 'dépendance', 'defaut' => $defaut, 'result' => $result, 'advice' => $advice];
                     }
                 } catch (Exception $e) {
 
@@ -261,7 +262,7 @@ try {
                                 }
                                 break;
                         }
-                        $health[] = array('plugin' => $plugin_id, 'type' => 'Configuration démon', 'defaut' => $defaut, 'result' => $result, 'advice' => $advice);
+                        $health[] = ['plugin' => $plugin_id, 'type' => 'Configuration démon', 'defaut' => $defaut, 'result' => $result, 'advice' => $advice];
 
                         switch ($deamon_info['state']) {
                             case 'ok':
@@ -278,7 +279,7 @@ try {
                                 }
                                 break;
                         }
-                        $health[] = array('plugin' => $plugin_id, 'type' => 'Statut démon', 'defaut' => $defaut, 'result' => $result, 'advice' => $advice);
+                        $health[] = ['plugin' => $plugin_id, 'type' => 'Statut démon', 'defaut' => $defaut, 'result' => $result, 'advice' => $advice];
                     }
                 } catch (Exception $e) {
 
@@ -293,7 +294,7 @@ try {
                             } else {
                                 $defaut = 1;
                             }
-                            $health[] = array('plugin' => $plugin_id, 'type' => $result['test'], 'defaut' => $defaut, 'result' => $result['result'], 'advice' => $result['advice']);
+                            $health[] = ['plugin' => $plugin_id, 'type' => $result['test'], 'defaut' => $defaut, 'result' => $result['result'], 'advice' => $result['advice']];
                         }
                     }
                 } catch (Exception $e) {
@@ -334,10 +335,10 @@ try {
                 throw new Exception('Objet introuvable : ' . secureXSS($params['id']), -32601);
             }
             $return = utils::o2a($jeeObject);
-            $return['eqLogics'] = array();
+            $return['eqLogics'] = [];
             foreach ($jeeObject->getEqLogic() as $eqLogic) {
                 $eqLogic_return = utils::o2a($eqLogic);
-                $eqLogic_return['cmds'] = array();
+                $eqLogic_return['cmds'] = [];
                 foreach ($eqLogic->getCmd() as $cmd) {
                     $cmd_return = utils::o2a($cmd);
                     if ($cmd->getType() == 'info') {
@@ -393,7 +394,7 @@ try {
                 throw new Exception('EqLogic introuvable : ' . secureXSS($params['id']), -32602);
             }
             $return = utils::o2a($eqLogic);
-            $return['cmds'] = array();
+            $return['cmds'] = [];
             foreach ($eqLogic->getCmd() as $cmd) {
                 $cmd_return = utils::o2a($cmd);
                 if ($cmd->getType() == 'info') {
@@ -422,7 +423,7 @@ try {
             $eqLogic->save();
             $dbList = $typeCmd::byEqLogicId($eqLogic->getId());
             $eqLogic->save();
-            $enableList = array();
+            $enableList = [];
             if (isset($params['cmd'])) {
                 $cmd_order = 0;
                 foreach ($params['cmd'] as $cmd_info) {
@@ -452,11 +453,11 @@ try {
         }
 
         if ($jsonrpc->getMethod() == 'eqLogic::byTypeAndId') {
-            $return = array();
+            $return = [];
             foreach ($params['eqType'] as $eqType) {
-                $info_eqLogics = array();
+                $info_eqLogics = [];
                 foreach (eqLogic::byType($eqType) as $eqLogic) {
-                    $info_cmds = array();
+                    $info_cmds = [];
                     foreach ($eqLogic->getCmd() as $cmd) {
                         $info_cmd = utils::o2a($cmd);
                         if ($cmd->getType() == 'info') {
@@ -474,7 +475,7 @@ try {
 
             foreach ($params['id'] as $id) {
                 $eqLogic = eqLogic::byId($id);
-                $info_cmds = array();
+                $info_cmds = [];
                 foreach ($eqLogic->getCmd() as $cmd) {
                     $info_cmd = utils::o2a($cmd);
                     if ($cmd->getType() == 'info') {
@@ -511,20 +512,20 @@ try {
 
         if ($jsonrpc->getMethod() == 'cmd::execCmd') {
             if (is_array($params['id'])) {
-                $return = array();
+                $return = [];
                 foreach ($params['id'] as $id) {
                     $cmd = cmd::byId($id);
                     if (!is_object($cmd)) {
                         throw new Exception(__('Commande introuvable : ', __FILE__) . secureXSS($id), -32702);
                     }
-                    $return[$id] = array('value' => $cmd->execCmd($params['options']), 'collectDate' => $cmd->getCollectDate());
+                    $return[$id] = ['value' => $cmd->execCmd($params['options']), 'collectDate' => $cmd->getCollectDate()];
                 }
             } else {
                 $cmd = cmd::byId($params['id']);
                 if (!is_object($cmd)) {
                     throw new Exception(__('Commande introuvable : ', __FILE__) . secureXSS($params['id']), -32702);
                 }
-                $return = array('value' => $cmd->execCmd($params['options']), 'collectDate' => $cmd->getCollectDate());
+                $return = ['value' => $cmd->execCmd($params['options']), 'collectDate' => $cmd->getCollectDate()];
             }
             $jsonrpc->makeSuccess($return);
         }
@@ -598,7 +599,7 @@ try {
                 $auiKey = config::genKey(255);
                 config::save('auiKey', $auiKey);
             }
-            $return = array(
+            $return = [
                 'mode' => config::byKey('jeeNetwork::mode'),
                 'nbUpdate' => update::nbNeedUpdate(),
                 'version' => nextdom::version(),
@@ -606,7 +607,7 @@ try {
                 'auiKey' => $auiKey,
                 'nextdom::url' => config::byKey('nextdom::url'),
                 'ngrok::port' => config::byKey('ngrok::port'),
-            );
+            ];
             if (!filter_var(network::getNetworkAccess('external', 'ip'), FILTER_VALIDATE_IP) && network::getNetworkAccess('external', 'ip') != '') {
                 $return['nextdom::url'] = network::getNetworkAccess('internal');
             }
@@ -678,7 +679,7 @@ try {
                 $jeeNetwork->getConfiguration('version'),
                 date('Y-m-d_H\hi'));
             FileSystemHelper::mkdirIfNotExists($uploadDir, 0775, true);
-            Utils::readUploadedFile($_FILES, "file", $uploadDir, 50, array(".tar.gz", ".gz", ".tar"), function ($file) use ($format) {
+            Utils::readUploadedFile($_FILES, "file", $uploadDir, 50, [".tar.gz", ".gz", ".tar"], function ($file) use ($format) {
                 $extension = strtolower(strrchr($file['name'], '.'));
                 return sprintf($format, $extension);
             });
@@ -692,7 +693,7 @@ try {
                 throw new Exception(__('Seul un esclave peut restaurer une sauvegarde', __FILE__));
             }
             $uploadDir = BackupManager::getBackupDirectory();
-            $filename = Utils::readUploadedFile($_FILES, $uploadDir, 50, array('.tar.gz', '.gz', '.tar'), function ($file) {
+            $filename = Utils::readUploadedFile($_FILES, $uploadDir, 50, ['.tar.gz', '.gz', '.tar'], function ($file) {
                 // should probably use BackupManager::getBackupFilename
                 return sprintf("backup-%s-%s.tar.gz", nextdom::version(), date("d-m-Y-H\hi"));
             });
@@ -806,10 +807,10 @@ try {
         }
 
         if ($jsonrpc->getMethod() == 'plugin::specificInfos') {
-            $infos = array();
+            $infos = [];
             foreach (plugin::listPlugin() as $plugin) {
                 $pluginId = $plugin->getId();
-                if(method_exists($pluginId, 'proApi')){
+                if (method_exists($pluginId, 'proApi')) {
                     $infos[] = $pluginId::proApi();
                 }
             }
@@ -832,9 +833,9 @@ try {
         }
 
         if ($jsonrpc->getMethod() == 'update::nbNeedUpdate') {
-            $return = array(
+            $return = [
                 'nbUpdate' => update::nbNeedUpdate(),
-            );
+            ];
             $jsonrpc->makeSuccess($return);
         }
 

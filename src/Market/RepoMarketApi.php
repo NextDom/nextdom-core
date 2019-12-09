@@ -18,10 +18,16 @@
 
 namespace NextDom\Repo;
 
+use NextDom\Enums\AjaxParams;
+use NextDom\Enums\Common;
+use NextDom\Enums\ConfigKey;
+use NextDom\Enums\LogTarget;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Api;
 use NextDom\Helpers\LogHelper;
+use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UserManager;
 use NextDom\Model\Entity\Cron;
@@ -36,22 +42,22 @@ if (UserManager::isBanned() && false) {
     die();
 }
 try {
-    if (!Api::apiAccess(init('apikey'), 'apimarket')) {
+    if (!Api::apiAccess(Utils::init('apikey'), 'apimarket')) {
         UserManager::failedLogin();
-        throw new CoreException(__('Vous n\'êtes pas autorisé à effectuer cette action 1, IP : ', __FILE__) . getClientIp());
+        throw new CoreException(__('Vous n\'êtes pas autorisé à effectuer cette action 1, IP : ') . NetworkHelper::getClientIp());
     }
-    if (init('action') == 'resync') {
-        if (NextDomHelper::isStarted() && ConfigManager::byKey('enableCron', 'core', 1, true) == 0) {
-            die(__('Tous les crons sont actuellement désactivés', __FILE__));
+    if (Utils::init(AjaxParams::ACTION) == 'resync') {
+        if (NextDomHelper::isStarted() && ConfigManager::byKey(ConfigKey::ENABLE_CRON, Common::CORE, 1, true) == 0) {
+            die(__('Tous les crons sont actuellement désactivés'));
         }
         $cron = new Cron();
         $cron->setClass('RepoMarket');
-        $cron->setFunction(init('test'));
+        $cron->setFunction(Utils::init(AjaxParams::TEST));
         $cron->setOnce(1);
         $cron->save();
         $cron->start();
     }
 } catch (\Exception $e) {
     echo $e->getMessage();
-    LogHelper::add('jeeEvent', 'error', $e->getMessage());
+    LogHelper::addError(LogTarget::JEE_EVENT, $e->getMessage());
 }

@@ -65,9 +65,9 @@ class ViewZoneManager
      */
     public static function byId($_id)
     {
-        $value = array(
+        $value = [
             'id' => $_id,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE id=:id';
@@ -82,9 +82,9 @@ class ViewZoneManager
      */
     public static function byView($_view_id)
     {
-        $value = array(
+        $value = [
             'view_id' => $_view_id,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
         WHERE view_id=:view_id';
@@ -98,9 +98,9 @@ class ViewZoneManager
      */
     public static function removeByViewId($_view_id)
     {
-        $value = array(
+        $value = [
             'view_id' => $_view_id,
-        );
+        ];
         $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . '
                 WHERE view_id = :view_id';
         return DBHelper::getOne($sql, $value);

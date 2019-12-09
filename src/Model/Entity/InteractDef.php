@@ -17,6 +17,9 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\CmdSubType;
+use NextDom\Enums\CmdType;
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
@@ -208,7 +211,7 @@ class InteractDef implements EntityInterface
     public function save()
     {
         if ($this->getQuery() == '') {
-            throw new \Exception(__('La commande (demande) ne peut pas être vide'));
+            throw new CoreException(__('La commande (demande) ne peut pas être vide'));
         }
         DBHelper::save($this);
         return true;
@@ -265,7 +268,7 @@ class InteractDef implements EntityInterface
     public function generateQueryVariant()
     {
         $inputs = InteractDefManager::generateTextVariant($this->getQuery());
-        $return = array();
+        $return = [];
         $object_filter = $this->getFiltres('object');
         $type_filter = $this->getFiltres('type');
         $subtype_filter = $this->getFiltres('subtype');
@@ -291,7 +294,7 @@ class InteractDef implements EntityInterface
                         if (isset($plugin_filter[$eqLogic->getEqType_name()]) && $plugin_filter[$eqLogic->getEqType_name()] == 0) {
                             continue;
                         }
-                        if (isset($visible_filter['eqLogic']) && $visible_filter['eqLogic'] == 1 && $eqLogic->getIsVisible() != 1) {
+                        if (isset($visible_filter['eqLogic']) && $visible_filter['eqLogic'] == 1 && !$eqLogic->isVisible()) {
                             continue;
                         }
 
@@ -315,7 +318,7 @@ class InteractDef implements EntityInterface
                             continue;
                         }
                         foreach ($eqLogic->getCmd() as $cmd) {
-                            if (isset($visible_filter['cmd']) && $visible_filter['cmd'] == 1 && $cmd->getIsVisible() != 1) {
+                            if (isset($visible_filter['cmd']) && $visible_filter['cmd'] == 1 && !$cmd->isVisible()) {
                                 continue;
                             }
                             if (isset($subtype_filter[$cmd->getSubType()]) && $subtype_filter[$cmd->getSubType()] == 0) {
@@ -334,30 +337,30 @@ class InteractDef implements EntityInterface
                                 }
                             }
 
-                            $replace = array(
+                            $replace = [
                                 '#objet#' => strtolower($jeeObject->getName()),
                                 '#commande#' => strtolower($cmd->getName()),
                                 '#equipement#' => strtolower($eqLogic->getName()),
-                            );
-                            $options = array();
-                            if ($cmd->getType() == 'action') {
-                                if ($cmd->getSubtype() == 'color') {
+                            ];
+                            $options = [];
+                            if ($cmd->isType(CmdType::ACTION)) {
+                                if ($cmd->isSubType(CmdSubType::COLOR)) {
                                     $options['color'] = '#color#';
                                 }
-                                if ($cmd->getSubtype() == 'slider') {
+                                if ($cmd->isSubType(CmdSubType::SLIDER)) {
                                     $options['slider'] = '#slider#';
                                 }
-                                if ($cmd->getSubtype() == 'message') {
+                                if ($cmd->isSubType(CmdSubType::MESSAGE)) {
                                     $options['message'] = '#message#';
                                     $options['title'] = '#title#';
                                 }
                             }
                             $query = str_replace(array_keys($replace), $replace, $input);
-                            $return[$query] = array(
+                            $return[$query] = [
                                 'query' => $query,
-                                'cmd' => array(array('cmd' => '#' . $cmd->getId() . '#', 'options' => $options)),
+                                'cmd' => [['cmd' => '#' . $cmd->getId() . '#', 'options' => $options]],
 
-                            );
+                            ];
                         }
                     }
                 }
@@ -366,14 +369,14 @@ class InteractDef implements EntityInterface
 
         if (count($return) == 0) {
             foreach ($inputs as $input) {
-                $return[] = array(
+                $return[] = [
                     'query' => $input,
                     'cmd' => $this->getActions('cmd'),
-                );
+                ];
             }
         }
         if ($this->getOptions('synonymes') != '') {
-            $synonymes = array();
+            $synonymes = [];
             foreach (explode('|', $this->getOptions('synonymes')) as $value) {
                 $values = explode('=', $value);
                 if (count($values) != 2) {
@@ -469,7 +472,7 @@ class InteractDef implements EntityInterface
             if (preg_match($exclude_regexp, $_query)) {
                 return false;
             }
-            $disallow = array(
+            $disallow = [
                 'le salle',
                 'le chambre',
                 'la dressing',
@@ -589,7 +592,7 @@ class InteractDef implements EntityInterface
                 'de espace',
                 'de salle de bain',
                 '(dans|quelqu\'un) entr(é|e)e',
-            );
+            ];
             if (preg_match('/( |^)' . implode('( |$)|( |^)', $disallow) . '( |$)/i', $_query)) {
                 return false;
             }
@@ -632,7 +635,7 @@ class InteractDef implements EntityInterface
      * @param int $_drill
      * @return array|null
      */
-    public function getLinkData(&$_data = array('node' => array(), 'link' => array()), $_level = 0, $_drill = 3)
+    public function getLinkData(&$_data = ['node' => [], 'link' => []], $_level = 0, $_drill = 3)
     {
         if (isset($_data['node']['interactDef' . $this->getId()])) {
             return null;
@@ -642,7 +645,7 @@ class InteractDef implements EntityInterface
             return $_data;
         }
         $icon = Utils::findCodeIcon('fa-comments-o');
-        $_data['node']['interactDef' . $this->getId()] = array(
+        $_data['node']['interactDef' . $this->getId()] = [
             'id' => 'interactDef' . $this->getId(),
             'name' => substr($this->getHumanName(), 0, 20),
             'icon' => $icon['icon'],
@@ -653,7 +656,7 @@ class InteractDef implements EntityInterface
             'textx' => 0,
             'title' => $this->getHumanName(),
             'url' => 'index.php?v=d&p=interact&id=' . $this->getId(),
-        );
+        ];
         return null;
     }
 

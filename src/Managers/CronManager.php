@@ -60,9 +60,9 @@ class CronManager
      */
     public static function byId($cronId)
     {
-        $value = array(
+        $value = [
             'id' => $cronId,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE id = :id';
@@ -81,10 +81,10 @@ class CronManager
      */
     public static function byClassAndFunction($className, $functionName, $options = '')
     {
-        $value = array(
+        $value = [
             'class' => $className,
             'function' => $functionName,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE class = :class
@@ -109,10 +109,10 @@ class CronManager
      */
     public static function searchClassAndFunction($className, $functionName, $options = '')
     {
-        $value = array(
+        $value = [
             'class' => $className,
             'function' => $functionName,
-        );
+        ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE class = :class
@@ -166,13 +166,13 @@ class CronManager
      */
     public static function nbCronRun()
     {
-        return count(SystemHelper::ps('start_cron.php', array('grep', 'sudo', 'shell=/bin/bash - ', '/bin/bash -c ', posix_getppid(), getmypid())));
+        return count(SystemHelper::ps('start_cron.php', ['grep', 'sudo', 'shell=/bin/bash - ', '/bin/bash -c ', posix_getppid(), getmypid()]));
     }
 
     /**
      * Return number of process on system
      *
-     * TODO: Move to other place ?
+     * @TODO: Move to other place ?
      *
      * @return int Number of process on system
      */
@@ -184,7 +184,7 @@ class CronManager
     /**
      * Return array of load average
      *
-     * TODO: Inutile, autant appeler directement la fonction
+     * @TODO: Inutile, autant appeler directement la fonction
      *
      * @return array Load average
      */

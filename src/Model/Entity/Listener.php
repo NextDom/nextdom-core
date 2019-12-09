@@ -17,6 +17,8 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\LogTarget;
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\SystemHelper;
@@ -79,7 +81,7 @@ class Listener implements EntityInterface
      */
     public function run($_event, $_value, $_datetime = null)
     {
-        $option = array();
+        $option = [];
         if (count($this->getOption()) > 0) {
             $option = $this->getOption();
         }
@@ -127,7 +129,7 @@ class Listener implements EntityInterface
     public function execute($_event, $_value, $_datetime = '')
     {
         try {
-            $option = array();
+            $option = [];
             if (count($this->getOption()) > 0) {
                 $option = $this->getOption();
             }
@@ -141,7 +143,7 @@ class Listener implements EntityInterface
                 if (class_exists($targetClass) && method_exists($targetClass, $function)) {
                     $targetClass::$function($option);
                 } else {
-                    LogHelper::add('listener', 'debug', __('[Erreur] Classe ou fonction non trouvée ') . $this->getName());
+                    LogHelper::addDebug(LogTarget::LISTENER, __('[Erreur] Classe ou fonction non trouvée ') . $this->getName());
                     $this->remove();
                     return;
                 }
@@ -150,12 +152,12 @@ class Listener implements EntityInterface
                 if (function_exists($function)) {
                     $function($option);
                 } else {
-                    LogHelper::addError('listener', __('[Erreur] Non trouvée ') . $this->getName());
+                    LogHelper::addError(LogTarget::LISTENER, __('[Erreur] Non trouvée ') . $this->getName());
                     return;
                 }
             }
         } catch (\Exception $e) {
-            LogHelper::add(init('plugin_id', 'plugin'), 'error', $e->getMessage());
+            LogHelper::addError(Utils::init('plugin_id', 'plugin'), $e->getMessage());
         }
     }
 
@@ -240,7 +242,7 @@ class Listener implements EntityInterface
     public function preSave()
     {
         if ($this->getFunction() == '') {
-            throw new \Exception(__('La fonction ne peut pas être vide'));
+            throw new CoreException(__('La fonction ne peut pas être vide'));
         }
     }
 
@@ -261,7 +263,7 @@ class Listener implements EntityInterface
 
     public function emptyEvent()
     {
-        $this->event = array();
+        $this->event = [];
     }
 
     /**
@@ -272,7 +274,7 @@ class Listener implements EntityInterface
     {
         $event = $this->getEvent();
         if (!is_array($event)) {
-            $event = array();
+            $event = [];
         }
         $id = '';
         if ($_type == 'cmd') {
@@ -289,7 +291,7 @@ class Listener implements EntityInterface
      */
     public function getEvent()
     {
-        return Utils::isJson($this->event, array());
+        return Utils::isJson($this->event, []);
     }
 
     /**

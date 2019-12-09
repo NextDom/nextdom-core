@@ -20,6 +20,8 @@ namespace NextDom\Ajax;
 use NextDom\Com\ComShell;
 use NextDom\Enums\AjaxParams;
 use NextDom\Enums\DateFormat;
+use NextDom\Enums\LogTarget;
+use NextDom\Enums\UserOption;
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AjaxHelper;
@@ -54,7 +56,7 @@ class UserAjax extends BaseAjax
         if (NetworkHelper::getUserLocation() == 'internal') {
             $this->ajax->success(0);
         }
-        $this->ajax->success($user->getOptions('twoFactorAuthentification', 0));
+        $this->ajax->success($user->getOptions(UserOption::TWO_FACTOR_AUTH, 0));
     }
 
     public function login()
@@ -79,7 +81,7 @@ class UserAjax extends BaseAjax
                     @session_start();
                     $_SESSION['user'] = $user;
                     @session_write_close();
-                    LogHelper::add('connection', 'info', __('Connexion de l\'utilisateur par REMOTE_USER : ') . $user->getLogin());
+                    LogHelper::addInfo(LogTarget::CONNECTION, __('Connexion de l\'utilisateur par REMOTE_USER : ') . $user->getLogin());
                 }
             }
             if (!AuthentificationHelper::login(Utils::init('username'), Utils::init('password'), Utils::init('twoFactorCode'))) {
@@ -89,17 +91,17 @@ class UserAjax extends BaseAjax
 
         if (Utils::init('storeConnection') == 1) {
             $rdk = ConfigManager::genKey();
-            $registerDevice = $_SESSION['user']->getOptions('registerDevice', array());
+            $registerDevice = $_SESSION['user']->getOptions(UserOption::REGISTER_DEVICE, []);
             if (!is_array($registerDevice)) {
-                $registerDevice = array();
+                $registerDevice = [];
             }
-            $registerDevice[sha512($rdk)] = array();
+            $registerDevice[sha512($rdk)] = [];
             $registerDevice[sha512($rdk)]['datetime'] = date(DateFormat::FULL);
             $registerDevice[sha512($rdk)]['ip'] = NetworkHelper::getClientIp();
             $registerDevice[sha512($rdk)]['session_id'] = session_id();
-            setcookie('registerDevice', $_SESSION['user']->getHash() . '-' . $rdk, time() + 365 * 24 * 3600, "/", '', false, true);
+            setcookie(UserOption::REGISTER_DEVICE, $_SESSION['user']->getHash() . '-' . $rdk, time() + 365 * 24 * 3600, "/", '', false, true);
             @session_start();
-            $_SESSION['user']->setOptions('registerDevice', $registerDevice);
+            $_SESSION['user']->setOptions(UserOption::REGISTER_DEVICE, $registerDevice);
             $_SESSION['user']->save();
             @session_write_close();
             if (!isset($_COOKIE['nextdom_token'])) {
@@ -125,9 +127,9 @@ class UserAjax extends BaseAjax
         if ($currentUser !== null) {
             @session_start();
             $currentUser->refresh();
-            $result = $currentUser->validateTwoFactorCode(Utils::init('code'));
+            $result = $currentUser->validateTwoFactorCode(Utils::init(AjaxParams::CODE));
             if ($result && Utils::init('enableTwoFactorAuthentification') == 1) {
-                $currentUser->setOptions('twoFactorAuthentification', 1);
+                $currentUser->setOptions(UserOption::TWO_FACTOR_AUTH, 1);
                 $currentUser->save();
             }
             @session_write_close();
@@ -144,7 +146,7 @@ class UserAjax extends BaseAjax
         if (!is_object($user)) {
             throw new CoreException('User ID inconnu');
         }
-        $user->setOptions('twoFactorAuthentification', 0);
+        $user->setOptions(UserOption::TWO_FACTOR_AUTH, 0);
         $user->save();
         $this->ajax->success(true);
     }
@@ -178,7 +180,7 @@ class UserAjax extends BaseAjax
     {
         AuthentificationHelper::init();
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $users = array();
+        $users = [];
         foreach (UserManager::all() as $user) {
             $user_info = Utils::o2a($user);
             $users[] = $user_info;
@@ -267,10 +269,10 @@ class UserAjax extends BaseAjax
             AuthentificationHelper::isConnectedAsAdminOrFail();
             foreach (UserManager::all() as $user) {
                 if ($user->getId() == UserManager::getStoredUser()->getId()) {
-                    UserManager::getStoredUser()->setOptions('registerDevice', array());
+                    UserManager::getStoredUser()->setOptions(UserOption::REGISTER_DEVICE, []);
                     UserManager::getStoredUser()->save();
                 } else {
-                    $user->setOptions('registerDevice', array());
+                    $user->setOptions(UserOption::REGISTER_DEVICE, []);
                     $user->save();
                 }
             }
@@ -282,22 +284,22 @@ class UserAjax extends BaseAjax
             if (!is_object($user)) {
                 throw new CoreException(__('Utilisateur non trouvé : ') . Utils::init(AjaxParams::USER_ID));
             }
-            $registerDevice = $user->getOptions('registerDevice', array());
+            $registerDevice = $user->getOptions(UserOption::REGISTER_DEVICE, []);
         } else {
-            $registerDevice = UserManager::getStoredUser()->getOptions('registerDevice', array());
+            $registerDevice = UserManager::getStoredUser()->getOptions(UserOption::REGISTER_DEVICE, []);
         }
 
         if (Utils::init(AjaxParams::KEY) == '') {
-            $registerDevice = array();
-        } elseif (isset($registerDevice[init('key')])) {
-            unset($registerDevice[init('key')]);
+            $registerDevice = [];
+        } elseif (isset($registerDevice[Utils::init(AjaxParams::KEY)])) {
+            unset($registerDevice[Utils::init(AjaxParams::KEY)]);
         }
         if (Utils::init(AjaxParams::USER_ID) != '') {
-            $user->setOptions('registerDevice', $registerDevice);
+            $user->setOptions(UserOption::REGISTER_DEVICE, $registerDevice);
             $user->save();
         } else {
             @session_start();
-            UserManager::getStoredUser()->setOptions('registerDevice', $registerDevice);
+            UserManager::getStoredUser()->setOptions(UserOption::REGISTER_DEVICE, $registerDevice);
             UserManager::getStoredUser()->save();
             @session_write_close();
         }
@@ -309,16 +311,16 @@ class UserAjax extends BaseAjax
         AuthentificationHelper::init();
         AuthentificationHelper::isConnectedOrFail();
         $sessions = SessionHelper::getSessionsList();
-        if (isset($sessions[init('id')])) {
-            $user = UserManager::byId($sessions[init('id')]['user_id']);
+        if (isset($sessions[Utils::init(AjaxParams::ID)])) {
+            $user = UserManager::byId($sessions[Utils::init(AjaxParams::ID)]['user_id']);
             if (is_object($user)) {
-                $registerDevice = $user->getOptions('registerDevice', array());
-                foreach ($user->getOptions('registerDevice', array()) as $key => $value) {
+                $registerDevice = $user->getOptions(UserOption::REGISTER_DEVICE, []);
+                foreach ($user->getOptions(UserOption::REGISTER_DEVICE, []) as $key => $value) {
                     if ($value['session_id'] == Utils::init(AjaxParams::ID)) {
                         unset($registerDevice[$key]);
                     }
                 }
-                $user->setOptions('registerDevice', $registerDevice);
+                $user->setOptions(UserOption::REGISTER_DEVICE, $registerDevice);
                 $user->save();
             }
         }
@@ -349,7 +351,7 @@ class UserAjax extends BaseAjax
     {
         AuthentificationHelper::init();
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        UserManager::supportAccess(Utils::init('enable'));
+        UserManager::supportAccess(Utils::init(AjaxParams::ENABLE));
         $this->ajax->success();
     }
 }

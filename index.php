@@ -31,7 +31,6 @@ $goToMobile = false;
 
 // Test if user want to force desktop on mobile
 if (isset($_GET['force_desktop'])) {
-    $_SESSION['force_desktop'] = true;
     $_SESSION['desktop_view'] = true;
     $goToMobile = false;
 } else {

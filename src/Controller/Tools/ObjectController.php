@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Tools;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\ConfigKey;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
@@ -47,7 +48,7 @@ class ObjectController extends BaseController
     {
         $pageData['JS_VARS']['select_id'] = Utils::init('id', '-1');
         $pageData['objectList'] = JeeObjectManager::buildTree(null, false);
-        $pageData['objectSummary'] = ConfigManager::byKey('object:summary');
+        $pageData['objectSummary'] = ConfigManager::byKey(ConfigKey::OBJECT_SUMMARY);
 
         $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/object.js';
 

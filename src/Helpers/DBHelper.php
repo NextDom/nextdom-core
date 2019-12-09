@@ -35,7 +35,6 @@
 namespace NextDom\Helpers;
 
 use NextDom\Exceptions\CoreException;
-use NextDom\Model\Entity\EntityInterface;
 
 /**
  * Class DBHelper
@@ -59,15 +58,15 @@ class DBHelper
     {
         global $CONFIG;
         if (isset($CONFIG['db']['unix_socket'])) {
-            $this->connection = new \PDO('mysql:unix_socket=' . $CONFIG['db']['unix_socket'] . ';dbname=' . $CONFIG['db']['dbname'], $CONFIG['db']['username'], $CONFIG['db']['password'], array(\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8', \PDO::ATTR_PERSISTENT => true));
+            $this->connection = new \PDO('mysql:unix_socket=' . $CONFIG['db']['unix_socket'] . ';dbname=' . $CONFIG['db']['dbname'], $CONFIG['db']['username'], $CONFIG['db']['password'], [\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8', \PDO::ATTR_PERSISTENT => true]);
         } else {
-            $this->connection = new \PDO('mysql:host=' . $CONFIG['db']['host'] . ';port=' . $CONFIG['db']['port'] . ';dbname=' . $CONFIG['db']['dbname'], $CONFIG['db']['username'], $CONFIG['db']['password'], array(\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8', \PDO::ATTR_PERSISTENT => true));
+            $this->connection = new \PDO('mysql:host=' . $CONFIG['db']['host'] . ';port=' . $CONFIG['db']['port'] . ';dbname=' . $CONFIG['db']['dbname'], $CONFIG['db']['username'], $CONFIG['db']['password'], [\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8', \PDO::ATTR_PERSISTENT => true]);
         }
     }
 
     /**
      * Call procedure
-     * TODO: Y en a-t-il d'utilisé ?
+     * @TODO: Y en a-t-il d'utilisé ?
      *
      * @param string $procName Procedure name
      * @param array $params Parameters
@@ -95,19 +94,61 @@ class DBHelper
     }
 
     /**
-     * Get one object from database
+     * Prepare a query and execute
      *
-     * @param string $query SQL query
-     * @param array $params Query params
-     * @param string $objectClassName Class of object
+     * @param $query
+     * @param array $params
+     * @param int $fetchType
+     * @param int $fetchParam
+     * @param mixed $fetchOpt
      *
-     * @return mixed|null Instance of the class
+     * @return array|mixed|null
      *
      * @throws CoreException
      */
-    public static function &getOneObject(string $query, array $params, string $objectClassName)
+    public static function &Prepare($query, $params = [], $fetchType = self::FETCH_TYPE_ROW, $fetchParam = \PDO::FETCH_ASSOC, $fetchOpt = NULL)
     {
-        return self::Prepare($query, $params, self::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, $objectClassName);
+        // Prepare statement
+        $statement = self::getConnection()->prepare($query);
+        $result = NULL;
+        // If execution success
+        if ($statement !== false && $statement->execute($params) !== false) {
+            if ($fetchType == self::FETCH_TYPE_ROW) {
+                if ($fetchOpt === null) {
+                    $result = $statement->fetch($fetchParam);
+                } else if ($fetchParam == \PDO::FETCH_CLASS) {
+                    $result = $statement->fetchObject($fetchOpt);
+                }
+            } else {
+                if ($fetchOpt === null) {
+                    $result = $statement->fetchAll($fetchParam);
+                } else {
+                    $result = $statement->fetchAll($fetchParam, $fetchOpt);
+                }
+            }
+        }
+        // Get error
+        $errorInfo = $statement->errorInfo();
+        // @TODO: Revoir cette chaine
+        if ($errorInfo[0] != 0000) {
+            throw new CoreException('[MySQL] Error code : ' . $errorInfo[0] . ' (' . $errorInfo[1] . '). ' . $errorInfo[2] . '  : ' . $query);
+        }
+        return $result;
+    }
+
+    /**
+     * Get the connection. Connect to the database if not.
+     *
+     * @return \PDO Connection
+     */
+    public static function getConnection()
+    {
+        if (!isset(self::$sharedInstance) || self::$sharedInstance->lastConnection + self::CONNECTION_TIMEOUT < time()) {
+            self::$sharedInstance = new self();
+        }
+        // Store last connection
+        self::$sharedInstance->lastConnection = time();
+        return self::$sharedInstance->connection;
     }
 
     /**
@@ -127,18 +168,18 @@ class DBHelper
     }
 
     /**
-     * Get one row data from database
-     *
-     * @param string $query SQL query
-     * @param array $params Query params
-     *
-     * @return mixed Associative array with data
+     * Optimize all tables
      *
      * @throws CoreException
      */
-    public static function &getOne(string $query, array $params = [])
+    public static function optimize()
     {
-        return self::Prepare($query, $params, self::FETCH_TYPE_ROW, \PDO::FETCH_ASSOC);
+        $tables = self::getAll('SELECT TABLE_NAME FROM information_schema.TABLES WHERE Data_Free > 0', []);
+        foreach ($tables as $table) {
+            $table = array_values($table);
+            $table = $table[0];
+            self::exec('OPTIMIZE TABLE `' . $table . '`');
+        }
     }
 
     /**
@@ -179,79 +220,6 @@ class DBHelper
     }
 
     /**
-     * Prepare a query and execute
-     *
-     * @param $query
-     * @param array $params
-     * @param int $fetchType
-     * @param int $fetchParam
-     * @param mixed $fetchOpt
-     *
-     * @return array|mixed|null
-     *
-     * @throws CoreException
-     */
-    public static function &Prepare($query, $params = [], $fetchType = self::FETCH_TYPE_ROW, $fetchParam = \PDO::FETCH_ASSOC, $fetchOpt = NULL)
-    {
-        // Prepare statement
-        $statement = self::getConnection()->prepare($query);
-        $result = NULL;
-        // If execution success
-        if ($statement !== false && $statement->execute($params) !== false) {
-            if ($fetchType == self::FETCH_TYPE_ROW) {
-                if ($fetchOpt === null) {
-                    $result = $statement->fetch($fetchParam);
-                } else if ($fetchParam == \PDO::FETCH_CLASS) {
-                    $result = $statement->fetchObject($fetchOpt);
-                }
-            } else {
-                if ($fetchOpt === null) {
-                    $result = $statement->fetchAll($fetchParam);
-                } else {
-                    $result = $statement->fetchAll($fetchParam, $fetchOpt);
-                }
-            }
-        }
-        // Get error
-        $errorInfo = $statement->errorInfo();
-        // TODO: Revoir cette chaine
-        if ($errorInfo[0] != 0000) {
-            throw new CoreException('[MySQL] Error code : ' . $errorInfo[0] . ' (' . $errorInfo[1] . '). ' . $errorInfo[2] . '  : ' . $query);
-        }
-        return $result;
-    }
-
-    /**
-     * Get the connection. Connect to the database if not.
-     *
-     * @return \PDO Connection
-     */
-    public static function getConnection()
-    {
-        if (!isset(self::$sharedInstance) || self::$sharedInstance->lastConnection + self::CONNECTION_TIMEOUT < time()) {
-            self::$sharedInstance = new self();
-        }
-        // Store last connection
-        self::$sharedInstance->lastConnection = time();
-        return self::$sharedInstance->connection;
-    }
-
-    /**
-     * Optimize all tables
-     *
-     * @throws CoreException
-     */
-    public static function optimize()
-    {
-        $tables = self::getAll('SELECT TABLE_NAME FROM information_schema.TABLES WHERE Data_Free > 0', []);
-        foreach ($tables as $table) {
-            $table = array_values($table);
-            $table = $table[0];
-            self::exec('OPTIMIZE TABLE `' . $table . '`');
-        }
-    }
-
-    /**
      * Begin transaction
      */
     public static function beginTransaction()
@@ -281,7 +249,7 @@ class DBHelper
      *
      * @param mixed $objToSave Object to save
      * @param bool $noProcess Don't call process before and after (preSave, preInsert, postSave, etc.)
-     * @param bool $forceReplace TODO: Force le remplacement si pas d'ID ????
+     * @param bool $forceReplace @TODO: Force le remplacement si pas d'ID ????
      *
      * @return boolean True on save success
      *
@@ -486,12 +454,27 @@ class DBHelper
             $sql[] = '`' . $field . '` = :' . $field;
             $parameters[$field] = self::getField($targetObject, $field);
         }
-        return array($sql, $parameters);
+        return [$sql, $parameters];
+    }
+
+    /**
+     * Get one row data from database
+     *
+     * @param string $query SQL query
+     * @param array $params Query params
+     *
+     * @return mixed Associative array with data
+     *
+     * @throws CoreException
+     */
+    public static function &getOne(string $query, array $params = [])
+    {
+        return self::Prepare($query, $params, self::FETCH_TYPE_ROW, \PDO::FETCH_ASSOC);
     }
 
     /**
      * Get the last insert id
-     * TODO: ???? Ca me parait dangereux si il y a une écriture en bdd entre temps
+     * @TODO: ???? Ca me parait dangereux si il y a une écriture en bdd entre temps
      * @return mixed
      * @throws CoreException
      */
@@ -518,7 +501,7 @@ class DBHelper
         if (is_subclass_of($objectToRefresh, 'EntityInterface') || !self::getField($objectToRefresh, 'id')) {
             throw new CoreException('DB ne peut rafraîchir l\'objet sans son ID');
         }
-        $parameters = array('id' => self::getField($objectToRefresh, 'id'));
+        $parameters = ['id' => self::getField($objectToRefresh, 'id')];
         $sql = 'SELECT ' . self::buildField(get_class($objectToRefresh)) .
             ' FROM `' . self::getTableName($objectToRefresh) . '` ' .
             ' WHERE ';
@@ -578,6 +561,22 @@ class DBHelper
     }
 
     /**
+     * Get one object from database
+     *
+     * @param string $query SQL query
+     * @param array $params Query params
+     * @param string $objectClassName Class of object
+     *
+     * @return mixed|null Instance of the class
+     *
+     * @throws CoreException
+     */
+    public static function &getOneObject(string $query, array $params, string $objectClassName)
+    {
+        return self::Prepare($query, $params, self::FETCH_TYPE_ROW, \PDO::FETCH_CLASS, $objectClassName);
+    }
+
+    /**
      * Get list of objects filtered
      *
      * @param array $filters Filtres à appliquer
@@ -589,7 +588,7 @@ class DBHelper
     public static function getWithFilter(array $filters, $objectType)
     {
         // operators have to remain in this order. If you put '<' before '<=', algorithm won't make the difference & will think a '<=' is a '<'
-        $operators = array('!=', '<=', '>=', '<', '>', 'NOT LIKE', 'LIKE', '=');
+        $operators = ['!=', '<=', '>=', '<', '>', 'NOT LIKE', 'LIKE', '='];
         $fields = self::getFields($objectType);
         $reflectedClass = self::getReflectionClass($objectType)->getName();
         // create query
@@ -601,11 +600,11 @@ class DBHelper
                 if ($property == $key && $value != '') {
                     // traitement à faire sur value pour obtenir l'opérateur
                     $thereIsOperator = false;
-                    $operatorInformation = array(
+                    $operatorInformation = [
                         'index' => -1,
                         'value' => '=', // by default '='
                         'length' => 0,
-                    );
+                    ];
                     foreach ($operators as $operator) {
                         if (($index = strpos($value, $operator)) !== false) {
                             $thereIsOperator = true;
@@ -619,7 +618,7 @@ class DBHelper
                         // extract operator from value
                         $value = substr($value, $operatorInformation['length'] + 1); // +1 because of space
                         // add % % to LIKE operator
-                        if (in_array($operatorInformation['value'], array('LIKE', 'NOT LIKE'))) {
+                        if (in_array($operatorInformation['value'], ['LIKE', 'NOT LIKE'])) {
                             $value = '%' . $value . '%';
                         }
                     }
@@ -657,7 +656,7 @@ class DBHelper
         $sql = 'DELETE FROM `' . self::getTableName($objectToRemove) . '` WHERE ';
         if (isset($parameters['id'])) {
             $sql .= '`id` = :id AND ';
-            $parameters = array('id' => $parameters['id']);
+            $parameters = ['id' => $parameters['id']];
         } else {
             foreach ($parameters as $field => $value) {
                 if ($value != '') {
@@ -811,7 +810,7 @@ class DBHelper
             if ($_loop < 1) {
                 return self::compareAndFix($_database, $_table, $_verbose, ($_loop + 1));
             }
-            throw new \Exception($error);
+            throw new CoreException($error);
         }
         return true;
     }
@@ -833,11 +832,11 @@ class DBHelper
      */
     private static function compareDatabase($database)
     {
-        $return = [];
+        $result = [];
         foreach ($database['tables'] as $table) {
-            $return = array_merge($return, self::compareTable($table));
+            $result = array_merge($result, self::compareTable($table));
         }
-        return $return;
+        return $result;
     }
 
     /**
@@ -863,36 +862,36 @@ class DBHelper
             $describes = [];
         }
 
-        $return = array($_table['name'] => array('status' => 'ok', 'fields' => [], 'indexes' => [], 'sql' => ''));
+        $result = [$_table['name'] => ['status' => 'ok', 'fields' => [], 'indexes' => [], 'sql' => '']];
         if (count($describes) == 0) {
-            $return = array($_table['name'] => array(
+            $result = [$_table['name'] => [
                 'status' => 'nok',
                 'message' => 'Not found',
                 'sql' => 'CREATE TABLE IF NOT EXISTS ' . '`' . $_table['name'] . '` (',
-            ));
+            ]];
             foreach ($_table['fields'] as $field) {
-                $return[$_table['name']]['sql'] .= "\n" . '`' . $field['name'] . '`';
-                $return[$_table['name']]['sql'] .= self::buildDefinitionField($field);
-                $return[$_table['name']]['sql'] .= ',';
+                $result[$_table['name']]['sql'] .= "\n" . '`' . $field['name'] . '`';
+                $result[$_table['name']]['sql'] .= self::buildDefinitionField($field);
+                $result[$_table['name']]['sql'] .= ',';
             }
-            $return[$_table['name']]['sql'] .= "\n" . 'primary key(';
+            $result[$_table['name']]['sql'] .= "\n" . 'primary key(';
             foreach ($_table['fields'] as $field) {
                 if (isset($field['key']) && $field['key'] == 'PRI') {
-                    $return[$_table['name']]['sql'] .= '`' . $field['name'] . '`,';
+                    $result[$_table['name']]['sql'] .= '`' . $field['name'] . '`,';
                 }
             }
-            $return[$_table['name']]['sql'] = trim($return[$_table['name']]['sql'], ',');
-            $return[$_table['name']]['sql'] .= ')';
-            $return[$_table['name']]['sql'] .= ')' . "\n";
+            $result[$_table['name']]['sql'] = trim($result[$_table['name']]['sql'], ',');
+            $result[$_table['name']]['sql'] .= ')';
+            $result[$_table['name']]['sql'] .= ')' . "\n";
             if (!isset($_table['engine'])) {
                 $_table['engine'] = 'InnoDB';
             }
-            $return[$_table['name']]['sql'] .= ' ENGINE ' . $_table['engine'] . ";\n";
+            $result[$_table['name']]['sql'] .= ' ENGINE ' . $_table['engine'] . ";\n";
             foreach ($_table['indexes'] as $index) {
-                $return[$_table['name']]['sql'] .= "\n" . self::buildDefinitionIndex($index, $_table['name']) . ';';
+                $result[$_table['name']]['sql'] .= "\n" . self::buildDefinitionIndex($index, $_table['name']) . ';';
             }
-            $return[$_table['name']]['sql'] = trim($return[$_table['name']]['sql'], ';');
-            return $return;
+            $result[$_table['name']]['sql'] = trim($result[$_table['name']]['sql'], ';');
+            return $result;
         }
         $forceRebuildIndex = false;
         foreach ($_table['fields'] as $field) {
@@ -901,19 +900,19 @@ class DBHelper
                 if ($describe['Field'] != $field['name']) {
                     continue;
                 }
-                $return[$_table['name']]['fields'] = array_merge($return[$_table['name']]['fields'], self::compareField($field, $describe, $_table['name']));
-                if (isset($return[$_table['name']]['fields'][$field['name']]) && $return[$_table['name']]['fields'][$field['name']]['status'] == 'nok') {
+                $result[$_table['name']]['fields'] = array_merge($result[$_table['name']]['fields'], self::compareField($field, $describe, $_table['name']));
+                if (isset($result[$_table['name']]['fields'][$field['name']]) && $result[$_table['name']]['fields'][$field['name']]['status'] == 'nok') {
                     $forceRebuildIndex = true;
                 }
                 $found = true;
             }
             if (!$found) {
-                $return[$_table['name']]['fields'][$field['name']] = array(
+                $result[$_table['name']]['fields'][$field['name']] = [
                     'status' => 'nok',
                     'message' => 'Not found',
                     'sql' => 'ALTER TABLE `' . $_table['name'] . '` ADD `' . $field['name'] . '`'
-                );
-                $return[$_table['name']]['fields'][$field['name']]['sql'] .= self::buildDefinitionField($field);
+                ];
+                $result[$_table['name']]['fields'][$field['name']]['sql'] .= self::buildDefinitionField($field);
             }
         }
         foreach ($describes as $describe) {
@@ -925,11 +924,11 @@ class DBHelper
                 }
             }
             if (!$found) {
-                $return[$_table['name']]['fields'][$describe['Field']] = array(
+                $result[$_table['name']]['fields'][$describe['Field']] = [
                     'status' => 'nok',
                     'message' => 'Should not exist',
                     'sql' => 'ALTER TABLE `' . $_table['name'] . '` DROP `' . $describe['Field'] . '`'
-                );
+                ];
             }
         }
         $showIndexes = self::prepareIndexCompare(self::getAll('show index from `' . $_table['name'] . '`', []));
@@ -939,16 +938,16 @@ class DBHelper
                 if ($showIndex['Key_name'] != $index['Key_name']) {
                     continue;
                 }
-                $return[$_table['name']]['indexes'] = array_merge($return[$_table['name']]['indexes'], self::compareIndex($index, $showIndex, $_table['name'], $forceRebuildIndex));
+                $result[$_table['name']]['indexes'] = array_merge($result[$_table['name']]['indexes'], self::compareIndex($index, $showIndex, $_table['name'], $forceRebuildIndex));
                 $found = true;
             }
             if (!$found) {
-                $return[$_table['name']]['indexes'][$index['Key_name']] = array(
+                $result[$_table['name']]['indexes'][$index['Key_name']] = [
                     'status' => 'nok',
                     'message' => 'Not found',
                     'sql' => ''
-                );
-                $return[$_table['name']]['indexes'][$index['Key_name']]['sql'] .= self::buildDefinitionIndex($index, $_table['name']);
+                ];
+                $result[$_table['name']]['indexes'][$index['Key_name']]['sql'] .= self::buildDefinitionIndex($index, $_table['name']);
             }
         }
         foreach ($showIndexes as $showIndex) {
@@ -960,14 +959,14 @@ class DBHelper
                 }
             }
             if (!$found) {
-                $return[$_table['name']]['indexes'][$showIndex['Key_name']] = array(
+                $result[$_table['name']]['indexes'][$showIndex['Key_name']] = [
                     'status' => 'nok',
                     'message' => 'Should not exist',
                     'sql' => 'ALTER TABLE `' . $_table['name'] . '` DROP INDEX `' . $showIndex['Key_name'] . '`;'
-                );
+                ];
             }
         }
-        return $return;
+        return $result;
     }
 
     /**
@@ -1053,7 +1052,7 @@ class DBHelper
      */
     private static function compareField($_ref_field, $_real_field, $_table_name)
     {
-        $return = array($_ref_field['name'] => array('status' => 'ok', 'sql' => ''));
+        $return = [$_ref_field['name'] => ['status' => 'ok', 'sql' => '']];
         if ($_ref_field['type'] != $_real_field['Type']) {
             $return[$_ref_field['name']]['status'] = 'nok';
             $return[$_ref_field['name']]['message'] = 'Type nok';
@@ -1097,14 +1096,14 @@ class DBHelper
                 continue;
             }
             if (!isset($return[$index['Key_name']])) {
-                $return[$index['Key_name']] = array(
+                $return[$index['Key_name']] = [
                     'Key_name' => $index['Key_name'],
                     'Non_unique' => 0,
                     'columns' => [],
-                );
+                ];
             }
             $return[$index['Key_name']]['Non_unique'] = $index['Non_unique'];
-            $return[$index['Key_name']]['columns'][$index['Seq_in_index']] = array('column' => $index['Column_name'], 'Sub_part' => $index['Sub_part']);
+            $return[$index['Key_name']]['columns'][$index['Seq_in_index']] = ['column' => $index['Column_name'], 'Sub_part' => $index['Sub_part']];
         }
         return $return;
     }
@@ -1118,7 +1117,7 @@ class DBHelper
      */
     private static function compareIndex($_ref_index, $_real_index, $_table_name, $_forceRebuild = false)
     {
-        $return = array($_ref_index['Key_name'] => array('status' => 'ok', 'presql' => '', 'sql' => ''));
+        $return = [$_ref_index['Key_name'] => ['status' => 'ok', 'presql' => '', 'sql' => '']];
         if ($_ref_index['Non_unique'] != $_real_index['Non_unique']) {
             $return[$_ref_index['Key_name']]['status'] = 'nok';
             $return[$_ref_index['Key_name']]['message'] = 'Non_unique nok';

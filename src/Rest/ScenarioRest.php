@@ -81,7 +81,7 @@ class ScenarioRest
 
     /**
      * Prepare result for response\n
-     * Associative array by group with following keys : 
+     * Associative array by group with following keys :
      *  - id
      *  - name
      *  - displayIcon
@@ -142,18 +142,9 @@ class ScenarioRest
      * @return bool True on success
      * @throws \Exception
      */
-    public static function enable(int $scenarioId) {
+    public static function enable(int $scenarioId)
+    {
         return self::changeScenarioActiveState($scenarioId, true);
-    }
-
-    /**
-     * Disable scenario
-     * @param int $scenarioId Id of the scenario to disable
-     * @return bool True on success
-     * @throws \Exception
-     */
-    public static function disable(int $scenarioId) {
-        return self::changeScenarioActiveState($scenarioId, false);
     }
 
     /**
@@ -163,19 +154,30 @@ class ScenarioRest
      * @return bool True on success
      * @throws \Exception
      */
-    private static function changeScenarioActiveState(int $scenarioId, bool $newState) {
+    private static function changeScenarioActiveState(int $scenarioId, bool $newState)
+    {
         $scenario = ScenarioManager::byId($scenarioId);
         if (!is_object($scenario)) {
             return false;
         }
         if ($newState) {
             $scenario->setIsActive(1);
-        }
-        else {
+        } else {
             $scenario->setIsActive(0);
         }
         $scenario->save();
         return true;
+    }
+
+    /**
+     * Disable scenario
+     * @param int $scenarioId Id of the scenario to disable
+     * @return bool True on success
+     * @throws \Exception
+     */
+    public static function disable(int $scenarioId)
+    {
+        return self::changeScenarioActiveState($scenarioId, false);
     }
 
     /**
