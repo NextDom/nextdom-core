@@ -530,7 +530,7 @@ class BackupManager
             self::clearCache();
             ConsoleHelper::ok();
             ConsoleHelper::step("restoring cache...");
-            self::restoreCache($tmpDir);
+            self::restoreCache($tmpDir,LogTarget::RESTORE);
             ConsoleHelper::ok();
             FileSystemHelper::rrmdir($tmpDir);
             NextDomHelper::event("end_restore");
@@ -817,14 +817,14 @@ class BackupManager
      * Restore cache from backup archive
      *
      * @param string $tmpDir extracted backup root directory
+     * @param string logFile logging file name
      * @throws CoreException
      */
-    private static function restoreCache($tmpDir)
+    private static function restoreCache($tmpDir, $logFile)
     {
 
         FileSystemHelper::rrmfile(CacheManager::getArchivePath());
-        FileSystemHelper::mv($tmpDir . '/' . NextDomFolder::VAR . '/' . NextDomFile::CACHE_TAR_GZ, CacheManager::getArchivePath());
-
+        FileSystemHelper::rmove($tmpDir . '/' . NextDomFolder::VAR . '/' . NextDomFile::CACHE_TAR_GZ, CacheManager::getArchivePath());
         CacheManager::restore();
     }
     private static function updateConfig()
