@@ -335,7 +335,7 @@ interact:
   limit_to_visible: "Limiter aux visibles"
   limit_to_the_device: "Limiter à l'équipement"
   list_of_users_identifiers_separated_by_a_pipe: "Liste des utilisateurs (identifiants) séparés par un | "
-  none: "Aucun - "
+  none: "Aucun"
   no_interactions_click_add_to_start: "Vous n'avez encore aucune interaction. Cliquez sur ajouter pour commencer."
   regenerate: "Régénérer"
   regex_exclusion: "Regexp d'exclusion"
@@ -524,10 +524,14 @@ repo:
         url: "URL core NextDom"
         version: "Version core NextDom"
 scenario:
-  add-block: Ajouter un bloc
-  add-item: Ajouter un élément
+  action: Action
+  add-block: Ajouter bloc
+  add-item: Ajouter élément
+  block: Bloc
   choose: Choisir
   conditions: "Conditions"
+  copy-block: Copier bloc
+  copy-action: Copier action
   default : Défaut
   description: Description
   description-if: "Permet de faire des conditions dans votre scénario. Par exemple: Si mon détecteur d’ouverture de porte se déclenche Alors allumer la lumière."
@@ -546,8 +550,8 @@ scenario:
   execute-title: Veuillez sauvegarder avant de tester. Ceci peut ne pas aboutir.
   export: Exporter
   expression-test: Testeur d'expression
-  follow: Suivi
-  follow-timeline: Suivre dans la timeline
+  follow: Activer Suivi
+  follow-timeline: Dans la timeline
   follow-timeline-title: Les exécutions du scénario pourront être vues dans la timeline.
   group: Groupe
   icon: Icône
@@ -569,6 +573,7 @@ scenario:
   name: Nom du scénario
   name-to-show: Nom à afficher
   name-to-show-placeholder: Ne rien mettre pour laisser le nom par défaut
+  new-group: Nouveau Groupe
   next: Prochain
   no-group: Aucun
   no-choice: Aucun
@@ -576,6 +581,8 @@ scenario:
   options: Options
   parameters: Paramètres
   parent-object: Objet parent
+  paste-block: Coller bloc
+  paste-action: Coller action
   paternity: Paternité
   previous: Précédent
   programmation: Programmation
@@ -599,6 +606,9 @@ scenario:
   timeout-unity: secondes
   trigger: Déclencheur
   twice: Les deux
+  use: Utilisation
+  used-by: Utilisé par les scénarios
+  used-in: Utilise les scénarios
   variables: Variables
   visible: Visible
   you-have-scenarios: Vous avez %s scénario(s).

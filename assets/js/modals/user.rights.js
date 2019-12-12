@@ -28,65 +28,34 @@
 *
 * You should have received a copy of the GNU General Public License
 * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
-*
-* @Support <https://www.nextdom.org>
-* @Email   <admin@nextdom.org>
-* @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-/* AdminLTE-Surcharge */
-.alert{
-    width: auto;
-    margin-bottom: 10px;
-    border-left: 5px solid $lightyellow;
-}
-.alert-danger {
-    border-left: 5px solid $lightred;
-}
-.alert-info, .alert-default {
-    border-left: 5px solid $lightblue;
-}
-.alert-success {
-    border-left: 5px solid $lightgreen;
-}
-.alert-default {
-    background-color: $lightgrey;
-}
-.callout {
-    border-radius: 3px;
-    margin: 0 0 20px 5px;
-}
-.alert .btn {
-    text-decoration: none;
+// Page init
+loadInformations();
+initEvents();
+
+/**
+ * Load informations in all forms of the page
+ */
+function loadInformations() {
+    $('#div_tasbUserRights').setValues(user_rights, '.userAttr');
+    initTableSorter();
 }
 
-/* Core-Ajout */
-.alert-no-child {
-    margin-bottom: 0px !important;
-    border-left: 0px;
-    padding: 10px 15px;
-}
-.alert-header {
-    padding: 15px;
-    -webkit-animation: slidein 0.5s;
-    -moz-animation:    slidein 0.5s;
-    -o-animation:      slidein 0.5s;
-    animation:     slidein 0.5s;
-}
-.alert-header .alert-danger {
-    margin-bottom: 0px;
-}
-
-/* Core-Surcharge */
-#div_alert {
-    padding:{
-        top: 77px;
-        left: 15px;
-        right: 15px;
-    }
-    margin-bottom: -78px;
-}
-.action-bar .alert {
-    margin-bottom: 0px;
-    padding: 8px 10px;
+/**
+ * Init events on the profils page
+ */
+function initEvents() {
+    $("#bt_usersRightsSave").on('click', function (event) {
+        nextdom.user.save({
+            users: $('#div_tasbUserRights').getValues('.userAttr'),
+            error: function (error) {
+                notify('Core', error.message, 'error');
+            },
+            success: function () {
+                notify('Info', '{{ Sauvegarde effectuée }}', 'success');
+                modifyWithoutSave = false;
+            }
+        });
+    });
 }

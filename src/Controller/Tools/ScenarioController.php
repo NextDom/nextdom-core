@@ -61,6 +61,7 @@ class ScenarioController extends BaseController
         $pageData['scenarioInactiveStyle'] = NextDomHelper::getConfiguration('eqLogic:style:noactive');
         $pageData['scenariosEnabled'] = ConfigManager::byKey('enableScenario');
         $pageData['scenarioAllObjects'] = JeeObjectManager::all();
+
         $pageData['CSS_POOL'][] = '/public/css/pages/scenario.css';
         $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/scenario.js';
 

@@ -46,7 +46,9 @@ var pluginsUpdateNeededList = [];
 // Point d'entrée du script
 $(document).ready(function () {
     initEvents();
-    $("img.lazyload").lazyload();
+    $("img.lazy").lazyload({
+      threshold : 400
+    });
     refresh(false);
 });
 
@@ -371,7 +373,7 @@ function getItemHtml(item) {
         '<h4 class="media-title">' + title + '</h4>' +
         '<div class="media-content">' +
         '<div class="media-left">' +
-        '<img class="lazyload" src="' + iconPath + '"/>' +
+        '<img class="lazy" src="' + iconPath + '"/>' +
         '</div>' +
         '<div class="media-body">' +
         descriptionPar +

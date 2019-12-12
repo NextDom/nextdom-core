@@ -107,14 +107,8 @@
     border-radius: 2px;
     margin: 4px 0;
 }
-.label-list ,
-.label-view ,
-.label-log {
-    background-color: $lightgolden;
-    color: $grey !important;
-    border-color: $lightgrey;
-}
 .li_noteDisplay.active .label-list ,
+.li_scenarioTemplate.active .label-list ,
 .li_view.active .label-view ,
 .li_log.active .label-log {
     border: 1px dashed !important;

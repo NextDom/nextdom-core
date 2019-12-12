@@ -77,7 +77,7 @@
                 <div class="panel box">
                     <a class="box-header with-border accordion-toggle cursor" data-toggle="collapse" data-parent="" href="#config_none">
                         <h3 class="box-title">
-                            <span>{{ 'scenario.no-group'|trans }}</span>
+                            <span>{{ 'scenario.no-group'|trans }}</span><span class="badge bg-yellow spacing-left">{{ scenariosWithoutGroup|length }}</span>
                         </h3>
                     </a>
                     <div id="config_none" class="panel-collapse collapse in">
@@ -98,18 +98,16 @@
                     </div>
                 </div>
             {% endif %}
-
             {% set index = 0 %}
-
             {% for scenarioGroup in scenarioListGroup %}
                 {% if scenarioGroup.group != '' %}
                     <div class="panel box">
                         <a class="box-header with-border accordion-toggle cursor" data-toggle="collapse" data-parent="" href="#config_{{ index }}">
                             <h3 class="box-title">
-                                <span>{{ scenarioGroup.group }} - {{ scenarios[scenarioGroup.group]|length }} {{ 'scenario.scenarios'|trans }}</span>
+                                <span>{{ scenarioGroup.group }}</span><span class="badge bg-nextdom spacing-left">{{ scenarios[scenarioGroup.group]|length }}</span>
                             </h3>
                         </a>
-                        <div id="config_{{ index }}" class="panel-collapse collapse in">
+                        <div id="config_{{ index }}" class="panel-collapse collapse {% if index == 0 %}in{% endif %}">
                             <div class="box-body">
                                 <div class="scenarioListContainer DisplayCard text-center ">
                                     {% for scenario in scenarios[scenarioGroup.group] %}
@@ -140,10 +138,8 @@
                 <a class="btn btn-danger btn-action-bar" id="bt_scenarioThumbnailDisplay"><i class="fas fa-chevron-left"></i>{{ 'common.back'|trans }}</a>
                 <a class="btn btn-default btn-action-bar" id="bt_graphScenario"><i class="fas fa-object-group"></i>{{ 'scenario.links'|trans }}</a>
                 <a class="btn btn-default btn-action-bar" id="bt_logScenario"><i class="fas fa-file-alt"></i>{{ 'scenario.log'|trans }}</a>
-                <a class="btn btn-default btn-action-bar" id="bt_templateScenario"><i class="fas fa-cubes"></i>{{ 'scenario.template'|trans }}</a>
-                <a class="btn btn-primary btn-action-bar" id="bt_exportScenario"><i class="fas fa fa-share"></i>{{ 'scenario.export'|trans }}</a>
+                <a class="btn btn-primary btn-action-bar" id="bt_templateScenario"><i class="fas fa-cubes"></i>{{ 'scenario.template'|trans }}</a>
                 <a class="btn btn-default btn-action-bar" id="bt_copyScenario"><i class="fas fa-copy"></i>{{ 'scenario.duplicate'|trans }}</a>
-                <a class="btn btn-success btn-action-bar bt_addScenarioElement"><i class="fas fa-plus-circle"></i>{{ 'scenario.add-block'|trans }}</a>
             </div>
             <div class="action-group">
                 <a class="btn btn-success btn-action-bar pull-right" id="bt_saveScenario"><i class="fas fa-save"></i>{{ 'common.save'|trans }}</a>
@@ -155,16 +151,42 @@
                 <a class="btn btn-success btn-action-bar pull-right" id="bt_testScenario" title='{{ 'scenario.execute-title'|trans }}'><i class="fas fa-play"></i>{{ 'scenario.execute'|trans }}</a>
             </div>
         </div>
+        <div class="action-bar" id="programActionBar" style="display:none;">
+            <div class="action-group">
+                <a class="btn btn-success btn-action-bar bt_addScenarioElement"><i class="fas fa-plus-circle"></i>{{ 'scenario.add-block'|trans }}</a>
+                <a class="btn btn-default btn-action-bar" id="bt_undo" title='{{ 'Annuler' }}'><i class="fas fa-undo-alt no-spacing"></i><span class="spacing-left" style="display:none">0</span></a>
+                <a class="btn btn-action btn-action-bar" id="bt_redo" title='{{ 'Reproduire' }}'><i class="fas fa-redo-alt no-spacing"></i><span class="spacing-left" style="display:none">0</span></a>
+                <a class="btn btn-success btn-action-bar" id="bt_memoSet" title='{{ 'Initialiser la mémoire avec le contenu actuel' }}'><i class="fas fa-sd-card"></i><i class="fas fa-plus-circle no-spacing"></i></a>
+                <a class="btn btn-primary btn-action-bar" id="bt_memoRecall" title='{{ 'Rapeller le contenu de la mémoire' }}'><i class="fas fa-sd-card"></i><i class="fas fa-undo-alt no-spacing"></i></a>
+                <a class="btn btn-warning btn-action-bar" id="bt_memoReset" title='{{ 'Annuler la mémoire et revenir au dernier stack' }}'><i class="fas fa-sd-card"></i><i class="fas fa-bomb no-spacing"></i></a>
+            </div>
+            <div class="action-group">
+                <a class="btn btn-primary btn-action-bar pull-right" id="bt_moveBlocDown" title='{{ 'Déplacer en dessous' }}'><i class="fas fa-arrow-down no-spacing"></i></a>
+                <a class="btn btn-primary btn-action-bar pull-right" id="bt_moveBlocUp" title='{{ 'Déplacer au dessus' }}'><i class="fas fa-arrow-up no-spacing"></i></a>
+            </div>
+            <div class="action-group">
+                <a class="btn btn-action btn-action-bar pull-right bt_ScenarioAction" style="display:none;" id="bt_replaceAction" title='{{ 'Remplacer une Action' }}'><i class="fas fa-sync-alt no-spacing"></i></a>
+                <a class="btn btn-action btn-action-bar pull-right bt_ScenarioAction" style="display:none;" id="bt_pasteAction" title='{{ 'Coller une Action' }}'><i class="fas fa-paste no-spacing"></i></a>
+                <a class="btn btn-action btn-action-bar pull-right" id="bt_cutAction" title='{{ 'Couper une Action' }}'><i class="fas fa-cut no-spacing"></i></a>
+                <a class="btn btn-action btn-action-bar pull-right" id="bt_copyAction" title='{{ 'Copier une Action' }}'>{{ 'scenario.action'|trans }}<i class="fas fa-copy no-spacing spacing-left"></i></a>
+                <a class="btn btn-default btn-action-bar pull-right bt_ScenarioBloc" style="display:none;" id="bt_replaceBloc" title='{{ 'Remplacer un Bloc' }}'><i class="fas fa-sync-alt no-spacing"></i></a>
+                <a class="btn btn-default btn-action-bar pull-right bt_ScenarioBloc" style="display:none;" id="bt_pasteBloc" title='{{ 'Coller un Bloc' }}'><i class="fas fa-paste no-spacing"></i></a>
+                <a class="btn btn-default btn-action-bar pull-right" id="bt_cutBloc" title='{{ 'Couper un Bloc' }}'><i class="fas fa-cut no-spacing"></i></a>
+                <a class="btn btn-default btn-action-bar pull-right" id="bt_copyBloc" title='{{ 'Copier un Bloc' }}'>{{ 'scenario.block'|trans }}<i class="fas fa-copy no-spacing spacing-left"></i></a>
+            </div>
+        </div>
     </section>
 
     <section class="content">
         <div class="nav-tabs-custom">
             <ul class="nav nav-tabs pull-right" role="tablist">
-                <li role="presentation"><a id="bt_scenarioTab" href="#scenariotab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-microchip"></i><span>{{ 'scenario.programmation'|trans }}</span></a></li>
-                <li role="presentation"><a href="#conditiontab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-clock"></i><span>{{ 'scenario.conditions'|trans }}</span></a></li>
-                <li role="presentation" class="active"><a href="#generaltab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-cog"></i><span>{{ 'scenario.parameters'|trans }}</span></a></li>
+                <li role="presentation"><a class="scenarioEditTab" href="#usedtab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-id-badge"></i><span>{{ 'scenario.use'|trans }}</span></a></li>
+                <li role="presentation"><a class="scenarioProgramTab" id="bt_scenarioTab" href="#scenariotab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-microchip"></i><span>{{ 'scenario.programmation'|trans }}</span></a></li>
+                <li role="presentation"><a class="scenarioEditTab" href="#conditiontab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-clock"></i><span>{{ 'scenario.conditions'|trans }}</span></a></li>
+                <li role="presentation" class="active"><a class="scenarioEditTab" href="#generaltab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-cog"></i><span>{{ 'scenario.parameters'|trans }}</span></a></li>
                 <h4 id="span_ongoing" class="label pull-right badge spacing-right"></h4>
                 <h4 class="label label-primary pull-right badge spacing-right">{{ 'scenario.id'|trans }} : <span class="scenarioAttr" data-l1key="id"></span></h4>
+                <h4 class="label label-primary pull-right badge spacing-right"><span id="scenarioName"></span></h4>
                 <li class="header pull-left"><i class="fas fa-film"></i>{{ 'scenario.scenario-edit'|trans }}</li>
             </ul>
             <div class="tab-content">
@@ -193,8 +215,20 @@
                         <legend>{{ 'scenario.paternity'|trans }}</legend>
                         <div class="row">
                             <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label for="scenarioGroupAttr" class="control-label">{{ 'scenario.group'|trans }}</label>
-                                <input id="scenarioGroupAttr" class="form-control scenarioAttr" data-l1key="group" type="text" placeholder="{{ 'scenario.scenario-group'|trans }}"/>
+                                <label for="scenarioGroupListAttr" class="control-label">{{ 'scenario.group'|trans }}</label>
+                                <select id="scenarioGroupListAttr" class="form-control">
+                                    <option value="">{{ 'scenario.no-group'|trans }}</option>
+                                    <option value="NEW">{{ 'scenario.new-group'|trans }}</option>
+                                    {% for scenarioGroup in scenarioListGroup %}
+                                        {% if scenarioGroup.group != "" %}
+                                            <option value="{{ scenarioGroup.group }}">{{ scenarioGroup.group }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group col-sm-6 col-xs-12 col-padding" style="display:none">
+                                <label for="scenarioGroupAttr" class="control-label">{{ 'scenario.new-group'|trans }}</label>
+                                <input id="scenarioGroupAttr" class="form-control scenarioAttr" data-l1key="group" type="text"/>
                             </div>
                             <div class="form-group col-sm-6 col-xs-12 col-padding">
                                 <label for="scenarioObjectIdAttr" class="control-label">{{ 'scenario.parent-object'|trans }}</label>
@@ -319,6 +353,20 @@
                 </div>
                 <div role="tabpanel" class="tab-pane" id="scenariotab">
                     <div id="div_scenarioElement" class="element"></div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="usedtab">
+                    <fieldset>
+                        <legend>{{ 'scenario.used-by'|trans }}</legend>
+                        <div class="row">
+                            <div class="usedBy"></div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>{{ 'scenario.used-in'|trans }}</legend>
+                        <div class="row">
+                            <div class="usedIn"></div>
+                        </div>
+                    </fieldset>
                 </div>
             </div>
         </div>

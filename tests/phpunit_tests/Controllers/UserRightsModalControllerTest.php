@@ -40,7 +40,6 @@ class UserRightsModalControllerTest extends BaseControllerTest
         ob_start();
         $result = \NextDom\Controller\Modals\UserRights::get();
         $scriptResult = ob_get_clean();
-        $this->assertContains('id="div_userRightAlert"', $result);
         $this->assertContains('var user_rights = jQuery', $scriptResult);
     }
 }

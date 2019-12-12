@@ -142,39 +142,22 @@ function initEvents() {
                 notify('Erreur', error.message, 'error');
             },
             success: function () {
-                nextdom.user.get({
+                var config = $('#div_Profils').getValues('.configKey')[0];
+                nextdom.config.save({
+                    configuration: config,
                     error: function (error) {
-                        notify('Erreur', error.message, 'error');
+                        notify("Erreur", error.message, 'error');
                     },
-                    success: function (data) {
-                        var config = $('#div_Profils').getValues('.configKey')[0];
-                        nextdom.config.save({
-                            configuration: config,
-                            error: function (error) {
-                                notify("Erreur", error.message, 'error');
-                            },
-                            success: function () {
-                                // Change config dynamically
-                                widget_size = config['widget::size'];
-                                widget_margin = config['widget::margin'];
-                                widget_padding = config['widget::padding'];
-                                widget_radius = config['widget::radius'];
-                                nextdom.config.load({
-                                    configuration: $('#div_Profils').getValues('.configKey:not(.noSet)')[0],
-                                    error: function (error) {
-                                        notify("Erreur", error.message, 'error');
-                                    },
-                                    success: function (data) {
-                                        $('#div_Profils').setValues(data, '.configKey');
-                                        modifyWithoutSave = false;
-                                        $(".bt_cancelModifs").hide();
-                                        updateInformations();
-                                        notify("Info", '{{Sauvegarde réussie}}', 'success');
-                                        window.location.reload(true);
-                                    }
-                                });
-                            }
-                        });
+                    success: function () {
+                        // Change config dynamically
+                        widget_size = config['widget::size'];
+                        widget_margin = config['widget::margin'];
+                        widget_padding = config['widget::padding'];
+                        widget_radius = config['widget::radius'];
+                        modifyWithoutSave = false;
+                        $(".bt_cancelModifs").hide();
+                        notify("Info", '{{Sauvegarde réussie}}', 'success');
+                        window.location.reload(true);
                     }
                 });
             }
