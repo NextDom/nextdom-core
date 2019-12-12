@@ -475,16 +475,26 @@ class MigrationHelper
         }
     }
 
-    /***********************************************************************************************************************************************************/
-
+    /***************************************************************** 0.6.1 Migration process *****************************************************************/
+    /**
+     * 0.6.1 Migration process
+     * @param string $logFile log name file to display information
+     * @throws \Exception
+     */
     private static function migrate_0_6_1($logFile = LogTarget::MIGRATION)
     {
         exec("sudo sed -i '/vm.swappiness=/d' /etc/sysctl.d/99-sysctl.conf");
         exec("sudo echo 'vm.swappiness=10' >> /etc/sysctl.d/99-sysctl.conf");
     }
 
-    private static function migrate_0_6_2($logFile = LogTarget::MIGRATION)
+    /***************************************************************** 0.7.0 Migration process *****************************************************************/
+    /**
+     * 0.7.0 Migration process
+     * @param string $logFile log name file to display information
+     * @throws \Exception
+     */
+    private static function migrate_0_7_0($logFile = LogTarget::MIGRATION)
     {
-        DBHelper::exec("ALTER message ADD icon MEDIUMTEXT;");
+        DBHelper::exec("ALTER message ADD icon MEDIUMTEXT");
     }
 }
