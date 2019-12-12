@@ -65,6 +65,13 @@ class Message implements EntityInterface
     /**
      * @var string
      *
+     * @ORM\Column(name="icon", type="text", length=65535, nullable=true)
+     */
+    protected $icon;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="action", type="text", length=65535, nullable=true)
      */
     protected $action;
@@ -198,6 +205,25 @@ class Message implements EntityInterface
         $this->_changed = Utils::attrChanged($this->_changed, $this->plugin, $_plugin);
         $this->plugin = $_plugin;
         return $this;
+    }
+
+    /**
+     * @param $_icon
+     * @return $this
+     */
+    public function setIcon($_icon)
+    {
+        $this->_changed = Utils::attrChanged($this->_changed, $this->icon, $_icon);
+        $this->icon = $_icon;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIcon()
+    {
+        return $this->icon;
     }
 
     public function remove()

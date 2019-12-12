@@ -60,18 +60,20 @@ class MessageManager
      * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
      */
-    public static function add($_type, $_message, $_action = '', $_logicalId = '', $_writeMessage = true)
+    public static function add($_type, $_message, $_action = '', $_logicalId = '', $_writeMessage = true, $icon ='/public/img/NextDom/NextDom_Square_WhiteBlackBlue.png')
     {
         $message = (new message())
             ->setPlugin(Utils::secureXSS($_type))
             ->setMessage(Utils::secureXSS($_message))
             ->setAction(Utils::secureXSS($_action))
             ->setDate(date(DateFormat::FULL_DAY))
-            ->setLogicalId(Utils::secureXSS($_logicalId));
+            ->setLogicalId(Utils::secureXSS($_logicalId))
+            ->setIcon(Utils::secureXSS($icon));
         $message->save($_writeMessage);
     }
 
     /**
+     * @param string $_plugin
      * @param string $_plugin
      * @param string $_logicalId
      * @param bool $_search
