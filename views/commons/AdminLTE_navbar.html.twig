@@ -69,14 +69,13 @@
                                             <div class="pull-left">
                                                 <img src="{{ message.getIcon() }}">
                                             </div>
-                                            <h4>{{ message.getPlugin() }}<small class="pull-right"><i class="fas fa-clock spacing-right"></i>{{ message.getDate() }}</small></h4>
-                                            <div class="pull-left">
-                                                <p>{{ message.getMessage()|raw }}</p>
-                                            </div>
-                                            <p>
-                                                <span>{{ message.getAction() }}</span>
+                                            <h4>
+                                                {{ message.getPlugin() }}
                                                 <div class="btn btn-sm btn-danger removeMessage pull-right"><i class="fas fa-trash no-spacing"></i></div>
-                                            </p>
+                                                <small class="pull-right"><i class="fas fa-clock spacing-right"></i>{{ message.getDate() }}</small>
+                                            </h4>
+                                            <p>{{ message.getMessage()|raw }}</p>
+                                            <p><span>{{ message.getAction() }}</span></p>
                                         </a>
                                     </li>
                                 {% endfor %}

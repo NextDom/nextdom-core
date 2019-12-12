@@ -50,7 +50,11 @@
     }
     h4 {
         text-transform: uppercase;
-        margin: 6px 0px 18px 45px;
+        margin: 0px 0px 18px 45px;
+        small {
+            padding-top: 8px;
+            padding-right: 5px;
+        }
     }
     img {
         height: 32px;
