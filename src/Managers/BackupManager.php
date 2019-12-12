@@ -318,7 +318,10 @@ class BackupManager
      * @param array $roots
      * @param string $pattern
      * @param Tar $tar
-     * @param string logFile
+     * @param $logFile
+     * @throws \splitbrain\PHPArchive\ArchiveCorruptedException
+     * @throws \splitbrain\PHPArchive\ArchiveIOException
+     * @throws \splitbrain\PHPArchive\FileInfoException
      */
     private static function addPathToArchive($roots, $pattern, $tar, $logFile)
     {
@@ -383,8 +386,8 @@ class BackupManager
      *
      * @param string $backupDir backup root directory
      * @param string $order sort result by 'newest' or 'oldest' first
-     * @return array
-     * @retrun array of file object
+     * @return array of file object
+     * @throws CoreException
      */
     public static function getBackupFileInfo($backupDir, $order = "newest")
     {
@@ -818,11 +821,12 @@ class BackupManager
      *
      * @param string $tmpDir extracted backup root directory
      * @param string logFile logging file name
-     * @throws CoreException
+     *
+     * @throws \Exception
      */
     private static function restoreCache($tmpDir, $logFile)
     {
-
+        LogHelper::addInfo($logFile, 'Restore cache', '');
         FileSystemHelper::rrmfile(CacheManager::getArchivePath());
         FileSystemHelper::rmove($tmpDir . '/' . NextDomFolder::VAR . '/' . NextDomFile::CACHE_TAR_GZ, CacheManager::getArchivePath());
         CacheManager::restore();
