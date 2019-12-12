@@ -171,12 +171,47 @@
                     </div>
                     <div class="modal-body">
                         <div style="display: none;" id="div_newUserAlert"></div>
-                        <input class="form-control form-group" type="text" id="in_newUserLogin" placeholder="{{ 'Identifiant...' }}"/><br/>
-                        <input class="form-control" type="password" id="in_newUserMdp" placeholder="{{ 'Mot de passe...' }}"/>
+                        <input class="form-control form-group" type="text" id="in_newUserLogin" placeholder="{{ 'Identifiant...' }}"/>
+                        <input class="form-control form-group" type="password" id="in_newUserMdp" placeholder="{{ 'Mot de passe...' }}"/>
+                        <input class="form-control form-group" type="password" id="in_newUserMdpConfirm" placeholder="{{ 'Confirmation...' }}"/>
+                        <div class="form-group">
+                            <div class="progress progress-slim">
+                                <div id="newUserPasswordProgress" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                            </div>
+                            <span id="newUserPasswordLevel" class="label label-value"></span>
+                            <span class="label label-value pull-right" data-toggle="tooltip" title="" data-original-title="{{'security.rules'|trans}}"><i class="fas fa-question-circle no-spacing"></i></span>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-ban"></i>{{ 'common.cancel' | trans }}</a>
                         <a class="btn btn-success" id="bt_newUserSave"><i class="fas fa-save"></i>{{ 'common.validate' | trans }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- New password modal section -->
+        <div class="modal fade" id="md_newPassword">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button class="bootbox-close-button close" data-dismiss="modal">×</button>
+                        <h4>{{ 'Quel est le nouveau mot de passe ?' }}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div style="display: none;" id="div_newUserAlert"></div>
+                        <input class="form-control form-group" type="password" id="in_newPassword" placeholder="{{ 'Mot de passe...' }}"/>
+                        <input class="form-control form-group" type="password" id="in_newPasswordConfirm" placeholder="{{ 'Confirmation...' }}"/>
+                        <div class="form-group">
+                            <div class="progress progress-slim">
+                                <div id="newPasswordProgress" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                            </div>
+                            <span id="newPasswordLevel" class="label label-value" data-toggle="tooltip" title="" data-original-title="{{'security.rules'|trans}}"></span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-ban"></i>{{ 'common.cancel' | trans }}</a>
+                        <a class="btn btn-success" id="bt_newPasswordSave"><i class="fas fa-save"></i>{{ 'common.validate' | trans }}</a>
                     </div>
                 </div>
             </div>

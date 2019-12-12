@@ -77,9 +77,29 @@ class Router
     public static function showError401AndDie()
     {
         header("HTTP/1.1 401 Unauthorized");
+        require(NEXTDOM_ROOT . '/public/401.html');
         die();
     }
 
+    /**
+     * Show 403 security page
+     */
+    public static function showError403AndDie()
+    {
+        header("HTTP/1.0 403 Not Found");
+        require(NEXTDOM_ROOT . '/public/403.html');
+        die();
+    }
+
+    /**
+     * Show 500 http error page
+     */
+    public static function showError500AndDie()
+    {
+        header("HTTP/1.0 500 Not Found");
+        require(NEXTDOM_ROOT . '/public/500.html');
+        die();
+    }
     /**
      * Viewing the requested content
      *

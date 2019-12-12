@@ -50,11 +50,7 @@
     <div class="nav-tabs-custom config">
         <!-- Tabs title -->
         <ul class="nav nav-tabs pull-right" role="tablist">
-            {% set count = 0 %}
-            {% for informations in healthPluginsInformations %}
-                {% if informations.nOk > 0 %}{% set count = count + 1 %}{% endif %}
-            {% endfor %}
-            <li role="presentation"><a href="#div_Plugins" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-puzzle-piece"></i><span>{{ 'health.plugins-title'|trans }}</span>{% if count>0 %}<label class="badge bg-red spacing-left">{{ count }}</label>{% endif %}</a></li>
+            <li role="presentation"><a href="#div_Plugins" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-puzzle-piece"></i><span>{{ 'health.plugins-title'|trans }}</span>{% if healthTotalNOk>0 %}<label class="badge bg-red spacing-left">{{ healthTotalNOk }}</label>{% endif %}</a></li>
             {% set count = 0 %}
             {% for informations in healthInformations %}
                 {% if informations.state != 1 and informations.state != true %}{% set count = count + 1 %}{% endif %}

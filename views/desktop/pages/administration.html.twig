@@ -147,12 +147,12 @@
                 </div>
                 <div class="box-body text-center">
                     <a class="btn btn-app" href="index.php?v=d&p=health"><i class="fas fa-medkit"></i>{{ 'page-title.health'|trans }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=cron"><i class="fas fa-tasks"></i>{{ 'page-title.tasks'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=cron">{% if cronCount != 0 %}<span class="badge bg-red">{{ cronCount }}</span>{% endif %}<i class="fas fa-tasks"></i>{{ 'page-title.tasks'|trans }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=eqAnalyse"><i class="fas fa-plug"></i>{{ 'page-title.equipments'|trans }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=history"><i class="fas fa-chart-area"></i>{{ 'page-title.historics'|trans }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=timeline"><i class="fas fa-history"></i>{{ 'page-title.timeline'|trans }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=report"><i class="fas fa-newspaper-o"></i>{{ 'page-title.reports'|trans }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=log"><i class="fas fa-file-alt"></i>{{ 'page-title.logs'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=log">{% if logCount != 0 %}<span class="badge bg-red">{{ logCount }}</span>{% endif %}<i class="fas fa-file-alt"></i>{{ 'page-title.logs'|trans }}</a>
                 </div>
             </div>
         </div>
@@ -165,12 +165,12 @@
                     <a class="btn btn-app" href="index.php?v=d&p=display"><i class="fas fa-table"></i>{{ 'page-title.summaries'|trans }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=backup" ><i class="fas fa-save"></i>{{ 'page-title.backups'|trans }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=update">{% if numberOfUpdates != 0 %}<span class="badge bg-red">{{ numberOfUpdates }}</span>{% endif %}<i class="fas fa-download"></i>{{ 'page-title.updates'|trans }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=note"><i class="fas fa-sticky-note"></i>{{ 'page-title.notes'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=note">{% if noteCount != 0 %}<span class="badge bg-green">{{ noteCount }}</span>{% endif %}<i class="fas fa-sticky-note"></i>{{ 'page-title.notes'|trans }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=osdb"><i class="fas fa-terminal"></i>{{ 'page-title.database'|trans }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=interact"><i class="fas fa-comments"></i>{{ 'page-title.interacts'|trans }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=scenario"><i class="fas fa-film"></i>{{ 'page-title.scenarios'|trans }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=object"><i class="fas fa-clone"></i>{{ 'page-title.objects'|trans }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=plugin"><i class="fas fa-puzzle-piece"></i>{{ 'page-title.plugins'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=interact">{% if interactCount != 0 %}<span class="badge bg-green">{{ interactCount }}</span>{% endif %}<i class="fas fa-comments"></i>{{ 'page-title.interacts'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=scenario">{% if scenarioCount != 0 %}<span class="badge bg-green">{{ scenarioCount }}</span>{% endif %}<i class="fas fa-film"></i>{{ 'page-title.scenarios'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=object">{% if objectCount != 0 %}<span class="badge bg-green">{{ objectCount }}</span>{% endif %}<i class="fas fa-clone"></i>{{ 'page-title.objects'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=plugin">{% if pluginsCount != 0 %}<span class="badge bg-green">{{ pluginsCount }}</span>{% endif %}<i class="fas fa-puzzle-piece"></i>{{ 'page-title.plugins'|trans }}</a>
                 </div>
             </div>
         </div>

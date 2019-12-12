@@ -662,3 +662,49 @@ function resetConfigParamKey(keyElt) {
         }
     });
 }
+
+/**
+ * Calcul a score password from 0=none, 2/4=low, 8/16=Middle, 32/64=High, 128/256=VeryHigh
+ *
+ * @param password password value
+ * @param progressbar progressbar component with role="progressbar"
+ * @param spanLevel span id to write level
+ */
+function passwordScore(password, progressbar=null, spanLevel=null) {
+    let passwordToScore = password.toString();
+    let scoreNumber = passwordToScore.match(/\d+/) ? 15 : 0;
+    let scoreNumberThree = passwordToScore.match(/(.*[0-9].*[0-9].*[0-9])/) ? 15 : 0;
+    let scoreCase = passwordToScore.match(/([a-z].*[A-Z])|([A-Z].*[a-z])/) ? 15 : 0;
+    let scoreSpecial = passwordToScore.match(/[!,@,#,$,%,^,&,*,?,-,_,~,€,§]/) ? 15 : 0;
+    let scoreSpecialTwo = passwordToScore.match(/(.*[!,@,#,$,%,^,&,*,?,-,_,~,€,§].*[!,@,#,$,%,^,&,*,?,-,_,~,€,§])/) ? 15 : 0;
+    let scoreLength = passwordToScore.length >= 3 ? 10 : 0;
+    let scoreLengthMore = passwordToScore.length >= 10 ? 15 : 0;
+    let textLevel = '';
+    score = (scoreNumber + scoreNumberThree + scoreCase + scoreSpecial + scoreSpecialTwo + scoreLength + scoreLengthMore).toString();
+    if (progressbar != null) {
+        progressbar.width(score + '%');
+        progressbar.removeClass('progress-bar-green').removeClass('progress-bar-yellow').removeClass('progress-bar-red');
+        if(score > 0 && score <= 25) {
+            progressbar.addClass('progress-bar-red');
+        } else if (score >= 25 && score <= 70) {
+            progressbar.addClass('progress-bar-yellow');
+        } else if (score > 70) {
+            progressbar.addClass('progress-bar-green');
+        }
+    }
+    if (spanLevel != null) {
+        if(score > 0 && score <= 25) {
+            textLevel='{{Sécurité Faible}}';
+        } else if (score > 25 && score <= 70) {
+            textLevel='{{Sécurité Moyenne}}';
+        } else if (score > 70 && score < 100) {
+            textLevel='{{Sécurité Forte}}';
+        } else if (score == 0) {
+            textLevel='{{Sécurité Trés Faible}}';
+        } else if (score == 100) {
+            textLevel='{{Sécurité Trés Forte}}';
+        }
+        spanLevel.html('<i class="fas fa-shield-alt"></i>' + textLevel)
+    }
+    return score;
+}

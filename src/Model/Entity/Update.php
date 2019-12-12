@@ -208,7 +208,7 @@ class Update implements EntityInterface
                     LogHelper::addAlert(LogTarget::UPDATE, __('Décompression du zip...'));
                     $zip = new ZipArchive;
                     $res = $zip->open($tmp);
-                    if ($res === TRUE) {
+                    if ($res) {
                         if (!$zip->extractTo($cibDir . '/')) {
                             $content = file_get_contents($tmp);
                             throw new CoreException(__('Impossible d\'installer le plugin. Les fichiers n\'ont pas pu être décompressés : ') . substr($content, 255));

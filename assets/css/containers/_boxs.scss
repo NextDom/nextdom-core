@@ -79,11 +79,19 @@
 }
 
 /* Core-Surcharge : Page Update */
-#listPlugin .box .box-body,
-#listWidget .box .box-body ,
-#listScript .box .box-body,
-#listOther .box .box-body {
-    min-height: 180px;
+#listPlugin,
+#listWidget,
+#listScript,
+#listOther {
+    .box .box-body {
+        min-height: 180px;
+    }
+    .box-title {
+        white-space: nowrap;
+    }
+    .box-header {
+        overflow-x: hidden;
+    }
 }
 #listCore .box .box-body {
     min-height: 10px;

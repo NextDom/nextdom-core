@@ -660,7 +660,7 @@ class ScenarioManager
      */
     public static function getTemplate($template = '')
     {
-        $path = NEXTDOM_ROOT . '/core/config/scenario';
+        $path = NEXTDOM_DATA . '/data/scenario';
         /**
          * if (isset($template) && $template != '') {
          * // @TODO Magic trixxxxxx
@@ -680,7 +680,7 @@ class ScenarioManager
      */
     public static function shareOnMarket(&$market)
     {
-        $moduleFile = NEXTDOM_ROOT . '/core/config/scenario/' . $market->getLogicalId() . '.json';
+        $moduleFile = NEXTDOM_DATA . '/data/scenario/' . $market->getLogicalId() . '.json';
         if (!file_exists($moduleFile)) {
             throw new CoreException('Impossible de trouver le fichier de configuration ' . $moduleFile);
         }
@@ -704,7 +704,7 @@ class ScenarioManager
      */
     public static function getFromMarket(&$market, $path)
     {
-        $cibDir = NEXTDOM_ROOT . '/core/config/scenario/';
+        $cibDir = NEXTDOM_DATA . '/data/scenario/';
         if (!file_exists($cibDir)) {
             mkdir($cibDir);
         }

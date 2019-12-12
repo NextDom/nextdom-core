@@ -1,6 +1,7 @@
 DocumentRoot  "${wwwdir}"
 TraceEnable   Off
 ErrorDocument 300 /public/300.html
+ErrorDocument 401 /public/401.html
 ErrorDocument 404 /public/404.html
 ErrorDocument 500 /public/500.html
 

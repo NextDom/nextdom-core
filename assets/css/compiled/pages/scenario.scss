@@ -138,9 +138,7 @@
     display: table-cell;
 }
 .scenario-code {
-    width: 110px;
     padding-left: 5px;
-    display: table-cell;
     vertical-align: top;
 }
 .scenario-code-text {
@@ -187,6 +185,12 @@
     font-size: 11px;
     padding: 13px 2px 0px 0px;
 }
+.scenario-bloc-focused {
+    border: 2px dashed !important;
+}
+.scenario-action-focused {
+    border: 2px dotted !important;
+}
 
 /* Boutons */
 .scenario-expand {
@@ -231,7 +235,7 @@
     margin-bottom: 1.5rem;
 }
 #div_scenarioElement {
-    padding-bottom: 7rem;
+    padding-bottom: 22rem;
 }
 #div_editScenario {
     .input-group-btn {
@@ -243,8 +247,9 @@
     .CodeMirror-scroll {
         max-height: 300px !important;
     }
-    .expressionAttr.scenario-text {
-        resize: vertical;
+    .expressionAttr.scenario-text,
+    textarea.scenarioAttr {
+        resize: vertical !important;
     }
     .expression-error {
         text-decoration: underline;

@@ -36,23 +36,18 @@ try {
     }
 
     $baseFilePath = Utils::init('pathfile');
-    if (strpos($baseFilePath, 'log') === false) {
-        if (strpos($baseFilePath, 'data') === 0) {
-            $filePath = NEXTDOM_DATA . '/data';
-        } else {
-            $filePath = realpath(NEXTDOM_DATA . '/' . $baseFilePath);
-            if (false === is_file($filePath)) {
-                $filePath = realpath(NEXTDOM_ROOT . '/' . $baseFilePath);
-            }
-        }
-    } else {
+
+    if (strpos($baseFilePath, 'log') === 0) {
         $filePath = realpath(NEXTDOM_LOG . '/' . substr($baseFilePath, 4));
+    } elseif (strpos($baseFilePath, 'data') === 0) {
+        $filePath = realpath(NEXTDOM_DATA . '/' . $baseFilePath);
     }
 
     // Bad path
-    if ($filePath === false) {
+    if ($filePath === false || !Utils::checkPath($filePath)) {
         Router::showError401AndDie();
     }
+
     // Block PHP files download
     if (strpos($filePath, '.php') !== false) {
         Router::showError401AndDie();
@@ -69,7 +64,7 @@ try {
     }
 
     // Special access
-    if (strpos($filePath, NEXTDOM_LOG) === false) {
+    if (strpos($filePath, NEXTDOM_LOG) === false && strpos($filePath, NEXTDOM_DATA . '/data') === false) {
         // For camera
         $cameraPath = ConfigManager::byKey('recordDir', 'camera');
         if ($cameraPath != '' && substr($cameraPath, 0, 1) == '/') {

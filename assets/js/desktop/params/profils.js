@@ -64,6 +64,9 @@ function loadInformations() {
         success: function (data) {
           $('#div_Profils').setValues(data, '.userAttr');
           $('#in_passwordCheck').value(data.password);
+          $("#newPasswordProgress").width('0%');
+          $("#newPasswordProgress").removeClass('progress-bar-green').removeClass('progress-bar-yellow').removeClass('progress-bar-red');
+          $("#newPasswordLevel").html('<i class="fas fa-clock"></i>{{Attente saisie nouveau mot de passe}}');
           $('#' + $('.userAttr[data-l2key="widget::theme"]').value()).attr('checked', 'checked');
           $('#avatar-preview').attr('src', $('.userAttr[data-l2key=avatar]').value());
           nextdom.config.load({
@@ -125,8 +128,13 @@ function initEvents() {
     $("#bt_saveProfils").on('click', function (event) {
         var profil = $('#div_pageContainer').getValues('.userAttr')[0];
         if (profil.password != $('#in_passwordCheck').value()) {
-            notify('Erreur', '{{Les deux mots de passe ne sont pas identiques}}', 'error');
+            notify('Erreur', '{{Les mots de passe ne sont pas identiques !}}', 'error');
             return false;
+        } else {
+            if ($('#in_passwordCheck').value() == '') {
+                notify('Erreur', '{{Le mot de passe ne peut pas être vide !}}', 'error');
+                return false;
+            }
         }
         nextdom.user.saveProfils({
             profils: profil,
@@ -134,39 +142,22 @@ function initEvents() {
                 notify('Erreur', error.message, 'error');
             },
             success: function () {
-                nextdom.user.get({
+                var config = $('#div_Profils').getValues('.configKey')[0];
+                nextdom.config.save({
+                    configuration: config,
                     error: function (error) {
-                        notify('Erreur', error.message, 'error');
+                        notify("Erreur", error.message, 'error');
                     },
-                    success: function (data) {
-                        var config = $('#div_Profils').getValues('.configKey')[0];
-                        nextdom.config.save({
-                            configuration: config,
-                            error: function (error) {
-                                notify("Erreur", error.message, 'error');
-                            },
-                            success: function () {
-                                // Change config dynamically
-                                widget_size = config['widget::size'];
-                                widget_margin = config['widget::margin'];
-                                widget_padding = config['widget::padding'];
-                                widget_radius = config['widget::radius'];
-                                nextdom.config.load({
-                                    configuration: $('#div_Profils').getValues('.configKey:not(.noSet)')[0],
-                                    error: function (error) {
-                                        notify("Erreur", error.message, 'error');
-                                    },
-                                    success: function (data) {
-                                        $('#div_Profils').setValues(data, '.configKey');
-                                        modifyWithoutSave = false;
-                                        $(".bt_cancelModifs").hide();
-                                        updateInformations();
-                                        notify("Info", '{{Sauvegarde réussie}}', 'success');
-                                        window.location.reload(true);
-                                    }
-                                });
-                            }
-                        });
+                    success: function () {
+                        // Change config dynamically
+                        widget_size = config['widget::size'];
+                        widget_margin = config['widget::margin'];
+                        widget_padding = config['widget::padding'];
+                        widget_radius = config['widget::radius'];
+                        modifyWithoutSave = false;
+                        $(".bt_cancelModifs").hide();
+                        notify("Info", '{{Sauvegarde réussie}}', 'success');
+                        window.location.reload(true);
                     }
                 });
             }
@@ -246,6 +237,19 @@ function initEvents() {
         var radio = $(this).val();
         $('.userAttr[data-l2key="widget::theme"]').value(radio);
         modifyWithoutSave = true;
+    });
+
+    // Password new changed
+    $("#in_newPassword").on('input', function (event) {
+        passwordScore($(this).value(),$("#newPasswordProgress"),$("#newPasswordLevel"));
+        $("#in_passwordCheck").value('');
+        modifyWithoutSave = true;
+        $(".bt_cancelModifs").show();
+    });
+
+    // Password new click
+    $("#in_newPassword").on('click', function (event) {
+        $(this).select();
     });
 }
 

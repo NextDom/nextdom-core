@@ -40,6 +40,7 @@ class ScenarioExpressionAction extends Enum
     const DELETE_VARIABLE = 'delete_variable';
     const ASK = 'ask';
     const NEXTDOM_POWEROFF = 'nextdom_poweroff';
+    const NEXTDOM_REBOOT = 'nextdom_reboot';
     const SCENARIO_RETURN = 'scenario_return';
     const REMOVE_INAT = 'remove_inat';
     const REPORT = 'report';

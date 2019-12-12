@@ -25,7 +25,15 @@ namespace NextDom\Controller\Pages;
 use NextDom\Controller\BaseController;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\SystemHelper;
+use NextDom\Helpers\Utils;
+use NextDom\Helpers\NextDomHelper;
 use NextDom\Managers\UpdateManager;
+use NextDom\Managers\InteractDefManager;
+use NextDom\Managers\PluginManager;
+use NextDom\Managers\ScenarioManager;
+use NextDom\Managers\JeeObjectManager;
+use NextDom\Managers\NoteManager;
+use NextDom\Managers\CronManager;
 
 /**
  * Class AdministrationController
@@ -45,6 +53,18 @@ class AdministrationController extends BaseController
     public static function get(&$pageData): string
     {
         $pageData['numberOfUpdates'] = UpdateManager::nbNeedUpdate();
+        $pageData['scenarioCount'] = count(ScenarioManager::all());
+        $pageData['interactCount'] = count(InteractDefManager::all());
+        $pageData['pluginsCount'] = count(PluginManager::listPlugin());
+        $pageData['objectCount'] = count(JeeObjectManager::all());
+        $pageData['noteCount'] = count(NoteManager::all());
+        $pageData['cronCount'] = 0;
+        foreach (CronManager::all() as $cron) {
+            if ($cron->getEnable() == 0) {
+                $pageData['cronCount']++;
+            }
+        }
+        self::countErrorLog($pageData);
         self::initMemoryInformations($pageData);
         $uptime = SystemHelper::getUptime() % 31556926;
         $pageData['uptimeDays'] = explode(".", ($uptime / 86400))[0];
@@ -124,6 +144,31 @@ class AdministrationController extends BaseController
                 $pageData['administrationSwapTotal'] = $swapTotal;
             } else {
                 $pageData['swapLoad'] = 0;
+            }
+        }
+    }
+
+    /**
+     * @param $pageData
+     */
+    private static function countErrorLog(&$pageData)
+    {
+        $pageData['logCount'] = 0;
+        $currentLogfile = Utils::init('logfile');
+        $logFilesList = [];
+        $dir = opendir(NEXTDOM_LOG);
+        while ($file = readdir($dir)) {
+            if ($file != '.' && $file != '..' && $file != '.htaccess' && !is_dir(NEXTDOM_LOG . '/' . $file)) {
+                $logFilesList[] = $file;
+            }
+        }
+        foreach ($logFilesList as $logFile) {
+            if (round(filesize(NEXTDOM_LOG . '/' . $logFile) / 1024) < 10000) {
+                if (shell_exec('grep -c -E "\[ERROR\]|\[error\]" ' . NEXTDOM_LOG . '/' . $logFile) != 0) {
+                    $pageData['logCount']++;
+                }
+            } else {
+                $pageData['logCount']++;
             }
         }
     }
