@@ -369,7 +369,7 @@ class Plugin implements EntityInterface
             if (file_exists($script_array[0])) {
                 if (NextDomHelper::isCapable('sudo')) {
                     $this->deamon_stop();
-                    MessageManager::add($plugin_id, __('Attention : installation des dépendances lancée'));
+                    MessageManager::add($plugin_id, __('Attention : installation des dépendances lancée'), '', '', true,$this->getPathImgIcon());
                     ConfigManager::save('lastDependancyInstallTime', date(DateFormat::FULL), $plugin_id);
                     exec(SystemHelper::getCmdSudo() . '/bin/bash ' . $script . ' >> ' . $cmd['log'] . ' 2>&1 &');
                     sleep(1);
