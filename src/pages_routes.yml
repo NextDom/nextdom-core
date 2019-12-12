@@ -181,3 +181,7 @@ view_edit:
   path: 'view_edit'
   controller: NextDom\Controller\Pages\ViewEditController::get
   condition: 'admin'
+translations:
+  path: 'translations'
+  controller:  NextDom\Controller\Pages\TranslationsController::get
+  condition: 'user'

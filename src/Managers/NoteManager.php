@@ -58,7 +58,7 @@ class NoteManager
      * Get a note by his Id
      * @param int $id Id of the note
      *
-     * @return Note|null
+     * @return mixed|null
      *
      * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
@@ -77,6 +77,7 @@ class NoteManager
      *
      * @return Note[]|null
      *
+     * @return mixed|null
      * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
      */

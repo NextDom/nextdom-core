@@ -129,11 +129,10 @@ class JeeObjectManager
 
     public static function getDefaultUserRoom(User $user)
     {
-        $rootRoomId = $user->getOptions('defaultDashboardObject');
+        $rootRoomId  = $user->getOptions('defaultDashboardObject');
+        $defaultRoom = self::byId($rootRoomId);
         if (empty($rootRoomId)) {
             $defaultRoom = self::getRootObjects();
-        } else {
-            $defaultRoom = self::byId($rootRoomId);
         }
         return $defaultRoom;
     }
