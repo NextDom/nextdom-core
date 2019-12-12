@@ -482,4 +482,9 @@ class MigrationHelper
         exec("sudo sed -i '/vm.swappiness=/d' /etc/sysctl.d/99-sysctl.conf");
         exec("sudo echo 'vm.swappiness=10' >> /etc/sysctl.d/99-sysctl.conf");
     }
+
+    private static function migrate_0_6_2($logFile = LogTarget::MIGRATION)
+    {
+        DBHelper::exec("ALTER message ADD icon MEDIUMTEXT;");
+    }
 }
