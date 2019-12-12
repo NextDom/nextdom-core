@@ -255,7 +255,7 @@ class PluginManager
                     $message = __('Attention le plugin ') . ' ' . $plugin->getName();
                     $message .= __(' n\'a recu de message depuis ') . $heartbeat . __(' min');
                     $logicalId = 'heartbeat' . $plugin->getId();
-                    MessageManager::add($plugin->getId(), $message, '', $logicalId, true, $plugin->getPathImgIcon());
+                    MessageManager::add($plugin->getId(), $message, '', $logicalId, true);
                     if ($plugin->getHasOwnDeamon() && ConfigManager::byKey('heartbeat::restartDeamon::' . $plugin->getId(), 'core', 0) == 1) {
                         $plugin->deamon_start(true);
                     }

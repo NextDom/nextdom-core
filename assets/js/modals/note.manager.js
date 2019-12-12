@@ -81,7 +81,7 @@ $('#bt_noteManagerSave').on('click',function(){
             notify('Core',error.message,'error');
         },
         success: function (note) {
-            notify('Core','{{ 'Note sauvegardée avec succès' }}','success');
+            notify('Core','{{Note sauvegardée avec succès}}','success');
             $('#div_noteManagerDisplay').setValues(note, '.noteAttr');
             updateNoteList();
         }
@@ -90,7 +90,7 @@ $('#bt_noteManagerSave').on('click',function(){
 
 $('#bt_noteManagerRemove').on('click',function(){
     var note = $('#div_noteManagerDisplay').getValues('.noteAttr')[0];
-    var r = confirm('{{ 'Êtes vous sur de vouloir supprimer la note : ' }}'+note.name+' ?');
+    var r = confirm('{{Êtes vous sur de vouloir supprimer la note : }}'+note.name+' ?');
     if (r == true) {
         nextdom.note.remove({
             id : note.id,
@@ -98,7 +98,7 @@ $('#bt_noteManagerRemove').on('click',function(){
                 notify('Core',error.message,'error');
             },
             success: function (notes) {
-                notify('Core','{{ 'Note supprimée avec succès' }}','success');
+                notify('Core','{{Note supprimée avec succès}}','success');
                 $('#div_noteManagerDisplay .noteAttr').value('');
                 updateNoteList();
             }

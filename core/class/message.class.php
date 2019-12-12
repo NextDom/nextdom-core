@@ -23,8 +23,8 @@ use NextDom\Managers\MessageManager;
 require_once __DIR__ . '/../../core/php/core.inc.php';
 
 class message extends \NextDom\Model\Entity\Message {
-    public static function add($_type, $_message, $_action = '', $_logicalId = '', $_writeMessage = true, $_icon= '/public/img/NextDom/NextDom_Square_WhiteBlackBlue.png') {
-        MessageManager::add($_type, $_message, $_action, $_logicalId, $_writeMessage, $_icon);
+    public static function add($_type, $_message, $_action = '', $_logicalId = '', $_writeMessage = true) {
+        MessageManager::add($_type, $_message, $_action, $_logicalId, $_writeMessage);
     }
 
     public static function removeAll($_plugin = '', $_logicalId = '', $_search = false) {

@@ -51,7 +51,7 @@
                     <a class="clockdate" id="horloge_date">lundi 1 janvier 1970</a>
                 </li>
                 <li class="dropdown notifications-menu task_notif_mobile">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" id="bt_messageModal">
                         {% if MENU_NB_MESSAGES != 0 %}
                             <i class="fas fa-envelope-open notifbadge"></i>
                             <span id="span_nbMessage" class="label label-warning notifcounter">{{ MENU_NB_MESSAGES }}</span>
@@ -60,26 +60,8 @@
                         {% endif %}
                     </a>
                     <ul class="dropdown-menu" id="table_message">
-                        <li class="header">Vous avez {{ MENU_NB_MESSAGES }} messages</li>
                         <li>
-                            <ul class="menu">
-                                {% for message in messagesList %}
-                                    <li data-message_id="{{ message.getId() }}">
-                                        <a href="#">
-                                            <div class="pull-left">
-                                                <img src="{{ message.getIcon() }}">
-                                            </div>
-                                            <h4>
-                                                {{ message.getPlugin() }}
-                                                <div class="btn btn-sm btn-danger removeMessage pull-right"><i class="fas fa-trash no-spacing"></i></div>
-                                                <small class="pull-right"><i class="fas fa-clock spacing-right"></i>{{ message.getDate() }}</small>
-                                            </h4>
-                                            <p>{{ message.getMessage()|raw }}</p>
-                                            <p><span>{{ message.getAction() }}</span></p>
-                                        </a>
-                                    </li>
-                                {% endfor %}
-                            </ul>
+                            <ul class="menu"></ul>
                         </li>
                     </ul>
                 </li>
