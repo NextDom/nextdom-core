@@ -4,7 +4,6 @@
 namespace NextDom\Controller\Pages;
 
 use NextDom\Controller\BaseController;
-use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\TranslateHelper;
 use Symfony\Component\Translation\Loader\YamlFileLoader;
 use Symfony\Component\Translation\Translator;
