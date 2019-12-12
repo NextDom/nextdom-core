@@ -485,6 +485,6 @@ class MigrationHelper
 
     private static function migrate_0_6_2($logFile = LogTarget::MIGRATION)
     {
-        DBHelper::exec("ALTER message ADD icon MEDIUMTEXT;");
+        DBHelper::exec("ALTER message ADD icon MEDIUMTEXT");
     }
 }
