@@ -47,6 +47,7 @@ class Common extends Enum
     const DISPLAY_VALUE = 'display_value';
     const GENERIC_TYPE = 'generic_type';
     const GLOBAL = 'global';
+    const GROUP = 'group';
     const HUMAN_NAME = 'humanName';
     const ICON = 'icon';
     const ID = 'id';
@@ -76,6 +77,7 @@ class Common extends Enum
     const TAG = 'tag';
     const TIMELINE_ONLY = 'timelineOnly';
     const TIMEOUT = 'timeout';
+    const TRIGGER = 'trigger';
     const TYPE = 'type';
     const UID = 'uid';
     const USED_BY = 'usedBy';

@@ -335,7 +335,7 @@ interact:
   limit_to_visible: "Limit to visible"
   limit_to_the_device: "Limit to the device"
   list_of_users_identifiers_separated_by_a_pipe: "List of users (identifiers) separated by a |"
-  none: "None -"
+  none: "None"
   no_interactions_click_add_to_start: "You do not have any interactions. Click Add to start."
   regenerate: "Regenerate"
   regex_exclusion: "Regex exclusion"
@@ -524,10 +524,14 @@ repo:
         url: "NextDom core URL"
         version: "NextDom core version"
 scenario:
-  add-block: Add a block
+  action: Action
+  add-block: Add block
   add-item: Add element
+  block: Bloc
   choose: To choose
   conditions: "Conditions"
+  copy-block: Copy bloc
+  copy-action: Copy action
   default: Default
   description: Description
   description-if: "Lets make the conditions in your scenario. For example: If my door open sensor is triggered then turn on the light."
@@ -546,8 +550,8 @@ scenario:
   execute-title: Please save before testing. This may not succeed.
   export: Export
   expression-test: Expression test
-  follow: Following
-  follow-timeline: Follow in the Timeline
+  follow: Activate Following
+  follow-timeline: In the Timeline
   follow-timeline-title: The executions of the script can be seen in the timeline.
   group: Group
   icon: Icon
@@ -569,6 +573,7 @@ scenario:
   name: Scenario name
   name-to-show: Display Name
   name-to-show-placeholder: Do not put anything to leave the default name
+  new-group: New Group
   next: Next
   no-group: None
   no-choice: None
@@ -576,6 +581,8 @@ scenario:
   options: options
   parameters: Settings
   parent-object: parent object
+  paste-block: Paste bloc
+  paste-action: Paste action
   paternity: Paternity
   previous: Previous
   programmation: Programming
@@ -599,6 +606,9 @@ scenario:
   timeout-unity: seconds
   trigger: trigger
   twice: Both
+  use: Using
+  used-by: Used by scenarios
+  used-in: Use scenarios
   variables: variables
   visible: Visible
   you-have-scenarios: You have %s scenario(s).

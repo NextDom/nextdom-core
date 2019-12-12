@@ -332,6 +332,9 @@ class ScenarioExpression implements EntityInterface
             case ScenarioExpressionAction::NEXTDOM_POWEROFF:
                 $this->executeActionNextDomPowerOff($scenario);
                 break;
+            case ScenarioExpressionAction::NEXTDOM_REBOOT:
+                $this->executeActionNextDomReboot($scenario);
+                break;
             case ScenarioExpressionAction::SCENARIO_RETURN:
                 $this->executeActionScenarioReturn($scenario, $options);
                 break;
@@ -728,9 +731,20 @@ class ScenarioExpression implements EntityInterface
      */
     protected function executeActionNextDomPowerOff(&$scenario)
     {
-        $this->setLog($scenario, __('Lancement de l\'arret de nextdom'));
+        $this->setLog($scenario, __('Lancement de l\'arret de NextDom'));
         $scenario->persistLog();
         NextDomHelper::haltSystem();
+    }
+
+    /**
+     * @param Scenario $scenario
+     * @throws \Exception
+     */
+    protected function executeActionNextDomReboot(&$scenario)
+    {
+        $this->setLog($scenario, __('Lancement du redémarrage de NextDom'));
+        $scenario->persistLog();
+        NextDomHelper::rebootSystem();
     }
 
     /**

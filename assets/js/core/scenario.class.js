@@ -141,7 +141,7 @@ nextdom.scenario.loadTemplateDiff = function (queryParams) {
 };
 
 nextdom.scenario.applyTemplate = function (queryParams) {
-  var paramsRequired = ['template', 'id', 'convert'];
+  var paramsRequired = ['template', 'id', 'convert', 'newValues'];
   var paramsSpecifics = {};
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
     var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
@@ -149,6 +149,7 @@ nextdom.scenario.applyTemplate = function (queryParams) {
     ajaxParams.data['template'] = queryParams.template;
     ajaxParams.data['id'] = queryParams.id;
     ajaxParams.data['convert'] = queryParams.convert;
+    ajaxParams.data['newValues'] = queryParams.newValues;
     $.ajax(ajaxParams);
   }
 };

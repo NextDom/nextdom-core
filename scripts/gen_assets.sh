@@ -174,6 +174,8 @@ function copy_assets {
 	cp -fr assets/icon public/
 	echo " >>> Copy images"
 	cp -fr assets/img public/
+  echo " >>> Copy html"
+	cp -fr assets/*.html public/
 	gen_css
 	gen_js
 }
@@ -190,16 +192,19 @@ function start {
 		FIND_CSS_RES=$(find assets/css -mmin -0.1)
 		if [ -n "$FIND_CSS_RES" ]; then
 			gen_css no_compress
+      clean_cache
 			echo " >>> OK"
 		fi
 		FIND_JS_RES=$(find core/js -mmin -0.1)
 		if [ -n "$FIND_JS_RES" ]; then
 			gen_js no_compress
+      clean_cache
 			echo " >>> OK"
 		fi
 		FIND_JS_RES=$(find assets/js -mmin -0.1)
 		if [ -n "$FIND_JS_RES" ]; then
 			gen_js no_compress
+      clean_cache
 			echo " >>> OK"
 		fi
 		sleep 1

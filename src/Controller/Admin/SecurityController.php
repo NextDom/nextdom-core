@@ -48,8 +48,6 @@ class SecurityController extends BaseController
         $keys = ['security::bantime', 'ldap::enable'];
         $configs = ConfigManager::byKeys($keys);
 
-        $pageData['JS_VARS']['ldapEnable'] = $configs['ldap::enable'];
-
         $pageData['adminUseLdap'] = function_exists('ldap_connect');
         if ($pageData['adminUseLdap']) {
             $pageData['adminLdapEnabled'] = ConfigManager::byKey('ldap:enable');

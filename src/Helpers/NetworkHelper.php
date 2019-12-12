@@ -375,7 +375,7 @@ class NetworkHelper
      * @return bool
      * @throws \Exception
      */
-    public static function test($_mode = UserLocation::EXTERNAL, $_timeout = 5)
+    public static function test($_mode = UserLocation::EXTERNAL, $_timeout = 2)
     {
         if (ConfigManager::byKey('network::disableMangement') == 1) {
             return true;

@@ -66,13 +66,15 @@
   color: map_get($color_theme, 'color1') !important;
 }
 .li_noteDisplay.active .label-list,
+.li_scenarioTemplate.active .label-list,
 .li_view.active .label-view,
 .li_log.active .label-log {
   border-color: map_get($color_theme, 'color1') !important;
 }
 
 /* Bouton primaires */
-.btn-primary {
+.btn-primary,
+.label-primary {
   background-color: map_get($color_theme, 'color1') !important;
   border-color: map_get($color_theme, 'color1') !important;
 }
@@ -100,6 +102,9 @@
 ::-webkit-scrollbar-thumb {
   background: map_get($color_theme, 'color1') !important;
   background-color: map_get($color_theme, 'color1') !important;
+}
+html {
+  scrollbar-color: map_get($color_theme, 'color1') map_get($color_theme, 'color6');
 }
 
 /* Fabs */
@@ -180,6 +185,13 @@
   color: map_get($color_theme, 'color1') !important;
 }
 
+/* Autocomplete */
+.autocomplete {
+    .ui-menu-item-wrapper:hover,
+    .ui-state-hover, .ui-state-active {
+        background-color: map_get($color_theme, 'color1') !important;
+    }
+}
 
 /* ################################################################################## */
 /* COLOR2 = Couleur de contraste (icônes et texte sur fond accentué ou de sidebar...) */
@@ -251,8 +263,17 @@
   background: map_get($color_theme, 'color2') !important;
 }
 
+/* Mobile title */
 .login-mobile-title{
   color: map_get($color_theme, 'color2') !important;
+}
+
+/* Autocomplete */
+.autocomplete {
+    .ui-menu-item-wrapper:hover,
+    .ui-state-hover, .ui-state-active {
+        color: map_get($color_theme, 'color2') !important;
+    }
 }
 
 /* ############################################################################################################# */
@@ -430,6 +451,9 @@
 .panel-default,
 .nav-tabs-custom .well {
   border-color: map_get($color_theme, 'color8') !important;
+}
+.nav-tabs-custom .marketOverload {
+  background-color: map_get($color_theme, 'color8') !important;
 }
 
 /* Action bar */
