@@ -52,16 +52,6 @@
 }
 
 /* Core-Ajout */
-.btn-black {
-  color:$white;
-  background-color:#373737;
-  border-color:#1f1f1f;
-  &:hover {
-    color:$white;
-    background-color:#303030;
-    border-color:#1f1f1f;
-  }
-}
 .btn-app {
     line-height: 2.5;
     height: 70px;
@@ -80,21 +70,21 @@
     margin: 3px 2px 3px 2px;
     min-width: 107px;
     border-radius: 4px;
-}
-.btn-selector .iconSel i {
-    padding-top: 7px;
-}
-.btn-selector span {
-    opacity: 0.5;
-}
-.btn-selector .fa,
-.btn-selector .fas,
-.btn-selector .fab,
-.btn-selector .glyphicon,
-.btn-selector .ion,
-.btn-selector .icon {
-    font-size: 20px;
-    display: block;
+    .iconSel i {
+        padding-top: 7px;
+    }
+    span {
+        opacity: 0.5;
+    }
+    .fa,
+    .fas,
+    .fab,
+    .glyphicon,
+    .ion,
+    .icon {
+        font-size: 20px;
+        display: block;
+    }
 }
 .btn-tab {
     line-height: 2;
@@ -123,4 +113,7 @@
 }
 .btn-jeedom:hover {
     background-color: $jeedomgreen;
+}
+.btn-danger {
+    background-color: $critical !important;
 }

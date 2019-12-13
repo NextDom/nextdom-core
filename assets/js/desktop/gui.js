@@ -317,11 +317,13 @@ function refreshMessageNumber() {
       MESSAGE_NUMBER = _number;
       if (_number === 0 || _number === '0') {
         $('.notifications-menu').find('.fa-envelope-open').removeClass('notifbadge');
-        $('#span_nbMessage').hide();
+        $('.spanNbMessage').hide();
+        $('#table_message .header').hide();
       } else {
         $('.notifications-menu').find('.fa-envelope-open').addClass('notifbadge');
-        $('#span_nbMessage').html(_number);
-        $('#span_nbMessage').show();
+        $('.spanNbMessage').html(_number);
+        $('.spanNbMessage').show();
+        $('#table_message .header').show();
       }
     }
   });

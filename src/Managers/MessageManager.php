@@ -62,7 +62,7 @@ class MessageManager
      */
     public static function add($_type, $_message, $_action = '', $_logicalId = '', $_writeMessage = true)
     {
-        $message = (new message())
+        $message = (new Message())
             ->setPlugin(Utils::secureXSS($_type))
             ->setMessage(Utils::secureXSS($_message))
             ->setAction(Utils::secureXSS($_action))
@@ -76,7 +76,7 @@ class MessageManager
      * @param string $_logicalId
      * @param bool $_search
      * @return bool
-     * @throws \NextDom\Exceptions\CoreException
+     * @throws \Exception
      */
     public static function removeAll($_plugin = '', $_logicalId = '', $_search = false)
     {
@@ -84,14 +84,14 @@ class MessageManager
         $sql = 'DELETE FROM ' . self::DB_CLASS_NAME;
         if ($_plugin != '') {
             $values['plugin'] = $_plugin;
-            $sql .= ' WHERE plugin=:plugin';
+            $sql .= ' WHERE plugin = :plugin';
             if ($_logicalId != '') {
                 if ($_search) {
                     $values['logicalId'] = '%' . $_logicalId . '%';
                     $sql .= ' AND logicalId LIKE :logicalId';
                 } else {
                     $values['logicalId'] = $_logicalId;
-                    $sql .= ' AND logicalId=:logicalId';
+                    $sql .= ' AND logicalId = :logicalId';
                 }
             }
         }

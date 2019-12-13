@@ -90,7 +90,7 @@
   border-bottom-color:map_get($color_theme, 'color180') !important;
 }
 @media (max-width: 767px) {
-  .main-header .navbar .dropdown-menu li a:hover {
+  .main-header .navbar .dropdown-menu li a:hover:not(.btn) {
     background-color: map_get($color_theme, 'color1') !important;
   }
 }
@@ -191,6 +191,11 @@ html {
     .ui-state-hover, .ui-state-active {
         background-color: map_get($color_theme, 'color1') !important;
     }
+}
+
+/* Messages */
+#table_message .iconCore {
+    background-color: map_get($color_theme, 'color1') !important;
 }
 
 /* ################################################################################## */
@@ -527,6 +532,21 @@ body,
   background-color: map_get($color_theme, 'color8') !important;
 }
 
+/* Messages */
+#table_message {
+  border-color: map_get($color_theme, 'color8') !important;
+  background-color: map_get($color_theme, 'color8') !important;
+  .header {
+    background-color: map_get($color_theme, 'color8') !important;
+  }
+  li, li ul li a {
+    border-color: map_get($color_theme, 'color8') !important;
+  }
+  li a:hover:not(.btn) {
+    background-color: map_get($color_theme, 'color8') !important;
+  }
+}
+
 
 /* ################################################################### */
 /* COLOR9 = Couleur de fond des titres (légendes, tableaux, unités...) */
@@ -598,6 +618,11 @@ pre::selection {
   color: map_get($color_theme, 'color9') !important;
 }
 
+/* Messages */
+#table_message .menu {
+  background-color: map_get($color_theme, 'color9') !important;
+}
+
 
 /* #################################################################################################### */
 /* COLOR10 = Couleur des textes (contenu, titres, footer, bouton d'administration, unités, légendes...) */
@@ -634,6 +659,11 @@ legend {
 }
 .ui-widget-content {
   color: map_get($color_theme, 'color10') !important;
+}
+#table_message {
+  li, li ul li a {
+    color: map_get($color_theme, 'color10') !important;
+  }
 }
 
 /* Titres */

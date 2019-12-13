@@ -136,9 +136,33 @@ $(function () {
     });
 
     // Messages link event handler declaration
-    $('#bt_messageModal').on('click',function(){
-        $('#md_modal').dialog({title: "{{Messages NextDom}}"});
-        $('#md_modal').load('index.php?v=d&modal=message').dialog('open');
+    $('#bt_messageModal').on('click',function() {
+        var tableMessageContainer = $('#table_message .menu');
+        tableMessageContainer.html('<i class="fas fa-circle-notch fa-spin"></i>');
+        nextdom.message.all({
+            error: function (error) {
+                notify('Core', error.message, 'error');
+            },
+            success: function (messages) {
+                tableMessageContainer.html('');
+                for (var messageIndex in messages) {
+                    tableMessageContainer.append('' +
+                      '<li data-message_id="' + messages[messageIndex]['id'] + '">' +
+                      '<a href="#">' +
+                      '<div class="pull-left">' +
+                      '<img class="' + messages[messageIndex]['iconClass'] + '" src="' + messages[messageIndex]['icon'] + '">' +
+                      '</div>' +
+                      '<h4>' + messages[messageIndex]['plugin'] +
+                      '<div class="btn btn-sm btn-danger removeMessage pull-right"><i class="fas fa-trash no-spacing"></i></div>' +
+                      '<small class="pull-right"><i class="fas fa-clock spacing-right"></i>' + messages[messageIndex]['date'] + '</small>' +
+                      '</h4>' +
+                      '<p>' + unescape(messages[messageIndex]['message']) + '</p>' +
+                      '<p>' +  messages[messageIndex]['action'] + '</p>' +
+                      '</a>' +
+                      '</li>');
+                }
+            }
+        });
     });
 
     // Restart event handler declaration
