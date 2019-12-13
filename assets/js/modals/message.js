@@ -37,15 +37,8 @@
 var modalContainer = $('#md_modal');
 
 function initEvents() {
-    $('#sel_plugin').on('change', function () {
-        var pluginId = $('#sel_plugin').value();
-        modalContainer.dialog({title: '{{Messages NextDom }}' + pluginId});
-        modalContainer.load('index.php?v=d&modal=message&plugin_id=' + pluginId).dialog('open');
-    });
-
     $('#bt_clearMessage').on('click', function (event) {
         nextdom.message.clear({
-            plugin: $('#sel_plugin').value(),
             error: function (error) {
                 notify('Erreur', error.message, 'error');
             },
@@ -54,11 +47,6 @@ function initEvents() {
                 refreshMessageNumber();
             }
         });
-    });
-
-    $('#bt_refreshMessage').on('click', function () {
-        modalContainer.dialog({title: '{{Messages NextDom}}'});
-        modalContainer.load('index.php?v=d&modal=message').dialog('open');
     });
 
     $('#table_message').delegate('.removeMessage', 'click', function () {
@@ -70,8 +58,8 @@ function initEvents() {
             },
             success: function () {
                 messageRow.remove();
-                $('#table_message').trigger('update');
                 refreshMessageNumber();
+                $('#bt_messageModal').click();
             }
         });
     });

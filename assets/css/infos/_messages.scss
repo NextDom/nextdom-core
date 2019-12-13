@@ -42,22 +42,41 @@
     border: 3px solid;
     border-radius: 8px;
     padding: 2px;
+    width: 70% !important;
+    max-width: 750px;
+    position: absolute;
+    right: 0%;
     .menu {
         max-height: 500px;
+        border-radius: 4px;
         > li > a {
             white-space: normal !important;
+            padding-bottom: 0px;
+            padding-top: 12px;
         }
     }
     h4 {
         text-transform: uppercase;
-        margin: 0px 0px 18px 45px;
+        margin: 4px 0px 22px 45px;
         small {
-            padding-top: 8px;
+            padding-top: 4px;
             padding-right: 5px;
         }
     }
     img {
-        height: 32px;
         width: 32px;
+    }
+    .header {
+        padding: 3px 5px 8px 0px;
+    }
+    .removeMessage {
+        margin-top: -4px;
+    }
+}
+@media (max-width: 767px) {
+    #table_message {
+        width: 99% !important;
+        position: unset !important;
+        left: 0% !important;
     }
 }

@@ -23,6 +23,7 @@ use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\MessageManager;
 use NextDom\Managers\PluginManager;
+use NextDom\Managers\ConfigManager;
 
 /**
  * Class MessageAjax
@@ -33,7 +34,7 @@ class MessageAjax extends BaseAjax
     protected $NEEDED_RIGHTS = UserRight::USER;
     protected $MUST_BE_CONNECTED = true;
     protected $CHECK_AJAX_TOKEN = true;
-    private $iconsCache = ['scenario' => '/public/img/NextDom/NextDom_Scenario.png'];
+    private $iconsCache = ['scenario' => '/public/img/NextDom_Scenario_Gray.png'];
 
     /**
      * Remove all message
@@ -57,8 +58,10 @@ class MessageAjax extends BaseAjax
      */
     private function addIcon(&$message) {
         $pluginId = $message['plugin'];
+        $message['iconClass'] = '';
+        $defaultIcon = '/public/img/NextDom/NextDom_Square_' . ConfigManager::byKey('nextdom::user-icon') . '.png';
         if (!isset($this->iconsCache[$pluginId])) {
-            $this->iconsCache[$pluginId] = '/public/img/NextDom/NextDom_Square_WhiteBlackBlue.png';
+            $this->iconsCache[$pluginId] = $defaultIcon;
             try {
                 $plugin = PluginManager::byId($pluginId);
                 if (is_object($plugin)) {
@@ -68,6 +71,9 @@ class MessageAjax extends BaseAjax
             catch (\Throwable $t) {
 
             }
+        }
+        if ($this->iconsCache[$pluginId] === $defaultIcon) {
+            $message['iconClass'] = 'iconCore';
         }
         $message['icon'] = $this->iconsCache[$pluginId];
     }

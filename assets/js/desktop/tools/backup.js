@@ -312,6 +312,7 @@ function getNextDomLog(_autoUpdate, _log) {
                 for(var i in REPO_LIST){
                     updateRepoListBackup(REPO_LIST[i]);
                 }
+                refreshMessageNumber();
             }
         }
     });

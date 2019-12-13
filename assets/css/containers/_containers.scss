@@ -104,10 +104,13 @@
 }
 .mix-group {
     display: flex;
+    flex-wrap: wrap;
     white-space: nowrap;
     > * {
         margin: 0px 10px;
-        margin-inline-start: 0;
+    }
+    > *:nth-child(-n+1) {
+        margin-left: 0px !important;
     }
     > span {
        white-space: normal;

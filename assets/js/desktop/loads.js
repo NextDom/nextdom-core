@@ -150,15 +150,14 @@ $(function () {
                       '<li data-message_id="' + messages[messageIndex]['id'] + '">' +
                       '<a href="#">' +
                       '<div class="pull-left">' +
-                      '<img src="' + messages[messageIndex]['icon'] + '">' +
+                      '<img class="' + messages[messageIndex]['iconClass'] + '" src="' + messages[messageIndex]['icon'] + '">' +
                       '</div>' +
-                      '<h4>' +
-                      messages[messageIndex]['plugin'] +
+                      '<h4>' + messages[messageIndex]['plugin'] +
                       '<div class="btn btn-sm btn-danger removeMessage pull-right"><i class="fas fa-trash no-spacing"></i></div>' +
                       '<small class="pull-right"><i class="fas fa-clock spacing-right"></i>' + messages[messageIndex]['date'] + '</small>' +
                       '</h4>' +
                       '<p>' + unescape(messages[messageIndex]['message']) + '</p>' +
-                      '<p><span>' +  messages[messageIndex]['action'] + '</span></p>' +
+                      '<p>' +  messages[messageIndex]['action'] + '</p>' +
                       '</a>' +
                       '</li>');
                 }
