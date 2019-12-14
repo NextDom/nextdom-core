@@ -86,6 +86,8 @@
     </filter>
     <logging>
         <log type="coverage-clover" target="../coverage/clover.xml"/>
+        <!--
         <log type="junit" target="../coverage/junitlog.xml"/>
+        -->
     </logging>
 </phpunit>

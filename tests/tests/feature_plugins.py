@@ -16,7 +16,7 @@ class PluginsTest(unittest.TestCase):
         """Test cron from plugin execution
         """
         # Wait 2 minute for cron execution
-        sleep(130)
+        sleep(120)
         shell_output = subprocess.check_output(
             'docker exec -it nextdom-test-plugins ls /var/log/nextdom'.split(' '))  # pylint: disable=line-too-long
         self.assertIn('plugin4tests', shell_output.decode('utf-8'))

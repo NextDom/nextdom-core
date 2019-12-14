@@ -20,7 +20,8 @@
 */
 
 /* Vendors */
-@import "../vendors/required.scss";
+@import "../builded/vendors.scss";
+@import "../builded/AdminLTE.scss";
 
 /* NextDom and AdminLTE surcharges */
 /* Need to be first */

@@ -187,7 +187,7 @@ CREATE TABLE IF NOT EXISTS `scenario` (
   `display` TEXT NULL,
   `description` TEXT NULL,
   `configuration` TEXT NULL,
-  `order` INT NULL DEFAULT '9999',
+  `order` INT NULL DEFAULT 9999,
   `type` VARCHAR(127) NULL DEFAULT 'expert',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `name` (`group` ASC, `object_id` ASC, `name` ASC),

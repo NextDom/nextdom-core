@@ -133,8 +133,7 @@ class PrepareView
             $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min.js';
         } else {
-            // If base.js problem, loading JS files dynamicly
-            // First respect this files and their order to prevent conflicts
+            // DEV MODE
             $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-ui-dist/jquery-ui.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/bootstrap/dist/js/bootstrap.min.js';
             $pageData['JS_POOL'][] = '/vendor/node_modules/admin-lte/dist/js/adminlte.min.js';

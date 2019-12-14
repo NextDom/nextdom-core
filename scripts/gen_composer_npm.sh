@@ -25,7 +25,7 @@ set_root $0
 
 function run_as_superuser {
     cmd=$@
-    if [ -z "${TRAVIS}" ] && [ ${EUID} != "0" ]; then
+    if [ ${EUID} != "0" ]; then
         sudo $@
     else
         $@
@@ -66,13 +66,16 @@ function init_dependencies {
 
     sass --version > /dev/null 2>&1 || {
         echo " >>> Installation of sass"
-        run_as_superuser npm install -g sass
+        if [ "$(grep -Ei 'debian|buntu|mint' /etc/*release)" ]; then
+            run_as_superuser apt-get install -y ruby-sass;
+        else
+            run_as_superuser npm install -g ruby-sass
+        fi
     }
 
     python -c "import jsmin" 2>&1 /dev/null || {
-        . /etc/os-release
-        if [[ "$NAME" == *Debian* ]]; then
-            run_as_superuser apt install -y python-jsmin;
+        if [ "$(grep -Ei 'debian|buntu|mint' /etc/*release)" ]; then
+            run_as_superuser apt-get install -y python-jsmin;
         else
             run_as_superuser pip install jsmin;
         fi

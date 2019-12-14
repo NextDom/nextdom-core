@@ -71,7 +71,6 @@ def scenarios_tests():
         '/usr/bin/mysql -u root nextdomdev < data/smallest_scenario.sql')
     test_result = run_test('tests/feature_scenarios.py')
     remove_test_container(container_name)
-    print(test_result)
     return test_result
 
 
@@ -92,7 +91,6 @@ def plugins_tests():
         '/usr/bin/mysql -u root nextdomdev < data/plugin_test.sql')
     test_result = run_test('tests/feature_plugins.py')
     remove_test_container(container_name)
-    print(test_result)
     return test_result
 
 
@@ -108,6 +106,7 @@ if __name__ == "__main__":
     if len(sys.argv) == 1:
         RESULT = start_all_tests('Features', TESTS_LIST)
     else:
+        print_title('Features')
         RESULT = start_specific_test(sys.argv[1], TESTS_LIST)
     if not RESULT:
         sys.exit(1)

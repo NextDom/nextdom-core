@@ -1748,7 +1748,7 @@
           "type": "int(11)",
           "null": "YES",
           "key": "",
-          "default": null,
+          "default": 9999,
           "extra": ""
         }
       ],
