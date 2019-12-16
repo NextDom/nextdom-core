@@ -22,11 +22,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class ScenarioLogExecutionModalControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (isset($_GET['scenario_id'])) {
             unset($_GET['scenario_id']);
@@ -40,7 +40,7 @@ class ScenarioLogExecutionModalControllerTest extends BaseControllerTest
         ob_start();
         $result = \NextDom\Controller\Modals\ScenarioLogExecution::get();
         $scriptResult = ob_get_clean();
-        $this->assertContains('[Test scenario]', $result);
-        $this->assertContains('var scenarioLog_scenario_id = ', $scriptResult);
+        $this->assertStringContainsString('[Test scenario]', $result);
+        $this->assertStringContainsString('var scenarioLog_scenario_id = ', $scriptResult);
     }
 }

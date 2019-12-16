@@ -20,11 +20,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class ViewControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (isset($_SESSION['user'])) {
             unset($_SESSION['user']);
@@ -38,7 +38,7 @@ class ViewControllerTest extends BaseControllerTest
         $pageData = [];
         $result = \NextDom\Controller\Pages\ViewController::get($pageData);
         $this->assertEquals(1, $pageData['viewsList'][0]->getId());
-        $this->assertContains('Test view', $result);
+        $this->assertStringContainsString('Test view', $result);
     }
 
     public function testPageDataVars()

@@ -31,16 +31,16 @@ def php_tests():
     exec_command_in_container(
         container_name, 'bash -c "mysql -u root nextdomdev < /var/www/html/tests/data/tests_fixtures.sql"')  # pylint: disable=line-too-long
     exec_command_in_container(
-        container_name, 'apt-get install -y php-xdebug > /dev/null 2>&1')
+        container_name, 'apt-get install -y php-phpdbg > /dev/null 2>&1')
     return_code = exec_command_in_container(
-        container_name, 'bash -c "cd /var/www/html && vendor/bin/phpunit --configuration tests/phpunit_tests/phpunit.xml --testsuite AllTests"')  # pylint: disable=line-too-long
-    if return_code != 0:
-        sys.exit(1)
+        container_name, 'bash -c "cd /var/www/html && phpdbg -d memory_limit=-1  -qrr phpunit --configuration tests/phpunit_tests/phpunit.xml --testsuite AllTests"')  # pylint: disable=line-too-long
     copy_file_from_container(container_name, '/var/www/html/tests/coverage/clover.xml',
                              'coverage/')  # pylint: disable=line-too-long
     copy_file_from_container(container_name, '/var/www/html/tests/coverage/junitlog.xml',
                              'coverage/')  # pylint: disable=line-too-long
     remove_test_container(container_name)
+    if return_code != 0:
+        sys.exit(1)
 
 
 if __name__ == "__main__":

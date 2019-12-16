@@ -27,7 +27,7 @@ class ObjectAjaxTest extends BaseAjaxTest
     /** @var ObjectAjax */
     private $objectAjax = null;
 
-    public function setUp()
+    public function setUp(): void
     {
         $parentObject = JeeObjectManager::byName('Parent test object');
         if (is_object($parentObject)) {
@@ -47,7 +47,7 @@ class ObjectAjaxTest extends BaseAjaxTest
         $childObject->save();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->cleanGetParams();
         $parentObject = JeeObjectManager::byName('Parent test object');
@@ -156,7 +156,7 @@ class ObjectAjaxTest extends BaseAjaxTest
         $this->assertEquals('ok', $jsonResult['state']);
         $this->assertArrayHasKey('objectHtml', $jsonResult['result']);
         $this->assertArrayHasKey('scenarios', $jsonResult['result']);
-        $this->assertContains('class="eqLogic', $jsonResult['result']['objectHtml']);
+        $this->assertStringContainsString('class="eqLogic', $jsonResult['result']['objectHtml']);
         $this->assertEquals('Scenario with expressions', $jsonResult['result']['scenarios'][0]['name']);
     }
 

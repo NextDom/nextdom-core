@@ -20,11 +20,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class TimelineControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -33,7 +33,7 @@ class TimelineControllerTest extends BaseControllerTest
     {
         $pageData = [];
         $result = \NextDom\Controller\Diagnostic\TimelineController::get($pageData);
-        $this->assertContains('id="table_timeline"', $result);
+        $this->assertStringContainsString('id="table_timeline"', $result);
     }
 
     public function testPageDataVars()

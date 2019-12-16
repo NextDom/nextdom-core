@@ -23,56 +23,56 @@ class AjaxCronTest extends AjaxBase
 
     public function testWithout() {
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'save']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testImpossibleActionAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'with-is-not-possible']);
-        $this->assertContains('"state":"error"', (string) $result->getBody());
+        $this->assertStringContainsString('"state":"error"', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testImpossibleActionAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'with-is-not-possible']);
-        $this->assertContains('"state":"error"', (string) $result->getBody());
+        $this->assertStringContainsString('"state":"error"', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testSaveAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'save']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testSaveAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'save']);
-        $this->assertContains('Invalid json', (string) $result->getBody());
+        $this->assertStringContainsString('Invalid json', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testRemoveAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'remove']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testRemoveAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'remove']);
-        $this->assertContains('Cron id inconnu', (string) $result->getBody());
+        $this->assertStringContainsString('Cron id inconnu', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testAllAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'all']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
@@ -86,28 +86,28 @@ class AjaxCronTest extends AjaxBase
     public function testStartAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'start']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testStartAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'start']);
-        $this->assertContains('Cron id inconnu', (string) $result->getBody());
+        $this->assertStringContainsString('Cron id inconnu', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testStopAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'stop']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testStopAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'stop']);
-        $this->assertContains('Cron id inconnu', (string) $result->getBody());
+        $this->assertStringContainsString('Cron id inconnu', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 }

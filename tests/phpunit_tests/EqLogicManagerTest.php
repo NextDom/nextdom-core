@@ -20,17 +20,17 @@ use NextDom\Managers\EqLogicManager;
 
 require_once(__DIR__ . '/../../src/core.php');
 
-class EqLogicManagerTest extends PHPUnit_Framework_TestCase
+class EqLogicManagerTest extends PHPUnit\Framework\TestCase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
     }
 
-    public function setUp()
+    public function setUp(): void
     {
 
     }

@@ -20,17 +20,17 @@ use NextDom\Managers\CmdManager;
 
 require_once(__DIR__ . '/../../src/core.php');
 
-class CmdManagerTest extends PHPUnit_Framework_TestCase
+class CmdManagerTest extends PHPUnit\Framework\TestCase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
     }
 
-    public function setUp()
+    public function setUp(): void
     {
     }
 

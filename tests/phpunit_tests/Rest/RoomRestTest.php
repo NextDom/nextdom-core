@@ -22,12 +22,12 @@ use Symfony\Component\HttpFoundation\Request;
 
 require_once(__DIR__ . '/../../../src/core.php');
 
-class RoomRestTest extends PHPUnit_Framework_TestCase
+class RoomRestTest extends PHPUnit\Framework\TestCase
 {
     /** @var Authenticator */
     private $authenticator;
 
-    public function setUp()
+    public function setUp(): void
     {
         $admin = UserManager::byLogin('admin');
         $admin->setOptions('defaultDashboardObject', null);

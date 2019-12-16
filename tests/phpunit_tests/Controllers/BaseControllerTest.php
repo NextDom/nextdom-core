@@ -1,6 +1,6 @@
 <?php
 
-abstract class BaseControllerTest extends PHPUnit_Framework_TestCase
+abstract class BaseControllerTest extends PHPUnit\Framework\TestCase
 {
     /**
      * Test unused data in page data
@@ -14,7 +14,7 @@ abstract class BaseControllerTest extends PHPUnit_Framework_TestCase
         $twigFileContent = file_get_contents(__DIR__ . '/../../../views/' . $twigFile);
         foreach ($pageDataKeys as $key) {
             if (strpos($key, 'JS_') === false && strpos($key, 'CSS_') === false && $key !== 'TITLE' && !in_array($key, $ignoreSpecials)) {
-                $this->assertContains($key, $twigFileContent);
+                $this->assertStringContainsString($key, $twigFileContent);
             }
         }
     }

@@ -25,12 +25,12 @@ class CronAjaxTest extends BaseAjaxTest
     /** @var CronAjax */
     private $cronAjax = null;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->cronAjax = new CronAjax();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->cleanGetParams();
     }
@@ -59,6 +59,6 @@ class CronAjaxTest extends BaseAjaxTest
         sleep(10);
         $jsonResult = json_decode($result, true);
         $this->assertEquals('ok', $jsonResult['state']);
-        $this->assertContains('CRON ERROR', LogHelper::get('plugin4tests')[0]);
+        $this->assertStringContainsString('CRON ERROR', LogHelper::get('plugin4tests')[0]);
     }
 }

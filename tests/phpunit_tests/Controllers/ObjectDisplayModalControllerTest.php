@@ -20,11 +20,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class ObjectDisplayModalControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (isset($_GET['class'])) {
             unset($_GET['class']);
@@ -40,6 +40,6 @@ class ObjectDisplayModalControllerTest extends BaseControllerTest
         $_GET['class'] = 'plugin4tests';
         $_GET['id'] = 1;
         $result = \NextDom\Controller\Modals\ObjectDisplay::get();
-        $this->assertContains('<form class="form-horizontal">', $result);
+        $this->assertStringContainsString('<form class="form-horizontal">', $result);
     }
 }

@@ -31,12 +31,12 @@ class ConfigAjaxTest extends BaseAjaxTest
     /** @var ConfigAjax */
     private $configAjax = null;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->configAjax = new ConfigAjax();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->cleanGetParams();
         DBHelper::exec('DELETE FROM config WHERE plugin = "phpunit"');

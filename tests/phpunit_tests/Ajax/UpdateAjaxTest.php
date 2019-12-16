@@ -32,12 +32,12 @@ class UpdateAjaxTest extends BaseAjaxTest
     /** @var UpdateAjax */
     private $configAjax = null;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->configAjax = new UpdateAjax();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->cleanGetParams();
     }

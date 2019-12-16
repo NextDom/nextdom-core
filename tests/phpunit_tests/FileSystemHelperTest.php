@@ -22,14 +22,14 @@ require_once(__DIR__ . '/../../src/core.php');
 define('TEST_BASE_PATH', '/tmp/nextdom_tests');
 define('SECOND_TEST_BASE_PATH', '/tmp/nextdom_tests_S');
 
-class FileSystemHelperTest extends PHPUnit_Framework_TestCase
+class FileSystemHelperTest extends PHPUnit\Framework\TestCase
 {
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         system('rm -fr ' . TEST_BASE_PATH);
         mkdir(TEST_BASE_PATH);
@@ -44,21 +44,21 @@ class FileSystemHelperTest extends PHPUnit_Framework_TestCase
         system('sudo chown www-data:www-data -R ' . TEST_BASE_PATH);
     }
 
-    public function tearDown() {
+    public function tearDown(): void {
         system('rm -fr ' . TEST_BASE_PATH);
         system('rm -fr ' . SECOND_TEST_BASE_PATH);
     }
 
     public function testGetTemplateFileContentOnExistingTemplate() {
         $template = FileSystemHelper::getTemplateFileContent('core', 'dashboard', 'eqLogic','');
-        $this->assertContains('data-eqLogic_id="#id#"', $template);
-        $this->assertContains('cmd refresh', $template);
+        $this->assertStringContainsString('data-eqLogic_id="#id#"', $template);
+        $this->assertStringContainsString('cmd refresh', $template);
     }
 
     public function testGetTemplateFileContentOnPluginTemplate() {
         $template = FileSystemHelper::getTemplateFileContent('core', 'dashboard', 'eqLogic', 'plugin4tests');
-        $this->assertContains('data-eqLogic_id="#id#"', $template);
-        $this->assertContains('My Plugin', $template);
+        $this->assertStringContainsString('data-eqLogic_id="#id#"', $template);
+        $this->assertStringContainsString('My Plugin', $template);
     }
 
     public function testGetTemplateFileContentOnBadTemplate() {

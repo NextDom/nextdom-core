@@ -20,11 +20,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class InteractTestModalControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -32,6 +32,6 @@ class InteractTestModalControllerTest extends BaseControllerTest
     public function testSimple()
     {
         $result = \NextDom\Controller\Modals\InteractTest::get();
-        $this->assertContains('id="div_interactTestResult"', $result);
+        $this->assertStringContainsString('id="div_interactTestResult"', $result);
     }
 }

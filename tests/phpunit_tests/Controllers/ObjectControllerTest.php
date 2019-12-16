@@ -20,11 +20,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class ObjectControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -34,7 +34,7 @@ class ObjectControllerTest extends BaseControllerTest
         $pageData = [];
         $result = \NextDom\Controller\Tools\ObjectController::get($pageData);
         $this->assertEquals('My Room', $pageData['objectList'][0]->getName());
-        $this->assertContains('id="div_resumeObjectList"', $result);
+        $this->assertStringContainsString('id="div_resumeObjectList"', $result);
     }
 
     public function testPageDataVars()

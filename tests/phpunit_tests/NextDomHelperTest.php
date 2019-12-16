@@ -22,15 +22,15 @@ require_once(__DIR__ . '/../../src/core.php');
 
 define('REMOVE_HISTORY_PATH_FILE', NEXTDOM_DATA . '/data/remove_history.json');
 
-class NextDomHelperTest extends PHPUnit_Framework_TestCase
+class NextDomHelperTest extends PHPUnit\Framework\TestCase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         system('rm -fr ' . NEXTDOM_DATA . '/data');
         mkdir(NEXTDOM_DATA . '/data', 0777, true);
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         if (file_exists(REMOVE_HISTORY_PATH_FILE)) {
             unlink(REMOVE_HISTORY_PATH_FILE);

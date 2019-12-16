@@ -20,11 +20,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class LogConfigControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -34,7 +34,7 @@ class LogConfigControllerTest extends BaseControllerTest
         $pageData = [];
         $result = \NextDom\Controller\Params\LogConfigController::get($pageData);
         $this->assertArrayHasKey('adminPluginsList', $pageData);
-        $this->assertContains('id="log_config"', $result);
+        $this->assertStringContainsString('id="log_config"', $result);
     }
 
     public function testPageDataVars()

@@ -20,11 +20,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class HistoryControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -34,7 +34,7 @@ class HistoryControllerTest extends BaseControllerTest
         $pageData = [];
         $result = \NextDom\Controller\Diagnostic\HistoryController::get($pageData);
         $this->assertArrayHasKey('historyCmdsList', $pageData);
-        $this->assertContains('div_graph', $result);
+        $this->assertStringContainsString('div_graph', $result);
     }
 
     public function testPageDataVars()

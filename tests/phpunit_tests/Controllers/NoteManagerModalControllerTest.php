@@ -20,11 +20,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class NoteManagerModalControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -32,6 +32,6 @@ class NoteManagerModalControllerTest extends BaseControllerTest
     public function testSimple()
     {
         $result = \NextDom\Controller\Modals\NoteManager::get();
-        $this->assertContains('<section class="content-header">', $result);
+        $this->assertStringContainsString('<section class="content-header">', $result);
     }
 }

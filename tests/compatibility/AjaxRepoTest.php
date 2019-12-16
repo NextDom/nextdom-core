@@ -23,175 +23,175 @@ class AjaxRepoTest extends AjaxBase
 
     public function testWithout() {
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'uploadCloud']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testImpossibleActionAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'with-is-not-possible']);
-        $this->assertContains('"state":"error"', (string) $result->getBody());
+        $this->assertStringContainsString('"state":"error"', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testImpossibleActionAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'with-is-not-possible']);
-        $this->assertContains('"state":"error"', (string) $result->getBody());
+        $this->assertStringContainsString('"state":"error"', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testUploadCloudAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'uploadCloud']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testUploadCloudAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'uploadCloud']);
-        $this->assertContains('Aucun serveur de backup defini', (string) $result->getBody());
+        $this->assertStringContainsString('Aucun serveur de backup defini', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testRestoreCloudAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'restoreCloud']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testRestoreCloudAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'restoreCloud']);
-        $this->assertContains('Le repo n\'existe pas', (string) $result->getBody());
+        $this->assertStringContainsString('Le repo n\'existe pas', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testSendReportBugAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'sendReportBug']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testSendReportBugAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'sendReportBug']);
-        $this->assertContains('Le repo n\'existe pas', (string) $result->getBody());
+        $this->assertStringContainsString('Le repo n\'existe pas', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testInstallAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'install']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testInstallAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'install']);
-        $this->assertContains('Le repo n\'existe pas', (string) $result->getBody());
+        $this->assertStringContainsString('Le repo n\'existe pas', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testTestAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'test']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testTestAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'test']);
-        $this->assertContains('Le repo n\'existe pas', (string) $result->getBody());
+        $this->assertStringContainsString('Le repo n\'existe pas', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testRemoveAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'remove']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testRemoveAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'remove']);
-        $this->assertContains('Le repo n\'existe pas', (string) $result->getBody());
+        $this->assertStringContainsString('Le repo n\'existe pas', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testSaveAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'save']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testSaveAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'save']);
-        $this->assertContains('Le repo n\'existe pas', (string) $result->getBody());
+        $this->assertStringContainsString('Le repo n\'existe pas', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testGetInfoAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'getInfo']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testGetInfoAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'getInfo']);
-        $this->assertContains('Le repo n\'existe pas', (string) $result->getBody());
+        $this->assertStringContainsString('Le repo n\'existe pas', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testByLogicalIdAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'byLogicalId']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testByLogicalIdAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'byLogicalId']);
-        $this->assertContains('Le repo n\'existe pas', (string) $result->getBody());
+        $this->assertStringContainsString('Le repo n\'existe pas', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testSetRaingAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'setRating']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testSetRatingAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'setRating']);
-        $this->assertContains('Le repo n\'existe pas', (string) $result->getBody());
+        $this->assertStringContainsString('Le repo n\'existe pas', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testBackupListAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'backupList']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testBackupListAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'backupList']);
-        $this->assertContains('Le repo n\'existe pas', (string) $result->getBody());
+        $this->assertStringContainsString('Le repo n\'existe pas', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 }

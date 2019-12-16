@@ -19,9 +19,9 @@ use NextDom\Managers\UserManager;
 
 require_once(__DIR__ . '/../../src/core.php');
 
-class UserManagerTest extends PHPUnit_Framework_TestCase
+class UserManagerTest extends PHPUnit\Framework\TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
 
     }

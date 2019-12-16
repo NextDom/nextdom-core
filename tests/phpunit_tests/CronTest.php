@@ -22,23 +22,23 @@ use NextDom\Model\Entity\Cron;
 
 require_once(__DIR__ . '/../../src/core.php');
 
-class CronTest extends PHPUnit_Framework_TestCase
+class CronTest extends PHPUnit\Framework\TestCase
 {
     /** @var Cron cron for test */
     private $preparedCron = null;
     private static $maxExecTimeCrontask = 0;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$maxExecTimeCrontask = ConfigManager::byKey('maxExecTimeCrontask');
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         DBHelper::exec('DELETE FROM ' . CronManager::DB_CLASS_NAME. ' WHERE id > 3');
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->preparedCron = new Cron();
         $this->preparedCron->setClass('MyTest');
@@ -46,7 +46,7 @@ class CronTest extends PHPUnit_Framework_TestCase
         $this->preparedCron->setSchedule('* * * * *');
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         DBHelper::exec('DELETE FROM ' . CronManager::DB_CLASS_NAME. ' WHERE id > 3');
     }

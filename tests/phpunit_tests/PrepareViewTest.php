@@ -25,25 +25,25 @@ use NextDom\Model\Entity\Note;
 
 require_once(__DIR__ . '/../../src/core.php');
 
-class PrepareViewTest extends PHPUnit_Framework_TestCase
+class PrepareViewTest extends PHPUnit\Framework\TestCase
 {
     /** @var PrepareView */
     private $prepareView = null;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->prepareView = new PrepareView();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         DBHelper::exec("UPDATE user SET password = '" . Utils::sha512('nextdom-test') . "' WHERE login = 'admin'");
         DBHelper::exec("DELETE FROM config WHERE `key` = 'nextdom::firstUse'");

@@ -29,12 +29,12 @@ class CmdAjaxTest extends BaseAjaxTest
     /** @var CmdAjax */
     private $cmdAjax = null;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->cmdAjax = new CmdAjax();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->cleanGetParams();
         DBHelper::exec('DELETE FROM cmd WHERE id > 4');
@@ -49,7 +49,7 @@ class CmdAjaxTest extends BaseAjaxTest
         $result = ob_get_clean();
         $jsonResult = json_decode($result, true);
         $this->assertEquals('ok', $jsonResult['state']);
-        $this->assertContains('data-cmd_id=\"1\"', $result);
+        $this->assertStringContainsString('data-cmd_id=\"1\"', $result);
     }
 
     public function testToHtmlMultiple()
@@ -60,7 +60,7 @@ class CmdAjaxTest extends BaseAjaxTest
         $result = ob_get_clean();
         $jsonResult = json_decode($result, true);
         $this->assertEquals('ok', $jsonResult['state']);
-        $this->assertContains('data-cmd_id=\"2\"', $result);
+        $this->assertStringContainsString('data-cmd_id=\"2\"', $result);
         $this->assertCount(3, $jsonResult['result']);
         $this->assertEquals(1, $jsonResult['result']['1']['id']);
     }

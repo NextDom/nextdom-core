@@ -18,7 +18,7 @@
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Translation\Loader\YamlFileLoader;
 
-class i18nValidityTest extends PHPUnit_Framework_TestCase
+class i18nValidityTest extends PHPUnit\Framework\TestCase
 {
     public function testsLanguages()
     {

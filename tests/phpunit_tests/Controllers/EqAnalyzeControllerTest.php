@@ -20,11 +20,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class EqAnalyzeControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -34,7 +34,7 @@ class EqAnalyzeControllerTest extends BaseControllerTest
         $pageData = [];
         $result = \NextDom\Controller\Diagnostic\EqAnalyzeController::get($pageData);
         $this->assertCount(4, $pageData['eqAnalyzeCmdData']);
-        $this->assertContains('id="alertCmd"', $result);
+        $this->assertStringContainsString('id="alertCmd"', $result);
     }
 
     public function testPageDataVars()

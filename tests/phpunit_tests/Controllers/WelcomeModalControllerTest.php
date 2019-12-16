@@ -20,11 +20,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class WelcomeModalControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -32,6 +32,6 @@ class WelcomeModalControllerTest extends BaseControllerTest
     public function testSimple()
     {
         $result = \NextDom\Controller\Modals\Welcome::get();
-        $this->assertContains('<script src="/public/js/modals/welcome.js"></script>', $result);
+        $this->assertStringContainsString('<script src="/public/js/modals/welcome.js"></script>', $result);
     }
 }

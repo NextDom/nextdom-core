@@ -20,19 +20,19 @@ use NextDom\Managers\UpdateManager;
 
 require_once(__DIR__ . '/../../src/core.php');
 
-class UpdateManagerTest extends PHPUnit_Framework_TestCase
+class UpdateManagerTest extends PHPUnit\Framework\TestCase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         // Keep only core
         DBHelper::exec('DELETE FROM `update` WHERE id > 2');
     }
 
-    public function setUp()
+    public function setUp(): void
     {
 
     }

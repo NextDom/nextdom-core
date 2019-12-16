@@ -20,11 +20,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class ScenarioHumanInsertModalControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -32,6 +32,6 @@ class ScenarioHumanInsertModalControllerTest extends BaseControllerTest
     public function testSimple()
     {
         $result = \NextDom\Controller\Modals\ScenarioHumanInsert::get();
-        $this->assertContains('id="mod_insertScenariocValue_value"', $result);
+        $this->assertStringContainsString('id="mod_insertScenariocValue_value"', $result);
     }
 }

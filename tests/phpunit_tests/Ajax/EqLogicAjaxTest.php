@@ -26,12 +26,12 @@ class EqLogicAjaxTest extends BaseAjaxTest
     /** @var EqLogicAjax */
     private $eqLogicAjax = null;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->eqLogicAjax = new EqLogicAjax();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->cleanGetParams();
     }
@@ -49,7 +49,7 @@ class EqLogicAjaxTest extends BaseAjaxTest
         $this->assertEquals('ok', $jsonResult['state']);
         $this->assertEquals('My Room', $jsonResult['result']['name']);
         $this->assertCount(1, $jsonResult['result']['eqLogic']);
-        $this->assertContains('class="eqLogic', $jsonResult['result']['eqLogic'][0]['html']);
+        $this->assertStringContainsString('class="eqLogic', $jsonResult['result']['eqLogic'][0]['html']);
     }
 
     public function testGetEqLogicObjectNoId()
@@ -99,7 +99,7 @@ class EqLogicAjaxTest extends BaseAjaxTest
         $jsonResult = json_decode($result, true);
         $this->assertEquals('ok', $jsonResult['state']);
         $this->assertCount(4, $jsonResult['result']);
-        $this->assertContains('nextdom.cmd.update[\'1\']', $jsonResult['result']['html']);
+        $this->assertStringContainsString('nextdom.cmd.update[\'1\']', $jsonResult['result']['html']);
     }
 
     public function testToHtmlOneWithoutVersion()
@@ -121,7 +121,7 @@ class EqLogicAjaxTest extends BaseAjaxTest
         $jsonResult = json_decode($result, true);
         $this->assertEquals('ok', $jsonResult['state']);
         $this->assertEquals('plugin4tests', $jsonResult['result'][1]['type']);
-        $this->assertContains('$(\'.cmd[data-cmd_id=1]', $jsonResult['result'][1]['html']);
+        $this->assertStringContainsString('$(\'.cmd[data-cmd_id=1]', $jsonResult['result'][1]['html']);
     }
 
     public function testToHtmlMultipleWithoutVersion()

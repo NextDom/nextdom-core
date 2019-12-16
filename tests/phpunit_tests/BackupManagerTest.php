@@ -17,11 +17,11 @@
 
 use NextDom\Managers\BackupManager;
 
-class BackupManagerTest extends PHPUnit_Framework_TestCase
+class BackupManagerTest extends PHPUnit\Framework\TestCase
 {
     private $tmpDir;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->tmpDir = sys_get_temp_dir() . '/' . mt_rand();
         mkdir($this->tmpDir);
@@ -32,7 +32,7 @@ class BackupManagerTest extends PHPUnit_Framework_TestCase
         touch($this->tmpDir . "/thrid.gz");
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         system("rm -rf " . $this->tmpDir);
     }

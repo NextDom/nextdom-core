@@ -20,11 +20,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class GraphLinkModalControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -34,7 +34,7 @@ class GraphLinkModalControllerTest extends BaseControllerTest
         ob_start();
         $result = \NextDom\Controller\Modals\GraphLink::get();
         $scriptResult = ob_get_clean();
-        $this->assertContains('id="div_graphLinkRenderer"', $result);
-        $this->assertContains('var prerenderGraph = ', $scriptResult);
+        $this->assertStringContainsString('id="div_graphLinkRenderer"', $result);
+        $this->assertStringContainsString('var prerenderGraph = ', $scriptResult);
     }
 }

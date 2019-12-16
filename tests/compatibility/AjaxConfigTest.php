@@ -23,28 +23,28 @@ class AjaxConfigTest extends AjaxBase
 
     public function testWithout() {
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'genApiKey']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testImpossibleActionAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'with-is-not-possible']);
-        $this->assertContains('"state":"error"', (string) $result->getBody());
+        $this->assertStringContainsString('"state":"error"', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testImpossibleActionAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'with-is-not-possible']);
-        $this->assertContains('"state":"error"', (string) $result->getBody());
+        $this->assertStringContainsString('"state":"error"', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testGenApiKeyAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'genApiKey']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
@@ -58,28 +58,28 @@ class AjaxConfigTest extends AjaxBase
     public function testGetKeyAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'getKey']);
-        $this->assertContains('Aucune clé demandée', (string) $result->getBody());
+        $this->assertStringContainsString('Aucune clé demandée', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testAddKeyAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'addKey']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testAddKeyAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'addKey']);
-        $this->assertContains('"state":"ok"', (string) $result->getBody());
+        $this->assertStringContainsString('"state":"ok"', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testRemoveKeyAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'removeKey']);
-        $this->assertContains('Aucune clé demandée', (string) $result->getBody());
+        $this->assertStringContainsString('Aucune clé demandée', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
         // TODO : Pas normal ça
     }

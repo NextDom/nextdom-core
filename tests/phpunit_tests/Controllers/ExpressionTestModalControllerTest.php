@@ -20,11 +20,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class ExpressionTestModalControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -32,6 +32,6 @@ class ExpressionTestModalControllerTest extends BaseControllerTest
     public function testSimple()
     {
         $result = \NextDom\Controller\Modals\ExpressionTest::get();
-        $this->assertContains('id="div_expressionTestResult"', $result);
+        $this->assertStringContainsString('id="div_expressionTestResult"', $result);
     }
 }

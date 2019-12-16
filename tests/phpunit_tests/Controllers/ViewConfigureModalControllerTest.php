@@ -22,11 +22,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class ViewConfigureModalControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (isset($_GET['view_id'])) {
             unset($_GET['view_id']);
@@ -40,7 +40,7 @@ class ViewConfigureModalControllerTest extends BaseControllerTest
         ob_start();
         $result = \NextDom\Controller\Modals\ViewConfigure::get();
         $scriptResult = ob_get_clean();
-        $this->assertContains('src="/public/js/modals/view.configure.js"', $result);
-        $this->assertContains('var view = ', $scriptResult);
+        $this->assertStringContainsString('src="/public/js/modals/view.configure.js"', $result);
+        $this->assertStringContainsString('var view = ', $scriptResult);
     }
 }

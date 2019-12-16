@@ -20,11 +20,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class CmdSelectMultipleModalControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (isset($_GET['cmd_id'])) {
             unset($_GET['cmd_id']);
@@ -36,6 +36,6 @@ class CmdSelectMultipleModalControllerTest extends BaseControllerTest
     {
         $_GET['cmd_id'] = 1;
         $result = \NextDom\Controller\Modals\CmdSelectMultiple::get();
-        $this->assertContains('Test eqLogic - Cmd 1', $result);
+        $this->assertStringContainsString('Test eqLogic - Cmd 1', $result);
     }
 }

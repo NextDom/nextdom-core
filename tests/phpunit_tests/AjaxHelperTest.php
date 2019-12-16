@@ -17,12 +17,12 @@
 
 use NextDom\Helpers\AjaxHelper;
 
-class AjaxHelperTest extends PHPUnit_Framework_TestCase
+class AjaxHelperTest extends PHPUnit\Framework\TestCase
 {
     /** @var AjaxHelper */
     public $ajax = null;
 
-    public function setUp() {
+    public function setUp(): void {
         $this->ajax = new AjaxHelper();
     }
 

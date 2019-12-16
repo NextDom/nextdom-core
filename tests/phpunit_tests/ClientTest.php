@@ -17,7 +17,7 @@
 
 use NextDom\Helpers\ClientHelper;
 
-class ClientTest extends PHPUnit_Framework_TestCase
+class ClientTest extends PHPUnit\Framework\TestCase
 {
     public function testIsMobileWithoutUserAgent()
     {

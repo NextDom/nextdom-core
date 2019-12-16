@@ -20,11 +20,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class BackupControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -34,7 +34,7 @@ class BackupControllerTest extends BaseControllerTest
         $pageData = [];
         $result = \NextDom\Controller\Tools\BackupController::get($pageData);
         $this->assertEquals('Apt', $pageData['backupReposList']['apt']['name']);
-        $this->assertContains('id="bt_saveOpenLog"', $result);
+        $this->assertStringContainsString('id="bt_saveOpenLog"', $result);
     }
 
     public function testPageDataVars()

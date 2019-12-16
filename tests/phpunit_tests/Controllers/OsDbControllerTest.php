@@ -20,11 +20,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class OsDbControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -34,7 +34,7 @@ class OsDbControllerTest extends BaseControllerTest
         $pageData = [];
         $result = \NextDom\Controller\Tools\OsDbController::get($pageData);
         $this->assertEquals('nextdomdev', $pageData['adminDbConfig']['dbname']);
-        $this->assertContains('id="osdb"', $result);
+        $this->assertStringContainsString('id="osdb"', $result);
     }
 
     public function testPageDataVars()

@@ -20,11 +20,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class ActionInsertModalControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -32,6 +32,6 @@ class ActionInsertModalControllerTest extends BaseControllerTest
     public function testSimple()
     {
         $result = \NextDom\Controller\Modals\ActionInsert::get();
-        $this->assertContains('src="/public/js/modals/action.insert.js"', $result);
+        $this->assertStringContainsString('src="/public/js/modals/action.insert.js"', $result);
     }
 }
