@@ -183,5 +183,5 @@ view_edit:
   condition: 'admin'
 translations:
   path: 'translations'
-  controller:  NextDom\Controller\Pages\TranslationsController::get
+  controller:  NextDom\Ajax\TranslationsAjax
   condition: 'user'
