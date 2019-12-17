@@ -58,8 +58,8 @@
     }
 }
 .media-title {
-    padding: 0.4em;
-    margin: 0em -1em 0.5em -1em;
+    padding: .4em;
+    margin: 0em -1em .5em -1em;
 }
 .ui-tooltip {
     transform: translateY(-4.5em);
@@ -72,7 +72,7 @@
     .media {
         position: relative;
         height: 200px;
-        transition: all 0.2s ease;
+        transition: all .2s ease;
         overflow: hidden;
         box-shadow: 1px 1px 5px rgba(0,0,0,0.1), -1px -1px 4px rgba(0,0,0,0.1);
         margin: 0;
@@ -83,7 +83,7 @@
     .media-left {
         margin-right: 1em;
         padding-right: 1.2em;
-        padding-top: 0.3em;
+        padding-top: .3em;
     }
     .media .installed-marker {
         position: absolute;
@@ -142,7 +142,7 @@
         color: $white;
         border: none;
         float: right;
-        border-top-left-radius: 0.3em;
+        border-top-left-radius: .3em;
         position: absolute;
         bottom: 0;
         right: 0;
@@ -152,11 +152,11 @@
             size: 202% 100%;
             position: 0 0;
         }
-        -webkit-transition: all 0.2s ease;
-        -moz-transition: all 0.2s ease;
-        -ms-transition: all 0.2s ease;
-        -o-transition: all 0.2s ease;
-        transition: all 0.2s ease;
+        -webkit-transition: all .2s ease;
+        -moz-transition: all .2s ease;
+        -ms-transition: all .2s ease;
+        -o-transition: all .2s ease;
+        transition: all .2s ease;
         font-size: 1em;
         line-height: 2em;
         padding: 0 1em 0 1em;
@@ -249,13 +249,13 @@
 }
 #plugin-modal-footer {
     text-align: right;
-    margin-right: 0.5em;
+    margin-right: .5em;
 }
 .market-rating {
     position: absolute;
     bottom: 8px;
     left: 10px;
-    font-size: 0.7em;
+    font-size: .7em;
 }
 .market-modale-rating {
     font-size: 4em;
@@ -270,7 +270,7 @@
     position: absolute;
     bottom: 25px;
     right: 12px;
-    font-size: 0.7em;
+    font-size: .7em;
     color: #999999;
 }
 .market-modale-author {
@@ -290,13 +290,13 @@
   font-weight: bold;
 }
 .market-certification {
-  top: 0px;
+  top: 0;
   left: 25%;
   width: 50%;
-  border-radius: 0px 0px 4px 4px;
-  padding: 1px 0px 1px 0px;
+  border-radius: 0 0 4px 4px;
+  padding: 1px 0 1px 0;
   position: absolute;
-  font-size: 0.8em;
+  font-size: .8em;
 }
 .market-modale-certification,
 .market-modale-category {
@@ -332,14 +332,14 @@
 }
 .market-widget {
     position: absolute;
-    top: 0px;
-    left: 0px;
+    top: 0;
+    left: 0;
     padding: 8px;
 }
 .market-install {
     position: absolute;
-    top: 0px;
-    right: 0px;
+    top: 0;
+    right: 0;
     padding: 8px;
 }
 .market,

@@ -24,9 +24,9 @@
     z-index: 5000;
     background-clip: unset;
     box-shadow:0 3px 30px rgba(0,0,0,0.6);
-    padding: 0px 0 0px 0px;
+    padding: 0 0 0 0;
     & .ui-dialog-title {
-        padding: 7px 5px 5px 0px;
+        padding: 7px 5px 5px 0;
     }
     & .ui-dialog-titlebar-close {
         opacity: 1;
@@ -42,7 +42,7 @@
         position: relative;
     }
     .content {
-        min-height: 0px;
+        min-height: 0;
     }
     .ui-dialog-content {
         padding: 15px;
@@ -55,11 +55,10 @@
         padding: 5px 5px 5px;
     }
     .ui-dialog-content .content {
-        padding: 0px !important;
+        padding: 0 !important;
     }
     .ui-dialog-content .content-header {
-        padding: 0px;
-        padding-bottom: 15px;
+        padding: 0 0 15px;
     }
     .ui-dialog-titlebar {
         -webkit-border-top-left-radius: 6px;
@@ -82,7 +81,6 @@
     font-size: 14px;
     line-height: 1.42857143;
 }
-
 
 /* Core-Surcharge */
 .modal {

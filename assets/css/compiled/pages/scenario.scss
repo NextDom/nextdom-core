@@ -39,7 +39,7 @@
 /* Tuiles scenario */
 .scenarioDisplayCard {
     >.title {
-        margin: 0px;
+        margin: 0;
     }
     span.scenario-icon {
         font-size: 4em;
@@ -90,7 +90,7 @@
     padding: 5px;
 }
 .scenario-sub-group {
-    padding: 5px 5px 0px 0px;
+    padding: 5px 5px 0 0;
 }
 .scenario-group-right {
     padding: 5px 10px 5px 5px;
@@ -100,11 +100,11 @@
 .scenario-action-bloc {
     vertical-align: top;
     display: table-cell;
-    padding: 0px 10px 5px 5px;
+    padding: 0 10px 5px 5px;
     width: 110px;
 }
 .scenario-action {
-    padding: 0px 0px 0px 6px;
+    padding: 0 0 0 6px;
 }
 .scenario-si {
     width: 105px;
@@ -112,11 +112,11 @@
     display: table-cell;
 }
 .scenario-si-bloc {
-    padding: 0px 0px 5px 0px;
+    padding: 0 0 5px 0;
     display: table-cell;
 }
 .scenario-condition {
-    padding: 0px;
+    padding: 0;
     display: table-cell;
     vertical-align: top;
 }
@@ -169,7 +169,7 @@
     display: table-cell;
     padding:{
       left: 5px;
-      right: 0px;
+      right: 0;
     }
 }
 .scenario-text {
@@ -178,12 +178,12 @@
 .scenario-unity {
     float: right;
     font-size: 11px;
-    padding: 0px 10px 0px 0px;
+    padding: 0 10px 0 0;
 }
 .scenario-unity-line {
     float: right;
     font-size: 11px;
-    padding: 13px 2px 0px 0px;
+    padding: 13px 2px 0 0;
 }
 .scenario-bloc-focused {
     border: 2px dashed !important;
@@ -219,7 +219,7 @@
 /* Sortable */
 .bt_sortable {
     vertical-align: middle;
-    margin: -2px 9px 0px -2px;
+    margin: -2px 9px 0 -2px;
     cursor: all-scroll;
     font-size: 18px;
 }
@@ -258,7 +258,7 @@
     }
     .element {
         color: white;
-        border-width: 0px;
+        border-width: 0;
         border-style: solid;
     }
     .subElement {

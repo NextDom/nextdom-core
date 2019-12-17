@@ -22,7 +22,7 @@
 
 /* Core-Ajout */
 @keyframes zoomIn {
-    from {transform: scale(0);opacity: 0.3;}
+    from {transform: scale(0);opacity: .3;}
     to {transform: scale(1);opacity: 1;}
 }
 @keyframes zoomOut {
@@ -52,7 +52,7 @@
     margin-top: -50%;
   }
   to {
-    margin-top: 0%;
+    margin-top: 0;
   }
 }
 

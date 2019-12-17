@@ -30,10 +30,8 @@ input[type="checkbox"], input[type="radio"] {
     cursor: pointer;
     margin: 0 0 0 0;
 }
-[type="checkbox"]:not(:checked):before,
-[type="checkbox"]:checked:before,
-[type="radio"]:not(:checked):before,
-[type="radio"]:checked:before {
+[type="checkbox"]:before,
+[type="radio"]:before {
     content: '';
     background: #fff;
     position: absolute;
@@ -43,14 +41,11 @@ input[type="checkbox"], input[type="radio"] {
     border: 1px solid #ccc;
     border-radius: 2px;
 }
-[type="radio"]:not(:checked):before,
-[type="radio"]:checked:before {
+[type="radio"]:before {
     border-radius: 20px;
 }
-[type="checkbox"]:not(:checked):after,
-[type="checkbox"]:checked:after,
-[type="radio"]:not(:checked):after,
-[type="radio"]:checked:after {
+[type="checkbox"]:after,
+[type="radio"]:after {
     content: '';
     position: absolute;
     left:0; top: 0;
@@ -62,24 +57,21 @@ input[type="checkbox"], input[type="radio"] {
     -ms-transition: all .2s;
     border-radius: 2px;
 }
-[type="radio"]:not(:checked):after,
-[type="radio"]:checked:after {
+[type="radio"]:after {
     border-radius: 20px;
 }
 [type="checkbox"]:hover:before, [type="radio"]:hover:before {
-    box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.2);
+    box-shadow: 0 0 8px 0 rgba(0,0,0,0.2);
 }
 .has-error [type="checkbox"]:checked:after,
-.has-error [type="checkbox"]:checked:after,
-.has-error [type="radio"]:checked:after,
 .has-error [type="radio"]:checked:after {
     background: #c9302c;
 }
 .radio-inline,
 .checkbox-inline {
-    padding-top:0px !important;
+    padding-top:0 !important;
     padding-bottom: 5px;
-    margin-left: 0px !important;
+    margin-left: 0 !important;
     margin-right: 10px;
     input {
         margin-right: 4px !important;
@@ -93,7 +85,7 @@ input[type="checkbox"], input[type="radio"] {
     transform: scale(0); /* mise à l'échelle à 0 */
 }
 [type="checkbox"]:checked:after, [type="radio"]:checked:after {
-    opacity: 0.9; /* coche opaque */
+    opacity: .9; /* coche opaque */
     transform: scale(1); /* mise à l'échelle 1:1 */
 }
 

@@ -67,8 +67,8 @@
     width: 50px;
     margin: {
         left: -4px;
-        top: 0px;
-        bottom: 0px;
+        top: 0;
+        bottom: 0;
     }
 }
 .label-check {
@@ -114,7 +114,7 @@
     border: 1px dashed !important;
 }
 .label-cmd {
-    margin: 3px 0px 3px 0px;
+    margin: 3px 0 3px 0;
     font-size: 100%;
     padding: {
       top: 7px;
