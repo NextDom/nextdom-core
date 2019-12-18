@@ -54,14 +54,14 @@ class EqLogicAjaxTest extends BaseAjaxTest
 
     public function testGetEqLogicObjectNoId()
     {
-        $this->connectAdAdmin();
+        $this->connectAsAdmin();
         $this->expectException(CoreException::class);
         $this->eqLogicAjax->getEqLogicObject();
     }
 
     public function testGetEqLogicObjectNoVersion()
     {
-        $this->connectAdAdmin();
+        $this->connectAsAdmin();
         $_GET['object_id'] = 1;
         $this->expectException(CoreException::class);
         $this->eqLogicAjax->getEqLogicObject();
@@ -82,7 +82,7 @@ class EqLogicAjaxTest extends BaseAjaxTest
 
     public function testByIdNoId()
     {
-        $this->connectAdAdmin();
+        $this->connectAsAdmin();
         $this->expectException(CoreException::class);
         $this->eqLogicAjax->getEqLogicObject();
     }
@@ -135,7 +135,7 @@ class EqLogicAjaxTest extends BaseAjaxTest
 
     public function testToHtmlWithoutId()
     {
-        $this->connectAdAdmin();
+        $this->connectAsAdmin();
         $this->expectException(CoreException::class);
         $this->eqLogicAjax->toHtml();
     }

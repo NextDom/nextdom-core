@@ -34,61 +34,85 @@ class ScenarioExpressionManagerTest extends PHPUnit\Framework\TestCase
 
     }
 
-    public function testByIdWithExisting() {
+    public function testByIdWithExisting()
+    {
         $scenarioExpression = ScenarioExpressionManager::byId(1);
         $this->assertInstanceOf(\NextDom\Model\Entity\ScenarioExpression::class, $scenarioExpression);
         $this->assertEquals(1, $scenarioExpression->getid());
     }
 
-    public function testByIdWithoutExisting() {
+    public function testByIdWithoutExisting()
+    {
         $scenarioExpression = ScenarioExpressionManager::byId(392);
         $this->assertFalse($scenarioExpression);
     }
 
-    public function testAll() {
+    public function testAll()
+    {
         $scenarioExpressions = ScenarioExpressionManager::all();
-        $this->assertCount(6, $scenarioExpressions);
+        $this->assertCount(7, $scenarioExpressions);
         $this->assertEquals(3, $scenarioExpressions[2]->getId());
     }
 
-    public function testByScenarioSubElementIdOnIf() {
+    public function testByScenarioSubElementIdOnIf()
+    {
         $scenarioExpressions = ScenarioExpressionManager::byScenarioSubElementId(1);
         $this->assertCount(2, $scenarioExpressions);
         $this->assertEquals(1, $scenarioExpressions[0]->getId());
         $this->assertEquals(2, $scenarioExpressions[1]->getId());
     }
 
-    public function testByScenarioSubElementIdWithoutExpression() {
+    public function testByScenarioSubElementIdWithoutExpression()
+    {
         $scenarioExpressions = ScenarioExpressionManager::byScenarioSubElementId(3);
         $this->assertCount(0, $scenarioExpressions);
     }
 
-    public function testSearchExpressionSimple() {
+    public function testSearchExpressionSimple()
+    {
         $scenarioExpressions = ScenarioExpressionManager::searchExpression('log');
-        $this->assertCount(3, $scenarioExpressions);
+        $this->assertCount(4, $scenarioExpressions);
         $this->assertEquals('log', $scenarioExpressions[0]->getExpression());
     }
 
-    public function testSearchExpressionAndOption() {
+    public function testSearchExpressionAndOption()
+    {
         $scenarioExpressions = ScenarioExpressionManager::searchExpression('log', 'LAUNCHED');
         $this->assertCount(1, $scenarioExpressions);
         $this->assertEquals('log', $scenarioExpressions[0]->getExpression());
         $this->assertEquals('LAUNCHED', $scenarioExpressions[0]->getOptions('message'));
     }
 
-    public function testSearchExpressionOrOption() {
+    public function testSearchExpressionOrOption()
+    {
         $scenarioExpressions = ScenarioExpressionManager::searchExpression('log', 'success', false);
-        $this->assertCount(4, $scenarioExpressions);
+        $this->assertCount(5, $scenarioExpressions);
         $this->assertEquals('log', $scenarioExpressions[0]->getExpression());
         $this->assertEquals('alert', $scenarioExpressions[3]->getExpression());
         $this->assertEquals('That\'s works', $scenarioExpressions[3]->getOptions('message'));
     }
 
-    public function testRand() {
+    public function testRand()
+    {
         for ($i = 0; $i < 20; ++$i) {
             $randomNumber = ScenarioExpressionManager::rand(2, 5);
             $this->assertTrue($randomNumber > 1);
             $this->assertTrue($randomNumber < 6);
         }
+    }
+
+    public function testGetRequestTags()
+    {
+        // On imagine que le test peut durer 2s
+        $this->assertTrue(date('s') + 2 > ScenarioExpressionManager::getRequestTags('#seconde#')['#seconde#']);
+        $this->assertTrue(date('G') + 1 > ScenarioExpressionManager::getRequestTags('#heure#')['#heure#']);
+        $this->assertTrue(date('i') + 1 > ScenarioExpressionManager::getRequestTags('#minute#')['#minute#']);
+        $multiple = ScenarioExpressionManager::getRequestTags('#date# #annee# #semaine# #jeedom_name# #trigger#');
+        $this->assertCount(5, $multiple);
+        $this->assertEquals(date('md'), $multiple['#date#']);
+        $this->assertEquals(date('W'), $multiple['#semaine#']);
+        $this->assertEquals(date('Y'), $multiple['#annee#']);
+        $this->assertEquals('"NextDom"', $multiple['#jeedom_name#']);
+        $this->assertEquals('', $multiple['#trigger#']);
     }
 }

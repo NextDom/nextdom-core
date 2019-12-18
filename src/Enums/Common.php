@@ -70,6 +70,8 @@ class Common extends Enum
     const PROFILE = 'profile';
     const QUERY = 'query';
     const REPLY_CMD = 'reply_cmd';
+    const SCHEDULE = 'schedule';
+    const STATE = 'state';
     const STATUS = 'status';
     const SUB_PROCESS = 'subprocess';
     const SUBTYPE = 'subtype';
@@ -79,6 +81,7 @@ class Common extends Enum
     const TIMEOUT = 'timeout';
     const TRIGGER = 'trigger';
     const TYPE = 'type';
+    const UNITE = 'unite';
     const UID = 'uid';
     const USED_BY = 'usedBy';
     const VALUE = 'value';

@@ -383,74 +383,68 @@ class ScenarioExpressionManager
      */
     public static function getRequestTags($expression)
     {
-        $return = [];
-        preg_match_all("/#([a-zA-Z0-9]*)#/", $expression, $matches);
+        $result = [];
+        preg_match_all("/#([a-zA-Z0-9_]*)#/", $expression, $matches);
         if (count($matches) == 0) {
-            return $return;
+            return $result;
         }
         $matches = array_unique($matches[0]);
+        $humanToDate = [
+            '#seconde#' => 's',
+            '#heure#' => 'G',
+            '#heure12#' => 'g',
+            '#minute#' => 'i',
+            '#jour#' => 'd',
+            '#mois#' => 'm',
+            '#annee#' => 'Y',
+            '#njour#' => 'w',
+            '#time#' => 'Gi',
+            '#date#' => 'md',
+            '#semaine#' => 'W'
+        ];
         foreach ($matches as $tag) {
             switch ($tag) {
                 case '#seconde#':
-                    $return['#seconde#'] = (int)date('s');
-                    break;
                 case '#heure#':
-                    $return['#heure#'] = (int)date('G');
-                    break;
                 case '#heure12#':
-                    $return['#heure12#'] = (int)date('g');
-                    break;
                 case '#minute#':
-                    $return['#minute#'] = (int)date('i');
-                    break;
                 case '#jour#':
-                    $return['#jour#'] = (int)date('d');
-                    break;
                 case '#mois#':
-                    $return['#mois#'] = (int)date('m');
-                    break;
                 case '#annee#':
-                    $return['#annee#'] = (int)date('Y');
+                case '#njour#':
+                    $result[$tag] = (int)date($humanToDate[$tag]);
                     break;
                 case '#time#':
-                    $return['#time#'] = date('Gi');
+                case '#date#':
+                case '#semaine#':
+                    $result[$tag] = date($humanToDate[$tag]);
                     break;
                 case '#timestamp#':
-                    $return['#timestamp#'] = time();
-                    break;
-                case '#date#':
-                    $return['#date#'] = date('md');
-                    break;
-                case '#semaine#':
-                    $return['#semaine#'] = date('W');
+                    $result['#timestamp#'] = time();
                     break;
                 case '#sjour#':
-                    $return['#sjour#'] = '"' . DateHelper::dateToFr(date('l')) . '"';
+                    $result['#sjour#'] = '"' . DateHelper::dateToFr(date('l')) . '"';
                     break;
                 case '#smois#':
-                    $return['#smois#'] = '"' . DateHelper::dateToFr(date('F')) . '"';
+                    $result['#smois#'] = '"' . DateHelper::dateToFr(date('F')) . '"';
                     break;
-                case '#njour#':
-                    $return['#njour#'] = (int)date('w');
-                    break;
+                case '#jeedom_name#':
                 case '#nextdom_name#':
-                    $return['#nextdom_name#'] = '"' . ConfigManager::byKey('name') . '"';
+                    $result[$tag] = '"NextDom"';
                     break;
                 case '#hostname#':
-                    $return['#hostname#'] = '"' . gethostname() . '"';
+                    $result['#hostname#'] = '"' . gethostname() . '"';
                     break;
                 case '#IP#':
-                    $return['#IP#'] = '"' . NetworkHelper::getNetworkAccess('internal', 'ip', '', false) . '"';
+                    $result['#IP#'] = '"' . NetworkHelper::getNetworkAccess('internal', 'ip', '', false) . '"';
                     break;
                 case '#trigger#':
-                    $return['#trigger#'] = '';
-                    break;
                 case '#trigger_value#':
-                    $return['#trigger_value#'] = '';
+                    $result[$tag] = '';
                     break;
             }
         }
-        return $return;
+        return $result;
     }
 
     /**
