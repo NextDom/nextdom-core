@@ -18,6 +18,7 @@
 namespace NextDom\Model\Entity;
 
 use NextDom\Enums\CmdType;
+use NextDom\Enums\NextDomObj;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
@@ -82,17 +83,17 @@ class DataStore implements EntityInterface
      */
     public function preSave()
     {
-        $allowType = ['cmd', 'object', 'eqLogic', 'scenario', 'eqReal'];
-        if (!in_array($this->getType(), $allowType)) {
-            throw new CoreException(__('Le type doit être un des suivants : ') . print_r($allowType, true));
+        $allowedType = [NextDomObj::CMD, NextDomObj::OBJECT, NextDomObj::EQLOGIC, NextDomObj::SCENARIO, NextDomObj::EQREAL];
+        if (!in_array($this->getType(), $allowedType)) {
+            throw new CoreException(__('Le type doit être un des suivants : ') . print_r($allowedType, true));
         }
         if (!is_numeric($this->getLink_id())) {
             throw new CoreException(__('Link_id doit être un chiffre'));
         }
-        if ($this->getKey() == '') {
+        if (empty($this->getKey())) {
             throw new CoreException(__('La clé ne peut pas être vide'));
         }
-        if ($this->getId() == '') {
+        if (empty($this->getId())) {
             $dataStore = DataStoreManager::byTypeLinkIdKey($this->getType(), $this->getLink_id(), $this->getKey());
             if (is_object($dataStore)) {
                 $this->setId($dataStore->getId());
@@ -186,8 +187,7 @@ class DataStore implements EntityInterface
      */
     public function save()
     {
-        DBHelper::save($this);
-        return true;
+        return DBHelper::save($this);
     }
 
     public function postSave()
@@ -198,7 +198,6 @@ class DataStore implements EntityInterface
             foreach ($value_cmd as $cmd) {
                 if ($cmd->isType(CmdType::ACTION)) {
                     $cmd->event($cmd->execute());
-
                 }
             }
         }
@@ -241,10 +240,10 @@ class DataStore implements EntityInterface
             'title' => __('Variable :') . ' ' . $this->getKey(),
         ];
         $usedBy = $this->getUsedBy();
-        Utils::addGraphLink($this, 'dataStore', $usedBy['scenario'], 'scenario', $_data, $_level, $_drill);
-        Utils::addGraphLink($this, 'dataStore', $usedBy['cmd'], 'cmd', $_data, $_level, $_drill);
-        Utils::addGraphLink($this, 'dataStore', $usedBy['eqLogic'], 'eqLogic', $_data, $_level, $_drill);
-        Utils::addGraphLink($this, 'dataStore', $usedBy['interactDef'], 'interactDef', $_data, $_level, $_drill);
+        Utils::addGraphLink($this, 'dataStore', $usedBy[NextDomObj::SCENARIO], NextDomObj::SCENARIO, $_data, $_level, $_drill);
+        Utils::addGraphLink($this, 'dataStore', $usedBy[NextDomObj::CMD], NextDomObj::CMD, $_data, $_level, $_drill);
+        Utils::addGraphLink($this, 'dataStore', $usedBy[NextDomObj::EQLOGIC], NextDomObj::EQLOGIC, $_data, $_level, $_drill);
+        Utils::addGraphLink($this, 'dataStore', $usedBy[NextDomObj::INTERACT_DEF], NextDomObj::INTERACT_DEF, $_data, $_level, $_drill);
         return $_data;
     }
 
@@ -255,11 +254,12 @@ class DataStore implements EntityInterface
      */
     public function getUsedBy($_array = false)
     {
-        $result = ['cmd' => [], 'eqLogic' => [], 'scenario' => []];
-        $result['cmd'] = CmdManager::searchConfiguration(['"cmd":"variable"%"name":"' . $this->getKey() . '"', 'variable(' . $this->getKey() . ')', 'variable(' . $this->getKey() . ',', '"name":"' . $this->getKey() . '"%"cmd":"variable"']);
-        $result['eqLogic'] = EqLogicManager::searchConfiguration(['"cmd":"variable"%"name":"' . $this->getKey() . '"', 'variable(' . $this->getKey() . ')', 'variable(' . $this->getKey() . ',', '"name":"' . $this->getKey() . '"%"cmd":"variable"']);
-        $result['interactDef'] = InteractDefManager::searchByUse(['"cmd":"variable"%"name":"' . $this->getKey() . '"', 'variable(' . $this->getKey() . ')', 'variable(' . $this->getKey() . ',', '"name":"' . $this->getKey() . '"%"cmd":"variable"']);
-        $result['scenario'] = ScenarioManager::searchByUse([
+        $searchConfigurationKey = '"cmd":"variable"%"name":"';
+        $result = [NextDomObj::CMD => [], NextDomObj::EQLOGIC => [], NextDomObj::SCENARIO => []];
+        $result[NextDomObj::CMD] = CmdManager::searchConfiguration([$searchConfigurationKey . $this->getKey() . '"', 'variable(' . $this->getKey() . ')', 'variable(' . $this->getKey() . ',', '"name":"' . $this->getKey() . '"%"cmd":"variable"']);
+        $result[NextDomObj::EQLOGIC] = EqLogicManager::searchConfiguration([$searchConfigurationKey . $this->getKey() . '"', 'variable(' . $this->getKey() . ')', 'variable(' . $this->getKey() . ',', '"name":"' . $this->getKey() . '"%"cmd":"variable"']);
+        $result[NextDomObj::INTERACT_DEF] = InteractDefManager::searchByUse([$searchConfigurationKey . $this->getKey() . '"', 'variable(' . $this->getKey() . ')', 'variable(' . $this->getKey() . ',', '"name":"' . $this->getKey() . '"%"cmd":"variable"']);
+        $result[NextDomObj::SCENARIO] = ScenarioManager::searchByUse([
             ['action' => 'variable(' . $this->getKey() . ')', 'option' => 'variable(' . $this->getKey() . ')'],
             ['action' => 'variable(' . $this->getKey() . ',', 'option' => 'variable(' . $this->getKey() . ','],
             ['action' => 'variable', 'option' => $this->getKey(), 'and' => true],
@@ -282,7 +282,7 @@ class DataStore implements EntityInterface
         if ($this->value === '') {
             return $_default;
         }
-        return is_json($this->value, $this->value);
+        return Utils::isJson($this->value, $this->value);
     }
 
     /**

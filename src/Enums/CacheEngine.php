@@ -18,26 +18,13 @@
 namespace NextDom\Enums;
 
 /**
- * Class NextDomObj
+ * Class CacheEngine
  * @package NextDom\Enums
  */
-class NextDomObj extends Enum
+class CacheEngine extends Enum
 {
-    const CMD = 'cmd';
-    const CRON = 'cron';
-    const EQLOGIC = 'eqLogic';
-    const EQREAL = 'eqReal';
-    const DATASTORE = 'dataStore';
-    const INTERACT = 'interact';
-    const INTERACT_DEF = 'interactDef';
-    const INTERACT_QUERY = 'interactQuery';
-    const JEE_OBJECT = 'jeeObject';
-    const OBJECT = 'object';
-    const PLAN = 'plan';
-    const PLAN_OBJECT = 'planObject';
-    const PLUGIN = 'plugin';
-    const SCENARIO = 'scenario';
-    const SCENARIOS = 'scenarios';
-    const UPDATE = 'update';
-    const VIEW = 'view';
+    const MEMCACHED = 'MemcachedCache';
+    const REDIS = 'RedisCache';
+    const FILESYSTEM = 'FilesystemCache';
+    const PHPFILE = 'PhpFileCache';
 }

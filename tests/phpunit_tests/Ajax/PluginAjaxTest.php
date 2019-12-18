@@ -15,19 +15,30 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-use NextDom\Ajax\CronAjax;
+use NextDom\Ajax\CmdAjax;
+use NextDom\Ajax\DataStoreAjax;
+use NextDom\Ajax\LogAjax;
+use NextDom\Ajax\PluginAjax;
+use NextDom\Enums\LogTarget;
+use NextDom\Exceptions\CoreException;
+use NextDom\Helpers\AuthentificationHelper;
+use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\LogHelper;
+use NextDom\Managers\CmdManager;
+use NextDom\Managers\DataStoreManager;
+use NextDom\Model\Entity\Cmd;
+use NextDom\Model\Entity\DataStore;
 
 require_once('BaseAjaxTest.php');
 
-class CronAjaxTest extends BaseAjaxTest
+class PluginAjaxTest extends BaseAjaxTest
 {
-    /** @var CronAjax */
-    private $cronAjax = null;
+    /** @var PluginAjax */
+    private $pluginAjax = null;
 
     public function setUp(): void
     {
-        $this->cronAjax = new CronAjax();
+        $this->pluginAjax = new PluginAjax();
     }
 
     public function tearDown(): void
@@ -37,28 +48,20 @@ class CronAjaxTest extends BaseAjaxTest
 
     public function testAll()
     {
-        $this->connectAsAdmin();
+        AuthentificationHelper::login('admin', 'nextdom-test');
+        AuthentificationHelper::init();
         ob_start();
-        $this->cronAjax->all();
+        $this->pluginAjax->all();
         $result = ob_get_clean();
         $jsonResult = json_decode($result, true);
         $this->assertEquals('ok', $jsonResult['state']);
-        $this->assertCount(8, $jsonResult['result']);
-        $this->assertEquals(1, $jsonResult['result'][0]['id']);
-        $this->assertEquals('cron10', $jsonResult['result'][1]['function']);
+        $this->assertEquals('plugin4tests', $jsonResult['result'][0]['id']);
+        $this->assertTrue($jsonResult['result'][0]['functionality']['cron']['exists']);
     }
 
-    public function testStart()
+    public function testAllDisconnected()
     {
-        LogHelper::clear('plugin4tests');
-        $_GET['id'] = 5;
-        $this->connectAsAdmin();
-        ob_start();
-        $this->cronAjax->start();
-        $result = ob_get_clean();
-        sleep(10);
-        $jsonResult = json_decode($result, true);
-        $this->assertEquals('ok', $jsonResult['state']);
-        $this->assertStringContainsString('CRON ERROR', LogHelper::get('plugin4tests')[0]);
+        $this->expectException(CoreException::class);
+        $this->pluginAjax->all();
     }
 }

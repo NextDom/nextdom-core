@@ -184,7 +184,7 @@ class CmdAjaxTest extends BaseAjaxTest
 
     public function testUsedBy()
     {
-        $this->connectAdAdmin();
+        $this->connectAsAdmin();
         $_GET['id'] = '3';
         ob_start();
         $this->cmdAjax->usedBy();
@@ -221,7 +221,7 @@ class CmdAjaxTest extends BaseAjaxTest
 
     public function testSave()
     {
-        $this->connectAdAdmin();
+        $this->connectAsAdmin();
 
         $cmd4 = new Cmd();
         $cmd4->setName('Save test');
@@ -242,7 +242,7 @@ class CmdAjaxTest extends BaseAjaxTest
 
     public function testMultiSave()
     {
-        $this->connectAdAdmin();
+        $this->connectAsAdmin();
 
         $cmd4 = new Cmd();
         $cmd4->setName('Save test');

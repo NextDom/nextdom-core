@@ -68,7 +68,7 @@
             <directory>../phpunit_tests/Controllers</directory>
         </testsuite>
         <testsuite name="current">
-            <directory>../phpunit_tests/IndexTest.php</directory>
+            <directory>../phpunit_tests/Ajax/UserAjaxTest.php</directory>
         </testsuite>
     </testsuites>
     <filter>

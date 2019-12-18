@@ -18,6 +18,7 @@
 namespace NextDom\Ajax;
 
 use NextDom\Enums\AjaxParams;
+use NextDom\Enums\NextDomObj;
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AjaxHelper;
@@ -49,49 +50,6 @@ class NextDomAjax extends BaseAjax
     protected $MUST_BE_CONNECTED = true;
     protected $CHECK_AJAX_TOKEN = false;
 
-    public function getInfoApplication()
-    {
-        $result = [];
-        $result['widget_margin'] = ConfigManager::byKey('widget::margin');
-        $result['serverDatetime'] = Utils::getmicrotime();
-        if (!isConnect()) {
-            $result['connected'] = false;
-            $this->ajax->success($result);
-        }
-
-        $result['user_id'] = UserManager::getStoredUser()->getId();
-        $result['nextdom_token'] = AjaxHelper::getToken();
-        @session_start();
-        $currentUser = UserManager::getStoredUser();
-        $currentUser->refresh();
-        @session_write_close();
-
-        $result['userProfils'] = $currentUser->getOptions();
-        $result['userProfils']['defaultMobileViewName'] = __('Vue');
-        if ($currentUser->getOptions('defaultDesktopView') != '') {
-            $view = ViewManager::byId($currentUser->getOptions('defaultDesktopView'));
-            if (is_object($view)) {
-                $result['userProfils']['defaultMobileViewName'] = $view->getName();
-            }
-        }
-        $result['userProfils']['defaultMobileObjectName'] = __('Objet');
-        if ($currentUser->getOptions('defaultDashboardObject') != '') {
-            $resultObject = JeeObjectManager::byId($currentUser->getOptions('defaultDashboardObject'));
-            if (is_object($resultObject)) {
-                $result['userProfils']['defaultMobileObjectName'] = $resultObject->getName();
-            }
-        }
-
-        $result['plugins'] = [];
-        foreach (PluginManager::listPlugin(true) as $plugin) {
-            if ($plugin->getEventJs() == 1) {
-                $result['plugins'][] = Utils::o2a($plugin);
-            }
-        }
-        $result['custom'] = ['js' => false, 'css' => false];
-        $this->ajax->success($result);
-    }
-
     /**
      * Get documentation link
      *
@@ -99,18 +57,15 @@ class NextDomAjax extends BaseAjax
      */
     public function getDocumentationUrl()
     {
+        $documentationUrl = '';
         AuthentificationHelper::isConnectedOrFail();
         $this->ajax->checkToken();
 
-        $pluginId = Utils::init('plugin');
+        $pluginId = Utils::init(AjaxParams::PLUGIN);
         if ($pluginId !== '') {
             $plugin = PluginManager::byId($pluginId);
-            if (is_object($plugin)) {
-                if ($plugin->getDocumentation() !== '') {
-                    $this->ajax->success($plugin->getDocumentation());
-                } else {
-                    $this->ajax->error(__('Ce plugin ne possède pas de documentation'));
-                }
+            if (is_object($plugin) && $plugin->getDocumentation() !== '') {
+                $documentationUrl = $plugin->getDocumentation();
             }
         } else {
             $adminPages = ['api', 'cache', 'network', 'security', 'services', 'realtime', 'commandes', 'eqlogic', 'general', 'links'];
@@ -129,17 +84,22 @@ class NextDomAjax extends BaseAjax
 
             $documentationPage = Utils::init('page');
             if (in_array($documentationPage, $noDocPages)) {
-                $this->ajax->success('https://jeedom.github.io/documentation/');
+                $documentationUrl = 'https://jeedom.github.io/documentation/';
             } else {
                 if (in_array($documentationPage, $adminPages)) {
                     $documentationPage = 'administration';
                 } elseif (array_key_exists($documentationPage, $redirectPage)) {
                     $documentationPage = $redirectPage[$documentationPage];
                 }
-                $this->ajax->success('https://jeedom.github.io/core/' . ConfigManager::byKey('language', 'core', 'fr_FR') . '/' . secureXSS($documentationPage));
+                $documentationUrl = 'https://jeedom.github.io/core/' . ConfigManager::byKey('language', 'core', 'fr_FR') . '/' . secureXSS($documentationPage);
             }
         }
-        throw new CoreException(__('Aucune documentation trouvée'), -1234);
+        if ($documentationUrl !== '') {
+            $this->ajax->success($documentationUrl);
+        }
+        else {
+            $this->ajax->error(__('Aucune documentation'));
+        }
     }
 
     public function addWarnme()
@@ -336,13 +296,11 @@ class NextDomAjax extends BaseAjax
         $events = TimeLineHelper::getTimelineEvent();
         foreach ($events as $event) {
             $info = null;
-            switch ($event['type']) {
-                case 'cmd':
-                    $info = CmdManager::timelineDisplay($event);
-                    break;
-                case 'scenario':
-                    $info = ScenarioManager::timelineDisplay($event);
-                    break;
+            if ($event['type'] === NextDomObj::CMD) {
+                $info = CmdManager::timelineDisplay($event);
+            }
+            elseif ($event['type'] === NextDomObj::SCENARIO) {
+                $info = ScenarioManager::timelineDisplay($event);
             }
             if ($info != null) {
                 $return[] = $info;

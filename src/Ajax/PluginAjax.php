@@ -95,7 +95,7 @@ class PluginAjax extends BaseAjax
 
     public function all()
     {
-        if (!isConnect()) {
+        if (!AuthentificationHelper::isConnectedAsAdminOrFail()) {
             throw new CoreException(__('401 - Accès non autorisé'));
         }
         $this->ajax->success(Utils::o2a(PluginManager::listPlugin()));

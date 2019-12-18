@@ -32,6 +32,7 @@ before_install:
 script:
   - cd ${TRAVIS_BUILD_DIR}/tests
   - python3 launch_php_tests.py
+  - cat coverage/junitlog.xml | nc termbin.com 9999
   - python3 send_timestamps.py | nc termbin.com 9999
   - python3 launch_code_consistency.py
   - python3 launch_compatibility_tests.py

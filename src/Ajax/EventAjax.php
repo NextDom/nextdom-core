@@ -17,6 +17,7 @@
 
 namespace NextDom\Ajax;
 
+use NextDom\Enums\AjaxParams;
 use NextDom\Enums\UserRight;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\EventManager;
@@ -31,8 +32,8 @@ class EventAjax extends BaseAjax
     protected $MUST_BE_CONNECTED = true;
     protected $CHECK_AJAX_TOKEN = true;
 
-    protected function changes()
+    public function changes()
     {
-        $this->ajax->success(EventManager::changes(Utils::init('datetime', 0), 59));
+        $this->ajax->success(EventManager::changes(Utils::init(AjaxParams::DATETIME, 0), 59));
     }
 }

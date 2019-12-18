@@ -16,25 +16,30 @@
  */
 
 use NextDom\Ajax\CmdAjax;
-use NextDom\Ajax\ConfigAjax;
-use NextDom\Ajax\UpdateAjax;
+use NextDom\Ajax\DataStoreAjax;
+use NextDom\Ajax\EventAjax;
+use NextDom\Ajax\LogAjax;
+use NextDom\Ajax\NoteAjax;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\DBHelper;
 use NextDom\Managers\CmdManager;
-use NextDom\Managers\ConfigManager;
+use NextDom\Managers\DataStoreManager;
+use NextDom\Managers\EventManager;
+use NextDom\Managers\NoteManager;
 use NextDom\Model\Entity\Cmd;
+use NextDom\Model\Entity\DataStore;
 
 require_once('BaseAjaxTest.php');
 
-class UpdateAjaxTest extends BaseAjaxTest
+class EventAjaxTest extends BaseAjaxTest
 {
-    /** @var UpdateAjax */
-    private $configAjax = null;
+    /** @var EventAjaxTest */
+    private $eventAjax = null;
 
     public function setUp(): void
     {
-        $this->configAjax = new UpdateAjax();
+        $this->eventAjax = new EventAjax();
     }
 
     public function tearDown(): void
@@ -42,14 +47,16 @@ class UpdateAjaxTest extends BaseAjaxTest
         $this->cleanGetParams();
     }
 
-    public function testAll()
+    public function testChanges()
     {
-        $this->connectAsAdmin();
+        EventManager::add('scenario::update', ['scenario_id' => 1, 'state' => 'fake_state', 'last_launch' => '2019-12-22 18:41:18']);
+        $_GET['datetime'] = strtotime('now') - 2;
         ob_start();
-        $this->configAjax->all();
+        $this->eventAjax->changes();
         $result = ob_get_clean();
         $jsonResult = json_decode($result, true);
         $this->assertEquals('ok', $jsonResult['state']);
-        $this->assertCount(2, $jsonResult['result']);
+        $this->assertEquals('scenario::update', $jsonResult['result']['result'][0]['name']);
+        $this->assertEquals('fake_state', $jsonResult['result']['result'][0]['option']['state']);
     }
 }

@@ -754,4 +754,18 @@ class ScenarioManager
             . '</div>';
         return $return;
     }
+
+    /**
+     * State of the scenario engine
+     *
+     * @return bool True if enabled
+     *
+     * @throws \Exception
+     */
+    public static function isEnabled() {
+        if (ConfigManager::byKey('enableScenario') != 1) {
+            return false;
+        }
+        return true;
+    }
 }

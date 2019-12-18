@@ -18,23 +18,25 @@
 use NextDom\Ajax\CmdAjax;
 use NextDom\Ajax\ConfigAjax;
 use NextDom\Ajax\UpdateAjax;
+use NextDom\Ajax\UserAjax;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\DBHelper;
+use NextDom\Managers\CacheManager;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Model\Entity\Cmd;
 
 require_once('BaseAjaxTest.php');
 
-class UpdateAjaxTest extends BaseAjaxTest
+class UserAjaxTest extends BaseAjaxTest
 {
-    /** @var UpdateAjax */
-    private $configAjax = null;
+    /** @var UserAjax */
+    private $userAjax = null;
 
     public function setUp(): void
     {
-        $this->configAjax = new UpdateAjax();
+        $this->userAjax = new UserAjax();
     }
 
     public function tearDown(): void
@@ -42,14 +44,39 @@ class UpdateAjaxTest extends BaseAjaxTest
         $this->cleanGetParams();
     }
 
-    public function testAll()
+    public function testGetApiKey()
     {
-        $this->connectAsAdmin();
+        $_GET['username'] = 'admin';
+        $_GET['password'] = 'nextdom-test';
+        $_GET['twoFactorCode'] = false;
         ob_start();
-        $this->configAjax->all();
+        $this->userAjax->getApikey();
         $result = ob_get_clean();
         $jsonResult = json_decode($result, true);
         $this->assertEquals('ok', $jsonResult['state']);
-        $this->assertCount(2, $jsonResult['result']);
+        $this->assertEquals('VVZtg2HUxbE4XWStXTVWc2ONs0b0fXtt', $jsonResult['result']);
+    }
+
+    public function testGet()
+    {
+        $this->connectAsAdmin();
+        ob_start();
+        $this->userAjax->get();
+        $result = ob_get_clean();
+        $jsonResult = json_decode($result, true);
+        $this->assertEquals('ok', $jsonResult['state']);
+        $this->assertEquals('fea6ef74405b298a3fc654cfac01a3ed2e4cf010f394c0c555df15f14eed4833424545561c68461fc099843b06140ad4ba5c5694e209d30d10a5eb5b034d6a83', $jsonResult['result']['password']);
+    }
+
+    public function testRemoveBanIp()
+    {
+        CacheManager::set('security::banip', '10.0.0.0');
+        $this->connectAsAdmin();
+        ob_start();
+        $this->userAjax->removeBanIp();
+        $result = ob_get_clean();
+        $jsonResult = json_decode($result, true);
+        $this->assertEquals('ok', $jsonResult['state']);
+        $this->assertEquals('', CacheManager::byKey('security::banip')->getValue());
     }
 }
