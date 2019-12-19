@@ -29,22 +29,7 @@ function gen_css {
     # Build adminlte
     node vendor/node_modules/less/bin/lessc assets/css/compiled/AdminLTE.less assets/css/builded/AdminLTE.scss
     # 
-    cat assets/icon/animal/style.css \
-		assets/icon/divers/style.css \
-		assets/icon/fashion/style.css \
-		assets/icon/loisir/style.css \
-		assets/icon/maison/style.css \
-		assets/icon/meteo/style.css \
-		assets/icon/nature/style.css \
-		assets/icon/nextdom/style.css \
-		assets/icon/nextdom2/style.css \
-		assets/icon/nextdomapp/style.css \
-		assets/icon/nourriture/style.css \
-		assets/icon/personne/style.css \
-		assets/icon/securite/style.css \
-		assets/icon/techno/style.css \
-		assets/icon/transport/style.css \
-		vendor/node_modules/bootstrap/dist/css/bootstrap.css \
+    cat vendor/node_modules/bootstrap/dist/css/bootstrap.css \
 		vendor/node_modules/roboto-fontface/css/roboto/roboto-fontface.css \
 		vendor/node_modules/jquery-ui/themes/base/core.css \
 		vendor/node_modules/jquery-ui/themes/base/accordion.css \
@@ -78,8 +63,23 @@ function gen_css {
 		vendor/node_modules/@fortawesome/fontawesome-free/css/all.css \
 		vendor/node_modules/jquery-datetimepicker/jquery.datetimepicker.css \
 		vendor/node_modules/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css \
-		> assets/css/builded/vendors.scss
-		
+        assets/icon/animal/style.css \
+		assets/icon/divers/style.css \
+		assets/icon/fashion/style.css \
+		assets/icon/loisir/style.css \
+		assets/icon/maison/style.css \
+		assets/icon/meteo/style.css \
+		assets/icon/nature/style.css \
+		assets/icon/nextdom/style.css \
+		assets/icon/nextdom2/style.css \
+		assets/icon/nextdomapp/style.css \
+		assets/icon/nourriture/style.css \
+		assets/icon/personne/style.css \
+		assets/icon/securite/style.css \
+		assets/icon/techno/style.css \
+		assets/icon/transport/style.css \
+        > assets/css/builded/vendors.scss
+
     if [ $# -eq 0 ]; then
         COMPRESS="--style compressed"
     fi
