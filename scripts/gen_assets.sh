@@ -59,8 +59,8 @@ function gen_css {
 		vendor/node_modules/tablesorter/dist/css/theme.bootstrap.min.css \
 		vendor/node_modules/codemirror/lib/codemirror.css \
 		vendor/node_modules/izitoast/dist/css/iziToast.css \
-		vendor/node_modules/font-awesome/css/font-awesome.css \
 		vendor/node_modules/@fortawesome/fontawesome-free/css/all.css \
+		vendor/node_modules/font-awesome/css/font-awesome.css \
 		vendor/node_modules/jquery-datetimepicker/jquery.datetimepicker.css \
 		vendor/node_modules/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css \
         assets/icon/animal/style.css \
