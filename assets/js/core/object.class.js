@@ -245,11 +245,5 @@ nextdom.object.getImgPath = function (queryParams) {
 
 
 nextdom.object.removeImage = function (queryParams) {
-  var paramsRequired = ['id'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Object', 'removeImage');
-    ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('Object', 'removeImage', queryParams, ['id']);
 };

@@ -359,13 +359,7 @@ nextdom.cmd.byHumanName = function (queryParams) {
 };
 
 nextdom.cmd.usedBy = function (queryParams) {
-  var paramsRequired = ['id'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Cmd', 'usedBy');
-    ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('Cmd', 'usedBy', queryParams, ['id']);
 };
 
 nextdom.cmd.changeType = function (_cmd, _subType) {

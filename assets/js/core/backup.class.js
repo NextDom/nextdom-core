@@ -19,53 +19,26 @@ nextdom.backup = function () {
 };
 
 nextdom.backup.backup = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'NextDom', 'backup');
-  $.ajax(ajaxParams);
+  nextdom.private.simpleAjax('Repo', 'backup', queryParams);
 };
 
 
 nextdom.backup.restoreLocal = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'NextDom', 'restore');
-  ajaxParams.data['backup'] = queryParams.backup;
-  $.ajax(ajaxParams);
+  nextdom.private.simpleAjaxWithRequiredParams('Repo', 'restore', queryParams, ['backup']);
 };
 
 nextdom.backup.remove = function (queryParams) {
-  var paramsRequired = ['backup'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'NextDom', 'removeBackup');
-    ajaxParams.data['backup'] = queryParams.backup;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('Repo', 'removeBackup', queryParams, ['backup']);
 };
 
 nextdom.backup.uploadCloud = function (queryParams) {
-  var paramsRequired = ['backup'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Repo', 'uploadCloud');
-    ajaxParams.data['backup'] = queryParams.backup;
-    ajaxParams.data['repo'] = queryParams.repo;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('Repo', 'uploadCloud', queryParams, ['backup', 'repo']);
 };
 
 nextdom.backup.restoreCloud = function (queryParams) {
-  var paramsRequired = ['backup', 'repo'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Repo', 'restoreCloud');
-    ajaxParams.data['backup'] = queryParams.backup;
-    ajaxParams.data['repo'] = queryParams.repo;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('Repo', 'restoreCloud', queryParams, ['backup', 'repo']);
 };
 
 nextdom.backup.list = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'NextDom', 'listBackup');
-  $.ajax(ajaxParams);
+  nextdom.private.simpleAjax('Repo', 'listBackup', queryParams);
 };

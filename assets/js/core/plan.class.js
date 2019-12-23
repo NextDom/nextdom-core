@@ -57,13 +57,7 @@ nextdom.plan.save = function (queryParams) {
 
 
 nextdom.plan.byId = function (queryParams) {
-  var paramsRequired = ['id'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Plan', 'get');
-    ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('Plan', 'get', queryParams, ['id']);
 };
 
 nextdom.plan.getObjectPlan = function (queryParams) {
@@ -111,13 +105,7 @@ nextdom.plan.byPlanHeader = function (queryParams) {
 };
 
 nextdom.plan.removeImageHeader = function (queryParams) {
-  var paramsRequired = ['planHeader_id'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Plan', 'removeImageHeader');
-    ajaxParams.data['id'] = queryParams.planHeader_id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('Plan', 'removeImageHeader', queryParams, ['planHeader_id']);
 };
 
 nextdom.plan.saveHeader = function (queryParams) {
@@ -131,35 +119,15 @@ nextdom.plan.saveHeader = function (queryParams) {
 };
 
 nextdom.plan.copyHeader = function (queryParams) {
-  var paramsRequired = ['id', 'name'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Plan', 'copyPlanHeader');
-    ajaxParams.data['id'] = queryParams.id;
-    ajaxParams.data['name'] = queryParams.name;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('Plan', 'copyPlanHeader', queryParams, ['id', 'name']);
 };
 
 nextdom.plan.removeHeader = function (queryParams) {
-  var paramsRequired = ['id'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Plan', 'removePlanHeader');
-    ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('Plan', 'removePlanHeader', queryParams, ['id']);
 };
 
 nextdom.plan.getHeader = function (queryParams) {
-  var paramsRequired = ['id'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Plan', 'getPlanHeader');
-    ajaxParams.data['id'] = queryParams.id;
-    ajaxParams.data['code'] = queryParams.code;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('Plan', 'getPlanHeader', queryParams, ['id', 'code']);
 };
 
 nextdom.plan.allHeader = function (queryParams) {

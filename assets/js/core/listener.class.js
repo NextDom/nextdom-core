@@ -20,9 +20,7 @@ nextdom.listener = function () {
 
 
 nextdom.listener.all = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'Listener', 'all');
-  $.ajax(ajaxParams);
+  nextdom.private.simpleAjax('Listener', 'all');
 };
 
 nextdom.listener.save = function (queryParams) {

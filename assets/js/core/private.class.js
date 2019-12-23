@@ -305,6 +305,15 @@ nextdom.private.checkParamsValue = function (queryParams) {
   }
 };
 
+/**
+ * Check required params and ajax query validity
+ *
+ * @param queryParams
+ * @param requiredParams
+ * @param specificParams
+ *
+ * @returns {boolean}
+ */
 nextdom.private.isValidQuery = function (queryParams, requiredParams, specificParams) {
   if (specificParams === undefined) {
     specificParams = {};
@@ -316,4 +325,37 @@ nextdom.private.isValidQuery = function (queryParams, requiredParams, specificPa
     return false;
   }
   return true;
+};
+
+/**
+ * Start a basic Ajax query
+ *
+ * @param target
+ * @param action
+ * @param queryParams
+ */
+nextdom.private.simpleAjax = function(target, action, queryParams) {
+  var mergedParams = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
+  var ajaxParams = nextdom.private.getAjaxParams(mergedParams, target, action);
+  $.ajax(ajaxParams);
+};
+
+/**
+ * Start a basic Ajax query with simple params
+ * @param target
+ * @param action
+ * @param queryParams
+ * @param requiredParams
+ */
+nextdom.private.simpleAjaxWithRequiredParams = function(target, action, queryParams, requiredParams) {
+  if (nextdom.private.isValidQuery(queryParams, requiredParams)) {
+    var mergedParams = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
+    var ajaxParams = nextdom.private.getAjaxParams(mergedParams, target, action);
+    // Add required params to the ajax data
+    for (var requiredParamsIndex in requiredParams) {
+      var requiredParamsKey = requiredParams[requiredParamsIndex];
+      ajaxParams[requiredParamsKey] = queryParams[requiredParamsKey];
+    }
+    $.ajax(ajaxParams);
+  }
 };

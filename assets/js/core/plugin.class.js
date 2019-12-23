@@ -40,24 +40,11 @@ nextdom.plugin.all = function (queryParams) {
 };
 
 nextdom.plugin.toggle = function (queryParams) {
-  var paramsRequired = ['id', 'state'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Plugin', 'toggle');
-    ajaxParams.data['id'] = queryParams.id;
-    ajaxParams.data['state'] = queryParams.state;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('Plugin', 'toggle', queryParams, ['id', 'state']);
 };
 
 nextdom.plugin.get = function (queryParams) {
-  var paramsRequired = ['id'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Plugin', 'getConf');
-    ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('Plugin', 'getConf', queryParams, ['id']);
 };
 
 nextdom.plugin.getDependancyInfo = function (queryParams) {
@@ -74,13 +61,7 @@ nextdom.plugin.getDependancyInfo = function (queryParams) {
 };
 
 nextdom.plugin.dependancyInstall = function (queryParams) {
-  var paramsRequired = ['id'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Plugin', 'dependancyInstall');
-    ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('Plugin', 'dependancyInstall', queryParams, ['id']);
 };
 
 nextdom.plugin.getDeamonInfo = function (queryParams) {
@@ -109,22 +90,9 @@ nextdom.plugin.deamonStart = function (queryParams) {
 };
 
 nextdom.plugin.deamonStop = function (queryParams) {
-  var paramsRequired = ['id'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Plugin', 'deamonStop');
-    ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('Plugin', 'deamonStop', queryParams, ['id']);
 };
 
 nextdom.plugin.deamonChangeAutoMode = function (queryParams) {
-  var paramsRequired = ['id', 'mode'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Plugin', 'deamonChangeAutoMode');
-    ajaxParams.data['id'] = queryParams.id;
-    ajaxParams.data['mode'] = queryParams.mode;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('Plugin', 'deamonChangeAutoMode', queryParams, ['id', 'mode']);
 };

@@ -27,47 +27,23 @@ nextdom.update.doAll = function (queryParams) {
 };
 
 nextdom.update.do = function (queryParams) {
-  var paramsRequired = ['id'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Update', 'update');
-    ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('Update', 'update', queryParams, ['id']);
 };
 
 nextdom.update.remove = function (queryParams) {
-  var paramsRequired = ['id'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Update', 'remove');
-    ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('Update', 'remove', queryParams, ['id']);
 };
 
 nextdom.update.checkAll = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'Update', 'checkAllUpdate');
-  $.ajax(ajaxParams);
+  nextdom.private.simpleAjax('Update', 'checkAllUpdate', queryParams);
 };
 
 nextdom.update.check = function (queryParams) {
-  var paramsRequired = ['id'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Update', 'checkUpdate');
-    ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('Update', 'checkUpdate', queryParams, ['id']);
 };
 
 nextdom.update.get = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'Update', 'all');
-  ajaxParams.data['action'] = 'all';
-  $.ajax(ajaxParams);
+  nextdom.private.simpleAjax('Update', 'all', queryParams);
 };
 
 nextdom.update.save = function (queryParams) {
