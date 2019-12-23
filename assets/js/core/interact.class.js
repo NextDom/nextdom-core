@@ -19,24 +19,12 @@ nextdom.interact = function () {
 };
 
 nextdom.interact.remove = function (queryParams) {
-  var paramsRequired = ['id'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Interact', 'remove');
-    ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('Interact', 'remove', queryParams, ['id']);
 };
 
 
 nextdom.interact.get = function (queryParams) {
-  var paramsRequired = ['id'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Interact', 'byId');
-    ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('Interact', 'byId', queryParams, ['id']);
 };
 
 nextdom.interact.save = function (queryParams) {
@@ -50,17 +38,9 @@ nextdom.interact.save = function (queryParams) {
 };
 
 nextdom.interact.regenerateInteract = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'Interact', 'regenerateInteract');
-  $.ajax(ajaxParams);
+  nextdom.private.simpleAjax('Interact', 'regenerateInteract', queryParams);
 };
 
 nextdom.interact.execute = function (queryParams) {
-  var paramsRequired = ['query'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Interact', 'execute');
-    ajaxParams.data['query'] = queryParams.query;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('Interact', 'execute', queryParams, ['query']);
 };

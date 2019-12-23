@@ -18,23 +18,11 @@ nextdom.note = function () {
 };
 
 nextdom.note.remove = function (queryParams) {
-  var paramsRequired = ['id'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Note', 'remove');
-    ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('Note', 'remove', queryParams, ['id']);
 };
 
 nextdom.note.byId = function (queryParams) {
-  var paramsRequired = ['id'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Note', 'byId');
-    ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('Note', 'byId', queryParams, ['id']);
 };
 
 nextdom.note.save = function (queryParams) {
@@ -48,7 +36,5 @@ nextdom.note.save = function (queryParams) {
 };
 
 nextdom.note.all = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'Note', 'all');
-  $.ajax(ajaxParams);
+  nextdom.private.simpleAjax('Note', 'all', queryParams);
 };

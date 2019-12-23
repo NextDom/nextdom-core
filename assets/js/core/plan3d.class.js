@@ -44,13 +44,7 @@ nextdom.plan3d.save = function (queryParams) {
 };
 
 nextdom.plan3d.byId = function (queryParams) {
-  var paramsRequired = ['id'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Plan3d', 'get');
-    ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('Plan3d', 'get', queryParams, ['id']);
 };
 
 nextdom.plan3d.byName = function (queryParams) {
@@ -66,13 +60,7 @@ nextdom.plan3d.byName = function (queryParams) {
 
 
 nextdom.plan3d.byplan3dHeader = function (queryParams) {
-  var paramsRequired = ['plan3dHeader_id'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Plan3d', 'plan3dHeader');
-    ajaxParams.data['plan3dHeader_id'] = queryParams.plan3dHeader_id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('Plan3d', 'plan3dHeader', queryParams, ['plan3dHeader_id']);
 };
 
 nextdom.plan3d.saveHeader = function (queryParams) {
@@ -86,24 +74,11 @@ nextdom.plan3d.saveHeader = function (queryParams) {
 };
 
 nextdom.plan3d.removeHeader = function (queryParams) {
-  var paramsRequired = ['id'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Plan3d', 'removeplan3dHeader');
-    ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('Plan3d', 'removeplan3dHeader', queryParams, ['id']);
 };
 
 nextdom.plan3d.getHeader = function (queryParams) {
-  var paramsRequired = ['id'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Plan3d', 'getplan3dHeader');
-    ajaxParams.data['id'] = queryParams.id;
-    ajaxParams.data['code'] = queryParams.code;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('Plan3d', 'getplan3dHeader', queryParams, ['id', 'code']);
 };
 
 nextdom.plan3d.allHeader = function (queryParams) {

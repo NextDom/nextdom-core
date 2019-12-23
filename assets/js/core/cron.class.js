@@ -30,9 +30,7 @@ nextdom.cron.setState = function (queryParams) {
 
 
 nextdom.cron.all = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'Cron', 'all');
-  $.ajax(ajaxParams);
+  nextdom.private.simpleAjax('Cron', 'all', queryParams);
 };
 
 nextdom.cron.save = function (queryParams) {

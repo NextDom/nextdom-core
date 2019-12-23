@@ -28,13 +28,7 @@ nextdom.message.all = function (queryParams) {
 };
 
 nextdom.message.remove = function (queryParams) {
-  var paramsRequired = ['id'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Message', 'removeMessage');
-    ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('Message', 'removeMessage', queryParams, ['id']);
 };
 
 nextdom.message.clear = function (queryParams) {

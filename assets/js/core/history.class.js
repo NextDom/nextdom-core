@@ -41,14 +41,7 @@ nextdom.history.get = function (queryParams) {
 };
 
 nextdom.history.copyHistoryToCmd = function (queryParams) {
-  var paramsRequired = ['source_id', 'target_id'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Cmd', 'copyHistoryToCmd');
-    ajaxParams.data['source_id'] = queryParams.source_id;
-    ajaxParams.data['target_id'] = queryParams.target_id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('Cmd', 'copyHistoryToCmd', queryParams, ['source_id', 'target_id']);
 };
 
 nextdom.history.drawChart = function (queryParams) {

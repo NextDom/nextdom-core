@@ -105,13 +105,7 @@ nextdom.view.handleViewAjax = function (queryParams) {
 
 
 nextdom.view.remove = function (queryParams) {
-  var paramsRequired = ['id'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'View', 'remove');
-    ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('View', 'remove', queryParams, ['id']);
 };
 
 
@@ -127,13 +121,7 @@ nextdom.view.save = function (queryParams) {
 };
 
 nextdom.view.get = function (queryParams) {
-  var paramsRequired = ['id'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'View', 'get');
-    ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('View', 'get', queryParams, ['id']);
 };
 
 nextdom.view.setEqLogicOrder = function (queryParams) {
@@ -156,13 +144,6 @@ nextdom.view.setOrder = function (queryParams) {
   }
 };
 
-
 nextdom.view.removeImage = function (queryParams) {
-  var paramsRequired = ['id'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'View', 'removeImage');
-    ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('View', 'removeImage', queryParams, ['id']);
 };

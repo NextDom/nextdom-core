@@ -27,13 +27,7 @@ nextdom.user.all = function (queryParams) {
 };
 
 nextdom.user.remove = function (queryParams) {
-  var paramsRequired = ['id'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'User', 'remove');
-    ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('User', 'remove', queryParams, ['id']);
 };
 
 nextdom.user.save = function (queryParams) {
@@ -101,13 +95,7 @@ nextdom.user.validateTwoFactorCode = function (queryParams) {
 };
 
 nextdom.user.removeTwoFactorCode = function (queryParams) {
-  var paramsRequired = ['id'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'User', 'removeTwoFactorCode');
-    ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('User', 'removeTwoFactorCode', queryParams, ['id']);
 };
 
 nextdom.user.useTwoFactorAuthentification = function (queryParams) {
@@ -136,18 +124,12 @@ nextdom.user.login = function (queryParams) {
   }
 };
 
-
 nextdom.user.refresh = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'User', 'refresh');
-  $.ajax(ajaxParams);
+  nextdom.private.simpleAjax('User', 'refresh', queryParams);
 };
 
-
 nextdom.user.removeBanIp = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'User', 'removeBanIp');
-  $.ajax(ajaxParams);
+  nextdom.private.simpleAjax('User', 'removeBanIp', queryParams);
 };
 
 nextdom.user.removeRegisterDevice = function (queryParams) {
@@ -159,21 +141,9 @@ nextdom.user.removeRegisterDevice = function (queryParams) {
 };
 
 nextdom.user.deleteSession = function (queryParams) {
-  var paramsRequired = ['id'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'User', 'deleteSession');
-    ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('User', 'deleteSession', queryParams, ['id']);
 };
 
 nextdom.user.supportAccess = function (queryParams) {
-  var paramsRequired = ['enable'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'User', 'supportAccess');
-    ajaxParams.data['enable'] = queryParams.enable;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('User', 'supportAccess', queryParams, ['enable']);
 };

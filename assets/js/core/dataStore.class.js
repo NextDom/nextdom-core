@@ -36,15 +36,7 @@ nextdom.dataStore.save = function (queryParams) {
 };
 
 nextdom.dataStore.all = function (queryParams) {
-  var paramsRequired = ['type', 'usedBy'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'DataStore', 'all');
-    ajaxParams.data['type'] = queryParams.type;
-    ajaxParams.data['usedBy'] = queryParams.usedBy;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('DataStore', 'all', queryParams, ['type', 'usedBy']);
 };
 
 nextdom.dataStore.getSelectModal = function (_options, callback) {
@@ -86,12 +78,5 @@ nextdom.dataStore.getSelectModal = function (_options, callback) {
 
 
 nextdom.dataStore.remove = function (queryParams) {
-  var paramsRequired = ['id'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'DataStore', 'remove');
-    ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.simpleAjaxWithRequiredParams('DataStore', 'remove', queryParams, ['id']);
 };
