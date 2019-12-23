@@ -20,9 +20,8 @@ nextdom.cron = function () {
 
 nextdom.cron.setState = function (queryParams) {
   var paramsRequired = ['id', 'state'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
     var ajaxParams = nextdom.private.getAjaxParams(params, 'Cron', queryParams.state);
     ajaxParams.data['id'] = queryParams.id;
     $.ajax(ajaxParams);
@@ -31,16 +30,15 @@ nextdom.cron.setState = function (queryParams) {
 
 
 nextdom.cron.all = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
+  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
   var ajaxParams = nextdom.private.getAjaxParams(params, 'Cron', 'all');
   $.ajax(ajaxParams);
 };
 
 nextdom.cron.save = function (queryParams) {
   var paramsRequired = ['crons'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
     var ajaxParams = nextdom.private.getAjaxParams(params, 'Cron', 'save');
     ajaxParams.data['crons'] = json_encode(queryParams.crons);
     $.ajax(ajaxParams);

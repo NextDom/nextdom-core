@@ -20,19 +20,19 @@ nextdom.cache = function () {
 
 
 nextdom.cache.clean = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
+  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
   var ajaxParams = nextdom.private.getAjaxParams(params, 'Cache', 'clean');
   $.ajax(ajaxParams);
 };
 
 nextdom.cache.flush = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
+  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
   var ajaxParams = nextdom.private.getAjaxParams(params, 'Cache', 'flush');
   $.ajax(ajaxParams);
 };
 
 nextdom.cache.stats = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
+  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
   var ajaxParams = nextdom.private.getAjaxParams(params, 'Cache', 'stats');
   $.ajax(ajaxParams);
 };

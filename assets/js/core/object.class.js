@@ -75,9 +75,8 @@ nextdom.object.all = function (queryParams) {
 
 nextdom.object.toHtml = function (queryParams) {
   var paramsRequired = ['id'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
     var ajaxParams = nextdom.private.getAjaxParams(params, 'Object', 'toHtml');
     ajaxParams.data['id'] = ($.isArray(queryParams.id)) ? json_encode(queryParams.id) : queryParams.id;
     ajaxParams.data['version'] = queryParams.version || 'dashboard';
@@ -159,9 +158,8 @@ nextdom.object.byId = function (queryParams) {
 
 nextdom.object.setOrder = function (queryParams) {
   var paramsRequired = ['objects'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
     var ajaxParams = nextdom.private.getAjaxParams(params, 'Object', 'setOrder');
     ajaxParams.data['objects'] = json_encode(queryParams.objects);
     $.ajax(ajaxParams);
@@ -248,9 +246,8 @@ nextdom.object.getImgPath = function (queryParams) {
 
 nextdom.object.removeImage = function (queryParams) {
   var paramsRequired = ['id'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
     var ajaxParams = nextdom.private.getAjaxParams(params, 'Object', 'removeImage');
     ajaxParams.data['id'] = queryParams.id;
     $.ajax(ajaxParams);

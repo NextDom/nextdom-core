@@ -216,7 +216,7 @@ nextdom.getConfiguration = function (queryParams) {
 };
 
 nextdom.haltSystem = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
+  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
   var ajaxParams = nextdom.private.getAjaxParams(params, 'Nextdom', 'haltSystem');
   $.ajax(ajaxParams);
 };
@@ -228,7 +228,7 @@ nextdom.ssh = function (queryParams) {
     command = queryParams;
     queryParams = {};
   }
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
+  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
   var ajaxParams = nextdom.private.getAjaxParams(params, 'Nextdom', 'ssh');
   ajaxParams.data['command'] = command;
   $.ajax(ajaxParams);
@@ -242,7 +242,7 @@ nextdom.db = function (queryParams) {
     command = queryParams;
     queryParams = {};
   }
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
+  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
   var ajaxParams = nextdom.private.getAjaxParams(params, 'Nextdom', 'db');
   ajaxParams.data['command'] = command;
   $.ajax(ajaxParams);
@@ -251,19 +251,19 @@ nextdom.db = function (queryParams) {
 
 
 nextdom.rebootSystem = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
+  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
   var ajaxParams = nextdom.private.getAjaxParams(params, 'Nextdom', 'rebootSystem');
   $.ajax(ajaxParams);
 };
 
 nextdom.health = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
+  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
   var ajaxParams = nextdom.private.getAjaxParams(params, 'Nextdom', 'health');
   $.ajax(ajaxParams);
 };
 
 nextdom.forceSyncHour = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
+  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
   var ajaxParams = nextdom.private.getAjaxParams(params, 'Nextdom', 'forceSyncHour');
   $.ajax(ajaxParams);
 };
@@ -343,7 +343,7 @@ nextdom.getSelectActionModal = function (_options, _callback) {
 };
 
 nextdom.getGraphData = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
+  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
   var ajaxParams = nextdom.private.getAjaxParams(params, 'Nextdom', 'getGraphData');
   ajaxParams.data['filter_type'] = params.filter_type || null;
   ajaxParams.data['filter_id'] = params.filter_id || null;
@@ -352,7 +352,7 @@ nextdom.getGraphData = function (queryParams) {
 
 
 nextdom.getDocumentationUrl = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
+  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
   var ajaxParams = nextdom.private.getAjaxParams(params, 'Nextdom', 'getDocumentationUrl');
   ajaxParams.data['plugin'] = params.plugin || null;
   ajaxParams.data['page'] = params.page || null;
@@ -361,7 +361,7 @@ nextdom.getDocumentationUrl = function (queryParams) {
 
 
 nextdom.addWarnme = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
+  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
   var ajaxParams = nextdom.private.getAjaxParams(params, 'Nextdom', 'addWarnme');
   ajaxParams.data['cmd_id'] = params.cmd_id;
   ajaxParams.data['test'] = params.test;
@@ -370,13 +370,13 @@ nextdom.addWarnme = function (queryParams) {
 
 
 nextdom.getTimelineEvents = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
+  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
   var ajaxParams = nextdom.private.getAjaxParams(params, 'Nextdom', 'getTimelineEvents');
   $.ajax(ajaxParams);
 };
 
 nextdom.removeTimelineEvents = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
+  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
   var ajaxParams = nextdom.private.getAjaxParams(params, 'Nextdom', 'removeTimelineEvents');
   $.ajax(ajaxParams);
 };
@@ -384,9 +384,8 @@ nextdom.removeTimelineEvents = function (queryParams) {
 
 nextdom.getFileFolder = function (queryParams) {
   var paramsRequired = ['type', 'path'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
     var ajaxParams = nextdom.private.getAjaxParams(params, 'Nextdom', 'getFileFolder');
     ajaxParams.data['type'] = queryParams.type;
     ajaxParams.data['path'] = queryParams.path;
@@ -396,9 +395,8 @@ nextdom.getFileFolder = function (queryParams) {
 
 nextdom.getFileContent = function (queryParams) {
   var paramsRequired = ['path'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
     var ajaxParams = nextdom.private.getAjaxParams(params, 'Nextdom', 'getFileContent');
     ajaxParams.data['path'] = queryParams.path;
     $.ajax(ajaxParams);
@@ -407,9 +405,8 @@ nextdom.getFileContent = function (queryParams) {
 
 nextdom.setFileContent = function (queryParams) {
   var paramsRequired = ['path', 'content'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
     var ajaxParams = nextdom.private.getAjaxParams(params, 'Nextdom', 'setFileContent');
     ajaxParams.data['path'] = queryParams.path;
     ajaxParams.data['content'] = queryParams.content;
@@ -420,9 +417,8 @@ nextdom.setFileContent = function (queryParams) {
 
 nextdom.deleteFile = function (queryParams) {
   var paramsRequired = ['path'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
     var ajaxParams = nextdom.private.getAjaxParams(params, 'Nextdom', 'deleteFile');
     ajaxParams.data['path'] = queryParams.path;
     $.ajax(ajaxParams);
@@ -431,9 +427,8 @@ nextdom.deleteFile = function (queryParams) {
 
 nextdom.createFile = function (queryParams) {
   var paramsRequired = ['path', 'name'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
     var ajaxParams = nextdom.private.getAjaxParams(params, 'Nextdom', 'createFile');
     ajaxParams.data['path'] = queryParams.path;
     ajaxParams.data['name'] = queryParams.name;
@@ -441,21 +436,20 @@ nextdom.createFile = function (queryParams) {
   }
 };
 
-
 nextdom.emptyRemoveHistory = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
+  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
   var ajaxParams = nextdom.private.getAjaxParams(params, 'Nextdom', 'emptyRemoveHistory');
   $.ajax(ajaxParams);
 };
 
 nextdom.cleanFileSystemRight = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
+  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
   var ajaxParams = nextdom.private.getAjaxParams(params, 'Nextdom', 'cleanFileSystemRight');
   $.ajax(ajaxParams);
 };
 
 nextdom.consistency = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
+  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
   var ajaxParams = nextdom.private.getAjaxParams(params, 'Nextdom', 'consistency');
   $.ajax(ajaxParams);
 };

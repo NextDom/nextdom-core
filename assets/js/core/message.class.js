@@ -21,7 +21,7 @@ nextdom.message = function () {
 nextdom.message.cache = Array();
 
 nextdom.message.all = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
+  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
   var ajaxParams = nextdom.private.getAjaxParams(params, 'Message', 'all');
   ajaxParams.data['plugin'] = queryParams.plugin || '';
   $.ajax(ajaxParams);
@@ -29,9 +29,8 @@ nextdom.message.all = function (queryParams) {
 
 nextdom.message.remove = function (queryParams) {
   var paramsRequired = ['id'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
     var ajaxParams = nextdom.private.getAjaxParams(params, 'Message', 'removeMessage');
     ajaxParams.data['id'] = queryParams.id;
     $.ajax(ajaxParams);
@@ -39,7 +38,7 @@ nextdom.message.remove = function (queryParams) {
 };
 
 nextdom.message.clear = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
+  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
   var ajaxParams = nextdom.private.getAjaxParams(params, 'Message', 'clearMessage');
   ajaxParams.data['plugin'] = queryParams.plugin || '';
   $.ajax(ajaxParams);
