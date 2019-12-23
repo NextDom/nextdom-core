@@ -20,7 +20,7 @@ nextdom.update = function () {
 
 
 nextdom.update.doAll = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
+  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
   var ajaxParams = nextdom.private.getAjaxParams(params, 'Update', 'updateAll');
   ajaxParams.data['options'] = json_encode(queryParams.options) || '';
   $.ajax(ajaxParams);
@@ -28,9 +28,8 @@ nextdom.update.doAll = function (queryParams) {
 
 nextdom.update.do = function (queryParams) {
   var paramsRequired = ['id'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
     var ajaxParams = nextdom.private.getAjaxParams(params, 'Update', 'update');
     ajaxParams.data['id'] = queryParams.id;
     $.ajax(ajaxParams);
@@ -39,9 +38,8 @@ nextdom.update.do = function (queryParams) {
 
 nextdom.update.remove = function (queryParams) {
   var paramsRequired = ['id'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
     var ajaxParams = nextdom.private.getAjaxParams(params, 'Update', 'remove');
     ajaxParams.data['id'] = queryParams.id;
     $.ajax(ajaxParams);
@@ -49,7 +47,7 @@ nextdom.update.remove = function (queryParams) {
 };
 
 nextdom.update.checkAll = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
+  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
   var ajaxParams = nextdom.private.getAjaxParams(params, 'Update', 'checkAllUpdate');
   $.ajax(ajaxParams);
 };
@@ -66,7 +64,7 @@ nextdom.update.check = function (queryParams) {
 };
 
 nextdom.update.get = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
+  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
   var ajaxParams = nextdom.private.getAjaxParams(params, 'Update', 'all');
   ajaxParams.data['action'] = 'all';
   $.ajax(ajaxParams);

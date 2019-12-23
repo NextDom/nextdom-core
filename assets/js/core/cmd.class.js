@@ -261,9 +261,8 @@ nextdom.cmd.refreshValue = function (queryParams) {
 
 nextdom.cmd.toHtml = function (queryParams) {
   var paramsRequired = ['id', 'version'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
     var ajaxParams = nextdom.private.getAjaxParams(params, 'Cmd', 'toHtml');
     ajaxParams.data['id'] = queryParams.id;
     ajaxParams.data['version'] = queryParams.version;
@@ -273,9 +272,8 @@ nextdom.cmd.toHtml = function (queryParams) {
 
 nextdom.cmd.replaceCmd = function (queryParams) {
   var paramsRequired = ['source_id', 'target_id'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
     var ajaxParams = nextdom.private.getAjaxParams(params, 'Cmd', 'replaceCmd');
     ajaxParams.data['source_id'] = queryParams.source_id;
     ajaxParams.data['target_id'] = queryParams.target_id;
@@ -362,9 +360,8 @@ nextdom.cmd.byHumanName = function (queryParams) {
 
 nextdom.cmd.usedBy = function (queryParams) {
   var paramsRequired = ['id'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
     var ajaxParams = nextdom.private.getAjaxParams(params, 'Cmd', 'usedBy');
     ajaxParams.data['id'] = queryParams.id;
     $.ajax(ajaxParams);
@@ -594,9 +591,8 @@ nextdom.cmd.displayActionOption = function (_expression, _options, _callback) {
 
 nextdom.cmd.displayActionsOption = function (queryParams) {
   var paramsRequired = ['params'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
     var ajaxParams = nextdom.private.getAjaxParams(params, 'Scenario', 'actionToHtml');
     ajaxParams.async = queryParams.async || true;
     ajaxParams.data['params'] = json_encode(queryParams.params);
@@ -642,9 +638,8 @@ nextdom.cmd.normalizeName = function (_tagname) {
 
 nextdom.cmd.setOrder = function (queryParams) {
   var paramsRequired = ['cmds'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
     var ajaxParams = nextdom.private.getAjaxParams(params, 'Cmd', 'setOrder');
     ajaxParams.data['cmds'] = json_encode(queryParams.cmds);
     $.ajax(ajaxParams);

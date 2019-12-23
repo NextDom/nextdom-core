@@ -20,9 +20,8 @@ nextdom.config = function () {
 
 nextdom.config.save = function (queryParams) {
   var paramsRequired = ['configuration'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
     var ajaxParams = nextdom.private.getAjaxParams(params, 'Config', 'addKey');
     ajaxParams.data['value'] = json_encode(queryParams.configuration);
     ajaxParams.data['plugin'] = queryParams.plugin || 'core';
@@ -45,9 +44,8 @@ nextdom.config.load = function (queryParams) {
 
 nextdom.config.remove = function (queryParams) {
   var paramsRequired = ['configuration'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
     var ajaxParams = nextdom.private.getAjaxParams(params, 'Config', 'removeKey');
     ajaxParams.data['action'] = 'removeKey';
     ajaxParams.data['key'] = ($.isArray(queryParams.configuration) || $.isPlainObject(queryParams.configuration)) ? json_encode(queryParams.configuration) : queryParams.configuration;

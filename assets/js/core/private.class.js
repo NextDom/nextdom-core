@@ -306,6 +306,9 @@ nextdom.private.checkParamsValue = function (queryParams) {
 };
 
 nextdom.private.isValidQuery = function (queryParams, requiredParams, specificParams) {
+  if (specificParams === undefined) {
+    specificParams = {};
+  }
   try {
     nextdom.private.checkParamsRequired(queryParams, requiredParams);
   } catch (e) {

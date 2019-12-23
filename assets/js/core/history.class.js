@@ -42,9 +42,8 @@ nextdom.history.get = function (queryParams) {
 
 nextdom.history.copyHistoryToCmd = function (queryParams) {
   var paramsRequired = ['source_id', 'target_id'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
     var ajaxParams = nextdom.private.getAjaxParams(params, 'Cmd', 'copyHistoryToCmd');
     ajaxParams.data['source_id'] = queryParams.source_id;
     ajaxParams.data['target_id'] = queryParams.target_id;

@@ -41,9 +41,8 @@ nextdom.plugin.all = function (queryParams) {
 
 nextdom.plugin.toggle = function (queryParams) {
   var paramsRequired = ['id', 'state'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
     var ajaxParams = nextdom.private.getAjaxParams(params, 'Plugin', 'toggle');
     ajaxParams.data['id'] = queryParams.id;
     ajaxParams.data['state'] = queryParams.state;
@@ -53,9 +52,8 @@ nextdom.plugin.toggle = function (queryParams) {
 
 nextdom.plugin.get = function (queryParams) {
   var paramsRequired = ['id'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
     var ajaxParams = nextdom.private.getAjaxParams(params, 'Plugin', 'getConf');
     ajaxParams.data['id'] = queryParams.id;
     $.ajax(ajaxParams);
@@ -77,9 +75,8 @@ nextdom.plugin.getDependancyInfo = function (queryParams) {
 
 nextdom.plugin.dependancyInstall = function (queryParams) {
   var paramsRequired = ['id'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
     var ajaxParams = nextdom.private.getAjaxParams(params, 'Plugin', 'dependancyInstall');
     ajaxParams.data['id'] = queryParams.id;
     $.ajax(ajaxParams);
@@ -101,9 +98,8 @@ nextdom.plugin.getDeamonInfo = function (queryParams) {
 
 nextdom.plugin.deamonStart = function (queryParams) {
   var paramsRequired = ['id'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
     var ajaxParams = nextdom.private.getAjaxParams(params, 'Plugin', 'deamonStart');
     ajaxParams.data['id'] = queryParams.id;
     ajaxParams.data['debug'] = queryParams.debug || 0;
@@ -114,9 +110,8 @@ nextdom.plugin.deamonStart = function (queryParams) {
 
 nextdom.plugin.deamonStop = function (queryParams) {
   var paramsRequired = ['id'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
     var ajaxParams = nextdom.private.getAjaxParams(params, 'Plugin', 'deamonStop');
     ajaxParams.data['id'] = queryParams.id;
     $.ajax(ajaxParams);
@@ -125,9 +120,8 @@ nextdom.plugin.deamonStop = function (queryParams) {
 
 nextdom.plugin.deamonChangeAutoMode = function (queryParams) {
   var paramsRequired = ['id', 'mode'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
     var ajaxParams = nextdom.private.getAjaxParams(params, 'Plugin', 'deamonChangeAutoMode');
     ajaxParams.data['id'] = queryParams.id;
     ajaxParams.data['mode'] = queryParams.mode;

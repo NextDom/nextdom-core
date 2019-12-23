@@ -106,9 +106,8 @@ nextdom.view.handleViewAjax = function (queryParams) {
 
 nextdom.view.remove = function (queryParams) {
   var paramsRequired = ['id'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
     var ajaxParams = nextdom.private.getAjaxParams(params, 'View', 'remove');
     ajaxParams.data['id'] = queryParams.id;
     $.ajax(ajaxParams);
@@ -118,9 +117,8 @@ nextdom.view.remove = function (queryParams) {
 
 nextdom.view.save = function (queryParams) {
   var paramsRequired = ['id', 'view'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
     var ajaxParams = nextdom.private.getAjaxParams(params, 'View', 'save');
     ajaxParams.data['view_id'] = queryParams.id;
     ajaxParams.data['view'] = json_encode(queryParams.view);
@@ -130,9 +128,8 @@ nextdom.view.save = function (queryParams) {
 
 nextdom.view.get = function (queryParams) {
   var paramsRequired = ['id'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
     var ajaxParams = nextdom.private.getAjaxParams(params, 'View', 'get');
     ajaxParams.data['id'] = queryParams.id;
     $.ajax(ajaxParams);
@@ -141,9 +138,8 @@ nextdom.view.get = function (queryParams) {
 
 nextdom.view.setEqLogicOrder = function (queryParams) {
   var paramsRequired = ['eqLogics'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
     var ajaxParams = nextdom.private.getAjaxParams(params, 'View', 'setEqLogicOrder');
     ajaxParams.data['eqLogics'] = json_encode(queryParams.eqLogics);
     $.ajax(ajaxParams);
@@ -152,9 +148,8 @@ nextdom.view.setEqLogicOrder = function (queryParams) {
 
 nextdom.view.setOrder = function (queryParams) {
   var paramsRequired = ['views'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
     var ajaxParams = nextdom.private.getAjaxParams(params, 'View', 'setOrder');
     ajaxParams.data['views'] = json_encode(queryParams.views);
     $.ajax(ajaxParams);
@@ -164,9 +159,8 @@ nextdom.view.setOrder = function (queryParams) {
 
 nextdom.view.removeImage = function (queryParams) {
   var paramsRequired = ['id'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
     var ajaxParams = nextdom.private.getAjaxParams(params, 'View', 'removeImage');
     ajaxParams.data['id'] = queryParams.id;
     $.ajax(ajaxParams);
