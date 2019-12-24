@@ -18,23 +18,17 @@ nextdom.note = function () {
 };
 
 nextdom.note.remove = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Note', 'remove', queryParams, ['id']);
+  nextdom.private.ajax('Note', 'remove', queryParams, ['id']);
 };
 
 nextdom.note.byId = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Note', 'byId', queryParams, ['id']);
+  nextdom.private.ajax('Note', 'byId', queryParams, ['id']);
 };
 
 nextdom.note.save = function (queryParams) {
-  var paramsRequired = ['note'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Note', 'save');
-    ajaxParams.data['note'] = json_encode(queryParams.note);
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('Note', 'save', queryParams, ['note'], true);
 };
 
 nextdom.note.all = function (queryParams) {
-  nextdom.private.simpleAjax('Note', 'all', queryParams);
+  nextdom.private.ajax('Note', 'all', queryParams);
 };

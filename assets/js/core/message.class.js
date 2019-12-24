@@ -14,7 +14,6 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 nextdom.message = function () {
 };
 
@@ -28,7 +27,7 @@ nextdom.message.all = function (queryParams) {
 };
 
 nextdom.message.remove = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Message', 'removeMessage', queryParams, ['id']);
+  nextdom.private.ajax('Message', 'removeMessage', queryParams, ['id']);
 };
 
 nextdom.message.clear = function (queryParams) {
@@ -39,13 +38,5 @@ nextdom.message.clear = function (queryParams) {
 };
 
 nextdom.message.number = function (queryParams) {
-  var paramsRequired = [];
-  var paramsSpecifics = {
-    global: false,
-  };
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Message', 'nbMessage');
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('Message', 'nbMessage', queryParams, false, false, false);
 };

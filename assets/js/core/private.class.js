@@ -6,7 +6,6 @@ var init = function (_param, _default) {
   return (typeof _param == 'number') ? _param : (typeof _param != 'boolean' || _param) && (_param !== false && _param || _default || '');
 };
 
-
 nextdom.private = {
   /**
    * Paramètres par défaut de toutes les fonctions de l'API
@@ -69,7 +68,6 @@ nextdom.private.handleAjaxErrorAPI = function (_request, _status, _error) {
   }
   return {type: 'AJAX', code: code, message: 'Unknown error'};
 };
-
 
 /**
  * Retourne les paramètres AJAX de l'API en fonction des paramètres choisis par l'utilisateur
@@ -183,7 +181,6 @@ nextdom.private.checkParamValue = function (queryParams) {
   }
 };
 
-
 /** Fonction qui permet de vérifier que tous les paramètres obligatoires ont bien été renseignés dans l'objet params
  * Note : chaque fonction doit appeler cette fonction au préalable après avoir créé un string[] composé des paramètres requis.
  * @return {Object} ret Contient les résultats du check
@@ -264,7 +261,6 @@ nextdom.private.checkParamsRequired = function (queryParams, queryParamsRequired
       message: tostring
     };
   }
-  return;
 };
 
 /**
@@ -328,34 +324,48 @@ nextdom.private.isValidQuery = function (queryParams, requiredParams, specificPa
 };
 
 /**
- * Start a basic Ajax query
+ * NextDom ajax query
  *
- * @param target
- * @param action
- * @param queryParams
+ * @param target Ajax target
+ * @param action Action of the target
+ * @param queryParams Parameters of the query
+ * @param requiredParams Required params to check
+ * @param encodeRequired Encode required params at json format
+ * @param global Start query as global query
+ *
+ * @returns {boolean} True on success
  */
-nextdom.private.simpleAjax = function(target, action, queryParams) {
-  var mergedParams = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(mergedParams, target, action);
-  $.ajax(ajaxParams);
-};
-
-/**
- * Start a basic Ajax query with simple params
- * @param target
- * @param action
- * @param queryParams
- * @param requiredParams
- */
-nextdom.private.simpleAjaxWithRequiredParams = function(target, action, queryParams, requiredParams) {
-  if (nextdom.private.isValidQuery(queryParams, requiredParams)) {
-    var mergedParams = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(mergedParams, target, action);
-    // Add required params to the ajax data
-    for (var requiredParamsIndex in requiredParams) {
-      var requiredParamsKey = requiredParams[requiredParamsIndex];
-      ajaxParams[requiredParamsKey] = queryParams[requiredParamsKey];
-    }
-    $.ajax(ajaxParams);
+nextdom.private.ajax = function(target, action, queryParams, requiredParams, encodeRequired, global) {
+  var specificParams = {};
+  // query params optional
+  if (queryParams === undefined) {
+    queryParams = {};
   }
+  queryParams.data = queryParams.data || {};
+  if (encodeRequired === undefined) {
+    encodeRequired = false;
+  }
+  if (global !== undefined) {
+    specificParams = { global: global};
+  }
+  if (requiredParams !== undefined &&
+      requiredParams !== false &&
+      !nextdom.private.isValidQuery(queryParams, requiredParams)) {
+      return false;
+  }
+  var mergedParams = $.extend({}, nextdom.private.defaultqueryParams, specificParams, queryParams || {});
+  var ajaxParams = nextdom.private.getAjaxParams(mergedParams, target, action);
+  // Add required params to the ajax data
+  for (var requiredParamsIndex in requiredParams) {
+    var requiredParamsKey = requiredParams[requiredParamsIndex];
+    if (encodeRequired) {
+      queryParams.data[requiredParamsKey] = json_encode(queryParams[requiredParamsKey]);
+    }
+    else {
+      ajaxParams.data[requiredParamsKey] = queryParams[requiredParamsKey];
+    }
+  }
+  console.log(ajaxParams);
+  $.ajax(ajaxParams);
+  return true;
 };

@@ -14,10 +14,8 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 nextdom.update = function () {
 };
-
 
 nextdom.update.doAll = function (queryParams) {
   var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
@@ -27,55 +25,33 @@ nextdom.update.doAll = function (queryParams) {
 };
 
 nextdom.update.do = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Update', 'update', queryParams, ['id']);
+  nextdom.private.ajax('Update', 'update', queryParams, ['id']);
 };
 
 nextdom.update.remove = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Update', 'remove', queryParams, ['id']);
+  nextdom.private.ajax('Update', 'remove', queryParams, ['id']);
 };
 
 nextdom.update.checkAll = function (queryParams) {
-  nextdom.private.simpleAjax('Update', 'checkAllUpdate', queryParams);
+  nextdom.private.ajax('Update', 'checkAllUpdate', queryParams);
 };
 
 nextdom.update.check = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Update', 'checkUpdate', queryParams, ['id']);
+  nextdom.private.ajax('Update', 'checkUpdate', queryParams, ['id']);
 };
 
 nextdom.update.get = function (queryParams) {
-  nextdom.private.simpleAjax('Update', 'all', queryParams);
+  nextdom.private.ajax('Update', 'all', queryParams);
 };
 
 nextdom.update.save = function (queryParams) {
-  var paramsRequired = ['update'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Update', 'save');
-    ajaxParams.data['update'] = json_encode(queryParams.update);
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('Update', 'save', queryParams, ['update'], true);
 };
 
 nextdom.update.saves = function (queryParams) {
-  var paramsRequired = ['updates'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Update', 'saves');
-    ajaxParams.data['updates'] = json_encode(queryParams.updates);
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('Update', 'saves', queryParams, ['updates'], true);
 };
 
 nextdom.update.number = function (queryParams) {
-  var paramsRequired = [];
-  var paramsSpecifics = {
-    global: false,
-  };
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Update', 'nbUpdate');
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('Update', 'nbUpdate', queryParams, false, false, false);
 };

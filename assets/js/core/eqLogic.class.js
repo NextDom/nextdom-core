@@ -14,7 +14,6 @@
 * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 nextdom.eqLogic = function () {
 };
 
@@ -60,13 +59,7 @@ nextdom.eqLogic.save = function (queryParams) {
 };
 
 nextdom.eqLogic.simpleSave = function (queryParams) {
-  var paramsRequired = ['eqLogic'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'EqLogic', 'simpleSave');
-    ajaxParams.data['eqLogic'] = json_encode(queryParams.eqLogic);
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('EqLogic', 'simpleSave', queryParams, ['eqLogic'], true);
 };
 
 nextdom.eqLogic.remove = function (queryParams) {
@@ -126,7 +119,7 @@ nextdom.eqLogic.print = function (queryParams) {
 };
 
 nextdom.eqLogic.toHtml = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('EqLogic', 'toHtml', queryParams, ['id', 'version']);
+  nextdom.private.ajax('EqLogic', 'toHtml', queryParams, ['id', 'version']);
 };
 
 nextdom.eqLogic.getCmd = function (queryParams) {
@@ -148,7 +141,6 @@ nextdom.eqLogic.getCmd = function (queryParams) {
     $.ajax(ajaxParams);
   }
 };
-
 
 nextdom.eqLogic.byId = function (queryParams) {
   var paramsRequired = ['id'];
@@ -250,7 +242,6 @@ nextdom.eqLogic.refreshValue = function (queryParams) {
     global: false,
     success: function (result) {
       for (var i in result) {
-        var gridstack = false;
         var html = $(result[i].html);
         var eqLogic = eqLogics[i].eqLogic;
         var visible = eqLogic.is(":visible");
@@ -304,25 +295,12 @@ nextdom.eqLogic.refreshValue = function (queryParams) {
   }
 };
 
-
 nextdom.eqLogic.setOrder = function (queryParams) {
-  var paramsRequired = ['eqLogics'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'EqLogic', 'setOrder');
-    ajaxParams.data['eqLogics'] = json_encode(queryParams.eqLogics);
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('EqLogic', 'setOrder', queryParams, ['eqLogics'], true);
 };
 
 nextdom.eqLogic.removes = function (queryParams) {
-  var paramsRequired = ['eqLogics'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'EqLogic', 'removes');
-    ajaxParams.data['eqLogics'] = json_encode(queryParams.eqLogics);
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('EqLogic', 'removes', queryParams, ['eqLogics'], true);
 };
 
 nextdom.eqLogic.setIsVisibles = function (queryParams) {
@@ -347,12 +325,10 @@ nextdom.eqLogic.setIsEnables = function (queryParams) {
   }
 };
 
-
 nextdom.eqLogic.htmlAlert = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('EqLogic', 'htmlAlert', queryParams, ['version']);
+  nextdom.private.ajax('EqLogic', 'htmlAlert', queryParams, ['version']);
 };
 
-
 nextdom.eqLogic.htmlBattery = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('EqLogic', 'htmlBattery', queryParams, ['version']);
+  nextdom.private.ajax('EqLogic', 'htmlBattery', queryParams, ['version']);
 };

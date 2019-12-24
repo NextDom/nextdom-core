@@ -14,7 +14,6 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 nextdom.object = function () {
 };
 
@@ -135,7 +134,6 @@ nextdom.object.save = function (queryParams) {
   }
 };
 
-
 nextdom.object.byId = function (queryParams) {
   var paramsRequired = ['id'];
   var paramsSpecifics = {
@@ -157,15 +155,8 @@ nextdom.object.byId = function (queryParams) {
 };
 
 nextdom.object.setOrder = function (queryParams) {
-  var paramsRequired = ['objects'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Object', 'setOrder');
-    ajaxParams.data['objects'] = json_encode(queryParams.objects);
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('Object', 'setOrder', queryParams, ['objects'], true);
 };
-
 
 nextdom.object.summaryUpdate = function (queryParams) {
   var objects = {};
@@ -232,7 +223,6 @@ nextdom.object.getImgPath = function (queryParams) {
     global: false,
     async: false,
     error: function (data) {
-      return;
     },
     success: function (data) {
       if (!isset(data.img)) {
@@ -243,7 +233,6 @@ nextdom.object.getImgPath = function (queryParams) {
   });
 };
 
-
 nextdom.object.removeImage = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Object', 'removeImage', queryParams, ['id']);
+  nextdom.private.ajax('Object', 'removeImage', queryParams, ['id']);
 };

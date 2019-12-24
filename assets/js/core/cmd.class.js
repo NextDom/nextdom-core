@@ -244,7 +244,7 @@ nextdom.cmd.refreshByEqLogic = function (queryParams) {
       })
     });
   }
-}
+};
 
 nextdom.cmd.refreshValue = function (queryParams) {
   for (var i in queryParams) {
@@ -260,25 +260,11 @@ nextdom.cmd.refreshValue = function (queryParams) {
 };
 
 nextdom.cmd.toHtml = function (queryParams) {
-  var paramsRequired = ['id', 'version'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Cmd', 'toHtml');
-    ajaxParams.data['id'] = queryParams.id;
-    ajaxParams.data['version'] = queryParams.version;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('Cmd', 'toHtml', queryParams, ['id', 'version']);
 };
 
 nextdom.cmd.replaceCmd = function (queryParams) {
-  var paramsRequired = ['source_id', 'target_id'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Cmd', 'replaceCmd');
-    ajaxParams.data['source_id'] = queryParams.source_id;
-    ajaxParams.data['target_id'] = queryParams.target_id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('Cmd', 'replaceCmd', queryParams, ['source_id', 'target_id']);
 };
 
 nextdom.cmd.save = function (queryParams) {
@@ -359,7 +345,7 @@ nextdom.cmd.byHumanName = function (queryParams) {
 };
 
 nextdom.cmd.usedBy = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Cmd', 'usedBy', queryParams, ['id']);
+  nextdom.private.ajax('Cmd', 'usedBy', queryParams, ['id']);
 };
 
 nextdom.cmd.changeType = function (_cmd, _subType) {
@@ -576,7 +562,6 @@ nextdom.cmd.displayActionOption = function (_expression, _options, _callback) {
       }
       if ('function' == typeof (_callback)) {
         _callback(html);
-        return;
       }
     }
   });
@@ -597,7 +582,6 @@ nextdom.cmd.displayActionsOption = function (queryParams) {
 nextdom.cmd.normalizeName = function (_tagname) {
   cmdName = _tagname.toLowerCase().trim();
   var cmdTests = [];
-  var cmdType = null;
   var cmdList = {
     'on': 'on',
     'off': 'off',
@@ -629,17 +613,9 @@ nextdom.cmd.normalizeName = function (_tagname) {
   return _tagname;
 };
 
-
 nextdom.cmd.setOrder = function (queryParams) {
-  var paramsRequired = ['cmds'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Cmd', 'setOrder');
-    ajaxParams.data['cmds'] = json_encode(queryParams.cmds);
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('Cmd', 'setOrder', queryParams, ['cmds'], true);
 };
-
 
 nextdom.cmd.displayDuration = function (_date, _el) {
   var arrDate = _date.split(/-|\s|:/);

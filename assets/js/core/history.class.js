@@ -14,7 +14,6 @@
 * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 nextdom.history = function () {
 };
 
@@ -41,7 +40,7 @@ nextdom.history.get = function (queryParams) {
 };
 
 nextdom.history.copyHistoryToCmd = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Cmd', 'copyHistoryToCmd', queryParams, ['source_id', 'target_id']);
+  nextdom.private.ajax('Cmd', 'copyHistoryToCmd', queryParams, ['source_id', 'target_id']);
 };
 
 nextdom.history.drawChart = function (queryParams) {
@@ -110,10 +109,10 @@ nextdom.history.drawChart = function (queryParams) {
       var stacking = (queryParams.option.graphStack === undefined || queryParams.option.graphStack == null || queryParams.option.graphStack == 0) ? null : 'value';
       queryParams.option.graphStack = (queryParams.option.graphStack === undefined || queryParams.option.graphStack == null || queryParams.option.graphStack == 0) ? Math.floor(Math.random() * 10000 + 2) : 1;
       queryParams.option.graphScale = (queryParams.option.graphScale === undefined) ? 0 : parseInt(queryParams.option.graphScale);
-      queryParams.showLegend = (init(queryParams.showLegend, true) && init(queryParams.showLegend, true) != '0') ? true : false;
-      queryParams.showTimeSelector = (init(queryParams.showTimeSelector, true) && init(queryParams.showTimeSelector, true) != '0') ? true : false;
-      queryParams.showScrollbar = (init(queryParams.showScrollbar, true) && init(queryParams.showScrollbar, true) != '0') ? true : false;
-      queryParams.showNavigator = (init(queryParams.showNavigator, true) && init(queryParams.showNavigator, true) != '0') ? true : false;
+      queryParams.showLegend = init(queryParams.showLegend, true) && init(queryParams.showLegend, true) != '0';
+      queryParams.showTimeSelector = init(queryParams.showTimeSelector, true) && init(queryParams.showTimeSelector, true) != '0';
+      queryParams.showScrollbar = init(queryParams.showScrollbar, true) && init(queryParams.showScrollbar, true) != '0';
+      queryParams.showNavigator = init(queryParams.showNavigator, true) && init(queryParams.showNavigator, true) != '0';
 
       var legend = {borderColor: 'black', borderWidth: 2, shadow: true};
       legend.enabled = init(queryParams.showLegend, true);
@@ -440,7 +439,7 @@ nextdom.history.drawChart = function (queryParams) {
       }
     }
   });
-};;
+};
 
 nextdom.history.generatePlotBand = function (_startTime, _endTime) {
   var plotBands = [];

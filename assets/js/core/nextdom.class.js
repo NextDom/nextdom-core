@@ -93,7 +93,6 @@ nextdom.changes = function () {
   }
 };
 
-
 nextdom.init = function () {
   var bodyContainer = $('body');
   nextdom.datetime = serverDatetime;
@@ -216,7 +215,7 @@ nextdom.getConfiguration = function (queryParams) {
 };
 
 nextdom.haltSystem = function (queryParams) {
-  nextdom.private.simpleAjax('Nextdom', 'haltSystem', queryParams);
+  nextdom.private.ajax('Nextdom', 'haltSystem', queryParams);
 };
 
 nextdom.ssh = function (queryParams) {
@@ -247,17 +246,16 @@ nextdom.db = function (queryParams) {
   return 'Execute command : ' + command;
 };
 
-
 nextdom.rebootSystem = function (queryParams) {
-  nextdom.private.simpleAjax('Nextdom', 'rebootSystem', queryParams);
+  nextdom.private.ajax('Nextdom', 'rebootSystem', queryParams);
 };
 
 nextdom.health = function (queryParams) {
-  nextdom.private.simpleAjax('Nextdom', 'health', queryParams);
+  nextdom.private.ajax('Nextdom', 'health', queryParams);
 };
 
 nextdom.forceSyncHour = function (queryParams) {
-  nextdom.private.simpleAjax('Nextdom', 'forceSyncHour', queryParams);
+  nextdom.private.ajax('Nextdom', 'forceSyncHour', queryParams);
 };
 
 nextdom.getCronSelectModal = function (_options, _callback) {
@@ -342,7 +340,6 @@ nextdom.getGraphData = function (queryParams) {
   $.ajax(ajaxParams);
 };
 
-
 nextdom.getDocumentationUrl = function (queryParams) {
   var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
   var ajaxParams = nextdom.private.getAjaxParams(params, 'Nextdom', 'getDocumentationUrl');
@@ -352,46 +349,45 @@ nextdom.getDocumentationUrl = function (queryParams) {
 };
 
 nextdom.addWarnme = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Nextdom', 'addWarnme', queryParams, ['cmd_id', 'test']);
+  nextdom.private.ajax('Nextdom', 'addWarnme', queryParams, ['cmd_id', 'test']);
 };
 
 nextdom.getTimelineEvents = function (queryParams) {
-  nextdom.private.simpleAjax('Interact', 'getTimelineEvents', queryParams);
+  nextdom.private.ajax('Interact', 'getTimelineEvents', queryParams);
 };
 
 nextdom.removeTimelineEvents = function (queryParams) {
-  nextdom.private.simpleAjax('Interact', 'removeTimelineEvents', queryParams);
+  nextdom.private.ajax('Interact', 'removeTimelineEvents', queryParams);
 };
 
-
 nextdom.getFileFolder = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Nextdom', 'getFileFolder', queryParams, ['type', 'path']);
+  nextdom.private.ajax('Nextdom', 'getFileFolder', queryParams, ['type', 'path']);
 };
 
 nextdom.getFileContent = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Nextdom', 'getFileContent', queryParams, ['path']);
+  nextdom.private.ajax('Nextdom', 'getFileContent', queryParams, ['path']);
 };
 
 nextdom.setFileContent = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Nextdom', 'setFileContent', queryParams, ['path', 'content']);
+  nextdom.private.ajax('Nextdom', 'setFileContent', queryParams, ['path', 'content']);
 };
 
 nextdom.deleteFile = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Nextdom', 'deleteFile', queryParams, ['path']);
+  nextdom.private.ajax('Nextdom', 'deleteFile', queryParams, ['path']);
 };
 
 nextdom.createFile = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Nextdom', 'createFile', queryParams, ['path', 'name']);
+  nextdom.private.ajax('Nextdom', 'createFile', queryParams, ['path', 'name']);
 };
 
 nextdom.emptyRemoveHistory = function (queryParams) {
-  nextdom.private.simpleAjax('Interact', 'emptyRemoveHistory', queryParams);
+  nextdom.private.ajax('Interact', 'emptyRemoveHistory', queryParams);
 };
 
 nextdom.cleanFileSystemRight = function (queryParams) {
-  nextdom.private.simpleAjax('Interact', 'cleanFileSystemRight', queryParams);
+  nextdom.private.ajax('Interact', 'cleanFileSystemRight', queryParams);
 };
 
 nextdom.consistency = function (queryParams) {
-  nextdom.private.simpleAjax('Interact', 'consistency', queryParams);
+  nextdom.private.ajax('Interact', 'consistency', queryParams);
 };
