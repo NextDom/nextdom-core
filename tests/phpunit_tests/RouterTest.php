@@ -24,21 +24,21 @@ use NextDom\Managers\ConfigManager;
 
 require_once(__DIR__ . '/../../src/core.php');
 
-class RouterTest extends PHPUnit_Framework_TestCase
+class RouterTest extends PHPUnit\Framework\TestCase
 {
     private static $firstUseState = null;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$firstUseState = ConfigManager::byKey('nextdom::firstUse');
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         ConfigManager::save('nextdom::firstUse', self::$firstUseState);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         foreach (array_keys($_GET) as $getKey) {
             unset($_GET[$getKey]);
@@ -62,15 +62,15 @@ class RouterTest extends PHPUnit_Framework_TestCase
     {
         $_GET['p'] = 'dashboard';
         $result = $this->getContent();
-        $this->assertContains('<input type="password"', $result);
-        $this->assertContains('<input type="checkbox" id="storeConnection">', $result);
+        $this->assertStringContainsString('<input type="password"', $result);
+        $this->assertStringContainsString('<input type="checkbox" id="storeConnection">', $result);
     }
 
     public function testDesktopViewConnected()
     {
         $_GET['p'] = 'dashboard';
         $result = $this->getContent(true);
-        $this->assertContains('id="div_mainContainer"', $result);
+        $this->assertStringContainsString('id="div_mainContainer"', $result);
     }
 
     public function testModalDisconnected()
@@ -87,7 +87,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
         $_GET['p'] = 'dashboard';
         $_GET['modal'] = 'welcome';
         $result = $this->getContent(true);
-        $this->assertContains('Bienvenue dans NextDom', $result);
+        $this->assertStringContainsString('Bienvenue dans NextDom', $result);
     }
 
     public function testPluginConfPageDisconnected()
@@ -106,7 +106,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
         $_GET['configure'] = 1;
         $_GET['plugin'] = 'plugin4tests';
         $result = $this->getContent(true);
-        $this->assertContains('<input class="configKey form-control" data-l1key="text_option" />', $result);
+        $this->assertStringContainsString('<input class="configKey form-control" data-l1key="text_option" />', $result);
     }
 
     public function testPageByAjaxDisconnected()
@@ -114,7 +114,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
         $_GET['p'] = 'administration';
         $_GET['ajax'] = 1;
         $result = $this->getContent();
-        $this->assertContains('<span id="span_errorMessage">401', $result);
+        $this->assertStringContainsString('<span id="span_errorMessage">401', $result);
     }
 
     public function testPageByAjaxConnected()
@@ -122,8 +122,8 @@ class RouterTest extends PHPUnit_Framework_TestCase
         $_GET['p'] = 'administration';
         $_GET['ajax'] = 1;
         $result = $this->getContent(true);
-        $this->assertContains('<link href="/public/css/pages/administration.css" rel="stylesheet" />', $result);
-        $this->assertNotContains('<body', $result);
+        $this->assertStringContainsString('<link href="/public/css/pages/administration.css" rel="stylesheet" />', $result);
+        $this->assertStringNotContainsString('<body', $result);
     }
 
     public function testFirstUseWithDefaultPassword()
@@ -132,7 +132,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
         DBHelper::exec('UPDATE user SET password = SHA2("admin", 512) WHERE login = "admin"');
         $_GET['p'] = 'administration';
         $result = $this->getContent();
-        $this->assertContains('stepwizard-btn-circle', $result);
+        $this->assertStringContainsString('stepwizard-btn-circle', $result);
     }
 
     public function testFirstUseWithPasswordSetted()
@@ -140,7 +140,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
         ConfigManager::save('nextdom::firstUse', 1);
         $_GET['p'] = 'administration';
         $result = $this->getContent();
-        $this->assertContains('<input type="password"', $result);
-        $this->assertContains('<input type="checkbox" id="storeConnection">', $result);
+        $this->assertStringContainsString('<input type="password"', $result);
+        $this->assertStringContainsString('<input type="checkbox" id="storeConnection">', $result);
     }
 }

@@ -20,11 +20,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class CronControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -34,7 +34,7 @@ class CronControllerTest extends BaseControllerTest
         $pageData = [];
         $result = \NextDom\Controller\Diagnostic\CronController::get($pageData);
         $this->assertEquals('1', $pageData['cronEnabled']);
-        $this->assertContains('id="cron-tab"', $result);
+        $this->assertStringContainsString('id="cron-tab"', $result);
     }
 
     public function testPageDataVars()

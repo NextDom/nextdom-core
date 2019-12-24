@@ -66,9 +66,9 @@ html {
 
 /* Shadows */
 .fixed-shadow {
-    box-shadow: 0 6px 6px 0px rgba(0,0,0,0.4);
-    border-top-right-radius: 0px;
-    border-top-left-radius: 0px;
+    box-shadow: 0 6px 6px 0 rgba(0,0,0,0.4);
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
 }
 .scroll-shadow {
     box-shadow: 0 1px 1px rgba(0,0,0,0.1);

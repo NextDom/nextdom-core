@@ -21,23 +21,23 @@ use NextDom\Model\Entity\Config;
 
 require_once(__DIR__ . '/../../src/core.php');
 
-class ConfigTest extends PHPUnit_Framework_TestCase
+class ConfigTest extends PHPUnit\Framework\TestCase
 {
     public $testEqLogicId = null;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
     }
 
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         DBHelper::exec('DELETE FROM ' . ConfigManager::DB_CLASS_NAME. ' WHERE `key` = "Just a test"');
     }

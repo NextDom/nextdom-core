@@ -20,11 +20,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class ScenarioSummaryModalControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -32,6 +32,6 @@ class ScenarioSummaryModalControllerTest extends BaseControllerTest
     public function testSimple()
     {
         $result = \NextDom\Controller\Modals\ScenarioSummary::get();
-        $this->assertContains('id="table_scenarioSummary"', $result);
+        $this->assertStringContainsString('id="table_scenarioSummary"', $result);
     }
 }

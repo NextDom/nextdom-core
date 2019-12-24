@@ -20,11 +20,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class PlanHeaderConfigureModalControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (isset($_GET['planHeader_id'])) {
             unset($_GET['planHeader_id']);
@@ -38,7 +38,7 @@ class PlanHeaderConfigureModalControllerTest extends BaseControllerTest
         ob_start();
         $result = \NextDom\Controller\Modals\PlanHeaderConfigure::get();
         $scriptResult = ob_get_clean();
-        $this->assertContains('<div id="div_planHeaderConfigure">', $result);
-        $this->assertContains('var planHeader = ', $scriptResult);
+        $this->assertStringContainsString('<div id="div_planHeaderConfigure">', $result);
+        $this->assertStringContainsString('var planHeader = ', $scriptResult);
     }
 }

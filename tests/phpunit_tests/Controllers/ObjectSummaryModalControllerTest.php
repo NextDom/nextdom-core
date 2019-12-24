@@ -20,11 +20,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class ObjectSummaryModalControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -32,6 +32,6 @@ class ObjectSummaryModalControllerTest extends BaseControllerTest
     public function testSimple()
     {
         $result = \NextDom\Controller\Modals\ObjectSummary::get();
-        $this->assertContains('<table class="table table-bordered', $result);
+        $this->assertStringContainsString('<table class="table table-bordered', $result);
     }
 }

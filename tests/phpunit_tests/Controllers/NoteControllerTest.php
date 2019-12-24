@@ -20,11 +20,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class NoteControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -33,7 +33,7 @@ class NoteControllerTest extends BaseControllerTest
     {
         $pageData = [];
         $result = \NextDom\Controller\Tools\NoteController::get($pageData);
-        $this->assertContains('id="div_noteManagementAlert"', $result);
+        $this->assertStringContainsString('id="div_noteManagementAlert"', $result);
     }
 
     public function testPageDataVars()

@@ -20,9 +20,9 @@ use NextDom\Rest\ScenarioRest;
 
 require_once(__DIR__ . '/../../../src/core.php');
 
-class ScenarioRestTest extends PHPUnit_Framework_TestCase
+class ScenarioRestTest extends PHPUnit\Framework\TestCase
 {
-    public function tearDown()
+    public function tearDown(): void
     {
         ScenarioManager::byId(3)->setIsActive(1);
         ScenarioManager::byId(4)->setIsActive(0);

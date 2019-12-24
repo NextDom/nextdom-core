@@ -20,11 +20,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class CmdHistoryModalControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -34,7 +34,7 @@ class CmdHistoryModalControllerTest extends BaseControllerTest
         ob_start();
         $result = \NextDom\Controller\Modals\CmdHistory::get();
         $scriptResult = ob_get_clean();
-        $this->assertContains('src="/public/js/modals/cmd.history.js"', $result);
-        $this->assertContains('var historyId = "";', $scriptResult);
+        $this->assertStringContainsString('src="/public/js/modals/cmd.history.js"', $result);
+        $this->assertStringContainsString('var historyId = "";', $scriptResult);
     }
 }

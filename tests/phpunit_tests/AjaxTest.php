@@ -21,7 +21,7 @@ use NextDom\Helpers\AuthentificationHelper;
 
 require_once(__DIR__ . '/../../src/core.php');
 
-class AjaxTest extends PHPUnit_Framework_TestCase
+class AjaxTest extends PHPUnit\Framework\TestCase
 {
     /**
      * @throws Exception
@@ -37,7 +37,7 @@ class AjaxTest extends PHPUnit_Framework_TestCase
         ob_start();
         require_once(__DIR__ . '/../../src/ajax.php');
         $result = ob_get_clean();
-        $this->assertContains('"state":"ok"', $result);
+        $this->assertStringContainsString('"state":"ok"', $result);
     }
 
     /**
@@ -53,8 +53,8 @@ class AjaxTest extends PHPUnit_Framework_TestCase
         ob_start();
         require_once(__DIR__ . '/../../src/ajax.php');
         $result = ob_get_clean();
-        $this->assertContains('"state":"error"', $result);
-        $this->assertContains('invalide', $result);
+        $this->assertStringContainsString('"state":"error"', $result);
+        $this->assertStringContainsString('invalide', $result);
     }
 
     /*
@@ -81,7 +81,7 @@ class AjaxTest extends PHPUnit_Framework_TestCase
         ob_start();
         require_once(__DIR__ . '/../../src/ajax.php');
         $result = ob_get_clean();
-        $this->assertContains('"state":"error"', $result);
-        $this->assertContains('inconnue', $result);
+        $this->assertStringContainsString('"state":"error"', $result);
+        $this->assertStringContainsString('inconnue', $result);
     }
 }

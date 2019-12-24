@@ -20,11 +20,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class InteractConfigControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -33,7 +33,7 @@ class InteractConfigControllerTest extends BaseControllerTest
     {
         $pageData = [];
         $result = \NextDom\Controller\Params\InteractConfigController::get($pageData);
-        $this->assertContains('id="interact_config"', $result);
+        $this->assertStringContainsString('id="interact_config"', $result);
     }
 
     public function testPageDataVars()

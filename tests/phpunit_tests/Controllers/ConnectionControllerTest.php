@@ -20,11 +20,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class ConnectionControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
             unset($_SERVER['HTTP_USER_AGENT']);
@@ -46,7 +46,7 @@ class ConnectionControllerTest extends BaseControllerTest
         $pageData = [];
         $result = \NextDom\Controller\Pages\ConnectionController::get($pageData);
         $this->assertTrue($pageData['IS_MOBILE']);
-        $this->assertContains('mobile', $result);
+        $this->assertStringContainsString('mobile', $result);
     }
 
     public function testPageDataVars()

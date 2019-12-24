@@ -21,14 +21,14 @@ use NextDom\Managers\EventManager;
 
 require_once(__DIR__ . '/../../src/core.php');
 
-class EventManagerTest extends PHPUnit_Framework_TestCase
+class EventManagerTest extends PHPUnit\Framework\TestCase
 {
-    public function setup()
+    public function setUp(): void
     {
         CacheManager::delete('event');
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         CacheManager::delete('event');
     }

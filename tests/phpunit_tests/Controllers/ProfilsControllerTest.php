@@ -20,12 +20,12 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class ProfilsControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
         @session_start();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (isset($_SESSION['user'])) {
             unset($_SESSION['user']);
@@ -40,7 +40,7 @@ class ProfilsControllerTest extends BaseControllerTest
         $pageData = [];
         $result = \NextDom\Controller\Params\ProfilsController::get($pageData);
         $this->assertCount(3, $pageData['profilsDisplayTypes']);
-        $this->assertContains('id="div_Profils"', $result);
+        $this->assertStringContainsString('id="div_Profils"', $result);
     }
 
     public function testPageDataVars()

@@ -22,20 +22,20 @@ use NextDom\Model\Entity\EqLogic;
 
 require_once(__DIR__ . '/../../src/core.php');
 
-class EqLogicTest extends PHPUnit_Framework_TestCase
+class EqLogicTest extends PHPUnit\Framework\TestCase
 {
     public $testEqLogicId = null;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         DBHelper::Prepare('DELETE FROM ' . EqLogicManager::DB_CLASS_NAME. ' WHERE id > 4', []);
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         $eqLogic = new EqLogic();
         $eqLogic->setName('Run test eqLogic');
@@ -63,7 +63,7 @@ class EqLogicTest extends PHPUnit_Framework_TestCase
         $cmd->setSubType('binary');
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         DBHelper::Prepare('DELETE FROM ' . EqLogicManager::DB_CLASS_NAME. ' WHERE id > 4', []);
     }
@@ -99,7 +99,7 @@ class EqLogicTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('', $savedEqLogic->getGenericType());
         $this->assertEquals('getset-test-eqlogic', $savedEqLogic->getLogicalId());
         $this->assertEquals('plugin4tests', $savedEqLogic->getEqType_name());
-        $this->assertContains($createDate->format('Y-m-d'), $savedEqLogic->getConfiguration('createtime'));
+        $this->assertStringContainsString($createDate->format('Y-m-d'), $savedEqLogic->getConfiguration('createtime'));
         $this->assertEquals(1, $savedEqLogic->getIsVisible());
         $this->assertEquals(1, $savedEqLogic->getIsEnable());
         $this->assertEquals(300, $savedEqLogic->getTimeout());

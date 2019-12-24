@@ -20,11 +20,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class ScenarioControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -34,7 +34,7 @@ class ScenarioControllerTest extends BaseControllerTest
         $pageData = [];
         $result = \NextDom\Controller\Tools\ScenarioController::get($pageData);
         $this->assertEquals(4, $pageData['scenarioCount']);
-        $this->assertContains('div_editScenario', $result);
+        $this->assertStringContainsString('div_editScenario', $result);
     }
 
     public function testPageDataVars()

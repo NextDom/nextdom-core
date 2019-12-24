@@ -22,22 +22,22 @@ use NextDom\Model\Entity\Note;
 
 require_once(__DIR__ . '/../../src/core.php');
 
-class NoteTest extends PHPUnit_Framework_TestCase
+class NoteTest extends PHPUnit\Framework\TestCase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         DBHelper::Prepare('DELETE FROM ' . NoteManager::DB_CLASS_NAME. ' WHERE id > 2', []);
     }
 
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         DBHelper::Prepare('DELETE FROM ' . NoteManager::DB_CLASS_NAME. ' WHERE id > 2', []);
     }

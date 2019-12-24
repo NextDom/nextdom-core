@@ -20,11 +20,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class DashboardControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (isset($_SESSION['user'])) {
             unset($_SESSION['user']);
@@ -39,7 +39,7 @@ class DashboardControllerTest extends BaseControllerTest
         $result = \NextDom\Controller\Pages\DashBoardController::get($pageData);
         $this->assertArrayHasKey('dashboardObjectListMenu', $pageData);
         $this->assertEquals('1', $pageData['dashboardObjectId']);
-        $this->assertContains('dashboard-content', $result);
+        $this->assertStringContainsString('dashboard-content', $result);
     }
 
     public function testPageDataVars()

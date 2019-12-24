@@ -20,11 +20,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class ObjectConfigureModalControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (isset($_GET['object_id'])) {
             unset($_GET['object_id']);
@@ -38,7 +38,7 @@ class ObjectConfigureModalControllerTest extends BaseControllerTest
         ob_start();
         $result = \NextDom\Controller\Modals\ObjectConfigure::get();
         $scriptResult = ob_get_clean();
-        $this->assertContains('id="div_displayObjectConfigure"', $result);
-        $this->assertContains('var objectInfo =', $scriptResult);
+        $this->assertStringContainsString('id="div_displayObjectConfigure"', $result);
+        $this->assertStringContainsString('var objectInfo =', $scriptResult);
     }
 }

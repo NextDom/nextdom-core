@@ -20,11 +20,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class AdministrationControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -34,7 +34,7 @@ class AdministrationControllerTest extends BaseControllerTest
         $pageData = [];
         $result = \NextDom\Controller\Pages\AdministrationController::get($pageData);
         $this->assertEquals(0, $pageData['numberOfUpdates']);
-        $this->assertContains('/docs/html/index.xhtml', $result);
+        $this->assertStringContainsString('/docs/html/index.xhtml', $result);
     }
 
     public function testPageDataVars()

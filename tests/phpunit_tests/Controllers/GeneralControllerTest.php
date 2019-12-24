@@ -20,11 +20,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class GeneralControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -34,7 +34,7 @@ class GeneralControllerTest extends BaseControllerTest
         $pageData = [];
         $result = \NextDom\Controller\Params\GeneralController::get($pageData);
         $this->assertEquals('docker', $pageData['adminHardwareName']);
-        $this->assertContains('id="general"', $result);
+        $this->assertStringContainsString('id="general"', $result);
     }
 
     public function testPageDataVars()

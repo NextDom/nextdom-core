@@ -40,7 +40,7 @@
         right: 10px;
     }
     .main-header .navbar .dropdown-menu li.divider {
-        background-color: rgba(255, 255, 255, 0.1);
+        background-color: rgba(255, 255, 255, .1);
     }
 }
 @media (max-width: 992px) {
@@ -81,7 +81,7 @@
     border-top: none;
     border-bottom: 3px solid transparent;
     margin-bottom: -3px;
-    margin-right: 0px;
+    margin-right: 0;
 }
 .nav-tabs-dashboard > li.active > a {
     cursor: pointer !important;

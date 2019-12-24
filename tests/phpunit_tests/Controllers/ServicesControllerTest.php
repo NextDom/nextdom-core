@@ -20,11 +20,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class ServicesControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -34,7 +34,7 @@ class ServicesControllerTest extends BaseControllerTest
         $pageData = [];
         $result = \NextDom\Controller\Admin\ServicesController::get($pageData);
         $this->assertArrayHasKey('adminReposList', $pageData);
-        $this->assertContains('href="#tabgithub"', $result);
+        $this->assertStringContainsString('href="#tabgithub"', $result);
     }
 
     public function testPageDataVars()

@@ -21,10 +21,8 @@
 
 /* Core-Surcharge */
 .eqLogic-battery {
-    min:{
-      width:200px;
-      height:170px;
-    }
+    min-width:200px;
+    min-height:170px;
     padding: 8px !important;
     text-align: center;
     & .good {
@@ -37,7 +35,7 @@
         background-color: $critical;
     }
     & .informations {
-        font-size : 0.8em;
+        font-size : .8em;
         margin: {
             bottom: 3px;
             right: 5px;
@@ -57,7 +55,7 @@
     font-weight: 600;
 }
 .eqLogic-place {
-    font-size: 0.95em;
+    font-size: .95em;
     position:relative;
     top:-5px;
     cursor:default;
@@ -107,7 +105,7 @@
     & .statistiques{
         position : absolute;
         bottom: 0;
-        font-size: 0.80em;
+        font-size: .80em;
         left : 0;
         margin : 0;
         padding: 0;
@@ -169,7 +167,6 @@
   }
 }
 .eqLogicDisplayCard {
-  margin-bottom: 10px !important;
   height: 170px !important;
   padding: 0 !important;
   margin: 0 !important;
@@ -204,12 +201,12 @@
 .eqLogicDisplayCard:not(.disableCard) {
   opacity: 1 !important;
   transition-property: opacity;
-  transition-duration: 0.6s;
+  transition-duration: .6s;
 }
 .eqLogicDisplayCard.disableCard {
-  opacity: 0.65 !important;
+  opacity: .65 !important;
   transition-property: opacity;
-  transition-duration: 0.6s;
+  transition-duration: .6s;
 }
 
 .eqLogicThumbnailContainer div.cursor > center > img,

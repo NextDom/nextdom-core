@@ -27,12 +27,12 @@ class MessageAjaxTest extends BaseAjaxTest
     /** @var MessageAjax */
     private $messageAjax = null;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->messageAjax = new MessageAjax();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->cleanGetParams();
         DBHelper::exec('DELETE FROM message WHERE id > 3');
@@ -45,7 +45,7 @@ class MessageAjaxTest extends BaseAjaxTest
         $result = ob_get_clean();
         $jsonResult = json_decode($result, true);
         $this->assertEquals('ok', $jsonResult['state']);
-        $this->assertContains('3', $result);
+        $this->assertStringContainsString('3', $result);
     }
 
     public function testAll()

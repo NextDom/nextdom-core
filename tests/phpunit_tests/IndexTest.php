@@ -17,17 +17,17 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-class IndexTest extends PHPUnit_Framework_TestCase
+class IndexTest extends PHPUnit\Framework\TestCase
 {
     // For avoid NEXTDOM_ROOT override
     const ROOT_PATH = __DIR__ . '/../../';
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         system('rm -fr ' . self::ROOT_PATH . 'mobile');
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         system('rm -fr ' . self::ROOT_PATH . 'mobile');
         if (isset($_SERVER["HTTP_USER_AGENT"])) {
@@ -54,9 +54,9 @@ class IndexTest extends PHPUnit_Framework_TestCase
     public function testSimple()
     {
         $result = $this->getIndexContent();
-        $this->assertContains('connection.js', $result);
-        $this->assertContains('<input type="password"', $result);
-        $this->assertNotContains('id="mobile-box"', $result);
+        $this->assertStringContainsString('connection.js', $result);
+        $this->assertStringContainsString('<input type="password"', $result);
+        $this->assertStringNotContainsString('id="mobile-box"', $result);
     }
 
     public function testOnPhoneWithoutMobileInstalled()
@@ -64,9 +64,9 @@ class IndexTest extends PHPUnit_Framework_TestCase
         system('rm -fr ' . self::ROOT_PATH . 'mobile');
         $_SERVER["HTTP_USER_AGENT"] = 'Firefox Android';
         $result = $this->getIndexContent();
-        $this->assertContains('connection.js', $result);
-        $this->assertContains('<input type="password"', $result);
-        $this->assertContains('id="mobile-box"', $result);
+        $this->assertStringContainsString('connection.js', $result);
+        $this->assertStringContainsString('<input type="password"', $result);
+        $this->assertStringContainsString('id="mobile-box"', $result);
     }
 
     public function testOnPhoneWithForceDesktop()
@@ -75,9 +75,9 @@ class IndexTest extends PHPUnit_Framework_TestCase
         $_SERVER["HTTP_USER_AGENT"] = 'Firefox Android';
         $_GET['force_desktop'] = true;
         $result = $this->getIndexContent();
-        $this->assertContains('connection.js', $result);
-        $this->assertContains('<input type="password"', $result);
-        $this->assertContains('id="mobile-box"', $result);
+        $this->assertStringContainsString('connection.js', $result);
+        $this->assertStringContainsString('<input type="password"', $result);
+        $this->assertStringContainsString('id="mobile-box"', $result);
     }
 
     public function testOnPhoneWithDesktopViewSetted()
@@ -86,8 +86,8 @@ class IndexTest extends PHPUnit_Framework_TestCase
         $_SERVER["HTTP_USER_AGENT"] = 'Firefox Android';
         $_SESSION['desktop_view'] = true;
         $result = $this->getIndexContent();
-        $this->assertContains('connection.js', $result);
-        $this->assertContains('<input type="password"', $result);
-        $this->assertContains('id="mobile-box"', $result);
+        $this->assertStringContainsString('connection.js', $result);
+        $this->assertStringContainsString('<input type="password"', $result);
+        $this->assertStringContainsString('id="mobile-box"', $result);
     }
 }

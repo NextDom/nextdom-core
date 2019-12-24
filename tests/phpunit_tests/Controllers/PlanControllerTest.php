@@ -20,12 +20,12 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class PlanControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
         $_SESSION['user'] = \NextDom\Managers\UserManager::byId(1);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (isset($_SESSION['user'])) {
             unset($_SESSION['user']);
@@ -38,7 +38,7 @@ class PlanControllerTest extends BaseControllerTest
         $pageData = [];
         $result = \NextDom\Controller\Pages\PlanController::get($pageData);
         $this->assertArrayHasKey('planHeader', $pageData['JS_VARS_RAW']);
-        $this->assertContains('div_displayObject', $result);
+        $this->assertStringContainsString('div_displayObject', $result);
     }
 
     public function testPageDataVars()

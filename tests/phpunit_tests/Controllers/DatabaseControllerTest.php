@@ -20,11 +20,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class DatabaseControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -33,7 +33,7 @@ class DatabaseControllerTest extends BaseControllerTest
     {
         $pageData = [];
         $result = \NextDom\Controller\Tools\Osdb\DatabaseController::get($pageData);
-        $this->assertContains('id="div_rowSystemCommand"', $result);
+        $this->assertStringContainsString('id="div_rowSystemCommand"', $result);
     }
 
     public function testPageDataVars()

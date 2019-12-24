@@ -20,11 +20,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class CmdConfigureModalControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (isset($_GET['cmd_id'])) {
             unset($_GET['cmd_id']);
@@ -38,7 +38,7 @@ class CmdConfigureModalControllerTest extends BaseControllerTest
         ob_start();
         $result = \NextDom\Controller\Modals\CmdConfigure::get();
         $scriptResult = ob_get_clean();
-        $this->assertContains('nextdom.cmd.update[&#039;#id#&#039;]', $result);
-        $this->assertContains('var cmdInfoSearchString = "%5BMy+Room%5D%5BTest+eqLogic%5D%5BCmd+1%5D";', $scriptResult);
+        $this->assertStringContainsString('nextdom.cmd.update[&#039;#id#&#039;]', $result);
+        $this->assertStringContainsString('var cmdInfoSearchString = "%5BMy+Room%5D%5BTest+eqLogic%5D%5BCmd+1%5D";', $scriptResult);
     }
 }

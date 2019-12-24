@@ -47,3 +47,4 @@ core/template
 /tests/coverage
 
 /assets/config/default.config.ini
+/assets/css/builded/

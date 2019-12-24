@@ -20,11 +20,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class CommandeControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -33,7 +33,7 @@ class CommandeControllerTest extends BaseControllerTest
     {
         $pageData = [];
         $result = \NextDom\Controller\Params\CommandeController::get($pageData);
-        $this->assertContains('id="commandes"', $result);
+        $this->assertStringContainsString('id="commandes"', $result);
     }
 
     public function testPageDataVars()

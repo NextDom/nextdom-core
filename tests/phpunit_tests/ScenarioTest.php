@@ -5,13 +5,13 @@ use NextDom\Managers\ScenarioManager;
 
 require_once(__DIR__ . '/../../src/core.php');
 
-class ScenarioTest extends PHPUnit_Framework_TestCase
+class ScenarioTest extends PHPUnit\Framework\TestCase
 {
-    public function setUp() {
+    public function setUp(): void {
 
     }
 
-    public function tearDown() {
+    public function tearDown(): void {
         $scenario = ScenarioManager::byId(1);
         $scenario->setState(null);
         $scenario->setIsActive(1);

@@ -25,6 +25,7 @@ class PluginsPage(BaseGuiTest):
         """Test desktop plugin page
         """
         self.goto('index.php?v=d&p=dashboard')
+        sleep(2)
         # Put the mouse hover the menu to show the plugin link
         menu_to_hover = self.get_element_by_css(
             '.treeview>a>i.fa-puzzle-piece')
@@ -41,7 +42,7 @@ class PluginsPage(BaseGuiTest):
         self.get_element_by_css(
             'a[href="index.php?v=d&m=plugin4tests&p=plugin4tests"]').click()
         # Wait for loading page
-        sleep(3)
+        sleep(4)
         self.assertIsNotNone(self.get_element_by_id('add-eqlogic-btn'))
         self.assertEqual(0, len(self.get_js_logs()))
 

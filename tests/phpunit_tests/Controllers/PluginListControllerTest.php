@@ -20,11 +20,11 @@ require_once(__DIR__ . '/BaseControllerTest.php');
 
 class PluginListControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -34,7 +34,7 @@ class PluginListControllerTest extends BaseControllerTest
         $pageData = [];
         $result = \NextDom\Controller\Tools\PluginListController::get($pageData);
         $this->assertEquals('Plugin4Tests', $pageData['pluginsList'][0]->getName());
-        $this->assertContains('id="div_resumePluginList"', $result);
+        $this->assertStringContainsString('id="div_resumePluginList"', $result);
     }
 
     public function testPageDataVars()

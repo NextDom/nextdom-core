@@ -24,19 +24,19 @@ define('CACHE_PATH', ROOT_PATH . '/var/cache/i18n');
 
 require (ROOT_PATH . '/vendor/autoload.php');
 
-class I18nTest extends PHPUnit_Framework_TestCase
+class I18nTest extends PHPUnit\Framework\TestCase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         system('mkdir -p ' . ROOT_PATH . '/var/cache/i18n');
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
 
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         shell_exec('rm -fr '.CACHE_PATH.'/*');
     }

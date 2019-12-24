@@ -19,7 +19,6 @@ def first_use_tests():
     start_test_container(container_name)
     test_result = run_test('tests/first_use_page.py', [NEXTDOM_URL])
     remove_test_container(container_name)
-    print(test_result)
     return test_result
 
 
@@ -55,7 +54,6 @@ def administration_tests():
     test_result += run_test('tests/tools_pages.py',
                             [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])
     remove_test_container(container_name)
-    print(test_result)
     return test_result
 
 
@@ -83,7 +81,6 @@ def specific_tests():
     test_result += run_test('tests/plan_page.py',
                             [NEXTDOM_URL, NEXTDOM_LOGIN, NEXTDOM_PASSWORD])  # pylint: disable=line-too-long
     remove_test_container(container_name)
-    print(test_result)
     return test_result
 
 
@@ -105,7 +102,6 @@ def plugins_tests():
     test_result = run_test('tests/plugins_page.py', [NEXTDOM_URL, NEXTDOM_LOGIN,
                                                      NEXTDOM_PASSWORD])  # pylint: disable=line-too-long
     remove_test_container(container_name)
-    print(test_result)
     return test_result
 
 
@@ -127,7 +123,6 @@ def modal_tests():
     test_result = run_test('tests/modal_pages.py', [NEXTDOM_URL, NEXTDOM_LOGIN,
                                                     NEXTDOM_PASSWORD])  # pylint: disable=line-too-long
     remove_test_container(container_name)
-    print(test_result)
     return test_result
 
 
@@ -149,7 +144,5 @@ if __name__ == "__main__":
         else:
             print_title('GUI Tests')
             RESULT = start_specific_test(sys.argv[1], TESTS_LIST)
-    print("RESULT")
-    print(RESULT)
     if RESULT != 0:
         sys.exit(1)

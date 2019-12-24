@@ -201,9 +201,9 @@ def start_all_tests(title, tests_list, use_docker=True):
     :return:           True if all tests pass
     :rtype:            bool
     """
+    print_title(title)
     if use_docker:
         clear_docker()
-    print_title(title)
     all_tests_pass = True
     for test in tests_list:
         if tests_list[test]():

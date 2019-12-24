@@ -19,17 +19,17 @@ use NextDom\Managers\JeeObjectManager;
 
 require_once(__DIR__ . '/../../src/core.php');
 
-class ObjectManagerTest extends PHPUnit_Framework_TestCase
+class ObjectManagerTest extends PHPUnit\Framework\TestCase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
     }
 
-    public function setUp()
+    public function setUp(): void
     {
 
     }
