@@ -14,7 +14,6 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 nextdom.plan3d = function () {
 };
 
@@ -44,7 +43,7 @@ nextdom.plan3d.save = function (queryParams) {
 };
 
 nextdom.plan3d.byId = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Plan3d', 'get', queryParams, ['id']);
+  nextdom.private.ajax('Plan3d', 'get', queryParams, ['id']);
 };
 
 nextdom.plan3d.byName = function (queryParams) {
@@ -58,9 +57,8 @@ nextdom.plan3d.byName = function (queryParams) {
   }
 };
 
-
 nextdom.plan3d.byplan3dHeader = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Plan3d', 'plan3dHeader', queryParams, ['plan3dHeader_id']);
+  nextdom.private.ajax('Plan3d', 'plan3dHeader', queryParams, ['plan3dHeader_id']);
 };
 
 nextdom.plan3d.saveHeader = function (queryParams) {
@@ -74,11 +72,11 @@ nextdom.plan3d.saveHeader = function (queryParams) {
 };
 
 nextdom.plan3d.removeHeader = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Plan3d', 'removeplan3dHeader', queryParams, ['id']);
+  nextdom.private.ajax('Plan3d', 'removeplan3dHeader', queryParams, ['id']);
 };
 
 nextdom.plan3d.getHeader = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Plan3d', 'getplan3dHeader', queryParams, ['id', 'code']);
+  nextdom.private.ajax('Plan3d', 'getplan3dHeader', queryParams, ['id', 'code']);
 };
 
 nextdom.plan3d.allHeader = function (queryParams) {

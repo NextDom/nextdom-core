@@ -17,7 +17,6 @@
 nextdom.config = function () {
 };
 
-
 nextdom.config.save = function (queryParams) {
   var paramsRequired = ['configuration'];
   if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {

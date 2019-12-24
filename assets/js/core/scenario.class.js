@@ -14,7 +14,6 @@
 * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 nextdom.scenario = function () {
 };
 
@@ -47,14 +46,7 @@ nextdom.scenario.all = function (queryParams) {
 };
 
 nextdom.scenario.saveAll = function (queryParams) {
-  var paramsRequired = ['scenarios'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    delete nextdom.scenario.cache.all;
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Scenario', 'saveAll');
-    ajaxParams.data['scenarios'] = json_encode(queryParams.scenarios);
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('Scenario', 'saveAll', queryParams, ['scenarios'], true);
 };
 
 nextdom.scenario.toHtml = function (queryParams) {
@@ -80,27 +72,12 @@ nextdom.scenario.toHtml = function (queryParams) {
   }
 };
 
-
 nextdom.scenario.changeState = function (queryParams) {
-  var paramsRequired = ['id', 'state'];
-  var paramsSpecifics = {global: false};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Scenario', 'changeState');
-    ajaxParams.data['id'] = queryParams.id;
-    ajaxParams.data['state'] = queryParams.state;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('Scenario', 'changeState', queryParams, ['id', 'state'], false, false);
 };
 
 nextdom.scenario.getTemplate = function (queryParams) {
-  var paramsRequired = [];
-  var paramsSpecifics = {global: false};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Scenario', 'getTemplate');
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('Scenario', 'getTemplate', queryParams, false, false, false);
 };
 
 nextdom.scenario.convertToTemplate = function (queryParams) {
@@ -115,15 +92,15 @@ nextdom.scenario.convertToTemplate = function (queryParams) {
 };
 
 nextdom.scenario.removeTemplate = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Scenario', 'removeTemplate', queryParams, ['template']);
+  nextdom.private.ajax('Scenario', 'removeTemplate', queryParams, ['template']);
 };
 
 nextdom.scenario.loadTemplateDiff = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Scenario', 'loadTemplateDiff', queryParams, ['template', 'id']);
+  nextdom.private.ajax('Scenario', 'loadTemplateDiff', queryParams, ['template', 'id']);
 };
 
 nextdom.scenario.applyTemplate = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Scenario', 'applyTemplate', queryParams, ['template', 'id', 'convert', 'newValues']);
+  nextdom.private.ajax('Scenario', 'applyTemplate', queryParams, ['template', 'id', 'convert', 'newValues']);
 };
 
 nextdom.scenario.refreshValue = function (queryParams) {
@@ -154,19 +131,18 @@ nextdom.scenario.refreshValue = function (queryParams) {
 };
 
 nextdom.scenario.copy = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Scenario', 'copy', queryParams, ['id', 'name']);
+  nextdom.private.ajax('Scenario', 'copy', queryParams, ['id', 'name']);
 };
 
-
 nextdom.scenario.get = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Scenario', 'get', queryParams, ['id']);
+  nextdom.private.ajax('Scenario', 'get', queryParams, ['id']);
 };
 
 nextdom.scenario.save = function (queryParams) {
   var paramsRequired = ['scenario'];
   var paramsSpecifics = {};
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    delete nextdom.scenario.cache.all
+    delete nextdom.scenario.cache.all;
     var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
     var ajaxParams = nextdom.private.getAjaxParams(params, 'Scenario', 'save');
     ajaxParams.data['scenario'] = json_encode(queryParams.scenario);
@@ -187,7 +163,7 @@ nextdom.scenario.remove = function (queryParams) {
 };
 
 nextdom.scenario.emptyLog = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Scenario', 'emptyLog', queryParams, ['id']);
+  nextdom.private.ajax('Scenario', 'emptyLog', queryParams, ['id']);
 };
 
 nextdom.scenario.getSelectModal = function (_options, callback) {
@@ -228,15 +204,9 @@ nextdom.scenario.getSelectModal = function (_options, callback) {
 };
 
 nextdom.scenario.testExpression = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Scenario', 'testExpression', queryParams, ['expression']);
+  nextdom.private.ajax('Scenario', 'testExpression', queryParams, ['expression']);
 };
 
 nextdom.scenario.setOrder = function (queryParams) {
-  var paramsRequired = ['scenarios'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Scenario', 'setOrder');
-    ajaxParams.data['scenarios'] = json_encode(queryParams.scenarios);
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('Scenario', 'setOrder', queryParams, ['scenarios'], true);
 };

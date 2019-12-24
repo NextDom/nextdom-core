@@ -14,33 +14,25 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 nextdom.interact = function () {
 };
 
 nextdom.interact.remove = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Interact', 'remove', queryParams, ['id']);
+  nextdom.private.ajax('Interact', 'remove', queryParams, ['id']);
 };
 
-
 nextdom.interact.get = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Interact', 'byId', queryParams, ['id']);
+  nextdom.private.ajax('Interact', 'byId', queryParams, ['id']);
 };
 
 nextdom.interact.save = function (queryParams) {
-  var paramsRequired = ['interact'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Interact', 'save');
-    ajaxParams.data['interact'] = json_encode(queryParams.interact);
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('Interact', 'save', queryParams, ['interact'], true);
 };
 
 nextdom.interact.regenerateInteract = function (queryParams) {
-  nextdom.private.simpleAjax('Interact', 'regenerateInteract', queryParams);
+  nextdom.private.ajax('Interact', 'regenerateInteract', queryParams);
 };
 
 nextdom.interact.execute = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Interact', 'execute', queryParams, ['query']);
+  nextdom.private.ajax('Interact', 'execute', queryParams, ['query']);
 };

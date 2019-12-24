@@ -14,22 +14,14 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 nextdom.listener = function () {
 };
 
-
 nextdom.listener.all = function (queryParams) {
-  nextdom.private.simpleAjax('Listener', 'all');
+  nextdom.private.ajax('Listener', 'all');
 };
 
 nextdom.listener.save = function (queryParams) {
-  var paramsRequired = ['listeners'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Listener', 'save');
-    ajaxParams.data['listeners'] = json_encode(queryParams.listeners);
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('Listener', 'save', queryParams, ['listeners'], true);
 };
 

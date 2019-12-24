@@ -14,47 +14,29 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 nextdom.user = function () {
 };
 
 nextdom.user.connectCheck = 0;
 
 nextdom.user.all = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'User', 'all');
-  $.ajax(ajaxParams);
+  nextdom.private.ajax('User', 'all', queryParams);
 };
 
 nextdom.user.remove = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('User', 'remove', queryParams, ['id']);
+  nextdom.private.ajax('User', 'remove', queryParams, ['id']);
 };
 
 nextdom.user.save = function (queryParams) {
-  var paramsRequired = ['users'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'User', 'save');
-    ajaxParams.data['users'] = json_encode(queryParams.users);
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('User', 'save', queryParams, ['users'], true);
 };
 
 nextdom.user.saveProfils = function (queryParams) {
-  var paramsRequired = ['profils'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'User', 'saveProfils');
-    ajaxParams.data['profils'] = json_encode(queryParams.profils);
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('User', 'saveProfils', queryParams, ['profils'], true);
 };
 
 nextdom.user.get = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'User', 'get');
-  ajaxParams.data['profils'] = json_encode(queryParams.profils);
-  $.ajax(ajaxParams);
+  nextdom.private.ajax('User', 'get', queryParams, false, true);
 };
 
 nextdom.user.isConnect = function (queryParams) {
@@ -95,20 +77,11 @@ nextdom.user.validateTwoFactorCode = function (queryParams) {
 };
 
 nextdom.user.removeTwoFactorCode = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('User', 'removeTwoFactorCode', queryParams, ['id']);
+  nextdom.private.ajax('User', 'removeTwoFactorCode', queryParams, ['id']);
 };
 
 nextdom.user.useTwoFactorAuthentification = function (queryParams) {
-  var paramsRequired = ['login'];
-  var paramsSpecifics = {
-    global: false,
-  };
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'User', 'useTwoFactorAuthentification');
-    ajaxParams.data['login'] = queryParams.login;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('User', 'useTwoFactorAuthentification', queryParams, ['login'], false, false);
 };
 
 nextdom.user.login = function (queryParams) {
@@ -125,11 +98,11 @@ nextdom.user.login = function (queryParams) {
 };
 
 nextdom.user.refresh = function (queryParams) {
-  nextdom.private.simpleAjax('User', 'refresh', queryParams);
+  nextdom.private.ajax('User', 'refresh', queryParams);
 };
 
 nextdom.user.removeBanIp = function (queryParams) {
-  nextdom.private.simpleAjax('User', 'removeBanIp', queryParams);
+  nextdom.private.ajax('User', 'removeBanIp', queryParams);
 };
 
 nextdom.user.removeRegisterDevice = function (queryParams) {
@@ -141,9 +114,9 @@ nextdom.user.removeRegisterDevice = function (queryParams) {
 };
 
 nextdom.user.deleteSession = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('User', 'deleteSession', queryParams, ['id']);
+  nextdom.private.ajax('User', 'deleteSession', queryParams, ['id']);
 };
 
 nextdom.user.supportAccess = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('User', 'supportAccess', queryParams, ['enable']);
+  nextdom.private.ajax('User', 'supportAccess', queryParams, ['enable']);
 };

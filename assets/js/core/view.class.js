@@ -14,7 +14,6 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 nextdom.view = function () {
 };
 
@@ -96,18 +95,15 @@ nextdom.view.handleViewAjax = function (queryParams) {
       result.html += '</div>';
     } else if (viewZone.type == 'table') {
       result.html += viewZone.html;
-      ;
     }
     result.html += '</div>';
   }
   return result;
 };
 
-
 nextdom.view.remove = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('View', 'remove', queryParams, ['id']);
+  nextdom.private.ajax('View', 'remove', queryParams, ['id']);
 };
-
 
 nextdom.view.save = function (queryParams) {
   var paramsRequired = ['id', 'view'];
@@ -121,29 +117,17 @@ nextdom.view.save = function (queryParams) {
 };
 
 nextdom.view.get = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('View', 'get', queryParams, ['id']);
+  nextdom.private.ajax('View', 'get', queryParams, ['id']);
 };
 
 nextdom.view.setEqLogicOrder = function (queryParams) {
-  var paramsRequired = ['eqLogics'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'View', 'setEqLogicOrder');
-    ajaxParams.data['eqLogics'] = json_encode(queryParams.eqLogics);
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('View', 'setEqLogicOrder', queryParams, ['eqLogics'], true);
 };
 
 nextdom.view.setOrder = function (queryParams) {
-  var paramsRequired = ['views'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'View', 'setOrder');
-    ajaxParams.data['views'] = json_encode(queryParams.views);
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('View', 'setOrder', queryParams, ['views'], true);
 };
 
 nextdom.view.removeImage = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('View', 'removeImage', queryParams, ['id']);
+  nextdom.private.ajax('View', 'removeImage', queryParams, ['id']);
 };

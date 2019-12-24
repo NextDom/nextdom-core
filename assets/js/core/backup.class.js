@@ -14,31 +14,29 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 nextdom.backup = function () {
 };
 
 nextdom.backup.backup = function (queryParams) {
-  nextdom.private.simpleAjax('Repo', 'backup', queryParams);
+  nextdom.private.ajax('Repo', 'backup', queryParams);
 };
 
-
 nextdom.backup.restoreLocal = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Repo', 'restore', queryParams, ['backup']);
+  nextdom.private.ajax('Repo', 'restore', queryParams, ['backup']);
 };
 
 nextdom.backup.remove = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Repo', 'removeBackup', queryParams, ['backup']);
+  nextdom.private.ajax('Repo', 'removeBackup', queryParams, ['backup']);
 };
 
 nextdom.backup.uploadCloud = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Repo', 'uploadCloud', queryParams, ['backup', 'repo']);
+  nextdom.private.ajax('Repo', 'uploadCloud', queryParams, ['backup', 'repo']);
 };
 
 nextdom.backup.restoreCloud = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Repo', 'restoreCloud', queryParams, ['backup', 'repo']);
+  nextdom.private.ajax('Repo', 'restoreCloud', queryParams, ['backup', 'repo']);
 };
 
 nextdom.backup.list = function (queryParams) {
-  nextdom.private.simpleAjax('Repo', 'listBackup', queryParams);
+  nextdom.private.ajax('NextDom', 'listBackup', queryParams);
 };

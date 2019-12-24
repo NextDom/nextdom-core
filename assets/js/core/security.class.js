@@ -14,26 +14,13 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 nextdom.security = function () {
 };
 
 nextdom.security.remove = function (queryParams) {
-  var paramsRequired = ['id'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Connection', 'remove');
-    ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('Connection', 'remove', queryParams, ['id']);
 };
 
 nextdom.security.ban = function (queryParams) {
-  var paramsRequired = ['id'];
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Connection', 'ban');
-    ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('Connection', 'ban', queryParams, ['id']);
 };

@@ -14,7 +14,6 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 nextdom.plugin = function () {
 };
 
@@ -40,11 +39,11 @@ nextdom.plugin.all = function (queryParams) {
 };
 
 nextdom.plugin.toggle = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Plugin', 'toggle', queryParams, ['id', 'state']);
+  nextdom.private.ajax('Plugin', 'toggle', queryParams, ['id', 'state']);
 };
 
 nextdom.plugin.get = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Plugin', 'getConf', queryParams, ['id']);
+  nextdom.private.ajax('Plugin', 'getConf', queryParams, ['id']);
 };
 
 nextdom.plugin.getDependancyInfo = function (queryParams) {
@@ -61,20 +60,11 @@ nextdom.plugin.getDependancyInfo = function (queryParams) {
 };
 
 nextdom.plugin.dependancyInstall = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Plugin', 'dependancyInstall', queryParams, ['id']);
+  nextdom.private.ajax('Plugin', 'dependancyInstall', queryParams, ['id']);
 };
 
 nextdom.plugin.getDeamonInfo = function (queryParams) {
-  var paramsRequired = ['id'];
-  var paramsSpecifics = {
-    global: false,
-  };
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Plugin', 'getDeamonInfo');
-    ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('Plugin', 'getDeamonInfo', queryParams, ['id'], false,false);
 };
 
 nextdom.plugin.deamonStart = function (queryParams) {
@@ -90,9 +80,9 @@ nextdom.plugin.deamonStart = function (queryParams) {
 };
 
 nextdom.plugin.deamonStop = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Plugin', 'deamonStop', queryParams, ['id']);
+  nextdom.private.ajax('Plugin', 'deamonStop', queryParams, ['id']);
 };
 
 nextdom.plugin.deamonChangeAutoMode = function (queryParams) {
-  nextdom.private.simpleAjaxWithRequiredParams('Plugin', 'deamonChangeAutoMode', queryParams, ['id', 'mode']);
+  nextdom.private.ajax('Plugin', 'deamonChangeAutoMode', queryParams, ['id', 'mode']);
 };

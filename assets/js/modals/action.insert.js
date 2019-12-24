@@ -55,4 +55,4 @@ mod_insertAction.setOptions = function (_options) {
 
 mod_insertAction.getValue = function () {
     return $('#mod_actionValue_sel').value();
-}
+};
