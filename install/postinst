@@ -52,8 +52,6 @@ print_log_in() {
 }
 
 print_log_ok() {
-  NORMAL="\\033[0;39m"
-  GREEN="\\033[1;92m"
 
   if [ 1 -eq "0${isdev}"  ] ; then
       echo -e " ${GREEN}Success${NORMAL}"
