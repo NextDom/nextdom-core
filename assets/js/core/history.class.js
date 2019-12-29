@@ -31,8 +31,8 @@ nextdom.history.get = function (queryParams) {
     }
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Cmd', 'getHistory');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Cmd', 'getHistory');
     ajaxParams.data['id'] = queryParams.cmd_id;
     ajaxParams.data['dateStart'] = queryParams.dateStart || '';
     ajaxParams.data['dateEnd'] = queryParams.dateEnd || '';
@@ -44,8 +44,8 @@ nextdom.history.copyHistoryToCmd = function (queryParams) {
   var paramsRequired = ['source_id', 'target_id'];
   var paramsSpecifics = {};
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Cmd', 'copyHistoryToCmd');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Cmd', 'copyHistoryToCmd');
     ajaxParams.data['source_id'] = queryParams.source_id;
     ajaxParams.data['target_id'] = queryParams.target_id;
     $.ajax(ajaxParams);
@@ -496,8 +496,8 @@ nextdom.history.changePoint = function (queryParams) {
     }
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Cmd', 'changeHistoryPoint');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Cmd', 'changeHistoryPoint');
     ajaxParams.data['cmd_id'] = queryParams.cmd_id;
     ajaxParams.data['datetime'] = queryParams.datetime;
     ajaxParams.data['value'] = queryParams.value;

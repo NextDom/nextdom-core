@@ -100,8 +100,8 @@ nextdom.cmd.execute = function (queryParams) {
     }
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Cmd', 'execCmd');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Cmd', 'execCmd');
     var cache = 1;
     if (queryParams.cache !== undefined) {
       cache = queryParams.cache;
@@ -220,8 +220,8 @@ nextdom.cmd.test = function (queryParams) {
     }
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Cmd', 'getCmd');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Cmd', 'getCmd');
     ajaxParams.data['id'] = queryParams.id;
     $.ajax(ajaxParams);
   }
@@ -263,8 +263,8 @@ nextdom.cmd.toHtml = function (queryParams) {
   var paramsRequired = ['id', 'version'];
   var paramsSpecifics = {};
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Cmd', 'toHtml');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Cmd', 'toHtml');
     ajaxParams.data['id'] = queryParams.id;
     ajaxParams.data['version'] = queryParams.version;
     $.ajax(ajaxParams);
@@ -275,8 +275,8 @@ nextdom.cmd.replaceCmd = function (queryParams) {
   var paramsRequired = ['source_id', 'target_id'];
   var paramsSpecifics = {};
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Cmd', 'replaceCmd');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Cmd', 'replaceCmd');
     ajaxParams.data['source_id'] = queryParams.source_id;
     ajaxParams.data['target_id'] = queryParams.target_id;
     $.ajax(ajaxParams);
@@ -297,8 +297,8 @@ nextdom.cmd.save = function (queryParams) {
     }
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Cmd', 'save');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Cmd', 'save');
     ajaxParams.data['cmd'] = json_encode(queryParams.cmd);
     $.ajax(ajaxParams);
   }
@@ -313,8 +313,8 @@ nextdom.cmd.multiSave = function (queryParams) {
     }
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Cmd', 'multiSave');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Cmd', 'multiSave');
     ajaxParams.data['cmd'] = json_encode(queryParams.cmds);
     $.ajax(ajaxParams);
   }
@@ -329,12 +329,12 @@ nextdom.cmd.byId = function (queryParams) {
     }
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
     if (isset(nextdom.cmd.cache.byId[params.id]) && init(params.noCache, false) == false) {
       params.success(nextdom.cmd.cache.byId[params.id]);
       return;
     }
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Cmd', 'byId');
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Cmd', 'byId');
     ajaxParams.data['id'] = queryParams.id;
     $.ajax(ajaxParams);
   }
@@ -349,12 +349,12 @@ nextdom.cmd.byHumanName = function (queryParams) {
     }
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
     if (isset(nextdom.cmd.cache.byHumanName[params.humanName]) && init(params.noCache, false) == false) {
       params.success(nextdom.cmd.cache.byHumanName[params.humanName]);
       return;
     }
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Cmd', 'byHumanName');
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Cmd', 'byHumanName');
     ajaxParams.data['humanName'] = queryParams.humanName;
     $.ajax(ajaxParams);
   }
@@ -364,8 +364,8 @@ nextdom.cmd.usedBy = function (queryParams) {
   var paramsRequired = ['id'];
   var paramsSpecifics = {};
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Cmd', 'usedBy');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Cmd', 'usedBy');
     ajaxParams.data['id'] = queryParams.id;
     $.ajax(ajaxParams);
   }
@@ -379,7 +379,7 @@ nextdom.cmd.changeType = function (_cmd, _subType) {
     default: 0,
     async: false,
     error: function (error) {
-      queryParams.error(error);
+      console.log(error);
     },
     success: function (subType) {
       for (var i in subType) {
@@ -596,8 +596,8 @@ nextdom.cmd.displayActionsOption = function (queryParams) {
   var paramsRequired = ['params'];
   var paramsSpecifics = {};
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Scenario', 'actionToHtml');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Scenario', 'actionToHtml');
     ajaxParams.async = queryParams.async || true;
     ajaxParams.data['params'] = json_encode(queryParams.params);
     $.ajax(ajaxParams);
@@ -644,8 +644,8 @@ nextdom.cmd.setOrder = function (queryParams) {
   var paramsRequired = ['cmds'];
   var paramsSpecifics = {};
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Cmd', 'setOrder');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Cmd', 'setOrder');
     ajaxParams.data['cmds'] = json_encode(queryParams.cmds);
     $.ajax(ajaxParams);
   }

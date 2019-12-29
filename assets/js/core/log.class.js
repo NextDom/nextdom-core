@@ -27,8 +27,8 @@ nextdom.log.list = function (queryParams) {
     global: queryParams.global || true,
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Log', 'list');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Log', 'list');
     $.ajax(ajaxParams);
   }
 };
@@ -39,8 +39,8 @@ nextdom.log.removeAll = function (queryParams) {
     global: queryParams.global || true,
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Log', 'removeAll');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Log', 'removeAll');
     $.ajax(ajaxParams);
   }
 };
@@ -51,8 +51,8 @@ nextdom.log.get = function (queryParams) {
     global: queryParams.global || true,
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Log', 'get');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Log', 'get');
     ajaxParams.data['log'] = queryParams.log;
     $.ajax(ajaxParams);
   }
@@ -64,8 +64,8 @@ nextdom.log.remove = function (queryParams) {
     global: queryParams.global || true,
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Log', 'remove');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Log', 'remove');
     ajaxParams.data['log'] = queryParams.log;
     $.ajax(ajaxParams);
   }
@@ -77,8 +77,8 @@ nextdom.log.clear = function (queryParams) {
     global: queryParams.global || true,
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Log', 'clear');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Log', 'clear');
     ajaxParams.data['log'] = queryParams.log;
     $.ajax(ajaxParams);
   }

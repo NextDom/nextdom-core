@@ -19,13 +19,13 @@ nextdom.network = function () {
 };
 
 nextdom.network.restartDns = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'Network', 'restartDns');
+  var params = $.extend({}, nextdom.private.default_params, {}, queryParams || {});
+  var ajaxParams = nextdom.private.getParamsAJAX(params, 'Network', 'restartDns');
   $.ajax(ajaxParams);
 };
 
 nextdom.network.stopDns = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'Network', 'stopDns');
+  var params = $.extend({}, nextdom.private.default_params, {}, queryParams || {});
+  var ajaxParams = nextdom.private.getParamsAJAX(params, 'Network', 'stopDns');
   $.ajax(ajaxParams);
 };

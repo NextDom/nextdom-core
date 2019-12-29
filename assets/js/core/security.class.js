@@ -22,8 +22,8 @@ nextdom.security.remove = function (queryParams) {
   var paramsRequired = ['id'];
   var paramsSpecifics = {};
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Connection', 'remove');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Connection', 'remove');
     ajaxParams.data['id'] = queryParams.id;
     $.ajax(ajaxParams);
   }
@@ -33,8 +33,8 @@ nextdom.security.ban = function (queryParams) {
   var paramsRequired = ['id'];
   var paramsSpecifics = {};
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Connection', 'ban');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Connection', 'ban');
     ajaxParams.data['id'] = queryParams.id;
     $.ajax(ajaxParams);
   }

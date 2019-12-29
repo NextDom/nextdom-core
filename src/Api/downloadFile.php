@@ -37,10 +37,17 @@ try {
 
     $baseFilePath = Utils::init('pathfile');
 
-    if (strpos($baseFilePath, 'log') === 0) {
+    if (strpos($baseFilePath, 'log') === false) {
+        if (strpos($baseFilePath, 'data') === 0) {
+            $filePath = NEXTDOM_DATA . '/data';
+        } else {
+            $filePath = realpath(NEXTDOM_DATA . '/' . $baseFilePath);
+            if (!is_file($filePath)) {
+                $filePath = realpath(NEXTDOM_ROOT . '/' . $baseFilePath);
+            }
+        }
+    } else {
         $filePath = realpath(NEXTDOM_LOG . '/' . substr($baseFilePath, 4));
-    } elseif (strpos($baseFilePath, 'data') === 0) {
-        $filePath = realpath(NEXTDOM_DATA . '/' . $baseFilePath);
     }
 
     // Bad path

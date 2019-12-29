@@ -20,8 +20,8 @@ nextdom.listener = function () {
 
 
 nextdom.listener.all = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'Listener', 'all');
+  var params = $.extend({}, nextdom.private.default_params, {}, queryParams || {});
+  var ajaxParams = nextdom.private.getParamsAJAX(params, 'Listener', 'all');
   $.ajax(ajaxParams);
 };
 
@@ -29,8 +29,8 @@ nextdom.listener.save = function (queryParams) {
   var paramsRequired = ['listeners'];
   var paramsSpecifics = {};
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Listener', 'save');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Listener', 'save');
     ajaxParams.data['listeners'] = json_encode(queryParams.listeners);
     $.ajax(ajaxParams);
   }

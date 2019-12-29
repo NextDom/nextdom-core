@@ -19,15 +19,15 @@ nextdom.backup = function () {
 };
 
 nextdom.backup.backup = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'NextDom', 'backup');
+  var params = $.extend({}, nextdom.private.default_params, {}, queryParams || {});
+  var ajaxParams = nextdom.private.getParamsAJAX(params, 'NextDom', 'backup');
   $.ajax(ajaxParams);
 };
 
 
 nextdom.backup.restoreLocal = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'NextDom', 'restore');
+  var params = $.extend({}, nextdom.private.default_params, {}, queryParams || {});
+  var ajaxParams = nextdom.private.getParamsAJAX(params, 'NextDom', 'restore');
   ajaxParams.data['backup'] = queryParams.backup;
   $.ajax(ajaxParams);
 };
@@ -36,8 +36,8 @@ nextdom.backup.remove = function (queryParams) {
   var paramsRequired = ['backup'];
   var paramsSpecifics = {};
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'NextDom', 'removeBackup');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'NextDom', 'removeBackup');
     ajaxParams.data['backup'] = queryParams.backup;
     $.ajax(ajaxParams);
   }
@@ -47,8 +47,8 @@ nextdom.backup.uploadCloud = function (queryParams) {
   var paramsRequired = ['backup'];
   var paramsSpecifics = {};
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Repo', 'uploadCloud');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Repo', 'uploadCloud');
     ajaxParams.data['backup'] = queryParams.backup;
     ajaxParams.data['repo'] = queryParams.repo;
     $.ajax(ajaxParams);
@@ -59,8 +59,8 @@ nextdom.backup.restoreCloud = function (queryParams) {
   var paramsRequired = ['backup', 'repo'];
   var paramsSpecifics = {};
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Repo', 'restoreCloud');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Repo', 'restoreCloud');
     ajaxParams.data['backup'] = queryParams.backup;
     ajaxParams.data['repo'] = queryParams.repo;
     $.ajax(ajaxParams);
@@ -68,7 +68,7 @@ nextdom.backup.restoreCloud = function (queryParams) {
 };
 
 nextdom.backup.list = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'NextDom', 'listBackup');
+  var params = $.extend({}, nextdom.private.default_params, {}, queryParams || {});
+  var ajaxParams = nextdom.private.getParamsAJAX(params, 'NextDom', 'listBackup');
   $.ajax(ajaxParams);
 };

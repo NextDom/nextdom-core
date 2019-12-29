@@ -23,8 +23,8 @@ nextdom.report.list = function (queryParams) {
   var paramsRequired = ['type', 'id'];
   var paramsSpecifics = {};
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Report', 'list');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Report', 'list');
     ajaxParams.data['id'] = queryParams.id;
     ajaxParams.data['type'] = queryParams.type;
     $.ajax(ajaxParams);
@@ -35,8 +35,8 @@ nextdom.report.get = function (queryParams) {
   var paramsRequired = ['type', 'id', 'report'];
   var paramsSpecifics = {};
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Report', 'get');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Report', 'get');
     ajaxParams.data['id'] = queryParams.id;
     ajaxParams.data['type'] = queryParams.type;
     ajaxParams.data['report'] = queryParams.report;
@@ -48,8 +48,8 @@ nextdom.report.remove = function (queryParams) {
   var paramsRequired = ['type', 'id', 'report'];
   var paramsSpecifics = {};
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Report', 'remove');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Report', 'remove');
     ajaxParams.data['id'] = queryParams.id;
     ajaxParams.data['type'] = queryParams.type;
     ajaxParams.data['report'] = queryParams.report;
@@ -61,8 +61,8 @@ nextdom.report.removeAll = function (queryParams) {
   var paramsRequired = ['type', 'id'];
   var paramsSpecifics = {};
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Report', 'removeAll');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Report', 'removeAll');
     ajaxParams.data['id'] = queryParams.id;
     ajaxParams.data['type'] = queryParams.type;
     $.ajax(ajaxParams);

@@ -70,6 +70,7 @@ class Common extends Enum
     const PROFILE = 'profile';
     const QUERY = 'query';
     const REPLY_CMD = 'reply_cmd';
+    const RESULT = 'result';
     const STATUS = 'status';
     const SUB_PROCESS = 'subprocess';
     const SUBTYPE = 'subtype';
