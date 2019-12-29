@@ -68,7 +68,7 @@ class NoteManager
         $values = ['id' => $id];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
-                WHERE id = :id';
+                WHERE `id` = :id';
         return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
@@ -84,7 +84,7 @@ class NoteManager
     {
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
-                ORDER BY name';
+                ORDER BY `name`';
         return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
     }
 }

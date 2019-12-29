@@ -970,21 +970,7 @@ class EqLogic implements EntityInterface
             $this->setStatus(BatteryStatus::WARNING, 1);
             $this->setStatus(BatteryStatus::DANGER, 0);
             if ($prevStatus == 0) {
-                if (ConfigManager::ByKey('alert::addMessageOnBatterywarning') == 1) {
-                    MessageManager::add($this->getEqType_name(), $message, '', $logicalId);
-                }
-                $cmds = explode(('&&'), ConfigManager::byKey('alert::batterywarningCmd'));
-                if (count($cmds) > 0 && trim(ConfigManager::byKey('alert::batterywarningCmd')) != '') {
-                    foreach ($cmds as $id) {
-                        $cmd = CmdManager::byId(str_replace('#', '', $id));
-                        if (is_object($cmd)) {
-                            $cmd->execCmd([
-                                'title' => __('[' . ConfigManager::byKey('name', 'core', 'NEXTDOM') . '] ') . $message,
-                                'message' => ConfigManager::byKey('name', 'core', 'NEXTDOM') . ' : ' . $message,
-                            ]);
-                        }
-                    }
-                }
+                CmdManager::checkAlertCmds('alert::addMessageOnBatterywarning', 'alert::batterywarningCmd', $message, $logicalId);
             }
         } else {
             MessageManager::removeByPluginLogicalId($this->getEqType_name(), 'warningBattery' . $this->getId());

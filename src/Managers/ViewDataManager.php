@@ -71,7 +71,7 @@ class ViewDataManager
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
-        WHERE id=:id';
+        WHERE `id` = :id';
         return DBHelper::getOneObject($sql, $value, self::CLASS_NAME);
     }
 
@@ -88,7 +88,7 @@ class ViewDataManager
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
-        WHERE viewZone_id=:viewZone_id
+        WHERE `viewZone_id` = :viewZone_id
         ORDER BY `order`';
         return DBHelper::getAllObjects($sql, $value, self::CLASS_NAME);
     }
@@ -105,7 +105,7 @@ class ViewDataManager
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
-        WHERE configuration LIKE :search';
+        WHERE `configuration` LIKE :search';
         return DBHelper::getAllObjects($sql, $value, self::CLASS_NAME);
     }
 
@@ -138,8 +138,8 @@ class ViewDataManager
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
-        WHERE type=:type
-        AND link_id=:link_id
+        WHERE `type` = :type
+        AND `link_id` = :link_id
         ORDER BY `order`';
         return DBHelper::getAllObjects($sql, $value, self::CLASS_NAME);
     }

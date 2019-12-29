@@ -303,7 +303,7 @@ class DBHelper
                 if (!$noProcess && method_exists($objToSave, 'getId')) {
                     $parameters['id'] = $objToSave->getId(); //override if necessary
                 }
-                $sql = 'UPDATE `' . self::getTableName($objToSave) . '` SET ' . implode(', ', $sql) . ' WHERE id = :id';
+                $sql = 'UPDATE `' . self::getTableName($objToSave) . '` SET ' . implode(', ', $sql) . ' WHERE `id` = :id';
                 $res = self::getOne($sql, $parameters);
             } else {
                 $res = true;

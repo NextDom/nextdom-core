@@ -66,7 +66,7 @@ class ScenarioManager
     public static function byName(string $name)
     {
         $values = ['name' => $name];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . ' FROM ' . self::DB_CLASS_NAME . ' WHERE name = :name';
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . ' FROM ' . self::DB_CLASS_NAME . ' WHERE `name` = :name';
         return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
@@ -102,7 +102,7 @@ class ScenarioManager
     public static function byId($id)
     {
         $values = ['id' => $id];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . ' FROM ' . self::DB_CLASS_NAME . ' WHERE id = :id';
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . ' FROM ' . self::DB_CLASS_NAME . ' WHERE `id` = :id';
         return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
@@ -183,7 +183,7 @@ class ScenarioManager
                 FROM ' . self::DB_CLASS_NAME . ' s ';
 
         if ($objectName == __('Aucun')) {
-            $sql .= 'WHERE s.name=:scenario_name ';
+            $sql .= 'WHERE s.name = :scenario_name ';
             if ($groupName == __('Aucun')) {
                 $sql .= 'AND (`group` IS NULL OR `group` = ""  OR `group` = "Aucun" OR `group` = "None")
                          AND s.object_id IS NULL';
@@ -267,13 +267,13 @@ class ScenarioManager
             $sql .= ' WHERE object_id IS NULL';
         } else {
             $values['object_id'] = $objectId;
-            $sql .= ' WHERE object_id = :object_id';
+            $sql .= ' WHERE `object_id` = :object_id';
         }
         if ($onlyEnabled) {
-            $sql .= ' AND isActive = 1';
+            $sql .= ' AND `isActive` = 1';
         }
         if ($onlyVisible) {
-            $sql .= ' AND isVisible = 1';
+            $sql .= ' AND `isVisible` = 1';
         }
         $sql .= ' ORDER BY `order`';
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
@@ -344,10 +344,10 @@ class ScenarioManager
     {
         $values = ['cmd_id' => '%#' . $cmdId . '#%'];
         $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE mode != "schedule" AND `trigger` LIKE :cmd_id';
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE `mode` != "schedule" AND `trigger` LIKE :cmd_id';
         if ($onlyEnabled) {
-            $sql .= ' AND isActive = 1';
+            $sql .= ' AND `isActive` = 1';
         }
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
@@ -363,7 +363,7 @@ class ScenarioManager
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE `mode` != "provoke"
-                AND isActive = 1';
+                AND `isActive` = 1';
         return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
     }
 

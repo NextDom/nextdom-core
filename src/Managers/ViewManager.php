@@ -69,7 +69,7 @@ class ViewManager
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
-        WHERE id = :id';
+        WHERE `id` = :id';
         return DBHelper::getOneObject($sql, $value, self::CLASS_NAME);
     }
 

@@ -84,14 +84,14 @@ class MessageManager
         $sql = 'DELETE FROM ' . self::DB_CLASS_NAME;
         if ($_plugin != '') {
             $values['plugin'] = $_plugin;
-            $sql .= ' WHERE plugin = :plugin';
+            $sql .= ' WHERE `plugin` = :plugin';
             if ($_logicalId != '') {
                 if ($_search) {
                     $values['logicalId'] = '%' . $_logicalId . '%';
-                    $sql .= ' AND logicalId LIKE :logicalId';
+                    $sql .= ' AND `logicalId` LIKE :logicalId';
                 } else {
                     $values['logicalId'] = $_logicalId;
-                    $sql .= ' AND logicalId = :logicalId';
+                    $sql .= ' AND `logicalId` = :logicalId';
                 }
             }
         }
@@ -107,7 +107,7 @@ class MessageManager
     public static function nbMessage()
     {
         $sql = 'SELECT count(*)
-        FROM ' . self::DB_CLASS_NAME;
+                FROM ' . self::DB_CLASS_NAME;
         $count = DBHelper::getOne($sql);
         return $count['count(*)'];
     }
@@ -124,8 +124,8 @@ class MessageManager
             'id' => $_id,
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE id=:id';
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE `id` = :id';
         return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
@@ -142,9 +142,9 @@ class MessageManager
             'plugin' => $_plugin,
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE logicalId=:logicalId
-        AND plugin=:plugin';
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE `logicalId` = :logicalId
+                AND `plugin` = :plugin';
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
@@ -160,9 +160,9 @@ class MessageManager
             'plugin' => $_plugin,
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE plugin=:plugin
-        ORDER BY date DESC';
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE `plugin` = :plugin
+                ORDER BY `date` DESC';
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
@@ -172,8 +172,8 @@ class MessageManager
      */
     public static function listPlugin()
     {
-        $sql = 'SELECT DISTINCT(plugin)
-        FROM ' . self::DB_CLASS_NAME;
+        $sql = 'SELECT DISTINCT(`plugin`)
+                FROM ' . self::DB_CLASS_NAME;
         return DBHelper::getAll($sql);
     }
 
@@ -185,9 +185,9 @@ class MessageManager
     public static function all()
     {
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        ORDER BY date DESC
-        LIMIT 500';
+                FROM ' . self::DB_CLASS_NAME . '
+                ORDER BY `date` DESC
+                LIMIT 500';
         return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
     }
 
@@ -202,9 +202,9 @@ class MessageManager
             'logicalId' => $logicialId,
             'plugin' => $pluginId,
         ];
-        $sql = 'DELETE FROM message
-                WHERE logicalId=:logicalId
-                AND plugin=:plugin';
+        $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . '
+                WHERE `logicalId` = :logicalId
+                AND `plugin` = :plugin';
         return DBHelper::exec($sql, $values);
     }
 }

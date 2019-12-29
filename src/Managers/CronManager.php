@@ -65,7 +65,7 @@ class CronManager
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
-                WHERE id = :id';
+                WHERE `id` = :id';
         return DBHelper::getOneObject($sql, $value, self::CLASS_NAME);
     }
 
@@ -87,8 +87,8 @@ class CronManager
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
-                WHERE class = :class
-                AND function = :function';
+                WHERE `class` = :class
+                AND `function` = :function';
         if ($options != '') {
             $options = json_encode($options, JSON_UNESCAPED_UNICODE);
             $value['option'] = $options;
@@ -115,8 +115,8 @@ class CronManager
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
-                WHERE class = :class
-                AND function = :function';
+                WHERE `class` = :class
+                AND `function` = :function';
         if ($options != '') {
             $value['option'] = '%' . $options . '%';
             $sql .= ' AND `option` LIKE :option';
@@ -154,7 +154,7 @@ class CronManager
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME;
         if ($ordered) {
-            $sql .= ' ORDER BY deamon DESC';
+            $sql .= ' ORDER BY `deamon` DESC';
         }
         return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
     }

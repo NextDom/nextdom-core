@@ -165,7 +165,7 @@ class UserManager
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
-                WHERE login = :login';
+                WHERE `login` = :login';
         return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
@@ -184,8 +184,8 @@ class UserManager
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
-                WHERE login = :login
-                AND password = :password';
+                WHERE `login` = :login
+                AND `password` = :password';
         return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
@@ -201,7 +201,7 @@ class UserManager
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
-                WHERE id = :id';
+                WHERE `id` = :id';
         return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
@@ -217,7 +217,7 @@ class UserManager
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
-                WHERE hash = :hash';
+                WHERE `hash` = :hash';
         return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
@@ -236,8 +236,8 @@ class UserManager
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
-                WHERE login = :login
-                AND hash = :hash';
+                WHERE `login` = :login
+                AND `hash` = :hash';
         return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
@@ -267,8 +267,8 @@ class UserManager
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
-                WHERE rights LIKE :rights
-                OR rights LIKE :rights2';
+                WHERE `rights` LIKE :rights
+                OR `rights` LIKE :rights2';
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
@@ -285,7 +285,7 @@ class UserManager
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
-                WHERE profils = :profils';
+                WHERE `profils` = :profils';
         if ($_enable) {
             $sql .= ' AND enable=1';
         }
@@ -305,7 +305,7 @@ class UserManager
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
-        WHERE enable=:enable';
+        WHERE `enable` = :enable';
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 

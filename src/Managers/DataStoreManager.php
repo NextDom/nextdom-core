@@ -61,7 +61,7 @@ class DataStoreManager
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
-                WHERE id=:id';
+                WHERE `id` = :id';
         return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
@@ -128,10 +128,10 @@ class DataStoreManager
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
-                WHERE type=:type';
+                WHERE `type` = :type';
         if ($linkId != '') {
             $values['link_id'] = $linkId;
-            $sql .= ' AND link_id = :link_id';
+            $sql .= ' AND `link_id` = :link_id';
         }
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }

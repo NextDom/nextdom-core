@@ -199,8 +199,8 @@ class MigrationHelper
             foreach ($cronData as $cronName => $cronConfig) {
                 $sql = 'SELECT ' . DBHelper::buildField(CronManager::CLASS_NAME) . '
                         FROM ' . CronManager::DB_CLASS_NAME . '
-                        WHERE class = :class
-                        AND function = :function';
+                        WHERE `class` = :class
+                        AND `function` = :function';
                 $params = [
                     'class' => $cronClass,
                     'function' => $cronName,

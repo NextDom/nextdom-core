@@ -222,11 +222,11 @@ class JeeObject implements EntityInterface
             ];
             $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
-                WHERE father_id = :id';
+                WHERE `father_id` = :id';
             if ($_visible) {
-                $sql .= ' AND isVisible = 1 ';
+                $sql .= ' AND `isVisible` = 1 ';
             }
-            $sql .= ' ORDER BY position';
+            $sql .= ' ORDER BY `position`';
             $this->_child[$_visible] = DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
         }
         return $this->_child[$_visible];
@@ -425,11 +425,11 @@ class JeeObject implements EntityInterface
      */
     public function preRemove()
     {
-        DataStoreManager::removeByTypeLinkId('object', $this->getId());
+        DataStoreManager::removeByTypeLinkId(NextDomObj::OBJECT, $this->getId());
         $params = ['object_id' => $this->getId()];
-        $sql = 'UPDATE eqLogic set object_id= NULL where object_id = :object_id';
+        $sql = 'UPDATE ' . EqLogicManager::DB_CLASS_NAME . ' SET `object_id = NULL WHERE `object_id` = :object_id';
         DBHelper::exec($sql, $params);
-        $sql = 'UPDATE scenario set object_id= NULL where object_id = :object_id';
+        $sql = 'UPDATE ' . ScenarioManager::DB_CLASS_NAME . ' SET `object_id` = NULL WHERE `object_id` = :object_id';
         DBHelper::exec($sql, $params);
     }
 

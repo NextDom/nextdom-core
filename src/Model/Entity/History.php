@@ -91,10 +91,10 @@ class History
                         'datetime' => date('Y-m-d H:i:00', strtotime($this->getDatetime()) + 300),
                         'value' => $this->getValue(),
                     ];
-                    $sql = 'REPLACE INTO history
-                    SET cmd_id=:cmd_id,
-                    `datetime`=:datetime,
-                    value=:value';
+                    $sql = 'REPLACE INTO ' . HistoryManager::DB_CLASS_NAME . '
+                    SET `cmd_id` = :cmd_id,
+                    `datetime` = :datetime,
+                    `value` = :value';
                     DBHelper::exec($sql, $values);
                     return;
                 }
@@ -103,8 +103,8 @@ class History
                     'datetime' => $this->getDatetime(),
                 ];
                 $sql = 'SELECT `value`
-                FROM history
-                WHERE cmd_id=:cmd_id
+                FROM ' . HistoryManager::DB_CLASS_NAME . '
+                WHERE `cmd_id` = :cmd_id
                 AND `datetime`=:datetime';
                 $result = DBHelper::getOne($sql, $values);
                 if ($result !== false) {
@@ -135,10 +135,10 @@ class History
         if ($values['value'] === '') {
             $values['value'] = null;
         }
-        $sql = 'REPLACE INTO ' . $this->getTableName() . '
-        SET cmd_id=:cmd_id,
-        `datetime`=:datetime,
-        value=:value';
+        $sql = 'REPLACE INTO ' . HistoryManager::DB_CLASS_NAME . '
+        SET `cmd_id` = :cmd_id,
+        `datetime` = :datetime,
+        `value` = :value';
         DBHelper::exec($sql, $values);
     }
 

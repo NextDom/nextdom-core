@@ -53,7 +53,7 @@ use NextDom\Model\Entity\ScenarioExpression;
  */
 class ScenarioExpressionManager
 {
-    const DB_CLASS_NAME = 'scenarioExpression';
+    const DB_CLASS_NAME = '`scenarioExpression`';
     const CLASS_NAME = ScenarioExpression::class;
     const WAIT_LIMIT = 7200;
 
@@ -71,7 +71,7 @@ class ScenarioExpressionManager
         $params = ['id' => $id];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
-                WHERE id = :id';
+                WHERE `id` = :id';
         return DBHelper::getOneObject($sql, $params, self::CLASS_NAME);
     }
 
@@ -104,7 +104,7 @@ class ScenarioExpressionManager
         $params = ['scenarioSubElement_id' => $scenarioSubElementId];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
-                WHERE scenarioSubElement_id = :scenarioSubElement_id
+                WHERE `scenarioSubElement_id` = :scenarioSubElement_id
                 ORDER BY `order`';
         return DBHelper::getAllObjects($sql, $params, self::CLASS_NAME);
     }
@@ -125,13 +125,13 @@ class ScenarioExpressionManager
         $params = ['expression' => '%' . $expression . '%'];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
-                WHERE expression LIKE :expression ';
+                WHERE `expression` LIKE :expression ';
         if ($options !== null) {
             $params['options'] = '%' . $options . '%';
             if ($and) {
-                $sql .= 'AND options LIKE :options';
+                $sql .= 'AND `options` LIKE :options';
             } else {
-                $sql .= 'OR options LIKE :options';
+                $sql .= 'OR `options` LIKE :options';
             }
         }
         return DBHelper::getAllObjects($sql, $params, self::CLASS_NAME);
@@ -149,7 +149,7 @@ class ScenarioExpressionManager
         $params = ['expression' => $elementId];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
-                WHERE expression = :expression
+                WHERE `expression` = :expression
                 AND `type` = "element"';
         return DBHelper::getOneObject($sql, $params, self::CLASS_NAME);
     }

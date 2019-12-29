@@ -64,7 +64,7 @@ class PlanManager
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
-        WHERE id = :id';
+        WHERE `id` = :id';
         return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
@@ -81,7 +81,7 @@ class PlanManager
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
-        WHERE planHeader_id = :planHeader_id';
+        WHERE `planHeader_id` = :planHeader_id';
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
@@ -100,8 +100,8 @@ class PlanManager
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
-        WHERE link_type = :link_type
-        AND link_id = :link_id';
+        WHERE `link_type` = :link_type
+        AND `link_id` = :link_id';
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
@@ -122,9 +122,9 @@ class PlanManager
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
-        WHERE link_type = :link_type
-        AND link_id = :link_id
-        AND planHeader_id = :planHeader_id';
+        WHERE `link_type` = :link_type
+        AND `link_id` = :link_id
+        AND `planHeader_id` = :planHeader_id';
         return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
@@ -143,9 +143,9 @@ class PlanManager
             'planHeader_id' => $_planHeader_id,
         ];
         $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . '
-        WHERE link_type = :link_type
-        AND link_id = :link_id
-        AND planHeader_id = :planHeader_id';
+        WHERE `link_type` = :link_type
+        AND `link_id` = :link_id
+        AND `planHeader_id` = :planHeader_id';
         return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
@@ -174,7 +174,7 @@ class PlanManager
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
-        WHERE display LIKE :search';
+        WHERE `display` LIKE :search';
         return DBHelper::getAllObjects($sql, $value, self::CLASS_NAME);
     }
 
@@ -193,8 +193,8 @@ class PlanManager
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
-        WHERE configuration LIKE :search
-        AND link_type != :not';
+        WHERE `configuration` LIKE :search
+        AND `link_type` != :not';
         return DBHelper::getAllObjects($sql, $value, self::CLASS_NAME);
     }
 }

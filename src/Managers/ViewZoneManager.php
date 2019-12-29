@@ -70,7 +70,7 @@ class ViewZoneManager
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
-        WHERE id=:id';
+        WHERE `id` = :id';
         return DBHelper::getOneObject($sql, $value, self::CLASS_NAME);
     }
 
@@ -87,7 +87,7 @@ class ViewZoneManager
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
-        WHERE view_id=:view_id';
+        WHERE `view_id` = :view_id';
         return DBHelper::getAllObjects($sql, $value, self::CLASS_NAME);
     }
 
@@ -102,7 +102,7 @@ class ViewZoneManager
             'view_id' => $_view_id,
         ];
         $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . '
-                WHERE view_id = :view_id';
+                WHERE `view_id` = :view_id';
         return DBHelper::getOne($sql, $value);
     }
 

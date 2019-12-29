@@ -42,7 +42,7 @@ use NextDom\Model\Entity\ScenarioSubElement;
  */
 class ScenarioSubElementManager
 {
-    const DB_CLASS_NAME = 'scenarioSubElement';
+    const DB_CLASS_NAME = '`scenarioSubElement`';
     const CLASS_NAME = ScenarioSubElement::class;
 
     /**
@@ -59,7 +59,7 @@ class ScenarioSubElementManager
         $values = ['id' => $id];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
-                WHERE id = :id';
+                WHERE `id` = :id';
         return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
@@ -80,10 +80,10 @@ class ScenarioSubElementManager
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
-                WHERE scenarioElement_id=:scenarioElement_id ';
+                WHERE `scenarioElement_id` = :scenarioElement_id ';
         if ($filterByType != '') {
             $values['type'] = $filterByType;
-            $sql .= ' AND type=:type ';
+            $sql .= ' AND `type` = :type ';
             return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
         } else {
             $sql .= ' ORDER BY `order`';

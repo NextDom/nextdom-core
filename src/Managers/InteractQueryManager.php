@@ -74,7 +74,7 @@ class InteractQueryManager
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
-                WHERE interactDef_id=:interactDef_id
+                WHERE `interactDef_id` = :interactDef_id
                 ORDER BY `query`';
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
@@ -92,17 +92,17 @@ class InteractQueryManager
             ];
             $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                     FROM ' . self::DB_CLASS_NAME . '
-                    WHERE actions LIKE :actions';
+                    WHERE `actions` LIKE :actions';
         } else {
             $values = [
                 'actions' => '%' . $_action[0] . '%',
             ];
             $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                     FROM ' . self::DB_CLASS_NAME . '
-                    WHERE actions LIKE :actions';
+                    WHERE `actions` LIKE :actions';
             for ($i = 1; $i < count($_action); $i++) {
                 $values['actions' . $i] = '%' . $_action[$i] . '%';
-                $sql .= ' OR actions LIKE :actions' . $i;
+                $sql .= ' OR `actions` LIKE :actions' . $i;
             }
         }
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
@@ -119,7 +119,7 @@ class InteractQueryManager
             'interactDef_id' => $_interactDef_id,
         ];
         $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . '
-                WHERE interactDef_id = :interactDef_id';
+                WHERE `interactDef_id` = :interactDef_id';
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
@@ -772,13 +772,13 @@ class InteractQueryManager
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME;
         if ($caseSensitive) {
-            $sql .= ' WHERE query=:query';
+            $sql .= ' WHERE `query` = :query';
         } else {
             $sql .= ' WHERE LOWER(query)=LOWER(:query)';
         }
         if ($_interactDef_id !== null) {
             $values['interactDef_id'] = $_interactDef_id;
-            $sql .= ' AND interactDef_id=:interactDef_id';
+            $sql .= ' AND `interactDef_id` = :interactDef_id';
         }
         return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
@@ -807,7 +807,7 @@ class InteractQueryManager
     {
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
-                ORDER BY id';
+                ORDER BY `id`';
         return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
     }
 
@@ -910,7 +910,7 @@ class InteractQueryManager
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
-                WHERE id=:id';
+                WHERE `id` = :id';
 
         return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }

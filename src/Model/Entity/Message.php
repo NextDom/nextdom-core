@@ -99,8 +99,8 @@ class Message implements EntityInterface
             ];
             $sql = 'SELECT count(*)
                     FROM ' . self::DB_CLASS_NAME . '
-                    WHERE plugin = :plugin
-                    AND message = :message';
+                    WHERE `plugin` = :plugin
+                    AND `message` = :message';
             $result = DBHelper::getOne($sql, $values);
         } else {
             $values = [
@@ -108,9 +108,9 @@ class Message implements EntityInterface
                 'plugin' => $this->getPlugin(),
             ];
             $sql = 'SELECT count(*)
-            FROM message
-            WHERE plugin=:plugin
-            AND logicalId=:logicalId';
+            FROM ' . self::DB_CLASS_NAME . '
+            WHERE `plugin` = :plugin
+            AND `logicalId` = :logicalId';
             $result = DBHelper::getOne($sql, $values);
         }
         if ($result['count(*)'] != 0) {

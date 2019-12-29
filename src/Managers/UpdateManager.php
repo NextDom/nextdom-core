@@ -52,7 +52,7 @@ use NextDom\Model\Entity\Update;
 class UpdateManager
 {
     const REPO_CLASS_PATH = '\\NextDom\\Repo\\';
-    const DB_CLASS_NAME = 'update';
+    const DB_CLASS_NAME = '`update`';
     const CLASS_NAME = Update::class;
 
     /**
@@ -147,7 +147,7 @@ class UpdateManager
                 $params = [
                     'type' => $pluginId,
                 ];
-                $sql = 'DELETE FROM `' . self::DB_CLASS_NAME . '`
+                $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . '
                         WHERE `type` = :type';
                 DBHelper::exec($sql, $params);
             }
@@ -170,9 +170,9 @@ class UpdateManager
             'logicalId' => $logicalId,
             'type' => $type,
         ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
-                FROM `' . self::DB_CLASS_NAME . '`
-                WHERE logicalId = :logicalId
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE `logicalId` = :logicalId
                 AND `type` = :type';
         return DBHelper::getOneObject($sql, $params, self::CLASS_NAME);
     }
@@ -191,8 +191,8 @@ class UpdateManager
         $params = [
             'type' => $type,
         ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
-                FROM `' . self::DB_CLASS_NAME . '`
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
                 WHERE `type` = :type';
         return DBHelper::getAllObjects($sql, $params, self::CLASS_NAME);
     }
@@ -209,13 +209,13 @@ class UpdateManager
     public static function all($filter = '')
     {
         $params = [];
-        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
-                FROM `' . self::DB_CLASS_NAME . '` ';
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . ' ';
         if ($filter != '') {
             $params['type'] = $filter;
             $sql .= 'WHERE `type` = :type ';
         }
-        $sql .= 'ORDER BY FIELD( `status`, "update", "ok", "depreciated") ASC, FIELD( `type`, "plugin","core") DESC, `name` ASC';
+        $sql .= 'ORDER BY FIELD(`status`, "update", "ok", "depreciated") ASC, FIELD(`type`, "plugin", "core") DESC, `name` ASC';
         return DBHelper::getAllObjects($sql, $params, self::CLASS_NAME);
     }
 
@@ -349,9 +349,9 @@ class UpdateManager
         $params = [
             'id' => $id,
         ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
-                FROM `' . self::DB_CLASS_NAME . '`
-                WHERE id = :id';
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE `id` = :id';
         return DBHelper::getOneObject($sql, $params, self::CLASS_NAME);
     }
 
@@ -369,9 +369,9 @@ class UpdateManager
         $params = [
             'status' => $status,
         ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
-                FROM `' . self::DB_CLASS_NAME . '`
-                WHERE status = :status';
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE `status` = :status';
         return DBHelper::getAllObjects($sql, $params, self::CLASS_NAME);
     }
 
@@ -389,9 +389,9 @@ class UpdateManager
         $params = [
             'logicalId' => $logicalId,
         ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
-                FROM `' . self::DB_CLASS_NAME . '`
-                WHERE logicalId = :logicalId';
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE `logicalId` = :logicalId';
         return DBHelper::getOneObject($sql, $params, self::CLASS_NAME);
     }
 
@@ -411,7 +411,7 @@ class UpdateManager
             'configuration' => '%"doNotUpdate":"1"%'
         ];
         $sql = 'SELECT count(*)
-               FROM `' . self::DB_CLASS_NAME . '`
+               FROM ' . self::DB_CLASS_NAME . '
                WHERE `status` = :status
                AND `configuration` NOT LIKE :configuration';
         if ($filter != '') {

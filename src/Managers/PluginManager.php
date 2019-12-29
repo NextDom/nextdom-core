@@ -212,7 +212,7 @@ class PluginManager
         ];
         $sql = 'UPDATE eqLogic
                 SET isEnable = 0
-                WHERE eqType_name = :eqType_name';
+                WHERE `eqType_name` = :eqType_name';
         DBHelper::exec($sql, $values);
     }
 

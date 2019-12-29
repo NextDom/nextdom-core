@@ -58,7 +58,7 @@ class Plan3dManager
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
-        WHERE id=:id';
+        WHERE `id` = :id';
         return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
@@ -73,8 +73,8 @@ class Plan3dManager
             'plan3dHeader_id' => $_plan3dHeader_id,
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE plan3dHeader_id=:plan3dHeader_id';
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE `plan3dHeader_id` = :plan3dHeader_id';
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
@@ -92,9 +92,9 @@ class Plan3dManager
             'link_id' => $_link_id,
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE link_type=:link_type
-        AND link_id=:link_id';
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE `link_type` = :link_type
+                AND `link_id` = :link_id';
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
@@ -113,8 +113,8 @@ class Plan3dManager
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
-        WHERE name=:name
-        AND plan3dHeader_id=:plan3dHeader_id';
+        WHERE `name` = :name
+        AND `plan3dHeader_id` = :plan3dHeader_id';
         return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
@@ -135,9 +135,9 @@ class Plan3dManager
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
         FROM ' . self::DB_CLASS_NAME . '
-        WHERE link_type=:link_type
-        AND link_id=:link_id
-        AND plan3dHeader_id=:plan3dHeader_id';
+        WHERE `link_type` = :link_type
+        AND `link_id` = :link_id
+        AND `plan3dHeader_id` = :plan3dHeader_id';
         return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
@@ -156,9 +156,9 @@ class Plan3dManager
             'plan3dHeader_id' => $_plan3dHeader_id,
         ];
         $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . '
-        WHERE link_type=:link_type
-        AND link_id=:link_id
-        AND plan3dHeader_id=:plan3dHeader_id';
+        WHERE `link_type` = :link_type
+        AND `link_id` = :link_id
+        AND `plan3dHeader_id` = :plan3dHeader_id';
         return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
@@ -186,8 +186,8 @@ class Plan3dManager
             'search' => '%' . $_search . '%',
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE display LIKE :search';
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE `display` LIKE :search';
         return DBHelper::getAllObjects($sql, $value, self::CLASS_NAME);
     }
 
@@ -205,9 +205,9 @@ class Plan3dManager
             'not' => $_not,
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE configuration LIKE :search
-        AND link_type !=:not';
+                FROM ' . self::DB_CLASS_NAME . '
+                WHERE `configuration` LIKE :search
+                AND `link_type` !=:not';
         return DBHelper::getAllObjects($sql, $value, self::CLASS_NAME);
     }
 }

@@ -62,7 +62,7 @@ class InteractDefManager
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
-                WHERE id = :id';
+                WHERE `id` = :id';
         return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
@@ -122,7 +122,7 @@ class InteractDefManager
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
-                WHERE query LIKE :query';
+                WHERE `query` LIKE :query';
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
@@ -143,20 +143,18 @@ class InteractDefManager
         $values = [];
         if ($_group === '') {
             $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                    FROM ' . self::DB_CLASS_NAME . '
-                    ORDER BY name, query';
+                    FROM ' . self::DB_CLASS_NAME;
         } else if ($_group === null) {
             $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                     FROM ' . self::DB_CLASS_NAME . '
-                    WHERE (`group` IS NULL OR `group` = "")
-                    ORDER BY name, query';
+                    WHERE (`group` IS NULL OR `group` = "")';
         } else {
             $values['group'] = $_group;
             $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                     FROM ' . self::DB_CLASS_NAME . '
-                    WHERE `group` = :group
-                    ORDER BY name, query';
+                    WHERE `group` = :group';
         }
+        $sql .= ' ORDER BY `name`, `query`';
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
@@ -290,20 +288,20 @@ class InteractDefManager
             ];
             $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                     FROM ' . self::DB_CLASS_NAME . '
-                    WHERE actions LIKE :search
-                        OR reply LIKE :search';
+                    WHERE `actions` LIKE :search
+                       OR `reply` LIKE :search';
         } else {
             $values = [
                 'search' => '%' . $searchPattern[0] . '%',
             ];
             $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                     FROM ' . self::DB_CLASS_NAME . '
-                    WHERE actions LIKE :search
-                        OR reply LIKE :search';
+                    WHERE `actions` LIKE :search
+                       OR `reply` LIKE :search';
             for ($i = 1; $i < count($searchPattern); $i++) {
                 $values['search' . $i] = '%' . $searchPattern[$i] . '%';
-                $sql .= ' OR actions LIKE :search' . $i . '
-                          OR reply LIKE :search' . $i;
+                $sql .= ' OR `actions` LIKE :search' . $i . '
+                          OR `reply` LIKE :search' . $i;
             }
         }
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);

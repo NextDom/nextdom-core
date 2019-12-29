@@ -69,7 +69,7 @@ class JeeObjectManager
         ];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
-                WHERE name=:name';
+                WHERE `name` = :name';
         return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
@@ -117,9 +117,9 @@ class JeeObjectManager
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE father_id IS NULL';
         if ($onlyVisible) {
-            $sql .= ' AND isVisible = 1';
+            $sql .= ' AND `isVisible` = 1';
         }
-        $sql .= ' ORDER BY position';
+        $sql .= ' ORDER BY `position`';
         if ($all === false) {
             $sql .= ' LIMIT 1';
             $fetchType = DBHelper::FETCH_TYPE_ROW;
@@ -154,7 +154,7 @@ class JeeObjectManager
         $values = ['id' => $id];
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . '
-                WHERE id = :id';
+                WHERE `id` = :id';
         return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
@@ -216,9 +216,9 @@ class JeeObjectManager
         $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
                 FROM ' . self::DB_CLASS_NAME . ' ';
         if ($onlyVisible) {
-            $sql .= ' WHERE isVisible = 1';
+            $sql .= 'WHERE `isVisible` = 1';
         }
-        $sql .= ' ORDER BY position,name,father_id';
+        $sql .= ' ORDER BY `position`, `name`, `father_id`';
         return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
     }
 

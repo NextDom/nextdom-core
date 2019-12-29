@@ -244,7 +244,7 @@ class ConfigManager
         $sql = 'SELECT `key`,`value`
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE `key` IN ' . $keys . '
-                    AND plugin=:plugin';
+                    AND `plugin` = :plugin';
         $values = DBHelper::getAll($sql, $values);
         $result = [];
         foreach ($values as $value) {
