@@ -52,7 +52,7 @@ class ScenarioManager extends BaseManager
 {
     use CommonManager;
 
-    const DB_CLASS_NAME = 'scenario';
+    const DB_CLASS_NAME = '`scenario`';
     const CLASS_NAME = Scenario::class;
     const INITIAL_TRANSLATION_FILE = '';
 
@@ -222,7 +222,7 @@ class ScenarioManager extends BaseManager
     {
         // TODO: Vérifier, bizarre les guillemets dans le like
         return static::searchOneByClauses([
-            'element_id' => '%"' . $elementId . '"%',
+            'scenarioElement' => '%"' . $elementId . '"%',
         ]);
     }
 

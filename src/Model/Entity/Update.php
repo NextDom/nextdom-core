@@ -45,7 +45,7 @@ use ZipArchive;
  * @ORM\Table(name="update", indexes={@ORM\Index(name="status", columns={"status"})})
  * @ORM\Entity
  */
-class Update implements EntityInterface
+class Update extends BaseEntity
 {
     const TABLE_NAME = NextDomObj::UPDATE;
 

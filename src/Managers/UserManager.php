@@ -57,9 +57,7 @@ class UserManager extends BaseManager
     use CommonManager;
 
     const DB_CLASS_NAME = '`user`';
-    const CLASS_NAME = 'user';
-
-    /*     * ***********************Méthodes statiques*************************** */
+    const CLASS_NAME = User::class;
 
     /**
      * Retourne un object utilisateur (si les information de connection sont valide)

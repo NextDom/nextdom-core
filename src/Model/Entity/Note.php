@@ -28,7 +28,7 @@ use NextDom\Model\Entity\Parents\NameEntity;
  * @ORM\Table(name="note")
  * @ORM\Entity
  */
-class Note implements EntityInterface
+class Note extends BaseEntity
 {
     const TABLE_NAME = NextDomObj::NOTE;
 

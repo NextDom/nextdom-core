@@ -46,8 +46,7 @@ class ViewDataManager extends BaseManager
 {
     use CommonManager;
     const DB_CLASS_NAME = '`viewData`';
-    const CLASS_NAME = 'viewData';
-
+    const CLASS_NAME = ViewData::class;
 
     /**
      * @return array|mixed|null

@@ -20,8 +20,8 @@ nextdom.cron = function () {
 nextdom.cron.setState = function (queryParams) {
   var paramsRequired = ['id', 'state'];
   if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Cron', queryParams.state);
+    var params = $.extend({}, nextdom.private.default_params, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Cron', queryParams.state);
     ajaxParams.data['id'] = queryParams.id;
     $.ajax(ajaxParams);
   }

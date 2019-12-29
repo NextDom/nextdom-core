@@ -75,8 +75,8 @@ nextdom.object.all = function (queryParams) {
 nextdom.object.toHtml = function (queryParams) {
   var paramsRequired = ['id'];
   if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Object', 'toHtml');
+    var params = $.extend({}, nextdom.private.default_params, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Object', 'toHtml');
     ajaxParams.data['id'] = ($.isArray(queryParams.id)) ? json_encode(queryParams.id) : queryParams.id;
     ajaxParams.data['version'] = queryParams.version || 'dashboard';
     ajaxParams.data['category'] = queryParams.category || 'all';

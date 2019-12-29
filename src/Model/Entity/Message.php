@@ -31,7 +31,7 @@ use NextDom\Model\Entity\Parents\LogicalIdEntity;
  * @ORM\Table(name="message", indexes={@ORM\Index(name="plugin_logicalID", columns={"plugin", "logicalId"})})
  * @ORM\Entity
  */
-class Message implements EntityInterface
+class Message extends BaseEntity
 {
     const CLASS_NAME = Message::class;
     const DB_CLASS_NAME = '`message`';

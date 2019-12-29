@@ -75,7 +75,7 @@ use NextDom\Model\Entity\Parents\RefreshEntity;
  * })
  * ORM\Entity
  */
-class EqLogic implements EntityInterface
+class EqLogic extends BaseEntity
 {
     const CLASS_NAME = EqLogic::class;
     const DB_CLASS_NAME = '`eqLogic`';

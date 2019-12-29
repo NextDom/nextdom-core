@@ -55,7 +55,7 @@ class UpdateManager extends BaseManager
 {
     use CommonManager;
     const REPO_CLASS_PATH = '\\NextDom\\Repo\\';
-    const DB_CLASS_NAME = 'update';
+    const DB_CLASS_NAME = '`update`';
     const CLASS_NAME = Update::class;
 
     /**
@@ -150,7 +150,7 @@ class UpdateManager extends BaseManager
                 $params = [
                     'type' => $pluginId,
                 ];
-                $sql = 'DELETE FROM `' . self::DB_CLASS_NAME . '`
+                $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . '
                         WHERE `type` = :type';
                 DBHelper::exec($sql, $params);
             }
@@ -367,7 +367,7 @@ class UpdateManager extends BaseManager
             'configuration' => '%"doNotUpdate":"1"%'
         ];
         $sql = 'SELECT count(*)
-               FROM `' . self::DB_CLASS_NAME . '`
+               FROM ' . self::DB_CLASS_NAME . '
                WHERE `status` = :status
                AND `configuration` NOT LIKE :configuration';
         if ($filter != '') {

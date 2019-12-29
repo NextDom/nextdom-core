@@ -20,8 +20,8 @@ nextdom.plan = function () {
 nextdom.plan.cache = Array();
 
 nextdom.plan.remove = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'Plan', 'remove');
+  var params = $.extend({}, nextdom.private.default_params, queryParams || {});
+  var ajaxParams = nextdom.private.getParamsAJAX(params, 'Plan', 'remove');
   ajaxParams.data['id'] = queryParams.id || '';
   ajaxParams.data['link_type'] = queryParams.link_type || '';
   ajaxParams.data['link_id'] = queryParams.link_id || '';
@@ -44,8 +44,8 @@ nextdom.plan.byId = function (queryParams) {
 nextdom.plan.getObjectPlan = function (queryParams) {
   var paramsRequired = ['id'];
   if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Plan', 'getObjectPlan');
+    var params = $.extend({}, nextdom.private.default_params, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Plan', 'getObjectPlan');
     ajaxParams.data['id'] = queryParams.id;
     ajaxParams.data['version'] = queryParams.version || 'dplan';
     $.ajax(ajaxParams);
@@ -55,8 +55,8 @@ nextdom.plan.getObjectPlan = function (queryParams) {
 nextdom.plan.create = function (queryParams) {
   var paramsRequired = ['plan'];
   if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Plan', 'create');
+    var params = $.extend({}, nextdom.private.default_params, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Plan', 'create');
     ajaxParams.data['plan'] = json_encode(queryParams.plan);
     ajaxParams.data['version'] = queryParams.version;
     $.ajax(ajaxParams);
@@ -64,8 +64,8 @@ nextdom.plan.create = function (queryParams) {
 };
 
 nextdom.plan.copy = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'Plan', 'copy');
+  var params = $.extend({}, nextdom.private.default_params, queryParams || {});
+  var ajaxParams = nextdom.private.getParamsAJAX(params, 'Plan', 'copy');
   ajaxParams.data['id'] = queryParams.id || '';
   ajaxParams.data['link_type'] = queryParams.link_type || '';
   ajaxParams.data['link_id'] = queryParams.link_id || '';
@@ -76,8 +76,8 @@ nextdom.plan.copy = function (queryParams) {
 nextdom.plan.byPlanHeader = function (queryParams) {
   var paramsRequired = ['id'];
   if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Plan', 'planHeader');
+    var params = $.extend({}, nextdom.private.default_params, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Plan', 'planHeader');
     ajaxParams.data['planHeader_id'] = queryParams.id;
     ajaxParams.data['noHtml'] = queryParams.noHtml;
     ajaxParams.data['version'] = queryParams.version || 'dplan';
@@ -88,8 +88,8 @@ nextdom.plan.byPlanHeader = function (queryParams) {
 nextdom.plan.removeImageHeader = function (queryParams) {
   var paramsRequired = ['planHeader_id'];
   if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Plan', 'removeImageHeader');
+    var params = $.extend({}, nextdom.private.default_params, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Plan', 'removeImageHeader');
     ajaxParams.data['id'] = queryParams.planHeader_id;
     $.ajax(ajaxParams);
   }

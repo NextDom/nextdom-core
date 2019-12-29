@@ -68,8 +68,8 @@ nextdom.user.isConnect = function (queryParams) {
 nextdom.user.validateTwoFactorCode = function (queryParams) {
   var paramsRequired = ['code'];
   if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'User', 'validateTwoFactorCode');
+    var params = $.extend({}, nextdom.private.default_params, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'User', 'validateTwoFactorCode');
     ajaxParams.data['code'] = queryParams.code;
     ajaxParams.data['enableTwoFactorAuthentification'] = queryParams.enableTwoFactorAuthentification || 0;
     $.ajax(ajaxParams);
@@ -87,8 +87,8 @@ nextdom.user.useTwoFactorAuthentification = function (queryParams) {
 nextdom.user.login = function (queryParams) {
   var paramsRequired = ['username', 'password'];
   if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'User', 'login');
+    var params = $.extend({}, nextdom.private.default_params, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'User', 'login');
     ajaxParams.data['username'] = queryParams.username;
     ajaxParams.data['password'] = queryParams.password;
     ajaxParams.data['twoFactorCode'] = queryParams.twoFactorCode || '';
@@ -106,8 +106,8 @@ nextdom.user.removeBanIp = function (queryParams) {
 };
 
 nextdom.user.removeRegisterDevice = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'User', 'removeRegisterDevice');
+  var params = $.extend({}, nextdom.private.default_params, queryParams || {});
+  var ajaxParams = nextdom.private.getParamsAJAX(params, 'User', 'removeRegisterDevice');
   ajaxParams.data['key'] = queryParams.key;
   ajaxParams.data['user_id'] = queryParams.user_id || '';
   $.ajax(ajaxParams);

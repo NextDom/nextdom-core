@@ -37,7 +37,7 @@ use PragmaRX\Google2FA\Google2FA;
  * @ORM\Table(name="user")
  * @ORM\Entity
  */
-class User implements EntityInterface
+class User extends BaseEntity
 {
     const TABLE_NAME = NextDomObj::USER;
 

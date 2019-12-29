@@ -33,7 +33,7 @@ use NextDom\Model\Entity\Parents\BaseEntity;
  * @ORM\Table(name="listener", indexes={@ORM\Index(name="event", columns={"event"})})
  * @ORM\Entity
  */
-class Listener implements EntityInterface
+class Listener extends BaseEntity
 {
     const TABLE_NAME = NextDomObj::LISTENER;
 

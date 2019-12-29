@@ -38,7 +38,7 @@ use NextDom\Model\Entity\Parents\EnableEntity;
  * @ORM\Table(name="cron", uniqueConstraints={@ORM\UniqueConstraint(name="class_function_option", columns={"class", "function", "option"})}, indexes={@ORM\Index(name="type", columns={"class"}), @ORM\Index(name="logicalId_Type", columns={"class"}), @ORM\Index(name="deamon", columns={"deamon"})})
  * @ORM\Entity
  */
-class Cron implements EntityInterface
+class Cron extends BaseEntity
 {
     const TABLE_NAME = NextDomObj::CRON;
 

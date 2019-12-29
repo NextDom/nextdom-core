@@ -37,7 +37,7 @@ use NextDom\Model\Entity\Parents\NameEntity;
  * @ORM\Table(name="planHeader")
  * @ORM\Entity
  */
-class PlanHeader implements EntityInterface
+class PlanHeader extends BaseEntity
 {
     const TABLE_NAME = NextDomObj::PLAN_HEADER;
 

@@ -70,8 +70,8 @@ nextdom.plugin.getDeamonInfo = function (queryParams) {
 nextdom.plugin.deamonStart = function (queryParams) {
   var paramsRequired = ['id'];
   if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Plugin', 'deamonStart');
+    var params = $.extend({}, nextdom.private.default_params, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Plugin', 'deamonStart');
     ajaxParams.data['id'] = queryParams.id;
     ajaxParams.data['debug'] = queryParams.debug || 0;
     ajaxParams.data['forceRestart'] = queryParams.forceRestart || 0;

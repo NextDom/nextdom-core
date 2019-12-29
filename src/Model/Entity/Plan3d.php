@@ -39,7 +39,7 @@ use NextDom\Model\Entity\Parents\NameEntity;
  * @ORM\Table(name="plan3d", indexes={@ORM\Index(name="name", columns={"name"}), @ORM\Index(name="link_type_link_id", columns={"link_type", "link_id"}), @ORM\Index(name="fk_plan3d_plan3dHeader1_idx", columns={"plan3dHeader_id"})})
  * @ORM\Entity
  */
-class Plan3d implements EntityInterface
+class Plan3d extends BaseEntity
 {
     const TABLE_NAME = NextDomObj::PLAN3D;
 

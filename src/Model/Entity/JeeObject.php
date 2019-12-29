@@ -45,7 +45,7 @@ use NextDom\Model\Entity\Parents\PositionEntity;
  * @ORM\Table(name="object", uniqueConstraints={@ORM\UniqueConstraint(name="name_UNIQUE", columns={"name"})}, indexes={@ORM\Index(name="fk_object_object1_idx1", columns={"father_id"}), @ORM\Index(name="position", columns={"position"})})
  * @ORM\Entity
  */
-class JeeObject implements EntityInterface
+class JeeObject extends BaseEntity
 {
     const CLASS_NAME = JeeObject::class;
     const DB_CLASS_NAME = '`object`';

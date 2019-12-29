@@ -83,8 +83,8 @@ nextdom.scenario.getTemplate = function (queryParams) {
 nextdom.scenario.convertToTemplate = function (queryParams) {
   var paramsRequired = ['id'];
   if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Scenario', 'convertToTemplate');
+    var params = $.extend({}, nextdom.private.default_params, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Scenario', 'convertToTemplate');
     ajaxParams.data['id'] = queryParams.id;
     ajaxParams.data['template'] = queryParams.template || '';
     $.ajax(ajaxParams);
@@ -143,8 +143,8 @@ nextdom.scenario.save = function (queryParams) {
   var paramsSpecifics = {};
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
     delete nextdom.scenario.cache.all;
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Scenario', 'save');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Scenario', 'save');
     ajaxParams.data['scenario'] = json_encode(queryParams.scenario);
     $.ajax(ajaxParams);
   }
@@ -155,8 +155,8 @@ nextdom.scenario.remove = function (queryParams) {
   var paramsSpecifics = {};
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
     delete nextdom.scenario.cache.all;
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Scenario', 'remove');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Scenario', 'remove');
     ajaxParams.data['id'] = queryParams.id;
     $.ajax(ajaxParams);
   }

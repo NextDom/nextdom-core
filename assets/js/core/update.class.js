@@ -18,8 +18,8 @@ nextdom.update = function () {
 };
 
 nextdom.update.doAll = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'Update', 'updateAll');
+  var params = $.extend({}, nextdom.private.default_params, queryParams || {});
+  var ajaxParams = nextdom.private.getParamsAJAX(params, 'Update', 'updateAll');
   ajaxParams.data['options'] = json_encode(queryParams.options) || '';
   $.ajax(ajaxParams);
 };

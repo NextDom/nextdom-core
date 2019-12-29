@@ -43,7 +43,7 @@ use NextDom\Model\Entity\Parents\TypeEntity;
  * ORM\Table(name="scenarioElement")
  * ORM\Entity
  */
-class ScenarioElement implements EntityInterface
+class ScenarioElement extends BaseEntity
 {
     const TABLE_NAME = NextDomObj::SCENARIO_ELEMENT;
 

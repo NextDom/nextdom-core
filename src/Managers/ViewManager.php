@@ -33,7 +33,6 @@
 
 namespace NextDom\Managers;
 
-use NextDom\Helpers\DBHelper;
 use NextDom\Managers\Parents\BaseManager;
 use NextDom\Managers\Parents\CommonManager;
 use NextDom\Model\Entity\View;

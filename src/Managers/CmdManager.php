@@ -79,7 +79,7 @@ class CmdManager extends BaseManager
                 INNER JOIN eqLogic el ON c.eqLogic_id = el.id
                 WHERE el.object_id IS NULL
                 AND isHistorized = 1
-                AND type=\'info\'';
+                AND type='info'";
         $sql .= ' ORDER BY el.name, c.name';
         $result2 = self::cast(DBHelper::getAllObjects($sql, [], self::CLASS_NAME));
         return array_merge($result1, $result2);

@@ -37,7 +37,7 @@ use NextDom\Model\Entity\Parents\NameEntity;
  * @ORM\Table(name="interactDef")
  * @ORM\Entity
  */
-class InteractDef implements EntityInterface
+class InteractDef extends BaseEntity
 {
     const TABLE_NAME = NextDomObj::INTERACT_DEF;
 

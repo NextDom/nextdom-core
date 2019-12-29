@@ -33,7 +33,7 @@ use NextDom\Model\Entity\Parents\TypeEntity;
  * ORM\Table(name="scenarioSubElement", indexes={@ORM\Index(name="fk_scenarioSubElement_scenarioElement1_idx", columns={"scenarioElement_id"}), @ORM\Index(name="type", columns={"scenarioElement_id", "type"})})
  * ORM\Entity
  */
-class ScenarioSubElement implements EntityInterface
+class ScenarioSubElement extends BaseEntity
 {
     const TABLE_NAME = NextDomObj::SCENARIO_SUB_ELEMENT;
 

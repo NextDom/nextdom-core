@@ -353,8 +353,8 @@ nextdom.private.ajax = function(target, action, queryParams, requiredParams, enc
       !nextdom.private.isValidQuery(queryParams, requiredParams)) {
       return false;
   }
-  var mergedParams = $.extend({}, nextdom.private.defaultqueryParams, specificParams, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(mergedParams, target, action);
+  var mergedParams = $.extend({}, nextdom.private.default_params, specificParams, queryParams || {});
+  var ajaxParams = nextdom.private.getParamsAJAX(mergedParams, target, action);
   // Add required params to the ajax data
   for (var requiredParamsIndex in requiredParams) {
     var requiredParamsKey = requiredParams[requiredParamsIndex];

@@ -65,7 +65,7 @@ use NextDom\Model\Entity\Parents\TypeEntity;
  * ORM\Table(name="scenario", uniqueConstraints={@ORM\UniqueConstraint(name="name", columns={"group", "object_id", "name"})}, indexes={@ORM\Index(name="group", columns={"group"}), @ORM\Index(name="fk_scenario_object1_idx", columns={"object_id"}), @ORM\Index(name="trigger", columns={"trigger"}), @ORM\Index(name="mode", columns={"mode"}), @ORM\Index(name="modeTriger", columns={"mode", "trigger"})})
  * ORM\Entity
  */
-class Scenario implements EntityInterface
+class Scenario extends BaseEntity
 {
     const TABLE_NAME = NextDomObj::SCENARIO;
 

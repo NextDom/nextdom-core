@@ -37,7 +37,7 @@ use NextDom\Model\Entity\Parents\TypeEntity;
  * @ORM\Table(name="dataStore", uniqueConstraints={@ORM\UniqueConstraint(name="UNIQUE", columns={"type", "link_id", "key"})})
  * @ORM\Entity
  */
-class DataStore implements EntityInterface
+class DataStore extends BaseEntity
 {
     const TABLE_NAME = NextDomObj::DATASTORE;
 

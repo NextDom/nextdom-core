@@ -37,7 +37,7 @@ use NextDom\Model\Entity\Parents\BaseEntity;
  * @ORM\Table(name="interactQuery", indexes={@ORM\Index(name="fk_sarahQuery_sarahDef1_idx", columns={"interactDef_id"}), @ORM\Index(name="query", columns={"query"})})
  * @ORM\Entity
  */
-class InteractQuery implements EntityInterface
+class InteractQuery extends BaseEntity
 {
     const TABLE_NAME = NextDomObj::INTERACT_QUERY;
 

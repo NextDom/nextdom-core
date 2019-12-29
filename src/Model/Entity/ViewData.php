@@ -31,7 +31,7 @@ use NextDom\Model\Entity\Parents\TypeEntity;
  * @ORM\Table(name="viewData", uniqueConstraints={@ORM\UniqueConstraint(name="unique", columns={"viewZone_id", "link_id", "type"})}, indexes={@ORM\Index(name="fk_data_zone1_idx", columns={"viewZone_id"}), @ORM\Index(name="order", columns={"order", "viewZone_id"})})
  * @ORM\Entity
  */
-class ViewData implements EntityInterface
+class ViewData extends BaseEntity
 {
     const TABLE_NAME = NextDomObj::VIEW_DATA;
 

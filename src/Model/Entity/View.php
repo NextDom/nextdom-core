@@ -38,7 +38,7 @@ use NextDom\Model\Entity\Parents\OrderEntity;
  * @ORM\Table(name="view", uniqueConstraints={@ORM\UniqueConstraint(name="name_UNIQUE", columns={"name"})})
  * @ORM\Entity
  */
-class View implements EntityInterface
+class View extends BaseEntity
 {
     const TABLE_NAME = NextDomObj::VIEW;
 

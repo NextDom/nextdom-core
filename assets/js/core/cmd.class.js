@@ -571,8 +571,8 @@ nextdom.cmd.displayActionOption = function (_expression, _options, _callback) {
 nextdom.cmd.displayActionsOption = function (queryParams) {
   var paramsRequired = ['params'];
   if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Scenario', 'actionToHtml');
+    var params = $.extend({}, nextdom.private.default_params, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Scenario', 'actionToHtml');
     ajaxParams.async = queryParams.async || true;
     ajaxParams.data['params'] = json_encode(queryParams.params);
     $.ajax(ajaxParams);

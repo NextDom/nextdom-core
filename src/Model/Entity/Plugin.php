@@ -33,6 +33,7 @@ use NextDom\Managers\ListenerManager;
 use NextDom\Managers\MessageManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
+use NextDom\Model\Entity\Parents\BaseEntity;
 
 /**
  * Plugin
@@ -40,7 +41,7 @@ use NextDom\Managers\UpdateManager;
  * @ORM\Table(name="plugin")
  * @ORM\Entity
  */
-class Plugin implements EntityInterface
+class Plugin extends BaseEntity
 {
     protected $id;
     protected $name = '';

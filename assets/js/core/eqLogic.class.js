@@ -306,8 +306,8 @@ nextdom.eqLogic.removes = function (queryParams) {
 nextdom.eqLogic.setIsVisibles = function (queryParams) {
   var paramsRequired = ['eqLogics', 'isVisible'];
   if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'EqLogic', 'setIsVisibles');
+    var params = $.extend({}, nextdom.private.default_params, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'EqLogic', 'setIsVisibles');
     ajaxParams.data['eqLogics'] = json_encode(queryParams.eqLogics);
     ajaxParams.data['isVisible'] = queryParams.isVisible;
     $.ajax(ajaxParams);
@@ -317,8 +317,8 @@ nextdom.eqLogic.setIsVisibles = function (queryParams) {
 nextdom.eqLogic.setIsEnables = function (queryParams) {
   var paramsRequired = ['eqLogics', 'isEnable'];
   if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'EqLogic', 'setIsEnables');
+    var params = $.extend({}, nextdom.private.default_params, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'EqLogic', 'setIsEnables');
     ajaxParams.data['eqLogics'] = json_encode(queryParams.eqLogics);
     ajaxParams.data['isEnable'] = queryParams.isEnable;
     $.ajax(ajaxParams);

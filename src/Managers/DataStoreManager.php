@@ -46,7 +46,7 @@ class DataStoreManager extends BaseManager
 {
     use CommonManager;
 
-    const CLASS_NAME = 'dataStore';
+    const CLASS_NAME = DataStore::class;
     const DB_CLASS_NAME = '`dataStore`';
 
     /**

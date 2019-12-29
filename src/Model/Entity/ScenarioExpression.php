@@ -56,7 +56,7 @@ use NextDom\Model\Entity\Parents\TypeEntity;
  * @ORM\Table(name="scenarioExpression", indexes={@ORM\Index(name="fk_scenarioExpression_scenarioSubElement1_idx", columns={"scenarioSubElement_id"})})
  * @ORM\Entity
  */
-class ScenarioExpression implements EntityInterface
+class ScenarioExpression extends BaseEntity
 {
     const TABLE_NAME = NextDomObj::SCENARIO_EXPR;
 

@@ -32,7 +32,7 @@ use NextDom\Model\Entity\Parents\TypeEntity;
  * @ORM\Table(name="viewZone", indexes={@ORM\Index(name="fk_zone_view1", columns={"view_id"})})
  * @ORM\Entity
  */
-class ViewZone implements EntityInterface
+class ViewZone extends BaseEntity
 {
     const TABLE_NAME = NextDomObj::VIEW_ZONE;
 

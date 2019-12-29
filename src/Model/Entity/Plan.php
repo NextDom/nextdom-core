@@ -39,7 +39,7 @@ use NextDom\Model\Entity\Parents\BasePlan;
  * @ORM\Table(name="plan", indexes={@ORM\Index(name="unique", columns={"link_type", "link_id"}), @ORM\Index(name="fk_plan_planHeader1_idx", columns={"planHeader_id"})})
  * @ORM\Entity
  */
-class Plan implements EntityInterface
+class Plan extends BaseEntity
 {
     const TABLE_NAME = NextDomObj::PLAN;
 

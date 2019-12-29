@@ -46,8 +46,7 @@ class ViewZoneManager extends BaseManager
 {
     use CommonManager;
     const DB_CLASS_NAME = '`viewZone`';
-    const CLASS_NAME = 'viewZone';
-
+    const CLASS_NAME = ViewZone::class;
 
     /**
      * @return array|mixed|null

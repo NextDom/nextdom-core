@@ -85,7 +85,7 @@ use NextDom\Model\Entity\Parents\TypeEntity;
  *      })
  * ORM\Entity
  */
-class Cmd implements EntityInterface
+class Cmd extends BaseEntity
 {
     const TABLE_NAME = NextDomObj::CMD;
 

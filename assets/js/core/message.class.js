@@ -20,8 +20,8 @@ nextdom.message = function () {
 nextdom.message.cache = Array();
 
 nextdom.message.all = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'Message', 'all');
+  var params = $.extend({}, nextdom.private.default_params, queryParams || {});
+  var ajaxParams = nextdom.private.getParamsAJAX(params, 'Message', 'all');
   ajaxParams.data['plugin'] = queryParams.plugin || '';
   $.ajax(ajaxParams);
 };
@@ -31,8 +31,8 @@ nextdom.message.remove = function (queryParams) {
 };
 
 nextdom.message.clear = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'Message', 'clearMessage');
+  var params = $.extend({}, nextdom.private.default_params, queryParams || {});
+  var ajaxParams = nextdom.private.getParamsAJAX(params, 'Message', 'clearMessage');
   ajaxParams.data['plugin'] = queryParams.plugin || '';
   $.ajax(ajaxParams);
 };

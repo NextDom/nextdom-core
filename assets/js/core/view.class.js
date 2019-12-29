@@ -108,8 +108,8 @@ nextdom.view.remove = function (queryParams) {
 nextdom.view.save = function (queryParams) {
   var paramsRequired = ['id', 'view'];
   if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'View', 'save');
+    var params = $.extend({}, nextdom.private.default_params, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'View', 'save');
     ajaxParams.data['view_id'] = queryParams.id;
     ajaxParams.data['view'] = json_encode(queryParams.view);
     $.ajax(ajaxParams);

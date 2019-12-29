@@ -225,8 +225,8 @@ nextdom.ssh = function (queryParams) {
     command = queryParams;
     queryParams = {};
   }
-  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'Nextdom', 'ssh');
+  var params = $.extend({}, nextdom.private.default_params, queryParams || {});
+  var ajaxParams = nextdom.private.getParamsAJAX(params, 'Nextdom', 'ssh');
   ajaxParams.data['command'] = command;
   $.ajax(ajaxParams);
   return 'Execute command : ' + command;
@@ -239,8 +239,8 @@ nextdom.db = function (queryParams) {
     command = queryParams;
     queryParams = {};
   }
-  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'Nextdom', 'db');
+  var params = $.extend({}, nextdom.private.default_params, queryParams || {});
+  var ajaxParams = nextdom.private.getParamsAJAX(params, 'Nextdom', 'db');
   ajaxParams.data['command'] = command;
   $.ajax(ajaxParams);
   return 'Execute command : ' + command;
@@ -333,16 +333,16 @@ nextdom.getSelectActionModal = function (_options, _callback) {
 };
 
 nextdom.getGraphData = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'Nextdom', 'getGraphData');
+  var params = $.extend({}, nextdom.private.default_params, queryParams || {});
+  var ajaxParams = nextdom.private.getParamsAJAX(params, 'Nextdom', 'getGraphData');
   ajaxParams.data['filter_type'] = params.filter_type || null;
   ajaxParams.data['filter_id'] = params.filter_id || null;
   $.ajax(ajaxParams);
 };
 
 nextdom.getDocumentationUrl = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'Nextdom', 'getDocumentationUrl');
+  var params = $.extend({}, nextdom.private.default_params, queryParams || {});
+  var ajaxParams = nextdom.private.getParamsAJAX(params, 'Nextdom', 'getDocumentationUrl');
   ajaxParams.data['plugin'] = params.plugin || null;
   ajaxParams.data['page'] = params.page || null;
   $.ajax(ajaxParams);
