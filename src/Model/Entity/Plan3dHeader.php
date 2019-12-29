@@ -18,12 +18,15 @@
 namespace NextDom\Model\Entity;
 
 use NextDom\Enums\DateFormat;
+use NextDom\Enums\NextDomObj;
 use NextDom\Exceptions\CoreException;
-use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\Plan3dManager;
-use NextDom\Model\BaseEntity;
+use NextDom\Model\Entity\Parents\AccessCodeConfigurationEntity;
+use NextDom\Model\Entity\Parents\BaseEntity;
+use NextDom\Model\Entity\Parents\ConfigurationEntity;
+use NextDom\Model\Entity\Parents\NameEntity;
 
 /**
  * Plan3dheader
@@ -33,13 +36,9 @@ use NextDom\Model\BaseEntity;
  */
 class Plan3dHeader extends BaseEntity
 {
+    const TABLE_NAME = NextDomObj::PLAN3D_HEADER;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=127, nullable=true)
-     */
-    protected $name;
+    use NameEntity, AccessCodeConfigurationEntity;
 
     /**
      * @var string
@@ -55,30 +54,6 @@ class Plan3dHeader extends BaseEntity
         }
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param $_name
-     * @return $this
-     */
-    public function setName($_name)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
-        $this->name = $_name;
-        return $this;
-    }
-
-    public function save()
-    {
-        DBHelper::save($this);
-    }
-
     public function remove()
     {
         $cibDir = NEXTDOM_ROOT . '/' . $this->getConfiguration('path', '');
@@ -86,33 +61,7 @@ class Plan3dHeader extends BaseEntity
             rrmdir($cibDir);
         }
         NextDomHelper::addRemoveHistory(['id' => $this->getId(), 'name' => $this->getName(), 'date' => date(DateFormat::FULL), 'type' => 'plan3d']);
-        DBHelper::remove($this);
-    }
-
-    /**
-     * @param string $_key
-     * @param string $_default
-     * @return array|bool|mixed|null|string
-     */
-    public function getConfiguration($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->configuration, $_key, $_default);
-    }
-
-    /**
-     * @param $_key
-     * @param $_value
-     * @return $this
-     */
-    public function setConfiguration($_key, $_value)
-    {
-        if ($_key == 'accessCode' && $_value != '' && !Utils::isSha512($_value)) {
-            $_value = Utils::sha512($_value);
-        }
-        $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
-        $this->configuration = $configuration;
-        return $this;
+        return parent::remove();
     }
 
     /**
@@ -122,13 +71,5 @@ class Plan3dHeader extends BaseEntity
     public function getPlan3d()
     {
         return Plan3dManager::byPlan3dHeaderId($this->getId());
-    }
-
-    /**
-     * @return string
-     */
-    public function getTableName()
-    {
-        return 'plan3dHeader';
     }
 }

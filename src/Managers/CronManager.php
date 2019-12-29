@@ -37,37 +37,20 @@ namespace NextDom\Managers;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
+use NextDom\Managers\Parents\BaseManager;
+use NextDom\Managers\Parents\CommonManager;
 use NextDom\Model\Entity\Cron;
 
 /**
  * Class CronManager
  * @package NextDom\Managers
  */
-class CronManager
+class CronManager extends BaseManager
 {
+    use CommonManager;
 
     const CLASS_NAME = Cron::class;
     const DB_CLASS_NAME = '`cron`';
-
-    /**
-     * Get cron object by his id
-     *
-     * @param int $cronId
-     *
-     * @return Cron
-     *
-     * @throws \Exception
-     */
-    public static function byId($cronId)
-    {
-        $value = [
-            'id' => $cronId,
-        ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE `id` = :id';
-        return DBHelper::getOneObject($sql, $value, self::CLASS_NAME);
-    }
 
     /**
      * Return cron object by class and function
@@ -85,8 +68,7 @@ class CronManager
             'class' => $className,
             'function' => $functionName,
         ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
+        $sql = static::getBaseSQL() . '
                 WHERE `class` = :class
                 AND `function` = :function';
         if ($options != '') {
@@ -113,8 +95,7 @@ class CronManager
             'class' => $className,
             'function' => $functionName,
         ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
+        $sql = static::getBaseSQL() . '
                 WHERE `class` = :class
                 AND `function` = :function';
         if ($options != '') {
@@ -151,12 +132,12 @@ class CronManager
      */
     public static function all($ordered = false)
     {
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME;
         if ($ordered) {
-            $sql .= ' ORDER BY `deamon` DESC';
+            return static::getAllOrdered('deamon', true);
         }
-        return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
+        else {
+            return static::getAll();
+        }
     }
 
     /**

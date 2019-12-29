@@ -58,7 +58,7 @@ class AjaxUpdateTest extends AjaxBase
     public function testAllAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'all']);
-        $this->assertStringContainsString('{"state":"ok","result":[{"type":"', (string) $result->getBody());
+        $this->assertStringContainsString('{"state":"ok","result":[{"', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 

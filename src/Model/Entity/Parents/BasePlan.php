@@ -1,12 +1,13 @@
 <?php
 
-namespace NextDom\Model;
+namespace NextDom\Model\Entity\Parents;
 
-use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
 
 abstract class BasePlan extends BaseEntity
 {
+    use ConfigurationEntity, DisplayEntity;
+
     /**
      * @var string
      *
@@ -31,23 +32,9 @@ abstract class BasePlan extends BaseEntity
     /**
      * @var string
      *
-     * @ORM\Column(name="display", type="text", length=65535, nullable=true)
-     */
-    protected $display;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="css", type="text", length=65535, nullable=true)
      */
     protected $css;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="configuration", type="text", length=65535, nullable=true)
-     */
-    protected $configuration;
 
     /**
      * @param string $_key
@@ -67,54 +54,8 @@ abstract class BasePlan extends BaseEntity
     public function setPosition($_key, $_value)
     {
         $position = Utils::setJsonAttr($this->position, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->position, $position);
+        $this->updateChangeState($this->position, $position);
         $this->position = $position;
-        return $this;
-    }
-
-    /**
-     * @param string $_key
-     * @param string $_default
-     * @return array|bool|mixed|null|string
-     */
-    public function getDisplay($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->display, $_key, $_default);
-    }
-
-    /**
-     * @param $_key
-     * @param $_value
-     * @return $this
-     */
-    public function setDisplay($_key, $_value)
-    {
-        $display = Utils::setJsonAttr($this->display, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->display, $display);
-        $this->display = $display;
-        return $this;
-    }
-
-    /**
-     * @param string $_key
-     * @param string $_default
-     * @return array|bool|mixed|null|string
-     */
-    public function getConfiguration($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->configuration, $_key, $_default);
-    }
-
-    /**
-     * @param $_key
-     * @param $_value
-     * @return $this
-     */
-    public function setConfiguration($_key, $_value)
-    {
-        $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
-        $this->configuration = $configuration;
         return $this;
     }
 
@@ -132,7 +73,7 @@ abstract class BasePlan extends BaseEntity
      */
     public function setLink_type($_link_type)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->link_type, $_link_type);
+        $this->updateChangeState($this->link_type, $_link_type);
         $this->link_type = $_link_type;
         return $this;
     }
@@ -151,7 +92,7 @@ abstract class BasePlan extends BaseEntity
      */
     public function setLink_id($_link_id)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->link_id, $_link_id);
+        $this->updateChangeState($this->link_id, $_link_id);
         $this->link_id = $_link_id;
         return $this;
     }
@@ -174,23 +115,16 @@ abstract class BasePlan extends BaseEntity
     public function setCss($_key, $_value)
     {
         $css = Utils::setJsonAttr($this->css, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->css, $css);
+        $this->updateChangeState($this->css, $css);
         $this->css = $css;
         return $this;
     }
 
-    public function save()
-    {
-        DBHelper::save($this);
-    }
-
-    public function remove()
-    {
-        DBHelper::remove($this);
-    }
-
     abstract public function preInsert();
+
     abstract public function preSave();
+
     abstract public function getHtml();
+
     abstract public function getLink();
 }

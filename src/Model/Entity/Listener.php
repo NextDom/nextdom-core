@@ -18,13 +18,14 @@
 namespace NextDom\Model\Entity;
 
 use NextDom\Enums\LogTarget;
+use NextDom\Enums\NextDomObj;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\SystemHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ListenerManager;
-use NextDom\Model\BaseEntity;
+use NextDom\Model\Entity\Parents\BaseEntity;
 
 /**
  * Listener
@@ -34,6 +35,7 @@ use NextDom\Model\BaseEntity;
  */
 class Listener extends BaseEntity
 {
+    const TABLE_NAME = NextDomObj::LISTENER;
 
     /**
      * @var string
@@ -105,7 +107,7 @@ class Listener extends BaseEntity
     public function setOption($_key, $_value = '')
     {
         $option = Utils::setJsonAttr($this->option, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->option, $option);
+        $this->updateChangeState($this->option, $option);
         $this->option = $option;
         return $this;
     }
@@ -165,7 +167,7 @@ class Listener extends BaseEntity
      */
     public function setClass($_class)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->class, $_class);
+        $this->updateChangeState($this->class, $_class);
         $this->class = $_class;
         return $this;
     }
@@ -184,7 +186,7 @@ class Listener extends BaseEntity
      */
     public function setFunction($_function)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->function, $_function);
+        $this->updateChangeState($this->function, $_function);
         $this->function = $_function;
         return $this;
     }
@@ -198,16 +200,6 @@ class Listener extends BaseEntity
             return $this->getClass() . '::' . $this->getFunction() . '()';
         }
         return $this->getFunction() . '()';
-    }
-
-    /**
-     * @return bool
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
-    public function remove()
-    {
-        return DBHelper::remove($this);
     }
 
     public function preSave()
@@ -272,17 +264,8 @@ class Listener extends BaseEntity
     public function setEvent($_event)
     {
         $event = json_encode($_event, JSON_UNESCAPED_UNICODE);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->event, $_event);
+        $this->updateChangeState($this->event, $_event);
         $this->event = $event;
         return $this;
     }
-
-    /**
-     * @return string
-     */
-    public function getTableName()
-    {
-        return 'listener';
-    }
-
 }

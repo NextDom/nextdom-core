@@ -59,8 +59,11 @@ class Common extends Enum
     const HTML = 'html';
     const LENGTH_FACTOR = 'lengthfactor';
     const LEVEL = 'level';
+    const LINK = 'link';
     const LOGICAL_ID = 'logicalId';
+    const MARKET = 'market';
     const NAME = 'name';
+    const NODE = 'node';
     const NONE = 'none';
     const OBJECT_ID = 'object_id';
     const OBJECT_HTML = 'objectHtml';

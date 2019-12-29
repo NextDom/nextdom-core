@@ -34,16 +34,19 @@
 namespace NextDom\Managers;
 
 use NextDom\Helpers\DBHelper;
+use NextDom\Managers\Parents\BaseManager;
+use NextDom\Managers\Parents\CommonManager;
 use NextDom\Model\Entity\View;
 
 /**
  * Class ViewManager
  * @package NextDom\Managers
  */
-class ViewManager
+class ViewManager extends BaseManager
 {
+    use CommonManager;
     const DB_CLASS_NAME = '`view`';
-    const CLASS_NAME = 'view';
+    const CLASS_NAME = View::class;
 
     /**
      * @return View[]|null
@@ -51,26 +54,7 @@ class ViewManager
      */
     public static function all()
     {
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        ORDER BY `order`';
-        return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
-    }
-
-    /**
-     * @param $_id
-     * @return View|null
-     * @throws \Exception
-     */
-    public static function byId($_id)
-    {
-        $value = [
-            'id' => $_id,
-        ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE `id` = :id';
-        return DBHelper::getOneObject($sql, $value, self::CLASS_NAME);
+        return static::getAllOrdered('order');
     }
 
     /**

@@ -34,33 +34,19 @@
 namespace NextDom\Managers;
 
 use NextDom\Helpers\DBHelper;
+use NextDom\Managers\Parents\BaseManager;
+use NextDom\Managers\Parents\CommonManager;
 use NextDom\Model\Entity\Plan3dHeader;
 
 /**
  * Class Plan3dHeaderManager
  * @package NextDom\Managers
  */
-class Plan3dHeaderManager
+class Plan3dHeaderManager extends BaseManager
 {
+    use CommonManager;
     const CLASS_NAME = Plan3dHeader::class;
     const DB_CLASS_NAME = '`plan3dHeader`';
-
-    /**
-     * @param $_id
-     * @return array|mixed|null
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
-    public static function byId($_id)
-    {
-        $values = [
-            'id' => $_id,
-        ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE `id` = :id';
-        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
-    }
 
     /**
      * @return array|mixed|null
@@ -69,9 +55,7 @@ class Plan3dHeaderManager
      */
     public static function all()
     {
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME;
-        return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
+        return static::getAll();
     }
 
     /**

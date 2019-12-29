@@ -1121,26 +1121,6 @@ class Utils
     }
 
     /**
-     * @param $currentChangedState
-     * @param $oldValue
-     * @param $newValue
-     * @return bool
-     */
-    public static function attrChanged($currentChangedState, $oldValue, $newValue): bool
-    {
-        if ($currentChangedState) {
-            return true;
-        }
-        if (is_array($oldValue)) {
-            $oldValue = json_encode($oldValue);
-        }
-        if (is_array($newValue)) {
-            $newValue = json_encode($newValue);
-        }
-        return ($oldValue !== $newValue);
-    }
-
-    /**
      * Fill associative array with given list of parameters <name>=<value>
      *
      * @param array $argv input parameters of form "<name>=<value>"

@@ -17,10 +17,10 @@
 
 namespace NextDom\Model\Entity;
 
-use NextDom\Model\BasePlan;
 use NextDom\Enums\CmdSubType;
 use NextDom\Enums\CmdType;
 use NextDom\Enums\Common;
+use NextDom\Enums\NextDomObj;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
@@ -30,6 +30,8 @@ use NextDom\Managers\Plan3dHeaderManager;
 use NextDom\Managers\Plan3dManager;
 use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
+use NextDom\Model\Entity\Parents\BasePlan;
+use NextDom\Model\Entity\Parents\NameEntity;
 
 /**
  * Plan3d
@@ -39,12 +41,9 @@ use NextDom\Managers\ScenarioManager;
  */
 class Plan3d extends BasePlan
 {
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255, nullable=true)
-     */
-    protected $name;
+    const TABLE_NAME = NextDomObj::PLAN3D;
+
+    use NameEntity;
 
     /**
      * @var \NextDom\Model\Entity\Plan3dHeader
@@ -77,7 +76,7 @@ class Plan3d extends BasePlan
      */
     public function setPlan3dHeader_id($_plan3dHeader_id)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->plan3dHeader_id, $_plan3dHeader_id);
+        $this->updateChangeState($this->plan3dHeader_id, $_plan3dHeader_id);
         $this->plan3dHeader_id = $_plan3dHeader_id;
         return $this;
     }
@@ -250,32 +249,5 @@ class Plan3d extends BasePlan
     public function getPlan3dHeader()
     {
         return Plan3dHeaderManager::byId($this->getPlan3dHeader_id());
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param $_name
-     * @return $this
-     */
-    public function setName($_name)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
-        $this->name = $_name;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTableName()
-    {
-        return 'plan3d';
     }
 }

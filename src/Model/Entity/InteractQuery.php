@@ -18,6 +18,7 @@
 namespace NextDom\Model\Entity;
 
 use NextDom\Enums\DateFormat;
+use NextDom\Enums\NextDomObj;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\LogHelper;
@@ -28,7 +29,7 @@ use NextDom\Managers\ConfigManager;
 use NextDom\Managers\CronManager;
 use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\ScenarioExpressionManager;
-use NextDom\Model\BaseEntity;
+use NextDom\Model\Entity\Parents\BaseEntity;
 
 /**
  * Interactquery
@@ -38,6 +39,7 @@ use NextDom\Model\BaseEntity;
  */
 class InteractQuery extends BaseEntity
 {
+    const TABLE_NAME = NextDomObj::INTERACT_QUERY;
 
     /**
      * @var integer
@@ -91,7 +93,7 @@ class InteractQuery extends BaseEntity
      */
     public function setQuery($_query)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->query, $_query);
+        $this->updateChangeState($this->query, $_query);
         $this->query = $_query;
         return $this;
     }
@@ -110,19 +112,9 @@ class InteractQuery extends BaseEntity
      */
     public function setInteractDef_id($_interactDef_id)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->interactDef_id, $_interactDef_id);
+        $this->updateChangeState($this->interactDef_id, $_interactDef_id);
         $this->interactDef_id = $_interactDef_id;
         return $this;
-    }
-
-    /**
-     * @return bool
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
-    public function remove()
-    {
-        return DBHelper::remove($this);
     }
 
     /**
@@ -306,7 +298,7 @@ class InteractQuery extends BaseEntity
     public function setActions($_key, $_value)
     {
         $actions = Utils::setJsonAttr($this->actions, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->actions, $actions);
+        $this->updateChangeState($this->actions, $actions);
         $this->actions = $actions;
         return $this;
     }
@@ -329,13 +321,5 @@ class InteractQuery extends BaseEntity
     public function replaceForContextual($_replace, $_by, $_in)
     {
         Interactquery::replaceForContextual($_replace, $_by, $_in);
-    }
-
-    /**
-     * @return string
-     */
-    public function getTableName()
-    {
-        return 'interactQuery';
     }
 }

@@ -20,6 +20,7 @@ namespace NextDom\Model\Entity;
 
 use NextDom\Enums\DateFormat;
 use NextDom\Enums\LogTarget;
+use NextDom\Enums\NextDomObj;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\LogHelper;
@@ -28,7 +29,8 @@ use NextDom\Helpers\Utils;
 use NextDom\Managers\CacheManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\CronManager;
-use NextDom\Model\BaseEntity;
+use NextDom\Model\Entity\Parents\BaseEntity;
+use NextDom\Model\Entity\Parents\EnableEntity;
 
 /**
  * Cron
@@ -38,13 +40,9 @@ use NextDom\Model\BaseEntity;
  */
 class Cron extends BaseEntity
 {
+    const TABLE_NAME = NextDomObj::CRON;
 
-    /**
-     * @var integer 1 if cron is enabled
-     *
-     * @ORM\Column(name="enable", type="integer", nullable=true)
-     */
-    protected $enable = 1;
+    use EnableEntity;
 
     /**
      * @var string
@@ -118,30 +116,6 @@ class Cron extends BaseEntity
     }
 
     /**
-     * Set enabled state of the cron task
-     *
-     * @param int $newState 1 for enable task, 0 for disable
-     *
-     * @return $this
-     */
-    public function setEnable($newState)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->enable, $newState);
-        $this->enable = $newState;
-        return $this;
-    }
-
-    /**
-     * Get bool enabled state
-     *
-     * @return bool True is task is enabled
-     */
-    public function isEnabled()
-    {
-        return $this->enable == 1;
-    }
-
-    /**
      * Get timeout of the task
      * If timeout is not configured, return default value from
      *
@@ -165,7 +139,7 @@ class Cron extends BaseEntity
      */
     public function setTimeout($_timeout)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->timeout, $_timeout);
+        $this->updateChangeState($this->timeout, $_timeout);
         $this->timeout = $_timeout;
         return $this;
     }
@@ -185,7 +159,7 @@ class Cron extends BaseEntity
      */
     public function setDeamon($_deamons)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->deamon, $_deamons);
+        $this->updateChangeState($this->deamon, $_deamons);
         $this->deamon = $_deamons;
         return $this;
     }
@@ -210,7 +184,7 @@ class Cron extends BaseEntity
      */
     public function setDeamonSleepTime($_deamonSleepTime)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->deamonSleepTime, $_deamonSleepTime);
+        $this->updateChangeState($this->deamonSleepTime, $_deamonSleepTime);
         $this->deamonSleepTime = $_deamonSleepTime;
         return $this;
     }
@@ -234,19 +208,9 @@ class Cron extends BaseEntity
      */
     public function setOnce($_once)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->once, $_once);
+        $this->updateChangeState($this->once, $_once);
         $this->once = $_once;
         return $this;
-    }
-
-    /**
-     * Get the name of the SQL table where data is stored.
-     *
-     * @return string
-     */
-    public function getTableName()
-    {
-        return 'cron';
     }
 
     /**
@@ -284,7 +248,7 @@ class Cron extends BaseEntity
      */
     public function setFunction($_function)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->function, $_function);
+        $this->updateChangeState($this->function, $_function);
         $this->function = $_function;
         return $this;
     }
@@ -304,7 +268,7 @@ class Cron extends BaseEntity
      */
     public function setSchedule($_schedule)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->schedule, $_schedule);
+        $this->updateChangeState($this->schedule, $_schedule);
         $this->schedule = $_schedule;
         return $this;
     }
@@ -325,7 +289,7 @@ class Cron extends BaseEntity
     public function setOption($_option)
     {
         $_option = json_encode($_option, JSON_UNESCAPED_UNICODE);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->option, $_option);
+        $this->updateChangeState($this->option, $_option);
         $this->option = $_option;
         return $this;
     }
@@ -345,7 +309,7 @@ class Cron extends BaseEntity
      */
     public function setClass($newClass)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->class, $newClass);
+        $this->updateChangeState($this->class, $newClass);
         $this->class = $newClass;
         return $this;
     }
@@ -419,7 +383,7 @@ class Cron extends BaseEntity
             $this->halt();
         }
         CacheManager::delete('cronCacheAttr' . $this->getId());
-        return DBHelper::remove($this);
+        return parent::remove();
     }
 
     /**

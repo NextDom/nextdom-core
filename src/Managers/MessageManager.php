@@ -37,6 +37,8 @@ namespace NextDom\Managers;
 use NextDom\Enums\DateFormat;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
+use NextDom\Managers\Parents\BaseManager;
+use NextDom\Managers\Parents\CommonManager;
 use NextDom\Model\Entity\Message;
 
 require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
@@ -45,8 +47,9 @@ require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
  * Class MessageManager
  * @package NextDom\Managers
  */
-class MessageManager
+class MessageManager extends BaseManager
 {
+    use CommonManager;
     const CLASS_NAME = Message::class;
     const DB_CLASS_NAME = '`message`';
 
@@ -113,23 +116,6 @@ class MessageManager
     }
 
     /**
-     * @param $_id
-     * @return array|mixed|null
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
-    public static function byId($_id)
-    {
-        $values = [
-            'id' => $_id,
-        ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE `id` = :id';
-        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
-    }
-
-    /**
      * @param $_plugin
      * @param $_logicalId
      * @return Message[]|null
@@ -141,8 +127,7 @@ class MessageManager
             'logicalId' => $_logicalId,
             'plugin' => $_plugin,
         ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
+        $sql = static::getBaseSQL() . '
                 WHERE `logicalId` = :logicalId
                 AND `plugin` = :plugin';
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
@@ -159,8 +144,7 @@ class MessageManager
         $values = [
             'plugin' => $_plugin,
         ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
+        $sql = static::getBaseSQL() . '
                 WHERE `plugin` = :plugin
                 ORDER BY `date` DESC';
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
@@ -180,15 +164,10 @@ class MessageManager
     /**
      * @return array|mixed|null
      * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
      */
     public static function all()
     {
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                ORDER BY `date` DESC
-                LIMIT 500';
-        return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
+        return static::getAllOrdered('date', true, 500);
     }
 
     /**

@@ -17,11 +17,15 @@
 
 namespace NextDom\Model\Entity;
 
-use NextDom\Helpers\DBHelper;
-use NextDom\Helpers\Utils;
+use NextDom\Enums\NextDomObj;
 use NextDom\Managers\ScenarioElementManager;
 use NextDom\Managers\ScenarioExpressionManager;
-use NextDom\Model\BaseEntity;
+use NextDom\Model\Entity\Parents\BaseEntity;
+use NextDom\Model\Entity\Parents\NameEntity;
+use NextDom\Model\Entity\Parents\OptionsEntity;
+use NextDom\Model\Entity\Parents\OrderEntity;
+use NextDom\Model\Entity\Parents\SubTypeEntity;
+use NextDom\Model\Entity\Parents\TypeEntity;
 
 /**
  * Scenariosubelement
@@ -31,41 +35,9 @@ use NextDom\Model\BaseEntity;
  */
 class ScenarioSubElement extends BaseEntity
 {
+    const TABLE_NAME = NextDomObj::SCENARIO_SUB_ELEMENT;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="order", type="integer", nullable=true)
-     */
-    protected $order;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="type", type="string", length=127, nullable=true)
-     */
-    protected $type;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="subtype", type="string", length=127, nullable=true)
-     */
-    protected $subtype;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=127, nullable=true)
-     */
-    protected $name;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="options", type="text", length=65535, nullable=true)
-     */
-    protected $options;
+    use OptionsEntity, NameEntity, TypeEntity, SubTypeEntity, OrderEntity;
 
     /**
      * @var \NextDom\Model\Entity\ScenarioElement
@@ -78,25 +50,6 @@ class ScenarioSubElement extends BaseEntity
     protected $scenarioElement_id;
 
     protected $_expression;
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param $_name
-     * @return $this
-     */
-    public function setName($_name)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
-        $this->name = $_name;
-        return $this;
-    }
 
     /**
      * @return ScenarioElement
@@ -121,50 +74,8 @@ class ScenarioSubElement extends BaseEntity
      */
     public function setScenarioElement_id($_scenarioElement_id)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->scenarioElement_id, $_scenarioElement_id);
+        $this->updateChangeState($this->scenarioElement_id, $_scenarioElement_id);
         $this->scenarioElement_id = $_scenarioElement_id;
-        return $this;
-    }
-
-    /**
-     * @param string $_key
-     * @param string $_default
-     * @return array|bool|mixed|null|string
-     */
-    public function getOptions($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->options, $_key, $_default);
-    }
-
-    /**
-     * @param $_key
-     * @param $_value
-     * @return $this
-     */
-    public function setOptions($_key, $_value)
-    {
-        $options = Utils::setJsonAttr($this->options, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->options, $options);
-        $this->options = $options;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getOrder()
-    {
-        return $this->order;
-    }
-
-    /**
-     * @param $_order
-     * @return $this
-     */
-    public function setOrder($_order)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->order, $_order);
-        $this->order = $_order;
         return $this;
     }
 
@@ -196,44 +107,6 @@ class ScenarioSubElement extends BaseEntity
     }
 
     /**
-     * @return string
-     */
-    public function getSubtype()
-    {
-        return $this->subtype;
-    }
-
-    /**
-     * @param $_subtype
-     * @return $this
-     */
-    public function setSubtype($_subtype)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->subtype, $_subtype);
-        $this->subtype = $_subtype;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param $_type
-     * @return $this
-     */
-    public function setType($_type)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->type, $_type);
-        $this->type = $_type;
-        return $this;
-    }
-
-    /**
      * @return ScenarioExpression|ScenarioExpression[]|null
      * @throws \Exception
      */
@@ -251,7 +124,7 @@ class ScenarioSubElement extends BaseEntity
         foreach ($this->getExpression() as $expression) {
             $expression->remove();
         }
-        DBHelper::remove($this);
+        return parent::remove();
     }
 
     /**
@@ -290,18 +163,4 @@ class ScenarioSubElement extends BaseEntity
         }
         return $subElementCopy->getId();
     }
-
-    public function save()
-    {
-        DBHelper::save($this);
-    }
-
-    /**
-     * @return string
-     */
-    public function getTableName()
-    {
-        return 'scenarioSubElement';
-    }
-
 }

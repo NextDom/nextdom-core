@@ -40,6 +40,8 @@ use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
+use NextDom\Managers\Parents\BaseManager;
+use NextDom\Managers\Parents\CommonManager;
 use NextDom\Model\Entity\User;
 use NextDom\Repo\RepoMarket;
 use PragmaRX\Google2FA\Google2FA;
@@ -50,8 +52,10 @@ define('BAD_LOGIN_BLOCK_DURATION', 5);
  * Class UserManager
  * @package NextDom\Managers
  */
-class UserManager
+class UserManager extends BaseManager
 {
+    use CommonManager;
+
     const DB_CLASS_NAME = '`user`';
     const CLASS_NAME = 'user';
 
@@ -60,7 +64,7 @@ class UserManager
     /**
      * Retourne un object utilisateur (si les information de connection sont valide)
      * @param string $_login nom d'utilisateur
-     * @param string $_mdp motsz de passe en sha512
+     * @param string $_mdp mot de passe en sha512
      * @return User|bool object user
      * @throws \Exception
      */
@@ -76,12 +80,12 @@ class UserManager
                 ldap_set_option($ad, LDAP_OPT_PROTOCOL_VERSION, 3);
                 ldap_set_option($ad, LDAP_OPT_REFERRALS, 0);
                 if (!ldap_bind($ad, 'uid=' . $_login . ',' . ConfigManager::byKey('ldap:basedn'), $_mdp)) {
-                    LogHelper::addInfo("connection", __('Mot de passe erroné (') . $_login . ')');
+                    LogHelper::addInfo(LogTarget::CONNECTION, __('Mot de passe erroné (') . $_login . ')');
                     return false;
                 }
                 LogHelper::addDebug(LogTarget::CONNECTION, __('Bind user OK'));
                 $result = ldap_search($ad, ConfigManager::byKey('ldap::usersearch') . '=' . $_login . ',' . ConfigManager::byKey('ldap:basedn'), ConfigManager::byKey('ldap:filter'));
-                LogHelper::addInfo("connection", __('Recherche LDAP (') . $_login . ')');
+                LogHelper::addInfo(LogTarget::CONNECTION, __('Recherche LDAP (') . $_login . ')');
                 if ($result) {
                     $entries = ldap_get_entries($ad, $result);
                     if ($entries['count'] > 0) {
@@ -97,7 +101,7 @@ class UserManager
                             ->setPassword($sMdp)
                             ->setOptions('lastConnection', date(DateFormat::FULL));
                         $user->save();
-                        LogHelper::addInfo("connection", __('Utilisateur créé depuis le LDAP : ') . $_login);
+                        LogHelper::addInfo(LogTarget::CONNECTION, __('Utilisateur créé depuis le LDAP : ') . $_login);
                         NextDomHelper::event('user_connect');
                         LogHelper::addInfo('event', __('Connexion de l\'utilisateur ') . $_login);
                         return $user;
@@ -106,7 +110,7 @@ class UserManager
                         if (is_object($user)) {
                             $user->remove();
                         }
-                        LogHelper::addInfo("connection", __('Utilisateur non autorisé à accéder à NextDom (') . $_login . ')');
+                        LogHelper::addInfo(LogTarget::CONNECTION, __('Utilisateur non autorisé à accéder à NextDom (') . $_login . ')');
                         return false;
                     }
                 } else {
@@ -114,11 +118,11 @@ class UserManager
                     if (is_object($user)) {
                         $user->remove();
                     }
-                    LogHelper::addInfo("connection", __('Utilisateur non autorisé à accéder à NextDom (') . $_login . ')');
+                    LogHelper::addInfo(LogTarget::CONNECTION, __('Utilisateur non autorisé à accéder à NextDom (') . $_login . ')');
                     return false;
                 }
             } else {
-                LogHelper::addInfo("connection", __('Impossible de se connecter au LDAP'));
+                LogHelper::addInfo(LogTarget::CONNECTION, __('Impossible de se connecter au LDAP'));
             }
         }
         $user = self::byLoginAndPassword($_login, $sMdp);
@@ -160,13 +164,7 @@ class UserManager
      */
     public static function byLogin($_login)
     {
-        $values = [
-            'login' => $_login,
-        ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE `login` = :login';
-        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
+        return static::getOneByClauses(['login' => $_login]);
     }
 
     /**
@@ -178,31 +176,7 @@ class UserManager
      */
     public static function byLoginAndPassword($_login, $_password)
     {
-        $values = [
-            'login' => $_login,
-            'password' => $_password,
-        ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE `login` = :login
-                AND `password` = :password';
-        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
-    }
-
-    /**
-     * @param $_id
-     * @return array|mixed|null
-     * @throws \Exception
-     */
-    public static function byId($_id)
-    {
-        $values = [
-            'id' => $_id,
-        ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE `id` = :id';
-        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
+        return static::getOneByClauses(['login' => $_login, 'password' => $_password]);
     }
 
     /**
@@ -212,13 +186,7 @@ class UserManager
      */
     public static function byHash($_hash)
     {
-        $values = [
-            'hash' => $_hash,
-        ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE `hash` = :hash';
-        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
+        return static::getOneByClauses(['hash' => $_hash]);
     }
 
     /**
@@ -230,15 +198,7 @@ class UserManager
      */
     public static function byLoginAndHash($_login, $_hash)
     {
-        $values = [
-            'login' => $_login,
-            'hash' => $_hash,
-        ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE `login` = :login
-                AND `hash` = :hash';
-        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
+        return static::getOneByClauses(['login' => $_login, 'hash' => $_hash]);
     }
 
     /**
@@ -248,9 +208,7 @@ class UserManager
      */
     public static function all()
     {
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME;
-        return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
+        return static::getAll();
     }
 
     /**
@@ -265,8 +223,7 @@ class UserManager
             'rights' => '%"' . $_rights . '":1%',
             'rights2' => '%"' . $_rights . '":"1"%',
         ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
+        $sql = static::getBaseSQL() . '
                 WHERE `rights` LIKE :rights
                 OR `rights` LIKE :rights2';
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
@@ -280,16 +237,7 @@ class UserManager
      */
     public static function byProfils($_profils, $_enable = false)
     {
-        $values = [
-            'profils' => $_profils,
-        ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE `profils` = :profils';
-        if ($_enable) {
-            $sql .= ' AND enable=1';
-        }
-        return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
+        return static::getMultipleByClauses(['profils' => $_profils, 'enable' => 1]);
     }
 
     /**
@@ -300,13 +248,7 @@ class UserManager
      */
     public static function byEnable($_enable)
     {
-        $values = [
-            'enable' => $_enable,
-        ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE `enable` = :enable';
-        return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
+        return static::getMultipleByClauses(['enable' => $_enable]);
     }
 
     public static function failedLogin()

@@ -17,10 +17,13 @@
 
 namespace NextDom\Model\Entity;
 
-use NextDom\Helpers\DBHelper;
-use NextDom\Helpers\Utils;
+use NextDom\Enums\NextDomObj;
 use NextDom\Managers\ViewZoneManager;
-use NextDom\Model\BaseEntity;
+use NextDom\Model\Entity\Parents\BaseEntity;
+use NextDom\Model\Entity\Parents\ConfigurationEntity;
+use NextDom\Model\Entity\Parents\LinkIdEntity;
+use NextDom\Model\Entity\Parents\OrderEntity;
+use NextDom\Model\Entity\Parents\TypeEntity;
 
 /**
  * Viewdata
@@ -30,34 +33,9 @@ use NextDom\Model\BaseEntity;
  */
 class ViewData extends BaseEntity
 {
+    const TABLE_NAME = NextDomObj::VIEW_DATA;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="order", type="integer", nullable=true)
-     */
-    protected $order = 0;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="type", type="string", length=127, nullable=true)
-     */
-    protected $type;
-
-    /**
-     * @var integer
-     *
-     * ORM\Column(name="link_id", type="integer", nullable=true)
-     */
-    protected $link_id;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="configuration", type="text", length=65535, nullable=true)
-     */
-    protected $configuration;
+    use ConfigurationEntity, LinkIdEntity, TypeEntity, OrderEntity;
 
     /**
      * @var \NextDom\Model\Entity\ViewZone
@@ -69,24 +47,11 @@ class ViewData extends BaseEntity
      */
     protected $viewZone_id;
 
-    /**
-     * @return bool
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
-    public function save()
+    public function __construct()
     {
-        return DBHelper::save($this);
-    }
-
-    /**
-     * @return bool
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
-    public function remove()
-    {
-        return DBHelper::remove($this);
+        if ($this->order === null) {
+            $this->order = 0;
+        }
     }
 
     /**
@@ -114,111 +79,8 @@ class ViewData extends BaseEntity
      */
     public function setviewZone_id($_viewZone_id)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->viewZone_id, $_viewZone_id);
+        $this->updateChangeState($this->viewZone_id, $_viewZone_id);
         $this->viewZone_id = $_viewZone_id;
         return $this;
     }
-
-    /**
-     * @return int
-     */
-    public function getOrder()
-    {
-        return $this->order;
-    }
-
-    /**
-     * @param $_order
-     * @return $this
-     */
-    public function setOrder($_order)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->order, $_order);
-        $this->order = $_order;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getLinkObject()
-    {
-        $type = $this->getType();
-        if (class_exists($type)) {
-            return $type::byId($this->getLink_id());
-        }
-        return false;
-    }
-
-    /**
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param $_type
-     * @return $this
-     */
-    public function setType($_type)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->type, $_type);
-        $this->type = $_type;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getLink_id()
-    {
-        return $this->link_id;
-    }
-
-    /**
-     * @param $_link_id
-     * @return $this
-     */
-    public function setLink_id($_link_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->link_id, $_link_id);
-        $this->link_id = $_link_id;
-        return $this;
-    }
-
-    /**
-     * @param string $_key
-     * @param string $_default
-     * @return array|bool|mixed|null|string
-     */
-    public function getConfiguration($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->configuration, $_key, $_default);
-    }
-
-    /**
-     * @param $_key
-     * @param $_value
-     * @return $this
-     */
-    public function setConfiguration($_key, $_value)
-    {
-        $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
-        $this->configuration = $configuration;
-        return $this;
-    }
-
-    /**
-     * Get the name of the SQL table where data is stored.
-     *
-     * @return string
-     */
-    public function getTableName()
-    {
-        return 'viewData';
-    }
-
 }

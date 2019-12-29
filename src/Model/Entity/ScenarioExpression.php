@@ -19,6 +19,7 @@ namespace NextDom\Model\Entity;
 
 use NextDom\Enums\CmdSubType;
 use NextDom\Enums\DateFormat;
+use NextDom\Enums\NextDomObj;
 use NextDom\Enums\ScenarioExpressionAction;
 use NextDom\Enums\ScenarioExpressionType;
 use NextDom\Exceptions\CoreException;
@@ -43,7 +44,11 @@ use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\ScenarioSubElementManager;
 use NextDom\Managers\ViewManager;
-use NextDom\Model\BaseEntity;
+use NextDom\Model\Entity\Parents\BaseEntity;
+use NextDom\Model\Entity\Parents\OptionsEntity;
+use NextDom\Model\Entity\Parents\OrderEntity;
+use NextDom\Model\Entity\Parents\SubTypeEntity;
+use NextDom\Model\Entity\Parents\TypeEntity;
 
 /**
  * Scenarioexpression
@@ -53,27 +58,9 @@ use NextDom\Model\BaseEntity;
  */
 class ScenarioExpression extends BaseEntity
 {
+    const TABLE_NAME = NextDomObj::SCENARIO_EXPR;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="order", type="integer", nullable=true)
-     */
-    protected $order;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="type", type="string", length=127, nullable=true)
-     */
-    protected $type;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="subtype", type="string", length=127, nullable=true)
-     */
-    protected $subtype;
+    use OptionsEntity, OrderEntity, TypeEntity, SubTypeEntity;
 
     /**
      * @var string
@@ -81,13 +68,6 @@ class ScenarioExpression extends BaseEntity
      * @ORM\Column(name="expression", type="text", length=65535, nullable=true)
      */
     protected $expression;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="options", type="text", length=65535, nullable=true)
-     */
-    protected $options;
 
     /**
      * @var integer
@@ -179,30 +159,6 @@ class ScenarioExpression extends BaseEntity
         return null;
     }
 
-    /**
-     * @param string $_key
-     * @param string $_default
-     * @return array|bool|mixed|null|string
-     */
-    public function getOptions($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->options, $_key, $_default);
-    }
-
-    /**
-     * @param $_key
-     * @param $_value
-     * @return $this
-     * @throws \Exception
-     */
-    public function setOptions($_key, $_value)
-    {
-        $options = Utils::setJsonAttr($this->options, $_key, NextDomHelper::fromHumanReadable($_value));
-        $this->_changed = Utils::attrChanged($this->_changed, $this->options, $options);
-        $this->options = $options;
-        return $this;
-    }
-
     public function checkBackground()
     {
         if ($this->getOptions('background', 0) == 0) {
@@ -230,7 +186,7 @@ class ScenarioExpression extends BaseEntity
     public function setExpression($_expression)
     {
         $_expression = NextDomHelper::fromHumanReadable($_expression);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->expression, $_expression);
+        $this->updateChangeState($this->expression, $_expression);
         $this->expression = $_expression;
         return $this;
     }
@@ -244,25 +200,6 @@ class ScenarioExpression extends BaseEntity
         if ($_scenario !== null && is_object($_scenario)) {
             $_scenario->setLog($log);
         }
-    }
-
-    /**
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param $_type
-     * @return $this
-     */
-    public function setType($_type)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->type, $_type);
-        $this->type = $_type;
-        return $this;
     }
 
     /**
@@ -638,7 +575,7 @@ class ScenarioExpression extends BaseEntity
         $dataStore = new DataStore();
         $dataStore->setKey($this->getOptions('name'));
         $dataStore->setValue($result);
-        $dataStore->setType('scenario');
+        $dataStore->setType(NextDomObj::SCENARIO);
         $dataStore->setLink_id(-1);
         $dataStore->save();
 
@@ -666,7 +603,7 @@ class ScenarioExpression extends BaseEntity
     protected function executeActionAsk(&$scenario, $options)
     {
         $dataStore = new DataStore();
-        $dataStore->setType('scenario');
+        $dataStore->setType(NextDomObj::SCENARIO);
         $dataStore->setKey($this->getOptions('variable'));
         $dataStore->setValue('');
         $dataStore->setLink_id(-1);
@@ -851,8 +788,7 @@ class ScenarioExpression extends BaseEntity
      * @param Scenario $scenario
      * @param $options
      * @return mixed
-     * @throws CoreException
-     * @throws \ReflectionException
+     * @throws \Exception
      */
     protected function executeActionOthers(&$scenario, $options)
     {
@@ -873,11 +809,6 @@ class ScenarioExpression extends BaseEntity
     }
 
     /*     * **********************Getteur Setteur*************************** */
-
-    public function remove()
-    {
-        DBHelper::remove($this);
-    }
 
     /**
      * @return array
@@ -937,7 +868,7 @@ class ScenarioExpression extends BaseEntity
     public function save()
     {
         $this->checkBackground();
-        DBHelper::save($this);
+        parent::save();
         return true;
     }
 
@@ -1030,54 +961,8 @@ class ScenarioExpression extends BaseEntity
      */
     public function setScenarioSubElement_id($_scenarioSubElement_id)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->scenarioSubElement_id, $_scenarioSubElement_id);
+        $this->updateChangeState($this->scenarioSubElement_id, $_scenarioSubElement_id);
         $this->scenarioSubElement_id = $_scenarioSubElement_id;
         return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSubtype()
-    {
-        return $this->subtype;
-    }
-
-    /**
-     * @param $_subtype
-     * @return $this
-     */
-    public function setSubtype($_subtype)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->subtype, $_subtype);
-        $this->subtype = $_subtype;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getOrder()
-    {
-        return $this->order;
-    }
-
-    /**
-     * @param $_order
-     * @return $this
-     */
-    public function setOrder($_order)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->order, $_order);
-        $this->order = $_order;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTableName()
-    {
-        return 'scenarioExpression';
     }
 }

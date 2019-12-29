@@ -32,7 +32,12 @@ use NextDom\Managers\DataStoreManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\ScenarioManager;
-use NextDom\Model\BaseEntity;
+use NextDom\Model\Entity\Parents\BaseEntity;
+use NextDom\Model\Entity\Parents\ConfigurationEntity;
+use NextDom\Model\Entity\Parents\DisplayEntity;
+use NextDom\Model\Entity\Parents\IsVisibleEntity;
+use NextDom\Model\Entity\Parents\NameEntity;
+use NextDom\Model\Entity\Parents\PositionEntity;
 
 /**
  * Object for eqLogic group
@@ -44,49 +49,9 @@ class JeeObject extends BaseEntity
 {
     const CLASS_NAME = JeeObject::class;
     const DB_CLASS_NAME = '`object`';
+    const TABLE_NAME = NextDomObj::OBJECT;
 
-    /**
-     * Name of the object
-     *
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=45, nullable=false)
-     */
-    protected $name = '';
-
-    /**
-     * Visible status
-     *
-     * @var int
-     *
-     * @ORM\Column(name="isVisible", type="boolean", nullable=true)
-     */
-    protected $isVisible = 1;
-
-    /**
-     * Position
-     *
-     * @var integer
-     *
-     * @ORM\Column(name="position", type="integer", nullable=true)
-     */
-    protected $position;
-
-    /**
-     * Specific configuration
-     *
-     * @var string|array
-     *
-     * @ORM\Column(name="configuration", type="text", length=65535, nullable=true)
-     */
-    protected $configuration;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="display", type="text", length=65535, nullable=true)
-     */
-    protected $display;
+    use ConfigurationEntity, DisplayEntity, NameEntity, IsVisibleEntity, PositionEntity;
 
     /**
      * @var string
@@ -108,19 +73,6 @@ class JeeObject extends BaseEntity
     protected $_child = [];
 
     /**
-     * Get visibility state
-     *
-     * @return bool True if the object is visible
-     */
-    public function isVisible(): bool
-    {
-        if ($this->getIsVisible() === 1) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * Get visibility value
      *
      * @param null $default Default value if state is not set
@@ -136,20 +88,6 @@ class JeeObject extends BaseEntity
     }
 
     /**
-     * Set visibility value
-     *
-     * @param int $_isVisible 1 if visible, 0 for not visible
-     *
-     * @return $this
-     */
-    public function setIsVisible($_isVisible)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->isVisible, $_isVisible);
-        $this->isVisible = $_isVisible;
-        return $this;
-    }
-
-    /**
      * Get object position
      *
      * @param int|null $default Default value if position is not set
@@ -162,20 +100,6 @@ class JeeObject extends BaseEntity
             return $default;
         }
         return $this->position;
-    }
-
-    /**
-     * Set position
-     *
-     * @param int $_position Object position
-     *
-     * @return $this
-     */
-    public function setPosition($_position)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->position, $_position);
-        $this->position = $_position;
-        return $this;
     }
 
     /**
@@ -206,17 +130,7 @@ class JeeObject extends BaseEntity
     public function getChild($_visible = true)
     {
         if (!isset($this->_child[$_visible])) {
-            $values = [
-                'id' => $this->id,
-            ];
-            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE `father_id` = :id';
-            if ($_visible) {
-                $sql .= ' AND `isVisible` = 1 ';
-            }
-            $sql .= ' ORDER BY `position`';
-            $this->_child[$_visible] = DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
+            $this->_child[$_visible] = JeeObjectManager::getChildren($this->id, $_visible);
         }
         return $this->_child[$_visible];
     }
@@ -273,7 +187,7 @@ class JeeObject extends BaseEntity
     public function setFather_id($_father_id = null)
     {
         $_father_id = ($_father_id == '') ? null : $_father_id;
-        $this->_changed = Utils::attrChanged($this->_changed, $this->father_id, $_father_id);
+        $this->updateChangeState($this->father_id, $_father_id);
         $this->father_id = $_father_id;
         return $this;
     }
@@ -337,35 +251,6 @@ class JeeObject extends BaseEntity
     }
 
     /**
-     * Get configuration information by key
-     *
-     * @param string $key Name of the information
-     * @param mixed $default Default value
-     *
-     * @return mixed Value of the asked information or $default.
-     */
-    public function getConfiguration(string $key = '', $default = '')
-    {
-        return Utils::getJsonAttr($this->configuration, $key, $default);
-    }
-
-    /**
-     * Set configuration information by key
-     *
-     * @param string $_key Name of the information
-     * @param mixed $_value Value of this information
-     *
-     * @return $this
-     */
-    public function setConfiguration(string $_key, $_value)
-    {
-        $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
-        $this->configuration = $configuration;
-        return $this;
-    }
-
-    /**
      * Method called before remove
      *
      * @throws \Exception
@@ -391,17 +276,7 @@ class JeeObject extends BaseEntity
     public function remove()
     {
         NextDomHelper::addRemoveHistory([Common::ID => $this->getId(), Common::NAME => $this->getName(), Common::DATE => date(DateFormat::FULL), Common::TYPE => NextDomObj::OBJECT]);
-        return DBHelper::remove($this);
-    }
-
-    /**
-     * Get object name
-     *
-     * @return string Object name
-     */
-    public function getName()
-    {
-        return $this->name;
+        return parent::remove();
     }
 
     /**
@@ -414,7 +289,7 @@ class JeeObject extends BaseEntity
     public function setName($name)
     {
         $name = str_replace(['&', '#', ']', '[', '%'], '', $name);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $name);
+        $this->updateChangeState($this->name, $name);
         $this->name = $name;
         return $this;
     }
@@ -448,7 +323,7 @@ class JeeObject extends BaseEntity
             if ($infos['enable'] != 1) {
                 continue;
             }
-            $cmd = CmdManager::byId(str_replace('#', '', $infos['cmd']));
+            $cmd = CmdManager::byId(str_replace('#', '', $infos[NextDomObj::CMD]));
             if (is_object($cmd)) {
                 $eqLogics_id[$cmd->getEqLogic_id()] = $cmd->getEqLogic_id();
             }
@@ -501,7 +376,7 @@ class JeeObject extends BaseEntity
                     if ($allowDisplayZero == 0 && $summaryResult == 0) {
                         $style = 'display:none;';
                     }
-                    $result .= '<span style="' . $style . '" class="objectSummaryParent cursor" data-summary="' . $key . '" data-object_id="' . $this->getId() . '" data-displayZeroValue="' . $allowDisplayZero . '">' . $value['icon'] . ' <sup><span class="objectSummary' . $key . '">' . $summaryResult . '</span> ' . $value['unit'] . '</span></sup>';
+                    $result .= '<span style="' . $style . '" class="objectSummaryParent cursor" data-summary="' . $key . '" data-object_id="' . $this->getId() . '" data-displayZeroValue="' . $allowDisplayZero . '">' . $value[Common::ICON] . ' <sup><span class="objectSummary' . $key . '">' . $summaryResult . '</span> ' . $value['unit'] . '</span></sup>';
                 }
             }
         }
@@ -551,7 +426,7 @@ class JeeObject extends BaseEntity
             if (isset($infos['enable']) && $infos['enable'] == 0) {
                 continue;
             }
-            $value = CmdManager::cmdToValue($infos['cmd']);
+            $value = CmdManager::cmdToValue($infos[NextDomObj::CMD]);
             if (isset($infos['invert']) && $infos['invert'] == 1) {
                 $value = !$value;
             }
@@ -570,35 +445,6 @@ class JeeObject extends BaseEntity
             return trim(implode(',', $values), ',');
         }
         return round(NextDomHelper::calculStat($def[$summaryKey]['calcul'], $values), 1);
-    }
-
-    /**
-     * Get display information by key
-     *
-     * @param string $key Name of the information
-     * @param mixed $default Value of this information
-     *
-     * @return mixed Value of the asked information or $default
-     */
-    public function getDisplay(string $key = '', $default = '')
-    {
-        return Utils::getJsonAttr($this->display, $key, $default);
-    }
-
-    /**
-     * Set display information by key
-     *
-     * @param string $key Name of the information
-     * @param mixed $value value of this information
-     *
-     * @return $this
-     */
-    public function setDisplay(string $key, $value)
-    {
-        $display = Utils::setJsonAttr($this->display, $key, $value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->display, $display);
-        $this->display = $display;
-        return $this;
     }
 
     /**
@@ -624,23 +470,23 @@ class JeeObject extends BaseEntity
      *
      * @throws \ReflectionException
      */
-    public function getLinkData(&$data = ['node' => [], 'link' => []], $level = 0, $drill = null)
+    public function getLinkData(&$data = [Common::NODE => [], Common::LINK => []], $level = 0, $drill = null)
     {
         if ($drill === null) {
             $drill = ConfigManager::byKey('graphlink::object::drill');
         }
-        if (isset($data['node']['object' . $this->getId()])) {
+        if (isset($data[Common::NODE][NextDomObj::OBJECT . $this->getId()])) {
             return null;
         }
         $level++;
         if ($level > $drill) {
             return $data;
         }
-        $icon = Utils::findCodeIcon($this->getDisplay('icon'));
-        $data['node']['object' . $this->getId()] = [
-            'id' => 'object' . $this->getId(),
+        $icon = Utils::findCodeIcon($this->getDisplay(Common::ICON));
+        $data[Common::NODE][NextDomObj::OBJECT . $this->getId()] = [
+            'id' => NextDomObj::OBJECT . $this->getId(),
             'name' => $this->getName(),
-            'icon' => $icon['icon'],
+            'icon' => $icon[Common::ICON],
             'fontfamily' => $icon['fontfamily'],
             'fontweight' => ($level == 1) ? 'bold' : 'normal',
             'fontsize' => '4em',
@@ -650,13 +496,13 @@ class JeeObject extends BaseEntity
             'url' => 'index.php?v=d&p=object&id=' . $this->getId(),
         ];
         $use = $this->getUse();
-        Utils::addGraphLink($this, 'object', $this->getEqLogic(), 'eqLogic', $data, $level, $drill, ['dashvalue' => '1,0', 'lengthfactor' => 0.6]);
-        Utils::addGraphLink($this, 'object', $use['cmd'], 'cmd', $data, $level, $drill);
-        Utils::addGraphLink($this, 'object', $use['scenario'], 'scenario', $data, $level, $drill);
-        Utils::addGraphLink($this, 'object', $use['eqLogic'], 'eqLogic', $data, $level, $drill);
-        Utils::addGraphLink($this, 'object', $use['dataStore'], 'dataStore', $data, $level, $drill);
-        Utils::addGraphLink($this, 'object', $this->getChild(), 'object', $data, $level, $drill, ['dashvalue' => '1,0', 'lengthfactor' => 0.6]);
-        Utils::addGraphLink($this, 'object', $this->getScenario(false), 'scenario', $data, $level, $drill, ['dashvalue' => '1,0', 'lengthfactor' => 0.6]);
+        Utils::addGraphLink($this, NextDomObj::OBJECT, $this->getEqLogic(), NextDomObj::EQLOGIC, $data, $level, $drill, [Common::DASH_VALUE => '1,0', Common::LENGTH_FACTOR => 0.6]);
+        Utils::addGraphLink($this, NextDomObj::OBJECT, $use[NextDomObj::CMD], NextDomObj::CMD, $data, $level, $drill);
+        Utils::addGraphLink($this, NextDomObj::OBJECT, $use[NextDomObj::SCENARIO], NextDomObj::SCENARIO, $data, $level, $drill);
+        Utils::addGraphLink($this, NextDomObj::OBJECT, $use[NextDomObj::EQLOGIC], NextDomObj::EQLOGIC, $data, $level, $drill);
+        Utils::addGraphLink($this, NextDomObj::OBJECT, $use[NextDomObj::DATASTORE], NextDomObj::DATASTORE, $data, $level, $drill);
+        Utils::addGraphLink($this, NextDomObj::OBJECT, $this->getChild(), NextDomObj::OBJECT, $data, $level, $drill, [Common::DASH_VALUE => '1,0', Common::LENGTH_FACTOR => 0.6]);
+        Utils::addGraphLink($this, NextDomObj::OBJECT, $this->getScenario(false), NextDomObj::SCENARIO, $data, $level, $drill, [Common::DASH_VALUE => '1,0', Common::LENGTH_FACTOR => 0.6]);
         return $data;
     }
 
@@ -671,14 +517,16 @@ class JeeObject extends BaseEntity
     public function getHumanName($tag = false, $prettify = false)
     {
         if ($tag) {
+            $tagIcon = '<i class="fas fa-tag"></i>';
+            $spacingRight = '<i class="spacing-right"></i>';
             if ($prettify) {
                 if ($this->getDisplay('tagColor') != '') {
-                    return '<span class="label" style="text-shadow : none;background-color:' . $this->getDisplay('tagColor') . ' !important;color:' . $this->getDisplay('tagTextColor', 'white') . ' !important">' . $this->getDisplay('icon', '<i class="fas fa-tag"></i>') . '<i class="spacing-right"></i>' . $this->getName() . '</span>';
+                    return '<span class="label" style="text-shadow:none;background-color:' . $this->getDisplay('tagColor') . ' !important;color:' . $this->getDisplay('tagTextColor', 'white') . ' !important">' . $this->getDisplay(Common::ICON, $tagIcon) . $spacingRight . $this->getName() . '</span>';
                 } else {
-                    return '<span class="label label-primary">' . $this->getDisplay('icon', '<i class="fas fa-tag"></i>') . '<i class="spacing-right"></i>' . $this->getName() . '</span>';
+                    return '<span class="label label-primary">' . $this->getDisplay(Common::ICON, $tagIcon) . $spacingRight . $this->getName() . '</span>';
                 }
             } else {
-                return $this->getDisplay('icon', '<i class="fas fa-tag"></i>') . '<i class="spacing-right"></i>' . $this->getName();
+                return $this->getDisplay(Common::ICON, $tagIcon) . $spacingRight . $this->getName();
             }
         } else {
             return $this->getName();
@@ -828,15 +676,5 @@ class JeeObject extends BaseEntity
         }
         DBHelper::save($this);
         return true;
-    }
-
-    /**
-     * Get table name for stored object in database
-     *
-     * @return string
-     */
-    public function getTableName()
-    {
-        return 'object';
     }
 }

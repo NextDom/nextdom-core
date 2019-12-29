@@ -17,7 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
-use NextDom\Model\BasePlan;
+use NextDom\Enums\NextDomObj;
 use NextDom\Enums\PlanDisplayType;
 use NextDom\Enums\PlanLinkType;
 use NextDom\Helpers\LogHelper;
@@ -30,6 +30,7 @@ use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PlanManager;
 use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
+use NextDom\Model\Entity\Parents\BasePlan;
 
 /**
  * Plan
@@ -39,6 +40,8 @@ use NextDom\Managers\ScenarioManager;
  */
 class Plan extends BasePlan
 {
+    const TABLE_NAME = NextDomObj::PLAN;
+
     /**
      * @var \NextDom\Model\Entity\PlanHeader
      *
@@ -55,7 +58,7 @@ class Plan extends BasePlan
             $this->setCss('z-index', 1000);
         }
         if (in_array($this->getLink_type(), ['eqLogic', 'cmd', 'scenario'])) {
-            PlanManager::removeByLinkTypeLinkIdPlanHedaerId($this->getLink_type(), $this->getLink_id(), $this->getPlanHeader_id());
+            PlanManager::removeByLinkTypeLinkIdPlanHeaderId($this->getLink_type(), $this->getLink_id(), $this->getPlanHeader_id());
         }
     }
 
@@ -73,7 +76,7 @@ class Plan extends BasePlan
      */
     public function setPlanHeader_id($_planHeader_id)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->planHeader_id, $_planHeader_id);
+        $this->updateChangeState($this->planHeader_id, $_planHeader_id);
         $this->planHeader_id = $_planHeader_id;
         return $this;
     }
@@ -313,13 +316,5 @@ class Plan extends BasePlan
     public function getPlanHeader()
     {
         return PlanHeaderManager::byId($this->getPlanHeader_id());
-    }
-
-    /**
-     * @return string
-     */
-    public function getTableName()
-    {
-        return 'plan';
     }
 }

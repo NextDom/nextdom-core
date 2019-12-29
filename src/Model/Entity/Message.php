@@ -17,12 +17,13 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\NextDomObj;
 use NextDom\Helpers\DBHelper;
-use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\EventManager;
 use NextDom\Managers\ScenarioExpressionManager;
-use NextDom\Model\BaseEntity;
+use NextDom\Model\Entity\Parents\BaseEntity;
+use NextDom\Model\Entity\Parents\LogicalIdEntity;
 
 /**
  * Message
@@ -34,6 +35,9 @@ class Message extends BaseEntity
 {
     const CLASS_NAME = Message::class;
     const DB_CLASS_NAME = '`message`';
+    const TABLE_NAME = NextDomObj::MESSAGE;
+
+    use LogicalIdEntity;
 
     /**
      * @var \DateTime
@@ -41,13 +45,6 @@ class Message extends BaseEntity
      * @ORM\Column(name="date", type="datetime", nullable=false)
      */
     protected $date;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="logicalId", type="string", length=127, nullable=true)
-     */
-    protected $logicalId;
 
     /**
      * @var string
@@ -147,30 +144,11 @@ class Message extends BaseEntity
      */
     public function setMessage($_message)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->message, $_message);
+        $this->updateChangeState($this->message, $_message);
         $this->message = $_message;
         return $this;
     }
-
-    /**
-     * @return string
-     */
-    public function getLogicalId()
-    {
-        return $this->logicalId;
-    }
-
-    /**
-     * @param $_logicalId
-     * @return $this
-     */
-    public function setLogicalId($_logicalId)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->logicalId, $_logicalId);
-        $this->logicalId = $_logicalId;
-        return $this;
-    }
-
+    
     /**
      * @return string
      */
@@ -185,15 +163,15 @@ class Message extends BaseEntity
      */
     public function setPlugin($_plugin)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->plugin, $_plugin);
+        $this->updateChangeState($this->plugin, $_plugin);
         $this->plugin = $_plugin;
         return $this;
     }
 
     public function remove()
     {
-        DBHelper::remove($this);
         EventManager::add('message::refreshMessageNumber');
+        return parent::remove();
     }
 
     /**
@@ -210,7 +188,7 @@ class Message extends BaseEntity
      */
     public function setDate($_date)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->date, $_date);
+        $this->updateChangeState($this->date, $_date);
         $this->date = $_date;
         return $this;
     }
@@ -229,16 +207,8 @@ class Message extends BaseEntity
      */
     public function setAction($_action)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->action, $_action);
+        $this->updateChangeState($this->action, $_action);
         $this->action = $_action;
         return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTableName()
-    {
-        return 'message';
     }
 }

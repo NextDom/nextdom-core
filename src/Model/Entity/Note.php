@@ -17,10 +17,10 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\NextDomObj;
 use NextDom\Exceptions\CoreException;
-use NextDom\Helpers\DBHelper;
-use NextDom\Helpers\Utils;
-use NextDom\Model\BaseEntity;
+use NextDom\Model\Entity\Parents\BaseEntity;
+use NextDom\Model\Entity\Parents\NameEntity;
 
 /**
  * Note
@@ -30,14 +30,9 @@ use NextDom\Model\BaseEntity;
  */
 class Note extends BaseEntity
 {
-    /**
-     * Name of the note
-     *
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=127, nullable=true)
-     */
-    protected $name;
+    const TABLE_NAME = NextDomObj::NOTE;
+
+    use NameEntity;
 
     /**
      * Text of the note
@@ -67,7 +62,7 @@ class Note extends BaseEntity
      */
     public function setText($newText)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->text, $newText);
+        $this->updateChangeState($this->text, $newText);
         $this->text = $newText;
         return $this;
     }
@@ -84,33 +79,9 @@ class Note extends BaseEntity
     }
 
     /**
-     * Get the name of the note
-     *
-     * @return string Name of the note
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Set the name of the note
-     *
-     * @param string $newName Name of the note
-     *
-     * @return $this
-     */
-    public function setName($newName)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $newName);
-        $this->name = $newName;
-        return $this;
-    }
-
-    /**
      * Save note in database
      *
-     * @return bool True on success
+     * @return Note True on success
      *
      * @throws CoreException
      * @throws \ReflectionException
@@ -118,31 +89,9 @@ class Note extends BaseEntity
     public function save()
     {
         if ($this->_changed) {
-            DBHelper::save($this);
+            parent::save();
             $this->_changed = false;
         }
-        return true;
+        return $this;
     }
-
-    /**
-     * Remove note from database
-     *
-     * @throws CoreException
-     * @throws \ReflectionException
-     */
-    public function remove()
-    {
-        DBHelper::remove($this);
-    }
-
-    /**
-     * Table name in database
-     *
-     * @return string Table name
-     */
-    public function getTableName()
-    {
-        return 'note';
-    }
-
 }

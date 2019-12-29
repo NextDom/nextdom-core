@@ -41,6 +41,8 @@ use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
+use NextDom\Managers\Parents\BaseManager;
+use NextDom\Managers\Parents\CommonManager;
 use NextDom\Model\Entity\History;
 use NextDom\Model\Entity\HistoryArch;
 
@@ -48,7 +50,7 @@ use NextDom\Model\Entity\HistoryArch;
  * Class HistoryManager
  * @package NextDom\Managers
  */
-class HistoryManager
+class HistoryManager extends BaseManager
 {
     const CLASS_NAME = 'history';
     const DB_CLASS_NAME = '`history`';
@@ -118,8 +120,7 @@ class HistoryManager
         if ($_oldValue != null) {
             $values['oldValue'] = $_oldValue;
         }
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
+        $sql = static::getBaseSQL() . '
                 WHERE `cmd_id` = :cmd_id
                 AND `datetime` >= :startTime
                 AND `datetime` <= :endTime';
@@ -202,8 +203,7 @@ class HistoryManager
                 $values = [
                     'cmd_id' => $cmd->getId(),
                 ];
-                $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                        FROM ' . self::DB_CLASS_NAME . '
+                $sql = static::getBaseSQL() . '
                         WHERE `cmd_id` = :cmd_id ORDER BY `datetime` ASC';
                 $history = DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
 
@@ -476,8 +476,7 @@ class HistoryManager
             $values['endTime'] = $_endTime;
         }
 
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
+        $sql = static::getBaseSQL() . '
                 WHERE `cmd_id` = :cmd_id ';
         if ($_startTime !== null) {
             $sql .= ' AND `datetime` >= :startTime';
