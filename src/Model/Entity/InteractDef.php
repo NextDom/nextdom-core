@@ -26,6 +26,7 @@ use NextDom\Managers\ConfigManager;
 use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\InteractQueryManager;
 use NextDom\Managers\JeeObjectManager;
+use NextDom\Model\BaseEntity;
 
 /**
  * Interactdef
@@ -33,7 +34,7 @@ use NextDom\Managers\JeeObjectManager;
  * @ORM\Table(name="interactDef")
  * @ORM\Entity
  */
-class InteractDef implements EntityInterface
+class InteractDef extends BaseEntity
 {
 
     /**
@@ -98,17 +99,6 @@ class InteractDef implements EntityInterface
      * @ORM\Column(name="actions", type="text", length=65535, nullable=true)
      */
     protected $actions;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    protected $_changed = false;
 
     /**
      * @return mixed
@@ -425,25 +415,6 @@ class InteractDef implements EntityInterface
     /**
      * @return int
      */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $_id
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
     public function getEnable()
     {
         return $this->enable;
@@ -663,12 +634,6 @@ class InteractDef implements EntityInterface
     /**
      * @return string
      */
-    /**
-     * @return string
-     */
-    /**
-     * @return string
-     */
     public function getHumanName()
     {
         if ($this->getName() != '') {
@@ -680,25 +645,11 @@ class InteractDef implements EntityInterface
     /**
      * @return string
      */
-    /**
-     * @return string
-     */
-    /**
-     * @return string
-     */
     public function getName()
     {
         return $this->name;
     }
 
-    /**
-     * @param $_name
-     * @return $this
-     */
-    /**
-     * @param $_name
-     * @return $this
-     */
     /**
      * @param $_name
      * @return $this
@@ -713,25 +664,11 @@ class InteractDef implements EntityInterface
     /**
      * @return string
      */
-    /**
-     * @return string
-     */
-    /**
-     * @return string
-     */
     public function getPerson()
     {
         return $this->person;
     }
 
-    /**
-     * @param $_person
-     * @return $this
-     */
-    /**
-     * @param $_person
-     * @return $this
-     */
     /**
      * @param $_person
      * @return $this
@@ -746,25 +683,11 @@ class InteractDef implements EntityInterface
     /**
      * @return string
      */
-    /**
-     * @return string
-     */
-    /**
-     * @return string
-     */
     public function getGroup()
     {
         return $this->group;
     }
 
-    /**
-     * @param $_group
-     * @return $this
-     */
-    /**
-     * @param $_group
-     * @return $this
-     */
     /**
      * @param $_group
      * @return $this
@@ -776,44 +699,6 @@ class InteractDef implements EntityInterface
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    /**
-     * @return bool
-     */
-    /**
-     * @return bool
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    /**
-     * @return string
-     */
     /**
      * @return string
      */

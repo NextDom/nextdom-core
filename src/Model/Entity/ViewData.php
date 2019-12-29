@@ -20,6 +20,7 @@ namespace NextDom\Model\Entity;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ViewZoneManager;
+use NextDom\Model\BaseEntity;
 
 /**
  * Viewdata
@@ -27,7 +28,7 @@ use NextDom\Managers\ViewZoneManager;
  * @ORM\Table(name="viewData", uniqueConstraints={@ORM\UniqueConstraint(name="unique", columns={"viewZone_id", "link_id", "type"})}, indexes={@ORM\Index(name="fk_data_zone1_idx", columns={"viewZone_id"}), @ORM\Index(name="order", columns={"order", "viewZone_id"})})
  * @ORM\Entity
  */
-class ViewData implements EntityInterface
+class ViewData extends BaseEntity
 {
 
     /**
@@ -59,15 +60,6 @@ class ViewData implements EntityInterface
     protected $configuration;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
      * @var \NextDom\Model\Entity\ViewZone
      *
      * @ORM\ManyToOne(targetEntity="NextDom\Model\Entity\Viewzone")
@@ -76,8 +68,6 @@ class ViewData implements EntityInterface
      * })
      */
     protected $viewZone_id;
-
-    protected $_changed = false;
 
     /**
      * @return bool
@@ -126,25 +116,6 @@ class ViewData implements EntityInterface
     {
         $this->_changed = Utils::attrChanged($this->_changed, $this->viewZone_id, $_viewZone_id);
         $this->viewZone_id = $_viewZone_id;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $_id
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
         return $this;
     }
 
@@ -237,24 +208,6 @@ class ViewData implements EntityInterface
         $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
         $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
         $this->configuration = $configuration;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
         return $this;
     }
 

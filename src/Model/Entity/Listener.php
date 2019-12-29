@@ -24,6 +24,7 @@ use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\SystemHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ListenerManager;
+use NextDom\Model\BaseEntity;
 
 /**
  * Listener
@@ -31,7 +32,7 @@ use NextDom\Managers\ListenerManager;
  * @ORM\Table(name="listener", indexes={@ORM\Index(name="event", columns={"event"})})
  * @ORM\Entity
  */
-class Listener implements EntityInterface
+class Listener extends BaseEntity
 {
 
     /**
@@ -61,17 +62,6 @@ class Listener implements EntityInterface
      * @ORM\Column(name="option", type="text", length=65535, nullable=true)
      */
     protected $option;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    protected $_changed = false;
 
     /**
      * @param $_event
@@ -159,25 +149,6 @@ class Listener implements EntityInterface
         } catch (\Exception $e) {
             LogHelper::addError(Utils::init('plugin_id', 'plugin'), $e->getMessage());
         }
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $_id
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
     }
 
     /**
@@ -303,24 +274,6 @@ class Listener implements EntityInterface
         $event = json_encode($_event, JSON_UNESCAPED_UNICODE);
         $this->_changed = Utils::attrChanged($this->_changed, $this->event, $_event);
         $this->event = $event;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
         return $this;
     }
 

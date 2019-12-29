@@ -43,6 +43,7 @@ use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\ScenarioSubElementManager;
 use NextDom\Managers\ViewManager;
+use NextDom\Model\BaseEntity;
 
 /**
  * Scenarioexpression
@@ -50,7 +51,7 @@ use NextDom\Managers\ViewManager;
  * @ORM\Table(name="scenarioExpression", indexes={@ORM\Index(name="fk_scenarioExpression_scenarioSubElement1_idx", columns={"scenarioSubElement_id"})})
  * @ORM\Entity
  */
-class ScenarioExpression implements EntityInterface
+class ScenarioExpression extends BaseEntity
 {
 
     /**
@@ -91,22 +92,12 @@ class ScenarioExpression implements EntityInterface
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * @var integer
-     *
      * ORM\ManyToOne(targetEntity="NextDom\Model\Entity\Scenariosubelement")
      * ORM\JoinColumns({
      *   ORM\JoinColumn(name="scenarioSubElement_id", referencedColumnName="id")
      * })
      */
     protected $scenarioSubElement_id;
-    protected $_changed = false;
 
     /**
      * Execute a scenario
@@ -917,25 +908,6 @@ class ScenarioExpression implements EntityInterface
     }
 
     /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $_id
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
-    }
-
-    /**
      * @param $_scenarioSubElement_id
      * @return int
      * @throws CoreException
@@ -1107,23 +1079,5 @@ class ScenarioExpression implements EntityInterface
     public function getTableName()
     {
         return 'scenarioExpression';
-    }
-
-    /**
-     * @return bool
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
-        return $this;
     }
 }

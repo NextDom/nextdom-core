@@ -32,6 +32,7 @@ use NextDom\Managers\DataStoreManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\ScenarioManager;
+use NextDom\Model\BaseEntity;
 
 /**
  * Object for eqLogic group
@@ -39,21 +40,10 @@ use NextDom\Managers\ScenarioManager;
  * @ORM\Table(name="object", uniqueConstraints={@ORM\UniqueConstraint(name="name_UNIQUE", columns={"name"})}, indexes={@ORM\Index(name="fk_object_object1_idx1", columns={"father_id"}), @ORM\Index(name="position", columns={"position"})})
  * @ORM\Entity
  */
-class JeeObject implements EntityInterface
+class JeeObject extends BaseEntity
 {
     const CLASS_NAME = JeeObject::class;
     const DB_CLASS_NAME = '`object`';
-
-    /**
-     * Id of the object
-     *
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
 
     /**
      * Name of the object
@@ -116,7 +106,6 @@ class JeeObject implements EntityInterface
     protected $father_id = null;
 
     protected $_child = [];
-    protected $_changed = false;
 
     /**
      * Get visibility state
@@ -233,24 +222,6 @@ class JeeObject implements EntityInterface
     }
 
     /**
-     * @return bool
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
-        return $this;
-    }
-
-    /**
      * Method called before save. Check error and set default values
      *
      * @throws \Exception
@@ -304,30 +275,6 @@ class JeeObject implements EntityInterface
         $_father_id = ($_father_id == '') ? null : $_father_id;
         $this->_changed = Utils::attrChanged($this->_changed, $this->father_id, $_father_id);
         $this->father_id = $_father_id;
-        return $this;
-    }
-
-    /**
-     * Get object id
-     *
-     * @return int|null Object id
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set object id
-     *
-     * @param int|null $_id Object Id
-     *
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
         return $this;
     }
 

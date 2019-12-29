@@ -23,6 +23,7 @@ use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\Plan3dManager;
+use NextDom\Model\BaseEntity;
 
 /**
  * Plan3dheader
@@ -30,7 +31,7 @@ use NextDom\Managers\Plan3dManager;
  * @ORM\Table(name="plan3dHeader")
  * @ORM\Entity
  */
-class Plan3dHeader implements EntityInterface
+class Plan3dHeader extends BaseEntity
 {
 
     /**
@@ -46,17 +47,6 @@ class Plan3dHeader implements EntityInterface
      * @ORM\Column(name="configuration", type="text", length=65535, nullable=true)
      */
     protected $configuration;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    protected $_changed = false;
 
     public function preSave()
     {
@@ -126,49 +116,12 @@ class Plan3dHeader implements EntityInterface
     }
 
     /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $_id
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
-    }
-
-    /**
      * @return Plan3d|null
      * @throws \Exception
      */
     public function getPlan3d()
     {
         return Plan3dManager::byPlan3dHeaderId($this->getId());
-    }
-
-    /**
-     * @return bool
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
-        return $this;
     }
 
     /**

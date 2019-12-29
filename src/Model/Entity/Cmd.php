@@ -58,6 +58,7 @@ use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\ViewDataManager;
 use NextDom\Managers\ViewManager;
+use NextDom\Model\BaseEntity;
 
 /**
  * Cmd
@@ -77,7 +78,7 @@ use NextDom\Managers\ViewManager;
  *      })
  * ORM\Entity
  */
-class Cmd implements EntityInterface
+class Cmd extends BaseEntity
 {
     private static $_templateArray = [];
     public $_collectDate = '';
@@ -85,7 +86,6 @@ class Cmd implements EntityInterface
     public $_eqLogic = null;
     public $_needRefreshWidget;
     public $_needRefreshAlert;
-    protected $_changed = false;
 
     /**
      * @var string
@@ -198,15 +198,6 @@ class Cmd implements EntityInterface
      * @ORM\Column(name="alert", type="text", length=65535, nullable=true)
      */
     protected $alert;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
 
     /**
      * @var EqLogic
@@ -390,25 +381,6 @@ class Cmd implements EntityInterface
     {
         $cache = CacheManager::byKey(CmdConfigKey::CMD_CACHE_ATTR . $this->getId())->getValue();
         return Utils::getJsonAttr($cache, $_key, $_default);
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $id
-     * @return $this
-     */
-    public function setId($id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $id);
-        $this->id = $id;
-        return $this;
     }
 
     /**
@@ -2208,29 +2180,6 @@ class Cmd implements EntityInterface
         } else {
             return $this->getEqLogicId()->hasRight(ActionRight::READ, $user);
         }
-    }
-
-    /**
-     * Get changed state
-     *
-     * @return bool True if attribute has changed
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * Set changed state
-     *
-     * @param bool $changed New changed state
-     *
-     * @return $this
-     */
-    public function setChanged($changed)
-    {
-        $this->_changed = $changed;
-        return $this;
     }
 
     /**

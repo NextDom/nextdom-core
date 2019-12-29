@@ -24,6 +24,7 @@ use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UserManager;
+use NextDom\Model\BaseEntity;
 use PragmaRX\Google2FA\Google2FA;
 
 /**
@@ -32,7 +33,7 @@ use PragmaRX\Google2FA\Google2FA;
  * @ORM\Table(name="user")
  * @ORM\Entity
  */
-class User implements EntityInterface
+class User extends BaseEntity
 {
 
     /**
@@ -83,16 +84,6 @@ class User implements EntityInterface
      * @ORM\Column(name="enable", type="integer", nullable=true)
      */
     protected $enable = 1;
-    protected $_changed = false;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
 
     public function preInsert()
     {
@@ -162,25 +153,6 @@ class User implements EntityInterface
     public function isEnabled()
     {
         return $this->enable != 0;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $_id
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
     }
 
     /*     * **********************Getteur Setteur*************************** */
@@ -358,24 +330,6 @@ class User implements EntityInterface
     public function save()
     {
         return DBHelper::save($this);
-    }
-
-    /**
-     * @return bool
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
-        return $this;
     }
 
     /**

@@ -33,6 +33,7 @@ use NextDom\Managers\ScenarioElementManager;
 use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\ScenarioSubElementManager;
+use NextDom\Model\BaseEntity;
 
 /**
  * Scenarioelement
@@ -40,7 +41,7 @@ use NextDom\Managers\ScenarioSubElementManager;
  * ORM\Table(name="scenarioElement")
  * ORM\Entity
  */
-class ScenarioElement implements EntityInterface
+class ScenarioElement extends BaseEntity
 {
 
     /**
@@ -71,17 +72,7 @@ class ScenarioElement implements EntityInterface
      */
     protected $options;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
     protected $_subelement;
-    protected $_changed = false;
 
     public function remove()
     {
@@ -111,25 +102,6 @@ class ScenarioElement implements EntityInterface
             $this->_subelement[-1] = ScenarioSubElementManager::byScenarioElementId($this->getId(), $_type);
             return $this->_subelement[-1];
         }
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $_id
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
     }
 
     /**
@@ -580,24 +552,6 @@ class ScenarioElement implements EntityInterface
     {
         $this->_changed = Utils::attrChanged($this->_changed, $this->order, $_order);
         $this->order = $_order;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
         return $this;
     }
 

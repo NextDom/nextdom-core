@@ -46,6 +46,7 @@ use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\UserManager;
 use NextDom\Managers\ViewDataManager;
 use NextDom\Managers\ViewManager;
+use NextDom\Model\BaseEntity;
 
 /**
  * Scenario
@@ -53,7 +54,7 @@ use NextDom\Managers\ViewManager;
  * ORM\Table(name="scenario", uniqueConstraints={@ORM\UniqueConstraint(name="name", columns={"group", "object_id", "name"})}, indexes={@ORM\Index(name="group", columns={"group"}), @ORM\Index(name="fk_scenario_object1_idx", columns={"object_id"}), @ORM\Index(name="trigger", columns={"trigger"}), @ORM\Index(name="mode", columns={"mode"}), @ORM\Index(name="modeTriger", columns={"mode", "trigger"})})
  * ORM\Entity
  */
-class Scenario implements EntityInterface
+class Scenario extends BaseEntity
 {
     /**
      * @var array
@@ -139,14 +140,6 @@ class Scenario implements EntityInterface
     protected $type = 'expert';
     protected $order = 9999;
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-    /**
      * @var int
      *
      * ORM\ManyToOne(targetEntity="NextDom\Model\Entity\Object")
@@ -162,7 +155,6 @@ class Scenario implements EntityInterface
     protected $_tags = [];
     protected $_do = true;
     protected $_log;
-    protected $_changed = false;
 
     /**
      *
@@ -378,25 +370,6 @@ class Scenario implements EntityInterface
     {
         $scenarioCacheAttr = CacheManager::byKey(CacheKey::SCENARIO_CACHE_ATTR . $this->getId())->getValue();
         return Utils::getJsonAttr($scenarioCacheAttr, $key, $defaultValue);
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $_id
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
     }
 
     /**
@@ -1756,38 +1729,6 @@ class Scenario implements EntityInterface
     {
         $this->_changed = Utils::attrChanged($this->_changed, $this->order, $_order);
         $this->order = $_order;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    /**
-     * @return bool
-     */
-    /**
-     * @return bool
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
         return $this;
     }
 }

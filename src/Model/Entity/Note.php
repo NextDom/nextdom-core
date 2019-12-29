@@ -20,6 +20,7 @@ namespace NextDom\Model\Entity;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
+use NextDom\Model\BaseEntity;
 
 /**
  * Note
@@ -27,19 +28,8 @@ use NextDom\Helpers\Utils;
  * @ORM\Table(name="note")
  * @ORM\Entity
  */
-class Note implements EntityInterface
+class Note extends BaseEntity
 {
-    /**
-     * Id of the note
-     *
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
     /**
      * Name of the note
      *
@@ -57,35 +47,6 @@ class Note implements EntityInterface
      * @ORM\Column(name="text", type="text", length=65535, nullable=true)
      */
     protected $text;
-
-    /**
-     * @var bool Data changed state
-     */
-    private $_changed = false;
-
-    /**
-     * Get id of the note
-     *
-     * @return int Id of the note
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set note id
-     *
-     * @param int $id Id of the note
-     *
-     * @return $this
-     */
-    public function setId($id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $id);
-        $this->id = $id;
-        return $this;
-    }
 
     /**
      * Get the text of the note
@@ -108,29 +69,6 @@ class Note implements EntityInterface
     {
         $this->_changed = Utils::attrChanged($this->_changed, $this->text, $newText);
         $this->text = $newText;
-        return $this;
-    }
-
-    /**
-     * Get data change status
-     *
-     * @return bool True if change occurs
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * Set change data state
-     *
-     * @param $newChangedState
-     *
-     * @return $this
-     */
-    public function setChanged($newChangedState)
-    {
-        $this->_changed = $newChangedState;
         return $this;
     }
 

@@ -21,6 +21,7 @@ use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ScenarioElementManager;
 use NextDom\Managers\ScenarioExpressionManager;
+use NextDom\Model\BaseEntity;
 
 /**
  * Scenariosubelement
@@ -28,7 +29,7 @@ use NextDom\Managers\ScenarioExpressionManager;
  * ORM\Table(name="scenarioSubElement", indexes={@ORM\Index(name="fk_scenarioSubElement_scenarioElement1_idx", columns={"scenarioElement_id"}), @ORM\Index(name="type", columns={"scenarioElement_id", "type"})})
  * ORM\Entity
  */
-class ScenarioSubElement implements EntityInterface
+class ScenarioSubElement extends BaseEntity
 {
 
     /**
@@ -67,15 +68,6 @@ class ScenarioSubElement implements EntityInterface
     protected $options;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
      * @var \NextDom\Model\Entity\ScenarioElement
      *
      * @ORM\ManyToOne(targetEntity="NextDom\Model\Entity\Scenarioelement")
@@ -86,8 +78,6 @@ class ScenarioSubElement implements EntityInterface
     protected $scenarioElement_id;
 
     protected $_expression;
-
-    protected $_changed = false;
 
     /**
      * @return string
@@ -179,24 +169,6 @@ class ScenarioSubElement implements EntityInterface
     }
 
     /**
-     * @return bool
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
-        return $this;
-    }
-
-    /**
      * @param Scenario $_scenario
      * @return bool|null
      * @throws \Exception
@@ -272,25 +244,6 @@ class ScenarioSubElement implements EntityInterface
         }
         $this->_expression = ScenarioExpressionManager::byscenarioSubElementId($this->getId());
         return $this->_expression;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $_id
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
     }
 
     public function remove()

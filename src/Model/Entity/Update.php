@@ -30,6 +30,7 @@ use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
+use NextDom\Model\BaseEntity;
 use ZipArchive;
 
 /**
@@ -38,7 +39,7 @@ use ZipArchive;
  * @ORM\Table(name="update", indexes={@ORM\Index(name="status", columns={"status"})})
  * @ORM\Entity
  */
-class Update implements EntityInterface
+class Update extends BaseEntity
 {
     /**
      * @var string
@@ -96,16 +97,7 @@ class Update implements EntityInterface
      */
     protected $configuration;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
     protected $_changeUpdate = false;
-    protected $_changed = false;
 
     /**
      * Obtenir les informations de la mise à jour
@@ -595,25 +587,6 @@ class Update implements EntityInterface
     }
 
     /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $_id
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getStatus()
@@ -635,44 +608,6 @@ class Update implements EntityInterface
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    /**
-     * @return bool
-     */
-    /**
-     * @return bool
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    /**
-     * @return string
-     */
     /**
      * @return string
      */

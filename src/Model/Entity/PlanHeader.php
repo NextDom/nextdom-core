@@ -26,6 +26,7 @@ use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\ReportHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\PlanManager;
+use NextDom\Model\BaseEntity;
 
 /**
  * Planheader
@@ -33,7 +34,7 @@ use NextDom\Managers\PlanManager;
  * @ORM\Table(name="planHeader")
  * @ORM\Entity
  */
-class PlanHeader implements EntityInterface
+class PlanHeader extends BaseEntity
 {
 
     /**
@@ -58,17 +59,6 @@ class PlanHeader implements EntityInterface
     protected $configuration;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    protected $_changed;
-
-    /**
      * @param string $_format
      * @param array $_parameters
      * @return string
@@ -83,25 +73,6 @@ class PlanHeader implements EntityInterface
             $url .= '&' . $_parameters['arg'];
         }
         return ReportHelper::generate($url, 'plan', $this->getId(), $_format, $_parameters);
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $_id
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
     }
 
     /**
@@ -294,24 +265,6 @@ class PlanHeader implements EntityInterface
             'url' => 'index.php?v=d&p=plan&view_id=' . $this->getId(),
         ];
         return null;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
-        return $this;
     }
 
     /**

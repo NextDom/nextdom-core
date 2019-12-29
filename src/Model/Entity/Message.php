@@ -22,6 +22,7 @@ use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\EventManager;
 use NextDom\Managers\ScenarioExpressionManager;
+use NextDom\Model\BaseEntity;
 
 /**
  * Message
@@ -29,7 +30,7 @@ use NextDom\Managers\ScenarioExpressionManager;
  * @ORM\Table(name="message", indexes={@ORM\Index(name="plugin_logicalID", columns={"plugin", "logicalId"})})
  * @ORM\Entity
  */
-class Message implements EntityInterface
+class Message extends BaseEntity
 {
     const CLASS_NAME = Message::class;
     const DB_CLASS_NAME = '`message`';
@@ -68,17 +69,6 @@ class Message implements EntityInterface
      * @ORM\Column(name="action", type="text", length=65535, nullable=true)
      */
     protected $action;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    protected $_changed = false;
 
     /**
      * @param bool $_writeMessage
@@ -207,25 +197,6 @@ class Message implements EntityInterface
     }
 
     /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $_id
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
-    }
-
-    /**
      * @return \DateTime
      */
     public function getDate()
@@ -260,24 +231,6 @@ class Message implements EntityInterface
     {
         $this->_changed = Utils::attrChanged($this->_changed, $this->action, $_action);
         $this->action = $_action;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
         return $this;
     }
 

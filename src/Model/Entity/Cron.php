@@ -28,6 +28,7 @@ use NextDom\Helpers\Utils;
 use NextDom\Managers\CacheManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\CronManager;
+use NextDom\Model\BaseEntity;
 
 /**
  * Cron
@@ -35,7 +36,7 @@ use NextDom\Managers\CronManager;
  * @ORM\Table(name="cron", uniqueConstraints={@ORM\UniqueConstraint(name="class_function_option", columns={"class", "function", "option"})}, indexes={@ORM\Index(name="type", columns={"class"}), @ORM\Index(name="logicalId_Type", columns={"class"}), @ORM\Index(name="deamon", columns={"deamon"})})
  * @ORM\Entity
  */
-class Cron implements EntityInterface
+class Cron extends BaseEntity
 {
 
     /**
@@ -100,20 +101,6 @@ class Cron implements EntityInterface
      * @ORM\Column(name="once", type="integer", nullable=true)
      */
     protected $once = 0;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * @var bool
-     */
-    protected $_changed = false;
 
     /**
      * Get enabled state of the cron task
@@ -360,27 +347,6 @@ class Cron implements EntityInterface
     {
         $this->_changed = Utils::attrChanged($this->_changed, $this->class, $newClass);
         $this->class = $newClass;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set task id
-     *
-     * @param $_id
-     * @return $this Task object
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
         return $this;
     }
 
@@ -723,23 +689,5 @@ class Cron implements EntityInterface
     public function setLastRun($lastRun)
     {
         $this->setCache('lastRun', $lastRun);
-    }
-
-    /**
-     * @return bool
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
-        return $this;
     }
 }

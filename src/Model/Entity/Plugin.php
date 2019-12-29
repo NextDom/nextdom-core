@@ -26,6 +26,7 @@ use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\ReportHelper;
 use NextDom\Helpers\SystemHelper;
+use NextDom\Interfaces\EntityInterface;
 use NextDom\Managers\CacheManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\EqLogicManager;

@@ -28,6 +28,7 @@ use NextDom\Managers\ConfigManager;
 use NextDom\Managers\CronManager;
 use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\ScenarioExpressionManager;
+use NextDom\Model\BaseEntity;
 
 /**
  * Interactquery
@@ -35,7 +36,7 @@ use NextDom\Managers\ScenarioExpressionManager;
  * @ORM\Table(name="interactQuery", indexes={@ORM\Index(name="fk_sarahQuery_sarahDef1_idx", columns={"interactDef_id"}), @ORM\Index(name="query", columns={"query"})})
  * @ORM\Entity
  */
-class InteractQuery implements EntityInterface
+class InteractQuery extends BaseEntity
 {
 
     /**
@@ -58,17 +59,6 @@ class InteractQuery implements EntityInterface
      * @ORM\Column(name="actions", type="text", length=65535, nullable=true)
      */
     protected $actions;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    protected $_changed = false;
 
     /**
      * @return $this
@@ -299,25 +289,6 @@ class InteractQuery implements EntityInterface
     }
 
     /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $_id
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
-    }
-
-    /**
      * @param string $_key
      * @param string $_default
      * @return array|bool|mixed|null|string
@@ -358,24 +329,6 @@ class InteractQuery implements EntityInterface
     public function replaceForContextual($_replace, $_by, $_in)
     {
         Interactquery::replaceForContextual($_replace, $_by, $_in);
-    }
-
-    /**
-     * @return bool
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
-        return $this;
     }
 
     /**

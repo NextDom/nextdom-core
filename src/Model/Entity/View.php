@@ -26,6 +26,7 @@ use NextDom\Helpers\ReportHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\ViewZoneManager;
+use NextDom\Model\BaseEntity;
 
 /**
  * View
@@ -33,7 +34,7 @@ use NextDom\Managers\ViewZoneManager;
  * @ORM\Table(name="view", uniqueConstraints={@ORM\UniqueConstraint(name="name_UNIQUE", columns={"name"})})
  * @ORM\Entity
  */
-class View implements EntityInterface
+class View extends BaseEntity
 {
 
     /**
@@ -72,17 +73,6 @@ class View implements EntityInterface
     protected $configuration;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    protected $_changed = false;
-
-    /**
      * @param string $_format
      * @param array $_parameters
      * @return string
@@ -97,25 +87,6 @@ class View implements EntityInterface
             $url .= '&' . $_parameters['arg'];
         }
         return ReportHelper::generate($url, 'view', $this->getId(), $_format, $_parameters);
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $_id
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
     }
 
     /**
@@ -448,24 +419,6 @@ class View implements EntityInterface
         $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
         $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
         $this->configuration = $configuration;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
         return $this;
     }
 
