@@ -26,7 +26,6 @@ APACHE_SYSTEMD_DIRECTORY="/etc/systemd/system/apache2.service.d"
 ### PHP path
 PHP_DIRECTORY=$(php --ini | head -n 1 | sed -E "s/.*Path: (.*)\/cli/\\1/")
 
-
 ### NextDom path
 CONFIG_DIRECTORY="/etc/nextdom"
 LIB_DIRECTORY="/var/lib/nextdom"
@@ -37,10 +36,11 @@ TMP_DIRECTORY="/tmp/nextdom"
 
 ### MySQL/MariaDB configuration
 
-MYSQL_HOSTNAME="localhost"
-MYSQL_PORT="3306"
+MYSQL_HOSTNAME=${MYSQL_HOSTNAME:-"localhost"}
+MYSQL_PORT=${MYSQL_PORT:-"3306"}
 #MYSQL_ROOT_PASSWD=""
-MYSQL_NEXTDOM_DB="nextdomdev"
-MYSQL_NEXTDOM_USER="nextdomdev"
-MYSQL_NEXTDOM_PASSWD="$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15)"
-
+MYSQL_NEXTDOM_DB=${MYSQL_NEXTDOM_DB:-"nextdomdev"}
+MYSQL_NEXTDOM_USER=${MYSQL_NEXTDOM_USER:-"nextdomdev"}
+if [ -z ${MYSQL_NEXTDOM_PASSWD} ]; then
+  MYSQL_NEXTDOM_PASSWD="$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15)"
+fi
