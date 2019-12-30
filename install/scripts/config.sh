@@ -5,7 +5,7 @@ set -e
 #################################################################################################
 
 # false for dev
-PRODUCTION=true
+PRODUCTION=${PRODUCTION:-"true"}
 
 # For log output
 BLUE="\\033[1;34m"

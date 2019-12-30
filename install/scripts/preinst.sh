@@ -2,7 +2,7 @@
 set -e
 
 #https://stackoverflow.com/questions/59895/get-the-source-directory-of-a-bash-script-from-within-the-script-itself
-CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
 source ${CURRENT_DIR}/utils.sh
 
@@ -272,7 +272,7 @@ step6_generate_mysql_structure() {
   if [[ ${MYSQL_HOSTNAME} == "localhost" ]]; then
     CONSTRAINT='localhost'
   fi
-addLogStep "Preinst -- Generate MySQL/MariaDB structure - 6/7"
+  addLogStep "Preinst -- Generate MySQL/MariaDB structure - 6/7"
 
   CONSTRAINT="%"
   if [[ ${MYSQL_HOSTNAME} == "localhost" ]]; then
@@ -364,7 +364,7 @@ step7_configure_php() {
     addLogError "Error while removing 10-opcache.ini file"
   }
 
-  if [[ ${PRODUCTION} ]]; then
+  if [[ "true" == "${PRODUCTION}" ]]; then
     addLogInfo "production mode"
     { ##try
 
