@@ -20,7 +20,6 @@ namespace NextDom\Model\Entity;
 use NextDom\Enums\CmdType;
 use NextDom\Enums\NextDomObj;
 use NextDom\Exceptions\CoreException;
-use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\ConfigManager;
@@ -28,6 +27,9 @@ use NextDom\Managers\DataStoreManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\ScenarioManager;
+use NextDom\Model\Entity\Parents\BaseEntity;
+use NextDom\Model\Entity\Parents\LinkIdEntity;
+use NextDom\Model\Entity\Parents\TypeEntity;
 
 /**
  * Datastore
@@ -37,20 +39,9 @@ use NextDom\Managers\ScenarioManager;
  */
 class DataStore implements EntityInterface
 {
+    const TABLE_NAME = NextDomObj::DATASTORE;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="type", type="string", length=127, nullable=false)
-     */
-    protected $type;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="link_id", type="integer", nullable=false)
-     */
-    protected $link_id;
+    use LinkIdEntity, TypeEntity;
 
     /**
      * @var string
@@ -105,44 +96,6 @@ class DataStore implements EntityInterface
     /**
      * @return string
      */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param $_type
-     * @return $this
-     */
-    public function setType($_type)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->type, $_type);
-        $this->type = $_type;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getLink_id()
-    {
-        return $this->link_id;
-    }
-
-    /**
-     * @param $_link_id
-     * @return $this
-     */
-    public function setLink_id($_link_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->link_id, $_link_id);
-        $this->link_id = $_link_id;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
     public function getKey()
     {
         return $this->key;
@@ -156,38 +109,9 @@ class DataStore implements EntityInterface
      */
     public function setKey($_key)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->key, $_key);
+        $this->updateChangeState($this->key, $_key);
         $this->key = $_key;
         return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $_id
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
-    public function save()
-    {
-        return DBHelper::save($this);
     }
 
     public function postSave()
@@ -201,11 +125,6 @@ class DataStore implements EntityInterface
                 }
             }
         }
-    }
-
-    public function remove()
-    {
-        DBHelper::remove($this);
     }
 
     /**
@@ -294,34 +213,8 @@ class DataStore implements EntityInterface
         if (is_object($_value) || is_array($_value)) {
             $_value = json_encode($_value, JSON_UNESCAPED_UNICODE);
         }
-        $this->_changed = Utils::attrChanged($this->_changed, $this->value, $_value);
+        $this->updateChangeState($this->value, $_value);
         $this->value = $_value;
         return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTableName()
-    {
-        return 'dataStore';
     }
 }

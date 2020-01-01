@@ -37,11 +37,11 @@ class plan extends \NextDom\Model\Entity\Plan {
     }
     
     public static function byLinkTypeLinkIdPlanHedaerId($_link_type, $_link_id, $_planHeader_id) {
-        return PlanManager::byLinkTypeLinkIdPlanHedaerId($_link_type, $_link_id, $_planHeader_id);
+        return PlanManager::byLinkTypeLinkIdPlanHeaderId($_link_type, $_link_id, $_planHeader_id);
     }
     
     public static function removeByLinkTypeLinkIdPlanHedaerId($_link_type, $_link_id, $_planHeader_id) {
-        return PlanManager::removeByLinkTypeLinkIdPlanHedaerId($_link_type, $_link_id, $_planHeader_id);
+        return PlanManager::removeByLinkTypeLinkIdPlanHeaderId($_link_type, $_link_id, $_planHeader_id);
     }
 
     public static function all() {

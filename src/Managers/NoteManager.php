@@ -34,7 +34,8 @@
 
 namespace NextDom\Managers;
 
-use NextDom\Helpers\DBHelper;
+use NextDom\Managers\Parents\BaseManager;
+use NextDom\Managers\Parents\CommonManager;
 use NextDom\Model\Entity\Note;
 
 require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
@@ -43,8 +44,9 @@ require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
  * Class NoteManager
  * @package NextDom\Managers
  */
-class NoteManager
+class NoteManager extends BaseManager
 {
+    use CommonManager;
     /**
      * Name of the class
      */
@@ -53,24 +55,6 @@ class NoteManager
      * Table name in database
      */
     const DB_CLASS_NAME = '`note`';
-
-    /**
-     * Get a note by his Id
-     * @param int $id Id of the note
-     *
-     * @return Note|null
-     *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
-    public static function byId($id)
-    {
-        $values = ['id' => $id];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE id = :id';
-        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
-    }
 
     /**
      * Get all notes
@@ -82,9 +66,6 @@ class NoteManager
      */
     public static function all()
     {
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                ORDER BY name';
-        return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
+        return static::getAllOrdered('name');
     }
 }

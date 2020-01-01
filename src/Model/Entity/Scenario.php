@@ -49,6 +49,15 @@ use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\UserManager;
 use NextDom\Managers\ViewDataManager;
 use NextDom\Managers\ViewManager;
+use NextDom\Model\Entity\Parents\BaseEntity;
+use NextDom\Model\Entity\Parents\ConfigurationEntity;
+use NextDom\Model\Entity\Parents\DisplayEntity;
+use NextDom\Model\Entity\Parents\IsActiveEntity;
+use NextDom\Model\Entity\Parents\IsVisibleEntity;
+use NextDom\Model\Entity\Parents\NameEntity;
+use NextDom\Model\Entity\Parents\OrderEntity;
+use NextDom\Model\Entity\Parents\RefreshEntity;
+use NextDom\Model\Entity\Parents\TypeEntity;
 
 /**
  * Scenario
@@ -58,6 +67,10 @@ use NextDom\Managers\ViewManager;
  */
 class Scenario implements EntityInterface
 {
+    const TABLE_NAME = NextDomObj::SCENARIO;
+
+    use ConfigurationEntity, DisplayEntity, IsVisibleEntity, IsActiveEntity, NameEntity, OrderEntity, RefreshEntity, TypeEntity;
+
     /**
      * @var array
      */
@@ -65,21 +78,9 @@ class Scenario implements EntityInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=127, nullable=true)
-     */
-    protected $name;
-    /**
-     * @var string
-     *
      * @ORM\Column(name="group", type="string", length=127, nullable=true)
      */
     protected $group = '';
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="isActive", type="boolean", nullable=true)
-     */
-    protected $isActive = 1;
     /**
      * @var string
      *
@@ -111,44 +112,12 @@ class Scenario implements EntityInterface
      */
     protected $timeout = 0;
     /**
-     * @var boolean
-     *
-     * @ORM\Column(name="isVisible", type="boolean", nullable=true)
-     */
-    protected $isVisible = 1;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="display", type="text", length=65535, nullable=true)
-     */
-    protected $display;
-    /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", length=65535, nullable=true)
      */
     protected $description;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="configuration", type="text", length=65535, nullable=true)
-     */
-    protected $configuration;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="type", type="string", length=127, nullable=true)
-     */
-    protected $type = 'expert';
-    protected $order = 9999;
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
+
     /**
      * @var int
      *
@@ -167,51 +136,11 @@ class Scenario implements EntityInterface
     protected $_log;
     protected $_changed = false;
 
-    /**
-     *
-     * @param mixed $defaultValue
-     * @return mixed
-     */
-    public function getIsVisible($defaultValue = 0)
+    public function __construct()
     {
-        if ($this->isVisible == '' || !is_numeric($this->isVisible)) {
-            return $defaultValue;
+        if ($this->order === null) {
+            $this->order = 9999;
         }
-        return $this->isVisible;
-    }
-
-    public function isVisible()
-    {
-        return intval($this->isVisible) == 1;
-    }
-
-    /**
-     * @param $isVisible
-     * @return $this
-     */
-    public function setIsVisible($isVisible)
-    {
-        $this->isVisible = $isVisible;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param $_type
-     * @return $this
-     */
-    public function setType($_type)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->type, $_type);
-        $this->type = $_type;
-        return $this;
     }
 
     /**
@@ -251,7 +180,7 @@ class Scenario implements EntityInterface
             $_trigger = json_encode($_trigger, JSON_UNESCAPED_UNICODE);
         }
         $_trigger = CmdManager::humanReadableToCmd($_trigger);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->trigger, $_trigger);
+        $this->updateChangeState($this->trigger, $_trigger);
         $this->trigger = $_trigger;
         return $this;
     }
@@ -323,39 +252,6 @@ class Scenario implements EntityInterface
     }
 
     /**
-     * @return bool
-     */
-    public function getIsActive()
-    {
-        return $this->isActive;
-    }
-
-    /**
-     * Get active state of the scenario
-     *
-     * @return bool Active state
-     */
-    public function isActive(): bool
-    {
-        return $this->isActive == 1;
-    }
-
-    /**
-     *
-     * @param int $isActive
-     * @return $this
-     */
-    public function setIsActive($isActive)
-    {
-        if ($isActive != $this->getIsActive()) {
-            $this->_changeState = true;
-            $this->_changed = true;
-        }
-        $this->isActive = $isActive;
-        return $this;
-    }
-
-    /**
      *
      * @return mixed
      * @throws \Exception
@@ -381,33 +277,6 @@ class Scenario implements EntityInterface
     {
         $scenarioCacheAttr = CacheManager::byKey(CacheKey::SCENARIO_CACHE_ATTR . $this->getId())->getValue();
         return Utils::getJsonAttr($scenarioCacheAttr, $key, $defaultValue);
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $_id
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
     }
 
     /**
@@ -445,31 +314,6 @@ class Scenario implements EntityInterface
             file_put_contents($path, "------------------------------------\n" . $this->getLog(), FILE_APPEND);
         }
         return true;
-    }
-
-    /**
-     *
-     * @param string $key
-     * @param mixed $defaultValue
-     *
-     * @return mixed
-     */
-    public function getConfiguration($key = '', $defaultValue = '')
-    {
-        return Utils::getJsonAttr($this->configuration, $key, $defaultValue);
-    }
-
-    /**
-     *
-     * @param string $key
-     * @param mixed $value
-     *
-     * @return $this
-     */
-    public function setConfiguration($key, $value)
-    {
-        $this->configuration = Utils::setJsonAttr($this->configuration, $key, $value);
-        return $this;
     }
 
     /**
@@ -820,7 +664,7 @@ class Scenario implements EntityInterface
         if (is_array($_scenarioElement)) {
             $_scenarioElement = json_encode($_scenarioElement, JSON_UNESCAPED_UNICODE);
         }
-        $this->_changed = Utils::attrChanged($this->_changed, $this->scenarioElement, $_scenarioElement);
+        $this->updateChangeState($this->scenarioElement, $_scenarioElement);
         $this->scenarioElement = $_scenarioElement;
         return $this;
     }
@@ -922,7 +766,7 @@ class Scenario implements EntityInterface
      */
     public function setMode($_mode)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->mode, $_mode);
+        $this->updateChangeState($this->mode, $_mode);
         $this->mode = $_mode;
         return $this;
     }
@@ -979,7 +823,7 @@ class Scenario implements EntityInterface
         if (is_array($_schedule)) {
             $_schedule = json_encode($_schedule, JSON_UNESCAPED_UNICODE);
         }
-        $this->_changed = Utils::attrChanged($this->_changed, $this->schedule, $_schedule);
+        $this->updateChangeState($this->schedule, $_schedule);
         $this->schedule = $_schedule;
         return $this;
     }
@@ -1054,31 +898,6 @@ class Scenario implements EntityInterface
             return true;
         }
         return false;
-    }
-
-    /**
-     *
-     * @param mixed $key
-     * @param mixed $default
-     * @return mixed
-     */
-    public function getDisplay($key = '', $default = '')
-    {
-        return Utils::getJsonAttr($this->display, $key, $default);
-    }
-
-    /**
-     *
-     * @param $key
-     * @param $value
-     * @return $this
-     */
-    public function setDisplay($key, $value)
-    {
-        $display = Utils::setJsonAttr($this->display, $key, $value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->display, $display);
-        $this->display = $display;
-        return $this;
     }
 
     /**
@@ -1181,7 +1000,7 @@ class Scenario implements EntityInterface
         if ($_timeout === '' || is_nan(intval($_timeout)) || $_timeout < 1) {
             $_timeout = 0;
         }
-        $this->_changed = Utils::attrChanged($this->_changed, $this->timeout, $_timeout);
+        $this->updateChangeState($this->timeout, $_timeout);
         $this->timeout = $_timeout;
         return $this;
     }
@@ -1193,14 +1012,6 @@ class Scenario implements EntityInterface
     {
         $this->setState('stop');
         $this->setPID();
-    }
-
-    /**
-     *
-     */
-    public function refresh()
-    {
-        DBHelper::refresh($this);
     }
 
     /**
@@ -1220,7 +1031,7 @@ class Scenario implements EntityInterface
             unlink(NEXTDOM_LOG . '/scenarioLog/scenario' . $this->getId() . '.log');
         }
         CacheManager::delete(CacheKey::SCENARIO_CACHE_ATTR . $this->getId());
-        return DBHelper::remove($this);
+        return parent::remove();
     }
 
     /**
@@ -1615,7 +1426,7 @@ class Scenario implements EntityInterface
      */
     public function setDescription($_description)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->description, $_description);
+        $this->updateChangeState($this->description, $_description);
         $this->description = $_description;
         return $this;
     }
@@ -1675,55 +1486,6 @@ class Scenario implements EntityInterface
     public function setRealTrigger($_realTrigger)
     {
         $this->_realTrigger = $_realTrigger;
-        return $this;
-    }
-
-    /**
-     * Name of the table in the database
-     *
-     * @return string Name of the table in the database
-     */
-    public function getTableName()
-    {
-        return 'scenario';
-    }
-
-    /**
-     *
-     * @return int
-     */
-    public function getOrder()
-    {
-        return $this->order;
-    }
-
-    /**
-     *
-     * @param int $_order
-     * @return $this
-     */
-    public function setOrder($_order)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->order, $_order);
-        $this->order = $_order;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
         return $this;
     }
 }

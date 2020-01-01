@@ -120,7 +120,7 @@ class ObjectAjax extends BaseAjax
             $resultObject = new JeeObject();
         }
         Utils::a2o($resultObject, NextDomHelper::fromHumanReadable($jsonObject));
-        if ($resultObject->getName() !== '') {
+        if (!empty($resultObject->getName())) {
             $resultObject->save();
             $this->ajax->success(Utils::o2a($resultObject));
         }

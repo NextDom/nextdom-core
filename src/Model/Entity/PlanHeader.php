@@ -18,14 +18,18 @@
 namespace NextDom\Model\Entity;
 
 use NextDom\Enums\DateFormat;
+use NextDom\Enums\NextDomObj;
 use NextDom\Exceptions\CoreException;
-use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\ReportHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\PlanManager;
+use NextDom\Model\Entity\Parents\AccessCodeConfigurationEntity;
+use NextDom\Model\Entity\Parents\BaseEntity;
+use NextDom\Model\Entity\Parents\ConfigurationEntity;
+use NextDom\Model\Entity\Parents\NameEntity;
 
 /**
  * Planheader
@@ -35,13 +39,9 @@ use NextDom\Managers\PlanManager;
  */
 class PlanHeader implements EntityInterface
 {
+    const TABLE_NAME = NextDomObj::PLAN_HEADER;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=127, nullable=true)
-     */
-    protected $name;
+    use NameEntity, AccessCodeConfigurationEntity;
 
     /**
      * @var string
@@ -49,24 +49,6 @@ class PlanHeader implements EntityInterface
      * @ORM\Column(name="image", type="text", length=16777215, nullable=true)
      */
     protected $image;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="configuration", type="text", length=65535, nullable=true)
-     */
-    protected $configuration;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    protected $_changed;
 
     /**
      * @param string $_format
@@ -130,11 +112,6 @@ class PlanHeader implements EntityInterface
         return $planHeaderCopy;
     }
 
-    public function save()
-    {
-        DBHelper::save($this);
-    }
-
     /**
      * @return Plan[]
      * @throws \NextDom\Exceptions\CoreException
@@ -163,7 +140,7 @@ class PlanHeader implements EntityInterface
     public function setImage($_key, $_value)
     {
         $image = Utils::setJsonAttr($this->image, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->image, $image);
+        $this->updateChangeState($this->image, $image);
         $this->image = $image;
         return $this;
     }
@@ -187,55 +164,10 @@ class PlanHeader implements EntityInterface
         }
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param $_name
-     * @return $this
-     */
-    public function setName($_name)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
-        $this->name = $_name;
-        return $this;
-    }
-
-    /**
-     * @param string $_key
-     * @param string $_default
-     * @return array|bool|mixed|null|string
-     */
-    public function getConfiguration($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->configuration, $_key, $_default);
-    }
-
-    /**
-     * @param $_key
-     * @param $_value
-     * @return $this
-     */
-    public function setConfiguration($_key, $_value)
-    {
-        if ($_key == 'accessCode' && $_value != '' && !Utils::isSha512($_value)) {
-            $_value = Utils::sha512($_value);
-        }
-        $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
-        $this->configuration = $configuration;
-        return $this;
-    }
-
     public function remove()
     {
         NextDomHelper::addRemoveHistory(['id' => $this->getId(), 'name' => $this->getName(), 'date' => date(DateFormat::FULL), 'type' => 'plan']);
-        DBHelper::remove($this);
+        return parent::remove();
     }
 
     /**
@@ -294,31 +226,5 @@ class PlanHeader implements EntityInterface
             'url' => 'index.php?v=d&p=plan&view_id=' . $this->getId(),
         ];
         return null;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTableName()
-    {
-        return 'planHeader';
     }
 }

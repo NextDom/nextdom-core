@@ -34,14 +34,17 @@
 namespace NextDom\Managers;
 
 use NextDom\Helpers\DBHelper;
+use NextDom\Managers\Parents\BaseManager;
+use NextDom\Managers\Parents\CommonManager;
 use NextDom\Model\Entity\ViewData;
 
 /**
  * Class ViewDataManager
  * @package NextDom\Managers
  */
-class ViewDataManager
+class ViewDataManager extends BaseManager
 {
+    use CommonManager;
     const DB_CLASS_NAME = '`viewData`';
     const CLASS_NAME = 'viewData';
 
@@ -53,26 +56,7 @@ class ViewDataManager
      */
     public static function all()
     {
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME;
-        return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
-    }
-
-    /**
-     * @param $_id
-     * @return array|mixed|null
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
-    public static function byId($_id)
-    {
-        $value = [
-            'id' => $_id,
-        ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE id=:id';
-        return DBHelper::getOneObject($sql, $value, self::CLASS_NAME);
+        return static::getAll();
     }
 
     /**
@@ -83,14 +67,9 @@ class ViewDataManager
      */
     public static function byViewZoneId($_viewZone_id)
     {
-        $value = [
-            'viewZone_id' => $_viewZone_id,
-        ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE viewZone_id=:viewZone_id
-        ORDER BY `order`';
-        return DBHelper::getAllObjects($sql, $value, self::CLASS_NAME);
+        return static::getMultipleByClauses([
+            'viewZone_id' => $_viewZone_id
+        ], 'order');
     }
 
     /**
@@ -100,13 +79,10 @@ class ViewDataManager
      */
     public static function searchByConfiguration($_search)
     {
-        $value = [
+        $clauses = [
             'search' => '%' . $_search . '%',
         ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE configuration LIKE :search';
-        return DBHelper::getAllObjects($sql, $value, self::CLASS_NAME);
+        return static::searchMultipleByClauses($clauses);
     }
 
     /**
@@ -132,15 +108,9 @@ class ViewDataManager
      */
     public static function byTypeLinkId($_type, $_link_id)
     {
-        $value = [
+        return static::getMultipleByClauses([
             'type' => $_type,
-            'link_id' => $_link_id,
-        ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE type=:type
-        AND link_id=:link_id
-        ORDER BY `order`';
-        return DBHelper::getAllObjects($sql, $value, self::CLASS_NAME);
+            'link_id' => $_link_id
+        ], 'order');
     }
 }

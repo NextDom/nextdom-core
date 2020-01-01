@@ -17,9 +17,10 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\Common;
 use NextDom\Enums\LogTarget;
+use NextDom\Enums\NextDomObj;
 use NextDom\Exceptions\CoreException;
-use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
@@ -30,6 +31,12 @@ use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\EventManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
+use NextDom\Model\Entity\Parents\BaseEntity;
+use NextDom\Model\Entity\Parents\ConfigurationEntity;
+use NextDom\Model\Entity\Parents\LogicalIdEntity;
+use NextDom\Model\Entity\Parents\NameEntity;
+use NextDom\Model\Entity\Parents\RefreshEntity;
+use NextDom\Model\Entity\Parents\TypeEntity;
 use ZipArchive;
 
 /**
@@ -40,26 +47,9 @@ use ZipArchive;
  */
 class Update implements EntityInterface
 {
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="type", type="string", length=127, nullable=true)
-     */
-    protected $type = 'plugin';
+    const TABLE_NAME = NextDomObj::UPDATE;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=127, nullable=true)
-     */
-    protected $name;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="logicalId", type="string", length=127, nullable=true)
-     */
-    protected $logicalId;
+    use ConfigurationEntity, LogicalIdEntity, NameEntity, RefreshEntity, TypeEntity;
 
     /**
      * @var string
@@ -80,7 +70,7 @@ class Update implements EntityInterface
      *
      * @ORM\Column(name="source", type="string", length=127, nullable=true)
      */
-    protected $source = 'market';
+    protected $source = Common::MARKET;
 
     /**
      * @var string
@@ -89,23 +79,15 @@ class Update implements EntityInterface
      */
     protected $status;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="configuration", type="text", length=65535, nullable=true)
-     */
-    protected $configuration;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
     protected $_changeUpdate = false;
     protected $_changed = false;
+
+    public function __construct()
+    {
+        if ($this->type === null) {
+            $this->type = NextDomObj::PLUGIN;
+        }
+    }
 
     /**
      * Obtenir les informations de la mise à jour
@@ -116,32 +98,13 @@ class Update implements EntityInterface
     public function getInfo()
     {
         $result = [];
-        if ($this->getType() != 'core') {
+        if (!$this->isType(Common::CORE)) {
             $repoClass = 'Repo' . $this->getSource();
             if (class_exists($repoClass) && method_exists($repoClass, 'objectInfo') && ConfigManager::byKey($this->getSource() . '::enable') == 1) {
                 $result = $repoClass::objectInfo($this);
             }
         }
         return $result;
-    }
-
-    /**
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param $_type
-     * @return $this
-     */
-    public function setType($_type)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->type, $_type);
-        $this->type = $_type;
-        return $this;
     }
 
     /**
@@ -158,7 +121,7 @@ class Update implements EntityInterface
      */
     public function setSource($_source)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->source, $_source);
+        $this->updateChangeState($this->source, $_source);
         $this->source = $_source;
         return $this;
     }
@@ -171,17 +134,17 @@ class Update implements EntityInterface
      */
     public function doUpdate()
     {
-        if ($this->getConfiguration('doNotUpdate') == 1 && $this->getType() != 'core') {
+        if ($this->getConfiguration('doNotUpdate') == 1 && !$this->isType(Common::CORE)) {
             LogHelper::addAlert(LogTarget::UPDATE, __('Vérification des mises à jour, mise à jour et réinstallation désactivées sur ') . $this->getLogicalId());
             return;
         }
-        if ($this->getType() == 'core') {
+        if ($this->isType(Common::CORE)) {
             NextDomHelper::update(['core' => 1]);
         } else {
             $class = UpdateManager::getRepoDataFromName($this->getSource())['phpClass'];
             if (class_exists($class) && method_exists($class, 'downloadObject') && ConfigManager::byKey($this->getSource() . '::enable') == 1) {
                 $this->preInstallUpdate();
-                $cibDir = NextDomHelper::getTmpFolder('market') . '/' . $this->getLogicalId();
+                $cibDir = NextDomHelper::getTmpFolder(Common::MARKET) . '/' . $this->getLogicalId();
                 if (file_exists($cibDir)) {
                     rrmdir($cibDir);
                 }
@@ -233,7 +196,7 @@ class Update implements EntityInterface
                         }
                         rmove($cibDir, NEXTDOM_ROOT . '/plugins/' . $this->getLogicalId(), false, [], true);
                         rrmdir($cibDir);
-                        $cibDir = NextDomHelper::getTmpFolder('market') . '/' . $this->getLogicalId();
+                        $cibDir = NextDomHelper::getTmpFolder(Common::MARKET) . '/' . $this->getLogicalId();
                         if (file_exists($cibDir)) {
                             rrmdir($cibDir);
                         }
@@ -250,48 +213,6 @@ class Update implements EntityInterface
     }
 
     /**
-     * @param string $_key
-     * @param string $_default
-     * @return array|bool|mixed|null|string
-     */
-    public function getConfiguration($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->configuration, $_key, $_default);
-    }
-
-    /**
-     * @param $_key
-     * @param $_value
-     * @return $this
-     */
-    public function setConfiguration($_key, $_value)
-    {
-        $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
-        $this->configuration = $configuration;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLogicalId()
-    {
-        return $this->logicalId;
-    }
-
-    /**
-     * @param $_logicalId
-     * @return $this
-     */
-    public function setLogicalId($_logicalId)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->logicalId, $_logicalId);
-        $this->logicalId = $_logicalId;
-        return $this;
-    }
-
-    /**
      * Lance la procédure de préinstallation d'un objet
      *
      * @throws \Exception
@@ -305,22 +226,21 @@ class Update implements EntityInterface
             @chmod(NEXTDOM_ROOT . '/plugins', 0775);
         }
         LogHelper::addAlert(LogTarget::UPDATE, __('Début de la mise à jour de : ') . $this->getLogicalId() . "\n");
-        switch ($this->getType()) {
-            case 'plugin':
-                $cibDir = NEXTDOM_ROOT . '/plugins/' . $this->getLogicalId();
-                if (!file_exists($cibDir) && !mkdir($cibDir, 0775, true)) {
-                    throw new CoreException(__('Impossible de créer le dossier  : ' . $cibDir . '. Problème de droits ?'));
+        if ($this->isType(NextDomObj::PLUGIN)) {
+            $targetDir = NEXTDOM_ROOT . '/plugins/' . $this->getLogicalId();
+            if (!file_exists($targetDir) && !mkdir($targetDir, 0775, true)) {
+                throw new CoreException(__('Impossible de créer le dossier  : ' . $targetDir . '. Problème de droits ?'));
+            }
+            try {
+                $plugin = PluginManager::byId($this->getLogicalId());
+                if (is_object($plugin)) {
+                    LogHelper::addAlert(LogTarget::UPDATE, __('Action de pré-update...'));
+                    $plugin->callInstallFunction('pre_update');
+                    LogHelper::addAlert(LogTarget::UPDATE, __("OK\n"));
                 }
-                try {
-                    $plugin = PluginManager::byId($this->getLogicalId());
-                    if (is_object($plugin)) {
-                        LogHelper::addAlert(LogTarget::UPDATE, __('Action de pré-update...'));
-                        $plugin->callInstallFunction('pre_update');
-                        LogHelper::addAlert(LogTarget::UPDATE, __("OK\n"));
-                    }
-                } catch (\Exception $e) {
+            } catch (\Exception $e) {
 
-                }
+            }
         }
     }
 
@@ -334,18 +254,16 @@ class Update implements EntityInterface
     public function postInstallUpdate($informations)
     {
         LogHelper::addAlert(LogTarget::UPDATE, __('Post-installation de ') . $this->getLogicalId() . '...');
-        switch ($this->getType()) {
-            case 'plugin':
-                try {
-                    $plugin = PluginManager::byId($this->getLogicalId());
-                } catch (\Exception $e) {
-                    $this->remove();
-                    throw new CoreException(__('Impossible d\'installer le plugin. Le nom du plugin est différent de l\'ID ou le plugin n\'est pas correctement formé. Veuillez contacter l\'auteur.'));
-                }
-                if (is_object($plugin) && $plugin->isActive()) {
-                    $plugin->setIsEnable(1);
-                }
-                break;
+        if ($this->isType(NextDomObj::PLUGIN)) {
+            try {
+                $plugin = PluginManager::byId($this->getLogicalId());
+            } catch (\Exception $e) {
+                $this->remove();
+                throw new CoreException(__('Impossible d\'installer le plugin. Le nom du plugin est différent de l\'ID ou le plugin n\'est pas correctement formé. Veuillez contacter l\'auteur.'));
+            }
+            if (is_object($plugin) && $plugin->isActive()) {
+                $plugin->setIsEnable(1);
+            }
         }
         if (isset($informations['localVersion'])) {
             $this->setLocalVersion($informations['localVersion']);
@@ -355,54 +273,20 @@ class Update implements EntityInterface
     }
 
     /**
-     * Supprime l'objet de la base de données
-     *
-     * @return bool
-     * @throws CoreException
-     * @throws \ReflectionException
-     */
-    public function remove()
-    {
-        return DBHelper::remove($this);
-    }
-
-    /**
-     * Sauvegarde l'objet dans la base de données
-     *
-     * @return bool
-     * @throws CoreException
-     * @throws \ReflectionException
-     */
-    public function save()
-    {
-        return DBHelper::save($this);
-    }
-
-    /**
-     * Rafraichit les informations à partir de la base de données
-     *
-     * @throws \Exception
-     */
-    public function refresh()
-    {
-        DBHelper::refresh($this);
-    }
-
-    /**
      * Vérifier si une mise à jour est disponible
      *
-     * @return void
+     * @return bool
      * @throws \Exception
      */
     public function checkUpdate()
     {
-        if ($this->getConfiguration('doNotUpdate') == 1 && $this->getType() != 'core') {
+        if ($this->getConfiguration('doNotUpdate') == 1 && !$this->isType(Common::CORE)) {
             LogHelper::addAlert(LogTarget::UPDATE, __('Vérification des mises à jour, mise à jour et réinstallation désactivées sur ') . $this->getLogicalId());
-            return;
+            return false;
         }
-        if ($this->getType() == 'core') {
-            if (ConfigManager::byKey('update::allowCore', 'core', 1) != 1) {
-                return;
+        if ($this->isType(Common::CORE)) {
+            if (ConfigManager::byKey('update::allowCore', Common::CORE, 1) != 1) {
+                return false;
             }
             if (ConfigManager::byKey('core::repo::provider') == 'default') {
                 $this->setRemoteVersion(self::getLastAvailableVersion());
@@ -434,6 +318,7 @@ class Update implements EntityInterface
 
             }
         }
+        return true;
     }
 
     /**
@@ -444,7 +329,7 @@ class Update implements EntityInterface
     public static function getLastAvailableVersion()
     {
         try {
-            $url = 'https://raw.githubusercontent.com/nextdom/core/' . ConfigManager::byKey('core::branch', 'core', 'master') . '/core/config/version';
+            $url = 'https://raw.githubusercontent.com/nextdom/core/' . ConfigManager::byKey('core::branch', Common::CORE, 'master') . '/core/config/version';
             $request_http = new \com_http($url);
             return trim($request_http->exec());
         } catch (\Exception $e) {
@@ -467,7 +352,7 @@ class Update implements EntityInterface
      */
     public function setLocalVersion($_localVersion)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->localVersion, $_localVersion);
+        $this->updateChangeState($this->localVersion, $_localVersion);
         $this->localVersion = $_localVersion;
         return $this;
     }
@@ -486,7 +371,7 @@ class Update implements EntityInterface
      */
     public function setRemoteVersion($_remoteVersion)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->remoteVersion, $_remoteVersion);
+        $this->updateChangeState($this->remoteVersion, $_remoteVersion);
         $this->remoteVersion = $_remoteVersion;
         return $this;
     }
@@ -498,32 +383,30 @@ class Update implements EntityInterface
      */
     public function deleteObjet()
     {
-        if ($this->getType() == 'core') {
+        if ($this->isType(Common::CORE)) {
             throw new CoreException(__('Vous ne pouvez pas supprimer le core de NextDom'));
         } else {
-            switch ($this->getType()) {
-                case 'plugin':
-                    try {
-                        $plugin = PluginManager::byId($this->getLogicalId());
-                        if (is_object($plugin)) {
+            if ($this->isType(NextDomObj::PLUGIN)) {
+                try {
+                    $plugin = PluginManager::byId($this->getLogicalId());
+                    if (is_object($plugin)) {
+                        try {
+                            $plugin->setIsEnable(0);
+                        } catch (\Exception $e) {
+
+                        }
+                        foreach (EqLogicManager::byType($this->getLogicalId()) as $eqLogic) {
                             try {
-                                $plugin->setIsEnable(0);
+                                $eqLogic->remove();
                             } catch (\Exception $e) {
 
                             }
-                            foreach (EqLogicManager::byType($this->getLogicalId()) as $eqLogic) {
-                                try {
-                                    $eqLogic->remove();
-                                } catch (\Exception $e) {
-
-                                }
-                            }
                         }
-                        ConfigManager::remove('*', $this->getLogicalId());
-                    } catch (\Exception $e) {
-
                     }
-                    break;
+                    ConfigManager::remove('*', $this->getLogicalId());
+                } catch (\Exception $e) {
+
+                }
             }
             try {
                 $class = 'Repo' . $this->getSource();
@@ -533,13 +416,11 @@ class Update implements EntityInterface
             } catch (\Exception $e) {
 
             }
-            switch ($this->getType()) {
-                case 'plugin':
-                    $cibDir = NEXTDOM_ROOT . '/plugins/' . $this->getLogicalId();
-                    if (file_exists($cibDir)) {
-                        rrmdir($cibDir);
-                    }
-                    break;
+            if ($this->isType(NextDomObj::PLUGIN)) {
+                $cibDir = NEXTDOM_ROOT . '/plugins/' . $this->getLogicalId();
+                if (file_exists($cibDir)) {
+                    rrmdir($cibDir);
+                }
             }
             $this->remove();
         }
@@ -558,25 +439,6 @@ class Update implements EntityInterface
         if ($this->getName() == '') {
             $this->setName($this->getLogicalId());
         }
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param $_name
-     * @return $this
-     */
-    public function setName($_name)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
-        $this->name = $_name;
-        return $this;
     }
 
     /**
@@ -633,51 +495,5 @@ class Update implements EntityInterface
         }
         $this->status = $_status;
         return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    /**
-     * @return bool
-     */
-    /**
-     * @return bool
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    /**
-     * @return string
-     */
-    /**
-     * @return string
-     */
-    public function getTableName()
-    {
-        return 'update';
     }
 }

@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\NextDomObj;
 use NextDom\Enums\PlanDisplayType;
 use NextDom\Enums\PlanLinkType;
 use NextDom\Helpers\DBHelper;
@@ -30,6 +31,7 @@ use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PlanManager;
 use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
+use NextDom\Model\Entity\Parents\BasePlan;
 
 /**
  * Plan
@@ -39,6 +41,7 @@ use NextDom\Managers\ScenarioManager;
  */
 class Plan implements EntityInterface
 {
+    const TABLE_NAME = NextDomObj::PLAN;
 
     /**
      * @var string
@@ -109,7 +112,7 @@ class Plan implements EntityInterface
             $this->setCss('z-index', 1000);
         }
         if (in_array($this->getLink_type(), ['eqLogic', 'cmd', 'scenario'])) {
-            PlanManager::removeByLinkTypeLinkIdPlanHedaerId($this->getLink_type(), $this->getLink_id(), $this->getPlanHeader_id());
+            PlanManager::removeByLinkTypeLinkIdPlanHeaderId($this->getLink_type(), $this->getLink_id(), $this->getPlanHeader_id());
         }
     }
 
@@ -188,7 +191,7 @@ class Plan implements EntityInterface
      */
     public function setPlanHeader_id($_planHeader_id)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->planHeader_id, $_planHeader_id);
+        $this->updateChangeState($this->planHeader_id, $_planHeader_id);
         $this->planHeader_id = $_planHeader_id;
         return $this;
     }
@@ -503,54 +506,5 @@ class Plan implements EntityInterface
     public function getPlanHeader()
     {
         return PlanHeaderManager::byId($this->getPlanHeader_id());
-    }
-
-    /**
-     * @param string $_key
-     * @param string $_default
-     * @return array|bool|mixed|null|string
-     */
-    public function getPosition($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->position, $_key, $_default);
-    }
-
-    /**
-     * @param $_key
-     * @param $_value
-     * @return $this
-     */
-    public function setPosition($_key, $_value)
-    {
-        $position = Utils::setJsonAttr($this->position, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->position, $position);
-        $this->position = $position;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTableName()
-    {
-        return 'plan';
     }
 }

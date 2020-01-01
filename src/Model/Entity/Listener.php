@@ -18,12 +18,14 @@
 namespace NextDom\Model\Entity;
 
 use NextDom\Enums\LogTarget;
+use NextDom\Enums\NextDomObj;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\SystemHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ListenerManager;
+use NextDom\Model\Entity\Parents\BaseEntity;
 
 /**
  * Listener
@@ -33,6 +35,7 @@ use NextDom\Managers\ListenerManager;
  */
 class Listener implements EntityInterface
 {
+    const TABLE_NAME = NextDomObj::LISTENER;
 
     /**
      * @var string
@@ -115,7 +118,7 @@ class Listener implements EntityInterface
     public function setOption($_key, $_value = '')
     {
         $option = Utils::setJsonAttr($this->option, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->option, $option);
+        $this->updateChangeState($this->option, $option);
         $this->option = $option;
         return $this;
     }
@@ -194,7 +197,7 @@ class Listener implements EntityInterface
      */
     public function setClass($_class)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->class, $_class);
+        $this->updateChangeState($this->class, $_class);
         $this->class = $_class;
         return $this;
     }
@@ -213,7 +216,7 @@ class Listener implements EntityInterface
      */
     public function setFunction($_function)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->function, $_function);
+        $this->updateChangeState($this->function, $_function);
         $this->function = $_function;
         return $this;
     }
@@ -227,16 +230,6 @@ class Listener implements EntityInterface
             return $this->getClass() . '::' . $this->getFunction() . '()';
         }
         return $this->getFunction() . '()';
-    }
-
-    /**
-     * @return bool
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
-    public function remove()
-    {
-        return DBHelper::remove($this);
     }
 
     public function preSave()
@@ -301,35 +294,8 @@ class Listener implements EntityInterface
     public function setEvent($_event)
     {
         $event = json_encode($_event, JSON_UNESCAPED_UNICODE);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->event, $_event);
+        $this->updateChangeState($this->event, $_event);
         $this->event = $event;
         return $this;
     }
-
-    /**
-     * @return bool
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTableName()
-    {
-        return 'listener';
-    }
-
 }

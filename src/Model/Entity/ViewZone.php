@@ -17,10 +17,14 @@
 
 namespace NextDom\Model\Entity;
 
-use NextDom\Helpers\DBHelper;
-use NextDom\Helpers\Utils;
+use NextDom\Enums\NextDomObj;
 use NextDom\Managers\ViewDataManager;
 use NextDom\Managers\ViewManager;
+use NextDom\Model\Entity\Parents\BaseEntity;
+use NextDom\Model\Entity\Parents\ConfigurationEntity;
+use NextDom\Model\Entity\Parents\NameEntity;
+use NextDom\Model\Entity\Parents\PositionEntity;
+use NextDom\Model\Entity\Parents\TypeEntity;
 
 /**
  * Viewzone
@@ -30,43 +34,9 @@ use NextDom\Managers\ViewManager;
  */
 class ViewZone implements EntityInterface
 {
+    const TABLE_NAME = NextDomObj::VIEW_ZONE;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="type", type="string", length=127, nullable=true)
-     */
-    protected $type;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=127, nullable=true)
-     */
-    protected $name;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="position", type="integer", nullable=true)
-     */
-    protected $position;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="configuration", type="text", length=65535, nullable=true)
-     */
-    protected $configuration;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
+    use ConfigurationEntity, NameEntity, PositionEntity, TypeEntity;
 
     /**
      * @var \NextDom\Model\Entity\View
@@ -82,26 +52,6 @@ class ViewZone implements EntityInterface
 
 
     /*     * *********************Methode d'instance************************* */
-
-    /**
-     * @return bool
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
-    public function save()
-    {
-        return DBHelper::save($this);
-    }
-
-    /**
-     * @return bool
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
-    public function remove()
-    {
-        return DBHelper::remove($this);
-    }
 
     /**
      * @return array|mixed|null [ViewZone]|null
@@ -157,116 +107,8 @@ class ViewZone implements EntityInterface
      */
     public function setView_id($_view_id)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->view_id, $_view_id);
+        $this->updateChangeState($this->view_id, $_view_id);
         $this->view_id = $_view_id;
         return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param $_type
-     * @return $this
-     */
-    public function setType($_type)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->type, $_type);
-        $this->type = $_type;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param $_name
-     * @return $this
-     */
-    public function setName($_name)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
-        $this->name = $_name;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPosition()
-    {
-        return $this->position;
-    }
-
-    /**
-     * @param $_position
-     * @return $this
-     */
-    public function setPosition($_position)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->position, $_position);
-        $this->position = $_position;
-        return $this;
-    }
-
-    /**
-     * @param string $_key
-     * @param string $_default
-     * @return array|bool|mixed|null|string
-     */
-    public function getConfiguration($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->configuration, $_key, $_default);
-    }
-
-    /**
-     * @param $_key
-     * @param $_value
-     * @return $this
-     */
-    public function setConfiguration($_key, $_value)
-    {
-        $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
-        $this->configuration = $configuration;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
-        return $this;
-    }
-
-    /**
-     * Get the name of the SQL table where data is stored.
-     *
-     * @return string
-     */
-    public function getTableName()
-    {
-        return 'viewZone';
     }
 }

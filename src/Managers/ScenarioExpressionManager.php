@@ -43,6 +43,8 @@ use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\TranslateHelper;
 use NextDom\Helpers\Utils;
+use NextDom\Managers\Parents\BaseManager;
+use NextDom\Managers\Parents\CommonManager;
 use NextDom\Model\Entity\Cmd;
 use NextDom\Model\Entity\Scenario;
 use NextDom\Model\Entity\ScenarioExpression;
@@ -51,29 +53,12 @@ use NextDom\Model\Entity\ScenarioExpression;
  * Class ScenarioExpressionManager
  * @package NextDom\Managers
  */
-class ScenarioExpressionManager
+class ScenarioExpressionManager extends BaseManager
 {
-    const DB_CLASS_NAME = 'scenarioExpression';
+    use CommonManager;
+    const DB_CLASS_NAME = '`scenarioExpression`';
     const CLASS_NAME = ScenarioExpression::class;
     const WAIT_LIMIT = 7200;
-
-    /**
-     * Get expression from his id
-     *
-     * @param mixed $id Identifiant
-     *
-     * @return ScenarioExpression|null
-     *
-     * @throws \Exception
-     */
-    public static function byId($id)
-    {
-        $params = ['id' => $id];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE id = :id';
-        return DBHelper::getOneObject($sql, $params, self::CLASS_NAME);
-    }
 
     /**
      * Get all scenario expressions
@@ -84,9 +69,7 @@ class ScenarioExpressionManager
      */
     public static function all()
     {
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME;
-        return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
+        return static::getAll();
     }
 
 
@@ -101,12 +84,7 @@ class ScenarioExpressionManager
      */
     public static function byScenarioSubElementId($scenarioSubElementId)
     {
-        $params = ['scenarioSubElement_id' => $scenarioSubElementId];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE scenarioSubElement_id = :scenarioSubElement_id
-                ORDER BY `order`';
-        return DBHelper::getAllObjects($sql, $params, self::CLASS_NAME);
+        return static::getMultipleByClauses(['scenarioSubElement_id' => $scenarioSubElementId], 'order');
     }
 
     /**
@@ -123,9 +101,8 @@ class ScenarioExpressionManager
     public static function searchExpression($expression, $options = null, $and = true)
     {
         $params = ['expression' => '%' . $expression . '%'];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE expression LIKE :expression ';
+        $sql = static::getBaseSQL() . '
+                WHERE `expression` LIKE :expression ';
         if ($options !== null) {
             $params['options'] = '%' . $options . '%';
             if ($and) {
@@ -146,12 +123,7 @@ class ScenarioExpressionManager
      */
     public static function byElement($elementId)
     {
-        $params = ['expression' => $elementId];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE expression = :expression
-                AND `type` = "element"';
-        return DBHelper::getOneObject($sql, $params, self::CLASS_NAME);
+        return static::getOneByClauses(['expression' => $elementId, 'type' => 'element']);
     }
 
     /**

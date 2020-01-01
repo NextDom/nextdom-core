@@ -40,6 +40,8 @@ use NextDom\Enums\UpdateStatus;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
+use NextDom\Managers\Parents\BaseManager;
+use NextDom\Managers\Parents\CommonManager;
 use NextDom\Model\Entity\Update;
 
 /**
@@ -49,8 +51,9 @@ use NextDom\Model\Entity\Update;
  *
  * @package NextDom\Managers
  */
-class UpdateManager
+class UpdateManager extends BaseManager
 {
+    use CommonManager;
     const REPO_CLASS_PATH = '\\NextDom\\Repo\\';
     const DB_CLASS_NAME = 'update';
     const CLASS_NAME = Update::class;
@@ -166,15 +169,7 @@ class UpdateManager
      */
     public static function byTypeAndLogicalId($type, $logicalId)
     {
-        $params = [
-            'logicalId' => $logicalId,
-            'type' => $type,
-        ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
-                FROM `' . self::DB_CLASS_NAME . '`
-                WHERE logicalId = :logicalId
-                AND `type` = :type';
-        return DBHelper::getOneObject($sql, $params, self::CLASS_NAME);
+        return static::getOneByClauses(['logicalId' => $logicalId, 'type' => $type]);
     }
 
     /**
@@ -188,13 +183,7 @@ class UpdateManager
      */
     public static function byType($type)
     {
-        $params = [
-            'type' => $type,
-        ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
-                FROM `' . self::DB_CLASS_NAME . '`
-                WHERE `type` = :type';
-        return DBHelper::getAllObjects($sql, $params, self::CLASS_NAME);
+        return static::getMultipleByClauses(['type' => $type]);
     }
 
     /**
@@ -209,8 +198,7 @@ class UpdateManager
     public static function all($filter = '')
     {
         $params = [];
-        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
-                FROM `' . self::DB_CLASS_NAME . '` ';
+        $sql = static::getBaseSQL() . ' ';
         if ($filter != '') {
             $params['type'] = $filter;
             $sql .= 'WHERE `type` = :type ';
@@ -336,26 +324,6 @@ class UpdateManager
     }
 
     /**
-     * Get update by his id
-     *
-     * @param string $id ID of the update
-     *
-     * @return Update|null Update object
-     *
-     * @throws \Exception
-     */
-    public static function byId($id)
-    {
-        $params = [
-            'id' => $id,
-        ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
-                FROM `' . self::DB_CLASS_NAME . '`
-                WHERE id = :id';
-        return DBHelper::getOneObject($sql, $params, self::CLASS_NAME);
-    }
-
-    /**
      * Get updates by their status
      *
      * @param string $status Status of the update (@see UpdateStatus)
@@ -366,13 +334,7 @@ class UpdateManager
      */
     public static function byStatus($status)
     {
-        $params = [
-            'status' => $status,
-        ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
-                FROM `' . self::DB_CLASS_NAME . '`
-                WHERE status = :status';
-        return DBHelper::getAllObjects($sql, $params, self::CLASS_NAME);
+        return static::getMultipleByClauses(['status' => $status]);
     }
 
     /**
@@ -386,13 +348,7 @@ class UpdateManager
      */
     public static function byLogicalId($logicalId)
     {
-        $params = [
-            'logicalId' => $logicalId,
-        ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
-                FROM `' . self::DB_CLASS_NAME . '`
-                WHERE logicalId = :logicalId';
-        return DBHelper::getOneObject($sql, $params, self::CLASS_NAME);
+        return static::getOneByClauses(['logicalId' => $logicalId]);
     }
 
     /**

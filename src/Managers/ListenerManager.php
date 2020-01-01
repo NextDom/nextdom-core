@@ -36,6 +36,8 @@ namespace NextDom\Managers;
 
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\SystemHelper;
+use NextDom\Managers\Parents\BaseManager;
+use NextDom\Managers\Parents\CommonManager;
 use NextDom\Model\Entity\Listener;
 
 require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
@@ -44,8 +46,9 @@ require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
  * Class ListenerManager
  * @package NextDom\Managers
  */
-class ListenerManager
+class ListenerManager extends BaseManager
 {
+    use CommonManager;
 
     const CLASS_NAME = Listener::class;
     const DB_CLASS_NAME = '`listener`';
@@ -57,26 +60,7 @@ class ListenerManager
      */
     public static function all()
     {
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME;
-        return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
-    }
-
-    /**
-     * @param $_id
-     * @return array|mixed|null
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
-    public static function byId($_id)
-    {
-        $value = [
-            'id' => $_id,
-        ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE id=:id';
-        return DBHelper::getOneObject($sql, $value, self::CLASS_NAME);
+        return static::getAll();
     }
 
     /**
@@ -87,13 +71,7 @@ class ListenerManager
      */
     public static function byClass($_class)
     {
-        $value = [
-            'class' => $_class,
-        ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE class=:class';
-        return DBHelper::getAllObjects($sql, $value, self::CLASS_NAME);
+        return static::getMultipleByClauses(['class' => $_class]);
     }
 
     /**
@@ -110,10 +88,9 @@ class ListenerManager
             'class' => $_class,
             'function' => $_function,
         ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE class=:class
-        AND function=:function';
+        $sql = static::getBaseSQL() . '
+        WHERE `class` = :class
+        AND `function` = :function';
         if ($_option != '') {
             $_option = json_encode($_option, JSON_UNESCAPED_UNICODE);
             $value['option'] = $_option;
@@ -137,10 +114,9 @@ class ListenerManager
             'function' => $_function,
             'option' => '%' . $_option . '%',
         ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE class=:class
-        AND function=:function
+        $sql = static::getBaseSQL() . '
+        WHERE `class` = :class
+        AND `function` = :function
         AND `option` LIKE :option';
         return DBHelper::getAllObjects($sql, $value, self::CLASS_NAME);
     }
@@ -155,17 +131,11 @@ class ListenerManager
      */
     public static function byClassFunctionAndEvent($_class, $_function, $_event)
     {
-        $value = [
+        return static::getMultipleByClauses([
             'class' => $_class,
             'function' => $_function,
-            'event' => $_event,
-        ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE class=:class
-        AND function=:function
-        AND event=:event';
-        return DBHelper::getAllObjects($sql, $value, self::CLASS_NAME);
+            'event' => $_event
+        ]);
     }
 
     /**
@@ -226,8 +196,7 @@ class ListenerManager
                 'event' => '%#' . $_event . '#%',
             ];
         }
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
+        $sql = static::getBaseSQL() . '
         WHERE `event` LIKE :event';
         return DBHelper::getAllObjects($sql, $value, self::CLASS_NAME);
     }

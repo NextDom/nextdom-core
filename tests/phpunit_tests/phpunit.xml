@@ -44,6 +44,9 @@
             <file>NextDomHelperTest.php</file>
             <file>UtilsTest.php</file>
         </testsuite>
+        <testsuite name="Ajax">
+            <directory>../phpunit_tests/Ajax</directory>
+        </testsuite>
         <testsuite name="Entities">
             <file>CronTest.php</file>
             <file>EqLogicTest.php</file>
@@ -68,7 +71,7 @@
             <directory>../phpunit_tests/Controllers</directory>
         </testsuite>
         <testsuite name="current">
-            <directory>../phpunit_tests/Ajax/UserAjaxTest.php</directory>
+            <directory>../phpunit_tests/IndexTest.php</directory>
         </testsuite>
     </testsuites>
     <filter>
