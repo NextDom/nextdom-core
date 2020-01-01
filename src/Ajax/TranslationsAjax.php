@@ -22,7 +22,6 @@
 
 namespace NextDom\Ajax;
 
-use NextDom\Controller\BaseController;
 use NextDom\Helpers\TranslateHelper;
 use Symfony\Component\Translation\Loader\YamlFileLoader;
 use Symfony\Component\Translation\Translator;
