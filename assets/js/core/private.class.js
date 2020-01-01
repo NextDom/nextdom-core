@@ -359,13 +359,12 @@ nextdom.private.ajax = function(target, action, queryParams, requiredParams, enc
   for (var requiredParamsIndex in requiredParams) {
     var requiredParamsKey = requiredParams[requiredParamsIndex];
     if (encodeRequired) {
-      queryParams.data[requiredParamsKey] = json_encode(queryParams[requiredParamsKey]);
+      ajaxParams.data[requiredParamsKey] = json_encode(queryParams[requiredParamsKey]);
     }
     else {
       ajaxParams.data[requiredParamsKey] = queryParams[requiredParamsKey];
     }
   }
-  console.log(ajaxParams);
   $.ajax(ajaxParams);
   return true;
 };

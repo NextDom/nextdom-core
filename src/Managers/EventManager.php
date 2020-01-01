@@ -35,8 +35,11 @@ namespace NextDom\Managers;
 
 use NextDom\Enums\CacheKey;
 use NextDom\Enums\Common;
+use NextDom\Enums\ConfigKey;
 use NextDom\Enums\DateFormat;
+use NextDom\Enums\EventType;
 use NextDom\Helpers\NextDomHelper;
+use NextDom\Helpers\Utils;
 
 /**
  * Class EventManager
@@ -63,8 +66,9 @@ class EventManager
     public static function getFileDescriptorLock()
     {
         if (self::$eventLockFile === null) {
-            self::$eventLockFile = fopen(NextDomHelper::getTmpFolder() . '/event_cache_lock', 'w');
-            chmod(NextDomHelper::getTmpFolder() . '/event_cache_lock', 0777);
+            $lockFilePath = NextDomHelper::getTmpFolder() . '/event_cache_lock';
+            self::$eventLockFile = fopen($lockFilePath, 'w');
+            chmod($lockFilePath, 0777);
         }
         return self::$eventLockFile;
     }
@@ -87,7 +91,7 @@ class EventManager
             if (!is_array($value)) {
                 $value = [];
             }
-            $value[] = [Common::DATETIME => getmicrotime(), Common::NAME => $eventCode, 'option' => $eventOptions];
+            $value[] = [Common::DATETIME => Utils::getMicrotime(), Common::NAME => $eventCode, Common::OPTION => $eventOptions];
             CacheManager::set(CacheKey::EVENT, json_encode(self::cleanEvent($value)));
             flock($fd, LOCK_UN);
         }
@@ -112,7 +116,7 @@ class EventManager
             }
             $value = array();
             foreach ($eventOptions as $option) {
-                $value[] = array(Common::DATETIME => getmicrotime(), Common::NAME => $eventCode, 'option' => $option);
+                $value[] = array(Common::DATETIME => Utils::getMicrotime(), Common::NAME => $eventCode, Common::OPTION => $option);
             }
             CacheManager::set(CacheKey::EVENT, json_encode(self::cleanEvent(array_merge($value_src, $value))));
             flock($fd, LOCK_UN);
@@ -136,16 +140,16 @@ class EventManager
                 unset($events[$key]);
                 continue;
             }
-            if ($event[Common::NAME] == 'eqLogic::update') {
-                $id = 'eqLogic::update::' . $event['option']['eqLogic_id'];
-            } elseif ($event[Common::NAME] == 'cmd::update') {
-                $id = 'cmd::update::' . $event['option']['cmd_id'];
-            } elseif ($event[Common::NAME] == 'scenario::update') {
-                $id = 'scenario::update::' . $event['option']['scenario_id'];
-            } elseif ($event[Common::NAME] == 'jeeObject::summary::update') {
-                $id = 'jeeObject::summary::update::' . $event['option']['object_id'];
-                if (is_array($event['option']['keys']) && count($event['option']['keys']) > 0) {
-                    foreach ($event['option']['keys'] as $key2 => $value) {
+            if ($event[Common::NAME] == EventType::EQLOGIC_UPDATE) {
+                $id = EventType::EQLOGIC_UPDATE . '::' . $event[Common::OPTION][Common::EQLOGIC_ID];
+            } elseif ($event[Common::NAME] == EventType::CMD_UPDATE) {
+                $id = EventType::CMD_UPDATE . '::' . $event[Common::OPTION][Common::CMD_ID];
+            } elseif ($event[Common::NAME] == EventType::SCENARIO_UPDATE) {
+                $id = EventType::SCENARIO_UPDATE . '::' . $event[Common::OPTION][Common::SCENARIO_ID];
+            } elseif ($event[Common::NAME] == EventType::SUMMARY_UPDATE) {
+                $id = EventType::SUMMARY_UPDATE . '::' . $event[Common::OPTION][Common::OBJECT_ID];
+                if (is_array($event[Common::OPTION][Common::KEYS]) && count($event[Common::OPTION][Common::KEYS]) > 0) {
+                    foreach ($event[Common::OPTION][Common::KEYS] as $key2 => $value) {
                         $id .= $key2;
                     }
                 }
@@ -157,10 +161,10 @@ class EventManager
                     unset($events[$key]);
                     continue;
                 } else {
-                    unset($events[$find[$id]['key']]);
+                    unset($events[$find[$id][Common::KEY]]);
                 }
             }
-            $find[$id] = [Common::DATETIME => $event[Common::DATETIME], 'key' => $key];
+            $find[$id] = [Common::DATETIME => $event[Common::DATETIME], Common::KEY => $key];
         }
         return array_values($events);
     }
@@ -193,7 +197,7 @@ class EventManager
         if ($_longPolling === null || count($result[Common::RESULT]) > 0) {
             return $result;
         }
-        $waitTime = ConfigManager::byKey('event::waitPollingTime');
+        $waitTime = ConfigManager::byKey(ConfigKey::EVENT_WAIT_POLLING);
         $i = 0;
         $maxCycle = $_longPolling / $waitTime;
         while (count($result[Common::RESULT]) == 0 && $i < $maxCycle) {
@@ -229,7 +233,7 @@ class EventManager
             if ($_filter !== null && isset($_filter::$_listenEvents) && !in_array($value[Common::NAME], $_filter::$_listenEvents)) {
                 continue;
             }
-            if (count($filters) != 0 && $value[Common::NAME] == 'cmd::update' && !in_array($value['option']['cmd_id'], $filters)) {
+            if (count($filters) != 0 && $value[Common::NAME] == EventType::CMD_UPDATE && !in_array($value[Common::OPTION][Common::CMD_ID], $filters)) {
                 continue;
             }
             $result[Common::RESULT][] = $value;
@@ -247,7 +251,7 @@ class EventManager
      */
     private static function changesSince($_datetime)
     {
-        $now = getmicrotime();
+        $now = Utils::getMicrotime();
         if ($_datetime > $now) {
             $_datetime = $now;
         }

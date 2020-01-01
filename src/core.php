@@ -59,6 +59,7 @@ namespace {
     define('NEXTDOM_TMP', $CONFIG["paths"]["tmp"]);
 
     require_once NEXTDOM_ROOT . '/vendor/autoload.php';
+    require_once NEXTDOM_ROOT . '/core/php/utils.inc.php';
     require_once NEXTDOM_ROOT . '/src/Helpers/DBHelper.php';
     require_once NEXTDOM_ROOT . '/src/Managers/ConfigManager.php';
     require_once NEXTDOM_DATA . '/config/nextdom.config.php';

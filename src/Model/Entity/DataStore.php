@@ -58,17 +58,6 @@ class DataStore extends BaseEntity
     protected $value;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    protected $_changed;
-
-    /**
      * @return bool
      * @throws \Exception
      */

@@ -26,6 +26,7 @@ use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\ReportHelper;
 use NextDom\Helpers\SystemHelper;
+use NextDom\Interfaces\EntityInterface;
 use NextDom\Managers\CacheManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\EqLogicManager;
@@ -724,7 +725,7 @@ class Plugin extends BaseEntity
         if (file_exists($dir . '/' . $language . '.json')) {
             $result = file_get_contents($dir . '/' . $language . '.json');
 
-            if (is_json($result)) {
+            if (Utils::isJson($result)) {
                 return json_decode($result, true);
             }
         }

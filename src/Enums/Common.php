@@ -31,6 +31,7 @@ class Common extends Enum
     const BATTERY = 'battery';
     const CATEGORY = 'category';
     const CHANGED = 'changed';
+    const CLASS_CODE = 'class';
     const CLASS_NAME = 'className';
     const CMD_ID = 'cmd_id';
     const CMD_PARAMETERS = 'cmd_parameters';
@@ -45,6 +46,9 @@ class Common extends Enum
     const DETAIL = 'detail';
     const DISPLAY = 'display';
     const DISPLAY_VALUE = 'display_value';
+    const EQLOGIC_ID = 'eqLogic_id';
+    const EVENT = 'event';
+    const FUNCTION = 'function';
     const GENERIC_TYPE = 'generic_type';
     const GLOBAL = 'global';
     const GROUP = 'group';
@@ -67,6 +71,7 @@ class Common extends Enum
     const NONE = 'none';
     const OBJECT_ID = 'object_id';
     const OBJECT_HTML = 'objectHtml';
+    const OPTION = 'option';
     const OPTIONS = 'options';
     const ORDER = 'order';
     const PHP_CLASS = 'phpClass';
@@ -74,6 +79,7 @@ class Common extends Enum
     const QUERY = 'query';
     const REPLY_CMD = 'reply_cmd';
     const RESULT = 'result';
+    const SCENARIO_ID = 'scenario_id';
     const SCHEDULE = 'schedule';
     const STATE = 'state';
     const STATUS = 'status';

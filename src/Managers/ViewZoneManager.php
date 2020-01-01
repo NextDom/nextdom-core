@@ -80,7 +80,7 @@ class ViewZoneManager extends BaseManager
             'view_id' => $_view_id,
         ];
         $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . '
-                WHERE view_id = :view_id';
+                WHERE `view_id` = :view_id';
         return DBHelper::getOne($sql, $value);
     }
 

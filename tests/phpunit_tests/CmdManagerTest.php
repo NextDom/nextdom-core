@@ -133,4 +133,9 @@ class CmdManagerTest extends PHPUnit\Framework\TestCase
         $cmd = CmdManager::humanReadableToCmd('#[My Room][Test eqLogic][Cmd 1]#');
         $this->assertEquals('#1#', $cmd);
     }
+
+    public function testByEqLogicIdCmdName() {
+        $cmd = CmdManager::byEqLogicIdCmdName(1, 'Cmd 1');
+        $this->assertEquals('Cmd 1', $cmd->getName());
+    }
 }

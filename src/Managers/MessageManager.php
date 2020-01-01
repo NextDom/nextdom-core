@@ -87,14 +87,14 @@ class MessageManager extends BaseManager
         $sql = 'DELETE FROM ' . self::DB_CLASS_NAME;
         if ($_plugin != '') {
             $values['plugin'] = $_plugin;
-            $sql .= ' WHERE plugin = :plugin';
+            $sql .= ' WHERE `plugin` = :plugin';
             if ($_logicalId != '') {
                 if ($_search) {
                     $values['logicalId'] = '%' . $_logicalId . '%';
-                    $sql .= ' AND logicalId LIKE :logicalId';
+                    $sql .= ' AND `logicalId` LIKE :logicalId';
                 } else {
                     $values['logicalId'] = $_logicalId;
-                    $sql .= ' AND logicalId = :logicalId';
+                    $sql .= ' AND `logicalId` = :logicalId';
                 }
             }
         }
@@ -110,7 +110,7 @@ class MessageManager extends BaseManager
     public static function nbMessage()
     {
         $sql = 'SELECT count(*)
-        FROM ' . self::DB_CLASS_NAME;
+                FROM ' . self::DB_CLASS_NAME;
         $count = DBHelper::getOne($sql);
         return $count['count(*)'];
     }
@@ -156,8 +156,8 @@ class MessageManager extends BaseManager
      */
     public static function listPlugin()
     {
-        $sql = 'SELECT DISTINCT(plugin)
-        FROM ' . self::DB_CLASS_NAME;
+        $sql = 'SELECT DISTINCT(`plugin`)
+                FROM ' . self::DB_CLASS_NAME;
         return DBHelper::getAll($sql);
     }
 
@@ -181,9 +181,9 @@ class MessageManager extends BaseManager
             'logicalId' => $logicialId,
             'plugin' => $pluginId,
         ];
-        $sql = 'DELETE FROM message
-                WHERE logicalId=:logicalId
-                AND plugin=:plugin';
+        $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . '
+                WHERE `logicalId` = :logicalId
+                AND `plugin` = :plugin';
         return DBHelper::exec($sql, $values);
     }
 }

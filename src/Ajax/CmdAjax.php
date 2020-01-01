@@ -379,7 +379,7 @@ class CmdAjax extends BaseAjax
         $dateEnd = null;
         $dateRange = Utils::init(AjaxParams::DATE_RANGE);
         if ($dateRange != '' && $dateRange != 'all') {
-            if (is_json($dateRange)) {
+            if (Utils::isJson($dateRange)) {
                 $dateRange = json_decode($dateRange, true);
                 if (isset($dateRange['start'])) {
                     $dateStart = $dateRange['start'];

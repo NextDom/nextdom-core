@@ -1260,16 +1260,16 @@ class NextDomHelper
 
         $starttime = Utils::getMicrotime();
         for ($i = 0; $i < $param['database_write_delete']; $i++) {
-            $sql = 'DELETE FROM config
+            $sql = 'DELETE FROM ' . ConfigManager::DB_CLASS_NAME . '
                     WHERE `key`="nextdom_benchmark"
-                    AND plugin="core"';
+                    AND `plugin` = "core"';
             try {
                 DBHelper::exec($sql);
             } catch (\Exception $e) {
 
             }
-            $sql = 'INSERT INTO config
-                    SET `key`="nextdom_benchmark",plugin="core",`value`="' . $i . '"';
+            $sql = 'INSERT INTO ' . ConfigManager::DB_CLASS_NAME . '
+                    SET `key` = "nextdom_benchmark", `plugin` = "core", `value` = "' . $i . '"';
             try {
                 DBHelper::exec($sql);
             } catch (\Exception $e) {
@@ -1278,18 +1278,18 @@ class NextDomHelper
         }
         $result['database_write_delete_' . $param['database_write_delete']] = Utils::getMicrotime() - $starttime;
 
-        $sql = 'INSERT INTO config
-                SET `key`="nextdom_benchmark",plugin="core",`value`="0"';
+        $sql = 'INSERT INTO ' . ConfigManager::DB_CLASS_NAME . '
+                SET `key` = "nextdom_benchmark", `plugin` = "core", `value` = "0"';
         try {
             DBHelper::exec($sql);
         } catch (\Exception $e) {
         }
         $starttime = Utils::getMicrotime();
         for ($i = 0; $i < $param['database_update']; $i++) {
-            $sql = 'UPDATE `config`
+            $sql = 'UPDATE ' . ConfigManager::DB_CLASS_NAME . '
                     SET `value`=:value
                     WHERE `key` = "nextdom_benchmark"
-                        AND plugin = "core"';
+                    AND `plugin` = "core"';
             try {
                 DBHelper::exec($sql, ['value' => $i]);
             } catch (\Exception $e) {

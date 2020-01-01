@@ -71,7 +71,6 @@ class JeeObject extends BaseEntity
     protected $father_id = null;
 
     protected $_child = [];
-    protected $_changed = false;
 
     /**
      * Get visibility value
@@ -137,24 +136,6 @@ class JeeObject extends BaseEntity
     }
 
     /**
-     * @return bool
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
-        return $this;
-    }
-
-    /**
      * Method called before save. Check error and set default values
      *
      * @throws \Exception
@@ -208,30 +189,6 @@ class JeeObject extends BaseEntity
         $_father_id = ($_father_id == '') ? null : $_father_id;
         $this->updateChangeState($this->father_id, $_father_id);
         $this->father_id = $_father_id;
-        return $this;
-    }
-
-    /**
-     * Get object id
-     *
-     * @return int|null Object id
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set object id
-     *
-     * @param int|null $_id Object Id
-     *
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
         return $this;
     }
 
@@ -300,11 +257,11 @@ class JeeObject extends BaseEntity
      */
     public function preRemove()
     {
-        DataStoreManager::removeByTypeLinkId('object', $this->getId());
+        DataStoreManager::removeByTypeLinkId(NextDomObj::OBJECT, $this->getId());
         $params = ['object_id' => $this->getId()];
-        $sql = 'UPDATE eqLogic set object_id= NULL where object_id = :object_id';
+        $sql = 'UPDATE ' . EqLogicManager::DB_CLASS_NAME . ' SET `object_id = NULL WHERE `object_id` = :object_id';
         DBHelper::exec($sql, $params);
-        $sql = 'UPDATE scenario set object_id= NULL where object_id = :object_id';
+        $sql = 'UPDATE ' . ScenarioManager::DB_CLASS_NAME . ' SET `object_id` = NULL WHERE `object_id` = :object_id';
         DBHelper::exec($sql, $params);
     }
 

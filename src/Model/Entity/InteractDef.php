@@ -30,6 +30,7 @@ use NextDom\Managers\JeeObjectManager;
 use NextDom\Model\Entity\Parents\BaseEntity;
 use NextDom\Model\Entity\Parents\EnableEntity;
 use NextDom\Model\Entity\Parents\NameEntity;
+use NextDom\Model\Entity\Parents\OptionsEntity;
 
 /**
  * Interactdef
@@ -41,7 +42,7 @@ class InteractDef extends BaseEntity
 {
     const TABLE_NAME = NextDomObj::INTERACT_DEF;
 
-    use EnableEntity, NameEntity;
+    use EnableEntity, NameEntity, OptionsEntity;
 
     /**
      * @var string
@@ -84,17 +85,6 @@ class InteractDef extends BaseEntity
      * @ORM\Column(name="actions", type="text", length=65535, nullable=true)
      */
     protected $actions;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    protected $_changed = false;
 
     /**
      * @return mixed
@@ -583,12 +573,6 @@ class InteractDef extends BaseEntity
     /**
      * @return string
      */
-    /**
-     * @return string
-     */
-    /**
-     * @return string
-     */
     public function getHumanName()
     {
         if ($this->getName() != '') {
@@ -609,14 +593,6 @@ class InteractDef extends BaseEntity
      * @param $_person
      * @return $this
      */
-    /**
-     * @param $_person
-     * @return $this
-     */
-    /**
-     * @param $_person
-     * @return $this
-     */
     public function setPerson($_person)
     {
         $this->updateChangeState($this->person, $_person);
@@ -627,25 +603,11 @@ class InteractDef extends BaseEntity
     /**
      * @return string
      */
-    /**
-     * @return string
-     */
-    /**
-     * @return string
-     */
     public function getGroup()
     {
         return $this->group;
     }
 
-    /**
-     * @param $_group
-     * @return $this
-     */
-    /**
-     * @param $_group
-     * @return $this
-     */
     /**
      * @param $_group
      * @return $this

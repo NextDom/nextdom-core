@@ -106,7 +106,6 @@ class Cmd extends BaseEntity
     public $_eqLogic = null;
     public $_needRefreshWidget;
     public $_needRefreshAlert;
-    protected $_changed = false;
 
     /**
      * @var string
@@ -170,15 +169,6 @@ class Cmd extends BaseEntity
      * @ORM\Column(name="alert", type="text", length=65535, nullable=true)
      */
     protected $alert;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
 
     /**
      * @var EqLogic
@@ -362,25 +352,6 @@ class Cmd extends BaseEntity
     {
         $cache = CacheManager::byKey(CmdConfigKey::CMD_CACHE_ATTR . $this->getId())->getValue();
         return Utils::getJsonAttr($cache, $_key, $_default);
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $id
-     * @return $this
-     */
-    public function setId($id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $id);
-        $this->id = $id;
-        return $this;
     }
 
     /**
@@ -2046,29 +2017,6 @@ class Cmd extends BaseEntity
         } else {
             return $this->getEqLogicId()->hasRight(ActionRight::READ, $user);
         }
-    }
-
-    /**
-     * Get changed state
-     *
-     * @return bool True if attribute has changed
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * Set changed state
-     *
-     * @param bool $changed New changed state
-     *
-     * @return $this
-     */
-    public function setChanged($changed)
-    {
-        $this->_changed = $changed;
-        return $this;
     }
 
     /**

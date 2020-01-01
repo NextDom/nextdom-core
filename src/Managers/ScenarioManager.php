@@ -166,7 +166,7 @@ class ScenarioManager extends BaseManager
         $sql = static::getPrefixedBaseSQL('s');
 
         if ($objectName == __('Aucun')) {
-            $sql .= 'WHERE s.name=:scenario_name ';
+            $sql .= 'WHERE s.name = :scenario_name ';
             if ($groupName == __('Aucun')) {
                 $sql .= 'AND (`group` IS NULL OR `group` = ""  OR `group` = "Aucun" OR `group` = "None")
                          AND s.object_id IS NULL';
@@ -245,13 +245,13 @@ class ScenarioManager extends BaseManager
             $sql .= ' WHERE object_id IS NULL';
         } else {
             $values['object_id'] = $objectId;
-            $sql .= ' WHERE object_id = :object_id';
+            $sql .= ' WHERE `object_id` = :object_id';
         }
         if ($onlyEnabled) {
-            $sql .= ' AND isActive = 1';
+            $sql .= ' AND `isActive` = 1';
         }
         if ($onlyVisible) {
-            $sql .= ' AND isVisible = 1';
+            $sql .= ' AND `isVisible` = 1';
         }
         $sql .= ' ORDER BY `order`';
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
@@ -324,7 +324,7 @@ class ScenarioManager extends BaseManager
         $sql = static::getBaseSQL() . '
                 WHERE `mode` != "schedule" AND `trigger` LIKE :cmd_id';
         if ($onlyEnabled) {
-            $sql .= ' AND isActive = 1';
+            $sql .= ' AND `isActive` = 1';
         }
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
@@ -339,7 +339,7 @@ class ScenarioManager extends BaseManager
     {
         $sql = static::getBaseSQL() . '
                 WHERE `mode` != "provoke"
-                AND isActive = 1';
+                AND `isActive` = 1';
         return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
     }
 
@@ -492,7 +492,7 @@ class ScenarioManager extends BaseManager
      */
     public static function consystencyCheck($needsReturn = false)
     {
-        $return = [];
+        $result = [];
         foreach (self::all() as $scenario) {
             if ($scenario->getIsActive() != 1 && !$needsReturn) {
                 continue;
@@ -506,9 +506,9 @@ class ScenarioManager extends BaseManager
                 foreach ($matches[1] as $cmd_id) {
                     if (is_numeric($cmd_id)) {
                         if ($needsReturn) {
-                            $return[] = ['detail' => 'Scénario ' . $scenario->getHumanName(), 'help' => 'Déclencheur du scénario', 'who' => '#' . $cmd_id . '#'];
+                            $result[] = ['detail' => 'Scénario ' . $scenario->getHumanName(), 'help' => 'Déclencheur du scénario', 'who' => '#' . $cmd_id . '#'];
                         } else {
-                            LogHelper::addError('scenario', __('Un déclencheur du scénario : ') . $scenario->getHumanName() . __(' est introuvable'));
+                            LogHelper::addError(LogTarget::SCENARIO, __('Un déclencheur du scénario : ') . $scenario->getHumanName() . __(' est introuvable'));
                         }
                     }
                 }
@@ -521,15 +521,15 @@ class ScenarioManager extends BaseManager
             foreach ($matches[1] as $cmd_id) {
                 if (is_numeric($cmd_id)) {
                     if ($needsReturn) {
-                        $return[] = ['detail' => 'Scénario ' . $scenario->getHumanName(), 'help' => 'Utilisé dans le scénario', 'who' => '#' . $cmd_id . '#'];
+                        $result[] = ['detail' => 'Scénario ' . $scenario->getHumanName(), 'help' => 'Utilisé dans le scénario', 'who' => '#' . $cmd_id . '#'];
                     } else {
-                        LogHelper::addError('scenario', __('Une commande du scénario : ') . $scenario->getHumanName() . __(' est introuvable'));
+                        LogHelper::addError(LogTarget::SCENARIO, __('Une commande du scénario : ') . $scenario->getHumanName() . __(' est introuvable'));
                     }
                 }
             }
         }
         if ($needsReturn) {
-            return $return;
+            return $result;
         }
         return null;
     }

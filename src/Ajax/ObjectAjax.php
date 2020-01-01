@@ -151,8 +151,8 @@ class ObjectAjax extends BaseAjax
     public function toHtml()
     {
         $objectId = Utils::init(AjaxParams::ID);
-        if ($objectId == '' || $objectId == 'all' || is_json($objectId)) {
-            if (is_json($objectId)) {
+        if ($objectId == '' || $objectId == 'all' || Utils::isJson($objectId)) {
+            if (Utils::isJson($objectId)) {
                 $objectsList = json_decode($objectId, true);
             } else {
                 $objectsList = [];

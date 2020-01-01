@@ -33,9 +33,9 @@
 
 namespace NextDom\Managers\Parents;
 
+use NextDom\Enums\SQLField;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
-use NextDom\Model\Entity\Parents\BaseModel;
 
 /**
  * Base planmanager with commons functions
@@ -75,8 +75,8 @@ abstract class BasePlanManager extends BaseManager
     public static function byLinkTypeLinkIdPlanHeaderId($linkType, $linkId, $planHeaderId)
     {
         return static::getMultipleByClauses([
-            'link_type' => $linkType,
-            'link_id' => $linkId,
+            SQLField::LINK_TYPE => $linkType,
+            SQLField::LINK_ID => $linkId,
             static::PLANHEADER_ID => $planHeaderId
         ]);
     }
@@ -91,8 +91,8 @@ abstract class BasePlanManager extends BaseManager
     public static function removeByLinkTypeLinkIdPlanHeaderId($linkType, $linkId, $planHeaderId)
     {
         $params = [
-            'link_type' => $linkType,
-            'link_id' => $linkId,
+            SQLField::LINK_TYPE => $linkType,
+            SQLField::LINK_ID => $linkId,
             'planHeader_id' => $planHeaderId
         ];
         $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . '
@@ -122,8 +122,8 @@ abstract class BasePlanManager extends BaseManager
     public static function byLinkTypeLinkId($_link_type, $_link_id)
     {
         return static::getMultipleByClauses([
-            'link_type' => $_link_type,
-            'link_id' => $_link_id,
+            SQLField::LINK_TYPE => $_link_type,
+            SQLField::LINK_ID => $_link_id,
         ]);
     }
 
@@ -135,12 +135,10 @@ abstract class BasePlanManager extends BaseManager
      */
     public static function searchByDisplay($_search)
     {
-        $value = [
-            'search' => '%' . $_search . '%',
+        $clauses = [
+            SQLField::DISPLAY => '%' . $_search . '%',
         ];
-        $sql = static::getBaseSQL() . '
-                WHERE `display` LIKE :search';
-        return DBHelper::getAllObjects($sql, $value, static::CLASS_NAME);
+        return static::searchMultipleByClauses($clauses);
     }
 
     /**

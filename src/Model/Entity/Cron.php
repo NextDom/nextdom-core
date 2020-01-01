@@ -101,20 +101,6 @@ class Cron extends BaseEntity
     protected $once = 0;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * @var bool
-     */
-    protected $_changed = false;
-
-    /**
      * Get enabled state of the cron task
      *
      * @param int $defaultValue Default value if cron task is not initialized
@@ -325,27 +311,6 @@ class Cron extends BaseEntity
     {
         $this->updateChangeState($this->class, $newClass);
         $this->class = $newClass;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set task id
-     *
-     * @param $_id
-     * @return $this Task object
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
         return $this;
     }
 
@@ -688,23 +653,5 @@ class Cron extends BaseEntity
     public function setLastRun($lastRun)
     {
         $this->setCache('lastRun', $lastRun);
-    }
-
-    /**
-     * @return bool
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
-        return $this;
     }
 }

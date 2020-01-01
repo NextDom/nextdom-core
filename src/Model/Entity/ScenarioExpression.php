@@ -72,22 +72,12 @@ class ScenarioExpression extends BaseEntity
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * @var integer
-     *
      * ORM\ManyToOne(targetEntity="NextDom\Model\Entity\Scenariosubelement")
      * ORM\JoinColumns({
      *   ORM\JoinColumn(name="scenarioSubElement_id", referencedColumnName="id")
      * })
      */
     protected $scenarioSubElement_id;
-    protected $_changed = false;
 
     /**
      * Execute a scenario
@@ -846,25 +836,6 @@ class ScenarioExpression extends BaseEntity
         $return['subelement'] = array_merge($return['subelement'], $result['subelement']);
         $return['expression'] = array_merge($return['expression'], $result['expression']);
         return $return;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $_id
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
     }
 
     /**

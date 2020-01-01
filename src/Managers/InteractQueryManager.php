@@ -102,7 +102,7 @@ class InteractQueryManager extends BaseManager
                     WHERE `actions` LIKE :actions';
             for ($i = 1; $i < count($_action); $i++) {
                 $values['actions' . $i] = '%' . $_action[$i] . '%';
-                $sql .= ' OR actions LIKE :actions' . $i;
+                $sql .= ' OR `actions` LIKE :actions' . $i;
             }
         }
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
@@ -119,7 +119,7 @@ class InteractQueryManager extends BaseManager
             'interactDef_id' => $_interactDef_id,
         ];
         $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . '
-                WHERE interactDef_id = :interactDef_id';
+                WHERE `interactDef_id` = :interactDef_id';
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
@@ -770,13 +770,13 @@ class InteractQueryManager extends BaseManager
         ];
         $sql = static::getBaseSQL();
         if ($caseSensitive) {
-            $sql .= ' WHERE query=:query';
+            $sql .= ' WHERE `query` = :query';
         } else {
             $sql .= ' WHERE LOWER(query)=LOWER(:query)';
         }
         if ($_interactDef_id !== null) {
             $values['interactDef_id'] = $_interactDef_id;
-            $sql .= ' AND interactDef_id=:interactDef_id';
+            $sql .= ' AND `interactDef_id` = :interactDef_id';
         }
         return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }

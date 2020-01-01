@@ -68,17 +68,6 @@ class Message extends BaseEntity
     protected $action;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    protected $_changed = false;
-
-    /**
      * @param bool $_writeMessage
      * @return bool|null
      * @throws \NextDom\Exceptions\CoreException
@@ -97,8 +86,8 @@ class Message extends BaseEntity
             ];
             $sql = 'SELECT count(*)
                     FROM ' . self::DB_CLASS_NAME . '
-                    WHERE plugin = :plugin
-                    AND message = :message';
+                    WHERE `plugin` = :plugin
+                    AND `message` = :message';
             $result = DBHelper::getOne($sql, $values);
         } else {
             $values = [
@@ -106,9 +95,9 @@ class Message extends BaseEntity
                 'plugin' => $this->getPlugin(),
             ];
             $sql = 'SELECT count(*)
-            FROM message
-            WHERE plugin=:plugin
-            AND logicalId=:logicalId';
+            FROM ' . self::DB_CLASS_NAME . '
+            WHERE `plugin` = :plugin
+            AND `logicalId` = :logicalId';
             $result = DBHelper::getOne($sql, $values);
         }
         if ($result['count(*)'] != 0) {
@@ -183,25 +172,6 @@ class Message extends BaseEntity
     {
         EventManager::add('message::refreshMessageNumber');
         return parent::remove();
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $_id
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
     }
 
     /**

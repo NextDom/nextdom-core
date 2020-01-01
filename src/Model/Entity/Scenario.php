@@ -134,7 +134,6 @@ class Scenario extends BaseEntity
     protected $_tags = [];
     protected $_do = true;
     protected $_log;
-    protected $_changed = false;
 
     public function __construct()
     {

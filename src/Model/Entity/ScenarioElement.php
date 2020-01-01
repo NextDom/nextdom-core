@@ -34,6 +34,7 @@ use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\ScenarioSubElementManager;
 use NextDom\Model\Entity\Parents\BaseEntity;
 use NextDom\Model\Entity\Parents\NameEntity;
+use NextDom\Model\Entity\Parents\OptionsEntity;
 use NextDom\Model\Entity\Parents\OrderEntity;
 use NextDom\Model\Entity\Parents\TypeEntity;
 
@@ -47,10 +48,9 @@ class ScenarioElement extends BaseEntity
 {
     const TABLE_NAME = NextDomObj::SCENARIO_ELEMENT;
 
-    use NameEntity, OrderEntity, TypeEntity;
+    use NameEntity, OptionsEntity, OrderEntity, TypeEntity;
 
     protected $_subelement;
-    protected $_changed = false;
 
     public function __construct()
     {
@@ -87,25 +87,6 @@ class ScenarioElement extends BaseEntity
             $this->_subelement[-1] = ScenarioSubElementManager::byScenarioElementId($this->getId(), $_type);
             return $this->_subelement[-1];
         }
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $_id
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
     }
 
     /**

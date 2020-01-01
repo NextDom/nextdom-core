@@ -66,17 +66,6 @@ class Listener extends BaseEntity
     protected $option;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    protected $_changed = false;
-
-    /**
      * @param $_event
      * @param $_value
      * @param null $_datetime
@@ -162,25 +151,6 @@ class Listener extends BaseEntity
         } catch (\Exception $e) {
             LogHelper::addError(Utils::init('plugin_id', 'plugin'), $e->getMessage());
         }
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $_id
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
     }
 
     /**

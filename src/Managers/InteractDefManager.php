@@ -134,6 +134,7 @@ class InteractDefManager extends BaseManager
             $sql = static::getBaseSQL() . '
                     WHERE `group` = :group';
         }
+        $sql .= ' ORDER BY `name`, `query`';
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
@@ -277,8 +278,8 @@ class InteractDefManager extends BaseManager
                        OR `reply` LIKE :search';
             for ($i = 1; $i < count($searchPattern); $i++) {
                 $values['search' . $i] = '%' . $searchPattern[$i] . '%';
-                $sql .= ' OR actions LIKE :search' . $i . '
-                          OR reply LIKE :search' . $i;
+                $sql .= ' OR `actions` LIKE :search' . $i . '
+                          OR `reply` LIKE :search' . $i;
             }
         }
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);

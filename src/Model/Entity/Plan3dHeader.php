@@ -47,17 +47,6 @@ class Plan3dHeader extends BaseEntity
      */
     protected $configuration;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    protected $_changed = false;
-
     public function preSave()
     {
         if (trim($this->getName()) == '') {

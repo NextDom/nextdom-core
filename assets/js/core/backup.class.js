@@ -18,15 +18,15 @@ nextdom.backup = function () {
 };
 
 nextdom.backup.backup = function (queryParams) {
-  nextdom.private.ajax('Repo', 'backup', queryParams);
+  nextdom.private.ajax('NextDom', 'backup', queryParams);
 };
 
 nextdom.backup.restoreLocal = function (queryParams) {
-  nextdom.private.ajax('Repo', 'restore', queryParams, ['backup']);
+  nextdom.private.ajax('NextDom', 'restore', queryParams, ['backup']);
 };
 
 nextdom.backup.remove = function (queryParams) {
-  nextdom.private.ajax('Repo', 'removeBackup', queryParams, ['backup']);
+  nextdom.private.ajax('NextDom', 'removeBackup', queryParams, ['backup']);
 };
 
 nextdom.backup.uploadCloud = function (queryParams) {

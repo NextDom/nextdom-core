@@ -48,8 +48,6 @@ class ViewZone extends BaseEntity
      */
     protected $view_id;
 
-    protected $_changed = false;
-
 
     /*     * *********************Methode d'instance************************* */
 
@@ -61,27 +59,6 @@ class ViewZone extends BaseEntity
     public function getViewData()
     {
         return ViewDataManager::byViewZoneId($this->getId());
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /*     * **********************Getteur Setteur*************************** */
-
-    /**
-     * @param $_id
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
     }
 
     /**

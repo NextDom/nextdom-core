@@ -78,10 +78,9 @@ class ViewDataManager extends BaseManager
      */
     public static function searchByConfiguration($_search)
     {
-        $clauses = [
-            'search' => '%' . $_search . '%',
-        ];
-        return static::searchMultipleByClauses($clauses);
+        return static::searchMultipleByClauses([
+            'configuration' => '%' . $_search . '%',
+        ]);
     }
 
     /**

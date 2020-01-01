@@ -35,6 +35,7 @@ namespace NextDom\Managers;
 
 use NextDom\Enums\DateFormat;
 use NextDom\Enums\LogTarget;
+use NextDom\Enums\SQLField;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NetworkHelper;
@@ -162,7 +163,7 @@ class UserManager extends BaseManager
      */
     public static function byLogin($_login)
     {
-        return static::getOneByClauses(['login' => $_login]);
+        return static::getOneByClauses([SQLField::LOGIN => $_login]);
     }
 
     /**
@@ -174,7 +175,7 @@ class UserManager extends BaseManager
      */
     public static function byLoginAndPassword($_login, $_password)
     {
-        return static::getOneByClauses(['login' => $_login, 'password' => $_password]);
+        return static::getOneByClauses([SQLField::LOGIN => $_login, 'password' => $_password]);
     }
 
     /**
@@ -196,7 +197,7 @@ class UserManager extends BaseManager
      */
     public static function byLoginAndHash($_login, $_hash)
     {
-        return static::getOneByClauses(['login' => $_login, 'hash' => $_hash]);
+        return static::getOneByClauses([SQLField::LOGIN => $_login, 'hash' => $_hash]);
     }
 
     /**
@@ -317,7 +318,7 @@ class UserManager extends BaseManager
                 $values_tmp[] = $value;
             }
             $values = $values_tmp;
-            $values[] = ['datetime' => strtotime('now'), 'ip' => NetworkHelper::getClientIp()];
+            $values[] = ['datetime' => strtotime(DateFormat::NOW), 'ip' => NetworkHelper::getClientIp()];
             @session_start();
             $_SESSION['failed_count'] = 0;
             $_SESSION['failed_datetime'] = -1;

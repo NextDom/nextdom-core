@@ -80,7 +80,6 @@ class Update extends BaseEntity
     protected $status;
 
     protected $_changeUpdate = false;
-    protected $_changed = false;
 
     public function __construct()
     {
@@ -454,25 +453,6 @@ class Update extends BaseEntity
     public function postRemove()
     {
         EventManager::add('update::refreshUpdateNumber');
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $_id
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
     }
 
     /**

@@ -36,7 +36,6 @@ script:
   - python3 send_timestamps.py | nc termbin.com 9999
   - python3 launch_code_consistency.py
   - python3 launch_compatibility_tests.py
-  - python3 check_jeedom_compatibility_from_src.py
   - python3 launch_features_tests.py
   - python3 launch_gui_tests.py first_use
   - python3 launch_gui_tests.py administration

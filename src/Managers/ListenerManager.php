@@ -34,6 +34,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Enums\Common;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\SystemHelper;
 use NextDom\Managers\Parents\BaseManager;
@@ -71,7 +72,7 @@ class ListenerManager extends BaseManager
      */
     public static function byClass($_class)
     {
-        return static::getMultipleByClauses(['class' => $_class]);
+        return static::getMultipleByClauses([Common::CLASS => $_class]);
     }
 
     /**
@@ -84,19 +85,15 @@ class ListenerManager extends BaseManager
      */
     public static function byClassAndFunction($_class, $_function, $_option = '')
     {
-        $value = [
-            'class' => $_class,
-            'function' => $_function,
+        $clauses = [
+            Common::CLASS_CODE => $_class,
+            Common::FUNCTION => $_function,
         ];
-        $sql = static::getBaseSQL() . '
-        WHERE `class` = :class
-        AND `function` = :function';
         if ($_option != '') {
             $_option = json_encode($_option, JSON_UNESCAPED_UNICODE);
-            $value['option'] = $_option;
-            $sql .= ' AND `option`=:option';
+            $clauses[Common::OPTION] = $_option;
         }
-        return DBHelper::getOneObject($sql, $value, self::CLASS_NAME);
+        return static::getOneByClauses($clauses);
     }
 
     /**
@@ -110,14 +107,14 @@ class ListenerManager extends BaseManager
     public static function searchClassFunctionOption($_class, $_function, $_option = '')
     {
         $value = [
-            'class' => $_class,
-            'function' => $_function,
-            'option' => '%' . $_option . '%',
+            Common::CLASS_CODE => $_class,
+            Common::FUNCTION => $_function,
+            Common::OPTION => '%' . $_option . '%',
         ];
         $sql = static::getBaseSQL() . '
-        WHERE `class` = :class
-        AND `function` = :function
-        AND `option` LIKE :option';
+                WHERE `class` = :class
+                AND `function` = :function
+                AND `option` LIKE :option';
         return DBHelper::getAllObjects($sql, $value, self::CLASS_NAME);
     }
 
@@ -132,9 +129,9 @@ class ListenerManager extends BaseManager
     public static function byClassFunctionAndEvent($_class, $_function, $_event)
     {
         return static::getMultipleByClauses([
-            'class' => $_class,
-            'function' => $_function,
-            'event' => $_event
+            Common::CLASS_CODE => $_class,
+            Common::FUNCTION => $_function,
+            Common::EVENT => $_event
         ]);
     }
 
@@ -148,17 +145,17 @@ class ListenerManager extends BaseManager
     public static function removeByClassFunctionAndEvent($_class, $_function, $_event, $_option = '')
     {
         $value = [
-            'class' => $_class,
-            'function' => $_function,
-            'event' => $_event,
+            Common::CLASS_CODE => $_class,
+            Common::FUNCTION => $_function,
+            Common::EVENT => $_event,
         ];
         $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . '
-        WHERE class=:class
-        AND function=:function
-        AND event=:event';
+                WHERE `class` = :class
+                AND `function` = :function
+                AND `event` = :event';
         if ($_option != '') {
             $_option = json_encode($_option, JSON_UNESCAPED_UNICODE);
-            $value['option'] = $_option;
+            $value[Common::OPTION] = $_option;
             $sql .= ' AND `option`=:option';
         }
         DBHelper::exec($sql, $value);
@@ -188,17 +185,11 @@ class ListenerManager extends BaseManager
     public static function searchEvent($_event)
     {
         if (strpos($_event, '#') !== false) {
-            $value = [
-                'event' => '%' . $_event . '%',
-            ];
+            $clauses = [Common::EVENT => '%' . $_event . '%'];
         } else {
-            $value = [
-                'event' => '%#' . $_event . '#%',
-            ];
+            $clauses = [Common::EVENT => '%#' . $_event . '#%'];
         }
-        $sql = static::getBaseSQL() . '
-        WHERE `event` LIKE :event';
-        return DBHelper::getAllObjects($sql, $value, self::CLASS_NAME);
+        return static::searchMultipleByClauses($clauses);
     }
 
     /**

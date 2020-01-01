@@ -203,7 +203,7 @@ class UpdateManager extends BaseManager
             $params['type'] = $filter;
             $sql .= 'WHERE `type` = :type ';
         }
-        $sql .= 'ORDER BY FIELD( `status`, "update", "ok", "depreciated") ASC, FIELD( `type`, "plugin","core") DESC, `name` ASC';
+        $sql .= 'ORDER BY FIELD(`status`, "update", "ok", "depreciated") ASC, FIELD(`type`, "plugin", "core") DESC, `name` ASC';
         return DBHelper::getAllObjects($sql, $params, self::CLASS_NAME);
     }
 

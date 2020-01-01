@@ -24,4 +24,7 @@ namespace NextDom\Enums;
 class EventType extends Enum
 {
     const CMD_UPDATE = 'cmd::update';
+    const EQLOGIC_UPDATE = 'eqLogic::update';
+    const SCENARIO_UPDATE = 'scenario::update';
+    const SUMMARY_UPDATE = 'jeeObject::summary::update';
 }

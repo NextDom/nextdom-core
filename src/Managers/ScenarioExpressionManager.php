@@ -106,9 +106,9 @@ class ScenarioExpressionManager extends BaseManager
         if ($options !== null) {
             $params['options'] = '%' . $options . '%';
             if ($and) {
-                $sql .= 'AND options LIKE :options';
+                $sql .= 'AND `options` LIKE :options';
             } else {
-                $sql .= 'OR options LIKE :options';
+                $sql .= 'OR `options` LIKE :options';
             }
         }
         return DBHelper::getAllObjects($sql, $params, self::CLASS_NAME);

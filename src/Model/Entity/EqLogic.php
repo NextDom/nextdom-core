@@ -281,30 +281,6 @@ class EqLogic extends BaseEntity
     }
 
     /**
-     * Get Id
-     *
-     * @return int EqLogic id
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Change id
-     *
-     * @param int|string $newId New id or '' if you want to reset id
-     *
-     * @return $this
-     */
-    public function setId($newId)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $newId);
-        $this->id = $newId;
-        return $this;
-    }
-
-    /**
      * Store data in cache
      *
      * @param string $cacheKey Key of the data
@@ -761,29 +737,6 @@ class EqLogic extends BaseEntity
     }
 
     /**
-     * Get changed data state
-     *
-     * @return bool True if a data changed since last save
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * Set changed data state
-     *
-     * @param bool $newChangedStatus New data changed state
-     *
-     * @return $this
-     */
-    public function setChanged($newChangedStatus)
-    {
-        $this->_changed = $newChangedStatus;
-        return $this;
-    }
-
-    /**
      * Remove widget render in cache
      */
     public function emptyCacheWidget()
@@ -898,21 +851,7 @@ class EqLogic extends BaseEntity
             $this->setStatus(BatteryStatus::WARNING, 1);
             $this->setStatus(BatteryStatus::DANGER, 0);
             if ($prevStatus == 0) {
-                if (ConfigManager::ByKey('alert::addMessageOnBatterywarning') == 1) {
-                    MessageManager::add($this->getEqType_name(), $message, '', $logicalId);
-                }
-                $cmds = explode(('&&'), ConfigManager::byKey('alert::batterywarningCmd'));
-                if (count($cmds) > 0 && trim(ConfigManager::byKey('alert::batterywarningCmd')) != '') {
-                    foreach ($cmds as $id) {
-                        $cmd = CmdManager::byId(str_replace('#', '', $id));
-                        if (is_object($cmd)) {
-                            $cmd->execCmd([
-                                'title' => __('[' . ConfigManager::byKey('name', 'core', 'NEXTDOM') . '] ') . $message,
-                                'message' => ConfigManager::byKey('name', 'core', 'NEXTDOM') . ' : ' . $message,
-                            ]);
-                        }
-                    }
-                }
+                CmdManager::checkAlertCmds('alert::addMessageOnBatterywarning', 'alert::batterywarningCmd', $message, $logicalId);
             }
         } else {
             MessageManager::removeByPluginLogicalId($this->getEqType_name(), 'warningBattery' . $this->getId());

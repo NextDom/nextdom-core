@@ -215,7 +215,7 @@ nextdom.getConfiguration = function (queryParams) {
 };
 
 nextdom.haltSystem = function (queryParams) {
-  nextdom.private.ajax('Nextdom', 'haltSystem', queryParams);
+  nextdom.private.ajax('NextDom', 'haltSystem', queryParams);
 };
 
 nextdom.ssh = function (queryParams) {
@@ -226,7 +226,7 @@ nextdom.ssh = function (queryParams) {
     queryParams = {};
   }
   var params = $.extend({}, nextdom.private.default_params, queryParams || {});
-  var ajaxParams = nextdom.private.getParamsAJAX(params, 'Nextdom', 'ssh');
+  var ajaxParams = nextdom.private.getParamsAJAX(params, 'NextDom', 'ssh');
   ajaxParams.data['command'] = command;
   $.ajax(ajaxParams);
   return 'Execute command : ' + command;
@@ -240,22 +240,22 @@ nextdom.db = function (queryParams) {
     queryParams = {};
   }
   var params = $.extend({}, nextdom.private.default_params, queryParams || {});
-  var ajaxParams = nextdom.private.getParamsAJAX(params, 'Nextdom', 'db');
+  var ajaxParams = nextdom.private.getParamsAJAX(params, 'NextDom', 'db');
   ajaxParams.data['command'] = command;
   $.ajax(ajaxParams);
   return 'Execute command : ' + command;
 };
 
 nextdom.rebootSystem = function (queryParams) {
-  nextdom.private.ajax('Nextdom', 'rebootSystem', queryParams);
+  nextdom.private.ajax('NextDom', 'rebootSystem', queryParams);
 };
 
 nextdom.health = function (queryParams) {
-  nextdom.private.ajax('Nextdom', 'health', queryParams);
+  nextdom.private.ajax('NextDom', 'health', queryParams);
 };
 
 nextdom.forceSyncHour = function (queryParams) {
-  nextdom.private.ajax('Nextdom', 'forceSyncHour', queryParams);
+  nextdom.private.ajax('NextDom', 'forceSyncHour', queryParams);
 };
 
 nextdom.getCronSelectModal = function (_options, _callback) {
@@ -334,7 +334,7 @@ nextdom.getSelectActionModal = function (_options, _callback) {
 
 nextdom.getGraphData = function (queryParams) {
   var params = $.extend({}, nextdom.private.default_params, queryParams || {});
-  var ajaxParams = nextdom.private.getParamsAJAX(params, 'Nextdom', 'getGraphData');
+  var ajaxParams = nextdom.private.getParamsAJAX(params, 'NextDom', 'getGraphData');
   ajaxParams.data['filter_type'] = params.filter_type || null;
   ajaxParams.data['filter_id'] = params.filter_id || null;
   $.ajax(ajaxParams);
@@ -342,52 +342,52 @@ nextdom.getGraphData = function (queryParams) {
 
 nextdom.getDocumentationUrl = function (queryParams) {
   var params = $.extend({}, nextdom.private.default_params, queryParams || {});
-  var ajaxParams = nextdom.private.getParamsAJAX(params, 'Nextdom', 'getDocumentationUrl');
+  var ajaxParams = nextdom.private.getParamsAJAX(params, 'NextDom', 'getDocumentationUrl');
   ajaxParams.data['plugin'] = params.plugin || null;
   ajaxParams.data['page'] = params.page || null;
   $.ajax(ajaxParams);
 };
 
 nextdom.addWarnme = function (queryParams) {
-  nextdom.private.ajax('Nextdom', 'addWarnme', queryParams, ['cmd_id', 'test']);
+  nextdom.private.ajax('NextDom', 'addWarnme', queryParams, ['cmd_id', 'test']);
 };
 
 nextdom.getTimelineEvents = function (queryParams) {
-  nextdom.private.ajax('Interact', 'getTimelineEvents', queryParams);
+  nextdom.private.ajax('NextDom', 'getTimelineEvents', queryParams);
 };
 
 nextdom.removeTimelineEvents = function (queryParams) {
-  nextdom.private.ajax('Interact', 'removeTimelineEvents', queryParams);
+  nextdom.private.ajax('NextDom', 'removeTimelineEvents', queryParams);
 };
 
 nextdom.getFileFolder = function (queryParams) {
-  nextdom.private.ajax('Nextdom', 'getFileFolder', queryParams, ['type', 'path']);
+  nextdom.private.ajax('NextDom', 'getFileFolder', queryParams, ['type', 'path']);
 };
 
 nextdom.getFileContent = function (queryParams) {
-  nextdom.private.ajax('Nextdom', 'getFileContent', queryParams, ['path']);
+  nextdom.private.ajax('NextDom', 'getFileContent', queryParams, ['path']);
 };
 
 nextdom.setFileContent = function (queryParams) {
-  nextdom.private.ajax('Nextdom', 'setFileContent', queryParams, ['path', 'content']);
+  nextdom.private.ajax('NextDom', 'setFileContent', queryParams, ['path', 'content']);
 };
 
 nextdom.deleteFile = function (queryParams) {
-  nextdom.private.ajax('Nextdom', 'deleteFile', queryParams, ['path']);
+  nextdom.private.ajax('NextDom', 'deleteFile', queryParams, ['path']);
 };
 
 nextdom.createFile = function (queryParams) {
-  nextdom.private.ajax('Nextdom', 'createFile', queryParams, ['path', 'name']);
+  nextdom.private.ajax('NextDom', 'createFile', queryParams, ['path', 'name']);
 };
 
 nextdom.emptyRemoveHistory = function (queryParams) {
-  nextdom.private.ajax('Interact', 'emptyRemoveHistory', queryParams);
+  nextdom.private.ajax('NextDom', 'emptyRemoveHistory', queryParams);
 };
 
 nextdom.cleanFileSystemRight = function (queryParams) {
-  nextdom.private.ajax('Interact', 'cleanFileSystemRight', queryParams);
+  nextdom.private.ajax('NextDom', 'cleanFileSystemRight', queryParams);
 };
 
 nextdom.consistency = function (queryParams) {
-  nextdom.private.ajax('Interact', 'consistency', queryParams);
+  nextdom.private.ajax('NextDom', 'consistency', queryParams);
 };

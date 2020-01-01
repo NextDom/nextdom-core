@@ -44,35 +44,6 @@ class Note extends BaseEntity
     protected $text;
 
     /**
-     * @var bool Data changed state
-     */
-    private $_changed = false;
-
-    /**
-     * Get id of the note
-     *
-     * @return int Id of the note
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set note id
-     *
-     * @param int $id Id of the note
-     *
-     * @return $this
-     */
-    public function setId($id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $id);
-        $this->id = $id;
-        return $this;
-    }
-
-    /**
      * Get the text of the note
      *
      * @return string Text of the note
@@ -93,29 +64,6 @@ class Note extends BaseEntity
     {
         $this->updateChangeState($this->text, $newText);
         $this->text = $newText;
-        return $this;
-    }
-
-    /**
-     * Get data change status
-     *
-     * @return bool True if change occurs
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * Set change data state
-     *
-     * @param $newChangedState
-     *
-     * @return $this
-     */
-    public function setChanged($newChangedState)
-    {
-        $this->_changed = $newChangedState;
         return $this;
     }
 

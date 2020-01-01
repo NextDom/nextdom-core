@@ -39,55 +39,11 @@ use NextDom\Model\Entity\Parents\NameEntity;
  * @ORM\Table(name="plan3d", indexes={@ORM\Index(name="name", columns={"name"}), @ORM\Index(name="link_type_link_id", columns={"link_type", "link_id"}), @ORM\Index(name="fk_plan3d_plan3dHeader1_idx", columns={"plan3dHeader_id"})})
  * @ORM\Entity
  */
-class Plan3d extends BaseEntity
+class Plan3d extends BasePlan
 {
     const TABLE_NAME = NextDomObj::PLAN3D;
 
     use NameEntity;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="link_type", type="string", length=127, nullable=true)
-     */
-    protected $link_type;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="link_id", type="string", length=127, nullable=true)
-     */
-    protected $link_id;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="position", type="text", length=65535, nullable=true)
-     */
-    protected $position;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="display", type="text", length=65535, nullable=true)
-     */
-    protected $display;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="configuration", type="text", length=65535, nullable=true)
-     */
-    protected $configuration;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
 
     /**
      * @var \NextDom\Model\Entity\Plan3dHeader
@@ -99,53 +55,11 @@ class Plan3d extends BaseEntity
      */
     protected $plan3dHeader_id;
 
-    protected $css;
-
-    protected $_changed = false;
-
     public function preInsert()
     {
         if (in_array($this->getLink_type(), ['eqLogic', 'cmd', 'scenario'])) {
             Plan3dManager::removeByLinkTypeLinkId3dHeaderId($this->getLink_type(), $this->getLink_id(), $this->getPlan3dHeader_id());
         }
-    }
-
-    /**
-     * @return string
-     */
-    public function getLink_type()
-    {
-        return $this->link_type;
-    }
-
-    /**
-     * @param $_link_type
-     * @return $this
-     */
-    public function setLink_type($_link_type)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->link_type, $_link_type);
-        $this->link_type = $_link_type;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLink_id()
-    {
-        return $this->link_id;
-    }
-
-    /**
-     * @param $_link_id
-     * @return $this
-     */
-    public function setLink_id($_link_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->link_id, $_link_id);
-        $this->link_id = $_link_id;
-        return $this;
     }
 
     /**
@@ -195,39 +109,6 @@ class Plan3d extends BaseEntity
         foreach ($default as $key => $value) {
             $this->setConfiguration($key, $this->getConfiguration($key, $value));
         }
-    }
-
-    /**
-     * @param string $_key
-     * @param string $_default
-     * @return array|bool|mixed|null|string
-     */
-    public function getConfiguration($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->configuration, $_key, $_default);
-    }
-
-    /**
-     * @param $_key
-     * @param $_value
-     * @return $this
-     */
-    public function setConfiguration($_key, $_value)
-    {
-        $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
-        $this->configuration = $configuration;
-        return $this;
-    }
-
-    public function save()
-    {
-        DBHelper::save($this);
-    }
-
-    public function remove()
-    {
-        DBHelper::remove($this);
     }
 
     /**
@@ -300,7 +181,7 @@ class Plan3d extends BaseEntity
                 $cmd = CmdManager::byId(str_replace('#', '', $this->getConfiguration('3d::widget::door::window')));
                 if (is_object($cmd) && $cmd->isType(CmdType::INFO)) {
                     $cmd_value = $cmd->execCmd();
-                    if ($this->isSubType(CmdSubType::BINARY) && $cmd->getDisplay('invertBinary') == 1) {
+                    if ($cmd->isSubType(CmdSubType::BINARY) && $cmd->getDisplay('invertBinary') == 1) {
                         $cmd_value = ($cmd_value == 1) ? 0 : 1;
                     }
                     $return['state'] = $cmd_value;
@@ -309,7 +190,7 @@ class Plan3d extends BaseEntity
                     $cmd = CmdManager::byId(str_replace('#', '', $this->getConfiguration('3d::widget::door::shutter')));
                     if (is_object($cmd) && $cmd->isType(CmdType::INFO)) {
                         $cmd_value = $cmd->execCmd();
-                        if ($this->isSubType(CmdSubType::BINARY) && $cmd->getDisplay('invertBinary') == 1) {
+                        if ($cmd->isSubType(CmdSubType::BINARY) && $cmd->getDisplay('invertBinary') == 1) {
                             $cmd_value = ($cmd_value == 1) ? 0 : 1;
                         }
                         if ($cmd_value) {

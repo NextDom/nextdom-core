@@ -63,17 +63,6 @@ class InteractQuery extends BaseEntity
     protected $actions;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    protected $_changed = false;
-
-    /**
      * @return $this
      * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
@@ -289,25 +278,6 @@ class InteractQuery extends BaseEntity
         }
         $replace['"'] = '';
         return str_replace(array_keys($replace), $replace, $reply);
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $_id
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
     }
 
     /**

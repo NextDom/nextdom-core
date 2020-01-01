@@ -113,9 +113,9 @@ class JeeObjectManager extends BaseManager
         $sql = static::getBaseSQL() . '
                 WHERE father_id IS NULL';
         if ($onlyVisible) {
-            $sql .= ' AND isVisible = 1';
+            $sql .= ' AND `isVisible` = 1';
         }
-        $sql .= ' ORDER BY position';
+        $sql .= ' ORDER BY `position`';
         if ($all === false) {
             $sql .= ' LIMIT 1';
             $fetchType = DBHelper::FETCH_TYPE_ROW;
