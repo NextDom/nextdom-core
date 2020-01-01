@@ -30,8 +30,8 @@ nextdom.history.get = function (queryParams) {
     }
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Cmd', 'getHistory');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Cmd', 'getHistory');
     ajaxParams.data['id'] = queryParams.cmd_id;
     ajaxParams.data['dateStart'] = queryParams.dateStart || '';
     ajaxParams.data['dateEnd'] = queryParams.dateEnd || '';
@@ -487,8 +487,8 @@ nextdom.history.changePoint = function (queryParams) {
     }
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Cmd', 'changeHistoryPoint');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Cmd', 'changeHistoryPoint');
     ajaxParams.data['cmd_id'] = queryParams.cmd_id;
     ajaxParams.data['datetime'] = queryParams.datetime;
     ajaxParams.data['value'] = queryParams.value;

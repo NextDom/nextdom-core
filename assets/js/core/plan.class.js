@@ -120,12 +120,12 @@ nextdom.plan.allHeader = function (queryParams) {
     }
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
     if (isset(nextdom.plan.cache.all)) {
       params.success(nextdom.plan.cache.all);
       return;
     }
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Plan', 'allHeader');
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Plan', 'allHeader');
     $.ajax(ajaxParams);
   }
 };

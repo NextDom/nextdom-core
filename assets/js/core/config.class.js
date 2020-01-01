@@ -32,8 +32,8 @@ nextdom.config.load = function (queryParams) {
   var paramsRequired = ['configuration'];
   var paramsSpecifics = {global: queryParams.global || true};
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Config', 'getKey');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Config', 'getKey');
     ajaxParams.data['key'] = ($.isArray(queryParams.configuration) || $.isPlainObject(queryParams.configuration)) ? json_encode(queryParams.configuration) : queryParams.configuration;
     ajaxParams.data['plugin'] = queryParams.plugin || 'core';
     ajaxParams.data['convertToHumanReadable'] = queryParams.convertToHumanReadable || false;

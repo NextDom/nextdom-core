@@ -10,7 +10,7 @@ nextdom.private = {
   /**
    * Paramètres par défaut de toutes les fonctions de l'API
    * Ces valeurs sont merges avec les paramètres appelés à chaque appel de fonction
-   * @example defaultqueryParams = {
+   * @example default_params = {
    *      async : true,         // Appel AJAX synchrone (deprecated) ou non
    *      type : 'POST',        // Transmission des données
    *      dataTye : 'json',     // Type de données échangées
@@ -21,7 +21,7 @@ nextdom.private = {
    *      complete : function () {}        // Callback quoi qu'il se passe
    * };
    */
-  defaultqueryParams: {
+  default_params: {
     async: true,
     type: 'POST',
     dataType: 'json',
@@ -72,7 +72,7 @@ nextdom.private.handleAjaxErrorAPI = function (_request, _status, _error) {
 /**
  * Retourne les paramètres AJAX de l'API en fonction des paramètres choisis par l'utilisateur
  */
-nextdom.private.getAjaxParams = function (queryParams, target, action) {
+nextdom.private.getParamsAJAX = function (queryParams, target, action) {
   // cas particulier du type dans les paramètres
   var typeInData = false;
 
@@ -272,7 +272,7 @@ nextdom.private.checkAndGetParams = function (queryParams, queryParamsSpecifics,
   nextdom.private.checkParamsRequired(queryParams, queryParamsRequired || []);
 
   // tout est ok, on merge avec les paramètres par défaut + les spécifiques à la fonction
-  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParamsSpecifics, queryParams || {});
+  var params = $.extend({}, nextdom.private.default_params, queryParamsSpecifics, queryParams || {});
 
   // on json_encode tous les objets contenus dans les params
   for (var attr in params) {
@@ -280,7 +280,7 @@ nextdom.private.checkAndGetParams = function (queryParams, queryParamsSpecifics,
     params[attr] = (typeof param == 'object') ? json_encode(param) : param;
   }
 
-  var ajaxParams = nextdom.private.getAjaxParams(params);
+  var ajaxParams = nextdom.private.getParamsAJAX(params);
 
   return {
     params: params,
@@ -317,7 +317,7 @@ nextdom.private.isValidQuery = function (queryParams, requiredParams, specificPa
   try {
     nextdom.private.checkParamsRequired(queryParams, requiredParams);
   } catch (e) {
-    (queryParams.error || specificParams.error || nextdom.private.defaultqueryParams.error)(e);
+    (queryParams.error || specificParams.error || nextdom.private.default_params.error)(e);
     return false;
   }
   return true;

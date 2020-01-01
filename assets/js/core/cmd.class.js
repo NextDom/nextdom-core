@@ -100,8 +100,8 @@ nextdom.cmd.execute = function (queryParams) {
     }
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Cmd', 'execCmd');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Cmd', 'execCmd');
     var cache = 1;
     if (queryParams.cache !== undefined) {
       cache = queryParams.cache;
@@ -220,8 +220,8 @@ nextdom.cmd.test = function (queryParams) {
     }
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Cmd', 'getCmd');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Cmd', 'getCmd');
     ajaxParams.data['id'] = queryParams.id;
     $.ajax(ajaxParams);
   }
@@ -281,8 +281,8 @@ nextdom.cmd.save = function (queryParams) {
     }
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Cmd', 'save');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Cmd', 'save');
     ajaxParams.data['cmd'] = json_encode(queryParams.cmd);
     $.ajax(ajaxParams);
   }
@@ -297,8 +297,8 @@ nextdom.cmd.multiSave = function (queryParams) {
     }
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Cmd', 'multiSave');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Cmd', 'multiSave');
     ajaxParams.data['cmd'] = json_encode(queryParams.cmds);
     $.ajax(ajaxParams);
   }
@@ -313,12 +313,12 @@ nextdom.cmd.byId = function (queryParams) {
     }
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
     if (isset(nextdom.cmd.cache.byId[params.id]) && init(params.noCache, false) == false) {
       params.success(nextdom.cmd.cache.byId[params.id]);
       return;
     }
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Cmd', 'byId');
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Cmd', 'byId');
     ajaxParams.data['id'] = queryParams.id;
     $.ajax(ajaxParams);
   }
@@ -333,12 +333,12 @@ nextdom.cmd.byHumanName = function (queryParams) {
     }
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
     if (isset(nextdom.cmd.cache.byHumanName[params.humanName]) && init(params.noCache, false) == false) {
       params.success(nextdom.cmd.cache.byHumanName[params.humanName]);
       return;
     }
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Cmd', 'byHumanName');
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Cmd', 'byHumanName');
     ajaxParams.data['humanName'] = queryParams.humanName;
     $.ajax(ajaxParams);
   }
@@ -356,7 +356,7 @@ nextdom.cmd.changeType = function (_cmd, _subType) {
     default: 0,
     async: false,
     error: function (error) {
-      queryParams.error(error);
+      console.log(error);
     },
     success: function (subType) {
       for (var i in subType) {

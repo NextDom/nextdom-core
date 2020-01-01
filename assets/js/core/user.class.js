@@ -53,8 +53,8 @@ nextdom.user.isConnect = function (queryParams) {
       }
     };
     if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-      var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-      var ajaxParams = nextdom.private.getAjaxParams(params, 'User', 'isConnect');
+      var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+      var ajaxParams = nextdom.private.getParamsAJAX(params, 'User', 'isConnect');
       ajaxParams.global = false;
       $.ajax(ajaxParams);
     }

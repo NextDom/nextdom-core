@@ -21,8 +21,8 @@ nextdom.dataStore.save = function (queryParams) {
   var paramsRequired = ['id', 'value', 'type', 'key', 'link_id'];
   var paramsSpecifics = {};
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'DataStore', 'save');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'DataStore', 'save');
     ajaxParams.async = queryParams.async || true;
     ajaxParams.data['id'] = queryParams.id;
     ajaxParams.data['value'] = queryParams.value;

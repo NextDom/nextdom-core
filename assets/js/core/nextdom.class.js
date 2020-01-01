@@ -86,8 +86,8 @@ nextdom.changes = function () {
     }
   };
   if (nextdom.private.isValidQuery({}, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics);
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Event', 'changes');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics);
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Event', 'changes');
     ajaxParams.data['datetime'] = nextdom.datetime;
     $.ajax(ajaxParams);
   }
@@ -196,7 +196,7 @@ nextdom.getConfiguration = function (queryParams) {
     }
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
     if (nextdom.cache.getConfiguration != null) {
       var keys = queryParams.key.split(':');
       var result = nextdom.cache.getConfiguration;
@@ -208,7 +208,7 @@ nextdom.getConfiguration = function (queryParams) {
       queryParams.success(result);
       return;
     }
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Nextdom', 'getConfiguration');
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'NextDom', 'getConfiguration');
     ajaxParams.data['key'] = '';
     $.ajax(ajaxParams);
   }

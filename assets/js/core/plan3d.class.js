@@ -35,8 +35,8 @@ nextdom.plan3d.save = function (queryParams) {
     global: queryParams.global || true,
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Plan3d', 'save');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Plan3d', 'save');
     ajaxParams.data['plan3ds'] = json_encode(queryParams.plan3ds);
     $.ajax(ajaxParams);
   }
@@ -88,12 +88,12 @@ nextdom.plan3d.allHeader = function (queryParams) {
     }
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
     if (isset(nextdom.plan3d.cache.all)) {
       params.success(nextdom.plan3d.cache.all);
       return;
     }
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Plan3d', 'allHeader');
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Plan3d', 'allHeader');
     $.ajax(ajaxParams);
   }
 };

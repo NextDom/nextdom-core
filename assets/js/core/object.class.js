@@ -36,12 +36,12 @@ nextdom.object.getEqLogic = function (queryParams) {
     }
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
     if (isset(nextdom.object.cache.getEqLogic[params.id])) {
       params.success(nextdom.object.cache.getEqLogic[params.id]);
       return;
     }
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'EqLogic', 'listByObject');
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'EqLogic', 'listByObject');
     ajaxParams.data['object_id'] = queryParams.id;
     ajaxParams.data['onlyEnable'] = queryParams.onlyEnable || 0;
     ajaxParams.data['orderByName'] = queryParams.orderByName || 0;
@@ -60,12 +60,12 @@ nextdom.object.all = function (queryParams) {
     }
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
     if (isset(nextdom.object.cache.all) && !isset(queryParams.onlyHasEqLogic)) {
       params.success(nextdom.object.cache.all);
       return;
     }
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Object', 'all');
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Object', 'all');
     ajaxParams.data['onlyHasEqLogic'] = queryParams.onlyHasEqLogic || 0;
     ajaxParams.data['searchOnchild'] = queryParams.searchOnchild || 0;
     $.ajax(ajaxParams);
@@ -103,8 +103,8 @@ nextdom.object.remove = function (queryParams) {
     }
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Object', 'remove');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Object', 'remove');
     ajaxParams.data['id'] = queryParams.id;
     $.ajax(ajaxParams);
   }
@@ -127,8 +127,8 @@ nextdom.object.save = function (queryParams) {
     }
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Object', 'save');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Object', 'save');
     ajaxParams.data['object'] = json_encode(queryParams.object);
     $.ajax(ajaxParams);
   }
@@ -143,12 +143,12 @@ nextdom.object.byId = function (queryParams) {
     }
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
     if (isset(nextdom.object.cache.byId[params.id]) && init(queryParams.cache, true) == true) {
       params.success(nextdom.object.cache.byId[params.id]);
       return;
     }
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Object', 'byId');
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Object', 'byId');
     ajaxParams.data['id'] = queryParams.id;
     $.ajax(ajaxParams);
   }
@@ -210,8 +210,8 @@ nextdom.object.summaryUpdate = function (queryParams) {
     }
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Object', 'getSummaryHtml');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Object', 'getSummaryHtml');
     ajaxParams.data['ids'] = queryParams.ids;
     $.ajax(ajaxParams);
   }

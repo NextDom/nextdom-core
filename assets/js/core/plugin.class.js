@@ -32,8 +32,8 @@ nextdom.plugin.all = function (queryParams) {
       queryParams.success(nextdom.plugin.cache.all);
       return;
     }
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Plugin', 'all');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Plugin', 'all');
     $.ajax(ajaxParams);
   }
 };
@@ -52,8 +52,8 @@ nextdom.plugin.getDependancyInfo = function (queryParams) {
     global: false,
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Plugin', 'getDependancyInfo');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Plugin', 'getDependancyInfo');
     ajaxParams.data['id'] = queryParams.id;
     $.ajax(ajaxParams);
   }

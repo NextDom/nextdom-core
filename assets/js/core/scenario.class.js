@@ -35,12 +35,12 @@ nextdom.scenario.all = function (queryParams) {
     }
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
     if (isset(nextdom.scenario.cache.all) && nextdom.scenario.cache.all != null && init(queryParams.nocache, false) == false) {
       params.success(nextdom.scenario.cache.all);
       return;
     }
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Scenario', 'all');
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Scenario', 'all');
     $.ajax(ajaxParams);
   }
 };
@@ -64,8 +64,8 @@ nextdom.scenario.toHtml = function (queryParams) {
     }
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Scenario', 'toHtml');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Scenario', 'toHtml');
     ajaxParams.data['id'] = ($.isArray(queryParams.id)) ? json_encode(queryParams.id) : queryParams.id;
     ajaxParams.data['version'] = queryParams.version;
     $.ajax(ajaxParams);
@@ -122,8 +122,8 @@ nextdom.scenario.refreshValue = function (queryParams) {
     }
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Scenario', 'toHtml');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Scenario', 'toHtml');
     ajaxParams.data['id'] = queryParams.scenario_id;
     ajaxParams.data['version'] = queryParams.version || version;
     $.ajax(ajaxParams);
