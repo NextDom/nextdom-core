@@ -713,7 +713,7 @@ function passwordScore(password, progressbar=null, spanLevel=null) {
  * persist and return values of translations from localstorage
  * @returns {Promise<any>}
  */
-function persistInLocalStorage(key,json) {
+function storeAndGetTranslations(key,json) {
     let translations = null;
     if (localStorage.getItem(key) === null ){
         localStorage.setItem(key,JSON.stringify(json.messages));

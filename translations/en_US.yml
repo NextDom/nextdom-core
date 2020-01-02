@@ -134,6 +134,7 @@ common:
   round: "Round"
   run: "Run"
   save: "Save"
+  save-success: "Saved successfully"
   scenario: "Scenario"
   seconds: "second(s)"
   send: "Send"

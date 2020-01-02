@@ -38,15 +38,6 @@
 
 // INIT, EVENT, FIRST Loading
 /**
- * return jsonObject with all translations
- * @returns {Promise<any>}
- */
-const getTranslations = async () => {
-    const response = await fetch('/core/ajax/translations.ajax.php');
-    return await response.json();
-};
-
-/**
  * Event for Ajax start request
  */
 $(document).ajaxStart(function () {
@@ -77,8 +68,7 @@ $(function () {
     };
 
     // JS translations
-    let jsonTranslates = await getTranslations();
-    var translates = persistInLocalStorage('NextDomJSTranslations',jsonTranslates)
+    await initTranslations();
 
     // Clock actualisation timer
     displayClock();
@@ -456,6 +446,9 @@ function loadPage(pageUrl,noPushHistory){
         var n = pageUrl.lastIndexOf("#");
         var url = pageUrl.substring(0,n)+"&ajax=1"+pageUrl.substring(n)
     }
+
+    // JS translations
+    await initTranslations();
 
     // Page content loading
     $('#div_pageContainer').empty().load(url, function(){
