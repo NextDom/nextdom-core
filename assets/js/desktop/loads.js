@@ -37,6 +37,14 @@
 /* JS file for page and modals loading management */
 
 // INIT, EVENT, FIRST Loading
+/**
+ * return jsonObject with all translations
+ * @returns {Promise<any>}
+ */
+const getTranslations = async () => {
+    const response = await fetch('/core/ajax/translations.ajax.php');
+    return await response.json();
+};
 
 /**
  * Event for Ajax start request
@@ -67,6 +75,10 @@ $(function () {
     // ?
     $.fn.modal.Constructor.prototype.enforceFocus = function () {
     };
+
+    // JS translations
+    let jsonTranslates = await getTranslations();
+    var translates = persistInLocalStorage('NextDomJSTranslations',jsonTranslates)
 
     // Clock actualisation timer
     displayClock();

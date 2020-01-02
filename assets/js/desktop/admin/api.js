@@ -89,7 +89,7 @@ function initEvents() {
                     success: function (data) {
                         $('#API').setValues(data, '.configKey');
                         modifyWithoutSave = false;
-                        notify("Info", '{{Sauvegarde réussie}}', 'success');
+                        notify("Info", translates.common.save-success, 'success');
                     }
                 });
             }

@@ -134,6 +134,7 @@ common:
   round: "Arrondi"
   run: "Exécuter"
   save: "Sauvegarder"
+  save-success: "Sauvegarde réussie"
   scenario: "Scénario"
   seconds: "seconde(s)"
   send: "Envoyer"
