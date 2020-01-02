@@ -4,4 +4,9 @@ use NextDom\Ajax\TranslationsAjax;
 
 require_once (__DIR__ . '/../../src/core.php');
 
-  echo (new TranslationsAjax())->sendTranslations();
+try {
+    echo (new TranslationsAjax())->allTranslations();
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
+

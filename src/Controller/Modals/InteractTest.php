@@ -34,6 +34,7 @@ class InteractTest extends BaseAbstractModal
      * Render interact tester modal
      *
      * @return string
+     * @throws \Exception
      */
     public static function get(): string
     {
