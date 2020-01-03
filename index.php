@@ -32,21 +32,24 @@ $goToMobile = false;
 // Test if user want to force desktop on mobile
 if (isset($_GET['force_desktop'])) {
     $_SESSION['desktop_view'] = true;
-    $goToMobile               = false;
-} elseif (is_dir(NEXTDOM_ROOT . '/mobile')) {
-    // Test choice in session
-    if (isset($_SESSION['desktop_view'])) {
-        if ($_SESSION['desktop_view'] === false) {
-            $goToMobile = true;
+    $goToMobile = false;
+} else {
+    if (is_dir(NEXTDOM_ROOT . '/mobile')) {
+        // Test choice in session
+        if (isset($_SESSION['desktop_view'])) {
+            if ($_SESSION['desktop_view'] === false) {
+                $goToMobile = true;
+            }
+        } else {
+            if (ClientHelper::isMobile()) {
+                $goToMobile = true;
+                $_SESSION['desktop_view'] = false;
+            } else {
+                $_SESSION['desktop_view'] = true;
+            }
         }
-    } elseif (ClientHelper::isMobile()) {
-        $goToMobile               = true;
-        $_SESSION['desktop_view'] = false;
-    } else {
-        $_SESSION['desktop_view'] = true;
     }
 }
-
 if ($goToMobile) {
     Utils::redirect('/mobile/index.html');
     die();
