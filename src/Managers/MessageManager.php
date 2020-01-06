@@ -69,7 +69,7 @@ class MessageManager extends BaseManager
             ->setPlugin(Utils::secureXSS($_type))
             ->setMessage(Utils::secureXSS($_message))
             ->setAction(Utils::secureXSS($_action))
-            ->setDate(date(DateFormat::FULL_DAY))
+            ->setDate(date(DateFormat::FULL))
             ->setLogicalId(Utils::secureXSS($_logicalId));
         $message->save($_writeMessage);
     }
