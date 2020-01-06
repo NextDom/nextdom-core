@@ -65,7 +65,7 @@ function initEvents() {
 
 /**
  * Show timeline data
- * 
+ *
  * @param  timelineData Complete timeline data
  */
 function fillTimelineContainer(timelineData)
@@ -153,7 +153,7 @@ function displayTimeline(){
                 fillTimelineContainer(result);
             }
             else {
-                $('#timeline').text('{{Aucun évènement dans la timeline}}');
+                $('#timeline').append('<div><span>{{Vous n\'avez aucun évènement dans la timeline ...}}</span></div>');
             }
         }
     });

@@ -21,8 +21,6 @@
 
 /* AdminLTE-Surcharge */
 #timeline {
-    list-style: none;
-    
     li > .fa, .timeline > li > .glyphicon, .timeline > li > .ion {
         top: 4px;
     }
@@ -31,10 +29,9 @@
         border-top-left-radius: 4px;
         border-top-right-radius: 4px;
     }
-    
+
     .time-label span,
     .timeline-scenario {
         color: $white !important;
     }
 }
-
