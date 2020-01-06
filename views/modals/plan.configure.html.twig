@@ -444,7 +444,7 @@
   });
   $('#bt_uploadImagePlan').fileupload({
     replaceFileInput: false,
-    url: 'core/ajax/plan.ajax.php?action=uploadImagePlan&id=' + id + '&nextdom_token=' + NEXTDOM_AJAX_TOKEN,
+    url: 'src/ajax.php?target=Plan&action=uploadImagePlan&id=' + id + '&nextdom_token=' + NEXTDOM_AJAX_TOKEN,
     dataType: 'json',
     done: function (e, data) {
       if (data.result.state != 'ok') {
@@ -488,8 +488,9 @@
   if (isset(id) && id != '') {
     $.ajax({
       type: "POST",
-      url: "core/ajax/plan.ajax.php",
+      url: "src/ajax.php",
       data: {
+        target: 'Plan',
         action: "get",
         id: id
       },

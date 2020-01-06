@@ -18,6 +18,9 @@
 namespace NextDom\Ajax;
 
 use NextDom\Enums\AjaxParams;
+use NextDom\Enums\Common;
+use NextDom\Enums\NextDomFolder;
+use NextDom\Enums\NextDomObj;
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
@@ -26,6 +29,7 @@ use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PlanManager;
+use NextDom\Model\DataClass\UploadedImage;
 use NextDom\Model\Entity\Plan;
 use NextDom\Model\Entity\PlanHeader;
 
@@ -191,75 +195,111 @@ class PlanAjax extends BaseAjax
         }
         $filename = 'planHeader' . $planHeader->getId() . '-' . $planHeader->getImage('sha512') . '.' . $planHeader->getImage('type');
         $planHeader->setImage('sha512', '');
+        $planHeader->setImage('data', '');
         $planHeader->save();
         @unlink(NEXTDOM_DATA . '/data/custom/plans/' . $filename);
         $this->ajax->success();
     }
 
-    public function uploadImage()
+    /**
+     * Get data of uploaded file
+     *
+     * @return UploadedImage
+     * @throws CoreException
+     */
+    private function getUploadedImageData()
     {
-        AuthentificationHelper::isConnectedAsAdminOrFail();
-        $planHeader = PlanHeaderManager::byId(Utils::init(AjaxParams::ID));
-        if (!is_dir(NEXTDOM_DATA . '/data/custom/plans/')) {
-            mkdir(NEXTDOM_DATA . '/data/custom/plans/');
-        }
-        if (!is_object($planHeader)) {
-            throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));
-        }
+        $uploadedImageData = new UploadedImage();
         if (!isset($_FILES['file'])) {
             throw new CoreException(__('Aucun fichier trouvé. Vérifiez le paramètre PHP (post size limit)'));
         }
         $extension = strtolower(strrchr($_FILES['file']['name'], '.'));
+        $uploadedImageData->setType(substr($extension, 1));
         if (!in_array($extension, ['.jpg', '.jpeg', '.png'])) {
             throw new CoreException('Extension du fichier non valide (autorisé .jpg .jpeg .png) : ' . $extension);
         }
         if (filesize($_FILES['file']['tmp_name']) > 5000000) {
             throw new CoreException(__('Le fichier est trop gros (maximum 5Mo)'));
         }
-        $files = FileSystemHelper::ls(NEXTDOM_DATA . '/data/custom/plans/', 'plan' . $planHeader->getId() . '*');
-        if (count($files) > 0) {
-            foreach ($files as $file) {
-                unlink(NEXTDOM_DATA . '/data/custom/plans/' . $file);
-            }
-        }
-        $imgSize = getimagesize($_FILES['file']['tmp_name']);
+        $uploadedImageData->setSize(getimagesize($_FILES['file']['tmp_name']));
         $fileContent = file_get_contents($_FILES['file']['tmp_name']);
-        $sha512File = sha512($fileContent);
-        $planHeader->setImage('type', str_replace('.', '', $extension));
-        $planHeader->setImage('size', $imgSize);
-        $planHeader->setImage('sha512', $sha512File);
-        $planHeader->setImage('data', base64_encode($fileContent));
-        $filename = 'planHeader' . $planHeader->getId() . '-' . $sha512File . '.' . $planHeader->getImage('type');
-        $filepath = NEXTDOM_DATA . '/data/custom/plans/' . $filename;
-        copy($_FILES['file']['tmp_name'], $filepath);
-        if (!file_exists($filepath)) {
+        $uploadedImageData->setHash(Utils::sha512($fileContent));
+        $uploadedImageData->setPath($_FILES['file']['tmp_name']);
+        $uploadedImageData->setData(base64_encode($fileContent));
+        return $uploadedImageData;
+    }
+
+    /**
+     * Check file path and move file
+     *
+     * @param $uploadFile
+     * @param $targetPath
+     *
+     * @throws CoreException
+     */
+    private function checkAndMoveUploadImage($uploadFile, $targetPath)
+    {
+        // Check $targetPath don't go up
+        if (preg_match('/.*(\.\.\/)|(\/\.\.).*/', $targetPath) !== 0) {
+            throw new CoreException(__('Le répertoire de destination n\'est pas valide'));
+        }
+        if (!move_uploaded_file($uploadFile, $targetPath)) {
             throw new CoreException(__('Impossible de sauvegarder l\'image'));
         }
-        $planHeader->setConfiguration('desktopSizeX', $imgSize[0]);
-        $planHeader->setConfiguration('desktopSizeY', $imgSize[1]);
+    }
+
+    /**
+     * Upload background picture on plan
+     *
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
+    public function uploadImage()
+    {
+        AuthentificationHelper::isConnectedAsAdminOrFail();
+        $planHeader = PlanHeaderManager::byId(Utils::init(AjaxParams::ID));
+        if (!is_dir(NextDomFolder::PLAN_IMAGE)) {
+            mkdir(NextDomFolder::PLAN_IMAGE, 0755, true);
+        }
+        if (!is_object($planHeader)) {
+            throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));
+        }
+        $uploadedImageData = $this->getUploadedImageData();
+        PlanHeaderManager::cleanPlanImageFolder($planHeader->getId());
+        $planHeader->setImage('type', $uploadedImageData->getType());
+        $planHeader->setImage('size', $uploadedImageData->getSize());
+        $planHeader->setImage('sha512', $uploadedImageData->getHash());
+        $planHeader->setImage('data', $uploadedImageData->getData());
+        $destFilename = NextDomObj::PLAN_HEADER . $planHeader->getId() . '-' . $uploadedImageData->getHash() . '.' . $uploadedImageData->getType();
+        $this->checkAndMoveUploadImage($uploadedImageData->getPath(), NextDomFolder::PLAN_IMAGE . $destFilename);
+        $planHeader->setConfiguration('desktopSizeX', $uploadedImageData->getSizeX());
+        $planHeader->setConfiguration('desktopSizeY', $uploadedImageData->getSizeY());
         $planHeader->save();
         $this->ajax->success();
     }
 
+    /**
+     * Upload image for static picture on plan
+     *
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function uploadImagePlan()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
         $plan = PlanManager::byId(Utils::init(AjaxParams::ID));
-        if (false == is_object($plan)) {
+        if (!is_object($plan)) {
             throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));
         }
-        $uploadDir = sprintf("%s/data/custom/plans/plan_%s", NEXTDOM_DATA, $plan->getId());
-        shell_exec('rm -rf ' . $uploadDir);
-        mkdir($uploadDir, 0775, true);
-        $filename = Utils::readUploadedFile($_FILES, "file", $uploadDir, 5, ['.png', '.jpeg', '.jpg'], function ($file) {
-            $content = file_get_contents($file['tmp_name']);
-            return sha512(base64_encode($content));
-        });
-        $filepath = sprintf("%s/%s", $uploadDir, $filename);
-        $imgSize = getimagesize($filepath);
-        $plan->setDisplay('width', $imgSize[0]);
-        $plan->setDisplay('height', $imgSize[1]);
-        $plan->setDisplay('path', 'data/custom/plans/plan_' . $plan->getId() . '/' . $filename);
+        $uploadedImageData = $this->getUploadedImageData();
+        $destPath = NextDomFolder::PLAN_IMAGE . 'plan_' . $plan->getId();
+        shell_exec('rm -rf ' . $destPath);
+        mkdir($destPath, 0775, true);
+        $destFilename = sha512($uploadedImageData->getData()) . '.' . $uploadedImageData->getType();
+        $this->checkAndMoveUploadImage($uploadedImageData->getPath(), $destPath . '/' . $destFilename);
+        $plan->setDisplay('width', $uploadedImageData->getSizeX());
+        $plan->setDisplay('height', $uploadedImageData->getSizeY());
+        $plan->setDisplay('path', 'data/custom/plans/plan_' . $plan->getId() . '/' . $destFilename);
         $plan->save();
         $this->ajax->success();
     }

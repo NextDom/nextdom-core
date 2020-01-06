@@ -33,7 +33,10 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Enums\NextDomFolder;
+use NextDom\Enums\NextDomObj;
 use NextDom\Helpers\DBHelper;
+use NextDom\Helpers\FileSystemHelper;
 use NextDom\Managers\Parents\BaseManager;
 use NextDom\Managers\Parents\CommonManager;
 use NextDom\Model\Entity\PlanHeader;
@@ -76,4 +79,17 @@ class PlanHeaderManager extends BaseManager
         }
         return $return;
     }
+
+    /**
+     * Clean plan images
+     *
+     * @param int $planHeaderId
+     */
+    public static function cleanPlanImageFolder(int $planHeaderId) {
+        $filesToClean = FileSystemHelper::ls(NextDomFolder::PLAN_IMAGE, NextDomObj::PLAN_HEADER . $planHeaderId . '*');
+        foreach ($filesToClean as $fileToClean) {
+            unlink(NextDomFolder::PLAN_IMAGE . $fileToClean);
+        }
+    }
+
 }
