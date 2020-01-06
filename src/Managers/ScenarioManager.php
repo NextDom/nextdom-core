@@ -721,7 +721,7 @@ class ScenarioManager extends BaseManager
         $linkedObject = $scenario->getObject();
         $return['object'] = is_object($linkedObject) ? $linkedObject->getId() : 'aucun';
         $return['html'] = '<div class="timeline-item cmd" data-id="' . $event['id'] . '">'
-            . '<span class="time"><i class="fa fa-clock-o"></i>' . substr($event['datetime'], -9) . '</span>'
+            . '<span class="time"><i class="fa fa-clock-o spacing-right"></i>' . trim(substr($event['datetime'], -9)) . '</span>'
             . '<h3 class="timeline-header">' . $event['name'] . '</h3>'
             . '<div class="timeline-body">'
             . 'Déclenché par ' . $event['trigger']
