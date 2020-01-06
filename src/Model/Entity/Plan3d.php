@@ -20,7 +20,7 @@ namespace NextDom\Model\Entity;
 use NextDom\Enums\CmdSubType;
 use NextDom\Enums\CmdType;
 use NextDom\Enums\Common;
-use NextDom\Helpers\DBHelper;
+use NextDom\Enums\NextDomObj;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
@@ -30,6 +30,8 @@ use NextDom\Managers\Plan3dHeaderManager;
 use NextDom\Managers\Plan3dManager;
 use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
+use NextDom\Model\Entity\Parents\BasePlan;
+use NextDom\Model\Entity\Parents\NameEntity;
 
 /**
  * Plan3d
@@ -37,58 +39,11 @@ use NextDom\Managers\ScenarioManager;
  * @ORM\Table(name="plan3d", indexes={@ORM\Index(name="name", columns={"name"}), @ORM\Index(name="link_type_link_id", columns={"link_type", "link_id"}), @ORM\Index(name="fk_plan3d_plan3dHeader1_idx", columns={"plan3dHeader_id"})})
  * @ORM\Entity
  */
-class Plan3d implements EntityInterface
+class Plan3d extends BasePlan
 {
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255, nullable=true)
-     */
-    protected $name;
+    const TABLE_NAME = NextDomObj::PLAN3D;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="link_type", type="string", length=127, nullable=true)
-     */
-    protected $link_type;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="link_id", type="string", length=127, nullable=true)
-     */
-    protected $link_id;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="position", type="text", length=65535, nullable=true)
-     */
-    protected $position;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="display", type="text", length=65535, nullable=true)
-     */
-    protected $display;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="configuration", type="text", length=65535, nullable=true)
-     */
-    protected $configuration;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
+    use NameEntity;
 
     /**
      * @var \NextDom\Model\Entity\Plan3dHeader
@@ -100,53 +55,11 @@ class Plan3d implements EntityInterface
      */
     protected $plan3dHeader_id;
 
-    protected $css;
-
-    protected $_changed = false;
-
     public function preInsert()
     {
         if (in_array($this->getLink_type(), ['eqLogic', 'cmd', 'scenario'])) {
             Plan3dManager::removeByLinkTypeLinkId3dHeaderId($this->getLink_type(), $this->getLink_id(), $this->getPlan3dHeader_id());
         }
-    }
-
-    /**
-     * @return string
-     */
-    public function getLink_type()
-    {
-        return $this->link_type;
-    }
-
-    /**
-     * @param $_link_type
-     * @return $this
-     */
-    public function setLink_type($_link_type)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->link_type, $_link_type);
-        $this->link_type = $_link_type;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLink_id()
-    {
-        return $this->link_id;
-    }
-
-    /**
-     * @param $_link_id
-     * @return $this
-     */
-    public function setLink_id($_link_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->link_id, $_link_id);
-        $this->link_id = $_link_id;
-        return $this;
     }
 
     /**
@@ -163,7 +76,7 @@ class Plan3d implements EntityInterface
      */
     public function setPlan3dHeader_id($_plan3dHeader_id)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->plan3dHeader_id, $_plan3dHeader_id);
+        $this->updateChangeState($this->plan3dHeader_id, $_plan3dHeader_id);
         $this->plan3dHeader_id = $_plan3dHeader_id;
         return $this;
     }
@@ -196,39 +109,6 @@ class Plan3d implements EntityInterface
         foreach ($default as $key => $value) {
             $this->setConfiguration($key, $this->getConfiguration($key, $value));
         }
-    }
-
-    /**
-     * @param string $_key
-     * @param string $_default
-     * @return array|bool|mixed|null|string
-     */
-    public function getConfiguration($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->configuration, $_key, $_default);
-    }
-
-    /**
-     * @param $_key
-     * @param $_value
-     * @return $this
-     */
-    public function setConfiguration($_key, $_value)
-    {
-        $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
-        $this->configuration = $configuration;
-        return $this;
-    }
-
-    public function save()
-    {
-        DBHelper::save($this);
-    }
-
-    public function remove()
-    {
-        DBHelper::remove($this);
     }
 
     /**
@@ -301,7 +181,7 @@ class Plan3d implements EntityInterface
                 $cmd = CmdManager::byId(str_replace('#', '', $this->getConfiguration('3d::widget::door::window')));
                 if (is_object($cmd) && $cmd->isType(CmdType::INFO)) {
                     $cmd_value = $cmd->execCmd();
-                    if ($this->isSubType(CmdSubType::BINARY) && $cmd->getDisplay('invertBinary') == 1) {
+                    if ($cmd->isSubType(CmdSubType::BINARY) && $cmd->getDisplay('invertBinary') == 1) {
                         $cmd_value = ($cmd_value == 1) ? 0 : 1;
                     }
                     $return['state'] = $cmd_value;
@@ -310,7 +190,7 @@ class Plan3d implements EntityInterface
                     $cmd = CmdManager::byId(str_replace('#', '', $this->getConfiguration('3d::widget::door::shutter')));
                     if (is_object($cmd) && $cmd->isType(CmdType::INFO)) {
                         $cmd_value = $cmd->execCmd();
-                        if ($this->isSubType(CmdSubType::BINARY) && $cmd->getDisplay('invertBinary') == 1) {
+                        if ($cmd->isSubType(CmdSubType::BINARY) && $cmd->getDisplay('invertBinary') == 1) {
                             $cmd_value = ($cmd_value == 1) ? 0 : 1;
                         }
                         if ($cmd_value) {
@@ -369,138 +249,5 @@ class Plan3d implements EntityInterface
     public function getPlan3dHeader()
     {
         return Plan3dHeaderManager::byId($this->getPlan3dHeader_id());
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $_id
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param $_name
-     * @return $this
-     */
-    public function setName($_name)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
-        $this->name = $_name;
-        return $this;
-    }
-
-    /**
-     * @param string $_key
-     * @param string $_default
-     * @return array|bool|mixed|null|string
-     */
-    public function getPosition($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->position, $_key, $_default);
-    }
-
-    /**
-     * @param $_key
-     * @param $_value
-     * @return $this
-     */
-    public function setPosition($_key, $_value)
-    {
-        $position = Utils::setJsonAttr($this->position, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->position, $position);
-        $this->position = $position;
-        return $this;
-    }
-
-    /**
-     * @param string $_key
-     * @param string $_default
-     * @return array|bool|mixed|null|string
-     */
-    public function getDisplay($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->display, $_key, $_default);
-    }
-
-    /**
-     * @param $_key
-     * @param $_value
-     * @return $this
-     */
-    public function setDisplay($_key, $_value)
-    {
-        $display = Utils::setJsonAttr($this->display, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->display, $display);
-        $this->display = $display;
-        return $this;
-    }
-
-    /**
-     * @param string $_key
-     * @param string $_default
-     * @return array|bool|mixed|null|string
-     */
-    public function getCss($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->css, $_key, $_default);
-    }
-
-    /**
-     * @param $_key
-     * @param $_value
-     * @return $this
-     */
-    public function setCss($_key, $_value)
-    {
-        $css = Utils::setJsonAttr($this->css, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->css, $css);
-        $this->css = $css;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTableName()
-    {
-        return 'plan3d';
     }
 }

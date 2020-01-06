@@ -14,7 +14,6 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 nextdom.repo = function () {
 };
 
@@ -24,8 +23,8 @@ nextdom.repo.install = function (queryParams) {
     global: queryParams.global || true,
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Repo', 'install');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Repo', 'install');
     ajaxParams.data['repo'] = queryParams.repo;
     ajaxParams.data['id'] = queryParams.id;
     ajaxParams.data['version'] = queryParams.version || 'stable';
@@ -34,57 +33,17 @@ nextdom.repo.install = function (queryParams) {
 };
 
 nextdom.repo.remove = function (queryParams) {
-  var paramsRequired = ['id', 'repo'];
-  var paramsSpecifics = {
-    global: queryParams.global || true,
-  };
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Repo', 'remove');
-    ajaxParams.data['repo'] = queryParams.repo;
-    ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('Repo', 'remove', queryParams, ['id', 'repo'], false, queryParams.global || true);
 };
 
 nextdom.repo.setRating = function (queryParams) {
-  var paramsRequired = ['id', 'rating', 'repo'];
-  var paramsSpecifics = {
-    global: queryParams.global || true,
-  };
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Repo', 'setRating');
-    ajaxParams.data['repo'] = queryParams.repo;
-    ajaxParams.data['id'] = queryParams.id;
-    ajaxParams.data['rating'] = queryParams.rating;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('Repo', 'setRating', queryParams, ['id', 'rating', 'repo'], false, queryParams.global || true);
 };
 
 nextdom.repo.test = function (queryParams) {
-  var paramsRequired = ['repo'];
-  var paramsSpecifics = {
-    global: queryParams.global || true,
-  };
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Repo', 'test');
-    ajaxParams.data['repo'] = queryParams.repo;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('Repo', 'test', queryParams, ['repo'], false, queryParams.global || true);
 };
 
-
 nextdom.repo.backupList = function (queryParams) {
-  var paramsRequired = ['repo'];
-  var paramsSpecifics = {
-    global: queryParams.global || true,
-  };
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Repo', 'backupList');
-    ajaxParams.data['repo'] = queryParams.repo;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('Repo', 'backupList', queryParams, ['repo'], false, queryParams.global || true);
 };

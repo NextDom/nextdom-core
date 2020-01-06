@@ -36,6 +36,8 @@ namespace NextDom\Managers;
 
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
+use NextDom\Managers\Parents\BaseManager;
+use NextDom\Managers\Parents\CommonManager;
 use NextDom\Model\Entity\InteractDef;
 
 require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
@@ -44,27 +46,11 @@ require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
  * Class InteractDefManager
  * @package NextDom\Managers
  */
-class InteractDefManager
+class InteractDefManager extends BaseManager
 {
+    use CommonManager;
     const CLASS_NAME = InteractDef::class;
     const DB_CLASS_NAME = '`interactDef`';
-
-    /**
-     * @param $_id
-     * @return array|mixed|null
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
-    public static function byId($_id)
-    {
-        $values = [
-            'id' => $_id,
-        ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE id = :id';
-        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
-    }
 
     /**
      * @param null $_group
@@ -117,13 +103,10 @@ class InteractDefManager
      */
     public static function searchByQuery($_query)
     {
-        $values = [
+        $clauses = [
             'query' => '%' . $_query . '%',
         ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE query LIKE :query';
-        return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
+        return static::searchMultipleByClauses($clauses);
     }
 
     public static function regenerateInteract()
@@ -142,21 +125,16 @@ class InteractDefManager
     {
         $values = [];
         if ($_group === '') {
-            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                    FROM ' . self::DB_CLASS_NAME . '
-                    ORDER BY name, query';
+            $sql = static::getBaseSQL();
         } else if ($_group === null) {
-            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                    FROM ' . self::DB_CLASS_NAME . '
-                    WHERE (`group` IS NULL OR `group` = "")
-                    ORDER BY name, query';
+            $sql = static::getBaseSQL() . '
+                    WHERE (`group` IS NULL OR `group` = "")';
         } else {
             $values['group'] = $_group;
-            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                    FROM ' . self::DB_CLASS_NAME . '
-                    WHERE `group` = :group
-                    ORDER BY name, query';
+            $sql = static::getBaseSQL() . '
+                    WHERE `group` = :group';
         }
+        $sql .= ' ORDER BY `name`, `query`';
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
@@ -288,22 +266,20 @@ class InteractDefManager
             $values = [
                 'search' => '%' . $searchPattern . '%',
             ];
-            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                    FROM ' . self::DB_CLASS_NAME . '
-                    WHERE actions LIKE :search
-                        OR reply LIKE :search';
+            $sql = static::getBaseSQL() . '
+                    WHERE `actions` LIKE :search
+                       OR `reply` LIKE :search';
         } else {
             $values = [
                 'search' => '%' . $searchPattern[0] . '%',
             ];
-            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                    FROM ' . self::DB_CLASS_NAME . '
-                    WHERE actions LIKE :search
-                        OR reply LIKE :search';
+            $sql = static::getBaseSQL() . '
+                    WHERE `actions` LIKE :search
+                       OR `reply` LIKE :search';
             for ($i = 1; $i < count($searchPattern); $i++) {
                 $values['search' . $i] = '%' . $searchPattern[$i] . '%';
-                $sql .= ' OR actions LIKE :search' . $i . '
-                          OR reply LIKE :search' . $i;
+                $sql .= ' OR `actions` LIKE :search' . $i . '
+                          OR `reply` LIKE :search' . $i;
             }
         }
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);

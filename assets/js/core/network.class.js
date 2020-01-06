@@ -14,18 +14,13 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 nextdom.network = function () {
 };
 
 nextdom.network.restartDns = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'Network', 'restartDns');
-  $.ajax(ajaxParams);
+  nextdom.private.ajax('Network', 'restartDns', queryParams);
 };
 
 nextdom.network.stopDns = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'Network', 'stopDns');
-  $.ajax(ajaxParams);
+  nextdom.private.ajax('Network', 'stopDns', queryParams);
 };

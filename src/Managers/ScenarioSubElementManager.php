@@ -33,35 +33,20 @@
 
 namespace NextDom\Managers;
 
-use NextDom\Helpers\DBHelper;
+use NextDom\Managers\Parents\BaseManager;
+use NextDom\Managers\Parents\CommonManager;
 use NextDom\Model\Entity\ScenarioSubElement;
 
 /**
  * Class ScenarioSubElementManager
  * @package NextDom\Managers
  */
-class ScenarioSubElementManager
+class ScenarioSubElementManager extends BaseManager
 {
-    const DB_CLASS_NAME = 'scenarioSubElement';
-    const CLASS_NAME = ScenarioSubElement::class;
+    use CommonManager;
 
-    /**
-     * Obtain a sub-element of a scenario from its identifier
-     *
-     * @param $id
-     *
-     * @return array|mixed|null
-     *
-     * @throws \Exception
-     */
-    public static function byId($id)
-    {
-        $values = ['id' => $id];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE id = :id';
-        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
-    }
+    const DB_CLASS_NAME = '`scenarioSubElement`';
+    const CLASS_NAME = ScenarioSubElement::class;
 
     /**
      * Get the sub-elements of a scenario
@@ -75,19 +60,15 @@ class ScenarioSubElementManager
      */
     public static function byScenarioElementId($scenarioElementId, $filterByType = '')
     {
-        $values = [
+        $clauses = [
             'scenarioElement_id' => $scenarioElementId,
         ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE scenarioElement_id=:scenarioElement_id ';
-        if ($filterByType != '') {
-            $values['type'] = $filterByType;
-            $sql .= ' AND type=:type ';
-            return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
-        } else {
-            $sql .= ' ORDER BY `order`';
-            return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
+        if ($filterByType !== '') {
+            $clauses['type'] = $filterByType;
+            return static::getOneByClauses($clauses);
+        }
+        else {
+            return static::getMultipleByClauses($clauses);
         }
     }
 

@@ -72,7 +72,7 @@ class AjaxPluginTest extends AjaxBase
     public function testAllAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'all']);
-        $this->assertStringContainsString('"result":[]', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 

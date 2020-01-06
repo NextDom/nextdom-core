@@ -17,11 +17,13 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\NextDomObj;
 use NextDom\Helpers\DBHelper;
-use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\EventManager;
 use NextDom\Managers\ScenarioExpressionManager;
+use NextDom\Model\Entity\Parents\BaseEntity;
+use NextDom\Model\Entity\Parents\LogicalIdEntity;
 
 /**
  * Message
@@ -29,10 +31,13 @@ use NextDom\Managers\ScenarioExpressionManager;
  * @ORM\Table(name="message", indexes={@ORM\Index(name="plugin_logicalID", columns={"plugin", "logicalId"})})
  * @ORM\Entity
  */
-class Message implements EntityInterface
+class Message extends BaseEntity
 {
     const CLASS_NAME = Message::class;
     const DB_CLASS_NAME = '`message`';
+    const TABLE_NAME = NextDomObj::MESSAGE;
+
+    use LogicalIdEntity;
 
     /**
      * @var \DateTime
@@ -40,13 +45,6 @@ class Message implements EntityInterface
      * @ORM\Column(name="date", type="datetime", nullable=false)
      */
     protected $date;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="logicalId", type="string", length=127, nullable=true)
-     */
-    protected $logicalId;
 
     /**
      * @var string
@@ -70,17 +68,6 @@ class Message implements EntityInterface
     protected $action;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    protected $_changed = false;
-
-    /**
      * @param bool $_writeMessage
      * @return bool|null
      * @throws \NextDom\Exceptions\CoreException
@@ -99,8 +86,8 @@ class Message implements EntityInterface
             ];
             $sql = 'SELECT count(*)
                     FROM ' . self::DB_CLASS_NAME . '
-                    WHERE plugin = :plugin
-                    AND message = :message';
+                    WHERE `plugin` = :plugin
+                    AND `message` = :message';
             $result = DBHelper::getOne($sql, $values);
         } else {
             $values = [
@@ -108,9 +95,9 @@ class Message implements EntityInterface
                 'plugin' => $this->getPlugin(),
             ];
             $sql = 'SELECT count(*)
-            FROM message
-            WHERE plugin=:plugin
-            AND logicalId=:logicalId';
+            FROM ' . self::DB_CLASS_NAME . '
+            WHERE `plugin` = :plugin
+            AND `logicalId` = :logicalId';
             $result = DBHelper::getOne($sql, $values);
         }
         if ($result['count(*)'] != 0) {
@@ -157,30 +144,11 @@ class Message implements EntityInterface
      */
     public function setMessage($_message)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->message, $_message);
+        $this->updateChangeState($this->message, $_message);
         $this->message = $_message;
         return $this;
     }
-
-    /**
-     * @return string
-     */
-    public function getLogicalId()
-    {
-        return $this->logicalId;
-    }
-
-    /**
-     * @param $_logicalId
-     * @return $this
-     */
-    public function setLogicalId($_logicalId)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->logicalId, $_logicalId);
-        $this->logicalId = $_logicalId;
-        return $this;
-    }
-
+    
     /**
      * @return string
      */
@@ -195,34 +163,15 @@ class Message implements EntityInterface
      */
     public function setPlugin($_plugin)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->plugin, $_plugin);
+        $this->updateChangeState($this->plugin, $_plugin);
         $this->plugin = $_plugin;
         return $this;
     }
 
     public function remove()
     {
-        DBHelper::remove($this);
         EventManager::add('message::refreshMessageNumber');
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $_id
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
+        return parent::remove();
     }
 
     /**
@@ -239,7 +188,7 @@ class Message implements EntityInterface
      */
     public function setDate($_date)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->date, $_date);
+        $this->updateChangeState($this->date, $_date);
         $this->date = $_date;
         return $this;
     }
@@ -258,34 +207,8 @@ class Message implements EntityInterface
      */
     public function setAction($_action)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->action, $_action);
+        $this->updateChangeState($this->action, $_action);
         $this->action = $_action;
         return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTableName()
-    {
-        return 'message';
     }
 }

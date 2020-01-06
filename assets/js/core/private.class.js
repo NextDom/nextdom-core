@@ -6,12 +6,11 @@ var init = function (_param, _default) {
   return (typeof _param == 'number') ? _param : (typeof _param != 'boolean' || _param) && (_param !== false && _param || _default || '');
 };
 
-
 nextdom.private = {
   /**
    * Paramètres par défaut de toutes les fonctions de l'API
    * Ces valeurs sont merges avec les paramètres appelés à chaque appel de fonction
-   * @example defaultqueryParams = {
+   * @example default_params = {
    *      async : true,         // Appel AJAX synchrone (deprecated) ou non
    *      type : 'POST',        // Transmission des données
    *      dataTye : 'json',     // Type de données échangées
@@ -22,7 +21,7 @@ nextdom.private = {
    *      complete : function () {}        // Callback quoi qu'il se passe
    * };
    */
-  defaultqueryParams: {
+  default_params: {
     async: true,
     type: 'POST',
     dataType: 'json',
@@ -70,11 +69,10 @@ nextdom.private.handleAjaxErrorAPI = function (_request, _status, _error) {
   return {type: 'AJAX', code: code, message: 'Unknown error'};
 };
 
-
 /**
  * Retourne les paramètres AJAX de l'API en fonction des paramètres choisis par l'utilisateur
  */
-nextdom.private.getAjaxParams = function (queryParams, target, action) {
+nextdom.private.getParamsAJAX = function (queryParams, target, action) {
   // cas particulier du type dans les paramètres
   var typeInData = false;
 
@@ -183,7 +181,6 @@ nextdom.private.checkParamValue = function (queryParams) {
   }
 };
 
-
 /** Fonction qui permet de vérifier que tous les paramètres obligatoires ont bien été renseignés dans l'objet params
  * Note : chaque fonction doit appeler cette fonction au préalable après avoir créé un string[] composé des paramètres requis.
  * @return {Object} ret Contient les résultats du check
@@ -264,7 +261,6 @@ nextdom.private.checkParamsRequired = function (queryParams, queryParamsRequired
       message: tostring
     };
   }
-  return;
 };
 
 /**
@@ -276,7 +272,7 @@ nextdom.private.checkAndGetParams = function (queryParams, queryParamsSpecifics,
   nextdom.private.checkParamsRequired(queryParams, queryParamsRequired || []);
 
   // tout est ok, on merge avec les paramètres par défaut + les spécifiques à la fonction
-  var params = $.extend({}, nextdom.private.defaultqueryParams, queryParamsSpecifics, queryParams || {});
+  var params = $.extend({}, nextdom.private.default_params, queryParamsSpecifics, queryParams || {});
 
   // on json_encode tous les objets contenus dans les params
   for (var attr in params) {
@@ -284,7 +280,7 @@ nextdom.private.checkAndGetParams = function (queryParams, queryParamsSpecifics,
     params[attr] = (typeof param == 'object') ? json_encode(param) : param;
   }
 
-  var ajaxParams = nextdom.private.getAjaxParams(params);
+  var ajaxParams = nextdom.private.getParamsAJAX(params);
 
   return {
     params: params,
@@ -305,12 +301,70 @@ nextdom.private.checkParamsValue = function (queryParams) {
   }
 };
 
+/**
+ * Check required params and ajax query validity
+ *
+ * @param queryParams
+ * @param requiredParams
+ * @param specificParams
+ *
+ * @returns {boolean}
+ */
 nextdom.private.isValidQuery = function (queryParams, requiredParams, specificParams) {
+  if (specificParams === undefined) {
+    specificParams = {};
+  }
   try {
     nextdom.private.checkParamsRequired(queryParams, requiredParams);
   } catch (e) {
-    (queryParams.error || specificParams.error || nextdom.private.defaultqueryParams.error)(e);
+    (queryParams.error || specificParams.error || nextdom.private.default_params.error)(e);
     return false;
   }
+  return true;
+};
+
+/**
+ * NextDom ajax query
+ *
+ * @param target Ajax target
+ * @param action Action of the target
+ * @param queryParams Parameters of the query
+ * @param requiredParams Required params to check
+ * @param encodeRequired Encode required params at json format
+ * @param global Start query as global query
+ *
+ * @returns {boolean} True on success
+ */
+nextdom.private.ajax = function(target, action, queryParams, requiredParams, encodeRequired, global) {
+  var specificParams = {};
+  // query params optional
+  if (queryParams === undefined) {
+    queryParams = {};
+  }
+  queryParams.data = queryParams.data || {};
+  if (encodeRequired === undefined) {
+    encodeRequired = false;
+  }
+  if (global !== undefined) {
+    specificParams = { global: global};
+  }
+  if (requiredParams !== undefined &&
+      requiredParams !== false &&
+      !nextdom.private.isValidQuery(queryParams, requiredParams)) {
+      return false;
+  }
+  var mergedParams = $.extend({}, nextdom.private.default_params, specificParams, queryParams || {});
+  var ajaxParams = nextdom.private.getParamsAJAX(mergedParams, target, action);
+  // Add required params to the ajax data
+  for (var requiredParamsIndex in requiredParams) {
+    var requiredParamsKey = requiredParams[requiredParamsIndex];
+    if (encodeRequired) {
+      ajaxParams.data[requiredParamsKey] = json_encode(queryParams[requiredParamsKey]);
+    }
+    else {
+      ajaxParams.data[requiredParamsKey] = queryParams[requiredParamsKey];
+    }
+  }
+  $.ajax(ajaxParams);
   return true;
 };

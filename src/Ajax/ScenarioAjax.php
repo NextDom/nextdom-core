@@ -294,8 +294,8 @@ class ScenarioAjax extends BaseAjax
     public function toHtml()
     {
         $target = Utils::init(AjaxParams::ID);
-        if ($target == Common::ALL || is_json($target)) {
-            if (is_json($target)) {
+        if ($target == Common::ALL || Utils::isJson($target)) {
+            if (Utils::isJson($target)) {
                 $scenario_ajax = json_decode($target, true);
                 $scenarios = [];
                 foreach ($scenario_ajax as $id) {
@@ -399,7 +399,7 @@ class ScenarioAjax extends BaseAjax
     public function save()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        if (!is_json(Utils::init(AjaxParams::SCENARIO))) {
+        if (!Utils::isJson(Utils::init(AjaxParams::SCENARIO))) {
             throw new CoreException(__('Champs json invalide'));
         }
         // Check if scenario has time dependency
@@ -457,7 +457,7 @@ class ScenarioAjax extends BaseAjax
     public function actionToHtml()
     {
         $result = null;
-        if (Utils::init(AjaxParams::PARAMS) != '' && is_json(Utils::init(AjaxParams::PARAMS))) {
+        if (Utils::init(AjaxParams::PARAMS) != '' && Utils::isJson(Utils::init(AjaxParams::PARAMS))) {
             $result = [];
             $params = json_decode(Utils::init(AjaxParams::PARAMS), true);
             foreach ($params as $param) {

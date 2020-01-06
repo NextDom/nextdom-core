@@ -40,17 +40,19 @@ use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
+use NextDom\Managers\Parents\BaseManager;
+use NextDom\Managers\Parents\CommonManager;
 use NextDom\Model\Entity\Scenario;
-
-// @TODO: DBHelper::buildField(ScenarioEntity::className) à factoriser
 
 /**
  * Class ScenarioManager
  * @package NextDom\Managers
  */
-class ScenarioManager
+class ScenarioManager extends BaseManager
 {
-    const DB_CLASS_NAME = 'scenario';
+    use CommonManager;
+
+    const DB_CLASS_NAME = '`scenario`';
     const CLASS_NAME = Scenario::class;
     const INITIAL_TRANSLATION_FILE = '';
 
@@ -65,9 +67,7 @@ class ScenarioManager
      */
     public static function byName(string $name)
     {
-        $values = ['name' => $name];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . ' FROM ' . self::DB_CLASS_NAME . ' WHERE name = :name';
-        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
+        return static::getOneByClauses(['name' => $name]);
     }
 
     /**
@@ -83,27 +83,11 @@ class ScenarioManager
      */
     public static function byString(string $scenarioName, $commandNotFoundString)
     {
-        $scenario = self::byId(str_replace('#scenario', '', self::fromHumanReadable($scenarioName)));
+        $scenario = static::byId(str_replace('#scenario', '', self::fromHumanReadable($scenarioName)));
         if (!is_object($scenario)) {
             throw new CoreException($commandNotFoundString . $scenarioName . ' => ' . self::fromHumanReadable($scenarioName));
         }
         return $scenario;
-    }
-
-    /**
-     * Get scenario by his id
-     *
-     * @param int $id Identifiant du scénario
-     *
-     * @return Scenario Objet demandé
-     *
-     * @throws \Exception
-     */
-    public static function byId($id)
-    {
-        $values = ['id' => $id];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . ' FROM ' . self::DB_CLASS_NAME . ' WHERE id = :id';
-        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -179,11 +163,10 @@ class ScenarioManager
             'scenario_name' => html_entity_decode($scenarioName),
         ];
 
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME, 's') . '
-                FROM ' . self::DB_CLASS_NAME . ' s ';
+        $sql = static::getPrefixedBaseSQL('s');
 
         if ($objectName == __('Aucun')) {
-            $sql .= 'WHERE s.name=:scenario_name ';
+            $sql .= 'WHERE s.name = :scenario_name ';
             if ($groupName == __('Aucun')) {
                 $sql .= 'AND (`group` IS NULL OR `group` = ""  OR `group` = "Aucun" OR `group` = "None")
                          AND s.object_id IS NULL';
@@ -238,13 +221,9 @@ class ScenarioManager
     public static function byElement(string $elementId)
     {
         // TODO: Vérifier, bizarre les guillemets dans le like
-        $values = [
-            'element_id' => '%"' . $elementId . '"%',
-        ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE `scenarioElement` LIKE :element_id';
-        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
+        return static::searchOneByClauses([
+            'scenarioElement' => '%"' . $elementId . '"%',
+        ]);
     }
 
     /**
@@ -261,19 +240,18 @@ class ScenarioManager
     public static function byObjectId($objectId, $onlyEnabled = true, $onlyVisible = false)
     {
         $values = [];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME;
+        $sql = static::getBaseSQL();
         if ($objectId === null) {
             $sql .= ' WHERE object_id IS NULL';
         } else {
             $values['object_id'] = $objectId;
-            $sql .= ' WHERE object_id = :object_id';
+            $sql .= ' WHERE `object_id` = :object_id';
         }
         if ($onlyEnabled) {
-            $sql .= ' AND isActive = 1';
+            $sql .= ' AND `isActive` = 1';
         }
         if ($onlyVisible) {
-            $sql .= ' AND isVisible = 1';
+            $sql .= ' AND `isVisible` = 1';
         }
         $sql .= ' ORDER BY `order`';
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
@@ -343,11 +321,10 @@ class ScenarioManager
     public static function byTrigger($cmdId, $onlyEnabled = true)
     {
         $values = ['cmd_id' => '%#' . $cmdId . '#%'];
-        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE mode != "schedule" AND `trigger` LIKE :cmd_id';
+        $sql = static::getBaseSQL() . '
+                WHERE `mode` != "schedule" AND `trigger` LIKE :cmd_id';
         if ($onlyEnabled) {
-            $sql .= ' AND isActive = 1';
+            $sql .= ' AND `isActive` = 1';
         }
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
@@ -360,10 +337,9 @@ class ScenarioManager
      */
     public static function schedule()
     {
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
+        $sql = static::getBaseSQL() . '
                 WHERE `mode` != "provoke"
-                AND isActive = 1';
+                AND `isActive` = 1';
         return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
     }
 
@@ -406,7 +382,7 @@ class ScenarioManager
         $result1 = null;
         $result2 = null;
 
-        $baseSql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME, 's') . 'FROM ' . self::DB_CLASS_NAME . ' s ';
+        $baseSql = static::getPrefixedBaseSQL('s');
         $sqlWhereTypeFilter = ' ';
         $sqlAndTypeFilter = ' ';
         if ($type !== null) {
@@ -516,7 +492,7 @@ class ScenarioManager
      */
     public static function consystencyCheck($needsReturn = false)
     {
-        $return = [];
+        $result = [];
         foreach (self::all() as $scenario) {
             if ($scenario->getIsActive() != 1 && !$needsReturn) {
                 continue;
@@ -530,9 +506,9 @@ class ScenarioManager
                 foreach ($matches[1] as $cmd_id) {
                     if (is_numeric($cmd_id)) {
                         if ($needsReturn) {
-                            $return[] = ['detail' => 'Scénario ' . $scenario->getHumanName(), 'help' => 'Déclencheur du scénario', 'who' => '#' . $cmd_id . '#'];
+                            $result[] = ['detail' => 'Scénario ' . $scenario->getHumanName(), 'help' => 'Déclencheur du scénario', 'who' => '#' . $cmd_id . '#'];
                         } else {
-                            LogHelper::addError('scenario', __('Un déclencheur du scénario : ') . $scenario->getHumanName() . __(' est introuvable'));
+                            LogHelper::addError(LogTarget::SCENARIO, __('Un déclencheur du scénario : ') . $scenario->getHumanName() . __(' est introuvable'));
                         }
                     }
                 }
@@ -545,15 +521,15 @@ class ScenarioManager
             foreach ($matches[1] as $cmd_id) {
                 if (is_numeric($cmd_id)) {
                     if ($needsReturn) {
-                        $return[] = ['detail' => 'Scénario ' . $scenario->getHumanName(), 'help' => 'Utilisé dans le scénario', 'who' => '#' . $cmd_id . '#'];
+                        $result[] = ['detail' => 'Scénario ' . $scenario->getHumanName(), 'help' => 'Utilisé dans le scénario', 'who' => '#' . $cmd_id . '#'];
                     } else {
-                        LogHelper::addError('scenario', __('Une commande du scénario : ') . $scenario->getHumanName() . __(' est introuvable'));
+                        LogHelper::addError(LogTarget::SCENARIO, __('Une commande du scénario : ') . $scenario->getHumanName() . __(' est introuvable'));
                     }
                 }
             }
         }
         if ($needsReturn) {
-            return $return;
+            return $result;
         }
         return null;
     }
@@ -753,5 +729,19 @@ class ScenarioManager
             . '</div>'
             . '</div>';
         return $return;
+    }
+
+    /**
+     * State of the scenario engine
+     *
+     * @return bool True if enabled
+     *
+     * @throws \Exception
+     */
+    public static function isEnabled() {
+        if (ConfigManager::byKey('enableScenario') != 1) {
+            return false;
+        }
+        return true;
     }
 }

@@ -97,9 +97,15 @@ function mySqlIsHere()
     return Utils::connectedToDatabase();
 }
 
+/**
+ * @param $e
+ * @return string
+ * @throws Exception
+ * @deprecated see displayException
+ */
 function displayExeption($e)
 {
-    trigger_error('La fonction displayExeption devient displayException', E_USER_DEPRECATED);
+    //@trigger_error('La fonction displayExeption devient displayException', E_USER_DEPRECATED);
     return Utils::displayException($e);
 }
 

@@ -18,14 +18,19 @@
 namespace NextDom\Model\Entity;
 
 use NextDom\Enums\DateFormat;
+use NextDom\Enums\NextDomObj;
 use NextDom\Exceptions\CoreException;
-use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\ReportHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\ViewZoneManager;
+use NextDom\Model\Entity\Parents\AccessCodeConfigurationEntity;
+use NextDom\Model\Entity\Parents\BaseEntity;
+use NextDom\Model\Entity\Parents\DisplayEntity;
+use NextDom\Model\Entity\Parents\NameEntity;
+use NextDom\Model\Entity\Parents\OrderEntity;
 
 /**
  * View
@@ -33,29 +38,11 @@ use NextDom\Managers\ViewZoneManager;
  * @ORM\Table(name="view", uniqueConstraints={@ORM\UniqueConstraint(name="name_UNIQUE", columns={"name"})})
  * @ORM\Entity
  */
-class View implements EntityInterface
+class View extends BaseEntity
 {
+    const TABLE_NAME = NextDomObj::VIEW;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=127, nullable=true)
-     */
-    protected $name;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="display", type="text", length=65535, nullable=true)
-     */
-    protected $display;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="order", type="integer", nullable=true)
-     */
-    protected $order;
+    use AccessCodeConfigurationEntity, DisplayEntity, NameEntity, OrderEntity;
 
     /**
      * @var string
@@ -63,24 +50,6 @@ class View implements EntityInterface
      * @ORM\Column(name="image", type="text", length=16777215, nullable=true)
      */
     protected $image;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="configuration", type="text", length=65535, nullable=true)
-     */
-    protected $configuration;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    protected $_changed = false;
 
     /**
      * @param string $_format
@@ -100,25 +69,6 @@ class View implements EntityInterface
     }
 
     /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $_id
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
-    }
-
-    /**
      *
      * @throws \Exception
      */
@@ -130,25 +80,6 @@ class View implements EntityInterface
     }
 
     /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param $_name
-     * @return $this
-     */
-    public function setName($_name)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
-        $this->name = $_name;
-        return $this;
-    }
-
-    /**
      * @return bool
      * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
@@ -156,7 +87,7 @@ class View implements EntityInterface
     public function remove()
     {
         NextDomHelper::addRemoveHistory(['id' => $this->getId(), 'name' => $this->getName(), 'date' => date(DateFormat::FULL), 'type' => 'view']);
-        return DBHelper::remove($this);
+        return parent::remove();
     }
 
     /**
@@ -227,19 +158,9 @@ class View implements EntityInterface
     public function setImage($_key, $_value)
     {
         $image = Utils::setJsonAttr($this->image, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->image, $image);
+        $this->updateChangeState($this->image, $image);
         $this->image = $image;
         return $this;
-    }
-
-    /**
-     * @return bool
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
-    public function save()
-    {
-        return DBHelper::save($this);
     }
 
     /**
@@ -260,10 +181,10 @@ class View implements EntityInterface
                 $viewData_info = Utils::o2a($viewData);
                 $viewData_info['name'] = '';
                 switch ($viewData->getType()) {
-                    case 'cmd':
+                    case NextDomObj::CMD:
                         $cmd = $viewData->getLinkObject();
                         if (is_object($cmd)) {
-                            $viewData_info['type'] = 'cmd';
+                            $viewData_info['type'] = NextDomObj::CMD;
                             if ($_html) {
                                 $viewData_info['html'] = $cmd->toHtml($_version);
                             } else {
@@ -272,10 +193,10 @@ class View implements EntityInterface
                             }
                         }
                         break;
-                    case 'eqLogic':
+                    case NextDomObj::EQLOGIC:
                         $eqLogic = $viewData->getLinkObject();
                         if (is_object($eqLogic)) {
-                            $viewData_info['type'] = 'eqLogic';
+                            $viewData_info['type'] = NextDomObj::EQLOGIC;
                             if ($_html) {
                                 $viewData_info['html'] = $eqLogic->toHtml($_version);
                             } else {
@@ -284,10 +205,10 @@ class View implements EntityInterface
                             }
                         }
                         break;
-                    case 'scenario':
+                    case NextDomObj::SCENARIO:
                         $scenario = $viewData->getLinkObject();
                         if (is_object($scenario)) {
-                            $viewData_info['type'] = 'scenario';
+                            $viewData_info['type'] = NextDomObj::SCENARIO;
                             if ($_html) {
                                 $viewData_info['html'] = $scenario->toHtml($_version);
                             } else {
@@ -390,93 +311,4 @@ class View implements EntityInterface
         }
         return $this->order;
     }
-
-    /**
-     * @param $_order
-     * @return $this
-     */
-    public function setOrder($_order)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->order, $_order);
-        $this->order = $_order;
-        return $this;
-    }
-
-    /**
-     * @param string $_key
-     * @param string $_default
-     * @return array|bool|mixed|null|string
-     */
-    public function getDisplay($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->display, $_key, $_default);
-    }
-
-    /**
-     * @param $_key
-     * @param $_value
-     * @return $this
-     */
-    public function setDisplay($_key, $_value)
-    {
-        $display = Utils::setJsonAttr($this->display, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->display, $display);
-        $this->display = $display;
-        return $this;
-    }
-
-    /**
-     * @param string $_key
-     * @param string $_default
-     * @return array|bool|mixed|null|string
-     */
-    public function getConfiguration($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->configuration, $_key, $_default);
-    }
-
-    /**
-     * @param $_key
-     * @param $_value
-     * @return $this
-     */
-    public function setConfiguration($_key, $_value)
-    {
-        if ($_key == 'accessCode' && $_value != '' && !Utils::isSha512($_value)) {
-            $_value = Utils::sha512($_value);
-        }
-        $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
-        $this->configuration = $configuration;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
-        return $this;
-    }
-
-    /**
-     * Get the name of the SQL table where data is stored.
-     *
-     * @return string
-     */
-    public function getTableName()
-    {
-        return 'view';
-    }
-
 }

@@ -14,7 +14,6 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 nextdom.log = function () {
 };
 
@@ -22,71 +21,28 @@ nextdom.log.timeout = null;
 nextdom.log.currentAutoupdate = [];
 
 nextdom.log.list = function (queryParams) {
-  var paramsRequired = [];
-  var paramsSpecifics = {
-    global: queryParams.global || true,
-  };
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Log', 'list');
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('Log', 'list', queryParams, false, false, queryParams.global || true);
 };
 
 nextdom.log.removeAll = function (queryParams) {
-  var paramsRequired = [];
-  var paramsSpecifics = {
-    global: queryParams.global || true,
-  };
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Log', 'removeAll');
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('Log', 'removeAll', queryParams, false, false, queryParams.global || true);
 };
 
 nextdom.log.get = function (queryParams) {
-  var paramsRequired = ['log'];
-  var paramsSpecifics = {
-    global: queryParams.global || true,
-  };
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Log', 'get');
-    ajaxParams.data['log'] = queryParams.log;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('Log', 'get', queryParams, ['log'], false, queryParams.global || true);
 };
 
 nextdom.log.remove = function (queryParams) {
-  var paramsRequired = ['log'];
-  var paramsSpecifics = {
-    global: queryParams.global || true,
-  };
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Log', 'remove');
-    ajaxParams.data['log'] = queryParams.log;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('Log', 'remove', queryParams, ['log'], false, queryParams.global || true);
 };
 
 nextdom.log.clear = function (queryParams) {
-  var paramsRequired = ['log'];
-  var paramsSpecifics = {
-    global: queryParams.global || true,
-  };
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Log', 'clear');
-    ajaxParams.data['log'] = queryParams.log;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('Log', 'clear', queryParams, ['log'], false, queryParams.global || true);
 };
 
 nextdom.log.autoupdate = function (queryParams) {
-  if (!isset(queryParams.callNumber)) {
-    queryParams.callNumber = 0;
+  if (!isset(queryParams.callCount)) {
+    queryParams.callCount = 0;
   }
   if (!isset(queryParams.log)) {
     console.log('[nextdom.log.autoupdate] No logfile');
@@ -99,13 +55,13 @@ nextdom.log.autoupdate = function (queryParams) {
   if (!queryParams['display'].is(':visible')) {
     return;
   }
-  if (queryParams.callNumber > 0 && isset(queryParams['control']) && queryParams['control'].attr('data-state') != 1) {
+  if (queryParams.callCount > 0 && isset(queryParams['control']) && queryParams['control'].attr('data-state') != 1) {
     return;
   }
-  if (queryParams.callNumber > 0 && isset(nextdom.log.currentAutoupdate[queryParams.display.uniqueId().attr('id')]) && nextdom.log.currentAutoupdate[queryParams.display.uniqueId().attr('id')].log != queryParams.log) {
+  if (queryParams.callCount > 0 && isset(nextdom.log.currentAutoupdate[queryParams.display.uniqueId().attr('id')]) && nextdom.log.currentAutoupdate[queryParams.display.uniqueId().attr('id')].log != queryParams.log) {
     return;
   }
-  if (queryParams.callNumber == 0) {
+  if (queryParams.callCount === 0) {
     if (isset(queryParams.default_search)) {
       queryParams['search'].value(queryParams.default_search);
     } else {
@@ -135,10 +91,10 @@ nextdom.log.autoupdate = function (queryParams) {
       }
     });
   }
-  queryParams.callNumber++;
+  queryParams.callCount++;
   nextdom.log.currentAutoupdate[queryParams.display.uniqueId().attr('id')] = {log: queryParams.log};
 
-  if (queryParams.callNumber > 0 && (queryParams.display.scrollTop() + queryParams.display.innerHeight() + 1) < queryParams.display[0].scrollHeight) {
+  if (queryParams.callCount > 0 && (queryParams.display.scrollTop() + queryParams.display.innerHeight() + 1) < queryParams.display[0].scrollHeight) {
     if (queryParams['control'].attr('data-state') == 1) {
       queryParams['control'].trigger('click');
     }
@@ -147,7 +103,7 @@ nextdom.log.autoupdate = function (queryParams) {
   nextdom.log.get({
     log: queryParams.log,
     slaveId: queryParams.slaveId,
-    global: (queryParams.callNumber == 1),
+    global: (queryParams.callCount === 1),
     success: function (result) {
       var log = '';
       var regex = /<br\s*[\/]?>/gi;

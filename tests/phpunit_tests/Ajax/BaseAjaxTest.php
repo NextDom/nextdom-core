@@ -16,7 +16,7 @@ abstract class BaseAjaxTest extends PHPUnit\Framework\TestCase
         }
     }
 
-    protected function connectAdAdmin() {
+    protected function connectAsAdmin() {
         AuthentificationHelper::login('admin', 'nextdom-test');
         AuthentificationHelper::init();
     }

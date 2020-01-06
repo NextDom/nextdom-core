@@ -33,7 +33,11 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Enums\CacheKey;
+use NextDom\Enums\Common;
+use NextDom\Enums\ConfigKey;
 use NextDom\Enums\DateFormat;
+use NextDom\Enums\EventType;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 
@@ -47,34 +51,11 @@ class EventManager
     /**
      * @var int Max events processed each time
      */
-    protected static $MAX_EVENTS_BY_PROCESS = 250;
+    private static $MAX_EVENTS_BY_PROCESS = 250;
     /**
      * @var mixed Event lock file
      */
-    protected static $eventLockFile = null;
-
-    /**
-     * Add event in cache
-     *
-     * @param string $eventName
-     * @param array $options
-     * @throws \Exception
-     */
-    public static function add($eventName, $options = [])
-    {
-        $waitIfLocked = true;
-        $fd = self::getEventLockFile();
-        if (flock($fd, LOCK_EX, $waitIfLocked)) {
-            $cache = CacheManager::byKey('event');
-            $value = json_decode($cache->getValue('[]'), true);
-            if (!is_array($value)) {
-                $value = [];
-            }
-            $value[] = ['datetime' => Utils::getMicrotime(), 'name' => $eventName, 'option' => $options];
-            CacheManager::set('event', json_encode(self::cleanEvent($value)));
-            flock($fd, LOCK_UN);
-        }
-    }
+    private static $eventLockFile = null;
 
     /**
      * Get event cache file object
@@ -82,53 +63,38 @@ class EventManager
      * @return bool|null|resource
      * @throws \Exception
      */
-    protected static function getEventLockFile()
+    public static function getFileDescriptorLock()
     {
         if (self::$eventLockFile === null) {
-            self::$eventLockFile = fopen(NextDomHelper::getTmpFolder() . '/event_cache_lock', 'w');
-            chmod(NextDomHelper::getTmpFolder() . '/event_cache_lock', 0666);
+            $lockFilePath = NextDomHelper::getTmpFolder() . '/event_cache_lock';
+            self::$eventLockFile = fopen($lockFilePath, 'w');
+            chmod($lockFilePath, 0777);
         }
         return self::$eventLockFile;
     }
 
     /**
-     * Get the last MAX_EVENTS_BY_PROCESS events
-     * @param $events
-     * @return array
+     * Add event in cache
+     *
+     * @param string $eventCode
+     * @param array $eventOptions
+     *
+     * @throws \Exception
      */
-    protected static function cleanEvent($events)
+    public static function add($eventCode, $eventOptions = [])
     {
-        $events = array_slice(array_values($events), -self::$MAX_EVENTS_BY_PROCESS, self::$MAX_EVENTS_BY_PROCESS);
-        $find = [];
-        $currentTime = strtotime(DateFormat::NOW) + 300;
-        foreach (array_values($events) as $key => $event) {
-            if ($event['datetime'] > $currentTime) {
-                unset($events[$key]);
-                continue;
+        $waitIfLocked = true;
+        $fd = self::getFileDescriptorLock();
+        if (flock($fd, LOCK_EX, $waitIfLocked)) {
+            $cache = CacheManager::byKey(CacheKey::EVENT);
+            $value = json_decode($cache->getValue('[]'), true);
+            if (!is_array($value)) {
+                $value = [];
             }
-            if ($event['name'] == 'eqLogic::update') {
-                $id = $event['name'] . '::' . $event['option']['eqLogic_id'];
-            } elseif ($event['name'] == 'cmd::update') {
-                $id = $event['name'] . '::' . $event['option']['cmd_id'];
-            } elseif ($event['name'] == 'scenario::update') {
-                $id = $event['name'] . '::' . $event['option']['scenario_id'];
-            } elseif ($event['name'] == 'jeeObject::summary::update') {
-                $id = $event['name'] . '::' . $event['option']['object_id'];
-                if (is_array($event['option']['keys']) && count($event['option']['keys']) > 0) {
-                    foreach ($event['option']['keys'] as $optionKey => $value) {
-                        $id .= $optionKey;
-                    }
-                }
-            } else {
-                continue;
-            }
-            if ($id != '' && isset($find[$id]) && $find[$id] > $event['datetime']) {
-                unset($events[$key]);
-                continue;
-            }
-            $find[$id] = $event['datetime'];
+            $value[] = [Common::DATETIME => Utils::getMicrotime(), Common::NAME => $eventCode, Common::OPTION => $eventOptions];
+            CacheManager::set(CacheKey::EVENT, json_encode(self::cleanEvent($value)));
+            flock($fd, LOCK_UN);
         }
-        return array_values($events);
     }
 
     /**
@@ -138,23 +104,69 @@ class EventManager
      * @param array $values
      * @throws \Exception
      */
-    public static function adds($eventName, $values = [])
+    public static function adds($eventCode, $eventOptions = [])
     {
         $waitIfLocked = true;
-        $fd = self::getEventLockFile();
+        $fd = self::getFileDescriptorLock();
         if (flock($fd, LOCK_EX, $waitIfLocked)) {
-            $cache = CacheManager::byKey('event');
+            $cache = CacheManager::byKey(CacheKey::EVENT);
             $value_src = json_decode($cache->getValue('[]'), true);
             if (!is_array($value_src)) {
-                $value_src = [];
+                $value_src = array();
             }
-            $value = [];
-            foreach ($values as $option) {
-                $value[] = ['datetime' => Utils::getMicrotime(), 'name' => $eventName, 'option' => $option];
+            $value = array();
+            foreach ($eventOptions as $option) {
+                $value[] = array(Common::DATETIME => Utils::getMicrotime(), Common::NAME => $eventCode, Common::OPTION => $option);
             }
-            CacheManager::set('event', json_encode(self::cleanEvent(array_merge($value_src, $value))));
+            CacheManager::set(CacheKey::EVENT, json_encode(self::cleanEvent(array_merge($value_src, $value))));
             flock($fd, LOCK_UN);
         }
+    }
+
+    /**
+     * Clean events
+     *
+     * @param $events
+     * @return array
+     */
+    public static function cleanEvent($_events)
+    {
+        $_events = array_slice(array_values($_events), -self::$MAX_EVENTS_BY_PROCESS, self::$MAX_EVENTS_BY_PROCESS);
+        $find = [];
+        $events = array_values($_events);
+        $now = strtotime(DateFormat::NOW) + 300;
+        foreach ($events as $key => $event) {
+            if ($event[Common::DATETIME] > $now) {
+                unset($events[$key]);
+                continue;
+            }
+            if ($event[Common::NAME] == EventType::EQLOGIC_UPDATE) {
+                $id = EventType::EQLOGIC_UPDATE . '::' . $event[Common::OPTION][Common::EQLOGIC_ID];
+            } elseif ($event[Common::NAME] == EventType::CMD_UPDATE) {
+                $id = EventType::CMD_UPDATE . '::' . $event[Common::OPTION][Common::CMD_ID];
+            } elseif ($event[Common::NAME] == EventType::SCENARIO_UPDATE) {
+                $id = EventType::SCENARIO_UPDATE . '::' . $event[Common::OPTION][Common::SCENARIO_ID];
+            } elseif ($event[Common::NAME] == EventType::SUMMARY_UPDATE) {
+                $id = EventType::SUMMARY_UPDATE . '::' . $event[Common::OPTION][Common::OBJECT_ID];
+                if (is_array($event[Common::OPTION][Common::KEYS]) && count($event[Common::OPTION][Common::KEYS]) > 0) {
+                    foreach ($event[Common::OPTION][Common::KEYS] as $key2 => $value) {
+                        $id .= $key2;
+                    }
+                }
+            } else {
+                continue;
+            }
+            if (isset($find[$id])) {
+                if ($find[$id][Common::DATETIME] > $event[Common::DATETIME]) {
+                    unset($events[$key]);
+                    continue;
+                } else {
+                    unset($events[$find[$id][Common::KEY]]);
+                }
+            }
+            $find[$id] = [Common::DATETIME => $event[Common::DATETIME], Common::KEY => $key];
+        }
+        return array_values($events);
     }
 
     /**
@@ -167,7 +179,7 @@ class EventManager
      */
     public static function orderEvent($eventA, $eventB)
     {
-        return ($eventA['datetime'] - $eventB['datetime']);
+        return ($eventA[Common::DATETIME] - $eventB[Common::DATETIME]);
     }
 
     /**
@@ -181,24 +193,25 @@ class EventManager
      */
     public static function changes($_datetime, $_longPolling = null, $_filter = null)
     {
-        $return = self::filterEvent(self::changesSince($_datetime), $_filter);
-        if ($_longPolling === null || count($return['result']) > 0) {
-            return $return;
+        $result = self::filterEvent(self::changesSince($_datetime), $_filter);
+        if ($_longPolling === null || count($result[Common::RESULT]) > 0) {
+            return $result;
         }
-        $waitTime = ConfigManager::byKey('event::waitPollingTime');
+        $waitTime = ConfigManager::byKey(ConfigKey::EVENT_WAIT_POLLING);
         $i = 0;
-        $max_cycle = $_longPolling / $waitTime;
-        while (count($return['result']) == 0 && $i < $max_cycle) {
+        $maxCycle = $_longPolling / $waitTime;
+        while (count($result[Common::RESULT]) == 0 && $i < $maxCycle) {
             if ($waitTime < 1) {
                 usleep(1000000 * $waitTime);
             } else {
                 sleep(round($waitTime));
             }
             sleep(1);
-            $return = self::filterEvent(self::changesSince($_datetime), $_filter);
+            $result = self::filterEvent(self::changesSince($_datetime), $_filter);
             $i++;
         }
-        return $return;
+        $result[Common::RESULT] = self::cleanEvent($result[Common::RESULT]);
+        return $result;
     }
 
     /**
@@ -209,24 +222,23 @@ class EventManager
      * @return array Filtered events
      * @throws \Exception
      */
-    protected static function filterEvent($_data = [], $_filter = null)
+    private static function filterEvent($_data = [], $_filter = null)
     {
         if ($_filter == null) {
             return $_data;
         }
         $filters = ($_filter !== null) ? CacheManager::byKey($_filter . '::event')->getValue([]) : [];
-        $return = ['datetime' => $_data['datetime'], 'result' => []];
-        foreach ($_data['result'] as $value) {
-            if ($_filter !== null && isset($_filter::$_listenEvents) && !in_array($value['name'], $_filter::$_listenEvents)) {
+        $result = [Common::DATETIME => $_data[Common::DATETIME], Common::RESULT => []];
+        foreach ($_data[Common::RESULT] as $value) {
+            if ($_filter !== null && isset($_filter::$_listenEvents) && !in_array($value[Common::NAME], $_filter::$_listenEvents)) {
                 continue;
             }
-            if (count($filters) != 0 && $value['name'] == 'cmd::update' && !in_array($value['option']['cmd_id'], $filters)) {
+            if (count($filters) != 0 && $value[Common::NAME] == EventType::CMD_UPDATE && !in_array($value[Common::OPTION][Common::CMD_ID], $filters)) {
                 continue;
             }
-            $return['result'][] = $value;
+            $result[Common::RESULT][] = $value;
         }
-
-        return $return;
+        return $result;
     }
 
     /**
@@ -237,25 +249,29 @@ class EventManager
      * @return array Associative array with all events
      * @throws \Exception
      */
-    protected static function changesSince($_datetime)
+    private static function changesSince($_datetime)
     {
-        $return = ['datetime' => $_datetime, 'result' => []];
-        $cache = CacheManager::byKey('event');
+        $now = Utils::getMicrotime();
+        if ($_datetime > $now) {
+            $_datetime = $now;
+        }
+        $result = [Common::DATETIME => $_datetime, Common::RESULT => []];
+        $cache = CacheManager::byKey(CacheKey::EVENT);
         $events = json_decode($cache->getValue('[]'), true);
         if (!is_array($events)) {
             $events = [];
         }
         $values = array_reverse($events);
         if (count($values) > 0) {
-            $return['datetime'] = $values[0]['datetime'];
+            $result[Common::DATETIME] = $values[0][Common::DATETIME];
             foreach ($values as $value) {
-                if ($value['datetime'] <= $_datetime) {
+                if ($value[Common::DATETIME] <= $_datetime) {
                     break;
                 }
-                $return['result'][] = $value;
+                $result[Common::RESULT][] = $value;
             }
         }
-        $return['result'] = array_reverse($return['result']);
-        return $return;
+        $result[Common::RESULT] = array_reverse($result[Common::RESULT]);
+        return $result;
     }
 }

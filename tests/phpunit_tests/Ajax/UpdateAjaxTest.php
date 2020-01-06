@@ -44,7 +44,7 @@ class UpdateAjaxTest extends BaseAjaxTest
 
     public function testAll()
     {
-        $this->connectAdAdmin();
+        $this->connectAsAdmin();
         ob_start();
         $this->configAjax->all();
         $result = ob_get_clean();

@@ -10,10 +10,10 @@ def read_test_suite(test_suite_list):
     :type test_suite_list:  list
     """
     for test_suite in test_suite_list:
-        print('> ' + test_suite.getAttribute('name'))
         test_case_list = test_suite.getElementsByTagName('testcase')
         for test_case in test_case_list:
-            print('>> ' + test_case.getAttribute('name') + ' in ' +
+            print('>> ' + test_case.getAttribute('class') + ' - ' +
+                  test_case.getAttribute('name') + ' in ' +
                   test_case.getAttribute('time') + 's')
 
 

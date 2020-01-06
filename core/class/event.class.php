@@ -58,6 +58,20 @@ class event {
     }
 
     /**
+     * @see EventManager::getFileDescriptorLock
+     */
+    public static function getFileDescriptorLock() {
+        EventManager::getFileDescriptorLock();
+    }
+
+    /**
+     * @see EventManager::cleanEvent
+     */
+    public static function cleanEvent($_events) {
+        EventManager::cleanEvent($_events);
+    }
+
+    /**
      * @see EventManager::orderEvent
      */
     public static function orderEvent($a, $b) {

@@ -14,45 +14,29 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 nextdom.message = function () {
 };
 
 nextdom.message.cache = Array();
 
 nextdom.message.all = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'Message', 'all');
+  var params = $.extend({}, nextdom.private.default_params, queryParams || {});
+  var ajaxParams = nextdom.private.getParamsAJAX(params, 'Message', 'all');
   ajaxParams.data['plugin'] = queryParams.plugin || '';
   $.ajax(ajaxParams);
 };
 
 nextdom.message.remove = function (queryParams) {
-  var paramsRequired = ['id'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Message', 'removeMessage');
-    ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('Message', 'removeMessage', queryParams, ['id']);
 };
 
 nextdom.message.clear = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'Message', 'clearMessage');
+  var params = $.extend({}, nextdom.private.default_params, queryParams || {});
+  var ajaxParams = nextdom.private.getParamsAJAX(params, 'Message', 'clearMessage');
   ajaxParams.data['plugin'] = queryParams.plugin || '';
   $.ajax(ajaxParams);
 };
 
 nextdom.message.number = function (queryParams) {
-  var paramsRequired = [];
-  var paramsSpecifics = {
-    global: false,
-  };
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Message', 'nbMessage');
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('Message', 'nbMessage', queryParams, false, false, false);
 };

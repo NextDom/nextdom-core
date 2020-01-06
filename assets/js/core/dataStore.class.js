@@ -14,17 +14,15 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 nextdom.dataStore = function () {
 };
-
 
 nextdom.dataStore.save = function (queryParams) {
   var paramsRequired = ['id', 'value', 'type', 'key', 'link_id'];
   var paramsSpecifics = {};
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'DataStore', 'save');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'DataStore', 'save');
     ajaxParams.async = queryParams.async || true;
     ajaxParams.data['id'] = queryParams.id;
     ajaxParams.data['value'] = queryParams.value;
@@ -36,15 +34,7 @@ nextdom.dataStore.save = function (queryParams) {
 };
 
 nextdom.dataStore.all = function (queryParams) {
-  var paramsRequired = ['type', 'usedBy'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'DataStore', 'all');
-    ajaxParams.data['type'] = queryParams.type;
-    ajaxParams.data['usedBy'] = queryParams.usedBy;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('DataStore', 'all', queryParams, ['type', 'usedBy']);
 };
 
 nextdom.dataStore.getSelectModal = function (_options, callback) {
@@ -84,14 +74,6 @@ nextdom.dataStore.getSelectModal = function (_options, callback) {
   dataStoreModal.dialog('open');
 };
 
-
 nextdom.dataStore.remove = function (queryParams) {
-  var paramsRequired = ['id'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'DataStore', 'remove');
-    ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('DataStore', 'remove', queryParams, ['id']);
 };

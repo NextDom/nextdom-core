@@ -42,6 +42,8 @@ use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
+use NextDom\Managers\Parents\BaseManager;
+use NextDom\Managers\Parents\CommonManager;
 use NextDom\Model\Entity\JeeObject;
 use NextDom\Model\Entity\Update;
 use NextDom\Model\Entity\User;
@@ -50,8 +52,9 @@ use NextDom\Model\Entity\User;
  * Class ObjectManager
  * @package NextDom\Managers
  */
-class JeeObjectManager
+class JeeObjectManager extends BaseManager
 {
+    use CommonManager;
     const DB_CLASS_NAME = '`object`';
     const CLASS_NAME = JeeObject::class;
 
@@ -64,13 +67,7 @@ class JeeObjectManager
      */
     public static function byName($name)
     {
-        $values = [
-            'name' => $name,
-        ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE name=:name';
-        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
+        return static::getOneByClauses(['name' => $name]);
     }
 
     /**
@@ -113,13 +110,12 @@ class JeeObjectManager
     public static function getRootObjects($all = false, $onlyVisible = false)
     {
         $fetchType = DBHelper::FETCH_TYPE_ALL;
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
+        $sql = static::getBaseSQL() . '
                 WHERE father_id IS NULL';
         if ($onlyVisible) {
-            $sql .= ' AND isVisible = 1';
+            $sql .= ' AND `isVisible` = 1';
         }
-        $sql .= ' ORDER BY position';
+        $sql .= ' ORDER BY `position`';
         if ($all === false) {
             $sql .= ' LIMIT 1';
             $fetchType = DBHelper::FETCH_TYPE_ROW;
@@ -136,26 +132,6 @@ class JeeObjectManager
             $defaultRoom = self::byId($rootRoomId);
         }
         return $defaultRoom;
-    }
-
-    /**
-     * Get an object by with his id.
-     *
-     * @param int $id Identifiant de l'objet
-     * @return JeeObject|null
-     *
-     * @throws \Exception
-     */
-    public static function byId($id)
-    {
-        if ($id == '' || $id == -1) {
-            return null;
-        }
-        $values = ['id' => $id];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE id = :id';
-        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 
     /**
@@ -213,13 +189,20 @@ class JeeObjectManager
      */
     public static function all($onlyVisible = false)
     {
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . ' ';
+        $clauses = [];
         if ($onlyVisible) {
-            $sql .= ' WHERE isVisible = 1';
+            $clauses['isVisible'] = 1;
         }
-        $sql .= ' ORDER BY position,name,father_id';
-        return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
+        return static::getMultipleByClauses($clauses, ['position', 'name', 'father_id']);
+    }
+
+    public static function getChildren($father_id, $onlyVisible)
+    {
+        $clauses = ['father_id' => $father_id];
+        if ($onlyVisible) {
+            $clauses['isVisible'] = 1;
+        }
+        return static::getMultipleByClauses($clauses, 'position');
     }
 
     /**
@@ -346,8 +329,7 @@ class JeeObjectManager
         $values = [
             'configuration' => '%' . $search . '%',
         ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
+        $sql = static::getBaseSQL() . '
                 WHERE `configuration` LIKE :configuration';
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }

@@ -292,9 +292,9 @@ class RepoMarket implements BaseRepo
         if ($market->sendRequest('market::byLogicalIdAndType', $options, $timeout, null, 1)) {
             if (is_array($_logicalId)) {
                 $result = [];
-                foreach ($market->getResult() as $logicalId => $result) {
-                    if (isset($result['id'])) {
-                        $result[$logicalId] = self::construct($result);
+                foreach ($market->getResult() as $logicalId => $marketResult) {
+                    if (isset($marketResult['id'])) {
+                        $result[$logicalId] = self::construct($marketResult);
                     }
                 }
                 return $result;

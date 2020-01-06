@@ -54,9 +54,9 @@ class CmdAjax extends BaseAjax
     public function toHtml()
     {
         // Render list of id
-        if (Utils::init('ids') != '') {
+        if (Utils::init(AjaxParams::IDS) != '') {
             $result = [];
-            foreach (json_decode(Utils::init('ids'), true) as $id => $value) {
+            foreach (json_decode(Utils::init(AjaxParams::IDS), true) as $id => $value) {
                 $cmd = CmdManager::byId($id);
                 if (!is_object($cmd)) {
                     continue;
@@ -117,9 +117,9 @@ class CmdAjax extends BaseAjax
      */
     public function getByObjectNameEqNameCmdName()
     {
-        $objectName = Utils::init('object_name');
-        $eqLogicName = Utils::init('eqLogic_name');
-        $cmdName = Utils::init('cmd_name');
+        $objectName = Utils::init(AjaxParams::OBJECT_NAME);
+        $eqLogicName = Utils::init(AjaxParams::EQLOGIC_NAME);
+        $cmdName = Utils::init(AjaxParams::CMD_NAME);
         $cmd = CmdManager::byObjectNameEqLogicNameCmdName($objectName, $eqLogicName, $cmdName);
         if (!is_object($cmd)) {
             throw new CoreException(__('Cmd inconnu : ') . $objectName . '/' . $eqLogicName . '/' . $cmdName);
@@ -135,8 +135,8 @@ class CmdAjax extends BaseAjax
      */
     public function getByObjectNameCmdName()
     {
-        $objectName = Utils::init('object_name');
-        $cmdName = Utils::init('cmd_name');
+        $objectName = Utils::init(AjaxParams::OBJECT_NAME);
+        $cmdName = Utils::init(AjaxParams::CMD_NAME);
         $cmd = CmdManager::byObjectNameCmdName($objectName, $cmdName);
         if (!is_object($cmd)) {
             throw new CoreException(__('Cmd inconnu : ') . $objectName . '/' . $cmdName, 9999);
@@ -192,7 +192,7 @@ class CmdAjax extends BaseAjax
      */
     public function byHumanName()
     {
-        $humanName = Utils::init('humanName');
+        $humanName = Utils::init(AjaxParams::HUMAN_NAME);
         $cmd_id = CmdManager::humanReadableToCmd($humanName);
         $cmd = CmdManager::byId(str_replace('#', '', $cmd_id));
         if (!is_object($cmd)) {
@@ -373,14 +373,14 @@ class CmdAjax extends BaseAjax
         global $NEXTDOM_INTERNAL_CONFIG;
         $result = [];
         $data = [];
-        $userDateStart = Utils::init('dateStart');
-        $userDateEnd = Utils::init('dateEnd');
+        $userDateStart = Utils::init(AjaxParams::DATE_START);
+        $userDateEnd = Utils::init(AjaxParams::DATE_END);
         $dateStart = null;
         $dateEnd = null;
-        $dateRange = Utils::init('dateRange');
+        $dateRange = Utils::init(AjaxParams::DATE_RANGE);
         if ($dateRange != '' && $dateRange != 'all') {
-            if (is_json($dateRange)) {
-                $dateRange = json_decode(Utils::init('dateRange'), true);
+            if (Utils::isJson($dateRange)) {
+                $dateRange = json_decode($dateRange, true);
                 if (isset($dateRange['start'])) {
                     $dateStart = $dateRange['start'];
                 }
@@ -430,7 +430,7 @@ class CmdAjax extends BaseAjax
             $histories = $cmd->getHistory($dateStart, $dateEnd);
             $result['cmd_name'] = $cmd->getName();
             $result['history_name'] = $cmd->getHumanName();
-            $result['unite'] = $cmd->getUnite();
+            $result[Common::UNITE] = $cmd->getUnite();
             $result[NextDomObj::CMD] = Utils::o2a($cmd);
             $result[NextDomObj::EQLOGIC] = Utils::o2a($cmd->getEqLogicId());
             $result[Common::TIMELINE_ONLY] = $NEXTDOM_INTERNAL_CONFIG[NextDomObj::CMD][Common::TYPE][Common::INFO]['subtype'][$cmd->getSubType()][Common::IS_HISTORIZED][Common::TIMELINE_ONLY];

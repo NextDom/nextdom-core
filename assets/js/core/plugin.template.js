@@ -72,7 +72,6 @@ $('.eqLogicAction[data-action=returnToThumbnailDisplay]').on('click', function (
   $('.eqLogicThumbnailContainer').packery();
 });
 
-
 $(".li_eqLogic,.eqLogicDisplayCard").on('click', function () {
   nextdom.eqLogic.cache.getCmd = Array();
   if ($('.eqLogicThumbnailDisplay').html() !== undefined) {
@@ -296,7 +295,6 @@ $('#in_searchEqlogic').off('keyup').keyup(function () {
   $('.eqLogicDisplayCard .name').each(function () {
     var text = $(this).text().toLowerCase();
     if (text.indexOf(search.toLowerCase()) >= 0) {
-      $(this)
       $(this).closest('.eqLogicDisplayCard').show();
     }
   });

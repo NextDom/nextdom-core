@@ -19,6 +19,7 @@ namespace NextDom\Model\Entity;
 
 use NextDom\Enums\CmdSubType;
 use NextDom\Enums\CmdType;
+use NextDom\Enums\NextDomObj;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
@@ -26,6 +27,10 @@ use NextDom\Managers\ConfigManager;
 use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\InteractQueryManager;
 use NextDom\Managers\JeeObjectManager;
+use NextDom\Model\Entity\Parents\BaseEntity;
+use NextDom\Model\Entity\Parents\EnableEntity;
+use NextDom\Model\Entity\Parents\NameEntity;
+use NextDom\Model\Entity\Parents\OptionsEntity;
 
 /**
  * Interactdef
@@ -33,22 +38,11 @@ use NextDom\Managers\JeeObjectManager;
  * @ORM\Table(name="interactDef")
  * @ORM\Entity
  */
-class InteractDef implements EntityInterface
+class InteractDef extends BaseEntity
 {
+    const TABLE_NAME = NextDomObj::INTERACT_DEF;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255, nullable=true)
-     */
-    protected $name;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="enable", type="integer", nullable=true)
-     */
-    protected $enable;
+    use EnableEntity, NameEntity, OptionsEntity;
 
     /**
      * @var string
@@ -74,13 +68,6 @@ class InteractDef implements EntityInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="options", type="text", length=65535, nullable=true)
-     */
-    protected $options;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="filtres", type="text", length=65535, nullable=true)
      */
     protected $filtres;
@@ -98,17 +85,6 @@ class InteractDef implements EntityInterface
      * @ORM\Column(name="actions", type="text", length=65535, nullable=true)
      */
     protected $actions;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    protected $_changed = false;
 
     /**
      * @return mixed
@@ -134,7 +110,7 @@ class InteractDef implements EntityInterface
      */
     public function setReply($_reply)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->reply, $_reply);
+        $this->updateChangeState($this->reply, $_reply);
         $this->reply = $_reply;
         return $this;
     }
@@ -162,29 +138,6 @@ class InteractDef implements EntityInterface
      * @param string $_default
      * @return array|bool|mixed|null|string
      */
-    public function getOptions($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->options, $_key, $_default);
-    }
-
-    /**
-     * @param $_key
-     * @param $_value
-     * @return $this
-     */
-    public function setOptions($_key, $_value)
-    {
-        $options = Utils::setJsonAttr($this->options, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->options, $options);
-        $this->options = $options;
-        return $this;
-    }
-
-    /**
-     * @param string $_key
-     * @param string $_default
-     * @return array|bool|mixed|null|string
-     */
     public function getFiltres($_key = '', $_default = '')
     {
         return Utils::getJsonAttr($this->filtres, $_key, $_default);
@@ -198,7 +151,7 @@ class InteractDef implements EntityInterface
     public function setFiltres($_key, $_value)
     {
         $filtres = Utils::setJsonAttr($this->filtres, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->filtres, $filtres);
+        $this->updateChangeState($this->filtres, $filtres);
         $this->filtres = $filtres;
         return $this;
     }
@@ -231,7 +184,7 @@ class InteractDef implements EntityInterface
      */
     public function setQuery($_query)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->query, $_query);
+        $this->updateChangeState($this->query, $_query);
         $this->query = $_query;
         return $this;
     }
@@ -417,46 +370,8 @@ class InteractDef implements EntityInterface
     public function setActions($_key, $_value)
     {
         $actions = Utils::setJsonAttr($this->actions, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->actions, $actions);
+        $this->updateChangeState($this->actions, $actions);
         $this->actions = $actions;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $_id
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getEnable()
-    {
-        return $this->enable;
-    }
-
-    /**
-     * @param $_enable
-     * @return $this
-     */
-    public function setEnable($_enable)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->enable, $_enable);
-        $this->enable = $_enable;
         return $this;
     }
 
@@ -606,11 +521,6 @@ class InteractDef implements EntityInterface
         return true;
     }
 
-    public function remove()
-    {
-        DBHelper::remove($this);
-    }
-
     public function preRemove()
     {
         InteractQueryManager::removeByInteractDefId($this->getId());
@@ -663,12 +573,6 @@ class InteractDef implements EntityInterface
     /**
      * @return string
      */
-    /**
-     * @return string
-     */
-    /**
-     * @return string
-     */
     public function getHumanName()
     {
         if ($this->getName() != '') {
@@ -677,45 +581,6 @@ class InteractDef implements EntityInterface
         return $this->getQuery();
     }
 
-    /**
-     * @return string
-     */
-    /**
-     * @return string
-     */
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param $_name
-     * @return $this
-     */
-    /**
-     * @param $_name
-     * @return $this
-     */
-    /**
-     * @param $_name
-     * @return $this
-     */
-    public function setName($_name)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
-        $this->name = $_name;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    /**
-     * @return string
-     */
     /**
      * @return string
      */
@@ -728,27 +593,13 @@ class InteractDef implements EntityInterface
      * @param $_person
      * @return $this
      */
-    /**
-     * @param $_person
-     * @return $this
-     */
-    /**
-     * @param $_person
-     * @return $this
-     */
     public function setPerson($_person)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->person, $_person);
+        $this->updateChangeState($this->person, $_person);
         $this->person = $_person;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    /**
-     * @return string
-     */
     /**
      * @return string
      */
@@ -761,64 +612,10 @@ class InteractDef implements EntityInterface
      * @param $_group
      * @return $this
      */
-    /**
-     * @param $_group
-     * @return $this
-     */
-    /**
-     * @param $_group
-     * @return $this
-     */
     public function setGroup($_group)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->group, $_group);
+        $this->updateChangeState($this->group, $_group);
         $this->group = $_group;
         return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    /**
-     * @return bool
-     */
-    /**
-     * @return bool
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    /**
-     * @return string
-     */
-    /**
-     * @return string
-     */
-    public function getTableName()
-    {
-        return 'interactDef';
     }
 }

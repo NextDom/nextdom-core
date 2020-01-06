@@ -44,6 +44,8 @@ use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
+use NextDom\Managers\Parents\BaseManager;
+use NextDom\Managers\Parents\CommonManager;
 use NextDom\Model\Entity\EqLogic;
 use NextDom\Model\Entity\InteractQuery;
 use NextDom\Model\Entity\JeeObject;
@@ -55,8 +57,9 @@ require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
  * Class InteractQueryManager
  * @package NextDom\Managers
  */
-class InteractQueryManager
+class InteractQueryManager extends BaseManager
 {
+    use CommonManager;
 
     const CLASS_NAME = InteractQuery::class;
     const DB_CLASS_NAME = '`interactQuery`';
@@ -72,9 +75,8 @@ class InteractQueryManager
         $values = [
             'interactDef_id' => $_interactDef_id,
         ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE interactDef_id=:interactDef_id
+        $sql = static::getBaseSQL() . '
+                WHERE `interactDef_id` = :interactDef_id
                 ORDER BY `query`';
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
@@ -90,19 +92,17 @@ class InteractQueryManager
             $values = [
                 'actions' => '%' . $_action . '%',
             ];
-            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                    FROM ' . self::DB_CLASS_NAME . '
-                    WHERE actions LIKE :actions';
+            $sql = static::getBaseSQL() . '
+                    WHERE `actions` LIKE :actions';
         } else {
             $values = [
                 'actions' => '%' . $_action[0] . '%',
             ];
-            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                    FROM ' . self::DB_CLASS_NAME . '
-                    WHERE actions LIKE :actions';
+            $sql = static::getBaseSQL() . '
+                    WHERE `actions` LIKE :actions';
             for ($i = 1; $i < count($_action); $i++) {
                 $values['actions' . $i] = '%' . $_action[$i] . '%';
-                $sql .= ' OR actions LIKE :actions' . $i;
+                $sql .= ' OR `actions` LIKE :actions' . $i;
             }
         }
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
@@ -119,7 +119,7 @@ class InteractQueryManager
             'interactDef_id' => $_interactDef_id,
         ];
         $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . '
-                WHERE interactDef_id = :interactDef_id';
+                WHERE `interactDef_id` = :interactDef_id';
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
@@ -670,8 +670,7 @@ class InteractQueryManager
             return null;
         }
 
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . ', MATCH query AGAINST (:query IN NATURAL LANGUAGE MODE) as score
-                FROM ' . self::DB_CLASS_NAME . '
+        $sql = static::getBaseSQL() . '
                 GROUP BY id
                 HAVING score > 1';
         $queries = DBHelper::getAllObjects($sql, [Common::QUERY => $_query], self::CLASS_NAME);
@@ -769,16 +768,15 @@ class InteractQueryManager
         $values = [
             Common::QUERY => $_query,
         ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME;
+        $sql = static::getBaseSQL();
         if ($caseSensitive) {
-            $sql .= ' WHERE query=:query';
+            $sql .= ' WHERE `query` = :query';
         } else {
             $sql .= ' WHERE LOWER(query)=LOWER(:query)';
         }
         if ($_interactDef_id !== null) {
             $values['interactDef_id'] = $_interactDef_id;
-            $sql .= ' AND interactDef_id=:interactDef_id';
+            $sql .= ' AND `interactDef_id` = :interactDef_id';
         }
         return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
@@ -805,10 +803,7 @@ class InteractQueryManager
      */
     public static function all()
     {
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                ORDER BY id';
-        return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
+        return static::getAllOrdered('id');
     }
 
     /**
@@ -895,23 +890,5 @@ class InteractQueryManager
         }
         $_params['execNow'] = 1;
         $interactQuery->executeAndReply($_params);
-    }
-
-    /**
-     * @param $_id
-     * @return array|mixed|null
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
-    public static function byId($_id)
-    {
-        $values = [
-            'id' => $_id,
-        ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE id=:id';
-
-        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
     }
 }

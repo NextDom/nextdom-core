@@ -33,7 +33,7 @@ class ScenarioControllerTest extends BaseControllerTest
     {
         $pageData = [];
         $result = \NextDom\Controller\Tools\ScenarioController::get($pageData);
-        $this->assertEquals(4, $pageData['scenarioCount']);
+        $this->assertEquals(5, $pageData['scenarioCount']);
         $this->assertStringContainsString('div_editScenario', $result);
     }
 

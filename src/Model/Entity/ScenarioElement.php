@@ -23,7 +23,6 @@ use NextDom\Enums\ScenarioElementType;
 use NextDom\Enums\ScenarioExpressionType;
 use NextDom\Enums\ScenarioSubElementType;
 use NextDom\Exceptions\CoreException;
-use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
@@ -33,6 +32,11 @@ use NextDom\Managers\ScenarioElementManager;
 use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\ScenarioSubElementManager;
+use NextDom\Model\Entity\Parents\BaseEntity;
+use NextDom\Model\Entity\Parents\NameEntity;
+use NextDom\Model\Entity\Parents\OptionsEntity;
+use NextDom\Model\Entity\Parents\OrderEntity;
+use NextDom\Model\Entity\Parents\TypeEntity;
 
 /**
  * Scenarioelement
@@ -40,55 +44,27 @@ use NextDom\Managers\ScenarioSubElementManager;
  * ORM\Table(name="scenarioElement")
  * ORM\Entity
  */
-class ScenarioElement implements EntityInterface
+class ScenarioElement extends BaseEntity
 {
+    const TABLE_NAME = NextDomObj::SCENARIO_ELEMENT;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="order", type="integer", nullable=false)
-     */
-    protected $order = 0;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="type", type="string", length=127, nullable=true)
-     */
-    protected $type;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=127, nullable=true)
-     */
-    protected $name;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="options", type="text", length=65535, nullable=true)
-     */
-    protected $options;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
+    use NameEntity, OptionsEntity, OrderEntity, TypeEntity;
 
     protected $_subelement;
-    protected $_changed = false;
+
+    public function __construct()
+    {
+        if ($this->order === null) {
+            $this->order = 0;
+        }
+    }
 
     public function remove()
     {
         foreach ($this->getSubElement() as $subElement) {
             $subElement->remove();
         }
-        DBHelper::remove($this);
+        return parent::remove();
     }
 
     /**
@@ -111,25 +87,6 @@ class ScenarioElement implements EntityInterface
             $this->_subelement[-1] = ScenarioSubElementManager::byScenarioElementId($this->getId(), $_type);
             return $this->_subelement[-1];
         }
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $_id
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
     }
 
     /**
@@ -285,25 +242,6 @@ class ScenarioElement implements EntityInterface
             return true;
         }
         return null;
-    }
-
-    /**
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param $_type
-     * @return $this
-     */
-    public function setType($_type)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->type, $_type);
-        $this->type = $_type;
-        return $this;
     }
 
     /**
@@ -480,8 +418,7 @@ class ScenarioElement implements EntityInterface
 
     /**
      * @return int
-     * @throws CoreException
-     * @throws \ReflectionException
+     * @throws \Exception
      */
     public function copy()
     {
@@ -492,17 +429,6 @@ class ScenarioElement implements EntityInterface
             $subelement->copy($elementCopy->getId());
         }
         return $elementCopy->getId();
-    }
-
-    /**
-     * @return $this
-     * @throws CoreException
-     * @throws \ReflectionException
-     */
-    public function save()
-    {
-        DBHelper::save($this);
-        return $this;
     }
 
     /**
@@ -520,92 +446,5 @@ class ScenarioElement implements EntityInterface
             return $expression->getSubElement()->getElement()->getScenario();
         }
         return null;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param $_name
-     * @return $this
-     */
-    public function setName($_name)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
-        $this->name = $_name;
-        return $this;
-    }
-
-    /**
-     * @param string $_key
-     * @param string $_default
-     * @return array|bool|mixed|null|string
-     */
-    public function getOptions($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->options, $_key, $_default);
-    }
-
-    /**
-     * @param $_key
-     * @param $_value
-     * @return $this
-     */
-    public function setOptions($_key, $_value)
-    {
-        $options = Utils::setJsonAttr($this->options, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->options, $options);
-        $this->options = $options;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getOrder()
-    {
-        return $this->order;
-    }
-
-    /**
-     * @param $_order
-     * @return $this
-     */
-    public function setOrder($_order)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->order, $_order);
-        $this->order = $_order;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTableName()
-    {
-        return 'scenarioElement';
     }
 }

@@ -14,7 +14,6 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 nextdom.view = function () {
 };
 
@@ -33,8 +32,8 @@ nextdom.view.all = function (queryParams) {
       queryParams.success(nextdom.view.cache.all);
       return;
     }
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'View', 'all');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'View', 'all');
     ajaxParams.data['action'] = 'all';
     $.ajax(ajaxParams);
   }
@@ -57,8 +56,8 @@ nextdom.view.toHtml = function (queryParams) {
     }
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'View', 'get');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'View', 'get');
     ajaxParams.data['id'] = ($.isArray(queryParams.id)) ? json_encode(queryParams.id) : queryParams.id;
     ajaxParams.data['version'] = queryParams.version;
     ajaxParams.data['html'] = true;
@@ -96,32 +95,21 @@ nextdom.view.handleViewAjax = function (queryParams) {
       result.html += '</div>';
     } else if (viewZone.type == 'table') {
       result.html += viewZone.html;
-      ;
     }
     result.html += '</div>';
   }
   return result;
 };
 
-
 nextdom.view.remove = function (queryParams) {
-  var paramsRequired = ['id'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'View', 'remove');
-    ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('View', 'remove', queryParams, ['id']);
 };
-
 
 nextdom.view.save = function (queryParams) {
   var paramsRequired = ['id', 'view'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'View', 'save');
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.default_params, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'View', 'save');
     ajaxParams.data['view_id'] = queryParams.id;
     ajaxParams.data['view'] = json_encode(queryParams.view);
     $.ajax(ajaxParams);
@@ -129,46 +117,17 @@ nextdom.view.save = function (queryParams) {
 };
 
 nextdom.view.get = function (queryParams) {
-  var paramsRequired = ['id'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'View', 'get');
-    ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('View', 'get', queryParams, ['id']);
 };
 
 nextdom.view.setEqLogicOrder = function (queryParams) {
-  var paramsRequired = ['eqLogics'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'View', 'setEqLogicOrder');
-    ajaxParams.data['eqLogics'] = json_encode(queryParams.eqLogics);
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('View', 'setEqLogicOrder', queryParams, ['eqLogics'], true);
 };
 
 nextdom.view.setOrder = function (queryParams) {
-  var paramsRequired = ['views'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'View', 'setOrder');
-    ajaxParams.data['views'] = json_encode(queryParams.views);
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('View', 'setOrder', queryParams, ['views'], true);
 };
 
-
 nextdom.view.removeImage = function (queryParams) {
-  var paramsRequired = ['id'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'View', 'removeImage');
-    ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
-  }
+  nextdom.private.ajax('View', 'removeImage', queryParams, ['id']);
 };

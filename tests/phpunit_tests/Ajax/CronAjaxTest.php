@@ -37,7 +37,7 @@ class CronAjaxTest extends BaseAjaxTest
 
     public function testAll()
     {
-        $this->connectAdAdmin();
+        $this->connectAsAdmin();
         ob_start();
         $this->cronAjax->all();
         $result = ob_get_clean();
@@ -52,7 +52,7 @@ class CronAjaxTest extends BaseAjaxTest
     {
         LogHelper::clear('plugin4tests');
         $_GET['id'] = 5;
-        $this->connectAdAdmin();
+        $this->connectAsAdmin();
         ob_start();
         $this->cronAjax->start();
         $result = ob_get_clean();

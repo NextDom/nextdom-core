@@ -67,7 +67,7 @@ function initEvents() {
  */
 function displayTimeline(){
     $('#data').empty()
-    jeedom.getTimelineEvents({
+    nextdom.getTimelineEvents({
         error: function (error) {
             notify("Core",error.message,"error");
         },

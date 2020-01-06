@@ -18,7 +18,6 @@
 use NextDom\Ajax\MessageAjax;
 use NextDom\Helpers\DBHelper;
 use NextDom\Managers\MessageManager;
-use NextDom\Model\Entity\Message;
 
 require_once('BaseAjaxTest.php');
 
@@ -35,7 +34,12 @@ class MessageAjaxTest extends BaseAjaxTest
     public function tearDown(): void
     {
         $this->cleanGetParams();
-        DBHelper::exec('DELETE FROM message WHERE id > 3');
+        DBHELPER::exec(
+            "DELETE FROM message;
+                    INSERT INTO `message` VALUES (1,'2019-05-03 22:00:03','newUpdate','update','De nouvelles mises à jour sont disponibles : nextdom,openzwave','');
+                    INSERT INTO `message` VALUES (2,'2019-05-04 00:00:02','scenario::sKEbQHaqQGiOwgvu4sknYQUQqFurIUks','scenario','Une commande du scénario : [Couloir][Couloir][Lumière couloir] est introuvable','');
+                    INSERT INTO `message` VALUES (3,'2019-05-05 22:00:02','plugin4tests::Zx1FKbfyTf3jW6ux8TLpSmQAbJSvCIt1','plugin4tests','Message from a plugin','');");
+
     }
 
     public function testNbMessage()
@@ -71,19 +75,24 @@ class MessageAjaxTest extends BaseAjaxTest
         $this->assertEquals('Message from a plugin', $jsonResult['result'][0]['message']);
     }
 
-    public function testRemoveMessage() {
-        $message = new Message();
-        $message->setMessage('test message');
-        $message->setDate(date('Y-m-d H:i:s'));
-        $message->setPlugin('plugin4tests');
-        $message->save();
-
-        $_GET['id'] = $message->getId();
+    public function testRemoveMessage()
+    {
+        $_GET['id'] = 1;
         ob_start();
         $this->messageAjax->removeMessage();
         $result = ob_get_clean();
         $jsonResult = json_decode($result, true);
         $this->assertEquals('ok', $jsonResult['state']);
-        $this->assertCount(3, MessageManager::all());
+        $this->assertCount(2, MessageManager::all());
+    }
+
+    public function testClearMessage()
+    {
+        ob_start();
+        $this->messageAjax->clearMessage();
+        $result = ob_get_clean();
+        $jsonResult = json_decode($result, true);
+        $this->assertEquals('ok', $jsonResult['state']);
+        $this->assertCount(0, MessageManager::all());
     }
 }

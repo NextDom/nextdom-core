@@ -69,7 +69,7 @@ class ConfigAjax extends BaseAjax
         if ($keys == '') {
             throw new CoreException(__('Aucune clé demandée'));
         }
-        if (is_json($keys)) {
+        if (Utils::isJson($keys)) {
             $keys = json_decode($keys, true);
             $result = ConfigManager::byKeys(array_keys($keys), Utils::init(AjaxParams::PLUGIN, Common::CORE));
             if (Utils::init(AjaxParams::CONVERT_TO_HUMAN_READABLE, 0)) {
@@ -113,7 +113,7 @@ class ConfigAjax extends BaseAjax
         if ($keys == '') {
             throw new CoreException(__('Aucune clé demandée'));
         }
-        if (is_json($keys)) {
+        if (Utils::isJson($keys)) {
             $keys = json_decode($keys, true);
             foreach ($keys as $key => $value) {
                 ConfigManager::remove($key, $plugin);

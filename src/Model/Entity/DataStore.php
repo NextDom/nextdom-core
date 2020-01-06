@@ -18,8 +18,8 @@
 namespace NextDom\Model\Entity;
 
 use NextDom\Enums\CmdType;
+use NextDom\Enums\NextDomObj;
 use NextDom\Exceptions\CoreException;
-use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\ConfigManager;
@@ -27,6 +27,9 @@ use NextDom\Managers\DataStoreManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\ScenarioManager;
+use NextDom\Model\Entity\Parents\BaseEntity;
+use NextDom\Model\Entity\Parents\LinkIdEntity;
+use NextDom\Model\Entity\Parents\TypeEntity;
 
 /**
  * Datastore
@@ -34,22 +37,11 @@ use NextDom\Managers\ScenarioManager;
  * @ORM\Table(name="dataStore", uniqueConstraints={@ORM\UniqueConstraint(name="UNIQUE", columns={"type", "link_id", "key"})})
  * @ORM\Entity
  */
-class DataStore implements EntityInterface
+class DataStore extends BaseEntity
 {
+    const TABLE_NAME = NextDomObj::DATASTORE;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="type", type="string", length=127, nullable=false)
-     */
-    protected $type;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="link_id", type="integer", nullable=false)
-     */
-    protected $link_id;
+    use LinkIdEntity, TypeEntity;
 
     /**
      * @var string
@@ -66,77 +58,28 @@ class DataStore implements EntityInterface
     protected $value;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    protected $_changed;
-
-    /**
      * @return bool
      * @throws \Exception
      */
     public function preSave()
     {
-        $allowType = ['cmd', 'object', 'eqLogic', 'scenario', 'eqReal'];
-        if (!in_array($this->getType(), $allowType)) {
-            throw new CoreException(__('Le type doit être un des suivants : ') . print_r($allowType, true));
+        $allowedType = [NextDomObj::CMD, NextDomObj::OBJECT, NextDomObj::EQLOGIC, NextDomObj::SCENARIO, NextDomObj::EQREAL];
+        if (!in_array($this->getType(), $allowedType)) {
+            throw new CoreException(__('Le type doit être un des suivants : ') . print_r($allowedType, true));
         }
         if (!is_numeric($this->getLink_id())) {
             throw new CoreException(__('Link_id doit être un chiffre'));
         }
-        if ($this->getKey() == '') {
+        if (empty($this->getKey())) {
             throw new CoreException(__('La clé ne peut pas être vide'));
         }
-        if ($this->getId() == '') {
+        if (empty($this->getId())) {
             $dataStore = DataStoreManager::byTypeLinkIdKey($this->getType(), $this->getLink_id(), $this->getKey());
             if (is_object($dataStore)) {
                 $this->setId($dataStore->getId());
             }
         }
         return true;
-    }
-
-    /**
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param $_type
-     * @return $this
-     */
-    public function setType($_type)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->type, $_type);
-        $this->type = $_type;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getLink_id()
-    {
-        return $this->link_id;
-    }
-
-    /**
-     * @param $_link_id
-     * @return $this
-     */
-    public function setLink_id($_link_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->link_id, $_link_id);
-        $this->link_id = $_link_id;
-        return $this;
     }
 
     /**
@@ -155,39 +98,9 @@ class DataStore implements EntityInterface
      */
     public function setKey($_key)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->key, $_key);
+        $this->updateChangeState($this->key, $_key);
         $this->key = $_key;
         return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $_id
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
-    public function save()
-    {
-        DBHelper::save($this);
-        return true;
     }
 
     public function postSave()
@@ -198,15 +111,9 @@ class DataStore implements EntityInterface
             foreach ($value_cmd as $cmd) {
                 if ($cmd->isType(CmdType::ACTION)) {
                     $cmd->event($cmd->execute());
-
                 }
             }
         }
-    }
-
-    public function remove()
-    {
-        DBHelper::remove($this);
     }
 
     /**
@@ -241,10 +148,10 @@ class DataStore implements EntityInterface
             'title' => __('Variable :') . ' ' . $this->getKey(),
         ];
         $usedBy = $this->getUsedBy();
-        Utils::addGraphLink($this, 'dataStore', $usedBy['scenario'], 'scenario', $_data, $_level, $_drill);
-        Utils::addGraphLink($this, 'dataStore', $usedBy['cmd'], 'cmd', $_data, $_level, $_drill);
-        Utils::addGraphLink($this, 'dataStore', $usedBy['eqLogic'], 'eqLogic', $_data, $_level, $_drill);
-        Utils::addGraphLink($this, 'dataStore', $usedBy['interactDef'], 'interactDef', $_data, $_level, $_drill);
+        Utils::addGraphLink($this, 'dataStore', $usedBy[NextDomObj::SCENARIO], NextDomObj::SCENARIO, $_data, $_level, $_drill);
+        Utils::addGraphLink($this, 'dataStore', $usedBy[NextDomObj::CMD], NextDomObj::CMD, $_data, $_level, $_drill);
+        Utils::addGraphLink($this, 'dataStore', $usedBy[NextDomObj::EQLOGIC], NextDomObj::EQLOGIC, $_data, $_level, $_drill);
+        Utils::addGraphLink($this, 'dataStore', $usedBy[NextDomObj::INTERACT_DEF], NextDomObj::INTERACT_DEF, $_data, $_level, $_drill);
         return $_data;
     }
 
@@ -255,11 +162,12 @@ class DataStore implements EntityInterface
      */
     public function getUsedBy($_array = false)
     {
-        $result = ['cmd' => [], 'eqLogic' => [], 'scenario' => []];
-        $result['cmd'] = CmdManager::searchConfiguration(['"cmd":"variable"%"name":"' . $this->getKey() . '"', 'variable(' . $this->getKey() . ')', 'variable(' . $this->getKey() . ',', '"name":"' . $this->getKey() . '"%"cmd":"variable"']);
-        $result['eqLogic'] = EqLogicManager::searchConfiguration(['"cmd":"variable"%"name":"' . $this->getKey() . '"', 'variable(' . $this->getKey() . ')', 'variable(' . $this->getKey() . ',', '"name":"' . $this->getKey() . '"%"cmd":"variable"']);
-        $result['interactDef'] = InteractDefManager::searchByUse(['"cmd":"variable"%"name":"' . $this->getKey() . '"', 'variable(' . $this->getKey() . ')', 'variable(' . $this->getKey() . ',', '"name":"' . $this->getKey() . '"%"cmd":"variable"']);
-        $result['scenario'] = ScenarioManager::searchByUse([
+        $searchConfigurationKey = '"cmd":"variable"%"name":"';
+        $result = [NextDomObj::CMD => [], NextDomObj::EQLOGIC => [], NextDomObj::SCENARIO => []];
+        $result[NextDomObj::CMD] = CmdManager::searchConfiguration([$searchConfigurationKey . $this->getKey() . '"', 'variable(' . $this->getKey() . ')', 'variable(' . $this->getKey() . ',', '"name":"' . $this->getKey() . '"%"cmd":"variable"']);
+        $result[NextDomObj::EQLOGIC] = EqLogicManager::searchConfiguration([$searchConfigurationKey . $this->getKey() . '"', 'variable(' . $this->getKey() . ')', 'variable(' . $this->getKey() . ',', '"name":"' . $this->getKey() . '"%"cmd":"variable"']);
+        $result[NextDomObj::INTERACT_DEF] = InteractDefManager::searchByUse([$searchConfigurationKey . $this->getKey() . '"', 'variable(' . $this->getKey() . ')', 'variable(' . $this->getKey() . ',', '"name":"' . $this->getKey() . '"%"cmd":"variable"']);
+        $result[NextDomObj::SCENARIO] = ScenarioManager::searchByUse([
             ['action' => 'variable(' . $this->getKey() . ')', 'option' => 'variable(' . $this->getKey() . ')'],
             ['action' => 'variable(' . $this->getKey() . ',', 'option' => 'variable(' . $this->getKey() . ','],
             ['action' => 'variable', 'option' => $this->getKey(), 'and' => true],
@@ -282,7 +190,7 @@ class DataStore implements EntityInterface
         if ($this->value === '') {
             return $_default;
         }
-        return is_json($this->value, $this->value);
+        return Utils::isJson($this->value, $this->value);
     }
 
     /**
@@ -294,34 +202,8 @@ class DataStore implements EntityInterface
         if (is_object($_value) || is_array($_value)) {
             $_value = json_encode($_value, JSON_UNESCAPED_UNICODE);
         }
-        $this->_changed = Utils::attrChanged($this->_changed, $this->value, $_value);
+        $this->updateChangeState($this->value, $_value);
         $this->value = $_value;
         return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTableName()
-    {
-        return 'dataStore';
     }
 }

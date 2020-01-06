@@ -26,6 +26,7 @@ use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\ReportHelper;
 use NextDom\Helpers\SystemHelper;
+use NextDom\Interfaces\EntityInterface;
 use NextDom\Managers\CacheManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\EqLogicManager;
@@ -33,6 +34,7 @@ use NextDom\Managers\ListenerManager;
 use NextDom\Managers\MessageManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
+use NextDom\Model\Entity\Parents\BaseEntity;
 
 /**
  * Plugin
@@ -40,7 +42,7 @@ use NextDom\Managers\UpdateManager;
  * @ORM\Table(name="plugin")
  * @ORM\Entity
  */
-class Plugin implements EntityInterface
+class Plugin extends BaseEntity
 {
     protected $id;
     protected $name = '';
@@ -723,7 +725,7 @@ class Plugin implements EntityInterface
         if (file_exists($dir . '/' . $language . '.json')) {
             $result = file_get_contents($dir . '/' . $language . '.json');
 
-            if (is_json($result)) {
+            if (Utils::isJson($result)) {
                 return json_decode($result, true);
             }
         }

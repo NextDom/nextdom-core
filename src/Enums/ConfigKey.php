@@ -27,6 +27,7 @@ class ConfigKey extends Enum
     const CMD_PUSH_URL = 'cmdPushUrl';
     const ENABLE_CRON = 'enableCron';
     const ENABLE_SCENARIO = 'enableScenario';
+    const EVENT_WAIT_POLLING = 'event::waitPollingTime';
     const HARDWARE_NAME = 'hardware_name';
     const IGNORE_HOUR_CHECK = 'ignoreHourCheck';
     const LOG_LEVEL = 'log::level';
