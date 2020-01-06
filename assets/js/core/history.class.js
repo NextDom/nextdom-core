@@ -35,7 +35,7 @@ nextdom.history.get = function (queryParams) {
     ajaxParams.data['id'] = queryParams.cmd_id;
     ajaxParams.data['dateStart'] = queryParams.dateStart || '';
     ajaxParams.data['dateEnd'] = queryParams.dateEnd || '';
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
@@ -48,7 +48,7 @@ nextdom.history.drawChart = function (queryParams) {
     queryParams.dateRange = json_encode(queryParams.dateRange);
   }
   queryParams.option = init(queryParams.option, {derive: ''});
-  $.ajax({
+  nextdom.private.ajaxCall({
     type: 'POST',
     url: 'src/ajax.php',
     data: {
@@ -493,6 +493,6 @@ nextdom.history.changePoint = function (queryParams) {
     ajaxParams.data['datetime'] = queryParams.datetime;
     ajaxParams.data['value'] = queryParams.value;
     ajaxParams.data['oldValue'] = queryParams.oldValue;
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };

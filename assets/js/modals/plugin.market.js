@@ -106,20 +106,12 @@ function initInstallationButtons() {
 
 /* Evènement du bouton de mise à jour des branches */
 function initBranchesUpdate(defaultBranchChoice) {
-    $.post({
-        url: 'core/ajax/nextdom_market.ajax.php',
-        data: {
-            action: 'get',
-            params: 'branches',
-            data: {source: currentPlugin['sourceName'], fullName: currentPlugin['fullName']}
-        },
-        dataType: 'json',
-        success: function (data, status) {
+    nextdom_market.get({
+        post_success: function(data) {
             initBranchesChoice(data['result'], defaultBranchChoice);
         },
-        error: function (request, status, error) {
-            handleAjaxError(request, status, error);
-        }
+        params: 'branches',
+        data: {source: currentPlugin['sourceName'], fullName: currentPlugin['fullName']}
     });
 }
 
@@ -155,17 +147,22 @@ function initBranchesChoice(branchesList, defaultBranchChoice) {
  * @param branch Nom de la branche GitHub à installer
  */
 function installPlugin(branch) {
-
-    var data = {
-        action: 'save',
-        // Version de l'installation par URL
-        // update: '{"logicalId":"' + currentPlugin['id'] + '","configuration":{"url":"' + currentPlugin['url'] + '/archive/' + branch + '.zip"},"source":"url"}'
-        // Version de l'installation par GitHub
-        update: '{"logicalId":"' + currentPlugin['id'] + '","configuration":{"user":"' + currentPlugin['gitId'] + '", "repository":"' + currentPlugin['gitName'] + '", "version":"' + branch + '"},"source":"github"}'
-    };
-    ajaxQuery('core/ajax/update.ajax.php', data, function () {
-        window.location.replace('/index.php?v=d&p=plugin&id=' + currentPlugin['id']);
-    });
+    nextdom.update.install(
+        {
+            update: {
+                logicalId: currentPlugin['id'],
+                configuration: {
+                    user: currentPlugin['gitId'],
+                    repository: currentPlugin['gitName'],
+                    version: branch
+                },
+                source: 'github'
+            },
+            post_success: function() {
+                window.location.replace('/index.php?v=d&p=plugin&id=' + currentPlugin['id']);
+            }
+        }
+    );
 }
 
 /* Lance l'installation du plugin
@@ -173,13 +170,12 @@ function installPlugin(branch) {
  * @param pluginId Identifiant du plugin
  */
 function removePlugin(pluginId) {
-    var data = {
-        action: 'remove',
-        id: pluginId
-    };
-    ajaxQuery('core/ajax/update.ajax.php', data, function () {
-        reloadWithMessage(1);
-    });
+    nextdom.update.remove({
+        id: pluginId,
+        post_success: function() {
+            reloadWithMessage(1);
+        }
+    })
 }
 
 /* Initialise le carousel pour les screenshots */

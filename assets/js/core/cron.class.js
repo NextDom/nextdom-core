@@ -23,7 +23,7 @@ nextdom.cron.setState = function (queryParams) {
     var params = $.extend({}, nextdom.private.default_params, queryParams || {});
     var ajaxParams = nextdom.private.getParamsAJAX(params, 'Cron', queryParams.state);
     ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 

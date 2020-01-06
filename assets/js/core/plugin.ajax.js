@@ -42,7 +42,7 @@ var stackAjaxTab = {
     }
     this.running = true;
     var params = this.objects.shift();
-    $.ajax({
+    nextdom.private.ajaxCall({
       type: 'POST',
       url: 'plugins/' + this.plugin + '/core/ajax/' + this.plugin + '.ajax.php ',
       data: {

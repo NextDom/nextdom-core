@@ -28,7 +28,7 @@ nextdom.repo.install = function (queryParams) {
     ajaxParams.data['repo'] = queryParams.repo;
     ajaxParams.data['id'] = queryParams.id;
     ajaxParams.data['version'] = queryParams.version || 'stable';
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 

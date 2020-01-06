@@ -89,7 +89,7 @@ nextdom.changes = function () {
     var params = $.extend({}, nextdom.private.default_params, paramsSpecifics);
     var ajaxParams = nextdom.private.getParamsAJAX(params, 'Event', 'changes');
     ajaxParams.data['datetime'] = nextdom.datetime;
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
@@ -210,7 +210,7 @@ nextdom.getConfiguration = function (queryParams) {
     }
     var ajaxParams = nextdom.private.getParamsAJAX(params, 'NextDom', 'getConfiguration');
     ajaxParams.data['key'] = '';
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
@@ -228,7 +228,7 @@ nextdom.ssh = function (queryParams) {
   var params = $.extend({}, nextdom.private.default_params, queryParams || {});
   var ajaxParams = nextdom.private.getParamsAJAX(params, 'NextDom', 'ssh');
   ajaxParams.data['command'] = command;
-  $.ajax(ajaxParams);
+  nextdom.private.ajaxCall(ajaxParams);
   return 'Execute command : ' + command;
 };
 
@@ -242,7 +242,7 @@ nextdom.db = function (queryParams) {
   var params = $.extend({}, nextdom.private.default_params, queryParams || {});
   var ajaxParams = nextdom.private.getParamsAJAX(params, 'NextDom', 'db');
   ajaxParams.data['command'] = command;
-  $.ajax(ajaxParams);
+  nextdom.private.ajaxCall(ajaxParams);
   return 'Execute command : ' + command;
 };
 
@@ -337,7 +337,7 @@ nextdom.getGraphData = function (queryParams) {
   var ajaxParams = nextdom.private.getParamsAJAX(params, 'NextDom', 'getGraphData');
   ajaxParams.data['filter_type'] = params.filter_type || null;
   ajaxParams.data['filter_id'] = params.filter_id || null;
-  $.ajax(ajaxParams);
+  nextdom.private.ajaxCall(ajaxParams);
 };
 
 nextdom.getDocumentationUrl = function (queryParams) {
@@ -345,7 +345,7 @@ nextdom.getDocumentationUrl = function (queryParams) {
   var ajaxParams = nextdom.private.getParamsAJAX(params, 'NextDom', 'getDocumentationUrl');
   ajaxParams.data['plugin'] = params.plugin || null;
   ajaxParams.data['page'] = params.page || null;
-  $.ajax(ajaxParams);
+  nextdom.private.ajaxCall(ajaxParams);
 };
 
 nextdom.addWarnme = function (queryParams) {

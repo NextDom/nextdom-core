@@ -26,7 +26,7 @@ nextdom.plan.remove = function (queryParams) {
   ajaxParams.data['link_type'] = queryParams.link_type || '';
   ajaxParams.data['link_id'] = queryParams.link_id || '';
   ajaxParams.data['planHeader_id'] = queryParams.planHeader_id || '';
-  $.ajax(ajaxParams);
+  nextdom.private.ajaxCall(ajaxParams);
 };
 
 nextdom.plan.execute = function (queryParams) {
@@ -48,7 +48,7 @@ nextdom.plan.getObjectPlan = function (queryParams) {
     var ajaxParams = nextdom.private.getParamsAJAX(params, 'Plan', 'getObjectPlan');
     ajaxParams.data['id'] = queryParams.id;
     ajaxParams.data['version'] = queryParams.version || 'dplan';
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
@@ -59,7 +59,7 @@ nextdom.plan.create = function (queryParams) {
     var ajaxParams = nextdom.private.getParamsAJAX(params, 'Plan', 'create');
     ajaxParams.data['plan'] = json_encode(queryParams.plan);
     ajaxParams.data['version'] = queryParams.version;
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
@@ -70,7 +70,7 @@ nextdom.plan.copy = function (queryParams) {
   ajaxParams.data['link_type'] = queryParams.link_type || '';
   ajaxParams.data['link_id'] = queryParams.link_id || '';
   ajaxParams.data['planHeader_id'] = queryParams.planHeader_id || '';
-  $.ajax(ajaxParams);
+  nextdom.private.ajaxCall(ajaxParams);
 };
 
 nextdom.plan.byPlanHeader = function (queryParams) {
@@ -81,7 +81,7 @@ nextdom.plan.byPlanHeader = function (queryParams) {
     ajaxParams.data['planHeader_id'] = queryParams.id;
     ajaxParams.data['noHtml'] = queryParams.noHtml;
     ajaxParams.data['version'] = queryParams.version || 'dplan';
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
@@ -91,7 +91,7 @@ nextdom.plan.removeImageHeader = function (queryParams) {
     var params = $.extend({}, nextdom.private.default_params, queryParams || {});
     var ajaxParams = nextdom.private.getParamsAJAX(params, 'Plan', 'removeImageHeader');
     ajaxParams.data['id'] = queryParams.planHeader_id;
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
@@ -126,6 +126,6 @@ nextdom.plan.allHeader = function (queryParams) {
       return;
     }
     var ajaxParams = nextdom.private.getParamsAJAX(params, 'Plan', 'allHeader');
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };

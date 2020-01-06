@@ -114,7 +114,7 @@ nextdom.cmd.execute = function (queryParams) {
     if (window.location.href.indexOf('p=dashboard') >= 0 || window.location.href.indexOf('p=plan') >= 0 || window.location.href.indexOf('p=view') >= 0 || $.mobile) {
       ajaxParams.data['utid'] = utid;
     }
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
@@ -223,7 +223,7 @@ nextdom.cmd.test = function (queryParams) {
     var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
     var ajaxParams = nextdom.private.getParamsAJAX(params, 'Cmd', 'getCmd');
     ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
@@ -284,7 +284,7 @@ nextdom.cmd.save = function (queryParams) {
     var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
     var ajaxParams = nextdom.private.getParamsAJAX(params, 'Cmd', 'save');
     ajaxParams.data['cmd'] = json_encode(queryParams.cmd);
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
@@ -300,7 +300,7 @@ nextdom.cmd.multiSave = function (queryParams) {
     var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
     var ajaxParams = nextdom.private.getParamsAJAX(params, 'Cmd', 'multiSave');
     ajaxParams.data['cmd'] = json_encode(queryParams.cmds);
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
@@ -320,7 +320,7 @@ nextdom.cmd.byId = function (queryParams) {
     }
     var ajaxParams = nextdom.private.getParamsAJAX(params, 'Cmd', 'byId');
     ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
@@ -340,7 +340,7 @@ nextdom.cmd.byHumanName = function (queryParams) {
     }
     var ajaxParams = nextdom.private.getParamsAJAX(params, 'Cmd', 'byHumanName');
     ajaxParams.data['humanName'] = queryParams.humanName;
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
@@ -536,7 +536,7 @@ nextdom.cmd.getSelectModal = function (_options, _callback) {
 
 nextdom.cmd.displayActionOption = function (_expression, _options, _callback) {
   var html = '';
-  $.ajax({
+  nextdom.private.ajaxCall({
     type: 'POST',
     url: "src/ajax.php",
     data: {
@@ -575,7 +575,7 @@ nextdom.cmd.displayActionsOption = function (queryParams) {
     var ajaxParams = nextdom.private.getParamsAJAX(params, 'Scenario', 'actionToHtml');
     ajaxParams.async = queryParams.async || true;
     ajaxParams.data['params'] = json_encode(queryParams.params);
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 

@@ -41,7 +41,7 @@ nextdom.scenario.all = function (queryParams) {
       return;
     }
     var ajaxParams = nextdom.private.getParamsAJAX(params, 'Scenario', 'all');
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
@@ -68,7 +68,7 @@ nextdom.scenario.toHtml = function (queryParams) {
     var ajaxParams = nextdom.private.getParamsAJAX(params, 'Scenario', 'toHtml');
     ajaxParams.data['id'] = ($.isArray(queryParams.id)) ? json_encode(queryParams.id) : queryParams.id;
     ajaxParams.data['version'] = queryParams.version;
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
@@ -87,7 +87,7 @@ nextdom.scenario.convertToTemplate = function (queryParams) {
     var ajaxParams = nextdom.private.getParamsAJAX(params, 'Scenario', 'convertToTemplate');
     ajaxParams.data['id'] = queryParams.id;
     ajaxParams.data['template'] = queryParams.template || '';
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
@@ -126,7 +126,7 @@ nextdom.scenario.refreshValue = function (queryParams) {
     var ajaxParams = nextdom.private.getParamsAJAX(params, 'Scenario', 'toHtml');
     ajaxParams.data['id'] = queryParams.scenario_id;
     ajaxParams.data['version'] = queryParams.version || version;
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
@@ -146,7 +146,7 @@ nextdom.scenario.save = function (queryParams) {
     var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
     var ajaxParams = nextdom.private.getParamsAJAX(params, 'Scenario', 'save');
     ajaxParams.data['scenario'] = json_encode(queryParams.scenario);
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
@@ -158,7 +158,7 @@ nextdom.scenario.remove = function (queryParams) {
     var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
     var ajaxParams = nextdom.private.getParamsAJAX(params, 'Scenario', 'remove');
     ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 

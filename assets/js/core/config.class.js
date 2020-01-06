@@ -24,7 +24,7 @@ nextdom.config.save = function (queryParams) {
     var ajaxParams = nextdom.private.getParamsAJAX(params, 'Config', 'addKey');
     ajaxParams.data['value'] = json_encode(queryParams.configuration);
     ajaxParams.data['plugin'] = queryParams.plugin || 'core';
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
@@ -37,7 +37,7 @@ nextdom.config.load = function (queryParams) {
     ajaxParams.data['key'] = ($.isArray(queryParams.configuration) || $.isPlainObject(queryParams.configuration)) ? json_encode(queryParams.configuration) : queryParams.configuration;
     ajaxParams.data['plugin'] = queryParams.plugin || 'core';
     ajaxParams.data['convertToHumanReadable'] = queryParams.convertToHumanReadable || false;
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
@@ -49,6 +49,6 @@ nextdom.config.remove = function (queryParams) {
     ajaxParams.data['action'] = 'removeKey';
     ajaxParams.data['key'] = ($.isArray(queryParams.configuration) || $.isPlainObject(queryParams.configuration)) ? json_encode(queryParams.configuration) : queryParams.configuration;
     ajaxParams.data['plugin'] = queryParams.plugin || 'core';
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
