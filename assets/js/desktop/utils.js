@@ -708,3 +708,14 @@ function passwordScore(password, progressbar=null, spanLevel=null) {
     }
     return score;
 }
+
+/**
+ * Decode HTML entities in string like &eacute;
+ * @param string message 
+ */
+function decodeHtmlEntities(message)
+{
+    var temporaryTextArea = document.createElement('textarea');
+    temporaryTextArea.innerHTML = message;
+    return temporaryTextArea.value;
+}

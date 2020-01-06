@@ -156,7 +156,7 @@ $(function () {
                       '<div class="btn btn-sm btn-danger removeMessage pull-right"><i class="fas fa-trash no-spacing"></i></div>' +
                       '<small class="pull-right"><i class="fas fa-clock spacing-right"></i>' + messages[messageIndex]['date'] + '</small>' +
                       '</h4>' +
-                      '<p>' + unescape(messages[messageIndex]['message']) + '</p>' +
+                      '<p>' + decodeHtmlEntities(messages[messageIndex]['message']) + '</p>' +
                       '<p>' +  messages[messageIndex]['action'] + '</p>' +
                       '</a>' +
                       '</li>');
