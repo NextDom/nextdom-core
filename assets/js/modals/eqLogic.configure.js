@@ -45,6 +45,10 @@ function loadInformations() {
         }
     });
 
+    if ($('.eqLogicAttr[data-l1key="display"][data-l2key="layout::dashboard"]').value() == 'table') {
+      $("#widget_layout_table").show();
+    }
+
     $('#tableCmdLayoutConfiguration tbody td .cmdLayoutContainer').sortable({
         connectWith: '#tableCmdLayoutConfiguration tbody td .cmdLayoutContainer',
         items: ".cmdLayout"
