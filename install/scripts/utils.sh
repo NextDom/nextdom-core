@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-#https://stackoverflow.com/questions/59895/get-the-source-directory-of-a-bash-script-from-within-the-script-itself
-CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
 source ${CURRENT_DIR}/config.sh
 
@@ -48,9 +47,11 @@ createDirectory() {
 goToDirectory() {
   local directory=$1
   { ##try
-    checkIfDirectoryExists ${directory}
-    cd ${directory} >/dev/null
-    pushd ${directory} >/dev/null
+    checkDirectory = checkIfDirectoryExists ${directory}
+    if [[ ${checkDirectory} -gt 0  ]]; then
+        cd ${directory} >/dev/null
+        pushd ${directory} >/dev/null
+     fi
   } || { ##catch
     addLogError "Error while going : ${directory}"
   }
