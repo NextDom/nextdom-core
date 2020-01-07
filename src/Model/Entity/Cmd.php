@@ -1227,7 +1227,7 @@ class Cmd extends BaseEntity
 
             if ($this->isType(CmdType::INFO)
                 && ($this->isSubType(CmdSubType::NUMERIC) || $this->isSubType(CmdSubType::BINARY))
-                && (!empty($valueToSend))) {
+                && (isset($valueToSend))) {
                 $client = new \InfluxDB\Client($influxDbConf['influxDbIp'], $influxDbConf['influxDbPort']);
                 $influxDbDatabase = $client->selectDB($influxDbConf['influxDbDatabase']);
 
