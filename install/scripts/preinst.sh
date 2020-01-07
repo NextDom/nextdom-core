@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-#https://stackoverflow.com/questions/59895/get-the-source-directory-of-a-bash-script-from-within-the-script-itself
 CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
 source ${CURRENT_DIR}/utils.sh
@@ -16,7 +15,7 @@ step1_generate_nextdom_assets() {
 
   addLogStep "Preinst -- Generate Assets - 1/7"
   # Generate CSS files
-  if [ "false" == "${PRODUCTION}" ]; then
+  if [[ ! ${PRODUCTION} ]]; then
     # A faire dans une version developpeur (apres git clone)
     cd ${ROOT_DIRECTORY}
     ./scripts/gen_global.sh || {
@@ -29,7 +28,7 @@ step1_generate_nextdom_assets() {
     addLogInfo "generated css files"
     addLogInfo "generated javascript files"
   fi
-  if [ "true" == "${result}" ]; then
+  if [[ "true" == "${result}" ]]; then
     addLogSuccess "Assets are generated with success"
   fi
 }
@@ -41,37 +40,30 @@ step2_configure_mysql() {
 
   addLogStep "Preinst -- Configure MySQL/MariaDB - 2/7"
 
-  [[ "localhost" != "${MYSQL_HOSTNAME}" ]] && {
+  if [[ "localhost" != "${MYSQL_HOSTNAME}" ]]; then
     addLogInfo "Remote mysql server detected"
     return 0
-  }
+  fi
 
   { ##try
-
-    #service mysql status 2>&1 >>${DEBUG}
-    UP=$(pgrep mysql | wc -l)
-    #isService=$?
-    if [[ "$UP" -eq 0 ]]; then
+    mysqlStatus=$(pgrep mysql | wc -l)
+    if [[ "${mysqlStatus}" -eq 0 ]]; then
       addLogInfo "no mysql service locally"
       return 0
     fi
   } || { ##catch
-
     addLogError "Error while checking mysql status"
   }
 
   stopService mysql
 
   { ##try
-
     rm -f /var/lib/mysql/ib_logfile*
   } || { ##catch
-
     addLogError "Error while cleaning mysql data"
   }
 
   { ##try
-
     if [[ -d /etc/mysql/conf.d ]]; then
       cat - >/etc/mysql/conf.d/nextdom_my.cnf <<EOS
 [mysqld]
@@ -91,13 +83,12 @@ EOS
     fi
     addLogInfo "created nextdom mysql configuration: /etc/mysql/conf.d/nextdom_my.cnf"
   } || { ##catch
-
     addLogError "Error while creating /etc/mysql/conf.d/nextdom_my.cnf"
   }
 
   startService mysql
 
-  if [ "true" == "${result}" ]; then
+  if [[ "true" == "${result}" ]]; then
     addLogSuccess "MySQL is configured with success"
   fi
 }
@@ -113,7 +104,6 @@ step3_prepare_var_www_html() {
   fi
 
   { ##try
-
     # moving any content of /var/www/html to /var/www/html.XXXXXXXX
     if [[ -d "${APACHE_HTML_DIRECTORY}" ]]; then
       count="$(find ${APACHE_HTML_DIRECTORY} -mindepth 1 -maxdepth 1 | wc -l)"
@@ -124,11 +114,9 @@ step3_prepare_var_www_html() {
       fi
     fi
   } || { ##catch
-
     addLogError "Error while moving any content of ${APACHE_HTML_DIRECTORY} to ${APACHE_HTML_DIRECTORY}.XXXXXXXX"
   }
   { ##try
-
     # rename any pre-exiting link
     if [[ -L "${APACHE_HTML_DIRECTORY}" ]]; then
       dest=$(readlink "${APACHE_HTML_DIRECTORY}")
@@ -146,7 +134,6 @@ step3_prepare_var_www_html() {
     addLogError "Error while renaming ${APACHE_HTML_DIRECTORY} to ${APACHE_HTML_DIRECTORY}.XXXXXXXX"
   }
   { ##try
-
     # strange but why not
     if [[ -f "${APACHE_HTML_DIRECTORY}" ]]; then
       tfile=$(mktemp -u ${APACHE_HTML_DIRECTORY}.XXXXXXXX)
@@ -154,11 +141,10 @@ step3_prepare_var_www_html() {
       addLogInfo "warning : ${APACHE_HTML_DIRECTORY} is a file, renamed it ${tfile}"
     fi
   } || { ##catch
-
     addLogError "Error while moving ${APACHE_HTML_DIRECTORY} to ${APACHE_HTML_DIRECTORY}.XXXXXXXX"
   }
 
-  if [ "true" == "${result}" ]; then
+  if [[ "true" == "${result}" ]]; then
     addLogSuccess "${APACHE_HTML_DIRECTORY} is prepared with success"
   fi
 
@@ -178,20 +164,17 @@ step4_configure_apache() {
   for c_file in nextdom.conf nextdom-ssl.conf nextdom-common; do
     if [[ ! -f ${APACHE_CONFIG_DIRECTORY}/${c_file} ]]; then
       { ##try
-
         cp "${ROOT_DIRECTORY}/install/apache/"/${c_file} ${APACHE_CONFIG_DIRECTORY}/${c_file}
         sed -i -r "s%\s+Define\s+wwwdir\s.*%Define wwwdir \"${APACHE_HTML_DIRECTORY}\"%gI" ${APACHE_CONFIG_DIRECTORY}/${c_file}
         sed -i -r "s%\s+Define\s+logdir\s.*%Define logdir \"${LOG_DIRECTORY}\"%gI" ${APACHE_CONFIG_DIRECTORY}/${c_file}
         addLogInfo "created file: ${APACHE_CONFIG_DIRECTORY}/${c_file}"
       } || { ##catch
-
         addLogError "Error while creating file: ${APACHE_CONFIG_DIRECTORY}/${c_file}"
       }
     fi
   done
 
   { ##try
-
     # Configure private tmp
     if [[ ! -f "${APACHE_SYSTEMD_DIRECTORY}/privatetmp.conf" ]]; then
       createDirectory ${APACHE_SYSTEMD_DIRECTORY}
@@ -199,7 +182,6 @@ step4_configure_apache() {
       addLogInfo "created file: ${APACHE_SYSTEMD_DIRECTORY}/privatetmp.conf"
     fi
   } || { ##catch
-
     addLogError "Error while creating file: ${APACHE_SYSTEMD_DIRECTORY}/privatetmp.conf"
   }
 
@@ -208,18 +190,16 @@ step4_configure_apache() {
     createDirectory ${CONFIG_DIRECTORY}/ssl/
     goToDirectory ${CONFIG_DIRECTORY}/ssl/
     { ##try
-
       openssl genrsa -out nextdom.key 2048
       openssl req -new -key nextdom.key -out nextdom.csr -subj "/C=FR/ST=Paris/L=Paris/O=Global Security/OU=IT Department/CN=example.com"
       openssl x509 -req -days 3650 -in nextdom.csr -signkey nextdom.key -out nextdom.crt
       addLogInfo "created SSL self-signed certificates in /etc/nextdom/ssl/"
     } || { ##catch
-
       addLogError "Error while creating SSL self-signed certificates in /etc/nextdom/ssl/"
     }
   fi
 
-  if [ "true" == "${result}" ]; then
+  if [[ "true" == "${result}" ]]; then
     addLogSuccess "Apache is configured with success"
   fi
 }
@@ -231,9 +211,30 @@ step5_configure_mysql_database() {
 
   addLogStep "Preinst -- Configure MySQL/MariaDB - 5/7"
 
-  if [[ -f /etc/nextdom/mysql/secret ]]; then
-    source /etc/nextdom/mysql/secret
+  if [[ -f ${CONFIG_DIRECTORY}/mysql/secret ]]; then
+    source ${CONFIG_DIRECTORY}/mysql/secret
+  elif [[ -z ${MYSQL_NEXTDOM_PASSWD} ]]; then
+      MYSQL_NEXTDOM_PASSWD="$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15)"
+      { ##try
+        checkDirectory = checkIfDirectoryExists ${CONFIG_DIRECTORY}/mysql/
+        if [[ ${checkDirectory} -gt 0  ]]; then
+            createDirectory ${CONFIG_DIRECTORY}/mysql/
+        fi
+        cat - >${CONFIG_DIRECTORY}/mysql/secret <<EOS
+MYSQL_HOSTNAME="${MYSQL_HOSTNAME}"
+MYSQL_PORT="${MYSQL_PORT}"
+MYSQL_SUBNET="${MYSQL_HOSTNAME}"
+#MYSQL_SUBNET="${MYSQL_SUBNET}"
+MYSQL_NEXTDOM_DB=${MYSQL_NEXTDOM_DB}
+MYSQL_NEXTDOM_USER="${MYSQL_NEXTDOM_USER}"
+MYSQL_NEXTDOM_PASSWD="${MYSQL_NEXTDOM_PASSWD}"
+EOS
+        addLogInfo "Writing MariaDb/MySQL information file: ${CONFIG_DIRECTORY}/mysql/secret"
+      } || { ##catch
+        addLogError "Error while writing MariaDb/MySQL information in: ${CONFIG_DIRECTORY}/mysql/secret"
+      }
   fi
+
   #MYSQL_NEXTDOM_PASSWD=${MYSQL_NEXTDOM_PASSWD:-$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15)}
   #MYSQL_HOSTNAME=${MYSQL_HOSTNAME:-localhost}
   #MYSQL_PORT=${MYSQL_PORT:-3306}
@@ -253,14 +254,12 @@ step5_configure_mysql_database() {
   fi
 
   { ##try
-
     checkMySQLIsRunning ${MYSQL_OPTIONS}
   } || { ##catch
-
     addLogError "MySQL/MariaDB is not running"
   }
 
-  if [ "true" == "${result}" ]; then
+  if [[ "true" == "${result}" ]]; then
     addLogSuccess "MySQL/MariaDB is configured with success"
   fi
 }
@@ -279,7 +278,6 @@ step6_generate_mysql_structure() {
     CONSTRAINT='localhost'
   fi
   { ##try
-
     QUERY="DROP USER IF EXISTS '${MYSQL_NEXTDOM_USER}'@'${CONSTRAINT}';"
     mysql -uroot -h${MYSQL_HOSTNAME} ${HOSTPASS} -e "${QUERY}"
     addLogInfo "deleted mysql user: ${MYSQL_NEXTDOM_USER}"
@@ -288,58 +286,41 @@ step6_generate_mysql_structure() {
     addLogError "Error while deleting user : ${MYSQL_NEXTDOM_USER}"
   }
   { ##try
-
     QUERY="CREATE USER '${MYSQL_NEXTDOM_USER}'@'${CONSTRAINT}' IDENTIFIED BY '${MYSQL_NEXTDOM_PASSWD}';"
     mysql -uroot -h${MYSQL_HOSTNAME} ${HOSTPASS} -e "${QUERY}"
     addLogInfo "created mysql user: ${MYSQL_NEXTDOM_USER}"
   } || { ##catch
-
     addLogError "Error while creating user : ${MYSQL_NEXTDOM_USER}"
   }
   { ##try
-
     QUERY="DROP DATABASE IF EXISTS ${MYSQL_NEXTDOM_DB};"
     mysql -uroot -h${MYSQL_HOSTNAME} ${HOSTPASS} -e "${QUERY}"
     addLogInfo "deleted mysql table: ${MYSQL_NEXTDOM_DB}"
   } || { ##catch
-
     addLogError "Error while deleting table : ${MYSQL_NEXTDOM_DB}"
   }
   { ##try
-
     QUERY="CREATE DATABASE ${MYSQL_NEXTDOM_DB};"
     mysql -uroot -h${MYSQL_HOSTNAME} ${HOSTPASS} -e "${QUERY}"
     addLogInfo "created mysql table: ${MYSQL_NEXTDOM_DB}"
   } || { ##catch
-
     addLogError "Error while creating table : ${MYSQL_NEXTDOM_DB}"
   }
   { ##try
-
     QUERY="GRANT ALL PRIVILEGES ON ${MYSQL_NEXTDOM_DB}.* TO '${MYSQL_NEXTDOM_USER}'@'${CONSTRAINT}';"
     mysql -uroot -h${MYSQL_HOSTNAME} ${HOSTPASS} -e "${QUERY}"
   } || { ##catch
-
     addLogError "Error while granting privileges on : ${MYSQL_NEXTDOM_DB}"
   }
   { ##try
-
     QUERY="FLUSH PRIVILEGES;"
     mysql -uroot -h${MYSQL_HOSTNAME} ${HOSTPASS} -e "${QUERY}"
     addLogInfo "configured table privileges: ${MYSQL_NEXTDOM_DB}"
   } || { ##catch
-
     addLogError "Error while flushing privileges"
   }
-  { ##try
 
-    php ${ROOT_DIRECTORY}/install/install.php mode=force
-  } || { ##catch
-
-    addLogError "NextDom installation script failed"
-  }
-
-  if [ "true" == "${result}" ]; then
+  if [[ "true" == "${result}" ]]; then
     addLogSuccess "Database structure generated with success"
   fi
 }
@@ -350,65 +331,51 @@ step7_configure_php() {
   addLogStep "Preinst -- Configure PHP - 7/7"
 
   { ##try
-
     removeDirectoryOrFile ${ROOT_DIRECTORY}/assets/config/default.config.ini
   } || { ##catch
-
     addLogError "Error while removing default.config.ini file"
   }
   { ##try
-
     removeDirectoryOrFile ${PHP_DIRECTORY}/apache2/conf.d/10-opcache.ini
   } || { ##catch
-
     addLogError "Error while removing 10-opcache.ini file"
   }
 
   if [[ "true" == "${PRODUCTION}" ]]; then
     addLogInfo "production mode"
     { ##try
-
       cp -f ${ROOT_DIRECTORY}/assets/config/dist/default.config.ini.dist ${ROOT_DIRECTORY}/assets/config/default.config.ini
     } || { ##catch
-
       addLogError "Error while copying default.config.ini file"
     }
     addLogInfo "enable PHP opcache"
     { ##try
-
       cp -f ${ROOT_DIRECTORY}/assets/config/dist/opcache.ini.dist ${PHP_DIRECTORY}/apache2/conf.d/10-opcache.ini
     } || { ##catch
-
       addLogError "Error while copying 10-opcache.ini file"
     }
   else
     addLogInfo "development mode"
     { ##try
-
       cp -f ${ROOT_DIRECTORY}/assets/config/dist/default.config.ini.dev ${ROOT_DIRECTORY}/assets/config/default.config.ini
     } || { ##catch
-
       addLogError "Error while copying default.config.ini file"
     }
     addLogInfo "disable PHP opcache"
     { ##try
-
       cp -f ${ROOT_DIRECTORY}/assets/config/dist/opcache.ini.dev ${PHP_DIRECTORY}/apache2/conf.d/10-opcache.ini
     } || { ##catch
-
       addLogError "Error while copying 10-opcache.ini file"
     }
   fi
   addLogInfo "restart Apache"
   { ##try
-
     restartService apache2
   } || { ##catch
-
     addLogError "Error while restarting apache2"
   }
 
-  if [ "true" == "${result}" ]; then
+  if [[ "true" == "${result}" ]]; then
     addLogSuccess "PHP is configured with success"
   fi
 }
@@ -425,8 +392,6 @@ preinstall_nextdom() {
     exit 1
   fi
 
-  docker=${1:-""}
-
   addLogScript "============ Starting preinst.sh ============"
 
   # Start all services
@@ -435,18 +400,18 @@ preinstall_nextdom() {
   startService mysql
 
   step1_generate_nextdom_assets
-  step2_configure_mysql ${docker}
+  step2_configure_mysql
   step3_prepare_var_www_html
   step4_configure_apache
-  step5_configure_mysql_database ${docker}
-  step6_generate_mysql_structure ${docker}
+  step5_configure_mysql_database
+  step6_generate_mysql_structure
   step7_configure_php
 
   addLogScript "============ Preinst.sh is executed ... ============"
 
 }
 
-[[ ! $(checkIfDirectoryExists ${LOG_DIRECTORY}) ]] && createDirectory ${LOG_DIRECTORY}
+[[ $(checkIfDirectoryExists ${LOG_DIRECTORY}) -eq 0  ]] && createDirectory ${LOG_DIRECTORY}
 
 preinstall_nextdom
 

@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-#https://stackoverflow.com/questions/59895/get-the-source-directory-of-a-bash-script-from-within-the-script-itself
 CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
 source ${CURRENT_DIR}/utils.sh
@@ -32,7 +31,7 @@ step1_create_prerequisite_files_and_directories() {
     createFile ${c_file}
   done
 
-  if [ "true" == "${result}" ]; then
+  if [[ "true" == "${result}" ]]; then
     addLogSuccess "Files and directories are created with success"
   fi
 }
@@ -140,7 +139,7 @@ step2_prepare_directory_layout() {
   } || { ##catch
     addLogError "Error while clearing cache"
   }
-  if [ "true" == "${result}" ]; then
+  if [[ "true" == "${result}" ]]; then
     addLogSuccess "NextDom is configured with success"
   fi
 }
@@ -157,7 +156,6 @@ step3_configure_mysql() {
     addLogInfo "Remote mysql server detected"
     return 0
   }
-
   { ##try
     mysqladmin -u root status
     isService=$?
@@ -205,7 +203,7 @@ EOS
 
   startService mysql
 
-  if [ "true" == "${result}" ]; then
+  if [[ "true" == "${result}" ]]; then
     addLogSuccess "MySQL is configured with success"
   fi
 }
@@ -224,7 +222,7 @@ step4_create_symLink_var_www_html() {
     addLogError "Error while linking ${ROOT_DIRECTORY} to ${APACHE_HTML_DIRECTORY}"
   }
 
-  if [ "true" == "${result}" ]; then
+  if [[ "true" == "${result}" ]]; then
     addLogSuccess "${ROOT_DIRECTORY} linked with success to ${APACHE_HTML_DIRECTORY}"
   fi
 }
@@ -260,7 +258,7 @@ step5_configure_apache() {
   } || { ##catch
     addLogError "Error while configuring Apache service"
   }
-  if [ "true" == "${result}" ]; then
+  if [[ "true" == "${result}" ]]; then
     addLogSuccess "Apache is configured with success"
   fi
 }
@@ -295,6 +293,10 @@ step6_configure_nextdom() {
     addLogError "Error while generating Secret key"
   }
 
+  if [[ -f ${CONFIG_DIRECTORY}/mysql/secret ]]; then
+    source ${CONFIG_DIRECTORY}/mysql/secret
+  fi
+
   { ##try
     sed -i "s/#PASSWORD#/${MYSQL_NEXTDOM_PASSWD}/g" ${ROOT_DIRECTORY}/core/config/common.config.php
     sed -i "s/#DBNAME#/${MYSQL_NEXTDOM_DB}/g" ${ROOT_DIRECTORY}/core/config/common.config.php
@@ -308,6 +310,12 @@ step6_configure_nextdom() {
     addLogInfo "wrote configuration file: ${ROOT_DIRECTORY}/core/config/common.config.php"
   } || { ##catch
     addLogError "Error while writing in: ${ROOT_DIRECTORY}/core/config/common.config.php"
+  }
+
+  { ##try
+    php ${ROOT_DIRECTORY}/install/install.php mode=force
+  } || { ##catch
+    addLogError "NextDom installation script failed"
   }
 
   { ##try
@@ -374,7 +382,7 @@ EOS
   } || { ##catch
     addLogError "Error while adding www-data as sudoer"
   }
-  if [ "true" == "${result}" ]; then
+  if [[ "true" == "${result}" ]]; then
     addLogSuccess "NextDom is configured with success"
   fi
 }
@@ -389,7 +397,7 @@ step7_restart_mysql_database() {
     addLogError "MySQL/MariaDB is not running"
   }
 
-  if [ "true" == "${result}" ]; then
+  if [[ "true" == "${result}" ]]; then
     addLogSuccess "MySQL/MariaDB is configured with success"
   fi
 }
@@ -418,7 +426,7 @@ EOS
 
   reloadService cron
 
-  if [ "true" == "${result}" ]; then
+  if [[ "true" == "${result}" ]]; then
     addLogSuccess "Cron is configured with success"
   fi
 }
@@ -433,7 +441,7 @@ step9_check_nextdom() {
   } || { ##catch
     addLogError "Error while checking nextdom"
   }
-  if [ "true" == "${result}" ]; then
+  if [[ "true" == "${result}" ]]; then
     addLogSuccess "Check is done with success"
   fi
 }
@@ -458,7 +466,17 @@ step10_specific_action_for_OS() {
   } || { ##catch
     addLogError "Error while specific action for raspberry pi"
   }
-  if [ "true" == "${result}" ]; then
+
+  { ##try
+    # Windows hack (bash for windows)
+    if [[ ! $(uname -r | grep -i microsoft) = "" ]] ; then
+      bash ${WEBSERVER_HOME}/install/OS_specific/windows/pre_inst.sh
+    fi
+  } || { ##catch
+    addLogError "Error while specific action for microsoft windows"
+  }
+
+  if [[ "true" == "${result}" ]]; then
     addLogSuccess "OS specific actions are done with success"
   fi
 }
@@ -475,7 +493,7 @@ step11_configure_file_permissions() {
     local directories=("${LIB_DIRECTORY}" "${LOG_DIRECTORY}" "${TMP_DIRECTORY}" "${ROOT_DIRECTORY}/plugins" "${ROOT_DIRECTORY}/public/img")
     for c_dir in ${directories[*]}; do
       if [[ $(checkIfDirectoryExists ${c_dir}) -gt 0 ]]; then
-        chown -R www-data:www-data ${c_dir}
+        chown -Rf www-data:www-data ${c_dir}
         find ${c_dir} -type d -exec chmod 0755 {} \;
         find ${c_dir} -type f -exec chmod 0644 {} \;
         addLogInfo "set file owner: www-data, perms: 0755/0644 on directory ${c_dir}"
@@ -485,7 +503,7 @@ step11_configure_file_permissions() {
     addLogError "Error while checking file permission"
   }
 
-  if [ "true" == "${result}" ]; then
+  if [[ "true" == "${result}" ]]; then
     addLogSuccess "Files permissions are configured with success"
   fi
 }
@@ -496,20 +514,22 @@ step12_change_owner_for_nextdom_directories() {
   addLogStep "Postinst -- Configure owner for NextDom directory - 12/12"
 
   { ##try
-    chown -R www-data:www-data "${ROOT_DIRECTORY}"
+    local directories=("${ROOT_DIRECTORY}" "${LIB_DIRECTORY}" "${LOG_DIRECTORY}" "${TMP_DIRECTORY}")
+    for c_dir in ${directories[*]}; do
+        { ##try
+            if [[ -d "${c_dir}" ]]; then
+              chown -Rf www-data:www-data "${c_dir}"
+            fi
+        } || { ##catch
+            addLogError "Error while changing owner on ${c_dir}"
+        }
+    done
   } || { ##catch
-    addLogError "Error while changing owner on ${ROOT_DIRECTORY}"
-  }
-  { ##try
-    if [[ -d "${TMP_DIRECOTRY}" ]]; then
-      chown -R www-data:www-data "${TMP_DIRECOTRY}"
-    fi
-  } || { ##catch
-    addLogError "Error while changing owner on ${TMP_DIRECTORY}"
+    addLogError "Error while changing owner"
   }
 
-  if [ "true" == "${result}" ]; then
-    addLogSuccess "${ROOT_DIRECTORY} and ${TMP_DIRECTORY} owner is changed with success"
+  if [[ "true" == "${result}" ]]; then
+    addLogSuccess "${ROOT_DIRECTORY}, ${LIB_DIRECTORY}, ${LOG_DIRECTORY} and ${TMP_DIRECTORY} folder's owner is changed with success"
   fi
 }
 
@@ -524,8 +544,6 @@ postinstall_nextdom() {
         Veuillez lancer sudo $0 ou connectez-vous en tant que root, puis relancez $0"
     exit 1
   fi
-
-  docker=${1:-""}
 
   addLogScript "============ Starting postinst.sh ============"
 

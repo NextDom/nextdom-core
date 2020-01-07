@@ -5,7 +5,8 @@ set -e
 #################################################################################################
 
 # false for dev
-PRODUCTION=${PRODUCTION:-"true"}
+PRODUCTION=${PRODUCTION:-true}
+DOCKER=${DOCKER:-false}
 
 # For log output
 BLUE="\\033[1;34m"
@@ -38,9 +39,8 @@ TMP_DIRECTORY="/tmp/nextdom"
 
 MYSQL_HOSTNAME=${MYSQL_HOSTNAME:-"localhost"}
 MYSQL_PORT=${MYSQL_PORT:-"3306"}
-#MYSQL_ROOT_PASSWD=""
-MYSQL_NEXTDOM_DB=${MYSQL_NEXTDOM_DB:-"nextdomdev"}
-MYSQL_NEXTDOM_USER=${MYSQL_NEXTDOM_USER:-"nextdomdev"}
-if [ -z ${MYSQL_NEXTDOM_PASSWD} ]; then
-  MYSQL_NEXTDOM_PASSWD="$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15)"
-fi
+MYSQL_SUBNET="192.168.1.%"
+MYSQL_ROOT_PASSWD=""
+MYSQL_NEXTDOM_DB=${MYSQL_NEXTDOM_DB:-"nextdom"}
+MYSQL_NEXTDOM_USER=${MYSQL_NEXTDOM_USER:-"nextdom"}
+MYSQL_NEXTDOM_PASSWD='#MYSQL_NEXTDOM_PASSWD#'

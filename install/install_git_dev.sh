@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-CURRENT_DIR=$(dirname $0)
+CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
 source ${CURRENT_DIR}/scripts/utils.sh
 
