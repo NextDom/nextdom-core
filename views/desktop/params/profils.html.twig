@@ -143,7 +143,7 @@
                                         <img class="themeWidgetThumbnail" src="{{ theme.dir }}">
                                     </label>
                                 </div>
-                                <input id={{ theme.name|slice(0, -4) }} class="spacing-right" type="radio" name="themeWidget" value={{ theme.name |slice(0, -4) }}>
+                                <input id={{ theme.name|slice(0, -4) }} class="spacing-right" type="radio" name="themeWidget" value="{{ theme.name |slice(0, -4) }}"/>
                                 <label for={{ theme.name|slice(0, -4) }}>{{ theme.name|slice(0, -4) }}</label>
                             </div>
                         {% endfor %}
