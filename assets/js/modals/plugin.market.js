@@ -56,8 +56,6 @@ function initDataModal() {
     $('#travis-badge img').attr('src', 'https://travis-ci.org/' + fullName + '.svg?branch=' + defaultBranch);
     $('#coveralls-badge').attr('href', 'https://coveralls.io/github/' + fullName + '?branch=' + defaultBranch);
     $('#coveralls-badge img').attr('src', 'https://coveralls.io/repos/github/' + fullName + '/badge.svg?branch=' + defaultBranch);
-    $('#waffle-badge').attr('href', 'https://waffle.io/' + fullName);
-    $('#waffle-badge img').attr('src', 'https://badge.waffle.io/' + fullName + '.svg?columns=all');
 }
 
 /* Initialise les boutons d'installation */
@@ -67,7 +65,7 @@ function initInstallationButtons() {
     $('#install-plugin').click(function () {
         installPlugin(currentPlugin['defaultBranch']);
     });
-    $('#default-branch-information').text(branchStr + defaultBranch);
+    $('#default-branch-information').text(defaultBranch);
     if (currentPlugin['branchesList'].length > 0) {
         initBranchesChoice(currentPlugin['branchesList'], defaultBranch);
     }
@@ -85,7 +83,7 @@ function initInstallationButtons() {
         if (currentPlugin['installedBranchData'] !== false) {
             $('#install-plugin').hide();
             var installedBranch = currentPlugin['installedBranchData']['branch'];
-            $('#default-branch-information').text('Branche ' + installedBranch);
+            $('#default-branch-information').text(installedBranch);
             initBranchesChoice(currentPlugin['branchesList'], installedBranch);
             if (currentPlugin['installedBranchData']['needUpdate'] === true) {
                 $('#update-plugin').click(function () {
@@ -155,7 +153,6 @@ function initBranchesChoice(branchesList, defaultBranchChoice) {
  * @param branch Nom de la branche GitHub à installer
  */
 function installPlugin(branch) {
-
     var data = {
         action: 'save',
         // Version de l'installation par URL
