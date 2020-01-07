@@ -165,6 +165,10 @@ timeline:
   path: 'timeline'
   controller: NextDom\Controller\Diagnostic\TimelineController::get
   condition: 'admin'
+translations:
+  path: 'translations'
+  controller:  NextDom\Ajax\TranslationsAjax
+  condition: 'user'
 update:
   path: 'update'
   controller: NextDom\Controller\Tools\UpdateController::get
@@ -181,7 +185,3 @@ view_edit:
   path: 'view_edit'
   controller: NextDom\Controller\Pages\ViewEditController::get
   condition: 'admin'
-translations:
-  path: 'translations'
-  controller:  NextDom\Ajax\TranslationsAjax
-  condition: 'user'
