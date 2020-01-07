@@ -38,11 +38,10 @@ class TranslationsAjax extends BaseAjax
     private static $translator = null;
 
     /**
-     * @param $pageData
-     * @return string
+     * @return false|string
      * @throws \Exception
      */
-    public static function get(&$pageData): string
+    public function allTranslations()
     {
         $language = TranslateHelper::getLanguage();
         $filename = TranslateHelper::getPathTranslationFile($language);
@@ -51,9 +50,8 @@ class TranslationsAjax extends BaseAjax
         self::$translator->addLoader('yaml', new YamlFileLoader());
         self::$translator->addResource('yaml', $filename, $language);
 
-        $arrayOftranslations = self::$translator->getCatalogue()->all();
+        $arrayOfTranslations = self::$translator->getCatalogue()->all();
 
-        return \json_encode($arrayOftranslations, true);
+        return \json_encode($arrayOfTranslations);
     }
-
 }

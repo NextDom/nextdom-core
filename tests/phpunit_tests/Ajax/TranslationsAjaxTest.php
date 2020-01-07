@@ -20,33 +20,17 @@
  * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
  */
 
-
 use NextDom\Ajax\CronAjax;
+use NextDom\Ajax\TranslationsAjax;
 
 require_once('BaseAjaxTest.php');
 
 class TranslationsAjaxTest extends BaseAjaxTest
 {
 
-
-    /**
-     * @var CronAjax
-     */
-    private $cronAjax;
-
-    public function setUp()
+    public function testTranslationsIsJsonValid()
     {
-        $this->cronAjax = new CronAjax();
-    }
-
-    public function tearDown()
-    {
-        $this->cleanGetParams();
-    }
-
-    public function testGetTranslations()
-    {
-       return true;
+        $this->assertJson((new TranslationsAjax())->allTranslations(),'available translations');
     }
 
 }

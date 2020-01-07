@@ -179,3 +179,18 @@ function initTextArea(){
          }
      });
  }
+
+ /**
+  * Initialize JS translations
+  */
+ async function initTranslations() {
+   let jsonTranslates = await getJSONTranslations();
+   return storeAndGetTranslations('NextDomTranslations',jsonTranslates);
+ }
+
+ /**
+  * Initialize JS translations
+  */
+ async function initTranslations2() {
+   var translates = await initTranslations();
+}
