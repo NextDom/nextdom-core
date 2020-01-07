@@ -20,24 +20,17 @@
  * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
  */
 
-namespace NextDom\Controller\Modals;
+use NextDom\Ajax\CronAjax;
+use NextDom\Ajax\TranslationsAjax;
 
-use NextDom\Helpers\Render;
+require_once('BaseAjaxTest.php');
 
-/**
- * Class InteractTest
- * @package NextDom\Controller\Modals
- */
-class InteractTest extends BaseAbstractModal
+class TranslationsAjaxTest extends BaseAjaxTest
 {
-    /**
-     * Render interact tester modal
-     *
-     * @return string
-     * @throws \Exception
-     */
-    public static function get(): string
+
+    public function testTranslationsIsJsonValid()
     {
-        return Render::getInstance()->get('/modals/interact.test.html.twig');
+        $this->assertJson((new TranslationsAjax())->allTranslations(),'available translations');
     }
+
 }

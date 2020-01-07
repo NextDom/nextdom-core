@@ -77,19 +77,19 @@ function initEvents() {
         nextdom.config.save({
             configuration: $('#API').getValues('.configKey')[0],
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify(translates['common.error'], error.message, 'error');
             },
             success: function () {
                 nextdom.config.load({
                     configuration: $('#API').getValues('.configKey')[0],
                     plugin: 'core',
                     error: function (error) {
-                        notify("Erreur", error.message, 'error');
+                        notify(translates['common.error'], error.message, 'error');
                     },
                     success: function (data) {
                         $('#API').setValues(data, '.configKey');
                         modifyWithoutSave = false;
-                        notify("Info", '{{Sauvegarde réussie}}', 'success');
+                        notify(translates['common.info'], translates['common.save-success'], 'success');
                     }
                 });
             }

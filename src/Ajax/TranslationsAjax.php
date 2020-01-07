@@ -20,24 +20,38 @@
  * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
  */
 
-namespace NextDom\Controller\Modals;
+namespace NextDom\Ajax;
 
-use NextDom\Helpers\Render;
+use NextDom\Helpers\TranslateHelper;
+use Symfony\Component\Translation\Loader\YamlFileLoader;
+use Symfony\Component\Translation\Translator;
 
 /**
- * Class InteractTest
- * @package NextDom\Controller\Modals
+ * Class TranslationsController
+ * @package NextDom\Controller\Pages
  */
-class InteractTest extends BaseAbstractModal
+class TranslationsAjax extends BaseAjax
 {
     /**
-     * Render interact tester modal
-     *
-     * @return string
+     * @var Translator Translate tool
+     */
+    private static $translator = null;
+
+    /**
+     * @return false|string
      * @throws \Exception
      */
-    public static function get(): string
+    public function allTranslations()
     {
-        return Render::getInstance()->get('/modals/interact.test.html.twig');
+        $language = TranslateHelper::getLanguage();
+        $filename = TranslateHelper::getPathTranslationFile($language);
+
+        self::$translator = new Translator($language, null, NEXTDOM_DATA . '/cache/i18n');
+        self::$translator->addLoader('yaml', new YamlFileLoader());
+        self::$translator->addResource('yaml', $filename, $language);
+
+        $arrayOfTranslations = self::$translator->getCatalogue()->all();
+
+        return \json_encode($arrayOfTranslations);
     }
 }

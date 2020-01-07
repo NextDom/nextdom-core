@@ -37,7 +37,6 @@
 /* JS file for page and modals loading management */
 
 // INIT, EVENT, FIRST Loading
-
 /**
  * Event for Ajax start request
  */
@@ -55,6 +54,11 @@ $(document).ajaxStop(function () {
     }
 });
 
+const getJSONTranslations = async () => {
+    const response = await fetch('/core/ajax/translations.ajax.php');
+    return await response.json();
+};
+
 /**
  * Event for first page loading or F5 loading
  */
@@ -67,6 +71,8 @@ $(function () {
     // ?
     $.fn.modal.Constructor.prototype.enforceFocus = function () {
     };
+
+    initTranslations2();
 
     // Clock actualisation timer
     displayClock();
@@ -468,6 +474,8 @@ function loadPage(pageUrl,noPushHistory){
         var n = pageUrl.lastIndexOf("#");
         var url = pageUrl.substring(0,n)+"&ajax=1"+pageUrl.substring(n)
     }
+
+initTranslations2();
 
     // Page content loading
     $('#div_pageContainer').empty().load(url, function(){

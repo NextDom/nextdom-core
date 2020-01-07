@@ -708,3 +708,18 @@ function passwordScore(password, progressbar=null, spanLevel=null) {
     }
     return score;
 }
+
+/**
+ * persist and return values of translations from localstorage
+ * @returns {Promise<any>}
+ */
+function storeAndGetTranslations(key,jsonObject) {
+    let translations = null;
+    if (localStorage.getItem(key) === null ){
+        localStorage.setItem(key,JSON.stringify(jsonObject.messages));
+        translations = jsonObject;
+    } else {
+        translations = JSON.parse(localStorage.getItem(key));
+    }
+    return translations;
+}
