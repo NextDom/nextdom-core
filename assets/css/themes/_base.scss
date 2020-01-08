@@ -964,7 +964,8 @@ pre:not(.mobile-pre) {
 /* ############################################## */
 /* Tabs */
 .nav-tabs-custom>.tab-content,
-#dashboard-content .box-body:not(.widget-content), {
+#dashboard-content .box-body:not(.widget-content),
+#dashboard-content .box {
   background-color: map_get($color_theme, 'color19') !important;
 }
 /* Legendes de sections */
