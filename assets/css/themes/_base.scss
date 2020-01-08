@@ -281,6 +281,13 @@ html {
     }
 }
 
+/* Widget theme nextdom */
+.label-default,
+.bg-theme .btn  {
+  color: map_get($color_theme, 'color2') !important;
+}
+
+
 /* ############################################################################################################# */
 /* COLOR3 = Couleur de survol principale (contenu, titres, footer, bouton d'administration, unités, légendes...) */
 /* ############################################################################################################# */
@@ -547,6 +554,10 @@ body,
   }
 }
 
+/* Widget theme nextdom */
+.bg-theme {
+    background-color: map_get($color_theme, 'color8') !important;
+}
 
 /* ################################################################### */
 /* COLOR9 = Couleur de fond des titres (légendes, tableaux, unités...) */
@@ -628,7 +639,7 @@ pre::selection {
 /* COLOR10 = Couleur des textes (contenu, titres, footer, bouton d'administration, unités, légendes...) */
 /* #################################################################################################### */
 /* Textes */
-body, h1, h2, h3, h4, h5, h6  {
+body, h1, h2, h3, h4, h5, h6, {
   color: map_get($color_theme, 'color10') !important;
 }
 .box-header span:not(.badge) {
@@ -745,6 +756,11 @@ pre::selection {
   color: map_get($color_theme, 'color10') !important;
 }
 .timeline-item {
+  color: map_get($color_theme, 'color10') !important;
+}
+
+/* Widget Theme Nextdom */
+.bg-theme .widget-content {
   color: map_get($color_theme, 'color10') !important;
 }
 

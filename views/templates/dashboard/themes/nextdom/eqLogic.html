@@ -1,0 +1,25 @@
+<div class="eqLogic eqLogic-widget allowResize allowReorderCmd #custom_layout# #eqLogic_class# bg-theme" data-eqType="#eqType#" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#" style="border:#border#;border-radius:#border-radius#;color: #color#;width: #width#;height: #height#;#style#" data-category="#category#" data-tags="#data-tags#">
+	<div class="widget-name" style="background-color:#background-color#;">
+		<span class="pull-left" title="#alert_name#">
+			<i class='#alert_icon#'></i>
+		</span>
+		<span class="cmd refresh pull-right cursor" data-cmd_id="#refresh_id#">
+			<i class='fas fa-refresh'></i>
+		</span>
+		<span class="reportModeVisible" style="display:none;">#name_display# <span>#object_name#</span></span>
+		<a href="#eqLink#" class="reportModeHidden" style="#hideEqLogicName#">#name_display# <span>#object_name#</span></a>
+	</div>
+	<div class="widget-content widget-vertical-align">
+			#cmd#
+	</div>
+	<span class="statusCmd"></span>
+	<script>
+		if ('#refresh_id#' != ''){
+			$('.eqLogic[data-eqLogic_uid=#uid#] .refresh').on('click', function () {
+				nextdom.cmd.execute({id: '#refresh_id#'});
+			});
+		}else{
+			$('.eqLogic[data-eqLogic_uid=#uid#] .refresh').remove();
+		}
+	</script>
+</div>
