@@ -25,6 +25,7 @@ use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
 use NextDom\Interfaces\BaseRepo;
+use NextDom\Managers\CacheManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UpdateManager;
 use NextDom\Model\Entity\Update;
@@ -155,9 +156,9 @@ class RepoGitHub implements BaseRepo
 
     public static function getGithubClient()
     {
-        $client = new \Github\Client(
-            new \Github\HttpClient\CachedHttpClient(['cache_dir' => NextDomHelper::getTmpFolder('github') . '/cache'])
-        );
+        $cache = new \Symfony\Component\Cache\Adapter\FilesystemAdapter('', 0, NextDomHelper::getTmpFolder('github'));
+        $client = new \Github\Client();
+        $client->addCache($cache);
         if (ConfigManager::byKey('github::token') != '') {
             $client->authenticate(ConfigManager::byKey('github::token'), '', \Github\Client::AUTH_URL_TOKEN);
         }

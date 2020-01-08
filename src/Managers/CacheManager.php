@@ -127,6 +127,22 @@ class CacheManager
     }
 
     /**
+     * Get doctrine cache
+     *
+     * @param string $targetFolder Target folder
+     *
+     * @return \Doctrine\Common\Cache\FilesystemCache
+     *
+     * @throws \Exception
+     */
+    public static function getDoctrineCache(string $targetFolder = '') {
+        if ($targetFolder === '') {
+            $targetFolder = self::getFolder();
+        }
+        return new \Doctrine\Common\Cache\FilesystemCache($targetFolder);
+    }
+
+    /**
      * Get cache system
      *
      * @return \Doctrine\Common\Cache\FilesystemCache|\Doctrine\Common\Cache\MemcachedCache|\Doctrine\Common\Cache\RedisCache|null Cache system
@@ -148,10 +164,9 @@ class CacheManager
         }
         switch ($engine) {
             case CacheEngine::FILESYSTEM:
-                self::$cacheSystem = new \Doctrine\Common\Cache\FilesystemCache(self::getFolder());
-                break;
             case CacheEngine::PHPFILE:
-                self::$cacheSystem = new \Doctrine\Common\Cache\FilesystemCache(self::getFolder());
+            default:
+                self::$cacheSystem = self::getDoctrineCache();
                 break;
             case CacheEngine::MEMCACHED:
                 $memcached = new \Memcached();
@@ -164,9 +179,6 @@ class CacheManager
                 $redis->connect(ConfigManager::byKey('cache::redisaddr'), ConfigManager::byKey('cache::redisport'));
                 self::$cacheSystem = new \Doctrine\Common\Cache\RedisCache();
                 self::$cacheSystem->setRedis($redis);
-                break;
-            default:
-                self::$cacheSystem = new \Doctrine\Common\Cache\FilesystemCache(self::getFolder());
                 break;
         }
         return self::$cacheSystem;
