@@ -57,7 +57,7 @@ function loadInformations() {
             $(".bt_cancelModifs").hide();
         }
     });
-    $('#pre_backupInfo').height($(window).height() - $('header').height() - $('footer').height() - 150);
+    $('#pre_backupInfo').height($(window).height() - $('header').height() - 150);
 }
 
 /**

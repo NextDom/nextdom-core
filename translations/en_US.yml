@@ -207,10 +207,6 @@ firstuse:
   welcome-content: |
     Well Done! You have just installed your home automation solution, the first use wizard is activated!
     This one will guide you in the process of configuring your home automation solution ..."
-footer:
-  about: A Propos de
-  licence: GPL Automation 2018
-  rights: All rights reserved
 general:
   hours: "Hours"
   ignore_system_time: "do not check system time"
@@ -635,6 +631,7 @@ security:
   high: Strong Security
   very-high: Very Strong Security
 sidebar:
+  about: About...
   dashboard: Dashboard
   design: Design(s)
   default-object: Default Subject
@@ -661,6 +658,7 @@ sidebar:
   help-forum: Forum
   help-github: Github
   help-chat: Chat
+  licence: GPL Automation 2018
   menu-main: Main Menu
   menu-manage: Menu Management
   objects-list: List Objects & Summaries
@@ -671,6 +669,7 @@ sidebar:
   plugins: plugins
   plugins-markets: Management & Markets
   quick-notes: Quick Notes
+  rights: All rights reserved
   show-all: Show all
   tools: Tools
   tools-summary: Automation Summary

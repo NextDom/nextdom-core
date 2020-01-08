@@ -34,7 +34,6 @@ if (getUrlVars('fullscreen') == '1') {
     $('#div_colPlan3d').removeClass('col-lg-10').addClass('col-lg-12');
     $('#div_colMenu').remove();
     $('header').hide();
-    $('footer').hide();
     $('#div_mainContainer').css('margin-top', '-50px');
     $('#wrap').css('margin-bottom', '0px');
     $('#div_colPlan3d').height($('html').height());

@@ -140,7 +140,6 @@ function initTextArea(){
  function initReportMode() {
      if (getUrlVars('report') == 1) {
          $('header').hide();
-         $('footer').hide();
          $('#div_mainContainer').css('margin-top', '-50px');
          $('#wrap').css('margin-bottom', '0px');
          $('.reportModeVisible').show();

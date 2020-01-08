@@ -207,10 +207,6 @@ firstuse:
   welcome-content: |
     Bravo ! Vous venez d'installer votre solution domotique, l'assistant de première utilisation est activé !
     Celui-ci va vous guider dans le processus de configuration de votre solution domotique...
-footer:
-  about: A Propos de
-  licence: GPL Automation 2018
-  rights: All rights reserved
 general:
   hours: "Heures"
   ignore_system_time: "Ignorer la vérification"
@@ -635,6 +631,7 @@ security:
   high: Sécurité Forte
   very-high: Sécurité Trés Forte
 sidebar:
+  about: A Propos ...
   dashboard: Dashboard
   design: Design(s)
   default-object: Objet par défaut
@@ -661,6 +658,7 @@ sidebar:
   help-forum: Forum
   help-github: Github
   help-chat: Chat
+  licence: GPL Automation 2018
   menu-main: Menu Principal
   menu-manage: Menu Gestion
   objects-list: Liste Objets & Résumés
@@ -671,6 +669,7 @@ sidebar:
   plugins: Plugins
   plugins-markets: Gestion & Markets
   quick-notes: Quick Notes
+  rights: All rights reserved
   show-all: Afficher tout
   tools: Outils
   tools-summary: Résumé domotique
