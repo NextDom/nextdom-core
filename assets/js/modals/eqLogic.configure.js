@@ -205,6 +205,7 @@ function initEvents() {
                         notify("EqLogic", '{{ Enregistrement réussi }}', 'success');
                     }
                 });
+                $('#md_modal').load('index.php?v=d&modal=eqLogic.configure&eqLogic_id=' + $('.li_eqLogic.active').attr('data-eqLogic_id')).dialog('open');
             }
         });
     });
@@ -266,6 +267,7 @@ function initEvents() {
         });
     });
 
+    // Close button
     $('#bt_eqLogicConfigureClose').on('click', function () {
         $('#md_modal').dialog('close');
     });
