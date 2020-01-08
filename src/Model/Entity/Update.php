@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Com\ComHttp;
 use NextDom\Enums\Common;
 use NextDom\Enums\LogTarget;
 use NextDom\Enums\NextDomObj;
@@ -328,8 +329,8 @@ class Update extends BaseEntity
     public static function getLastAvailableVersion()
     {
         try {
-            $url = 'https://raw.githubusercontent.com/nextdom/core/' . ConfigManager::byKey('core::branch', Common::CORE, 'master') . '/core/config/version';
-            $request_http = new \com_http($url);
+            $url = 'https://raw.githubusercontent.com/NextDom/nextdom-core/' . ConfigManager::byKey('core::branch', Common::CORE, 'master') . '/assets/config/Nextdom_version';
+            $request_http = new ComHttp($url);
             return trim($request_http->exec());
         } catch (\Exception $e) {
 
