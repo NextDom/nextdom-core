@@ -84,7 +84,8 @@
                                                     <p><i>{{ 'Licence :' }}<i class="spacing-right"></i></i>{{ plugin.getLicense() }}</p>
                                                 </div>
                                                 <div class="box-footer clearfix text-center">
-                                                    <a class="btn btn-info btn-sm pull-left plugin_configure" title="{{'Configurer'}}"><i class="fas fa-cog"></i>{{'Configurer'}}</a>
+                                                    <a class="btn btn-primary btn-sm pull-left plugin_configure" title="{{'Configurer'}}"><i class="fas fa-cog"></i>{{'Configurer'}}</a>
+                                                    <a class="btn btn-warning btn-sm" href="index.php?v=d&m={{ plugin.getId() }}&p={{ plugin.getIndex() }}" title="{{'Gérer'}}"><i class="fas fa-cog"></i>{{'Gérer'}}</a>
                                                     <a class="btn btn-danger btn-sm remove pull-right plugin_delete" data-market_logicalid="{{ plugin.getId() }}" title="{{ 'common.remove' | trans }}"><i class="fas fa-trash"></i>{{ 'common.remove' | trans }}</a>
                                                 </div>
                                             </div>

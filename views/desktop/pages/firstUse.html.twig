@@ -152,7 +152,7 @@
                                                     <span class="themeThumbnailBody" style="background: #ecf0f5"></span>
                                                 </div>
                                             </label>
-                                            <input id="light-nextdom" class="theme spacing-right" type="radio" name="themeNextDom" value="light-nextdom" checked="checked"/>
+                                            <input id="light-nextdom" class="theme spacing-right" type="radio" name="themeNextDom" value="light-nextdom"/>
                                             <label for="light-nextdom">{{ 'Light' }}</label>
                                         </div>
                                     </div>
@@ -171,7 +171,7 @@
                                             <label for="dark-nextdom">{{ 'Dark' }}</label>
                                         </div>
                                     </div>
-                                    <input class="configKey form-control" data-l1key="nextdom::user-theme" style="display:none" />
+                                    <input id="nextdom-theme" class="configKey form-control" data-l1key="nextdom::user-theme" style="display:none" />
                                 </div>
                             </div>
                             <button id="toStep5" class="btn btn-primary nextBtn primary-bg pull-right" type="button">{{ 'common.next'|trans }}<i class="fas fa-caret-right spacing-left no-spacing"></i></button>
@@ -191,11 +191,11 @@
                                                     <img class="themeWidgetThumbnail" src="{{ theme.dir }}">
                                                 </label>
                                             </div>
-                                            <input id={{ theme.name|slice(0, -4) }} class="spacing-right" type="radio" name="themeWidget" value={{ theme.name|slice(0, -4) }} {% if theme.name|slice(0, -4) == "flat" %}checked="checked"{% endif %}/>
+                                            <input id={{ theme.name|slice(0, -4) }} class="spacing-right" type="radio" name="themeWidget" value="{{ theme.name|slice(0, -4) }}"/>
                                             <label for={{ theme.name|slice(0, -4) }}>{{ theme.name|slice(0, -4) }}{{theme.first}}</label>
                                         </div>
                                     {% endfor %}
-                                    <input class="userAttr form-control" data-l1key="options" data-l2key="widget::theme" style="display:none" />
+                                    <input id="widget-theme" class="userAttr form-control" data-l1key="options" data-l2key="widget::theme" style="display:none" />
                                 </div>
                             </div>
                             <button id="toStep6" class="btn btn-primary nextBtn primary-bg pull-right" type="button">

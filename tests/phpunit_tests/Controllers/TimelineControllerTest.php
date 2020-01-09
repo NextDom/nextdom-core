@@ -33,7 +33,7 @@ class TimelineControllerTest extends BaseControllerTest
     {
         $pageData = [];
         $result = \NextDom\Controller\Diagnostic\TimelineController::get($pageData);
-        $this->assertStringContainsString('id="table_timeline"', $result);
+        $this->assertStringContainsString('id="timeline"', $result);
     }
 
     public function testPageDataVars()

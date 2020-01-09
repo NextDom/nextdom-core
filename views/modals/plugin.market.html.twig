@@ -44,13 +44,8 @@
                 <a class="btn btn-action-bar btn-primary" id="install-plugin"><i class="fas fa-download"></i>{{ 'Installer' }}</a>
                 <a class="btn btn-action-bar btn-primary" href="" id="config-plugin"><i class="fas fa-cogs spacing-right"></i>{{ 'Configurer' }}</a>
                 <div id="install-plugin-advanced" class="btn-group hidden-btn">
-                    <a class="btn btn-action-bar btn-warning"><i class="fas fa-download"></i><span>{{ 'Installation avancée' }}</span></a>
-                    <a class="btn btn-action-bar btn-warning dropdown-toggle" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                        <span class="caret"></span>
-                        <span class="sr-only">Toggle Dropdown</span>
-                    </a>
-                    <ul class="dropdown-menu">
+                    <a class="btn btn-action-bar btn-warning" dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-download"></i><span>{{ 'Installation avancée' }}</span></a>
+                    <ul class="dropdown-menu bg-warning">
                     </ul>
                 </div>
                 <div id="get-branches-informations">
@@ -74,7 +69,7 @@
                     <a id="github-link" class="btn btn-success btn-action-bar" target="_blank" href=""><i class="fab fa-github"></i>{{ 'GitHub' }}</a>
                 </div>
             </div>
-            <div class="col-xs-12 col-sm-8 col-md-9">
+            <div class="col-xs-12 col-sm-8 col-md-9" id="market-right-pane">
                 <legend>{{ 'Informations' }}</legend>
                 <div class="form-group" id="description">
                     <p><span class="list-title">{{ 'Branche : ' }}</span><span id="default-branch-information" class="list-info"></span></p>
@@ -85,7 +80,6 @@
                     <p><span class="list-title">{{ 'Badges : ' }}</span>
                     <span><a id="travis-badge"><img src=""/></a></span>
                     <span><a id="coveralls-badge"><img src=""/></a></span>
-                    <span><a id="waffle-badge"><img src=""/></a></span></p>
                 </div>
                 <div id="infos">
                     <p id="author"><span class="list-title">{{ 'Auteur' }}</span> : <span class="list-info"></span></p>

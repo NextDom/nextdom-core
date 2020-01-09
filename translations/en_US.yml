@@ -366,7 +366,8 @@ network:
   external-access: "External access"
   management: "Independent network management"
   mask: "Local IP mask"
-  mobile: "I use mobile connection"
+  mobile: "Mobile connection"
+  mobile-active: "I use 4G connection"
   networks: "Networks"
   started: "Started : "
   stopped: "Stopped"
@@ -494,6 +495,7 @@ repo:
     conf:
       stable: "NextDom Stable"
       draft: "NextDom Draft"
+      exclusivity: "NextDom Exclusivity"
       filters: "Display source filters"
   samba:
     conf:

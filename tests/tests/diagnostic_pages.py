@@ -88,7 +88,7 @@ class AdminDiagnosticPages(BaseGuiTest):
         self.goto('index.php?v=d&p=timeline')
         back_button = self.get_link_by_title('Retour')
         self.assertIsNotNone(back_button)
-        self.assertIsNotNone(self.get_element_by_id('table_timeline'))
+        self.assertIsNotNone(self.get_element_by_id('timeline'))
         self.assertIsNotNone(self.get_element_by_id('bt_configureTimelineScenario'))
         self.get_element_by_id('bt_configureTimelineScenario').click()
         sleep(2)

@@ -194,10 +194,17 @@
         border: $lightgreen !important;
         background-image: none !important;
     }
-    .btn-warning {
+    .btn-warning, .bg-warning {
         background-color: $orange !important;
         border: $orange !important;
         background-image: none !important;
+    }
+    .bg-warning a {
+        color: $white !important;
+    }
+    .bg-warning a:hover {
+        background-color: $orange !important;
+        color: $black !important;
     }
     .row {
         margin: 0;
@@ -207,6 +214,9 @@
     }
     .hidden-btn {
         display: none;
+        > a {
+            height: 34px;
+        }
     }
     .list-title {
         font-weight: bold;
@@ -217,11 +227,16 @@
 }
 #market-left-pane {
   text-align: center;
+  > img {
+    height: 14em;
+    margin-bottom: 20px;
+    margin-top: 10px;
+  }
 }
-#market-left-pane>img {
-  height: 14em;
-  margin-bottom: 20px;
-  margin-top: 10px;
+#market-right-pane {
+  > div {
+    padding-left: 10px;
+  }
 }
 #plugin-modal-body {
     background-color: $white;
@@ -384,4 +399,3 @@
 .market-modale-body {
     min-height: 120px;
 }
-

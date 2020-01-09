@@ -634,6 +634,9 @@ body, h1, h2, h3, h4, h5, h6  {
 .box-header span:not(.badge) {
   color: map_get($color_theme, 'color10') !important;
 }
+#dashboard-content .box-header {
+  color: map_get($color_theme, 'color10') !important;
+}
 .nav-tabs-custom > .nav-tabs > li.header,
 .nav-tabs-custom > .nav-tabs > li.active > a,
 .nav-tabs-custom > .nav-tabs > li.active:hover > a,
@@ -945,7 +948,7 @@ pre:not(.mobile-pre) {
 /* ############################################## */
 /* Tabs */
 .nav-tabs-custom>.tab-content,
-.box-body, {
+#dashboard-content .box-body:not(.widget-content), {
   background-color: map_get($color_theme, 'color19') !important;
 }
 /* Legendes de sections */
