@@ -357,8 +357,7 @@ html {
 /* ########################################################################## */
 .content-wrapper,
 .nav-tabs-custom > .nav-tabs > li.active > a,
-.nav-tabs-custom > .nav-tabs > li.active:hover > a,
-.main-footer {
+.nav-tabs-custom > .nav-tabs > li.active:hover > a {
   background-color:map_get($color_theme, 'color7') !important;
   border-color:map_get($color_theme, 'color7') !important;
 }
@@ -382,8 +381,12 @@ html {
   background-color: map_get($color_theme, 'color7') !important;
 }
 
-.box-header.with-border{
+.box-header.with-border {
   border-color: map_get($color_theme, 'color7') !important;
+}
+
+.box-theme {
+  border-top-color: map_get($color_theme, 'color7') !important;
 }
 
 .nav-tabs-custom > .nav-tabs,
@@ -483,8 +486,7 @@ html {
 }
 
 /* Footer */
-body,
-.main-footer{
+body {
   background-color: map_get($color_theme, 'color8') !important;
 }
 .label-list:hover,
@@ -668,7 +670,7 @@ legend {
 .CodeMirror-scroll{
   color: map_get($color_theme, 'color10') !important;
 }
-.footer-center, .text-muted {
+.text-muted {
   color: map_get($color_theme, 'color10') !important;
 }
 .ui-widget-content {

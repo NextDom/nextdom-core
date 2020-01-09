@@ -51,7 +51,7 @@ initEvents();
  * Load informations in all forms of the page
  */
 function loadInformations() {
-    updateLogView.height($(window).height() - $('header').height() - $('footer').height() - 150);
+    updateLogView.height($(window).height() - $('header').height() - 150);
     updateLogView.parent().height($(window).outerHeight() - $('header').outerHeight() - 160);
 }
 
@@ -200,7 +200,7 @@ function initUpdateTabsContent(updateId) {
  * @param updateId Id of the item to create (optional)
  */
 function createUpdateBox(updateData,updateId) {
-  var boxClass = '';
+  var boxClass = 'box-theme';
   var bgClass = 'bg-green';
   var boxUpdateClass = '';
   var updateIcon = '';

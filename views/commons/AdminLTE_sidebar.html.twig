@@ -139,7 +139,13 @@
                     <li><a href="https://www.nextdom.org/" target="_blank"><i class="fas fa-bookmark spacing-right"></i>{{ 'sidebar.help-site'|trans }}</a></li>
                     <li><a href="https://www.nextdom.org/forum/" target="_blank"><i class="fab fa-wpforms spacing-right"></i>{{ 'sidebar.help-forum'|trans }}</a></li>
                     <li><a href="https://github.com/NextDom" target="_blank"><i class="fab fa-github spacing-right"></i>{{ 'sidebar.help-github'|trans }}</a></li>
-                    <li><a href="https://discord.gg/RUd44pn" target="_blank"><i class="fab fa-discord spacing-right"></i>{{ 'sidebar.help-chat'|trans }}</a></li>
+                    <li class="divider"><a href="https://discord.gg/RUd44pn" target="_blank"><i class="fab fa-discord spacing-right"></i>{{ 'sidebar.help-chat'|trans }}</a></li>
+                    <li><a data-toggle="tooltip" title="" data-html="true"
+                        data-original-title="{% if CORE_BRANCH is defined %}{{ 'common.branch'|trans ~ ' : ' ~ CORE_BRANCH }}<br>{% endif %}
+                        {% if JEEDOM_VERSION is defined %}{{ 'common.jeedom-version'|trans ~ ' : ' ~ JEEDOM_VERSION }}{% endif %}"><i class="fas fa-code-branch spacing-right"></i>{{ 'common.version'|trans ~ ' ' ~ NEXTDOM_VERSION }}</a></li>
+                    <li><a href="https://www.nextdom.org" target="_blank" data-toggle="tooltip" title="" data-html="true"
+                        data-original-title="{{ 'sidebar.rights'|trans }}."><i class="fas fa-certificate spacing-right"></i>{{ 'sidebar.licence'|trans ~ ' - ' ~ 'now'|date('Y') }}</a></li>
+                    <li><a id="bt_nextdomAboutSide" class="cursor"><i class="fas fa-info-circle spacing-right"></i>{{ 'sidebar.about'|trans }}</a></li>
                 </ul>
             </li>
             <li class="treeview" id="side10">

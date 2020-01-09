@@ -92,7 +92,7 @@ $(function () {
 
     // BUTTONS, LINKS HANDLERS
     // About buttons event handler declaration
-    $('#bt_nextdomAbout,#bt_nextdomAbout2, #bt_nextdomAboutFooter').on('click', function () {
+    $('#bt_nextdomAbout,#bt_nextdomAbout2, #bt_nextdomAboutSide').on('click', function () {
         $('#md_modal').dialog({title: "{{A propos}}"});
         $('#md_modal').load('index.php?v=d&modal=about').dialog('open');
     });

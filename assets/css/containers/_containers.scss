@@ -68,7 +68,6 @@
   }
 }
 .wrapper.fullscreen header,
-.wrapper.fullscreen footer,
 .wrapper.fullscreen aside {
   display: none;
 }
@@ -114,6 +113,9 @@
     }
     > span {
        white-space: normal;
+    }
+    .form-control {
+      width: auto;
     }
 }
 .form-group-light {
