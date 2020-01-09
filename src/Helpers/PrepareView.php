@@ -162,6 +162,7 @@ class PrepareView
             $pageData['JS_POOL'][] = '/assets/js/core/update.class.js';
             $pageData['JS_POOL'][] = '/assets/js/core/user.class.js';
             $pageData['JS_POOL'][] = '/assets/js/core/backup.class.js';
+            $pageData['JS_POOL'][] = '/assets/js/core/nextdom_market.class.js';
             $pageData['JS_POOL'][] = '/assets/js/core/interact.class.js';
             $pageData['JS_POOL'][] = '/assets/js/core/update.class.js';
             $pageData['JS_POOL'][] = '/assets/js/core/plan.class.js';

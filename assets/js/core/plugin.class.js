@@ -34,7 +34,7 @@ nextdom.plugin.all = function (queryParams) {
     }
     var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
     var ajaxParams = nextdom.private.getParamsAJAX(params, 'Plugin', 'all');
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
@@ -55,7 +55,7 @@ nextdom.plugin.getDependancyInfo = function (queryParams) {
     var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
     var ajaxParams = nextdom.private.getParamsAJAX(params, 'Plugin', 'getDependancyInfo');
     ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
@@ -75,7 +75,7 @@ nextdom.plugin.deamonStart = function (queryParams) {
     ajaxParams.data['id'] = queryParams.id;
     ajaxParams.data['debug'] = queryParams.debug || 0;
     ajaxParams.data['forceRestart'] = queryParams.forceRestart || 0;
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 

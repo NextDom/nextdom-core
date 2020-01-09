@@ -365,6 +365,20 @@ nextdom.private.ajax = function(target, action, queryParams, requiredParams, enc
       ajaxParams.data[requiredParamsKey] = queryParams[requiredParamsKey];
     }
   }
-  $.ajax(ajaxParams);
+  nextdom.private.ajaxCall(ajaxParams);
   return true;
 };
+
+/**
+ * Ajax call with pace if global
+ */
+nextdom.private.ajaxCall = function(ajaxParams) {
+  if (isset(ajaxParams.global) && ajaxParams.global) {
+    Pace.track(function() {
+      $.ajax(ajaxParams);
+    });
+  }
+  else {
+    $.ajax(ajaxParams);
+  }
+}

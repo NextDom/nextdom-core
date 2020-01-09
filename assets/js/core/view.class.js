@@ -35,7 +35,7 @@ nextdom.view.all = function (queryParams) {
     var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
     var ajaxParams = nextdom.private.getParamsAJAX(params, 'View', 'all');
     ajaxParams.data['action'] = 'all';
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
@@ -61,7 +61,7 @@ nextdom.view.toHtml = function (queryParams) {
     ajaxParams.data['id'] = ($.isArray(queryParams.id)) ? json_encode(queryParams.id) : queryParams.id;
     ajaxParams.data['version'] = queryParams.version;
     ajaxParams.data['html'] = true;
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
@@ -112,7 +112,7 @@ nextdom.view.save = function (queryParams) {
     var ajaxParams = nextdom.private.getParamsAJAX(params, 'View', 'save');
     ajaxParams.data['view_id'] = queryParams.id;
     ajaxParams.data['view'] = json_encode(queryParams.view);
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 

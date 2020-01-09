@@ -56,7 +56,7 @@ nextdom.user.isConnect = function (queryParams) {
       var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
       var ajaxParams = nextdom.private.getParamsAJAX(params, 'User', 'isConnect');
       ajaxParams.global = false;
-      $.ajax(ajaxParams);
+      nextdom.private.ajaxCall(ajaxParams);
     }
   } else {
     if ('function' == typeof (queryParams.success)) {
@@ -72,7 +72,7 @@ nextdom.user.validateTwoFactorCode = function (queryParams) {
     var ajaxParams = nextdom.private.getParamsAJAX(params, 'User', 'validateTwoFactorCode');
     ajaxParams.data['code'] = queryParams.code;
     ajaxParams.data['enableTwoFactorAuthentification'] = queryParams.enableTwoFactorAuthentification || 0;
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
@@ -93,7 +93,7 @@ nextdom.user.login = function (queryParams) {
     ajaxParams.data['password'] = queryParams.password;
     ajaxParams.data['twoFactorCode'] = queryParams.twoFactorCode || '';
     ajaxParams.data['storeConnection'] = queryParams.storeConnection || 0;
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
@@ -110,7 +110,7 @@ nextdom.user.removeRegisterDevice = function (queryParams) {
   var ajaxParams = nextdom.private.getParamsAJAX(params, 'User', 'removeRegisterDevice');
   ajaxParams.data['key'] = queryParams.key;
   ajaxParams.data['user_id'] = queryParams.user_id || '';
-  $.ajax(ajaxParams);
+  nextdom.private.ajaxCall(ajaxParams);
 };
 
 nextdom.user.deleteSession = function (queryParams) {

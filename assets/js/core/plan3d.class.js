@@ -26,7 +26,7 @@ nextdom.plan3d.remove = function (queryParams) {
   ajaxParams.data['link_type'] = queryParams.link_type || '';
   ajaxParams.data['link_id'] = queryParams.link_id || '';
   ajaxParams.data['plan3dHeader_id'] = queryParams.plan3dHeader_id || '';
-  $.ajax(ajaxParams);
+  nextdom.private.ajaxCall(ajaxParams);
 };
 
 nextdom.plan3d.save = function (queryParams) {
@@ -38,7 +38,7 @@ nextdom.plan3d.save = function (queryParams) {
     var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
     var ajaxParams = nextdom.private.getParamsAJAX(params, 'Plan3d', 'save');
     ajaxParams.data['plan3ds'] = json_encode(queryParams.plan3ds);
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
@@ -53,7 +53,7 @@ nextdom.plan3d.byName = function (queryParams) {
     var ajaxParams = nextdom.private.getParamsAJAX(params, 'Plan3d', 'byName');
     ajaxParams.data['name'] = queryParams.name;
     ajaxParams.data['plan3dHeader_id'] = queryParams.plan3dHeader_id;
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
@@ -67,7 +67,7 @@ nextdom.plan3d.saveHeader = function (queryParams) {
     var params = $.extend({}, nextdom.private.default_params, queryParams || {});
     var ajaxParams = nextdom.private.getParamsAJAX(params, 'Plan3d', 'saveplan3dHeader');
     ajaxParams.data['plan3dHeader'] = json_encode(queryParams.plan3dHeader);
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
@@ -94,6 +94,6 @@ nextdom.plan3d.allHeader = function (queryParams) {
       return;
     }
     var ajaxParams = nextdom.private.getParamsAJAX(params, 'Plan3d', 'allHeader');
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };

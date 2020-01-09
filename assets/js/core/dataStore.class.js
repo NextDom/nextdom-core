@@ -29,7 +29,7 @@ nextdom.dataStore.save = function (queryParams) {
     ajaxParams.data['type'] = queryParams.type;
     ajaxParams.data['key'] = queryParams.key;
     ajaxParams.data['link_id'] = queryParams.link_id;
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 

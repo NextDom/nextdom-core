@@ -43,6 +43,7 @@
  */
 $(document).ajaxStart(function () {
     nbActiveAjaxRequest++;
+    Pace.restart();
 });
 
 /**

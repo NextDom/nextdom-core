@@ -45,7 +45,7 @@ nextdom.object.getEqLogic = function (queryParams) {
     ajaxParams.data['object_id'] = queryParams.id;
     ajaxParams.data['onlyEnable'] = queryParams.onlyEnable || 0;
     ajaxParams.data['orderByName'] = queryParams.orderByName || 0;
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
@@ -68,7 +68,7 @@ nextdom.object.all = function (queryParams) {
     var ajaxParams = nextdom.private.getParamsAJAX(params, 'Object', 'all');
     ajaxParams.data['onlyHasEqLogic'] = queryParams.onlyHasEqLogic || 0;
     ajaxParams.data['searchOnchild'] = queryParams.searchOnchild || 0;
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
@@ -82,7 +82,7 @@ nextdom.object.toHtml = function (queryParams) {
     ajaxParams.data['category'] = queryParams.category || 'all';
     ajaxParams.data['summary'] = queryParams.summary || '';
     ajaxParams.data['tag'] = queryParams.tag || 'all';
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
@@ -106,7 +106,7 @@ nextdom.object.remove = function (queryParams) {
     var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
     var ajaxParams = nextdom.private.getParamsAJAX(params, 'Object', 'remove');
     ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
@@ -130,7 +130,7 @@ nextdom.object.save = function (queryParams) {
     var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
     var ajaxParams = nextdom.private.getParamsAJAX(params, 'Object', 'save');
     ajaxParams.data['object'] = json_encode(queryParams.object);
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
@@ -150,7 +150,7 @@ nextdom.object.byId = function (queryParams) {
     }
     var ajaxParams = nextdom.private.getParamsAJAX(params, 'Object', 'byId');
     ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
@@ -213,7 +213,7 @@ nextdom.object.summaryUpdate = function (queryParams) {
     var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
     var ajaxParams = nextdom.private.getParamsAJAX(params, 'Object', 'getSummaryHtml');
     ajaxParams.data['ids'] = queryParams.ids;
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
