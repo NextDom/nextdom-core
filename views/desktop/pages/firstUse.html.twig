@@ -141,7 +141,7 @@
                                 <h2 class="login-box-msg">{{ 'firstuse.customize-title'|trans }}</h2>
                                 <div class="row">
                                     <h5>{{ 'firstuse.customize-content'|trans }}</h5>
-                                    <div class="col-sm-12 col-md-6">
+                                    <div class="col-sm-12 col-md-6 col-lg-4 form-group">
                                         <div>
                                             <label class="clearfix cursor themeThumbnail cursor" for="light-nextdom">
                                                 <div>
@@ -156,7 +156,7 @@
                                             <label for="light-nextdom">{{ 'Light' }}</label>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-6">
+                                    <div class="col-sm-12 col-md-6 col-lg-4 form-group">
                                         <div>
                                             <label class="clearfix cursor themeThumbnail cursor" for="dark-nextdom">
                                                 <div>
@@ -169,6 +169,21 @@
                                             </label>
                                             <input id="dark-nextdom" class="theme spacing-right" type="radio" name="themeNextDom" value="dark-nextdom"/>
                                             <label for="dark-nextdom">{{ 'Dark' }}</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6 col-lg-4 form-group">
+                                        <div>
+                                            <label class="clearfix cursor themeThumbnail cursor" for="mix-nextdom">
+                                                <div>
+                                                    <span class="themeThumbnailHeader bg-nextdom"><i class="fas fa-bars"></i></span>
+                                                </div>
+                                                <div>
+                                                    <span class="themeThumbnailLeft" style="background: #222d32"></span>
+                                                    <span class="themeThumbnailBody" style="background: #ecf0f5;"></span>
+                                                </div>
+                                            </label>
+                                            <input id="mix-nextdom" class="theme spacing-right" type="radio" name="themeNextDom" value="mix-nextdom"/>
+                                            <label for="mix-nextdom">{{ 'Mix' }}</label>
                                         </div>
                                     </div>
                                     <input id="nextdom-theme" class="configKey form-control" data-l1key="nextdom::user-theme" style="display:none" />
@@ -185,7 +200,7 @@
                                 <div class="row">
                                     <h5>{{ 'firstuse.customize-widget'|trans }}</h5>
                                     {% for theme in profilsWidgetThemes %}
-                                        <div class="col-sm-12 col-md-6">
+                                        <div class="col-sm-12 col-md-6 col-lg-4 form-group">
                                             <div class="clearfix">
                                                 <label class="cursor" for={{ theme.name|slice(0, -4) }}>
                                                     <img class="themeWidgetThumbnail" src="{{ theme.dir }}">
