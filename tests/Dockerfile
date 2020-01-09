@@ -30,9 +30,9 @@ RUN echo "#!/bin/sh" > /start.sh && \
     echo "service mysql start" >> /start.sh && \
     echo "service apache2 start" >> /start.sh && \
     echo "./scripts/gen_global.sh" >> /start.sh && \
-    echo "bash -x install/postinst" >> /start.sh && \
-    echo "composer install --dev" && \
-    echo "mysql -u root -e \"UPDATE nextdomdev.user SET password = SHA2('nextdom-test', 512)\"" >> /start.sh && \
+    echo "./install/install_git_dev.sh" >> /start.sh && \
+    echo "composer install --dev" >> /start.sh && \
+    echo "mysql -u root -e \"UPDATE nextdom.user SET password = SHA2('nextdom_test', 512)\"" >> /start.sh && \
     echo "echo NEXTDOM TEST READY" >> /start.sh && \
     echo "while true; do" >> /start.sh && \
     echo "  sleep 50" >> /start.sh && \
