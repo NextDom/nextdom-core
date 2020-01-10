@@ -153,7 +153,7 @@ class HistoryManager extends BaseManager
     public static function archive()
     {
         global $NEXTDOM_INTERNAL_CONFIG;
-        $sql = 'DELETE FROM history WHERE `datetime` <= "2000-01-01 01:00:00"';
+        $sql = 'DELETE FROM '. self::DB_CLASS_NAME.' WHERE `datetime` <= "2000-01-01 01:00:00"';
         DBHelper::exec($sql);
         $sql = 'DELETE FROM historyArch WHERE `datetime` <= "2000-01-01 01:00:00"';
         DBHelper::exec($sql);
