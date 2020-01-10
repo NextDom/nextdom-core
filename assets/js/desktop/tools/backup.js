@@ -57,7 +57,6 @@ function loadInformations() {
             $(".bt_cancelModifs").hide();
         }
     });
-    $('#pre_backupInfo').height($(window).height() - $('header').height() - 150);
 }
 
 /**
@@ -107,9 +106,12 @@ function initEvents() {
         closeText: '',
         autoOpen: false,
         modal: true,
-        width: ((jQuery(window).width() - 50) < 1500) ? (jQuery(window).width() - 50) : 1500,
+        height: jQuery(window).height() - 100,
+        width: getModalWidth(),
         open: function () {
             $("body").css({overflow: 'hidden'});
+            $(this).dialog("option", "position", {my: "center", at: "center", of: window});
+            $('#pre_backupInfo').css('height', $('#md_backupInfo').height());
         },
         beforeClose: function (event, ui) {
             $("body").css({overflow: 'inherit'});

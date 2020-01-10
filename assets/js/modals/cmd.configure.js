@@ -104,11 +104,11 @@ function initEvents() {
         closeText: '',
         autoOpen: false,
         modal: true,
-        height: (jQuery(window).height() - 150),
-        width: ((jQuery(window).width() - 150) < 1200) ? (jQuery(window).width() - 50) : 1200,
-        position: {my: 'center', at: 'center', of: window},
+        height: jQuery(window).height() - 100,
+        width: getModalWidth(),
         open: function () {
             $("body").css({overflow: 'hidden'});
+            $(this).dialog("option", "position", {my: "center", at: "center", of: window});
         },
         beforeClose: function (event, ui) {
             $("body").css({overflow: 'inherit'});

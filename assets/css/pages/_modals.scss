@@ -23,16 +23,14 @@
 .ui-dialog {
     z-index: 5000;
     background-clip: unset;
-    box-shadow:0 3px 30px rgba(0,0,0,0.6);
+    box-shadow: 0 3px 30px rgba(0,0,0,0.6);
     padding: 0 0 0 0;
+    position: fixed;
     & .ui-dialog-title {
         padding: 7px 5px 5px 0;
     }
     & .ui-dialog-titlebar-close {
         opacity: 1;
-    }
-    ::-webkit-scrollbar {
-        width: 12px;
     }
     .ui-dialog-titlebar {
         border-bottom: none;
@@ -43,6 +41,9 @@
     }
     .content {
         min-height: 0;
+        pre {
+            margin: 0;
+        }
     }
     .ui-dialog-content {
         padding: 15px;
@@ -120,7 +121,9 @@
         color: $nextdom_blue !important;
     }
 }
-.ui-widget .label-config a, .ui-widget .label-config i, .ui-widget .label-config * {
+.ui-widget .label-config a,
+.ui-widget .label-config i,
+.ui-widget .label-config * {
     color: white !important;
 }
 

@@ -163,12 +163,10 @@ function chooseIcon(_callback) {
             autoOpen: false,
             modal: true,
             height: (jQuery(window).height() - 150),
-            width: 1500,
+            width: getModalWidth(),
             open: function () {
-                if ((jQuery(window).width() - 50) < 1500) {
-                    $('#mod_selectIcon').dialog({width: jQuery(window).width() - 50});
-                }
                 $("body").css({overflow: 'hidden'});
+                $(this).dialog("option", "position", {my: "center", at: "center", of: window});
             },
             beforeClose: function (event, ui) {
                 $("body").css({overflow: 'inherit'});
