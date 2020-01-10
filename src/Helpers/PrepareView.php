@@ -696,7 +696,7 @@ class PrepareView
             ob_end_clean();
             echo '<section class="alert-header">';
             echo '<div class="alert alert-danger">';
-            echo \translate::exec(Utils::displayException($e), 'desktop/' . Utils::init('p') . '.php');
+            echo TranslateHelper::exec(Utils::displayException($e), 'desktop/' . Utils::init('p') . '.php');
             echo '</div>';
             echo '</section>';
         }

@@ -102,12 +102,12 @@ class ProfilsController extends BaseController
         }
 
         $pageData['profilsWidgetThemes'] = [];
-        $lsDir = FileSystemHelper::ls(NEXTDOM_ROOT . '/core/template/dashboard/themes/', '*', true);
+        $lsDir = FileSystemHelper::ls(NEXTDOM_ROOT . '/views/templates/dashboard/themes/', '*', true);
         foreach ($lsDir as $themesDir) {
-            $lsThemes = FileSystemHelper::ls(NEXTDOM_ROOT . '/core/template/dashboard/themes/' . $themesDir, '*.png');
+            $lsThemes = FileSystemHelper::ls(NEXTDOM_ROOT . '/view/templates/dashboard/themes/' . $themesDir, '*.png');
             foreach ($lsThemes as $themeFile) {
                 $themeData = [];
-                $themeData['dir'] = '/core/template/dashboard/themes/' . $themesDir . $themeFile;
+                $themeData['dir'] = '/views/templates/dashboard/themes/' . $themesDir . $themeFile;
                 $themeData['name'] = $themeFile;
                 $pageData['profilsWidgetThemes'][] = $themeData;
             }

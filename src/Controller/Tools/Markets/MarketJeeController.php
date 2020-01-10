@@ -26,6 +26,7 @@ use NextDom\Controller\BaseController;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
+use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UpdateManager;
 use NextDom\Repo\RepoMarket;
 
@@ -177,7 +178,7 @@ class MarketJeeController extends BaseController
                 default:
                     $marketObjects2['default_image'] = 'public/img/NextDom_NoPicture_Gray.png';
             }
-            $marketObjects2['urlPath'] = \config::byKey('market::address') . '/' . $marketObject->getImg('icon');
+            $marketObjects2['urlPath'] = ConfigManager::byKey('market::address') . '/' . $marketObject->getImg('icon');
             $marketObjects2['note'] = $marketObject->getRating();
             $pageData['marketObjectsByCategory'][$categorieObjet]['objects'][$marketObjects2['name']] = $marketObjects2;
         }
@@ -244,7 +245,7 @@ class MarketJeeController extends BaseController
         $pageData['marketName'] = $name;
         $pageData['marketAuthor'] = $author;
         $pageData['marketOldSearch'] = $oldSearch;
-        $pageData['marketUser'] = \config::byKey('market::username');
+        $pageData['marketUser'] = ConfigManager::byKey('market::username');
         $pageData['marketUserTest'] = $userTest;
         $pageData['marketLimit'] = $searchLimit;
         $pageData['markets'] = $markets;

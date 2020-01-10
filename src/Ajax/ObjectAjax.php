@@ -346,7 +346,7 @@ class ObjectAjax extends BaseAjax
         $resultObject->setImage('data', '');
         $resultObject->setImage('sha512', '');
         $resultObject->save();
-        @rrmdir(NEXTDOM_ROOT . '/core/img/object');
+        @rrmdir(NEXTDOM_ROOT . '/data/object/object');
         $this->ajax->success();
     }
 

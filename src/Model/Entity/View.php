@@ -122,7 +122,7 @@ class View extends BaseEntity
         if ($this->getImage('data') == '') {
             return '';
         }
-        $dir = NEXTDOM_ROOT . '/public/img/view';
+        $dir = NEXTDOM_DATA . '/data/view/';
         if (!file_exists($dir)) {
             mkdir($dir);
         }
@@ -135,7 +135,7 @@ class View extends BaseEntity
         if (!file_exists($filepath)) {
             file_put_contents($filepath, base64_decode($this->getImage('data')));
         }
-        return 'core/img/view/' . $filename;
+        return NEXTDOM_DATA . '/data/view/' . $filename;
     }
 
     /*     * **********************Getteur Setteur*************************** */

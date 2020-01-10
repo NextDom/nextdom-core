@@ -172,7 +172,7 @@ $('.eqLogicAction[data-action=copy]').on('click', function () {
 });
 
 $('.eqLogicAction[data-action=export]').on('click', function () {
-  window.open('core/php/export.php?type=eqLogic&id=' + $('.eqLogicAttr[data-l1key=id]').value(), "_blank", null);
+  window.open('src/Api/export.php?type=eqLogic&id=' + $('.eqLogicAttr[data-l1key=id]').value(), "_blank", null);
 });
 
 $('.eqLogicAction[data-action=save]').on('click', function () {

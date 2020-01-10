@@ -724,9 +724,9 @@ class BackupManager
      */
     private static function restoreJeedomConfig(string $tmpDir)
     {
-        $commonBackup = sprintf("%s/common.config.php", $tmpDir);
-        $commonConfig = sprintf("%s/core/config/common.config.php", NEXTDOM_ROOT);
-        $jeedomConfig = sprintf("%s/core/config/jeedom.config.php", NEXTDOM_ROOT);
+        $commonBackup = $tmpDir . '/common.config.php';
+        $commonConfig = NEXTDOM_DATA . '/config/common.config.php';
+        $jeedomConfig = NEXTDOM_DATA . '/config/jeedom.config.php';
 
         if (true == file_exists($jeedomConfig)) {
             @unlink($jeedomConfig);

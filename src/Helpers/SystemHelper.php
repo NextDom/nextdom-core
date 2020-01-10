@@ -103,14 +103,14 @@ class SystemHelper
     }
 
     /**
-     * Load system from /core/config/system_cmd.json if file exists.
+     * Load system from system_cmd.json if file exists.
      *
      * @return array List of commands
      */
     public static function loadCommand(): array
     {
-        if (file_exists(NEXTDOM_ROOT . '/core/config/system_cmd.json')) {
-            $content = file_get_contents(NEXTDOM_ROOT . '/core/config/system_cmd.json');
+        if (file_exists(NEXTDOM_DATA . '/config/system_cmd.json')) {
+            $content = file_get_contents(NEXTDOM_DATA . '/config/system_cmd.json');
             if (Utils::isJson($content)) {
                 self::$commands['custom'] = json_decode($content, true);
             }

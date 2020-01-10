@@ -85,8 +85,9 @@ function initEvents() {
         var objectSummary = $(this).closest('.objectSummary');
         $.ajax({
             type: "POST",
-            url: "core/ajax/object.ajax.php",
+            url: "src/ajax.php",
             data: {
+                target: 'Object',
                 action: "createSummaryVirtual",
                 key: objectSummary.find('.objectSummaryAttr[data-l1key=key]').value()
             },
@@ -114,8 +115,9 @@ function initEvents() {
 function printObjectSummary() {
     $.ajax({
         type: "POST",
-        url: "core/ajax/config.ajax.php",
+        url: "src/ajax.php",
         data: {
+            target: 'Config',
             action: "getKey",
             key: 'object:summary'
         },
@@ -219,8 +221,9 @@ function saveObjectSummary() {
     value = {'object:summary' : summary};
     $.ajax({
         type: "POST",
-        url: "core/ajax/config.ajax.php",
+        url: "src/ajax.php",
         data: {
+            target: 'Config',
             action: 'addKey',
             value: json_encode(value)
         },

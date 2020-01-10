@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Com\ComHttp;
 use NextDom\Enums\ActionRight;
 use NextDom\Enums\CacheKey;
 use NextDom\Enums\CmdConfigKey;
@@ -1201,7 +1202,7 @@ class Cmd extends BaseEntity
         ];
         $url = str_replace(array_keys($replace), $replace, $url);
         LogHelper::addInfo(LogTarget::EVENT, __('Appels de l\'URL de push pour la commande ') . $this->getHumanName() . ' : ' . $url);
-        $http = new \com_http($url);
+        $http = new ComHttp($url);
         $http->setLogError(false);
         try {
             $http->exec();
@@ -1693,7 +1694,7 @@ class Cmd extends BaseEntity
     {
         $token = $this->getCache('ask::token', ConfigManager::genKey());
         $this->setCache(['ask::count' => 0, 'ask::token' => $token]);
-        $result = NetworkHelper::getNetworkAccess($_network) . '/core/api/jeeApi.php?';
+        $result = NetworkHelper::getNetworkAccess($_network) . '/src/Api/jeeApi.php?';
         $result .= 'type=ask';
         $result .= '&plugin=' . $_plugin;
         $result .= '&apikey=' . Api::getApiKey($_plugin);
@@ -1859,7 +1860,7 @@ class Cmd extends BaseEntity
      */
     public function getDirectUrlAccess()
     {
-        $url = '/core/api/jeeApi.php?apikey=' . ConfigManager::byKey('api') . '&type=cmd&id=' . $this->getId();
+        $url = '/src/Api/jeeApi.php?apikey=' . ConfigManager::byKey('api') . '&type=cmd&id=' . $this->getId();
         if ($this->isType(CmdType::ACTION)) {
             switch ($this->getSubType()) {
                 case CmdSubType::SLIDER:

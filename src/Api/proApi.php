@@ -623,7 +623,7 @@ try {
             if (config::byKey('internalAddr') == '') {
                 config::save('internalAddr', $params['slave_ip']);
             }
-            \jeeNetwork::testMaster();
+            jeeNetwork::testMaster();
             $jsonrpc->makeSuccess($return);
         }
 

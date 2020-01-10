@@ -29,8 +29,6 @@ use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UpdateManager;
 use NextDom\Model\Entity\Update;
 
-require_once __DIR__ . '/../../core/php/core.inc.php';
-
 class RepoGitHub implements BaseRepo
 {
     public static $_name = 'Github';
@@ -234,7 +232,7 @@ class RepoGitHub implements BaseRepo
     {
         try {
             $client = self::getGithubClient();
-            $fileContent = $client->api('repo')->contents()->download(ConfigManager::byKey('github::core::user', 'core', 'nextdom'), ConfigManager::byKey('github::core::repository', 'core', 'core'), 'core/config/version', ConfigManager::byKey('github::core::branch', 'core', 'stable'));
+            $fileContent = $client->api('repo')->contents()->download(ConfigManager::byKey('github::core::user', 'core', 'nextdom'), ConfigManager::byKey('github::core::repository', 'core', 'core'), NEXTDOM_DATA . '/config/Nextdom_version', ConfigManager::byKey('github::core::branch', 'core', 'stable'));
             return trim($fileContent);
         } catch (\Throwable $e) {
 
