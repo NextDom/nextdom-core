@@ -1,8 +1,19 @@
 # NextDom Core Changelog
 ---
+## 0.6.1
+> ***Release Date : 10/01/2020***
+>
+> ***Statut : beta***
+>
+> ***Coverall : 17%***
+
+#### FIXS
+* Fix Plus d'historique depuis 01/01/2020 
+* [liste ici](https://github.com/NextDom/nextdom-core/milestone/26?closed=1)
+---
 ## 0.6.0
 
-> ***Release Date : XX/11/2019***
+> ***Release Date : 27/11/2019***
 >
 > ***Statut : beta***
 >

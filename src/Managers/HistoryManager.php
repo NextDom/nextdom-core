@@ -150,9 +150,9 @@ class HistoryManager
     public static function archive()
     {
         global $NEXTDOM_INTERNAL_CONFIG;
-        $sql = 'DELETE FROM history WHERE `datetime` <= "2000-01-01 01:00:00" OR  `datetime` >= "2020-01-01 01:00:00"';
+        $sql = 'DELETE FROM history WHERE `datetime` <= "2000-01-01 01:00:00"';
         DBHelper::exec($sql);
-        $sql = 'DELETE FROM historyArch WHERE `datetime` <= "2000-01-01 01:00:00" OR  `datetime` >= "2020-01-01 01:00:00"';
+        $sql = 'DELETE FROM historyArch WHERE `datetime` <= "2000-01-01 01:00:00"';
         DBHelper::exec($sql);
         $sql = 'DELETE FROM history WHERE `value` IS NULL';
         DBHelper::exec($sql);
