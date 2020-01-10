@@ -733,7 +733,8 @@ pre::selection {
 
 /* Bouton filtres tuiles */
 .bt_editDashboardWidgetGridAllResize,
-.bt_editDashboardWidgetGridResize {
+.bt_editDashboardWidgetGridResize,
+.bt_editDashboardWidgetPackery {
   color: map_get($color_theme, 'color10') !important;
 }
 .editDashboardButtons a {
