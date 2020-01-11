@@ -60,4 +60,4 @@ addLogScript "============ End postinst.sh ============"
 #add supervisor
 apt install -y supervisor
 mkdir -p /var/log/supervisor/
-cp ${CURRENT_DIR}/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+cp ${CURRENT_DIR}/../supervisord.conf /etc/supervisor/conf.d/supervisord.conf
