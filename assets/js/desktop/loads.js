@@ -316,13 +316,12 @@ $(function () {
         modal: false,
         closeText: '',
         height: (jQuery(window).height() - 100),
-        width: (jQuery(window).width() < 1000) ? "96%" : "80%",
-        position: { my: "center", at: "center", of: window },
+        width: getModalWidth(),
         show: { effect: "blind", duration: 200 },
         resizable: false,
         open: function () {
             $("body").css({overflow: 'hidden'});
-            $(this).closest( ".ui-dialog" ).find(":button").blur();
+            $(this).dialog("option", "position", {my: "center", at: "center", of: window});
         },
         beforeClose: function (event, ui) {
             $("body").css({overflow: 'inherit'});
@@ -336,13 +335,12 @@ $(function () {
         modal: false,
         closeText: '',
         height: (jQuery(window).height() - 100),
-        width: (jQuery(window).width() < 1000) ? "96%" : "80%",
-        position: {my: 'center', at: 'center', of: window},
+        width: getModalWidth(),
         show: { effect: "blind", duration: 200 },
         resizable: false,
         open: function () {
             $("body").css({overflow: 'hidden'});
-            $(this).closest( ".ui-dialog" ).find(":button").blur();
+            $(this).dialog("option", "position", {my: "center", at: "center", of: window});
         },
         beforeClose: function (event, ui) {
             $("body").css({overflow: 'inherit'});
@@ -356,13 +354,12 @@ $(function () {
         modal: false,
         closeText: '',
         height: (jQuery(window).height() - 100),
-        width: (jQuery(window).width() < 1000) ? "96%" : "80%",
-        position: {my: 'center', at: 'center', of: window},
+        width: getModalWidth(),
         show: { effect: "blind", duration: 200 },
         resizable: false,
         open: function () {
             $("body").css({overflow: 'hidden'});
-            $(this).closest( ".ui-dialog" ).find(":button").blur();
+            $(this).dialog("option", "position", {my: "center", at: "center", of: window});
         },
         beforeClose: function (event, ui) {
             $("body").css({overflow: 'inherit'});

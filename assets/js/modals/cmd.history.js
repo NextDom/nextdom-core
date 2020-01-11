@@ -33,7 +33,7 @@
 $(".in_datepicker").datepicker({dateFormat: "yy-mm-dd"});
 $('#ui-datepicker-div').hide();
 
-$('#div_historyChart').css('height', $('#div_historyChart').closest('.ui-dialog-content').height()-100);
+$('#div_historyChart').css('height', $('#div_historyChart').closest('.ui-dialog-content').height()-$('#div_historyChart').closest('.ui-dialog-content').find('.content-header').height() - 15);
 
 delete nextdom.history.chart['div_historyChart'];
 

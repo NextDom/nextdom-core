@@ -248,7 +248,7 @@ function setHeaderPosition(init) {
             headerHeight = container.children('.content-header').height();
           }
           var scrollValue = document.documentElement.scrollTop;
-          if (scrollValue > scrollLimit) {
+          if (scrollValue > scrollLimit && $(window).width() >= 768) {
             container.children(".content-header").css("top", headerSize - 15);
             container.children(".content").css("padding-top", headerHeight + 30);
             container.children(".content-header").children("div").removeClass('scroll-shadow').addClass('fixed-shadow');
