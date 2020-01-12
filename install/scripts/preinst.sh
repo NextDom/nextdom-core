@@ -186,19 +186,18 @@ step4_configure_apache() {
   }
 
   # Certificat SSL auto signe
-  if [[ -f ${CONFIG_DIRECTORY} ]]; then
-      if [[ ! -f ${CONFIG_DIRECTORY}/ssl/nextdom.crt ]] || [[ ! -f ${CONFIG_DIRECTORY}/ssl/nextdom.csr ]] || [[ ! -f ${CONFIG_DIRECTORY}/ssl/nextdom.key ]]; then
-        createDirectory ${CONFIG_DIRECTORY}/ssl/
-        goToDirectory ${CONFIG_DIRECTORY}/ssl/
-        { ##try
-          openssl genrsa -out nextdom.key 2048
-          openssl req -new -key nextdom.key -out nextdom.csr -subj "/C=FR/ST=Paris/L=Paris/O=Global Security/OU=IT Department/CN=example.com"
-          openssl x509 -req -days 3650 -in nextdom.csr -signkey nextdom.key -out nextdom.crt
-          addLogInfo "created SSL self-signed certificates in /etc/nextdom/ssl/"
-        } || { ##catch
-          addLogError "Error while creating SSL self-signed certificates in /etc/nextdom/ssl/"
-        }
-      fi
+  [[ -d ${CONFIG_DIRECTORY} ]] && mkdir -p ${CONFIG_DIRECTORY}
+  if [[ ! -f ${CONFIG_DIRECTORY}/ssl/nextdom.crt ]] || [[ ! -f ${CONFIG_DIRECTORY}/ssl/nextdom.csr ]] || [[ ! -f ${CONFIG_DIRECTORY}/ssl/nextdom.key ]]; then
+    createDirectory ${CONFIG_DIRECTORY}/ssl/
+    goToDirectory ${CONFIG_DIRECTORY}/ssl/
+    { ##try
+      openssl genrsa -out nextdom.key 2048
+      openssl req -new -key nextdom.key -out nextdom.csr -subj "/C=FR/ST=Paris/L=Paris/O=Global Security/OU=IT Department/CN=example.com"
+      openssl x509 -req -days 3650 -in nextdom.csr -signkey nextdom.key -out nextdom.crt
+      addLogInfo "created SSL self-signed certificates in /etc/nextdom/ssl/"
+    } || { ##catch
+      addLogError "Error while creating SSL self-signed certificates in /etc/nextdom/ssl/"
+    }
   fi
 
   if [[ "true" == "${result}" ]]; then
@@ -216,13 +215,13 @@ step5_configure_mysql_database() {
   if [[ -f ${CONFIG_DIRECTORY}/mysql/secret ]]; then
     source ${CONFIG_DIRECTORY}/mysql/secret
   elif [[ -z ${MYSQL_NEXTDOM_PASSWD} ]]; then
-      MYSQL_NEXTDOM_PASSWD="$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15)"
-      { ##try
-        checkDirectory = checkIfDirectoryExists ${CONFIG_DIRECTORY}/mysql/
-        if [[ ${checkDirectory} -gt 0  ]]; then
-            createDirectory ${CONFIG_DIRECTORY}/mysql/
-        fi
-        cat - >${CONFIG_DIRECTORY}/mysql/secret <<EOS
+    MYSQL_NEXTDOM_PASSWD="$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15)"
+    { ##try
+      checkDirectory = checkIfDirectoryExists ${CONFIG_DIRECTORY}/mysql/
+      if [[ ${checkDirectory} -gt 0 ]]; then
+        createDirectory ${CONFIG_DIRECTORY}/mysql/
+      fi
+      cat - >${CONFIG_DIRECTORY}/mysql/secret <<EOS
 MYSQL_HOSTNAME="${MYSQL_HOSTNAME}"
 MYSQL_PORT="${MYSQL_PORT}"
 MYSQL_SUBNET="${MYSQL_HOSTNAME}"
@@ -231,10 +230,10 @@ MYSQL_NEXTDOM_DB=${MYSQL_NEXTDOM_DB}
 MYSQL_NEXTDOM_USER="${MYSQL_NEXTDOM_USER}"
 MYSQL_NEXTDOM_PASSWD="${MYSQL_NEXTDOM_PASSWD}"
 EOS
-        addLogInfo "Writing MariaDb/MySQL information file: ${CONFIG_DIRECTORY}/mysql/secret"
-      } || { ##catch
-        addLogError "Error while writing MariaDb/MySQL information in: ${CONFIG_DIRECTORY}/mysql/secret"
-      }
+      addLogInfo "Writing MariaDb/MySQL information file: ${CONFIG_DIRECTORY}/mysql/secret"
+    } || { ##catch
+      addLogError "Error while writing MariaDb/MySQL information in: ${CONFIG_DIRECTORY}/mysql/secret"
+    }
   fi
 
   #MYSQL_NEXTDOM_PASSWD=${MYSQL_NEXTDOM_PASSWD:-$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15)}
@@ -413,7 +412,7 @@ preinstall_nextdom() {
 
 }
 
-[[ $(checkIfDirectoryExists ${LOG_DIRECTORY}) -eq 0  ]] && createDirectory ${LOG_DIRECTORY}
+[[ $(checkIfDirectoryExists ${LOG_DIRECTORY}) -eq 0 ]] && createDirectory ${LOG_DIRECTORY}
 
 preinstall_nextdom
 
