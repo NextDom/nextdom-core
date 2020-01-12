@@ -42,7 +42,7 @@ sed -i 's/postinstall_nextdom$//g' ${CURRENT_DIR}/postinst.sh
 sed -i 's/exit 0$//g' ${CURRENT_DIR}/postinst.sh
 source ${CURRENT_DIR}/postinst.sh docker
 
-addLogScript "============ Starting preinst.sh ============"
+addLogScript "============ Starting postinst.sh ============"
 step1_create_prerequisite_files_and_directories
 step2_prepare_directory_layout
 #step3_configure_mysql
