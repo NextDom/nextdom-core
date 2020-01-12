@@ -24,51 +24,59 @@
         timeoutForMediumTests="10"
         timeoutForLargeTests="60"
         verbose="true">
+    <extensions>
+        <extension class="Symfony\Component\Panther\ServerExtension" />
+    </extensions>
     <testsuites>
+        <testsuite name="Ajax">
+            <directory>Ajax</directory>
+        </testsuite>
         <testsuite name="Managers">
-            <file>BackupManagerTest.php</file>
-            <file>CmdManagerTest.php</file>
-            <file>ConfigManagerTest.php</file>
-            <file>EqLogicManagerTest.php</file>
-            <file>EventManagerTest.php</file>
-            <file>NoteManagerTest.php</file>
-            <file>ObjectManagerTest.php</file>
-            <file>ScenarioExpressionManagerTest.php</file>
-            <file>UpdateManagerTest.php</file>
-            <file>UserManagerTest.php</file>
+            <directory>Managers</directory>
         </testsuite>
         <testsuite name="Helpers">
-            <file>AjaxHelperTest.php</file>
-            <file>ClientTest.php</file>
-            <file>FileSystemHelperTest.php</file>
-            <file>NextDomHelperTest.php</file>
-            <file>UtilsTest.php</file>
-        </testsuite>
-        <testsuite name="Ajax">
-            <directory>../phpunit_tests/Ajax</directory>
+            <directory>Helpers</directory>
         </testsuite>
         <testsuite name="Entities">
-            <file>CronTest.php</file>
-            <file>EqLogicTest.php</file>
-            <file>NoteTest.php</file>
-            <file>PluginTest.php</file>
-            <file>ScenarioTest.php</file>
+            <directory>Entities</directory>
         </testsuite>
         <testsuite name="Controllers">
-            <directory>../phpunit_tests/Controllers</directory>
+            <directory>Controllers</directory>
         </testsuite>
         <testsuite name="Rest">
-            <directory>../phpunit_tests/Rest</directory>
+            <directory>Rest</directory>
         </testsuite>
         <testsuite name="Others">
-            <file>EnumTest.php</file>
-            <file>I18nTest.php</file>
+            <directory>Others</directory>
+        </testsuite>
+        <testsuite name="Gui">
+            <directory>Gui</directory>
+        </testsuite>
+        <testsuite name="Features">
+            <directory>Features</directory>
         </testsuite>
         <testsuite name="AllTests">
-            <directory>../phpunit_tests</directory>
-            <directory>../phpunit_tests/Ajax</directory>
-            <directory>../phpunit_tests/Rest</directory>
-            <directory>../phpunit_tests/Controllers</directory>
+            <directory>Gui</directory>
+            <directory>Ajax</directory>
+            <directory>Features</directory>
+            <directory>Others</directory>
+            <directory>Rest</directory>
+            <directory>Controllers</directory>
+            <directory>Entities</directory>
+            <directory>Others</directory>
+            <directory>Helpers</directory>
+            <directory>Managers</directory>
+        </testsuite>
+        <testsuite name="AllTestsNoGui">
+            <directory>Features</directory>
+            <directory>Ajax</directory>
+            <directory>Others</directory>
+            <directory>Rest</directory>
+            <directory>Controllers</directory>
+            <directory>Entities</directory>
+            <directory>Others</directory>
+            <directory>Helpers</directory>
+            <directory>Managers</directory>
         </testsuite>
         <testsuite name="current">
             <directory>../phpunit_tests/Ajax/ObjectAjaxTest.php</directory>

@@ -41,7 +41,9 @@
   },
   "require-dev": {
     "vrana/adminer": "^4.7",
-    "symfony/var-dumper": "^3.4"
+    "symfony/var-dumper": "^3.4",
+    "symfony/panther": "^0.6.0",
+    "symfony/css-selector": "^5.0"
   },
   "authors": [
     {

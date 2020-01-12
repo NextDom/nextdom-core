@@ -20,7 +20,7 @@ use NextDom\Exceptions\CoreException;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Model\Entity\JeeObject;
 
-require_once('BaseAjaxTest.php');
+require_once(__DIR__ . '/../libs/BaseAjaxTest.php');
 
 class ObjectAjaxTest extends BaseAjaxTest
 {

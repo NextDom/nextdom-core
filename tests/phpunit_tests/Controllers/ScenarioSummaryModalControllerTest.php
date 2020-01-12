@@ -16,7 +16,7 @@
  */
 
 require_once(__DIR__ . '/../../../src/core.php');
-require_once(__DIR__ . '/BaseControllerTest.php');
+require_once(__DIR__ . '/../libs/BaseControllerTest.php');
 
 class ScenarioSummaryModalControllerTest extends BaseControllerTest
 {

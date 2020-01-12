@@ -25,7 +25,7 @@ use NextDom\Managers\CmdManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Model\Entity\Cmd;
 
-require_once('BaseAjaxTest.php');
+require_once(__DIR__ . '/../libs/BaseAjaxTest.php');
 
 class UpdateAjaxTest extends BaseAjaxTest
 {

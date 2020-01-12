@@ -302,7 +302,7 @@ class Scenario extends BaseEntity
             return null;
         }
         $path = NEXTDOM_LOG . '/scenarioLog';
-        if (!file_exists($path)) {
+        if (!is_dir($path)) {
             mkdir($path);
         }
         $path .= '/scenario' . $this->getId() . '.log';

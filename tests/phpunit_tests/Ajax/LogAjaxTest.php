@@ -28,7 +28,7 @@ use NextDom\Managers\DataStoreManager;
 use NextDom\Model\Entity\Cmd;
 use NextDom\Model\Entity\DataStore;
 
-require_once('BaseAjaxTest.php');
+require_once(__DIR__ . '/../libs/BaseAjaxTest.php');
 
 class LogAjaxTest extends BaseAjaxTest
 {

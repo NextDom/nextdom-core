@@ -29,7 +29,7 @@ def check_python():
     """Check python code quality
     """
     print_subtitle('Python code quality')
-    folders_to_test = ['', 'tests/', 'tests/libs/']
+    folders_to_test = ['', 'tests/libs/']
     error = False
     for folder_to_test in folders_to_test:
         output, status = get_command_output('python3 -m pylint --rcfile=.pylintrc --output-format=colorized ' + folder_to_test + '*.py') #pylint: disable=line-too-long

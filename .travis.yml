@@ -19,16 +19,11 @@ before_install:
   - sudo python3 -m pip install --upgrade pip jsmin
   - python3 -c "import fcntl; fcntl.fcntl(1, fcntl.F_SETFL, 0)" # Fix travis error
   - sudo pip3 install --ignore-installed urllib3[secure] pylint
-  - export CHROME_SOURCE_URL=https://dl.google.com/dl/linux/direct/google-chrome-stable_current_amd64.deb
-  - wget --no-verbose -O /tmp/$(basename $CHROME_SOURCE_URL) $CHROME_SOURCE_URL
-  - sudo dpkg -i /tmp/$(basename $CHROME_SOURCE_URL)
   - ./scripts/gen_global.sh
   - composer require --dev php-coveralls/php-coveralls
   - while true; do DOCKER_LOGS=$(docker logs --tail 10 nextdom-test 2>&1); if [[ "$DOCKER_LOGS" =~ .*NEXTDOM.TEST.READY.* ]]; then break; fi; sleep 2; done
   - docker commit nextdom-test nextdom-test-snap
   - docker kill nextdom-test
-  - cd tests
-  - sudo ./install_env.sh
 script:
   - cd ${TRAVIS_BUILD_DIR}/tests
   - python3 launch_php_tests.py
@@ -36,12 +31,6 @@ script:
   - python3 send_timestamps.py | nc termbin.com 9999
   - python3 launch_code_consistency.py
   - python3 launch_compatibility_tests.py
-  - python3 launch_features_tests.py
-  - python3 launch_gui_tests.py first_use
-  - python3 launch_gui_tests.py administration
-  - python3 launch_gui_tests.py specific
-  - python3 launch_gui_tests.py plugins
-  - python3 launch_gui_tests.py modal
 after_script:
   - cat tests/coverage/junitlog.xml
   - cd ${TRAVIS_BUILD_DIR}
