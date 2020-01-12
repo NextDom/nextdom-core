@@ -47,11 +47,12 @@ createDirectory() {
 goToDirectory() {
   local directory=$1
   { ##try
-    checkDirectory = checkIfDirectoryExists ${directory}
-    if [[ ${checkDirectory} -gt 0  ]]; then
-        cd ${directory} >/dev/null
-        pushd ${directory} >/dev/null
-     fi
+    $(checkIfDirectoryExists ${directory})
+    checkDirectory=$?
+    if [[ ${checkDirectory} -gt 0 ]]; then
+      cd ${directory} >/dev/null
+      pushd ${directory} >/dev/null
+    fi
   } || { ##catch
     addLogError "Error while going : ${directory}"
   }
