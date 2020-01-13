@@ -31,7 +31,7 @@ step1_create_prerequisite_files_and_directories() {
     createFile ${c_file}
   done
 
-  if [[ "true" == "${result}" ]]; then
+  if [ "true" == "${result}" ]; then
     addLogSuccess "Files and directories are created with success"
   fi
 }
@@ -52,19 +52,19 @@ step2_prepare_directory_layout() {
   addLogInfo "created data directory ${LIB_DIRECTORY}/data"
 
   # jeedom backup compatibility: ./core/config is a symlink
-  if [[ -L ${ROOT_DIRECTORY}/core/config ]]; then
+  if [ -L ${ROOT_DIRECTORY}/core/config ]; then
     removeDirectoryOrFile ${ROOT_DIRECTORY}/core/config
   fi
   ln -s ${LIB_DIRECTORY}/config ${ROOT_DIRECTORY}/core/config
   addLogInfo "created core configuration symlink: ${ROOT_DIRECTORY}/core/config"
 
   # jeedom backup compatibility:  ./var is a symlink
-  if [[ -L ${ROOT_DIRECTORY}/var ]]; then
+  if [ -L ${ROOT_DIRECTORY}/var ]; then
     removeDirectoryOrFile ${ROOT_DIRECTORY}/var
   fi
-  if [[ -d ${ROOT_DIRECTORY}/var ]]; then
+  if [ -d ${ROOT_DIRECTORY}/var ]; then
     content=$(ls -A ${ROOT_DIRECTORY}/var)
-    if [[ ! -z "${content}" ]]; then
+    if [ ! -z "${content}" ]; then
       tmpvar=$(mktemp -d ${ROOT_DIRECTORY}/var.XXXXXXXX)
       mv ${ROOT_DIRECTORY}/var/* ${tmpvar}/
     fi
@@ -76,10 +76,10 @@ step2_prepare_directory_layout() {
   # jeedom backup compatibility:  ./core/css is a symlink
   # -> some important plugins like widget are writing direclty to core/css/...
   #    and there fore need www-data write permission
-  if [[ -L ${ROOT_DIRECTORY}/core/css ]]; then
+  if [ -L ${ROOT_DIRECTORY}/core/css ]; then
     removeDirectoryOrFile ${ROOT_DIRECTORY}/core/css
   fi
-  if [[ -d ${ROOT_DIRECTORY}/core/css ]]; then
+  if [ -d ${ROOT_DIRECTORY}/core/css ]; then
     mv ${ROOT_DIRECTORY}/core/css/* ${LIB_DIRECTORY}/public/css/
     removeDirectoryOrFile ${ROOT_DIRECTORY}/core/css
   fi
@@ -87,34 +87,34 @@ step2_prepare_directory_layout() {
   addLogInfo "created core/css symlink: ${ROOT_DIRECTORY}/core/css"
 
   # jeedom javascript compatibility
-  if [[ ! -e ${ROOT_DIRECTORY}/core/js ]]; then
+  if [ ! -e ${ROOT_DIRECTORY}/core/js ]; then
     ln -s ${ROOT_DIRECTORY}/assets/js/core/ ${ROOT_DIRECTORY}/core/js
   fi
   addLogInfo "created core/js symlink: ${ROOT_DIRECTORY}/assets/js/core"
 
   # jeedom template location compatibility
-  if [[ ! -e ${ROOT_DIRECTORY}/core/template ]]; then
+  if [ ! -e ${ROOT_DIRECTORY}/core/template ]; then
     ln -s ${ROOT_DIRECTORY}/views/templates/ ${ROOT_DIRECTORY}/core/template
   fi
   addLogInfo "created core/template symlink: ${ROOT_DIRECTORY}/core/template"
 
   # jeedom backup compatibility:  ./data is a symlink
-  if [[ -L ${ROOT_DIRECTORY}/data ]]; then
+  if [ -L ${ROOT_DIRECTORY}/data ]; then
     removeDirectoryOrFile ${ROOT_DIRECTORY}/data
   fi
-  if [[ -d ${ROOT_DIRECTORY}/data ]]; then
+  if [ -d ${ROOT_DIRECTORY}/data ]; then
     content=$(ls -A ${ROOT_DIRECTORY}/data)
-    if [[ ! -z "${content}" ]]; then
+    if [ ! -z "${content}" ]; then
       tmpvar=$(mktemp -d ${ROOT_DIRECTORY}/data.XXXXXXXX)
       mv ${ROOT_DIRECTORY}/data/* ${tmpvar}/
     fi
     removeDirectoryOrFile ${ROOT_DIRECTORY}/data
   fi
   { ##try
-    if [[ -f ${ROOT_DIRECTORY}/data ]]; then
+    if [ -f ${ROOT_DIRECTORY}/data ]; then
       removeDirectoryOrFile ${ROOT_DIRECTORY}/data
     fi
-    if [[ ! -e ${ROOT_DIRECTORY}/data ]]; then
+    if [ ! -e ${ROOT_DIRECTORY}/data ]; then
       ln -s ${LIB_DIRECTORY}/data ${ROOT_DIRECTORY}/data
     fi
     addLogInfo "created data symlink: ${ROOT_DIRECTORY}/data"
@@ -123,10 +123,10 @@ step2_prepare_directory_layout() {
   }
   { ##try
     # jeedom logs compatibility
-    if [[ ! -f ${ROOT_DIRECTORY}/log ]]; then
+    if [ ! -f ${ROOT_DIRECTORY}/log ]; then
       removeDirectoryOrFile ${ROOT_DIRECTORY}/log
     fi
-    if [[ ! -e ${ROOT_DIRECTORY}/log ]]; then
+    if [ ! -e ${ROOT_DIRECTORY}/log ]; then
       ln -s ${LOG_DIRECTORY} ${ROOT_DIRECTORY}/log
     fi
   } || { ##catch
@@ -139,7 +139,7 @@ step2_prepare_directory_layout() {
   } || { ##catch
     addLogError "Error while clearing cache"
   }
-  if [[ "true" == "${result}" ]]; then
+  if [ "true" == "${result}" ]; then
     addLogSuccess "NextDom is configured with success"
   fi
 }
@@ -152,17 +152,17 @@ step3_configure_mysql() {
 
   addLogStep "Postinst -- Configure MySQL/MariaDB - 3/12"
 
-  [[ "localhost" != "${MYSQL_HOSTNAME}" ]] && {
+  [ "localhost" != "${MYSQL_HOSTNAME}" ] && {
     addLogInfo "Remote mysql server detected"
     return 0
   }
   { ##try
     mysqladmin -u root status
     isService=$?
-    if [[ ${isService} -gt 0 ]]; then
+    if [ ${isService} -gt 0 ]; then
       addLogInfo "no mysql service locally"
       return 0
-    elif [[ ! -f /etc/init.d/mysql ]]; then
+    elif [ ! -f /etc/init.d/mysql ]; then
       addLogInfo "no mysql service locally"
       return 0
     fi
@@ -179,7 +179,7 @@ step3_configure_mysql() {
   }
 
   { ##try
-    if [[ -d /etc/mysql/conf.d ]]; then
+    if [ -d /etc/mysql/conf.d ]; then
       cat - >/etc/mysql/conf.d/nextdom_my.cnf <<EOS
 [mysqld]
 skip-name-resolve
@@ -203,7 +203,7 @@ EOS
 
   startService mysql
 
-  if [[ "true" == "${result}" ]]; then
+  if [ "true" == "${result}" ]; then
     addLogSuccess "MySQL is configured with success"
   fi
 }
@@ -222,7 +222,7 @@ step4_create_symLink_var_www_html() {
     addLogError "Error while linking ${ROOT_DIRECTORY} to ${APACHE_HTML_DIRECTORY}"
   }
 
-  if [[ "true" == "${result}" ]]; then
+  if [ "true" == "${result}" ]; then
     addLogSuccess "${ROOT_DIRECTORY} linked with success to ${APACHE_HTML_DIRECTORY}"
   fi
 }
@@ -258,7 +258,7 @@ step5_configure_apache() {
   } || { ##catch
     addLogError "Error while configuring Apache service"
   }
-  if [[ "true" == "${result}" ]]; then
+  if [ "true" == "${result}" ]; then
     addLogSuccess "Apache is configured with success"
   fi
 }
@@ -293,7 +293,7 @@ step6_configure_nextdom() {
     addLogError "Error while generating Secret key"
   }
 
-  if [[ -f ${CONFIG_DIRECTORY}/mysql/secret ]]; then
+  if [ -f ${CONFIG_DIRECTORY}/mysql/secret ]; then
     source ${CONFIG_DIRECTORY}/mysql/secret
   fi
 
@@ -320,15 +320,15 @@ step6_configure_nextdom() {
 
   { ##try
     # some other compatibilty ugly stuff
-    if [[ -d "/tmp/jeedom" ]]; then
-      if [[ -L "/tmp/jeedom" ]]; then
+    if [ -d "/tmp/jeedom" ]; then
+      if [ -L "/tmp/jeedom" ]; then
         removeDirectoryOrFile /tmp/jeedom
-        if [[ ! -d "${TMP_DIRECTORY}" ]]; then
+        if [ ! -d "${TMP_DIRECTORY}" ]; then
           mkdir -p ${TMP_DIRECTORY}
         fi
         ln -s ${TMP_DIRECTORY} /tmp/jeedom
       else
-        if [[ -d "${TMP_DIRECTORY}" ]]; then
+        if [ -d "${TMP_DIRECTORY}" ]; then
           mv /tmp/jeedom/* ${TMP_DIRECTORY}/
         else
           mv /tmp/jeedom ${TMP_DIRECTORY}
@@ -336,7 +336,7 @@ step6_configure_nextdom() {
         fi
       fi
     else
-      if [[ ! -d "${TMP_DIRECTORY}" ]]; then
+      if [ ! -d "${TMP_DIRECTORY}" ]; then
         mkdir -p ${TMP_DIRECTORY}
       fi
       removeDirectoryOrFile /tmp/jeedom
@@ -355,10 +355,10 @@ step6_configure_nextdom() {
   }
   { ##try
     # set tmp directory as ramfs mount point if enough memory is available
-    if [[ -f "/proc/meminfo" ]]; then
-      if [[ $(cat /proc/meminfo | grep MemTotal | awk '{ print $2 }') -gt 600000 ]]; then
-        if [[ -f "/etc/fstab" ]]; then
-          if [[ $(cat /etc/fstab | grep ${TMP_DIRECTORY} | grep tmpfs | wc -l) -eq 0 ]]; then
+    if [ -f "/proc/meminfo" ]; then
+      if [ $(cat /proc/meminfo | grep MemTotal | awk '{ print $2 }') -gt 600000 ]; then
+        if [ -f "/etc/fstab" ]; then
+          if [ $(cat /etc/fstab | grep ${TMP_DIRECTORY} | grep tmpfs | wc -l) -eq 0 ]; then
             cat - >>/etc/fstab <<EOS
 tmpfs ${TMP_DIRECTORY} tmpfs defaults,size=128M 0 0
 EOS
@@ -372,9 +372,9 @@ EOS
 
   { ##try
     # add www-data in sudoers with no password
-    if [[ $(grep "www-data ALL=(ALL) NOPASSWD: ALL" /etc/sudoers | wc -l) -eq 0 ]]; then
+    if [ $(grep "www-data ALL=(ALL) NOPASSWD: ALL" /etc/sudoers | wc -l) -eq 0 ]; then
       echo "www-data ALL=(ALL) NOPASSWD: ALL" | (EDITOR="tee -a" visudo) >/dev/null
-      if [[ $? -ne 0 ]]; then
+      if [ $? -ne 0 ]; then
         print_error "unable to add www-data to sudoers"
       fi
     fi
@@ -382,7 +382,7 @@ EOS
   } || { ##catch
     addLogError "Error while adding www-data as sudoer"
   }
-  if [[ "true" == "${result}" ]]; then
+  if [ "true" == "${result}" ]; then
     addLogSuccess "NextDom is configured with success"
   fi
 }
@@ -397,7 +397,7 @@ step7_restart_mysql_database() {
     addLogError "MySQL/MariaDB is not running"
   }
 
-  if [[ "true" == "${result}" ]]; then
+  if [ "true" == "${result}" ]; then
     addLogSuccess "MySQL/MariaDB is configured with success"
   fi
 }
@@ -426,7 +426,7 @@ EOS
 
   reloadService cron
 
-  if [[ "true" == "${result}" ]]; then
+  if [ "true" == "${result}" ]; then
     addLogSuccess "Cron is configured with success"
   fi
 }
@@ -441,7 +441,7 @@ step9_check_nextdom() {
   } || { ##catch
     addLogError "Error while checking nextdom"
   }
-  if [[ "true" == "${result}" ]]; then
+  if [ "true" == "${result}" ]; then
     addLogSuccess "Check is done with success"
   fi
 }
@@ -452,7 +452,7 @@ step10_specific_action_for_OS() {
   addLogStep "Postinst -- Execute scripts for specific OS- 10/12"
 
   { ##try
-    if [[ -f /etc/armbian.txt ]]; then
+    if [ -f /etc/armbian.txt ]; then
       cat ${ROOT_DIRECTORY}/install/OS_specific/armbian/post-install.sh | bash
     fi
   } || { ##catch
@@ -460,7 +460,7 @@ step10_specific_action_for_OS() {
   }
 
   { ##try
-    if [[ -f /usr/bin/raspi-config ]]; then
+    if [ -f /usr/bin/raspi-config ]; then
       cat ${ROOT_DIRECTORY}/install/OS_specific/rpi/post-install.sh | bash
     fi
   } || { ##catch
@@ -469,14 +469,14 @@ step10_specific_action_for_OS() {
 
   { ##try
     # Windows hack (bash for windows)
-    if [[ ! $(uname -r | grep -i microsoft) = "" ]] ; then
+    if [ ! $(uname -r | grep -i microsoft) = "" ] ; then
       bash ${WEBSERVER_HOME}/install/OS_specific/windows/pre_inst.sh
     fi
   } || { ##catch
     addLogError "Error while specific action for microsoft windows"
   }
 
-  if [[ "true" == "${result}" ]]; then
+  if [ "true" == "${result}" ]; then
     addLogSuccess "OS specific actions are done with success"
   fi
 }
@@ -492,7 +492,7 @@ step11_configure_file_permissions() {
   { ##try
     local directories=("${LIB_DIRECTORY}" "${LOG_DIRECTORY}" "${TMP_DIRECTORY}" "${ROOT_DIRECTORY}/plugins" "${ROOT_DIRECTORY}/public/img")
     for c_dir in ${directories[*]}; do
-      if [[ $(checkIfDirectoryExists ${c_dir}) -gt 0 ]]; then
+      if [ $(checkIfDirectoryExists ${c_dir}) -gt 0 ]; then
         chown -Rf www-data:www-data ${c_dir}
         find ${c_dir} -type d -exec chmod 0755 {} \;
         find ${c_dir} -type f -exec chmod 0644 {} \;
@@ -503,7 +503,7 @@ step11_configure_file_permissions() {
     addLogError "Error while checking file permission"
   }
 
-  if [[ "true" == "${result}" ]]; then
+  if [ "true" == "${result}" ]; then
     addLogSuccess "Files permissions are configured with success"
   fi
 }
@@ -517,7 +517,7 @@ step12_change_owner_for_nextdom_directories() {
     local directories=("${ROOT_DIRECTORY}" "${LIB_DIRECTORY}" "${LOG_DIRECTORY}" "${TMP_DIRECTORY}")
     for c_dir in ${directories[*]}; do
         { ##try
-            if [[ -d "${c_dir}" ]]; then
+            if [ -d "${c_dir}" ]; then
               chown -Rf www-data:www-data "${c_dir}"
             fi
         } || { ##catch
@@ -528,7 +528,7 @@ step12_change_owner_for_nextdom_directories() {
     addLogError "Error while changing owner"
   }
 
-  if [[ "true" == "${result}" ]]; then
+  if [ "true" == "${result}" ]; then
     addLogSuccess "${ROOT_DIRECTORY}, ${LIB_DIRECTORY}, ${LOG_DIRECTORY} and ${TMP_DIRECTORY} folder's owner is changed with success"
   fi
 }
@@ -539,7 +539,7 @@ step12_change_owner_for_nextdom_directories() {
 
 postinstall_nextdom() {
 
-  if [[ $(id -u) != 0 ]]; then
+  if [ $(id -u) != 0 ]; then
     addLogError "Les droits de super-utilisateur (root) sont requis pour installer NextDom
         Veuillez lancer sudo $0 ou connectez-vous en tant que root, puis relancez $0"
     exit 1
@@ -565,9 +565,12 @@ postinstall_nextdom() {
   step11_configure_file_permissions
   step12_change_owner_for_nextdom_directories
 
-  [[ -f /root/.mysqlroot ]] && rm -f /root/.mysqlroot
+  if [ -f /root/.mysqlroot ]; then
+    rm -f /root/.mysqlroot
+  fi
 
-  cat - <<EOS
+  if [ ! ${PRODUCTION} ]; then
+    cat - <<EOS
   Installation dir  : ${ROOT_DIRECTORY}
 
   Database host     : ${MYSQL_HOSTNAME}
@@ -581,6 +584,7 @@ postinstall_nextdom() {
 
   >>>>> COMPLETED <<<<<
 EOS
+  fi
 
   addLogScript "============ Postinst.sh is executed ... ============"
 

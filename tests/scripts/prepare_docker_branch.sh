@@ -20,7 +20,7 @@ git clone https://github.com/nextdom/nextdom-core
 echo "Change branch"
 cd nextdom-core
 git checkout $1
-docker run -d --rm -p 8765:80 -v `pwd`:/data --name="nextdom-test" nextdom/nextdom-test:latest /start.sh > /dev/null 2>&1
+docker run -d --rm -p 8765:80 -v `pwd`:/data --name="nextdom-test" nextdom/nextdom-test2:latest /start.sh > /dev/null 2>&1
 END_OF_INSTALL_STR="OK NEXTDOM TEST READY"
 
 while true

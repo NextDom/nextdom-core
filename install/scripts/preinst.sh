@@ -15,10 +15,20 @@ step1_generate_nextdom_assets() {
 
   addLogStep "Preinst -- Generate Assets - 1/7"
   # Generate CSS files
-  if [[ ! ${PRODUCTION} ]]; then
+  if [ ! ${PRODUCTION} ]; then
     # A faire dans une version developpeur (apres git clone)
-    cd ${ROOT_DIRECTORY}
-    ./scripts/gen_global.sh || {
+    if [ ! -f ${ROOT_DIRECTORY}/vendor ]; then
+        { ##try
+        cd ${ROOT_DIRECTORY}
+        ./scripts/gen_composer_npm.sh
+        } || { ##catch
+          addLogError "error during composer and npm initialize"
+        }
+    fi
+    { ##try
+        cd ${ROOT_DIRECTORY}
+        ./scripts/gen_global.sh
+    } || { ##catch
       addLogError "error during asset generation"
     }
     addLogInfo "installed nodejs"
@@ -28,7 +38,7 @@ step1_generate_nextdom_assets() {
     addLogInfo "generated css files"
     addLogInfo "generated javascript files"
   fi
-  if [[ "true" == "${result}" ]]; then
+  if [ "true" == "${result}" ]; then
     addLogSuccess "Assets are generated with success"
   fi
 }
@@ -40,14 +50,14 @@ step2_configure_mysql() {
 
   addLogStep "Preinst -- Configure MySQL/MariaDB - 2/7"
 
-  if [[ "localhost" != "${MYSQL_HOSTNAME}" ]]; then
+  if [ "localhost" != "${MYSQL_HOSTNAME}" ]; then
     addLogInfo "Remote mysql server detected"
     return 0
   fi
 
   { ##try
     mysqlStatus=$(pgrep mysql | wc -l)
-    if [[ "${mysqlStatus}" -eq 0 ]]; then
+    if [ "${mysqlStatus}" -eq 0 ]; then
       addLogInfo "no mysql service locally"
       return 0
     fi
@@ -64,7 +74,7 @@ step2_configure_mysql() {
   }
 
   { ##try
-    if [[ -d /etc/mysql/conf.d ]]; then
+    if [ -d /etc/mysql/conf.d ]; then
       cat - >/etc/mysql/conf.d/nextdom_my.cnf <<EOS
 [mysqld]
 skip-name-resolve
@@ -88,7 +98,7 @@ EOS
 
   startService mysql
 
-  if [[ "true" == "${result}" ]]; then
+  if [ "true" == "${result}" ]; then
     addLogSuccess "MySQL is configured with success"
   fi
 }
@@ -98,16 +108,16 @@ step3_prepare_var_www_html() {
 
   addLogStep "Preinst -- Prepare ${APACHE_HTML_DIRECTORY}- 3/7"
 
-  if [[ "${ROOT_DIRECTORY}" == "${APACHE_HTML_DIRECTORY}" ]]; then
+  if [ "${ROOT_DIRECTORY}" == "${APACHE_HTML_DIRECTORY}" ]; then
     addLogInfo "No links to build"
     return 0
   fi
 
   { ##try
     # moving any content of /var/www/html to /var/www/html.XXXXXXXX
-    if [[ -d "${APACHE_HTML_DIRECTORY}" ]]; then
+    if [ -d "${APACHE_HTML_DIRECTORY}" ]; then
       count="$(find ${APACHE_HTML_DIRECTORY} -mindepth 1 -maxdepth 1 | wc -l)"
-      if [[ $count -gt 0 ]]; then
+      if [ $count -gt 0 ]; then
         tmpd="$(mktemp -d -u ${APACHE_HTML_DIRECTORY}.XXXXXXXX)"
         mv "${APACHE_HTML_DIRECTORY}" "${tmpd}"
         addLogInfo "warning : directory ${APACHE_HTML_DIRECTORY} isn't empty, renamed to ${tmpd}"
@@ -118,9 +128,9 @@ step3_prepare_var_www_html() {
   }
   { ##try
     # rename any pre-exiting link
-    if [[ -L "${APACHE_HTML_DIRECTORY}" ]]; then
+    if [ -L "${APACHE_HTML_DIRECTORY}" ]; then
       dest=$(readlink "${APACHE_HTML_DIRECTORY}")
-      if [[ "${dest}" == "${ROOT_DIRECTORY}" ]]; then
+      if [ "${dest}" == "${ROOT_DIRECTORY}" ]; then
         rm -f "${APACHE_HTML_DIRECTORY}"
       else
         tfile="$(mktemp -u ${APACHE_HTML_DIRECTORY}.XXXXXXXX)"
@@ -135,7 +145,7 @@ step3_prepare_var_www_html() {
   }
   { ##try
     # strange but why not
-    if [[ -f "${APACHE_HTML_DIRECTORY}" ]]; then
+    if [ -f "${APACHE_HTML_DIRECTORY}" ]; then
       tfile=$(mktemp -u ${APACHE_HTML_DIRECTORY}.XXXXXXXX)
       mv "${APACHE_HTML_DIRECTORY}" "${tfile}"
       addLogInfo "warning : ${APACHE_HTML_DIRECTORY} is a file, renamed it ${tfile}"
@@ -144,7 +154,7 @@ step3_prepare_var_www_html() {
     addLogError "Error while moving ${APACHE_HTML_DIRECTORY} to ${APACHE_HTML_DIRECTORY}.XXXXXXXX"
   }
 
-  if [[ "true" == "${result}" ]]; then
+  if [ "true" == "${result}" ]; then
     addLogSuccess "${APACHE_HTML_DIRECTORY} is prepared with success"
   fi
 
@@ -157,12 +167,16 @@ step4_configure_apache() {
 
   addLogStep "Preinst -- Configure Apache - 4/7"
 
-  if [[ ! -d "${APACHE_CONFIG_DIRECTORY}" ]]; then
+  if [ ! -d "${APACHE_CONFIG_DIRECTORY}" ]; then
     addLogError "apache is not installed"
   fi
 
+  if [ $(checkIfDirectoryExists ${LOG_DIRECTORY}) -eq 0 ]; then
+    createDirectory ${LOG_DIRECTORY}
+  fi
+
   for c_file in nextdom.conf nextdom-ssl.conf nextdom-common; do
-    if [[ ! -f ${APACHE_CONFIG_DIRECTORY}/${c_file} ]]; then
+    if [ ! -f ${APACHE_CONFIG_DIRECTORY}/${c_file} ]; then
       { ##try
         cp "${ROOT_DIRECTORY}/install/apache/"/${c_file} ${APACHE_CONFIG_DIRECTORY}/${c_file}
         sed -i -r "s%\s+Define\s+wwwdir\s.*%Define wwwdir \"${APACHE_HTML_DIRECTORY}\"%gI" ${APACHE_CONFIG_DIRECTORY}/${c_file}
@@ -176,7 +190,7 @@ step4_configure_apache() {
 
   { ##try
     # Configure private tmp
-    if [[ ! -f "${APACHE_SYSTEMD_DIRECTORY}/privatetmp.conf" ]]; then
+    if [ ! -f "${APACHE_SYSTEMD_DIRECTORY}/privatetmp.conf" ]; then
       createDirectory ${APACHE_SYSTEMD_DIRECTORY}
       cp "${ROOT_DIRECTORY}/install/apache/"privatetmp.conf ${APACHE_SYSTEMD_DIRECTORY}/privatetmp.conf
       addLogInfo "created file: ${APACHE_SYSTEMD_DIRECTORY}/privatetmp.conf"
@@ -186,21 +200,22 @@ step4_configure_apache() {
   }
 
   # Certificat SSL auto signe
-  [[ -d ${CONFIG_DIRECTORY} ]] && mkdir -p ${CONFIG_DIRECTORY}
-  if [[ ! -f ${CONFIG_DIRECTORY}/ssl/nextdom.crt ]] || [[ ! -f ${CONFIG_DIRECTORY}/ssl/nextdom.csr ]] || [[ ! -f ${CONFIG_DIRECTORY}/ssl/nextdom.key ]]; then
-    createDirectory ${CONFIG_DIRECTORY}/ssl/
-    goToDirectory ${CONFIG_DIRECTORY}/ssl/
-    { ##try
-      openssl genrsa -out nextdom.key 2048
-      openssl req -new -key nextdom.key -out nextdom.csr -subj "/C=FR/ST=Paris/L=Paris/O=Global Security/OU=IT Department/CN=example.com"
-      openssl x509 -req -days 3650 -in nextdom.csr -signkey nextdom.key -out nextdom.crt
-      addLogInfo "created SSL self-signed certificates in /etc/nextdom/ssl/"
-    } || { ##catch
-      addLogError "Error while creating SSL self-signed certificates in /etc/nextdom/ssl/"
-    }
+  if [ -d ${CONFIG_DIRECTORY} ]; then
+      if [ ! -f ${CONFIG_DIRECTORY}/ssl/nextdom.crt ] || [ ! -f ${CONFIG_DIRECTORY}/ssl/nextdom.csr ] || [ ! -f ${CONFIG_DIRECTORY}/ssl/nextdom.key ]; then
+        createDirectory ${CONFIG_DIRECTORY}/ssl/
+        goToDirectory ${CONFIG_DIRECTORY}/ssl/
+        { ##try
+          openssl genrsa -out nextdom.key 2048
+          openssl req -new -key nextdom.key -out nextdom.csr -subj "/C=FR/ST=Paris/L=Paris/O=Global Security/OU=IT Department/CN=example.com"
+          openssl x509 -req -days 3650 -in nextdom.csr -signkey nextdom.key -out nextdom.crt
+          addLogInfo "created SSL self-signed certificates in /etc/nextdom/ssl/"
+        } || { ##catch
+          addLogError "Error while creating SSL self-signed certificates in /etc/nextdom/ssl/"
+        }
+      fi
   fi
 
-  if [[ "true" == "${result}" ]]; then
+  if [ "true" == "${result}" ]; then
     addLogSuccess "Apache is configured with success"
   fi
 }
@@ -212,13 +227,13 @@ step5_configure_mysql_database() {
 
   addLogStep "Preinst -- Configure MySQL/MariaDB - 5/7"
 
-  if [[ -f ${CONFIG_DIRECTORY}/mysql/secret ]]; then
+  if [ -f ${CONFIG_DIRECTORY}/mysql/secret ]; then
     source ${CONFIG_DIRECTORY}/mysql/secret
-  elif [[ -z ${MYSQL_NEXTDOM_PASSWD} ]]; then
+  elif [ -z ${MYSQL_NEXTDOM_PASSWD} ]; then
     MYSQL_NEXTDOM_PASSWD="$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15)"
     { ##try
       checkDirectory = checkIfDirectoryExists ${CONFIG_DIRECTORY}/mysql/
-      if [[ ${checkDirectory} -gt 0 ]]; then
+      if [ ${checkDirectory} -gt 0 ]; then
         createDirectory ${CONFIG_DIRECTORY}/mysql/
       fi
       cat - >${CONFIG_DIRECTORY}/mysql/secret <<EOS
@@ -244,13 +259,13 @@ EOS
 
   # All parameters
   MYSQL_OPTIONS=""
-  if [[ -n "${MYSQL_ROOT_PASSWD}" ]]; then
+  if [ -n "${MYSQL_ROOT_PASSWD}" ]; then
     MYSQL_OPTIONS="${MYSQL_OPTIONS} -p${MYSQL_ROOT_PASSWD}"
   fi
-  if [[ -n "${MYSQL_HOSTNAME}" ]]; then
+  if [ -n "${MYSQL_HOSTNAME}" ]; then
     MYSQL_OPTIONS="${MYSQL_OPTIONS} -h${MYSQL_HOSTNAME}"
   fi
-  if [[ -n "${MYSQL_PORT}" ]]; then
+  if [ -n "${MYSQL_PORT}" ]; then
     MYSQL_OPTIONS="${MYSQL_OPTIONS} --port=${MYSQL_PORT}"
   fi
 
@@ -260,7 +275,7 @@ EOS
     addLogError "MySQL/MariaDB is not running"
   }
 
-  if [[ "true" == "${result}" ]]; then
+  if [ "true" == "${result}" ]; then
     addLogSuccess "MySQL/MariaDB is configured with success"
   fi
 }
@@ -269,13 +284,13 @@ step6_generate_mysql_structure() {
   result=true
 
   CONSTRAINT="%"
-  if [[ ${MYSQL_HOSTNAME} == "localhost" ]]; then
+  if [ ${MYSQL_HOSTNAME} == "localhost" ]; then
     CONSTRAINT='localhost'
   fi
   addLogStep "Preinst -- Generate MySQL/MariaDB structure - 6/7"
 
   CONSTRAINT="%"
-  if [[ ${MYSQL_HOSTNAME} == "localhost" ]]; then
+  if [ ${MYSQL_HOSTNAME} == "localhost" ]; then
     CONSTRAINT='localhost'
   fi
   { ##try
@@ -321,7 +336,7 @@ step6_generate_mysql_structure() {
     addLogError "Error while flushing privileges"
   }
 
-  if [[ "true" == "${result}" ]]; then
+  if [ "true" == "${result}" ]; then
     addLogSuccess "Database structure generated with success"
   fi
 }
@@ -342,7 +357,7 @@ step7_configure_php() {
     addLogError "Error while removing 10-opcache.ini file"
   }
 
-  if [[ "true" == "${PRODUCTION}" ]]; then
+  if [ "true" == "${PRODUCTION}" ]; then
     addLogInfo "production mode"
     { ##try
       cp -f ${ROOT_DIRECTORY}/assets/config/dist/default.config.ini.dist ${ROOT_DIRECTORY}/assets/config/default.config.ini
@@ -376,7 +391,7 @@ step7_configure_php() {
     addLogError "Error while restarting apache2"
   }
 
-  if [[ "true" == "${result}" ]]; then
+  if [ "true" == "${result}" ]; then
     addLogSuccess "PHP is configured with success"
   fi
 }
@@ -387,7 +402,7 @@ step7_configure_php() {
 
 preinstall_nextdom() {
 
-  if [[ $(id -u) != 0 ]]; then
+  if [ $(id -u) != 0 ]; then
     addLogError "Les droits de super-utilisateur (root) sont requis pour installer NextDom\
         Veuillez lancer sudo $0 ou connectez-vous en tant que root, puis relancez $0"
     exit 1
@@ -412,7 +427,6 @@ preinstall_nextdom() {
 
 }
 
-[[ $(checkIfDirectoryExists ${LOG_DIRECTORY}) -eq 0 ]] && createDirectory ${LOG_DIRECTORY}
 
 preinstall_nextdom
 
