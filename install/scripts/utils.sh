@@ -13,7 +13,7 @@ source ${CURRENT_DIR}/config.sh
 
 checkIfDirectoryExists() {
   local directoryToCheck=$1
-  if [[ -e ${directoryToCheck} ]]; then
+  if [ -e ${directoryToCheck} ]; then
     return 1
   else
     return 0
@@ -23,7 +23,7 @@ checkIfDirectoryExists() {
 createFile() {
   local fileToCreate=$1
   { ##try
-    if [[ ! -f ${fileToCreate} ]]; then
+    if [ ! -f ${fileToCreate} ]; then
       touch ${fileToCreate}
       addLogInfo "File : ${fileToCreate} created"
     fi
@@ -35,7 +35,7 @@ createFile() {
 createDirectory() {
   local directoryToCreate=$1
   { ##try
-    if [[ ! -e ${directoryToCreate} ]]; then
+    if [ ! -e ${directoryToCreate} ]; then
       mkdir -p ${directoryToCreate}
       addLogInfo "Directory : ${directoryToCreate} created"
     fi
@@ -49,7 +49,7 @@ goToDirectory() {
   { ##try
     $(checkIfDirectoryExists ${directory})
     checkDirectory=$?
-    if [[ ${checkDirectory} -gt 0 ]]; then
+    if [ ${checkDirectory} -gt 0 ]; then
       cd ${directory} >/dev/null
       pushd ${directory} >/dev/null
     fi
@@ -61,7 +61,7 @@ goToDirectory() {
 removeDirectoryOrFile() {
   local directoryToRemove=$1
   { ##try
-    if [[ -d "${directoryToRemove}" ]]; then
+    if [ -d "${directoryToRemove}" ]; then
       rm -Rf "${directoryToRemove}"
     fi
     addLogInfo "Directory or file : ${directoryToRemove} removed"
@@ -99,7 +99,7 @@ addLogScript() {
 ########################################### Rights management ###################################
 
 checkCurrentUser() {
-  if [[ "${UID}" -ne "${ROOT_UID}" ]]; then
+  if [ "${UID}" -ne "${ROOT_UID}" ]; then
     addLogError "You are not authorized to run this script … Permission Denied !!!"
     //exit ${ERROR_INVALID_USER}
   fi
@@ -112,7 +112,7 @@ checkMySQLIsRunning() {
   local MYSQL_OPTIONS=$1
   local try=0
 
-  while [[ ${try} -lt 5 ]]; do
+  while [ ${try} -lt 5 ]; do
     { ##try
       mysql -uroot ${MYSQL_OPTIONS} -e "SHOW DATABASES;" >/dev/null 2>&1
     } || { ##catch
@@ -129,10 +129,10 @@ checkMySQLIsRunning() {
 # slow restart of docker service
 restartService() {
   # not needed in docker
-  [[ -f /.dockerenv ]] && return 0
+  [ -f /.dockerenv ] && return 0
   local SERVICE=$1
   local try=0
-  while [[ ${try} -lt 5 ]]; do
+  while [ ${try} -lt 5 ]; do
     { ##try
       service ${SERVICE} restart
     } || { ##catch
@@ -148,10 +148,10 @@ restartService() {
 # slow reload of docker service
 reloadService() {
   # not needed in docker
-  [[ -f /.dockerenv ]] && return 0
+  [ -f /.dockerenv ] && return 0
   local SERVICE=$1
   local try=0
-  while [[ ${try} -lt 5 ]]; do
+  while [ ${try} -lt 5 ]; do
     { ##try
       service ${SERVICE} reload
     } || { ##catch
@@ -167,10 +167,10 @@ reloadService() {
 # slow start of docker service
 startService() {
   # not needed in docker
-  [[ -f /.dockerenv ]] && return 0
+  [ -f /.dockerenv ] && return 0
   local SERVICE=$1
   local try=0
-  while [[ ${try} -lt 5 ]]; do
+  while [ ${try} -lt 5 ]; do
     { ##try
       service ${SERVICE} start
     } || { ##catch
@@ -186,10 +186,10 @@ startService() {
 # slow stop of docker service
 stopService() {
   # not needed in docker
-  [[ -f /.dockerenv ]] && return 0
+  [ -f /.dockerenv ] && return 0
   local SERVICE=$1
   local try=0
-  while [[ ${try} -lt 5 ]]; do
+  while [ ${try} -lt 5 ]; do
     { ##try
       service ${SERVICE} stop
     } || { ##catch
@@ -205,10 +205,10 @@ stopService() {
 # slow status of docker service
 statusService() {
   # not needed in docker
-  [[ -f /.dockerenv ]] && return 0
+  [ -f /.dockerenv ] && return 0
   local SERVICE=$1
   local try=0
-  while [[ ${try} -lt 5 ]]; do
+  while [ ${try} -lt 5 ]; do
     { ##try
       service ${SERVICE} status
     } || { ##catch
