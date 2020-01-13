@@ -65,7 +65,7 @@ class AjaxUserTest extends AjaxBase
     public function testValidateTwoFactorCodeAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'validateTwoFactorCode']);
-        $this->assertStringContainsString('Invalid characters in the base32 string.', (string) $result->getBody());
+        $this->assertStringContainsString('Le code ne peut être vide.', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 

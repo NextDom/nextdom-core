@@ -187,13 +187,18 @@ class User extends BaseEntity
     }
 
     /**
-     * @param $_code
+     * @param string $_code
      * @return bool
      */
-    public function validateTwoFactorCode($_code)
+    public function validateTwoFactorCode($twoFactorCode)
     {
-        $google2fa = new Google2FA();
-        return $google2fa->verifyKey($this->getOptions('twoFactorAuthentificationSecret'), $_code);
+        if (empty($twoFactorCode)) {
+            throw new CoreException(__('Le code ne peut être vide.'));
+        }
+        else {
+            $google2fa = new Google2FA();
+            return $google2fa->verifyKey($this->getOptions('twoFactorAuthentificationSecret'), $twoFactorCode);
+        }
     }
 
     /**

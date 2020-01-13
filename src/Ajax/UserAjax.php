@@ -127,7 +127,7 @@ class UserAjax extends BaseAjax
         if ($currentUser !== null) {
             @session_start();
             $currentUser->refresh();
-            $result = $currentUser->validateTwoFactorCode(Utils::init(AjaxParams::CODE));
+            $result = $currentUser->validateTwoFactorCode(Utils::init(AjaxParams::CODE), '');
             if ($result && Utils::init('enableTwoFactorAuthentification') == 1) {
                 $currentUser->setOptions(UserOption::TWO_FACTOR_AUTH, 1);
                 $currentUser->save();
