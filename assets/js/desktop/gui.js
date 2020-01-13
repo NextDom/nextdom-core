@@ -415,9 +415,33 @@ function modalesAdjust() {
   });
 }
 
+/**
+ * Calcul modal width depend of width screen
+ */
 function getModalWidth() {
   if (jQuery(window).width() < 1000) {
     return '96%';
   }
   return '80%';
+}
+
+/**
+ * Set new progress bar value
+ *
+ * @param progressElement the progress element to set.
+ * @param newValue new progress value.
+ */
+function setProgressBar(progressElement, newValue) {
+  if (newValue == 0) {
+    progressStatus = 0;
+  }
+  $(progressElement).attr('aria-valuenow',newValue);
+  $(progressElement).css('width',newValue + '%');
+  $(progressElement).find('span').html(newValue + '%');
+  if ($(progressElement).parent().hasClass('progress') && $(progressElement).parent().next('span').length>0) {
+    let spanValue = $(progressElement).parent().next('span').html();
+    let spanSplit = spanValue.split('%');
+    spanSplit[0] = newValue + '%';
+    $(progressElement).parent().next('span').html(spanSplit.join(''));
+  }
 }

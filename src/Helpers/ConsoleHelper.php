@@ -86,18 +86,30 @@ class ConsoleHelper
 
     /**
      * Show ok message
+     *
+     * @param int $progress progress value
      */
-    public static function ok()
+    public static function ok(int $progress = NULL)
     {
-        printf(" OK\n");
+        if ($progress == NULL) {
+            printf(" OK\n");
+        } else {
+            printf(" OK (" . $progress . "%%)\n");
+        }
     }
 
     /**
      * Show not ok message
+     *
+     * @param int $progress progress value
      */
-    public static function nok()
+    public static function nok(int $progress = NULL)
     {
-        printf(" Failure\n");
+        if ($progress == NULL) {
+            printf(" Failure\n");
+        } else {
+            printf(" Failure (" . $progress . "%%)\n");
+        }
     }
 
     /**

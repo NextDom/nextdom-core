@@ -37,6 +37,7 @@
 /* Global variables Initialisations */
 var modifyWithoutSave = false;
 var lockModify = false;
+var progressStatus = 0;
 uniqId_count = 0;
 modifyWithoutSave = false;
 nbActiveAjaxRequest = 0;
@@ -709,7 +710,7 @@ function passwordScore(password, progressbar=null, spanLevel=null) {
 
 /**
  * Decode HTML entities in string like &eacute;
- * @param string message 
+ * @param string message
  */
 function decodeHtmlEntities(message)
 {

@@ -132,13 +132,14 @@ function initEvents() {
                 $('#bt_backupNextDom').addClass('disabled');
                 el.find('.fa-refresh').show();
                 el.find('.fa-floppy-o').hide();
-                $('#md_backupInfo').dialog({title: "{{Avancement de la sauvegarde}}"});
-                $("#md_backupInfo").dialog('open');
                 nextdom.backup.backup({
                     error: function (error) {
                         notify("Erreur", error.message, 'error');
                     },
                     success: function () {
+                        $('#md_backupInfo').dialog({title: "{{Avancement de la sauvegarde}}"});
+                        setProgressBar($("#progressbar"), 0);
+                        $("#progressbar_div").show();
                         getNextDomLog(1, 'backup');
                     }
                 });
@@ -156,14 +157,15 @@ function initEvents() {
                 $('#bt_restoreRepoNextDom').addClass('disabled');
                 el.find('.fa-refresh').show();
                 el.find('.fa-window-restore').hide();
-                $('#md_backupInfo').dialog({title: "{{Avancement de la restauration}}"});
-                $("#md_backupInfo").dialog('open');
                 nextdom.backup.restoreLocal({
                     backup: $('#sel_restoreBackup').value(),
                     error: function (error) {
                         notify("Erreur", error.message, 'error');
                     },
                     success: function () {
+                        $('#md_backupInfo').dialog({title: "{{Avancement de la restauration}}"});
+                        setProgressBar($("#progressbar"), 0);
+                        $("#progressbar_div").show();
                         getNextDomLog(1, 'restore');
                     }
                 });
@@ -240,7 +242,8 @@ function initEvents() {
                     },
                     success: function () {
                       $('#md_backupInfo').dialog({title: "{{Avancement de la restauration}}"});
-                      $("#md_backupInfo").dialog('open');
+                      setProgressBar($("#progressbar"), 0);
+                      $("#progressbar_div").show();
                       getNextDomLog(1, 'restore');
                     }
                 });
@@ -293,6 +296,14 @@ function getNextDomLog(_autoUpdate, _log) {
                         notify("Erreur", '{{L\'opération a échoué}}', 'error');
                         _autoUpdate = 0;
                     }
+                    if(data.result[i].indexOf('OK (') != -1){
+                      let progressPos = data.result[i].indexOf('OK (')+4;
+                      let newProgressStatus = parseInt(data.result[i].substr(progressPos, data.result[i].indexOf('%')-progressPos));
+                      if (newProgressStatus > progressStatus) {
+                        progressStatus = newProgressStatus;
+                        setProgressBar($("#progressbar"), progressStatus);
+                      }
+                    }
                 }
             }
             $('#pre_backupInfo').text(log);
@@ -310,6 +321,7 @@ function getNextDomLog(_autoUpdate, _log) {
                 $('#bt_' + _log + 'RepoNextDom .fa-window-restore').show();
                 $('#bt_' + _log + 'NextDom .fa-cloud-upload-alt').show();
                 $('#bt_' + _log + 'NextDom .fa-cloud-dowload-alt').show();
+                $("#progressbar_div").hide();
                 updateListBackup();
                 for(var i in REPO_LIST){
                     updateRepoListBackup(REPO_LIST[i]);

@@ -439,7 +439,8 @@ html {
 
 /* Progressbar */
 .box-body .progress,
-.tab-pane .progress {
+.tab-pane .progress,
+.form-group .progress {
   background-color: map_get($color_theme, 'color7') !important;
 }
 
