@@ -39,6 +39,20 @@ use NextDom\Model\Entity\Cron;
  */
 class MigrationHelper
 {
+    /**
+     * Log message
+     *
+     * @param $targetLogFile
+     * @param $message
+     * @throws \Exception
+     */
+    private static function logMessage($targetLogFile, $message) {
+        if ($targetLogFile == LogTarget::MIGRATION) {
+            LogHelper::addInfo($targetLogFile, $message, '');
+        } else {
+            ConsoleHelper::process($message);
+        }
+    }
 
     /**
      * Main migrate process
@@ -63,21 +77,13 @@ class MigrationHelper
         }
         $previousVersion = array_map('intval', $previousVersion);
         $message = 'Migration/Update process from --> ' . implode('.', $previousVersion);
-        if ($logFile == LogTarget::MIGRATION) {
-            LogHelper::addInfo($logFile, $message, '');
-        } else {
-            ConsoleHelper::process($message);
-        }
+        self::logMessage($logFile, $message);
 
         //get current version
         $currentVersion = explode('.', NextDomHelper::getNextdomVersion());
         $currentVersion = array_map('intval', $currentVersion);
         $message = 'Migration/Update process to --> ' . implode('.', $currentVersion);
-        if ($logFile == LogTarget::MIGRATION) {
-            LogHelper::addInfo($logFile, $message, '');
-        } else {
-            ConsoleHelper::process($message);
-        }
+        self::logMessage($logFile, $message);
 
         //compare versions
         if ($migrate === true) {
@@ -94,30 +100,18 @@ class MigrationHelper
                         if (method_exists(get_class(), 'migrate_' . $previousVersion[0] . '_' . $previousVersion[1] . '_' . $previousVersion[2])) {
                             $migrateMethod = 'migrate_' . $previousVersion[0] . '_' . $previousVersion[1] . '_' . $previousVersion[2];
                             $message = 'Start migration process for ' . $migrateMethod;
-                            if ($logFile == LogTarget::MIGRATION) {
-                                LogHelper::addInfo($logFile, $message, '');
-                            } else {
-                                ConsoleHelper::process($message);
-                            }
+                            self::logMessage($logFile, $message);
                             try {
                                 self::$migrateMethod($logFile);
                             } catch (\Exception $exception) {
                                 throw new CoreException();
                             }
                             $message = 'Done migration process for ' . $migrateMethod;
-                            if ($logFile == LogTarget::MIGRATION) {
-                                LogHelper::addInfo($logFile, $message, '');
-                            } else {
-                                ConsoleHelper::process($message);
-                            }
+                            self::logMessage($logFile, $message);
                             ConfigManager::save('lastUpdateVersion', $previousVersion[0] . '.' . $previousVersion[1] . '.' . $previousVersion[2], 'core');
 
                             $message = 'Save migration process for ' . $migrateMethod;
-                            if ($logFile == LogTarget::MIGRATION) {
-                                LogHelper::addInfo($logFile, $message, '');
-                            } else {
-                                ConsoleHelper::process($message);
-                            }
+                            self::logMessage($logFile, $message);
                         }
                         $previousVersion[2] += 1;
                     }
@@ -128,6 +122,7 @@ class MigrationHelper
                 $previousVersion[0] += 1;
             }
         }
+        self::fixHtaccess();
         self::replaceJeedomInDatabase($logFile);
         ConfigManager::save('lastUpdateVersion', $currentVersion[0] . '.' . $currentVersion[1] . '.' . $currentVersion[2], 'core');
     }
@@ -158,6 +153,17 @@ class MigrationHelper
     }
 
     /**
+     * Fix htaccess problems in data folder
+     *
+     * @param string $logFile
+     */
+    private static function fixHtaccess($logFile = LogTarget::MIGRATION)
+    {
+
+        exec("find " . NEXTDOM_DATA . " -name '.htaccess' -exec sed -i s/\\|jpeg\\|/\\|jpe\\?g\\|/g {} +");
+    }
+
+    /**
      * Replace jeedom to nextdom in database
      *
      * @param string $logFile log name file to display information
@@ -166,12 +172,7 @@ class MigrationHelper
      */
     private static function replaceJeedomInDatabase($logFile = LogTarget::MIGRATION)
     {
-        $message = 'Replace jeedom in database';
-        if ($logFile == LogTarget::MIGRATION) {
-            LogHelper::addInfo($logFile, $message, '');
-        } else {
-            ConsoleHelper::process($message);
-        }
+        self::logMessage($logFile, 'Replace jeedom in database');
 
         //Update Config table
         $allConfigKeys = ConfigManager::searchKey('', 'core');
@@ -236,12 +237,7 @@ class MigrationHelper
 
         BackupManager::loadSQLFromFile($migrateFile);
 
-        $message = 'Database basic update';
-        if ($logFile == LogTarget::MIGRATION) {
-            LogHelper::addInfo($logFile, $message, '');
-        } else {
-            ConsoleHelper::process($message);
-        }
+        self::logMessage($logFile, 'Database basic update');
 
         foreach (InteractDefManager::all() as $interactDef) {
             $interactDef->setEnable(1);
@@ -269,12 +265,7 @@ class MigrationHelper
      */
     private static function movePersonalFoldersAndFilesToData($logFile = LogTarget::MIGRATION)
     {
-        $message = 'Update theme folder';
-        if ($logFile == LogTarget::MIGRATION) {
-            LogHelper::addInfo($logFile, $message, '');
-        } else {
-            ConsoleHelper::process($message);
-        }
+        self::logMessage($logFile, 'Update theme folder');
 
         FileSystemHelper::mkdirIfNotExists(NEXTDOM_DATA . '/data/custom/', 0775, true);
         $dir = new \RecursiveDirectoryIterator(NEXTDOM_ROOT, \FilesystemIterator::SKIP_DOTS);
@@ -286,12 +277,7 @@ class MigrationHelper
         $it->setMaxDepth(0);
 
         try {
-            $message = 'Start moving files and folders process to ' . NEXTDOM_DATA;
-            if ($logFile == LogTarget::MIGRATION) {
-                LogHelper::addInfo($logFile, $message, '');
-            } else {
-                ConsoleHelper::process($message);
-            }
+            self::logMessage($logFile, 'Start moving files and folders process to ' . NEXTDOM_DATA);
 
             // Basic loop displaying different messages based on file or folder
             foreach ($it as $fileInfo) {
@@ -303,12 +289,7 @@ class MigrationHelper
                         && !is_link($fileInfo->getFilename())) {
 
                         $fileToReplace = $fileInfo->getFilename();
-                        $message = 'Moving ' . NEXTDOM_ROOT . '/' . $fileToReplace;
-                        if ($logFile == LogTarget::MIGRATION) {
-                            LogHelper::addInfo($logFile, $message, '');
-                        } else {
-                            ConsoleHelper::process($message);
-                        }
+                        self::logMessage($logFile, 'Moving ' . NEXTDOM_ROOT . '/' . $fileToReplace);
                         FileSystemHelper::mv(NEXTDOM_ROOT . '/' . $fileToReplace, sprintf("%s/%s", NEXTDOM_DATA . '/data/custom/', $fileToReplace));
 
                         self::migratePlanPath($logFile, $fileToReplace, '', 'data/custom/');
@@ -390,12 +371,7 @@ class MigrationHelper
             throw(new CoreException());
         }
 
-        $message = 'Migrate theme to data folder is done';
-        if ($logFile == LogTarget::MIGRATION) {
-            LogHelper::addInfo($logFile, $message, '');
-        } else {
-            ConsoleHelper::process($message);
-        }
+        self::logMessage($logFile, 'Migrate theme to data folder is done');
     }
 
 
@@ -407,18 +383,14 @@ class MigrationHelper
      * @param string $newReferencePath
      * @throws CoreException
      * @throws \ReflectionException
+     * @throws \NextDom\Exceptions\OperatingSystemException
      */
     private static function migratePlanPath($logFile, $fileToReplace, $oldReferencePath, $newReferencePath)
     {
         if (empty($oldReferencePath)) {
             $oldReferencePath = '';
         }
-        $message = 'Migrate ' . $oldReferencePath . $fileToReplace . ' to ' . $newReferencePath . $fileToReplace;
-        if ($logFile == LogTarget::MIGRATION) {
-            LogHelper::addInfo($logFile, $message, '');
-        } else {
-            ConsoleHelper::process($message);
-        }
+        self::logMessage($logFile, 'Migrate ' . $oldReferencePath . $fileToReplace . ' to ' . $newReferencePath . $fileToReplace);
 
         foreach (PlanManager::all() as $plan) {
             foreach (PlanDisplayType::getValues() as $displayType) {
@@ -467,12 +439,7 @@ class MigrationHelper
             FileSystemHelper::rrmfile(NEXTDOM_DATA . '/data/php/user.function.class.php');
             FileSystemHelper::rrmfile(NEXTDOM_DATA . '/data/php/user.function.class.sample.php');
         }
-        $message = 'user.function files removed';
-        if ($logFile == LogTarget::MIGRATION) {
-            LogHelper::addInfo($logFile, $message, '');
-        } else {
-            ConsoleHelper::process($message);
-        }
+        self::logMessage($logFile, 'user.function files removed');
     }
 
     /***************************************************************** 0.6.1 Migration process *****************************************************************/

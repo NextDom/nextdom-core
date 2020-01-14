@@ -44,4 +44,5 @@ class NextDomFolder extends Enum
     const _SASS_CACHE = '.sass-cache';
     const _GIT = '.git';
     const _IDEA = '.idea';
+    const PLAN_IMAGE = NEXTDOM_DATA . '/data/custom/plans/';
 }

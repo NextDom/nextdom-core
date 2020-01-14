@@ -152,7 +152,7 @@
 
     $('#bt_uploadImage').fileupload({
         replaceFileInput: false,
-        url: '/core/ajax/plan.ajax.php?action=uploadImage&id=' + planHeader_id + '&nextdom_token=' + NEXTDOM_AJAX_TOKEN,
+        url: '/src/ajax.php?target=Plan&action=uploadImage&id=' + planHeader_id + '&nextdom_token=' + NEXTDOM_AJAX_TOKEN,
         dataType: 'json',
         done: function (e, data) {
             if (data.result.state != 'ok') {

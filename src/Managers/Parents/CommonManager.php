@@ -35,6 +35,7 @@ namespace NextDom\Managers\Parents;
 
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
+use NextDom\Model\Entity\PlanHeader;
 
 /**
  * Base manager with commonts functions
@@ -48,7 +49,7 @@ trait CommonManager
      *
      * @param $requestedId
      *
-     * @return mixed|null
+     * @return mixed
      *
      * @throws CoreException
      * @throws \ReflectionException

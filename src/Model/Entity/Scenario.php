@@ -237,7 +237,6 @@ class Scenario extends BaseEntity
             return $this->execute($trigger, $message);
         } else {
             if (count($this->getTags()) != '') {
-                var_dump('a');
                 $this->setCache(ScenarioCache::TAGS, $this->getTags());
             }
             $cmd = NEXTDOM_ROOT . '/src/Api/start_scenario.php ';
