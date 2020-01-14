@@ -238,7 +238,7 @@ function init(_value, _default) {
           if (_path[i].indexOf('?file=') >= 0) {
             $('<script type="text/javascript" src="' + _path[i] + '"></script>').appendTo('head');
           } else {
-            $('<script type="text/javascript" src="core/php/getResource.php?file=' + _path[i] + '"></script>').appendTo('head');
+            $('<script type="text/javascript" src="src/Api/getResource.php?file=' + _path[i] + '"></script>').appendTo('head');
           }
         }
 

@@ -164,7 +164,7 @@ class ScenarioExpressionManager extends BaseManager
                 $replace[$value] = '';
             }
         }
-        $result['html'] = TranslateHelper::exec(Utils::templateReplace($replace, $result['html']), 'core/template/scenario/' . $expression . '.default');
+        $result['html'] = TranslateHelper::exec(Utils::templateReplace($replace, $result['html']), 'views/templates/scenario/' . $expression . '.default');
         return $result;
     }
 

@@ -20,6 +20,7 @@ namespace NextDom\Ajax;
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Utils;
+use NextDom\Managers\MessageManager;
 use NextDom\Market\DownloadManager;
 use NextDom\Market\MarketItem;
 use NextDom\Market\NextDomMarket;
@@ -131,7 +132,7 @@ class NextDomMarketAjax extends BaseAjax
                                 if (!\in_array($item->getId(), $idList)) {
                                     $itemData = $item->getDataInArray();
                                     if ($itemData['installed'] === true && $itemData['installedBranchData']['needUpdate'] === true) {
-                                        \message::add('NextDom Market', 'Mise à jour disponible pour ' . $itemData['name'], null, null);
+                                        MessageManager::add('NextDom Market', 'Mise à jour disponible pour ' . $itemData['name'], null, null);
                                     }
                                     array_push($result, $itemData);
                                     array_push($idList, $item->getId());
@@ -140,7 +141,7 @@ class NextDomMarketAjax extends BaseAjax
                         }
                     }
                     // Tri par ordre alphabétique
-                    \usort($result, function ($item1, $item2) {
+                    usort($result, function ($item1, $item2) {
                         return $item1['name'] > $item2['name'];
                     });
                 }

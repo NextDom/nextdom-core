@@ -838,7 +838,7 @@ class CmdManager extends BaseManager
      */
     public static function availableWidget($version)
     {
-        $path = NEXTDOM_ROOT . '/core/template/' . $version;
+        $path = NEXTDOM_ROOT . '/views/templates/' . $version;
         $files = FileSystemHelper::ls($path, 'cmd.*', false, ['files', 'quiet']);
         $result = [];
         foreach ($files as $file) {

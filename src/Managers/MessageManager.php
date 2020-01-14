@@ -41,8 +41,6 @@ use NextDom\Managers\Parents\BaseManager;
 use NextDom\Managers\Parents\CommonManager;
 use NextDom\Model\Entity\Message;
 
-require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
-
 /**
  * Class MessageManager
  * @package NextDom\Managers

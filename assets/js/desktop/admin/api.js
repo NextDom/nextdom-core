@@ -103,8 +103,9 @@ function initEvents() {
             if (result) {
                $.ajax({
                   type: "POST",
-                  url: "core/ajax/config.ajax.php",
+                  url: "src/ajax.php",
                   data: {
+                      target: 'Config',
                       action: "genApiKey",
                       plugin:el.attr('data-plugin'),
                   },

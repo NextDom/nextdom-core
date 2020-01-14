@@ -37,8 +37,6 @@ namespace NextDom\Managers;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\Utils;
 
-require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
-
 /**
  * Class DevicesManager
  * @package NextDom\Managers

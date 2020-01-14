@@ -289,8 +289,9 @@ function initGeneralFormEvents() {
         source: function (request, response, url) {
             $.ajax({
                 type: 'POST',
-                url: 'core/ajax/scenario.ajax.php',
+                url: 'src/ajax.php',
                 data: {
+                    target: 'Scenario',
                     action: 'autoCompleteGroup',
                     term: request.term
                 },

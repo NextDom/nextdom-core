@@ -386,8 +386,9 @@ function launchUpdate(updateId) {
 function getNextDomLog(_autoUpdate, _log) {
   $.ajax({
     type: 'POST',
-    url: 'core/ajax/log.ajax.php',
+    url: 'src/ajax.php',
     data: {
+      target: 'Log',
       action: 'get',
       log: _log,
     },

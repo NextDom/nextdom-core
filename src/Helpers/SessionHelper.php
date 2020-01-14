@@ -34,6 +34,7 @@
 
 namespace NextDom\Helpers;
 
+use NextDom\Com\ComShell;
 use NextDom\Enums\DateFormat;
 use NextDom\Exceptions\CoreException;
 use NextDom\Managers\ConfigManager;
@@ -52,9 +53,9 @@ class SessionHelper
     {
         $result = [];
         try {
-            $sessions = explode("\n", \com_shell::execute(SystemHelper::getCmdSudo() . ' ls ' . session_save_path()));
+            $sessions = explode("\n", ComShell::execute(SystemHelper::getCmdSudo() . ' ls ' . session_save_path()));
             foreach ($sessions as $session) {
-                $data = \com_shell::execute(SystemHelper::getCmdSudo() . ' cat ' . session_save_path() . '/' . $session);
+                $data = ComShell::execute(SystemHelper::getCmdSudo() . ' cat ' . session_save_path() . '/' . $session);
                 if ($data == '') {
                     continue;
                 }
@@ -64,7 +65,7 @@ class SessionHelper
                 }
                 $session_id = str_replace('sess_', '', $session);
                 $result[$session_id] = [
-                    'datetime' => date(DateFormat::FULL, \com_shell::execute(SystemHelper::getCmdSudo() . ' stat -c "%Y" ' . session_save_path() . '/' . $session)),
+                    'datetime' => date(DateFormat::FULL, ComShell::execute(SystemHelper::getCmdSudo() . ' stat -c "%Y" ' . session_save_path() . '/' . $session)),
                 ];
                 $result[$session_id]['login'] = $data_session['user']->getLogin();
                 $result[$session_id]['user_id'] = $data_session['user']->getId();

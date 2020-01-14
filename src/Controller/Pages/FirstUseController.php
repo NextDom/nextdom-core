@@ -53,12 +53,13 @@ class FirstUseController extends BaseController
         }
 
         $pageData['profilsWidgetThemes'] = [];
-        $lsDir = FileSystemHelper::ls(NEXTDOM_ROOT . '/core/template/dashboard/themes/', '*', true);
+        $baseThemesPath = '/views/templates/dashboard/themes/';
+        $lsDir = FileSystemHelper::ls(NEXTDOM_ROOT . $baseThemesPath, '*', true);
         foreach ($lsDir as $themesDir) {
-            $lsThemes = FileSystemHelper::ls(NEXTDOM_ROOT . '/core/template/dashboard/themes/' . $themesDir, '*.png');
+            $lsThemes = FileSystemHelper::ls(NEXTDOM_ROOT . $baseThemesPath . $themesDir, '*.png');
             foreach ($lsThemes as $themeFile) {
                 $themeData = [];
-                $themeData['dir'] = '/core/template/dashboard/themes/' . $themesDir . $themeFile;
+                $themeData['dir'] = $baseThemesPath . $themesDir . $themeFile;
                 $themeData['name'] = $themeFile;
                 $pageData['profilsWidgetThemes'][] = $themeData;
             }

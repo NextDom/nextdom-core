@@ -130,8 +130,9 @@ function initEvents() {
                 modifyWithoutSave = false;
                 $.ajax({
                     type: 'POST',
-                    url: 'core/ajax/user.ajax.php',
+                    url: 'src/ajax.php',
                     data: {
+                        target: 'User',
                         action: 'testLdapConnection',
                     },
                     dataType: 'json',

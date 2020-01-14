@@ -206,7 +206,7 @@ function initEvents() {
     // Uplod new picture
     $('#user_avatar').fileupload({
         dataType: 'json',
-        url: 'core/ajax/profils.ajax.php?action=imageUpload',
+        url: 'src/ajax.php?target=Profils&action=imageUpload',
         dropZone: '#bsImagesPanel',
         formData: {'nextdom_token': NEXTDOM_AJAX_TOKEN},
         done: function (e, data) {

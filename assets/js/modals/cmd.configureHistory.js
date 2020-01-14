@@ -103,7 +103,7 @@ $('.bt_configureHistoryAdvanceCmdConfiguration').off('click').on('click', functi
 });
 
 $(".bt_configureHistoryExportData").on('click', function () {
-    window.open('core/php/export.php?type=cmdHistory&id=' + $(this).attr('data-id'), "_blank", null);
+    window.open('src/Api/export.php?type=cmdHistory&id=' + $(this).attr('data-id'), "_blank", null);
 });
 
 $('.cmdAttr').on('change click', function () {

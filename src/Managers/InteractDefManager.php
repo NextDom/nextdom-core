@@ -40,8 +40,6 @@ use NextDom\Managers\Parents\BaseManager;
 use NextDom\Managers\Parents\CommonManager;
 use NextDom\Model\Entity\InteractDef;
 
-require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
-
 /**
  * Class InteractDefManager
  * @package NextDom\Managers

@@ -51,8 +51,6 @@ use NextDom\Model\Entity\InteractQuery;
 use NextDom\Model\Entity\JeeObject;
 use NextDom\Model\Entity\Listener;
 
-require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
-
 /**
  * Class InteractQueryManager
  * @package NextDom\Managers

@@ -42,7 +42,7 @@ $('#bt_chooseIcon').on('click', function () {
 
 $('#bt_uploadImage').fileupload({
     replaceFileInput: false,
-    url: 'core/ajax/view.ajax.php?action=uploadImage&id=' + view.id+'&nextdom_token='+NEXTDOM_AJAX_TOKEN,
+    url: 'src/ajax.php?target=View&action=uploadImage&id=' + view.id+'&nextdom_token='+NEXTDOM_AJAX_TOKEN,
     dataType: 'json',
     done: function (e, data) {
         if (data.result.state != 'ok') {

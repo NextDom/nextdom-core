@@ -122,7 +122,7 @@ class RepoUrl implements BaseRepo
                 return null;
             }
             $version = trim(file_get_contents(NextDomHelper::getTmpFolder('url') . '/version'));
-            \com_shell::execute(SystemHelper::getCmdSudo() . 'rm ' . NextDomHelper::getTmpFolder('url') . '/version');
+            ComShell::execute(SystemHelper::getCmdSudo() . 'rm ' . NextDomHelper::getTmpFolder('url') . '/version');
             return $version;
         } catch (\Exception $e) {
 

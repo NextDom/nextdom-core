@@ -45,8 +45,6 @@ use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
 use NextDom\Model\Entity\Cache;
 
-require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
-
 /**
  * Class CacheManager
  * @package NextDom\Managers
