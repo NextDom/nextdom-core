@@ -1217,7 +1217,7 @@ class Cmd extends BaseEntity
      */
     public function influxDb($valueToSend)
     {
-        $influxDbConf = ConfigManager::byKeys(['influxDbIp', 'influxDbPort', 'influxDbDatabase']);
+        $influxDbConf = ConfigManager::byKeys(['influxDbIp', 'influxDbPort', 'influxDbDatabase', 'influxDbLogin', 'influxDbPassword']);
         if ($influxDbConf['influxDbIp'] !== '') {
             if (empty($this->getUnite())) {
                 $unite = 'state';
@@ -1228,8 +1228,7 @@ class Cmd extends BaseEntity
             if ($this->isType(CmdType::INFO)
                 && ($this->isSubType(CmdSubType::NUMERIC) || $this->isSubType(CmdSubType::BINARY))
                 && (isset($valueToSend))) {
-                $client = new \InfluxDB\Client($influxDbConf['influxDbIp'], $influxDbConf['influxDbPort']);
-                $influxDbDatabase = $client->selectDB($influxDbConf['influxDbDatabase']);
+                $influxDbDatabase = \InfluxDB\Client::fromDSN(sprintf('influxdb://%s:%s@%s:%s/%s', urlencode($influxDbConf['influxDbLogin']), urlencode($influxDbConf['influxDbPassword']), $influxDbConf['influxDbIp'], $influxDbConf['influxDbPort'], $influxDbConf['influxDbDatabase']));
 
                 $points = [
                     new \InfluxDB\Point(
