@@ -74,6 +74,8 @@ cache:
 commandes:
   influxDbIPLabel: IP
   influxDbPortLabel: Port
+  influxDbLoginLabel: Login
+  influxDbPasswordLabel: Mot de passe
   influxDbDatabaseNameLabel: Base de données
 common:
   action: "Action"
