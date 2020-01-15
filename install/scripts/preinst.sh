@@ -9,25 +9,33 @@ source ${CURRENT_DIR}/utils.sh
 ########################################### NextDom Steps #######################################
 #################################################################################################
 
+step0_createDirectories() {
+
+  for dir in ${CONFIG_DIRECTORY} ${LIB_DIRECTORY} ${LOG_DIRECTORY} ${ROOT_DIRECTORY} ${TMP_DIRECTORY}
+   do
+    if [ ! -d ${dir} ]; then mkdir -p ${dir}; fi
+  done
+}
+
 step1_generate_nextdom_assets() {
 
   result=true
 
   addLogStep "Preinst -- Generate Assets - 1/7"
   # Generate CSS files
-  if [ ! ${PRODUCTION} ]; then
+  if [ "false" == "${PRODUCTION}" ]; then
     # A faire dans une version developpeur (apres git clone)
     if [ ! -f ${ROOT_DIRECTORY}/vendor ]; then
-        { ##try
+      { ##try
         cd ${ROOT_DIRECTORY}
         ./scripts/gen_composer_npm.sh
-        } || { ##catch
-          addLogError "error during composer and npm initialize"
-        }
+      } || { ##catch
+        addLogError "error during composer and npm initialize"
+      }
     fi
     { ##try
-        cd ${ROOT_DIRECTORY}
-        ./scripts/gen_global.sh
+      cd ${ROOT_DIRECTORY}
+      ./scripts/gen_global.sh
     } || { ##catch
       addLogError "error during asset generation"
     }
@@ -171,7 +179,7 @@ step4_configure_apache() {
     addLogError "apache is not installed"
   fi
 
-  if [ $(checkIfDirectoryExists ${LOG_DIRECTORY}) -eq 0 ]; then
+  if [ -d ${LOG_DIRECTORY} ]; then
     createDirectory ${LOG_DIRECTORY}
   fi
 
@@ -201,18 +209,18 @@ step4_configure_apache() {
 
   # Certificat SSL auto signe
   if [ -d ${CONFIG_DIRECTORY} ]; then
-      if [ ! -f ${CONFIG_DIRECTORY}/ssl/nextdom.crt ] || [ ! -f ${CONFIG_DIRECTORY}/ssl/nextdom.csr ] || [ ! -f ${CONFIG_DIRECTORY}/ssl/nextdom.key ]; then
-        createDirectory ${CONFIG_DIRECTORY}/ssl/
-        goToDirectory ${CONFIG_DIRECTORY}/ssl/
-        { ##try
-          openssl genrsa -out nextdom.key 2048
-          openssl req -new -key nextdom.key -out nextdom.csr -subj "/C=FR/ST=Paris/L=Paris/O=Global Security/OU=IT Department/CN=example.com"
-          openssl x509 -req -days 3650 -in nextdom.csr -signkey nextdom.key -out nextdom.crt
-          addLogInfo "created SSL self-signed certificates in /etc/nextdom/ssl/"
-        } || { ##catch
-          addLogError "Error while creating SSL self-signed certificates in /etc/nextdom/ssl/"
-        }
-      fi
+    if [ ! -f ${CONFIG_DIRECTORY}/ssl/nextdom.crt ] || [ ! -f ${CONFIG_DIRECTORY}/ssl/nextdom.csr ] || [ ! -f ${CONFIG_DIRECTORY}/ssl/nextdom.key ]; then
+      createDirectory ${CONFIG_DIRECTORY}/ssl/
+      goToDirectory ${CONFIG_DIRECTORY}/ssl/
+      { ##try
+        openssl genrsa -out nextdom.key 2048
+        openssl req -new -key nextdom.key -out nextdom.csr -subj "/C=FR/ST=Paris/L=Paris/O=Global Security/OU=IT Department/CN=example.com"
+        openssl x509 -req -days 3650 -in nextdom.csr -signkey nextdom.key -out nextdom.crt
+        addLogInfo "created SSL self-signed certificates in /etc/nextdom/ssl/"
+      } || { ##catch
+        addLogError "Error while creating SSL self-signed certificates in /etc/nextdom/ssl/"
+      }
+    fi
   fi
 
   if [ "true" == "${result}" ]; then
@@ -232,8 +240,7 @@ step5_configure_mysql_database() {
   elif [ -z ${MYSQL_NEXTDOM_PASSWD} ]; then
     MYSQL_NEXTDOM_PASSWD="$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15)"
     { ##try
-      checkDirectory = checkIfDirectoryExists ${CONFIG_DIRECTORY}/mysql/
-      if [ ${checkDirectory} -gt 0 ]; then
+      if [ ! -d ${CONFIG_DIRECTORY}/mysql ]; then
         createDirectory ${CONFIG_DIRECTORY}/mysql/
       fi
       cat - >${CONFIG_DIRECTORY}/mysql/secret <<EOS
@@ -426,7 +433,6 @@ preinstall_nextdom() {
   addLogScript "============ Preinst.sh is executed ... ============"
 
 }
-
 
 preinstall_nextdom
 
