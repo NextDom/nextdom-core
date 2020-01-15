@@ -103,6 +103,7 @@ window.onscroll = function () {
   // Modals repositionning
   $('#md_modal').dialog('option', 'position', 'center');
   $('#md_modal2').dialog('option', 'position', 'center');
+  $('#md_modal_local').dialog('option', 'position', 'center');
   $('#md_pageHelp').dialog('option', 'position', 'center');
 };
 
@@ -406,11 +407,13 @@ function displayClock() {
  * Adjust size and position of jquery modales
  */
 function modalesAdjust() {
-  var modals = [$('#md_modal'), $('#md_modal2')];
+  var modals = [$('#md_modal'), $('#md_modal2'), $('#md_pageHelp'), $('#md_modal_local')];
   modals.forEach(function (modal) {
     if (modal.is(':ui-dialog')) {
       modal.dialog('option', 'width', getModalWidth());
+      modal.dialog('option', 'height', getModalHeight());
       modal.dialog('option', 'position', {my: 'center', at: 'center', of: window});
+      modal.find('pre').css('height', modal.height());
     }
   });
 }
@@ -423,6 +426,13 @@ function getModalWidth() {
     return '96%';
   }
   return '80%';
+}
+
+/**
+ * Calcul modal width depend of width screen
+ */
+function getModalHeight() {
+  return (jQuery(window).height() - 100);
 }
 
 /**

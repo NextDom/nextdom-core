@@ -37,17 +37,31 @@
     <div class="action-bar">
         <div class="action-group">
             <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'common.return' | trans }}</a>
+            <a class="btn btn-default btn-action-bar" id="bt_saveOpenLog"><i class="fas fa-file-alt"></i>{{ 'common.log' | trans }}</a>
         </div>
         <div class="action-group">
             <a class="btn btn-success btn-action-bar pull-right" id="bt_saveBackup"><i class="fas fa-save"></i>{{ 'common.save' | trans }}</a>
             <a class="btn btn-danger btn-action-bar pull-right bt_cancelModifs"><i class="fas fa-times"></i>{{ 'common.cancel'|trans }}</a>
-            <a class="btn btn-default btn-action-bar pull-right" id="bt_saveOpenLog"><i class="fas fa-file-alt"></i>{{ 'common.log' | trans }}</a>
         </div>
     </div>
 </section>
 
 <section class="content">
     <div id="backup">
+        <div id="progressbar_div" class="box box-solid" style="display:none">
+            <div class="box-header with-border">
+                <h3 class="box-title"><i class="fas fa-spinner fa-spin"></i>{{ 'Progression...' }}</h3>
+            </div>
+            <div class="box-body">
+                <div class="progress spacing-bottom-big">
+                    <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" id="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                        <span class="sr-only"></span>
+                    </div>
+                </div>
+                <span id="progressbar_span"></span>
+            </div>
+        </div>
+
         <div class="nav-tabs-custom">
             <ul class="nav nav-tabs pull-right" role="tablist">
                 <li role="presentation"><a href="#tabDist" aria-controls="tabDist" role="tab" data-toggle="tab"><i class="fas fa-cloud-download-alt"></i><span>{{ 'Distantes' }}</span></a></li>
@@ -182,25 +196,12 @@
                         {% endfor %}
                     </fieldset>
                 </div>
-
-                <div id="progressbar_div" class="spacing-top-big-three" style="display:none">
-                    <legend>{{ 'Progression' }}</legend>
-                    <div class="row">
-                        <div class="form-group col-xs-12 col-padding">
-                            <div class="progress spacing-bottom-big">
-                                <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" id="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
-                                    <span class="sr-only"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
 
-        <div id="md_backupInfo">
+        <div id="md_modal_local" style="display:none">
             <div class="content">
-                <pre id="pre_backupInfo" style="overflow: scroll;"></pre>
+                <pre id="pre_modal_local"></pre>
             </div>
         </div>
     </div>

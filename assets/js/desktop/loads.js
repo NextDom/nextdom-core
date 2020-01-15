@@ -315,7 +315,7 @@ $(function () {
         autoOpen: false,
         modal: false,
         closeText: '',
-        height: (jQuery(window).height() - 100),
+        height: getModalHeight(),
         width: getModalWidth(),
         show: { effect: "blind", duration: 200 },
         resizable: false,
@@ -334,7 +334,7 @@ $(function () {
         autoOpen: false,
         modal: false,
         closeText: '',
-        height: (jQuery(window).height() - 100),
+        height: getModalHeight(),
         width: getModalWidth(),
         show: { effect: "blind", duration: 200 },
         resizable: false,
@@ -345,6 +345,7 @@ $(function () {
         beforeClose: function (event, ui) {
             $("body").css({overflow: 'inherit'});
             $("#md_modal").empty();
+            $("#md_modal").dialog('option', 'buttons', []);
         }
     });
 
@@ -353,7 +354,7 @@ $(function () {
         autoOpen: false,
         modal: false,
         closeText: '',
-        height: (jQuery(window).height() - 100),
+        height: getModalHeight(),
         width: getModalWidth(),
         show: { effect: "blind", duration: 200 },
         resizable: false,
@@ -364,6 +365,28 @@ $(function () {
         beforeClose: function (event, ui) {
             $("body").css({overflow: 'inherit'});
             $("#md_modal2").empty();
+            $("#md_modal2").dialog('option', 'buttons', []);
+        }
+    });
+
+    // modal bis trigger declaration
+    $("#md_modal_local").dialog({
+        autoOpen: false,
+        modal: true,
+        closeText: '',
+        height: getModalHeight(),
+        width: getModalWidth(),
+        show: { effect: "blind", duration: 200 },
+        resizable: false,
+        open: function () {
+            $("body").css({overflow: 'hidden'});
+            $(this).dialog("option", "position", {my: "center", at: "center", of: window});
+            $(this).find('pre').css('height', $(this).height());
+        },
+        beforeClose: function (event, ui) {
+            $("body").css({overflow: 'inherit'});
+            $("#md_modal_true").empty();
+            $("#md_modal_true").dialog('option', 'buttons', []);
         }
     });
 

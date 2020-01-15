@@ -33,6 +33,8 @@
 * @Email   <admin@nextdom.org>
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
+var backupInfoModal = $('#md_modal_local');
+var backupInfoPre = $('#pre_modal_local');
 
 // Page init
 loadInformations();
@@ -101,27 +103,10 @@ function initEvents() {
         });
     });
 
-    // Backup modale init
-    $("#md_backupInfo").dialog({
-        closeText: '',
-        autoOpen: false,
-        modal: true,
-        height: jQuery(window).height() - 100,
-        width: getModalWidth(),
-        open: function () {
-            $("body").css({overflow: 'hidden'});
-            $(this).dialog("option", "position", {my: "center", at: "center", of: window});
-            $('#pre_backupInfo').css('height', $('#md_backupInfo').height());
-        },
-        beforeClose: function (event, ui) {
-            $("body").css({overflow: 'inherit'});
-        }
-    });
-
     // Open log button
     $("#bt_saveOpenLog").on('click', function (event) {
-        $('#md_backupInfo').dialog({title: "{{Avancement de la sauvegarde}}"});
-        $("#md_backupInfo").dialog('open');
+        backupInfoModal.dialog({title: "{{Avancement de la sauvegarde}}"});
+        backupInfoModal.dialog('open');
     });
 
     // Backup button
@@ -137,7 +122,7 @@ function initEvents() {
                         notify("Erreur", error.message, 'error');
                     },
                     success: function () {
-                        $('#md_backupInfo').dialog({title: "{{Avancement de la sauvegarde}}"});
+                        backupInfoModal.dialog({title: "{{Avancement de la sauvegarde}}"});
                         setProgressBar($("#progressbar"), 0);
                         $("#progressbar_div").show();
                         getNextDomLog(1, 'backup');
@@ -163,7 +148,7 @@ function initEvents() {
                         notify("Erreur", error.message, 'error');
                     },
                     success: function () {
-                        $('#md_backupInfo').dialog({title: "{{Avancement de la restauration}}"});
+                        backupInfoModal.dialog({title: "{{Avancement de la restauration}}"});
                         setProgressBar($("#progressbar"), 0);
                         $("#progressbar_div").show();
                         getNextDomLog(1, 'restore');
@@ -241,7 +226,7 @@ function initEvents() {
                         notify("Erreur", error.message, 'error');
                     },
                     success: function () {
-                      $('#md_backupInfo').dialog({title: "{{Avancement de la restauration}}"});
+                      backupInfoModal.dialog({title: "{{Avancement de la restauration}}"});
                       setProgressBar($("#progressbar"), 0);
                       $("#progressbar_div").show();
                       getNextDomLog(1, 'restore');
@@ -265,13 +250,13 @@ function getNextDomLog(_autoUpdate, _log) {
         error: function (request, status, error) {
             setTimeout(function () {
                 getNextDomLog(_autoUpdate, _log)
-            }, 1000);
+            }, 500);
         },
         success: function (data) {
             if (data.state != 'ok') {
                 setTimeout(function () {
                     getNextDomLog(_autoUpdate, _log)
-                }, 1000);
+                }, 500);
                 return;
             }
             var log = '';
@@ -296,6 +281,7 @@ function getNextDomLog(_autoUpdate, _log) {
                         notify("Erreur", '{{L\'opération a échoué}}', 'error');
                         _autoUpdate = 0;
                     }
+                    $("#progressbar_span").html(data.result[data.result.length-1]);
                     if(data.result[i].indexOf('OK (') != -1){
                       let progressPos = data.result[i].indexOf('OK (')+4;
                       let newProgressStatus = parseInt(data.result[i].substr(progressPos, data.result[i].indexOf('%')-progressPos));
@@ -306,7 +292,8 @@ function getNextDomLog(_autoUpdate, _log) {
                     }
                 }
             }
-            $('#pre_backupInfo').text(log);
+            backupInfoPre.text(log);
+            backupInfoPre.scrollTop(backupInfoPre.innerHeight());
             if (init(_autoUpdate, 0) == 1) {
                 setTimeout(function () {
                     getNextDomLog(_autoUpdate, _log)
