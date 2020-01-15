@@ -31,6 +31,35 @@ step1_create_prerequisite_files_and_directories() {
     createFile ${c_file}
   done
 
+  { ##try
+    # some other compatibilty ugly stuff
+    if [ -d "/tmp/jeedom" ]; then
+      if [ -L "/tmp/jeedom" ]; then
+        removeDirectoryOrFile /tmp/jeedom
+        if [ ! -d "${TMP_DIRECTORY}" ]; then
+          mkdir -p ${TMP_DIRECTORY}
+        fi
+        ln -s ${TMP_DIRECTORY} /tmp/jeedom
+      else
+        if [ -d "${TMP_DIRECTORY}" ]; then
+          mv /tmp/jeedom/* ${TMP_DIRECTORY}/
+        else
+          mv /tmp/jeedom ${TMP_DIRECTORY}
+          ln -s ${TMP_DIRECTORY} /tmp/jeedom
+        fi
+      fi
+    else
+      if [ ! -d "${TMP_DIRECTORY}" ]; then
+        mkdir -p ${TMP_DIRECTORY}
+      fi
+      removeDirectoryOrFile /tmp/jeedom
+      ln -s ${TMP_DIRECTORY} /tmp/jeedom
+    fi
+    addLogInfo "created temporary directory: ${TMP_DIRECTORY}"
+  } || { ##catch
+    addLogError "Error while creating tmp folders/links"
+  }
+
   if [ "true" == "${result}" ]; then
     addLogSuccess "Files and directories are created with success"
   fi
@@ -319,35 +348,6 @@ step6_configure_nextdom() {
   }
 
   { ##try
-    # some other compatibilty ugly stuff
-    if [ -d "/tmp/jeedom" ]; then
-      if [ -L "/tmp/jeedom" ]; then
-        removeDirectoryOrFile /tmp/jeedom
-        if [ ! -d "${TMP_DIRECTORY}" ]; then
-          mkdir -p ${TMP_DIRECTORY}
-        fi
-        ln -s ${TMP_DIRECTORY} /tmp/jeedom
-      else
-        if [ -d "${TMP_DIRECTORY}" ]; then
-          mv /tmp/jeedom/* ${TMP_DIRECTORY}/
-        else
-          mv /tmp/jeedom ${TMP_DIRECTORY}
-          ln -s ${TMP_DIRECTORY} /tmp/jeedom
-        fi
-      fi
-    else
-      if [ ! -d "${TMP_DIRECTORY}" ]; then
-        mkdir -p ${TMP_DIRECTORY}
-      fi
-      removeDirectoryOrFile /tmp/jeedom
-      ln -s ${TMP_DIRECTORY} /tmp/jeedom
-    fi
-    addLogInfo "created temporary directory: ${TMP_DIRECTORY}"
-  } || { ##catch
-    addLogError "Error while creating tmp folders/links"
-  }
-
-  { ##try
     # allow www-data to use usb/serial ports
     usermod -a -G dialout,tty www-data
   } || { ##catch
@@ -469,7 +469,7 @@ step10_specific_action_for_OS() {
 
   { ##try
     # Windows hack (bash for windows)
-    if [ ! $(uname -r | grep -i microsoft) = "" ] ; then
+    if [ ! $(uname -r | grep -i microsoft) = "" ]; then
       bash ${WEBSERVER_HOME}/install/OS_specific/windows/pre_inst.sh
     fi
   } || { ##catch
@@ -492,7 +492,7 @@ step11_configure_file_permissions() {
   { ##try
     local directories=("${LIB_DIRECTORY}" "${LOG_DIRECTORY}" "${TMP_DIRECTORY}" "${ROOT_DIRECTORY}/plugins" "${ROOT_DIRECTORY}/public/img")
     for c_dir in ${directories[*]}; do
-      if [ $(checkIfDirectoryExists ${c_dir}) -gt 0 ]; then
+      if [ -d ${c_dir} ]; then
         chown -Rf www-data:www-data ${c_dir}
         find ${c_dir} -type d -exec chmod 0755 {} \;
         find ${c_dir} -type f -exec chmod 0644 {} \;
@@ -516,13 +516,13 @@ step12_change_owner_for_nextdom_directories() {
   { ##try
     local directories=("${ROOT_DIRECTORY}" "${LIB_DIRECTORY}" "${LOG_DIRECTORY}" "${TMP_DIRECTORY}")
     for c_dir in ${directories[*]}; do
-        { ##try
-            if [ -d "${c_dir}" ]; then
-              chown -Rf www-data:www-data "${c_dir}"
-            fi
-        } || { ##catch
-            addLogError "Error while changing owner on ${c_dir}"
-        }
+      { ##try
+        if [ -d "${c_dir}" ]; then
+          chown -Rf www-data:www-data "${c_dir}"
+        fi
+      } || { ##catch
+        addLogError "Error while changing owner on ${c_dir}"
+      }
     done
   } || { ##catch
     addLogError "Error while changing owner"
@@ -569,7 +569,7 @@ postinstall_nextdom() {
     rm -f /root/.mysqlroot
   fi
 
-  if [ ! ${PRODUCTION} ]; then
+  if [ "${PRODUCTION}" != "true" ]; then
     cat - <<EOS
   Installation dir  : ${ROOT_DIRECTORY}
 
