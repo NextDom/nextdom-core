@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DATABASE=nextdomdev
+DATABASE=nextdom
 
 if [[ $# -eq 0 ]]; then
     echo "Usage $0"
