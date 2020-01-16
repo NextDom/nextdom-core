@@ -1052,9 +1052,9 @@ class Cmd extends BaseEntity
                 // @TODO: Il doit y avoir un problème avec les Types et SubType
                 TimeLineHelper::addTimelineEvent(['type' => NextDomObj::CMD, 'subtype' => 'info', 'cmdType' => $this->getSubType(), Common::ID => $this->getId(), Common::NAME => $this->getHumanName(true), 'datetime' => $this->getValueDate(), Common::VALUE => $eventValue . $this->getUnite()]);
             }
+            $this->influxDb($eventValue);
             $this->pushUrl($eventValue);
         }
-        $this->influxDb($eventValue);
     }
 
     /**
@@ -1226,14 +1226,15 @@ class Cmd extends BaseEntity
             }
 
             if ($this->isType(CmdType::INFO)
-                && ($this->isSubType(CmdSubType::NUMERIC) || $this->isSubType(CmdSubType::BINARY))) {
+                && ($this->isSubType(CmdSubType::NUMERIC) || $this->isSubType(CmdSubType::BINARY))
+                && (isset($valueToSend))) {
                 $client = new \InfluxDB\Client($influxDbConf['influxDbIp'], $influxDbConf['influxDbPort']);
                 $influxDbDatabase = $client->selectDB($influxDbConf['influxDbDatabase']);
 
                 $points = [
                     new \InfluxDB\Point(
                         $unite,
-                        $valueToSend,
+                        floatval($valueToSend),
                         ['equipment' => $this->getHumanName()]
                     ),
                 ];
