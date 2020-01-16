@@ -18,7 +18,7 @@
 use NextDom\Ajax\CronAjax;
 use NextDom\Helpers\LogHelper;
 
-require_once('BaseAjaxTest.php');
+require_once(__DIR__ . '/../libs/BaseAjaxTest.php');
 
 class CronAjaxTest extends BaseAjaxTest
 {
@@ -43,7 +43,7 @@ class CronAjaxTest extends BaseAjaxTest
         $result = ob_get_clean();
         $jsonResult = json_decode($result, true);
         $this->assertEquals('ok', $jsonResult['state']);
-        $this->assertCount(8, $jsonResult['result']);
+        $this->assertCount(10, $jsonResult['result']);
         $this->assertEquals(1, $jsonResult['result'][0]['id']);
         $this->assertEquals('cron10', $jsonResult['result'][1]['function']);
     }
@@ -59,6 +59,6 @@ class CronAjaxTest extends BaseAjaxTest
         sleep(10);
         $jsonResult = json_decode($result, true);
         $this->assertEquals('ok', $jsonResult['state']);
-        $this->assertStringContainsString('CRON ERROR', LogHelper::get('plugin4tests')[0]);
+        $this->assertStringContainsString('CRON TEST', LogHelper::get('plugin4tests')[0]);
     }
 }

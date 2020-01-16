@@ -19,7 +19,7 @@ use NextDom\Ajax\MessageAjax;
 use NextDom\Helpers\DBHelper;
 use NextDom\Managers\MessageManager;
 
-require_once('BaseAjaxTest.php');
+require_once(__DIR__ . '/../libs/BaseAjaxTest.php');
 
 class MessageAjaxTest extends BaseAjaxTest
 {

@@ -19,7 +19,7 @@ use NextDom\Ajax\EqLogicAjax;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
 
-require_once('BaseAjaxTest.php');
+require_once(__DIR__ . '/../libs/BaseAjaxTest.php');
 
 class EqLogicAjaxTest extends BaseAjaxTest
 {
