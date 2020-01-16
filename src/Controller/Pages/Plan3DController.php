@@ -69,15 +69,14 @@ class Plan3DController extends BaseController
         $pageData['plan3dHeader'] = Plan3dHeaderManager::all();
         $pageData['plan3dFullScreen'] = Utils::init('fullscreen') == 1;
 
-        $pageData['JS_END_POOL'][] = '/public/3rdparty/three.js/three.min.js';
-        $pageData['JS_END_POOL'][] = '/public/3rdparty/three.js/loaders/LoaderSupport.js';
-        $pageData['JS_END_POOL'][] = '/public/3rdparty/three.js/loaders/OBJLoader.js';
-        $pageData['JS_END_POOL'][] = '/public/3rdparty/three.js/loaders/MTLLoader.js';
-        $pageData['JS_END_POOL'][] = '/public/3rdparty/three.js/controls/TrackballControls.js';
-        $pageData['JS_END_POOL'][] = '/public/3rdparty/three.js/controls/OrbitControls.js';
-        $pageData['JS_END_POOL'][] = '/public/3rdparty/three.js/renderers/Projector.js';
-        $pageData['JS_END_POOL'][] = '/public/3rdparty/three.js/objects/Sky.js';
-        $pageData['JS_END_POOL'][] = '/public/js/core/plan3d.class.js';
+        $pageData['JS_END_POOL'][] = '/vendor/node_modules/three/build/three.min.js';
+        $pageData['JS_END_POOL'][] = '/vendor/node_modules/three/examples/js/loaders/OBJLoader.js';
+        $pageData['JS_END_POOL'][] = '/vendor/node_modules/three/examples/js/loaders/MTLLoader.js';
+        $pageData['JS_END_POOL'][] = '/vendor/node_modules/three/examples/js/controls/TrackballControls.js';
+        $pageData['JS_END_POOL'][] = '/vendor/node_modules/three/examples/js/controls/OrbitControls.js';
+        $pageData['JS_END_POOL'][] = '/vendor/node_modules/three/examples/js/renderers/Projector.js';
+        $pageData['JS_END_POOL'][] = '/vendor/node_modules/three/examples/js/objects/Sky.js';
+        $pageData['JS_END_POOL'][] = '/assets/js/core/plan3d.class.js';
         $pageData['JS_END_POOL'][] = '/public/js/desktop/pages/plan3d.js';
 
         return Render::getInstance()->get('/desktop/pages/plan3d.html.twig', $pageData);
