@@ -48,3 +48,4 @@ core/template
 
 /assets/config/default.config.ini
 /assets/css/builded/
+/node_modules/
