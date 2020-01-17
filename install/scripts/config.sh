@@ -6,6 +6,7 @@ set -e
 
 # false for dev
 PRODUCTION=${PRODUCTION:-true}
+DOCKER=${DOCKER:-false}
 
 # For log output
 BLUE="\\033[1;34m"
