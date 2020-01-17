@@ -18,6 +18,7 @@
 namespace NextDom\Model\Entity;
 
 use NextDom\Enums\NextDomObj;
+use NextDom\Enums\ScenarioSubElementType;
 use NextDom\Managers\ScenarioElementManager;
 use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Model\Entity\Parents\BaseEntity;
@@ -89,15 +90,15 @@ class ScenarioSubElement extends BaseEntity
         if ($_scenario != null && !$_scenario->getDo()) {
             return null;
         }
-        if ($this->getSubtype() == 'action') {
+        if ($this->isSubtype(ScenarioSubElementType::ACTION)) {
             $_scenario->setLog(__('Exécution du sous-élément de type [action] : ') . $this->getType());
-            $return = true;
+            $result = true;
             foreach ($this->getExpression() as $expression) {
-                $return = $expression->execute($_scenario);
+                $result = $expression->execute($_scenario);
             }
-            return $return;
+            return $result;
         }
-        if ($this->getSubtype() == 'condition') {
+        if ($this->isSubtype(ScenarioSubElementType::CONDITION)) {
             $_scenario->setLog(__('Exécution du sous-élément de type [condition] : ') . $this->getType());
             foreach ($this->getExpression() as $expression) {
                 return $expression->execute($_scenario);

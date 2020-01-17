@@ -739,7 +739,7 @@ class CmdManager extends BaseManager
                 $cmd_value = Utils::getJsonAttr($cmdCacheAttrValue, 'value', '');
             } else {
                 $cmd = self::byId($cmd_id);
-                if (!is_object($cmd) || $cmd->isType(CmdType::INFO)) {
+                if (!is_object($cmd) || !$cmd->isType(CmdType::INFO)) {
                     continue;
                 }
                 $cmd_value = $cmd->execCmd(null, true, $quote);

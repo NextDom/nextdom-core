@@ -27,6 +27,7 @@ class ScenarioSubElementType extends Enum
     const ACTION = 'action';
     const AT = 'at';
     const CODE = 'code';
+    const CONDITION = 'condition';
     const ELSE = 'else';
     const FOR = 'for';
     const IF = 'if';

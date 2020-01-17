@@ -60,7 +60,10 @@ class ScenarioExpression extends BaseEntity
 {
     const TABLE_NAME = NextDomObj::SCENARIO_EXPR;
 
-    use OptionsEntity, OrderEntity, TypeEntity, SubTypeEntity;
+    use OrderEntity, TypeEntity, SubTypeEntity;
+    use OptionsEntity {
+        setOptions as basicSetOptions;
+    }
 
     /**
      * @var string
@@ -964,5 +967,10 @@ class ScenarioExpression extends BaseEntity
         $this->updateChangeState($this->scenarioSubElement_id, $_scenarioSubElement_id);
         $this->scenarioSubElement_id = $_scenarioSubElement_id;
         return $this;
+    }
+
+    public function setOptions($_key, $_value)
+    {
+        return $this->basicSetOptions($_key, NextDomHelper::fromHumanReadable($_value));
     }
 }
