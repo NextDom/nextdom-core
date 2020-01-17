@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Tools;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\ControllerData;
 use NextDom\Helpers\Render;
 
 /**
@@ -43,7 +44,7 @@ class OsDbController extends BaseController
     {
         global $CONFIG;
         $pageData['adminDbConfig'] = $CONFIG['db'];
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/osdb.js';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/tools/osdb.js';
 
         return Render::getInstance()->get('/desktop/tools/osdb.html.twig', $pageData);
     }

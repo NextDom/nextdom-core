@@ -19,6 +19,7 @@ namespace NextDom\Helpers;
 
 use NextDom\Enums\AjaxParams;
 use NextDom\Enums\Common;
+use NextDom\Enums\ControllerData;
 use NextDom\Enums\GetParams;
 use NextDom\Enums\NextDomObj;
 use NextDom\Enums\ViewType;
@@ -98,7 +99,7 @@ class PrepareView
     {
         $pageData = [];
         $this->initHeaderData($pageData);
-        $pageData['JS_VARS_RAW']['serverDatetime'] = Utils::getMicrotime();
+        $pageData[ControllerData::JS_VARS_RAW]['serverDatetime'] = Utils::getMicrotime();
         echo $this->getContentFromRoute('pages_routes.yml', $pageCode, $pageData);
     }
 
@@ -111,8 +112,8 @@ class PrepareView
      */
     private function initHeaderData(&$pageData)
     {
-        $pageData['AJAX_TOKEN'] = AjaxHelper::getToken();
-        $pageData['LANGUAGE'] = $this->currentConfig['language'];
+        $pageData[ControllerData::AJAX_TOKEN] = AjaxHelper::getToken();
+        $pageData[ControllerData::LANGUAGE] = $this->currentConfig['language'];
 
         $this->initJsPool($pageData);
         $this->initCssPool($pageData);
@@ -127,117 +128,117 @@ class PrepareView
     {
         if (file_exists(NEXTDOM_ROOT . '/public/js/base.js')) {
             // Loading of base.js that contain all JS in the else below via gen_assets
-            $pageData['JS_POOL'][] = '/public/js/base.js';
+            $pageData[ControllerData::JS_POOL][] = '/public/js/base.js';
             // Loading dynamic libraries, must be here
-            $pageData['JS_POOL'][] = '/vendor/node_modules/autosize/dist/autosize.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/autosize/dist/autosize.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min.js';
         } else {
             // DEV MODE
-            $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-ui-dist/jquery-ui.min.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/bootstrap/dist/js/bootstrap.min.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/admin-lte/dist/js/adminlte.min.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/pace-js/pace.min.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/izitoast/dist/js/iziToast.min.js';
-            $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.utils/jquery.utils.js';
-            $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.at.caret/jquery.at.caret.min.js';
-            $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.multi-column-select/multi-column-select.js';
-            $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.ui-touch-punch/jquery.ui.touch-punch.min.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/jquery-ui-dist/jquery-ui.min.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/bootstrap/dist/js/bootstrap.min.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/admin-lte/dist/js/adminlte.min.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/pace-js/pace.min.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/izitoast/dist/js/iziToast.min.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/3rdparty/jquery.utils/jquery.utils.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/3rdparty/jquery.at.caret/jquery.at.caret.min.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/3rdparty/jquery.multi-column-select/multi-column-select.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/3rdparty/jquery.ui-touch-punch/jquery.ui.touch-punch.min.js';
 
             // Add NextDom core JS
-            $pageData['JS_POOL'][] = '/assets/js/core/core.js';
-            $pageData['JS_POOL'][] = '/assets/js/core/nextdom.class.js';
-            $pageData['JS_POOL'][] = '/assets/js/core/private.class.js';
-            $pageData['JS_POOL'][] = '/assets/js/core/eqLogic.class.js';
-            $pageData['JS_POOL'][] = '/assets/js/core/cmd.class.js';
-            $pageData['JS_POOL'][] = '/assets/js/core/object.class.js';
-            $pageData['JS_POOL'][] = '/assets/js/core/scenario.class.js';
-            $pageData['JS_POOL'][] = '/assets/js/core/plugin.class.js';
-            $pageData['JS_POOL'][] = '/assets/js/core/message.class.js';
-            $pageData['JS_POOL'][] = '/assets/js/core/view.class.js';
-            $pageData['JS_POOL'][] = '/assets/js/core/config.class.js';
-            $pageData['JS_POOL'][] = '/assets/js/core/history.class.js';
-            $pageData['JS_POOL'][] = '/assets/js/core/cron.class.js';
-            $pageData['JS_POOL'][] = '/assets/js/core/security.class.js';
-            $pageData['JS_POOL'][] = '/assets/js/core/update.class.js';
-            $pageData['JS_POOL'][] = '/assets/js/core/user.class.js';
-            $pageData['JS_POOL'][] = '/assets/js/core/backup.class.js';
-            $pageData['JS_POOL'][] = '/assets/js/core/nextdom_market.class.js';
-            $pageData['JS_POOL'][] = '/assets/js/core/interact.class.js';
-            $pageData['JS_POOL'][] = '/assets/js/core/update.class.js';
-            $pageData['JS_POOL'][] = '/assets/js/core/plan.class.js';
-            $pageData['JS_POOL'][] = '/assets/js/core/log.class.js';
-            $pageData['JS_POOL'][] = '/assets/js/core/repo.class.js';
-            $pageData['JS_POOL'][] = '/assets/js/core/network.class.js';
-            $pageData['JS_POOL'][] = '/assets/js/core/dataStore.class.js';
-            $pageData['JS_POOL'][] = '/assets/js/core/cache.class.js';
-            $pageData['JS_POOL'][] = '/assets/js/core/report.class.js';
-            $pageData['JS_POOL'][] = '/assets/js/core/note.class.js';
-            $pageData['JS_POOL'][] = '/assets/js/core/listener.class.js';
-            $pageData['JS_POOL'][] = '/assets/js/core/jeedom.class.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/core/core.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/core/nextdom.class.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/core/private.class.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/core/eqLogic.class.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/core/cmd.class.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/core/object.class.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/core/scenario.class.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/core/plugin.class.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/core/message.class.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/core/view.class.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/core/config.class.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/core/history.class.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/core/cron.class.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/core/security.class.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/core/update.class.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/core/user.class.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/core/backup.class.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/core/nextdom_market.class.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/core/interact.class.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/core/update.class.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/core/plan.class.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/core/log.class.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/core/repo.class.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/core/network.class.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/core/dataStore.class.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/core/cache.class.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/core/report.class.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/core/note.class.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/core/listener.class.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/core/jeedom.class.js';
 
             // Then NextDom JS files
-            $pageData['JS_POOL'][] = '/public/js/desktop/conflicts.js';
-            $pageData['JS_POOL'][] = '/public/js/desktop/loads.js';
-            $pageData['JS_POOL'][] = '/public/js/desktop/inits.js';
-            $pageData['JS_POOL'][] = '/public/js/desktop/gui.js';
-            $pageData['JS_POOL'][] = '/public/js/desktop/utils.js';
-            $pageData['JS_POOL'][] = '/public/js/desktop/search.js';
+            $pageData[ControllerData::JS_POOL][] = '/public/js/desktop/conflicts.js';
+            $pageData[ControllerData::JS_POOL][] = '/public/js/desktop/loads.js';
+            $pageData[ControllerData::JS_POOL][] = '/public/js/desktop/inits.js';
+            $pageData[ControllerData::JS_POOL][] = '/public/js/desktop/gui.js';
+            $pageData[ControllerData::JS_POOL][] = '/public/js/desktop/utils.js';
+            $pageData[ControllerData::JS_POOL][] = '/public/js/desktop/search.js';
 
             // And libraries JS
-            $pageData['JS_POOL'][] = '/vendor/node_modules/bootbox/dist/bootbox.min.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/highcharts/highstock.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/highcharts/highcharts-more.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/highcharts/modules/solid-gauge.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/highcharts/modules/exporting.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/highcharts/modules/export-data.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/packery/dist/packery.pkgd.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-lazyload/jquery.lazyload.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/codemirror/lib/codemirror.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/codemirror/addon/edit/matchbrackets.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/codemirror/mode/htmlmixed/htmlmixed.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/codemirror/mode/clike/clike.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/codemirror/mode/php/php.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/codemirror/mode/xml/xml.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/codemirror/mode/javascript/javascript.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/codemirror/mode/css/css.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/blueimp-file-upload/js/jquery.iframe-transport.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/blueimp-file-upload/js/jquery.fileupload.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-cron/dist/jquery-cron.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/inputmask/dist/jquery.inputmask.bundle.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/moment/moment.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/vivagraphjs/dist/vivagraph.min.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/bootbox/dist/bootbox.min.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/highcharts/highstock.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/highcharts/highcharts-more.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/highcharts/modules/solid-gauge.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/highcharts/modules/exporting.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/highcharts/modules/export-data.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/packery/dist/packery.pkgd.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/jquery-lazyload/jquery.lazyload.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/codemirror/lib/codemirror.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/codemirror/addon/edit/matchbrackets.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/codemirror/mode/htmlmixed/htmlmixed.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/codemirror/mode/clike/clike.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/codemirror/mode/php/php.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/codemirror/mode/xml/xml.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/codemirror/mode/javascript/javascript.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/codemirror/mode/css/css.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/blueimp-file-upload/js/jquery.iframe-transport.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/blueimp-file-upload/js/jquery.fileupload.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/jquery-cron/dist/jquery-cron.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/inputmask/dist/jquery.inputmask.bundle.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/moment/moment.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/vivagraphjs/dist/vivagraph.min.js';
 
             // Then Factory framwework files
-            $pageData['JS_POOL'][] = '/public/js/factory/NextDomUIDGenerator.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/NextDomElement.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/NextDomEnum.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/elements/A.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/elements/Br.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/elements/Button.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/elements/Div.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/elements/DivWithTooltip.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/elements/HorizontalLayout.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/elements/IFA.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/elements/InputText.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/elements/Label.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/elements/Space.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/elements/Table.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/elements/Tbody.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/elements/Td.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/elements/TextNode.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/elements/Th.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/elements/Thead.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/elements/Tr.js';
-            $pageData['JS_POOL'][] = '/public/js/factory/elements/VerticalLayout.js';
+            $pageData[ControllerData::JS_POOL][] = '/public/js/factory/NextDomUIDGenerator.js';
+            $pageData[ControllerData::JS_POOL][] = '/public/js/factory/NextDomElement.js';
+            $pageData[ControllerData::JS_POOL][] = '/public/js/factory/NextDomEnum.js';
+            $pageData[ControllerData::JS_POOL][] = '/public/js/factory/elements/A.js';
+            $pageData[ControllerData::JS_POOL][] = '/public/js/factory/elements/Br.js';
+            $pageData[ControllerData::JS_POOL][] = '/public/js/factory/elements/Button.js';
+            $pageData[ControllerData::JS_POOL][] = '/public/js/factory/elements/Div.js';
+            $pageData[ControllerData::JS_POOL][] = '/public/js/factory/elements/DivWithTooltip.js';
+            $pageData[ControllerData::JS_POOL][] = '/public/js/factory/elements/HorizontalLayout.js';
+            $pageData[ControllerData::JS_POOL][] = '/public/js/factory/elements/IFA.js';
+            $pageData[ControllerData::JS_POOL][] = '/public/js/factory/elements/InputText.js';
+            $pageData[ControllerData::JS_POOL][] = '/public/js/factory/elements/Label.js';
+            $pageData[ControllerData::JS_POOL][] = '/public/js/factory/elements/Space.js';
+            $pageData[ControllerData::JS_POOL][] = '/public/js/factory/elements/Table.js';
+            $pageData[ControllerData::JS_POOL][] = '/public/js/factory/elements/Tbody.js';
+            $pageData[ControllerData::JS_POOL][] = '/public/js/factory/elements/Td.js';
+            $pageData[ControllerData::JS_POOL][] = '/public/js/factory/elements/TextNode.js';
+            $pageData[ControllerData::JS_POOL][] = '/public/js/factory/elements/Th.js';
+            $pageData[ControllerData::JS_POOL][] = '/public/js/factory/elements/Thead.js';
+            $pageData[ControllerData::JS_POOL][] = '/public/js/factory/elements/Tr.js';
+            $pageData[ControllerData::JS_POOL][] = '/public/js/factory/elements/VerticalLayout.js';
 
             // Finally dynamic libraries, must be here
-            $pageData['JS_POOL'][] = '/vendor/node_modules/autosize/dist/autosize.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min.js';
-            $pageData['JS_POOL'][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/autosize/dist/autosize.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.min.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/tablesorter/dist/js/jquery.tablesorter.widgets.min.js';
         }
     }
 
@@ -249,12 +250,12 @@ class PrepareView
      */
     private function initCssPool(&$pageData)
     {
-        $pageData['CSS_POOL'][] = '/public/css/nextdom.css';
-        $pageData['CSS_POOL'][] = '/public/css/themes/' . ConfigManager::byKey('nextdom::user-theme', 'core', 'dark-nextdom') . '.css';
+        $pageData[ControllerData::CSS_POOL][] = '/public/css/nextdom.css';
+        $pageData[ControllerData::CSS_POOL][] = '/public/css/themes/' . ConfigManager::byKey('nextdom::user-theme', 'core', 'dark-nextdom') . '.css';
         if (AuthentificationHelper::isConnected()) {
             if (UserManager::getStoredUser() !== null && UserManager::getStoredUser()->getOptions('desktop_highcharts_theme') != '') {
                 $highstockThemeFile = '/vendor/node_modules/highcharts/themes/' . UserManager::getStoredUser()->getOptions('desktop_highcharts_theme') . '.js';
-                $pageData['JS_POOL'][] = $highstockThemeFile;
+                $pageData[ControllerData::JS_POOL][] = $highstockThemeFile;
             }
         }
     }
@@ -379,11 +380,11 @@ class PrepareView
             } else {
                 if ($this->userCanUseRoute($controllerRoute)) {
                     $pageData = [];
-                    $pageData['JS_POOL'] = [];
-                    $pageData['JS_END_POOL'] = [];
-                    $pageData['CSS_POOL'] = [];
-                    $pageData['JS_VARS'] = [];
-                    $pageData['content'] = $this->getContentFromControllerRouteData($controllerRoute, $pageData);
+                    $pageData[ControllerData::JS_POOL] = [];
+                    $pageData[ControllerData::JS_END_POOL] = [];
+                    $pageData[ControllerData::CSS_POOL] = [];
+                    $pageData[ControllerData::JS_VARS] = [];
+                    $pageData[ControllerData::CONTENT] = $this->getContentFromControllerRouteData($controllerRoute, $pageData);
                     Render::getInstance()->show('/layouts/ajax_content.html.twig', $pageData);
                 }
             }
@@ -407,8 +408,8 @@ class PrepareView
         global $language;
 
         $pageData = [];
-        $pageData['JS_POOL'] = [];
-        $pageData['CSS_POOL'] = [];
+        $pageData[ControllerData::JS_POOL] = [];
+        $pageData[ControllerData::CSS_POOL] = [];
 
         $language = $this->currentConfig['language'];
         $pageData['HOMELINK'] = $this->getHomeLink();
@@ -417,7 +418,7 @@ class PrepareView
         if ($page == '') {
             Utils::redirect($pageData['HOMELINK']);
         } else {
-            $pageData['TITLE'] = ucfirst($page) . ' - NextDom';
+            $pageData[ControllerData::TITLE] = ucfirst($page) . ' - NextDom';
         }
 
         $currentPlugin = $this->initPluginsData($pageData, $eventsJsPlugin);
@@ -430,7 +431,7 @@ class PrepareView
             $currentJeeObjectId = $currentJeeObject->getId();
         }
 
-        $pageData['JS_VARS'] = [
+        $pageData[ControllerData::JS_VARS] = [
             'user_id' => UserManager::getStoredUser()->getId(),
             'user_isAdmin' => AuthentificationHelper::isConnectedAsAdmin(),
             'user_login' => UserManager::getStoredUser()->getLogin(),
@@ -444,7 +445,7 @@ class PrepareView
             'widget_radius' => $this->currentConfig['widget::radius'],
             'root_object_id' => $currentJeeObjectId
         ];
-        $pageData['JS_VARS_RAW'] = [
+        $pageData[ControllerData::JS_VARS_RAW] = [
             'userProfils' => Utils::getArrayToJQueryJson(UserManager::getStoredUser()->getOptions()),
             'serverDatetime' => Utils::getMicrotime()
         ];
@@ -455,16 +456,16 @@ class PrepareView
 
         try {
             if (!NextDomHelper::isStarted()) {
-                $pageData['ALERT_MSG'] = __('NextDom est en cours de démarrage, veuillez patienter. La page se rechargera automatiquement une fois le démarrage terminé.');
+                $pageData[ControllerData::ALERT_MSG] = __('NextDom est en cours de démarrage, veuillez patienter. La page se rechargera automatiquement une fois le démarrage terminé.');
             }
-            $pageData['content'] = $this->getContent($pageData, $page, $currentPlugin);
+            $pageData[ControllerData::CONTENT] = $this->getContent($pageData, $page, $currentPlugin);
         } catch (\Exception $e) {
             ob_end_clean();
-            $pageData['ALERT_MSG'] = Utils::displayException($e);
+            $pageData[ControllerData::ALERT_MSG] = Utils::displayException($e);
         }
 
         $render = Render::getInstance();
-        $pageData['CONTENT'] = $render->get('desktop/index.html.twig', $pageData);
+        $pageData[ControllerData::CONTENT_MAIN] = $render->get('desktop/index.html.twig', $pageData);
         $render->show($baseView, $pageData);
     }
 
@@ -557,7 +558,7 @@ class PrepareView
                     $pageData['MENU_PLUGIN'][$categoryCode][] = $plugin;
                     if ($plugin->getId() == Utils::init('m')) {
                         $currentPlugin = $plugin;
-                        $pageData['title'] = ucfirst($currentPlugin->getName()) . ' - NextDom';
+                        $pageData[ControllerData::TITLE] = ucfirst($currentPlugin->getName()) . ' - NextDom';
                     }
                     if ($plugin->getDisplay() != '' && ConfigManager::bykey('displayDesktopPanel', $plugin->getId(), 0) != 0) {
                         $pageData['PANEL_MENU'][] = $plugin;
@@ -581,11 +582,11 @@ class PrepareView
     private function initPluginsEvents($eventsJsPlugin, &$pageData)
     {
         if (count($eventsJsPlugin) > 0) {
-            $pageData['PLUGINS_JS_POOL'] = [];
+            $pageData[ControllerData::PLUGINS_JS_POOL] = [];
             foreach ($eventsJsPlugin as $pluginId) {
                 $eventJsFile = '/plugins/' . $pluginId . '/desktop/js/event.js';
                 if (file_exists(NEXTDOM_ROOT . $eventJsFile)) {
-                    $pageData['PLUGINS_JS_POOL'][] = $eventJsFile;
+                    $pageData[ControllerData::PLUGINS_JS_POOL][] = $eventJsFile;
                 }
             }
         }
@@ -600,12 +601,12 @@ class PrepareView
      */
     private function initMenu(&$pageData, $currentPlugin)
     {
-        $pageData['IS_ADMIN'] = AuthentificationHelper::isConnectedAsAdmin();
-        $pageData['CAN_SUDO'] = NextDomHelper::isCapable('sudo');
+        $pageData[ControllerData::IS_ADMIN] = AuthentificationHelper::isConnectedAsAdmin();
+        $pageData[ControllerData::CAN_SUDO] = NextDomHelper::isCapable('sudo');
         $pageData['SHOW_MOBILE_IN_MENU'] = is_dir(NEXTDOM_ROOT . '/mobile');
         $pageData['MENU_NB_MESSAGES'] = MessageManager::nbMessage();
         $pageData['NOTIFY_STATUS'] = ConfigManager::byKey('notify::status');
-        if ($pageData['IS_ADMIN']) {
+        if ($pageData[ControllerData::IS_ADMIN]) {
             $pageData['MENU_NB_UPDATES'] = UpdateManager::nbNeedUpdate();
         }
         $pageData['MENU_JEEOBJECT_TREE'] = JeeObjectManager::buildTree(null, false);

@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Diagnostic;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\ControllerData;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
 use NextDom\Managers\ConfigManager;
@@ -158,7 +159,7 @@ class HealthController extends BaseController
                 $pageData['healthPluginsInformations'][] = $pluginData;
             }
         }
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/diagnostic/health.js';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/diagnostic/health.js';
 
         return Render::getInstance()->get('/desktop/diagnostic/health.html.twig', $pageData);
     }

@@ -18,6 +18,8 @@
 require_once(__DIR__ . '/../../../src/core.php');
 require_once(__DIR__ . '/../libs/BaseControllerTest.php');
 
+use NextDom\Enums\ControllerData;
+
 class PlanControllerTest extends BaseControllerTest
 {
     public function setUp(): void
@@ -37,7 +39,7 @@ class PlanControllerTest extends BaseControllerTest
     {
         $pageData = [];
         $result = \NextDom\Controller\Pages\PlanController::get($pageData);
-        $this->assertArrayHasKey('planHeader', $pageData['JS_VARS_RAW']);
+        $this->assertArrayHasKey('planHeader', $pageData[ControllerData::JS_VARS_RAW]);
         $this->assertStringContainsString('div_displayObject', $result);
     }
 

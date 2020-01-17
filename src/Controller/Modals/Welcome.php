@@ -22,6 +22,7 @@
 
 namespace NextDom\Controller\Modals;
 
+use NextDom\Enums\ControllerData;
 use NextDom\Helpers\Render;
 
 /**
@@ -39,7 +40,7 @@ class Welcome extends BaseAbstractModal
     public static function get(): string
     {
         $pageData = [];
-        $pageData['CSS_POOL'][] = '/public/css/pages/welcome.css';
+        $pageData[ControllerData::CSS_POOL][] = '/public/css/pages/welcome.css';
         return Render::getInstance()->get('/modals/welcome.html.twig', $pageData);
     }
 

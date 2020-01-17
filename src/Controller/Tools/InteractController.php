@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Tools;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\ControllerData;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
 use NextDom\Managers\CmdManager;
@@ -57,8 +58,8 @@ class InteractController extends BaseController
                 $interacts[$group['group']] = InteractDefManager::all($group['group']);
             }
         }
-        $pageData['CSS_POOL'][] = '/public/css/pages/interact.css';
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/interact.js';
+        $pageData[ControllerData::CSS_POOL][] = '/public/css/pages/interact.css';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/tools/interact.js';
         $pageData['interactsList'] = $interacts;
         $pageData['interactsListGroup'] = $interactListGroup;
         $pageData['interactDisabledOpacity'] = NextDomHelper::getConfiguration('eqLogic:style:noactive');

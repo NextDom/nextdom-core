@@ -24,6 +24,7 @@ namespace NextDom\Controller\Pages;
 
 use NextDom\Controller\BaseController;
 use NextDom\Enums\AjaxParams;
+use NextDom\Enums\ControllerData;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\Render;
@@ -80,9 +81,9 @@ class ViewController extends BaseController
         if (UserManager::getStoredUser()->getOptions('displayViewByDefault') == 1 && Utils::init('report') != 1) {
             $pageData['viewHideList'] = false;
         }
-        $pageData['JS_VARS'][AjaxParams::VIEW_ID] = $currentView->getId();
-        $pageData['CSS_POOL'][] = '/public/css/pages/view.css';
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/pages/view.js';
+        $pageData[ControllerData::JS_VARS][AjaxParams::VIEW_ID] = $currentView->getId();
+        $pageData[ControllerData::CSS_POOL][] = '/public/css/pages/view.css';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/pages/view.js';
 
         return Render::getInstance()->get('/desktop/pages/view.html.twig', $pageData);
     }

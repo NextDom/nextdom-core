@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Diagnostic;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\ControllerData;
 use NextDom\Helpers\Render;
 
 /**
@@ -42,7 +43,7 @@ class TimelineController extends BaseController
      */
     public static function get(&$pageData): string
     {
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/diagnostic/timeline.js';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/diagnostic/timeline.js';
 
         return Render::getInstance()->get('/desktop/diagnostic/timeline.html.twig', $pageData);
     }

@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Tools;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\ControllerData;
 use NextDom\Helpers\Render;
 
 /**
@@ -41,7 +42,7 @@ class NoteController extends BaseController
      */
     public static function get(&$pageData): string
     {
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/note.js';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/tools/note.js';
 
         return Render::getInstance()->get('/desktop/tools/note.html.twig', $pageData);
     }

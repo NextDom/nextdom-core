@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Params;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\ControllerData;
 use NextDom\Helpers\Render;
 
 /**
@@ -38,7 +39,7 @@ class EqlogicController extends BaseController
      */
     public static function get(&$pageData): string
     {
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/params/eqlogic.js';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/params/eqlogic.js';
 
         return Render::getInstance()->get('/desktop/params/eqlogic.html.twig', $pageData);
     }
