@@ -181,10 +181,10 @@ step3_configure_mysql() {
 
   addLogStep "Postinst -- Configure MySQL/MariaDB - 3/12"
 
-  [ "localhost" != "${MYSQL_HOSTNAME}" ] && {
+  if [ "localhost" != "${MYSQL_HOSTNAME}" ]; then
     addLogInfo "Remote mysql server detected"
     return 0
-  }
+  fi
   { ##try
     mysqladmin -u root status
     isService=$?
@@ -391,6 +391,10 @@ step7_restart_mysql_database() {
   result=true
   addLogStep "Postinst -- Restart MySQL/MariaDB - 7/12"
 
+  if [ "localhost" != "${MYSQL_HOSTNAME}" ]; then
+    addLogInfo "Remote mysql server detected"
+    return 0
+  fi
   { ##try
     restartService mysql
   } || { ##catch

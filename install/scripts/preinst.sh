@@ -23,7 +23,6 @@ step1_generate_nextdom_assets() {
 
   addLogStep "Preinst -- Generate Assets - 1/7"
   # Generate CSS files
-  if [ "false" == "${PRODUCTION}" ]; then
     # A faire dans une version developpeur (apres git clone)
     if [ ! -f ${ROOT_DIRECTORY}/vendor ]; then
       { ##try
@@ -45,7 +44,6 @@ step1_generate_nextdom_assets() {
     addLogInfo "copied icons, themes and images from assets"
     addLogInfo "generated css files"
     addLogInfo "generated javascript files"
-  fi
   if [ "true" == "${result}" ]; then
     addLogSuccess "Assets are generated with success"
   fi
@@ -234,6 +232,10 @@ step5_configure_mysql_database() {
   result=true
 
   addLogStep "Preinst -- Configure MySQL/MariaDB - 5/7"
+  if [ "localhost" != "${MYSQL_HOSTNAME}" ]; then
+    addLogInfo "Remote mysql server detected"
+    return 0
+  fi
 
   if [ -f ${CONFIG_DIRECTORY}/mysql/secret ]; then
     source ${CONFIG_DIRECTORY}/mysql/secret
@@ -290,12 +292,12 @@ EOS
 step6_generate_mysql_structure() {
   result=true
 
-  CONSTRAINT="%"
-  if [ ${MYSQL_HOSTNAME} == "localhost" ]; then
-    CONSTRAINT='localhost'
-  fi
   addLogStep "Preinst -- Generate MySQL/MariaDB structure - 6/7"
 
+  if [ "true" == "${DOCKER}" ]; then
+    addLogInfo "Docker mysql server detected"
+    return 0
+  fi
   CONSTRAINT="%"
   if [ ${MYSQL_HOSTNAME} == "localhost" ]; then
     CONSTRAINT='localhost'
