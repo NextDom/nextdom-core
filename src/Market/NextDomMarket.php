@@ -63,7 +63,7 @@ class NextDomMarket
      * @param array $source Nom de la source
      * @throws \Exception
      */
-    public function __construct($source)
+    public function __construct(array $source)
     {
         DownloadManager::init();
         $this->source = $source;
