@@ -67,6 +67,7 @@ function postInitPage(){
     limitTreeviewMenu();
     adjustNextDomTheme();
     activateGlobalSearch();
+    fixLoadingHide();
 }
 
 /**
