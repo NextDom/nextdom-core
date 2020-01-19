@@ -34,6 +34,7 @@
 
 namespace NextDom\Helpers;
 
+use NextDom\Enums\Common;
 use NextDom\Enums\ConfigKey;
 use NextDom\Enums\DateFormat;
 use NextDom\Enums\LogTarget;
@@ -50,11 +51,11 @@ use NextDom\Managers\EventManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\MessageManager;
 use NextDom\Managers\PlanHeaderManager;
-use NextDom\Managers\PlanManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\UpdateManager;
+use NextDom\Managers\UserManager;
 use NextDom\Managers\ViewManager;
 use NextDom\Model\DataClass\SystemHealth;
 use NextDom\Repo\RepoMarket;
@@ -211,6 +212,13 @@ class NextDomHelper
             $systemHealth[] = new SystemHealth('fa-hdd', 'health.available-swap', 2, __('health.unknow'), '', 'swap');
         }
 
+        $value = shell_exec('sudo cat /proc/sys/vm/swappiness');
+        $state = ($value <= 20);
+        if($values['MemTotal'] >= (1024*1024)){
+            $state = true;
+        }
+        $systemHealth[] = new SystemHealth('fa-hdd', 'health.swapiness', $state, $value.'%', ($state) ? '' :__('health.swapiness-config'), 'swapiness');
+
         $values = sys_getloadavg();
         $systemHealth[] = new SystemHealth('fa-fire', 'health.load', ($values[2] < 20), $values[0] . ' - ' . $values[1] . ' - ' . $values[2], __('health.need-less-than') . ': 20', 'load');
 
@@ -336,6 +344,9 @@ class NextDomHelper
      */
     public static function forceSyncHour()
     {
+        if (ConfigManager::byKey('disable_ntp', Common::CORE, 0) == 1) {
+            return false;
+        }
         shell_exec(SystemHelper::getCmdSudo() . 'service ntp stop;' . SystemHelper::getCmdSudo() . 'ntpdate -s ' . ConfigManager::byKey('ntp::optionalServer', 'core', '0.debian.pool.ntp.org') . ';' . SystemHelper::getCmdSudo() . 'service ntp start');
     }
 
@@ -841,6 +852,7 @@ class NextDomHelper
             ReportHelper::clean();
             DBHelper::optimize();
             CacheManager::clean();
+            UserManager::regenerateHash();
             foreach (UpdateManager::listRepo() as $repoCode => $repoData) {
                 $classCode = 'repo_' . $repoCode;
                 $fullClassName = $repoCode['class'];

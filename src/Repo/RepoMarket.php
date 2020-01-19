@@ -38,6 +38,7 @@ use NextDom\Managers\MessageManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
 use NextDom\Managers\UserManager;
+use NextDom\Model\DataClass\SystemHealth;
 use NextDom\Model\Entity\JsonRPCClient;
 use NextDom\Model\Entity\Update;
 
@@ -54,7 +55,7 @@ class RepoMarket implements BaseRepo
         'backup' => false,
         'hasConfiguration' => true,
         'proxy' => true,
-        'sendPlugin' => false,
+        'sendPlugin' => true,
         'hasStore' => true,
         'hasScenarioStore' => true,
         'test' => true,
@@ -345,7 +346,7 @@ class RepoMarket implements BaseRepo
                 'hwkey' => NextDomHelper::getHardwareKey(),
                 'localIp' => $internalIp,
                 'nextdom_name' => ConfigManager::byKey('name'),
-                'plugin_install_list' => PluginManager::listPlugin(true, false, true),
+                'plugin_install_list' => PluginManager::listPlugin(false, false, true),
                 'information' => [
                     'nbMessage' => MessageManager::nbMessage(),
                     'nbUpdate' => UpdateManager::nbNeedUpdate(),
@@ -892,6 +893,13 @@ class RepoMarket implements BaseRepo
         }
     }
 
+    public static function sendHealth(){
+        $market = self::getJsonRpc();
+        if (!$market->sendRequest('register::health', ['health' => SystemHealth::health()])) {
+            throw new CoreException($market->getError(), $market->getErrorCode());
+        }
+    }
+
     public static function monitoring_status()
     {
         if (!file_exists('/etc/zabbix/zabbix_agentd.conf')) {
@@ -918,6 +926,9 @@ class RepoMarket implements BaseRepo
     {
         preg_match_all('/(\d\.\d\.\d)/m', shell_exec(SystemHelper::getCmdSudo() . ' zabbix_agentd -V'), $matches);
         self::monitoring_install();
+        if(!file_exists('/etc/zabbix/zabbix_agentd.conf')){
+            return;
+        }
         $cmd = SystemHelper::getCmdSudo() . " chmod -R 777 /etc/zabbix;";
         $cmd .= SystemHelper::getCmdSudo() . " sed -i '/ServerActive=/d' /etc/zabbix/zabbix_agentd.conf;";
         $cmd .= SystemHelper::getCmdSudo() . " sed -i '/Hostname=/d' /etc/zabbix/zabbix_agentd.conf;";

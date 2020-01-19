@@ -662,4 +662,18 @@ class EqLogicManager extends BaseManager
         }
         return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
     }
+
+    public static function deadCmdGeneric($_plugin_id) {
+        $result = [];
+        foreach (self::byType($_plugin_id) as $eqLogic) {
+            $eqLogic_json = json_encode(utils::o2a($eqLogic));
+            preg_match_all("/#([0-9]*)#/", $eqLogic_json, $matches);
+            foreach ($matches[1] as $cmdId) {
+                if (is_numeric($cmdId) && !CmdManager::byId(str_replace('#', '', $cmdId))) {
+                    $result[] = array('detail' => ucfirst($_plugin_id).' ' . $eqLogic->getHumanName(), 'help' => 'Action', 'who' => '#' . $cmdId . '#');
+                }
+            }
+        }
+        return $result;
+    }
 }

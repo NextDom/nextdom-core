@@ -29,7 +29,7 @@ class FeatureCronTest extends PHPUnit\Framework\TestCase
         exec('rm -fr /var/log/nextdom/plugin4tests');
         exec('rm -fr /tmp/nextdom/cache/*');
         // Wait cron execution
-        sleep(160);
+        sleep(180);
         $this->assertTrue(is_file('/var/log/nextdom/plugin4tests'));
         $this->assertContains('CRON TEST', file_get_contents('/var/log/nextdom/plugin4tests'));
 

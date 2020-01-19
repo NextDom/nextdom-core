@@ -46,6 +46,7 @@ class Common extends Enum
     const DETAIL = 'detail';
     const DISPLAY = 'display';
     const DISPLAY_VALUE = 'display_value';
+    const END = 'end';
     const EQLOGIC_ID = 'eqLogic_id';
     const EVENT = 'event';
     const FUNCTION = 'function';
@@ -64,6 +65,7 @@ class Common extends Enum
     const LENGTH_FACTOR = 'lengthfactor';
     const LEVEL = 'level';
     const LINK = 'link';
+    const LOCATION = 'location';
     const LOGICAL_ID = 'logicalId';
     const MARKET = 'market';
     const NAME = 'name';
@@ -81,6 +83,7 @@ class Common extends Enum
     const RESULT = 'result';
     const SCENARIO_ID = 'scenario_id';
     const SCHEDULE = 'schedule';
+    const START = 'start';
     const STATE = 'state';
     const STATUS = 'status';
     const SUB_PROCESS = 'subprocess';

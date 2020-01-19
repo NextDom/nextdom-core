@@ -308,6 +308,8 @@ health:
   scenario-enabled: active scenarios
   sudo-error: Apply root privileges to NextDom
   sudo-rights: sudo rights
+  swapiness: Swapiness
+  swapiness-config: For optimal performance the swapiness should not exceed 20% if you have 1GB or less of memory
   system-date-error: "If the last recorded time is wrong: it must be reset <a href=\"index.php?v=d&p=administration\"> </a>"
   system-date: System Date (last recorded time)
   title: Health page

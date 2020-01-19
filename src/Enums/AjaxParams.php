@@ -43,6 +43,7 @@ class AjaxParams extends Enum
     const EXPRESSION = 'expression';
     const FILTER = 'filter';
     const FORCE_RESTART = 'forceRestart';
+    const GROUPING_TYPE = 'groupingType';
     const HTML = 'html';
     const HUMAN_NAME = 'humanName';
     const ID = 'id';

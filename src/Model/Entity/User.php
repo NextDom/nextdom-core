@@ -113,11 +113,13 @@ class User extends BaseEntity
             throw new CoreException(__('Le nom d\'utilisateur ne peut pas être vide'));
         }
         $admins = UserManager::byProfils('admin', true);
-        if (count($admins) == 1 && $this->getProfils() == 'admin' && !$this->isEnabled()) {
-            throw new CoreException(__('Vous ne pouvez désactiver le dernier utilisateur'));
-        }
-        if (count($admins) == 1 && $admins[0]->getId() == $this->getid() && $this->getProfils() != 'admin') {
-            throw new CoreException(__('Vous ne pouvez changer le profil du dernier administrateur'));
+        if(count($admins) == 1 && $admins[0]->getId() == $this->getId()){
+            if ($this->getProfils() == 'admin' && $this->getEnable() == 0) {
+                throw new CoreException(__('Vous ne pouvez désactiver le dernier utilisateur'));
+            }
+            if ($this->getProfils() != 'admin') {
+                throw new CoreException(__('Vous ne pouvez changer le profil du dernier administrateur'));
+            }
         }
     }
 
@@ -256,6 +258,7 @@ class User extends BaseEntity
                 $hash = ConfigManager::genKey();
             }
             $this->setHash($hash);
+            $this->setOptions('hashGenerated',date(DateFormat::FULL));
             $this->save();
         }
         return $this->hash;

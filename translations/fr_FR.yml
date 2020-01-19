@@ -310,6 +310,8 @@ health:
   scenario-enabled: Scénarios actifs
   sudo-error: Appliquez les droits root à NextDom
   sudo-rights: Droits sudo
+  swapiness: Swapiness
+  swapiness-config: Pour des performances optimal le swapiness ne doit pas dépasser 20% si vous avez 1Go ou moins de mémoire
   system-date-error: Si la dernière heure enregistrée est fausse, il faut la remettre à zéro <a href="index.php?v=d&p=administration">ici</a>
   system-date: Date système (dernière heure enregistrée)
   title: Page Santé
