@@ -163,15 +163,23 @@
                         <div class="row">
                             <div class="form-group col-sm-6 col-xs-12 col-padding">
                                 <label class="control-label" for="influxdbIp">{{ 'commandes.influxDbIPLabel'|trans }}</label>
-                                <input type="text" class="configKey form-control" id="influxdbIp" data-l1key="influxDbIp"/>
+                                <input type="text" class="configKey form-control" id="influxdbIp" data-l1key="influxDbIp" placeholder="127.0.0.1"/>
                             </div>
                             <div class="form-group col-sm-6 col-xs-12 col-padding">
                                 <label class="control-label" for="influxdbPort">{{ 'commandes.influxDbPortLabel'|trans }}</label>
-                                <input type="text" class="configKey form-control" id="influxDbPort" data-l1key="influxDbPort"/>
+                                <input type="text" class="configKey form-control" id="influxDbPort" data-l1key="influxDbPort" placeholder="8086"/>
+                            </div>
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label" for="influxDbLogin">{{ 'commandes.influxDbLoginLabel'|trans }}</label>
+                                <input type="text" class="configKey form-control" id="influxDbLogin" data-l1key="influxDbLogin" placeholder="nextdom"/>
+                            </div>
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label" for="influxDbPassword">{{ 'commandes.influxDbPasswordLabel'|trans }}</label>
+                                <input type="password" class="configKey form-control" id="influxDbPassword" data-l1key="influxDbPassword"/>
                             </div>
                             <div class="form-group col-xs-12 col-padding">
                                 <label class="control-label" for="influxDbDatabase">{{ 'commandes.influxDbDatabaseNameLabel'|trans }}</label>
-                                <input type="text" class="configKey form-control" id="influxDbDatabase" data-l1key="influxDbDatabase"/>
+                                <input type="text" class="configKey form-control" id="influxDbDatabase" data-l1key="influxDbDatabase" placeholder="nextdom"/>
                             </div>
                         </div>
                     </fieldset>
