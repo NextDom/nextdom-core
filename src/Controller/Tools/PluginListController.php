@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Tools;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\ControllerData;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
@@ -47,7 +48,7 @@ class PluginListController extends BaseController
     public static function get(&$pageData): string
     {
 
-        $pageData['JS_VARS']['sel_plugin_id'] = Utils::init('id', '-1');
+        $pageData[ControllerData::JS_VARS]['sel_plugin_id'] = Utils::init('id', '-1');
         $pageData['pluginsList'] = PluginManager::listPlugin();
         $pageData['pluginsListActive'] = PluginManager::listPlugin(true);
         $pageData['pluginReposList'] = [];
@@ -59,7 +60,7 @@ class PluginListController extends BaseController
             }
         }
         $pageData['pluginInactiveOpacity'] = NextDomHelper::getConfiguration('eqLogic:style:noactive');
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/plugin.js';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/tools/plugin.js';
 
         return Render::getInstance()->get('/desktop/tools/plugin.html.twig', $pageData);
     }

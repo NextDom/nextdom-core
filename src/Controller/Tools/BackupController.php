@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Tools;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\ControllerData;
 use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\Render;
 use NextDom\Managers\UpdateManager;
@@ -45,10 +46,10 @@ class BackupController extends BaseController
     public static function get(&$pageData): string
     {
 
-        $pageData['JS_VARS_RAW']['REPO_LIST'] = '[]';
+        $pageData[ControllerData::JS_VARS_RAW]['REPO_LIST'] = '[]';
         $pageData['backupAjaxToken'] = AjaxHelper::getToken();
         $pageData['backupReposList'] = UpdateManager::listRepo();
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/backup.js';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/tools/backup.js';
 
         return Render::getInstance()->get('/desktop/tools/backup.html.twig', $pageData);
     }

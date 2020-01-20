@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Tools;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\ControllerData;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\PluginManager;
@@ -50,7 +51,7 @@ class PluginController extends BaseController
         echo '<section class="content">';
         FileSystemHelper::includeFile('desktop', $page, 'php', $plugin->getId(), true);
         echo '</section>';
-        $pageData['CSS_POOL'][] = '/public/css/pages/plugins.css';
+        $pageData[ControllerData::CSS_POOL][] = '/public/css/pages/plugins.css';
         return ob_get_clean();
     }
 }

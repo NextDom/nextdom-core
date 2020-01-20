@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Tools\Osdb;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\ControllerData;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
 
@@ -44,7 +45,7 @@ class SystemController extends BaseController
     public static function get(&$pageData): string
     {
         $pageData['systemCanSudo'] = NextDomHelper::isCapable('sudo');
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/osdb/system.js';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/tools/osdb/system.js';
 
         return Render::getInstance()->get('/desktop/tools/osdb/system.html.twig', $pageData);
     }

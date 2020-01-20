@@ -24,6 +24,7 @@ namespace NextDom\Controller\Diagnostic;
 
 use NextDom\Controller\BaseController;
 use NextDom\Enums\CmdType;
+use NextDom\Enums\ControllerData;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
 use NextDom\Managers\CmdManager;
@@ -187,7 +188,7 @@ class EqAnalyzeController extends BaseController
                 $pageData['eqAnalyzePluginDeadCmd'][] = $pluginId::deadCmd();
             }
         }
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/diagnostic/eqAnalyse.js';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/diagnostic/eqAnalyse.js';
 
         return Render::getInstance()->get('/desktop/diagnostic/eqAnalyze.html.twig', $pageData);
     }

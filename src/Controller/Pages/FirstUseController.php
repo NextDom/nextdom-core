@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Pages;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\ControllerData;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Router;
@@ -65,18 +66,18 @@ class FirstUseController extends BaseController
             }
         }
 
-        $pageData['JS_END_POOL'] = [];
-        $pageData['TITLE'] = '1ère Connexion';
-        $pageData['JS_VARS'] = [
+        $pageData[ControllerData::JS_END_POOL] = [];
+        $pageData[ControllerData::TITLE] = '1ère Connexion';
+        $pageData[ControllerData::JS_VARS] = [
             'notify_status' => $configs['notify::status'],
             'notify_position' => $configs['notify::position'],
             'notify_timeout' => $configs['notify::timeout'],
             'serverTZoffsetMin' => Utils::getTZoffsetMin(),
             'serverDatetime' => Utils::getMicrotime()
         ];
-        $pageData['CSS_POOL'][] = '/public/css/nextdom.css';
-        $pageData['CSS_POOL'][] = '/public/css/pages/firstUse.css';
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/pages/firstUse.js';
+        $pageData[ControllerData::CSS_POOL][] = '/public/css/nextdom.css';
+        $pageData[ControllerData::CSS_POOL][] = '/public/css/pages/firstUse.css';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/pages/firstUse.js';
 
         return Render::getInstance()->get('desktop/pages/firstUse.html.twig', $pageData);
     }

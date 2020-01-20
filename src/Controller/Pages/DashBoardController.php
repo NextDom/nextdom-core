@@ -25,6 +25,7 @@ namespace NextDom\Controller\Pages;
 use NextDom\Controller\BaseController;
 use NextDom\Enums\AjaxParams;
 use NextDom\Enums\Common;
+use NextDom\Enums\ControllerData;
 use NextDom\Enums\NextDomObj;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\NextDomHelper;
@@ -54,10 +55,10 @@ class DashBoardController extends BaseController
         $objectIdFromUrl = Utils::init(AjaxParams::OBJECT_ID, '');
         $defaultDashboardObjectId = '';
         $currentJeeObjectId = '';
-        $pageData['JS_VARS']['nextdom_Welcome'] = ConfigManager::byKey('nextdom::Welcome');
-        $pageData['JS_VARS']['SEL_CATEGORY'] = Utils::init(AjaxParams::CATEGORY, 'all');
-        $pageData['JS_VARS']['SEL_TAG'] = Utils::init(AjaxParams::TAG, 'all');
-        $pageData['JS_VARS']['SEL_SUMMARY'] = Utils::init(AjaxParams::SUMMARY);
+        $pageData[ControllerData::JS_VARS]['nextdom_Welcome'] = ConfigManager::byKey('nextdom::Welcome');
+        $pageData[ControllerData::JS_VARS]['SEL_CATEGORY'] = Utils::init(AjaxParams::CATEGORY, 'all');
+        $pageData[ControllerData::JS_VARS]['SEL_TAG'] = Utils::init(AjaxParams::TAG, 'all');
+        $pageData[ControllerData::JS_VARS]['SEL_SUMMARY'] = Utils::init(AjaxParams::SUMMARY);
 
         $defaultDashboardObjectName = UserManager::getStoredUser()->getOptions('defaultDashboardObject');
         $defaultDashboardObject = JeeObjectManager::byId($defaultDashboardObjectName);
@@ -80,9 +81,9 @@ class DashBoardController extends BaseController
             throw new CoreException(__('Aucun objet racine trouvé. Pour en créer un, allez dans dashboard -> <a href="/index.php?v=d&p=object">Liste objets et résumés</a>'));
         }
 
-        $pageData['JS_VARS']['SEL_OBJECT_ID'] = $currentJeeObjectId;
-        $pageData['JS_VARS']['rootObjectId'] = $currentJeeObjectId;
-        $pageData['JS_VARS']['serverTZoffsetMin'] = Utils::getTZoffsetMin();
+        $pageData[ControllerData::JS_VARS]['SEL_OBJECT_ID'] = $currentJeeObjectId;
+        $pageData[ControllerData::JS_VARS]['rootObjectId'] = $currentJeeObjectId;
+        $pageData[ControllerData::JS_VARS]['serverTZoffsetMin'] = Utils::getTZoffsetMin();
 
         $pageData['dashboardCategory'] = Utils::init(AjaxParams::CATEGORY, Common::ALL);
         $pageData['dashboardSummary'] = Utils::init(AjaxParams::SUMMARY, Common::ALL);
@@ -94,11 +95,11 @@ class DashBoardController extends BaseController
         $pageData['dashboardObjectListMenu'] = self::getObjectsListMenu($currentJeeObjectId);
         $pageData['dashboardChildrenObjects'] = JeeObjectManager::buildTree($currentJeeObject);
 
-        $pageData['JS_POOL'][] = '/public/js/desktop/pages/dashboard.js';
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/pages/dashboard_events.js';
+        $pageData[ControllerData::JS_POOL][] = '/public/js/desktop/pages/dashboard.js';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/pages/dashboard_events.js';
         // A remettre une fois mise sous forme de thème
-        $pageData['JS_POOL'][] = '/vendor/node_modules/isotope-layout/dist/isotope.pkgd.min.js';
-        $pageData['JS_POOL'][] = '/assets/3rdparty/jquery.multi-column-select/multi-column-select.js';
+        $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/isotope-layout/dist/isotope.pkgd.min.js';
+        $pageData[ControllerData::JS_POOL][] = '/assets/3rdparty/jquery.multi-column-select/multi-column-select.js';
 
         return Render::getInstance()->get('/desktop/pages/dashboard.html.twig', $pageData);
     }

@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Admin;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\ControllerData;
 use NextDom\Helpers\Render;
 use NextDom\Managers\UpdateManager;
 
@@ -43,7 +44,7 @@ class ServicesController extends BaseController
     public static function get(&$pageData): string
     {
         $pageData['adminReposList'] = UpdateManager::listRepo();
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/admin/services.js';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/admin/services.js';
 
         return Render::getInstance()->get('/desktop/admin/services.html.twig', $pageData);
     }

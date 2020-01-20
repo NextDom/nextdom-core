@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Admin;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\ControllerData;
 use NextDom\Enums\DateFormat;
 use NextDom\Helpers\Render;
 use NextDom\Managers\CacheManager;
@@ -70,7 +71,7 @@ class SecurityController extends BaseController
             }
         }
 
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/admin/security.js';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/admin/security.js';
 
         return Render::getInstance()->get('/desktop/admin/security.html.twig', $pageData);
     }

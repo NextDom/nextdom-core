@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Admin;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\ControllerData;
 use NextDom\Helpers\Render;
 use NextDom\Managers\CacheManager;
 
@@ -49,7 +50,7 @@ class CacheController extends BaseController
         $pageData['adminMemCachedExists'] = class_exists('memcached');
         $pageData['adminRedisExists'] = class_exists('redis');
 
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/admin/cache.js';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/admin/cache.js';
 
         return Render::getInstance()->get('/desktop/admin/cache.html.twig', $pageData);
     }

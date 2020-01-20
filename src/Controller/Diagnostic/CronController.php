@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Diagnostic;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\ControllerData;
 use NextDom\Helpers\Render;
 use NextDom\Managers\ConfigManager;
 
@@ -44,7 +45,7 @@ class CronController extends BaseController
     public static function get(&$pageData): string
     {
         $pageData['cronEnabled'] = ConfigManager::byKey('enableCron');
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/diagnostic/cron.js';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/diagnostic/cron.js';
 
         return Render::getInstance()->get('/desktop/diagnostic/cron.html.twig', $pageData);
     }

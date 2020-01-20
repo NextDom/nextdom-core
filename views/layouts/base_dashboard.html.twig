@@ -6,7 +6,7 @@
             {% include '/commons/AdminLTE_navbar.html.twig' %}
             {% include '/commons/AdminLTE_sidebar.html.twig' %}
             <div class="content-wrapper">
-                {{ CONTENT | raw }}
+                {{ CONTENT_MAIN | raw }}
             </div>
         </div>
         <div class="fabs fab-left">
@@ -21,9 +21,6 @@
             {% for jsFile in JS_END_POOL %}
                 <script src="{{ jsFile }}"></script>
             {% endfor %}
-        {% endif %}
-        {% if debugbar != false %}
-            {{ debugbar.render | raw }}
         {% endif %}
     </body>
 </html>

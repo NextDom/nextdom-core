@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Params;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\ControllerData;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
@@ -148,7 +149,7 @@ class ProfilsController extends BaseController
 
         $pageData['adminCategories'] = NextDomHelper::getConfiguration('eqLogic:category');
 
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/params/profils.js';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/params/profils.js';
 
         return Render::getInstance()->get('/desktop/params/profils.html.twig', $pageData);
     }

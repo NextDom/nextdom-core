@@ -17,8 +17,6 @@
 
 namespace NextDom\Helpers;
 
-use DebugBar\DataCollector;
-use DebugBar\StandardDebugBar;
 use NextDom\Managers\ConfigManager;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
 use Symfony\Component\Translation\Loader\YamlFileLoader;
@@ -143,34 +141,12 @@ class Render
      */
     public function get($view, array $data = [])
     {
-        if (isset($data['debugbar'])) {
-            $data['debugbar'] = $this->showDebugBar();
-        }
         try {
             return $this->twig->render($view, $data);
         } catch (\Throwable $e) {
             echo $e->getMessage();
         }
         return null;
-    }
-
-    /**
-     * @return bool|\DebugBar\JavascriptRenderer
-     */
-    private function showDebugBar()
-    {
-        $debugBarData = false;
-        if (AuthentificationHelper::isInDeveloperMode()) {
-            $debugBar = new StandardDebugBar();
-            $debugBarRenderer = $debugBar->getJavascriptRenderer();
-            try {
-                $debugBar->addCollector(new DataCollector\ConfigCollector(ConfigManager::getDefaultConfiguration()['core']));
-                $debugBarData = $debugBarRenderer;
-            } catch (\DebugBar\DebugBarException $e) {
-                echo $e->getMessage();
-            }
-        }
-        return $debugBarData;
     }
 
     /**

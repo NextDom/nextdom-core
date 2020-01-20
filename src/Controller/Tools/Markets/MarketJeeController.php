@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Tools\Markets;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\ControllerData;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
@@ -249,11 +250,11 @@ class MarketJeeController extends BaseController
         $pageData['marketUserTest'] = $userTest;
         $pageData['marketLimit'] = $searchLimit;
         $pageData['markets'] = $markets;
-        $pageData['JS_VARS']['marketType'] = $type;
-        $pageData['JS_VARS']['marketCategory'] = $categorie;
+        $pageData[ControllerData::JS_VARS]['marketType'] = $type;
+        $pageData[ControllerData::JS_VARS]['marketCategory'] = $categorie;
 
-        $pageData['CSS_POOL'][] = '/public/css/pages/markets.css';
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/markets/marketJee.js';
+        $pageData[ControllerData::CSS_POOL][] = '/public/css/pages/markets.css';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/tools/markets/marketJee.js';
         return Render::getInstance()->get('/desktop/tools/markets/marketJee.html.twig', $pageData);
     }
 

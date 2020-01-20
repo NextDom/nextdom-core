@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Params;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\ControllerData;
 use NextDom\Helpers\Render;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\PluginManager;
@@ -57,7 +58,7 @@ class LogConfigController extends BaseController
             $pluginData['plugin'] = $plugin;
             $pageData['adminPluginsList'][] = $pluginData;
         }
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/params/log_config.js';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/params/log_config.js';
 
         return Render::getInstance()->get('/desktop/params/log_config.html.twig', $pageData);
     }
