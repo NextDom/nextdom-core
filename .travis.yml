@@ -12,6 +12,7 @@ cache:
 before_install:
   - docker pull nextdom/nextdom-test:latest
   - mkdir -p tests/coverage
+  - composer require --dev symfony/panther:0.6.0 symfony/css-selector
   - wget -q -O phpunit https://phar.phpunit.de/phpunit-7.phar && chmod +x phpunit
   - docker run -d --rm -p 8765:80 -v `pwd`:/data --name="nextdom-test" nextdom/nextdom-test:latest bash -x /start.sh
   - sudo apt-get update && sudo apt-get install -y --no-install-recommends python3-pip python3-setuptools dpkg ruby-sass
