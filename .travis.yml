@@ -7,24 +7,20 @@ services:
 cache:
   directories:
     - $HOME/.composer/cache/files
-    - $HOME/.npm
     - $HOME/.cache/pip
 before_install:
   - docker pull nextdom/nextdom-test:latest
   - mkdir -p tests/coverage
   - composer require --dev symfony/panther:0.6.0 symfony/css-selector
   - wget -q -O phpunit https://phar.phpunit.de/phpunit-7.phar && chmod +x phpunit
-  - docker run -d --rm -p 8765:80 -v `pwd`:/data --name="nextdom-test" nextdom/nextdom-test:latest bash -x /start.sh
-  - sudo apt-get update && sudo apt-get install -y --no-install-recommends python3-pip python3-setuptools dpkg ruby-sass
-  - sudo python -m pip install --upgrade pip jsmin
-  - sudo python3 -m pip install --upgrade pip jsmin
-  - python3 -c "import fcntl; fcntl.fcntl(1, fcntl.F_SETFL, 0)" # Fix travis error
-  - sudo pip3 install --ignore-installed urllib3[secure] pylint
-  - ./scripts/gen_global.sh
+  - docker run -d --rm -v `pwd`:/data --name="nextdom-test" nextdom/nextdom-test:latest bash -x /start.sh
+  - sudo apt-get update && sudo apt-get install -y --no-install-recommends python3-pip python3-setuptools
+  - sudo python3 -m pip install --upgrade pip
+  - sudo pip3 install --ignore-installed pylint
   - composer require --dev php-coveralls/php-coveralls
   - while true; do DOCKER_LOGS=$(docker logs --tail 10 nextdom-test 2>&1); if [[ "$DOCKER_LOGS" =~ .*NEXTDOM.TEST.READY.* ]]; then break; fi; sleep 2; done
   - docker commit nextdom-test nextdom-test-snap
-  - docker kill nextdom-test
+  - docker kill nextdom-test &
 script:
   - cd ${TRAVIS_BUILD_DIR}/tests
   - python3 launch_php_tests.py
@@ -33,7 +29,6 @@ script:
   - python3 launch_code_consistency.py
   - python3 launch_compatibility_tests.py
 after_script:
-  - cat tests/coverage/junitlog.xml
   - cd ${TRAVIS_BUILD_DIR}
   - sed -i "s/\/usr\/share\/nextdom\///g" tests/coverage/clover.xml
   - php vendor/bin/php-coveralls -v
