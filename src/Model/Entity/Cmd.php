@@ -264,10 +264,9 @@ class Cmd extends BaseEntity
                 $this->setValueDate($this->getCollectDate());
             }
             return $state[CacheKey::VALUE];
-
         }
         $eqLogic = $this->getEqLogicId();
-        if (!$this->isType(CmdType::INFO) && (!is_object($eqLogic) || $eqLogic->getIsEnable() != 1)) {
+        if (!is_object($eqLogic) || !$eqLogic->isEnabled()) {
             throw new CoreException(__('Equipement désactivé - impossible d\'exécuter la commande : ') . $this->getHumanName());
         }
         try {

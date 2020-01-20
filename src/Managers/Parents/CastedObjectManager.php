@@ -56,6 +56,7 @@ trait CastedObjectManager
     use CommonManager {
         byId as baseById;
     }
+
     public static function byId($requestedId) {
 
         return static::cast(static::baseById($requestedId));
