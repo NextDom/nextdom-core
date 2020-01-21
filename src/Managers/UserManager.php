@@ -36,6 +36,7 @@ namespace NextDom\Managers;
 use NextDom\Enums\DateFormat;
 use NextDom\Enums\LogTarget;
 use NextDom\Enums\SQLField;
+use NextDom\Enums\UserRight;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NetworkHelper;
@@ -359,7 +360,7 @@ class UserManager extends BaseManager
         }
         $user->setPassword(Utils::sha512(ConfigManager::genKey(255)));
         $user->setOptions('localOnly', 1);
-        $user->setProfils('admin');
+        $user->setProfils(UserRight::ADMIN);
         $user->setEnable(1);
         $key = ConfigManager::genKey();
         $registerDevice = [
@@ -387,7 +388,7 @@ class UserManager extends BaseManager
                 $user->setLogin('nextdom_support');
             }
             $user->setPassword(Utils::sha512(ConfigManager::genKey(255)));
-            $user->setProfils('admin');
+            $user->setProfils(UserRight::ADMIN);
             $user->setEnable(1);
             $key = ConfigManager::genKey();
             $registerDevice = [
@@ -426,5 +427,30 @@ class UserManager extends BaseManager
             return $_SESSION['user'];
         }
         return null;
+    }
+
+    public static function deadCmd() {
+        $result = [];
+        foreach (UserManager::all() as $user) {
+            $cmdId = $user->getOptions('notification::cmd');
+            if (!empty($cmdId) && is_object(CmdManager::byId(str_replace('#', '', $cmdId)))) {
+                $result[] = ['detail' => __('Utilisateur'), 'help' => __('Commande notification utilisateur'), 'who' => $cmdId];
+            }
+        }
+        return $result;
+    }
+
+    public static function regenerateHash(){
+        foreach (self::all() as $user) {
+            if($user->getProfils() != UserRight::ADMIN || $user->getOptions('doNotRotateHash',0) == 1 || !$user->isEnabled()){
+                continue;
+            }
+            if(strtotime($user->getOptions('hashGenerated')) > strtotime('now -3 month')){
+                continue;
+            }
+            $user->setHash('');
+            $user->getHash();
+            $user->save();
+        }
     }
 }

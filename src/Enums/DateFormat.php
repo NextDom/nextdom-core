@@ -24,6 +24,7 @@ namespace NextDom\Enums;
 class DateFormat extends Enum
 {
     const FULL = 'Y-m-d H:i:s';
+    const FULL_MIDNIGHT = 'Y-m-d 00:00:00';
     const FULL_DAY = 'Y-m-d';
     const FULL_HOUR = 'H:i:s';
     const NOW = 'now';

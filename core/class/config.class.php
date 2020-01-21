@@ -68,4 +68,12 @@ class config {
     public static function preConfig_market_password($_value) {
         return ConfigManager::preConfig_market_password($_value);
     }
+
+    public static function preConfig_info_latitude($_value) {
+        ConfigManager::preConfig_info_latitude($_value);
+    }
+
+    public static function preConfig_info_longitude($_value) {
+        return ConfigManager::preConfig_info_longitude($_value);
+    }
 }

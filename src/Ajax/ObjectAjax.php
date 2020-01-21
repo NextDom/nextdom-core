@@ -156,11 +156,17 @@ class ObjectAjax extends BaseAjax
                 $objectsList = json_decode($objectId, true);
             } else {
                 $objectsList = [];
-                foreach (JeeObjectManager::all() as $resultObject) {
-                    if ($resultObject->getConfiguration('hideOnDashboard', 0) == 1) {
-                        continue;
+                if (Utils::init(AjaxParams::SUMMARY) == '') {
+                    foreach (JeeObjectManager::buildTree(null, true) as $object) {
+                        if ($object->getConfiguration('hideOnDashboard', 0) == 1) {
+                            continue;
+                        }
+                        $objects[] = $object->getId();
                     }
-                    $objectsList[] = $resultObject->getId();
+                } else {
+                    foreach (JeeObjectManager::all() as $object) {
+                        $objects[] = $object->getId();
+                    }
                 }
             }
             $result = [];
@@ -373,7 +379,7 @@ class ObjectAjax extends BaseAjax
         if (filesize($_FILES['file']['tmp_name']) > 5000000) {
             throw new CoreException(__('Le fichier est trop gros (maximum 5Mo)'));
         }
-        $files = FileSystemHelper::ls(NEXTDOM_DATA . '/data/object/', 'object' . $resultObject->getId() . '*');
+        $files = FileSystemHelper::ls(NEXTDOM_DATA . '/data/object/', 'object' . $resultObject->getId() . '-*');
         if (count($files) > 0) {
             foreach ($files as $file) {
                 unlink(NEXTDOM_DATA . '/data/object/' . $file);

@@ -8,7 +8,7 @@ class DiagnosticPageTest extends BasePageTest
     {
         $this->goTo('index.php?v=d&p=health');
         sleep(4);
-        $this->assertCount(21, $this->crawler->filter('.info-box-content'));
+        $this->assertCount(22, $this->crawler->filter('.info-box-content'));
         $this->crawler->filter('a[href="#div_Plugins"]')->click();
         $this->assertEquals('div', $this->crawler->filter('#div_Plugins')->getTagName());
         $this->crawler->filter('#bt_benchmarkNextDom')->click();

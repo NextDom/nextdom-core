@@ -106,15 +106,8 @@ class SessionHelper
      */
     public static function deleteSession($sessionId)
     {
-        $currentSessionId = session_id();
-        if (session_status() !== PHP_SESSION_NONE) {
-            session_start();
-            session_id($sessionId);
-            session_unset();
-            session_destroy();
-            session_id($currentSessionId);
-            session_write_close();
-        }
+        $sessionId = preg_replace('/[^A-Za-z0-9]/', '', $sessionId);
+        @unlink(session_save_path().'/sess_'.$sessionId);
     }
 
     /**

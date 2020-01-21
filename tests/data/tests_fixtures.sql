@@ -67,31 +67,6 @@ INSERT INTO `scenarioSubElement` VALUES (3,1,2,'then','action',NULL,'[]',NULL),(
 INSERT INTO `scenarioSubElement` VALUES (5,0,3,'action','action',NULL,'{\"enable\":\"1\"}',NULL);
 INSERT INTO `scenarioSubElement` VALUES (6,0,4,'action','action',NULL,'{\"enable\":\"1\"}',NULL);
 INSERT INTO `scenarioSubElement` VALUES (7,0,5,'action','action',NULL,'{\"enable\":\"1\"}',NULL);
-/*
-INSERT INTO `scenario` VALUES (1,'Test scenario','',1,'schedule','* * * * *','[\"1\"]','[]',0,1,NULL,'{\"name\":\"\",\"icon\":\"\"}','','{\"timeDependency\":0,\"has_return\":0,\"logmode\":\"default\",\"allowMultiInstance\":\"0\",\"syncmode\":\"0\",\"timeline::enable\":\"0\"',99,'expert');
-INSERT INTO `scenario` VALUES (2,'Empty scenario','Small group',1,'schedule','* * * * *','[\"1\"]','[\"\"]',NULL,1,NULL,'{\"name\":\"\"}','','{\"timeDependency\":0,\"has_return\":0,\"logmode\":\"default\",\"allowMultiInstance\":\"0\",\"syncmode\":\"0\",\"timeline::enable\":\"0\"}',99,'expert');
-INSERT INTO `scenario` VALUES (3,'Scenario with expressions','Scenario for tests',1,'schedule','* * * * *','[\"3\",\"4\"]','[]',0,1,1,'{\"name\":\"Scenario with expressions\",\"icon\":\"\"}','Just a small description','{\"timeDependency\":0,\"has_return\":0,\"logmode\":\"default\",\"timeline::enable\":\"0\",\"allowMultiInstance\":\"0\",\"syncmode\":\"0\"}',9999,'expert');
-INSERT INTO `scenario` VALUES (4,'Disabled scenario','Scenario for tests',0,'schedule','0 0 * * *','[]','[]',0,1,1,'{\"name\":\"Disabled scenario\",\"icon\":\"\"}','A disabled description','{\"timeDependency\":0,\"has_return\":0,\"logmode\":\"default\",\"timeline::enable\":\"0\",\"allowMultiInstance\":\"0\",\"syncmode\":\"0\"}',9999,'expert');
-INSERT INTO `scenario` VALUES (5,'Trigger scenario','',1,'provoke','[]','[\"5\"]','[\"#1#\"]',0,1,NULL,'{\"name\":\"\",\"icon\":\"\"}','','{\"timeDependency\":0,\"has_return\":0,\"logmode\":\"default\",\"timeline::enable\":\"0\",\"allowMultiInstance\":\"0\",\"syncmode\":\"1\"}',9999,'expert');
-INSERT INTO `scenarioElement` VALUES (1,0,'action',NULL,'[]',NULL);
-INSERT INTO `scenarioElement` VALUES (2,0,'if',NULL,'[]',NULL);
-INSERT INTO `scenarioElement` VALUES (3,0,'if',NULL,'[]',NULL);
-INSERT INTO `scenarioElement` VALUES (4,0,'action',NULL,'[]',NULL);
-INSERT INTO `scenarioElement` VALUES (5,0,'action',NULL,'[]',NULL);
-INSERT INTO `scenarioExpression` VALUES (1,0,1,'action',NULL,'log','{\"enable\":\"1\",\"background\":\"0\",\"message\":\"LAUNCHED\"}',NULL);
-INSERT INTO `scenarioExpression` VALUES (2,0,1,'condition',NULL,'#3# == 1  ','[]',NULL);
-INSERT INTO `scenarioExpression` VALUES (3,0,2,'action',NULL,'log','{\"enable\":\"1\",\"background\":\"0\",\"message\":\"\"}',NULL);
-INSERT INTO `scenarioExpression` VALUES (4,0,4,'condition',NULL,'#3# == 1  ','[]',NULL);
-INSERT INTO `scenarioExpression` VALUES (5,0,5,'action',NULL,'log','{\"enable\":\"1\",\"background\":\"0\",\"message\":\"\"}',NULL);
-INSERT INTO `scenarioExpression` VALUES (6,0,7,'action',NULL,'alert','{\"enable\":\"1\",\"background\":\"0\",\"level\":\"success\",\"message\":\"That\'s works\"}',NULL);
-INSERT INTO `scenarioExpression` VALUES (7,0,8,'action',NULL,'log','{\"enable\":\"1\",\"background\":\"0\",\"message\":\"Log this message\"}',NULL);
-INSERT INTO `scenarioSubElement` VALUES (1,0,2,'if','condition',NULL,'{\"enable\":\"1\",\"allowRepeatCondition\":\"0\"}',NULL);
-INSERT INTO `scenarioSubElement` VALUES (2,1,2,'then','action',NULL,'[]',NULL),(3,2,2,'else','action',NULL,'[]',NULL);
-INSERT INTO `scenarioSubElement` VALUES (4,0,3,'if','condition',NULL,'{\"enable\":\"1\",\"allowRepeatCondition\":\"0\"}',NULL);
-INSERT INTO `scenarioSubElement` VALUES (5,1,3,'then','action',NULL,'[]',NULL),(6,2,3,'else','action',NULL,'[]',NULL);
-INSERT INTO `scenarioSubElement` VALUES (7,0,4,'action','action',NULL,'{\"enable\":\"1\"}',NULL);
-INSERT INTO `scenarioSubElement` VALUES (8,0,5,'action','action',NULL,'{\"enable\":\"1\"}',NULL);
-*/
 INSERT INTO `cron` VALUES (1,1,'nextdom','cron5','*/5 * * * * *',5,0,1,NULL,0);
 INSERT INTO `cron` VALUES (2,1,'nextdom','cron10','*/10 * * * * *',10,0,1,NULL,0);
 INSERT INTO `cron` VALUES (3,1,'nextdom','cron','* * * * * *',2,0,1,NULL,0);

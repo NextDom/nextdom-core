@@ -19,6 +19,7 @@
 
 namespace NextDom\Helpers;
 
+use NextDom\Enums\DateFormat;
 use NextDom\Enums\FoldersReferential;
 use NextDom\Enums\LogTarget;
 use NextDom\Enums\PlanDisplayType;
@@ -31,6 +32,7 @@ use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\Plan3dManager;
 use NextDom\Managers\PlanManager;
 use NextDom\Managers\UpdateManager;
+use NextDom\Managers\UserManager;
 use NextDom\Model\Entity\Cron;
 
 /**
@@ -452,6 +454,32 @@ class MigrationHelper
     {
         exec("sudo sed -i '/vm.swappiness=/d' /etc/sysctl.d/99-sysctl.conf");
         exec("sudo echo 'vm.swappiness=10' >> /etc/sysctl.d/99-sysctl.conf");
+    }
+
+    private static function migrate_0_6_2($logFile = LogTarget::MIGRATION)
+    {
+        foreach (UserManager::all() as $user) {
+            if($user->getProfils() != 'admin' || $user->getOptions('doNotRotateHash',0) == 1){
+                continue;
+            }
+            $user->setHash('');
+            $user->getHash();
+            $user->setOptions('hashGenerated',date(DateFormat::FULL));
+            $user->save();
+        }
+
+        $sql = "SELECT concat('ALTER TABLE ', TABLE_NAME, ' DROP FOREIGN KEY ', CONSTRAINT_NAME, ';')
+                FROM information_schema.key_column_usage
+                WHERE CONSTRAINT_SCHEMA = 'nextdom'
+                AND REFERENCED_TABLE_NAME IS NOT NULL;";
+        $result = DBHelper::getAll($sql);
+        foreach ($result as $value) {
+            try {
+                DBHelper::exec(array_values($value)[0]);
+            } catch (\Exception $e) {
+
+            }
+        }
     }
 
     /***************************************************************** 0.7.0 Migration process *****************************************************************/

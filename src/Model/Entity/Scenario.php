@@ -1177,7 +1177,7 @@ class Scenario extends BaseEntity
                         $cron->halt();
                         $cron->remove();
                     } catch (\Exception $e) {
-                        LogHelper::addInfo(LogTarget::SCENARIO, __('Can not stop subtask : ') . print_r($cron->getOption(), true));
+                        LogHelper::addInfo(LogTarget::SCENARIO, __('Can not stop subtask : ') . json_encode($cron->getOption()));
                     }
                 }
             }

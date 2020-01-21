@@ -52,16 +52,18 @@ class DashBoardController extends BaseController
      */
     public static function get(&$pageData): string
     {
-        $objectIdFromUrl = Utils::init(AjaxParams::OBJECT_ID, '');
         $defaultDashboardObjectId = '';
-        $currentJeeObjectId = '';
+        $objectIdFromUrl = Utils::init(AjaxParams::OBJECT_ID, '');
         $pageData[ControllerData::JS_VARS]['nextdom_Welcome'] = ConfigManager::byKey('nextdom::Welcome');
         $pageData[ControllerData::JS_VARS]['SEL_CATEGORY'] = Utils::init(AjaxParams::CATEGORY, 'all');
         $pageData[ControllerData::JS_VARS]['SEL_TAG'] = Utils::init(AjaxParams::TAG, 'all');
         $pageData[ControllerData::JS_VARS]['SEL_SUMMARY'] = Utils::init(AjaxParams::SUMMARY);
 
-        $defaultDashboardObjectName = UserManager::getStoredUser()->getOptions('defaultDashboardObject');
-        $defaultDashboardObject = JeeObjectManager::byId($defaultDashboardObjectName);
+        if(Utils::init('summary') != ''){
+            $defaultDashboardObject = JeeObjectManager::getRootObjects();
+        }else{
+            $defaultDashboardObject = JeeObjectManager::byId($_SESSION['user']->getOptions('defaultDashboardObject'));
+        }
         if (!empty($defaultDashboardObject)) {
             $defaultDashboardObjectId = $defaultDashboardObject->getId();
         }

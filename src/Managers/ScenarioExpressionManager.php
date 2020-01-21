@@ -1114,7 +1114,7 @@ class ScenarioExpressionManager extends BaseManager
         $startDate = date(DateFormat::FULL, strtotime(self::setTags($startDate)));
         $endDate = date(DateFormat::FULL, strtotime(self::setTags($endDate)));
         $historyStatistic = $cmd->getStatistique($startDate, $endDate);
-        if (!$historyStatistic['last']) {
+        if(!isset($historyStatistic['last']) || $historyStatistic['last'] === ''){
             return '';
         }
         return round($historyStatistic['last'], 1);
@@ -1145,11 +1145,11 @@ class ScenarioExpressionManager extends BaseManager
             }
         }
         $calc = str_replace(' ', '', $calc);
-        $historyStatistique = $cmd->getStatistique($startHist, date(DateFormat::FULL));
-        if ($historyStatistique['min'] == '') {
+        $historyStatistic = $cmd->getStatistique($startHist, date(DateFormat::FULL));
+        if (!isset($historyStatistic['min']) || $historyStatistic['min'] == '') {
             return $cmd->execCmd();
         }
-        return $historyStatistique[$calc];
+        return $historyStatistic[$calc];
     }
 
     /**

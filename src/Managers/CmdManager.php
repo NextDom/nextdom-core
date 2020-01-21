@@ -34,6 +34,7 @@
 namespace NextDom\Managers;
 
 use NextDom\Enums\CmdType;
+use NextDom\Enums\Common;
 use NextDom\Enums\DateFormat;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
@@ -833,40 +834,36 @@ class CmdManager extends BaseManager
      * Check if widget is available
      *
      * @param string $version Display version
-     *
+     * TODO A factoriser
      * @return array
+     * @throws \Exception
      */
     public static function availableWidget($version)
     {
-        $path = NEXTDOM_ROOT . '/views/templates/' . $version;
-        $files = FileSystemHelper::ls($path, 'cmd.*', false, ['files', 'quiet']);
         $result = [];
-        foreach ($files as $file) {
-            $informations = explode('.', $file);
-            if (!isset($result[$informations[1]])) {
-                $result[$informations[1]] = [];
-            }
-            if (!isset($result[$informations[1]][$informations[2]])) {
-                $result[$informations[1]][$informations[2]] = [];
-            }
-            if (isset($informations[3])) {
-                $result[$informations[1]][$informations[2]][$informations[3]] = ['name' => $informations[3], 'location' => 'core'];
-            }
+        $lsOptions = ['files', 'quiet'];
+        $widgetFileSearch = 'cmd.*';
+        $widgetLocationPaths = [];
+        foreach (PluginManager::listPlugin(false, false, false) as $plugin) {
+            $widgetLocationPaths[] = ['path' => NEXTDOM_ROOT . '/plugins/' . $plugin->getId() . '/core/template/' . $version, 'key' => $plugin->getId()];
         }
-        $path = NEXTDOM_ROOT . '/plugins/widget/core/template/' . $version;
-        if (file_exists($path)) {
-            $files = FileSystemHelper::ls($path, 'cmd.*', false, ['files', 'quiet']);
-            foreach ($files as $file) {
-                $informations = explode('.', $file);
-                if (count($informations) > 3) {
-                    if (!isset($result[$informations[1]])) {
-                        $result[$informations[1]] = [];
-                    }
-                    if (!isset($result[$informations[1]][$informations[2]])) {
-                        $result[$informations[1]][$informations[2]] = [];
-                    }
-                    if (!isset($result[$informations[1]][$informations[2]][$informations[3]])) {
-                        $result[$informations[1]][$informations[2]][$informations[3]] = ['name' => $informations[3], 'location' => 'widget'];
+        $widgetLocationPaths[] = ['path' => NEXTDOM_ROOT . '/views/templates/' . $version, 'key' => Common::CORE];
+        $widgetLocationPaths[] = ['path' => NEXTDOM_ROOT . '/plugins/widget/core/template/' . $version, 'key' => 'widget'];
+        foreach ($widgetLocationPaths as $widgetLocationPath) {
+            if (file_exists($widgetLocationPath['path'])) {
+                $files = FileSystemHelper::ls($widgetLocationPath['path'], $widgetFileSearch, false, $lsOptions);
+                foreach ($files as $file) {
+                    $informations = explode('.', $file);
+                    if (count($informations) > 3) {
+                        if (!isset($result[$informations[1]])) {
+                            $result[$informations[1]] = [];
+                        }
+                        if (!isset($result[$informations[1]][$informations[2]])) {
+                            $result[$informations[1]][$informations[2]] = [];
+                        }
+                        if (!isset($result[$informations[1]][$informations[2]][$informations[3]])) {
+                            $result[$informations[1]][$informations[2]][$informations[3]] = [Common::NAME => $informations[3], Common::LOCATION => $widgetLocationPath['key']];
+                        }
                     }
                 }
             }
