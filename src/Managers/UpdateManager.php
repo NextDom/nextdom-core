@@ -369,56 +369,36 @@ class UpdateManager extends BaseManager
             Common::STATUS => 'update',
             Common::CONFIGURATION => '%"doNotUpdate":"1"%'
         ];
-        $sql = 'SELECT count(*)
-               FROM ' . self::DB_CLASS_NAME . '
-               WHERE `status` = :status
-               AND `configuration` NOT LIKE :configuration';
-        if ($filter != '') {
-            $params[Common::TYPE] = $filter;
-            $sql .= ' AND `type` = :type';
+        if (is_array($filter)) {
+            $likeParams = DBHelper::getInParamFromArray($filter);
+            if ($params) {
+                $sql = 'SELECT `type`, SUM(CASE WHEN status = :status AND configuration NOT LIKE :configuration THEN 1 ELSE 0 END) AS count
+                        FROM ' . self::DB_CLASS_NAME . '
+                        WHERE `type` IN ' . $likeParams . '
+                        GROUP BY `type`';
+                $result = DBHelper::getAll($sql, $params);
+                $sql = 'SELECT SUM(CASE WHEN status = :status AND configuration NOT LIKE :configuration THEN 1 ELSE 0 END) AS count
+                        FROM ' . self::DB_CLASS_NAME . '
+                        WHERE `type` NOT IN ' . $likeParams . '
+                        GROUP BY `type`';
+                $othersCount = DBHelper::getOne($sql, $params);
+                array_push($result, ['type' => 'others', 'count' => intval($othersCount['count'])]);
+                return $result;
+            }
         }
-
-        $result = DBHelper::getOne($sql, $params);
-        return $result[SQLField::COUNT];
-    }
-
-    /**
-     * Get the number of pending updates
-     *
-     * @param string $filter Type filter
-     *
-     * @return array arrays of pending updates type count
-     *
-     * @throws \NextDom\Exceptions\CoreException
-     */
-    public static function nbNeedUpdates()
-    {
-        $filters = [
-          UpdateType::CORE,
-          UpdateType::PLUGIN,
-          UpdateType::WIDGET,
-          UpdateType::SCRIPT
-        ];
-        $params = [
-            Common::STATUS => 'update',
-            Common::CONFIGURATION => '%"doNotUpdate":"1"%'
-        ];
-        $sqlbase = 'SELECT count(*)
-               FROM ' . self::DB_CLASS_NAME . '
-               WHERE `status` = :status
-               AND `configuration` NOT LIKE :configuration';
-        $sql = $sqlbase;
-        $sqlResult = DBHelper::getOne($sql, $params);
-        $countAll = $sqlResult[SQLField::COUNT];
-        foreach ($filters as $filter) {
-            $params[Common::TYPE] = $filter;
-            $sql = $sqlbase . ' AND `type` = :type';
-            $sqlResult = DBHelper::getOne($sql, $params);
-            $result[$filter] = $sqlResult[SQLField::COUNT];
+        else {
+            $sql = 'SELECT count(*)
+                    FROM ' . self::DB_CLASS_NAME . '
+                    WHERE `status` = :status
+                    AND `configuration` NOT LIKE :configuration';
+            if ($filter != '') {
+                $params[Common::TYPE] = $filter;
+                $sql .= ' AND `type` = :type';
+            }
+            $result = DBHelper::getOne($sql, $params);
+            return $result[SQLField::COUNT];
         }
-        $result[UpdateType::ALL] = $countAll;
-        $result[UpdateType::OTHERS] = $countAll - $result[UpdateType::CORE] - $result[UpdateType::PLUGIN] - $result[UpdateType::WIDGET] - $result[UpdateType::SCRIPT];
-        return $result;
+        return false;
     }
 
     /**

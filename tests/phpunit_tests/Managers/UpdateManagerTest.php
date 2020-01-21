@@ -28,6 +28,12 @@ class UpdateManagerTest extends PHPUnit\Framework\TestCase
         DBHelper::exec('DELETE FROM `update` WHERE id > 2');
     }
 
+    public function setUp(): void
+    {
+        DBHelper::exec('UPDATE `update` SET configuration = \'{"doNotUpdate":"1"}\'');
+        DBHelper::exec('UPDATE `update` SET status = \'ok\' WHERE id = 1');
+    }
+
     public function testFindNewUpdateObject()
     {
         UpdateManager::findNewUpdateObject();
@@ -110,5 +116,75 @@ class UpdateManagerTest extends PHPUnit\Framework\TestCase
         $this->assertEquals('Apt', $repoList['apt']['name']);
         $this->assertEquals('\NextDom\Repo\RepoNextDom', $repoList['nextdom']['class']);
         $this->assertEquals('input', $repoList['samba']['configuration']['configuration']['backup::ip']['type']);
+    }
+
+    public function testNbUpdateWithoutFilter()
+    {
+        $this->assertEquals(0, UpdateManager::nbNeedUpdate());
+        $coreUpdate = UpdateManager::byId(1);
+        $coreUpdate->setConfiguration('doNotUpdate', 0);
+        $coreUpdate->save();
+        $this->assertEquals(0, UpdateManager::nbNeedUpdate());
+        $pluginUpdate = UpdateManager::byId(2);
+        $pluginUpdate->setStatus('update');
+        $pluginUpdate->save();
+        $this->assertEquals(0, UpdateManager::nbNeedUpdate());
+        $pluginUpdate->setConfiguration('doNotUpdate', 0);
+        $pluginUpdate->save();
+        $this->assertEquals(1, UpdateManager::nbNeedUpdate());
+    }
+
+    public function testNbUpdateWithTextFilter()
+    {
+        $this->assertEquals(0, UpdateManager::nbNeedUpdate('core'));
+        $coreUpdate = UpdateManager::byId(1);
+        $coreUpdate->setConfiguration('doNotUpdate', 0);
+        $coreUpdate->save();
+        $this->assertEquals(0, UpdateManager::nbNeedUpdate('core'));
+        $pluginUpdate = UpdateManager::byId(2);
+        $pluginUpdate->setStatus('update');
+        $pluginUpdate->save();
+        $this->assertEquals(0, UpdateManager::nbNeedUpdate('plugin'));
+        $pluginUpdate->setConfiguration('doNotUpdate', 0);
+        $pluginUpdate->save();
+        $this->assertEquals(1, UpdateManager::nbNeedUpdate('plugin'));
+    }
+
+    public function testNbUpdateWithArrayFilter()
+    {
+        $result = UpdateManager::nbNeedUpdate(['core']);
+        $this->assertEquals('core', $result[0]['type']);
+        $this->assertEquals(0, $result[0]['count']);
+        $this->assertEquals('others', $result[1]['type']);
+        $this->assertEquals(0, $result[1]['count']);
+        $coreUpdate = UpdateManager::byId(1);
+        $coreUpdate->setConfiguration('doNotUpdate', 0);
+        $coreUpdate->save();
+        $result = UpdateManager::nbNeedUpdate(['core', 'plugin']);
+        $this->assertEquals('core', $result[0]['type']);
+        $this->assertEquals('plugin', $result[1]['type']);
+        $this->assertEquals(0, $result[0]['count']);
+        $this->assertEquals(0, $result[1]['count']);
+        $this->assertEquals('others', $result[2]['type']);
+        $this->assertEquals(0, $result[2]['count']);
+        $pluginUpdate = UpdateManager::byId(2);
+        $pluginUpdate->setStatus('update');
+        $pluginUpdate->save();
+        $coreUpdate->setStatus('update');
+        $coreUpdate->save();
+        $result = UpdateManager::nbNeedUpdate(['plugin']);
+        $this->assertEquals('plugin', $result[0]['type']);
+        $this->assertEquals('others', $result[1]['type']);
+        $this->assertEquals(0, $result[0]['count']);
+        $this->assertEquals(1, $result[1]['count']);
+        $pluginUpdate->setConfiguration('doNotUpdate', 0);
+        $pluginUpdate->save();
+        $result = UpdateManager::nbNeedUpdate(['core', 'plugin']);
+        $this->assertEquals('core', $result[0]['type']);
+        $this->assertEquals('plugin', $result[1]['type']);
+        $this->assertEquals('others', $result[2]['type']);
+        $this->assertEquals(1, $result[0]['count']);
+        $this->assertEquals(1, $result[1]['count']);
+        $this->assertEquals(0, $result[2]['count']);
     }
 }

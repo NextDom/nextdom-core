@@ -350,46 +350,31 @@ function refreshUpdateNumber() {
     }
   });
   if($('#spanNbUpdates').length){
-    nextdom.update.numbers({
+    nextdom.update.number({
+      filter: ['core', 'plugin', 'widget', 'script'],
       error: function (error) {
         notify("Erreur", error.message, 'error');
       },
-      success: function (_numbers) {
-        if (_numbers.all == 0 || _numbers.all == '0') {
+      success: function (updatesData) {
+        var updateSum = 0;
+        for (var updateIndex in updatesData) {
+          var target = $('#spanNbUpdates-' + updatesData[updateIndex].type);
+          var targetCount = updatesData[updateIndex].count;
+          updateSum += targetCount;
+          if (targetCount == 0) {
+            target.hide();
+          }
+          else {
+            target.html(targetCount);
+            target.show();
+          }
+        }
+        if (updateSum == 0) {
           $('#spanNbUpdates').hide();
-        } else {
-          $('#spanNbUpdates').html(_numbers.all);
-          $('#spanNbUpdates').show();
         }
-        if (_numbers.core == 0 || _numbers.core == '0') {
-          $('#spanNbUpdatesCore').hide();
-        } else {
-          $('#spanNbUpdatesCore').html(_numbers.core);
-          $('#spanNbUpdatesCore').show();
-        }
-        if (_numbers.plugin == 0 || _numbers.plugin == '0') {
-          $('#spanNbUpdatesPlugins').hide();
-        } else {
-          $('#spanNbUpdatesPlugins').html(_numbers.plugin);
-          $('#spanNbUpdatesPlugins').show();
-        }
-        if (_numbers.widget == 0 || _numbers.widget == '0') {
-          $('#spanNbUpdatesWidgets').hide();
-        } else {
-          $('#spanNbUpdatesWidgets').html(_numbers.widget);
-          $('#spanNbUpdatesWidgets').show();
-        }
-        if (_numbers.script == 0 || _numbers.script == '0') {
-          $('#spanNbUpdatesScripts').hide();
-        } else {
-          $('#spanNbUpdatesScripts').html(_numbers.script);
-          $('#spanNbUpdatesScripts').show();
-        }
-        if (_numbers.others == 0 || _numbers.others == '0') {
-          $('#spanNbUpdatesOthers').hide();
-        } else {
-          $('#spanNbUpdatesOthers').html(_numbers.others);
-          $('#spanNbUpdatesOthers').show();
+        else {
+          $('#spanNbUpdates').html(updateSum);
+          $('#spanNbUpdates').hide();
         }
       }
     });

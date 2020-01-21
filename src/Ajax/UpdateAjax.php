@@ -44,12 +44,8 @@ class UpdateAjax extends BaseAjax
 
     public function nbUpdate()
     {
-        $this->ajax->success(UpdateManager::nbNeedUpdate());
-    }
-
-    public function nbUpdates()
-    {
-        $this->ajax->success(UpdateManager::nbNeedUpdates());
+        $filter = json_decode(Utils::init(AjaxParams::FILTER, ''));
+        $this->ajax->success(UpdateManager::nbNeedUpdate($filter));
     }
 
     public function all()
