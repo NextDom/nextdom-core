@@ -29,6 +29,7 @@ use NextDom\Helpers\Render;
 use NextDom\Helpers\Router;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
+use NextDom\Managers\ThemeManager;
 
 /**
  * Class FirstUseController
@@ -53,19 +54,7 @@ class FirstUseController extends BaseController
             Router::showError404AndDie();
         }
 
-        $pageData['profilsWidgetThemes'] = [];
-        $baseThemesPath = '/views/templates/dashboard/themes/';
-        $lsDir = FileSystemHelper::ls(NEXTDOM_ROOT . $baseThemesPath, '*', true);
-        foreach ($lsDir as $themesDir) {
-            $lsThemes = FileSystemHelper::ls(NEXTDOM_ROOT . $baseThemesPath . $themesDir, '*.png');
-            foreach ($lsThemes as $themeFile) {
-                $themeData = [];
-                $themeData['dir'] = $baseThemesPath . $themesDir . $themeFile;
-                $themeData['name'] = $themeFile;
-                $pageData['profilsWidgetThemes'][] = $themeData;
-            }
-        }
-
+        $pageData['profilsWidgetThemes'] = ThemeManager::getWidgetThemes();
         $pageData[ControllerData::JS_END_POOL] = [];
         $pageData[ControllerData::TITLE] = '1ère Connexion';
         $pageData[ControllerData::JS_VARS] = [
