@@ -349,6 +349,51 @@ function refreshUpdateNumber() {
       }
     }
   });
+  if($('#spanNbUpdates').length){
+    nextdom.update.numbers({
+      error: function (error) {
+        notify("Erreur", error.message, 'error');
+      },
+      success: function (_numbers) {
+        if (_numbers.all == 0 || _numbers.all == '0') {
+          $('#spanNbUpdates').hide();
+        } else {
+          $('#spanNbUpdates').html(_numbers.all);
+          $('#spanNbUpdates').show();
+        }
+        if (_numbers.core == 0 || _numbers.core == '0') {
+          $('#spanNbUpdatesCore').hide();
+        } else {
+          $('#spanNbUpdatesCore').html(_numbers.core);
+          $('#spanNbUpdatesCore').show();
+        }
+        if (_numbers.plugin == 0 || _numbers.plugin == '0') {
+          $('#spanNbUpdatesPlugins').hide();
+        } else {
+          $('#spanNbUpdatesPlugins').html(_numbers.plugin);
+          $('#spanNbUpdatesPlugins').show();
+        }
+        if (_numbers.widget == 0 || _numbers.widget == '0') {
+          $('#spanNbUpdatesWidgets').hide();
+        } else {
+          $('#spanNbUpdatesWidgets').html(_numbers.widget);
+          $('#spanNbUpdatesWidgets').show();
+        }
+        if (_numbers.script == 0 || _numbers.script == '0') {
+          $('#spanNbUpdatesScripts').hide();
+        } else {
+          $('#spanNbUpdatesScripts').html(_numbers.script);
+          $('#spanNbUpdatesScripts').show();
+        }
+        if (_numbers.others == 0 || _numbers.others == '0') {
+          $('#spanNbUpdatesOthers').hide();
+        } else {
+          $('#spanNbUpdatesOthers').html(_numbers.others);
+          $('#spanNbUpdatesOthers').show();
+        }
+      }
+    });
+  }
 }
 
 /**
@@ -406,18 +451,29 @@ function displayClock() {
  * Adjust size and position of jquery modales
  */
 function modalesAdjust() {
-  var modals = [$('#md_modal'), $('#md_modal2')];
+  var modals = [$('#md_modal'), $('#md_modal2'), $('#md_pageHelp')];
   modals.forEach(function (modal) {
     if (modal.is(':ui-dialog')) {
       modal.dialog('option', 'width', getModalWidth());
+      modal.dialog('option', 'height', getModalHeight());
       modal.dialog('option', 'position', {my: 'center', at: 'center', of: window});
     }
   });
 }
 
+/**
+ * Calcul modal width depend of width screen
+ */
 function getModalWidth() {
   if (jQuery(window).width() < 1000) {
     return '96%';
   }
   return '80%';
+}
+
+/**
+ * Calcul modal width depend of width screen
+ */
+function getModalHeight() {
+  return (jQuery(window).height() - 100);
 }

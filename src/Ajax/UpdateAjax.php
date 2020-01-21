@@ -47,6 +47,11 @@ class UpdateAjax extends BaseAjax
         $this->ajax->success(UpdateManager::nbNeedUpdate());
     }
 
+    public function nbUpdates()
+    {
+        $this->ajax->success(UpdateManager::nbNeedUpdates());
+    }
+
     public function all()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
@@ -105,7 +110,6 @@ class UpdateAjax extends BaseAjax
 
                 }
                 LogHelper::addAlert(LogTarget::UPDATE, __("[END UPDATE SUCCESS]"));
-                LogHelper::addAlert(LogTarget::UPDATE, __("Refresh with F5 key to discover news"));
             }
         } catch (\Exception $e) {
             if ($update->getType() != 'core') {

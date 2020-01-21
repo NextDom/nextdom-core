@@ -33,10 +33,13 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Enums\Common;
 use NextDom\Enums\DateFormat;
 use NextDom\Enums\LogTarget;
 use NextDom\Enums\NextDomObj;
+use NextDom\Enums\SQLField;
 use NextDom\Enums\UpdateStatus;
+use NextDom\Enums\UpdateType;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
@@ -90,8 +93,8 @@ class UpdateManager extends BaseManager
         foreach ($updatesToCheckBySource as $source => $updates) {
             if (ConfigManager::byKey($source . '::enable') == 1) {
                 $repoData = self::getRepoDataFromName($source);
-                if (array_key_exists('phpClass', $repoData)) {
-                    $repoPhpClass = $repoData['phpClass'];
+                if (array_key_exists(Common::PHP_CLASS, $repoData)) {
+                    $repoPhpClass = $repoData[Common::PHP_CLASS];
                     if (class_exists($repoPhpClass) && method_exists($repoPhpClass, 'checkUpdate')) {
                         $repoPhpClass::checkUpdate($updates);
                     }
@@ -148,7 +151,7 @@ class UpdateManager extends BaseManager
             } else {
                 // Remove all update if plugin is removed
                 $params = [
-                    'type' => $pluginId,
+                    Common::TYPE => $pluginId,
                 ];
                 $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . '
                         WHERE `type` = :type';
@@ -169,7 +172,7 @@ class UpdateManager extends BaseManager
      */
     public static function byTypeAndLogicalId($type, $logicalId)
     {
-        return static::getOneByClauses(['logicalId' => $logicalId, 'type' => $type]);
+        return static::getOneByClauses(['logicalId' => $logicalId, Common::TYPE => $type]);
     }
 
     /**
@@ -183,7 +186,7 @@ class UpdateManager extends BaseManager
      */
     public static function byType($type)
     {
-        return static::getMultipleByClauses(['type' => $type]);
+        return static::getMultipleByClauses([Common::TYPE => $type]);
     }
 
     /**
@@ -200,7 +203,7 @@ class UpdateManager extends BaseManager
         $params = [];
         $sql = static::getBaseSQL() . ' ';
         if ($filter != '') {
-            $params['type'] = $filter;
+            $params[Common::TYPE] = $filter;
             $sql .= 'WHERE `type` = :type ';
         }
         $sql .= 'ORDER BY FIELD(`status`, "update", "ok", "depreciated") ASC, FIELD(`type`, "plugin", "core") DESC, `name` ASC';
@@ -220,10 +223,10 @@ class UpdateManager extends BaseManager
     {
         $repoList = self::listRepo();
         foreach ($repoList as $repoData) {
-            if (ucfirst($repoData['name']) == ucfirst($name)) {
+            if (ucfirst($repoData[Common::NAME]) == ucfirst($name)) {
                 return [
-                    'className' => str_replace(self::REPO_CLASS_PATH, '', $repoData['class']),
-                    'phpClass' => $repoData['class']
+                    Common::CLASS_NAME => str_replace(self::REPO_CLASS_PATH, '', $repoData[Common::CLASS_CODE]),
+                    Common::PHP_CLASS => $repoData[Common::CLASS_CODE]
                 ];
             }
         }
@@ -246,14 +249,14 @@ class UpdateManager extends BaseManager
             if (class_exists($fullNameClass) && is_subclass_of($fullNameClass, '\\NextDom\\Interfaces\\BaseRepo')) {
                 $repoCode = strtolower(str_replace('Repo', '', $repoClassName));
                 $result[$repoCode] = [
-                    'name' => $fullNameClass::$_name,
-                    'class' => $fullNameClass,
-                    'configuration' => $fullNameClass::$_configuration,
-                    'scope' => $fullNameClass::$_scope,
-                    'description' => $fullNameClass::$_description,
-                    'icon' => $fullNameClass::$_icon
+                    Common::NAME => $fullNameClass::$_name,
+                    Common::CLASS_CODE => $fullNameClass,
+                    Common::CONFIGURATION => $fullNameClass::$_configuration,
+                    Common::SCOPE => $fullNameClass::$_scope,
+                    Common::DESCRIPTION => $fullNameClass::$_description,
+                    Common::ICON => $fullNameClass::$_icon
                 ];
-                $result[$repoCode]['enable'] = ConfigManager::byKey($repoCode . '::enable');
+                $result[$repoCode][Common::ENABLE] = ConfigManager::byKey($repoCode . '::enable');
             }
         }
         return $result;
@@ -271,16 +274,16 @@ class UpdateManager extends BaseManager
     public static function repoById($id)
     {
         $repoClassData = self::getRepoDataFromName($id);
-        $phpClass = $repoClassData['phpClass'];
+        $phpClass = $repoClassData[Common::PHP_CLASS];
         $result = [
-            'name' => $phpClass::$_name,
-            'class' => $repoClassData['className'],
-            'configuration' => $phpClass::$_configuration,
-            'scope' => $phpClass::$_scope,
-            'description' => $phpClass::$_description,
-            'icon' => $phpClass::$_icon
+            Common::NAME => $phpClass::$_name,
+            Common::CLASS_CODE => $repoClassData[Common::CLASS_NAME],
+            Common::CONFIGURATION => $phpClass::$_configuration,
+            Common::SCOPE => $phpClass::$_scope,
+            Common::DESCRIPTION => $phpClass::$_description,
+            Common::ICON => $phpClass::$_icon
         ];
-        $result['enable'] = ConfigManager::byKey($id . '::enable');
+        $result[Common::ENABLE] = ConfigManager::byKey($id . '::enable');
         return $result;
     }
 
@@ -334,7 +337,7 @@ class UpdateManager extends BaseManager
      */
     public static function byStatus($status)
     {
-        return static::getMultipleByClauses(['status' => $status]);
+        return static::getMultipleByClauses([Common::STATUS => $status]);
     }
 
     /**
@@ -348,7 +351,7 @@ class UpdateManager extends BaseManager
      */
     public static function byLogicalId($logicalId)
     {
-        return static::getOneByClauses(['logicalId' => $logicalId]);
+        return static::getOneByClauses([Common::LOGICAL_ID => $logicalId]);
     }
 
     /**
@@ -363,20 +366,59 @@ class UpdateManager extends BaseManager
     public static function nbNeedUpdate($filter = '')
     {
         $params = [
-            'status' => 'update',
-            'configuration' => '%"doNotUpdate":"1"%'
+            Common::STATUS => 'update',
+            Common::CONFIGURATION => '%"doNotUpdate":"1"%'
         ];
         $sql = 'SELECT count(*)
                FROM ' . self::DB_CLASS_NAME . '
                WHERE `status` = :status
                AND `configuration` NOT LIKE :configuration';
         if ($filter != '') {
-            $params['type'] = $filter;
+            $params[Common::TYPE] = $filter;
             $sql .= ' AND `type` = :type';
         }
 
         $result = DBHelper::getOne($sql, $params);
-        return $result['count(*)'];
+        return $result[SQLField::COUNT];
+    }
+
+    /**
+     * Get the number of pending updates
+     *
+     * @param string $filter Type filter
+     *
+     * @return array arrays of pending updates type count
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     */
+    public static function nbNeedUpdates()
+    {
+        $filters = [
+          UpdateType::CORE,
+          UpdateType::PLUGIN,
+          UpdateType::WIDGET,
+          UpdateType::SCRIPT
+        ];
+        $params = [
+            Common::STATUS => 'update',
+            Common::CONFIGURATION => '%"doNotUpdate":"1"%'
+        ];
+        $sqlbase = 'SELECT count(*)
+               FROM ' . self::DB_CLASS_NAME . '
+               WHERE `status` = :status
+               AND `configuration` NOT LIKE :configuration';
+        $sql = $sqlbase;
+        $sqlResult = DBHelper::getOne($sql, $params);
+        $countAll = $sqlResult[SQLField::COUNT];
+        foreach ($filters as $filter) {
+            $params[Common::TYPE] = $filter;
+            $sql = $sqlbase . ' AND `type` = :type';
+            $sqlResult = DBHelper::getOne($sql, $params);
+            $result[$filter] = $sqlResult[SQLField::COUNT];
+        }
+        $result[UpdateType::ALL] = $countAll;
+        $result[UpdateType::OTHERS] = $countAll - $result[UpdateType::CORE] - $result[UpdateType::PLUGIN] - $result[UpdateType::WIDGET] - $result[UpdateType::SCRIPT];
+        return $result;
     }
 
     /**

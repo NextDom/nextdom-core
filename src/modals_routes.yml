@@ -6,6 +6,10 @@ action.insert:
   path: 'action.insert'
   controller: NextDom\Controller\Modals\ActionInsert::get
   condition: 'user'
+backup.log:
+  path: 'backup.log'
+  controller: NextDom\Controller\Modals\BackupLog::get
+  condition: 'admin'
 cmd.configure:
   path: 'cmd.configure'
   controller: NextDom\Controller\Modals\CmdConfigure::get
@@ -177,6 +181,10 @@ update.display:
 update.list:
   path: 'update.list'
   controller: NextDom\Controller\Modals\UpdateList::get
+  condition: 'admin'
+update.log:
+  path: 'update.log'
+  controller: NextDom\Controller\Modals\UpdateLog::get
   condition: 'admin'
 update.send:
   path: 'update.send'

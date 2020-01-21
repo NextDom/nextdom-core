@@ -49,6 +49,7 @@ function initPage(){
     initTextArea();
     initEventHandler();
     initFields();
+    initModals();
 
     // Trig page loaded
     $('body').trigger('nextdom_page_load');
@@ -190,3 +191,70 @@ function initTextArea(){
          }
      });
  }
+
+ /**
+  * Init of modals pages
+  */
+ function initModals(){
+     // Help modal trigger declaration
+     $("#md_pageHelp").dialog({
+         autoOpen: false,
+         modal: false,
+         closeText: '',
+         height: getModalHeight(),
+         width: getModalWidth(),
+         resizable: false,
+         open: function () {
+             $("body").css({overflow: 'hidden'});
+             modalesAdjust();
+             $(".wrapper").addClass("blur");
+         },
+         beforeClose: function (event, ui) {
+             $("body").css({overflow: 'inherit'});
+             $("#md_pageHelp").empty();
+             $(".wrapper").removeClass("blur");
+         }
+     });
+
+     // modal trigger declaration
+     $("#md_modal").dialog({
+         autoOpen: false,
+         modal: false,
+         closeText: '',
+         height: getModalHeight(),
+         width: getModalWidth(),
+         resizable: false,
+         open: function () {
+             $("body").css({overflow: 'hidden'});
+             modalesAdjust();
+             $(".wrapper").addClass("blur");
+         },
+         beforeClose: function (event, ui) {
+             $("body").css({overflow: 'inherit'});
+             $("#md_modal").empty();
+             $("#md_modal").dialog('option', 'buttons', []);
+             $(".wrapper").removeClass("blur");
+         }
+     });
+
+     // modal bis trigger declaration
+     $("#md_modal2").dialog({
+         autoOpen: false,
+         modal: false,
+         closeText: '',
+         height: getModalHeight(),
+         width: getModalWidth(),
+         resizable: false,
+         open: function () {
+             $("body").css({overflow: 'hidden'});
+             modalesAdjust();
+             $(".wrapper").addClass("blur");
+         },
+         beforeClose: function (event, ui) {
+             $("body").css({overflow: 'inherit'});
+             $("#md_modal2").empty();
+             $("#md_modal2").dialog('option', 'buttons', []);
+             $(".wrapper").removeClass("blur");
+         }
+     });
+}

@@ -64,3 +64,7 @@ nextdom.update.saves = function (queryParams) {
 nextdom.update.number = function (queryParams) {
   nextdom.private.ajax('Update', 'nbUpdate', queryParams, false, false, false);
 };
+
+nextdom.update.numbers = function (queryParams) {
+  nextdom.private.ajax('Update', 'nbUpdates', queryParams, false, false, false);
+};
