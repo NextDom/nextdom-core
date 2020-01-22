@@ -202,12 +202,12 @@
                                     {% for theme in profilsWidgetThemes %}
                                         <div class="col-sm-12 col-md-6 col-lg-4 form-group">
                                             <div class="clearfix">
-                                                <label class="cursor" for={{ theme.name|slice(0, -4) }}>
-                                                    <img class="themeWidgetThumbnail" src="{{ theme.dir }}">
+                                                <label class="cursor" for={{ theme.code }}>
+                                                    <img class="themeWidgetThumbnail" src="{{ theme.icon }}">
                                                 </label>
                                             </div>
-                                            <input id={{ theme.name|slice(0, -4) }} class="spacing-right" type="radio" name="themeWidget" value="{{ theme.name|slice(0, -4) }}"/>
-                                            <label for={{ theme.name|slice(0, -4) }}>{{ theme.name|slice(0, -4) }}{{theme.first}}</label>
+                                            <input id={{ theme.code }} class="spacing-right" type="radio" name="themeWidget" value="{{ theme.code }}"/>
+                                            <label for={{ theme.code }}>{{ theme.code|capitalize }}</label>
                                         </div>
                                     {% endfor %}
                                     <input id="widget-theme" class="userAttr form-control" data-l1key="options" data-l2key="widget::theme" style="display:none" />

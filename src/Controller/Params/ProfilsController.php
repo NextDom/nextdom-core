@@ -32,6 +32,7 @@ use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\Plan3dHeaderManager;
 use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PluginManager;
+use NextDom\Managers\ThemeManager;
 use NextDom\Managers\UserManager;
 use NextDom\Managers\ViewManager;
 
@@ -102,18 +103,7 @@ class ProfilsController extends BaseController
             @session_write_close();
         }
 
-        $pageData['profilsWidgetThemes'] = [];
-        $lsDir = FileSystemHelper::ls(NEXTDOM_ROOT . '/views/templates/dashboard/themes/', '*', true);
-        foreach ($lsDir as $themesDir) {
-            $lsThemes = FileSystemHelper::ls(NEXTDOM_ROOT . '/view/templates/dashboard/themes/' . $themesDir, '*.png');
-            foreach ($lsThemes as $themeFile) {
-                $themeData = [];
-                $themeData['dir'] = '/views/templates/dashboard/themes/' . $themesDir . $themeFile;
-                $themeData['name'] = $themeFile;
-                $pageData['profilsWidgetThemes'][] = $themeData;
-            }
-        }
-
+        $pageData['profilsWidgetThemes'] = ThemeManager::getWidgetThemes();
         $pageData['profilsDisplayTypes'] = NextDomHelper::getConfiguration('eqLogic:displayType');
         foreach ($pageData['profilsDisplayTypes'] as $key => $value) {
             if (isset($_SESSION) && is_object(UserManager::getStoredUser()) && UserManager::getStoredUser()->getOptions('widget::background-opacity::' . $key, null) == null) {
