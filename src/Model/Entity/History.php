@@ -136,7 +136,7 @@ class History extends BaseModel
         if ($values['value'] === '') {
             $values['value'] = null;
         }
-        $sql = 'REPLACE INTO ' . HistoryManager::DB_CLASS_NAME . '
+        $sql = 'REPLACE INTO ' . $this->getTableName() . '
                 SET `cmd_id` = :cmd_id,
                 `datetime` = :datetime,
                 `value` = :value';
@@ -207,6 +207,11 @@ class History extends BaseModel
         $this->updateChangeState($this->value, $value);
         $this->value = $value;
         return $this;
+    }
+
+    public function getTableName()
+    {
+        return $this->_tableName;
     }
 
     /**
