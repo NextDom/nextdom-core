@@ -13,12 +13,13 @@ before_install:
   - mkdir -p tests/coverage
   - composer require --dev symfony/panther:0.6.0 symfony/css-selector
   - wget -q -O phpunit https://phar.phpunit.de/phpunit-7.phar && chmod +x phpunit
-  - docker run -d --rm -v `pwd`:/data --name="nextdom-test" nextdom/nextdom-test:latest2 bash -x /start.sh
+  - docker run -d --rm -v `pwd`:/data --name="nextdom-test" nextdom/nextdom-test2:latest bash -x /start.sh
   - sudo apt-get update && sudo apt-get install -y --no-install-recommends python3-pip python3-setuptools
   - sudo python3 -m pip install --upgrade pip
   - sudo pip3 install --ignore-installed pylint
   - composer require --dev php-coveralls/php-coveralls
   - while true; do DOCKER_LOGS=$(docker logs --tail 10 nextdom-test 2>&1); if [[ "$DOCKER_LOGS" =~ .*NEXTDOM.TEST.READY.* ]]; then break; fi; sleep 2; done
+  - docker exec -it nextdom-test service mysql stop
   - docker commit nextdom-test nextdom-test-snap
   - docker kill nextdom-test &
 script:

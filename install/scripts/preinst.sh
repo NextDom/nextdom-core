@@ -239,7 +239,7 @@ step5_configure_mysql_database() {
 
   if [ -f ${CONFIG_DIRECTORY}/mysql/secret ]; then
     source ${CONFIG_DIRECTORY}/mysql/secret
-  elif [ -z ${MYSQL_NEXTDOM_PASSWD} ]; then
+  elif [ -z ${MYSQL_NEXTDOM_PASSWD} ] || [ "#MYSQL_NEXTDOM_PASSWD#" == "${MYSQL_NEXTDOM_PASSWD}" ] || [ "" == "${MYSQL_NEXTDOM_PASSWD}" ]; then
     MYSQL_NEXTDOM_PASSWD="$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15)"
     { ##try
       if [ ! -d ${CONFIG_DIRECTORY}/mysql ]; then
@@ -420,6 +420,7 @@ preinstall_nextdom() {
   startService cron
   startService mysql
 
+  step0_createDirectories
   step1_generate_nextdom_assets
   step2_configure_mysql
   step3_prepare_var_www_html
