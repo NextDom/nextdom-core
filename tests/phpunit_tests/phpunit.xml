@@ -79,7 +79,7 @@
             <directory>Managers</directory>
         </testsuite>
         <testsuite name="current">
-            <directory>../phpunit_tests/Controllers/Plan3dConfigureModalControllerTest.php</directory>
+            <directory>../phpunit_tests/Ajax/ObjectAjaxTest.php</directory>
         </testsuite>
     </testsuites>
     <filter>

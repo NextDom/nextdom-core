@@ -20,13 +20,12 @@ source ${CURRENT_DIR}/scripts/config.sh
 source ${CURRENT_DIR}/scripts/utils.sh
 source ${CURRENT_DIR}/preinst.sh
 
+addLogScript "============ Starting preinst.sh ============"
 #build a script for docker build time
 #at build time, unwanted steps are commented
 #needed to generate assets
 savePRODUCTION=${PRODUCTION}
 PRODUCTION=false
-step0_createDirectories
-addLogScript "============ Starting preinst.sh ============"
 step1_generate_nextdom_assets
 #step2_configure_mysql
 step3_prepare_var_www_html
@@ -41,16 +40,15 @@ addLogScript "============ End preinst.sh ============"
 
 sed -i 's/postinstall_nextdom$//g' ${CURRENT_DIR}/postinst.sh
 sed -i 's/exit 0$//g' ${CURRENT_DIR}/postinst.sh
-source ${CURRENT_DIR}/postinst.sh
+source ${CURRENT_DIR}/postinst.sh docker
 
 addLogScript "============ Starting postinst.sh ============"
-#commented step are the one needed at runtime not build time
 step1_create_prerequisite_files_and_directories
 step2_prepare_directory_layout
 #step3_configure_mysql
 step4_create_symLink_var_www_html
 step5_configure_apache
-#step6_configure_nextdom
+step6_configure_nextdom
 #step7_restart_mysql_database
 step8_configure_crontab
 #step9_check_nextdom
