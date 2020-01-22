@@ -26,20 +26,12 @@ class Plan3dConfigureModalControllerTest extends BaseControllerTest
 
     public function tearDown(): void
     {
-        if (isset($_GET['name'])) {
-            unset($_GET['name']);
-        }
-        if (isset($_GET['plan3dHeader_id'])) {
-            unset($_GET['plan3dHeader_id']);
-        }
     }
 
 
     public function testError()
     {
-        $_GET['name'] = 'Plan 3d';
-        $_GET['plan3dHeader_id'] = 1;
-        $result = \NextDom\Controller\Modals\Plan3dConfigure::get();
-        $this->assertContains('id="fd_plan3dConfigure"', $result);
+        $this->expectException(\NextDom\Exceptions\CoreException::class);
+        \NextDom\Controller\Modals\Plan3dConfigure::get();
     }
 }

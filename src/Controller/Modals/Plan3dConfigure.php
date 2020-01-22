@@ -50,7 +50,7 @@ class Plan3dConfigure extends BaseAbstractModal
                 ->setPlan3dHeader_id(Utils::init('plan3dHeader_id'));
             $plan3d->save();
         }
-        $pageData['JS_VARS']['id'] = $plan3d->getId();
+        Utils::sendVarToJS('id', $plan3d->getId());
 
         return Render::getInstance()->get('/modals/plan3d.configure.html.twig', $pageData);
     }
