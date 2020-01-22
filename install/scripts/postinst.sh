@@ -14,7 +14,7 @@ step1_create_prerequisite_files_and_directories() {
   addLogStep "Postinst -- Create needed files and directories - 1/12"
 
   local directories=("${ROOT_DIRECTORY}/plugins" "${LIB_DIRECTORY}" "${LIB_DIRECTORY}/market_cache"
-    "${LIB_DIRECTORY}/cache" "${LIB_DIRECTORY}/backup" "${LIB_DIRECTORY}/custom/desktop" "${LIB_DIRECTORY}/public/css"
+    "${LIB_DIRECTORY}/cache" "${LIB_DIRECTORY}/backup" "${LIB_DIRECTORY}/core/config" "${LIB_DIRECTORY}/custom/desktop" "${LIB_DIRECTORY}/public/css"
     "${LIB_DIRECTORY}/public/img/plan" "${LIB_DIRECTORY}/public/img/profils" "${LIB_DIRECTORY}/public/img/market_cache"
     "${LOG_DIRECTORY}/scenarioLog")
 
