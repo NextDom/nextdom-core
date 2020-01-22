@@ -12,12 +12,7 @@ source ${CURRENT_DIR}/config.sh
 ####################################### Directory/File management ###############################
 
 checkIfDirectoryExists() {
-  local directoryToCheck=$1
-  if [ -e ${directoryToCheck} ]; then
-    return 1
-  else
-    return 0
-  fi
+  [ -d $1 ]
 }
 
 createFile() {
@@ -47,9 +42,7 @@ createDirectory() {
 goToDirectory() {
   local directory=$1
   { ##try
-    $(checkIfDirectoryExists ${directory})
-    checkDirectory=$?
-    if [ ${checkDirectory} -gt 0 ]; then
+    if [ -d ${directory} ]; then
       cd ${directory} >/dev/null
       pushd ${directory} >/dev/null
     fi

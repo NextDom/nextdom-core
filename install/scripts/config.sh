@@ -31,7 +31,7 @@ CONFIG_DIRECTORY="/etc/nextdom"
 LIB_DIRECTORY="/var/lib/nextdom"
 LOG_DIRECTORY="/var/log/nextdom"
 LOG_FILE="install.log"
-ROOT_DIRECTORY="/usr/share/nextdom"
+ROOT_DIRECTORY=${ROOT_DIRECTORY:-"/usr/share/nextdom"}
 TMP_DIRECTORY="/tmp/nextdom"
 
 ### MySQL/MariaDB configuration

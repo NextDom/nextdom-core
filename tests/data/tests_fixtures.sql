@@ -38,6 +38,7 @@ INSERT INTO `note` VALUES (1,'Note de test','Un peu de contenu');
 INSERT INTO `note` VALUES (2,'Une autre note','Peu d\'idée');
 INSERT INTO `plan` VALUES (1,1,'eqLogic',4,'[]','[]','{\"z-index\":1000}','[]');
 INSERT INTO `planHeader` VALUES (1,'Plan test','[]','{\"desktopSizeX\":500,\"desktopSizeY\":500,\"backgroundTransparent\":1,\"backgroundColor\":\"#ffffff\"}');
+INSERT INTO `plan3d` VALUES (1, 'Plan 3d', 1, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `plan3dHeader` VALUES (1,'Test plan 3d','[]');
 INSERT INTO `config` VALUES ('core', 'api', 'uMOVMeaRleSDCVp6aZ5aLcOaVeOBeAVv');
 INSERT INTO `config` VALUES ('core', 'nextdom::user-theme', 'dark-nextdom');
