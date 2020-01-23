@@ -184,6 +184,7 @@ class PrepareView
             $pageData[ControllerData::JS_POOL][] = '/public/js/desktop/gui.js';
             $pageData[ControllerData::JS_POOL][] = '/public/js/desktop/utils.js';
             $pageData[ControllerData::JS_POOL][] = '/public/js/desktop/search.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/desktop/jeedomCompatibility.js';
 
             // And libraries JS
             $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/bootbox/dist/bootbox.min.js';
