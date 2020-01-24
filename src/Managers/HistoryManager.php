@@ -37,12 +37,14 @@ namespace NextDom\Managers;
 use NextDom\Enums\CmdSubType;
 use NextDom\Enums\CmdType;
 use NextDom\Enums\DateFormat;
+use NextDom\Enums\NextDomObj;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\Parents\BaseManager;
 use NextDom\Managers\Parents\CommonManager;
+use NextDom\Model\Entity\Cmd;
 use NextDom\Model\Entity\History;
 use NextDom\Model\Entity\HistoryArch;
 
@@ -182,10 +184,11 @@ class HistoryManager extends BaseManager
         $sql = 'SELECT DISTINCT(cmd_id)
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE `datetime` < :archiveDatetime';
-        $list_sensors = DBHelper::getAll($sql, $values);
-        foreach ($list_sensors as $sensors) {
+        $sensorsList = DBHelper::getAll($sql, $values);
+        foreach ($sensorsList as $sensors) {
+            /** @var Cmd $cmd */
             $cmd = CmdManager::byId($sensors['cmd_id']);
-            if (!is_object($cmd) || !$cmd->isType(CmdType::INFO) || $cmd->getIsHistorized() != 1) {
+            if (!is_object($cmd) || !$cmd->isType(CmdType::INFO) || !$cmd->isHistorized()) {
                 continue;
             }
             if ($cmd->getConfiguration('historyPurge', '') != '') {
@@ -208,25 +211,24 @@ class HistoryManager extends BaseManager
                 $history = DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
 
                 $countHistory = count($history);
-
                 for ($i = 1; $i < $countHistory; $i++) {
                     if ($history[$i]->getValue() != $history[$i - 1]->getValue()) {
-                        $history[$i]->setTableName('historyArch');
+                        $history[$i]->setTableName(NextDomObj::HISTORY_ARCH);
                         $history[$i]->save();
-                        $history[$i]->setTableName('history');
+                        $history[$i]->setTableName(NextDomObj::HISTORY);
                     }
                     $history[$i]->remove();
                 }
-                $history[0]->setTableName('historyArch');
+                $history[0]->setTableName(NextDomObj::HISTORY_ARCH);
                 $history[0]->save();
-                $history[0]->setTableName('history');
+                $history[0]->setTableName(NextDomObj::HISTORY);
                 $history[0]->remove();
                 $values = [
                     'cmd_id' => $cmd->getId(),
                 ];
                 $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                    FROM historyArch
-                    WHERE `cmd_id` = :cmd_id ORDER BY `datetime` ASC';
+                        FROM ' . HistoryArch::TABLE_NAME . '
+                        WHERE `cmd_id` = :cmd_id ORDER BY `datetime` ASC';
                 $history = DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
                 $countHistory = count($history);
                 for ($i = 1; $i < $countHistory; $i++) {
@@ -259,15 +261,14 @@ class HistoryManager extends BaseManager
                 $sql = 'SELECT ' . $mode . '(CAST(`value` AS DECIMAL(12,2))) as value,
                         FROM_UNIXTIME(AVG(UNIX_TIMESTAMP(`datetime`))) as datetime
                         FROM ' . self::DB_CLASS_NAME . '
-                        WHERE addtime(`datetime`, :archivePackage)<:oldest
+                        WHERE addtime(`datetime`, :archivePackage) < :oldest
                         AND `cmd_id` = :cmd_id';
                 $avg = DBHelper::getOne($sql, $values);
-
                 $history = new History();
                 $history->setCmd_id($sensors['cmd_id']);
                 $history->setValue($avg['value']);
                 $history->setDatetime($avg['datetime']);
-                $history->setTableName('historyArch');
+                $history->setTableName(NextDomObj::HISTORY_ARCH);
                 $history->save();
 
                 $values = [
@@ -276,7 +277,7 @@ class HistoryManager extends BaseManager
                     'archivePackage' => '-' . $archivePackage,
                 ];
                 $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . '
-                        WHERE addtime(`datetime`,:archivePackage)<:oldest
+                        WHERE addtime(`datetime`, :archivePackage) < :oldest
                         AND `cmd_id` = :cmd_id';
                 DBHelper::exec($sql, $values);
 

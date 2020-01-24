@@ -30,10 +30,10 @@ INSERT INTO `eqLogic` VALUES (2,'Second eqLogic',NULL,NULL,2,'plugin4tests','{\"
 INSERT INTO `eqLogic` VALUES (3,'Third eqLogic',NULL,NULL,1,'plugin4tests','{\"createtime\":\"2019-03-10 22:10:30\",\"updatetime\":\"2019-03-01 20:21:16\"}',0,NULL,1,NULL,NULL,'{\"heating\":\"0\",\"security\":\"0\",\"energy\":\"1\",\"light\":\"0\",\"automatism\":\"0\",\"multimedia\":\"1\",\"default\":\"0\"}','{\"showObjectNameOnview\":1,\"showObjectNameOndview\":1,\"showObjectNameOnmview\":1,\"height\":\"auto\",\"width\":\"auto\",\"layout::dashboard::table::parameters\":{\"center\":1,\"styletd\":\"padding:3px;\"},\"layout::mobile::table::parameters\":{\"center\":1,\"styletd\":\"padding:3px;\"}}',9999,NULL,NULL);
 INSERT INTO `eqLogic` VALUES (4,'A lamp',NULL,NULL,3,'plugin4tests','{\"createtime\":\"2019-03-10 22:10:30\",\"updatetime\":\"2019-03-01 20:21:16\"}',1,NULL,1,NULL,NULL,'','{\"showObjectNameOnview\":1,\"showObjectNameOndview\":1,\"showObjectNameOnmview\":1,\"height\":\"auto\",\"width\":\"auto\",\"layout::dashboard::table::parameters\":{\"center\":1,\"styletd\":\"padding:3px;\"},\"layout::mobile::table::parameters\":{\"center\":1,\"styletd\":\"padding:3px;\"}}',9999,NULL,NULL);
 INSERT INTO `config` VALUES ('plugin4tests','active','1'),('plugin4tests','deamonAutoMode','1'),('core','log::level::plugin4tests','{\"100\":\"1\",\"200\":\"0\",\"300\":\"0\",\"400\":\"0\",\"1000\":\"0\",\"default\":\"0\"}');
-INSERT INTO `cmd` VALUES (1,1,'plugin4tests',NULL,NULL,0,'Cmd 1','[]','[]','0','info','binary',NULL,'[]',1,NULL,'[]','[]');
+INSERT INTO `cmd` VALUES (1,1,'plugin4tests',NULL,NULL,0,'Cmd 1','[]','[]','1','info','binary',NULL,'[]',1,NULL,'[]','[]');
 INSERT INTO `cmd` VALUES (2,1,'plugin4tests',NULL,NULL,0,'Cmd 2','[]','[]','0','action','other',NULL,'[]',0,NULL,'[]','[]');
 INSERT INTO `cmd` VALUES (3,2,'plugin4tests',NULL,NULL,0,'Cmd 3','[]','[]','0','info','binary',NULL,'[]',1,NULL,'[]','[]');
-INSERT INTO `cmd` VALUES (4,4,'plugin4tests',NULL,NULL,0,'Cmd 4','[]','[]','0','info','numeric',NULL,'[]',1,NULL,'[]','[]');
+INSERT INTO `cmd` VALUES (4,4,'plugin4tests',NULL,NULL,0,'Cmd 4','[]','[]','1','info','numeric',NULL,'[]',1,NULL,'[]','[]');
 INSERT INTO `note` VALUES (1,'Note de test','Un peu de contenu');
 INSERT INTO `note` VALUES (2,'Une autre note','Peu d\'idée');
 INSERT INTO `plan` VALUES (1,1,'eqLogic',4,'[]','[]','{\"z-index\":1000}','[]');

@@ -749,6 +749,15 @@ class Cmd extends BaseEntity
     }
 
     /**
+     * Get historic command status
+     * @return bool
+     */
+    public function isHistorized()
+    {
+        return $this->isHistorized == 1;
+    }
+
+    /**
      * @return string
      */
     public function getIsHistorized()
