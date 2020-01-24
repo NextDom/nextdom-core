@@ -58,94 +58,56 @@ jQuery.fn.findAtDepth = function (selector, maxDepth) {
 };
 
 /**
- * Floating notification
- *
- * @param _title title of the notification
- * @param _text text of the notification
- * @param _class_name equivalent to the color of notification (success, warning, error, nextdom color)
+ * Show notification
+ * @param title Title of the notification
+ * @param message Message of the notification
+ * @param type Type of notification (success, error)
  */
-function notify(_title, _text, _class_name) {
-    if (typeof notify_status != 'undefined' && isset(notify_status) && notify_status == 1) {
-        var _backgroundColor = "";
-        var _icon = "";
+function showNotification(title, message, type) {
+    var icon = '/public/img/icon-256x256.png';
+    if (type === 'error') {
+        icon = '/public/img/icon-error.png';
+    }
+    var notification = new Notification(title, {
+        body: message.replace(/(<([^>]+)>)/ig, ''),
+        icon: icon
+    });
+    if (typeof(notify_timeout) !== 'undefined') {
+        setTimeout(notification.close.bind(notification), notify_timeout);
+    }
+}
 
-        if (_title == "") {
-            _title = "Core";
-        }
-        if (_text == "") {
-            _text = "Erreur inconnue";
-        }
-        if (_class_name == "success") {
-            _backgroundColor = '#00a65a';
-            _icon = 'far fa-check-circle fa-3x';
-        } else if (_class_name == "warning") {
-            _backgroundColor = '#f39c12';
-            _icon = 'fas fa-exclamation-triangle fa-3x';
-        } else if (_class_name == "error") {
-            _backgroundColor = '#dd4b39';
-            _icon = 'fas fa-times fa-3x';
-        } else {
-            _backgroundColor = '#33B8CC';
-            _icon = 'fas fa-info fa-3x';
-        }
-
-        iziToast.show({
-            id: null,
-            class: '',
-            title: _title,
-            titleColor: 'white',
-            titleSize: '1.5em',
-            titleLineHeight: '30px',
-            message: _text,
-            messageColor: 'white',
-            messageSize: '',
-            messageLineHeight: '',
-            theme: 'dark', // dark
-            iconText: '',
-            backgroundColor: _backgroundColor,
-            icon: _icon,
-            iconColor: 'white',
-            iconUrl: null,
-            image: '',
-            imageWidth: 50,
-            maxWidth: jQuery(window).width() - 500,
-            zindex: null,
-            layout: 2,
-            balloon: false,
-            close: true,
-            closeOnEscape: false,
-            closeOnClick: false,
-            displayMode: 0, // once, replace
-            position: notify_position, // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter, center
-            target: '',
-            targetFirst: true,
-            timeout: notify_timeout * 1000,
-            rtl: false,
-            animateInside: true,
-            drag: true,
-            pauseOnHover: true,
-            resetOnHover: false,
-            progressBar: true,
-            progressBarColor: '',
-            progressBarEasing: 'linear',
-            overlay: false,
-            overlayClose: false,
-            overlayColor: 'rgba(0, 0, 0, 0.6)',
-            transitionIn: 'fadeInUp',
-            transitionOut: 'fadeOut',
-            transitionInMobile: 'fadeInUp',
-            transitionOutMobile: 'fadeOutDown',
-            buttons: {},
-            inputs: {},
-            onOpening: function () {
-            },
-            onOpened: function () {
-            },
-            onClosing: function () {
-            },
-            onClosed: function () {
+/**
+ * Check notification permission and show if granted
+ * @param title Title of the notification
+ * @param message Message of the notification
+ * @param type Type of notification (success, error)
+ */
+function notify(title, message, type) {
+    var currentDate = new Date();
+    if (!window.Notification) {
+        console.error('You\'re browser doesn\'t support notifications');
+    }
+    else {
+        if (!(typeof(notify_status) !== 'undefined' && notify_status == 0)) {
+            if (Notification.permission === 'granted') {
+                showNotification(title, message, type);
             }
-        });
+            else {
+                var lastRequest = parseInt(localStorage.getItem('notification'));
+                // 2 weeks
+                if (lastRequest + 1209600000 > currentDate.getTime()) {
+                    Notification.requestPermission().then(function(result) {
+                        if (result === 'granted') {
+                            showNotification(title, message, type);
+                        }
+                        else {
+                            localStorage.setItem('notification', currentDate.getTime().toString());
+                        }
+                    });
+                }
+            }
+        }
     }
 }
 
@@ -235,7 +197,6 @@ function saveWidgetDisplay(_params){
     }
     var cmds = [];
     var eqLogics = [];
-    var scenarios = [];
     $('.eqLogic-widget:not(.eqLogic_layout_table)').each(function(){
         var eqLogic = $(this);
         order = 1;
@@ -709,7 +670,7 @@ function passwordScore(password, progressbar=null, spanLevel=null) {
 
 /**
  * Decode HTML entities in string like &eacute;
- * @param string message 
+ * @param message Message to decode
  */
 function decodeHtmlEntities(message)
 {

@@ -173,7 +173,6 @@ developer::exceptionhandler = 1
 
 ;Notification
 notify::status = 1
-notify::position = bottomCenter
 notify::timeout = 5
 
 ;Api

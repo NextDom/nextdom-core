@@ -47,7 +47,6 @@ class FirstUseController extends BaseController
     {
         $configs = ConfigManager::byKeys([
             'notify::status',
-            'notify::position',
             'notify::timeout',
             'nextdom::firstUse']);
         if ($configs['nextdom::firstUse'] == 0) {
@@ -59,7 +58,6 @@ class FirstUseController extends BaseController
         $pageData[ControllerData::TITLE] = '1ère Connexion';
         $pageData[ControllerData::JS_VARS] = [
             'notify_status' => $configs['notify::status'],
-            'notify_position' => $configs['notify::position'],
             'notify_timeout' => $configs['notify::timeout'],
             'serverTZoffsetMin' => Utils::getTZoffsetMin(),
             'serverDatetime' => Utils::getMicrotime()
