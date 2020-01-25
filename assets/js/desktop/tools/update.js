@@ -35,20 +35,24 @@
 */
 
 var tabsList = $('#accordionUpdate > .tab-pane > .row > div');
-var updateModale = $("#md_modal");
+var updateInfoModal = $('#updateInfoModal');
 var selectiveUpdateModal = $('#selectiveUpdateModal');
 var updateCollapseButton = $('#updateCollapseButton');
 var updateUncollapseButton = $('#updateUncollapseButton');
+var updateLogView = $('#updateLog');
 
 // Page init
 loadInformations();
+initUpdateTabsContent();
+initDialogs();
+initEvents();
 
 /**
  * Load informations in all forms of the page
  */
 function loadInformations() {
-  initUpdateTabsContent();
-  initEvents();
+    updateLogView.height($(window).height() - $('header').height() - 150);
+    updateLogView.parent().height($(window).outerHeight() - $('header').outerHeight() - 160);
 }
 
 /**
@@ -73,23 +77,24 @@ function initEvents() {
   // Selective update start button
   $('#startUpdateButton').off('click').on('click', function () {
     selectiveUpdateModal.modal('hide');
-    setProgressBar($("#progressbar"), 0);
-    $("#progressbar_div").show();
-    getNextDomLog(1, 'update');
+    showLogDialog();
+    $('#lbl_updateRunning').show();
     var options = selectiveUpdateModal.getValues('.updateOption')[0];
     nextdom.update.doAll({
       options: options,
       error: function (error) {
         notify('Erreur', error.message, 'error');
+      },
+      success: function () {
+        notify("Info", '{{L\'opération est réussie.}}', 'success');
+        window.location.reload();
       }
     });
   });
 
   // Show log button
   $('#logDialogButton').on('click', function () {
-    getNextDomLog(1, 'update');
-    updateModale.dialog({title: '{{Avancement de la mise à jour}}'});
-    updateModale.load('index.php?v=d&modal=log.basic').dialog('open');
+    showLogDialog();
   });
 
   // Updates check all button
@@ -101,7 +106,6 @@ function initEvents() {
         $('#checkAllUpdatesButton').children().removeClass('fa-spin');
       },
       success: function () {
-        notify('Info', '{{Vérifications terminées}}', 'success');
         initUpdateTabsContent();
         $('#checkAllUpdatesButton').children().removeClass('fa-spin');
       }
@@ -145,10 +149,8 @@ function initEvents() {
 
   // Check update button on one update box
   tabsList.delegate('.checkUpdate', 'click', function () {
-    $(this).children().addClass('fa-spin');
     var updateId = $(this).closest('.box').attr('data-id');
     checkSingleUpdate(updateId);
-    $(this).children().removeClass('fa-spin');
   });
 
   // Save button
@@ -271,7 +273,7 @@ function createUpdateBox(updateData,updateId) {
       htmlData += '<a class="btn btn-default btn-sm pull-right" href="https://github.com/NextDom/nextdom-core/blob/master/CHANGELOG.md" target="_blank"><i class="fas fa-book"></i>{{Changelog}}</a>';
     }
   }
-  htmlData += '<a class="btn btn-info btn-sm pull-left checkUpdate" ><i class="fas fa-refresh"></i>{{Vérifier}}</a>';
+  htmlData += '<a class="btn btn-info btn-sm pull-left checkUpdate" ><i class="fas fa-check"></i>{{Vérifier}}</a>';
   htmlData += '</div>';
   htmlData += '</div>';
   htmlData += '</div>';
@@ -325,7 +327,6 @@ function checkSingleUpdate(updateId) {
       notify('Erreur', error.message, 'error');
     },
     success: function () {
-      notify('Info', '{{Vérification terminée}}', 'success');
       initUpdateTabsContent(updateId);
     }
   });
@@ -345,7 +346,6 @@ function removeUpdate(updateId) {
           notify('Erreur', error.message, 'error');
         },
         success: function () {
-          notify('Info', '{{Objet supprimé}}', 'success');
           initUpdateTabsContent();
         }
       });
@@ -361,13 +361,16 @@ function removeUpdate(updateId) {
 function launchUpdate(updateId) {
   bootbox.confirm('{{Etes vous sur de vouloir mettre à jour cet objet ?}}', function (result) {
     if (result) {
-      setProgressBar($("#progressbar"), 0);
-      $("#progressbar_div").show();
-      getNextDomLog(1, 'update');
+      showLogDialog();
+      $('#lbl_updateRunning').show();
       nextdom.update.do({
         id: updateId,
         error: function (error) {
           notify('Erreur', error.message, 'error');
+        },
+        success: function () {
+          notify("Info", '{{L\'opération est réussie.}}', 'success');
+          window.location.reload();
         }
       });
     }
@@ -394,50 +397,62 @@ function getNextDomLog(_autoUpdate, _log) {
     error: function (request, status, error) {
       setTimeout(function () {
         getNextDomLog(_autoUpdate, _log)
-      }, 500);
+      }, 1000);
     },
     success: function (data) {
       if (data.state != 'ok') {
         setTimeout(function () {
           getNextDomLog(_autoUpdate, _log)
-        }, 500);
+        }, 1000);
         return;
       }
       var log = '';
       if ($.isArray(data.result)) {
         for (var i in data.result.reverse()) {
           log += data.result[i] + "\n";
-          if(data.result[i].indexOf('[END UPDATE SUCCESS]') != -1){
-              notify("Info", '{{L\'opération est réussie}}', 'success');
-              initUpdateTabsContent();
-              _autoUpdate = 0;
-          }
-          if(data.result[i].indexOf('[END UPDATE ERROR]') != -1){
-              notify("Erreur", '{{L\'opération a échoué}}', 'error');
-              initUpdateTabsContent();
-              _autoUpdate = 0;
-          }
-          if(data.result[i].indexOf('OK (') != -1){
-            let progressPos = data.result[i].indexOf('OK (')+4;
-            let newProgressStatus = parseInt(data.result[i].substr(progressPos, data.result[i].indexOf('%')-progressPos));
-            if (newProgressStatus > progressStatus) {
-              progressStatus = newProgressStatus;
-              setProgressBar($("#progressbar"), progressStatus);
-            }
+          if (data.result[i].indexOf('[END') != -1) {
+            initUpdateTabsContent();
+            _autoUpdate = 0;
           }
         }
       }
-      $('#pre_modal').text(log);
-      $('#pre_modal').scrollTop($('#pre_modal').innerHeight()+scrollTopToDown);
+      updateLogView.text(log);
+      updateLogView.parent().scrollTop(updateLogView.parent().height() + 200000);
       if (init(_autoUpdate, 0) == 1) {
         setTimeout(function () {
           getNextDomLog(_autoUpdate, _log)
-        }, 500);
+        }, 1000);
       } else {
-        setTimeout(function () {
-          window.location.reload();
-        }, 500);
+        $('#lbl_updateRunning').hide();
       }
+    }
+  });
+}
+
+/**
+ * Show log update modale
+ */
+function showLogDialog() {
+  updateInfoModal.dialog({title: '{{Avancement de la mise à jour}}'});
+  updateInfoModal.dialog('open');
+  getNextDomLog(1, 'update');
+}
+
+/**
+ * Init dialogs
+ */
+function initDialogs() {
+  updateInfoModal.dialog({
+    closeText: '',
+    autoOpen: false,
+    modal: true,
+    width: getModalWidth(),
+    open: function () {
+      $('body').css({overflow: 'hidden'});
+      $(this).dialog("option", "position", {my: "center", at: "center", of: window});
+    },
+    beforeClose: function (event, ui) {
+      $('body').css({overflow: 'inherit'});
     }
   });
 }

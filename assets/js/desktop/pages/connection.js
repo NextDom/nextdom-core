@@ -135,11 +135,9 @@ function updateTwoFactorVisibility() {
     if (useTwoFactor === 1) {
         divLogin.hide();
         divTwoFactor.show();
-        twoFactorInput.focus();
     } else {
         divLogin.show();
         divTwoFactor.hide();
-        loginInput.focus();
     }
 }
 

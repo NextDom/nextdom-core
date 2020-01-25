@@ -78,10 +78,6 @@ interact.test:
   path: 'interact.test'
   controller: NextDom\Controller\Modals\InteractTest::get
   condition: 'admin'
-log.basic:
-  path: 'backup.log'
-  controller: NextDom\Controller\Modals\LogBasic::get
-  condition: 'admin'
 log.display:
   path: 'log.display'
   controller: NextDom\Controller\Modals\LogDisplay::get

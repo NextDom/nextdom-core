@@ -33,7 +33,6 @@
 * @Email   <admin@nextdom.org>
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
-var backupInfoModal = $('#md_modal');
 
 // Page init
 loadInformations();
@@ -102,10 +101,27 @@ function initEvents() {
         });
     });
 
+    // Backup modale init
+    $("#md_backupInfo").dialog({
+        closeText: '',
+        autoOpen: false,
+        modal: true,
+        height: jQuery(window).height() - 100,
+        width: getModalWidth(),
+        open: function () {
+            $("body").css({overflow: 'hidden'});
+            $(this).dialog("option", "position", {my: "center", at: "center", of: window});
+            $('#pre_backupInfo').css('height', $('#md_backupInfo').height());
+        },
+        beforeClose: function (event, ui) {
+            $("body").css({overflow: 'inherit'});
+        }
+    });
+
     // Open log button
     $("#bt_saveOpenLog").on('click', function (event) {
-        backupInfoModal.dialog({title: "{{Avancement de la sauvegarde}}"});
-        backupInfoModal.load('index.php?v=d&modal=log.basic').dialog('open');
+        $('#md_backupInfo').dialog({title: "{{Avancement de la sauvegarde}}"});
+        $("#md_backupInfo").dialog('open');
     });
 
     // Backup button
@@ -116,15 +132,14 @@ function initEvents() {
                 $('#bt_backupNextDom').addClass('disabled');
                 el.find('.fa-refresh').show();
                 el.find('.fa-floppy-o').hide();
+                $('#md_backupInfo').dialog({title: "{{Avancement de la sauvegarde}}"});
+                $("#md_backupInfo").dialog('open');
                 nextdom.backup.backup({
                     error: function (error) {
                         notify("Erreur", error.message, 'error');
                     },
                     success: function () {
-                      backupInfoModal.dialog({title: "{{Avancement de la sauvegarde}}"});
-                      setProgressBar($("#progressbar"), 0);
-                      $("#progressbar_div").show();
-                      getNextDomLog(1, 'backup');
+                        getNextDomLog(1, 'backup');
                     }
                 });
             }
@@ -141,15 +156,15 @@ function initEvents() {
                 $('#bt_restoreRepoNextDom').addClass('disabled');
                 el.find('.fa-refresh').show();
                 el.find('.fa-window-restore').hide();
+                $('#md_backupInfo').dialog({title: "{{Avancement de la restauration}}"});
+                $("#md_backupInfo").dialog('open');
                 nextdom.backup.restoreLocal({
                     backup: $('#sel_restoreBackup').value(),
                     error: function (error) {
                         notify("Erreur", error.message, 'error');
                     },
                     success: function () {
-                      backupInfoModal.dialog({title: "{{Avancement de la restauration}}"});
-                      setProgressBar($("#progressbar"), 0);
-                      $("#progressbar_div").show();
+                        getNextDomLog(1, 'restore');
                     }
                 });
             }
@@ -224,9 +239,8 @@ function initEvents() {
                         notify("Erreur", error.message, 'error');
                     },
                     success: function () {
-                      backupInfoModal.dialog({title: "{{Avancement de la restauration}}"});
-                      setProgressBar($("#progressbar"), 0);
-                      $("#progressbar_div").show();
+                      $('#md_backupInfo').dialog({title: "{{Avancement de la restauration}}"});
+                      $("#md_backupInfo").dialog('open');
                       getNextDomLog(1, 'restore');
                     }
                 });
@@ -236,84 +250,75 @@ function initEvents() {
 }
 
 function getNextDomLog(_autoUpdate, _log) {
-  nextdom.log.get({
-    log: _log,
-    success: function (result) {
-      var log = '';
-      var search = $('#generalSearch');
-      var regex = /<br\s*[\/]?>/gi;
-      if ($.isArray(result)) {
-        for (var i in result.reverse()) {
-          if (!isset(search) || search.value() == '' || result[i].toLowerCase().indexOf(search.value().toLowerCase()) != -1) {
-            log += $.trim(result[i]) + "\n";
-          }
+    $.ajax({
+        type: 'POST',
+        url: 'src/ajax.php',
+        data: {
+            target: 'Log',
+            action: 'get',
+            log: _log,
+        },
+        dataType: 'json',
+        global: false,
+        error: function (request, status, error) {
+            setTimeout(function () {
+                getNextDomLog(_autoUpdate, _log)
+            }, 1000);
+        },
+        success: function (data) {
+            if (data.state != 'ok') {
+                setTimeout(function () {
+                    getNextDomLog(_autoUpdate, _log)
+                }, 1000);
+                return;
+            }
+            var log = '';
+            if($.isArray(data.result)){
+                for (var i in data.result.reverse()) {
+                    log += data.result[i]+"\n";
+                    if(data.result[i].indexOf('Closing with success') != -1){
+                        switchNotify(1);
+                        nextdom.user.refresh();
+                        notify("Info", '{{L\'opération est réussie}}', 'success');
+                        _autoUpdate = 0;
+                    }
+                    if(data.result[i].indexOf('Closing with error') != -1){
+                        switchNotify(1);
+                        nextdom.user.refresh();
+                        notify("Erreur", '{{L\'opération a échoué}}', 'error');
+                        _autoUpdate = 0;
+                    }
+                    if(data.result[i].indexOf('Fatal error') != -1){
+                        switchNotify(1);
+                        nextdom.user.refresh();
+                        notify("Erreur", '{{L\'opération a échoué}}', 'error');
+                        _autoUpdate = 0;
+                    }
+                }
+            }
+            $('#pre_backupInfo').text(log);
+            if (init(_autoUpdate, 0) == 1) {
+                setTimeout(function () {
+                    getNextDomLog(_autoUpdate, _log)
+                }, 500);
+            } else {
+                $('#bt_' + _log + 'NextDom').removeClass('disabled');
+                $('#bt_' + _log + 'RepoNextDom').removeClass('disabled');
+                $('#bt_' + _log + 'NextDom .fa-refresh').hide();
+                $('#bt_' + _log + 'RepoNextDom .fa-refresh').hide();
+                $('#bt_' + _log + 'NextDom .fa-floppy-o').show();
+                $('#bt_' + _log + 'NextDom .fa-window-restore').show();
+                $('#bt_' + _log + 'RepoNextDom .fa-window-restore').show();
+                $('#bt_' + _log + 'NextDom .fa-cloud-upload-alt').show();
+                $('#bt_' + _log + 'NextDom .fa-cloud-dowload-alt').show();
+                updateListBackup();
+                for(var i in REPO_LIST){
+                    updateRepoListBackup(REPO_LIST[i]);
+                }
+                refreshMessageNumber();
+            }
         }
-        if(log.indexOf('Closing with success') != -1){
-            switchNotify(1);
-            nextdom.user.refresh();
-            notify("Info", '{{L\'opération est réussie}}', 'success');
-            _autoUpdate = 0;
-        }
-        if(log.indexOf('Closing with error') != -1){
-            switchNotify(1);
-            nextdom.user.refresh();
-            notify("Erreur", '{{L\'opération a échoué}}', 'error');
-            _autoUpdate = 0;
-        }
-        if(log.indexOf('Fatal error') != -1){
-            switchNotify(1);
-            nextdom.user.refresh();
-            notify("Erreur", '{{L\'opération a échoué}}', 'error');
-            _autoUpdate = 0;
-        }
-        if(log.indexOf('OK (') != -1){
-          let progressPos = log.indexOf('OK (')+4;
-          let newProgressStatus = parseInt(log.substr(progressPos, log.indexOf('%')-progressPos));
-          if (newProgressStatus > progressStatus) {
-            progressStatus = newProgressStatus;
-            setProgressBar($("#progressbar"), progressStatus);
-          }
-        }
-      }
-      $('#pre_modal').text(log);
-      $('#pre_modal').scrollTop($('#pre_modal').innerHeight()+scrollTopToDown);
-      if (init(_autoUpdate, 0) == 1) {
-          setTimeout(function () {
-              getNextDomLog(_autoUpdate, _log)
-          }, 500);
-      } else {
-          $('#bt_' + _log + 'NextDom').removeClass('disabled');
-          $('#bt_' + _log + 'RepoNextDom').removeClass('disabled');
-          $('#bt_' + _log + 'NextDom .fa-refresh').hide();
-          $('#bt_' + _log + 'RepoNextDom .fa-refresh').hide();
-          $('#bt_' + _log + 'NextDom .fa-floppy-o').show();
-          $('#bt_' + _log + 'NextDom .fa-window-restore').show();
-          $('#bt_' + _log + 'RepoNextDom .fa-window-restore').show();
-          $('#bt_' + _log + 'NextDom .fa-cloud-upload-alt').show();
-          $('#bt_' + _log + 'NextDom .fa-cloud-dowload-alt').show();
-          $("#progressbar_div").hide();
-          updateListBackup();
-          for(var i in REPO_LIST){
-              updateRepoListBackup(REPO_LIST[i]);
-          }
-          refreshMessageNumber();
-      }
-      if (nextdom.log.timeout !== null) {
-        clearTimeout(nextdom.log.timeout);
-      }
-      nextdom.log.timeout = setTimeout(function () {
-        getNextDomLog(_autoUpdate, _log)
-      }, 500);
-    },
-    error: function () {
-      if (nextdom.log.timeout !== null) {
-        clearTimeout(nextdom.log.timeout);
-      }
-      nextdom.log.timeout = setTimeout(function () {
-        getNextDomLog(_autoUpdate, _log)
-      }, 500);
-    },
-  });
+    });
 }
 
 function updateListBackup() {

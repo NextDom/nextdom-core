@@ -62,10 +62,5 @@ nextdom.update.saves = function (queryParams) {
 };
 
 nextdom.update.number = function (queryParams) {
-  var params = $.extend({}, nextdom.private.default_params, queryParams || {});
-  var ajaxParams = nextdom.private.getParamsAJAX(params, 'Update', 'nbUpdate');
-  if (queryParams !== undefined && queryParams.hasOwnProperty('filter')) {
-    ajaxParams.data['filter'] = json_encode(queryParams.filter);
-  }
-  nextdom.private.ajaxCall(ajaxParams);
+  nextdom.private.ajax('Update', 'nbUpdate', queryParams, false, false, false);
 };

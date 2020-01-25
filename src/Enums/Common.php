@@ -43,14 +43,11 @@ class Common extends Enum
     const DATE = 'date';
     const DATETIME = 'datetime';
     const DEFAULT = 'default';
-    const DESCRIPTION = 'description';
     const DETAIL = 'detail';
-    const DISABLE = 'disable';
     const DISPLAY = 'display';
     const DISPLAY_VALUE = 'display_value';
     const END = 'end';
     const EQLOGIC_ID = 'eqLogic_id';
-    const ENABLE = 'enable';
     const EVENT = 'event';
     const FUNCTION = 'function';
     const GENERIC_TYPE = 'generic_type';
@@ -85,7 +82,6 @@ class Common extends Enum
     const REPLY_CMD = 'reply_cmd';
     const RESULT = 'result';
     const SCENARIO_ID = 'scenario_id';
-    const SCOPE = 'scope';
     const SCHEDULE = 'schedule';
     const START = 'start';
     const STATE = 'state';

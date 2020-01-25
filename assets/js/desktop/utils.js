@@ -37,9 +37,6 @@
 /* Global variables Initialisations */
 var modifyWithoutSave = false;
 var lockModify = false;
-var progressStatus = 0;
-var progressInc = 0;
-const scrollTopToDown = 1000000000;
 uniqId_count = 0;
 modifyWithoutSave = false;
 nbActiveAjaxRequest = 0;
@@ -80,7 +77,7 @@ function notify(_title, _text, _class_name) {
         }
         if (_class_name == "success") {
             _backgroundColor = '#00a65a';
-            _icon = 'far fa-check fa-3x';
+            _icon = 'far fa-check-circle fa-3x';
         } else if (_class_name == "warning") {
             _backgroundColor = '#f39c12';
             _icon = 'fas fa-exclamation-triangle fa-3x';
@@ -158,9 +155,28 @@ function notify(_title, _text, _class_name) {
  * @param _callback callback who receive the icon code
  */
 function chooseIcon(_callback) {
-    $('#md_modal2').dialog({title: "{{Choisissez votre icône}}"});
-    $('#md_modal2').load('index.php?v=d&modal=icon.selector');
-    $("#md_modal2").dialog('option', 'buttons', {
+    if ($("#mod_selectIcon").length == 0) {
+        $('#div_pageContainer').append('<div id="mod_selectIcon" title="{{Choisissez votre icône}}" ></div>');
+
+        $("#mod_selectIcon").dialog({
+            closeText: '',
+            autoOpen: false,
+            modal: true,
+            height: (jQuery(window).height() - 150),
+            width: getModalWidth(),
+            open: function () {
+                $("body").css({overflow: 'hidden'});
+                $(this).dialog("option", "position", {my: "center", at: "center", of: window});
+            },
+            beforeClose: function (event, ui) {
+                $("body").css({overflow: 'inherit'});
+            }
+        });
+        jQuery.ajaxSetup({async: false});
+        $('#mod_selectIcon').load('index.php?v=d&modal=icon.selector');
+        jQuery.ajaxSetup({async: true});
+    }
+    $("#mod_selectIcon").dialog('option', 'buttons', {
         "Annuler": function () {
             $(this).dialog("close");
         },
@@ -174,7 +190,7 @@ function chooseIcon(_callback) {
             $(this).dialog('close');
         }
     });
-    $('#md_modal2').dialog('open');
+    $('#mod_selectIcon').dialog('open');
 }
 
 /**
@@ -693,7 +709,7 @@ function passwordScore(password, progressbar=null, spanLevel=null) {
 
 /**
  * Decode HTML entities in string like &eacute;
- * @param string message
+ * @param string message 
  */
 function decodeHtmlEntities(message)
 {

@@ -25,6 +25,8 @@ def php_tests():
         container_name, 'apt-get install -y php-phpdbg > /dev/null 2>&1')
     return_code = exec_command_in_container(
         container_name, 'bash -c "cd /var/www/html && export PANTHER_NO_SANDBOX=1 && export PANTHER_CHROME_ARGUMENTS=\"--disable-dev-shm-usage\" && phpdbg -d memory_limit=-1 -qrr phpunit --configuration tests/phpunit_tests/phpunit.xml --testsuite AllTests"')  # pylint: disable=line-too-long
+#    return_code = exec_command_in_container(
+#        container_name, 'bash -c "cd /var/www/html && phpdbg -d memory_limit=-1 -qrr phpunit --configuration tests/phpunit_tests/phpunit.xml --testsuite AllTestsNoGui"')  # pylint: disable=line-too-long
     copy_file_from_container(container_name, '/var/www/html/tests/coverage/clover.xml',
                              'coverage/')  # pylint: disable=line-too-long
     copy_file_from_container(container_name, '/var/www/html/tests/coverage/junitlog.xml',

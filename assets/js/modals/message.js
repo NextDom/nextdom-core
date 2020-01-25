@@ -43,7 +43,7 @@ function initEvents() {
                 notify('Erreur', error.message, 'error');
             },
             success: function () {
-                $('#table_message .menu').empty();
+                $('#table_message tbody').remove();
                 refreshMessageNumber();
             }
         });

@@ -349,36 +349,6 @@ function refreshUpdateNumber() {
       }
     }
   });
-  if($('#spanNbUpdates').length){
-    nextdom.update.number({
-      filter: ['core', 'plugin', 'widget', 'script'],
-      error: function (error) {
-        notify("Erreur", error.message, 'error');
-      },
-      success: function (updatesData) {
-        var updateSum = 0;
-        for (var updateIndex in updatesData) {
-          var target = $('#spanNbUpdates-' + updatesData[updateIndex].type);
-          var targetCount = updatesData[updateIndex].count;
-          updateSum += targetCount;
-          if (targetCount == 0) {
-            target.hide();
-          }
-          else {
-            target.html(targetCount);
-            target.show();
-          }
-        }
-        if (updateSum == 0) {
-          $('#spanNbUpdates').hide();
-        }
-        else {
-          $('#spanNbUpdates').html(updateSum);
-          $('#spanNbUpdates').hide();
-        }
-      }
-    });
-  }
 }
 
 /**
@@ -436,50 +406,18 @@ function displayClock() {
  * Adjust size and position of jquery modales
  */
 function modalesAdjust() {
-  var modals = [$('#md_modal'), $('#md_modal2'), $('#md_pageHelp')];
+  var modals = [$('#md_modal'), $('#md_modal2')];
   modals.forEach(function (modal) {
     if (modal.is(':ui-dialog')) {
       modal.dialog('option', 'width', getModalWidth());
-      modal.dialog('option', 'height', getModalHeight());
       modal.dialog('option', 'position', {my: 'center', at: 'center', of: window});
     }
   });
 }
 
-/**
- * Calcul modal width depend of width screen
- */
 function getModalWidth() {
   if (jQuery(window).width() < 1000) {
     return '96%';
   }
   return '80%';
-}
-
-/**
- * Calcul modal width depend of width screen
- */
-function getModalHeight() {
-  return (jQuery(window).height() - 100);
-}
-
-/**
- * Set new progress bar value
- *
- * @param progressElement the progress element to set.
- * @param newValue new progress value.
- */
-function setProgressBar(progressElement, newValue) {
-  if (newValue == 0) {
-    progressStatus = 0;
-  }
-  $(progressElement).attr('aria-valuenow',newValue);
-  $(progressElement).css('width',newValue + '%');
-  $(progressElement).find('span').html(newValue + '%');
-  if ($(progressElement).parent().hasClass('progress') && $(progressElement).parent().next('span').length>0) {
-    let spanValue = $(progressElement).parent().next('span').html();
-    let spanSplit = spanValue.split('%');
-    spanSplit[0] = newValue + '%';
-    $(progressElement).parent().next('span').html(spanSplit.join(''));
-  }
 }

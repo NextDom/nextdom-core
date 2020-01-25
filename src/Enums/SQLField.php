@@ -28,5 +28,4 @@ class SQLField extends Enum
     const LINK_TYPE = 'link_type';
     const LINK_ID = 'link_id';
     const LOGIN = 'login';
-    const COUNT = 'count(*)';
 }

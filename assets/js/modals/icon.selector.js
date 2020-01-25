@@ -63,7 +63,7 @@ $('.btn-selector').on('click', function () {
 $('.btn-selector').on('dblclick', function () {
     $('.btn-selector').removeClass('iconSelected');
     $(this).closest('.btn-selector').addClass('iconSelected');
-    $('#md_modal2').dialog("option", "buttons")['Valider'].apply($('#md_modal2'));
+    $('#mod_selectIcon').dialog("option", "buttons")['Valider'].apply($('#mod_selectIcon'));
 });
 
 $('#bt_iconCollapse').on('click',function(){
