@@ -135,7 +135,7 @@ class Listener extends BaseEntity
                 if (class_exists($targetClass) && method_exists($targetClass, $function)) {
                     $targetClass::$function($option);
                 } else {
-                    LogHelper::addDebug(LogTarget::LISTENER, __('[Erreur] Classe ou fonction non trouvée ') . $this->getName());
+                    LogHelper::addDebug(LogTarget::LISTENER, __('[Erreur] Classe ou fonction non trouvée : ') . $this->getName());
                     $this->remove();
                     return;
                 }

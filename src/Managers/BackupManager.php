@@ -93,38 +93,38 @@ class BackupManager
             NextDomHelper::event('begin_backup', true);
             ConsoleHelper::step("stopping NextDom (cron & scenario)");
             NextDomHelper::stopSystem(true);
-            ConsoleHelper::ok();
+            ConsoleHelper::ok(10);
             ConsoleHelper::step("starting plugin backup");
             self::backupPlugins();
-            ConsoleHelper::ok();
+            ConsoleHelper::ok(20);
             ConsoleHelper::step("checking database integrity");
             self::repairDB();
-            ConsoleHelper::ok();
+            ConsoleHelper::ok(30);
             ConsoleHelper::step("starting database backup");
             self::createDBBackup($sqlPath);
-            ConsoleHelper::ok();
+            ConsoleHelper::ok(40);
             ConsoleHelper::step("starting cache backup");
             CacheManager::persist();
-            ConsoleHelper::ok();
+            ConsoleHelper::ok(50);
             ConsoleHelper::step("creating backup archive");
             ConsoleHelper::enter();
             self::createBackupArchive($backupPath, $sqlPath, $cachePath, LogTarget::BACKUP);
-            ConsoleHelper::ok();
+            ConsoleHelper::ok(70);
             ConsoleHelper::step("rotating backup archives");
             self::rotateBackups($backupDir);
-            ConsoleHelper::ok();
+            ConsoleHelper::ok(80);
             ConsoleHelper::step("checking remote backup systems");
             self::sendRemoteBackup($backupPath);
-            ConsoleHelper::ok();
+            ConsoleHelper::ok(90);
         } catch (\Exception $e) {
             $status = "error";
-            ConsoleHelper::nok();
+            ConsoleHelper::nok(100);
             ConsoleHelper::error($e);
             LogHelper::addError(LogTarget::BACKUP, $e->getMessage());
         } finally {
             ConsoleHelper::step("starting NextDom (cron & scenario)");
             NextDomHelper::startSystem();
-            ConsoleHelper::ok();
+            ConsoleHelper::ok(100);
             NextDomHelper::event('end_backup');
             ConsoleHelper::subTitle("end of backup procedure at " . date(DateFormat::FULL));
             ConsoleHelper::subTitle("elapsed time " . (strtotime('now') - $startTime));
@@ -285,11 +285,13 @@ class BackupManager
         $roots = [NEXTDOM_DATA . '/data/', NEXTDOM_DATA . '/config/'];
         $pattern = NEXTDOM_DATA . '/';
         self::addPathToArchive($roots, $pattern, $tar, $logFile);
+        ConsoleHelper::ok(55);
 
         // Backup plugins folder
         $roots = [NEXTDOM_ROOT . '/plugins/'];
         $pattern = NEXTDOM_ROOT . '/';
         self::addPathToArchive($roots, $pattern, $tar, $logFile);
+        ConsoleHelper::ok(60);
 
         $dir = new \RecursiveDirectoryIterator(NEXTDOM_ROOT, \FilesystemIterator::SKIP_DOTS);
         // Flatten the recursive iterator, folders come before their files
@@ -307,6 +309,7 @@ class BackupManager
                 if ($fileInfo->isDir()) {
                     $roots = [NEXTDOM_ROOT . '/' . $fileInfo->getFilename()];
                     self::addPathToArchive($roots, $pattern, $tar, $logFile);
+                    ConsoleHelper::ok(65);
                 }
             }
         }
@@ -495,53 +498,53 @@ class BackupManager
                 $file = self::getLastBackupFilePath($backupDir, "newest");
             }
             ConsoleHelper::process("file used for restoration: " . $file);
-            ConsoleHelper::ok();
+            ConsoleHelper::ok(10);
             ConsoleHelper::step("stopping Nextdom system...");
             NextDomHelper::stopSystem(false);
-            ConsoleHelper::ok();
+            ConsoleHelper::ok(20);
             ConsoleHelper::step("extracting backup archive...");
             $tmpDir = self::extractArchive($file);
-            ConsoleHelper::ok();
+            ConsoleHelper::ok(30);
             ConsoleHelper::step("restoring plugins...");
             self::restorePlugins($tmpDir);
-            ConsoleHelper::ok();
+            ConsoleHelper::ok(50);
             ConsoleHelper::step("restoring mysql database...");
             self::restoreDatabase($tmpDir);
-            ConsoleHelper::ok();
+            ConsoleHelper::ok(55);
             ConsoleHelper::step("importing Jeedom configuration...");
             self::restoreJeedomConfig($tmpDir);
-            ConsoleHelper::ok();
+            ConsoleHelper::ok(60);
             ConsoleHelper::step("restoring custom data...\n");
             self::restoreCustomData($tmpDir, LogTarget::RESTORE);
-            ConsoleHelper::ok();
+            ConsoleHelper::ok(65);
             ConsoleHelper::step("migrating data...");
             MigrationHelper::migrate(LogTarget::RESTORE);
-            ConsoleHelper::ok();
+            ConsoleHelper::ok(70);
             ConsoleHelper::step("starting nextdom system...");
             NextDomHelper::startSystem();
-            ConsoleHelper::ok();
+            ConsoleHelper::ok(75);
             ConsoleHelper::step("updating system configuration...");
             self::updateConfig();
-            ConsoleHelper::ok();
+            ConsoleHelper::ok(80);
             ConsoleHelper::step("checking system consistency...");
             ConsistencyManager::checkConsistency();
-            ConsoleHelper::ok();
+            ConsoleHelper::ok(85);
             ConsoleHelper::step("init values...");
             self::initValues();
-            ConsoleHelper::ok();
+            ConsoleHelper::ok(90);
             ConsoleHelper::step("clearing cache...");
             self::clearCache();
-            ConsoleHelper::ok();
+            ConsoleHelper::ok(95);
             ConsoleHelper::step("restoring cache...");
             self::restoreCache($tmpDir,LogTarget::RESTORE);
-            ConsoleHelper::ok();
+            ConsoleHelper::ok(100);
             FileSystemHelper::rrmdir($tmpDir);
             NextDomHelper::event("end_restore");
             ConsoleHelper::subTitle("end of restore procedure at " . date(DateFormat::FULL));
             ConsoleHelper::subTitle("elapsed time " . (strtotime('now') - $startTime));
         } catch (\Exception $e) {
             $status = "error";
-            ConsoleHelper::nok();
+            ConsoleHelper::nok(100);
             ConsoleHelper::error($e);
             LogHelper::addError(LogTarget::RESTORE, $e->getMessage());
             if (true === is_dir($tmpDir)) {
@@ -623,6 +626,7 @@ class BackupManager
             }
         }
         self::restorePublicPerms($pluginRoot);
+        ConsoleHelper::ok(40);
 
         $plugins = PluginManager::listPlugin(true);
         foreach ($plugins as $c_plugin) {

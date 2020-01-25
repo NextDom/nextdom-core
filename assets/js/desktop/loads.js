@@ -310,63 +310,6 @@ $(function () {
         });
     });
 
-    // Help modal trigger declaration
-    $("#md_pageHelp").dialog({
-        autoOpen: false,
-        modal: false,
-        closeText: '',
-        height: (jQuery(window).height() - 100),
-        width: getModalWidth(),
-        show: { effect: "blind", duration: 200 },
-        resizable: false,
-        open: function () {
-            $("body").css({overflow: 'hidden'});
-            $(this).dialog("option", "position", {my: "center", at: "center", of: window});
-        },
-        beforeClose: function (event, ui) {
-            $("body").css({overflow: 'inherit'});
-            $("#md_pageHelp").empty();
-        }
-    });
-
-    // modal trigger declaration
-    $("#md_modal").dialog({
-        autoOpen: false,
-        modal: false,
-        closeText: '',
-        height: (jQuery(window).height() - 100),
-        width: getModalWidth(),
-        show: { effect: "blind", duration: 200 },
-        resizable: false,
-        open: function () {
-            $("body").css({overflow: 'hidden'});
-            $(this).dialog("option", "position", {my: "center", at: "center", of: window});
-        },
-        beforeClose: function (event, ui) {
-            $("body").css({overflow: 'inherit'});
-            $("#md_modal").empty();
-        }
-    });
-
-    // modal bis trigger declaration
-    $("#md_modal2").dialog({
-        autoOpen: false,
-        modal: false,
-        closeText: '',
-        height: (jQuery(window).height() - 100),
-        width: getModalWidth(),
-        show: { effect: "blind", duration: 200 },
-        resizable: false,
-        open: function () {
-            $("body").css({overflow: 'hidden'});
-            $(this).dialog("option", "position", {my: "center", at: "center", of: window});
-        },
-        beforeClose: function (event, ui) {
-            $("body").css({overflow: 'inherit'});
-            $("#md_modal2").empty();
-        }
-    });
-
     // Prevent close event handler declaration to advise user for exit without saving
     $(window).bind('beforeunload', function (e) {
         if (modifyWithoutSave) {

@@ -43,6 +43,7 @@
         min-height: 0;
         pre {
             margin: 0;
+            overflow: scroll;
         }
     }
     .ui-dialog-content {
@@ -130,4 +131,12 @@
 /* Core-Adjusting */
 .modal-padding {
     padding: 15px !important;
+}
+.modal-pre-full {
+    height: calc(100% - 30px);
+    width: calc(100% - 30px);
+    position: absolute;
+    bottom: 0;
+    top: 0;
+    margin: 15px 0 !important;
 }
