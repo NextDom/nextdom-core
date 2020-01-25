@@ -18,15 +18,18 @@
 namespace NextDom\Enums;
 
 /**
- * Class CacheEngine
+ * Class UpdateStatus
+ *
+ * Type of update in database
+ *
  * @package NextDom\Enums
  */
-class SQLField extends Enum
+class UpdateType extends Enum
 {
-    const DISPLAY = 'display';
-    const ID = 'id';
-    const LINK_TYPE = 'link_type';
-    const LINK_ID = 'link_id';
-    const LOGIN = 'login';
-    const COUNT = 'count(*)';
+    const ALL = 'ALL';
+    const CORE = 'core';
+    const OTHERS = 'others';
+    const PLUGIN = 'plugin';
+    const SCRIPT = 'script';
+    const WIDGET = 'widget';
 }

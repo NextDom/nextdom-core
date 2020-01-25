@@ -49,6 +49,8 @@ use ZipArchive;
 class Update extends BaseEntity
 {
     const TABLE_NAME = NextDomObj::UPDATE;
+    var $progressInc = 0;
+    var $progressStart = 0;
 
     use ConfigurationEntity, LogicalIdEntity, NameEntity, RefreshEntity, TypeEntity;
 
@@ -156,7 +158,7 @@ class Update extends BaseEntity
                 $info = $class::downloadObject($this);
                 if ($info['path'] !== false) {
                     $tmp = $info['path'];
-                    LogHelper::addAlert(LogTarget::UPDATE, __("OK\n"));
+                    LogHelper::addAlert(LogTarget::UPDATE, __("OK" . $progressStart + (2*$progressInc) ."\n"));
 
                     if (!file_exists($tmp)) {
                         throw new CoreException(__('Impossible de trouver le fichier zip : ') . $this->getConfiguration('path'));
@@ -200,7 +202,7 @@ class Update extends BaseEntity
                         if (file_exists($cibDir)) {
                             rrmdir($cibDir);
                         }
-                        LogHelper::addAlert(LogTarget::UPDATE, __("OK\n"));
+                        LogHelper::addAlert(LogTarget::UPDATE, __("OK" . $progressStart + (3*$progressInc) ."\n"));
                     } else {
                         throw new CoreException(__('Impossible de décompresser l\'archive zip : ') . $tmp . ' => ' . Utils::getZipErrorMessage($res));
                     }
@@ -236,7 +238,7 @@ class Update extends BaseEntity
                 if (is_object($plugin)) {
                     LogHelper::addAlert(LogTarget::UPDATE, __('Action de pré-update...'));
                     $plugin->callInstallFunction('pre_update');
-                    LogHelper::addAlert(LogTarget::UPDATE, __("OK\n"));
+                    LogHelper::addAlert(LogTarget::UPDATE, __("OK" . $progressStart + $progressInc ."\n"));
                 }
             } catch (\Exception $e) {
 
@@ -269,7 +271,7 @@ class Update extends BaseEntity
             $this->setLocalVersion($informations['localVersion']);
         }
         $this->save();
-        LogHelper::addAlert(LogTarget::UPDATE, __("OK\n"));
+        LogHelper::addAlert(LogTarget::UPDATE, __("OK" . $progressStart + (4*$progressInc) ."\n"));
     }
 
     /**
@@ -476,5 +478,11 @@ class Update extends BaseEntity
         }
         $this->status = $_status;
         return $this;
+    }
+
+    public function setProgressParams($Increment,$Start)
+    {
+        $progressInc = $Increment;
+        $progressStart = $Start;
     }
 }
