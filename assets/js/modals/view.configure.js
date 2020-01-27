@@ -49,7 +49,7 @@ $('#bt_uploadImage').fileupload({
             notify('Core',data.result.result,'error');
             return;
         }
-        notify("Core","{{ Image ajoutée }}","success");
+        notify('Core',"{{ Image ajoutée }}","success");
     }
 });
 
@@ -60,7 +60,7 @@ $('#bt_removeBackgroundImage').off('click').on('click', function () {
         notify('Core',error.message,'error');
     },
     success: function () {
-        notify("Core","{{ Image supprimée }}","success");
+        notify('Core',"{{ Image supprimée }}","success");
     },
 });
 });
@@ -74,7 +74,7 @@ $('#bt_saveConfigureView').on('click', function () {
             notify('Core',error.message,'error');
         },
         success: function () {
-            notify("Core","{{ Vue sauvegardé }}","success");
+            notify('Core',"{{ Vue sauvegardé }}","success");
         },
     });
 });

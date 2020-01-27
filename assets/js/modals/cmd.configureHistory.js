@@ -120,11 +120,11 @@ $('#bt_cmdConfigureCmdHistoryApply').on('click', function () {
     nextdom.cmd.multiSave({
         cmds: cmds,
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function (data) {
             $("#table_cmdConfigureHistory").trigger("update");
-            notify("Info", "{{ Opération effectuée }}", 'success');
+            notify('Info', "{{ Opération effectuée }}", 'success');
         }
     });
 });

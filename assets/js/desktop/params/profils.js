@@ -72,7 +72,7 @@ function loadInformations() {
           nextdom.config.load({
               configuration: $('#div_Profils').getValues('.configKey:not(.noSet)')[0],
               error: function (error) {
-                  notify("Erreur", error.message, 'error');
+                  notify('Erreur', error.message, 'error');
               },
               success: function (data) {
                   $('#div_Profils').setValues(data, '.configKey');
@@ -146,7 +146,7 @@ function initEvents() {
                 nextdom.config.save({
                     configuration: config,
                     error: function (error) {
-                        notify("Erreur", error.message, 'error');
+                        notify('Erreur', error.message, 'error');
                     },
                     success: function () {
                         // Change config dynamically
@@ -156,7 +156,7 @@ function initEvents() {
                         widget_radius = config['widget::radius'];
                         modifyWithoutSave = false;
                         $(".bt_cancelModifs").hide();
-                        notify("Info", '{{Sauvegarde réussie}}', 'success');
+                        notify('Info', '{{Sauvegarde réussie}}', 'success');
                         window.location.reload(true);
                     }
                 });

@@ -68,7 +68,7 @@ $('#ul_noteList').on('click','.li_noteDisplay',function(){
         success: function (note) {
             $('#div_noteManagerDisplay .noteAttr').value('');
             $('#div_noteManagerDisplay').setValues(note, '.noteAttr');
-            taAutosize();
+            initTextAreaAutosize();
         }
     });
 });
@@ -107,4 +107,4 @@ $('#bt_noteManagerRemove').on('click',function(){
 });
 
 updateNoteList();
-taAutosize();
+initTextAreaAutosize();

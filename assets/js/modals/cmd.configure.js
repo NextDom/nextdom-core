@@ -389,7 +389,7 @@ function initEvents() {
             el.value(result.human);
             nextdom.cmd.displayActionOption(el.value(), '', function (html) {
                 el.closest('.' + type).find('.actionOptions').html(html);
-                taAutosize();
+                initTextAreaAutosize();
             });
         });
     });
@@ -401,7 +401,7 @@ function initEvents() {
             el.value(result.human);
             nextdom.cmd.displayActionOption(el.value(), '', function (html) {
                 el.closest('.' + type).find('.actionOptions').html(html);
-                taAutosize();
+                initTextAreaAutosize();
             });
         });
     });
@@ -412,7 +412,7 @@ function initEvents() {
         var el = $(this);
         nextdom.cmd.displayActionOption($(this).value(), init(expression[0].options), function (html) {
             el.closest('.' + type).find('.actionOptions').html(html);
-            taAutosize();
+            initTextAreaAutosize();
         })
     });
 
@@ -460,7 +460,7 @@ function initEvents() {
                         });
                     }
                 });
-                notify("Core", "{{Modification(s) appliquée(s) avec succès}}", "success");
+                notify('Core', "{{Modification(s) appliquée(s) avec succès}}", "success");
             });
         }).dialog('open');
     });
@@ -523,5 +523,5 @@ function addActionCmd(_action, _type, _name) {
     div += '</div>';
     $('#div_' + _type).append(div);
     $('#div_' + _type + ' .' + _type + ':last').setValues(_action, '.expressionAttr');
-    taAutosize();
+    initTextAreaAutosize();
 }

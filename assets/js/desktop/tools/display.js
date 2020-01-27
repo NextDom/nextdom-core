@@ -59,7 +59,7 @@ function loadInformations() {
         nextdom.eqLogic.setOrder({
             eqLogics: eqLogics,
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
                 $( ".eqLogicSortable" ).sortable( "cancel" );
             }
         });
@@ -81,7 +81,7 @@ function loadInformations() {
         nextdom.cmd.setOrder({
             cmds: cmds,
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             }
         });
       }
@@ -235,7 +235,7 @@ function initEvents() {
                 nextdom.eqLogic.removes({
                     eqLogics: eqLogics,
                     error: function (error) {
-                        notify("Erreur", error.message, 'error');
+                        notify('Erreur', error.message, 'error');
                     },
                     success : function(){
                         loadPage('index.php?v=d&p=display');
@@ -257,7 +257,7 @@ function initEvents() {
             eqLogics: eqLogics,
             isVisible : $(this).attr('data-value'),
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success : function(){
              loadPage('index.php?v=d&p=display');
@@ -277,7 +277,7 @@ function initEvents() {
             eqLogics: eqLogics,
             isEnable : $(this).attr('data-value'),
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success : function(){
                 loadPage('index.php?v=d&p=display');

@@ -14,9 +14,7 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 $(function () {
-  if (!$.mobile) {
     nextdom.init();
-  }
 });
 
 function getTemplate(_folder, _version, _filename, _replace) {
@@ -84,12 +82,4 @@ function getUrlVars(_key) {
   }
   vars.length = nbVars;
   return vars;
-}
-
-function initTooltips() {
-
-}
-
-function getDeviceType() {
-  // Non utilisé
 }

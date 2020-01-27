@@ -87,7 +87,7 @@ mod_insertCmd.changeObjectCmd = function (_select) {
         id: _select.value(),
         orderByName: true,
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function (eqLogics) {
             _select.closest('tr').find('.mod_insertCmdValue_eqLogic').empty();
@@ -116,7 +116,7 @@ mod_insertCmd.changeEqLogic = function (_select) {
         id: _select.value(),
         filter: mod_insertCmd.options.cmd,
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function (html) {
             _select.closest('tr').find('.mod_insertCmdValue_cmd').empty();

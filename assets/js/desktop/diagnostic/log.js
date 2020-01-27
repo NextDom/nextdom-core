@@ -109,7 +109,7 @@ function initEvents() {
       if (result) {
         nextdom.log.removeAll({
           error: function (error) {
-            notify("Core", error.message, "error");
+            notify('Core', error.message, "error");
           },
           success: function (data) {
             loadPage('index.php?v=d&p=log');

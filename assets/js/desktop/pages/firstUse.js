@@ -114,7 +114,7 @@ function initEvents() {
                 nextdom.config.load({
                     configuration: $('.firstUse-Page').getValues('.configKey:not(.noSet)')[0],
                     error: function (error) {
-                        notify("Erreur", error.message, 'error');
+                        notify('Erreur', error.message, 'error');
                     },
                     success: function (data) {
                         $('.firstUse-Page').setValues(data, '.configKey');
@@ -134,14 +134,14 @@ function initEvents() {
             nextdom.config.save({
                 configuration: config,
                 error: function (error) {
-                    notify("Erreur", error.message, 'error');
+                    notify('Erreur', error.message, 'error');
                 },
                 success: function () {
                     goToNextStep('#toStep5');
                 }
             });
         } else {
-            notify("Erreur", '{{Veuillez choisir un thème...}}', 'error');
+            notify('Erreur', '{{Veuillez choisir un thème...}}', 'error');
         }
     });
 
@@ -152,14 +152,14 @@ function initEvents() {
             nextdom.user.saveProfils({
                 profils: profil,
                 error: function (error) {
-                    notify("Erreur", error.message, 'error');
+                    notify('Erreur', error.message, 'error');
                 },
                 success: function () {
                     goToNextStep('#toStep6');
                 }
             });
         } else {
-            notify("Erreur", '{{Veuillez choisir un thème Widget...}}', 'error');
+            notify('Erreur', '{{Veuillez choisir un thème Widget...}}', 'error');
         }
     });
 

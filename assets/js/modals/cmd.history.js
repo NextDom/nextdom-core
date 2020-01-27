@@ -55,7 +55,7 @@ function addChart(_cmd_id) {
     nextdom.cmd.save({
         cmd: {id: historyId},
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function () {
             nextdom.history.drawChart({
@@ -93,7 +93,7 @@ function initHistoryTrigger() {
         nextdom.cmd.save({
             cmd: {id: historyId, display: {graphType: $(this).value()}},
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             }
         });
     });
@@ -103,7 +103,7 @@ function initHistoryTrigger() {
         nextdom.cmd.save({
             cmd: {id: historyId, display: {groupingType: $(this).value()}},
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             }
         });
     });
@@ -113,7 +113,7 @@ function initHistoryTrigger() {
         nextdom.cmd.save({
             cmd: {id: historyId, display: {graphDerive: $(this).value()}},
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             }
         });
     });
@@ -123,7 +123,7 @@ function initHistoryTrigger() {
         nextdom.cmd.save({
             cmd: {id: historyId, display: {graphStep: $(this).value()}},
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             }
         });
     });
@@ -135,7 +135,7 @@ $('#bt_validChangeDate').on('click', function () {
     nextdom.cmd.save({
         cmd: {id: historyId},
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         }
     });
 });

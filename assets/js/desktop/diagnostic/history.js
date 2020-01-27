@@ -173,7 +173,7 @@ function initHistoryTrigger() {
         nextdom.cmd.save({
             cmd: {id: lastId, display: {graphType: $(this).value()}},
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function () {
                 $('.li_history[data-cmd_id=' + lastId + '] .history').click();
@@ -196,7 +196,7 @@ function initHistoryTrigger() {
         nextdom.cmd.save({
             cmd: {id: lastId, display: {groupingType: $(this).value()}},
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function () {
                 $('.li_history[data-cmd_id=' + lastId + '] .history').click();
@@ -219,7 +219,7 @@ function initHistoryTrigger() {
         nextdom.cmd.save({
             cmd: {id: lastId, display: {graphDerive: $(this).value()}},
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function () {
                 $('.li_history[data-cmd_id=' + lastId + '] .history').click();
@@ -242,7 +242,7 @@ function initHistoryTrigger() {
         nextdom.cmd.save({
             cmd: {id: lastId, display: {graphStep: $(this).value()}},
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function () {
                 $('.li_history[data-cmd_id=' + lastId + '] .history').click();
@@ -273,10 +273,10 @@ function emptyHistory(_cmd_id, _date) {
         },
         success: function (data) {
             if (data.state != 'ok') {
-                notify("Erreur", data.result, 'error');
+                notify('Erreur', data.result, 'error');
                 return;
             }
-            notify("Info", '{{Historique supprimé avec succès}}', 'success');
+            notify('Info', '{{Historique supprimé avec succès}}', 'success');
             li = $('li[data-cmd_id=' + _cmd_id + ']');
             if (li.hasClass('active')) {
                 li.find('.history').click();

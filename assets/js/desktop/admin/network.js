@@ -45,7 +45,7 @@ function loadInformations() {
     nextdom.config.load({
         configuration: $('#network').getValues('.configKey:not(.noSet)')[0],
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function (data) {
             $('#network').setValues(data, '.configKey');
@@ -79,19 +79,19 @@ function initEvents() {
         nextdom.config.save({
             configuration: $('#network').getValues('.configKey')[0],
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function () {
                 nextdom.config.load({
                     configuration: $('#network').getValues('.configKey')[0],
                     plugin: 'core',
                     error: function (error) {
-                        notify("Erreur", error.message, 'error');
+                        notify('Erreur', error.message, 'error');
                     },
                     success: function (data) {
                         $('#network').setValues(data, '.configKey');
                         modifyWithoutSave = false;
-                        notify("Info", '{{Sauvegarde réussie}}', 'success');
+                        notify('Info', '{{Sauvegarde réussie}}', 'success');
                     }
                 });
             }
@@ -103,12 +103,12 @@ function initEvents() {
         jeedom.config.save({
             configuration: $('#network').getValues('.configKey')[0],
             error: function (error) {
-                notify("Core",error.message,"error");
+                notify('Core',error.message,"error");
                 },
             success: function () {
                 jeedom.network.restartDns({
                     error: function (error) {
-                        notify("Core",error.message,"error");
+                        notify('Core',error.message,"error");
                         },
                     success: function (data) {
                         modifyWithoutSave = false;
@@ -125,12 +125,12 @@ function initEvents() {
         jeedom.config.save({
             configuration: $('#network').getValues('.configKey')[0],
             error: function (error) {
-                notify("Core",error.message,"error");
+                notify('Core',error.message,"error");
                 },
             success: function () {
                 jeedom.network.stopDns({
                     error: function (error) {
-                        notify("Core",error.message,"error");
+                        notify('Core',error.message,"error");
                         },
                     success: function (data) {
                         modifyWithoutSave = false;

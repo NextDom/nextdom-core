@@ -89,13 +89,13 @@ function initEvents() {
         nextdom.cron.save({
             crons: $('#table_cron tbody tr').getValues('.cronAttr'),
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function () {
                 nextdom.listener.save({
                     listeners: $('#table_listener tbody tr').getValues('.listenerAttr'),
                     error: function (error) {
-                        notify("Erreur", error.message, 'error');
+                        notify('Erreur', error.message, 'error');
                     },
                     success: function () {
                         loadInformations();
@@ -111,7 +111,7 @@ function initEvents() {
         nextdom.config.save({
             configuration: {enableCron: el.attr('data-state')},
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function () {
                 if (el.attr('data-state') == 1) {
@@ -136,7 +136,7 @@ function initEvents() {
             state: 'stop',
             id: $(this).closest('tr').attr('id'),
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function () {
                 loadInformations();
@@ -150,7 +150,7 @@ function initEvents() {
             state: 'start',
             id: $(this).closest('tr').attr('id'),
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function () {
                 loadInformations();

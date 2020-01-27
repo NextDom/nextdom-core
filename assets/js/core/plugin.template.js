@@ -133,11 +133,11 @@ $(".li_eqLogic,.eqLogicDisplayCard").on('click', function () {
 });
 
 if (getUrlVars('saveSuccessFull') == 1) {
-  notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
+  notify('Info', '{{Sauvegarde effectuée avec succès}}', 'success');
 }
 
 if (getUrlVars('removeSuccessFull') == 1) {
-  notify("Info", '{{Suppression effectuée avec succès}}', 'success');
+  notify('Info', '{{Suppression effectuée avec succès}}', 'success');
 }
 
 /**************************EqLogic*********************************************/
@@ -339,7 +339,7 @@ $('#div_pageContainer').on('click', '.cmd .cmdAction[data-action=test]', functio
     var id = $(this).closest('.cmd').attr('data-cmd_id');
     nextdom.cmd.test({id: id});
   } else {
-    notify("Info", '{{Veuillez activer l\'équipement avant de tester une de ses commandes}}', 'warning');
+    notify('Info', '{{Veuillez activer l\'équipement avant de tester une de ses commandes}}', 'warning');
   }
 
 });

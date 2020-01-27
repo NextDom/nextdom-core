@@ -86,7 +86,7 @@ function initEvents() {
         notify('Erreur', error.message, 'error');
       },
       success: function () {
-        notify("Info", '{{L\'opération est réussie.}}', 'success');
+        notify('Info', '{{L\'opération est réussie.}}', 'success');
         window.location.reload();
       }
     });
@@ -369,7 +369,7 @@ function launchUpdate(updateId) {
           notify('Erreur', error.message, 'error');
         },
         success: function () {
-          notify("Info", '{{L\'opération est réussie.}}', 'success');
+          notify('Info', '{{L\'opération est réussie.}}', 'success');
           window.location.reload();
         }
       });

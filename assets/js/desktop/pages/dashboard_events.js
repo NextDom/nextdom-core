@@ -63,6 +63,20 @@ function loadInformations() {
  * Init events on the profils page
  */
 function initEvents() {
+    // Opening welcome modal if not saved "not display anymore"
+    if (typeof nextdom_Welcome != 'undefined' && isset(nextdom_Welcome) && nextdom_Welcome == 1 && getUrlVars('noWelcome') != 1) {
+        $('#md_modal').dialog({title: "{{Bienvenue dans NextDom}}"});
+        $("#md_modal").load('index.php?v=d&modal=welcome').dialog('open');
+    }
+
+    // Dashboard categorie filter button event handler declaration
+    $('.fab-filter').on('mouseleave',function() {
+        $('.blur-div').removeClass('blur');
+    });
+    $('.fab-filter').on('mouseenter',function() {
+        $('.blur-div').addClass('blur');
+    });
+
     // Dashboard edition mode button
     $('#bt_editDashboardWidgetOrder').on('click', function () {
         if ($(this).attr('data-mode') == 1) {

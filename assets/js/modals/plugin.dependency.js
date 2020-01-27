@@ -76,7 +76,7 @@ $('.launchInstallPluginDependancy').on('click',function(){
     nextdom.plugin.dependancyInstall({
         id : plugin_id,
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function (data) {
             $("#div_plugin_dependancy").load('index.php?v=d&modal=plugin.dependancy&plugin_id='+plugin_id);

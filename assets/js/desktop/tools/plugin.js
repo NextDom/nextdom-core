@@ -158,7 +158,7 @@ function initEvents() {
                 notify('Core',error.message,'error');
             },
             success: function () {
-                notify("Core",'{{Sauvegarde de la configuration des panneaux effectuée}}',"success");
+                notify('Core','{{Sauvegarde de la configuration des panneaux effectuée}}',"success");
                 modifyWithoutSave = false;
             }
         });
@@ -173,7 +173,7 @@ function initEvents() {
                 notify('Core',error.message,'error');
             },
             success: function () {
-                notify("Core",'{{Sauvegarde des fonctionalités effectuée}}',"success");
+                notify('Core','{{Sauvegarde des fonctionalités effectuée}}',"success");
                 modifyWithoutSave = false;
             }
         });
@@ -187,7 +187,7 @@ function initEvents() {
                 notify('Core',error.message,'error');
             },
             success: function () {
-                notify("Core",'{{Sauvegarde de la configuration des logs effectuée}}',"success");
+                notify('Core','{{Sauvegarde de la configuration des logs effectuée}}',"success");
                 modifyWithoutSave = false;
             }
         });
@@ -468,7 +468,7 @@ function savePluginConfig(_param) {
             notify('Core',error.message,'error');
         },
         success: function () {
-            notify("Core",'{{Sauvegarde effectuée}}',"success");
+            notify('Core','{{Sauvegarde effectuée}}',"success");
             modifyWithoutSave = false;
             var postSave = sel_plugin_id+'_postSaveConfiguration';
             if (typeof window[postSave] == 'function'){
