@@ -338,12 +338,12 @@ step6_configure_nextdom() {
       echo ""
     )
     # Add a special char
-    SECRET_KEY=$SECRET_KEY$(
-      tr </dev/urandom -dc '*&!@#' | head -c1
+    SECRET_KEY=${SECRET_KEY}$(
+      tr </dev/urandom -dc '!@#' | head -c1
       echo ""
     )
     # Add numeric char
-    SECRET_KEY=$SECRET_KEY$(
+    SECRET_KEY=${SECRET_KEY}$(
       tr </dev/urandom -dc '1234567890' | head -c1
       echo ""
     )
