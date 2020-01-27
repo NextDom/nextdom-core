@@ -53,7 +53,6 @@ class PrepareView
         $this->currentConfig = ConfigManager::byKeys([
             'language',
             'nextdom::firstUse',
-            'nextdom::Welcome',
             'notify::status',
             'notify::position',
             'notify::timeout',
@@ -178,12 +177,14 @@ class PrepareView
             $pageData[ControllerData::JS_POOL][] = '/assets/js/core/jeedom.class.js';
 
             // Then NextDom JS files
-            $pageData[ControllerData::JS_POOL][] = '/public/js/desktop/conflicts.js';
-            $pageData[ControllerData::JS_POOL][] = '/public/js/desktop/loads.js';
-            $pageData[ControllerData::JS_POOL][] = '/public/js/desktop/inits.js';
-            $pageData[ControllerData::JS_POOL][] = '/public/js/desktop/gui.js';
-            $pageData[ControllerData::JS_POOL][] = '/public/js/desktop/utils.js';
-            $pageData[ControllerData::JS_POOL][] = '/public/js/desktop/search.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/desktop/globals.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/libs/gui.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/desktop/conflicts.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/desktop/menu.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/desktop/preinit.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/desktop/postinit.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/desktop/utils.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/desktop/search.js';
             $pageData[ControllerData::JS_POOL][] = '/assets/js/desktop/jeedomCompatibility.js';
 
             // And libraries JS
@@ -437,7 +438,6 @@ class PrepareView
             'user_id' => UserManager::getStoredUser()->getId(),
             'user_isAdmin' => AuthentificationHelper::isConnectedAsAdmin(),
             'user_login' => UserManager::getStoredUser()->getLogin(),
-            'nextdom_Welcome' => $this->currentConfig['nextdom::Welcome'],
             'notify_status' => $this->currentConfig['notify::status'],
             'notify_position' => $this->currentConfig['notify::position'],
             'notify_timeout' => $this->currentConfig['notify::timeout'],

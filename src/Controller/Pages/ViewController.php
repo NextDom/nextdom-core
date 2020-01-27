@@ -82,6 +82,7 @@ class ViewController extends BaseController
         }
         $pageData[ControllerData::JS_VARS][AjaxParams::VIEW_ID] = $currentView->getId();
         $pageData[ControllerData::CSS_POOL][] = '/public/css/pages/view.css';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/libs/widget.js';
         $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/pages/view.js';
 
         return Render::getInstance()->get('/desktop/pages/view.html.twig', $pageData);

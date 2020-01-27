@@ -167,7 +167,7 @@ nextdom.history.drawChart = function (queryParams) {
               href: '',
             },
             exporting: {
-              enabled: queryParams.enableExport || ($.mobile) ? false : true
+              enabled: queryParams.enableExport || true
             },
             tooltip: {
               pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b><br/>',
@@ -335,7 +335,7 @@ nextdom.history.drawChart = function (queryParams) {
               }
             },
             exporting: {
-              enabled: queryParams.enableExport || ($.mobile) ? false : true
+              enabled: queryParams.enableExport || true
             },
             rangeSelector: {
               buttons: [{

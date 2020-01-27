@@ -37,7 +37,7 @@ function initEvents() {
         filter_type : filterTypeGraph,
         filter_id :  filterIdGraph ,
         error: function(error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success : function(data){
             for(var i in data.node){

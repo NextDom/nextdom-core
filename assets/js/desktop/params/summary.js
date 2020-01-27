@@ -97,10 +97,10 @@ function initEvents() {
             },
             success: function (data) {
                 if (data.state != 'ok') {
-                    notify("Erreur", data.result, 'error');
+                    notify('Erreur', data.result, 'error');
                     return;
                 }
-                notify("Info", '{{summary.virtual_cmd_succed}}', 'success');
+                notify('Info', '{{summary.virtual_cmd_succed}}', 'success');
             }
         });
     });
@@ -127,7 +127,7 @@ function printObjectSummary() {
         },
         success: function (data) {
             if (data.state != 'ok') {
-                notify("Erreur", data.result, 'error');
+                notify('Erreur', data.result, 'error');
                 return;
             }
             $('#table_objectSummary tbody').empty();
@@ -233,13 +233,13 @@ function saveObjectSummary() {
         },
         success: function (data) {
             if (data.state != 'ok') {
-                notify("Erreur", data.result, 'error');
+                notify('Erreur', data.result, 'error');
                 return;
             }
             printObjectSummary();
             modifyWithoutSave = false;
             $(".bt_cancelModifs").hide();
-            notify("Info", '{{Sauvegarde réussie}}', 'success');
+            notify('Info', '{{Sauvegarde réussie}}', 'success');
         }
     });
 }

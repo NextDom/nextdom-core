@@ -49,3 +49,7 @@ function fixLoadingHide() {
     $.hideLoading();
   }
 }
+
+function taAutosize() {
+  initTextAreaAutosize()
+}

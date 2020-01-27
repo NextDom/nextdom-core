@@ -45,7 +45,7 @@ function loadInformations() {
     nextdom.config.load({
         configuration: $('#services').getValues('.configKey:not(.noSet)')[0],
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function (data) {
             $('#services').setValues(data, '.configKey');
@@ -79,19 +79,19 @@ function initEvents() {
         nextdom.config.save({
             configuration: config,
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function () {
                 nextdom.config.load({
                     configuration: $('#services').getValues('.configKey:not(.noSet)')[0],
                     error: function (error) {
-                        notify("Erreur", error.message, 'error');
+                        notify('Erreur', error.message, 'error');
                     },
                     success: function (data) {
                         $('#services').setValues(data, '.configKey');
                         modifyWithoutSave = false;
                         $(".bt_cancelModifs").hide();
-                        notify("Info", '{{Sauvegarde réussie}}', 'success');
+                        notify('Info', '{{Sauvegarde réussie}}', 'success');
                     }
                 });
             }
@@ -104,13 +104,13 @@ function initEvents() {
         nextdom.config.save({
             configuration: $('#services').getValues('.configKey')[0],
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function () {
                 nextdom.config.load({
                     configuration: $('#services').getValues('.configKey:not(.noSet)')[0],
                     error: function (error) {
-                        notify("Erreur", error.message, 'error');
+                        notify('Erreur', error.message, 'error');
                     },
                     success: function (data) {
                         $('#services').setValues(data, '.configKey');
@@ -118,10 +118,10 @@ function initEvents() {
                         nextdom.repo.test({
                             repo: repo,
                             error: function (error) {
-                                notify("Erreur", error.message, 'error');
+                                notify('Erreur', error.message, 'error');
                             },
                             success: function (data) {
-                                notify("Info", '{{Test réussi}}', 'success');
+                                notify('Info', '{{Test réussi}}', 'success');
                             }
                         });
                     }

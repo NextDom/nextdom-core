@@ -45,7 +45,7 @@ function loadInformations() {
     nextdom.config.load({
         configuration: $('#cache').getValues('.configKey:not(.noSet)')[0],
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function (data) {
             $('#cache').setValues(data, '.configKey');
@@ -77,20 +77,20 @@ function initEvents() {
         nextdom.config.save({
             configuration: $('#cache').getValues('.configKey')[0],
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function () {
                 nextdom.config.load({
                     configuration: $('#cache').getValues('.configKey')[0],
                     plugin: 'core',
                     error: function (error) {
-                        notify("Erreur", error.message, 'error');
+                        notify('Erreur', error.message, 'error');
                     },
                     success: function (data) {
                         $('#cache').setValues(data, '.configKey');
                         modifyWithoutSave = false;
                         $(".bt_cancelModifs").hide();
-                        notify("Info", '{{Sauvegarde réussie}}', 'success');
+                        notify('Info', '{{Sauvegarde réussie}}', 'success');
                     }
                 });
             }
@@ -120,11 +120,11 @@ function initEvents() {
 function flushCache() {
     nextdom.cache.flush({
         error: function (error) {
-            notify("Erreur", data.result, 'error');
+            notify('Erreur', data.result, 'error');
         },
         success: function (data) {
             updateCacheStats();
-            notify("Info", '{{Cache vidé}}', 'success');
+            notify('Info', '{{Cache vidé}}', 'success');
         }
     });
 }
@@ -135,11 +135,11 @@ function flushCache() {
 function cleanCache() {
     nextdom.cache.clean({
         error: function (error) {
-            notify("Erreur", data.result, 'error');
+            notify('Erreur', data.result, 'error');
         },
         success: function (data) {
             updateCacheStats();
-            notify("Info", '{{Cache nettoyé}}', 'success');
+            notify('Info', '{{Cache nettoyé}}', 'success');
         }
     });
 }
@@ -150,7 +150,7 @@ function cleanCache() {
 function updateCacheStats(){
     nextdom.cache.stats({
         error: function (error) {
-            notify("Erreur", data.result, 'error');
+            notify('Erreur', data.result, 'error');
         },
         success: function (data) {
             $('#span_cacheObject').html(data.count);

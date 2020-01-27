@@ -87,7 +87,7 @@ function initEvents() {
                 nextdom.object.save({
                     object: {name: result, isVisible: 1},
                     error: function (error) {
-                        notify("Erreur", error.message, 'error');
+                        notify('Erreur', error.message, 'error');
                     },
                     success: function (data) {
                         modifyWithoutSave = false;
@@ -119,12 +119,12 @@ function initEvents() {
                 nextdom.object.remove({
                     id: object.closest(".objectDisplayCard").attr("data-object_id"),
                     error: function (error) {
-                        notify("Erreur", error.message, 'error');
+                        notify('Erreur', error.message, 'error');
                     },
                     success: function () {
                         modifyWithoutSave = false;
                         loadPage('index.php?v=d&p=object');
-                        notify("Info", '{{Suppression effectuée avec succès}}', 'success');
+                        notify('Info', '{{Suppression effectuée avec succès}}', 'success');
                     }
                 });
             }
@@ -143,10 +143,10 @@ function initEvents() {
         nextdom.object.removeImage({
             view: $('.objectAttr[data-l1key=id]').value(),
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function () {
-                notify("Info", '{{Image supprimée}}', 'success');
+                notify('Info', '{{Image supprimée}}', 'success');
             },
         });
     });
@@ -172,12 +172,12 @@ function initEvents() {
         nextdom.object.save({
             object: object,
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function (data) {
                 modifyWithoutSave = false;
                 $(".bt_cancelModifs").hide();
-                notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
+                notify('Info', '{{Sauvegarde effectuée avec succès}}', 'success');
             }
         });
         $('#bt_returnToThumbnailDisplay').show();
@@ -263,10 +263,10 @@ function loadObjectConfiguration(_id){
         dataType: 'json',
         done: function (e, data) {
             if (data.result.state != 'ok') {
-                notify("Erreur", data.result.result, 'error');
+                notify('Erreur', data.result.result, 'error');
                 return;
             }
-            notify("Info", '{{Image ajoutée}}', 'success');
+            notify('Info', '{{Image ajoutée}}', 'success');
         }
     });
     $(".objectDisplayCard").removeClass('active');
@@ -278,7 +278,7 @@ function loadObjectConfiguration(_id){
         id: _id,
         cache: false,
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function (data) {
             $('#objectId').value(_id);

@@ -43,7 +43,7 @@ function initEvents() {
                     id: plugin_id,
                     forceRestart: 1,
                     error: function (error) {
-                        notify("Erreur", error.message, 'error');
+                        notify('Erreur', error.message, 'error');
                         refreshDeamonInfo();
                         timeout_refreshDeamonInfo = setTimeout(refreshDeamonInfo, 5000);
                     },
@@ -61,7 +61,7 @@ function initEvents() {
         nextdom.plugin.deamonStop({
             id: plugin_id,
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
                 refreshDeamonInfo();
                 timeout_refreshDeamonInfo = setTimeout(refreshDeamonInfo, 5000);
             },
@@ -79,7 +79,7 @@ function initEvents() {
             id: plugin_id,
             mode: mode,
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
                 refreshDeamonInfo();
                 timeout_refreshDeamonInfo = setTimeout(refreshDeamonInfo, 5000);
             },

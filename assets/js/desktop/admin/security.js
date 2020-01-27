@@ -45,7 +45,7 @@ function loadInformations() {
     nextdom.config.load({
         configuration: $('#security').getValues('.configKey:not(.noSet)')[0],
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function (data) {
             $('#security').setValues(data, '.configKey');
@@ -77,20 +77,20 @@ function initEvents() {
         nextdom.config.save({
             configuration: $('#security').getValues('.configKey')[0],
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function () {
                 nextdom.config.load({
                     configuration: $('#security').getValues('.configKey')[0],
                     plugin: 'core',
                     error: function (error) {
-                        notify("Erreur", error.message, 'error');
+                        notify('Erreur', error.message, 'error');
                     },
                     success: function (data) {
                         $('#security').setValues(data, '.configKey');
                         modifyWithoutSave = false;
                         $(".bt_cancelModifs").hide();
-                        notify("Info", '{{Sauvegarde réussie}}', 'success');
+                        notify('Info', '{{Sauvegarde réussie}}', 'success');
                     }
                 });
             }
@@ -110,7 +110,7 @@ function initEvents() {
     $('#bt_removeBanIp').on('click',function(){
         nextdom.user.removeBanIp({
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function (data) {
                 modifyWithoutSave = false;
@@ -124,7 +124,7 @@ function initEvents() {
         nextdom.config.save({
             configuration: $('#security').getValues('.configKey')[0],
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function () {
                 modifyWithoutSave = false;
@@ -141,10 +141,10 @@ function initEvents() {
                     },
                     success: function (data) {
                         if (data.state != 'ok') {
-                            notify("Erreur", '{{Connexion échouée :}} ' + data.result, 'error');
+                            notify('Erreur', '{{Connexion échouée :}} ' + data.result, 'error');
                             return;
                         }
-                        notify("Info", '{{Connexion réussie}}', 'success');
+                        notify('Info', '{{Connexion réussie}}', 'success');
                     }
                 });
             }

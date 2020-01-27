@@ -45,7 +45,7 @@ function loadInformations() {
     nextdom.config.load({
         configuration: $('#report_config').getValues('.configKey:not(.noSet)')[0],
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function (data) {
             $('#report_config').setValues(data, '.configKey');
@@ -77,19 +77,19 @@ function initEvents() {
       nextdom.config.save({
           configuration: $('#report_config').getValues('.configKey')[0],
           error: function (error) {
-              notify("Erreur", error.message, 'error');
+              notify('Erreur', error.message, 'error');
           },
           success: function () {
               nextdom.config.load({
                   configuration: $('#report_config').getValues('.configKey')[0],
                   plugin: 'core',
                   error: function (error) {
-                      notify("Erreur", error.message, 'error');
+                      notify('Erreur', error.message, 'error');
                   },
                   success: function (data) {
                       $('#report_config').setValues(data, '.configKey');
                       modifyWithoutSave = false;
-                      notify("Info", '{{Sauvegarde réussie}}', 'success');
+                      notify('Info', '{{Sauvegarde réussie}}', 'success');
                   }
               });
           }

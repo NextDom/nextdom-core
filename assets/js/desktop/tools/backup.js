@@ -45,7 +45,7 @@ function loadInformations() {
     nextdom.config.load({
         configuration: $('#backup').getValues('.configKey:not(.noSet)')[0],
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function (data) {
             $('#backup').setValues(data, '.configKey');
@@ -81,20 +81,20 @@ function initEvents() {
         nextdom.config.save({
             configuration: $('#backup').getValues('.configKey')[0],
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function () {
                 nextdom.config.load({
                     configuration: $('#backup').getValues('.configKey')[0],
                     plugin: 'core',
                     error: function (error) {
-                        notify("Erreur", error.message, 'error');
+                        notify('Erreur', error.message, 'error');
                     },
                     success: function (data) {
                         $('#backup').setValues(data, '.configKey');
                         modifyWithoutSave = false;
                         $(".bt_cancelModifs").hide();
-                        notify("Info", '{{Sauvegarde réussie}}', 'success');
+                        notify('Info', '{{Sauvegarde réussie}}', 'success');
                     }
                 });
             }
@@ -136,7 +136,7 @@ function initEvents() {
                 $("#md_backupInfo").dialog('open');
                 nextdom.backup.backup({
                     error: function (error) {
-                        notify("Erreur", error.message, 'error');
+                        notify('Erreur', error.message, 'error');
                     },
                     success: function () {
                         getNextDomLog(1, 'backup');
@@ -161,7 +161,7 @@ function initEvents() {
                 nextdom.backup.restoreLocal({
                     backup: $('#sel_restoreBackup').value(),
                     error: function (error) {
-                        notify("Erreur", error.message, 'error');
+                        notify('Erreur', error.message, 'error');
                     },
                     success: function () {
                         getNextDomLog(1, 'restore');
@@ -179,11 +179,11 @@ function initEvents() {
                 nextdom.backup.remove({
                     backup: $('#sel_restoreBackup').value(),
                     error: function (error) {
-                        notify("Erreur", error.message, 'error');
+                        notify('Erreur', error.message, 'error');
                     },
                     success: function () {
                         updateListBackup();
-                        notify("Info", '{{Sauvegarde supprimée avec succès}}', 'success');
+                        notify('Info', '{{Sauvegarde supprimée avec succès}}', 'success');
                     }
                 });
             }
@@ -208,11 +208,11 @@ function initEvents() {
         },
         done: function (e, data) {
             if (data.result.state != 'ok') {
-                notify("Erreur", data.result.result, 'error');
+                notify('Erreur', data.result.result, 'error');
                 return;
             }
             updateListBackup();
-            notify("Info", '{{Fichier(s) ajouté(s) avec succès}}', 'success');
+            notify('Info', '{{Fichier(s) ajouté(s) avec succès}}', 'success');
         },
         always: function (e, data) {
           $('#bt_uploadBackup').parent().removeClass('disabled');
@@ -236,7 +236,7 @@ function initEvents() {
                     backup: $('#sel_restoreRepoNextDom').value(),
                     repo: el.attr('data-repo'),
                     error: function (error) {
-                        notify("Erreur", error.message, 'error');
+                        notify('Erreur', error.message, 'error');
                     },
                     success: function () {
                       $('#md_backupInfo').dialog({title: "{{Avancement de la restauration}}"});
@@ -279,19 +279,19 @@ function getNextDomLog(_autoUpdate, _log) {
                     if(data.result[i].indexOf('Closing with success') != -1){
                         switchNotify(1);
                         nextdom.user.refresh();
-                        notify("Info", '{{L\'opération est réussie}}', 'success');
+                        notify('Info', '{{L\'opération est réussie}}', 'success');
                         _autoUpdate = 0;
                     }
                     if(data.result[i].indexOf('Closing with error') != -1){
                         switchNotify(1);
                         nextdom.user.refresh();
-                        notify("Erreur", '{{L\'opération a échoué}}', 'error');
+                        notify('Erreur', '{{L\'opération a échoué}}', 'error');
                         _autoUpdate = 0;
                     }
                     if(data.result[i].indexOf('Fatal error') != -1){
                         switchNotify(1);
                         nextdom.user.refresh();
-                        notify("Erreur", '{{L\'opération a échoué}}', 'error');
+                        notify('Erreur', '{{L\'opération a échoué}}', 'error');
                         _autoUpdate = 0;
                     }
                 }
@@ -324,7 +324,7 @@ function getNextDomLog(_autoUpdate, _log) {
 function updateListBackup() {
     nextdom.backup.list({
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function (data) {
             var options = '';
@@ -341,7 +341,7 @@ function updateRepoListBackup(_repo) {
         repo : _repo,
         global : false,
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function (data) {
             var options = '';

@@ -323,7 +323,7 @@ function iconDownload() {
             success: function (iconData, status) {
                 // Test si l'appel a échoué
                 if (iconData.state !== 'ok' || status !== 'success') {
-                    notify("Erreur", iconData.result, 'error');
+                    notify('Erreur', iconData.result, 'error');
                 }
                 else {
                     var img = new Image();
@@ -451,7 +451,7 @@ function ajaxQuery(url, data, callbackFunc) {
         success: function (data, status) {
             // Test si l'appel a échoué
             if (data.state !== 'ok' || status !== 'success') {
-                notify("Erreur", data.result, 'error');
+                notify('Erreur', data.result, 'error');
             }
             else {
                 if (typeof callbackFunc !== "undefined") {

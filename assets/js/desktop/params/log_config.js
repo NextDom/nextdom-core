@@ -45,7 +45,7 @@ function loadInformations() {
     nextdom.config.load({
         configuration: $('#log_config').getValues('.configKey:not(.noSet)')[0],
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function (data) {
             $('#log_config').setValues(data, '.configKey');
@@ -80,20 +80,20 @@ function initEvents() {
         nextdom.config.save({
             configuration: config,
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function () {
                 nextdom.config.load({
                     configuration: $('#log_config').getValues('.configKey')[0],
                     plugin: 'core',
                     error: function (error) {
-                        notify("Erreur", error.message, 'error');
+                        notify('Erreur', error.message, 'error');
                     },
                     success: function (data) {
                         $('#log_config').setValues(data, '.configKey');
                         modifyWithoutSave = false;
                         $(".bt_cancelModifs").hide();
-                        notify("Info", '{{Sauvegarde réussie}}', 'success');
+                        notify('Info', '{{Sauvegarde réussie}}', 'success');
                     }
                 });
             }
@@ -125,7 +125,7 @@ function initEvents() {
         var el = $(this);
         nextdom.cmd.displayActionOption($(this).value(), init(expression[0].options), function (html) {
             el.closest('.actionOnMessage').find('.actionOptions').html(html);
-            taAutosize();
+            initTextAreaAutosize();
         })
     });
 
@@ -133,10 +133,10 @@ function initEvents() {
     $('#bt_removeTimelineEvent').on('click',function(){
         nextdom.removeTimelineEvents({
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function (data) {
-                notify("Info", '{{Evènement de la timeline supprimé avec succès}}', 'success');
+                notify('Info', '{{Evènement de la timeline supprimé avec succès}}', 'success');
             }
         });
     });
@@ -156,7 +156,7 @@ function initEvents() {
           el.value(result.human);
           nextdom.cmd.displayActionOption(el.value(), '', function (html) {
             el.closest('.actionOnMessage').find('.actionOptions').html(html);
-            taAutosize();
+            initTextAreaAutosize();
         });
       });
     });
@@ -166,7 +166,7 @@ function initEvents() {
             el.value(result.human);
             nextdom.cmd.displayActionOption(el.value(), '', function (html) {
                 el.closest('.actionOnMessage').find('.actionOptions').html(html);
-                taAutosize();
+                initTextAreaAutosize();
             });
         });
     });
@@ -180,7 +180,7 @@ function loadActionOnMessage(){
     nextdom.config.load({
         configuration: 'actionOnMessage',
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function (data) {
             if(data == ''){
@@ -194,13 +194,13 @@ function loadActionOnMessage(){
                 params : actionOptions,
                 async : false,
                 error: function (error) {
-                    notify("Erreur", error.message, 'error');
+                    notify('Erreur', error.message, 'error');
                 },
                 success : function(data){
                     for(var i in data){
                         $('#'+data[i].id).append(data[i].html.html);
                     }
-                    taAutosize();
+                    initTextAreaAutosize();
                 }
             });
         }

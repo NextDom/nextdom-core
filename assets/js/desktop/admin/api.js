@@ -45,7 +45,7 @@ function loadInformations() {
     nextdom.config.load({
         configuration: $('#API').getValues('.configKey:not(.noSet)')[0],
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function (data) {
             $('#API').setValues(data, '.configKey');
@@ -77,19 +77,19 @@ function initEvents() {
         nextdom.config.save({
             configuration: $('#API').getValues('.configKey')[0],
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function () {
                 nextdom.config.load({
                     configuration: $('#API').getValues('.configKey')[0],
                     plugin: 'core',
                     error: function (error) {
-                        notify("Erreur", error.message, 'error');
+                        notify('Erreur', error.message, 'error');
                     },
                     success: function (data) {
                         $('#API').setValues(data, '.configKey');
                         modifyWithoutSave = false;
-                        notify("Info", '{{Sauvegarde réussie}}', 'success');
+                        notify('Info', '{{Sauvegarde réussie}}', 'success');
                     }
                 });
             }
@@ -115,7 +115,7 @@ function initEvents() {
                   },
                   success: function (data) {
                       if (data.state != 'ok') {
-                          notify("Erreur", data.result, 'error');
+                          notify('Erreur', data.result, 'error');
                           return;
                       }
                       el.closest('.mix-group').find('.span_apikey').value(data.result);
@@ -140,6 +140,6 @@ function initEvents() {
            window.getSelection().addRange(selectedRange);
         }
         document.execCommand('copy');
-        notify("Info", '{{Clé copiée !}}', 'success');
+        notify('Info', '{{Clé copiée !}}', 'success');
     });
 }

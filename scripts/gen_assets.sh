@@ -151,10 +151,12 @@ function gen_js {
            assets/js/core/note.class.js \
            assets/js/core/listener.class.js \
            assets/js/core/jeedom.class.js \
+           assets/js/desktop/globals.js \
+           assets/js/libs/gui.js \
            assets/js/desktop/conflicts.js \
-           assets/js/desktop/loads.js \
-           assets/js/desktop/inits.js \
-           assets/js/desktop/gui.js \
+           assets/js/desktop/menu.js \
+           assets/js/desktop/preinit.js \
+           assets/js/desktop/postinit.js \
            assets/js/desktop/utils.js \
            assets/js/desktop/search.js \
            assets/js/desktop/jeedomCompatibility.js \
@@ -226,6 +228,7 @@ function gen_js {
                    js/desktop/tools \
                    js/desktop/tools/markets \
                    js/desktop/tools/osdb \
+                   js/libs \
                    js/modals \
                    js/factory \
                    js/factory/elements)

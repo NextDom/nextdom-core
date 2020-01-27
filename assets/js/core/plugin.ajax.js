@@ -304,7 +304,7 @@ $('.eqLogicAction[data-action=save]').on('click', function () {
         updateDisplayPlugin(function () {
           $('body .li_eqLogic[data-eqLogic_id="' + data.id + '"]').click();
         });
-      notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
+      notify('Info', '{{Sauvegarde effectuée avec succès}}', 'success');
     }
   });
   return false;
@@ -339,7 +339,7 @@ $('.eqLogicAction[data-action=remove]').on('click', function () {
                 $('.eqLogicThumbnailContainer').packery();
               });
             window.history.replaceState('', '', url);
-            notify("Info", '{{Suppression effectuée avec succès}}', 'success');
+            notify('Info', '{{Suppression effectuée avec succès}}', 'success');
             modifyWithoutSave = false;
           }
         });
@@ -375,7 +375,7 @@ $('body').on('click', '.eqLogicAction[data-action=add]', function () {
               $('body .li_eqLogic[data-eqLogic_id="' + _data.id + '"]').click();
             });
           url += '&id=' + _data.id;
-          notify("Info", '{{Création effectuée avec succès}}', 'success');
+          notify('Info', '{{Création effectuée avec succès}}', 'success');
           window.history.replaceState('', '', url);
           modifyWithoutSave = false;
         }

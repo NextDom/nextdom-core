@@ -86,6 +86,7 @@ class DashBoardController extends BaseController
         $pageData[ControllerData::JS_VARS]['SEL_OBJECT_ID'] = $currentJeeObjectId;
         $pageData[ControllerData::JS_VARS]['rootObjectId'] = $currentJeeObjectId;
         $pageData[ControllerData::JS_VARS]['serverTZoffsetMin'] = Utils::getTZoffsetMin();
+        $pageData[ControllerData::JS_VARS]['nextdom_Welcome'] = ConfigManager::byKey('nextdom::Welcome', 'core', 1);
 
         $pageData['dashboardCategory'] = Utils::init(AjaxParams::CATEGORY, Common::ALL);
         $pageData['dashboardSummary'] = Utils::init(AjaxParams::SUMMARY, Common::ALL);
@@ -97,6 +98,7 @@ class DashBoardController extends BaseController
         $pageData['dashboardObjectListMenu'] = self::getObjectsListMenu($currentJeeObjectId);
         $pageData['dashboardChildrenObjects'] = JeeObjectManager::buildTree($currentJeeObject);
 
+        $pageData[ControllerData::JS_POOL][] = '/public/js/libs/widget.js';
         $pageData[ControllerData::JS_POOL][] = '/public/js/desktop/pages/dashboard.js';
         $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/pages/dashboard_events.js';
         // A remettre une fois mise sous forme de thème

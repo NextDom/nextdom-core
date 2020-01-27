@@ -46,7 +46,7 @@ function loadInformations() {
         $('#ul_noteList').css("overflow-y", "auto");
         $('#ul_noteList').css("padding-right", "5px");
         updateNoteList();
-        taAutosize();
+        initTextAreaAutosize();
     });
 }
 
@@ -179,7 +179,7 @@ function getNoteDisplay(_id) {
             $('#div_noteManagerDisplay').setValues(note, '.noteAttr');
             modifyWithoutSave = false;
             $(".bt_cancelModifs").hide();
-            taAutosize();
+            initTextAreaAutosize();
         }
     });
 }

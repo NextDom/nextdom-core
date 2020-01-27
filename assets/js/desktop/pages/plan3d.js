@@ -30,6 +30,20 @@
 * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * Convert an hex color to RGB color
+ *
+ * @param hex color in HEX format
+ */
+function hexToRgb(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+}
+
 if (getUrlVars('fullscreen') == '1') {
     $('#div_colPlan3d').removeClass('col-lg-10').addClass('col-lg-12');
     $('#div_colMenu').remove();
@@ -66,7 +80,7 @@ $('#bt_showAllObject').on('click',function(){
     nextdom.plan3d.byplan3dHeader({
         plan3dHeader_id : plan3dHeader_id,
         error : function(error){
-            notify("Core",error.message,"error");
+            notify('Core',error.message,"error");
             },
         success : function(data){
             for(var i in data){
@@ -90,7 +104,7 @@ $('#bt_plan3dHeaderAdd').on('click',function(){
             nextdom.plan3d.saveHeader({
                 plan3dHeader: {name: result},
                 error: function (error) {
-                    notify("Core",error.message,"error");
+                    notify('Core',error.message,"error");
                     },
                 success: function (data) {
                     window.location = 'index.php?v=d&p=plan3d&plan3d_id=' + data.id;
@@ -166,7 +180,7 @@ window.addEventListener('click', function(){
             name: intersects[0].object.name,
             plan3dHeader_id: plan3dHeader_id,
             error: function (request, status, error) {
-                notify("Core",error.message,"error");
+                notify('Core',error.message,"error");
                 },
             success: function (data) {
                 if(data.html){
@@ -185,7 +199,7 @@ function display3d(_id){
     nextdom.plan3d.getHeader({
         id : _id,
         error : function(error){
-            notify("Core",error.message,"error");
+            notify('Core',error.message,"error");
             },
         success : function(data){
             if(!data.configuration || !data.configuration.path || !data.configuration.objfile){
@@ -300,7 +314,7 @@ function add3dObjects(_id){
     nextdom.plan3d.byplan3dHeader({
         plan3dHeader_id : _id,
         error : function(error){
-            notify("Core",error.message,"error");
+            notify('Core',error.message,"error");
             },
         success : function(data){
             for(var i in data){

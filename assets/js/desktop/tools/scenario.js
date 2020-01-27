@@ -302,7 +302,7 @@ function initGeneralFormEvents() {
                 },
                 success: function (data) {
                     if (data.state !== 'ok') {
-                        notify("Erreur", data.result, 'error');
+                        notify('Erreur', data.result, 'error');
                         return;
                     }
                     response(data.result);
@@ -378,7 +378,7 @@ function initGeneralFormEvents() {
     $('#bt_scenarioTab').off('click').on('click', function () {
         setTimeout(function () {
             setEditor();
-            taAutosize();
+            initTextAreaAutosize();
         }, 100);
     });
 
@@ -594,7 +594,7 @@ function initScenarioEditorEvents() {
             nextdom.cmd.displayActionOption(expression.find('.expressionAttr[data-l1key=expression]').value(), '', function (html) {
                 clearRedoStack();
                 expression.find('.expressionOptions').html(html);
-                taAutosize();
+                initTextAreaAutosize();
                 setUndoStack();
             });
         });
@@ -609,7 +609,7 @@ function initScenarioEditorEvents() {
                 currentExpression = el.value();
                 nextdom.cmd.displayActionOption(el.value(), init(expression[0].options), function (html) {
                     el.closest('.expression').find('.expressionOptions').html(html);
-                    taAutosize();
+                    initTextAreaAutosize();
                 });
             }
         }
@@ -635,7 +635,7 @@ function initScenarioEditorEvents() {
             var expression = el.closest('.expression').getValues('.expressionAttr');
             nextdom.cmd.displayActionOption(el.value(), init(expression[0].options), function (html) {
                 el.closest('.expression').find('.expressionOptions').html(html);
-                taAutosize();
+                initTextAreaAutosize();
             });
         }
     });
@@ -891,7 +891,7 @@ function toggleAllScenariosState() {
             enableScenario: $("#bt_changeAllScenarioState").attr('data-state')
         },
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function () {
             loadPage('index.php?v=d&p=scenario');
@@ -908,7 +908,7 @@ function addScenario() {
             nextdom.scenario.save({
                 scenario: {name: result},
                 error: function (error) {
-                    notify("Core",error.message,"error");
+                    notify('Core',error.message,"error");
                     },
                 success: function (data) {
                     modifyWithoutSave = false;
@@ -932,13 +932,13 @@ function deleteScenario() {
             nextdom.scenario.remove({
                 id: $('.scenarioAttr[data-l1key=id]').value(),
                 error: function (error) {
-                    notify("Erreur", error.message, 'error');
+                    notify('Erreur', error.message, 'error');
                 },
                 success: function () {
                     modifyWithoutSave = false;
                     resetUndo();
                     loadPage('index.php?v=d&p=scenario');
-                    notify("Info", '{{Suppression effectuée avec succès}}', 'success');
+                    notify('Info', '{{Suppression effectuée avec succès}}', 'success');
                 }
             });
         }
@@ -953,10 +953,10 @@ function testScenario() {
         id: $('.scenarioAttr[data-l1key=id]').value(),
         state: 'start',
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function () {
-            notify("Info", '{{Lancement du scénario réussi}}', 'success');
+            notify('Info', '{{Lancement du scénario réussi}}', 'success');
         }
     });
 }
@@ -971,7 +971,7 @@ function copyScenario() {
                 id: $('.scenarioAttr[data-l1key=id]').value(),
                 name: result,
                 error: function (error) {
-                    notify("Erreur", error.message, 'error');
+                    notify('Erreur', error.message, 'error');
                 },
                 success: function (data) {
                     $('#scenarioThumbnailDisplay').hide();
@@ -991,10 +991,10 @@ function stopScenario() {
         id: $('.scenarioAttr[data-l1key=id]').value(),
         state: 'stop',
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function () {
-            notify("Info", '{{Arrêt du scénario réussi}}', 'success');
+            notify('Info', '{{Arrêt du scénario réussi}}', 'success');
         }
     });
 }
@@ -1135,7 +1135,7 @@ function printScenario(scenarioId) {
     nextdom.scenario.get({
         id: scenarioId,
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function (data) {
             colorIndex = 0;
@@ -1209,14 +1209,14 @@ function printScenario(scenarioId) {
                 params: actionOptions,
                 async: false,
                 error: function (error) {
-                    notify("Erreur", error.message, 'error');
+                    notify('Erreur', error.message, 'error');
                 },
                 success: function (data) {
                     for (var i in data) {
                         $('#' + data[i].id).append(data[i].html.html);
                     }
                     $('#div_editScenario').show();
-                    taAutosize();
+                    initTextAreaAutosize();
                     setAutocomplete();
                     updateElseToggle();
                     setEditor();
@@ -1288,13 +1288,13 @@ function saveScenario() {
     nextdom.scenario.save({
         scenario: scenario,
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function (data) {
             modifyWithoutSave = false;
             resetUndo();
             $(".bt_cancelModifs").hide();
-            notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
+            notify('Info', '{{Sauvegarde effectuée avec succès}}', 'success');
         }
     });
     $('#bt_scenarioThumbnailDisplay').show();
@@ -2228,7 +2228,7 @@ function selectCmdExpression(elementData, expressionElement) {
             nextdom.cmd.displayActionOption(expressionElement.find('.expressionAttr[data-l1key=expression]').value(), '', function (html) {
                 clearRedoStack();
                 expressionElement.find('.expressionOptions').html(html);
-                taAutosize();
+                initTextAreaAutosize();
                 setUndoStack();
             });
         }

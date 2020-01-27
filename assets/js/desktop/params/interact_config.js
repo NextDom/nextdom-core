@@ -47,7 +47,7 @@ function loadInformations() {
     nextdom.config.load({
         configuration: $('#interact_config').getValues('.configKey:not(.noSet)')[0],
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function (data) {
             $('#interact_config').setValues(data, '.configKey');
@@ -80,20 +80,20 @@ function initEvents() {
         nextdom.config.save({
             configuration: $('#interact_config').getValues('.configKey')[0],
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function () {
                 nextdom.config.load({
                     configuration: $('#interact_config').getValues('.configKey')[0],
                     plugin: 'core',
                     error: function (error) {
-                        notify("Erreur", error.message, 'error');
+                        notify('Erreur', error.message, 'error');
                     },
                     success: function (data) {
                         $('#interact_config').setValues(data, '.configKey');
                         modifyWithoutSave = false;
                         $(".bt_cancelModifs").hide();
-                        notify("Info", '{{Sauvegarde réussie}}', 'success');
+                        notify('Info', '{{Sauvegarde réussie}}', 'success');
                     }
                 });
             }
@@ -132,7 +132,7 @@ function printConvertColor() {
         },
         success: function (data) {
             if (data.state != 'ok') {
-                notify("Erreur", data.result, 'error');
+                notify('Erreur', data.result, 'error');
                 return;
             }
             $('#table_convertColor tbody').empty();
@@ -193,7 +193,7 @@ function saveConvertColor() {
         },
         success: function (data) {
             if (data.state != 'ok') {
-                notify("Erreur", data.result, 'error');
+                notify('Erreur', data.result, 'error');
                 return;
             }
             modifyWithoutSave = false;
