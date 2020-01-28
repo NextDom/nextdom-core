@@ -14,10 +14,9 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-nextdom.cron = function () {
-};
+nextdom.cron = function() {};
 
-nextdom.cron.setState = function (queryParams) {
+nextdom.cron.setState = function(queryParams) {
   var paramsRequired = ['id', 'state'];
   if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
     var params = $.extend({}, nextdom.private.default_params, queryParams || {});
@@ -27,11 +26,11 @@ nextdom.cron.setState = function (queryParams) {
   }
 };
 
-nextdom.cron.all = function (queryParams) {
+nextdom.cron.all = function(queryParams) {
   nextdom.private.ajax('Cron', 'all', queryParams);
 };
 
-nextdom.cron.save = function (queryParams) {
+nextdom.cron.save = function(queryParams) {
   nextdom.private.ajax('Cron', 'save', queryParams, ['crons'], true);
 };
 

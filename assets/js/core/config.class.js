@@ -14,10 +14,9 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-nextdom.config = function () {
-};
+nextdom.config = function() {};
 
-nextdom.config.save = function (queryParams) {
+nextdom.config.save = function(queryParams) {
   var paramsRequired = ['configuration'];
   if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
     var params = $.extend({}, nextdom.private.default_params, queryParams || {});
@@ -28,7 +27,7 @@ nextdom.config.save = function (queryParams) {
   }
 };
 
-nextdom.config.load = function (queryParams) {
+nextdom.config.load = function(queryParams) {
   var paramsRequired = ['configuration'];
   var paramsSpecifics = {global: queryParams.global || true};
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
@@ -41,7 +40,7 @@ nextdom.config.load = function (queryParams) {
   }
 };
 
-nextdom.config.remove = function (queryParams) {
+nextdom.config.remove = function(queryParams) {
   var paramsRequired = ['configuration'];
   if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
     var params = $.extend({}, nextdom.private.default_params, queryParams || {});

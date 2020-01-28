@@ -14,7 +14,7 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-nextdom.object = function () {
+nextdom.object = function() {
 };
 
 nextdom.object.cache = Array();
@@ -27,7 +27,7 @@ if (!isset(nextdom.object.cache.byId)) {
   nextdom.object.cache.byId = Array();
 }
 
-nextdom.object.getEqLogic = function (queryParams) {
+nextdom.object.getEqLogic = function(queryParams) {
   var paramsRequired = ['id'];
   var paramsSpecifics = {
     pre_success: function (data) {
@@ -49,7 +49,7 @@ nextdom.object.getEqLogic = function (queryParams) {
   }
 };
 
-nextdom.object.all = function (queryParams) {
+nextdom.object.all = function(queryParams) {
   var paramsRequired = [];
   var paramsSpecifics = {
     pre_success: function (data) {
@@ -72,7 +72,7 @@ nextdom.object.all = function (queryParams) {
   }
 };
 
-nextdom.object.toHtml = function (queryParams) {
+nextdom.object.toHtml = function(queryParams) {
   var paramsRequired = ['id'];
   if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
     var params = $.extend({}, nextdom.private.default_params, queryParams || {});
@@ -86,7 +86,7 @@ nextdom.object.toHtml = function (queryParams) {
   }
 };
 
-nextdom.object.remove = function (queryParams) {
+nextdom.object.remove = function(queryParams) {
   var paramsRequired = ['id'];
   var paramsSpecifics = {
     pre_success: function (data) {
@@ -110,7 +110,7 @@ nextdom.object.remove = function (queryParams) {
   }
 };
 
-nextdom.object.save = function (queryParams) {
+nextdom.object.save = function(queryParams) {
   var paramsRequired = ['object'];
   var paramsSpecifics = {
     pre_success: function (data) {
@@ -134,7 +134,7 @@ nextdom.object.save = function (queryParams) {
   }
 };
 
-nextdom.object.byId = function (queryParams) {
+nextdom.object.byId = function(queryParams) {
   var paramsRequired = ['id'];
   var paramsSpecifics = {
     pre_success: function (data) {
@@ -154,11 +154,11 @@ nextdom.object.byId = function (queryParams) {
   }
 };
 
-nextdom.object.setOrder = function (queryParams) {
+nextdom.object.setOrder = function(queryParams) {
   nextdom.private.ajax('Object', 'setOrder', queryParams, ['objects'], true);
 };
 
-nextdom.object.summaryUpdate = function (queryParams) {
+nextdom.object.summaryUpdate = function(queryParams) {
   var objects = {};
   var sends = {};
   for (var i in queryParams) {
@@ -217,7 +217,7 @@ nextdom.object.summaryUpdate = function (queryParams) {
   }
 };
 
-nextdom.object.getImgPath = function (queryParams) {
+nextdom.object.getImgPath = function(queryParams) {
   nextdom.object.byId({
     id: queryParams.id,
     global: false,
@@ -233,6 +233,6 @@ nextdom.object.getImgPath = function (queryParams) {
   });
 };
 
-nextdom.object.removeImage = function (queryParams) {
+nextdom.object.removeImage = function(queryParams) {
   nextdom.private.ajax('Object', 'removeImage', queryParams, ['id']);
 };

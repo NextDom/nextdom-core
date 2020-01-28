@@ -14,29 +14,28 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-nextdom.backup = function () {
-};
+nextdom.backup = function() {};
 
-nextdom.backup.backup = function (queryParams) {
+nextdom.backup.backup = function(queryParams) {
   nextdom.private.ajax('NextDom', 'backup', queryParams);
 };
 
-nextdom.backup.restoreLocal = function (queryParams) {
+nextdom.backup.restoreLocal = function(queryParams) {
   nextdom.private.ajax('NextDom', 'restore', queryParams, ['backup']);
 };
 
-nextdom.backup.remove = function (queryParams) {
+nextdom.backup.remove = function(queryParams) {
   nextdom.private.ajax('NextDom', 'removeBackup', queryParams, ['backup']);
 };
 
-nextdom.backup.uploadCloud = function (queryParams) {
+nextdom.backup.uploadCloud = function(queryParams) {
   nextdom.private.ajax('Repo', 'uploadCloud', queryParams, ['backup', 'repo']);
 };
 
-nextdom.backup.restoreCloud = function (queryParams) {
+nextdom.backup.restoreCloud = function(queryParams) {
   nextdom.private.ajax('Repo', 'restoreCloud', queryParams, ['backup', 'repo']);
 };
 
-nextdom.backup.list = function (queryParams) {
+nextdom.backup.list = function(queryParams) {
   nextdom.private.ajax('NextDom', 'listBackup', queryParams);
 };

@@ -79,8 +79,6 @@ $(window).resize(function () {
   setHeaderPosition(false);
   // Gui automatic adjusting
   adjustNextDomTheme();
-  // Modale resize
-  modalesAdjust();
 });
 
 /**
@@ -88,13 +86,11 @@ $(window).resize(function () {
  */
 window.onscroll = function () {
   var goOnTopButton = document.getElementById('bt_goOnTop');
-  var sidemenuBottomPadding = 0;
 
   // GoOnTop button management
   if (goOnTopButton !== undefined && goOnTopButton !== null) {
     if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
       goOnTopButton.style.display = 'block';
-      sidemenuBottomPadding = 75;
     } else {
       goOnTopButton.style.display = 'none';
     }
@@ -107,10 +103,6 @@ window.onscroll = function () {
   setHeaderPosition(false);
   // Gui automatic adjusting
   adjustNextDomTheme();
-  // Modals repositionning
-  $('#md_modal').dialog('option', 'position', 'center');
-  $('#md_modal2').dialog('option', 'position', 'center');
-  $('#md_pageHelp').dialog('option', 'position', 'center');
 };
 
 /**

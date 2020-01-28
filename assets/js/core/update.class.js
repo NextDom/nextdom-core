@@ -14,53 +14,53 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-nextdom.update = function () {
+nextdom.update = function() {
 };
 
-nextdom.update.doAll = function (queryParams) {
+nextdom.update.doAll = function(queryParams) {
   var params = $.extend({}, nextdom.private.default_params, queryParams || {});
   var ajaxParams = nextdom.private.getParamsAJAX(params, 'Update', 'updateAll');
   ajaxParams.data['options'] = json_encode(queryParams.options) || '';
   nextdom.private.ajaxCall(ajaxParams);
 };
 
-nextdom.update.do = function (queryParams) {
+nextdom.update.do = function(queryParams) {
   nextdom.private.ajax('Update', 'update', queryParams, ['id']);
 };
 
-nextdom.update.remove = function (queryParams) {
+nextdom.update.remove = function(queryParams) {
   nextdom.private.ajax('Update', 'remove', queryParams, ['id']);
 };
 
-nextdom.update.update = function (queryParams) {
+nextdom.update.update = function(queryParams) {
   nextdom.private.ajax('Update', 'update', queryParams, ['id']);
 };
 
-nextdom.update.checkAll = function (queryParams) {
+nextdom.update.checkAll = function(queryParams) {
   nextdom.private.ajax('Update', 'checkAllUpdate', queryParams);
 };
 
-nextdom.update.check = function (queryParams) {
+nextdom.update.check = function(queryParams) {
   nextdom.private.ajax('Update', 'checkUpdate', queryParams, ['id']);
 };
 
-nextdom.update.get = function (queryParams) {
+nextdom.update.get = function(queryParams) {
   nextdom.private.ajax('Update', 'all', queryParams);
 };
 
-nextdom.update.install = function (queryParams) {
+nextdom.update.install = function(queryParams) {
   nextdom.private.ajax('Update', 'save', queryParams, ['update'], true, true);
 };
 
-nextdom.update.save = function (queryParams) {
+nextdom.update.save = function(queryParams) {
   console.log(queryParams);
   nextdom.private.ajax('Update', 'save', queryParams, ['update'], true);
 };
 
-nextdom.update.saves = function (queryParams) {
+nextdom.update.saves = function(queryParams) {
   nextdom.private.ajax('Update', 'saves', queryParams, ['updates'], true);
 };
 
-nextdom.update.number = function (queryParams) {
+nextdom.update.number = function(queryParams) {
   nextdom.private.ajax('Update', 'nbUpdate', queryParams, false, false, false);
 };

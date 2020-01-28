@@ -43,14 +43,14 @@
 function selectCategory(_selectedCategory, _selectedIcon) {
     var category = _selectedCategory;
     var filterValue = '';
-    if (category == 'all') {
+    if (category === 'all') {
         filterValue = '*';
-        $("#fabEditor").show();
-        $("#fabCategory").removeClass().addClass("fab-action-button__icon fas fa-filter");
+        $('#fabEditor').show();
+        $('#fabCategory').removeClass().addClass("fab-action-button__icon fas fa-filter");
     } else {
         filterValue = '.' + category;
-        $("#fabEditor").hide();
-        $("#fabCategory").removeClass("fas fa-filter").addClass(_selectedIcon);
+        $('#fabEditor').hide();
+        $('#fabCategory').removeClass('fas fa-filter').addClass(_selectedIcon);
     }
     var $grid = $('.div_displayEquipement').isotope({
         itemSelector: '.eqLogic-widget',
@@ -139,10 +139,10 @@ function getObjectHtml(_object_id) {
             var html = result['objectHtml'];
             var scenarios = result['scenarios'];
             if ($.trim(html) == '') {
-                $('#div_ob' + _object_id).parent().children('.alert-no-child').show();
+                $('#div_ob' + _object_id).siblings('.alert-no-child').show();
                 return;
             } else {
-                $('#div_ob' + _object_id).parent().children('.alert-no-child').hide();
+                $('#div_ob' + _object_id).siblings('.alert-no-child').hide();
             }
             try {
                 $('#div_ob' + _object_id).empty().html(html).parent().show();
@@ -187,30 +187,28 @@ function getObjectHtml(_object_id) {
  * @param scenarioData
  */
 function createScenarioWidget(scenarioData) {
-    var widgetDiv = $('<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 scenario" data-scenario_id="' + scenarioData.id + '">');
-    var widgetDiv2 = $('<div class="div_scenario">');
+    var widgetDiv = $('<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 scenario">');
+    var widgetDiv2 = $('<div class="div_scenario" data-scenario_id="' + scenarioData.id + '">');
     var nameContainer = $('<a class="scenario-label scenario-open-button cursor">');
     if (scenarioData.icon !== '') {
-        nameContainer.append(scenarioData.icon + scenarioData.name);
+        scenarioData.icon = '<i class="fas fa-film"></i>';
     }
-    else {
-        nameContainer.append('<i class="fas fa-film"></i>' + scenarioData.name);
-    }
+    nameContainer.append(scenarioData.icon + scenarioData.name);
     widgetDiv2.append(nameContainer);
     var enableButton = $('<a class="btn btn-default scenario-cmd scenario-enable-button" data-toggle="tooltip" title="" data-original-title="Activer le scénario"><i class="fas fa-toggle-on no-spacing text-good"></i></a>');
     var playButton = $('<a class="btn btn-success scenario-cmd scenario-play-button" data-toggle="tooltip" title="" data-original-title="Lancer le scénario"><i class="fas fa-play no-spacing"></i></a>');
     var stopButton = $('<a class="btn btn-danger scenario-cmd scenario-stop-button" data-toggle="tooltip" title="" data-original-title="Arrêter le scénario"><i class="fas fa-stop no-spacing"></i></a>');
     playButton.on('click', function() {
-        nextdom.scenario.changeState({'id': $(this).parent().parent().data('scenario_id'), 'state': 'start'});
+        nextdom.scenario.changeState({'id': $(this).parent().data('scenario_id'), 'state': 'start'});
     });
     stopButton.on('click', function() {
-        nextdom.scenario.changeState({'id': $(this).parent().parent().data('scenario_id'), 'state': 'stop'});
+        nextdom.scenario.changeState({'id': $(this).parent().data('scenario_id'), 'state': 'stop'});
     });
     enableButton.on('click', function() {
-        nextdom.scenario.changeState({'id': $(this).parent().parent().data('scenario_id'), 'state': 'activate'});
+        nextdom.scenario.changeState({'id': $(this).parent().data('scenario_id'), 'state': 'activate'});
     });
     $('.scenario-open-button').on('click', function() {
-        loadPage("index.php?v=d&p=scenario&id=" + $(this).parent().parent().attr('data-scenario_id'));
+        loadPage("index.php?v=d&p=scenario&id=" + $(this).parent().attr('data-scenario_id'));
     });
     widgetDiv2.append(enableButton);
     widgetDiv2.append(playButton);

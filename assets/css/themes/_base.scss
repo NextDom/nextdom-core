@@ -641,7 +641,7 @@ pre::selection {
 /* COLOR10 = Couleur des textes (contenu, titres, footer, bouton d'administration, unités, légendes...) */
 /* #################################################################################################### */
 /* Textes */
-body, h1, h2, h3, h4, h5, h6, {
+body, h1, h2, h3, h4, h5, h6 {
   color: map_get($color_theme, 'color10') !important;
 }
 .box-header span:not(.badge) {

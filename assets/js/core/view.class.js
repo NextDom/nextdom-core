@@ -14,12 +14,12 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-nextdom.view = function () {
+nextdom.view = function() {
 };
 
 nextdom.view.cache = Array();
 
-nextdom.view.all = function (queryParams) {
+nextdom.view.all = function(queryParams) {
   var paramsRequired = [];
   var paramsSpecifics = {
     pre_success: function (data) {
@@ -39,7 +39,7 @@ nextdom.view.all = function (queryParams) {
   }
 };
 
-nextdom.view.toHtml = function (queryParams) {
+nextdom.view.toHtml = function(queryParams) {
   if (queryParams.version == 'mobile') {
     queryParams.version = 'mview';
   }
@@ -65,7 +65,7 @@ nextdom.view.toHtml = function (queryParams) {
   }
 };
 
-nextdom.view.handleViewAjax = function (queryParams) {
+nextdom.view.handleViewAjax = function(queryParams) {
   var result = {html: '', scenario: [], cmd: [], eqLogic: []};
   for (var i in queryParams.view.viewZone) {
     var viewZone = queryParams.view.viewZone[i];
@@ -101,11 +101,11 @@ nextdom.view.handleViewAjax = function (queryParams) {
   return result;
 };
 
-nextdom.view.remove = function (queryParams) {
+nextdom.view.remove = function(queryParams) {
   nextdom.private.ajax('View', 'remove', queryParams, ['id']);
 };
 
-nextdom.view.save = function (queryParams) {
+nextdom.view.save = function(queryParams) {
   var paramsRequired = ['id', 'view'];
   if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
     var params = $.extend({}, nextdom.private.default_params, queryParams || {});
@@ -116,18 +116,18 @@ nextdom.view.save = function (queryParams) {
   }
 };
 
-nextdom.view.get = function (queryParams) {
+nextdom.view.get = function(queryParams) {
   nextdom.private.ajax('View', 'get', queryParams, ['id']);
 };
 
-nextdom.view.setEqLogicOrder = function (queryParams) {
+nextdom.view.setEqLogicOrder = function(queryParams) {
   nextdom.private.ajax('View', 'setEqLogicOrder', queryParams, ['eqLogics'], true);
 };
 
-nextdom.view.setOrder = function (queryParams) {
+nextdom.view.setOrder = function(queryParams) {
   nextdom.private.ajax('View', 'setOrder', queryParams, ['views'], true);
 };
 
-nextdom.view.removeImage = function (queryParams) {
+nextdom.view.removeImage = function(queryParams) {
   nextdom.private.ajax('View', 'removeImage', queryParams, ['id']);
 };

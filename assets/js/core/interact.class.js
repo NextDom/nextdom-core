@@ -14,25 +14,25 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-nextdom.interact = function () {
+nextdom.interact = function() {
 };
 
-nextdom.interact.remove = function (queryParams) {
+nextdom.interact.remove = function(queryParams) {
   nextdom.private.ajax('Interact', 'remove', queryParams, ['id']);
 };
 
-nextdom.interact.get = function (queryParams) {
+nextdom.interact.get = function(queryParams) {
   nextdom.private.ajax('Interact', 'byId', queryParams, ['id']);
 };
 
-nextdom.interact.save = function (queryParams) {
+nextdom.interact.save = function(queryParams) {
   nextdom.private.ajax('Interact', 'save', queryParams, ['interact'], true);
 };
 
-nextdom.interact.regenerateInteract = function (queryParams) {
+nextdom.interact.regenerateInteract = function(queryParams) {
   nextdom.private.ajax('Interact', 'regenerateInteract', queryParams);
 };
 
-nextdom.interact.execute = function (queryParams) {
+nextdom.interact.execute = function(queryParams) {
   nextdom.private.ajax('Interact', 'execute', queryParams, ['query']);
 };

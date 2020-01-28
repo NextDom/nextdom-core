@@ -14,8 +14,7 @@
 * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
 */
 
-nextdom.nextdom_market = function() {
-}
+nextdom.nextdom_market = function() {};
 
 nextdom.nextdom_market.get = function(queryParams) {
   var paramsRequired = ['data', 'params'];
@@ -26,7 +25,7 @@ nextdom.nextdom_market.get = function(queryParams) {
     ajaxParams.data['params'] = queryParams.params;
     nextdom.private.ajaxCall(ajaxParams);
   }
-}
+};
 
 nextdom.nextdom_market.refresh = function(queryParams) {
   var paramsRequired = ['data', 'params'];
@@ -37,4 +36,4 @@ nextdom.nextdom_market.refresh = function(queryParams) {
     ajaxParams.data['params'] = queryParams.params;
     nextdom.private.ajaxCall(ajaxParams);
   }
-}
+};

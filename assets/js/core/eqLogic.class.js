@@ -14,13 +14,13 @@
 * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
 */
 
-nextdom.eqLogic = function () {
+nextdom.eqLogic = function() {
 };
 
 nextdom.eqLogic.cache = Array();
 nextdom.eqLogic.displayObjectName = false;
 
-nextdom.eqLogic.changeDisplayObjectName = function (_display) {
+nextdom.eqLogic.changeDisplayObjectName = function(_display) {
 
 };
 
@@ -32,7 +32,7 @@ if (!isset(nextdom.eqLogic.cache.byId)) {
   nextdom.eqLogic.cache.byId = Array();
 }
 
-nextdom.eqLogic.save = function (queryParams) {
+nextdom.eqLogic.save = function(queryParams) {
   var paramsRequired = ['type', 'eqLogics'];
   var paramsSpecifics = {
     pre_success: function (data) {
@@ -58,11 +58,11 @@ nextdom.eqLogic.save = function (queryParams) {
   }
 };
 
-nextdom.eqLogic.simpleSave = function (queryParams) {
+nextdom.eqLogic.simpleSave = function(queryParams) {
   nextdom.private.ajax('EqLogic', 'simpleSave', queryParams, ['eqLogic'], true);
 };
 
-nextdom.eqLogic.remove = function (queryParams) {
+nextdom.eqLogic.remove = function(queryParams) {
   var paramsRequired = ['id', 'type'];
   var paramsSpecifics = {
     pre_success: function (data) {
@@ -81,7 +81,7 @@ nextdom.eqLogic.remove = function (queryParams) {
   }
 };
 
-nextdom.eqLogic.copy = function (queryParams) {
+nextdom.eqLogic.copy = function(queryParams) {
   var paramsRequired = ['id', 'name'];
   var paramsSpecifics = {
     pre_success: function (data) {
@@ -100,7 +100,7 @@ nextdom.eqLogic.copy = function (queryParams) {
   }
 };
 
-nextdom.eqLogic.print = function (queryParams) {
+nextdom.eqLogic.print = function(queryParams) {
   var paramsRequired = ['id', 'type'];
   var paramsSpecifics = {
     pre_success: function (data) {
@@ -118,11 +118,11 @@ nextdom.eqLogic.print = function (queryParams) {
   }
 };
 
-nextdom.eqLogic.toHtml = function (queryParams) {
+nextdom.eqLogic.toHtml = function(queryParams) {
   nextdom.private.ajax('EqLogic', 'toHtml', queryParams, ['id', 'version']);
 };
 
-nextdom.eqLogic.getCmd = function (queryParams) {
+nextdom.eqLogic.getCmd = function(queryParams) {
   var paramsRequired = ['id'];
   var paramsSpecifics = {
     pre_success: function (data) {
@@ -142,7 +142,7 @@ nextdom.eqLogic.getCmd = function (queryParams) {
   }
 };
 
-nextdom.eqLogic.byId = function (queryParams) {
+nextdom.eqLogic.byId = function(queryParams) {
   var paramsRequired = ['id'];
   var paramsSpecifics = {
     pre_success: function (result) {
@@ -162,7 +162,7 @@ nextdom.eqLogic.byId = function (queryParams) {
   }
 };
 
-nextdom.eqLogic.builSelectCmd = function (queryParams) {
+nextdom.eqLogic.builSelectCmd = function(queryParams) {
   if (!isset(queryParams.filter)) {
     queryParams.filter = {};
   }
@@ -186,7 +186,7 @@ nextdom.eqLogic.builSelectCmd = function (queryParams) {
   });
 };
 
-nextdom.eqLogic.getSelectModal = function (_options, callback) {
+nextdom.eqLogic.getSelectModal = function(_options, callback) {
   if (!isset(_options)) {
     _options = {};
   }
@@ -222,7 +222,7 @@ nextdom.eqLogic.getSelectModal = function (_options, callback) {
   $('#mod_insertEqLogicValue').dialog('open');
 };
 
-nextdom.eqLogic.refreshValue = function (queryParams) {
+nextdom.eqLogic.refreshValue = function(queryParams) {
   var paramsRequired = [];
   var eqLogics = {};
   var sends = {};
@@ -295,15 +295,15 @@ nextdom.eqLogic.refreshValue = function (queryParams) {
   }
 };
 
-nextdom.eqLogic.setOrder = function (queryParams) {
+nextdom.eqLogic.setOrder = function(queryParams) {
   nextdom.private.ajax('EqLogic', 'setOrder', queryParams, ['eqLogics'], true);
 };
 
-nextdom.eqLogic.removes = function (queryParams) {
+nextdom.eqLogic.removes = function(queryParams) {
   nextdom.private.ajax('EqLogic', 'removes', queryParams, ['eqLogics'], true);
 };
 
-nextdom.eqLogic.setIsVisibles = function (queryParams) {
+nextdom.eqLogic.setIsVisibles = function(queryParams) {
   var paramsRequired = ['eqLogics', 'isVisible'];
   if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
     var params = $.extend({}, nextdom.private.default_params, queryParams || {});
@@ -314,7 +314,7 @@ nextdom.eqLogic.setIsVisibles = function (queryParams) {
   }
 };
 
-nextdom.eqLogic.setIsEnables = function (queryParams) {
+nextdom.eqLogic.setIsEnables = function(queryParams) {
   var paramsRequired = ['eqLogics', 'isEnable'];
   if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
     var params = $.extend({}, nextdom.private.default_params, queryParams || {});
@@ -325,10 +325,10 @@ nextdom.eqLogic.setIsEnables = function (queryParams) {
   }
 };
 
-nextdom.eqLogic.htmlAlert = function (queryParams) {
+nextdom.eqLogic.htmlAlert = function(queryParams) {
   nextdom.private.ajax('EqLogic', 'htmlAlert', queryParams, ['version']);
 };
 
-nextdom.eqLogic.htmlBattery = function (queryParams) {
+nextdom.eqLogic.htmlBattery = function(queryParams) {
   nextdom.private.ajax('EqLogic', 'htmlBattery', queryParams, ['version']);
 };

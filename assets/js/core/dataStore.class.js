@@ -14,10 +14,9 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-nextdom.dataStore = function () {
-};
+nextdom.dataStore = function() {};
 
-nextdom.dataStore.save = function (queryParams) {
+nextdom.dataStore.save = function(queryParams) {
   var paramsRequired = ['id', 'value', 'type', 'key', 'link_id'];
   var paramsSpecifics = {};
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
@@ -33,11 +32,11 @@ nextdom.dataStore.save = function (queryParams) {
   }
 };
 
-nextdom.dataStore.all = function (queryParams) {
+nextdom.dataStore.all = function(queryParams) {
   nextdom.private.ajax('DataStore', 'all', queryParams, ['type', 'usedBy']);
 };
 
-nextdom.dataStore.getSelectModal = function (_options, callback) {
+nextdom.dataStore.getSelectModal = function(_options, callback) {
   var dataStoreModal = $("#mod_insertDataStoreValue");
   if (!isset(_options)) {
     _options = {};
@@ -74,6 +73,6 @@ nextdom.dataStore.getSelectModal = function (_options, callback) {
   dataStoreModal.dialog('open');
 };
 
-nextdom.dataStore.remove = function (queryParams) {
+nextdom.dataStore.remove = function(queryParams) {
   nextdom.private.ajax('DataStore', 'remove', queryParams, ['id']);
 };

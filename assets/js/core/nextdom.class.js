@@ -14,8 +14,7 @@
 * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
 */
 
-function nextdom() {
-}
+var nextdom = function() {};
 
 nextdom.cache = [];
 nextdom.display = {};
@@ -25,7 +24,7 @@ if (!isset(nextdom.cache.getConfiguration)) {
   nextdom.cache.getConfiguration = null;
 }
 
-nextdom.changes = function () {
+nextdom.changes = function() {
   var paramsRequired = [];
   var paramsSpecifics = {
     global: false,
@@ -93,7 +92,10 @@ nextdom.changes = function () {
   }
 };
 
-nextdom.init = function () {
+/**
+ * Initialize update events and start event loop
+ */
+nextdom.init = function() {
   var bodyContainer = $('body');
   nextdom.datetime = serverDatetime;
   nextdom.display.version = 'desktop';
@@ -175,12 +177,12 @@ nextdom.init = function () {
   bodyContainer.on('notify', function (_event, _options) {
     notify(_options.title, _options.message, _options.theme);
   });
-  if (typeof user_id !== 'undefined') {
+  if (typeof(user_id) !== 'undefined') {
     nextdom.changes();
   }
 };
 
-nextdom.getConfiguration = function (queryParams) {
+nextdom.getConfiguration = function(queryParams) {
   var paramsRequired = ['key'];
   var paramsSpecifics = {
     pre_success: function (data) {
@@ -214,11 +216,11 @@ nextdom.getConfiguration = function (queryParams) {
   }
 };
 
-nextdom.haltSystem = function (queryParams) {
+nextdom.haltSystem = function(queryParams) {
   nextdom.private.ajax('NextDom', 'haltSystem', queryParams);
 };
 
-nextdom.ssh = function (queryParams) {
+nextdom.ssh = function(queryParams) {
   if ($.isPlainObject(queryParams)) {
     command = queryParams.command;
   } else {
@@ -232,7 +234,7 @@ nextdom.ssh = function (queryParams) {
   return 'Execute command : ' + command;
 };
 
-nextdom.db = function (queryParams) {
+nextdom.db = function(queryParams) {
   if ($.isPlainObject(queryParams)) {
     command = queryParams.command;
   } else {
@@ -246,19 +248,19 @@ nextdom.db = function (queryParams) {
   return 'Execute command : ' + command;
 };
 
-nextdom.rebootSystem = function (queryParams) {
+nextdom.rebootSystem = function(queryParams) {
   nextdom.private.ajax('NextDom', 'rebootSystem', queryParams);
 };
 
-nextdom.health = function (queryParams) {
+nextdom.health = function(queryParams) {
   nextdom.private.ajax('NextDom', 'health', queryParams);
 };
 
-nextdom.forceSyncHour = function (queryParams) {
+nextdom.forceSyncHour = function(queryParams) {
   nextdom.private.ajax('NextDom', 'forceSyncHour', queryParams);
 };
 
-nextdom.getCronSelectModal = function (_options, _callback) {
+nextdom.getCronSelectModal = function(_options, _callback) {
   if ($("#mod_insertCronValue").length == 0) {
     $('body').append('<div id="mod_insertCronValue" title="{{Assistant cron}}" ></div>');
     $("#mod_insertCronValue").dialog({
@@ -293,7 +295,7 @@ nextdom.getCronSelectModal = function (_options, _callback) {
   $('#mod_insertCronValue').dialog('open');
 };
 
-nextdom.getSelectActionModal = function (_options, _callback) {
+nextdom.getSelectActionModal = function(_options, _callback) {
   if (!isset(_options)) {
     _options = {};
   }
@@ -332,7 +334,7 @@ nextdom.getSelectActionModal = function (_options, _callback) {
   $('#mod_insertActionValue').dialog('open');
 };
 
-nextdom.getGraphData = function (queryParams) {
+nextdom.getGraphData = function(queryParams) {
   var params = $.extend({}, nextdom.private.default_params, queryParams || {});
   var ajaxParams = nextdom.private.getParamsAJAX(params, 'NextDom', 'getGraphData');
   ajaxParams.data['filter_type'] = params.filter_type || null;
@@ -340,7 +342,7 @@ nextdom.getGraphData = function (queryParams) {
   nextdom.private.ajaxCall(ajaxParams);
 };
 
-nextdom.getDocumentationUrl = function (queryParams) {
+nextdom.getDocumentationUrl = function(queryParams) {
   var params = $.extend({}, nextdom.private.default_params, queryParams || {});
   var ajaxParams = nextdom.private.getParamsAJAX(params, 'NextDom', 'getDocumentationUrl');
   ajaxParams.data['plugin'] = params.plugin || null;
@@ -348,46 +350,46 @@ nextdom.getDocumentationUrl = function (queryParams) {
   nextdom.private.ajaxCall(ajaxParams);
 };
 
-nextdom.addWarnme = function (queryParams) {
+nextdom.addWarnme = function(queryParams) {
   nextdom.private.ajax('NextDom', 'addWarnme', queryParams, ['cmd_id', 'test']);
 };
 
-nextdom.getTimelineEvents = function (queryParams) {
+nextdom.getTimelineEvents = function(queryParams) {
   nextdom.private.ajax('NextDom', 'getTimelineEvents', queryParams);
 };
 
-nextdom.removeTimelineEvents = function (queryParams) {
+nextdom.removeTimelineEvents = function(queryParams) {
   nextdom.private.ajax('NextDom', 'removeTimelineEvents', queryParams);
 };
 
-nextdom.getFileFolder = function (queryParams) {
+nextdom.getFileFolder = function(queryParams) {
   nextdom.private.ajax('NextDom', 'getFileFolder', queryParams, ['type', 'path']);
 };
 
-nextdom.getFileContent = function (queryParams) {
+nextdom.getFileContent = function(queryParams) {
   nextdom.private.ajax('NextDom', 'getFileContent', queryParams, ['path']);
 };
 
-nextdom.setFileContent = function (queryParams) {
+nextdom.setFileContent = function(queryParams) {
   nextdom.private.ajax('NextDom', 'setFileContent', queryParams, ['path', 'content']);
 };
 
-nextdom.deleteFile = function (queryParams) {
+nextdom.deleteFile = function(queryParams) {
   nextdom.private.ajax('NextDom', 'deleteFile', queryParams, ['path']);
 };
 
-nextdom.createFile = function (queryParams) {
+nextdom.createFile = function(queryParams) {
   nextdom.private.ajax('NextDom', 'createFile', queryParams, ['path', 'name']);
 };
 
-nextdom.emptyRemoveHistory = function (queryParams) {
+nextdom.emptyRemoveHistory = function(queryParams) {
   nextdom.private.ajax('NextDom', 'emptyRemoveHistory', queryParams);
 };
 
-nextdom.cleanFileSystemRight = function (queryParams) {
+nextdom.cleanFileSystemRight = function(queryParams) {
   nextdom.private.ajax('NextDom', 'cleanFileSystemRight', queryParams);
 };
 
-nextdom.consistency = function (queryParams) {
+nextdom.consistency = function(queryParams) {
   nextdom.private.ajax('NextDom', 'consistency', queryParams);
 };

@@ -14,21 +14,21 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-nextdom.report = function () {
+nextdom.report = function() {
 };
 
-nextdom.report.list = function (queryParams) {
+nextdom.report.list = function(queryParams) {
   nextdom.private.ajax('Report', 'list', queryParams, ['id', 'type']);
 };
 
-nextdom.report.get = function (queryParams) {
+nextdom.report.get = function(queryParams) {
   nextdom.private.ajax('Report', 'get', queryParams, ['id', 'type', 'report']);
 };
 
-nextdom.report.remove = function (queryParams) {
+nextdom.report.remove = function(queryParams) {
   nextdom.private.ajax('Report', 'remove', queryParams, ['id', 'type', 'report']);
 };
 
-nextdom.report.removeAll = function (queryParams) {
+nextdom.report.removeAll = function(queryParams) {
   nextdom.private.ajax('Report', 'removeAll', queryParams, ['id', 'type']);
 };
