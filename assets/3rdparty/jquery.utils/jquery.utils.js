@@ -254,6 +254,13 @@ function init(_value, _default) {
     return;
   };
 
+  $.showLoading = function () {
+    // Todo: Replace with Pace
+  };
+  $.hideLoading = function () {
+    // Todo: Replace with Pace
+  };
+
   /*********************jquery alert*************************************/
   $.fn.showAlert = function (_options) {
     var options = init(_options, {});

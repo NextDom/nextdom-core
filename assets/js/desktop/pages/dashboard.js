@@ -187,8 +187,8 @@ function getObjectHtml(_object_id) {
  * @param scenarioData
  */
 function createScenarioWidget(scenarioData) {
-    var widgetDiv = $('<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 scenario">');
-    var widgetDiv2 = $('<div class="div_scenario" data-scenario_id="' + scenarioData.id + '">');
+    var widgetDiv = $('<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 scenario" data-scenario_id="' + scenarioData.id + '">');
+    var widgetDiv2 = $('<div class="div_scenario">');
     var nameContainer = $('<a class="scenario-label scenario-open-button cursor">');
     if (scenarioData.icon !== '') {
         scenarioData.icon = '<i class="fas fa-film"></i>';
@@ -199,16 +199,16 @@ function createScenarioWidget(scenarioData) {
     var playButton = $('<a class="btn btn-success scenario-cmd scenario-play-button" data-toggle="tooltip" title="" data-original-title="Lancer le scénario"><i class="fas fa-play no-spacing"></i></a>');
     var stopButton = $('<a class="btn btn-danger scenario-cmd scenario-stop-button" data-toggle="tooltip" title="" data-original-title="Arrêter le scénario"><i class="fas fa-stop no-spacing"></i></a>');
     playButton.on('click', function() {
-        nextdom.scenario.changeState({'id': $(this).parent().data('scenario_id'), 'state': 'start'});
+        nextdom.scenario.changeState({'id': $(this).parent().parent().data('scenario_id'), 'state': 'start'});
     });
     stopButton.on('click', function() {
-        nextdom.scenario.changeState({'id': $(this).parent().data('scenario_id'), 'state': 'stop'});
+        nextdom.scenario.changeState({'id': $(this).parent().parent().data('scenario_id'), 'state': 'stop'});
     });
     enableButton.on('click', function() {
-        nextdom.scenario.changeState({'id': $(this).parent().data('scenario_id'), 'state': 'activate'});
+        nextdom.scenario.changeState({'id': $(this).parent().parent().data('scenario_id'), 'state': 'activate'});
     });
     $('.scenario-open-button').on('click', function() {
-        loadPage("index.php?v=d&p=scenario&id=" + $(this).parent().attr('data-scenario_id'));
+        loadPage("index.php?v=d&p=scenario&id=" + $(this).parent().parent().attr('data-scenario_id'));
     });
     widgetDiv2.append(enableButton);
     widgetDiv2.append(playButton);

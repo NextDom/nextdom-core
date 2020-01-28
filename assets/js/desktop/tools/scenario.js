@@ -801,16 +801,16 @@ function initScenarioEditorEvents() {
     $('#bt_moveBlocDown').off('click').on('click', function (event) {
         if (BLOC_FOCUS || ACTION_FOCUS) {
             if (BLOC_LAST_FOCUS) {
-                if (BLOC_FOCUS.next().length != 0) {
+                if (BLOC_FOCUS.next().length !== 0) {
                     BLOC_FOCUS.insertAfter(BLOC_FOCUS.next())
                 } else {
                     let BLOC_PARENT = BLOC_FOCUS.parent().parent();
-                    if (BLOC_PARENT.hasClass("expression") && BLOC_PARENT.next().length != 0) {
+                    if (BLOC_PARENT.hasClass("expression") && BLOC_PARENT.next().length !== 0) {
                         BLOC_PARENT.insertAfter(BLOC_PARENT.next())
                     }
                 }
             } else {
-                if (ACTION_FOCUS.next().length != 0) {
+                if (ACTION_FOCUS.next().length !== 0) {
                     ACTION_FOCUS.insertAfter(ACTION_FOCUS.next())
                 }
             }
@@ -821,7 +821,7 @@ function initScenarioEditorEvents() {
     $('#bt_moveBlocUp').off('click').on('click', function (event) {
         if (BLOC_FOCUS || ACTION_FOCUS) {
             if (BLOC_LAST_FOCUS) {
-                if (BLOC_FOCUS.prev().length != 0) {
+                if (BLOC_FOCUS.prev().length !== 0) {
                     BLOC_FOCUS.insertBefore(BLOC_FOCUS.prev())
                 } else {
                     let BLOC_PARENT = BLOC_FOCUS.parent().parent();
@@ -1431,7 +1431,7 @@ function getActionExpressionHTML(expressionData) {
         htmlData += '<input type="checkbox" class="expressionAttr" data-l1key="options" data-l2key="background" checked title="{{Cocher pour que la commande s\'exécute en parallèle des autres actions}}"/>';
     }
     var expressionTxt = init(expressionData.expression);
-    if(typeof expressionTxt !== 'string'){
+    if(typeof(expressionTxt)!== 'string'){
         expressionTxt = json_encode(expressionTxt);
     }
     htmlData += '</div>';

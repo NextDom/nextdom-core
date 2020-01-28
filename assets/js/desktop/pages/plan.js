@@ -764,7 +764,7 @@ function displayPlan(_code) {
   if (planHeader_id == -1) {
     return;
   }
-  if (typeof _code == "undefined") {
+  if (typeof(_code)== 'undefined') {
     _code = null;
   }
   if (getUrlVars('fullscreen') == 1) {

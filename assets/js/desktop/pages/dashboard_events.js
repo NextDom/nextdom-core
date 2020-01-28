@@ -45,7 +45,7 @@ function loadInformations() {
     // Background image load
     $(function () {
         setTimeout(function () {
-            if (typeof rootObjectId != 'undefined') {
+            if (typeof(rootObjectId)!= 'undefined') {
                 nextdom.object.getImgPath({
                     id: rootObjectId,
                     success: function (_path) {
@@ -64,7 +64,7 @@ function loadInformations() {
  */
 function initEvents() {
     // Opening welcome modal if not saved "not display anymore"
-    if (typeof nextdom_Welcome != 'undefined' && isset(nextdom_Welcome) && nextdom_Welcome == 1 && getUrlVars('noWelcome') != 1) {
+    if (typeof(nextdom_Welcome)!= 'undefined' && isset(nextdom_Welcome) && nextdom_Welcome == 1 && getUrlVars('noWelcome') != 1) {
         $('#md_modal').dialog({title: "{{Bienvenue dans NextDom}}"});
         $("#md_modal").load('index.php?v=d&modal=welcome').dialog('open');
     }

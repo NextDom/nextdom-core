@@ -213,7 +213,7 @@ function initTopMenu() {
 function limitTreeviewMenu() {
     var maxHeight = 0;
     $(".sidebar-menu").children(".treeview").each(function () {
-        if (document.getElementsByClassName('sidebar-collapse').length == 0) {
+        if (document.getElementsByClassName('sidebar-collapse').length === 0) {
             $(this).children(".treeview-menu").css("max-height", "auto");
         } else {
             maxHeight = window.innerHeight - document.getElementById($(this).attr('id')).offsetTop - 44 - 48 - 30;

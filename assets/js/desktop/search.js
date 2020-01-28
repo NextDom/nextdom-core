@@ -219,7 +219,7 @@ function generalSearchOnPages(value) {
                     $(this).packery();
                 });
                 $('.card').each(function () {
-                    if ($(this).children(".card-body").length == 0) {
+                    if ($(this).children(".card-body").length === 0) {
                         $(this).hide();
                     }
                 });

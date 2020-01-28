@@ -226,7 +226,7 @@ $('.eqLogicAction[data-action=copy]').on('click', function () {
           },
           success: function (data) {
             modifyWithoutSave = false;
-            if ($('#ul_eqLogic .li_eqLogic[data-eqLogic_id=' + data.id + ']').length != 0) {
+            if ($('#ul_eqLogic .li_eqLogic[data-eqLogic_id=' + data.id + ']').length !== 0) {
               $('#ul_eqLogic .li_eqLogic[data-eqLogic_id=' + data.id + ']').click();
             } else {
               var vars = getMyUrlVars();
@@ -264,7 +264,7 @@ $('.eqLogicAttr[data-l1key=object_id]').on('change', function () {
 if (updateDisplayPlugin !== undefined)
   updateDisplayPlugin(function () {
     if (is_numeric(getMyUrlVars('id'))) {
-      if ($('body .li_eqLogic[data-eqLogic_id="' + getMyUrlVars('id') + '"]').length != 0) {
+      if ($('body .li_eqLogic[data-eqLogic_id="' + getMyUrlVars('id') + '"]').length !== 0) {
         $('body .li_eqLogic[data-eqLogic_id="' + getMyUrlVars('id') + '"]').click();
       } else {
         if ($('.eqLogicThumbnailDisplay').html() === undefined) {

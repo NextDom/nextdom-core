@@ -57,7 +57,7 @@ jQuery.fn.findAtDepth = function (selector, maxDepth) {
  * @param _class_name equivalent to the color of notification (success, warning, error, nextdom color)
  */
 function notify(_title, _text, _class_name) {
-  if (typeof notify_status != 'undefined' && isset(notify_status) && notify_status == 1) {
+  if (typeof(notify_status)!= 'undefined' && isset(notify_status) && notify_status == 1) {
     var _backgroundColor = '';
     var _icon = '';
 
@@ -206,7 +206,7 @@ function sleep(milliseconds) {
  * @param _prefix ID prefix
  */
 function uniqId(_prefix) {
-  if (typeof _prefix == 'undefined') {
+  if (typeof(_prefix)== 'undefined') {
     _prefix = 'jee-uniq';
   }
   do {

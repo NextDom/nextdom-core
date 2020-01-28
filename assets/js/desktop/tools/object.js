@@ -43,7 +43,7 @@ initEvents();
  */
 function loadInformations() {
     if (is_numeric(getUrlVars('id'))) {
-        if ($('.objectDisplayCard[data-object_id=' + getUrlVars('id') + ']').length != 0) {
+        if ($('.objectDisplayCard[data-object_id=' + getUrlVars('id') + ']').length !== 0) {
             $('.objectDisplayCard[data-object_id=' + getUrlVars('id') + ']').click();
         } else {
             $('.objectDisplayCard:first').click();
@@ -286,7 +286,7 @@ function loadObjectConfiguration(_id){
             $('.objectAttr[data-l1key=father_id] option').show();
             $('#summarytab input[type=checkbox]').value(0);
             $('.object').setValues(data, '.objectAttr');
-            if(!isset(data.display) || data.display.length == 0){
+            if(!isset(data.display) || data.display.length === 0){
                 $('.objectAttr[data-l1key=display][data-l2key=tagColor]').value('#33B8CC');
                 $('.objectAttr[data-l1key=display][data-l2key=tagTextColor]').value('#ffffff');
                 $('.objectAttr[data-l1key=display][data-l2key="desktop::summaryTextColor"]').value('#ffffff');
@@ -309,7 +309,7 @@ function loadObjectConfiguration(_id){
                         for(var j in data.configuration.summary[i]){
                             addSummaryInfo(el,data.configuration.summary[i][j]);
                         }
-                        if (data.configuration.summary[i].length != 0){
+                        if (data.configuration.summary[i].length !== 0){
                             $('.summarytabnumber'+i).append('(' + data.configuration.summary[i].length + ')');
                         }
                     }

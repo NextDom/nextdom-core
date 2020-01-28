@@ -308,7 +308,7 @@ function startIconsDownload() {
 
 function iconDownload() {
     var content = iconDownloadQueue.shift();
-    if (typeof content !== 'undefined') {
+    if (typeof(content)!== 'undefined') {
         var itemData = content[0];
         var itemObj = content[1];
         $.post({
@@ -454,7 +454,7 @@ function ajaxQuery(url, data, callbackFunc) {
                 notify('Erreur', data.result, 'error');
             }
             else {
-                if (typeof callbackFunc !== "undefined") {
+                if (typeof(callbackFunc)!== 'undefined') {
                     callbackFunc(data.result);
                 }
             }

@@ -81,7 +81,7 @@ function adjustNextDomTheme() {
   }
 
   // containers adjustement
-  var needContent = pageContainer.children("section").length === 0 && pageContainer.children().children("section").length == 0 && (getUrlVars('p') != 'plan') && (getUrlVars('p') != 'view') && (getUrlVars('p') != 'plan3d');
+  var needContent = pageContainer.children("section").length === 0 && pageContainer.children().children("section").length === 0 && (getUrlVars('p') != 'plan') && (getUrlVars('p') != 'view') && (getUrlVars('p') != 'plan3d');
   if (needContent) {
     if (!pageContainer.hasClass('content')) {
       pageContainer.addClass('content');
@@ -136,16 +136,16 @@ function closeAll() {
   // Closing modals
   $('#md_modal').dialog('close');
   $('#md_modal2').dialog('close');
-  if ($('#mod_insertCmdValue').length != 0) {
+  if ($('#mod_insertCmdValue').length !== 0) {
     $('#mod_insertCmdValue').dialog('close');
   }
-  if ($('#mod_insertDataStoreValue').length != 0) {
+  if ($('#mod_insertDataStoreValue').length !== 0) {
     $('#mod_insertDataStoreValue').dialog('close');
   }
-  if ($('#mod_insertEqLogicValue').length != 0) {
+  if ($('#mod_insertEqLogicValue').length !== 0) {
     $('#mod_insertEqLogicValue').dialog('close');
   }
-  if ($('#mod_insertCronValue').length != 0) {
+  if ($('#mod_insertCronValue').length !== 0) {
     $('#mod_insertCronValue').dialog('close');
   }
   if ($('#mod_insertActionValue').length !== 0) {

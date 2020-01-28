@@ -19,6 +19,7 @@ var nextdom = function() {};
 nextdom.cache = [];
 nextdom.display = {};
 nextdom.connect = 0;
+nextdom.initialized = false;
 
 if (!isset(nextdom.cache.getConfiguration)) {
   nextdom.cache.getConfiguration = null;
@@ -76,7 +77,7 @@ nextdom.changes = function() {
       setTimeout(nextdom.changes, 1);
     },
     error: function (_error) {
-      if (typeof (user_id) != "undefined" && nextdom.connect == 100) {
+      if (typeof (user_id) != 'undefined' && nextdom.connect == 100) {
         notify('{{Erreur de connexion}}', '{{Erreur lors de la connexion à NextDom}} : ' + _error.message);
         window.location.reload();
       }
@@ -177,7 +178,8 @@ nextdom.init = function() {
   bodyContainer.on('notify', function (_event, _options) {
     notify(_options.title, _options.message, _options.theme);
   });
-  if (typeof(user_id) !== 'undefined') {
+  if (typeof(user_id) !== 'undefined' && !nextdom.initialized) {
+    nextdom.initialized = true
     nextdom.changes();
   }
 };
@@ -261,7 +263,7 @@ nextdom.forceSyncHour = function(queryParams) {
 };
 
 nextdom.getCronSelectModal = function(_options, _callback) {
-  if ($("#mod_insertCronValue").length == 0) {
+  if ($("#mod_insertCronValue").length === 0) {
     $('body').append('<div id="mod_insertCronValue" title="{{Assistant cron}}" ></div>');
     $("#mod_insertCronValue").dialog({
       closeText: '',
@@ -299,7 +301,7 @@ nextdom.getSelectActionModal = function(_options, _callback) {
   if (!isset(_options)) {
     _options = {};
   }
-  if ($("#mod_insertActionValue").length == 0) {
+  if ($("#mod_insertActionValue").length === 0) {
     $('body').append('<div id="mod_insertActionValue" title="{{Sélectionner la commande}}" ></div>');
     $("#mod_insertActionValue").dialog({
       closeText: '',

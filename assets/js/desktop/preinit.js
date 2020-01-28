@@ -79,6 +79,14 @@ $(window).resize(function () {
   setHeaderPosition(false);
   // Gui automatic adjusting
   adjustNextDomTheme();
+
+  var modals = [$('#md_modal'), $('#md_modal2')];
+  modals.forEach(function (modal) {
+    if (modal.is(':ui-dialog')) {
+      modal.dialog('option', 'width', getModalWidth());
+      modal.dialog('option', 'position', {my: 'center', at: 'center', of: window});
+    }
+  });
 });
 
 /**
