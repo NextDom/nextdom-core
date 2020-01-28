@@ -19,6 +19,7 @@ var nextdom = function() {};
 nextdom.cache = [];
 nextdom.display = {};
 nextdom.connect = 0;
+nextdom.initialized = false;
 
 if (!isset(nextdom.cache.getConfiguration)) {
   nextdom.cache.getConfiguration = null;
@@ -177,7 +178,8 @@ nextdom.init = function() {
   bodyContainer.on('notify', function (_event, _options) {
     notify(_options.title, _options.message, _options.theme);
   });
-  if (typeof(user_id) !== 'undefined') {
+  if (typeof(user_id) !== 'undefined' && !nextdom.initialized) {
+    nextdom.initialized = true
     nextdom.changes();
   }
 };
