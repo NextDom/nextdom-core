@@ -14,12 +14,12 @@
 * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
 */
 
-nextdom.history = function () {
+nextdom.history = function() {
 };
 
 nextdom.history.chart = [];
 
-nextdom.history.get = function (queryParams) {
+nextdom.history.get = function(queryParams) {
   var paramsRequired = ['cmd_id', 'dateStart', 'dateEnd'];
   var paramsSpecifics = {
     pre_success: function (data) {
@@ -39,11 +39,11 @@ nextdom.history.get = function (queryParams) {
   }
 };
 
-nextdom.history.copyHistoryToCmd = function (queryParams) {
+nextdom.history.copyHistoryToCmd = function(queryParams) {
   nextdom.private.ajax('Cmd', 'copyHistoryToCmd', queryParams, ['source_id', 'target_id']);
 };
 
-nextdom.history.drawChart = function (queryParams) {
+nextdom.history.drawChart = function(queryParams) {
   if ($.type(queryParams.dateRange) == 'object') {
     queryParams.dateRange = json_encode(queryParams.dateRange);
   }
@@ -441,7 +441,7 @@ nextdom.history.drawChart = function (queryParams) {
   });
 };
 
-nextdom.history.generatePlotBand = function (_startTime, _endTime) {
+nextdom.history.generatePlotBand = function(_startTime, _endTime) {
   var plotBands = [];
   if ((_endTime - _startTime) > (7 * 86400000)) {
     return plotBands;
@@ -463,7 +463,7 @@ nextdom.history.generatePlotBand = function (_startTime, _endTime) {
   return plotBands;
 };
 
-nextdom.history.changePoint = function (queryParams) {
+nextdom.history.changePoint = function(queryParams) {
   var paramsRequired = ['cmd_id', 'datetime', 'value', 'oldValue'];
   var paramsSpecifics = {
     error: function (error) {

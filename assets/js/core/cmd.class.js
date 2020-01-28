@@ -13,19 +13,21 @@
 * You should have received a copy of the GNU General Public License
 * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
 */
-nextdom.cmd = function () {
-};
-nextdom.cmd.cache = Array();
+nextdom.cmd = function() {};
+
+nextdom.cmd.cache = [];
+
 if (!isset(nextdom.cmd.cache.byId)) {
-  nextdom.cmd.cache.byId = Array();
+  nextdom.cmd.cache.byId = [];
 }
 if (!isset(nextdom.cmd.cache.byHumanName)) {
-  nextdom.cmd.cache.byHumanName = Array();
+  nextdom.cmd.cache.byHumanName = [];
 }
 if (!isset(nextdom.cmd.update)) {
-  nextdom.cmd.update = Array();
+  nextdom.cmd.update = [];
 }
-nextdom.cmd.execute = function (queryParams) {
+
+nextdom.cmd.execute = function(queryParams) {
   var notifyMe = queryParams.notify || true;
   if (notifyMe) {
     var eqLogic = $('.cmd[data-cmd_id=' + queryParams.id + ']').closest('.eqLogic');
@@ -118,7 +120,7 @@ nextdom.cmd.execute = function (queryParams) {
   }
 };
 
-nextdom.cmd.test = function (queryParams) {
+nextdom.cmd.test = function(queryParams) {
   var paramsRequired = ['id'];
   var paramsSpecifics = {
     global: false,
@@ -227,7 +229,7 @@ nextdom.cmd.test = function (queryParams) {
   }
 };
 
-nextdom.cmd.refreshByEqLogic = function (queryParams) {
+nextdom.cmd.refreshByEqLogic = function(queryParams) {
   var cmds = $('.cmd[data-eqLogic_id=' + queryParams.eqLogic_id + ']');
   if (cmds.length > 0) {
     $(cmds).each(function () {
@@ -246,7 +248,7 @@ nextdom.cmd.refreshByEqLogic = function (queryParams) {
   }
 };
 
-nextdom.cmd.refreshValue = function (queryParams) {
+nextdom.cmd.refreshValue = function(queryParams) {
   for (var i in queryParams) {
     var cmd = $('.cmd[data-cmd_id=' + queryParams[i].cmd_id + ']');
     if (cmd.html() === undefined || cmd.hasClass('noRefresh')) {
@@ -259,15 +261,15 @@ nextdom.cmd.refreshValue = function (queryParams) {
   }
 };
 
-nextdom.cmd.toHtml = function (queryParams) {
+nextdom.cmd.toHtml = function(queryParams) {
   nextdom.private.ajax('Cmd', 'toHtml', queryParams, ['id', 'version']);
 };
 
-nextdom.cmd.replaceCmd = function (queryParams) {
+nextdom.cmd.replaceCmd = function(queryParams) {
   nextdom.private.ajax('Cmd', 'replaceCmd', queryParams, ['source_id', 'target_id']);
 };
 
-nextdom.cmd.save = function (queryParams) {
+nextdom.cmd.save = function(queryParams) {
   var paramsRequired = ['cmd'];
   var paramsSpecifics = {
     pre_success: function (data) {
@@ -288,7 +290,7 @@ nextdom.cmd.save = function (queryParams) {
   }
 };
 
-nextdom.cmd.multiSave = function (queryParams) {
+nextdom.cmd.multiSave = function(queryParams) {
   var paramsRequired = ['cmds'];
   var paramsSpecifics = {
     pre_success: function (data) {
@@ -304,7 +306,7 @@ nextdom.cmd.multiSave = function (queryParams) {
   }
 };
 
-nextdom.cmd.byId = function (queryParams) {
+nextdom.cmd.byId = function(queryParams) {
   var paramsRequired = ['id'];
   var paramsSpecifics = {
     pre_success: function (data) {
@@ -324,7 +326,7 @@ nextdom.cmd.byId = function (queryParams) {
   }
 };
 
-nextdom.cmd.byHumanName = function (queryParams) {
+nextdom.cmd.byHumanName = function(queryParams) {
   var paramsRequired = ['humanName'];
   var paramsSpecifics = {
     pre_success: function (data) {
@@ -344,11 +346,11 @@ nextdom.cmd.byHumanName = function (queryParams) {
   }
 };
 
-nextdom.cmd.usedBy = function (queryParams) {
+nextdom.cmd.usedBy = function(queryParams) {
   nextdom.private.ajax('Cmd', 'usedBy', queryParams, ['id']);
 };
 
-nextdom.cmd.changeType = function (_cmd, _subType) {
+nextdom.cmd.changeType = function(_cmd, _subType) {
   var selSubType = '<select style="width : 120px;margin-top : 5px;" class="cmdAttr form-control input-sm" data-l1key="subType">';
   var type = _cmd.find('.cmdAttr[data-l1key=type]').value();
   nextdom.getConfiguration({
@@ -374,7 +376,7 @@ nextdom.cmd.changeType = function (_cmd, _subType) {
   });
 };
 
-nextdom.cmd.changeSubType = function (_cmd) {
+nextdom.cmd.changeSubType = function(_cmd) {
   nextdom.getConfiguration({
     key: 'cmd:type:' + _cmd.find('.cmdAttr[data-l1key=type]').value() + ':subtype:' + _cmd.find('.cmdAttr[data-l1key=subType]').value(),
     default: 0,
@@ -484,7 +486,7 @@ nextdom.cmd.changeSubType = function (_cmd) {
   });
 };
 
-nextdom.cmd.availableType = function () {
+nextdom.cmd.availableType = function() {
   var selType = '<select style="width : 120px; margin-bottom : 3px;" class="cmdAttr form-control input-sm" data-l1key="type">';
   selType += '<option value="info">{{Info}}</option>';
   selType += '<option value="action">{{Action}}</option>';
@@ -492,7 +494,7 @@ nextdom.cmd.availableType = function () {
   return selType;
 };
 
-nextdom.cmd.getSelectModal = function (_options, _callback) {
+nextdom.cmd.getSelectModal = function(_options, _callback) {
   if (!isset(_options)) {
     _options = {};
   }
@@ -534,7 +536,7 @@ nextdom.cmd.getSelectModal = function (_options, _callback) {
   $('#mod_insertCmdValue').dialog('open');
 };
 
-nextdom.cmd.displayActionOption = function (_expression, _options, _callback) {
+nextdom.cmd.displayActionOption = function(_expression, _options, _callback) {
   var html = '';
   nextdom.private.ajaxCall({
     type: 'POST',
@@ -568,7 +570,7 @@ nextdom.cmd.displayActionOption = function (_expression, _options, _callback) {
   return html;
 };
 
-nextdom.cmd.displayActionsOption = function (queryParams) {
+nextdom.cmd.displayActionsOption = function(queryParams) {
   var paramsRequired = ['params'];
   if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
     var params = $.extend({}, nextdom.private.default_params, queryParams || {});
@@ -579,7 +581,7 @@ nextdom.cmd.displayActionsOption = function (queryParams) {
   }
 };
 
-nextdom.cmd.normalizeName = function (_tagname) {
+nextdom.cmd.normalizeName = function(_tagname) {
   cmdName = _tagname.toLowerCase().trim();
   var cmdTests = [];
   var cmdList = {
@@ -613,11 +615,11 @@ nextdom.cmd.normalizeName = function (_tagname) {
   return _tagname;
 };
 
-nextdom.cmd.setOrder = function (queryParams) {
+nextdom.cmd.setOrder = function(queryParams) {
   nextdom.private.ajax('Cmd', 'setOrder', queryParams, ['cmds'], true);
 };
 
-nextdom.cmd.displayDuration = function (_date, _el) {
+nextdom.cmd.displayDuration = function(_date, _el) {
   var arrDate = _date.split(/-|\s|:/);
   var timeInMillis = new Date(arrDate[0], arrDate[1] - 1, arrDate[2], arrDate[3], arrDate[4], arrDate[5]).getTime();
   _el.attr('data-time', timeInMillis);

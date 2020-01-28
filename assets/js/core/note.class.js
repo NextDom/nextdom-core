@@ -14,21 +14,21 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-nextdom.note = function () {
+nextdom.note = function() {
 };
 
-nextdom.note.remove = function (queryParams) {
+nextdom.note.remove = function(queryParams) {
   nextdom.private.ajax('Note', 'remove', queryParams, ['id']);
 };
 
-nextdom.note.byId = function (queryParams) {
+nextdom.note.byId = function(queryParams) {
   nextdom.private.ajax('Note', 'byId', queryParams, ['id']);
 };
 
-nextdom.note.save = function (queryParams) {
+nextdom.note.save = function(queryParams) {
   nextdom.private.ajax('Note', 'save', queryParams, ['note'], true);
 };
 
-nextdom.note.all = function (queryParams) {
+nextdom.note.all = function(queryParams) {
   nextdom.private.ajax('Note', 'all', queryParams);
 };

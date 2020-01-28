@@ -101,19 +101,6 @@ function adjustNextDomTheme() {
   });
 }
 
-/**
- * Adjust size and position of jquery modales
- */
-function modalesAdjust() {
-  var modals = [$('#md_modal'), $('#md_modal2')];
-  modals.forEach(function (modal) {
-    if (modal.is(':ui-dialog')) {
-      modal.dialog('option', 'width', getModalWidth());
-      modal.dialog('option', 'position', {my: 'center', at: 'center', of: window});
-    }
-  });
-}
-
 function getModalWidth() {
   if (jQuery(window).width() < 1000) {
     return '96%';

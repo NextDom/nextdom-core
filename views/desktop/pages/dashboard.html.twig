@@ -134,12 +134,12 @@
         <div class="fabs fab-filter">
             <span class="fab-action-button"><i id="fabCategory" class="fab-action-button__icon fas fa-filter"></i></span>
             <ul class="fab-buttons">
-                <li class="fab-buttons__item"><a class="fab-buttons__link cursor bg-green" data-tooltip="{{ 'dashboard.all-categories'|trans }}" onclick='selectCategory("all");'><i class="fas fa-asterisk"></i></a></li>
+                <li class="fab-buttons__item"><a class="fab-buttons__link cursor bg-green" data-tooltip="{{ 'dashboard.all-categories'|trans }}" onclick="selectCategory('all');"><i class="fas fa-asterisk"></i></a></li>
                 {% for categoryCode, category in dashboardCategories %}
                     {% if dashboardCategory == categoryCode %}
-                        <li class="fab-buttons__item"><a class="fab-buttons__link cursor" data-tooltip="{{ category.name|trans }}" style="background-color:{{ category.color }}" onclick='selectCategory("{{ categoryCode }}","{{ category.icon }}");'><i class="{{ category.icon }}"></i></a></li>
+                        <li class="fab-buttons__item"><a class="fab-buttons__link cursor" data-tooltip="{{ category.name|trans }}" style="background-color:{{ category.color }}" onclick="selectCategory('{{ categoryCode }}','{{ category.icon }}');"><i class="{{ category.icon }}"></i></a></li>
                     {% else %}
-                        <li class="fab-buttons__item"><a class="fab-buttons__link cursor" data-tooltip="{{ category.name|trans }}" style="background-color:{{ category.color }}" onclick='selectCategory("{{ categoryCode }}","{{ category.icon }}");'><i class="{{ category.icon }}"></i></a></li>
+                        <li class="fab-buttons__item"><a class="fab-buttons__link cursor" data-tooltip="{{ category.name|trans }}" style="background-color:{{ category.color }}" onclick="selectCategory('{{ categoryCode }}','{{ category.icon }}');"><i class="{{ category.icon }}"></i></a></li>
                     {% endif %}
                 {% endfor %}
             </ul>

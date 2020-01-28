@@ -14,33 +14,33 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-nextdom.log = function () {
+nextdom.log = function() {
 };
 
 nextdom.log.timeout = null;
 nextdom.log.currentAutoupdate = [];
 
-nextdom.log.list = function (queryParams) {
+nextdom.log.list = function(queryParams) {
   nextdom.private.ajax('Log', 'list', queryParams, false, false, queryParams.global || true);
 };
 
-nextdom.log.removeAll = function (queryParams) {
+nextdom.log.removeAll = function(queryParams) {
   nextdom.private.ajax('Log', 'removeAll', queryParams, false, false, queryParams.global || true);
 };
 
-nextdom.log.get = function (queryParams) {
+nextdom.log.get = function(queryParams) {
   nextdom.private.ajax('Log', 'get', queryParams, ['log'], false, queryParams.global || true);
 };
 
-nextdom.log.remove = function (queryParams) {
+nextdom.log.remove = function(queryParams) {
   nextdom.private.ajax('Log', 'remove', queryParams, ['log'], false, queryParams.global || true);
 };
 
-nextdom.log.clear = function (queryParams) {
+nextdom.log.clear = function(queryParams) {
   nextdom.private.ajax('Log', 'clear', queryParams, ['log'], false, queryParams.global || true);
 };
 
-nextdom.log.autoupdate = function (queryParams) {
+nextdom.log.autoupdate = function(queryParams) {
   if (!isset(queryParams.callCount)) {
     queryParams.callCount = 0;
   }

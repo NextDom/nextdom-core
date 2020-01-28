@@ -2,7 +2,7 @@
  * Ensemble des variables et fonctions de configuration / défaut
  * @namespace nextdom.private
  */
-var init = function (_param, _default) {
+var init = function(_param, _default) {
   return (typeof _param == 'number') ? _param : (typeof _param != 'boolean' || _param) && (_param !== false && _param || _default || '');
 };
 
@@ -58,7 +58,7 @@ var code = 42;
 /**
  * Fonction de conversion du retour AJAX en cas d'erreur en objet pour la fonction d'erreur
  */
-nextdom.private.handleAjaxErrorAPI = function (_request, _status, _error) {
+nextdom.private.handleAjaxErrorAPI = function(_request, _status, _error) {
   if (_request.status && _request.status != '0') {
     if (_request.responseText) {
       return {type: 'AJAX', code: code, message: _request.responseText};
@@ -72,7 +72,7 @@ nextdom.private.handleAjaxErrorAPI = function (_request, _status, _error) {
 /**
  * Retourne les paramètres AJAX de l'API en fonction des paramètres choisis par l'utilisateur
  */
-nextdom.private.getParamsAJAX = function (queryParams, target, action) {
+nextdom.private.getParamsAJAX = function(queryParams, target, action) {
   // cas particulier du type dans les paramètres
   var typeInData = false;
 
@@ -143,7 +143,7 @@ nextdom.private.getParamsAJAX = function (queryParams, target, action) {
 
 // tests en console :
 // try { nextdom.private.checkParamsValue({value : [{test : 'check', test2 :'eeee'},{test : 'oefop', test2 : 'kfefe', test3 : 10}], regexp : /a|e|ch|1|zec/}); } catch(e) { console.log(e); }
-nextdom.private.checkParamValue = function (queryParams) {
+nextdom.private.checkParamValue = function(queryParams) {
   try {
     checkParamsRequired(queryParams, ['value', 'regexp']);
   } catch (e) {
@@ -191,7 +191,7 @@ nextdom.private.checkParamValue = function (queryParams) {
  * @return {number} ret.missing.group Groupe associé au paramètre (0 pour les paramètres obligatoires et n pour les paramètres optionnels, ce numéro est identique pour les membres d'un même groupe, il faut qu'au moins l'un d'entre eux soit précisé pour que la fonction fonctionne)
  * @return {string} ret.missing.toString Renvoie un paramètre manquant sous forme de string pour l'affichage
  */
-nextdom.private.checkParamsRequired = function (queryParams, queryParamsRequired) {
+nextdom.private.checkParamsRequired = function(queryParams, queryParamsRequired) {
   var missings = Array();
   var group = Array();
   var missingAtLeastOneParam = false;
@@ -267,7 +267,7 @@ nextdom.private.checkParamsRequired = function (queryParams, queryParamsRequired
  * Check global
  * À impérativement encadrer de try {} catch () {}
  */
-nextdom.private.checkAndGetParams = function (queryParams, queryParamsSpecifics, queryParamsRequired) {
+nextdom.private.checkAndGetParams = function(queryParams, queryParamsSpecifics, queryParamsRequired) {
   // throw une exception en cas d'erreur (à attraper plus haut)
   nextdom.private.checkParamsRequired(queryParams, queryParamsRequired || []);
 
@@ -291,7 +291,7 @@ nextdom.private.checkAndGetParams = function (queryParams, queryParamsSpecifics,
 /**
  * Fonction générique qui permet de checker les valeurs des paramètres
  */
-nextdom.private.checkParamsValue = function (queryParams) {
+nextdom.private.checkParamsValue = function(queryParams) {
   if (Object.prototype.toString.call(queryParams) == '[object Object]') {
     nextdom.private.checkParamValue(queryParams);
   } else {
@@ -310,7 +310,7 @@ nextdom.private.checkParamsValue = function (queryParams) {
  *
  * @returns {boolean}
  */
-nextdom.private.isValidQuery = function (queryParams, requiredParams, specificParams) {
+nextdom.private.isValidQuery = function(queryParams, requiredParams, specificParams) {
   if (specificParams === undefined) {
     specificParams = {};
   }

@@ -14,13 +14,13 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-nextdom.security = function () {
+nextdom.security = function() {
 };
 
-nextdom.security.remove = function (queryParams) {
+nextdom.security.remove = function(queryParams) {
   nextdom.private.ajax('Connection', 'remove', queryParams, ['id']);
 };
 
-nextdom.security.ban = function (queryParams) {
+nextdom.security.ban = function(queryParams) {
   nextdom.private.ajax('Connection', 'ban', queryParams, ['id']);
 };

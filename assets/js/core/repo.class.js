@@ -14,10 +14,10 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-nextdom.repo = function () {
+nextdom.repo = function() {
 };
 
-nextdom.repo.install = function (queryParams) {
+nextdom.repo.install = function(queryParams) {
   var paramsRequired = ['id', 'repo'];
   var paramsSpecifics = {
     global: queryParams.global || true,
@@ -32,18 +32,18 @@ nextdom.repo.install = function (queryParams) {
   }
 };
 
-nextdom.repo.remove = function (queryParams) {
+nextdom.repo.remove = function(queryParams) {
   nextdom.private.ajax('Repo', 'remove', queryParams, ['id', 'repo'], false, queryParams.global || true);
 };
 
-nextdom.repo.setRating = function (queryParams) {
+nextdom.repo.setRating = function(queryParams) {
   nextdom.private.ajax('Repo', 'setRating', queryParams, ['id', 'rating', 'repo'], false, queryParams.global || true);
 };
 
-nextdom.repo.test = function (queryParams) {
+nextdom.repo.test = function(queryParams) {
   nextdom.private.ajax('Repo', 'test', queryParams, ['repo'], false, queryParams.global || true);
 };
 
-nextdom.repo.backupList = function (queryParams) {
+nextdom.repo.backupList = function(queryParams) {
   nextdom.private.ajax('Repo', 'backupList', queryParams, ['repo'], false, queryParams.global || true);
 };

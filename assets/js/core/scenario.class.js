@@ -14,7 +14,7 @@
 * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
 */
 
-nextdom.scenario = function () {
+nextdom.scenario = function() {
 };
 
 nextdom.scenario.cache = Array();
@@ -26,7 +26,7 @@ if (!isset(nextdom.scenario.update)) {
   nextdom.scenario.update = Array();
 }
 
-nextdom.scenario.all = function (queryParams) {
+nextdom.scenario.all = function(queryParams) {
   var paramsRequired = [];
   var paramsSpecifics = {
     pre_success: function (data) {
@@ -45,11 +45,11 @@ nextdom.scenario.all = function (queryParams) {
   }
 };
 
-nextdom.scenario.saveAll = function (queryParams) {
+nextdom.scenario.saveAll = function(queryParams) {
   nextdom.private.ajax('Scenario', 'saveAll', queryParams, ['scenarios'], true);
 };
 
-nextdom.scenario.toHtml = function (queryParams) {
+nextdom.scenario.toHtml = function(queryParams) {
   var paramsRequired = ['id', 'version'];
   var paramsSpecifics = {
     pre_success: function (data) {
@@ -72,15 +72,15 @@ nextdom.scenario.toHtml = function (queryParams) {
   }
 };
 
-nextdom.scenario.changeState = function (queryParams) {
+nextdom.scenario.changeState = function(queryParams) {
   nextdom.private.ajax('Scenario', 'changeState', queryParams, ['id', 'state'], false, false);
 };
 
-nextdom.scenario.getTemplate = function (queryParams) {
+nextdom.scenario.getTemplate = function(queryParams) {
   nextdom.private.ajax('Scenario', 'getTemplate', queryParams, false, false, false);
 };
 
-nextdom.scenario.convertToTemplate = function (queryParams) {
+nextdom.scenario.convertToTemplate = function(queryParams) {
   var paramsRequired = ['id'];
   if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
     var params = $.extend({}, nextdom.private.default_params, queryParams || {});
@@ -91,19 +91,19 @@ nextdom.scenario.convertToTemplate = function (queryParams) {
   }
 };
 
-nextdom.scenario.removeTemplate = function (queryParams) {
+nextdom.scenario.removeTemplate = function(queryParams) {
   nextdom.private.ajax('Scenario', 'removeTemplate', queryParams, ['template']);
 };
 
-nextdom.scenario.loadTemplateDiff = function (queryParams) {
+nextdom.scenario.loadTemplateDiff = function(queryParams) {
   nextdom.private.ajax('Scenario', 'loadTemplateDiff', queryParams, ['template', 'id']);
 };
 
-nextdom.scenario.applyTemplate = function (queryParams) {
+nextdom.scenario.applyTemplate = function(queryParams) {
   nextdom.private.ajax('Scenario', 'applyTemplate', queryParams, ['template', 'id', 'convert', 'newValues']);
 };
 
-nextdom.scenario.refreshValue = function (queryParams) {
+nextdom.scenario.refreshValue = function(queryParams) {
   if (!isset(queryParams.global) || !queryParams.global) {
     if (isset(nextdom.scenario.update) && isset(nextdom.scenario.update[queryParams.scenario_id])) {
       nextdom.scenario.update[queryParams.scenario_id](queryParams);
@@ -130,15 +130,15 @@ nextdom.scenario.refreshValue = function (queryParams) {
   }
 };
 
-nextdom.scenario.copy = function (queryParams) {
+nextdom.scenario.copy = function(queryParams) {
   nextdom.private.ajax('Scenario', 'copy', queryParams, ['id', 'name']);
 };
 
-nextdom.scenario.get = function (queryParams) {
+nextdom.scenario.get = function(queryParams) {
   nextdom.private.ajax('Scenario', 'get', queryParams, ['id']);
 };
 
-nextdom.scenario.save = function (queryParams) {
+nextdom.scenario.save = function(queryParams) {
   var paramsRequired = ['scenario'];
   var paramsSpecifics = {};
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
@@ -150,7 +150,7 @@ nextdom.scenario.save = function (queryParams) {
   }
 };
 
-nextdom.scenario.remove = function (queryParams) {
+nextdom.scenario.remove = function(queryParams) {
   var paramsRequired = ['id'];
   var paramsSpecifics = {};
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
@@ -162,11 +162,11 @@ nextdom.scenario.remove = function (queryParams) {
   }
 };
 
-nextdom.scenario.emptyLog = function (queryParams) {
+nextdom.scenario.emptyLog = function(queryParams) {
   nextdom.private.ajax('Scenario', 'emptyLog', queryParams, ['id']);
 };
 
-nextdom.scenario.getSelectModal = function (_options, callback) {
+nextdom.scenario.getSelectModal = function(_options, callback) {
   if (!isset(_options)) {
     _options = {};
   }
@@ -203,10 +203,10 @@ nextdom.scenario.getSelectModal = function (_options, callback) {
   $('#mod_insertScenarioValue').dialog('open');
 };
 
-nextdom.scenario.testExpression = function (queryParams) {
+nextdom.scenario.testExpression = function(queryParams) {
   nextdom.private.ajax('Scenario', 'testExpression', queryParams, ['expression']);
 };
 
-nextdom.scenario.setOrder = function (queryParams) {
+nextdom.scenario.setOrder = function(queryParams) {
   nextdom.private.ajax('Scenario', 'setOrder', queryParams, ['scenarios'], true);
 };
