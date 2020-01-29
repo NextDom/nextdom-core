@@ -95,11 +95,11 @@ abstract class BasePlanManager extends BaseManager
             SQLField::LINK_ID => $linkId,
             'planHeader_id' => $planHeaderId
         ];
-        $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . '
+        $sql = 'DELETE FROM ' . static::DB_CLASS_NAME . '
                 WHERE `link_type` = :link_type
                 AND `link_id` = :link_id
                 AND `' . static::PLANHEADER_ID . '` = :planHeader_id';
-        return DBHelper::getOneObject($sql, $params, self::CLASS_NAME);
+        return DBHelper::getOneObject($sql, $params, static::CLASS_NAME);
     }
 
     /**
