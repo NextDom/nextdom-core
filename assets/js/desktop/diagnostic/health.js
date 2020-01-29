@@ -43,7 +43,7 @@ initEvents();
  */
 function initEvents() {
     // Plugin configuration button
-    $('.bt_configurationPlugin').on('click',function(){
+    $('.bt_configurationPlugin').on('click', function() {
       $('#md_modal').dialog({title: "{{Configuration du plugin}}"});
       $("#md_modal").load('index.php?v=d&p=plugin&ajax=1&id='+$(this).attr('data-pluginid')).dialog('open');
     });
@@ -56,8 +56,7 @@ function initEvents() {
 
     // Benchmark button
     $('#bt_benchmarkNextDom').on('click',function(){
-      $('#md_modal').dialog({title: "{{NextDom benchmark}}"});
-      $("#md_modal").load('index.php?v=d&modal=nextdom.benchmark').dialog('open');
+      loadModal('modal', '{{NextDom benchmark}}', 'nextdom.benchmark');
     });
 
     // Plugin panel collapsing

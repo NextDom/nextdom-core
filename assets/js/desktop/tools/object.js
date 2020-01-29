@@ -71,8 +71,7 @@ function initEvents() {
 
     // Object links button
     $('#bt_graphObject').on('click', function () {
-        $('#md_modal').dialog({title: "{{Graphique des liens}}"});
-        $("#md_modal").load('index.php?v=d&modal=graph.link&filter_type=object&filter_id='+$("#objectId").value()).dialog('open');
+        loadModal('modal', '{{Graphique des liens}}', 'graph.link&filter_type=object&filter_id='+$("#objectId").value());
     });
 
     // Object list go back button
@@ -134,8 +133,7 @@ function initEvents() {
 
     // Globale view display button
     $('#bt_showObjectSummary').off('click').on('click', function () {
-        $('#md_modal').dialog({title: "{{Résumé Objets}}"});
-        $("#md_modal").load('index.php?v=d&modal=object.summary').dialog('open');
+        loadModal('modal', '{{Résumé Objets}}', 'object.summary');
     });
 
     // Object picture remove button

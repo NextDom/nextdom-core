@@ -167,9 +167,7 @@ function initEvents() {
 
     // Show two factor authentication process
     $('#bt_configureTwoFactorAuthentification').on('click', function () {
-        var mdModal = $('#md_modal');
-        mdModal.dialog({title: '{{Authentification 2 étapes}}'});
-        mdModal.load('index.php?v=d&modal=twoFactor.authentification').dialog('open');
+        loadModal('modal', '{{Authentification 2 étapes}}', 'twoFactor.authentification');
     });
 
     // Generate new user API key

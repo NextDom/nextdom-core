@@ -135,13 +135,11 @@ function initEvents() {
     });
 
     $('#bt_cmdConfigureRawObject').off('click').on('click', function () {
-        $('#md_modal2').dialog({title: "{{Informations}}"});
-        $("#md_modal2").load('index.php?v=d&modal=object.display&class=cmd&id=' + cmdInfo.id).dialog('open');
+        loadModal('modal2', '{{Informations}}', 'object.display&class=cmd&id=' + cmdInfo.id);
     });
 
     $('#bt_cmdConfigureGraph').on('click', function () {
-        $('#md_modal2').dialog({title: "{{Graphique des liens}}"});
-        $("#md_modal2").load('index.php?v=d&modal=graph.link&filter_type=cmd&filter_id=' + cmdInfo.id).dialog('open');
+        loadModal('modal2', '{{Graphique des liens}}', 'graph.link&filter_type=cmd&filter_id=' + cmdInfo.id);
     });
 
     $('#bt_cmdConfigureCopyHistory').off('click').on('click', function () {

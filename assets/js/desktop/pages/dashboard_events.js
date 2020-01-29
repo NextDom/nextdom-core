@@ -65,8 +65,7 @@ function loadInformations() {
 function initEvents() {
     // Opening welcome modal if not saved "not display anymore"
     if (typeof(nextdom_Welcome)!= 'undefined' && isset(nextdom_Welcome) && nextdom_Welcome == 1 && getUrlVars('noWelcome') != 1) {
-        $('#md_modal').dialog({title: "{{Bienvenue dans NextDom}}"});
-        $("#md_modal").load('index.php?v=d&modal=welcome').dialog('open');
+        loadModal('modal', '{{Bienvenue dans NextDom}}', 'welcome');
     }
 
     // Dashboard categorie filter button event handler declaration
@@ -128,8 +127,7 @@ function initEvents() {
 
     // Widget data click for history modele
     $('#div_pageContainer').on( 'click','.eqLogic-widget .history', function () {
-        $('#md_modal2').dialog({title: "Historique"});
-        $("#md_modal2").load('index.php?v=d&modal=cmd.history&id=' + $(this).data('cmd_id')).dialog('open');
+        loadModal('modal2', 'Historique', 'cmd.history&id=' + $(this).data('cmd_id'));
     });
 
     // Room title click for objets detail page

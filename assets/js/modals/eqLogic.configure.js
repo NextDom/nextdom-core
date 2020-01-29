@@ -126,8 +126,7 @@ function initEvents() {
     });
 
     $('#bt_eqLogicConfigureGraph').on('click', function () {
-        $('#md_modal2').dialog({title: "{{ Graphique des liens }}"});
-        $("#md_modal2").load('index.php?v=d&modal=graph.link&filter_type=eqLogic&filter_id=' + eqLogicInfo.id).dialog('open');
+        loadModal('modal2', '{{ Graphique des liens }}', 'graph.link&filter_type=eqLogic&filter_id=' + eqLogicInfo.id);
     });
 
     $('#table_widgetParameters').on('click', '.removeWidgetParameter', function () {
@@ -141,8 +140,7 @@ function initEvents() {
     });
 
     $('#bt_eqLogicConfigureRawObject').off('click').on('click', function () {
-        $('#md_modal2').dialog({title: "{{ Informations brutes }}"});
-        $("#md_modal2").load('index.php?v=d&modal=object.display&class=eqLogic&id=' + eqLogicInfo.id).dialog('open');
+        loadModal('modal2', '{{ Informations brutes }}', 'object.display&class=eqLogic&id=' + eqLogicInfo.id);
     })
 
     $('#bt_addWidgetParameters').off().on('click', function () {
@@ -162,8 +160,7 @@ function initEvents() {
 
     $('.bt_displayWidget').off('click').on('click', function () {
         var eqLogic = $('#div_displayEqLogicConfigure').getValues('.eqLogicAttr')[0];
-        $('#md_modal2').dialog({title: "{{ Widget }}"});
-        $('#md_modal2').load('index.php?v=d&modal=eqLogic.displayWidget&eqLogic_id=' + eqLogic.id + '&version=' + $(this).attr('data-version')).dialog('open');
+        loadModal('modal2', '{{ Widget }}', 'eqLogic.displayWidget&eqLogic_id=' + eqLogic.id + '&version=' + $(this).attr('data-version'));
     });
 
     $('#bt_eqLogicConfigureSave').on('click', function () {
@@ -229,13 +226,11 @@ function initEvents() {
     });
 
     $('.bt_advanceCmdConfigurationOnEqLogicConfiguration').off('click').on('click', function () {
-        $('#md_modal2').dialog({title: "{{ Configuration de la commande }}"});
-        $('#md_modal2').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).attr('data-id')).dialog('open');
+        loadModal('modal2', '{{ Configuration de la commande }}', 'cmd.configure&cmd_id=' + $(this).attr('data-id'));
     });
 
     $('.advanceCmdConfigurationCmdConfigure').off('dblclick').on('dblclick', function () {
-        $('#md_modal2').dialog({title: "{{ Configuration de la commande }}"});
-        $('#md_modal2').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).attr('data-id')).dialog('open');
+        loadModal('modal2', '{{ Configuration de la commande }}', 'cmd.configure&cmd_id=' + $(this).attr('data-id'));
     });
 
     $('#bt_resetbattery').on('click', function () {

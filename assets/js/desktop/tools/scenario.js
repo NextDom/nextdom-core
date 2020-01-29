@@ -186,20 +186,17 @@ function initEvents() {
 function initModalEvents() {
     // Links modal open button
     $('#bt_graphScenario').off('click').on('click', function () {
-        modalContainer.dialog({title: "{{Graphique de lien(s)}}"});
-        modalContainer.load('index.php?v=d&modal=graph.link&filter_type=scenario&filter_id=' + $('.scenarioAttr[data-l1key=id]').value()).dialog('open');
+        loadModal('modal', '{{Graphique de lien(s)}}', 'graph.link&filter_type=scenario&filter_id=' + $('.scenarioAttr[data-l1key=id]').value());
     });
 
     // Log modale open button
     $('#bt_logScenario').off('click').on('click', function () {
-        modalContainer.dialog({title: "{{Log d'exécution du scénario}}"});
-        modalContainer.load('index.php?v=d&modal=scenario.log.execution&scenario_id=' + $('.scenarioAttr[data-l1key=id]').value()).dialog('open');
+        loadModal('modal', '{{Log d\'exécution du scénario}}', 'scenario.log.execution&scenario_id=' + $('.scenarioAttr[data-l1key=id]').value());
     });
 
     // Template modale open button
     $('#bt_templateScenario').off('click').on('click', function () {
-        modalContainer.dialog({title: "{{Template de scénario}}"});
-        modalContainer.load('index.php?v=d&modal=scenario.template&scenario_id=' + $('.scenarioAttr[data-l1key=id]').value()).dialog('open');
+        loadModal('modal', '{{Template de scénario}}', 'scenario.template&scenario_id=' + $('.scenarioAttr[data-l1key=id]').value());
     });
 }
 
@@ -352,20 +349,17 @@ function initGeneralFormEvents() {
 
     // Variables display button
     $(".bt_displayScenarioVariable").off('click').on('click', function () {
-        modalContainer.dialog({title: "{{Variables des scénarios}}"});
-        modalContainer.load('index.php?v=d&modal=dataStore.management&type=scenario').dialog('open');
+        loadModal('modal', '{{Variables des scénarios}}', 'dataStore.management&type=scenario');
     });
 
     // Expression test modale display button
     $('.bt_showExpressionTest').off('click').on('click', function () {
-        modalContainer.dialog({title: "{{Testeur d'expression}}"});
-        modalContainer.load('index.php?v=d&modal=expression.test').dialog('open');
+        loadModal('modal', '{{Testeur d\'expression}}', 'expression.test');
     });
 
     // Summary modal display button
     $('.bt_showScenarioSummary').off('click').on('click', function () {
-        modalContainer.dialog({title: "{{Résumé scénario}}"});
-        modalContainer.load('index.php?v=d&modal=scenario.summary').dialog('open');
+        loadModal('modal', '{{Résumé scénario}}', 'scenario.summary');
     });
 
     // Bloc add modale element choose

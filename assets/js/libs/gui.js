@@ -213,3 +213,14 @@ function loadPage(pageUrl, noPushHistory) {
       nextdom.init();
   });
 }
+
+/**
+ * Load modal
+ * @param target Target div
+ * @param title Title
+ * @param modalUrl Url data
+ */
+function loadModal(target, title, modalUrl) {
+  $('#md_' + target).dialog({title: title});
+  $('#md_' + target).load('index.php?v=d&modal=' + modalUrl).dialog('open');
+}

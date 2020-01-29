@@ -72,8 +72,7 @@ function initEvents() {
 
     // Configure calcul charts
     $('#bt_configureCalculHistory').on('click',function(){
-        $('#md_modal').dialog({title: "{{Configuration des formules de calcul}}"});
-        $("#md_modal").load('index.php?v=d&modal=history.calcul').dialog('open');
+        loadModal('modal', '{{Configuration des formules de calcul}}', 'history.calcul');
     });
 
     // Clear graph button
@@ -136,8 +135,7 @@ function initEvents() {
 
     // Configure history
     $('#bt_openCmdHistoryConfigure').on('click',function(){
-        $('#md_modal').dialog({title: "{{Configuration de l'historique des commandes}}"});
-        $("#md_modal").load('index.php?v=d&modal=cmd.configureHistory').dialog('open');
+        loadModal('modal', '{{Configuration de l\'historique des commandes}}', 'cmd.configureHistory');
     });
 
     // Date change confirm

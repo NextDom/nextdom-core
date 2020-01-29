@@ -98,8 +98,7 @@ function addCommandHistory(_cmd) {
 
 
 $('.bt_configureHistoryAdvanceCmdConfiguration').off('click').on('click', function () {
-    $('#md_modal2').dialog({title: "{{ Configuration de la commande }}"});
-    $('#md_modal2').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).attr('data-id')).dialog('open');
+    loadModal('modal2', '{{ Configuration de la commande }}', 'cmd.configure&cmd_id=' + $(this).attr('data-id'));
 });
 
 $(".bt_configureHistoryExportData").on('click', function () {

@@ -39,7 +39,6 @@ timeline = null;
 // Page init
 displayTimeline();
 initEvents();
-var modalContainer = $('#md_modal');
 
 /**
  * Init events on the profils page
@@ -47,14 +46,12 @@ var modalContainer = $('#md_modal');
 function initEvents() {
     // Configure timeline command button
     $('#bt_configureTimelineCommand').on('click', function() {
-        modalContainer.dialog({title: '{{Configuration de l\'historique des commandes}}'});
-        modalContainer.load('index.php?v=d&modal=cmd.configureHistory').dialog('open');
+        loadModal('modal', '{{Configuration de l\'historique des commandes}}', 'cmd.configureHistory');
     });
 
     // Configure timeline scenario button
     $('#bt_configureTimelineScenario').on('click', function() {
-        modalContainer.dialog({title: '{{Résumé scénario}}'});
-        modalContainer.load('index.php?v=d&modal=scenario.summary').dialog('open');
+        loadModal('modal', '{{Résumé scénario}}', 'scenario.summary');
     });
 
     // Refresh button

@@ -199,8 +199,7 @@ function initEvents() {
 
     // Manage rights button
     $('#table_user').on( 'click','.bt_manage_restrict_rights', function () {
-        $('#md_modal').dialog({title: "Gestion des droits"});
-        $("#md_modal").load('index.php?v=d&modal=user.rights&id=' + $(this).closest('tr').find('.userAttr[data-l1key=id]').value()).dialog('open');
+        loadModal('modal', 'Gestion des droits', 'user.rights&id=' + $(this).closest('tr').find('.userAttr[data-l1key=id]').value());
     });
 
     // Disable Two Factor button

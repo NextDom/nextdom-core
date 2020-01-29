@@ -181,11 +181,11 @@ function clearErrors() {
 function setErrorOnInput(inputField, state) {
     var container = inputField.parent();
     if (state) {
-        inputField.addClass("has-error");
+        inputField.addClass('has-error');
         container.addClass('animationShake');
     }
     else {
-        inputField.removeClass("has-error");
+        inputField.removeClass('has-error');
         container.removeClass('animationShake');
     }
 }

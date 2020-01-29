@@ -94,8 +94,7 @@ $('#bt_showAllObject').on('click',function(){
 });
 
 $('#bt_plan3dHeaderConfigure').on('click',function(){
-    $('#md_modal').dialog({title: "{{Configuration du plan 3D}}"});
-    $('#md_modal').load('index.php?v=d&modal=plan3dHeader.configure&plan3dHeader_id='+plan3dHeader_id).dialog('open');
+    loadModal('modal', '{{Configuration du plan 3D}}', 'plan3dHeader.configure&plan3dHeader_id='+plan3dHeader_id);
 });
 
 $('#bt_plan3dHeaderAdd').on('click',function(){
@@ -158,8 +157,7 @@ window.addEventListener('dblclick', function(){
     raycaster.setFromCamera( mouse, camera );
     var intersects = raycaster.intersectObjects( scene.children,true );
     if(intersects.length > 0 && intersects[0].object.name != ''){
-        $('#md_modal').dialog({title: "{{Configuration de l\'objet}}"});
-        $('#md_modal').load('index.php?v=d&modal=plan3d.configure&&plan3dHeader_id='+plan3dHeader_id+'&name=' + intersects[0].object.name).dialog('open');
+        loadModal('modal', '{{Configuration de l\'objet}}', 'plan3d.configure&&plan3dHeader_id='+plan3dHeader_id+'&name=' + intersects[0].object.name);
     }
 }, false );
 

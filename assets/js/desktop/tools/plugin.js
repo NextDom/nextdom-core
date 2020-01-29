@@ -88,8 +88,7 @@ function initEvents() {
 
     // Add plugin by other source button
     $('#bt_addPluginFromOtherSource').on('click',function(){
-        $('#md_modal').dialog({title: "{{Ajouter un plugin}}"});
-        $('#md_modal').load('index.php?v=d&modal=update.add').dialog('open');
+        loadModal('modal', '{{Ajouter un plugin}}', 'update.add');
     });
 
     // Plugin configure button
@@ -196,11 +195,9 @@ function initEvents() {
     // Plugin log display button
     $('#div_plugin_log').on('click','.bt_plugin_conf_view_log',function(){
         if($('#md_modal').is(':visible')){
-            $('#md_modal2').dialog({title: "{{Log du plugin}}"});
-            $("#md_modal2").load('index.php?v=d&modal=log.display&log='+$(this).attr('data-log')).dialog('open');
+            loadModal('modal2', '{{Log du plugin}}', 'log.display&log='+$(this).attr('data-log'));
         }else{
-            $('#md_modal').dialog({title: "{{Log du plugin}}"});
-            $("#md_modal").load('index.php?v=d&modal=log.display&log='+$(this).attr('data-log')).dialog('open');
+            loadModal('modal', '{{Log du plugin}}', 'log.display&log='+$(this).attr('data-log'));
         }
     });
 

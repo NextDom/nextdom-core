@@ -122,8 +122,7 @@
 });
 
  $("#bt_editView").on('click', function(event) {
-    $('#md_modal').dialog({title: "{{Configuration de la vue}}"});
-    $('#md_modal').load('index.php?v=d&modal=view.configure&view_id='+$('.li_view.active').attr('data-view_id')).dialog('open');
+    loadModal('modal', '{{Configuration de la vue}}', 'view.configure&view_id='+$('.li_view.active').attr('data-view_id'));
 });
 
  $('#bt_saveView').on('click', function(event) {

@@ -68,8 +68,7 @@ function initEvents() {
 
     // Interaction Sentence list display
     $('.displayInteracQuery').on('click', function () {
-      $('#md_modal').dialog({title: "{{Liste des interactions}}"});
-      $('#md_modal').load('index.php?v=d&modal=interact.query.display&interactDef_id=' + $('.interactAttr[data-l1key=id]').value()).dialog('open');
+      loadModal('modal', '{{Liste des interactions}}', 'interact.query.display&interactDef_id=' + $('.interactAttr[data-l1key=id]').value());
     });
 
     // Intercation go back list button
@@ -141,8 +140,7 @@ function initEvents() {
 
     // Interaction test button
     $('#bt_testInteract').on('click', function () {
-      $('#md_modal').dialog({title: "{{Tester les interactions}}"});
-      $('#md_modal').load('index.php?v=d&modal=interact.test').dialog('open');
+      loadModal('modal', '{{Tester les interactions}}', 'interact.test');
     });
 
     // Interaction save button

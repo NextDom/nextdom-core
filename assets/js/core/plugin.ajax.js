@@ -385,8 +385,7 @@ $('body').on('click', '.eqLogicAction[data-action=add]', function () {
 });
 
 $('.eqLogic .eqLogicAction[data-action=configure]').on('click', function () {
-  $('#md_modal').dialog({title: "{{Configuration commande}}"});
-  $('#md_modal').load('index.php?v=d&modal=eqLogic.configure&eqLogic_id=' + $('.li_eqLogic.active').attr('data-eqLogic_id')).dialog('open');
+  loadModal('modal', '{{Configuration commande}}', 'eqLogic.configure&eqLogic_id=' + $('.li_eqLogic.active').attr('data-eqLogic_id'));
 });
 
 /**************************CMD*********************************************/
@@ -428,8 +427,7 @@ $('body').on('.cmd .cmdAction[data-action=test]', 'click', function (event) {
 });
 
 $('body').on('.cmd .cmdAction[data-action=configure]', 'click', function () {
-  $('#md_modal').dialog({title: "{{Configuration commande}}"});
-  $('#md_modal').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).closest('.cmd').attr('data-cmd_id')).dialog('open');
+  loadModal('modal', '{{Configuration commande}}', 'cmd.configure&cmd_id=' + $(this).closest('.cmd').attr('data-cmd_id'));
 });
 
 $('.eqLogicThumbnailContainer').packery();

@@ -51,7 +51,7 @@ initEvents();
  * Load informations in all forms of the page
  */
 function loadInformations() {
-    updateLogView.height($(window).height() - $('header').height() - 150);
+    updateLogView.height(window.innerHeight - $('header').height() - 150);
     updateLogView.parent().height($(window).outerHeight() - $('header').outerHeight() - 160);
 }
 

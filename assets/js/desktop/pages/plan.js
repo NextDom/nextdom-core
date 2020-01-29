@@ -420,8 +420,7 @@ if (user_isAdmin == 1) {
         icon: 'fa-cogs',
         callback: function (key, opt) {
           savePlan(false, false);
-          $('#md_modal').dialog({title: "{{Configuration du widget}}"});
-          $('#md_modal').load('index.php?v=d&modal=plan.configure&id=' + $(this).attr('data-plan_id')).dialog('open');
+          loadModal('modal', '{{Configuration du widget}}', 'plan.configure&id=' + $(this).attr('data-plan_id'));
         }
       },
       configuration: {
@@ -634,13 +633,13 @@ $('.div_displayObject').delegate('.graph-widget', 'resize', function () {
 
 $('#div_pageContainer').delegate('.div_displayObject > .eqLogic-widget .history', 'click', function () {
   if (!editOption.state) {
-    $('#md_modal').dialog({title: "Historique"}).load('index.php?v=d&modal=cmd.history&id=' + $(this).data('cmd_id')).dialog('open');
+    loadModal('modal', '{{Historique}}', 'cmd.history&id=' + $(this).data('cmd_id'));
   }
 });
 
 $('#div_pageContainer').delegate('.div_displayObject > .cmd-widget.history', 'click', function () {
   if (!editOption.state) {
-    $('#md_modal').dialog({title: "Historique"}).load('index.php?v=d&modal=cmd.history&id=' + $(this).data('cmd_id')).dialog('open');
+    loadModal('modal', '{{Historique}}', 'cmd.history&id=' + $(this).data('cmd_id'));
   }
 });
 
@@ -907,8 +906,7 @@ function savePlan(_refreshDisplay, _async) {
 }
 
 function showConfigModal() {
-  $('#md_modal').dialog({title: "{{Configuration du design}}"});
-  $('#md_modal').load('index.php?v=d&modal=planHeader.configure&planHeader_id=' + planHeader_id).dialog('open');
+  loadModal('modal', '{{Configuration du design}}', 'planHeader.configure&planHeader_id=' + planHeader_id);
 }
 
 function displayObject(_plan, _html, _noRender) {

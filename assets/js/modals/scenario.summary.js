@@ -128,8 +128,7 @@ function refreshScenarioSummary(){
             // Scenario log view button
             $('.bt_summaryViewLog').off().on('click',function(){
                 var tr = $(this).closest('tr');
-                $('#md_modal2').dialog({title: "{{ Log d\'exécution du scénario }}"});
-                $("#md_modal2").load('index.php?v=d&modal=scenario.log.execution&scenario_id=' + tr.attr('data-id')).dialog('open');
+                loadModal('modal2', '{{ Log d\'exécution du scénario }}', 'scenario.log.execution&scenario_id=' + tr.attr('data-id'));
             });
 
             // Scenario stop button

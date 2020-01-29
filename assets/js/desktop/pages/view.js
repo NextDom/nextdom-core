@@ -143,8 +143,7 @@ if (view_id != '') {
 }
 
 $('#div_pageContainer').delegate('.cmd-widget.history', 'click', function () {
-  $('#md_modal2').dialog({title: "Historique"});
-  $("#md_modal2").load('index.php?v=d&modal=cmd.history&id=' + $(this).data('cmd_id')).dialog('open');
+  loadModal('modal2', 'Historique', 'cmd.history&id=' + $(this).data('cmd_id'));
 });
 
 $('.bt_displayView').on('click', function () {

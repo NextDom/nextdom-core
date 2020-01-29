@@ -68,7 +68,7 @@ $(window).resize(function () {
   initRowOverflow();
 
   // Close left menu if small resolution comming
-  if ($(window).width() < 768) {
+  if (window.innerWidth < 768) {
     $('body').removeClass("sidebar-collapse");
   }
 

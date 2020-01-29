@@ -160,14 +160,12 @@ function initEvents() {
 
     // Cron detail display button
     $("#table_cron").delegate(".display", 'click', function () {
-        $('#md_modal').dialog({title: "{{Détails du cron}}"});
-        $("#md_modal").load('index.php?v=d&modal=object.display&class=cron&id='+$(this).closest('tr').attr('id')).dialog('open');
+        loadModal('modal', '{{Détails du cron}}', 'object.display&class=cron&id='+$(this).closest('tr').attr('id'));
     });
 
     // Listener detail display button
     $("#table_listener").delegate(".display", 'click', function () {
-        $('#md_modal').dialog({title: "{{Détails du listener}}"});
-        $("#md_modal").load('index.php?v=d&modal=object.display&class=listener&id='+$(this).closest('tr').attr('id')).dialog('open');
+        loadModal('modal', '{{Détails du listener}}', 'object.display&class=listener&id='+$(this).closest('tr').attr('id'));
     });
 
     // Cron demon change

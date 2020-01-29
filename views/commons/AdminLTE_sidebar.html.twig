@@ -126,7 +126,7 @@
                     <li><a href="index.php?v=d&p=history"><i class="fas fa-chart-area spacing-right"></i>{{ 'sidebar.diagnostics-history'|trans }}</a></li>
                     <li><a href="index.php?v=d&p=timeline"><i class="fas fa-history spacing-right"></i>{{ 'sidebar.diagnostics-timeline'|trans }}</a></li>
                     <li><a href="index.php?v=d&p=log"><i class="fas fa-file-alt spacing-right"></i>{{ 'sidebar.diagnostics-logs'|trans }}</a></li>
-                    <li><a href="#" id="bt_showExpressionTest"><i class="fas fa-rss spacing-right"></i>{{ 'scenario.test-expression'|trans }}</a></li>
+                    <li><a href="#" class="bt_showExpressionTest"><i class="fas fa-rss spacing-right"></i>{{ 'scenario.test-expression'|trans }}</a></li>
                 </ul>
             </li>
             <li class="treeview" id="side9">
@@ -145,7 +145,7 @@
                         {% if JEEDOM_VERSION is defined %}{{ 'common.jeedom-version'|trans ~ ' : ' ~ JEEDOM_VERSION }}{% endif %}"><i class="fas fa-code-branch spacing-right"></i>{{ 'common.version'|trans ~ ' ' ~ NEXTDOM_VERSION }}</a></li>
                     <li><a href="https://www.nextdom.org" target="_blank" data-toggle="tooltip" title="" data-html="true"
                         data-original-title="{{ 'sidebar.rights'|trans }}."><i class="fas fa-certificate spacing-right"></i>{{ 'sidebar.licence'|trans ~ ' - ' ~ 'now'|date('Y') }}</a></li>
-                    <li><a id="bt_nextdomAboutSide" class="cursor"><i class="fas fa-info-circle spacing-right"></i>{{ 'sidebar.about'|trans }}</a></li>
+                    <li><a class="bt_nextdomAbout cursor"><i class="fas fa-info-circle spacing-right"></i>{{ 'sidebar.about'|trans }}</a></li>
                 </ul>
             </li>
             <li class="treeview" id="side10">
