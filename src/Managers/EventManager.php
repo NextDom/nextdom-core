@@ -100,8 +100,8 @@ class EventManager
     /**
      * Add multiple events in cache
      *
-     * @param string $eventName
-     * @param array $values
+     * @param       $eventCode
+     * @param array $eventOptions
      * @throws \Exception
      */
     public static function adds($eventCode, $eventOptions = [])
@@ -126,7 +126,7 @@ class EventManager
     /**
      * Clean events
      *
-     * @param $events
+     * @param $_events
      * @return array
      */
     public static function cleanEvent($_events)

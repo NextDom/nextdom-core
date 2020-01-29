@@ -407,10 +407,18 @@ class ConfigManager
         return $newValue;
     }
 
+    /**
+     * @param $_value
+     * @return string|string[]
+     */
     public static function preConfig_info_latitude($_value){
         return str_replace(',','.',$_value);
     }
 
+    /**
+     * @param $_value
+     * @return string|string[]
+     */
     public static function preConfig_info_longitude($_value){
         return str_replace(',','.',$_value);
     }

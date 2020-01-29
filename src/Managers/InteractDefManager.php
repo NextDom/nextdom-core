@@ -107,6 +107,10 @@ class InteractDefManager extends BaseManager
         return static::searchMultipleByClauses($clauses);
     }
 
+    /**
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
     public static function regenerateInteract()
     {
         foreach (self::all() as $interactDef) {

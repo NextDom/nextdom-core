@@ -43,6 +43,9 @@ use NextDom\Model\Entity\Cron;
  */
 class ConsistencyManager
 {
+    /**
+     * @var array 
+     */
     private static $defaultSummary = [
         'security' => ['key' => 'security', 'name' => 'Alerte', 'calcul' => 'sum', 'icon' => '<i class="icon nextdom-alerte2"></i>', 'unit' => '', 'count' => 'binary', 'allowDisplayZero' => false],
         'motion' => ['key' => 'motion', 'name' => 'Mouvement', 'calcul' => 'sum', 'icon' => '<i class="icon nextdom-mouvement"></i>', 'unit' => '', 'count' => 'binary', 'allowDisplayZero' => false],
@@ -130,11 +133,11 @@ class ConsistencyManager
                     if (false == is_object($cron)) {
                         $cron = new Cron();
                     }
-                    $cron->setClass($cronClass);
-                    $cron->setFunction($cronName);
-                    $cron->setSchedule($cronConfig["schedule"]);
-                    $cron->setTimeout($cronConfig["timeout"]);
-                    $cron->setDeamon(0);
+                    $cron->setClass($cronClass)
+                         ->setFunction($cronName)
+                         ->setSchedule($cronConfig["schedule"])
+                         ->setTimeout($cronConfig["timeout"])
+                         ->setDeamon(0);
                     if (true == array_key_exists("enabled", $cronConfig)) {
                         $cron->setEnable($cronConfig["enabled"]);
                     }
@@ -148,7 +151,7 @@ class ConsistencyManager
     /**
      * @return array
      */
-    public static function getDefaultCrons()
+    public static function getDefaultCrons(): array
     {
         return [
             "nextdom" => [
@@ -249,6 +252,9 @@ class ConsistencyManager
         ];
     }
 
+    /**
+     * @throws \Exception
+     */
     private static function cleanWidgetCache()
     {
         foreach (EqLogicManager::all() as $c_item) {
@@ -269,6 +275,9 @@ class ConsistencyManager
         }
     }
 
+    /**
+     * @throws \Exception
+     */
     private static function resetCommandsActionID()
     {
         foreach (CmdManager::all() as $c_cmd) {
