@@ -71,6 +71,8 @@ namespace {
         ('1' == ConfigManager::getDefaultConfiguration()['core']['developer::exceptionhandler'])) {
         Symfony\Component\Debug\ErrorHandler::register();
         Symfony\Component\Debug\ExceptionHandler::register();
+        Symfony\Component\Debug\Debug::enable();
+        Symfony\Component\Debug\DebugClassLoader::enable();
     }
 
     /**
