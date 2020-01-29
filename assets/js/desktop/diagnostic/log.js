@@ -43,8 +43,8 @@ initEvents();
  */
 function loadInformations() {
   $(document).ready(function () {
-    $('pre').height($(window).height() - 339);
-    $('#ul_object').height($(window).height() - 339);
+    $('pre').height($(window).height() - 300);
+    $('#ul_object').height($(window).height() - 279);
     $('#ul_object').css("overflow-y", "auto");
     $('#ul_object').css("padding-right", "5px");
     sortList("#ul_object", "timing");
@@ -122,6 +122,7 @@ function initEvents() {
   // Display log by alphabetic sort
   $("#bt_LogAlphabetic").on('click', function (event) {
     sortList("#ul_object", "log");
+    $(".li_log").removeClass('active');
     $('.li_log').first().addClass('active');
     $('#bt_LogAlphabetic').removeClass('btn-action').addClass('btn-info');
     $('#bt_LogChronologic').removeClass('btn-info').addClass('btn-action');
@@ -131,6 +132,7 @@ function initEvents() {
   // Display log by timing sort
   $("#bt_LogChronologic").on('click', function (event) {
     sortList("#ul_object", "timing");
+    $(".li_log").removeClass('active');
     $('.li_log').first().addClass('active');
     $('#bt_LogChronologic').removeClass('btn-action').addClass('btn-info');
     $('#bt_LogAlphabetic').removeClass('btn-info').addClass('btn-action');

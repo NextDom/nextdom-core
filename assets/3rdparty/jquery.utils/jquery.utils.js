@@ -254,6 +254,17 @@ function init(_value, _default) {
     return;
   };
 
+  /********************************loading************************/
+  $.showLoading = function () {
+    if ($('#jqueryLoadingDiv').length == 0) {
+      $('body').append('<div id="jqueryLoadingDiv"><div class="overlay"></div><i class="fa fa-cog fa-spin loadingImg"></i></div>');
+    }
+    $('#jqueryLoadingDiv').show();
+  };
+  $.hideLoading = function () {
+    $('#jqueryLoadingDiv').hide();
+  };
+
   /*********************jquery alert*************************************/
   $.fn.showAlert = function (_options) {
     var options = init(_options, {});

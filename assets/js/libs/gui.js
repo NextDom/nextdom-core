@@ -101,11 +101,50 @@ function adjustNextDomTheme() {
   });
 }
 
+/**
+ * Adjust size and position of jquery modales
+ */
+function modalsAdjust() {
+  var modals = [$('#md_modal'), $('#md_modal2'), $('#md_pageHelp')];
+  modals.forEach(function (modal) {
+    if (modal.is(':ui-dialog')) {
+      modal.dialog('option', 'width', getModalWidth());
+      modal.dialog('option', 'height', getModalHeight());
+      modal.dialog('option', 'position', {my: 'center', at: 'center', of: window});
+    }
+  });
+}
+
+/**
+ * Calcul modal width depend of width screen
+ */
 function getModalWidth() {
   if (jQuery(window).width() < 1000) {
     return '96%';
   }
   return '80%';
+}
+
+/**
+ * Calcul modal width depend of width screen
+ */
+function getModalHeight() {
+  return (jQuery(window).height() - 100);
+}
+
+/**
+ * Calcul modal width depend of width screen
+ */
+function goOnTopDisplay() {
+  var goOnTopButton = document.getElementById('bt_goOnTop');
+  // GoOnTop button management
+  if (goOnTopButton !== undefined && goOnTopButton !== null) {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+      goOnTopButton.style.display = 'block';
+    } else {
+      goOnTopButton.style.display = 'none';
+    }
+  }
 }
 
 /**

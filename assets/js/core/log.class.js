@@ -67,7 +67,7 @@ nextdom.log.autoupdate = function(queryParams) {
     } else {
       queryParams['search'].value('');
     }
-    queryParams.display.scrollTop(queryParams.display.height() + 200000);
+    queryParams.display.scrollTop(queryParams.display.innerHeight() + scrollTopToDown);
     if (queryParams['control'].attr('data-state') == 0) {
       queryParams['control'].attr('data-state', 1);
     }
@@ -80,7 +80,7 @@ nextdom.log.autoupdate = function(queryParams) {
         $(this).removeClass('btn-success').addClass('btn-warning');
         $(this).html('<i class="fas fa-pause spacing-right"></i>{{Pause}}');
         $(this).attr('data-state', 1);
-        queryParams.display.scrollTop(queryParams.display.height() + 200000);
+        queryParams.display.scrollTop(queryParams.display.innerHeight() + scrollTopToDown);
         nextdom.log.autoupdate(queryParams);
       }
     });
@@ -115,13 +115,13 @@ nextdom.log.autoupdate = function(queryParams) {
         }
       }
       queryParams.display.text(log);
-      queryParams.display.scrollTop(queryParams.display.height() + 200000);
+      queryParams.display.scrollTop(queryParams.display.innerHeight() + scrollTopToDown);
       if (nextdom.log.timeout !== null) {
-        clearTimeout(jeedom.log.timeout);
+        clearTimeout(nextdom.log.timeout);
       }
       nextdom.log.timeout = setTimeout(function () {
         nextdom.log.autoupdate(queryParams)
-      }, 1000);
+      }, 500);
     },
     error: function () {
       if (nextdom.log.timeout !== null) {
@@ -129,7 +129,7 @@ nextdom.log.autoupdate = function(queryParams) {
       }
       nextdom.log.timeout = setTimeout(function () {
         nextdom.log.autoupdate(queryParams)
-      }, 1000);
+      }, 500);
     },
   });
 };

@@ -227,7 +227,6 @@ general:
     stateCode: "Code pays (FR,US...)"
     various: "Divers"
   horodatage: "Horodatage"
-  ignore_system_time: "Ignorer la vérification"
   installation_key: "Clé d'installation"
   language: "Langage"
   language-used: "Langue utilisée"
@@ -246,6 +245,8 @@ general:
   time: "Horodatage"
   time_zone: "Fuseau horaire"
   time_server: "Serveur de temps optionnel"
+  time_server_checking: "Vérification de l'heure système"
+  time_server_ignore: "Ignorer"
   tooltip:
      address: "Adresse de votre maison, permet de ne pas avoir à la remplir dans les plugins"
      coordinates: "Coordonées géographique de votre maison, permet de ne pas avoir à la remplir dans les plugins"
@@ -258,7 +259,7 @@ general:
      nbOccupant: "Nombre d'occupant, permet de ne pas avoir à la remplir dans les plugins"
      time_zone: "Fuseau horaire de votre NextDom"
      time_server: "Permet d'ajouter un serveur de temps à NextDom utilisé lorsque NextDom force la synchronisation de l'heure"
-     ignore_system_time: "Ignorer la vérification de l'heure système"
+     time_server_ignore: "Ignorer la vérification"
 health:
   tmp-space-left: "Espace temporaire disponible"
   tmp-problem: "En cas d'erreur essayez de redémarrer. Si le problème persiste, testez en désactivant les plugins un à un jusqu'à trouver le coupable"

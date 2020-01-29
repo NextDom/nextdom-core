@@ -100,21 +100,6 @@ function loadInformations() {
  * Init events on the profils page
  */
 function initEvents() {
-    $("#md_cmdConfigureSelectMultiple").dialog({
-        closeText: '',
-        autoOpen: false,
-        modal: true,
-        height: jQuery(window).height() - 100,
-        width: getModalWidth(),
-        open: function () {
-            $("body").css({overflow: 'hidden'});
-            $(this).dialog("option", "position", {my: "center", at: "center", of: window});
-        },
-        beforeClose: function (event, ui) {
-            $("body").css({overflow: 'inherit'});
-        }
-    });
-
     $('#table_widgetParametersCmd').delegate('.removeWidgetParameter', 'click', function () {
         $(this).closest('tr').remove();
     });
@@ -428,7 +413,8 @@ function initEvents() {
             cmd.display.parameters[$(this).find('.key').value()] = $(this).find('.value').value();
         });
         cmd = {display: cmd.display, template: cmd.template};
-        $('#md_cmdConfigureSelectMultiple').load('index.php?v=d&modal=cmd.selectMultiple&cmd_id=' + cmdInfo.id, function () {
+        $('#md_modal2').dialog({title: "{{Sélection multiple de commandes}}"});
+        $('#md_modal2').load('index.php?v=d&modal=cmd.selectMultiple&cmd_id=' + cmdInfo.id, function () {
             initTableSorter();
             $('#bt_cmdConfigureSelectMultipleAlertToogle').off().on('click', function () {
                 var state = false;

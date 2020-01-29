@@ -50,6 +50,9 @@ function fixLoadingHide() {
   }
 }
 
+/**
+ * Init autosizing of text area
+ */
 function taAutosize() {
   initTextAreaAutosize()
 }

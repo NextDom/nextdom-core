@@ -34,7 +34,6 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-
 // ?
 jQuery.fn.findAtDepth = function (selector, maxDepth) {
   var depths = [], i;
@@ -69,16 +68,16 @@ function notify(_title, _text, _class_name) {
     }
     if (_class_name == 'success') {
       _backgroundColor = '#00a65a';
-      _icon = 'far fa-check-circle fa-3x';
+      _icon = 'fas fa-check-circle fa-3x';
     } else if (_class_name == 'warning') {
       _backgroundColor = '#f39c12';
-      _icon = 'fas fa-exclamation-triangle fa-3x';
+      _icon = 'fas fa-warning fa-3x';
     } else if (_class_name == 'error') {
       _backgroundColor = '#dd4b39';
-      _icon = 'fas fa-times fa-3x';
+      _icon = 'fas fa-times-circle fa-3x';
     } else {
       _backgroundColor = '#33B8CC';
-      _icon = 'fas fa-info fa-3x';
+      _icon = 'fas fa-info-circle fa-3x';
     }
 
     iziToast.show({
@@ -147,31 +146,9 @@ function notify(_title, _text, _class_name) {
  * @param callbackFunc Callback function who receive the icon code
  */
 function chooseIcon(callbackFunc) {
-  var chooseIconModal = $('#mod_selectIcon');
-  if (chooseIconModal.length === 0) {
-    $('#div_pageContainer').append('<div id="mod_selectIcon" title="{{Choisissez votre icône}}" ></div>');
-    chooseIconModal = $('#mod_selectIcon');
-    // Init choose icon modal
-    chooseIconModal.dialog({
-      closeText: '',
-      autoOpen: false,
-      modal: true,
-      height: (jQuery(window).height() - 150),
-      width: getModalWidth(),
-      open: function () {
-        $('body').css({overflow: 'hidden'});
-        $(this).dialog('option', 'position', {my: 'center', at: 'center', of: window});
-      },
-      beforeClose: function (event, ui) {
-        $('body').css({overflow: 'inherit'});
-      }
-    });
-    // Populate modal
-    jQuery.ajaxSetup({async: false});
-    chooseIconModal.load('index.php?v=d&modal=icon.selector');
-    jQuery.ajaxSetup({async: true});
-  }
-  chooseIconModal.dialog('option', 'buttons', {
+  $('#md_modal2').dialog({title: "{{Choisissez votre icône}}"});
+  $('#md_modal2').load('index.php?v=d&modal=icon.selector');
+  $("#md_modal2").dialog('option', 'buttons', {
     'Annuler': function () {
       $(this).dialog('close');
     },
@@ -185,7 +162,7 @@ function chooseIcon(callbackFunc) {
       $(this).dialog('close');
     }
   });
-  chooseIconModal.dialog('open');
+  $('#md_modal2').dialog('open');
 }
 
 /**
