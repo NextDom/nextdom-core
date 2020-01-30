@@ -59,7 +59,7 @@ function loadInformations() {
 function initEvents() {
   // Download button
   $('#bt_downloadLog').click(function () {
-    var logFile = $('.li_log.active').attr('data-log')
+    var logFile = $('.li_log.active').attr('data-log');
     if (logFile !== undefined) {
       window.open('src/Api/downloadFile.php?pathfile=log/' + logFile, "_blank", null);
     }

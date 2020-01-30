@@ -189,7 +189,7 @@ class ObjectAjax extends BaseAjax
                      */
                     foreach ($scenarios as $scenario) {
                         $scenariosResult[$i . '::' . $id][] = [
-                            'id' => $scenario->getId(),
+                            'scenario_id' => $scenario->getId(),
                             'state' => $scenario->getState(),
                             'name' => $scenario->getName(),
                             'icon' => $scenario->getDisplay(Common::ICON),
@@ -220,7 +220,7 @@ class ObjectAjax extends BaseAjax
                  */
                 foreach ($scenarios as $scenario) {
                     $scenariosResult[] = [
-                        'id' => $scenario->getId(),
+                        'scenario_id' => $scenario->getId(),
                         'state' => $scenario->getState(),
                         'name' => $scenario->getName(),
                         'icon' => $scenario->getDisplay('icon'),

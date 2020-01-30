@@ -157,7 +157,7 @@ function gen_js {
            assets/js/desktop/menu.js \
            assets/js/desktop/preinit.js \
            assets/js/desktop/postinit.js \
-           assets/js/desktop/utils.js \
+           assets/js/libs/utils.js \
            assets/js/desktop/search.js \
            assets/js/desktop/jeedomCompatibility.js \
            vendor/node_modules/bootbox/dist/bootbox.min.js \

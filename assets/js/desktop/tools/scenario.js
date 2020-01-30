@@ -548,7 +548,7 @@ function initScenarioEditorEvents() {
         updateSortable();
         setInputExpressionsEvent();
         setUndoStack();
-    })
+    });
 
     // Bloc else button
     pageContainer.off('click', '.bt_addSinon').on('click', '.bt_addSinon', function (event) {
@@ -738,13 +738,13 @@ function initScenarioEditorEvents() {
         } else {
             BLOC_LAST_FOCUS = true;
         }
-    })
+    });
     scenarioContainer.off('click', '.scenario-title').on('click', '.scenario-title', function() {
         blocFocusing($(this),true);
-    })
+    });
     scenarioContainer.off('click', '.scenario-action-bloc').on('click', '.scenario-action-bloc', function() {
         blocFocusing($(this),true);
-    })
+    });
 
 
     // Bloc copy / cut
@@ -1238,7 +1238,7 @@ function updateScenarioDisplay(_id, _data) {
     var scenarioState = $('#span_ongoing');
     scenarioStartBtn.hide();
     scenarioStopBtn.hide();
-    scenarioState.removeClass('label-danger label-info label-success label-warning label-default')
+    scenarioState.removeClass('label-danger label-info label-success label-warning label-default');
     if (isset(_data.isActive) && _data.isActive != 1) {
         scenarioState.text('{{Inactif}}');
         scenarioState.addClass('label-action');

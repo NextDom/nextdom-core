@@ -240,7 +240,7 @@ function initEvents() {
 
     // Intercation display action option on focusout
     $('#div_pageContainer').undelegate(".cmdAction.expressionAttr[data-l1key=cmd]", 'focusout').delegate('.cmdAction.expressionAttr[data-l1key=cmd]', 'focusout', function (event) {
-        var type = $(this).attr('data-type')
+        var type = $(this).attr('data-type');
         var expression = $(this).closest('.' + type).getValues('.expressionAttr');
         var el = $(this);
         nextdom.cmd.displayActionOption($(this).value(), init(expression[0].options), function (html) {
@@ -307,7 +307,7 @@ function displayInteract(_id){
     nextdom.interact.get({
         id: _id,
         success: function (data) {
-            actionOptions = []
+            actionOptions = [];
             $('#interactId').value(_id);
             $('#div_action').empty();
             $('.interactAttr').value('');

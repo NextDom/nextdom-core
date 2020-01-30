@@ -52,7 +52,7 @@ initEvents();
  */
 function loadInformations() {
     updateLogView.height(window.innerHeight - $('header').height() - 150);
-    updateLogView.parent().height($(window).outerHeight() - $('header').outerHeight() - 160);
+    updateLogView.parent().height(window.outerHeight - $('header').outerHeight() - 160);
 }
 
 /**

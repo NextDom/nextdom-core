@@ -41,7 +41,6 @@
  * Second entry point when page is loaded
  */
 function initPage() {
-  console.log('Init page');
   // Init functions calls
   initTableSorter();
   initReportMode();
@@ -62,7 +61,6 @@ function initPage() {
  * Third entry point, called at the end of the loading
  */
 function postInitPage() {
-  console.log('Post init page');
   // Scroll to top
   window.scrollTo(0, 0);
   // post init functions calls
@@ -96,9 +94,9 @@ function initFields() {
   $('.colorpick').colorpicker({
     horizontal: true
   });
-  $(":input").inputmask();
-  $(".slimScrollDiv").css("overflow", "");
-  $(".sidebar").css("overflow", "");
+  $(':input').inputmask();
+  $(".slimScrollDiv").css('overflow', '');
+  $(".sidebar").css('overflow', '');
 }
 
 /**
@@ -115,7 +113,7 @@ function initTextArea() {
  * Init of row-overflow classe
  */
 function initRowOverflow() {
-  var hWindow = $(window).outerHeight() - $('header').outerHeight();
+  var hWindow = window.outerHeight - $('header').outerHeight();
   $('.row-overflow > div').css('padding-top', '0px').height(hWindow).css('overflow-y', 'auto').css('overflow-x', 'hidden').css('padding-top', '5px');
 }
 
@@ -125,7 +123,7 @@ function initRowOverflow() {
 function initReportMode() {
   if (parseInt(getUrlVars('report')) === 1) {
     $('header').hide();
-    $('#div_mainContainer').css('margin-top', '-50px');
+    document.getElementById('div_mainContainer').style.marginTop = '-50px';
     $('#wrap').css('margin-bottom', '0px');
     $('.reportModeVisible').show();
     $('.reportModeHidden').hide();
@@ -139,7 +137,7 @@ function initTableSorter() {
   $(".tablesorter").each(function () {
     var widgets = ['uitheme', 'filter', 'zebra', 'resizable'];
     $(this).tablesorter({
-      theme: "bootstrap",
+      theme: 'bootstrap',
       widthFixed: true,
       headerTemplate: '{content} {icon}',
       widgets: widgets,
@@ -159,7 +157,7 @@ function initTableSorter() {
 function initHelp() {
   $('.help').each(function () {
     var dataHelpValue = $(this).attr('data-help');
-    if (typeof (dataHelpValue) !== 'undefined') {
+    if (typeof(dataHelpValue) !== 'undefined') {
       $(this).append('<sup><i class="fas fa-question-circle tooltips text-normal" title="' + dataHelpValue + '" style="color:grey;"></i></sup>');
     }
   });
@@ -187,9 +185,9 @@ function initTabs() {
   $('.nav-tabs a').on('click', function (e) {
     var scrollHeight = $(document).scrollTop();
     $(this).tab('show');
-    $(window).scrollTop(scrollHeight);
+    window.scrollTo(0, scrollHeight);
     setTimeout(function () {
-      $(window).scrollTop(scrollHeight);
+      window.scrollTo(0, scrollHeight);
     }, 0);
   });
 }

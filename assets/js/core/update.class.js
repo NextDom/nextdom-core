@@ -53,7 +53,6 @@ nextdom.update.install = function(queryParams) {
 };
 
 nextdom.update.save = function(queryParams) {
-  console.log(queryParams);
   nextdom.private.ajax('Update', 'save', queryParams, ['update'], true);
 };
 

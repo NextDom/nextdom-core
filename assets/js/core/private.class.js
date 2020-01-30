@@ -381,4 +381,4 @@ nextdom.private.ajaxCall = function(ajaxParams) {
   else {
     $.ajax(ajaxParams);
   }
-}
+};

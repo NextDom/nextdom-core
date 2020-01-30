@@ -43,7 +43,7 @@ function initEvents() {
                 refreshScenarioSummary();
             }
         });
-    })
+    });
 
     // Refresh button
     $('#bt_refreshSummaryScenario').off().on('click',function(){

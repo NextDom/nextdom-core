@@ -83,7 +83,7 @@ function initEvents() {
     });
 
     $('.color-default').off('change').on('change', function () {
-        var td = $(this).closest('td')
+        var td = $(this).closest('td');
         if ($(this).value() == 1) {
             td.find('.color').hide();
         } else {
@@ -92,7 +92,7 @@ function initEvents() {
     });
 
     $('.border-default').off('change').on('change', function () {
-        var td = $(this).closest('td')
+        var td = $(this).closest('td');
         if ($(this).value() == 1) {
             td.find('.border').hide();
         } else {
@@ -101,7 +101,7 @@ function initEvents() {
     });
 
     $('.border-radius-default').off('change').on('change', function () {
-        var td = $(this).closest('td')
+        var td = $(this).closest('td');
         if ($(this).value() == 1) {
             td.find('.border-radius').hide();
         } else {
@@ -141,7 +141,7 @@ function initEvents() {
 
     $('#bt_eqLogicConfigureRawObject').off('click').on('click', function () {
         loadModal('modal2', '{{ Informations brutes }}', 'object.display&class=eqLogic&id=' + eqLogicInfo.id);
-    })
+    });
 
     $('#bt_addWidgetParameters').off().on('click', function () {
         var tr = '<tr>';
@@ -237,7 +237,7 @@ function initEvents() {
         bootbox.confirm('{{ Avez vous changé les piles ? Cette action mettra la date de changement de piles à aujourd\'hui }}', function (result) {
             if (result) {
                 var eqLogic = {};
-                eqLogic['id'] = eqLogicInfo.id
+                eqLogic['id'] = eqLogicInfo.id;
                 eqLogic['configuration'] = {};
                 var today = new Date();
                 var dd = today.getDate();
@@ -247,7 +247,6 @@ function initEvents() {
                 var ss = today.getSeconds();
                 var yyyy = today.getFullYear();
                 eqLogic['configuration']['batterytime'] = yyyy + '-' + mm + '-' + dd + ' ' + hh + ':' + MM + ':' + ss;
-                console.log(eqLogic);
                 jeedom.eqLogic.simpleSave({
                     eqLogic: eqLogic,
                     error: function (error) {

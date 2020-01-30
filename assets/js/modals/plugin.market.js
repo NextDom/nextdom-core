@@ -188,7 +188,7 @@ function initPluginCarousel() {
                 itemClassList += ' active';
                 first = false;
             }
-            var itemToAdd = $('<div class="' + itemClassList + '"><img src="' + screenshots[screenshotIndex] + '"/></div>')
+            var itemToAdd = $('<div class="' + itemClassList + '"><img src="' + screenshots[screenshotIndex] + '"/></div>');
             $('#plugin-screenshots .carousel-inner').append(itemToAdd);
             $('#plugin-screenshots').carousel();
         }

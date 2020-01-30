@@ -161,7 +161,7 @@ function initEvents() {
                 modifyWithoutSave = false;
             }
         });
-    })
+    });
 
     // Functionnality plugin config save button
     $('#bt_savePluginFunctionalityConfig').off('click').on('click',function(){
@@ -176,7 +176,7 @@ function initEvents() {
                 modifyWithoutSave = false;
             }
         });
-    })
+    });
 
     // Log plugin config save button
     $('#bt_savePluginLogConfig').off('click').on('click',function(){
@@ -190,7 +190,7 @@ function initEvents() {
                 modifyWithoutSave = false;
             }
         });
-    })
+    });
 
     // Plugin log display button
     $('#div_plugin_log').on('click','.bt_plugin_conf_view_log',function(){
@@ -249,7 +249,7 @@ function showPlugin(pluginId) {
                 $('#div_plugin_dependancy').closest('.box').hide();
             }else{
                 $('#div_plugin_dependancy').closest('.box').show();
-                $('#div_plugin_dependancy').closest('.panel')
+                $('#div_plugin_dependancy').closest('.panel');
                 $("#div_plugin_dependancy").load('index.php?v=d&modal=plugin.dependancy&plugin_id='+data.id);
             }
 

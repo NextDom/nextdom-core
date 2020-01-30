@@ -298,7 +298,7 @@ function resetConfigParamKey(keyElt) {
             // Direct slider
             keyElt.siblings('.slider').value(dataLoad);
             // Or associate fields
-            $('.configKey[data-l1key="' + paramKey + '"]').value(dataLoad)
+            $('.configKey[data-l1key="' + paramKey + '"]').value(dataLoad);
             lockModify = false;
           } else {
             nextdom.config.load({
@@ -335,15 +335,13 @@ function resetConfigParamKey(keyElt) {
  */
 function passwordScore(password, progressbar = null, spanLevel = null) {
   var passwordToScore = password.toString();
-  var scoreNumber = passwordToScore.match(/\d/) ? 15 : 0;
-  var scoreThreeNumbers = passwordToScore.match(/(.*\d.*\d.*\d)/) ? 15 : 0;
-  var scoreCase = passwordToScore.match(/([a-z].*[A-Z])|([A-Z].*[a-z])/) ? 15 : 0;
-  var scoreSpecial = passwordToScore.match(/\W/) ? 15 : 0;
-  var scoreSpecialTwo = passwordToScore.match(/(.*\W.*\W)/) ? 15 : 0;
-  var scoreLength = passwordToScore.length >= 3 ? 10 : 0;
-  var scoreLengthMore = passwordToScore.length >= 10 ? 15 : 0;
-  var textLevel = '';
-  var score = scoreNumber + scoreThreeNumbers + scoreCase + scoreSpecial + scoreSpecialTwo + scoreLength + scoreLengthMore;
+  var score = passwordToScore.match(/\d/) ? 15 : 0;
+  score += passwordToScore.match(/(.*\d.*\d.*\d)/) ? 15 : 0;
+  score += passwordToScore.match(/([a-z].*[A-Z])|([A-Z].*[a-z])/) ? 15 : 0;
+  score += passwordToScore.match(/\W/) ? 15 : 0;
+  score += passwordToScore.match(/(.*\W.*\W)/) ? 15 : 0;
+  score += passwordToScore.length >= 3 ? 10 : 0;
+  score += passwordToScore.length >= 10 ? 15 : 0;
   if (progressbar !== null) {
     progressbar.width(score + '%');
     progressbar.removeClass('progress-bar-green').removeClass('progress-bar-yellow').removeClass('progress-bar-red');
@@ -355,6 +353,7 @@ function passwordScore(password, progressbar = null, spanLevel = null) {
       progressbar.addClass('progress-bar-green');
     }
   }
+  var textLevel = '';
   if (spanLevel !== null) {
     if (score === 0) {
       textLevel = '{{Sécurité Trés Faible}}';
@@ -380,14 +379,4 @@ function decodeHtmlEntities(message) {
   var temporaryTextArea = document.createElement('textarea');
   temporaryTextArea.innerHTML = message;
   return temporaryTextArea.value;
-}
-
-function sprintf(template, keysToReplace) {
-  console.log(template);
-  var result = template
-  var keys = Object.keys(keysToReplace)
-  for (var k in keys) {
-    result = result.replace(new RegExp('#\{' + keys[k] + '\}'), keysToReplace[keys[k]]);
-  }
-  console.log(result);
 }

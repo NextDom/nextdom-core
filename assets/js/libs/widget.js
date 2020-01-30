@@ -60,7 +60,7 @@ function editWidgetCmdMode(_mode) {
           name: "{{Configuration avancée}}",
           icon: 'fa-cog',
           callback: function (key, opt) {
-            saveWidgetDisplay()
+            saveWidgetDisplay();
             loadModal('modal', '{{Configuration du widget}}', 'eqLogic.configure&eqLogic_id=' + $(this).attr('data-eqLogic_id'));
           }
         },
@@ -243,7 +243,7 @@ function saveWidgetDisplay(_params) {
     $('.div_displayEquipement').each(function () {
       order = 1;
       $(this).find('.eqLogic-widget').each(function () {
-        var eqLogic = {id: $(this).attr('data-eqlogic_id')}
+        var eqLogic = {id: $(this).attr('data-eqlogic_id')};
         eqLogic.display = {};
         eqLogic.display.width = Math.floor($(this).width() / 2) * 2 + 'px';
         eqLogic.display.height = Math.floor($(this).height() / 2) * 2 + 'px';
@@ -275,7 +275,7 @@ function saveWidgetDisplay(_params) {
     $('.eqLogicZone').each(function () {
       order = 1;
       $(this).find('.eqLogic-widget').each(function () {
-        var eqLogic = {id: $(this).attr('data-eqlogic_id')}
+        var eqLogic = {id: $(this).attr('data-eqlogic_id')};
         eqLogic.display = {};
         eqLogic.viewZone_id = $(this).closest('.eqLogicZone').attr('data-viewZone-id');
         eqLogic.order = order;

@@ -183,7 +183,7 @@ class PrepareView
             $pageData[ControllerData::JS_POOL][] = '/assets/js/desktop/menu.js';
             $pageData[ControllerData::JS_POOL][] = '/assets/js/desktop/preinit.js';
             $pageData[ControllerData::JS_POOL][] = '/assets/js/desktop/postinit.js';
-            $pageData[ControllerData::JS_POOL][] = '/assets/js/desktop/utils.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/libs/utils.js';
             $pageData[ControllerData::JS_POOL][] = '/assets/js/desktop/search.js';
             $pageData[ControllerData::JS_POOL][] = '/assets/js/desktop/jeedomCompatibility.js';
 

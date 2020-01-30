@@ -42,6 +42,7 @@
  * Fullscreen management
  */
 function toggleFullScreen() {
+  var fullscreenToggle = document.getElementById('togglefullscreen');
   if ((document.fullScreenElement && document.fullScreenElement !== null) || (!document.mozFullScreen && !document.webkitIsFullScreen)) {
     if (document.documentElement.requestFullScreen) {
       document.documentElement.requestFullScreen();
@@ -50,7 +51,8 @@ function toggleFullScreen() {
     } else if (document.documentElement.webkitRequestFullScreen) {
       document.documentElement.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
     }
-    $('#togglefullscreen').removeClass('fa-expand').addClass('fa-compress');
+    fullscreenToggle.classList.remove('fa-expand');
+    fullscreenToggle.classList.add('fa-compress');
   } else {
     if (document.cancelFullScreen) {
       document.cancelFullScreen();
@@ -59,7 +61,8 @@ function toggleFullScreen() {
     } else if (document.webkitCancelFullScreen) {
       document.webkitCancelFullScreen();
     }
-    $('#togglefullscreen').removeClass('fa-compress').addClass('fa-expand');
+    fullscreenToggle.classList.remove('fa-compress');
+    fullscreenToggle.classList.add('fa-expand');
   }
 }
 
@@ -102,7 +105,7 @@ function adjustNextDomTheme() {
 }
 
 function getModalWidth() {
-  if (jQuery(window).width() < 1000) {
+  if (window.innerWidth < 1000) {
     return '96%';
   }
   return '80%';
@@ -171,7 +174,6 @@ function closeAll() {
  * @param noPushHistory TRUE to not have the new page in history, so go back to previous page if F5
  */
 function loadPage(pageUrl, noPushHistory) {
-  console.log('Load page');
   // Catch a page leaving when setting not saved
   if (modifyWithoutSave) {
     if (!confirm('{{Attention vous quittez une page ayant des données modifiées non sauvegardées. Voulez-vous continuer ?}}')) {

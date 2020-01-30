@@ -179,7 +179,7 @@ nextdom.init = function() {
     notify(_options.title, _options.message, _options.theme);
   });
   if (typeof(user_id) !== 'undefined' && !nextdom.initialized) {
-    nextdom.initialized = true
+    nextdom.initialized = true;
     nextdom.changes();
   }
 };

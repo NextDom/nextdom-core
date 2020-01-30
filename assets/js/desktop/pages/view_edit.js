@@ -505,6 +505,6 @@ function addWidgetService(_viewData){
     tr += '</td>';
     tr += '</tr>';
     var result = $(tr);
-    result.setValues(_viewData,'.viewDataAttr')
+    result.setValues(_viewData,'.viewDataAttr');
     return result;
 }

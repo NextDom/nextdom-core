@@ -1303,18 +1303,6 @@ class ScenarioExpressionManager extends BaseManager
      * @return false|int|string
      * @throws \Exception
      */
-    /**
-     * @param $_eqLogic_id
-     * @param string $_format
-     * @return false|int|string
-     * @throws \Exception
-     */
-    /**
-     * @param $_eqLogic_id
-     * @param string $_format
-     * @return false|int|string
-     * @throws \Exception
-     */
     public static function lastCommunication($_eqLogic_id, $_format = DateFormat::FULL)
     {
         $eqLogic = EqLogicManager::byId(trim(str_replace(['#', '#eqLogic', 'eqLogic'], '', EqLogicManager::fromHumanReadable('#' . str_replace('#', '', $_eqLogic_id) . '#'))));
@@ -1324,16 +1312,6 @@ class ScenarioExpressionManager extends BaseManager
         return date($_format, strtotime($eqLogic->getStatus('lastCommunication', date(DateFormat::FULL))));
     }
 
-    /**
-     * @param $_cmd_id
-     * @return mixed|string
-     * @throws \NextDom\Exceptions\CoreException
-     */
-    /**
-     * @param $_cmd_id
-     * @return mixed|string
-     * @throws \NextDom\Exceptions\CoreException
-     */
     /**
      * @param $_cmd_id
      * @return mixed|string
@@ -1481,6 +1459,7 @@ class ScenarioExpressionManager extends BaseManager
      * @param string $intervalFormat Format de l'interval (s : secondes, m : minutes, h : heures, d : jours)
      *
      * @return float|int|string
+     * @throws \Exception
      */
     public static function time_diff($date1Str, $date2Str, $intervalFormat = 'd')
     {

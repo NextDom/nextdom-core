@@ -144,8 +144,8 @@ function initEvents() {
 
     $('#bt_cmdConfigureCopyHistory').off('click').on('click', function () {
         nextdom.cmd.getSelectModal({cmd: {type: 'info', subType: cmdInfo.subType}}, function (result) {
-            var target_id = result.cmd.id
-            var name = result.human
+            var target_id = result.cmd.id;;
+            var name = result.human;
             bootbox.confirm('{{Etes-vous sûr de vouloir copier l\'historique de}} <strong>' + cmdInfo.name + '</strong> {{vers}} <strong>' + name + '</strong> ? {{Il est conseillé de vider l\'historique de la commande}} : <strong>' + name + '</strong> {{ avant la copie}}', function (result) {
                 if (result) {
                     nextdom.history.copyHistoryToCmd({

@@ -576,7 +576,7 @@ $('#div_pageContainer').on('mouseenter', '.zone-widget.zoneEqLogic.zoneEqLogicOn
         el.empty().append(html);
         positionEqLogic(el.attr('data-eqLogic_id'), false);
         el.off('mouseleave').on('mouseleave', function () {
-          el.empty()
+          el.empty();
           clickedOpen = false;
         });
       }
@@ -774,7 +774,7 @@ function displayPlan(_code) {
     code: _code,
     error: function (error) {
       if (error.code == -32005) {
-        var result = prompt("{{Veuillez indiquer le code ?}}", "")
+        var result = prompt("{{Veuillez indiquer le code ?}}", "");
         if (result == null) {
           notify('Erreur', error.message, 'error');
           return;

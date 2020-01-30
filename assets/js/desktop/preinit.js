@@ -63,13 +63,13 @@ $(function () {
 /**
  * Event for windows resizing
  */
-$(window).resize(function () {
+window.onresize = function () {
   // OBSOLETE ?
   initRowOverflow();
 
   // Close left menu if small resolution comming
   if (window.innerWidth < 768) {
-    $('body').removeClass("sidebar-collapse");
+    document.getElementsByTagName('body')[0].classList.remove('sidebar-open');
   }
 
   // Left menu resize
@@ -87,7 +87,7 @@ $(window).resize(function () {
       modal.dialog('option', 'position', {my: 'center', at: 'center', of: window});
     }
   });
-});
+};
 
 /**
  * Event for scrolling inside display page
@@ -117,7 +117,6 @@ window.onscroll = function () {
  * Event for first page loading or F5 loading
  */
 function entryPoint() {
-  console.log('Entry point');
   // Todo: ???
   $.alertTrigger = function () {
     initRowOverflow();
@@ -140,7 +139,7 @@ function entryPoint() {
   });
 
   // Go on top fab button link event handler declaration
-  $('#bt_goOnTop').click(function () {
+  $('#bt_goOnTop').on('click', function () {
     window.scrollTo(0, 0);
   });
 
@@ -156,7 +155,7 @@ function entryPoint() {
   initModals();
 
   // Prevent close event handler declaration to advise user for exit without saving
-  $(window).bind('beforeunload', function (e) {
+  window.addEventListener('beforeunload', function (e) {
     if (modifyWithoutSave) {
       return '{{Attention vous quittez une page ayant des données modifiées non sauvegardées. Voulez-vous continuer ?}}';
     }
@@ -171,9 +170,9 @@ function entryPoint() {
   initPage();
 
   // Post Inits launch
-  $(window).on('load', function () {
+  window.onload = function () {
     postInitPage();
-  });
+  };
 }
 
 function initBootbox() {
@@ -210,7 +209,6 @@ function initModals() {
 }
 
 function initLinkInterception() {
-  console.log('init link interception');
   $('body').on('click', 'a', function (e) {
     if ($(this).hasClass('noOnePageLoad')
       || $(this).attr('href') == undefined
@@ -221,7 +219,6 @@ function initLinkInterception() {
       || $(this).attr('target') === '_blank') {
       return;
     }
-    console.log('Link interception');
     $('li.dropdown.open').click();
     if ($(this).data('reload') === 'yes') {
       window.location.href = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + $(this).attr('href');
