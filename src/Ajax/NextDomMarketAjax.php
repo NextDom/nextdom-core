@@ -71,8 +71,6 @@ class NextDomMarketAjax extends BaseAjax
      */
     private function refreshList($sources, $force)
     {
-        var_dump($sources);
-        die();
         $result = false;
         if (is_array($sources)) {
             $result = true;
@@ -111,11 +109,12 @@ class NextDomMarketAjax extends BaseAjax
     public function get()
     {
         $params = Utils::init('params');
-        $data = json_decode(Utils::init('data'), true);
+        $data = Utils::init('data');
 
         $result = false;
         switch ($params) {
             case 'list':
+                $data = json_decode($data, true);
                 if (is_array($data)) {
                     $result = [];
                     $idList = [];
