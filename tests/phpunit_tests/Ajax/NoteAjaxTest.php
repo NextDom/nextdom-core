@@ -53,8 +53,8 @@ class NoteAjaxTest extends BaseAjaxTest
         $result = ob_get_clean();
         $jsonResult = json_decode($result, true);
         $this->assertEquals('ok', $jsonResult['state']);
-        $this->assertEquals('Note de test', $jsonResult['result'][0]['name']);
-        $this->assertEquals('Peu d\'idée', $jsonResult['result'][1]['text']);
+        $this->assertEquals('Un peu de contenu', $jsonResult['result'][0]['text']);
+        $this->assertEquals('Une autre note', $jsonResult['result'][1]['name']);
     }
 
     public function testByIdExists()

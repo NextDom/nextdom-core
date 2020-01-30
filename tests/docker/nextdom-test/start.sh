@@ -25,7 +25,7 @@ service apache2 start
 
 bash -x /usr/share/nextdom/install/postinst
 
-mysql -u root -e "UPDATE nextdomdev.user SET password = SHA2('nextdom_test', 512)"
+mysql -u root -e "UPDATE nextdom.user SET password = SHA2('nextdom_test', 512)"
 
 echo NEXTDOM TEST READY
 while true; do
