@@ -125,7 +125,7 @@ function startCronTargetMethod($cron, $option, $startTime)
                     if ($cron->getDeamonSleepTime() > 1) {
                         sleep($cron->getDeamonSleepTime());
                     } else {
-                        $cycleDuration = Utils::getMicrotime()() - $cycleStartTime;
+                        $cycleDuration = Utils::getMicrotime() - $cycleStartTime;
                         if ($cycleDuration < $cron->getDeamonSleepTime()) {
                             usleep(round(($cron->getDeamonSleepTime() - $cycleDuration) * 1000000));
                         }
@@ -163,7 +163,7 @@ function startCronTargetFunction($cron, $option, $startTime)
             } else {
                 $gc = 0;
                 while (true) {
-                    $cycleStartTime = Utils::getMicrotime()();
+                    $cycleStartTime = Utils::getMicrotime();
                     if ($option !== null) {
                         $functionToCall($option);
                     } else {
@@ -174,7 +174,7 @@ function startCronTargetFunction($cron, $option, $startTime)
                         gc_collect_cycles();
                         $gc = 0;
                     }
-                    $cycleDuration = Utils::getMicrotime()() - $cycleStartTime;
+                    $cycleDuration = Utils::getMicrotime() - $cycleStartTime;
                     if ($cron->getDeamonSleepTime() > 1) {
                         sleep($cron->getDeamonSleepTime());
                     } else {
