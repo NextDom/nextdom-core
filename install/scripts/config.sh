@@ -23,8 +23,6 @@ APACHE_CONFIG_DIRECTORY="/etc/apache2/sites-available"
 APACHE_HTML_DIRECTORY="/var/www/html"
 APACHE_SYSTEMD_DIRECTORY="/etc/systemd/system/apache2.service.d"
 
-### PHP path
-PHP_DIRECTORY=$(php --ini | head -n 1 | sed -E "s/.*Path: (.*)\/cli/\\1/")
 
 ### NextDom path
 CONFIG_DIRECTORY="/etc/nextdom"

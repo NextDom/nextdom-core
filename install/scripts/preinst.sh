@@ -9,12 +9,53 @@ source ${CURRENT_DIR}/utils.sh
 ########################################### NextDom Steps #######################################
 #################################################################################################
 
-step0_createDirectories() {
+step0_prepare_prerequisites() {
 
-  for dir in ${CONFIG_DIRECTORY} ${LIB_DIRECTORY} ${LOG_DIRECTORY} ${ROOT_DIRECTORY} ${TMP_DIRECTORY}
+  result=true
+
+  # IMPORTANT : keep  ${LOG_DIRECTORY} created first ! the info log is done once it's created
+  { ##try
+    mkdir -p ${LOG_DIRECTORY}
+  } || { ##catch
+    echo -e "${RED}${CURRENT_DATE} ERROR : Unable to create ${LOG_DIRECTORY} ${NORMAL}"
+    return 0
+  }
+
+  addLogStep "Preinst -- Prepare and check prerequisites - 0/7"
+
+  for dir in ${CONFIG_DIRECTORY} ${LIB_DIRECTORY} ${ROOT_DIRECTORY} ${TMP_DIRECTORY}
    do
-    if [ ! -d ${dir} ]; then mkdir -p ${dir}; fi
+       createDirectory ${dir}
   done
+  addLogInfo "Local needed directories checked"
+
+  if [ "localhost" == "${MYSQL_HOSTNAME}" ] || [ "$(hostname -I)" == "${MYSQL_HOSTNAME}" ]; then
+    addLogInfo "Local mysql server detected"
+    startService mysql
+    addLogInfo "MySQL/MariaDB service started"
+    checkMySQLIsRunning
+  fi
+  { ##try
+    unset command_not_found_handle
+    php --ini | head -n 1 | sed -E "s/.*Path: (.*)\/cli/\\1/"
+
+    if [ "$?" -eq 127 ]; then
+        addLogError "PHP is not installed"
+        return 0
+    fi
+    addLogInfo "PHP detected"
+    startService apache2
+    addLogInfo "Apache2 service started"
+    startService cron
+    addLogInfo "Cron service started"
+    set command_not_found_handle
+  } || {
+    addLogError "PHP is not installed"
+  }
+
+  if [ "true" == "${result}" ]; then
+    addLogSuccess "Prerequisites are checked with success"
+  fi
 }
 
 step1_generate_nextdom_assets() {
@@ -185,11 +226,25 @@ step4_configure_apache() {
     if [ ! -f ${APACHE_CONFIG_DIRECTORY}/${c_file} ]; then
       { ##try
         cp "${ROOT_DIRECTORY}/install/apache/"/${c_file} ${APACHE_CONFIG_DIRECTORY}/${c_file}
-        sed -i -r "s%\s+Define\s+wwwdir\s.*%Define wwwdir \"${APACHE_HTML_DIRECTORY}\"%gI" ${APACHE_CONFIG_DIRECTORY}/${c_file}
-        sed -i -r "s%\s+Define\s+logdir\s.*%Define logdir \"${LOG_DIRECTORY}\"%gI" ${APACHE_CONFIG_DIRECTORY}/${c_file}
         addLogInfo "created file: ${APACHE_CONFIG_DIRECTORY}/${c_file}"
       } || { ##catch
         addLogError "Error while creating file: ${APACHE_CONFIG_DIRECTORY}/${c_file}"
+      }
+    fi
+    if [ ${APACHE_HTML_DIRECTORY} != "/usr/share/nextdom" ]; then
+      { ##try
+        sed -i "s%/usr/share/nextdom%${APACHE_HTML_DIRECTORY}%g" ${APACHE_CONFIG_DIRECTORY}/${c_file}
+        addLogInfo "updated wwwdir in : ${APACHE_CONFIG_DIRECTORY}/${c_file}"
+      } || { ##catch
+        addLogError "Error while updating wwwdir in : ${APACHE_CONFIG_DIRECTORY}/${c_file}"
+      }
+    fi
+    if [ ${LOG_DIRECTORY} != "/var/log/nextdom" ]; then
+      { ##try
+        sed -i "s%/var/log/nextdom%${LOG_DIRECTORY}%g" ${APACHE_CONFIG_DIRECTORY}/${c_file}
+        addLogInfo "updated logdir in : ${APACHE_CONFIG_DIRECTORY}/${c_file}"
+      } || { ##catch
+        addLogError "Error while updating logdir in : ${APACHE_CONFIG_DIRECTORY}/${c_file}"
       }
     fi
   done
@@ -352,6 +407,12 @@ step7_configure_php() {
   addLogStep "Preinst -- Configure PHP - 7/7"
 
   { ##try
+    PHP_DIRECTORY=$(php --ini | head -n 1 | sed -E "s/.*Path: (.*)\/cli/\\1/")
+  } || { ##catch
+    addLogError "PHP is not installed"
+  }
+
+  { ##try
     removeDirectoryOrFile ${ROOT_DIRECTORY}/assets/config/default.config.ini
   } || { ##catch
     addLogError "Error while removing default.config.ini file"
@@ -413,14 +474,10 @@ preinstall_nextdom() {
     exit 1
   fi
 
+  step0_prepare_prerequisites
+
   addLogScript "============ Starting preinst.sh ============"
 
-  # Start all services
-  startService apache2
-  startService cron
-  startService mysql
-
-  step0_createDirectories
   step1_generate_nextdom_assets
   step2_configure_mysql
   step3_prepare_var_www_html

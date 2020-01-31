@@ -66,35 +66,45 @@ removeDirectoryOrFile() {
 
 addLogError() {
   local error=$1
-  echo -e "${RED}${CURRENT_DATE} ERROR : ${error}${NORMAL}" | tee -a ${LOG_DIRECTORY}/${LOG_FILE}
+  {
+    echo -e "${RED}${CURRENT_DATE} ERROR : ${error}${NORMAL}" | tee -a ${LOG_DIRECTORY}/${LOG_FILE}
+  }
   result=false
 }
 
 addLogInfo() {
   local info=$1
-  echo -e "${CURRENT_DATE} INFO : ${info}" | tee -a ${LOG_DIRECTORY}/${LOG_FILE}
+  {
+    echo -e "${CURRENT_DATE} INFO : ${info}" | tee -a ${LOG_DIRECTORY}/${LOG_FILE}
+  }
 }
 
 addLogSuccess() {
   local info=$1
-  echo -e "${GREEN}${CURRENT_DATE} SUCCESS : ${info}${NORMAL}" | tee -a ${LOG_DIRECTORY}/${LOG_FILE}
+  {
+    echo -e "${GREEN}${CURRENT_DATE} SUCCESS : ${info}${NORMAL}" | tee -a ${LOG_DIRECTORY}/${LOG_FILE}
+  }
 }
 
 addLogStep() {
   local info=$1
-  echo -e "${BLUE}${CURRENT_DATE} STEP : ${info}${NORMAL}" | tee -a ${LOG_DIRECTORY}/${LOG_FILE}
+  {
+    echo -e "${BLUE}${CURRENT_DATE} STEP : ${info}${NORMAL}" | tee -a ${LOG_DIRECTORY}/${LOG_FILE}
+  }
 }
 
 addLogScript() {
   local info=$1
-  echo -e "${GREY}${CURRENT_DATE} SCRIPT : ${info}${NORMAL}" | tee -a ${LOG_DIRECTORY}/${LOG_FILE}
+  {
+    echo -e "${GREY}${CURRENT_DATE} SCRIPT : ${info}${NORMAL}" | tee -a ${LOG_DIRECTORY}/${LOG_FILE}
+  }
 }
 ########################################### Rights management ###################################
 
 checkCurrentUser() {
   if [ "${UID}" -ne "${ROOT_UID}" ]; then
     addLogError "You are not authorized to run this script … Permission Denied !!!"
-    //exit ${ERROR_INVALID_USER}
+    ##exit ${ERROR_INVALID_USER}
   fi
 }
 
@@ -116,13 +126,11 @@ checkMySQLIsRunning() {
     return 0
   done
   addLogError "Can't connect to database"
-  //exit ${ERROR_INVALID_DATABASE_CONNECTION}
+  ##exit ${ERROR_INVALID_DATABASE_CONNECTION}
 }
 
 # slow restart of docker service
 restartService() {
-  # not needed in docker
-  [ -f /.dockerenv ] && return 0
   local SERVICE=$1
   local try=0
   while [ ${try} -lt 5 ]; do
@@ -140,8 +148,6 @@ restartService() {
 
 # slow reload of docker service
 reloadService() {
-  # not needed in docker
-  [ -f /.dockerenv ] && return 0
   local SERVICE=$1
   local try=0
   while [ ${try} -lt 5 ]; do
@@ -159,8 +165,6 @@ reloadService() {
 
 # slow start of docker service
 startService() {
-  # not needed in docker
-  [ -f /.dockerenv ] && return 0
   local SERVICE=$1
   local try=0
   while [ ${try} -lt 5 ]; do
@@ -178,8 +182,6 @@ startService() {
 
 # slow stop of docker service
 stopService() {
-  # not needed in docker
-  [ -f /.dockerenv ] && return 0
   local SERVICE=$1
   local try=0
   while [ ${try} -lt 5 ]; do
@@ -197,8 +199,6 @@ stopService() {
 
 # slow status of docker service
 statusService() {
-  # not needed in docker
-  [ -f /.dockerenv ] && return 0
   local SERVICE=$1
   local try=0
   while [ ${try} -lt 5 ]; do
