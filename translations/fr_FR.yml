@@ -693,6 +693,7 @@ sidebar:
   panel: Panel(s)
   plugins: Plugins
   plugins-markets: Gestion & Markets
+  plugins-all: Liste A..Z
   quick-notes: Quick Notes
   rights: All rights reserved
   show-all: Afficher tout

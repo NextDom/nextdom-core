@@ -539,6 +539,7 @@ class PrepareView
             $pageData['PANEL_MENU'] = [];
             $pageData['MENU_PLUGIN'] = [];
             $pageData['MENU_PLUGIN_CATEGORY'] = [];
+            $pageData['MENU_PLUGIN_ALL'] = [];
 
             foreach ($categories as $categoryCode => $pluginsList) {
                 $pageData['MENU_PLUGIN'][$categoryCode] = [];
@@ -558,6 +559,7 @@ class PrepareView
                 /** @var Plugin $plugin */
                 foreach ($pluginsList as $plugin) {
                     $pageData['MENU_PLUGIN'][$categoryCode][] = $plugin;
+                    $pageData['MENU_PLUGIN_ALL'][] = $plugin;
                     if ($plugin->getId() == Utils::init('m')) {
                         $currentPlugin = $plugin;
                         $pageData[ControllerData::TITLE] = ucfirst($currentPlugin->getName()) . ' - NextDom';

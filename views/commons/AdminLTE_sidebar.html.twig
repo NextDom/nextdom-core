@@ -94,6 +94,14 @@
                 <a href="#"><i class="fas fa-puzzle-piece spacing-right"></i><span>{{ 'sidebar.plugins'|trans }}</span><span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
                 <ul class="treeview-menu">
                     <li class="treeview divider"><a href="index.php?v=d&p=plugin"><i class="fas fa-tags spacing-right"></i>{{ 'sidebar.plugins-markets'|trans }}</a></li>
+                    <li class="treeview divider"><a href="#" data-toggle="dropdown"><i class="fas fa-sort-alpha-down spacing-right"></i>{{ 'sidebar.plugins-all'|trans }}<span class="pull-right-container"><i class="fas fa-angle-left pull-right"></i></span></a>
+                        <ul class="treeview-menu">
+                            {% if MENU_PLUGIN_ALL is defined %}
+                                {% for plugin in MENU_PLUGIN_ALL|sort((a, b) => a.name|lower <=> b.name|lower) %}
+                                    <li class="treeview treeview-plugin-item"><a href="index.php?v=d&m={{ plugin.id }}&p={{ plugin.index }}"><img class="img-responsive spacing-right" src="{{ plugin.pathImgIcon }}"/>{{ plugin.name }}</a></li>
+                                {% endfor %}
+                            {% endif %}
+                        </ul>
                     {% if MENU_PLUGIN_CATEGORY is defined %}
                         {% for category, categoryData in MENU_PLUGIN_CATEGORY|sort %}
                             <li class="treeview">

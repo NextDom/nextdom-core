@@ -691,6 +691,7 @@ sidebar:
   panel: Panel(s)
   plugins: plugins
   plugins-markets: Management & Markets
+  plugins-all: A..Z list
   quick-notes: Quick Notes
   rights: All rights reserved
   show-all: Show all
