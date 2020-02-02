@@ -10,7 +10,7 @@
 
 #### NEWS
 * Nouvelles fonctionnalités d'édition de la programmation des scénarios (copier/couper/coller, déplacement, undo/redo, mémoire....)
-* Ajouts de tests [SonalCloud](https://sonarcloud.io/dashboard?id=NextDom_nextdom-core)
+* Ajouts de tests [SonarCloud](https://sonarcloud.io/dashboard?id=NextDom_nextdom-core)
 * Création de nombreux enums
 * Création des méthodes isVisible et isEnabled pour la plupart des classes
 * Création des méthodes isType et isSubType pour les commandes et eqLogics
