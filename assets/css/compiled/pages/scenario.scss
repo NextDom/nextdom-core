@@ -39,7 +39,7 @@
 /* Tuiles scenario */
 .scenarioDisplayCard {
     >.title {
-        margin: 0px;
+        margin: 0;
     }
     span.scenario-icon {
         font-size: 4em;
@@ -90,7 +90,7 @@
     padding: 5px;
 }
 .scenario-sub-group {
-    padding: 5px 5px 0px 0px;
+    padding: 5px 5px 0 0;
 }
 .scenario-group-right {
     padding: 5px 10px 5px 5px;
@@ -100,11 +100,11 @@
 .scenario-action-bloc {
     vertical-align: top;
     display: table-cell;
-    padding: 0px 10px 5px 5px;
+    padding: 0 10px 5px 5px;
     width: 110px;
 }
 .scenario-action {
-    padding: 0px 0px 0px 6px;
+    padding: 0 0 0 6px;
 }
 .scenario-si {
     width: 105px;
@@ -112,11 +112,11 @@
     display: table-cell;
 }
 .scenario-si-bloc {
-    padding: 0px 0px 5px 0px;
+    padding: 0 0 5px 0;
     display: table-cell;
 }
 .scenario-condition {
-    padding: 0px;
+    padding: 0;
     display: table-cell;
     vertical-align: top;
 }
@@ -138,9 +138,7 @@
     display: table-cell;
 }
 .scenario-code {
-    width: 110px;
     padding-left: 5px;
-    display: table-cell;
     vertical-align: top;
 }
 .scenario-code-text {
@@ -171,7 +169,7 @@
     display: table-cell;
     padding:{
       left: 5px;
-      right: 0px;
+      right: 0;
     }
 }
 .scenario-text {
@@ -180,12 +178,18 @@
 .scenario-unity {
     float: right;
     font-size: 11px;
-    padding: 0px 10px 0px 0px;
+    padding: 0 10px 0 0;
 }
 .scenario-unity-line {
     float: right;
     font-size: 11px;
-    padding: 13px 2px 0px 0px;
+    padding: 13px 2px 0 0;
+}
+.scenario-bloc-focused {
+    border: 2px dashed !important;
+}
+.scenario-action-focused {
+    border: 2px dotted !important;
 }
 
 /* Boutons */
@@ -215,7 +219,7 @@
 /* Sortable */
 .bt_sortable {
     vertical-align: middle;
-    margin: -2px 9px 0px -2px;
+    margin: -2px 9px 0 -2px;
     cursor: all-scroll;
     font-size: 18px;
 }
@@ -231,7 +235,7 @@
     margin-bottom: 1.5rem;
 }
 #div_scenarioElement {
-    padding-bottom: 7rem;
+    padding-bottom: 22rem;
 }
 #div_editScenario {
     .input-group-btn {
@@ -243,8 +247,9 @@
     .CodeMirror-scroll {
         max-height: 300px !important;
     }
-    .expressionAttr.scenario-text {
-        resize: vertical;
+    .expressionAttr.scenario-text,
+    textarea.scenarioAttr {
+        resize: vertical !important;
     }
     .expression-error {
         text-decoration: underline;
@@ -253,7 +258,7 @@
     }
     .element {
         color: white;
-        border-width: 0px;
+        border-width: 0;
         border-style: solid;
     }
     .subElement {

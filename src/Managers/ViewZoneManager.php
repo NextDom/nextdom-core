@@ -34,17 +34,19 @@
 namespace NextDom\Managers;
 
 use NextDom\Helpers\DBHelper;
+use NextDom\Managers\Parents\BaseManager;
+use NextDom\Managers\Parents\CommonManager;
 use NextDom\Model\Entity\ViewZone;
 
 /**
  * Class ViewZoneManager
  * @package NextDom\Managers
  */
-class ViewZoneManager
+class ViewZoneManager extends BaseManager
 {
+    use CommonManager;
     const DB_CLASS_NAME = '`viewZone`';
-    const CLASS_NAME = 'viewZone';
-
+    const CLASS_NAME = ViewZone::class;
 
     /**
      * @return array|mixed|null
@@ -53,42 +55,18 @@ class ViewZoneManager
      */
     public static function all()
     {
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME;
-        return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
+        return static::getAll();
     }
 
     /**
-     * @param $_id
-     * @return ViewZone|null
-     * @throws \Exception
-     */
-    public static function byId($_id)
-    {
-        $value = array(
-            'id' => $_id,
-        );
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE id=:id';
-        return DBHelper::getOneObject($sql, $value, self::CLASS_NAME);
-    }
-
-    /**
-     * @param $_view_id
+     * @param $viewId
      * @return array|mixed|null
      * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
      */
-    public static function byView($_view_id)
+    public static function byView($viewId)
     {
-        $value = array(
-            'view_id' => $_view_id,
-        );
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE view_id=:view_id';
-        return DBHelper::getAllObjects($sql, $value, self::CLASS_NAME);
+        return static::getMultipleByClauses(['view_id' => $viewId]);
     }
 
     /**
@@ -98,11 +76,11 @@ class ViewZoneManager
      */
     public static function removeByViewId($_view_id)
     {
-        $value = array(
+        $value = [
             'view_id' => $_view_id,
-        );
+        ];
         $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . '
-                WHERE view_id = :view_id';
+                WHERE `view_id` = :view_id';
         return DBHelper::getOne($sql, $value);
     }
 

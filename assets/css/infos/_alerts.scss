@@ -62,19 +62,19 @@
 
 /* Core-Ajout */
 .alert-no-child {
-    margin-bottom: 0px !important;
-    border-left: 0px;
+    margin-bottom: 0 !important;
+    border-left: 0;
     padding: 10px 15px;
 }
 .alert-header {
     padding: 15px;
-    -webkit-animation: slidein 0.5s;
-    -moz-animation:    slidein 0.5s;
-    -o-animation:      slidein 0.5s;
-    animation:     slidein 0.5s;
+    -webkit-animation: slidein .5s;
+    -moz-animation:    slidein .5s;
+    -o-animation:      slidein .5s;
+    animation:     slidein .5s;
 }
 .alert-header .alert-danger {
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 /* Core-Surcharge */
@@ -85,4 +85,8 @@
         right: 15px;
     }
     margin-bottom: -78px;
+}
+.action-bar .alert {
+    margin-bottom: 0;
+    padding: 8px 10px;
 }

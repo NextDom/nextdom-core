@@ -22,7 +22,6 @@
 
 namespace NextDom\Controller\Modals;
 
-use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
 
 /**

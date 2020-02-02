@@ -25,11 +25,11 @@ if (!jeedom::apiAccess(init('apikey'))) {
     die();
 }
 log::add('tts', 'debug', 'Call tts api : ' . print_r($_GET, true));
-if (class_exists('gcp')) {
-    $engine = 'gcp';
+if (class_exists('dataservice')) {
+    $engine = 'dataservice';
 } else {
     $engine = init('engine', 'pico');
-    if ($engine == 'gcp') {
+    if ($engine == 'dataservice') {
         $engine = 'pico';
     }
 }
@@ -38,22 +38,24 @@ if ($text == '') {
     echo __('Aucun texte à dire', __FILE__);
     die();
 }
-if(substr(init('text'), -1) == '#' && substr(init('text'), 0,1) == '#' && class_exists('songs_song')){
-    log::add('tts','debug',__('Tag detécté dans le tts et plugin song présent',__FILE__));
-    $song = songs_song::byLogicalId(strtolower(str_replace('#','',init('text'))));
-    if(is_object($song) && file_exists($song->getPath())){
-        log::add('tts','debug',__('Son trouvé path : ',__FILE__).$song->getPath());
+if (substr(init('text'), -1) == '#' && substr(init('text'), 0, 1) == '#' && class_exists('songs_song')) {
+    log::add('tts', 'debug', __('Tag detécté dans le tts et plugin song présent', __FILE__));
+    $song = songs_song::byLogicalId(strtolower(str_replace('#', '', init('text'))));
+    if (is_object($song) && file_exists($song->getPath())) {
+        log::add('tts', 'debug', __('Son trouvé path : ', __FILE__) . $song->getPath());
         if (init('path') == 1) {
             echo $song->getPath();
         } else {
-            header('Content-Type: application/octet-stream');
-            header('Content-Disposition: attachment; filename=' . $song->getName() . '.mp3');
+            header('Content-Type: audio/mpeg');
+            header("Content-Transfer-Encoding: binary");
+            header("Pragma: no-cache");
+            header('Content-length: '.filesize($song->getPath()));
             readfile($song->getPath());
         }
         die();
     }
 }
-$text = str_replace(array('[', ']', '#', '{', '}'), '', $text);
+$text = str_replace(['[', ']', '#', '{', '}'], '', $text);
 $md5 = md5($text);
 $tts_dir = jeedom::getTmpFolder('tts');
 $filename = $tts_dir . '/' . $md5 . '.mp3';
@@ -63,24 +65,26 @@ if (file_exists($filename)) {
         echo $filename;
         die();
     }
-    header('Content-Type: application/octet-stream');
-    header('Content-Disposition: attachment; filename=' . $md5 . '.mp3');
+    header('Content-Type: audio/mpeg');
+    header("Content-Transfer-Encoding: binary");
+    header("Pragma: no-cache");
+    header('Content-length: '.filesize($filename));
     readfile($filename);
     die();
 }
 log::add('tts', 'debug', 'Generate tts for ' . $filename . ' (' . $text . ') with engine ' . $engine);
 try {
     switch ($engine) {
-        case 'gcp':
-            gcp::tts($text);
+        case 'dataservice':
+            dataservice::tts($text);
             break;
         case 'espeak':
             $voice = init('voice', 'fr+f4');
             $avconv = 'avconv';
-            if(!com_shell::commandExists('avconv')){
+            if (!com_shell::commandExists('avconv')) {
                 $avconv = 'ffmpeg';
             }
-            $cmd = 'espeak -v' . $voice . ' "' . $text . '" --stdout | '.$avconv.' -i - -ar 44100 -ac 2 -ab 192k -f mp3 ' . $filename . ' > /dev/null 2>&1';
+            $cmd = 'espeak -v' . $voice . ' "' . $text . '" --stdout | ' . $avconv . ' -i - -ar 44100 -ac 2 -ab 192k -f mp3 ' . $filename . ' > /dev/null 2>&1';
             log::add('tts', 'debug', $cmd);
             shell_exec($cmd);
             break;
@@ -88,11 +92,11 @@ try {
             $volume = '-af "volume=' . init('volume', '6') . 'dB"';
             $lang = init('lang', 'fr-FR');
             $avconv = 'avconv';
-            if(!com_shell::commandExists('avconv')){
+            if (!com_shell::commandExists('avconv')) {
                 $avconv = 'ffmpeg';
             }
             $cmd = 'pico2wave -l=' . $lang . ' -w=' . $md5 . '.wav "' . $text . '" > /dev/null 2>&1;';
-            $cmd .= $avconv.' -i ' . $md5 . '.wav -ar 44100 ' . $volume . ' -ac 2 -ab 192k -f mp3 ' . $filename . ' > /dev/null 2>&1;rm ' . $md5 . '.wav';
+            $cmd .= $avconv . ' -i ' . $md5 . '.wav -ar 44100 ' . $volume . ' -ac 2 -ab 192k -f mp3 ' . $filename . ' > /dev/null 2>&1;rm ' . $md5 . '.wav';
             log::add('tts', 'debug', $cmd);
             shell_exec($cmd);
             break;
@@ -109,13 +113,15 @@ try {
 if (init('path') == 1) {
     echo $filename;
 } else {
-    header('Content-Type: application/octet-stream');
-    header('Content-Disposition: attachment; filename=' . $md5 . '.mp3');
+    header('Content-Type: audio/mpeg');
+    header("Content-Transfer-Encoding: binary");
+    header("Pragma: no-cache");
+    header('Content-length: '.filesize($filename));
     readfile($filename);
 }
 try {
     while (getDirectorySize($tts_dir) > (10 * 1024 * 1024)) {
-        $older = array('file' => null, 'datetime' => null);
+        $older = ['file' => null, 'datetime' => null];
         foreach (ls($tts_dir . '/', '*') as $file) {
             if ($older['datetime'] == null || $older['datetime'] > filemtime($tts_dir . '/' . $file)) {
                 $older['file'] = $tts_dir . '/' . $file;

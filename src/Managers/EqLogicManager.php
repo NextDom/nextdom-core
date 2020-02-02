@@ -37,14 +37,18 @@ use NextDom\Enums\DateFormat;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
+use NextDom\Managers\Parents\BaseManager;
+use NextDom\Managers\Parents\CastedObjectManager;
 use NextDom\Model\Entity\EqLogic;
 
 /**
  * Class EqLogicManager
  * @package NextDom\Managers
  */
-class EqLogicManager
+class EqLogicManager extends BaseManager
 {
+    use CastedObjectManager;
+
     const CLASS_NAME = EqLogic::class;
     const DB_CLASS_NAME = '`eqLogic`';
 
@@ -59,13 +63,9 @@ class EqLogicManager
      */
     public static function byEqRealId($eqRealId)
     {
-        $values = array(
+        return self::cast(static::getMultipleByClauses([
             'eqReal_id' => $eqRealId,
-        );
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE eqReal_id = :eqReal_id';
-        return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
+        ]));
     }
 
     /**
@@ -74,6 +74,8 @@ class EqLogicManager
      * @param EqLogic|EqLogic[] $eqLogicInput EqLogic to cast or array of EqLogics
      *
      * @return EqLogic|EqLogic[] Converted EqLogic(s)
+     * @throws CoreException
+     * @throws \ReflectionException
      */
     public static function cast($eqLogicInput)
     {
@@ -96,8 +98,7 @@ class EqLogicManager
                     return $target;
                 }
             }
-        }
-        catch (CoreException $e) {
+        } catch (CoreException $e) {
             MessageManager::add('core', $e->getMessage());
             return null;
         }
@@ -113,7 +114,7 @@ class EqLogicManager
      * @param bool $onlyVisible Filter only visible
      * @param null $eqTypeName Filter by eqTypeName (Plugin type)
      * @param null $logicalId Filter by logical id (value defined by the plugin)
-     * @param bool $orderByName Order by name
+     * @param bool $orderByName ORDER BY `name`
      *
      * @return EqLogic[] All linked eqLogic
      *
@@ -121,14 +122,13 @@ class EqLogicManager
      */
     public static function byObjectId($objectId, $onlyEnable = true, $onlyVisible = false, $eqTypeName = null, $logicalId = null, $orderByName = false)
     {
-        $values = array();
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . ' ';
+        $values = [];
+        $sql = static::getBaseSQL() . ' ';
         if ($objectId === null) {
             $sql .= 'WHERE object_id IS NULL OR object_id = -1 ';
         } else {
             $values['object_id'] = $objectId;
-            $sql .= 'WHERE object_id = :object_id ';
+            $sql .= 'WHERE `object_id` = :object_id ';
         }
         if ($onlyEnable) {
             $sql .= 'AND isEnable = 1 ';
@@ -138,11 +138,11 @@ class EqLogicManager
         }
         if ($eqTypeName !== null) {
             $values['eqType_name'] = $eqTypeName;
-            $sql .= 'AND eqType_name = :eqType_name ';
+            $sql .= 'AND `eqType_name` = :eqType_name ';
         }
         if ($logicalId !== null) {
             $values['logicalId'] = $logicalId;
-            $sql .= 'AND logicalId = :logicalId ';
+            $sql .= 'AND `logicalId` = :logicalId ';
         }
         if ($orderByName) {
             $sql .= 'ORDER BY `name`';
@@ -165,24 +165,21 @@ class EqLogicManager
      */
     public static function byLogicalId($logicalId, $eqTypeName, $multiple = false)
     {
-        $values = [
+        $clauses = [
             'logicalId' => $logicalId,
             'eqType_name' => $eqTypeName,
         ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE logicalId = :logicalId
-                AND eqType_name = :eqType_name';
         if ($multiple) {
-            $data = self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
-        } else {
-            $data = self::cast(DBHelper::getOneObject($sql, $values, self::CLASS_NAME));
+            $result = static::getMultipleByClauses($clauses);
         }
-        return $data;
+        else {
+            $result = static::getOneByClauses($clauses);
+        }
+        return self::cast($result);
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      *
      * @param $eqTypeName
      * @param bool $onlyEnable
@@ -191,15 +188,14 @@ class EqLogicManager
      */
     public static function byType($eqTypeName, $onlyEnable = false)
     {
-        $values = array(
+        $values = [
             'eqType_name' => $eqTypeName,
-        );
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME, 'el') . '
-                FROM ' . self::DB_CLASS_NAME . '  el
+        ];
+        $sql = static::getPrefixedBaseSQL('el') . '
                 LEFT JOIN object ob ON el.object_id = ob.id
-                WHERE eqType_name = :eqType_name ';
+                WHERE `eqType_name` = :eqType_name ';
         if ($onlyEnable) {
-            $sql .= 'AND isEnable=1 ';
+            $sql .= 'AND isEnable = 1 ';
         }
         $sql .= 'ORDER BY ob.name,el.name';
         return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
@@ -214,21 +210,20 @@ class EqLogicManager
      */
     public static function byCategory($category)
     {
-        $values = array(
+        $values = [
             'category' => '%"' . $category . '":1%',
             'category2' => '%"' . $category . '":"1"%',
-        );
+        ];
 
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE category LIKE :category
-                OR category LIKE :category2
-                ORDER BY name';
+        $sql = static::getBaseSQL() . '
+                WHERE `category` LIKE :category
+                OR `category` LIKE :category2
+                ORDER BY `name`';
         return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      *
      * @param $eqTypeName
      * @param $configuration
@@ -237,20 +232,19 @@ class EqLogicManager
      */
     public static function byTypeAndSearhConfiguration($eqTypeName, $configuration)
     {
-        $values = array(
+        $values = [
             'eqType_name' => $eqTypeName,
             'configuration' => '%' . $configuration . '%',
-        );
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE eqType_name = :eqType_name
-                AND configuration LIKE :configuration
-                ORDER BY name';
+        ];
+        $sql = static::getBaseSQL() . '
+                WHERE `eqType_name` = :eqType_name
+                AND `configuration` LIKE :configuration
+                ORDER BY `name`';
         return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      *
      * @param $configuration
      * @param null $type
@@ -259,35 +253,31 @@ class EqLogicManager
      */
     public static function searchConfiguration($configuration, $type = null)
     {
+        $sql = static::getBaseSQL() . '
+                WHERE `configuration` LIKE :configuration';
         if (!is_array($configuration)) {
-            $values = array(
+            $values = [
                 'configuration' => '%' . $configuration . '%',
-            );
-            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                    FROM ' . self::DB_CLASS_NAME . '
-                    WHERE configuration LIKE :configuration';
+            ];
         } else {
-            $values = array(
+            $values = [
                 'configuration' => '%' . $configuration[0] . '%',
-            );
-            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                    FROM ' . self::DB_CLASS_NAME . '
-                    WHERE configuration LIKE :configuration';
+            ];
             for ($i = 1; $i < count($configuration); $i++) {
                 $values['configuration' . $i] = '%' . $configuration[$i] . '%';
-                $sql .= ' OR configuration LIKE :configuration' . $i;
+                $sql .= ' OR `configuration` LIKE :configuration' . $i;
             }
         }
         if ($type !== null) {
             $values['eqType_name'] = $type;
-            $sql .= ' AND eqType_name=:eqType_name ';
+            $sql .= ' AND `eqType_name` = :eqType_name ';
         }
-        $sql .= ' ORDER BY name';
+        $sql .= ' ORDER BY `name`';
         return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
     }
 
     /**
-     * TODO: ??
+     * @TODO: ??
      *
      * @param $eqTypeName
      * @param $typeCmd
@@ -298,36 +288,36 @@ class EqLogicManager
     public static function listByTypeAndCmdType($eqTypeName, $typeCmd, $subTypeCmd = '')
     {
         if ($subTypeCmd == '') {
-            $values = array(
+            $values = [
                 'eqType_name' => $eqTypeName,
                 'typeCmd' => $typeCmd,
-            );
+            ];
             $sql = 'SELECT DISTINCT(el.id),el.name
                     FROM ' . self::DB_CLASS_NAME . '  el
-                    INNER JOIN cmd c ON c.eqLogic_id = el.id
-                    WHERE eqType_name = :eqType_name
+                    INNER JOIN `cmd` c ON c.eqLogic_id = el.id
+                    WHERE `eqType_name` = :eqType_name
                     AND c.type = :typeCmd
-                    ORDER BY name';
+                    ORDER BY `name`';
             return DBHelper::getAll($sql, $values);
         } else {
-            $values = array(
+            $values = [
                 'eqType_name' => $eqTypeName,
                 'typeCmd' => $typeCmd,
                 'subTypeCmd' => $subTypeCmd,
-            );
+            ];
             $sql = 'SELECT DISTINCT(el.id),el.name
                     FROM ' . self::DB_CLASS_NAME . '  el
-                    INNER JOIN cmd c ON c.eqLogic_id = el.id
-                    WHERE eqType_name = :eqType_name
+                    INNER JOIN `cmd` c ON c.eqLogic_id = el.id
+                    WHERE `eqType_name` = :eqType_name
                     AND c.type = :typeCmd
                     AND c.subType = :subTypeCmd
-                    ORDER BY name';
+                    ORDER BY `name`';
             return DBHelper::getAll($sql, $values);
         }
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      *
      * @param $objectId
      * @param $typeCmd
@@ -337,16 +327,16 @@ class EqLogicManager
      */
     public static function listByObjectAndCmdType($objectId, $typeCmd, $subTypeCmd = '')
     {
-        $values = array();
+        $values = [];
         $sql = 'SELECT DISTINCT(el.id), el.name
                 FROM ' . self::DB_CLASS_NAME . '  el
-                INNER JOIN cmd c ON c.eqLogic_id=el.id
+                INNER JOIN `cmd` c ON c.eqLogic_id=el.id
                 WHERE ';
         if ($objectId === null) {
             $sql .= 'object_id IS NULL ';
         } elseif ($objectId != '') {
             $values['object_id'] = $objectId;
-            $sql .= 'object_id = :object_id ';
+            $sql .= '`object_id` = :object_id ';
         } else {
             return null;
         }
@@ -358,12 +348,12 @@ class EqLogicManager
             $values['type'] = $typeCmd;
             $sql .= 'AND c.type = :type ';
         }
-        $sql .= 'ORDER BY name';
+        $sql .= 'ORDER BY `name`';
         return DBHelper::getAll($sql, $values);
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      *
      * @return array|mixed|null
      * @throws \Exception
@@ -394,21 +384,8 @@ class EqLogicManager
                         $message = __('Attention') . ' ' . $eqLogic->getHumanName();
                         $message .= __(' n\'a pas envoyé de message depuis plus de ') . $noReponseTimeLimit . __(' min (vérifiez les piles)');
                         $eqLogic->setStatus('timeout', 1);
-                        if (ConfigManager::ByKey('alert::addMessageOnTimeout') == 1) {
-                            MessageManager::add('core', $message, '', $logicalId);
-                        }
-                        $cmds = explode(('&&'), ConfigManager::byKey('alert::timeoutCmd'));
-                        if (count($cmds) > 0 && trim(ConfigManager::byKey('alert::timeoutCmd')) != '') {
-                            foreach ($cmds as $id) {
-                                $cmd = CmdManager::byId(str_replace('#', '', $id));
-                                if (is_object($cmd)) {
-                                    $cmd->execCmd(array(
-                                        'title' => __('[' . ConfigManager::byKey('name', 'core', 'NEXTDOM') . '] ') . $message,
-                                        'message' => ConfigManager::byKey('name', 'core', 'NEXTDOM') . ' : ' . $message,
-                                    ));
-                                }
-                            }
-                        }
+
+                        CmdManager::checkAlertCmds('alert::addMessageOnTimeout', 'alert::timeoutCmd', $message, $logicalId);
                     }
                 } else {
                     if ($eqLogic->getStatus('lastCommunication', date(DateFormat::FULL)) > date(DateFormat::FULL, strtotime('-' . $noReponseTimeLimit . ' minutes' . date(DateFormat::FULL)))) {
@@ -423,7 +400,7 @@ class EqLogicManager
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      *
      * @param int $timeout
      * @param bool $onlyEnable
@@ -432,20 +409,19 @@ class EqLogicManager
      */
     public static function byTimeout($timeout = 0, $onlyEnable = false)
     {
-        $values = array(
+        $values = [
             'timeout' => $timeout,
-        );
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE timeout >= :timeout';
+        ];
+        $sql = static::getBaseSQL() . '
+                WHERE `timeout` >= :timeout';
         if ($onlyEnable) {
-            $sql .= ' AND isEnable = 1';
+            $sql .= ' AND `isEnable` = 1';
         }
         return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      *
      * @param $input
      * @return array|mixed
@@ -490,34 +466,11 @@ class EqLogicManager
     }
 
     /**
-     * Get eqLogic object with his id.
-     *
-     * @param mixed $id EqLogic object id
-     *
-     * @return EqLogic|null
-     *
-     * @throws \Exception
-     */
-    public static function byId($id)
-    {
-        if ($id == '') {
-            return null;
-        }
-        $values = array(
-            'id' => $id,
-        );
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE id = :id';
-        return self::cast(DBHelper::getOneObject($sql, $values, self::CLASS_NAME));
-    }
-
-    /**
-     * TODO: ???
+     * @TODO: ???
      */
     public static function clearCacheWidget()
     {
-        foreach (self::all() as $eqLogic) {
+        foreach (static::all() as $eqLogic) {
             $eqLogic->emptyCacheWidget();
         }
     }
@@ -532,27 +485,26 @@ class EqLogicManager
      */
     public static function all($onlyEnable = false)
     {
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME, 'el') . '
-                FROM ' . self::DB_CLASS_NAME . ' el
+        $sql = static::getPrefixedBaseSQL('el') . '
                 LEFT JOIN object ob ON el.object_id = ob.id ';
         if ($onlyEnable) {
-            $sql .= 'WHERE isEnable = 1 ';
+            $sql .= 'WHERE `isEnable` = 1 ';
         }
         $sql .= 'ORDER BY ob.name, el.name';
         return self::cast(DBHelper::getAllObjects($sql, [], self::CLASS_NAME));
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      *
      * @param $nbLine
      * @param $nbColumn
      * @param array $options
      * @return array
      */
-    public static function generateHtmlTable($nbLine, $nbColumn, $options = array())
+    public static function generateHtmlTable($nbLine, $nbColumn, $options = [])
     {
-        $return = array('html' => '', 'replace' => array());
+        $return = ['html' => '', 'replace' => []];
         if (!isset($options['styletd'])) {
             $options['styletd'] = '';
         }
@@ -598,13 +550,13 @@ class EqLogicManager
      */
     public static function getAllTags()
     {
-        $values = array();
+        $values = [];
         $sql = 'SELECT tags
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE tags IS NOT NULL
         	    AND tags!=""';
         $results = DBHelper::getAll($sql, $values);
-        $return = array();
+        $return = [];
         foreach ($results as $result) {
             $tags = explode(',', $result['tags']);
             foreach ($tags as $tag) {
@@ -621,15 +573,15 @@ class EqLogicManager
      */
     public static function byString($_string)
     {
-        $eqLogic = self::byId(str_replace(array('#','eqLogic'), '', self::fromHumanReadable($_string)));
+        $eqLogic = self::byId(str_replace(['#', 'eqLogic'], '', self::fromHumanReadable($_string)));
         if (!is_object($eqLogic)) {
-            throw new \Exception(__('L\'équipement n\'a pas pu être trouvé : ') . $_string . __(' => ') . self::fromHumanReadable($_string));
+            throw new CoreException(__('L\'équipement n\'a pas pu être trouvé : ') . $_string . __(' => ') . self::fromHumanReadable($_string));
         }
         return $eqLogic;
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      *
      * @param $input
      * @return array|mixed
@@ -685,7 +637,7 @@ class EqLogicManager
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      *
      * @param $objectName
      * @param $eqLogicName
@@ -694,25 +646,34 @@ class EqLogicManager
      */
     public static function byObjectNameEqLogicName($objectName, $eqLogicName)
     {
+        $values = [
+            'eqLogic_name' => $eqLogicName,
+        ];
         if ($objectName == __('Aucun')) {
-            $values = [
-                'eqLogic_name' => $eqLogicName,
-            ];
-            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                    FROM ' . self::DB_CLASS_NAME . '
-                    WHERE name=:eqLogic_name
+            $sql = static::getBaseSQL() . '
+                    WHERE `name` = :eqLogic_name
                     AND object_id IS NULL';
         } else {
-            $values = array(
-                'eqLogic_name' => $eqLogicName,
-                'object_name' => $objectName,
-            );
-            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME, 'el') . '
-                    FROM ' . self::DB_CLASS_NAME . '  el
+            $values['object_name'] = $objectName;
+            $sql = static::getPrefixedBaseSQL('el') . '
                     INNER JOIN object ob ON el.object_id=ob.id
-                    WHERE el.name=:eqLogic_name
-                    AND ob.name=:object_name';
+                    WHERE el.name = :eqLogic_name
+                    AND ob.name = :object_name';
         }
         return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
+    }
+
+    public static function deadCmdGeneric($_plugin_id) {
+        $result = [];
+        foreach (self::byType($_plugin_id) as $eqLogic) {
+            $eqLogic_json = json_encode(utils::o2a($eqLogic));
+            preg_match_all("/#([0-9]*)#/", $eqLogic_json, $matches);
+            foreach ($matches[1] as $cmdId) {
+                if (is_numeric($cmdId) && !CmdManager::byId(str_replace('#', '', $cmdId))) {
+                    $result[] = array('detail' => ucfirst($_plugin_id).' ' . $eqLogic->getHumanName(), 'help' => 'Action', 'who' => '#' . $cmdId . '#');
+                }
+            }
+        }
+        return $result;
     }
 }

@@ -18,6 +18,9 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\DateFormat;
+use NextDom\Enums\LogTarget;
+use NextDom\Enums\NextDomObj;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\LogHelper;
@@ -26,6 +29,8 @@ use NextDom\Helpers\Utils;
 use NextDom\Managers\CacheManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\CronManager;
+use NextDom\Model\Entity\Parents\BaseEntity;
+use NextDom\Model\Entity\Parents\EnableEntity;
 
 /**
  * Cron
@@ -33,15 +38,11 @@ use NextDom\Managers\CronManager;
  * @ORM\Table(name="cron", uniqueConstraints={@ORM\UniqueConstraint(name="class_function_option", columns={"class", "function", "option"})}, indexes={@ORM\Index(name="type", columns={"class"}), @ORM\Index(name="logicalId_Type", columns={"class"}), @ORM\Index(name="deamon", columns={"deamon"})})
  * @ORM\Entity
  */
-class Cron implements EntityInterface
+class Cron extends BaseEntity
 {
+    const TABLE_NAME = NextDomObj::CRON;
 
-    /**
-     * @var integer 1 if cron is enabled
-     *
-     * @ORM\Column(name="enable", type="integer", nullable=true)
-     */
-    protected $enable = 1;
+    use EnableEntity;
 
     /**
      * @var string
@@ -100,20 +101,6 @@ class Cron implements EntityInterface
     protected $once = 0;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * @var bool
-     */
-    protected $_changed = false;
-
-    /**
      * Get enabled state of the cron task
      *
      * @param int $defaultValue Default value if cron task is not initialized
@@ -126,29 +113,6 @@ class Cron implements EntityInterface
             return $defaultValue;
         }
         return $this->enable;
-    }
-
-    /**
-     * Set enabled state of the cron task
-     *
-     * @param int $newState 1 for enable task, 0 for disable
-     *
-     * @return $this
-     */
-    public function setEnable($newState)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->enable, $newState);
-        $this->enable = $newState;
-        return $this;
-    }
-
-    /**
-     * Get bool enabled state
-     *
-     * @return bool True is task is enabled
-     */
-    public function isEnabled() {
-        return $this->enable == 1;
     }
 
     /**
@@ -175,7 +139,7 @@ class Cron implements EntityInterface
      */
     public function setTimeout($_timeout)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->timeout, $_timeout);
+        $this->updateChangeState($this->timeout, $_timeout);
         $this->timeout = $_timeout;
         return $this;
     }
@@ -195,7 +159,7 @@ class Cron implements EntityInterface
      */
     public function setDeamon($_deamons)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->deamon, $_deamons);
+        $this->updateChangeState($this->deamon, $_deamons);
         $this->deamon = $_deamons;
         return $this;
     }
@@ -220,7 +184,7 @@ class Cron implements EntityInterface
      */
     public function setDeamonSleepTime($_deamonSleepTime)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->deamonSleepTime, $_deamonSleepTime);
+        $this->updateChangeState($this->deamonSleepTime, $_deamonSleepTime);
         $this->deamonSleepTime = $_deamonSleepTime;
         return $this;
     }
@@ -244,19 +208,9 @@ class Cron implements EntityInterface
      */
     public function setOnce($_once)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->once, $_once);
+        $this->updateChangeState($this->once, $_once);
         $this->once = $_once;
         return $this;
-    }
-
-    /**
-     * Get the name of the SQL table where data is stored.
-     *
-     * @return string
-     */
-    public function getTableName()
-    {
-        return 'cron';
     }
 
     /**
@@ -294,7 +248,7 @@ class Cron implements EntityInterface
      */
     public function setFunction($_function)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->function, $_function);
+        $this->updateChangeState($this->function, $_function);
         $this->function = $_function;
         return $this;
     }
@@ -314,7 +268,7 @@ class Cron implements EntityInterface
      */
     public function setSchedule($_schedule)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->schedule, $_schedule);
+        $this->updateChangeState($this->schedule, $_schedule);
         $this->schedule = $_schedule;
         return $this;
     }
@@ -335,7 +289,7 @@ class Cron implements EntityInterface
     public function setOption($_option)
     {
         $_option = json_encode($_option, JSON_UNESCAPED_UNICODE);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->option, $_option);
+        $this->updateChangeState($this->option, $_option);
         $this->option = $_option;
         return $this;
     }
@@ -355,29 +309,8 @@ class Cron implements EntityInterface
      */
     public function setClass($newClass)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->class, $newClass);
+        $this->updateChangeState($this->class, $newClass);
         $this->class = $newClass;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set task id
-     *
-     * @param $_id
-     * @return $this Task object
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
         return $this;
     }
 
@@ -450,7 +383,7 @@ class Cron implements EntityInterface
             $this->halt();
         }
         CacheManager::delete('cronCacheAttr' . $this->getId());
-        return DBHelper::remove($this);
+        return parent::remove();
     }
 
     /**
@@ -519,7 +452,7 @@ class Cron implements EntityInterface
             $this->setState('stop');
             $this->setPID();
         } else {
-            LogHelper::add('cron', 'info', __('Arrêt de ') . $this->getClass() . '::' . $this->getFunction() . '(), PID : ' . $this->getPID());
+            LogHelper::addInfo(LogTarget::CRON, __('Arrêt de ') . $this->getClass() . '::' . $this->getFunction() . '(), PID : ' . $this->getPID());
             if ($this->getPID() > 0) {
                 SystemHelper::kill($this->getPID());
                 $retry = 0;
@@ -651,7 +584,7 @@ class Cron implements EntityInterface
                 return true;
             }
         } catch (\Exception $e) {
-            LogHelper::add('cron', 'debug', 'Error on isDue : ' . $e->getMessage() . ', cron : ' . $this->getSchedule());
+            LogHelper::addDebug(LogTarget::CRON, 'Error on isDue : ' . $e->getMessage() . ', cron : ' . $this->getSchedule());
         }
         return false;
     }
@@ -676,7 +609,7 @@ class Cron implements EntityInterface
     {
         try {
             $cronExpression = new \Cron\CronExpression($this->getSchedule(), new \Cron\FieldFactory);
-            return $cronExpression->getNextRunDate()->format('Y-m-d H:i:s');
+            return $cronExpression->getNextRunDate()->format(DateFormat::FULL);
         } catch (\Exception $e) {
 
         }
@@ -720,23 +653,5 @@ class Cron implements EntityInterface
     public function setLastRun($lastRun)
     {
         $this->setCache('lastRun', $lastRun);
-    }
-
-    /**
-     * @return bool
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
-        return $this;
     }
 }

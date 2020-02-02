@@ -16,15 +16,15 @@
  */
 
 require_once(__DIR__ . '/../../../src/core.php');
-require_once(__DIR__ . '/BaseControllerTest.php');
+require_once(__DIR__ . '/../libs/BaseControllerTest.php');
 
 class DataStoreHumanInsertModalControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -32,6 +32,6 @@ class DataStoreHumanInsertModalControllerTest extends BaseControllerTest
     public function testSimple()
     {
         $result = \NextDom\Controller\Modals\DataStoreHumanInsert::get();
-        $this->assertContains('class="mod_insertDataStoreValue_name"', $result);
+        $this->assertStringContainsString('class="mod_insertDataStoreValue_name"', $result);
     }
 }

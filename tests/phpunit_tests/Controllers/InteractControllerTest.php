@@ -16,15 +16,15 @@
  */
 
 require_once(__DIR__ . '/../../../src/core.php');
-require_once(__DIR__ . '/BaseControllerTest.php');
+require_once(__DIR__ . '/../libs/BaseControllerTest.php');
 
 class InteractControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -34,7 +34,7 @@ class InteractControllerTest extends BaseControllerTest
         $pageData = [];
         $result = \NextDom\Controller\Tools\InteractController::get($pageData);
         $this->assertArrayHasKey('numeric', $pageData['interactCmdType']['info']['subtype']);
-        $this->assertContains('id="interactThumbnailDisplay"', $result);
+        $this->assertStringContainsString('id="interactThumbnailDisplay"', $result);
     }
 
     public function testPageDataVars()

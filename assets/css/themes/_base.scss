@@ -66,13 +66,15 @@
   color: map_get($color_theme, 'color1') !important;
 }
 .li_noteDisplay.active .label-list,
+.li_scenarioTemplate.active .label-list,
 .li_view.active .label-view,
 .li_log.active .label-log {
   border-color: map_get($color_theme, 'color1') !important;
 }
 
 /* Bouton primaires */
-.btn-primary {
+.btn-primary,
+.label-primary {
   background-color: map_get($color_theme, 'color1') !important;
   border-color: map_get($color_theme, 'color1') !important;
 }
@@ -88,7 +90,7 @@
   border-bottom-color:map_get($color_theme, 'color180') !important;
 }
 @media (max-width: 767px) {
-  .main-header .navbar .dropdown-menu li a:hover {
+  .main-header .navbar .dropdown-menu li a:hover:not(.btn) {
     background-color: map_get($color_theme, 'color1') !important;
   }
 }
@@ -100,6 +102,9 @@
 ::-webkit-scrollbar-thumb {
   background: map_get($color_theme, 'color1') !important;
   background-color: map_get($color_theme, 'color1') !important;
+}
+html {
+  scrollbar-color: map_get($color_theme, 'color1') map_get($color_theme, 'color6');
 }
 
 /* Fabs */
@@ -180,6 +185,18 @@
   color: map_get($color_theme, 'color1') !important;
 }
 
+/* Autocomplete */
+.autocomplete {
+    .ui-menu-item-wrapper:hover,
+    .ui-state-hover, .ui-state-active {
+        background-color: map_get($color_theme, 'color1') !important;
+    }
+}
+
+/* Messages */
+#table_message .iconCore {
+    background-color: map_get($color_theme, 'color1') !important;
+}
 
 /* ################################################################################## */
 /* COLOR2 = Couleur de contraste (icônes et texte sur fond accentué ou de sidebar...) */
@@ -251,9 +268,25 @@
   background: map_get($color_theme, 'color2') !important;
 }
 
+/* Mobile title */
 .login-mobile-title{
   color: map_get($color_theme, 'color2') !important;
 }
+
+/* Autocomplete */
+.autocomplete {
+    .ui-menu-item-wrapper:hover,
+    .ui-state-hover, .ui-state-active {
+        color: map_get($color_theme, 'color2') !important;
+    }
+}
+
+/* Widget theme nextdom */
+.label-default,
+.bg-theme .btn  {
+  color: map_get($color_theme, 'color2') !important;
+}
+
 
 /* ############################################################################################################# */
 /* COLOR3 = Couleur de survol principale (contenu, titres, footer, bouton d'administration, unités, légendes...) */
@@ -324,8 +357,7 @@
 /* ########################################################################## */
 .content-wrapper,
 .nav-tabs-custom > .nav-tabs > li.active > a,
-.nav-tabs-custom > .nav-tabs > li.active:hover > a,
-.main-footer {
+.nav-tabs-custom > .nav-tabs > li.active:hover > a {
   background-color:map_get($color_theme, 'color7') !important;
   border-color:map_get($color_theme, 'color7') !important;
 }
@@ -349,8 +381,12 @@
   background-color: map_get($color_theme, 'color7') !important;
 }
 
-.box-header.with-border{
+.box-header.with-border {
   border-color: map_get($color_theme, 'color7') !important;
+}
+
+.box-theme {
+  border-top-color: map_get($color_theme, 'color7') !important;
 }
 
 .nav-tabs-custom > .nav-tabs,
@@ -401,6 +437,12 @@
   background-color: map_get($color_theme, 'color7') !important;
 }
 
+/* Progressbar */
+.box-body .progress,
+.tab-pane .progress {
+  background-color: map_get($color_theme, 'color7') !important;
+}
+
 
 /* ########################################################################################################## */
 /* COLOR8 = Couleur de fond secondaire (titres, action-bar, footer, onglets, titre modale, boîtes d'infos...) */
@@ -425,6 +467,9 @@
 .nav-tabs-custom .well {
   border-color: map_get($color_theme, 'color8') !important;
 }
+.nav-tabs-custom .marketOverload {
+  background-color: map_get($color_theme, 'color8') !important;
+}
 
 /* Action bar */
 .action-bar {
@@ -441,8 +486,7 @@
 }
 
 /* Footer */
-body,
-.main-footer{
+body {
   background-color: map_get($color_theme, 'color8') !important;
 }
 .label-list:hover,
@@ -492,6 +536,30 @@ body,
   background-color: map_get($color_theme, 'color8') !important;
 }
 
+/* Progressbar */
+.modal-body .progress {
+  background-color: map_get($color_theme, 'color8') !important;
+}
+
+/* Messages */
+#table_message {
+  border-color: map_get($color_theme, 'color8') !important;
+  background-color: map_get($color_theme, 'color8') !important;
+  .header {
+    background-color: map_get($color_theme, 'color8') !important;
+  }
+  li, li ul li a {
+    border-color: map_get($color_theme, 'color8') !important;
+  }
+  li a:hover:not(.btn) {
+    background-color: map_get($color_theme, 'color8') !important;
+  }
+}
+
+/* Widget theme nextdom */
+.bg-theme {
+    background-color: map_get($color_theme, 'color8') !important;
+}
 
 /* ################################################################### */
 /* COLOR9 = Couleur de fond des titres (légendes, tableaux, unités...) */
@@ -563,15 +631,23 @@ pre::selection {
   color: map_get($color_theme, 'color9') !important;
 }
 
+/* Messages */
+#table_message .menu {
+  background-color: map_get($color_theme, 'color9') !important;
+}
+
 
 /* #################################################################################################### */
 /* COLOR10 = Couleur des textes (contenu, titres, footer, bouton d'administration, unités, légendes...) */
 /* #################################################################################################### */
 /* Textes */
-body, h1, h2, h3, h4, h5, h6  {
+body, h1, h2, h3, h4, h5, h6, {
   color: map_get($color_theme, 'color10') !important;
 }
 .box-header span:not(.badge) {
+  color: map_get($color_theme, 'color10') !important;
+}
+#dashboard-content .box-header {
   color: map_get($color_theme, 'color10') !important;
 }
 .nav-tabs-custom > .nav-tabs > li.header,
@@ -594,11 +670,16 @@ legend {
 .CodeMirror-scroll{
   color: map_get($color_theme, 'color10') !important;
 }
-.footer-center, .text-muted {
+.text-muted {
   color: map_get($color_theme, 'color10') !important;
 }
 .ui-widget-content {
   color: map_get($color_theme, 'color10') !important;
+}
+#table_message {
+  li, li ul li a {
+    color: map_get($color_theme, 'color10') !important;
+  }
 }
 
 /* Titres */
@@ -652,7 +733,8 @@ pre::selection {
 
 /* Bouton filtres tuiles */
 .bt_editDashboardWidgetGridAllResize,
-.bt_editDashboardWidgetGridResize {
+.bt_editDashboardWidgetGridResize,
+.bt_editDashboardWidgetPackery {
   color: map_get($color_theme, 'color10') !important;
 }
 .editDashboardButtons a {
@@ -677,6 +759,11 @@ pre::selection {
   color: map_get($color_theme, 'color10') !important;
 }
 .timeline-item {
+  color: map_get($color_theme, 'color10') !important;
+}
+
+/* Widget Theme Nextdom */
+.bg-theme .widget-content {
   color: map_get($color_theme, 'color10') !important;
 }
 
@@ -746,7 +833,8 @@ legend {
 
 /* Labels */
 .label-value,
-.label-icon {
+.label-icon,
+.progress {
   border-color: map_get($color_theme, 'color12') !important;
 }
 
@@ -879,7 +967,8 @@ pre:not(.mobile-pre) {
 /* ############################################## */
 /* Tabs */
 .nav-tabs-custom>.tab-content,
-.box-body, {
+#dashboard-content .box-body:not(.widget-content),
+#dashboard-content .box {
   background-color: map_get($color_theme, 'color19') !important;
 }
 /* Legendes de sections */

@@ -34,22 +34,25 @@
 namespace NextDom\Managers;
 
 use NextDom\Enums\ScenarioState;
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
+use NextDom\Managers\Parents\BaseManager;
+use NextDom\Managers\Parents\CommonManager;
 use NextDom\Model\Entity\Scenario;
-
-// TODO: DBHelper::buildField(ScenarioEntity::className) à factoriser
 
 /**
  * Class ScenarioManager
  * @package NextDom\Managers
  */
-class ScenarioManager
+class ScenarioManager extends BaseManager
 {
-    const DB_CLASS_NAME = 'scenario';
+    use CommonManager;
+
+    const DB_CLASS_NAME = '`scenario`';
     const CLASS_NAME = Scenario::class;
     const INITIAL_TRANSLATION_FILE = '';
 
@@ -64,9 +67,7 @@ class ScenarioManager
      */
     public static function byName(string $name)
     {
-        $values = array('name' => $name);
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . ' FROM ' . self::DB_CLASS_NAME . ' WHERE name = :name';
-        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
+        return static::getOneByClauses(['name' => $name]);
     }
 
     /**
@@ -78,34 +79,19 @@ class ScenarioManager
      * @return Scenario Objet demandé
      *
      * @throws \ReflectionException
+     * @throws CoreException
      */
     public static function byString(string $scenarioName, $commandNotFoundString)
     {
-        $scenario = self::byId(str_replace('#scenario', '', self::fromHumanReadable($scenarioName)));
+        $scenario = static::byId(str_replace('#scenario', '', self::fromHumanReadable($scenarioName)));
         if (!is_object($scenario)) {
-            throw new \Exception($commandNotFoundString . $scenarioName . ' => ' . self::fromHumanReadable($scenarioName));
+            throw new CoreException($commandNotFoundString . $scenarioName . ' => ' . self::fromHumanReadable($scenarioName));
         }
         return $scenario;
     }
 
     /**
-     * Get scenario by his id
-     *
-     * @param int $id Identifiant du scénario
-     *
-     * @return Scenario Objet demandé
-     *
-     * @throws \Exception
-     */
-    public static function byId($id)
-    {
-        $values = array('id' => $id);
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . ' FROM ' . self::DB_CLASS_NAME . ' WHERE id = :id';
-        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
-    }
-
-    /**
-     * TODO: Ca fait l'inverse, mais je sais pas quoi
+     * @TODO: Ca fait l'inverse, mais je sais pas quoi
      *
      * @param $input
      * @return array|mixed
@@ -119,7 +105,7 @@ class ScenarioManager
             $input = json_decode($input, true);
         }
         if (is_object($input)) {
-            $reflections = array();
+            $reflections = [];
             $uuid = spl_object_hash($input);
             if (!isset($reflections[$uuid])) {
                 $reflections[$uuid] = new \ReflectionClass($input);
@@ -173,15 +159,14 @@ class ScenarioManager
      */
     public static function byObjectNameGroupNameScenarioName($objectName, $groupName, $scenarioName)
     {
-        $values = array(
+        $values = [
             'scenario_name' => html_entity_decode($scenarioName),
-        );
+        ];
 
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME, 's') . '
-                FROM ' . self::DB_CLASS_NAME . ' s ';
+        $sql = static::getPrefixedBaseSQL('s');
 
         if ($objectName == __('Aucun')) {
-            $sql .= 'WHERE s.name=:scenario_name ';
+            $sql .= 'WHERE s.name = :scenario_name ';
             if ($groupName == __('Aucun')) {
                 $sql .= 'AND (`group` IS NULL OR `group` = ""  OR `group` = "Aucun" OR `group` = "None")
                          AND s.object_id IS NULL';
@@ -215,7 +200,7 @@ class ScenarioManager
      */
     public static function listGroup($groupPattern = null)
     {
-        $values = array();
+        $values = [];
         $sql = 'SELECT DISTINCT(`group`)
         FROM ' . self::DB_CLASS_NAME;
         if ($groupPattern !== null) {
@@ -227,7 +212,7 @@ class ScenarioManager
     }
 
     /**
-     * Obtenir la liste des scénarios à partir d'un élément TODO: Kesako
+     * Obtenir la liste des scénarios à partir d'un élément @TODO: Kesako
      *
      * @param string $elementId
      * @return mixed
@@ -236,17 +221,13 @@ class ScenarioManager
     public static function byElement(string $elementId)
     {
         // TODO: Vérifier, bizarre les guillemets dans le like
-        $values = array(
-            'element_id' => '%"' . $elementId . '"%',
-        );
-        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE `scenarioElement` LIKE :element_id';
-        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
+        return static::searchOneByClauses([
+            'scenarioElement' => '%"' . $elementId . '"%',
+        ]);
     }
 
     /**
-     * Obtenir un scénario à partir de l'identifiant d'un objet //TODO: Comprendre ce que c'est
+     * Obtenir un scénario à partir de l'identifiant d'un objet //@TODO: Comprendre ce que c'est
      *
      * @param int $objectId Identifiant de l'objet
      * @param bool $onlyEnabled Filtrer uniquement les scénarios activés
@@ -258,20 +239,19 @@ class ScenarioManager
      */
     public static function byObjectId($objectId, $onlyEnabled = true, $onlyVisible = false)
     {
-        $values = array();
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME;
+        $values = [];
+        $sql = static::getBaseSQL();
         if ($objectId === null) {
             $sql .= ' WHERE object_id IS NULL';
         } else {
             $values['object_id'] = $objectId;
-            $sql .= ' WHERE object_id = :object_id';
+            $sql .= ' WHERE `object_id` = :object_id';
         }
         if ($onlyEnabled) {
-            $sql .= ' AND isActive = 1';
+            $sql .= ' AND `isActive` = 1';
         }
         if ($onlyVisible) {
-            $sql .= ' AND isVisible = 1';
+            $sql .= ' AND `isVisible` = 1';
         }
         $sql .= ' ORDER BY `order`';
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
@@ -279,12 +259,12 @@ class ScenarioManager
 
     /**
      * Vérifier un scénario
-     * TODO: Virer les strings
+     * @TODO: Virer les strings
      *
      * @param string $event Evènement déclencheur
      * @param bool $forceSyncMode Forcer le mode synchrone
      *
-     * @return bool Renvoie toujours true //TODO: A voir
+     * @return bool Renvoie toujours true //@TODO: A voir
      * @throws \Exception
      */
     public static function check($event = null, $forceSyncMode = false)
@@ -292,7 +272,7 @@ class ScenarioManager
         $message = '';
         $scenarios = [];
         if ($event !== null) {
-            // TODO: Event ne peut pas être un objet
+            // @TODO: Event ne peut pas être un objet
             if (is_object($event)) {
                 $eventScenarios = self::byTrigger($event->getId());
                 $trigger = '#' . $event->getId() . '#';
@@ -314,11 +294,9 @@ class ScenarioManager
             $scheduledScenarios = self::schedule();
             $trigger = 'schedule';
             if (NextDomHelper::isDateOk()) {
-                foreach ($scheduledScenarios as $key => $scenario) {
-                    if ($scenario->getState() != ScenarioState::IN_PROGRESS) {
-                        if ($scenario->isDue()) {
-                            $scenarios[] = $scenario;
-                        }
+                foreach ($scheduledScenarios as $scenario) {
+                    if ($scenario->getState() != ScenarioState::IN_PROGRESS && $scenario->isDue()) {
+                        $scenarios[] = $scenario;
                     }
                 }
             }
@@ -342,12 +320,11 @@ class ScenarioManager
      */
     public static function byTrigger($cmdId, $onlyEnabled = true)
     {
-        $values = array('cmd_id' => '%#' . $cmdId . '#%');
-        $sql = 'SELECT ' . DBHelper::buildField(self::DB_CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE mode != "schedule" AND `trigger` LIKE :cmd_id';
+        $values = ['cmd_id' => '%#' . $cmdId . '#%'];
+        $sql = static::getBaseSQL() . '
+                WHERE `mode` != "schedule" AND `trigger` LIKE :cmd_id';
         if ($onlyEnabled) {
-            $sql .= ' AND isActive = 1';
+            $sql .= ' AND `isActive` = 1';
         }
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
@@ -360,29 +337,28 @@ class ScenarioManager
      */
     public static function schedule()
     {
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
+        $sql = static::getBaseSQL() . '
                 WHERE `mode` != "provoke"
-                AND isActive = 1';
+                AND `isActive` = 1';
         return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
     }
 
     /**
-     * Contrôle des scénarios // TODO: ???
+     * Contrôle des scénarios // @TODO: ???
      *
      */
     public static function control()
     {
         foreach (self::all() as $scenario) {
             if ($scenario->getState() != ScenarioState::IN_PROGRESS) {
-                continue; // TODO: To be or not to be
+                continue; // @TODO: To be or not to be
             }
             if (!$scenario->running()) {
                 $scenario->setState(ScenarioState::ERROR);
-                continue; // TODO: To be or not to be
+                continue; // @TODO: To be or not to be
             }
             $runtime = strtotime('now') - strtotime($scenario->getLastLaunch());
-            // TODO: Optimisation
+            // @TODO: Optimisation
             if (is_numeric($scenario->getTimeout()) && $scenario->getTimeout() != '' && $scenario->getTimeout() != 0 && $runtime > $scenario->getTimeout()) {
                 $scenario->stop();
                 $scenario->setLog(__('Arret du scénario car il a dépassé son temps de timeout : ') . $scenario->getTimeout() . 's');
@@ -402,11 +378,11 @@ class ScenarioManager
      */
     public static function all($groupName = '', $type = null): array
     {
-        $values = array();
+        $values = [];
         $result1 = null;
         $result2 = null;
 
-        $baseSql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME, 's') . 'FROM ' . self::DB_CLASS_NAME . ' s ';
+        $baseSql = static::getPrefixedBaseSQL('s');
         $sqlWhereTypeFilter = ' ';
         $sqlAndTypeFilter = ' ';
         if ($type !== null) {
@@ -423,23 +399,23 @@ class ScenarioManager
             $sql1 .= 'WHERE (`group` IS NULL OR `group` = "")' . $sqlAndTypeFilter . 'ORDER BY s.group, s.name';
             $sql2 = $baseSql . 'WHERE (`group` IS NULL OR `group` = "") AND s.object_id IS NULL' . $sqlAndTypeFilter . ' ORDER BY s.name';
         } else {
-            $values = array('group' => $groupName);
+            $values = ['group' => $groupName];
             $sql1 .= 'WHERE `group` = :group ' . $sqlAndTypeFilter . 'ORDER BY ob.name, s.group, s.name';
             $sql2 = $baseSql . 'WHERE `group` = :group AND s.object_id IS NULL' . $sqlAndTypeFilter . 'ORDER BY s.group, s.name';
         }
         $result1 = DBHelper::getAllObjects($sql1, $values, self::CLASS_NAME);
         $result2 = DBHelper::getAllObjects($sql2, $values, self::CLASS_NAME);
         if (!is_array($result1)) {
-            $result1 = array();
+            $result1 = [];
         }
         if (!is_array($result2)) {
-            $result2 = array();
+            $result2 = [];
         }
         return array_merge($result1, $result2);
     }
 
     /**
-     * Fait dedans ??? TODO: Trouver un nom explicite
+     * Fait dedans ??? @TODO: Trouver un nom explicite
      *
      * @param array $options ???
      *
@@ -472,15 +448,15 @@ class ScenarioManager
     }
 
     /**
-     * Nettoie la table TODO: Avec l'éponge et grosse optimisation à faire
+     * Nettoie la table @TODO: Avec l'éponge et grosse optimisation à faire
      */
     public static function cleanTable()
     {
-        $ids = array(
-            'element' => array(),
-            'subelement' => array(),
-            'expression' => array(),
-        );
+        $ids = [
+            'element' => [],
+            'subelement' => [],
+            'expression' => [],
+        ];
         foreach (self::all() as $scenario) {
             foreach ($scenario->getElement() as $element) {
                 $result = $element->getAllId();
@@ -507,7 +483,7 @@ class ScenarioManager
     }
 
     /**
-     * Test la validité des scénarios TODO: Je suppose
+     * Test la validité des scénarios @TODO: Je suppose
      *
      * @param bool $needsReturn Argument à virer
      *
@@ -516,12 +492,10 @@ class ScenarioManager
      */
     public static function consystencyCheck($needsReturn = false)
     {
-        $return = array();
+        $result = [];
         foreach (self::all() as $scenario) {
-            if ($scenario->getIsActive() != 1) {
-                if (!$needsReturn) {
-                    continue;
-                }
+            if ($scenario->getIsActive() != 1 && !$needsReturn) {
+                continue;
             }
             if ($scenario->getMode() == 'provoke' || $scenario->getMode() == 'all') {
                 $trigger_list = '';
@@ -532,9 +506,9 @@ class ScenarioManager
                 foreach ($matches[1] as $cmd_id) {
                     if (is_numeric($cmd_id)) {
                         if ($needsReturn) {
-                            $return[] = array('detail' => 'Scénario ' . $scenario->getHumanName(), 'help' => 'Déclencheur du scénario', 'who' => '#' . $cmd_id . '#');
+                            $result[] = ['detail' => 'Scénario ' . $scenario->getHumanName(), 'help' => 'Déclencheur du scénario', 'who' => '#' . $cmd_id . '#'];
                         } else {
-                            LogHelper::addError('scenario', __('Un déclencheur du scénario : ') . $scenario->getHumanName() . __(' est introuvable'));
+                            LogHelper::addError(LogTarget::SCENARIO, __('Un déclencheur du scénario : ') . $scenario->getHumanName() . __(' est introuvable'));
                         }
                     }
                 }
@@ -547,33 +521,33 @@ class ScenarioManager
             foreach ($matches[1] as $cmd_id) {
                 if (is_numeric($cmd_id)) {
                     if ($needsReturn) {
-                        $return[] = array('detail' => 'Scénario ' . $scenario->getHumanName(), 'help' => 'Utilisé dans le scénario', 'who' => '#' . $cmd_id . '#');
+                        $result[] = ['detail' => 'Scénario ' . $scenario->getHumanName(), 'help' => 'Utilisé dans le scénario', 'who' => '#' . $cmd_id . '#'];
                     } else {
-                        LogHelper::addError('scenario', __('Une commande du scénario : ') . $scenario->getHumanName() . __(' est introuvable'));
+                        LogHelper::addError(LogTarget::SCENARIO, __('Une commande du scénario : ') . $scenario->getHumanName() . __(' est introuvable'));
                     }
                 }
             }
         }
         if ($needsReturn) {
-            return $return;
+            return $result;
         }
         return null;
     }
 
     /**
-     * /TODO: Fatigué d'essayer de comprendre à quoi ça sert
+     * /@TODO: Fatigué d'essayer de comprendre à quoi ça sert
      * Méthode appelée de façon recursive
      *
-     * @param $input /TODO: Ca entre en effect
+     * @param $input /@TODO: Ca entre en effect
      *
-     * @return mixed TODO: Quelque chose de lisible à priori
+     * @return mixed @TODO: Quelque chose de lisible à priori
      *
      * @throws \Exception
      */
     public static function toHumanReadable($input)
     {
         if (is_object($input)) {
-            $reflections = array();
+            $reflections = [];
             $uuid = spl_object_hash($input);
             if (!isset($reflections[$uuid])) {
                 $reflections[$uuid] = new \ReflectionClass($input);
@@ -608,16 +582,16 @@ class ScenarioManager
     }
 
     /**
-     * TODO:
+     * @TODO:
      * @param array $searchs
      * @return array
      * @throws \Exception
      */
     public static function searchByUse(array $searchs)
     {
-        $return = array();
-        $expressions = array();
-        $scenarios = array();
+        $return = [];
+        $expressions = [];
+        $scenarios = [];
         foreach ($searchs as $search) {
             $_cmd_id = str_replace('#', '', $search['action']);
             $return = array_merge($return, self::byTrigger($_cmd_id, false));
@@ -654,7 +628,7 @@ class ScenarioManager
     }
 
     /**
-     *TODO: PATH pointe vers rien
+     *@TODO: PATH pointe vers rien
      *
      * @param string $template
      *
@@ -662,17 +636,17 @@ class ScenarioManager
      */
     public static function getTemplate($template = '')
     {
-        $path = NEXTDOM_ROOT . '/core/config/scenario';
+        $path = NEXTDOM_DATA . '/data/scenario';
         /**
          * if (isset($template) && $template != '') {
-         * // TODO Magic trixxxxxx
+         * // @TODO Magic trixxxxxx
          * }
          */
         return FileSystemHelper::ls($path, '*.json', false, ['files', 'quiet']);
     }
 
     /**
-     * TODO:
+     * @TODO:
      *
      * @param $market
      *
@@ -682,31 +656,31 @@ class ScenarioManager
      */
     public static function shareOnMarket(&$market)
     {
-        $moduleFile = NEXTDOM_ROOT . '/core/config/scenario/' . $market->getLogicalId() . '.json';
+        $moduleFile = NEXTDOM_DATA . '/data/scenario/' . $market->getLogicalId() . '.json';
         if (!file_exists($moduleFile)) {
-            throw new \Exception('Impossible de trouver le fichier de configuration ' . $moduleFile);
+            throw new CoreException('Impossible de trouver le fichier de configuration ' . $moduleFile);
         }
         $tmp = NextDomHelper::getTmpFolder('market') . '/' . $market->getLogicalId() . '.zip';
         if (file_exists($tmp)) {
             if (!unlink($tmp)) {
-                throw new \Exception(__('Impossible de supprimer : ') . $tmp . __('. Vérifiez les droits'));
+                throw new CoreException(__('Impossible de supprimer : ') . $tmp . __('. Vérifiez les droits'));
             }
         }
         if (!FileSystemHelper::createZip($moduleFile, $tmp)) {
-            throw new \Exception(__('Echec de création du zip. Répertoire source : ') . $moduleFile . __(' / Répertoire cible : ') . $tmp);
+            throw new CoreException(__('Echec de création du zip. Répertoire source : ') . $moduleFile . __(' / Répertoire cible : ') . $tmp);
         }
         return $tmp;
     }
 
     /**
-     * TODO:
+     * @TODO:
      * @param mixed $market
      * @param mixed $path
      * @throws \Exception
      */
     public static function getFromMarket(&$market, $path)
     {
-        $cibDir = NEXTDOM_ROOT . '/core/config/scenario/';
+        $cibDir = NEXTDOM_DATA . '/data/scenario/';
         if (!file_exists($cibDir)) {
             mkdir($cibDir);
         }
@@ -715,21 +689,21 @@ class ScenarioManager
             $zip->extractTo($cibDir . '/');
             $zip->close();
         } else {
-            throw new \Exception('Impossible de décompresser l\'archive zip : ' . $path);
+            throw new CoreException('Impossible de décompresser l\'archive zip : ' . $path);
         }
     }
 
     /**
-     * TODO: Trixxxxxx
+     * @TODO: Trixxxxxx
      * @return array
      */
     public static function listMarketObject()
     {
-        return array();
+        return [];
     }
 
     /**
-     * TODO: Le CSS C'est pour les faibles
+     * @TODO: Le CSS C'est pour les faibles
      * @param array $event
      * @return array|null
      * @throws \Exception
@@ -747,13 +721,27 @@ class ScenarioManager
         $linkedObject = $scenario->getObject();
         $return['object'] = is_object($linkedObject) ? $linkedObject->getId() : 'aucun';
         $return['html'] = '<div class="timeline-item cmd" data-id="' . $event['id'] . '">'
-            . '<span class="time"><i class="fa fa-clock-o"></i>' . substr($event['datetime'], -9) . '</span>'
-            .'<h3 class="timeline-header">' . $event['name'] . '</h3>'
-            .'<div class="timeline-body">'
+            . '<span class="time"><i class="fa fa-clock-o spacing-right"></i>' . trim(substr($event['datetime'], -9)) . '</span>'
+            . '<h3 class="timeline-header">' . $event['name'] . '</h3>'
+            . '<div class="timeline-body">'
             . 'Déclenché par ' . $event['trigger']
-            .' <div class="timeline-footer">'
-            .'</div>'
-            .'</div>';
+            . ' <div class="timeline-footer">'
+            . '</div>'
+            . '</div>';
         return $return;
+    }
+
+    /**
+     * State of the scenario engine
+     *
+     * @return bool True if enabled
+     *
+     * @throws \Exception
+     */
+    public static function isEnabled() {
+        if (ConfigManager::byKey('enableScenario') != 1) {
+            return false;
+        }
+        return true;
     }
 }

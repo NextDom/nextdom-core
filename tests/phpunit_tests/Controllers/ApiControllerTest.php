@@ -18,15 +18,15 @@
 use NextDom\Managers\ConfigManager;
 
 require_once(__DIR__ . '/../../../src/core.php');
-require_once(__DIR__ . '/BaseControllerTest.php');
+require_once(__DIR__ . '/../libs/BaseControllerTest.php');
 
 class ApiControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         ConfigManager::remove('api', 'core');
     }
@@ -39,8 +39,8 @@ class ApiControllerTest extends BaseControllerTest
         $result = \NextDom\Controller\Admin\ApiController::get($pageData);
         $this->assertArrayHasKey('adminConfigs', $pageData);
         $this->assertArrayHasKey('api', $pageData['adminConfigs']);
-        $this->assertContains('Sauvegarder', $result);
-        $this->assertContains('GPaCCxccAwyZx8kNgLlDkGlZxp0W3vaM', $result);
+        $this->assertStringContainsString('Sauvegarder', $result);
+        $this->assertStringContainsString('GPaCCxccAwyZx8kNgLlDkGlZxp0W3vaM', $result);
     }
 
     public function testPageDataVars()

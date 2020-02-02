@@ -72,8 +72,8 @@
   width: 100%;
   height: 1px;
   background-color: #ccc;
-  opacity: 0.4;
-  z-order: 0;
+  opacity: .4;
+  z-index: 0;
 }
 .stepwizard-step {
   display: table-cell;
@@ -97,7 +97,7 @@
 }
 .stepwizard-btn-circle.disabled, .stepwizard-btn-circle[disabled] {
   color: Black;
-  opacity: 0.9;
+  opacity: .9;
 }
 
 /* Inputs */
@@ -106,12 +106,22 @@
     padding-right: 20%;
 }
 .stepwizard-passwd2 {
-    padding-left: 0%;
-    padding-right: 0%;
+    padding-left: 0;
+    padding-right: 0;
 }
 .stepwizard-passwd > input {
-  width: 65%;
+  width: 100%;
   height: 30px;
   text-align: center;
   margin-bottom: 15px;
+}
+
+.stepwizard .progress {
+    background-color: #fafafa !important;
+    border: 1px solid #ddd !important;
+}
+.stepwizard .label-value {
+    border-color: #ddd !important;
+    color: inherit !important;
+    background-color: #fafafa !important;
 }

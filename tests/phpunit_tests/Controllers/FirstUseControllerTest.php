@@ -18,15 +18,15 @@
 use NextDom\Managers\ConfigManager;
 
 require_once(__DIR__ . '/../../../src/core.php');
-require_once(__DIR__ . '/BaseControllerTest.php');
+require_once(__DIR__ . '/../libs/BaseControllerTest.php');
 
 class FirstUseControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         ConfigManager::remove('nextdom::firstUse');
     }
@@ -38,7 +38,7 @@ class FirstUseControllerTest extends BaseControllerTest
         $pageData = [];
         $result = \NextDom\Controller\Pages\FirstUseController::get($pageData);
         $this->assertArrayHasKey('profilsWidgetThemes', $pageData);
-        $this->assertContains('stepwizard', $result);
+        $this->assertStringContainsString('stepwizard', $result);
     }
 
     public function testPageDataVars()

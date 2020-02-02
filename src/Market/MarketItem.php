@@ -132,7 +132,7 @@ class MarketItem
     public function __construct($sourceName)
     {
         $this->dataStorage = new DataStorage('market');
-        // TODO: A supprimer
+        // @TODO: A supprimer
         if (!$this->dataStorage->isDataTableExists()) {
             $this->dataStorage->createDataTable();
         }
@@ -197,10 +197,10 @@ class MarketItem
     {
         $name = sprintf("repo_data_%s", str_replace("/", "_", $this->fullName));
         $json = $this->dataStorage->getJsonData($name);
-        $attrs = array("name", "gitName", "gitId", "fullName",
+        $attrs = ["name", "gitName", "gitId", "fullName",
             "description", "url", "id", "author",
             "category", "iconPath", "defaultBranch", "branchesList",
-            "licence", "changelogLink", "documentationLink", "screenshots");
+            "licence", "changelogLink", "documentationLink", "screenshots"];
         if ($json === null) {
             return false;
         }

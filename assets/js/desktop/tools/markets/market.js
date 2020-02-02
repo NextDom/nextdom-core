@@ -46,7 +46,9 @@ var pluginsUpdateNeededList = [];
 // Point d'entrée du script
 $(document).ready(function () {
     initEvents();
-    $("img.lazyload").lazyload();
+    $("img.lazy").lazyload({
+      threshold : 400
+    });
     refresh(false);
 });
 
@@ -221,13 +223,12 @@ function refresh(force) {
         params += '-force';
     }
     $('#mass-update').hide();
-    var ajaxData = {
-        action: 'refresh',
+    nextdom.nextdom_market.refresh({
         params: params,
-        data: sourcesList
-    };
-    ajaxQuery('core/ajax/nextdom_market.ajax.php', ajaxData, function () {
-        refreshItems();
+        data: sourcesList,
+        success: function() {
+            refreshItems();
+        }
     });
 }
 
@@ -240,6 +241,19 @@ function refreshItems() {
         params: 'list',
         data: sourcesList
     };
+    nextdom.nextdom_market.get({
+        params: 'list',
+        data: sourcesList,
+        success: function(result) {
+            showItems(result);
+            updateFilteredList();
+            if (pluginsUpdateNeededList.length > 0) {
+                $('#mass-update').show();
+                $('#mass-update .badge').text(pluginsUpdateNeededList.length);
+            }
+        }
+    });
+/*
     ajaxQuery('core/ajax/nextdom_market.ajax.php', ajaxData, function (result) {
         showItems(result);
         updateFilteredList();
@@ -248,6 +262,7 @@ function refreshItems() {
             $('#mass-update .badge').text(pluginsUpdateNeededList.length);
         }
     });
+    */
 }
 
 /**
@@ -371,7 +386,7 @@ function getItemHtml(item) {
         '<h4 class="media-title">' + title + '</h4>' +
         '<div class="media-content">' +
         '<div class="media-left">' +
-        '<img class="lazyload" src="' + iconPath + '"/>' +
+        '<img class="lazy" src="' + iconPath + '"/>' +
         '</div>' +
         '<div class="media-body">' +
         descriptionPar +
@@ -401,27 +416,25 @@ function showPluginModal(pluginData, iconPath) {
  * Lance l'installation du plugin
  */
 function updatePlugin(id, massUpdate) {
-    var data = {
-        action: 'update',
-        id: id
-    };
-    ajaxQuery('core/ajax/update.ajax.php', data, function () {
-        var data = {
-            action: 'refresh',
-            params: 'branch-hash',
-            data: [currentPlugin['sourceName'], currentPlugin['fullName']]
+    nextdom.update.update({
+        id: id,
+        success: function() {
+            nextdom.nextdom_market.refresh({
+                id: id,
+                params: 'branch-hash',
+                data: [currentPlugin['sourceName'], currentPlugin['fullName']],
+                success: function() {
+                    if (massUpdate && pluginsUpdateNeededList.length > 1) {
+                        pluginsUpdateNeededList.splice(0, 1);
+                        currentPlugin = pluginsUpdateNeededList[0];
+                        updatePlugin(currentPlugin['installedBranchData']['id'], true);
+                    }
+                    else {
+                        reloadWithMessage(0);
+                    }
+                }
+            });
         }
-        // Met à jour les branches
-        ajaxQuery('core/ajax/nextdom_market.ajax.php', data, function () {
-            if (massUpdate && pluginsUpdateNeededList.length > 1) {
-                pluginsUpdateNeededList.splice(0, 1);
-                currentPlugin = pluginsUpdateNeededList[0];
-                updatePlugin(currentPlugin['installedBranchData']['id'], true);
-            }
-            else {
-                reloadWithMessage(0);
-            }
-        });
     });
 }
 

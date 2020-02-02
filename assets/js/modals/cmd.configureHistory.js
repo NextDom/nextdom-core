@@ -30,7 +30,6 @@
 * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
 */
 
-console.log(cmds_history_configure);
 initTableSorter();
 $("#table_cmdConfigureHistory").tablesorter({headers: {0: {sorter: 'checkbox'}}});
 table_history = [];
@@ -104,7 +103,7 @@ $('.bt_configureHistoryAdvanceCmdConfiguration').off('click').on('click', functi
 });
 
 $(".bt_configureHistoryExportData").on('click', function () {
-    window.open('core/php/export.php?type=cmdHistory&id=' + $(this).attr('data-id'), "_blank", null);
+    window.open('src/Api/export.php?type=cmdHistory&id=' + $(this).attr('data-id'), "_blank", null);
 });
 
 $('.cmdAttr').on('change click', function () {
@@ -117,7 +116,7 @@ $('#bt_cmdConfigureCmdHistoryApply').on('click', function () {
         if ($(this).attr('data-change') == '1') {
             cmds.push($(this).getValues('.cmdAttr')[0]);
         }
-    })
+    });
     nextdom.cmd.multiSave({
         cmds: cmds,
         error: function (error) {

@@ -258,7 +258,7 @@ function loadObjectConfiguration(_id){
     }
     $('#bt_uploadImage').fileupload({
         replaceFileInput: false,
-        url: 'core/ajax/object.ajax.php?action=uploadImage&id=' +_id,
+        url: 'src/ajax.php?target=Object&action=uploadImage&id=' +_id,
         formData: {'nextdom_token': NEXTDOM_AJAX_TOKEN},
         dataType: 'json',
         done: function (e, data) {

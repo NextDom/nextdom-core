@@ -19,7 +19,7 @@
 use NextDom\Managers\CmdManager;
 
 /* * ***************************Includes********************************* */
-require_once NEXTDOM_ROOT.'/core/php/core.inc.php';
+require_once __DIR__ . '/../../core/php/core.inc.php';
 
 class cmd extends NextDom\Model\Entity\Cmd {
     public static function byId($_id) {

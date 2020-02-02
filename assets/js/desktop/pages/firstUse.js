@@ -34,12 +34,14 @@
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
 
-/**
- * Entry point
- */
+// Page init
 var allWells = $('.setup-content');
 allWells.hide();
+initEvents();
 
+/**
+ * Init when page is loaded
+ */
 $(document).ready(function () {
   var navListItems = $('div.setup-panel div a');
   var allWells = $('.setup-content');
@@ -48,7 +50,6 @@ $(document).ready(function () {
     e.preventDefault();
     var target = $($(this).attr('href'));
     var item = $(this);
-
     if (!item.hasClass('disabled')) {
       navListItems.removeClass('primary-bg btn-primary');
       navListItems.addClass('btn-default');
@@ -59,131 +60,168 @@ $(document).ready(function () {
     }
   });
   $('div.setup-panel div a.btn-primary').trigger('click');
+  passwordScore($("#in_change_password").value(),$("#newPasswordProgress"),$("#newPasswordLevel"));
 });
 
-$('#toStep2').click(function () {
-  nextdom.user.login({
-      username: 'admin',
-      password: 'admin',
-      error: function (error) {
-        notify('Core', error.message, 'error');
-      },
-      success: function (data) {
-        changeFirstUseStatus();
-      }
-  });
-});
-
-$('#toStep3').click(function () {
-  var newPassword = $('#in_change_password').val();
-  if (newPassword !== '') {
-    if (newPassword === $('#in_change_passwordToo').val()) {
-      updateUserPassword(newPassword)
-    } else {
-      notify('Erreur', '{{Les deux mots de passe ne sont pas identiques !}}', 'error')
-    }
-  } else {
-    notify('Erreur', '{{Veuillez saisir un mot de passe ...}}', 'error')
-  }
-});
-
-$('#toStep4').click(function () {
-  var username = $('#in_login_username_market').val();
-  var password = $('#in_login_password_market').val();
-  nextdom.config.save({
-    configuration: {'market::username': username, 'market::password': password},
-    error: function (error) {
-      notify('Core', error.message, 'error');
-    },
-    success: function () {
-      nextdom.repo.test({
-        repo: 'market',
-        error: function (error) {
-          notify('Core', error.message, 'error');
-        },
-        success: function () {
-          nextdom.config.load({
-              configuration: $('.firstUse-Page').getValues('.configKey:not(.noSet)')[0],
-              error: function (error) {
-                  notify("Erreur", error.message, 'error');
-              },
-              success: function (data) {
-                  $('.firstUse-Page').setValues(data, '.configKey');
-              }
-          });
-          goToNextStep('#toStep4');
-        }
+/**
+ * Init events on the profils page
+ */
+function initEvents() {
+    // Step 2 asked
+    $('#toStep2').click(function () {
+      nextdom.user.login({
+          username: 'admin',
+          password: 'admin',
+          error: function (error) {
+            notify('Core', error.message, 'error');
+          },
+          success: function (data) {
+            changeFirstUseStatus();
+          }
       });
-    }
-  });
-});
+    });
 
-$('#toStep5').click(function () {
-  var config = $('.firstUse-Page').getValues('.configKey')[0];
-  nextdom.config.save({
-      configuration: config,
-      error: function (error) {
-          notify("Erreur", error.message, 'error');
-      },
-      success: function () {
-          goToNextStep('#toStep5');
+    // Step 3 asked
+    $('#toStep3').click(function () {
+      var newPassword = $('#in_change_password').val();
+      if (newPassword !== '') {
+        if (newPassword === $('#in_change_passwordToo').val()) {
+          updateUserPassword(newPassword)
+        } else {
+          notify('Erreur', '{{Les deux mots de passe ne sont pas identiques !}}', 'error')
+        }
+      } else {
+        notify('Erreur', '{{Veuillez saisir un mot de passe...}}', 'error')
       }
-  });
-});
+    });
 
-$('#toStep6').click(function () {
-  var profil = $('.firstUse-Page').getValues('.userAttr')[0];
-  nextdom.user.saveProfils({
-      profils: profil,
-      error: function (error) {
-          notify("Erreur", error.message, 'error');
-      },
-      success: function () {
-          goToNextStep('#toStep6');
-      }
-  });
-});
+    // Step 4 asked
+    $('#toStep4').click(function () {
+        var username = $('#in_login_username_market').val();
+        var password = $('#in_login_password_market').val();
+        nextdom.config.save({
+          configuration: {'market::username': username, 'market::password': password},
+          error: function (error) {
+            notify('Core', error.message, 'error');
+          },
+          success: function () {
+            nextdom.repo.test({
+              repo: 'market',
+              error: function (error) {
+                notify('Core', error.message, 'error');
+              },
+              success: function () {
+                nextdom.config.load({
+                    configuration: $('.firstUse-Page').getValues('.configKey:not(.noSet)')[0],
+                    error: function (error) {
+                        notify("Erreur", error.message, 'error');
+                    },
+                    success: function (data) {
+                        $('.firstUse-Page').setValues(data, '.configKey');
+                    }
+                });
+                goToNextStep('#toStep4');
+              }
+            });
+          }
+        });
+    });
 
-$('#backStep1').click(function () {
-  goToPreviousStep('#backStep1');
-});
+    // Step 5 asked
+    $('#toStep5').click(function () {
+        if (document.getElementById('nextdom-theme').value != '') {
+            var config = $('.firstUse-Page').getValues('.configKey')[0];
+            nextdom.config.save({
+                configuration: config,
+                error: function (error) {
+                    notify("Erreur", error.message, 'error');
+                },
+                success: function () {
+                    goToNextStep('#toStep5');
+                }
+            });
+        } else {
+            notify("Erreur", '{{Veuillez choisir un thème...}}', 'error');
+        }
+    });
 
-$('#backStep2').click(function () {
-  goToPreviousStep('#backStep2');
-});
+    // Step 6 asked
+    $('#toStep6').click(function () {
+        if (document.getElementById('widget-theme').value != '') {
+            var profil = $('.firstUse-Page').getValues('.userAttr')[0];
+            nextdom.user.saveProfils({
+                profils: profil,
+                error: function (error) {
+                    notify("Erreur", error.message, 'error');
+                },
+                success: function () {
+                    goToNextStep('#toStep6');
+                }
+            });
+        } else {
+            notify("Erreur", '{{Veuillez choisir un thème Widget...}}', 'error');
+        }
+    });
 
-$('#backStep3').click(function () {
-  goToPreviousStep('#backStep3');
-});
+    // Step 1 asked
+    $('#backStep1').click(function () {
+      goToPreviousStep('#backStep1');
+    });
 
-$('#backStep4').click(function () {
-  goToPreviousStep('#backStep4');
-});
+    // Step 2 asked
+    $('#backStep2').click(function () {
+      goToPreviousStep('#backStep2');
+    });
 
-$('#backStep5').click(function () {
-  goToPreviousStep('#backStep5');
-});
+    // Step 3 asked
+    $('#backStep3').click(function () {
+      goToPreviousStep('#backStep3');
+    });
 
-$('#skipStep4').click(function () {
-  goToNextStep('#toStep4');
-});
+    // Step 4 asked
+    $('#backStep4').click(function () {
+      goToPreviousStep('#backStep4');
+    });
 
-$('#finishConf').click(function () {
-  window.location = '/';
-});
+    // Step 5 asked
+    $('#backStep5').click(function () {
+      goToPreviousStep('#backStep5');
+    });
 
-$("input[name=themeWidget]").on('click', function (event) {
-    var radio = $(this).val();
-    $('.userAttr[data-l2key="widget::theme"]').value(radio);
-});
+    // Skip step 4 asked
+    $('#skipStep4').click(function () {
+      goToNextStep('#toStep4');
+    });
 
-$("input[name=themeNextDom]").on('click', function (event) {
-    var radio = $(this).val();
-    $('.configKey[data-l1key="nextdom::user-theme"]').value(radio);
-});
+    // Finish step asked
+    $('#finishConf').click(function () {
+      window.location = '/';
+    });
 
-function goToNextStep(_step) {
-  var curStep = $(_step).closest('.setup-content');
+    // widget theme choose click
+    $("input[name=themeWidget]").on('click', function (event) {
+        var radio = $(this).val();
+        $('.userAttr[data-l2key="widget::theme"]').value(radio);
+    });
+
+    // theme choose click
+    $("input[name=themeNextDom]").on('click', function (event) {
+        var radio = $(this).val();
+        $('.configKey[data-l1key="nextdom::user-theme"]').value(radio);
+    });
+
+    // Password new changed
+    $("#in_change_password").on('input', function (event) {
+        passwordScore($(this).value(),$("#newPasswordProgress"),$("#newPasswordLevel"));
+    });
+}
+
+/**
+ * To go to next step
+ * @param nextStep div id of next step needed
+ */
+function goToNextStep(nextStep) {
+  var curStep = $(nextStep).closest('.setup-content');
   var curStepBtn = curStep.attr('id');
   var nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().next().children('a');
   var curInputs = curStep.find('input[type="text"],input[type="url"]');
@@ -201,8 +239,12 @@ function goToNextStep(_step) {
   }
 }
 
-function goToPreviousStep(_step) {
-  var curStep = $(_step).closest('.setup-content');
+/**
+ * To go to previous step
+ * @param previousStep div id of previous step needed
+ */
+function goToPreviousStep(previousStep) {
+  var curStep = $(previousStep).closest('.setup-content');
   var curStepBtn = curStep.attr('id');
   var nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().prev().children('a');
 
@@ -260,5 +302,4 @@ function changeFirstUseStatus() {
       goToNextStep('#toStep2');
     }
   });
-
 }

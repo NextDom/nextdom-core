@@ -44,7 +44,7 @@ class FileSystemHelper
 {
     /**
      * Inclut un fichier à partir de son type et son nom.
-     * TODO: Doit être revue
+     * @TODO: Doit être revue
      * @param string $_folder Répertoire du fichier
      * @param string $_filename Nom du fichier
      * @param string $_type Type de fichier
@@ -54,7 +54,7 @@ class FileSystemHelper
      */
     public static function includeFile($_folder, $_filename, $_type, $_plugin = '', $translate = false)
     {
-        if(strpos($_folder,'..') !== false || strpos($_filename,'..') !== false){
+        if (strpos($_folder, '..') !== false || strpos($_filename, '..') !== false) {
             return;
         }        // Aucune particularité pour les 3rdparty
         if ($_folder == '3rdparty') {
@@ -71,25 +71,25 @@ class FileSystemHelper
             $type = $_type;
         } else {
             // Tableau de mappage des fichiers
-            $config = array(
-                'class' => array('/class', '.class.php', 'php'),
-                'com' => array('/com', '.com.php', 'php'),
-                'repo' => array('/repo', '.repo.php', 'php'),
-                'config' => array('/config', '.config.php', 'php'),
-                'modal' => array('/modal', '.php', 'php'),
-                'modalhtml' => array('/modal', '.html', 'php'),
-                'php' => array('/php', '.php', 'php'),
-                'css' => array('/css', '.css', 'css'),
-                'js' => array('/js', '.js', 'js'),
-                'class.js' => array('/js', '.class.js', 'js'),
-                'custom.js' => array('/custom', 'custom.js', 'js'),
-                'custom.css' => array('/custom', 'custom.css', 'css'),
-                'themes.js' => array('/themes', '.js', 'js'),
-                'themes.css' => array('/themes', '.css', 'css'),
-                'api' => array('/api', '.api.php', 'php'),
-                'html' => array('/html', '.html', 'php'),
-                'configuration' => array('', '.php', 'php'),
-            );
+            $config = [
+                'class' => ['/class', '.class.php', 'php'],
+                'com' => ['/com', '.com.php', 'php'],
+                'repo' => ['/repo', '.repo.php', 'php'],
+                'config' => ['/config', '.config.php', 'php'],
+                'modal' => ['/modal', '.php', 'php'],
+                'modalhtml' => ['/modal', '.html', 'php'],
+                'php' => ['/php', '.php', 'php'],
+                'css' => ['/css', '.css', 'css'],
+                'js' => ['/js', '.js', 'js'],
+                'class.js' => ['/js', '.class.js', 'js'],
+                'custom.js' => ['/custom', 'custom.js', 'js'],
+                'custom.css' => ['/custom', 'custom.css', 'css'],
+                'themes.js' => ['/themes', '.js', 'js'],
+                'themes.css' => ['/themes', '.css', 'css'],
+                'api' => ['/api', '.api.php', 'php'],
+                'html' => ['/html', '.html', 'php'],
+                'configuration' => ['', '.php', 'php'],
+            ];
             $_folder .= $config[$_type][0];
             $_filename .= $config[$_type][1];
             $type = $config[$_type][2];
@@ -116,19 +116,19 @@ class FileSystemHelper
             if ($_type != 'class') {
                 ob_start();
                 require_once $path;
-                    if ($translate) {
-                        echo TranslateHelper::exec(ob_get_clean(), $_folder . '/' . $_filename);
-                    } else {
-                        echo ob_get_clean();
-                    }
+                if ($translate) {
+                    echo TranslateHelper::exec(ob_get_clean(), $_folder . '/' . $_filename);
+                } else {
+                    echo ob_get_clean();
+                }
             } else {
                 require_once $path;
             }
         } elseif ($type == 'css') {
-            // TODO : MD5
+            // @TODO : MD5
             echo '<link href="' . $_folder . '/' . $_filename . '?md5=' . md5_file($path) . '" rel="stylesheet" />';
         } elseif ($type == 'js') {
-            // TODO : MD5
+            // @TODO : MD5
             echo '<script type="text/javascript" src="src/Api/getResource.php?file=' . $_folder . '/' . $_filename . '&md5=' . md5_file($path) . '&lang=' . TranslateHelper::getLanguage() . '"></script>';
         }
     }
@@ -205,6 +205,19 @@ class FileSystemHelper
     }
 
     /**
+     * Read content of a core template file
+     * @param string $version View version
+     * @param string $filename Name of the template file
+     * @param string $pluginId Plugin (todo: remove)
+     * @param string $theme Theme if necessary
+     * @return string
+     */
+    public static function getCoreTemplateFileContent($version, $filename, $pluginId = '', $theme = ''): string
+    {
+        return self::getTemplateFileContent('views', $version, $filename, $pluginId, $theme);
+    }
+
+    /**
      * Obtenir le contenu d'un fichier template.
      *
      * @param string $folder Répertoire dans lequel se trouve le fichier de template
@@ -215,7 +228,7 @@ class FileSystemHelper
      *
      * @return string Contenu du fichier ou une chaine vide.
      */
-    public static function getTemplateFileContent($folder, $version, $filename, $pluginId = '' , $theme = ''): string
+    public static function getTemplateFileContent($folder, $version, $filename, $pluginId = '', $theme = ''): string
     {
         $result = '';
         $filePath = NEXTDOM_ROOT . '/';
@@ -235,19 +248,6 @@ class FileSystemHelper
             $result = file_get_contents($filePath);
         }
         return $result;
-    }
-
-    /**
-     * Read content of a core template file
-     * @param string $version View version
-     * @param string $filename Name of the template file
-     * @param string $pluginId Plugin (todo: remove)
-     * @param string $theme Theme if necessary
-     * @return string
-     */
-    public static function getCoreTemplateFileContent($version, $filename, $pluginId = '', $theme = ''): string
-    {
-        return self::getTemplateFileContent('views', $version, $filename, $pluginId, $theme);
     }
 
     /**
@@ -285,7 +285,7 @@ class FileSystemHelper
      *
      * @return array Content list
      */
-    public static function ls($folder = "", $pattern = "*", $recursivly = false, $options = array('files', 'folders'))
+    public static function ls($folder = "", $pattern = "*", $recursivly = false, $options = ['files', 'folders'])
     {
         $currentFolder = '';
         if ($folder) {
@@ -293,22 +293,22 @@ class FileSystemHelper
             if (in_array('quiet', $options)) {
                 // If quiet is on, we will suppress the 'no such folder' error
                 if (!file_exists($folder)) {
-                    return array();
+                    return [];
                 }
 
             }
             if (!is_dir($folder) || !chdir($folder)) {
-                return array();
+                return [];
             }
 
         }
         $getFiles = in_array('files', $options);
         $getFolders = in_array('folders', $options);
-        $both = array();
-        $folders = array();
+        $both = [];
+        $folders = [];
         // Get the all files and folders in the given directory.
         if ($getFiles) {
-            $both = array();
+            $both = [];
             foreach (Utils::globBrace($pattern, GLOB_MARK) as $file) {
                 if (!is_dir($folder . '/' . $file)) {
                     $both[] = $file;
@@ -320,7 +320,7 @@ class FileSystemHelper
         }
 
         //If a pattern is specified, make sure even the folders match that pattern.
-        $matching_folders = array();
+        $matching_folders = [];
         if ($pattern !== '*') {
             $matching_folders = glob($pattern, GLOB_ONLYDIR + GLOB_MARK);
         }
@@ -383,7 +383,7 @@ class FileSystemHelper
      * @param array $_params
      * @return bool
      */
-    public static function rcopy($src, $dst, $_emptyDest = true, $_exclude = array(), $_noError = false, $_params = array())
+    public static function rcopy($src, $dst, $_emptyDest = true, $_exclude = [], $_noError = false, $_params = [])
     {
         if (!file_exists($src)) {
             return true;
@@ -425,7 +425,7 @@ class FileSystemHelper
                     return true;
                 }
                 if (!copy($src, $dst)) {
-                    $output = array();
+                    $output = [];
                     $retval = 0;
                     exec('sudo cp ' . $src . ' ' . $dst, $output, $retval);
                     if ($retval != 0) {
@@ -457,11 +457,11 @@ class FileSystemHelper
     public static function rrmdir($dir): bool
     {
         // Check if we remove our own folders/files only
-        if(!(substr($dir, 0, strlen(NEXTDOM_ROOT)) === NEXTDOM_ROOT
+        if (!(substr($dir, 0, strlen(NEXTDOM_ROOT)) === NEXTDOM_ROOT
             || substr($dir, 0, strlen(NEXTDOM_DATA)) === NEXTDOM_DATA
             || substr($dir, 0, strlen(NEXTDOM_LOG)) === NEXTDOM_LOG
             || substr($dir, 0, strlen(NEXTDOM_TMP)) === NEXTDOM_TMP
-            || substr($dir, 0, strlen('/tmp')) === '/tmp')){
+            || substr($dir, 0, strlen('/tmp')) === '/tmp')) {
 
             return false;
         }
@@ -473,8 +473,8 @@ class FileSystemHelper
                     self::rrmdir("$dir/$file");
                 }
             }
-            if (!rmdir($dir)) {
-                $output = array();
+            if (!is_writable($dir) || !rmdir($dir)) {
+                $output = [];
                 $retval = 0;
                 exec('sudo rm -rf ' . $dir, $output, $retval);
                 if ($retval != 0) {
@@ -482,8 +482,8 @@ class FileSystemHelper
                 }
             }
         } elseif (file_exists($dir)) {
-            if (!unlink($dir)) {
-                $output = array();
+            if (!is_writable($dir) || !unlink($dir)) {
+                $output = [];
                 $retval = 0;
                 exec('sudo rm -rf ' . $dir, $output, $retval);
                 if ($retval != 0) {
@@ -516,7 +516,7 @@ class FileSystemHelper
      * @param array $_params
      * @return bool
      */
-    public static function rmove($src, $dst, $_emptyDest = true, $_exclude = array(), $_noError = false, $_params = array())
+    public static function rmove($src, $dst, $_emptyDest = true, $_exclude = [], $_noError = false, $_params = [])
     {
         if (!file_exists($src)) {
             return true;
@@ -558,7 +558,7 @@ class FileSystemHelper
                     return true;
                 }
                 if (!rename($src, $dst)) {
-                    $output = array();
+                    $output = [];
                     $retval = 0;
                     exec('sudo mv ' . $src . ' ' . $dst, $output, $retval);
                     if ($retval != 0) {
@@ -589,10 +589,10 @@ class FileSystemHelper
      * @return bool
      * @throws CoreException
      */
-    public static function createZip($source_arr, $destination, $_excludes = array())
+    public static function createZip($source_arr, $destination, $_excludes = [])
     {
         if (is_string($source_arr)) {
-            $source_arr = array($source_arr);
+            $source_arr = [$source_arr];
         }
         if (!extension_loaded('zip')) {
             throw new CoreException('Extension php ZIP non chargée');
@@ -664,7 +664,7 @@ class FileSystemHelper
      */
     public static function getDirectoryFreeSpace($directory)
     {
-        return disk_free_space ( $directory );
+        return disk_free_space($directory);
     }
 
 
@@ -675,7 +675,7 @@ class FileSystemHelper
      */
     public static function isFileExists($file)
     {
-        return file_exists ( $file );
+        return file_exists($file);
     }
 
     /**

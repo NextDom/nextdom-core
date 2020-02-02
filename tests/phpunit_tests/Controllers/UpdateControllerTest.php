@@ -16,15 +16,15 @@
  */
 
 require_once(__DIR__ . '/../../../src/core.php');
-require_once(__DIR__ . '/BaseControllerTest.php');
+require_once(__DIR__ . '/../libs/BaseControllerTest.php');
 
 class UpdateControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -34,7 +34,7 @@ class UpdateControllerTest extends BaseControllerTest
         $pageData = [];
         $result = \NextDom\Controller\Tools\UpdateController::get($pageData);
         $this->assertEquals(0, $pageData['numberOfUpdates']);
-        $this->assertContains('<li class="header pull-left"><i class="fas fa-download">', $result);
+        $this->assertStringContainsString('<li class="header pull-left"><i class="fas fa-download">', $result);
     }
 
     public function testPageDataVars()

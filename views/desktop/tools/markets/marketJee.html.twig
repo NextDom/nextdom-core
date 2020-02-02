@@ -140,7 +140,7 @@
                                     {% endif %}
                                     {% if object.installed == 'notInstall' %}<i class="fas fa-check market-install"></i>{% endif %}
                                     <div>
-                                        <img class="lazy lazyload market-icon" src="{{ object.default_image }}" data-original="{{ object.urlPath }}"/>
+                                        <img class="lazy market-icon" src="{{ object.default_image }}" data-original="{{ object.urlPath }}"/>
                                     </div>
                                     <span class="market-name">{{ object.name }}</span>
                                     <span class="market-author"><i>{{ 'par ' | trans }}</i>{{ object.author }}</span>

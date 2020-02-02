@@ -16,15 +16,15 @@
  */
 
 require_once(__DIR__ . '/../../../src/core.php');
-require_once(__DIR__ . '/BaseControllerTest.php');
+require_once(__DIR__ . '/../libs/BaseControllerTest.php');
 
 class UsersControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -34,7 +34,7 @@ class UsersControllerTest extends BaseControllerTest
         $pageData = [];
         $result = \NextDom\Controller\Admin\UsersController::get($pageData);
         $this->assertCount(2, $pageData['usersList']);
-        $this->assertContains('md_newUser', $result);
+        $this->assertStringContainsString('md_newUser', $result);
     }
 
     public function testPageDataVars()

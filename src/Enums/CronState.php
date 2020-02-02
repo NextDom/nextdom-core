@@ -25,7 +25,7 @@ class CronState extends Enum
 {
     const RUN = 'run';
     const STARTING = 'starting';
-    const STOPPING = 'stoping'; // TODO: Faute
+    const STOPPING = 'stoping'; // @TODO: Faute
     const STOP = 'stop';
-    const NOT_FOUND = 'Not found'; // TODO: Format différent
+    const NOT_FOUND = 'Not found'; // @TODO: Format différent
 }

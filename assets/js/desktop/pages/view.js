@@ -42,7 +42,6 @@
 function fullScreen(_mode) {
     if(_mode){
         $('header').hide();
-        $('footer').hide();
         $('#div_mainContainer').css('margin-top', '-50px');
         $('.backgroundforJeedom').css('margin-top', '-50px').css('height','100%');
         $('#wrap').css('margin-bottom', '0px');
@@ -51,7 +50,6 @@ function fullScreen(_mode) {
         $('.bt_hideFullScreen').hide();
     }else{
         $('header').show();
-        $('footer').show();
         $('#div_mainContainer').css('margin-top', '0px');
         $('.backgroundforJeedom').css('margin-top', '0px').css('height','calc(100% - 50px)');
         $('#wrap').css('margin-bottom', '15px');

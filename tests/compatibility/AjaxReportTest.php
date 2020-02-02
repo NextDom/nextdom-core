@@ -23,77 +23,77 @@ class AjaxReportTest extends AjaxBase
 
     public function testWithout() {
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'list']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testImpossibleActionAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'with-is-not-possible']);
-        $this->assertContains('"state":"error"', (string) $result->getBody());
+        $this->assertStringContainsString('"state":"error"', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testImpossibleActionAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'with-is-not-possible']);
-        $this->assertContains('"state":"error"', (string) $result->getBody());
+        $this->assertStringContainsString('"state":"error"', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testListAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'list']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testListAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'list']);
-        $this->assertContains('"result":[]', (string) $result->getBody());
+        $this->assertStringContainsString('"result":[]', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testGetAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'get']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testGetAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'get']);
-        $this->assertContains('"result":{"dirname":"\/var\/lib\/nextdom\/data"', (string) $result->getBody());
+        $this->assertStringContainsString('"result":{"dirname":"\/var\/lib\/nextdom\/data"', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testRemoveAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'remove']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testRemoveAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'remove']);
-        $this->assertContains('"result":""', (string) $result->getBody());
+        $this->assertStringContainsString('"result":""', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testRemoveAllAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'removeAll']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testRemoveAllAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'removeAll']);
-        $this->assertContains('"result":""', (string) $result->getBody());
+        $this->assertStringContainsString('"result":""', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 }

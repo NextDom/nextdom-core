@@ -371,7 +371,22 @@ function showPlugin(pluginId) {
                     log_conf += '<a class="btn btn-info bt_plugin_conf_view_log btn-log" data-slaveId="'+data.logs[i].id+'" data-log="'+data.logs[i].log[j]+'"><i class="fas fa-paperclip spacing-right"></i>'+data.logs[i].log[j].charAt(0).toUpperCase() + data.logs[i].log[j].slice(1)+'</a> ';
                 }
             }
+
+            log_conf += '<legend>{{Surveillance}}</legend>';
+            log_conf += '<div class="form-group" style="min-height:40px;text-align:center;">';
+            log_conf += '<label class="col-sm-3 control-label">{{Heartbeat (min)}}</label>';
+            log_conf += '<div class="col-sm-2">';
+            log_conf += '<input class="configKey form-control" data-l1key="heartbeat::delay::' + data.id + '" />';
+            log_conf += '</div>';
+            if(data.hasOwnDeamon){
+                log_conf += '<label class="col-sm-3 control-label">{{Redémarrer démon}}</label>';
+                log_conf += '<div class="col-sm-2">';
+                log_conf += '<input type="checkbox" class="configKey" data-l1key="heartbeat::restartDeamon::' + data.id + '" />';
+                log_conf += '</div>';
+            }
+            log_conf += '</div>';
             log_conf += '</form>';
+
             $('#div_plugin_log').empty().append(log_conf);
             $('#div_plugin_configuration').empty();
             if (data.checkVersion != -1) {

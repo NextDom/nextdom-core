@@ -22,6 +22,7 @@
 
 namespace NextDom\Ajax;
 
+use NextDom\Enums\AjaxParams;
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AjaxHelper;
@@ -59,7 +60,8 @@ abstract class BaseAjax
      * Initialize Ajax helper
      * @throws \Exception
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->ajax = new AjaxHelper();
     }
 
@@ -76,7 +78,7 @@ abstract class BaseAjax
             }
 
             // Check and call the method for the action in query
-            $actionCode = Utils::init('action', '');
+            $actionCode = Utils::init(AjaxParams::ACTION, '');
             if ($this->checkIfActionExists($actionCode)) {
                 $this->$actionCode();
             } else {

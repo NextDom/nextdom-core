@@ -131,7 +131,7 @@ function initEvents() {
 
     // Export history
     $(".li_history .export").on('click', function () {
-        window.open('core/php/export.php?type=cmdHistory&id=' + $(this).closest('.li_history').attr('data-cmd_id'), "_blank", null);
+        window.open('src/Api/export.php?type=cmdHistory&id=' + $(this).closest('.li_history').attr('data-cmd_id'), "_blank", null);
     });
 
     // Configure history
@@ -260,8 +260,9 @@ function initHistoryTrigger() {
 function emptyHistory(_cmd_id, _date) {
     $.ajax({
         type: "POST",
-        url: "core/ajax/cmd.ajax.php",
+        url: "src/ajax.php",
         data: {
+            target: 'Cmd',
             action: "emptyHistory",
             id: _cmd_id,
             date: _date

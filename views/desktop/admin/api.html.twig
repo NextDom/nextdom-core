@@ -126,39 +126,45 @@
                         <div class="row">
                             <div class="form-group col-lg-6 col-xs-12 col-padding">
                                 <label class="control-label" data-toggle="tooltip" title="" data-original-title="{{ 'api.key-global-of' | trans }} NextDom">{{ 'api.key-global' | trans }}</label>
-                                <div class="mix-group">
-                                    {% if adminConfigs['api'] == '' %}
-                                        <span class="span_apikey label label-value">{{ 'api.no-api' | trans }}</span>
-                                    {% else %}
-                                        <a class="btn btn-action bt_regenerate_api" data-plugin="core"><i class="fas fa-refresh"></i><span>{{ 'common.regenerate' | trans }}</span></a>
+                                {% if adminConfigs['api'] == '' %}
+                                    <div><span class="span_apikey label label-value">{{ 'api.no-api' | trans }}</span></div>
+                                {% else %}
+                                    <div class="mix-group form-group">
                                         <span class="span_apikey label label-value">{{ adminConfigs['api'] }}</span>
                                         <a class="btn btn-default bt_copy_api" data-plugin="core"><i class="fas fa-copy no-spacing"></i><span></span></a>
-                                    {% endif %}
-                                </div>
+                                    </div>
+                                    <div>
+                                        <a class="btn btn-action bt_regenerate_api" data-plugin="core"><i class="fas fa-refresh"></i><span>{{ 'common.regenerate' | trans }}</span></a>
+                                    </div>
+                                {% endif %}
                             </div>
                             <div class="form-group col-lg-6 col-xs-12 col-padding">
                                 <label class="control-label" data-toggle="tooltip" title="" data-original-title="{{ 'api.key-pro-of' | trans }} NextDom">{{ 'api.key-pro' | trans  }}</label>
-                                <div class="mix-group">
-                                    {% if adminConfigs.apipro == '' %}
-                                        <span class="span_apikey label label-value">{{ 'api.no-api' | trans }}</span>
-                                    {% else %}
-                                        <a class="btn btn-action bt_regenerate_api" data-plugin="pro"><i class="fas fa-refresh"></i><span>{{ 'common.regenerate' | trans }}</span></a>
+                                {% if adminConfigs.apipro == '' %}
+                                    <div><span class="span_apikey label label-value">{{ 'api.no-api' | trans }}</span></div>
+                                {% else %}
+                                    <div class="mix-group form-group">
                                         <span class="span_apikey label label-value">{{ adminConfigs.apipro }}</span>
                                         <a class="btn btn-default bt_copy_api" data-plugin="pro"><i class="fas fa-copy no-spacing"></i><span></span></a>
-                                    {% endif %}
-                                </div>
+                                    </div>
+                                    <div>
+                                        <a class="btn btn-action bt_regenerate_api" data-plugin="pro"><i class="fas fa-refresh"></i><span>{{ 'common.regenerate' | trans }}</span></a>
+                                    </div>
+                                {% endif %}
                             </div>
                             <div class="form-group col-lg-6 col-xs-12 col-padding">
                                 <label class="control-label" data-toggle="tooltip" title="" data-original-title="{{ 'api.market-key-of' | trans }} NextDom">{{ 'api.market-key' | trans }}</label>
-                                <div class="mix-group">
-                                    {% if adminConfigs.apimarket == '' %}
-                                        <span class="span_apikey label label-value">{{ 'api.no-api' | trans }}</span>
-                                    {% else %}
-                                        <a class="btn btn-action bt_regenerate_api" data-plugin="apimarket"><i class="fas fa-refresh"></i><span>{{ 'common.regenerate' | trans }}</span></a>
+                                {% if adminConfigs.apimarket == '' %}
+                                    <div><span class="span_apikey label label-value">{{ 'api.no-api' | trans }}</span></div>
+                                {% else %}
+                                    <div class="mix-group form-group">
                                         <span class="span_apikey label label-value">{{ adminConfigs.apimarket }}</span>
                                         <a class="btn btn-default bt_copy_api" data-plugin="apimarket"><i class="fas fa-copy no-spacing"></i><span></span></a>
-                                    {% endif %}
-                                </div>
+                                    </div>
+                                    <div>
+                                        <a class="btn btn-action bt_regenerate_api" data-plugin="apimarket"><i class="fas fa-refresh"></i><span>{{ 'common.regenerate' | trans }}</span></a>
+                                    </div>
+                                {% endif %}
                             </div>
                         </div>
                     </fieldset>
@@ -179,15 +185,17 @@
                                             <option value="localhost">{{ 'common.localhost' | trans }}</option>
                                             <option value="disable">{{ 'common.disabled' | trans }}</option>
                                         </select>
-                                        <div class="mix-group">
-                                            {% if pluginData.api == '' %}
-                                                <span class="span_apikey label label-value">{{ 'api.no-api' | trans }}</span>
-                                            {% else %}
-                                                <a class="btn btn-action bt_regenerate_api" data-plugin="{{ pluginData.plugin.getId() }}"><i class="fas fa-refresh"></i><span>{{ 'common.regenerate' | trans }}</span></a>
+                                        {% if pluginData.api == '' %}
+                                            <div><span class="span_apikey label label-value">{{ 'api.no-api' | trans }}</span></div>
+                                        {% else %}
+                                            <div class="mix-group form-group">
                                                 <span class="span_apikey label label-value">{{ pluginData.api }}</span>
                                                 <a class="btn btn-default bt_copy_api" data-plugin="{{ pluginData.plugin.getId() }}"><i class="fas fa-copy no-spacing"></i><span></span></a>
-                                            {% endif %}
-                                        </div>
+                                            </div>
+                                            <div>
+                                                <a class="btn btn-action bt_regenerate_api" data-plugin="{{ pluginData.plugin.getId() }}"><i class="fas fa-refresh"></i><span>{{ 'common.regenerate' | trans }}</span></a>
+                                            </div>
+                                        {% endif %}
                                     </div>
                                 {% endfor %}
                             </div>

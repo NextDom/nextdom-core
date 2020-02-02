@@ -116,7 +116,7 @@ class Utils
      * Redirect to target url
      *
      * @param string $url Target url
-     * @param null $forceType Forcage si 'JS' TODO: ???
+     * @param null $forceType Forcage si 'JS' @TODO: ???
      */
     public static function redirect(string $url, $forceType = null)
     {
@@ -126,6 +126,19 @@ class Utils
             header("Location: $url");
             exit(0);
         }
+    }
+
+    /**
+     * Obtenir un entier passé en paramètre
+     *
+     * @param string $name Nom de la variable
+     * @param mixed $default Valeur par défaut
+     *
+     * @return mixed Valeur de la variable
+     */
+    public static function initInt(string $name, $default = 0): int
+    {
+        return intval(self::init($name, $default));
     }
 
     /**
@@ -158,9 +171,21 @@ class Utils
      *
      * @return mixed Valeur de la variable
      */
-    public static function initInt(string $name, $default = 0): int
+    public static function initStr(string $name, $default = ''): string
     {
-        return intval(self::init($name, $default));
+        return self::sanitizeString(self::init($name, $default));
+    }
+
+    /**
+     * Keep only characters, numbers, - _ characters
+     *
+     * @param $strToSanitize
+     *
+     * @return string Sanitized string
+     */
+    public static function sanitizeString($strToSanitize)
+    {
+        return preg_replace('/[^a-zA-Z0-9\-_]/', '', $strToSanitize);
     }
 
     /**
@@ -202,8 +227,9 @@ class Utils
      */
     public static function checkPath(string $path): bool
     {
+        $realpathToCheck = realpath($path);
         foreach ([NEXTDOM_ROOT, NEXTDOM_DATA, NEXTDOM_TMP, NEXTDOM_LOG] as $authorizedPath) {
-            if (strpos($path, $authorizedPath) === 0) {
+            if (strpos($realpathToCheck, $authorizedPath) === 0) {
                 return true;
             }
         }
@@ -338,7 +364,7 @@ class Utils
      */
     public static function cleanPath($path)
     {
-        $out = array();
+        $out = [];
         foreach (explode('/', $path) as $i => $fold) {
             if ($fold == '' || $fold == '.') {
                 continue;
@@ -428,7 +454,7 @@ class Utils
             }
         }
 
-        $paths = array();
+        $paths = [];
         $p = $begin + 1;
 
         // For each comma-separated subpattern.
@@ -458,7 +484,7 @@ class Utils
      */
     public static function removeCR($_string)
     {
-        return trim(str_replace(array("\n", "\r\n", "\r", "\n\r"), '', $_string));
+        return trim(str_replace(["\n", "\r\n", "\r", "\n\r"], '', $_string));
     }
 
     /**
@@ -514,7 +540,7 @@ class Utils
     }
 
     /**
-     * TODO: Stocker la version évaluée
+     * @TODO: Stocker la version évaluée
      *
      * @param $_string
      * @return string
@@ -590,15 +616,15 @@ class Utils
     }
 
     /**
-     * @param $_string
+     * @param $string
      * @return mixed|null
      */
-    public static function secureXSS($_string)
+    public static function secureXSS($string = null)
     {
-        if ($_string === null) {
+        if ($string === null) {
             return null;
         }
-        return str_replace('&amp;', '&', htmlspecialchars(strip_tags($_string), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+        return str_replace('&amp;', '&', htmlspecialchars(strip_tags($string), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
     }
 
     /**
@@ -607,27 +633,27 @@ class Utils
      */
     public static function minify($_buffer)
     {
-        $search = array(
+        $search = [
             '/\>[^\S ]+/s', // strip whitespaces after tags, except space
             '/[^\S ]+\</s', // strip whitespaces before tags, except space
             '/(\s)+/s', // shorten multiple whitespace sequences
-        );
-        $replace = array(
+        ];
+        $replace = [
             '>',
             '<',
             '\\1',
-        );
+        ];
         return preg_replace($search, $replace, $_buffer);
     }
 
     /**
-     * TODO: Pourquoi en minuscule ?
-     * @param $_message
+     * @TODO: Pourquoi en minuscule ?
+     * @param $message
      * @return string|string[]|null
      */
-    public static function sanitizeAccent($_message)
+    public static function sanitizeAccent(string $message)
     {
-        $caracteres = array(
+        $caracteres = [
             'À' => 'a', 'Á' => 'a', 'Â' => 'a', 'Ä' => 'a', 'à' => 'a', 'á' => 'a', 'â' => 'a', 'ä' => 'a', '@' => 'a',
             'Ç' => 'c', 'ç' => 'c',
             'È' => 'e', 'É' => 'e', 'Ê' => 'e', 'Ë' => 'e', 'è' => 'e', 'é' => 'e', 'ê' => 'e', 'ë' => 'e', '€' => 'e',
@@ -635,8 +661,8 @@ class Utils
             'Ò' => 'o', 'Ó' => 'o', 'Ô' => 'o', 'Ö' => 'o', 'ò' => 'o', 'ó' => 'o', 'ô' => 'o', 'ö' => 'o',
             'Ù' => 'u', 'Ú' => 'u', 'Û' => 'u', 'Ü' => 'u', 'ù' => 'u', 'ú' => 'u', 'û' => 'u', 'ü' => 'u', 'µ' => 'u',
             'Œ' => 'oe', 'œ' => 'oe',
-            '$' => 's');
-        return preg_replace('#[^A-Za-z0-9 \n\.\'=\*:]+\#\)\(#', '', strtr($_message, $caracteres));
+            '$' => 's'];
+        return preg_replace('#[^A-Za-z0-9 \n\.\'=\*:]+\#\)\(#', '', strtr($message, $caracteres));
     }
 
     /**
@@ -724,21 +750,21 @@ class Utils
     }
 
     /**
-     * @param $_string
+     * @param $string
      * @return array
      */
-    public static function arg2array($_string): array
+    public static function arg2array($string): array
     {
-        $return = array();
+        $result = [];
         $re = '/[\/-]?(([a-zA-Z0-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœ_#]+)(?:[=:]("[^"]+"|[^\s"]+))?)(?:\s+|$)/';
-        preg_match_all($re, $_string, $matches, PREG_SET_ORDER, 0);
+        preg_match_all($re, $string, $matches, PREG_SET_ORDER, 0);
         foreach ($matches as $match) {
             if (count($match) != 4) {
                 continue;
             }
-            $return[$match[2]] = $match[3];
+            $result[$match[2]] = $match[3];
         }
-        return $return;
+        return $result;
     }
 
     /**
@@ -773,65 +799,16 @@ class Utils
             $g = hexdec(substr($hex, 2, 2));
             $b = hexdec(substr($hex, 4, 2));
         }
-        return array($r, $g, $b);
+        return [$r, $g, $b];
     }
 
     /**
-     * @param $_pathimg
-     * @return string|array
-     */
-    function getDominantColor($_pathimg, $_level = null, $_ignoreDarkColor = false)
-    {
-        $colors = array();
-        $i = imagecreatefromjpeg($_pathimg);
-        $imagesX = imagesx($i);
-        $imagesY = imagesy($i);
-        $ratio = $imagesX / $imagesY;
-        $size = 270;
-        $img = imagecreatetruecolor($size, $size / $ratio);
-        imagecopyresized($img, $i, 0, 0, 0, 0, $size, $size / $ratio, $imagesX, $imagesY);
-        $imagesX = $size;
-        $imagesY = $size / $ratio;
-        for ($x = 0; $x < $imagesX; $x++) {
-            for ($y = 0; $y < $imagesY; $y++) {
-                $rgb = imagecolorat($img, $x, $y);
-                if ($_ignoreDarkColor) {
-                    $sum = (($rgb >> 16) & 0xFF) + (($rgb >> 8) & 0xFF) + ($rgb & 0xFF);
-                    if ($sum < 10) {
-                        continue;
-                    }
-                }
-                if (!isset($colors[$rgb])) {
-                    $colors[$rgb] = array('value' => $rgb, 'nb' => 0);
-                }
-                $colors[$rgb]['nb']++;
-            }
-        }
-        usort($colors, function ($a, $b) {
-            return $b['nb'] - $a['nb'];
-        });
-
-        if ($_level == null) {
-            if ($colors[0]['value'] == 0) {
-                return '#' . substr("000000" . dechex($colors[1]['value']), -6);
-            }
-            return '#' . substr("000000" . dechex($colors[0]['value']), -6);
-        }
-        $return = array();
-        $colors = array_slice($colors, 0, $_level);
-        foreach ($colors as $color) {
-            $return[] = '#' . substr("000000" . dechex($color['value']), -6);
-        }
-        return $return;
-    }
-
-    /**
-     * @param $_string
+     * @param string $string
      * @return string
      */
-    public static function sha512($_string): string
+    public static function sha512( string $string): string
     {
-        return hash('sha512', $_string);
+        return hash('sha512', $string);
     }
 
     /**
@@ -840,13 +817,13 @@ class Utils
      */
     public static function findCodeIcon($_icon): array
     {
-        $icon = trim(str_replace(array('fa ', 'icon ', '></i>', '<i', 'class="', '"'), '', trim($_icon)));
+        $icon = trim(str_replace(['fa ', 'icon ', '></i>', '<i', 'class="', '"'], '', trim($_icon)));
         $re = '/.' . $icon . ':.*\n.*content:.*"(.*?)";/m';
 
         $css = file_get_contents(NEXTDOM_ROOT . '/vendor/node_modules/font-awesome/css/font-awesome.css');
         preg_match($re, $css, $matches);
         if (isset($matches[1])) {
-            return array('icon' => trim($matches[1], '\\'), 'fontfamily' => 'FontAwesome');
+            return ['icon' => trim($matches[1], '\\'), 'fontfamily' => 'FontAwesome'];
         }
 
         foreach (FileSystemHelper::ls(NEXTDOM_ROOT . '/public/icon', '*') as $dir) {
@@ -854,7 +831,7 @@ class Utils
                 $css = file_get_contents(NEXTDOM_ROOT . '/public/icon/' . $dir . '/style.css');
                 preg_match($re, $css, $matches);
                 if (isset($matches[1])) {
-                    return array('icon' => trim($matches[1], '\\'), 'fontfamily' => trim($dir, '/'));
+                    return ['icon' => trim($matches[1], '\\'), 'fontfamily' => trim($dir, '/')];
                 }
             }
         }
@@ -872,7 +849,7 @@ class Utils
      * @param array $_display
      * @return null
      */
-    public static function addGraphLink($_from, $_from_type, $_to, $_to_type, &$_data, $_level, $_drill, $_display = array('dashvalue' => '5,3', 'lengthfactor' => 0.6))
+    public static function addGraphLink($_from, $_from_type, $_to, $_to_type, &$_data, $_level, $_drill, $_display = ['dashvalue' => '5,3', 'lengthfactor' => 0.6])
     {
         if (is_array($_to) && count($_to) == 0) {
             return null;
@@ -881,7 +858,7 @@ class Utils
             if (!is_object($_to)) {
                 return null;
             }
-            $_to = array($_to);
+            $_to = [$_to];
         }
         foreach ($_to as $to) {
             $to->getLinkData($_data, $_level, $_drill);
@@ -891,10 +868,10 @@ class Utils
             if (isset($_data['link'][$_from_type . $_from->getId() . '-' . $_to_type . $to->getId()])) {
                 continue;
             }
-            $_data['link'][$_to_type . $to->getId() . '-' . $_from_type . $_from->getId()] = array(
+            $_data['link'][$_to_type . $to->getId() . '-' . $_from_type . $_from->getId()] = [
                 'from' => $_to_type . $to->getId(),
                 'to' => $_from_type . $_from->getId(),
-            );
+            ];
             $_data['link'][$_to_type . $to->getId() . '-' . $_from_type . $_from->getId()] = array_merge($_data['link'][$_to_type . $to->getId() . '-' . $_from_type . $_from->getId()], $_display);
         }
         return $_data;
@@ -947,16 +924,15 @@ class Utils
      */
     public static function o2a($objectToConvert, $_noToArray = false)
     {
+        $result = [];
         if (is_array($objectToConvert)) {
-            $return = array();
             foreach ($objectToConvert as $subObject) {
-                $return[] = self::o2a($subObject);
+                $result[] = self::o2a($subObject);
             }
-            return $return;
+            return $result;
         }
-        $array = array();
         if (!is_object($objectToConvert)) {
-            return $array;
+            return $result;
         }
         if (!$_noToArray && method_exists($objectToConvert, 'toArray')) {
             return $objectToConvert->toArray();
@@ -977,10 +953,10 @@ class Utils
                     $value = $property->getValue($objectToConvert);
                     $property->setAccessible(false);
                 }
-                $array[$name] = ($value === null) ? null : Utils::isJson($value, $value);
+                $result[$name] = ($value === null) ? null : Utils::isJson($value, $value);
             }
         }
-        return $array;
+        return $result;
     }
 
     /**
@@ -997,11 +973,11 @@ class Utils
             if (!is_string($_string)) {
                 return $_default;
             }
-            $return = json_decode($_string, true, 512, JSON_BIGINT_AS_STRING);
-            if (!is_array($return)) {
+            $result = json_decode($_string, true, 512, JSON_BIGINT_AS_STRING);
+            if (!is_array($result)) {
                 return $_default;
             }
-            return $return;
+            return $result;
         }
         return ((is_string($_string) && is_array(json_decode($_string, true, 512, JSON_BIGINT_AS_STRING)))) ? true : false;
     }
@@ -1029,7 +1005,7 @@ class Utils
             $_dbList = $_class::all();
         }
 
-        $enableList = array();
+        $enableList = [];
         foreach ($_ajaxList as $ajaxObject) {
             $resultObject = $_class::byId($ajaxObject['id']);
             if (!is_object($resultObject)) {
@@ -1091,12 +1067,12 @@ class Utils
     {
         if ($_value === null && !is_array($_key)) {
             if (!is_array($_attr)) {
-                $_attr = Utils::isJson($_attr, array());
+                $_attr = Utils::isJson($_attr, []);
             }
             unset($_attr[$_key]);
         } else {
             if (!is_array($_attr)) {
-                $_attr = Utils::isJson($_attr, array());
+                $_attr = Utils::isJson($_attr, []);
             }
             if (is_array($_key)) {
                 $_attr = array_merge($_attr, $_key);
@@ -1121,47 +1097,27 @@ class Utils
             }
         } else {
             if ($_key == '') {
-                return self::isJson($_attr, array());
+                return self::isJson($_attr, []);
             }
             if ($_attr === '') {
                 if (is_array($_key)) {
                     foreach ($_key as $key) {
-                        $return[$key] = $_default;
+                        $result[$key] = $_default;
                     }
-                    return $return;
+                    return $result;
                 }
                 return $_default;
             }
             $_attr = json_decode($_attr, true);
         }
         if (is_array($_key)) {
-            $return = array();
+            $result = [];
             foreach ($_key as $key) {
-                $return[$key] = (isset($_attr[$key]) && $_attr[$key] !== '') ? $_attr[$key] : $_default;
+                $result[$key] = (isset($_attr[$key]) && $_attr[$key] !== '') ? $_attr[$key] : $_default;
             }
-            return $return;
+            return $result;
         }
         return (isset($_attr[$_key]) && $_attr[$_key] !== '') ? $_attr[$_key] : $_default;
-    }
-
-    /**
-     * @param $currentChangedState
-     * @param $oldValue
-     * @param $newValue
-     * @return bool
-     */
-    public static function attrChanged($currentChangedState, $oldValue, $newValue): bool
-    {
-        if ($currentChangedState) {
-            return true;
-        }
-        if (is_array($oldValue)) {
-            $oldValue = json_encode($oldValue);
-        }
-        if (is_array($newValue)) {
-            $newValue = json_encode($newValue);
-        }
-        return ($oldValue !== $newValue);
     }
 
     /**
@@ -1172,7 +1128,7 @@ class Utils
      */
     public static function parseArgs($argv)
     {
-        $args = array();
+        $args = [];
         if (isset($argv)) {
             foreach ($argv as $c_arg) {
                 $parts = explode('=', $c_arg);
@@ -1302,5 +1258,58 @@ class Utils
         }
 
         return (substr($haystack, -$length) === $needle);
+    }
+
+    /**
+     * @param      $pathImg
+     * @param null $level
+     * @param bool $ignoreDarkColor
+     * @return array|string
+     */
+    public function getDominantColor($pathImg, $level = null, $ignoreDarkColor = false)
+    {
+
+
+        $colors = [];
+        $i = imagecreatefromjpeg($pathImg);
+        $imagesX = imagesx($i);
+        $imagesY = imagesy($i);
+        $ratio = $imagesX / $imagesY;
+        $size = 270;
+        $img = imagecreatetruecolor($size, $size / $ratio);
+        imagecopyresized($img, $i, 0, 0, 0, 0, $size, $size / $ratio, $imagesX, $imagesY);
+        $imagesX = $size;
+        $imagesY = $size / $ratio;
+        for ($x = 0; $x < $imagesX; $x++) {
+            for ($y = 0; $y < $imagesY; $y++) {
+                $rgb = imagecolorat($img, $x, $y);
+                if ($ignoreDarkColor) {
+                    $sum = (($rgb >> 16) & 0xFF) + (($rgb >> 8) & 0xFF) + ($rgb & 0xFF);
+                    if ($sum < 10) {
+                        continue;
+                    }
+                }
+                if (!isset($colors[$rgb])) {
+                    $colors[$rgb] = ['value' => $rgb, 'nb' => 0];
+                }
+                $colors[$rgb]['nb']++;
+            }
+        }
+        usort($colors, function ($a, $b) {
+            return $b['nb'] - $a['nb'];
+        });
+
+        if ($level == null) {
+            if ($colors[0]['value'] == 0) {
+                return '#' . substr("000000" . dechex($colors[1]['value']), -6);
+            }
+            return '#' . substr("000000" . dechex($colors[0]['value']), -6);
+        }
+        $result = [];
+        $colors = array_slice($colors, 0, $level);
+        foreach ($colors as $color) {
+            $result[] = '#' . substr("000000" . dechex($color['value']), -6);
+        }
+        return $result;
     }
 }

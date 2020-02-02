@@ -18,17 +18,25 @@
 
 namespace NextDom\Helpers;
 
+use Symfony\Component\HttpFoundation\Response;
+
 /**
  * Temporary class to store different states.
+ *
+ * Class ScriptHelper
+ * @package NextDom\Helpers
  */
 class ScriptHelper
 {
+    /**
+     * @throws \Exception
+     */
     public static function cliOrCrash()
     {
         if (php_sapi_name() != 'cli' || isset($_SERVER['REQUEST_METHOD']) || !isset($_SERVER['argc'])) {
             header("Statut: 404 Page non trouvée");
             header('HTTP/1.0 404 Not Found');
-            $_SERVER['REDIRECT_STATUS'] = 404;
+            $_SERVER['REDIRECT_STATUS'] = Response::HTTP_NOT_FOUND;
             echo '<h1>' . __('core.error-404') . '</h1>';
             exit();
         }

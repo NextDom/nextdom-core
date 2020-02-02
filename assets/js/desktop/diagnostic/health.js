@@ -35,6 +35,7 @@
 */
 
 // Page init
+showSelectedTabFromUrl(document.location.toString());
 initEvents();
 
 /**
@@ -61,24 +62,61 @@ function initEvents() {
 
     // Plugin panel collapsing
     $('#bt_healthCollapse').on('click',function(){
-      $('#accordionHealth .panel-collapse').each(function () {
-         if (!$(this).hasClass("in")) {
-             $(this).css({'height' : '' });
-             $(this).addClass("in");
-         }
-      });
-      $('#bt_healthCollapse').hide();
-      $('#bt_healthUncollapse').show()
+      collapseHealth();
     });
 
     // Plugin panel uncollapsing
     $('#bt_healthUncollapse').on('click',function(){
-      $('#accordionHealth .panel-collapse').each(function () {
-         if ($(this).hasClass("in")) {
-             $(this).removeClass("in");
-         }
-      });
-      $('#bt_healthUncollapse').hide();
-      $('#bt_healthCollapse').show()
+      uncollapseHealth();
     });
+}
+
+/**
+ * uncollapse Health panels
+ */
+function uncollapseHealth() {
+  $('#accordionHealth .panel-collapse').each(function () {
+     if ($(this).hasClass("in")) {
+         $(this).removeClass("in");
+     }
+  });
+  $('#bt_healthUncollapse').hide();
+  $('#bt_healthCollapse').show()
+}
+
+/**
+ * collapse Health panels
+ */
+function collapseHealth() {
+  $('#accordionHealth .panel-collapse').each(function () {
+     if (!$(this).hasClass("in")) {
+         $(this).css({'height' : '' });
+         $(this).addClass("in");
+     }
+  });
+  $('#bt_healthCollapse').hide();
+  $('#bt_healthUncollapse').show()
+}
+
+/**
+ * Show the tab indicated in the url
+ *
+ * @param url Url to check
+ */
+function showSelectedTabFromUrl(url) {
+    let tabCode = 'div_Health';
+    if (url.match('#')) {
+      tabCode = url.split('#')[1];
+      $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
+    }
+    $('.nav-tabs a').off('shown.bs.tab').on('shown.bs.tab', function (e) {
+      window.location.hash = e.target.hash;
+      showSelectedTabFromUrl(document.location.toString());
+    });
+    if (tabCode == 'div_Health') {
+        $('#bt_healthCollapse').hide();
+        $('#bt_healthUncollapse').hide()
+    } else {
+        uncollapseHealth();
+    }
 }

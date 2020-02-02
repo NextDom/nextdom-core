@@ -38,10 +38,13 @@ namespace {
     use NextDom\Managers\ConfigManager;
 
     define('NEXTDOM_ROOT', realpath(__DIR__ . '/..'));
+    define('NEXTDOM_DATA', '/var/lib/nextdom');
 
-
-    if (file_exists(NEXTDOM_ROOT . '/core/config/common.config.php')) {
-        require_once NEXTDOM_ROOT . '/core/config/common.config.php';
+    if (file_exists(NEXTDOM_DATA . '/config/common.config.php')) {
+        require_once NEXTDOM_DATA . '/config/common.config.php';
+    }
+    else {
+        throw new Exception('Missing configuration file');
     }
 
     /**
@@ -49,16 +52,13 @@ namespace {
      */
     $ENABLED_PLUGINS = null;
     spl_autoload_register('nextdomPluginAutoload', true, true);
-    if (file_exists(NEXTDOM_ROOT . '/core/config/common.config.php')) {
-        require_once NEXTDOM_ROOT . '/core/config/common.config.php';
-    }
 
     global $CONFIG;
-    define('NEXTDOM_DATA', $CONFIG["paths"]["lib"]);
     define('NEXTDOM_LOG', $CONFIG["paths"]["log"]);
     define('NEXTDOM_TMP', $CONFIG["paths"]["tmp"]);
 
     require_once NEXTDOM_ROOT . '/vendor/autoload.php';
+    require_once NEXTDOM_ROOT . '/src/Api/jeedom_functions.php'; // Forced by plugins
     require_once NEXTDOM_ROOT . '/src/Helpers/DBHelper.php';
     require_once NEXTDOM_ROOT . '/src/Managers/ConfigManager.php';
     require_once NEXTDOM_DATA . '/config/nextdom.config.php';

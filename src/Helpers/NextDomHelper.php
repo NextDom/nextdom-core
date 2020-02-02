@@ -34,6 +34,7 @@
 
 namespace NextDom\Helpers;
 
+use NextDom\Enums\Common;
 use NextDom\Enums\ConfigKey;
 use NextDom\Enums\DateFormat;
 use NextDom\Enums\LogTarget;
@@ -54,7 +55,9 @@ use NextDom\Managers\PluginManager;
 use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\UpdateManager;
+use NextDom\Managers\UserManager;
 use NextDom\Managers\ViewManager;
+use NextDom\Model\DataClass\SystemHealth;
 use NextDom\Repo\RepoMarket;
 
 /**
@@ -74,7 +77,7 @@ class NextDomHelper
      */
     public static function addRemoveHistory($data)
     {
-        $removeHistory = array();
+        $removeHistory = [];
         $removeHistoryPath = NEXTDOM_DATA . '/data/remove_history.json';
         if (file_exists($removeHistoryPath)) {
             $removeHistory = json_decode(file_get_contents($removeHistoryPath), true);
@@ -93,21 +96,21 @@ class NextDomHelper
     public static function getDeadCmd()
     {
         global $NEXTDOM_INTERNAL_CONFIG;
-        $result = array();
+        $result = [];
         $cmd = ConfigManager::byKey('interact::warnme::defaultreturncmd', 'core', '');
         if ($cmd != '' && !CmdManager::byId(str_replace('#', '', $cmd))) {
-            $result[] = array('detail' => 'Administration', 'help' => __('Commande retour interactions'), 'who' => $cmd);
+            $result[] = ['detail' => 'Administration', 'help' => __('Commande retour interactions'), 'who' => $cmd];
         }
         $cmd = ConfigManager::byKey('emailAdmin', 'core', '');
         if ($cmd != '' && !CmdManager::byId(str_replace('#', '', $cmd))) {
-            $result[] = array('detail' => 'Administration', 'help' => __('Commande information utilisateur'), 'who' => $cmd);
+            $result[] = ['detail' => 'Administration', 'help' => __('Commande information utilisateur'), 'who' => $cmd];
         }
         foreach ($NEXTDOM_INTERNAL_CONFIG['alerts'] as $level => $value) {
             $cmds = ConfigManager::byKey('alert::' . $level . 'Cmd', 'core', '');
             preg_match_all("/#([0-9]*)#/", $cmds, $matches);
             foreach ($matches[1] as $cmd_id) {
                 if (CmdManager::byId($cmd_id)) {
-                    $result[] = array('detail' => 'Administration', 'help' => __('Commande sur ') . $value['name'], 'who' => '#' . $cmd_id . '#');
+                    $result[] = ['detail' => 'Administration', 'help' => __('Commande sur ') . $value['name'], 'who' => '#' . $cmd_id . '#'];
                 }
             }
         }
@@ -126,11 +129,11 @@ class NextDomHelper
         $okStr = __('common.ok');
         $nokStr = __('common.nok');
 
-        $systemHealth = array();
+        $systemHealth = [];
 
         $state = true;
         $version = '';
-        $uname = shell_exec('uname -a');
+        $uname = SystemHelper::getSystemInformations();
         if (SystemHelper::getDistrib() != 'debian') {
             $state = false;
         } else {
@@ -140,278 +143,114 @@ class NextDomHelper
                 && strpos($version, 'stretch') === false
                 && strpos($version, 'buster') === false) {
                 $state = false;
-            }   
+            }
         }
-        $systemHealth[] = array(
-            'icon' => 'fa-cogs',
-            'name' => __('health.os-version'),
-            'state' => $state,
-            'result' => ($state) ? $uname . ' [' . $version . ']' : $uname,
-            'comment' => ($state) ? '' : __('health.os-not-supported'),
-        );
+        $systemHealth[] = new SystemHealth(
+            'fa-cogs',
+            'health.os-version',
+            $state,
+            ($state) ? $uname . ' [' . $version . ']' : $uname,
+            ($state) ? '' : __('health.os-not-supported'),
+            'os::version');
 
         $nbNeededUpdate = UpdateManager::nbNeedUpdate();
         $state = ($nbNeededUpdate == 0) ? true : false;
-        $systemHealth[] = array(
-            'icon' => 'fa-heartbeat',
-            'name' => __('health.update-to-date'),
-            'state' => $state,
-            'result' => ($state) ? $okStr : $nbNeededUpdate . ' ' . __('health.updates'),
-            'comment' => '',
-            'key' => 'uptodate'
-        );
+        $systemHealth[] = new SystemHealth('fa-heartbeat', 'health.update-to-date', $state, ($state) ? $okStr : $nbNeededUpdate . ' ' . __('health.updates'), '', 'uptodate');
 
         $state = ConfigManager::byKey(ConfigKey::ENABLE_CRON, 'core', 1, true) != 0;
-        $systemHealth[] = array(
-            'icon' => 'fa-calendar-alt',
-            'name' => __('health.cron-enabled'),
-            'state' => $state,
-            'result' => ($state) ? $okStr : $nokStr,
-            'comment' => ($state) ? '' : __('health.cron-disabled'),
-            'key' => 'cron::enable'
-        );
+        $systemHealth[] = new SystemHealth('fa-calendar-alt', 'health.cron-enabled', $state, ($state) ? $okStr : $nokStr, ($state) ? '' : __('health.cron-disabled'), 'cron::enable');
 
         $state = !(ConfigManager::byKey(ConfigKey::ENABLE_SCENARIO) == 0 && count(ScenarioManager::all()) > 0);
-        $systemHealth[] = array(
-            'icon' => 'fa-film',
-            'name' => __('health.scenario-enabled'),
-            'state' => $state,
-            'result' => ($state) ? $okStr : $nokStr,
-            'comment' => ($state) ? '' : __('health.scenario-disabled'),
-            'key' => 'scenario::enable'
-        );
+        $systemHealth[] = new SystemHealth('fa-film', 'health.scenario-enabled', $state, ($state) ? $okStr : $nokStr, ($state) ? '' : __('health.scenario-disabled'), 'scenario::enable');
 
         $state = self::isStarted();
-        $systemHealth[] = array(
-            'icon' => 'fa-play',
-            'name' => __('health.product-started'),
-            'state' => $state,
-            'result' => ($state) ? $okStr . ' - ' . file_get_contents(self::getStartedFilePath()) : $nokStr,
-            'comment' => '',
-            'key' => 'isStarted'
-        );
+        $systemHealth[] = new SystemHealth('fa-play', 'health.product-started', $state, ($state) ? $okStr . ' - ' . file_get_contents(self::getStartedFilePath()) : $nokStr, '', 'isStarted');
 
         $state = self::isDateOk();
         $cache = CacheManager::byKey('hour');
         $lastKnowDate = $cache->getValue();
-        $systemHealth[] = array(
-            'icon' => 'fa-clock',
-            'name' => __('health.system-date'),
-            'state' => $state,
-            'result' => ($state) ? $okStr . ' - ' . date(DateFormat::FULL) . ' (' . $lastKnowDate . ')' : date(DateFormat::FULL),
-            'comment' => ($state) ? '' : __('health.system-date-error'),
-            'key' => 'hour'
-        );
+        $systemHealth[] = new SystemHealth('fa-clock', 'health.system-date', $state, ($state) ? $okStr . ' - ' . date(DateFormat::FULL) . ' (' . $lastKnowDate . ')' : date(DateFormat::FULL), ($state) ? '' : __('health.system-date-error'), 'hour');
 
         $state = self::isCapable('sudo', true);
-        $systemHealth[] = array(
-            'icon' => 'fa-user-secret',
-            'name' => __('health.sudo-rights'),
-            'state' => ($state) ? 1 : 2,
-            'result' => ($state) ? $okStr : $nokStr,
-            'comment' => ($state) ? '' : __('sudo-error'),
-            'key' => 'sudo::right'
-        );
+        $systemHealth[] = new SystemHealth('fa-user-secret', 'health.sudo-rights', ($state) ? 1 : 2, ($state) ? $okStr : $nokStr, ($state) ? '' : __('sudo-error'), 'sudo::right');
 
-        $systemHealth[] = array(
-            'icon' => 'fa-code-branch',
-            'name' => __('health.product-version'),
-            'state' => true,
-            'result' => self::getNextdomVersion(),
-            'comment' => '',
-            'key' => 'nextdom::version'
-        );
+        $systemHealth[] = new SystemHealth('fa-code-branch', 'health.product-version', true, self::getNextdomVersion(), '', 'nextdom::version');
 
         $state = version_compare(phpversion(), '7.0', '>=');
-        $systemHealth[] = array(
-            'icon' => 'fa-code',
-            'name' => __('health.php-version'),
-            'state' => $state,
-            'result' => phpversion(),
-            'comment' => ($state) ? '' : __('health.php-error'),
-        );
-
-        $state = version_compare(phpversion(), '5.5', '>=');
-        $systemHealth[] = array(
-            'name' => __('Version PHP'),
-            'state' => $state,
-            'result' => phpversion(),
-            'comment' => ($state) ? '' : __('Si vous êtes en version 5.4.x on vous indiquera quand la version 5.5 sera obligatoire'),
-            'key' => 'php::version'
-        );
-
-        $state = true;
-        $version = '';
-        $uname = shell_exec('uname -a');
-        if (SystemHelper::getDistrib() != 'debian') {
-            $state = false;
-        } else {
-            $version = trim(strtolower(file_get_contents('/etc/debian_version')));
-            if (version_compare($version, '8', '<')) {
-                if (strpos($version, 'jessie') === false && strpos($version, 'stretch') === false) {
-                    $state = false;
-                }
-            }
-        }
-        $systemHealth[] = array(
-            'name' => __('Version OS'),
-            'state' => $state,
-            'result' => ($state) ? $uname . ' [' . $version . ']' : $uname,
-            'comment' => ($state) ? '' : __('Vous n\'êtes pas sur un OS officiellement supporté par l\'équipe Jeedom (toute demande de support pourra donc être refusée). Les OS officiellement supporté sont Debian Jessie et Debian Strech (voir <a href="https://jeedom.github.io/documentation/compatibility/fr_FR/index" target="_blank">ici</a>)'),
-            'key' => 'os::version'
-        );
+        $systemHealth[] = new SystemHealth('fa-code', 'health.php-version', $state, phpversion(), ($state) ? '' : __('health.php-error'), 'php::version');
 
         $version = DBHelper::getOne('select version()');
-        $systemHealth[] = array(
-            'icon' => 'fa-database',
-            'name' => __('health.database-version'),
-            'state' => true,
-            'result' => $version['version()'],
-            'comment' => '',
-            'key' => 'database::version'
-
-        );
+        $systemHealth[] = new SystemHealth('fa-database', 'health.database-version', true, $version['version()'], ($state) ? '' : __('health.php-error'), 'database::version');
 
         $value = self::checkSpaceLeft();
-        $systemHealth[] = array(
-            'icon' => 'fa-hdd',
-            'name' => __('health.harddisk-freespace'),
-            'state' => ($value > 10),
-            'result' => $value . ' %',
-            'comment' => __('health.need-more-than') . ': 10%',
-            'key' => 'space::root'
-        );
+        $systemHealth[] = new SystemHealth('fa-hdd', 'health.harddisk-freespace', ($value > 10), $value . ' %', __('health.need-more-than') . ': 10%', 'space::root');
 
         $value = self::checkSpaceLeft(self::getTmpFolder());
-        $systemHealth[] = array(
-            'name' => __('Espace disque libre tmp'),
-            'state' => ($value > 10),
-            'result' => $value . ' %',
-            'comment' => __('En cas d\'erreur essayez de redémarrer. Si le problème persiste, testez en désactivant les plugins un à un jusqu\'à trouver le coupable'),
-            'key' => 'space::tmp'
-        );
+        $systemHealth[] = new SystemHealth('fa-hdd', 'health.tmp-space-left', ($value > 10), $value . ' %', __('health.tmp-problem') . ': 10%', 'space::tmp');
 
         $values = SystemHelper::getMemInfo();
         $value = round(($values['MemAvailable'] / $values['MemTotal']) * 100);
-        $systemHealth[] = array(
-            'icon' => 'fa-th',
-            'name' => __('health.available-memory'),
-            'state' => ($value > 15),
-            'result' => $value . ' %',
-            'comment' => __('health.need-more-than') . ': 15%',
-            'key' => 'meminfo'
-        );
+        $systemHealth[] = new SystemHealth('fa-th', 'health.available-memory', ($value > 15), $value . ' %', __('health.need-more-than') . ': 15%', 'meminfo');
 
         $value = shell_exec('sudo dmesg | grep oom | grep -v deprecated | wc -l');
-        $systemHealth[] = array(
-            'icon' => 'fa-th-large',
-            'name' => __('health.enough-memory'),
-            'state' => ($value == 0),
-            'result' => ($state == 0) ? $nokStr : $okStr,
-            'comment' => ($value == 0) ? '' : __('health.processes-killed'),
-            'key' => 'oom'
-        );
+        $systemHealth[] = new SystemHealth('fa-th-large', 'health.enough-memory', ($value == 0), ($state == 0) ? $nokStr : $okStr, ($value == 0) ? '' : __('health.processes-killed'), 'oom');
 
         $value = shell_exec('sudo dmesg | grep "CRC error" | grep "mmcblk0" | grep "card status" | wc -l');
-        if(!is_numeric($value)){
+        if (!is_numeric($value)) {
             $value = 0;
         }
         $value2 = @shell_exec('sudo dmesg | grep "I/O error" | wc -l');
-        if(is_numeric($value2)){
+        if (is_numeric($value2)) {
             $value += $value2;
         }
-        $systemHealth[] = array(
-            'name' => __('Erreur I/O'),
-            'state' => ($value == 0),
-            'result' => $value,
-            'comment' => ($value == 0) ? '' : __('Il y a des erreurs disque, cela peut indiquer un soucis avec le disque ou un problème d\'alimentation'),
-            'key' => 'io_error'
-        );
+        $systemHealth[] = new SystemHealth('fa fa-hearth', __('Erreur I/O'), $value == 0, $value, ($value == 0) ? '' : __('Il y a des erreurs disque, cela peut indiquer un soucis avec le disque ou un problème d\'alimentation'), 'io_error');
 
         if ($values['SwapTotal'] != 0 && $values['SwapTotal'] !== null) {
             $value = round(($values['SwapFree'] / $values['SwapTotal']) * 100);
-            $systemHealth[] = array(
-                'icon' => 'fa-hdd',
-                'name' => __('health.available-swap'),
-                'state' => ($value > 15),
-                'result' => $value . ' %',
-                'comment' => __('health.need-more-than') . ': 15%',
-                'key' => 'swap'
-            );
+            $systemHealth[] = new SystemHealth('fa-hdd', 'health.available-swap', ($value > 15), $value . ' %', __('health.need-more-than') . ': 15%', 'swap');
         } else {
-            $systemHealth[] = array(
-                'icon' => 'fa-hdd',
-                'name' => __('health.available-swap'),
-                'state' => 2,
-                'result' => __('health.unknow'),
-                'comment' => '',
-                'key' => 'swap'
-            );
+            $systemHealth[] = new SystemHealth('fa-hdd', 'health.available-swap', 2, __('health.unknow'), '', 'swap');
         }
 
+        $value = shell_exec('sudo cat /proc/sys/vm/swappiness');
+        $state = ($value <= 20);
+        if($values['MemTotal'] >= (1024*1024)){
+            $state = true;
+        }
+        $systemHealth[] = new SystemHealth('fa-hdd', 'health.swapiness', $state, $value.'%', ($state) ? '' :__('health.swapiness-config'), 'swapiness');
+
         $values = sys_getloadavg();
-        $systemHealth[] = array(
-            'icon' => 'fa-fire',
-            'name' => __('health.load'),
-            'state' => ($values[2] < 20),
-            'result' => $values[0] . ' - ' . $values[1] . ' - ' . $values[2],
-            'comment' => __('health.need-less-than') . ': 20',
-            'key' => 'load'
-        );
+        $systemHealth[] = new SystemHealth('fa-fire', 'health.load', ($values[2] < 20), $values[0] . ' - ' . $values[1] . ' - ' . $values[2], __('health.need-less-than') . ': 20', 'load');
 
         $state = NetworkHelper::test('internal');
-        $systemHealth[] = array(
-            'icon' => 'fa-plug',
-            'name' => __('health.internal-network-conf'),
-            'state' => $state,
-            'result' => ($state) ? $okStr : $nokStr,
-            'comment' => ($state) ? '' : __('health.network-config'),
-            'key' => 'network::internal'
-        );
+        $systemHealth[] = new SystemHealth('fa-plug', 'health.internal-network-conf', $state, ($state) ? $okStr : $nokStr, ($state) ? '' : __('health.network-config'), 'network::internal');
 
         $state = NetworkHelper::test('external');
-        $systemHealth[] = array(
-            'icon' => 'fa-globe',
-            'name' => __('health.external-network-conf'),
-            'state' => $state,
-            'result' => ($state) ? $okStr : $nokStr,
-            'comment' => ($state) ? '' : __('health.network-config'),
-            'key' => 'network::external'
-        );
+        $systemHealth[] = new SystemHealth('fa-globe', 'health.external-network-conf', $state, ($state) ? $okStr : $nokStr, ($state) ? '' : __('health.network-config'), 'network::external');
 
-        $cache_health = array(
-            'icon' => 'fa-inbox',
-            'comment' => '',
-            'name' => __('health.cache-persistence'));
+        $cacheHealth = new SystemHealth('fa-inbox', 'health.cache-persistence', false, '', '', 'cache::persit');
 
         if (CacheManager::isPersistOk()) {
             if ((ConfigManager::byKey('cache::engine') != 'FilesystemCache') &&
                 (ConfigManager::byKey('cache::engine') != 'PhpFileCache')) {
-                $cache_health['state'] = true;
-                $cache_health['result'] = $okStr;
+                $cacheHealth->setState(true);
+                $cacheHealth['result'] = $okStr;
             } else {
                 $cache_path = CacheManager::getArchivePath();
                 $cache_time = date(DateFormat::FULL, filemtime($cache_path));
-                $cache_health['state'] = true;
-                $cache_health['result'] = sprintf("%s (%s)", $okStr, $cache_time);
+                $cacheHealth->setState(true);
+                $cacheHealth->setResult(sprintf("%s (%s)", $okStr, $cache_time));
             }
         } else {
-            $cache_health['state'] = false;
-            $cache_health['result'] = $nokStr;
-            $cache_health['comment'] = __('health.cache-not-saved');
+            $cacheHealth->setState(false)
+                ->setResult($nokStr)
+                ->setComment(__('health.cache-not-saved'));
         }
 
-        $systemHealth[] = $cache_health;
+        $systemHealth[] = $cacheHealth;
 
         $state = shell_exec('systemctl show apache2 | grep  PrivateTmp | grep yes | wc -l');
-        $systemHealth[] = array(
-            'icon' => 'fa-folder',
-            'name' => __('health.apache-private-tmp'),
-            'state' => $state,
-            'result' => ($state) ? $okStr : $nokStr,
-            'comment' => ($state) ? '' : __('health.apache-private-tmp-disabled'),
-            'key' => 'apache2::privateTmp'
-        );
+        $systemHealth[] = new SystemHealth('fa-folder', 'health.apache-private-tmp', $state, ($state) ? $okStr : $nokStr, ($state) ? '' : __('health.apache-private-tmp-disabled'), 'apache2::privateTmp');
 
         foreach (UpdateManager::listRepo() as $repo) {
             if ($repo['enable']) {
@@ -505,6 +344,9 @@ class NextDomHelper
      */
     public static function forceSyncHour()
     {
+        if (ConfigManager::byKey('disable_ntp', Common::CORE, 0) == 1) {
+            return false;
+        }
         shell_exec(SystemHelper::getCmdSudo() . 'service ntp stop;' . SystemHelper::getCmdSudo() . 'ntpdate -s ' . ConfigManager::byKey('ntp::optionalServer', 'core', '0.debian.pool.ntp.org') . ';' . SystemHelper::getCmdSudo() . 'service ntp start');
     }
 
@@ -553,7 +395,7 @@ class NextDomHelper
             return ConfigManager::byKey(ConfigKey::HARDWARE_NAME);
         }
         $result = 'diy';
-        $uname = shell_exec('uname -a');
+        $uname = SystemHelper::getSystemInformations();
         if (strpos(shell_exec('sudo cat /proc/1/cgroup'), 'docker') !== false) {
             $result = 'docker';
         } else if (file_exists('/usr/bin/raspi-config')) {
@@ -562,7 +404,7 @@ class NextDomHelper
             global $NEXTDOM_RPI_HARDWARE;
             foreach ($NEXTDOM_RPI_HARDWARE as $key => $values) {
                 foreach ($values as $value) {
-                    if(strpos($hardware_revision,$value) !== false){
+                    if (strpos($hardware_revision, $value) !== false) {
                         $result = $key;
                     }
                 }
@@ -593,14 +435,14 @@ class NextDomHelper
     /**
      * Check space left
      *
+     * @param null $directory
      * @return float
      */
     public static function checkSpaceLeft($directory = null): float
     {
         if ($directory == null) {
             $pathToCheck = NEXTDOM_ROOT;
-        }
-        else {
+        } else {
             $pathToCheck = $directory;
         }
         return round(disk_free_space($pathToCheck) / disk_total_space($pathToCheck) * 100);
@@ -674,9 +516,9 @@ class NextDomHelper
             return $NEXTDOM_INTERNAL_CONFIG;
         }
         if (!is_array(self::$nextdomConfiguration)) {
-            self::$nextdomConfiguration = array();
+            self::$nextdomConfiguration = [];
         }
-        // TODO: Bizarre
+        // @TODO: Bizarre
         if (!$defaultValue && isset(self::$nextdomConfiguration[$askedKey])) {
             return self::$nextdomConfiguration[$askedKey];
         }
@@ -697,7 +539,7 @@ class NextDomHelper
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      *
      * @param string $configKey
      * @param mixed $configValue
@@ -707,7 +549,7 @@ class NextDomHelper
     public static function checkValueInConfiguration($configKey, $configValue)
     {
         if (!is_array(self::$nextdomConfiguration)) {
-            self::$nextdomConfiguration = array();
+            self::$nextdomConfiguration = [];
         }
         if (isset(self::$nextdomConfiguration[$configKey])) {
             return self::$nextdomConfiguration[$configKey];
@@ -739,7 +581,7 @@ class NextDomHelper
 
     /**
      * Stop all cron tasks and scenarios
-     * @param $isBackupProcess if true stop all except backup cron
+     * @param bool $isBackupProcess if true stop all except backup cron
      * @throws \Exception
      */
     public static function stopSystem($isBackupProcess)
@@ -798,7 +640,7 @@ class NextDomHelper
                         try {
                             $cron->halt();
                         } catch (\Exception $e) {
-                            LogHelper::addError('starting', __('Erreur sur l\'arrêt d\'une tâche cron : ') . LogHelper::exception($e));
+                            LogHelper::addError(LogTarget::STARTING, __('Erreur sur l\'arrêt d\'une tâche cron : ') . LogHelper::exception($e));
                         }
                     }
                 }
@@ -822,27 +664,27 @@ class NextDomHelper
             }
 
             try {
-                LogHelper::addDebug('starting', __('Nettoyage du cache des péripheriques Bluetooth'));
+                LogHelper::addDebug(LogTarget::STARTING, __('Nettoyage du cache des péripheriques Bluetooth'));
                 $cache = CacheManager::byKey('nextdom::bluetoothMapping');
                 $cache->remove();
             } catch (\Exception $e) {
-                LogHelper::addError('starting', __('Erreur sur le nettoyage du CacheManager des péripheriques Bluetooth : ') . LogHelper::exception($e));
+                LogHelper::addError(LogTarget::STARTING, __('Erreur sur le nettoyage du CacheManager des péripheriques Bluetooth : ') . LogHelper::exception($e));
             }
 
             try {
-                LogHelper::addDebug('starting', __('Démarrage des processus Internet de NextDom'));
+                LogHelper::addDebug(LogTarget::STARTING, __('Démarrage des processus Internet de NextDom'));
                 self::startSystem();
             } catch (\Exception $e) {
-                LogHelper::addError('starting', __('Erreur sur le démarrage interne de NextDom : ') . LogHelper::exception($e));
+                LogHelper::addError(LogTarget::STARTING, __('Erreur sur le démarrage interne de NextDom : ') . LogHelper::exception($e));
             }
 
             try {
-                LogHelper::addDebug('starting', __('Ecriture du fichier ') . self::getStartedFilePath());
+                LogHelper::addDebug(LogTarget::STARTING, __('Ecriture du fichier ') . self::getStartedFilePath());
                 if (file_put_contents(self::getStartedFilePath(), date(DateFormat::FULL)) === false) {
-                    LogHelper::addError('starting', __('Impossible d\'écrire ' . self::getStartedFilePath()));
+                    LogHelper::addError(LogTarget::STARTING, __('Impossible d\'écrire ' . self::getStartedFilePath()));
                 }
             } catch (\Exception $e) {
-                LogHelper::addError('starting', __('Impossible d\'écrire ' . self::getStartedFilePath() . ' : ') . LogHelper::exception($e));
+                LogHelper::addError(LogTarget::STARTING, __('Impossible d\'écrire ' . self::getStartedFilePath() . ' : ') . LogHelper::exception($e));
             }
 
             if (!file_exists(self::getStartedFilePath())) {
@@ -943,7 +785,8 @@ class NextDomHelper
         }
     }
 
-    public static function cron10() {
+    public static function cron10()
+    {
         try {
             foreach (UpdateManager::listRepo() as $name => $repo) {
                 $repoClass = 'Repo' . $name;
@@ -1009,6 +852,7 @@ class NextDomHelper
             ReportHelper::clean();
             DBHelper::optimize();
             CacheManager::clean();
+            UserManager::regenerateHash();
             foreach (UpdateManager::listRepo() as $repoCode => $repoData) {
                 $classCode = 'repo_' . $repoCode;
                 $fullClassName = $repoCode['class'];
@@ -1023,18 +867,18 @@ class NextDomHelper
     }
 
     /**
-     * TODO: ????
+     * @TODO: ????
      * @param array $_replaces
      * @throws \Exception
      */
     public static function replaceTag(array $_replaces)
     {
-        $datas = array();
+        $datas = [];
         foreach ($_replaces as $key => $value) {
             $datas = array_merge($datas, CmdManager::searchConfiguration($key));
             $datas = array_merge($datas, EqLogicManager::searchConfiguration($key));
             $datas = array_merge($datas, JeeObjectManager::searchConfiguration($key));
-            $datas = array_merge($datas, ScenarioManager::searchByUse(array(array('action' => '#' . $key . '#'))));
+            $datas = array_merge($datas, ScenarioManager::searchByUse([['action' => '#' . $key . '#']]));
             $datas = array_merge($datas, ScenarioExpressionManager::searchExpression($key, $key, false));
             $datas = array_merge($datas, ScenarioExpressionManager::searchExpression('variable(' . str_replace('#', '', $key) . ')'));
             $datas = array_merge($datas, ScenarioExpressionManager::searchExpression('variable', str_replace('#', '', $key), true));
@@ -1048,7 +892,7 @@ class NextDomHelper
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      *
      * @param $cmd
      *
@@ -1072,7 +916,7 @@ class NextDomHelper
     }
 
     /**
-     * TODO: ??
+     * @TODO: ??
      *
      * @param $version
      * @param bool $lightMode
@@ -1090,15 +934,15 @@ class NextDomHelper
                 return 'view';
             }
         }
-        $alias = array(
+        $alias = [
             'dview' => 'dashboard',
             'dplan' => 'dashboard',
-        );
+        ];
         return (isset($alias[$version])) ? $alias[$version] : $version;
     }
 
     /**
-     * TODO: ?? Ca fait plein de choses
+     * @TODO: ?? Ca fait plein de choses
      *
      * @param $input
      *
@@ -1111,7 +955,7 @@ class NextDomHelper
     }
 
     /**
-     * TODO: ?? Ca aussi ça fait plein de choses
+     * @TODO: ?? Ca aussi ça fait plein de choses
      *
      * @param $input
      *
@@ -1124,7 +968,7 @@ class NextDomHelper
     }
 
     /**
-     * TODO: Ca évalue des choses dans les expressions
+     * @TODO: Ca évalue des choses dans les expressions
      *
      * @param $input
      * @param null $scenario
@@ -1146,7 +990,7 @@ class NextDomHelper
     }
 
     /**
-     * TODO: Calcul les stats de quelquechose
+     * @TODO: Calcul les stats de quelquechose
      *
      * @param $calcType
      * @param $values
@@ -1176,23 +1020,23 @@ class NextDomHelper
      */
     public static function getTypeUse($testString = '')
     {
-        $results = array(NextDomObj::CMD => [], NextDomObj::SCENARIO => [], NextDomObj::EQLOGIC => [], NextDomObj::DATASTORE => [], NextDomObj::PLAN => [], NextDomObj::VIEW => []);
+        $results = [NextDomObj::CMD => [], NextDomObj::SCENARIO => [], NextDomObj::EQLOGIC => [], NextDomObj::DATASTORE => [], NextDomObj::PLAN => [], NextDomObj::VIEW => []];
         // Look for human readable strings
         preg_match_all('/#(eqLogic|scenario)?(\d+)#/', $testString, $humanReadableResults);
         self::addTypeUseResults($humanReadableResults, $results);
         // Look in json string
-        preg_match_all('/"((?:scenario|view|plan)_id|eqLogic)":"(\d+)"/', $testString, $jsonResults);
+        preg_match_all('/"(scenario|view|plan|eqLogic)(?:_id)?":"(\d+)"/', $testString, $jsonResults);
         self::addTypeUseResults($jsonResults, $results);
         preg_match_all('/variable\((.*?)\)/', $testString, $dataStoreResults);
         foreach ($dataStoreResults[1] as $variable) {
-            if (isset($results['dataStore'][$variable])) {
+            if (isset($results[NextDomObj::DATASTORE][$variable])) {
                 continue;
             }
-            $dataStore = DataStoreManager::byTypeLinkIdKey('scenario', -1, trim($variable));
+            $dataStore = DataStoreManager::byTypeLinkIdKey(NextDomObj::SCENARIO, -1, trim($variable));
             if (!is_object($dataStore)) {
                 continue;
             }
-            $results['dataStore'][$variable] = $dataStore;
+            $results[NextDomObj::DATASTORE][$variable] = $dataStore;
         }
 
         return $results;
@@ -1215,12 +1059,25 @@ class NextDomHelper
             if (isset($result[$typeName][$typeId])) {
                 continue;
             }
-            if ($typeName[0] === 'c') {
-                $target = CmdManager::byId($typeId);
-            } elseif ($typeName[0] === 'e') {
-                $target = EqLogicManager::byId($typeId);
-            } elseif ($typeName[0] === 's') {
-                $target = ScenarioManager::byId($typeId);
+            switch ($typeName[0]) {
+                case 'c':
+                    $target = CmdManager::byId($typeId);
+                    break;
+                case 'e':
+                    $target = EqLogicManager::byId($typeId);
+                    break;
+                case 's':
+                    $target = ScenarioManager::byId($typeId);
+                    break;
+                case 'p':
+                    $target = PlanHeaderManager::byId($typeId);
+                    break;
+                case 'v':
+                    $target = ViewManager::byId($typeId);
+                    break;
+                default:
+                    $target = null;
+                    break;
             }
             if (!is_object($target)) {
                 continue;
@@ -1237,7 +1094,7 @@ class NextDomHelper
      */
     public static function getTypeUseOld($testString = '')
     {
-        $result = array(NextDomObj::CMD => [], NextDomObj::SCENARIO => [], NextDomObj::EQLOGIC => [], NextDomObj::DATASTORE => [], NextDomObj::PLAN => [], NextDomObj::VIEW => []);
+        $result = [NextDomObj::CMD => [], NextDomObj::SCENARIO => [], NextDomObj::EQLOGIC => [], NextDomObj::DATASTORE => [], NextDomObj::PLAN => [], NextDomObj::VIEW => []];
         // Test commands human readable
         preg_match_all("/#([0-9]*)#/", $testString, $matches);
         foreach ($matches[1] as $cmdId) {
@@ -1346,7 +1203,7 @@ class NextDomHelper
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      *
      * @param string $command Command to execute after stop preparation
      * @param string $errorMessage Message to show if actions failed
@@ -1396,9 +1253,9 @@ class NextDomHelper
      */
     public static function benchmark()
     {
-        $result = array();
+        $result = [];
 
-        $param = array('cache_write' => 5000, 'cache_read' => 5000, 'database_write_delete' => 1000, 'database_update' => 1000, 'database_replace' => 1000, 'database_read' => 50000, 'subprocess' => 200);
+        $param = ['cache_write' => 5000, 'cache_read' => 5000, 'database_write_delete' => 1000, 'database_update' => 1000, 'database_replace' => 1000, 'database_read' => 50000, 'subprocess' => 200];
 
         $starttime = Utils::getMicrotime();
         for ($i = 0; $i < $param['cache_write']; $i++) {
@@ -1415,16 +1272,16 @@ class NextDomHelper
 
         $starttime = Utils::getMicrotime();
         for ($i = 0; $i < $param['database_write_delete']; $i++) {
-            $sql = 'DELETE FROM config
+            $sql = 'DELETE FROM ' . ConfigManager::DB_CLASS_NAME . '
                     WHERE `key`="nextdom_benchmark"
-                    AND plugin="core"';
+                    AND `plugin` = "core"';
             try {
                 DBHelper::exec($sql);
             } catch (\Exception $e) {
 
             }
-            $sql = 'INSERT INTO config
-                    SET `key`="nextdom_benchmark",plugin="core",`value`="' . $i . '"';
+            $sql = 'INSERT INTO ' . ConfigManager::DB_CLASS_NAME . '
+                    SET `key` = "nextdom_benchmark", `plugin` = "core", `value` = "' . $i . '"';
             try {
                 DBHelper::exec($sql);
             } catch (\Exception $e) {
@@ -1433,18 +1290,18 @@ class NextDomHelper
         }
         $result['database_write_delete_' . $param['database_write_delete']] = Utils::getMicrotime() - $starttime;
 
-        $sql = 'INSERT INTO config
-                SET `key`="nextdom_benchmark",plugin="core",`value`="0"';
+        $sql = 'INSERT INTO ' . ConfigManager::DB_CLASS_NAME . '
+                SET `key` = "nextdom_benchmark", `plugin` = "core", `value` = "0"';
         try {
             DBHelper::exec($sql);
         } catch (\Exception $e) {
         }
         $starttime = Utils::getMicrotime();
         for ($i = 0; $i < $param['database_update']; $i++) {
-            $sql = 'UPDATE `config`
+            $sql = 'UPDATE ' . ConfigManager::DB_CLASS_NAME . '
                     SET `value`=:value
                     WHERE `key` = "nextdom_benchmark"
-                        AND plugin = "core"';
+                    AND `plugin` = "core"';
             try {
                 DBHelper::exec($sql, ['value' => $i]);
             } catch (\Exception $e) {

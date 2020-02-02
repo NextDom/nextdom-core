@@ -17,11 +17,15 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\LogTarget;
+use NextDom\Enums\NextDomObj;
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\SystemHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ListenerManager;
+use NextDom\Model\Entity\Parents\BaseEntity;
 
 /**
  * Listener
@@ -29,8 +33,9 @@ use NextDom\Managers\ListenerManager;
  * @ORM\Table(name="listener", indexes={@ORM\Index(name="event", columns={"event"})})
  * @ORM\Entity
  */
-class Listener implements EntityInterface
+class Listener extends BaseEntity
 {
+    const TABLE_NAME = NextDomObj::LISTENER;
 
     /**
      * @var string
@@ -61,17 +66,6 @@ class Listener implements EntityInterface
     protected $option;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    protected $_changed = false;
-
-    /**
      * @param $_event
      * @param $_value
      * @param null $_datetime
@@ -79,7 +73,7 @@ class Listener implements EntityInterface
      */
     public function run($_event, $_value, $_datetime = null)
     {
-        $option = array();
+        $option = [];
         if (count($this->getOption()) > 0) {
             $option = $this->getOption();
         }
@@ -113,7 +107,7 @@ class Listener implements EntityInterface
     public function setOption($_key, $_value = '')
     {
         $option = Utils::setJsonAttr($this->option, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->option, $option);
+        $this->updateChangeState($this->option, $option);
         $this->option = $option;
         return $this;
     }
@@ -127,7 +121,7 @@ class Listener implements EntityInterface
     public function execute($_event, $_value, $_datetime = '')
     {
         try {
-            $option = array();
+            $option = [];
             if (count($this->getOption()) > 0) {
                 $option = $this->getOption();
             }
@@ -141,7 +135,7 @@ class Listener implements EntityInterface
                 if (class_exists($targetClass) && method_exists($targetClass, $function)) {
                     $targetClass::$function($option);
                 } else {
-                    LogHelper::add('listener', 'debug', __('[Erreur] Classe ou fonction non trouvée ') . $this->getName());
+                    LogHelper::addDebug(LogTarget::LISTENER, __('[Erreur] Classe ou fonction non trouvée ') . $this->getName());
                     $this->remove();
                     return;
                 }
@@ -150,32 +144,13 @@ class Listener implements EntityInterface
                 if (function_exists($function)) {
                     $function($option);
                 } else {
-                    LogHelper::addError('listener', __('[Erreur] Non trouvée ') . $this->getName());
+                    LogHelper::addError(LogTarget::LISTENER, __('[Erreur] Non trouvée ') . $this->getName());
                     return;
                 }
             }
         } catch (\Exception $e) {
-            LogHelper::add(init('plugin_id', 'plugin'), 'error', $e->getMessage());
+            LogHelper::addError(Utils::init('plugin_id', 'plugin'), $e->getMessage());
         }
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $_id
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
     }
 
     /**
@@ -192,7 +167,7 @@ class Listener implements EntityInterface
      */
     public function setClass($_class)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->class, $_class);
+        $this->updateChangeState($this->class, $_class);
         $this->class = $_class;
         return $this;
     }
@@ -211,7 +186,7 @@ class Listener implements EntityInterface
      */
     public function setFunction($_function)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->function, $_function);
+        $this->updateChangeState($this->function, $_function);
         $this->function = $_function;
         return $this;
     }
@@ -227,20 +202,10 @@ class Listener implements EntityInterface
         return $this->getFunction() . '()';
     }
 
-    /**
-     * @return bool
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
-    public function remove()
-    {
-        return DBHelper::remove($this);
-    }
-
     public function preSave()
     {
         if ($this->getFunction() == '') {
-            throw new \Exception(__('La fonction ne peut pas être vide'));
+            throw new CoreException(__('La fonction ne peut pas être vide'));
         }
     }
 
@@ -261,7 +226,7 @@ class Listener implements EntityInterface
 
     public function emptyEvent()
     {
-        $this->event = array();
+        $this->event = [];
     }
 
     /**
@@ -272,7 +237,7 @@ class Listener implements EntityInterface
     {
         $event = $this->getEvent();
         if (!is_array($event)) {
-            $event = array();
+            $event = [];
         }
         $id = '';
         if ($_type == 'cmd') {
@@ -289,7 +254,7 @@ class Listener implements EntityInterface
      */
     public function getEvent()
     {
-        return Utils::isJson($this->event, array());
+        return Utils::isJson($this->event, []);
     }
 
     /**
@@ -299,35 +264,8 @@ class Listener implements EntityInterface
     public function setEvent($_event)
     {
         $event = json_encode($_event, JSON_UNESCAPED_UNICODE);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->event, $_event);
+        $this->updateChangeState($this->event, $_event);
         $this->event = $event;
         return $this;
     }
-
-    /**
-     * @return bool
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTableName()
-    {
-        return 'listener';
-    }
-
 }

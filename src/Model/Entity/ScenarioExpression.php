@@ -17,9 +17,10 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\CmdSubType;
 use NextDom\Enums\DateFormat;
+use NextDom\Enums\NextDomObj;
 use NextDom\Enums\ScenarioExpressionAction;
-use NextDom\Enums\ScenarioExpressionSubType;
 use NextDom\Enums\ScenarioExpressionType;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
@@ -43,6 +44,11 @@ use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\ScenarioSubElementManager;
 use NextDom\Managers\ViewManager;
+use NextDom\Model\Entity\Parents\BaseEntity;
+use NextDom\Model\Entity\Parents\OptionsEntity;
+use NextDom\Model\Entity\Parents\OrderEntity;
+use NextDom\Model\Entity\Parents\SubTypeEntity;
+use NextDom\Model\Entity\Parents\TypeEntity;
 
 /**
  * Scenarioexpression
@@ -50,29 +56,14 @@ use NextDom\Managers\ViewManager;
  * @ORM\Table(name="scenarioExpression", indexes={@ORM\Index(name="fk_scenarioExpression_scenarioSubElement1_idx", columns={"scenarioSubElement_id"})})
  * @ORM\Entity
  */
-class ScenarioExpression implements EntityInterface
+class ScenarioExpression extends BaseEntity
 {
+    const TABLE_NAME = NextDomObj::SCENARIO_EXPR;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="order", type="integer", nullable=true)
-     */
-    protected $order;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="type", type="string", length=127, nullable=true)
-     */
-    protected $type;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="subtype", type="string", length=127, nullable=true)
-     */
-    protected $subtype;
+    use OrderEntity, TypeEntity, SubTypeEntity;
+    use OptionsEntity {
+        setOptions as basicSetOptions;
+    }
 
     /**
      * @var string
@@ -80,22 +71,6 @@ class ScenarioExpression implements EntityInterface
      * @ORM\Column(name="expression", type="text", length=65535, nullable=true)
      */
     protected $expression;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="options", type="text", length=65535, nullable=true)
-     */
-    protected $options;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
 
     /**
      * @var integer
@@ -106,7 +81,6 @@ class ScenarioExpression implements EntityInterface
      * })
      */
     protected $scenarioSubElement_id;
-    protected $_changed = false;
 
     /**
      * Execute a scenario
@@ -130,7 +104,7 @@ class ScenarioExpression implements EntityInterface
             while (CacheManager::exists($key)) {
                 $key = 'scenarioElement' . ConfigManager::genKey(10);
             }
-            CacheManager::set($key, array('scenarioExpression' => $this, 'scenario' => $scenario), 60);
+            CacheManager::set($key, ['scenarioExpression' => $this, 'scenario' => $scenario], 60);
             $cmd = NEXTDOM_ROOT . '/src/Api/start_scenario_expr.php';
             $cmd .= ' key=' . $key;
             $this->setLog($scenario, __('Execution du lancement en arriere plan : ') . $key);
@@ -188,36 +162,12 @@ class ScenarioExpression implements EntityInterface
         return null;
     }
 
-    /**
-     * @param string $_key
-     * @param string $_default
-     * @return array|bool|mixed|null|string
-     */
-    public function getOptions($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->options, $_key, $_default);
-    }
-
-    /**
-     * @param $_key
-     * @param $_value
-     * @return $this
-     * @throws \Exception
-     */
-    public function setOptions($_key, $_value)
-    {
-        $options = Utils::setJsonAttr($this->options, $_key, NextDomHelper::fromHumanReadable($_value));
-        $this->_changed = Utils::attrChanged($this->_changed, $this->options, $options);
-        $this->options = $options;
-        return $this;
-    }
-
     public function checkBackground()
     {
         if ($this->getOptions('background', 0) == 0) {
             return;
         }
-        if (in_array($this->getExpression(), array(ScenarioExpressionAction::WAIT, ScenarioExpressionAction::SLEEP, ScenarioExpressionAction::STOP, ScenarioExpressionAction::SCENARIO_RETURN))) {
+        if (in_array($this->getExpression(), [ScenarioExpressionAction::WAIT, ScenarioExpressionAction::SLEEP, ScenarioExpressionAction::STOP, ScenarioExpressionAction::SCENARIO_RETURN])) {
             $this->setOptions('background', 0);
         }
         return;
@@ -239,7 +189,7 @@ class ScenarioExpression implements EntityInterface
     public function setExpression($_expression)
     {
         $_expression = NextDomHelper::fromHumanReadable($_expression);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->expression, $_expression);
+        $this->updateChangeState($this->expression, $_expression);
         $this->expression = $_expression;
         return $this;
     }
@@ -253,25 +203,6 @@ class ScenarioExpression implements EntityInterface
         if ($_scenario !== null && is_object($_scenario)) {
             $_scenario->setLog($log);
         }
-    }
-
-    /**
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param $_type
-     * @return $this
-     */
-    public function setType($_type)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->type, $_type);
-        $this->type = $_type;
-        return $this;
     }
 
     /**
@@ -331,6 +262,9 @@ class ScenarioExpression implements EntityInterface
                 break;
             case ScenarioExpressionAction::NEXTDOM_POWEROFF:
                 $this->executeActionNextDomPowerOff($scenario);
+                break;
+            case ScenarioExpressionAction::NEXTDOM_REBOOT:
+                $this->executeActionNextDomReboot($scenario);
                 break;
             case ScenarioExpressionAction::SCENARIO_RETURN:
                 $this->executeActionScenarioReturn($scenario, $options);
@@ -420,8 +354,7 @@ class ScenarioExpression implements EntityInterface
                     sleep($options['duration']);
                 }
             }
-        }
-        else {
+        } else {
             $this->setLog($scenario, __('Aucune durée trouvée pour l\'action sleep : ') . $options['duration']);
         }
     }
@@ -508,7 +441,7 @@ class ScenarioExpression implements EntityInterface
      */
     protected function executeActionEquipment(&$scenario)
     {
-        $eqLogic = EqLogicManager::byId(str_replace(array('#eqLogic', '#'), '', $this->getOptions('eqLogic')));
+        $eqLogic = EqLogicManager::byId(str_replace(['#eqLogic', '#'], '', $this->getOptions('eqLogic')));
         if (!is_object($eqLogic)) {
             throw new CoreException(__('Action sur l\'équipement impossible. Equipement introuvable - Vérifiez l\'id : ') . $this->getOptions('eqLogic'));
         }
@@ -566,7 +499,7 @@ class ScenarioExpression implements EntityInterface
         switch ($this->getOptions('action')) {
             case 'start':
                 if ($this->getOptions('tags') != '' && !is_array($this->getOptions('tags'))) {
-                    $tags = array();
+                    $tags = [];
                     $args = Utils::arg2array($this->getOptions('tags'));
                     foreach ($args as $key => $value) {
                         $tags['#' . trim(trim($key), '#') . '#'] = ScenarioExpressionManager::setTags(trim($value), $scenario);
@@ -585,7 +518,7 @@ class ScenarioExpression implements EntityInterface
                 break;
             case 'startsync':
                 if ($this->getOptions('tags') != '' && !is_array($this->getOptions('tags'))) {
-                    $tags = array();
+                    $tags = [];
                     $args = Utils::arg2array($this->getOptions('tags'));
                     foreach ($args as $key => $value) {
                         $tags['#' . trim(trim($key), '#') . '#'] = ScenarioExpressionManager::setTags(trim($value), $scenario);
@@ -645,7 +578,7 @@ class ScenarioExpression implements EntityInterface
         $dataStore = new DataStore();
         $dataStore->setKey($this->getOptions('name'));
         $dataStore->setValue($result);
-        $dataStore->setType('scenario');
+        $dataStore->setType(NextDomObj::SCENARIO);
         $dataStore->setLink_id(-1);
         $dataStore->save();
 
@@ -673,13 +606,13 @@ class ScenarioExpression implements EntityInterface
     protected function executeActionAsk(&$scenario, $options)
     {
         $dataStore = new DataStore();
-        $dataStore->setType('scenario');
+        $dataStore->setType(NextDomObj::SCENARIO);
         $dataStore->setKey($this->getOptions('variable'));
         $dataStore->setValue('');
         $dataStore->setLink_id(-1);
         $dataStore->save();
         $limit = (isset($options['timeout'])) ? $options['timeout'] : 300;
-        $options_cmd = array('title' => $options['question'], 'message' => $options['question'], 'answer' => explode(';', $options['answer']), 'timeout' => $limit, 'variable' => $this->getOptions('variable'));
+        $options_cmd = ['title' => $options['question'], 'message' => $options['question'], 'answer' => explode(';', $options['answer']), 'timeout' => $limit, 'variable' => $this->getOptions('variable')];
         //Recuperation des tags
         $tags = $scenario->getTags();
         if (isset($tags['#profile#']) === true) {
@@ -729,9 +662,20 @@ class ScenarioExpression implements EntityInterface
      */
     protected function executeActionNextDomPowerOff(&$scenario)
     {
-        $this->setLog($scenario, __('Lancement de l\'arret de nextdom'));
+        $this->setLog($scenario, __('Lancement de l\'arret de NextDom'));
         $scenario->persistLog();
         NextDomHelper::haltSystem();
+    }
+
+    /**
+     * @param Scenario $scenario
+     * @throws \Exception
+     */
+    protected function executeActionNextDomReboot(&$scenario)
+    {
+        $this->setLog($scenario, __('Lancement du redémarrage de NextDom'));
+        $scenario->persistLog();
+        NextDomHelper::rebootSystem();
     }
 
     /**
@@ -776,7 +720,7 @@ class ScenarioExpression implements EntityInterface
      */
     protected function executeActionReport(&$scenario, $options)
     {
-        $cmd_parameters = array('files' => null);
+        $cmd_parameters = ['files' => null];
         $this->setLog($scenario, __('Génération d\'un rapport de type ') . $options['type']);
         switch ($options['type']) {
             case 'view':
@@ -785,7 +729,7 @@ class ScenarioExpression implements EntityInterface
                     throw new CoreException(__('Vue introuvable - Vérifiez l\'id : ') . $options['view_id']);
                 }
                 $this->setLog($scenario, __('Génération du rapport ') . $view->getName());
-                $cmd_parameters['files'] = array($view->report($options['export_type'], $options));
+                $cmd_parameters['files'] = [$view->report($options['export_type'], $options)];
                 $cmd_parameters['title'] = __('[' . ConfigManager::byKey('name') . '] Rapport ') . $view->getName() . __(' du ') . date(DateFormat::FULL);
                 $cmd_parameters['message'] = __('Veuillez trouver ci-joint le rapport ') . $view->getName() . __(' généré le ') . date(DateFormat::FULL);
                 break;
@@ -795,7 +739,7 @@ class ScenarioExpression implements EntityInterface
                     throw new CoreException(__('Design introuvable - Vérifiez l\'id : ') . $options['plan_id']);
                 }
                 $this->setLog($scenario, __('Génération du rapport ') . $plan->getName());
-                $cmd_parameters['files'] = array($plan->report($options['export_type'], $options));
+                $cmd_parameters['files'] = [$plan->report($options['export_type'], $options)];
                 $cmd_parameters['title'] = __('[' . ConfigManager::byKey('name') . '] Rapport ') . $plan->getName() . __(' du ') . date(DateFormat::FULL);
                 $cmd_parameters['message'] = __('Veuillez trouver ci-joint le rapport ') . $plan->getName() . __(' généré le ') . date(DateFormat::FULL);
                 break;
@@ -805,14 +749,14 @@ class ScenarioExpression implements EntityInterface
                     throw new CoreException(__('Panel introuvable - Vérifiez l\'id : ') . $options['plugin_id']);
                 }
                 $this->setLog($scenario, __('Génération du rapport ') . $plugin->getName());
-                $cmd_parameters['files'] = array($plugin->report($options['export_type'], $options));
+                $cmd_parameters['files'] = [$plugin->report($options['export_type'], $options)];
                 $cmd_parameters['title'] = __('[' . ConfigManager::byKey('name') . '] Rapport ') . $plugin->getName() . __(' du ') . date(DateFormat::FULL);
                 $cmd_parameters['message'] = __('Veuillez trouver ci-joint le rapport ') . $plugin->getName() . __(' généré le ') . date(DateFormat::FULL);
                 break;
             case 'eqAnalyse':
                 $url = NetworkHelper::getNetworkAccess('internal') . '/index.php?v=d&p=eqAnalyse&report=1';
                 $this->setLog($scenario, __('Génération du rapport ') . $url);
-                $cmd_parameters['files'] = array(ReportHelper::generate($url, 'other', 'eqAnalyse', $options['export_type'], $options));
+                $cmd_parameters['files'] = [ReportHelper::generate($url, 'other', 'eqAnalyse', $options['export_type'], $options)];
                 $cmd_parameters['title'] = __('[' . ConfigManager::byKey('name') . '] Rapport équipement du ') . date(DateFormat::FULL);
                 $cmd_parameters['message'] = __('Veuillez trouver ci-joint le rapport équipement généré le ') . date(DateFormat::FULL);
                 break;
@@ -847,14 +791,13 @@ class ScenarioExpression implements EntityInterface
      * @param Scenario $scenario
      * @param $options
      * @return mixed
-     * @throws CoreException
-     * @throws \ReflectionException
+     * @throws \Exception
      */
     protected function executeActionOthers(&$scenario, $options)
     {
         $cmd = CmdManager::byId(str_replace('#', '', $this->getExpression()));
         if (is_object($cmd)) {
-            if ($cmd->getSubType() == ScenarioExpressionSubType::SLIDER && isset($options['slider'])) {
+            if ($cmd->isSubType(CmdSubType::SLIDER) && isset($options['slider'])) {
                 $options['slider'] = Utils::evaluate($options['slider']);
             }
             if (is_array($options) && (count($options) > 1 || (isset($options['background']) && $options['background'] == 1))) {
@@ -870,27 +813,22 @@ class ScenarioExpression implements EntityInterface
 
     /*     * **********************Getteur Setteur*************************** */
 
-    public function remove()
-    {
-        DBHelper::remove($this);
-    }
-
     /**
      * @return array
      * @throws \Exception
      */
     public function getAllId()
     {
-        $return = array(
-            'element' => array(),
-            'subelement' => array(),
-            'expression' => array($this->getId()),
-        );
-        $result = array(
-            'element' => array(),
-            'subelement' => array(),
-            'expression' => array(),
-        );
+        $return = [
+            'element' => [],
+            'subelement' => [],
+            'expression' => [$this->getId()],
+        ];
+        $result = [
+            'element' => [],
+            'subelement' => [],
+            'expression' => [],
+        ];
         if ($this->getType() == 'element') {
             $element = ScenarioElementManager::byId($this->getExpression());
             if (is_object($element)) {
@@ -901,25 +839,6 @@ class ScenarioExpression implements EntityInterface
         $return['subelement'] = array_merge($return['subelement'], $result['subelement']);
         $return['expression'] = array_merge($return['expression'], $result['expression']);
         return $return;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $_id
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
     }
 
     /**
@@ -952,7 +871,7 @@ class ScenarioExpression implements EntityInterface
     public function save()
     {
         $this->checkBackground();
-        DBHelper::save($this);
+        parent::save();
         return true;
     }
 
@@ -1045,72 +964,13 @@ class ScenarioExpression implements EntityInterface
      */
     public function setScenarioSubElement_id($_scenarioSubElement_id)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->scenarioSubElement_id, $_scenarioSubElement_id);
+        $this->updateChangeState($this->scenarioSubElement_id, $_scenarioSubElement_id);
         $this->scenarioSubElement_id = $_scenarioSubElement_id;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getSubtype()
+    public function setOptions($_key, $_value)
     {
-        return $this->subtype;
-    }
-
-    /**
-     * @param $_subtype
-     * @return $this
-     */
-    public function setSubtype($_subtype)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->subtype, $_subtype);
-        $this->subtype = $_subtype;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getOrder()
-    {
-        return $this->order;
-    }
-
-    /**
-     * @param $_order
-     * @return $this
-     */
-    public function setOrder($_order)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->order, $_order);
-        $this->order = $_order;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTableName()
-    {
-        return 'scenarioExpression';
-    }
-
-    /**
-     * @return bool
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
-        return $this;
+        return $this->basicSetOptions($_key, NextDomHelper::fromHumanReadable($_value));
     }
 }

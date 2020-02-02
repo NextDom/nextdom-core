@@ -51,7 +51,7 @@ initEvents();
  * Load informations in all forms of the page
  */
 function loadInformations() {
-    updateLogView.height($(window).height() - $('header').height() - $('footer').height() - 150);
+    updateLogView.height($(window).height() - $('header').height() - 150);
     updateLogView.parent().height($(window).outerHeight() - $('header').outerHeight() - 160);
 }
 
@@ -99,12 +99,15 @@ function initEvents() {
 
   // Updates check all button
   $('#checkAllUpdatesButton').off('click').on('click', function () {
+    $('#checkAllUpdatesButton').children().addClass('fa-spin');
     nextdom.update.checkAll({
       error: function (error) {
         notify('Erreur', error.message, 'error');
+        $('#checkAllUpdatesButton').children().removeClass('fa-spin');
       },
       success: function () {
         initUpdateTabsContent();
+        $('#checkAllUpdatesButton').children().removeClass('fa-spin');
       }
     });
   });
@@ -197,7 +200,7 @@ function initUpdateTabsContent(updateId) {
  * @param updateId Id of the item to create (optional)
  */
 function createUpdateBox(updateData,updateId) {
-  var boxClass = 'box-success';
+  var boxClass = 'box-theme';
   var bgClass = 'bg-green';
   var boxUpdateClass = '';
   var updateIcon = '';
@@ -265,7 +268,7 @@ function createUpdateBox(updateData,updateId) {
     htmlData += '<a class="btn btn-default btn-sm pull-left cursor hidden-sm" target="_blank" href="' + updateData.plugin.changelog + '"><i class="fas fa-book"></i>{{Changelog}}</a>';
   } else {
     if (updateData.configuration && updateData.configuration.version) {
-      htmlData += '<a class="btn btn-default btn-sm pull-right" href="https://github.com/NextDom/nextdom-core/blob/' + updateData.configuration.version + '/CHANGELOG..md" target="_blank"><i class="fas fa-book"></i>{{Changelog}}</a>';
+      htmlData += '<a class="btn btn-default btn-sm pull-right" href="https://github.com/NextDom/nextdom-core/blob/' + updateData.configuration.version + '/CHANGELOG.md" target="_blank"><i class="fas fa-book"></i>{{Changelog}}</a>';
     }else{
       htmlData += '<a class="btn btn-default btn-sm pull-right" href="https://github.com/NextDom/nextdom-core/blob/master/CHANGELOG.md" target="_blank"><i class="fas fa-book"></i>{{Changelog}}</a>';
     }
@@ -383,8 +386,9 @@ function launchUpdate(updateId) {
 function getNextDomLog(_autoUpdate, _log) {
   $.ajax({
     type: 'POST',
-    url: 'core/ajax/log.ajax.php',
+    url: 'src/ajax.php',
     data: {
+      target: 'Log',
       action: 'get',
       log: _log,
     },
@@ -442,9 +446,10 @@ function initDialogs() {
     closeText: '',
     autoOpen: false,
     modal: true,
-    width: ((jQuery(window).width() - 50) < 1500) ? (jQuery(window).width() - 50) : 1500,
+    width: getModalWidth(),
     open: function () {
       $('body').css({overflow: 'hidden'});
+      $(this).dialog("option", "position", {my: "center", at: "center", of: window});
     },
     beforeClose: function (event, ui) {
       $('body').css({overflow: 'inherit'});

@@ -17,13 +17,19 @@
 
 namespace NextDom\Model\Entity;
 
-use NextDom\Helpers\DBHelper;
+use NextDom\Enums\DateFormat;
+use NextDom\Enums\NextDomObj;
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\ReportHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\PlanManager;
+use NextDom\Model\Entity\Parents\AccessCodeConfigurationEntity;
+use NextDom\Model\Entity\Parents\BaseEntity;
+use NextDom\Model\Entity\Parents\ConfigurationEntity;
+use NextDom\Model\Entity\Parents\NameEntity;
 
 /**
  * Planheader
@@ -31,15 +37,11 @@ use NextDom\Managers\PlanManager;
  * @ORM\Table(name="planHeader")
  * @ORM\Entity
  */
-class PlanHeader implements EntityInterface
+class PlanHeader extends BaseEntity
 {
+    const TABLE_NAME = NextDomObj::PLAN_HEADER;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=127, nullable=true)
-     */
-    protected $name;
+    use NameEntity, AccessCodeConfigurationEntity;
 
     /**
      * @var string
@@ -49,30 +51,12 @@ class PlanHeader implements EntityInterface
     protected $image;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="configuration", type="text", length=65535, nullable=true)
-     */
-    protected $configuration;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    protected $_changed;
-
-    /**
      * @param string $_format
      * @param array $_parameters
      * @return string
      * @throws \Exception
      */
-    public function report($_format = 'pdf', $_parameters = array())
+    public function report($_format = 'pdf', $_parameters = [])
     {
         $url = NetworkHelper::getNetworkAccess('internal') . '/index.php?v=d&p=plan';
         $url .= '&plan_id=' . $this->getId();
@@ -81,25 +65,6 @@ class PlanHeader implements EntityInterface
             $url .= '&' . $_parameters['arg'];
         }
         return ReportHelper::generate($url, 'plan', $this->getId(), $_format, $_parameters);
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $_id
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
     }
 
     /**
@@ -126,11 +91,6 @@ class PlanHeader implements EntityInterface
             copy(NEXTDOM_DATA . '/data/custom/plans/' . $filename1, NEXTDOM_DATA . '/data/custom/plans/' . $filename2);
         }
         return $planHeaderCopy;
-    }
-
-    public function save()
-    {
-        DBHelper::save($this);
     }
 
     /**
@@ -161,7 +121,7 @@ class PlanHeader implements EntityInterface
     public function setImage($_key, $_value)
     {
         $image = Utils::setJsonAttr($this->image, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->image, $image);
+        $this->updateChangeState($this->image, $image);
         $this->image = $image;
         return $this;
     }
@@ -169,7 +129,7 @@ class PlanHeader implements EntityInterface
     public function preSave()
     {
         if (trim($this->getName()) == '') {
-            throw new \Exception(__('Le nom du plan ne peut pas être vide'));
+            throw new CoreException(__('Le nom du plan ne peut pas être vide'));
         }
         if ($this->getConfiguration('desktopSizeX') == '') {
             $this->setConfiguration('desktopSizeX', 500);
@@ -185,59 +145,15 @@ class PlanHeader implements EntityInterface
         }
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param $_name
-     * @return $this
-     */
-    public function setName($_name)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
-        $this->name = $_name;
-        return $this;
-    }
-
-    /**
-     * @param string $_key
-     * @param string $_default
-     * @return array|bool|mixed|null|string
-     */
-    public function getConfiguration($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->configuration, $_key, $_default);
-    }
-
-    /**
-     * @param $_key
-     * @param $_value
-     * @return $this
-     */
-    public function setConfiguration($_key, $_value)
-    {
-        if ($_key == 'accessCode' && $_value != '' && !Utils::isSha512($_value)) {
-            $_value = Utils::sha512($_value);
-        }
-        $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
-        $this->configuration = $configuration;
-        return $this;
-    }
-
     public function remove()
     {
-        NextDomHelper::addRemoveHistory(array('id' => $this->getId(), 'name' => $this->getName(), 'date' => date('Y-m-d H:i:s'), 'type' => 'plan'));
-        DBHelper::remove($this);
+        NextDomHelper::addRemoveHistory(['id' => $this->getId(), 'name' => $this->getName(), 'date' => date(DateFormat::FULL), 'type' => 'plan']);
+        return parent::remove();
     }
 
     /**
      * @return string
+     * @throws CoreException
      */
     public function displayImage()
     {
@@ -246,7 +162,7 @@ class PlanHeader implements EntityInterface
         }
         $dir = NEXTDOM_DATA . '/data/custom/plans/';
         if (!file_exists($dir)) {
-            FileSystemHelper::mkdirIfNotExists($dir,0755,true);
+            FileSystemHelper::mkdirIfNotExists($dir, 0755, true);
         }
         if ($this->getImage('sha512') == '') {
             $this->setImage('sha512', Utils::sha512($this->getImage('data')));
@@ -258,7 +174,7 @@ class PlanHeader implements EntityInterface
             file_put_contents($filepath, base64_decode($this->getImage('data')));
         }
         $size = $this->getImage('size');
-        return '<img style="z-index:997" src="'. '/data/custom/plans/' . $filename . '" data-size_y="' . $size[1] . '" data-size_x="' . $size[0] . '">';
+        return '<img style="z-index:997" src="' . '/data/custom/plans/' . $filename . '" data-size_y="' . $size[1] . '" data-size_x="' . $size[0] . '">';
     }
 
     /**
@@ -268,7 +184,7 @@ class PlanHeader implements EntityInterface
      * @return array|null
      * @throws \Exception
      */
-    public function getLinkData(&$_data = array('node' => array(), 'link' => array()), $_level = 0, $_drill = 3)
+    public function getLinkData(&$_data = ['node' => [], 'link' => []], $_level = 0, $_drill = 3)
     {
         if (isset($_data['node']['plan' . $this->getId()])) {
             return null;
@@ -278,7 +194,7 @@ class PlanHeader implements EntityInterface
             return $_data;
         }
         $icon = Utils::findCodeIcon('fa-paint-brush');
-        $_data['node']['plan' . $this->getId()] = array(
+        $_data['node']['plan' . $this->getId()] = [
             'id' => 'interactDef' . $this->getId(),
             'name' => substr($this->getName(), 0, 20),
             'icon' => $icon['icon'],
@@ -289,33 +205,7 @@ class PlanHeader implements EntityInterface
             'textx' => 0,
             'title' => __('Design :') . ' ' . $this->getName(),
             'url' => 'index.php?v=d&p=plan&view_id=' . $this->getId(),
-        );
+        ];
         return null;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTableName()
-    {
-        return 'planHeader';
     }
 }

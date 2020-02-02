@@ -39,21 +39,22 @@ timeline = null;
 // Page init
 displayTimeline();
 initEvents();
+var modalContainer = $('#md_modal');
 
 /**
  * Init events on the profils page
  */
 function initEvents() {
     // Configure timeline command button
-    $('#bt_configureTimelineCommand').on('click',function(){
-        $('#md_modal').dialog({title: "{{Configuration de l'historique des commandes}}"});
-        $("#md_modal").load('index.php?v=d&modal=cmd.configureHistory').dialog('open');
+    $('#bt_configureTimelineCommand').on('click', function() {
+        modalContainer.dialog({title: '{{Configuration de l\'historique des commandes}}'});
+        modalContainer.load('index.php?v=d&modal=cmd.configureHistory').dialog('open');
     });
 
     // Configure timeline scenario button
-    $('#bt_configureTimelineScenario').on('click',function(){
-        $('#md_modal').dialog({title: "{{Résumé scénario}}"});
-        $("#md_modal").load('index.php?v=d&modal=scenario.summary').dialog('open');
+    $('#bt_configureTimelineScenario').on('click', function() {
+        modalContainer.dialog({title: '{{Résumé scénario}}'});
+        modalContainer.load('index.php?v=d&modal=scenario.summary').dialog('open');
     });
 
     // Refresh button
@@ -63,81 +64,97 @@ function initEvents() {
 }
 
 /**
+ * Show timeline data
+ *
+ * @param  timelineData Complete timeline data
+ */
+function fillTimelineContainer(timelineData)
+{
+    var timelineContainer = $('#timeline');
+    timelineData = timelineData.reverse();
+    var tr = '';
+    var color = '';
+
+    for(var i in timelineData){
+        $.each( timelineData[i]['category'], function( key, value ) {
+            var category = (value == 1) ? key: false;
+            switch (category ) {
+                case 'energy':
+                    color = '#2eb04b';
+                    break;
+                case 'security':
+                    color = '2eb04b';
+                    break;
+                case 'heating':
+                    color = '2eb04b';
+                    break;
+                case 'light':
+                    color = '#f39c12';
+                    break;
+                case 'automatism':
+                    color = '#80808';
+                    break;
+                case 'multimedia':
+                    color = '#19bc9c';
+                    break;
+                case 'defaut':
+                    color = 'grey';
+                    break;
+            }
+        });
+        if (i > 0) {
+            if (moment(timelineData[i].date).format('DD/MM/YYYY') != moment(timelineData[i-1].date).format('DD/MM/YYYY')) {
+                tr += '<li class="time-label">';
+                tr += '<span>';
+                tr += moment(timelineData[i].date).format('DD/MM/YYYY');
+                tr += '</span>';
+                tr += '</li>';
+            }
+        } else {
+            tr += '<li class="time-label">';
+            tr += '<span>';
+            tr += moment(timelineData[i].date).format('DD/MM/YYYY');
+            tr += '</span>';
+            tr += '</li>';
+        }
+        tr += '<li>';
+
+        switch (timelineData[i].group ) {
+            case 'info' :
+                tr += '<i class="fa fa-info" style="background-color:' + color + '" data-toggle="tooltip" title="" data-original-title="{{Info}}"></i>';
+                break;
+            case 'action' :
+                tr += '<i class="fa fa-rocket" style="background-color:' + color + '" data-toggle="tooltip" title="" data-original-title="{{Action}}"></i>';
+                break;
+            case 'scenario' :
+                tr += '<i class="fa fa-film timeline-scenario" data-toggle="tooltip" title="" data-original-title="{{Scénario}}"></i>';
+                break;
+            default:
+                tr += '<i class="fa fa-question bg-yellow" data-toggle="tooltip" title="" data-original-title="{{Autre}}"></i>';
+                break;
+        }
+        tr += timelineData[i].html;
+        tr += ' </li>';
+    }
+    timelineContainer.append(tr).trigger('update');
+}
+
+/**
  * Display the timeline
  */
 function displayTimeline(){
-    $('#data').empty()
-    jeedom.getTimelineEvents({
+    $('#timeline').empty();
+    nextdom.getTimelineEvents({
         error: function (error) {
-            notify("Core",error.message,"error");
+            notify('Core', error.message, 'error');
         },
-        success: function (data) {
-            data = data.reverse();
-            var tr = '';
-            var color = '';
-
-            for(var i in data){
-                $.each( data[i]['category'], function( key, value ) {
-                    var category = (value == 1) ? key: false;
-                    switch (category ) {
-                        case "energy":
-                            color = "#2eb04b";
-                            break;
-                        case "security":
-                            color = "2eb04b";
-                            break;
-                        case "heating":
-                            color = "2eb04b";
-                            break;
-                        case "light":
-                            color = "#f39c12";
-                            break;
-                        case "automatism":
-                            color = "#80808";
-                            break;
-                        case "multimedia":
-                            color = "#19bc9c";
-                            break;
-                        case "defaut":
-                            color = "grey";
-                            break;
-                    }
-                });
-                if (i > 0) {
-                    if (moment(data[i].date).format('DD/MM/YYYY') != moment(data[i-1].date).format('DD/MM/YYYY')) {
-                        tr += '<li class="time-label">';
-                        tr += '<span>';
-                        tr += moment(data[i].date).format('DD/MM/YYYY');
-                        tr += '</span>';
-                        tr += ' </li>';
-                    }
-                } else {
-                    tr += '<li class="time-label">';
-                    tr += '<span>';
-                    tr += moment(data[i].date).format('DD/MM/YYYY');
-                    tr += '</span>';
-                    tr += ' </li>';
-                }
-                tr += '<li>';
-
-                switch (data[i].group ) {
-                    case "info" :
-                        tr += '<i class="fa fa-info" style="background-color:' + color +'" data-toggle="tooltip" title="" data-original-title="{{Info}}"></i>';
-                        break;
-                    case "action" :
-                        tr += '<i class="fa fa-rocket" style="background-color:' + color +'" data-toggle="tooltip" title="" data-original-title="{{Action}}"></i>';
-                        break;
-                    case "scenario" :
-                        tr += '<i class="fa fa-film timeline-scenario" data-toggle="tooltip" title="" data-original-title="{{Scénario}}"></i>';
-                        break;
-                    default:
-                        tr += '<i class="fa fa-question bg-yellow" data-toggle="tooltip" title="" data-original-title="{{Autre}}"></i>';
-                        break;
-                }
-                tr +=data[i].html;
-                tr += ' </li>';
+        success: function (result) {
+            if (result.length > 0) {
+                fillTimelineContainer(result);
             }
-            $('#data').append(tr).trigger('update');
+            else {
+                $('#timeline').append('<div><span>{{Vous n\'avez aucun évènement dans la timeline ...}}</span></div>');
+            }
         }
     });
 }

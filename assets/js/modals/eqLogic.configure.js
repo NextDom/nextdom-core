@@ -45,6 +45,10 @@ function loadInformations() {
         }
     });
 
+    if ($('.eqLogicAttr[data-l1key="display"][data-l2key="layout::dashboard"]').value() == 'table') {
+      $("#widget_layout_table").show();
+    }
+
     $('#tableCmdLayoutConfiguration tbody td .cmdLayoutContainer').sortable({
         connectWith: '#tableCmdLayoutConfiguration tbody td .cmdLayoutContainer',
         items: ".cmdLayout"
@@ -201,6 +205,7 @@ function initEvents() {
                         notify("EqLogic", '{{ Enregistrement réussi }}', 'success');
                     }
                 });
+                $('#md_modal').load('index.php?v=d&modal=eqLogic.configure&eqLogic_id=' + $('.li_eqLogic.active').attr('data-eqLogic_id')).dialog('open');
             }
         });
     });
@@ -262,6 +267,7 @@ function initEvents() {
         });
     });
 
+    // Close button
     $('#bt_eqLogicConfigureClose').on('click', function () {
         $('#md_modal').dialog('close');
     });

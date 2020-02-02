@@ -17,6 +17,8 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\NextDomObj;
+
 /**
  * Historyarch
  *
@@ -25,13 +27,6 @@ namespace NextDom\Model\Entity;
  */
 class HistoryArch extends History
 {
-    protected $_tableName = 'historyArch';
-
-    /**
-     * @return string
-     */
-    public function getTableName()
-    {
-        return 'historyArch';
-    }
+    const TABLE_NAME = NextDomObj::HISTORY_ARCH;
+    protected $_tableName = self::TABLE_NAME;
 }

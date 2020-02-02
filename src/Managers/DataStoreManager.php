@@ -34,36 +34,20 @@
 
 namespace NextDom\Managers;
 
-use NextDom\Helpers\DBHelper;
+use NextDom\Managers\Parents\BaseManager;
+use NextDom\Managers\Parents\CommonManager;
 use NextDom\Model\Entity\DataStore;
 
 /**
  * Class DataStoreManager
  * @package NextDom\Managers
  */
-class DataStoreManager
+class DataStoreManager extends BaseManager
 {
-    const CLASS_NAME = 'dataStore';
-    const DB_CLASS_NAME = '`dataStore`';
+    use CommonManager;
 
-    /**
-     * Get stored data by his Id
-     *
-     * @param mixed $id Stored data Id
-     * @return mixed Store data
-     *
-     * @throws \Exception
-     */
-    public static function byId($id)
-    {
-        $values = array(
-            'id' => $id,
-        );
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE id=:id';
-        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
-    }
+    const CLASS_NAME = DataStore::class;
+    const DB_CLASS_NAME = '`dataStore`';
 
     /**
      * Get stored data by type, linkId and key
@@ -79,18 +63,11 @@ class DataStoreManager
      */
     public static function byTypeLinkIdKey($dataType, $linkId, $key)
     {
-        $values = array(
+        return static::getOneByClauses([
             'type' => $dataType,
             'link_id' => $linkId,
-            'key' => $key,
-        );
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE `type` = :type
-                    AND `link_id` = :link_id
-                    AND `key` = :key
-                ORDER BY `key`';
-        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
+            'key' => $key
+        ], 'key');
     }
 
     /**
@@ -123,16 +100,12 @@ class DataStoreManager
      */
     public static function byTypeLinkId($dataType, $linkId = '')
     {
-        $values = array(
+        $clauses = [
             'type' => $dataType,
-        );
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE type=:type';
+        ];
         if ($linkId != '') {
-            $values['link_id'] = $linkId;
-            $sql .= ' AND link_id = :link_id';
+            $clauses['link_id'] = $linkId;
         }
-        return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
+        return static::getMultipleByClauses($clauses);
     }
 }

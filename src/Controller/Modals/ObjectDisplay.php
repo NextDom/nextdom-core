@@ -22,6 +22,7 @@
 
 namespace NextDom\Controller\Modals;
 
+use NextDom\Enums\AjaxParams;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
@@ -51,7 +52,7 @@ class ObjectDisplay extends BaseAbstractModal
             throw new CoreException(__('La classe demandée n\'a pas de méthode byId : ') . $cmdClass);
         }
 
-        $resultObject = $cmdClass::byId(Utils::init('id'));
+        $resultObject = $cmdClass::byId(Utils::init(AjaxParams::ID));
         if (!is_object($resultObject)) {
             throw new CoreException(__('L\'objet n\'existe pas : ') . $cmdClass);
         }
@@ -64,10 +65,10 @@ class ObjectDisplay extends BaseAbstractModal
 
         if ($cmdClass == 'cron' && $data['class'] == 'scenario' && $data['function'] == 'doIn') {
             $scenario = ScenarioManager::byId($data['option']['scenario_id']);
-            //TODO: $array ???
+            //@TODO: $array ???
             $scenarioElement = ScenarioElementManager::byId($data['option']['scenarioElement_id']);
             if (is_object($scenarioElement) && is_object($scenario)) {
-                $otherInfo['doIn'] = __('Scénario : ') . $scenario->getName() . "\n" . str_replace(array('"'), array("'"), $scenarioElement->export());
+                $otherInfo['doIn'] = __('Scénario : ') . $scenario->getName() . "\n" . str_replace(['"'], ["'"], $scenarioElement->export());
             }
         }
 
@@ -78,7 +79,7 @@ class ObjectDisplay extends BaseAbstractModal
             foreach ($otherInfo as $otherInfoKey => $otherInfoValue) {
                 $pageData['otherData'][$otherInfoKey] = [];
                 $pageData['otherData'][$otherInfoKey]['value'] = $otherInfoValue;
-                // TODO: Always long-text ???
+                // @TODO: Always long-text ???
                 if (is_array($otherInfoValue)) {
                     $pageData['otherData'][$otherInfoKey]['type'] = 'json';
                     $pageData['otherData'][$otherInfoKey]['value'] = json_encode($otherInfoValue);
@@ -89,7 +90,7 @@ class ObjectDisplay extends BaseAbstractModal
                 }
             }
         }
-        // TODO : Reduce loops
+        // @TODO : Reduce loops
         $pageData['data'] = [];
         foreach ($data as $dataKey => $dataValue) {
             $pageData['data'][$dataKey] = [];

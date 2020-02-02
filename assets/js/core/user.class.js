@@ -1,4 +1,3 @@
-
 /* This file is part of Jeedom.
  *
  * Jeedom is free software: you can redistribute it and/or modify
@@ -15,313 +14,109 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+nextdom.user = function () {
+};
 
- nextdom.user = function() {
- };
- nextdom.user.connectCheck = 0;
+nextdom.user.connectCheck = 0;
 
- nextdom.user.all = function(_params) {
+nextdom.user.all = function (queryParams) {
+  nextdom.private.ajax('User', 'all', queryParams);
+};
+
+nextdom.user.remove = function (queryParams) {
+  nextdom.private.ajax('User', 'remove', queryParams, ['id']);
+};
+
+nextdom.user.save = function (queryParams) {
+  nextdom.private.ajax('User', 'save', queryParams, ['users'], true);
+};
+
+nextdom.user.saveProfils = function (queryParams) {
+  nextdom.private.ajax('User', 'saveProfils', queryParams, ['profils'], true);
+};
+
+nextdom.user.get = function (queryParams) {
+  nextdom.private.ajax('User', 'get', queryParams, false, true);
+};
+
+nextdom.user.isConnect = function (queryParams) {
+  if (Math.round(+new Date() / 1000) > (nextdom.user.connectCheck + 300)) {
     var paramsRequired = [];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/user.ajax.php';
-    paramsAJAX.data = {
-        action: 'all',
-    };
-    $.ajax(paramsAJAX);
-}
-
-nextdom.user.remove = function(_params) {
-    var paramsRequired = ['id'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/user.ajax.php';
-    paramsAJAX.data = {
-        action: 'remove',
-        id: _params.id
-    };
-    $.ajax(paramsAJAX);
-}
-
-nextdom.user.save = function(_params) {
-    var paramsRequired = ['users'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/user.ajax.php';
-    paramsAJAX.data = {
-        action: 'save',
-        users: json_encode(_params.users)
-    };
-    $.ajax(paramsAJAX);
-}
-
-nextdom.user.saveProfils = function(_params) {
-    var paramsRequired = ['profils'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/user.ajax.php';
-    paramsAJAX.data = {
-        action: 'saveProfils',
-        profils: json_encode(_params.profils)
-    };
-    $.ajax(paramsAJAX);
-}
-
-nextdom.user.get = function(_params) {
-    var paramsRequired = [];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/user.ajax.php';
-    paramsAJAX.data = {
-        action: 'get',
-        profils: json_encode(_params.profils)
-    };
-    $.ajax(paramsAJAX);
-};
-
-nextdom.user.isConnect = function(_params) {
-    if (Math.round(+new Date() / 1000) > (nextdom.user.connectCheck + 300)) {
-        var paramsRequired = [];
-        var paramsSpecifics = {
-            pre_success: function(data) {
-                if (data.state != 'ok') {
-                    return {state: 'ok', result: false};
-                } else {
-                    nextdom.user.connectCheck = Math.round(+new Date() / 1000);
-                    return {state: 'ok', result: true};
-                }
-            }
-        };
-        try {
-            nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-        } catch (e) {
-            (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-            return;
-        }
-        var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-        var paramsAJAX = nextdom.private.getParamsAJAX(params);
-        paramsAJAX.url = 'core/ajax/user.ajax.php';
-        paramsAJAX.global = false;
-        paramsAJAX.data = {
-            action: 'isConnect',
-        };
-        $.ajax(paramsAJAX);
-    } else {
-        if ('function' == typeof (_params.success)) {
-            _params.success(true);
-        }
-    }
-}
-
-nextdom.user.validateTwoFactorCode = function(_params) {
-    var paramsRequired = ['code'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/user.ajax.php';
-    paramsAJAX.data = {
-        action: 'validateTwoFactorCode',
-        code: _params.code,
-        enableTwoFactorAuthentification : _params.enableTwoFactorAuthentification || 0
-    };
-    $.ajax(paramsAJAX);
-};
-
-nextdom.user.removeTwoFactorCode = function(_params) {
-    var paramsRequired = ['id'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/user.ajax.php';
-    paramsAJAX.data = {
-        action: 'removeTwoFactorCode',
-        id: _params.id,
-    };
-    $.ajax(paramsAJAX);
-};
-
-nextdom.user.useTwoFactorAuthentification = function(_params) {
-    var paramsRequired = ['login'];
     var paramsSpecifics = {
-        global: false,
-    }
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/user.ajax.php';
-    paramsAJAX.data = {
-        action: 'useTwoFactorAuthentification',
-        login: _params.login
+      pre_success: function (data) {
+        if (data.state != 'ok') {
+          return {state: 'ok', result: false};
+        } else {
+          nextdom.user.connectCheck = Math.round(+new Date() / 1000);
+          return {state: 'ok', result: true};
+        }
+      }
     };
-    $.ajax(paramsAJAX);
+    if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
+      var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+      var ajaxParams = nextdom.private.getParamsAJAX(params, 'User', 'isConnect');
+      ajaxParams.global = false;
+      nextdom.private.ajaxCall(ajaxParams);
+    }
+  } else {
+    if ('function' == typeof (queryParams.success)) {
+      queryParams.success(true);
+    }
+  }
 };
 
-nextdom.user.login = function(_params) {
-    var paramsRequired = ['username','password'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/user.ajax.php';
-    paramsAJAX.data = {
-        action: 'login',
-        username: _params.username,
-        password: _params.password,
-        twoFactorCode: _params.twoFactorCode || '',
-        storeConnection: _params.storeConnection || 0,
-    };
-    $.ajax(paramsAJAX);
+nextdom.user.validateTwoFactorCode = function (queryParams) {
+  var paramsRequired = ['code'];
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.default_params, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'User', 'validateTwoFactorCode');
+    ajaxParams.data['code'] = queryParams.code;
+    ajaxParams.data['enableTwoFactorAuthentification'] = queryParams.enableTwoFactorAuthentification || 0;
+    nextdom.private.ajaxCall(ajaxParams);
+  }
 };
 
-
-nextdom.user.refresh = function(_params) {
-    var paramsRequired = [];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/user.ajax.php';
-    paramsAJAX.data = {
-        action: 'refresh',
-    };
-    $.ajax(paramsAJAX);
+nextdom.user.removeTwoFactorCode = function (queryParams) {
+  nextdom.private.ajax('User', 'removeTwoFactorCode', queryParams, ['id']);
 };
 
-
-nextdom.user.removeBanIp = function(_params) {
-    var paramsRequired = [];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/user.ajax.php';
-    paramsAJAX.data = {
-        action: 'removeBanIp',
-    };
-    $.ajax(paramsAJAX);
+nextdom.user.useTwoFactorAuthentification = function (queryParams) {
+  nextdom.private.ajax('User', 'useTwoFactorAuthentification', queryParams, ['login'], false, false);
 };
 
-nextdom.user.removeRegisterDevice = function(_params) {
-    var paramsRequired = [];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/user.ajax.php';
-    paramsAJAX.data = {
-        action: 'removeRegisterDevice',
-        key: _params.key,
-        user_id : _params.user_id || ''
-    };
-    $.ajax(paramsAJAX);
+nextdom.user.login = function (queryParams) {
+  var paramsRequired = ['username', 'password'];
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.default_params, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'User', 'login');
+    ajaxParams.data['username'] = queryParams.username;
+    ajaxParams.data['password'] = queryParams.password;
+    ajaxParams.data['twoFactorCode'] = queryParams.twoFactorCode || '';
+    ajaxParams.data['storeConnection'] = queryParams.storeConnection || 0;
+    nextdom.private.ajaxCall(ajaxParams);
+  }
 };
 
-nextdom.user.deleteSession = function(_params) {
-    var paramsRequired = ['id'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/user.ajax.php';
-    paramsAJAX.data = {
-        action: 'deleteSession',
-        id: _params.id
-    };
-    $.ajax(paramsAJAX);
+nextdom.user.refresh = function (queryParams) {
+  nextdom.private.ajax('User', 'refresh', queryParams);
 };
 
-nextdom.user.supportAccess = function(_params) {
-    var paramsRequired = ['enable'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/user.ajax.php';
-    paramsAJAX.data = {
-        action: 'supportAccess',
-        enable: _params.enable
-    };
-    $.ajax(paramsAJAX);
+nextdom.user.removeBanIp = function (queryParams) {
+  nextdom.private.ajax('User', 'removeBanIp', queryParams);
+};
+
+nextdom.user.removeRegisterDevice = function (queryParams) {
+  var params = $.extend({}, nextdom.private.default_params, queryParams || {});
+  var ajaxParams = nextdom.private.getParamsAJAX(params, 'User', 'removeRegisterDevice');
+  ajaxParams.data['key'] = queryParams.key;
+  ajaxParams.data['user_id'] = queryParams.user_id || '';
+  nextdom.private.ajaxCall(ajaxParams);
+};
+
+nextdom.user.deleteSession = function (queryParams) {
+  nextdom.private.ajax('User', 'deleteSession', queryParams, ['id']);
+};
+
+nextdom.user.supportAccess = function (queryParams) {
+  nextdom.private.ajax('User', 'supportAccess', queryParams, ['enable']);
 };

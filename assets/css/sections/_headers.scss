@@ -39,8 +39,8 @@
 
 /* Core-Ajout : Barre recherche générale */
 .navbar-search {
-    padding: 0px 10px 0px 0px;
-    margin-bottom: 0px;
+    padding: 0 10px 0 0;
+    margin-bottom: 0;
     display: none;
     @media (max-width: 767px) {
         position: absolute;
@@ -50,7 +50,7 @@
         box-shadow: none;
         -webkit-box-shadow: none;
         margin-top: 18px;
-        margin-right: 0px;
+        margin-right: 0;
     }
 }
 
@@ -61,7 +61,7 @@
 
 /* AdminLTE-Surcharge */
 .main-header .navbar {
-    box-shadow: 2px 0 1px rgba(0, 0, 0, 0.5);
+    box-shadow: 2px 0 1px rgba(0, 0, 0, .5);
 }
 .main-header .navbar .nav > li > a > .label {
     position: absolute;

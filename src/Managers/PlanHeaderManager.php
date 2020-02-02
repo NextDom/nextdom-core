@@ -33,33 +33,23 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Enums\NextDomFolder;
+use NextDom\Enums\NextDomObj;
 use NextDom\Helpers\DBHelper;
+use NextDom\Helpers\FileSystemHelper;
+use NextDom\Managers\Parents\BaseManager;
+use NextDom\Managers\Parents\CommonManager;
 use NextDom\Model\Entity\PlanHeader;
 
 /**
  * Class PlanHeaderManager
  * @package NextDom\Managers
  */
-class PlanHeaderManager
+class PlanHeaderManager extends BaseManager
 {
+    use CommonManager;
     const CLASS_NAME = PlanHeader::class;
     const DB_CLASS_NAME = '`planHeader`';
-
-    /**
-     * @param $_id
-     * @return PlanHeader|null
-     * @throws \Exception
-     */
-    public static function byId($_id)
-    {
-        $values = array(
-            'id' => $_id,
-        );
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE id=:id';
-        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
-    }
 
     /**
      * @return PlanHeader[]|null
@@ -67,9 +57,7 @@ class PlanHeaderManager
      */
     public static function all()
     {
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME;
-        return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
+        return static::getAll();
     }
 
     /**
@@ -82,7 +70,7 @@ class PlanHeaderManager
      */
     public static function searchByUse($_type, $_id)
     {
-        $return = array();
+        $return = [];
         $search = '#' . str_replace('cmd', '', $_type . $_id) . '#';
         $plans = array_merge(PlanManager::byLinkTypeLinkId($_type, $_id), PlanManager::searchByConfiguration($search, 'eqLogic'));
         foreach ($plans as $plan) {
@@ -91,4 +79,17 @@ class PlanHeaderManager
         }
         return $return;
     }
+
+    /**
+     * Clean plan images
+     *
+     * @param int $planHeaderId
+     */
+    public static function cleanPlanImageFolder(int $planHeaderId) {
+        $filesToClean = FileSystemHelper::ls(NextDomFolder::PLAN_IMAGE, NextDomObj::PLAN_HEADER . $planHeaderId . '*');
+        foreach ($filesToClean as $fileToClean) {
+            unlink(NextDomFolder::PLAN_IMAGE . $fileToClean);
+        }
+    }
+
 }

@@ -17,6 +17,8 @@
 
 namespace NextDom\Helpers;
 
+use NextDom\Com\ComShell;
+use NextDom\Enums\LogTarget;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UserManager;
 
@@ -43,7 +45,7 @@ class ReportHelper
      * @return string
      * @throws \Exception
      */
-    public static function generate($_url, $_type, $_name, $_format = 'png', $_parameter = array())
+    public static function generate($_url, $_type, $_name, $_format = 'png', $_parameter = [])
     {
         if (!is_string($_format)) {
             $_format = 'png';
@@ -62,8 +64,8 @@ class ReportHelper
         $cmd = 'xvfb-run --server-args="-screen 0, 1920x1280x24" cutycapt --min-width=' . $min_width . ' --min-height=' . $min_height . ' --url="' . $_url . '" --out="' . $out . '"';
         $cmd .= ' --delay=' . $delay;
         $cmd .= ' --print-backgrounds=on';
-        LogHelper::add('report', 'debug', $cmd);
-        \com_shell::execute($cmd);
+        LogHelper::addDebug(LogTarget::REPORT, $cmd);
+        ComShell::execute($cmd);
         return $out;
     }
 }

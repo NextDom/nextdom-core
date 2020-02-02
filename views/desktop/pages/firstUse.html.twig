@@ -97,6 +97,12 @@
                                     <div class="passwd stepwizard-passwd">
                                         <input type="password" id="in_change_passwordToo" placeholder="{{ 'firstuse.password-confirm-placeholder'|trans }}">
                                     </div>
+                                    <div class="stepwizard-passwd">
+                                        <div class="progress progress-slim">
+                                            <div id="newPasswordProgress" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                                        </div>
+                                        <span id="newPasswordLevel" class="label label-value" data-toggle="tooltip" title="" data-original-title="{{'security.rules'|trans}}"></span>
+                                    </div>
                                 </div>
                             </div>
                             <button id="toStep3" class="btn btn-primary nextBtn pull-right primary-bg" type="button">{{ 'common.next'|trans }}<i class="fas fa-caret-right spacing-left no-spacing"></i></button>
@@ -135,7 +141,7 @@
                                 <h2 class="login-box-msg">{{ 'firstuse.customize-title'|trans }}</h2>
                                 <div class="row">
                                     <h5>{{ 'firstuse.customize-content'|trans }}</h5>
-                                    <div class="col-sm-12 col-md-6">
+                                    <div class="col-sm-12 col-md-6 col-lg-4 form-group">
                                         <div>
                                             <label class="clearfix cursor themeThumbnail cursor" for="light-nextdom">
                                                 <div>
@@ -146,11 +152,11 @@
                                                     <span class="themeThumbnailBody" style="background: #ecf0f5"></span>
                                                 </div>
                                             </label>
-                                            <input id="light-nextdom" class="theme spacing-right" type="radio" name="themeNextDom" value="light-nextdom" checked="checked"/>
+                                            <input id="light-nextdom" class="theme spacing-right" type="radio" name="themeNextDom" value="light-nextdom"/>
                                             <label for="light-nextdom">{{ 'Light' }}</label>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-6">
+                                    <div class="col-sm-12 col-md-6 col-lg-4 form-group">
                                         <div>
                                             <label class="clearfix cursor themeThumbnail cursor" for="dark-nextdom">
                                                 <div>
@@ -165,7 +171,22 @@
                                             <label for="dark-nextdom">{{ 'Dark' }}</label>
                                         </div>
                                     </div>
-                                    <input class="configKey form-control" data-l1key="nextdom::user-theme" style="display:none" />
+                                    <div class="col-sm-12 col-md-6 col-lg-4 form-group">
+                                        <div>
+                                            <label class="clearfix cursor themeThumbnail cursor" for="mix-nextdom">
+                                                <div>
+                                                    <span class="themeThumbnailHeader bg-nextdom"><i class="fas fa-bars"></i></span>
+                                                </div>
+                                                <div>
+                                                    <span class="themeThumbnailLeft" style="background: #222d32"></span>
+                                                    <span class="themeThumbnailBody" style="background: #ecf0f5;"></span>
+                                                </div>
+                                            </label>
+                                            <input id="mix-nextdom" class="theme spacing-right" type="radio" name="themeNextDom" value="mix-nextdom"/>
+                                            <label for="mix-nextdom">{{ 'Mix' }}</label>
+                                        </div>
+                                    </div>
+                                    <input id="nextdom-theme" class="configKey form-control" data-l1key="nextdom::user-theme" style="display:none" />
                                 </div>
                             </div>
                             <button id="toStep5" class="btn btn-primary nextBtn primary-bg pull-right" type="button">{{ 'common.next'|trans }}<i class="fas fa-caret-right spacing-left no-spacing"></i></button>
@@ -179,17 +200,17 @@
                                 <div class="row">
                                     <h5>{{ 'firstuse.customize-widget'|trans }}</h5>
                                     {% for theme in profilsWidgetThemes %}
-                                        <div class="col-sm-12 col-md-6">
+                                        <div class="col-sm-12 col-md-6 col-lg-4 form-group">
                                             <div class="clearfix">
-                                                <label class="cursor" for={{ theme.name|slice(0, -4) }}>
-                                                    <img class="themeWidgetThumbnail" src="{{ theme.dir }}">
+                                                <label class="cursor" for={{ theme.code }}>
+                                                    <img class="themeWidgetThumbnail" src="{{ theme.icon }}">
                                                 </label>
                                             </div>
-                                            <input id={{ theme.name|slice(0, -4) }} class="spacing-right" type="radio" name="themeWidget" value={{ theme.name|slice(0, -4) }} {% if theme.name|slice(0, -4) == "flat" %}checked="checked"{% endif %}/>
-                                            <label for={{ theme.name|slice(0, -4) }}>{{ theme.name|slice(0, -4) }}{{theme.first}}</label>
+                                            <input id={{ theme.code }} class="spacing-right" type="radio" name="themeWidget" value="{{ theme.code }}"/>
+                                            <label for={{ theme.code }}>{{ theme.code|capitalize }}</label>
                                         </div>
                                     {% endfor %}
-                                    <input class="userAttr form-control" data-l1key="options" data-l2key="widget::theme" style="display:none" />
+                                    <input id="widget-theme" class="userAttr form-control" data-l1key="options" data-l2key="widget::theme" style="display:none" />
                                 </div>
                             </div>
                             <button id="toStep6" class="btn btn-primary nextBtn primary-bg pull-right" type="button">

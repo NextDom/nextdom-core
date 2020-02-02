@@ -23,7 +23,7 @@ define('ADMIN_ACCOUNT', 'admin');
 define('USER_ACCOUNT', 'user');
 define('PASSWORD', 'nextdom-test');
 
-class AjaxBase extends PHPUnit_Framework_TestCase
+class AjaxBase extends PHPUnit\Framework\TestCase
 {
     /**
      * @var GuzzleHttp\Client
@@ -32,7 +32,7 @@ class AjaxBase extends PHPUnit_Framework_TestCase
 
     private $ajaxToken;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->client = new GuzzleHttp\Client(['cookies' => true]);
         $this->getAjaxTokenFromBody();

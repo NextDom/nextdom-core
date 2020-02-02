@@ -16,15 +16,15 @@
  */
 
 require_once(__DIR__ . '/../../../src/core.php');
-require_once(__DIR__ . '/BaseControllerTest.php');
+require_once(__DIR__ . '/../libs/BaseControllerTest.php');
 
 class LinksControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -33,7 +33,7 @@ class LinksControllerTest extends BaseControllerTest
     {
         $pageData = [];
         $result = \NextDom\Controller\Params\LinksController::get($pageData);
-        $this->assertContains('id="links"', $result);
+        $this->assertStringContainsString('id="links"', $result);
     }
 
     public function testPageDataVars()

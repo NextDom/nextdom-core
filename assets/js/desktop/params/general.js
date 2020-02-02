@@ -112,10 +112,11 @@ function initEvents() {
     // Last connection date reset
     $('#bt_resetHour').on('click',function(){
         $.ajax({
-            type: "POST",
-            url: "core/ajax/nextdom.ajax.php",
+            type: 'POST',
+            url: 'src/ajax.php',
             data: {
-                action: "resetHour"
+                target: 'NextDom',
+                action: 'resetHour'
             },
             dataType: 'json',
             error: function (request, status, error) {
@@ -135,9 +136,10 @@ function initEvents() {
     $('#bt_resetHwKey').on('click',function(){
         $.ajax({
             type: "POST",
-            url: "core/ajax/nextdom.ajax.php",
+            url: 'src/ajax.php',
             data: {
-                action: "resetHwKey"
+                target: 'NextDom',
+                action: 'resetHour'
             },
             dataType: 'json',
             error: function (request, status, error) {

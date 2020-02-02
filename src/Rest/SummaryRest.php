@@ -41,8 +41,7 @@ class SummaryRest
         $defaultRoom = JeeObjectManager::getDefaultUserRoom($user);
         if ($defaultRoom === false) {
             return false;
-        }
-        else {
+        } else {
             return self::getRoomTree($defaultRoom->getId());
         }
     }
@@ -66,7 +65,7 @@ class SummaryRest
 
     /**
      * Prepare result for response\n
-     * Associative array with following keys : 
+     * Associative array with following keys :
      *  - id
      *  - name
      *  - icon

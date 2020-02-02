@@ -1,81 +1,22 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <phpdox xmlns="http://xml.phpdox.net/config">
-  <project name="NextDom" source="${basedir}/../../" workdir="${basedir}/../../docs/xml">
+  <project name="NextDom" source="${basedir}/src" workdir="${basedir}/docs/xml">
     <collector backend="parser" >
-	<include mask="*.php"/>
-	<exclude mask="*.js"/>
-	<exclude mask="*.html"/>
-	<exclude mask="*.twig"/>
-	<exclude mask="*/docs/*"/>
-	<exclude mask="*/cache/*"/>
-	<exclude mask="*/vendor/*"/>
-	<inheritance resolve="true">
-	</inheritance>
+        <include mask="*.php"/>
+        <exclude mask="*.js"/>
+        <exclude mask="*.html"/>
+        <exclude mask="*.twig"/>
+        <exclude mask="*/docs/*"/>
+        <exclude mask="*/cache/*"/>
+        <exclude mask="*/vendor/*"/>
+        <inheritance resolve="true">
+        </inheritance>
     </collector>
-    <!--  Configuration of generation process -->
-        <generator output="${basedir}/../../docs">
-            <!-- @output - (Base-)Directory to store output data in -->
-
-            <!-- A generation process consists of one or more build tasks and of (optional) enrich sources -->
-
-            <enrich base="${basedir}">
-                <!-- @base - (Base-)Directory of datafiles used for enrich process -->
-
-                <!--<source type="...">-->
-                <!-- @type - the handler for the enrichment -->
-                <!--         known types by default are: build, checkstyle, git, phpcs, phploc, phpunit, pmd -->
-
-                <!-- every enrichment source can have additional configuration nodes, most probably need a logfile -->
-                <!-- <file name="path/to/log.xml" /> -->
-                <!--</source> -->
-
-                <!-- git vcs information -->
-                <source type="git">
-                    <git binary="/usr/bin/git" />
-                    <history enabled="true" limit="15" cache="${phpDox.project.workdir}/gitlog.xml" />
-                </source>
-
-                <!-- PHP Code Sniffer -->
-                <source type="phpcs">
-                    <file name="phpcs.xml" />
-                </source>
-
-                <!-- PHPLoc -->
-                <source type="phploc">
-                    <file name="phploc.xml" />
-                </source>
-
-                <!-- PHPMessDetector -->
-                <source type="pmd">
-                    <file name="phpmd.xml" />
-                </source>
-
-                <!-- PHPUnit Coverage XML -->
-                <!-- <source type="phpunit">  -->
-                <!-- <coverage path="" /> -->
-                <!--           @path - the directory where the xml code coverage report can be found -->
-                <!--<filter directory="${phpDox.project.source}" />-->
-                <!-- @directory - path of the phpunit config whitelist filter directory -->
-                <!--</source>-->
-                <!--<source type="phpunit">-->
-                    <!--<coverage path="tests/_output/coverage" />-->
-                <!--</source>-->
-
-            </enrich>
-
-            <!-- <build engine="..." enabled="true" output="..." /> -->
-            <!--   @engine  - The name of the engine this build task uses, use ./phpDox - -engines to get a list of available engines -->
-            <!--   @enabled - Flag to enable/disable this engine, default: enabled=true -->
-            <!--   @output  - (optional) Output directory; if relative (no / as first char) it is interpreted as relative to generator/@output -->
-
-            <!-- An engine and thus build node can have additional configuration child nodes, please check the documentation for the engine to find out more -->
-
-            <!--  default engine "html" -->
-            <build engine="html" enabled="true" output="html">
-                <template dir="${phpDox.home}/templates/html" />
-                <file extension="xhtml" />
-            </build>
-</generator>
+    <generator output="${basedir}/docs">
+        <build engine="html" enabled="true" output="html">
+            <file extension="html" />
+        </build>
+    </generator>
   </project>
 </phpdox>
 

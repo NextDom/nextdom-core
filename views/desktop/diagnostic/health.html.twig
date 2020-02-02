@@ -39,7 +39,7 @@
             <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'common.back'|trans }}</a>
         </div>
         <div class="action-group">
-            <a class="btn btn-action btn-action-bar pull-right" id="bt_healthCollapse"><i class="fas fa-plus-square"></i>{{ 'health.collapse'|trans }}</a>
+            <a class="btn btn-action btn-action-bar pull-right" style="display:none;" id="bt_healthCollapse"><i class="fas fa-plus-square"></i>{{ 'health.collapse'|trans }}</a>
             <a class="btn btn-action btn-action-bar pull-right" style="display:none;" id="bt_healthUncollapse"><i class="fas fa-minus-square"></i>{{ 'health.uncollapse'|trans }}</a>
             <a class="btn btn-primary btn-action-bar pull-right" id="bt_benchmarkNextDom"><i class="fas fa-tachometer-alt"></i>{{ 'health.launch-benchmark'|trans }}</a>
         </div>
@@ -50,11 +50,7 @@
     <div class="nav-tabs-custom config">
         <!-- Tabs title -->
         <ul class="nav nav-tabs pull-right" role="tablist">
-            {% set count = 0 %}
-            {% for informations in healthPluginsInformations %}
-                {% if informations.nOk > 0 %}{% set count = count + 1 %}{% endif %}
-            {% endfor %}
-            <li role="presentation"><a href="#div_Plugins" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-puzzle-piece"></i><span>{{ 'health.plugins-title'|trans }}</span>{% if count>0 %}<label class="badge bg-red spacing-left">{{ count }}</label>{% endif %}</a></li>
+            <li role="presentation"><a href="#div_Plugins" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-puzzle-piece"></i><span>{{ 'health.plugins-title'|trans }}</span>{% if healthTotalNOk>0 %}<label class="badge bg-red spacing-left">{{ healthTotalNOk }}</label>{% endif %}</a></li>
             {% set count = 0 %}
             {% for informations in healthInformations %}
                 {% if informations.state != 1 and informations.state != true %}{% set count = count + 1 %}{% endif %}

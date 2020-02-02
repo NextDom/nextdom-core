@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Params;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\ControllerData;
 use NextDom\Helpers\Render;
 
 /**
@@ -42,7 +43,7 @@ class InteractConfigController extends BaseController
     public static function get(&$pageData): string
     {
 
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/params/interact_config.js';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/params/interact_config.js';
 
         return Render::getInstance()->get('/desktop/params/interact_config.html.twig', $pageData);
     }

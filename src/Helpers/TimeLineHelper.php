@@ -34,6 +34,7 @@
 
 namespace NextDom\Helpers;
 
+use NextDom\Com\ComShell;
 use NextDom\Managers\ConfigManager;
 
 /**
@@ -62,11 +63,11 @@ class TimeLineHelper
     {
         $path = NEXTDOM_DATA . '/data/timeline.json';
         if (!file_exists($path)) {
-            $result = array();
+            $result = [];
         } else {
-            \com_shell::execute(SystemHelper::getCmdSudo() . 'chmod 666 ' . $path . ' > /dev/null 2>&1;echo "$(tail -n ' . ConfigManager::byKey('timeline::maxevent') . ' ' . $path . ')" > ' . $path);
+            ComShell::execute(SystemHelper::getCmdSudo() . 'chmod 666 ' . $path . ' > /dev/null 2>&1;echo "$(tail -n ' . ConfigManager::byKey('timeline::maxevent') . ' ' . $path . ')" > ' . $path);
             $lines = explode("\n", trim(file_get_contents($path)));
-            $result = array();
+            $result = [];
             foreach ($lines as $line) {
                 $result[] = json_decode($line, true);
             }
@@ -81,7 +82,7 @@ class TimeLineHelper
     {
         $path = NEXTDOM_DATA . '/data/timeline.json';
         if (file_exists($path)) {
-            \com_shell::execute(SystemHelper::getCmdSudo() . 'chmod 666 ' . $path . ' > /dev/null 2>&1;');
+            ComShell::execute(SystemHelper::getCmdSudo() . 'chmod 666 ' . $path . ' > /dev/null 2>&1;');
             unlink($path);
         }
     }

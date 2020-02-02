@@ -33,9 +33,17 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Enums\CmdSubType;
+use NextDom\Enums\CmdType;
+use NextDom\Enums\Common;
+use NextDom\Enums\ConfigKey;
+use NextDom\Enums\NextDomObj;
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
+use NextDom\Managers\Parents\BaseManager;
+use NextDom\Managers\Parents\CommonManager;
 use NextDom\Model\Entity\JeeObject;
 use NextDom\Model\Entity\Update;
 use NextDom\Model\Entity\User;
@@ -44,30 +52,11 @@ use NextDom\Model\Entity\User;
  * Class ObjectManager
  * @package NextDom\Managers
  */
-class JeeObjectManager
+class JeeObjectManager extends BaseManager
 {
+    use CommonManager;
     const DB_CLASS_NAME = '`object`';
     const CLASS_NAME = JeeObject::class;
-
-    /**
-     * Get an object by with his id.
-     *
-     * @param int $id Identifiant de l'objet
-     * @return JeeObject|null
-     *
-     * @throws \Exception
-     */
-    public static function byId($id)
-    {
-        if ($id == '' || $id == -1) {
-            return null;
-        }
-        $values = ['id' => $id];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE id = :id';
-        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
-    }
 
     /**
      * Get an object by with his name.
@@ -78,13 +67,7 @@ class JeeObjectManager
      */
     public static function byName($name)
     {
-        $values = array(
-            'name' => $name,
-        );
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE name=:name';
-        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
+        return static::getOneByClauses(['name' => $name]);
     }
 
     /**
@@ -99,7 +82,7 @@ class JeeObjectManager
      */
     public static function buildTree($nodeObject = null, $visible = true)
     {
-        $result = array();
+        $result = [];
         if (!is_object($nodeObject)) {
             $objectsList = self::getRootObjects(true, $visible);
         } else {
@@ -112,18 +95,6 @@ class JeeObjectManager
             }
         }
         return $result;
-    }
-
-    public static function getDefaultUserRoom(User $user)
-    {
-        $rootRoomId = $user->getOptions('defaultDashboardObject');
-        if (empty($rootRoomId)) {
-            $defaultRoom = self::getRootObjects();
-        }
-        else {
-            $defaultRoom = self::byId($rootRoomId);
-        }
-        return $defaultRoom;
     }
 
     /**
@@ -139,13 +110,12 @@ class JeeObjectManager
     public static function getRootObjects($all = false, $onlyVisible = false)
     {
         $fetchType = DBHelper::FETCH_TYPE_ALL;
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
+        $sql = static::getBaseSQL() . '
                 WHERE father_id IS NULL';
         if ($onlyVisible) {
-            $sql .= ' AND isVisible = 1';
+            $sql .= ' AND `isVisible` = 1';
         }
-        $sql .= ' ORDER BY position';
+        $sql .= ' ORDER BY `position`';
         if ($all === false) {
             $sql .= ' LIMIT 1';
             $fetchType = DBHelper::FETCH_TYPE_ROW;
@@ -153,8 +123,19 @@ class JeeObjectManager
         return DBHelper::Prepare($sql, [], $fetchType, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    public static function getDefaultUserRoom(User $user)
+    {
+        $rootRoomId = $user->getOptions('defaultDashboardObject');
+        if (empty($rootRoomId)) {
+            $defaultRoom = self::getRootObjects();
+        } else {
+            $defaultRoom = self::byId($rootRoomId);
+        }
+        return $defaultRoom;
+    }
+
     /**
-     * TODO: ???
+     * @TODO: ???
      *
      * Data restrictions :
      *  - $restrict['object'][OBJECT_ID] : Skip objects
@@ -166,23 +147,23 @@ class JeeObjectManager
      *
      * @throws \Exception
      */
-    public static function fullData($restrict = array())
+    public static function fullData($restrict = [])
     {
-        $result = array();
+        $result = [];
         foreach (self::all(true) as $jeeObject) {
-            if (!isset($restrict['object']) || !is_array($restrict['object']) || isset($restrict['object'][$jeeObject->getId()])) {
+            if (!isset($restrict[NextDomObj::OBJECT]) || !is_array($restrict[NextDomObj::OBJECT]) || isset($restrict[NextDomObj::OBJECT][$jeeObject->getId()])) {
                 $object_return = Utils::o2a($jeeObject);
-                $object_return['eqLogics'] = array();
+                $object_return['eqLogics'] = [];
                 $objectGetEqLogic = $jeeObject->getEqLogic(true, true);
                 foreach ($objectGetEqLogic as $eqLogic) {
-                    if (!isset($restrict['eqLogic']) || !is_array($restrict['eqLogic']) || isset($restrict['eqLogic'][$eqLogic->getId()])) {
+                    if (!isset($restrict[NextDomObj::EQLOGIC]) || !is_array($restrict[NextDomObj::EQLOGIC]) || isset($restrict[NextDomObj::EQLOGIC][$eqLogic->getId()])) {
                         $eqLogic_return = Utils::o2a($eqLogic);
                         $eqLogic_return['cmds'] = [];
                         $eqLogicGetCmd = $eqLogic->getCmd();
                         foreach ($eqLogicGetCmd as $cmd) {
-                            if (!isset($restrict['cmd']) || !is_array($restrict['cmd']) || isset($restrict['cmd'][$cmd->getId()])) {
+                            if (!isset($restrict[NextDomObj::CMD]) || !is_array($restrict[NextDomObj::CMD]) || isset($restrict[NextDomObj::CMD][$cmd->getId()])) {
                                 $cmd_return = Utils::o2a($cmd);
-                                if ($cmd->getType() == 'info') {
+                                if ($cmd->isType(CmdType::INFO)) {
                                     $cmd_return['state'] = $cmd->execCmd();
                                 }
                                 $eqLogic_return['cmds'][] = $cmd_return;
@@ -208,29 +189,36 @@ class JeeObjectManager
      */
     public static function all($onlyVisible = false)
     {
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . ' ';
+        $clauses = [];
         if ($onlyVisible) {
-            $sql .= ' WHERE isVisible = 1';
+            $clauses['isVisible'] = 1;
         }
-        $sql .= ' ORDER BY position,name,father_id';
-        return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
+        return static::getMultipleByClauses($clauses, ['position', 'name', 'father_id']);
+    }
+
+    public static function getChildren($father_id, $onlyVisible)
+    {
+        $clauses = ['father_id' => $father_id];
+        if ($onlyVisible) {
+            $clauses['isVisible'] = 1;
+        }
+        return static::getMultipleByClauses($clauses, 'position');
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      *
      * @return array
      * @throws \Exception
      */
     public static function deadCmd()
     {
-        $result = array();
+        $result = [];
         foreach (self::all() as $jeeObject) {
-            foreach ($jeeObject->getConfiguration('summary', []) as $key => $summary) {
+            foreach ($jeeObject->getConfiguration(Common::SUMMARY, []) as $key => $summary) {
                 foreach ($summary as $cmdInfo) {
                     if (!CmdManager::byId(str_replace('#', '', $cmdInfo['cmd']))) {
-                        $result[] = array('detail' => 'Résumé ' . $jeeObject->getName(), 'help' => ConfigManager::byKey('object:summary')[$key]['name'], 'who' => $cmdInfo['cmd']);
+                        $result[] = ['detail' => 'Résumé ' . $jeeObject->getName(), 'help' => ConfigManager::byKey(ConfigKey::OBJECT_SUMMARY)[$key]['name'], 'who' => $cmdInfo['cmd']];
                     }
                 }
             }
@@ -239,7 +227,7 @@ class JeeObjectManager
     }
 
     /**
-     * TODO ???
+     * @TODO ???
      *
      * @param string $cmdId
      * @throws \Exception
@@ -250,22 +238,22 @@ class JeeObjectManager
         if (count($jeeObjects) == 0) {
             return;
         }
-        $toRefreshCmd = array();
-        $global = array();
+        $toRefreshCmd = [];
+        $global = [];
         foreach ($jeeObjects as $jeeObject) {
-            $summaries = $jeeObject->getConfiguration('summary');
+            $summaries = $jeeObject->getConfiguration(Common::SUMMARY);
             if (!is_array($summaries)) {
                 continue;
             }
-            $event = array('object_id' => $jeeObject->getId(), 'keys' => array());
+            $event = [Common::OBJECT_ID => $jeeObject->getId(), Common::KEYS => []];
             foreach ($summaries as $key => $summary) {
                 foreach ($summary as $cmd_info) {
                     preg_match_all("/#([0-9]*)#/", $cmd_info['cmd'], $matches);
                     foreach ($matches[1] as $cmd_id) {
                         if ($cmd_id == $cmdId) {
                             $value = $jeeObject->getSummary($key);
-                            $event['keys'][$key] = array('value' => $value);
-                            $toRefreshCmd[] = array('key' => $key, 'object' => $jeeObject, 'value' => $value);
+                            $event['keys'][$key] = ['value' => $value];
+                            $toRefreshCmd[] = ['key' => $key, 'object' => $jeeObject, 'value' => $value];
                             if ($jeeObject->getConfiguration('summary::global::' . $key, 0) == 1) {
                                 $global[$key] = 1;
                             }
@@ -289,7 +277,7 @@ class JeeObjectManager
                         $jeeObject->save();
                         continue;
                     }
-                    $cmd = $virtual->getCmd('info', $value['key']);
+                    $cmd = $virtual->getCmd(CmdType::INFO, $value['key']);
                     if (!is_object($cmd)) {
                         continue;
                     }
@@ -302,19 +290,19 @@ class JeeObjectManager
         if (count($global) > 0) {
             CacheManager::set('globalSummaryHtmldesktop', '');
             CacheManager::set('globalSummaryHtmlmobile', '');
-            $event = array('object_id' => 'global', 'keys' => array());
+            $event = [Common::OBJECT_ID => 'global', Common::KEYS => []];
             foreach ($global as $key => $value) {
                 try {
                     $result = JeeObjectManager::getGlobalSummary($key);
                     if ($result === null) {
                         continue;
                     }
-                    $event['keys'][$key] = array('value' => $result);
+                    $event['keys'][$key] = ['value' => $result];
                     $virtual = EqLogicManager::byLogicalId('summaryglobal', 'virtual');
                     if (!is_object($virtual)) {
                         continue;
                     }
-                    $cmd = $virtual->getCmd('info', $key);
+                    $cmd = $virtual->getCmd(CmdType::INFO, $key);
                     if (!is_object($cmd)) {
                         continue;
                     }
@@ -330,7 +318,7 @@ class JeeObjectManager
     }
 
     /**
-     * Search object configuration TODO: ??
+     * Search object configuration @TODO: ??
      *
      * @param string $search
      * @return array|mixed|null
@@ -338,17 +326,16 @@ class JeeObjectManager
      */
     public static function searchConfiguration(string $search)
     {
-        $values = array(
+        $values = [
             'configuration' => '%' . $search . '%',
-        );
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
+        ];
+        $sql = static::getBaseSQL() . '
                 WHERE `configuration` LIKE :configuration';
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
     /**
-     * TODO: ???
+     * @TODO: ???
      *
      * @param string $key
      * @return float|null|string
@@ -359,9 +346,9 @@ class JeeObjectManager
         if ($key == '') {
             return null;
         }
-        $def = ConfigManager::byKey('object:summary');
+        $def = ConfigManager::byKey(ConfigKey::OBJECT_SUMMARY);
         $jeeObjects = self::all();
-        $value = array();
+        $value = [];
         foreach ($jeeObjects as $jeeObject) {
             if ($jeeObject->getConfiguration('summary::global::' . $key, 0) == 0) {
                 continue;
@@ -382,7 +369,7 @@ class JeeObjectManager
     }
 
     /**
-     * TODO ???
+     * @TODO ???
      *
      * @param string $version
      *
@@ -397,8 +384,8 @@ class JeeObjectManager
             return $cache->getValue();
         }
         $jeeObjects = self::all();
-        $def = ConfigManager::byKey('object:summary');
-        $values = array();
+        $def = ConfigManager::byKey(ConfigKey::OBJECT_SUMMARY);
+        $values = [];
         $return = '<span class="objectSummaryglobal" data-version="' . $version . '">';
         foreach ($def as $key => $value) {
             foreach ($jeeObjects as $jeeObject) {
@@ -406,7 +393,7 @@ class JeeObjectManager
                     continue;
                 }
                 if (!isset($values[$key])) {
-                    $values[$key] = array();
+                    $values[$key] = [];
                 }
                 $result = $jeeObject->getSummary($key, true);
                 if ($result === null || !is_array($result)) {
@@ -443,7 +430,7 @@ class JeeObjectManager
     }
 
     /**
-     * TODO ???
+     * @TODO ???
      *
      * @param string $key
      * @throws \Throwable
@@ -453,7 +440,7 @@ class JeeObjectManager
         if ($key == '') {
             return;
         }
-        $def = ConfigManager::byKey('object:summary');
+        $def = ConfigManager::byKey(ConfigKey::OBJECT_SUMMARY);
         if (!isset($def[$key])) {
             return;
         }
@@ -489,10 +476,10 @@ class JeeObjectManager
             $plugin->setIsEnable(1);
         }
         if (!is_object($plugin)) {
-            throw new \Exception(__('Le plugin virtuel doit être installé'));
+            throw new CoreException(__('Le plugin virtuel doit être installé'));
         }
         if (!$plugin->isActive()) {
-            throw new \Exception(__('Le plugin virtuel doit être actif'));
+            throw new CoreException(__('Le plugin virtuel doit être actif'));
         }
 
         $virtual = EqLogicManager::byLogicalId('summaryglobal', 'virtual');
@@ -507,7 +494,7 @@ class JeeObjectManager
         $virtual->setLogicalId('summaryglobal');
         $virtual->setEqType_name('virtual');
         $virtual->save();
-        $cmd = $virtual->getCmd('info', $key);
+        $cmd = $virtual->getCmd(CmdType::INFO, $key);
         if (!is_object($cmd)) {
             /** @noinspection PhpUndefinedClassInspection */
             $cmd = new \virtualCmd();
@@ -516,24 +503,24 @@ class JeeObjectManager
         }
         $cmd->setEqLogic_id($virtual->getId());
         $cmd->setLogicalId($key);
-        $cmd->setType('info');
+        $cmd->setType(CmdType::INFO);
         if ($def[$key]['calcul'] == 'text') {
-            $cmd->setSubtype('string');
+            $cmd->setSubtype(CmdSubType::STRING);
         } else {
-            $cmd->setSubtype('numeric');
+            $cmd->setSubtype(CmdSubType::NUMERIC);
         }
         $cmd->setUnite($def[$key]['unit']);
         $cmd->save();
 
         foreach (self::all() as $jeeObject) {
-            $summaries = $jeeObject->getConfiguration('summary');
+            $summaries = $jeeObject->getConfiguration(Common::SUMMARY);
             if (!is_array($summaries)) {
                 continue;
             }
             if (!isset($summaries[$key]) || !is_array($summaries[$key]) || count($summaries[$key]) == 0) {
                 continue;
             }
-            $virtual = EqLogicManager::byLogicalId('summary' . $jeeObject->getId(), 'virtual');
+            $virtual = EqLogicManager::byLogicalId(Common::SUMMARY . $jeeObject->getId(), 'virtual');
             if (!is_object($virtual)) {
                 /** @noinspection PhpUndefinedClassInspection */
                 $virtual = new \virtual();
@@ -542,13 +529,13 @@ class JeeObjectManager
                 $virtual->setIsEnable(1);
             }
             $virtual->setIsEnable(1);
-            $virtual->setLogicalId('summary' . $jeeObject->getId());
+            $virtual->setLogicalId(Common::SUMMARY . $jeeObject->getId());
             $virtual->setEqType_name('virtual');
             $virtual->setObject_id($jeeObject->getId());
             $virtual->save();
             $jeeObject->setConfiguration('summary_virtual_id', $virtual->getId());
             $jeeObject->save();
-            $cmd = $virtual->getCmd('info', $key);
+            $cmd = $virtual->getCmd(CmdType::INFO, $key);
             if (!is_object($cmd)) {
                 /** @noinspection PhpUndefinedClassInspection */
                 $cmd = new \virtualCmd();
@@ -557,11 +544,11 @@ class JeeObjectManager
             }
             $cmd->setEqLogic_id($virtual->getId());
             $cmd->setLogicalId($key);
-            $cmd->setType('info');
+            $cmd->setType(CmdType::INFO);
             if ($def[$key]['calcul'] == 'text') {
-                $cmd->setSubtype('string');
+                $cmd->setSubtype(CmdSubType::STRING);
             } else {
-                $cmd->setSubtype('numeric');
+                $cmd->setSubtype(CmdSubType::NUMERIC);
             }
             $cmd->setUnite($def[$key]['unit']);
             $cmd->save();

@@ -33,6 +33,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Enums\CmdType;
 use NextDom\Enums\DateFormat;
 use NextDom\Enums\ScenarioState;
 use NextDom\Helpers\DateHelper;
@@ -42,6 +43,8 @@ use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\TranslateHelper;
 use NextDom\Helpers\Utils;
+use NextDom\Managers\Parents\BaseManager;
+use NextDom\Managers\Parents\CommonManager;
 use NextDom\Model\Entity\Cmd;
 use NextDom\Model\Entity\Scenario;
 use NextDom\Model\Entity\ScenarioExpression;
@@ -50,29 +53,12 @@ use NextDom\Model\Entity\ScenarioExpression;
  * Class ScenarioExpressionManager
  * @package NextDom\Managers
  */
-class ScenarioExpressionManager
+class ScenarioExpressionManager extends BaseManager
 {
-    const DB_CLASS_NAME = 'scenarioExpression';
+    use CommonManager;
+    const DB_CLASS_NAME = '`scenarioExpression`';
     const CLASS_NAME = ScenarioExpression::class;
     const WAIT_LIMIT = 7200;
-
-    /**
-     * Get expression from his id
-     *
-     * @param mixed $id Identifiant
-     *
-     * @return ScenarioExpression|null
-     *
-     * @throws \Exception
-     */
-    public static function byId($id)
-    {
-        $params = ['id' => $id];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE id = :id';
-        return DBHelper::getOneObject($sql, $params, self::CLASS_NAME);
-    }
 
     /**
      * Get all scenario expressions
@@ -83,9 +69,7 @@ class ScenarioExpressionManager
      */
     public static function all()
     {
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME;
-        return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
+        return static::getAll();
     }
 
 
@@ -100,12 +84,7 @@ class ScenarioExpressionManager
      */
     public static function byScenarioSubElementId($scenarioSubElementId)
     {
-        $params = ['scenarioSubElement_id' => $scenarioSubElementId];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE scenarioSubElement_id = :scenarioSubElement_id
-                ORDER BY `order`';
-        return DBHelper::getAllObjects($sql, $params, self::CLASS_NAME);
+        return static::getMultipleByClauses(['scenarioSubElement_id' => $scenarioSubElementId], 'order');
     }
 
     /**
@@ -122,15 +101,14 @@ class ScenarioExpressionManager
     public static function searchExpression($expression, $options = null, $and = true)
     {
         $params = ['expression' => '%' . $expression . '%'];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE expression LIKE :expression ';
+        $sql = static::getBaseSQL() . '
+                WHERE `expression` LIKE :expression ';
         if ($options !== null) {
             $params['options'] = '%' . $options . '%';
             if ($and) {
-                $sql .= 'AND options LIKE :options';
+                $sql .= 'AND `options` LIKE :options';
             } else {
-                $sql .= 'OR options LIKE :options';
+                $sql .= 'OR `options` LIKE :options';
             }
         }
         return DBHelper::getAllObjects($sql, $params, self::CLASS_NAME);
@@ -145,17 +123,12 @@ class ScenarioExpressionManager
      */
     public static function byElement($elementId)
     {
-        $params = ['expression' => $elementId];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE expression = :expression
-                AND `type` = "element"';
-        return DBHelper::getOneObject($sql, $params, self::CLASS_NAME);
+        return static::getOneByClauses(['expression' => $elementId, 'type' => 'element']);
     }
 
     /**
-     * TODO ????
-     * TODO Revoir la génération des UID
+     * @TODO ????
+     * @TODO Revoir la génération des UID
      *
      * @param $expression
      * @param $options
@@ -168,7 +141,7 @@ class ScenarioExpressionManager
         $replace = [
             '#uid#' => 'exp' . mt_rand()
         ];
-        $result = array('html' => '');
+        $result = ['html' => ''];
         $cmd = CmdManager::byId(str_replace('#', '', CmdManager::humanReadableToCmd($expression)));
         if (is_object($cmd)) {
             $result['html'] = trim($cmd->toHtml('scenario', $options));
@@ -191,12 +164,12 @@ class ScenarioExpressionManager
                 $replace[$value] = '';
             }
         }
-        $result['html'] = TranslateHelper::exec(Utils::templateReplace($replace, $result['html']), 'core/template/scenario/' . $expression . '.default');
+        $result['html'] = TranslateHelper::exec(Utils::templateReplace($replace, $result['html']), 'views/templates/scenario/' . $expression . '.default');
         return $result;
     }
 
     /**
-     * TODO ????
+     * @TODO ????
      *
      * @param $baseAction
      *
@@ -242,8 +215,8 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO ???
-     * TODO Result n'est jamais utilisé, le bloc Try peut normalement être supprimé
+     * @TODO ???
+     * @TODO Result n'est jamais utilisé, le bloc Try peut normalement être supprimé
      * @param $_sValue
      *
      * @return array|mixed
@@ -271,7 +244,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO Faut bien les définir les tags
+     * @TODO Faut bien les définir les tags
      *
      * @param $_expression
      * @param Scenario $_scenario
@@ -306,7 +279,7 @@ class ScenarioExpressionManager
                 }
             }
         }
-        $replace2 = array();
+        $replace2 = [];
         if (!is_string($_expression)) {
             return $_expression;
         }
@@ -374,7 +347,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO: Je demande des tags
+     * @TODO: Je demande des tags
      *
      * @param $expression
      * @return array
@@ -382,78 +355,72 @@ class ScenarioExpressionManager
      */
     public static function getRequestTags($expression)
     {
-        $return = array();
-        preg_match_all("/#([a-zA-Z0-9]*)#/", $expression, $matches);
+        $result = [];
+        preg_match_all("/#([a-zA-Z0-9_]*)#/", $expression, $matches);
         if (count($matches) == 0) {
-            return $return;
+            return $result;
         }
         $matches = array_unique($matches[0]);
+        $humanToDate = [
+            '#seconde#' => 's',
+            '#heure#' => 'G',
+            '#heure12#' => 'g',
+            '#minute#' => 'i',
+            '#jour#' => 'd',
+            '#mois#' => 'm',
+            '#annee#' => 'Y',
+            '#njour#' => 'w',
+            '#time#' => 'Gi',
+            '#date#' => 'md',
+            '#semaine#' => 'W'
+        ];
         foreach ($matches as $tag) {
             switch ($tag) {
                 case '#seconde#':
-                    $return['#seconde#'] = (int)date('s');
-                    break;
                 case '#heure#':
-                    $return['#heure#'] = (int)date('G');
-                    break;
                 case '#heure12#':
-                    $return['#heure12#'] = (int)date('g');
-                    break;
                 case '#minute#':
-                    $return['#minute#'] = (int)date('i');
-                    break;
                 case '#jour#':
-                    $return['#jour#'] = (int)date('d');
-                    break;
                 case '#mois#':
-                    $return['#mois#'] = (int)date('m');
-                    break;
                 case '#annee#':
-                    $return['#annee#'] = (int)date('Y');
+                case '#njour#':
+                    $result[$tag] = (int)date($humanToDate[$tag]);
                     break;
                 case '#time#':
-                    $return['#time#'] = date('Gi');
+                case '#date#':
+                case '#semaine#':
+                    $result[$tag] = date($humanToDate[$tag]);
                     break;
                 case '#timestamp#':
-                    $return['#timestamp#'] = time();
-                    break;
-                case '#date#':
-                    $return['#date#'] = date('md');
-                    break;
-                case '#semaine#':
-                    $return['#semaine#'] = date('W');
+                    $result['#timestamp#'] = time();
                     break;
                 case '#sjour#':
-                    $return['#sjour#'] = '"' . DateHelper::dateToFr(date('l')) . '"';
+                    $result['#sjour#'] = '"' . DateHelper::dateToFr(date('l')) . '"';
                     break;
                 case '#smois#':
-                    $return['#smois#'] = '"' . DateHelper::dateToFr(date('F')) . '"';
+                    $result['#smois#'] = '"' . DateHelper::dateToFr(date('F')) . '"';
                     break;
-                case '#njour#':
-                    $return['#njour#'] = (int)date('w');
-                    break;
+                case '#jeedom_name#':
                 case '#nextdom_name#':
-                    $return['#nextdom_name#'] = '"' . ConfigManager::byKey('name') . '"';
+                    $result[$tag] = '"NextDom"';
                     break;
                 case '#hostname#':
-                    $return['#hostname#'] = '"' . gethostname() . '"';
+                    $result['#hostname#'] = '"' . gethostname() . '"';
                     break;
                 case '#IP#':
-                    $return['#IP#'] = '"' . NetworkHelper::getNetworkAccess('internal', 'ip', '', false) . '"';
+                    $result['#IP#'] = '"' . NetworkHelper::getNetworkAccess('internal', 'ip', '', false) . '"';
                     break;
                 case '#trigger#':
-                    $return['#trigger#'] = '';
-                    break;
                 case '#trigger_value#':
-                    $return['#trigger_value#'] = '';
+                    $result[$tag] = '';
                     break;
             }
         }
-        return $return;
+        return $result;
     }
 
     /**
-     * TODO ????
+     * @TODO ????
      * @ il semble judicieu de rajouter l'interface SenarioInterface à $senario, elle est prete, faut se servir...
      * @param string $name
      * @param Scenario $scenario
@@ -473,7 +440,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO ????
+     * @TODO ????
      *
      * @param Scenario $scenario
      * @return mixed
@@ -491,7 +458,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO: Un tag
+     * @TODO: Un tag
      *
      * @param Scenario|null $scenario
      * @param $name
@@ -512,15 +479,15 @@ class ScenarioExpressionManager
 
     /**
      * Get a scenario from its expression
-     * TODO: Format ???
+     * @TODO: Format ???
      *
      * @param $scenarioExpression
-     * @return int TODO -1, -2, -3 ????
+     * @return int @TODO -1, -2, -3 ????
      * @throws \Exception
      */
     public static function scenario(string $scenarioExpression)
     {
-        $id = str_replace(array('scenario', '#'), '', trim($scenarioExpression));
+        $id = str_replace(['scenario', '#'], '', trim($scenarioExpression));
         $scenario = ScenarioManager::byId($id);
         if (!is_object($scenario)) {
             return -2;
@@ -540,7 +507,7 @@ class ScenarioExpressionManager
 
     /**
      * Enables an eqLogic object
-     * TODO: -2 en -1 ?
+     * @TODO: -2 en -1 ?
      * @param mixed $eqLogicId Identifiant du l'objet
      *
      * @return int 0 If the object is not activated, 1 if the object is activated, -2 if the object does not exist
@@ -548,7 +515,7 @@ class ScenarioExpressionManager
      */
     public static function eqEnable($eqLogicId)
     {
-        $id = str_replace(array('eqLogic', '#'), '', trim($eqLogicId));
+        $id = str_replace(['eqLogic', '#'], '', trim($eqLogicId));
         $eqLogic = EqLogicManager::byId($id);
         if (!is_object($eqLogic)) {
             return -2;
@@ -557,8 +524,8 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO: Fait une moyenne de quelque chose
-     * TODO: Mettre en place la gestion du nombre de paramètres variables
+     * @TODO: Fait une moyenne de quelque chose
+     * @TODO: Mettre en place la gestion du nombre de paramètres variables
      *
      * @param mixed $cmdId Identifiant de la commande
      * @param string $period Période sur laquelle la moyenne doit être calculée
@@ -570,7 +537,7 @@ class ScenarioExpressionManager
     {
         $args = func_get_args();
         if (count($args) > 2 || strpos($period, '#') !== false || is_numeric($period)) {
-            $values = array();
+            $values = [];
             foreach ($args as $arg) {
                 if (is_numeric($arg)) {
                     $values[] = $arg;
@@ -610,7 +577,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO: Calcule une moyenne de quelque chose entre deux dates
+     * @TODO: Calcule une moyenne de quelque chose entre deux dates
      *
      * @param $cmdId
      * @param $startDate
@@ -684,7 +651,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * Obtenir la valeur maximum sur une période TODO: de quelque chose
+     * Obtenir la valeur maximum sur une période @TODO: de quelque chose
      *
      * @param $cmdId
      * @param string $period
@@ -695,7 +662,7 @@ class ScenarioExpressionManager
     {
         $args = func_get_args();
         if (count($args) > 2 || strpos($period, '#') !== false || is_numeric($period)) {
-            $values = array();
+            $values = [];
             foreach ($args as $arg) {
                 if (is_numeric($arg)) {
                     $values[] = $arg;
@@ -735,7 +702,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * Obtenir la valeur maximum entre deux dates TODO: de quelque chose
+     * Obtenir la valeur maximum entre deux dates @TODO: de quelque chose
      *
      * @param $cmdId
      * @param $startDate
@@ -787,7 +754,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * Obtenir la valeur minimum sur une période TODO: ??? Toujours sur quoi ?
+     * Obtenir la valeur minimum sur une période @TODO: ??? Toujours sur quoi ?
      * @param $cmdId
      * @param string $period
      * @return float|mixed|string
@@ -797,7 +764,7 @@ class ScenarioExpressionManager
     {
         $args = func_get_args();
         if (count($args) > 2 || strpos($period, '#') !== false || is_numeric($period)) {
-            $values = array();
+            $values = [];
             foreach ($args as $arg) {
                 if (is_numeric($arg)) {
                     $values[] = $arg;
@@ -837,7 +804,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * Obtenir la valeur minimum entre deux dates TODO: De quoi ?
+     * Obtenir la valeur minimum entre deux dates @TODO: De quoi ?
      *
      * @param $cmdId
      * @param $startDate
@@ -862,7 +829,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * Obtenir une valeur médiane TODO: De quoi ?
+     * Obtenir une valeur médiane @TODO: De quoi ?
      *
      * @return int|mixed
      * @throws \NextDom\Exceptions\CoreException
@@ -871,7 +838,7 @@ class ScenarioExpressionManager
     public static function median()
     {
         $args = func_get_args();
-        $values = array();
+        $values = [];
         foreach ($args as $arg) {
             if (is_numeric($arg)) {
                 $values[] = $arg;
@@ -899,7 +866,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * Renvoie une tendance TODO de ?
+     * Renvoie une tendance @TODO de ?
      *
      * @param $cmdId
      * @param string $period
@@ -943,7 +910,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO: j'en sais rien, durée pendant laquelle il a conserver son état sans doute
+     * @TODO: j'en sais rien, durée pendant laquelle il a conserver son état sans doute
      *
      * @param $cmdId
      * @param null $value
@@ -956,7 +923,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO Changement d'état, ou de pantalon, ou de slip
+     * @TODO Changement d'état, ou de pantalon, ou de slip
      *
      * @param $cmdId
      * @param null $value
@@ -989,7 +956,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * Changement entre deux dates //TODO: Woohoo
+     * Changement entre deux dates //@TODO: Woohoo
      *
      * @param $cmdId
      * @param $value
@@ -1129,7 +1096,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO: Dernier entre deux dates ???
+     * @TODO: Dernier entre deux dates ???
      *
      * @param $cmdId
      * @param $startDate
@@ -1147,14 +1114,14 @@ class ScenarioExpressionManager
         $startDate = date(DateFormat::FULL, strtotime(self::setTags($startDate)));
         $endDate = date(DateFormat::FULL, strtotime(self::setTags($endDate)));
         $historyStatistic = $cmd->getStatistique($startDate, $endDate);
-        if (!$historyStatistic['last']) {
+        if(!isset($historyStatistic['last']) || $historyStatistic['last'] === ''){
             return '';
         }
         return round($historyStatistic['last'], 1);
     }
 
     /**
-     * TODO: Statistiques de quelque chose
+     * @TODO: Statistiques de quelque chose
      *
      * @param $cmdId
      * @param $calc
@@ -1178,15 +1145,15 @@ class ScenarioExpressionManager
             }
         }
         $calc = str_replace(' ', '', $calc);
-        $historyStatistique = $cmd->getStatistique($startHist, date(DateFormat::FULL));
-        if ($historyStatistique['min'] == '') {
+        $historyStatistic = $cmd->getStatistique($startHist, date(DateFormat::FULL));
+        if (!isset($historyStatistic['min']) || $historyStatistic['min'] == '') {
             return $cmd->execCmd();
         }
-        return $historyStatistique[$calc];
+        return $historyStatistic[$calc];
     }
 
     /**
-     * TODO: Statistiques de quelque chose entre deux dates
+     * @TODO: Statistiques de quelque chose entre deux dates
      *
      * @param $cmdId
      * @param $calc
@@ -1219,7 +1186,7 @@ class ScenarioExpressionManager
      */
     public static function variable($name, $defaultValue = '')
     {
-        // TODO: Yolo sur les trims
+        // @TODO: Yolo sur les trims
         $name = trim(trim(trim($name), '"'));
         $dataStore = DataStoreManager::byTypeLinkIdKey('scenario', -1, trim($name));
         if (is_object($dataStore)) {
@@ -1243,7 +1210,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO: Dernier changement de la durée de ???
+     * @TODO: Dernier changement de la durée de ???
      *
      * @param $cmdId
      * @param $value
@@ -1257,7 +1224,7 @@ class ScenarioExpressionManager
 
     /**
      * Tester si une valeur est paire
-     * TODO: Changer en binaire le résultat
+     * @TODO: Changer en binaire le résultat
      *
      * @param mixed $value
      *
@@ -1284,7 +1251,7 @@ class ScenarioExpressionManager
      */
     public static function lastScenarioExecution($scenarioId)
     {
-        $scenario = ScenarioManager::byId(str_replace(array('#scenario', '#'), '', $scenarioId));
+        $scenario = ScenarioManager::byId(str_replace(['#scenario', '#'], '', $scenarioId));
         if (!is_object($scenario)) {
             return 0;
         }
@@ -1292,7 +1259,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO: Collecter une date
+     * @TODO: Collecter une date
      *
      * @param $cmdId
      * @param string $format
@@ -1305,7 +1272,7 @@ class ScenarioExpressionManager
         if (!is_object($cmdObj)) {
             return -1;
         }
-        if ($cmdObj->getType() != 'info') {
+        if (!$cmdObj->isType(CmdType::INFO)) {
             return -2;
         }
         $cmdObj->execCmd();
@@ -1313,7 +1280,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO: Valeur d'une date
+     * @TODO: Valeur d'une date
      *
      * @param $cmdId
      * @param string $format
@@ -1350,7 +1317,7 @@ class ScenarioExpressionManager
      */
     public static function lastCommunication($_eqLogic_id, $_format = DateFormat::FULL)
     {
-        $eqLogic = EqLogicManager::byId(trim(str_replace(array('#', '#eqLogic', 'eqLogic'), '', EqLogicManager::fromHumanReadable('#' . str_replace('#', '', $_eqLogic_id) . '#'))));
+        $eqLogic = EqLogicManager::byId(trim(str_replace(['#', '#eqLogic', 'eqLogic'], '', EqLogicManager::fromHumanReadable('#' . str_replace('#', '', $_eqLogic_id) . '#'))));
         if (!is_object($eqLogic)) {
             return -1;
         }
@@ -1445,7 +1412,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO:? ???
+     * @TODO:? ???
      *
      * @param $time
      * @param $value
@@ -1489,7 +1456,7 @@ class ScenarioExpressionManager
      * @param $startInverval
      * @param $endInterval
      *
-     * @return int TODO: 0, 1
+     * @return int @TODO: 0, 1
      * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
      */
@@ -1535,7 +1502,7 @@ class ScenarioExpressionManager
     /** @noinspection PhpOptionalBeforeRequiredParametersInspection */
 
     /**
-     * TODO: L'heure mais ça à l'air plus compliqué que ça
+     * @TODO: L'heure mais ça à l'air plus compliqué que ça
      *
      * @param $value
      * @return int|mixed|string
@@ -1568,7 +1535,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO: Formate l'heure
+     * @TODO: Formate l'heure
      *
      * @param $time
      * @return string
@@ -1590,7 +1557,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO: My name is Bond, James Bond
+     * @TODO: My name is Bond, James Bond
      *
      * @param $type
      * @param $cmdId
@@ -1622,7 +1589,7 @@ class ScenarioExpressionManager
     }
 
     /**
-     * TODO: Créé et exécute un truc
+     * @TODO: Créé et exécute un truc
      *
      * @param $type
      * @param $cmd

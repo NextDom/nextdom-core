@@ -52,48 +52,48 @@ class DateHelper
         if (ConfigManager::byKey('language', 'core', 'fr_FR') == 'en_US') {
             return $dateEn;
         }
-        $longTextEn = array(
+        $longTextEn = [
             '/(^| )Monday($| )/', '/(^| )Tuesday($| )/', '/(^| )Wednesday($| )/', '/(^| )Thursday($| )/',
             '/(^| )Friday($| )/', '/(^| )Saturday($| )/', '/(^| )Sunday($| )/', '/(^| )January($| )/',
             '/(^| )February($| )/', '/(^| )March($| )/', '/(^| )April($| )/', '/(^| )May($| )/',
             '/(^| )June($| )/', '/(^| )July($| )/', '/(^| )August($| )/', '/(^| )September($| )/',
             '/(^| )October($| )/', '/(^| )November($| )/', '/(^| )December($| )/',
-            );
-        $shortTextEn = array(
+        ];
+        $shortTextEn = [
             '/(^| )Mon($| )/', '/(^| )Tue($| )/', '/(^| )Wed($| )/', '/(^| )Thu($| )/', '/(^| )Fri($| )/', '/(^| )Sat($| )/', '/(^| )Sun($| )/',
             '/(^| )Jan($| )/', '/(^| )Feb($| )/', '/(^| )Mar($| )/', '/(^| )Apr($| )/', '/(^| )May($| )/', '/(^| )Jun($| )/', '/(^| )Jul($| )/',
             '/(^| )Aug($| )/', '/(^| )Sep($| )/', '/(^| )Oct($| )/', '/(^| )Nov($| )/', '/(^| )Dec($| )/',
-        );
+        ];
 
         switch (ConfigManager::byKey('language', 'core', 'fr_FR')) {
             case 'fr_FR':
-                $longText = array(
+                $longText = [
                     'Lundi', 'Mardi', 'Mercredi', 'Jeudi',
                     'Vendredi', 'Samedi', 'Dimanche', 'Janvier',
                     'Février', 'Mars', 'Avril', 'Mai',
                     'Juin', 'Juillet', 'Août', 'Septembre',
                     'Octobre', 'Novembre', 'Décembre',
-                );
-                $shortText = array(
+                ];
+                $shortText = [
                     'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim',
                     'Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin',
                     'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.',
-                );
+                ];
                 break;
             case 'de_DE':
-                $longText = array(
+                $longText = [
                     'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag',
                     'Freitag', 'Samstag', 'Sonntag', 'Januar',
                     'Februar', 'März', 'April', 'May',
                     'Juni', 'July', 'August', 'September',
                     'October', 'November', 'December',
-                );
+                ];
 
-                $shortText = array(
+                $shortText = [
                     'Mon', 'Die', 'Mit', 'Thu', 'Don', 'Sam', 'Son',
                     'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',
                     'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
-                );
+                ];
                 break;
             default:
                 return $dateEn;
@@ -110,8 +110,8 @@ class DateHelper
     public static function convertDayFromEn($_day)
     {
         $result = $_day;
-        $daysMapping = array(
-            'fr_FR' => array(
+        $daysMapping = [
+            'fr_FR' => [
                 'Monday' => 'Lundi', 'Mon' => 'Lundi',
                 'monday' => 'lundi', 'mon' => 'lundi',
                 'Tuesday' => 'Mardi', 'Tue' => 'Mardi',
@@ -126,8 +126,8 @@ class DateHelper
                 'saturday' => 'samedi', 'sat' => 'samedi',
                 'Sunday' => 'Dimanche', 'Sun' => 'Dimanche',
                 'sunday' => 'dimanche', 'sun' => 'dimanche',
-            ),
-            'de_DE' => array(
+            ],
+            'de_DE' => [
                 'Monday' => 'Montag', 'Mon' => 'Montag',
                 'monday' => 'montag', 'mon' => 'montag',
                 'Tuesday' => 'Dienstag', 'Tue' => 'Dienstag',
@@ -142,8 +142,8 @@ class DateHelper
                 'saturday' => 'samstag', 'sat' => 'samstag',
                 'Sunday' => 'Sonntag', 'Sun' => 'Sonntag',
                 'sunday' => 'sonntag', 'sun' => 'sonntag',
-            ),
-        );
+            ],
+        ];
         $language = ConfigManager::byKey('language', 'core', 'fr_FR');
         if (array_key_exists($language, $daysMapping)) {
             $daysArray = $daysMapping[$language];
@@ -160,13 +160,13 @@ class DateHelper
      */
     public static function getNtpTime()
     {
-        $time_servers = array(
+        $time_servers = [
             'ntp2.emn.fr',
             'time-a.timefreq.bldrdoc.gov',
             'utcnist.colorado.edu',
             'time.nist.gov',
             'ntp.pads.ufrj.br',
-        );
+        ];
         $time_adjustment = 0;
         foreach ($time_servers as $time_server) {
             $fp = fsockopen($time_server, 37, $errno, $errstr, 1);

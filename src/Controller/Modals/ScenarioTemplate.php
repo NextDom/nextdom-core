@@ -44,13 +44,17 @@ class ScenarioTemplate extends BaseAbstractModal
     {
         $scenarioId = Utils::init('scenario_id');
         $scenario = ScenarioManager::byId($scenarioId);
+        $filePath = 'data/scenario/';
 
         if (is_object($scenario) !== true) {
             throw new CoreException(__('Scénario non trouvé : ') . $scenarioId);
         }
-        Utils::sendVarToJS('scenario_template_id', $scenarioId);
+        Utils::sendVarsToJS([
+            'scenario_template_id' => $scenarioId,
+            'filePath' => $filePath
+        ]);
         $pageData = [
-            'repoList' => UpdateManager::listRepo(),
+            'repoList' => UpdateManager::listRepo()
         ];
 
         return Render::getInstance()->get('/modals/scenario.template.html.twig', $pageData);

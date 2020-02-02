@@ -71,7 +71,7 @@
                     <div class="panel box">
                         <a class="box-header with-border accordion-toggle cursor" data-toggle="collapse" data-parent="" href="#config_aucun">
                             <h3 class="box-title">
-                                <span>{{ 'interact.none' | trans }} {{ interactsList[-1]|length }} {{ 'interact.interactions' | trans }}</span>
+                                <span>{{ 'interact.none' | trans }}</span><span class="badge bg-yellow spacing-left">{{ interactsList[-1]|length }}</span>
                             </h3>
                         </a>
                         <div id="config_aucun" class="panel-collapse collapse in">
@@ -94,10 +94,10 @@
                         <div class="panel box box-primary">
                             <a class="box-header with-border accordion-toggle cursor" data-toggle="collapse" data-parent="" href="#config_{{ index }}">
                                 <h3 class="box-title">
-                                    <span style="text-decoration:none;">{{ group['group'] }} - {{ interactsList[group['group']]|length }} {{ 'interact.interactions' | trans }}</span>
+                                    <span style="text-decoration:none;">{{ group['group'] }}</span><span class="badge bg-nextdom spacing-left">{{ interactsList[group['group']]|length }}</span>
                                 </h3>
                             </a>
-                            <div id="config_{{ index }}" class="panel-collapse collapse in">
+                            <div id="config_{{ index }}" class="panel-collapse collapse {% if index == 0 %}in{% endif %}">
                                 <div class="box-body">
                                     <div class="interactListContainer DisplayCard text-center">
                                         {% for interact in interactsList[group['group']] %}

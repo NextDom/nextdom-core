@@ -16,15 +16,17 @@
  */
 
 require_once(__DIR__ . '/../../../src/core.php');
-require_once(__DIR__ . '/BaseControllerTest.php');
+require_once(__DIR__ . '/../libs/BaseControllerTest.php');
+
+use NextDom\Enums\ControllerData;
 
 class ConnectionControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
             unset($_SERVER['HTTP_USER_AGENT']);
@@ -35,8 +37,8 @@ class ConnectionControllerTest extends BaseControllerTest
     {
         $pageData = [];
         $result = \NextDom\Controller\Pages\ConnectionController::get($pageData);
-        $this->assertFalse($pageData['IS_MOBILE']);
-        $this->assertArrayHasKey('TITLE', $pageData);
+        $this->assertFalse($pageData[ControllerData::IS_MOBILE]);
+        $this->assertArrayHasKey(ControllerData::TITLE, $pageData);
         $this->assertEquals(4, substr_count($result, 'input'));
     }
 
@@ -45,8 +47,8 @@ class ConnectionControllerTest extends BaseControllerTest
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (Linux; U; Android 4.0.2; en-us; Galaxy Nexus Build/ICL53F) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30';
         $pageData = [];
         $result = \NextDom\Controller\Pages\ConnectionController::get($pageData);
-        $this->assertTrue($pageData['IS_MOBILE']);
-        $this->assertContains('mobile', $result);
+        $this->assertTrue($pageData[ControllerData::IS_MOBILE]);
+        $this->assertStringContainsString('mobile', $result);
     }
 
     public function testPageDataVars()

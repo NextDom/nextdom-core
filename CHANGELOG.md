@@ -1,5 +1,57 @@
 # NextDom Core Changelog
 ---
+## 0.6.8
+
+> ***Release Date : 03/02/2020***
+>
+> ***Statut : beta***
+>
+> ***Coverall : 23%***
+
+#### NEWS
+* Nouvelles fonctionnalités d'édition de la programmation des scénarios (copier/couper/coller, déplacement, undo/redo, mémoire....)
+* Ajouts de tests [SonarCloud](https://sonarcloud.io/dashboard?id=NextDom_nextdom-core)
+* Création de nombreux enums
+* Création des méthodes isVisible et isEnabled pour la plupart des classes
+* Création des méthodes isType et isSubType pour les commandes et eqLogics
+* Création de nouvelles fonctions pour éviter les failles XSS
+* Création de méthodes dans LogHelper
+* Tranformation de la boîte à message au format adminLTE
+* Nouvelle catégorie dans le Market NextDom : Exclusivity
+* Nouveau thème de Widget pour le dashboard
+* Nouveaux Avatars
+* Nouveau security score lors des saisies de mots de passe
+
+#### AMELIORATIONS / MODIFICATIONS
+* Merge Jeedom 3.3.41
+* Mise à jour, nettoyage et traitement des obsolescence des dépendances
+* Amélioration de l'autocomplétion des fonctions scénarios (avec description)
+* Réindentation du code
+* Remplacement des array('blabla') par ['blabla']
+* Nettoyage et amélioration massif de l'ajax
+* Amélioration des requetes SQL
+* Optimisation du code PHP
+* Optimisation du code JS
+* Suppression du footer et déplacement des informations dans le sideMenu
+* Sécurisation InfluxDB
+* Optimisation des chargements CSS
+* Restoration du cache d'un backup
+
+#### FIXS
+* FIx de la position et du resize des modales
+* [liste ici](https://github.com/NextDom/nextdom-core/milestone/25?closed=1)
+---
+## 0.6.1
+> ***Release Date : 10/01/2020***
+>
+> ***Statut : beta***
+>
+> ***Coverall : 17%***
+
+#### FIXS
+* Fix Plus d'historique depuis 01/01/2020
+* [liste ici](https://github.com/NextDom/nextdom-core/milestone/26?closed=1)
+---
 ## 0.6.1
 > ***Release Date : 10/01/2020***
 >

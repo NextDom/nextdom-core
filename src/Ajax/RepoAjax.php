@@ -17,6 +17,8 @@
 
 namespace NextDom\Ajax;
 
+use NextDom\Enums\AjaxParams;
+use NextDom\Enums\Common;
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Utils;
@@ -36,70 +38,70 @@ class RepoAjax extends BaseAjax
 
     public function uploadCloud()
     {
-        RepoMarket::backup_send(Utils::init('backup'));
+        RepoMarket::backup_send(Utils::init(AjaxParams::BACKUP));
         $this->ajax->success();
     }
 
     public function restoreCloud()
     {
-        $repoClassData = UpdateManager::getRepoDataFromName(Utils::init('repo'));
-        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassData['className'] . '.php')) {
-            $repoClassData['phpClass']::backup_restore(Utils::init('backup'));
+        $repoClassData = UpdateManager::getRepoDataFromName(Utils::initStr(AjaxParams::REPO));
+        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassData[Common::CLASS_NAME] . '.php')) {
+            $repoClassData[Common::PHP_CLASS]::backup_restore(Utils::init(AjaxParams::BACKUP));
             $this->ajax->success();
         }
-        $this->ajax->error(__('Le repo n\'existe pas : ' . $repoClassData['className']));
+        $this->ajax->error(__('Le repo n\'existe pas : ' . $repoClassData[Common::CLASS_NAME]));
     }
 
     public function sendReportBug()
     {
-        $repoClassData = UpdateManager::getRepoDataFromName(Utils::init('repo'));
-        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassData['className'] . '.php')) {
-            $this->ajax->success($repoClassData['phpClass']::saveTicket(json_decode(Utils::init('ticket'), true)));
+        $repoClassData = UpdateManager::getRepoDataFromName(Utils::initStr(AjaxParams::REPO));
+        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassData[Common::CLASS_NAME] . '.php')) {
+            $this->ajax->success($repoClassData[Common::PHP_CLASS]::saveTicket(json_decode(Utils::init('ticket'), true)));
         }
-        $this->ajax->error(__('Le repo n\'existe pas : ' . $repoClassData['className']));
+        $this->ajax->error(__('Le repo n\'existe pas : ' . $repoClassData[Common::CLASS_NAME]));
     }
 
     public function install()
     {
-        $repoClassData = UpdateManager::getRepoDataFromName(Utils::init('repo'));
-        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassData['className'] . '.php')) {
-            $repo = $repoClassData['phpClass']::byId(Utils::init('id'));
+        $repoClassData = UpdateManager::getRepoDataFromName(Utils::initStr(AjaxParams::REPO));
+        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassData[Common::CLASS_NAME] . '.php')) {
+            $repo = $repoClassData[Common::PHP_CLASS]::byId(Utils::init(AjaxParams::ID));
             if (!is_object($repo)) {
-                throw new CoreException(__('Impossible de trouver l\'objet associé : ', __FILE__) . Utils::init('id'));
+                throw new CoreException(__('Impossible de trouver l\'objet associé : ') . Utils::init(AjaxParams::ID));
             }
             $update = UpdateManager::byTypeAndLogicalId($repo->getType(), $repo->getLogicalId());
             if (!is_object($update)) {
                 $update = new Update();
             }
-            $update->setSource(Utils::init('repo'));
+            $update->setSource(Utils::initStr(AjaxParams::REPO));
             $update->setLogicalId($repo->getLogicalId());
             $update->setType($repo->getType());
-            $update->setLocalVersion($repo->getDatetime(Utils::init('version', 'stable')));
-            $update->setConfiguration('version', Utils::init('version', 'stable'));
+            $update->setLocalVersion($repo->getDatetime(Utils::init(AjaxParams::VERSION, 'stable')));
+            $update->setConfiguration('version', Utils::init(AjaxParams::VERSION, 'stable'));
             $update->save();
             $update->doUpdate();
             $this->ajax->success();
         }
-        $this->ajax->error(__('Le repo n\'existe pas : ' . $repoClassData['className']));
+        $this->ajax->error(__('Le repo n\'existe pas : ' . $repoClassData[Common::CLASS_NAME]));
     }
 
     public function test()
     {
-        $repoClassData = UpdateManager::getRepoDataFromName(Utils::init('repo'));
-        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassData['className'] . '.php')) {
-            $repoClassData['phpClass']::test();
+        $repoClassData = UpdateManager::getRepoDataFromName(Utils::initStr(AjaxParams::REPO));
+        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassData[Common::CLASS_NAME] . '.php')) {
+            $repoClassData[Common::PHP_CLASS]::test();
             $this->ajax->success();
         }
-        $this->ajax->error(__('Le repo n\'existe pas : ' . $repoClassData['className']));
+        $this->ajax->error(__('Le repo n\'existe pas : ' . $repoClassData[Common::CLASS_NAME]));
     }
 
     public function remove()
     {
-        $repoClassData = UpdateManager::getRepoDataFromName(Utils::init('repo'));
-        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassData['className'] . '.php')) {
-            $repo = $repoClassData['phpClass']::byId(Utils::init('id'));
+        $repoClassData = UpdateManager::getRepoDataFromName(Utils::initStr(AjaxParams::REPO));
+        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassData[Common::CLASS_NAME] . '.php')) {
+            $repo = $repoClassData[Common::PHP_CLASS]::byId(Utils::init(AjaxParams::ID));
             if (!is_object($repo)) {
-                throw new CoreException(__('Impossible de trouver l\'objet associé : ', __FILE__) . Utils::init('id'));
+                throw new CoreException(__('Impossible de trouver l\'objet associé : ') . Utils::init(AjaxParams::ID));
             }
             $update = UpdateManager::byTypeAndLogicalId($repo->getType(), $repo->getLogicalId());
             try {
@@ -115,72 +117,72 @@ class RepoAjax extends BaseAjax
             }
             $this->ajax->success();
         }
-        $this->ajax->error(__('Le repo n\'existe pas : ' . $repoClassData['className']));
+        $this->ajax->error(__('Le repo n\'existe pas : ' . $repoClassData[Common::CLASS_NAME]));
     }
 
     public function save()
     {
-        $repoClassData = UpdateManager::getRepoDataFromName(Utils::init('repo'));
-        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassData['className'] . '.php')) {
+        $repoClassData = UpdateManager::getRepoDataFromName(Utils::initStr(AjaxParams::REPO));
+        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassData[Common::CLASS_NAME] . '.php')) {
             $repo_ajax = json_decode(Utils::init('market'), true);
             try {
-                $repo = $repoClassData['phpClass']::byId($repo_ajax['id']);
+                $repo = $repoClassData[Common::PHP_CLASS]::byId($repo_ajax['id']);
             } catch (\Exception $e) {
-                $repo = new $repoClassData['phpClass']();
+                $repo = new $repoClassData[Common::PHP_CLASS]();
             }
             Utils::a2o($repo, $repo_ajax);
             $repo->save();
             $this->ajax->success();
         }
-        $this->ajax->error(__('Le repo n\'existe pas : ' . $repoClassData['className']));
+        $this->ajax->error(__('Le repo n\'existe pas : ' . $repoClassData[Common::CLASS_NAME]));
     }
 
     public function getInfo()
     {
-        $repoClassData = UpdateManager::getRepoDataFromName(Utils::init('repo'));
-        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassData['className'] . '.php')) {
-            $this->ajax->success($repoClassData['phpClass']::getInfo(Utils::init('logicalId')));
+        $repoClassData = UpdateManager::getRepoDataFromName(Utils::initStr(AjaxParams::REPO));
+        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassData[Common::CLASS_NAME] . '.php')) {
+            $this->ajax->success($repoClassData[Common::PHP_CLASS]::getInfo(Utils::init(AjaxParams::LOGICAL_ID)));
         }
-        $this->ajax->error(__('Le repo n\'existe pas : ' . $repoClassData['className']));
+        $this->ajax->error(__('Le repo n\'existe pas : ' . $repoClassData[Common::CLASS_NAME]));
     }
 
     public function byLogicalId()
     {
-        $repoClassData = UpdateManager::getRepoDataFromName(Utils::init('repo'));
-        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassData['className'] . '.php')) {
+        $repoClassData = UpdateManager::getRepoDataFromName(Utils::initStr(AjaxParams::REPO));
+        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassData[Common::CLASS_NAME] . '.php')) {
             if (Utils::init('noExecption', 0) == 1) {
                 try {
-                    $this->ajax->success(Utils::o2a($repoClassData['phpClass']::byLogicalIdAndType(Utils::init('logicalId'), Utils::init('type'))));
+                    $this->ajax->success(Utils::o2a($repoClassData[Common::PHP_CLASS]::byLogicalIdAndType(Utils::init(AjaxParams::LOGICAL_ID), Utils::init(AjaxParams::TYPE))));
                 } catch (\Exception $e) {
                     $this->ajax->success();
                 }
             } else {
-                $this->ajax->success(Utils::o2a($repoClassData['phpClass']::byLogicalIdAndType(Utils::init('logicalId'), Utils::init('type'))));
+                $this->ajax->success(Utils::o2a($repoClassData[Common::PHP_CLASS]::byLogicalIdAndType(Utils::init(AjaxParams::LOGICAL_ID), Utils::init(AjaxParams::TYPE))));
             }
         }
-        $this->ajax->error(__('Le repo n\'existe pas : ' . $repoClassData['className']));
+        $this->ajax->error(__('Le repo n\'existe pas : ' . $repoClassData[Common::CLASS_NAME]));
     }
 
     public function setRating()
     {
-        $repoClassData = UpdateManager::getRepoDataFromName(Utils::init('repo'));
-        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassData['className'] . '.php')) {
-            $repo = $repoClassData['phpClass']::byId(Utils::init('id'));
+        $repoClassData = UpdateManager::getRepoDataFromName(Utils::initStr(AjaxParams::REPO));
+        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassData[Common::CLASS_NAME] . '.php')) {
+            $repo = $repoClassData[Common::PHP_CLASS]::byId(Utils::init(AjaxParams::ID));
             if (!is_object($repo)) {
-                throw new CoreException(__('Impossible de trouver l\'objet associé : ') . Utils::init('id'));
+                throw new CoreException(__('Impossible de trouver l\'objet associé : ') . Utils::init(AjaxParams::ID));
             }
             $repo->setRating(Utils::init('rating'));
             $this->ajax->success();
         }
-        $this->ajax->error(__('Le repo n\'existe pas : ' . $repoClassData['className']));
+        $this->ajax->error(__('Le repo n\'existe pas : ' . $repoClassData[Common::CLASS_NAME]));
     }
 
     public function backupList()
     {
-        $repoClassData = UpdateManager::getRepoDataFromName(Utils::init('repo'));
-        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassData['className'] . '.php')) {
-            $this->ajax->success($repoClassData['phpClass']::backup_list());
+        $repoClassData = UpdateManager::getRepoDataFromName(Utils::initStr(AjaxParams::REPO));
+        if (file_exists(NEXTDOM_ROOT . '/src/Repo/' . $repoClassData[Common::CLASS_NAME] . '.php')) {
+            $this->ajax->success($repoClassData[Common::PHP_CLASS]::backup_list());
         }
-        $this->ajax->error(__('Le repo n\'existe pas : ' . $repoClassData['className']));
+        $this->ajax->error(__('Le repo n\'existe pas : ' . $repoClassData[Common::CLASS_NAME]));
     }
 }

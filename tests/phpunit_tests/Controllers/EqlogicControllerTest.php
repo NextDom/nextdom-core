@@ -16,15 +16,15 @@
  */
 
 require_once(__DIR__ . '/../../../src/core.php');
-require_once(__DIR__ . '/BaseControllerTest.php');
+require_once(__DIR__ . '/../libs/BaseControllerTest.php');
 
 class EqlogicControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -33,7 +33,7 @@ class EqlogicControllerTest extends BaseControllerTest
     {
         $pageData = [];
         $result = \NextDom\Controller\Params\EqlogicController::get($pageData);
-        $this->assertContains('id="eqlogic"', $result);
+        $this->assertStringContainsString('id="eqlogic"', $result);
     }
 
     public function testPageDataVars()

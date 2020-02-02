@@ -23,6 +23,8 @@
 namespace NextDom\Controller\Pages;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\AjaxParams;
+use NextDom\Enums\ControllerData;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\Render;
@@ -54,7 +56,7 @@ class ViewController extends BaseController
         $pageData['viewNoControl'] = Utils::init('noControl');
 
         $currentView = null;
-        if (Utils::init('view_id') == '') {
+        if (Utils::init(AjaxParams::VIEW_ID) == '') {
 
             if (UserManager::getStoredUser()->getOptions('defaultDesktopView') != '') {
                 $currentView = ViewManager::byId(UserManager::getStoredUser()->getOptions('defaultDesktopView'));
@@ -64,10 +66,10 @@ class ViewController extends BaseController
                 $currentView = $pageData['viewsList'][0];
             }
         } else {
-            $currentView = ViewManager::byId(init('view_id'));
+            $currentView = ViewManager::byId(Utils::init(AjaxParams::VIEW_ID));
 
             if (!is_object($currentView)) {
-                throw new \Exception('{{Vue inconnue. Vérifier l\'ID.}}');
+                throw new CoreException('{{Vue inconnue. Vérifier l\'ID.}}');
             }
         }
 
@@ -79,9 +81,9 @@ class ViewController extends BaseController
         if (UserManager::getStoredUser()->getOptions('displayViewByDefault') == 1 && Utils::init('report') != 1) {
             $pageData['viewHideList'] = false;
         }
-        $pageData['JS_VARS']['view_id'] = $currentView->getId();
-        $pageData['CSS_POOL'][] = '/public/css/pages/view.css';
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/pages/view.js';
+        $pageData[ControllerData::JS_VARS][AjaxParams::VIEW_ID] = $currentView->getId();
+        $pageData[ControllerData::CSS_POOL][] = '/public/css/pages/view.css';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/pages/view.js';
 
         return Render::getInstance()->get('/desktop/pages/view.html.twig', $pageData);
     }

@@ -1,81 +1,109 @@
-{% if not restrictedUser %}
-    <div class="alert alert-danger">
-        {{ 'Attention : le compte utilisateur n\'a pas un profil "Utilisateur limité", aucune restriction mise ici ne pourra donc s\'appliquer' }}
-    </div>
-{% endif %}
-<div style="display: none" id="div_userRightAlert"></div>
-<div class="nav-tabs-custom">
-<a class="btn-sm btn-success pull-right" style="margin:5px;" id="bt_usersRightsSave"><i class="far fa-check-circle"></i> {{ 'Sauvegarder' }}</a>
-<ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#tab_eqLogic" aria-controls="tab_eqLogic" role="tab" data-toggle="tab">{{ 'Equipements' }}</a></li>
-    <li role="presentation"><a href="#tab_scenario" aria-controls="tab_scenario" role="tab" data-toggle="tab">{{ 'Scénarios' }}</a></li>
-</ul>
-<div class="tab-content" id="div_tasbUserRights">
-    <span class="userAttr" data-l1key="id" style="display : none;"></span>
-    <div role="tabpanel" class="tab-pane active" id="tab_eqLogic">
-        <table class='table table-condensed table-bordered tablesorter'>
-            <thead>
-            <tr>
-                <th>{{ 'Equipements' }}</th>
-                <th data-sorter="select-text">{{ 'Droits' }}</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for eqLogic in eqLogics %}
-                <tr>
-                    <td>{{ eqLogic.getHumanName(true)|raw }}</td>
-                    <td>
-                        <select class="form-control userAttr input-sm" data-l1key="rights" data-l2key="eqLogic{{ eqLogic.getId() }}">
-                            <option value="n">{{ 'Aucun' }}</option>
-                            <option value="r">{{ 'Visualisation' }}</option>
-                            <option value="rx">{{ 'Visualisation et exécution' }}</option>
-                        </select>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    <div role="tabpanel" class="tab-pane" id="tab_scenario">
-        <table class='table table-condensed table-bordered tablesorter'>
-            <thead>
-            <tr>
-                <th>{{ 'Scénarios' }}</th>
-                <th data-sorter="false" data-filter="false">{{ 'Droits' }}</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for scenario in scenarios %}
-                <tr>
-                    <td>{{ scenario.getHumanName(true, true, true)|raw }}</td>
-                    <td>
-                        <select class="form-control userAttr input-sm" data-l1key="rights" data-l2key="scenario{{ scenario.getId() }}">
-                            <option value="n">{{ 'Aucun' }}</option>
-                            <option value="r">{{ 'Visualisation' }}</option>
-                            <option value="rx">{{ 'Visualisation et exécution' }}</option>
-                        </select>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</div>
-</div>
-<script>
-    $('#div_tasbUserRights').setValues(user_rights, '.userAttr');
-    initTableSorter();
+{#
+/* This file is part of Jeedom.
+*
+* Jeedom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* Jeedom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+*/
 
-    $("#bt_usersRightsSave").on('click', function (event) {
-        nextdom.user.save({
-            users: $('#div_tasbUserRights').getValues('.userAttr'),
-            error: function (error) {
-                notify('Core', error.message, 'error');
-            },
-            success: function () {
-                notify('Info', '{{ 'Sauvegarde effectuée' }}', 'success');
-                modifyWithoutSave = false;
-            }
-        });
-    });
-</script>
+/* This file is part of NextDom.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#}
+<section class="content-header">
+    <div class="action-bar">
+        <div class="action-group">
+            {% if not restrictedUser %}
+                <div class="alert alert-danger">{{ 'Attention : le compte utilisateur n\'a pas un profil "Utilisateur limité", aucune restriction mise ici ne pourra donc s\'appliquer' }}</div>
+            {% endif %}
+        </div>
+        <div class="action-group">
+            <a class="btn btn-success btn-action-bar pull-right" id="bt_usersRightsSave"><i class="fas fa-save"></i>{{ 'Sauvegarder' }}</a>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#tab_eqLogic" aria-controls="tab_eqLogic" role="tab" data-toggle="tab"><i class="fas fa-plug"></i>{{ 'Equipements' }}</a></li>
+            <li role="presentation"><a href="#tab_scenario" aria-controls="tab_scenario" role="tab" data-toggle="tab"><i class="fas fa-film"></i>{{ 'Scénarios' }}</a></li>
+        </ul>
+        <div class="tab-content" id="div_tasbUserRights">
+            <span class="userAttr" data-l1key="id" style="display : none;"></span>
+            <div role="tabpanel" class="tab-pane active" id="tab_eqLogic">
+                <table class='table table-condensed table-bordered tablesorter'>
+                    <thead>
+                    <tr>
+                        <th>{{ 'Equipements' }}</th>
+                        <th data-sorter="select-text">{{ 'Droits' }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for eqLogic in eqLogics %}
+                        <tr>
+                            <td>{{ eqLogic.getHumanName(true)|raw }}</td>
+                            <td>
+                                <select class="form-control userAttr input-sm" data-l1key="rights" data-l2key="eqLogic{{ eqLogic.getId() }}">
+                                    <option value="n">{{ 'Aucun' }}</option>
+                                    <option value="r">{{ 'Visualisation' }}</option>
+                                    <option value="rx">{{ 'Visualisation et exécution' }}</option>
+                                </select>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="tab_scenario">
+                <table class='table table-condensed table-bordered tablesorter'>
+                    <thead>
+                    <tr>
+                        <th>{{ 'Scénarios' }}</th>
+                        <th data-sorter="false" data-filter="false">{{ 'Droits' }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for scenario in scenarios %}
+                        <tr>
+                            <td>{{ scenario.getHumanName(true, true, true)|raw }}</td>
+                            <td>
+                                <select class="form-control userAttr input-sm" data-l1key="rights" data-l2key="scenario{{ scenario.getId() }}">
+                                    <option value="n">{{ 'Aucun' }}</option>
+                                    <option value="r">{{ 'Visualisation' }}</option>
+                                    <option value="rx">{{ 'Visualisation et exécution' }}</option>
+                                </select>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="/public/js/modals/user.rights.js"></script>

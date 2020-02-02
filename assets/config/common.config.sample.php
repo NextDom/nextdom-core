@@ -31,7 +31,6 @@ $CONFIG = array(
     ),
     'paths' => array(
         "log" => '#LOG_DIR#',
-        "lib" => '#LIB_DIR#',
         "tmp" => '#TMP_DIR#',
     ),
     'secretKey' => '#SECRET_KEY#'

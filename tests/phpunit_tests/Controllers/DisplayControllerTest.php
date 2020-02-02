@@ -16,15 +16,15 @@
  */
 
 require_once(__DIR__ . '/../../../src/core.php');
-require_once(__DIR__ . '/BaseControllerTest.php');
+require_once(__DIR__ . '/../libs/BaseControllerTest.php');
 
 class DisplayControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -34,7 +34,7 @@ class DisplayControllerTest extends BaseControllerTest
         $pageData = [];
         $result = \NextDom\Controller\Tools\DisplayController::get($pageData);
         $this->assertEquals(4, $pageData['displayNbEqLogics']);
-        $this->assertContains('data-l1key="cb_actifDisplay"', $result);
+        $this->assertStringContainsString('data-l1key="cb_actifDisplay"', $result);
     }
 
     public function testPageDataVars()

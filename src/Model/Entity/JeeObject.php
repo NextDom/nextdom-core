@@ -17,6 +17,10 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\Common;
+use NextDom\Enums\ConfigKey;
+use NextDom\Enums\DateFormat;
+use NextDom\Enums\NextDomObj;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\NextDomHelper;
@@ -28,6 +32,12 @@ use NextDom\Managers\DataStoreManager;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\ScenarioManager;
+use NextDom\Model\Entity\Parents\BaseEntity;
+use NextDom\Model\Entity\Parents\ConfigurationEntity;
+use NextDom\Model\Entity\Parents\DisplayEntity;
+use NextDom\Model\Entity\Parents\IsVisibleEntity;
+use NextDom\Model\Entity\Parents\NameEntity;
+use NextDom\Model\Entity\Parents\PositionEntity;
 
 /**
  * Object for eqLogic group
@@ -35,64 +45,13 @@ use NextDom\Managers\ScenarioManager;
  * @ORM\Table(name="object", uniqueConstraints={@ORM\UniqueConstraint(name="name_UNIQUE", columns={"name"})}, indexes={@ORM\Index(name="fk_object_object1_idx1", columns={"father_id"}), @ORM\Index(name="position", columns={"position"})})
  * @ORM\Entity
  */
-class JeeObject implements EntityInterface
+class JeeObject extends BaseEntity
 {
     const CLASS_NAME = JeeObject::class;
     const DB_CLASS_NAME = '`object`';
+    const TABLE_NAME = NextDomObj::OBJECT;
 
-    /**
-     * Id of the object
-     *
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Name of the object
-     *
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=45, nullable=false)
-     */
-    protected $name = '';
-
-    /**
-     * Visible status
-     *
-     * @var int
-     *
-     * @ORM\Column(name="isVisible", type="boolean", nullable=true)
-     */
-    protected $isVisible = 1;
-
-    /**
-     * Position
-     *
-     * @var integer
-     *
-     * @ORM\Column(name="position", type="integer", nullable=true)
-     */
-    protected $position;
-
-    /**
-     * Specific configuration
-     *
-     * @var string|array
-     *
-     * @ORM\Column(name="configuration", type="text", length=65535, nullable=true)
-     */
-    protected $configuration;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="display", type="text", length=65535, nullable=true)
-     */
-    protected $display;
+    use ConfigurationEntity, DisplayEntity, NameEntity, IsVisibleEntity, PositionEntity;
 
     /**
      * @var string
@@ -112,56 +71,6 @@ class JeeObject implements EntityInterface
     protected $father_id = null;
 
     protected $_child = [];
-    protected $_changed = false;
-
-    /**
-     * Get object id
-     *
-     * @return int|null Object id
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set object id
-     *
-     * @param int|null $_id Object Id
-     *
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
-    }
-
-    /**
-     * Get object name
-     *
-     * @return string Object name
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Set object name
-     *
-     * @param string $_name Object name
-     *
-     * @return $this
-     */
-    public function setName($_name)
-    {
-        $_name = str_replace(['&', '#', ']', '[', '%'], '', $_name);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
-        $this->name = $_name;
-        return $this;
-    }
 
     /**
      * Get visibility value
@@ -179,33 +88,6 @@ class JeeObject implements EntityInterface
     }
 
     /**
-     * Set visibility value
-     *
-     * @param int $_isVisible 1 if visible, 0 for not visible
-     *
-     * @return $this
-     */
-    public function setIsVisible($_isVisible)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->isVisible, $_isVisible);
-        $this->isVisible = $_isVisible;
-        return $this;
-    }
-
-    /**
-     * Get visibility state
-     *
-     * @return bool True if the object is visible
-     */
-    public function isVisible(): bool
-    {
-        if ($this->getIsVisible() === 1) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * Get object position
      *
      * @param int|null $default Default value if position is not set
@@ -218,143 +100,6 @@ class JeeObject implements EntityInterface
             return $default;
         }
         return $this->position;
-    }
-
-    /**
-     * Set position
-     *
-     * @param int $_position Object position
-     *
-     * @return $this
-     */
-    public function setPosition($_position)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->position, $_position);
-        $this->position = $_position;
-        return $this;
-    }
-
-    /**
-     * Get configuration information by key
-     *
-     * @param string $key Name of the information
-     * @param mixed $default Default value
-     *
-     * @return mixed Value of the asked information or $default.
-     */
-    public function getConfiguration(string $key = '', $default = '')
-    {
-        return Utils::getJsonAttr($this->configuration, $key, $default);
-    }
-
-    /**
-     * Set configuration information by key
-     *
-     * @param string $_key Name of the information
-     * @param mixed $_value Value of this information
-     *
-     * @return $this
-     */
-    public function setConfiguration(string $_key, $_value)
-    {
-        $configuration = Utils::setJsonAttr($this->configuration, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
-        $this->configuration = $configuration;
-        return $this;
-    }
-
-    /**
-     * Get display information by key
-     *
-     * @param string $key Name of the information
-     * @param mixed $default Value of this information
-     *
-     * @return mixed Value of the asked information or $default
-     */
-    public function getDisplay(string $key = '', $default = '')
-    {
-        return Utils::getJsonAttr($this->display, $key, $default);
-    }
-
-    /**
-     * Set display information by key
-     *
-     * @param string $key Name of the information
-     * @param mixed $value value of this information
-     *
-     * @return $this
-     */
-    public function setDisplay(string $key, $value)
-    {
-        $display = Utils::setJsonAttr($this->display, $key, $value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->display, $display);
-        $this->display = $display;
-        return $this;
-    }
-
-    /**
-     * Get image of the object
-     *
-     * @param string $imageKey Image key
-     * @param string $defaultValue Default value if not set
-     * @return array|bool|mixed|null|string
-     */
-    public function getImage($imageKey = '', $defaultValue = '')
-    {
-        return Utils::getJsonAttr($this->image, $imageKey, $defaultValue);
-    }
-
-    /**
-     * @param string $imageKey Image key
-     * @param string $imageValue Image value (CSS icon)
-     * @return $this
-     */
-    public function setImage($imageKey, $imageValue)
-    {
-        $this->image = Utils::setJsonAttr($this->image, $imageKey, $imageValue);
-        return $this;
-    }
-
-    /**
-     * Get father object id
-     *
-     * @param int|null $default Default value if object as no father
-     *
-     * @return int|null Father object id
-     */
-    public function getFather_id($default = null)
-    {
-        if ($this->father_id == '' || !is_numeric($this->father_id)) {
-            return $default;
-        }
-        return $this->father_id;
-    }
-
-    /**
-     * Set father object id
-     *
-     * @param int|null $_father_id Set father object id or null for root object
-     *
-     * @return $this
-     */
-    public function setFather_id($_father_id = null)
-    {
-        $_father_id = ($_father_id == '') ? null : $_father_id;
-        $this->_changed = Utils::attrChanged($this->_changed, $this->father_id, $_father_id);
-        $this->father_id = $_father_id;
-        return $this;
-    }
-
-    /**
-     * Get father
-     *
-     * @return JeeObject Father jeeObject
-     *
-     * @throws \Exception
-     */
-    public function getFather()
-    {
-        return JeeObjectManager::byId($this->getFather_id());
     }
 
     /**
@@ -385,64 +130,9 @@ class JeeObject implements EntityInterface
     public function getChild($_visible = true)
     {
         if (!isset($this->_child[$_visible])) {
-            $values = array(
-                'id' => $this->id,
-            );
-            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE father_id = :id';
-            if ($_visible) {
-                $sql .= ' AND isVisible = 1 ';
-            }
-            $sql .= ' ORDER BY position';
-            $this->_child[$_visible] = DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
+            $this->_child[$_visible] = JeeObjectManager::getChildren($this->id, $_visible);
         }
         return $this->_child[$_visible];
-    }
-
-    /**
-     * @return bool
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
-        return $this;
-    }
-
-    /**
-     * Get cache information of this object
-     *
-     * @param string $key Name of the information
-     * @param mixed $default Default value
-     *
-     * @return mixed Value of the asked information or $default
-     * @throws \Exception
-     */
-    public function getCache(string $key = '', $default = '')
-    {
-        $cache = CacheManager::byKey('objectCacheAttr' . $this->getId())->getValue();
-        return Utils::getJsonAttr($cache, $key, $default);
-    }
-
-    /**
-     * Store information of this object in cache
-     *
-     * @param string $key Name of the information to store
-     * @param mixed $value Default value
-     * @throws \Exception
-     */
-    public function setCache(string $key, $value = null)
-    {
-        CacheManager::set('objectCacheAttr' . $this->getId(), Utils::setJsonAttr(CacheManager::byKey('objectCacheAttr' . $this->getId())->getValue(), $key, $value));
     }
 
     /**
@@ -473,50 +163,33 @@ class JeeObject implements EntityInterface
     }
 
     /**
-     * Save object in database
+     * Get father object id
      *
-     * @return bool True if save works
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
+     * @param int|null $default Default value if object as no father
+     *
+     * @return int|null Father object id
      */
-    public function save()
+    public function getFather_id($default = null)
     {
-        if ($this->_changed) {
-            CacheManager::set('globalSummaryHtmldashboard', '');
-            CacheManager::set('globalSummaryHtmlmobile', '');
-            $this->setCache('summaryHtmldashboard', '');
-            $this->setCache('summaryHtmlmobile', '');
+        if ($this->father_id == '' || !is_numeric($this->father_id)) {
+            return $default;
         }
-        DBHelper::save($this);
-        return true;
+        return $this->father_id;
     }
 
     /**
-     * Method called before remove
+     * Set father object id
      *
-     * @throws \Exception
+     * @param int|null $_father_id Set father object id or null for root object
+     *
+     * @return $this
      */
-    public function preRemove()
+    public function setFather_id($_father_id = null)
     {
-        DataStoreManager::removeByTypeLinkId('object', $this->getId());
-        $sql = 'UPDATE eqLogic set object_id= NULL where object_id = :object_id';
-        DBHelper::exec($sql);
-        $sql = 'UPDATE scenario set object_id= NULL where object_id = :object_id';
-        DBHelper::exec($sql);
-    }
-
-    /**
-     * Remove object from the database
-     *
-     * @return bool True on success
-     *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
-    public function remove()
-    {
-        NextDomHelper::addRemoveHistory(['id' => $this->getId(), 'name' => $this->getName(), 'date' => date('Y-m-d H:i:s'), 'type' => 'object']);
-        return DBHelper::remove($this);
+        $_father_id = ($_father_id == '') ? null : $_father_id;
+        $this->updateChangeState($this->father_id, $_father_id);
+        $this->father_id = $_father_id;
+        return $this;
     }
 
     /**
@@ -539,6 +212,18 @@ class JeeObject implements EntityInterface
 
             $father->checkTreeConsistency($ancestors);
         }
+    }
+
+    /**
+     * Get father
+     *
+     * @return JeeObject Father jeeObject
+     *
+     * @throws \Exception
+     */
+    public function getFather()
+    {
+        return JeeObjectManager::byId($this->getFather_id());
     }
 
     /**
@@ -566,6 +251,50 @@ class JeeObject implements EntityInterface
     }
 
     /**
+     * Method called before remove
+     *
+     * @throws \Exception
+     */
+    public function preRemove()
+    {
+        DataStoreManager::removeByTypeLinkId(NextDomObj::OBJECT, $this->getId());
+        $params = ['object_id' => $this->getId()];
+        $sql = 'UPDATE ' . EqLogicManager::DB_CLASS_NAME . ' SET `object_id = NULL WHERE `object_id` = :object_id';
+        DBHelper::exec($sql, $params);
+        $sql = 'UPDATE ' . ScenarioManager::DB_CLASS_NAME . ' SET `object_id` = NULL WHERE `object_id` = :object_id';
+        DBHelper::exec($sql, $params);
+    }
+
+    /**
+     * Remove object from the database
+     *
+     * @return bool True on success
+     *
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
+    public function remove()
+    {
+        NextDomHelper::addRemoveHistory([Common::ID => $this->getId(), Common::NAME => $this->getName(), Common::DATE => date(DateFormat::FULL), Common::TYPE => NextDomObj::OBJECT]);
+        return parent::remove();
+    }
+
+    /**
+     * Set object name
+     *
+     * @param string $name Object name
+     *
+     * @return $this
+     */
+    public function setName($name)
+    {
+        $name = str_replace(['&', '#', ']', '[', '%'], '', $name);
+        $this->updateChangeState($this->name, $name);
+        $this->name = $name;
+        return $this;
+    }
+
+    /**
      * Get eqLogic used in the summary
      *
      * @param string $summary Name of the summary
@@ -580,11 +309,11 @@ class JeeObject implements EntityInterface
      */
     public function getEqLogicBySummary($summary = '', $onlyEnable = true, $onlyVisible = false, $eqTypeName = null, $logicalId = null)
     {
-        $def = ConfigManager::byKey('object:summary');
+        $def = ConfigManager::byKey(ConfigKey::OBJECT_SUMMARY);
         if ($summary == '' || !isset($def[$summary])) {
             return null;
         }
-        $summaries = $this->getConfiguration('summary');
+        $summaries = $this->getConfiguration(Common::SUMMARY);
         if (!isset($summaries[$summary])) {
             return [];
         }
@@ -594,7 +323,7 @@ class JeeObject implements EntityInterface
             if ($infos['enable'] != 1) {
                 continue;
             }
-            $cmd = CmdManager::byId(str_replace('#', '', $infos['cmd']));
+            $cmd = CmdManager::byId(str_replace('#', '', $infos[NextDomObj::CMD]));
             if (is_object($cmd)) {
                 $eqLogics_id[$cmd->getEqLogic_id()] = $cmd->getEqLogic_id();
             }
@@ -627,7 +356,7 @@ class JeeObject implements EntityInterface
             return $this->getCache('summaryHtml' . $version);
         }
         $result = '<span class="objectSummary' . $this->getId() . '" data-version="' . $version . '">';
-        $def = ConfigManager::byKey('object:summary');
+        $def = ConfigManager::byKey(ConfigKey::OBJECT_SUMMARY);
         $summaryResult = '';
         if (!empty($def)) {
             foreach ($def as $key => $value) {
@@ -647,13 +376,28 @@ class JeeObject implements EntityInterface
                     if ($allowDisplayZero == 0 && $summaryResult == 0) {
                         $style = 'display:none;';
                     }
-                    $result .= '<span style="' . $style . '" class="objectSummaryParent cursor" data-summary="' . $key . '" data-object_id="' . $this->getId() . '" data-displayZeroValue="' . $allowDisplayZero . '">' . $value['icon'] . ' <sup><span class="objectSummary' . $key . '">' . $summaryResult . '</span> ' . $value['unit'] . '</span></sup>';
+                    $result .= '<span style="' . $style . '" class="objectSummaryParent cursor" data-summary="' . $key . '" data-object_id="' . $this->getId() . '" data-displayZeroValue="' . $allowDisplayZero . '">' . $value[Common::ICON] . ' <sup><span class="objectSummary' . $key . '">' . $summaryResult . '</span> ' . $value['unit'] . '</span></sup>';
                 }
             }
         }
         $result = trim($result) . '</span>';
         $this->setCache('summaryHtml' . $version, $result);
         return $result;
+    }
+
+    /**
+     * Get cache information of this object
+     *
+     * @param string $key Name of the information
+     * @param mixed $default Default value
+     *
+     * @return mixed Value of the asked information or $default
+     * @throws \Exception
+     */
+    public function getCache(string $key = '', $default = '')
+    {
+        $cache = CacheManager::byKey('objectCacheAttr' . $this->getId())->getValue();
+        return Utils::getJsonAttr($cache, $key, $default);
     }
 
     /**
@@ -669,11 +413,11 @@ class JeeObject implements EntityInterface
      */
     public function getSummary($summaryKey = '', $raw = false)
     {
-        $def = ConfigManager::byKey('object:summary');
+        $def = ConfigManager::byKey(ConfigKey::OBJECT_SUMMARY);
         if ($summaryKey == '' || !isset($def[$summaryKey])) {
             return null;
         }
-        $summaries = $this->getConfiguration('summary');
+        $summaries = $this->getConfiguration(Common::SUMMARY);
         if (!isset($summaries[$summaryKey])) {
             return null;
         }
@@ -682,7 +426,7 @@ class JeeObject implements EntityInterface
             if (isset($infos['enable']) && $infos['enable'] == 0) {
                 continue;
             }
-            $value = CmdManager::cmdToValue($infos['cmd']);
+            $value = CmdManager::cmdToValue($infos[NextDomObj::CMD]);
             if (isset($infos['invert']) && $infos['invert'] == 1) {
                 $value = !$value;
             }
@@ -704,6 +448,18 @@ class JeeObject implements EntityInterface
     }
 
     /**
+     * Store information of this object in cache
+     *
+     * @param string $key Name of the information to store
+     * @param mixed $value Default value
+     * @throws \Exception
+     */
+    public function setCache(string $key, $value = null)
+    {
+        CacheManager::set('objectCacheAttr' . $this->getId(), Utils::setJsonAttr(CacheManager::byKey('objectCacheAttr' . $this->getId())->getValue(), $key, $value));
+    }
+
+    /**
      * Get graph data
      *
      * @param array $data Graph data
@@ -714,23 +470,23 @@ class JeeObject implements EntityInterface
      *
      * @throws \ReflectionException
      */
-    public function getLinkData(&$data = ['node' => [], 'link' => []], $level = 0, $drill = null)
+    public function getLinkData(&$data = [Common::NODE => [], Common::LINK => []], $level = 0, $drill = null)
     {
         if ($drill === null) {
             $drill = ConfigManager::byKey('graphlink::object::drill');
         }
-        if (isset($data['node']['object' . $this->getId()])) {
+        if (isset($data[Common::NODE][NextDomObj::OBJECT . $this->getId()])) {
             return null;
         }
         $level++;
         if ($level > $drill) {
             return $data;
         }
-        $icon = Utils::findCodeIcon($this->getDisplay('icon'));
-        $data['node']['object' . $this->getId()] = array(
-            'id' => 'object' . $this->getId(),
+        $icon = Utils::findCodeIcon($this->getDisplay(Common::ICON));
+        $data[Common::NODE][NextDomObj::OBJECT . $this->getId()] = [
+            'id' => NextDomObj::OBJECT . $this->getId(),
             'name' => $this->getName(),
-            'icon' => $icon['icon'],
+            'icon' => $icon[Common::ICON],
             'fontfamily' => $icon['fontfamily'],
             'fontweight' => ($level == 1) ? 'bold' : 'normal',
             'fontsize' => '4em',
@@ -738,15 +494,15 @@ class JeeObject implements EntityInterface
             'textx' => 0,
             'title' => $this->getHumanName(),
             'url' => 'index.php?v=d&p=object&id=' . $this->getId(),
-        );
+        ];
         $use = $this->getUse();
-        Utils::addGraphLink($this, 'object', $this->getEqLogic(), 'eqLogic', $data, $level, $drill, ['dashvalue' => '1,0', 'lengthfactor' => 0.6]);
-        Utils::addGraphLink($this, 'object', $use['cmd'], 'cmd', $data, $level, $drill);
-        Utils::addGraphLink($this, 'object', $use['scenario'], 'scenario', $data, $level, $drill);
-        Utils::addGraphLink($this, 'object', $use['eqLogic'], 'eqLogic', $data, $level, $drill);
-        Utils::addGraphLink($this, 'object', $use['dataStore'], 'dataStore', $data, $level, $drill);
-        Utils::addGraphLink($this, 'object', $this->getChild(), 'object', $data, $level, $drill, ['dashvalue' => '1,0', 'lengthfactor' => 0.6]);
-        Utils::addGraphLink($this, 'object', $this->getScenario(false), 'scenario', $data, $level, $drill, ['dashvalue' => '1,0', 'lengthfactor' => 0.6]);
+        Utils::addGraphLink($this, NextDomObj::OBJECT, $this->getEqLogic(), NextDomObj::EQLOGIC, $data, $level, $drill, [Common::DASH_VALUE => '1,0', Common::LENGTH_FACTOR => 0.6]);
+        Utils::addGraphLink($this, NextDomObj::OBJECT, $use[NextDomObj::CMD], NextDomObj::CMD, $data, $level, $drill);
+        Utils::addGraphLink($this, NextDomObj::OBJECT, $use[NextDomObj::SCENARIO], NextDomObj::SCENARIO, $data, $level, $drill);
+        Utils::addGraphLink($this, NextDomObj::OBJECT, $use[NextDomObj::EQLOGIC], NextDomObj::EQLOGIC, $data, $level, $drill);
+        Utils::addGraphLink($this, NextDomObj::OBJECT, $use[NextDomObj::DATASTORE], NextDomObj::DATASTORE, $data, $level, $drill);
+        Utils::addGraphLink($this, NextDomObj::OBJECT, $this->getChild(), NextDomObj::OBJECT, $data, $level, $drill, [Common::DASH_VALUE => '1,0', Common::LENGTH_FACTOR => 0.6]);
+        Utils::addGraphLink($this, NextDomObj::OBJECT, $this->getScenario(false), NextDomObj::SCENARIO, $data, $level, $drill, [Common::DASH_VALUE => '1,0', Common::LENGTH_FACTOR => 0.6]);
         return $data;
     }
 
@@ -761,14 +517,16 @@ class JeeObject implements EntityInterface
     public function getHumanName($tag = false, $prettify = false)
     {
         if ($tag) {
+            $tagIcon = '<i class="fas fa-tag"></i>';
+            $spacingRight = '<i class="spacing-right"></i>';
             if ($prettify) {
                 if ($this->getDisplay('tagColor') != '') {
-                    return '<span class="label" style="text-shadow : none;background-color:' . $this->getDisplay('tagColor') . ' !important;color:' . $this->getDisplay('tagTextColor', 'white') . ' !important">' . $this->getDisplay('icon', '<i class="fas fa-tag"></i>') . '<i class="spacing-right"></i>' . $this->getName() . '</span>';
+                    return '<span class="label" style="text-shadow:none;background-color:' . $this->getDisplay('tagColor') . ' !important;color:' . $this->getDisplay('tagTextColor', 'white') . ' !important">' . $this->getDisplay(Common::ICON, $tagIcon) . $spacingRight . $this->getName() . '</span>';
                 } else {
-                    return '<span class="label label-primary">' . $this->getDisplay('icon', '<i class="fas fa-tag"></i>') . '<i class="spacing-right"></i>' . $this->getName() . '</span>';
+                    return '<span class="label label-primary">' . $this->getDisplay(Common::ICON, $tagIcon) . $spacingRight . $this->getName() . '</span>';
                 }
             } else {
-                return $this->getDisplay('icon', '<i class="fas fa-tag"></i>') . '<i class="spacing-right"></i>' . $this->getName();
+                return $this->getDisplay(Common::ICON, $tagIcon) . $spacingRight . $this->getName();
             }
         } else {
             return $this->getName();
@@ -879,12 +637,44 @@ class JeeObject implements EntityInterface
     }
 
     /**
-     * Get table name for stored object in database
+     * Get image of the object
      *
-     * @return string
+     * @param string $imageKey Image key
+     * @param string $defaultValue Default value if not set
+     * @return array|bool|mixed|null|string
      */
-    public function getTableName()
+    public function getImage($imageKey = '', $defaultValue = '')
     {
-        return 'object';
+        return Utils::getJsonAttr($this->image, $imageKey, $defaultValue);
+    }
+
+    /**
+     * @param string $imageKey Image key
+     * @param string $imageValue Image value (CSS icon)
+     * @return $this
+     */
+    public function setImage($imageKey, $imageValue)
+    {
+        $this->image = Utils::setJsonAttr($this->image, $imageKey, $imageValue);
+        return $this;
+    }
+
+    /**
+     * Save object in database
+     *
+     * @return bool True if save works
+     * @throws \NextDom\Exceptions\CoreException
+     * @throws \ReflectionException
+     */
+    public function save()
+    {
+        if ($this->_changed) {
+            CacheManager::set('globalSummaryHtmldashboard', '');
+            CacheManager::set('globalSummaryHtmlmobile', '');
+            $this->setCache('summaryHtmldashboard', '');
+            $this->setCache('summaryHtmlmobile', '');
+        }
+        DBHelper::save($this);
+        return true;
     }
 }

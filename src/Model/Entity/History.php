@@ -18,10 +18,11 @@
 namespace NextDom\Model\Entity;
 
 use NextDom\Enums\DateFormat;
+use NextDom\Enums\NextDomObj;
 use NextDom\Helpers\DBHelper;
-use NextDom\Helpers\Utils;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\HistoryManager;
+use NextDom\Model\Entity\Parents\BaseModel;
 
 /**
  * History
@@ -29,8 +30,10 @@ use NextDom\Managers\HistoryManager;
  * @ORM\Table(name="history", uniqueConstraints={@ORM\UniqueConstraint(name="unique", columns={"datetime", "cmd_id"})}, indexes={@ORM\Index(name="fk_history5min_commands1_idx", columns={"cmd_id"})})
  * @ORM\Entity
  */
-class History
+class History extends BaseModel
 {
+    const TABLE_NAME = NextDomObj::HISTORY;
+
     /**
      * @var string
      *
@@ -54,8 +57,7 @@ class History
      * })
      */
     protected $cmd_id;
-    protected $_tableName = 'history';
-    protected $_changed = false;
+    protected $_tableName = self::TABLE_NAME;
 
     /**
      * @param null $_cmd
@@ -86,26 +88,26 @@ class History
                 $time -= $time % 300;
                 $this->setDatetime(date(DateFormat::FULL, $time));
                 if ($this->getValue() === 0) {
-                    $values = array(
+                    $values = [
                         'cmd_id' => $this->getCmd_id(),
                         'datetime' => date('Y-m-d H:i:00', strtotime($this->getDatetime()) + 300),
                         'value' => $this->getValue(),
-                    );
-                    $sql = 'REPLACE INTO history
-                    SET cmd_id=:cmd_id,
-                    `datetime`=:datetime,
-                    value=:value';
+                    ];
+                    $sql = 'REPLACE INTO ' . HistoryManager::DB_CLASS_NAME . '
+                            SET `cmd_id` = :cmd_id,
+                            `datetime` = :datetime,
+                            `value` = :value';
                     DBHelper::exec($sql, $values);
                     return;
                 }
-                $values = array(
+                $values = [
                     'cmd_id' => $this->getCmd_id(),
                     'datetime' => $this->getDatetime(),
-                );
+                ];
                 $sql = 'SELECT `value`
-                FROM history
-                WHERE cmd_id=:cmd_id
-                AND `datetime`=:datetime';
+                        FROM ' . HistoryManager::DB_CLASS_NAME . '
+                        WHERE `cmd_id` = :cmd_id
+                        AND `datetime`=:datetime';
                 $result = DBHelper::getOne($sql, $values);
                 if ($result !== false) {
                     switch ($cmd->getConfiguration('historizeMode', 'avg')) {
@@ -113,9 +115,8 @@ class History
                             $this->setValue(($result['value'] + intval($this->getValue())) / 2);
                             break;
                         case 'min':
-                            $this->setValue(min($result['value'], $this->getValue()));
-                            break;
                         case 'max':
+                            $this->setValue(min($result['value'], $this->getValue()));
                             $this->setValue(max($result['value'], $this->getValue()));
                             break;
                     }
@@ -127,18 +128,18 @@ class History
                 $this->setDatetime(date('Y-m-d H:00:00', strtotime($this->getDatetime())));
             }
         }
-        $values = array(
+        $values = [
             'cmd_id' => $this->getCmd_id(),
             'datetime' => $this->getDatetime(),
             'value' => $this->getValue(),
-        );
+        ];
         if ($values['value'] === '') {
             $values['value'] = null;
         }
         $sql = 'REPLACE INTO ' . $this->getTableName() . '
-        SET cmd_id=:cmd_id,
-        `datetime`=:datetime,
-        value=:value';
+                SET `cmd_id` = :cmd_id,
+                `datetime` = :datetime,
+                `value` = :value';
         DBHelper::exec($sql, $values);
     }
 
@@ -165,7 +166,7 @@ class History
      */
     public function setCmd_id($cmd_id)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->cmd_id, $cmd_id);
+        $this->updateChangeState($this->cmd_id, $cmd_id);
         $this->cmd_id = $cmd_id;
         return $this;
     }
@@ -184,7 +185,7 @@ class History
      */
     public function setDatetime($datetime)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->datetime, $datetime);
+        $this->updateChangeState($this->datetime, $datetime);
         $this->datetime = $datetime;
         return $this;
     }
@@ -203,14 +204,11 @@ class History
      */
     public function setValue($value)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->value, $value);
+        $this->updateChangeState($this->value, $value);
         $this->value = $value;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getTableName()
     {
         return $this->_tableName;
@@ -223,29 +221,6 @@ class History
     public function setTableName($_tableName)
     {
         $this->_tableName = $_tableName;
-        return $this;
-    }
-
-    public function remove()
-    {
-        DBHelper::remove($this);
-    }
-
-    /**
-     * @return bool
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
         return $this;
     }
 }

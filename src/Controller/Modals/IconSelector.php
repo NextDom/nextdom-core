@@ -35,29 +35,20 @@ class IconSelector extends BaseAbstractModal
      * Render icon selector modal
      *
      * @return string
+     * @throws \Exception
      */
     public static function get(): string
     {
+        $iconsStylePath = 'public/icons/';
         $pageData = [];
         $pageData['iconsList'] = [];
-        foreach (FileSystemHelper::ls('public/icon', '*') as $iconDirectory) {
-            if (is_dir('public/icon/' . $iconDirectory) && file_exists('public/icon/' . $iconDirectory . '/style.css')) {
-                $cssFileContent = file_get_contents('public/icon/' . $iconDirectory . '/style.css');
+        foreach (FileSystemHelper::ls($iconsStylePath, '*') as $iconDirectory) {
+            if (is_dir($iconsStylePath . $iconDirectory) && file_exists($iconsStylePath . $iconDirectory . 'style.css')) {
+                $cssFileContent = file_get_contents($iconsStylePath . $iconDirectory . 'style.css');
                 $research = strtolower(str_replace('/', '', $iconDirectory));
                 $pageData['iconsList'][] = self::getIconsData($iconDirectory, $cssFileContent, "/\." . $research . "-(.*?):/");
             }
         }
-        /*
-        $nodeModules = [
-            ['name' => 'Font-Awesome-5', 'path' => 'vendor/node_modules/@fortawesome/fontawesome-free/css/', 'cssFile' => 'all.css', 'cssPrefix' => 'fa']
-        ];
-        foreach ($nodeModules as $nodeModule) {
-            if (is_dir($nodeModule['path']) && file_exists($nodeModule['path'] . $nodeModule['cssFile'])) {
-                $cssFileContent = file_get_contents($nodeModule['path'] . $nodeModule['cssFile']);
-                $pageData['iconsList'][] = self::getIconsData($nodeModule['path'], $cssFileContent, "/\." . $nodeModule['cssPrefix'] . "-(.*?):/", $nodeModule['name'], $nodeModule['cssPrefix']);
-            }
-        }
-        */
         // Font Awesome 5
         $fontAwesomeTypes = ['far' => 'regular', 'fas' => 'solid', 'fab' => 'brands'];
         foreach ($fontAwesomeTypes as $cssCode => $svgFolder) {
@@ -100,9 +91,9 @@ class IconSelector extends BaseAbstractModal
         foreach ($matchResults as $result) {
             if (isset($result[0])) {
                 if ($cssClass === null) {
-                    $data['list'][] = str_replace(array(':', '.'), ' ', $result[0]);
+                    $data['list'][] = str_replace([':', '.'], ' ', $result[0]);
                 } else {
-                    $data['list'][] = $cssClass . str_replace(array(':', '.'), ' ', $result[0]);
+                    $data['list'][] = $cssClass . str_replace([':', '.'], ' ', $result[0]);
                 }
             }
         }

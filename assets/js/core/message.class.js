@@ -1,4 +1,3 @@
-
 /* This file is part of Jeedom.
  *
  * Jeedom is free software: you can redistribute it and/or modify
@@ -15,85 +14,29 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-nextdom.message = function() {
+nextdom.message = function () {
 };
 
 nextdom.message.cache = Array();
 
-nextdom.message.all = function(_params) {
-    var paramsRequired = [];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/message.ajax.php';
-    paramsAJAX.data = {
-        action: "all",
-        plugin: _params.plugin || ''
-    };
-    $.ajax(paramsAJAX);
-}
+nextdom.message.all = function (queryParams) {
+  var params = $.extend({}, nextdom.private.default_params, queryParams || {});
+  var ajaxParams = nextdom.private.getParamsAJAX(params, 'Message', 'all');
+  ajaxParams.data['plugin'] = queryParams.plugin || '';
+  nextdom.private.ajaxCall(ajaxParams);
+};
 
-nextdom.message.remove = function(_params) {
-    var paramsRequired = ['id'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/message.ajax.php';
-    paramsAJAX.data = {
-        action: 'removeMessage',
-        id: _params.id,
-    };
-    $.ajax(paramsAJAX);
-}
+nextdom.message.remove = function (queryParams) {
+  nextdom.private.ajax('Message', 'removeMessage', queryParams, ['id']);
+};
 
-nextdom.message.clear = function(_params) {
-    var paramsRequired = [];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/message.ajax.php';
-    paramsAJAX.data = {
-        action: 'clearMessage',
-        plugin: _params.plugin || ''
-    };
-    $.ajax(paramsAJAX);
-}
+nextdom.message.clear = function (queryParams) {
+  var params = $.extend({}, nextdom.private.default_params, queryParams || {});
+  var ajaxParams = nextdom.private.getParamsAJAX(params, 'Message', 'clearMessage');
+  ajaxParams.data['plugin'] = queryParams.plugin || '';
+  nextdom.private.ajaxCall(ajaxParams);
+};
 
-nextdom.message.number = function(_params) {
-    var paramsRequired = [];
-    var paramsSpecifics = {
-        global: false,
-    };
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/message.ajax.php';
-    paramsAJAX.data = {
-        action: 'nbMessage',
-    };
-    $.ajax(paramsAJAX);
-}
+nextdom.message.number = function (queryParams) {
+  nextdom.private.ajax('Message', 'nbMessage', queryParams, false, false, false);
+};

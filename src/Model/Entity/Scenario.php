@@ -18,9 +18,12 @@
 namespace NextDom\Model\Entity;
 
 use NextDom\Enums\CacheKey;
+use NextDom\Enums\Common;
 use NextDom\Enums\DateFormat;
 use NextDom\Enums\LogTarget;
 use NextDom\Enums\NextDomObj;
+use NextDom\Enums\ScenarioCache;
+use NextDom\Enums\ScenarioConf;
 use NextDom\Enums\ScenarioState;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
@@ -46,6 +49,15 @@ use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\UserManager;
 use NextDom\Managers\ViewDataManager;
 use NextDom\Managers\ViewManager;
+use NextDom\Model\Entity\Parents\BaseEntity;
+use NextDom\Model\Entity\Parents\ConfigurationEntity;
+use NextDom\Model\Entity\Parents\DisplayEntity;
+use NextDom\Model\Entity\Parents\IsActiveEntity;
+use NextDom\Model\Entity\Parents\IsVisibleEntity;
+use NextDom\Model\Entity\Parents\NameEntity;
+use NextDom\Model\Entity\Parents\OrderEntity;
+use NextDom\Model\Entity\Parents\RefreshEntity;
+use NextDom\Model\Entity\Parents\TypeEntity;
 
 /**
  * Scenario
@@ -53,28 +65,22 @@ use NextDom\Managers\ViewManager;
  * ORM\Table(name="scenario", uniqueConstraints={@ORM\UniqueConstraint(name="name", columns={"group", "object_id", "name"})}, indexes={@ORM\Index(name="group", columns={"group"}), @ORM\Index(name="fk_scenario_object1_idx", columns={"object_id"}), @ORM\Index(name="trigger", columns={"trigger"}), @ORM\Index(name="mode", columns={"mode"}), @ORM\Index(name="modeTriger", columns={"mode", "trigger"})})
  * ORM\Entity
  */
-class Scenario implements EntityInterface
+class Scenario extends BaseEntity
 {
+    const TABLE_NAME = NextDomObj::SCENARIO;
 
-    protected static $_templateArray;
+    use ConfigurationEntity, DisplayEntity, IsVisibleEntity, IsActiveEntity, NameEntity, OrderEntity, RefreshEntity, TypeEntity;
+
     /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=127, nullable=true)
+     * @var array
      */
-    protected $name;
+    protected static $_templateArray;
     /**
      * @var string
      *
      * @ORM\Column(name="group", type="string", length=127, nullable=true)
      */
     protected $group = '';
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="isActive", type="boolean", nullable=true)
-     */
-    protected $isActive = 1;
     /**
      * @var string
      *
@@ -106,46 +112,14 @@ class Scenario implements EntityInterface
      */
     protected $timeout = 0;
     /**
-     * @var boolean
-     *
-     * @ORM\Column(name="isVisible", type="boolean", nullable=true)
-     */
-    protected $isVisible = 1;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="display", type="text", length=65535, nullable=true)
-     */
-    protected $display;
-    /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", length=65535, nullable=true)
      */
     protected $description;
+
     /**
-     * @var string
-     *
-     * @ORM\Column(name="configuration", type="text", length=65535, nullable=true)
-     */
-    protected $configuration;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="type", type="string", length=127, nullable=true)
-     */
-    protected $type = 'expert';
-    protected $order = 9999;
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-    /**
-     * @var \NextDom\Model\Entity\JeeObject
+     * @var int
      *
      * ORM\ManyToOne(targetEntity="NextDom\Model\Entity\Object")
      * ORM\JoinColumns({
@@ -153,60 +127,19 @@ class Scenario implements EntityInterface
      * })
      */
     protected $object_id;
-    protected $_elements = array();
+    protected $_elements = [];
     protected $_changeState = false;
     protected $_realTrigger = '';
     protected $_return = true;
-    protected $_tags = array();
+    protected $_tags = [];
     protected $_do = true;
     protected $_log;
-    protected $_changed = false;
 
-    /**
-     *
-     * @param mixed $defaultValue
-     * @return mixed
-     */
-    public function getIsVisible($defaultValue = 0)
+    public function __construct()
     {
-        if ($this->isVisible == '' || !is_numeric($this->isVisible)) {
-            return $defaultValue;
+        if ($this->order === null) {
+            $this->order = 9999;
         }
-        return $this->isVisible;
-    }
-
-    /**
-     * @param $isVisible
-     * @return $this
-     */
-    public function setIsVisible($isVisible)
-    {
-        $this->isVisible = $isVisible;
-        return $this;
-    }
-
-    public function isVisible()
-    {
-        return intval($this->isVisible) == 1;
-    }
-
-    /**
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param $_type
-     * @return $this
-     */
-    public function setType($_type)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->type, $_type);
-        $this->type = $_type;
-        return $this;
     }
 
     /**
@@ -216,11 +149,9 @@ class Scenario implements EntityInterface
      */
     public function testTrigger($event): bool
     {
-        foreach ($this->getTrigger() as $trigger) {
-            $trigger = str_replace(array('#variable(', ')#'), array('variable(', ')'), $trigger);
-            if ($trigger == $event) {
-                return true;
-            } elseif (strpos($trigger, $event) !== false && NextDomHelper::evaluateExpression($trigger)) {
+        foreach ($this->getTrigger() as $triggerTotest) {
+            $triggerTotest = str_replace(['#variable(', ')#'], ['variable(', ')'], $triggerTotest);
+            if ($triggerTotest == $event || (strpos($triggerTotest, $event) !== false && NextDomHelper::evaluateExpression($triggerTotest))) {
                 return true;
             }
         }
@@ -233,7 +164,7 @@ class Scenario implements EntityInterface
      */
     public function getTrigger()
     {
-        return Utils::isJson($this->trigger, array($this->trigger));
+        return Utils::isJson($this->trigger, [$this->trigger]);
     }
 
     /**
@@ -248,7 +179,7 @@ class Scenario implements EntityInterface
             $_trigger = json_encode($_trigger, JSON_UNESCAPED_UNICODE);
         }
         $_trigger = CmdManager::humanReadableToCmd($_trigger);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->trigger, $_trigger);
+        $this->updateChangeState($this->trigger, $_trigger);
         $this->trigger = $_trigger;
         return $this;
     }
@@ -265,19 +196,20 @@ class Scenario implements EntityInterface
     public function launch($trigger = '', $message = '', $forceSyncMode = false)
     {
         // Test if scenarios are enabled and if this scenario is activated
-        if (ConfigManager::byKey('enableScenario') != 1 || $this->getIsActive() != 1) {
+        if (!$this->isActive() || !ScenarioManager::isEnabled()) {
             return false;
         }
         $state = $this->getState();
+        $now = strtotime('now');
         if ($state == ScenarioState::STARTING) {
             //Scénario bloqué en starting (Exemple de cause : trop de connexions à MySql, la connexion est refusée, le scénario plante)
-            if (strtotime('now') - $this->getCache('startingTime') > 5) {
+            if ($now - $this->getCache(ScenarioCache::STARTING_TIME) > 5) {
                 LogHelper::addError(LogTarget::SCENARIO, __('La dernière exécution du scénario ne s\'est pas lancée. Vérifiez le log scenario_execution, ainsi que le log du scénario') . " \"" . $this->getName() . "\".");
-                $this->setLog(__('La dernière exécution du scénario ne s\'est pas lancée. Vérifiez le log scenario_execution pour l\'exécution à ') . date(DateFormat::FULL, $this->getCache('startingTime')) . ".");
+                $this->setLog(__('La dernière exécution du scénario ne s\'est pas lancée. Vérifiez le log scenario_execution pour l\'exécution à ') . date(DateFormat::FULL, $this->getCache(ScenarioCache::STARTING_TIME)) . ".");
                 $this->persistLog();
             }
             //Retarde le lancement du scénario si une autre instance est déjà en cours de démarrage
-            if (($this->getCache('startingTime') + 2) > strtotime('now')) {
+            if (($this->getCache(ScenarioCache::STARTING_TIME) + 2) > $now) {
                 $i = 0;
                 while ($state == ScenarioState::STARTING) {
                     sleep(1);
@@ -298,14 +230,14 @@ class Scenario implements EntityInterface
         if ($state == ScenarioState::IN_PROGRESS && $this->getConfiguration('allowMultiInstance', 0) == 0) {
             return false;
         }
-        $this->setCache(['startingTime' => strtotime('now'), 'state' => ScenarioState::STARTING]);
+        $this->setCache([ScenarioCache::STARTING_TIME => $now, ScenarioCache::STATE => ScenarioState::STARTING]);
         // Test execution mode
-        if ($this->getConfiguration('syncmode') == 1 || $forceSyncMode) {
+        if ($this->getConfiguration(ScenarioConf::SYNC_MODE) == 1 || $forceSyncMode) {
             $this->setLog(__('Lancement du scénario en mode synchrone'));
             return $this->execute($trigger, $message);
         } else {
             if (count($this->getTags()) != '') {
-                $this->setCache('tags', $this->getTags());
+                $this->setCache(ScenarioCache::TAGS, $this->getTags());
             }
             $cmd = NEXTDOM_ROOT . '/src/Api/start_scenario.php ';
             $cmd .= ' scenario_id=' . $this->getId();
@@ -318,60 +250,105 @@ class Scenario implements EntityInterface
     }
 
     /**
-     * @return bool
+     *
+     * @return mixed
+     * @throws \Exception
      */
-    public function getIsActive()
+    public function getState()
     {
-        return $this->isActive;
+        return $this->getCache(ScenarioCache::STATE);
     }
 
     /**
+     * Get data from cache
      *
-     * @param int $isActive
+     * Data are stored in scenarioCacheAttr + Scenario_ID
+     *
+     * @param string $key Key find
+     * @param mixed $defaultValue Default value returned if key is not found
+     *
+     * @return mixed
+     *
+     * @throws \Exception
+     */
+    public function getCache($key = '', $defaultValue = '')
+    {
+        $scenarioCacheAttr = CacheManager::byKey(CacheKey::SCENARIO_CACHE_ATTR . $this->getId())->getValue();
+        return Utils::getJsonAttr($scenarioCacheAttr, $key, $defaultValue);
+    }
+
+    /**
+     * @param $name
      * @return $this
      */
-    public function setIsActive($isActive)
+    public function setName($name)
     {
-        if ($isActive != $this->getIsActive()) {
+        if ($name != $this->getName()) {
             $this->_changeState = true;
             $this->_changed = true;
         }
-        $this->isActive = $isActive;
+        $this->name = $name;
         return $this;
     }
 
     /**
-     * Get active state of the scenario
      *
-     * @return bool Active state
+     * @param mixed $_partial
+     * @return bool|null
      */
-    public function isActive(): bool {
-        return $this->isActive == 1;
+    public function persistLog($_partial = false)
+    {
+        if ($this->getConfiguration(ScenarioConf::LOG_MODE, Common::DEFAULT) == 'none') {
+            return null;
+        }
+        $path = NEXTDOM_LOG . '/scenarioLog';
+        if (!is_dir($path)) {
+            mkdir($path);
+        }
+        $path .= '/scenario' . $this->getId() . '.log';
+        if ($_partial) {
+            file_put_contents($path, $this->getLog(), FILE_APPEND);
+        } else {
+            file_put_contents($path, "------------------------------------\n" . $this->getLog(), FILE_APPEND);
+        }
+        return true;
     }
 
     /**
-     *
-     * @param string $key
-     * @param mixed $defaultValue
      *
      * @return mixed
      */
-    public function getConfiguration($key = '', $defaultValue = '')
+    public function getLog()
     {
-        return Utils::getJsonAttr($this->configuration, $key, $defaultValue);
+        return $this->_log;
     }
 
     /**
      *
-     * @param string $key
-     * @param mixed $value
-     *
-     * @return $this
+     * @param string $log
      */
-    public function setConfiguration($key, $value)
+    public function setLog($log)
     {
-        $this->configuration = Utils::setJsonAttr($this->configuration, $key, $value);
-        return $this;
+        $this->_log .= '[' . date(DateFormat::FULL) . '][SCENARIO] ' . $log . "\n";
+        if ($this->getConfiguration(ScenarioConf::LOG_MODE, 'default') == 'realtime') {
+            $this->persistLog(true);
+            $this->_log = '';
+        }
+    }
+
+    /**
+     * Store data in cache
+     *
+     * Data are stored in scenarioCacheAttr + Scenario_ID
+     *
+     * @param string|array $key Key to store
+     * @param mixed $valueToStore Value to store
+     *
+     * @throws \Exception
+     */
+    public function setCache($key, $valueToStore = null)
+    {
+        CacheManager::set(CacheKey::SCENARIO_CACHE_ATTR . $this->getId(), Utils::setJsonAttr(CacheManager::byKey(CacheKey::SCENARIO_CACHE_ATTR . $this->getId())->getValue(), $key, $valueToStore));
     }
 
     /**
@@ -384,17 +361,17 @@ class Scenario implements EntityInterface
      */
     public function execute($trigger = '', $message = '')
     {
-        $tags = $this->getCache('tags');
+        $tags = $this->getCache(ScenarioCache::TAGS);
         if ($tags != '') {
             $this->setTags($tags);
-            $this->setCache('tags', '');
+            $this->setCache(ScenarioCache::TAGS, '');
         }
-        if ($this->getIsActive() != 1) {
+        if (!$this->isActive()) {
             $this->setLog(__('Impossible d\'exécuter le scénario : ') . $this->getHumanName() . __(' sur : ') . $message . __(' car il est désactivé'));
             $this->persistLog();
             return null;
         }
-        if ($this->getConfiguration('timeDependency', 0) == 1 && !NextDomHelper::isDateOk()) {
+        if ($this->getConfiguration(ScenarioConf::TIME_DEPENDENCY, 0) == 1 && !NextDomHelper::isDateOk()) {
             $this->setLog(__('Lancement du scénario : ') . $this->getHumanName() . __(' annulé car il utilise une condition de type temporelle et que la date système n\'est pas OK'));
             $this->persistLog();
             return null;
@@ -403,13 +380,13 @@ class Scenario implements EntityInterface
         $cmd = CmdManager::byId(str_replace('#', '', $trigger));
         if (is_object($cmd)) {
             LogHelper::addInfo(LogTarget::EVENT, __('Exécution du scénario ') . $this->getHumanName() . __(' déclenché par : ') . $cmd->getHumanName());
-            if ($this->getConfiguration('timeline::enable')) {
-                TimeLineHelper::addTimelineEvent(array('type' => NextDomObj::SCENARIO, 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => date(DateFormat::FULL), 'trigger' => $cmd->getHumanName(true)));
+            if ($this->getConfiguration(ScenarioConf::TIMELINE_ENABLE)) {
+                TimeLineHelper::addTimelineEvent([Common::TYPE => NextDomObj::SCENARIO, Common::ID => $this->getId(), Common::NAME => $this->getHumanName(true), Common::DATETIME => date(DateFormat::FULL), Common::TRIGGER => $cmd->getHumanName(true)]);
             }
         } else {
             LogHelper::addInfo(LogTarget::EVENT, __('Exécution du scénario ') . $this->getHumanName() . __(' déclenché par : ') . $trigger);
-            if ($this->getConfiguration('timeline::enable')) {
-                TimeLineHelper::addTimelineEvent(array('type' => NextDomObj::SCENARIO, 'id' => $this->getId(), 'name' => $this->getHumanName(true), 'datetime' => date(DateFormat::FULL), 'trigger' => $trigger == 'schedule' ? 'programmation' : $trigger));
+            if ($this->getConfiguration(ScenarioConf::TIMELINE_ENABLE)) {
+                TimeLineHelper::addTimelineEvent([Common::TYPE => NextDomObj::SCENARIO, Common::ID => $this->getId(), Common::NAME => $this->getHumanName(true), Common::DATETIME => date(DateFormat::FULL), Common::TRIGGER => $trigger == Common::SCHEDULE ? 'programmation' : $trigger]);
             }
         }
         if (count($this->getTags()) == 0) {
@@ -435,114 +412,63 @@ class Scenario implements EntityInterface
     }
 
     /**
-     * Get data from cache
      *
-     * Data are stored in scenarioCacheAttr + Scenario_ID
-     *
-     * @param string $key Key find
-     * @param mixed $defaultValue Default value returned if key is not found
-     *
-     * @return mixed
-     *
-     * @throws \Exception
-     */
-    public function getCache($key = '', $defaultValue = '')
-    {
-        $scenarioCacheAttr = CacheManager::byKey(CacheKey::SCENARIO_CACHE_ATTR . $this->getId())->getValue();
-        return Utils::getJsonAttr($scenarioCacheAttr, $key, $defaultValue);
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $_id
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
-    }
-
-    /**
-     * Store data in cache
-     *
-     * Data are stored in scenarioCacheAttr + Scenario_ID
-     *
-     * @param string|array $key Key to store
-     * @param mixed $valueToStore Value to store
-     *
-     * @throws \Exception
-     */
-    public function setCache($key, $valueToStore = null)
-    {
-        CacheManager::set(CacheKey::SCENARIO_CACHE_ATTR . $this->getId(), Utils::setJsonAttr(CacheManager::byKey(CacheKey::SCENARIO_CACHE_ATTR . $this->getId())->getValue(), $key, $valueToStore));
-    }
-
-    /**
-     *
-     * @param mixed $_complete
-     * @param mixed $_noGroup
-     * @param mixed $_tag
-     * @param mixed $_prettify
-     * @param mixed $_withoutScenarioName
-     * @param bool $_object_name
+     * @param bool $fullInfo
+     * @param bool $withoutGroup
+     * @param bool $withTag
+     * @param bool $htmlRender
+     * @param bool $withoutScenarioName
+     * @param bool $showObjectName
      * @return string
      * @throws \Exception
      */
-    public function getHumanName($_complete = false, $_noGroup = false, $_tag = false, $_prettify = false, $_withoutScenarioName = false, $_object_name = true)
+    public function getHumanName($fullInfo = false, $withoutGroup = false, $withTag = false, $htmlRender = false, $withoutScenarioName = false, $showObjectName = true)
     {
-        $name = '';
-        if ($_object_name && is_numeric($this->getObject_id()) && is_object($this->getObject())) {
+        $noneText = __('Aucun');
+        $result = '';
+        if ($showObjectName && is_numeric($this->getObject_id()) && is_object($this->getObject())) {
             $linkedObject = $this->getObject();
-            if ($_tag) {
+            if ($withTag) {
                 if ($linkedObject->getDisplay('tagColor') != '') {
-                    $name .= '<span class="label label-config" style="background-color:' . $linkedObject->getDisplay('tagColor') . ' !important;color:' . $linkedObject->getDisplay('tagTextColor', 'white') . ' !important">' . $linkedObject->getName() . '</span>';
+                    $result .= '<span class="label label-config" style="background-color:' . $linkedObject->getDisplay('tagColor') . ' !important;color:' . $linkedObject->getDisplay('tagTextColor', 'white') . ' !important">' . $linkedObject->getName() . '</span>';
                 } else {
-                    $name .= '<span class="label label-primary label-sticker">' . $linkedObject->getName() . '</span>';
+                    $result .= '<span class="label label-primary label-sticker">' . $linkedObject->getName() . '</span>';
                 }
             } else {
-                $name .= '[' . $linkedObject->getName() . ']';
+                $result .= '[' . $linkedObject->getName() . ']';
             }
         } else {
-            if ($_complete) {
-                if ($_tag) {
-                    $name .= '<span class="label label-default label-sticker">' . __('Aucun') . '</span>';
+            if ($fullInfo) {
+                if ($withTag) {
+                    $result .= '<span class="label label-default label-sticker">' . __('Aucun') . '</span>';
                 } else {
-                    $name .= '[' . __('Aucun') . ']';
+                    $result .= '[' . $noneText . ']';
                 }
             }
         }
-        if (!$_noGroup) {
+        if (!$withoutGroup) {
             if ($this->getGroup() != '') {
-                $name .= '[' . $this->getGroup() . ']';
+                $result .= '[' . $this->getGroup() . ']';
             } else {
-                if ($_complete) {
-                    $name .= '[' . __('Aucun') . ']';
+                if ($fullInfo) {
+                    $result .= '[' . $noneText . ']';
                 }
             }
         }
-        if ($_prettify) {
-            $name .= '<p class="title">';
+        if ($htmlRender) {
+            $result .= '<p class="title">';
         }
-        if (!$_withoutScenarioName) {
-            if ($_tag) {
-                $name .= $this->getName();
+        if (!$withoutScenarioName) {
+            if ($withTag) {
+                $result .= $this->getName();
             } else {
-                $name .= '[' . $this->getName() . ']';
+                $result .= '[' . $this->getName() . ']';
             }
         }
-        if ($_prettify) {
-            $name .= '</p>';
+        if ($htmlRender) {
+            $result .= '</p>';
         }
-        return $name;
+        return $result;
     }
 
     /**
@@ -607,73 +533,6 @@ class Scenario implements EntityInterface
     }
 
     /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param $name
-     * @return $this
-     */
-    public function setName($name)
-    {
-        if ($name != $this->getName()) {
-            $this->_changeState = true;
-            $this->_changed = true;
-        }
-        $this->name = $name;
-        return $this;
-    }
-
-    /**
-     *
-     * @param mixed $_partial
-     * @return bool|null
-     */
-    public function persistLog($_partial = false)
-    {
-        if ($this->getConfiguration('logmode', 'default') == 'none') {
-            return null;
-        }
-        $path = NEXTDOM_LOG . '/scenarioLog';
-        if (!file_exists($path)) {
-            mkdir($path);
-        }
-        $path .= '/scenario' . $this->getId() . '.log';
-        if ($_partial) {
-            file_put_contents($path, $this->getLog(), FILE_APPEND);
-        } else {
-            file_put_contents($path, "------------------------------------\n" . $this->getLog(), FILE_APPEND);
-        }
-        return true;
-    }
-
-    /**
-     *
-     * @return mixed
-     */
-    public function getLog()
-    {
-        return $this->_log;
-    }
-
-    /**
-     *
-     * @param string $log
-     */
-    public function setLog($log)
-    {
-        $this->_log .= '[' . date(DateFormat::FULL) . '][SCENARIO] ' . $log . "\n";
-        if ($this->getConfiguration('logmode', 'default') == 'realtime') {
-            $this->persistLog(true);
-            $this->_log = '';
-        }
-    }
-
-    /**
      *
      * @return array
      */
@@ -700,7 +559,7 @@ class Scenario implements EntityInterface
      */
     public function setLastLaunch($lastLaunch)
     {
-        $this->setCache('lastLaunch', $lastLaunch);
+        $this->setCache(ScenarioCache::LAST_LAUNCH, $lastLaunch);
     }
 
     /**
@@ -710,11 +569,11 @@ class Scenario implements EntityInterface
      */
     public function setState($state)
     {
-        if ($this->getCache('state') != $state) {
+        if ($this->getCache(ScenarioCache::STATE) != $state) {
             $this->emptyCacheWidget();
-            EventManager::add('scenario::update', array('scenario_id' => $this->getId(), 'state' => $state, 'lastLaunch' => $this->getLastLaunch()));
+            EventManager::add('scenario::update', ['scenario_id' => $this->getId(), Common::STATE => $state, ScenarioCache::LAST_LAUNCH => $this->getLastLaunch()]);
         }
-        $this->setCache('state', $state);
+        $this->setCache(ScenarioCache::STATE, $state);
     }
 
     /**
@@ -739,7 +598,7 @@ class Scenario implements EntityInterface
      */
     public function getLastLaunch()
     {
-        return $this->getCache('lastLaunch');
+        return $this->getCache(ScenarioCache::LAST_LAUNCH);
     }
 
     /**
@@ -762,7 +621,7 @@ class Scenario implements EntityInterface
         if (count($this->_elements) > 0) {
             return $this->_elements;
         }
-        $result = array();
+        $result = [];
         $elements = $this->getScenarioElement();
         $elementId = -1;
         if (is_array($elements)) {
@@ -773,17 +632,15 @@ class Scenario implements EntityInterface
                 }
             }
             $this->_elements = $result;
-            return $result;
         }
-        if ($elements != '') {
+        elseif ($elements != '') {
             $element = ScenarioElementManager::byId($elementId);
             if (is_object($element)) {
                 $result[] = $element;
                 $this->_elements = $result;
-                return $result;
             }
         }
-        return array();
+        return $result;
     }
 
     /**
@@ -805,7 +662,7 @@ class Scenario implements EntityInterface
         if (is_array($_scenarioElement)) {
             $_scenarioElement = json_encode($_scenarioElement, JSON_UNESCAPED_UNICODE);
         }
-        $this->_changed = Utils::attrChanged($this->_changed, $this->scenarioElement, $_scenarioElement);
+        $this->updateChangeState($this->scenarioElement, $_scenarioElement);
         $this->scenarioElement = $_scenarioElement;
         return $this;
     }
@@ -862,7 +719,7 @@ class Scenario implements EntityInterface
         $scenarioCopy = clone $this;
         $scenarioCopy->setName($name);
         $scenarioCopy->setId('');
-        $scenario_element_list = array();
+        $scenario_element_list = [];
         foreach ($this->getElement() as $element) {
             $scenario_element_list[] = $element->copy();
         }
@@ -876,11 +733,12 @@ class Scenario implements EntityInterface
     }
 
     /**
-     *
+     * @throws CoreException
+     * @throws \ReflectionException
      */
     public function save()
     {
-        if ($this->getLastLaunch() == '' && ($this->getMode() == 'schedule' || $this->getMode() == 'all')) {
+        if ($this->getLastLaunch() == '' && ($this->getMode() == Common::SCHEDULE || $this->getMode() == 'all')) {
             $calculateScheduleDate = $this->calculateScheduleDate();
             $this->setLastLaunch($calculateScheduleDate['prevDate']);
         }
@@ -888,16 +746,10 @@ class Scenario implements EntityInterface
         $this->emptyCacheWidget();
         if ($this->_changeState) {
             $this->_changeState = false;
-            EventManager::add('scenario::update', array('scenario_id' => $this->getId(), 'isActive' => $this->getIsActive(), 'state' => $this->getState(), 'lastLaunch' => $this->getLastLaunch()));
+            EventManager::add('scenario::update', ['scenario_id' => $this->getId(), 'isActive' => $this->getIsActive(), Common::STATE => $this->getState(), ScenarioCache::LAST_LAUNCH => $this->getLastLaunch()]);
         }
     }
 
-    /**
-     * @return string
-     */
-    /**
-     * @return string
-     */
     /**
      * @return string
      */
@@ -910,30 +762,21 @@ class Scenario implements EntityInterface
      * @param $_mode
      * @return $this
      */
-    /**
-     * @param $_mode
-     * @return $this
-     */
-    /**
-     * @param $_mode
-     * @return $this
-     */
     public function setMode($_mode)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->mode, $_mode);
+        $this->updateChangeState($this->mode, $_mode);
         $this->mode = $_mode;
         return $this;
     }
 
     /**
-     *
-     * @return mixed
+     * @return array
      */
     public function calculateScheduleDate()
     {
-        $calculatedDate = array('prevDate' => '', 'nextDate' => '');
+        $calculatedDate = ['prevDate' => '', 'nextDate' => ''];
         if (is_array($this->getSchedule())) {
-            $calculatedDate_tmp = array('prevDate' => '', 'nextDate' => '');
+            $calculatedDate_tmp = ['prevDate' => '', 'nextDate' => ''];
             foreach ($this->getSchedule() as $schedule) {
                 try {
                     $c = new \Cron\CronExpression($schedule, new \Cron\FieldFactory);
@@ -964,12 +807,6 @@ class Scenario implements EntityInterface
     /**
      * @return bool|mixed|null
      */
-    /**
-     * @return bool|mixed|null
-     */
-    /**
-     * @return bool|mixed|null
-     */
     public function getSchedule()
     {
         return Utils::isJson($this->schedule, $this->schedule);
@@ -979,32 +816,14 @@ class Scenario implements EntityInterface
      * @param $_schedule
      * @return $this
      */
-    /**
-     * @param $_schedule
-     * @return $this
-     */
-    /**
-     * @param $_schedule
-     * @return $this
-     */
     public function setSchedule($_schedule)
     {
         if (is_array($_schedule)) {
             $_schedule = json_encode($_schedule, JSON_UNESCAPED_UNICODE);
         }
-        $this->_changed = Utils::attrChanged($this->_changed, $this->schedule, $_schedule);
+        $this->updateChangeState($this->schedule, $_schedule);
         $this->schedule = $_schedule;
         return $this;
-    }
-
-    /**
-     *
-     * @return mixed
-     * @throws \Exception
-     */
-    public function getState()
-    {
-        return $this->getCache('state');
     }
 
     /**
@@ -1024,12 +843,12 @@ class Scenario implements EntityInterface
         }
 
         $version = NextDomHelper::versionAlias($_version);
-        $replace = array(
+        $replace = [
             '#id#' => $this->getId(),
             '#state#' => $this->getState(),
             '#isActive#' => $this->getIsActive(),
-            '#name#' => ($this->getDisplay('name') != '') ? $this->getDisplay('name') : $this->getHumanName(),
-            '#shortname#' => ($this->getDisplay('name') != '') ? $this->getDisplay('name') : $this->getName(),
+            '#name#' => ($this->getDisplay(Common::NAME) != '') ? $this->getDisplay(Common::NAME) : $this->getHumanName(),
+            '#shortname#' => ($this->getDisplay(Common::NAME) != '') ? $this->getDisplay(Common::NAME) : $this->getName(),
             '#treename#' => $this->getHumanName(false, false, false, false, true),
             '#icon#' => $this->getIcon(),
             '#lastLaunch#' => $this->getLastLaunch(),
@@ -1037,9 +856,9 @@ class Scenario implements EntityInterface
             '#version#' => $_version,
             '#height#' => $this->getDisplay('height', 'auto'),
             '#width#' => $this->getDisplay('width', 'auto')
-        );
+        ];
         if (!isset(self::$_templateArray)) {
-            self::$_templateArray = array();
+            self::$_templateArray = [];
         }
         if (!isset(self::$_templateArray[$version])) {
             self::$_templateArray[$version] = FileSystemHelper::getCoreTemplateFileContent($version, NextDomObj::SCENARIO, '');
@@ -1080,31 +899,6 @@ class Scenario implements EntityInterface
     }
 
     /**
-     *
-     * @param mixed $key
-     * @param mixed $default
-     * @return mixed
-     */
-    public function getDisplay($key = '', $default = '')
-    {
-        return Utils::getJsonAttr($this->display, $key, $default);
-    }
-
-    /**
-     *
-     * @param $key
-     * @param $value
-     * @return $this
-     */
-    public function setDisplay($key, $value)
-    {
-        $display = Utils::setJsonAttr($this->display, $key, $value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->display, $display);
-        $this->display = $display;
-        return $this;
-    }
-
-    /**
      * Get scenario icon
      *
      * @param bool $onlyClass
@@ -1113,8 +907,7 @@ class Scenario implements EntityInterface
      */
     public function getIcon($onlyClass = false)
     {
-        $cssClass = '';
-        if ($this->getIsActive() == 1) {
+        if ($this->isActive()) {
             switch ($this->getState()) {
                 case ScenarioState::STARTING:
                     $cssClass = 'fas fa-hourglass-start';
@@ -1131,13 +924,11 @@ class Scenario implements EntityInterface
                         // Icon stored with HTML
                         if ($onlyClass) {
                             $cssClass = trim(str_replace(['<i', 'class=', '"', '/>', '></i>'], '', $this->getDisplay('icon')));
-                        }
-                        else {
+                        } else {
                             return $this->getDisplay('icon');
                         }
-                    }
-                    else {
-                        $cssClass =  'fas fa-check';
+                    } else {
+                        $cssClass = 'fas fa-check';
                     }
                     break;
             }
@@ -1173,14 +964,14 @@ class Scenario implements EntityInterface
         if ($this->getName() == '') {
             throw new CoreException(__('Le nom du scénario ne peut pas être vide.'));
         }
-        if (($this->getMode() == 'schedule' || $this->getMode() == 'all') && $this->getSchedule() == '') {
+        if (($this->getMode() == Common::SCHEDULE || $this->getMode() == 'all') && $this->getSchedule() == '') {
             throw new CoreException(__('Le scénario est de type programmé mais la programmation est vide'));
         }
         if ($this->getConfiguration('has_return', 0) == 1) {
-            $this->setConfiguration('syncmode', 1);
+            $this->setConfiguration(ScenarioConf::SYNC_MODE, 1);
         }
-        if ($this->getConfiguration('logmode') == '') {
-            $this->setConfiguration('logmode', 'default');
+        if ($this->getConfiguration(ScenarioConf::LOG_MODE) == '') {
+            $this->setConfiguration(ScenarioConf::LOG_MODE, 'default');
         }
     }
 
@@ -1207,7 +998,7 @@ class Scenario implements EntityInterface
         if ($_timeout === '' || is_nan(intval($_timeout)) || $_timeout < 1) {
             $_timeout = 0;
         }
-        $this->_changed = Utils::attrChanged($this->_changed, $this->timeout, $_timeout);
+        $this->updateChangeState($this->timeout, $_timeout);
         $this->timeout = $_timeout;
         return $this;
     }
@@ -1219,14 +1010,6 @@ class Scenario implements EntityInterface
     {
         $this->setState('stop');
         $this->setPID();
-    }
-
-    /**
-     *
-     */
-    public function refresh()
-    {
-        DBHelper::refresh($this);
     }
 
     /**
@@ -1246,7 +1029,7 @@ class Scenario implements EntityInterface
             unlink(NEXTDOM_LOG . '/scenarioLog/scenario' . $this->getId() . '.log');
         }
         CacheManager::delete(CacheKey::SCENARIO_CACHE_ATTR . $this->getId());
-        return DBHelper::remove($this);
+        return parent::remove();
     }
 
     /**
@@ -1293,20 +1076,6 @@ class Scenario implements EntityInterface
         return true;
     }
 
-    /**
-     * @param $key
-     * @param bool $protected
-     * @param string $default
-     * @return string
-     * @throws \Exception
-     */
-    /**
-     * @param $key
-     * @param bool $protected
-     * @param string $default
-     * @return string
-     * @throws \Exception
-     */
     /**
      * @param $key
      * @param bool $protected
@@ -1408,7 +1177,7 @@ class Scenario implements EntityInterface
                         $cron->halt();
                         $cron->remove();
                     } catch (\Exception $e) {
-                        LogHelper::addInfo(LogTarget::SCENARIO, __('Can not stop subtask : ') . print_r($cron->getOption(), true));
+                        LogHelper::addInfo(LogTarget::SCENARIO, __('Can not stop subtask : ') . json_encode($cron->getOption()));
                     }
                 }
             }
@@ -1450,7 +1219,7 @@ class Scenario implements EntityInterface
         if (intval($this->getPID()) > 0 && posix_getsid(intval($this->getPID())) && (!file_exists('/proc/' . $this->getPID() . '/cmdline') || strpos(file_get_contents('/proc/' . $this->getPID() . '/cmdline'), 'scenario_id=' . $this->getId()) !== false)) {
             return true;
         }
-        if (count(SystemHelper::ps('scenario_id=' . $this->getId() . ' ', array(getmypid()))) > 0) {
+        if (count(SystemHelper::ps('scenario_id=' . $this->getId() . ' ', [getmypid()])) > 0) {
             return true;
         }
         return false;
@@ -1474,17 +1243,17 @@ class Scenario implements EntityInterface
     public function toArray()
     {
         $return = Utils::o2a($this, true);
-        $cache = $this->getCache(array('state', 'lastLaunch'));
+        $cache = $this->getCache([ScenarioCache::STATE, ScenarioCache::LAST_LAUNCH]);
         // TODO: Pourquoi ce test a-t-il dû être rajouté ?
-        if (isset($cache['state'])) {
-            $return['state'] = $cache['state'];
+        if (isset($cache[ScenarioCache::STATE])) {
+            $return[ScenarioCache::STATE] = $cache[ScenarioCache::STATE];
         } else {
-            $return['state'] = '';
+            $return[ScenarioCache::STATE] = '';
         }
-        if (isset($cache['lastLaunch'])) {
-            $return['lastLaunch'] = $cache['lastLaunch'];
+        if (isset($cache[ScenarioCache::LAST_LAUNCH])) {
+            $return[ScenarioCache::LAST_LAUNCH] = $cache[ScenarioCache::LAST_LAUNCH];
         } else {
-            $return['lastLaunch'] = '';
+            $return[ScenarioCache::LAST_LAUNCH] = '';
         }
         return $return;
     }
@@ -1497,7 +1266,7 @@ class Scenario implements EntityInterface
      * @return string
      * @throws \Exception
      */
-    public function getLinkData(&$_data = array('node' => array(), 'link' => array()), $_level = 0, $_drill = null)
+    public function getLinkData(&$_data = ['node' => [], 'link' => []], $_level = 0, $_drill = null)
     {
         if ($_drill === null) {
             $_drill = ConfigManager::byKey('graphlink::scenario::drill');
@@ -1505,7 +1274,7 @@ class Scenario implements EntityInterface
         if (isset($_data['node'][NextDomObj::SCENARIO . $this->getId()])) {
             return null;
         }
-        if ($this->getIsActive() == 0 && $_level > 0) {
+        if (!$this->isActive() && $_level > 0) {
             return $_data;
         }
         $_level++;
@@ -1513,9 +1282,9 @@ class Scenario implements EntityInterface
             return $_data;
         }
 
-        $_data['node'][NextDomObj::SCENARIO . $this->getId()] = array(
-            'id' => NextDomObj::SCENARIO . $this->getId(),
-            'name' => $this->getName(),
+        $_data['node'][NextDomObj::SCENARIO . $this->getId()] = [
+            Common::ID => NextDomObj::SCENARIO . $this->getId(),
+            Common::NAME => $this->getName(),
             'fontweight' => ($_level == 1) ? 'bold' : 'normal',
             'shape' => 'rect',
             'width' => 40,
@@ -1524,10 +1293,10 @@ class Scenario implements EntityInterface
             'image' => '/public/img/NextDom_Scenario.png',
             'title' => $this->getHumanName(),
             'url' => 'index.php?v=d&p=scenario&id=' . $this->getId(),
-        );
+        ];
         $use = $this->getUse();
         $usedBy = $this->getUsedBy();
-        Utils::addGraphLink($this, NextDomObj::SCENARIO, $this->getObject(), 'object', $_data, $_level + 1, $_drill, array('dashvalue' => '1,0', 'lengthfactor' => 0.6));
+        Utils::addGraphLink($this, NextDomObj::SCENARIO, $this->getObject(), 'object', $_data, $_level + 1, $_drill, ['dashvalue' => '1,0', 'lengthfactor' => 0.6]);
         Utils::addGraphLink($this, NextDomObj::SCENARIO, $use['cmd'], 'cmd', $_data, $_level, $_drill);
         Utils::addGraphLink($this, NextDomObj::SCENARIO, $use[NextDomObj::SCENARIO], NextDomObj::SCENARIO, $_data, $_level, $_drill);
         Utils::addGraphLink($this, NextDomObj::SCENARIO, $use['eqLogic'], 'eqLogic', $_data, $_level, $_drill);
@@ -1537,9 +1306,9 @@ class Scenario implements EntityInterface
         Utils::addGraphLink($this, NextDomObj::SCENARIO, $usedBy['cmd'], 'cmd', $_data, $_level, $_drill);
         Utils::addGraphLink($this, NextDomObj::SCENARIO, $usedBy[NextDomObj::SCENARIO], NextDomObj::SCENARIO, $_data, $_level, $_drill);
         Utils::addGraphLink($this, NextDomObj::SCENARIO, $usedBy['eqLogic'], 'eqLogic', $_data, $_level, $_drill);
-        Utils::addGraphLink($this, NextDomObj::SCENARIO, $usedBy['interactDef'], 'interactDef', $_data, $_level, $_drill, array('dashvalue' => '2,6', 'lengthfactor' => 0.6));
-        Utils::addGraphLink($this, NextDomObj::SCENARIO, $usedBy['plan'], 'plan', $_data, $_level, $_drill, array('dashvalue' => '2,6', 'lengthfactor' => 0.6));
-        Utils::addGraphLink($this, NextDomObj::SCENARIO, $usedBy['view'], 'view', $_data, $_level, $_drill, array('dashvalue' => '2,6', 'lengthfactor' => 0.6));
+        Utils::addGraphLink($this, NextDomObj::SCENARIO, $usedBy['interactDef'], 'interactDef', $_data, $_level, $_drill, ['dashvalue' => '2,6', 'lengthfactor' => 0.6]);
+        Utils::addGraphLink($this, NextDomObj::SCENARIO, $usedBy['plan'], 'plan', $_data, $_level, $_drill, ['dashvalue' => '2,6', 'lengthfactor' => 0.6]);
+        Utils::addGraphLink($this, NextDomObj::SCENARIO, $usedBy['view'], 'view', $_data, $_level, $_drill, ['dashvalue' => '2,6', 'lengthfactor' => 0.6]);
         return $_data;
     }
 
@@ -1571,7 +1340,7 @@ class Scenario implements EntityInterface
             }
             $return .= '- Mode du scénario : ' . $this->getMode() . "\n";
             $schedules = $this->getSchedule();
-            if ($this->getMode() == 'schedule' || $this->getMode() == 'all') {
+            if ($this->getMode() == Common::SCHEDULE || $this->getMode() == 'all') {
                 if (is_array($schedules)) {
                     foreach ($schedules as $schedule) {
                         $return .= '    - Programmation : ' . $schedule . "\n";
@@ -1599,16 +1368,16 @@ class Scenario implements EntityInterface
         }
         if ($_mode == 'array') {
             $return = Utils::o2a($this);
-            $return['trigger'] = NextDomHelper::toHumanReadable($return['trigger']);
-            $return['elements'] = array();
+            $return[Common::TRIGGER] = NextDomHelper::toHumanReadable($return[Common::TRIGGER]);
+            $return['elements'] = [];
             foreach ($this->getElement() as $element) {
                 $return['elements'][] = $element->getAjaxElement('array');
             }
             if (isset($return['id'])) {
                 unset($return['id']);
             }
-            if (isset($return['lastLaunch'])) {
-                unset($return['lastLaunch']);
+            if (isset($return[ScenarioCache::LAST_LAUNCH])) {
+                unset($return[ScenarioCache::LAST_LAUNCH]);
             }
             if (isset($return['log'])) {
                 unset($return['log']);
@@ -1628,17 +1397,11 @@ class Scenario implements EntityInterface
             if (isset($return['_templateArray'])) {
                 unset($return['_templateArray']);
             }
-            if (isset($return['_templateArray'])) {
-                unset($return['_templateArray']);
-            }
             if (isset($return['_changeState'])) {
                 unset($return['_changeState']);
             }
             if (isset($return['_realTrigger'])) {
                 unset($return['_realTrigger']);
-            }
-            if (isset($return['_templateArray'])) {
-                unset($return['_templateArray']);
             }
             if (isset($return['_elements'])) {
                 unset($return['_elements']);
@@ -1661,7 +1424,7 @@ class Scenario implements EntityInterface
      */
     public function setDescription($_description)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->description, $_description);
+        $this->updateChangeState($this->description, $_description);
         $this->description = $_description;
         return $this;
     }
@@ -1677,7 +1440,7 @@ class Scenario implements EntityInterface
         $return = [NextDomObj::CMD => [], NextDomObj::EQLOGIC => [], NextDomObj::SCENARIO => [], NextDomObj::PLAN => [], NextDomObj::VIEW => []];
         $return[NextDomObj::EQLOGIC] = EqLogicManager::searchConfiguration(['#scenario' . $this->getId() . '#', '"scenario_id":"' . $this->getId()]);
         $return[NextDomObj::INTERACT_DEF] = InteractDefManager::searchByUse(['#scenario' . $this->getId() . '#', '"scenario_id":"' . $this->getId()]);
-        // TODO: scenario_id, pas de guillemet ouvrant, à vérifier
+        // @TODO: scenario_id, pas de guillemet ouvrant, à vérifier
         $return[NextDomObj::SCENARIO] = ScenarioManager::searchByUse([
             ['action' => NextDomObj::SCENARIO, 'option' => $this->getId(), 'and' => true],
             ['action' => '#scenario' . $this->getId() . '#'],
@@ -1721,69 +1484,6 @@ class Scenario implements EntityInterface
     public function setRealTrigger($_realTrigger)
     {
         $this->_realTrigger = $_realTrigger;
-        return $this;
-    }
-
-    /**
-     * Name of the table in the database
-     *
-     * @return string Name of the table in the database
-     */
-    public function getTableName()
-    {
-        return 'scenario';
-    }
-
-    /**
-     *
-     * @return int
-     */
-    public function getOrder()
-    {
-        return $this->order;
-    }
-
-    /**
-     *
-     * @param int $_order
-     * @return $this
-     */
-    public function setOrder($_order)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->order, $_order);
-        $this->order = $_order;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    /**
-     * @return bool
-     */
-    /**
-     * @return bool
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
         return $this;
     }
 }

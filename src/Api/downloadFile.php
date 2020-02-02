@@ -36,12 +36,13 @@ try {
     }
 
     $baseFilePath = Utils::init('pathfile');
+
     if (strpos($baseFilePath, 'log') === false) {
         if (strpos($baseFilePath, 'data') === 0) {
             $filePath = NEXTDOM_DATA . '/data';
         } else {
             $filePath = realpath(NEXTDOM_DATA . '/' . $baseFilePath);
-            if (false === is_file($filePath)) {
+            if (!is_file($filePath)) {
                 $filePath = realpath(NEXTDOM_ROOT . '/' . $baseFilePath);
             }
         }
@@ -50,9 +51,10 @@ try {
     }
 
     // Bad path
-    if ($filePath === false) {
+    if ($filePath === false || !Utils::checkPath($filePath)) {
         Router::showError401AndDie();
     }
+
     // Block PHP files download
     if (strpos($filePath, '.php') !== false) {
         Router::showError401AndDie();
@@ -60,7 +62,7 @@ try {
 
     // Block some kind of files for non-admin users
     if (!AuthentificationHelper::isConnectedWithRights('admin')) {
-        $adminFiles = array('backup', '.sql', 'scenario', '.tar', '.gz');
+        $adminFiles = ['backup', '.sql', 'scenario', '.tar', '.gz'];
         foreach ($adminFiles as $adminFile) {
             if (strpos($filePath, $adminFile) !== false) {
                 Router::showError401AndDie();
@@ -69,7 +71,7 @@ try {
     }
 
     // Special access
-    if (strpos($filePath, NEXTDOM_LOG) === false) {
+    if (strpos($filePath, NEXTDOM_LOG) === false && strpos($filePath, NEXTDOM_DATA . '/data') === false) {
         // For camera
         $cameraPath = ConfigManager::byKey('recordDir', 'camera');
         if ($cameraPath != '' && substr($cameraPath, 0, 1) == '/') {

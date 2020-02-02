@@ -36,35 +36,19 @@ namespace NextDom\Managers;
 
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
+use NextDom\Managers\Parents\BaseManager;
+use NextDom\Managers\Parents\CommonManager;
 use NextDom\Model\Entity\InteractDef;
-
-require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
 
 /**
  * Class InteractDefManager
  * @package NextDom\Managers
  */
-class InteractDefManager
+class InteractDefManager extends BaseManager
 {
+    use CommonManager;
     const CLASS_NAME = InteractDef::class;
     const DB_CLASS_NAME = '`interactDef`';
-
-    /**
-     * @param $_id
-     * @return array|mixed|null
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
-    public static function byId($_id)
-    {
-        $values = array(
-            'id' => $_id,
-        );
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE id = :id';
-        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
-    }
 
     /**
      * @param null $_group
@@ -73,7 +57,7 @@ class InteractDefManager
      */
     public static function listGroup($_group = null)
     {
-        $values = array();
+        $values = [];
         $sql = 'SELECT DISTINCT(`group`)
                 FROM ' . self::DB_CLASS_NAME;
         if ($_group !== null) {
@@ -90,7 +74,7 @@ class InteractDefManager
      */
     public static function generateTextVariant($_text)
     {
-        $return = array();
+        $return = [];
         preg_match_all("/(\[.*?\])/", $_text, $words);
         if (count($words[1]) == 0) {
             $return[] = $_text;
@@ -117,13 +101,10 @@ class InteractDefManager
      */
     public static function searchByQuery($_query)
     {
-        $values = array(
+        $clauses = [
             'query' => '%' . $_query . '%',
-        );
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE query LIKE :query';
-        return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
+        ];
+        return static::searchMultipleByClauses($clauses);
     }
 
     public static function regenerateInteract()
@@ -140,23 +121,18 @@ class InteractDefManager
      */
     public static function all($_group = '')
     {
-        $values = array();
+        $values = [];
         if ($_group === '') {
-            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                    FROM ' . self::DB_CLASS_NAME . '
-                    ORDER BY name, query';
+            $sql = static::getBaseSQL();
         } else if ($_group === null) {
-            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                    FROM ' . self::DB_CLASS_NAME . '
-                    WHERE (`group` IS NULL OR `group` = "")
-                    ORDER BY name, query';
+            $sql = static::getBaseSQL() . '
+                    WHERE (`group` IS NULL OR `group` = "")';
         } else {
             $values['group'] = $_group;
-            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                    FROM ' . self::DB_CLASS_NAME . '
-                    WHERE `group` = :group
-                    ORDER BY name, query';
+            $sql = static::getBaseSQL() . '
+                    WHERE `group` = :group';
         }
+        $sql .= ' ORDER BY `name`, `query`';
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
     }
 
@@ -169,7 +145,7 @@ class InteractDefManager
     {
         $_def = self::sanitizeQuery(trim($_def));
         $_query = self::sanitizeQuery(trim($_query));
-        $options = array();
+        $options = [];
         $regexp = preg_quote(strtolower($_def));
         preg_match_all("/#(.*?)#/", $_def, $tags);
         if (count($tags[1]) > 0) {
@@ -200,7 +176,7 @@ class InteractDefManager
      */
     public static function sanitizeQuery($_query)
     {
-        $_query = str_replace(array("\'"), array("'"), $_query);
+        $_query = str_replace(["\'"], ["'"], $_query);
         $_query = preg_replace('/\s+/', ' ', $_query);
         $_query = ucfirst(strtolower($_query));
         $_query = strtolower(Utils::sanitizeAccent($_query));
@@ -213,14 +189,14 @@ class InteractDefManager
      */
     public static function deadCmd()
     {
-        $return = array();
+        $return = [];
         foreach (self::all() as $interact) {
             if (is_string($interact->getActions('cmd')) && $interact->getActions('cmd') != '') {
                 preg_match_all("/#([0-9]*)#/", $interact->getActions('cmd'), $matches);
                 foreach ($matches[1] as $cmd_id) {
                     if (is_numeric($cmd_id)) {
                         if (!CmdManager::byId(str_replace('#', '', $cmd_id))) {
-                            $return[] = array('detail' => 'Interaction ' . $interact->getName() . ' du groupe ' . $interact->getGroup(), 'help' => 'Action', 'who' => '#' . $cmd_id . '#');
+                            $return[] = ['detail' => 'Interaction ' . $interact->getName() . ' du groupe ' . $interact->getGroup(), 'help' => 'Action', 'who' => '#' . $cmd_id . '#'];
                         }
                     }
                 }
@@ -230,7 +206,7 @@ class InteractDefManager
                 foreach ($matches[1] as $cmd_id) {
                     if (is_numeric($cmd_id)) {
                         if (!CmdManager::byId(str_replace('#', '', $cmd_id))) {
-                            $return[] = array('detail' => 'Interaction ' . $interact->getName() . ' du groupe ' . $interact->getGroup(), 'help' => 'Réponse', 'who' => '#' . $cmd_id . '#');
+                            $return[] = ['detail' => 'Interaction ' . $interact->getName() . ' du groupe ' . $interact->getGroup(), 'help' => 'Réponse', 'who' => '#' . $cmd_id . '#'];
                         }
                     }
                 }
@@ -245,7 +221,7 @@ class InteractDefManager
      */
     public static function cleanInteract()
     {
-        $list_id = array();
+        $list_id = [];
         foreach (self::all() as $interactDef) {
             $list_id[$interactDef->getId()] = $interactDef->getId();
         }
@@ -263,7 +239,7 @@ class InteractDefManager
      */
     public static function searchByUse($searchPattern)
     {
-        $return = array();
+        $return = [];
         $interactDefs = self::searchByActionsOrReply($searchPattern);
         $interactQueries = InteractQueryManager::searchActions($searchPattern);
         foreach ($interactQueries as $interactQuery) {
@@ -285,25 +261,23 @@ class InteractDefManager
     private static function searchByActionsOrReply($searchPattern)
     {
         if (!is_array($searchPattern)) {
-            $values = array(
+            $values = [
                 'search' => '%' . $searchPattern . '%',
-            );
-            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                    FROM ' . self::DB_CLASS_NAME . '
-                    WHERE actions LIKE :search
-                        OR reply LIKE :search';
+            ];
+            $sql = static::getBaseSQL() . '
+                    WHERE `actions` LIKE :search
+                       OR `reply` LIKE :search';
         } else {
-            $values = array(
+            $values = [
                 'search' => '%' . $searchPattern[0] . '%',
-            );
-            $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                    FROM ' . self::DB_CLASS_NAME . '
-                    WHERE actions LIKE :search
-                        OR reply LIKE :search';
+            ];
+            $sql = static::getBaseSQL() . '
+                    WHERE `actions` LIKE :search
+                       OR `reply` LIKE :search';
             for ($i = 1; $i < count($searchPattern); $i++) {
                 $values['search' . $i] = '%' . $searchPattern[$i] . '%';
-                $sql .= ' OR actions LIKE :search' . $i . '
-                          OR reply LIKE :search' . $i;
+                $sql .= ' OR `actions` LIKE :search' . $i . '
+                          OR `reply` LIKE :search' . $i;
             }
         }
         return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
@@ -317,7 +291,7 @@ class InteractDefManager
      */
     public static function generateSynonymeVariante($_text, $_synonymes, $_deep = 0)
     {
-        $return = array();
+        $return = [];
         if (count($_synonymes) == 0) {
             return $return;
         }

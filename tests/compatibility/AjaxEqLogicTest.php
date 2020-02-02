@@ -23,112 +23,112 @@ class AjaxEqLogicTest extends AjaxBase
 
     public function testWithout() {
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'remove']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testImpossibleActionAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'with-is-not-possible']);
-        $this->assertContains('"state":"error"', (string) $result->getBody());
+        $this->assertStringContainsString('"state":"error"', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testImpossibleActionAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'with-is-not-possible']);
-        $this->assertContains('"state":"error"', (string) $result->getBody());
+        $this->assertStringContainsString('"state":"error"', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testGetEqLogicObjectAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'getEqLogicObject']);
-        $this->assertContains('Objet inconnu. Vérifiez l\'ID', (string) $result->getBody());
+        $this->assertStringContainsString('Objet inconnu. Vérifiez l\'ID', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testByIdAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'byId']);
-        $this->assertContains('EqLogic inconnu. Vérifiez l\'ID', (string) $result->getBody());
+        $this->assertStringContainsString('EqLogic inconnu. Vérifiez l\'ID', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testToHtmlAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'toHtml']);
-        $this->assertContains('Eqlogic inconnu. Vérifiez l\'ID', (string) $result->getBody());
+        $this->assertStringContainsString('Eqlogic inconnu. Vérifiez l\'ID', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testHtmlAlertAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'htmlAlert']);
-        $this->assertContains('"result":[]', (string) $result->getBody());
+        $this->assertStringContainsString('"result":[]', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testHtmlBatteryAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'htmlBattery']);
-        $this->assertContains('"result":[]', (string) $result->getBody());
+        $this->assertStringContainsString('"result":[]', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testListByTypeAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'listByType']);
-        $this->assertContains('"result":null', (string) $result->getBody());
+        $this->assertStringContainsString('"result":[]', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testListByObjectAndCmdTypeAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'listByObjectAndCmdType']);
-        $this->assertContains('"result":null', (string) $result->getBody());
+        $this->assertStringContainsString('"result":null', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testListByObjectAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'listByObject']);
-        $this->assertContains('"result":[]', (string) $result->getBody());
+        $this->assertStringContainsString('"result":[]', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testListByTypeAndCmdTypeAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'listByTypeAndCmdType']);
-        $this->assertContains('"result":[]', (string) $result->getBody());
+        $this->assertStringContainsString('"result":[]', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testSetIsEnableAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'setIsEnable']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testSetIsEnableAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'setIsEnable']);
-        $this->assertContains('EqLogic inconnu. Vérifiez l\'ID', (string) $result->getBody());
+        $this->assertStringContainsString('EqLogic inconnu. Vérifiez l\'ID', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testSetOrderAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'setOrder']);
-        $this->assertContains('"result":""', (string) $result->getBody());
+        $this->assertStringContainsString('"result":""', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testRemovesAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'removes']);
-        $this->assertContains('"result":""', (string) $result->getBody());
+        $this->assertStringContainsString('"result":""', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
         // Todo : Bizarre
     }
@@ -136,84 +136,84 @@ class AjaxEqLogicTest extends AjaxBase
     public function testSetIsVisiblesAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'setIsVisibles']);
-        $this->assertContains('"result":""', (string) $result->getBody());
+        $this->assertStringContainsString('"result":""', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testSetIsEnablesAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'setIsEnables']);
-        $this->assertContains('"result":""', (string) $result->getBody());
+        $this->assertStringContainsString('"result":""', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testSimpleSaveAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'simpleSave']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testSimpleSaveAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'simpleSave']);
-        $this->assertContains('EqLogic inconnu.', (string) $result->getBody());
+        $this->assertStringContainsString('EqLogic inconnu.', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testCopyAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'copy']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testCopyAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'copy']);
-        $this->assertContains('EqLogic inconnu. Vérifiez l\'ID', (string) $result->getBody());
+        $this->assertStringContainsString('EqLogic inconnu. Vérifiez l\'ID', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testRemoveAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'remove']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testRemoveCmdAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'remove']);
-        $this->assertContains('EqLogic inconnu. Vérifiez l\'ID', (string) $result->getBody());
+        $this->assertStringContainsString('EqLogic inconnu. Vérifiez l\'ID', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testGetAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'get']);
-        $this->assertContains('Type incorrect (classe équipement inexistante)', (string) $result->getBody());
+        $this->assertStringContainsString('Type incorrect (classe équipement inexistante)', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testSaveAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'save']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testSaveAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'save']);
-        $this->assertContains('"result":null', (string) $result->getBody());
+        $this->assertStringContainsString('"result":null', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testGetAlertAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'getAlert']);
-        $this->assertContains('"result":[]', (string) $result->getBody());
+        $this->assertStringContainsString('"result":[]', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
         // Todo : Bizarre
     }

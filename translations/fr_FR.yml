@@ -74,6 +74,8 @@ cache:
 commandes:
   influxDbIPLabel: IP
   influxDbPortLabel: Port
+  influxDbLoginLabel: Login
+  influxDbPasswordLabel: Mot de passe
   influxDbDatabaseNameLabel: Base de données
 common:
   action: "Action"
@@ -207,12 +209,24 @@ firstuse:
   welcome-content: |
     Bravo ! Vous venez d'installer votre solution domotique, l'assistant de première utilisation est activé !
     Celui-ci va vous guider dans le processus de configuration de votre solution domotique...
-footer:
-  about: A Propos de
-  licence: GPL Automation 2018
-  rights: All rights reserved
 general:
   hours: "Heures"
+  house:
+    address: "Adresse"
+    altitude: "Altitude"
+    coordinates: "Coordonnées"
+    city: "Ville"
+    here: "ici"
+    house: "Maison"
+    latitude: "Latitude"
+    livingSpace: "Surface habitable"
+    longitude: "Longitude"
+    nbOccupant: "Nombre d'occupant(s)"
+    postalCode: "Code postal"
+    site: "Pour trouver les coordonnées de votre maison rendez-vous "
+    stateCode: "Code pays (FR,US...)"
+    various: "Divers"
+  horodatage: "Horodatage"
   ignore_system_time: "Ignorer la vérification"
   installation_key: "Clé d'installation"
   language: "Langage"
@@ -223,6 +237,7 @@ general:
   last_known_date: "Dernière date connue"
   nextdom: "NextDom"
   nextdom_name: "Nom de votre NextDom "
+  parameters: "Paramètres"
   reset: "Remise à zéro"
   session_timeout: "Durée de vie de votre connexion"
   synchronization: "Synchronisation"
@@ -232,15 +247,21 @@ general:
   time_zone: "Fuseau horaire"
   time_server: "Serveur de temps optionnel"
   tooltip:
+     address: "Adresse de votre maison, permet de ne pas avoir à la remplir dans les plugins"
+     coordinates: "Coordonées géographique de votre maison, permet de ne pas avoir à la remplir dans les plugins"
      installation_key: "Clé d'installation qui permet d'identifier votre NextDom quand il communique avec le market"
      session_timeout: "Durée de vie de votre connexion à NextDom si vous n'avez pas coché la case enregistrer cet ordinateur"
      language: "Langue à utiliser dans Nexdom"
      system_hardware: "Indique votre type de matériel"
      nextdom_name : "Nom de votre NextDom (utilisé notamment par le market)"
+     livingSpace: "Surface habitable votre maison, permet de ne pas avoir à la remplir dans les plugins"
+     nbOccupant: "Nombre d'occupant, permet de ne pas avoir à la remplir dans les plugins"
      time_zone: "Fuseau horaire de votre NextDom"
      time_server: "Permet d'ajouter un serveur de temps à NextDom utilisé lorsque NextDom force la synchronisation de l'heure"
      ignore_system_time: "Ignorer la vérification de l'heure système"
 health:
+  tmp-space-left: "Espace temporaire disponible"
+  tmp-problem: "En cas d'erreur essayez de redémarrer. Si le problème persiste, testez en désactivant les plugins un à un jusqu'à trouver le coupable"
   apache-private-tmp-disabled: Veuillez désactiver le private tmp d'Apache (NextDom ne peut fonctionner avec). Voir <a href=\"https://jeedom.github.io/core/fr_FR/faq#tocAnchor-1-29\" target=\"_blank\">ici</a>
   apache-private-tmp: Apache private tmp
   authentication-error: "Attention : vous avez toujours l'utilisateur admin/admin configuré, cela représente une grave faille de sécurité, allez <a href=\"index.php?v=d&p=user\">ici</a> pour modifier le mot de passe de l'utilisateur admin"
@@ -289,6 +310,8 @@ health:
   scenario-enabled: Scénarios actifs
   sudo-error: Appliquez les droits root à NextDom
   sudo-rights: Droits sudo
+  swapiness: Swapiness
+  swapiness-config: Pour des performances optimal le swapiness ne doit pas dépasser 20% si vous avez 1Go ou moins de mémoire
   system-date-error: Si la dernière heure enregistrée est fausse, il faut la remettre à zéro <a href="index.php?v=d&p=administration">ici</a>
   system-date: Date système (dernière heure enregistrée)
   title: Page Santé
@@ -333,7 +356,7 @@ interact:
   limit_to_visible: "Limiter aux visibles"
   limit_to_the_device: "Limiter à l'équipement"
   list_of_users_identifiers_separated_by_a_pipe: "Liste des utilisateurs (identifiants) séparés par un | "
-  none: "Aucun - "
+  none: "Aucun"
   no_interactions_click_add_to_start: "Vous n'avez encore aucune interaction. Cliquez sur ajouter pour commencer."
   regenerate: "Régénérer"
   regex_exclusion: "Regexp d'exclusion"
@@ -364,7 +387,8 @@ network:
   external-access: "Accès externe"
   management: "Gestion autonome du réseau"
   mask: "Masque d'IP local"
-  mobile: "Ma connexion internet est une ligne mobile"
+  mobile: "Ma connexion mobile"
+  mobile-active: "J'utilise une connexion 4G"
   networks: "Réseaux"
   started: "Démarré : "
   stopped: "Arrêté"
@@ -472,7 +496,7 @@ repo:
           name: "Branche pour le core NextDom"
           placeholder: "master"
   market:
-    description: "Ce service vous permet de vous connecter au Market Jeedom pour avoir accès à tous ces propres services..."
+    description: "Ce service vous permet de vous connecter au Market Jeedom pour avoir accès à tous ses propres services..."
     conf:
       address:
         name: "Adresse"
@@ -492,6 +516,7 @@ repo:
     conf:
       stable: "NextDom Stable"
       draft: "NextDom Draft"
+      exclusivity: "NextDom Exclusivity"
       filters: "Afficher les filtres des sources"
   samba:
     conf:
@@ -510,10 +535,10 @@ repo:
         placeholder: "Répertoire de destination (/MonRépertoire)"
     description: "Ce service vous permet de connecter à NextDom un serveur Samba décentralisé, afin par exemple de stocker vos backups (page sauvegarde/restauration) ou récuperer une sauvegarde de plugin..."
     error:
-      already-exists: "Le fichier existe déjà sur le serveur samba"
-      connect: "Impossible de se connecteur au serveur samba"
-      not-found: "Le fichier est introuvable sur le serveur samba"
-      unknown: "Une erreur s'est produite lors de la connexion au serveur samba"
+      already-exists: "Le fichier existe déjà sur le serveur Samba"
+      connect: "Impossible de se connecteur au serveur Samba"
+      not-found: "Le fichier est introuvable sur le serveur Samba"
+      unknown: "Une erreur s'est produite lors de la connexion au serveur Samba"
   url:
     description: "Ce service vous permet d'utiliser directement une URL pour par exemple l'installation de plugins..."
     conf:
@@ -522,10 +547,14 @@ repo:
         url: "URL core NextDom"
         version: "Version core NextDom"
 scenario:
-  add-block: Ajouter un bloc
+  action: Action
+  add-block: Ajouter bloc
   add-item: Ajouter élément
+  block: Bloc
   choose: Choisir
   conditions: "Conditions"
+  copy-block: Copier bloc
+  copy-action: Copier action
   default : Défaut
   description: Description
   description-if: "Permet de faire des conditions dans votre scénario. Par exemple: Si mon détecteur d’ouverture de porte se déclenche Alors allumer la lumière."
@@ -544,8 +573,8 @@ scenario:
   execute-title: Veuillez sauvegarder avant de tester. Ceci peut ne pas aboutir.
   export: Exporter
   expression-test: Testeur d'expression
-  follow: Suivi
-  follow-timeline: Suivre dans la timeline
+  follow: Activer Suivi
+  follow-timeline: Dans la timeline
   follow-timeline-title: Les exécutions du scénario pourront être vues dans la timeline.
   group: Groupe
   icon: Icône
@@ -567,6 +596,7 @@ scenario:
   name: Nom du scénario
   name-to-show: Nom à afficher
   name-to-show-placeholder: Ne rien mettre pour laisser le nom par défaut
+  new-group: Nouveau Groupe
   next: Prochain
   no-group: Aucun
   no-choice: Aucun
@@ -574,6 +604,8 @@ scenario:
   options: Options
   parameters: Paramètres
   parent-object: Objet parent
+  paste-block: Coller bloc
+  paste-action: Coller action
   paternity: Paternité
   previous: Précédent
   programmation: Programmation
@@ -597,6 +629,9 @@ scenario:
   timeout-unity: secondes
   trigger: Déclencheur
   twice: Les deux
+  use: Utilisation
+  used-by: Utilisé par les scénarios
+  used-in: Utilise les scénarios
   variables: Variables
   visible: Visible
   you-have-scenarios: Vous avez %s scénario(s).
@@ -612,7 +647,16 @@ scripts:
   scenario: "Scenario : "
   scenario-not-found: "Scénario non trouvé. Vérifiez ID : "
   start-in-background: "Lancement en arrière-plan de : "
+security:
+  rules: Pour améliorer la sécurité, augmenter le nombre de caractères, mixer minuscules / majuscules, ajouter un ou plusieurs chiffres et caractères spéciaux...
+  no-password: Aucune sécurité
+  very-low: Sécurité Trés Faible
+  low: Sécurité Faible
+  medium: Sécurité Moyenne
+  high: Sécurité Forte
+  very-high: Sécurité Trés Forte
 sidebar:
+  about: A Propos ...
   dashboard: Dashboard
   design: Design(s)
   default-object: Objet par défaut
@@ -639,6 +683,7 @@ sidebar:
   help-forum: Forum
   help-github: Github
   help-chat: Chat
+  licence: GPL Automation 2018
   menu-main: Menu Principal
   menu-manage: Menu Gestion
   objects-list: Liste Objets & Résumés
@@ -649,6 +694,7 @@ sidebar:
   plugins: Plugins
   plugins-markets: Gestion & Markets
   quick-notes: Quick Notes
+  rights: All rights reserved
   show-all: Afficher tout
   tools: Outils
   tools-summary: Résumé domotique

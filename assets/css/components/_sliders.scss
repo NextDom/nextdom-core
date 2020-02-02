@@ -27,9 +27,9 @@
     -webkit-transition: .2s;
     transition: opacity .2s;
     width: 100%;
-    margin: 12px 0px;
-    -webkit-box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.3);
-    box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.3);
+    margin: 12px 0;
+    -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, .3);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, .3);
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
     border-radius: 6px;
@@ -64,4 +64,9 @@
 .input-range-max {
     cursor: not-allowed;
     font-size: 12px;
+}
+
+/* Admin-LTE Surcharge : progressbar */
+.progress-slim {
+    margin-bottom: 6px !important;
 }

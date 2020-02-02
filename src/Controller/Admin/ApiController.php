@@ -23,7 +23,7 @@
 namespace NextDom\Controller\Admin;
 
 use NextDom\Controller\BaseController;
-use NextDom\Helpers\AuthentificationHelper;
+use NextDom\Enums\ControllerData;
 use NextDom\Helpers\Render;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\PluginManager;
@@ -63,7 +63,7 @@ class ApiController extends BaseController
                 $pageData['adminPluginsList'][] = $pluginData;
             }
         }
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/admin/api.js';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/admin/api.js';
 
         return Render::getInstance()->get('/desktop/admin/api.html.twig', $pageData);
     }

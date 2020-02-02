@@ -102,7 +102,7 @@ function initEvents() {
                 $('#div_ob' + id_object).packery();
             });
             // Packery widget
-            $('.bt_editDashboardWidgetPackery').on('click',function(){
+            $('.bt_editDashboardWidgetPackery').off('click').on('click',function(){
                 var id_object = $(this).attr('id');
                 id_object = id_object.replace('edit_object_', '');
                 $('#div_ob' + id_object).packery();

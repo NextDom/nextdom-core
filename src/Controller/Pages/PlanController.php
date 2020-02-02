@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Pages;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\ControllerData;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\PlanHeaderManager;
@@ -46,11 +47,11 @@ class PlanController extends BaseController
     {
         $planHeader = null;
         $planHeaders = PlanHeaderManager::all();
-        $planHeadersSendToJS = array();
+        $planHeadersSendToJS = [];
         foreach ($planHeaders as $planHeader_select) {
-            $planHeadersSendToJS[] = array('id' => $planHeader_select->getId(), 'name' => $planHeader_select->getName());
+            $planHeadersSendToJS[] = ['id' => $planHeader_select->getId(), 'name' => $planHeader_select->getName()];
         }
-        $pageData['JS_VARS_RAW']['planHeader'] = Utils::getArrayToJQueryJson($planHeadersSendToJS);
+        $pageData[ControllerData::JS_VARS_RAW]['planHeader'] = Utils::getArrayToJQueryJson($planHeadersSendToJS);
         if (Utils::init('plan_id') == '') {
             foreach ($planHeaders as $planHeader_select) {
                 if ($planHeader_select->getId() == UserManager::getStoredUser()->getOptions('defaultDashboardPlan')) {
@@ -71,14 +72,14 @@ class PlanController extends BaseController
         }
         if (!is_object($planHeader)) {
             $pageData['planHeaderError'] = true;
-            $pageData['JS_VARS']['planHeader_id'] = -1;
+            $pageData[ControllerData::JS_VARS]['planHeader_id'] = -1;
         } else {
             $pageData['planHeaderError'] = false;
-            $pageData['JS_VARS']['planHeader_id'] = $planHeader->getId();
+            $pageData[ControllerData::JS_VARS]['planHeader_id'] = $planHeader->getId();
         }
 
-        $pageData['CSS_POOL'][] = '/public/css/pages/plan.css';
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/pages/plan.js';
+        $pageData[ControllerData::CSS_POOL][] = '/public/css/pages/plan.css';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/pages/plan.js';
 
         return Render::getInstance()->get('/desktop/pages/plan.html.twig', $pageData);
     }

@@ -33,7 +33,7 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once NEXTDOM_ROOT.'/core/php/core.inc.php';
+require_once __DIR__ . '/../../core/php/core.inc.php';
 
 use NextDom\Helpers\Api;
 use NextDom\Helpers\NextDomHelper;

@@ -34,7 +34,7 @@ use NextDom\Managers\PluginManager;
 class PanelPageController extends BaseController
 {
     /**
-     * TODO this methode are used ?
+     * @TODO this methode are used ?
      *
      * @param array $pageData
      * @return string

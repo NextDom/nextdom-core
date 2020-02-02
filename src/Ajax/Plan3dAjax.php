@@ -17,6 +17,7 @@
 
 namespace NextDom\Ajax;
 
+use NextDom\Enums\AjaxParams;
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
@@ -57,7 +58,7 @@ class Plan3dAjax extends BaseAjax
 
     public function plan3dHeader()
     {
-        $return = array();
+        $return = [];
         /**
          * @var Plan3d $plan3d
          */
@@ -73,17 +74,17 @@ class Plan3dAjax extends BaseAjax
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
         if (Utils::init('plan3d', '') === '') {
-            throw new CoreException(__('L\'identifiant du plan doit être fourni', __FILE__));
+            throw new CoreException(__('L\'identifiant du plan doit être fourni'));
         }
         $plan3d = new Plan3d();
         Utils::a2o($plan3d, json_decode(Utils::init('plan3d'), true));
         $plan3d->save();
-        $this->ajax->success($plan3d->getHtml(Utils::init('version')));
+        $this->ajax->success($plan3d->getHtml(Utils::init(AjaxParams::VERSION)));
     }
 
     public function get()
     {
-        $plan3d = Plan3dManager::byId(Utils::init('id'));
+        $plan3d = Plan3dManager::byId(Utils::init(AjaxParams::ID));
         if (!is_object($plan3d)) {
             throw new CoreException(__('Aucun plan3d correspondant'));
         }
@@ -94,7 +95,7 @@ class Plan3dAjax extends BaseAjax
 
     public function byName()
     {
-        $plan3d = Plan3dManager::byName3dHeaderId(Utils::init('name'), Utils::init('plan3dHeader_id'));
+        $plan3d = Plan3dManager::byName3dHeaderId(Utils::init(AjaxParams::NAME), Utils::init('plan3dHeader_id'));
         if (!is_object($plan3d)) {
             $this->ajax->success();
         }
@@ -104,7 +105,7 @@ class Plan3dAjax extends BaseAjax
     public function remove()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $plan3d = Plan3dManager::byId(Utils::init('id'));
+        $plan3d = Plan3dManager::byId(Utils::init(AjaxParams::ID));
         if (!is_object($plan3d)) {
             throw new CoreException(__('Aucun plan3d correspondant'));
         }
@@ -114,7 +115,7 @@ class Plan3dAjax extends BaseAjax
     public function removeplan3dHeader()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $plan3dHeader = Plan3dHeaderManager::byId(Utils::init('id'));
+        $plan3dHeader = Plan3dHeaderManager::byId(Utils::init(AjaxParams::ID));
         if (!is_object($plan3dHeader)) {
             throw new CoreException(__('Objet inconnu verifiez l\'id'));
         }
@@ -125,7 +126,7 @@ class Plan3dAjax extends BaseAjax
     public function allHeader()
     {
         $plan3dHeaders = Plan3dHeaderManager::all();
-        $return = array();
+        $return = [];
         foreach ($plan3dHeaders as $plan3dHeader) {
             $info_plan3dHeader = Utils::o2a($plan3dHeader);
             unset($info_plan3dHeader['image']);
@@ -136,9 +137,9 @@ class Plan3dAjax extends BaseAjax
 
     public function getplan3dHeader()
     {
-        $plan3dHeader = Plan3dHeaderManager::byId(Utils::init('id'));
+        $plan3dHeader = Plan3dHeaderManager::byId(Utils::init(AjaxParams::ID));
         if (!is_object($plan3dHeader)) {
-            throw new CoreException(__('plan3d header inconnu verifiez l\'id : ') . Utils::init('id'));
+            throw new CoreException(__('plan3d header inconnu verifiez l\'id : ') . Utils::init(AjaxParams::ID));
         }
         if (trim($plan3dHeader->getConfiguration('accessCode', '')) != '' && $plan3dHeader->getConfiguration('accessCode', '') != sha512(Utils::init('code'))) {
             throw new CoreException(__('Code d\'acces invalide'), -32005);
@@ -167,12 +168,12 @@ class Plan3dAjax extends BaseAjax
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
         $uploadDir = '/tmp';
-        $plan3dHeader = Plan3dHeaderManager::byId(Utils::init('id'));
+        $plan3dHeader = Plan3dHeaderManager::byId(Utils::init(AjaxParams::ID));
         if (!is_object($plan3dHeader)) {
             throw new CoreException(__('Objet inconnu. Vérifiez l\'ID'));
         }
 
-        $filename = Utils::readUploadedFile($_FILES, "file", $uploadDir, 150, array(".zip"));
+        $filename = Utils::readUploadedFile($_FILES, "file", $uploadDir, 150, [".zip"]);
 
         if ($plan3dHeader->getConfiguration('path') == '') {
             $path = sprintf("%s/data/3d/%s/", NEXTDOM_DATA, ConfigManager::genKey());
@@ -193,12 +194,12 @@ class Plan3dAjax extends BaseAjax
         } else {
             throw new CoreException(__('Impossible de décompresser l\'archive zip : ') . $filename . ' => ' . ZipErrorMessage($res));
         }
-        $objfile = FileSystemHelper::ls($cibDir, '*.obj', false, array('files'));
+        $objfile = FileSystemHelper::ls($cibDir, '*.obj', false, ['files']);
         if (count($objfile) != 1) {
             throw new CoreException(__('Il faut 1 seul et unique fichier .obj'));
         }
         $plan3dHeader->setConfiguration('objfile', $objfile[0]);
-        $mtlfile = FileSystemHelper::ls($cibDir, '*.mtl', false, array('files'));
+        $mtlfile = FileSystemHelper::ls($cibDir, '*.mtl', false, ['files']);
         if (count($mtlfile) == 1) {
             $plan3dHeader->setConfiguration('mtlfile', $mtlfile[0]);
         }

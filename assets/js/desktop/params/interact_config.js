@@ -120,9 +120,10 @@ function initEvents() {
 function printConvertColor() {
     $.ajax({
         type: "POST",
-        url: "core/ajax/config.ajax.php",
+        url: "src/ajax.php",
         data: {
-            action: "getKey",
+            target: 'Config',
+            action: 'getKey',
             key: 'convertColor'
         },
         dataType: 'json',
@@ -180,8 +181,9 @@ function saveConvertColor() {
     value.convertColor = colors;
     $.ajax({
         type: "POST",
-        url: "core/ajax/config.ajax.php",
+        url: "src/ajax.php",
         data: {
+            target: 'Config',
             action: 'addKey',
             value: json_encode(value)
         },

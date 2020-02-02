@@ -33,168 +33,19 @@
 
 namespace NextDom\Managers;
 
-use NextDom\Helpers\DBHelper;
+use NextDom\Managers\Parents\BasePlanManager;
 use NextDom\Model\Entity\Plan;
 
 /**
  * Class PlanManager
  * @package NextDom\Managers
  */
-class PlanManager
+class PlanManager extends BasePlanManager
 {
-    /**
-     *
-     */
+    /** @var string */
     const CLASS_NAME = Plan::class;
-    /**
-     *
-     */
+    /** @var string */
     const DB_CLASS_NAME = '`plan`';
-
-    /**
-     * @param $_id
-     * @return array|mixed|null
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
-    public static function byId($_id)
-    {
-        $values = array(
-            'id' => $_id,
-        );
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE id = :id';
-        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
-    }
-
-    /**
-     * @param $_planHeader_id
-     * @return array|mixed|null
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
-    public static function byPlanHeaderId($_planHeader_id)
-    {
-        $values = array(
-            'planHeader_id' => $_planHeader_id,
-        );
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE planHeader_id = :planHeader_id';
-        return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
-    }
-
-    /**
-     * @param $_link_type
-     * @param $_link_id
-     * @return array|mixed|null
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
-    public static function byLinkTypeLinkId($_link_type, $_link_id)
-    {
-        $values = array(
-            'link_type' => $_link_type,
-            'link_id' => $_link_id,
-        );
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE link_type = :link_type
-        AND link_id = :link_id';
-        return DBHelper::getAllObjects($sql, $values, self::CLASS_NAME);
-    }
-
-    /**
-     * @param $_link_type
-     * @param $_link_id
-     * @param $_planHeader_id
-     * @return array|mixed|null
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
-    public static function byLinkTypeLinkIdPlanHedaerId($_link_type, $_link_id, $_planHeader_id)
-    {
-        $values = array(
-            'link_type' => $_link_type,
-            'link_id' => $_link_id,
-            'planHeader_id' => $_planHeader_id,
-        );
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE link_type = :link_type
-        AND link_id = :link_id
-        AND planHeader_id = :planHeader_id';
-        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
-    }
-
-    /**
-     * @param $_link_type
-     * @param $_link_id
-     * @param $_planHeader_id
-     * @return array|mixed|null
-     * @throws \NextDom\Exceptions\CoreException
-     */
-    public static function removeByLinkTypeLinkIdPlanHedaerId($_link_type, $_link_id, $_planHeader_id)
-    {
-        $values = array(
-            'link_type' => $_link_type,
-            'link_id' => $_link_id,
-            'planHeader_id' => $_planHeader_id,
-        );
-        $sql = 'DELETE FROM ' . self::DB_CLASS_NAME . '
-        WHERE link_type = :link_type
-        AND link_id = :link_id
-        AND planHeader_id = :planHeader_id';
-        return DBHelper::getOneObject($sql, $values, self::CLASS_NAME);
-    }
-
-    /**
-     * @return array|mixed|null
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
-    public static function all()
-    {
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME;
-        return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
-    }
-
-    /**
-     * @param $_search
-     * @return array|mixed|null
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
-    public static function searchByDisplay($_search)
-    {
-        $value = array(
-            'search' => '%' . $_search . '%',
-        );
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE display LIKE :search';
-        return DBHelper::getAllObjects($sql, $value, self::CLASS_NAME);
-    }
-
-    /**
-     * @param $_search
-     * @param string $_not
-     * @return array|mixed|null
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
-    public static function searchByConfiguration($_search, $_not = '')
-    {
-        $value = array(
-            'search' => '%' . $_search . '%',
-            'not' => $_not,
-        );
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-        FROM ' . self::DB_CLASS_NAME . '
-        WHERE configuration LIKE :search
-        AND link_type != :not';
-        return DBHelper::getAllObjects($sql, $value, self::CLASS_NAME);
-    }
+    /** @var string  */
+    const PLANHEADER_ID = 'planHeader_id';
 }

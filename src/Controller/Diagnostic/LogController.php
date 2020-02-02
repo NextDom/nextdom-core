@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Diagnostic;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\ControllerData;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 
@@ -79,7 +80,7 @@ class LogController extends BaseController
             $pageData['logFilesList'][] = $logFileData;
         }
 
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/diagnostic/log.js';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/diagnostic/log.js';
 
         return Render::getInstance()->get('/desktop/diagnostic/log.html.twig', $pageData);
     }

@@ -19,23 +19,24 @@
 namespace NextDom\Repo;
 
 use NextDom\Helpers\SystemHelper;
+use NextDom\Interfaces\BaseRepo;
 use NextDom\Model\Entity\Update;
 
 /**
  * Class RepoApt
  */
-class RepoApt
+class RepoApt implements BaseRepo
 {
     public static $_name = 'Apt';
     public static $_icon = 'fab fa-ubuntu';
     public static $_description = 'repo.apt.description';
 
-    public static $_scope = array(
+    public static $_scope = [
         'plugin' => false,
         'backup' => false,
         'hasConfiguration' => false,
         'core' => true,
-    );
+    ];
 
     public static $_configuration = [];
 
@@ -61,7 +62,7 @@ class RepoApt
                 }
             }
         } else if ($targetUpdate->getType() === 'core' && $targetUpdate->getLogicalId() === 'nextdom') {
-            exec(SystemHelper::getCmdSudo(). 'lsof /var/lib/dpkg/lock', $aptLocked);
+            exec(SystemHelper::getCmdSudo() . 'lsof /var/lib/dpkg/lock', $aptLocked);
             if (count($aptLocked) === 0) {
                 exec(SystemHelper::getCmdSudo() . 'apt-get update');
                 exec(SystemHelper::getCmdSudo() . "apt-cache policy nextdom | grep Installed | sed 's/Installed: \\(.*\\)/\\1/g'", $currentVersion);
@@ -82,8 +83,7 @@ class RepoApt
                         $targetUpdate->setRemoteVersion($newVersion);
                         $targetUpdate->save();
                     }
-                }
-                else {
+                } else {
                     $targetUpdate->setSource('github');
                     RepoGitHub::checkUpdate($targetUpdate);
                     $result = true;

@@ -17,6 +17,9 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Enums\DateFormat;
+use NextDom\Enums\NextDomObj;
+use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
@@ -26,6 +29,7 @@ use NextDom\Managers\ConfigManager;
 use NextDom\Managers\CronManager;
 use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\ScenarioExpressionManager;
+use NextDom\Model\Entity\Parents\BaseEntity;
 
 /**
  * Interactquery
@@ -33,8 +37,9 @@ use NextDom\Managers\ScenarioExpressionManager;
  * @ORM\Table(name="interactQuery", indexes={@ORM\Index(name="fk_sarahQuery_sarahDef1_idx", columns={"interactDef_id"}), @ORM\Index(name="query", columns={"query"})})
  * @ORM\Entity
  */
-class InteractQuery implements EntityInterface
+class InteractQuery extends BaseEntity
 {
+    const TABLE_NAME = NextDomObj::INTERACT_QUERY;
 
     /**
      * @var integer
@@ -58,17 +63,6 @@ class InteractQuery implements EntityInterface
     protected $actions;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    protected $_changed = false;
-
-    /**
      * @return $this
      * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
@@ -76,10 +70,10 @@ class InteractQuery implements EntityInterface
     public function save()
     {
         if ($this->getQuery() == '') {
-            throw new \Exception(__('La commande vocale ne peut pas être vide'));
+            throw new CoreException(__('La commande vocale ne peut pas être vide'));
         }
         if ($this->getInteractDef_id() == '') {
-            throw new \Exception(__('InteractDef_id ne peut pas être vide'));
+            throw new CoreException(__('InteractDef_id ne peut pas être vide'));
         }
         DBHelper::save($this);
         return $this;
@@ -99,7 +93,7 @@ class InteractQuery implements EntityInterface
      */
     public function setQuery($_query)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->query, $_query);
+        $this->updateChangeState($this->query, $_query);
         $this->query = $_query;
         return $this;
     }
@@ -118,19 +112,9 @@ class InteractQuery implements EntityInterface
      */
     public function setInteractDef_id($_interactDef_id)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->interactDef_id, $_interactDef_id);
+        $this->updateChangeState($this->interactDef_id, $_interactDef_id);
         $this->interactDef_id = $_interactDef_id;
         return $this;
-    }
-
-    /**
-     * @return bool
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
-    public function remove()
-    {
-        return DBHelper::remove($this);
     }
 
     /**
@@ -156,7 +140,7 @@ class InteractQuery implements EntityInterface
             }
         }
         $reply = $interactDef->selectReply();
-        $replace = array('#query#' => $this->getQuery());
+        $replace = ['#query#' => $this->getQuery()];
         foreach ($_parameters as $key => $value) {
             $replace['#' . $key . '#'] = $value;
         }
@@ -171,17 +155,17 @@ class InteractQuery implements EntityInterface
         $executeDate = null;
 
         if (isset($replace['#duration#'])) {
-            $dateConvert = array(
+            $dateConvert = [
                 'heure' => 'hour',
                 'mois' => 'month',
                 'semaine' => 'week',
                 'année' => 'year',
-            );
+            ];
             $replace['#duration#'] = str_replace(array_keys($dateConvert), $dateConvert, $replace['#duration#']);
             $executeDate = strtotime('+' . $replace['#duration#']);
         }
         if (isset($replace['#time#'])) {
-            $time = str_replace(array('h'), array(':'), $replace['#time#']);
+            $time = str_replace(['h'], [':'], $replace['#time#']);
             if (strlen($time) == 1) {
                 $time .= ':00';
             } else if (strlen($time) == 2) {
@@ -213,12 +197,12 @@ class InteractQuery implements EntityInterface
             $cron = new Cron();
             $cron->setClass('interactQuery');
             $cron->setFunction('doIn');
-            $cron->setOption(array_merge(array('interactQuery_id' => intval($this->getId())), $_parameters));
-            $cron->setLastRun(date('Y-m-d H:i:s'));
+            $cron->setOption(array_merge(['interactQuery_id' => intval($this->getId())], $_parameters));
+            $cron->setLastRun(date(DateFormat::FULL));
             $cron->setOnce(1);
             $cron->setSchedule(CronManager::convertDateToCron($executeDate));
             $cron->save();
-            $replace['#valeur#'] = date('Y-m-d H:i:s', $executeDate);
+            $replace['#valeur#'] = date(DateFormat::FULL, $executeDate);
             $result = ScenarioExpressionManager::setTags(str_replace(array_keys($replace), $replace, $reply));
             return $result;
         }
@@ -227,7 +211,7 @@ class InteractQuery implements EntityInterface
         if (is_array($this->getActions('cmd'))) {
             foreach ($this->getActions('cmd') as $action) {
                 try {
-                    $options = array();
+                    $options = [];
                     if (isset($action['options'])) {
                         $options = $action['options'];
                     }
@@ -254,7 +238,7 @@ class InteractQuery implements EntityInterface
                             }
                         }
                     }
-                    $tags = array();
+                    $tags = [];
                     if (isset($options['tags'])) {
                         $options['tags'] = Utils::arg2array($options['tags']);
                         foreach ($options['tags'] as $key => $value) {
@@ -297,25 +281,6 @@ class InteractQuery implements EntityInterface
     }
 
     /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $_id
-     * @return $this
-     */
-    public function setId($_id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
-    }
-
-    /**
      * @param string $_key
      * @param string $_default
      * @return array|bool|mixed|null|string
@@ -333,7 +298,7 @@ class InteractQuery implements EntityInterface
     public function setActions($_key, $_value)
     {
         $actions = Utils::setJsonAttr($this->actions, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->actions, $actions);
+        $this->updateChangeState($this->actions, $actions);
         $this->actions = $actions;
         return $this;
     }
@@ -356,31 +321,5 @@ class InteractQuery implements EntityInterface
     public function replaceForContextual($_replace, $_by, $_in)
     {
         Interactquery::replaceForContextual($_replace, $_by, $_in);
-    }
-
-    /**
-     * @return bool
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTableName()
-    {
-        return 'interactQuery';
     }
 }

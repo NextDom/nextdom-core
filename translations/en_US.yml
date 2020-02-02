@@ -74,6 +74,8 @@ cache:
 commandes:
   influxDbIPLabel: IP
   influxDbPortLabel: Port
+  influxDbLoginLabel: Login
+  influxDbPasswordLabel: Password
   influxDbDatabaseNameLabel: Database
 common:
   action: "Action"
@@ -207,12 +209,24 @@ firstuse:
   welcome-content: |
     Well Done! You have just installed your home automation solution, the first use wizard is activated!
     This one will guide you in the process of configuring your home automation solution ..."
-footer:
-  about: A Propos de
-  licence: GPL Automation 2018
-  rights: All rights reserved
 general:
   hours: "Hours"
+  house:
+    address: "Address"
+    altitude: "Altitude"
+    coordinates: "Coordinates"
+    city: "City"
+    here: "here"
+    house: "House"
+    latitude: "Latitude"
+    livingSpace: "Living space"
+    longitude: "Longitude"
+    nbOccupant: Number(s) of occupant
+    postalCode: "Postal code"
+    site: "To find the coordinates of your house go "
+    stateCode: "Country code (FR, US ...)"
+    various: "Various"
+  horodatage: "Timestamp"
   ignore_system_time: "do not check system time"
   installation_key: "Installation Key"
   language: "Language"
@@ -223,6 +237,7 @@ general:
   last_known_date: "Last known date"
   nextdom: "NextDom"
   nextdom_name: "Name of your NextDom "
+  parameters: "Parameters"
   reset: "Reset"
   session_timeout: "Sessions timeout"
   synchronization: "Synchronization"
@@ -232,15 +247,19 @@ general:
   time_zone: "Time zone"
   time_server: "Time Server (optional)"
   tooltip:
-     installation_key: "Installation key used to communicate with the Market"
-     session_timeout: "Session timeout if you haven't tick the box 'register this computer' on the logon window"
-     language: "Language to use with Nexdom"
-     system_hardware: "Indicate the type of Hardware"
-     nextdom_name : "Name of the Nexdom system"
-     time_zone: "Time zone used by Nexdom"
-     time_server: "Time Server used for time synchronization"
-     ignore_system_time: "Indicates to Nexdom to ignore system time"
+    address: "Home address, so you don't have to fill it in plugins"
+    coordinates: "Geographical coordinates of your house, so you don't have to fill it in plugins"
+    installation_key: "Installation key used to communicate with the Market"
+    session_timeout: "Session timeout if you haven't tick the box 'register this computer' on the logon window"
+    language: "Language to use with Nexdom"
+    system_hardware: "Indicate the type of Hardware"
+    nextdom_name : "Name of the Nexdom system"
+    time_zone: "Time zone used by Nexdom"
+    time_server: "Time Server used for time synchronization"
+    ignore_system_time: "Indicates to Nexdom to ignore system time"
 health:
+  tmp-space-left: "Tmp space left"
+  tmp-problem: "On error, try to restart. If this doesn't work, disable plugin one by one."
   apache-private-tmp-disabled: "Please disable private tmp Apache (NextDom can work with). See <a href=\"https://jeedom.github.io/core/fr_FR/faq#tocAnchor-1-29\" target=\"_blank\"> </a>"
   apache-private-tmp: Apache private tmp
   authentication-error: "Warning: you always have the user admin/admin configured: this represents a serious security flaw, go <a href=\"index.php?v=d&p=user\"> </a> to change the password admin user "
@@ -289,6 +308,8 @@ health:
   scenario-enabled: active scenarios
   sudo-error: Apply root privileges to NextDom
   sudo-rights: sudo rights
+  swapiness: Swapiness
+  swapiness-config: For optimal performance the swapiness should not exceed 20% if you have 1GB or less of memory
   system-date-error: "If the last recorded time is wrong: it must be reset <a href=\"index.php?v=d&p=administration\"> </a>"
   system-date: System Date (last recorded time)
   title: Health page
@@ -333,7 +354,7 @@ interact:
   limit_to_visible: "Limit to visible"
   limit_to_the_device: "Limit to the device"
   list_of_users_identifiers_separated_by_a_pipe: "List of users (identifiers) separated by a |"
-  none: "None -"
+  none: "None"
   no_interactions_click_add_to_start: "You do not have any interactions. Click Add to start."
   regenerate: "Regenerate"
   regex_exclusion: "Regex exclusion"
@@ -364,7 +385,8 @@ network:
   external-access: "External access"
   management: "Independent network management"
   mask: "Local IP mask"
-  mobile: "I use mobile connection"
+  mobile: "Mobile connection"
+  mobile-active: "I use 4G connection"
   networks: "Networks"
   started: "Started : "
   stopped: "Stopped"
@@ -492,6 +514,7 @@ repo:
     conf:
       stable: "NextDom Stable"
       draft: "NextDom Draft"
+      exclusivity: "NextDom Exclusivity"
       filters: "Display source filters"
   samba:
     conf:
@@ -522,10 +545,14 @@ repo:
         url: "NextDom core URL"
         version: "NextDom core version"
 scenario:
-  add-block: Add a block
+  action: Action
+  add-block: Add block
   add-item: Add element
+  block: Bloc
   choose: To choose
   conditions: "Conditions"
+  copy-block: Copy bloc
+  copy-action: Copy action
   default: Default
   description: Description
   description-if: "Lets make the conditions in your scenario. For example: If my door open sensor is triggered then turn on the light."
@@ -544,8 +571,8 @@ scenario:
   execute-title: Please save before testing. This may not succeed.
   export: Export
   expression-test: Expression test
-  follow: Following
-  follow-timeline: Follow in the Timeline
+  follow: Activate Following
+  follow-timeline: In the Timeline
   follow-timeline-title: The executions of the script can be seen in the timeline.
   group: Group
   icon: Icon
@@ -567,6 +594,7 @@ scenario:
   name: Scenario name
   name-to-show: Display Name
   name-to-show-placeholder: Do not put anything to leave the default name
+  new-group: New Group
   next: Next
   no-group: None
   no-choice: None
@@ -574,6 +602,8 @@ scenario:
   options: options
   parameters: Settings
   parent-object: parent object
+  paste-block: Paste bloc
+  paste-action: Paste action
   paternity: Paternity
   previous: Previous
   programmation: Programming
@@ -597,6 +627,9 @@ scenario:
   timeout-unity: seconds
   trigger: trigger
   twice: Both
+  use: Using
+  used-by: Used by scenarios
+  used-in: Use scenarios
   variables: variables
   visible: Visible
   you-have-scenarios: You have %s scenario(s).
@@ -612,7 +645,16 @@ scripts:
   scenario: "Scenario :"
   scenario-not-found: "Script not found. Check ID:"
   start-in-background: "Launch in background:"
+security:
+  rules: To improve security, increase the number of characters, mix lowercase / uppercase, add one or more digits and special characters ...
+  no-password: No security
+  very-low: Very Low Security
+  low: Low Security
+  medium: Medium Security
+  high: Strong Security
+  very-high: Very Strong Security
 sidebar:
+  about: About...
   dashboard: Dashboard
   design: Design(s)
   default-object: Default Subject
@@ -639,6 +681,7 @@ sidebar:
   help-forum: Forum
   help-github: Github
   help-chat: Chat
+  licence: GPL Automation 2018
   menu-main: Main Menu
   menu-manage: Menu Management
   objects-list: List Objects & Summaries
@@ -649,6 +692,7 @@ sidebar:
   plugins: plugins
   plugins-markets: Management & Markets
   quick-notes: Quick Notes
+  rights: All rights reserved
   show-all: Show all
   tools: Tools
   tools-summary: Automation Summary

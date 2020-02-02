@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Pages;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\ControllerData;
 use NextDom\Helpers\Render;
 use NextDom\Managers\ViewManager;
 
@@ -43,8 +44,8 @@ class ViewEditController extends BaseController
     public static function get(&$pageData): string
     {
         $pageData['viewEditViewsList'] = ViewManager::all();
-        $pageData['CSS_POOL'][] = '/public/css/pages/view.css';
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/pages/view_edit.js';
+        $pageData[ControllerData::CSS_POOL][] = '/public/css/pages/view.css';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/pages/view_edit.js';
 
         return Render::getInstance()->get('/desktop/pages/view_edit.html.twig', $pageData);
     }

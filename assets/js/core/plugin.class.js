@@ -1,4 +1,3 @@
-
 /* This file is part of Jeedom.
  *
  * Jeedom is free software: you can redistribute it and/or modify
@@ -15,196 +14,75 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-nextdom.plugin = function() {
+nextdom.plugin = function () {
 };
 
 nextdom.plugin.cache = Array();
 
-nextdom.plugin.all = function(_params) {
-    var paramsRequired = [];
-    var paramsSpecifics = {
-        pre_success: function(data) {
-            nextdom.plugin.cache.all = data.result;
-            return data;
-        }
-    };
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
+nextdom.plugin.all = function (queryParams) {
+  var paramsRequired = [];
+  var paramsSpecifics = {
+    pre_success: function (data) {
+      nextdom.plugin.cache.all = data.result;
+      return data;
     }
-    if (isset(nextdom.plugin.cache.all) && 'function' == typeof (_params.success)) {
-        _params.success(nextdom.plugin.cache.all);
-        return;
+  };
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
+    if (isset(nextdom.plugin.cache.all) && 'function' == typeof (queryParams.success)) {
+      queryParams.success(nextdom.plugin.cache.all);
+      return;
     }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/plugin.ajax.php';
-    paramsAJAX.data = {
-        action: 'all',
-    };
-    $.ajax(paramsAJAX);
-}
-
-
-nextdom.plugin.toggle = function(_params) {
-    var paramsRequired = ['id', 'state'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/plugin.ajax.php';
-    paramsAJAX.data = {
-        action: 'toggle',
-        id: _params.id,
-        state: _params.state
-    };
-    $.ajax(paramsAJAX);
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Plugin', 'all');
+    nextdom.private.ajaxCall(ajaxParams);
+  }
 };
 
-nextdom.plugin.get = function(_params) {
-    var paramsRequired = ['id'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/plugin.ajax.php';
-    paramsAJAX.data = {
-        action: 'getConf',
-        id: _params.id
-    };
-    $.ajax(paramsAJAX);
+nextdom.plugin.toggle = function (queryParams) {
+  nextdom.private.ajax('Plugin', 'toggle', queryParams, ['id', 'state']);
 };
 
-nextdom.plugin.getDependancyInfo = function(_params) {
-    var paramsRequired = ['id'];
-    var paramsSpecifics = {
-        global: false,
-    };
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/plugin.ajax.php';
-    paramsAJAX.data = {
-        action: 'getDependancyInfo',
-        id: _params.id
-    };
-    $.ajax(paramsAJAX);
+nextdom.plugin.get = function (queryParams) {
+  nextdom.private.ajax('Plugin', 'getConf', queryParams, ['id']);
 };
 
-nextdom.plugin.dependancyInstall = function(_params) {
-    var paramsRequired = ['id'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/plugin.ajax.php';
-    paramsAJAX.data = {
-        action: 'dependancyInstall',
-        id: _params.id
-    };
-    $.ajax(paramsAJAX);
+nextdom.plugin.getDependancyInfo = function (queryParams) {
+  var paramsRequired = ['id'];
+  var paramsSpecifics = {
+    global: false,
+  };
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Plugin', 'getDependancyInfo');
+    ajaxParams.data['id'] = queryParams.id;
+    nextdom.private.ajaxCall(ajaxParams);
+  }
 };
 
-nextdom.plugin.getDeamonInfo = function(_params) {
-    var paramsRequired = ['id'];
-    var paramsSpecifics = {
-        global: false,
-    };
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/plugin.ajax.php';
-    paramsAJAX.data = {
-        action: 'getDeamonInfo',
-        id: _params.id
-    };
-    $.ajax(paramsAJAX);
+nextdom.plugin.dependancyInstall = function (queryParams) {
+  nextdom.private.ajax('Plugin', 'dependancyInstall', queryParams, ['id']);
 };
 
-nextdom.plugin.deamonStart = function(_params) {
-    var paramsRequired = ['id'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/plugin.ajax.php';
-    paramsAJAX.data = {
-        action: 'deamonStart',
-        id: _params.id,
-        debug: _params.debug || 0,
-        forceRestart: _params.forceRestart || 0
-    };
-    $.ajax(paramsAJAX);
+nextdom.plugin.getDeamonInfo = function (queryParams) {
+  nextdom.private.ajax('Plugin', 'getDeamonInfo', queryParams, ['id'], false,false);
 };
 
-nextdom.plugin.deamonStop = function(_params) {
-    var paramsRequired = ['id'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/plugin.ajax.php';
-    paramsAJAX.data = {
-        action: 'deamonStop',
-        id: _params.id
-    };
-    $.ajax(paramsAJAX);
+nextdom.plugin.deamonStart = function (queryParams) {
+  var paramsRequired = ['id'];
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.default_params, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Plugin', 'deamonStart');
+    ajaxParams.data['id'] = queryParams.id;
+    ajaxParams.data['debug'] = queryParams.debug || 0;
+    ajaxParams.data['forceRestart'] = queryParams.forceRestart || 0;
+    nextdom.private.ajaxCall(ajaxParams);
+  }
 };
 
-nextdom.plugin.deamonChangeAutoMode = function(_params) {
-    var paramsRequired = ['id','mode'];
-    var paramsSpecifics = {};
-    try {
-        nextdom.private.checkParamsRequired(_params || {}, paramsRequired);
-    } catch (e) {
-        (_params.error || paramsSpecifics.error || nextdom.private.default_params.error)(e);
-        return;
-    }
-    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, _params || {});
-    var paramsAJAX = nextdom.private.getParamsAJAX(params);
-    paramsAJAX.url = 'core/ajax/plugin.ajax.php';
-    paramsAJAX.data = {
-        action: 'deamonChangeAutoMode',
-        id: _params.id,
-        mode: _params.mode
-    };
-    $.ajax(paramsAJAX);
+nextdom.plugin.deamonStop = function (queryParams) {
+  nextdom.private.ajax('Plugin', 'deamonStop', queryParams, ['id']);
+};
+
+nextdom.plugin.deamonChangeAutoMode = function (queryParams) {
+  nextdom.private.ajax('Plugin', 'deamonChangeAutoMode', queryParams, ['id', 'mode']);
 };

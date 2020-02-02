@@ -43,6 +43,7 @@
  */
 $(document).ajaxStart(function () {
     nbActiveAjaxRequest++;
+    Pace.restart();
 });
 
 /**
@@ -91,7 +92,7 @@ $(function () {
 
     // BUTTONS, LINKS HANDLERS
     // About buttons event handler declaration
-    $('#bt_nextdomAbout,#bt_nextdomAbout2, #bt_nextdomAboutFooter').on('click', function () {
+    $('#bt_nextdomAbout,#bt_nextdomAbout2, #bt_nextdomAboutSide').on('click', function () {
         $('#md_modal').dialog({title: "{{A propos}}"});
         $('#md_modal').load('index.php?v=d&modal=about').dialog('open');
     });
@@ -136,9 +137,33 @@ $(function () {
     });
 
     // Messages link event handler declaration
-    $('#bt_messageModal').on('click',function(){
-        $('#md_modal').dialog({title: "{{Messages NextDom}}"});
-        $('#md_modal').load('index.php?v=d&modal=message').dialog('open');
+    $('#bt_messageModal').on('click',function() {
+        var tableMessageContainer = $('#table_message .menu');
+        tableMessageContainer.html('<i class="fas fa-circle-notch fa-spin"></i>');
+        nextdom.message.all({
+            error: function (error) {
+                notify('Core', error.message, 'error');
+            },
+            success: function (messages) {
+                tableMessageContainer.html('');
+                for (var messageIndex in messages) {
+                    tableMessageContainer.append('' +
+                      '<li data-message_id="' + messages[messageIndex]['id'] + '">' +
+                      '<a href="#">' +
+                      '<div class="pull-left">' +
+                      '<img class="' + messages[messageIndex]['iconClass'] + '" src="' + messages[messageIndex]['icon'] + '">' +
+                      '</div>' +
+                      '<h4>' + messages[messageIndex]['plugin'] +
+                      '<div class="btn btn-sm btn-danger removeMessage pull-right"><i class="fas fa-trash no-spacing"></i></div>' +
+                      '<small class="pull-right"><i class="fas fa-clock spacing-right"></i>' + messages[messageIndex]['date'] + '</small>' +
+                      '</h4>' +
+                      '<p>' + decodeHtmlEntities(messages[messageIndex]['message']) + '</p>' +
+                      '<p>' +  messages[messageIndex]['action'] + '</p>' +
+                      '</a>' +
+                      '</li>');
+                }
+            }
+        });
     });
 
     // Restart event handler declaration
@@ -291,13 +316,12 @@ $(function () {
         modal: false,
         closeText: '',
         height: (jQuery(window).height() - 100),
-        width: (jQuery(window).width() < 1000) ? "96%" : "80%",
-        position: { my: "center", at: "center", of: window },
+        width: getModalWidth(),
         show: { effect: "blind", duration: 200 },
         resizable: false,
         open: function () {
             $("body").css({overflow: 'hidden'});
-            $(this).closest( ".ui-dialog" ).find(":button").blur();
+            $(this).dialog("option", "position", {my: "center", at: "center", of: window});
         },
         beforeClose: function (event, ui) {
             $("body").css({overflow: 'inherit'});
@@ -311,13 +335,12 @@ $(function () {
         modal: false,
         closeText: '',
         height: (jQuery(window).height() - 100),
-        width: (jQuery(window).width() < 1000) ? "96%" : "80%",
-        position: {my: 'center', at: 'center', of: window},
+        width: getModalWidth(),
         show: { effect: "blind", duration: 200 },
         resizable: false,
         open: function () {
             $("body").css({overflow: 'hidden'});
-            $(this).closest( ".ui-dialog" ).find(":button").blur();
+            $(this).dialog("option", "position", {my: "center", at: "center", of: window});
         },
         beforeClose: function (event, ui) {
             $("body").css({overflow: 'inherit'});
@@ -331,13 +354,12 @@ $(function () {
         modal: false,
         closeText: '',
         height: (jQuery(window).height() - 100),
-        width: (jQuery(window).width() < 1000) ? "96%" : "80%",
-        position: {my: 'center', at: 'center', of: window},
+        width: getModalWidth(),
         show: { effect: "blind", duration: 200 },
         resizable: false,
         open: function () {
             $("body").css({overflow: 'hidden'});
-            $(this).closest( ".ui-dialog" ).find(":button").blur();
+            $(this).dialog("option", "position", {my: "center", at: "center", of: window});
         },
         beforeClose: function (event, ui) {
             $("body").css({overflow: 'inherit'});

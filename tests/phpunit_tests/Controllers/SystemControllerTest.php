@@ -16,15 +16,15 @@
  */
 
 require_once(__DIR__ . '/../../../src/core.php');
-require_once(__DIR__ . '/BaseControllerTest.php');
+require_once(__DIR__ . '/../libs/BaseControllerTest.php');
 
 class SystemControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -34,7 +34,7 @@ class SystemControllerTest extends BaseControllerTest
         $pageData = [];
         $result = \NextDom\Controller\Tools\Osdb\SystemController::get($pageData);
         $this->assertEquals(true, $pageData['systemCanSudo']);
-        $this->assertContains('id="div_rowSystemCommand"', $result);
+        $this->assertStringContainsString('id="div_rowSystemCommand"', $result);
     }
 
     public function testPageDataVars()

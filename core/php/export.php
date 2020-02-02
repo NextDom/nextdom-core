@@ -16,39 +16,4 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once __DIR__ . '/../../core/php/core.inc.php';
-include_file('core', 'authentification', 'php');
-if (!isConnect()) {
-    throw new Exception(__('401 - Accès non autorisé', __FILE__));
-}
-
-$type = init('type');
-
-switch ($type) {
-    case 'cmdHistory':
-        $cmd = cmd::byId(init('id'));
-        if (!is_object($cmd)) {
-            throw new Exception(__('Commande introuvable : ', __FILE__) . init('id'));
-        }
-        header('Content-Type: text/csv; charset=utf-8');
-        header('Content-Disposition: attachment; filename=' . str_replace(' ', '_', $cmd->getHumanName()) . '.csv');
-        $histories = $cmd->getHistory();
-        foreach ($histories as $history) {
-            echo $history->getDatetime();
-            echo ';';
-            echo str_replace('.', ',', $history->getValue());
-            echo "\n";
-        }
-        break;
-    case 'eqLogic':
-        $eqLogic = eqLogic::byId(init('id'));
-        if (!is_object($eqLogic)) {
-            throw new Exception(__('Commande introuvable : ', __FILE__) . init('id'));
-        }
-        header('Content-Type: text/csv; charset=utf-8');
-        header('Content-Disposition: attachment; filename=' . $eqLogic->getHumanName() . '.json');
-        echo json_encode($eqLogic->export(), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-        break;
-    default:
-        break;
-}
+require_once __DIR__ . '/../../src/Api/export.php';

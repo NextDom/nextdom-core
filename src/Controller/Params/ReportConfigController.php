@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Params;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\ControllerData;
 use NextDom\Helpers\Render;
 
 /**
@@ -41,7 +42,7 @@ class ReportConfigController extends BaseController
      */
     public static function get(&$pageData): string
     {
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/params/report_config.js';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/params/report_config.js';
 
         return Render::getInstance()->get('/desktop/params/report_config.html.twig', $pageData);
     }

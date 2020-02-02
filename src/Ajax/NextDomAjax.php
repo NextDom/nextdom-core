@@ -18,6 +18,7 @@
 namespace NextDom\Ajax;
 
 use NextDom\Enums\AjaxParams;
+use NextDom\Enums\NextDomObj;
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AjaxHelper;
@@ -49,41 +50,6 @@ class NextDomAjax extends BaseAjax
     protected $MUST_BE_CONNECTED = true;
     protected $CHECK_AJAX_TOKEN = false;
 
-    public function getInfoApplication()
-    {
-        $result = [];
-        $result['widget_margin'] = ConfigManager::byKey('widget::margin');
-        $result['serverDatetime'] = Utils::getmicrotime();
-        if (!isConnect()) {
-            $result['connected'] = false;
-            $this->ajax->success($result);
-        }
-
-        $result['user_id'] = UserManager::getStoredUser()->getId();
-        $result['nextdom_token'] = AjaxHelper::getToken();
-        @session_start();
-        $currentUser = UserManager::getStoredUser();
-        $currentUser->refresh();
-        @session_write_close();
-
-        $result['userProfils'] = $currentUser->getOptions();
-        if ($currentUser->getOptions('defaultDesktopView') != '') {
-            $view = ViewManager::byId($currentUser->getOptions('defaultDesktopView'));
-        }
-        if ($currentUser->getOptions('defaultDashboardObject') != '') {
-            $resultObject = JeeObjectManager::byId($currentUser->getOptions('defaultDashboardObject'));
-        }
-
-        $result['plugins'] = [];
-        foreach (PluginManager::listPlugin(true) as $plugin) {
-            if ($plugin->getEventJs() == 1) {
-                $result['plugins'][] = Utils::o2a($plugin);
-            }
-        }
-        $result['custom'] = ['js' => false, 'css' => false];
-        $this->ajax->success($result);
-    }
-
     /**
      * Get documentation link
      *
@@ -91,48 +57,49 @@ class NextDomAjax extends BaseAjax
      */
     public function getDocumentationUrl()
     {
+        $documentationUrl = '';
         AuthentificationHelper::isConnectedOrFail();
         $this->ajax->checkToken();
 
-        $pluginId = Utils::init('plugin');
+        $pluginId = Utils::init(AjaxParams::PLUGIN);
         if ($pluginId !== '') {
             $plugin = PluginManager::byId($pluginId);
-            if (is_object($plugin)) {
-                if ($plugin->getDocumentation() !== '') {
-                    $this->ajax->success($plugin->getDocumentation());
-                }
-                else {
-                    $this->ajax->error(__('Ce plugin ne possède pas de documentation'));
-                }
+            if (is_object($plugin) && $plugin->getDocumentation() !== '') {
+                $documentationUrl = $plugin->getDocumentation();
             }
         } else {
-            $adminPages = ['api','cache','network', 'security', 'services', 'realtime', 'commandes', 'eqlogic', 'general', 'links'];
-            $noDocPages = ['connection','firstUse','note'];
+            $adminPages = ['api', 'cache', 'network', 'security', 'services', 'realtime', 'commandes', 'eqlogic', 'general', 'links'];
+            $noDocPages = ['connection', 'firstUse', 'note'];
             $redirectPage = ['view_edit' => 'view',
-                             'plan' => 'design',
-                             'plan3d' => 'design3d',
-                             'scenarioAssist' => 'scenario',
-                             'users' => 'user',
-                             'timeline' => 'history',
-                             'interact_config' => 'interact',
-                             'log_config' => 'log',
-                             'summary' => 'display',
-                             'report_config' => 'report',
-                             'update-view' => 'update'];
+                'plan' => 'design',
+                'plan3d' => 'design3d',
+                'scenarioAssist' => 'scenario',
+                'users' => 'user',
+                'timeline' => 'history',
+                'interact_config' => 'interact',
+                'log_config' => 'log',
+                'summary' => 'display',
+                'report_config' => 'report',
+                'update-view' => 'update'];
 
             $documentationPage = Utils::init('page');
             if (in_array($documentationPage, $noDocPages)) {
-                $this->ajax->success('https://jeedom.github.io/documentation/');
+                $documentationUrl = 'https://jeedom.github.io/documentation/';
             } else {
                 if (in_array($documentationPage, $adminPages)) {
                     $documentationPage = 'administration';
                 } elseif (array_key_exists($documentationPage, $redirectPage)) {
                     $documentationPage = $redirectPage[$documentationPage];
                 }
-                $this->ajax->success('https://jeedom.github.io/core/' . ConfigManager::byKey('language', 'core', 'fr_FR') . '/' . secureXSS($documentationPage));
+                $documentationUrl = 'https://jeedom.github.io/core/' . ConfigManager::byKey('language', 'core', 'fr_FR') . '/' . secureXSS($documentationPage);
             }
         }
-        throw new CoreException(__('Aucune documentation trouvée'), -1234);
+        if ($documentationUrl !== '') {
+            $this->ajax->success($documentationUrl);
+        }
+        else {
+            $this->ajax->error(__('Aucune documentation'));
+        }
     }
 
     public function addWarnme()
@@ -147,13 +114,13 @@ class NextDomAjax extends BaseAjax
         $listener->setClass('interactQuery');
         $listener->setFunction('warnMeExecute');
         $listener->addEvent($cmd->getId());
-        $options = array(
+        $options = [
             'type' => 'cmd',
             'cmd_id' => $cmd->getId(),
             'name' => $cmd->getHumanName(),
             'test' => Utils::init('test'),
             'reply_cmd' => Utils::init('reply_cmd', UserManager::getStoredUser()->getOptions('notification::cmd')),
-        );
+        ];
         $listener->setOption($options);
         $listener->save(true);
         $this->ajax->success();
@@ -168,7 +135,7 @@ class NextDomAjax extends BaseAjax
         if (strpos($command, '2>&1') === false && strpos($command, '>') === false) {
             $command .= ' 2>&1';
         }
-        $output = array();
+        $output = [];
         exec($command, $output);
         $this->ajax->success(implode("\n", $output));
     }
@@ -229,7 +196,7 @@ class NextDomAjax extends BaseAjax
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
         $this->ajax->checkToken();
-        BackupManager::restore(Utils::init('backup'), true);
+        BackupManager::restore(Utils::init(AjaxParams::BACKUP), true);
         $this->ajax->success();
     }
 
@@ -237,7 +204,7 @@ class NextDomAjax extends BaseAjax
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
         $this->ajax->checkToken();
-        BackupManager::removeBackup(Utils::init('backup'));
+        BackupManager::removeBackup(Utils::init(AjaxParams::BACKUP));
         $this->ajax->success();
     }
 
@@ -276,7 +243,7 @@ class NextDomAjax extends BaseAjax
         AuthentificationHelper::isConnectedAsAdminOrFail();
         $this->ajax->checkToken();
         $uploadDir = BackupManager::getBackupDirectory();
-        Utils::readUploadedFile($_FILES, "file", $uploadDir, 1000, array(".gz"));
+        Utils::readUploadedFile($_FILES, "file", $uploadDir, 1000, [".gz"]);
         $this->ajax->success();
     }
 
@@ -308,7 +275,6 @@ class NextDomAjax extends BaseAjax
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
         $this->ajax->checkToken();
-        $return = array('node' => array(), 'link' => array());
         $resultObject = null;
         $type = Utils::init('filter_type');
         if ($type !== '') {
@@ -326,17 +292,15 @@ class NextDomAjax extends BaseAjax
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
         $this->ajax->checkToken();
-        $return = array();
+        $return = [];
         $events = TimeLineHelper::getTimelineEvent();
         foreach ($events as $event) {
             $info = null;
-            switch ($event['type']) {
-                case 'cmd':
-                    $info = CmdManager::timelineDisplay($event);
-                    break;
-                case 'scenario':
-                    $info = ScenarioManager::timelineDisplay($event);
-                    break;
+            if ($event['type'] === NextDomObj::CMD) {
+                $info = CmdManager::timelineDisplay($event);
+            }
+            elseif ($event['type'] === NextDomObj::SCENARIO) {
+                $info = ScenarioManager::timelineDisplay($event);
             }
             if ($info != null) {
                 $return[] = $info;
@@ -373,7 +337,7 @@ class NextDomAjax extends BaseAjax
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
         $this->ajax->checkToken();
-        $this->ajax->success(FileSystemHelper::ls(Utils::init('path'), '*', false, array(Utils::init('type'))));
+        $this->ajax->success(FileSystemHelper::ls(Utils::init('path'), '*', false, [Utils::init('type')]));
     }
 
     public function getFileContent()
@@ -383,7 +347,7 @@ class NextDomAjax extends BaseAjax
         $filePath = Utils::init('path');
         $pathinfo = pathinfo($filePath);
         $extension = Utils::array_key_default($pathinfo, "extension", "<no-ext>");
-        if (!in_array($extension, array('php', 'js', 'json', 'sql', 'ini', 'html', 'py', 'css'))) {
+        if (!in_array($extension, ['php', 'js', 'json', 'sql', 'ini', 'html', 'py', 'css'])) {
             throw new CoreException(__('Vous ne pouvez éditer ce type d\'extension : ' . $extension));
         }
         if (!is_writable($filePath)) {
@@ -399,7 +363,7 @@ class NextDomAjax extends BaseAjax
         $filePath = Utils::init('path');
         $pathInfo = pathinfo($filePath);
         $extension = Utils::array_key_default($pathInfo, "extension", "<no-ext>");
-        if (!in_array($extension, array('php', 'js', 'json', 'sql', 'ini', 'html', 'py', 'css'))) {
+        if (!in_array($extension, ['php', 'js', 'json', 'sql', 'ini', 'html', 'py', 'css'])) {
             throw new CoreException(__('Vous ne pouvez éditer ce type d\'extension : ') . $extension);
         }
         if (!is_writable($filePath)) {
@@ -414,8 +378,8 @@ class NextDomAjax extends BaseAjax
         $this->ajax->checkToken();
         $pathinfo = pathinfo(Utils::init('path'));
         $extension = Utils::array_key_default($pathinfo, "extension", "<no-ext>");
-        if (!in_array($extension, array('php', 'js', 'json', 'sql', 'ini', 'css'))) {
-            throw new CoreException(__('Vous ne pouvez éditer ce type d\'extension : ' . $extension, __FILE__));
+        if (!in_array($extension, ['php', 'js', 'json', 'sql', 'ini', 'css'])) {
+            throw new CoreException(__('Vous ne pouvez éditer ce type d\'extension : ' . $extension));
         }
         $this->ajax->success(unlink(Utils::init('path')));
     }
@@ -426,8 +390,8 @@ class NextDomAjax extends BaseAjax
         $this->ajax->checkToken();
         $pathinfo = pathinfo(Utils::init('name'));
         $extension = Utils::array_key_default($pathinfo, "extension", "<no-ext>");
-        if (!in_array($extension, array('php', 'js', 'json', 'sql', 'ini', 'css'))) {
-            throw new CoreException(__('Vous ne pouvez éditer ce type d\'extension : ' . $extension, __FILE__));
+        if (!in_array($extension, ['php', 'js', 'json', 'sql', 'ini', 'css'])) {
+            throw new CoreException(__('Vous ne pouvez éditer ce type d\'extension : ' . $extension));
         }
         touch(Utils::init('path') . Utils::init('name'));
         if (!file_exists(Utils::init('path') . Utils::init('name'))) {

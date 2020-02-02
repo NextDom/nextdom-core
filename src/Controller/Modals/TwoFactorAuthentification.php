@@ -22,10 +22,10 @@
 
 namespace NextDom\Controller\Modals;
 
+use Endroid\QrCode\QrCode;
 use NextDom\Helpers\Render;
 use NextDom\Managers\UserManager;
 use PragmaRX\Google2FA\Google2FA;
-use NextDom\Managers\ConfigManager;
 
 /**
  * Class TwoFactorAuthentification
@@ -49,14 +49,16 @@ class TwoFactorAuthentification extends BaseAbstractModal
             UserManager::getStoredUser()->save();
         }
         @session_write_close();
-        $google2faUrl = $google2fa->getQRCodeGoogleUrl(
+        $google2faUrl = $google2fa->getQRCodeUrl(
             'NextDom',
             UserManager::getStoredUser()->getLogin(),
             UserManager::getStoredUser()->getOptions('twoFactorAuthentificationSecret')
         );
-
+        $qrCode = new QrCode($google2faUrl);
+        $qrCode->setSize(200);
+        $qrCodeRender = $qrCode->writeDataUri();
         $pageData = [];
-        $pageData['google2FaUrl'] = $google2faUrl;
+        $pageData['google2FaUrl'] = $qrCodeRender;
         $pageData['userTwoFactorSecret'] = UserManager::getStoredUser()->getOptions('twoFactorAuthentificationSecret');
 
         return Render::getInstance()->get('/modals/twoFactor.authentification.html.twig', $pageData);

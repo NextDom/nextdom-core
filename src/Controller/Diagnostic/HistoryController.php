@@ -23,12 +23,11 @@
 namespace NextDom\Controller\Diagnostic;
 
 use NextDom\Controller\BaseController;
-use NextDom\Helpers\NextDomHelper;
+use NextDom\Enums\ControllerData;
+use NextDom\Enums\DateFormat;
 use NextDom\Helpers\Render;
 use NextDom\Managers\CmdManager;
 use NextDom\Managers\ConfigManager;
-use NextDom\Managers\JeeObjectManager;
-use NextDom\Managers\PluginManager;
 
 /**
  * Class HistoryController
@@ -48,12 +47,12 @@ class HistoryController extends BaseController
     public static function get(&$pageData): string
     {
 
-        $pageData['historyDate'] = array(
-            'start' => date('Y-m-d', strtotime(ConfigManager::byKey('history::defautShowPeriod') . ' ' . date('Y-m-d'))),
-            'end' => date('Y-m-d'),
-        );
+        $pageData['historyDate'] = [
+            'start' => date(DateFormat::FULL_DAY, strtotime(ConfigManager::byKey('history::defautShowPeriod') . ' ' . date(DateFormat::FULL_DAY))),
+            'end' => date(DateFormat::FULL_DAY),
+        ];
         $pageData['historyCmdsList'] = CmdManager::allHistoryCmd();
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/diagnostic/history.js';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/diagnostic/history.js';
 
         return Render::getInstance()->get('/desktop/diagnostic/history.html.twig', $pageData);
     }

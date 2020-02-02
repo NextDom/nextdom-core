@@ -21,28 +21,21 @@
 
 /* Core-Surcharge */
 .autocomplete {
-    background-color: $lightgolden;
     border-radius: 3px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 5px rgba(0, 0, 0, .5);
     max-height: 400px;
     overflow-y: auto;
+    overflow-x: hidden;
     margin-top: 20px;
-    z-index: 9999;
+    margin-right: 10px;
+    z-index: 1000 !important;
     .ui-menu-item-wrapper {
-        padding: 5px;
+        padding: 10px;
     }
     .ui-menu-item {
     	  cursor:pointer;
     }
     .ui-state-hover, .ui-state-active {
         border: none;
-    }
-    .ui-menu-item-wrapper:hover {
-        color: $white;
-        background-color: $nextdom_blue;
-    }
-    .ui-state-hover, .ui-state-active {
-        color: $white;
-        background-color: $nextdom_blue;
     }
 }

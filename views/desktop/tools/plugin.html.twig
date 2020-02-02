@@ -72,7 +72,7 @@
                             {% for plugin in pluginsList %}
                                 {% if plugin.isActive() %}
                                     <div class="objet col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                                        <div class="box box-primary pluginDisplayCard" data-pluginPath="{{ plugin.getFilepath() }}" data-plugin_icon="{{ plugin.getPathImgIcon() }}" data-plugin_id="{{ plugin.getId() }}">
+                                        <div class="box pluginDisplayCard" data-pluginPath="{{ plugin.getFilepath() }}" data-plugin_icon="{{ plugin.getPathImgIcon() }}" data-plugin_id="{{ plugin.getId() }}">
                                             <div class="box-header with-border accordion-toggle cursor" {% if not plugin.isActive() %}style="{{ pluginInactiveOpacity }}"{% endif %} data-toggle="collapse" data-parent="#accordionPlugin" href="#config_{{ plugin.getId() }}">
                                                 <h4 class="box-title"><img class="box-header-icon spacing-right" src="{{ plugin.getPathImgIcon() }}">{{ plugin.getName() }}</h4>
                                             </div>
@@ -84,7 +84,8 @@
                                                     <p><i>{{ 'Licence :' }}<i class="spacing-right"></i></i>{{ plugin.getLicense() }}</p>
                                                 </div>
                                                 <div class="box-footer clearfix text-center">
-                                                    <a class="btn btn-info btn-sm pull-left plugin_configure" title="{{'Configurer'}}"><i class="fas fa-cog"></i>{{'Configurer'}}</a>
+                                                    <a class="btn btn-primary btn-sm pull-left plugin_configure" title="{{'Configurer'}}"><i class="fas fa-cog"></i>{{'Configurer'}}</a>
+                                                    <a class="btn btn-warning btn-sm" href="index.php?v=d&m={{ plugin.getId() }}&p={{ plugin.getIndex() }}" title="{{'Gérer'}}"><i class="fas fa-cog"></i>{{'Gérer'}}</a>
                                                     <a class="btn btn-danger btn-sm remove pull-right plugin_delete" data-market_logicalid="{{ plugin.getId() }}" title="{{ 'common.remove' | trans }}"><i class="fas fa-trash"></i>{{ 'common.remove' | trans }}</a>
                                                 </div>
                                             </div>
@@ -102,7 +103,7 @@
                             {% for plugin in pluginsList %}
                                 {% if not plugin.isActive() %}
                                     <div class="objet col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                                        <div class="box box-default pluginDisplayCard" data-pluginPath="{{ plugin.getFilepath() }}" data-plugin_icon="{{ plugin.getPathImgIcon() }}" data-plugin_id="{{ plugin.getId() }}">
+                                        <div class="box pluginDisplayCard" data-pluginPath="{{ plugin.getFilepath() }}" data-plugin_icon="{{ plugin.getPathImgIcon() }}" data-plugin_id="{{ plugin.getId() }}">
                                             <div class="box-header with-border accordion-toggle cursor" {% if not plugin.isActive() %}style="{{ pluginInactiveOpacity }}"{% endif %} data-toggle="collapse" data-parent="#accordionPlugin" href="#config_{{ plugin.getId() }}">
                                                 <h4 class="box-title"><img class="box-header-icon spacing-right" src="{{ plugin.getPathImgIcon() }}">{{ plugin.getName() }}</h4>
                                             </div>
@@ -195,7 +196,7 @@
             <div class="col-lg-6 col-sm-12">
                 <div class="box box-primary" id="div_configLog">
                     <div class="box-header with-border">
-                        <h3 class="box-title"><i class="fas fa-file"></i>{{ 'common.log' | trans }}</h3>
+                        <h3 class="box-title"><i class="fas fa-file"></i>{{ 'Logs et surveillance' | trans }}</h3>
                     </div>
                     <div class="box-body">
                         <form class="form-horizontal">

@@ -47,6 +47,9 @@
     border: 1px solid;
     border-radius: 2px;
     margin-left: 1px;
+    i {
+        margin-right: 8px;
+    }
 }
 .label-badge {
     position: absolute;
@@ -64,8 +67,8 @@
     width: 50px;
     margin: {
         left: -4px;
-        top: 0px;
-        bottom: 0px;
+        top: 0;
+        bottom: 0;
     }
 }
 .label-check {
@@ -104,20 +107,14 @@
     border-radius: 2px;
     margin: 4px 0;
 }
-.label-list ,
-.label-view ,
-.label-log {
-    background-color: $lightgolden;
-    color: $grey !important;
-    border-color: $lightgrey;
-}
 .li_noteDisplay.active .label-list ,
+.li_scenarioTemplate.active .label-list ,
 .li_view.active .label-view ,
 .li_log.active .label-log {
     border: 1px dashed !important;
 }
 .label-cmd {
-    margin: 3px 0px 3px 0px;
+    margin: 3px 0 3px 0;
     font-size: 100%;
     padding: {
       top: 7px;

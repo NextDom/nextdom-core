@@ -57,7 +57,6 @@ function loadInformations() {
             $(".bt_cancelModifs").hide();
         }
     });
-    $('#pre_backupInfo').height($(window).height() - $('header').height() - $('footer').height() - 150);
 }
 
 /**
@@ -107,9 +106,12 @@ function initEvents() {
         closeText: '',
         autoOpen: false,
         modal: true,
-        width: ((jQuery(window).width() - 50) < 1500) ? (jQuery(window).width() - 50) : 1500,
+        height: jQuery(window).height() - 100,
+        width: getModalWidth(),
         open: function () {
             $("body").css({overflow: 'hidden'});
+            $(this).dialog("option", "position", {my: "center", at: "center", of: window});
+            $('#pre_backupInfo').css('height', $('#md_backupInfo').height());
         },
         beforeClose: function (event, ui) {
             $("body").css({overflow: 'inherit'});
@@ -250,8 +252,9 @@ function initEvents() {
 function getNextDomLog(_autoUpdate, _log) {
     $.ajax({
         type: 'POST',
-        url: 'core/ajax/log.ajax.php',
+        url: 'src/ajax.php',
         data: {
+            target: 'Log',
             action: 'get',
             log: _log,
         },
@@ -312,6 +315,7 @@ function getNextDomLog(_autoUpdate, _log) {
                 for(var i in REPO_LIST){
                     updateRepoListBackup(REPO_LIST[i]);
                 }
+                refreshMessageNumber();
             }
         }
     });

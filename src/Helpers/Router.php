@@ -36,7 +36,6 @@ namespace NextDom\Helpers;
 
 use NextDom\Enums\GetParams;
 use NextDom\Enums\ViewType;
-use NextDom\Managers\ConfigManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -78,9 +77,29 @@ class Router
     public static function showError401AndDie()
     {
         header("HTTP/1.1 401 Unauthorized");
+        require(NEXTDOM_ROOT . '/public/401.html');
         die();
     }
 
+    /**
+     * Show 403 security page
+     */
+    public static function showError403AndDie()
+    {
+        header("HTTP/1.0 403 Not Found");
+        require(NEXTDOM_ROOT . '/public/403.html');
+        die();
+    }
+
+    /**
+     * Show 500 http error page
+     */
+    public static function showError500AndDie()
+    {
+        header("HTTP/1.0 500 Not Found");
+        require(NEXTDOM_ROOT . '/public/500.html');
+        die();
+    }
     /**
      * Viewing the requested content
      *
@@ -98,6 +117,38 @@ class Router
             $result = true;
         }
         return $result;
+    }
+
+    /**
+     * Display for a computer
+     *
+     * @throws \Exception
+     */
+    public function desktopView()
+    {
+        AuthentificationHelper::init();
+        $prepareView = new PrepareView();
+        if ($this->isModalRequest()) {
+            $prepareView->showModal();
+        } elseif ($this->isPluginConfRequest()) {
+            // Displaying the configuration section of a plugin in the configuration page
+            if (AuthentificationHelper::isConnectedAsAdminOrFail())
+            {
+                FileSystemHelper::includeFile('plugin_info', 'configuration', 'configuration', Utils::init(GetParams::PLUGIN_ID), true);
+            }
+        } elseif ($this->isAjaxQuery()) {
+            $prepareView->showContentByAjax();
+        } else {
+            $prepareView->initConfig();
+            if (!$prepareView->firstUseAlreadyShowed()) {
+                $prepareView->showSpecialPage('firstUse');
+
+            } elseif (!AuthentificationHelper::isConnected()) {
+                $prepareView->showSpecialPage('connection');
+            } else {
+                $prepareView->showContent();
+            }
+        }
     }
 
     /**
@@ -125,36 +176,9 @@ class Router
      *
      * @return bool True if page is requested by Ajax query
      */
-    private function isAjaxQuery() {
-        return isset($_GET[GetParams::AJAX_QUERY]) && $_GET[GetParams::AJAX_QUERY] == 1;
-    }
-    /**
-     * Display for a computer
-     *
-     * @throws \Exception
-     */
-    public function desktopView()
+    private function isAjaxQuery()
     {
-        AuthentificationHelper::init();
-        $prepareView = new PrepareView();
-        if ($this->isModalRequest()) {
-            $prepareView->showModal();
-        } elseif ($this->isPluginConfRequest()) {
-            // Displaying the configuration section of a plugin in the configuration page
-            FileSystemHelper::includeFile('plugin_info', 'configuration', 'configuration', Utils::init(GetParams::PLUGIN_ID), true);
-        } elseif ($this->isAjaxQuery()) {
-            $prepareView->showContentByAjax();
-        } else {
-            $prepareView->initConfig();
-            if (!$prepareView->firstUseAlreadyShowed()) {
-                $prepareView->showSpecialPage('firstUse');
-
-            } elseif (!AuthentificationHelper::isConnected()) {
-                $prepareView->showSpecialPage('connection');
-            } else {
-                $prepareView->showContent();
-            }
-        }
+        return isset($_GET[GetParams::AJAX_QUERY]) && $_GET[GetParams::AJAX_QUERY] == 1;
     }
 
     /**

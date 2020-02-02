@@ -37,7 +37,8 @@
 .box-danger,
 .box-primary,
 .box-summary,
-.box-default {
+.box-default,
+.box-theme {
     border-top:{
         style: solid;
         width: 3px;
@@ -79,11 +80,19 @@
 }
 
 /* Core-Surcharge : Page Update */
-#listPlugin .box .box-body,
-#listWidget .box .box-body ,
-#listScript .box .box-body,
-#listOther .box .box-body {
-    min-height: 180px;
+#listPlugin,
+#listWidget,
+#listScript,
+#listOther {
+    .box .box-body {
+        min-height: 180px;
+    }
+    .box-title {
+        white-space: nowrap;
+    }
+    .box-header {
+        overflow-x: hidden;
+    }
 }
 #listCore .box .box-body {
     min-height: 10px;
@@ -93,7 +102,7 @@
 .eqLogicSortable {
     list-style-type: none;
     min-height: 30px;
-    padding-left: 0px;
+    padding-left: 0;
     margin-bottom: 8px !important;
     li {
       margin: 0 0 4px 0;
@@ -103,7 +112,7 @@
 .cmdSortable {
     list-style-type: none;
     min-height: 20px;
-    padding-left: 0px;
+    padding-left: 0;
     margin-top:5px;
     li {
         margin: 0 2px 2px 2px;
@@ -113,5 +122,5 @@
 
 /* Core-Ajout : Page Résumé domotique */
 .summary-box-tools {
-    margin: 7px 0px 0px 5px;
+    margin: 7px 0 0 5px;
 }

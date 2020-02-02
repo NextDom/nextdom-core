@@ -41,7 +41,7 @@
 
 /* Core-Ajout : icone semi-transparente */
 .fa-soft {
-    opacity: 0.8;
+    opacity: .8;
 }
 
 /* Core-Ajout : Classes NO */
@@ -49,7 +49,7 @@
     border: none !important;
 }
 .no-radius {
-    border-radius: 0px !important;
+    border-radius: 0 !important;
 }
 
 /* Core-Ajout */
@@ -60,8 +60,8 @@
     border: solid 1px $good;
 }
 .roundedLeft {
-    border-radius: 4px 0px 0px 4px !important;
+    border-radius: 4px 0 0 4px !important;
 }
 .roundedRight {
-    border-radius: 0px 4px 4px 0px !important;
+    border-radius: 0 4px 4px 0 !important;
 }
