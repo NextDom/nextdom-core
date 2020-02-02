@@ -272,11 +272,6 @@ html {
   color: map_get($color_theme, 'color2') !important;
 }
 
-/* Textes scenario dashboard */
-.div_scenario a {
-  color: map_get($color_theme, 'color2') !important;
-}
-
 /* Barre de chargement */
 .pace .pace-progress {
   background: map_get($color_theme, 'color2') !important;
@@ -785,6 +780,11 @@ pre::selection {
 
 /* Widget Theme Nextdom */
 .bg-theme .widget-content {
+  color: map_get($color_theme, 'color10') !important;
+}
+
+/* Dashboard scenario controls */
+.scenario-label {
   color: map_get($color_theme, 'color10') !important;
 }
 
