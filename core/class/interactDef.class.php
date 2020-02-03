@@ -24,6 +24,14 @@ require_once __DIR__ . '/../../core/php/core.inc.php';
 
 class interactDef extends \NextDom\Model\Entity\InteractDef
 {
+    public function getFiltres($_key = '', $_default = '') {
+        return $this->getFilters($_key, $_default);
+    }
+
+    public function setFiltres($_key = '', $_default = '') {
+        return $this->setFilters($_key, $_default);
+    }
+
     public static function byId($_id)
     {
         return InteractDefManager::byId($_id);

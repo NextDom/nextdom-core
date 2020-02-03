@@ -30,7 +30,7 @@ class ConsoleHelper
      * @param string $title Title to show
      * @param bool $ending true if end tag
      */
-    public static function title(string $title, $ending)
+    public static function title(string $title, bool $ending = false)
     {
         if ($ending) {
             printf("[ / $title ]\n");
@@ -108,6 +108,6 @@ class ConsoleHelper
     public static function error($exceptionData)
     {
         printf(">> *** ERROR *** " . Utils::br2nl($exceptionData->getMessage()) . "\n");
-        printf(">> *** TRACE *** " . Utils::br2nl($exceptionData->getTrace()) . "\n");
+        printf(">> *** TRACE *** " . Utils::br2nl($exceptionData->getTraceAsString()) . "\n");
     }
 }

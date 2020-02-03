@@ -47,6 +47,7 @@ class ScenarioAjax extends BaseAjax
      * Change scenario state
      *
      * @throws CoreException
+     * @throws \ReflectionException
      */
     public function changeState()
     {
@@ -128,6 +129,7 @@ class ScenarioAjax extends BaseAjax
     /**
      * Convert current scenario to template
      * @throws CoreException
+     * @throws \ReflectionException
      */
     public function convertToTemplate()
     {
@@ -310,6 +312,7 @@ class ScenarioAjax extends BaseAjax
             }
             $this->ajax->success($result);
         } else {
+            /** @var Scenario $scenario */
             $scenario = ScenarioManager::byId($target);
             if (is_object($scenario)) {
                 $this->ajax->success($scenario->toHtml(Utils::init(AjaxParams::VERSION)));

@@ -128,8 +128,8 @@ class InteractDef extends BaseEntity
         if ($this->getOptions('allowSyntaxCheck') === '') {
             $this->setOptions('allowSyntaxCheck', 1);
         }
-        if ($this->getFiltres('eqLogic_id') == '') {
-            $this->setFiltres('eqLogic_id', 'all');
+        if ($this->getFilters('eqLogic_id') == '') {
+            $this->setFilters('eqLogic_id', 'all');
         }
     }
 
@@ -138,7 +138,7 @@ class InteractDef extends BaseEntity
      * @param string $_default
      * @return array|bool|mixed|null|string
      */
-    public function getFiltres($_key = '', $_default = '')
+    public function getFilters($_key = '', $_default = '')
     {
         return Utils::getJsonAttr($this->filtres, $_key, $_default);
     }
@@ -148,7 +148,7 @@ class InteractDef extends BaseEntity
      * @param $_value
      * @return $this
      */
-    public function setFiltres($_key, $_value)
+    public function setFilters($_key, $_value)
     {
         $filtres = Utils::setJsonAttr($this->filtres, $_key, $_value);
         $this->updateChangeState($this->filtres, $filtres);
@@ -222,13 +222,13 @@ class InteractDef extends BaseEntity
     {
         $inputs = InteractDefManager::generateTextVariant($this->getQuery());
         $return = [];
-        $object_filter = $this->getFiltres('object');
-        $type_filter = $this->getFiltres('type');
-        $subtype_filter = $this->getFiltres('subtype');
-        $unite_filter = $this->getFiltres('unite');
-        $plugin_filter = $this->getFiltres('plugin');
-        $visible_filter = $this->getFiltres('visible');
-        $category_filter = $this->getFiltres('category');
+        $object_filter = $this->getFilters('object');
+        $type_filter = $this->getFilters('type');
+        $subtype_filter = $this->getFilters('subtype');
+        $unite_filter = $this->getFilters('unite');
+        $plugin_filter = $this->getFilters('plugin');
+        $visible_filter = $this->getFilters('visible');
+        $category_filter = $this->getFilters('category');
         foreach ($inputs as $input) {
             preg_match_all("/#(.*?)#/", $input, $matches);
             $matches = $matches[1];
@@ -241,7 +241,7 @@ class InteractDef extends BaseEntity
                         continue;
                     }
                     foreach ($jeeObject->getEqLogic() as $eqLogic) {
-                        if ($this->getFiltres('eqLogic_id', 'all') != 'all' && $eqLogic->getId() != $this->getFiltres('eqLogic_id')) {
+                        if ($this->getFilters('eqLogic_id', 'all') != 'all' && $eqLogic->getId() != $this->getFilters('eqLogic_id')) {
                             continue;
                         }
                         if (isset($plugin_filter[$eqLogic->getEqType_name()]) && $plugin_filter[$eqLogic->getEqType_name()] == 0) {

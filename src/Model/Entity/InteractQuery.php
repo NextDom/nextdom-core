@@ -207,7 +207,11 @@ class InteractQuery extends BaseEntity
             return $result;
         }
         $replace['#valeur#'] = '';
-        $colors = array_change_key_case(ConfigManager::byKey('convertColor'));
+        $colorsToConvert = ConfigManager::byKey('convertColor');
+        if (!is_array($colorsToConvert)) {
+            $colorsToConvert = [$colorsToConvert];
+        }
+        $colors = array_change_key_case($colorsToConvert);
         if (is_array($this->getActions('cmd'))) {
             foreach ($this->getActions('cmd') as $action) {
                 try {

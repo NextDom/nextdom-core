@@ -36,6 +36,7 @@ class RepoApt implements BaseRepo
         'backup' => false,
         'hasConfiguration' => false,
         'core' => true,
+        'test' => false
     ];
 
     public static $_configuration = [];

@@ -41,8 +41,12 @@ class PluginAjax extends BaseAjax
     public function getConf()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $plugin = PluginManager::byId(Utils::init(AjaxParams::ID));
-        $update = UpdateManager::byLogicalId(Utils::init(AjaxParams::ID));
+        $pluginId = Utils::init(AjaxParams::ID);
+        $plugin = PluginManager::byId($pluginId);
+        if (!is_object($plugin)) {
+            throw new CoreException(__('Plugin introuvable : ') . $pluginId);
+        }
+        $update = UpdateManager::byLogicalId($pluginId);
         $result = Utils::o2a($plugin);
         $result['activate'] = $plugin->isActive();
         $result['configurationPath'] = $plugin->getPathToConfiguration();
@@ -56,10 +60,11 @@ class PluginAjax extends BaseAjax
 
     public function toggle()
     {
+        $pluginId = Utils::init(AjaxParams::ID);
         AuthentificationHelper::isConnectedAsAdminOrFail();
-        $plugin = PluginManager::byId(Utils::init(AjaxParams::ID));
+        $plugin = PluginManager::byId($pluginId);
         if (!is_object($plugin)) {
-            throw new CoreException(__('Plugin introuvable : ') . Utils::init(AjaxParams::ID));
+            throw new CoreException(__('Plugin introuvable : ') . $pluginId);
         }
         $plugin->setIsEnable(Utils::init(AjaxParams::STATE));
         $this->ajax->success();

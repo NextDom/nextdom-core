@@ -60,10 +60,12 @@ class ViewAjax extends BaseAjax
 
     public function get()
     {
-        if (Utils::init(AjaxParams::ID) == 'all' || Utils::isJson(Utils::init(AjaxParams::ID))) {
+        $viewId = Utils::init(AjaxParams::ID);
+        $isJson = Utils::isJson($viewId);
+        if ($viewId == 'all' || $isJson) {
             $views = [];
-            if (Utils::isJson(Utils::init(AjaxParams::ID))) {
-                $view_ajax = json_decode(Utils::init(AjaxParams::ID), true);
+            if ($isJson) {
+                $view_ajax = json_decode($viewId, true);
                 foreach ($view_ajax as $id) {
                     $views[] = ViewManager::byId($id);
                 }
@@ -76,6 +78,7 @@ class ViewAjax extends BaseAjax
             }
             $this->ajax->success($return);
         } else {
+            /** @var View $view */
             $view = ViewManager::byId(Utils::init(AjaxParams::ID));
             if (!is_object($view)) {
                 throw new CoreException(__('Vue non trouvée. Vérifiez l\'ID'));

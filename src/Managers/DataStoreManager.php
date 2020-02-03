@@ -37,6 +37,7 @@ namespace NextDom\Managers;
 use NextDom\Managers\Parents\BaseManager;
 use NextDom\Managers\Parents\CommonManager;
 use NextDom\Model\Entity\DataStore;
+use NextDom\Model\Entity\InteractQuery;
 
 /**
  * Class DataStoreManager
@@ -58,7 +59,7 @@ class DataStoreManager extends BaseManager
      * @param mixed $linkId
      * @param mixed $key
      *
-     * @return mixed
+     * @return DataStore
      * @throws \Exception
      */
     public static function byTypeLinkIdKey($dataType, $linkId, $key)

@@ -79,7 +79,8 @@
             <directory>Managers</directory>
         </testsuite>
         <testsuite name="current">
-            <directory>../phpunit_tests/Managers/HistoryManagerTest.php</directory>
+            <directory>Entities/InteractDefTest.php</directory>
+            <directory>Managers/InteractDefManagerTest.php</directory>
         </testsuite>
     </testsuites>
     <filter>

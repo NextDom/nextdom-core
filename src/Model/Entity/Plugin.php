@@ -176,7 +176,7 @@ class Plugin extends BaseEntity
 
     /**
      * Obtenir le fichier de configuration du plugin
-     *
+     * @deprecated
      * @return string Chemin du fichier de configuration du plugin
      */
     public function getPathToConfigurationById(): string
@@ -185,6 +185,10 @@ class Plugin extends BaseEntity
         return $this->getPathToConfiguration();
     }
 
+    /**
+     * Obtenir le chemin du fichier de configuration
+     * @return string
+     */
     public function getPathToConfiguration(): string
     {
         $result = '';

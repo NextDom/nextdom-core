@@ -70,7 +70,7 @@ class ListenerManager extends BaseManager
      */
     public static function byClass($_class)
     {
-        return static::getMultipleByClauses([Common::CLASS => $_class]);
+        return static::getMultipleByClauses([Common::CLASS_CODE => $_class]);
     }
 
     /**
