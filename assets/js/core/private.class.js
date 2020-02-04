@@ -29,7 +29,7 @@ nextdom.private = {
       return _data;
     },
     success: function (_data) {
-      console.log(_data);
+      // console.log(_data);
     },
     post_success: function (_data) {
     },
@@ -37,7 +37,7 @@ nextdom.private = {
     },
     error: function (_data) {
       // Erreur dans l'API ou mauvais retour AJAX (appel de ajax::error() côté PHP)
-      console.log(_data);
+      // console.log(_data);
     }
   },
   /**

@@ -198,6 +198,19 @@ html {
     background-color: map_get($color_theme, 'color1') !important;
 }
 
+/* Modales */
+.ui-widget-content {
+    a:not(.btn):not(.label-list):not(.ui-state-active):not(.ui-state-hover) {
+        color: map_get($color_theme, 'color1') !important;
+    }
+}
+.ui-datepicker td .ui-state-active,
+.ui-datepicker td .ui-state-hover,
+.ui-datepicker-close {
+    background: map_get($color_theme, 'color1') !important;
+}
+
+
 /* ################################################################################## */
 /* COLOR2 = Couleur de contraste (icônes et texte sur fond accentué ou de sidebar...) */
 /* ################################################################################## */
@@ -229,7 +242,8 @@ html {
 }
 
 /* Bouton action */
-.btn-action {
+.btn-action,
+.label-action {
   color: map_get($color_theme, 'color2') !important;
 }
 
@@ -284,6 +298,13 @@ html {
 /* Widget theme nextdom */
 .label-default,
 .bg-theme .btn  {
+  color: map_get($color_theme, 'color2') !important;
+}
+
+/* Modales */
+.ui-datepicker td .ui-state-active,
+.ui-datepicker td .ui-state-hover,
+.ui-datepicker-close {
   color: map_get($color_theme, 'color2') !important;
 }
 
@@ -891,7 +912,8 @@ pre:not(.mobile-pre) {
 /* ########################## */
 /* COLOR14 = Boutons d'action */
 /* ########################## */
-.btn-action {
+.btn-action,
+.label-action {
   background-color: map_get($color_theme, 'color14') !important;
 }
 .tooltip-inner {

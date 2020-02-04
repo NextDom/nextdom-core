@@ -1350,9 +1350,9 @@ function addSchedule(scheduleCode) {
  * @param scenario
  */
 function addUsedBy(scenario,section) {
-    var usedByHtml = '<div class="form-group col-xs-6 col-xs-12 col-padding">';
+    var usedByHtml = '<div class="form-group col-xs-12 col-padding">';
     usedByHtml += '<div class="mix-group">';
-    usedByHtml += '<span class="label label-default label-sticker">' + scenario.name + '</span>';
+    usedByHtml += '<span class="label label-action label-sticker">' + scenario.name + '</span>';
     if (scenario.isActive == true) {
         usedByHtml += '<span class="label label-success label-sticker-big badge">{{Actif}}</span>';
     } else {
