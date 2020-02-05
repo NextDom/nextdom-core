@@ -98,8 +98,7 @@ function gitUpdate()
  */
 function debianUpdate()
 {
-    exec(SystemHelper::getCmdSudo() . 'apt update > /dev/null 2>&1');
-    exec(SystemHelper::getCmdSudo() . 'apt-get install -y nextdom');
+    exec(SystemHelper::getCmdSudo() . 'setsid ' . NEXTDOM_ROOT . '/install/scripts/debian-update.sh > ' . NEXTDOM_LOG . '/update &');
 }
 
 /**
