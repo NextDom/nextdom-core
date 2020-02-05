@@ -20,9 +20,10 @@ class UploadedImage
     }
 
     /**
-     * @param mixed $type
+     * @param $type
+     * @return UploadedImage
      */
-    public function setType($type)
+    public function setType($type): self
     {
         $this->type = $type;
         return $this;
@@ -38,8 +39,9 @@ class UploadedImage
 
     /**
      * @param mixed $hash
+     * @return UploadedImage
      */
-    public function setHash($hash)
+    public function setHash($hash): self
     {
         $this->hash = $hash;
         return $this;
@@ -55,8 +57,9 @@ class UploadedImage
 
     /**
      * @param mixed $size
+     * @return UploadedImage
      */
-    public function setSize($size)
+    public function setSize($size): self
     {
         $this->size = $size;
         return $this;
@@ -88,8 +91,9 @@ class UploadedImage
 
     /**
      * @param mixed $data
+     * @return UploadedImage
      */
-    public function setData($data)
+    public function setData($data): self
     {
         $this->data = $data;
         return $this;
@@ -105,8 +109,9 @@ class UploadedImage
 
     /**
      * @param mixed $path
+     * @return UploadedImage
      */
-    public function setPath($path)
+    public function setPath($path): self
     {
         $this->path = $path;
         return $this;

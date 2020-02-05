@@ -52,7 +52,7 @@ class SystemHealth
      * @param mixed $state
      * @return SystemHealth
      */
-    public function setState($state)
+    public function setState($state): self
     {
         $this->state = $state;
 
@@ -71,7 +71,7 @@ class SystemHealth
      * @param mixed $result
      * @return SystemHealth
      */
-    public function setResult($result)
+    public function setResult($result): self
     {
         $this->result = $result;
 
@@ -90,7 +90,7 @@ class SystemHealth
      * @param mixed $comment
      * @return SystemHealth
      */
-    public function setComment($comment)
+    public function setComment($comment): self
     {
         $this->comment = $comment;
 
