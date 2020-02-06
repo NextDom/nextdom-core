@@ -63,7 +63,7 @@ class DataStore extends BaseEntity
      */
     public function preSave()
     {
-        $allowedType = [NextDomObj::CMD, NextDomObj::OBJECT, NextDomObj::EQLOGIC, NextDomObj::SCENARIO, NextDomObj::EQREAL];
+        $allowedType = [NextDomObj::CMD, NextDomObj::OBJECT, NextDomObj::EQLOGIC, NextDomObj::SCENARIO];
         if (!in_array($this->getType(), $allowedType)) {
             throw new CoreException(__('Le type doit être un des suivants : ') . print_r($allowedType, true));
         }

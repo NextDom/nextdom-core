@@ -38,7 +38,6 @@ use NextDom\Managers\CmdManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\DataStoreManager;
 use NextDom\Managers\EqLogicManager;
-use NextDom\Managers\EqRealManager;
 use NextDom\Managers\EventManager;
 use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\JeeObjectManager;
@@ -235,9 +234,6 @@ class EqLogic extends BaseEntity
      */
     public function getEqReal_id($defaultValue = null)
     {
-        if ($this->eqReal_id == '' || !is_numeric($this->eqReal_id)) {
-            return $defaultValue;
-        }
         return $this->eqReal_id;
     }
 
@@ -248,20 +244,8 @@ class EqLogic extends BaseEntity
      */
     public function setEqReal_id($_eqReal_id)
     {
-        $this->updateChangeState($this->eqReal_id, $_eqReal_id);
         $this->eqReal_id = $_eqReal_id;
         return $this;
-    }
-
-    /**
-     * @TODO: Unused
-     * @return array|mixed|null
-     * @throws CoreException
-     * @throws \ReflectionException
-     */
-    public function getEqReal()
-    {
-        return EqRealManager::byId($this->eqReal_id);
     }
 
     /**
