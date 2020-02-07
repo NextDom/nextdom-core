@@ -295,24 +295,7 @@ step5_configure_mysql_database() {
   if [ -f ${CONFIG_DIRECTORY}/mysql/secret ]; then
     source ${CONFIG_DIRECTORY}/mysql/secret
   elif [ -z ${MYSQL_NEXTDOM_PASSWD} ] || [ "#MYSQL_NEXTDOM_PASSWD#" == "${MYSQL_NEXTDOM_PASSWD}" ] || [ "" == "${MYSQL_NEXTDOM_PASSWD}" ]; then
-    MYSQL_NEXTDOM_PASSWD="$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15)"
-    { ##try
-      if [ ! -d ${CONFIG_DIRECTORY}/mysql ]; then
-        createDirectory ${CONFIG_DIRECTORY}/mysql/
-      fi
-      cat - >${CONFIG_DIRECTORY}/mysql/secret <<EOS
-MYSQL_HOSTNAME="${MYSQL_HOSTNAME}"
-MYSQL_PORT="${MYSQL_PORT}"
-MYSQL_SUBNET="${MYSQL_HOSTNAME}"
-#MYSQL_SUBNET="${MYSQL_SUBNET}"
-MYSQL_NEXTDOM_DB=${MYSQL_NEXTDOM_DB}
-MYSQL_NEXTDOM_USER="${MYSQL_NEXTDOM_USER}"
-MYSQL_NEXTDOM_PASSWD="${MYSQL_NEXTDOM_PASSWD}"
-EOS
-      addLogInfo "Writing MariaDb/MySQL information file: ${CONFIG_DIRECTORY}/mysql/secret"
-    } || { ##catch
-      addLogError "Error while writing MariaDb/MySQL information in: ${CONFIG_DIRECTORY}/mysql/secret"
-    }
+    setNextdomPasswordForMySQL
   fi
 
   #MYSQL_NEXTDOM_PASSWD=${MYSQL_NEXTDOM_PASSWD:-$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15)}
