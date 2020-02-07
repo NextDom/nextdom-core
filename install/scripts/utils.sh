@@ -129,6 +129,26 @@ checkMySQLIsRunning() {
   ##exit ${ERROR_INVALID_DATABASE_CONNECTION}
 }
 
+setNextdomPasswordForMySQL() {
+    MYSQL_NEXTDOM_PASSWD="$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 15)"
+    { ##try
+      if [ ! -d ${CONFIG_DIRECTORY}/mysql ]; then
+        createDirectory ${CONFIG_DIRECTORY}/mysql/
+      fi
+      cat - >${CONFIG_DIRECTORY}/mysql/secret <<EOS
+MYSQL_HOSTNAME="${MYSQL_HOSTNAME}"
+MYSQL_PORT="${MYSQL_PORT}"
+MYSQL_SUBNET="${MYSQL_HOSTNAME}"
+#MYSQL_SUBNET="${MYSQL_SUBNET}"
+MYSQL_NEXTDOM_DB=${MYSQL_NEXTDOM_DB}
+MYSQL_NEXTDOM_USER="${MYSQL_NEXTDOM_USER}"
+MYSQL_NEXTDOM_PASSWD="${MYSQL_NEXTDOM_PASSWD}"
+EOS
+      addLogInfo "Writing MariaDb/MySQL information file: ${CONFIG_DIRECTORY}/mysql/secret"
+    } || { ##catch
+      addLogError "Error while writing MariaDb/MySQL information in: ${CONFIG_DIRECTORY}/mysql/secret"
+    }
+}
 # slow restart of docker service
 restartService() {
   local SERVICE=$1

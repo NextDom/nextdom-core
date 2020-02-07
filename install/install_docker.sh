@@ -25,7 +25,7 @@ source ${CURRENT_DIR}/preinst.sh
 #needed to generate assets
 savePRODUCTION=${PRODUCTION}
 PRODUCTION=false
-step0_createDirectories
+step0_prepare_prerequisites
 addLogScript "============ Starting preinst.sh ============"
 step1_generate_nextdom_assets
 #step2_configure_mysql

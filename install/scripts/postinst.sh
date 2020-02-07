@@ -369,6 +369,9 @@ step6_configure_nextdom() {
 
   if [ -f ${CONFIG_DIRECTORY}/mysql/secret ]; then
     source ${CONFIG_DIRECTORY}/mysql/secret
+  else
+    ## To remove in the futur
+    setNextdomPasswordForMySQL
   fi
 
   { ##try
