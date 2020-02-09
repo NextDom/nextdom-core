@@ -49,265 +49,263 @@
 </section>
 
 <section class="content">
-    <div class="box" id="interact_config">
-        <div class="nav-tabs-custom">
-            <ul class="nav nav-tabs pull-right" role="tablist">
-                <li role="presentation"><a href="#tabColors" aria-controls="tabColors" role="tab" data-toggle="tab"><i class="fas fa-tint"></i><span>{{ 'Couleurs' }}</span></a></li>
-                <li role="presentation"><a href="#tabSynonyme" aria-controls="tabColors" role="tab" data-toggle="tab"><i class="fas fa-restroom"></i><span>{{ 'Synonymes' }}</span></a></li>
-                <li role="presentation"><a href="#tabIntelli" aria-controls="tabIntelli" role="tab" data-toggle="tab"><i class="fas fa-brain"></i><span>{{ 'Intelligence' }}</span></a></li>
-                <li role="presentation" class="active"><a href="#tabParams" aria-controls="tabParams" role="tab" data-toggle="tab"><i class="fas fa-cog"></i><span>{{ 'Paramètres' }}</span></a></li>
-                <li class="header pull-left"><i class="fas fa-comments"></i>{{ 'Interactions' }}</li>
-            </ul>
-            <div class="global-tab-content tab-content">
-                <div role="tabpanel" class="tab-pane active" id="tabParams">
-                    <fieldset>
-                        <!-- Sensibility Section -->
-                        <legend>{{ 'Sensibilités' }}</legend>
-                        <div class="row">
-                            <div class="form-group col-xs-12 col-padding">
-                                <div class="alert alert-info">{{ 'Plus la sensibilité est basse (proche de 1), plus la correspondance doit être exacte.' }}</div>
-                            </div>
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Pour 1 mot' }}</label>
-                                <div class="input-group">
-                                    <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="interact::confidence1" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
-                                    <span class="input-group-addon input-range-min"></span>
-                                    <input class="configKey slider" type="range" min="1" max="99" step="1" data-l1key="interact::confidence1"/>
-                                    <span class="input-group-addon input-range-max"></span>
-                                    <span class="input-group-addon input-range-value"></span>
-                                </div>
-                            </div>
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Pour 2 mots' }}</label>
-                                <div class="input-group">
-                                    <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="interact::confidence2" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
-                                    <span class="input-group-addon input-range-min"></span>
-                                    <input class="configKey slider" type="range" min="1" max="99" step="1" data-l1key="interact::confidence2"/>
-                                    <span class="input-group-addon input-range-max"></span>
-                                    <span class="input-group-addon input-range-value"></span>
-                                </div>
-                            </div>
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Pour 3 mots' }}</label>
-                                <div class="input-group">
-                                    <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="interact::confidence3" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
-                                    <span class="input-group-addon input-range-min"></span>
-                                    <input class="configKey slider" type="range" min="1" max="99" step="1" data-l1key="interact::confidence3"/>
-                                    <span class="input-group-addon input-range-max"></span>
-                                    <span class="input-group-addon input-range-value"></span>
-                                </div>
-                            </div>
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Pour 4 mots et +' }}</label>
-                                <div class="input-group">
-                                    <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="interact::confidence" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
-                                    <span class="input-group-addon input-range-min"></span>
-                                    <input class="configKey slider" type="range" min="1" max="99" step="1" data-l1key="interact::confidence"/>
-                                    <span class="input-group-addon input-range-max"></span>
-                                    <span class="input-group-addon input-range-value"></span>
-                                </div>
+    <div class="nav-tabs-custom" id="interact_config">
+        <ul class="nav nav-tabs pull-right" role="tablist">
+            <li role="presentation"><a href="#tabColors" aria-controls="tabColors" role="tab" data-toggle="tab"><i class="fas fa-tint"></i><span>{{ 'Couleurs' }}</span></a></li>
+            <li role="presentation"><a href="#tabSynonyme" aria-controls="tabColors" role="tab" data-toggle="tab"><i class="fas fa-restroom"></i><span>{{ 'Synonymes' }}</span></a></li>
+            <li role="presentation"><a href="#tabIntelli" aria-controls="tabIntelli" role="tab" data-toggle="tab"><i class="fas fa-brain"></i><span>{{ 'Intelligence' }}</span></a></li>
+            <li role="presentation" class="active"><a href="#tabParams" aria-controls="tabParams" role="tab" data-toggle="tab"><i class="fas fa-cog"></i><span>{{ 'Paramètres' }}</span></a></li>
+            <li class="header pull-left"><i class="fas fa-comments"></i>{{ 'Interactions' }}</li>
+        </ul>
+        <div class="global-tab-content tab-content">
+            <div role="tabpanel" class="tab-pane active" id="tabParams">
+                <fieldset>
+                    <!-- Sensibility Section -->
+                    <legend>{{ 'Sensibilités' }}</legend>
+                    <div class="row">
+                        <div class="form-group col-xs-12 col-padding">
+                            <div class="alert alert-info">{{ 'Plus la sensibilité est basse (proche de 1), plus la correspondance doit être exacte.' }}</div>
+                        </div>
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Pour 1 mot' }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="interact::confidence1" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                                <span class="input-group-addon input-range-min"></span>
+                                <input class="configKey slider" type="range" min="1" max="99" step="1" data-l1key="interact::confidence1"/>
+                                <span class="input-group-addon input-range-max"></span>
+                                <span class="input-group-addon input-range-value"></span>
                             </div>
                         </div>
-
-                        <!-- Poids Section -->
-                        <legend>{{ 'Poids' }}</legend>
-                        <div class="row">
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Réduire le poids pour 1 mot' }}</label>
-                                <div class="input-group">
-                                    <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="interact::weigh1" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
-                                    <span class="input-group-addon input-range-min"></span>
-                                    <input class="configKey slider" type="range" min="0" max="50" step="1" data-l1key="interact::weigh1"/>
-                                    <span class="input-group-addon input-range-max"></span>
-                                    <span class="input-group-addon input-range-value"></span>
-                                </div>
-                            </div>
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Réduire le poids pour 2 mot' }}</label>
-                                <div class="input-group">
-                                    <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="interact::weigh2" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
-                                    <span class="input-group-addon input-range-min"></span>
-                                    <input class="configKey slider" type="range" min="0" max="50" step="1" data-l1key="interact::weigh2"/>
-                                    <span class="input-group-addon input-range-max"></span>
-                                    <span class="input-group-addon input-range-value"></span>
-                                </div>
-                            </div>
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Réduire le poids pour 3 mot' }}</label>
-                                <div class="input-group">
-                                    <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="interact::weigh3" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
-                                    <span class="input-group-addon input-range-min"></span>
-                                    <input class="configKey slider" type="range" min="0" max="50" step="1" data-l1key="interact::weigh3"/>
-                                    <span class="input-group-addon input-range-max"></span>
-                                    <span class="input-group-addon input-range-value"></span>
-                                </div>
-                            </div>
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Réduire le poids pour  4 mots et +' }}</label>
-                                <div class="input-group">
-                                    <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="interact::weigh4" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
-                                    <span class="input-group-addon input-range-min"></span>
-                                    <input class="configKey slider" type="range" min="0" max="50" step="1" data-l1key="interact::weigh4"/>
-                                    <span class="input-group-addon input-range-max"></span>
-                                    <span class="input-group-addon input-range-value"></span>
-                                </div>
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Pour 2 mots' }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="interact::confidence2" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                                <span class="input-group-addon input-range-min"></span>
+                                <input class="configKey slider" type="range" min="1" max="99" step="1" data-l1key="interact::confidence2"/>
+                                <span class="input-group-addon input-range-max"></span>
+                                <span class="input-group-addon input-range-value"></span>
                             </div>
                         </div>
-                    </fieldset>
-                </div>
-
-                <div role="tabpanel" class="tab-pane" id="tabIntelli">
-                    <fieldset>
-                        <!-- Compréhension Section -->
-                        <legend>{{ 'Compréhension' }}</legend>
-                        <div class="row">
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Interactions automatiques' }}</label>
-                                <div>
-                                    <input type="checkbox" class="configKey" data-l1key="interact::autoreply::enable" id="autoreply"/>
-                                    <label for="autoreply" class="control-label label-check">{{ 'common.activate' | trans }}</label>
-                                </div>
-                            </div>
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Interaction non comprise' }}</label>
-                                <div>
-                                    <input type="checkbox" class="configKey" data-l1key="interact::noResponseIfEmpty" id="noResponseIfEmpty"/>
-                                    <label for="noResponseIfEmpty" class="control-label label-check">{{'Ne pas répondre'}}</label>
-                                </div>
-                            </div>
-                            <div class="form-group col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Regex générale d\'exclusion pour les interactions' }}</label>
-                                <textarea type="text" class="configKey form-control" data-l1key="interact::regexpExcludGlobal"></textarea>
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Pour 3 mots' }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="interact::confidence3" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                                <span class="input-group-addon input-range-min"></span>
+                                <input class="configKey slider" type="range" min="1" max="99" step="1" data-l1key="interact::confidence3"/>
+                                <span class="input-group-addon input-range-max"></span>
+                                <span class="input-group-addon input-range-value"></span>
                             </div>
                         </div>
-
-                        <!-- Compréhension Section -->
-                        <legend>{{ 'Contexte' }}</legend>
-                        <div class="row">
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Réponses contextuelles' }}</label>
-                                <div>
-                                    <input type="checkbox" class="configKey" data-l1key="interact::contextual::enable" id="contextual"/>
-                                    <label for="contextual" class="control-label label-check">{{ 'common.activate' | trans }}</label>
-                                </div>
-                            </div>
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Réponse contextuelle prioritaire si la phrase commence par' }}</label>
-                                <div class="input-group">
-                                    <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="interact::contextual::startpriority" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
-                                    <input type="text" class="configKey form-control" data-l1key="interact::contextual::startpriority"/>
-                                </div>
-                            </div>
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Découper une interaction en 2 si elle contient' }}</label>
-                                <div class="input-group">
-                                    <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="interact::contextual::splitword" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
-                                    <input type="text" class="configKey form-control" data-l1key="interact::contextual::splitword"/>
-                                </div>
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Pour 4 mots et +' }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="interact::confidence" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                                <span class="input-group-addon input-range-min"></span>
+                                <input class="configKey slider" type="range" min="1" max="99" step="1" data-l1key="interact::confidence"/>
+                                <span class="input-group-addon input-range-max"></span>
+                                <span class="input-group-addon input-range-value"></span>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Warn me section -->
-                        <legend>{{ 'Préviens-moi' }}</legend>
-                        <div class="row">
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Interactions "préviens moi"' }}</label>
-                                <div>
-                                    <input type="checkbox" class="configKey" data-l1key="interact::warnme::enable" id="warnme"/>
-                                    <label for="warnme" class="control-label label-check">{{ 'common.activate' | trans }}</label>
-                                </div>
-                            </div>
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Réponse de type "préviens moi" si la phrase commence par' }}</label>
-                                <div class="input-group">
-                                    <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="interact::warnme::start" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
-                                    <input type="text" class="configKey form-control" data-l1key="interact::warnme::start"/>
-                                </div>
-                            </div>
-                            <div class="form-group col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Commande de retour par défaut' }}</label>
-                                <div class="input-group">
-                                    <input type="text" class="configKey form-control" data-l1key="interact::warnme::defaultreturncmd"/>
-                                    <span class="input-group-btn">
-                                        <a class="btn btn-default cursor bt_selectWarnMeCmd" data-toggle="tooltip" title="" data-original-title="Rechercher une commande"><i class="fas fa-list-alt"></i></a>
-                                    </span>
-                                </div>
+                    <!-- Poids Section -->
+                    <legend>{{ 'Poids' }}</legend>
+                    <div class="row">
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Réduire le poids pour 1 mot' }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="interact::weigh1" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                                <span class="input-group-addon input-range-min"></span>
+                                <input class="configKey slider" type="range" min="0" max="50" step="1" data-l1key="interact::weigh1"/>
+                                <span class="input-group-addon input-range-max"></span>
+                                <span class="input-group-addon input-range-value"></span>
                             </div>
                         </div>
-                    </fieldset>
-                </div>
-
-                <div role="tabpanel" class="tab-pane" id="tabSynonyme">
-                    <!-- Synonymes section -->
-                    <fieldset>
-                        <legend>{{ 'Synonymes' }}</legend>
-                        <div class="row">
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Synonymes pour les objets' }}</label>
-                                <div class="input-group">
-                                    <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="interact::autoreply::object::synonym" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
-                                    <input class="configKey form-control" data-l1key="interact::autoreply::object::synonym"/>
-                                </div>
-                            </div>
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Synonymes pour les équipements' }}</label>
-                                <div class="input-group">
-                                    <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="interact::autoreply::eqLogic::synonym" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
-                                    <input class="configKey form-control" data-l1key="interact::autoreply::eqLogic::synonym"/>
-                                </div>
-                            </div>
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Synonymes pour les commandes' }}</label>
-                                <div class="input-group">
-                                    <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="interact::autoreply::cmd::synonym" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
-                                    <input class="configKey form-control" data-l1key="interact::autoreply::cmd::synonym"/>
-                                </div>
-                            </div>
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Synonymes pour les résumés' }}</label>
-                                <div class="input-group">
-                                    <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="interact::autoreply::summary::synonym" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
-                                    <input class="configKey form-control" data-l1key="interact::autoreply::summary::synonym"/>
-                                </div>
-                            </div>
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Synonyme commande slider minimum' }}</label>
-                                <div class="input-group">
-                                    <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="interact::autoreply::cmd::slider::min" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
-                                    <input class="configKey form-control" data-l1key="interact::autoreply::cmd::slider::min"/>
-                                </div>
-                            </div>
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Synonyme commande slider maximum' }}</label>
-                                <div class="input-group">
-                                    <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="interact::autoreply::cmd::slider::max" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
-                                    <input class="configKey form-control" data-l1key="interact::autoreply::cmd::slider::max"/>
-                                </div>
-                            </div>
-                        </dov>
-                    </fieldset>
-                </div>
-
-                <div role="tabpanel" class="tab-pane" id="tabColors">
-                    <!-- Colors Section -->
-                    <fieldset>
-                        <legend>{{ 'Couleurs'  | trans }}</legend>
-                        <div class="row">
-                            <div class="form-group col-xs-12 col-padding">
-                                <table class="table table-condensed table-bordered" id="table_convertColor">
-                                    <thead>
-                                    <tr>
-                                        <th>{{ 'common.name' | trans }}</th>
-                                        <th>{{ 'Code Couleur' | trans }}</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Réduire le poids pour 2 mot' }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="interact::weigh2" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                                <span class="input-group-addon input-range-min"></span>
+                                <input class="configKey slider" type="range" min="0" max="50" step="1" data-l1key="interact::weigh2"/>
+                                <span class="input-group-addon input-range-max"></span>
+                                <span class="input-group-addon input-range-value"></span>
                             </div>
                         </div>
-                    </fieldset>
-                </div>
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Réduire le poids pour 3 mot' }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="interact::weigh3" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                                <span class="input-group-addon input-range-min"></span>
+                                <input class="configKey slider" type="range" min="0" max="50" step="1" data-l1key="interact::weigh3"/>
+                                <span class="input-group-addon input-range-max"></span>
+                                <span class="input-group-addon input-range-value"></span>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Réduire le poids pour  4 mots et +' }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="interact::weigh4" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                                <span class="input-group-addon input-range-min"></span>
+                                <input class="configKey slider" type="range" min="0" max="50" step="1" data-l1key="interact::weigh4"/>
+                                <span class="input-group-addon input-range-max"></span>
+                                <span class="input-group-addon input-range-value"></span>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="tabIntelli">
+                <fieldset>
+                    <!-- Compréhension Section -->
+                    <legend>{{ 'Compréhension' }}</legend>
+                    <div class="row">
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Interactions automatiques' }}</label>
+                            <div>
+                                <input type="checkbox" class="configKey" data-l1key="interact::autoreply::enable" id="autoreply"/>
+                                <label for="autoreply" class="control-label label-check">{{ 'common.activate' | trans }}</label>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Interaction non comprise' }}</label>
+                            <div>
+                                <input type="checkbox" class="configKey" data-l1key="interact::noResponseIfEmpty" id="noResponseIfEmpty"/>
+                                <label for="noResponseIfEmpty" class="control-label label-check">{{'Ne pas répondre'}}</label>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Regex générale d\'exclusion pour les interactions' }}</label>
+                            <textarea type="text" class="configKey form-control" data-l1key="interact::regexpExcludGlobal"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Compréhension Section -->
+                    <legend>{{ 'Contexte' }}</legend>
+                    <div class="row">
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Réponses contextuelles' }}</label>
+                            <div>
+                                <input type="checkbox" class="configKey" data-l1key="interact::contextual::enable" id="contextual"/>
+                                <label for="contextual" class="control-label label-check">{{ 'common.activate' | trans }}</label>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Réponse contextuelle prioritaire si la phrase commence par' }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="interact::contextual::startpriority" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                                <input type="text" class="configKey form-control" data-l1key="interact::contextual::startpriority"/>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Découper une interaction en 2 si elle contient' }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="interact::contextual::splitword" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                                <input type="text" class="configKey form-control" data-l1key="interact::contextual::splitword"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Warn me section -->
+                    <legend>{{ 'Préviens-moi' }}</legend>
+                    <div class="row">
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Interactions "préviens moi"' }}</label>
+                            <div>
+                                <input type="checkbox" class="configKey" data-l1key="interact::warnme::enable" id="warnme"/>
+                                <label for="warnme" class="control-label label-check">{{ 'common.activate' | trans }}</label>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Réponse de type "préviens moi" si la phrase commence par' }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="interact::warnme::start" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                                <input type="text" class="configKey form-control" data-l1key="interact::warnme::start"/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Commande de retour par défaut' }}</label>
+                            <div class="input-group">
+                                <input type="text" class="configKey form-control" data-l1key="interact::warnme::defaultreturncmd"/>
+                                <span class="input-group-btn">
+                                    <a class="btn btn-default cursor bt_selectWarnMeCmd" data-toggle="tooltip" title="" data-original-title="Rechercher une commande"><i class="fas fa-list-alt"></i></a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="tabSynonyme">
+                <!-- Synonymes section -->
+                <fieldset>
+                    <legend>{{ 'Synonymes' }}</legend>
+                    <div class="row">
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Synonymes pour les objets' }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="interact::autoreply::object::synonym" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                                <input class="configKey form-control" data-l1key="interact::autoreply::object::synonym"/>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Synonymes pour les équipements' }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="interact::autoreply::eqLogic::synonym" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                                <input class="configKey form-control" data-l1key="interact::autoreply::eqLogic::synonym"/>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Synonymes pour les commandes' }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="interact::autoreply::cmd::synonym" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                                <input class="configKey form-control" data-l1key="interact::autoreply::cmd::synonym"/>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Synonymes pour les résumés' }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="interact::autoreply::summary::synonym" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                                <input class="configKey form-control" data-l1key="interact::autoreply::summary::synonym"/>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Synonyme commande slider minimum' }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="interact::autoreply::cmd::slider::min" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                                <input class="configKey form-control" data-l1key="interact::autoreply::cmd::slider::min"/>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Synonyme commande slider maximum' }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="interact::autoreply::cmd::slider::max" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                                <input class="configKey form-control" data-l1key="interact::autoreply::cmd::slider::max"/>
+                            </div>
+                        </div>
+                    </dov>
+                </fieldset>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="tabColors">
+                <!-- Colors Section -->
+                <fieldset>
+                    <legend>{{ 'Couleurs'  | trans }}</legend>
+                    <div class="row">
+                        <div class="form-group col-xs-12 col-padding">
+                            <table class="table table-condensed table-bordered" id="table_convertColor">
+                                <thead>
+                                <tr>
+                                    <th>{{ 'common.name' | trans }}</th>
+                                    <th>{{ 'Code Couleur' | trans }}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </fieldset>
             </div>
         </div>
     </div>

@@ -72,6 +72,9 @@
     li > a > .pull-right-container {
         right: 5px;
     }
+    > li > .treeview-menu {
+        margin: 0 1px;
+    }
 }
 .main-sidebar {
     position: fixed;

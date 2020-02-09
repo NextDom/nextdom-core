@@ -45,14 +45,18 @@ function loadInformations() {
     // Background image load
     $(function () {
         setTimeout(function () {
+            var pathBackground = background;
             if (typeof rootObjectId != 'undefined') {
                 nextdom.object.getImgPath({
                     id: rootObjectId,
                     success: function (_path) {
-                        $('.backgroundforNextDom').css('background-image', 'url("' + _path + '")');
+                        if (_path != '') {
+                          pathBackground = _path;
+                        }
                     }
                 });
             }
+            $('.theme-background').css('background-image', 'url("' + pathBackground + '")');
         }, 1);
     });
     // Object menu filter init

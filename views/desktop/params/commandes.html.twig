@@ -46,144 +46,142 @@
 </section>
 
 <section class="content">
-    <div class="box" id="commandes">
-        <div class="nav-tabs-custom">
-            <ul class="nav nav-tabs pull-right" role="tablist">
-                <li role="presentation"><a href="#tabPub" aria-controls="tabPub" role="tab" data-toggle="tab"><i class="fas fa-bullhorn"></i><span>{{ 'Publications' }}</span></a></li>
-                <li role="presentation" class="active"><a href="#tabStat" aria-controls="tabStat" role="tab" data-toggle="tab"><i class="fas fa-chart-bar"></i><span>{{ 'Statistiques' }}</span></a></li>
-                <li class="header pull-left"><i class="fas fa-hand-o-right"></i>{{ 'Commandes' }}</li>
-            </ul>
-            <div class="global-tab-content tab-content">
-                <div role="tabpanel" class="tab-pane active" id="tabStat">
-                    <!-- Statistiques Section -->
-                    <fieldset>
-                        <legend>{{ 'Statistiques' }}</legend>
-                        <div class="row">
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Statistiques sur les widgets' }}</label>
-                                <div>
-                                    <input id="displayStatsWidget" type="checkbox" class="configKey" data-l1key="displayStatsWidget"/>
-                                    <label for="displayStatsWidget" class="label-check control-label">{{'Afficher'}}</label>
-                                </div>
-                            </div>
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Période d\'affichage des graphiques par défaut' }}</label>
-                                <div class="input-group">
-                                    <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="history::defautShowPeriod" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
-                                    <select class="configKey form-control" data-l1key="history::defautShowPeriod">
-                                        <option value="-6 month">{{ '6 mois' | trans }}</option>
-                                        <option value="-3 month">{{ '3 mois' | trans }}</option>
-                                        <option value="-1 month">{{ '1 mois' | trans }}</option>
-                                        <option value="-1 week">{{ '1 semaine' | trans }}</option>
-                                        <option value="-1 day">{{ '1 jour' | trans }}</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Période de calcul pour min, max, moy' | trans }}</label>
-                                <div class="input-group">
-                                    <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="historyCalculPeriod" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
-                                    <span class="input-group-addon input-range-min"></span>
-                                    <input class="configKey slider" type="range" min="1" max="200" step="1" data-l1key="historyCalculPeriod"/>
-                                    <span class="input-group-addon input-range-max"></span>
-                                    <span class="input-group-addon input-range-value"></span>
-                                    <span class="input-group-addon">{{ 'heures' | trans }}</span>
-                                </div>
-                            </div>
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Période de calcul pour la tendance' | trans }}</label>
-                                <div class="input-group">
-                                    <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="historyCalculTendance" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
-                                    <span class="input-group-addon input-range-min"></span>
-                                    <input class="configKey slider" type="range" min="1" max="200" step="1" data-l1key="historyCalculTendance"/>
-                                    <span class="input-group-addon input-range-max"></span>
-                                    <span class="input-group-addon input-range-value"></span>
-                                    <span class="input-group-addon">{{ 'heures' | trans }}</span>
-                                </div>
-                            </div>
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Délai avant archivage' | trans }}</label>
-                                <div class="input-group">
-                                    <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="historyArchiveTime" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
-                                    <span class="input-group-addon input-range-min"></span>
-                                    <input class="configKey slider" type="range" min="1" max="200" step="1" data-l1key="historyArchiveTime"/>
-                                    <span class="input-group-addon input-range-max"></span>
-                                    <span class="input-group-addon input-range-value"></span>
-                                    <span class="input-group-addon">{{ 'heures' | trans }}</span>
-                                </div>
-                            </div>
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Archiver par paquet de' | trans }}</label>
-                                <div class="input-group">
-                                    <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="historyArchivePackage" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
-                                    <span class="input-group-addon input-range-min"></span>
-                                    <input class="configKey slider" type="range" min="1" max="200" step="1" data-l1key="historyArchivePackage"/>
-                                    <span class="input-group-addon input-range-max"></span>
-                                    <span class="input-group-addon input-range-value"></span>
-                                    <span class="input-group-addon">{{ 'heures' | trans }}</span>
-                                </div>
-                            </div>
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Seuil de calcul de tendance bas' | trans }}</label>
-                                <div class="input-group">
-                                    <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="historyCalculTendanceThresholddMin" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
-                                    <span class="input-group-addon input-range-min"></span>
-                                    <input class="configKey slider" type="range" min="-10" max="-0.1" step="0.1" data-l1key="historyCalculTendanceThresholddMin"/>
-                                    <span class="input-group-addon input-range-max"></span>
-                                    <span class="input-group-addon input-range-value"></span>
-                                </div>
-                            </div>
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label">{{ 'Seuil de calcul de tendance haut' }}</label>
-                                <div class="input-group">
-                                    <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="historyCalculTendanceThresholddMax" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
-                                    <span class="input-group-addon input-range-min"></span>
-                                    <input class="configKey slider" type="range" min="0.1" max="10" step="0.1" data-l1key="historyCalculTendanceThresholddMax"/>
-                                    <span class="input-group-addon input-range-max"></span>
-                                    <span class="input-group-addon input-range-value"></span>
-                                </div>
+    <div class="nav-tabs-custom" id="commandes">
+        <ul class="nav nav-tabs pull-right" role="tablist">
+            <li role="presentation"><a href="#tabPub" aria-controls="tabPub" role="tab" data-toggle="tab"><i class="fas fa-bullhorn"></i><span>{{ 'Publications' }}</span></a></li>
+            <li role="presentation" class="active"><a href="#tabStat" aria-controls="tabStat" role="tab" data-toggle="tab"><i class="fas fa-chart-bar"></i><span>{{ 'Statistiques' }}</span></a></li>
+            <li class="header pull-left"><i class="fas fa-hand-o-right"></i>{{ 'Commandes' }}</li>
+        </ul>
+        <div class="global-tab-content tab-content">
+            <div role="tabpanel" class="tab-pane active" id="tabStat">
+                <!-- Statistiques Section -->
+                <fieldset>
+                    <legend>{{ 'Statistiques' }}</legend>
+                    <div class="row">
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Statistiques sur les widgets' }}</label>
+                            <div>
+                                <input id="displayStatsWidget" type="checkbox" class="configKey" data-l1key="displayStatsWidget"/>
+                                <label for="displayStatsWidget" class="label-check control-label">{{'Afficher'}}</label>
                             </div>
                         </div>
-                    </fieldset>
-                </div>
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Période d\'affichage des graphiques par défaut' }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="history::defautShowPeriod" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                                <select class="configKey form-control" data-l1key="history::defautShowPeriod">
+                                    <option value="-6 month">{{ '6 mois' | trans }}</option>
+                                    <option value="-3 month">{{ '3 mois' | trans }}</option>
+                                    <option value="-1 month">{{ '1 mois' | trans }}</option>
+                                    <option value="-1 week">{{ '1 semaine' | trans }}</option>
+                                    <option value="-1 day">{{ '1 jour' | trans }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Période de calcul pour min, max, moy' | trans }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="historyCalculPeriod" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
+                                <span class="input-group-addon input-range-min"></span>
+                                <input class="configKey slider" type="range" min="1" max="200" step="1" data-l1key="historyCalculPeriod"/>
+                                <span class="input-group-addon input-range-max"></span>
+                                <span class="input-group-addon input-range-value"></span>
+                                <span class="input-group-addon">{{ 'heures' | trans }}</span>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Période de calcul pour la tendance' | trans }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="historyCalculTendance" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
+                                <span class="input-group-addon input-range-min"></span>
+                                <input class="configKey slider" type="range" min="1" max="200" step="1" data-l1key="historyCalculTendance"/>
+                                <span class="input-group-addon input-range-max"></span>
+                                <span class="input-group-addon input-range-value"></span>
+                                <span class="input-group-addon">{{ 'heures' | trans }}</span>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Délai avant archivage' | trans }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="historyArchiveTime" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
+                                <span class="input-group-addon input-range-min"></span>
+                                <input class="configKey slider" type="range" min="1" max="200" step="1" data-l1key="historyArchiveTime"/>
+                                <span class="input-group-addon input-range-max"></span>
+                                <span class="input-group-addon input-range-value"></span>
+                                <span class="input-group-addon">{{ 'heures' | trans }}</span>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Archiver par paquet de' | trans }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="historyArchivePackage" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
+                                <span class="input-group-addon input-range-min"></span>
+                                <input class="configKey slider" type="range" min="1" max="200" step="1" data-l1key="historyArchivePackage"/>
+                                <span class="input-group-addon input-range-max"></span>
+                                <span class="input-group-addon input-range-value"></span>
+                                <span class="input-group-addon">{{ 'heures' | trans }}</span>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Seuil de calcul de tendance bas' | trans }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="historyCalculTendanceThresholddMin" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
+                                <span class="input-group-addon input-range-min"></span>
+                                <input class="configKey slider" type="range" min="-10" max="-0.1" step="0.1" data-l1key="historyCalculTendanceThresholddMin"/>
+                                <span class="input-group-addon input-range-max"></span>
+                                <span class="input-group-addon input-range-value"></span>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label">{{ 'Seuil de calcul de tendance haut' }}</label>
+                            <div class="input-group">
+                                <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="historyCalculTendanceThresholddMax" data-toggle="tooltip" title="" data-original-title="{{ 'common.by_default' | trans }}"><i class="fas fa-times"></i></a>
+                                <span class="input-group-addon input-range-min"></span>
+                                <input class="configKey slider" type="range" min="0.1" max="10" step="0.1" data-l1key="historyCalculTendanceThresholddMax"/>
+                                <span class="input-group-addon input-range-max"></span>
+                                <span class="input-group-addon input-range-value"></span>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
 
-                <div role="tabpanel" class="tab-pane" id="tabPub">
-                    <fieldset>
-                        <!-- Push Section -->
-                        <legend>{{ 'Push' }}</legend>
-                        <div class="row">
-                            <div class="form-group col-xs-12 col-padding">
-                                <label class="control-label">{{ 'URL de push globale' }}</label>
-                                <input type="text" class="configKey form-control" data-l1key="cmdPushUrl" data-toggle="tooltip" title="" data-original-title="{{ 'Mettez ici l\'URL à appeler lors d\'une mise à jour de la valeur des commandes. Vous pouvez utiliser les tags suivants : #value# (valeur de la commande), #cmd_id# (id de la commande) et #cmd_name# (nom de la commande)'  | trans }}"/>
-                            </div>
+            <div role="tabpanel" class="tab-pane" id="tabPub">
+                <fieldset>
+                    <!-- Push Section -->
+                    <legend>{{ 'Push' }}</legend>
+                    <div class="row">
+                        <div class="form-group col-xs-12 col-padding">
+                            <label class="control-label">{{ 'URL de push globale' }}</label>
+                            <input type="text" class="configKey form-control" data-l1key="cmdPushUrl" data-toggle="tooltip" title="" data-original-title="{{ 'Mettez ici l\'URL à appeler lors d\'une mise à jour de la valeur des commandes. Vous pouvez utiliser les tags suivants : #value# (valeur de la commande), #cmd_id# (id de la commande) et #cmd_name# (nom de la commande)'  | trans }}"/>
                         </div>
+                    </div>
 
-                        <!-- Influx DB Section -->
-                        <legend>{{ 'InfluxDB' }}</legend>
-                        <div class="row">
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label" for="influxdbIp">{{ 'commandes.influxDbIPLabel'|trans }}</label>
-                                <input type="text" class="configKey form-control" id="influxdbIp" data-l1key="influxDbIp" placeholder="127.0.0.1"/>
-                            </div>
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label" for="influxdbPort">{{ 'commandes.influxDbPortLabel'|trans }}</label>
-                                <input type="text" class="configKey form-control" id="influxDbPort" data-l1key="influxDbPort" placeholder="8086"/>
-                            </div>
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label" for="influxDbLogin">{{ 'commandes.influxDbLoginLabel'|trans }}</label>
-                                <input type="text" class="configKey form-control" id="influxDbLogin" data-l1key="influxDbLogin" placeholder="nextdom"/>
-                            </div>
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
-                                <label class="control-label" for="influxDbPassword">{{ 'commandes.influxDbPasswordLabel'|trans }}</label>
-                                <input type="password" class="configKey form-control" id="influxDbPassword" data-l1key="influxDbPassword"/>
-                            </div>
-                            <div class="form-group col-xs-12 col-padding">
-                                <label class="control-label" for="influxDbDatabase">{{ 'commandes.influxDbDatabaseNameLabel'|trans }}</label>
-                                <input type="text" class="configKey form-control" id="influxDbDatabase" data-l1key="influxDbDatabase" placeholder="nextdom"/>
-                            </div>
+                    <!-- Influx DB Section -->
+                    <legend>{{ 'InfluxDB' }}</legend>
+                    <div class="row">
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label" for="influxdbIp">{{ 'commandes.influxDbIPLabel'|trans }}</label>
+                            <input type="text" class="configKey form-control" id="influxdbIp" data-l1key="influxDbIp" placeholder="127.0.0.1"/>
                         </div>
-                    </fieldset>
-                </div>
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label" for="influxdbPort">{{ 'commandes.influxDbPortLabel'|trans }}</label>
+                            <input type="text" class="configKey form-control" id="influxDbPort" data-l1key="influxDbPort" placeholder="8086"/>
+                        </div>
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label" for="influxDbLogin">{{ 'commandes.influxDbLoginLabel'|trans }}</label>
+                            <input type="text" class="configKey form-control" id="influxDbLogin" data-l1key="influxDbLogin" placeholder="nextdom"/>
+                        </div>
+                        <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <label class="control-label" for="influxDbPassword">{{ 'commandes.influxDbPasswordLabel'|trans }}</label>
+                            <input type="password" class="configKey form-control" id="influxDbPassword" data-l1key="influxDbPassword"/>
+                        </div>
+                        <div class="form-group col-xs-12 col-padding">
+                            <label class="control-label" for="influxDbDatabase">{{ 'commandes.influxDbDatabaseNameLabel'|trans }}</label>
+                            <input type="text" class="configKey form-control" id="influxDbDatabase" data-l1key="influxDbDatabase" placeholder="nextdom"/>
+                        </div>
+                    </div>
+                </fieldset>
             </div>
         </div>
     </div>

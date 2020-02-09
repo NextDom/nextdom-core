@@ -48,7 +48,7 @@
                                     {% for menuItem in menuLayer %}
                                     <li class="cursor {% if menuItem.active %}active{% endif %}">
                                         <a href="" data-object-id="{{ menuItem.jeeObject.getId() }}">{{ menuItem.jeeObject.getDisplay('icon', '<i class="fas fa-tag"></i>')|replace({'></i>': '></i>'})|raw }}{{ menuItem.jeeObject.getName() }}</a>
-                                    <li>
+                                    </li>
                                     {% endfor %}
                                 </ul>
                             {% endfor %}

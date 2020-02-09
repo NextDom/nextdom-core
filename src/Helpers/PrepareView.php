@@ -432,6 +432,7 @@ class PrepareView
         if (!empty($currentJeeObject)) {
             $currentJeeObjectId = $currentJeeObject->getId();
         }
+        $pageData['background'] = '/public/img/background/' . ConfigManager::byKey('nextdom::user-background', 'core', 'Back_01') . '.jpg';
 
         $pageData[ControllerData::JS_VARS] = [
             'user_id' => UserManager::getStoredUser()->getId(),
@@ -445,7 +446,8 @@ class PrepareView
             'widget_margin' => $this->currentConfig['widget::margin'],
             'widget_padding' => $this->currentConfig['widget::padding'],
             'widget_radius' => $this->currentConfig['widget::radius'],
-            'root_object_id' => $currentJeeObjectId
+            'root_object_id' => $currentJeeObjectId,
+            'background' => $pageData['background']
         ];
         $pageData[ControllerData::JS_VARS_RAW] = [
             'userProfils' => Utils::getArrayToJQueryJson(UserManager::getStoredUser()->getOptions()),

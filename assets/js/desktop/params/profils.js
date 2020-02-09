@@ -64,20 +64,25 @@ function loadInformations() {
         success: function (data) {
           $('#div_Profils').setValues(data, '.userAttr');
           $('#in_passwordCheck').value(data.password);
-          $("#newPasswordProgress").width('0%');
-          $("#newPasswordProgress").removeClass('progress-bar-green').removeClass('progress-bar-yellow').removeClass('progress-bar-red');
-          $("#newPasswordLevel").html('<i class="fas fa-clock"></i>{{Attente saisie nouveau mot de passe}}');
+          $('#newPasswordProgress').width('0%');
+          $('#newPasswordProgress').removeClass('progress-bar-green').removeClass('progress-bar-yellow').removeClass('progress-bar-red');
+          $('#newPasswordLevel').html('<i class="fas fa-clock"></i>{{Attente saisie nouveau mot de passe}}');
           $('#' + $('.userAttr[data-l2key="widget::theme"]').value()).attr('checked', 'checked');
           $('#avatar-preview').attr('src', $('.userAttr[data-l2key=avatar]').value());
           nextdom.config.load({
               configuration: $('#div_Profils').getValues('.configKey:not(.noSet)')[0],
               error: function (error) {
-                  notify("Erreur", error.message, 'error');
+                  notify('Erreur', error.message, 'error');
               },
               success: function (data) {
                   $('#div_Profils').setValues(data, '.configKey');
                   modifyWithoutSave = false;
-                  $(".bt_cancelModifs").hide();
+                  $('.bt_cancelModifs').hide();
+                  if($('#themeBase').value() == 'clear') {
+                    $('#backgroundImageDiv').show();
+                  } else {
+                    $('#backgroundImageDiv').hide();
+                  }
               }
           });
         }
@@ -93,14 +98,14 @@ function initEvents() {
     $('#div_Profils').delegate('.userAttr', 'change', function () {
         if (!lockModify) {
             modifyWithoutSave = true;
-            $(".bt_cancelModifs").show();
+            $('.bt_cancelModifs').show();
         }
     });
     // Show confirm modal on non saved changes
     $('#div_Profils').delegate('.configKey:not(.noSet)', 'change', function () {
         if (!lockModify) {
             modifyWithoutSave = true;
-            $(".bt_cancelModifs").show();
+            $('.bt_cancelModifs').show();
         }
     });
 
@@ -110,22 +115,31 @@ function initEvents() {
     });
 
     // Theme config changing
-    $("#themeBase").on('change', function (event) {
-        $('.configKey[data-l1key="nextdom::user-theme"]').value($("#themeBase").value() + "-" + $("#themeIdentity").value());
-        $('#themePreview').contents().find("head").append($("<link href='/public/css/themes/" + $('.configKey[data-l1key="nextdom::user-theme"]').value() + ".css' rel='stylesheet'>"));
+    $('#themeBase').on('change', function (event) {
+        $('.configKey[data-l1key="nextdom::user-theme"]').value($('#themeBase').value() + "-" + $('#themeIdentity').value());
+        $('#themePreview').contents().find('head').append($("<link href='/public/css/themes/" + $('.configKey[data-l1key="nextdom::user-theme"]').value() + ".css' rel='stylesheet'>"));
+        if($('#themeBase').value() == 'clear') {
+          $('#backgroundImageDiv').show();
+        } else {
+          $('#backgroundImageDiv').hide();
+        }
     });
-    $("#themeIdentity").on('change', function (event) {
-        $('.configKey[data-l1key="nextdom::user-theme"]').value($("#themeBase").value() + "-" + $("#themeIdentity").value());
-        $('#themePreview').contents().find("head").append($("<link href='/public/css/themes/" + $('.configKey[data-l1key="nextdom::user-theme"]').value() + ".css' rel='stylesheet'>"));
+    $('#themeIdentity').on('change', function (event) {
+        $('.configKey[data-l1key="nextdom::user-theme"]').value($('#themeBase').value() + "-" + $('#themeIdentity').value());
+        $('#themePreview').contents().find('head').append($("<link href='/public/css/themes/" + $('.configKey[data-l1key="nextdom::user-theme"]').value() + ".css' rel='stylesheet'>"));
     });
-    $("#themeIcon").on('change', function (event) {
-        $('.configKey[data-l1key="nextdom::user-icon"]').value($("#themeIcon").value());
-        $('#themePreview').contents().find(".logo-mini-img").attr( "src", "/public/img/NextDom/NextDom_Square_" + $('.configKey[data-l1key="nextdom::user-icon"]').value() + ".png");
-        $('#themePreview').contents().find(".logo-lg-img").attr( "src", "/public/img/NextDom/NextDom_Wide_" + $('.configKey[data-l1key="nextdom::user-icon"]').value() + ".png");
+    $('#themeIcon').on('change', function (event) {
+        $('.configKey[data-l1key="nextdom::user-icon"]').value($('#themeIcon').value());
+        $('#themePreview').contents().find('.logo-mini-img').attr( 'src', '/public/img/NextDom/NextDom_Square_' + $('.configKey[data-l1key="nextdom::user-icon"]').value() + '.png');
+        $('#themePreview').contents().find('.logo-lg-img').attr( 'src', '/public/img/NextDom/NextDom_Wide_' + $('.configKey[data-l1key="nextdom::user-icon"]').value() + '.png');
+    });
+    $('#themeBackground').on('change', function (event) {
+        $('.configKey[data-l1key="nextdom::user-background"]').value($('#themeBackground').value());
+        $('#themePreview').contents().find('.theme-background').css( 'background-image', 'url(/public/img/background/' + $('.configKey[data-l1key="nextdom::user-background"]').value() + '.jpg)');
     });
 
     // Save forms data
-    $("#bt_saveProfils").on('click', function (event) {
+    $('#bt_saveProfils').on('click', function (event) {
         var profil = $('#div_pageContainer').getValues('.userAttr')[0];
         if (profil.password != $('#in_passwordCheck').value()) {
             notify('Erreur', '{{Les mots de passe ne sont pas identiques !}}', 'error');
@@ -135,6 +149,9 @@ function initEvents() {
                 notify('Erreur', '{{Le mot de passe ne peut pas être vide !}}', 'error');
                 return false;
             }
+        }
+        if($('#themeBase').value() != 'clear') {
+          $('.configKey[data-l1key="nextdom::user-background"]').value('');
         }
         nextdom.user.saveProfils({
             profils: profil,
@@ -146,7 +163,7 @@ function initEvents() {
                 nextdom.config.save({
                     configuration: config,
                     error: function (error) {
-                        notify("Erreur", error.message, 'error');
+                        notify('Erreur', error.message, 'error');
                     },
                     success: function () {
                         // Change config dynamically
@@ -155,8 +172,8 @@ function initEvents() {
                         widget_padding = config['widget::padding'];
                         widget_radius = config['widget::radius'];
                         modifyWithoutSave = false;
-                        $(".bt_cancelModifs").hide();
-                        notify("Info", '{{Sauvegarde réussie}}', 'success');
+                        $('.bt_cancelModifs').hide();
+                        notify('Info', '{{Sauvegarde réussie}}', 'success');
                         window.location.reload(true);
                     }
                 });
@@ -225,7 +242,7 @@ function initEvents() {
     });
 
     // Change avatar picture
-    $(".avatar").on('click', function (event) {
+    $('.avatar').on('click', function (event) {
         var newPicture = $(this).attr('src');
         $('.userAttr[data-l2key=avatar]').value(newPicture);
         $('#avatar-preview').attr('src', newPicture);
@@ -240,15 +257,15 @@ function initEvents() {
     });
 
     // Password new changed
-    $("#in_newPassword").on('input', function (event) {
-        passwordScore($(this).value(),$("#newPasswordProgress"),$("#newPasswordLevel"));
-        $("#in_passwordCheck").value('');
+    $('#in_newPassword').on('input', function (event) {
+        passwordScore($(this).value(),$('#newPasswordProgress'),$('#newPasswordLevel'));
+        $('#in_passwordCheck').value('');
         modifyWithoutSave = true;
-        $(".bt_cancelModifs").show();
+        $('.bt_cancelModifs').show();
     });
 
     // Password new click
-    $("#in_newPassword").on('click', function (event) {
+    $('#in_newPassword').on('click', function (event) {
         $(this).select();
     });
 }

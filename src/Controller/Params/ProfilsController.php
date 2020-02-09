@@ -134,8 +134,14 @@ class ProfilsController extends BaseController
         foreach ($themesIcons as $themesIcon) {
             $pageData['profilsThemesIcons'][] = substr($themesIcon, 15, -4);
         }
+        $themesBackgrounds = FileSystemHelper::ls('public/img/background/', 'Back_*.jpg');
+        $pageData['profilsThemesBackgrounds'] = [];
+        foreach ($themesBackgrounds as $themesBackground) {
+            $pageData['profilsThemesBackgrounds'][] = substr($themesBackground, 0, -4);
+        }
         $pageData['profilsThemeChoice'] = ConfigManager::byKey('nextdom::user-theme');
         $pageData['profilsIconChoice'] = ConfigManager::byKey('nextdom::user-icon');
+        $pageData['profilsBackgroundChoice'] = ConfigManager::byKey('nextdom::user-background');
 
         $pageData['adminCategories'] = NextDomHelper::getConfiguration('eqLogic:category');
 
