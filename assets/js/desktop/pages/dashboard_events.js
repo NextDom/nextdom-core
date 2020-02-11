@@ -57,6 +57,7 @@ function loadInformations() {
                 });
             }
             $('.theme-background').css('background-image', 'url("' + pathBackground + '")');
+            $('.content-wrapper').css('background', 'none !important');
         }, 1);
     });
     // Object menu filter init

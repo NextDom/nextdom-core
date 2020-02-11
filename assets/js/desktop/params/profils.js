@@ -135,7 +135,7 @@ function initEvents() {
     });
     $('#themeBackground').on('change', function (event) {
         $('.configKey[data-l1key="nextdom::user-background"]').value($('#themeBackground').value());
-        $('#themePreview').contents().find('.theme-background').css( 'background-image', 'url(/public/img/background/' + $('.configKey[data-l1key="nextdom::user-background"]').value() + '.jpg)');
+        $('#themePreview').contents().find('.theme-background').css('background-image', 'url(/public/img/background/' + $('.configKey[data-l1key="nextdom::user-background"]').value() + '.jpg)');
     });
 
     // Save forms data
@@ -224,7 +224,6 @@ function initEvents() {
     $('#user_avatar').fileupload({
         dataType: 'json',
         url: 'src/ajax.php?target=Profils&action=imageUpload',
-        dropZone: '#bsImagesPanel',
         formData: {'nextdom_token': NEXTDOM_AJAX_TOKEN},
         done: function (e, data) {
             if (data.result.state !== 'ok') {
