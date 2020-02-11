@@ -512,9 +512,11 @@ repo:
   nextdom:
     description: "This service is none other than the Market of plugins coded by the NextDom team ..."
     conf:
-      stable: "NextDom Stable"
-      draft: "NextDom Draft"
-      exclusivity: "NextDom Exclusivity"
+      stable: "NextDom Stable Plugins"
+      draft: "NextDom Draft Plugins"
+      exclusivity: "NextDom Exclusivity Plugins"
+      third-stable: "Third Stable Plugins"
+      third-draft: "Third Draft Plugins"
       filters: "Display source filters"
   samba:
     conf:

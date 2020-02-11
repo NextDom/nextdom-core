@@ -55,6 +55,14 @@ class RepoNextDom implements BaseRepo
                 'name' => 'repo.nextdom.conf.exclusivity',
                 'type' => 'checkbox',
             ],
+            'third_stable' => [
+                'name' => 'repo.nextdom.conf.third-stable',
+                'type' => 'checkbox',
+            ],
+            'third_draft' => [
+                'name' => 'repo.nextdom.conf.third-draft',
+                'type' => 'checkbox',
+            ],
             'show_sources_filters' => [
                 'name' => 'repo.nextdom.conf.filters',
                 'type' => 'checkbox',

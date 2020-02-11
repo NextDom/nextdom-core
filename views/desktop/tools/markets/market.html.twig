@@ -41,7 +41,7 @@
                 <button id="market-filter-installed" class="btn btn-primary btn-action-bar"><i class="fas fa-thumbs-up"></i><span>{{ 'Installés' }}</span></button>
                 <button id="market-filter-notinstalled" class="btn btn-primary btn-action-bar"><i class="fas fa-thumbs-down"></i><span>{{ 'Non installés' }}</span></button>
             </div>
-            {% if marketSourcesList|length > 1 and marketSourcesFilter %}
+            {% if marketSourcesList|length >= 1 and marketSourcesFilter %}
                 <div id="market-filter-src" class="btn-group">
                     {% for source in marketSourcesList %}
                         <button type="button" class="btn btn-primary btn-action-bar" data-source="{{ source['name'] }}">{{ source['name'] }}</button>

@@ -49,7 +49,9 @@ $NEXTDOM_INTERNAL_CONFIG = array(
         'sources' => array(
             array('name' => 'NextDom Stable', 'type' => 'json', 'code' => 'nextdom_stable', 'data' => 'https://raw.githubusercontent.com/NextDom/AlternativeMarket-Lists/master/results/nextdom-stable.json'),
             array('name' => 'NextDom Draft', 'type' => 'json', 'code' => 'nextdom_draft', 'data' => 'https://raw.githubusercontent.com/NextDom/AlternativeMarket-Lists/master/results/nextdom-draft.json'),
-            array('name' => 'NextDom Exclusivity', 'type' => 'json', 'code' => 'nextdom_exclusivity', 'data' => 'https://raw.githubusercontent.com/NextDom/AlternativeMarket-Lists/master/results/nextdom-exclusivity.json')
+            array('name' => 'NextDom Exclusivity', 'type' => 'json', 'code' => 'nextdom_exclusivity', 'data' => 'https://raw.githubusercontent.com/NextDom/AlternativeMarket-Lists/master/results/nextdom-exclusivity.json'),
+            array('name' => 'Third Stable', 'type' => 'json', 'code' => 'third_stable', 'data' => 'https://raw.githubusercontent.com/NextDom/AlternativeMarket-Lists/master/results/third-stable.json'),
+            array('name' => 'Third Draft', 'type' => 'json', 'code' => 'third_draft', 'data' => 'https://raw.githubusercontent.com/NextDom/AlternativeMarket-Lists/master/results/third-draft.json')
         )
     ),
     'plugin' => array(
