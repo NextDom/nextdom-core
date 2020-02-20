@@ -668,7 +668,8 @@ class InteractQueryManager extends BaseManager
             return null;
         }
 
-        $sql = static::getBaseSQL() . '
+        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . ', MATCH query AGAINST (:query IN NATURAL LANGUAGE MODE) as score
+                FROM ' . self::DB_CLASS_NAME . ' 
                 GROUP BY id
                 HAVING score > 1';
         $queries = DBHelper::getAllObjects($sql, [Common::QUERY => $_query], self::CLASS_NAME);
