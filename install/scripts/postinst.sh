@@ -24,7 +24,7 @@ step0_prepare_prerequisites() {
 
 step1_create_prerequisite_files_and_directories() {
   result=true
-  addLogStep "Postinst -- Create needed files and directories - 1/12"
+  addLogStep "Postinst -- Create needed files and directories - 1/11"
 
   local directories=("${ROOT_DIRECTORY}/plugins" "${LIB_DIRECTORY}" "${LIB_DIRECTORY}/market_cache"
     "${LIB_DIRECTORY}/cache" "${LIB_DIRECTORY}/backup" "${LIB_DIRECTORY}/core/config" "${LIB_DIRECTORY}/custom/desktop" "${LIB_DIRECTORY}/public/css"
@@ -81,7 +81,7 @@ step1_create_prerequisite_files_and_directories() {
 step2_prepare_directory_layout() {
   result=true
 
-  addLogStep "Postinst -- Prepare directory layout - 2/12"
+  addLogStep "Postinst -- Prepare directory layout - 2/11"
 
   # we delete existing config since it is regenerated from asset sample (step_nextdom_configuration)
   removeDirectoryOrFile ${LIB_DIRECTORY}/config
@@ -215,77 +215,13 @@ step2_prepare_directory_layout() {
   fi
 }
 
-##TODO A virer après update du paquet debian
-step3_configure_mysql() {
-  # check that mysql is locally installed before any further configuration
-  # default value for mysql_host is localhost
-  result=true
-
-  addLogStep "Postinst -- Configure MySQL/MariaDB - 3/12"
-
-  if [ "localhost" != "${MYSQL_HOSTNAME}" ] && [ "$(hostname)" != "${MYSQL_HOSTNAME}" ] && [ "$(hostname -I)" != "${MYSQL_HOSTNAME}" ]; then
-    addLogInfo "Remote mysql server detected"
-    return 0
-  fi
-  { ##try
-    mysqladmin -u root status
-    isService=$?
-    if [ ${isService} -gt 0 ]; then
-      addLogInfo "no mysql service locally"
-      return 0
-    elif [ ! -f /etc/init.d/mysql ]; then
-      addLogInfo "no mysql service locally"
-      return 0
-    fi
-  } || { ##catch
-    addLogError "Error while checking mysql status"
-  }
-
-  stopService mysql
-
-  { ##try
-    rm -f /var/lib/mysql/ib_logfile*
-  } || { ##catch
-    addLogError "Error while cleaning mysql data"
-  }
-
-  { ##try
-    if [ -d /etc/mysql/conf.d ]; then
-      cat - >/etc/mysql/conf.d/nextdom_my.cnf <<EOS
-[mysqld]
-skip-name-resolve
-key_buffer_size = 16M
-thread_cache_size = 16
-tmp_table_size = 48M
-max_heap_table_size = 48M
-query_cache_type =1
-query_cache_size = 32M
-query_cache_limit = 2M
-query_cache_min_res_unit=3K
-innodb_flush_method = O_DIRECT
-innodb_flush_log_at_trx_commit = 2
-innodb_log_file_size = 32M
-EOS
-    fi
-    addLogInfo "created nextdom mysql configuration: /etc/mysql/conf.d/nextdom_my.cnf"
-  } || { ##catch
-    addLogError "Error while creating /etc/mysql/conf.d/nextdom_my.cnf"
-  }
-
-  startService mysql
-
-  if [ "true" == "${result}" ]; then
-    addLogSuccess "MySQL is configured with success"
-  fi
-}
-
-step4_create_symLink_var_www_html() {
+step3_create_symLink_var_www_html() {
   # Link ${ROOT_DIRECTORY} to /var/www/html. Required by old plugins that may hardcode this path.
   # Any previously installed content are moved to temporairy directories in check_var_www_html()
   # link /var/www/html to nextdom root
   result=true
 
-  addLogStep "Postinst -- Configure symbolic links - 4/12"
+  addLogStep "Postinst -- Configure symbolic links - 4/11"
   if [ "${ROOT_DIRECTORY}" != "${APACHE_HTML_DIRECTORY}" ]; then
       { ##try
         ln -s "${ROOT_DIRECTORY}" ${APACHE_HTML_DIRECTORY}
@@ -301,10 +237,10 @@ step4_create_symLink_var_www_html() {
   fi
 }
 
-step5_configure_apache() {
+step4_configure_apache() {
   result=true
 
-  addLogStep "Postinst -- Configure Apache - 5/12"
+  addLogStep "Postinst -- Configure Apache - 5/11"
 
   # check that APACHE_HTML_DIRECTORY is readable by www-data
   { ##try
@@ -313,34 +249,15 @@ step5_configure_apache() {
     addLogError "${APACHE_HTML_DIRECTORY} is not readable by www-data user \n enabled compatibility mode, DocumentRoot targets /var/www/html"
   }
 
-  { ##try
-    a2enmod ssl
-    addLogInfo "apache: enable module ssl"
-    a2enmod rewrite
-    addLogInfo "apache: enable module rewrite"
-    a2dismod status
-    addLogInfo "apache: disable module status"
-    a2dissite 000-default
-    addLogInfo "apache: disabled site default"
-    a2dissite default-ssl
-    addLogInfo "apache: disabled site default-ssl"
-    a2ensite nextdom-ssl
-    addLogInfo "apache: enabled site nextdom-ssl"
-    a2ensite nextdom
-    addLogInfo "apache: enabled site nextdom"
-    restartService apache2
-  } || { ##catch
-    addLogError "Error while configuring Apache service"
-  }
   if [ "true" == "${result}" ]; then
     addLogSuccess "Apache is configured with success"
   fi
 }
 
-step6_configure_nextdom() {
+step5_configure_nextdom() {
   result=true
 
-  addLogStep "Postinst -- Configure NextDom - 6/12"
+  addLogStep "Postinst -- Configure NextDom - 6/11"
 
   { ##try
     # recreate configuration from sample
@@ -435,9 +352,9 @@ EOS
   fi
 }
 
-step7_restart_mysql_database() {
+step6_restart_mysql_database() {
   result=true
-  addLogStep "Postinst -- Restart MySQL/MariaDB - 7/12"
+  addLogStep "Postinst -- Restart MySQL/MariaDB - 7/11"
 
   if [ "localhost" != "${MYSQL_HOSTNAME}" ] && [ "$(hostname)" != "${MYSQL_HOSTNAME}" ] && [ "$(hostname -I)" != "${MYSQL_HOSTNAME}" ]; then
     addLogInfo "Remote mysql server detected"
@@ -454,10 +371,10 @@ step7_restart_mysql_database() {
   fi
 }
 
-step8_configure_crontab() {
+step7_configure_crontab() {
   result=true
 
-  addLogStep "Postinst -- Configure Cron - 8/12"
+  addLogStep "Postinst -- Configure Cron - 8/11"
 
   { ##try
     cat - >/etc/cron.d/nextdom <<EOS
@@ -483,10 +400,10 @@ EOS
   fi
 }
 
-step9_check_nextdom() {
+step8_check_nextdom() {
   result=true
 
-  addLogStep "Postinst -- Check NextDom - 9/12"
+  addLogStep "Postinst -- Check NextDom - 9/11"
 
   { ##try
     php ${APACHE_HTML_DIRECTORY}/scripts/sick.php
@@ -498,10 +415,10 @@ step9_check_nextdom() {
   fi
 }
 
-step10_specific_action_for_OS() {
+step9_specific_action_for_OS() {
   result=true
 
-  addLogStep "Postinst -- Execute scripts for specific OS- 10/12"
+  addLogStep "Postinst -- Execute scripts for specific OS- 10/11"
 
   { ##try
     if [ -f /etc/armbian.txt ]; then
@@ -533,13 +450,13 @@ step10_specific_action_for_OS() {
   fi
 }
 
-step11_configure_file_permissions() {
+step10_configure_file_permissions() {
   # configure file permissions
   # ${ROOT_DIRECTORY}/plugins and ${ROOT_DIRECTORY}/public/img should not be given
   # www-data ownership, still needed until proper migration handling
   result=true
 
-  addLogStep "Postinst -- Configure file permission - 11/12"
+  addLogStep "Postinst -- Configure file permission - 11/11"
 
   { ##try
     local directories=("${LIB_DIRECTORY}" "${LOG_DIRECTORY}" "${TMP_DIRECTORY}" "${ROOT_DIRECTORY}/plugins" "${ROOT_DIRECTORY}/public/img")
@@ -560,10 +477,10 @@ step11_configure_file_permissions() {
   fi
 }
 
-step12_change_owner_for_nextdom_directories() {
+step11_change_owner_for_nextdom_directories() {
   result=true
 
-  addLogStep "Postinst -- Configure owner for NextDom directory - 12/12"
+  addLogStep "Postinst -- Configure owner for NextDom directory - 12/11"
 
   { ##try
     local directories=("${ROOT_DIRECTORY}" "${LIB_DIRECTORY}" "${LOG_DIRECTORY}" "${TMP_DIRECTORY}")
@@ -603,16 +520,15 @@ postinstall_nextdom() {
   step0_prepare_prerequisites
   step1_create_prerequisite_files_and_directories
   step2_prepare_directory_layout
-  step3_configure_mysql
-  step4_create_symLink_var_www_html
-  step5_configure_apache
-  step6_configure_nextdom
-  step7_restart_mysql_database
-  step8_configure_crontab
-  step9_check_nextdom
-  step10_specific_action_for_OS
-  step11_configure_file_permissions
-  step12_change_owner_for_nextdom_directories
+  step3_create_symLink_var_www_html
+  step4_configure_apache
+  step5_configure_nextdom
+  step6_restart_mysql_database
+  step7_configure_crontab
+  step8_check_nextdom
+  step9_specific_action_for_OS
+  step10_configure_file_permissions
+  step11_change_owner_for_nextdom_directories
 
   if [ -f /root/.mysqlroot ]; then
     rm -f /root/.mysqlroot

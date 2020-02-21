@@ -47,16 +47,12 @@ addLogScript "============ Starting postinst.sh ============"
 #commented step are the one needed at runtime not build time
 step1_create_prerequisite_files_and_directories
 step2_prepare_directory_layout
-#step3_configure_mysql
-step4_create_symLink_var_www_html
-step5_configure_apache
-#step6_configure_nextdom
-#step7_restart_mysql_database
-step8_configure_crontab
-#step9_check_nextdom
-step10_specific_action_for_OS
-step11_configure_file_permissions
-step12_change_owner_for_nextdom_directories
+step5_create_symLink_var_www_html
+step6_configure_apache
+step7_configure_crontab
+step9_specific_action_for_OS
+step10_configure_file_permissions
+step11_change_owner_for_nextdom_directories
 addLogScript "============ End postinst.sh ============"
 
 #add supervisor

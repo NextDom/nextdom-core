@@ -218,10 +218,6 @@ step4_configure_apache() {
     addLogError "apache is not installed"
   fi
 
-  if [ -d ${LOG_DIRECTORY} ]; then
-    createDirectory ${LOG_DIRECTORY}
-  fi
-
   for c_file in nextdom.conf nextdom-ssl.conf nextdom-common; do
     if [ ! -f ${APACHE_CONFIG_DIRECTORY}/${c_file} ]; then
       { ##try
@@ -275,6 +271,27 @@ step4_configure_apache() {
       }
     fi
   fi
+
+
+  { ##try
+    a2enmod ssl
+    addLogInfo "apache: enable module ssl"
+    a2enmod rewrite
+    addLogInfo "apache: enable module rewrite"
+    a2dismod status
+    addLogInfo "apache: disable module status"
+    a2dissite 000-default
+    addLogInfo "apache: disabled site default"
+    a2dissite default-ssl
+    addLogInfo "apache: disabled site default-ssl"
+    a2ensite nextdom-ssl
+    addLogInfo "apache: enabled site nextdom-ssl"
+    a2ensite nextdom
+    addLogInfo "apache: enabled site nextdom"
+    restartService apache2
+  } || { ##catch
+    addLogError "Error while configuring Apache service"
+  }
 
   if [ "true" == "${result}" ]; then
     addLogSuccess "Apache is configured with success"
