@@ -114,8 +114,8 @@
                     <fieldset>
                         <legend>{{ 'Filtrage et mise en forme des données' }}</legend>
                         <div class="form-group">
-                            <input id="in_startDate" class="form-control in_datepicker" style="display : inline-block; width: 150px;" value="{{ historyDate.start }}"/>
-                            <input id="in_endDate" class="form-control in_datepicker" style="display : inline-block; width: 150px;" value="{{ historyDate.end }}"/>
+                            <input id="in_startDate" class="form-control in_datepicker" style="display : inline-block; width: 120px;" value="{{ historyDate.start }}"/>
+                            <input id="in_endDate" class="form-control in_datepicker" style="display : inline-block; width: 120px;" value="{{ historyDate.end }}"/>
                             <a class="btn btn-success" id="bt_validChangeDate" data-toggle="tooltip" title="" data-original-title="{{ 'Attention : une trop grande plage de dates peut mettre très longtemps à être calculée ou même ne pas s\'afficher.'  | trans }}"><i class="fas fa-check"></i>{{ 'Ok' }}</a>
                             <select class="form-control pull-right" id="sel_groupingType" style="width: 200px;">
                                 <option value="">{{ 'Aucun groupement' | trans }}</option>

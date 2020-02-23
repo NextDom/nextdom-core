@@ -115,6 +115,17 @@ function initFields(){
     $(":input").inputmask();
     $(".slimScrollDiv").css("overflow", "");
     $(".sidebar").css("overflow", "");
+    var options = $.extend(
+    {},
+        $.datepicker.regional["fr"],         
+        { showOtherMonths: true,
+        showWeek: true,
+        showButtonPanel: true,
+        numberOfMonths: 2,
+        firstDay: 1,
+        dateFormat: "yy-mm-dd" }
+    );
+    $.datepicker.setDefaults(options);
 }
 
 /**

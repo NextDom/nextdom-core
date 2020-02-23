@@ -210,6 +210,7 @@ class PrepareView
             $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/inputmask/dist/jquery.inputmask.bundle.js';
             $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js';
             $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js';
+            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/jquery-ui/ui/i18n/datepicker-fr.js';
             $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/moment/moment.js';
             $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/vivagraphjs/dist/vivagraph.min.js';
 
