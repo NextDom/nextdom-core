@@ -83,11 +83,6 @@ step2_prepare_directory_layout() {
 
   addLogStep "Postinst -- Prepare directory layout - 2/11"
 
-  # we delete existing config since it is regenerated from asset sample (step_nextdom_configuration)
-  removeDirectoryOrFile ${LIB_DIRECTORY}/config
-  cp -r ${ROOT_DIRECTORY}/assets/config ${LIB_DIRECTORY}
-  addLogInfo "created configuration directory ${LIB_DIRECTORY}/config"
-
   # we delete existing data, since its re-imported from assets
   removeDirectoryOrFile ${LIB_DIRECTORY}/data
   cp -r ${ROOT_DIRECTORY}/assets/data ${LIB_DIRECTORY}
@@ -143,10 +138,10 @@ step2_prepare_directory_layout() {
   # jeedom javascript compatibility
   if [ ! -e ${ROOT_DIRECTORY}/core/js ]; then
     { ##try
-        ln -s ${ROOT_DIRECTORY}/assets/js/core/ ${ROOT_DIRECTORY}/core/js
-        addLogInfo "created core/js symlink: ${ROOT_DIRECTORY}/assets/core/js"
+        ln -s ${ROOT_DIRECTORY}/public/compatibility ${ROOT_DIRECTORY}/core/js
+        addLogInfo "created core/js symlink: ${ROOT_DIRECTORY}/public/compatibility"
       } || { ##catch
-        addLogInfo "assets/core/js symlink: ${ROOT_DIRECTORY}/assets/core/js already exists"
+        addLogInfo "assets/core/js symlink: ${ROOT_DIRECTORY}/public/compatibility already exists"
       }
   fi
 
