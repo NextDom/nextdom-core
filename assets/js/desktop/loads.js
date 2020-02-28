@@ -67,8 +67,46 @@ $(function () {
     $.fn.modal.Constructor.prototype.enforceFocus = function () {
     };
 
+    /**
+     * Initialize JS translations
+     */
+    async function initTranslations() {
+        const getJSONTranslations = async () => {
+            const response = await fetch('/core/ajax/translations.ajax.php');
+            return await response.json();
+        };
+        let jsonTranslates = await getJSONTranslations();
+        const translates = storeAndGetTranslations('NextDomTranslations',jsonTranslates)
+    }
+
+    /**
+     * persist and return values of translations from localstorage
+     * @returns {Promise<any>}
+     */
+    function storeAndGetTranslations(key,json) {
+        let translations = null;
+        if (localStorage.getItem(key) === null ){
+            localStorage.setItem(key,JSON.stringify(json.messages));
+            translations = json;
+        } else {
+            translations = JSON.parse(localStorage.getItem(key));
+        }
+        return translations ;
+    }
+
+    /**
+     *
+     */
+    const setDateTranslation = () => {
+        let key = 'dateSetTranslation';
+        let dateCreatedTranslation = new Date().getTime();
+        if (localStorage.getItem(key) === null || ((dateCreatedTranslation + (7*24*3600*1000)) < localStorage.getItem(key))){
+            localStorage.setItem(key, JSON.stringify(dateCreatedTranslation));
+            await initTranslations();
+    }
+
     // JS translations
-    await initTranslations();
+    setDateTranslation();
 
     // Clock actualisation timer
     displayClock();
