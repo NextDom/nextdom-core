@@ -180,14 +180,4 @@ function initTextArea(){
      });
  }
 
- /**
-  * Initialize JS translations
-  */
- async function initTranslations() {
-   const getJSONTranslations = async () => {
-       const response = await fetch('/core/ajax/translations.ajax.php');
-       return await response.json();
-   };
-   let jsonTranslates = await getJSONTranslations();
-   const translates = storeAndGetTranslations('NextDomTranslations',jsonTranslates)
- }
+
