@@ -19,7 +19,7 @@ def ajax_tests():
     start_test_container(container_name, NEXTDOM_PASSWORD)
     # Create standard user
     exec_command_in_container(
-        container_name, '/usr/bin/mysql -u root nextdomdev -e "INSERT INTO \\`user\\` VALUES (NULL, \'user\', \'user\', SHA2(\'nextdom-test\', 512), \'{\\\"localOnly\\\":\\\"0\\\",\\\"lastConnection\\\":\\\"\\\"}\', \'VD5OOmHSVT3VFYjng4XEaZF5wAI9jEi8\', \'[]\', 1)"')  # pylint: disable=line-too-long
+        container_name, '/usr/bin/mysql -u root nextdom -e "INSERT INTO \\`user\\` VALUES (NULL, \'user\', \'user\', SHA2(\'nextdom-test\', 512), \'{\\\"localOnly\\\":\\\"0\\\",\\\"lastConnection\\\":\\\"\\\"}\', \'VD5OOmHSVT3VFYjng4XEaZF5wAI9jEi8\', \'[]\', 1)"')  # pylint: disable=line-too-long
     # Check ajax
     return_code = os.system(
         'cd .. && ./phpunit --configuration tests/compatibility/phpunit.xml --testsuite AllTests')  # pylint: disable=line-too-long

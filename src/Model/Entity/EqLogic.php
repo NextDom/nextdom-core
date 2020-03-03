@@ -1107,7 +1107,6 @@ class EqLogic extends BaseEntity
             '#category#' => $this->getPrimaryCategory(),
             '#color#' => '#ffffff',
             '#border#' => 'none',
-            '#border-radius#' => '0px',
             '#style#' => '',
             '#max_width#' => '650px',
             '#logicalId#' => $this->getLogicalId(),

@@ -33,7 +33,7 @@ class OsDbControllerTest extends BaseControllerTest
     {
         $pageData = [];
         $result = \NextDom\Controller\Tools\OsDbController::get($pageData);
-        $this->assertEquals('nextdomdev', $pageData['adminDbConfig']['dbname']);
+        $this->assertEquals('nextdom', $pageData['adminDbConfig']['dbname']);
         $this->assertStringContainsString('id="osdb"', $result);
     }
 

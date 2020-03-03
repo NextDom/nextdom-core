@@ -28,7 +28,7 @@ function gen_css {
     mkdir -p assets/css/builded
     # Build adminlte
     node vendor/node_modules/less/bin/lessc assets/css/compiled/AdminLTE.less assets/css/builded/AdminLTE.scss
-    # 
+    #
     cat vendor/node_modules/bootstrap/dist/css/bootstrap.css \
 		vendor/node_modules/roboto-fontface/css/roboto/roboto-fontface.css \
 		vendor/node_modules/jquery-ui/themes/base/core.css \
@@ -63,7 +63,7 @@ function gen_css {
 		vendor/node_modules/font-awesome/css/font-awesome.css \
 		vendor/node_modules/jquery-datetimepicker/jquery.datetimepicker.css \
 		vendor/node_modules/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css \
-        assets/icon/animal/style.css \
+    assets/icon/animal/style.css \
 		assets/icon/divers/style.css \
 		assets/icon/fashion/style.css \
 		assets/icon/loisir/style.css \
@@ -78,7 +78,7 @@ function gen_css {
 		assets/icon/securite/style.css \
 		assets/icon/techno/style.css \
 		assets/icon/transport/style.css \
-        > assets/css/builded/vendors.scss
+    > assets/css/builded/vendors.scss
 
     if [ $# -eq 0 ]; then
         COMPRESS="--style compressed"
@@ -181,6 +181,7 @@ function gen_js {
            vendor/node_modules/inputmask/dist/jquery.inputmask.bundle.js \
            vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js \
            vendor/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js \
+           vendor/node_modules/jquery-ui/ui/i18n/datepicker-fr.js \
            vendor/node_modules/snapsvg/dist/snap.svg-min.js \
            vendor/node_modules/moment/min/moment.min.js \
            vendor/node_modules/vivagraphjs/dist/vivagraph.min.js \

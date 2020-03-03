@@ -417,8 +417,7 @@ class CmdAjax extends BaseAjax
             $dateEnd = date(DateFormat::FULL);
         }
         if ($dateStart !== '') {
-            // TODO startDate à vérifier
-            $dateStart = Utils::init('startDate', date(DateFormat::FULL_DAY, strtotime(ConfigManager::byKey('history::defautShowPeriod') . ' ' . date(DateFormat::FULL_DAY))));
+            $dateStart = Utils::init(AjaxParams::DATE_START, date(DateFormat::FULL_DAY, strtotime(ConfigManager::byKey('history::defautShowPeriod') . ' ' . date(DateFormat::FULL_DAY))));
         }
         $result['maxValue'] = '';
         $result['minValue'] = '';
