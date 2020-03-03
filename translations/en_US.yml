@@ -174,7 +174,7 @@ core:
   error-404: 404 - Page not found
   error-ajax: Unknown Ajax request
   error-bad-action: Misuse of a feature
-  incorrect-sys-date: The system date is incorrect (before or after %s %s):
+  incorrect-sys-date: 'The system date is incorrect (before or after %s %s):'
 dashboard:
   all-categories: All
   grid-config: Configure the size of the grid
@@ -196,7 +196,7 @@ firstuse:
   market-content: By adding or connecting a Market Jeedom account for installing plugins ...
   market-noaccount: I have no Market account
   market-password-placeholder: Password...
-  market-productname-placeholder: ?
+  market-productname-placeholder: '?'
   market-title: Connect your market has Jeedom to NextDom!
   market-username-placeholder: Username...
   market-wantaccount: I want to create one!
@@ -943,7 +943,7 @@ welcome:
 "Arrêt de ": "Arrêt de"
 "De nouvelles mises à jour sont disponibles : ": "New updates are available :"
 "Système à jour": "System up to date"
-"OK": "OK"
+ OK: "OK"
 "Cron actif": "Cron active"
 "Scénario actif": "Scenario active"
 "Démarré": "Started"
