@@ -141,7 +141,7 @@ step2_prepare_directory_layout() {
         ln -s ${ROOT_DIRECTORY}/public/compatibility ${ROOT_DIRECTORY}/core/js
         addLogInfo "created core/js symlink: ${ROOT_DIRECTORY}/public/compatibility"
       } || { ##catch
-        addLogInfo "assets/core/js symlink: ${ROOT_DIRECTORY}/public/compatibility already exists"
+        addLogInfo "assets/core/js symlink: ${ROOT_DIRECTORY}/assets/core/js already exists"
       }
   fi
 
