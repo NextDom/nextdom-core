@@ -19,6 +19,7 @@ before_install:
   - sudo pip3 install --ignore-installed pylint
   - composer require --dev php-coveralls/php-coveralls
   - while true; do DOCKER_LOGS=$(docker logs --tail 10 nextdom-test 2>&1); if [[ "$DOCKER_LOGS" =~ .*NEXTDOM.TEST.READY.* ]]; then break; fi; sleep 2; done
+  - docker logs nextdom-test
   - docker exec -it nextdom-test service mysql stop
   - docker commit nextdom-test nextdom-test-snap
   - docker kill nextdom-test &
