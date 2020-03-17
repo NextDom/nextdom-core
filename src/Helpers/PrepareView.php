@@ -55,7 +55,6 @@ class PrepareView
             'nextdom::firstUse',
             'nextdom::Welcome',
             'notify::status',
-            'notify::position',
             'notify::timeout',
             'widget::size',
             'widget::margin',
@@ -139,7 +138,6 @@ class PrepareView
             $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/bootstrap/dist/js/bootstrap.min.js';
             $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/admin-lte/dist/js/adminlte.min.js';
             $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/pace-js/pace.min.js';
-            $pageData[ControllerData::JS_POOL][] = '/vendor/node_modules/izitoast/dist/js/iziToast.min.js';
             $pageData[ControllerData::JS_POOL][] = '/assets/3rdparty/jquery.utils/jquery.utils.js';
             $pageData[ControllerData::JS_POOL][] = '/assets/3rdparty/jquery.at.caret/jquery.at.caret.min.js';
             $pageData[ControllerData::JS_POOL][] = '/assets/3rdparty/jquery.multi-column-select/multi-column-select.js';
@@ -178,12 +176,12 @@ class PrepareView
             $pageData[ControllerData::JS_POOL][] = '/assets/js/core/jeedom.class.js';
 
             // Then NextDom JS files
-            $pageData[ControllerData::JS_POOL][] = '/public/js/desktop/conflicts.js';
-            $pageData[ControllerData::JS_POOL][] = '/public/js/desktop/loads.js';
-            $pageData[ControllerData::JS_POOL][] = '/public/js/desktop/inits.js';
-            $pageData[ControllerData::JS_POOL][] = '/public/js/desktop/gui.js';
-            $pageData[ControllerData::JS_POOL][] = '/public/js/desktop/utils.js';
-            $pageData[ControllerData::JS_POOL][] = '/public/js/desktop/search.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/desktop/conflicts.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/desktop/loads.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/desktop/inits.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/desktop/gui.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/desktop/utils.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/desktop/search.js';
             $pageData[ControllerData::JS_POOL][] = '/assets/js/desktop/jeedomCompatibility.js';
 
             // And libraries JS
@@ -439,7 +437,6 @@ class PrepareView
             'user_login' => UserManager::getStoredUser()->getLogin(),
             'nextdom_Welcome' => $this->currentConfig['nextdom::Welcome'],
             'notify_status' => $this->currentConfig['notify::status'],
-            'notify_position' => $this->currentConfig['notify::position'],
             'notify_timeout' => $this->currentConfig['notify::timeout'],
             'widget_size' => $this->currentConfig['widget::size'],
             'widget_margin' => $this->currentConfig['widget::margin'],

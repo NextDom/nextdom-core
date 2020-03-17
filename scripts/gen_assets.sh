@@ -58,7 +58,6 @@ function gen_css {
 		vendor/node_modules/jquery-contextmenu/dist/jquery.contextMenu.css \
 		vendor/node_modules/tablesorter/dist/css/theme.bootstrap.min.css \
 		vendor/node_modules/codemirror/lib/codemirror.css \
-		vendor/node_modules/izitoast/dist/css/iziToast.css \
 		vendor/node_modules/@fortawesome/fontawesome-free/css/all.css \
 		vendor/node_modules/font-awesome/css/font-awesome.css \
 		vendor/node_modules/jquery-datetimepicker/jquery.datetimepicker.css \
@@ -116,7 +115,6 @@ function gen_js {
            vendor/node_modules/bootstrap/dist/js/bootstrap.min.js \
            vendor/node_modules/pace-js/pace.min.js \
            vendor/node_modules/admin-lte/dist/js/adminlte.min.js \
-           vendor/node_modules/izitoast/dist/js/iziToast.min.js \
            assets/3rdparty/jquery.utils/jquery.utils.js \
            assets/3rdparty/jquery.at.caret/jquery.at.caret.min.js \
            assets/3rdparty/jquery.multi-column-select/multi-column-select.js \
