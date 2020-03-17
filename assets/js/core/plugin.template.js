@@ -350,12 +350,12 @@ $('#div_pageContainer').on('dblclick', '.cmd input,select,span,a', function (eve
 
 $('#div_pageContainer').on('dblclick', '.cmd', function () {
   $('#md_modal').dialog({title: "{{Configuration commande}}"});
-  $('#md_modal').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).closest('.cmd').attr('data-cmd_id')).dialog('open');
+  $('#md_modal').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).closest('.cmd').attr('data-cmd_id')).dialog('option', 'resizable', true).dialog('open');
 });
 
 $('#div_pageContainer').on('click', '.cmd .cmdAction[data-action=configure]', function () {
   $('#md_modal').dialog({title: "{{Configuration commande}}"});
-  $('#md_modal').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).closest('.cmd').attr('data-cmd_id')).dialog('open');
+  $('#md_modal').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).closest('.cmd').attr('data-cmd_id')).dialog('option', 'resizable', true).dialog('open');
 });
 
 $('.eqLogicThumbnailContainer').packery();
