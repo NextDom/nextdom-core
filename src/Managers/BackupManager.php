@@ -44,6 +44,9 @@ use splitbrain\PHPArchive\Tar;
  */
 class BackupManager
 {
+    /**
+     * @var null
+     */
     private static $logLevel = null;
 
     /**
@@ -72,6 +75,7 @@ class BackupManager
      *
      * @return bool true if no error
      * @throws CoreException
+     * @throws \Exception
      */
     public static function createBackup()
     {
@@ -315,13 +319,14 @@ class BackupManager
     }
 
     /**
-     * @param array $roots
+     * @param array  $roots
      * @param string $pattern
-     * @param Tar $tar
-     * @param $logFile
+     * @param Tar    $tar
+     * @param        $logFile
      * @throws \splitbrain\PHPArchive\ArchiveCorruptedException
      * @throws \splitbrain\PHPArchive\ArchiveIOException
      * @throws \splitbrain\PHPArchive\FileInfoException
+     * @throws \Exception
      */
     private static function addPathToArchive($roots, $pattern, $tar, $logFile)
     {
@@ -609,6 +614,7 @@ class BackupManager
      *
      * @param string $tmpDir extracted backup root directory
      * @throws CoreException
+     * @throws \Exception
      */
     private static function restorePlugins($tmpDir)
     {
@@ -643,6 +649,7 @@ class BackupManager
      *
      * @param $folderRoot
      * @throws CoreException on permission error
+     * @throws \Exception
      */
     private static function restorePublicPerms($folderRoot)
     {
@@ -855,9 +862,9 @@ class BackupManager
     }
 
     /**
-     * Obtenir la liste des sauvegardes
+     * Get the list of backups
      *
-     * @return array Liste des sauvegardes
+     * @return array list of backups
      * @throws \Exception
      */
     public static function listBackup(): array
@@ -879,6 +886,7 @@ class BackupManager
      * @param string $backupFilePath Backup file path
      *
      * @throws CoreException
+     * @throws \Exception
      */
     public static function removeBackup(string $backupFilePath)
     {

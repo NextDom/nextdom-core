@@ -52,11 +52,10 @@ trait CommonManager
      * @return mixed
      *
      * @throws CoreException
-     * @throws \ReflectionException
      */
     public static function byId($requestedId)
     {
-        if (empty($requestedId)) {
+        if (empty($requestedId) === true) {
             return null;
         }
         $params = ['id' => $requestedId];
@@ -70,7 +69,6 @@ trait CommonManager
      * @return mixed|null
      *
      * @throws CoreException
-     * @throws \ReflectionException
      */
     protected static function getAll()
     {
@@ -87,7 +85,6 @@ trait CommonManager
      * @return mixed|null
      *
      * @throws CoreException
-     * @throws \ReflectionException
      */
     protected static function getAllOrdered(string $orderColumn, bool $reverseOrder = false, int $limit = 0)
     {
@@ -181,10 +178,9 @@ trait CommonManager
      */
     private static function query(array $clauses, $compOperator = '', bool $onlyOneResult = false, $orderColumn = '', bool $reverseOrder = false) {
         $sql = static::createSQL($clauses, $compOperator, $orderColumn, $reverseOrder);
-        if ($onlyOneResult) {
+        if ($onlyOneResult === true) {
             return DBHelper::getOneObject($sql, $clauses, static::CLASS_NAME);
-        }
-        else {
+        } else {
             return DBHelper::getAllObjects($sql, $clauses, static::CLASS_NAME);
         }
     }
@@ -199,7 +195,6 @@ trait CommonManager
      *
      * @return string
      *
-     * @throws \ReflectionException
      */
     private static function createSQL(array $clauses, string $compOperator, $orderColumn = '', bool $reverseOrder = false)
     {
@@ -209,8 +204,7 @@ trait CommonManager
         foreach ($clauses as $clauseName => $clauseValue) {
             if ($sqlClauses === '') {
                 $sqlClauses = "WHERE ";
-            }
-            else {
+            } else {
                 $sqlClauses .= "AND ";
             }
             $sqlClauses .= "`$clauseName` $compOperator :$clauseName ";
@@ -218,8 +212,7 @@ trait CommonManager
         if ($orderColumn !== '') {
             if (is_array($orderColumn)) {
                 $sqlOrder = "ORDER BY `" . implode("`, `", $orderColumn) . "`";
-            }
-            else {
+            } else {
                 $sqlOrder = "ORDER BY `$orderColumn`";
             }
             if ($reverseOrder) {

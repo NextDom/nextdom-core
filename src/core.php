@@ -78,9 +78,10 @@ namespace {
      *
      * @param string $className Name of the class
      *
+     * @throws CoreException
      * @throws Exception
      */
-    function nextdomPluginAutoload($className)
+    function nextdomPluginAutoload(string $className)
     {
         global $ENABLED_PLUGINS;
         if ($ENABLED_PLUGINS === null) {

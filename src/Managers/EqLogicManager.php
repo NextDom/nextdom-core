@@ -367,6 +367,7 @@ class EqLogicManager extends BaseManager
 
     /**
      * Vérifier si un objet est actif
+     * @throws \Exception
      */
     public static function checkAlive()
     {
@@ -426,6 +427,7 @@ class EqLogicManager extends BaseManager
      * @param $input
      * @return array|mixed
      * @throws \ReflectionException
+     * @throws CoreException
      */
     public static function toHumanReadable($input)
     {
@@ -467,6 +469,7 @@ class EqLogicManager extends BaseManager
 
     /**
      * @TODO: ???
+     * @throws \Exception
      */
     public static function clearCacheWidget()
     {

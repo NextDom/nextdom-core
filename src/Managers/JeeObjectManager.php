@@ -123,6 +123,11 @@ class JeeObjectManager extends BaseManager
         return DBHelper::Prepare($sql, [], $fetchType, \PDO::FETCH_CLASS, self::CLASS_NAME);
     }
 
+    /**
+     * @param User $user
+     * @return array|mixed|null
+     * @throws CoreException
+     */
     public static function getDefaultUserRoom(User $user)
     {
         $rootRoomId = $user->getOptions('defaultDashboardObject');
@@ -196,6 +201,13 @@ class JeeObjectManager extends BaseManager
         return static::getMultipleByClauses($clauses, ['position', 'name', 'father_id']);
     }
 
+    /**
+     * @param $father_id
+     * @param $onlyVisible
+     * @return mixed|null
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public static function getChildren($father_id, $onlyVisible)
     {
         $clauses = ['father_id' => $father_id];

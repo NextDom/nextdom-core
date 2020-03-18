@@ -107,12 +107,13 @@ class CronManager extends BaseManager
 
     /**
      * Clean cron that will never run
+     * @throws \Exception
      */
     public static function clean()
     {
         $crons = self::all();
         foreach ($crons as $cron) {
-            $cronExpression = new \Cron\CronExpression($cron->getSchedule(), new \Cron\FieldFactory);
+            $cronExpression = new \Cron\CronExpression($cron->getSchedule(), new \Cron\FieldFactory());
             try {
                 if (!$cronExpression->isDue()) {
                     $cronExpression->getNextRunDate();
@@ -176,6 +177,7 @@ class CronManager extends BaseManager
 
     /**
      * Write jeeCron PID of current process
+     * @throws \Exception
      */
     public static function setPidFile()
     {
@@ -203,7 +205,7 @@ class CronManager extends BaseManager
     /**
      * Return the current pid of jeecron or empty if not running
      *
-     * @return int Current jeeCron PID
+     * @return false|string Current jeeCron PID
      * @throws \Exception
      */
     public static function getPidFile()
@@ -234,7 +236,7 @@ class CronManager extends BaseManager
      * @return string
      * @throws \Exception
      */
-    public static function convertCronSchedule($cron)
+    public static function convertCronSchedule(string $cron)
     {
         $return = str_replace('*/ ', '* ', $cron);
         preg_match_all('/([0-9]*\/\*)/m', $return, $matches, PREG_SET_ORDER, 0);
