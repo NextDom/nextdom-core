@@ -34,6 +34,7 @@
 
 namespace NextDom\Helpers;
 
+use NextDom\Enums\LogTarget;
 use NextDom\Exceptions\CoreException;
 
 /**
@@ -219,6 +220,29 @@ class DBHelper
         return false;
     }
 
+    /**
+     * Generate IN params for query
+     *
+     * @param array $params
+     *
+     * @return bool|string
+     *
+     * @throws \Exception
+     */
+    public static function getInParamFromArray($params)
+    {
+        if (count($params) > 0) {
+            $stringifiedParams = "'" . implode("', '", $params) . "'";
+            preg_match_all('/^\'\w*\'(?:, \'\w*\')*$/', $stringifiedParams, $checkValidity);
+            if (count($checkValidity) > 0 && count($checkValidity[0]) === 1) {
+                return '(' . $stringifiedParams . ')';
+            }
+            else {
+                LogHelper::addError(LogTarget::NEXTDOM, __('Bad SQL WHERE IN params ') . $stringifiedParams);
+            }
+        }
+        return false;
+    }
     /**
      * Begin transaction
      */

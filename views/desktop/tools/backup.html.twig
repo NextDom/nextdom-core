@@ -37,11 +37,11 @@
     <div class="action-bar">
         <div class="action-group">
             <a class="btn btn-danger btn-action-bar" href="index.php?v=d&p=administration"><i class="fas fa-chevron-left"></i>{{ 'common.return' | trans }}</a>
+            <a class="btn btn-default btn-action-bar" id="bt_saveOpenLog"><i class="fas fa-file-alt"></i>{{ 'common.log' | trans }}</a>
         </div>
         <div class="action-group">
             <a class="btn btn-success btn-action-bar pull-right" id="bt_saveBackup"><i class="fas fa-save"></i>{{ 'common.save' | trans }}</a>
             <a class="btn btn-danger btn-action-bar pull-right bt_cancelModifs"><i class="fas fa-times"></i>{{ 'common.cancel'|trans }}</a>
-            <a class="btn btn-default btn-action-bar pull-right" id="bt_saveOpenLog"><i class="fas fa-file-alt"></i>{{ 'common.log' | trans }}</a>
         </div>
     </div>
 </section>
@@ -182,12 +182,6 @@
                         {% endfor %}
                     </fieldset>
                 </div>
-            </div>
-        </div>
-
-        <div id="md_backupInfo">
-            <div class="content">
-                <pre id="pre_backupInfo" style="overflow: scroll;"></pre>
             </div>
         </div>
     </div>

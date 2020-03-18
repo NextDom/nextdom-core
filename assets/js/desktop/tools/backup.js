@@ -33,6 +33,7 @@
 * @Email   <admin@nextdom.org>
 * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
 */
+var backupInfoModal = $('#md_modal');
 
 // Page init
 loadInformations();
@@ -101,27 +102,10 @@ function initEvents() {
         });
     });
 
-    // Backup modale init
-    $("#md_backupInfo").dialog({
-        closeText: '',
-        autoOpen: false,
-        modal: true,
-        height: jQuery(window).height() - 100,
-        width: getModalWidth(),
-        open: function () {
-            $("body").css({overflow: 'hidden'});
-            $(this).dialog("option", "position", {my: "center", at: "center", of: window});
-            $('#pre_backupInfo').css('height', $('#md_backupInfo').height());
-        },
-        beforeClose: function (event, ui) {
-            $("body").css({overflow: 'inherit'});
-        }
-    });
-
     // Open log button
     $("#bt_saveOpenLog").on('click', function (event) {
-        $('#md_backupInfo').dialog({title: "{{Avancement de la sauvegarde}}"});
-        $("#md_backupInfo").dialog('open');
+        backupInfoModal.dialog({title: "{{Avancement de la sauvegarde}}"});
+        backupInfoModal.load('index.php?v=d&modal=backup.log').dialog('open');
     });
 
     // Backup button
@@ -132,13 +116,13 @@ function initEvents() {
                 $('#bt_backupNextDom').addClass('disabled');
                 el.find('.fa-refresh').show();
                 el.find('.fa-floppy-o').hide();
-                $('#md_backupInfo').dialog({title: "{{Avancement de la sauvegarde}}"});
-                $("#md_backupInfo").dialog('open');
                 nextdom.backup.backup({
                     error: function (error) {
                         notify("Erreur", error.message, 'error');
                     },
                     success: function () {
+                        backupInfoModal.dialog({title: "{{Avancement de la sauvegarde}}"});
+                        backupInfoModal.load('index.php?v=d&modal=backup.log').dialog('open');
                         getNextDomLog(1, 'backup');
                     }
                 });
@@ -156,14 +140,14 @@ function initEvents() {
                 $('#bt_restoreRepoNextDom').addClass('disabled');
                 el.find('.fa-refresh').show();
                 el.find('.fa-window-restore').hide();
-                $('#md_backupInfo').dialog({title: "{{Avancement de la restauration}}"});
-                $("#md_backupInfo").dialog('open');
                 nextdom.backup.restoreLocal({
                     backup: $('#sel_restoreBackup').value(),
                     error: function (error) {
                         notify("Erreur", error.message, 'error');
                     },
                     success: function () {
+                        backupInfoModal.dialog({title: "{{Avancement de la restauration}}"});
+                        backupInfoModal.load('index.php?v=d&modal=backup.log').dialog('open');
                         getNextDomLog(1, 'restore');
                     }
                 });
@@ -239,8 +223,8 @@ function initEvents() {
                         notify("Erreur", error.message, 'error');
                     },
                     success: function () {
-                      $('#md_backupInfo').dialog({title: "{{Avancement de la restauration}}"});
-                      $("#md_backupInfo").dialog('open');
+                      backupInfoModal.dialog({title: "{{Avancement de la restauration}}"});
+                      backupInfoModal.load('index.php?v=d&modal=backup.log').dialog('open');
                       getNextDomLog(1, 'restore');
                     }
                 });
@@ -263,13 +247,13 @@ function getNextDomLog(_autoUpdate, _log) {
         error: function (request, status, error) {
             setTimeout(function () {
                 getNextDomLog(_autoUpdate, _log)
-            }, 1000);
+            }, 500);
         },
         success: function (data) {
             if (data.state != 'ok') {
                 setTimeout(function () {
                     getNextDomLog(_autoUpdate, _log)
-                }, 1000);
+                }, 500);
                 return;
             }
             var log = '';
@@ -296,7 +280,8 @@ function getNextDomLog(_autoUpdate, _log) {
                     }
                 }
             }
-            $('#pre_backupInfo').text(log);
+            $('#pre_modal_backup').text(log);
+            $('#pre_modal_backup').scrollTop($('#pre_modal_backup').innerHeight());
             if (init(_autoUpdate, 0) == 1) {
                 setTimeout(function () {
                     getNextDomLog(_autoUpdate, _log)
