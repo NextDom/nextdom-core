@@ -170,7 +170,7 @@ nextdom.scenario.getSelectModal = function(_options, callback) {
   if (!isset(_options)) {
     _options = {};
   }
-  if ($("#mod_insertScenarioValue").length != 0) {
+  if ($("#mod_insertScenarioValue").length !== 0) {
     $("#mod_insertScenarioValue").remove();
   }
   $('body').append('<div id="mod_insertScenarioValue" title="{{Sélectionner le scénario}}" ></div>');

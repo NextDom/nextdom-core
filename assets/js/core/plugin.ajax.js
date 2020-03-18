@@ -226,8 +226,9 @@ $('.eqLogicAction[data-action=copy]').on('click', function () {
           },
           success: function (data) {
             modifyWithoutSave = false;
-            if ($('#ul_eqLogic .li_eqLogic[data-eqLogic_id=' + data.id + ']').length != 0) {
-              $('#ul_eqLogic .li_eqLogic[data-eqLogic_id=' + data.id + ']').click();
+            var targetElement = $('#ul_eqLogic .li_eqLogic[data-eqLogic_id=' + data.id + ']');
+            if (targetElement.length !== 0) {
+              targetElement.click();
             } else {
               var vars = getMyUrlVars();
               var url = 'index.php?';
@@ -264,8 +265,9 @@ $('.eqLogicAttr[data-l1key=object_id]').on('change', function () {
 if (updateDisplayPlugin !== undefined)
   updateDisplayPlugin(function () {
     if (is_numeric(getMyUrlVars('id'))) {
-      if ($('body .li_eqLogic[data-eqLogic_id="' + getMyUrlVars('id') + '"]').length != 0) {
-        $('body .li_eqLogic[data-eqLogic_id="' + getMyUrlVars('id') + '"]').click();
+      var targetUpdate = $('body .li_eqLogic[data-eqLogic_id="' + getMyUrlVars('id') + '"]');
+      if (targetUpdate.length !== 0) {
+        targetUpdate.click();
       } else {
         if ($('.eqLogicThumbnailDisplay').html() === undefined) {
           $('body .li_eqLogic:first').click();

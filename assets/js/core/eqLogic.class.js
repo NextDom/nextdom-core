@@ -190,7 +190,7 @@ nextdom.eqLogic.getSelectModal = function(_options, callback) {
   if (!isset(_options)) {
     _options = {};
   }
-  if ($("#mod_insertEqLogicValue").length == 0) {
+  if ($("#mod_insertEqLogicValue").length === 0) {
     $('body').append('<div id="mod_insertEqLogicValue" title="{{Sélectionner un équipement}}" ></div>');
 
     $("#mod_insertEqLogicValue").dialog({
@@ -235,7 +235,7 @@ nextdom.eqLogic.refreshValue = function(queryParams) {
     eqLogics[queryParams[i].eqLogic_id] = {eqLogic: eqLogic, version: eqLogic.attr('data-version')};
     sends[queryParams[i].eqLogic_id] = {version: eqLogic.attr('data-version')};
   }
-  if (Object.keys(eqLogics).length == 0) {
+  if (Object.keys(eqLogics).length === 0) {
     return;
   }
   var paramsSpecifics = {

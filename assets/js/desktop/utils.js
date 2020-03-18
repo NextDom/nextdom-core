@@ -358,13 +358,3 @@ function decodeHtmlEntities(message) {
   temporaryTextArea.innerHTML = message;
   return temporaryTextArea.value;
 }
-
-function sprintf(template, keysToReplace) {
-  console.log(template);
-  var result = template
-  var keys = Object.keys(keysToReplace)
-  for (var k in keys) {
-    result = result.replace(new RegExp('#\{' + keys[k] + '\}'), keysToReplace[keys[k]]);
-  }
-  console.log(result);
-}

@@ -190,7 +190,7 @@ nextdom.object.summaryUpdate = function(queryParams) {
     objects[queryParams[i].object_id] = {object: object, version: object.attr('data-version')};
     sends[queryParams[i].object_id] = {version: object.attr('data-version')};
   }
-  if (Object.keys(objects).length == 0) {
+  if (Object.keys(objects).length === 0) {
     return;
   }
   var paramsRequired = [];

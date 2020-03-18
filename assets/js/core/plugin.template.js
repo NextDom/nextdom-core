@@ -86,8 +86,9 @@ $(".li_eqLogic,.eqLogicDisplayCard").on('click', function () {
   } else {
     $('.eqLogic').show();
   }
-  if ($('.li_eqLogic').length != 0) {
-    $('.li_eqLogic').removeClass('active');
+  var liEqLogic = document.getElementsByClassName('li_eqLogic');
+  if (liEqLogic.length !== 0) {
+    liEqLogic.classList.remove('active');
   }
   $(this).addClass('active');
   if ($('.li_eqLogic[data-eqLogic_id=' + $(this).attr('data-eqLogic_id') + ']').html() !== undefined) {
@@ -361,9 +362,10 @@ $('#div_pageContainer').on('click', '.cmd .cmdAction[data-action=configure]', fu
 $('.eqLogicThumbnailContainer').packery();
 
 if (is_numeric(getUrlVars('id'))) {
-  if ($('#ul_eqLogic .li_eqLogic[data-eqLogic_id=' + getUrlVars('id') + ']').length != 0) {
-    $('#ul_eqLogic .li_eqLogic[data-eqLogic_id=' + getUrlVars('id') + ']').click();
-  } else if ($('.eqLogicThumbnailContainer .eqLogicDisplayCard[data-eqLogic_id=' + getUrlVars('id') + ']').length != 0) {
+  var eqLogicItem = $('#ul_eqLogic .li_eqLogic[data-eqLogic_id=' + getUrlVars('id') + ']');
+  if (eqLogicItem.length !== 0) {
+    eqLogicItem.click();
+  } else if (document.querySelectorAll('.eqLogicThumbnailContainer .eqLogicDisplayCard[data-eqLogic_id=' + getUrlVars('id') + ']').length !== 0) {
     $('.eqLogicThumbnailContainer .eqLogicDisplayCard[data-eqLogic_id=' + getUrlVars('id') + ']').click();
   } else if ($('.eqLogicThumbnailDisplay').html() === undefined) {
     $('#ul_eqLogic .li_eqLogic:first').click();

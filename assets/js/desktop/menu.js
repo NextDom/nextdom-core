@@ -159,18 +159,6 @@ function initTopMenu() {
             success: function (messages) {
                 tableMessageContainer.html('');
                 for (var messageIndex in messages) {
-                    sprintf('' +
-                      '<li data-message_id="#{id}">' +
-                      '  <a href="#">' +
-                      '    <div class="pull-left"><img class="#{iconClass}" src="#{icon}"></div>' +
-                      '    <h4>#{plugin}' +
-                      '    <div class="btn btn-sm btn-danger removeMessage pull-right"><i class="fas fa-trash no-spacing"></i></div>' +
-                      '    <small class="pull-right"><i class="fas fa-clock spacing-right"></i>#{date}</small>' +
-                      '    </h4>' +
-                      '    <p>#{message}</p>' +
-                      '    <p>#{action}</p>' +
-                      '  </a>' +
-                      '</li>', messages[messageIndex]);
                     tableMessageContainer.append('' +
                       '<li data-message_id="' + messages[messageIndex]['id'] + '">' +
                       '<a href="#">' +
@@ -211,12 +199,11 @@ function initTopMenu() {
  *
  */
 function limitTreeviewMenu() {
-    var maxHeight = 0;
     $(".sidebar-menu").children(".treeview").each(function () {
-        if (document.getElementsByClassName('sidebar-collapse').length == 0) {
+        if (document.getElementsByClassName('sidebar-collapse').length === 0) {
             $(this).children(".treeview-menu").css("max-height", "auto");
         } else {
-            maxHeight = window.innerHeight - document.getElementById($(this).attr('id')).offsetTop - 44 - 48 - 30;
+            var maxHeight = window.innerHeight - document.getElementById($(this).attr('id')).offsetTop - 44 - 48 - 30;
             $(this).children(".treeview-menu").css("max-height", maxHeight);
         }
     });
@@ -233,7 +220,7 @@ function setHeaderPosition(init) {
     var alertHeaderMargin = 0;
     var headerSize;
     var paddingSideClose;
-    if ($(window).width() < 768) {
+    if (window.innerWidth < 768) {
         headerSize = 100;
         if ($('body').hasClass("sidebar-open")) {
             paddingSideClose = 245;
@@ -267,7 +254,7 @@ function setHeaderPosition(init) {
                         headerHeight = container.children('.content-header').height();
                     }
                     var scrollValue = document.documentElement.scrollTop;
-                    if (scrollValue > scrollLimit && $(window).width() >= 768) {
+                    if (scrollValue > scrollLimit && window.innerWidth >= 768) {
                         container.children(".content-header").css("top", headerSize - 15);
                         container.children(".content").css("padding-top", headerHeight + 30);
                         container.children(".content-header").children("div").removeClass('scroll-shadow').addClass('fixed-shadow');
@@ -287,22 +274,21 @@ function setHeaderPosition(init) {
 
 /**
  * Search input field activation on dedicated pages
- *
- * @param calcul true if you want to calcul dynamicly the height of menu
  */
 function sideMenuResize() {
     var lists = document.getElementsByTagName("li");
-    if ($('body').hasClass("sidebar-collapse") || ($(window).width() < 768 && !$('body').hasClass("sidebar-open"))) {
+    var bodyClassList = document.getElementsByTagName('body')[0].classList;
+    if (bodyClassList.contains('sidebar-collapse') || (window.innerWidth < 768 && !bodyClassList.contains('sidebar-open'))) {
         // Menu closed
-        $(".sidebar-menu").css("overflow", "");
-        $(".treeview-menu").css("overflow-y", "auto");
-
-        $(".sidebar-menu").css("height", "none");
-        for (var i = 0; i < lists.length; ++i) {
-            if (lists[i].getAttribute("id") !== undefined && lists[i].getAttribute("id") !== null) {
-                if (lists[i].getAttribute("id").match("side")) {
-                    var liIndex = lists[i].getAttribute("id").slice(-1);
-                    lists[i].getElementsByClassName("treeview-menu")[0].style.maxHeight = $(window).height() - 50 - 70 - (44 * liIndex) + "px";
+        // Todo : Merge css {}
+        $('.sidebar-menu').css('overflow', '');
+        $('.sidebar-menu').css('height', 'none');
+        $('.treeview-menu').css('overflow-y', 'auto');
+        for (var menuItemIndex = 0; menuItemIndex < lists.length; ++menuItemIndex) {
+            if (lists[menuItemIndex].getAttribute("id") !== undefined && lists[menuItemIndex].getAttribute("id") !== null) {
+                if (lists[menuItemIndex].getAttribute("id").match("side")) {
+                    var liIndex = lists[menuItemIndex].getAttribute("id").slice(-1);
+                    lists[menuItemIndex].getElementsByClassName("treeview-menu")[0].style.maxHeight = window.innerHeight - 50 - 70 - (44 * liIndex) + "px";
                 }
             }
         }
@@ -322,12 +308,12 @@ function sideMenuResize() {
         }
 
         // If double header because of little resolution
-        if ($(window).width() < 767) {
+        if (window.innerWidth < 767) {
             sidemenuDoubleHeaderPadding = 50;
         }
 
         // Height adjustement
-        $(".sidebar-menu").css("height", $(window).height() - 50 - 70 - sidemenuBottomPadding - sidemenuDoubleHeaderPadding);
+        $(".sidebar-menu").css("height", window.innerHeight - 50 - 70 - sidemenuBottomPadding - sidemenuDoubleHeaderPadding);
         for (var i = 0; i < lists.length; ++i) {
             if (lists[i].getAttribute("id") !== undefined && lists[i].getAttribute("id") !== null) {
                 if (lists[i].getAttribute("id").match("side")) {

@@ -43,8 +43,8 @@ initEvents();
  */
 function loadInformations() {
   $(document).ready(function () {
-    $('pre').height($(window).height() - 300);
-    $('#ul_object').height($(window).height() - 279);
+    $('pre').height(window.innerHeight - 300);
+    $('#ul_object').height(window.innerHeight - 279);
     $('#ul_object').css("overflow-y", "auto");
     $('#ul_object').css("padding-right", "5px");
     sortList("#ul_object", "timing");

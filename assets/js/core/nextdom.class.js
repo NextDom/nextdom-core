@@ -263,7 +263,7 @@ nextdom.forceSyncHour = function(queryParams) {
 };
 
 nextdom.getCronSelectModal = function(_options, _callback) {
-  if ($("#mod_insertCronValue").length == 0) {
+  if ($("#mod_insertCronValue").length === 0) {
     $('body').append('<div id="mod_insertCronValue" title="{{Assistant cron}}" ></div>');
     $("#mod_insertCronValue").dialog({
       closeText: '',
@@ -301,7 +301,7 @@ nextdom.getSelectActionModal = function(_options, _callback) {
   if (!isset(_options)) {
     _options = {};
   }
-  if ($("#mod_insertActionValue").length == 0) {
+  if ($("#mod_insertActionValue").length === 0) {
     $('body').append('<div id="mod_insertActionValue" title="{{Sélectionner la commande}}" ></div>');
     $("#mod_insertActionValue").dialog({
       closeText: '',

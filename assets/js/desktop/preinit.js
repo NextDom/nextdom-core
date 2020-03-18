@@ -66,6 +66,13 @@ $(function () {
 $(window).resize(function () {
   // OBSOLETE ?
   initRowOverflow();
+
+  // Close left menu if small resolution comming
+  var body = document.getElementsByTagName('body')[0];
+  if (window.innerWidth < 768 && !body.classList.contains('sidebar-collapse')) {
+    body.classList.add('sidebar-collapse');
+  }
+
   // Left menu resize
   sideMenuResize();
   limitTreeviewMenu();

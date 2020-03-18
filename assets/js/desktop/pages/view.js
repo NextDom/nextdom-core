@@ -175,7 +175,7 @@ function editWidgetMode(_mode, _save) {
     if (!isset(_save) || _save) {
       saveWidgetDisplay({view: 1});
     }
-    if ($('.eqLogicZone .eqLogic-widget.ui-draggable').length > 0) {
+    if (document.querySelectorAll('.eqLogicZone .eqLogic-widget.ui-draggable').length > 0) {
       $('.eqLogicZone .eqLogic-widget').draggable('disable');
       $('.eqLogicZone .eqLogic-widget.allowResize').resizable('destroy');
     }

@@ -439,7 +439,7 @@ function addAction(_action, _type) {
 function loadFromUrl() {
     var interactIdFromUrl = getUrlVars('id');
     if (is_numeric(interactIdFromUrl)) {
-        if ($('.interactDisplayCard[data-interact_id=' + interactIdFromUrl + ']').length !== 0) {
+        if (document.querySelectorAll('.interactDisplayCard[data-interact_id=' + interactIdFromUrl + ']').length !== 0) {
             var url = document.location.toString();
             displayInteract(interactIdFromUrl);
         }

@@ -498,7 +498,7 @@ nextdom.cmd.getSelectModal = function(_options, _callback) {
   if (!isset(_options)) {
     _options = {};
   }
-  if ($("#mod_insertCmdValue").length == 0) {
+  if ($("#mod_insertCmdValue").length === 0) {
     $('body').append('<div id="mod_insertCmdValue" title="{{Sélectionner la commande}}" ></div>');
     $("#mod_insertCmdValue").dialog({
       closeText: '',

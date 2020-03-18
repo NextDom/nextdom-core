@@ -801,16 +801,16 @@ function initScenarioEditorEvents() {
     $('#bt_moveBlocDown').off('click').on('click', function (event) {
         if (BLOC_FOCUS || ACTION_FOCUS) {
             if (BLOC_LAST_FOCUS) {
-                if (BLOC_FOCUS.next().length != 0) {
+                if (BLOC_FOCUS.next().length !== 0) {
                     BLOC_FOCUS.insertAfter(BLOC_FOCUS.next())
                 } else {
                     let BLOC_PARENT = BLOC_FOCUS.parent().parent();
-                    if (BLOC_PARENT.hasClass("expression") && BLOC_PARENT.next().length != 0) {
+                    if (BLOC_PARENT.hasClass("expression") && BLOC_PARENT.next().length !== 0) {
                         BLOC_PARENT.insertAfter(BLOC_PARENT.next())
                     }
                 }
             } else {
-                if (ACTION_FOCUS.next().length != 0) {
+                if (ACTION_FOCUS.next().length !== 0) {
                     ACTION_FOCUS.insertAfter(ACTION_FOCUS.next())
                 }
             }
@@ -821,7 +821,7 @@ function initScenarioEditorEvents() {
     $('#bt_moveBlocUp').off('click').on('click', function (event) {
         if (BLOC_FOCUS || ACTION_FOCUS) {
             if (BLOC_LAST_FOCUS) {
-                if (BLOC_FOCUS.prev().length != 0) {
+                if (BLOC_FOCUS.prev().length !== 0) {
                     BLOC_FOCUS.insertBefore(BLOC_FOCUS.prev())
                 } else {
                     let BLOC_PARENT = BLOC_FOCUS.parent().parent();
@@ -2297,7 +2297,7 @@ function selectCmdExpression(elementData, expressionElement) {
 function loadFromUrl() {
     var scenarioIdFromUrl = getUrlVars('id');
     if (is_numeric(scenarioIdFromUrl)) {
-        if ($('.scenarioDisplayCard[data-scenario_id=' + scenarioIdFromUrl + ']').length !== 0) {
+        if (document.querySelectorAll('.scenarioDisplayCard[data-scenario_id=' + scenarioIdFromUrl + ']').length !== 0) {
             let url = document.location.toString();
             var tabCode = GENERAL_TAB;
             if (url.match('#')) {

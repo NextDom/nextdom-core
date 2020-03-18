@@ -194,13 +194,11 @@ $("#bt_removeView").on('click', function(event) {
 });
 
 if (is_numeric(getUrlVars('view_id'))) {
-    if ($('#ul_view .li_view[data-view_id=' + getUrlVars('view_id') + ']').length != 0) {
-        $('#ul_view .li_view[data-view_id=' + getUrlVars('view_id') + ']').click();
-    } else {
-        $('#ul_view .li_view:first').click();
-    }
-} else {
-    $('#ul_view .li_view:first').click();
+  var targetView = $('#ul_view .li_view[data-view_id=' + getUrlVars('view_id') + ']');
+  if (targetView.length === 0) {
+    targetView = $('#ul_view .li_view:first');
+  }
+  targetView.click();
 }
 
 $("#div_viewZones").sortable({axis: "y", cursor: "move", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
