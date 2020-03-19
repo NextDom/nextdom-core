@@ -129,17 +129,17 @@ function initEvents() {
         var el = $(this);
         bootbox.confirm('{{Etes-vous sûr de vouloir faire une sauvegarde de votre NextDom ?</br>Une fois lancée cette opération ne peut pas être annulée...}}', function (result) {
             if (result) {
-                $('#bt_backupNextDom').addClass('disabled');
-                el.find('.fa-refresh').show();
-                el.find('.fa-floppy-o').hide();
-                $('#md_backupInfo').dialog({title: "{{Avancement de la sauvegarde}}"});
-                $("#md_backupInfo").dialog('open');
                 nextdom.backup.backup({
                     error: function (error) {
                         notify('Erreur', error.message, 'error');
                     },
                     success: function () {
-                        getNextDomLog(1, 'backup');
+                      $('#bt_backupNextDom').addClass('disabled');
+                      el.find('.fa-refresh').show();
+                      el.find('.fa-floppy-o').hide();
+                      $('#md_backupInfo').dialog({title: "{{Avancement de la sauvegarde}}"});
+                      $("#md_backupInfo").dialog('open');
+                      getNextDomLog(1, 'backup');
                     }
                 });
             }
@@ -151,20 +151,20 @@ function initEvents() {
         var el = $(this);
         bootbox.confirm('{{Etes-vous sûr de vouloir restaurer NextDom avec la sauvegarde}} <b>' + $('#sel_restoreBackup option:selected').text() + '</b> ?</br>{{Une fois lancée cette opération ne peut pas être annulée...}}</br><span style="color:red;font-weight: bold;">{{IMPORTANT la restauration d\'un backup est une opération risquée et n\'est à utiliser qu\'en dernier recours.}}</span>', function (result) {
             if (result) {
-                switchNotify(0);
-                $('#bt_restoreNextDom').addClass('disabled');
-                $('#bt_restoreRepoNextDom').addClass('disabled');
-                el.find('.fa-refresh').show();
-                el.find('.fa-window-restore').hide();
-                $('#md_backupInfo').dialog({title: "{{Avancement de la restauration}}"});
-                $("#md_backupInfo").dialog('open');
                 nextdom.backup.restoreLocal({
                     backup: $('#sel_restoreBackup').value(),
                     error: function (error) {
                         notify('Erreur', error.message, 'error');
                     },
                     success: function () {
-                        getNextDomLog(1, 'restore');
+                      switchNotify(0);
+                      $('#bt_restoreNextDom').addClass('disabled');
+                      $('#bt_restoreRepoNextDom').addClass('disabled');
+                      el.find('.fa-refresh').show();
+                      el.find('.fa-window-restore').hide();
+                      $('#md_backupInfo').dialog({title: "{{Avancement de la restauration}}"});
+                      $("#md_backupInfo").dialog('open');
+                      getNextDomLog(1, 'restore');
                     }
                 });
             }
@@ -226,19 +226,18 @@ function initEvents() {
         var el = $(this);
         bootbox.confirm('{{Etes-vous sûr de vouloir restaurer NextDom avec la sauvegarde Cloud}} <b>' + $('#sel_restoreRepoNextDom option:selected').text() + '</b> ?</br>{{Une fois lancée cette opération ne peut pas être annulée...}}</br><span style="color:red;font-weight: bold;">{{IMPORTANT la restauration d\'un backup est une opération risquée et n\'est à utiliser qu\'en dernier recours.}}</span>', function (result) {
             if (result) {
-                switchNotify(0);
-                $.hideAlert();
-                $('#bt_restoreNextDom').addClass('disabled');
-                $('#bt_restoreRepoNextDom').addClass('disabled');
-                el.find('.fa-refresh').show();
-                el.find('.fa-window-restore').hide();
                 nextdom.backup.restoreCloud({
                     backup: $('#sel_restoreRepoNextDom').value(),
                     repo: el.attr('data-repo'),
                     error: function (error) {
-                        notify('Erreur', error.message, 'error');
+                      notify('Erreur', error.message, 'error');
                     },
                     success: function () {
+                      switchNotify(0);
+                      $('#bt_restoreNextDom').addClass('disabled');
+                      $('#bt_restoreRepoNextDom').addClass('disabled');
+                      el.find('.fa-refresh').show();
+                      el.find('.fa-window-restore').hide();
                       $('#md_backupInfo').dialog({title: "{{Avancement de la restauration}}"});
                       $("#md_backupInfo").dialog('open');
                       getNextDomLog(1, 'restore');

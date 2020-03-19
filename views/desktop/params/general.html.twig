@@ -228,14 +228,15 @@
                                     <a class="btn btn-primary" id="bt_forceSyncHour"><i class="fas fa-clock-o"></i><span>{{ 'general.synchronization'|trans }}</span></a>
                                 </div>
                             </div>
-                            <div class="form-group col-sm-8 col-xs-12 col-padding">
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
                                 <label for="ntp-optional-server" class="control-label" data-toggle="tooltip" title="" data-original-title="{{'general.tooltip.time_server'|trans}}">{{'general.time_server'|trans}}</label>
-                                <div class="mix-group">
-                                    <input type="text" id="ntp-optional-server" class="configKey form-control" data-l1key="ntp::optionalServer">
-                                    <div>
-                                        <input type="checkbox" id="ignore-hour-check" class="configKey" data-l1key="ignoreHourCheck">
-                                        <label for="ignore-hour-check" class="control-label label-check" data-toggle="tooltip" title="" data-original-title="{{'general.tooltip.ignore_system_time'|trans}}">{{'general.ignore_system_time'|trans}}</label>
-                                    </div>
+                                <input type="text" id="ntp-optional-server" class="configKey form-control" data-l1key="ntp::optionalServer">
+                            </div>
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label for="ntp-optional-server" class="control-label" data-toggle="tooltip" title="">{{'general.time_server_checking'|trans}}</label>
+                                <div>
+                                    <input type="checkbox" id="ignore-hour-check" class="configKey" data-l1key="ignoreHourCheck">
+                                    <label for="ignore-hour-check" class="control-label label-check" data-toggle="tooltip" title="" data-original-title="{{'general.tooltip.time_server_ignore'|trans}}">{{'general.time_server_ignore'|trans}}</label>
                                 </div>
                             </div>
                         </div>

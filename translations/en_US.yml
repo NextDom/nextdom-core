@@ -227,7 +227,6 @@ general:
     stateCode: "Country code (FR, US ...)"
     various: "Various"
   horodatage: "Timestamp"
-  ignore_system_time: "do not check system time"
   installation_key: "Installation Key"
   language: "Language"
   language-used: "Language used"
@@ -246,6 +245,8 @@ general:
   time: "Time"
   time_zone: "Time zone"
   time_server: "Time Server (optional)"
+  time_server_checking: "Check system time"
+  time_server_ignore: "Ignore"
   tooltip:
     address: "Home address, so you don't have to fill it in plugins"
     coordinates: "Geographical coordinates of your house, so you don't have to fill it in plugins"
@@ -256,7 +257,7 @@ general:
     nextdom_name : "Name of the Nexdom system"
     time_zone: "Time zone used by Nexdom"
     time_server: "Time Server used for time synchronization"
-    ignore_system_time: "Indicates to Nexdom to ignore system time"
+    time_server_ignore: "Indicates to Nexdom to ignore system time"
 health:
   tmp-space-left: "Tmp space left"
   tmp-problem: "On error, try to restart. If this doesn't work, disable plugin one by one."

@@ -93,17 +93,8 @@ window.onresize = function () {
  * Event for scrolling inside display page
  */
 window.onscroll = function () {
-  var goOnTopButton = document.getElementById('bt_goOnTop');
-
-  // GoOnTop button management
-  if (goOnTopButton !== undefined && goOnTopButton !== null) {
-    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-      goOnTopButton.style.display = 'block';
-    } else {
-      goOnTopButton.style.display = 'none';
-    }
-  }
-
+  // goOnTopButton
+  goOnTopDisplay();
   // Left menu resize
   sideMenuResize();
   limitTreeviewMenu();
@@ -126,6 +117,7 @@ function entryPoint() {
   $.fn.modal.Constructor.prototype.enforceFocus = function () {
   };
 
+  // Menus init
   initSideBar();
   initTopMenu();
 
@@ -143,6 +135,7 @@ function entryPoint() {
     window.scrollTo(0, 0);
   });
 
+  // Link managemeent init
   initLinkInterception();
 
   // Modal opening event handler
@@ -151,6 +144,7 @@ function entryPoint() {
     $(this).find(".modal-body :input:visible:first").focus();
   });
 
+  // Modals init
   initBootbox();
   initModals();
 
@@ -175,6 +169,9 @@ function entryPoint() {
   };
 }
 
+/**
+ * Init bootbox language
+ */
 function initBootbox() {
   // Define question box language
   if (isset(nextdom_language)) {
@@ -184,22 +181,27 @@ function initBootbox() {
   }
 }
 
+/**
+ * Init of modals pages
+ */
 function initModals() {
   var modalOptions = {
     autoOpen: false,
     modal: false,
     closeText: '',
-    height: (jQuery(window).height() - 100),
+    height: getModalHeight(),
     width: getModalWidth(),
     show: {effect: 'blind', duration: 200},
     resizable: false,
     open: function () {
       $('body').css({overflow: 'hidden'});
-      $(this).dialog('option', 'position', {my: 'center', at: 'center', of: window});
+      modalsAdjust();
+      $(".wrapper").addClass("blur");
     },
     beforeClose: function (event, ui) {
       $('body').css({overflow: 'inherit'});
       $(this).empty();
+      $(".wrapper").removeClass("blur");
     }
   };
   // Help modal trigger declaration
@@ -208,6 +210,9 @@ function initModals() {
   $("#md_modal2").dialog(modalOptions);
 }
 
+/**
+ * Init the link interception procedure
+ */
 function initLinkInterception() {
   $('body').on('click', 'a', function (e) {
     if ($(this).hasClass('noOnePageLoad')

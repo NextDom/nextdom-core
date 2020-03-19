@@ -40,7 +40,7 @@ class FirstUsePageTest extends BasePageTest
         $this->crawler->filter('#toStep2')->click();
         sleep(3);
         $this->crawler->filter('#in_change_password')->sendKeys('nextdom-test');
-        $this->crawler->filter('#in_change_passwordToo')->sendKeys('nextdom-test');
+        $this->crawler->filter('#in_change_password_confirm')->sendKeys('nextdom-test');
         $this->crawler->filter('#toStep3')->click();
         sleep(4);
         $this->crawler->filter('#skipStep4')->click();
