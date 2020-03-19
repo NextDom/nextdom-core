@@ -81,10 +81,10 @@ function editWidgetMode(_mode, _save) {
         if (!isset(_save) || _save) {
             saveWidgetDisplay({dashboard: 1});
         }
-        if ($('.div_displayEquipement .eqLogic-widget.ui-resizable').length > 0) {
+        if (document.querySelectorAll('.div_displayEquipement .eqLogic-widget.ui-resizable').length > 0) {
             $('.div_displayEquipement .eqLogic-widget.allowResize').resizable('destroy');
         }
-        if ($('.div_displayEquipement .eqLogic-widget.ui-draggable').length > 0) {
+        if (document.querySelectorAll('.div_displayEquipement .eqLogic-widget.ui-draggable').length > 0) {
             $('.div_displayEquipement .eqLogic-widget').draggable('disable');
         }
         $('.div_displayEquipement .eqLogic-widget').css('box-shadow', '');

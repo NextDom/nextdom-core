@@ -43,7 +43,7 @@ initEvents();
  */
 function loadInformations() {
     if (is_numeric(getUrlVars('id'))) {
-        if ($('.objectDisplayCard[data-object_id=' + getUrlVars('id') + ']').length !== 0) {
+        if (document.querySelectorAll('.objectDisplayCard[data-object_id=' + getUrlVars('id') + ']').length !== 0) {
             $('.objectDisplayCard[data-object_id=' + getUrlVars('id') + ']').click();
         } else {
             $('.objectDisplayCard:first').click();
@@ -376,7 +376,7 @@ function addSummaryInfo(_el, _summary) {
 function loadFromUrl() {
     var objectIdFromUrl = getUrlVars('id');
     if (is_numeric(objectIdFromUrl)) {
-        if ($('.objectDisplayCard[data-object_id=' + objectIdFromUrl + ']').length !== 0) {
+        if (document.querySelectorAll('.objectDisplayCard[data-object_id=' + objectIdFromUrl + ']').length !== 0) {
             var url = document.location.toString();
             loadObjectConfiguration(objectIdFromUrl);
         }

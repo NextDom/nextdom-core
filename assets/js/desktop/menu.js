@@ -196,7 +196,7 @@ function limitTreeviewMenu() {
         if (document.getElementsByClassName('sidebar-collapse').length === 0) {
             $(this).children(".treeview-menu").css("max-height", "auto");
         } else {
-            maxHeight = window.innerHeight - document.getElementById($(this).attr('id')).offsetTop - 44 - 48 - 30;
+            var maxHeight = window.innerHeight - document.getElementById($(this).attr('id')).offsetTop - 44 - 48 - 30;
             $(this).children(".treeview-menu").css("max-height", maxHeight);
         }
     });
@@ -267,22 +267,21 @@ function setHeaderPosition(init) {
 
 /**
  * Search input field activation on dedicated pages
- *
- * @param calcul true if you want to calcul dynamicly the height of menu
  */
 function sideMenuResize() {
-    var lists = document.getElementsByTagName('li');
-    if ($('body').hasClass('sidebar-collapse') || (window.innerWidth < 768 && !$('body').hasClass('sidebar-open'))) {
+    var lists = document.getElementsByTagName("li");
+    var bodyClassList = document.getElementsByTagName('body')[0].classList;
+    if (bodyClassList.contains('sidebar-collapse') || (window.innerWidth < 768 && !bodyClassList.contains('sidebar-open'))) {
         // Menu closed
+        // Todo : Merge css {}
         $('.sidebar-menu').css('overflow', '');
-        $('.treeview-menu').css('overflow-y', 'auto');
-
         $('.sidebar-menu').css('height', 'none');
-        for (var i = 0; i < lists.length; ++i) {
-            if (lists[i].getAttribute('id') !== undefined && lists[i].getAttribute('id') !== null) {
-                if (lists[i].getAttribute('id').match('side')) {
-                    var liIndex = lists[i].getAttribute('id').slice(-1);
-                    lists[i].getElementsByClassName('treeview-menu')[0].style.maxHeight = window.innerHeight - 50 - 70 - (44 * liIndex) + 'px';
+        $('.treeview-menu').css('overflow-y', 'auto');
+        for (var menuItemIndex = 0; menuItemIndex < lists.length; ++menuItemIndex) {
+            if (lists[menuItemIndex].getAttribute("id") !== undefined && lists[menuItemIndex].getAttribute("id") !== null) {
+                if (lists[menuItemIndex].getAttribute("id").match("side")) {
+                    var liIndex = lists[menuItemIndex].getAttribute("id").slice(-1);
+                    lists[menuItemIndex].getElementsByClassName("treeview-menu")[0].style.maxHeight = window.innerHeight - 50 - 70 - (44 * liIndex) + "px";
                 }
             }
         }

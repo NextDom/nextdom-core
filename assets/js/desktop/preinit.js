@@ -68,8 +68,9 @@ window.onresize = function () {
   initRowOverflow();
 
   // Close left menu if small resolution comming
-  if (window.innerWidth < 768) {
-    document.getElementsByTagName('body')[0].classList.remove('sidebar-open');
+  var body = document.getElementsByTagName('body')[0];
+  if (window.innerWidth < 768 && !body.classList.contains('sidebar-collapse')) {
+    body.classList.add('sidebar-collapse');
   }
 
   // Left menu resize
