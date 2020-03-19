@@ -14,21 +14,21 @@ function editWidgetCmdMode(_mode) {
   if (_mode == 0) {
     $(".eqLogic-widget.eqLogic_layout_table table.tableCmd").removeClass('table-bordered');
     $.contextMenu('destroy');
-    if ($('.eqLogic-widget.allowReorderCmd.eqLogic_layout_table table.tableCmd.ui-sortable').length > 0) {
+    if (document.querySelectorAll('.eqLogic-widget.allowReorderCmd.eqLogic_layout_table table.tableCmd.ui-sortable').length > 0) {
       try {
         $('.eqLogic-widget.allowReorderCmd.eqLogic_layout_table table.tableCmd').sortable('destroy');
       } catch (e) {
 
       }
     }
-    if ($('.eqLogic-widget.allowReorderCmd.eqLogic_layout_default.ui-sortable').length > 0) {
+    if (document.querySelectorAll('.eqLogic-widget.allowReorderCmd.eqLogic_layout_default.ui-sortable').length > 0) {
       try {
         $('.eqLogic-widget.allowReorderCmd.eqLogic_layout_default').sortable('destroy');
       } catch (e) {
 
       }
     }
-    if ($('.eqLogic-widget.ui-draggable').length > 0) {
+    if (document.querySelectorAll('.eqLogic-widget.ui-draggable').length > 0) {
       $('.eqLogic-widget.allowReorderCmd').off('mouseover', '.cmd');
       $('.eqLogic-widget.allowReorderCmd').off('mouseleave', '.cmd');
     }

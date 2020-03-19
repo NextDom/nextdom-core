@@ -2291,7 +2291,7 @@ function selectCmdExpression(elementData, expressionElement) {
 function loadFromUrl() {
     var scenarioIdFromUrl = getUrlVars('id');
     if (is_numeric(scenarioIdFromUrl)) {
-        if ($('.scenarioDisplayCard[data-scenario_id=' + scenarioIdFromUrl + ']').length !== 0) {
+        if (document.querySelectorAll('.scenarioDisplayCard[data-scenario_id=' + scenarioIdFromUrl + ']').length !== 0) {
             let url = document.location.toString();
             var tabCode = GENERAL_TAB;
             if (url.match('#')) {
