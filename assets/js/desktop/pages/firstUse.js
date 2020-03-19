@@ -85,7 +85,7 @@ function initEvents() {
     $('#toStep3').click(function () {
       var newPassword = $('#in_change_password').val();
       if (newPassword !== '') {
-        if (newPassword === $('#in_change_passwordToo').val()) {
+        if (newPassword === $('#in_change_password_confirm').val()) {
           updateUserPassword(newPassword)
         } else {
           notify('Erreur', '{{Les deux mots de passe ne sont pas identiques !}}', 'error')
