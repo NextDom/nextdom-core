@@ -244,9 +244,6 @@ function updateScenarioControls(scenarioId, data) {
         playButton.show();
         stopButton.hide();
     }
-    // Frame color
-    var color = $('.scenario[data-scenario_id="' + scenarioId + '"]').closest(".card").find(".card-icon").css("backgroundColor");
-    scenarioContainer.find(".div_scenario").css("background-color", color.replace(')', ', 0.2)').replace('rgb', 'rgba'));
     // Status Label
     stateField.removeClass('label-danger label-info label-success label-warning label-default')
     if (isset(data.active) && data.active != 1) {
