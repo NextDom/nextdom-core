@@ -855,9 +855,11 @@ class NextDomHelper
             UserManager::regenerateHash();
             foreach (UpdateManager::listRepo() as $repoCode => $repoData) {
                 $classCode = 'repo_' . $repoCode;
-                $fullClassName = $repoCode['class'];
-                if (class_exists($fullClassName) && method_exists($fullClassName, 'cronDaily') && ConfigManager::byKey($classCode . '::enable') == 1) {
-                    $fullClassName::cronDaily();
+                if(!empty($repoCode['class'])) {
+                    $fullClassName = $repoCode['class'];
+                    if (class_exists($fullClassName) && method_exists($fullClassName, 'cronDaily') && ConfigManager::byKey($classCode . '::enable') == 1) {
+                        $fullClassName::cronDaily();
+                    }
                 }
             }
 
