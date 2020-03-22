@@ -39,6 +39,7 @@ class CommandeController extends BaseController
      *
      * @return string Content of commandes page
      *
+     * @throws \Exception
      */
     public static function get(&$pageData): string
     {

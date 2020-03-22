@@ -120,14 +120,8 @@ class AdministrationController extends BaseController
                 )
             );
             if ($memData[1] != 0) {
-                $pageData['memoryLoad'] = round(100 * $memData[2] / $memData[1], 2);
-                if ($memData[1] < 1024) {
-                    $memTotal = $memData[1] . ' B';
-                } elseif ($memData[1] < (1024 * 1024)) {
-                    $memTotal = round($memData[1] / 1024, 0) . ' MB';
-                } else {
-                    $memTotal = round($memData[1] / 1024 / 1024, 0) . ' GB';
-                }
+                $pageData['memoryLoad']  = round(100 * $memData[2] / $memData[1], 2);
+                $memTotal                = self::swapData($swapData, $memData);
                 $pageData['totalMemory'] = $memTotal;
             } else {
                 $pageData['memoryLoad'] = 0;
@@ -135,13 +129,7 @@ class AdministrationController extends BaseController
             }
             if ($swapData[1] != 0) {
                 $pageData['swapLoad'] = round(100 * $swapData[2] / $swapData[1], 2);
-                if ($swapData[1] < 1024) {
-                    $swapTotal = $swapData[1] . ' B';
-                } elseif ($memData[1] < (1024 * 1024)) {
-                    $swapTotal = round($swapData[1] / 1024, 0) . ' MB';
-                } else {
-                    $swapTotal = round($swapData[1] / 1024 / 1024, 0) . ' GB';
-                }
+                $swapTotal            = self::swapData($swapData, $memData);
                 $pageData['administrationSwapTotal'] = $swapTotal;
             } else {
                 $pageData['swapLoad'] = 0;
@@ -155,7 +143,7 @@ class AdministrationController extends BaseController
     private static function countErrorLog(&$pageData)
     {
         $pageData['logCount'] = 0;
-        $currentLogfile = Utils::init('logfile');
+        Utils::init('logfile');
         $logFilesList = [];
         $dir = opendir(NEXTDOM_LOG);
         while ($file = readdir($dir)) {
@@ -172,5 +160,22 @@ class AdministrationController extends BaseController
                 $pageData['logCount']++;
             }
         }
+    }
+
+    /**
+     * @param array $swapData
+     * @param array $memData
+     * @return string
+     */
+    private static function swapData(array $swapData, array $memData): string
+    {
+        if ($swapData[1] < 1024) {
+            $swapTotal = $swapData[1] . ' B';
+        } elseif ($memData[1] < (1024 * 1024)) {
+            $swapTotal = round($swapData[1] / 1024, 0) . ' MB';
+        } else {
+            $swapTotal = round($swapData[1] / 1024 / 1024, 0) . ' GB';
+        }
+        return $swapTotal;
     }
 }

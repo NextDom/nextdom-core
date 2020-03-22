@@ -36,6 +36,7 @@ class EqlogicController extends BaseController
      *
      * @param array $pageData
      * @return string
+     * @throws \Exception
      */
     public static function get(&$pageData): string
     {

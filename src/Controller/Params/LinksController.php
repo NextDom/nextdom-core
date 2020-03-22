@@ -39,6 +39,7 @@ class LinksController extends BaseController
      *
      * @return string Content of links page
      *
+     * @throws \Exception
      */
     public static function get(&$pageData): string
     {

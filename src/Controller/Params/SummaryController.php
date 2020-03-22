@@ -38,6 +38,7 @@ class SummaryController extends BaseController
      *
      * @return string Content of summary page
      *
+     * @throws \Exception
      */
     public static function get(&$pageData): string
     {

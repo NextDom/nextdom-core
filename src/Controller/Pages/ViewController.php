@@ -47,6 +47,7 @@ class ViewController extends BaseController
      *
      * @throws CoreException
      * @throws \ReflectionException
+     * @throws \Exception
      */
     public static function get(&$pageData): string
     {

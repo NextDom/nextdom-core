@@ -39,6 +39,7 @@ class Plan3dConfigure extends BaseAbstractModal
      * @return string
      * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
+     * @throws \Exception
      */
     public static function get(): string
     {

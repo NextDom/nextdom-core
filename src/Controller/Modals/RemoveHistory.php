@@ -34,6 +34,7 @@ class RemoveHistory extends BaseAbstractModal
      * Render remove history modal
      *
      * @return string
+     * @throws \Exception
      */
     public static function get(): string
     {

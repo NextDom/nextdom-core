@@ -35,6 +35,7 @@ class HistoryCalcul extends BaseAbstractModal
      * Render history calcul modal
      *
      * @return string
+     * @throws \Exception
      */
     public static function get(): string
     {

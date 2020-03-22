@@ -39,6 +39,7 @@ class ObjectConfigure extends BaseAbstractModal
      * @return string
      * @throws CoreException
      * @throws \ReflectionException
+     * @throws \Exception
      */
     public static function get(): string
     {
