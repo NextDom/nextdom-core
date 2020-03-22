@@ -39,6 +39,7 @@ class DatabaseController extends BaseController
      *
      * @return string Content of database page
      *
+     * @throws \Exception
      */
     public static function get(&$pageData): string
     {

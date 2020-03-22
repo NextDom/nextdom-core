@@ -37,6 +37,7 @@ class ShutdownController extends BaseController
      *
      * @return string Content of shutdown page
      *
+     * @throws \Exception
      */
     public static function get(&$pageData): string
     {

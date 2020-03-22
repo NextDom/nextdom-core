@@ -39,6 +39,7 @@ class ReportConfigController extends BaseController
      *
      * @return string Content of report config page
      *
+     * @throws \Exception
      */
     public static function get(&$pageData): string
     {

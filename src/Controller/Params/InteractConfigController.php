@@ -39,6 +39,7 @@ class InteractConfigController extends BaseController
      *
      * @return string Content of interaction config page
      *
+     * @throws \Exception
      */
     public static function get(&$pageData): string
     {

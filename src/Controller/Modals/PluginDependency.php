@@ -36,7 +36,7 @@ class PluginDependency extends BaseAbstractModal
      * Render plugin daemon modal
      *
      * @return string
-     * @throws \Exception
+     * @throws \NextDom\Exceptions\CoreException
      */
     public static function get(): string
     {

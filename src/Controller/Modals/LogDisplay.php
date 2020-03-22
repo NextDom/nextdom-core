@@ -36,6 +36,7 @@ class LogDisplay extends BaseAbstractModal
      * Render log display modal
      *
      * @return string
+     * @throws \Exception
      */
     public static function get(): string
     {
