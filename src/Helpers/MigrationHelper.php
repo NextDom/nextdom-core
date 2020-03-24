@@ -501,7 +501,7 @@ class MigrationHelper
      */
     private static function migrate_0_7_1($logFile = LogTarget::MIGRATION)
     {
-        DBHelper::exec("`ALTER TABLE `interactQuery` ENGINE=InnoDB;`"); //Peut-être fait plutôt.
+        DBHelper::exec("`ALTER TABLE `interactQuery` ENGINE=InnoDB;`"); //Peut-être fait plus tot.
     }
 }
 }
