@@ -492,4 +492,16 @@ class MigrationHelper
     {
         DBHelper::exec("ALTER message ADD icon MEDIUMTEXT");
     }
+
+    /***************************************************************** 0.7.1 Migration process *****************************************************************/
+    /**
+     * 0.7.1 Migration process
+     * @param string $logFile log name file to display information
+     * @throws \Exception
+     */
+    private static function migrate_0_7_1($logFile = LogTarget::MIGRATION)
+    {
+        DBHelper::exec("`ALTER TABLE `interactQuery` ENGINE=InnoDB;`"); //Peut-être fait plutôt.
+    }
+}
 }
