@@ -504,4 +504,3 @@ class MigrationHelper
         DBHelper::exec("`ALTER TABLE `interactQuery` ENGINE=InnoDB;`"); //Peut-être fait plus tot.
     }
 }
-}
