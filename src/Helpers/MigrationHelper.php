@@ -501,6 +501,8 @@ class MigrationHelper
      */
     private static function migrate_0_8_0($logFile = LogTarget::MIGRATION)
     {
+        DBHelper::exec("ALTER TABLE `cmd` add `html` mediumtext COLLATE utf8_unicode_ci;");
+        DBHelper::exec("ALTER TABLE `type` DROP COLUMN `scenario`;");
         DBHelper::exec("RENAME TABLE `widgets` TO `widget`");
         $createWidget = "CREATE TABLE IF NOT EXISTS `widget` (
               `id` int(11) NOT NULL AUTO_INCREMENT,
