@@ -188,7 +188,6 @@ CREATE TABLE IF NOT EXISTS `scenario` (
   `description` TEXT NULL,
   `configuration` TEXT NULL,
   `order` INT NULL DEFAULT 9999,
-  `type` VARCHAR(127) NULL DEFAULT 'expert',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `name` (`group` ASC, `object_id` ASC, `name` ASC),
   INDEX `group` (`group` ASC),
@@ -538,6 +537,22 @@ CREATE TABLE IF NOT EXISTS `note` (
   `text` TEXT NULL,
   PRIMARY KEY (`id`))
   ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `widget`
+-- -----------------------------------------------------
+CREATE TABLE `widget` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `type` varchar(27) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `subtype` varchar(27) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `template` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `display` text COLLATE utf8_unicode_ci,
+  `replace` text COLLATE utf8_unicode_ci,
+  `test` text COLLATE utf8_unicode_ci,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique` (`type`,`subtype`,`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

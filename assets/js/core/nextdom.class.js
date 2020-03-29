@@ -391,3 +391,7 @@ nextdom.cleanFileSystemRight = function (queryParams) {
 nextdom.consistency = function (queryParams) {
   nextdom.private.ajax('NextDom', 'consistency', queryParams);
 };
+
+nextdom.version = function(queryParams) {
+  nextdom.private.ajax('NextDom', 'version', queryParams);
+};

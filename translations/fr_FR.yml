@@ -106,11 +106,13 @@ common:
   enough: "NOK"
   error-b: "[Erreur] "
   error: "Erreur"
+  export: "Exporter"
   finish: "Terminer"
   here: "Ici"
   hours: "heures"
   id: "ID"
   ignore: "Ignorer"
+  import: "Importer"
   in-progress: "En cours"
   info: "Info"
   information: "Informations"
@@ -413,7 +415,7 @@ osdb:
   clean_command: Vider la commande
   click_on_command: "Cliquez sur une commande de la liste ou tapez une commande personnalisée ci-dessous :"
   command_list: Liste des commandes
-  database: "Base de donnée"
+  database: "Base de données"
   editors: "Editeurs"
   file_editor: "Editeur de fichiers"
   historic: Historique
@@ -430,6 +432,7 @@ osdb:
 page-title:
   administration: Administration
   api: API
+  backups: Backup
   cache: Cache
   backups: Sauvegardes
   commands: Commandes
@@ -440,6 +443,7 @@ page-title:
   health: Santé
   historics: Historiques
   interacts: Interactions
+  widgets: Widgets
   links: Liens
   logs: Logs
   networks: Réseaux
@@ -699,6 +703,7 @@ sidebar:
   tools: Outils
   tools-summary: Résumé domotique
   tools-interactions: Interactions
+  tools-widgets: Widgets
   tools-scenarios: Scénarios
   tools-scenarios-manage: Gestion Scénarios
   tools-notes: Notes
@@ -772,6 +777,29 @@ welcome:
   never-show: Ne plus afficher
   notify: Sauvegarde réussie
   title: Bienvenue dans NextDom
+widget:
+  choose: Choisir
+  display: "Affichage"
+  display_option: "Option d’Affichage"
+  duplicate: "Dupliquer"
+  edit: "Edition Widget"
+  fold: "Replier"
+  icon: Icône
+  id: "ID : "
+  identity: Identité
+  no_widgets_click_add_to_start: "Vous n'avez encore aucun widget. Cliquez sur ajouter pour commencer."
+  preview: Prévisualisation
+  programming: Programmation
+  replacement: Remplacement
+  subType: "Sous-type"
+  template: "Modèle"
+  type: "Type"
+  unfold: "Déplier"
+  use_by_list: "Commande(s) liée(s)"
+  widgets: "widget(s)"
+  width_desktop: "Largeur desktop"
+  width_mobile: "Largeur mobile"
+  you_have_n_widgets: "Vous avez %s widget(s)..."
 
 # Ancien format
 "401 - Accès non autorisé": "401 - Accès non autorisé"
