@@ -86,4 +86,5 @@ class AjaxParams extends Enum
     const VALUE = 'value';
     const VERSION = 'version';
     const VIEW_ID = 'view_id';
+    const WIDGET = 'widget';
 }

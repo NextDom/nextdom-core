@@ -181,3 +181,7 @@ view_edit:
   path: 'view_edit'
   controller: NextDom\Controller\Pages\ViewEditController::get
   condition: 'admin'
+widget:
+  path: 'widget'
+  controller: NextDom\Controller\Tools\WidgetController::get
+  condition: 'admin'

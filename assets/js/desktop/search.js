@@ -95,6 +95,7 @@ function activateGlobalSearch() {
         "update.list",
         "update",
         "health",
+        "widget",
     ];
     if (fullUrl.indexOf('p=') != -1) {
         page = fullUrl.split('p=')[1].replace('#', '').split('&')[0];
@@ -227,7 +228,7 @@ function generalSearchOnPages(value) {
             break;
 
         case 'object':
-            if (search == '') {
+            if (search === '') {
                 $('.objectDisplayCard').parent().show();
             } else {
                 $('.objectDisplayCard').parent().hide();
@@ -255,10 +256,10 @@ function generalSearchOnPages(value) {
                 var name = eqLogic.attr('data-name').toLowerCase();
                 var type = eqLogic.attr('data-type').toLowerCase();
                 $(this).find(".fa-chevron-down").removeClass("fa-chevron-down").addClass("fa-chevron-right");
-                if (search == '' || name.indexOf(search) >= 0 || type.indexOf(search) >= 0) {
+                if (search === '' || name.indexOf(search) >= 0 || type.indexOf(search) >= 0) {
                     eqLogic.show();
                     eqLogic.parents('.object').show();
-                    if (search != '' && !eqLogic.closest('.panel-collapse').hasClass("in")) {
+                    if (search !== '' && !eqLogic.closest('.panel-collapse').hasClass("in")) {
                         eqLogic.closest('.panel-collapse').css({'height' : '' });
                         eqLogic.closest('.panel-collapse').addClass("in");
                     }
@@ -354,7 +355,7 @@ function generalSearchOnPages(value) {
             break;
 
         case 'update':
-            if(search == ''){
+            if(search === ''){
                 $('.box').show();
             } else {
                 $('.box').hide();
@@ -368,7 +369,7 @@ function generalSearchOnPages(value) {
             break;
 
         case 'health':
-            if (search == '') {
+            if (search === '') {
                 $('.box').parent().show();
             } else {
                 $('.box').parent().hide();
@@ -379,6 +380,22 @@ function generalSearchOnPages(value) {
                     }
                 });
             }
+            break;
+        case 'widget':
+            if (search === '') {
+                $('.panel-collapse.in').closest('.panel').find('.accordion-toggle.collapsed').click();
+                $('.widgetDisplayCard').show();
+            } else {
+                $('.panel-collapse:not(.in)').closest('.panel').find('.accordion-toggle').click();
+                $('.widgetDisplayCard').hide();
+                $('.widgetDisplayCard .title').each(function () {
+                    var cardTitle = $(this).text().toLowerCase();
+                    if (cardTitle.indexOf(search) !== -1) {
+                        $(this).closest('.widgetDisplayCard').show();
+                    }
+                });
+            }
+            $('.widgetListContainer').packery();
             break;
     }
 };

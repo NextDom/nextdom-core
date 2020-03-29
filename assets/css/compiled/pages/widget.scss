@@ -1,0 +1,244 @@
+/* This file is part of Jeedom.
+*
+* Jeedom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* Jeedom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/* This file is part of NextDom.
+*
+* NextDom is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* NextDom is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+*
+* @Support <https://www.nextdom.org>
+* @Email   <admin@nextdom.org>
+* @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
+*/
+/* Need to be first */
+@import "../../graphics/_colors.scss";
+
+/* Tuiles widget */
+.widgetDisplayCard {
+    >.title {
+        margin: 0;
+    }
+    span.widget-icon {
+        font-size: 4em;
+        line-height: 88px;
+        border-radius: 10px;
+        padding: 10px;
+        vertical-align: middle;
+        padding-bottom: 2px;
+    }
+    img {
+        height: 80px;
+        width: auto;
+    }
+}
+.displayWidget-overlay {
+    height: 100%;
+    position: absolute;
+    z-index: 9999;
+    right: -250px;
+    background-color: rgba(0,0,0,0.7);
+    overflow-x: hidden;
+    padding-top: 60px;
+    width: 250px;
+    float: left;
+    & a:hover {
+        color: #f1f1f1;
+    }
+    & .closebtn {
+        position: absolute;
+        top: 0;
+        left: 250px;
+        font-size: 36px;
+    }
+}
+.widget-widget{
+    background-color: $grey;
+    display: inline-block;
+    position : relative;
+    vertical-align: top;
+    color : $white;
+    & a{
+        color : $white;
+    }
+}
+
+/* Groupes */
+.widget-group {
+    padding: 5px;
+}
+.widget-sub-group {
+    padding: 5px 5px 0 0;
+}
+.widget-group-right {
+    padding: 5px 10px 5px 5px;
+}
+
+/* Blocs */
+.widget-action-bloc {
+    vertical-align: top;
+    display: table-cell;
+    padding: 0 10px 5px 5px;
+    width: 110px;
+}
+.widget-action {
+    padding: 0 0 0 6px;
+}
+.widget-si {
+    width: 105px;
+    padding-left: 5px;
+    display: table-cell;
+}
+.widget-si-bloc {
+    padding: 0 0 5px 0;
+    display: table-cell;
+}
+.widget-condition {
+    padding: 0;
+    display: table-cell;
+    vertical-align: top;
+}
+.widget-alors,
+.widget-sinon {
+    display: table-cell;
+    width: 110px;
+    vertical-align: top;
+    padding: 5px;
+}
+.widget-alors .dropdown {
+    display: inline-block;
+}
+.widget-for,
+.widget-in,
+.widget-at {
+    width: 105px;
+    padding-left: 5px;
+    display: table-cell;
+}
+.widget-code {
+    padding-left: 5px;
+    vertical-align: top;
+}
+.widget-code-text {
+    min-height: 170px;
+}
+.widget-comment {
+    width: 25px;
+    padding-left: 5px;
+    display: table-cell;
+    vertical-align: top;
+}
+.widget-comment-text {
+    min-height: 75px;
+}
+.widget-faire {
+    display: table-cell;
+    width: 110px;
+    vertical-align: top;
+    padding: 5px;
+}
+.widget-title {
+    font-size: 20px;
+    color: $white;
+    vertical-align: middle;
+}
+.widget-subtitle {
+    vertical-align: top;
+    display: table-cell;
+    padding:{
+      left: 5px;
+      right: 0;
+    }
+}
+.widget-text {
+    min-height: 30px;
+}
+.widget-unity {
+    float: right;
+    font-size: 11px;
+    padding: 0 10px 0 0;
+}
+.widget-unity-line {
+    float: right;
+    font-size: 11px;
+    padding: 13px 2px 0 0;
+}
+.widget-bloc-focused {
+    border: 2px dashed !important;
+}
+.widget-action-focused {
+    border: 2px dotted !important;
+}
+
+/* Boutons */
+.widget-expand {
+    margin-right: 5px;
+    width: 23px;
+}
+.widget-btn-repeat {
+    margin:{
+      left: 4px;
+      top: 5px;
+    }
+    width: 30px;
+    padding-left: 8px;
+    vertical-align: initial;
+}
+.widget-delete {
+    vertical-align: top;
+    display: table-cell;
+    width: 15px;
+    i {
+        position: relative;
+        z-index: 2;
+    }
+}
+
+/* Sortable */
+.bt_sortable {
+    vertical-align: middle;
+    margin: -2px 9px 0 -2px;
+    cursor: all-scroll;
+    font-size: 18px;
+}
+.sortable-placeholder {
+    border: 2px dashed $lightgrey;
+}
+
+/* Element */
+#div_display_config {
+    input[type=text]{
+        width: 400px;
+    }
+}
+
+.fieldset_display_preview {
+    background-color: #16329110;
+}
+
+/* Element */
+#div_display_preview {
+    margin-bottom: 20px;
+}

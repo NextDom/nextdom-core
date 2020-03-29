@@ -57,7 +57,6 @@ use NextDom\Model\Entity\Parents\IsVisibleEntity;
 use NextDom\Model\Entity\Parents\NameEntity;
 use NextDom\Model\Entity\Parents\OrderEntity;
 use NextDom\Model\Entity\Parents\RefreshEntity;
-use NextDom\Model\Entity\Parents\TypeEntity;
 
 /**
  * Scenario
@@ -69,7 +68,7 @@ class Scenario extends BaseEntity
 {
     const TABLE_NAME = NextDomObj::SCENARIO;
 
-    use ConfigurationEntity, DisplayEntity, IsVisibleEntity, IsActiveEntity, NameEntity, OrderEntity, RefreshEntity, TypeEntity;
+    use ConfigurationEntity, DisplayEntity, IsVisibleEntity, IsActiveEntity, NameEntity, OrderEntity, RefreshEntity;
 
     /**
      * @var array

@@ -140,6 +140,7 @@ function gen_js {
            assets/js/core/backup.class.js \
            assets/js/core/nextdom_market.class.js \
            assets/js/core/interact.class.js \
+           assets/js/core/widget.class.js \
            assets/js/core/update.class.js \
            assets/js/core/plan.class.js \
            assets/js/core/log.class.js \

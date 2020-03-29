@@ -46,5 +46,6 @@ class AjaxActions extends Enum
     const UPDATE = 'update';
     const USER = 'user';
     const VIEW = 'view';
+    const WIDGET = 'widget';
 
 }
