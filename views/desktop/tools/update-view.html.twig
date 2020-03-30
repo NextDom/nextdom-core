@@ -174,4 +174,37 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="restorePluginBackupModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="bootbox-close-button close" data-dismiss="modal">×</button>
+                    <h4>{{ 'update-view.selective_update' | trans }}</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger">{{ 'update-view.please_consult_release_note' | trans }} <a target="_blank" href="https://nextdom.github.io/core/fr_FR/noteVersion">{{'common.here' | trans }}</a></div>
+                    <fieldset>
+                        <div class="alert alert-danger">{{ 'update-view.warning_special_option'|trans }}</div>
+                        <legend>{{ 'update-view.restoration' | trans }}</legend>
+                        <div class="form-group has-warning">
+                            <label class="col-xs-6 control-label label-sticker-big">{{ 'update-view.update_to_reapply' | trans }}</label>
+                            <div class="col-xs-5">
+                                <select id="sel_updateVersion" class="form-control updateOption" data-l1key="update::reapply">
+                                    <option value="">{{ 'update-view.none' | trans }}</option>
+                                    {% for update in updatesList %}
+                                        <option value="{{ update }}">{{ update }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-danger" data-dismiss="modal"><i class="fas fa-minus-circle"></i>{{ 'common.cancel' | trans }}</a>
+                    <a class="btn btn-success" id="startUpdateButton"><i class="fas fa-download"></i>{{ 'update-view.restorePlugin' | trans }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>

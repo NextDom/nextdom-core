@@ -444,7 +444,6 @@ class PluginManager
 
     /**
      * Test si le plugin est actif
-     * @TODO: Doit passer en static
      * @param $id
      * @return int
      * @throws \Exception
@@ -460,4 +459,40 @@ class PluginManager
         }
         return $result;
     }
+    /**
+     * Lance le backup d'un plugin
+     * @param $plugin
+     * @throws \Exception
+     */
+    public static function backupPluginBeforeUpdate(Plugin $plugin)
+    {
+        LogHelper::addAlert(LogTarget::UPDATE, __('Backup de la version courante de : ') . $plugin->getLogicalId() . "\n");
+        if ($plugin->isType(NextDomObj::PLUGIN)) {
+            $targetDir = NEXTDOM_ROOT . '/plugins/' . $plugin->getLogicalId();
+            if (!file_exists($targetDir)) {
+                throw new CoreException(__('Impossible de sauvegarder le dossier : ' . $targetDir ));
+            }
+            try {
+                $plugin = PluginManager::byId($plugin->getLogicalId());
+                if (is_object($plugin)) {
+                    LogHelper::addAlert(LogTarget::UPDATE, __('Backup en cours ...'));
+                    $plugin_id = $plugin->getId();
+                    if (true === method_exists($plugin_id, 'backup')) {
+                        $plugin_id::backup();
+                    }
+                    if((!file_exists(BackupManager::getBackupDirectory().'/plugins/'))){
+                        FileSystemHelper::mkdirIfNotExists(BackupManager::getBackupDirectory().'/plugins/');
+                    } else {
+                        BackupManager::rotateBackups(BackupManager::getBackupDirectory().'/plugins/');
+                    }
+                    FileSystemHelper::createZip($targetDir, BackupManager::getBackupDirectory().'/plugins/' . BackupManager::getBackupFilename($plugin->getLogicalId()), null);
+                    LogHelper::addAlert(LogTarget::UPDATE, __("Backup OK\n"));
+                }
+            } catch (\Exception $e) {
+                throw new CoreException(__('Impossible de sauvegarder le dossier : ' . $targetDir ));
+            }
+        }
+    }
+
+
 }

@@ -144,6 +144,7 @@ class Update extends BaseEntity
             $class = UpdateManager::getRepoDataFromName($this->getSource())['phpClass'];
             if (class_exists($class) && method_exists($class, 'downloadObject') && ConfigManager::byKey($this->getSource() . '::enable') == 1) {
                 $this->preInstallUpdate();
+                PluginManager::backupPluginBeforeUpdate($this);
                 $cibDir = NextDomHelper::getTmpFolder(Common::MARKET) . '/' . $this->getLogicalId();
                 if (file_exists($cibDir)) {
                     rrmdir($cibDir);

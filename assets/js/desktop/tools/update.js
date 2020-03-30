@@ -37,6 +37,7 @@
 var tabsList = $('#accordionUpdate > .tab-pane > .row > div');
 var updateInfoModal = $('#updateInfoModal');
 var selectiveUpdateModal = $('#selectiveUpdateModal');
+var restorePluginBackupModal= $('#restorePluginBackupModal');
 var updateCollapseButton = $('#updateCollapseButton');
 var updateUncollapseButton = $('#updateUncollapseButton');
 var updateLogView = $('#updateLog');
@@ -153,6 +154,13 @@ function initEvents() {
     checkSingleUpdate(updateId);
   });
 
+  // Restore plugin backup button
+  tabsList.delegate('.restoreBackupPlugin', 'click', function () {
+    var updateId = $(this).closest('.box').attr('data-id');
+    restoreBackupPlugin(updateId);
+  });
+
+
   // Save button
   $('#saveUpdateChanges').click(saveUpdateChanges);
 }
@@ -260,6 +268,7 @@ function createUpdateBox(updateData,updateId) {
   if (updateData.type != 'core') {
     htmlData += '<a class="btn btn-danger btn-sm pull-right remove" ><i class="fas fa-trash"></i>{{Supprimer}}</a>';
     htmlData += '<a class="btn btn-action btn-sm update pull-right" title="{{Re-installer}}"><i class="fas fa-refresh"></i>{{Reinstaller}}</a> ';
+    htmlData += '<a class="btn btn-action btn-sm pull-left restoreBackupPlugin" ><i class="fas fa-check"></i>{{Restaurer}}</a>';
   }
   if (updateData.status == 'update') {
     htmlData += '<a class="btn btn-warning btn-sm update pull-right" title="{{Mettre à jour}}"><i class="fas fa-refresh"></i>{{Mettre à jour}}</a> ';
@@ -331,6 +340,17 @@ function checkSingleUpdate(updateId) {
     }
   });
 }
+
+
+/**
+ * Restore backup on single item
+ *
+ * @param updateId Id of the item to check
+ */
+function restoreBackupPlugin(updateId) {
+  loadModal('restoreBackupPlugin', '{{Restore plugin backup}}', 'update.restorePlugin&id=' + updateId);
+}
+
 
 /**
  * Remove item from NextDom

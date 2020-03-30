@@ -178,6 +178,10 @@ update.list:
   path: 'update.list'
   controller: NextDom\Controller\Modals\UpdateList::get
   condition: 'admin'
+update.restorePluginBackup:
+  path: 'update.restorePluginBackup'
+  controller: NextDom\Controller\Modals\UpdateRestorePluginBackup::get
+  condition: 'admin'
 update.send:
   path: 'update.send'
   controller: NextDom\Controller\Modals\UpdateSend::get
