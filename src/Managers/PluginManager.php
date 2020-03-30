@@ -234,6 +234,8 @@ class PluginManager
      */
     public static function heartbeat()
     {
+        // set the default timezone to UTC
+        date_default_timezone_set('UTC');
         foreach (self::listPlugin(true) as $plugin) {
             try {
                 $heartbeat = ConfigManager::byKey('heartbeat::delay::' . $plugin->getId(), 'core', 0);
