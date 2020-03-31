@@ -174,7 +174,7 @@ core:
   error-404: 404 - Page not found
   error-ajax: Unknown Ajax request
   error-bad-action: Misuse of a feature
-  incorrect-sys-date: The system date is incorrect (before or after %s %s):
+  incorrect-sys-date: "The system date is incorrect (before or after %s %s):"
 dashboard:
   all-categories: All
   grid-config: Configure the size of the grid
