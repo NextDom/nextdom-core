@@ -24,6 +24,7 @@ namespace NextDom\Controller\Pages;
 
 use NextDom\Controller\BaseController;
 use NextDom\Enums\ControllerData;
+use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Router;
@@ -64,9 +65,11 @@ class FirstUseController extends BaseController
             'serverTZoffsetMin' => Utils::getTZoffsetMin(),
             'serverDatetime' => Utils::getMicrotime()
         ];
-        $pageData[ControllerData::CSS_POOL][] = '/public/css/nextdom.css';
+
         $pageData[ControllerData::CSS_POOL][] = '/public/css/pages/firstUse.css';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/tools/backup.js';
         $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/pages/firstUse.js';
+        $pageData[ControllerData::AJAX_TOKEN] = AjaxHelper::getToken();
 
         return Render::getInstance()->get('desktop/pages/firstUse.html.twig', $pageData);
     }

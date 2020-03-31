@@ -85,23 +85,31 @@
                             <button id="toStep2" class="btn btn-primary nextBtn primary-bg pull-right" type="button">{{ 'common.next'|trans }}<i class="fas fa-caret-right spacing-left no-spacing"></i></button>
                         </div>
 
-                        <!-- Step 2 section : Change password -->
+                        <!-- Step 2 section : Choose backup or new install -->
                         <div class="row setup-content" id="step-2">
                             <div class="stepwizard">
-                                <h2 class="login-box-msg">{{ 'firstuse.password-title'|trans }}</h2>
-                                <h5>{{ 'firstuse.password-content'|trans }}</h5>
-                                <div id="register" tabindex="500">
-                                    <div class="passwd stepwizard-passwd">
-                                        <input type="password" id="in_change_password" placeholder="{{ 'firstuse.password-placeholder'|trans }}">
+                                <h2 class="login-box-msg">{{ 'firstuse.step-choose-title'|trans }}</h2>
+                                <div class="row">
+                                    <h5>{{ 'firstuse.step-choose-backup_or_new'|trans }}</h5>
+                                    <div id="import" class="col-sm-12 col-md-6">
+                                        <h5>{{ 'firstuse.import-content'|trans }}</h5>
+                                        <label for="bt_uploadBackup"><span class="btn btn-primary pull-right primary-bg" id="bt_import"><i class="fas fa-sign-in-alt spacing-right"></i>{{ 'firstuse.import.load-backup'|trans }}</span></label>
+                                        <input id="bt_uploadBackup" type="file" name="file" data-url="core/ajax/nextdom.ajax.php?action=backupupload&nextdom_token={{ AJAX_TOKEN }}" style="display: none;"/>
                                     </div>
-                                    <div class="passwd stepwizard-passwd">
-                                        <input type="password" id="in_change_password_confirm" placeholder="{{ 'firstuse.password-confirm-placeholder'|trans }}">
-                                    </div>
-                                    <div class="stepwizard-passwd">
-                                        <div class="progress progress-slim">
-                                            <div id="newPasswordProgress" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                                    <div id="register" tabindex="500" class="col-sm-12 col-md-6">
+                                        <h5>{{ 'firstuse.new-content'|trans }}</h5>
+                                        <div class="passwd stepwizard-passwd">
+                                            <input type="password" id="in_change_password" placeholder="{{ 'firstuse.password-placeholder'|trans }}">
                                         </div>
-                                        <span id="newPasswordLevel" class="label label-value" data-toggle="tooltip" title="" data-original-title="{{'security.rules'|trans}}"></span>
+                                        <div class="passwd stepwizard-passwd">
+                                            <input type="password" id="in_change_password_confirm" placeholder="{{ 'firstuse.password-confirm-placeholder'|trans }}">
+                                        </div>
+                                        <div class="stepwizard-passwd">
+                                            <div class="progress progress-slim">
+                                                <div id="newPasswordProgress" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                                            </div>
+                                            <span id="newPasswordLevel" class="label label-value" data-toggle="tooltip" title="" data-original-title="{{'security.rules'|trans}}"></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -233,6 +241,12 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div id="md_backupInfo">
+        <div class="content">
+            <pre id="pre_backupInfo" style="overflow: scroll;"></pre>
         </div>
     </div>
 

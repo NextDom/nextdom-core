@@ -200,6 +200,14 @@ class NextDomAjax extends BaseAjax
         $this->ajax->success();
     }
 
+    public function restoreLocal()
+    {
+        AuthentificationHelper::isConnectedAsAdminOrFail();
+        $this->ajax->checkToken();
+        BackupManager::restore(BackupManager::getBackupDirectory() . "/" . Utils::init(AjaxParams::BACKUP), true);
+        $this->ajax->success();
+    }
+
     public function removeBackup()
     {
         AuthentificationHelper::isConnectedAsAdminOrFail();
