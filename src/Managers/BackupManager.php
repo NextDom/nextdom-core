@@ -888,7 +888,7 @@ class BackupManager
      */
     public static function removeBackup(string $backupFilePath)
     {
-        if (Utils::checkPath($backupFilePath) && file_exists($backupFilePath)) {
+        if (Utils::checkPath($backupFilePath) && is_file($backupFilePath)) {
             unlink($backupFilePath);
         } else {
             throw new CoreException(__('Impossible de trouver le fichier : ') . $backupFilePath);
