@@ -312,7 +312,7 @@ $('#bt_uploadBackup').fileupload({
     start: function (e, data) {
       $('#bt_uploadBackup').parent().addClass('disabled');
       $('#bt_uploadBackup').parent().find('.fa-refresh').show();
-      $('#bt_uploadBackup').parent().find('.fa-cloud-upload-alt').hide();
+      $('#bt_uploadBackup').parent().find('.fa-sign-in-alt').hide();
     },
     done: function (e, data) {
         if (data.result.state != 'ok') {
@@ -349,6 +349,6 @@ $('#bt_uploadBackup').fileupload({
     always: function (e, data) {
       $('#bt_uploadBackup').parent().removeClass('disabled');
       $('#bt_uploadBackup').parent().find('.fa-refresh').hide();
-      $('#bt_uploadBackup').parent().find('.fa-cloud-upload-alt').show();
+      $('#bt_uploadBackup').parent().find('.fa-sign-in-alt').show();
     },
 });
