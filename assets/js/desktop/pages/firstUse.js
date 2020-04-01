@@ -333,7 +333,6 @@ $('#bt_uploadBackup').fileupload({
                     success: function () {
                       switchNotify(0);
                       $('#bt_uploadBackup').addClass('disabled');
-                      $('#bt_uploadBackup').addClass('disabled');
                       el.find('.fa-refresh').show();
                       el.find('.fa-window-restore').hide();
                       $('#md_backupInfo').dialog({title: "{{Avancement de la restauration}}"});
