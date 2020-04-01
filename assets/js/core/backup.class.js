@@ -21,10 +21,6 @@ nextdom.backup.backup = function(queryParams) {
 };
 
 nextdom.backup.restoreLocal = function(queryParams) {
-  nextdom.private.ajax('NextDom', 'restore', queryParams, ['backup']);
-};
-
-nextdom.backup.restoreBackupLocal = function(queryParams) {
   nextdom.private.ajax('NextDom', 'restoreLocal', queryParams, ['backup']);
 };
 

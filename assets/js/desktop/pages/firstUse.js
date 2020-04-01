@@ -315,26 +315,21 @@ $('#bt_uploadBackup').fileupload({
       $('#bt_uploadBackup').parent().find('.fa-sign-in-alt').hide();
     },
     done: function (e, data) {
-        if (data.result.state != 'ok') {
+        if (data.result.state !== 'ok') {
             notify('Erreur', data.result.result, 'error');
             return;
         }
-        notify('Info', '{{Fichier(s) ajouté(s) avec succès}}', 'success');
-        
-        var el = $(this);
+        notify('Info', '{{Backup ajouté avec succès}}', 'success');
         var filename = $('#bt_uploadBackup').value().replace(/^.*[\\\/]/, '');
         bootbox.confirm('{{Etes-vous sûr de vouloir restaurer NextDom avec la sauvegarde}} <b>' + filename + '</b> ?</br>{{Une fois lancée cette opération ne peut pas être annulée...}}</br><span style="color:red;font-weight: bold;">{{IMPORTANT la restauration d\'un backup est une opération risquée et n\'est à utiliser qu\'en dernier recours.}}</span>', function (result) {
             if (result) {
-                nextdom.backup.restoreBackupLocal({
+                nextdom.backup.restoreLocal({
                     backup: filename,
                     error: function (error) {
                         notify('Erreur', error.message, 'error');
                     },
                     success: function () {
                       switchNotify(0);
-                      $('#bt_uploadBackup').addClass('disabled');
-                      el.find('.fa-refresh').show();
-                      el.find('.fa-window-restore').hide();
                       $('#md_backupInfo').dialog({title: "{{Avancement de la restauration}}"});
                       $("#md_backupInfo").dialog('open');
                       getNextDomLog(1, 'restore');

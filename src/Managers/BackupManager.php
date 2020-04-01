@@ -873,9 +873,7 @@ class BackupManager
         $backups = self::getBackupFileInfo($backupDir, 'newest');
         $results = [];
         foreach ($backups as $c_backup) {
-            $path = $c_backup['file'];
-            $name = basename($path);
-            $results[$path] = $name;
+            $results[] = basename($c_backup['file']);
         }
         return $results;
     }
