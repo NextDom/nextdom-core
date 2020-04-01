@@ -37,4 +37,8 @@ class ConfigKey extends Enum
     const TMP_FOLDER = 'folder::tmp';
     const UPDATE_CMD_TO_VALUE = 'updateCmdToValue';
     const WIDGET_BACKGROUND_OPACITY = 'widget::background-opacity';
+    const NOTIFY_STATUS = 'notify::status';
+    const NOTIFY_POSITION = 'notify::position';
+    const NOTIFY_TIMEOUT = 'notify::timeout';
+    const NEXTDOM_FIRST_USE = 'nextdom::firstUse';
 }

@@ -67,6 +67,24 @@ $(document).ready(function () {
  * Init events on the profils page
  */
 function initEvents() {
+
+    // Backup modale init
+    $("#md_backupInfo").dialog({
+        closeText: '',
+        autoOpen: false,
+        modal: true,
+        height: jQuery(window).height() - 100,
+        width: getModalWidth(),
+        open: function () {
+            $("body").css({overflow: 'hidden'});
+            $(this).dialog("option", "position", {my: "center", at: "center", of: window});
+            $('#pre_backupInfo').css('height', $('#md_backupInfo').height());
+        },
+        beforeClose: function (event, ui) {
+            $("body").css({overflow: 'inherit'});
+        }
+    });
+
     // Step 2 asked
     $('#toStep2').click(function () {
       nextdom.user.login({
