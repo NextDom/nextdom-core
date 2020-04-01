@@ -16,15 +16,15 @@
  */
 
 require_once(__DIR__ . '/../../../src/core.php');
-require_once(__DIR__ . '/BaseControllerTest.php');
+require_once(__DIR__ . '/../libs/BaseControllerTest.php');
 
 class Plan3dHeaderConfigureModalControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (isset($_GET['plan3dHeader_id'])) {
             unset($_GET['plan3dHeader_id']);
@@ -38,7 +38,7 @@ class Plan3dHeaderConfigureModalControllerTest extends BaseControllerTest
         ob_start();
         $result = \NextDom\Controller\Modals\Plan3dHeaderConfigure::get();
         $scriptResult = ob_get_clean();
-        $this->assertContains('$(\'#div_plan3dHeaderConfigure\')', $result);
-        $this->assertContains('var plan3dHeader = ', $scriptResult);
+        $this->assertStringContainsString('$(\'#div_plan3dHeaderConfigure\')', $result);
+        $this->assertStringContainsString('var plan3dHeader = ', $scriptResult);
     }
 }

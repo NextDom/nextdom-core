@@ -42,14 +42,14 @@ $('#bt_chooseIcon').on('click', function () {
 
 $('#bt_uploadImage').fileupload({
     replaceFileInput: false,
-    url: 'core/ajax/view.ajax.php?action=uploadImage&id=' + view.id+'&nextdom_token='+NEXTDOM_AJAX_TOKEN,
+    url: 'src/ajax.php?target=View&action=uploadImage&id=' + view.id+'&nextdom_token='+NEXTDOM_AJAX_TOKEN,
     dataType: 'json',
     done: function (e, data) {
         if (data.result.state != 'ok') {
             notify('Core',data.result.result,'error');
             return;
         }
-        notify("Core","{{ Image ajoutée }}","success");
+        notify('Core',"{{ Image ajoutée }}","success");
     }
 });
 
@@ -60,7 +60,7 @@ $('#bt_removeBackgroundImage').off('click').on('click', function () {
         notify('Core',error.message,'error');
     },
     success: function () {
-        notify("Core","{{ Image supprimée }}","success");
+        notify('Core',"{{ Image supprimée }}","success");
     },
 });
 });
@@ -74,7 +74,7 @@ $('#bt_saveConfigureView').on('click', function () {
             notify('Core',error.message,'error');
         },
         success: function () {
-            notify("Core","{{ Vue sauvegardé }}","success");
+            notify('Core',"{{ Vue sauvegardé }}","success");
         },
     });
 });

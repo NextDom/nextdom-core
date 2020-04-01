@@ -16,15 +16,15 @@
  */
 
 require_once(__DIR__ . '/../../../src/core.php');
-require_once(__DIR__ . '/BaseControllerTest.php');
+require_once(__DIR__ . '/../libs/BaseControllerTest.php');
 
 class PlanConfigureModalControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (isset($_GET['id'])) {
             unset($_GET['id']);
@@ -38,7 +38,7 @@ class PlanConfigureModalControllerTest extends BaseControllerTest
         ob_start();
         $result = \NextDom\Controller\Modals\PlanConfigure::get();
         $scriptResult = ob_get_clean();
-        $this->assertContains('<fieldset id="fd_planConfigure">', $result);
-        $this->assertContains('var id = ', $scriptResult);
+        $this->assertStringContainsString('<fieldset id="fd_planConfigure">', $result);
+        $this->assertStringContainsString('var id = ', $scriptResult);
     }
 }

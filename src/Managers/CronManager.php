@@ -37,37 +37,20 @@ namespace NextDom\Managers;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
+use NextDom\Managers\Parents\BaseManager;
+use NextDom\Managers\Parents\CommonManager;
 use NextDom\Model\Entity\Cron;
 
 /**
  * Class CronManager
  * @package NextDom\Managers
  */
-class CronManager
+class CronManager extends BaseManager
 {
+    use CommonManager;
 
     const CLASS_NAME = Cron::class;
     const DB_CLASS_NAME = '`cron`';
-
-    /**
-     * Get cron object by his id
-     *
-     * @param int $cronId
-     *
-     * @return Cron
-     *
-     * @throws \Exception
-     */
-    public static function byId($cronId)
-    {
-        $value = [
-            'id' => $cronId,
-        ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE id = :id';
-        return DBHelper::getOneObject($sql, $value, self::CLASS_NAME);
-    }
 
     /**
      * Return cron object by class and function
@@ -85,10 +68,9 @@ class CronManager
             'class' => $className,
             'function' => $functionName,
         ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE class = :class
-                AND function = :function';
+        $sql = static::getBaseSQL() . '
+                WHERE `class` = :class
+                AND `function` = :function';
         if ($options != '') {
             $options = json_encode($options, JSON_UNESCAPED_UNICODE);
             $value['option'] = $options;
@@ -113,10 +95,9 @@ class CronManager
             'class' => $className,
             'function' => $functionName,
         ];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE class = :class
-                AND function = :function';
+        $sql = static::getBaseSQL() . '
+                WHERE `class` = :class
+                AND `function` = :function';
         if ($options != '') {
             $value['option'] = '%' . $options . '%';
             $sql .= ' AND `option` LIKE :option';
@@ -126,12 +107,13 @@ class CronManager
 
     /**
      * Clean cron that will never run
+     * @throws \Exception
      */
     public static function clean()
     {
         $crons = self::all();
         foreach ($crons as $cron) {
-            $cronExpression = new \Cron\CronExpression($cron->getSchedule(), new \Cron\FieldFactory);
+            $cronExpression = new \Cron\CronExpression($cron->getSchedule(), new \Cron\FieldFactory());
             try {
                 if (!$cronExpression->isDue()) {
                     $cronExpression->getNextRunDate();
@@ -151,12 +133,12 @@ class CronManager
      */
     public static function all($ordered = false)
     {
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME;
         if ($ordered) {
-            $sql .= ' ORDER BY deamon DESC';
+            return static::getAllOrdered('deamon', true);
         }
-        return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
+        else {
+            return static::getAll();
+        }
     }
 
     /**
@@ -195,6 +177,7 @@ class CronManager
 
     /**
      * Write jeeCron PID of current process
+     * @throws \Exception
      */
     public static function setPidFile()
     {
@@ -222,7 +205,7 @@ class CronManager
     /**
      * Return the current pid of jeecron or empty if not running
      *
-     * @return int Current jeeCron PID
+     * @return false|string Current jeeCron PID
      * @throws \Exception
      */
     public static function getPidFile()
@@ -253,7 +236,7 @@ class CronManager
      * @return string
      * @throws \Exception
      */
-    public static function convertCronSchedule($cron)
+    public static function convertCronSchedule(string $cron)
     {
         $return = str_replace('*/ ', '* ', $cron);
         preg_match_all('/([0-9]*\/\*)/m', $return, $matches, PREG_SET_ORDER, 0);

@@ -74,6 +74,8 @@ cache:
 commandes:
   influxDbIPLabel: IP
   influxDbPortLabel: Port
+  influxDbLoginLabel: Login
+  influxDbPasswordLabel: Mot de passe
   influxDbDatabaseNameLabel: Base de données
 common:
   action: "Action"
@@ -207,13 +209,24 @@ firstuse:
   welcome-content: |
     Bravo ! Vous venez d'installer votre solution domotique, l'assistant de première utilisation est activé !
     Celui-ci va vous guider dans le processus de configuration de votre solution domotique...
-footer:
-  about: A Propos de
-  licence: GPL Automation 2018
-  rights: All rights reserved
 general:
   hours: "Heures"
-  ignore_system_time: "Ignorer la vérification"
+  house:
+    address: "Adresse"
+    altitude: "Altitude"
+    coordinates: "Coordonnées"
+    city: "Ville"
+    here: "ici"
+    house: "Maison"
+    latitude: "Latitude"
+    livingSpace: "Surface habitable"
+    longitude: "Longitude"
+    nbOccupant: "Nombre d'occupant(s)"
+    postalCode: "Code postal"
+    site: "Pour trouver les coordonnées de votre maison rendez-vous "
+    stateCode: "Code pays (FR,US...)"
+    various: "Divers"
+  horodatage: "Horodatage"
   installation_key: "Clé d'installation"
   language: "Langage"
   language-used: "Langue utilisée"
@@ -223,6 +236,7 @@ general:
   last_known_date: "Dernière date connue"
   nextdom: "NextDom"
   nextdom_name: "Nom de votre NextDom "
+  parameters: "Paramètres"
   reset: "Remise à zéro"
   session_timeout: "Durée de vie de votre connexion"
   synchronization: "Synchronisation"
@@ -231,15 +245,21 @@ general:
   time: "Horodatage"
   time_zone: "Fuseau horaire"
   time_server: "Serveur de temps optionnel"
+  time_server_checking: "Vérification de l'heure système"
+  time_server_ignore: "Ignorer"
   tooltip:
+     address: "Adresse de votre maison, permet de ne pas avoir à la remplir dans les plugins"
+     coordinates: "Coordonées géographique de votre maison, permet de ne pas avoir à la remplir dans les plugins"
      installation_key: "Clé d'installation qui permet d'identifier votre NextDom quand il communique avec le market"
      session_timeout: "Durée de vie de votre connexion à NextDom si vous n'avez pas coché la case enregistrer cet ordinateur"
      language: "Langue à utiliser dans Nexdom"
      system_hardware: "Indique votre type de matériel"
      nextdom_name : "Nom de votre NextDom (utilisé notamment par le market)"
+     livingSpace: "Surface habitable votre maison, permet de ne pas avoir à la remplir dans les plugins"
+     nbOccupant: "Nombre d'occupant, permet de ne pas avoir à la remplir dans les plugins"
      time_zone: "Fuseau horaire de votre NextDom"
      time_server: "Permet d'ajouter un serveur de temps à NextDom utilisé lorsque NextDom force la synchronisation de l'heure"
-     ignore_system_time: "Ignorer la vérification de l'heure système"
+     time_server_ignore: "Ignorer la vérification"
 health:
   tmp-space-left: "Espace temporaire disponible"
   tmp-problem: "En cas d'erreur essayez de redémarrer. Si le problème persiste, testez en désactivant les plugins un à un jusqu'à trouver le coupable"
@@ -291,6 +311,8 @@ health:
   scenario-enabled: Scénarios actifs
   sudo-error: Appliquez les droits root à NextDom
   sudo-rights: Droits sudo
+  swapiness: Swapiness
+  swapiness-config: Pour des performances optimal le swapiness ne doit pas dépasser 20% si vous avez 1Go ou moins de mémoire
   system-date-error: Si la dernière heure enregistrée est fausse, il faut la remettre à zéro <a href="index.php?v=d&p=administration">ici</a>
   system-date: Date système (dernière heure enregistrée)
   title: Page Santé
@@ -366,7 +388,8 @@ network:
   external-access: "Accès externe"
   management: "Gestion autonome du réseau"
   mask: "Masque d'IP local"
-  mobile: "Ma connexion internet est une ligne mobile"
+  mobile: "Ma connexion mobile"
+  mobile-active: "J'utilise une connexion 4G"
   networks: "Réseaux"
   started: "Démarré : "
   stopped: "Arrêté"
@@ -494,6 +517,7 @@ repo:
     conf:
       stable: "NextDom Stable"
       draft: "NextDom Draft"
+      exclusivity: "NextDom Exclusivity"
       filters: "Afficher les filtres des sources"
   samba:
     conf:
@@ -633,6 +657,7 @@ security:
   high: Sécurité Forte
   very-high: Sécurité Trés Forte
 sidebar:
+  about: A Propos ...
   dashboard: Dashboard
   design: Design(s)
   default-object: Objet par défaut
@@ -659,6 +684,7 @@ sidebar:
   help-forum: Forum
   help-github: Github
   help-chat: Chat
+  licence: GPL Automation 2018
   menu-main: Menu Principal
   menu-manage: Menu Gestion
   objects-list: Liste Objets & Résumés
@@ -669,6 +695,7 @@ sidebar:
   plugins: Plugins
   plugins-markets: Gestion & Markets
   quick-notes: Quick Notes
+  rights: All rights reserved
   show-all: Afficher tout
   tools: Outils
   tools-summary: Résumé domotique

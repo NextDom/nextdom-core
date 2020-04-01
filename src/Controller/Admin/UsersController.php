@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Admin;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\ControllerData;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\SessionHelper;
 use NextDom\Managers\ConfigManager;
@@ -47,8 +48,8 @@ class UsersController extends BaseController
         $pageData['userLdapEnabled'] = ConfigManager::byKey('ldap::enable');
         $pageData['userSessionsList'] = SessionHelper::getSessionsList();
         $pageData['usersList'] = UserManager::all();
-        $pageData['JS_VARS']['ldapEnable'] = $pageData['userLdapEnabled'];
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/admin/user.js';
+        $pageData[ControllerData::JS_VARS]['ldapEnable'] = $pageData['userLdapEnabled'];
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/admin/user.js';
 
         return Render::getInstance()->get('/desktop/admin/users.html.twig', $pageData);
     }

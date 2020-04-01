@@ -18,15 +18,15 @@
 use NextDom\Managers\CacheManager;
 
 require_once(__DIR__ . '/../../../src/core.php');
-require_once(__DIR__ . '/BaseControllerTest.php');
+require_once(__DIR__ . '/../libs/BaseControllerTest.php');
 
 class ScenarioJsonEditModalControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (isset($_GET['id'])) {
             unset($_GET['id']);
@@ -40,7 +40,7 @@ class ScenarioJsonEditModalControllerTest extends BaseControllerTest
         ob_start();
         $result = \NextDom\Controller\Modals\ScenarioJsonEdit::get();
         $scriptResult = ob_get_clean();
-        $this->assertContains('<textarea id="ta_scenarioJsonEdit_scenario">', $result);
-        $this->assertContains('var scenarioJsonEdit_scenario_id = ', $scriptResult);
+        $this->assertStringContainsString('<textarea id="ta_scenarioJsonEdit_scenario">', $result);
+        $this->assertStringContainsString('var scenarioJsonEdit_scenario_id = ', $scriptResult);
     }
 }

@@ -47,11 +47,9 @@ if (isset($_GET['force_desktop'])) {
             } else {
                 $_SESSION['desktop_view'] = true;
             }
-
         }
     }
 }
-
 if ($goToMobile) {
     Utils::redirect('/mobile/index.html');
     die();

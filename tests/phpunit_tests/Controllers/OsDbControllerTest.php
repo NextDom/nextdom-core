@@ -16,15 +16,15 @@
  */
 
 require_once(__DIR__ . '/../../../src/core.php');
-require_once(__DIR__ . '/BaseControllerTest.php');
+require_once(__DIR__ . '/../libs/BaseControllerTest.php');
 
 class OsDbControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -33,8 +33,8 @@ class OsDbControllerTest extends BaseControllerTest
     {
         $pageData = [];
         $result = \NextDom\Controller\Tools\OsDbController::get($pageData);
-        $this->assertEquals('nextdomdev', $pageData['adminDbConfig']['dbname']);
-        $this->assertContains('id="osdb"', $result);
+        $this->assertEquals('nextdom', $pageData['adminDbConfig']['dbname']);
+        $this->assertStringContainsString('id="osdb"', $result);
     }
 
     public function testPageDataVars()

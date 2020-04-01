@@ -100,21 +100,6 @@ function loadInformations() {
  * Init events on the profils page
  */
 function initEvents() {
-    $("#md_cmdConfigureSelectMultiple").dialog({
-        closeText: '',
-        autoOpen: false,
-        modal: true,
-        height: (jQuery(window).height() - 150),
-        width: ((jQuery(window).width() - 150) < 1200) ? (jQuery(window).width() - 50) : 1200,
-        position: {my: 'center', at: 'center', of: window},
-        open: function () {
-            $("body").css({overflow: 'hidden'});
-        },
-        beforeClose: function (event, ui) {
-            $("body").css({overflow: 'inherit'});
-        }
-    });
-
     $('#table_widgetParametersCmd').delegate('.removeWidgetParameter', 'click', function () {
         $(this).closest('tr').remove();
     });
@@ -135,19 +120,17 @@ function initEvents() {
     });
 
     $('#bt_cmdConfigureRawObject').off('click').on('click', function () {
-        $('#md_modal2').dialog({title: "{{Informations}}"});
-        $("#md_modal2").load('index.php?v=d&modal=object.display&class=cmd&id=' + cmdInfo.id).dialog('open');
+        loadModal('modal2', '{{Informations}}', 'object.display&class=cmd&id=' + cmdInfo.id);
     });
 
     $('#bt_cmdConfigureGraph').on('click', function () {
-        $('#md_modal2').dialog({title: "{{Graphique des liens}}"});
-        $("#md_modal2").load('index.php?v=d&modal=graph.link&filter_type=cmd&filter_id=' + cmdInfo.id).dialog('open');
+        loadModal('modal2', '{{Graphique des liens}}', 'graph.link&filter_type=cmd&filter_id=' + cmdInfo.id);
     });
 
     $('#bt_cmdConfigureCopyHistory').off('click').on('click', function () {
         nextdom.cmd.getSelectModal({cmd: {type: 'info', subType: cmdInfo.subType}}, function (result) {
-            var target_id = result.cmd.id
-            var name = result.human
+            var target_id = result.cmd.id;;
+            var name = result.human;
             bootbox.confirm('{{Etes-vous sûr de vouloir copier l\'historique de}} <strong>' + cmdInfo.name + '</strong> {{vers}} <strong>' + name + '</strong> ? {{Il est conseillé de vider l\'historique de la commande}} : <strong>' + name + '</strong> {{ avant la copie}}', function (result) {
                 if (result) {
                     nextdom.history.copyHistoryToCmd({
@@ -389,7 +372,7 @@ function initEvents() {
             el.value(result.human);
             nextdom.cmd.displayActionOption(el.value(), '', function (html) {
                 el.closest('.' + type).find('.actionOptions').html(html);
-                taAutosize();
+                initTextAreaAutosize();
             });
         });
     });
@@ -401,7 +384,7 @@ function initEvents() {
             el.value(result.human);
             nextdom.cmd.displayActionOption(el.value(), '', function (html) {
                 el.closest('.' + type).find('.actionOptions').html(html);
-                taAutosize();
+                initTextAreaAutosize();
             });
         });
     });
@@ -412,7 +395,7 @@ function initEvents() {
         var el = $(this);
         nextdom.cmd.displayActionOption($(this).value(), init(expression[0].options), function (html) {
             el.closest('.' + type).find('.actionOptions').html(html);
-            taAutosize();
+            initTextAreaAutosize();
         })
     });
 
@@ -428,7 +411,8 @@ function initEvents() {
             cmd.display.parameters[$(this).find('.key').value()] = $(this).find('.value').value();
         });
         cmd = {display: cmd.display, template: cmd.template};
-        $('#md_cmdConfigureSelectMultiple').load('index.php?v=d&modal=cmd.selectMultiple&cmd_id=' + cmdInfo.id, function () {
+        $('#md_modal2').dialog({title: "{{Sélection multiple de commandes}}"});
+        $('#md_modal2').load('index.php?v=d&modal=cmd.selectMultiple&cmd_id=' + cmdInfo.id, function () {
             initTableSorter();
             $('#bt_cmdConfigureSelectMultipleAlertToogle').off().on('click', function () {
                 var state = false;
@@ -460,7 +444,7 @@ function initEvents() {
                         });
                     }
                 });
-                notify("Core", "{{Modification(s) appliquée(s) avec succès}}", "success");
+                notify('Core', "{{Modification(s) appliquée(s) avec succès}}", "success");
             });
         }).dialog('open');
     });
@@ -523,5 +507,5 @@ function addActionCmd(_action, _type, _name) {
     div += '</div>';
     $('#div_' + _type).append(div);
     $('#div_' + _type + ' .' + _type + ':last').setValues(_action, '.expressionAttr');
-    taAutosize();
+    initTextAreaAutosize();
 }

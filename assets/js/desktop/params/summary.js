@@ -85,8 +85,9 @@ function initEvents() {
         var objectSummary = $(this).closest('.objectSummary');
         $.ajax({
             type: "POST",
-            url: "core/ajax/object.ajax.php",
+            url: "src/ajax.php",
             data: {
+                target: 'Object',
                 action: "createSummaryVirtual",
                 key: objectSummary.find('.objectSummaryAttr[data-l1key=key]').value()
             },
@@ -96,10 +97,10 @@ function initEvents() {
             },
             success: function (data) {
                 if (data.state != 'ok') {
-                    notify("Erreur", data.result, 'error');
+                    notify('Erreur', data.result, 'error');
                     return;
                 }
-                notify("Info", '{{summary.virtual_cmd_succed}}', 'success');
+                notify('Info', '{{summary.virtual_cmd_succed}}', 'success');
             }
         });
     });
@@ -114,8 +115,9 @@ function initEvents() {
 function printObjectSummary() {
     $.ajax({
         type: "POST",
-        url: "core/ajax/config.ajax.php",
+        url: "src/ajax.php",
         data: {
+            target: 'Config',
             action: "getKey",
             key: 'object:summary'
         },
@@ -125,7 +127,7 @@ function printObjectSummary() {
         },
         success: function (data) {
             if (data.state != 'ok') {
-                notify("Erreur", data.result, 'error');
+                notify('Erreur', data.result, 'error');
                 return;
             }
             $('#table_objectSummary tbody').empty();
@@ -210,7 +212,7 @@ function saveObjectSummary() {
     summary = {};
     temp = $('#table_objectSummary tbody tr').getValues('.objectSummaryAttr');
     for(var i in temp){
-        temp[i].key = temp[i].key.toLowerCase().stripAccents().replace(/\_/g, '').replace(/\-/g, '').replace(/\&/g, '').replace(/\s/g, '')
+        temp[i].key = temp[i].key.toLowerCase().stripAccents().replace(/\_/g, '').replace(/\-/g, '').replace(/\&/g, '').replace(/\s/g, '');
         if(temp[i].key == ''){
             temp[i].key = temp[i].name.toLowerCase().stripAccents().replace(/\_/g, '').replace(/\-/g, '').replace(/\&/g, '').replace(/\s/g, '')
         }
@@ -219,8 +221,9 @@ function saveObjectSummary() {
     value = {'object:summary' : summary};
     $.ajax({
         type: "POST",
-        url: "core/ajax/config.ajax.php",
+        url: "src/ajax.php",
         data: {
+            target: 'Config',
             action: 'addKey',
             value: json_encode(value)
         },
@@ -230,13 +233,13 @@ function saveObjectSummary() {
         },
         success: function (data) {
             if (data.state != 'ok') {
-                notify("Erreur", data.result, 'error');
+                notify('Erreur', data.result, 'error');
                 return;
             }
             printObjectSummary();
             modifyWithoutSave = false;
             $(".bt_cancelModifs").hide();
-            notify("Info", '{{Sauvegarde réussie}}', 'success');
+            notify('Info', '{{Sauvegarde réussie}}', 'success');
         }
     });
 }

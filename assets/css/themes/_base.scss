@@ -90,7 +90,7 @@
   border-bottom-color:map_get($color_theme, 'color180') !important;
 }
 @media (max-width: 767px) {
-  .main-header .navbar .dropdown-menu li a:hover {
+  .main-header .navbar .dropdown-menu li a:hover:not(.btn) {
     background-color: map_get($color_theme, 'color1') !important;
   }
 }
@@ -193,6 +193,24 @@ html {
     }
 }
 
+/* Messages */
+#table_message .iconCore {
+    background-color: map_get($color_theme, 'color1') !important;
+}
+
+/* Modales */
+.ui-widget-content {
+    a:not(.btn):not(.label-list):not(.ui-state-active):not(.ui-state-hover) {
+        color: map_get($color_theme, 'color1') !important;
+    }
+}
+.ui-datepicker td .ui-state-active,
+.ui-datepicker td .ui-state-hover,
+.ui-datepicker-close {
+    background: map_get($color_theme, 'color1') !important;
+}
+
+
 /* ################################################################################## */
 /* COLOR2 = Couleur de contraste (icônes et texte sur fond accentué ou de sidebar...) */
 /* ################################################################################## */
@@ -224,7 +242,8 @@ html {
 }
 
 /* Bouton action */
-.btn-action {
+.btn-action,
+.label-action {
   color: map_get($color_theme, 'color2') !important;
 }
 
@@ -253,11 +272,6 @@ html {
   color: map_get($color_theme, 'color2') !important;
 }
 
-/* Textes scenario dashboard */
-.div_scenario a {
-  color: map_get($color_theme, 'color2') !important;
-}
-
 /* Barre de chargement */
 .pace .pace-progress {
   background: map_get($color_theme, 'color2') !important;
@@ -275,6 +289,20 @@ html {
         color: map_get($color_theme, 'color2') !important;
     }
 }
+
+/* Widget theme nextdom */
+.label-default,
+.bg-theme .btn  {
+  color: map_get($color_theme, 'color2') !important;
+}
+
+/* Modales */
+.ui-datepicker td .ui-state-active,
+.ui-datepicker td .ui-state-hover,
+.ui-datepicker-close {
+  color: map_get($color_theme, 'color2') !important;
+}
+
 
 /* ############################################################################################################# */
 /* COLOR3 = Couleur de survol principale (contenu, titres, footer, bouton d'administration, unités, légendes...) */
@@ -345,8 +373,7 @@ html {
 /* ########################################################################## */
 .content-wrapper,
 .nav-tabs-custom > .nav-tabs > li.active > a,
-.nav-tabs-custom > .nav-tabs > li.active:hover > a,
-.main-footer {
+.nav-tabs-custom > .nav-tabs > li.active:hover > a {
   background-color:map_get($color_theme, 'color7') !important;
   border-color:map_get($color_theme, 'color7') !important;
 }
@@ -370,8 +397,12 @@ html {
   background-color: map_get($color_theme, 'color7') !important;
 }
 
-.box-header.with-border{
+.box-header.with-border {
   border-color: map_get($color_theme, 'color7') !important;
+}
+
+.box-theme {
+  border-top-color: map_get($color_theme, 'color7') !important;
 }
 
 .nav-tabs-custom > .nav-tabs,
@@ -424,7 +455,8 @@ html {
 
 /* Progressbar */
 .box-body .progress,
-.tab-pane .progress {
+.tab-pane .progress,
+.form-group .progress {
   background-color: map_get($color_theme, 'color7') !important;
 }
 
@@ -471,8 +503,7 @@ html {
 }
 
 /* Footer */
-body,
-.main-footer{
+body {
   background-color: map_get($color_theme, 'color8') !important;
 }
 .label-list:hover,
@@ -527,6 +558,25 @@ body,
   background-color: map_get($color_theme, 'color8') !important;
 }
 
+/* Messages */
+#table_message {
+  border-color: map_get($color_theme, 'color8') !important;
+  background-color: map_get($color_theme, 'color8') !important;
+  .header {
+    background-color: map_get($color_theme, 'color8') !important;
+  }
+  li, li ul li a {
+    border-color: map_get($color_theme, 'color8') !important;
+  }
+  li a:hover:not(.btn) {
+    background-color: map_get($color_theme, 'color8') !important;
+  }
+}
+
+/* Widget theme nextdom */
+.bg-theme {
+    background-color: map_get($color_theme, 'color8') !important;
+}
 
 /* ################################################################### */
 /* COLOR9 = Couleur de fond des titres (légendes, tableaux, unités...) */
@@ -598,15 +648,23 @@ pre::selection {
   color: map_get($color_theme, 'color9') !important;
 }
 
+/* Messages */
+#table_message .menu {
+  background-color: map_get($color_theme, 'color9') !important;
+}
+
 
 /* #################################################################################################### */
 /* COLOR10 = Couleur des textes (contenu, titres, footer, bouton d'administration, unités, légendes...) */
 /* #################################################################################################### */
 /* Textes */
-body, h1, h2, h3, h4, h5, h6  {
+body, h1, h2, h3, h4, h5, h6 {
   color: map_get($color_theme, 'color10') !important;
 }
 .box-header span:not(.badge) {
+  color: map_get($color_theme, 'color10') !important;
+}
+#dashboard-content .box-header {
   color: map_get($color_theme, 'color10') !important;
 }
 .nav-tabs-custom > .nav-tabs > li.header,
@@ -629,11 +687,16 @@ legend {
 .CodeMirror-scroll{
   color: map_get($color_theme, 'color10') !important;
 }
-.footer-center, .text-muted {
+.text-muted {
   color: map_get($color_theme, 'color10') !important;
 }
 .ui-widget-content {
   color: map_get($color_theme, 'color10') !important;
+}
+#table_message {
+  li, li ul li a {
+    color: map_get($color_theme, 'color10') !important;
+  }
 }
 
 /* Titres */
@@ -687,7 +750,8 @@ pre::selection {
 
 /* Bouton filtres tuiles */
 .bt_editDashboardWidgetGridAllResize,
-.bt_editDashboardWidgetGridResize {
+.bt_editDashboardWidgetGridResize,
+.bt_editDashboardWidgetPackery {
   color: map_get($color_theme, 'color10') !important;
 }
 .editDashboardButtons a {
@@ -712,6 +776,16 @@ pre::selection {
   color: map_get($color_theme, 'color10') !important;
 }
 .timeline-item {
+  color: map_get($color_theme, 'color10') !important;
+}
+
+/* Widget Theme Nextdom */
+.bg-theme .widget-content {
+  color: map_get($color_theme, 'color10') !important;
+}
+
+/* Dashboard scenario controls */
+.scenario-label {
   color: map_get($color_theme, 'color10') !important;
 }
 
@@ -839,7 +913,8 @@ pre:not(.mobile-pre) {
 /* ########################## */
 /* COLOR14 = Boutons d'action */
 /* ########################## */
-.btn-action {
+.btn-action,
+.label-action {
   background-color: map_get($color_theme, 'color14') !important;
 }
 .tooltip-inner {
@@ -915,7 +990,8 @@ pre:not(.mobile-pre) {
 /* ############################################## */
 /* Tabs */
 .nav-tabs-custom>.tab-content,
-.box-body, {
+#dashboard-content .box-body:not(.widget-content),
+#dashboard-content .box {
   background-color: map_get($color_theme, 'color19') !important;
 }
 /* Legendes de sections */

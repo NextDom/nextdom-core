@@ -18,15 +18,15 @@
 use NextDom\Managers\CacheManager;
 
 require_once(__DIR__ . '/../../../src/core.php');
-require_once(__DIR__ . '/BaseControllerTest.php');
+require_once(__DIR__ . '/../libs/BaseControllerTest.php');
 
 class ScenarioExportModalControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (isset($_GET['scenario_id'])) {
             unset($_GET['scenario_id']);
@@ -38,6 +38,6 @@ class ScenarioExportModalControllerTest extends BaseControllerTest
     {
         $_GET['scenario_id'] = 1;
         $result = \NextDom\Controller\Modals\ScenarioExport::get();
-        $this->assertContains('Programmation : * * * * *', $result);
+        $this->assertStringContainsString('Programmation : * * * * *', $result);
     }
 }

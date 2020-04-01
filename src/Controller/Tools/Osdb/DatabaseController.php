@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Tools\Osdb;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\ControllerData;
 use NextDom\Helpers\Render;
 
 /**
@@ -41,7 +42,7 @@ class DatabaseController extends BaseController
      */
     public static function get(&$pageData): string
     {
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/osdb/database.js';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/tools/osdb/database.js';
 
         return Render::getInstance()->get('/desktop/tools/osdb/database.html.twig', $pageData);
     }

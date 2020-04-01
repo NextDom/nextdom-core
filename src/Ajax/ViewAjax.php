@@ -60,9 +60,9 @@ class ViewAjax extends BaseAjax
 
     public function get()
     {
-        if (Utils::init(AjaxParams::ID) == 'all' || is_json(Utils::init(AjaxParams::ID))) {
+        if (Utils::init(AjaxParams::ID) == 'all' || Utils::isJson(Utils::init(AjaxParams::ID))) {
             $views = [];
-            if (is_json(Utils::init(AjaxParams::ID))) {
+            if (Utils::isJson(Utils::init(AjaxParams::ID))) {
                 $view_ajax = json_decode(Utils::init(AjaxParams::ID), true);
                 foreach ($view_ajax as $id) {
                     $views[] = ViewManager::byId($id);

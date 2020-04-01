@@ -22,6 +22,8 @@ use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\MessageManager;
+use NextDom\Managers\PluginManager;
+use NextDom\Managers\ConfigManager;
 
 /**
  * Class MessageAjax
@@ -32,7 +34,12 @@ class MessageAjax extends BaseAjax
     protected $NEEDED_RIGHTS = UserRight::USER;
     protected $MUST_BE_CONNECTED = true;
     protected $CHECK_AJAX_TOKEN = true;
+    private $iconsCache = ['scenario' => '/public/img/NextDom_Scenario_Gray.png'];
 
+    /**
+     * Remove all message
+     * @throws \Exception
+     */
     public function clearMessage()
     {
         MessageManager::removeAll(Utils::init(AjaxParams::PLUGIN));
@@ -44,6 +51,33 @@ class MessageAjax extends BaseAjax
         $this->ajax->success(MessageManager::nbMessage());
     }
 
+    /**
+     * Add icon data
+     * @param $message
+     * @throws \Exception
+     */
+    private function addIcon(&$message) {
+        $pluginId = $message['plugin'];
+        $message['iconClass'] = '';
+        $defaultIcon = '/public/img/NextDom/NextDom_Square_' . ConfigManager::byKey('nextdom::user-icon') . '.png';
+        if (!isset($this->iconsCache[$pluginId])) {
+            $this->iconsCache[$pluginId] = $defaultIcon;
+            try {
+                $plugin = PluginManager::byId($pluginId);
+                if (is_object($plugin)) {
+                    $this->iconsCache[$pluginId] = '/' . $plugin->getPathImgIcon();
+                }
+            }
+            catch (\Throwable $t) {
+
+            }
+        }
+        if ($this->iconsCache[$pluginId] === $defaultIcon) {
+            $message['iconClass'] = 'iconCore';
+        }
+        $message['icon'] = $this->iconsCache[$pluginId];
+    }
+
     public function all()
     {
         if (Utils::init(AjaxParams::PLUGIN) == '') {
@@ -53,6 +87,7 @@ class MessageAjax extends BaseAjax
         }
         foreach ($messages as &$message) {
             $message['message'] = htmlentities($message['message']);
+            $this->addIcon($message);
         }
         $this->ajax->success($messages);
     }

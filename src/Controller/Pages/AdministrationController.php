@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Pages;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\ControllerData;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\SystemHelper;
 use NextDom\Helpers\Utils;
@@ -86,8 +87,8 @@ class AdministrationController extends BaseController
         $pageData['hddSize'] = $diskTotal;
         $pageData['httpConnectionsCount'] = SystemHelper::getHttpConnectionsCount();
         $pageData['processCount'] = SystemHelper::getProcessCount();
-        $pageData['CSS_POOL'][] = '/public/css/pages/administration.css';
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/pages/administration.js';
+        $pageData[ControllerData::CSS_POOL][] = '/public/css/pages/administration.css';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/pages/administration.js';
 
         return Render::getInstance()->get('/desktop/pages/administration.html.twig', $pageData);
     }

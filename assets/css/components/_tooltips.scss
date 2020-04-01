@@ -29,7 +29,7 @@
     font:{
         weight: 600;
         family: 'Roboto';
-        size: 0.7em;
+        size: .7em;
     }
     border-radius: 10px;
     background: #585858;
@@ -38,7 +38,7 @@
     text-decoration: none;
     visibility: hidden;
     opacity: 0;
-    padding: 0px 12px;
+    padding: 0 12px;
     position: absolute;
     transform: scale(0);
     right: 100%;
@@ -53,9 +53,9 @@
     transform-origin: right center 0;
 }
 .tooltip-inner {
-    padding: 8px 8px;
+    padding: 8px;
     border-radius: 8px;
 }
 .tooltip.in {
-    opacity: 0.95;
+    opacity: .95;
 }

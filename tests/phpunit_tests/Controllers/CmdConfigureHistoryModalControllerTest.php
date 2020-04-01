@@ -16,15 +16,15 @@
  */
 
 require_once(__DIR__ . '/../../../src/core.php');
-require_once(__DIR__ . '/BaseControllerTest.php');
+require_once(__DIR__ . '/../libs/BaseControllerTest.php');
 
 class CmdConfigureHistoryModalControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -34,7 +34,7 @@ class CmdConfigureHistoryModalControllerTest extends BaseControllerTest
         ob_start();
         $result = \NextDom\Controller\Modals\CmdConfigureHistory::get();
         $scriptResult = ob_get_clean();
-        $this->assertContains('src="/public/js/modals/cmd.configureHistory.js"', $result);
-        $this->assertContains('var cmds_history_configure', $scriptResult);
+        $this->assertStringContainsString('src="/public/js/modals/cmd.configureHistory.js"', $result);
+        $this->assertStringContainsString('var cmds_history_configure', $scriptResult);
     }
 }

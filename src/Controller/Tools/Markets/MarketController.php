@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Tools\Markets;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\ControllerData;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\ConfigManager;
@@ -56,14 +57,14 @@ class MarketController extends BaseController
             }
         }
 
-        $pageData['JS_VARS']['github'] = ConfigManager::byKey('github::enable');
-        $pageData['JS_VARS_RAW']['sourcesList'] = Utils::getArrayToJQueryJson($sourcesList);
-        $pageData['JS_VARS']['moreInformationsStr'] = __("Plus d'informations");
-        $pageData['JS_VARS']['updateStr'] = __("Mettre à jour");
-        $pageData['JS_VARS']['updateAllStr'] = __("Voulez-vous mettre à jour tous les plugins ?");
-        $pageData['JS_VARS']['updateThisStr'] = __("Voulez-vous mettre à jour ce plugin ?");
-        $pageData['JS_VARS']['installedPluginStr'] = __("Plugin installé");
-        $pageData['JS_VARS']['updateAvailableStr'] = __("Mise à jour disponible");
+        $pageData[ControllerData::JS_VARS]['github'] = ConfigManager::byKey('github::enable');
+        $pageData[ControllerData::JS_VARS_RAW]['sourcesList'] = Utils::getArrayToJQueryJson($sourcesList);
+        $pageData[ControllerData::JS_VARS]['moreInformationsStr'] = __("Plus d'informations");
+        $pageData[ControllerData::JS_VARS]['updateStr'] = __("Mettre à jour");
+        $pageData[ControllerData::JS_VARS]['updateAllStr'] = __("Voulez-vous mettre à jour tous les plugins ?");
+        $pageData[ControllerData::JS_VARS]['updateThisStr'] = __("Voulez-vous mettre à jour ce plugin ?");
+        $pageData[ControllerData::JS_VARS]['installedPluginStr'] = __("Plugin installé");
+        $pageData[ControllerData::JS_VARS]['updateAvailableStr'] = __("Mise à jour disponible");
         $pageData['marketSourcesList'] = $sourcesList;
         $pageData['marketSourcesFilter'] = ConfigManager::byKey('nextdom::show_sources_filters');
 
@@ -79,8 +80,8 @@ class MarketController extends BaseController
                 MessageManager::add('core', $messages[$messageIndex]);
             }
         }
-        $pageData['CSS_POOL'][] = '/public/css/pages/markets.css';
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/markets/market.js';
+        $pageData[ControllerData::CSS_POOL][] = '/public/css/pages/markets.css';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/tools/markets/market.js';
 
         return Render::getInstance()->get('/desktop/tools/markets/market.html.twig', $pageData);
     }

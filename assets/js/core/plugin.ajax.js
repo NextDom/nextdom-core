@@ -42,7 +42,7 @@ var stackAjaxTab = {
     }
     this.running = true;
     var params = this.objects.shift();
-    $.ajax({
+    nextdom.private.ajaxCall({
       type: 'POST',
       url: 'plugins/' + this.plugin + '/core/ajax/' + this.plugin + '.ajax.php ',
       data: {
@@ -226,8 +226,9 @@ $('.eqLogicAction[data-action=copy]').on('click', function () {
           },
           success: function (data) {
             modifyWithoutSave = false;
-            if ($('#ul_eqLogic .li_eqLogic[data-eqLogic_id=' + data.id + ']').length != 0) {
-              $('#ul_eqLogic .li_eqLogic[data-eqLogic_id=' + data.id + ']').click();
+            var targetElement = $('#ul_eqLogic .li_eqLogic[data-eqLogic_id=' + data.id + ']');
+            if (targetElement.length !== 0) {
+              targetElement.click();
             } else {
               var vars = getMyUrlVars();
               var url = 'index.php?';
@@ -250,7 +251,7 @@ $('.eqLogicAction[data-action=copy]').on('click', function () {
 });
 
 $('.eqLogicAction[data-action=export]').on('click', function () {
-  window.open('core/php/export.php?type=eqLogic&id=' + $('.li_eqLogic.active').attr('data-eqLogic_id'), "_blank", null);
+  window.open('src/Api/export.php?type=eqLogic&id=' + $('.li_eqLogic.active').attr('data-eqLogic_id'), "_blank", null);
 });
 
 $('.eqLogicAttr[data-l1key=name]').on('change', function () {
@@ -264,8 +265,9 @@ $('.eqLogicAttr[data-l1key=object_id]').on('change', function () {
 if (updateDisplayPlugin !== undefined)
   updateDisplayPlugin(function () {
     if (is_numeric(getMyUrlVars('id'))) {
-      if ($('body .li_eqLogic[data-eqLogic_id="' + getMyUrlVars('id') + '"]').length != 0) {
-        $('body .li_eqLogic[data-eqLogic_id="' + getMyUrlVars('id') + '"]').click();
+      var targetUpdate = $('body .li_eqLogic[data-eqLogic_id="' + getMyUrlVars('id') + '"]');
+      if (targetUpdate.length !== 0) {
+        targetUpdate.click();
       } else {
         if ($('.eqLogicThumbnailDisplay').html() === undefined) {
           $('body .li_eqLogic:first').click();
@@ -304,7 +306,7 @@ $('.eqLogicAction[data-action=save]').on('click', function () {
         updateDisplayPlugin(function () {
           $('body .li_eqLogic[data-eqLogic_id="' + data.id + '"]').click();
         });
-      notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
+      notify('Info', '{{Sauvegarde effectuée avec succès}}', 'success');
     }
   });
   return false;
@@ -339,7 +341,7 @@ $('.eqLogicAction[data-action=remove]').on('click', function () {
                 $('.eqLogicThumbnailContainer').packery();
               });
             window.history.replaceState('', '', url);
-            notify("Info", '{{Suppression effectuée avec succès}}', 'success');
+            notify('Info', '{{Suppression effectuée avec succès}}', 'success');
             modifyWithoutSave = false;
           }
         });
@@ -375,7 +377,7 @@ $('body').on('click', '.eqLogicAction[data-action=add]', function () {
               $('body .li_eqLogic[data-eqLogic_id="' + _data.id + '"]').click();
             });
           url += '&id=' + _data.id;
-          notify("Info", '{{Création effectuée avec succès}}', 'success');
+          notify('Info', '{{Création effectuée avec succès}}', 'success');
           window.history.replaceState('', '', url);
           modifyWithoutSave = false;
         }
@@ -385,8 +387,7 @@ $('body').on('click', '.eqLogicAction[data-action=add]', function () {
 });
 
 $('.eqLogic .eqLogicAction[data-action=configure]').on('click', function () {
-  $('#md_modal').dialog({title: "{{Configuration commande}}"});
-  $('#md_modal').load('index.php?v=d&modal=eqLogic.configure&eqLogic_id=' + $('.li_eqLogic.active').attr('data-eqLogic_id')).dialog('open');
+  loadModal('modal', '{{Configuration commande}}', 'eqLogic.configure&eqLogic_id=' + $('.li_eqLogic.active').attr('data-eqLogic_id'));
 });
 
 /**************************CMD*********************************************/
@@ -428,8 +429,7 @@ $('body').on('.cmd .cmdAction[data-action=test]', 'click', function (event) {
 });
 
 $('body').on('.cmd .cmdAction[data-action=configure]', 'click', function () {
-  $('#md_modal').dialog({title: "{{Configuration commande}}"});
-  $('#md_modal').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).closest('.cmd').attr('data-cmd_id')).dialog('open');
+  loadModal('modal', '{{Configuration commande}}', 'cmd.configure&cmd_id=' + $(this).closest('.cmd').attr('data-cmd_id'));
 });
 
 $('.eqLogicThumbnailContainer').packery();

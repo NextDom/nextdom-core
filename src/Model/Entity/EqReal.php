@@ -20,6 +20,7 @@ namespace NextDom\Model\Entity;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\Utils;
+use NextDom\Interfaces\EntityInterface;
 use NextDom\Managers\DataStoreManager;
 use NextDom\Managers\EqLogicManager;
 

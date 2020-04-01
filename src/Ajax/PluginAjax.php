@@ -47,34 +47,6 @@ class PluginAjax extends BaseAjax
         $result['activate'] = $plugin->isActive();
         $result['configurationPath'] = $plugin->getPathToConfiguration();
         $result['checkVersion'] = version_compare(NextDomHelper::getJeedomVersion(), $plugin->getRequire());
-        if (is_object($update)) {
-            $repoClass = UpdateManager::getRepoDataFromName($update->getSource())['phpClass'];
-            if (method_exists($repoClass, 'getInfo')) {
-                $result[Common::STATUS] = $repoClass::getInfo(['logicalId' => $plugin->getId(), 'type' => 'plugin']);
-            }
-            if (!isset($result[Common::STATUS])) {
-                $result[Common::STATUS] = [];
-            }
-            if (!isset($result['status']['owner'])) {
-                $result['status']['owner'] = [];
-            }
-            foreach (UpdateManager::listRepo() as $key => $repo) {
-                if (!isset($repo['scope']['sendPlugin']) || !$repo['scope']['sendPlugin']) {
-                    continue;
-                }
-                if ($update->getSource() != $key) {
-                    $result['status']['owner'][$key] = 0;
-                    $repoClass = UpdateManager::getRepoDataFromName($key)['phpClass'];
-                    if (ConfigManager::byKey($key . '::enable')) {
-                        $info = $repoClass::getInfo(['logicalId' => $plugin->getId(), 'type' => 'plugin']);
-                        if (isset($info['owner']) && isset($info['owner'][$key])) {
-                            $result['status']['owner'][$key] = $info['owner'][$key];
-                        }
-                    }
-                }
-            }
-        }
-
         $result['update'] = Utils::o2a($update);
         $result['logs'] = [];
         $result['logs'][-1] = ['id' => -1, 'name' => 'local', 'log' => $plugin->getLogList()];
@@ -95,7 +67,7 @@ class PluginAjax extends BaseAjax
 
     public function all()
     {
-        if (!isConnect()) {
+        if (!AuthentificationHelper::isConnectedAsAdminOrFail()) {
             throw new CoreException(__('401 - Accès non autorisé'));
         }
         $this->ajax->success(Utils::o2a(PluginManager::listPlugin()));

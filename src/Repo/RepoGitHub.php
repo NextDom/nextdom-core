@@ -18,16 +18,17 @@
 
 namespace NextDom\Repo;
 
+use NextDom\Enums\Common;
 use NextDom\Enums\LogTarget;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
 use NextDom\Interfaces\BaseRepo;
+use NextDom\Managers\CacheManager;
 use NextDom\Managers\ConfigManager;
+use NextDom\Managers\UpdateManager;
 use NextDom\Model\Entity\Update;
-
-require_once __DIR__ . '/../../core/php/core.inc.php';
 
 class RepoGitHub implements BaseRepo
 {
@@ -103,7 +104,7 @@ class RepoGitHub implements BaseRepo
         }
         $client = self::getGithubClient();
         // Check if core data is correct and change type or repository if necessary
-        if ($targetUpdate->getType() === 'core') {
+        if ($targetUpdate->isType(Common::CORE)) {
             exec('cd ' . NEXTDOM_ROOT . ' && git rev-parse --abbrev-ref HEAD 2> /dev/null', $currentBranch);
             if (is_array($currentBranch) && count($currentBranch) > 0) {
                 $targetUpdate->setConfiguration('version', $currentBranch[0]);
@@ -131,9 +132,16 @@ class RepoGitHub implements BaseRepo
         }
         $targetUpdate->setRemoteVersion($branch['commit']['sha']);
         // Read local version
-        exec('cd ' . NEXTDOM_ROOT . ' && git rev-parse HEAD 2> /dev/null', $localVersion);
-        if (is_array($localVersion) && count($localVersion) > 0) {
-            $targetUpdate->setLocalVersion($localVersion[0]);
+        $gitHiddenPath = NEXTDOM_ROOT;
+        if (!$targetUpdate->isType(Common::CORE)) {
+            $gitHiddenPath = NEXTDOM_ROOT . '/plugins/' . $targetUpdate->getId();
+        }
+        $gitHiddenPath .= '.git';
+        if (is_dir($gitHiddenPath)) {
+            exec('cd ' . $gitHiddenPath . ' && git rev-parse HEAD 2> /dev/null', $localVersion);
+            if (is_array($localVersion) && count($localVersion) > 0) {
+                $targetUpdate->setLocalVersion($localVersion[0]);
+            }
         }
         // Compare
         if ($branch['commit']['sha'] != $targetUpdate->getLocalVersion()) {
@@ -146,9 +154,9 @@ class RepoGitHub implements BaseRepo
 
     public static function getGithubClient()
     {
-        $client = new \Github\Client(
-            new \Github\HttpClient\CachedHttpClient(['cache_dir' => NextDomHelper::getTmpFolder('github') . '/cache'])
-        );
+        $cache = new \Symfony\Component\Cache\Adapter\FilesystemAdapter('', 0, NextDomHelper::getTmpFolder('github'));
+        $client = new \Github\Client();
+        $client->addCache($cache);
         if (ConfigManager::byKey('github::token') != '') {
             $client->authenticate(ConfigManager::byKey('github::token'), '', \Github\Client::AUTH_URL_TOKEN);
         }
@@ -225,7 +233,7 @@ class RepoGitHub implements BaseRepo
     {
         try {
             $client = self::getGithubClient();
-            $fileContent = $client->api('repo')->contents()->download(ConfigManager::byKey('github::core::user', 'core', 'nextdom'), ConfigManager::byKey('github::core::repository', 'core', 'core'), 'core/config/version', ConfigManager::byKey('github::core::branch', 'core', 'stable'));
+            $fileContent = $client->api('repo')->contents()->download(ConfigManager::byKey('github::core::user', 'core', 'nextdom'), ConfigManager::byKey('github::core::repository', 'core', 'core'), NEXTDOM_DATA . '/config/Nextdom_version', ConfigManager::byKey('github::core::branch', 'core', 'stable'));
             return trim($fileContent);
         } catch (\Throwable $e) {
 

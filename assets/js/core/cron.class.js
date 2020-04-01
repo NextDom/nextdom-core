@@ -14,36 +14,23 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+nextdom.cron = function() {};
 
-nextdom.cron = function () {
-};
-
-nextdom.cron.setState = function (queryParams) {
+nextdom.cron.setState = function(queryParams) {
   var paramsRequired = ['id', 'state'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Cron', queryParams.state);
+  if (nextdom.private.isValidQuery(queryParams, paramsRequired)) {
+    var params = $.extend({}, nextdom.private.default_params, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Cron', queryParams.state);
     ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
-
-nextdom.cron.all = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'Cron', 'all');
-  $.ajax(ajaxParams);
+nextdom.cron.all = function(queryParams) {
+  nextdom.private.ajax('Cron', 'all', queryParams);
 };
 
-nextdom.cron.save = function (queryParams) {
-  var paramsRequired = ['crons'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Cron', 'save');
-    ajaxParams.data['crons'] = json_encode(queryParams.crons);
-    $.ajax(ajaxParams);
-  }
+nextdom.cron.save = function(queryParams) {
+  nextdom.private.ajax('Cron', 'save', queryParams, ['crons'], true);
 };
 

@@ -18,15 +18,15 @@
 use NextDom\Managers\CacheManager;
 
 require_once(__DIR__ . '/../../../src/core.php');
-require_once(__DIR__ . '/BaseControllerTest.php');
+require_once(__DIR__ . '/../libs/BaseControllerTest.php');
 
 class CacheControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -36,7 +36,7 @@ class CacheControllerTest extends BaseControllerTest
         $pageData = [];
         $result = \NextDom\Controller\Admin\CacheController::get($pageData);
         $this->assertArrayHasKey('adminCacheFolder', $pageData);
-        $this->assertContains(CacheManager::getFolder(), $result);
+        $this->assertStringContainsString(CacheManager::getFolder(), $result);
     }
 
     public function testPageDataVars()

@@ -88,8 +88,7 @@ function initEvents() {
 
     // Add plugin by other source button
     $('#bt_addPluginFromOtherSource').on('click',function(){
-        $('#md_modal').dialog({title: "{{Ajouter un plugin}}"});
-        $('#md_modal').load('index.php?v=d&modal=update.add').dialog('open');
+        loadModal('modal', '{{Ajouter un plugin}}', 'update.add');
     });
 
     // Plugin configure button
@@ -158,11 +157,11 @@ function initEvents() {
                 notify('Core',error.message,'error');
             },
             success: function () {
-                notify("Core",'{{Sauvegarde de la configuration des panneaux effectuée}}',"success");
+                notify('Core','{{Sauvegarde de la configuration des panneaux effectuée}}',"success");
                 modifyWithoutSave = false;
             }
         });
-    })
+    });
 
     // Functionnality plugin config save button
     $('#bt_savePluginFunctionalityConfig').off('click').on('click',function(){
@@ -173,11 +172,11 @@ function initEvents() {
                 notify('Core',error.message,'error');
             },
             success: function () {
-                notify("Core",'{{Sauvegarde des fonctionalités effectuée}}',"success");
+                notify('Core','{{Sauvegarde des fonctionalités effectuée}}',"success");
                 modifyWithoutSave = false;
             }
         });
-    })
+    });
 
     // Log plugin config save button
     $('#bt_savePluginLogConfig').off('click').on('click',function(){
@@ -187,20 +186,18 @@ function initEvents() {
                 notify('Core',error.message,'error');
             },
             success: function () {
-                notify("Core",'{{Sauvegarde de la configuration des logs effectuée}}',"success");
+                notify('Core','{{Sauvegarde de la configuration des logs effectuée}}',"success");
                 modifyWithoutSave = false;
             }
         });
-    })
+    });
 
     // Plugin log display button
     $('#div_plugin_log').on('click','.bt_plugin_conf_view_log',function(){
         if($('#md_modal').is(':visible')){
-            $('#md_modal2').dialog({title: "{{Log du plugin}}"});
-            $("#md_modal2").load('index.php?v=d&modal=log.display&log='+$(this).attr('data-log')).dialog('open');
+            loadModal('modal2', '{{Log du plugin}}', 'log.display&log='+$(this).attr('data-log'));
         }else{
-            $('#md_modal').dialog({title: "{{Log du plugin}}"});
-            $("#md_modal").load('index.php?v=d&modal=log.display&log='+$(this).attr('data-log')).dialog('open');
+            loadModal('modal', '{{Log du plugin}}', 'log.display&log='+$(this).attr('data-log'));
         }
     });
 
@@ -252,7 +249,7 @@ function showPlugin(pluginId) {
                 $('#div_plugin_dependancy').closest('.box').hide();
             }else{
                 $('#div_plugin_dependancy').closest('.box').show();
-                $('#div_plugin_dependancy').closest('.panel')
+                $('#div_plugin_dependancy').closest('.panel');
                 $("#div_plugin_dependancy").load('index.php?v=d&modal=plugin.dependancy&plugin_id='+data.id);
             }
 
@@ -468,7 +465,7 @@ function savePluginConfig(_param) {
             notify('Core',error.message,'error');
         },
         success: function () {
-            notify("Core",'{{Sauvegarde effectuée}}',"success");
+            notify('Core','{{Sauvegarde effectuée}}',"success");
             modifyWithoutSave = false;
             var postSave = sel_plugin_id+'_postSaveConfiguration';
             if (typeof window[postSave] == 'function'){

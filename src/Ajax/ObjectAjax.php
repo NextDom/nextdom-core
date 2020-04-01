@@ -120,7 +120,7 @@ class ObjectAjax extends BaseAjax
             $resultObject = new JeeObject();
         }
         Utils::a2o($resultObject, NextDomHelper::fromHumanReadable($jsonObject));
-        if ($resultObject->getName() !== '') {
+        if (!empty($resultObject->getName())) {
             $resultObject->save();
             $this->ajax->success(Utils::o2a($resultObject));
         }
@@ -151,16 +151,22 @@ class ObjectAjax extends BaseAjax
     public function toHtml()
     {
         $objectId = Utils::init(AjaxParams::ID);
-        if ($objectId == '' || $objectId == 'all' || is_json($objectId)) {
-            if (is_json($objectId)) {
+        if ($objectId == '' || $objectId == 'all' || Utils::isJson($objectId)) {
+            if (Utils::isJson($objectId)) {
                 $objectsList = json_decode($objectId, true);
             } else {
                 $objectsList = [];
-                foreach (JeeObjectManager::all() as $resultObject) {
-                    if ($resultObject->getConfiguration('hideOnDashboard', 0) == 1) {
-                        continue;
+                if (Utils::init(AjaxParams::SUMMARY) == '') {
+                    foreach (JeeObjectManager::buildTree(null, true) as $object) {
+                        if ($object->getConfiguration('hideOnDashboard', 0) == 1) {
+                            continue;
+                        }
+                        $objects[] = $object->getId();
                     }
-                    $objectsList[] = $resultObject->getId();
+                } else {
+                    foreach (JeeObjectManager::all() as $object) {
+                        $objects[] = $object->getId();
+                    }
                 }
             }
             $result = [];
@@ -183,7 +189,7 @@ class ObjectAjax extends BaseAjax
                      */
                     foreach ($scenarios as $scenario) {
                         $scenariosResult[$i . '::' . $id][] = [
-                            'id' => $scenario->getId(),
+                            'scenario_id' => $scenario->getId(),
                             'state' => $scenario->getState(),
                             'name' => $scenario->getName(),
                             'icon' => $scenario->getDisplay(Common::ICON),
@@ -214,7 +220,7 @@ class ObjectAjax extends BaseAjax
                  */
                 foreach ($scenarios as $scenario) {
                     $scenariosResult[] = [
-                        'id' => $scenario->getId(),
+                        'scenario_id' => $scenario->getId(),
                         'state' => $scenario->getState(),
                         'name' => $scenario->getName(),
                         'icon' => $scenario->getDisplay('icon'),
@@ -346,7 +352,7 @@ class ObjectAjax extends BaseAjax
         $resultObject->setImage('data', '');
         $resultObject->setImage('sha512', '');
         $resultObject->save();
-        @rrmdir(NEXTDOM_ROOT . '/core/img/object');
+        @rrmdir(NEXTDOM_ROOT . '/data/object/object');
         $this->ajax->success();
     }
 
@@ -373,7 +379,7 @@ class ObjectAjax extends BaseAjax
         if (filesize($_FILES['file']['tmp_name']) > 5000000) {
             throw new CoreException(__('Le fichier est trop gros (maximum 5Mo)'));
         }
-        $files = FileSystemHelper::ls(NEXTDOM_DATA . '/data/object/', 'object' . $resultObject->getId() . '*');
+        $files = FileSystemHelper::ls(NEXTDOM_DATA . '/data/object/', 'object' . $resultObject->getId() . '-*');
         if (count($files) > 0) {
             foreach ($files as $file) {
                 unlink(NEXTDOM_DATA . '/data/object/' . $file);

@@ -79,7 +79,7 @@ class RepoApt implements BaseRepo
                         $targetUpdate->setStatus('update');
                         $targetUpdate->save();
                         $result = true;
-                    } elseif (empty($targetUpdate->getRemoteVersion())) {
+                    } elseif (empty($targetUpdate->getRemoteVersion()) || $targetUpdate->getRemoteVersion() !== $newVersion) {
                         $targetUpdate->setRemoteVersion($newVersion);
                         $targetUpdate->save();
                     }

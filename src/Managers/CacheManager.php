@@ -34,14 +34,16 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Com\ComShell;
+use NextDom\Enums\CacheEngine;
+use NextDom\Enums\CacheKey;
 use NextDom\Enums\DateFormat;
 use NextDom\Enums\NextDomFile;
+use NextDom\Enums\NextDomObj;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
 use NextDom\Model\Entity\Cache;
-
-require_once NEXTDOM_ROOT . '/core/class/cache.class.php';
 
 /**
  * Class CacheManager
@@ -89,8 +91,8 @@ class CacheManager
     {
         $result = self::getCache()->getStats();
         $result['count'] = __('Inconnu');
-        $engine = ConfigManager::byKey('cache::engine');
-        if ($engine == 'FilesystemCache') {
+        $engine = ConfigManager::byKey(CacheKey::CACHE_ENGINE);
+        if ($engine == CacheEngine::FILESYSTEM) {
             $result['count'] = 0;
             foreach (FileSystemHelper::ls(self::getFolder()) as $folder) {
                 foreach (FileSystemHelper::ls(self::getFolder() . '/' . $folder) as $file) {
@@ -100,7 +102,7 @@ class CacheManager
                     $result['count']++;
                 }
             }
-        } else if ($engine == 'RedisCache') {
+        } elseif ($engine == CacheEngine::REDIS) {
             $result['count'] = self::$cacheSystem->getRedis()->dbSize();
         }
         if ($details) {
@@ -123,6 +125,22 @@ class CacheManager
     }
 
     /**
+     * Get doctrine cache
+     *
+     * @param string $targetFolder Target folder
+     *
+     * @return \Doctrine\Common\Cache\FilesystemCache
+     *
+     * @throws \Exception
+     */
+    public static function getDoctrineCache(string $targetFolder = '') {
+        if ($targetFolder === '') {
+            $targetFolder = self::getFolder();
+        }
+        return new \Doctrine\Common\Cache\FilesystemCache($targetFolder);
+    }
+
+    /**
      * Get cache system
      *
      * @return \Doctrine\Common\Cache\FilesystemCache|\Doctrine\Common\Cache\MemcachedCache|\Doctrine\Common\Cache\RedisCache|null Cache system
@@ -133,36 +151,32 @@ class CacheManager
         if (self::$cacheSystem !== null) {
             return self::$cacheSystem;
         }
-        $engine = ConfigManager::byKey('cache::engine');
-        if ($engine == 'MemcachedCache' && !class_exists('memcached')) {
-            $engine = 'FilesystemCache';
-            ConfigManager::save('cache::engine', 'FilesystemCache');
+        $engine = ConfigManager::byKey(CacheKey::CACHE_ENGINE);
+        if ($engine == CacheEngine::MEMCACHED && !class_exists('memcached')) {
+            $engine = CacheEngine::FILESYSTEM;
+            ConfigManager::save(CacheKey::CACHE_ENGINE, CacheEngine::FILESYSTEM);
         }
-        if ($engine == 'RedisCache' && !class_exists('redis')) {
-            $engine = 'FilesystemCache';
-            ConfigManager::save('cache::engine', 'FilesystemCache');
+        if ($engine == CacheEngine::REDIS && !class_exists('redis')) {
+            $engine = CacheEngine::FILESYSTEM;
+            ConfigManager::save(CacheKey::CACHE_ENGINE, CacheEngine::FILESYSTEM);
         }
         switch ($engine) {
-            case 'FilesystemCache':
-                self::$cacheSystem = new \Doctrine\Common\Cache\FilesystemCache(self::getFolder());
+            case CacheEngine::FILESYSTEM:
+            case CacheEngine::PHPFILE:
+            default:
+                self::$cacheSystem = self::getDoctrineCache();
                 break;
-            case 'PhpFileCache':
-                self::$cacheSystem = new \Doctrine\Common\Cache\FilesystemCache(self::getFolder());
-                break;
-            case 'MemcachedCache':
+            case CacheEngine::MEMCACHED:
                 $memcached = new \Memcached();
                 $memcached->addServer(ConfigManager::byKey('cache::memcacheaddr'), ConfigManager::byKey('cache::memcacheport'));
                 self::$cacheSystem = new \Doctrine\Common\Cache\MemcachedCache();
                 self::$cacheSystem->setMemcached($memcached);
                 break;
-            case 'RedisCache':
+            case CacheEngine::REDIS:
                 $redis = new \Redis();
                 $redis->connect(ConfigManager::byKey('cache::redisaddr'), ConfigManager::byKey('cache::redisport'));
                 self::$cacheSystem = new \Doctrine\Common\Cache\RedisCache();
                 self::$cacheSystem->setRedis($redis);
-                break;
-            default:
-                self::$cacheSystem = new \Doctrine\Common\Cache\FilesystemCache(self::getFolder());
                 break;
         }
         return self::$cacheSystem;
@@ -195,7 +209,7 @@ class CacheManager
      */
     public static function exist($key)
     {
-        trigger_error('This method is deprecated', E_USER_DEPRECATED);
+        @trigger_error('This method is deprecated', E_USER_DEPRECATED);
         return self::exists($key);
     }
 
@@ -235,11 +249,11 @@ class CacheManager
      */
     public static function persist()
     {
-        switch (ConfigManager::byKey('cache::engine')) {
-            case 'FilesystemCache':
+        switch (ConfigManager::byKey(CacheKey::CACHE_ENGINE)) {
+            case CacheEngine::FILESYSTEM:
                 $cacheDir = self::getFolder();
                 break;
-            case 'PhpFileCache':
+            case CacheEngine::PHPFILE:
                 $cacheDir = self::getFolder();
                 break;
             default:
@@ -252,10 +266,10 @@ class CacheManager
             $chmodCmd = sprintf("chmod 664 %s", $cacheFile);
             $chownCmd = sprintf("chown %s:%s %s", SystemHelper::getWWWUid(), SystemHelper::getWWWGid(), $cacheFile);
 
-            \com_shell::execute($rmCmd);
-            \com_shell::execute($tarCmd);
-            \com_shell::execute($chmodCmd);
-            \com_shell::execute($chownCmd);
+            ComShell::execute($rmCmd);
+            ComShell::execute($tarCmd);
+            ComShell::execute($chmodCmd);
+            ComShell::execute($chownCmd);
         } catch (\Exception $e) {
         }
     }
@@ -276,15 +290,12 @@ class CacheManager
      */
     public static function isPersistOk(): bool
     {
-        if (ConfigManager::byKey('cache::engine') != 'FilesystemCache' && ConfigManager::byKey('cache::engine') != 'PhpFileCache') {
-            return true;
-        }
-        $filename = self::getArchivePath();
-        if (!file_exists($filename)) {
-            return false;
-        }
-        if (filemtime($filename) < strtotime('-35min')) {
-            return false;
+        $cacheEngine = ConfigManager::byKey(CacheKey::CACHE_ENGINE);
+        if ($cacheEngine == CacheEngine::PHPFILE || $cacheEngine == CacheEngine::FILESYSTEM) {
+            $filename = self::getArchivePath();
+            if (!file_exists($filename) || filemtime($filename) < strtotime('-35min')) {
+                return false;
+            }
         }
         return true;
     }
@@ -294,24 +305,19 @@ class CacheManager
      */
     public static function restore()
     {
-        switch (ConfigManager::byKey('cache::engine')) {
-            case 'FilesystemCache':
-                $cache_dir = self::getFolder();
-                break;
-            case 'PhpFileCache':
-                $cache_dir = self::getFolder();
-                break;
-            default:
-                return;
+        $cacheDir = '';
+        $cacheEngine = ConfigManager::byKey(CacheKey::CACHE_ENGINE);
+        if ($cacheEngine == CacheEngine::PHPFILE || $cacheEngine == CacheEngine::FILESYSTEM) {
+            $cacheDir = self::getFolder();
         }
-
         if (!file_exists(self::getArchivePath())) {
-            return;
+            return false;
         }
 
-        SystemHelper::vsystem("rm -rf %s", $cache_dir);
-        SystemHelper::vsystem("mkdir %s", $cache_dir);
-        SystemHelper::vsystem("tar xzf %s -C %s", self::getArchivePath(), $cache_dir);
+        SystemHelper::vsystem("rm -rf %s", $cacheDir);
+        SystemHelper::vsystem("mkdir %s", $cacheDir);
+        SystemHelper::vsystem("tar xzf %s -C %s", self::getArchivePath(), $cacheDir);
+        return true;
     }
 
     /**
@@ -321,7 +327,7 @@ class CacheManager
      */
     public static function clean()
     {
-        if (ConfigManager::byKey('cache::engine') != 'FilesystemCache') {
+        if (ConfigManager::byKey(CacheKey::CACHE_ENGINE) != 'FilesystemCache') {
             return;
         }
         $re = '/s:\d*:(.*?);s:\d*:"(.*?)";s/';
@@ -342,25 +348,17 @@ class CacheManager
             }
         }
         $cleanCache = [
-            'cmdCacheAttr' => 'cmd',
-            'cmd' => 'cmd',
-            'eqLogicCacheAttr' => 'eqLogic',
-            'eqLogicStatusAttr' => 'eqLogic',
-            'scenarioCacheAttr' => 'scenario',
-            'cronCacheAttr' => 'cron',
-            'cron' => 'cron',
+            'cmdCacheAttr' => NextDomObj::CMD,
+            'cmd' => NextDomObj::CMD,
+            'eqLogicCacheAttr' => NextDomObj::EQLOGIC,
+            'eqLogicStatusAttr' => NextDomObj::EQLOGIC,
+            'scenarioCacheAttr' => NextDomObj::SCENARIO,
+            'cronCacheAttr' => NextDomObj::CRON,
+            'cron' => NextDomObj::CRON,
         ];
         foreach ($result as $key) {
             $matches = null;
-            if (strpos($key, '::lastCommunication') !== false) {
-                self::delete($key);
-                continue;
-            }
-            if (strpos($key, '::state') !== false) {
-                self::delete($key);
-                continue;
-            }
-            if (strpos($key, '::numberTryWithoutSuccess') !== false) {
+            if (preg_match_all('/(::lastCommunication|::state|::numberTryWithoutSuccess)/', $key) == 1) {
                 self::delete($key);
                 continue;
             }
@@ -374,24 +372,10 @@ class CacheManager
                     if (!is_object($resultObject)) {
                         self::delete($key);
                     }
-                    continue;
                 }
             }
-            preg_match_all('/widgetHtml(\d*)(.*?)/', $key, $matches);
+            preg_match_all('/(?:widgetHtml|camera)(\d+)(.*?)/', $key, $matches);
             if (isset($matches[1]) && isset($matches[1][0])) {
-                if (!is_numeric($matches[1][0])) {
-                    continue;
-                }
-                $resultObject = EqLogicManager::byId($matches[1][0]);
-                if (!is_object($resultObject)) {
-                    self::delete($key);
-                }
-            }
-            preg_match_all('/camera(\d*)(.*?)/', $key, $matches);
-            if (isset($matches[1]) && isset($matches[1][0])) {
-                if (!is_numeric($matches[1][0])) {
-                    continue;
-                }
                 $resultObject = EqLogicManager::byId($matches[1][0]);
                 if (!is_object($resultObject)) {
                     self::delete($key);
@@ -399,43 +383,16 @@ class CacheManager
             }
             preg_match_all('/scenarioHtml(.*?)(\d*)/', $key, $matches);
             if (isset($matches[1]) && isset($matches[1][0])) {
-                if (!is_numeric($matches[1][0])) {
-                    continue;
-                }
                 $resultObject = ScenarioManager::byId($matches[1][0]);
                 if (!is_object($resultObject)) {
                     self::delete($key);
                 }
             }
-            if (strpos($key, 'widgetHtmldashboard') !== false) {
-                $id = str_replace('widgetHtmldashboard', '', $key);
-                if (is_numeric($id)) {
-                    self::delete($key);
-                }
-                continue;
+            $withoutPrefix = preg_replace('/widgetHtmldashboard|widgetHtmldplan|widgetHtml|cmd/', '', $key);
+            if (is_numeric($withoutPrefix)) {
+                self::delete($key);
             }
-            if (strpos($key, 'widgetHtmldplan') !== false) {
-                $id = str_replace('widgetHtmldplan', '', $key);
-                if (is_numeric($id)) {
-                    self::delete($key);
-                }
-                continue;
-            }
-            if (strpos($key, 'widgetHtml') !== false) {
-                $id = str_replace('widgetHtml', '', $key);
-                if (is_numeric($id)) {
-                    self::delete($key);
-                }
-                continue;
-            }
-            if (strpos($key, 'cmd') !== false) {
-                $id = str_replace('cmd', '', $key);
-                if (is_numeric($id)) {
-                    self::delete($key);
-                }
-                continue;
-            }
-            preg_match_all('/dependancy(.*)/', $key, $matches);
+            preg_match_all('/(?:dependancy|dependency)(.*)/', $key, $matches);
             if (isset($matches[1]) && isset($matches[1][0])) {
                 try {
                     $plugin = PluginManager::byId($matches[1][0]);

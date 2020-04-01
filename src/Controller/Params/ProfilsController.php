@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Params;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\ControllerData;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
@@ -31,6 +32,7 @@ use NextDom\Managers\JeeObjectManager;
 use NextDom\Managers\Plan3dHeaderManager;
 use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PluginManager;
+use NextDom\Managers\ThemeManager;
 use NextDom\Managers\UserManager;
 use NextDom\Managers\ViewManager;
 
@@ -101,18 +103,7 @@ class ProfilsController extends BaseController
             @session_write_close();
         }
 
-        $pageData['profilsWidgetThemes'] = [];
-        $lsDir = FileSystemHelper::ls(NEXTDOM_ROOT . '/core/template/dashboard/themes/', '*', true);
-        foreach ($lsDir as $themesDir) {
-            $lsThemes = FileSystemHelper::ls(NEXTDOM_ROOT . '/core/template/dashboard/themes/' . $themesDir, '*.png');
-            foreach ($lsThemes as $themeFile) {
-                $themeData = [];
-                $themeData['dir'] = '/core/template/dashboard/themes/' . $themesDir . $themeFile;
-                $themeData['name'] = $themeFile;
-                $pageData['profilsWidgetThemes'][] = $themeData;
-            }
-        }
-
+        $pageData['profilsWidgetThemes'] = ThemeManager::getWidgetThemes();
         $pageData['profilsDisplayTypes'] = NextDomHelper::getConfiguration('eqLogic:displayType');
         foreach ($pageData['profilsDisplayTypes'] as $key => $value) {
             if (isset($_SESSION) && is_object(UserManager::getStoredUser()) && UserManager::getStoredUser()->getOptions('widget::background-opacity::' . $key, null) == null) {
@@ -148,7 +139,7 @@ class ProfilsController extends BaseController
 
         $pageData['adminCategories'] = NextDomHelper::getConfiguration('eqLogic:category');
 
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/params/profils.js';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/params/profils.js';
 
         return Render::getInstance()->get('/desktop/params/profils.html.twig', $pageData);
     }

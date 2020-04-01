@@ -53,8 +53,14 @@ abstract class BaseAbstractModal
         if ($repo['enable'] == 0) {
             throw new CoreException(__('Le dépôt est inactif : ') . $repoId);
         }
+        if ($repoId !== 'market') {
+            throw new CoreException(__('L\'affichage de ce service n\'est pas disponible.'));
+        }
         ob_start();
-        $repoDisplayFile = NEXTDOM_ROOT . '/core/repo/' . $repoId . '.display.repo.php';
+        $repoDisplayFile = '';
+        if ($repoId === 'market') {
+            $repoDisplayFile = NEXTDOM_ROOT . '/src/Market/RepoMarketDisplay.php';
+        }
         if (file_exists($repoDisplayFile)) {
             FileSystemHelper::includeFile('core', $repoId . '.' . $type, 'repo', '', true);
         }

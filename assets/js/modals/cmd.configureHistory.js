@@ -98,12 +98,11 @@ function addCommandHistory(_cmd) {
 
 
 $('.bt_configureHistoryAdvanceCmdConfiguration').off('click').on('click', function () {
-    $('#md_modal2').dialog({title: "{{ Configuration de la commande }}"});
-    $('#md_modal2').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).attr('data-id')).dialog('open');
+    loadModal('modal2', '{{ Configuration de la commande }}', 'cmd.configure&cmd_id=' + $(this).attr('data-id'));
 });
 
 $(".bt_configureHistoryExportData").on('click', function () {
-    window.open('core/php/export.php?type=cmdHistory&id=' + $(this).attr('data-id'), "_blank", null);
+    window.open('src/Api/export.php?type=cmdHistory&id=' + $(this).attr('data-id'), "_blank", null);
 });
 
 $('.cmdAttr').on('change click', function () {
@@ -120,11 +119,11 @@ $('#bt_cmdConfigureCmdHistoryApply').on('click', function () {
     nextdom.cmd.multiSave({
         cmds: cmds,
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function (data) {
             $("#table_cmdConfigureHistory").trigger("update");
-            notify("Info", "{{ Opération effectuée }}", 'success');
+            notify('Info', "{{ Opération effectuée }}", 'success');
         }
     });
 });

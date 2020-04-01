@@ -18,15 +18,15 @@
 use NextDom\Managers\CacheManager;
 
 require_once(__DIR__ . '/../../../src/core.php');
-require_once(__DIR__ . '/BaseControllerTest.php');
+require_once(__DIR__ . '/../libs/BaseControllerTest.php');
 
 class UserRightsModalControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (isset($_GET['id'])) {
             unset($_GET['id']);
@@ -40,6 +40,6 @@ class UserRightsModalControllerTest extends BaseControllerTest
         ob_start();
         $result = \NextDom\Controller\Modals\UserRights::get();
         $scriptResult = ob_get_clean();
-        $this->assertContains('var user_rights = jQuery', $scriptResult);
+        $this->assertStringContainsString('var user_rights = jQuery', $scriptResult);
     }
 }

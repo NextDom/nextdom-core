@@ -20,6 +20,7 @@
 
 namespace NextDom\Repo;
 
+use NextDom\Com\ComShell;
 use NextDom\Enums\DateFormat;
 use NextDom\Enums\LogTarget;
 use NextDom\Exceptions\CoreException;
@@ -37,6 +38,8 @@ use NextDom\Managers\MessageManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
 use NextDom\Managers\UserManager;
+use NextDom\Model\DataClass\SystemHealth;
+use NextDom\Model\Entity\JsonRPCClient;
 use NextDom\Model\Entity\Update;
 
 class RepoMarket implements BaseRepo
@@ -52,7 +55,7 @@ class RepoMarket implements BaseRepo
         'backup' => false,
         'hasConfiguration' => true,
         'proxy' => true,
-        'sendPlugin' => false,
+        'sendPlugin' => true,
         'hasStore' => true,
         'hasScenarioStore' => true,
         'test' => true,
@@ -292,9 +295,9 @@ class RepoMarket implements BaseRepo
         if ($market->sendRequest('market::byLogicalIdAndType', $options, $timeout, null, 1)) {
             if (is_array($_logicalId)) {
                 $result = [];
-                foreach ($market->getResult() as $logicalId => $result) {
-                    if (isset($result['id'])) {
-                        $result[$logicalId] = self::construct($result);
+                foreach ($market->getResult() as $logicalId => $marketResult) {
+                    if (isset($marketResult['id'])) {
+                        $result[$logicalId] = self::construct($marketResult);
                     }
                 }
                 return $result;
@@ -336,14 +339,14 @@ class RepoMarket implements BaseRepo
             if (ConfigManager::byKey('market::allowDNS') != 1 || ConfigManager::byKey('network::disableMangement') == 1) {
                 $params['url'] = NetworkHelper::getNetworkAccess('external');
             }
-            $jsonrpc = new \jsonrpcClient(ConfigManager::byKey('market::address') . '/core/api/api.php', '', $params);
+            $jsonrpc = new JsonRPCClient(ConfigManager::byKey('market::address') . '/core/api/api.php', '', $params);
         } else {
-            $jsonrpc = new \jsonrpcClient(ConfigManager::byKey('market::address') . '/core/api/api.php', '', [
+            $jsonrpc = new JsonRPCClient(ConfigManager::byKey('market::address') . '/core/api/api.php', '', [
                 'nextdomversion' => NextDomHelper::getNextdomVersion(),
                 'hwkey' => NextDomHelper::getHardwareKey(),
                 'localIp' => $internalIp,
                 'nextdom_name' => ConfigManager::byKey('name'),
-                'plugin_install_list' => PluginManager::listPlugin(true, false, true),
+                'plugin_install_list' => PluginManager::listPlugin(false, false, true),
                 'information' => [
                     'nbMessage' => MessageManager::nbMessage(),
                     'nbUpdate' => UpdateManager::nbNeedUpdate(),
@@ -372,7 +375,7 @@ class RepoMarket implements BaseRepo
     /**
      *
      * @param array $_arrayMarket
-     * @return \self
+     * @return self
      */
     public static function construct(array $_arrayMarket)
     {
@@ -680,7 +683,7 @@ class RepoMarket implements BaseRepo
         $cmd .= ' ' . $baseDir . '  "webdavs://' . ConfigManager::byKey('market::username') . ':' . ConfigManager::byKey('market::backupPassword');
         $cmd .= '@' . ConfigManager::byKey('market::backupServer') . '/remote.php/webdav/' . ConfigManager::byKey('market::cloud::backup::name') . '"';
         try {
-            \com_shell::execute($cmd);
+            ComShell::execute($cmd);
         } catch (\Exception $e) {
             if (self::backup_errorAnalyzed($e->getMessage()) != null) {
                 throw new CoreException('[backup cloud] ' . self::backup_errorAnalyzed($e->getMessage()));
@@ -691,7 +694,7 @@ class RepoMarket implements BaseRepo
             SystemHelper::kill('duplicity');
             shell_exec(SystemHelper::getCmdSudo() . ' rm -rf ' . $baseDir . '/tmp/duplicity*');
             shell_exec(SystemHelper::getCmdSudo() . ' rm -rf ~/.cache/duplicity/*');
-            \com_shell::execute($cmd);
+            ComShell::execute($cmd);
         }
     }
 
@@ -723,7 +726,7 @@ class RepoMarket implements BaseRepo
     {
         if (exec('which duplicity | wc -l') == 0) {
             try {
-                \com_shell::execute('sudo apt-get -y install duplicity');
+                ComShell::execute('sudo apt-get -y install duplicity');
             } catch (\Exception $e) {
 
             }
@@ -765,7 +768,7 @@ class RepoMarket implements BaseRepo
         $cmd .= ' "webdavs://' . ConfigManager::byKey('market::username') . ':' . ConfigManager::byKey('market::backupPassword');
         $cmd .= '@' . ConfigManager::byKey('market::backupServer') . '/remote.php/webdav/' . ConfigManager::byKey('market::cloud::backup::name') . '"';
         try {
-            \com_shell::execute($cmd);
+            ComShell::execute($cmd);
         } catch (\Exception $e) {
             if (self::backup_errorAnalyzed($e->getMessage()) != null) {
                 throw new CoreException('[restore cloud] ' . self::backup_errorAnalyzed($e->getMessage()));
@@ -793,10 +796,10 @@ class RepoMarket implements BaseRepo
         $cmd .= ' "webdavs://' . ConfigManager::byKey('market::username') . ':' . ConfigManager::byKey('market::backupPassword');
         $cmd .= '@' . ConfigManager::byKey('market::backupServer') . '/remote.php/webdav/' . ConfigManager::byKey('market::cloud::backup::name') . '"';
         try {
-            $results = explode("\n", \com_shell::execute($cmd));
+            $results = explode("\n", ComShell::execute($cmd));
         } catch (\Exception $e) {
             shell_exec(SystemHelper::getCmdSudo() . ' rm -rf ~/.cache/duplicity/*');
-            $results = explode("\n", \com_shell::execute($cmd));
+            $results = explode("\n", ComShell::execute($cmd));
         }
         foreach ($results as $line) {
             if (strpos($line, 'Full') === false && strpos($line, 'Incremental') === false && strpos($line, 'Complète') === false && strpos($line, 'Incrémentale') === false) {
@@ -818,7 +821,7 @@ class RepoMarket implements BaseRepo
         }
         $restore_dir = '/tmp/nextdom_cloud_restore';
         if (file_exists($restore_dir)) {
-            \com_shell::execute(SystemHelper::getCmdSudo() . ' rm -rf ' . $restore_dir);
+            ComShell::execute(SystemHelper::getCmdSudo() . ' rm -rf ' . $restore_dir);
         }
         self::backup_install();
         $base_dir = '/usr/jeedom_duplicity';
@@ -837,7 +840,7 @@ class RepoMarket implements BaseRepo
         $cmd .= '@' . ConfigManager::byKey('market::backupServer') . '/remote.php/webdav/' . ConfigManager::byKey('market::cloud::backup::name') . '"';
         $cmd .= ' ' . $restore_dir;
         try {
-            \com_shell::execute($cmd);
+            ComShell::execute($cmd);
         } catch (\Exception $e) {
             if (self::backup_errorAnalyzed($e->getMessage()) != null) {
                 throw new CoreException('[restore cloud] ' . self::backup_errorAnalyzed($e->getMessage()));
@@ -847,7 +850,7 @@ class RepoMarket implements BaseRepo
         shell_exec(SystemHelper::getCmdSudo() . ' rm -rf ' . $base_dir);
         system('cd ' . $restore_dir . ';tar cfz "' . $backup_dir . '/' . $backup_name . '" . > /dev/null');
         if (file_exists($restore_dir)) {
-            \com_shell::execute(SystemHelper::getCmdSudo() . ' rm -rf ' . $restore_dir);
+            ComShell::execute(SystemHelper::getCmdSudo() . ' rm -rf ' . $restore_dir);
         }
         BackupManager::restore($backup_dir . '/' . $backup_name, true);
     }
@@ -890,6 +893,13 @@ class RepoMarket implements BaseRepo
         }
     }
 
+    public static function sendHealth(){
+        $market = self::getJsonRpc();
+        if (!$market->sendRequest('register::health', ['health' => SystemHealth::health()])) {
+            throw new CoreException($market->getError(), $market->getErrorCode());
+        }
+    }
+
     public static function monitoring_status()
     {
         if (!file_exists('/etc/zabbix/zabbix_agentd.conf')) {
@@ -916,6 +926,9 @@ class RepoMarket implements BaseRepo
     {
         preg_match_all('/(\d\.\d\.\d)/m', shell_exec(SystemHelper::getCmdSudo() . ' zabbix_agentd -V'), $matches);
         self::monitoring_install();
+        if(!file_exists('/etc/zabbix/zabbix_agentd.conf')){
+            return;
+        }
         $cmd = SystemHelper::getCmdSudo() . " chmod -R 777 /etc/zabbix;";
         $cmd .= SystemHelper::getCmdSudo() . " sed -i '/ServerActive=/d' /etc/zabbix/zabbix_agentd.conf;";
         $cmd .= SystemHelper::getCmdSudo() . " sed -i '/Hostname=/d' /etc/zabbix/zabbix_agentd.conf;";

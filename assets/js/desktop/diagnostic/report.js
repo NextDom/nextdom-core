@@ -79,7 +79,7 @@ function initEvents() {
             id: $('#div_reportForm .reportAttr[data-l1key=id]').value(),
             report: report,
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function (data) {
                 $('#div_reportForm').hide();
@@ -96,7 +96,7 @@ function initEvents() {
             type: $('#div_reportForm .reportAttr[data-l1key=type]').value(),
             id: $('#div_reportForm .reportAttr[data-l1key=id]').value(),
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function (data) {
                 $('#div_reportForm').hide();
@@ -119,7 +119,7 @@ function getReportList(_type, _id){
        type: _type,
        id: _id,
        error: function (error) {
-           notify("Erreur", error.message, 'error');
+           notify('Erreur', error.message, 'error');
        },
        success: function (data) {
            $('#ul_report .li_report').remove();
@@ -145,7 +145,7 @@ function getReport(_type, _id, _report){
        id: _id,
        report: _report,
        error: function (error) {
-           notify("Erreur", error.message, 'error');
+           notify('Erreur', error.message, 'error');
        },
        success: function (data) {
            $('#div_reportForm').show();

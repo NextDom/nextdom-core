@@ -24,57 +24,66 @@ set_root() {
 set_root $0
 
 function run_as_superuser {
-  cmd=$@
-  if [ -z "${TRAVIS}" ] && [ ${EUID} != "0" ]; then
-      sudo $@
-  else
-    $@
-  fi
+    cmd=$@
+    if [ ${EUID} != "0" ]; then
+        sudo $@
+    else
+        $@
+    fi
 }
 
 function install_nodemodules {
-  echo " >>> Installing the npm modules"
-  [[ ! -d ./vendor ]] && mkdir vendor
-  cp package.json ./vendor/
-  npm install --unsafe-perm --no-save --prefix ./vendor
+    echo " >>> Installing the npm modules"
+    if [[ ! -d ./vendor ]]; then
+        mkdir vendor
+    fi
+    cp package.json ./vendor/
+    if [[ "$1" = "--no-dev" ]]; then
+        npm install --unsafe-perm --no-save --production --prefix ./vendor
+    else
+        npm install --unsafe-perm --no-save --prefix ./vendor
+    fi
 }
 
 function install_dep_composer {
-  echo " >>> Installation dependencies composer"
-  if [[ "$1" = "--no-dev" ]] ; then
-      composer install -o --no-dev
-  else
-      composer install
-  fi
+    echo " >>> Installation dependencies composer"
+    if [[ "$1" = "--no-dev" ]] ; then
+        composer install -o --no-dev
+    else
+        composer install --dev
+    fi
 }
 
 function init_dependencies {
-	npm --version > /dev/null 2>&1 || {
-		echo " >>> Installation of node and npm"
-    tmpFile=$(mktemp)
-		wget -q https://deb.nodesource.com/setup_10.x -O ${tmpFile}
-    run_as_superuser bash ${tmpFile}
-		run_as_superuser apt install -y nodejs
-    rm -f ${tmpFile}
-  }
+    npm --version > /dev/null 2>&1 || {
+        echo " >>> Installation of node and npm"
+        tmpFile=$(mktemp)
+        wget -q https://deb.nodesource.com/setup_10.x -O ${tmpFile}
+        run_as_superuser bash ${tmpFile}
+        run_as_superuser apt install -y nodejs
+        rm -f ${tmpFile}
+    }
 
-	sass --version > /dev/null 2>&1 || {
-		echo " >>> Installation of sass"
-    run_as_superuser npm install -g sass
-	}
+    sass --version > /dev/null 2>&1 || {
+        echo " >>> Installation of sass"
+        if [ "$(grep -Ei 'debian|buntu|mint' /etc/*release)" ]; then
+            run_as_superuser apt-get install -y ruby-sass;
+        else
+            run_as_superuser npm install -g ruby-sass
+        fi
+    }
 
-	python -c "import jsmin" 2>&1 /dev/null || {
-	  . /etc/os-release
-	  if [[ "$NAME" == *Debian* ]]; then
-	      run_as_superuser apt install -y python-jsmin;
-	  else
-	    run_as_superuser pip install jsmin;
-	  fi
-  }
+    python -c "import jsmin" 2>&1 /dev/null || {
+        if [ "$(grep -Ei 'debian|buntu|mint' /etc/*release)" ]; then
+            run_as_superuser apt-get install -y python-jsmin;
+        else
+            run_as_superuser pip install jsmin;
+        fi
+    }
 }
 
 cd ${root}/..
 
 init_dependencies
-install_dep_composer --no-dev
+install_dep_composer
 install_nodemodules

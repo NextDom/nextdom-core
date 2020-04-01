@@ -25,6 +25,61 @@ set -e
 
 function gen_css {
     COMPRESS=""
+    mkdir -p assets/css/builded
+    # Build adminlte
+    node vendor/node_modules/less/bin/lessc assets/css/compiled/AdminLTE.less assets/css/builded/AdminLTE.scss
+    #
+    cat vendor/node_modules/bootstrap/dist/css/bootstrap.css \
+		vendor/node_modules/roboto-fontface/css/roboto/roboto-fontface.css \
+		vendor/node_modules/jquery-ui/themes/base/core.css \
+		vendor/node_modules/jquery-ui/themes/base/accordion.css \
+		vendor/node_modules/jquery-ui/themes/base/autocomplete.css \
+		vendor/node_modules/jquery-ui/themes/base/button.css \
+		vendor/node_modules/jquery-ui/themes/base/checkboxradio.css \
+		vendor/node_modules/jquery-ui/themes/base/controlgroup.css \
+		vendor/node_modules/jquery-ui/themes/base/datepicker.css \
+		vendor/node_modules/jquery-ui/themes/base/dialog.css \
+		vendor/node_modules/jquery-ui/themes/base/draggable.css \
+		vendor/node_modules/jquery-ui/themes/base/menu.css \
+		vendor/node_modules/jquery-ui/themes/base/progressbar.css \
+		vendor/node_modules/jquery-ui/themes/base/resizable.css \
+		vendor/node_modules/jquery-ui/themes/base/selectable.css \
+		vendor/node_modules/jquery-ui/themes/base/selectmenu.css \
+		vendor/node_modules/jquery-ui/themes/base/sortable.css \
+		vendor/node_modules/jquery-ui/themes/base/slider.css \
+		vendor/node_modules/jquery-ui/themes/base/spinner.css \
+		vendor/node_modules/jquery-ui/themes/base/tabs.css \
+		vendor/node_modules/jquery-ui/themes/base/tooltip.css \
+		vendor/node_modules/jquery-ui/themes/base/theme.css \
+		vendor/node_modules/jquery-ui-bootstrap/jquery.ui.theme.css \
+		assets/3rdparty/jquery.utils/_jquery.utils.scss \
+		vendor/node_modules/notosans-fontface/css/notosans-fontface.min.css \
+		vendor/node_modules/jquery-cron/dist/jquery-cron.css \
+		vendor/node_modules/jquery-contextmenu/dist/jquery.contextMenu.css \
+		vendor/node_modules/tablesorter/dist/css/theme.bootstrap.min.css \
+		vendor/node_modules/codemirror/lib/codemirror.css \
+		vendor/node_modules/izitoast/dist/css/iziToast.css \
+		vendor/node_modules/@fortawesome/fontawesome-free/css/all.css \
+		vendor/node_modules/font-awesome/css/font-awesome.css \
+		vendor/node_modules/jquery-datetimepicker/jquery.datetimepicker.css \
+		vendor/node_modules/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css \
+    assets/icon/animal/style.css \
+		assets/icon/divers/style.css \
+		assets/icon/fashion/style.css \
+		assets/icon/loisir/style.css \
+		assets/icon/maison/style.css \
+		assets/icon/meteo/style.css \
+		assets/icon/nature/style.css \
+		assets/icon/nextdom/style.css \
+		assets/icon/nextdom2/style.css \
+		assets/icon/nextdomapp/style.css \
+		assets/icon/nourriture/style.css \
+		assets/icon/personne/style.css \
+		assets/icon/securite/style.css \
+		assets/icon/techno/style.css \
+		assets/icon/transport/style.css \
+    > assets/css/builded/vendors.scss
+
     if [ $# -eq 0 ]; then
         COMPRESS="--style compressed"
     fi
@@ -32,13 +87,26 @@ function gen_css {
     mkdir -p public/css/pages
     mkdir -p public/css/modals
     mkdir -p public/css/themes
-    sass --update --stop-on-error assets/css/compiled:public/css $COMPRESS
+    sass --update --default-encoding=UTF-8 --stop-on-error assets/css/compiled:public/css $COMPRESS
     echo " >>> Generate Themes"
     for theme_file in assets/css/themes/output/*.scss; do
         sass --update --stop-on-error ${theme_file}:public/css/themes/$(basename "${theme_file}" .scss).css $COMPRESS
     done
   	# Path replace
-  	sed -i s#\"images/ui-#\"/assets/css/vendors/jquery-ui-bootstrap/images/ui-#g public/css/nextdom.css
+  	sed -i s#images/ui-icons_333333#/vendor/node_modules/jquery-ui-bootstrap/images/ui-icons_333333#g public/css/nextdom.css
+  	sed -i s#images/ui-icons_454545#/vendor/node_modules/jquery-ui-bootstrap/images/ui-icons_454545#g public/css/nextdom.css
+  	sed -i s#images/ui-icons_888888#/vendor/node_modules/jquery-ui-bootstrap/images/ui-icons_888888#g public/css/nextdom.css
+  	sed -i s#images/ui-icons_B94A48#/vendor/node_modules/jquery-ui-bootstrap/images/ui-icons_B94A48#g public/css/nextdom.css
+  	sed -i s#images/ui-icons_444444#/vendor/node_modules/jquery-ui-dist/images/ui-icons_444444#g public/css/nextdom.css
+  	sed -i s#images/ui-icons_555555#/vendor/node_modules/jquery-ui-dist/images/ui-icons_555555#g public/css/nextdom.css
+  	sed -i s#images/ui-icons_777620#/vendor/node_modules/jquery-ui-dist/images/ui-icons_777620#g public/css/nextdom.css
+  	sed -i s#images/ui-icons_777777#/vendor/node_modules/jquery-ui-dist/images/ui-icons_777777#g public/css/nextdom.css
+  	sed -i s#images/ui-icons_cc0000#/vendor/node_modules/jquery-ui-dist/images/ui-icons_cc0000#g public/css/nextdom.css
+  	sed -i s#images/ui-icons_ffffff#/vendor/node_modules/jquery-ui-dist/images/ui-icons_ffffff#g public/css/nextdom.css
+  	sed -i s#../fonts/glyphicons#/vendor/node_modules/bootstrap/fonts/glyphicons#g public/css/nextdom.css
+  	sed -i s#../fonts/fontawesome-webfont#/vendor/node_modules/font-awesome/fonts/fontawesome-webfont#g public/css/nextdom.css
+  	sed -i s#../webfonts/fa#/vendor/node_modules/@fortawesome/fontawesome-free/webfonts/fa#g public/css/nextdom.css
+  	sed -i s#../../fonts/roboto/Roboto-#/vendor/node_modules/roboto-fontface/fonts/roboto/Roboto-#g public/css/nextdom.css
 }
 
 function gen_js {
@@ -70,6 +138,7 @@ function gen_js {
            assets/js/core/update.class.js \
            assets/js/core/user.class.js \
            assets/js/core/backup.class.js \
+           assets/js/core/nextdom_market.class.js \
            assets/js/core/interact.class.js \
            assets/js/core/update.class.js \
            assets/js/core/plan.class.js \
@@ -82,11 +151,13 @@ function gen_js {
            assets/js/core/note.class.js \
            assets/js/core/listener.class.js \
            assets/js/core/jeedom.class.js \
+           assets/js/desktop/globals.js \
+           assets/js/libs/gui.js \
            assets/js/desktop/conflicts.js \
-           assets/js/desktop/loads.js \
-           assets/js/desktop/inits.js \
-           assets/js/desktop/gui.js \
-           assets/js/desktop/utils.js \
+           assets/js/desktop/menu.js \
+           assets/js/desktop/preinit.js \
+           assets/js/desktop/postinit.js \
+           assets/js/libs/utils.js \
            assets/js/desktop/search.js \
            assets/js/desktop/jeedomCompatibility.js \
            vendor/node_modules/bootbox/dist/bootbox.min.js \
@@ -112,6 +183,7 @@ function gen_js {
            vendor/node_modules/inputmask/dist/jquery.inputmask.bundle.js \
            vendor/node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js \
            vendor/node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js \
+           vendor/node_modules/jquery-ui/ui/i18n/datepicker-fr.js \
            vendor/node_modules/snapsvg/dist/snap.svg-min.js \
            vendor/node_modules/moment/min/moment.min.js \
            vendor/node_modules/vivagraphjs/dist/vivagraph.min.js \
@@ -156,6 +228,7 @@ function gen_js {
                    js/desktop/tools \
                    js/desktop/tools/markets \
                    js/desktop/tools/osdb \
+                   js/libs \
                    js/modals \
                    js/factory \
                    js/factory/elements)
@@ -170,14 +243,18 @@ function gen_js {
 }
 
 function copy_assets {
-  echo " >>> Copy icons"
-	cp -fr assets/icon public/
-	echo " >>> Copy images"
+    mkdir -p public/css/fonts
+    mkdir -p public/icons
+    echo " >>> Copy vendors"
+    cp -fr assets/3rdparty public/
+    echo " >>> Copy icons"
+	cp -fr assets/icon/*/fonts/* public/css/fonts/
+    cp -fr assets/icon/* public/icons/
+    rm -fr public/icons/*/fonts
+  	echo " >>> Copy images"
 	cp -fr assets/img public/
-  echo " >>> Copy html"
+    echo " >>> Copy html"
 	cp -fr assets/*.html public/
-	gen_css
-	gen_js
 }
 
 function clean_cache {
@@ -218,6 +295,8 @@ if [ "$#" == 0 ]; then
 	  mkdir -p public/css
 	  mkdir -p public/js
 	  copy_assets;
+	  gen_css
+	  gen_js
 	  clean_cache
 elif [ "$1" == "--watch" ]; then
 	  start;
@@ -225,4 +304,6 @@ elif [ "$1" == "--css" ]; then
 	  gen_css
 elif [ "$1" == "--js" ]; then
 	  gen_js
+else
+      copy_assets
 fi

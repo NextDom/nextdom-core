@@ -50,7 +50,7 @@
         nextdom.view.setOrder({
             views: views,
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             }
         });
     }
@@ -75,7 +75,7 @@
     nextdom.view.get({
         id: $(this).attr('data-view_id'),
         error: function(error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function(data) {
             $('#div_viewZones').empty();
@@ -111,7 +111,7 @@
             id: '',
             view: {name:result},
             error: function(error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function(data) {
                loadPage('index.php?v=d&p=view_edit&view_id=' + data.id);
@@ -122,8 +122,7 @@
 });
 
  $("#bt_editView").on('click', function(event) {
-    $('#md_modal').dialog({title: "{{Configuration de la vue}}"});
-    $('#md_modal').load('index.php?v=d&modal=view.configure&view_id='+$('.li_view.active').attr('data-view_id')).dialog('open');
+    loadModal('modal', '{{Configuration de la vue}}', 'view.configure&view_id='+$('.li_view.active').attr('data-view_id'));
 });
 
  $('#bt_saveView').on('click', function(event) {
@@ -161,10 +160,10 @@
     id: $(".li_view.active").attr('data-view_id'),
     view: view,
     error: function(error) {
-        notify("Erreur", error.message, 'error');
+        notify('Erreur', error.message, 'error');
     },
     success: function() {
-        notify("Info", '{{Modification enregistrée}}', 'success');
+        notify('Info', '{{Modification enregistrée}}', 'success');
         modifyWithoutSave = false;
         if(isset(_viewResult) && _viewResult){
             window.location.href = 'index.php?v=d&p=view&view_id=' + $(".li_view.active").attr('data-view_id');
@@ -182,7 +181,7 @@ $("#bt_removeView").on('click', function(event) {
             nextdom.view.remove({
                 id: $(".li_view.active").attr('data-view_id'),
                 error: function(error) {
-                    notify("Erreur", error.message, 'error');
+                    notify('Erreur', error.message, 'error');
                 },
                 success: function() {
                     modifyWithoutSave = false;
@@ -194,13 +193,11 @@ $("#bt_removeView").on('click', function(event) {
 });
 
 if (is_numeric(getUrlVars('view_id'))) {
-    if ($('#ul_view .li_view[data-view_id=' + getUrlVars('view_id') + ']').length != 0) {
-        $('#ul_view .li_view[data-view_id=' + getUrlVars('view_id') + ']').click();
-    } else {
-        $('#ul_view .li_view:first').click();
-    }
-} else {
-    $('#ul_view .li_view:first').click();
+  var targetView = $('#ul_view .li_view[data-view_id=' + getUrlVars('view_id') + ']');
+  if (targetView.length === 0) {
+    targetView = $('#ul_view .li_view:first');
+  }
+  targetView.click();
 }
 
 $("#div_viewZones").sortable({axis: "y", cursor: "move", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
@@ -413,70 +410,70 @@ function addGraphService(_viewData){
     tr += '<span class="viewDataAttr" data-l1key="name"></span>';
     tr += '</td>';
     tr += '<td>';
-    tr += '<select class="viewDataAttr form-control input-sm" data-l1key="configuration" data-l2key="graphColor" style="background-color:#4572A7;color:white;">'
-    tr += '<option value="#4572A7" style="background-color:#4572A7;color:white;">{{Bleu}}</option>'
-    tr += '<option value="#AA4643" style="background-color:#AA4643;color:white;">{{Rouge}}</option>'
-    tr += '<option value="#89A54E" style="background-color:#89A54E;color:white;">{{Vert}}</option>'
-    tr += '<option value="#80699B" style="background-color:#80699B;color:white;">{{Violet}}</option>'
-    tr += '<option value="#00FFFF" style="background-color:#00FFFF;color:white;">{{Bleu ciel}}</option>'
-    tr += '<option value="#DB843D" style="background-color:#DB843D;color:white;">{{Orange}}</option>'
-    tr += '<option value="#FFFF00" style="background-color:#FFFF00;color:white;">{{Jaune}}</option>'
-    tr += '<option value="#FE2E9A" style="background-color:#FE2E9A;color:white;">{{Rose}}</option>'
-    tr += '<option value="#000000" style="background-color:#000000;color:white;">{{Noir}}</option>'
-    tr += '<option value="#3D96AE" style="background-color:#3D96AE;color:white;">{{Vert/Bleu}}</option>'
-    tr += '</select>'
+    tr += '<select class="viewDataAttr form-control input-sm" data-l1key="configuration" data-l2key="graphColor" style="background-color:#4572A7;color:white;">';
+    tr += '<option value="#4572A7" style="background-color:#4572A7;color:white;">{{Bleu}}</option>';
+    tr += '<option value="#AA4643" style="background-color:#AA4643;color:white;">{{Rouge}}</option>';
+    tr += '<option value="#89A54E" style="background-color:#89A54E;color:white;">{{Vert}}</option>';
+    tr += '<option value="#80699B" style="background-color:#80699B;color:white;">{{Violet}}</option>';
+    tr += '<option value="#00FFFF" style="background-color:#00FFFF;color:white;">{{Bleu ciel}}</option>';
+    tr += '<option value="#DB843D" style="background-color:#DB843D;color:white;">{{Orange}}</option>';
+    tr += '<option value="#FFFF00" style="background-color:#FFFF00;color:white;">{{Jaune}}</option>';
+    tr += '<option value="#FE2E9A" style="background-color:#FE2E9A;color:white;">{{Rose}}</option>';
+    tr += '<option value="#000000" style="background-color:#000000;color:white;">{{Noir}}</option>';
+    tr += '<option value="#3D96AE" style="background-color:#3D96AE;color:white;">{{Vert/Bleu}}</option>';
+    tr += '</select>';
     tr += '</td>';
     tr += '<td>';
-    tr += '<select class="viewDataAttr form-control input-sm" data-l1key="configuration" data-l2key="graphType">'
-    tr +=  '<option value="line">{{Ligne}}</option>'
-    tr +=  '<option value="area">{{Aire}}</option>'
-    tr +=  '<option value="column">{{Colonne}}</option>'
-    tr +=  '<option value="pie">{{Camembert}}</option>'
-    tr +=  '</select>'
+    tr += '<select class="viewDataAttr form-control input-sm" data-l1key="configuration" data-l2key="graphType">';
+    tr +=  '<option value="line">{{Ligne}}</option>';
+    tr +=  '<option value="area">{{Aire}}</option>';
+    tr +=  '<option value="column">{{Colonne}}</option>';
+    tr +=  '<option value="pie">{{Camembert}}</option>';
+    tr +=  '</select>';
     tr += '</td>';
     tr += '<td>';
-    tr += '<select class="viewDataAttr form-control input-sm" data-l1key="configuration" data-l2key="groupingType">'
-    tr += '<option value="">{{Aucun groupement}}</option>'
-    tr += '<option value="sum::day">{{Somme par jour}}</option>'
-    tr += '<option value="average::day">{{Moyenne par jour}}</option>'
-    tr += '<option value="low::day">{{Minimum par jour}}</option>'
-    tr += '<option value="high::day">{{Maximum par jour}}</option>'
-    tr += '<option value="sum::week">{{Somme par semaine}}</option>'
-    tr += '<option value="average::week">{{Moyenne par semaine}}</option>'
-    tr += '<option value="low::week">{{Minimum par semaine}}</option>'
-    tr += '<option value="high::week">{{Maximum par semaine}}</option>'
-    tr += '<option value="sum::month">{{Somme par mois}}</option>'
-    tr += '<option value="average::month">{{Moyenne par mois}}</option>'
-    tr += '<option value="low::month">{{Minimum par mois}}</option>'
-    tr += '<option value="high::month">{{Maximum par mois}}</option>'
-    tr += '<option value="average::year">{{Moyenne par année}}</option>'
-    tr += '<option value="low::year">{{Minimum par année}}</option>'
-    tr += '<option value="high::year">{{Maximum par année}}</option>'
-    tr +=  '</select>'
+    tr += '<select class="viewDataAttr form-control input-sm" data-l1key="configuration" data-l2key="groupingType">';
+    tr += '<option value="">{{Aucun groupement}}</option>';
+    tr += '<option value="sum::day">{{Somme par jour}}</option>';
+    tr += '<option value="average::day">{{Moyenne par jour}}</option>';
+    tr += '<option value="low::day">{{Minimum par jour}}</option>';
+    tr += '<option value="high::day">{{Maximum par jour}}</option>';
+    tr += '<option value="sum::week">{{Somme par semaine}}</option>';
+    tr += '<option value="average::week">{{Moyenne par semaine}}</option>';
+    tr += '<option value="low::week">{{Minimum par semaine}}</option>';
+    tr += '<option value="high::week">{{Maximum par semaine}}</option>';
+    tr += '<option value="sum::month">{{Somme par mois}}</option>';
+    tr += '<option value="average::month">{{Moyenne par mois}}</option>';
+    tr += '<option value="low::month">{{Minimum par mois}}</option>';
+    tr += '<option value="high::month">{{Maximum par mois}}</option>';
+    tr += '<option value="average::year">{{Moyenne par année}}</option>';
+    tr += '<option value="low::year">{{Minimum par année}}</option>';
+    tr += '<option value="high::year">{{Maximum par année}}</option>';
+    tr +=  '</select>';
     tr += '</td>';
     tr += '<td>';
-    tr += '<select class="viewDataAttr form-control input-sm" data-l1key="configuration" data-l2key="graphScale" style="width : 90px;">'
-    tr += '<option value="0">{{Droite}}</option>'
-    tr += '<option value="1">{{Gauche}}</option>'
-    tr += '</select>'
+    tr += '<select class="viewDataAttr form-control input-sm" data-l1key="configuration" data-l2key="graphScale" style="width : 90px;">';
+    tr += '<option value="0">{{Droite}}</option>';
+    tr += '<option value="1">{{Gauche}}</option>';
+    tr += '</select>';
     tr += '</td>';
     tr += '<td>';
-    tr += '<select class="viewDataAttr form-control input-sm" data-l1key="configuration" data-l2key="graphStep" style="width : 90px;">'
-    tr += '<option value="0">{{Non}}</option>'
-    tr += '<option value="1">{{Oui}}</option>'
-    tr += '</select>'
+    tr += '<select class="viewDataAttr form-control input-sm" data-l1key="configuration" data-l2key="graphStep" style="width : 90px;">';
+    tr += '<option value="0">{{Non}}</option>';
+    tr += '<option value="1">{{Oui}}</option>';
+    tr += '</select>';
     tr += '</td>';
     tr += '<td>';
-    tr += '<select class="viewDataAttr form-control input-sm" data-l1key="configuration" data-l2key="graphStack" style="width : 90px;">'
-    tr += '<option value="0">{{Non}}</option>'
-    tr += '<option value="1">{{Oui}}</option>'
-    tr += '</select>'
+    tr += '<select class="viewDataAttr form-control input-sm" data-l1key="configuration" data-l2key="graphStack" style="width : 90px;">';
+    tr += '<option value="0">{{Non}}</option>';
+    tr += '<option value="1">{{Oui}}</option>';
+    tr += '</select>';
     tr += '</td>';
     tr += '<td>';
-    tr += '<select class="viewDataAttr form-control input-sm" data-l1key="configuration" data-l2key="derive" style="width : 90px;">'
-    tr += '<option value="0">{{Non}}</option>'
-    tr += '<option value="1">{{Oui}}</option>'
-    tr += '</select>'
+    tr += '<select class="viewDataAttr form-control input-sm" data-l1key="configuration" data-l2key="derive" style="width : 90px;">';
+    tr += '<option value="0">{{Non}}</option>';
+    tr += '<option value="1">{{Oui}}</option>';
+    tr += '</select>';
     tr += '</td>';
     tr += '</tr>';
     var result = $(tr);
@@ -506,6 +503,6 @@ function addWidgetService(_viewData){
     tr += '</td>';
     tr += '</tr>';
     var result = $(tr);
-    result.setValues(_viewData,'.viewDataAttr')
+    result.setValues(_viewData,'.viewDataAttr');
     return result;
 }

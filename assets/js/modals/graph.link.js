@@ -37,7 +37,7 @@ function initEvents() {
         filter_type : filterTypeGraph,
         filter_id :  filterIdGraph ,
         error: function(error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success : function(data){
             for(var i in data.node){
@@ -83,7 +83,7 @@ function render(graphToRender){
             .attr('y', -15).text(node.data.name)
             .attr('alignment-baseline','central')
             .attr('text-anchor','middle')
-            .attr('font-weight',node.data.fontweight)
+            .attr('font-weight',node.data.fontweight);
         if(typeof node.data.image != 'undefined' && $.trim(node.data.image) != ''){
             img = Viva.Graph.svg('image')
                 .attr('width', node.data.width)

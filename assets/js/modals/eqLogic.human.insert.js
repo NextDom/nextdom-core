@@ -67,7 +67,7 @@ mod_insertEqLogic.changeObjectEqLogic = function (_select) {
         id: _select.value(),
         orderByName: true,
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function (eqLogics) {
             _select.closest('tr').find('.mod_insertEqLogicValue_eqLogic').empty();

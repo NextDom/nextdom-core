@@ -16,15 +16,15 @@
  */
 
 require_once(__DIR__ . '/../../../src/core.php');
-require_once(__DIR__ . '/BaseControllerTest.php');
+require_once(__DIR__ . '/../libs/BaseControllerTest.php');
 
 class EqLogicDisplayWidgetModalControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (isset($_GET['eqLogic_id'])) {
             unset($_GET['eqLogic_id']);
@@ -40,6 +40,6 @@ class EqLogicDisplayWidgetModalControllerTest extends BaseControllerTest
         $_GET['eqLogic_id'] = 1;
         $_SESSION['user'] = \NextDom\Managers\UserManager::byId(1);
         $result = \NextDom\Controller\Modals\EqLogicDisplayWidget::get();
-        $this->assertContains('positionEqLogic();', $result);
+        $this->assertStringContainsString('positionEqLogic();', $result);
     }
 }

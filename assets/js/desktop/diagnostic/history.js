@@ -72,8 +72,7 @@ function initEvents() {
 
     // Configure calcul charts
     $('#bt_configureCalculHistory').on('click',function(){
-        $('#md_modal').dialog({title: "{{Configuration des formules de calcul}}"});
-        $("#md_modal").load('index.php?v=d&modal=history.calcul').dialog('open');
+        loadModal('modal', '{{Configuration des formules de calcul}}', 'history.calcul');
     });
 
     // Clear graph button
@@ -131,13 +130,12 @@ function initEvents() {
 
     // Export history
     $(".li_history .export").on('click', function () {
-        window.open('core/php/export.php?type=cmdHistory&id=' + $(this).closest('.li_history').attr('data-cmd_id'), "_blank", null);
+        window.open('src/Api/export.php?type=cmdHistory&id=' + $(this).closest('.li_history').attr('data-cmd_id'), "_blank", null);
     });
 
     // Configure history
     $('#bt_openCmdHistoryConfigure').on('click',function(){
-        $('#md_modal').dialog({title: "{{Configuration de l'historique des commandes}}"});
-        $("#md_modal").load('index.php?v=d&modal=cmd.configureHistory').dialog('open');
+        loadModal('modal', '{{Configuration de l\'historique des commandes}}', 'cmd.configureHistory');
     });
 
     // Date change confirm
@@ -173,7 +171,7 @@ function initHistoryTrigger() {
         nextdom.cmd.save({
             cmd: {id: lastId, display: {graphType: $(this).value()}},
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function () {
                 $('.li_history[data-cmd_id=' + lastId + '] .history').click();
@@ -196,7 +194,7 @@ function initHistoryTrigger() {
         nextdom.cmd.save({
             cmd: {id: lastId, display: {groupingType: $(this).value()}},
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function () {
                 $('.li_history[data-cmd_id=' + lastId + '] .history').click();
@@ -219,7 +217,7 @@ function initHistoryTrigger() {
         nextdom.cmd.save({
             cmd: {id: lastId, display: {graphDerive: $(this).value()}},
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function () {
                 $('.li_history[data-cmd_id=' + lastId + '] .history').click();
@@ -242,7 +240,7 @@ function initHistoryTrigger() {
         nextdom.cmd.save({
             cmd: {id: lastId, display: {graphStep: $(this).value()}},
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function () {
                 $('.li_history[data-cmd_id=' + lastId + '] .history').click();
@@ -260,8 +258,9 @@ function initHistoryTrigger() {
 function emptyHistory(_cmd_id, _date) {
     $.ajax({
         type: "POST",
-        url: "core/ajax/cmd.ajax.php",
+        url: "src/ajax.php",
         data: {
+            target: 'Cmd',
             action: "emptyHistory",
             id: _cmd_id,
             date: _date
@@ -272,10 +271,10 @@ function emptyHistory(_cmd_id, _date) {
         },
         success: function (data) {
             if (data.state != 'ok') {
-                notify("Erreur", data.result, 'error');
+                notify('Erreur', data.result, 'error');
                 return;
             }
-            notify("Info", '{{Historique supprimé avec succès}}', 'success');
+            notify('Info', '{{Historique supprimé avec succès}}', 'success');
             li = $('li[data-cmd_id=' + _cmd_id + ']');
             if (li.hasClass('active')) {
                 li.find('.history').click();

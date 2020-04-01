@@ -66,7 +66,7 @@ $('.bt_dbCommand').off('click').on('click',function(){
   nextdom.db({
     command : command,
     error: function (error) {
-      notify("Erreur", error.message, 'error');
+      notify('Erreur', error.message, 'error');
     },
     success : function(log){
      $('#in_specificCommand').value(command);
@@ -81,7 +81,7 @@ $('#ul_listSqlHistory').off('click','.bt_dbCommand').on('click','.bt_dbCommand',
   nextdom.db({
     command : command,
     error: function (error) {
-      notify("Erreur", error.message, 'error');
+      notify('Erreur', error.message, 'error');
     },
     success : function(log){
      $('#in_specificCommand').value(command);
@@ -96,7 +96,7 @@ $('#bt_validateSpecifiCommand').off('click').on('click',function(){
   nextdom.db({
     command : command,
     error: function (error) {
-      notify("Erreur", error.message, 'error');
+      notify('Erreur', error.message, 'error');
     },
     success : function(log){
       $('#div_commandResult').append(dbGenerateTableFromResponse(log));
@@ -116,7 +116,7 @@ $('#in_specificCommand').keypress(function(e) {
    nextdom.db({
     command : command,
     error: function (error) {
-      notify("Erreur", error.message, 'error');
+      notify('Erreur', error.message, 'error');
     },
     success : function(log){
       $('#div_commandResult').append(dbGenerateTableFromResponse(log));

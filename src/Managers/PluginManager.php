@@ -212,7 +212,7 @@ class PluginManager
         ];
         $sql = 'UPDATE eqLogic
                 SET isEnable = 0
-                WHERE eqType_name = :eqType_name';
+                WHERE `eqType_name` = :eqType_name';
         DBHelper::exec($sql, $values);
     }
 
@@ -255,7 +255,7 @@ class PluginManager
                     $message = __('Attention le plugin ') . ' ' . $plugin->getName();
                     $message .= __(' n\'a recu de message depuis ') . $heartbeat . __(' min');
                     $logicalId = 'heartbeat' . $plugin->getId();
-                    MessageManager::add($plugin->getId(), $message, '', $logicalId);
+                    MessageManager::add($plugin->getId(), $message, '', $logicalId, true);
                     if ($plugin->getHasOwnDeamon() && ConfigManager::byKey('heartbeat::restartDeamon::' . $plugin->getId(), 'core', 0) == 1) {
                         $plugin->deamon_start(true);
                     }

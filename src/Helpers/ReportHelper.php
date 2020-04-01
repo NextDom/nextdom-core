@@ -17,6 +17,7 @@
 
 namespace NextDom\Helpers;
 
+use NextDom\Com\ComShell;
 use NextDom\Enums\LogTarget;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\UserManager;
@@ -64,7 +65,7 @@ class ReportHelper
         $cmd .= ' --delay=' . $delay;
         $cmd .= ' --print-backgrounds=on';
         LogHelper::addDebug(LogTarget::REPORT, $cmd);
-        \com_shell::execute($cmd);
+        ComShell::execute($cmd);
         return $out;
     }
 }

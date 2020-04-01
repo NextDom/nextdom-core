@@ -45,7 +45,7 @@ function loadInformations() {
     nextdom.config.load({
         configuration: $('#general').getValues('.configKey:not(.noSet)')[0],
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function (data) {
             $('#general').setValues(data, '.configKey');
@@ -77,20 +77,20 @@ function initEvents() {
         nextdom.config.save({
             configuration: $('#general').getValues('.configKey')[0],
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function () {
                 nextdom.config.load({
                     configuration: $('#general').getValues('.configKey')[0],
                     plugin: 'core',
                     error: function (error) {
-                        notify("Erreur", error.message, 'error');
+                        notify('Erreur', error.message, 'error');
                     },
                     success: function (data) {
                         $('#general').setValues(data, '.configKey');
                         modifyWithoutSave = false;
                         $(".bt_cancelModifs").hide();
-                        notify("Info", '{{Sauvegarde réussie}}', 'success');
+                        notify('Info', '{{Sauvegarde réussie}}', 'success');
                     }
                 });
             }
@@ -101,10 +101,10 @@ function initEvents() {
     $('#bt_forceSyncHour').on('click', function () {
         nextdom.forceSyncHour({
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function (data) {
-                notify("Info", '{{Commande réalisée avec succès}}', 'success');
+                notify('Info', '{{Commande réalisée avec succès}}', 'success');
             }
         });
     });
@@ -112,10 +112,11 @@ function initEvents() {
     // Last connection date reset
     $('#bt_resetHour').on('click',function(){
         $.ajax({
-            type: "POST",
-            url: "core/ajax/nextdom.ajax.php",
+            type: 'POST',
+            url: 'src/ajax.php',
             data: {
-                action: "resetHour"
+                target: 'NextDom',
+                action: 'resetHour'
             },
             dataType: 'json',
             error: function (request, status, error) {
@@ -123,7 +124,7 @@ function initEvents() {
             },
             success: function (data) {
                 if (data.state != 'ok') {
-                    notify("Erreur", data.result, 'error');
+                    notify('Erreur', data.result, 'error');
                     return;
                 }
                 location.reload();
@@ -135,9 +136,10 @@ function initEvents() {
     $('#bt_resetHwKey').on('click',function(){
         $.ajax({
             type: "POST",
-            url: "core/ajax/nextdom.ajax.php",
+            url: 'src/ajax.php',
             data: {
-                action: "resetHwKey"
+                target: 'NextDom',
+                action: 'resetHour'
             },
             dataType: 'json',
             error: function (request, status, error) {
@@ -145,7 +147,7 @@ function initEvents() {
             },
             success: function (data) {
                 if (data.state != 'ok') {
-                    notify("Erreur", data.result, 'error');
+                    notify('Erreur', data.result, 'error');
                     return;
                 }
                 location.reload();
@@ -158,7 +160,7 @@ function initEvents() {
         nextdom.config.save({
             configuration: {hardware_name : ''},
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function () {
                 location.reload();

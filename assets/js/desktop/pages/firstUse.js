@@ -85,74 +85,82 @@ function initEvents() {
     $('#toStep3').click(function () {
       var newPassword = $('#in_change_password').val();
       if (newPassword !== '') {
-        if (newPassword === $('#in_change_passwordToo').val()) {
+        if (newPassword === $('#in_change_password_confirm').val()) {
           updateUserPassword(newPassword)
         } else {
           notify('Erreur', '{{Les deux mots de passe ne sont pas identiques !}}', 'error')
         }
       } else {
-        notify('Erreur', '{{Veuillez saisir un mot de passe ...}}', 'error')
+        notify('Erreur', '{{Veuillez saisir un mot de passe...}}', 'error')
       }
     });
 
     // Step 4 asked
     $('#toStep4').click(function () {
-      var username = $('#in_login_username_market').val();
-      var password = $('#in_login_password_market').val();
-      nextdom.config.save({
-        configuration: {'market::username': username, 'market::password': password},
-        error: function (error) {
-          notify('Core', error.message, 'error');
-        },
-        success: function () {
-          nextdom.repo.test({
-            repo: 'market',
-            error: function (error) {
-              notify('Core', error.message, 'error');
-            },
-            success: function () {
-              nextdom.config.load({
-                  configuration: $('.firstUse-Page').getValues('.configKey:not(.noSet)')[0],
-                  error: function (error) {
-                      notify("Erreur", error.message, 'error');
-                  },
-                  success: function (data) {
-                      $('.firstUse-Page').setValues(data, '.configKey');
-                  }
-              });
-              goToNextStep('#toStep4');
-            }
-          });
-        }
-      });
+        var username = $('#in_login_username_market').val();
+        var password = $('#in_login_password_market').val();
+        nextdom.config.save({
+          configuration: {'market::username': username, 'market::password': password},
+          error: function (error) {
+            notify('Core', error.message, 'error');
+          },
+          success: function () {
+            nextdom.repo.test({
+              repo: 'market',
+              error: function (error) {
+                notify('Core', error.message, 'error');
+              },
+              success: function () {
+                nextdom.config.load({
+                    configuration: $('.firstUse-Page').getValues('.configKey:not(.noSet)')[0],
+                    error: function (error) {
+                        notify('Erreur', error.message, 'error');
+                    },
+                    success: function (data) {
+                        $('.firstUse-Page').setValues(data, '.configKey');
+                    }
+                });
+                goToNextStep('#toStep4');
+              }
+            });
+          }
+        });
     });
 
     // Step 5 asked
     $('#toStep5').click(function () {
-      var config = $('.firstUse-Page').getValues('.configKey')[0];
-      nextdom.config.save({
-          configuration: config,
-          error: function (error) {
-              notify("Erreur", error.message, 'error');
-          },
-          success: function () {
-              goToNextStep('#toStep5');
-          }
-      });
+        if (document.getElementById('nextdom-theme').value != '') {
+            var config = $('.firstUse-Page').getValues('.configKey')[0];
+            nextdom.config.save({
+                configuration: config,
+                error: function (error) {
+                    notify('Erreur', error.message, 'error');
+                },
+                success: function () {
+                    goToNextStep('#toStep5');
+                }
+            });
+        } else {
+            notify('Erreur', '{{Veuillez choisir un thème...}}', 'error');
+        }
     });
 
     // Step 6 asked
     $('#toStep6').click(function () {
-      var profil = $('.firstUse-Page').getValues('.userAttr')[0];
-      nextdom.user.saveProfils({
-          profils: profil,
-          error: function (error) {
-              notify("Erreur", error.message, 'error');
-          },
-          success: function () {
-              goToNextStep('#toStep6');
-          }
-      });
+        if (document.getElementById('widget-theme').value != '') {
+            var profil = $('.firstUse-Page').getValues('.userAttr')[0];
+            nextdom.user.saveProfils({
+                profils: profil,
+                error: function (error) {
+                    notify('Erreur', error.message, 'error');
+                },
+                success: function () {
+                    goToNextStep('#toStep6');
+                }
+            });
+        } else {
+            notify('Erreur', '{{Veuillez choisir un thème Widget...}}', 'error');
+        }
     });
 
     // Step 1 asked

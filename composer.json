@@ -2,42 +2,44 @@
   "name": "nextdom/core",
   "description": "Software for home automation Open Source",
   "require": {
-    "ext-curl": "*",
+    "ext-json": "*",
     "christian-riesen/base32": "^1.3",
     "doctrine/cache": "^1.6",
-    "doctrine/orm": "^2.5",
-    "guzzle/guzzle": "^3.9",
-    "knplabs/github-api": "^1.7",
+    "endroid/qr-code": "^2.5",
+    "ext-curl": "*",
+    "guzzlehttp/guzzle": "6.5.2",
+    "icewind/smb": "^3.1",
+    "influxdb/influxdb-php": "^1.15",
+    "knplabs/github-api": "2.11.0",
     "league/flysystem-webdav": "^1.0",
     "league/oauth2-client": "^2.4",
     "matthiasmullie/minify": "^1.3",
-    "maximebf/debugbar": "^1.15",
-    "monolog/monolog": "^1.24",
+    "monolog/monolog": "^1.25",
     "mtdowling/cron-expression": "^1.2",
     "paragonie/random_compat": "^2.0",
-    "pragmarx/google2fa": "^1.0",
+    "php-http/guzzle6-adapter": "^1.1",
+    "pragmarx/google2fa": "^7.0",
     "ralouphie/getallheaders": "^2.0",
+    "rbdwllr/reallysimplejwt": "^1.1",
+    "simplesoftwareio/simple-qrcode": "^2.0",
+    "splitbrain/php-archive": "^1.1",
+    "symfony/cache": "^3.4",
     "symfony/config": "^3.4",
     "symfony/debug": "^3.4",
     "symfony/expression-language": "^2.8",
+    "symfony/http-foundation": "^3.4",
+    "symfony/routing": "^3.4",
     "symfony/translation": "^3.4",
     "symfony/twig-bridge": "^3.4",
-    "touki/ftp": "^1.2",
-    "twig/extensions": "^1.5",
-    "symfony/routing": "^3.4",
     "symfony/yaml": "^3.4",
-    "splitbrain/php-archive": "^1.1",
-    "symfony/http-foundation": "^3.4",
-    "rbdwllr/reallysimplejwt": "^1.1",
-    "icewind/smb": "^3.1",
-    "influxdb/influxdb-php": "^1.15"
+    "touki/ftp": "^1.2",
+    "twig/extensions": "^1.5"
   },
   "license": "GPL",
   "config": {
     "preferred-install": "dist"
   },
   "require-dev": {
-    "phpunit/phpunit": "^5.7",
     "vrana/adminer": "^4.7",
     "symfony/var-dumper": "^3.4"
   },
@@ -49,10 +51,13 @@
   ],
   "autoload": {
     "psr-4": {
-      "NextDom\\": [
-        "src"
-      ]
+      "NextDom\\": "src"
     },
-    "classmap": ["core/class/", "core/com/", "core/repo/", "core/php/"]
+    "classmap": [
+      "core/class/",
+      "core/com/",
+      "core/repo/",
+      "core/php/"
+    ]
   }
 }

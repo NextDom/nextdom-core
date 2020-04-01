@@ -24,7 +24,7 @@
     height : auto;
     width : 170px;
     word-break: break-word;
-    padding: 5px 10px 0px;
+    padding: 5px 10px 0;
     & > i {
         font-size : 4em;
         margin-top:5px;
@@ -80,7 +80,7 @@
     float: left;
     background-color: transparent;
     background-image: none;
-    padding: 15px 15px 0px 4px;
+    padding: 15px 15px 0 4px;
     font-family: fontAwesome;
     color: white;
 }

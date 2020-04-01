@@ -43,7 +43,7 @@ initEvents();
  */
 function loadInformations() {
     if (is_numeric(getUrlVars('id'))) {
-        if ($('.objectDisplayCard[data-object_id=' + getUrlVars('id') + ']').length != 0) {
+        if (document.querySelectorAll('.objectDisplayCard[data-object_id=' + getUrlVars('id') + ']').length !== 0) {
             $('.objectDisplayCard[data-object_id=' + getUrlVars('id') + ']').click();
         } else {
             $('.objectDisplayCard:first').click();
@@ -71,8 +71,7 @@ function initEvents() {
 
     // Object links button
     $('#bt_graphObject').on('click', function () {
-        $('#md_modal').dialog({title: "{{Graphique des liens}}"});
-        $("#md_modal").load('index.php?v=d&modal=graph.link&filter_type=object&filter_id='+$("#objectId").value()).dialog('open');
+        loadModal('modal', '{{Graphique des liens}}', 'graph.link&filter_type=object&filter_id='+$("#objectId").value());
     });
 
     // Object list go back button
@@ -87,7 +86,7 @@ function initEvents() {
                 nextdom.object.save({
                     object: {name: result, isVisible: 1},
                     error: function (error) {
-                        notify("Erreur", error.message, 'error');
+                        notify('Erreur', error.message, 'error');
                     },
                     success: function (data) {
                         modifyWithoutSave = false;
@@ -119,12 +118,12 @@ function initEvents() {
                 nextdom.object.remove({
                     id: object.closest(".objectDisplayCard").attr("data-object_id"),
                     error: function (error) {
-                        notify("Erreur", error.message, 'error');
+                        notify('Erreur', error.message, 'error');
                     },
                     success: function () {
                         modifyWithoutSave = false;
                         loadPage('index.php?v=d&p=object');
-                        notify("Info", '{{Suppression effectuée avec succès}}', 'success');
+                        notify('Info', '{{Suppression effectuée avec succès}}', 'success');
                     }
                 });
             }
@@ -134,8 +133,7 @@ function initEvents() {
 
     // Globale view display button
     $('#bt_showObjectSummary').off('click').on('click', function () {
-        $('#md_modal').dialog({title: "{{Résumé Objets}}"});
-        $("#md_modal").load('index.php?v=d&modal=object.summary').dialog('open');
+        loadModal('modal', '{{Résumé Objets}}', 'object.summary');
     });
 
     // Object picture remove button
@@ -143,10 +141,10 @@ function initEvents() {
         nextdom.object.removeImage({
             view: $('.objectAttr[data-l1key=id]').value(),
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function () {
-                notify("Info", '{{Image supprimée}}', 'success');
+                notify('Info', '{{Image supprimée}}', 'success');
             },
         });
     });
@@ -172,12 +170,12 @@ function initEvents() {
         nextdom.object.save({
             object: object,
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function (data) {
                 modifyWithoutSave = false;
                 $(".bt_cancelModifs").hide();
-                notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
+                notify('Info', '{{Sauvegarde effectuée avec succès}}', 'success');
             }
         });
         $('#bt_returnToThumbnailDisplay').show();
@@ -258,15 +256,15 @@ function loadObjectConfiguration(_id){
     }
     $('#bt_uploadImage').fileupload({
         replaceFileInput: false,
-        url: 'core/ajax/object.ajax.php?action=uploadImage&id=' +_id,
+        url: 'src/ajax.php?target=Object&action=uploadImage&id=' +_id,
         formData: {'nextdom_token': NEXTDOM_AJAX_TOKEN},
         dataType: 'json',
         done: function (e, data) {
             if (data.result.state != 'ok') {
-                notify("Erreur", data.result.result, 'error');
+                notify('Erreur', data.result.result, 'error');
                 return;
             }
-            notify("Info", '{{Image ajoutée}}', 'success');
+            notify('Info', '{{Image ajoutée}}', 'success');
         }
     });
     $(".objectDisplayCard").removeClass('active');
@@ -278,7 +276,7 @@ function loadObjectConfiguration(_id){
         id: _id,
         cache: false,
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function (data) {
             $('#objectId').value(_id);
@@ -286,7 +284,7 @@ function loadObjectConfiguration(_id){
             $('.objectAttr[data-l1key=father_id] option').show();
             $('#summarytab input[type=checkbox]').value(0);
             $('.object').setValues(data, '.objectAttr');
-            if(!isset(data.display) || data.display.length == 0){
+            if(!isset(data.display) || data.display.length === 0){
                 $('.objectAttr[data-l1key=display][data-l2key=tagColor]').value('#33B8CC');
                 $('.objectAttr[data-l1key=display][data-l2key=tagTextColor]').value('#ffffff');
                 $('.objectAttr[data-l1key=display][data-l2key="desktop::summaryTextColor"]').value('#ffffff');
@@ -309,7 +307,7 @@ function loadObjectConfiguration(_id){
                         for(var j in data.configuration.summary[i]){
                             addSummaryInfo(el,data.configuration.summary[i][j]);
                         }
-                        if (data.configuration.summary[i].length != 0){
+                        if (data.configuration.summary[i].length !== 0){
                             $('.summarytabnumber'+i).append('(' + data.configuration.summary[i].length + ')');
                         }
                     }
@@ -378,7 +376,7 @@ function addSummaryInfo(_el, _summary) {
 function loadFromUrl() {
     var objectIdFromUrl = getUrlVars('id');
     if (is_numeric(objectIdFromUrl)) {
-        if ($('.objectDisplayCard[data-object_id=' + objectIdFromUrl + ']').length !== 0) {
+        if (document.querySelectorAll('.objectDisplayCard[data-object_id=' + objectIdFromUrl + ']').length !== 0) {
             var url = document.location.toString();
             loadObjectConfiguration(objectIdFromUrl);
         }

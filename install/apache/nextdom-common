@@ -23,7 +23,7 @@ RewriteRule ^/(.*)$ /index.php?v=s&file=$1 [B,L]
 
 <Directory "${wwwdir}/assets/data/custom/">
   Order allow,deny
-  <Files ~ "\.(obj|mtl|jpeg|png)$">
+  <Files ~ "\.(obj|mtl|jpe?g|png)$">
      Allow from all
   </Files>
   Deny from all
@@ -31,7 +31,7 @@ RewriteRule ^/(.*)$ /index.php?v=s&file=$1 [B,L]
 
 <Directory "${wwwdir}/assets/data/3d/">
   Order allow,deny
-  <Files ~ "\.(obj|mtl|jpeg|png)$">
+  <Files ~ "\.(obj|mtl|jpe?g|png)$">
      Allow from all
   </Files>
   Deny from all
@@ -99,7 +99,7 @@ RewriteRule ^/(.*)$ /index.php?v=s&file=$1 [B,L]
 
 <Directory ~ "${wwwdir}/var/(public|custom)">
   Order allow,deny
-  <Files ~ "\.(obj|mtl|jpeg|png|css|js)$">
+  <Files ~ "\.(obj|mtl|jpe?g|png|css|js)$">
      Allow from all
   </Files>
   Deny from all

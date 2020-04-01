@@ -24,6 +24,7 @@ namespace NextDom\Controller\Pages;
 
 use NextDom\Controller\BaseController;
 use NextDom\Enums\AjaxParams;
+use NextDom\Enums\ControllerData;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
 use NextDom\Helpers\Render;
@@ -45,44 +46,44 @@ class ViewController extends BaseController
      * @return string Content of view page
      *
      * @throws CoreException
+     * @throws \ReflectionException
      */
     public static function get(&$pageData): string
     {
-        $pageData['viewsList'] = ViewManager::all();
+        $allViews = ViewManager::all();
+        $viewId = Utils::init(AjaxParams::VIEW_ID);
         $pageData['viewHideList'] = true;
         $pageData['viewIsAdmin'] = AuthentificationHelper::isConnectedAsAdmin();
         $pageData['viewDefault'] = UserManager::getStoredUser()->getOptions('displayViewByDefault');
         $pageData['viewNoControl'] = Utils::init('noControl');
+        $pageData['viewsList'] = $allViews;
 
         $currentView = null;
-        if (Utils::init(AjaxParams::VIEW_ID) == '') {
-
-            if (UserManager::getStoredUser()->getOptions('defaultDesktopView') != '') {
-                $currentView = ViewManager::byId(UserManager::getStoredUser()->getOptions('defaultDesktopView'));
+        if (empty($viewId)) {
+            $defaultDesktopView = UserManager::getStoredUser()->getOptions('defaultDesktopView');
+            if (!empty($defaultDesktopView)) {
+                $currentView = ViewManager::byId($defaultDesktopView);
             }
-
-            if (!is_object($currentView) && is_array($pageData['viewsList']) && count($pageData['viewsList']) > 0) {
-                $currentView = $pageData['viewsList'][0];
+            if (!is_object($currentView) && is_array($allViews) && count($allViews) > 0) {
+                $currentView = $allViews[0];
             }
         } else {
-            $currentView = ViewManager::byId(Utils::init(AjaxParams::VIEW_ID));
-
+            $currentView = ViewManager::byId($viewId);
             if (!is_object($currentView)) {
-                throw new CoreException('{{Vue inconnue. Vérifier l\'ID.}}');
+                throw new CoreException(__('Vue inconnue. Vérifier l\'ID.'));
             }
         }
-
         if (!is_object($currentView)) {
             throw new CoreException(__('Aucune vue n\'existe, cliquez <a href="index.php?v=d&p=view_edit">ici</a> pour en créer une.'));
         }
         $pageData['viewCurrent'] = $currentView;
-
-        if (UserManager::getStoredUser()->getOptions('displayViewByDefault') == 1 && Utils::init('report') != 1) {
+        if ($pageData['viewDefault'] == 1 && Utils::init('report') != 1) {
             $pageData['viewHideList'] = false;
         }
-        $pageData['JS_VARS'][AjaxParams::VIEW_ID] = $currentView->getId();
-        $pageData['CSS_POOL'][] = '/public/css/pages/view.css';
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/pages/view.js';
+        $pageData[ControllerData::JS_VARS][AjaxParams::VIEW_ID] = $currentView->getId();
+        $pageData[ControllerData::CSS_POOL][] = '/public/css/pages/view.css';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/libs/widget.js';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/pages/view.js';
 
         return Render::getInstance()->get('/desktop/pages/view.html.twig', $pageData);
     }

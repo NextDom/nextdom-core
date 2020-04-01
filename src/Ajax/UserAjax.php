@@ -101,6 +101,7 @@ class UserAjax extends BaseAjax
             $registerDevice[sha512($rdk)]['session_id'] = session_id();
             setcookie(UserOption::REGISTER_DEVICE, $_SESSION['user']->getHash() . '-' . $rdk, time() + 365 * 24 * 3600, "/", '', false, true);
             @session_start();
+            $_SESSION['user']->refresh();
             $_SESSION['user']->setOptions(UserOption::REGISTER_DEVICE, $registerDevice);
             $_SESSION['user']->save();
             @session_write_close();
@@ -127,7 +128,7 @@ class UserAjax extends BaseAjax
         if ($currentUser !== null) {
             @session_start();
             $currentUser->refresh();
-            $result = $currentUser->validateTwoFactorCode(Utils::init(AjaxParams::CODE));
+            $result = $currentUser->validateTwoFactorCode(Utils::init(AjaxParams::CODE), '');
             if ($result && Utils::init('enableTwoFactorAuthentification') == 1) {
                 $currentUser->setOptions(UserOption::TWO_FACTOR_AUTH, 1);
                 $currentUser->save();
@@ -269,8 +270,11 @@ class UserAjax extends BaseAjax
             AuthentificationHelper::isConnectedAsAdminOrFail();
             foreach (UserManager::all() as $user) {
                 if ($user->getId() == UserManager::getStoredUser()->getId()) {
+                    @session_start();
+                    UserManager::getStoredUser()->refresh();
                     UserManager::getStoredUser()->setOptions(UserOption::REGISTER_DEVICE, []);
                     UserManager::getStoredUser()->save();
+                    @session_write_close();
                 } else {
                     $user->setOptions(UserOption::REGISTER_DEVICE, []);
                     $user->save();
@@ -299,6 +303,7 @@ class UserAjax extends BaseAjax
             $user->save();
         } else {
             @session_start();
+            UserManager::getStoredUser()->refresh();
             UserManager::getStoredUser()->setOptions(UserOption::REGISTER_DEVICE, $registerDevice);
             UserManager::getStoredUser()->save();
             @session_write_close();

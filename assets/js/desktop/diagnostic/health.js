@@ -35,6 +35,7 @@
 */
 
 // Page init
+showSelectedTabFromUrl(document.location.toString());
 initEvents();
 
 /**
@@ -42,7 +43,7 @@ initEvents();
  */
 function initEvents() {
     // Plugin configuration button
-    $('.bt_configurationPlugin').on('click',function(){
+    $('.bt_configurationPlugin').on('click', function() {
       $('#md_modal').dialog({title: "{{Configuration du plugin}}"});
       $("#md_modal").load('index.php?v=d&p=plugin&ajax=1&id='+$(this).attr('data-pluginid')).dialog('open');
     });
@@ -55,30 +56,66 @@ function initEvents() {
 
     // Benchmark button
     $('#bt_benchmarkNextDom').on('click',function(){
-      $('#md_modal').dialog({title: "{{NextDom benchmark}}"});
-      $("#md_modal").load('index.php?v=d&modal=nextdom.benchmark').dialog('open');
+      loadModal('modal', '{{NextDom benchmark}}', 'nextdom.benchmark');
     });
 
     // Plugin panel collapsing
     $('#bt_healthCollapse').on('click',function(){
-      $('#accordionHealth .panel-collapse').each(function () {
-         if (!$(this).hasClass("in")) {
-             $(this).css({'height' : '' });
-             $(this).addClass("in");
-         }
-      });
-      $('#bt_healthCollapse').hide();
-      $('#bt_healthUncollapse').show()
+      collapseHealth();
     });
 
     // Plugin panel uncollapsing
     $('#bt_healthUncollapse').on('click',function(){
-      $('#accordionHealth .panel-collapse').each(function () {
-         if ($(this).hasClass("in")) {
-             $(this).removeClass("in");
-         }
-      });
-      $('#bt_healthUncollapse').hide();
-      $('#bt_healthCollapse').show()
+      uncollapseHealth();
     });
+}
+
+/**
+ * uncollapse Health panels
+ */
+function uncollapseHealth() {
+  $('#accordionHealth .panel-collapse').each(function () {
+     if ($(this).hasClass("in")) {
+         $(this).removeClass("in");
+     }
+  });
+  $('#bt_healthUncollapse').hide();
+  $('#bt_healthCollapse').show()
+}
+
+/**
+ * collapse Health panels
+ */
+function collapseHealth() {
+  $('#accordionHealth .panel-collapse').each(function () {
+     if (!$(this).hasClass("in")) {
+         $(this).css({'height' : '' });
+         $(this).addClass("in");
+     }
+  });
+  $('#bt_healthCollapse').hide();
+  $('#bt_healthUncollapse').show()
+}
+
+/**
+ * Show the tab indicated in the url
+ *
+ * @param url Url to check
+ */
+function showSelectedTabFromUrl(url) {
+    let tabCode = 'div_Health';
+    if (url.match('#')) {
+      tabCode = url.split('#')[1];
+      $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
+    }
+    $('.nav-tabs a').off('shown.bs.tab').on('shown.bs.tab', function (e) {
+      window.location.hash = e.target.hash;
+      showSelectedTabFromUrl(document.location.toString());
+    });
+    if (tabCode == 'div_Health') {
+        $('#bt_healthCollapse').hide();
+        $('#bt_healthUncollapse').hide()
+    } else {
+        uncollapseHealth();
+    }
 }

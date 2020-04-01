@@ -25,26 +25,26 @@ use NextDom\Managers\CmdManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Model\Entity\Cmd;
 
-require_once('BaseAjaxTest.php');
+require_once(__DIR__ . '/../libs/BaseAjaxTest.php');
 
 class UpdateAjaxTest extends BaseAjaxTest
 {
     /** @var UpdateAjax */
     private $configAjax = null;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->configAjax = new UpdateAjax();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->cleanGetParams();
     }
 
     public function testAll()
     {
-        $this->connectAdAdmin();
+        $this->connectAsAdmin();
         ob_start();
         $this->configAjax->all();
         $result = ob_get_clean();

@@ -59,7 +59,7 @@ function initEvents() {
                     },
                     success: function (data) {
                         refreshScenarioTemplateList(newTemplate);
-                        notify("Info", '{{ Création du template réussie }}', 'success');
+                        notify('Info', '{{ Création du template réussie }}', 'success');
                         $('.nav-tabs a[href="#tab_template"]').tab('show');
                     }
                 });
@@ -70,7 +70,7 @@ function initEvents() {
     // Remove a template
     $('#bt_scenarioTemplateRemove').on('click', function () {
         if ($('#ul_scenarioTemplateList li.active').attr('data-template') == undefined) {
-            notify("Info", '{{ Vous devez d\'abord sélectionner un template }}', 'error');
+            notify('Info', '{{ Vous devez d\'abord sélectionner un template }}', 'error');
             return;
         }
         bootbox.confirm('{{ Etes-vous sûr de vouloir supprimer le template ? }}', function (result) {
@@ -82,7 +82,7 @@ function initEvents() {
                     },
                     success: function (data) {
                         refreshScenarioTemplateList();
-                        notify("Info", '{{ Suppression du template réussie }}', 'success');
+                        notify('Info', '{{ Suppression du template réussie }}', 'success');
                     }
                 });
             }
@@ -106,7 +106,7 @@ function initEvents() {
                             },
                             success: function (data) {
                                 refreshScenarioTemplateList($('#ul_scenarioTemplateList li.active').attr('data-template'));
-                                notify("Info", '{{ Template appliqué avec succès }}', 'success');
+                                notify('Info', '{{ Template appliqué avec succès }}', 'success');
                                 loadScenario(scenario_template_id, 'generaltab');
                             }
                         });
@@ -131,7 +131,7 @@ function initEvents() {
                     },
                     success: function (data) {
                         refreshScenarioTemplateList($('#ul_scenarioTemplateList li.active').attr('data-template'));
-                        notify("Info", '{{ Template appliqué avec succès }}', 'success');
+                        notify('Info', '{{ Template appliqué avec succès }}', 'success');
                         loadScenario(scenario_template_id, 'generaltab');
                     }
                 });

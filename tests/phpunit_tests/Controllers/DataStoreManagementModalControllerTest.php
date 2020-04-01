@@ -16,15 +16,15 @@
  */
 
 require_once(__DIR__ . '/../../../src/core.php');
-require_once(__DIR__ . '/BaseControllerTest.php');
+require_once(__DIR__ . '/../libs/BaseControllerTest.php');
 
 class DataStoreManagementModalControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -34,7 +34,7 @@ class DataStoreManagementModalControllerTest extends BaseControllerTest
         ob_start();
         $result = \NextDom\Controller\Modals\DataStoreManagement::get();
         $scriptResult = ob_get_clean();
-        $this->assertContains('id="div_dataStoreManagementAlert"', $result);
-        $this->assertContains('var dataStore_link_id', $scriptResult);
+        $this->assertStringContainsString('id="div_dataStoreManagementAlert"', $result);
+        $this->assertStringContainsString('var dataStore_link_id', $scriptResult);
     }
 }

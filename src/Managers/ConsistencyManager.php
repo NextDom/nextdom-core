@@ -34,6 +34,7 @@
 
 namespace NextDom\Managers;
 
+use NextDom\Enums\Common;
 use NextDom\Exceptions\CoreException;
 use NextDom\Model\Entity\Cron;
 
@@ -43,6 +44,9 @@ use NextDom\Model\Entity\Cron;
  */
 class ConsistencyManager
 {
+    /**
+     * @var array 
+     */
     private static $defaultSummary = [
         'security' => ['key' => 'security', 'name' => 'Alerte', 'calcul' => 'sum', 'icon' => '<i class="icon nextdom-alerte2"></i>', 'unit' => '', 'count' => 'binary', 'allowDisplayZero' => false],
         'motion' => ['key' => 'motion', 'name' => 'Mouvement', 'calcul' => 'sum', 'icon' => '<i class="icon nextdom-mouvement"></i>', 'unit' => '', 'count' => 'binary', 'allowDisplayZero' => false],
@@ -130,11 +134,11 @@ class ConsistencyManager
                     if (false == is_object($cron)) {
                         $cron = new Cron();
                     }
-                    $cron->setClass($cronClass);
-                    $cron->setFunction($cronName);
-                    $cron->setSchedule($cronConfig["schedule"]);
-                    $cron->setTimeout($cronConfig["timeout"]);
-                    $cron->setDeamon(0);
+                    $cron->setClass($cronClass)
+                         ->setFunction($cronName)
+                         ->setSchedule($cronConfig[Common::SCHEDULE])
+                         ->setTimeout($cronConfig[Common::TIMEOUT])
+                         ->setDeamon(0);
                     if (true == array_key_exists("enabled", $cronConfig)) {
                         $cron->setEnable($cronConfig["enabled"]);
                     }
@@ -148,107 +152,110 @@ class ConsistencyManager
     /**
      * @return array
      */
-    public static function getDefaultCrons()
+    public static function getDefaultCrons(): array
     {
         return [
             "nextdom" => [
                 "backup" => [
-                    "schedule" => mt_rand(10, 59) . ' 0' . mt_rand(0, 7) . ' * * *',
-                    "timeout" => 60,
+                    Common::SCHEDULE => mt_rand(10, 59) . ' 0' . mt_rand(0, 7) . ' * * *',
+                    Common::TIMEOUT => 60,
                     "enabled" => 1
                 ],
                 "cronDaily" => [
-                    "schedule" => "00 00 * * * *",
-                    "timeout" => 240,
+                    Common::SCHEDULE => "00 00 * * * *",
+                    Common::TIMEOUT => 240,
                     "enabled" => 1
                 ],
                 "cronHourly" => [
-                    "schedule" => "00 * * * * *",
-                    "timeout" => 60,
+                    Common::SCHEDULE => "00 * * * * *",
+                    Common::TIMEOUT => 60,
                     "enabled" => 1
                 ],
                 "cron10" => [
-                    "schedule" => "*/10 * * * * *",
-                    "timeout" => 10
+                    Common::SCHEDULE => "*/10 * * * * *",
+                    Common::TIMEOUT => 10
                 ],
                 "cron5" => [
-                    "schedule" => "*/5 * * * * *",
-                    "timeout" => 5
+                    Common::SCHEDULE => "*/5 * * * * *",
+                    Common::TIMEOUT => 5
                 ],
                 "cron" => [
-                    "schedule" => "* * * * * *",
-                    "timeout" => 2
+                    Common::SCHEDULE => "* * * * * *",
+                    Common::TIMEOUT => 2
                 ],
             ],
             "plugin" => [
                 "cronDaily" => [
-                    "schedule" => "00 00 * * * *",
-                    "timeout" => 240,
+                    Common::SCHEDULE => "00 00 * * * *",
+                    Common::TIMEOUT => 240,
                     "enabled" => 1
                 ],
                 "cronHourly" => [
-                    "schedule" => "00 * * * * *",
-                    "timeout" => 60,
+                    Common::SCHEDULE => "00 * * * * *",
+                    Common::TIMEOUT => 60,
                     "enabled" => 1
                 ],
                 "cron" => [
-                    "schedule" => "* * * * * *",
-                    "timeout" => 2
+                    Common::SCHEDULE => "* * * * * *",
+                    Common::TIMEOUT => 2
                 ],
                 "cron5" => [
-                    "schedule" => "*/5 * * * * *",
-                    "timeout" => 5,
+                    Common::SCHEDULE => "*/5 * * * * *",
+                    Common::TIMEOUT => 5,
                     "enabled" => 1
                 ],
                 "cron10" => [
-                    "schedule" => "*/10 * * * * *",
-                    "timeout" => 10
+                    Common::SCHEDULE => "*/10 * * * * *",
+                    Common::TIMEOUT => 10
                 ],
                 "cron15" => [
-                    "schedule" => "*/15 * * * * *",
-                    "timeout" => 15
+                    Common::SCHEDULE => "*/15 * * * * *",
+                    Common::TIMEOUT => 15
                 ],
                 "cron30" => [
-                    "schedule" => "*/15 * * * * *",
-                    "timeout" => 30
+                    Common::SCHEDULE => "*/15 * * * * *",
+                    Common::TIMEOUT => 30
                 ],
                 "checkDeamon" => [
-                    "schedule" => "*/5 * * * * *",
-                    "timeout" => 5
+                    Common::SCHEDULE => "*/5 * * * * *",
+                    Common::TIMEOUT => 5
                 ],
                 "heartbeat" => [
-                    "schedule" => "*/5 * * * * *",
-                    "timeout" => 10,
+                    Common::SCHEDULE => "*/5 * * * * *",
+                    Common::TIMEOUT => 10,
                     "enabled" => 1
                 ],
             ],
             "scenario" => [
                 "check" => [
-                    "schedule" => "* * * * * *",
-                    "timeout" => 30,
+                    Common::SCHEDULE => "* * * * * *",
+                    Common::TIMEOUT => 30,
                     "enabled" => 1
                 ],
                 "control" => [
-                    "schedule" => "* * * * * *",
-                    "timeout" => 30,
+                    Common::SCHEDULE => "* * * * * *",
+                    Common::TIMEOUT => 30,
                     "enabled" => 1
                 ],
             ],
             "cache" => [
                 "persist" => [
-                    "schedule" => "*/30 * * * * *",
-                    "timeout" => 30
+                    Common::SCHEDULE => "*/30 * * * * *",
+                    Common::TIMEOUT => 30
                 ],
             ],
             "history" => [
                 "archive" => [
-                    "schedule" => "00 5 * * * *",
-                    "timeout" => 240
+                    Common::SCHEDULE => "00 5 * * * *",
+                    Common::TIMEOUT => 240
                 ],
             ],
         ];
     }
 
+    /**
+     * @throws \Exception
+     */
     private static function cleanWidgetCache()
     {
         foreach (EqLogicManager::all() as $c_item) {
@@ -269,6 +276,9 @@ class ConsistencyManager
         }
     }
 
+    /**
+     * @throws \Exception
+     */
     private static function resetCommandsActionID()
     {
         foreach (CmdManager::all() as $c_cmd) {

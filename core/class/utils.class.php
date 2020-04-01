@@ -23,8 +23,18 @@ class utils {
         return \NextDom\Helpers\Utils::getJsonAttr($_attr, $_key, $_default);
     }
 
-    public static function attrChanged($_changed,$_old,$_new){
-        return \NextDom\Helpers\Utils::attrChanged($_changed, $_old, $_new);
+    public static function attrChanged($currentChangedState, $oldValue, $newValue): bool
+    {
+        if ($currentChangedState) {
+            return true;
+        }
+        if (is_array($oldValue)) {
+            $oldValue = json_encode($oldValue);
+        }
+        if (is_array($newValue)) {
+            $newValue = json_encode($newValue);
+        }
+        return ($oldValue !== $newValue);
     }
 
 }

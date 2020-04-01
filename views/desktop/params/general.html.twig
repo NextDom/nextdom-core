@@ -48,9 +48,10 @@
     <div class="box" id="general">
         <div class="nav-tabs-custom">
             <ul class="nav nav-tabs pull-right" role="tablist">
-                <li role="presentation"><a href="#tabHorodatage" aria-controls="tabHorodatage" role="tab" data-toggle="tab"><i class="fas fa-clock"></i><span>{{ 'Horodatage' }}</span></a></li>
-                <li role="presentation"><a href="#tabLanguage" aria-controls="tabLanguage" role="tab" data-toggle="tab"><i class="fas fa-language"></i><span>{{ 'Langage' }}</span></a></li>
-                <li role="presentation" class="active"><a href="#tabParams" aria-controls="tabParams" role="tab" data-toggle="tab"><i class="fas fa-cog"></i><span>{{ 'Paramètres' }}</span></a></li>
+                <li role="presentation"><a href="#tabHouse" aria-controls="tabHouse" role="tab" data-toggle="tab"><i class="fas fa-home"></i><span>{{ 'general.house.house' | trans }}</span></a></li>
+                <li role="presentation"><a href="#tabHorodatage" aria-controls="tabHorodatage" role="tab" data-toggle="tab"><i class="fas fa-clock"></i><span>{{ 'general.horodatage' | trans }}</span></a></li>
+                <li role="presentation"><a href="#tabLanguage" aria-controls="tabLanguage" role="tab" data-toggle="tab"><i class="fas fa-language"></i><span>{{ 'general.language' | trans }}</span></a></li>
+                <li role="presentation" class="active"><a href="#tabParams" aria-controls="tabParams" role="tab" data-toggle="tab"><i class="fas fa-cog"></i><span>{{ 'general.parameters' | trans }}</span></a></li>
                 <li class="header pull-left"><i class="fas fa-wrench"></i>{{ 'common.main' | trans }}</li>
             </ul>
             <div class="global-tab-content tab-content">
@@ -227,14 +228,83 @@
                                     <a class="btn btn-primary" id="bt_forceSyncHour"><i class="fas fa-clock-o"></i><span>{{ 'general.synchronization'|trans }}</span></a>
                                 </div>
                             </div>
-                            <div class="form-group col-sm-8 col-xs-12 col-padding">
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
                                 <label for="ntp-optional-server" class="control-label" data-toggle="tooltip" title="" data-original-title="{{'general.tooltip.time_server'|trans}}">{{'general.time_server'|trans}}</label>
-                                <div class="mix-group">
-                                    <input type="text" id="ntp-optional-server" class="configKey form-control" data-l1key="ntp::optionalServer">
-                                    <div>
-                                        <input type="checkbox" id="ignore-hour-check" class="configKey" data-l1key="ignoreHourCheck">
-                                        <label for="ignore-hour-check" class="control-label label-check" data-toggle="tooltip" title="" data-original-title="{{'general.tooltip.ignore_system_time'|trans}}">{{'general.ignore_system_time'|trans}}</label>
-                                    </div>
+                                <input type="text" id="ntp-optional-server" class="configKey form-control" data-l1key="ntp::optionalServer">
+                            </div>
+                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                                <label for="ntp-optional-server" class="control-label" data-toggle="tooltip" title="">{{'general.time_server_checking'|trans}}</label>
+                                <div>
+                                    <input type="checkbox" id="ignore-hour-check" class="configKey" data-l1key="ignoreHourCheck">
+                                    <label for="ignore-hour-check" class="control-label label-check" data-toggle="tooltip" title="" data-original-title="{{'general.tooltip.time_server_ignore'|trans}}">{{'general.time_server_ignore'|trans}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <div role="tabpanel" class="tab-pane" id="tabHouse">
+                    <fieldset>
+                        <!-- Langage Section -->
+                        <legend>{{ 'general.house.coordinates' | trans }}</legend>
+                        <div class="alert alert-info">{{ 'general.house.site' | trans }}<a href="https://www.coordonnees-gps.fr/" target="_blank">{{ 'general.house.here' | trans }}</a></div>
+                        <div class="row">
+                            <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label" data-toggle="tooltip" title="" data-original-title="{{'general.tooltip.coordinates'|trans}}">{{'general.house.latitude'|trans}}</label>
+                                <input type="text" class="configKey form-control" data-l1key="info::latitude" />
+                            </div>
+                            <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label" data-toggle="tooltip" title="" data-original-title="{{'general.tooltip.coordinates'|trans}}">{{'general.house.longitude'|trans}}</label>
+                                <input type="text" class="configKey form-control" data-l1key="info::longitude" />
+                            </div>
+                            <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label" data-toggle="tooltip" title="" data-original-title="{{'general.tooltip.address'|trans}}">{{'general.house.altitude'|trans}}</label>
+                                <input type="text" class="configKey form-control" data-l1key="info::altitude" />
+                            </div>
+                        </div>
+
+                        <legend>{{ 'general.house.address' | trans }}</legend>
+                        <div class="row">
+                            <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label" data-toggle="tooltip" title="" data-original-title="{{'general.tooltip.address'|trans}}">{{'general.house.address'|trans}}</label>
+                                <input type="text" class="configKey form-control" data-l1key="info::address" />
+                            </div>
+                            <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label" data-toggle="tooltip" title="" data-original-title="{{'general.tooltip.address'|trans}}">{{'general.house.postalCode'|trans}}</label>
+                                <input type="text" class="configKey form-control" data-l1key="info::postalCode" />
+                            </div>
+                            <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label" data-toggle="tooltip" title="" data-original-title="{{'general.tooltip.address'|trans}}">{{'general.house.city'|trans}}</label>
+                                <input type="text" class="configKey form-control" data-l1key="info::city" />
+                            </div>
+                            <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label" data-toggle="tooltip" title="" data-original-title="{{'general.tooltip.address'|trans}}">{{'general.house.stateCode'|trans}}</label>
+                                <input type="text" class="configKey form-control" data-l1key="info::stateCode" />
+                            </div>
+                        </div>
+
+                        <legend>{{ 'general.house.various' | trans }}</legend>
+                        <div class="row">
+                            <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label" data-toggle="tooltip" title="" data-original-title="{{'general.tooltip.livingSpace'|trans}}">{{'general.house.livingSpace'|trans}}</label>
+                                <div class="input-group">
+                                    <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="info::livingSpace" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                                    <span class="input-group-addon input-range-min"></span>
+                                    <input class="configKey slider" type="range" min="0" max="300" step="1" data-l1key="info::livingSpace"/>
+                                    <span class="input-group-addon input-range-max"></span>
+                                    <span class="input-group-addon input-range-value"></span>
+                                    <span class="input-group-addon">{{ 'm²' }}</span>
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-6 col-sm-6 col-xs-12 col-padding">
+                                <label class="control-label" data-toggle="tooltip" title="" data-original-title="{{'general.tooltip.nbOccupant'|trans}}">{{'general.house.nbOccupant'|trans}}</label>
+                                <div class="input-group">
+                                    <a class="input-group-addon cursor bt_resetConfigParam" data-l1key="info::nbOccupant" data-toggle="tooltip" title="" data-original-title="Par défaut"><i class="fas fa-times"></i></a>
+                                    <span class="input-group-addon input-range-min"></span>
+                                    <input class="configKey slider" type="range" min="0" max="10" step="1" data-l1key="info::nbOccupant"/>
+                                    <span class="input-group-addon input-range-max"></span>
+                                    <span class="input-group-addon input-range-value"></span>
+                                    <span class="input-group-addon"><i class="fas fa-user"></i></span>
                                 </div>
                             </div>
                         </div>

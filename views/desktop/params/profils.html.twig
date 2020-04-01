@@ -137,14 +137,14 @@
                     <legend>{{ 'Thème des Widgets' }}</legend>
                     <div class="row text-center">
                         {% for theme in profilsWidgetThemes %}
-                            <div class="form-group col-sm-6 col-xs-12 col-padding">
+                            <div class="form-group col-lg-4 col-sm-6 col-xs-12 col-padding">
                                 <div class="clearfix">
-                                    <label class="cursor" for={{ theme.name|slice(0, -4) }}>
-                                        <img class="themeWidgetThumbnail" src="{{ theme.dir }}">
+                                    <label class="cursor" for={{ theme.code }}>
+                                        <img class="themeWidgetThumbnail" src="{{ theme.icon }}">
                                     </label>
                                 </div>
-                                <input id={{ theme.name|slice(0, -4) }} class="spacing-right" type="radio" name="themeWidget" value={{ theme.name |slice(0, -4) }}>
-                                <label for={{ theme.name|slice(0, -4) }}>{{ theme.name|slice(0, -4) }}</label>
+                                <input id={{ theme.code }} class="spacing-right" type="radio" name="themeWidget" value="{{ theme.code }}"/>
+                                <label for={{ theme.code }}>{{ theme.code|capitalize }}</label>
                             </div>
                         {% endfor %}
                     </div>

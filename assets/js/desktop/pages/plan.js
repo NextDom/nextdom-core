@@ -330,10 +330,10 @@ if (user_isAdmin == 1) {
               nextdom.plan.removeHeader({
                 id: planHeader_id,
                 error: function (error) {
-                  notify("Erreur", error.message, 'error');
+                  notify('Erreur', error.message, 'error');
                 },
                 success: function () {
-                  notify("Info", 'Design supprimé', 'success');
+                  notify('Info', 'Design supprimé', 'success');
                   loadPage('index.php?v=d&p=plan');
                 },
               });
@@ -365,7 +365,7 @@ if (user_isAdmin == 1) {
                 name: result,
                 id: planHeader_id,
                 error: function (error) {
-                  notify("Erreur", error.message, 'error');
+                  notify('Erreur', error.message, 'error');
                 },
                 success: function (data) {
                   loadPage('index.php?v=d&p=plan&plan_id=' + data.id);
@@ -420,8 +420,7 @@ if (user_isAdmin == 1) {
         icon: 'fa-cogs',
         callback: function (key, opt) {
           savePlan(false, false);
-          $('#md_modal').dialog({title: "{{Configuration du widget}}"});
-          $('#md_modal').load('index.php?v=d&modal=plan.configure&id=' + $(this).attr('data-plan_id')).dialog('open');
+          loadModal('modal', '{{Configuration du widget}}', 'plan.configure&id=' + $(this).attr('data-plan_id'));
         }
       },
       configuration: {
@@ -480,7 +479,7 @@ if (user_isAdmin == 1) {
           nextdom.plan.remove({
             id: $(this).attr('data-plan_id'),
             error: function (error) {
-              notify("Erreur", error.message, 'error');
+              notify('Erreur', error.message, 'error');
             },
             success: function () {
               displayPlan();
@@ -501,7 +500,7 @@ if (user_isAdmin == 1) {
             id: $(this).attr('data-plan_id'),
             version: 'dplan',
             error: function (error) {
-              notify("Erreur", error.message, 'error');
+              notify('Erreur', error.message, 'error');
             },
             success: function (data) {
               displayObject(data.plan, data.html);
@@ -548,7 +547,7 @@ $('#div_pageContainer').on('click', '.zone-widget:not(.zoneEqLogic)', function (
     nextdom.plan.execute({
       id: el.attr('data-plan_id'),
       error: function (error) {
-        notify("Erreur", error.message, 'error');
+        notify('Erreur', error.message, 'error');
         el.empty().append('<center class="loading"><i class="fas fa-times fa-4x"></i></center>');
         setTimeout(function () {
           el.empty();
@@ -577,7 +576,7 @@ $('#div_pageContainer').on('mouseenter', '.zone-widget.zoneEqLogic.zoneEqLogicOn
         el.empty().append(html);
         positionEqLogic(el.attr('data-eqLogic_id'), false);
         el.off('mouseleave').on('mouseleave', function () {
-          el.empty()
+          el.empty();
           clickedOpen = false;
         });
       }
@@ -634,13 +633,13 @@ $('.div_displayObject').delegate('.graph-widget', 'resize', function () {
 
 $('#div_pageContainer').delegate('.div_displayObject > .eqLogic-widget .history', 'click', function () {
   if (!editOption.state) {
-    $('#md_modal').dialog({title: "Historique"}).load('index.php?v=d&modal=cmd.history&id=' + $(this).data('cmd_id')).dialog('open');
+    loadModal('modal', '{{Historique}}', 'cmd.history&id=' + $(this).data('cmd_id'));
   }
 });
 
 $('#div_pageContainer').delegate('.div_displayObject > .cmd-widget.history', 'click', function () {
   if (!editOption.state) {
-    $('#md_modal').dialog({title: "Historique"}).load('index.php?v=d&modal=cmd.history&id=' + $(this).data('cmd_id')).dialog('open');
+    loadModal('modal', '{{Historique}}', 'cmd.history&id=' + $(this).data('cmd_id'));
   }
 });
 
@@ -652,7 +651,7 @@ function createNewDesign() {
       nextdom.plan.saveHeader({
         planHeader: {name: result},
         error: function (error) {
-          notify("Erreur", error.message, 'error');
+          notify('Erreur', error.message, 'error');
         },
         success: function (data) {
           window.location = 'index.php?v=d&p=plan&plan_id=' + data.id;
@@ -752,7 +751,7 @@ function addObject(_plan) {
     plan: _plan,
     version: 'dplan',
     error: function (error) {
-      notify("Erreur", error.message, 'error');
+      notify('Erreur', error.message, 'error');
     },
     success: function (data) {
       displayObject(data.plan, data.html);
@@ -764,7 +763,7 @@ function displayPlan(_code) {
   if (planHeader_id == -1) {
     return;
   }
-  if (typeof _code == "undefined") {
+  if (typeof(_code)== 'undefined') {
     _code = null;
   }
   if (getUrlVars('fullscreen') == 1) {
@@ -775,14 +774,14 @@ function displayPlan(_code) {
     code: _code,
     error: function (error) {
       if (error.code == -32005) {
-        var result = prompt("{{Veuillez indiquer le code ?}}", "")
+        var result = prompt("{{Veuillez indiquer le code ?}}", "");
         if (result == null) {
-          notify("Erreur", error.message, 'error');
+          notify('Erreur', error.message, 'error');
           return;
         }
         displayPlan(result);
       } else {
-        notify("Erreur", error.message, 'error');
+        notify('Erreur', error.message, 'error');
       }
     },
     success: function (data) {
@@ -812,7 +811,7 @@ function displayPlan(_code) {
       nextdom.plan.byPlanHeader({
         id: planHeader_id,
         error: function (error) {
-          notify("Erreur", error.message, 'error');
+          notify('Erreur', error.message, 'error');
         },
         success: function (plans) {
           var objects = [];
@@ -896,7 +895,7 @@ function savePlan(_refreshDisplay, _async) {
     async: _async || true,
     global: false,
     error: function (error) {
-      notify("Erreur", error.message, 'error');
+      notify('Erreur', error.message, 'error');
     },
     success: function () {
       if (init(_refreshDisplay, false)) {
@@ -907,8 +906,7 @@ function savePlan(_refreshDisplay, _async) {
 }
 
 function showConfigModal() {
-  $('#md_modal').dialog({title: "{{Configuration du design}}"});
-  $('#md_modal').load('index.php?v=d&modal=planHeader.configure&planHeader_id=' + planHeader_id).dialog('open');
+  loadModal('modal', '{{Configuration du design}}', 'planHeader.configure&planHeader_id=' + planHeader_id);
 }
 
 function displayObject(_plan, _html, _noRender) {

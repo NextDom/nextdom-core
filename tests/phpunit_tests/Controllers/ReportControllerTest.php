@@ -16,15 +16,15 @@
  */
 
 require_once(__DIR__ . '/../../../src/core.php');
-require_once(__DIR__ . '/BaseControllerTest.php');
+require_once(__DIR__ . '/../libs/BaseControllerTest.php');
 
 class ReportControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -34,7 +34,7 @@ class ReportControllerTest extends BaseControllerTest
         $pageData = [];
         $result = \NextDom\Controller\Diagnostic\ReportController::get($pageData);
         $this->assertArrayHasKey('reportViews', $pageData);
-        $this->assertContains('div_reportForm', $result);
+        $this->assertStringContainsString('div_reportForm', $result);
     }
 
     public function testPageDataVars()

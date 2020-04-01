@@ -34,16 +34,34 @@ class NoteAjax extends BaseAjax
     protected $MUST_BE_CONNECTED = true;
     protected $CHECK_AJAX_TOKEN = true;
 
+    /**
+     * Get all notes
+     *
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function all()
     {
         $this->ajax->success(Utils::o2a(NoteManager::all()));
     }
 
+    /**
+     * Get note by Id
+     *
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function byId()
     {
         $this->ajax->success(Utils::o2a(NoteManager::byId(Utils::init(AjaxParams::ID))));
     }
 
+    /**
+     * Save note
+     *
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function save()
     {
         $noteData = json_decode(Utils::init('note'), true);
@@ -61,6 +79,12 @@ class NoteAjax extends BaseAjax
         }
     }
 
+    /**
+     * Remove note
+     *
+     * @throws CoreException
+     * @throws \ReflectionException
+     */
     public function remove()
     {
         $note = NoteManager::byId(Utils::init(AjaxParams::ID));

@@ -18,15 +18,15 @@
 use NextDom\Managers\CacheManager;
 
 require_once(__DIR__ . '/../../../src/core.php');
-require_once(__DIR__ . '/BaseControllerTest.php');
+require_once(__DIR__ . '/../libs/BaseControllerTest.php');
 
 class UpdateAddModalControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -34,6 +34,6 @@ class UpdateAddModalControllerTest extends BaseControllerTest
     public function testSimple()
     {
         $result = \NextDom\Controller\Modals\UpdateAdd::get();
-        $this->assertContains('src="/public/js/modals/update.add.js"', $result);
+        $this->assertStringContainsString('src="/public/js/modals/update.add.js"', $result);
     }
 }

@@ -186,20 +186,17 @@ function initEvents() {
 function initModalEvents() {
     // Links modal open button
     $('#bt_graphScenario').off('click').on('click', function () {
-        modalContainer.dialog({title: "{{Graphique de lien(s)}}"});
-        modalContainer.load('index.php?v=d&modal=graph.link&filter_type=scenario&filter_id=' + $('.scenarioAttr[data-l1key=id]').value()).dialog('open');
+        loadModal('modal', '{{Graphique de lien(s)}}', 'graph.link&filter_type=scenario&filter_id=' + $('.scenarioAttr[data-l1key=id]').value());
     });
 
     // Log modale open button
     $('#bt_logScenario').off('click').on('click', function () {
-        modalContainer.dialog({title: "{{Log d'exécution du scénario}}"});
-        modalContainer.load('index.php?v=d&modal=scenario.log.execution&scenario_id=' + $('.scenarioAttr[data-l1key=id]').value()).dialog('open');
+        loadModal('modal', '{{Log d\'exécution du scénario}}', 'scenario.log.execution&scenario_id=' + $('.scenarioAttr[data-l1key=id]').value());
     });
 
     // Template modale open button
     $('#bt_templateScenario').off('click').on('click', function () {
-        modalContainer.dialog({title: "{{Template de scénario}}"});
-        modalContainer.load('index.php?v=d&modal=scenario.template&scenario_id=' + $('.scenarioAttr[data-l1key=id]').value()).dialog('open');
+        loadModal('modal', '{{Template de scénario}}', 'scenario.template&scenario_id=' + $('.scenarioAttr[data-l1key=id]').value());
     });
 }
 
@@ -289,8 +286,9 @@ function initGeneralFormEvents() {
         source: function (request, response, url) {
             $.ajax({
                 type: 'POST',
-                url: 'core/ajax/scenario.ajax.php',
+                url: 'src/ajax.php',
                 data: {
+                    target: 'Scenario',
                     action: 'autoCompleteGroup',
                     term: request.term
                 },
@@ -301,7 +299,7 @@ function initGeneralFormEvents() {
                 },
                 success: function (data) {
                     if (data.state !== 'ok') {
-                        notify("Erreur", data.result, 'error');
+                        notify('Erreur', data.result, 'error');
                         return;
                     }
                     response(data.result);
@@ -351,20 +349,17 @@ function initGeneralFormEvents() {
 
     // Variables display button
     $(".bt_displayScenarioVariable").off('click').on('click', function () {
-        modalContainer.dialog({title: "{{Variables des scénarios}}"});
-        modalContainer.load('index.php?v=d&modal=dataStore.management&type=scenario').dialog('open');
+        loadModal('modal', '{{Variables des scénarios}}', 'dataStore.management&type=scenario');
     });
 
     // Expression test modale display button
     $('.bt_showExpressionTest').off('click').on('click', function () {
-        modalContainer.dialog({title: "{{Testeur d'expression}}"});
-        modalContainer.load('index.php?v=d&modal=expression.test').dialog('open');
+        loadModal('modal', '{{Testeur d\'expression}}', 'expression.test');
     });
 
     // Summary modal display button
     $('.bt_showScenarioSummary').off('click').on('click', function () {
-        modalContainer.dialog({title: "{{Résumé scénario}}"});
-        modalContainer.load('index.php?v=d&modal=scenario.summary').dialog('open');
+        loadModal('modal', '{{Résumé scénario}}', 'scenario.summary');
     });
 
     // Bloc add modale element choose
@@ -377,7 +372,7 @@ function initGeneralFormEvents() {
     $('#bt_scenarioTab').off('click').on('click', function () {
         setTimeout(function () {
             setEditor();
-            taAutosize();
+            initTextAreaAutosize();
         }, 100);
     });
 
@@ -553,7 +548,7 @@ function initScenarioEditorEvents() {
         updateSortable();
         setInputExpressionsEvent();
         setUndoStack();
-    })
+    });
 
     // Bloc else button
     pageContainer.off('click', '.bt_addSinon').on('click', '.bt_addSinon', function (event) {
@@ -593,7 +588,7 @@ function initScenarioEditorEvents() {
             nextdom.cmd.displayActionOption(expression.find('.expressionAttr[data-l1key=expression]').value(), '', function (html) {
                 clearRedoStack();
                 expression.find('.expressionOptions').html(html);
-                taAutosize();
+                initTextAreaAutosize();
                 setUndoStack();
             });
         });
@@ -608,7 +603,7 @@ function initScenarioEditorEvents() {
                 currentExpression = el.value();
                 nextdom.cmd.displayActionOption(el.value(), init(expression[0].options), function (html) {
                     el.closest('.expression').find('.expressionOptions').html(html);
-                    taAutosize();
+                    initTextAreaAutosize();
                 });
             }
         }
@@ -634,7 +629,7 @@ function initScenarioEditorEvents() {
             var expression = el.closest('.expression').getValues('.expressionAttr');
             nextdom.cmd.displayActionOption(el.value(), init(expression[0].options), function (html) {
                 el.closest('.expression').find('.expressionOptions').html(html);
-                taAutosize();
+                initTextAreaAutosize();
             });
         }
     });
@@ -743,13 +738,13 @@ function initScenarioEditorEvents() {
         } else {
             BLOC_LAST_FOCUS = true;
         }
-    })
+    });
     scenarioContainer.off('click', '.scenario-title').on('click', '.scenario-title', function() {
         blocFocusing($(this),true);
-    })
+    });
     scenarioContainer.off('click', '.scenario-action-bloc').on('click', '.scenario-action-bloc', function() {
         blocFocusing($(this),true);
-    })
+    });
 
 
     // Bloc copy / cut
@@ -800,16 +795,16 @@ function initScenarioEditorEvents() {
     $('#bt_moveBlocDown').off('click').on('click', function (event) {
         if (BLOC_FOCUS || ACTION_FOCUS) {
             if (BLOC_LAST_FOCUS) {
-                if (BLOC_FOCUS.next().length != 0) {
+                if (BLOC_FOCUS.next().length !== 0) {
                     BLOC_FOCUS.insertAfter(BLOC_FOCUS.next())
                 } else {
                     let BLOC_PARENT = BLOC_FOCUS.parent().parent();
-                    if (BLOC_PARENT.hasClass("expression") && BLOC_PARENT.next().length != 0) {
+                    if (BLOC_PARENT.hasClass("expression") && BLOC_PARENT.next().length !== 0) {
                         BLOC_PARENT.insertAfter(BLOC_PARENT.next())
                     }
                 }
             } else {
-                if (ACTION_FOCUS.next().length != 0) {
+                if (ACTION_FOCUS.next().length !== 0) {
                     ACTION_FOCUS.insertAfter(ACTION_FOCUS.next())
                 }
             }
@@ -820,7 +815,7 @@ function initScenarioEditorEvents() {
     $('#bt_moveBlocUp').off('click').on('click', function (event) {
         if (BLOC_FOCUS || ACTION_FOCUS) {
             if (BLOC_LAST_FOCUS) {
-                if (BLOC_FOCUS.prev().length != 0) {
+                if (BLOC_FOCUS.prev().length !== 0) {
                     BLOC_FOCUS.insertBefore(BLOC_FOCUS.prev())
                 } else {
                     let BLOC_PARENT = BLOC_FOCUS.parent().parent();
@@ -890,7 +885,7 @@ function toggleAllScenariosState() {
             enableScenario: $("#bt_changeAllScenarioState").attr('data-state')
         },
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function () {
             loadPage('index.php?v=d&p=scenario');
@@ -907,7 +902,7 @@ function addScenario() {
             nextdom.scenario.save({
                 scenario: {name: result},
                 error: function (error) {
-                    notify("Core",error.message,"error");
+                    notify('Core',error.message,"error");
                     },
                 success: function (data) {
                     modifyWithoutSave = false;
@@ -931,13 +926,13 @@ function deleteScenario() {
             nextdom.scenario.remove({
                 id: $('.scenarioAttr[data-l1key=id]').value(),
                 error: function (error) {
-                    notify("Erreur", error.message, 'error');
+                    notify('Erreur', error.message, 'error');
                 },
                 success: function () {
                     modifyWithoutSave = false;
                     resetUndo();
                     loadPage('index.php?v=d&p=scenario');
-                    notify("Info", '{{Suppression effectuée avec succès}}', 'success');
+                    notify('Info', '{{Suppression effectuée avec succès}}', 'success');
                 }
             });
         }
@@ -952,10 +947,10 @@ function testScenario() {
         id: $('.scenarioAttr[data-l1key=id]').value(),
         state: 'start',
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function () {
-            notify("Info", '{{Lancement du scénario réussi}}', 'success');
+            notify('Info', '{{Lancement du scénario réussi}}', 'success');
         }
     });
 }
@@ -970,7 +965,7 @@ function copyScenario() {
                 id: $('.scenarioAttr[data-l1key=id]').value(),
                 name: result,
                 error: function (error) {
-                    notify("Erreur", error.message, 'error');
+                    notify('Erreur', error.message, 'error');
                 },
                 success: function (data) {
                     $('#scenarioThumbnailDisplay').hide();
@@ -990,10 +985,10 @@ function stopScenario() {
         id: $('.scenarioAttr[data-l1key=id]').value(),
         state: 'stop',
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function () {
-            notify("Info", '{{Arrêt du scénario réussi}}', 'success');
+            notify('Info', '{{Arrêt du scénario réussi}}', 'success');
         }
     });
 }
@@ -1134,7 +1129,7 @@ function printScenario(scenarioId) {
     nextdom.scenario.get({
         id: scenarioId,
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function (data) {
             colorIndex = 0;
@@ -1208,14 +1203,14 @@ function printScenario(scenarioId) {
                 params: actionOptions,
                 async: false,
                 error: function (error) {
-                    notify("Erreur", error.message, 'error');
+                    notify('Erreur', error.message, 'error');
                 },
                 success: function (data) {
                     for (var i in data) {
                         $('#' + data[i].id).append(data[i].html.html);
                     }
                     $('#div_editScenario').show();
-                    taAutosize();
+                    initTextAreaAutosize();
                     setAutocomplete();
                     updateElseToggle();
                     setEditor();
@@ -1243,7 +1238,7 @@ function updateScenarioDisplay(_id, _data) {
     var scenarioState = $('#span_ongoing');
     scenarioStartBtn.hide();
     scenarioStopBtn.hide();
-    scenarioState.removeClass('label-danger label-info label-success label-warning label-default')
+    scenarioState.removeClass('label-danger label-info label-success label-warning label-default');
     if (isset(_data.isActive) && _data.isActive != 1) {
         scenarioState.text('{{Inactif}}');
         scenarioState.addClass('label-action');
@@ -1287,13 +1282,13 @@ function saveScenario() {
     nextdom.scenario.save({
         scenario: scenario,
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function (data) {
             modifyWithoutSave = false;
             resetUndo();
             $(".bt_cancelModifs").hide();
-            notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
+            notify('Info', '{{Sauvegarde effectuée avec succès}}', 'success');
         }
     });
     $('#bt_scenarioThumbnailDisplay').show();
@@ -1349,9 +1344,9 @@ function addSchedule(scheduleCode) {
  * @param scenario
  */
 function addUsedBy(scenario,section) {
-    var usedByHtml = '<div class="form-group col-xs-6 col-xs-12 col-padding">';
+    var usedByHtml = '<div class="form-group col-xs-12 col-padding">';
     usedByHtml += '<div class="mix-group">';
-    usedByHtml += '<span class="label label-default label-sticker">' + scenario.name + '</span>';
+    usedByHtml += '<span class="label label-action label-sticker">' + scenario.name + '</span>';
     if (scenario.isActive == true) {
         usedByHtml += '<span class="label label-success label-sticker-big badge">{{Actif}}</span>';
     } else {
@@ -1430,7 +1425,7 @@ function getActionExpressionHTML(expressionData) {
         htmlData += '<input type="checkbox" class="expressionAttr" data-l1key="options" data-l2key="background" checked title="{{Cocher pour que la commande s\'exécute en parallèle des autres actions}}"/>';
     }
     var expressionTxt = init(expressionData.expression);
-    if(typeof expressionTxt !== 'string'){
+    if(typeof(expressionTxt)!== 'string'){
         expressionTxt = json_encode(expressionTxt);
     }
     htmlData += '</div>';
@@ -2227,7 +2222,7 @@ function selectCmdExpression(elementData, expressionElement) {
             nextdom.cmd.displayActionOption(expressionElement.find('.expressionAttr[data-l1key=expression]').value(), '', function (html) {
                 clearRedoStack();
                 expressionElement.find('.expressionOptions').html(html);
-                taAutosize();
+                initTextAreaAutosize();
                 setUndoStack();
             });
         }
@@ -2296,7 +2291,7 @@ function selectCmdExpression(elementData, expressionElement) {
 function loadFromUrl() {
     var scenarioIdFromUrl = getUrlVars('id');
     if (is_numeric(scenarioIdFromUrl)) {
-        if ($('.scenarioDisplayCard[data-scenario_id=' + scenarioIdFromUrl + ']').length !== 0) {
+        if (document.querySelectorAll('.scenarioDisplayCard[data-scenario_id=' + scenarioIdFromUrl + ']').length !== 0) {
             let url = document.location.toString();
             var tabCode = GENERAL_TAB;
             if (url.match('#')) {

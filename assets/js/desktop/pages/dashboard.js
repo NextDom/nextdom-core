@@ -43,14 +43,14 @@
 function selectCategory(_selectedCategory, _selectedIcon) {
     var category = _selectedCategory;
     var filterValue = '';
-    if (category == 'all') {
+    if (category === 'all') {
         filterValue = '*';
-        $("#fabEditor").show();
-        $("#fabCategory").removeClass().addClass("fab-action-button__icon fas fa-filter");
+        $('#fabEditor').show();
+        $('#fabCategory').removeClass().addClass("fab-action-button__icon fas fa-filter");
     } else {
         filterValue = '.' + category;
-        $("#fabEditor").hide();
-        $("#fabCategory").removeClass("fas fa-filter").addClass(_selectedIcon);
+        $('#fabEditor').hide();
+        $('#fabCategory').removeClass('fas fa-filter').addClass(_selectedIcon);
     }
     var $grid = $('.div_displayEquipement').isotope({
         itemSelector: '.eqLogic-widget',
@@ -81,10 +81,10 @@ function editWidgetMode(_mode, _save) {
         if (!isset(_save) || _save) {
             saveWidgetDisplay({dashboard: 1});
         }
-        if ($('.div_displayEquipement .eqLogic-widget.ui-resizable').length > 0) {
+        if (document.querySelectorAll('.div_displayEquipement .eqLogic-widget.ui-resizable').length > 0) {
             $('.div_displayEquipement .eqLogic-widget.allowResize').resizable('destroy');
         }
-        if ($('.div_displayEquipement .eqLogic-widget.ui-draggable').length > 0) {
+        if (document.querySelectorAll('.div_displayEquipement .eqLogic-widget.ui-draggable').length > 0) {
             $('.div_displayEquipement .eqLogic-widget').draggable('disable');
         }
         $('.div_displayEquipement .eqLogic-widget').css('box-shadow', '');
@@ -139,10 +139,10 @@ function getObjectHtml(_object_id) {
             var html = result['objectHtml'];
             var scenarios = result['scenarios'];
             if ($.trim(html) == '') {
-                $('#div_ob' + _object_id).parent().children('.alert-no-child').show();
+                $('#div_ob' + _object_id).siblings('.alert-no-child').show();
                 return;
             } else {
-                $('#div_ob' + _object_id).parent().children('.alert-no-child').hide();
+                $('#div_ob' + _object_id).siblings('.alert-no-child').hide();
             }
             try {
                 $('#div_ob' + _object_id).empty().html(html).parent().show();
@@ -151,7 +151,7 @@ function getObjectHtml(_object_id) {
             var scenarioContainer = $('#div_sc' + _object_id);
             for (var scenarioIndex = 0; scenarioIndex < scenarios.length; ++scenarioIndex) {
                 scenarioContainer.append(createScenarioWidget(scenarios[scenarioIndex]));
-                updateScenarioControls(scenarios[scenarioIndex].id, scenarios[scenarioIndex]);
+                updateScenarioControls(scenarios[scenarioIndex]);
             }
             setTimeout(function () {
                 positionEqLogic();
@@ -187,93 +187,110 @@ function getObjectHtml(_object_id) {
  * @param scenarioData
  */
 function createScenarioWidget(scenarioData) {
-    var widgetDiv = $('<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 scenario" data-scenario_id="' + scenarioData.id + '">');
-    var widgetDiv2 = $('<div class="div_scenario">');
-    var nameContainer = $('<a class="scenario-label scenario-open-button cursor">');
-    if (scenarioData.icon !== '') {
-        nameContainer.append(scenarioData.icon + scenarioData.name);
+    var widgetDiv = document.createElement('div');
+    widgetDiv.className = 'col-lg-3 col-md-4 col-sm-6 col-xs-12 scenario';
+    widgetDiv.setAttribute('data-scenario_id', scenarioData.scenario_id);
+    var widgetDiv2 = document.createElement('div');
+    widgetDiv2.className = 'div_scenario';
+    var nameContainer = document.createElement('a');
+    nameContainer.className = 'scenario-label scenario-open-button cursor';
+    if (scenarioData.icon === '') {
+        scenarioData.icon = '<i class="fas fa-film"></i>';
     }
-    else {
-        nameContainer.append('<i class="fas fa-film"></i>' + scenarioData.name);
-    }
-    widgetDiv2.append(nameContainer);
-    var enableButton = $('<a class="btn btn-default scenario-cmd scenario-enable-button" data-toggle="tooltip" title="" data-original-title="Activer le scénario"><i class="fas fa-toggle-on no-spacing text-good"></i></a>');
-    var playButton = $('<a class="btn btn-success scenario-cmd scenario-play-button" data-toggle="tooltip" title="" data-original-title="Lancer le scénario"><i class="fas fa-play no-spacing"></i></a>');
-    var stopButton = $('<a class="btn btn-danger scenario-cmd scenario-stop-button" data-toggle="tooltip" title="" data-original-title="Arrêter le scénario"><i class="fas fa-stop no-spacing"></i></a>');
-    playButton.on('click', function() {
-        nextdom.scenario.changeState({'id': $(this).parent().parent().data('scenario_id'), 'state': 'start'});
-    });
-    stopButton.on('click', function() {
-        nextdom.scenario.changeState({'id': $(this).parent().parent().data('scenario_id'), 'state': 'stop'});
-    });
-    enableButton.on('click', function() {
-        nextdom.scenario.changeState({'id': $(this).parent().parent().data('scenario_id'), 'state': 'activate'});
-    });
-    $('.scenario-open-button').on('click', function() {
-        loadPage("index.php?v=d&p=scenario&id=" + $(this).parent().parent().attr('data-scenario_id'));
-    });
-    widgetDiv2.append(enableButton);
-    widgetDiv2.append(playButton);
-    widgetDiv2.append(stopButton);
-    widgetDiv2.append('<a class="label scenario-state scenario-open-button">' + scenarioData.state + '</a>');
-    widgetDiv.append(widgetDiv2);
-    nextdom.scenario.update[scenarioData.id] = function (data) {
-        updateScenarioControls(data.scenario_id, data)
+    nameContainer.innerHTML = scenarioData.icon + scenarioData.name;
+    widgetDiv2.appendChild(nameContainer);
+    var enableButton = document.createElement('a');
+    enableButton.className = 'btn btn-default scenario-cmd scenario-enable-button';
+    enableButton.setAttribute('data-toggle', 'tooltip');
+    enableButton.setAttribute('title', '');
+    enableButton.setAttribute('data-original-title', '{{Activer le scénario}}');
+    enableButton.innerHTML = '<i class="fas fa-toggle-on no-spacing text-good">';
+    enableButton.onclick = function() {
+        nextdom.scenario.changeState({'id': scenarioData.scenario_id, 'state': 'activate'});
+    };
+    var playButton = document.createElement('a');
+    playButton.className = 'btn btn-success scenario-cmd scenario-play-button';
+    playButton.setAttribute('data-toggle', 'tooltip');
+    playButton.setAttribute('title', '');
+    playButton.setAttribute('data-original-title', '{{Lancer le scénario}}');
+    playButton.innerHTML = '<i class="fas fa-play no-spacing">';
+    playButton.onclick = function() {
+        nextdom.scenario.changeState({'id': scenarioData.scenario_id, 'state': 'start'});
+    };
+    var stopButton = document.createElement('a');
+    stopButton.className = 'btn btn-danger scenario-cmd scenario-stop-button';
+    stopButton.setAttribute('data-toggle', 'tooltip');
+    stopButton.setAttribute('title', '');
+    stopButton.setAttribute('data-original-title', '{{Arrêter le scénario}}');
+    stopButton.innerHTML = '<i class="fas fa-stop no-spacing">';
+    stopButton.onclick = function() {
+        nextdom.scenario.changeState({'id': scenarioData.scenario_id, 'state': 'stop'});
+    };
+    var openButton = document.createElement('a');
+    openButton.className = 'label scenario-state scenario-open-button';
+    openButton.textContent = scenarioData.state;
+    openButton.onclick = function() {
+        loadPage('index.php?v=d&p=scenario&id=' + scenarioData.scenario_id)
+    };
+    widgetDiv2.appendChild(enableButton);
+    widgetDiv2.appendChild(playButton);
+    widgetDiv2.appendChild(stopButton);
+    widgetDiv2.appendChild(openButton);
+    widgetDiv.appendChild(widgetDiv2);
+    nextdom.scenario.update[scenarioData.scenario_id] = function (data) {
+        updateScenarioControls(data)
     };
     return widgetDiv;
 }
 
 /**
  * Update display of scenario controls
- * @param scenarioId
- * @param data
+ * @param scenarioData
  */
-function updateScenarioControls(scenarioId, data) {
-    var scenarioContainer = $('.scenario[data-scenario_id=' + scenarioId + ']');
-    // Search fields
-    var enableButton = scenarioContainer.find('.scenario-enable-button');
-    var playButton = scenarioContainer.find('.scenario-play-button');
-    var stopButton = scenarioContainer.find('.scenario-stop-button');
-    var stateField = scenarioContainer.find('.scenario-state');
+function updateScenarioControls(scenarioData) {
+    var baseCssSelector = '.scenario[data-scenario_id="' + scenarioData.scenario_id + '"]';
+    var scenarioContainer = document.querySelector(baseCssSelector);
+    var enableButton = document.querySelector(baseCssSelector + ' .scenario-enable-button');
+    var playButton = document.querySelector(baseCssSelector + ' .scenario-play-button');
+    var stopButton = document.querySelector(baseCssSelector + ' .scenario-stop-button');
+    var stateField = document.querySelector(baseCssSelector + ' .scenario-state');
     // Cmd button
-    if (data.state === 'in progress' || data.state === 'starting') {
-        playButton.hide();
-        stopButton.show();
+    if (scenarioData.state === 'in progress' || scenarioData.state === 'starting') {
+        $(playButton).hide();
+        $(stopButton).show();
     }
     else {
-        playButton.show();
-        stopButton.hide();
+        $(playButton).show();
+        $(stopButton).hide();
     }
-    // Frame color
-    var color = $('.scenario[data-scenario_id="' + scenarioId + '"]').closest(".card").find(".card-icon").css("backgroundColor");
-    scenarioContainer.find(".div_scenario").css("background-color", color.replace(')', ', 0.2)').replace('rgb', 'rgba'));
     // Status Label
-    stateField.removeClass('label-danger label-info label-success label-warning label-default')
-    if (isset(data.active) && data.active != 1) {
-        stateField.text('');
-        scenarioContainer.css('opacity','0.6');
-        enableButton.show();
-        playButton.hide();
+    stateField.classList.remove('label-danger', 'label-info', 'label-success', 'label-warning', 'label-default');
+    if (isset(scenarioData.active) && scenarioData.active != 1) {
+        stateField.textContent = '';
+        scenarioContainer.style.opacity = 0.6;
+        $(enableButton).show();
+        $(playButton).hide();
     } else {
-        scenarioContainer.css('opacity','');
-        enableButton.hide();
-        switch (data.state) {
+        scenarioContainer.style.opacity = '';
+        $(enableButton).hide();
+        switch (scenarioData.state) {
             case 'error' :
-                stateField.text('{{Erreur}}');
-                stateField.addClass('label-warning');
+                stateField.textContent = '{{Erreur}}';
+                stateField.classList.add('label-warning');
                 break;
             case 'on' :
-                stateField.text('{{Actif}}');
-                stateField.addClass('label-success');
+                stateField.textContent = '{{Actif}}';
+                stateField.classList.add('label-success');
                 break;
             case 'in progress' :
-                stateField.text('{{En cours}}');
-                stateField.addClass('label-info');
+                stateField.textContent = '{{En cours}}';
+                stateField.classList.add('label-info');
                 break;
-            case 'stop' :
+            case 'stop':
             default :
-                stateField.text('{{Arrêté}}');
-                stateField.addClass('label-danger');
+                stateField.textContent = '{{Arrêté}}';
+                stateField.classList.add('label-danger');
+                break;
         }
     }
 }

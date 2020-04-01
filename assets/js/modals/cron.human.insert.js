@@ -66,7 +66,7 @@ $('#mod_cron_sel_scheduleMode').on('change', function () {
                 var hour = (date.getHours() < 10 ? '0' : '') + date.getHours();
                 var strdate = (date.getDate() < 10 ? '0' : '') + date.getDate();
                 var month = ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1);
-                var cron = minute + ' ' + hour + ' ' + strdate + ' ' + month + ' ' + date.getDay() + ' ' + date.getFullYear()
+                var cron = minute + ' ' + hour + ' ' + strdate + ' ' + month + ' ' + date.getDay() + ' ' + date.getFullYear();
                 $('#mod_cron_span_cronResult').value(cron);
             }
         });
@@ -97,4 +97,4 @@ function mod_insertCron() {
 
 mod_insertCron.getValue = function () {
     return $('#mod_cron_span_cronResult').text();
-}
+};

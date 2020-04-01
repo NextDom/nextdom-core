@@ -16,15 +16,15 @@
  */
 
 require_once(__DIR__ . '/../../../src/core.php');
-require_once(__DIR__ . '/BaseControllerTest.php');
+require_once(__DIR__ . '/../libs/BaseControllerTest.php');
 
 class LogControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -35,7 +35,7 @@ class LogControllerTest extends BaseControllerTest
         $result = \NextDom\Controller\Diagnostic\LogController::get($pageData);
         $this->assertArrayHasKey('logFilesList', $pageData);
         $this->assertTrue(count($pageData['logFilesList']) > 0);
-        $this->assertContains('</i>http.error', $result);
+        $this->assertStringContainsString('</i>http.error', $result);
     }
 
     public function testPageDataVars()

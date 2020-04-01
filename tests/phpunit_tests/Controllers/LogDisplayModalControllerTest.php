@@ -16,15 +16,15 @@
  */
 
 require_once(__DIR__ . '/../../../src/core.php');
-require_once(__DIR__ . '/BaseControllerTest.php');
+require_once(__DIR__ . '/../libs/BaseControllerTest.php');
 
 class LogDisplayModalControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -34,7 +34,7 @@ class LogDisplayModalControllerTest extends BaseControllerTest
         ob_start();
         $result = \NextDom\Controller\Modals\LogDisplay::get();
         $scriptResult = ob_get_clean();
-        $this->assertContains('src="/public/js/modals/log.display.js"', $result);
-        $this->assertContains('var log_default_search', $scriptResult);
+        $this->assertStringContainsString('src="/public/js/modals/log.display.js"', $result);
+        $this->assertStringContainsString('var log_default_search', $scriptResult);
     }
 }

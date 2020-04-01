@@ -24,19 +24,19 @@ use NextDom\Managers\CmdManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Model\Entity\Cmd;
 
-require_once('BaseAjaxTest.php');
+require_once(__DIR__ . '/../libs/BaseAjaxTest.php');
 
 class ConfigAjaxTest extends BaseAjaxTest
 {
     /** @var ConfigAjax */
     private $configAjax = null;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->configAjax = new ConfigAjax();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->cleanGetParams();
         DBHelper::exec('DELETE FROM config WHERE plugin = "phpunit"');
@@ -44,7 +44,7 @@ class ConfigAjaxTest extends BaseAjaxTest
 
     public function testGetKeyOneVar()
     {
-        $this->connectAdAdmin();
+        $this->connectAsAdmin();
         $_GET['key'] = 'api';
         ob_start();
         $this->configAjax->getKey();
@@ -56,7 +56,7 @@ class ConfigAjaxTest extends BaseAjaxTest
 
     public function testGetKeyBadVar()
     {
-        $this->connectAdAdmin();
+        $this->connectAsAdmin();
         $_GET['key'] = 'unknown-data';
         ob_start();
         $this->configAjax->getKey();
@@ -68,14 +68,14 @@ class ConfigAjaxTest extends BaseAjaxTest
 
     public function testGetKeyNoVar()
     {
-        $this->connectAdAdmin();
+        $this->connectAsAdmin();
         $this->expectException(CoreException::class);
         $this->configAjax->getKey();
     }
 
     public function testGetKeyPluginVar()
     {
-        $this->connectAdAdmin();
+        $this->connectAsAdmin();
         $_GET['key'] = 'unused_key';
         $_GET['plugin'] = 'plugin4tests';
         ob_start();
@@ -88,7 +88,7 @@ class ConfigAjaxTest extends BaseAjaxTest
 
     public function testGetKeyMultipleVars()
     {
-        $this->connectAdAdmin();
+        $this->connectAsAdmin();
         $_GET['key'] = '{"api":"","nextdom::user-theme":"","unknown":""}';
         ob_start();
         $this->configAjax->getKey();
@@ -102,7 +102,7 @@ class ConfigAjaxTest extends BaseAjaxTest
 
     public function testAddOneKey()
     {
-        $this->connectAdAdmin();
+        $this->connectAsAdmin();
         $_POST['value'] = '{"one_key":"one_value"}';
         $_POST['plugin'] = 'phpunit';
         ob_start();
@@ -117,7 +117,7 @@ class ConfigAjaxTest extends BaseAjaxTest
     public function testRemoveOneKey()
     {
         ConfigManager::save('first_test', 'First value', 'phpunit');
-        $this->connectAdAdmin();
+        $this->connectAsAdmin();
         $_POST['key'] = '{"first_test":""}';
         $_POST['plugin'] = 'phpunit';
         ob_start();
@@ -133,7 +133,7 @@ class ConfigAjaxTest extends BaseAjaxTest
     {
         ConfigManager::save('first_test', 'First value', 'phpunit');
         ConfigManager::save('second_test', 'Second value', 'phpunit');
-        $this->connectAdAdmin();
+        $this->connectAsAdmin();
         $_POST['key'] = '{"first_test":"", "second_test":""}';
         $_POST['plugin'] = 'phpunit';
         ob_start();

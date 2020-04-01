@@ -16,15 +16,15 @@
  */
 
 require_once(__DIR__ . '/../../../src/core.php');
-require_once(__DIR__ . '/BaseControllerTest.php');
+require_once(__DIR__ . '/../libs/BaseControllerTest.php');
 
 class Plan3DControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (isset($_SESSION['user'])) {
             unset($_SESSION['user']);
@@ -38,7 +38,7 @@ class Plan3DControllerTest extends BaseControllerTest
         $pageData = [];
         $result = \NextDom\Controller\Pages\Plan3DController::get($pageData);
         $this->assertArrayHasKey('plan3dHeader', $pageData);
-        $this->assertContains('bt_plan3dHeaderFullScreen', $result);
+        $this->assertStringContainsString('bt_plan3dHeaderFullScreen', $result);
     }
 
     public function testPageDataVars()

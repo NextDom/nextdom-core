@@ -26,6 +26,7 @@ use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\ReportHelper;
 use NextDom\Helpers\SystemHelper;
+use NextDom\Interfaces\EntityInterface;
 use NextDom\Managers\CacheManager;
 use NextDom\Managers\ConfigManager;
 use NextDom\Managers\EqLogicManager;
@@ -33,6 +34,7 @@ use NextDom\Managers\ListenerManager;
 use NextDom\Managers\MessageManager;
 use NextDom\Managers\PluginManager;
 use NextDom\Managers\UpdateManager;
+use NextDom\Model\Entity\Parents\BaseEntity;
 
 /**
  * Plugin
@@ -40,7 +42,7 @@ use NextDom\Managers\UpdateManager;
  * @ORM\Table(name="plugin")
  * @ORM\Entity
  */
-class Plugin implements EntityInterface
+class Plugin extends BaseEntity
 {
     protected $id;
     protected $name = '';
@@ -369,7 +371,7 @@ class Plugin implements EntityInterface
             if (file_exists($script_array[0])) {
                 if (NextDomHelper::isCapable('sudo')) {
                     $this->deamon_stop();
-                    MessageManager::add($plugin_id, __('Attention : installation des dépendances lancée'));
+                    MessageManager::add($plugin_id, __('Attention : installation des dépendances lancée'), '', '');
                     ConfigManager::save('lastDependancyInstallTime', date(DateFormat::FULL), $plugin_id);
                     exec(SystemHelper::getCmdSudo() . '/bin/bash ' . $script . ' >> ' . $cmd['log'] . ' 2>&1 &');
                     sleep(1);
@@ -723,7 +725,7 @@ class Plugin implements EntityInterface
         if (file_exists($dir . '/' . $language . '.json')) {
             $result = file_get_contents($dir . '/' . $language . '.json');
 
-            if (is_json($result)) {
+            if (Utils::isJson($result)) {
                 return json_decode($result, true);
             }
         }
@@ -773,7 +775,7 @@ class Plugin implements EntityInterface
         if (file_exists(NEXTDOM_ROOT . '/plugins/' . $this->getId() . '/doc/images/' . strtolower($this->getId()) . '_icon.png')) {
             return 'plugins/' . $this->getId() . '/doc/images/' . strtolower($this->getId()) . '_icon.png';
         }
-        return '/public/img/NextDom_Plugin_Gray.png';
+        return 'public/img/NextDom_Plugin_Gray.png';
     }
 
     /**

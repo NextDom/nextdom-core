@@ -56,8 +56,6 @@ function initDataModal() {
     $('#travis-badge img').attr('src', 'https://travis-ci.org/' + fullName + '.svg?branch=' + defaultBranch);
     $('#coveralls-badge').attr('href', 'https://coveralls.io/github/' + fullName + '?branch=' + defaultBranch);
     $('#coveralls-badge img').attr('src', 'https://coveralls.io/repos/github/' + fullName + '/badge.svg?branch=' + defaultBranch);
-    $('#waffle-badge').attr('href', 'https://waffle.io/' + fullName);
-    $('#waffle-badge img').attr('src', 'https://badge.waffle.io/' + fullName + '.svg?columns=all');
 }
 
 /* Initialise les boutons d'installation */
@@ -67,7 +65,7 @@ function initInstallationButtons() {
     $('#install-plugin').click(function () {
         installPlugin(currentPlugin['defaultBranch']);
     });
-    $('#default-branch-information').text(branchStr + defaultBranch);
+    $('#default-branch-information').text(defaultBranch);
     if (currentPlugin['branchesList'].length > 0) {
         initBranchesChoice(currentPlugin['branchesList'], defaultBranch);
     }
@@ -85,7 +83,7 @@ function initInstallationButtons() {
         if (currentPlugin['installedBranchData'] !== false) {
             $('#install-plugin').hide();
             var installedBranch = currentPlugin['installedBranchData']['branch'];
-            $('#default-branch-information').text('Branche ' + installedBranch);
+            $('#default-branch-information').text(installedBranch);
             initBranchesChoice(currentPlugin['branchesList'], installedBranch);
             if (currentPlugin['installedBranchData']['needUpdate'] === true) {
                 $('#update-plugin').click(function () {
@@ -106,20 +104,12 @@ function initInstallationButtons() {
 
 /* Evènement du bouton de mise à jour des branches */
 function initBranchesUpdate(defaultBranchChoice) {
-    $.post({
-        url: 'core/ajax/nextdom_market.ajax.php',
-        data: {
-            action: 'get',
-            params: 'branches',
-            data: {source: currentPlugin['sourceName'], fullName: currentPlugin['fullName']}
-        },
-        dataType: 'json',
-        success: function (data, status) {
+    nextdom_market.get({
+        post_success: function(data) {
             initBranchesChoice(data['result'], defaultBranchChoice);
         },
-        error: function (request, status, error) {
-            handleAjaxError(request, status, error);
-        }
+        params: 'branches',
+        data: {source: currentPlugin['sourceName'], fullName: currentPlugin['fullName']}
     });
 }
 
@@ -155,17 +145,22 @@ function initBranchesChoice(branchesList, defaultBranchChoice) {
  * @param branch Nom de la branche GitHub à installer
  */
 function installPlugin(branch) {
-
-    var data = {
-        action: 'save',
-        // Version de l'installation par URL
-        // update: '{"logicalId":"' + currentPlugin['id'] + '","configuration":{"url":"' + currentPlugin['url'] + '/archive/' + branch + '.zip"},"source":"url"}'
-        // Version de l'installation par GitHub
-        update: '{"logicalId":"' + currentPlugin['id'] + '","configuration":{"user":"' + currentPlugin['gitId'] + '", "repository":"' + currentPlugin['gitName'] + '", "version":"' + branch + '"},"source":"github"}'
-    };
-    ajaxQuery('core/ajax/update.ajax.php', data, function () {
-        window.location.replace('/index.php?v=d&p=plugin&id=' + currentPlugin['id']);
-    });
+    nextdom.update.install(
+        {
+            update: {
+                logicalId: currentPlugin['id'],
+                configuration: {
+                    user: currentPlugin['gitId'],
+                    repository: currentPlugin['gitName'],
+                    version: branch
+                },
+                source: 'github'
+            },
+            post_success: function() {
+                window.location.replace('/index.php?v=d&p=plugin&id=' + currentPlugin['id']);
+            }
+        }
+    );
 }
 
 /* Lance l'installation du plugin
@@ -173,13 +168,12 @@ function installPlugin(branch) {
  * @param pluginId Identifiant du plugin
  */
 function removePlugin(pluginId) {
-    var data = {
-        action: 'remove',
-        id: pluginId
-    };
-    ajaxQuery('core/ajax/update.ajax.php', data, function () {
-        reloadWithMessage(1);
-    });
+    nextdom.update.remove({
+        id: pluginId,
+        post_success: function() {
+            reloadWithMessage(1);
+        }
+    })
 }
 
 /* Initialise le carousel pour les screenshots */
@@ -194,7 +188,7 @@ function initPluginCarousel() {
                 itemClassList += ' active';
                 first = false;
             }
-            var itemToAdd = $('<div class="' + itemClassList + '"><img src="' + screenshots[screenshotIndex] + '"/></div>')
+            var itemToAdd = $('<div class="' + itemClassList + '"><img src="' + screenshots[screenshotIndex] + '"/></div>');
             $('#plugin-screenshots .carousel-inner').append(itemToAdd);
             $('#plugin-screenshots').carousel();
         }

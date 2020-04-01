@@ -37,7 +37,8 @@
 .box-danger,
 .box-primary,
 .box-summary,
-.box-default {
+.box-default,
+.box-theme {
     border-top:{
         style: solid;
         width: 3px;
@@ -101,7 +102,7 @@
 .eqLogicSortable {
     list-style-type: none;
     min-height: 30px;
-    padding-left: 0px;
+    padding-left: 0;
     margin-bottom: 8px !important;
     li {
       margin: 0 0 4px 0;
@@ -111,7 +112,7 @@
 .cmdSortable {
     list-style-type: none;
     min-height: 20px;
-    padding-left: 0px;
+    padding-left: 0;
     margin-top:5px;
     li {
         margin: 0 2px 2px 2px;
@@ -121,5 +122,5 @@
 
 /* Core-Ajout : Page Résumé domotique */
 .summary-box-tools {
-    margin: 7px 0px 0px 5px;
+    margin: 7px 0 0 5px;
 }

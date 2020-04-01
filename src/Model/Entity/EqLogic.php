@@ -49,6 +49,15 @@ use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\UserManager;
 use NextDom\Managers\ViewDataManager;
 use NextDom\Managers\ViewManager;
+use NextDom\Model\Entity\Parents\BaseEntity;
+use NextDom\Model\Entity\Parents\ConfigurationEntity;
+use NextDom\Model\Entity\Parents\DisplayEntity;
+use NextDom\Model\Entity\Parents\IsActiveEntity;
+use NextDom\Model\Entity\Parents\IsVisibleEntity;
+use NextDom\Model\Entity\Parents\LogicalIdEntity;
+use NextDom\Model\Entity\Parents\NameEntity;
+use NextDom\Model\Entity\Parents\OrderEntity;
+use NextDom\Model\Entity\Parents\RefreshEntity;
 
 /**
  * Eqlogic
@@ -66,10 +75,19 @@ use NextDom\Managers\ViewManager;
  * })
  * ORM\Entity
  */
-class EqLogic implements EntityInterface
+class EqLogic extends BaseEntity
 {
     const CLASS_NAME = EqLogic::class;
     const DB_CLASS_NAME = '`eqLogic`';
+    const TABLE_NAME = NextDomObj::EQLOGIC;
+
+    use NameEntity, LogicalIdEntity, IsVisibleEntity, OrderEntity, RefreshEntity;
+    use ConfigurationEntity {
+        setConfiguration as basicSetConfiguration;
+    }
+    use DisplayEntity {
+        setDisplay as basicSetDisplay;
+    }
 
     const UIDDELIMITER = '__';
     private static $_templateArray = [];
@@ -78,21 +96,7 @@ class EqLogic implements EntityInterface
     protected $_needRefreshWidget = false;
     protected $_timeoutUpdated = false;
     protected $_batteryUpdated = false;
-    protected $_changed = false;
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-    /**
-     * @var string EqLogic Name
-     *
-     * @ORM\Column(name="name", type="string", length=127, nullable=false)
-     */
-    protected $name;
+
     /**
      * @var string Used if eqLogic is a simple object (list in nextdom.config.php)
      *
@@ -100,29 +104,11 @@ class EqLogic implements EntityInterface
      */
     protected $generic_type;
     /**
-     * @var string Another id used by plugin
-     *
-     * @ORM\Column(name="logicalId", type="string", length=127, nullable=true)
-     */
-    protected $logicalId;
-    /**
      * @var string EqLogic plugin type
      *
      * @ORM\Column(name="eqType_name", type="string", length=127, nullable=false)
      */
     protected $eqType_name;
-    /**
-     * @var string Configuration data
-     *
-     * @ORM\Column(name="configuration", type="text", length=65535, nullable=true)
-     */
-    protected $configuration;
-    /**
-     * @var int 1 if eqLogic is visible, 0 for hidden
-     *
-     * @ORM\Column(name="isVisible", type="boolean", nullable=true)
-     */
-    protected $isVisible;
     /**
      * @var int 1 if eqLogic is enabled, 0 for hidden
      *
@@ -141,18 +127,6 @@ class EqLogic implements EntityInterface
      * @ORM\Column(name="category", type="text", length=65535, nullable=true)
      */
     protected $category;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="display", type="text", length=65535, nullable=true)
-     */
-    protected $display;
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="order", type="integer", nullable=true)
-     */
-    protected $order = 9999;
     /**
      * @var string
      *
@@ -179,14 +153,11 @@ class EqLogic implements EntityInterface
     protected $object_id;
     private $_cmds = [];
 
-    /**
-     * Get eqLogic visibility
-     *
-     * @return bool True if eqLogic is visible
-     */
-    public function isVisible()
+    public function __construct()
     {
-        return $this->getIsVisible() == 1;
+        if ($this->order === null) {
+            $this->order = 9999;
+        }
     }
 
     /**
@@ -235,19 +206,6 @@ class EqLogic implements EntityInterface
     }
 
     /**
-     * Set eqLogic order in list
-     *
-     * @param $order
-     * @return $this
-     */
-    public function setOrder($order)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->order, $order);
-        $this->order = $order;
-        return $this;
-    }
-
-    /**
      * Get the comment attached to the eqLogic
      *
      * @return string
@@ -265,7 +223,7 @@ class EqLogic implements EntityInterface
      */
     public function setComment($comment)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->comment, $comment);
+        $this->updateChangeState($this->comment, $comment);
         $this->comment = $comment;
         return $this;
     }
@@ -290,7 +248,7 @@ class EqLogic implements EntityInterface
      */
     public function setEqReal_id($_eqReal_id)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->eqReal_id, $_eqReal_id);
+        $this->updateChangeState($this->eqReal_id, $_eqReal_id);
         $this->eqReal_id = $_eqReal_id;
         return $this;
     }
@@ -320,30 +278,6 @@ class EqLogic implements EntityInterface
     {
         $cache = CacheManager::byKey(CacheKey::EQLOGIC_CACHE_ATTR . $this->getId())->getValue();
         return Utils::getJsonAttr($cache, $cacheKey, $defaultValue);
-    }
-
-    /**
-     * Get Id
-     *
-     * @return int EqLogic id
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Change id
-     *
-     * @param int|string $newId New id or '' if you want to reset id
-     *
-     * @return $this
-     */
-    public function setId($newId)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $newId);
-        $this->id = $newId;
-        return $this;
     }
 
     /**
@@ -423,19 +357,6 @@ class EqLogic implements EntityInterface
     }
 
     /**
-     * Get object specific configuration data
-     *
-     * @param string $configKey Configuration key
-     * @param string $defaultValue Default value if not found
-     *
-     * @return mixed
-     */
-    public function getConfiguration($configKey = '', $defaultValue = '')
-    {
-        return Utils::getJsonAttr($this->configuration, $configKey, $defaultValue);
-    }
-
-    /**
      * Set object specific configuration data
      *
      * @param string $configKey Configuration key
@@ -449,10 +370,7 @@ class EqLogic implements EntityInterface
             $this->getConfiguration($configKey, '') != $configValue) {
             $this->_batteryUpdated = true;
         }
-        $configuration = Utils::setJsonAttr($this->configuration, $configKey, $configValue);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
-        $this->configuration = $configuration;
-        return $this;
+        return $this->basicSetConfiguration($configKey, $configValue);
     }
 
     /**
@@ -474,7 +392,7 @@ class EqLogic implements EntityInterface
      */
     public function setEqType_name($eqTypeName)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->eqType_name, $eqTypeName);
+        $this->updateChangeState($this->eqType_name, $eqTypeName);
         $this->eqType_name = $eqTypeName;
         return $this;
     }
@@ -520,16 +438,6 @@ class EqLogic implements EntityInterface
     {
         $status = CacheManager::byKey(CacheKey::EQLOGIC_STATUS_ATTR . $this->getId())->getValue();
         return Utils::getJsonAttr($status, $statusKey, $defaultValue);
-    }
-
-    /**
-     * Get EqLogic name
-     *
-     * @return string EqLogic name
-     */
-    public function getName()
-    {
-        return $this->name;
     }
 
     /**
@@ -829,29 +737,6 @@ class EqLogic implements EntityInterface
     }
 
     /**
-     * Get changed data state
-     *
-     * @return bool True if a data changed since last save
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * Set changed data state
-     *
-     * @param bool $newChangedStatus New data changed state
-     *
-     * @return $this
-     */
-    public function setChanged($newChangedStatus)
-    {
-        $this->_changed = $newChangedStatus;
-        return $this;
-    }
-
-    /**
      * Remove widget render in cache
      */
     public function emptyCacheWidget()
@@ -893,11 +778,7 @@ class EqLogic implements EntityInterface
         if ($this->getDisplay($displayKey) != $displayValue) {
             $this->_needRefreshWidget = true;
         }
-        $display = Utils::setJsonAttr($this->display, $displayKey, $displayValue);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->display, $display);
-        $this->display = $display;
-
-        return $this;
+        return $this->basicSetDisplay($displayKey, $displayValue);
     }
 
     /**
@@ -970,21 +851,7 @@ class EqLogic implements EntityInterface
             $this->setStatus(BatteryStatus::WARNING, 1);
             $this->setStatus(BatteryStatus::DANGER, 0);
             if ($prevStatus == 0) {
-                if (ConfigManager::ByKey('alert::addMessageOnBatterywarning') == 1) {
-                    MessageManager::add($this->getEqType_name(), $message, '', $logicalId);
-                }
-                $cmds = explode(('&&'), ConfigManager::byKey('alert::batterywarningCmd'));
-                if (count($cmds) > 0 && trim(ConfigManager::byKey('alert::batterywarningCmd')) != '') {
-                    foreach ($cmds as $id) {
-                        $cmd = CmdManager::byId(str_replace('#', '', $id));
-                        if (is_object($cmd)) {
-                            $cmd->execCmd([
-                                'title' => __('[' . ConfigManager::byKey('name', 'core', 'NEXTDOM') . '] ') . $message,
-                                'message' => ConfigManager::byKey('name', 'core', 'NEXTDOM') . ' : ' . $message,
-                            ]);
-                        }
-                    }
-                }
+                CmdManager::checkAlertCmds('alert::addMessageOnBatterywarning', 'alert::batterywarningCmd', $message, $logicalId);
             }
         } else {
             MessageManager::removeByPluginLogicalId($this->getEqType_name(), 'warningBattery' . $this->getId());
@@ -1240,7 +1107,6 @@ class EqLogic implements EntityInterface
             '#category#' => $this->getPrimaryCategory(),
             '#color#' => '#ffffff',
             '#border#' => 'none',
-            '#border-radius#' => '0px',
             '#style#' => '',
             '#max_width#' => '650px',
             '#logicalId#' => $this->getLogicalId(),
@@ -1410,7 +1276,7 @@ class EqLogic implements EntityInterface
     public function setTags($tags)
     {
         $_tags = str_replace(["'", '<', '>'], "", $tags);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->tags, $_tags);
+        $this->updateChangeState($this->tags, $_tags);
         $this->tags = $_tags;
         return $this;
     }
@@ -1468,32 +1334,8 @@ class EqLogic implements EntityInterface
             $this->_needRefreshWidget = true;
         }
         $category = Utils::setJsonAttr($this->category, $categoryKey, $belong);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->category, $category);
+        $this->updateChangeState($this->category, $category);
         $this->category = $category;
-        return $this;
-    }
-
-    /**
-     * Set logicalId (Id used by plugins)
-     *
-     * @return string Logical Id
-     */
-    public function getLogicalId()
-    {
-        return $this->logicalId;
-    }
-
-    /**
-     * Get logicalId (Id used by plugins)
-     *
-     * @param string $logicalId logical Id
-     *
-     * @return $this
-     */
-    public function setLogicalId($logicalId)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->logicalId, $logicalId);
-        $this->logicalId = $logicalId;
         return $this;
     }
 
@@ -1566,7 +1408,7 @@ class EqLogic implements EntityInterface
      */
     public function setGenericType($genericType)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->generic_type, $genericType);
+        $this->updateChangeState($this->generic_type, $genericType);
         $this->generic_type = $genericType;
         return $this;
     }
@@ -1680,17 +1522,7 @@ class EqLogic implements EntityInterface
         $this->emptyCacheWidget();
         CacheManager::delete(CacheKey::EQLOGIC_CACHE_ATTR . $this->getId());
         CacheManager::delete('eqLogicStatusAttr' . $this->getId());
-        return DBHelper::remove($this);
-    }
-
-    /**
-     * Refresh data from the database
-     *
-     * @throws \Exception
-     */
-    public function refresh()
-    {
-        DBHelper::refresh($this);
+        return parent::remove();
     }
 
     /**
@@ -2068,7 +1900,7 @@ class EqLogic implements EntityInterface
     public function setObject_id($object_id = null)
     {
         $object_id = (!is_numeric($object_id)) ? null : $object_id;
-        $this->_changed = Utils::attrChanged($this->_changed, $this->object_id, $object_id);
+        $this->updateChangeState($this->object_id, $object_id);
         $this->object_id = $object_id;
         return $this;
     }
@@ -2134,15 +1966,5 @@ class EqLogic implements EntityInterface
             'eqReal_id' => $this->eqReal_id,
             'object_id' => $this->object_id,
         ];
-    }
-
-    /**
-     * Get the name of the SQL table where data is stored.
-     *
-     * @return string
-     */
-    public function getTableName()
-    {
-        return 'eqLogic';
     }
 }

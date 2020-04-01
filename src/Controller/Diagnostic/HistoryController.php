@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Diagnostic;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\ControllerData;
 use NextDom\Enums\DateFormat;
 use NextDom\Helpers\Render;
 use NextDom\Managers\CmdManager;
@@ -51,7 +52,7 @@ class HistoryController extends BaseController
             'end' => date(DateFormat::FULL_DAY),
         ];
         $pageData['historyCmdsList'] = CmdManager::allHistoryCmd();
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/diagnostic/history.js';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/diagnostic/history.js';
 
         return Render::getInstance()->get('/desktop/diagnostic/history.html.twig', $pageData);
     }

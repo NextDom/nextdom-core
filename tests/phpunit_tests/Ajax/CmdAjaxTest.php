@@ -22,19 +22,19 @@ use NextDom\Helpers\DBHelper;
 use NextDom\Managers\CmdManager;
 use NextDom\Model\Entity\Cmd;
 
-require_once('BaseAjaxTest.php');
+require_once(__DIR__ . '/../libs/BaseAjaxTest.php');
 
 class CmdAjaxTest extends BaseAjaxTest
 {
     /** @var CmdAjax */
     private $cmdAjax = null;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->cmdAjax = new CmdAjax();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->cleanGetParams();
         DBHelper::exec('DELETE FROM cmd WHERE id > 4');
@@ -49,7 +49,7 @@ class CmdAjaxTest extends BaseAjaxTest
         $result = ob_get_clean();
         $jsonResult = json_decode($result, true);
         $this->assertEquals('ok', $jsonResult['state']);
-        $this->assertContains('data-cmd_id=\"1\"', $result);
+        $this->assertStringContainsString('data-cmd_id=\"1\"', $result);
     }
 
     public function testToHtmlMultiple()
@@ -60,7 +60,7 @@ class CmdAjaxTest extends BaseAjaxTest
         $result = ob_get_clean();
         $jsonResult = json_decode($result, true);
         $this->assertEquals('ok', $jsonResult['state']);
-        $this->assertContains('data-cmd_id=\"2\"', $result);
+        $this->assertStringContainsString('data-cmd_id=\"2\"', $result);
         $this->assertCount(3, $jsonResult['result']);
         $this->assertEquals(1, $jsonResult['result']['1']['id']);
     }
@@ -184,7 +184,7 @@ class CmdAjaxTest extends BaseAjaxTest
 
     public function testUsedBy()
     {
-        $this->connectAdAdmin();
+        $this->connectAsAdmin();
         $_GET['id'] = '3';
         ob_start();
         $this->cmdAjax->usedBy();
@@ -221,7 +221,7 @@ class CmdAjaxTest extends BaseAjaxTest
 
     public function testSave()
     {
-        $this->connectAdAdmin();
+        $this->connectAsAdmin();
 
         $cmd4 = new Cmd();
         $cmd4->setName('Save test');
@@ -242,7 +242,7 @@ class CmdAjaxTest extends BaseAjaxTest
 
     public function testMultiSave()
     {
-        $this->connectAdAdmin();
+        $this->connectAsAdmin();
 
         $cmd4 = new Cmd();
         $cmd4->setName('Save test');

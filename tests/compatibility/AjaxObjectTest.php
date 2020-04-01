@@ -23,49 +23,49 @@ class AjaxObjectTest extends AjaxBase
 
     public function testWithout() {
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'remove']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testImpossibleActionAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'with-is-not-possible']);
-        $this->assertContains('"state":"error"', (string) $result->getBody());
+        $this->assertStringContainsString('"state":"error"', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testImpossibleActionAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'with-is-not-possible']);
-        $this->assertContains('"state":"error"', (string) $result->getBody());
+        $this->assertStringContainsString('"state":"error"', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testRemoveAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'remove']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testRemoveAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'remove']);
-        $this->assertContains('Objet inconnu. Vérifiez l\'ID', (string) $result->getBody());
+        $this->assertStringContainsString('Objet inconnu. Vérifiez l\'ID', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testByIdAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'byId']);
-        $this->assertContains('Objet inconnu. Vérifiez l\'ID', (string) $result->getBody());
+        $this->assertStringContainsString('Objet inconnu. Vérifiez l\'ID', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testCreateSummaryVirtualAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'createSummaryVirtual']);
-        $this->assertContains('"result":""', (string) $result->getBody());
+        $this->assertStringContainsString('"result":""', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
@@ -79,14 +79,14 @@ class AjaxObjectTest extends AjaxBase
     public function testSaveAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'save']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testSaveAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'save']);
-        $this->assertContains('Le nom de l\'objet ne peut être vide', (string) $result->getBody());
+        $this->assertStringContainsString('Le nom de l\'objet ne peut être vide', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
         $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'remove', 'id' => 1]);
     }
@@ -94,63 +94,63 @@ class AjaxObjectTest extends AjaxBase
     public function testGetChildAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'getChild']);
-        $this->assertContains('Objet inconnu. Vérifiez l\'ID', (string) $result->getBody());
+        $this->assertStringContainsString('Objet inconnu. Vérifiez l\'ID', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testToHtmlAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'toHtml']);
-        $this->assertContains('{"state":"ok","result":{"objectHtml":[],"scenarios":[]}}', (string) $result->getBody());
+        $this->assertStringContainsString('{"state":"ok","result":{"objectHtml":[],"scenarios":[]}}', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testSetOrderAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'setOrder']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testSetOrderAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'setOrder']);
-        $this->assertContains('"result":""', (string) $result->getBody());
+        $this->assertStringContainsString('"result":""', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testGetSummaryHtmlAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'getSummaryHtml']);
-        $this->assertContains('Objet inconnu. Vérifiez l\'ID', (string) $result->getBody());
+        $this->assertStringContainsString('Objet inconnu. Vérifiez l\'ID', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testRemoveImageAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'removeImage']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testRemoveImageAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'removeImage']);
-        $this->assertContains('Vue inconnu. Vérifiez l\'ID', (string) $result->getBody());
+        $this->assertStringContainsString('Vue inconnu. Vérifiez l\'ID', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testUploadImageAsUser() {
         $this->connectAsUser();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'uploadImage']);
-        $this->assertContains('401 - ', (string) $result->getBody());
+        $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
     public function testUploadImageAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'uploadImage']);
-        $this->assertContains('Objet inconnu. Vérifiez l\'ID', (string) $result->getBody());
+        $this->assertStringContainsString('Objet inconnu. Vérifiez l\'ID', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 

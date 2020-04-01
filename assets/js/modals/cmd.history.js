@@ -30,18 +30,92 @@
 * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
 */
 
-$(".in_datepicker").datepicker({dateFormat: "yy-mm-dd"});
-$('#ui-datepicker-div').hide();
+// Page init
+loadInformations();
+initEvents();
 
-$('#div_historyChart').css('height', $('#div_historyChart').closest('.ui-dialog-content').height()-100);
+/**
+ * Load informations in all forms of the page
+ */
+function loadInformations() {
+  // Set charts size
+  $('#div_historyChart').css('height', $('#div_historyChart').closest('.ui-dialog-content').height()-$('#div_historyChart').closest('.ui-dialog-content').find('.content-header').height() - 15);
+  // Add the cmd chart
+  addChart(historyId);
+  // Init datepicker
+  $(".in_datepicker").datepicker();
+  setTimeout(function () {
+    $("#ui-datepicker-div").hide();
+  }, 200);
+}
 
-delete nextdom.history.chart['div_historyChart'];
+/**
+ * Init events on the profils page
+ */
+function initEvents() {
+  // Chart type change
+  $('#sel_chartType').on('change', function () {
+      addChart(historyId);
+      nextdom.cmd.save({
+          cmd: {id: historyId, display: {graphType: $(this).value()}},
+          error: function (error) {
+              notify("Erreur", error.message, 'error');
+          }
+      });
+  });
 
-initHistoryTrigger();
-addChart(historyId);
+  // Chart group change
+  $('#sel_groupingType').on('change', function () {
+      addChart(historyId);
+      nextdom.cmd.save({
+          cmd: {id: historyId, display: {groupingType: $(this).value()}},
+          error: function (error) {
+              notify("Erreur", error.message, 'error');
+          }
+      });
+  });
 
+  // Chart derive option change
+  $('#cb_derive').on('change', function () {
+      addChart(historyId);
+      nextdom.cmd.save({
+          cmd: {id: historyId, display: {graphDerive: $(this).value()}},
+          error: function (error) {
+              notify("Erreur", error.message, 'error');
+          }
+      });
+  });
+
+  // Chart step option change
+  $('#cb_step').on('change', function () {
+      addChart(historyId);
+      nextdom.cmd.save({
+          cmd: {id: historyId, display: {graphStep: $(this).value()}},
+          error: function (error) {
+              notify("Erreur", error.message, 'error');
+          }
+      });
+  });
+
+  // Date change
+  $('#bt_validChangeDate').on('click', function () {
+      addChart(historyId);
+      nextdom.cmd.save({
+          cmd: {id: historyId},
+          error: function (error) {
+              notify("Erreur", error.message, 'error');
+          }
+      });
+  });
+}
+
+/**
+ * Add a charts
+ */
 function addChart(_cmd_id) {
+    // Hide alert
     $('#alertGraph').hide();
+    // Delete old chart
     if (isset(nextdom.history.chart['div_historyChart']) && isset(nextdom.history.chart['div_historyChart'].chart) && isset(nextdom.history.chart['div_historyChart'].chart.series)) {
         $(nextdom.history.chart['div_historyChart'].chart.series).each(function(i, serie){
             try {
@@ -52,10 +126,12 @@ function addChart(_cmd_id) {
             }
         });
     }
+    delete nextdom.history.chart['div_historyChart'];
+    // Drawing
     nextdom.cmd.save({
         cmd: {id: historyId},
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function () {
             nextdom.history.drawChart({
@@ -80,7 +156,7 @@ function addChart(_cmd_id) {
                             $('#cb_derive').off().value(init(data.cmd.display.graphDerive));
                         }
                     }
-                    initHistoryTrigger();
+                    initEvents();
                 }
             });
         }
@@ -93,7 +169,7 @@ function initHistoryTrigger() {
         nextdom.cmd.save({
             cmd: {id: historyId, display: {graphType: $(this).value()}},
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             }
         });
     });
@@ -103,7 +179,7 @@ function initHistoryTrigger() {
         nextdom.cmd.save({
             cmd: {id: historyId, display: {groupingType: $(this).value()}},
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             }
         });
     });
@@ -113,7 +189,7 @@ function initHistoryTrigger() {
         nextdom.cmd.save({
             cmd: {id: historyId, display: {graphDerive: $(this).value()}},
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             }
         });
     });
@@ -123,7 +199,7 @@ function initHistoryTrigger() {
         nextdom.cmd.save({
             cmd: {id: historyId, display: {graphStep: $(this).value()}},
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             }
         });
     });
@@ -135,7 +211,7 @@ $('#bt_validChangeDate').on('click', function () {
     nextdom.cmd.save({
         cmd: {id: historyId},
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         }
     });
 });

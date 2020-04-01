@@ -114,7 +114,7 @@ function copyInstallCode() {
        window.getSelection().addRange(selectedRange);
     }
     document.execCommand('copy');
-    notify("Info", '{{Code d\'installation copié !}}', 'success');
+    notify('Info', '{{Code d\'installation copié !}}', 'success');
 }
 
 /**
@@ -135,9 +135,11 @@ function updateTwoFactorVisibility() {
     if (useTwoFactor === 1) {
         divLogin.hide();
         divTwoFactor.show();
+        twoFactorInput.focus();
     } else {
         divLogin.show();
         divTwoFactor.hide();
+        loginInput.focus();
     }
 }
 
@@ -181,11 +183,11 @@ function clearErrors() {
 function setErrorOnInput(inputField, state) {
     var container = inputField.parent();
     if (state) {
-        inputField.addClass("has-error");
+        inputField.addClass('has-error');
         container.addClass('animationShake');
     }
     else {
-        inputField.removeClass("has-error");
+        inputField.removeClass('has-error');
         container.removeClass('animationShake');
     }
 }

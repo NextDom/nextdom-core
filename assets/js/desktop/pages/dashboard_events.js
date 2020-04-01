@@ -45,7 +45,7 @@ function loadInformations() {
     // Background image load
     $(function () {
         setTimeout(function () {
-            if (typeof rootObjectId != 'undefined') {
+            if (typeof(rootObjectId)!= 'undefined') {
                 nextdom.object.getImgPath({
                     id: rootObjectId,
                     success: function (_path) {
@@ -63,6 +63,19 @@ function loadInformations() {
  * Init events on the profils page
  */
 function initEvents() {
+    // Opening welcome modal if not saved "not display anymore"
+    if (typeof(nextdom_Welcome)!= 'undefined' && isset(nextdom_Welcome) && nextdom_Welcome == 1 && getUrlVars('noWelcome') != 1) {
+        loadModal('modal', '{{Bienvenue dans NextDom}}', 'welcome');
+    }
+
+    // Dashboard categorie filter button event handler declaration
+    $('.fab-filter').on('mouseleave',function() {
+        $('.blur-div').removeClass('blur');
+    });
+    $('.fab-filter').on('mouseenter',function() {
+        $('.blur-div').addClass('blur');
+    });
+
     // Dashboard edition mode button
     $('#bt_editDashboardWidgetOrder').on('click', function () {
         if ($(this).attr('data-mode') == 1) {
@@ -114,8 +127,7 @@ function initEvents() {
 
     // Widget data click for history modele
     $('#div_pageContainer').on( 'click','.eqLogic-widget .history', function () {
-        $('#md_modal2').dialog({title: "Historique"});
-        $("#md_modal2").load('index.php?v=d&modal=cmd.history&id=' + $(this).data('cmd_id')).dialog('open');
+        loadModal('modal2', 'Historique', 'cmd.history&id=' + $(this).data('cmd_id'));
     });
 
     // Room title click for objets detail page

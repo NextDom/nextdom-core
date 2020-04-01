@@ -11,6 +11,8 @@ language = fr_FR
 nextdom::firstUse = 1
 nextdom::Welcome = 1
 nextdom::user-icon = AlphaBlackWhite
+info::livingSpace = 130
+info::nbOccupant = 2
 
 ;History
 historyCalculTendance = 2
@@ -68,7 +70,7 @@ backup::maxSize = 500
 
 ;Market
 market::enable = 1
-market::address = https://www.jeedom.com/market
+market::address = https://market.jeedom.com
 market::allowDNS = 0
 
 ;Nextdom market
@@ -77,6 +79,8 @@ nextdom::nextdom_stable = 1
 nextdom::nextdom_stable_url = "https://raw.githubusercontent.com/NextDom/AlternativeMarket-Lists/master/results/nextdom-stable.json"
 nextdom::nextdom_draft = 1
 nextdom::nextdom_draft_url = "https://raw.githubusercontent.com/NextDom/AlternativeMarket-Lists/master/results/nextdom-draft.json"
+nextdom::nextdom_exclusivity = 1
+nextdom::nextdom_exclusivity_url = "https://raw.githubusercontent.com/NextDom/AlternativeMarket-Lists/master/results/nextdom-exclusivity.json"
 nextdom::show_sources_filters = 0
 
 ;Github

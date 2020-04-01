@@ -81,21 +81,21 @@ function initEvents() {
                 nextdom.user.save({
                     users: user,
                     error: function (error) {
-                        notify("Erreur", error.message, 'error');
+                        notify('Erreur', error.message, 'error');
                     },
                     success: function () {
                         printUsers();
-                        notify("Info", '{{Sauvegarde effectuée}}', 'success');
+                        notify('Info', '{{Sauvegarde effectuée}}', 'success');
                         modifyWithoutSave = false;
                         $('#md_newUser').modal('hide');
                         $(".bt_cancelModifs").hide();
                     }
                 });
             } else {
-                notify("Erreur", '{{Les mots de passe ne sont pas identique !}}', 'error');
+                notify('Erreur', '{{Les mots de passe ne sont pas identique !}}', 'error');
             }
         } else {
-            notify("Erreur", '{{Le mot de passe ne peut pas être vide !}}', 'error');
+            notify('Erreur', '{{Le mot de passe ne peut pas être vide !}}', 'error');
         }
     });
 
@@ -104,11 +104,11 @@ function initEvents() {
         nextdom.user.save({
             users: $('#table_user tbody tr').getValues('.userAttr'),
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function () {
                 printUsers();
-                notify("Info", '{{Sauvegarde effectuée}}', 'success');
+                notify('Info', '{{Sauvegarde effectuée}}', 'success');
                 modifyWithoutSave = false;
                 $(".bt_cancelModifs").hide();
             }
@@ -123,11 +123,11 @@ function initEvents() {
               nextdom.user.remove({
                   id: user.id,
                   error: function (error) {
-                      notify("Erreur", error.message, 'error');
+                      notify('Erreur', error.message, 'error');
                   },
                   success: function () {
                       printUsers();
-                      notify("Info", '{{L\'utilisateur a bien été supprimé}}', 'success');
+                      notify('Info', '{{L\'utilisateur a bien été supprimé}}', 'success');
                   }
               });
           }
@@ -157,21 +157,21 @@ function initEvents() {
                 nextdom.user.save({
                     users: [user],
                     error: function (error) {
-                        notify("Erreur", error.message, 'error');
+                        notify('Erreur', error.message, 'error');
                     },
                     success: function () {
                         printUsers();
-                        notify("Info", '{{Sauvegarde effectuée}}', 'success');
+                        notify('Info', '{{Sauvegarde effectuée}}', 'success');
                         modifyWithoutSave = false;
                         $('#md_newPassword').modal('hide');
                         $(".bt_cancelModifs").hide();
                     }
                 });
             } else {
-                notify("Erreur", '{{Les mots de passe ne sont pas identique !}}', 'error');
+                notify('Erreur', '{{Les mots de passe ne sont pas identique !}}', 'error');
             }
         } else {
-            notify("Erreur", '{{Le mot de passe ne peut pas être vide !}}', 'error');
+            notify('Erreur', '{{Le mot de passe ne peut pas être vide !}}', 'error');
         }
     });
 
@@ -184,11 +184,11 @@ function initEvents() {
               nextdom.user.save({
                   users: [user],
                   error: function (error) {
-                      notify("Erreur", error.message, 'error');
+                      notify('Erreur', error.message, 'error');
                   },
                   success: function () {
                       printUsers();
-                      notify("Info", '{{Modification effectuée}}', 'success');
+                      notify('Info', '{{Modification effectuée}}', 'success');
                       modifyWithoutSave = false;
                       $(".bt_cancelModifs").hide();
                   }
@@ -199,8 +199,7 @@ function initEvents() {
 
     // Manage rights button
     $('#table_user').on( 'click','.bt_manage_restrict_rights', function () {
-        $('#md_modal').dialog({title: "Gestion des droits"});
-        $("#md_modal").load('index.php?v=d&modal=user.rights&id=' + $(this).closest('tr').find('.userAttr[data-l1key=id]').value()).dialog('open');
+        loadModal('modal', 'Gestion des droits', 'user.rights&id=' + $(this).closest('tr').find('.userAttr[data-l1key=id]').value());
     });
 
     // Disable Two Factor button
@@ -208,7 +207,7 @@ function initEvents() {
         nextdom.user.removeTwoFactorCode({
             id :  $(this).closest('tr').find('.userAttr[data-l1key=id]').value(),
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function (data) {
                 printUsers();
@@ -222,7 +221,7 @@ function initEvents() {
         nextdom.user.deleteSession({
             id : id,
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function (data) {
                 modifyWithoutSave = false;
@@ -239,7 +238,7 @@ function initEvents() {
             key : key,
             user_id : user_id,
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function (data) {
                 modifyWithoutSave = false;
@@ -252,7 +251,7 @@ function initEvents() {
     $('#bt_removeAllRegisterDevice').on('click',function(){
         nextdom.user.removeRegisterDevice({
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function (data) {
                 modifyWithoutSave = false;
@@ -269,7 +268,7 @@ function printUsers() {
     var currentUser ="";
     nextdom.user.get({
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function (data) {
             currentUser=data.login;
@@ -277,7 +276,7 @@ function printUsers() {
     });
     nextdom.user.all({
         error: function (error) {
-            notify("Erreur", error.message, 'error');
+            notify('Erreur', error.message, 'error');
         },
         success: function (data) {
             $('#table_user tbody').empty();
@@ -294,6 +293,9 @@ function printUsers() {
                 ligne += '<td>';
                 ligne += '<label><input type="checkbox" class="userAttr" data-l1key="enable" '+disable+' />{{Actif}}</label><i class="spacing-right"></i>';
                 ligne += '<label><input type="checkbox" class="userAttr" data-l1key="options" data-l2key="localOnly" '+disable+' />{{Local}}</label>';
+                if(data[i].profils == 'admin'){
+                    ligne += '<br/><label><input type="checkbox" class="userAttr" data-l1key="options" data-l2key="doNotRotateHash" '+disable+' />{{Ne pas faire de rotation clef api}}</label>';
+                }
                 ligne += '</td>';
                 ligne += '<td style="width:175px;">';
                 ligne += '<select class="userAttr form-control input-sm" data-l1key="profils" '+disable+'>';

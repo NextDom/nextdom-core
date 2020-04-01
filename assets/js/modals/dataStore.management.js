@@ -39,10 +39,10 @@ function initEvents() {
                 nextdom.dataStore.remove({
                    id: tr.attr('data-dataStore_id'),
                    error: function (error) {
-                       notify("Core", error.message, 'error');
+                       notify('Core', error.message, 'error');
                    },
                 success: function (data) {
-                    notify("Info", '{{Dépôt de données supprimé}}', 'success');
+                    notify('Info', '{{Dépôt de données supprimé}}', 'success');
                     refreshDataStoreMangementTable();
                 }
             });
@@ -60,10 +60,10 @@ function initEvents() {
           key: tr.find('.key').value(),
           link_id: dataStore_link_id,
           error: function (error) {
-              notify("Core", error.message, 'error');
+              notify('Core', error.message, 'error');
           },
           success: function (data) {
-              notify("Info", '{{Dépôt de données sauvegardé}}', 'success');
+              notify('Info', '{{Dépôt de données sauvegardé}}', 'success');
               refreshDataStoreMangementTable();
           }
        });
@@ -72,8 +72,7 @@ function initEvents() {
     // Link data button
     $('#table_dataStore').delegate('.bt_graphDataStore', 'click', function() {
         var tr = $(this).closest('tr');
-        $('#md_modal2').dialog({title: "{{ Graphique de lien(s) }}"});
-        $("#md_modal2").load('index.php?v=d&modal=graph.link&filter_type=dataStore&filter_id='+tr.attr('data-dataStore_id')).dialog('open');
+        loadModal('modal2', '{{ Graphique de lien(s) }}', 'graph.link&filter_type=dataStore&filter_id='+tr.attr('data-dataStore_id'));
     });
 
     // Add data button
@@ -103,7 +102,7 @@ function refreshDataStoreMangementTable() {
       type: dataStore_type,
       usedBy : 1,
       error: function (error) {
-         notify("Core", error.message, 'error');
+         notify('Core', error.message, 'error');
       },
       success: function (data) {
         $('#table_dataStore tbody').empty();

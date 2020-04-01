@@ -14,13 +14,12 @@
 * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-nextdom.history = function () {
+nextdom.history = function() {
 };
 
 nextdom.history.chart = [];
 
-nextdom.history.get = function (queryParams) {
+nextdom.history.get = function(queryParams) {
   var paramsRequired = ['cmd_id', 'dateStart', 'dateEnd'];
   var paramsSpecifics = {
     pre_success: function (data) {
@@ -31,33 +30,25 @@ nextdom.history.get = function (queryParams) {
     }
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Cmd', 'getHistory');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Cmd', 'getHistory');
     ajaxParams.data['id'] = queryParams.cmd_id;
     ajaxParams.data['dateStart'] = queryParams.dateStart || '';
     ajaxParams.data['dateEnd'] = queryParams.dateEnd || '';
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };
 
-nextdom.history.copyHistoryToCmd = function (queryParams) {
-  var paramsRequired = ['source_id', 'target_id'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Cmd', 'copyHistoryToCmd');
-    ajaxParams.data['source_id'] = queryParams.source_id;
-    ajaxParams.data['target_id'] = queryParams.target_id;
-    $.ajax(ajaxParams);
-  }
+nextdom.history.copyHistoryToCmd = function(queryParams) {
+  nextdom.private.ajax('Cmd', 'copyHistoryToCmd', queryParams, ['source_id', 'target_id']);
 };
 
-nextdom.history.drawChart = function (queryParams) {
+nextdom.history.drawChart = function(queryParams) {
   if ($.type(queryParams.dateRange) == 'object') {
     queryParams.dateRange = json_encode(queryParams.dateRange);
   }
   queryParams.option = init(queryParams.option, {derive: ''});
-  $.ajax({
+  nextdom.private.ajaxCall({
     type: 'POST',
     url: 'src/ajax.php',
     data: {
@@ -118,10 +109,10 @@ nextdom.history.drawChart = function (queryParams) {
       var stacking = (queryParams.option.graphStack === undefined || queryParams.option.graphStack == null || queryParams.option.graphStack == 0) ? null : 'value';
       queryParams.option.graphStack = (queryParams.option.graphStack === undefined || queryParams.option.graphStack == null || queryParams.option.graphStack == 0) ? Math.floor(Math.random() * 10000 + 2) : 1;
       queryParams.option.graphScale = (queryParams.option.graphScale === undefined) ? 0 : parseInt(queryParams.option.graphScale);
-      queryParams.showLegend = (init(queryParams.showLegend, true) && init(queryParams.showLegend, true) != '0') ? true : false;
-      queryParams.showTimeSelector = (init(queryParams.showTimeSelector, true) && init(queryParams.showTimeSelector, true) != '0') ? true : false;
-      queryParams.showScrollbar = (init(queryParams.showScrollbar, true) && init(queryParams.showScrollbar, true) != '0') ? true : false;
-      queryParams.showNavigator = (init(queryParams.showNavigator, true) && init(queryParams.showNavigator, true) != '0') ? true : false;
+      queryParams.showLegend = init(queryParams.showLegend, true) && init(queryParams.showLegend, true) != '0';
+      queryParams.showTimeSelector = init(queryParams.showTimeSelector, true) && init(queryParams.showTimeSelector, true) != '0';
+      queryParams.showScrollbar = init(queryParams.showScrollbar, true) && init(queryParams.showScrollbar, true) != '0';
+      queryParams.showNavigator = init(queryParams.showNavigator, true) && init(queryParams.showNavigator, true) != '0';
 
       var legend = {borderColor: 'black', borderWidth: 2, shadow: true};
       legend.enabled = init(queryParams.showLegend, true);
@@ -176,7 +167,7 @@ nextdom.history.drawChart = function (queryParams) {
               href: '',
             },
             exporting: {
-              enabled: queryParams.enableExport || ($.mobile) ? false : true
+              enabled: queryParams.enableExport || true
             },
             tooltip: {
               pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b><br/>',
@@ -344,7 +335,7 @@ nextdom.history.drawChart = function (queryParams) {
               }
             },
             exporting: {
-              enabled: queryParams.enableExport || ($.mobile) ? false : true
+              enabled: queryParams.enableExport || true
             },
             rangeSelector: {
               buttons: [{
@@ -448,9 +439,9 @@ nextdom.history.drawChart = function (queryParams) {
       }
     }
   });
-};;
+};
 
-nextdom.history.generatePlotBand = function (_startTime, _endTime) {
+nextdom.history.generatePlotBand = function(_startTime, _endTime) {
   var plotBands = [];
   if ((_endTime - _startTime) > (7 * 86400000)) {
     return plotBands;
@@ -472,7 +463,7 @@ nextdom.history.generatePlotBand = function (_startTime, _endTime) {
   return plotBands;
 };
 
-nextdom.history.changePoint = function (queryParams) {
+nextdom.history.changePoint = function(queryParams) {
   var paramsRequired = ['cmd_id', 'datetime', 'value', 'oldValue'];
   var paramsSpecifics = {
     error: function (error) {
@@ -496,12 +487,12 @@ nextdom.history.changePoint = function (queryParams) {
     }
   };
   if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Cmd', 'changeHistoryPoint');
+    var params = $.extend({}, nextdom.private.default_params, paramsSpecifics, queryParams || {});
+    var ajaxParams = nextdom.private.getParamsAJAX(params, 'Cmd', 'changeHistoryPoint');
     ajaxParams.data['cmd_id'] = queryParams.cmd_id;
     ajaxParams.data['datetime'] = queryParams.datetime;
     ajaxParams.data['value'] = queryParams.value;
     ajaxParams.data['oldValue'] = queryParams.oldValue;
-    $.ajax(ajaxParams);
+    nextdom.private.ajaxCall(ajaxParams);
   }
 };

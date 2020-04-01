@@ -17,6 +17,7 @@
 
 namespace NextDom\Model\Entity;
 
+use NextDom\Com\ComHttp;
 use NextDom\Enums\ActionRight;
 use NextDom\Enums\CacheKey;
 use NextDom\Enums\CmdConfigKey;
@@ -30,7 +31,6 @@ use NextDom\Enums\EqLogicStatus;
 use NextDom\Enums\EventType;
 use NextDom\Enums\LogTarget;
 use NextDom\Enums\NextDomObj;
-use NextDom\Enums\ViewType;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\Api;
 use NextDom\Helpers\DBHelper;
@@ -58,6 +58,15 @@ use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\ViewDataManager;
 use NextDom\Managers\ViewManager;
+use NextDom\Model\Entity\Parents\BaseEntity;
+use NextDom\Model\Entity\Parents\ConfigurationEntity;
+use NextDom\Model\Entity\Parents\DisplayEntity;
+use NextDom\Model\Entity\Parents\IsVisibleEntity;
+use NextDom\Model\Entity\Parents\LogicalIdEntity;
+use NextDom\Model\Entity\Parents\NameEntity;
+use NextDom\Model\Entity\Parents\OrderEntity;
+use NextDom\Model\Entity\Parents\RefreshEntity;
+use NextDom\Model\Entity\Parents\TypeEntity;
 
 /**
  * Cmd
@@ -77,15 +86,27 @@ use NextDom\Managers\ViewManager;
  *      })
  * ORM\Entity
  */
-class Cmd implements EntityInterface
+class Cmd extends BaseEntity
 {
+    const TABLE_NAME = NextDomObj::CMD;
+
+    use LogicalIdEntity, IsVisibleEntity, OrderEntity, RefreshEntity, TypeEntity;
+    use NameEntity {
+        setName as basicSetName;
+    }
+    use ConfigurationEntity {
+        setConfiguration as basicSetConfiguration;
+    }
+    use DisplayEntity {
+        setDisplay as basicSetDisplay;
+    }
+
     private static $_templateArray = [];
     public $_collectDate = '';
     public $_valueDate = '';
     public $_eqLogic = null;
     public $_needRefreshWidget;
     public $_needRefreshAlert;
-    protected $_changed = false;
 
     /**
      * @var string
@@ -97,37 +118,9 @@ class Cmd implements EntityInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="logicalId", type="string", length=127, nullable=true)
-     */
-    protected $logicalId;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="generic_type", type="string", length=255, nullable=true)
      */
     protected $generic_type;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="order", type="integer", nullable=true)
-     */
-    protected $order;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=45, nullable=true)
-     */
-    protected $name;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="configuration", type="text", length=65535, nullable=true)
-     */
-    protected $configuration;
 
     /**
      * @var string
@@ -146,13 +139,6 @@ class Cmd implements EntityInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="type", type="string", length=45, nullable=true)
-     */
-    protected $type;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="subType", type="string", length=45, nullable=true)
      */
     protected $subType;
@@ -163,20 +149,6 @@ class Cmd implements EntityInterface
      * @ORM\Column(name="unite", type="string", length=45, nullable=true)
      */
     protected $unite;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="display", type="text", length=65535, nullable=true)
-     */
-    protected $display;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="isVisible", type="integer", nullable=true)
-     */
-    protected $isVisible = 1;
 
     /**
      * @var string
@@ -198,15 +170,6 @@ class Cmd implements EntityInterface
      * @ORM\Column(name="alert", type="text", length=65535, nullable=true)
      */
     protected $alert;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
 
     /**
      * @var EqLogic
@@ -301,10 +264,9 @@ class Cmd implements EntityInterface
                 $this->setValueDate($this->getCollectDate());
             }
             return $state[CacheKey::VALUE];
-
         }
         $eqLogic = $this->getEqLogicId();
-        if (!$this->isType(CmdType::INFO) && (!is_object($eqLogic) || $eqLogic->getIsEnable() != 1)) {
+        if (!is_object($eqLogic) || !$eqLogic->isEnabled()) {
             throw new CoreException(__('Equipement désactivé - impossible d\'exécuter la commande : ') . $this->getHumanName());
         }
         try {
@@ -393,25 +355,6 @@ class Cmd implements EntityInterface
     }
 
     /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param $id
-     * @return $this
-     */
-    public function setId($id)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $id);
-        $this->id = $id;
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getCollectDate()
@@ -451,23 +394,13 @@ class Cmd implements EntityInterface
     }
 
     /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
      * @param $_name
      * @return $this
      */
-    public function setName($_name)
+    public function setName($name)
     {
-        $_name = Utils::cleanComponentName($_name);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
-        $this->name = $_name;
-        return $this;
+        $name = Utils::cleanComponentName($name);
+        return $this->basicSetName($name);
     }
 
     /**
@@ -483,16 +416,6 @@ class Cmd implements EntityInterface
     }
 
     /**
-     * @param string $configKey
-     * @param string $defaultValue
-     * @return array|bool|mixed|null|string
-     */
-    public function getConfiguration($configKey = '', $defaultValue = '')
-    {
-        return Utils::getJsonAttr($this->configuration, $configKey, $defaultValue);
-    }
-
-    /**
      * Save configuration
      * @param $configKey
      * @param $configValue
@@ -504,10 +427,7 @@ class Cmd implements EntityInterface
             && !Utils::isSha1($configValue) && !Utils::isSha512($configValue)) {
             $configValue = Utils::sha512($configValue);
         }
-        $configuration = Utils::setJsonAttr($this->configuration, $configKey, $configValue);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->configuration, $configuration);
-        $this->configuration = $configuration;
-        return $this;
+        return $this->basicSetConfiguration($configKey, $configValue);
     }
 
     /**
@@ -622,26 +542,6 @@ class Cmd implements EntityInterface
     }
 
     /**
-     * Get sub type of the command
-     * @return string
-     */
-    public function getSubType()
-    {
-        return $this->subType;
-    }
-
-    /**
-     * @param $_subType
-     * @return $this
-     */
-    public function setSubType($_subType)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->subType, $_subType);
-        $this->subType = $_subType;
-        return $this;
-    }
-
-    /**
      * Execute command overrided by plugins
      *
      * @param array $options Execute options
@@ -701,7 +601,7 @@ class Cmd implements EntityInterface
      */
     public function setValue($_value)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->value, $_value);
+        $this->updateChangeState($this->value, $_value);
         $this->value = $_value;
         return $this;
     }
@@ -754,25 +654,6 @@ class Cmd implements EntityInterface
     }
 
     /**
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param $_type
-     * @return $this
-     */
-    public function setType($_type)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->type, $_type);
-        $this->type = $_type;
-        return $this;
-    }
-
-    /**
      *
      * @return mixed
      */
@@ -800,7 +681,7 @@ class Cmd implements EntityInterface
      */
     public function setEqLogic_id($_eqLogic_id)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->eqLogic_id, $_eqLogic_id);
+        $this->updateChangeState($this->eqLogic_id, $_eqLogic_id);
         $this->eqLogic_id = $_eqLogic_id;
         return $this;
     }
@@ -829,19 +710,9 @@ class Cmd implements EntityInterface
      */
     public function setEqType($_eqType)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->eqType, $_eqType);
+        $this->updateChangeState($this->eqType, $_eqType);
         $this->eqType = $_eqType;
         return $this;
-    }
-
-    /**
-     * @param string $_key
-     * @param string $_default
-     * @return array|bool|mixed|null|string
-     */
-    public function getDisplay($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->display, $_key, $_default);
     }
 
     /**
@@ -855,8 +726,7 @@ class Cmd implements EntityInterface
             $this->_needRefreshWidget = true;
             $this->_changed = true;
         }
-        $this->display = Utils::setJsonAttr($this->display, $_key, $_value);
-        return $this;
+        return $this->basicSetDisplay($_key, $_value);
     }
 
     /**
@@ -873,9 +743,18 @@ class Cmd implements EntityInterface
      */
     public function setGeneric_type($generic_type)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->generic_type, $generic_type);
+        $this->updateChangeState($this->generic_type, $generic_type);
         $this->generic_type = $generic_type;
         return $this;
+    }
+
+    /**
+     * Get historic command status
+     * @return bool
+     */
+    public function isHistorized()
+    {
+        return $this->isHistorized == 1;
     }
 
     /**
@@ -892,7 +771,7 @@ class Cmd implements EntityInterface
      */
     public function setIsHistorized($_isHistorized)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->isHistorized, $_isHistorized);
+        $this->updateChangeState($this->isHistorized, $_isHistorized);
         $this->isHistorized = $_isHistorized;
         return $this;
     }
@@ -977,7 +856,7 @@ class Cmd implements EntityInterface
     public function setAlert($_key, $_value)
     {
         $alert = Utils::setJsonAttr($this->alert, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->alert, $alert);
+        $this->updateChangeState($this->alert, $alert);
         $this->alert = $alert;
         $this->_needRefreshAlert = true;
         return $this;
@@ -1072,7 +951,7 @@ class Cmd implements EntityInterface
      */
     public function setUnite($_unite)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->unite, $_unite);
+        $this->updateChangeState($this->unite, $_unite);
         $this->unite = $_unite;
         return $this;
     }
@@ -1181,9 +1060,9 @@ class Cmd implements EntityInterface
                 // @TODO: Il doit y avoir un problème avec les Types et SubType
                 TimeLineHelper::addTimelineEvent(['type' => NextDomObj::CMD, 'subtype' => 'info', 'cmdType' => $this->getSubType(), Common::ID => $this->getId(), Common::NAME => $this->getHumanName(true), 'datetime' => $this->getValueDate(), Common::VALUE => $eventValue . $this->getUnite()]);
             }
+            $this->influxDb($eventValue);
             $this->pushUrl($eventValue);
         }
-        $this->influxDb($eventValue);
     }
 
     /**
@@ -1331,7 +1210,7 @@ class Cmd implements EntityInterface
         ];
         $url = str_replace(array_keys($replace), $replace, $url);
         LogHelper::addInfo(LogTarget::EVENT, __('Appels de l\'URL de push pour la commande ') . $this->getHumanName() . ' : ' . $url);
-        $http = new \com_http($url);
+        $http = new ComHttp($url);
         $http->setLogError(false);
         try {
             $http->exec();
@@ -1346,7 +1225,7 @@ class Cmd implements EntityInterface
      */
     public function influxDb($valueToSend)
     {
-        $influxDbConf = ConfigManager::byKeys(['influxDbIp', 'influxDbPort', 'influxDbDatabase']);
+        $influxDbConf = ConfigManager::byKeys(['influxDbIp', 'influxDbPort', 'influxDbDatabase', 'influxDbLogin', 'influxDbPassword']);
         if ($influxDbConf['influxDbIp'] !== '') {
             if (empty($this->getUnite())) {
                 $unite = 'state';
@@ -1355,14 +1234,14 @@ class Cmd implements EntityInterface
             }
 
             if ($this->isType(CmdType::INFO)
-                && ($this->isSubType(CmdSubType::NUMERIC) || $this->isSubType(CmdSubType::BINARY))) {
-                $client = new \InfluxDB\Client($influxDbConf['influxDbIp'], $influxDbConf['influxDbPort']);
-                $influxDbDatabase = $client->selectDB($influxDbConf['influxDbDatabase']);
+                && ($this->isSubType(CmdSubType::NUMERIC) || $this->isSubType(CmdSubType::BINARY))
+                && (isset($valueToSend))) {
+                $influxDbDatabase = \InfluxDB\Client::fromDSN(sprintf('influxdb://%s:%s@%s:%s/%s', urlencode($influxDbConf['influxDbLogin']), urlencode($influxDbConf['influxDbPassword']), $influxDbConf['influxDbIp'], $influxDbConf['influxDbPort'], $influxDbConf['influxDbDatabase']));
 
                 $points = [
                     new \InfluxDB\Point(
                         $unite,
-                        $valueToSend,
+                        floatval($valueToSend),
                         ['equipment' => $this->getHumanName()]
                     ),
                 ];
@@ -1382,17 +1261,6 @@ class Cmd implements EntityInterface
     }
 
     /**
-     * @return int
-     */
-    public function getOrder()
-    {
-        if ($this->order == '') {
-            return 0;
-        }
-        return $this->order;
-    }
-
-    /**
      * @param $order
      * @return $this
      */
@@ -1404,24 +1272,6 @@ class Cmd implements EntityInterface
         }
         $this->order = $order;
         return $this;
-    }
-
-    /**
-     * Get visibility state
-     *
-     * @return bool True if visible
-     */
-    public function isVisible()
-    {
-        return $this->getIsvisible() == 1;
-    }
-
-    /**
-     * @return int
-     */
-    public function getIsvisible()
-    {
-        return $this->isVisible;
     }
 
     /**
@@ -1554,19 +1404,6 @@ class Cmd implements EntityInterface
     }
 
     /**
-     * @return string
-     */
-    public function getTableName()
-    {
-        return NextDomObj::CMD;
-    }
-
-    public function refresh()
-    {
-        DBHelper::refresh($this);
-    }
-
-    /**
      * @return bool
      * @throws CoreException
      * @throws \ReflectionException
@@ -1580,7 +1417,7 @@ class Cmd implements EntityInterface
         CacheManager::delete(CmdConfigKey::CMD_CACHE_ATTR . $this->getId());
         CacheManager::delete(NextDomObj::CMD . $this->getId());
         NextDomHelper::addRemoveHistory([Common::ID => $this->getId(), Common::NAME => $this->getHumanName(), 'date' => date(DateFormat::FULL), 'type' => NextDomObj::CMD]);
-        return DBHelper::remove($this);
+        return parent::remove();
     }
 
     /**
@@ -1674,25 +1511,6 @@ class Cmd implements EntityInterface
             $htmlRender = $this->addDataForOthersCmdRender($htmlData, $htmlRender, $_options, $templateCode);
             return Utils::templateReplace($htmlData, $htmlRender);
         }
-    }
-
-    /**
-     * @return string
-     */
-    public function getLogicalId()
-    {
-        return $this->logicalId;
-    }
-
-    /**
-     * @param $_logicalId
-     * @return $this
-     */
-    public function setLogicalId($_logicalId)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->logicalId, $_logicalId);
-        $this->logicalId = $_logicalId;
-        return $this;
     }
 
     /**
@@ -1884,7 +1702,7 @@ class Cmd implements EntityInterface
     {
         $token = $this->getCache('ask::token', ConfigManager::genKey());
         $this->setCache(['ask::count' => 0, 'ask::token' => $token]);
-        $result = NetworkHelper::getNetworkAccess($_network) . '/core/api/jeeApi.php?';
+        $result = NetworkHelper::getNetworkAccess($_network) . '/src/Api/jeeApi.php?';
         $result .= 'type=ask';
         $result .= '&plugin=' . $_plugin;
         $result .= '&apikey=' . Api::getApiKey($_plugin);
@@ -2050,7 +1868,7 @@ class Cmd implements EntityInterface
      */
     public function getDirectUrlAccess()
     {
-        $url = '/core/api/jeeApi.php?apikey=' . ConfigManager::byKey('api') . '&type=cmd&id=' . $this->getId();
+        $url = '/src/Api/jeeApi.php?apikey=' . ConfigManager::byKey('api') . '&type=cmd&id=' . $this->getId();
         if ($this->isType(CmdType::ACTION)) {
             switch ($this->getSubType()) {
                 case CmdSubType::SLIDER:
@@ -2211,29 +2029,6 @@ class Cmd implements EntityInterface
     }
 
     /**
-     * Get changed state
-     *
-     * @return bool True if attribute has changed
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * Set changed state
-     *
-     * @param bool $changed New changed state
-     *
-     * @return $this
-     */
-    public function setChanged($changed)
-    {
-        $this->_changed = $changed;
-        return $this;
-    }
-
-    /**
      * Cast this object from a source command
      *
      * @param Cmd $srcCmd
@@ -2246,6 +2041,21 @@ class Cmd implements EntityInterface
         foreach ($attributes as $name => $value) {
             $this->$name = $value;
         }
+        return $this;
+    }
+
+    public function getSubType()
+    {
+        return $this->subType;
+    }
+
+    public function setSubType($_subType)
+    {
+        if ($this->subType != $_subType) {
+            $this->_needRefreshWidget = true;
+            $this->_changed = true;
+        }
+        $this->subType = $_subType;
         return $this;
     }
 

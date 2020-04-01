@@ -20,18 +20,22 @@ use NextDom\Rest\ScenarioRest;
 
 require_once(__DIR__ . '/../../../src/core.php');
 
-class ScenarioRestTest extends PHPUnit_Framework_TestCase
+class ScenarioRestTest extends PHPUnit\Framework\TestCase
 {
-    public function tearDown()
+    public function tearDown(): void
     {
-        ScenarioManager::byId(3)->setIsActive(1);
-        ScenarioManager::byId(4)->setIsActive(0);
+        $scenario3 = ScenarioManager::byId(3);
+        $scenario3->setIsActive(1);
+        $scenario3->save();
+        $scenario4 = ScenarioManager::byId(4);
+        $scenario4->setIsActive(0);
+        $scenario4->save();
     }
 
     public function testGetAll()
     {
         $result = ScenarioRest::getAll();
-        $this->assertCount(4, $result);
+        $this->assertCount(5, $result);
         $this->assertEquals('Disabled scenario', $result[0]['name']);
         $this->assertEquals('Scenario with expressions', $result[1]['name']);
     }

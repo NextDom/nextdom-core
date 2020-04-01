@@ -14,25 +14,16 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+nextdom.cache = function() {};
 
-nextdom.cache = function () {
+nextdom.cache.clean = function(queryParams) {
+  nextdom.private.ajax('Cache', 'clean', queryParams);
 };
 
-
-nextdom.cache.clean = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'Cache', 'clean');
-  $.ajax(ajaxParams);
+nextdom.cache.flush = function(queryParams) {
+  nextdom.private.ajax('Cache', 'flush', queryParams);
 };
 
-nextdom.cache.flush = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'Cache', 'flush');
-  $.ajax(ajaxParams);
-};
-
-nextdom.cache.stats = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'Cache', 'stats');
-  $.ajax(ajaxParams);
+nextdom.cache.stats = function(queryParams) {
+  nextdom.private.ajax('Cache', 'stats', queryParams);
 };

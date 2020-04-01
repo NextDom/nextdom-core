@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Tools;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\ControllerData;
 use NextDom\Helpers\Render;
 use NextDom\Managers\UpdateManager;
 
@@ -55,7 +56,7 @@ class UpdateController extends BaseController
         $pageData['numberOfUpdatesOthers'] = $pageData['numberOfUpdates'] - ($pageData['numberOfUpdatesCore'] + $pageData['numberOfUpdatesPlugins'] + $pageData['numberOfUpdatesWidgets'] + $pageData['numberOfUpdatesScripts']);
         $pageData['updatesList'] = array_reverse($updates);
 
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/update.js';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/tools/update.js';
 
         return Render::getInstance()->get('/desktop/tools/update-view.html.twig', $pageData);
     }

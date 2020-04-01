@@ -33,7 +33,7 @@ def get_class_methods_from_file(class_file):
     """
     with open(CLASS_PATH + class_file, 'r', encoding="utf-8") as file_content:
         content = file_content.read()
-        return re.findall(r' function (\w+)\(', content)
+        return re.findall(r'public (?:static )?function (\w+)\(', content)
 
 def get_class_methods():
     """Get all class methods from Jeedom
@@ -128,51 +128,6 @@ def get_entity_content_if_exists(base_class_file_content):
             result = entity_content.read()
     return result
 
-def class_methods_to_ignore(file_to_check, method_to_check):
-    """Check in list of ignored methods
-    :param file_to_check:   Ajax file to check
-    :param method_to_check: Ajax file to check
-    :type file_to_check:    str
-    :type method_to_check:  str
-    :return:                True if the method can be ignored
-    :rtype:                 bool
-    """
-    ignored_methods = {
-        'cmd.class.php': [
-            'cast' # Usage only static (in manager)
-        ],
-        'DB.class.php': [
-            '__construct',       # private
-            'getTableName',      # private
-            'getFields',         # private
-            'setField',          # private
-            'buildQuery',        # private
-            'getField',          # private
-            'getReflectionClass' # private
-        ],
-        'eqLogic.class.php': [
-            'cast' # Usage only static (in manager)
-        ],
-        'eqReal.class.php': [
-            'getClass' # Usage only static (in manager)
-        ],
-        'event.class.php': [
-            'getFileDescriptorLock', # Usage only static (in manager)
-            'cleanEvent',  # Usage only static (in manager)
-            'filterEvent', # Usage only static (in manager)
-            'changesSince' # Usage only static (in manager)
-        ],
-        'nextdom.class.php': [
-            'getThemeConfig', # No usage
-            'saveCustom', # Removed
-            'checkValueInconfiguration' # Usage only static and private (in manager)
-        ]
-    }
-    if file_to_check in ignored_methods.keys():
-        if method_to_check in ignored_methods[file_to_check]:
-            return True
-    return False
-
 def check_class_methods_file(file_to_check, methods_list):
     """Check class methods from file
     :param file_to_check: Ajax file to check
@@ -189,15 +144,10 @@ def check_class_methods_file(file_to_check, methods_list):
     if file_to_check == 'migrate.class.php':
         return True
     if os.path.isfile(NEXTDOM_CLASS_PATH + file_to_check):
-        with open(NEXTDOM_CLASS_PATH + file_to_check, 'r', encoding="utf-8") as class_file_content:
-            test_content = class_file_content.read()
-            test_content = test_content + get_entity_content_if_exists(test_content)
-            test_content = test_content.lower()
-            for method in methods_list:
-                if test_content.find('function ' + method.lower()) == -1:
-                    if not class_methods_to_ignore(file_to_check, method):
-                        print_warning('In ' + file_to_check + ', method ' + method + ' not found.')
-                        result = False
+        if os.system('php check_class_methods.php ' +
+                     file_to_check.replace('.class.php', '') + ' ' +
+                     ' '.join(methods_list)) != 0:
+            result = False
     else:
         print('Class ' + file_to_check + ' not found.')
         result = False

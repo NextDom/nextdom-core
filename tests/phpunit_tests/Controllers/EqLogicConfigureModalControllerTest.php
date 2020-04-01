@@ -16,15 +16,15 @@
  */
 
 require_once(__DIR__ . '/../../../src/core.php');
-require_once(__DIR__ . '/BaseControllerTest.php');
+require_once(__DIR__ . '/../libs/BaseControllerTest.php');
 
 class EqLogicConfigureModalControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (isset($_GET['eqLogic_id'])) {
             unset($_GET['eqLogic_id']);
@@ -38,7 +38,7 @@ class EqLogicConfigureModalControllerTest extends BaseControllerTest
         ob_start();
         $result = \NextDom\Controller\Modals\EqLogicConfigure::get();
         $scriptResult = ob_get_clean();
-        $this->assertContains('id="div_displayEqLogicConfigure"', $result);
-        $this->assertContains('var eqLogicInfoSearchString = "%5BMy+Room%5D%5BTest+eqLogic%5D";', $scriptResult);
+        $this->assertStringContainsString('id="div_displayEqLogicConfigure"', $result);
+        $this->assertStringContainsString('var eqLogicInfoSearchString = "%5BMy+Room%5D%5BTest+eqLogic%5D";', $scriptResult);
     }
 }

@@ -59,7 +59,7 @@ function loadInformations() {
         nextdom.eqLogic.setOrder({
             eqLogics: eqLogics,
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
                 $( ".eqLogicSortable" ).sortable( "cancel" );
             }
         });
@@ -81,7 +81,7 @@ function loadInformations() {
         nextdom.cmd.setOrder({
             cmds: cmds,
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             }
         });
       }
@@ -118,20 +118,17 @@ function initEvents() {
     // Equipement title double clic
     $( ".eqLogic" ).on('dblclick',function(e){
         if(e.target != this) return;
-        $('#md_modal').dialog({title: "{{Configuration de l'équipement}}"});
-        $('#md_modal').load('index.php?v=d&modal=eqLogic.configure&eqLogic_id=' + $(this).attr('data-id')).dialog('open');
+        loadModal('modal', '{{Configuration de l\'équipement}}', 'eqLogic.configure&eqLogic_id=' + $(this).attr('data-id'));
     });
 
     // Equipement configure button
     $('.configureEqLogic').on('click',function(){
-       $('#md_modal').dialog({title: "{{Configuration de l'équipement}}"});
-       $('#md_modal').load('index.php?v=d&modal=eqLogic.configure&eqLogic_id=' + $(this).closest('.eqLogic').attr('data-id')).dialog('open');
+       loadModal('modal', '{{Configuration de l\'équipement}}', 'eqLogic.configure&eqLogic_id=' + $(this).closest('.eqLogic').attr('data-id'));
     });
 
     // Object configure button
     $('.configureObject').on('click',function(){
-       $('#md_modal').dialog({title: "{{Configuration de l'objet}}"});
-       $('#md_modal').load('index.php?v=d&modal=object.configure&object_id=' + $(this).closest('.object').attr('data-id')).dialog('open');
+       loadModal('modal', '{{Configuration de l\'objet}}', 'object.configure&object_id=' + $(this).closest('.object').attr('data-id'));
     });
 
     // Object openning button
@@ -141,14 +138,12 @@ function initEvents() {
 
     // Cmd double clic
     $( ".cmd" ).on('dblclick',function(){
-       $('#md_modal').dialog({title: "{{Configuration de la commande}}"});
-       $('#md_modal').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).attr('data-id')).dialog('open');
+       loadModal('modal', '{{Configuration de la commande}}', 'cmd.configure&cmd_id=' + $(this).attr('data-id'));
     });
 
     // cmd configure button
     $('.configureCmd').on('click',function(){
-       $('#md_modal').dialog({title: "{{Configuration de la commande}}"});
-       $('#md_modal').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).closest('.cmd').attr('data-id')).dialog('open');
+       loadModal('modal', '{{Configuration de la commande}}', 'cmd.configure&cmd_id=' + $(this).closest('.cmd').attr('data-id'));
     });
 
     // Cmd collapsing/uncollapsing arrow button
@@ -235,7 +230,7 @@ function initEvents() {
                 nextdom.eqLogic.removes({
                     eqLogics: eqLogics,
                     error: function (error) {
-                        notify("Erreur", error.message, 'error');
+                        notify('Erreur', error.message, 'error');
                     },
                     success : function(){
                         loadPage('index.php?v=d&p=display');
@@ -257,7 +252,7 @@ function initEvents() {
             eqLogics: eqLogics,
             isVisible : $(this).attr('data-value'),
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success : function(){
              loadPage('index.php?v=d&p=display');
@@ -277,7 +272,7 @@ function initEvents() {
             eqLogics: eqLogics,
             isEnable : $(this).attr('data-value'),
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success : function(){
                 loadPage('index.php?v=d&p=display');
@@ -287,7 +282,6 @@ function initEvents() {
 
     // History deleting opening modal button
     $('#bt_removeHistory').on('click',function(){
-        $('#md_modal').dialog({title: "{{Historique des suppressions}}"});
-        $('#md_modal').load('index.php?v=d&modal=remove.history').dialog('open');
+        loadModal('modal', '{{Historique des suppressions}}', 'remove.history');
     });
 }

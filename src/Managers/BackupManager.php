@@ -44,6 +44,9 @@ use splitbrain\PHPArchive\Tar;
  */
 class BackupManager
 {
+    /**
+     * @var null
+     */
     private static $logLevel = null;
 
     /**
@@ -72,6 +75,7 @@ class BackupManager
      *
      * @return bool true if no error
      * @throws CoreException
+     * @throws \Exception
      */
     public static function createBackup()
     {
@@ -315,10 +319,14 @@ class BackupManager
     }
 
     /**
-     * @param array $roots
+     * @param array  $roots
      * @param string $pattern
-     * @param Tar $tar
-     * @param string logFile
+     * @param Tar    $tar
+     * @param        $logFile
+     * @throws \splitbrain\PHPArchive\ArchiveCorruptedException
+     * @throws \splitbrain\PHPArchive\ArchiveIOException
+     * @throws \splitbrain\PHPArchive\FileInfoException
+     * @throws \Exception
      */
     private static function addPathToArchive($roots, $pattern, $tar, $logFile)
     {
@@ -383,8 +391,8 @@ class BackupManager
      *
      * @param string $backupDir backup root directory
      * @param string $order sort result by 'newest' or 'oldest' first
-     * @return array
-     * @retrun array of file object
+     * @return array of file object
+     * @throws CoreException
      */
     public static function getBackupFileInfo($backupDir, $order = "newest")
     {
@@ -530,7 +538,7 @@ class BackupManager
             self::clearCache();
             ConsoleHelper::ok();
             ConsoleHelper::step("restoring cache...");
-            self::restoreCache($tmpDir);
+            self::restoreCache($tmpDir,LogTarget::RESTORE);
             ConsoleHelper::ok();
             FileSystemHelper::rrmdir($tmpDir);
             NextDomHelper::event("end_restore");
@@ -606,6 +614,7 @@ class BackupManager
      *
      * @param string $tmpDir extracted backup root directory
      * @throws CoreException
+     * @throws \Exception
      */
     private static function restorePlugins($tmpDir)
     {
@@ -640,6 +649,7 @@ class BackupManager
      *
      * @param $folderRoot
      * @throws CoreException on permission error
+     * @throws \Exception
      */
     private static function restorePublicPerms($folderRoot)
     {
@@ -721,9 +731,9 @@ class BackupManager
      */
     private static function restoreJeedomConfig(string $tmpDir)
     {
-        $commonBackup = sprintf("%s/common.config.php", $tmpDir);
-        $commonConfig = sprintf("%s/core/config/common.config.php", NEXTDOM_ROOT);
-        $jeedomConfig = sprintf("%s/core/config/jeedom.config.php", NEXTDOM_ROOT);
+        $commonBackup = $tmpDir . '/common.config.php';
+        $commonConfig = NEXTDOM_DATA . '/config/common.config.php';
+        $jeedomConfig = NEXTDOM_DATA . '/config/jeedom.config.php';
 
         if (true == file_exists($jeedomConfig)) {
             @unlink($jeedomConfig);
@@ -817,14 +827,15 @@ class BackupManager
      * Restore cache from backup archive
      *
      * @param string $tmpDir extracted backup root directory
-     * @throws CoreException
+     * @param string logFile logging file name
+     *
+     * @throws \Exception
      */
-    private static function restoreCache($tmpDir)
+    private static function restoreCache($tmpDir, $logFile)
     {
-
+        LogHelper::addInfo($logFile, 'Restore cache', '');
         FileSystemHelper::rrmfile(CacheManager::getArchivePath());
-        FileSystemHelper::mv($tmpDir . '/' . NextDomFolder::VAR . '/' . NextDomFile::CACHE_TAR_GZ, CacheManager::getArchivePath());
-
+        FileSystemHelper::rmove($tmpDir . '/' . NextDomFolder::VAR . '/' . NextDomFile::CACHE_TAR_GZ, CacheManager::getArchivePath());
         CacheManager::restore();
     }
     private static function updateConfig()
@@ -851,9 +862,9 @@ class BackupManager
     }
 
     /**
-     * Obtenir la liste des sauvegardes
+     * Get the list of backups
      *
-     * @return array Liste des sauvegardes
+     * @return array list of backups
      * @throws \Exception
      */
     public static function listBackup(): array
@@ -875,6 +886,7 @@ class BackupManager
      * @param string $backupFilePath Backup file path
      *
      * @throws CoreException
+     * @throws \Exception
      */
     public static function removeBackup(string $backupFilePath)
     {

@@ -17,7 +17,7 @@
  */
 
 /* * ***************************Includes********************************* */
-require_once NEXTDOM_ROOT.'/core/php/core.inc.php';
+require_once __DIR__ . '/../../core/php/core.inc.php';
 
 use NextDom\Managers\ConfigManager;
 
@@ -67,5 +67,13 @@ class config {
 
     public static function preConfig_market_password($_value) {
         return ConfigManager::preConfig_market_password($_value);
+    }
+
+    public static function preConfig_info_latitude($_value) {
+        ConfigManager::preConfig_info_latitude($_value);
+    }
+
+    public static function preConfig_info_longitude($_value) {
+        return ConfigManager::preConfig_info_longitude($_value);
     }
 }

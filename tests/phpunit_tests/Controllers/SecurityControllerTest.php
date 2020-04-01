@@ -16,15 +16,15 @@
  */
 
 require_once(__DIR__ . '/../../../src/core.php');
-require_once(__DIR__ . '/BaseControllerTest.php');
+require_once(__DIR__ . '/../libs/BaseControllerTest.php');
 
 class SecurityControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
@@ -35,7 +35,7 @@ class SecurityControllerTest extends BaseControllerTest
         $result = \NextDom\Controller\Admin\SecurityController::get($pageData);
         $this->assertArrayHasKey('adminUseLdap', $pageData);
         $this->assertFalse($pageData['adminUseLdap']);
-        $this->assertContains('data-l1key="security::whiteips"', $result);
+        $this->assertStringContainsString('data-l1key="security::whiteips"', $result);
     }
 
     public function testPageDataVars()

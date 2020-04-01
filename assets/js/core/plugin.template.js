@@ -72,7 +72,6 @@ $('.eqLogicAction[data-action=returnToThumbnailDisplay]').on('click', function (
   $('.eqLogicThumbnailContainer').packery();
 });
 
-
 $(".li_eqLogic,.eqLogicDisplayCard").on('click', function () {
   nextdom.eqLogic.cache.getCmd = Array();
   if ($('.eqLogicThumbnailDisplay').html() !== undefined) {
@@ -87,8 +86,9 @@ $(".li_eqLogic,.eqLogicDisplayCard").on('click', function () {
   } else {
     $('.eqLogic').show();
   }
-  if ($('.li_eqLogic').length != 0) {
-    $('.li_eqLogic').removeClass('active');
+  var liEqLogic = document.getElementsByClassName('li_eqLogic');
+  if (liEqLogic.length !== 0) {
+    liEqLogic.classList.remove('active');
   }
   $(this).addClass('active');
   if ($('.li_eqLogic[data-eqLogic_id=' + $(this).attr('data-eqLogic_id') + ']').html() !== undefined) {
@@ -134,11 +134,11 @@ $(".li_eqLogic,.eqLogicDisplayCard").on('click', function () {
 });
 
 if (getUrlVars('saveSuccessFull') == 1) {
-  notify("Info", '{{Sauvegarde effectuée avec succès}}', 'success');
+  notify('Info', '{{Sauvegarde effectuée avec succès}}', 'success');
 }
 
 if (getUrlVars('removeSuccessFull') == 1) {
-  notify("Info", '{{Suppression effectuée avec succès}}', 'success');
+  notify('Info', '{{Suppression effectuée avec succès}}', 'success');
 }
 
 /**************************EqLogic*********************************************/
@@ -173,7 +173,7 @@ $('.eqLogicAction[data-action=copy]').on('click', function () {
 });
 
 $('.eqLogicAction[data-action=export]').on('click', function () {
-  window.open('core/php/export.php?type=eqLogic&id=' + $('.eqLogicAttr[data-l1key=id]').value(), "_blank", null);
+  window.open('src/Api/export.php?type=eqLogic&id=' + $('.eqLogicAttr[data-l1key=id]').value(), "_blank", null);
 });
 
 $('.eqLogicAction[data-action=save]').on('click', function () {
@@ -281,8 +281,7 @@ $('.eqLogicAction[data-action=add]').on('click', function () {
 });
 
 $('.eqLogic .eqLogicAction[data-action=configure]').on('click', function () {
-  $('#md_modal').dialog({title: "{{Configuration de l'équipement}}"});
-  $('#md_modal').load('index.php?v=d&modal=eqLogic.configure&eqLogic_id=' + $('.eqLogicAttr[data-l1key=id]').value()).dialog('open');
+  loadModal('modal', '{{Configuration de l\'équipement}}', 'eqLogic.configure&eqLogic_id=' + $('.eqLogicAttr[data-l1key=id]').value());
 });
 
 $('#in_searchEqlogic').off('keyup').keyup(function () {
@@ -296,7 +295,6 @@ $('#in_searchEqlogic').off('keyup').keyup(function () {
   $('.eqLogicDisplayCard .name').each(function () {
     var text = $(this).text().toLowerCase();
     if (text.indexOf(search.toLowerCase()) >= 0) {
-      $(this)
       $(this).closest('.eqLogicDisplayCard').show();
     }
   });
@@ -341,7 +339,7 @@ $('#div_pageContainer').on('click', '.cmd .cmdAction[data-action=test]', functio
     var id = $(this).closest('.cmd').attr('data-cmd_id');
     nextdom.cmd.test({id: id});
   } else {
-    notify("Info", '{{Veuillez activer l\'équipement avant de tester une de ses commandes}}', 'warning');
+    notify('Info', '{{Veuillez activer l\'équipement avant de tester une de ses commandes}}', 'warning');
   }
 
 });
@@ -351,21 +349,20 @@ $('#div_pageContainer').on('dblclick', '.cmd input,select,span,a', function (eve
 });
 
 $('#div_pageContainer').on('dblclick', '.cmd', function () {
-  $('#md_modal').dialog({title: "{{Configuration commande}}"});
-  $('#md_modal').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).closest('.cmd').attr('data-cmd_id')).dialog('open');
+  loadModal('modal', '{{Configuration commande}}', 'cmd.configure&cmd_id=' + $(this).closest('.cmd').attr('data-cmd_id'));
 });
 
 $('#div_pageContainer').on('click', '.cmd .cmdAction[data-action=configure]', function () {
-  $('#md_modal').dialog({title: "{{Configuration commande}}"});
-  $('#md_modal').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).closest('.cmd').attr('data-cmd_id')).dialog('open');
+  loadModal('modal', '{{Configuration commande}}', 'cmd.configure&cmd_id=' + $(this).closest('.cmd').attr('data-cmd_id'));
 });
 
 $('.eqLogicThumbnailContainer').packery();
 
 if (is_numeric(getUrlVars('id'))) {
-  if ($('#ul_eqLogic .li_eqLogic[data-eqLogic_id=' + getUrlVars('id') + ']').length != 0) {
-    $('#ul_eqLogic .li_eqLogic[data-eqLogic_id=' + getUrlVars('id') + ']').click();
-  } else if ($('.eqLogicThumbnailContainer .eqLogicDisplayCard[data-eqLogic_id=' + getUrlVars('id') + ']').length != 0) {
+  var eqLogicItem = $('#ul_eqLogic .li_eqLogic[data-eqLogic_id=' + getUrlVars('id') + ']');
+  if (eqLogicItem.length !== 0) {
+    eqLogicItem.click();
+  } else if (document.querySelectorAll('.eqLogicThumbnailContainer .eqLogicDisplayCard[data-eqLogic_id=' + getUrlVars('id') + ']').length !== 0) {
     $('.eqLogicThumbnailContainer .eqLogicDisplayCard[data-eqLogic_id=' + getUrlVars('id') + ']').click();
   } else if ($('.eqLogicThumbnailDisplay').html() === undefined) {
     $('#ul_eqLogic .li_eqLogic:first').click();

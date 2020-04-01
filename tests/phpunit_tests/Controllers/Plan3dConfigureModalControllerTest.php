@@ -16,22 +16,30 @@
  */
 
 require_once(__DIR__ . '/../../../src/core.php');
-require_once(__DIR__ . '/BaseControllerTest.php');
+require_once(__DIR__ . '/../libs/BaseControllerTest.php');
 
 class Plan3dConfigureModalControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
+        if (isset($_GET['name'])) {
+            unset($_GET['name']);
+        }
+        if (isset($_GET['plan3dHeader_id'])) {
+            unset($_GET['plan3dHeader_id']);
+        }
     }
 
 
     public function testError()
     {
-        $this->expectException(\NextDom\Exceptions\CoreException::class);
-        \NextDom\Controller\Modals\Plan3dConfigure::get();
+        $_GET['name'] = 'Plan 3d';
+        $_GET['plan3dHeader_id'] = 1;
+        $result = \NextDom\Controller\Modals\Plan3dConfigure::get();
+        $this->assertContains('id="fd_plan3dConfigure"', $result);
     }
 }

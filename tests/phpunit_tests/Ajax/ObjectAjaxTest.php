@@ -20,14 +20,14 @@ use NextDom\Exceptions\CoreException;
 use NextDom\Managers\JeeObjectManager;
 use NextDom\Model\Entity\JeeObject;
 
-require_once('BaseAjaxTest.php');
+require_once(__DIR__ . '/../libs/BaseAjaxTest.php');
 
 class ObjectAjaxTest extends BaseAjaxTest
 {
     /** @var ObjectAjax */
     private $objectAjax = null;
 
-    public function setUp()
+    public function setUp(): void
     {
         $parentObject = JeeObjectManager::byName('Parent test object');
         if (is_object($parentObject)) {
@@ -47,7 +47,7 @@ class ObjectAjaxTest extends BaseAjaxTest
         $childObject->save();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->cleanGetParams();
         $parentObject = JeeObjectManager::byName('Parent test object');
@@ -67,7 +67,7 @@ class ObjectAjaxTest extends BaseAjaxTest
     public function testRemove()
     {
         $parentObject = JeeObjectManager::byName('Parent test object');
-        $this->connectAdAdmin();
+        $this->connectAsAdmin();
         $_GET['id'] = $parentObject->getId();
         ob_start();
         $this->objectAjax->remove();
@@ -79,13 +79,13 @@ class ObjectAjaxTest extends BaseAjaxTest
 
     public function testRemoveNoId()
     {
-        $this->connectAdAdmin();
+        $this->connectAsAdmin();
         $this->expectException(CoreException::class);
         $this->objectAjax->remove();
     }
 
     public function testById() {
-        $this->connectAdAdmin();
+        $this->connectAsAdmin();
         $_GET['id'] = 1;
         ob_start();
         $this->objectAjax->byId();
@@ -97,13 +97,13 @@ class ObjectAjaxTest extends BaseAjaxTest
 
     public function testByIdNoId()
     {
-        $this->connectAdAdmin();
+        $this->connectAsAdmin();
         $this->expectException(CoreException::class);
         $this->objectAjax->byId();
     }
 
     public function testAll() {
-        $this->connectAdAdmin();
+        $this->connectAsAdmin();
         ob_start();
         $this->objectAjax->all();
         $result = ob_get_clean();
@@ -114,7 +114,7 @@ class ObjectAjaxTest extends BaseAjaxTest
     }
 
     public function testSave() {
-        $this->connectAdAdmin();
+        $this->connectAsAdmin();
         $_GET['object'] = '{"name":"More test object"}';
         ob_start();
         $this->objectAjax->save();
@@ -128,7 +128,7 @@ class ObjectAjaxTest extends BaseAjaxTest
 
     public function testGetChild() {
         $parentObject = JeeObjectManager::byName('Parent test object');
-        $this->connectAdAdmin();
+        $this->connectAsAdmin();
         $_GET['id'] = $parentObject->getId();
         ob_start();
         $this->objectAjax->getChild();
@@ -141,13 +141,13 @@ class ObjectAjaxTest extends BaseAjaxTest
 
     public function testByGetChildNoId()
     {
-        $this->connectAdAdmin();
+        $this->connectAsAdmin();
         $this->expectException(CoreException::class);
         $this->objectAjax->getChild();
     }
 
     public function testToHtml() {
-        $this->connectAdAdmin();
+        $this->connectAsAdmin();
         $_GET['id'] = 1;
         ob_start();
         $this->objectAjax->toHtml();
@@ -156,7 +156,7 @@ class ObjectAjaxTest extends BaseAjaxTest
         $this->assertEquals('ok', $jsonResult['state']);
         $this->assertArrayHasKey('objectHtml', $jsonResult['result']);
         $this->assertArrayHasKey('scenarios', $jsonResult['result']);
-        $this->assertContains('class="eqLogic', $jsonResult['result']['objectHtml']);
+        $this->assertStringContainsString('class="eqLogic', $jsonResult['result']['objectHtml']);
         $this->assertEquals('Scenario with expressions', $jsonResult['result']['scenarios'][0]['name']);
     }
 
@@ -165,7 +165,7 @@ class ObjectAjaxTest extends BaseAjaxTest
         $parentObject->setImage('data', 'Sample data');
         $parentObject->setImage('sha512', 'Sample hash');
         $parentObject->save();
-        $this->connectAdAdmin();
+        $this->connectAsAdmin();
         $_GET['id'] = $parentObject->getId();
         ob_start();
         $this->objectAjax->removeImage();
@@ -179,7 +179,7 @@ class ObjectAjaxTest extends BaseAjaxTest
 
     public function testRemoveImageNoId()
     {
-        $this->connectAdAdmin();
+        $this->connectAsAdmin();
         $this->expectException(CoreException::class);
         $this->objectAjax->removeImage();
     }

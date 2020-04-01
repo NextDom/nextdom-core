@@ -244,7 +244,7 @@ class ConfigManager
         $sql = 'SELECT `key`,`value`
                 FROM ' . self::DB_CLASS_NAME . '
                 WHERE `key` IN ' . $keys . '
-                    AND plugin=:plugin';
+                    AND `plugin` = :plugin';
         $values = DBHelper::getAll($sql, $values);
         $result = [];
         foreach ($values as $value) {
@@ -405,5 +405,21 @@ class ConfigManager
             return sha1($newValue);
         }
         return $newValue;
+    }
+
+    /**
+     * @param $_value
+     * @return string|string[]
+     */
+    public static function preConfig_info_latitude($_value){
+        return str_replace(',','.',$_value);
+    }
+
+    /**
+     * @param $_value
+     * @return string|string[]
+     */
+    public static function preConfig_info_longitude($_value){
+        return str_replace(',','.',$_value);
     }
 }

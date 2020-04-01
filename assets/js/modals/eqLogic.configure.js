@@ -45,6 +45,10 @@ function loadInformations() {
         }
     });
 
+    if ($('.eqLogicAttr[data-l1key="display"][data-l2key="layout::dashboard"]').value() == 'table') {
+      $("#widget_layout_table").show();
+    }
+
     $('#tableCmdLayoutConfiguration tbody td .cmdLayoutContainer').sortable({
         connectWith: '#tableCmdLayoutConfiguration tbody td .cmdLayoutContainer',
         items: ".cmdLayout"
@@ -79,7 +83,7 @@ function initEvents() {
     });
 
     $('.color-default').off('change').on('change', function () {
-        var td = $(this).closest('td')
+        var td = $(this).closest('td');
         if ($(this).value() == 1) {
             td.find('.color').hide();
         } else {
@@ -88,7 +92,7 @@ function initEvents() {
     });
 
     $('.border-default').off('change').on('change', function () {
-        var td = $(this).closest('td')
+        var td = $(this).closest('td');
         if ($(this).value() == 1) {
             td.find('.border').hide();
         } else {
@@ -97,7 +101,7 @@ function initEvents() {
     });
 
     $('.border-radius-default').off('change').on('change', function () {
-        var td = $(this).closest('td')
+        var td = $(this).closest('td');
         if ($(this).value() == 1) {
             td.find('.border-radius').hide();
         } else {
@@ -122,8 +126,7 @@ function initEvents() {
     });
 
     $('#bt_eqLogicConfigureGraph').on('click', function () {
-        $('#md_modal2').dialog({title: "{{ Graphique des liens }}"});
-        $("#md_modal2").load('index.php?v=d&modal=graph.link&filter_type=eqLogic&filter_id=' + eqLogicInfo.id).dialog('open');
+        loadModal('modal2', '{{ Graphique des liens }}', 'graph.link&filter_type=eqLogic&filter_id=' + eqLogicInfo.id);
     });
 
     $('#table_widgetParameters').on('click', '.removeWidgetParameter', function () {
@@ -137,9 +140,8 @@ function initEvents() {
     });
 
     $('#bt_eqLogicConfigureRawObject').off('click').on('click', function () {
-        $('#md_modal2').dialog({title: "{{ Informations brutes }}"});
-        $("#md_modal2").load('index.php?v=d&modal=object.display&class=eqLogic&id=' + eqLogicInfo.id).dialog('open');
-    })
+        loadModal('modal2', '{{ Informations brutes }}', 'object.display&class=eqLogic&id=' + eqLogicInfo.id);
+    });
 
     $('#bt_addWidgetParameters').off().on('click', function () {
         var tr = '<tr>';
@@ -158,8 +160,7 @@ function initEvents() {
 
     $('.bt_displayWidget').off('click').on('click', function () {
         var eqLogic = $('#div_displayEqLogicConfigure').getValues('.eqLogicAttr')[0];
-        $('#md_modal2').dialog({title: "{{ Widget }}"});
-        $('#md_modal2').load('index.php?v=d&modal=eqLogic.displayWidget&eqLogic_id=' + eqLogic.id + '&version=' + $(this).attr('data-version')).dialog('open');
+        loadModal('modal2', '{{ Widget }}', 'eqLogic.displayWidget&eqLogic_id=' + eqLogic.id + '&version=' + $(this).attr('data-version'));
     });
 
     $('#bt_eqLogicConfigureSave').on('click', function () {
@@ -201,6 +202,7 @@ function initEvents() {
                         notify("EqLogic", '{{ Enregistrement réussi }}', 'success');
                     }
                 });
+                $('#md_modal').load('index.php?v=d&modal=eqLogic.configure&eqLogic_id=' + $('.li_eqLogic.active').attr('data-eqLogic_id')).dialog('open');
             }
         });
     });
@@ -224,20 +226,18 @@ function initEvents() {
     });
 
     $('.bt_advanceCmdConfigurationOnEqLogicConfiguration').off('click').on('click', function () {
-        $('#md_modal2').dialog({title: "{{ Configuration de la commande }}"});
-        $('#md_modal2').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).attr('data-id')).dialog('open');
+        loadModal('modal2', '{{ Configuration de la commande }}', 'cmd.configure&cmd_id=' + $(this).attr('data-id'));
     });
 
     $('.advanceCmdConfigurationCmdConfigure').off('dblclick').on('dblclick', function () {
-        $('#md_modal2').dialog({title: "{{ Configuration de la commande }}"});
-        $('#md_modal2').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).attr('data-id')).dialog('open');
+        loadModal('modal2', '{{ Configuration de la commande }}', 'cmd.configure&cmd_id=' + $(this).attr('data-id'));
     });
 
     $('#bt_resetbattery').on('click', function () {
         bootbox.confirm('{{ Avez vous changé les piles ? Cette action mettra la date de changement de piles à aujourd\'hui }}', function (result) {
             if (result) {
                 var eqLogic = {};
-                eqLogic['id'] = eqLogicInfo.id
+                eqLogic['id'] = eqLogicInfo.id;
                 eqLogic['configuration'] = {};
                 var today = new Date();
                 var dd = today.getDate();
@@ -247,7 +247,6 @@ function initEvents() {
                 var ss = today.getSeconds();
                 var yyyy = today.getFullYear();
                 eqLogic['configuration']['batterytime'] = yyyy + '-' + mm + '-' + dd + ' ' + hh + ':' + MM + ':' + ss;
-                console.log(eqLogic);
                 jeedom.eqLogic.simpleSave({
                     eqLogic: eqLogic,
                     error: function (error) {
@@ -262,6 +261,7 @@ function initEvents() {
         });
     });
 
+    // Close button
     $('#bt_eqLogicConfigureClose').on('click', function () {
         $('#md_modal').dialog('close');
     });

@@ -23,7 +23,6 @@ use NextDom\Enums\ScenarioElementType;
 use NextDom\Enums\ScenarioExpressionType;
 use NextDom\Enums\ScenarioSubElementType;
 use NextDom\Exceptions\CoreException;
-use NextDom\Helpers\DBHelper;
 use NextDom\Helpers\LogHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\SystemHelper;
@@ -33,6 +32,11 @@ use NextDom\Managers\ScenarioElementManager;
 use NextDom\Managers\ScenarioExpressionManager;
 use NextDom\Managers\ScenarioManager;
 use NextDom\Managers\ScenarioSubElementManager;
+use NextDom\Model\Entity\Parents\BaseEntity;
+use NextDom\Model\Entity\Parents\NameEntity;
+use NextDom\Model\Entity\Parents\OptionsEntity;
+use NextDom\Model\Entity\Parents\OrderEntity;
+use NextDom\Model\Entity\Parents\TypeEntity;
 
 /**
  * Scenarioelement
@@ -40,55 +44,27 @@ use NextDom\Managers\ScenarioSubElementManager;
  * ORM\Table(name="scenarioElement")
  * ORM\Entity
  */
-class ScenarioElement implements EntityInterface
+class ScenarioElement extends BaseEntity
 {
+    const TABLE_NAME = NextDomObj::SCENARIO_ELEMENT;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="order", type="integer", nullable=false)
-     */
-    protected $order = 0;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="type", type="string", length=127, nullable=true)
-     */
-    protected $type;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=127, nullable=true)
-     */
-    protected $name;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="options", type="text", length=65535, nullable=true)
-     */
-    protected $options;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
+    use NameEntity, OptionsEntity, OrderEntity, TypeEntity;
 
     protected $_subelement;
-    protected $_changed = false;
+
+    public function __construct()
+    {
+        if ($this->order === null) {
+            $this->order = 0;
+        }
+    }
 
     public function remove()
     {
         foreach ($this->getSubElement() as $subElement) {
             $subElement->remove();
         }
-        DBHelper::remove($this);
+        return parent::remove();
     }
 
     /**
@@ -113,23 +89,158 @@ class ScenarioElement implements EntityInterface
         }
     }
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function executeIf(&$_scenario)
     {
-        return $this->id;
+        if ($this->getSubElement(ScenarioSubElementType::IF)->getOptions('enable', 1) == 0) {
+            return true;
+        }
+        $result = $this->getSubElement(ScenarioSubElementType::IF)->execute($_scenario);
+        if (is_string($result) && strlen($result) > 1) {
+            $_scenario->setLog(__('Expression non valide : ') . $result);
+            return null;
+        }
+        if ($result) {
+            if ($this->getSubElement(ScenarioSubElementType::IF)->getOptions('allowRepeatCondition', 0) == 1) {
+                if ($this->getSubElement(ScenarioSubElementType::IF)->getOptions('previousState', -1) != 1) {
+                    $this->getSubElement(ScenarioSubElementType::IF)->setOptions('previousState', 1);
+                    $this->getSubElement(ScenarioSubElementType::IF)->save();
+                } else {
+                    $_scenario->setLog(__('Non exécution des actions pour cause de répétition'));
+                    return null;
+                }
+            }
+            return $this->getSubElement(ScenarioSubElementType::THEN)->execute($_scenario);
+        }
+        if (!is_object($this->getSubElement(ScenarioSubElementType::ELSE))) {
+            return null;
+        }
+        if ($this->getSubElement(ScenarioSubElementType::IF)->getOptions('allowRepeatCondition', 0) == 1) {
+            if ($this->getSubElement(ScenarioSubElementType::IF)->getOptions('previousState', -1) != 0) {
+                $this->getSubElement(ScenarioSubElementType::IF)->setOptions('previousState', 0);
+                $this->getSubElement(ScenarioSubElementType::IF)->save();
+            } else {
+                $_scenario->setLog(__('Non exécution des actions pour cause de répétition'));
+                return null;
+            }
+        }
+        return $this->getSubElement(ScenarioSubElementType::ELSE)->execute($_scenario);
     }
 
-    /**
-     * @param $_id
-     * @return $this
-     */
-    public function setId($_id)
+    public function executeAction(&$_scenario)
     {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->id, $_id);
-        $this->id = $_id;
-        return $this;
+        if ($this->getSubElement(ScenarioSubElementType::ACTION)->getOptions('enable', 1) == 0) {
+            return true;
+        }
+        return $this->getSubElement(ScenarioSubElementType::ACTION)->execute($_scenario);
+    }
+
+    public function executeCode(&$_scenario)
+    {
+        if ($this->getSubElement(ScenarioSubElementType::CODE)->getOptions('enable', 1) == 0) {
+            return true;
+        }
+        return $this->getSubElement(ScenarioSubElementType::CODE)->execute($_scenario);
+    }
+
+    public function executeFor(&$_scenario)
+    {
+        $for = $this->getSubElement(ScenarioElementType::FOR);
+        if ($for->getOptions('enable', 1) == 0) {
+            return true;
+        }
+        $limits = $for->getExpression();
+        $limits = intval(NextDomHelper::evaluateExpression($limits[0]->getExpression()));
+        if (!is_numeric($limits)) {
+            $_scenario->setLog(__('[ERREUR] La condition pour une boucle doit être numérique : ') . $limits);
+            throw new CoreException(__('La condition pour une boucle doit être numérique : ') . $limits);
+        }
+        $return = false;
+        for ($i = 1; $i <= $limits; $i++) {
+            $return = $this->getSubElement('do')->execute($_scenario);
+        }
+        return $return;
+    }
+
+    public function executeIn(&$_scenario)
+    {
+        $in = $this->getSubElement(ScenarioSubElementType::IN);
+        if ($in->getOptions('enable', 1) == 0) {
+            return true;
+        }
+        $time = ceil(str_replace('.', ',', NextDomHelper::evaluateExpression($in->getExpression()[0]->getExpression(), $_scenario)));
+        if (!is_numeric($time) || $time < 0) {
+            $time = 0;
+        }
+        if ($time == 0) {
+            $cmd = NEXTDOM_ROOT . '/src/Api/start_scenario.php ';
+            $cmd .= ' scenario_id=' . $_scenario->getId();
+            $cmd .= ' scenarioElement_id=' . $this->getId();
+            $cmd .= ' tags=' . escapeshellarg(json_encode($_scenario->getTags()));
+            $cmd .= ' >> ' . LogHelper::getPathToLog('scenario_element_execution') . ' 2>&1 &';
+            $_scenario->setLog(__('Tâche : ') . $this->getId() . __(' lancement immédiat '));
+            SystemHelper::php($cmd);
+        } else {
+            $crons = CronManager::searchClassAndFunction('scenario', 'doIn', '"scenarioElement_id":' . $this->getId() . ',');
+            if (is_array($crons)) {
+                foreach ($crons as $cron) {
+                    if ($cron->getState() != 'run') {
+                        $cron->remove();
+                    }
+                }
+            }
+            $cron = new cron();
+            $cron->setClass(NextDomObj::SCENARIO);
+            $cron->setFunction('doIn');
+            $cron->setOption(['scenario_id' => intval($_scenario->getId()), 'scenarioElement_id' => intval($this->getId()), 'second' => date('s'), 'tags' => $_scenario->getTags()]);
+            $cron->setLastRun(date(DateFormat::FULL));
+            $cron->setOnce(1);
+            $next = strtotime('+ ' . $time . ' min');
+            $cron->setSchedule(CronManager::convertDateToCron($next));
+            $cron->save();
+            $_scenario->setLog(__('Tâche : ') . $this->getId() . __(' programmé à : ') . date(DateFormat::FULL, $next) . ' (+ ' . $time . ' min)');
+        }
+        return true;
+    }
+
+    public function executeAt(&$_scenario)
+    {
+        $at = $this->getSubElement(ScenarioSubElementType::AT);
+        if ($at->getOptions('enable', 1) == 0) {
+            return true;
+        }
+        $next = NextDomHelper::evaluateExpression($at->getExpression()[0]->getExpression(), $_scenario);
+        if (!is_numeric($next) || $next < 0) {
+            throw new CoreException(__('Bloc type A : ') . $this->getId() . __(', heure programmée invalide : ') . $next);
+        }
+        if ($next <= date('Gi')) {
+            $next = str_repeat('0', 4 - strlen($next)) . $next;
+            $next = date(DateFormat::FULL_DAY, strtotime('+1 day' . date(DateFormat::FULL_DAY))) . ' ' . substr($next, 0, 2) . ':' . substr($next, 2, 4);
+        } else {
+            $next = str_repeat('0', 4 - strlen($next)) . $next;
+            $next = date(DateFormat::FULL_DAY) . ' ' . substr($next, 0, 2) . ':' . substr($next, 2, 4);
+        }
+        $next = strtotime($next);
+        if ($next < strtotime(DateFormat::NOW)) {
+            throw new CoreException(__('Bloc type A : ') . $this->getId() . __(', heure programmée invalide : ') . date('Y-m-d H:i:00', $next));
+        }
+        $crons = CronManager::searchClassAndFunction('scenario', 'doIn', '"scenarioElement_id":' . $this->getId() . ',');
+        if (is_array($crons)) {
+            foreach ($crons as $cron) {
+                if ($cron->getState() != 'run') {
+                    $cron->remove();
+                }
+            }
+        }
+        $cron = new Cron();
+        $cron->setClass(NextDomObj::SCENARIO);
+        $cron->setFunction('doIn');
+        $cron->setOption(['scenario_id' => intval($_scenario->getId()), 'scenarioElement_id' => intval($this->getId()), 'second' => 0, 'tags' => $_scenario->getTags()]);
+        $cron->setLastRun(date(DateFormat::FULL, strtotime('now')));
+        $cron->setOnce(1);
+        $cron->setSchedule(CronManager::convertDateToCron($next));
+        $cron->save();
+        $_scenario->setLog(__('Tâche : ') . $this->getId() . __(' programmée à : ') . date('Y-m-d H:i:00', $next));
+        return true;
     }
 
     /**
@@ -146,164 +257,21 @@ class ScenarioElement implements EntityInterface
         if (!is_object($this->getSubElement($this->getType()))) {
             return null;
         }
-        if ($this->getType() == ScenarioElementType::IF) {
-            if ($this->getSubElement(ScenarioSubElementType::IF)->getOptions('enable', 1) == 0) {
-                return true;
-            }
-            $result = $this->getSubElement(ScenarioSubElementType::IF)->execute($_scenario);
-            if (is_string($result) && strlen($result) > 1) {
-                $_scenario->setLog(__('Expression non valide : ') . $result);
-                return null;
-            }
-            if ($result) {
-                if ($this->getSubElement(ScenarioSubElementType::IF)->getOptions('allowRepeatCondition', 0) == 1) {
-                    if ($this->getSubElement(ScenarioSubElementType::IF)->getOptions('previousState', -1) != 1) {
-                        $this->getSubElement(ScenarioSubElementType::IF)->setOptions('previousState', 1);
-                        $this->getSubElement(ScenarioSubElementType::IF)->save();
-                    } else {
-                        $_scenario->setLog(__('Non exécution des actions pour cause de répétition'));
-                        return null;
-                    }
-                }
-                return $this->getSubElement(ScenarioSubElementType::THEN)->execute($_scenario);
-            }
-            if (!is_object($this->getSubElement(ScenarioSubElementType::ELSE))) {
-                return null;
-            }
-            if ($this->getSubElement(ScenarioSubElementType::IF)->getOptions('allowRepeatCondition', 0) == 1) {
-                if ($this->getSubElement(ScenarioSubElementType::IF)->getOptions('previousState', -1) != 0) {
-                    $this->getSubElement(ScenarioSubElementType::IF)->setOptions('previousState', 0);
-                    $this->getSubElement(ScenarioSubElementType::IF)->save();
-                } else {
-                    $_scenario->setLog(__('Non exécution des actions pour cause de répétition'));
-                    return null;
-                }
-            }
-            return $this->getSubElement(ScenarioSubElementType::ELSE)->execute($_scenario);
-
-        } elseif ($this->getType() == ScenarioElementType::ACTION) {
-            if ($this->getSubElement(ScenarioSubElementType::ACTION)->getOptions('enable', 1) == 0) {
-                return true;
-            }
-            return $this->getSubElement(ScenarioSubElementType::ACTION)->execute($_scenario);
-        } elseif ($this->getType() == ScenarioElementType::CODE) {
-            if ($this->getSubElement(ScenarioSubElementType::CODE)->getOptions('enable', 1) == 0) {
-                return true;
-            }
-            return $this->getSubElement(ScenarioSubElementType::CODE)->execute($_scenario);
-        } elseif ($this->getType() == ScenarioElementType::FOR) {
-            $for = $this->getSubElement(ScenarioElementType::FOR);
-            if ($for->getOptions('enable', 1) == 0) {
-                return true;
-            }
-            $limits = $for->getExpression();
-            $limits = intval(NextDomHelper::evaluateExpression($limits[0]->getExpression()));
-            if (!is_numeric($limits)) {
-                $_scenario->setLog(__('[ERREUR] La condition pour une boucle doit être numérique : ') . $limits);
-                throw new CoreException(__('La condition pour une boucle doit être numérique : ') . $limits);
-            }
-            $return = false;
-            for ($i = 1; $i <= $limits; $i++) {
-                $return = $this->getSubElement('do')->execute($_scenario);
-            }
-            return $return;
-        } elseif ($this->getType() == ScenarioElementType::IN) {
-            $in = $this->getSubElement(ScenarioSubElementType::IN);
-            if ($in->getOptions('enable', 1) == 0) {
-                return true;
-            }
-            $time = ceil(str_replace('.', ',', NextDomHelper::evaluateExpression($in->getExpression()[0]->getExpression(), $_scenario)));
-            if (!is_numeric($time) || $time < 0) {
-                $time = 0;
-            }
-            if ($time == 0) {
-                $cmd = NEXTDOM_ROOT . '/src/Api/start_scenario.php ';
-                $cmd .= ' scenario_id=' . $_scenario->getId();
-                $cmd .= ' scenarioElement_id=' . $this->getId();
-                $cmd .= ' tags=' . escapeshellarg(json_encode($_scenario->getTags()));
-                $cmd .= ' >> ' . LogHelper::getPathToLog('scenario_element_execution') . ' 2>&1 &';
-                $_scenario->setLog(__('Tâche : ') . $this->getId() . __(' lancement immédiat '));
-                SystemHelper::php($cmd);
-            } else {
-                $crons = CronManager::searchClassAndFunction('scenario', 'doIn', '"scenarioElement_id":' . $this->getId() . ',');
-                if (is_array($crons)) {
-                    foreach ($crons as $cron) {
-                        if ($cron->getState() != 'run') {
-                            $cron->remove();
-                        }
-                    }
-                }
-                $cron = new cron();
-                $cron->setClass(NextDomObj::SCENARIO);
-                $cron->setFunction('doIn');
-                $cron->setOption(['scenario_id' => intval($_scenario->getId()), 'scenarioElement_id' => intval($this->getId()), 'second' => date('s'), 'tags' => $_scenario->getTags()]);
-                $cron->setLastRun(date(DateFormat::FULL));
-                $cron->setOnce(1);
-                $next = strtotime('+ ' . $time . ' min');
-                $cron->setSchedule(CronManager::convertDateToCron($next));
-                $cron->save();
-                $_scenario->setLog(__('Tâche : ') . $this->getId() . __(' programmé à : ') . date(DateFormat::FULL, $next) . ' (+ ' . $time . ' min)');
-            }
-            return true;
-        } elseif ($this->getType() == ScenarioElementType::AT) {
-            $at = $this->getSubElement(ScenarioSubElementType::AT);
-            if ($at->getOptions('enable', 1) == 0) {
-                return true;
-            }
-            $next = NextDomHelper::evaluateExpression($at->getExpression()[0]->getExpression(), $_scenario);
-            if (!is_numeric($next) || $next < 0) {
-                throw new CoreException(__('Bloc type A : ') . $this->getId() . __(', heure programmée invalide : ') . $next);
-            }
-            if ($next <= date('Gi')) {
-                $next = str_repeat('0', 4 - strlen($next)) . $next;
-                $next = date(DateFormat::FULL_DAY, strtotime('+1 day' . date(DateFormat::FULL_DAY))) . ' ' . substr($next, 0, 2) . ':' . substr($next, 2, 4);
-            } else {
-                $next = str_repeat('0', 4 - strlen($next)) . $next;
-                $next = date(DateFormat::FULL_DAY) . ' ' . substr($next, 0, 2) . ':' . substr($next, 2, 4);
-            }
-            $next = strtotime($next);
-            if ($next < strtotime(DateFormat::NOW)) {
-                throw new CoreException(__('Bloc type A : ') . $this->getId() . __(', heure programmée invalide : ') . date('Y-m-d H:i:00', $next));
-            }
-            $crons = CronManager::searchClassAndFunction('scenario', 'doIn', '"scenarioElement_id":' . $this->getId() . ',');
-            if (is_array($crons)) {
-                foreach ($crons as $cron) {
-                    if ($cron->getState() != 'run') {
-                        $cron->remove();
-                    }
-                }
-            }
-            $cron = new Cron();
-            $cron->setClass(NextDomObj::SCENARIO);
-            $cron->setFunction('doIn');
-            $cron->setOption(['scenario_id' => intval($_scenario->getId()), 'scenarioElement_id' => intval($this->getId()), 'second' => 0, 'tags' => $_scenario->getTags()]);
-            $cron->setLastRun(date(DateFormat::FULL, strtotime('now')));
-            $cron->setOnce(1);
-            $cron->setSchedule(CronManager::convertDateToCron($next));
-            $cron->save();
-            $_scenario->setLog(__('Tâche : ') . $this->getId() . __(' programmée à : ') . date('Y-m-d H:i:00', $next));
-            return true;
+        switch ($this->getType()) {
+            case ScenarioElementType::IF:
+                return $this->executeIf($_scenario);
+            case ScenarioElementType::ACTION:
+                return $this->executeAction($_scenario);
+            case ScenarioElementType::CODE:
+                return $this->executeCode($_scenario);
+            case ScenarioElementType::FOR:
+                return $this->executeFor($_scenario);
+            case ScenarioElementType::IN:
+                return $this->executeIn($_scenario);
+            case ScenarioElementType::AT:
+                return $this->executeAt($_scenario);
         }
         return null;
-    }
-
-    /**
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param $_type
-     * @return $this
-     */
-    public function setType($_type)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->type, $_type);
-        $this->type = $_type;
-        return $this;
     }
 
     /**
@@ -480,8 +448,7 @@ class ScenarioElement implements EntityInterface
 
     /**
      * @return int
-     * @throws CoreException
-     * @throws \ReflectionException
+     * @throws \Exception
      */
     public function copy()
     {
@@ -492,17 +459,6 @@ class ScenarioElement implements EntityInterface
             $subelement->copy($elementCopy->getId());
         }
         return $elementCopy->getId();
-    }
-
-    /**
-     * @return $this
-     * @throws CoreException
-     * @throws \ReflectionException
-     */
-    public function save()
-    {
-        DBHelper::save($this);
-        return $this;
     }
 
     /**
@@ -520,92 +476,5 @@ class ScenarioElement implements EntityInterface
             return $expression->getSubElement()->getElement()->getScenario();
         }
         return null;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param $_name
-     * @return $this
-     */
-    public function setName($_name)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->name, $_name);
-        $this->name = $_name;
-        return $this;
-    }
-
-    /**
-     * @param string $_key
-     * @param string $_default
-     * @return array|bool|mixed|null|string
-     */
-    public function getOptions($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->options, $_key, $_default);
-    }
-
-    /**
-     * @param $_key
-     * @param $_value
-     * @return $this
-     */
-    public function setOptions($_key, $_value)
-    {
-        $options = Utils::setJsonAttr($this->options, $_key, $_value);
-        $this->_changed = Utils::attrChanged($this->_changed, $this->options, $options);
-        $this->options = $options;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getOrder()
-    {
-        return $this->order;
-    }
-
-    /**
-     * @param $_order
-     * @return $this
-     */
-    public function setOrder($_order)
-    {
-        $this->_changed = Utils::attrChanged($this->_changed, $this->order, $_order);
-        $this->order = $_order;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getChanged()
-    {
-        return $this->_changed;
-    }
-
-    /**
-     * @param $_changed
-     * @return $this
-     */
-    public function setChanged($_changed)
-    {
-        $this->_changed = $_changed;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTableName()
-    {
-        return 'scenarioElement';
     }
 }

@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Tools;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\ControllerData;
 use NextDom\Helpers\Render;
 use NextDom\Managers\EqLogicManager;
 use NextDom\Managers\JeeObjectManager;
@@ -72,7 +73,7 @@ class DisplayController extends BaseController
         $pageData['displayEqLogics'] = $eqLogics;
         $pageData['displayCmds'] = $cmds;
 
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/display.js';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/tools/display.js';
 
         return Render::getInstance()->get('/desktop/tools/display.html.twig', $pageData);
     }

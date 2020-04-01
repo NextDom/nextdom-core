@@ -43,6 +43,8 @@ use NextDom\Helpers\NetworkHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\TranslateHelper;
 use NextDom\Helpers\Utils;
+use NextDom\Managers\Parents\BaseManager;
+use NextDom\Managers\Parents\CommonManager;
 use NextDom\Model\Entity\Cmd;
 use NextDom\Model\Entity\Scenario;
 use NextDom\Model\Entity\ScenarioExpression;
@@ -51,29 +53,12 @@ use NextDom\Model\Entity\ScenarioExpression;
  * Class ScenarioExpressionManager
  * @package NextDom\Managers
  */
-class ScenarioExpressionManager
+class ScenarioExpressionManager extends BaseManager
 {
-    const DB_CLASS_NAME = 'scenarioExpression';
+    use CommonManager;
+    const DB_CLASS_NAME = '`scenarioExpression`';
     const CLASS_NAME = ScenarioExpression::class;
     const WAIT_LIMIT = 7200;
-
-    /**
-     * Get expression from his id
-     *
-     * @param mixed $id Identifiant
-     *
-     * @return ScenarioExpression|null
-     *
-     * @throws \Exception
-     */
-    public static function byId($id)
-    {
-        $params = ['id' => $id];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE id = :id';
-        return DBHelper::getOneObject($sql, $params, self::CLASS_NAME);
-    }
 
     /**
      * Get all scenario expressions
@@ -84,9 +69,7 @@ class ScenarioExpressionManager
      */
     public static function all()
     {
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME;
-        return DBHelper::getAllObjects($sql, [], self::CLASS_NAME);
+        return static::getAll();
     }
 
 
@@ -101,12 +84,7 @@ class ScenarioExpressionManager
      */
     public static function byScenarioSubElementId($scenarioSubElementId)
     {
-        $params = ['scenarioSubElement_id' => $scenarioSubElementId];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE scenarioSubElement_id = :scenarioSubElement_id
-                ORDER BY `order`';
-        return DBHelper::getAllObjects($sql, $params, self::CLASS_NAME);
+        return static::getMultipleByClauses(['scenarioSubElement_id' => $scenarioSubElementId], 'order');
     }
 
     /**
@@ -123,15 +101,14 @@ class ScenarioExpressionManager
     public static function searchExpression($expression, $options = null, $and = true)
     {
         $params = ['expression' => '%' . $expression . '%'];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE expression LIKE :expression ';
+        $sql = static::getBaseSQL() . '
+                WHERE `expression` LIKE :expression ';
         if ($options !== null) {
             $params['options'] = '%' . $options . '%';
             if ($and) {
-                $sql .= 'AND options LIKE :options';
+                $sql .= 'AND `options` LIKE :options';
             } else {
-                $sql .= 'OR options LIKE :options';
+                $sql .= 'OR `options` LIKE :options';
             }
         }
         return DBHelper::getAllObjects($sql, $params, self::CLASS_NAME);
@@ -146,12 +123,7 @@ class ScenarioExpressionManager
      */
     public static function byElement($elementId)
     {
-        $params = ['expression' => $elementId];
-        $sql = 'SELECT ' . DBHelper::buildField(self::CLASS_NAME) . '
-                FROM ' . self::DB_CLASS_NAME . '
-                WHERE expression = :expression
-                AND `type` = "element"';
-        return DBHelper::getOneObject($sql, $params, self::CLASS_NAME);
+        return static::getOneByClauses(['expression' => $elementId, 'type' => 'element']);
     }
 
     /**
@@ -192,7 +164,7 @@ class ScenarioExpressionManager
                 $replace[$value] = '';
             }
         }
-        $result['html'] = TranslateHelper::exec(Utils::templateReplace($replace, $result['html']), 'core/template/scenario/' . $expression . '.default');
+        $result['html'] = TranslateHelper::exec(Utils::templateReplace($replace, $result['html']), 'views/templates/scenario/' . $expression . '.default');
         return $result;
     }
 
@@ -383,74 +355,68 @@ class ScenarioExpressionManager
      */
     public static function getRequestTags($expression)
     {
-        $return = [];
-        preg_match_all("/#([a-zA-Z0-9]*)#/", $expression, $matches);
+        $result = [];
+        preg_match_all("/#([a-zA-Z0-9_]*)#/", $expression, $matches);
         if (count($matches) == 0) {
-            return $return;
+            return $result;
         }
         $matches = array_unique($matches[0]);
+        $humanToDate = [
+            '#seconde#' => 's',
+            '#heure#' => 'G',
+            '#heure12#' => 'g',
+            '#minute#' => 'i',
+            '#jour#' => 'd',
+            '#mois#' => 'm',
+            '#annee#' => 'Y',
+            '#njour#' => 'w',
+            '#time#' => 'Gi',
+            '#date#' => 'md',
+            '#semaine#' => 'W'
+        ];
         foreach ($matches as $tag) {
             switch ($tag) {
                 case '#seconde#':
-                    $return['#seconde#'] = (int)date('s');
-                    break;
                 case '#heure#':
-                    $return['#heure#'] = (int)date('G');
-                    break;
                 case '#heure12#':
-                    $return['#heure12#'] = (int)date('g');
-                    break;
                 case '#minute#':
-                    $return['#minute#'] = (int)date('i');
-                    break;
                 case '#jour#':
-                    $return['#jour#'] = (int)date('d');
-                    break;
                 case '#mois#':
-                    $return['#mois#'] = (int)date('m');
-                    break;
                 case '#annee#':
-                    $return['#annee#'] = (int)date('Y');
+                case '#njour#':
+                    $result[$tag] = (int)date($humanToDate[$tag]);
                     break;
                 case '#time#':
-                    $return['#time#'] = date('Gi');
+                case '#date#':
+                case '#semaine#':
+                    $result[$tag] = date($humanToDate[$tag]);
                     break;
                 case '#timestamp#':
-                    $return['#timestamp#'] = time();
-                    break;
-                case '#date#':
-                    $return['#date#'] = date('md');
-                    break;
-                case '#semaine#':
-                    $return['#semaine#'] = date('W');
+                    $result['#timestamp#'] = time();
                     break;
                 case '#sjour#':
-                    $return['#sjour#'] = '"' . DateHelper::dateToFr(date('l')) . '"';
+                    $result['#sjour#'] = '"' . DateHelper::dateToFr(date('l')) . '"';
                     break;
                 case '#smois#':
-                    $return['#smois#'] = '"' . DateHelper::dateToFr(date('F')) . '"';
+                    $result['#smois#'] = '"' . DateHelper::dateToFr(date('F')) . '"';
                     break;
-                case '#njour#':
-                    $return['#njour#'] = (int)date('w');
-                    break;
+                case '#jeedom_name#':
                 case '#nextdom_name#':
-                    $return['#nextdom_name#'] = '"' . ConfigManager::byKey('name') . '"';
+                    $result[$tag] = '"NextDom"';
                     break;
                 case '#hostname#':
-                    $return['#hostname#'] = '"' . gethostname() . '"';
+                    $result['#hostname#'] = '"' . gethostname() . '"';
                     break;
                 case '#IP#':
-                    $return['#IP#'] = '"' . NetworkHelper::getNetworkAccess('internal', 'ip', '', false) . '"';
+                    $result['#IP#'] = '"' . NetworkHelper::getNetworkAccess('internal', 'ip', '', false) . '"';
                     break;
                 case '#trigger#':
-                    $return['#trigger#'] = '';
-                    break;
                 case '#trigger_value#':
-                    $return['#trigger_value#'] = '';
+                    $result[$tag] = '';
                     break;
             }
         }
-        return $return;
+        return $result;
     }
 
     /**
@@ -1148,7 +1114,7 @@ class ScenarioExpressionManager
         $startDate = date(DateFormat::FULL, strtotime(self::setTags($startDate)));
         $endDate = date(DateFormat::FULL, strtotime(self::setTags($endDate)));
         $historyStatistic = $cmd->getStatistique($startDate, $endDate);
-        if (!$historyStatistic['last']) {
+        if(!isset($historyStatistic['last']) || $historyStatistic['last'] === ''){
             return '';
         }
         return round($historyStatistic['last'], 1);
@@ -1179,11 +1145,11 @@ class ScenarioExpressionManager
             }
         }
         $calc = str_replace(' ', '', $calc);
-        $historyStatistique = $cmd->getStatistique($startHist, date(DateFormat::FULL));
-        if ($historyStatistique['min'] == '') {
+        $historyStatistic = $cmd->getStatistique($startHist, date(DateFormat::FULL));
+        if (!isset($historyStatistic['min']) || $historyStatistic['min'] == '') {
             return $cmd->execCmd();
         }
-        return $historyStatistique[$calc];
+        return $historyStatistic[$calc];
     }
 
     /**
@@ -1337,18 +1303,6 @@ class ScenarioExpressionManager
      * @return false|int|string
      * @throws \Exception
      */
-    /**
-     * @param $_eqLogic_id
-     * @param string $_format
-     * @return false|int|string
-     * @throws \Exception
-     */
-    /**
-     * @param $_eqLogic_id
-     * @param string $_format
-     * @return false|int|string
-     * @throws \Exception
-     */
     public static function lastCommunication($_eqLogic_id, $_format = DateFormat::FULL)
     {
         $eqLogic = EqLogicManager::byId(trim(str_replace(['#', '#eqLogic', 'eqLogic'], '', EqLogicManager::fromHumanReadable('#' . str_replace('#', '', $_eqLogic_id) . '#'))));
@@ -1358,16 +1312,6 @@ class ScenarioExpressionManager
         return date($_format, strtotime($eqLogic->getStatus('lastCommunication', date(DateFormat::FULL))));
     }
 
-    /**
-     * @param $_cmd_id
-     * @return mixed|string
-     * @throws \NextDom\Exceptions\CoreException
-     */
-    /**
-     * @param $_cmd_id
-     * @return mixed|string
-     * @throws \NextDom\Exceptions\CoreException
-     */
     /**
      * @param $_cmd_id
      * @return mixed|string
@@ -1515,6 +1459,7 @@ class ScenarioExpressionManager
      * @param string $intervalFormat Format de l'interval (s : secondes, m : minutes, h : heures, d : jours)
      *
      * @return float|int|string
+     * @throws \Exception
      */
     public static function time_diff($date1Str, $date2Str, $intervalFormat = 'd')
     {

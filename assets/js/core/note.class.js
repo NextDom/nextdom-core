@@ -14,44 +14,21 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-nextdom.note = function () {
+nextdom.note = function() {
 };
 
-nextdom.note.remove = function (queryParams) {
-  var paramsRequired = ['id'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Note', 'remove');
-    ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
-  }
+nextdom.note.remove = function(queryParams) {
+  nextdom.private.ajax('Note', 'remove', queryParams, ['id']);
 };
 
-nextdom.note.byId = function (queryParams) {
-  var paramsRequired = ['id'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Note', 'byId');
-    ajaxParams.data['id'] = queryParams.id;
-    $.ajax(ajaxParams);
-  }
+nextdom.note.byId = function(queryParams) {
+  nextdom.private.ajax('Note', 'byId', queryParams, ['id']);
 };
 
-nextdom.note.save = function (queryParams) {
-  var paramsRequired = ['note'];
-  var paramsSpecifics = {};
-  if (nextdom.private.isValidQuery(queryParams, paramsRequired, paramsSpecifics)) {
-    var params = $.extend({}, nextdom.private.defaultqueryParams, paramsSpecifics, queryParams || {});
-    var ajaxParams = nextdom.private.getAjaxParams(params, 'Note', 'save');
-    ajaxParams.data['note'] = json_encode(queryParams.note);
-    $.ajax(ajaxParams);
-  }
+nextdom.note.save = function(queryParams) {
+  nextdom.private.ajax('Note', 'save', queryParams, ['note'], true);
 };
 
-nextdom.note.all = function (queryParams) {
-  var params = $.extend({}, nextdom.private.defaultqueryParams, {}, queryParams || {});
-  var ajaxParams = nextdom.private.getAjaxParams(params, 'Note', 'all');
-  $.ajax(ajaxParams);
+nextdom.note.all = function(queryParams) {
+  nextdom.private.ajax('Note', 'all', queryParams);
 };

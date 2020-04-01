@@ -55,6 +55,9 @@ class Api
         }
         $user = UserManager::byHash($defaultApiKey);
         if (is_object($user)) {
+            if (!$user->isEnabled()) {
+                return false;
+            }
             if ($user->getOptions('localOnly', 0) == 1 && !self::apiModeResult('whiteip')) {
                 return false;
             }

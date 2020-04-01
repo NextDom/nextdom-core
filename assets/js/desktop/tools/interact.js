@@ -68,8 +68,7 @@ function initEvents() {
 
     // Interaction Sentence list display
     $('.displayInteracQuery').on('click', function () {
-      $('#md_modal').dialog({title: "{{Liste des interactions}}"});
-      $('#md_modal').load('index.php?v=d&modal=interact.query.display&interactDef_id=' + $('.interactAttr[data-l1key=id]').value()).dialog('open');
+      loadModal('modal', '{{Liste des interactions}}', 'interact.query.display&interactDef_id=' + $('.interactAttr[data-l1key=id]').value());
     });
 
     // Intercation go back list button
@@ -127,7 +126,7 @@ function initEvents() {
           nextdom.interact.save({
             interact: interact,
             error: function (error) {
-              notify("Erreur", error.message, 'error');
+              notify('Erreur', error.message, 'error');
             },
             success: function (data) {
               modifyWithoutSave = false;
@@ -141,8 +140,7 @@ function initEvents() {
 
     // Interaction test button
     $('#bt_testInteract').on('click', function () {
-      $('#md_modal').dialog({title: "{{Tester les interactions}}"});
-      $('#md_modal').load('index.php?v=d&modal=interact.test').dialog('open');
+      loadModal('modal', '{{Tester les interactions}}', 'interact.test');
     });
 
     // Interaction save button
@@ -153,13 +151,13 @@ function initEvents() {
         nextdom.interact.save({
             interact: interact,
             error: function (error) {
-                notify("Erreur", error.message, 'error');
+                notify('Erreur', error.message, 'error');
             },
             success: function (data) {
                $('.interactDisplayCard[data-interact_id=' + data.id + ']').click();
                modifyWithoutSave = false;
                $(".bt_cancelModifs").hide();
-               notify("Info", '{{Sauvegarde réussie avec succès}}', 'success');
+               notify('Info', '{{Sauvegarde réussie avec succès}}', 'success');
             }
         });
         $('#bt_interactThumbnailDisplay').show();
@@ -172,10 +170,10 @@ function initEvents() {
           nextdom.interact.regenerateInteract({
             interact: {query: result},
             error: function (error) {
-              notify("Erreur", error.message, 'error');
+              notify('Erreur', error.message, 'error');
             },
             success: function (data) {
-             notify("Info", '{{Toutes les interactions ont été regénérées}}', 'success');
+             notify('Info', '{{Toutes les interactions ont été regénérées}}', 'success');
             }
           });
         }
@@ -191,7 +189,7 @@ function initEvents() {
                         nextdom.interact.save({
                             interact: {query: result2,name: result},
                             error: function (error) {
-                                notify("Erreur", error.message, 'error');
+                                notify('Erreur', error.message, 'error');
                                 },
                             success: function (data) {
                                 $('#bt_interactThumbnailDisplay').hide();
@@ -211,12 +209,12 @@ function initEvents() {
           nextdom.interact.remove({
             id: $('.interactDisplayCard.active').attr('data-interact_id'),
             error: function (error) {
-              notify("Erreur", error.message, 'error');
+              notify('Erreur', error.message, 'error');
             },
             success: function () {
               modifyWithoutSave = false;
               loadPage('index.php?v=d&p=interact');
-              notify("Info", '{{Suppression effectuée avec succès}}', 'success');
+              notify('Info', '{{Suppression effectuée avec succès}}', 'success');
            }
          });
         }
@@ -242,12 +240,12 @@ function initEvents() {
 
     // Intercation display action option on focusout
     $('#div_pageContainer').undelegate(".cmdAction.expressionAttr[data-l1key=cmd]", 'focusout').delegate('.cmdAction.expressionAttr[data-l1key=cmd]', 'focusout', function (event) {
-        var type = $(this).attr('data-type')
+        var type = $(this).attr('data-type');
         var expression = $(this).closest('.' + type).getValues('.expressionAttr');
         var el = $(this);
         nextdom.cmd.displayActionOption($(this).value(), init(expression[0].options), function (html) {
             el.closest('.' + type).find('.actionOptions').html(html);
-            taAutosize();
+            initTextAreaAutosize();
         })
     });
 
@@ -259,7 +257,7 @@ function initEvents() {
             el.value(result.human);
             nextdom.cmd.displayActionOption(el.value(), '', function (html) {
                 el.closest('.' + type).find('.actionOptions').html(html);
-                taAutosize();
+                initTextAreaAutosize();
             });
         });
     });
@@ -272,7 +270,7 @@ function initEvents() {
             el.value(result.human);
             nextdom.cmd.displayActionOption(el.value(), '', function (html) {
                 el.closest('.' + type).find('.actionOptions').html(html);
-                taAutosize();
+                initTextAreaAutosize();
             });
         });
     });
@@ -285,7 +283,7 @@ function initEvents() {
             el.value(result.human);
             nextdom.cmd.displayActionOption(el.value(), '', function (html) {
                 el.closest('.' + type).find('.actionOptions').html(html);
-                taAutosize();
+                initTextAreaAutosize();
             });
         });
     });
@@ -309,7 +307,7 @@ function displayInteract(_id){
     nextdom.interact.get({
         id: _id,
         success: function (data) {
-            actionOptions = []
+            actionOptions = [];
             $('#interactId').value(_id);
             $('#div_action').empty();
             $('.interactAttr').value('');
@@ -358,12 +356,12 @@ function displayInteract(_id){
                     addAction(data.actions.cmd[i], 'action');
                 }
             }
-            taAutosize();
+            initTextAreaAutosize();
             nextdom.cmd.displayActionsOption({
                 params : actionOptions,
                 async : false,
                 error: function (error) {
-                    notify("Erreur", error.message, 'error');
+                    notify('Erreur', error.message, 'error');
                 },
                 success : function(data){
                     for(var i in data){
@@ -371,7 +369,7 @@ function displayInteract(_id){
                             $('#'+data[i].id).append(data[i].html.html);
                         }
                     }
-                    taAutosize();
+                    initTextAreaAutosize();
                     var currentUrl = document.location.toString();
                     // Mise à jour d'URL
                     if (currentUrl.indexOf('id=') === -1) {
@@ -439,7 +437,7 @@ function addAction(_action, _type) {
 function loadFromUrl() {
     var interactIdFromUrl = getUrlVars('id');
     if (is_numeric(interactIdFromUrl)) {
-        if ($('.interactDisplayCard[data-interact_id=' + interactIdFromUrl + ']').length !== 0) {
+        if (document.querySelectorAll('.interactDisplayCard[data-interact_id=' + interactIdFromUrl + ']').length !== 0) {
             var url = document.location.toString();
             displayInteract(interactIdFromUrl);
         }

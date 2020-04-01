@@ -19,7 +19,7 @@ use NextDom\Rest\EqLogicRest;
 
 require_once(__DIR__ . '/../../../src/core.php');
 
-class EqLogicRestTest extends PHPUnit_Framework_TestCase
+class EqLogicRestTest extends PHPUnit\Framework\TestCase
 {
     public function testGetAll()
     {

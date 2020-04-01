@@ -7,17 +7,30 @@ else
     rootDir=$(dirname $(dirname $(dirname $(readlink -n -f $0))))
 fi
 
-baseImage="nextdom/nextdom-test:latest"
-if [ ! -z "$1" ]; then
+baseImage="nextdom/nextdom-test2:latest"
+if [[ ! -z "$1" ]]; then
     baseImage=$1;
 fi
 
 docker kill nextdom-test > /dev/null 2>&1 || true
 docker rm nextdom-test > /dev/null 2>&1   || true
 
+COMPOSER_CACHE=""
+NPM_CACHE=""
+COMPOSER_PATH=$(cd ~/.composer/cache/files; pwd)
+NPM_PATH=$(cd ~/.npm; pwd)
+if [[ -d ${COMPOSER_PATH} ]]; then
+    COMPOSER_CACHE=" -v $COMPOSER_PATH:/root/.composer/cache/files"
+fi
+if [[ -d ${NPM_PATH} ]]; then
+    NPM_CACHE=" -v $NPM_PATH:/root/.npm"
+fi
+
+
 # Go to base path
 echo "step 1. creating installer container nextdom-test from ${baseImage}..."
-docker run -d -p 8765:80 -v ${rootDir}:/data --name="nextdom-test" ${baseImage} /start.sh > /dev/null || {
+echo "docker run -d -p 8765:80 -v ${rootDir}:/data ${COMPOSER_CACHE} ${NPM_CACHE} --name=\"nextdom-test\" ${baseImage} /start.sh"
+docker run -d -p 8765:80 -v ${rootDir}:/data ${COMPOSER_CACHE} ${NPM_CACHE} --name="nextdom-test" ${baseImage} /start.sh > /dev/null || {
   echo "-> enable to run installer container"
   exit 1
 }

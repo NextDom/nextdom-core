@@ -24,9 +24,11 @@ namespace NextDom\Enums;
 class CacheKey extends Enum
 {
     const ALERT_LEVEL = 'alertLevel';
+    const CACHE_ENGINE = 'cache::engine';
     const COLLECT_DATE = 'collectDate';
     const EQLOGIC_CACHE_ATTR = 'eqLogicCacheAttr';
     const EQLOGIC_STATUS_ATTR = 'eqLogicStatusAttr';
+    const EVENT = 'event';
     const SCENARIO_CACHE_ATTR = 'scenarioCacheAttr';
     const VALUE = 'value';
     const VALUE_DATE = 'valueDate';

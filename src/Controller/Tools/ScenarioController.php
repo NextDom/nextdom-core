@@ -23,6 +23,7 @@
 namespace NextDom\Controller\Tools;
 
 use NextDom\Controller\BaseController;
+use NextDom\Enums\ControllerData;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Render;
 use NextDom\Managers\ConfigManager;
@@ -62,8 +63,8 @@ class ScenarioController extends BaseController
         $pageData['scenariosEnabled'] = ConfigManager::byKey('enableScenario');
         $pageData['scenarioAllObjects'] = JeeObjectManager::all();
 
-        $pageData['CSS_POOL'][] = '/public/css/pages/scenario.css';
-        $pageData['JS_END_POOL'][] = '/public/js/desktop/tools/scenario.js';
+        $pageData[ControllerData::CSS_POOL][] = '/public/css/pages/scenario.css';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/tools/scenario.js';
 
         return Render::getInstance()->get('/desktop/tools/scenario.html.twig', $pageData);
     }

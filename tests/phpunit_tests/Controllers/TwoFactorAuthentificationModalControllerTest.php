@@ -16,15 +16,15 @@
  */
 
 require_once(__DIR__ . '/../../../src/core.php');
-require_once(__DIR__ . '/BaseControllerTest.php');
+require_once(__DIR__ . '/../libs/BaseControllerTest.php');
 
 class TwoFactorAuthentificationModalControllerTest extends BaseControllerTest
 {
-    public function setUp()
+    public function setUp(): void
     {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (isset($_SESSION['user'])) {
             unset($_SESSION['user']);
@@ -37,6 +37,6 @@ class TwoFactorAuthentificationModalControllerTest extends BaseControllerTest
         @session_start();
         $_SESSION['user'] = \NextDom\Managers\UserManager::byId(1);
         $result = \NextDom\Controller\Modals\TwoFactorAuthentification::get();
-        $this->assertContains('src="/public/js/modals/twoFactor.authentification.js"', $result);
+        $this->assertStringContainsString('src="/public/js/modals/twoFactor.authentification.js"', $result);
     }
 }

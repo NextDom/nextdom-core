@@ -27,8 +27,7 @@ initEvents();
 function initEvents() {
     // Welcome page button
     $('#btn_welcomeModal').on('click', function () {
-        $('#md_modal').dialog({title: "{{Bienvenue dans NextDom}}"});
-        $("#md_modal").load('index.php?v=d&modal=welcome').dialog('open');
+        loadModal('modal', '{{Bienvenue dans NextDom}}', 'welcome');
     });
 
     // Restart button

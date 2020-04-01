@@ -223,13 +223,12 @@ function refresh(force) {
         params += '-force';
     }
     $('#mass-update').hide();
-    var ajaxData = {
-        action: 'refresh',
+    nextdom.nextdom_market.refresh({
         params: params,
-        data: sourcesList
-    };
-    ajaxQuery('core/ajax/nextdom_market.ajax.php', ajaxData, function () {
-        refreshItems();
+        data: sourcesList,
+        success: function() {
+            refreshItems();
+        }
     });
 }
 
@@ -242,6 +241,19 @@ function refreshItems() {
         params: 'list',
         data: sourcesList
     };
+    nextdom.nextdom_market.get({
+        params: 'list',
+        data: sourcesList,
+        success: function(result) {
+            showItems(result);
+            updateFilteredList();
+            if (pluginsUpdateNeededList.length > 0) {
+                $('#mass-update').show();
+                $('#mass-update .badge').text(pluginsUpdateNeededList.length);
+            }
+        }
+    });
+/*
     ajaxQuery('core/ajax/nextdom_market.ajax.php', ajaxData, function (result) {
         showItems(result);
         updateFilteredList();
@@ -250,6 +262,7 @@ function refreshItems() {
             $('#mass-update .badge').text(pluginsUpdateNeededList.length);
         }
     });
+    */
 }
 
 /**
@@ -295,7 +308,7 @@ function startIconsDownload() {
 
 function iconDownload() {
     var content = iconDownloadQueue.shift();
-    if (typeof content !== 'undefined') {
+    if (typeof(content)!== 'undefined') {
         var itemData = content[0];
         var itemObj = content[1];
         $.post({
@@ -310,7 +323,7 @@ function iconDownload() {
             success: function (iconData, status) {
                 // Test si l'appel a échoué
                 if (iconData.state !== 'ok' || status !== 'success') {
-                    notify("Erreur", iconData.result, 'error');
+                    notify('Erreur', iconData.result, 'error');
                 }
                 else {
                     var img = new Image();
@@ -403,27 +416,25 @@ function showPluginModal(pluginData, iconPath) {
  * Lance l'installation du plugin
  */
 function updatePlugin(id, massUpdate) {
-    var data = {
-        action: 'update',
-        id: id
-    };
-    ajaxQuery('core/ajax/update.ajax.php', data, function () {
-        var data = {
-            action: 'refresh',
-            params: 'branch-hash',
-            data: [currentPlugin['sourceName'], currentPlugin['fullName']]
+    nextdom.update.update({
+        id: id,
+        success: function() {
+            nextdom.nextdom_market.refresh({
+                id: id,
+                params: 'branch-hash',
+                data: [currentPlugin['sourceName'], currentPlugin['fullName']],
+                success: function() {
+                    if (massUpdate && pluginsUpdateNeededList.length > 1) {
+                        pluginsUpdateNeededList.splice(0, 1);
+                        currentPlugin = pluginsUpdateNeededList[0];
+                        updatePlugin(currentPlugin['installedBranchData']['id'], true);
+                    }
+                    else {
+                        reloadWithMessage(0);
+                    }
+                }
+            });
         }
-        // Met à jour les branches
-        ajaxQuery('core/ajax/nextdom_market.ajax.php', data, function () {
-            if (massUpdate && pluginsUpdateNeededList.length > 1) {
-                pluginsUpdateNeededList.splice(0, 1);
-                currentPlugin = pluginsUpdateNeededList[0];
-                updatePlugin(currentPlugin['installedBranchData']['id'], true);
-            }
-            else {
-                reloadWithMessage(0);
-            }
-        });
     });
 }
 
@@ -440,10 +451,10 @@ function ajaxQuery(url, data, callbackFunc) {
         success: function (data, status) {
             // Test si l'appel a échoué
             if (data.state !== 'ok' || status !== 'success') {
-                notify("Erreur", data.result, 'error');
+                notify('Erreur', data.result, 'error');
             }
             else {
-                if (typeof callbackFunc !== "undefined") {
+                if (typeof(callbackFunc)!== 'undefined') {
                     callbackFunc(data.result);
                 }
             }
