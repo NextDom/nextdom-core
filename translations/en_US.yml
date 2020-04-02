@@ -176,7 +176,7 @@ core:
   error-404: 404 - Page not found
   error-ajax: Unknown Ajax request
   error-bad-action: Misuse of a feature
-  incorrect-sys-date: The system date is incorrect (before or after %s %s):
+  incorrect-sys-date: "The system date is incorrect (before or after %s %s):"
 dashboard:
   all-categories: All
   grid-config: Configure the size of the grid
@@ -202,8 +202,11 @@ firstuse:
   market-title: Connect your market has Jeedom to NextDom!
   market-username-placeholder: Username...
   market-wantaccount: I want to create one!
-  password-title: Secure your NextDom
-  password-content: "First: thank you to define a new administrator password to improve security ..."
+  step-choose-title: The choice of the type of installation.
+  step-choose-backup_or_new: "You want to restore a backup or perform a new installation:"
+  import-content: "Restore a backup"
+  import.load-backup: Load your backup
+  new-content: "A new installation"
   password-placeholder: New Password...
   password-confirm-placeholder: Confirm password...
   step: Step

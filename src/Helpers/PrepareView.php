@@ -255,7 +255,7 @@ class PrepareView
     private function initCssPool(&$pageData)
     {
         $pageData[ControllerData::CSS_POOL][] = '/public/css/nextdom.css';
-        $pageData[ControllerData::CSS_POOL][] = '/public/css/themes/' . ConfigManager::byKey('nextdom::user-theme', 'core', 'dark-nextdom') . '.css';
+        $pageData[ControllerData::CSS_POOL][] = '/public/css/themes/' . ConfigManager::byKey('nextdom::user-theme', 'core', 'mix-nextdom') . '.css';
         if (AuthentificationHelper::isConnected()) {
             if (UserManager::getStoredUser() !== null && UserManager::getStoredUser()->getOptions('desktop_highcharts_theme') != '') {
                 $highstockThemeFile = '/vendor/node_modules/highcharts/themes/' . UserManager::getStoredUser()->getOptions('desktop_highcharts_theme') . '.js';

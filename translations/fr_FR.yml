@@ -202,8 +202,11 @@ firstuse:
   market-title: Connectez votre market Jeedom à NextDom !
   market-username-placeholder: Nom d'utilisateur...
   market-wantaccount: Je veux en créer un !
-  password-title: Sécurisez votre NextDom !
-  password-content: Pour commencer, merci de définir un nouveau mot de passe administrateur pour améliorer la sécurité...
+  step-choose-title: Le choix du type d’installation.
+  step-choose-backup_or_new: "Vous voulez restaurer un backup ou réaliser une nouvelle installation :"
+  import-content: "Restaurer un backup"
+  import.load-backup: Charger votre backup
+  new-content: "Une nouvelle installation"
   password-placeholder: Nouveau mot de passe...
   password-confirm-placeholder: Confirmer le mot de passe...
   step: Étape

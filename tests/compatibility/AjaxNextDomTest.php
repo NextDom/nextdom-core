@@ -162,14 +162,14 @@ class AjaxNextDomTest extends AjaxBase
 
     public function testRestoreAsUser() {
         $this->connectAsUser();
-        $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'restore']);
+        $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'restoreLocal']);
         $this->assertStringContainsString('401 - ', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 /*
     public function testRestoreAsAdmin() {
         $this->connectAsAdmin();
-        $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'restore']);
+        $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'restoreLocal']);
         $this->assertStringContainsString('"result":""', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }

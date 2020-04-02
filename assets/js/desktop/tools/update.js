@@ -400,9 +400,9 @@ function getNextDomLog(_autoUpdate, _log) {
       }, 1000);
     },
     success: function (data) {
-      if (data.state != 'ok') {
+      if (data.state !== 'ok') {
         setTimeout(function () {
-          getNextDomLog(_autoUpdate, _log)
+          getNextDomLog(_autoUpdate, _log);
         }, 1000);
         return;
       }
@@ -410,7 +410,7 @@ function getNextDomLog(_autoUpdate, _log) {
       if ($.isArray(data.result)) {
         for (var i in data.result.reverse()) {
           log += data.result[i] + "\n";
-          if (data.result[i].indexOf('[END') != -1) {
+          if (data.result[i].indexOf('[END') !== -1) {
             initUpdateTabsContent();
             _autoUpdate = 0;
           }
@@ -420,7 +420,7 @@ function getNextDomLog(_autoUpdate, _log) {
       updateLogView.parent().scrollTop(updateLogView.parent().height() + 200000);
       if (init(_autoUpdate, 0) == 1) {
         setTimeout(function () {
-          getNextDomLog(_autoUpdate, _log)
+          getNextDomLog(_autoUpdate, _log);
         }, 1000);
       } else {
         $('#lbl_updateRunning').hide();

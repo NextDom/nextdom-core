@@ -24,6 +24,8 @@ namespace NextDom\Controller\Pages;
 
 use NextDom\Controller\BaseController;
 use NextDom\Enums\ControllerData;
+use NextDom\Enums\ConfigKey;
+use NextDom\Helpers\AjaxHelper;
 use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\Render;
 use NextDom\Helpers\Router;
@@ -46,11 +48,12 @@ class FirstUseController extends BaseController
     public static function get(&$pageData): string
     {
         $configs = ConfigManager::byKeys([
-            'notify::status',
-            'notify::position',
-            'notify::timeout',
-            'nextdom::firstUse']);
-        if ($configs['nextdom::firstUse'] == 0) {
+            ConfigKey::NOTIFY_STATUS,
+            ConfigKey::NOTIFY_POSITION,
+            ConfigKey::NOTIFY_TIMEOUT,
+            ConfigKey::NEXTDOM_FIRST_USE]
+        );
+        if ($configs[ConfigKey::NEXTDOM_FIRST_USE] == 0) {
             Router::showError404AndDie();
         }
 
@@ -58,15 +61,17 @@ class FirstUseController extends BaseController
         $pageData[ControllerData::JS_END_POOL] = [];
         $pageData[ControllerData::TITLE] = '1ère Connexion';
         $pageData[ControllerData::JS_VARS] = [
-            'notify_status' => $configs['notify::status'],
-            'notify_position' => $configs['notify::position'],
-            'notify_timeout' => $configs['notify::timeout'],
+            'notify_status' => $configs[ConfigKey::NOTIFY_STATUS],
+            'notify_position' => $configs[ConfigKey::NOTIFY_POSITION],
+            'notify_timeout' => $configs[ConfigKey::NOTIFY_TIMEOUT],
             'serverTZoffsetMin' => Utils::getTZoffsetMin(),
             'serverDatetime' => Utils::getMicrotime()
         ];
-        $pageData[ControllerData::CSS_POOL][] = '/public/css/nextdom.css';
+
         $pageData[ControllerData::CSS_POOL][] = '/public/css/pages/firstUse.css';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/tools/log.js';
         $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/pages/firstUse.js';
+        $pageData[ControllerData::AJAX_TOKEN] = AjaxHelper::getToken();
 
         return Render::getInstance()->get('desktop/pages/firstUse.html.twig', $pageData);
     }
