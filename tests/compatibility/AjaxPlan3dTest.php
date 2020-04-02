@@ -116,7 +116,7 @@ class AjaxPlan3dTest extends AjaxBase
     public function testRemovePlan3dHeaderAsAdmin() {
         $this->connectAsAdmin();
         $result = $this->getAjaxQueryWithTokenResult($this->ajaxFile, ['action' => 'removeplan3dHeader']);
-        $this->assertStringContainsString('Objet inconnu verifiez l\'id', (string) $result->getBody());
+        $this->assertStringContainsString('Objet inconnu vérifiez l\'id', (string) $result->getBody());
         $this->assertEquals(200, $result->getStatusCode());
     }
 
