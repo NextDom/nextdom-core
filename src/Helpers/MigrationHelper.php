@@ -69,36 +69,34 @@ class MigrationHelper
             LogHelper::clear($logFile);
         }
 
+        //get current version
+        $currentVersion = explode('.', NextDomHelper::getNextdomVersion());
+        $currentVersion = array_map('intval', $currentVersion);
+
         // get previous version
         if (ConfigManager::byKey('lastUpdateVersion') == null) {
             $migrate = true;
             $previousVersion = [0, 0, 0];
-
         } else {
             $previousVersion = explode('.', ConfigManager::byKey('lastUpdateVersion'));
+            //compare versions
+            if ($currentVersion !== null && $previousVersion !== null) {
+                 $migrate = self::compareDigit(count($currentVersion), count($previousVersion), $previousVersion, $currentVersion, 0);
+            }
         }
         $previousVersion = array_map('intval', $previousVersion);
         $message = 'Migration/Update process from --> ' . implode('.', $previousVersion);
         self::logMessage($logFile, $message);
 
-        //get current version
-        $currentVersion = explode('.', NextDomHelper::getNextdomVersion());
-        $currentVersion = array_map('intval', $currentVersion);
         $message = 'Migration/Update process to --> ' . implode('.', $currentVersion);
         self::logMessage($logFile, $message);
-
-        //compare versions
-        if ($migrate === true) {
-            if ($currentVersion !== null && $previousVersion !== null) {
-                $migrate = self::compareDigit(count($currentVersion), count($previousVersion), $previousVersion, $currentVersion, 0);
-            }
-        }
 
         // call migrate functions
         if ($migrate === true) {
             while ($previousVersion[0] <= $currentVersion[0]) {
                 while ($previousVersion[1] <= 10) {
                     while ($previousVersion[2] <= 10) {
+                        $previousVersion[2] += 1;
                         if (method_exists(get_class(), 'migrate_' . $previousVersion[0] . '_' . $previousVersion[1] . '_' . $previousVersion[2])) {
                             $migrateMethod = 'migrate_' . $previousVersion[0] . '_' . $previousVersion[1] . '_' . $previousVersion[2];
                             $message = 'Start migration process for ' . $migrateMethod;
@@ -115,7 +113,6 @@ class MigrationHelper
                             $message = 'Save migration process for ' . $migrateMethod;
                             self::logMessage($logFile, $message);
                         }
-                        $previousVersion[2] += 1;
                     }
                     $previousVersion[2] = 0;
                     $previousVersion[1] += 1;
