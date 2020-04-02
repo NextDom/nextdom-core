@@ -48,11 +48,11 @@ backup:
   location: "Emplacement"
   manual_backup: "Sauvegarde manuelle"
   mb_maximum: "Mo maximum"
-  purpose1: "Cette fonction permet de créer une sauvegarde en compactant dans une archive tous les élements de votre Nextdom."
+  purpose1: "Cette fonction permet de créer une sauvegarde en compactant dans une archive tous les éléments de votre Nextdom."
   purpose2: "Seront sauvegardé les paramètres, dashboard, vues, designs, plugins, widgets etc... Mais le Core ne sera lui en revanche pas inclus dans cette sauvegarde."
   purpose3: "C'est ici également que vous pouvez restaurer une de vos sauvegardes (y compris celles issue du système Jeedom)."
   remove_selected: "Supprimer"
-  selection: "Actions sur la sauvegarde selectionnée"
+  selection: "Actions sur la sauvegarde sélectionnée"
   restore_backup_or_mirgration: "vous pouvez restaurer une sauvegarde NextDom ou migrer une sauvegarde Jeedom"
   restore_selection: "Restaurer"
   run: "Lancer"
@@ -192,16 +192,19 @@ firstuse:
   customize-title2: Customisez votre NextDom !
   customize-content: Sélectionnez le thème qui vous correspond le plus, personnalisation modifiable dans la page Customisation...
   customize-widget: Sélectionnez le thème pour vos widgets, personnalisation modifiable dans la page Profil...
-  market-alreadyaccount: J'ai déjà un compte market
+  market-alreadyaccount: J'ai déjà un compte Market
   market-content: En ajoutant ou connectant un compte Market Jeedom pour l'installation de plugins...
-  market-noaccount: Je n'ai pas de compte Market
+  market-noaccount: Je n'ai pas de compte market
   market-password-placeholder: Mot de passe...
   market-productname-placeholder: ?
   market-title: Connectez votre market Jeedom à NextDom !
   market-username-placeholder: Nom d'utilisateur...
   market-wantaccount: Je veux en créer un !
-  password-title: Sécurisez votre NextDom !
-  password-content: Pour commencer, merci de définir un nouveau mot de passe administrateur pour améliorer la sécurité...
+  step-choose-title: Le choix du type d’installation.
+  step-choose-backup_or_new: "Vous voulez restaurer un backup ou réaliser une nouvelle installation :"
+  import-content: "Restaurer un backup"
+  import.load-backup: Charger votre backup
+  new-content: "Une nouvelle installation"
   password-placeholder: Nouveau mot de passe...
   password-confirm-placeholder: Confirmer le mot de passe...
   step: Étape
@@ -296,7 +299,7 @@ health:
   no-info: Pas d'informations de santé
   no-info-detail: Aucune dépendances, ni daemon, ni informations
   os-version: Version OS
-  os-not-supported: Vous n'êtes pas sur un OS officiellement supporté par l'équipe NextDom (toute demande de support pourra donc être refusée). Les OS officiellement supportés sont Debian Jessie et Debian Strech.
+  os-not-supported: Vous n'êtes pas sur un OS officiellement supporté par l'équipe NextDom (toute demande de support pourra donc être refusée). Les OS officiellement supportés sont Debian Jessie et Debian Stretch.
   php-error: Une version de PHP supérieure ou égale à 7 est nécessaire.
   php-version: Version PHP
   plugins-legend: Détails de la santé de vos plugins, cliquez sur le titre pour avoir le détail puis survolez les icônes pour plus d'informations.
@@ -329,7 +332,7 @@ install:
   update-sourcecode: Mise à jour du code
   update-core-error: Impossible de mettre à jour le code du core.
   update-in-progress-wait: Une mise à jour est déjà en cours. Attente de 10s avant un nouvel essai.
-  update-in-progress-retry: Une mise à jour est toujours en cours. Veuillez rééssayer plus tard.
+  update-in-progress-retry: Une mise à jour est toujours en cours. Veuillez réessayer plus tard.
 interact:
   allow_extra_time: "Permet d'attendre le temps que l'état d'une lampe soit mise a jour par exemple"
   allow_nextdom_to_eliminate_malformed_requests: "Supprimer les demandes syntaxiquement incorrectes"
@@ -400,9 +403,9 @@ note:
   are_sure_you_want_to_delete_the_note: "Etes-vous sur de vouloir supprimer la note : "
   create_a_note: "Créer une note"
   list_notes: "Liste des notes"
-  note_saved_successfully: "Note sauvegardée avec succés"
-  note_selected: "Note selectionnée"
-  note_deleted_successfully: "Note supprimée avec succés"
+  note_saved_successfully: "Note sauvegardée avec succès"
+  note_selected: "Note sélectionnée"
+  note_deleted_successfully: "Note supprimée avec succès"
   notes: "Notes"
 object:
   global-view: Vue d'ensemble
@@ -558,7 +561,7 @@ scenario:
   copy-action: Copier action
   default : Défaut
   description: Description
-  description-if: "Permet de faire des conditions dans votre scénario. Par exemple: Si mon détecteur d’ouverture de porte se déclenche Alors allumer la lumière."
+  description-if: "Permet de faire des conditions dans votre scénario. Par exemple : Si mon détecteur d’ouverture de porte se déclenche Alors allumer la lumière."
   description-action: "Permet de lancer une action, sur un de vos modules, scénarios ou autre. Par exemple : Passer votre sirène sur ON."
   description-for: "Une boucle permet de réaliser une action de façon répétée un certain nombre de fois. Par exemple : Permet de répéter une action de 1 à X, c’est-à-dire X fois."
   description-in: "Permet de faire une action dans X min. Par exemple : Dans 5 min, éteindre la lumière."
@@ -742,7 +745,7 @@ update-view:
   save_before: "Sauvegarder avant"
   scripts: "Scripts"
   select_updates: "Sélection des mises à jour"
-  selective_update: "Mise à jour selective"
+  selective_update: "Mise à jour sélective"
   unfold: "Déplier"
   update: "Mettre à jour"
   update_plugins: "Mettre à jour les plugins"
@@ -765,7 +768,7 @@ welcome:
   forum-subtitle : Trouver de l'aide sur notre forum
   forum-content: |
                 Le forum NextDom est un moyen simple et efficace de trouver la solution a votre problème.
-                Il y a sûrement une autre personne qui a déja rencontré le même problème que vous.
+                Il y a sûrement une autre personne qui a déjà rencontré le même problème que vous.
                 Si ce n'est pas le cas, posez votre question, la communauté y répondra au plus vite.
   forum-launch: Accéder au forum
   hot-plugins: Plugins populaires
@@ -874,7 +877,7 @@ welcome:
 "Afficher sur un clic": "Afficher sur un clic"
 "Afficher tout": "Afficher tout"
 "Afficher/masquer le bloc Sinon": "Afficher/masquer le bloc Sinon"
-"Aimanter les élements": "Aimanter les élements"
+"Aimanter les élements": "Aimanter les éléments"
 "Aimanter à la grille": "Aimanter à la grille"
 "Aire": "Aire"
 "Ajout d'un nouveau scénario": "Ajout d'un nouveau scénario"
@@ -959,14 +962,14 @@ welcome:
 "Attention : tout ce que vous écrivez ici est global et inclus sur toutes les pages. La moindre erreur peut rendre votre": "Attention : tout ce que vous écrivez ici est global et inclus sur toutes les pages. La moindre erreur peut rendre votre"
 "Attention ce plugin n'est pas un plugin officiel en cas de soucis avec celui-ci (direct ou indirect) toute demande de support peut être refusée": "Attention ce plugin n'est pas un plugin officiel en cas de soucis avec celui-ci (direct ou indirect) toute demande de support peut être refusée"
 "Attention ce plugin ne semble pas être compatible avec votre système": "Attention ce plugin ne semble pas être compatible avec votre système"
-"Attention je pense qu'il y a un soucis avec le démon que j'ai relancé plus de 3 fois consecutivement": "Attention je pense qu'il y a un soucis avec le démon que j'ai relancé plus de 3 fois consecutivement"
+"Attention je pense qu'il y a un soucis avec le démon que j'ai relancé plus de 3 fois consecutivement": "Attention je pense qu'il y a un soucis avec le démon que j'ai relancé plus de 3 fois consécutivement"
 "Attention vous quittez une page ayant des données modifiées non sauvegardées. Voulez-vous continuer ?": "Attention vous quittez une page ayant des données modifiées non sauvegardées. Voulez-vous continuer ?"
 "Attention, il n’y a pas d’assistance de l’équipe Jeedom sur les plugins installés depuis une autre source que le Market Jeedom. De plus, l’installation d’un plugin depuis une autre source que le Market jeedom peut dans certains cas entrainer la perte globale d’assistance par l’équipe Jeedom.": "Attention, il n’y a pas d’assistance de l’équipe Jeedom sur les plugins installés depuis une autre source que le Market Jeedom. De plus, l’installation d’un plugin depuis une autre source que le Market jeedom peut dans certains cas entrainer la perte globale d’assistance par l’équipe Jeedom."
 "Au repos": "Au repos"
 "Aucun": "Aucun"
 "Aucun -": "Aucun -"
 "Aucun aperçu possible en pdf": "Aucun aperçu possible en pdf"
-"Aucun compte market n'est renseigné. Veuillez vous enregistrer sur le market, puis renseignez vos identifiants dans": "Aucun compte market n'est renseigné. Veuillez vous enregistrer sur le market, puis renseignez vos identifiants dans"
+"Aucun compte market n'est renseigné. Veuillez-vous enregistrer sur le market, puis renseignez vos identifiants dans": "Aucun compte market n'est renseigné. Veuillez vous enregistrer sur le market, puis renseignez vos identifiants dans"
 "Aucun design n'existe, cliquez <a id=\"bt_createNewDesign\" class=\"cursor\">ici</a> pour en créer un.": "Aucun design n'existe, cliquez <a id=\"bt_createNewDesign\" class=\"cursor\">ici</a> pour en créer un."
 "Aucun esclave correspondant à l'ID :": "Aucun esclave correspondant à l'ID :"
 "Aucun fichier trouvé. Vérifiez le paramètre PHP (post size limit": "Aucun fichier trouvé. Vérifiez le paramètre PHP (post size limit"
@@ -989,7 +992,7 @@ welcome:
 "Aucune documentation trouvée": "Aucune documentation trouvée"
 "Aucune durée trouvée pour l'action sleep ou la durée n'est pas valide :": "Aucune durée trouvée pour l'action sleep ou la durée n'est pas valide :"
 "Aucune fonction correspondante à :": "Aucune fonction correspondante à :"
-"Aucune methode correspondante à :": "Aucune methode correspondante à :"
+"Aucune methode correspondante à :": "Aucune méthode correspondante à :"
 "Aucune méthode correspondante :": "Aucune méthode correspondante :"
 "Aucune méthode correspondante à :": "Aucune méthode correspondante à :"
 "Aucune phrase trouvée": "Aucune phrase trouvée"
@@ -1071,7 +1074,7 @@ welcome:
 "categoryData.icon": "categoryData.icon"
 "Catégorie": "Catégorie"
 "Catégorie :": "Catégorie :"
-"Ce nom d'utilisateur est déja pris": "Ce nom d'utilisateur est déja pris"
+"Ce nom d'utilisateur est déja pris": "Ce nom d'utilisateur est déjà pris"
 "Ce plugin est pour le moment privé. Vous devez attendre qu'il devienne public ou avoir un code pour y accéder": "Ce plugin est pour le moment privé. Vous devez attendre qu'il devienne public ou avoir un code pour y accéder"
 "Ce plugin utilise un gestionnaire de demande de support": "Ce plugin utilise un gestionnaire de demande de support"
 "Ceci est un test de message pour la commande": "Ceci est un test de message pour la commande"
@@ -1084,7 +1087,7 @@ welcome:
 "Cette action nécessite une confirmation": "Cette action nécessite une confirmation"
 "Cette commande remplace l'ID": "Cette commande remplace l'ID"
 "Cette commande remplace la commande": "Cette commande remplace la commande"
-"Cette fonction permet de compacter dans une archive tous les élements de votre Nextdom.": "Cette fonction permet de compacter dans une archive tous les élements de votre Nextdom."
+"Cette fonction permet de compacter dans une archive tous les élements de votre Nextdom.": "Cette fonction permet de compacter dans une archive tous les éléments de votre Nextdom."
 "Champs json invalide": "Champs json invalide"
 "Champs recherche utilisateur": "Champs recherche utilisateur"
 "Changelog": "Changelog"
@@ -1114,7 +1117,7 @@ welcome:
 "cmdDirectUrlAccess": "cmdDirectUrlAccess"
 "cmdValueDate": "cmdValueDate"
 "Cocher pour que la commande s'exécute en parallèle des autres actions": "Cocher pour que la commande s'exécute en parallèle des autres actions"
-"Cocher pour que la commande s'éxecute en parrallele des autres actions": "Cocher pour que la commande s'éxecute en parrallele des autres actions"
+"Cocher pour que la commande s'éxecute en parrallele des autres actions": "Cocher pour que la commande s'exécute en parallèle des autres actions"
 "CODE": "CODE"
 "Code": "Code"
 "Code d'acces invalide": "Code d'accès invalide"
@@ -1186,7 +1189,7 @@ welcome:
 "Connexion de l'utilisateur par clé :": "Connexion de l'utilisateur par clé :"
 "Connexion de l'utilisateur par REMOTE_USER :": "Connexion de l'utilisateur par REMOTE_USER :"
 "Connexion réussie": "Connexion réussie"
-"connexion valide et verifiée :": "connexion valide et verifiée :"
+"connexion valide et verifiée :": "connexion valide et vérifiée :"
 "Connexion échouée :": "Connexion échouée :"
 "Conseillé": "Conseillé"
 "Console Système": "Console Système"
@@ -1210,7 +1213,7 @@ welcome:
 "Couleur fermée": "Couleur fermée"
 "Couleur hover menu latéral": "Couleur hover menu latéral"
 "Couleur hover principal": "Couleur hover principal"
-"Couleur menu lateral": "Couleur menu lateral"
+"Couleur menu lateral": "Couleur menu latéral"
 "Couleur ouverte": "Couleur ouverte"
 "Couleur sous-menu latéral": "Couleur sous-menu latéral"
 "Couleur sur mobile": "Couleur sur mobile"
@@ -1258,8 +1261,8 @@ welcome:
 "DE 1 A": "DE 1 A"
 "De nouvelles mises à jour sont disponibles :": "De nouvelles mises à jour sont disponibles :"
 "Debug": "Debug"
-"Defaut": "Defaut"
-"Delai (ms)": "Delai (ms)"
+"Defaut": "Défaut"
+"Delai (ms)": "Délai (ms)"
 "Demande": "Demande"
 "Demande API pour ajouter un message": "Demande API pour ajouter un message"
 "Demande API pour les commandes": "Demande API pour les commandes"
@@ -1279,7 +1282,7 @@ welcome:
 "Dernière mise à jour du core :": "Dernière mise à jour du core :"
 "Dernière mise à jour le": "Dernière mise à jour le"
 "Dernière vérification :": "Dernière vérification :"
-"Derriere": "Derriere"
+"Derriere": "Derrière"
 "Description": "Description"
 "Description :": "Description :"
 "Design": "Design"
@@ -1476,7 +1479,7 @@ welcome:
 "Etes-vous sûr de vouloir faire une sauvegarde de": "Etes-vous sûr de vouloir faire une sauvegarde de"
 "Etes-vous sûr de vouloir migrer": "Etes-vous sûr de vouloir migrer"
 "Etes-vous sûr de vouloir redémarrer le système ?": "Etes-vous sûr de vouloir redémarrer le système ?"
-"Etes-vous sûr de vouloir régénérer toutes les interations (cela peut être très long) ?": "Etes-vous sûr de vouloir régénérer toutes les interations (cela peut être très long) ?"
+"Etes-vous sûr de vouloir régénérer toutes les interations (cela peut être très long) ?": "Etes-vous sûr de vouloir régénérer toutes les interactions (cela peut être très long) ?"
 "Etes-vous sûr de vouloir remplacer": "Etes-vous sûr de vouloir remplacer"
 "Etes-vous sûr de vouloir remplacer l'ID": "Etes-vous sûr de vouloir remplacer l'ID"
 "Etes-vous sûr de vouloir restaurer": "Etes-vous sûr de vouloir restaurer"
@@ -1503,7 +1506,7 @@ welcome:
 "Evènement sur la commande": "Evénement sur la commande"
 "Evénement": "Evénement"
 "Evénement en temps réel": "Evénement en temps réel"
-"Execution du lancement en arriere plan :": "Exécution du lancement en arriere plan :"
+"Execution du lancement en arriere plan :": "Exécution du lancement en arrière-plan :"
 "Exemples / Programmation prédéfinie": "Exemples / Programmation prédéfinie"
 "Expert": "Expert"
 "Export du scénario": "Export du scénario"
@@ -1622,7 +1625,7 @@ welcome:
 "Il faut 1 seul et unique fichier .obj": "Il faut 1 seul et unique fichier .obj"
 "Il n'existe aucune méthode :": "Il n'existe aucune méthode :"
 "Il n'existe encore aucun historique pour cette commande :": "Il n'existe encore aucun historique pour cette commande :"
-"Il suffit de saisir le chemin d'accès vers les sauvegardes (si les sauvegardes sont deportées sur un NAS) ou alors utiliser l'outil d'upload ci-dessous.": "Il suffit de saisir le chemin d'accès vers les sauvegardes (si les sauvegardes sont deportées sur un NAS) ou alors utiliser l'outil d'upload ci-dessous."
+"Il suffit de saisir le chemin d'accès vers les sauvegardes (si les sauvegardes sont deportées sur un NAS) ou alors utiliser l'outil d'upload ci-dessous.": "Il suffit de saisir le chemin d'accès vers les sauvegardes (si les sauvegardes sont déportées sur un NAS) ou alors utiliser l'outil d'upload ci-dessous."
 "Image": "Image"
 "Image (marche uniquement avec le thème NextDom)": "Image (marche uniquement avec le thème NextDom)"
 "Image ajoutée": "Image ajoutée"
@@ -1667,7 +1670,7 @@ welcome:
 "Informations": "Informations"
 "Informations Batteries": "Informations Batteries"
 "Informations brutes": "Informations brutes"
-"Informations complementaires": "Informations complementaires"
+"Informations complementaires": "Informations complémentaires"
 "Informations reçues incorrectes": "Informations reçues incorrectes"
 "Informez-vous pour mieux maitriser": "Informez-vous pour mieux maitriser"
 "inférieur": "inférieur"
@@ -1746,7 +1749,7 @@ welcome:
 "La fonction ne peut pas être vide": "La fonction ne peut pas être vide"
 "La fonction ne peut être vide": "La fonction ne peut être vide"
 "La lecture de la documentation est fastidieuse mais c'est une opération essentielle pour bien maitriser votre solution domotique.": "La lecture de la documentation est fastidieuse mais c'est une opération essentielle pour bien maitriser votre solution domotique."
-"La mise à jour du plugin a été effecutée.": "La mise à jour du plugin a été effecutée."
+"La mise à jour du plugin a été effecutée.": "La mise à jour du plugin a été effectuée."
 "La poule": "La poule"
 "La programmation ne peut pas être vide :": "La programmation ne peut pas être vide :"
 "La tache plugin::": "La tâche plugin::"
@@ -2030,7 +2033,7 @@ welcome:
 "Note créée avec succès": "Note créée avec succès"
 "Note inconnue. Vérifiez l'ID": "Note inconnue. Vérifiez l'ID"
 "Note sauvegardée avec succès": "Note sauvegardée avec succès"
-"Note selectionnée": "Note selectionnée"
+"Note selectionnée": "Note sélectionnée"
 "Note supprimée avec succès": "Note supprimée avec succès"
 "Notes": "Notes"
 "Notification activée": "Notification activée"
@@ -2039,7 +2042,7 @@ welcome:
 "Nouveau": "Nouveau"
 "Nouveau mot de passe": "Nouveau mot de passe"
 "Objet": "Objet"
-"Objet inconnu verifiez l'id": "Objet inconnu verifiez l'id"
+"Objet inconnu verifiez l'id": "Objet inconnu vérifiez l'id"
 "Objet inconnu. Vérifiez l'ID": "Objet inconnu. Vérifiez l'ID"
 "Objet installé avec succès": "Objet installé avec succès"
 "Objet introuvable :": "Objet introuvable :"
@@ -2114,7 +2117,7 @@ welcome:
 "Permet d'attendre le temps que l'état d'une lampe soit mise à jour par exemple": "Permet d'attendre le temps que l'état d'une lampe soit mis à jour par exemple"
 "Permet d'envoyer, par une commande message, un rapport d'une vue, d'un design ou d'un panel en PNG/PDF/JPEG/SVG.": "Permet d'envoyer, par une commande message, un rapport d'une vue, d'un design ou d'un panel en PNG/PDF/JPEG/SVG."
 "Permet de faire dire un texte à": "Permet de faire dire un texte à"
-"Permet de modifier les proriétés visible/invisible actif/inactif d'un équipement": "Permet de modifier les proriétés visible/invisible actif/inactif d'un équipement"
+"Permet de modifier les proriétés visible/invisible actif/inactif d'un équipement": "Permet de modifier les propriétés visible/invisible actif/inactif d'un équipement"
 "Permet de rajouter un message dans les logs": "Permet de rajouter un message dans les logs"
 "Permet de supprimer la programmation de tous les blocs DANS et A du scénario": "Permet de supprimer la programmation de tous les blocs DANS et A du scénario"
 "Permet le contrôle des scénarios": "Permet le contrôle des scénarios"
@@ -2127,7 +2130,7 @@ welcome:
 "Phrase(s)": "Phrase(s)"
 "PID": "PID"
 "Plan": "Plan"
-"plan3d header inconnu verifiez l'id :": "plan3d header inconnu verifiez l'id :"
+"plan3d header inconnu verifiez l'id :": "plan3d header inconnu vérifiez l'id :"
 "Plan header inconnu. Vérifiez l'ID": "Plan header inconnu. Vérifiez l'ID"
 "Plan(s) 3D": "Plan(s) 3D"
 "Plein écran": "Plein écran"
@@ -2160,7 +2163,7 @@ welcome:
 "Pour commencer, merci de définir un nouveau mot de passe administrateur pour améliorer la sécurité...": "Pour commencer, merci de définir un nouveau mot de passe administrateur pour améliorer la sécurité..."
 "Pourcent (%) dans la commande, à moins qu'il soit échappé par une barre oblique inverse (\\), sont transformés en caractères de nouvelle ligne, et toutes les données après le  premier % sont envoyés à la commande comme entrée standard.": "Pourcent (%) dans la commande, à moins qu'il soit échappé par une barre oblique inverse (\\), sont transformés en caractères de nouvelle ligne, et toutes les données après le  premier % sont envoyés à la commande comme entrée standard."
 "Pourcent (&nbsp;% )": "Pourcent (&nbsp;% )"
-"Pre exécution": "Pre exécution"
+"Pre exécution": "Pré-exécution"
 "Problème dans l'arbre des objets": "Problème dans l'arbre des objets"
 "Prochain": "Prochain"
 "Profil": "Profil"
@@ -2199,10 +2202,10 @@ welcome:
 "Rafraîchir": "Rafraîchir"
 "RAM (": "RAM ("
 "Rapport": "Rapport"
-"Rapport selectionné": "Rapport selectionné"
+"Rapport selectionné": "Rapport sélectionné"
 "Rapports": "Rapports"
 "RAZ du Graphique": "RAZ du Graphique"
-"Re-installer": "Re-installer"
+"Re-installer": "Réinstaller"
 "Recherche LDAP (": "Recherche LDAP ("
 "Rechercher": "Rechercher"
 "Rechercher d'un équipement": "Rechercher d'un équipement"
@@ -2225,8 +2228,8 @@ welcome:
 "Remarque: Point d'interrogation est un caractère atypique et n'existe que dans certaines implémentations de cron. Il est utilisé à la place de '*' pour quitter soit vierge jour de mois ou le jour de la semaine.": "Remarque: Point d'interrogation est un caractère atypique et n'existe que dans certaines implémentations de cron. Il est utilisé à la place de '*' pour quitter soit vierge jour de mois ou le jour de la semaine."
 "Remerciements": "Remerciements"
 "Remettre par défaut": "Remettre par défaut"
-"Remise à zero des SI": "Remise à zero des SI"
-"Remise à zero des status du status des SI du scénario :": "Remise à zéro des status du status des SI du scénario :"
+"Remise à zero des SI": "Remise à zéro des SI"
+"Remise à zero des status du status des SI du scénario :": "Remise à zéro des statuts du statut des SI du scénario :"
 "Remise à zéro": "Remise à zéro"
 "Remonter dans le résumé global": "Remonter dans le résumé global"
 "REMOTE_USER": "REMOTE_USER"
@@ -2243,7 +2246,7 @@ welcome:
 "Restaurer la sélection": "Restaurer la sélection"
 "Restez informé": "Restez informé"
 "Restriction de l'action": "Restriction de l'action"
-"Resultat :": "Resultat :"
+"Resultat :": "Résultat :"
 "Retour": "Retour"
 "Retour à la ligne": "Retour à la ligne"
 "Retourne un texte ou une valeur pour une interaction par exemple": "Retourne un texte ou une valeur pour une interaction par exemple"
@@ -2258,7 +2261,7 @@ welcome:
 "Réinitialiser la personnalisation": "Réinitialiser la personnalisation"
 "Répertoire d'upload non trouvé": "Répertoire d'upload non trouvé"
 "Répertoire de téléversement non trouvé :": "Répertoire de téléversement non trouvé :"
-"Répeter": "Répeter"
+"Répeter": "Répéter"
 "Réponse": "Réponse"
 "Réponse contextuelle prioritaire si la phrase commence par": "Réponse contextuelle prioritaire si la phrase commence par"
 "Réponse de type \"préviens moi\" si la phrase commence par": "Réponse de type \"préviens moi\" si la phrase commence par"
@@ -2286,7 +2289,7 @@ welcome:
 "Sauvegarde": "Sauvegarde"
 "Sauvegarde de la configuration des logs effectuée": "Sauvegarde de la configuration des logs effectuée"
 "Sauvegarde de la configuration des panneaux effectuée": "Sauvegarde de la configuration des panneaux effectuée"
-"Sauvegarde des fonctionalités effectuée": "Sauvegarde des fonctionalités effectuée"
+"Sauvegarde des fonctionalités effectuée": "Sauvegarde des fonctionnalités effectuée"
 "Sauvegarde effectuée": "Sauvegarde effectuée"
 "Sauvegarde effectuée avec succès": "Sauvegarde effectuée avec succès"
 "Sauvegarde manuelle": "Sauvegarde manuelle"
@@ -2575,7 +2578,7 @@ welcome:
 "Veuillez indiquer le code ?": "Veuillez indiquer le code ?"
 "Veuillez installer une application d’authentification sur votre appareil mobile. Si vous n’en avez pas encore installé une,": "Veuillez installer une application d’authentification sur votre appareil mobile. Si vous n’en avez pas encore installé une,"
 "Veuillez trouver ci-joint le rapport": "Veuillez trouver ci-joint le rapport"
-"Video": "Video"
+"Video": "Vidéo"
 "Vider": "Vider"
 "Vider le cache": "Vider le cache"
 "Vider le log": "Vider le log"
