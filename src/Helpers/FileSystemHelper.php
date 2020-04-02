@@ -43,35 +43,37 @@ use NextDom\Exceptions\CoreException;
 class FileSystemHelper
 {
     /**
-     * Inclut un fichier à partir de son type et son nom.
+     * Includes a file from its type and name.
+     *
      * @TODO: Doit être revue
-     * @param string $_folder Répertoire du fichier
-     * @param string $_filename Nom du fichier
+     * @param string $folder Répertoire du fichier
+     * @param string $filename Nom du fichier
      * @param string $_type Type de fichier
-     * @param string $_plugin Nom du plugin ou vide pour le core
-     * @param bool $translate
+     * @param string $plugin Nom du plugin ou vide pour le core
+     * @param bool   $translate
      * @throws CoreException
+     * @throws \Exception
      */
-    public static function includeFile($_folder, $_filename, $_type, $_plugin = '', $translate = false)
+    public static function includeFile($folder, $filename, $_type, $plugin = '', $translate = false)
     {
-        if (strpos($_folder, '..') !== false || strpos($_filename, '..') !== false) {
+        if (strpos($folder, '..') !== false || strpos($filename, '..') !== false) {
             return;
         }        // Aucune particularité pour les 3rdparty
-        if ($_folder == '3rdparty') {
-            if ($_plugin === '') {
-                $file = sprintf("%s/%s.%s", $_folder, $_filename, $_type);
-                $_folder = null;
-                $_filename = self::getAssetPath($file);
-                if (null === $_filename) {
-                    $_filename = 'assets/3rdparty/' . $_filename . '.' . $_type;
+        if ($folder == '3rdparty') {
+            if ($plugin === '') {
+                $file     = sprintf("%s/%s.%s", $folder, $filename, $_type);
+                $folder   = null;
+                $filename = self::getAssetPath($file);
+                if (null === $filename) {
+                    $filename = 'assets/3rdparty/' . $filename . '.' . $_type;
                 }
             } else {
-                $_filename .= '.' . $_type;
+                $filename .= '.' . $_type;
             }
             $type = $_type;
         } else {
             // Tableau de mappage des fichiers
-            $config = [
+            $config    = [
                 'class' => ['/class', '.class.php', 'php'],
                 'com' => ['/com', '.com.php', 'php'],
                 'repo' => ['/repo', '.repo.php', 'php'],
@@ -90,23 +92,23 @@ class FileSystemHelper
                 'html' => ['/html', '.html', 'php'],
                 'configuration' => ['', '.php', 'php'],
             ];
-            $_folder .= $config[$_type][0];
-            $_filename .= $config[$_type][1];
+            $folder    .= $config[$_type][0];
+            $filename .= $config[$_type][1];
             $type = $config[$_type][2];
         }
-        if ($_plugin != '') {
-            $_folder = 'plugins/' . $_plugin . '/' . $_folder;
+        if ($plugin != '') {
+            $folder = 'plugins/' . $plugin . '/' . $folder;
         }
         /**
          * Modification pour la gestion du dossier public
          */
-        if ($_folder === 'desktop/js') {
-            $_folder = 'public/js/desktop';
+        if ($folder === 'desktop/js') {
+            $folder = 'public/js/desktop';
         }
-        if ($_folder === null) {
-            $path = NEXTDOM_ROOT . '/' . $_filename;
+        if ($folder === null) {
+            $path = NEXTDOM_ROOT . '/' . $filename;
         } else {
-            $path = NEXTDOM_ROOT . '/' . $_folder . '/' . $_filename;
+            $path = NEXTDOM_ROOT . '/' . $folder . '/' . $filename;
         }
         if (!file_exists($path)) {
             throw new CoreException('Fichier introuvable : ' . Utils::secureXSS($path), 35486);
@@ -117,7 +119,7 @@ class FileSystemHelper
                 ob_start();
                 require_once $path;
                 if ($translate) {
-                    echo TranslateHelper::exec(ob_get_clean(), $_folder . '/' . $_filename);
+                    echo TranslateHelper::exec(ob_get_clean(), $folder . '/' . $filename);
                 } else {
                     echo ob_get_clean();
                 }
@@ -126,10 +128,10 @@ class FileSystemHelper
             }
         } elseif ($type == 'css') {
             // @TODO : MD5
-            echo '<link href="' . $_folder . '/' . $_filename . '?md5=' . md5_file($path) . '" rel="stylesheet" />';
+            echo '<link href="' . $folder . '/' . $filename . '?md5=' . md5_file($path) . '" rel="stylesheet" />';
         } elseif ($type == 'js') {
             // @TODO : MD5
-            echo '<script type="text/javascript" src="src/Api/getResource.php?file=' . $_folder . '/' . $_filename . '&md5=' . md5_file($path) . '&lang=' . TranslateHelper::getLanguage() . '"></script>';
+            echo '<script type="text/javascript" src="src/Api/getResource.php?file=' . $folder . '/' . $filename . '&md5=' . md5_file($path) . '&lang=' . TranslateHelper::getLanguage() . '"></script>';
         }
     }
 
@@ -335,7 +337,6 @@ class FileSystemHelper
                         if (in_array($this_folder, $matching_folders)) {
                             array_push($all, $this_folder);
                         }
-
                     } else {
                         array_push($all, $this_folder);
                     }
@@ -431,7 +432,7 @@ class FileSystemHelper
                     if ($retval != 0) {
                         if (!$_noError) {
                             return false;
-                        } else if (isset($_params['log']) && $_params['log']) {
+                        } elseif (isset($_params['log']) && $_params['log']) {
                             echo 'Error on copy ' . $src . ' to ' . $dst . "\n";
                         }
                     }
@@ -564,7 +565,7 @@ class FileSystemHelper
                     if ($retval != 0) {
                         if (!$_noError) {
                             return false;
-                        } else if (isset($_params['log']) && $_params['log']) {
+                        } elseif (isset($_params['log']) && $_params['log']) {
                             echo 'Error on move ' . $src . ' to ' . $dst . "\n";
                         }
                     }
@@ -572,7 +573,7 @@ class FileSystemHelper
                 if ($srcSize != filesize($dst)) {
                     if (!$_noError) {
                         return false;
-                    } else if (isset($_params['log']) && $_params['log']) {
+                    } elseif (isset($_params['log']) && $_params['log']) {
                         echo 'Error on move ' . $src . ' to ' . $dst . "\n";
                     }
                 }
@@ -623,11 +624,11 @@ class FileSystemHelper
                     $file = str_replace('\\', '/', realpath($file));
                     if (is_dir($file) === true) {
                         $zip->addEmptyDir(str_replace($source . '/', '', $file . '/'));
-                    } else if (is_file($file) === true) {
+                    } elseif (is_file($file) === true) {
                         $zip->addFromString(str_replace($source . '/', '', $file), file_get_contents($file));
                     }
                 }
-            } else if (is_file($source) === true) {
+            } elseif (is_file($source) === true) {
                 $zip->addFromString(basename($source), file_get_contents($source));
             }
         }

@@ -52,8 +52,7 @@ class IconSelector extends BaseAbstractModal
         // Font Awesome 5
         $fontAwesomeTypes = ['far' => 'regular', 'fas' => 'solid', 'fab' => 'brands'];
         foreach ($fontAwesomeTypes as $cssCode => $svgFolder) {
-            $data = [];
-            $data['name'] = 'Font-Awesome-5-' . $svgFolder;
+            $data = ['name' => 'Font-Awesome-5-' . $svgFolder];
             $fileList = FileSystemHelper::ls('vendor/node_modules/@fortawesome/fontawesome-free/svgs/' . $svgFolder, '*');
             $data['height'] = (ceil(count($fileList) / 14) * 40) + 80;
             $data['list'] = [];
@@ -79,12 +78,10 @@ class IconSelector extends BaseAbstractModal
      */
     private static function getIconsData($path, $cssContent, $matchPattern, $name = null, $cssClass = null)
     {
-        $data = [];
         preg_match_all($matchPattern, $cssContent, $matchResults, PREG_SET_ORDER);
-        if ($name === null) {
+        $data = ['name' => $name];
+        if ($data['name'] === null) {
             $data['name'] = str_replace('/', '', $path);
-        } else {
-            $data['name'] = $name;
         }
         $data['height'] = (ceil(count($matchResults) / 14) * 40) + 80;
         $data['list'] = [];

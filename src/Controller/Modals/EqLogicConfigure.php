@@ -41,10 +41,10 @@ class EqLogicConfigure extends BaseAbstractModal
      * @return string
      * @throws CoreException
      * @throws \ReflectionException
+     * @throws \Exception
      */
     public static function get(): string
     {
-
 
         $eqLogicId = Utils::init('eqLogic_id');
         $eqLogic = EqLogicManager::byId($eqLogicId);
@@ -83,9 +83,10 @@ class EqLogicConfigure extends BaseAbstractModal
 
         foreach (NextDomHelper::getConfiguration('eqLogic:displayType') as $key => $value) {
             // TODO : A supprimer quand on aura trouvé où est initialisé eqLogic:displayType et retiré mobile
-            $eqLogicDisplayType = [];
-            $eqLogicDisplayType['key'] = $key;
-            $eqLogicDisplayType['name'] = $value['name'];
+            $eqLogicDisplayType = [
+                'key'  => $key,
+                'name' => $value['name'],
+            ];
             foreach ($widgetPossibilities as $widgetPossibility) {
                 $eqLogicDisplayType[$widgetPossibility['code']] = false;
                 if ($pageData[$widgetPossibility['code']] && $eqLogic->widgetPossibility($widgetPossibility['key'] . '::' . $key)) {
@@ -100,10 +101,11 @@ class EqLogicConfigure extends BaseAbstractModal
         if (is_array($eqLogic->widgetPossibility('parameters'))) {
             $pageData['parameters'] = [];
             foreach ($eqLogic->widgetPossibility('parameters') as $parameterKey => $parameterData) {
-                $param = [];
-                $param['key'] = $parameterKey;
-                $param['name'] = $parameterData['name'];
-                $param['advancedParam'] = false;
+                $param = [
+                    'key'           => $parameterKey,
+                    'name'          => $parameterData['name'],
+                    'advancedParam' => false,
+                ];
                 if (!isset($parameterData['allow_displayType'])) {
                     continue;
                 }
