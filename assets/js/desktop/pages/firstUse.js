@@ -67,6 +67,24 @@ $(document).ready(function () {
  * Init events on the profils page
  */
 function initEvents() {
+
+    // Backup modale init
+    $("#md_backupInfo").dialog({
+        closeText: '',
+        autoOpen: false,
+        modal: true,
+        height: jQuery(window).height() - 100,
+        width: getModalWidth(),
+        open: function () {
+            $("body").css({overflow: 'hidden'});
+            $(this).dialog("option", "position", {my: "center", at: "center", of: window});
+            $('#pre_backupInfo').css('height', $('#md_backupInfo').height());
+        },
+        beforeClose: function (event, ui) {
+            $("body").css({overflow: 'inherit'});
+        }
+    });
+
     // Step 2 asked
     $('#toStep2').click(function () {
       nextdom.user.login({
@@ -303,3 +321,46 @@ function changeFirstUseStatus() {
     }
   });
 }
+
+
+// Upload button
+$('#bt_uploadBackup').fileupload({
+    dataType: 'json',
+    replaceFileInput: false,
+    start: function (e, data) {
+      $('#bt_uploadBackup').parent().addClass('disabled');
+      $('#bt_uploadBackup').parent().find('.fa-refresh').show();
+      $('#bt_uploadBackup').parent().find('.fa-sign-in-alt').hide();
+    },
+    done: function (e, data) {
+        if (data.result.state !== 'ok') {
+            notify('Erreur', data.result.result, 'error');
+            return;
+        }
+        notify('Info', '{{Backup ajouté avec succès}}', 'success');
+        var filename = $('#bt_uploadBackup').value().replace(/^.*[\\\/]/, '');
+        bootbox.confirm('{{Etes-vous sûr de vouloir restaurer NextDom avec la sauvegarde}} <b>' + filename + '</b> ?</br>{{Une fois lancée cette opération ne peut pas être annulée...}}</br><span style="color:red;font-weight: bold;">{{IMPORTANT la restauration d\'un backup est une opération risquée et n\'est à utiliser qu\'en dernier recours.}}</span>', function (result) {
+            if (result) {
+                nextdom.backup.restoreLocal({
+                    backup: filename,
+                    error: function (error) {
+                        notify('Erreur', error.message, 'error');
+                    },
+                    success: function () {
+                      switchNotify(0);
+                      $('#md_backupInfo').dialog({title: "{{Avancement de la restauration}}"});
+                      $("#md_backupInfo").dialog('open');
+                      getNextDomLog(1, 'restore');
+                      goToNextStep('#toStep6');
+                    }
+                });
+            }
+        });
+         
+    },
+    always: function (e, data) {
+      $('#bt_uploadBackup').parent().removeClass('disabled');
+      $('#bt_uploadBackup').parent().find('.fa-refresh').hide();
+      $('#bt_uploadBackup').parent().find('.fa-sign-in-alt').show();
+    },
+});

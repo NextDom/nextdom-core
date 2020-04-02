@@ -873,9 +873,7 @@ class BackupManager
         $backups = self::getBackupFileInfo($backupDir, 'newest');
         $results = [];
         foreach ($backups as $c_backup) {
-            $path = $c_backup['file'];
-            $name = basename($path);
-            $results[$path] = $name;
+            $results[] = basename($c_backup['file']);
         }
         return $results;
     }
@@ -890,7 +888,7 @@ class BackupManager
      */
     public static function removeBackup(string $backupFilePath)
     {
-        if (Utils::checkPath($backupFilePath) && file_exists($backupFilePath)) {
+        if (Utils::checkPath($backupFilePath) && is_file($backupFilePath)) {
             unlink($backupFilePath);
         } else {
             throw new CoreException(__('Impossible de trouver le fichier : ') . $backupFilePath);

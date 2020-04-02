@@ -49,6 +49,7 @@ class BackupController extends BaseController
         $pageData[ControllerData::JS_VARS_RAW]['REPO_LIST'] = '[]';
         $pageData['backupAjaxToken'] = AjaxHelper::getToken();
         $pageData['backupReposList'] = UpdateManager::listRepo();
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/tools/log.js';
         $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/tools/backup.js';
 
         return Render::getInstance()->get('/desktop/tools/backup.html.twig', $pageData);

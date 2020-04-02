@@ -380,10 +380,12 @@ class SystemHelper
      */
     public static function php(string $arguments, $elevatedPrivileges = false)
     {
+        $exec = "";
         if ($elevatedPrivileges) {
-            return exec(self::getCmdSudo() . ' php ' . $arguments);
+            $exec .= self::getCmdSudo() . ' ';
         }
-        return exec('php ' . $arguments);
+        $exec .= 'php ' . $arguments;
+        return exec($exec);
     }
 
     /**
