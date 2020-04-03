@@ -242,23 +242,15 @@ class MigrationHelper
             $interactDef->setEnable(1);
             $interactDef->save();
         }
+        self::logMessage($logFile, 'Interact definition update');
 
     }
     /***********************************************************************************************************************************************************/
 
-    /***************************************************************** 0.3.0 Migration process *****************************************************************/
-    /**
-     * 0.3.0 Migration process
-     * @param string $logFile log name file to display information
-     * @throws \Exception
-     */
-    private static function migrate_0_3_0($logFile = LogTarget::MIGRATION)
-    {
-        self::movePersonalFoldersAndFilesToData($logFile);
-    }
+    /***************************************************************** 0.7.1 Migration process *****************************************************************/
 
     /**
-     * Migration to pass during migrate_themes_to_data
+     * Migration to pass during migrate_themes_to_data (should be done in 0.3.0)
      * @param string $logFile log name file to display information
      * @throws \Exception
      */
@@ -316,7 +308,7 @@ class MigrationHelper
                 }
             }
         } catch (\Exception $exception) {
-            echo $exception;
+            self::logMessage($logFile, $exception.getMessage());
             throw(new CoreException());
         }
 
@@ -338,7 +330,7 @@ class MigrationHelper
                 }
             }
         } catch (\Exception $exception) {
-            echo $exception;
+            self::logMessage($logFile, $exception.getMessage());
             throw(new CoreException());
         }
 
@@ -366,7 +358,7 @@ class MigrationHelper
                 self::migratePlanPath($logFile, '', 'core/img/', 'data/custom/plans/');
             }
         } catch (\Exception $exception) {
-            echo $exception;
+            self::logMessage($logFile, $exception.getMessage());
             throw(new CoreException());
         }
 
@@ -424,15 +416,13 @@ class MigrationHelper
             }
         }
     }
-    /***********************************************************************************************************************************************************/
 
-    /***************************************************************** 0.5.2 Migration process *****************************************************************/
     /**
-     * 0.5.2 Migration process
+     * Migration removing user.function.class.php (should be done in 0.5.2)
      * @param string $logFile log name file to display information
      * @throws \Exception
      */
-    private static function migrate_0_5_2($logFile = LogTarget::MIGRATION)
+    private static function migrate_removeFunctionClass($logFile = LogTarget::MIGRATION)
     {
         if (is_dir(NEXTDOM_DATA . '/data/php')) {
             FileSystemHelper::rrmfile(NEXTDOM_DATA . '/data/php/user.function.class.php');
@@ -441,19 +431,29 @@ class MigrationHelper
         self::logMessage($logFile, 'user.function files removed');
     }
 
-    /***************************************************************** 0.6.1 Migration process *****************************************************************/
     /**
-     * 0.6.1 Migration process
+     * Migration modifying swapiness (should be done in 0.6.1)
      * @param string $logFile log name file to display information
      * @throws \Exception
      */
-    private static function migrate_0_6_1($logFile = LogTarget::MIGRATION)
+    private static function migrate_swapiness($logFile = LogTarget::MIGRATION)
     {
-        exec("sudo sed -i '/vm.swappiness=/d' /etc/sysctl.d/99-sysctl.conf");
-        exec("sudo echo 'vm.swappiness=10' >> /etc/sysctl.d/99-sysctl.conf");
+        try {
+            exec("sudo sed -i '/vm.swappiness=/d' /etc/sysctl.d/99-sysctl.conf");
+            exec("sudo echo 'vm.swappiness=10' >> /etc/sysctl.d/99-sysctl.conf");
+        } catch (\Exception $exception) {
+            self::logMessage($logFile, $exception.getMessage());
+            throw(new CoreException());
+        }
+        self::logMessage($logFile, 'Swapiness configuration update');
     }
 
-    private static function migrate_0_6_2($logFile = LogTarget::MIGRATION)
+    /**
+     * Migration adding icon field to message table (should be done in 0.6.2)
+     * @param string $logFile log name file to display information
+     * @throws \Exception
+     */
+    private static function migrate_updateHash($logFile = LogTarget::MIGRATION)
     {
         foreach (UserManager::all() as $user) {
             if($user->getProfils() != 'admin' || $user->getOptions('doNotRotateHash',0) == 1){
@@ -473,31 +473,60 @@ class MigrationHelper
         foreach ($result as $value) {
             try {
                 DBHelper::exec(array_values($value)[0]);
-            } catch (\Exception $e) {
-
+            } catch (\Exception $exception) {
+                self::logMessage($logFile, $exception.getMessage());
+                throw(new CoreException());
             }
         }
     }
 
-    /***************************************************************** 0.7.0 Migration process *****************************************************************/
     /**
-     * 0.7.0 Migration process
+     * Migration adding icon field to message table (should be done in 0.7.0)
      * @param string $logFile log name file to display information
      * @throws \Exception
      */
-    private static function migrate_0_7_0($logFile = LogTarget::MIGRATION)
+    private static function migrate_messageToAddIcon($logFile = LogTarget::MIGRATION)
     {
-        DBHelper::exec("ALTER message ADD icon MEDIUMTEXT");
+        try {
+            DBHelper::exec("ALTER message ADD icon MEDIUMTEXT");
+        } catch (\Exception $exception) {
+            self::logMessage($logFile, $exception.getMessage());
+            throw(new CoreException());
+        }
     }
 
-    /***************************************************************** 0.7.1 Migration process *****************************************************************/
     /**
-     * 0.7.1 Migration process
+     * Migration changing engine of interactQuery table (should be done in 0.7.1)
+     * @param string $logFile log name file to display information
+     * @throws \Exception
+     */
+    private static function migrate_interactQueryEngine($logFile = LogTarget::MIGRATION)
+    {
+        try {
+            DBHelper::exec("ALTER TABLE `interactQuery` ENGINE=InnoDB;"); //Peut-être fait plus tot.
+        } catch (\Exception $exception) {
+            self::logMessage($logFile, $exception.getMessage());
+            throw(new CoreException());
+        }
+    }
+
+    /**
+     * 0.7.1 Migration process (apply all migration process from 0.3.0 not done yet)
      * @param string $logFile log name file to display information
      * @throws \Exception
      */
     private static function migrate_0_7_1($logFile = LogTarget::MIGRATION)
     {
-        DBHelper::exec("ALTER TABLE `interactQuery` ENGINE=InnoDB;"); //Peut-être fait plus tot.
+        self::movePersonalFoldersAndFilesToData($logFile);
+        self::migrate_removeFunctionClass($logFile);
+        self::migrate_swapiness($logFile);
+        self::migrate_updateHash($logFile);
+        self::migrate_messageToAddIcon($logFile);
+        self::migrate_interactQueryEngine($logFile);
     }
+    /***********************************************************************************************************************************************************/
+
+    /***************************************************************** 0.8.0 Migration process *****************************************************************/
+
+    /***********************************************************************************************************************************************************/
 }
