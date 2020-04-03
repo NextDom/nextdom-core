@@ -3,7 +3,7 @@
 		<span class="cmdName #hide_name#">#name_display# </span> <span class="iconCmdLine"></span>
 	</div>
 	<script>
-		jeedom.cmd.update['#id#'] = function(_options) {
+		nextdom.cmd.update['#id#'] = function(_options) {
 			var cmd = $('.cmd[data-cmd_id=#id#]')
 			cmd.attr('title','{{Date de valeur}} : '+_options.valueDate+'<br/>{{Date de collecte}} : '+_options.collectDate)
 			if (_options.display_value == '1') {
@@ -24,6 +24,6 @@
 				}
 			}
 		}
-		jeedom.cmd.update['#id#']({display_value:'#state#',valueDate:'#valueDate#',collectDate:'#collectDate#',alertLevel:'#alertLevel#'})
+		nextdom.cmd.update['#id#']({display_value:'#state#',valueDate:'#valueDate#',collectDate:'#collectDate#',alertLevel:'#alertLevel#'})
 	</script>
 </div>

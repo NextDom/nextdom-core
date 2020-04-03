@@ -29,6 +29,10 @@ nextdom.widget.loadConfig = function (queryParams) {
   nextdom.private.ajax('Widget', 'loadConfig', queryParams, ['template']);
 };
 
+nextdom.widget.getThemeImg = function (queryParams) {
+  nextdom.private.ajax('Widget', 'getThemeImg', queryParams);
+};
+
 nextdom.widget.getPreview = function (queryParams) {
   nextdom.private.ajax('Widget', 'getPreview', queryParams, ['id']);
 };
