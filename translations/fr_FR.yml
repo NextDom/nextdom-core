@@ -644,7 +644,7 @@ scenario:
   visible: Visible
   you-have-scenarios: Vous avez %s scénario(s).
 scripts:
-  cron-class-or-function-not-found: "[Erreur] Classe ou fonction non trouvée"
+  cron-class-or-function-not-found: "[Erreur] Classe ou fonction non trouvée : "
   cron-disable: "Tous les crons sont actuellement désactivés"
   error: "Erreur : "
   error-on: "Erreur sur "
