@@ -194,7 +194,7 @@ welcome:
   path: 'welcome'
   controller: NextDom\Controller\Modals\Welcome::get
   condition: 'user'
-widget.test:
-  path: 'interact.test'
-  controller: NextDom\Controller\Modals\WidgetTest::get
+widget.replace:
+  path: 'widget.replace'
+  controller: NextDom\Controller\Modals\WidgetReplace::get
   condition: 'admin'
