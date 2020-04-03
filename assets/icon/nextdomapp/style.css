@@ -453,19 +453,19 @@
   content: "\e949";
 }
 .nextdomapp-home-nextdom:before,
-.jeedomapp-home-nextdom:before {
+.jeedomapp-home-jeedom:before {
   content: "\e90b";
 }
 .nextdomapp-piece-nextdom:before,
-.jeedomapp-piece-nextdom:before {
+.jeedomapp-piece-jeedom:before {
   content: "\e90c";
 }
 .nextdomapp-scenario-nextdom:before,
-.jeedomapp-scenario-nextdom:before {
+.jeedomapp-scenario-jeedom:before {
   content: "\e90d";
 }
 .nextdomapp-design-nextdom:before,
-.jeedomapp-design-nextdom:before {
+.jeedomapp-design-jeedom:before {
   content: "\e90e";
 }
 .nextdomapp-alerte2:before,
