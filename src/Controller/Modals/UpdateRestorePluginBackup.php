@@ -47,30 +47,17 @@ class UpdateRestorePluginBackup extends BaseAbstractModal
         if (!is_object($pluginToRestore)) {
             throw new CoreException('Impossible de trouver le plugin');
         }
-        $pageData = [];
-        $pageData['plansList'] = $planHeader->getPlan();
-        Utils::sendVarsToJS([
-            'id' => $planHeader->getId(),
-            'planHeader' => Utils::o2a($planHeader)
-        ]);
+//        $pageData['plansList'] = $planHeader->getPlan();
+//        Utils::sendVarsToJS([
+//            'id' => $planHeader->getId(),
+//            'planHeader' => Utils::o2a($planHeader)
+//        ]);
 
-        return Render::getInstance()->get('/modals/planHeader.configure.html.twig', $pageData);
+        $pageData['pluginBackupList']= PluginManager::getPluginBackups($pluginToRestore) ;
 
-        foreach (UpdateManager::listRepo() as $repoKey => $repoValue) {
-            if ($repoValue['configuration'] === false) {
-                continue;
-            }
-            if ($repoValue['scope']['plugin'] === false) {
-                continue;
-            }
-            if (!isset($repoValue['configuration']['parameters_for_add'])) {
-                continue;
-            }
-            $pageData['repoListConfiguration'][$repoKey] = $repoValue;
-        }
         $pageData['ajaxToken'] = AjaxHelper::getToken();
 
 
-        return Render::getInstance()->get('/modals/update.add.html.twig', $pageData);
+        return Render::getInstance()->get('/modals/update.restorePluginBackup.html.twig', $pageData);
     }
 }

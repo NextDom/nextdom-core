@@ -49,6 +49,9 @@ use NextDom\Model\Entity\Plugin;
  */
 class PluginManager
 {
+    /**
+     * @var array
+     */
     private static $cache = [];
     private static $enabledPlugins = null;
 
@@ -494,5 +497,18 @@ class PluginManager
         }
     }
 
-
+    /**
+     * Get plugin's backup list
+     *
+     * @param Plugin $plugin
+     * @return array
+     * @throws CoreException
+     */
+    public static function getPluginBackups(Plugin $plugin): array
+    {
+        if((file_exists(BackupManager::getBackupDirectory().'/plugins/'))) {
+            return FileSystemHelper::ls(BackupManager::getBackupDirectory() . '/plugins/','*'.$plugin->getId().'*', false,'folders');
+        }
+        return [];
+    }
 }
