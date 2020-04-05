@@ -380,3 +380,42 @@ function decodeHtmlEntities(message) {
     temporaryTextArea.innerHTML = message;
     return temporaryTextArea.value;
 }
+
+/**
+ * TODO: Previous page
+ * @param _param
+ * @param _value
+ * @param _title
+ */
+function addOrUpdateUrl(_param, _value, _title) {
+    var url = new URL(window.location.href);
+    var query_string = url.search;
+    var searchParams = new URLSearchParams(query_string);
+    if (_value == null) {
+        searchParams.delete(_param);
+    } else {
+        searchParams.set(_param, _value);
+    }
+    url.search = searchParams.toString();
+    url = url.toString();
+    if (url != window.location.href) {
+        if (url.indexOf('#') != -1) {
+            url = url.substring(0, url.indexOf('#'));
+        }
+        /*
+        if (PREVIOUS_PAGE != 'index.php?' + window.location.href.split("index.php?")[1]) {
+            window.history.pushState('', '', window.location.href);
+        }
+         */
+        if (_title && _title != '') {
+            document.title = _title;
+        }
+        window.history.pushState('', '', url.toString());
+        //PREVIOUS_PAGE = 'index.php?' + url.split("index.php?")[1];
+    } else {
+        if (_title && _title != '') {
+            document.title = _title;
+        }
+    }
+}
+

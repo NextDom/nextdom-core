@@ -82,7 +82,7 @@ if (is_numeric(getUrlVars('id'))) {
 }
 
 function cleanDiv() {
-    $('#div_programation').empty();
+    $('#div_programmation').empty();
     $('#div_display_config').empty();
     $('#div_used_by').empty();
 }
@@ -121,6 +121,7 @@ function initEvents() {
     // widget display
     $('.widgetDisplayCard').on('click', function () {
         displayWidget($(this).attr('data-widget_id'));
+        addOrUpdateUrl('id', $(this).attr('data-widget_id'));
         if (document.location.toString().split('#')[1] === '' || document.location.toString().split('#')[1] === undefined) {
             $('.nav-tabs a[href="#generaltab"]').click();
         }
@@ -136,8 +137,7 @@ function initEvents() {
         bootbox.prompt("Nom ?", function (result) {
             if (result !== null) {
                 var widget = $('.widget').getValues('.widgetAttr')[0];
-                widget.test = $('#div_programation .test').getValues('.testAttr');
-                widget.test = $('#div_programation .test').getValues('.testAttr');
+                widget.test = $('#div_programmation .test').getValues('.testAttr');
                 widget.name = result;
                 widget.id = '';
                 nextdom.widget.save({
@@ -157,7 +157,7 @@ function initEvents() {
     // Widget save button
     $("#bt_saveWidget").on('click', function () {
         var widget = $('.widget').getValues('.widgetAttr')[0];
-        widget.test = $('#div_programation .test').getValues('.testAttr');
+        widget.test = $('#div_programmation .test').getValues('.testAttr');
         nextdom.widget.save({
             widget: widget,
             error: function (error) {
@@ -210,6 +210,95 @@ function initEvents() {
         });
     });
 
+    $('#bt_applyToCmd').off('click').on('click', function () {
+        //store usedBy:
+        var checkedId = [];
+        $('#div_usedBy .cmdAdvanceConfigure').each(function() {
+            checkedId.push($(this).data('cmd_id'))
+        });
+
+        $('#md_modal').dialog({title: "{{Appliquer sur}}"})
+            .load('index.php?v=d&modal=cmd.selectMultiple&type='+$('.widgetAttr[data-l1key="type"]').value()+'&subtype='+$('.widgetAttr[data-l1key="subtype"]').value(), function() {
+                initTableSorter();
+
+                $('#table_cmdConfigureSelectMultiple tbody tr').each(function( index ) {
+                    if (checkedId.includes($(this).data('cmd_id'))) {
+                        $(this).find('.selectMultipleApplyCmd').prop('checked', true)
+                    }
+                });
+
+                $('#bt_cmdConfigureSelectMultipleAlertToogle').off('click').on('click', function () {
+                    var state = false;
+                    if ($(this).attr('data-state') == 0) {
+                        state = true;
+                        $(this).attr('data-state', 1)
+                            .find('i').removeClass('fa-check-circle-o').addClass('fa-circle-o');
+                        $('#table_cmdConfigureSelectMultiple tbody tr .selectMultipleApplyCmd:visible').value(1);
+                    } else {
+                        state = false;
+                        $(this).attr('data-state', 0)
+                            .find('i').removeClass('fa-circle-o').addClass('fa-check-circle-o');
+                        $('#table_cmdConfigureSelectMultiple tbody tr .selectMultipleApplyCmd:visible').value(0);
+                    }
+                });
+
+                $('#bt_cmdConfigureSelectMultipleAlertApply').off().on('click', function () {
+                    var widget = $('.widget').getValues('.widgetAttr')[0];
+                    widget.test = $('#div_programmation .test').getValues('.testAttr');
+                    nextdom.widget.save({
+                        widget: widget,
+                        error: function (error) {
+                            $('#div_alert').showAlert({message: error.message, level: 'danger'})
+                        },
+                        success: function (data) {
+                            var modifyWithoutSave = false;
+                            var cmd = {template : {dashboard : 'custom::'+$('.widgetAttr[data-l1key="name"]').value(),mobile : 'custom::'+$('.widgetAttr[data-l1key="name"]').value()}};
+                            var cmdDefault = {template : {dashboard : 'default', mobile : 'default'}};
+console.log(cmd);
+console.log(cmdDefault);
+                            $('#table_cmdConfigureSelectMultiple tbody tr').each(function () {
+                                var thisId = $(this).data('cmd_id');
+                                if ($(this).find('.selectMultipleApplyCmd').prop('checked')) {
+                                    if (!checkedId.includes(thisId)) {
+                                        //show in usedBy
+                                        var thisObject = $(this).find('td').eq(1).html();
+                                        var thisEq = $(this).find('td').eq(2).html();
+                                        var thisName = $(this).find('td').eq(3).html();
+                                        var cmdHumanName = '['+thisObject+']['+thisEq+']['+thisName+']';
+                                        var newSpan = '<span class="label label-info cursor cmdAdvanceConfigure" data-cmd_id="'+thisId+'">'+cmdHumanName+'</span>';
+                                        $('#div_usedBy').append(newSpan)
+                                    }
+                                    cmd.id = thisId;
+                                    nextdom.cmd.save({
+                                        cmd: cmd,
+                                        error: function (error) {
+                                            $('#md_cmdConfigureSelectMultipleAlert').showAlert({message: error.message, level: 'danger'})
+                                        },
+                                        success: function () {}
+                                    });
+
+                                } else {
+                                    if (checkedId.includes(thisId)) {
+                                        cmdDefault.id = thisId;
+                                        nextdom.cmd.save({
+                                            cmd: cmdDefault,
+                                            error: function (error) {
+                                                $('#md_cmdConfigureSelectMultipleAlert').showAlert({message: error.message, level: 'danger'})
+                                            },
+                                            success: function (data) {
+                                                $('#div_usedBy .cmdAdvanceConfigure[data-cmd_id="'+ data.id +'"]').remove()
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                            $('#md_cmdConfigureSelectMultipleAlert').showAlert({message: "{{Modification(s) appliquée(s) avec succès}}", level: 'success'})
+                        }
+                    });
+                });
+            }).dialog('open');
+    });
+
 // Icon delete on double click
     $('.widgetAttr[data-l1key=display][data-l2key=icon]').on('dblclick', function () {
         $('.widgetAttr[data-l1key=display][data-l2key=icon]').value('');
@@ -220,14 +309,14 @@ function initEvents() {
             $('.widgetAttr[data-l1key=display][data-l2key=icon]').empty().append(_icon);
         });
     });
-// Element dans div_programation
-    $('#bt_programation_add_test').off('click').on('click', function () {
+// Element dans div_programmation
+    $('#bt_programmation_add_test').off('click').on('click', function () {
         addTest({});
     });
-    $('#div_programation').off('click', '.bt_removeTest').on('click', '.bt_removeTest', function () {
+    $('#div_programmation').off('click', '.bt_removeTest').on('click', '.bt_removeTest', function () {
         $(this).closest('.test').remove();
     });
-    $('#div_programation').off('click', '.chooseIcon').on('click', '.chooseIcon', function () {
+    $('#div_programmation').off('click', '.chooseIcon').on('click', '.chooseIcon', function () {
         var bt = $(this);
         chooseIcon(function (_icon) {
             bt.closest('.input-group').find('.testAttr').value(_icon);
@@ -317,7 +406,7 @@ function initEvents() {
     });
     $("#bt_export").on('click', function (event) {
         var widget = $('.widget').getValues('.widgetAttr')[0];
-        widget.test = $('#div_programation .test').getValues('.testAttr');
+        widget.test = $('#div_programmation .test').getValues('.testAttr');
         widget.id = "";
         nextdom.version({success: function (version) {
                 widget.jeedomCoreVersion = version.jeedom;
@@ -461,8 +550,8 @@ function addTest(_test) {
     div += '</div>';
     div += '</div>';
     div += '</div>';
-    $('#div_programation').append(div);
-    $('#div_programation').find('.test').last().setValues(_test, '.testAttr');
+    $('#div_programmation').append(div);
+    $('#div_programmation').find('.test').last().setValues(_test, '.testAttr');
 }
 
 function getThemeImg(_light, _dark) {
@@ -519,9 +608,9 @@ function loadConfig(_template, _data) {
                 $('.widget').setValues({replace: _data.replace}, '.widgetAttr');
             }
             if (data.test) {
-                $('.programation').show();
+                $('.programmation').show();
             } else {
-                $('.programation').hide();
+                $('.programmation').hide();
             }
             $('.selectWidgetTemplate').on('change', function () {
                 if ($(this).value() === '' || !$(this).hasClass('widgetAttr')) {

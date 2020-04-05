@@ -1381,9 +1381,9 @@ class Cmd extends BaseEntity
                 $replace = [];
             }
             $replace['#test#'] = '';
+            $replace['#change_theme#'] = '';
             if (isset($templateConf['test']) && is_array($templateConf['test']) && count($templateConf['test']) > 0) {
                 $i = 0;
-                $replace['#change_theme#'] = '';
                 foreach ($templateConf['test'] as &$test) {
                     if (!isset($test['operation'])) {
                         continue;
@@ -1527,6 +1527,7 @@ class Cmd extends BaseEntity
             '#name#' => $this->getName(),
             '#name_display#' => ($this->getDisplay('icon') != '') ? $this->getDisplay('icon') : $this->getName(),
             '#history#' => '',
+            '#hide_history#' => 'hidden',
             '#displayHistory#' => 'display : none;',
             '#unite#' => $this->getUnite(),
             '#minValue#' => $this->getConfiguration(CmdConfigKey::MIN_VALUE, 0),
