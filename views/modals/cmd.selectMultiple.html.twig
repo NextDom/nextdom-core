@@ -50,21 +50,25 @@
         <thead>
         <tr>
             <th style="width: 120px;" data-sorter="false" data-filter="false">{{ 'Selection' }}</th>
+            <th>{{ 'Objet' }}</th>
+            <th>{{ 'Equipement' }}</th>
             <th>{{ 'Nom' }}</th>
         </tr>
         </thead>
         <tbody>
         {% for cmd in cmds %}
-            <tr data-cmd_id="{{ cmd.getId() }}">
+            <tr data-cmd_id="{{ cmd.cmdId }}">
                 <td>
-                    {% if currentCmd.getId() == cmd.getId() %}
-                        <input type="checkbox" class="selectMultipleApplyCmd" checked/>
-                    {% else %}
-                        <input type="checkbox" class="selectMultipleApplyCmd"/>
-                    {% endif %}
+                    <input type="checkbox" class="selectMultipleApplyCmd"{% if cmd.selected %} checked="checked"{% endif %}/>
                 </td>
                 <td>
-                    {{ cmd.getHumanName(true)|raw }}
+                    {{ cmd.object|raw }}
+                </td>
+                <td>
+                    {{ cmd.eqLogic }}
+                </td>
+                <td>
+                    {{ cmd.cmdName|raw }}
                 </td>
             </tr>
         {% endfor %}

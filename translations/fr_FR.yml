@@ -782,6 +782,7 @@ welcome:
   notify: Sauvegarde réussie
   title: Bienvenue dans NextDom
 widget:
+  applyTo: Appliquer sur
   choose: Choisir
   display: "Affichage"
   display_option: "Option d’Affichage"

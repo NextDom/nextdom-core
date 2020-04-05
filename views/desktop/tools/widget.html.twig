@@ -136,6 +136,7 @@
                 <a class="btn btn-action-bar btn-info" id="bt_export"><i class="fas fa-file-export"></i>{{ 'common.export' | trans }}</a>
             </div>
             <div class="action-group">
+                <a class="btn btn-warning btn-action-bar pull-right" id="bt_applyToCmd"><i class="fas fa-check-circle"></i> {{ 'widget.applyTo' | trans }}</a>
                 <a class="btn btn-action-bar btn-success pull-right" id="bt_saveWidget"><i class="fas fa-save"></i>{{ 'common.save' | trans }}</a>
                 <a class="btn btn-danger btn-action-bar pull-right bt_cancelModifs"><i class="fas fa-times"></i>{{ 'common.cancel'|trans }}</a>
                 <a class="btn btn-action-bar btn-default pull-right" id="bt_duplicate"><i class="fas fa-files-o"></i>{{ 'widget.duplicate' | trans }}</a>
@@ -230,12 +231,12 @@
                             </div>
                         </fieldset>
                         <fieldset>
-                            <legend class="programation">
+                            <legend class="programmation">
                                 {{ 'widget.programming' | trans }}
-                                <a class="btn btn-xs pull-right" id="bt_programation_add_test"><i class="fas fa-plus-circle"></i> Ajouter</a>
+                                <a class="btn btn-xs pull-right" id="bt_programmation_add_test"><i class="fas fa-plus-circle"></i> Ajouter</a>
                             </legend>
                             <div class="row">
-                                <div id="div_programation" class="form-group col-xs-12 col-padding programation"></div>
+                                <div id="div_programmation" class="form-group col-xs-12 col-padding programmation"></div>
                             </div>
                         </fieldset>
                     </div>
@@ -252,6 +253,19 @@
                 </div>
             </div>
         </div>
+
+        <form class="form-horizontal">
+            <fieldset>
+                <div class="col-sm-12">
+                    <legend class="type_replace"><i class="fas fa-random"></i> {{Remplacement}}</legend>
+                    <div id="div_templateReplace" class="type_replace"></div>
+                    <legend class="type_test"><i class="fas fa-stethoscope"></i> {{Test}}
+                        <a class="btn btn-xs pull-right" id="bt_widgetsAddTest"><i class="fas fa-plus-circle"></i> {{Ajouter}}</a>
+                    </legend>
+                    <div id="div_templateTest" class="type_test"></div>
+                </div>
+            </fieldset>
+        </form>
 
         <div class="form-group col-sm-3 col-xs-12" style="padding-right:0">
             <div class="nav-tabs-custom">

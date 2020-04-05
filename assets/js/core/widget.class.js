@@ -45,3 +45,5 @@ nextdom.widget.save = function (queryParams) {
 nextdom.widget.replacement = function(queryParams) {
   nextdom.private.ajax('Widget', 'replacement', queryParams, ['version','replace','by']);
 }
+
+nextdom.widgets = nextdom.widget;

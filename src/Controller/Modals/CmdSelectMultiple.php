@@ -41,16 +41,35 @@ class CmdSelectMultiple extends BaseAbstractModal
      */
     public static function get(): string
     {
-        $cmdId = Utils::init('cmd_id');
-        $cmd = CmdManager::byId($cmdId);
-        if (!is_object($cmd)) {
-            throw new CoreException('Commande non trouvée : ' . $cmdId);
+        $cmdId = Utils::initInt('cmd_id', -1);
+        $selectedCmd = CmdManager::byId($cmdId);
+        if (is_object($selectedCmd)) {
+            $cmdList = CmdManager::byTypeSubType($selectedCmd->getType(), $selectedCmd->getSubType());
         }
-
+        else {
+            $cmdType = Utils::initStr('type');
+            $cmdSubType = Utils::initStr('subtype');
+            $cmdList = CmdManager::byTypeSubType($cmdType, $cmdSubType);
+        }
         $pageData = [];
-        $pageData['currentCmd'] = $cmd;
-        $pageData['cmds'] = CmdManager::byTypeSubType($cmd->getType(), $cmd->getSubType());
-
+        $pageData['cmds'] = [];
+        foreach ($cmdList as $cmd) {
+            $data = [];
+            $data['cmdId'] = $cmd->getId();
+            $data['cmdName'] = $cmd->getName();
+            $data['selected'] = $data['cmdId'] == $cmdId;
+            $data['object'] = '';
+            $data['eqLogic'] = '';
+            $linkedEqLogic = $cmd->getEqLogic();
+            if (is_object($linkedEqLogic)) {
+                $data['eqLogic'] = $linkedEqLogic->getName();
+                $linkedObject = $linkedEqLogic->getObject();
+                if (is_object($linkedEqLogic)) {
+                    $data['object'] = $linkedObject->getName();
+                }
+            }
+            $pageData['cmds'][] = $data;
+        }
         return Render::getInstance()->get('/modals/cmd.selectMultiple.html.twig', $pageData);
     }
 }

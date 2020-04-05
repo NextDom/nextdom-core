@@ -782,6 +782,7 @@ welcome:
   notify: Saved successfully
   title: Welcome to NextDom
 widget:
+  applyTo: Apply to
   choose: Choose
   display: Display
   display_option: Display option
