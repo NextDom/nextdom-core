@@ -216,10 +216,23 @@ function initEvents() {
     });
 // Icon choose button
     $('#bt_chooseIcon').on('click', function () {
+        var icon = false;
+        var color = false;
+        if ( $('div[data-l2key="icon"] > i').length ) {
+            color = '';
+            class_icon = $('div[data-l2key="icon"] > i').attr('class');
+            class_icon = class_icon.replace(' ', '.').split(' ');
+            icon = '.'+class_icon[1];
+            if(class_icon[2]){
+                color = class_icon[2];
+            }
+        }
         chooseIcon(function (_icon) {
             $('.widgetAttr[data-l1key=display][data-l2key=icon]').empty().append(_icon);
-        });
+        },{icon:icon,color:color});
+
     });
+
 // Element dans div_programation
     $('#bt_programation_add_test').off('click').on('click', function () {
         addTest({});

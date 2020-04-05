@@ -34,6 +34,12 @@ $('#in_iconSelectorSearch').on('keyup',function(){
     iconSearch($('#in_iconSelectorSearch').value());
 });
 
+$('#sel_colorIcon').off('change').on('change',function() {
+    $('.iconSel i').removeClass('icon_green icon_blue icon_orange icon_red icon_yellow').addClass($(this).value());
+});
+
+$('#sel_colorIcon').change();
+
 function iconSearch(search) {
     $('.btn-selector').hide();
     $('.panel').hide();

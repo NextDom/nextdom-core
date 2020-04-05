@@ -146,7 +146,7 @@ function notify(_title, _text, _class_name) {
  *
  * @param callbackFunc Callback function who receive the icon code
  */
-function chooseIcon(callbackFunc) {
+function chooseIcon(callbackFunc, _params) {
     var chooseIconModal = $('#mod_selectIcon');
     if (chooseIconModal.length === 0) {
         $('#div_pageContainer').append('<div id="mod_selectIcon" title="{{Choisissez votre icône}}" ></div>');
@@ -167,8 +167,25 @@ function chooseIcon(callbackFunc) {
             }
         });
         // Populate modal
+        var url = 'index.php?v=d&modal=icon.selector';
         jQuery.ajaxSetup({async: false});
-        chooseIconModal.load('index.php?v=d&modal=icon.selector');
+        if(_params && _params.img && _params.img === true) {
+          url += '&showimg=1';
+        }
+        if(_params && _params.icon) {
+          icon = _params.icon;
+          replaceAr = ['icon_blue', 'icon_green', 'icon_orange', 'icon_red', 'icon_yellow'];
+          replaceAr.forEach(function(element) {
+            icon = icon.replace(element, '');
+          });
+          icon = icon.trim().replace(new RegExp('  ', 'g'), ' ');
+          icon = icon.trim().replace(new RegExp(' ', 'g'), '.');
+          url += '&selectIcon=' + icon;
+        }
+        if(_params && _params.color) {
+          url += '&colorIcon=' + _params.color;
+        }
+        chooseIconModal.load(url);
         jQuery.ajaxSetup({async: true});
     }
     chooseIconModal.dialog('option', 'buttons', {
