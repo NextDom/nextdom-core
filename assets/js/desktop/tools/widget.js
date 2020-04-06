@@ -41,7 +41,7 @@ initEvents();
  * Load informations in all forms of the page
  */
 function loadInformations() {
-    $('#div_usedBy').off('click', '.cmdAdvanceConfigure').on('click', '.cmdAdvanceConfigure', function () {
+    $('#div_used_by').off('click', '.cmdAdvanceConfigure').on('click', '.cmdAdvanceConfigure', function () {
         $('#md_modal').dialog({title: "{{Configuration de la commande}}"});
         $('#md_modal').load('index.php?v=d&modal=cmd.configure&cmd_id=' + $(this).attr('data-cmd_id')).dialog('open');
     });
@@ -210,7 +210,7 @@ function initEvents() {
         });
     });
 
-    $('#bt_applyToCmd').off('click').on('click', function () {
+    $('.bt_applyToCmd').off('click').on('click', function () {
         //store usedBy:
         var checkedId = [];
         $('#div_usedBy .cmdAdvanceConfigure').each(function() {

@@ -136,7 +136,7 @@
                 <a class="btn btn-action-bar btn-info" id="bt_export"><i class="fas fa-file-export"></i>{{ 'common.export' | trans }}</a>
             </div>
             <div class="action-group">
-                <a class="btn btn-warning btn-action-bar pull-right" id="bt_applyToCmd"><i class="fas fa-check-circle"></i> {{ 'widget.applyTo' | trans }}</a>
+                <a class="btn btn-warning btn-action-bar pull-right bt_applyToCmd"><i class="fas fa-check-circle"></i> {{ 'widget.applyTo' | trans }}</a>
                 <a class="btn btn-action-bar btn-success pull-right" id="bt_saveWidget"><i class="fas fa-save"></i>{{ 'common.save' | trans }}</a>
                 <a class="btn btn-danger btn-action-bar pull-right bt_cancelModifs"><i class="fas fa-times"></i>{{ 'common.cancel'|trans }}</a>
                 <a class="btn btn-action-bar btn-default pull-right" id="bt_duplicate"><i class="fas fa-files-o"></i>{{ 'widget.duplicate' | trans }}</a>
@@ -243,7 +243,10 @@
                     <div role="tabpanel" class="tab-pane" id="widgetUseTab">
                         <form class="form-horizontal">
                             <fieldset>
-                                <legend>{{ 'widget.use_by_list' | trans }}</legend>
+                                <legend>
+                                    {{ 'widget.use_by_list' | trans }}
+                                    <a class="btn btn-xs pull-right bt_applyToCmd"><i class="fas fa-check-circle"></i> {{ 'widget.applyTo' | trans }}</a>
+                                </legend>
                                 <div class="row">
                                     <div id="div_used_by" class="col-xs-12 col-padding"></div>
                                 </div>
