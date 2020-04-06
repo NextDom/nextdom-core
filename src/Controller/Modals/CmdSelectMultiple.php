@@ -31,23 +31,21 @@ use NextDom\Managers\CmdManager;
  * Class CmdSelectMultiple
  * @package NextDom\Controller\Modals
  */
-class CmdSelectMultiple extends BaseAbstractModal
-{
+class CmdSelectMultiple extends BaseAbstractModal {
+
     /**
      * Render command select multiple modal (scenario)
      *
      * @return string
      * @throws CoreException
      */
-    public static function get(): string
-    {
+    public static function get(): string {
         $cmdId = Utils::initInt('cmd_id', -1);
         $selectedCmd = CmdManager::byId($cmdId);
         if (is_object($selectedCmd)) {
             $cmdType = $selectedCmd->getType();
             $cmdSubType = $selectedCmd->getSubType();
-        }
-        else {
+        } else {
             $cmdType = Utils::initStr('type');
             $cmdSubType = Utils::initStr('subtype');
             $cmdName = Utils::initStr('name');
@@ -59,7 +57,17 @@ class CmdSelectMultiple extends BaseAbstractModal
             $data = [];
             $data['cmdId'] = $cmd->getId();
             $data['cmdName'] = $cmd->getName();
-            $data['selected'] = ($data['cmdId'] == $cmdId) || ($cmdId === -1 && ($cmd->getTemplate()['dashboard'] === 'custom::' . $cmdName || $cmd->getTemplate()['mobile'] === 'custom::' . $cmdName));
+            if ($cmdId === -1) {
+                $data['selected'] = false;
+                if (!empty($cmd->getTemplate()['dashboard'])) {
+                    $data['selected'] |= $cmd->getTemplate()['dashboard'] === 'custom::' . $cmdName;
+                }
+                if (!empty($cmd->getTemplate()['mobile'])) {
+                    $data['selected'] |= $cmd->getTemplate()['mobile'] === 'custom::' . $cmdName;
+                }
+            } else {
+                $data['selected'] = $data['cmdId'] == $cmdId;
+            }
             $data['object'] = '';
             $data['eqLogic'] = '';
             $linkedEqLogic = $cmd->getEqLogic();
@@ -74,4 +82,5 @@ class CmdSelectMultiple extends BaseAbstractModal
         }
         return Render::getInstance()->get('/modals/cmd.selectMultiple.html.twig', $pageData);
     }
+
 }
