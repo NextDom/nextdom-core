@@ -44,20 +44,22 @@ class CmdSelectMultiple extends BaseAbstractModal
         $cmdId = Utils::initInt('cmd_id', -1);
         $selectedCmd = CmdManager::byId($cmdId);
         if (is_object($selectedCmd)) {
-            $cmdList = CmdManager::byTypeSubType($selectedCmd->getType(), $selectedCmd->getSubType());
+            $cmdType = $selectedCmd->getType();
+            $cmdSubType = $selectedCmd->getSubType();
         }
         else {
             $cmdType = Utils::initStr('type');
             $cmdSubType = Utils::initStr('subtype');
-            $cmdList = CmdManager::byTypeSubType($cmdType, $cmdSubType);
+            $cmdName = Utils::initStr('name');
         }
+        $cmdList = CmdManager::byTypeSubType($cmdType, $cmdSubType);
         $pageData = [];
         $pageData['cmds'] = [];
         foreach ($cmdList as $cmd) {
             $data = [];
             $data['cmdId'] = $cmd->getId();
             $data['cmdName'] = $cmd->getName();
-            $data['selected'] = $data['cmdId'] == $cmdId;
+            $data['selected'] = ($data['cmdId'] == $cmdId) || ($cmdId === -1 && ($cmd->getTemplate()['dashboard'] === 'custom::' . $cmdName || $cmd->getTemplate()['mobile'] === 'custom::' . $cmdName));
             $data['object'] = '';
             $data['eqLogic'] = '';
             $linkedEqLogic = $cmd->getEqLogic();

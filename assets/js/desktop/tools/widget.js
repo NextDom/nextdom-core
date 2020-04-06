@@ -218,7 +218,7 @@ function initEvents() {
         });
 
         $('#md_modal').dialog({title: "{{Appliquer sur}}"})
-            .load('index.php?v=d&modal=cmd.selectMultiple&type='+$('.widgetAttr[data-l1key="type"]').value()+'&subtype='+$('.widgetAttr[data-l1key="subtype"]').value(), function() {
+            .load('index.php?v=d&modal=cmd.selectMultiple&type='+$('.widgetAttr[data-l1key="type"]').value()+'&subtype='+$('.widgetAttr[data-l1key="subtype"]').value()+'&name='+$('.widgetAttr[data-l1key="name"]').value(), function() {
                 initTableSorter();
 
                 $('#table_cmdConfigureSelectMultiple tbody tr').each(function( index ) {
