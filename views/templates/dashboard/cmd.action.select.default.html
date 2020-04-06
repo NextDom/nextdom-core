@@ -2,8 +2,8 @@
     <div class="cmdName text-small " style="font-weight: bold;#hideCmdName#">#name_display#</div>
     <select class="selectCmd" style="color:#cmdColor#;background-color:#background-color#;border-radius: 5px;width: 146px;" title="#name_display#">#listValue#</select>
     <script>
-      $(".cmd[data-cmd_uid=#uid#] .selectCmd").on('change', function () {
-        nextdom.cmd.execute({id: '#id#', value: {select: $(this).value()}});
-    });
-</script>
+        $(".cmd[data-cmd_uid=#uid#] .selectCmd").on('change', function () {
+            nextdom.cmd.execute({id: '#id#', value: {select: $(this).value()}});
+        });
+    </script>
 </div>

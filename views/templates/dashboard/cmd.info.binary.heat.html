@@ -5,12 +5,12 @@
     </center>
     <script>
         nextdom.cmd.update['#id#'] = function(_options){
-            if (_options.display_value == '1') {
+            if (_options.display_value === '1') {
                 $('.cmd[data-cmd_id=#id#] .iconCmd').empty().append('<i class="icon nextdom-feu"></i>');
             } else {
                 $('.cmd[data-cmd_id=#id#] .iconCmd').empty().append('<i class="fa fa-times"></i>');
             }
-        }
+        };
         nextdom.cmd.update['#id#']({display_value:'#state#'});
     </script>
 </div>
