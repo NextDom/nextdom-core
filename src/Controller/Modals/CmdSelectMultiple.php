@@ -66,7 +66,7 @@ class CmdSelectMultiple extends BaseAbstractModal
             if (is_object($linkedEqLogic)) {
                 $data['eqLogic'] = $linkedEqLogic->getName();
                 $linkedObject = $linkedEqLogic->getObject();
-                if (is_object($linkedEqLogic)) {
+                if (is_object($linkedObject)) {
                     $data['object'] = $linkedObject->getName();
                 }
             }
