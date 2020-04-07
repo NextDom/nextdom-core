@@ -60,6 +60,7 @@ class WidgetController extends BaseController
         $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/tools/widget.js';
         $pageData[ControllerData::JS_END_POOL][] = '/assets/js/desktop/libs/displayCardPageA.js';
         $pageData[ControllerData::JS_END_POOL][] = '/assets/js/desktop/libs/displayCardWidget.js';
+        $pageData[ControllerData::JS_END_POOL][] = '/public/js/desktop/tools/widget.js';
         $pageData['widgetList'] = $widgetList;
         $pageData['widgetTypeList'] = $widgetTypeList;
 
