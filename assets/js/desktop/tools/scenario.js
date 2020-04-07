@@ -306,7 +306,7 @@ function initGeneralFormEvents() {
                 }
             });
         },
-        minLength: 1,
+        minLength: 1
     });
 
     // Scenario panel collasping
@@ -318,7 +318,7 @@ function initGeneralFormEvents() {
           }
        });
        $('#bt_scenarioCollapse').hide();
-       $('#bt_scenarioUncollapse').show()
+       $('#bt_scenarioUncollapse').show();
     });
 
     // Scenario panel uncollasping
@@ -329,7 +329,7 @@ function initGeneralFormEvents() {
           }
        });
        $('#bt_scenarioUncollapse').hide();
-       $('#bt_scenarioCollapse').show()
+       $('#bt_scenarioCollapse').show();
     });
 
     // Save button
@@ -2291,7 +2291,7 @@ function selectCmdExpression(elementData, expressionElement) {
 function loadFromUrl() {
     var scenarioIdFromUrl = getUrlVars('id');
     if (is_numeric(scenarioIdFromUrl)) {
-        if (document.querySelectorAll('.scenarioDisplayCard[data-scenario_id=' + scenarioIdFromUrl + ']').length !== 0) {
+       if ($('.scenarioDisplayCard[data-scenario_id=' + scenarioIdFromUrl + ']').length !== 0) {
             let url = document.location.toString();
             var tabCode = GENERAL_TAB;
             if (url.match('#')) {

@@ -384,18 +384,18 @@ function generalSearchOnPages(value) {
         case 'widget':
             if (search === '') {
                 $('.panel-collapse.in').closest('.panel').find('.accordion-toggle.collapsed').click();
-                $('.widgetDisplayCard').show();
+                $('.displayCard').show();
             } else {
                 $('.panel-collapse:not(.in)').closest('.panel').find('.accordion-toggle').click();
-                $('.widgetDisplayCard').hide();
-                $('.widgetDisplayCard .title').each(function () {
+                $('.displayCard').hide();
+                $('.displayCard .title').each(function () {
                     var cardTitle = $(this).text().toLowerCase();
                     if (cardTitle.indexOf(search) !== -1) {
-                        $(this).closest('.widgetDisplayCard').show();
+                        $(this).closest('.displayCard').show();
                     }
                 });
             }
-            $('.widgetListContainer').packery();
+            $('.displayCardList').packery();
             break;
     }
 };
