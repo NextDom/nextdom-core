@@ -153,8 +153,6 @@ function gen_js {
            assets/js/core/listener.class.js \
            assets/js/core/jeedom.class.js \
            assets/js/desktop/globals.js \
-           assets/js/desktop/libs/displayCardPageA.js \
-           assets/js/desktop/libs/displayCardWidget.js \
            assets/js/libs/gui.js \
            assets/js/desktop/conflicts.js \
            assets/js/desktop/menu.js \
@@ -226,6 +224,7 @@ function gen_js {
       directories=(js/desktop \
                    js/desktop/admin \
                    js/desktop/diagnostic \
+                   js/desktop/libs \
                    js/desktop/pages \
                    js/desktop/params \
                    js/desktop/tools \
