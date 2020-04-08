@@ -179,6 +179,8 @@ class PrepareView
 
             // Then NextDom JS files
             $pageData[ControllerData::JS_POOL][] = '/assets/js/desktop/globals.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/desktop/libs/displayCardPageA.js';
+            $pageData[ControllerData::JS_POOL][] = '/assets/js/desktop/libs/displayCardWidget.js';
             $pageData[ControllerData::JS_POOL][] = '/assets/js/libs/gui.js';
             $pageData[ControllerData::JS_POOL][] = '/assets/js/desktop/conflicts.js';
             $pageData[ControllerData::JS_POOL][] = '/assets/js/desktop/menu.js';
