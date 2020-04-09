@@ -68,7 +68,7 @@ class DisplayCardPageA {
             $this.save(objectPage);
             $('#bt_ThumbnailDisplay').show();
         });
-        // widget duplicate button
+        // Duplicate button
         $('#bt_duplicate').on('click', function () {
             bootbox.prompt("Quel est le nom de votre nouvel élément ?", function (result) {
                 if (result !== null) {
@@ -80,7 +80,7 @@ class DisplayCardPageA {
             });
         });
 
-// Widget delete button
+        // Delete button
         $("#bt_remove").on('click', function () {
             bootbox.confirm('{{Etes-vous sûr de vouloir supprimer l’élément suivant}} <span style="font-weight: bold ;">' + $('.displayCard.active .name').text() + '</span> ?', function (result) {
                 if (result) {
@@ -152,20 +152,22 @@ class DisplayCardPageA {
 
         // Icon choose button
         $('#bt_chooseIcon').on('click', function () {
-            var icon = false;
-            var color = false;
-            if ($('div[data-l2key="icon"] > i').length) {
-                color = '';
-                var class_icon = $('div[data-l2key="icon"] > i').attr('class');
-                class_icon = class_icon.replace(' ', '.').split(' ');
-                icon = '.' + class_icon[1];
-                if (class_icon[2]) {
-                    color = class_icon[2];
-                }
-            }
-            chooseIcon(function (_icon) {
-                $('.attr[data-l1key=display][data-l2key=icon]').empty().append(_icon);
-            }, {icon: icon, color: color});
+            $('#bt_chooseIcon').addClass('disabled');
+            $('#bt_chooseIcon').find('.fa-refresh').show();
+            $('#bt_chooseIcon').find('.initial').hide();
+            var clazz = $('div[data-l2key="icon"] > i').attr('class');
+            setTimeout(function () {
+                chooseIcon(function (_icon) {
+                    $('.attr[data-l1key=display][data-l2key=icon]').empty().append(_icon);
+                }, {
+                    clazz: clazz,
+                    finally: function() {
+                        $('#bt_chooseIcon').removeClass('disabled');
+                        $('#bt_chooseIcon').find('.fa-refresh').hide();
+                        $('#bt_chooseIcon').find('.initial').show();
+                    }
+                });
+            }, 50);
         });
 
         // Icon delete on double click

@@ -362,5 +362,5 @@ $('#bt_uploadBackup').fileupload({
       $('#bt_uploadBackup').parent().removeClass('disabled');
       $('#bt_uploadBackup').parent().find('.fa-refresh').hide();
       $('#bt_uploadBackup').parent().find('.fa-sign-in-alt').show();
-    },
+    }
 });

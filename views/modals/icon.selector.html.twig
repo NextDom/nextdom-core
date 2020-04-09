@@ -57,7 +57,7 @@
 <section class="content">
     {% for icons in iconsList %}
         {% set iconCounter = 0 %}
-        <div class="panel box box-primary">
+        <div class="panel box box-primary" style="position: inherit">
             <a class="box-header with-border accordion-toggle" data-toggle="collapse" data-parent="" href="#config_{{ icons['name'] }}">
                 <h3 class="box-title">
                     <span>{{ icons['name']|upper }}</span>
@@ -66,8 +66,8 @@
             <div id="config_{{ icons['name'] }}" class="panel-collapse collapse in">
                 <div class="box-body">
                     {% for icon in icons['list'] %}
-                        <a class="btn btn-selector{% if selectIcon == icon  %} iconSelected {% endif %}">
-                            <div class="iconSel"><i class="icon {{ icon }}"></i></div>
+                        <a class="btn btn-selector{% if selectIcon|replace({'_':' '})|trim == icon|replace({'_':' '})|trim %} iconSelected {% endif %}">
+                            <div class="iconSel"><i class="icon {{ icon }} {{ colorIcon }}"></i></div>
                             <span>{{ icon|split('-',2)|last }}</span>
                         </a>
                     {% endfor %}
