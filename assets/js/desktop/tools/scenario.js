@@ -1,38 +1,38 @@
 /* This file is part of Jeedom.
-*
-* Jeedom is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* Jeedom is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
-*/
+ *
+ * Jeedom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Jeedom is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /* This file is part of NextDom.
-*
-* NextDom is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* NextDom is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with NextDom. If not, see <http://www.gnu.org/licenses/>.
-*
-* @Support <https://www.nextdom.org>
-* @Email <admin@nextdom.org>
-* @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
-*/
+ *
+ * NextDom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * NextDom is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @Support <https://www.nextdom.org>
+ * @Email <admin@nextdom.org>
+ * @Authors/Contributors: Sylvaner, Byackee, cyrilphoenix71, ColonelMoutarde, edgd1er, slobberbone, Astral0, DanoneKiD
+ */
 
 var tab = null;
 var editor = [];
@@ -58,91 +58,91 @@ var colorIndex = 0;
 
 /* Space before is normal */
 var autoCompleteCondition = [
-    { value : '#IP#', label : ' #IP# : IP interne de NextDom' },
-    { value : '#hostname#', label : ' #hostname# : Nom de la machine NextDom' },
-    { value : '#date#', label : ' #date# : Jour et mois. Attention, le premier nombre est le mois. (ex : 1215 pour le 15 décembre)' },
-    { value : '#seconde#', label : ' #seconde# : Seconde courante (sans les zéros initiaux, ex : 6 pour 08:07:06)' },
-    { value : '#minute#', label : ' #minute# : Minute courante (sans les zéros initiaux, ex : 7 pour 08:07:06)' },
-    { value : '#heure#', label : ' #heure# : Heure courante au format 24h (sans les zéros initiaux, ex : 8 pour 08:07:06 ou 17 pour 17:15)' },
-    { value : '#heure12#', label : '#heure12# : Heure courante au format 12h (sans les zéros initiaux, ex : 8 pour 08:07:06)' },
-    { value : '#jour#', label : ' #jour# : Jour courant (sans les zéros initiaux, ex : 6 pour 06/07/2017)' },
-    { value : '#njour#', label : ' #njour# : Numéro du jour de 0 (dimanche) à 6 (samedi)' },
-    { value : '#sjour#', label : ' #sjour# : Nom du jour de la semaine (ex : Samedi)' },
-    { value : '#semaine#', label : ' #semaine# : Numéro de la semaine (ex : 51)' },
-    { value : '#mois#', label : ' #mois# : Mois courant (sans les zéros initiaux, ex : 7 pour 06/07/2017)' },
-    { value : '#smois#', label : ' #smois# : Nom du mois (ex : Janvier)' },
-    { value : '#annee#', label : ' #annee# : Année courante' },
-    { value : '#time#', label : ' #time# : Heure et minute courante (ex : 1715 pour 17h15)' },
-    { value : '#timestamp#', label : ' #timestamp# : Nombre de secondes depuis le 1er janvier 1970' },
-    { value : '#profil#', label : ' #profil# : profil de l\'utilisateur ayant déclenché le scénario (peut être vide)' },
-    { value : '#query#', label : ' #query# : interaction ayant déclenché le scénario' },
-    { value : '#trigger#', label : ' #trigger# : Peut être le nom de la commande qui a déclenché le scénario, (api) si le lancement a été déclenché par l\'API, (schedule) si il a été lancé par une programmation, (user) si il a été lancé manuellement' },
-    { value : 'average(commande,periode)', label : ' average(commande,periode) : Donnent la moyenne de la commande sur la période (period=[month,day,hour,min] ou expression PHP)' },
-    { value : 'averageBetween(commande,start,end)', label : ' averageBetween(commande,start,end) : Donnent la moyenne entre les 2 bornes demandées (sous la forme Y-m-d H:i:s ou expression PHP)' },
-    { value : 'avg(commande1,commande2,commandeN)', label : ' avg(commande1,commande2,commandeN) : Renvoie la moyenne des valeurs' },
-    { value : 'collectDate(cmd,[format])', label : ' collectDate(cmd,[format]) : Renvoie la date de la dernière donnée pour la commande donnée en paramètre, le 2ème paramètre optionnel permet de spécifier le format de retour (détails ici). Un retour de -1 signifie que la commande est introuvable et -2 que la commande n\'est pas de type info' },
-    { value : 'color_gradient(couleur_debut,couleur_fin,valuer_min,valeur_max,valeur)', label : ' color_gradient(couleur_debut,couleur_fin,valuer_min,valeur_max,valeur) : Renvoi une couleur calculé par rapport à valeur dans l\'intervalle couleur_debut/couleur_fin. La valeur doit etre comprise entre valeur_min et valeur_max' },
-    { value : 'convertDuration(secondes)', label : ' convertDuration(secondes) : Permet de convertir des secondes en j/h/mn/s' },
-    { value : 'duration(commande, valeur, période)', label : ' duration(commande, valeur, période) : Donnent la durée en minutes pendant laquelle l\'équipement avait la valeur choisie sur la période (period=[month,day,hour,min] ou expression PHP)' },
-    { value : 'durationbetween(commande,valeur,start,end)', label : ' durationbetween(commande,valeur,start,end) : Donnent la durée en minutes entre les 2 bornes demandées (sous la forme Y-m-d H:i:s ou expression PHP)' },
-    { value : 'eqEnable(equipement)', label : ' eqEnable(equipement) : Renvoie l\'état de l\'équipement. -2 si l\'équipement est introuvable, 1 si l\'équipement est actif et 0 s\'il est inactif' },
-    { value : 'floor(time/60)', label : ' floor(time/60) : Permet de convertir des secondes en minutes, ou des minutes en heures (floor(time/3600) pour des secondes en heures)' },
-    { value : 'formatTime(time)', label : ' formatTime(time) : Permet de formater le retour d\'une chaine #time#' },
-    { value : 'lastBetween(commande,start,end)', label : ' lastBetween(commande,start,end) : Donne la dernière valeur enregistrée pour l\'équipement entre les 2 bornes demandées (sous la forme Y-m-d H:i:s ou expression PHP)' },
-    { value : 'lastChangeStateDuration(commande,value)', label : ' lastChangeStateDuration(commande,value) : Donne la durée en secondes depuis le dernier changement d\'état à la valeur passée en paramètre. Retourne -1 si aucun historique n\'existe ou si la valeur n\'existe pas dans l\'historique. Retourne -2 si la commande n\'est pas historisée' },
-    { value : 'lastCommunication(equipment,[format])', label : ' lastCommunication(equipment,[format]) : Renvoie la date de la dernière communication pour l\'équipement donnée en paramètre, le 2ème paramètre optionnel permet de spécifier le format de retour (détails ici). Un retour de -1 signifie que l\'équipment est introuvable' },
-    { value : 'lastScenarioExecution(scenario)', label : ' lastScenarioExecution(scenario) : Donne la durée en secondes depuis le dernier lancement du scénario, renvoi 0 si le scénario n\'existe pas' },
-    { value : 'lastStateDuration(commande,value)', label : ' lastStateDuration(commande,value) : Donne la durée en secondes pendant laquelle l\'équipement a dernièrement eu la valeur choisie. Retourne -1 si aucun historique n\'existe ou si la valeur n\'existe pas dans l\'historique. Retourne -2 si la commande n\'est pas historisée' },
-    { value : 'min(commande,periode)', label : ' min(commande,periode) : Donnent le minimum de la commande sur la période (period=[month,day,hour,min] ou expression PHP)' },
-    { value : 'minBetween(commande,start,end)', label : ' minBetween(commande,start,end) : Donnent le minimum de la commande entre les 2 bornes demandées (sous la forme Y-m-d H:i:s ou expression PHP)' },
-    { value : 'median(commande1,commande2,commandeN)', label : ' median(commande1,commande2,commandeN) : Renvoie la médiane des valeurs' },
-    { value : 'max(commande,periode)', label : ' max(commande,periode) : Donnent le maximum de la commande sur la période (period=[month,day,hour,min] ou expression PHP)' },
-    { value : 'maxBetween(commande,start,end)', label : ' maxBetween(commande,start,end) : Donnent le maximum de la commande entre les 2 bornes demandées (sous la forme Y-m-d H:i:s ou expression PHP)' },
-    { value : 'name(type,commande)', label : ' name(type,commande) : Permet de récuperer le nom de la commande, de l\'équipement ou de l\'objet. Type vaut soit cmd, eqLogic ou object' },
-    { value : 'odd(valeur)', label : ' odd(valeur) : Permet de savoir si un nombre est impair ou non. Renvoie 1 si impair 0 sinon' },
-    { value : 'rand(MIN,MAX)', label : ' rand(MIN,MAX) : Donne un nombre aléatoire de MIN à MAX' },
-    { value : 'randText(texte1;texte2;texteN)', label : ' randText(texte1;texte2;texteN) : Permet de retourner un des textes aléatoirement (séparer les texte par un ; ). Il n\'y a pas de limite dans le nombre de texte' },
-    { value : 'randomColor(min,max)', label : ' randomColor(min,max) : Donne une couleur aléatoire compris entre 2 bornes ( 0 => rouge, 50 => vert, 100 => bleu)' },
-    { value : 'round(valeur,[decimal])', label : ' round(valeur,[decimal]) : Donne un arrondi au-dessus, [decimal] nombre de décimales après la virgule' },
-    { value : 'scenario(scenario)', label : ' scenario(scenario) : Renvoie le statut du scénario. 1 en cours, 0 si arrêté et -1 si désactivé, -2 si le scénario n\'existe pas et -3 si l\'état n\'est pas cohérent. Pour avoir le nom "humain" du scénario, vous pouvez utiliser le bouton dédié à droite de la recherche de scénario' },
-    { value : 'stateChanges(commande,valeur,période)', label : ' stateChanges(commande,valeur,période) : Donnent le nombre de changements d\'état (vers une certaine valeur si indiquée, ou au total sinon) sur la période (period=[month,day,hour,min] ou expression PHP)' },
-    { value : 'stateChangesBetween(commande,valeur,start,end)', label : ' stateChangesBetween(commande,valeur,start,end) : Donnent le nombre de changements d\'état (vers une certaine valeur si indiquée, ou au total sinon) entre les 2 bornes demandées (sous la forme Y-m-d H:i:s ou expression PHP)' },
-    { value : 'stateDuration(commande)', label : ' stateDuration(commande) : Donne la durée en secondes depuis le dernier changement de valeur. Retourne -1 si aucun historique n\'existe ou si la valeur n\'existe pas dans l\'historique. Retourne -2 si la commande n\'est pas historisée' },
-    { value : 'statistics(commande,calcul,période)', label : ' statistics(commande,calcul,période) : Donnent le résultat de différents calculs statistiques (sum, count, std, variance, avg, min, max) sur la période (period=[month,day,hour,min] ou expression PHP)' },
-    { value : 'statisticsBetween(commande,calcul,start,end)', label : ' statisticsBetween(commande,calcul,start,end) : Donnent le résultat de différents calculs statistiques (sum, count, std, variance, avg, min, max) entre les 2 bornes demandées (sous la forme Y-m-d H:i:s ou expression PHP)' },
-    { value : 'tag(montag,[defaut])', label : ' tag(montag,[defaut]) : Permet de récupérer la valeur d\'un tag ou la valeur par défaut si il n\'existe pas' },
-    { value : 'tendance(commande,periode)', label : ' tendance(commande,periode) : Donne la tendance de la commande sur la période (period=[month,day,hour,min] ou expression PHP)' },
-    { value : 'time_between(time,start,end)', label : ' time_between(time,start,end) : Permet de tester si un temps est entre deux valeurs avec time=temps (ex : 1530), start=temps, end=temps. Les valeurs start et end peuvent être à cheval sur minuit' },
-    { value : 'time_diff(date1,date1[,format])', label : ' time_diff(date1,date1[,format]) : Permet de connaître la différence entre 2 dates (les dates doivent être au format AAAA/MM/JJ HH:MM:SS). Par défaut (si vous ne mettez rien pour format), la méthode retourne le nombre total de jours. Vous pouvez lui demander en secondes (s), minutes (m), heures (h). Exemple en secondes time_diff(2018-02-02 14:55:00,2018-02-25 14:55:00,s)' },
-    { value : 'time_op(time,value)', label : ' time_op(time,value) : Permet de faire des opérations sur le temps, avec time=temps (ex : 1530) et value=valeur à ajouter ou à soustraire en minutes' },
-    { value : 'trigger(commande)', label : ' trigger(commande) : Permet de connaître le déclencheur du scénario ou de savoir si c\'est bien la commande passée en paramètre qui a déclenché le scénario' },
-    { value : 'triggerValue(commande)', label : ' triggerValue(commande) : Permet de connaître la valeur du déclencheur du scénario' },
-    { value : 'variable(mavariable,defaut)', label : ' variable(mavariable,defaut) : Récupère la valeur d\'une variable ou de la valeur souhaitée par défaut' },
-    { value : 'value(commande)', label : ' value(commande) : Renvoie la valeur d\'une commande si elle n\'est pas donnée automatiquement par NextDom (cas lors du stockage du nom de la commande dans une variable)' },
-    { value : 'valueDate(cmd,[format])', label : ' valueDate(cmd,[format]) : Renvoie la date de la dernière donnée pour la commande donnée en paramètre, le 2ème paramètre optionnel permet de spécifier le format de retour (détails ici). Un retour de -1 signifie que la commande est introuvable et -2 que la commande n\'est pas de type info' }
+    {value: '#IP#', label: ' #IP# : IP interne de NextDom'},
+    {value: '#hostname#', label: ' #hostname# : Nom de la machine NextDom'},
+    {value: '#date#', label: ' #date# : Jour et mois. Attention, le premier nombre est le mois. (ex : 1215 pour le 15 décembre)'},
+    {value: '#seconde#', label: ' #seconde# : Seconde courante (sans les zéros initiaux, ex : 6 pour 08:07:06)'},
+    {value: '#minute#', label: ' #minute# : Minute courante (sans les zéros initiaux, ex : 7 pour 08:07:06)'},
+    {value: '#heure#', label: ' #heure# : Heure courante au format 24h (sans les zéros initiaux, ex : 8 pour 08:07:06 ou 17 pour 17:15)'},
+    {value: '#heure12#', label: '#heure12# : Heure courante au format 12h (sans les zéros initiaux, ex : 8 pour 08:07:06)'},
+    {value: '#jour#', label: ' #jour# : Jour courant (sans les zéros initiaux, ex : 6 pour 06/07/2017)'},
+    {value: '#njour#', label: ' #njour# : Numéro du jour de 0 (dimanche) à 6 (samedi)'},
+    {value: '#sjour#', label: ' #sjour# : Nom du jour de la semaine (ex : Samedi)'},
+    {value: '#semaine#', label: ' #semaine# : Numéro de la semaine (ex : 51)'},
+    {value: '#mois#', label: ' #mois# : Mois courant (sans les zéros initiaux, ex : 7 pour 06/07/2017)'},
+    {value: '#smois#', label: ' #smois# : Nom du mois (ex : Janvier)'},
+    {value: '#annee#', label: ' #annee# : Année courante'},
+    {value: '#time#', label: ' #time# : Heure et minute courante (ex : 1715 pour 17h15)'},
+    {value: '#timestamp#', label: ' #timestamp# : Nombre de secondes depuis le 1er janvier 1970'},
+    {value: '#profil#', label: ' #profil# : profil de l\'utilisateur ayant déclenché le scénario (peut être vide)'},
+    {value: '#query#', label: ' #query# : interaction ayant déclenché le scénario'},
+    {value: '#trigger#', label: ' #trigger# : Peut être le nom de la commande qui a déclenché le scénario, (api) si le lancement a été déclenché par l\'API, (schedule) si il a été lancé par une programmation, (user) si il a été lancé manuellement'},
+    {value: 'average(commande,periode)', label: ' average(commande,periode) : Donnent la moyenne de la commande sur la période (period=[month,day,hour,min] ou expression PHP)'},
+    {value: 'averageBetween(commande,start,end)', label: ' averageBetween(commande,start,end) : Donnent la moyenne entre les 2 bornes demandées (sous la forme Y-m-d H:i:s ou expression PHP)'},
+    {value: 'avg(commande1,commande2,commandeN)', label: ' avg(commande1,commande2,commandeN) : Renvoie la moyenne des valeurs'},
+    {value: 'collectDate(cmd,[format])', label: ' collectDate(cmd,[format]) : Renvoie la date de la dernière donnée pour la commande donnée en paramètre, le 2ème paramètre optionnel permet de spécifier le format de retour (détails ici). Un retour de -1 signifie que la commande est introuvable et -2 que la commande n\'est pas de type info'},
+    {value: 'color_gradient(couleur_debut,couleur_fin,valuer_min,valeur_max,valeur)', label: ' color_gradient(couleur_debut,couleur_fin,valuer_min,valeur_max,valeur) : Renvoi une couleur calculé par rapport à valeur dans l\'intervalle couleur_debut/couleur_fin. La valeur doit etre comprise entre valeur_min et valeur_max'},
+    {value: 'convertDuration(secondes)', label: ' convertDuration(secondes) : Permet de convertir des secondes en j/h/mn/s'},
+    {value: 'duration(commande, valeur, période)', label: ' duration(commande, valeur, période) : Donnent la durée en minutes pendant laquelle l\'équipement avait la valeur choisie sur la période (period=[month,day,hour,min] ou expression PHP)'},
+    {value: 'durationbetween(commande,valeur,start,end)', label: ' durationbetween(commande,valeur,start,end) : Donnent la durée en minutes entre les 2 bornes demandées (sous la forme Y-m-d H:i:s ou expression PHP)'},
+    {value: 'eqEnable(equipement)', label: ' eqEnable(equipement) : Renvoie l\'état de l\'équipement. -2 si l\'équipement est introuvable, 1 si l\'équipement est actif et 0 s\'il est inactif'},
+    {value: 'floor(time/60)', label: ' floor(time/60) : Permet de convertir des secondes en minutes, ou des minutes en heures (floor(time/3600) pour des secondes en heures)'},
+    {value: 'formatTime(time)', label: ' formatTime(time) : Permet de formater le retour d\'une chaine #time#'},
+    {value: 'lastBetween(commande,start,end)', label: ' lastBetween(commande,start,end) : Donne la dernière valeur enregistrée pour l\'équipement entre les 2 bornes demandées (sous la forme Y-m-d H:i:s ou expression PHP)'},
+    {value: 'lastChangeStateDuration(commande,value)', label: ' lastChangeStateDuration(commande,value) : Donne la durée en secondes depuis le dernier changement d\'état à la valeur passée en paramètre. Retourne -1 si aucun historique n\'existe ou si la valeur n\'existe pas dans l\'historique. Retourne -2 si la commande n\'est pas historisée'},
+    {value: 'lastCommunication(equipment,[format])', label: ' lastCommunication(equipment,[format]) : Renvoie la date de la dernière communication pour l\'équipement donnée en paramètre, le 2ème paramètre optionnel permet de spécifier le format de retour (détails ici). Un retour de -1 signifie que l\'équipment est introuvable'},
+    {value: 'lastScenarioExecution(scenario)', label: ' lastScenarioExecution(scenario) : Donne la durée en secondes depuis le dernier lancement du scénario, renvoi 0 si le scénario n\'existe pas'},
+    {value: 'lastStateDuration(commande,value)', label: ' lastStateDuration(commande,value) : Donne la durée en secondes pendant laquelle l\'équipement a dernièrement eu la valeur choisie. Retourne -1 si aucun historique n\'existe ou si la valeur n\'existe pas dans l\'historique. Retourne -2 si la commande n\'est pas historisée'},
+    {value: 'min(commande,periode)', label: ' min(commande,periode) : Donnent le minimum de la commande sur la période (period=[month,day,hour,min] ou expression PHP)'},
+    {value: 'minBetween(commande,start,end)', label: ' minBetween(commande,start,end) : Donnent le minimum de la commande entre les 2 bornes demandées (sous la forme Y-m-d H:i:s ou expression PHP)'},
+    {value: 'median(commande1,commande2,commandeN)', label: ' median(commande1,commande2,commandeN) : Renvoie la médiane des valeurs'},
+    {value: 'max(commande,periode)', label: ' max(commande,periode) : Donnent le maximum de la commande sur la période (period=[month,day,hour,min] ou expression PHP)'},
+    {value: 'maxBetween(commande,start,end)', label: ' maxBetween(commande,start,end) : Donnent le maximum de la commande entre les 2 bornes demandées (sous la forme Y-m-d H:i:s ou expression PHP)'},
+    {value: 'name(type,commande)', label: ' name(type,commande) : Permet de récuperer le nom de la commande, de l\'équipement ou de l\'objet. Type vaut soit cmd, eqLogic ou object'},
+    {value: 'odd(valeur)', label: ' odd(valeur) : Permet de savoir si un nombre est impair ou non. Renvoie 1 si impair 0 sinon'},
+    {value: 'rand(MIN,MAX)', label: ' rand(MIN,MAX) : Donne un nombre aléatoire de MIN à MAX'},
+    {value: 'randText(texte1;texte2;texteN)', label: ' randText(texte1;texte2;texteN) : Permet de retourner un des textes aléatoirement (séparer les texte par un ; ). Il n\'y a pas de limite dans le nombre de texte'},
+    {value: 'randomColor(min,max)', label: ' randomColor(min,max) : Donne une couleur aléatoire compris entre 2 bornes ( 0 => rouge, 50 => vert, 100 => bleu)'},
+    {value: 'round(valeur,[decimal])', label: ' round(valeur,[decimal]) : Donne un arrondi au-dessus, [decimal] nombre de décimales après la virgule'},
+    {value: 'scenario(scenario)', label: ' scenario(scenario) : Renvoie le statut du scénario. 1 en cours, 0 si arrêté et -1 si désactivé, -2 si le scénario n\'existe pas et -3 si l\'état n\'est pas cohérent. Pour avoir le nom "humain" du scénario, vous pouvez utiliser le bouton dédié à droite de la recherche de scénario'},
+    {value: 'stateChanges(commande,valeur,période)', label: ' stateChanges(commande,valeur,période) : Donnent le nombre de changements d\'état (vers une certaine valeur si indiquée, ou au total sinon) sur la période (period=[month,day,hour,min] ou expression PHP)'},
+    {value: 'stateChangesBetween(commande,valeur,start,end)', label: ' stateChangesBetween(commande,valeur,start,end) : Donnent le nombre de changements d\'état (vers une certaine valeur si indiquée, ou au total sinon) entre les 2 bornes demandées (sous la forme Y-m-d H:i:s ou expression PHP)'},
+    {value: 'stateDuration(commande)', label: ' stateDuration(commande) : Donne la durée en secondes depuis le dernier changement de valeur. Retourne -1 si aucun historique n\'existe ou si la valeur n\'existe pas dans l\'historique. Retourne -2 si la commande n\'est pas historisée'},
+    {value: 'statistics(commande,calcul,période)', label: ' statistics(commande,calcul,période) : Donnent le résultat de différents calculs statistiques (sum, count, std, variance, avg, min, max) sur la période (period=[month,day,hour,min] ou expression PHP)'},
+    {value: 'statisticsBetween(commande,calcul,start,end)', label: ' statisticsBetween(commande,calcul,start,end) : Donnent le résultat de différents calculs statistiques (sum, count, std, variance, avg, min, max) entre les 2 bornes demandées (sous la forme Y-m-d H:i:s ou expression PHP)'},
+    {value: 'tag(montag,[defaut])', label: ' tag(montag,[defaut]) : Permet de récupérer la valeur d\'un tag ou la valeur par défaut si il n\'existe pas'},
+    {value: 'tendance(commande,periode)', label: ' tendance(commande,periode) : Donne la tendance de la commande sur la période (period=[month,day,hour,min] ou expression PHP)'},
+    {value: 'time_between(time,start,end)', label: ' time_between(time,start,end) : Permet de tester si un temps est entre deux valeurs avec time=temps (ex : 1530), start=temps, end=temps. Les valeurs start et end peuvent être à cheval sur minuit'},
+    {value: 'time_diff(date1,date1[,format])', label: ' time_diff(date1,date1[,format]) : Permet de connaître la différence entre 2 dates (les dates doivent être au format AAAA/MM/JJ HH:MM:SS). Par défaut (si vous ne mettez rien pour format), la méthode retourne le nombre total de jours. Vous pouvez lui demander en secondes (s), minutes (m), heures (h). Exemple en secondes time_diff(2018-02-02 14:55:00,2018-02-25 14:55:00,s)'},
+    {value: 'time_op(time,value)', label: ' time_op(time,value) : Permet de faire des opérations sur le temps, avec time=temps (ex : 1530) et value=valeur à ajouter ou à soustraire en minutes'},
+    {value: 'trigger(commande)', label: ' trigger(commande) : Permet de connaître le déclencheur du scénario ou de savoir si c\'est bien la commande passée en paramètre qui a déclenché le scénario'},
+    {value: 'triggerValue(commande)', label: ' triggerValue(commande) : Permet de connaître la valeur du déclencheur du scénario'},
+    {value: 'variable(mavariable,defaut)', label: ' variable(mavariable,defaut) : Récupère la valeur d\'une variable ou de la valeur souhaitée par défaut'},
+    {value: 'value(commande)', label: ' value(commande) : Renvoie la valeur d\'une commande si elle n\'est pas donnée automatiquement par NextDom (cas lors du stockage du nom de la commande dans une variable)'},
+    {value: 'valueDate(cmd,[format])', label: ' valueDate(cmd,[format]) : Renvoie la date de la dernière donnée pour la commande donnée en paramètre, le 2ème paramètre optionnel permet de spécifier le format de retour (détails ici). Un retour de -1 signifie que la commande est introuvable et -2 que la commande n\'est pas de type info'}
 ];
 autoCompleteAction = [
-  { value : 'alert', label : ' alert : Permet d\'afficher un petit message d\'alerte sur tous les navigateurs qui ont une page NextDom d\'ouvert. Vous pouvez en plus choisir 4 niveaux d\'alerte' },
-  { value : 'ask', label : ' ask : Action qui permet à NextDom de faire une demande puis de stocker la réponse dans une variable. Cette action est bloquante et ne finit que si NextDom reçoit une réponse ou si le timeout est atteint. Pour le moment cette action n\'est compatible qu\'avec les plugins SMS, Slack, SARAH et Telegram.' },
-  { value : 'delete_variable', label : ' delete_variable : Supprimer une variable' },
-  { value : 'equipement', label : ' equipement : Permet de modifier les proriétés visible/invisible actif/inactif d\'un équipement' },
-  { value : 'event', label : ' event : Permet de pousser une valeur dans une commande de type information de maniere arbitraire' },
-  { value : 'gotodesign', label : ' gotodesign : Sur tous les navigateurs qui affichent un design, le remplace par celui demandé' },
-  { value : 'icon', label : ' icon : Permet d\'affecter une icône au scénario' },
-  { value : 'log', label : ' log : Permet de rajouter un message dans les logs' },
-  { value : 'message', label : ' message : Permet d\'ajouter une message dans le centre de message' },
-  { value : 'nextdom_poweroff', label : ' nextdom_poweroff : Envoi l\'ordre à NextDom de s\'éteindre' },
-  { value : 'nextdom_reboot', label : ' nextdom_reboot : Envoi l\'ordre à NextDom de redémarrer' },
-  { value : 'popup', label : ' popup : Permet d\'afficher un popup qui doit absolument être validé sur tous les navigateurs qui ont une page NextDom ouverte.' },
-  { value : 'remove_inat', label : ' remove_inat : Permet de supprimer la programmation de tous les blocs DANS et A du scénario' },
-  { value : 'report', label : ' report : Permet d\'envoyer, par une commande message, un rapport d\'une vue, d\'un design ou d\'un panel en PNG/PDF/JPEG/SVG.' },
-  { value : 'scenario', label : ' scenario : Permet le contrôle des scénarios' },
-  { value : 'scenario_return', label : ' scenario_return : Retourne un texte ou une valeur pour une interaction par exemple' },
-  { value : 'sleep', label : ' sleep : Pause de x seconde(s)' },
-  { value : 'stop', label : ' stop : Arrête le scénario' },
-  { value : 'tag', label : ' tag : Permet d\'ajouter/modifier un tag (le tag n\'existe que pendant l\'execution en cours du scénario à la difference des variables qui survive à la fin du scénario' },
-  { value : 'variable', label : ' variable : Création/modification d\'une variable ou de la valeur d\'une variable' },
-  { value : 'wait', label : ' wait : Attend jusqu\'à ce que la condition soit valide (maximum 2h)' }
+    {value: 'alert', label: ' alert : Permet d\'afficher un petit message d\'alerte sur tous les navigateurs qui ont une page NextDom d\'ouvert. Vous pouvez en plus choisir 4 niveaux d\'alerte'},
+    {value: 'ask', label: ' ask : Action qui permet à NextDom de faire une demande puis de stocker la réponse dans une variable. Cette action est bloquante et ne finit que si NextDom reçoit une réponse ou si le timeout est atteint. Pour le moment cette action n\'est compatible qu\'avec les plugins SMS, Slack, SARAH et Telegram.'},
+    {value: 'delete_variable', label: ' delete_variable : Supprimer une variable'},
+    {value: 'equipement', label: ' equipement : Permet de modifier les proriétés visible/invisible actif/inactif d\'un équipement'},
+    {value: 'event', label: ' event : Permet de pousser une valeur dans une commande de type information de maniere arbitraire'},
+    {value: 'gotodesign', label: ' gotodesign : Sur tous les navigateurs qui affichent un design, le remplace par celui demandé'},
+    {value: 'icon', label: ' icon : Permet d\'affecter une icône au scénario'},
+    {value: 'log', label: ' log : Permet de rajouter un message dans les logs'},
+    {value: 'message', label: ' message : Permet d\'ajouter une message dans le centre de message'},
+    {value: 'nextdom_poweroff', label: ' nextdom_poweroff : Envoi l\'ordre à NextDom de s\'éteindre'},
+    {value: 'nextdom_reboot', label: ' nextdom_reboot : Envoi l\'ordre à NextDom de redémarrer'},
+    {value: 'popup', label: ' popup : Permet d\'afficher un popup qui doit absolument être validé sur tous les navigateurs qui ont une page NextDom ouverte.'},
+    {value: 'remove_inat', label: ' remove_inat : Permet de supprimer la programmation de tous les blocs DANS et A du scénario'},
+    {value: 'report', label: ' report : Permet d\'envoyer, par une commande message, un rapport d\'une vue, d\'un design ou d\'un panel en PNG/PDF/JPEG/SVG.'},
+    {value: 'scenario', label: ' scenario : Permet le contrôle des scénarios'},
+    {value: 'scenario_return', label: ' scenario_return : Retourne un texte ou une valeur pour une interaction par exemple'},
+    {value: 'sleep', label: ' sleep : Pause de x seconde(s)'},
+    {value: 'stop', label: ' stop : Arrête le scénario'},
+    {value: 'tag', label: ' tag : Permet d\'ajouter/modifier un tag (le tag n\'existe que pendant l\'execution en cours du scénario à la difference des variables qui survive à la fin du scénario'},
+    {value: 'variable', label: ' variable : Création/modification d\'une variable ou de la valeur d\'une variable'},
+    {value: 'wait', label: ' wait : Attend jusqu\'à ce que la condition soit valide (maximum 2h)'}
 ];
 
 /* Containers variables */
@@ -271,13 +271,26 @@ function initGeneralFormEvents() {
 
     // Choose icon in scenario form
     $('#bt_chooseIcon').off('click').on('click', function () {
-        chooseIcon(function (_icon) {
-            $('.scenarioAttr[data-l1key=display][data-l2key=icon]').empty().append(_icon);
-        });
+        $('#bt_chooseIcon').addClass('disabled');
+        $('#bt_chooseIcon').find('.fa-refresh').show();
+        $('#bt_chooseIcon').find('.initial').hide();
+        var clazz = $('div[data-l2key="icon"] > i').attr('class');
+        setTimeout(function () {
+            chooseIcon(function (_icon) {
+                $('.scenarioAttr[data-l1key=display][data-l2key=icon]').empty().append(_icon);
+            }, {
+                clazz: clazz,
+                finally: function () {
+                    $('#bt_chooseIcon').removeClass('disabled');
+                    $('#bt_chooseIcon').find('.fa-refresh').hide();
+                    $('#bt_chooseIcon').find('.initial').show();
+                }
+            });
+        }, 50);
     });
-
-    // Reset timeout
-    $('#bt_resetTimeout').off('click').on('click', function () {
+    });
+            // Reset timeout
+            $('#bt_resetTimeout').off('click').on('click', function () {
         $(this).siblings(".slider").value(0);
     });
 
@@ -310,26 +323,26 @@ function initGeneralFormEvents() {
     });
 
     // Scenario panel collasping
-    $('#bt_scenarioCollapse').off('click').on('click',function(){
-       $('#accordionScenario .panel-collapse').each(function () {
-          if (!$(this).hasClass("in")) {
-              $(this).css({'height' : '' });
-              $(this).addClass("in");
-          }
-       });
-       $('#bt_scenarioCollapse').hide();
-       $('#bt_scenarioUncollapse').show();
+    $('#bt_scenarioCollapse').off('click').on('click', function () {
+        $('#accordionScenario .panel-collapse').each(function () {
+            if (!$(this).hasClass("in")) {
+                $(this).css({'height': ''});
+                $(this).addClass("in");
+            }
+        });
+        $('#bt_scenarioCollapse').hide();
+        $('#bt_scenarioUncollapse').show();
     });
 
     // Scenario panel uncollasping
-    $('#bt_scenarioUncollapse').off('click').on('click',function(){
-       $('#accordionScenario .panel-collapse').each(function () {
-          if ($(this).hasClass("in")) {
-              $(this).removeClass("in");
-          }
-       });
-       $('#bt_scenarioUncollapse').hide();
-       $('#bt_scenarioCollapse').show();
+    $('#bt_scenarioUncollapse').off('click').on('click', function () {
+        $('#accordionScenario .panel-collapse').each(function () {
+            if ($(this).hasClass("in")) {
+                $(this).removeClass("in");
+            }
+        });
+        $('#bt_scenarioUncollapse').hide();
+        $('#bt_scenarioCollapse').show();
     });
 
     // Save button
@@ -482,10 +495,10 @@ function initScenarioEditorEvents() {
             clearRedoStack();
             if (ACTION_FOCUS || BLOC_FOCUS) {
                 if (expression) {
-                    newDiv=addExpression({type: 'element', element: {type: $("#in_addElementType").value()}});
+                    newDiv = addExpression({type: 'element', element: {type: $("#in_addElementType").value()}});
                 } else {
                     $('#div_scenarioElement .span_noScenarioElement').remove();
-                    newDiv=addElement({type: $("#in_addElementType").value()});
+                    newDiv = addElement({type: $("#in_addElementType").value()});
                 }
                 $(newDiv).insertAfter(elementDiv);
             } else {
@@ -525,7 +538,7 @@ function initScenarioEditorEvents() {
     });
 
     // Bloc add buttons
-    pageContainer.off('click','.fromSubElement').on( 'click','.fromSubElement ', function (event) {
+    pageContainer.off('click', '.fromSubElement').on('click', '.fromSubElement ', function (event) {
         var elementType = $(this).attr('data-type');
         var elementDiv = $(this).closest('.element');
         if (elementDiv.html() === undefined) {
@@ -555,12 +568,10 @@ function initScenarioEditorEvents() {
         if ($(this).children("i").hasClass('fa-chevron-right')) {
             $(this).children("i").removeClass('fa-chevron-right').addClass('fa-chevron-down');
             $(this).closest('.subElement').next().css('display', 'table');
-        }
-        else {
+        } else {
             if ($(this).closest('.subElement').next().children('.expressions').children('.expression').length > 0) {
                 alert("{{Le bloc Sinon ne peut être supprimé s'il contient des éléments}}");
-            }
-            else {
+            } else {
                 $(this).children("i").removeClass('fa-chevron-down').addClass('fa-chevron-right');
                 $(this).closest('.subElement').next().css('display', 'none');
             }
@@ -635,7 +646,7 @@ function initScenarioEditorEvents() {
     });
 
     // Bloc condition scenario choose button
-    pageContainer.off('click','.bt_selectScenarioExpression').on('click','.bt_selectScenarioExpression',  function (event) {
+    pageContainer.off('click', '.bt_selectScenarioExpression').on('click', '.bt_selectScenarioExpression', function (event) {
         var expression = $(this).closest('.expression');
         nextdom.scenario.getSelectModal({}, function (result) {
             if (expression.find('.expressionAttr[data-l1key=type]').value() == 'action') {
@@ -731,32 +742,34 @@ function initScenarioEditorEvents() {
     });
 
     // Bloc focusing
-    scenarioContainer.off('focus', ':input').on('focus', ':input', function() {
-        blocFocusing($(this),false);
-        if ($(this).closest(".expression").find(".expressionAttr[data-l1key='type']").filter(function() { return this.value == 'condition' }).length==0) {
+    scenarioContainer.off('focus', ':input').on('focus', ':input', function () {
+        blocFocusing($(this), false);
+        if ($(this).closest(".expression").find(".expressionAttr[data-l1key='type']").filter(function () {
+            return this.value == 'condition'
+        }).length == 0) {
             BLOC_LAST_FOCUS = false;
         } else {
             BLOC_LAST_FOCUS = true;
         }
     });
-    scenarioContainer.off('click', '.scenario-title').on('click', '.scenario-title', function() {
-        blocFocusing($(this),true);
+    scenarioContainer.off('click', '.scenario-title').on('click', '.scenario-title', function () {
+        blocFocusing($(this), true);
     });
-    scenarioContainer.off('click', '.scenario-action-bloc').on('click', '.scenario-action-bloc', function() {
-        blocFocusing($(this),true);
+    scenarioContainer.off('click', '.scenario-action-bloc').on('click', '.scenario-action-bloc', function () {
+        blocFocusing($(this), true);
     });
 
 
     // Bloc copy / cut
     $('#bt_copyBloc').off('click').on('click', function () {
         blocCopy(BLOC_FOCUS);
-        BLOC_CHANGE_COLOR=true;
+        BLOC_CHANGE_COLOR = true;
         $('.bt_ScenarioBloc').show();
         $('.bt_ScenarioAction').hide();
     });
     $('#bt_cutBloc').off('click').on('click', function (event) {
-        blocCopy(BLOC_FOCUS,true);
-        BLOC_CHANGE_COLOR=false;
+        blocCopy(BLOC_FOCUS, true);
+        BLOC_CHANGE_COLOR = false;
         $('.bt_ScenarioBloc').show();
         $('.bt_ScenarioAction').hide();
     });
@@ -764,13 +777,13 @@ function initScenarioEditorEvents() {
     // Action copy / cut
     $('#bt_copyAction').off('click').on('click', function (event) {
         blocCopy(ACTION_FOCUS);
-        BLOC_CHANGE_COLOR=true;
+        BLOC_CHANGE_COLOR = true;
         $('.bt_ScenarioBloc').hide();
         $('.bt_ScenarioAction').show();
     });
     $('#bt_cutAction').off('click').on('click', function (event) {
-        blocCopy(ACTION_FOCUS,true);
-        BLOC_CHANGE_COLOR=false;
+        blocCopy(ACTION_FOCUS, true);
+        BLOC_CHANGE_COLOR = false;
         $('.bt_ScenarioBloc').hide();
         $('.bt_ScenarioAction').show();
     });
@@ -866,8 +879,7 @@ function urlUpdate(scenarioId) {
         var updatedUrl = '';
         if (hashIndex === -1) {
             history.pushState({}, null, currentUrl + '&id=' + scenarioId);
-        }
-        else {
+        } else {
             updatedUrl = currentUrl.substr(0, hashIndex);
             updatedUrl += '&id=' + scenarioId;
             updatedUrl += currentUrl.substr(hashIndex);
@@ -902,8 +914,8 @@ function addScenario() {
             nextdom.scenario.save({
                 scenario: {name: result},
                 error: function (error) {
-                    notify('Core',error.message,"error");
-                    },
+                    notify('Core', error.message, "error");
+                },
                 success: function (data) {
                     modifyWithoutSave = false;
                     $('#scenarioThumbnailDisplay').hide();
@@ -1013,7 +1025,8 @@ function updateSortable() {
  */
 function updateElseToggle() {
     $('.subElementElse').each(function () {
-        if ($(this).parent().css('display') === 'table') $(this).parent().prev().find('.bt_addSinon:first').children('i').removeClass('fa-chevron-right').addClass('fa-chevron-down');
+        if ($(this).parent().css('display') === 'table')
+            $(this).parent().prev().find('.bt_addSinon:first').children('i').removeClass('fa-chevron-right').addClass('fa-chevron-down');
     });
 }
 
@@ -1023,7 +1036,7 @@ function updateElseToggle() {
 function setEditor() {
     $('.elementAttr[data-l1key=type][value=code]').each(function () {
         let editorTmp = $(this).closest('.element').find('.expressionAttr[data-l1key=expression]');
-        if (editorTmp.attr('id') == undefined ) {
+        if (editorTmp.attr('id') == undefined) {
             editorTmp.uniqueId();
             let currentId = editorTmp.attr('id');
             setTimeout(function () {
@@ -1073,7 +1086,7 @@ function setAutocomplete() {
             $(this).find('.expressionAttr[data-l1key=expression]').autocomplete({
                 source: function (request, response) {
                     response($.ui.autocomplete.filter(
-                        autoCompleteCondition, extractLastAutocomplete(request.term)));
+                            autoCompleteCondition, extractLastAutocomplete(request.term)));
                 },
                 classes: {
                     "ui-autocomplete": "autocomplete"
@@ -1088,7 +1101,7 @@ function setAutocomplete() {
                     if (terms == "") {
                         terms = ui.item.value.trim();
                     } else {
-                        terms = terms.replace(extractLastAutocomplete(terms),"");
+                        terms = terms.replace(extractLastAutocomplete(terms), "");
                         terms = terms + ui.item.value;
                     }
                     this.value = terms;
@@ -1181,16 +1194,16 @@ function printScenario(scenarioId) {
                     addSchedule(data.schedule);
                 }
             }
-            if(!isset(data.timeout)){
+            if (!isset(data.timeout)) {
                 $('.scenarioAttr[data-l1key=timeout]').value(0);
             }
             $('.usedBy').empty();
             for (var i in data.scenarioLinkBy.scenario) {
-                addUsedBy(data.scenarioLinkBy.scenario[i],'.usedBy');
+                addUsedBy(data.scenarioLinkBy.scenario[i], '.usedBy');
             }
             $('.usedIn').empty();
             for (var i in data.scenarioLinkIn.scenario) {
-                addUsedBy(data.scenarioLinkIn.scenario[i],'.usedIn');
+                addUsedBy(data.scenarioLinkIn.scenario[i], '.usedIn');
             }
             if (data.elements.length === 0) {
                 scenarioContainer.append('<div class="span_noScenarioElement"><p class="alert alert-info">{{Pour programmer votre scénario, veuillez commencer par ajouter des blocs...}}</p></div>')
@@ -1343,7 +1356,7 @@ function addSchedule(scheduleCode) {
  *
  * @param scenario
  */
-function addUsedBy(scenario,section) {
+function addUsedBy(scenario, section) {
     var usedByHtml = '<div class="form-group col-xs-12 col-padding">';
     usedByHtml += '<div class="mix-group">';
     usedByHtml += '<span class="label label-action label-sticker">' + scenario.name + '</span>';
@@ -1425,7 +1438,7 @@ function getActionExpressionHTML(expressionData) {
         htmlData += '<input type="checkbox" class="expressionAttr" data-l1key="options" data-l2key="background" checked title="{{Cocher pour que la commande s\'exécute en parallèle des autres actions}}"/>';
     }
     var expressionTxt = init(expressionData.expression);
-    if(typeof(expressionTxt)!== 'string'){
+    if (typeof (expressionTxt) !== 'string') {
         expressionTxt = json_encode(expressionTxt);
     }
     htmlData += '</div>';
@@ -1941,8 +1954,7 @@ function addElement(elementToAdd) {
         for (var subElementIndex in elementToAdd.subElements) {
             elementHTML += addSubElement(elementToAdd.subElements[subElementIndex], elementColorIndex);
         }
-    }
-    else {
+    } else {
         switch (elementToAdd.type) {
             case 'if':
                 elementHTML += addSubElement({type: 'if'}, elementColorIndex);
@@ -2042,8 +2054,7 @@ function setInputExpressionsEvent() {
 function checkExpressionInput(inputElement) {
     if (!checkExpressionValidity(inputElement.val())) {
         inputElement.addClass('expression-error');
-    }
-    else {
+    } else {
         if (inputElement.hasClass('expression-error')) {
             inputElement.removeClass('expression-error');
         }
@@ -2078,8 +2089,7 @@ function checkExpressionValidity(stringToCheck) {
         for (var i = 0; i < stringToCheck.length; ++i) {
             if (stringToCheck[i] === '(') {
                 parenthesisStack.push('(');
-            }
-            else if (stringToCheck[i] === ')') {
+            } else if (stringToCheck[i] === ')') {
                 if (parenthesisStack.length === 0) {
                     result = false;
                     break;
@@ -2105,34 +2115,34 @@ function checkExpressionValidity(stringToCheck) {
  */
 function getNumericExpressionHTML(humanResult) {
     return '<div class="row"> ' +
-        '<div class="col-md-12"> ' +
-        '<form class="form-horizontal" onsubmit="return false;"> ' +
-        '<div class="form-group"> ' +
-        '<label class="col-xs-5 control-label" >' + humanResult + ' {{est}}</label>' +
-        '<div class="col-xs-3">' +
-        '<select class="conditionAttr form-control" data-l1key="operator">' +
-        '<option value="==">{{égal}}</option>' +
-        '<option value=">">{{supérieur}}</option>' +
-        '<option value="<">{{inférieur}}</option>' +
-        '<option value="!=">{{différent}}</option>' +
-        '</select>' +
-        '</div>' +
-        '<div class="col-xs-4">' +
-        '<input type="number" class="conditionAttr form-control" data-l1key="operande" />' +
-        '</div>' +
-        '</div>' +
-        '<div class="form-group"> ' +
-        '<label class="col-xs-5 control-label" >{{Ensuite}}</label>' +
-        '<div class="col-xs-3">' +
-        '<select class="conditionAttr form-control" data-l1key="next">' +
-        '<option value="">rien</option>' +
-        '<option value="ET">{{et}}</option>' +
-        '<option value="OU">{{ou}}</option>' +
-        '</select>' +
-        '</div>' +
-        '</div>' +
-        '</div> </div>' +
-        '</form> </div> </div>';
+            '<div class="col-md-12"> ' +
+            '<form class="form-horizontal" onsubmit="return false;"> ' +
+            '<div class="form-group"> ' +
+            '<label class="col-xs-5 control-label" >' + humanResult + ' {{est}}</label>' +
+            '<div class="col-xs-3">' +
+            '<select class="conditionAttr form-control" data-l1key="operator">' +
+            '<option value="==">{{égal}}</option>' +
+            '<option value=">">{{supérieur}}</option>' +
+            '<option value="<">{{inférieur}}</option>' +
+            '<option value="!=">{{différent}}</option>' +
+            '</select>' +
+            '</div>' +
+            '<div class="col-xs-4">' +
+            '<input type="number" class="conditionAttr form-control" data-l1key="operande" />' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-group"> ' +
+            '<label class="col-xs-5 control-label" >{{Ensuite}}</label>' +
+            '<div class="col-xs-3">' +
+            '<select class="conditionAttr form-control" data-l1key="next">' +
+            '<option value="">rien</option>' +
+            '<option value="ET">{{et}}</option>' +
+            '<option value="OU">{{ou}}</option>' +
+            '</select>' +
+            '</div>' +
+            '</div>' +
+            '</div> </div>' +
+            '</form> </div> </div>';
 }
 
 /**
@@ -2141,33 +2151,33 @@ function getNumericExpressionHTML(humanResult) {
  */
 function getStringExpressionHTML(humanResult) {
     return '<div class="row"> ' +
-        '<div class="col-md-12"> ' +
-        '<form class="form-horizontal" onsubmit="return false;"> ' +
-        '<div class="form-group"> ' +
-        '<label class="col-xs-5 control-label" >' + humanResult + ' {{est}}</label>' +
-        '<div class="col-xs-3">' +
-        '<select class="conditionAttr form-control" data-l1key="operator">' +
-        '<option value="==">{{égale}}</option>' +
-        '<option value="matches">{{contient}}</option>' +
-        '<option value="!=">{{différent}}</option>' +
-        '</select>' +
-        '</div>' +
-        '<div class="col-xs-4">' +
-        '<input class="conditionAttr form-control" data-l1key="operande" />' +
-        '</div>' +
-        '</div>' +
-        '<div class="form-group"> ' +
-        '<label class="col-xs-5 control-label" >{{Ensuite}}</label>' +
-        '<div class="col-xs-3">' +
-        '<select class="conditionAttr form-control" data-l1key="next">' +
-        '<option value="">{{rien}}</option>' +
-        '<option value="ET">{{et}}</option>' +
-        '<option value="OU">{{ou}}</option>' +
-        '</select>' +
-        '</div>' +
-        '</div>' +
-        '</div> </div>' +
-        '</form> </div> </div>';
+            '<div class="col-md-12"> ' +
+            '<form class="form-horizontal" onsubmit="return false;"> ' +
+            '<div class="form-group"> ' +
+            '<label class="col-xs-5 control-label" >' + humanResult + ' {{est}}</label>' +
+            '<div class="col-xs-3">' +
+            '<select class="conditionAttr form-control" data-l1key="operator">' +
+            '<option value="==">{{égale}}</option>' +
+            '<option value="matches">{{contient}}</option>' +
+            '<option value="!=">{{différent}}</option>' +
+            '</select>' +
+            '</div>' +
+            '<div class="col-xs-4">' +
+            '<input class="conditionAttr form-control" data-l1key="operande" />' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-group"> ' +
+            '<label class="col-xs-5 control-label" >{{Ensuite}}</label>' +
+            '<div class="col-xs-3">' +
+            '<select class="conditionAttr form-control" data-l1key="next">' +
+            '<option value="">{{rien}}</option>' +
+            '<option value="ET">{{et}}</option>' +
+            '<option value="OU">{{ou}}</option>' +
+            '</select>' +
+            '</div>' +
+            '</div>' +
+            '</div> </div>' +
+            '</form> </div> </div>';
 }
 
 /**
@@ -2176,34 +2186,34 @@ function getStringExpressionHTML(humanResult) {
  */
 function getBinaryExpressionHTML(humanResult) {
     return '<div class="row"> ' +
-        '<div class="col-md-12"> ' +
-        '<form class="form-horizontal" onsubmit="return false;"> ' +
-        '<div class="form-group"> ' +
-        '<label class="col-xs-5 control-label" >' + humanResult + ' {{est}}</label>' +
-        '<div class="col-xs-7">' +
-        '<input class="conditionAttr" data-l1key="operator" value="==" type="hidden" />' +
-        '<select class="conditionAttr form-control" data-l1key="operande">' +
-        '<option value="1">{{Ouvert}}</option>' +
-        '<option value="0">{{Fermé}}</option>' +
-        '<option value="1">{{Allumé}}</option>' +
-        '<option value="0">{{Eteint}}</option>' +
-        '<option value="1">{{Déclenché}}</option>' +
-        '<option value="0">{{Au repos}}</option>' +
-        '</select>' +
-        '</div>' +
-        '</div>' +
-        '<div class="form-group"> ' +
-        '<label class="col-xs-5 control-label" >{{Ensuite}}</label>' +
-        '<div class="col-xs-3">' +
-        '<select class="conditionAttr form-control" data-l1key="next">' +
-        '<option value="">{{rien}}</option>' +
-        '<option value="ET">{{et}}</option>' +
-        '<option value="OU">{{ou}}</option>' +
-        '</select>' +
-        '</div>' +
-        '</div>' +
-        '</div></div>' +
-        '</form></div></div>';
+            '<div class="col-md-12"> ' +
+            '<form class="form-horizontal" onsubmit="return false;"> ' +
+            '<div class="form-group"> ' +
+            '<label class="col-xs-5 control-label" >' + humanResult + ' {{est}}</label>' +
+            '<div class="col-xs-7">' +
+            '<input class="conditionAttr" data-l1key="operator" value="==" type="hidden" />' +
+            '<select class="conditionAttr form-control" data-l1key="operande">' +
+            '<option value="1">{{Ouvert}}</option>' +
+            '<option value="0">{{Fermé}}</option>' +
+            '<option value="1">{{Allumé}}</option>' +
+            '<option value="0">{{Eteint}}</option>' +
+            '<option value="1">{{Déclenché}}</option>' +
+            '<option value="0">{{Au repos}}</option>' +
+            '</select>' +
+            '</div>' +
+            '</div>' +
+            '<div class="form-group"> ' +
+            '<label class="col-xs-5 control-label" >{{Ensuite}}</label>' +
+            '<div class="col-xs-3">' +
+            '<select class="conditionAttr form-control" data-l1key="next">' +
+            '<option value="">{{rien}}</option>' +
+            '<option value="ET">{{et}}</option>' +
+            '<option value="OU">{{ou}}</option>' +
+            '</select>' +
+            '</div>' +
+            '</div>' +
+            '</div></div>' +
+            '</form></div></div>';
 }
 
 /**
@@ -2291,7 +2301,7 @@ function selectCmdExpression(elementData, expressionElement) {
 function loadFromUrl() {
     var scenarioIdFromUrl = getUrlVars('id');
     if (is_numeric(scenarioIdFromUrl)) {
-       if ($('.scenarioDisplayCard[data-scenario_id=' + scenarioIdFromUrl + ']').length !== 0) {
+        if ($('.scenarioDisplayCard[data-scenario_id=' + scenarioIdFromUrl + ']').length !== 0) {
             let url = document.location.toString();
             var tabCode = GENERAL_TAB;
             if (url.match('#')) {
@@ -2335,7 +2345,7 @@ function setUndoStack() {
     let newStack = scenarioContainer.clone();
     undoStackPosition += 1;
     undoStack[undoStackPosition] = newStack;
-    if (undoStack.length-1 > undoLimit) {
+    if (undoStack.length - 1 > undoLimit) {
         undoStack = undoStack.slice(1, undoStackPosition + 1);
         undoStackPosition -= 1;
     }
@@ -2372,7 +2382,7 @@ function undo() {
  * Redo state from stack
  */
 function redo() {
-    if (undoStackPosition < undoStack.length-1) {
+    if (undoStackPosition < undoStack.length - 1) {
         undoStackPosition += 1;
         scenarioContainer.replaceWith(undoStack[undoStackPosition]);
         scenarioContainer = $('#div_scenarioElement');
@@ -2409,7 +2419,7 @@ function setMemoryStack() {
  */
 function resetMemoryStack() {
     if (undoStack.length > 0) {
-        undoStackPosition = undoStack.length-1;
+        undoStackPosition = undoStack.length - 1;
         scenarioContainer.replaceWith(undoStack[undoStackPosition]);
         scenarioContainer = $('#div_scenarioElement');
         $('.element').removeClass("scenario-bloc-focused");
@@ -2438,8 +2448,8 @@ function updateUndoBtn() {
     } else {
         undoBtnSpan.hide();
     }
-    if (undoStackPosition < undoStack.length-1) {
-        redoBtnSpan.show().html(undoStack.length-1-undoStackPosition);
+    if (undoStackPosition < undoStack.length - 1) {
+        redoBtnSpan.show().html(undoStack.length - 1 - undoStackPosition);
     } else {
         redoBtnSpan.hide();
     }
@@ -2450,7 +2460,7 @@ function updateUndoBtn() {
  * @param bloc input bloc ref
  * @param onlyBloc true = focus only the bloc not action
  */
-function blocFocusing(bloc,onlyBloc) {
+function blocFocusing(bloc, onlyBloc) {
     $('.element').removeClass("scenario-bloc-focused");
     if (!onlyBloc) {
         $('.expression').removeClass("scenario-action-focused");
@@ -2458,7 +2468,9 @@ function blocFocusing(bloc,onlyBloc) {
     BLOC_FOCUS = bloc.closest('.element');
     BLOC_FOCUS.addClass("scenario-bloc-focused");
     if (!onlyBloc) {
-        if (bloc.closest(".expression").find(".expressionAttr[data-l1key='type']").filter(function() { return this.value == 'condition' }).length==0) {
+        if (bloc.closest(".expression").find(".expressionAttr[data-l1key='type']").filter(function () {
+            return this.value == 'condition'
+        }).length == 0) {
             ACTION_FOCUS = bloc.closest('.expression');
             ACTION_FOCUS.addClass("scenario-action-focused");
         } else {
@@ -2476,7 +2488,7 @@ function blocFocusing(bloc,onlyBloc) {
  * @param blocCut TRUE = bloc cut
  * @param notStack TRUE = not save cut in stack
  */
-function blocCopy(blocType,blocCut=false,notStack=false) {
+function blocCopy(blocType, blocCut = false, notStack = false) {
     if (blocType) {
         SC_CLIPBOARD = blocType.clone();
         BLOC_LAST_CUT = false;
@@ -2493,7 +2505,7 @@ function blocCopy(blocType,blocCut=false,notStack=false) {
         }
     } else {
         notify("Attention", "Aucune selection !", 'warning');
-    }
+}
 }
 
 /**
@@ -2503,10 +2515,10 @@ function blocCopy(blocType,blocCut=false,notStack=false) {
  * @param blocAfter TRUE = paste after focus bloc
  * @param notClear TRUE = not clear stack
  */
- function blocPaste(blocReplace=false,blocAfter=true,notClear=false) {
+function blocPaste(blocReplace = false, blocAfter = true, notClear = false) {
     if (SC_CLIPBOARD && BLOC_FOCUS) {
         if (!notClear) {
-          clearRedoStack();
+            clearRedoStack();
         }
         let newColorIndex = getNextColorIndex();
         let newBloc = $(SC_CLIPBOARD).clone();
@@ -2517,11 +2529,11 @@ function blocCopy(blocType,blocCut=false,notStack=false) {
         }
         if (BLOC_CHANGE_COLOR) {
             if (newBloc.hasClass('element')) {
-                newBloc.css('background-color',listColorStrong[newColorIndex]);
-                newBloc.find('.empty').parent().css('background-color',listColor[newColorIndex]);
+                newBloc.css('background-color', listColorStrong[newColorIndex]);
+                newBloc.find('.empty').parent().css('background-color', listColor[newColorIndex]);
             } else {
-                newBloc.find('.element').css('background-color',listColorStrong[newColorIndex]);
-                newBloc.find('.element').find('.empty').parent().css('background-color',listColor[newColorIndex]);
+                newBloc.find('.element').css('background-color', listColorStrong[newColorIndex]);
+                newBloc.find('.element').find('.empty').parent().css('background-color', listColor[newColorIndex]);
             }
         }
         if (BLOC_LAST_FOCUS) {
@@ -2594,7 +2606,7 @@ function blocCopy(blocType,blocCut=false,notStack=false) {
         setUndoStack();
     } else {
         notify("Attention", "Aucun bloc selectionné, ni copié !", 'warning');
-    }
+}
 }
 
 /**
@@ -2604,10 +2616,10 @@ function blocCopy(blocType,blocCut=false,notStack=false) {
  * @param actionAfter TRUE = paste after focus bloc
  * @param notClear TRUE = not clear stack
  */
- function actionPaste(actionReplace=false,actionAfter=true,notClear=false) {
+function actionPaste(actionReplace = false, actionAfter = true, notClear = false) {
     if (SC_CLIPBOARD && (ACTION_FOCUS || BLOC_FOCUS)) {
         if (!notClear) {
-          clearRedoStack();
+            clearRedoStack();
         }
         let newBloc = $(SC_CLIPBOARD).clone();
         if (!BLOC_LAST_CUT) {
@@ -2646,5 +2658,5 @@ function blocCopy(blocType,blocCut=false,notStack=false) {
         setUndoStack();
     } else {
         notify("Attention", "Aucun bloc ni action selectionné(e)s, ni copié(e)s !", 'warning');
-    }
+}
 }
