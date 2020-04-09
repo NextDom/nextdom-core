@@ -90,6 +90,7 @@ common:
   branch: "Branche"
   by_default: "Par défaut"
   cancel: "Annuler"
+  choose: "Choisir"
   clear: "Vider"
   danger: "Danger"
   date: "Date"
@@ -559,7 +560,6 @@ scenario:
   add-block: Ajouter bloc
   add-item: Ajouter élément
   block: Bloc
-  choose: Choisir
   conditions: "Conditions"
   copy-block: Copier bloc
   copy-action: Copier action
@@ -783,7 +783,6 @@ welcome:
   title: Bienvenue dans NextDom
 widget:
   applyTo: Appliquer sur
-  choose: Choisir
   display: "Affichage"
   display_option: "Option d’Affichage"
   duplicate: "Dupliquer"

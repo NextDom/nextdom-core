@@ -90,6 +90,7 @@ common:
   branch: "Branch"
   by_default: "By default"
   cancel: "Cancel"
+  choose: "To choose"
   clear: "Clear"
   danger: "Danger"
   date: "Date"
@@ -260,8 +261,8 @@ general:
     language: "Language to use with Nexdom"
     system_hardware: "Indicate the type of Hardware"
     nextdom_name : "Name of the Nexdom system"
-     livingSpace: "Living space in your house, so you don't have to fill it in plugins"
-     nbOccupant: "Number of occupants, so you don't have to fill it in plugins"
+    livingSpace: "Living space in your house, so you don't have to fill it in plugins"
+    nbOccupant: "Number of occupants, so you don't have to fill it in plugins"
     time_zone: "Time zone used by Nexdom"
     time_server: "Time Server used for time synchronization"
     time_server_ignore: "Indicates to Nexdom to ignore system time"
@@ -559,7 +560,6 @@ scenario:
   add-block: Add block
   add-item: Add element
   block: Bloc
-  choose: To choose
   conditions: "Conditions"
   copy-block: Copy bloc
   copy-action: Copy action
@@ -771,7 +771,7 @@ welcome:
   doc-launch: Access the documentation
   forum-title: Forum
   forum-subtitle: Find help on our forum
-  forum-content: 
+  forum-content: |
                 The NextDom forum is a simple and effective way to find the solution to your problem.
                 Surely there is another person who has already encountered the same problem as you.
                 If this is not the case: ask your question, the community will respond as soon as possible."
@@ -783,7 +783,6 @@ welcome:
   title: Welcome to NextDom
 widget:
   applyTo: Apply to
-  choose: Choose
   display: Display
   display_option: Display option
   duplicate: Duplicate

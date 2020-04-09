@@ -76,7 +76,7 @@
                     <div class="planHeaderAttr" data-l1key="configuration" data-l2key="icon"></div>
                 </div>
                 <div class="col-lg-2 col-md-3 col-sm-4 col-xs-4">
-                    <a class="btn btn-default btn-sm" id="bt_chooseIcon"><i class="fas fa-flag"></i> {{ 'Choisir' }}</a>
+                    <a class="btn btn-default btn-sm" id="bt_chooseIcon"><i class="fas fa-flag initial"></i><i class="fas fa-refresh fa-spin" style="display:none;"></i><span>{{ 'common.choose' | trans }}</span></a>
                 </div>
             </div>
             <div class="form-group">
@@ -145,9 +145,22 @@
     });
 
     $('#bt_chooseIcon').on('click', function () {
+    $('#bt_chooseIcon').addClass('disabled');
+    $('#bt_chooseIcon').find('.fa-refresh').show();
+    $('#bt_chooseIcon').find('.initial').hide();
+    var clazz = $('div[data-l2key="icon"] > i').attr('class');
+    setTimeout(function () {
         chooseIcon(function (_icon) {
             $('.planHeaderAttr[data-l1key=configuration][data-l2key=icon]').empty().append(_icon);
+        }, {
+            clazz: clazz,
+            finally: function() {
+                $('#bt_chooseIcon').removeClass('disabled');
+                $('#bt_chooseIcon').find('.fa-refresh').hide();
+                $('#bt_chooseIcon').find('.initial').show();
+            }
         });
+    }, 50);
     });
 
     $('#bt_uploadImage').fileupload({
