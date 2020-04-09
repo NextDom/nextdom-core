@@ -27,7 +27,7 @@ step1_create_prerequisite_files_and_directories() {
   addLogStep "Postinst -- Create needed files and directories - 1/11"
 
   local directories=("${ROOT_DIRECTORY}/plugins" "${LIB_DIRECTORY}" "${LIB_DIRECTORY}/market_cache"
-    "${LIB_DIRECTORY}/cache" "${LIB_DIRECTORY}/backup" "${LIB_DIRECTORY}/core/config" "${LIB_DIRECTORY}/custom/desktop" "${LIB_DIRECTORY}/public/css"
+    "${LIB_DIRECTORY}/cache" "${LIB_DIRECTORY}/backup" "${ROOT_DIRECTORY}/core/config" "${LIB_DIRECTORY}/custom/desktop" "${LIB_DIRECTORY}/public/css"
     "${LIB_DIRECTORY}/public/img/plan" "${LIB_DIRECTORY}/public/img/profils" "${LIB_DIRECTORY}/public/img/market_cache"
     "${LOG_DIRECTORY}/scenarioLog")
 
@@ -83,10 +83,19 @@ step2_prepare_directory_layout() {
 
   addLogStep "Postinst -- Prepare directory layout - 2/11"
 
+#  # we delete existing config since it is regenerated from asset sample (step_nextdom_configuration)
+#  removeDirectoryOrFile ${LIB_DIRECTORY}/config
+#  cp -r ${ROOT_DIRECTORY}/assets/config ${LIB_DIRECTORY}/config
+#  addLogInfo "created configuration directory ${LIB_DIRECTORY}/config"
+
+
   # we delete existing data, since its re-imported from assets
   removeDirectoryOrFile ${LIB_DIRECTORY}/data
-  cp -r ${ROOT_DIRECTORY}/assets/data ${LIB_DIRECTORY}
-  addLogInfo "created data directory ${LIB_DIRECTORY}/data"
+
+  if [ -d ${ROOT_DIRECTORY}/assets/data ]; then
+      cp -r ${ROOT_DIRECTORY}/assets/data ${LIB_DIRECTORY}
+      addLogInfo "created data directory ${LIB_DIRECTORY}/data"
+  fi
 
   # jeedom backup compatibility: ./core/config is a symlink
   if [ -L ${ROOT_DIRECTORY}/core/config ]; then
@@ -256,9 +265,9 @@ step5_configure_nextdom() {
 
   { ##try
     # recreate configuration from sample
-    cp ${ROOT_DIRECTORY}/core/config/common.config.sample.php ${ROOT_DIRECTORY}/core/config/common.config.php
+    cp ${ROOT_DIRECTORY}/assets/config/common.config.sample.php ${LIB_DIRECTORY}/config/common.config.php
   } || { ##catch
-    addLogError "Error while copying ${ROOT_DIRECTORY}/core/config/common.config.php"
+    addLogError "Error while copying ${LIB_DIRECTORY}/config/common.config.php"
   }
   { ##try
     SECRET_KEY=$(
@@ -287,18 +296,18 @@ step5_configure_nextdom() {
   fi
 
   { ##try
-    sed -i "s/#PASSWORD#/${MYSQL_NEXTDOM_PASSWD}/g" ${ROOT_DIRECTORY}/core/config/common.config.php
-    sed -i "s/#DBNAME#/${MYSQL_NEXTDOM_DB}/g" ${ROOT_DIRECTORY}/core/config/common.config.php
-    sed -i "s/#USERNAME#/${MYSQL_NEXTDOM_USER}/g" ${ROOT_DIRECTORY}/core/config/common.config.php
-    sed -i "s/#PORT#/${MYSQL_PORT}/g" ${ROOT_DIRECTORY}/core/config/common.config.php
-    sed -i "s/#HOST#/${MYSQL_HOSTNAME}/g" ${ROOT_DIRECTORY}/core/config/common.config.php
-    sed -i "s%#LOG_DIR#%${LOG_DIRECTORY}%g" ${ROOT_DIRECTORY}/core/config/common.config.php
-    sed -i "s%#LIB_DIR#%${LIB_DIRECTORY}%g" ${ROOT_DIRECTORY}/core/config/common.config.php
-    sed -i "s%#TMP_DIR#%${TMP_DIRECTORY}%g" ${ROOT_DIRECTORY}/core/config/common.config.php
-    sed -i "s%#SECRET_KEY#%${SECRET_KEY}%g" ${ROOT_DIRECTORY}/core/config/common.config.php
-    addLogInfo "wrote configuration file: ${ROOT_DIRECTORY}/core/config/common.config.php"
+    sed -i "s/#PASSWORD#/${MYSQL_NEXTDOM_PASSWD}/g" ${LIB_DIRECTORY}/config/common.config.php
+    sed -i "s/#DBNAME#/${MYSQL_NEXTDOM_DB}/g" ${LIB_DIRECTORY}/config/common.config.php
+    sed -i "s/#USERNAME#/${MYSQL_NEXTDOM_USER}/g" ${LIB_DIRECTORY}/config/common.config.php
+    sed -i "s/#PORT#/${MYSQL_PORT}/g" ${LIB_DIRECTORY}/config/common.config.php
+    sed -i "s/#HOST#/${MYSQL_HOSTNAME}/g" ${LIB_DIRECTORY}/config/common.config.php
+    sed -i "s%#LOG_DIR#%${LOG_DIRECTORY}%g" ${LIB_DIRECTORY}/config/common.config.php
+    sed -i "s%#LIB_DIR#%${LIB_DIRECTORY}%g" ${LIB_DIRECTORY}/config/common.config.php
+    sed -i "s%#TMP_DIR#%${TMP_DIRECTORY}%g" ${LIB_DIRECTORY}/config/common.config.php
+    sed -i "s%#SECRET_KEY#%${SECRET_KEY}%g" ${LIB_DIRECTORY}/config/common.config.php
+    addLogInfo "wrote configuration file: ${LIB_DIRECTORY}/config/common.config.php"
   } || { ##catch
-    addLogError "Error while writing in: ${ROOT_DIRECTORY}/core/config/common.config.php"
+    addLogError "Error while writing in: ${LIB_DIRECTORY}/config/common.config.php"
   }
 
   { ##try
