@@ -443,6 +443,7 @@ page-title:
   commands: Commandes
   database: OS/DB
   diagnostics: Diagnostics
+  designs: Designs
   equipments: Équipements
   general: Général
   health: Santé
@@ -467,6 +468,7 @@ page-title:
   tools: Outils
   updates: Mises à jour
   users: Utilisateurs
+  views: Vues
 plugin:
   cant-report: Vous ne pouvez pas faire de rapport sur un plugin sans panneau
   category:

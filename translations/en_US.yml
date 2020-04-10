@@ -443,6 +443,7 @@ page-title:
   commands: Commands
   database: Database
   diagnostics: Diagnostics
+  designs: Designs
   equipments: Equipment
   general: General
   health: Health
@@ -467,6 +468,7 @@ page-title:
   tools: tools
   updates: Updates
   users: User
+  views: Views
 plugin:
   cant-report: You can not make a report on board without plugin
   category:
