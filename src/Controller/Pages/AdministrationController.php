@@ -56,14 +56,14 @@ class AdministrationController extends BaseController
     public static function get(&$pageData): string
     {
         $pageData['numberOfUpdates'] = UpdateManager::nbNeedUpdate();
-        $pageData['scenarioCount'] = count(ScenarioManager::all());
-        $pageData['interactCount'] = count(InteractDefManager::all());
+        $pageData['scenarioCount'] = ScenarioManager::getCount();
+        $pageData['interactCount'] = InteractDefManager::getCount();
         $pageData['pluginsCount'] = count(PluginManager::listPlugin());
-        $pageData['objectCount'] = count(JeeObjectManager::all());
-        $pageData['noteCount'] = count(NoteManager::all());
-        $pageData['widgetCount'] = count(WidgetManager::all());
-        $pageData['viewCount'] = count(ViewManager::all());
-        $pageData['planHeaderCount'] = count(PlanHeaderManager::all());
+        $pageData['objectCount'] = JeeObjectManager::getCount();
+        $pageData['noteCount'] = NoteManager::getCount();
+        $pageData['widgetCount'] = WidgetManager::getCount();
+        $pageData['viewCount'] = ViewManager::getCount();
+        $pageData['planHeaderCount'] = PlanHeaderManager::getCount();
         $pageData['cronCountEnable'] = 0;
         $pageData['cronCountDisable'] = 0;
         foreach (CronManager::all() as $cron) {

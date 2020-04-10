@@ -33,15 +33,7 @@
 
 namespace NextDom\Managers\Parents;
 
-use NextDom\Enums\CmdType;
-use NextDom\Enums\DateFormat;
-use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\DBHelper;
-use NextDom\Helpers\FileSystemHelper;
-use NextDom\Helpers\NextDomHelper;
-use NextDom\Helpers\Utils;
-use NextDom\Model\Entity\Cmd;
-use NextDom\Model\Entity\EqLogic;
 
 /**
  * Base manager with commonts functions
