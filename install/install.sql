@@ -377,7 +377,7 @@ CREATE TABLE IF NOT EXISTS `interactQuery` (
   PRIMARY KEY (`id`),
   INDEX `fk_sarahQuery_sarahDef1_idx` (`interactDef_id` ASC),
   FULLTEXT INDEX `query` (`query` ASC))
-ENGINE = MyISAM;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
