@@ -42,11 +42,12 @@ initEvents();
  * Load informations in all forms of the page
  */
 function loadInformations() {
-    if (is_numeric(getUrlVars('id'))) {
-        if (document.querySelectorAll('.objectDisplayCard[data-object_id=' + getUrlVars('id') + ']').length !== 0) {
-            $('.objectDisplayCard[data-object_id=' + getUrlVars('id') + ']').click();
+    var idFromUrl = getUrlVars('id');
+    if (idFromUrl) {
+        if ($('.objectDisplayCard[data-object_id=' + idFromUrl + ']').length !== 0) {
+            this.loadObjectConfiguration(idFromUrl);
         } else {
-            $('.objectDisplayCard:first').click();
+            notify("Erreur", 'Id ' + idFromUrl + ' not found', 'error');
         }
     }
     loadFromUrl();
@@ -388,7 +389,7 @@ function addSummaryInfo(_el, _summary) {
 function loadFromUrl() {
     var objectIdFromUrl = getUrlVars('id');
     if (is_numeric(objectIdFromUrl)) {
-        if (document.querySelectorAll('.objectDisplayCard[data-object_id=' + objectIdFromUrl + ']').length !== 0) {
+        if ($('.objectDisplayCard[data-object_id=' + objectIdFromUrl + ']').length !== 0) {
             var url = document.location.toString();
             loadObjectConfiguration(objectIdFromUrl);
         }
