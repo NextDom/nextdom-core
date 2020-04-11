@@ -93,10 +93,10 @@ class MigrationHelper
 
         // call migrate functions
         if ($migrate === true) {
+            $previousVersion[2]++;
             while ($previousVersion[0] <= $currentVersion[0]) {
                 while ($previousVersion[1] <= 10) {
                     while ($previousVersion[2] <= 10) {
-                        $previousVersion[2] += 1;
                         if (method_exists(get_class(), 'migrate_' . $previousVersion[0] . '_' . $previousVersion[1] . '_' . $previousVersion[2])) {
                             $migrateMethod = 'migrate_' . $previousVersion[0] . '_' . $previousVersion[1] . '_' . $previousVersion[2];
                             $message = 'Start migration process for ' . $migrateMethod;
@@ -113,6 +113,7 @@ class MigrationHelper
                             $message = 'Save migration process for ' . $migrateMethod;
                             self::logMessage($logFile, $message);
                         }
+                        $previousVersion[2] += 1;
                     }
                     $previousVersion[2] = 0;
                     $previousVersion[1] += 1;
