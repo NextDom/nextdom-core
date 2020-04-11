@@ -28,15 +28,15 @@
                             <div class="plan3dHeaderAttr" data-l1key="configuration" data-l2key="icon"></div>
                         </div>
                         <div class="col-lg-2 col-md-3 col-sm-4 col-xs-4">
-                            <a class="btn btn-default btn-sm" id="bt_chooseIcon"><i class="fas fa-flag"></i> {{ 'Choisir' }}</a>
+                            <a class="btn btn-default btn-sm" id="bt_chooseIcon"><i class="fas fa-flag initial"></i><i class="fas fa-refresh fa-spin" style="display:none;"></i><span>{{ 'common.choose' | trans }}</span></a>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-4 control-label">{{ 'Model 3D' }}</label>
                         <div class="col-lg-8">
-							<span class="btn btn-default btn-file">
-								<i class="fas fa-cloud-upload-alt"></i> {{ 'Envoyer' }}<input id="bt_upload3dModel" type="file" name="file" style="display: inline-block;">
-							</span>
+                            <span class="btn btn-default btn-file">
+                                <i class="fas fa-cloud-upload-alt"></i> {{ 'Envoyer' }}<input id="bt_upload3dModel" type="file" name="file" style="display: inline-block;">
+                            </span>
                         </div>
                     </div>
                     <div class="form-group">
@@ -60,17 +60,17 @@
             <fieldset>
                 <table class="table table-condensed table-bordered">
                     <thead>
-                    <tr>
-                        <th>{{ 'ID' }}</th>
-                        <th>{{ 'Nom object' }}</th>
-                        <th>{{ 'Type' }}</th>
-                        <th>{{ 'ID du lien' }}</th>
-                        <th>{{ 'Action' }}</th>
-                    </tr>
+                        <tr>
+                            <th>{{ 'ID' }}</th>
+                            <th>{{ 'Nom object' }}</th>
+                            <th>{{ 'Type' }}</th>
+                            <th>{{ 'ID du lien' }}</th>
+                            <th>{{ 'Action' }}</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    {% for plan3d in plan3ds %}
-                        <tr class="plan" data-id="{{ plan3d.getId() }}"></tr>
+                        {% for plan3d in plan3ds %}
+                            <tr class="plan" data-id="{{ plan3d.getId() }}"></tr>
                         <td>{{ plan3d.getId() }}</td>
                         <td>{{ plan3d.getName() }}</td>
                         <td>{{ plan3d.getLink_type() }}</td>
@@ -119,7 +119,7 @@
         url: 'core/ajax/plan3d.ajax.php?action=uploadModel&id=" + id + "&nextdom_token=' + NEXTDOM_AJAX_TOKEN,
         dataType: 'json',
         done: function (e, data) {
-            if (data.result.state != 'ok') {
+            if (data.result.state !== 'ok') {
                 notify('core', data.result.result, 'error');
                 return;
             }
@@ -128,9 +128,22 @@
     });
 
     $('#bt_chooseIcon').on('click', function () {
-        chooseIcon(function (_icon) {
-            $('.plan3dHeaderAttr[data-l1key=configuration][data-l2key=icon]').empty().append(_icon);
-        });
+        $('#bt_chooseIcon').addClass('disabled');
+        $('#bt_chooseIcon').find('.fa-refresh').show();
+        $('#bt_chooseIcon').find('.initial').hide();
+        var clazz = $('div[data-l2key="icon"] > i').attr('class');
+        setTimeout(function () {
+            chooseIcon(function (_icon) {
+                $('.plan3dHeaderAttr[data-l1key=configuration][data-l2key=icon]').empty().append(_icon);
+            }, {
+                clazz: clazz,
+                finally: function () {
+                    $('#bt_chooseIcon').removeClass('disabled');
+                    $('#bt_chooseIcon').find('.fa-refresh').hide();
+                    $('#bt_chooseIcon').find('.initial').show();
+                }
+            });
+        }, 50);
     });
 
     $('#bt_saveConfigureplan3dHeader').on('click', function () {
@@ -141,7 +154,7 @@
             },
             success: function () {
                 window.location.reload();
-            },
+            }
         });
     });
 
@@ -153,11 +166,11 @@
             },
             success: function () {
                 window.location.reload();
-            },
+            }
         });
     });
 
-    if (isset(id) && id != '') {
+    if (isset(id) && id !== '') {
         $('#div_plan3dHeaderConfigure').setValues(plan3dHeader, '.plan3dHeaderAttr');
     }
 </script>

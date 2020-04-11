@@ -29,6 +29,7 @@ class LogTarget extends Enum
     const CRON = 'cron';
     const EVENT = 'event';
     const INTERACT = 'interact';
+    const WIDGET = 'widget';
     const JEE_EVENT = 'jeeEvent';
     const LISTENER = 'listener';
     const MARKET = 'market';

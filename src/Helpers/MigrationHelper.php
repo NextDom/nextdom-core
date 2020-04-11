@@ -524,9 +524,30 @@ class MigrationHelper
         self::migrate_messageToAddIcon($logFile);
         self::migrate_interactQueryEngine($logFile);
     }
-    /***********************************************************************************************************************************************************/
 
     /***************************************************************** 0.8.0 Migration process *****************************************************************/
-
-    /***********************************************************************************************************************************************************/
+    /**
+     * 0.8.0 Migration process
+     * @param string $logFile log name file to display information
+     * @throws \Exception
+     */
+    private static function migrate_0_8_0($logFile = LogTarget::MIGRATION)
+    {
+        DBHelper::exec("ALTER TABLE `cmd` add `html` mediumtext COLLATE utf8_unicode_ci;");
+        DBHelper::exec("ALTER TABLE `type` DROP COLUMN `scenario`;");
+        DBHelper::exec("RENAME TABLE `widgets` TO `widget`");
+        $createWidget = "CREATE TABLE IF NOT EXISTS `widget` (
+              `id` int(11) NOT NULL AUTO_INCREMENT,
+              `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+              `type` varchar(27) COLLATE utf8_unicode_ci DEFAULT NULL,
+              `subtype` varchar(27) COLLATE utf8_unicode_ci DEFAULT NULL,
+              `template` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+              `display` text COLLATE utf8_unicode_ci,
+              `replace` text COLLATE utf8_unicode_ci,
+              `test` text COLLATE utf8_unicode_ci,
+              PRIMARY KEY (`id`),
+              UNIQUE KEY `unique` (`type`,`subtype`,`name`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+        DBHelper::exec($createWidget);
+    }
 }

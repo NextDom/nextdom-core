@@ -59,7 +59,7 @@ if (init('type') != '') {
     try {
         $type = init('type');
         $plugin = init('plugin', 'core');
-        if ($plugin == 'core' && !in_array(init('type'), ['ask', 'cmd', 'interact', 'scenario', 'message', 'object', 'eqLogic', 'command', 'fullData', 'variable'])) {
+        if ($plugin == 'core' && !in_array(init('type'), ['ask', 'cmd', 'interact', 'widget', 'scenario', 'message', 'object', 'eqLogic', 'command', 'fullData', 'variable'])) {
             $plugin = init('type');
         }
         if (!jeedom::apiAccess(init('apikey', init('api')), $plugin)) {
@@ -156,6 +156,9 @@ if (init('type') != '') {
             }
             $reply = interactQuery::tryToReply($query, $param);
             echo $reply['reply'];
+            die();
+        }
+        if ($type == 'interact') {
             die();
         }
         if ($type == 'scenario') {

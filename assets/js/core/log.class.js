@@ -125,7 +125,7 @@ nextdom.log.autoupdate = function(queryParams) {
     },
     error: function () {
       if (nextdom.log.timeout !== null) {
-        clearTimeout(jeedom.log.timeout);
+        clearTimeout(nextdom.log.timeout);
       }
       nextdom.log.timeout = setTimeout(function () {
         nextdom.log.autoupdate(queryParams)

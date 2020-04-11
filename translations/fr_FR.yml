@@ -90,6 +90,7 @@ common:
   branch: "Branche"
   by_default: "Par défaut"
   cancel: "Annuler"
+  choose: "Choisir"
   clear: "Vider"
   danger: "Danger"
   date: "Date"
@@ -106,11 +107,13 @@ common:
   enough: "NOK"
   error-b: "[Erreur] "
   error: "Erreur"
+  export: "Exporter"
   finish: "Terminer"
   here: "Ici"
   hours: "heures"
   id: "ID"
   ignore: "Ignorer"
+  import: "Importer"
   in-progress: "En cours"
   info: "Info"
   information: "Informations"
@@ -417,7 +420,7 @@ osdb:
   clean_command: Vider la commande
   click_on_command: "Cliquez sur une commande de la liste ou tapez une commande personnalisée ci-dessous :"
   command_list: Liste des commandes
-  database: "Base de donnée"
+  database: "Base de données"
   editors: "Editeurs"
   file_editor: "Editeur de fichiers"
   historic: Historique
@@ -434,16 +437,19 @@ osdb:
 page-title:
   administration: Administration
   api: API
+  backups: Backup
   cache: Cache
   backups: Sauvegardes
   commands: Commandes
   database: OS/DB
   diagnostics: Diagnostics
+  designs: Designs
   equipments: Équipements
   general: Général
   health: Santé
   historics: Historiques
   interacts: Interactions
+  widgets: Widgets
   links: Liens
   logs: Logs
   networks: Réseaux
@@ -462,6 +468,7 @@ page-title:
   tools: Outils
   updates: Mises à jour
   users: Utilisateurs
+  views: Vues
 plugin:
   cant-report: Vous ne pouvez pas faire de rapport sur un plugin sans panneau
   category:
@@ -555,7 +562,6 @@ scenario:
   add-block: Ajouter bloc
   add-item: Ajouter élément
   block: Bloc
-  choose: Choisir
   conditions: "Conditions"
   copy-block: Copier bloc
   copy-action: Copier action
@@ -640,7 +646,7 @@ scenario:
   visible: Visible
   you-have-scenarios: Vous avez %s scénario(s).
 scripts:
-  cron-class-or-function-not-found: "[Erreur] Classe ou fonction non trouvée"
+  cron-class-or-function-not-found: "[Erreur] Classe ou fonction non trouvée : "
   cron-disable: "Tous les crons sont actuellement désactivés"
   error: "Erreur : "
   error-on: "Erreur sur "
@@ -703,6 +709,7 @@ sidebar:
   tools: Outils
   tools-summary: Résumé domotique
   tools-interactions: Interactions
+  tools-widgets: Widgets
   tools-scenarios: Scénarios
   tools-scenarios-manage: Gestion Scénarios
   tools-notes: Notes
@@ -776,6 +783,29 @@ welcome:
   never-show: Ne plus afficher
   notify: Sauvegarde réussie
   title: Bienvenue dans NextDom
+widget:
+  applyTo: Appliquer sur
+  display: "Affichage"
+  display_option: "Option d’Affichage"
+  duplicate: "Dupliquer"
+  edit: "Edition Widget"
+  fold: "Replier"
+  icon: Icône
+  id: "ID : "
+  identity: Identité
+  no_widgets_click_add_to_start: "Vous n'avez encore aucun widget. Cliquez sur ajouter pour commencer."
+  preview: Prévisualisation
+  programming: Programmation
+  replacement: Remplacement
+  subType: "Sous-type"
+  template: "Modèle"
+  type: "Type"
+  unfold: "Déplier"
+  use_by_list: "Commande(s) liée(s)"
+  widgets: "widget(s)"
+  width_desktop: "Largeur desktop"
+  width_mobile: "Largeur mobile"
+  you_have_n_widgets: "Vous avez %s widget(s)..."
 
 # Ancien format
 "401 - Accès non autorisé": "401 - Accès non autorisé"

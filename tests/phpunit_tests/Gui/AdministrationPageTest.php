@@ -15,7 +15,7 @@ class AdministrationPageTest extends BasePageTest
             'eqlogic', 'summary', 'report_config', 'log_config',
             'health', 'cron', 'eqAnalyse', 'history', 'timeline',
             'report', 'log',
-            'display', 'backup', 'update', 'osdb', 'interact', 'scenario',
+            'display', 'backup', 'update', 'osdb', 'interact', 'widget', 'scenario',
             'object', 'plugin'];
         foreach ($linkButtons as $linkButton) {
             $button = $this->crawler->filterXPath('//a[@href="index.php?v=d&p=' . $linkButton . '"]');

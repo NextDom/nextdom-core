@@ -100,13 +100,13 @@ function initEvents() {
 
     // BDNS restart button
     $('#bt_restartDns').on('click', function () {
-        jeedom.config.save({
+        nextdom.config.save({
             configuration: $('#network').getValues('.configKey')[0],
             error: function (error) {
                 notify('Core',error.message,"error");
                 },
             success: function () {
-                jeedom.network.restartDns({
+                nextdom.network.restartDns({
                     error: function (error) {
                         notify('Core',error.message,"error");
                         },
@@ -122,13 +122,13 @@ function initEvents() {
 
     // DNS halt button
     $('#bt_haltDns').on('click', function () {
-        jeedom.config.save({
+        nextdom.config.save({
             configuration: $('#network').getValues('.configKey')[0],
             error: function (error) {
                 notify('Core',error.message,"error");
                 },
             success: function () {
-                jeedom.network.stopDns({
+                nextdom.network.stopDns({
                     error: function (error) {
                         notify('Core',error.message,"error");
                         },

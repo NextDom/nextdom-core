@@ -16,36 +16,36 @@
                 error: function (error) {
                     notify("Erreur", error.message, 'error');
                     $('.scenario[data-scenario_id=#id#] .state').empty().append('<i class="fa fa-times"></i>');
-                    setTimeout(function() {
-                       $('.scenario[data-scenario_id=#id#] .state').empty();
-                   }, 3000);
+                    setTimeout(function () {
+                        $('.scenario[data-scenario_id=#id#] .state').empty();
+                    }, 3000);
                 }
             });
         });
-        nextdom.scenario.update['#id#'] =function(_options){
+        nextdom.scenario.update['#id#'] = function (_options) {
             $('.scenario[data-scenario_id=#id#] .state').empty();
             $('.scenario[data-scenario_id=#id#] .changeScenarioState').hide();
-            if(!isset(_options.isActive)){
+            if (!isset(_options.isActive)) {
                 _options.isActive = '#isActive#';
             }
-            if(!isset(_options.state)){
+            if (!isset(_options.state)) {
                 _options.state = '#state#';
             }
-            if (_options.isActive == '1') {
-               if (_options.state == 'in progress') {
-                $('.scenario[data-scenario_id=#id#] .changeScenarioState[data-state=stop]').show();
-                $('.scenario[data-scenario_id=#id#] .changeScenarioState[data-state=deactivate]').show();
-            }else if (_options.state == 'error') {
-                $('.scenario[data-scenario_id=#id#] .changeScenarioState[data-state=start]').show();
-                $('.scenario[data-scenario_id=#id#] .changeScenarioState[data-state=deactivate]').show();
-            }else if (_options.state == 'stop') {
-                $('.scenario[data-scenario_id=#id#] .changeScenarioState[data-state=start]').show();
-                $('.scenario[data-scenario_id=#id#] .changeScenarioState[data-state=deactivate]').show();
+            if (_options.isActive === '1') {
+                if (_options.state === 'in progress') {
+                    $('.scenario[data-scenario_id=#id#] .changeScenarioState[data-state=stop]').show();
+                    $('.scenario[data-scenario_id=#id#] .changeScenarioState[data-state=deactivate]').show();
+                } else if (_options.state === 'error') {
+                    $('.scenario[data-scenario_id=#id#] .changeScenarioState[data-state=start]').show();
+                    $('.scenario[data-scenario_id=#id#] .changeScenarioState[data-state=deactivate]').show();
+                } else if (_options.state === 'stop') {
+                    $('.scenario[data-scenario_id=#id#] .changeScenarioState[data-state=start]').show();
+                    $('.scenario[data-scenario_id=#id#] .changeScenarioState[data-state=deactivate]').show();
+                }
+            } else {
+                $('.scenario[data-scenario_id=#id#] .changeScenarioState[data-state=activate]').show();
             }
-        } else {
-            $('.scenario[data-scenario_id=#id#] .changeScenarioState[data-state=activate]').show();
         }
-    }
-    nextdom.scenario.update['#id#']({isActive:'#isActive#',state:'#state#',lastLaunch:'#lastLaunch#'});
-</script>
+        nextdom.scenario.update['#id#']({isActive: '#isActive#', state: '#state#', lastLaunch: '#lastLaunch#'});
+    </script>
 </div>

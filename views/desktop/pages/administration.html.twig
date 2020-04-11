@@ -147,7 +147,11 @@
                 </div>
                 <div class="box-body text-center">
                     <a class="btn btn-app" href="index.php?v=d&p=health"><i class="fas fa-medkit"></i>{{ 'page-title.health'|trans }}</a>
-                    <a class="btn btn-app" href="index.php?v=d&p=cron">{% if cronCount != 0 %}<span class="badge bg-red">{{ cronCount }}</span>{% endif %}<i class="fas fa-tasks"></i>{{ 'page-title.tasks'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=cron">
+                        {% if cronCountDisable == 0 %}<span class="badge bg-green">{{ cronCountEnable }}</span>{% endif %}
+                        {% if cronCountDisable != 0 %}<span class="badge bg-red">{{ cronCountDisable }}</span>{% endif %}
+                        <i class="fas fa-tasks"></i>{{ 'page-title.tasks'|trans }}
+                    </a>
                     <a class="btn btn-app" href="index.php?v=d&p=eqAnalyse"><i class="fas fa-plug"></i>{{ 'page-title.equipments'|trans }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=history"><i class="fas fa-chart-area"></i>{{ 'page-title.historics'|trans }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=timeline"><i class="fas fa-history"></i>{{ 'page-title.timeline'|trans }}</a>
@@ -168,9 +172,12 @@
                     <a class="btn btn-app" href="index.php?v=d&p=note">{% if noteCount != 0 %}<span class="badge bg-green">{{ noteCount }}</span>{% endif %}<i class="fas fa-sticky-note"></i>{{ 'page-title.notes'|trans }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=osdb"><i class="fas fa-terminal"></i>{{ 'page-title.database'|trans }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=interact">{% if interactCount != 0 %}<span class="badge bg-green">{{ interactCount }}</span>{% endif %}<i class="fas fa-comments"></i>{{ 'page-title.interacts'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=widget">{% if widgetCount != 0 %}<span class="badge bg-green">{{ widgetCount }}</span>{% endif %}<i class="fas fa-camera-retro"></i>{{ 'page-title.widgets'|trans }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=scenario">{% if scenarioCount != 0 %}<span class="badge bg-green">{{ scenarioCount }}</span>{% endif %}<i class="fas fa-film"></i>{{ 'page-title.scenarios'|trans }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=object">{% if objectCount != 0 %}<span class="badge bg-green">{{ objectCount }}</span>{% endif %}<i class="fas fa-clone"></i>{{ 'page-title.objects'|trans }}</a>
                     <a class="btn btn-app" href="index.php?v=d&p=plugin">{% if pluginsCount != 0 %}<span class="badge bg-green">{{ pluginsCount }}</span>{% endif %}<i class="fas fa-puzzle-piece"></i>{{ 'page-title.plugins'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=view">{% if viewCount != 0 %}<span class="badge bg-green">{{ viewCount }}</span>{% endif %}<i class="fas fa-picture-o"></i>{{ 'page-title.views'|trans }}</a>
+                    <a class="btn btn-app" href="index.php?v=d&p=plan">{% if planHeaderCount != 0 %}<span class="badge bg-green">{{ planHeaderCount }}</span>{% endif %}<i class="fas fa-object-group"></i>{{ 'page-title.designs'|trans }}</a>
                 </div>
             </div>
         </div>

@@ -53,7 +53,7 @@ $('#bt_repoAddSaveUpdate').on('click',function(){
     var source = $('.updateAttr[data-l1key=source]').value();
     var update =  $('.repoSource.repo_'+source).getValues('.updateAttr')[0];
     update.source = source;
-    jeedom.update.save({
+    nextdom.update.save({
         update : update,
         error: function (error) {
             notify("{{ Plugin }}", error.message, 'error');

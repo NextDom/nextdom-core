@@ -2,12 +2,12 @@
     <span class="cmdName text-small " style="font-weight: bold;#hideCmdName#">#name_display#</span><br/>
     <input class="btn btn-default" id="file#id#" name="upload" type="file"/>
     <script>
-      $('#file#id#').fileupload({
-        dataType: 'json',
-        url: "core/ajax/cmd.ajax.php?action=fileUpload",
-        formData: {'nextdom_token': NEXTDOM_AJAX_TOKEN, 'cmdId': #id#},
-        done: function (e, data) {
-        }
-      });
+        $('#file#id#').fileupload({
+            dataType: 'json',
+            url: "core/ajax/cmd.ajax.php?action=fileUpload",
+            formData: {'nextdom_token': NEXTDOM_AJAX_TOKEN, 'cmdId': #id#},
+            done: function (e, data) {
+            }
+        });
     </script>
 </div>

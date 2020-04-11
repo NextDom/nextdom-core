@@ -90,6 +90,7 @@ common:
   branch: "Branch"
   by_default: "By default"
   cancel: "Cancel"
+  choose: "To choose"
   clear: "Clear"
   danger: "Danger"
   date: "Date"
@@ -106,11 +107,13 @@ common:
   enough: "ENOUGH"
   error-b: "[Error]"
   error: "Error"
+  export: "Export"
   finish: "finish"
   here: "Here"
   hours: "hours"
   id: "ID"
   ignore: "Ignore"
+  import: "Import"
   in-progress: "In progress"
   info: "Info"
   information: "Information"
@@ -258,6 +261,8 @@ general:
     language: "Language to use with Nexdom"
     system_hardware: "Indicate the type of Hardware"
     nextdom_name : "Name of the Nexdom system"
+    livingSpace: "Living space in your house, so you don't have to fill it in plugins"
+    nbOccupant: "Number of occupants, so you don't have to fill it in plugins"
     time_zone: "Time zone used by Nexdom"
     time_server: "Time Server used for time synchronization"
     time_server_ignore: "Indicates to Nexdom to ignore system time"
@@ -375,7 +380,7 @@ interact:
   unfold: "Unfold"
   wait_before_responding: "Wait before responding"
   without_unit: "Without unit"
-  you_have: "Vous avez "
+  you_have: "You have "
   you_have_n_interactions: "You have %s interaction(s)..."
 network:
   advanced: "Advanced configuration"
@@ -434,14 +439,17 @@ page-title:
   api: API
   backups: Backup
   cache: Cache
+  backups: Backups
   commands: Commands
   database: Database
   diagnostics: Diagnostics
+  designs: Designs
   equipments: Equipment
   general: General
   health: Health
   historics: History
   interacts: Interactions
+  widgets: Widgets
   links: Links
   logs: Logs
   networks: Networks
@@ -460,6 +468,7 @@ page-title:
   tools: tools
   updates: Updates
   users: User
+  views: Views
 plugin:
   cant-report: You can not make a report on board without plugin
   category:
@@ -553,7 +562,6 @@ scenario:
   add-block: Add block
   add-item: Add element
   block: Bloc
-  choose: To choose
   conditions: "Conditions"
   copy-block: Copy bloc
   copy-action: Copy action
@@ -701,6 +709,7 @@ sidebar:
   tools: Tools
   tools-summary: Automation Summary
   tools-interactions: Interactions
+  tools-widgets: Widgets
   tools-scenarios: Scenarios
   tools-scenarios-manage: Scénarios Management
   tools-notes: Notes
@@ -764,13 +773,39 @@ welcome:
   doc-launch: Access the documentation
   forum-title: Forum
   forum-subtitle: Find help on our forum
-  forum-content: "The NextDom forum is a simple and effective way to find the solution to your problem. Surely there is another person who has already encountered the same problem as you. If this is not the case: ask your question, the community will respond as soon as possible."
+  forum-content: |
+                The NextDom forum is a simple and effective way to find the solution to your problem.
+                Surely there is another person who has already encountered the same problem as you.
+                If this is not the case: ask your question, the community will respond as soon as possible."
   forum-launch: Forum access
   hot-plugins: Popular plugins
   migrate-from: Jeedom migration
   never-show: Do not display
   notify: Saved successfully
   title: Welcome to NextDom
+widget:
+  applyTo: Apply to
+  display: Display
+  display_option: Display option
+  duplicate: Duplicate
+  edit: "Edit Widget"
+  fold: "Fold"
+  icon: Icon
+  id: "ID : "
+  identity: Identity
+  no_widgets_click_add_to_start: "You have no widget yet. Click add to start."
+  preview: Preview
+  programming: Programmation
+  replacement: Remplacement
+  subType: "Sub-type"
+  template: "Template"
+  type: "Type"
+  unfold: "Unfold"
+  use_by_list: "Use by"
+  widgets: "widget(s)"
+  width_desktop: "Desktop width"
+  width_mobile: "Mobile width"
+  you_have_n_widgets: "You have %s widget(s)..."
 
 # Ancien format
 "401 - Accès non autorisé": "401 - Access not allowed"
