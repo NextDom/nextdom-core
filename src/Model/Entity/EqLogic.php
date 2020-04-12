@@ -1097,7 +1097,6 @@ class EqLogic extends BaseEntity
                 $tagsValue .= 'tag-' . $tags . ' ';
             }
         }
-        $tagsValue = trim($tagsValue);
         $replace = [
             '#id#' => $this->getId(),
             '#name#' => $this->getName(),
@@ -1120,7 +1119,7 @@ class EqLogic extends BaseEntity
             '#alert_icon#' => '',
             '#eqType#' => $this->getEqType_name(),
             '#custom_layout#' => ($this->widgetPossibility('custom::layout')) ? 'allowLayout' : '',
-            '#tag#' => $tagsValue,
+            '#tag#' => trim($tagsValue),
             '#data-tags#' => $this->getTags(),
             '#generic_type#' => $this->getGenericType()
         ];

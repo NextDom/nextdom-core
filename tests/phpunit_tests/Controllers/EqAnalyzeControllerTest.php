@@ -33,7 +33,7 @@ class EqAnalyzeControllerTest extends BaseControllerTest
     {
         $pageData = [];
         $result = \NextDom\Controller\Diagnostic\EqAnalyzeController::get($pageData);
-        $this->assertCount(4, $pageData['eqAnalyzeCmdData']);
+        $this->assertCount(5, $pageData['eqAnalyzeCmdData']);
         $this->assertStringContainsString('id="alertCmd"', $result);
     }
 

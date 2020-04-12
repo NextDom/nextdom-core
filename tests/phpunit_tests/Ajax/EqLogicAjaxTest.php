@@ -150,7 +150,7 @@ class EqLogicAjaxTest extends BaseAjaxTest
         $result = ob_get_clean();
         $jsonResult = json_decode($result, true);
         $this->assertEquals('ok', $jsonResult['state']);
-        $this->assertCount(4, $jsonResult['result']);
+        $this->assertCount(5, $jsonResult['result']);
         $this->assertEquals('A lamp', $jsonResult['result'][0]['name']);
     }
 
@@ -178,10 +178,10 @@ class EqLogicAjaxTest extends BaseAjaxTest
         $result = ob_get_clean();
         $jsonResult = json_decode($result, true);
         $this->assertEquals('ok', $jsonResult['state']);
-        $this->assertCount(3, $jsonResult['result']);
+        $this->assertCount(4, $jsonResult['result']);
         $this->assertCount(2, $jsonResult['result'][1]);
-        $this->assertEquals('Test eqLogic', $jsonResult['result'][2]['eqLogic']['name']);
-        $this->assertEquals('My Room', $jsonResult['result'][2]['object']['name']);
+        $this->assertEquals('Test eqLogic', $jsonResult['result'][3]['eqLogic']['name']);
+        $this->assertEquals('My Room', $jsonResult['result'][3]['object']['name']);
     }
 
     public function testListByTypeAndCmdTypeWithSubType()

@@ -79,6 +79,7 @@ class Common extends Enum
     const PHP_CLASS = 'phpClass';
     const PROFILE = 'profile';
     const QUERY = 'query';
+    const REPLACE = 'replace';
     const REPLY_CMD = 'reply_cmd';
     const RESULT = 'result';
     const SCENARIO_ID = 'scenario_id';
@@ -90,6 +91,7 @@ class Common extends Enum
     const SUBTYPE = 'subtype';
     const SUMMARY = 'summary';
     const TAG = 'tag';
+    const TEMPLATE = 'template';
     const TIMELINE_ONLY = 'timelineOnly';
     const TIMEOUT = 'timeout';
     const TRIGGER = 'trigger';

@@ -19,6 +19,8 @@ namespace NextDom\Ajax;
 
 use NextDom\Enums\AjaxParams;
 use NextDom\Enums\UserRight;
+use NextDom\Enums\Common;
+use NextDom\Enums\NextdomObj;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
@@ -40,16 +42,16 @@ class WidgetAjax extends BaseAjax
     {
         $results = Utils::o2a(WidgetManager::all());
         foreach ($results as &$result) {
-            if ($result['link_type'] == 'cmd' && $result['link_id'] != '') {
-                $link_id = '';
-                foreach (explode('&&', $result['link_id']) as $cmd_id) {
-                    $cmd = CmdManager::byId($cmd_id);
+            if (isset($result['link_type']) && $result['link_type'] == NextdomObj::CMD && $result['link_id'] != '') {
+                $linkId = '';
+                foreach (explode('&&', $result['link_id']) as $cmdId) {
+                    $cmd = CmdManager::byId($cmdId);
                     if (is_object($cmd)) {
-                        $link_id .= CmdManager::cmdToHumanReadable('#' . $cmd->getId() . '# && ');
+                        $linkId .= CmdManager::cmdToHumanReadable('#' . $cmd->getId() . '# && ');
                     }
 
                 }
-                $result['link_id'] = trim(trim($link_id), '&&');
+                $result['link_id'] = trim(trim($linkId), '&&');
             }
         }
         $this->ajax->success($results);
@@ -59,24 +61,29 @@ class WidgetAjax extends BaseAjax
     {
         $widget = WidgetManager::byId(Utils::init(AjaxParams::ID));
         $result = Utils::o2a($widget);
-        $usedByList = $widget->getUsedBy();
-        foreach ($usedByList as $cmd) {
-          $result['usedByList'][$cmd->getId()] = $cmd->getHumanName();
+        if (is_object($widget)) {
+            $usedByList = $widget->getUsedBy();
+            foreach ($usedByList as $cmd) {
+              $result['usedByList'][$cmd->getId()] = $cmd->getHumanName();
+            }
         }
         $this->ajax->success(NextDomHelper::toHumanReadable($result));
     }
 
-    public function getPreview($usedBy = null)
+    public function getPreview($usedByCmdForPreview = null)
     {
-        if($usedBy === null) {
+        if($usedByCmdForPreview === null) {
             $widget = WidgetManager::byId(Utils::init(AjaxParams::ID));
-            $usedByList = $widget->getUsedBy();
-            if (!empty($usedByList)) {
-                $usedBy = $usedByList[0];
+            if (is_object($widget))
+            {
+                $usedByCmdList = $widget->getUsedBy();
+                if (!empty($usedByCmdList)) {
+                    $usedByCmdForPreview = $usedByCmdList[0];
+                }
             }
         }
-        if(isset($usedBy)){
-            $this->ajax->success(array('html' => $usedBy->getEqLogic()->toHtml('dashboard')));
+        if(isset($usedByCmdForPreview)){
+            $this->ajax->success(['html' => $usedByCmdForPreview->getEqLogic()->toHtml('dashboard')]);
         }
         $this->ajax->error();
     }
@@ -113,6 +120,6 @@ class WidgetAjax extends BaseAjax
 
     public function replacement()
     {
-        $this->ajax->success(WidgetManager::replacement(init('version'),init('replace'),init('by')));
+        $this->ajax->success(WidgetManager::replacement(Utils::init(Common::VERSION), Utils::init(Common::REPLACE), Utils::init('by')));
     }
 }

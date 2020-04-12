@@ -73,7 +73,6 @@ class AjaxBase extends PHPUnit\Framework\TestCase
     {
         $res = '';
         try {
-
             $res = $this->client->request('GET', $url);
         } catch (GuzzleHttp\Exception\ClientException $e) {
             $res = $e->getResponse();

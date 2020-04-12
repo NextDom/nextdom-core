@@ -288,9 +288,8 @@ function initGeneralFormEvents() {
             });
         }, 50);
     });
-    });
-            // Reset timeout
-            $('#bt_resetTimeout').off('click').on('click', function () {
+    // Reset timeout
+    $('#bt_resetTimeout').off('click').on('click', function () {
         $(this).siblings(".slider").value(0);
     });
 

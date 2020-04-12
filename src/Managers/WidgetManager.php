@@ -180,38 +180,39 @@ class WidgetManager extends BaseManager {
     public static function loadConfig($_template) {
         $template = FileSystemHelper::getCoreTemplateFileContent(CmdViewType::DASHBOARD, $_template);
         if (!isset($template)) {
-            if (file_exists(__DIR__ . '/../../data/customTemplates/dashboard/' . $_template . '.html')) {
-                $template = file_get_contents(__DIR__ . '/../../data/customTemplates/dashboard/' . $_template . '.html');
+            $templatePath = NEXTDOM_DATA . '/data/customTemplates/dashboard/' . $_template . '.html';
+            if (file_exists($templatePath)) {
+                $template = file_get_contents($templatePath);
             } else {
-                return $return;
+                return null;
             }
         }
-        $return = array('test' => false);
+        $result = ['test' => false];
         if (strpos($template, '#test#') !== false) {
-            $return['test'] = true;
+            $result['test'] = true;
         }
         preg_match_all("/#_([a-zA-Z_]*)_#/", $template, $matches);
         if (count($matches[1]) == 0) {
-            return $return;
+            return $result;
         }
-        $return['replace'] = array_values(array_unique($matches[1]));
-        return $return;
+        $result['replace'] = array_values(array_unique($matches[1]));
+        return $result;
     }
 
-    public static function replacement($_version, $_replace, $_by) {
-        $cmds = CmdManager::searchTemplate($_version . '":"' . $_replace . '"');
-        if (!is_array($cmds) || count($cmds) == 0) {
+    public static function replacement($version, $replace, $by) {
+        $cmds = CmdManager::searchTemplate($version . '":"' . $replace . '"');
+        if (!is_array($cmds) || count($cmds) === 0) {
             return 0;
         }
-        $replace_number = 0;
+        $replaceCount = 0;
         foreach ($cmds as $cmd) {
-            if ($cmd->getTemplate($_version) == $_replace) {
-                $cmd->setTemplate($_version, $_by);
+            if ($cmd->getTemplate($version) == $replace) {
+                $cmd->setTemplate($version, $by);
                 $cmd->save();
-                $replace_number++;
+                $replaceCount++;
             }
         }
-        return $replace_number;
+        return $replaceCount;
     }
 
 }

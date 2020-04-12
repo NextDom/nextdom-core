@@ -93,7 +93,7 @@ class RoomRestTest extends PHPUnit\Framework\TestCase
     {
         $result = RoomRest::getRoots();
         $this->assertArrayHasKey('children', $result);
-        $this->assertCount(2, $result['children']);
+        $this->assertCount(3, $result['children']);
         $this->assertEquals('My Room', $result['children'][0]['name']);
         $this->assertEquals('Second Room', $result['children'][1]['name']);
     }

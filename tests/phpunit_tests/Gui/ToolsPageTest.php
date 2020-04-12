@@ -161,7 +161,7 @@ class ToolsPageTest extends BasePageTest
     public function testObjectPage()
     {
         $this->goTo('index.php?v=d&p=object');
-        $this->assertCount(4, $this->crawler->filter('.objectDisplayCard'));
+        $this->assertCount(5, $this->crawler->filter('.objectDisplayCard'));
         $this->crawler->filter('#bt_showObjectSummary')->click();
         sleep(3);
         $this->assertEquals('tr', $this->crawler->filter('.tablesorter-headerRow')->getTagName());

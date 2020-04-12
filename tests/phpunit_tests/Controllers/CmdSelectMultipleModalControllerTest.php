@@ -36,6 +36,6 @@ class CmdSelectMultipleModalControllerTest extends BaseControllerTest
     {
         $_GET['cmd_id'] = 1;
         $result = \NextDom\Controller\Modals\CmdSelectMultiple::get();
-        $this->assertStringContainsString('Test eqLogic - Cmd 1', $result);
+        $this->assertStringContainsString('<input type="checkbox" class="selectMultipleApplyCmd" checked="checked"/>', $result);
     }
 }
