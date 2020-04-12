@@ -1,4 +1,5 @@
 <?php
+
 /* This file is part of NextDom Software.
  *
  * NextDom is free software: you can redistribute it and/or modify
@@ -38,6 +39,7 @@ use NextDom\Model\Entity\Parents\DisplayEntity;
 use NextDom\Model\Entity\Parents\IsVisibleEntity;
 use NextDom\Model\Entity\Parents\NameEntity;
 use NextDom\Model\Entity\Parents\PositionEntity;
+use NextDom\Model\Entity\Parents\ImageEntity;
 
 /**
  * Object for eqLogic group
@@ -45,20 +47,19 @@ use NextDom\Model\Entity\Parents\PositionEntity;
  * @ORM\Table(name="object", uniqueConstraints={@ORM\UniqueConstraint(name="name_UNIQUE", columns={"name"})}, indexes={@ORM\Index(name="fk_object_object1_idx1", columns={"father_id"}), @ORM\Index(name="position", columns={"position"})})
  * @ORM\Entity
  */
-class JeeObject extends BaseEntity
-{
+class JeeObject extends BaseEntity {
+
     const CLASS_NAME = JeeObject::class;
     const DB_CLASS_NAME = '`object`';
     const TABLE_NAME = NextDomObj::OBJECT;
+    const IMG_DIR_NAME = NextDomObj::OBJECT;
 
-    use ConfigurationEntity, DisplayEntity, NameEntity, IsVisibleEntity, PositionEntity;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="image", type="text", length=16777215, nullable=true)
-     */
-    protected $image;
+    use ConfigurationEntity,
+        DisplayEntity,
+        NameEntity,
+        ImageEntity,
+        IsVisibleEntity,
+        PositionEntity;
 
     /**
      * @var int
@@ -69,7 +70,6 @@ class JeeObject extends BaseEntity
      * })
      */
     protected $father_id = null;
-
     protected $_child = [];
 
     /**
@@ -79,8 +79,7 @@ class JeeObject extends BaseEntity
      *
      * @return int|null
      */
-    public function getIsVisible($default = null)
-    {
+    public function getIsVisible($default = null) {
         if ($this->isVisible == '' || !is_numeric($this->isVisible)) {
             return $default;
         }
@@ -94,8 +93,7 @@ class JeeObject extends BaseEntity
      *
      * @return int|null Object position
      */
-    public function getPosition($default = null)
-    {
+    public function getPosition($default = null) {
         if ($this->position == '' || !is_numeric($this->position)) {
             return $default;
         }
@@ -109,8 +107,7 @@ class JeeObject extends BaseEntity
      *
      * @throws \Exception
      */
-    public function getChilds()
-    {
+    public function getChilds() {
         $tree = [];
         foreach ($this->getChild() as $child) {
             $tree[] = $child;
@@ -127,8 +124,7 @@ class JeeObject extends BaseEntity
      *
      * @throws \Exception
      */
-    public function getChild($_visible = true)
-    {
+    public function getChild($_visible = true) {
         if (!isset($this->_child[$_visible])) {
             $this->_child[$_visible] = JeeObjectManager::getChildren($this->id, $_visible);
         }
@@ -140,8 +136,7 @@ class JeeObject extends BaseEntity
      *
      * @throws \Exception
      */
-    public function preSave()
-    {
+    public function preSave() {
         if (is_numeric($this->getFather_id()) && $this->getFather_id() === $this->getId()) {
             throw new CoreException(__('L\'objet ne peut pas être son propre père'));
         }
@@ -169,8 +164,7 @@ class JeeObject extends BaseEntity
      *
      * @return int|null Father object id
      */
-    public function getFather_id($default = null)
-    {
+    public function getFather_id($default = null) {
         if ($this->father_id == '' || !is_numeric($this->father_id)) {
             return $default;
         }
@@ -184,8 +178,7 @@ class JeeObject extends BaseEntity
      *
      * @return $this
      */
-    public function setFather_id($_father_id = null)
-    {
+    public function setFather_id($_father_id = null) {
         $_father_id = ($_father_id == '') ? null : $_father_id;
         $this->updateChangeState($this->father_id, $_father_id);
         $this->father_id = $_father_id;
@@ -199,8 +192,7 @@ class JeeObject extends BaseEntity
      *
      * @throws \Exception
      */
-    public function checkTreeConsistency($ancestors = [])
-    {
+    public function checkTreeConsistency($ancestors = []) {
         $father = $this->getFather();
         // If object as a father
         if (is_object($father)) {
@@ -221,8 +213,7 @@ class JeeObject extends BaseEntity
      *
      * @throws \Exception
      */
-    public function getFather()
-    {
+    public function getFather() {
         return JeeObjectManager::byId($this->getFather_id());
     }
 
@@ -233,8 +224,7 @@ class JeeObject extends BaseEntity
      *
      * @throws \Exception
      */
-    public function parentNumber()
-    {
+    public function parentNumber() {
         $father = $this->getFather();
         if (!is_object($father)) {
             return 0;
@@ -255,8 +245,7 @@ class JeeObject extends BaseEntity
      *
      * @throws \Exception
      */
-    public function preRemove()
-    {
+    public function preRemove() {
         DataStoreManager::removeByTypeLinkId(NextDomObj::OBJECT, $this->getId());
         $params = ['object_id' => $this->getId()];
         $sql = 'UPDATE ' . EqLogicManager::DB_CLASS_NAME . ' SET `object_id = NULL WHERE `object_id` = :object_id';
@@ -273,8 +262,7 @@ class JeeObject extends BaseEntity
      * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
      */
-    public function remove()
-    {
+    public function remove() {
         NextDomHelper::addRemoveHistory([Common::ID => $this->getId(), Common::NAME => $this->getName(), Common::DATE => date(DateFormat::FULL), Common::TYPE => NextDomObj::OBJECT]);
         return parent::remove();
     }
@@ -286,8 +274,7 @@ class JeeObject extends BaseEntity
      *
      * @return $this
      */
-    public function setName($name)
-    {
+    public function setName($name) {
         $name = str_replace(['&', '#', ']', '[', '%'], '', $name);
         $this->updateChangeState($this->name, $name);
         $this->name = $name;
@@ -307,8 +294,7 @@ class JeeObject extends BaseEntity
      *
      * @throws \Exception
      */
-    public function getEqLogicBySummary($summary = '', $onlyEnable = true, $onlyVisible = false, $eqTypeName = null, $logicalId = null)
-    {
+    public function getEqLogicBySummary($summary = '', $onlyEnable = true, $onlyVisible = false, $eqTypeName = null, $logicalId = null) {
         $def = ConfigManager::byKey(ConfigKey::OBJECT_SUMMARY);
         if ($summary == '' || !isset($def[$summary])) {
             return null;
@@ -350,8 +336,7 @@ class JeeObject extends BaseEntity
      * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
      */
-    public function getHtmlSummary($version = 'desktop')
-    {
+    public function getHtmlSummary($version = 'desktop') {
         if (trim($this->getCache('summaryHtml' . $version)) != '') {
             return $this->getCache('summaryHtml' . $version);
         }
@@ -394,8 +379,7 @@ class JeeObject extends BaseEntity
      * @return mixed Value of the asked information or $default
      * @throws \Exception
      */
-    public function getCache(string $key = '', $default = '')
-    {
+    public function getCache(string $key = '', $default = '') {
         $cache = CacheManager::byKey('objectCacheAttr' . $this->getId())->getValue();
         return Utils::getJsonAttr($cache, $key, $default);
     }
@@ -411,8 +395,7 @@ class JeeObject extends BaseEntity
      * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
      */
-    public function getSummary($summaryKey = '', $raw = false)
-    {
+    public function getSummary($summaryKey = '', $raw = false) {
         $def = ConfigManager::byKey(ConfigKey::OBJECT_SUMMARY);
         if ($summaryKey == '' || !isset($def[$summaryKey])) {
             return null;
@@ -454,8 +437,7 @@ class JeeObject extends BaseEntity
      * @param mixed $value Default value
      * @throws \Exception
      */
-    public function setCache(string $key, $value = null)
-    {
+    public function setCache(string $key, $value = null) {
         CacheManager::set('objectCacheAttr' . $this->getId(), Utils::setJsonAttr(CacheManager::byKey('objectCacheAttr' . $this->getId())->getValue(), $key, $value));
     }
 
@@ -470,8 +452,7 @@ class JeeObject extends BaseEntity
      *
      * @throws \ReflectionException
      */
-    public function getLinkData(&$data = [Common::NODE => [], Common::LINK => []], $level = 0, $drill = null)
-    {
+    public function getLinkData(&$data = [Common::NODE => [], Common::LINK => []], $level = 0, $drill = null) {
         if ($drill === null) {
             $drill = ConfigManager::byKey('graphlink::object::drill');
         }
@@ -514,8 +495,7 @@ class JeeObject extends BaseEntity
      *
      * @return string
      */
-    public function getHumanName($tag = false, $prettify = false)
-    {
+    public function getHumanName($tag = false, $prettify = false) {
         if ($tag) {
             $tagIcon = '<i class="fas fa-tag"></i>';
             $spacingRight = '<i class="spacing-right"></i>';
@@ -540,8 +520,7 @@ class JeeObject extends BaseEntity
      *
      * @throws \ReflectionException
      */
-    public function getUse()
-    {
+    public function getUse() {
         $json = NextDomHelper::fromHumanReadable(json_encode(Utils::o2a($this)));
         return NextDomHelper::getTypeUse($json);
     }
@@ -559,8 +538,7 @@ class JeeObject extends BaseEntity
      *
      * @throws \Exception
      */
-    public function getEqLogic($onlyEnable = true, $onlyVisible = false, $eqTypeName = null, $logicalId = null, $searchOnchild = false)
-    {
+    public function getEqLogic($onlyEnable = true, $onlyVisible = false, $eqTypeName = null, $logicalId = null, $searchOnchild = false) {
         $eqLogics = EqLogicManager::byObjectId($this->getId(), $onlyEnable, $onlyVisible, $eqTypeName, $logicalId);
         if (is_array($eqLogics)) {
             foreach ($eqLogics as &$eqLogic) {
@@ -588,75 +566,8 @@ class JeeObject extends BaseEntity
      *
      * @throws \Exception
      */
-    public function getScenario($onlyEnable = true, $onlyVisible = false)
-    {
+    public function getScenario($onlyEnable = true, $onlyVisible = false) {
         return ScenarioManager::byObjectId($this->getId(), $onlyEnable, $onlyVisible);
-    }
-
-    /**
-     *
-     * Get data of the object in plain text array
-     *
-     * @return array
-     *
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
-    public function toArray()
-    {
-        $result = Utils::o2a($this, true);
-        unset($result['image']);
-        $result['img'] = $this->getImgLink();
-        return $result;
-    }
-
-    /**
-     * @return string
-     * @throws \NextDom\Exceptions\CoreException
-     * @throws \ReflectionException
-     */
-    public function getImgLink()
-    {
-        if ($this->getImage('data') == '') {
-            return '';
-        }
-        $dir = NEXTDOM_ROOT . '/public/img/object';
-        if (!file_exists($dir)) {
-            mkdir($dir);
-        }
-        if ($this->getImage('sha512') == '') {
-            $this->setImage('sha512', Utils::sha512($this->getImage('data')));
-            $this->save();
-        }
-        $filename = $this->getImage('sha512') . '.' . $this->getImage('type');
-        $filepath = $dir . '/' . $filename;
-        if (!file_exists($filepath)) {
-            file_put_contents($filepath, base64_decode($this->getImage('data')));
-        }
-        return 'public/img/object/' . $filename;
-    }
-
-    /**
-     * Get image of the object
-     *
-     * @param string $imageKey Image key
-     * @param string $defaultValue Default value if not set
-     * @return array|bool|mixed|null|string
-     */
-    public function getImage($imageKey = '', $defaultValue = '')
-    {
-        return Utils::getJsonAttr($this->image, $imageKey, $defaultValue);
-    }
-
-    /**
-     * @param string $imageKey Image key
-     * @param string $imageValue Image value (CSS icon)
-     * @return $this
-     */
-    public function setImage($imageKey, $imageValue)
-    {
-        $this->image = Utils::setJsonAttr($this->image, $imageKey, $imageValue);
-        return $this;
     }
 
     /**
@@ -666,8 +577,7 @@ class JeeObject extends BaseEntity
      * @throws \NextDom\Exceptions\CoreException
      * @throws \ReflectionException
      */
-    public function save()
-    {
+    public function save() {
         if ($this->_changed) {
             CacheManager::set('globalSummaryHtmldashboard', '');
             CacheManager::set('globalSummaryHtmlmobile', '');
@@ -677,4 +587,5 @@ class JeeObject extends BaseEntity
         DBHelper::save($this);
         return true;
     }
+
 }

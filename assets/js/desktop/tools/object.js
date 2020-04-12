@@ -140,12 +140,13 @@ function initEvents() {
     // Object picture remove button
     $('#bt_removeBackgroundImage').off('click').on('click', function () {
         nextdom.object.removeImage({
-            view: $('.objectAttr[data-l1key=id]').value(),
+            id: $('.objectAttr[data-l1key=id]').value(),
             error: function (error) {
                 notify('Erreur', error.message, 'error');
             },
             success: function () {
                 notify('Info', '{{Image supprimée}}', 'success');
+                showImg('');
             }
         });
     });
@@ -279,6 +280,7 @@ function loadObjectConfiguration(_id) {
                 return;
             }
             notify('Info', '{{Image ajoutée}}', 'success');
+            loadPage('index.php?v=d&p=object&id=' + _id);
         }
     });
     $(".objectDisplayCard").removeClass('active');
@@ -313,6 +315,7 @@ function loadObjectConfiguration(_id) {
             }
             $('.objectAttr[data-l1key=father_id] option[value=' + data.id + ']').hide();
             $('.div_summary').empty();
+            showImg(data.img);
             $('.tabnumber').empty();
             if (isset(data.configuration) && isset(data.configuration.summary)) {
                 for (var i in data.configuration.summary) {
@@ -346,6 +349,18 @@ function loadObjectConfiguration(_id) {
             $(".bt_cancelModifs").hide();
         }
     });
+}
+
+function showImg(img) {
+    if (isset(img) && img.length > 0) {
+        $('#objectImg').attr('src', img);
+        $('#objectImg').show();
+        $('#bt_removeBackgroundImage').show();
+    } else {
+        $('#objectImg').attr('src', '');
+        $('#objectImg').hide();
+        $('#bt_removeBackgroundImage').hide();
+    }
 }
 
 /**

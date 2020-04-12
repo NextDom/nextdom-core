@@ -162,7 +162,6 @@ class ObjectAjaxTest extends BaseAjaxTest
 
     public function testRemoveImage() {
         $parentObject = JeeObjectManager::byName('Parent test object');
-        $parentObject->setImage('data', 'Sample data');
         $parentObject->setImage('sha512', 'Sample hash');
         $parentObject->save();
         $this->connectAsAdmin();
@@ -173,7 +172,6 @@ class ObjectAjaxTest extends BaseAjaxTest
         $jsonResult = json_decode($result, true);
         $this->assertEquals('ok', $jsonResult['state']);
         $parentObject = JeeObjectManager::byName('Parent test object');
-        $this->assertEquals('', $parentObject->getImage('data'));
         $this->assertEquals('', $parentObject->getImage('sha512'));
     }
 

@@ -30,6 +30,7 @@ use NextDom\Model\Entity\Parents\AccessCodeConfigurationEntity;
 use NextDom\Model\Entity\Parents\BaseEntity;
 use NextDom\Model\Entity\Parents\ConfigurationEntity;
 use NextDom\Model\Entity\Parents\NameEntity;
+use NextDom\Model\Entity\Parents\ImageEntity;
 
 /**
  * Planheader
@@ -40,15 +41,9 @@ use NextDom\Model\Entity\Parents\NameEntity;
 class PlanHeader extends BaseEntity
 {
     const TABLE_NAME = NextDomObj::PLAN_HEADER;
+    const IMG_DIR_NAME = NextDomObj::PLAN;
 
-    use NameEntity, AccessCodeConfigurationEntity;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="image", type="text", length=16777215, nullable=true)
-     */
-    protected $image;
+    use NameEntity, ImageEntity, AccessCodeConfigurationEntity;
 
     /**
      * @param string $_format
@@ -85,10 +80,10 @@ class PlanHeader extends BaseEntity
             $planCopy->setPlanHeader_id($planHeaderCopy->getId());
             $planCopy->save();
         }
-        $filename1 = 'planHeader' . $this->getId() . '-' . $this->getImage('sha512') . '.' . $this->getImage('type');
+        $filename1 = self::TABLE_NAME . $this->getId() . '-' . $this->getImage('sha512') . '.' . $this->getImage('type');
         if (file_exists(NEXTDOM_DATA . '/data/custom/plans/' . $filename1)) {
-            $filename2 = 'planHeader' . $planHeaderCopy->getId() . '-' . $planHeaderCopy->getImage('sha512') . '.' . $planHeaderCopy->getImage('type');
-            copy(NEXTDOM_DATA . '/data/custom/plans/' . $filename1, NEXTDOM_DATA . '/data/custom/plans/' . $filename2);
+            $filename2 = self::TABLE_NAME . $planHeaderCopy->getId() . '-' . $planHeaderCopy->getImage('sha512') . '.' . $planHeaderCopy->getImage('type');
+            copy(NEXTDOM_DATA . '/data/custom/plans/' . $filename1, NEXTDOM_DATA . '/data/' . self::IMG_DIR_NAME . '/' . $filename2);
         }
         return $planHeaderCopy;
     }
@@ -101,29 +96,6 @@ class PlanHeader extends BaseEntity
     public function getPlan()
     {
         return PlanManager::byPlanHeaderId($this->getId());
-    }
-
-    /**
-     * @param string $_key
-     * @param string $_default
-     * @return array|bool|mixed|null|string
-     */
-    public function getImage($_key = '', $_default = '')
-    {
-        return Utils::getJsonAttr($this->image, $_key, $_default);
-    }
-
-    /**
-     * @param $_key
-     * @param $_value
-     * @return $this
-     */
-    public function setImage($_key, $_value)
-    {
-        $image = Utils::setJsonAttr($this->image, $_key, $_value);
-        $this->updateChangeState($this->image, $image);
-        $this->image = $image;
-        return $this;
     }
 
     public function preSave()
@@ -149,32 +121,6 @@ class PlanHeader extends BaseEntity
     {
         NextDomHelper::addRemoveHistory(['id' => $this->getId(), 'name' => $this->getName(), 'date' => date(DateFormat::FULL), 'type' => 'plan']);
         return parent::remove();
-    }
-
-    /**
-     * @return string
-     * @throws CoreException
-     */
-    public function displayImage()
-    {
-        if ($this->getImage('data') == '') {
-            return '';
-        }
-        $dir = NEXTDOM_DATA . '/data/custom/plans/';
-        if (!file_exists($dir)) {
-            FileSystemHelper::mkdirIfNotExists($dir, 0755, true);
-        }
-        if ($this->getImage('sha512') == '') {
-            $this->setImage('sha512', Utils::sha512($this->getImage('data')));
-            $this->save();
-        }
-        $filename = $this->getImage('sha512') . '.' . $this->getImage('type');
-        $filepath = $dir . $filename;
-        if (!file_exists($filepath)) {
-            file_put_contents($filepath, base64_decode($this->getImage('data')));
-        }
-        $size = $this->getImage('size');
-        return '<img style="z-index:997" src="' . '/data/custom/plans/' . $filename . '" data-size_y="' . $size[1] . '" data-size_x="' . $size[0] . '">';
     }
 
     /**

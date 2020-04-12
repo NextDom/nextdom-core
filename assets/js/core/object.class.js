@@ -172,7 +172,7 @@ nextdom.object.summaryUpdate = function(queryParams) {
         var keySpan = object.find('.objectSummary' + j);
         if (keySpan.html() !== undefined) {
           updated = true;
-          if (keySpan.closest('.objectSummaryParent').attr('data-displayZeroValue') == 0 && queryParams[i]['keys'][j]['value'] === 0) {
+          if (keySpan.closest('.objectSummaryParent').attr('data-displayZeroValue') === 0 && queryParams[i]['keys'][j]['value'] === 0) {
             keySpan.closest('.objectSummaryParent').hide();
             continue;
           }
@@ -199,8 +199,8 @@ nextdom.object.summaryUpdate = function(queryParams) {
     success: function (result) {
       for (var i in result) {
         objects[i].object.replaceWith($(result[i].html));
-        if ($('.objectSummary' + i).closest('.objectSummaryHide') != []) {
-          if ($(result[i].html).html() == '') {
+        if ($('.objectSummary' + i).closest('.objectSummaryHide') !== []) {
+          if ($(result[i].html).html() === '') {
             $('.objectSummary' + i).closest('.objectSummaryHide').hide();
           } else {
             $('.objectSummary' + i).closest('.objectSummaryHide').show();

@@ -18,13 +18,11 @@
 namespace NextDom\Ajax;
 
 use NextDom\Enums\AjaxParams;
-use NextDom\Enums\Common;
 use NextDom\Enums\NextDomFolder;
 use NextDom\Enums\NextDomObj;
 use NextDom\Enums\UserRight;
 use NextDom\Exceptions\CoreException;
 use NextDom\Helpers\AuthentificationHelper;
-use NextDom\Helpers\FileSystemHelper;
 use NextDom\Helpers\NextDomHelper;
 use NextDom\Helpers\Utils;
 use NextDom\Managers\PlanHeaderManager;
@@ -193,11 +191,9 @@ class PlanAjax extends BaseAjax
         if (!is_object($planHeader)) {
             throw new CoreException(__('Plan header inconnu. Vérifiez l\'ID ') . Utils::init(AjaxParams::ID));
         }
-        $filename = 'planHeader' . $planHeader->getId() . '-' . $planHeader->getImage('sha512') . '.' . $planHeader->getImage('type');
         $planHeader->setImage('sha512', '');
-        $planHeader->setImage('data', '');
         $planHeader->save();
-        @unlink(NEXTDOM_DATA . '/data/custom/plans/' . $filename);
+        @unlink(NEXTDOM_DATA . '/' . $planHeader->getImgLink());
         $this->ajax->success();
     }
 
@@ -225,7 +221,6 @@ class PlanAjax extends BaseAjax
         $fileContent = file_get_contents($_FILES['file']['tmp_name']);
         $uploadedImageData->setHash(Utils::sha512($fileContent));
         $uploadedImageData->setPath($_FILES['file']['tmp_name']);
-        $uploadedImageData->setData(base64_encode($fileContent));
         return $uploadedImageData;
     }
 
@@ -269,7 +264,6 @@ class PlanAjax extends BaseAjax
         $planHeader->setImage('type', $uploadedImageData->getType());
         $planHeader->setImage('size', $uploadedImageData->getSize());
         $planHeader->setImage('sha512', $uploadedImageData->getHash());
-        $planHeader->setImage('data', $uploadedImageData->getData());
         $destFilename = NextDomObj::PLAN_HEADER . $planHeader->getId() . '-' . $uploadedImageData->getHash() . '.' . $uploadedImageData->getType();
         $this->checkAndMoveUploadImage($uploadedImageData->getPath(), NextDomFolder::PLAN_IMAGE . $destFilename);
         $planHeader->setConfiguration('desktopSizeX', $uploadedImageData->getSizeX());
