@@ -30,10 +30,12 @@ use NextDom\Managers\ConsistencyManager;
 use NextDom\Managers\CronManager;
 use NextDom\Managers\InteractDefManager;
 use NextDom\Managers\Plan3dManager;
+use NextDom\Managers\PlanHeaderManager;
 use NextDom\Managers\PlanManager;
 use NextDom\Managers\UpdateManager;
 use NextDom\Managers\UserManager;
 use NextDom\Model\Entity\Cron;
+use NextDom\Model\Entity\PlanHeader;
 
 /**
  * Class MigrationHelper
@@ -349,8 +351,8 @@ class MigrationHelper
                     if (!is_link($fileInfo->getFilename()) && Utils::startsWith($fileInfo->getFilename(), 'plan_')) {
 
                         $fileToReplace = $fileInfo->getFilename();
-                        self::migratePlanPath($logFile, $fileToReplace, 'public/img/', 'data/custom/plans/');
-                        self::migratePlanPath($logFile, $fileToReplace, 'core/img/', 'data/custom/plans/');
+                        self::migratePlanPath($logFile, $fileToReplace, 'public/img/', 'data/plan/');
+                        self::migratePlanPath($logFile, $fileToReplace, 'core/img/', 'data/plan/');
                     }
                 }
 
@@ -534,6 +536,24 @@ class MigrationHelper
      */
     private static function migrate_0_8_0($logFile = LogTarget::MIGRATION)
     {
+        $dir = NEXTDOM_DATA . '/';
+        $planHeaderList = PlanHeaderManager::all();
+        foreach ($planHeaderList as $planHeader) {
+            if (!is_file($dir.$planHeader->getImgLink()) && !empty($planHeader->getImage('data'))) {
+                $dirname = dirname($dir . $planHeader->getImgLink());
+                if (!is_dir($dirname)) {
+                    mkdir($dirname);
+                }
+                self::logMessage($logFile, "Create " . $planHeader->getImgLink());
+                file_put_contents($dir . $planHeader->getImgLink(), base64_decode($planHeader->getImage('data')));
+                $planHeader->setImage('data', '');
+                $planHeader->save();
+            }
+        }
+        // delete /data/custom/plans/
+        $custom_plans = $dir . 'data/custom/plans/';
+        FileSystemHelper::rrmdir($custom_plans);
+
         DBHelper::exec("ALTER TABLE `cmd` add `html` mediumtext COLLATE utf8_unicode_ci;");
         DBHelper::exec("ALTER TABLE `type` DROP COLUMN `scenario`;");
         DBHelper::exec("RENAME TABLE `widgets` TO `widget`");
