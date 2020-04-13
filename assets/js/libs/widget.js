@@ -5,13 +5,13 @@
  */
 function editWidgetCmdMode(_mode) {
   if (!isset(_mode)) {
-    if ($('#bt_editDashboardWidgetOrder').attr('data-mode') != undefined && $('#bt_editDashboardWidgetOrder').attr('data-mode') == 1) {
+    if ($('#bt_editDashboardWidgetOrder').attr('data-mode') !== undefined && $('#bt_editDashboardWidgetOrder').attr('data-mode') === 1) {
       editWidgetMode(0);
       editWidgetMode(1);
     }
     return;
   }
-  if (_mode == 0) {
+  if (_mode === 0) {
     $(".eqLogic-widget.eqLogic_layout_table table.tableCmd").removeClass('table-bordered');
     $.contextMenu('destroy');
     if (document.querySelectorAll('.eqLogic-widget.allowReorderCmd.eqLogic_layout_table table.tableCmd.ui-sortable').length > 0) {
@@ -76,7 +76,7 @@ function editWidgetCmdMode(_mode) {
             nextdom.eqLogic.simpleSave({
               eqLogic: {
                 id: $(this).attr('data-eqLogic_id'),
-                display: {'layout::dashboard': 'default'},
+                display: {'layout::dashboard': 'default'}
               },
               error: function (error) {
                 notify('Erreur', error.message, 'error');
@@ -95,7 +95,7 @@ function editWidgetCmdMode(_mode) {
             nextdom.eqLogic.simpleSave({
               eqLogic: {
                 id: $(this).attr('data-eqLogic_id'),
-                display: {'layout::dashboard': 'table'},
+                display: {'layout::dashboard': 'table'}
               },
               error: function (error) {
                 notify('Erreur', error.message, 'error');
@@ -119,7 +119,7 @@ function editWidgetCmdMode(_mode) {
             nextdom.eqLogic.simpleSave({
               eqLogic: {
                 id: $(this).attr('data-eqLogic_id'),
-                display: {'layout::dashboard::table::nbColumn': column + 1},
+                display: {'layout::dashboard::table::nbColumn': column + 1}
               },
               error: function (error) {
                 notify('Erreur', error.message, 'error');
@@ -142,7 +142,7 @@ function editWidgetCmdMode(_mode) {
             nextdom.eqLogic.simpleSave({
               eqLogic: {
                 id: $(this).attr('data-eqLogic_id'),
-                display: {'layout::dashboard::table::nbLine': line + 1},
+                display: {'layout::dashboard::table::nbLine': line + 1}
               },
               error: function (error) {
                 notify('Erreur', error.message, 'error');
@@ -166,7 +166,7 @@ function editWidgetCmdMode(_mode) {
             nextdom.eqLogic.simpleSave({
               eqLogic: {
                 id: $(this).attr('data-eqLogic_id'),
-                display: {'layout::dashboard::table::nbColumn': column},
+                display: {'layout::dashboard::table::nbColumn': column}
               },
               error: function (error) {
                 notify('Erreur', error.message, 'error');
@@ -190,14 +190,14 @@ function editWidgetCmdMode(_mode) {
             nextdom.eqLogic.simpleSave({
               eqLogic: {
                 id: $(this).attr('data-eqLogic_id'),
-                display: {'layout::dashboard::table::nbLine': line},
+                display: {'layout::dashboard::table::nbLine': line}
               },
               error: function (error) {
                 notify('Erreur', error.message, 'error');
               }
             });
           }
-        },
+        }
       }
     });
   }
@@ -209,7 +209,7 @@ function editWidgetCmdMode(_mode) {
  * @param _params array of param dedicated for know page in edition
  */
 function saveWidgetDisplay(_params) {
-  if (init(_params) == '') {
+  if (init(_params) === '') {
     _params = {};
   }
   var cmds = [];
@@ -239,7 +239,7 @@ function saveWidgetDisplay(_params) {
       order++;
     });
   });
-  if (init(_params['dashboard']) == 1) {
+  if (init(_params['dashboard']) === 1) {
     $('.div_displayEquipement').each(function () {
       order = 1;
       $(this).find('.eqLogic-widget').each(function () {
@@ -247,7 +247,7 @@ function saveWidgetDisplay(_params) {
         eqLogic.display = {};
         eqLogic.display.width = Math.floor($(this).width() / 2) * 2 + 'px';
         eqLogic.display.height = Math.floor($(this).height() / 2) * 2 + 'px';
-        if ($(this).attr('data-order') != undefined) {
+        if ($(this).attr('data-order') !== undefined) {
           eqLogic.order = $(this).attr('data-order');
         } else {
           eqLogic.order = order;

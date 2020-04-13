@@ -84,7 +84,7 @@ function adjustNextDomTheme() {
   }
 
   // containers adjustement
-  var needContent = pageContainer.children("section").length === 0 && pageContainer.children().children("section").length === 0 && (getUrlVars('p') != 'plan') && (getUrlVars('p') != 'view') && (getUrlVars('p') != 'plan3d');
+  var needContent = pageContainer.children("section").length === 0 && pageContainer.children().children("section").length === 0 && (getUrlVars('p') !== 'plan') && (getUrlVars('p') !== 'view') && (getUrlVars('p') !== 'plan3d');
   if (needContent) {
     if (!pageContainer.hasClass('content')) {
       pageContainer.addClass('content');
@@ -224,7 +224,7 @@ function loadPage(pageUrl, noPushHistory) {
   closeAll();
 
   // Navigator history management
-  if (!isset(noPushHistory) || noPushHistory == false) {
+  if (!isset(noPushHistory) || noPushHistory === false) {
     window.history.pushState('', '', pageUrl);
   }
 
@@ -245,7 +245,7 @@ function loadPage(pageUrl, noPushHistory) {
     var url = pageUrl + '&ajax=1';
   } else {
     var anchorPos = pageUrl.lastIndexOf("#");
-    var url = pageUrl.substring(0, anchorPos) + "&ajax=1" + pageUrl.substring(anchorPos)
+    var url = pageUrl.substring(0, anchorPos) + "&ajax=1" + pageUrl.substring(anchorPos);
   }
 
   loadPageContent(url);
