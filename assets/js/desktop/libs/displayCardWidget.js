@@ -310,7 +310,7 @@ class DisplayCardWidget extends DisplayCardPageA {
                 $('id').value(id);
                 $('.selectTemplate').off('change');
                 $('.attr').value('');
-                $('.attr[data-l1key=type]').value('info')
+                $('.attr[data-l1key=type]').value('info');
                 $('.attr[data-l1key=subtype]').value($('.attr[data-l1key=subtype]').find('option:first').attr('value'));
                 $('#div_conf').setValues(data, '.attr');
                 if (isset(data.test)) {
@@ -454,7 +454,7 @@ class DisplayCardWidget extends DisplayCardPageA {
                     $('.display_config').hide();
                 }
                 if (typeof _data !== 'undefined') {
-                    $('.widget').setValues({replace: _data.replace}, '.attr');
+                    $('#div_conf').setValues({replace: _data.replace}, '.attr');
                 }
                 if (data.test) {
                     $('.programmation').show();
