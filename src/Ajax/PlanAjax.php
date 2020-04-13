@@ -287,13 +287,13 @@ class PlanAjax extends BaseAjax
         }
         $uploadedImageData = $this->getUploadedImageData();
         $destPath = NextDomFolder::PLAN_IMAGE . 'plan_' . $plan->getId();
-        shell_exec('rm -rf ' . $destPath);
+        FileSystemHelper::rrmdir($destPath);
         mkdir($destPath, 0775, true);
-        $destFilename = sha512($uploadedImageData->getData()) . '.' . $uploadedImageData->getType();
+        $destFilename = $uploadedImageData->getHash() . '.' . $uploadedImageData->getType();
         $this->checkAndMoveUploadImage($uploadedImageData->getPath(), $destPath . '/' . $destFilename);
         $plan->setDisplay('width', $uploadedImageData->getSizeX());
         $plan->setDisplay('height', $uploadedImageData->getSizeY());
-        $plan->setDisplay('path', 'data/custom/plans/plan_' . $plan->getId() . '/' . $destFilename);
+        $plan->setDisplay('path', 'data/plan/plan_' . $plan->getId() . '/' . $destFilename);
         $plan->save();
         $this->ajax->success();
     }

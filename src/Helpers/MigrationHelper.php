@@ -328,8 +328,8 @@ class MigrationHelper
                 if (!is_link($fileInfo->getFilename()) && Utils::startsWith($fileInfo->getFilename(), 'plan')) {
 
                     $fileToReplace = $fileInfo->getFilename();
-                    self::migratePlanPath($logFile, $fileToReplace, 'public/img/', 'data/custom/plans/');
-                    self::migratePlanPath($logFile, $fileToReplace, 'core/img/', 'data/custom/plans/');
+                    self::migratePlanPath($logFile, $fileToReplace, 'public/img/', 'data/plan/');
+                    self::migratePlanPath($logFile, $fileToReplace, 'core/img/', 'data/plan/');
                 }
             }
         } catch (\Exception $exception) {
@@ -349,16 +349,22 @@ class MigrationHelper
                 // Basic loop displaying different messages based on file or folder
                 foreach ($it as $fileInfo) {
                     if (!is_link($fileInfo->getFilename()) && Utils::startsWith($fileInfo->getFilename(), 'plan_')) {
-
                         $fileToReplace = $fileInfo->getFilename();
                         self::migratePlanPath($logFile, $fileToReplace, 'public/img/', 'data/plan/');
                         self::migratePlanPath($logFile, $fileToReplace, 'core/img/', 'data/plan/');
+                        self::migratePlanPath($logFile, $fileToReplace, 'data/custom/plans/', 'data/plan/');
+                        self::logMessage($logFile, 'File' . NEXTDOM_DATA . '/data/custom/plans/' . $fileInfo->getFilename());
+                        $dirname = dirname(NEXTDOM_DATA . '/data/plan/' . $fileInfo->getFilename());
+                        if (!is_dir($dirname)) {
+                            mkdir($dirname, 0775, true);
+                        }
+                        FileSystemHelper::rcopy(NEXTDOM_DATA . '/data/custom/plans/' . $fileInfo->getFilename(), NEXTDOM_DATA . '/data/plan/' . $fileInfo->getFilename());
                     }
                 }
 
 
-                self::migratePlanPath($logFile, '', 'public/img/', 'data/custom/plans/');
-                self::migratePlanPath($logFile, '', 'core/img/', 'data/custom/plans/');
+                self::migratePlanPath($logFile, '', 'public/img/', 'data/plan/');
+                self::migratePlanPath($logFile, '', 'core/img/', 'data/plan/');
             }
         } catch (\Exception $exception) {
             self::logMessage($logFile, $exception.getMessage());
@@ -542,7 +548,7 @@ class MigrationHelper
             if (!is_file($dir.$planHeader->getImgLink()) && !empty($planHeader->getImage('data'))) {
                 $dirname = dirname($dir . $planHeader->getImgLink());
                 if (!is_dir($dirname)) {
-                    mkdir($dirname);
+                    mkdir($dirname, 0775, true);
                 }
                 self::logMessage($logFile, "Create " . $planHeader->getImgLink());
                 file_put_contents($dir . $planHeader->getImgLink(), base64_decode($planHeader->getImage('data')));
@@ -550,6 +556,7 @@ class MigrationHelper
                 $planHeader->save();
             }
         }
+        self::logMessage($logFile, 'Create background plan, and delete data in DB.');
         // delete /data/custom/plans/
         $custom_plans = $dir . 'data/custom/plans/';
         FileSystemHelper::rrmdir($custom_plans);

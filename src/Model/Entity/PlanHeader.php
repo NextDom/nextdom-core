@@ -81,9 +81,9 @@ class PlanHeader extends BaseEntity
             $planCopy->save();
         }
         $filename1 = self::TABLE_NAME . $this->getId() . '-' . $this->getImage('sha512') . '.' . $this->getImage('type');
-        if (file_exists(NEXTDOM_DATA . '/data/custom/plans/' . $filename1)) {
+        if (file_exists(NEXTDOM_DATA . '/data/plan/' . $filename1)) {
             $filename2 = self::TABLE_NAME . $planHeaderCopy->getId() . '-' . $planHeaderCopy->getImage('sha512') . '.' . $planHeaderCopy->getImage('type');
-            copy(NEXTDOM_DATA . '/data/custom/plans/' . $filename1, NEXTDOM_DATA . '/data/' . self::IMG_DIR_NAME . '/' . $filename2);
+            copy(NEXTDOM_DATA . '/data/' . self::IMG_DIR_NAME . '/' . $filename1, NEXTDOM_DATA . '/data/' . self::IMG_DIR_NAME . '/' . $filename2);
         }
         return $planHeaderCopy;
     }
