@@ -223,6 +223,10 @@ class Widget extends BaseEntity {
         DBHelper::remove($this);
     }
 
+    /**
+     * 
+     * @return Cmd[]
+     */
     public function getUsedBy() {
         return array_merge(
             CmdManager::searchTemplate('dashboard":"custom::' . $this->getName() . '"'),

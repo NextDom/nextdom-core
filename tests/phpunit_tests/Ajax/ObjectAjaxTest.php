@@ -110,7 +110,7 @@ class ObjectAjaxTest extends BaseAjaxTest
         $jsonResult = json_decode($result, true);
         $this->assertEquals('ok', $jsonResult['state']);
         $this->assertEquals('My Room', $jsonResult['result'][0]['name']);
-        $this->assertEquals('Child test object', $jsonResult['result'][4]['name']);
+        $this->assertEquals('Child test object', $jsonResult['result'][5]['name']);
     }
 
     public function testSave() {

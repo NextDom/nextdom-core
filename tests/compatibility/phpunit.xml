@@ -29,7 +29,7 @@
             <directory>../compatibility</directory>
         </testsuite>
         <testsuite name="current">
-            <directory>../compatibility/AjaxCronTest.php</directory>
+            <directory>../compatibility/AjaxWidgetTest.php</directory>
         </testsuite>
     </testsuites>
     <filter>

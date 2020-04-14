@@ -1332,10 +1332,10 @@ class Cmd extends BaseEntity
         $templateVersion = NextDomHelper::versionAlias($viewVersion);
         $replace = null;
         $widgetTemplate = $NEXTDOM_INTERNAL_CONFIG[NextDomObj::CMD][NextDomObj::WIDGET];
-        $widgetName = $this->getTemplate($templateVersion, 'default');
+        $widgetName = $this->getTemplate($templateVersion, Common::DEFAULT);
         $templateNamePrefix = 'cmd.' . $this->getType() . '.' . $this->getSubType() . '.';
-        if (strpos($this->getTemplate($templateVersion, 'default'), '::') !== false) {
-            $name = explode('::', $this->getTemplate($templateVersion, 'default'));
+        if (strpos($this->getTemplate($templateVersion, Common::DEFAULT), '::') !== false) {
+            $name = explode('::', $this->getTemplate($templateVersion, Common::DEFAULT));
             $templateType = $name[0];
             $widgetName = $name[1];
             switch ($templateType) {
@@ -1346,9 +1346,9 @@ class Cmd extends BaseEntity
                             $this->getType() => [
                                 $this->getSubType() => [
                                     $widgetName => [
-                                        'replace' => $widget->getReplace(),
+                                        Common::REPLACE => json_decode($widget->getReplace(), true),
                                         'test' => $widget->getTest(),
-                                        'template' => $widget->getTemplate()
+                                        Common::TEMPLATE => $widget->getTemplate()
                                     ]
                                 ]
                             ]
@@ -1371,9 +1371,9 @@ class Cmd extends BaseEntity
         $templateName = $templateNamePrefix . $widgetName;
         if (isset($widgetTemplate[$this->getType()]) && isset($widgetTemplate[$this->getType()][$this->getSubType()]) && isset($widgetTemplate[$this->getType()][$this->getSubType()][$widgetName])) {
             $templateConf = $widgetTemplate[$this->getType()][$this->getSubType()][$widgetName];
-            $templateName = $templateNamePrefix . $templateConf['template'];
-            if (isset($templateConf['replace']) && is_array($templateConf['replace']) && count($templateConf['replace']) > 0) {
-                $replace = $templateConf['replace'];
+            $templateName = $templateNamePrefix . $templateConf[Common::TEMPLATE];
+            if (isset($templateConf[Common::REPLACE]) && is_array($templateConf[Common::REPLACE]) && count($templateConf[Common::REPLACE]) > 0) {
+                $replace = $templateConf[Common::REPLACE];
                 foreach ($replace as &$value) {
                     $value = str_replace('#value#', '"+_options.display_value+"', str_replace('"', "'", $value));
                 }
@@ -1570,7 +1570,6 @@ class Cmd extends BaseEntity
             $htmlData['#name_display#'] = $this->getDisplay('icon') . ' ' . $this->getName();
         }
         $templateCode = $this->getWidgetTemplateCode($viewVersion);
-
         if ($_cmdColor == null && $version != 'scenario') {
             $eqLogic = $this->getEqLogicId();
             if ($eqLogic->getPrimaryCategory() == '') {
@@ -1581,7 +1580,6 @@ class Cmd extends BaseEntity
         } else {
             $htmlData['#cmdColor#'] = $_cmdColor;
         }
-
         if ($this->isType(CmdType::INFO)) {
             $this->addDataForInfoCmdRender($htmlData, $version, $version2, $templateCode);
             return Utils::templateReplace($htmlData, $templateCode);
@@ -2160,7 +2158,7 @@ class Cmd extends BaseEntity
             'order' => $this->order,
             Common::NAME => $this->name,
             'configuration' => $this->configuration,
-            'template' => $this->template,
+            Common::TEMPLATE => $this->template,
             'isHistorized' => $this->isHistorized,
             'type' => $this->type,
             'subType' => $this->subType,

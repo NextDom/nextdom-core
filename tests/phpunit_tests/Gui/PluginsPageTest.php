@@ -20,7 +20,7 @@ class PluginsPageTest extends BasePageTest
     public function testPluginPageRender()
     {
         $this->goTo('index.php?v=d&m=plugin4tests&p=plugin4tests');
-        $this->assertCount(4, $this->crawler->filter('.eqLogicDisplayCard'));
+        $this->assertCount(5, $this->crawler->filter('.eqLogicDisplayCard'));
         $this->assertEquals('div', $this->crawler->filter('#add-eqlogic-btn')->getTagName());
         $this->checkJs();
     }

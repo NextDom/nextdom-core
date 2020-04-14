@@ -293,25 +293,25 @@ class CmdManager extends BaseManager
      */
     public static function searchTemplate($template, $eqType = null, $type = null, $subtype = null)
     {
-        $values = [
+        $params = [
             'template' => '%' . $template . '%',
         ];
         $sql = static::getBaseSQL() . '
                 WHERE `template` LIKE :template';
         if ($eqType !== null) {
-            $values['eqType'] = $eqType;
+            $params['eqType'] = $eqType;
             $sql .= ' AND `eqType` = :eqType ';
         }
         if ($type !== null) {
-            $values['type'] = $type;
+            $params['type'] = $type;
             $sql .= ' AND `type` = :type ';
         }
         if ($subtype !== null) {
-            $values['subType'] = $subtype;
+            $params['subType'] = $subtype;
             $sql .= ' AND `subType` = :subType ';
         }
         $sql .= ' ORDER BY `name`';
-        return self::cast(DBHelper::getAllObjects($sql, $values, self::CLASS_NAME));
+        return self::cast(DBHelper::getAllObjects($sql, $params, self::CLASS_NAME));
     }
 
     /**

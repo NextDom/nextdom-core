@@ -33,7 +33,7 @@ class DisplayControllerTest extends BaseControllerTest
     {
         $pageData = [];
         $result = \NextDom\Controller\Tools\DisplayController::get($pageData);
-        $this->assertEquals(4, $pageData['displayNbEqLogics']);
+        $this->assertEquals(5, $pageData['displayNbEqLogics']);
         $this->assertStringContainsString('data-l1key="cb_actifDisplay"', $result);
     }
 

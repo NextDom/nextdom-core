@@ -24,7 +24,7 @@ class EqLogicRestTest extends PHPUnit\Framework\TestCase
     public function testGetAll()
     {
         $result = EqLogicRest::getAll();
-        $this->assertCount(4, $result);
+        $this->assertCount(5, $result);
 
         $this->assertEquals('A lamp', $result[0]['name']);
         $this->assertEquals('plugin4tests', $result[0]['type']);
