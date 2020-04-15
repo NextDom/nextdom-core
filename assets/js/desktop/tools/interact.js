@@ -85,7 +85,7 @@ function initEvents() {
           }
        });
        $('#bt_interactCollapse').hide();
-       $('#bt_interactUncollapse').show()
+       $('#bt_interactUncollapse').show();
     });
 
     // Intercation category panel uncollasping
@@ -96,13 +96,13 @@ function initEvents() {
           }
        });
        $('#bt_interactUncollapse').hide();
-       $('#bt_interactCollapse').show()
+       $('#bt_interactCollapse').show();
     });
 
     // Intercation display
     $('.interactDisplayCard').on('click',function(){
         displayInteract($(this).attr('data-interact_id'));
-        if(document.location.toString().split('#')[1] == '' || document.location.toString().split('#')[1] == undefined){
+        if(document.location.toString().split('#')[1] === '' || document.location.toString().split('#')[1] === undefined){
             $('.nav-tabs a[href="#generaltab"]').click();
         }
     });
@@ -246,7 +246,7 @@ function initEvents() {
         nextdom.cmd.displayActionOption($(this).value(), init(expression[0].options), function (html) {
             el.closest('.' + type).find('.actionOptions').html(html);
             initTextAreaAutosize();
-        })
+        });
     });
 
     // Display cmd list for intercation action
@@ -351,7 +351,7 @@ function displayInteract(_id){
                     $('.interactAttr[data-l1key=filtres][data-l2key=category][data-l3key='+i+']').value(data.filtres.category[i]);
                 }
             }
-            if(isset(data.actions.cmd) && $.isArray(data.actions.cmd) && data.actions.cmd.length != null){
+            if(isset(data.actions.cmd) && $.isArray(data.actions.cmd) && data.actions.cmd.length !== null){
                 for(var i in data.actions.cmd){
                     addAction(data.actions.cmd[i], 'action');
                 }
@@ -365,7 +365,7 @@ function displayInteract(_id){
                 },
                 success : function(data){
                     for(var i in data){
-                        if(data[i].html != ''){
+                        if(data[i].html !== ''){
                             $('#'+data[i].id).append(data[i].html.html);
                         }
                     }
@@ -437,7 +437,7 @@ function addAction(_action, _type) {
 function loadFromUrl() {
     var interactIdFromUrl = getUrlVars('id');
     if (is_numeric(interactIdFromUrl)) {
-        if (document.querySelectorAll('.interactDisplayCard[data-interact_id=' + interactIdFromUrl + ']').length !== 0) {
+        if ($('.interactDisplayCard[data-interact_id=' + interactIdFromUrl + ']').length !== 0) {
             var url = document.location.toString();
             displayInteract(interactIdFromUrl);
         }

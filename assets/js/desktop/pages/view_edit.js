@@ -98,9 +98,9 @@
                 addEditviewZone(viewZone);
                 for (var j in viewZone.viewData) {
                     var viewData = viewZone.viewData[j];
-                    if (init(viewZone.type, 'widget') == 'graph') {
+                    if (init(viewZone.type, 'widget') === 'graph') {
                        $('#div_viewZones .viewZone:last .div_viewData').append(addGraphService(viewData));
-                   }else if(init(viewZone.type, 'widget') == 'table'){
+                   }else if(init(viewZone.type, 'widget') === 'table'){
                     $('#div_viewZones .viewZone:last .viewData').setValues(viewData, '.viewDataAttr');
                 }else{
                    $('#div_viewZones .viewZone:last .div_viewData tbody').append(addWidgetService(viewData));
@@ -149,7 +149,7 @@
    $('.viewZone').each(function() {
     viewZoneInfo = {};
     var viewZoneInfo = $(this).getValues('.viewZoneAttr')[0];
-    if(viewZoneInfo.type == 'table'){
+    if(viewZoneInfo.type === 'table'){
         viewZoneInfo.viewData = [{'configuration' : {}}];
         var line = 0;
         var col = 0;
@@ -217,7 +217,7 @@ $("#div_viewZones").sortable({axis: "y", cursor: "move", placeholder: "ui-state-
 
 $('#div_pageContainer').delegate('#table_addViewData .enable','change', function() {
     var selectTr = $(this).closest('tr');
-    if ($(this).value() == 1) {
+    if ($(this).value() === 1) {
         selectTr.find('div.option').show();
     } else {
         selectTr.find('div.option').hide();
@@ -233,12 +233,12 @@ $('#bt_addviewZone').on('click', function() {
 });
 
 $('#bt_addEditviewZoneSave').on('click', function() {
-    if ($.trim($('#in_addEditviewZoneName').val()) != '') {
+    if ($.trim($('#in_addEditviewZoneName').val()) !== '') {
         var viewZone = {name: $('#in_addEditviewZoneName').value(), emplacement: $('#in_addEditviewZoneEmplacement').value(), type: $('#sel_addEditviewZoneType').value()};
         addEditviewZone(viewZone);
         $('#md_addEditviewZone').modal('hide');
     } else {
-        alert('div_addEditviewZoneError', '{{Le nom de la viewZone ne peut être vide}}')
+        alert('div_addEditviewZoneError', '{{Le nom de la viewZone ne peut être vide}}');
     }
 });
 
@@ -273,15 +273,15 @@ function addEditviewZone(_viewZone) {
     if (!isset(_viewZone.configuration)) {
         _viewZone.configuration = {};
     }
-    if (init(_viewZone.emplacement) == '') {
+    if (init(_viewZone.emplacement) === '') {
         var id = $('#div_viewZones .viewZone').length;
         var div = '<div class="viewZone" data-toggle="tab" id="div_viewZone'+id+'">';
         div += '<legend style="height: 35px;"><span class="viewZoneAttr" data-l1key="name"></span>';
         div += '<a class="btn btn-danger btn-xs pull-right bt_removeviewZone"><i class="far fa-trash-alt"></i> Supprimer</a>';
         div += ' <a class="btn btn-warning btn-xs pull-right bt_editviewZone"><i class="fas fa-pencil-alt"></i> Editer</a>';
-        if (init(_viewZone.type, 'widget') == 'graph') {
+        if (init(_viewZone.type, 'widget') === 'graph') {
          div += '<a class="btn btn-primary btn-xs pull-right bt_addViewGraph"><i class="fas fa-plus-circle"></i> Ajouter courbe</a>';
-     }else  if (init(_viewZone.type, 'widget') == 'table') {
+     }else  if (init(_viewZone.type, 'widget') === 'table') {
         div += '<a class="btn btn-primary btn-xs pull-right bt_addViewTable" data-type="line"><i class="fas fa-plus-circle"></i> Ajouter ligne</a>';
         div += '<a class="btn btn-primary btn-xs pull-right bt_addViewTable" data-type="col"><i class="fas fa-plus-circle"></i> Ajouter colonne</a>';
     }else{
@@ -301,7 +301,7 @@ function addEditviewZone(_viewZone) {
  div += '<option value="2">{{Largeur}} 2</option>';
  div += '<option value="1">{{Largeur}} 1</option>';
  div += '</select>';
- if (init(_viewZone.type, 'widget') == 'graph') {
+ if (init(_viewZone.type, 'widget') === 'graph') {
     div += '<select class="pull-right viewZoneAttr form-control input-sm" data-l1key="configuration" data-l2key="dateRange" style="width : 200px;">';
     div += '<option value="30 min">{{30 min}}</option>';
     div += '<option value="1 hour">{{1 heure}}</option>';
@@ -314,7 +314,7 @@ function addEditviewZone(_viewZone) {
 }
 div += '</legend>';
 div += '<input style="display : none;" class="viewZoneAttr" data-l1key="type">';
-if (init(_viewZone.type, 'widget') == 'graph') {
+if (init(_viewZone.type, 'widget') === 'graph') {
     div += '<table class="table table-condensed div_viewData">';
     div += '<thead>';
     div += '<tr><th></th><th>{{Nom}}</th><th>{{Couleur}}</th><th>{{Type}}</th><th>{{Groupement}}</th><th>{{Echelle}}</th><th>{{Escalier}}</th><th>{{Empiler}}</th><th>{{Variation}}</th></tr>';
@@ -322,11 +322,11 @@ if (init(_viewZone.type, 'widget') == 'graph') {
     div += '<tbody>';
     div += '</tbody>';
     div += '</table>';
-}else if (init(_viewZone.type, 'widget') == 'table') {
-  if (init(_viewZone.configuration.nbcol) == '') {
+}else if (init(_viewZone.type, 'widget') === 'table') {
+  if (init(_viewZone.configuration.nbcol) === '') {
     _viewZone.configuration.nbcol = 2;
 }
-if (init(_viewZone.configuration.nbline) == '') {
+if (init(_viewZone.configuration.nbline) === '') {
     _viewZone.configuration.nbline = 2;
 }
 div += '<table class="table table-condensed div_viewData">';
@@ -368,7 +368,7 @@ $("#div_viewZones .viewZone:last .div_viewData tbody").sortable({axis: "y", curs
 
 $('#div_viewZones').on('click','.bt_addViewTable',function(){
     var table = $(this).closest('.viewZone').find('table.div_viewData');
-    if($(this).attr('data-type') == 'line'){
+    if($(this).attr('data-type') === 'line'){
         var line = '<tr class="viewData">';
         line += '<td><a class="btn btn-danger bt_removeAddViewTable" data-type="line"><i class="far fa-trash-alt"></a></td>';
         for(i=0;i<table.find('tbody tr:first td').length - 1;i++){
@@ -377,18 +377,18 @@ $('#div_viewZones').on('click','.bt_addViewTable',function(){
      line += '</tr>';
      table.find('tbody').append(line);
 
- }else if($(this).attr('data-type') == 'col'){
+ }else if($(this).attr('data-type') === 'col'){
     table.find('thead tr').append('<td><a class="btn btn-danger bt_removeAddViewTable" data-type="col"><i class="far fa-trash-alt"></a></td>');
     table.find('tbody tr').each(function(){
-     $(this).append('<td><input class="form-control viewDataAttr" data-l1key="configuration" style="width:calc(100% - 50px);display: inline-block;" /> <a class="btn btn-default bt_listEquipementInfo" style="margin-top:-3px;"><i class="fas fa-list-alt"></i></a></td>')
+     $(this).append('<td><input class="form-control viewDataAttr" data-l1key="configuration" style="width:calc(100% - 50px);display: inline-block;" /> <a class="btn btn-default bt_listEquipementInfo" style="margin-top:-3px;"><i class="fas fa-list-alt"></i></a></td>');
  });
 }
 });
 
 $('#div_viewZones').on('click','.bt_removeAddViewTable',function(){
-   if($(this).attr('data-type') == 'line'){
+   if($(this).attr('data-type') === 'line'){
      $(this).closest('tr').remove();
- }else if($(this).attr('data-type') == 'col'){
+ }else if($(this).attr('data-type') === 'col'){
      $(this).closest('table').find('td:nth-child(' + ($(this).closest('td').index() + 1) + ')').remove();
  }
 });
@@ -412,7 +412,7 @@ $('#div_viewZones').delegate('.viewDataAttr[data-l1key=configuration][data-l2key
 });
 
 function addGraphService(_viewData){
-    if (!isset(_viewData.configuration) || _viewData.configuration == '') {
+    if (!isset(_viewData.configuration) || _viewData.configuration === '') {
         _viewData.configuration = {};
     }
     var tr = '<tr class="viewData" style="cursor : move;">';
@@ -504,7 +504,7 @@ $('#div_viewZones').delegate('.bt_addViewWidget','click',function(){
 
 
 function addWidgetService(_viewData){
-    if (!isset(_viewData.configuration) || _viewData.configuration == '') {
+    if (!isset(_viewData.configuration) || _viewData.configuration === '') {
         _viewData.configuration = {};
     }
     var tr = '<tr class="viewData" style="cursor : move;">';

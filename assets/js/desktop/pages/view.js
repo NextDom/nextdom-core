@@ -57,7 +57,7 @@ function fullScreen(_mode) {
   }
 }
 
-if (view_id != '') {
+if (view_id !== '') {
   nextdom.view.toHtml({
     id: view_id,
     version: 'dview',
@@ -67,7 +67,7 @@ if (view_id != '') {
     },
     success: function (html) {
       setTimeout(function () {
-        if (isset(html.raw) && isset(html.raw.img) && html.raw.img != '') {
+        if (isset(html.raw) && isset(html.raw.img) && html.raw.img !== '') {
           $('.backgroundforNextDom').css('background-image', 'url("' + html.raw.img + '") !important');
         } else {
           $('.backgroundforNextDom').css('background-image', 'url("")');
@@ -122,7 +122,7 @@ if (view_id != '') {
 
         $('.eqLogicZone .eqLogic-widget').draggable('disable');
         $('#bt_editViewWidgetOrder').off('click').on('click', function () {
-          if ($(this).attr('data-mode') == 1) {
+          if ($(this).attr('data-mode') === 1) {
             $.hideAlert();
             $(this).attr('data-mode', 0);
             editWidgetMode(0);
@@ -134,7 +134,7 @@ if (view_id != '') {
             $(this).css('color', 'rgb(46, 176, 75)');
           }
         });
-        if (getUrlVars('fullscreen') == 1) {
+        if (getUrlVars('fullscreen') === 1) {
           fullScreen(true);
         }
       }, 10);
@@ -147,7 +147,7 @@ $('#div_pageContainer').delegate('.cmd-widget.history', 'click', function () {
 });
 
 $('.bt_displayView').on('click', function () {
-  if ($(this).attr('data-display') == 1) {
+  if ($(this).attr('data-display') === 1) {
     $(this).closest('.row').find('.div_displayViewList').hide();
     $(this).closest('.row').find('.div_displayViewContainer').removeClass('col-lg-8 col-lg-10 col-lg-12 col-lg-8 col-lg-10 col-lg-12 col-md-8 col-md-10 col-md-12 col-sm-8 col-sm-10 col-sm-12').addClass('col-lg-12 col-md-12 col-sm-12');
     $('.eqLogicZone').each(function () {
@@ -164,13 +164,13 @@ $('.bt_displayView').on('click', function () {
 
 function editWidgetMode(_mode, _save) {
   if (!isset(_mode)) {
-    if ($('#bt_editViewWidgetOrder').attr('data-mode') != undefined && $('#bt_editViewWidgetOrder').attr('data-mode') == 1) {
+    if ($('#bt_editViewWidgetOrder').attr('data-mode') !== undefined && $('#bt_editViewWidgetOrder').attr('data-mode') === 1) {
       editWidgetMode(0, false);
       editWidgetMode(1, false);
     }
     return;
   }
-  if (_mode == 0 || _mode == '0') {
+  if (_mode === 0 || _mode === '0') {
     if (!isset(_save) || _save) {
       saveWidgetDisplay({view: 1});
     }

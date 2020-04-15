@@ -45,7 +45,7 @@ function loadInformations() {
     // Background image load
     $(function () {
         setTimeout(function () {
-            if (typeof(rootObjectId)!= 'undefined') {
+            if (typeof(rootObjectId)!== 'undefined') {
                 nextdom.object.getImgPath({
                     id: rootObjectId,
                     success: function (_path) {
@@ -64,7 +64,7 @@ function loadInformations() {
  */
 function initEvents() {
     // Opening welcome modal if not saved "not display anymore"
-    if (typeof(nextdom_Welcome)!= 'undefined' && isset(nextdom_Welcome) && nextdom_Welcome == 1 && getUrlVars('noWelcome') != 1) {
+    if (typeof(nextdom_Welcome)!== 'undefined' && isset(nextdom_Welcome) && nextdom_Welcome === 1 && getUrlVars('noWelcome') != 1) {
         loadModal('modal', '{{Bienvenue dans NextDom}}', 'welcome');
     }
 
@@ -78,7 +78,7 @@ function initEvents() {
 
     // Dashboard edition mode button
     $('#bt_editDashboardWidgetOrder').on('click', function () {
-        if ($(this).attr('data-mode') == 1) {
+        if ($(this).attr('data-mode') === 1) {
             $.hideAlert();
             $(this).attr('data-mode', 0);
             editWidgetMode(0);
@@ -95,7 +95,7 @@ function initEvents() {
                 var id_object = $(this).attr('id');
                 id_object = id_object.replace('edit_father_object_', '');
                 $('#dashboard-content .div_displayEquipement').each(function (index, element2) {
-                      if ($(element2).attr('data-father_id') == id_object) {
+                      if ($(element2).attr('data-father_id') === id_object) {
                           $(element2).find('.eqLogic-widget').each(function (index, element) {
                               resizeWidget(element);
                           });

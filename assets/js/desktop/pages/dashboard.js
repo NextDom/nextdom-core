@@ -70,13 +70,13 @@ function selectCategory(_selectedCategory, _selectedIcon) {
  */
 function editWidgetMode(_mode, _save) {
     if (!isset(_mode)) {
-        if ($('#bt_editDashboardWidgetOrder').attr('data-mode') != undefined && $('#bt_editDashboardWidgetOrder').attr('data-mode') == 1) {
+        if ($('#bt_editDashboardWidgetOrder').attr('data-mode') !== undefined && $('#bt_editDashboardWidgetOrder').attr('data-mode') === 1) {
             editWidgetMode(0, false);
             editWidgetMode(1, false);
         }
         return;
     }
-    if (_mode == 0) {
+    if (_mode === 0) {
         // Edit widget mode exit
         if (!isset(_save) || _save) {
             saveWidgetDisplay({dashboard: 1});
@@ -105,7 +105,7 @@ function editWidgetMode(_mode, _save) {
             },
             refreshPositions: true,
             function (event, ui) {
-                ui.element.closest('.div_displayEquipement').packery('bindUIDraggableEvents', $itemElems)
+                ui.element.closest('.div_displayEquipement').packery('bindUIDraggableEvents', $itemElems);
             },
             stop: function (event, ui) {
                 positionEqLogic(ui.element.attr('data-eqlogic_id'), false);
@@ -138,7 +138,7 @@ function getObjectHtml(_object_id) {
         success: function (result) {
             var html = result['objectHtml'];
             var scenarios = result['scenarios'];
-            if ($.trim(html) == '') {
+            if ($.trim(html) === '') {
                 $('#div_ob' + _object_id).siblings('.alert-no-child').show();
                 return;
             } else {
@@ -169,7 +169,7 @@ function getObjectHtml(_object_id) {
                     var container = $(this).packery({
                         itemSelector: ".eqLogic-widget",
                         gutter: parseInt(widget_margin),
-                        columnWidth: parseInt(widget_size) ,
+                        columnWidth: parseInt(widget_size),
                         rowHeight: parseInt(widget_size)
                     });
                     var itemElems = container.find('.eqLogic-widget').draggable({ grid: [ (parseInt(widget_size) + (parseInt(widget_margin))), (parseInt(widget_size) + (parseInt(widget_margin)))]});
@@ -230,7 +230,7 @@ function createScenarioWidget(scenarioData) {
     openButton.className = 'label scenario-state scenario-open-button';
     openButton.textContent = scenarioData.state;
     openButton.onclick = function() {
-        loadPage('index.php?v=d&p=scenario&id=' + scenarioData.scenario_id)
+        loadPage('index.php?v=d&p=scenario&id=' + scenarioData.scenario_id);
     };
     widgetDiv2.appendChild(enableButton);
     widgetDiv2.appendChild(playButton);
@@ -238,7 +238,7 @@ function createScenarioWidget(scenarioData) {
     widgetDiv2.appendChild(openButton);
     widgetDiv.appendChild(widgetDiv2);
     nextdom.scenario.update[scenarioData.scenario_id] = function (data) {
-        updateScenarioControls(data)
+        updateScenarioControls(data);
     };
     return widgetDiv;
 }
@@ -265,7 +265,7 @@ function updateScenarioControls(scenarioData) {
     }
     // Status Label
     stateField.classList.remove('label-danger', 'label-info', 'label-success', 'label-warning', 'label-default');
-    if (isset(scenarioData.active) && scenarioData.active != 1) {
+    if (isset(scenarioData.active) && scenarioData.active !== 1) {
         stateField.textContent = '';
         scenarioContainer.style.opacity = 0.6;
         $(enableButton).show();
@@ -305,7 +305,7 @@ function orderItems() {
           $(itemElems).each(function (i, itemElem) {
               $(itemElem).attr('data-order', i + 1);
               value = i + 1;
-              if ($('#bt_editDashboardWidgetOrder').attr('data-mode') == 1) {
+              if ($('#bt_editDashboardWidgetOrder').attr('data-mode') === 1) {
                   if ($(itemElem).find(".card-order-number").length) {
                       $(itemElem).find(".card-order-number").text(value);
                   } else {
