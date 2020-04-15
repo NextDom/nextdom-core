@@ -212,7 +212,7 @@ class DisplayCardWidget extends DisplayCardPageA {
             //store usedBy:
             var checkedId = [];
             $('#div_usedBy .cmdAdvanceConfigure').each(function () {
-                checkedId.push($(this).data('cmd_id'))
+                checkedId.push($(this).data('cmd_id'));
             });
 
             $('#md_modal').dialog({title: "{{Appliquer sur}}"}).load('index.php?v=d&modal=cmd.selectMultiple&type=' + $('.attr[data-l1key="type"]').value() + '&subtype=' + $('.attr[data-l1key="subtype"]').value() + '&name=' + $('.attr[data-l1key="name"]').value(), function () {
@@ -220,13 +220,13 @@ class DisplayCardWidget extends DisplayCardPageA {
 
                 $('#table_cmdConfigureSelectMultiple tbody tr').each(function (index) {
                     if (checkedId.includes($(this).data('cmd_id'))) {
-                        $(this).find('.selectMultipleApplyCmd').prop('checked', true)
+                        $(this).find('.selectMultipleApplyCmd').prop('checked', true);
                     }
                 });
 
                 $('#bt_cmdConfigureSelectMultipleAlertToogle').off('click').on('click', function () {
                     var state = false;
-                    if ($(this).attr('data-state') == 0) {
+                    if ($(this).attr('data-state') === 0) {
                         state = true;
                         $(this).attr('data-state', 1)
                                 .find('i').removeClass('fa-check-circle-o').addClass('fa-circle-o');
@@ -400,20 +400,6 @@ class DisplayCardWidget extends DisplayCardPageA {
         div += '</div>';
         $('#div_programmation').append(div);
         $('#div_programmation').find('.test').last().setValues(_test, '.testAttr');
-    }
-
-    getThemeImg(_light, _dark) {
-        if (_light !== '' && _dark === '') {
-            return _light;
-        }
-        if (_light === '' && _dark !== '') {
-            return _dark;
-        }
-        if ($('body')[0].hasAttribute('data-theme')) {
-            if ($('body').attr('data-theme').endsWith('Light'))
-                return _light;
-        }
-        return _dark;
     }
 
     loadConfig(_template, _data) {

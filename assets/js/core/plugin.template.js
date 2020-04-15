@@ -362,7 +362,7 @@ if (is_numeric(getUrlVars('id'))) {
   var eqLogicItem = $('#ul_eqLogic .li_eqLogic[data-eqLogic_id=' + getUrlVars('id') + ']');
   if (eqLogicItem.length !== 0) {
     eqLogicItem.click();
-  } else if (document.querySelectorAll('.eqLogicThumbnailContainer .eqLogicDisplayCard[data-eqLogic_id=' + getUrlVars('id') + ']').length !== 0) {
+  } else if ($('.eqLogicThumbnailContainer .eqLogicDisplayCard[data-eqLogic_id=' + getUrlVars('id') + ']').length !== 0) {
     $('.eqLogicThumbnailContainer .eqLogicDisplayCard[data-eqLogic_id=' + getUrlVars('id') + ']').click();
   } else if ($('.eqLogicThumbnailDisplay').html() === undefined) {
     $('#ul_eqLogic .li_eqLogic:first').click();

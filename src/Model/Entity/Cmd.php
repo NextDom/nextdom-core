@@ -491,12 +491,13 @@ class Cmd extends BaseEntity
                     }
                     return $_value;
                 case CmdSubType::BINARY:
-                    if ($this->getConfiguration(CmdConfigKey::CALCUL_VALUE_OFFSET) != '') {
+                    $calculValueOffset = $this->getConfiguration(CmdConfigKey::CALCUL_VALUE_OFFSET);
+                    if ($calculValueOffset != '') {
                         try {
                             if (preg_match("/[a-zA-Z#]/", $_value)) {
-                                $_value = NextDomHelper::evaluateExpression(str_replace('#value#', '"' . $_value . '"', str_replace('\'#value#\'', '#value#', str_replace('"#value#"', '#value#', $this->getConfiguration(CmdConfigKey::CALCUL_VALUE_OFFSET)))));
+                                $_value = NextDomHelper::evaluateExpression(str_replace('#value#', '"' . $_value . '"', str_replace('\'#value#\'', '#value#', str_replace('"#value#"', '#value#', $calculValueOffset))));
                             } else {
-                                $_value = NextDomHelper::evaluateExpression(str_replace('#value#', $_value, $this->getConfiguration(CmdConfigKey::CALCUL_VALUE_OFFSET)));
+                                $_value = NextDomHelper::evaluateExpression(str_replace('#value#', $_value, $calculValueOffset));
                             }
                         } catch (\Exception $ex) {
 
@@ -1347,7 +1348,7 @@ class Cmd extends BaseEntity
                                 $this->getSubType() => [
                                     $widgetName => [
                                         Common::REPLACE => json_decode($widget->getReplace(), true),
-                                        'test' => $widget->getTest(),
+                                        Common::TEST => json_decode($widget->getTest(), true),
                                         Common::TEMPLATE => $widget->getTemplate()
                                     ]
                                 ]
@@ -1382,9 +1383,9 @@ class Cmd extends BaseEntity
             }
             $replace['#test#'] = '';
             $replace['#change_theme#'] = '';
-            if (isset($templateConf['test']) && is_array($templateConf['test']) && count($templateConf['test']) > 0) {
+            if (isset($templateConf[Common::TEST]) && is_array($templateConf[Common::TEST]) && count($templateConf[Common::TEST]) > 0) {
                 $i = 0;
-                foreach ($templateConf['test'] as &$test) {
+                foreach ($templateConf[Common::TEST] as &$test) {
                     if (!isset($test['operation'])) {
                         continue;
                     }

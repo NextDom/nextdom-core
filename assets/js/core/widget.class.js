@@ -29,8 +29,18 @@ nextdom.widget.loadConfig = function (queryParams) {
   nextdom.private.ajax('Widget', 'loadConfig', queryParams, ['template']);
 };
 
-nextdom.widget.getThemeImg = function (queryParams) {
-  nextdom.private.ajax('Widget', 'getThemeImg', queryParams);
+nextdom.widget.getThemeImg = function (_light, _dark) {
+  if (_light !== '' && _dark === '') {
+    return _light;
+  }
+  if (_light === '' && _dark !== '') {
+    return _dark;
+  }
+  if ($('body')[0].hasAttribute('data-theme')) {
+    if ($('body').attr('data-theme').endsWith('Light'))
+      return _light;
+  }
+  return _dark;
 };
 
 nextdom.widget.getPreview = function (queryParams) {

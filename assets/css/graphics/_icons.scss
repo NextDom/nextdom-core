@@ -89,3 +89,14 @@
     height: 75px;
     padding: 5px;
 }
+
+/* Icon Widgets */
+.iconCmd {
+    top: 0 !important;
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--link-color) !important;
+    & > i {
+        font-size: 30px;
+    }
+}

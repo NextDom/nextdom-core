@@ -92,6 +92,7 @@ class Common extends Enum
     const SUMMARY = 'summary';
     const TAG = 'tag';
     const TEMPLATE = 'template';
+    const TEST = 'test';
     const TIMELINE_ONLY = 'timelineOnly';
     const TIMEOUT = 'timeout';
     const TRIGGER = 'trigger';
